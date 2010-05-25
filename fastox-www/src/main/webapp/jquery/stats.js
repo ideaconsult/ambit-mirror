@@ -1,8 +1,8 @@
-function stats(url){
+function stats(url,target){
 	$.ajax({
 	  url: url,
 	  success: function(data) {
-	  	$("#count_struc").html(data);
+	  	$(target).html(data);
 	  }
 	});
 };

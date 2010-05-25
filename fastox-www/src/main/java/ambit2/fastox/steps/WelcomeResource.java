@@ -40,7 +40,17 @@ public class WelcomeResource extends WizardResource {
 		writer.write(String.format(
 				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\"); } );</script>",
 				wizard.getService(SERVICE.application).toString(),
-				"/stats/structures"));
+				"#count_struc","/stats/structures"));
+		
+		writer.write(String.format(
+				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\"); } );</script>",
+				wizard.getService(SERVICE.application).toString(),
+				"#count_chemicals","/stats/chemicals_in_dataset"));		
+		
+		writer.write(String.format(
+				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\"); } );</script>",
+				wizard.getService(SERVICE.application).toString(),
+				"#count_datasets","/stats/dataset"));			
 		/*
 		writer.write(String.format(
 				"\n<script type=\"text/javascript\">$(document).ready( $(\"#%s\").load(\"%s\"); );</script>",
