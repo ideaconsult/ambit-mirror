@@ -38,19 +38,22 @@ public class WelcomeResource extends WizardResource {
 	public void renderFormFooter(Writer writer,String key)  throws IOException {
 		
 		writer.write(String.format(
-				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\"); } );</script>",
+				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\",\"%s\"); } );</script>",
 				wizard.getService(SERVICE.application).toString(),
-				"#count_struc","/stats/structures"));
+				"/stats/structures",
+				"#count_struc"));
 		
 		writer.write(String.format(
-				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\"); } );</script>",
+				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\",\"%s\"); } );</script>",
 				wizard.getService(SERVICE.application).toString(),
-				"#count_chemicals","/stats/chemicals_in_dataset"));		
+				"/stats/chemicals_in_dataset",
+				"#count_chemicals"));		
 		
 		writer.write(String.format(
-				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\"); } );</script>",
+				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\",\"%s\"); } );</script>",
 				wizard.getService(SERVICE.application).toString(),
-				"#count_datasets","/stats/dataset"));			
+				"/stats/dataset",
+				"#count_datasets"));			
 		/*
 		writer.write(String.format(
 				"\n<script type=\"text/javascript\">$(document).ready( $(\"#%s\").load(\"%s\"); );</script>",
