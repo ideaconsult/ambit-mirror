@@ -72,44 +72,46 @@ public class ReportingResource  extends FastoxStepResource {
 	protected enum report_type {
 		Validation {
 			@Override
-			public String report(String q,String ontology,String application) throws Exception {
+			public String report(Reference baseRef,String q,String ontology,String application) throws Exception {
 				return OTValidation.validation(q).report(ontology);
 			}
 		},
 		Model {
 			@Override
-			public String report(String q,String ontology,String application) throws Exception  {
+			public String report(Reference baseRef,String q,String ontology,String application) throws Exception  {
 				return OTModel.model(q).report(ontology);
 			}
 		},
 		Algorithm {
 			@Override
-			public String report(String q,String ontology,String application) throws Exception  {
+			public String report(Reference baseRef,String q,String ontology,String application) throws Exception  {
 
 				return OTAlgorithm.algorithm(q).report(ontology);
 			}
 		},
 		Dataset {
 			@Override
-			public String report(String q,String ontology,String application) throws Exception  {
+			public String report(Reference baseRef,String q,String ontology,String application) throws Exception  {
 
 				return "";
 			}
 		},		
 		Stats {
 			@Override
-			public String report(String q,String ontology,String application) throws Exception  {
+			public String report(Reference baseRef,String q,String ontology,String application) throws Exception  {
 
-				return OTDatasetComparisonReport.report(new Reference(application),OTDataset.dataset(q)).report(ontology);
+				OTDatasetComparisonReport report = OTDatasetComparisonReport.report(new Reference(application),OTDataset.dataset(q));
+				report.setDatasetReportRef(baseRef);
+				return report.report(ontology);
 			}
 		},			
 		Feature {
 			@Override
-			public String report(String q,String ontology,String application) throws Exception  {
+			public String report(Reference baseRef,String q,String ontology,String application) throws Exception  {
 				return OTModel.model(q).report(ontology);
 			}
 		};
-		public abstract String report(String q,String ontology,String application) throws Exception ;
+		public abstract String report(Reference baseRef,String q,String ontology,String application) throws Exception ;
 
 		public String getTitle(String url) {
 			return String.format("%s&nbsp;<a href='%s'>%s</a>",toString(),url,url);
@@ -256,6 +258,10 @@ public class ReportingResource  extends FastoxStepResource {
 	@Override
 	public void renderFormContent(Writer writer, String key) throws IOException {
 		try {
+			Reference datasetReport =
+				new Reference(
+						String.format("%s/user/%s/report/Dataset",
+								getRequest().getRootRef(),session.getUser().getId()));
 			if (report_type.Dataset.equals(type)) {
 				if (header) {
 					writer.write(
@@ -330,24 +336,30 @@ public class ReportingResource  extends FastoxStepResource {
 					} else {
 						writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">\n",getRequest().getRootRef()));
 					}					
-					String s = type.report(null, 
+					String s = type.report(datasetReport,null, 
 							String.format("%s?results=yes&title=%s",
 							wizard.getService(SERVICE.ontology).toString(),
 							Reference.encode(type.getTitle(""))),
 							wizard.getService(SERVICE.application).toString());
 					writer.write(s);
-					
+					writer.write("<div id='BROWSER'></div>");
 					if (header) {
+						
 						writer.write("</body></html>");
 					}					
-				} else
+				} else {
+
+		
 					for (String q : search) {
-						String s = type.report(q, String.format("%s?results=yes&title=%s",
+						String s = type.report(
+								datasetReport,
+								q, String.format("%s?results=yes&title=%s",
 								wizard.getService(SERVICE.ontology).toString(),
 								Reference.encode(type.getTitle(q))),
 								wizard.getService(SERVICE.application).toString());
 						writer.write(s);
 					}
+				}
 
 		} catch (Exception x) {
 			writer.write(x.getMessage());

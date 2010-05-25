@@ -3,10 +3,8 @@ package ambit2.fastox.steps;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
-import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.fastox.users.IToxPredictSession;
@@ -14,6 +12,7 @@ import ambit2.fastox.users.IToxPredictUser;
 import ambit2.fastox.users.ToxPredictUser;
 import ambit2.fastox.users.UserResource;
 import ambit2.fastox.wizard.WizardResource;
+import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
 
 /**
@@ -37,6 +36,17 @@ public class WelcomeResource extends WizardResource {
 	public void renderFormHeader(Writer writer, String key)  throws IOException {
 	}
 	public void renderFormFooter(Writer writer,String key)  throws IOException {
+		
+		writer.write(String.format(
+				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\"); } );</script>",
+				wizard.getService(SERVICE.application).toString(),
+				"/stats/structures"));
+		/*
+		writer.write(String.format(
+				"\n<script type=\"text/javascript\">$(document).ready( $(\"#%s\").load(\"%s\"); );</script>",
+				"count_struc","http://194.141.0.136:8080/ambit2/stats/structures"));		
+		;
+		*/
 	}
 	
 	@Override
@@ -62,6 +72,7 @@ public class WelcomeResource extends WizardResource {
 					*/
 	
 		//writer.write("</FIELDSET>");
+
 	}
 	@Override
 	public void renderResults(Writer writer, String key) throws IOException {
@@ -92,7 +103,7 @@ public class WelcomeResource extends WizardResource {
 	@Override
 	protected String getHelp() {
 		String chemicals = "";
-		String datasets = "";
+		String datasets = String.format("<a href='%s/user/admin/report/Stats' alt='stats' title='dataset statistics' target='_blank'>datasets</a>", getRequest().getRootRef());
 		String models = "";
 		String endpoints = "";
 		
