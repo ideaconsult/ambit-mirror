@@ -147,6 +147,7 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
 		 Directory jmeDir = new Directory(getContext(), "war:///jme");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
+		 Directory scriptsDir = new Directory(getContext(), "war:///scripts");
 		 Directory jqueryDir = new Directory(getContext(), "war:///jquery");
 		 Directory metaDir = new Directory(getContext(), "war:///META-INF");
 		 
@@ -155,6 +156,7 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 //		 router.attach("/jmol/", jmolDir);
 		 router.attach("/jme/", jmeDir);
 		 router.attach("/style/", styleDir);
+		 router.attach("/scripts/", scriptsDir);
 		 router.attach("/jquery/", jqueryDir);
 		 //router.attach("/favicon.ico", FavIconResource.class);
 		 //router.attach("/favicon.png", FavIconResource.class);      

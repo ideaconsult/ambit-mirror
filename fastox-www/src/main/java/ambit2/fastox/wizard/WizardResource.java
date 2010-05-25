@@ -171,7 +171,17 @@ public abstract class WizardResource extends ServerResource {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-ui-1.8.1.custom.min.js\"></script>\n",baseReference));
 		//w.write(String.format("<link type=\"text/css\" href=\"%s/css/redmond/jquery-ui-1.8.1.custom.css\" rel=\"stylesheet\" />\n",baseReference));
-		w.write(String.format("<script src=\"%s/jquery/jquery.blockUI.js\"></script>\n",getRequest().getRootRef()));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.blockUI.js\"></script>\n",getRequest().getRootRef()));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/scripts/animatedcollapse.js\"></script>\n",baseReference));
+		w.write("<script type=\"text/javascript\">\n");
+		w.write("animatedcollapse.addDiv('help_step', 'fade=1')\n");
+		w.write("animatedcollapse.ontoggle=function($, divobj, state){ //fires each time a DIV is expanded/contracted\n");
+		w.write("//$: Access to jQuery\n");
+		w.write("//divobj: DOM reference to DIV being expanded/ collapsed. Use \"divobj.id\" to get its ID\n");
+		w.write("//state: \"block\" or \"none\", depending on state\n");
+		w.write("}\n");
+		w.write("animatedcollapse.init()\n");
+		w.write("</script>\n");
 		w.write("</head>\n");
 		w.write("<body>");
 		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
@@ -197,14 +207,11 @@ public abstract class WizardResource extends ServerResource {
 				UserResource.resource,
 				Reference.encode(session==null?"guest":session.getUser().getId()),
 				session==null?"guest":session.getUser().getName()));			
-		writer.write(String.format("<a href='%s/help/%s' target='_blank' title='Help'>%s</a><br>",
-				getRequest().getRootRef(),
-				session.getUser().getId(),
-				"Help"));		
-		writer.write(String.format("<a href='%s/admin/%s' target='admin' title='Configuration'>%s</a>",
+		writer.write(String.format("<a href='%s/admin/%s' target='admin' title='Configuration'>%s</a><br>",
 				getRequest().getRootRef(),
 				session.getUser().getId(),
 				"Admin"));		
+		writer.write("<a href=\"javascript:animatedcollapse.toggle('help_step')\" title=\"Help\">Help</a>");		
 		writer.write("</td>");
 		writer.write("<tr>");
 		
@@ -270,7 +277,7 @@ public abstract class WizardResource extends ServerResource {
 	public void help(Writer writer)  throws IOException {
 		writer.write("<div class=\"clearfloat\">&nbsp;</div>");
 
-		writer.write(String.format("<div class='help'>%s</div>",getHelp()));
+		writer.write(String.format("<div class=\"help\" id=\"help_step\" style=\"display:none;\">%s<div style=\"text-align:right; font-style:italic;\"><a href=\"javascript:animatedcollapse.hide('help_step')\">Hide</a></div></div>",getHelp()));
 	}
 	public void renderErrorsTab(Writer writer, String key)  throws IOException {
 		Iterator<String> keys = session.getErrorKeys();
