@@ -2,16 +2,10 @@ package ambit2.fastox.steps.step6;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 import java.util.List;
 
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
-import org.restlet.resource.ClientResource;
 
-import ambit2.fastox.DatasetTools;
-import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.rest.OpenTox;
 
@@ -40,7 +34,7 @@ public class Step6Resource extends FastoxStepResource {
 		}	
 		*/		
 		try {
-			renderCompoundsNew(writer,key,store,true,false);
+			renderCompoundsNew(writer,key,true,false);
 		} catch (Exception x) {
 			session.setError(key,x);
 		}
