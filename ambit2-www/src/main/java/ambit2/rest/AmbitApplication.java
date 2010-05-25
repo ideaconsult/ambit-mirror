@@ -146,6 +146,9 @@ public class AmbitApplication extends TaskApplication {
 		
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
 		router.attach(StatisticsResource.resource,StatisticsResource.class);
+		router.attach(String.format("%s/{%s}",StatisticsResource.resource,StatisticsResource.resourceKey),
+				StatisticsResource.class);
+		
 		router.attach(ChartResource.resource,ChartResource.class);
 		router.attach(String.format("%s/{%s}",ChartResource.resource,ChartResource.resourceKey),ChartResource.class);
 		

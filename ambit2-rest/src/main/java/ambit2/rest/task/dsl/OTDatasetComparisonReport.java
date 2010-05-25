@@ -15,6 +15,13 @@ public class OTDatasetComparisonReport extends OTObject {
 	protected Reference application;
 	protected OTDatasets datasets1;
 	protected OTDatasets datasets2; 
+	protected Reference datasetReportRef;
+	public Reference getDatasetReportRef() {
+		return datasetReportRef;
+	}
+	public void setDatasetReportRef(Reference datasetReportRef) {
+		this.datasetReportRef = datasetReportRef;
+	}
 	protected static String queryDatasets = 
 	"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
 	"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
@@ -63,10 +70,8 @@ public class OTDatasetComparisonReport extends OTObject {
 			writer.write("<thead><tr><th width='30%'>Number of compounds</th>");
 			for (int i=0; i < datasets2.size();i++) {
 				OTDataset dataset2 = datasets2.getItem(i);
-				writer.write(String.format("<th>%d.<a href='%s' title='%s'>%s</a></th>",i+1,
-							dataset2.getUri(),
-							dataset2.getName()==null?dataset2.getUri():dataset2.getName(),
-									dataset2.getName()==null?dataset2.getUri():dataset2.getName()
+				writer.write(String.format("<th>%d.&nbsp;%s</th>",i+1,
+							dataset2.getName()==null?dataset2.getUri():dataset2.getName()
 											));
 			}
 			writer.write("</tr></thead><tbody>");
@@ -74,8 +79,8 @@ public class OTDatasetComparisonReport extends OTObject {
 			String[][] count = new String[datasets1.size()][datasets2.size()];
 			for (int i=0; i < datasets1.size();i++) {
 				OTDataset dataset1 = datasets1.getItem(i);
-				writer.write("<tr>");
-				writer.write(String.format("<th align='left'>&nbsp;%d.<a href='%s'>%s</a></th>",i+1,dataset1.uri,
+				writer.write("\n<tr>");
+				writer.write(String.format("\n<th align='left'>&nbsp;%d.<a href='%s'>%s</a></th>",i+1,dataset1.uri,
 						dataset1.getName()==null?dataset1.uri:dataset1.name));
 				for (int j=0; j < datasets2.size();j++) {
 					OTDataset dataset2 = datasets2.getItem(j);
@@ -93,7 +98,15 @@ public class OTDatasetComparisonReport extends OTObject {
 						} 
 						Reference ref = dataset1.uri.clone();
 						ref.addQueryParameter("intersection",dataset2.uri.toString());
-						writer.write(String.format("<t%s><a href='%s' title='Common structures \"%s\" and \"%s\"' target='_blank'>%s</a></t%s>",
+						
+						/*
+						String link = String.format("onClick=\"contentDisp('%s',%d,'%s');\"",
+								datasetReportRef,
+								1,
+								ref);
+								*/
+						
+						writer.write(String.format("\n<t%s><a href='%s'  title='Common structures \"%s\" and \"%s\"' target='_blank'>%s</a></t%s>",
 								same?"h":"d",
 								ref,
 								dataset1.name==null?dataset1.uri:dataset1.name,
@@ -102,7 +115,7 @@ public class OTDatasetComparisonReport extends OTObject {
 								same?"h":"d"));
 					//}
 				}
-				writer.write("</tr>");
+				writer.write("</tr>\n");
 			}
 			writer.write("</tbody></table>");
 		}	 
