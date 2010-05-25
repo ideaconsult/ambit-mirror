@@ -15,6 +15,7 @@ import ambit2.base.data.Property;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.OT;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -22,7 +23,6 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -75,7 +75,42 @@ public class OTDatasetRDFReport extends OTObject {
 		"	ORDER by ?endpoint ?src ?title";
 	
 	
-	protected Model jenaModel;
+	protected static String queryPredictedFeatures = 
+		"PREFIX ot:<http://www.opentox.org/api/1.1#>\n"+
+		"	PREFIX ota:<http://www.opentox.org/algorithms.owl#>\n"+
+		"	PREFIX owl:<http://www.w3.org/2002/07/owl#>\n"+
+		"	PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
+		"	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+		"	PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+		"	PREFIX otee:<http://www.opentox.org/echaEndpoints.owl#>\n"+
+		"		select DISTINCT ?endpoint ?endpointName ?Model ?mname ?f ?o ?value ?otitle\n"+
+		"		where {\n"+
+		"	     ?dataset ot:dataEntry ?d.\n"+
+		"		 ?d rdf:type ot:DataEntry.\n"+
+		"	     ?d ot:compound <%s>.\n"+
+		"	     ?d ot:values ?v.\n"+
+		"	     ?v ot:value ?value.\n"+
+		"	     ?v ot:feature ?f.\n"+
+		"	     ?Model rdf:type ot:Model.\n"+
+		"	     ?f owl:sameAs ?o.\n"+		
+		//"	     ?Model ot:predictedVariables ?f\n"+
+		"	     OPTIONAL {?f dc:title ?otitle}.\n"+
+		"		 OPTIONAL {?Model dc:title ?mname.}\n"+
+		"{\n"+
+		"{ ?Model ot:dependentVariables ?f. } UNION { ?Model ot:predictedVariables ?f. }\n"+
+		"}\n"+		
+		"        OPTIONAL {?f owl:sameAs ?endpoint}.\n"+
+		"        OPTIONAL {?endpoint dc:title ?endpointName}.\n"+		
+		" }\n"+
+		"	ORDER by ?endpoint ?Model ?f";	
+	
+	protected OntModel jenaModel;
+	public OntModel getJenaModel() {
+		return jenaModel;
+	}
+	public void setJenaModel(OntModel jenaModel) {
+		this.jenaModel = jenaModel;
+	}
 	protected String application;
 	protected OTDataset dataset;
 	protected int page;
@@ -156,10 +191,10 @@ public class OTDatasetRDFReport extends OTObject {
 		Representation r = null;
 		
 		try {
-			
+
 			r = client.post(form.getWebRepresentation(),MediaType.APPLICATION_RDF_XML);
 			if (client.getStatus().equals(Status.SUCCESS_OK))
-				jenaModel = OT.createModel(null,r.getStream(),MediaType.APPLICATION_RDF_XML);
+				jenaModel = OT.createModel(jenaModel,r.getStream(),MediaType.APPLICATION_RDF_XML);
 			else throw new ResourceException(client.getStatus(),ref.toString());
 			
 			//writeData(writer);
@@ -265,11 +300,17 @@ public class OTDatasetRDFReport extends OTObject {
 		writer.write("\n</tr>\n");
 		writer.write("\n<tr><td colspan='3'>\n");
 		
-		
-		try { if (showEndpoints||showFeatures) writeData(row,compound,writer); }catch (Exception x) {x.printStackTrace();}
+			
+
+		if (showEndpoints) 
+			try  {writeData(row,compound,writer); } catch (Exception x) {x.printStackTrace();}
+		else if (showFeatures)
+			try { writeModels(row,compound,writer); } catch (Exception x) {x.printStackTrace();}
 		writer.write("\n</td></tr></table>\n");
 		
 	}	
+	
+	
 	public void rowValue(int row, int col, String compound, String title, String value, Writer writer) throws IOException {
 
 			writer.write("<b>\n");
@@ -366,6 +407,13 @@ public class OTDatasetRDFReport extends OTObject {
 			else if (node.isResource()) return String.format("<a href='%s' target=_blank>%s</a>",((Resource)node).getURI(),((Resource)node).getURI());
 			else return node.toString();
 	 }
+	 
+	 
+	 
+	 protected void writeModels(int row,String cmp, Writer writer) throws Exception {
+		 writer.write("</table><table>");
+		 renderCompoundFeatures(queryPredictedFeatures,jenaModel,writer, cmp,"",null,new Reference(application));
+	 }
 	 protected void writeData(int row,String cmp, Writer writer) throws Exception {
 		 	writer.write(String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#data_%s\").tablesorter({widgets: ['zebra'] }); } );</script>",row));	
 		    writer.write(String.format("\n<table class=\"tablesorter\" id=\"data_%s\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n",row));
@@ -409,7 +457,8 @@ public class OTDatasetRDFReport extends OTObject {
 					String modelName = getString(solution.get("modelName"));	
 					
 					writer.write(String.format("\n<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
-							endpoint==null?"":endpoint,src,title,value,type));
+							endpoint==null?"":endpoint,
+									(modelName==null)||("".equals(modelName))?src:modelName,title,value,type));
 				}
 				//if (oldEndpoint != null) writer.write("\n</tbody>\n");
 			}catch (Exception x) {
@@ -422,4 +471,112 @@ public class OTDatasetRDFReport extends OTObject {
 			writer.write("\n</table>");
 		}
 
+	 
+		public static int renderCompoundFeatures(
+				//IToxPredictSession session,
+			    String sparqlQuery,
+				OntModel model, 
+				Writer writer,
+				String compoundURI, 
+				String param,
+				String caption,
+				Reference rootReference) throws Exception {
+		QueryExecution qe = null;
+		try {
+			//System.out.println(String.format(sparqlQuery,compoundURI,param));
+			Query query = QueryFactory.create(String.format(sparqlQuery,compoundURI,param));
+			qe = QueryExecutionFactory.create(query,model );
+			ResultSet results = qe.execSelect();
+			int records = 0;
+			String thisModel = null;
+			while (results.hasNext()) {
+				records++;
+				QuerySolution solution = results.next();
+
+				String value = getValueColumn(solution);
+				if (value == null) continue;
+				
+				String modelString = getModelColumn(solution,rootReference);
+				if (modelString != null) {
+					if (!modelString.equals(thisModel)) {
+						writer.write("<tr class='predictions'>");
+						writer.write("<th align='left' colspan='3' class='predictions'>");
+						thisModel = modelString;
+						writer.write(modelString);
+						
+						writer.write("</th>");
+						writer.write("</tr>");
+					} 
+						//predictions
+						writer.write("<tr><td width='10%'></td><th colspan='1' align='left' valign='top' width='50%'>");
+						writer.write(getNameColumn(solution, caption));
+						writer.write("</th><td>");
+						if (caption==null) 
+							writer.write("<font color='#636bd2'>"); //didn't work with style
+						writer.write(value);
+						if (caption==null) 
+							writer.write("</font>");
+						writer.write("</td></tr>");						
+			
+				} else {
+					writer.write("<tr><th colspan='2' align='left' valign='top' width='30%'>");
+					writer.write(getNameColumn(solution, caption));
+					writer.write("</th><td>");
+					if (caption==null) 
+						writer.write("<font color='#636bd2'>"); //didn't work with style
+					writer.write(value);
+					if (caption==null) 
+						writer.write("</font>");
+					writer.write("</td></tr>");
+				}
+				
+			}
+
+			return records;
+		}catch (Exception x) {
+			throw x;
+		} finally {
+			try {qe.close();} catch (Exception x) {}
+		}		
+	}	
+		
+		protected static String getModelColumn( QuerySolution solution, Reference rootReference) {
+			Resource m = solution.getResource("Model");
+			Literal mname = solution.getLiteral("mname");
+			Resource endpoint = solution.getResource("endpoint");
+			Literal ename = solution.getLiteral("endpointName");
+			if (m!=null) {
+				/*
+				String download = ModelTools.getDownloadURI(session,m.getURI(), 
+							ChemicalMediaType.CHEMICAL_MDLSDF,rootReference);
+							*/
+				String download = null;
+				return String.format(
+						
+						"%s&nbsp;<a href='%s' target='_blank' title='%s' alt='%s'><img border='0' src='%s/images/chart_line.png' alt='Model %s' title='Model %s'>%s</a>&nbsp;%s",
+						ename==null?(endpoint==null?"":endpoint.getLocalName()):ename.getString(),
+						m.getURI(),
+						mname==null?m.getURI():mname.getString(),
+						mname==null?m.getURI():mname.getString(),
+						rootReference.toString(),
+						mname==null?m.getURI():mname.getString(),
+						mname==null?m.getURI():mname.getString(),
+						mname==null?m.getURI():mname.getString(),
+						download==null?"":download);
+			}
+			else return null;
+		}	
+		
+		protected static String getNameColumn(QuerySolution solution,String caption) {
+			Resource sameas = solution.getResource("o");
+			Literal sameName = solution.getLiteral("otitle");		
+			if (caption==null)
+				return sameName!=null?sameName.getString():sameas!=null?sameas.getLocalName():"";
+			else return caption; 
+		}
+		protected static String getValueColumn(QuerySolution solution) {
+			Literal literal = solution.getLiteral("value");
+			if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) return null;
+			return literal!=null?literal.getString():"";
+		}		
 }
