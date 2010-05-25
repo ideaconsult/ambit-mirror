@@ -53,7 +53,12 @@ public class WelcomeResource extends WizardResource {
 				"\n<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s%s\",\"%s\"); } );</script>",
 				wizard.getService(SERVICE.application).toString(),
 				"/stats/dataset",
-				"#count_datasets"));			
+				"#count_datasets"));	
+		
+		writer.write(String.format(
+				"\n<script type=\"text/javascript\">$(document).ready(function() {  %s; } );</script>",
+				"animatedcollapse.show('help_step')"));			
+
 		/*
 		writer.write(String.format(
 				"\n<script type=\"text/javascript\">$(document).ready( $(\"#%s\").load(\"%s\"); );</script>",
