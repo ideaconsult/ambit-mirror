@@ -19,6 +19,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.update.dataset.QueryCount;
+import ambit2.db.update.dataset.QueryCountChemicalInDataset;
 import ambit2.db.update.dataset.QueryCountDataset;
 import ambit2.db.update.dataset.QueryCountDatasetIntersection;
 import ambit2.db.update.dataset.QueryCountProperties;
@@ -38,7 +39,8 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 		chemicals_in_dataset,
 		dataset_intersection,
 		properties,
-		values
+		values,
+		dataset
 	}
 	
 	@Override
@@ -92,9 +94,11 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 		case values: {
 			return new QueryCountValues();
 		}		
-			
+		case dataset: {
+			return new QueryCountDataset();
+		}	
 		case chemicals_in_dataset: {
-			QueryCountDataset q = new QueryCountDataset();
+			QueryCountChemicalInDataset q = new QueryCountChemicalInDataset();
 			for (int i=0; i < datasetsURI.length;i++ ) {
 				String datasetURI = datasetsURI[i];
 				Map<String, Object> vars = new HashMap<String, Object>();
