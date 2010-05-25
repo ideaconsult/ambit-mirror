@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.OpenTox;
@@ -25,6 +27,8 @@ import ambit2.rest.task.dsl.OTFeatures;
 import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.task.dsl.OTModels;
 import ambit2.rest.task.dsl.OTValidation;
+
+import com.hp.hpl.jena.ontology.OntModel;
 
 public class ReportingResource  extends FastoxStepResource {
 	protected static OTFeatures endpoints;
@@ -169,7 +173,8 @@ public class ReportingResource  extends FastoxStepResource {
 		try {
 			pageSize = Integer.parseInt(form.getFirstValue(OpenTox.params.pagesize.toString()));
 		} catch (Exception x) {
-			pageSize = 10;
+			try { pageSize = Integer.parseInt(getSession(getUserKey()).getPageSize()); } 
+			catch (Exception xx) { pageSize =1; }
 		}	
 		try {
 			mode = display_mode.valueOf(form.getFirstValue("mode"));
@@ -279,6 +284,14 @@ public class ReportingResource  extends FastoxStepResource {
 				} else {
 					writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">\n",getRequest().getRootRef()));
 				}
+				OntModel store_models;
+				try {
+					store_models = ModelTools.retrieveModels(null,session, MediaType.APPLICATION_RDF_XML);
+				} catch (Exception x) {
+					store_models = null;
+					session.setError(key,x);
+				}	
+			
 				for (String q : search) {
 					
 					OTDatasetReport report;
@@ -293,6 +306,8 @@ public class ReportingResource  extends FastoxStepResource {
 									models==null?null:models.predictedVariables(),
 									wizard.getService(SERVICE.application).toString(),page,pageSize).
 						setRequestref(getRequest().getResourceRef());
+
+						rep.setJenaModel(store_models);
 						//((ToxPredictDatasetReport)report).setModels(models);
 						rep.write(writer);
 						break;

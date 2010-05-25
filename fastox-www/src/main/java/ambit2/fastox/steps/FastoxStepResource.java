@@ -16,8 +16,6 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.exceptions.NotFoundException;
-import ambit2.fastox.DatasetTools;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.users.UserResource;
@@ -30,10 +28,9 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.Syntax;
-import com.hp.hpl.jena.rdf.model.Model;
 
 public abstract class FastoxStepResource extends WizardResource {
-	protected Model store = null;
+
 	public enum params {
 		search,
 		max,
@@ -81,14 +78,7 @@ public abstract class FastoxStepResource extends WizardResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 	}
-	@Override
-	protected void doRelease() throws ResourceException {
-		try {
-			if (store != null) store.close();
-		} catch (Exception x) {
-		}
-		super.doRelease();
-	}
+
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		if (session.getDatasetURI() == null) {
@@ -170,14 +160,14 @@ public abstract class FastoxStepResource extends WizardResource {
 		} 		
 	}	
 	*/
-	protected void renderCompoundsNew(Writer writer,String key, Model jenaModel, boolean showPredictedResults,boolean showEndpoints) throws IOException {
+	protected void renderCompoundsNew(Writer writer,String key, boolean showPredictedResults,boolean showEndpoints) throws IOException {
 		ClientResource client = null;
 		Representation r = null;
 		try {
 	
 			client = new ClientResource(
 					new Reference(
-							String.format("%s/user/%s/report/Dataset?header=false&page=0&endpoints=%s&models=%s&search=%s",
+							String.format("%s/user/%s/report/Dataset?header=false&page=0&pagesize=1&endpoints=%s&models=%s&search=%s",
 									getRequest().getRootRef(),
 									session.getUser().getId(),
 									showEndpoints?"TRUE":"FALSE",

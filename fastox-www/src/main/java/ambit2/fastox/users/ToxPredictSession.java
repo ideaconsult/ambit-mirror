@@ -142,7 +142,7 @@ public class ToxPredictSession implements IToxPredictSession {
 		}
 		models.put(model,status);
 		try { 
-			selectedModels.add(OTModel.model(model).load(new OTProperty[] {OTProperty.predictedVariables})); 
+			selectedModels.add(OTModel.model(model).load(new OTProperty[] {OTProperty.predictedVariables,OTProperty.model})); 
 		} catch (Exception x) {}
 
 	}

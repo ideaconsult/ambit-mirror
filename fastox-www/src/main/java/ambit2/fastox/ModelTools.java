@@ -13,12 +13,12 @@ import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.WizardResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.rdf.OT;
 import ambit2.rest.task.RemoteTask;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -109,14 +109,14 @@ public class ModelTools {
 				"rdf.gif"
 				
 		};
-	public static Model retrieveModels(Model rdf,IToxPredictSession session,MediaType mediaType) throws Exception {
+	public static OntModel retrieveModels(OntModel rdf,IToxPredictSession session,MediaType mediaType) throws Exception {
 		Iterator<String> models = session.getModels();
 		if (models != null)
 		while (models.hasNext()) {
 			String uri = models.next();
 			try {
 				//System.out.println(uri);
-				if (rdf==null) rdf = ModelFactory.createDefaultModel();
+				if (rdf==null) rdf = OT.createModel();
 				rdf.read(uri);
 				
 			} catch (ResourceException x) {
