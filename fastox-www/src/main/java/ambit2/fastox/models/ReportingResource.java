@@ -11,11 +11,11 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.dsl.OTAlgorithm;
 import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTDatasetComparisonReport;
 import ambit2.rest.task.dsl.OTDatasetRDFReport;
 import ambit2.rest.task.dsl.OTDatasetReport;
 import ambit2.rest.task.dsl.OTDatasetScrollableReport;
@@ -72,37 +72,44 @@ public class ReportingResource  extends FastoxStepResource {
 	protected enum report_type {
 		Validation {
 			@Override
-			public String report(String q,String ontology) throws Exception {
+			public String report(String q,String ontology,String application) throws Exception {
 				return OTValidation.validation(q).report(ontology);
 			}
 		},
 		Model {
 			@Override
-			public String report(String q,String ontology) throws Exception  {
+			public String report(String q,String ontology,String application) throws Exception  {
 				return OTModel.model(q).report(ontology);
 			}
 		},
 		Algorithm {
 			@Override
-			public String report(String q,String ontology) throws Exception  {
+			public String report(String q,String ontology,String application) throws Exception  {
 
 				return OTAlgorithm.algorithm(q).report(ontology);
 			}
 		},
 		Dataset {
 			@Override
-			public String report(String q,String ontology) throws Exception  {
+			public String report(String q,String ontology,String application) throws Exception  {
 
 				return "";
 			}
 		},		
+		Stats {
+			@Override
+			public String report(String q,String ontology,String application) throws Exception  {
+
+				return OTDatasetComparisonReport.report(new Reference(application),OTDataset.dataset(q)).report(ontology);
+			}
+		},			
 		Feature {
 			@Override
-			public String report(String q,String ontology) throws Exception  {
+			public String report(String q,String ontology,String application) throws Exception  {
 				return OTModel.model(q).report(ontology);
 			}
 		};
-		public abstract String report(String q,String ontology) throws Exception ;
+		public abstract String report(String q,String ontology,String application) throws Exception ;
 
 		public String getTitle(String url) {
 			return String.format("%s&nbsp;<a href='%s'>%s</a>",toString(),url,url);
@@ -306,12 +313,41 @@ public class ReportingResource  extends FastoxStepResource {
 				}
 				
 			} else 
-				for (String q : search) {
-					String s = type.report(q, String.format("%s?results=yes&title=%s",
+				if ((search==null) || (search.length==0)) {
+					if (header) {
+						writer.write(
+								String.format(
+						"<html><head>\n<script src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n</head>"+
+						"\n<body>\n<link rel=\"stylesheet\" href=\"%s/style/scrollable.css\" type=\"text/css\" media=\"screen\">",
+						getRequest().getRootRef(),
+						getRequest().getRootRef()
+						));
+						writer.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",getRequest().getRootRef()));
+						writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">\n",getRequest().getRootRef()));
+						writer.write(String.format("<script src=\"%s/jquery/jquery.blockUI.js\"></script>\n",getRequest().getRootRef()));
+						writer.write(ReportingResource.js());
+						
+					} else {
+						writer.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">\n",getRequest().getRootRef()));
+					}					
+					String s = type.report(null, 
+							String.format("%s?results=yes&title=%s",
 							wizard.getService(SERVICE.ontology).toString(),
-							Reference.encode(type.getTitle(q))));
+							Reference.encode(type.getTitle(""))),
+							wizard.getService(SERVICE.application).toString());
 					writer.write(s);
-				}
+					
+					if (header) {
+						writer.write("</body></html>");
+					}					
+				} else
+					for (String q : search) {
+						String s = type.report(q, String.format("%s?results=yes&title=%s",
+								wizard.getService(SERVICE.ontology).toString(),
+								Reference.encode(type.getTitle(q))),
+								wizard.getService(SERVICE.application).toString());
+						writer.write(s);
+					}
 
 		} catch (Exception x) {
 			writer.write(x.getMessage());
