@@ -219,7 +219,20 @@ public class AmbitResource extends ServerResource {
 			{"/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)",format,"GET"},
 			{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict",format,"GET"},
 			{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
-		
+
+			{"[ambit - stats]","Statistics",formatHeader,null},
+			{"/stats/dataset","Number of datasets",format,"GET"},
+			{"/stats/structures","Number of structures",format,"GET"},
+			{"/stats/chemicals_in_dataset?dataset_uri=","Number of chemicals in a dataset",format,"GET"},
+			{"/stats/dataset_intersection?dataset_uri=..&dataset_uri=..","Number of common chemicals in two datasets",format,"GET"},
+			{"/stats/properties","Number of properties",format,"GET"},
+			{"/stats/values","Number of values",format,"GET"},
+
+
+			{"[ambit - chart]","Charts",formatHeader,null},
+			{"/chart/pie?dataset_uri=...&feature_uris[]=...","Pie chart",format,"GET"},
+			{"/chart/xy?dataset_uri=...&feature_uris[]=...&feature_uris[]=...","XY Scatter plot",format,"GET"},
+			
 	};
 
 	@Override
