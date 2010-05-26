@@ -271,7 +271,9 @@ public class ReportingResource  extends FastoxStepResource {
 				if (header) {
 					writer.write(
 							String.format(
-					"<html><head>\n<script src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n</head>"+
+					"<html><head>\n<script src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n"+
+					"<meta name=\"robots\" content=\"index,nofollow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,NOFOLLOW\">"+
+					"</head>"+
 					"\n<body>\n<link rel=\"stylesheet\" href=\"%s/style/scrollable.css\" type=\"text/css\" media=\"screen\">",
 					getRequest().getRootRef(),
 					getRequest().getRootRef()
