@@ -95,6 +95,8 @@ public class OTDatasetComparisonReport extends OTObject {
 						OTObject o = OTObject.object(link_count.toString()).readTextLineAsName();
 						count[i][j] = o.getName();
 						link = dataset1.uri.clone();
+						link.addQueryParameter("page", "0");
+						link.addQueryParameter("pagesize", "25");
 						
 					} else  {
 						//if (count[i][j] == null) {
@@ -133,7 +135,7 @@ public class OTDatasetComparisonReport extends OTObject {
 							"<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s\",\"#%s\"); } );</script>",
 							link_count,
 							cell));					
-					writer.write(String.format("\n<t%s><a href='%s' title='Common structures \"%s\" and \"%s\"' target='_blank'><label id='%s'></label></a>",
+					writer.write(String.format("\n<t%s><a href='%s' title='Common structures \"%s\" and \"%s\"' target='_blank'><label id='%s'>#</label></a>",
 								same?"h":"d",
 								link,
 								dataset1.uri,
