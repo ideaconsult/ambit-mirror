@@ -97,7 +97,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 					
 				}
 		} catch (Exception x) {
-			
+			try {System.err.println(x.getMessage() + " " +sresults); } catch (Exception xx) {}
 			throw new ProcessorException(this,x);
 		} catch (Throwable x) { 
 			throw new ProcessorException(this,x.getMessage());
