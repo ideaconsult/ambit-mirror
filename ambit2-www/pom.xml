@@ -297,7 +297,7 @@
   	<dependency>
   	<groupId>net.bull.javamelody</groupId>
   	<artifactId>javamelody</artifactId>
-  	<version>1.10.0</version>
+  	<version>1.15.0</version>
   	<scope>runtime</scope>
 	</dependency>
   	<dependency>
