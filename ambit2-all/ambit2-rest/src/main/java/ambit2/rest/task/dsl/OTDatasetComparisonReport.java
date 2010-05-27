@@ -85,19 +85,32 @@ public class OTDatasetComparisonReport extends OTObject {
 				for (int j=0; j < datasets2.size();j++) {
 					OTDataset dataset2 = datasets2.getItem(j);
 					boolean same= dataset1.uri.equals(dataset2.uri);
-					//if (dataset1.uri.equals(dataset2.uri)) {
-						//writer.write("<td> </td>");
-					//} else  {
-						if (count[i][j] == null) {
-							Reference ref = new Reference(String.format("%s/stats",application));
-							ref.addQueryParameter("dataset_uri",dataset1.uri.toString());
-							ref.addQueryParameter("dataset_uri",dataset2.uri.toString());
+					Reference link;
+					Reference link_count=null;
+					if (dataset1.uri.equals(dataset2.uri)) { //same dataset
+						//http://apps.ideaconsult.net:8080/ambit2/stats/chemicals_in_dataset?dataset_uri=http://apps.ideaconsult.net:8080/ambit2/dataset/1
+						link_count = new Reference(String.format("%s/stats/chemicals_in_dataset",application));
+						link_count.addQueryParameter("dataset_uri",dataset1.uri.toString());
+
+						OTObject o = OTObject.object(link_count.toString()).readTextLineAsName();
+						count[i][j] = o.getName();
+						link = dataset1.uri.clone();
+						
+					} else  {
+						//if (count[i][j] == null) {
+							link_count = new Reference(String.format("%s/stats",application));
+							link_count.addQueryParameter("dataset_uri",dataset1.uri.toString());
+							link_count.addQueryParameter("dataset_uri",dataset2.uri.toString());
 	
-							OTObject o = OTObject.object(ref.toString()).readTextLineAsName();
-							count[i][j] = o.getName();
-						} 
-						Reference ref = dataset1.uri.clone();
-						ref.addQueryParameter("intersection",dataset2.uri.toString());
+						//	OTObject o = OTObject.object(link_count.toString()).readTextLineAsName();
+						//	count[i][j] = o.getName();
+						//} 
+	
+						
+						link = dataset1.uri.clone();
+						link.addQueryParameter("intersection",dataset2.uri.toString());						
+					}
+
 						
 						/*
 						String link = String.format("onClick=\"contentDisp('%s',%d,'%s');\"",
@@ -105,17 +118,32 @@ public class OTDatasetComparisonReport extends OTObject {
 								1,
 								ref);
 								*/
-						
-						writer.write(String.format("\n<t%s><a href='%s'  title='Common structures \"%s\" and \"%s\"' target='_blank'>%s</a></t%s>",
+					/*		
+					writer.write(String.format("\n<t%s><a href='%s'  title='Common structures \"%s\" and \"%s\"' target='_blank'>%s</a></t%s>",
 								same?"h":"d",
-								ref,
+								link,
 								dataset1.name==null?dataset1.uri:dataset1.name,
 								dataset2.name==null?dataset2.uri:dataset2.name,
 								count[i][j],
 								same?"h":"d"));
+					*/
+					
+					String cell = String.format("td%d_%d",i,j);
+					writer.write(String.format(
+							"<script type=\"text/javascript\">$(document).ready(function() {  stats(\"%s\",\"#%s\"); } );</script>",
+							link_count,
+							cell));					
+					writer.write(String.format("\n<t%s><a href='%s' title='Common structures \"%s\" and \"%s\"' target='_blank'><label id='%s'></label></a>",
+								same?"h":"d",
+								link,
+								dataset1.uri,
+								dataset2.uri,
+								cell));
+
+					writer.write(String.format("</t%s>",same?"h":"d"));
 					//}
 				}
-				writer.write("</tr>\n");
+				writer.write("\n</tr>\n");
 			}
 			writer.write("</tbody></table>");
 		}	 
