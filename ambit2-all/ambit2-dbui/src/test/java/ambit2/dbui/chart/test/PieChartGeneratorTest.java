@@ -21,6 +21,7 @@ import ambit2.db.chart.HistogramChartGenerator;
 import ambit2.db.chart.Nominal2SimilarityChartGenerator;
 import ambit2.db.chart.Numeric2SimilarityChartGenerator;
 import ambit2.db.chart.PieChartGenerator;
+import ambit2.db.chart.PieChartGeneratorDataset;
 import ambit2.db.chart.PropertiesChartGenerator;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StoredQuery;
@@ -43,7 +44,7 @@ public class PieChartGeneratorTest extends RepositoryTest  {
 			//IStoredQuery q = new StoredQuery(6);
 			SourceDataset dataset = new SourceDataset();
 			dataset.setId(6);
-			PieChartGenerator gen = new PieChartGenerator();
+			PieChartGenerator gen = new PieChartGeneratorDataset();
 			gen.setConnection(c);
 			Property p = Property.getInstance("toxTree.tree.cramer.CramerRules", "");
 			p.setId(12361);

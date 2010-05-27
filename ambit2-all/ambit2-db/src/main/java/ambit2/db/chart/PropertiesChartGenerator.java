@@ -14,7 +14,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 
 public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
-	protected static final String sql = 
+	protected static final String sql_dataset = 
 		"select a,b from\n"+
 		"(\n"+
 		"select value_num as a,idchemical from struc_dataset join structure using(idstructure)\n"+
@@ -30,6 +30,23 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 		"group by idchemical,value_num\n"+
 		") as Y\n"+
 		"using(idchemical)\n";
+	
+	protected static final String sql_query = 
+		"select a,b from\n"+
+		"(\n"+
+		"select value_num as a,idchemical from query_results\n"+
+		"join property_values using(idstructure) join properties using(idproperty)\n"+
+		"where idproperty = %d and idquery=%d\n"+
+		"group by idchemical,value_num\n"+
+		") as X\n"+
+		"join\n"+
+		"(\n"+
+		"select value_num as b,idchemical from query_results\n"+
+		"join property_values using(idstructure) join properties using(idproperty)\n"+
+		"where idproperty = %d and idquery=%d\n"+
+		"group by idchemical,value_num\n"+
+		") as Y\n"+
+		"using(idchemical)\n";	
 	
 	protected Property propertyX;
 	public Property getPropertyX() {
@@ -64,7 +81,7 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 	      {
 	    	  JDBCXYDataset dataset =  new JDBCXYDataset(
 	        		 getConnection(),
-	        		 String.format(sql,
+	        		 String.format(sql_dataset,
 	        				 propertyX.getId(),target.getId(),
 	        				 propertyY.getId(),target.getId()
 	        				 )); 

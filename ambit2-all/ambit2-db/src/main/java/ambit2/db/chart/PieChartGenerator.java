@@ -9,7 +9,6 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.data.jdbc.JDBCPieDataset;
 
 import ambit2.base.data.Property;
-import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 
@@ -18,7 +17,7 @@ import ambit2.db.exceptions.DbAmbitException;
  * @author nina
  *
  */
-public class PieChartGenerator extends ChartGenerator<SourceDataset> {
+public abstract class PieChartGenerator<T> extends ChartGenerator<T> {
 	protected Property property;
 	public Property getProperty() {
 		return property;
@@ -35,25 +34,23 @@ public class PieChartGenerator extends ChartGenerator<SourceDataset> {
 		"group by value\n";
 		*/
 	
-	protected static final String sql = 
-		"SELECT ifnull(value_num,value) as v,count(distinct(structure.idchemical)) as num_chemicals\n"+
-		"FROM struc_dataset join structure using(idstructure) join property_values using(idstructure) " +
-		"left join property_string using(idvalue_string) join properties using(idproperty)\n"+
-		"where idproperty=%d and id_srcdataset=%d\n"+
-		"group by v\n";	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4301713904733096802L;
-
-	public BufferedImage process(SourceDataset target) throws AmbitException {
+	
+	protected abstract int getID(T target);
+	protected abstract String getSQL();
+	
+	public BufferedImage process(T target) throws AmbitException {
 		  if (property == null) throw new AmbitException("Property not defined");
 		  JFreeChart pieChart = null;
 
 	      try
 	      {
 	         PieDataset pieDataset =  new JDBCPieDataset(getConnection(),
-	        		 String.format(sql,property.getId(),target.getId())); 
+	        		 String.format(getSQL(),property.getId(),getID(target))); 
 	         
 
 	         pieChart =
