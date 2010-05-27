@@ -257,7 +257,7 @@ public class ReportingResource  extends FastoxStepResource {
 		 //"      type: \"POST\", \n"+
 		 "      data: data, \n"+
 		 "      beforeSend: function(xhr){\n"+
-		 "        xhr.setRequestHeader(\"Accept\",\"text/csv\");\n"+
+		 "        xhr.setRequestHeader(\"Accept\",\"text/html\");\n"+
 		 "      },\n"+
 		 "url : url,\n"+
 		 "success : function (data) {\n"+
