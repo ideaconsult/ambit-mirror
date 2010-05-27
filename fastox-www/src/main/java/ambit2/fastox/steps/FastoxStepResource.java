@@ -175,7 +175,9 @@ public abstract class FastoxStepResource extends WizardResource {
 									Reference.encode(session.getDatasetURI()))
 					));
 			r = client.get(MediaType.TEXT_HTML);
-			writer.write(r.getText());
+			if (Status.SUCCESS_OK.equals(client.getStatus()) && (r.isAvailable()))
+				writer.write(r.getText());
+			else throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 
 		} catch (Exception x) {
 			session.setError(key,x);
