@@ -2,6 +2,7 @@ package ambit2.db.reporters;
 
 import java.io.Writer;
 
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -10,6 +11,7 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
@@ -22,6 +24,13 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	private static final long serialVersionUID = 2931123688036795689L;
 	protected Template template;
 	protected boolean MOLONLY = false;
+	protected Profile groupProperties;
+	public Profile getGroupProperties() {
+		return groupProperties;
+	}
+	public void setGroupProperties(Profile gp) {
+		this.groupProperties = gp;
+	}	
 	public boolean isMOLONLY() {
 		return MOLONLY;
 	}
@@ -35,13 +44,14 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		this.template = template;
 	}
 	public SDFReporter() {
-		this(new Template(null));
+		this(new Template(null),null);
 	}
-	public SDFReporter(Template template) {
-		this(template,false);
+	public SDFReporter(Template template,Profile groupedProperties) {
+		this(template,groupedProperties,false);
 	}
-	public SDFReporter(Template template,boolean molOnly) {
+	public SDFReporter(Template template,Profile groupedProperties,boolean molOnly) {
 		setTemplate(template);
+		setGroupProperties(groupedProperties);
 		setMOLONLY(molOnly);
 		getProcessors().clear();
 		RetrieveStructure r = new RetrieveStructure();
@@ -49,6 +59,16 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		r.setPageSize(1);
 		getProcessors().add(new ProcessorStructureRetrieval(r));		
 
+		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0)) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});	
+		
 		if (getTemplate().size()>0) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override

@@ -58,10 +58,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	protected static String SEARCH_as_id = "search";
 	
 	protected Form params;
-	@Override
-	protected void doInit() throws ResourceException {
-		super.doInit();
-	}
+
 	/**
 	 * SMILES, InChI, InChI key (lookup) , identifiers, names
 	 */
@@ -72,6 +69,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		//parse params
+
 		Object id = null;
 		try {
 			id = getRequest().getAttributes().get(resourceKey);
@@ -164,8 +162,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			if (Method.GET.equals(getRequest().getMethod()))
 				params = getRequest().getResourceRef().getQueryAsForm();
 			//if POST, the form should be already initialized
-			else 
-				params = getRequest().getEntityAsForm();
+			else params = getRequest().getEntityAsForm();
 		return params;
 	}
 	protected QueryField getTextQuery(Property property, boolean caseSensitive, String value) {
@@ -240,17 +237,13 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			return 0;
 		}
 	}
-	@Override
-	protected Representation post(Representation entity)
-			throws ResourceException {
-		return super.post(entity);
-	}
 
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			if (params==null) params = new Form(entity);
+			params = getParams();
+			
 			return get(variant);
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 				String.format("%s not supported",entity==null?"":entity.getMediaType()));
