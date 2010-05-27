@@ -23,6 +23,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
 import ambit2.db.chart.PieChartGenerator;
+import ambit2.db.chart.PieChartGeneratorDataset;
 import ambit2.db.chart.PropertiesChartGenerator;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
@@ -101,7 +102,7 @@ public class ChartResource extends ServerResource {
     		case pie: {
     			Iterator<Property> i = profile.getProperties(true);
     			while (i.hasNext()) {
-	    			PieChartGenerator chart = new PieChartGenerator();
+	    			PieChartGenerator chart = new PieChartGeneratorDataset();
 	    			chart.setProperty(i.next());    
 	    			chart.setConnection(connection);
 	    			chart.setWidth(w);
