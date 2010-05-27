@@ -167,7 +167,7 @@ public class AmbitResource extends ServerResource {
 			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100304,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
 			
 			{"[ambit]","Actions on datasets (split, merge, subset)",formatHeader,null,"Implemented"},
-			{String.format("%s/8?%s=%s",DatasetResource.dataset,DatasetResource.dataset_intersection_uri,
+			{String.format("%s/{dataset1}?%s=%s",DatasetResource.dataset,DatasetResource.dataset_intersection_uri,
 							"datasetURI"),
 							"intersection of two datasets (only compounds common to both datasets)",format,"GET","Yes"},
 			{String.format("%s/8?%s=%s",DatasetResource.dataset,DatasetResource.dataset_complement_uri,
@@ -487,7 +487,7 @@ window.setInterval(function() {
 		w.write(meta);
 				
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
-		w.write("<meta name=\"robots\" content=\"index,follow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,FOLLOW\">");
+		w.write("<meta name=\"robots\" content=\"index,nofollow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,noFOLLOW\">");
 		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
 		//w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/dojo.js.uncompressed\" djConfig=\"parseOnLoad:true, isDebug:true\"></script>\n",baseReference));
 
