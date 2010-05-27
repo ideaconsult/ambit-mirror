@@ -201,7 +201,6 @@ public class OTDatasetRDFReport extends OTObject {
 
 		} catch (Exception x) {
 			throw x;
-			x.printStackTrace();
 		} finally {
 	
 			try {r.release();} catch (Exception x) {}
