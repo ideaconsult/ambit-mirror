@@ -1,12 +1,16 @@
 package ambit2.fastox.models;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
+import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -14,6 +18,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.dsl.OTAlgorithm;
 import ambit2.rest.task.dsl.OTDataset;
@@ -142,6 +147,9 @@ public class ReportingResource  extends FastoxStepResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
+		getVariants().add(new Variant(ChemicalMediaType.CHEMICAL_MDLSDF));
+		getVariants().add(new Variant(MediaType.TEXT_CSV));
+		getVariants().add(new Variant(MediaType.APPLICATION_PDF));
 		Form form = getParams();
 		search = form.getValuesArray("search");
 		if (endpoints==null) try {
@@ -421,4 +429,48 @@ public class ReportingResource  extends FastoxStepResource {
 	@Override
 	public void help(Writer writer) throws IOException {
 	}
+	
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
+		if (MediaType.TEXT_HTML.equals(variant.getMediaType())) 
+			return super.get(variant);
+		final MediaType mediaType = variant.getMediaType();
+		return new OutputRepresentation(mediaType) {
+			@Override
+			public void write(OutputStream out) throws IOException {
+				try {
+					OTModels models = getSession(getUserKey()).getSelectedModels();
+					for (String q : search) {
+						OTDatasetRDFReport rep = OTDatasetRDFReport.
+						report(OTDataset.dataset(q),
+									showEndpoints,
+									endpoints,
+									showModels,
+									models==null?null:models.predictedVariables(),
+									wizard.getService(SERVICE.application).toString(),page,pageSize).
+						setRequestref(getRequest().getResourceRef());
+	
+						//rep.setJenaModel(store_models);
+						//((ToxPredictDatasetReport)report).setModels(models);
+						rep.download(out,mediaType);
+					}
+						
+					
+				} catch (ResourceException x) {
+					throw x;
+				} catch (Exception x) {
+					if ((x.getMessage()!=null) && x.getMessage().equals("Not Found")) {
+						ResourceException xx = new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,
+								"We did not find any matching entries for the search you performed in the OpenTox database. Please go back to Step 1 of your ToxPredict workflow and try again.");
+						session.setError(step.getTitle(),xx);
+						throw xx;
+						
+					} else throw new ResourceException(x);
+				} finally {
+
+					out.close();
+				}
+			}
+		};
+	}	
 }
