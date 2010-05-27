@@ -1,6 +1,7 @@
 package ambit2.rest.task.dsl;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 
 import org.restlet.data.Form;
@@ -12,6 +13,7 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
+import ambit2.base.io.DownloadTool;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.OT;
 
@@ -364,7 +366,18 @@ public class OTDatasetRDFReport extends OTObject {
 						showEndpoints?"":"& Experimental Data")
 				));
 
-		
+		b.append(String.format("\n&nbsp;<a href=\"%s?media=chemical/x-mdl-sdf&%s\" title='Download as SDF'>SDF</a>",
+				requestref.getBaseRef(),
+				getPage(page, 1,true)
+				));
+		b.append(String.format("\n&nbsp;<a href=\"%s?media=text/csv&%s\" title='Download as CSV'>CSV</a>",
+				requestref.getBaseRef(),
+				getPage(page, 1,true)
+				));	
+		b.append(String.format("\n&nbsp;<a href=\"%s?media=application/pdf&%s\" title='Download as PDF'>PDF</a>",
+				requestref.getBaseRef(),
+				getPage(page, 1,true)
+				));				
 	
 		b.append("</td></tr>");
 		b.append("</table>");
@@ -579,5 +592,34 @@ public class OTDatasetRDFReport extends OTObject {
 			Literal literal = solution.getLiteral("value");
 			if ((literal==null) || literal.getString().equals(".") || literal.getString().equals("")) return null;
 			return literal!=null?literal.getString():"";
+		}		
+		
+		public OTDatasetRDFReport download(OutputStream out,MediaType media) throws Exception {
+			
+			Reference ref = uri.clone();
+			Form form = ref.getQueryAsForm();;
+			ref.setQuery("");
+			ClientResource client = new ClientResource(ref);
+			Representation r = null;
+			
+			try {
+
+				r = client.post(form.getWebRepresentation(),media);
+				if (client.getStatus().equals(Status.SUCCESS_OK))
+					DownloadTool.download(r.getStream(),out);
+				else throw new ResourceException(client.getStatus(),ref.toString());
+				
+				//writeData(writer);
+			} catch (ResourceException x) {
+				throw x;
+			} catch (Exception x) {
+				throw x;
+			} finally {
+		
+				try {r.release();} catch (Exception x) {}
+				try {client.release();} catch (Exception x) {}
+			}
+
+			return this;
 		}		
 }
