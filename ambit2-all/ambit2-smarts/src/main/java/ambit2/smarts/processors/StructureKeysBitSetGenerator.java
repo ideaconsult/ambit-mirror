@@ -52,7 +52,7 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	public void setSmartsKeys(Vector<String> smartsKeys) {
 		prepareKeySequences(smartsKeys,smartsKeys.size());		
 	}
-	protected void prepareKeySequences(Vector<String> keys, int nKeys)
+	protected synchronized void prepareKeySequences(Vector<String> keys, int nKeys)
 	{
 		smartsKeys = keys; 
 		QueryAtomContainer query;
@@ -86,7 +86,7 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 		}
 	}
 	
-	protected BitSet getStructureKeyBits(IAtomContainer ac)
+	protected synchronized BitSet getStructureKeyBits(IAtomContainer ac)
 	{
 		BitSet keys = new BitSet(nKeys);
 		boolean res;
