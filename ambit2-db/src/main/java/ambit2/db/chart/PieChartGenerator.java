@@ -36,10 +36,11 @@ public class PieChartGenerator extends ChartGenerator<SourceDataset> {
 		*/
 	
 	protected static final String sql = 
-		"SELECT value,count(distinct(structure.idchemical)) as num_chemicals\n"+
-		"FROM struc_dataset join structure using(idstructure) join property_values using(idstructure) join property_string using(idvalue_string) join properties using(idproperty)\n"+
+		"SELECT ifnull(value_num,value) as v,count(distinct(structure.idchemical)) as num_chemicals\n"+
+		"FROM struc_dataset join structure using(idstructure) join property_values using(idstructure) " +
+		"left join property_string using(idvalue_string) join properties using(idproperty)\n"+
 		"where idproperty=%d and id_srcdataset=%d\n"+
-		"group by value\n";	
+		"group by v\n";	
 	/**
 	 * 
 	 */
