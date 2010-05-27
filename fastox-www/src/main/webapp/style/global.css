@@ -264,7 +264,7 @@ div.user {
 	height: 71px;
 	list-style: none;
 	float: left;
-	padding-right: 8px;
+	/* padding-right: 8px; */
 	background-color: #ebebeb;
 	background-image: url(images/navBtn.gif);
 	background-repeat: no-repeat;
@@ -287,7 +287,9 @@ div.user {
 }
 
 #mainNav li.next {
-	background-image: url(images/navBtnNext.png);
+	background-color: #F9F9F9;
+	background-image: none;
+	text-align: right;
 }
 
 #mainNav li.nonext {
@@ -301,10 +303,10 @@ div.user {
 	text-align: left;
 	color: #636bd2;
 	height: 71px;
-	width: 170px;
+	width: 239px;
 	border: none;
 	background: #ebebeb;
-	background-image: url(images/navBtnNext.png);
+	background-image: url(images/navBtnNext_v3a.png);
 	background-repeat: no-repeat;
 	background-position: right top;
 }
@@ -313,7 +315,7 @@ div.user {
 	color: #ffffff;
 	cursor: pointer;
 	background: #636bd2;
-	background-image: url(images/navBtnNext_d.png);
+	background-image: url(images/navBtnNext_d_v3a.png);
 	background-repeat: no-repeat;
 	background-position: right top;
 }
@@ -368,8 +370,8 @@ div.user {
 	font-weight: normal;
 }
 
-#mainNav li.mainNavNoBg {
-	background-image:none;
+#mainNav li.mainNavLast {
+	background-image: url(images/navBtnLast_v2.png);
 }
 
 #mainNav li a {
@@ -379,11 +381,19 @@ div.user {
 
 /* #mainNav.wizardStep */
 #mainNav.wizardStep li {
-	width: 162px;
+	width: 13.89%;
 }
 
 #mainNav.wizardStep li a {
-	width: 162px;
+	width: 13.89%;
+}
+
+#mainNav.wizardStep li.next {
+	width: 30.55%;
+}
+
+#mainNav.wizardStep li.next a {
+	width: 30.55%;
 }
 
 /* #mainNav.fourStep */

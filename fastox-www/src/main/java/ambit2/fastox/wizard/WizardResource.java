@@ -249,7 +249,7 @@ public abstract class WizardResource extends ServerResource {
 			if (i == step.getIndex()) {
 				writer.write(String.format(
 						"<li class=\"current %s\"><a title=\"\"><em>%d.&nbsp;%s</em><span>%s</span></a></li>\n",
-						(i==(wizard.size()-1))?"mainNavNoBg\"":"",
+						(i==(wizard.size()-1))?"mainNavLast\"":"",
 						i,
 						step.getTitle(),
 						step.getDescription()
@@ -257,7 +257,7 @@ public abstract class WizardResource extends ServerResource {
 			} else if (i > step.getIndex()) {
 				writer.write(String.format(
 						"<li %s><a title=\"\"><em>%d.&nbsp;%s</em><span>%s</span></a></li>\n",
-						(i==(wizard.size()-1))?"class=\"mainNavNoBg\"":"",
+						(i==(wizard.size()-1))?"class=\"mainNavLast\"":"",
 						i,
 						thestep.getTitle(),
 						thestep.getDescription()						
@@ -268,7 +268,7 @@ public abstract class WizardResource extends ServerResource {
 
 		}
 		if ((step.getIndex()!=0) && (step.getIndex()!=(wizard.size()-1)))
-		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" onClick=\"getSmiles()\" type=\"submit\" value=\"&nbsp;NEXT\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
+		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" onClick=\"getSmiles()\" type=\"submit\" value=\"\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
 
 		writer.write("</ul>\n");
 
