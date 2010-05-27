@@ -207,7 +207,7 @@ public class OTDatasetRDFReport extends OTObject {
 			try {client.release();} catch (Exception x) {}
 		}
 	
-		
+		if (jenaModel==null) throw  new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,ref.toString());
 		try { writeIdentifiers(writer); }catch (Exception x) {x.printStackTrace();}
 		
 
@@ -218,6 +218,7 @@ public class OTDatasetRDFReport extends OTObject {
 	protected void writeIdentifiers(Writer writer) throws Exception {
 		QueryExecution qe = null;
 		try {
+			
 			Query query = QueryFactory.create(queryCompounds);
 			qe = QueryExecutionFactory.create(query,jenaModel);
 			ResultSet results = qe.execSelect();
