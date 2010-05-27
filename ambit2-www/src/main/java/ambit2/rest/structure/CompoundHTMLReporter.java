@@ -69,7 +69,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		pReporter = new PropertyURIReporter(request);
 		table = collapsed;
 		getProcessors().clear();
-		if (getGroupProperties()!=null) 
+		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
