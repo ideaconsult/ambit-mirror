@@ -110,7 +110,9 @@ public class OTDatasetComparisonReport extends OTObject {
 	
 						
 						link = dataset1.uri.clone();
-						link.addQueryParameter("intersection",dataset2.uri.toString());						
+						link.addQueryParameter("common",dataset2.uri.toString());	
+						link.addQueryParameter("page", "0");
+						link.addQueryParameter("pagesize", "25");						
 					}
 
 						
