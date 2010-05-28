@@ -1,6 +1,7 @@
 package ambit2.rest;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import org.restlet.Context;
@@ -36,6 +37,9 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	public final static String condition = "condition";
 	public final static String caseSensitive = "casesens";
 	public final static String max_hits = "max";
+	protected static String[] filter = {
+		"Googlebot","msnbot"
+	};
 	
 	public String[] URI_to_handle() {
 		return null;
@@ -44,10 +48,19 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
+		checkForBots();
 		response_status = Status.SUCCESS_OK;
 		queryObject = createQuery(getContext(), getRequest(), getResponse());
 		error = null;
 
+	}
+	protected void checkForBots() throws ResourceException {
+		if (getRequest().getClientInfo()==null) return;
+		if (getRequest().getClientInfo().getAgentName()==null) return;
+		for (int i=0;i < filter.length;i++)
+			if (filter[i].equals(getRequest().getClientInfo().getAgentName()))
+					throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED,getRequest().getClientInfo().getAgentName());
+		
 	}
 	protected void customizeVariants(MediaType[] mimeTypes) {
        // List<Variant> variants = new ArrayList<Variant>();
