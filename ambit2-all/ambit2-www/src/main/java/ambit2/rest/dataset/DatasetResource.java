@@ -53,7 +53,7 @@ import ambit2.rest.task.CallableUpdateDataset;
  */
 public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extends DatasetStructuresResource<Q> {
 	public final static String dataset_complement_uri = "complement";
-	public final static String dataset_intersection_uri = "intersection";
+	public final static String dataset_intersection_uri = "common";
 	protected FileUpload upload;
 	
 	@Override
