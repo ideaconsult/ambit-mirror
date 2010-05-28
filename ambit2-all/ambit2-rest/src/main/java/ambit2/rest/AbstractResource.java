@@ -38,7 +38,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	public final static String caseSensitive = "casesens";
 	public final static String max_hits = "max";
 	protected static String[] filter = {
-		"Googlebot","msnbot"
+		"googlebot","msnbot"
 	};
 	
 	public String[] URI_to_handle() {
@@ -56,9 +56,9 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	}
 	protected void checkForBots() throws ResourceException {
 		if (getRequest().getClientInfo()==null) return;
-		if (getRequest().getClientInfo().getAgentName()==null) return;
+		if (getRequest().getClientInfo().getAgent()==null) return;
 		for (int i=0;i < filter.length;i++)
-			if (filter[i].equals(getRequest().getClientInfo().getAgentName()))
+			if (getRequest().getClientInfo().getAgent().toLowerCase().indexOf(filter[i])>=0)
 					throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED,getRequest().getClientInfo().getAgentName());
 		
 	}
