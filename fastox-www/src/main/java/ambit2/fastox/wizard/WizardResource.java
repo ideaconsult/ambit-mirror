@@ -175,6 +175,8 @@ public abstract class WizardResource extends ServerResource {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/scripts/animatedcollapse.js\"></script>\n",baseReference));
 		w.write("<script type=\"text/javascript\">\n");
 		w.write("animatedcollapse.addDiv('help_step', 'fade=1')\n");
+		w.write("for (i=1;i<=5;i++) { animatedcollapse.addDiv('wiz' + i, 'fade=1'); }\n");
+		w.write("animatedcollapse.addDiv('wiz6', 'fade=1,width=25%')\n");
 		w.write("animatedcollapse.ontoggle=function($, divobj, state){ //fires each time a DIV is expanded/contracted\n");
 		w.write("//$: Access to jQuery\n");
 		w.write("//divobj: DOM reference to DIV being expanded/ collapsed. Use \"divobj.id\" to get its ID\n");
@@ -249,7 +251,7 @@ public abstract class WizardResource extends ServerResource {
 			if (i == step.getIndex()) {
 				writer.write(String.format(
 						"<li class=\"current %s\"><a title=\"\"><em>%d.&nbsp;%s</em><span>%s</span></a></li>\n",
-						(i==(wizard.size()-1))?"mainNavLast\"":"",
+						(i==(wizard.size()-1))?(step.getIndex()==(wizard.size()-1))?"mainNavNoBg\"":"mainNavLast\"":"",
 						i,
 						step.getTitle(),
 						step.getDescription()

@@ -59,6 +59,10 @@ public class WelcomeResource extends WizardResource {
 				"\n<script type=\"text/javascript\">$(document).ready(function() {  %s; } );</script>",
 				"animatedcollapse.show('help_step')"));			
 
+		writer.write(String.format(
+				"\n<script type=\"text/javascript\">$(document).ready(function() {  %s } );</script>",
+				"for (i=1;i<=6;i++) { animatedcollapse.showH('wiz'+i); }\n"));			
+
 		/*
 		writer.write(String.format(
 				"\n<script type=\"text/javascript\">$(document).ready( $(\"#%s\").load(\"%s\"); );</script>",
@@ -70,14 +74,14 @@ public class WelcomeResource extends WizardResource {
 	@Override
 	public void renderFormContent(Writer writer,String key) throws IOException {
 
-		writer.write("<table width='90%'><tr align='left'><td>");
+		writer.write("<table width='100%'><tr align='left'><td>");
 		writer.write("<h2>Estimate toxicological hazard of a chemical structure</h2>");
 		writer.write(String.format("<form name='start' method='GET' action='%s/%s/%s/%s%s'>",
 				getRootRef(),UserResource.resource,
 				Reference.encode(session.getUser().getId()),
 				WizardMode.A,"/step1"));	
 		writer.write("<ul id=\"mainNav\" class=\"wizardStep\">\n");
-		writer.write(String.format("<li class=\"next\"><INPUT name=\"next\" type=\"submit\" value=\"GO!\" tabindex=\"1\" title='Click here for the next step' class=\"button\"></li>"));
+		writer.write(String.format("<li id=\"wiz1\" style=\"display:none;\"><a title=\"\"><em>1.&nbsp;Select</em><span>structure(s)</span></a></li>\n<li id=\"wiz2\" style=\"display:none;\"><a title=\"\"><em>2.&nbsp;Verify</em><span>structure(s)</span></a></li>\n<li id=\"wiz3\" style=\"display:none;\"><a title=\"\"><em>3.&nbsp;Select</em><span>model(s)</span></a></li>\n<li id=\"wiz4\" style=\"display:none;\"><a title=\"\"><em>4.&nbsp;Run</em><span> prediction(s)</span></a></li>\n<li class=\"mainNavLast\" id=\"wiz5\" style=\"display:none;\"><a title=\"\"><em>5.&nbsp;Display</em><span>result(s)</span></a></li>\n<li class=\"next\" id=\"wiz6\" style=\"display:none;\"><INPUT name=\"next\" type=\"submit\" value=\"\" tabindex=\"1\" title=\"Click here to start the wizard.\" class=\"button\"></li>"));
 		writer.write(String.format("</ul>"));
 		writer.write(String.format("</form>"));
 		writer.write("</td></tr></table>");

@@ -25,6 +25,15 @@ show:function(divids){ //public method
 		this.showhide(divids, "show")
 },
 
+showH:function(divids){ //public method
+	if (typeof divids=="object"){
+		for (var i=0; i<divids.length; i++)
+			this.showhideH(divids[i], "show")
+	}
+	else
+		this.showhideH(divids, "show")
+},
+
 hide:function(divids){ //public method
 	if (typeof divids=="object"){
 		for (var i=0; i<divids.length; i++)
@@ -34,10 +43,25 @@ hide:function(divids){ //public method
 		this.showhide(divids, "hide")
 },
 
+hideH:function(divids){ //public method
+	if (typeof divids=="object"){
+		for (var i=0; i<divids.length; i++)
+			this.showhideH(divids[i], "hide")
+	}
+	else
+		this.showhideH(divids, "hide")
+},
+
 toggle:function(divid){ //public method
 	if (typeof divid=="object")
 		divid=divid[0]
 	this.showhide(divid, "toggle")
+},
+
+toggleH:function(divid){ //public method
+	if (typeof divid=="object")
+		divid=divid[0]
+	this.showhideH(divid, "toggle")
 },
 
 addDiv:function(divid, attrstring){ //public function
@@ -66,11 +90,51 @@ showhide:function(divid, action){
 	}
 },
 
+showhideH:function(divid, action){
+	var $divref=this.divholders[divid].$divref //reference collapsible DIV
+	if (this.divholders[divid] && $divref.length==1){ //if DIV exists
+		var targetgroup=this.divgroups[$divref.attr('groupname')] //find out which group DIV belongs to (if any)
+		if ($divref.attr('groupname') && targetgroup.count>1 && (action=="show" || action=="toggle" && $divref.css('display')=='none')){ //If current DIV belongs to a group
+			if (targetgroup.lastactivedivid && targetgroup.lastactivedivid!=divid) //if last active DIV is set
+				this.slideengineH(targetgroup.lastactivedivid, 'hide') //hide last active DIV within group first
+				this.slideengineH(divid, 'show')
+			targetgroup.lastactivedivid=divid //remember last active DIV
+		}
+		else{
+			this.slideengineH(divid, action)
+		}
+	}
+},
+
 slideengine:function(divid, action){
 	var $divref=this.divholders[divid].$divref
 	var $togglerimage=this.divholders[divid].$togglerimage
 	if (this.divholders[divid] && $divref.length==1){ //if this DIV exists
 		var animateSetting={height: action}
+		if ($divref.attr('fade'))
+			animateSetting.opacity=action
+		$divref.animate(animateSetting, $divref.attr('speed')? parseInt($divref.attr('speed')) : 500, function(){
+			if ($togglerimage){
+				$togglerimage.attr('src', ($divref.css('display')=="none")? $togglerimage.data('srcs').closed : $togglerimage.data('srcs').open)
+			}
+			if (animatedcollapse.ontoggle){
+				try{
+					animatedcollapse.ontoggle(jQuery, $divref.get(0), $divref.css('display'))
+				}
+				catch(e){
+					alert("An error exists inside your \"ontoggle\" function:\n\n"+e+"\n\nAborting execution of function.")
+				}
+			}
+		})
+		return false
+	}
+},
+
+slideengineH:function(divid, action){
+	var $divref=this.divholders[divid].$divref
+	var $togglerimage=this.divholders[divid].$togglerimage
+	if (this.divholders[divid] && $divref.length==1){ //if this DIV exists
+		var animateSetting={width: action}
 		if ($divref.attr('fade'))
 			animateSetting.opacity=action
 		$divref.animate(animateSetting, $divref.attr('speed')? parseInt($divref.attr('speed')) : 500, function(){
@@ -125,6 +189,7 @@ init:function(){
 				cssdisplay='none' //set div to "none", overriding any other setting
 			}
 			this.$divref.css(ac.generatemap(['height', this.getAttr('height')], ['display', cssdisplay]))
+			this.$divref.css(ac.generatemap(['width', this.getAttr('width')], ['display', cssdisplay]))
 			this.$divref.attr(ac.generatemap(['groupname', this.getAttr('group')], ['fade', this.getAttr('fade')], ['speed', this.getAttr('speed')]))
 			if (this.getAttr('group')){ //if this DIV has the "group" attr defined
 				var targetgroup=ac.divgroups[this.getAttr('group')] || (ac.divgroups[this.getAttr('group')]={}) //Get settings for this group, or if it no settings exist yet, create blank object to store them in

@@ -374,6 +374,10 @@ div.user {
 	background-image: url(images/navBtnLast_v2.png);
 }
 
+#mainNav li.mainNavNoBg {
+	background-image: none;
+}
+
 #mainNav li a {
 	height: 71px;
 	display: block;
