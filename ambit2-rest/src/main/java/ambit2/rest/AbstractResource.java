@@ -38,7 +38,25 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	public final static String caseSensitive = "casesens";
 	public final static String max_hits = "max";
 	protected static String[] filter = {
-		"googlebot","msnbot"
+		"googlebot","msnbot",
+		"yahoo-slurp",
+		"teoma",
+		"twiceler",
+		"gigabot",
+		"scrubby",
+		"robozilla",
+		"nutch",
+		"ia_archiver",
+		"baiduspider",
+		"naverbot",
+		"yeti",
+		"googlebot-image",
+		"googlebot-mobile",
+		"yahoo-mmcrawler",
+		"psbot",
+		"asterias",
+		"yahoo-blogs/v3.9"
+
 	};
 	
 	public String[] URI_to_handle() {
