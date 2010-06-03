@@ -52,10 +52,10 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
 			try {
 				if ((object == null) || (object.getAtomCount()==0)) throw new EmptyMoleculeException();
 				long fp_time = System.currentTimeMillis();
-				IAtomContainer c = (IMolecule) object; 
+				IAtomContainer c = (IAtomContainer) object; 
                 if (hydrogens) {
                     if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
-                    c = (IMolecule) ((IMolecule) object).clone(); 
+                    c = (IAtomContainer) ((IAtomContainer) object).clone(); 
                     hAdder.addImplicitHydrogens(c);
                     AtomContainerManipulator.convertImplicitToExplicitHydrogens(c);
 
@@ -65,7 +65,7 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
                     else c = (IAtomContainer) object;
                 }
     			fp_time = System.currentTimeMillis() - fp_time;
-      			((IMolecule)object).setProperty(AmbitCONSTANTS.FingerprintTIME,new Long(fp_time));                
+      			((IAtomContainer)object).setProperty(AmbitCONSTANTS.FingerprintTIME,new Long(fp_time));                
 				return fingerprinter.getFingerprint(c);
 			
 			} catch (AmbitException x) {
