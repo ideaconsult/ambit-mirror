@@ -324,7 +324,8 @@ public class CompoundImageTools {
 	            IChemObjectSelection highlighted = null;
 	            if (selector!= null)
 	            	try {
-	            		IChemObjectSelection selected = selector.process(mol);
+	            		IMolecule mol2process = (IMolecule)mol.clone();
+	            		IChemObjectSelection selected = selector.process(mol2process);
 	    				if(selected!=null) {
 	    					//if (highlighted==null) highlighted = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
 	    					//highlighted.add(selected);
@@ -343,8 +344,13 @@ public class CompoundImageTools {
     	    		r2dm.setShowAtomTypeNames(true);
 
     	    	} 	  
-				renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
-				
+    	    	try {
+    	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
+    	    	} catch (Exception x) {
+    	    		x.printStackTrace();
+    	    		r2dm.setSelection(null);
+    	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
+    	    	}
 				col++;
 				if (col >= columns) { col = 0; row++; }
 			}	
@@ -428,6 +434,7 @@ class MySelectAtomGenerator  implements IGenerator  {
 	            if (selectedAC != null) {
 	                for (IAtom atom : selectedAC.atoms()) {
 	                    Point2d p = atom.getPoint2d();
+	                    if (p==null) continue;
 	                    IRenderingElement element;
 	                    switch (shape) {
 	                        case SQUARE:
