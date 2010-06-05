@@ -65,7 +65,9 @@ public class ImageCellRenderer extends DefaultTableCellRenderer implements
     {
     	imageTools.setBorderColor((isSelected?Color.BLUE:Color.LIGHT_GRAY));
     	if (value instanceof IAtomContainer) {
+    		try {
     		setImage(table, isSelected, imageTools.getImage((IAtomContainer)value));
+    		} catch (Exception x) {}
     		return this;
     	} else if (value instanceof Image) { 
     		scaleImage(table,isSelected,(Image)value);

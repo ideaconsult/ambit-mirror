@@ -18,8 +18,8 @@ public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
 
 		//jcpModel.setTitle("JChemPaint structure diagram editor");
 		//jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
-		Package jcpPackage = Package.getPackage("org.openscience.cdk.applications.jchempaint");
-		String version = jcpPackage.getImplementationVersion();
+		Package jcpPackage = Package.getPackage("org.openscience.cdk.jchempaint");
+		String version = jcpPackage==null?"":jcpPackage.getImplementationVersion();
 		//jcpModel.setSoftware("JChemPaint " + version);
 		//jcpModel.setGendate((Calendar.getInstance()).getTime().toString());		
 		Dimension d = new Dimension(350,350);
