@@ -176,7 +176,6 @@ public class PBTTableModel extends AbstractTableModel {
 	    
 	    addNode(root);
 	    fireTableStructureChanged();
-//	    System.out.println(table);
 	} 
 	
 	public void addNode(Element node) {
