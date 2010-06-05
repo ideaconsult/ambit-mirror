@@ -104,6 +104,9 @@ public interface IStructureRecord extends IChemical{
 
     String getContent();
     void setContent(String content);
+    
+    boolean isSelected();
+    void setSelected(boolean value);
 
     int getNumberOfProperties();
     Iterable<Property> getProperties();

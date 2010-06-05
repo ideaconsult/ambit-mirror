@@ -43,6 +43,7 @@ public class StructureRecord implements IStructureRecord {
 	protected LiteratureEntry reference = null;
 	protected Map<Property,Object> properties;
 	protected STRUC_TYPE type = STRUC_TYPE.NA;
+	protected boolean selected = true;
 	
 	public STRUC_TYPE getType() {
 		return type;
@@ -239,4 +240,11 @@ public class StructureRecord implements IStructureRecord {
 			record.setProperty(p,getProperty(p));
 		return record;
 	}	
+	public boolean isSelected() {
+		return selected;
+	}
+	public void setSelected(boolean value) {
+		this.selected = true;
+		
+	}
 }	
