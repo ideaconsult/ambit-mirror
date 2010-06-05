@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.plugin.pbt.processors.PBTReader;
 import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.events.WorkflowContextListener;
@@ -68,14 +67,9 @@ public class PBTUpdater implements WorkflowContextListener {
 			return;
 		}
 		record = newrecord;
-		PBTReader reader = new PBTReader();
-		Connection c = null;
+
 		try {
-			c = getConnection();
-			reader.setConnection(c);
-			PBTWorkBook book = reader.process(record);
-			if (book == null) book = new PBTWorkBook();
-			book.setRecord(record);
+			PBTWorkBook book = new PBTWorkBook().loadFromRecord(record);
 			book.setModified(false);
 			if (book != null) {
 				context.put(PBTWorkBook.PBT_WORKBOOK, null);				
@@ -85,8 +79,7 @@ public class PBTUpdater implements WorkflowContextListener {
 		} catch (Exception x) {
 			context.put(DBWorkflowContext.ERROR, x);
 		} finally {
-			try {if (reader !=null) reader.close();} catch (Exception e) {};
-			try {if (c !=null) c.close();} catch (Exception e) {};
+
 		}
 		
 	}

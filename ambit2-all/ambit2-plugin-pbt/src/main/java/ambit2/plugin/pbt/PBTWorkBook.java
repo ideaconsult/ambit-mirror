@@ -2,6 +2,8 @@ package ambit2.plugin.pbt;
 
 import java.awt.Color;
 import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -10,8 +12,10 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.data.model.Algorithm;
 import ambit2.core.processors.structure.MoleculeReader;
 
 import com.lowagie.text.Document;
@@ -21,7 +25,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
 
 
-public class PBTWorkBook {
+public class PBTWorkBook extends Algorithm<Serializable>{
 	public static int COLUMN_STRUCTURE = 3;
 	public static int ROW_STRUCTURE = 9;
 	public static final String PBT_TITLE = "REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02";
@@ -68,6 +72,9 @@ public class PBTWorkBook {
 		pbt_worksheets = new PBTWorksheet[defs.length];
 		for (int i=0; i < defs.length;i++)
 			pbt_worksheets[i] = createSheet(workbook,i);
+		setEndpoint("http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation");
+		setDescription(PBT_TITLE);
+		setName("PBT");
 	}
     public String getTitle(int index) {
     	return workbook.getSheetName(index+1);
@@ -132,9 +139,8 @@ public class PBTWorkBook {
 					colspan = merged.getLastColumn() - merged.getFirstColumn() +1;
 					if (colspan > worksheet.getMaxCol())
 						colspan = worksheet.getMaxCol()  - merged.getFirstColumn() +1;							
-//					System.out.println("Cell " + merged.getFirstRow() + "," + merged.getFirstColumn() + "-" + merged.getLastRow() + "," + merged.getLastColumn());							
 				} else {
-					//System.out.println("Merged " + merged.getFirstRow() + "," + merged.getFirstColumn() + "-" + merged.getLastRow() + "," + merged.getLastColumn());							
+							
 					return null;					
 				}
 			} else continue;
@@ -229,6 +235,48 @@ public class PBTWorkBook {
     public IStructureRecord getRecord() {
     	return record;
     }
+    
+	public PBTWorkBook loadFromRecord(IStructureRecord target) throws AmbitException {
+		
+		try {
+			setRecord(target);
+			Object name = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).get(9,1);
+			Object cas = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).get(10,1);
+
+	
+			for (Property p : target.getProperties()) {
+				if (("".equals(cas)) && Property.opentox_CAS.equals(p.getLabel())) {
+					set( p, target.getProperty(p), 10,1);
+				} else if ("".equals(name) && Property.opentox_Name.equals(p.getLabel())) {
+					set( p, target.getProperty(p), 9,1);
+				} else if ("".equals(name) && Property.opentox_IupacName.equals(p.getLabel())) {
+					set( p, target.getProperty(p), 9,1);
+				} else {
+					Object value = target.getProperty(p);
+					if ((value==null) ||  (value instanceof Double && Double.isNaN((Double)value))) continue;
+					try {
+						set(p.getName(), value);
+					} catch (Exception x) {}
+				}
+			}
+
+			return this;
+
+		} catch (Exception x) {x.printStackTrace();}
+		return null;
+	}
+
+	protected void set(Property fieldname, Object value, int row, int col)
+	throws AmbitException {
+	
+		Object o = getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getExtendedCellValue(row,col);
+		if (o instanceof List) {
+			if (((List)o).indexOf(value)==-1)
+			((List)o).add(value);
+		} else  getWorksheet(WORKSHEET_INDEX.SUBSTANCE).set(row, col, value);
+		
+	}
+    
     public void setStructure(IAtomContainer structure) {
     	getWorksheet(WORKSHEET_INDEX.SUBSTANCE).setExtendedCell(structure, ROW_STRUCTURE,COLUMN_STRUCTURE);    	
     }
@@ -246,7 +294,12 @@ public class PBTWorkBook {
     	
     	WORKSHEET_INDEX sheet = WORKSHEET_INDEX.valueOf(fieldname.substring(0,i));
     	fieldname = fieldname.substring(i+1);
-    	getWorksheet(sheet).getModel().setValue(fieldname.toLowerCase(), value);
+    	try {
+    		getWorksheet(sheet).getModel().setValue(fieldname.toLowerCase(), value instanceof String?value.toString().trim():value);
+    		System.out.println(String.format("%s %s %s",sheet,fieldname,value));
+    	} catch (Exception x) {
+    		System.err.println(String.format("%s %s %s",sheet,fieldname,value));
+    	}
     	
     }
 }
