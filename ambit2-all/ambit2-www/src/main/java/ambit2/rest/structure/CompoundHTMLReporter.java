@@ -582,9 +582,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		b.append("<div id=\"div-1d\">");
 
 		String[][] s = new String[][] {
-				{PropertyValueResource.featureKey,AmbitCONSTANTS.CASRN,"CAS RN"},
+				{PropertyValueResource.featureKey,Property.opentox_CAS,"CAS RN"},
 				{PropertyValueResource.featureKey,"EC","EINECS"},
-				{PropertyValueResource.featureKey,AmbitCONSTANTS.NAMES,"Chemical name(s)"},
+				{PropertyValueResource.featureKey,Property.opentox_Name,"Chemical name(s)"},
 				{PropertyValueResource.featureKey,null,"All available feature values"},
 				{"template",null,"Feature values by groups"},
 				{TupleResource.resourceTag,null,"Feature values by dataset"},
