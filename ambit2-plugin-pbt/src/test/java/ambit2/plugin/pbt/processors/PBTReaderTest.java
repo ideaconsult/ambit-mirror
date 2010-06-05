@@ -11,10 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.base.data.StructureRecord;
 import ambit2.plugin.pbt.DbUnitTest;
 import ambit2.plugin.pbt.PBTWorkBook;
-import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
 
 
 public class PBTReaderTest extends DbUnitTest {
@@ -53,26 +51,16 @@ public class PBTReaderTest extends DbUnitTest {
 		templates = c.createQueryTable("EXPECTED_VALUES",	"SELECT name,value_num FROM property_values join properties using(idproperty) where name=\"SUBSTANCE_B12\" and (value_num - 72.2) <= 1E-4");
 		Assert.assertEquals(1, templates.getRowCount());
 		
-		
+		/*
 		PBTReader reader = new PBTReader();
 		reader.setConnection(c.getConnection());
 		PBTWorkBook book = reader.process(new StructureRecord(1,1,null,null));
 		Assert.assertEquals(72.2, (Double)book.getWorksheet(WORKSHEET_INDEX.SUBSTANCE).getB12(),1E-4);
 		reader.close();
 		
-
+	*/
 		c.close();
-		/*
-		try {
-	  	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());		
-			PBTMainPanel pbtPanel = new PBTMainPanel();
-			pbtPanel.setWorkbook(book);
-			pbtPanel.setPreferredSize(new Dimension(800,600));
-			JOptionPane.showMessageDialog(null,pbtPanel,pbtPanel.toString(),JOptionPane.OK_OPTION);
-		} catch (Exception x) {
-			x.printStackTrace();
-		}		
-		*/
+
 		
 	}
 	

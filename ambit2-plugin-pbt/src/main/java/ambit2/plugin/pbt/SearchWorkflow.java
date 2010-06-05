@@ -1,5 +1,6 @@
 package ambit2.plugin.pbt;
 
+import ambit2.db.search.property.TemplateQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.UserInteraction;
@@ -34,7 +35,10 @@ public class SearchWorkflow extends Workflow {
         UserInteraction browse = new UserInteraction(
         		true,DBWorkflowContext.USERINTERACTION,DBWorkflowContext.QUERY_POPUP,"Browse results");
         seq.addStep(browse);        
-        seq.addStep(new SequenceAppendQueryResults(DBWorkflowContext.QUERY_POPUP,false));
+        
+		TemplateQuery templateQuery = new TemplateQuery();
+		templateQuery.setValue(PBTWorkBook.PBT_TITLE);
+        seq.addStep(new SequenceAppendQueryResults(DBWorkflowContext.QUERY_POPUP,false,templateQuery));
         
 		Conditional c1 = new Conditional(modified,null,new LoginSequence(seq));
 		c1.setName("PBT modified?");
