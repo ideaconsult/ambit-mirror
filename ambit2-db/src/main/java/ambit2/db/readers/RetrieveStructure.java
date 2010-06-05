@@ -111,6 +111,11 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
             r.setContent(rs.getString(s_ustructure));
             r.setFormat(rs.getString(s_format));
             try {
+            	r.setSelected(rs.getBoolean("selected"));
+            } catch (Exception x) {
+            	r.setSelected(true);
+            }            
+            try {
             	String t = rs.getString(5);
             	for (STRUC_TYPE type : STRUC_TYPE.values()) if (type.toString().equals(t)) {
             		r.setType(type);
