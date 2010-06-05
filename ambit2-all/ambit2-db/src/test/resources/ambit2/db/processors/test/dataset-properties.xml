@@ -12,9 +12,9 @@
   <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE" type="Dataset"/>
   <catalog_references idreference="7" title="EINECS" url="EINECS" type="Dataset"/>
   <catalog_references idreference="8" title="PUBCHEM" url="PUBCHEM" type="Dataset"/>
- <properties idproperty="1" idreference="1" name="Property 1" units="" comments="Names" islocal="false"/>
-  <properties idproperty="2" idreference="1" name="Property 2" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="3" idreference="1" name="Property 3" units="" comments="Names" islocal="false"/>
+ <properties idproperty="1" idreference="1" name="Property 1" units="" comments="http://www.opentox.org/api/1.1#ChemicalName" islocal="false"/>
+  <properties idproperty="2" idreference="1" name="Property 2" units="" comments="http://www.opentox.org/api/1.1#CASRN" islocal="false"/>
+  <properties idproperty="3" idreference="1" name="Property 3" units="" comments="http://www.opentox.org/api/1.1#ChemicalName" islocal="false"/>
   <properties idproperty="4" idreference="8" name="PUBCHEM_COMPOUND_CID" units="" comments="ID" islocal="false"/>
     
   
