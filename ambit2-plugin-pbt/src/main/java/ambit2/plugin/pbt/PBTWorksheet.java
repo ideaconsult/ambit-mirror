@@ -100,7 +100,7 @@ public class PBTWorksheet  extends AmbitBean  {
 	
 	}
 	public void clear() {
-        //System.out.println("clear");
+
         Iterator<HSSFRow> rows = getSheet().rowIterator();
         
 		while (rows.hasNext()) {
@@ -187,7 +187,19 @@ public class PBTWorksheet  extends AmbitBean  {
     		switch (cell.getCachedFormulaResultType()) {
         	case HSSFCell.CELL_TYPE_NUMERIC: {
         		return cell.getNumericCellValue();
-        	}    		
+        	}    	
+        	case HSSFCell.CELL_TYPE_BOOLEAN: {
+        		return Boolean.toString(cell.getBooleanCellValue());
+        	}    
+        	case HSSFCell.CELL_TYPE_STRING: {
+        		return cell.getStringCellValue();
+        	}    
+        	case HSSFCell.CELL_TYPE_BLANK: {
+        		return cell.getStringCellValue();
+        	}         
+        	case HSSFCell.CELL_TYPE_ERROR: {
+        		return cell.getStringCellValue();
+        	}                 	
     		default:
     			return cell.getStringCellValue();
     		}
@@ -299,7 +311,7 @@ public class PBTWorksheet  extends AmbitBean  {
  
     }
     public void set(int row,int col, Object value) {
-    	//System.out.println("set"+getCellName(row, col) + "='" + value + "' "+value.getClass().getName());
+
 		HSSFCell theCell = getCell(row, col);
 		if (theCell == null) return;
     	if (theCell.getCellType() == HSSFCell.CELL_TYPE_FORMULA) return ;

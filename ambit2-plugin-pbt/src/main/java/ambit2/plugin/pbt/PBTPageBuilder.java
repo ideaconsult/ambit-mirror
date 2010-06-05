@@ -211,15 +211,14 @@ public class PBTPageBuilder {
 							colspan = merged.getLastColumn() - merged.getFirstColumn() +1;
 							if (colspan > worksheet.getMaxCol())
 								colspan = worksheet.getMaxCol()  - merged.getFirstColumn() +1;							
-//							System.out.println("Cell " + merged.getFirstRow() + "," + merged.getFirstColumn() + "-" + merged.getLastRow() + "," + merged.getLastColumn());							
+							
 						} else {
-							//System.out.println("Merged " + merged.getFirstRow() + "," + merged.getFirstColumn() + "-" + merged.getLastRow() + "," + merged.getLastColumn());							
 							hidden = true;						
 						}
 					} else continue;
 
 				}
-		        //System.out.println(cell.getRowIndex() + "," + cell.getColumnIndex() + "\t" + cell.toString());		        
+		        
 		        if (hidden) continue;
 
 				HSSFPalette palette = worksheet.getWorkbook().getCustomPalette();
@@ -322,6 +321,7 @@ public class PBTPageBuilder {
 			        	}
 			        };
 			        ToolTipManager.sharedInstance().registerComponent(textField);
+			        
 			        Bindings.bind(textField,model.getModel(propertyName),true);						
 					c = textField;					
 	        		c.setEnabled(false);

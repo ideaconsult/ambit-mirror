@@ -31,7 +31,7 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 		IAtomContainer a = getAtomContainer(target);
 		
 		String s = molwriter.process(a);
-		System.out.println(s);
+
 		record.setContent(s);
 		record.setFormat(MOL_TYPE.SDF.toString());
 		record.clearProperties();
@@ -53,7 +53,7 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 	protected static void addKeys(IAtomContainer record,String prefix,PBTWorksheet ws) {
 		for (int r = 0; r < ws.getMaxRow();r++)
 			for (int c = 0; c < ws.getMaxCol();c++) {
-				//System.out.println(r + "," + c + " " + ws.getCellName(r,c));
+
 				Cell extCell = ws.getExtendedCell(r,c);
 				if (extCell == null) continue;
 				switch (extCell.getMode()) {
