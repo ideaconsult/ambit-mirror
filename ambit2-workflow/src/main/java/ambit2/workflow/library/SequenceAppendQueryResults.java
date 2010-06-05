@@ -31,15 +31,19 @@ package ambit2.workflow.library;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.Property;
+import ambit2.base.data.Template;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.IRetrieval;
-import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.reporters.QueryTemplateReporter;
+import ambit2.db.reporters.StructureListReporter;
+import ambit2.db.reporters.StructureRecordReporter;
 import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.QueryExecutor;
+import ambit2.db.search.property.AbstractPropertyRetrieval;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.workflow.DBWorkflowContext;
 
@@ -54,6 +58,9 @@ import com.microworkflow.process.Sequence;
  */
 public class SequenceAppendQueryResults extends Sequence {
 	public SequenceAppendQueryResults(String queryTag, boolean all) {
+		this(queryTag,all,null);
+	}
+	public SequenceAppendQueryResults(String queryTag, boolean all, final AbstractPropertyRetrieval properties) {
 
 		/*
 		 * Creates QueryStoredResults from a IStoredQuery
@@ -92,37 +99,30 @@ public class SequenceAppendQueryResults extends Sequence {
 				protected List<IStructureRecord> retrieve(
 						IRetrieval<IStructureRecord> query, ResultSet resultset)
 						throws Exception {
-		   			Object o = getContext().get(getResultKey());
-	
-	    			List<IStructureRecord> records = null;
-	    			if ((o==null) || !(o instanceof List)) {
-	    				records = new ArrayList<IStructureRecord>();
-	    			} else records = (List<IStructureRecord>)o;
-	    			
-	    			RetrieveStructure struc = new RetrieveStructure();
-	    			QueryExecutor<RetrieveStructure> q = new QueryExecutor<RetrieveStructure> ();
+   			
+					String[] r = new String[] {Property.opentox_CAS,Property.opentox_IupacName,Property.opentox_Name} ;
+					Template gp = new Template();
+					for (int i=0; i < r.length;i++) {
+						Property p = new Property(r[i]);
+						p.setLabel(r[i]);
+						p.setEnabled(true);
+						p.setOrder(i+1);
+						gp.add(p);
+					}
+					Template template = null;
+					if (properties!=null)
+						template = getTemplate(properties,getConnection());
+	    			StructureListReporter reporter = new StructureListReporter(gp,template);
 	    			Connection c = getConnection();
 	    			try {
-		    			q.setConnection(c);
-		    			q.open();
-	    			
-				        while (resultset.next()) 
-				        	try {
-				        		if (resultset.getBoolean("selected")) {
-					        		struc.setValue(query.getObject(resultset));
-					        		ResultSet rs = q.process(struc);
-					        		while (rs.next())
-					        			records.add((IStructureRecord)struc.getObject(rs).clone());
-					        		q.closeResults(rs);
-				        		}
-				        	} catch (Exception x) {
-				        		x.printStackTrace();
-				        	};
+		    			reporter.setConnection(c);
+		    			reporter.process((IQueryRetrieval)query);
 	    			} finally {
-	    				try {q.close();c.close();} catch (Exception x) {}
+	    				try {reporter.close();} catch (Exception x) {}
+	    				try {c.close();} catch (Exception x) {}
 	    			}
 			        getContext().put(DBWorkflowContext.RECORD,null);
-			        return records;
+			        return reporter.getOutput();
 				}
 			};
 			
@@ -153,36 +153,31 @@ public class SequenceAppendQueryResults extends Sequence {
 					protected IStructureRecord retrieve(
 							IRetrieval<IStructureRecord> query, ResultSet resultset)
 							throws Exception {
-			   			Object o = getContext().get(getResultKey());
-						IStructureRecord record = null;
-						
-						RetrieveStructure struc = new RetrieveStructure();
-						QueryExecutor<RetrieveStructure> q = new QueryExecutor<RetrieveStructure> ();
-						Connection c = getConnection();
-						try {
-			    			q.setConnection(c);
-			    			q.open();
-						
-					        while (resultset.next()) 
-					        	try {
-					        		if (resultset.getBoolean("selected")) {
-						        		struc.setValue(query.getObject(resultset));
-						        		ResultSet rs = q.process(struc);
-						        		while (rs.next()) {
-						        			record = (IStructureRecord)struc.getObject(rs).clone();
-						        			break;
-						        		}
-						        		q.closeResults(rs);
-					        		}
-					        	} catch (Exception x) {
-					        		x.printStackTrace();
-					        	};
-						} finally {
-							try {q.close();c.close();} catch (Exception x) {}
+			   			
+						String[] r = new String[] {Property.opentox_CAS,Property.opentox_IupacName,Property.opentox_Name} ;
+						Template gp = new Template();
+						for (int i=0; i < r.length;i++) {
+							Property p = new Property(r[i]);
+							p.setLabel(r[i]);
+							p.setEnabled(true);
+							p.setOrder(i+1);
+							gp.add(p);
 						}
-
+						Template template = null;
+						if (properties!=null)
+							template = getTemplate(properties,getConnection());
+		    			StructureRecordReporter reporter = new StructureRecordReporter(gp,template);
+		    			Connection c = getConnection();
+		    			try {
+			    			reporter.setConnection(c);
+			    			reporter.process((IQueryRetrieval)query);
+		    			} finally {
+		    				try {reporter.close();} catch (Exception x) {}
+		    				try {c.close();} catch (Exception x) {}
+		    			}
 				        getContext().put(DBWorkflowContext.RECORD,null);
-				        return record;
+				        return reporter.getOutput();
+			
 					}
 				};			
 			Primitive<IQueryRetrieval<IStructureRecord>, IStructureRecord> retrieveStrucs = new Primitive<IQueryRetrieval<IStructureRecord>, IStructureRecord>(
@@ -202,4 +197,22 @@ public class SequenceAppendQueryResults extends Sequence {
 	
 	}
 
+	
+	public Template getTemplate(AbstractPropertyRetrieval properties, Connection connection) throws AmbitException {
+
+			Template template = new Template();
+			QueryTemplateReporter profileReader = new QueryTemplateReporter(template);
+			profileReader.setConnection(connection);
+  			try {
+  				profileReader.setConnection(connection);
+  				profileReader.process((AbstractPropertyRetrieval)properties);
+			} finally {
+				try {profileReader.close();} catch (Exception x) {}
+				try {connection.close();} catch (Exception x) {}
+			}
+			return template;
+
+	}
 }
+
+
