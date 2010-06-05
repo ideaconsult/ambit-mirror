@@ -48,7 +48,7 @@ public class ImageTools3D extends DefaultAmbitProcessor<IAtomContainer, Buffered
     	 currentSize = size;
    	     adapter = new CdkJmolAdapter(null);
    	     viewer = Viewer.allocateViewer(component, adapter);
-   	     //jmolpopup = JmolPopup.newJmolPopup(viewer,true);
+   	     jmolpopup = JmolPopup.newJmolPopup(viewer,true);
    	    viewer.setJmolStatusListener(new StatusListener(jmolpopup));
    	     
    	     moleculeSet = new MoleculeSet();
