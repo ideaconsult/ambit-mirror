@@ -30,6 +30,7 @@
 package ambit2.db.search.property;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +44,12 @@ public class TemplateQuery extends AbstractPropertyRetrieval<String, String, Str
 	 * 
 	 */
 	private static final long serialVersionUID = 6746077496508519227L;
-	public static final String SQL = 
-			"SELECT properties.name,properties.units,properties.comments,title,url from template join template_def using(idtemplate) "+
-			"join properties using(idproperty) join catalog_references using(idreference) %s" 
-			;
+
+	public static String SQL = 
+			"select idproperty,properties.name,units,title,url,idreference,comments,null,islocal,type " +
+			"from template join template_def using(idtemplate) join properties using(idproperty)" +
+			" join catalog_references using(idreference) %s";
+	
 	public static final String SQL_WHERE = "where template.name=?"; 
 	public TemplateQuery() {
 		setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
@@ -68,13 +71,16 @@ public class TemplateQuery extends AbstractPropertyRetrieval<String, String, Str
 	@Override
 	public void setFieldname(String fieldname) {
 	}
+
 	public Property getObject(ResultSet rs) throws AmbitException {
 		try {
-			Property p =Property.getInstance(rs.getString(1),rs.getString(4),rs.getString(5));
-			p.setUnits(rs.getString(2));
-			p.setLabel(rs.getString(3));
+			Property p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
+			p.setId(rs.getInt(1));
+			p.setUnits(rs.getString(3));
+			p.setLabel(rs.getString(7));
+			p.getReference().setId(rs.getInt(6));
 			return p;
-		} catch (Exception x) {
+		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
 	}
