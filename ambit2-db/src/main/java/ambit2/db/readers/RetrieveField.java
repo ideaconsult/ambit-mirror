@@ -131,7 +131,20 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 	public ResultType getObject(ResultSet rs) throws AmbitException {
 		try {
 			Object value = rs.getObject(5);
-			if (value == null) value = rs.getFloat(6);
+			
+			if (value == null) {
+				value = rs.getObject(6);
+				value = value==null?Double.NaN:rs.getFloat(6);
+
+			}
+			else {
+				if (NaN.equals(value.toString())) {
+
+				} else {
+					value = rs.getString(5);
+
+				}
+			}
 			return (ResultType)value;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
