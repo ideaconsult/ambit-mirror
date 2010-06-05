@@ -3,6 +3,7 @@ package ambit2.db.search.property;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -36,7 +37,7 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<IStruct
 		searchMode = value?SearchMode.alias:SearchMode.name;
 	}		
 	public RetrieveFieldNamesByAlias() {
-		this(AmbitCONSTANTS.NAMES);
+		this(Property.opentox_Name);
 	}
 	public RetrieveFieldNamesByAlias(String alias) {
 		super();

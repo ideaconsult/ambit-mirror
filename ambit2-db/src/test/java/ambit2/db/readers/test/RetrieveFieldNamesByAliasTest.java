@@ -64,7 +64,7 @@ public class RetrieveFieldNamesByAliasTest extends RetrieveTest<Property> {
 		qe.setConnection(c.getConnection());
 
 		RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias();
-		q.setValue(AmbitCONSTANTS.NAMES);
+		q.setValue(Property.opentox_Name);
 		ResultSet rs = qe.process(q);
 		
 		int count = 0; 
