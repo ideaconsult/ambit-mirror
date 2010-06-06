@@ -900,5 +900,28 @@ public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
     public List<IAtom> getAtomsByLinePosition() {
         return atomsByLinePosition;
     }
+    @Override
+    public void handleError(String message) throws CDKException {
+    	// TODO Auto-generated method stub
+    	super.handleError(message);
+    }
+    @Override
+    public void handleError(String message, Exception exception)
+    		throws CDKException {
+    	// TODO Auto-generated method stub
+    	super.handleError(message, exception);
+    }
+    @Override
+    public void handleError(String message, int row, int colStart, int colEnd)
+    		throws CDKException {
+    	// TODO Auto-generated method stub
+    	super.handleError(message, row, colStart, colEnd);
+    }
+    @Override
+    public void handleError(String message, int row, int colStart, int colEnd,
+    		Exception exception) throws CDKException {
+    	// TODO Auto-generated method stub
+    	super.handleError(message, row, colStart, colEnd, exception);
+    }
 }
 
