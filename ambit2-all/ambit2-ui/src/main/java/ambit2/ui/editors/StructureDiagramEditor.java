@@ -16,6 +16,9 @@ public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
 	public StructureDiagramEditor() {
 		jcpModel = new ChemModel();
 
+		IMoleculeSet mols = jcpModel.getBuilder().newMoleculeSet();
+		mols.addMolecule(jcpModel.getBuilder().newMolecule());
+		jcpModel.setMoleculeSet(mols);
 		//jcpModel.setTitle("JChemPaint structure diagram editor");
 		//jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
 		Package jcpPackage = Package.getPackage("org.openscience.cdk.jchempaint");
@@ -51,8 +54,10 @@ public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
 	public void setEditable(boolean editable) {
 	}
 
-	public void setObject(IMoleculeSet object) {
-		jcpModel.setMoleculeSet(object);
+	public void setObject(IMoleculeSet molecules) {
+		if (molecules.getAtomContainerCount()==0)
+			molecules.addMolecule(jcpModel.getBuilder().newMolecule());
+		jcpModel.setMoleculeSet(molecules);
 		
 	}
 
