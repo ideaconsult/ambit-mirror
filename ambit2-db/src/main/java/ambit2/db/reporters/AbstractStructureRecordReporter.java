@@ -57,7 +57,7 @@ public abstract class AbstractStructureRecordReporter<Result> extends QueryStruc
 					return super.process(target);
 				}
 			});		
-		if (getTemplate().size()>0) 
+		if ((getTemplate()!=null) && (getTemplate().size()>0)) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
