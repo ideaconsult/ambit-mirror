@@ -1,10 +1,34 @@
+/*
+Copyright Ideaconsult Ltd. (C) 2005-2007 
+
+Contact: nina@acad.bg
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+All we ask is that proper credit is given for our work, which includes
+- but is not limited to - adding the above copyright notice to the beginning
+of your source code files, and to any copyright notice that you may distribute
+with programs based on this work.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+*/
 package ambit2.ui.editors;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Iterator;
 
 import javax.swing.Icon;
 import javax.swing.JDialog;
@@ -12,8 +36,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.Atom;
+import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.MoleculeSet;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -22,13 +48,9 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
-
-import ambit2.core.config.AmbitCONSTANTS;
-
 
 /**
  * 
@@ -40,34 +62,31 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 	protected IMoleculeSet molecules;
 	protected IChemModel jcpModel;
 	protected StructureDiagramGenerator sdg = null;
-	protected boolean query = false;
-	protected int value = -1;
+	protected Component parentComponent=null;
+    protected JChemPaintDialog jcpDialog = null;
+    protected boolean modal = false;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5166718649430988452L;
 
 	public MoleculeEditAction(IMolecule molecule) {
-		this(molecule,"Edit");
+		super(molecule);
+		setJCPModel();
 	}
 
 	public MoleculeEditAction(IMolecule molecule, String arg0) {
-		this(molecule, arg0,null);
-		//Utils.createImageIcon("ambit2/ui/images/edit.png"));
+		super(molecule, arg0);
+		setJCPModel();
 	}
 
 	public MoleculeEditAction(IMolecule molecule, String arg0, Icon arg1) {
-		super( molecule,arg0, arg1);
+		super(molecule, arg0, arg1);
 		setJCPModel();
 
 	}
 	protected void setJCPModel() {
-	    
-		jcpModel =  DefaultChemObjectBuilder.getInstance()
-            .newChemModel();
-		jcpModel.setMoleculeSet(jcpModel.getBuilder().newMoleculeSet());
-		jcpModel.getMoleculeSet().addAtomContainer(
-				jcpModel.getBuilder().newMolecule());			
+		jcpModel = new ChemModel();        
 		//jcpModel.setTitle("JChemPaint structure diagram editor");
 		//jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
 		//Package jcpPackage = Package.getPackage("org.openscience.cdk.applications.jchempaint");
@@ -75,83 +94,71 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 		//jcpModel.setSoftware("JChemPaint " + version);
 		//jcpModel.setGendate((Calendar.getInstance()).getTime().toString());		
 	}
-
-	public void actionPerformed(ActionEvent arg0) {
-		setMolecule(editMolecule(getMolecule()));
-	}
-	public IMolecule editMolecule(IMolecule mole) {		
-			if (mole == null) {
-		    	mole = DefaultChemObjectBuilder.getInstance().newMolecule();
-		    	mole.addAtom(new Atom("C"));
-		    	mole.setProperty("SMILES","C");
-			}
-			setMolecule(mole);
-		
-	    	if (molecules != null) {
-				jcpModel.setMoleculeSet(molecules);
-				
-				Dimension d = new Dimension(460,450);
-				JChemPaintPanel jcpep = new JChemPaintPanel(jcpModel, JChemPaint.GUI_APPLICATION, false,null);
-	    		jcpep.setPreferredSize(d);
-	    		//jcpep.registerModel(jcpModel);
-	    		jcpep.setChemModel(jcpModel);//,new Dimension(200,200));
-	    		
-	    		//JFrame pane = getJCPFrame(jcpep);
-	    		
-	    		
-	    		JOptionPane pane = new JOptionPane(jcpep, JOptionPane.PLAIN_MESSAGE,JOptionPane.OK_CANCEL_OPTION,null);    		
-	    		JDialog dialog = pane.createDialog(null, "JChemPaint Structure diagram editor");
-	    		dialog.setBounds(300,100,d.width+100,d.height+100);
-	    		dialog.setVisible(true);
-	    		
-	    		if (pane.getValue() == null) return mole;
-	    		
-	    		//super.run(arg0);
-	    		pane.setVisible(true);
-	    		
-	    		int value = ((Integer) pane.getValue()).intValue();
-	    		//while (value != 0);
-	    		if (value == 0) { //ok
-	    	    	molecules = jcpep.getChemModel().getMoleculeSet();
-	    	    	if (molecule == null)  molecule = new org.openscience.cdk.Molecule(); 
-	    	    	else 	molecule.removeAllElements();
-	    	        for (int i=0; i < molecules.getAtomContainerCount(); i++) 
-	    	            molecule.add(molecules.getMolecule(i));
-	    	        
-	    	        
-	    	        //((Compound)dbaData.getQueryObject()).setMolecule(molecule);
-	    	        if (JOptionPane.showConfirmDialog(null, "Remove all properties of the molecule?\n(Yes - to remove, No - to keep)", 
-	    	        			"Structure diagram editor", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
-	    	        	molecule.getProperties().clear();
-					IAtomContainer m = null;
-					try {
-					    m = (IMolecule )molecule.clone();
-					} catch (Exception x) {
-					    m = molecule;
-					}
-
-					m = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(m);
-     
-	    	        SmilesGenerator g = new SmilesGenerator(true);
-	    	        molecule.setProperty(AmbitCONSTANTS.SMILES,g.createSMILES((IMolecule)m));
-	    	        m = null;
-
-	    	        g = null;
-	    	        return molecule;
-	    	        /*
-	    	        if (query) dbaData.setQuery(molecule);
-	    	        else dbaData.setMolecule(molecule);
-    	        
-	    	        return;
-	    	        */
-	    	    	
-	    		} else setMolecule(null);
-	    	}
-		//}
-	    	return mole;
-		
-	}
+    
+     public void actionPerformed(ActionEvent arg0) {
+    	 if (modal) {
+    	    	if (molecules != null) {
+    				jcpModel.setMoleculeSet(molecules);
+    				
+    				JChemPaintPanel jcpep = new JChemPaintPanel(jcpModel, JChemPaint.GUI_APPLICATION, false,null);
+    				Dimension d = new Dimension(500,500);
+    	    		jcpep.setPreferredSize(d);
+    	    		//jcpep.registerModel(jcpModel);
+    	    		//jcpep.setJChemPaintModel(jcpModel,d);
+    	    		JOptionPane pane = new JOptionPane(jcpep, JOptionPane.QUESTION_MESSAGE,JOptionPane.OK_CANCEL_OPTION);    		
+    	    		JDialog dialog = pane.createDialog(parentComponent, "Edit rule");
+    	    		dialog.setBounds(200,200,600,600);
+    	    		dialog.setVisible(true);
+    	    		if (pane.getValue() == null) return;
+    	    		int value = ((Integer) pane.getValue()).intValue();
+    	    		if (value == 0) { //ok
+    	    	    	molecules = jcpep.getChemModel().getMoleculeSet();
+    	    	    	if (molecule == null)  molecule = new org.openscience.cdk.Molecule(); 
+    	    	    	else 	molecule.removeAllElements();
+    	    	        for (int i=0; i < molecules.getAtomContainerCount(); i++) 
+    	    	            molecule.add(molecules.getMolecule(i));
+    	    	        
+    	    	        updateMolecule(molecule);
+    	    	        return;
+    	    	    	
+    	    		}
+    	    	}
+    	 } else editMolecule(true, parentComponent);
+        
+    }
+    
+	/*
+     * (non-Javadoc)
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	
+	public void actionPerformed(ActionEvent arg0) {
+    	if (molecules != null) {
+			jcpModel.getChemModel().setSetOfMolecules(molecules);
+			
+			JChemPaintEditorPanel jcpep = new JChemPaintEditorPanel(2,new Dimension(400,400),true,"stable");
+    		jcpep.setPreferredSize(new Dimension(500,500));
+    		jcpep.registerModel(jcpModel);
+    		jcpep.setJChemPaintModel(jcpModel);
+    		JOptionPane pane = new JOptionPane(jcpep, JOptionPane.QUESTION_MESSAGE,JOptionPane.OK_CANCEL_OPTION);    		
+    		JDialog dialog = pane.createDialog(parentComponent, "Edit rule");
+    		dialog.setBounds(200,200,600,600);
+    		dialog.setVisible(true);
+    		if (pane.getValue() == null) return;
+    		int value = ((Integer) pane.getValue()).intValue();
+    		if (value == 0) { //ok
+    	    	molecules = jcpep.getJChemPaintModel().getChemModel().getSetOfMolecules();
+    	    	if (molecule == null)  molecule = new org.openscience.cdk.Molecule(); 
+    	    	else 	molecule.removeAllElements();
+    	        for (int i=0; i < molecules.getAtomContainerCount(); i++) 
+    	            molecule.add(molecules.getMolecule(i));
+    	        return;
+    	    	
+    		}
+    	}
+	}
+    
+	 */
+	@Override
 	public void setMolecule(IMolecule molecule) {
 		super.setMolecule(molecule);
 		try {
@@ -168,72 +175,131 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 			return null;
 		}
 		
-		Iterator<IAtomContainer> t = ConnectivityChecker.partitionIntoMolecules(atomContainer).molecules().iterator();
-		IMoleculeSet molecules = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
-		while (t.hasNext()) {
-			IMolecule a = (IMolecule)t.next();
-			if (!GeometryTools.has2DCoordinates(a)) {
-				if (sdg == null) sdg = new StructureDiagramGenerator();
-				sdg.setMolecule(a);
-				sdg.generateCoordinates(new Vector2d(0,1));
-				a = sdg.getMolecule();
-			}
-			molecules.addMolecule(a);			
-		}	
+		IMoleculeSet molecules = ConnectivityChecker.partitionIntoMolecules(atomContainer);
 		
-		/*
-		
-		if (molecules.getAtomContainerCount() == 0) {
-			//TODO configure atoms
-		 	IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
-	    	mol.addAtom(new Atom("C"));
-	    	mol.setProperty("SMILES","C");
-	    	molecules.addAtomContainer(mol);
-		}
-		
-		IMoleculeSet m =  DefaultChemObjectBuilder.getInstance().newMoleculeSet();
-		
+		IMoleculeSet m =  new MoleculeSet();
 		for (int i=0; i< molecules.getMoleculeCount();i++) {
 			IMolecule a = molecules.getMolecule(i);
 			if (!GeometryTools.has2DCoordinates(a)) {
 				if (sdg == null) sdg = new StructureDiagramGenerator();
-				sdg.setMolecule(a);
+				sdg.setMolecule((IMolecule)a);
 				sdg.generateCoordinates(new Vector2d(0,1));
-				molecules.replaceAtomContainer(i, sdg.getMolecule());
+				molecules.replaceAtomContainer(i,sdg.getMolecule());
 			}
 			m.addMolecule(molecules.getMolecule(i));
 		}
+		if (m.getAtomContainerCount()==0)  //otherwise JChemPaint crashes
+			m.addMolecule(DefaultChemObjectBuilder.getInstance().newMolecule());
 		return m;		
-		*/
-		return molecules;
 	}
 
 	
 
-    public synchronized boolean isQuery() {
-        return query;
+	/**
+	 * @return Returns the parentComponent.
+	 */
+	public synchronized Component getParentComponent() {
+		return parentComponent;
+	}
+	/**
+	 * @param parentComponent The parentComponent to set.
+	 */
+	public synchronized void setParentComponent(Component parentComponent) {
+		this.parentComponent = parentComponent;
+	}
+    
+    
+    protected JFrame getParent(Component c) {
+        while ((c!=null) && !(c instanceof JFrame))
+                c = c.getParent();
+        return (JFrame)c;
     }
-    public synchronized void setQuery(boolean query) {
-        this.query = query;
-    }
-    public JFrame getJCPFrame(JChemPaintPanel jcpep) {
-		JFrame frame = new JFrame();
-		frame.addWindowListener(new WindowAdapter() {
-		    /* (non-Javadoc)
-             * @see java.awt.event.WindowAdapter#windowClosed(java.awt.event.WindowEvent)
-             */
-            public void windowClosed(WindowEvent e) {
-                super.windowClosed(e);
-                value = 0;
+    public void editMolecule(boolean editable, Component frame) {
+        
+        if (molecules != null) { 
+            if (jcpDialog == null) {
+                jcpModel.setMoleculeSet(molecules );
+                
+                jcpDialog = new JChemPaintDialog(getParent(frame),false,jcpModel) {
+                    private static final long serialVersionUID = -492805673357520991L;
+
+                    @Override
+                    public IMolecule okAction() {
+                        updateMolecule(super.okAction());
+                        molecules = jcpep.getChemModel().getMoleculeSet();
+
+                        /*updatedMolecule.setProperties(dataContainer.getMolecule().getProperties());
+                        getDataContainer().setEnabled(true);
+                        getDataContainer().setMolecule(updatedMolecule);
+                        getActions().allActionsEnable(true);
+*/
+                        dispose();
+                        jcpDialog = null;
+                        return molecule;
+                    };
+                    
+                    @Override
+                    public void cancelAction() {
+                        super.cancelAction();
+                        
+                        
+                        //data.getDataContainer().setEnabled(true);
+                        //data.getActions().allActionsEnable(true);
+                        dispose();
+                        jcpDialog = null;
+                        
+                    }
+                    
+                };
+                jcpDialog.setTitle("JChemPaint structure diagram editor");
+                jcpDialog.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent arg0) {
+                        super.windowClosing(arg0);
+                        //getDataContainer().setEnabled(true);
+                        //getActions().allActionsEnable(true);
+                        jcpDialog = null;
+                    }
+                });
+                //TODO center it 
+                //TODO nonmodal
+            } else jcpModel.setMoleculeSet(molecules);
+            
+
+
+            jcpDialog.cleanup();
+            jcpDialog.toFront();            
+            //dataContainer.setEnabled(false);
+            //getActions().allActionsEnable(false);
+            jcpDialog.setVisible(true);
+            
+            /*
+            while (jcpDialog != null) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-		});
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.getContentPane().add(jcpep);
-		frame.setTitle(jcpModel.toString());
-		frame.setBounds(100,100,400,400);
-		return frame;
+                  */
+        }
     }
+
+    protected void updateMolecule(IMolecule mol) {
+        molecule = mol;
+        try {
+	        AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+	        CDKHueckelAromaticityDetector.detectAromaticity(mol);
+        } catch (Exception x) {
+        	x.printStackTrace();
+        }
+    }
+
+	public boolean isModal() {
+		return modal;
+	}
+
+	public void setModal(boolean modal) {
+		this.modal = modal;
+	}
 }
-
-
-

@@ -94,6 +94,8 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
         		if (isEditable() && (e.getClickCount()==1)) {
         			if (editAction == null)
         				editAction = new MoleculeEditAction(null);
+        			editAction.setParentComponent(e.getComponent());
+        			editAction.setModal(true);
         			editAction.setMolecule((IMolecule)getObject());
         			editAction.actionPerformed(null);
         			IMolecule molecule = editAction.getMolecule();
