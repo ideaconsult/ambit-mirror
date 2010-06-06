@@ -39,12 +39,13 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.ui.jmol.Panel3D;
 
 public class TestView3D  {
 
 	public static IMolecule getMolecule() {
-		IMolecule methane = DefaultChemObjectBuilder.getInstance().newMolecule();
+		IMolecule methane = MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance());
 		Atom atom = new Atom("C");
 		atom.setPoint3d(new Point3d(0.26,-0.36,0.00));
 		methane.addAtom(atom);

@@ -60,6 +60,8 @@ import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 
+import ambit2.core.data.MoleculeTools;
+
 /**
  * Reads a molecule from the original MDL MOL or SDF file {@cdk.cite DAL92}. An SD files
  * is read into a {@link IChemSequence} of {@link IChemModel}'s. Each ChemModel will contain one
@@ -184,9 +186,9 @@ public class MDLReader extends DefaultChemObjectReader {
     private IChemModel readChemModel(IChemModel chemModel) throws CDKException {
     	IMoleculeSet setOfMolecules = chemModel.getMoleculeSet();
         if (setOfMolecules == null) {
-            setOfMolecules = chemModel.getBuilder().newMoleculeSet();
+            setOfMolecules = MoleculeTools.newMoleculeSet(chemModel.getBuilder());
         }
-        IMolecule m = readMolecule(chemModel.getBuilder().newMolecule());
+        IMolecule m = readMolecule(MoleculeTools.newMolecule(chemModel.getBuilder()));
 		if (m != null) {
 			setOfMolecules.addMolecule(m);
 		}
@@ -200,19 +202,19 @@ public class MDLReader extends DefaultChemObjectReader {
 	 * @return    The ChemFile that was read from the MDL file.
 	 */
     private IChemFile readChemFile(IChemFile chemFile) throws CDKException {
-        IChemSequence chemSequence = chemFile.getBuilder().newChemSequence();
+        IChemSequence chemSequence = MoleculeTools.newChemSequence(chemFile.getBuilder());
         
-        IChemModel chemModel = chemFile.getBuilder().newChemModel();
-		IMoleculeSet setOfMolecules = chemFile.getBuilder().newMoleculeSet();
-		IMolecule m = readMolecule(chemFile.getBuilder().newMolecule());
+        IChemModel chemModel = MoleculeTools.newChemModel(chemFile.getBuilder());
+		IMoleculeSet setOfMolecules = MoleculeTools.newMoleculeSet(chemFile.getBuilder());
+		IMolecule m = readMolecule(MoleculeTools.newMolecule(chemFile.getBuilder()));
 		if (m != null) {
 			setOfMolecules.addMolecule(m);
 		}
         chemModel.setMoleculeSet(setOfMolecules);
         chemSequence.addChemModel(chemModel);
         
-        setOfMolecules = chemFile.getBuilder().newMoleculeSet();
-        chemModel = chemFile.getBuilder().newChemModel();
+        setOfMolecules = MoleculeTools.newMoleculeSet(chemFile.getBuilder());
+        chemModel = MoleculeTools.newChemModel(chemFile.getBuilder());
 		String str;
         try {
             String line;
@@ -222,7 +224,7 @@ public class MDLReader extends DefaultChemObjectReader {
                 // reading mol files
 		str = new String(line);
 		if (str.equals("$$$$")) {
-		    m = readMolecule(chemFile.getBuilder().newMolecule());
+		    m = readMolecule(MoleculeTools.newMolecule(chemFile.getBuilder()));
 		    
 		    if (m != null) {
 			setOfMolecules.addMolecule(m);
@@ -230,8 +232,8 @@ public class MDLReader extends DefaultChemObjectReader {
 			chemModel.setMoleculeSet(setOfMolecules);
 			chemSequence.addChemModel(chemModel);
 			
-			setOfMolecules = chemFile.getBuilder().newMoleculeSet();
-			chemModel = chemFile.getBuilder().newChemModel();
+			setOfMolecules = MoleculeTools.newMoleculeSet(chemFile.getBuilder());
+			chemModel = MoleculeTools.newChemModel(chemFile.getBuilder());
 			
 		    }
 		} else {
@@ -387,17 +389,17 @@ public class MDLReader extends DefaultChemObjectReader {
 
                 logger.debug("Atom type: ", element);
                 if (isotopeFactory.isElement(element)) {
-                    atom = isotopeFactory.configure(molecule.getBuilder().newAtom(element));
+                    atom = isotopeFactory.configure(MoleculeTools.newAtom(molecule.getBuilder(),element));
                 } else if ("A".equals(element)) {
-                	atom = molecule.getBuilder().newPseudoAtom(element);
+                	atom = MoleculeTools.newPseudoAtom(molecule.getBuilder(),element);
                 } else if ("Q".equals(element)) {
-                	atom = molecule.getBuilder().newPseudoAtom(element);
+                	atom = MoleculeTools.newPseudoAtom(molecule.getBuilder(),element);
                 } else if ("*".equals(element)) {
-                	atom = molecule.getBuilder().newPseudoAtom(element);
+                	atom = MoleculeTools.newPseudoAtom(molecule.getBuilder(),element);
                 } else if ("LP".equals(element)) {
-                	atom = molecule.getBuilder().newPseudoAtom(element);
+                	atom = MoleculeTools.newPseudoAtom(molecule.getBuilder(),element);
                 } else if ("L".equals(element)) {
-                	atom = molecule.getBuilder().newPseudoAtom(element);
+                	atom = MoleculeTools.newPseudoAtom(molecule.getBuilder(),element);
                 } else if (element.length() > 0 && element.charAt(0) == 'R'){
                 	logger.debug("Atom ", element, " is not an regular element. Creating a PseudoAtom.");
                     //check if the element is R
@@ -412,12 +414,12 @@ public class MDLReader extends DefaultChemObjectReader {
                     	}
                     	element="R"+Rnumber;
                     }
-                    atom = molecule.getBuilder().newPseudoAtom(element);
+                    atom = MoleculeTools.newPseudoAtom(molecule.getBuilder(),element);
                 } else {
                 	if (mode == ISimpleChemObjectReader.Mode.STRICT) {
                 		throw new CDKException("Invalid element type. Must be an existing element, or one in: A, Q, L, LP, *.");
                 	}
-                	atom = molecule.getBuilder().newPseudoAtom(element);
+                	atom = MoleculeTools.newPseudoAtom(molecule.getBuilder(),element);
                 }
 
                 // store as 3D for now, convert to 2D (if totalZ == 0.0) later
@@ -542,14 +544,14 @@ public class MDLReader extends DefaultChemObjectReader {
                 IAtom a2 = molecule.getAtom(atom2 - 1);
                 IBond newBond = null;
                 if (order == 1) {
-                	newBond = molecule.getBuilder().newBond(a1, a2, IBond.Order.SINGLE, stereo);
+                	newBond = MoleculeTools.newBond(molecule.getBuilder(),a1, a2, IBond.Order.SINGLE, stereo);
                 } else if (order == 2) {
-                	newBond = molecule.getBuilder().newBond(a1, a2, IBond.Order.DOUBLE, stereo);
+                	newBond = MoleculeTools.newBond(molecule.getBuilder(),a1, a2, IBond.Order.DOUBLE, stereo);
                 } else if (order == 3) {
-                	newBond = molecule.getBuilder().newBond(a1, a2, IBond.Order.TRIPLE, stereo);
+                	newBond = MoleculeTools.newBond(molecule.getBuilder(),a1, a2, IBond.Order.TRIPLE, stereo);
                 } else if (order == 4) {                
                     // aromatic bond
-                	newBond = molecule.getBuilder().newBond(a1, a2, IBond.Order.SINGLE, stereo);
+                	newBond = MoleculeTools.newBond(molecule.getBuilder(),a1, a2, IBond.Order.SINGLE, stereo);
                     // mark both atoms and the bond as aromatic
                 	newBond.setFlag(CDKConstants.ISAROMATIC, true);
                     a1.setFlag(CDKConstants.ISAROMATIC, true);

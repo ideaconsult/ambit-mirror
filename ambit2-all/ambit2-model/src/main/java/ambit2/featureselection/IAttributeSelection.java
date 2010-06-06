@@ -20,8 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package ambit2.featureselection;
 
-import org.openscience.cdk.qsar.model.QSARModelException;
-
+import ambit2.base.exceptions.QSARModelException;
 import ambit2.similarity.knn.NearestNeighborsSearch;
 
 

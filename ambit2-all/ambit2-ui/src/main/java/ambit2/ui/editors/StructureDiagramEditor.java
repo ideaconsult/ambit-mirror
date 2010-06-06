@@ -10,14 +10,16 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
 
+import ambit2.core.data.MoleculeTools;
+
 public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
 	protected IChemModel jcpModel; 
 	protected JChemPaintPanel jcpep;
 	public StructureDiagramEditor() {
 		jcpModel = new ChemModel();
 
-		IMoleculeSet mols = jcpModel.getBuilder().newMoleculeSet();
-		mols.addMolecule(jcpModel.getBuilder().newMolecule());
+		IMoleculeSet mols = MoleculeTools.newMoleculeSet(jcpModel.getBuilder());
+		mols.addMolecule(MoleculeTools.newMolecule(jcpModel.getBuilder()));
 		jcpModel.setMoleculeSet(mols);
 		//jcpModel.setTitle("JChemPaint structure diagram editor");
 		//jcpModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
@@ -56,7 +58,7 @@ public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
 
 	public void setObject(IMoleculeSet molecules) {
 		if (molecules.getAtomContainerCount()==0)
-			molecules.addMolecule(jcpModel.getBuilder().newMolecule());
+			molecules.addMolecule(MoleculeTools.newMolecule(jcpModel.getBuilder()));
 		jcpModel.setMoleculeSet(molecules);
 		
 	}

@@ -24,8 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.featureselection;
 
-import org.openscience.cdk.qsar.model.QSARModelException;
-
+import ambit2.base.exceptions.QSARModelException;
 import ambit2.similarity.knn.NearestNeighborsSearch;
 import ambit2.similarity.measure.DistanceComparable;
 

@@ -49,6 +49,7 @@ import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -274,7 +275,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
         reader.open();
         int records = 0;
 		long now = System.currentTimeMillis();
-		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 		IStructureRecord o  ;
 		while (reader.hasNext()) {
 			o = reader.next();

@@ -17,6 +17,7 @@ import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -450,7 +451,7 @@ public class ChemObjectFactory
 	{	
 		try
 		{
-			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
 			int record=0;
 
@@ -486,7 +487,7 @@ public class ChemObjectFactory
 	{	
 		try
 		{
-			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
 			int record=0;
 
@@ -623,7 +624,7 @@ public class ChemObjectFactory
 		
 		try
 		{
-			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
 			int record=0;
 			boolean res;

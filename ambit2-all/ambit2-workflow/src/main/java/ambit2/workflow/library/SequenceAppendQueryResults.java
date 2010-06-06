@@ -110,8 +110,9 @@ public class SequenceAppendQueryResults extends Sequence {
 						gp.add(p);
 					}
 					Template template = null;
-					if (properties!=null)
+					if (properties!=null) try {
 						template = getTemplate(properties,getConnection());
+					} catch (Exception x) {template = null;}
 	    			StructureListReporter reporter = new StructureListReporter(gp,template);
 	    			Connection c = getConnection();
 	    			try {
@@ -164,8 +165,9 @@ public class SequenceAppendQueryResults extends Sequence {
 							gp.add(p);
 						}
 						Template template = null;
-						if (properties!=null)
+						if (properties!=null) try {
 							template = getTemplate(properties,getConnection());
+						} catch (Exception x) {template = null;}
 		    			StructureRecordReporter reporter = new StructureRecordReporter(gp,template);
 		    			Connection c = getConnection();
 		    			try {

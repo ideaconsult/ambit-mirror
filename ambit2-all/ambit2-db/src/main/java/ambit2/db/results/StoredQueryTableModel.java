@@ -47,6 +47,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.data.TypedListModel;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.data.MoleculeTools;
 import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
@@ -185,7 +186,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		ProcessorCreateQuery p = new ProcessorCreateQuery();
 		try {
 			p.setSession(session);
-			IMoleculeSet set = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
+			IMoleculeSet set = MoleculeTools.newMoleculeSet(DefaultChemObjectBuilder.getInstance());
 			IStructureRecord record =  getRecord(row, col);
 			set.addAtomContainer(getAtomContainer(record));		
 			QuerySimilarityStructure q = new QuerySimilarityStructure();

@@ -50,6 +50,8 @@ import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 
+import ambit2.core.data.MoleculeTools;
+
 public class SuppleAtomContainer extends ChemObject implements 
         IMolecule,IChemObjectListener, Serializable, Cloneable, IFiltered<IAtom>{
     /**
@@ -134,13 +136,13 @@ public class SuppleAtomContainer extends ChemObject implements
     }
 
     public void addBond(int atom1, int atom2, Order order, Stereo stereo) {
-        IBond bond = getBuilder().newBond(getAtom(atom1), getAtom(atom2), order, stereo);
+        IBond bond = MoleculeTools.newBond(getBuilder(),getAtom(atom1), getAtom(atom2), order, stereo);
         if (contains(bond)) return;
         addBond(bond);
     }
 
     public void addBond(int atom1, int atom2, Order order) {
-        IBond bond = getBuilder().newBond(getAtom(atom1), getAtom(atom2), order);
+        IBond bond = MoleculeTools.newBond(getBuilder(),getAtom(atom1), getAtom(atom2), order);
         if (contains(bond)) return;
         addBond(bond);
     }
@@ -157,7 +159,7 @@ public class SuppleAtomContainer extends ChemObject implements
     }
 
     public void addLonePair(int atomID) {
-        ILonePair lonePair = getBuilder().newLonePair(getAtom(atomID));
+        ILonePair lonePair = MoleculeTools.newLonePair(getBuilder(),getAtom(atomID));
         lonePair.addListener(this);
         addLonePair(lonePair);
     }
@@ -168,7 +170,7 @@ public class SuppleAtomContainer extends ChemObject implements
     }
 
     public void addSingleElectron(int atomID) {
-        ISingleElectron singleElectron = getBuilder().newSingleElectron(getAtom(atomID));
+        ISingleElectron singleElectron = MoleculeTools.newSingleElectron(getBuilder(),getAtom(atomID));
         singleElectron.addListener(this);
         addSingleElectron(singleElectron);
     }

@@ -39,6 +39,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
+import ambit2.core.data.MoleculeTools;
+
 
 public class SuperAtom extends AbstractGroup  implements IExpandable {
 	boolean expanded = true;
@@ -66,7 +68,7 @@ public class SuperAtom extends AbstractGroup  implements IExpandable {
     }
     @Override
     public IBond addBond(IBond bond) {
-        IBond newbond = getBuilder().newBond();
+        IBond newbond = MoleculeTools.newBond(getBuilder());
         newbond.setOrder(bond.getOrder());
         Iterator<IAtom> batoms = bond.atoms().iterator();
         int position=0;

@@ -52,6 +52,8 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
 
+import ambit2.core.data.MoleculeTools;
+
 /**
  * 
  * Launches JChemPaint structure diagram editor for a preset molecule
@@ -189,7 +191,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 			m.addMolecule(molecules.getMolecule(i));
 		}
 		if (m.getAtomContainerCount()==0)  //otherwise JChemPaint crashes
-			m.addMolecule(DefaultChemObjectBuilder.getInstance().newMolecule());
+			m.addMolecule(MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance()));
 		return m;		
 	}
 

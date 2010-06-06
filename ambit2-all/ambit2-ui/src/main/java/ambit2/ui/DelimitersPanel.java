@@ -49,6 +49,7 @@ import org.openscience.cdk.io.formats.IChemFormat;
 
 import ambit2.base.io.AmbitFileFilter;
 import ambit2.core.io.DelimitedFileFormat;
+import ambit2.core.io.ToxcastFileFormat;
 
 /**
  * FileOpen dialog accessory
@@ -56,7 +57,8 @@ import ambit2.core.io.DelimitedFileFormat;
  *
  */
 public class DelimitersPanel extends JPanel implements ItemListener, PropertyChangeListener {
-	protected static String[][] delimiters = {{"Comma",","},{"Semicolon",";"},{"Tab","\t"},{"Space"," "},{"Other"," "}};
+	protected static String[][] delimiters = 
+		{{"Comma",","},{"Semicolon",";"},{"Tab","\t"},{"Space"," "},{"Toxcast format","\t"},{"Other"," "}};
 	protected JRadioButton[] boxes;
 	protected JFormattedTextField field;
 	protected String delimiter = ",";
@@ -147,7 +149,8 @@ public class DelimitersPanel extends JPanel implements ItemListener, PropertyCha
 	}
 	public IChemFormat getFormat() {
 		if (field.isVisible()) {
-			return new DelimitedFileFormat(getDelimiter(),'"');
+			if (getDelimiter().equals("\t")) return new ToxcastFileFormat();
+			else return new DelimitedFileFormat(getDelimiter(),'"');
 		} else return null;
 	}
 	public void propertyChange(PropertyChangeEvent e) {

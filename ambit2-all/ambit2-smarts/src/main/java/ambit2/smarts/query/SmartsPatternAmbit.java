@@ -32,6 +32,7 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.SmartsManager;
 import ambit2.smarts.processors.SMARTSPropertiesReader;
 
@@ -93,7 +94,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
  */
 
 		//List<IAtom> atoms =sman.getAtomMappings(mol);
-		IAtomContainer c = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+		IAtomContainer c = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
 		
 		List<List<RMap>> bonds =sman.getBondMappings(mol);
 		

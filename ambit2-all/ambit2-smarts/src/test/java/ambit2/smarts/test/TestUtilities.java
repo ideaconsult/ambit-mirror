@@ -21,6 +21,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.io.CMLReader;
@@ -899,7 +900,7 @@ public class TestUtilities
 			else
 				fileName = mdlFile;
 				
-			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(fileName),b);
 			int record=0;
 
@@ -946,7 +947,7 @@ public class TestUtilities
 		
 		try
 		{
-			DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
 			int record=0;
 

@@ -41,6 +41,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import ambit2.base.data.ClassHolder;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.search.NumberCondition;
@@ -137,7 +138,7 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 		return query.getSQL();
 	}
 	public void setStructure(IAtomContainer structure) {
-		if (getValue()==null) setValue(NoNotificationChemObjectBuilder.getInstance().newMoleculeSet());
+		if (getValue()==null) setValue(MoleculeTools.newMoleculeSet(NoNotificationChemObjectBuilder.getInstance()));
 		else getValue().removeAllAtomContainers();
 		getValue().addAtomContainer(structure);
 		setValue(getValue());

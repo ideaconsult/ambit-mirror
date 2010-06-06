@@ -65,6 +65,8 @@ import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 
+import ambit2.core.data.MoleculeTools;
+
 /**
  * Writes MDL molfiles, which contains a single molecule.
  * For writing a MDL molfile you can this code:
@@ -178,8 +180,8 @@ public class MDLWriter extends DefaultChemObjectWriter {
 				writeChemFile((IChemFile)object);
 				return;
 			} else if (object instanceof IChemModel) {
-				IChemFile file = object.getBuilder().newChemFile();
-				IChemSequence sequence = object.getBuilder().newChemSequence();
+				IChemFile file = MoleculeTools.newChemFile(object.getBuilder());
+				IChemSequence sequence = MoleculeTools.newChemSequence(object.getBuilder());
 				sequence.addChemModel((IChemModel)object);
 				file.addChemSequence(sequence);
 				writeChemFile((IChemFile)file);
@@ -198,7 +200,7 @@ public class MDLWriter extends DefaultChemObjectWriter {
 	}
 	
 	private void writeChemFile(IChemFile file) throws Exception {
-	    IAtomContainer bigPile = file.getBuilder().newAtomContainer();
+	    IAtomContainer bigPile = MoleculeTools.newAtomContainer(file.getBuilder());
 		for (IAtomContainer container :
 		     ChemFileManipulator.getAllAtomContainers(file)) {
 		    bigPile.add(container);

@@ -42,6 +42,7 @@ import org.openscience.cdk.io.IChemObjectReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.groups.ComponentGroup;
 import ambit2.core.groups.ContainerGroup;
 import ambit2.core.groups.DataGroup;
@@ -66,7 +67,7 @@ public class MDLV2000ReaderExtendedTest  {
 		MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(
 				MDLV2000ReaderExtended.class.getClassLoader().getResourceAsStream(dir+file),
 				IChemObjectReader.Mode.RELAXED);
-		IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
+		IMolecule mol = MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance());
 		IChemObject newMol = reader.read(mol);
 		reader.close();
 		return newMol;
@@ -477,7 +478,7 @@ public class MDLV2000ReaderExtendedTest  {
 		for (File file: files) 
 			try {
 				MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(new FileInputStream(file));
-				IMolecule mol = DefaultChemObjectBuilder.getInstance().newMolecule();
+				IMolecule mol = MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance());
 				reader.read(mol);
 				reader.close();
 			} catch (Exception x) {

@@ -4,7 +4,7 @@
  */
 package ambit2.model.numeric;
 
-import org.openscience.cdk.qsar.model.QSARModelException;
+import ambit2.base.exceptions.QSARModelException;
 
 
 /**
