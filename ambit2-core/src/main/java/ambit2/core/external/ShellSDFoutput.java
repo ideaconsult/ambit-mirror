@@ -9,6 +9,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
+import ambit2.core.data.MoleculeTools;
 
 public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IMolecule> {
 	/**
@@ -31,7 +32,7 @@ public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IMolecule
 		try {
 			if (isReadOutput()) {
 				MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(path + File.separator + getOutputFile()));
-				IMolecule newmol = NoNotificationChemObjectBuilder.getInstance().newMolecule();
+				IMolecule newmol = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
 				reader.read(newmol);
 				reader.close();
 				return newmol;

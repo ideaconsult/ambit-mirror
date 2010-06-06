@@ -36,6 +36,7 @@ import javax.sql.DataSource;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
@@ -67,7 +68,7 @@ public class testHash extends DbUnitTest{
         Hashtable<Long, List<String>> histogram = new Hashtable<Long, List<String>>();
        
      
-		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+        IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 		int[] idchemicals ={3109,25703};			
 		for(int i=0;i<idchemicals.length;i++){
 		String content = reader.getStructure(idchemicals[i]);	
@@ -113,7 +114,7 @@ public static void testGetHashFomDB() throws Exception {
         int errors = 0;
         int doubles = 0;
 		long now = System.currentTimeMillis();
-		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 		IStructureRecord o  ;
 		while (reader.hasNext()) {
 			o = reader.next();

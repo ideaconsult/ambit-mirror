@@ -16,6 +16,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.editors.StructureDiagramEditor;
@@ -89,7 +90,7 @@ public class StructureRecordEditor  implements IAmbitEditor<StructureRecord> {
 	
 	public boolean confirm() {
 		IMoleculeSet set = strucDiagram.getObject();
-		IMolecule mol = NoNotificationChemObjectBuilder.getInstance().newMolecule();
+		IMolecule mol = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
 		Iterator<IAtomContainer> i = set.molecules().iterator();
 		while (i.hasNext())	mol.add(i.next());
 		MoleculeWriter writer = new MoleculeWriter();

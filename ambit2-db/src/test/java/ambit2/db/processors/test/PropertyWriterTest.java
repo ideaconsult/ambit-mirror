@@ -37,6 +37,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
@@ -119,7 +120,7 @@ public class PropertyWriterTest  extends DbUnitTest {
         reader.open();
         int records = 0;
 		long now = System.currentTimeMillis();
-		DefaultChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 		IStructureRecord o  ;
 		while (reader.hasNext()) {
 			o = reader.next();

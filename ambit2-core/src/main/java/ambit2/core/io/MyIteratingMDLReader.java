@@ -44,6 +44,8 @@ import org.openscience.cdk.io.formats.MDLV3000Format;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.core.data.MoleculeTools;
+
 /**
  * Copied here (with corrections)until Bug 1758372 in CDK is fixed. 
  * Iterating MDL SDF reader. It allows to iterate over all molecules
@@ -158,7 +160,7 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
                     logger.debug("MDL file part read: ", buffer);
                     ISimpleChemObjectReader reader = factory.createReader(currentFormat);
                     reader.setReader(new StringReader(buffer.toString()));
-                    Object newmol = reader.read(builder.newMolecule());
+                    Object newmol = reader.read(MoleculeTools.newMolecule(builder));
                     
                     nextMolecule = newmol==null?null:(IMolecule)newmol;
                     

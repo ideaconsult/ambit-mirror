@@ -35,6 +35,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.smarts.SMARTSQueryTool;
 
 import ambit2.core.config.Resources;
+import ambit2.core.data.MoleculeTools;
 
 /**
  * Encapsulates CDK SMARTS parser.
@@ -125,7 +126,7 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 	}
 	public IAtomContainer getMatchingStructure(IAtomContainer mol)
 			throws SMARTSException {
-		IAtomContainer selected = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+		IAtomContainer selected = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
 		List<List<Integer>> list = sqt.getUniqueMatchingAtoms();
         for (int j=0; j < list.size();j++) {
         	List<Integer> l = list.get(j); 

@@ -10,6 +10,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
@@ -41,7 +42,7 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 	
 	public static IAtomContainer getAtomContainer(PBTWorkBook target) throws AmbitException {
 		IAtomContainer a = target.getStructure();
-		if (a == null) a = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+		if (a == null) a = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
 		a.setProperties(new TreeMap());
 		
 		a.getProperties().clear();

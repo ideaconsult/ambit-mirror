@@ -46,6 +46,8 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 
+import ambit2.core.data.MoleculeTools;
+
 public class SmilesTest {
 
 	@Before
@@ -135,7 +137,7 @@ public class SmilesTest {
 		"$$$$";
 	    
 	    MDLReader r = new MDLReader(new StringReader(sdf));
-	    IMolecule m = DefaultChemObjectBuilder.getInstance().newMolecule();
+	    IMolecule m = MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance());
 	    try {
 	        m = (IMolecule)r.read(m);
 	    } catch (CDKException x) {

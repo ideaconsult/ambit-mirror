@@ -49,6 +49,8 @@ import org.openscience.cdk.tools.IValencyChecker;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.cdk.tools.SmilesValencyChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import ambit2.core.data.MoleculeTools;
 /**
  * Tool that tries to deduce bond orders based on connectivity and hybridization
  * for a number of common ring systems.
@@ -132,7 +134,7 @@ public class DeduceBondSystemTool {
             }
         }
 
-        IMoleculeSet som = molecule.getBuilder().newMoleculeSet();
+        IMoleculeSet som = MoleculeTools.newMoleculeSet(molecule.getBuilder());
 
 //		int number=1; // total number of possibilities
 //		
@@ -829,10 +831,10 @@ public class DeduceBondSystemTool {
      * @see storeRingSystem
      */
     private IRingSet recoverRingSystem(IMolecule mol) {
-    	IRingSet ringSet = mol.getBuilder().newRingSet();
+    	IRingSet ringSet = MoleculeTools.newRingSet(mol.getBuilder());
     	for (int r = 0; r < listOfRings.size(); ++r) {
     		int[] bondNumbers = (int[])listOfRings.get(r);
-    		IRing ring = mol.getBuilder().newRing(bondNumbers.length);
+    		IRing ring = MoleculeTools.newRing(mol.getBuilder(),bondNumbers.length);
     		for (int i = 0; i < bondNumbers.length; ++i) {
     			IBond bond = mol.getBond(bondNumbers[i]);
     			ring.addBond(bond);

@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
 
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.CloneProcessor;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.processors.DescriptorCalculationProcessor;
@@ -216,7 +217,8 @@ public class PBTTableModel extends AbstractTableModel {
 			} 
 			case NODE_STRUCTURE: {
 					try {
-						Cell<IAtomContainer> cell = new Cell<IAtomContainer>(row,col,colspan,NoNotificationChemObjectBuilder.getInstance().newMolecule());
+						Cell<IAtomContainer> cell = new Cell<IAtomContainer>(row,col,colspan,
+								MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance()));
 						cell.setMode(type);
 						table.add(cell);
 						Collections.sort(table);

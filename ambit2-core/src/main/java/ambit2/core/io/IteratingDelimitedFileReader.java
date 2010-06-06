@@ -46,7 +46,6 @@ import org.openscience.cdk.io.setting.StringIOSetting;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.processors.CASProcessor;
-import ambit2.core.data.EINECS;
 
 /**
  * Iterating reader for delimited files.

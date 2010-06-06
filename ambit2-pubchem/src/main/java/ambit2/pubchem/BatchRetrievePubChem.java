@@ -43,6 +43,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorException;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MDLWriter;
 
 public class BatchRetrievePubChem extends DefaultAmbitProcessor<String,Integer> {
@@ -70,7 +71,7 @@ public class BatchRetrievePubChem extends DefaultAmbitProcessor<String,Integer> 
 			if (logfile.exists()) logfile.delete();
 			
 			FileWriter logwriter = new FileWriter(resultDir+getLogfile());
-			IMolecule m = NoNotificationChemObjectBuilder.getInstance().newMolecule();
+			IMolecule m = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
 			File dir = new File(dirname);
 
 		    

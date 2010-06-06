@@ -19,14 +19,24 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomParity;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.interfaces.ILonePair;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.interfaces.IRing;
+import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.interfaces.ISingleElectron;
+import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
@@ -271,6 +281,71 @@ public class MoleculeTools {
 
          reader = null;
          return mol;
-    }        
-
+    }    
+    public static IAtom newAtom(IChemObjectBuilder builder,IElement element) {
+    	return builder.newAtom(element);
+    }    
+    public static IAtom newAtom(IChemObjectBuilder builder,IAtom atom) {
+    	return builder.newAtom(atom);
+    }
+    public static IAtom newAtom(IChemObjectBuilder builder,String  atom) {
+    	return builder.newAtom(atom);
+    }    
+    public static IAtom newAtom(IChemObjectBuilder builder) {
+    	return builder.newAtom();
+    }
+    public static IPseudoAtom newPseudoAtom(IChemObjectBuilder builder,String element) {
+    	return builder.newPseudoAtom(element);
+    }
+    public static ILonePair newLonePair(IChemObjectBuilder builder,IAtom atom) {
+    	return builder.newLonePair(atom);
+    }
+    public static IBond newBond(IChemObjectBuilder builder,IAtom a1, IAtom a2, Order order, IBond.Stereo stereo) {
+    	return builder.newBond(a1, a2, order, stereo);
+    }
+    public static IBond newBond(IChemObjectBuilder builder,IAtom a1, IAtom a2, Order order) {
+    	return builder.newBond(a1, a2, order);
+    }   
+    public static IBond newBond(IChemObjectBuilder builder,IAtom a1, IAtom a2) {
+    	return builder.newBond(a1, a2);
+    }      
+    public static IBond newBond(IChemObjectBuilder builder) {
+    	return builder.newBond();
+    }  
+    public static IAtomContainer newAtomContainer(IChemObjectBuilder builder) {
+    	return builder.newAtomContainer();
+    }
+    public static IMolecule newMolecule(IChemObjectBuilder builder) {
+    	return builder.newMolecule();
+    }    
+    public static IAtomContainer newAtomContainer(IChemObjectBuilder builder,IMolecule molecule) {
+    	return builder.newAtomContainer(molecule);
+    }
+    public static ISingleElectron newSingleElectron(IChemObjectBuilder builder,IAtom atom) {
+    	return builder.newSingleElectron(atom);
+    }
+    public static IMoleculeSet newMoleculeSet(IChemObjectBuilder builder) {
+    	return builder.newMoleculeSet();
+    }    
+    public static IChemModel newChemModel(IChemObjectBuilder builder) {
+    	return builder.newChemModel();
+    }  
+    public static IChemSequence newChemSequence(IChemObjectBuilder builder) {
+    	return builder.newChemSequence();
+    }  
+    public static IChemFile newChemFile(IChemObjectBuilder builder) {
+    	return builder.newChemFile();
+    }     
+    public static IRingSet newRingSet(IChemObjectBuilder builder) {
+    	return builder.newRingSet();
+    }  
+    public static IRing newRing(IChemObjectBuilder builder,int i) {
+    	return builder.newRing(i);
+    }   
+    public static IAtomParity newAtomParity(IChemObjectBuilder builder,IAtom a,IAtom a1, IAtom a2, IAtom a3, IAtom a4, int parity) {
+    	return builder.newAtomParity(a,a1,a2,a3,a4,parity);
+    }  
+    public static IElement newElement(IChemObjectBuilder builder,String element) {
+    	return builder.newElement(element);
+    }       
 }
