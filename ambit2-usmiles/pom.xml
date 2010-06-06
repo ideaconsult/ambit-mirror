@@ -8,7 +8,7 @@
     <version>2.1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ambit2-usmiles</groupId>
+  <groupId>ambit</groupId>
   <artifactId>ambit2-usmiles</artifactId>
   <name>Canonical SMILES</name>
   <version>2.1.0-SNAPSHOT</version>
