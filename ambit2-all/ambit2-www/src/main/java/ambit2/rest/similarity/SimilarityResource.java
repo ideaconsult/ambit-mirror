@@ -73,6 +73,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 			QueryCombinedStructure qc= null;
 			try {
 				qc = new QueryCombinedStructure();
+				qc.add(q);
 				qc.setChemicalsOnly(true);
 				this.dataset_id = Reference.decode(getRequest().getAttributes().get(DatasetResource.datasetKey).toString());
 				ChemicalByDataset  cd = new ChemicalByDataset(new Integer(dataset_id));
