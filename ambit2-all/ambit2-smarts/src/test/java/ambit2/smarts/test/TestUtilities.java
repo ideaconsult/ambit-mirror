@@ -1250,12 +1250,12 @@ public class TestUtilities
 		
 		//tu.sp.mSupportOpenBabelExtension = false;
 		//tu.printSmartsTokens("[C^3]N");
-		tu.testSmartsManagerBoolSearch("[C^1]","CCCC");
-		tu.testSmartsManagerBoolSearch("[C^2]","CCCC");
-		tu.testSmartsManagerBoolSearch("[C^3]","CCCC");
-		tu.testSmartsManagerBoolSearch("[C^2]","C1=CC=CC=1");
-		tu.testSmartsManagerBoolSearch("[C^1]","CC#CC");
-		tu.testSmartsManagerBoolSearch("[C^1]","CC=C=C");
+		//tu.testSmartsManagerBoolSearch("[C^1]","CCCC");
+		//tu.testSmartsManagerBoolSearch("[C^2]","CCCC");
+		//tu.testSmartsManagerBoolSearch("[C^3]","CCCC");
+		//tu.testSmartsManagerBoolSearch("[C^2]","C1=CC=CC=1");
+		//tu.testSmartsManagerBoolSearch("[C^1]","CC#CC");
+		//tu.testSmartsManagerBoolSearch("[C^1]","CC=C=C");
 		
 	}
 	
