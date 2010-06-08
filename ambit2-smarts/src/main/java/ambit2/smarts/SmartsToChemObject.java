@@ -1,9 +1,11 @@
 package ambit2.smarts;
 
 import java.util.Vector;
+import java.util.BitSet;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.RingSet;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtom;
@@ -203,6 +205,24 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return(container);
 	}
 	
+	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query, IRingSet ringSet)
+	{
+		Vector<IRingSet> rs = getCondensedRingSystems(ringSet);
+		if (rs.size() == 0)
+			return(query);
+		
+		for (int i = 0; i < rs.size(); i++)
+		{
+			QueryAtomContainer qac = getCondensedFragmentFromRingSets(query, rs.get(i));
+			IAtomContainer ac = extractAtomContainerFullyConnected(qac, ringSet);
+			//TODO - perceive aromaticity 
+			String smiles = SmartsHelper.moleculeToSMILES(ac);
+			System.out.println(smiles);
+		}
+		
+		return(null);
+	}
+	
 	
 	
 	public IAtomContainer process(QueryAtomContainer target)
@@ -226,6 +246,17 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		return(extractAtomContainerFullyConnected(query,ringSet));
 	}
+	
+	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query)
+	{
+		SSSRFinder sssrf = new SSSRFinder(query);
+		IRingSet ringSet = sssrf.findSSSR();
+		
+		return(convertKekuleSmartsToAromatic(query, ringSet));
+	}
+	
+	
+	
 	
 	
 	/**
@@ -580,5 +611,46 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		b.setProperty(SmartsToChemObject.markProperty,new Integer(1));
 		return(b);	
 	}
+	
+	
+	Vector<IRingSet> getCondensedRingSystems(IRingSet ringSet )
+	{			
+		Vector<IRingSet> v = new Vector<IRingSet>();
+		int n = ringSet.getAtomContainerCount();
+		if (n == 0)
+			return(v);  //empty container is returned
+		
+		BitSet flagUsedRings = new BitSet(n);
+		flagUsedRings.set(0, n, false);
+		
+		int k = flagUsedRings.nextClearBit(0);
+		while (k < n)
+		{
+			IAtomContainer ac = ringSet.getAtomContainer(k);
+			flagUsedRings.set(k);
+			IRingSet rs = getCondenzedRingsTo(ac, ringSet, flagUsedRings);
+			v.add(rs);
+			k = flagUsedRings.nextClearBit(0);
+		}
+		
+		return v;
+	}
+	
+	
+	IRingSet getCondenzedRingsTo(IAtomContainer ac, IRingSet ringSet, BitSet flagUsedRings)
+	{
+		RingSet rs = new RingSet();
+		//TODO
+		return (rs);
+	}
+	
+	QueryAtomContainer getCondensedFragmentFromRingSets(QueryAtomContainer query, IRingSet rs)
+	{
+		//TODO
+		return(null);
+	}
+	
+	
+	
 	
 }
