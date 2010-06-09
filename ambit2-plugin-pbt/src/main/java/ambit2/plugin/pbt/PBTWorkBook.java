@@ -69,6 +69,7 @@ public class PBTWorkBook extends Algorithm<Serializable>{
 			throw new Exception("Can't find "+file);
 		poifsFileSystem = new POIFSFileSystem(workbook_stream);	
 		workbook = new HSSFWorkbook(poifsFileSystem);
+		HSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
 		pbt_worksheets = new PBTWorksheet[defs.length];
 		for (int i=0; i < defs.length;i++)
 			pbt_worksheets[i] = createSheet(workbook,i);
