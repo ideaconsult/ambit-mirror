@@ -2,7 +2,6 @@ package ambit2.plugin.pbt;
 
 import java.awt.Color;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
@@ -15,7 +14,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.data.model.Algorithm;
 import ambit2.core.processors.structure.MoleculeReader;
 
 import com.lowagie.text.Document;
@@ -24,8 +22,15 @@ import com.lowagie.text.Element;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
 
-
-public class PBTWorkBook extends Algorithm<Serializable>{
+/**
+ * 
+ * @author nina
+ *
+ */
+/*
+ * new workbook fails if extending Algorithm class (NPE in algorithm.equals()  )
+ */
+public class PBTWorkBook /*extends Algorithm<Serializable> */{
 	public static int COLUMN_STRUCTURE = 3;
 	public static int ROW_STRUCTURE = 9;
 	public static final String PBT_TITLE = "REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02";
@@ -73,9 +78,10 @@ public class PBTWorkBook extends Algorithm<Serializable>{
 		pbt_worksheets = new PBTWorksheet[defs.length];
 		for (int i=0; i < defs.length;i++)
 			pbt_worksheets[i] = createSheet(workbook,i);
-		setEndpoint("http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation");
-		setDescription(PBT_TITLE);
-		setName("PBT");
+		
+		//setEndpoint("http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation");
+		//setDescription(PBT_TITLE);
+		//setName("PBT");
 	}
     public String getTitle(int index) {
     	return workbook.getSheetName(index+1);
@@ -226,11 +232,15 @@ public class PBTWorkBook extends Algorithm<Serializable>{
     }
     public void setRecord(IStructureRecord record) {
     	this.record = record;
-    	MoleculeReader molreader = new MoleculeReader();
-    	try {
-    		setStructure(molreader.process(record));
-    	} catch (Exception x) {
+    	if (record == null)
     		setStructure(null);
+    	else {
+    	MoleculeReader molreader = new MoleculeReader();
+	    	try {
+	    		setStructure(molreader.process(record));
+	    	} catch (Exception x) {
+	    		setStructure(null);
+	    	}
     	}
     }
     public IStructureRecord getRecord() {
