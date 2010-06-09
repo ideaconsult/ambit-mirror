@@ -61,6 +61,10 @@ public abstract class ProcessorFileExport<Content> extends DefaultAmbitProcessor
         		writeRTF(document,new FileOutputStream(file));
         	else if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.HTML_INDEX]))
         		writeHTML(document,new FileOutputStream(file));        	  
+        	else if (file.getName().endsWith(FileOutputState.extensions[FileOutputState.XLS_INDEX])) {
+        		writeXLS(content,new FileOutputStream(file));
+        		return getOutput();        	
+        	}
             document.open();
             write(document, content);
             return getOutput();
@@ -79,5 +83,6 @@ public abstract class ProcessorFileExport<Content> extends DefaultAmbitProcessor
 	protected abstract void  writePDF(Document document, OutputStream out) throws DocumentException ;
 	protected abstract void  writeSDF(Content content, OutputStream out) throws AmbitException ;
 	protected abstract void  writeRTF(Document document, OutputStream out) throws AmbitException ;
-	protected abstract void  writeHTML(Document document, OutputStream out) throws AmbitException ;        	
+	protected abstract void  writeHTML(Document document, OutputStream out) throws AmbitException ;
+	protected abstract void  writeXLS(Content content, OutputStream out) throws AmbitException ;     
 }
