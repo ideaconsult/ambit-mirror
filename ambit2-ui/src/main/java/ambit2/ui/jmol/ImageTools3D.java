@@ -97,7 +97,7 @@ public class ImageTools3D extends DefaultAmbitProcessor<IAtomContainer, Buffered
 				 jmolpopup.updateComputedMenus();
 
 			 } catch (Exception x) {
-				 x.printStackTrace();
+				// x.printStackTrace();
 			 }
 	   }	
 	
