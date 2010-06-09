@@ -339,6 +339,8 @@ public class PBTWorksheet  extends AmbitBean  {
     		notifyCells(row, col);    		
     		//formulaEvaluator.clearAllCachedResultValues();
     		HSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
+
+    		notifyCells(row, col);    		
 		//}
     	
 	}
@@ -352,11 +354,12 @@ public class PBTWorksheet  extends AmbitBean  {
 				else {
 					HSSFCell cell = getCell(r,c);
 					
-					if ((cell !=null) && (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA))
+					if ((cell !=null) && (cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA)) {
 						firePropertyChange(getCellName(r, c).toLowerCase(), oldValue[r][c],  format(get(r,c)));
+					}
 				}
 		
-						
+	
 	}
 	public static String getCellName(int row, int col) {
 		if (row < 0) return null;
@@ -1170,6 +1173,15 @@ public class PBTWorksheet  extends AmbitBean  {
 	}
 	public Object getC15() {
 		return get(14,2);
+	}
+	public Object getB93() {
+		return get(92,1);
+	}
+	public Object getB87() {
+		return get(86,1);
+	}
+	public Object getB86() {
+		return get(85,1);
 	}
 
 	public void setC15(Object value) {
