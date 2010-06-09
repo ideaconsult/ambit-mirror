@@ -58,6 +58,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFPatternFormatting;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -312,6 +313,35 @@ public class PBTPageBuilder {
 	        		break;	        		
 				}					
 				case  HSSFCell.CELL_TYPE_FORMULA: {
+				  JComponent fc = null;
+				   try {
+				        HSSFRichTextString stringValue = cell.getRichStringCellValue();
+				        fc = createTextComponent(rowspan, model, propertyName,  background, "");
+				   } catch (Exception e) {
+				             //System.out.println("Numeric formula");
+					   fc = createNumberComponent(rowspan, model, propertyName,  background, "",1);
+				   } 
+				   /*
+					switch (cell.getCachedFormulaResultType()) {
+					case HSSFCell.CELL_TYPE_NUMERIC: {
+						fc = createNumberComponent(rowspan, model, propertyName,  background, "",1);
+						break;
+					} 
+					case HSSFCell.CELL_TYPE_STRING: {
+						fc = createTextComponent(rowspan, model, propertyName,  background, "");
+						break;
+					}	
+					case HSSFCell.CELL_TYPE_BOOLEAN: {
+						fc = createTextComponent(rowspan, model, propertyName,  background, "");
+						break;
+					}
+					case HSSFCell.CELL_TYPE_ERROR: {
+						fc = createTextComponent(rowspan, model, propertyName,  background, "");
+						break;
+					}
+					}
+					*/
+					/*
 			        JTextField textField = new JTextField() {
 			        	@Override
 			        	public String getToolTipText() {
@@ -321,9 +351,10 @@ public class PBTPageBuilder {
 			        	}
 			        };
 			        ToolTipManager.sharedInstance().registerComponent(textField);
-			        
-			        Bindings.bind(textField,model.getModel(propertyName),true);						
-					c = textField;					
+			        */
+			        //System.out.println(String.format("%s (%d,%d) %s",cell,cell.getRowIndex(),cell.getColumnIndex(),model.getModel(propertyName).toString()));
+			        //Bindings.bind(textField,model.getModel(propertyName),true);						
+					c = fc;					
 	        		c.setEnabled(false);
 	        		c.setBackground(background);
 	        		c.setBorder(BorderFactory.createEtchedBorder());
@@ -448,7 +479,13 @@ public class PBTPageBuilder {
     	            return "";
     	        }
     	        else {
-    	            return super.valueToString(iv);
+    	        	try {
+    	        		return super.valueToString(iv);
+    	        	} catch (Exception x) {
+    	        		//System.out.println(iv);
+    	        		//x.printStackTrace();
+    	        		return iv.toString();
+    	        	}
     	        }
     	    }
     	    public Object stringToValue(String text) throws ParseException {
