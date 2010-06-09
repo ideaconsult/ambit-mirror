@@ -50,6 +50,18 @@ public class PBTExporter extends ProcessorFileExport<PBTWorkBook> {
 		RtfWriter2.getInstance(document, out);
 	}
 	@Override
+	protected void writeXLS(PBTWorkBook content, OutputStream out)
+			throws AmbitException {
+		try {
+			content.save(out);
+		} catch (Exception x) {
+			logger.warn(x);
+		} finally {
+			try {out.close();} catch (Exception x) {}
+		}
+		
+	}
+	@Override
 	protected void writeSDF(PBTWorkBook content, OutputStream out)
 			throws AmbitException {
 	

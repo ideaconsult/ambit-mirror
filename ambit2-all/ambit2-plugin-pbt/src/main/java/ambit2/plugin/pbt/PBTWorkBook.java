@@ -2,6 +2,7 @@ package ambit2.plugin.pbt;
 
 import java.awt.Color;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
@@ -83,6 +84,10 @@ public class PBTWorkBook /*extends Algorithm<Serializable> */{
 		//setDescription(PBT_TITLE);
 		//setName("PBT");
 	}
+    
+    public void save(OutputStream out) throws Exception {
+        workbook.write(out);
+    }
     public String getTitle(int index) {
     	return workbook.getSheetName(index+1);
     }    
