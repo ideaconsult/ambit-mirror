@@ -27,8 +27,8 @@ public abstract class ExportWorkflow<Content> extends Workflow {
     	export.setName("Export as PDF/RTF/HTML/SDF file");
     	
     	FileOutputState fo = new FileOutputState();
-    	fo.setSupportedExtensions(new String[] {".pdf",".rtf",".html",".sdf"});
-    	fo.setSupportedExtDescriptions(new String[] {"Adobe PDF files (*.pdf)","Rich Text Format files (*.rtf)","HTML files (*.html)","SDF (*.sdf)"});
+    	fo.setSupportedExtensions(new String[] {".pdf",".rtf",".html",".sdf",".xls"});
+    	fo.setSupportedExtDescriptions(new String[] {"Adobe PDF files (*.pdf)","Rich Text Format files (*.rtf)","HTML files (*.html)","SDF (*.sdf)","MS Excel (*.xls)"});
         setDefinition(new OutputFileSelection(export, fo));
         
 	}
