@@ -16,12 +16,12 @@ CDK descriptors, listed at http://qsar.sourceforge.net/dicts/qsar-descriptors/in
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-smarts</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${version}</version>
   	</dependency>
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-core</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>${version}</version>
   	</dependency>
   	<dependency>
   		<groupId>junit</groupId>
