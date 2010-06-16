@@ -138,7 +138,8 @@ public class PKASmartsDescriptorTest {
     }
     @Test
     public void testPredictions() throws Exception {
-    	File file = new File("src/test/resources/ambit2/descriptors/pka/ambit_results.csv");
+    	File file = File.createTempFile("ambit_results", ".csv");
+    	file.deleteOnExit();
     	System.out.println(file.getAbsolutePath());
     	DelimitedFileWriter writer = new DelimitedFileWriter(new FileOutputStream(file));
     	
