@@ -249,16 +249,23 @@
      -->
     </modules>
   <distributionManagement>
+  	<snapshotRepository>
+  		<id>ambit_acad</id>
+  		<name>ambit at acad</name>
+  		<url>scp://ambit.acad.bg/usr/local/www/data/ambit/maven</url>
+  	</snapshotRepository>
+  	<!-- 
+    <site>
+      <id>website_acad</id>
+      <url>scp://ambit.acad.bg/var/www/html/ambit/ambit2</url>
+    </site>
+     -->
     <site>
       <id>website_ambit</id>
-      <url>scp://shell.sourceforge.net/home/groups/a/am/ambit/htdocs/AMBIT2-LIBS</url>
+      <url>scp://shell.sourceforge.net/home/groups/a/am/ambit/htdocs</url>
     </site>
-    <repository>
-      <id>website_ambit</id>
-      <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url>
-    </repository>    
-    
-  </distributionManagement>  
+ 	
+  </distributionManagement>
     <mailingLists>
     <mailingList>
       <name>Developers list</name>
