@@ -7,8 +7,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
-  <artifactId>ambit2-smarts</artifactId>
-  <packaging>jar</packaging>  
+  <artifactId>ambit2-smarts</artifactId>  
   <name>ambit2-smarts</name>
   <version>2.1.0-SNAPSHOT</version>
   <description>Implementation of a SMARTS parser.</description>

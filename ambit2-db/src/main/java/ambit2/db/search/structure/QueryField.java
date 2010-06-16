@@ -183,7 +183,7 @@ where s2.idchemical is null;
 		else
 			params.add(new QueryParam<String>(String.class, isSearchByAlias()?getFieldname().getLabel():getFieldname().getName()));
 
-		params.add(new QueryParam<String>(String.class, getValue()));
+		params.add(new QueryParam<String>(String.class, getValue().length()>255?getValue().substring(1,255):getValue()));
 		return params;
 	}
 	@Override
