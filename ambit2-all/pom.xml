@@ -120,6 +120,7 @@
   <scm>
     <connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ambit2-all-2.1.0</connection>
     <developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ambit2-all-2.1.0</developerConnection>
+    <tag>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ambit2-all</tag>
     <url>http://ambit.svn.sourceforge.net/viewvc/ambit/tags/ambit2-all-2.1.0</url>
   </scm>
   <organization>
