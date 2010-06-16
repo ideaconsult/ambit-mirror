@@ -1,17 +1,27 @@
 AMBIT2 
 
-This is multi module maven project
+This is multi module maven project;
 
 Prerequisites for building AMBIT2
 JDK 1.5 or higher
 MySQL 5.0 or higher
 Maven
 
-Build all 
+1) to build ambit2 libraries:  
 
->mvn package
 
-NOTE: The build process includes mandatory database tests and can take a while. 
+ambit2-all>mvn package
+
+2) to build applications (AMbitXT and REST web services):
+
+>cd ambit2-apps
+ambit2-all\ambit2-apps>mvn package
+
+NOTE 1: Applications depend on Toxtree jars being in local maven repository http://toxtree.sourceforge.net .
+Get the source from https://toxtree.svn.sourceforge.net/svnroot/toxtree/trunk and run mvn install.
+
+
+NOTE 2: The build process includes mandatory database tests and can take a while. 
 To be able to access mysql database, there should be "settings.xml" file in your ".m2" directory with the following configuration:
 
 

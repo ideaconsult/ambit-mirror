@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
 	<description>Exposes  AMBIT 2 database search and other functionality by REST style web services.</description>
-  <parent>
-    <artifactId>ambit2-all</artifactId>
-    <groupId>ambit</groupId>
-    <version>2.1.0-SNAPSHOT</version>
-  </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-www</artifactId>
@@ -12,12 +8,11 @@
   <name>Ambit2 REST web services</name>
   <version>2.1.0-SNAPSHOT</version>
 
-  <properties>
-
- 	<toxtree.version>2.1.0-SNAPSHOT</toxtree.version>
- 	<ambit.version>2.1.0-SNAPSHOT</ambit.version>
-
-  </properties>  
+  <parent>
+  	<artifactId>ambit2-apps</artifactId>
+  	<groupId>ambit</groupId>
+  	<version>2.1.0-SNAPSHOT</version>
+  </parent>  
   <build>
     <finalName>ambit2</finalName>
 	<resources>
@@ -154,33 +149,21 @@
   		<version>1.2</version>
   		<scope>test</scope>
   	</dependency>
-  	<dependency>
-  		<groupId>ambit</groupId>
-  		<artifactId>ambit2-db</artifactId>
-  		<version>${ambit.version}</version>
-  	</dependency>
+
   	<dependency>
   		<groupId>org.dbunit</groupId>
   		<artifactId>dbunit</artifactId>
   		<version>2.4.7</version>
   		<scope>test</scope>
   	</dependency>
-  	<dependency>
-  		<groupId>ambit</groupId>
-  		<artifactId>ambit2-base</artifactId>
-  		<version>${ambit.version}</version>
-  	</dependency>
+ 
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-pubchem</artifactId>
   		<version>${ambit.version}</version>
 
   	</dependency>
-  	<dependency>
-  		<groupId>ambit</groupId>
-  		<artifactId>ambit2-namestructure</artifactId>
-  		<version>${ambit.version}</version>
-  	</dependency>
+
   	<dependency>
   		<groupId>net.sf.saxon</groupId>
   		<artifactId>saxon-dom</artifactId>
@@ -216,63 +199,7 @@
   		<artifactId>slf4j-nop</artifactId>
   		<version>1.5.6</version>
   	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-cramer</artifactId>
-  		<version>${toxtree.version}</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-cramer2</artifactId>
-  		<version>${toxtree.version}</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-mutant</artifactId>
-  		<version>${toxtree.version}</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-verhaar</artifactId>
-  		<version>${toxtree.version}</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-kroes</artifactId>
-  		<version>${toxtree.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-michaelacceptors</artifactId>
-  		<version>${toxtree.version}</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-mic</artifactId>
-  		<version>${toxtree.version}</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-eye</artifactId>
-  		<version>${toxtree.version}</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-sicret</artifactId>
-  		<version>${toxtree.version}</version>
-  		<scope>compile</scope>
-  	</dependency>
+  	
   	<dependency>
    	 	<groupId>org.jyaml</groupId>
    	 	<artifactId>jyaml</artifactId>
@@ -284,11 +211,7 @@
   		<version>${ambit.version}</version>
 
   	</dependency>
-  	<dependency>
-  		<groupId>ambit</groupId>
-  		<artifactId>ambit2-model</artifactId>
-  		<version>${ambit.version}</version>
-  	</dependency>
+
   	<dependency>
   		<groupId>org.restlet.jee</groupId>
   		<artifactId>org.restlet.ext.fileupload</artifactId>
@@ -311,21 +234,7 @@
   		<artifactId>jmol</artifactId>
   		<version>11.8.23</version>
   	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-biodegradation</artifactId>
-  		<version>${toxtree.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-skinsensitisation</artifactId>
-  		<version>${toxtree.version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>toxtree</groupId>
-  		<artifactId>toxtree-smartcyp</artifactId>
-  		<version>${toxtree.version}</version>
-  	</dependency>
+
   </dependencies>
 	<repositories>
 	    <repository>

@@ -214,9 +214,20 @@
   </build>
   <modules>
 <!--    <module>ambit2-i5rest</module> -->
+    <module>ambit2-base</module>
+    <module>ambit2-rest</module>
     <module>ambit2-smarts</module>
     <module>ambit2-core</module>
     <module>ambit2-db</module>
+    <module>ambit2-hashcode</module>
+    <module>ambit2-descriptors</module>
+    <module>ambit2-smi23d</module>
+    <module>ambit2-mopac</module>
+    <module>ambit2-model</module>
+    <module>ambit2-namestructure</module>
+    <module>ambit2-pubchem</module>
+    <module>ambit2-usmiles</module>
+    <module>ambit2-tautomers</module>
     <module>ambit2-ui</module>
     <module>ambit2-dbui</module>
     <module>ambit2-workflow</module>
@@ -225,21 +236,10 @@
     <module>ambit2-plugin-pbt</module>
     <module>ambit2-plugin-dbtools</module>
     <module>ambit2-plugin-usermgr</module>
-    <module>ambit2-hashcode</module>
-    <module>ambit2-descriptors</module>
+    <!--     
     <module>ambit2-taglibs</module>
-    <module>ambit2-www</module>
-    <module>ambit2-smi23d</module>
-    <module>ambit2-mopac</module>
-    <module>ambit2-model</module>
-    <module>ambit2-namestructure</module>
-    <module>ambit2-pubchem</module>
-    <module>ambit2-base</module>
-    <module>ambit2-rest</module>
-    <module>ambit2-usmiles</module>
-    <module>ambit2-tautomers</module>
-    
-  </modules>
+     -->
+    </modules>
   <distributionManagement>
   	<snapshotRepository>
   		<id>ambit_acad</id>
