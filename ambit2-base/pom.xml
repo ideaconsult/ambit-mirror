@@ -10,12 +10,7 @@
   <artifactId>ambit2-base</artifactId>
   <name>ambit2-base</name>
   <version>2.1.1-SNAPSHOT</version>
-  <scm>
-    <connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-base</connection>
-    <developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-base</developerConnection>
-    <tag>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ambit2-all/ambit2-base</tag>
-    <url>http://ambit.svn.sourceforge.net/viewvc/ambit/trunk/ambit2-all/ambit2-base</url>
-  </scm>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

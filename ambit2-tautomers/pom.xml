@@ -22,12 +22,7 @@
   		</roles>
   	</developer>
   </developers>
-  <scm>
-  	<connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-tautomers</connection>
-  	<developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-tautomers</developerConnection>
-  	<tag>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ambit2-all/ambit2-tautomers</tag>
-  	<url>http://ambit.svn.sourceforge.net/viewvc/ambit/tags/ambit2-all</url>
-  </scm>
+
   <organization>
   	<name>Ideaconsult Ltd.</name>
   	<url>http://www.ideaconsult.net</url>

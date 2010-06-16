@@ -25,12 +25,7 @@
   		</roles>
   	</developer>
   </developers>
-  <scm>
-  	<connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-usmiles</connection>
-  	<developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-usmiles</developerConnection>
-  	<tag>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ambit2-all/ambit2-usmiles</tag>
-  	<url>http://ambit.svn.sourceforge.net/viewvc/ambit/trunk/ambit2-all</url>
-  </scm>
+
   <organization>
   	<name>Ideaconsult Ltd.</name>
   	<url>http://www.ideaconsult.net</url>
