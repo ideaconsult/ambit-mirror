@@ -63,7 +63,13 @@
     <distribution>repo</distribution>
     <comments>LGPL 2</comments>
   </license>
-</licenses>  
+</licenses>
+  <scm>
+    <connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-core</connection>
+    <developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-core</developerConnection>
+    <tag>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ambit2-all/ambit2-core</tag>
+    <url>http://ambit.svn.sourceforge.net/viewvc/ambit/trunk/ambit2-all/ambit2-core</url>
+  </scm>
 <build>
 	<plugins>
         <plugin>
