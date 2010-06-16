@@ -215,9 +215,10 @@
                 <version>2.0-beta-9</version>
                
                <configuration>
+               		<remoteTagging>true</remoteTagging>
                		<tagBase>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags</tagBase> 
                    <autoVersionSubmodules>true</autoVersionSubmodules>
-               		<preparationGoals>clean install</preparationGoals> 
+<!--               		<preparationGoals>clean install</preparationGoals> -->  
                </configuration>
             </plugin>
   		</plugins>
