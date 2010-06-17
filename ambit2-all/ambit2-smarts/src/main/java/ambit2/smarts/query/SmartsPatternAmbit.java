@@ -24,15 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts.query;
 
-import java.util.List;
-
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
-import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.SmartsManager;
 import ambit2.smarts.processors.SMARTSPropertiesReader;
 
@@ -87,27 +83,15 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	}
 	public IAtomContainer getMatchingStructure(IAtomContainer mol)
 			throws SMARTSException {
-/*
-		List bondMaps = sman.getBondMappings(object);
-		boolean searchResult = man.searchIn(mol);
- 
- */
-
-		//List<IAtom> atoms =sman.getAtomMappings(mol);
-		IAtomContainer c = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
-		
-		List<List<RMap>> bonds =sman.getBondMappings(mol);
-		
-		for (List<RMap> maps : bonds)
-			for (RMap map : maps)
-			c.addBond(mol.getBond(map.getId1()));
-		
-		//List<IAtom> atoms =sman.getAtomMappings(mol,sman.getQueryContaner()); -- replaced by Nick :-)
-		List<IAtom> atoms =sman.getFirstPosAtomMappings(mol);
-		for (IAtom atom: atoms)
-			c.addAtom(atom);
-			
-		return c;
+		IAtomContainerSet set = sman.getAllIsomorphismMappings(mol);
+		if (set==null) return null;
+		if (set.getAtomContainerCount()==0) return null;
+		if (set.getAtomContainerCount()==1) return set.getAtomContainer(0);
+		//a hack before refactoring code to use set for selections
+		IAtomContainer match = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+		for (int i=0; i < set.getAtomContainerCount();i++)
+			match.add(set.getAtomContainer(i));
+		return match;
 	}
 
 	public int hasSMARTSPattern(IAtomContainer mol) throws SMARTSException {
