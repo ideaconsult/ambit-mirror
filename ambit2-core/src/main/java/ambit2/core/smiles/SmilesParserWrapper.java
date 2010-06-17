@@ -17,7 +17,8 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	protected static SmilesParserWrapper wrapper = null;
 	protected OpenBabelShell babel = null;
 	protected SmilesParser cdkParser = null;
-	protected DeduceBondSystemTool  dbt;
+	//protected DeduceBondSystemTool  dbt;
+	protected org.openscience.cdk.smiles.DeduceBondSystemTool dbt;
 	public enum SMILES_PARSER {
 	    CDK, OPENBABEL 
 	}
@@ -31,7 +32,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	protected SmilesParserWrapper(SMILES_PARSER mode) {
 		super();
 		setParser(mode);
-		dbt = new DeduceBondSystemTool();	
+		dbt = new org.openscience.cdk.smiles.DeduceBondSystemTool();	
 		Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
 	}
 	public IMolecule parseSmiles(String smiles) throws InvalidSmilesException {
@@ -60,9 +61,9 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 			if (cdkParser == null) cdkParser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 			IMolecule mol = cdkParser.parseSmiles(smiles);
 			try {
-
 				return dbt.fixAromaticBondOrders(mol);
-			} catch (CDKException xx) {
+				//return mol;
+			} catch (Exception xx) {
 				xx.printStackTrace();
 				throw new InvalidSmilesException(xx.getMessage());	
 			}
