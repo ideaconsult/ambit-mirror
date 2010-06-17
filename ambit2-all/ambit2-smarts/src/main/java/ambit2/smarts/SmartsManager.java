@@ -37,6 +37,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -761,7 +762,7 @@ public class SmartsManager
 				Vector<IAtom> v =  getAtomMappingsFor1AtomQuery(target, query);
 				for (int i = 0; i< v.size(); i++)
 				{
-					IAtomContainer c = DefaultChemObjectBuilder.getInstance().newAtomContainer();
+					IMolecule c = DefaultChemObjectBuilder.getInstance().newMolecule();
 					c.addAtom(v.get(i));
 					s.addAtomContainer(c);
 				}
@@ -1003,7 +1004,7 @@ public class SmartsManager
 						if (bo != null)
 							if (qBond.matches(bo))
 							{	
-								IAtomContainer c = DefaultChemObjectBuilder.getInstance().newAtomContainer();
+								IMolecule c = DefaultChemObjectBuilder.getInstance().newMolecule();
 								c.addAtom(at);
 								c.addAtom((IAtom)ca.get(j));
 								c.addBond(bo); 
@@ -1153,9 +1154,23 @@ public class SmartsManager
 	}	
 	
 	public IAtomContainer generateFullIsomorphismMapping(List bondMapList, IAtomContainer target, IAtomContainer queryStr)
-	{
-		//TODO
-		return (null);
+	{	
+		Vector<IAtom> v = generateFullAtomMapping(bondMapList, target, queryStr);
+		IMolecule ac = DefaultChemObjectBuilder.getInstance().newMolecule();
+		for (int i = 0; i < v.size(); i++)
+			ac.addAtom(v.get(i));
+		
+		
+		RMap map;
+		for (Object aMap : bondMapList) 
+		{
+			//Note: map.getId2 corresponds to the query; map.getId1 corresponds to the target
+			map = (RMap) aMap;
+			int targetBondNum = map.getId1();
+			ac.addBond(target.getBond(targetBondNum));
+		}
+		
+		return (ac);
 	}
 	
 	int getTargetPartnerBondID(int queryBondID, List mapList)

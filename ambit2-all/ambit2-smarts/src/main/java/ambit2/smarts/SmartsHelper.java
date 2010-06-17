@@ -310,7 +310,7 @@ public class SmartsHelper
 			writer.close();
 		}
 		catch (Exception e)
-		{
+		{	
 			System.out.println(e.toString());
 		}
 		
