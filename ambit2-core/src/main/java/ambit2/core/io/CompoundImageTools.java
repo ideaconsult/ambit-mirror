@@ -46,6 +46,7 @@ import org.openscience.jchempaint.renderer.generators.BasicAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.BasicBondGenerator;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.IGeneratorParameter;
+import org.openscience.jchempaint.renderer.generators.RingGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectBondGenerator;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
@@ -107,7 +108,7 @@ public class CompoundImageTools {
        generators.add(new BasicAtomGenerator());
        generators.add(new MySelectAtomGenerator());
        generators.add(new SelectBondGenerator());
-       //generators.add(new RingGenerator());
+       generators.add(new RingGenerator());
     	
 	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
 		RendererModel r2dm = renderer.getRenderer2DModel();	
@@ -119,7 +120,6 @@ public class CompoundImageTools {
 		r2dm.setColorAtomsByType(true);
 		r2dm.setShowImplicitHydrogens(false);
 		r2dm.setShowAromaticity(true);  
-
 
 		return renderer;
     }
@@ -288,7 +288,11 @@ public class CompoundImageTools {
         r2dm.setColorAtomsByType(true);
         r2dm.setSelectedPartColor(Color.orange);
         */
-    	r2dm.setShowAromaticity(true);
+    	//r2dm.setShowAromaticity(true);
+    	//r2dm.setShowAromaticityCDKStyle(true);
+    	//r2dm.setShowMoleculeTitle(true);
+    	//r2dm.setShowEndCarbons(true);
+    	//r2dm.setShowAtomTypeNames(true);
 		if ((molecules != null) && (molecules.getAtomContainerCount()>0)) {
 //			g.setBackground(r2dm.getBackColor());
 
