@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -19,6 +20,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -137,6 +139,38 @@ public class TestUtilities
 			System.out.println();
 		}
 	}
+	
+	
+	public void showFullIsomorphismMappings(String smarts, String smiles)
+	{	
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		man.setQuery(smarts);
+		if (!man.getErrors().equals(""))
+		{
+			System.out.println(man.getErrors());
+			return;
+		}
+		System.out.println("Man_search " + smarts + " in " + smiles);
+		IAtomContainerSet mappingSet = man.getAllIsomorphismMappings(mol);
+		for (int k = 0; k < mappingSet.getAtomContainerCount(); k++)
+		{	
+			IAtomContainer ac = mappingSet.getAtomContainer(k);
+			System.out.print("Mapping: ");
+			for (int i = 0; i < ac.getAtomCount(); i++)
+			{
+				IAtom a = ac.getAtom(i);
+				if (a == null)
+					System.out.print(" null");
+				else
+					System.out.print(" "+a.getSymbol()+"<"+mol.getAtomNumber(a)+">");
+			}
+			
+			System.out.print("      " + SmartsHelper.moleculeToSMILES(ac));
+			//System.out.println();
+		}
+		System.out.println();
+	}
+	
 	
 	public void testIsomorphismTester(String smarts, String smiles)
 	{	
@@ -1256,6 +1290,12 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[C^2]","C1=CC=CC=1");
 		//tu.testSmartsManagerBoolSearch("[C^1]","CC#CC");
 		//tu.testSmartsManagerBoolSearch("[C^1]","CC=C=C");
+		
+		tu.showFullIsomorphismMappings("N", "CCCNCCCNCC");
+		tu.showFullIsomorphismMappings("CN", "CCCNCCCNCC");
+		tu.showFullIsomorphismMappings("CNC", "CCCNCCCNCC");
+		tu.showFullIsomorphismMappings("CN(N)C", "CCCN(N)CCCNCC");
+		tu.showFullIsomorphismMappings("C1NCC1", "CCC1NCC1C");
 		
 	}
 	
