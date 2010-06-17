@@ -34,8 +34,10 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
@@ -728,6 +730,74 @@ public class SmartsManager
 	}
 	
 	
+	public IAtomContainerSet getAllIsomorphismMappings(IAtomContainer target)
+	{
+		IAtomContainerSet s = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
+		if (query == null)
+			return(s);
+		
+		
+		if (FlagUseCDKIsomorphismTester)
+		{
+			
+			if (query.getAtomCount() < 3)  
+			{
+				//This code is needed for the case query.getAtomCount() >= 3
+				//Since it is invoked inside getBondMappings()
+				
+				if (FlagSetSmartsDataForTarget)
+					parser.setSMARTSData(target);
+				
+				if (parser.hasRecursiveSmarts)
+				{	
+					clearQueryRecMatches();
+					getQueryRecMatches(target);
+				}	
+			}
+			
+			
+			if (query.getAtomCount() == 1)
+			{
+				Vector<IAtom> v =  getAtomMappingsFor1AtomQuery(target, query);
+				for (int i = 0; i< v.size(); i++)
+				{
+					IAtomContainer c = DefaultChemObjectBuilder.getInstance().newAtomContainer();
+					c.addAtom(v.get(i));
+					s.addAtomContainer(c);
+				}
+				return(s);
+			}
+			
+			
+			if (query.getAtomCount() == 2)
+			{	            
+				return(getAllIsomorphismMappingsFor2AtomQuery(target, query));
+			}
+			
+			
+			//The case query.getAtomCount() >= 3
+			List<List<RMap>> maps = getBondMappings(target);
+			for (List<RMap> bondMap : maps)
+			{
+				IAtomContainer c = generateFullIsomorphismMapping(bondMap, target, query);
+				s.addAtomContainer(c);
+			}
+			return(s);
+
+		}
+		else  //Current Isomorphism Tester is used
+		{
+			//TODO
+			
+		}
+		
+		
+		return(s);
+		
+	}
+	
+	
+	
 	//---------- Implementing the Strategy 1 for recursive atoms ---------------
 	
 	
@@ -757,6 +827,8 @@ public class SmartsManager
 		}	
 		return(getFirstPosAtomMappings(target,query));
 	}
+	
+	
 	
 	public List getBondMappings(IAtomContainer target)
 	{				
@@ -848,7 +920,7 @@ public class SmartsManager
 				return(getAtomMappingsFor1AtomQuery(target, recQuery));
 			else				
 				if (recQuery.getAtomCount() == 2)
-					return(getAtomMappingsFor2AtomQuery(target, recQuery));
+					return(getFirstPosAtomMappingsFor2AtomQuery(target, recQuery));
 				else
 				{
 					bondMaps = UniversalIsomorphismTester.getSubgraphMaps(target, recQuery);
@@ -872,14 +944,14 @@ public class SmartsManager
 		return(atomMaps);
 	}
 	
-	Vector<IAtom> getAtomMappingsFor2AtomQuery(IAtomContainer target, IAtomContainer recQuery)
+	Vector<IAtom> getFirstPosAtomMappingsFor2AtomQuery(IAtomContainer target, IAtomContainer recQuery)
 	{
 		Vector<IAtom> atomMaps  = new Vector<IAtom>();
 		if (recQuery.getBondCount() == 0)
 			return(atomMaps); //The two atoms must be connected otherwise substr. search returns no matches
 		
 		SMARTSAtom qAtom0 = (SMARTSAtom)recQuery.getAtom(0);
-		SMARTSAtom qAtom1 = (SMARTSAtom)recQuery.getAtom(1);
+		SMARTSAtom qAtom1 = (SMARTSAtom)recQuery.getAtom(1);		
 		SMARTSBond qBond = (SMARTSBond)recQuery.getBond(0);
 		
 		for (int i = 0; i < target.getAtomCount(); i++)
@@ -897,7 +969,7 @@ public class SmartsManager
 							{	
 								atomMaps.add(at);
 								//It is not needed to register all maps corresponding to a same
-								//target atom. Hence j-cycle is breaked
+								//target atom. Hence j-cycle is broken
 								break; //for j-cycle
 							}	
 					}
@@ -906,14 +978,55 @@ public class SmartsManager
 		return(atomMaps);
 	}
 	
+	
+	IAtomContainerSet getAllIsomorphismMappingsFor2AtomQuery(IAtomContainer target, IAtomContainer recQuery)
+	{	
+		IAtomContainerSet s = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
+		
+		if (recQuery.getBondCount() == 0)
+			return(s); //The two atoms must be connected otherwise substr. search returns no matches
+				
+		SMARTSAtom qAtom0 = (SMARTSAtom)recQuery.getAtom(0);
+		SMARTSAtom qAtom1 = (SMARTSAtom)recQuery.getAtom(1);		
+		SMARTSBond qBond = (SMARTSBond)recQuery.getBond(0);
+		
+		for (int i = 0; i < target.getAtomCount(); i++)
+		{	
+			IAtom at = target.getAtom(i);
+			if (qAtom0.matches(at))
+			{	
+				List ca = target.getConnectedAtomsList(at);
+				for (int j = 0; j < ca.size(); j++)
+					if (qAtom1.matches((IAtom)ca.get(j)))
+					{
+						IBond bo = target.getBond(at,(IAtom)ca.get(j));
+						if (bo != null)
+							if (qBond.matches(bo))
+							{	
+								IAtomContainer c = DefaultChemObjectBuilder.getInstance().newAtomContainer();
+								c.addAtom(at);
+								c.addAtom((IAtom)ca.get(j));
+								c.addBond(bo); 
+								s.addAtomContainer(c);
+							}	
+					}
+			}	
+		}	
+		
+
+		return(s);
+	}
+	
+	
+	
 	/** This function returns a vector of all positions (IAtoms) at which
 	 * The Query is matched (i.e. it first atom is matched)
-	 * The full atom mapping is not obtained from this function  */
+	 * The full atom mapping is not obtained from this function !!!*/
 	
 	Vector<IAtom> getAtomMapsFromBondMaps(List bondMapping, IAtomContainer target, IAtomContainer recQuery)
 	{
 		//The query must contain  at least 3 atoms and 2 bonds.
-		//The first bonds is alway 0-1
+		//The first bond is always 0-1
 		//Two cases are considered for the second bond:
 		//  a0-a1-a2     (e.g. CCC)
 		//  a0(-a1)-a2   (e.g. C(C)C)
@@ -1039,6 +1152,11 @@ public class SmartsManager
 		return(atomMaps);
 	}	
 	
+	public IAtomContainer generateFullIsomorphismMapping(List bondMapList, IAtomContainer target, IAtomContainer queryStr)
+	{
+		//TODO
+		return (null);
+	}
 	
 	int getTargetPartnerBondID(int queryBondID, List mapList)
 	{	
