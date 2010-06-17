@@ -20,6 +20,7 @@ import java.util.List;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
@@ -28,6 +29,7 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -97,17 +99,18 @@ public class CompoundImageTools {
     }
     public CompoundImageTools(Dimension cellSize) {
         super();
-        renderer = createRenderer(cellSize,background);
+        renderer = createRenderer(cellSize,background,false);
         r2dm = renderer.getRenderer2DModel();
 		this.imageSize = cellSize;
     }
     
-    private Renderer createRenderer(Dimension cellSize,Color background) {
+    private Renderer createRenderer(Dimension cellSize,Color background,boolean rings) {
        List<IGenerator> generators = new ArrayList<IGenerator>();
        generators.add(new BasicBondGenerator());
        generators.add(new BasicAtomGenerator());
        generators.add(new MySelectAtomGenerator());
        generators.add(new SelectBondGenerator());
+       if (rings)
        generators.add(new RingGenerator());
     	
 	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
@@ -164,9 +167,18 @@ public class CompoundImageTools {
     public synchronized BufferedImage getImage(IAtomContainer molecule, 
     		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
     		boolean build2d) {    
-    	renderer = createRenderer(imageSize,background);
+    	boolean rings = true;
+    	if (molecule!=null)
+        	for (int i=0; i < molecule.getBondCount();i++)
+        		if (molecule.getBond(i).getFlag(CDKConstants.ISAROMATIC)) 
+        			if (IBond.Order.DOUBLE.equals(molecule.getBond(i).getOrder())) {
+        				rings = false;
+        				break;
+        			}
+    	
+    	renderer = createRenderer(imageSize,background,rings);
     	r2dm = renderer.getRenderer2DModel();
-        
+    	
         if (buffer == null)
             buffer = new BufferedImage(imageSize.width, imageSize.height,
 				BufferedImage.TYPE_INT_RGB);
@@ -276,7 +288,7 @@ public class CompoundImageTools {
 			IProcessor<IAtomContainer,IChemObjectSelection> selector,
 			Dimension imageSize)	
 	{
-    	renderer = createRenderer(imageSize,Color.white);
+    	renderer = renderer==null?createRenderer(imageSize,Color.white,false):renderer;
     	RendererModel r2dm = renderer.getRenderer2DModel();
 		/*
 		Renderer2DModel r2dm = renderer.getRenderer2DModel();
