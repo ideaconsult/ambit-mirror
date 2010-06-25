@@ -61,7 +61,7 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 		for (int i=0; i < instances.numInstances();i++)
 			for (int j=1; j < instances.numAttributes();j++) 
 				try {	
-					double value = Double.parseDouble(instances.instance(i).stringValue(j));
+					double value = instances.instance(i).value(j);
 					matrix.set(i,j-1,value);
 				} catch (Exception x) {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
