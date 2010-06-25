@@ -4,11 +4,11 @@
   <artifactId>ambit2-apps</artifactId>
   <packaging>pom</packaging>
   <name>Ambit2 applications</name>
-  <version>2.1.1-SNAPSHOT</version>
+  <version>2.1.2-SNAPSHOT</version>
     <properties>
 
- 	<toxtree.version>2.1.0-SNAPSHOT</toxtree.version>
- 	<ambit.version>2.1.1-SNAPSHOT</ambit.version>
+ 	<toxtree.version>2.1.1-SNAPSHOT</toxtree.version>
+ 	<ambit.version>2.1.2-SNAPSHOT</ambit.version>
 
   </properties>
     <description>AmbitXT and Ambit REST web services </description>
@@ -69,8 +69,8 @@
 		              -->
 		              <addClasspath>true</addClasspath>
 		              <!-- 
-		              <addExtensions/>
-		              <classpathPrefix/>
+		              <addExtensions />
+		              <classpathPrefix />
 		              -->
 		            </manifest>				          	
 		            <manifestEntries>
@@ -81,6 +81,20 @@
 		          </archive>
 		        </configuration>
 			</plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-release-plugin</artifactId>
+                <version>2.0</version>
+               
+               <configuration>
+                     <releaseProfiles>release</releaseProfiles>
+              
+               		<remoteTagging>true</remoteTagging>
+               		<tagBase>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags</tagBase> 
+                   <autoVersionSubmodules>true</autoVersionSubmodules>
+<!--               		<preparationGoals>clean install</preparationGoals> -->  
+               </configuration>
+            </plugin>
 			
 	      <plugin>
 	        <groupId>org.apache.maven.plugins</groupId>
