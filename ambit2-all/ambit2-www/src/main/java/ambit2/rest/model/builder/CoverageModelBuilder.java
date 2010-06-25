@@ -64,7 +64,7 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 					double value = Double.parseDouble(instances.instance(i).stringValue(j));
 					matrix.set(i,j-1,value);
 				} catch (Exception x) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Not a numeric feature!");
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 				}
 		
 		DataCoverage coverage = null;
