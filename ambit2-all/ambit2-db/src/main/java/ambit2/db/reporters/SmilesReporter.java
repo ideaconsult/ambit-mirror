@@ -3,6 +3,7 @@ package ambit2.db.reporters;
 import java.io.IOException;
 import java.io.Writer;
 
+import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -11,6 +12,7 @@ import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.search.QuerySmilesByID;
 
 public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter<Q, Writer> {
@@ -19,6 +21,13 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 	protected boolean writeProperties = false;
+	protected Profile groupProperties;
+	public Profile getGroupProperties() {
+		return groupProperties;
+	}
+	public void setGroupProperties(Profile gp) {
+		this.groupProperties = gp;
+	}		
 	protected Property key;
 	public enum Mode {
 		SMILES {
@@ -30,7 +39,13 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		InChI {
 			@Override
 			public String getTag() {
-				return AmbitCONSTANTS.INCHI;
+				return Property.opentox_InChI_std;
+			}
+			@Override
+			public Property getProperty() {
+				Property p = Property.getInstance(getTag(),"Default","http:///ambit.sourceforge.net");
+				p.setLabel(getTag());
+				return p;
 			}
 		};
 		public abstract String getTag();
@@ -58,7 +73,28 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		setMode(mode);
 		this.writeProperties = writeProperties;
 		getProcessors().clear();
-		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));
+		
+		switch (mode) {
+		case SMILES: {
+			getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));
+			break;
+			
+		}
+		case InChI: {
+			if (getGroupProperties()==null) setGroupProperties(new Profile());
+			getGroupProperties().add(mode.getProperty());
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});
+			break;
+		}
+		}
+		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
