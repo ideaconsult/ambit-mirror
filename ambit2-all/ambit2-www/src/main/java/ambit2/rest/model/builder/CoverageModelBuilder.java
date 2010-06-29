@@ -144,8 +144,11 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 		
 		Form form = new Form();
 		
-		form.add("model", Base64.encode(content));
 		newInstances.delete();
+		
+		String encoded = Base64.encode(content);
+		form.add("model", encoded);
+		
 		if (newInstances.classIndex()>=0)
 			form.add("classIndex",Integer.toString(newInstances.classIndex()));		
 		newInstances.delete();

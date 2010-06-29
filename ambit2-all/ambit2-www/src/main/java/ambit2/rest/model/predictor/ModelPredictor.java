@@ -153,7 +153,8 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 			ois =  new ObjectInputStream(in);
 		 	Object o = ois.readObject();
 		 	if (o==null)  throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Error when reading model %s",model.getName()));
-		 	if (!isSupported(o))  throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Wrong model type %s",model.getName()));
+		 	if (!isSupported(o))  
+		 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Wrong model type %s %s",model.getName(),o.getClass().getName()));
 	 	
 		 	header = getHeader(form);
 		 	classIndex = getClassIndex(form);
