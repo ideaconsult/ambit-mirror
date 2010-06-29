@@ -116,14 +116,16 @@ public class CompoundImageTools {
 	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
 		RendererModel r2dm = renderer.getRenderer2DModel();	
 		//r2dm.setBackgroundDimension(cellSize);
+		/*
 		r2dm.setBackColor(background);
 		r2dm.setForeColor(Color.BLACK);
 		r2dm.setDrawNumbers(false);
 		r2dm.setUseAntiAliasing(true);
 		r2dm.setColorAtomsByType(true);
 		r2dm.setShowImplicitHydrogens(false);
+		
+		*/
 		r2dm.setShowAromaticity(true);  
-
 		return renderer;
     }
     public synchronized BufferedImage getImage(Object o) {
