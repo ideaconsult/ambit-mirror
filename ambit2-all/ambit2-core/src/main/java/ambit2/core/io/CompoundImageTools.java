@@ -44,6 +44,7 @@ import org.openscience.jchempaint.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.OvalElement;
 import org.openscience.jchempaint.renderer.elements.RectangleElement;
 import org.openscience.jchempaint.renderer.font.AWTFontManager;
+import org.openscience.jchempaint.renderer.generators.AtomNumberGenerator;
 import org.openscience.jchempaint.renderer.generators.BasicAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.BasicBondGenerator;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
@@ -99,27 +100,33 @@ public class CompoundImageTools {
     }
     public CompoundImageTools(Dimension cellSize) {
         super();
-        renderer = createRenderer(cellSize,background,false);
+        renderer = createRenderer(cellSize,background,false,false);
         r2dm = renderer.getRenderer2DModel();
 		this.imageSize = cellSize;
     }
     
-    private Renderer createRenderer(Dimension cellSize,Color background,boolean rings) {
+    private Renderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
        List<IGenerator> generators = new ArrayList<IGenerator>();
        generators.add(new BasicBondGenerator());
        generators.add(new BasicAtomGenerator());
+       if (atomNumbers)
+           generators.add(new AtomNumberGenerator());
+       
        generators.add(new MySelectAtomGenerator());
        generators.add(new SelectBondGenerator());
        if (rings)
        generators.add(new RingGenerator());
+       
+
     	
 	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
 		RendererModel r2dm = renderer.getRenderer2DModel();	
+		r2dm.setDrawNumbers(atomNumbers);
 		//r2dm.setBackgroundDimension(cellSize);
 		/*
 		r2dm.setBackColor(background);
 		r2dm.setForeColor(Color.BLACK);
-		r2dm.setDrawNumbers(false);
+		
 		r2dm.setUseAntiAliasing(true);
 		r2dm.setColorAtomsByType(true);
 		r2dm.setShowImplicitHydrogens(false);
@@ -160,15 +167,13 @@ public class CompoundImageTools {
     }
 
 	public synchronized BufferedImage getImage(IAtomContainer molecule) {
-		return getImage(molecule,null);
+		return getImage(molecule,null,false,false);
 	}
-	public synchronized BufferedImage getImage(IAtomContainer molecule, 
-			IProcessor<IAtomContainer,IChemObjectSelection> selector) {
-		return getImage(molecule, selector,false);
-	}
+	
     public synchronized BufferedImage getImage(IAtomContainer molecule, 
     		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
-    		boolean build2d) {    
+    		boolean build2d,
+    		boolean atomNumbers) {    
     	boolean rings = true;
     	if (molecule!=null)
         	for (int i=0; i < molecule.getBondCount();i++)
@@ -178,7 +183,7 @@ public class CompoundImageTools {
         				break;
         			}
     	
-    	renderer = createRenderer(imageSize,background,rings);
+    	renderer = createRenderer(imageSize,background,rings,atomNumbers);
     	r2dm = renderer.getRenderer2DModel();
     	
         if (buffer == null)
@@ -192,7 +197,7 @@ public class CompoundImageTools {
 		
 		IMoleculeSet molecules = new MoleculeSet();
         generate2D(molecule, build2d, molecules);
-        paint(renderer,molecules, false, g, selector,imageSize);
+        paint(renderer,molecules, false, g, selector,imageSize,atomNumbers);
         if (borderColor != background)
         	paintBorderShadow(g,getBorderWidth(),new Rectangle(imageSize));
         g.dispose();
@@ -271,8 +276,9 @@ public class CompoundImageTools {
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
-			IProcessor<IAtomContainer,IChemObjectSelection> selector) {
-		paint(renderer, molecules, explicitH, g, selector,getImageSize());
+			IProcessor<IAtomContainer,IChemObjectSelection> selector,
+			boolean atomNumbers) {
+		paint(renderer, molecules, explicitH, g, selector,getImageSize(),atomNumbers);
 	}
 	/**
 	 * TODO sort molecules, in order to display the largest part first
@@ -288,9 +294,10 @@ public class CompoundImageTools {
 			boolean explicitH,  
 			Graphics2D g,
 			IProcessor<IAtomContainer,IChemObjectSelection> selector,
-			Dimension imageSize)	
+			Dimension imageSize,
+			boolean atomNumbers)	
 	{
-    	renderer = renderer==null?createRenderer(imageSize,Color.white,false):renderer;
+    	renderer = renderer==null?createRenderer(imageSize,Color.white,false,atomNumbers):renderer;
     	RendererModel r2dm = renderer.getRenderer2DModel();
 		/*
 		Renderer2DModel r2dm = renderer.getRenderer2DModel();

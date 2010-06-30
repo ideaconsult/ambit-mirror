@@ -81,7 +81,14 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	protected boolean generate2d = true;
 	protected boolean editable = false;
 	protected MoleculeEditAction editAction;
+	protected boolean atomNumbers = false;
 	
+	public boolean isAtomNumbers() {
+		return atomNumbers;
+	}
+	public void setAtomNumbers(boolean atomNumbers) {
+		this.atomNumbers = atomNumbers;
+	}
 	public Panel2D() {
 		super();
 		setEditable(true);
@@ -93,22 +100,29 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
         	@Override
         	public void mouseClicked(MouseEvent e) {
     			super.mouseClicked(e);        		
-        		if (isEditable() && (e.getClickCount()==1)) {
-        			if (editAction == null)
-        				editAction = new MoleculeEditAction(null);
-        			editAction.setParentComponent(e.getComponent());
-        			editAction.setModal(true);
-        			editAction.setMolecule(
-        					getObject()==null?MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance()):(IMolecule)getObject());
-        			editAction.actionPerformed(null);
-        			IMolecule molecule = editAction.getMolecule();
-        			if (molecule != null) {
-        				//to force 2D generation, otherwise the image is broken
-	        			//Iterator<IAtom> atoms = molecule.atoms();
-	        			//while (atoms.hasNext()) {atoms.next().setPoint2d(null);}
+        		if (isEditable()) {
+        			if  (e.getClickCount()==1) {
+        		
+	        			if (editAction == null)
+	        				editAction = new MoleculeEditAction(null);
+	        			editAction.setParentComponent(e.getComponent());
+	        			editAction.setModal(true);
+	        			editAction.setMolecule(
+	        					getObject()==null?MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance()):(IMolecule)getObject());
+	        			editAction.actionPerformed(null);
+	        			IMolecule molecule = editAction.getMolecule();
+	        			if (molecule != null) {
+	        				//to force 2D generation, otherwise the image is broken
+		        			//Iterator<IAtom> atoms = molecule.atoms();
+		        			//while (atoms.hasNext()) {atoms.next().setPoint2d(null);}
+	        			}
+	        			setAtomContainer(molecule, true);
         			}
-        			setAtomContainer(molecule, true);
-        		}	
+        		} else {
+        			atomNumbers = ! atomNumbers;
+        			image = null;
+        			setAtomContainer(atomContainer, true);
+        		}
         	}
         });
         setPreferredSize(new Dimension(150,150));
@@ -117,7 +131,7 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	public void paint(Graphics g) {
 		super.paintComponent(g);    
 		if (image == null) {
-			image = tools.getImage(atomContainer,getSelector(),generate2d);
+			image = tools.getImage(atomContainer,getSelector(),generate2d,atomNumbers);
 		}
 		g.drawImage(image,0,0,this);
 	}

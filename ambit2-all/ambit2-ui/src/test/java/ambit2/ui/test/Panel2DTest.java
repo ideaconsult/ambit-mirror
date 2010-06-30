@@ -111,7 +111,7 @@ public class Panel2DTest {
 
 		CompoundImageTools tools = new CompoundImageTools();
 		tools.setImageSize(new Dimension(300,300));
-		BufferedImage image = tools.getImage(mol,getSelector(mol));
+		BufferedImage image = tools.getImage(mol,getSelector(mol),false,false);
 		
 		File file = new File("image.png");
 		FileOutputStream out = new FileOutputStream(file);
