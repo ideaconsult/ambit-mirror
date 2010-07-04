@@ -3,7 +3,6 @@ package ambit2.rest.task;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.openscience.jchempaint.action.CreateReactionAction;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;
