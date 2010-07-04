@@ -20,6 +20,7 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 		"select value_num as a,idchemical from struc_dataset join structure using(idstructure)\n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
 		"where idproperty = %d and id_srcdataset=%d\n"+
+		"and value_num is not null\n"+
 		"group by idchemical,value_num\n"+
 		") as X\n"+
 		"join\n"+
@@ -27,6 +28,7 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 		"select value_num as b,idchemical from struc_dataset join structure using(idstructure)\n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
 		"where idproperty = %d and id_srcdataset=%d\n"+
+		"and value_num is not null\n"+
 		"group by idchemical,value_num\n"+
 		") as Y\n"+
 		"using(idchemical)\n";
