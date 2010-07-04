@@ -29,6 +29,7 @@
 
 package ambit2.db.processors;
 
+import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
@@ -51,7 +53,7 @@ import ambit2.descriptors.processors.DescriptorValue2Property;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.descriptors.processors.PropertyCalculationProcessor;
 
-public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,IStructureRecord> {
+public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,IStructureRecord> implements IStructureDiagramHighlights {
 
 	/**
 	 * 
@@ -80,9 +82,7 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
 		this.descriptors = descriptors;
 	}
 
-    
-    public IStructureRecord process(IStructureRecord target)
-    		throws AmbitException {
+	public IAtomContainer preprocess(IStructureRecord target) throws AmbitException {
     	IAtomContainer a = reader.process(target);
     	//necessary for some calculations
     	for (Property p : target.getProperties()) try {
@@ -112,7 +112,12 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     	} else {
     		
     	}
-    	
+    	return a;
+	}
+	
+    public IStructureRecord process(IStructureRecord target)
+    		throws AmbitException {
+    	IAtomContainer a = preprocess(target);
 
         if (descriptors==null)	descriptors = d.process(null);
     	Iterator<Property> i = descriptors.getProperties(true);
@@ -174,6 +179,27 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
 		} catch (Exception x) {b.append(x.getMessage());};
 		return b.toString();
 	      	
+	}
+	public BufferedImage getStructureDiagramWithHighlights(IAtomContainer mol,
+			String ruleID, int width, int height, boolean atomnumbers)
+			throws AmbitException {
+
+        if (descriptors==null)	descriptors = d.process(null);
+    	Iterator<Property> i = descriptors.getProperties(true);
+    	while (i.hasNext()) {
+    		try {
+    			Property p = i.next();
+    			if (p.isEnabled()) {
+    				calc.setProperty(i.next());
+    				return calc.getStructureDiagramWithHighlights(mol, ruleID, width, height, atomnumbers);
+    			}	
+    		} catch (AmbitException x) {
+    			throw x;
+   			} catch (Exception x) {
+   				throw new AmbitException(x);
+    		}
+    	}    	    		
+      	return null;
 	}
 }
 

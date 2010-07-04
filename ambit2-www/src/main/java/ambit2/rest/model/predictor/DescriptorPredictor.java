@@ -19,6 +19,10 @@ import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 
 public class DescriptorPredictor  extends	ModelPredictor<DescriptorsCalculator,IStructureRecord> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8106073411946010587L;
 	DescriptorsCalculator calculator;
 	public DescriptorPredictor(
 			Reference applicationRootReference,

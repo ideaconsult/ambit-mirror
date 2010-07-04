@@ -1,5 +1,6 @@
 package ambit2.rest.model.predictor;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.StringReader;
 import java.util.Iterator;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -22,6 +24,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
@@ -37,7 +40,8 @@ import ambit2.rest.property.PropertyURIReporter;
  *
  * @param <NativeTypeItem>
  */
-public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractDBProcessor<NativeTypeItem, IStructureRecord> {
+public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractDBProcessor<NativeTypeItem, IStructureRecord> 
+							implements IStructureDiagramHighlights {
 	/**
 	 * 
 	 */
@@ -271,6 +275,14 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		
 	}
 	
+	public BufferedImage getStructureDiagramWithHighlights(IAtomContainer mol,
+			String ruleID, int width, int height, boolean atomnumbers)
+			throws AmbitException {
+		if (predictor instanceof IStructureDiagramHighlights)
+			return ((IStructureDiagramHighlights)predictor).
+			getStructureDiagramWithHighlights(mol, ruleID, width, height, atomnumbers);
+		throw new AmbitException(String.format("%s Hilighting alerts in structure diagram not supported!",predictor==null?"":predictor.toString()));
+	}
 	public static ModelPredictor getPredictor(ModelQueryResults model, Request request) throws ResourceException  {
 
 		try {
