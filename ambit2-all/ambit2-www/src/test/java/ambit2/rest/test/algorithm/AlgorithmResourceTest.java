@@ -50,7 +50,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 46;
+		return count == 52;
 	}	
 	
 	@Test
@@ -707,4 +707,5 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
 	}		
+		
 }
