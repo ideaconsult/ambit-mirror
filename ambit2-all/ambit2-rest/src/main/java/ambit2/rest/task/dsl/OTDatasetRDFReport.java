@@ -510,6 +510,7 @@ public class OTDatasetRDFReport extends OTObject {
 				String value = getValueColumn(solution);
 				if (value == null) continue;
 				
+				String modelURI= getModelURI(solution);
 				String modelString = getModelColumn(solution,rootReference);
 				if (modelString != null) {
 					if (!modelString.equals(thisModel)) {
@@ -527,7 +528,9 @@ public class OTDatasetRDFReport extends OTObject {
 						writer.write("</th><td>");
 						if (caption==null) 
 							writer.write("<font color='#636bd2'>"); //didn't work with style
-						writer.write(value);
+						if (value.indexOf("/hilight?")>=0)
+							writer.write(value.replace("/hilight?", String.format("%s?dataset_uri=%s&media=image/png&",modelURI,compoundURI)));
+						else writer.write(value);
 						if (caption==null) 
 							writer.write("</font>");
 						writer.write("</td></tr>");						
@@ -538,7 +541,9 @@ public class OTDatasetRDFReport extends OTObject {
 					writer.write("</th><td>");
 					if (caption==null) 
 						writer.write("<font color='#636bd2'>"); //didn't work with style
-					writer.write(value);
+					if (value.indexOf("/hilight?")>=0)
+						writer.write(value.replace("/hilight?", String.format("%s?dataset_uri=%s&media=image/png&",modelURI,compoundURI)));
+					else writer.write(value);
 					if (caption==null) 
 						writer.write("</font>");
 					writer.write("</td></tr>");
@@ -553,7 +558,10 @@ public class OTDatasetRDFReport extends OTObject {
 			try {qe.close();} catch (Exception x) {}
 		}		
 	}	
-		
+		protected static String getModelURI( QuerySolution solution) {
+			Resource m = solution.getResource("Model");
+			return m.getURI();
+		}
 		protected static String getModelColumn( QuerySolution solution, Reference rootReference) {
 			Resource m = solution.getResource("Model");
 			Literal mname = solution.getLiteral("mname");
