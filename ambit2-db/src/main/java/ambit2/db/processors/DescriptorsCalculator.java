@@ -29,6 +29,7 @@
 
 package ambit2.db.processors;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -69,6 +70,13 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     protected PropertyCalculationProcessor calc = new PropertyCalculationProcessor();
     protected boolean assignProperties = false;
     
+
+	public Dimension getImageSize() {
+		return calc==null?null:calc.getImageSize();
+	}
+	public void setImageSize(Dimension imageSize) {
+		calc.setImageSize(imageSize);
+	}
     public boolean isAssignProperties() {
 		return assignProperties;
 	}
@@ -180,7 +188,10 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
 		return b.toString();
 	      	
 	}
-	public BufferedImage getStructureDiagramWithHighlights(IAtomContainer mol,
+	public BufferedImage getImage(IAtomContainer mol) throws AmbitException  {
+		return getImage(mol, null,150,150,false);
+	}
+	public BufferedImage getImage(IAtomContainer mol,
 			String ruleID, int width, int height, boolean atomnumbers)
 			throws AmbitException {
 
@@ -191,7 +202,7 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     			Property p = i.next();
     			if (p.isEnabled()) {
     				calc.setProperty(i.next());
-    				return calc.getStructureDiagramWithHighlights(mol, ruleID, width, height, atomnumbers);
+    				return calc.getImage(mol, ruleID, width, height, atomnumbers);
     			}	
     		} catch (AmbitException x) {
     			throw x;
