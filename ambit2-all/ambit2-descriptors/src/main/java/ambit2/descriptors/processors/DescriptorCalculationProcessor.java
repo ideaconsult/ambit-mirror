@@ -1,5 +1,6 @@
 package ambit2.descriptors.processors;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -15,6 +16,13 @@ import ambit2.core.data.IStructureDiagramHighlights;
 public class DescriptorCalculationProcessor extends
 		DefaultAmbitProcessor<IAtomContainer, DescriptorValue> implements IStructureDiagramHighlights {
 	protected IMolecularDescriptor descriptor;
+	protected Dimension imageSize = new Dimension(150,150);
+	public Dimension getImageSize() {
+		return imageSize;
+	}
+	public void setImageSize(Dimension imageSize) {
+		this.imageSize = imageSize;
+	}
 	public DescriptorCalculationProcessor() {
 		this(null);
 	}
@@ -54,14 +62,18 @@ public class DescriptorCalculationProcessor extends
 		
 		}
 	}
-	public BufferedImage getStructureDiagramWithHighlights(IAtomContainer mol,
+	public BufferedImage getImage(IAtomContainer mol) throws AmbitException  {
+		return getImage(mol, null,150,150,false);
+	}
+	
+	public BufferedImage getImage(IAtomContainer mol,
 			String ruleID, int width, int height, boolean atomnumbers)
 			throws AmbitException {
 		if (descriptor == null) 
 			throw new AmbitException("Undefined descriptor");
 		if ((mol==null) || (mol.getAtomCount()==0)) throw new EmptyMoleculeException();
 		if (descriptor instanceof IStructureDiagramHighlights) {
-			return ((IStructureDiagramHighlights)descriptor).getStructureDiagramWithHighlights(mol, ruleID, width, height, atomnumbers);
+			return ((IStructureDiagramHighlights)descriptor).getImage(mol, ruleID, width, height, atomnumbers);
 		} else throw new AmbitException("Not supported");
 
 	}

@@ -1,5 +1,6 @@
 package ambit2.rest.model.predictor;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -47,6 +48,14 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 	 */
 	private static final long serialVersionUID = -8267727629802363087L;
 	protected ModelQueryResults model;
+	
+	protected Dimension imageSize = new Dimension(150,150);
+	public Dimension getImageSize() {
+		return imageSize;
+	}
+	public void setImageSize(Dimension imageSize) {
+		this.imageSize = imageSize;
+	}	
 	public ModelQueryResults getModel() {
 		return model;
 	}
@@ -274,13 +283,15 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		}
 		
 	}
-	
-	public BufferedImage getStructureDiagramWithHighlights(IAtomContainer mol,
+	public BufferedImage getImage(IAtomContainer mol) throws AmbitException {
+		return getImage(mol,null,imageSize.width,imageSize.height,false);
+	}
+	public BufferedImage getImage(IAtomContainer mol,
 			String ruleID, int width, int height, boolean atomnumbers)
 			throws AmbitException {
 		if (predictor instanceof IStructureDiagramHighlights)
 			return ((IStructureDiagramHighlights)predictor).
-			getStructureDiagramWithHighlights(mol, ruleID, width, height, atomnumbers);
+			getImage(mol, ruleID, width, height, atomnumbers);
 		throw new AmbitException(String.format("%s Hilighting alerts in structure diagram not supported!",predictor==null?"":predictor.toString()));
 	}
 	public static ModelPredictor getPredictor(ModelQueryResults model, Request request) throws ResourceException  {

@@ -1,5 +1,6 @@
 package ambit2.rest.model;
 
+import java.awt.Dimension;
 import java.sql.Connection;
 
 import org.restlet.Context;
@@ -24,6 +25,7 @@ import ambit2.db.search.property.ModelTemplates;
 import ambit2.db.update.model.ReadModel;
 import ambit2.model.numeric.DataCoverage;
 import ambit2.rest.DBConnection;
+import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -62,6 +64,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	
 	protected String category = "";
 
+	public ModelResource() {
+		super();
+		getVariants().add(new Variant(MediaType.IMAGE_PNG));
+	}
 	protected Object getModelID(Object id) throws ResourceException {
 		
 		if (id != null) try {
@@ -118,6 +124,24 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		return new RDFJenaConvertor<ModelQueryResults,IQueryRetrieval<ModelQueryResults>>(
 				new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),variant.getMediaType())
 				,variant.getMediaType());	
+	} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG) ||
+			variant.getMediaType().equals(MediaType.IMAGE_BMP) ||
+			variant.getMediaType().equals(MediaType.IMAGE_JPEG) ||
+			variant.getMediaType().equals(MediaType.IMAGE_TIFF) ||
+			variant.getMediaType().equals(MediaType.IMAGE_GIF) 
+			) {
+		Dimension d = new Dimension(250,250);
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		try {
+			
+			d.width = Integer.parseInt(form.getFirstValue("w").toString());
+		} catch (Exception x) {}
+		try {
+			d.height = Integer.parseInt(form.getFirstValue("h").toString());
+		} catch (Exception x) {}		
+		
+		return new ImageConvertor<ModelQueryResults, IQueryRetrieval<ModelQueryResults>>(
+				new ModelImageReporter(getRequest(), getRequest().getResourceRef().getQueryAsForm(), d),variant.getMediaType());			
 	} else//html
 		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
@@ -248,7 +272,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
+
 		return super.post(entity, variant);
 	}
+	
+	
 }
 

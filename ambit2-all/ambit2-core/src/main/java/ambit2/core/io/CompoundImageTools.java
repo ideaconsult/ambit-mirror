@@ -55,8 +55,10 @@ import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 
 
@@ -65,7 +67,7 @@ import ambit2.core.processors.structure.StructureTypeProcessor;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-3-5
  */
-public class CompoundImageTools {
+public class CompoundImageTools implements IStructureDiagramHighlights {
     RendererModel r2dm;
     Renderer renderer;
     protected Dimension imageSize = new Dimension(200,200);
@@ -431,6 +433,19 @@ public class CompoundImageTools {
 	public void setDefaultImage(BufferedImage defaultImage) {
 		this.defaultImage = defaultImage;
 	}
+	
+	public BufferedImage getImage(IAtomContainer mol,
+			String smarts, int width, int height, boolean atomnumbers)
+			throws AmbitException {
+		setImageSize(new Dimension(width,height));
+		IProcessor<IAtomContainer,IChemObjectSelection> selector = null;
+		if (smarts != null) {
+			//get smarts pattern
+			selector = null;
+		}
+		return getImage(mol,selector,false,atomnumbers);
+		
+	}
 }
 
 /**
@@ -490,4 +505,5 @@ class MySelectAtomGenerator  implements IGenerator  {
 	        // TODO Auto-generated method stub
 	        return null;
 	    }
+	    
 }
