@@ -4,7 +4,7 @@
   <artifactId>ToxPredict</artifactId>
   <packaging>war</packaging>
   <name>ToxPredict</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <repositories>
   	<repository>
   		<id>repo1.maven.org</id>
@@ -55,7 +55,7 @@
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-rest</artifactId>
-  		<version>2.1.0-SNAPSHOT</version>
+  		<version>2.1.2-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>log4j</groupId>
