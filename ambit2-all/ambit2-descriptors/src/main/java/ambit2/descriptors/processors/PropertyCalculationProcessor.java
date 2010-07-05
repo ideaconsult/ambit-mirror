@@ -63,9 +63,14 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		                "removeListener",
 		                new Class[] {}).
 		        invoke(o, new Object[] { });					
-			} catch (Exception x) {
-				//x.printStackTrace();
-			}
+			} catch (Exception x) {}
+			
+			try {
+				o.getClass().getMethod(
+		                "setWeb",
+		                new Class[] {Boolean.class}).
+		        invoke(o, new Object[] { Boolean.TRUE});					
+			} catch (Exception x) {x.printStackTrace();}
 			
 			if (o instanceof IMolecularDescriptor) {
 				d = (IMolecularDescriptor) o;

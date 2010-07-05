@@ -130,9 +130,13 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 			                "removeListener",
 			                new Class[] {}).
 			        invoke(o, new Object[] { });					
-				} catch (Exception x) {
-					//x.printStackTrace();
-				}
+				} catch (Exception x) {}
+				try {
+					o.getClass().getMethod(
+			                "setWeb",
+			                new Class[] {Boolean.class}).
+			        invoke(o, new Object[] { Boolean.TRUE});					
+				} catch (Exception x) {}
 				return descriptor;			
 			} else return null;
 	}	
