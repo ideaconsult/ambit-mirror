@@ -287,8 +287,8 @@ public class OTDatasetRDFReport extends OTObject {
 		writer.write("\n<td width='200px'>\n");
 		
 		writer.write(String.format(
-				"<img src='%s?w=240&h=200&media=image/png' alt='%s'>",
-				compound,compound));
+				"<img src='%s?w=240&h=200&media=image/png' alt='%s' id='%s'>",
+				compound,compound,compound));
 		
 		writer.write("\n</td><td align='left'>\n");
 		
@@ -528,9 +528,16 @@ public class OTDatasetRDFReport extends OTObject {
 						writer.write("</th><td>");
 						if (caption==null) 
 							writer.write("<font color='#636bd2'>"); //didn't work with style
-						if (value.indexOf("/hilight?")>=0)
-							writer.write(value.replace("/hilight?", String.format("%s?dataset_uri=%s&media=image/png&",modelURI,compoundURI)));
-						else writer.write(value);
+						
+						String newValue = value;
+						if (newValue.indexOf("/hilight?")>=0) 
+							newValue = value.replace("/hilight?", String.format("%s?dataset_uri=%s&media=image/png&",modelURI,compoundURI));
+						
+						if (newValue.indexOf("changeImage('compound_uri',")>=0)
+							newValue = newValue.replace("changeImage('compound_uri',", String.format("changeImage('%s',",compoundURI));
+								
+						writer.write(newValue);
+						
 						if (caption==null) 
 							writer.write("</font>");
 						writer.write("</td></tr>");						
@@ -541,9 +548,15 @@ public class OTDatasetRDFReport extends OTObject {
 					writer.write("</th><td>");
 					if (caption==null) 
 						writer.write("<font color='#636bd2'>"); //didn't work with style
-					if (value.indexOf("/hilight?")>=0)
-						writer.write(value.replace("/hilight?", String.format("%s?dataset_uri=%s&media=image/png&",modelURI,compoundURI)));
-					else writer.write(value);
+					
+					String newValue = value;
+					if (newValue.indexOf("/hilight?")>=0) 
+						newValue = value.replace("/hilight?", String.format("%s?dataset_uri=%s&media=image/png&",modelURI,compoundURI));
+					
+					if (newValue.indexOf("changeImage('compound_uri',")>=0)
+						newValue = newValue.replace("changeImage('compound_uri',", String.format("changeImage('%s',",compoundURI));
+							
+					writer.write(newValue);
 					if (caption==null) 
 						writer.write("</font>");
 					writer.write("</td></tr>");
