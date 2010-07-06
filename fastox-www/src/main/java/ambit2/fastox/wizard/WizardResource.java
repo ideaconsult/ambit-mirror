@@ -184,6 +184,7 @@ public abstract class WizardResource extends ServerResource {
 		w.write("}\n");
 		w.write("animatedcollapse.init()\n");
 		w.write("</script>\n");
+		w.write("<script>function changeImage(img,src)  {    document.getElementById(img).src=src;} </script>\n");
 		w.write("</head>\n");
 		w.write("<body>");
 		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
