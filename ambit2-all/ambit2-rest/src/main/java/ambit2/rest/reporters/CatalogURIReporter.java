@@ -36,8 +36,11 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
 	@Override
 	public void processItem(T item, Writer output) {
 		try {
-			output.write(getURI(item));
-			output.flush();
+			String uri = getURI(item);
+			if (uri!= null) {
+				output.write(uri);
+				output.flush();
+			}
 		} catch (IOException x) {
 			Context.getCurrentLogger().warning(x.getMessage());
 		}

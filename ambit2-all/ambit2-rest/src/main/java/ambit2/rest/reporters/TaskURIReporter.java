@@ -26,7 +26,7 @@ public class TaskURIReporter<USERID> extends CatalogURIReporter<Task<Reference,U
 	}	
 	public String getURI(String ref, Task<Reference,USERID> task) {
 
-		return task.getUri().toString();
+		return task.getUri()==null?null:task.getUri().toString();
 
 	}
 }
