@@ -127,11 +127,17 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 							if (counter > max) return false;
 							boolean loop=getResultSet().next();
 							long attemptsStart = System.currentTimeMillis();
-							while (loop  && (System.currentTimeMillis() - attemptsStart)<5000) {
+							while (loop) {
 
 								cachedRecord = query.getObject(getResultSet());
 								if (prescreen(query, cachedRecord)) return loop;
-								else loop=getResultSet().next();
+								else {
+									cachedRecord = null;
+									if ((System.currentTimeMillis() - attemptsStart)>5000) {
+										loop = false; 
+										break;
+									} else	loop=getResultSet().next();
+								}
 							}
 							return loop;
 						} catch (AmbitException x) {
