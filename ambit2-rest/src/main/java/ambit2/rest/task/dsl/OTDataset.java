@@ -11,8 +11,9 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
+import ambit2.rest.task.dsl.interfaces.IOTDataset;
 
-public class OTDataset extends OTObject {
+public class OTDataset extends OTObject implements IOTDataset {
 	 protected enum dataset_size  {empty,nonempty,unknown};
 	 protected dataset_size isEmpty = dataset_size.unknown;
 	 
@@ -29,7 +30,6 @@ public class OTDataset extends OTObject {
 	 public static OTDataset dataset(String datasetURI) throws Exception  { 
 		    return new OTDataset(datasetURI);
 	 }
-
 
 	 public OTDataset copy() throws Exception  { 
 		 if (dataset_service==null) throw new Exception("No dataset_service!");
@@ -65,6 +65,7 @@ public class OTDataset extends OTObject {
 			if (ref.equals(uri)) return this; else return dataset(uri).withDatasetService(dataset_service); 
 			
 	 }	 
+
 
 	 public OTDataset withDatasetService(Reference uri) throws Exception { 
 		  this.dataset_service = uri;
@@ -148,16 +149,10 @@ public class OTDataset extends OTObject {
 		 newuri.addQueryParameter(OpenTox.params.feature_uris.toString(), feature.getUri().toString());
 		 return dataset(newuri).withDatasetService(dataset_service);
 	 }
+
 	 public OTDataset getPage(int page,int pageSize) throws Exception {
-		 Reference ref = uri.clone();
-		 Form form = ref.getQueryAsForm();
-		 form.removeAll(OpenTox.params.page.toString());
-		 form.removeAll(OpenTox.params.pagesize.toString());
-		 form.add(OpenTox.params.page.toString(),Integer.toString(page));
-		 form.add(OpenTox.params.pagesize.toString(),Integer.toString(pageSize));
-		 ref.setQuery(form.getQueryString());
-		 return dataset(ref);
-	 }
+		 return dataset(OTObject.getPagedReference(uri,page, pageSize));
+	 }	 
 	 public OTDataset getFeatures(OTFeatures features) throws Exception {
 		 Reference ref = uri.clone();
 		 Form form = ref.getQueryAsForm();

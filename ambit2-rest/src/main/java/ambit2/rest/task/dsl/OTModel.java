@@ -19,6 +19,7 @@ import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
+import ambit2.rest.task.dsl.interfaces.IOTModel;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
@@ -36,7 +37,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author nina
  *
  */
-public class OTModel extends OTProcessingResource {
+public class OTModel extends OTProcessingResource implements IOTModel {
 	 protected OTFeatures independentVariables;
 	 public OTFeatures getIndependentVariables() {
 		return independentVariables;

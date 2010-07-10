@@ -1,15 +1,11 @@
 package ambit2.rest.task.dsl;
 
-import java.util.List;
-
 import org.restlet.data.Reference;
 
 import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.util.PrintUtil;
 
 public class OTValidation extends OTObject {
 	protected static String validationPerModel = 
