@@ -136,8 +136,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/fingerprints", port),
-				headers, Status.SUCCESS_NO_CONTENT,
-				null);		
+				headers, Status.SUCCESS_OK,
+				"");		
 				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 		
         c = getConnection();	
@@ -162,13 +162,13 @@ public class AlgorithmResourceTest extends ResourceTest {
 		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/structurequality", port),
-				headers, Status.SUCCESS_NO_CONTENT,
-				null);		
+				headers, Status.SUCCESS_OK,
+				"");		
 				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 		
         c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT bc from fp1024_struc");
-		Assert.assertEquals(4,table.getRowCount());
+		Assert.assertEquals(5,table.getRowCount());
 		c.close();			
 	}		
 	
@@ -188,8 +188,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/struckeys", port),
-				headers, Status.SUCCESS_NO_CONTENT,
-				null);		
+				headers, Status.SUCCESS_OK,
+				"");		
 				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 		
         c = getConnection();	
@@ -214,8 +214,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/smartsprop", port),
-				headers, Status.SUCCESS_NO_CONTENT,
-				null);		
+				headers, Status.SUCCESS_OK,
+				"");		
 				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 		
         c = getConnection();	
