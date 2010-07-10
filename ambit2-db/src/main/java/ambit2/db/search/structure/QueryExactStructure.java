@@ -188,12 +188,15 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 						mol = bondPropertiesReader.process(mol);
 					} else {
 						mol.removeProperty(smartsProperty);
+						if (configurator==null) configurator = new AtomConfigurator();
 						mol = configurator.process(mol);
+						
 						CDKHueckelAromaticityDetector.detectAromaticity(mol);
 
 					}
 				} else {
 					mol.removeProperty(smartsProperty);
+					if (configurator==null) configurator = new AtomConfigurator();
 					mol = configurator.process(mol);
 					CDKHueckelAromaticityDetector.detectAromaticity(mol);
 
