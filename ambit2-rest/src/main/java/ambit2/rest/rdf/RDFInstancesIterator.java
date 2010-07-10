@@ -158,7 +158,11 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 			Statement st = values.next();
 			if (st.getObject().isResource()) {
 				Resource fv = (Resource)st.getObject();
-				RDFNode value = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel)).getObject();
+				Statement st1 = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel));
+				if (st1 == null) continue;
+				RDFNode value = st1.getObject();
+				
+				if (value ==null) continue;
 				RDFNode feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject();
 
 				Attribute key = urilookup.get( feature.toString());
