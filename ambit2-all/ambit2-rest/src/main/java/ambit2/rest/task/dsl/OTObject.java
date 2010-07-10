@@ -9,15 +9,22 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
+import ambit2.rest.task.dsl.interfaces.IOTObject;
 
-public class OTObject implements Comparable<OTObject>{
+public class OTObject implements Comparable<OTObject>, IOTObject{
+	 protected Reference service = null;
+	 protected Reference dataset_service;
 	 protected final Reference uri ;
 	 protected String name;
 	 public String getName() {
 		return name;
 	}
-	 
+	 public static OTObject object(Reference datasetURI) throws Exception  { 
+		    return new OTObject(datasetURI);
+	 }
+
 	 public static OTObject object(String datasetURI) throws Exception  { 
 		    return new OTObject(datasetURI);
 	 }
@@ -38,7 +45,7 @@ public class OTObject implements Comparable<OTObject>{
 		return uri;
 	}
 
-	protected Reference dataset_service;
+	
 	 
 	 protected ChallengeResponse authentication;
 		protected long pollInterval = 1500;
@@ -108,4 +115,21 @@ public class OTObject implements Comparable<OTObject>{
 		}
 		return this;
 	}
+	
+	public OTObject create() throws Exception {
+		if (service==null)
+			throw new Exception("No service available");
+		throw new Exception("Not implemented");
+	}
+	
+	 static Reference getPagedReference(Reference uri, int page,int pageSize) throws Exception {
+		 Reference ref = uri.clone();
+		 Form form = ref.getQueryAsForm();
+		 form.removeAll(OpenTox.params.page.toString());
+		 form.removeAll(OpenTox.params.pagesize.toString());
+		 form.add(OpenTox.params.page.toString(),Integer.toString(page));
+		 form.add(OpenTox.params.pagesize.toString(),Integer.toString(pageSize));
+		 ref.setQuery(form.getQueryString());
+		 return ref;
+	 }		
 }

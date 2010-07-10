@@ -16,8 +16,10 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-public class OTFeature extends OTProcessingResource {
+public class OTFeature extends OTProcessingResource  {
      protected OTAlgorithm algorithm = null;
+     protected boolean isNumeric = false;
+     protected boolean isNominal = false;
      
 	 protected OTFeature(Reference ref) {
 			super(ref);
@@ -38,6 +40,10 @@ public class OTFeature extends OTProcessingResource {
 	public static OTFeature feature(Reference ref) throws Exception  { 
 	    return new OTFeature(ref);
    }
+	public OTFeature withFeatureService(Reference uri) throws Exception { 
+		  this.service = uri;
+		  return this; 
+	 }	
 	public OTFeature withAlgorithm(OTAlgorithm alg) throws Exception { 
 		  this.algorithm = alg;
 		  return this; 
@@ -90,6 +96,19 @@ public class OTFeature extends OTProcessingResource {
 		 algorithm();
 		 return (algorithm==null)?null:algorithm.process(inputDataset);	 
 	 }		 
+	 @Override
+	public OTObject create() throws Exception {
+		try {
+			if (service == null) throw new Exception("No feature service");
+			//RemoteTask task = new RemoteTask(service,MediaType.APPLICATION_RDF_XML,input,Method.POST,null);
+		} catch (Exception x) {
+			
+		}
+		return this;
+	}
+	 public OTFeature getPage(int page,int pageSize) throws Exception {
+		 return feature(OTObject.getPagedReference(uri,page, pageSize));
+	 }
 }
 
 

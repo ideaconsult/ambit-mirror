@@ -7,8 +7,9 @@ import org.restlet.data.Reference;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
+import ambit2.rest.task.dsl.interfaces.IOTAlgorithm;
 
-public class OTAlgorithm extends OTProcessingResource {
+public class OTAlgorithm extends OTProcessingResource implements IOTAlgorithm  {
 	
 	
 	protected OTAlgorithm(Reference ref) {
