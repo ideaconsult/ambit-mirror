@@ -209,7 +209,10 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 					
 				}
 				if (uit == null) uit = new UniversalIsomorphismTester();
-				return uit.isIsomorph(getValue(),mol)?1:0;
+				int ok = (getValue().getAtomCount()!=mol.getAtomCount())?0:
+						 (getValue().getBondCount()!=mol.getBondCount())?0:
+							uit.isIsomorph(getValue(),mol)?1:0;
+				return ok;
 
 			} else
 				return 0;
