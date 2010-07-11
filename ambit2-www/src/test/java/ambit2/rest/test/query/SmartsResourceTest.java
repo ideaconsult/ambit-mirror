@@ -22,6 +22,17 @@ public class SmartsResourceTest extends ResourceTest {
 		return String.format("http://localhost:%d/query/smarts?search=%s", port,
 				Reference.encode("c1ccccc1"));
 	}
+	
+	public String getTestURIKekuleSMILES() {
+		return String.format("http://localhost:%d/query/smarts?search=%s", port,
+				Reference.encode("C1=CC=CC=C1"));
+	}	
+	
+	@Test
+	public void testSDFKekuleSmiles() throws Exception {
+		testGet(getTestURIKekuleSMILES(),ChemicalMediaType.CHEMICAL_MDLSDF);
+	}	
+	
 	@Test
 	public void testSDF() throws Exception {
 		testGet(getTestURI(),ChemicalMediaType.CHEMICAL_MDLSDF);

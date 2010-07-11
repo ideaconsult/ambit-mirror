@@ -37,14 +37,19 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.MoleculeTools;
 
@@ -145,5 +150,37 @@ public class SmilesTest {
 	    }
 	    return m;
 	}	
+	@Test
+	public void testAromaticityRing7() throws Exception {
+		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IMolecule mol = parser.parseSmiles("c1cccccc1");
+		for (IAtom atom : mol.atoms())
+			Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC));
+	}
+	
+	@Test
+	public void testAromaticityRing7a() throws Exception {
+		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IMolecule mol = parser.parseSmiles("c1cccccc1");
+		//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		//for (IAtom atom : mol.atoms())	Assert.assertTrue(atom.getFlag(CDKConstants.HYBRIDIZATION_SP2));		
+		DeduceBondSystemTool d = new DeduceBondSystemTool();
+		System.out.println(d.isOK(mol));
 
+		for (IBond bond: mol.bonds())
+			System.out.println(bond.getOrder());
+	}	
+	
+	@Test
+	public void testAromaticityRing6() throws Exception {
+		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IMolecule mol = parser.parseSmiles("c1ccccc1");
+		for (IAtom atom : mol.atoms())
+			Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC));
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		DeduceBondSystemTool d = new DeduceBondSystemTool();
+		d.fixAromaticBondOrders(mol);
+		for (IBond bond: mol.bonds())
+			System.out.println(bond.getOrder());		
+	}	
 }
