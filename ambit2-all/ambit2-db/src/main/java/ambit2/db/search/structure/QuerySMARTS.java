@@ -2,6 +2,7 @@ package ambit2.db.search.structure;
 
 import java.util.List;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -85,13 +86,28 @@ public class QuerySMARTS extends
 				value.setQuery(matcher);
 				QueryAtomContainer container = matcher.getQuery();
 				IAtomContainer atomContainer = smartsToChemObject.process(container);
+				try {
+					AtomConfigurator cfg = new AtomConfigurator();
+					cfg.process(atomContainer);
+				} catch (Exception x) { x.printStackTrace();}
+				try { CDKHueckelAromaticityDetector.detectAromaticity(atomContainer); } catch (Exception x) { x.printStackTrace();}
+
 				if ((atomContainer == null) || (atomContainer.getAtomCount()==0)) {
 					screening.setValue(null);
 					screening.setFieldname(null);
 				} else {
-					screening.setValue(fpGenerator.process(atomContainer));
-					screening.setFieldname(skGenerator.process(atomContainer));
+					try {
+						screening.setValue(fpGenerator.process(atomContainer));
+					} catch (Exception x) {
+						screening.setValue(null);
+					}		
+					try {
+						screening.setFieldname(skGenerator.process(atomContainer));
+					} catch (Exception x) {
+						screening.setFieldname(null);
+					}						
 				}
+
 			}
 		} catch (AmbitException x) {
 			throw x;

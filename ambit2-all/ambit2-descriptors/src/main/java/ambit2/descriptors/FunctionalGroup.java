@@ -27,8 +27,14 @@ package ambit2.descriptors;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.result.IntegerResult;
+import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -125,6 +131,21 @@ public class FunctionalGroup extends AmbitBean implements
 		properties.put(t_example,name==null?getSmarts():name);
 	}	
 	public void setSmarts(String smarts) {
+		try {
+			//This is a HACK to deal with kekule structures!
+			//Find out if this is a valid smiles ,
+			SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+			IMolecule mol = parser.parseSmiles(smarts);
+			for (IAtom atom: mol.atoms()) 
+				if (atom.getFlag(CDKConstants.ISAROMATIC)) {
+					SmilesGenerator g = new SmilesGenerator();
+					g.setUseAromaticityFlag(true);
+					smarts = g.createSMILES(mol);					
+					break;
+				}
+		} catch (Exception x) {
+			//not a valid smiles, so we keep the original smarts
+		}
 		properties.put(t_smarts,smarts);
 		query = null;
 	}
