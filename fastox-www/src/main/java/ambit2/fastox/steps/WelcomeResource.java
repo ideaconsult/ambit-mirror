@@ -125,7 +125,7 @@ public class WelcomeResource extends WizardResource {
 	@Override
 	protected String getHelp() {
 		String chemicals = "";
-		String datasets = String.format("<a href='%s/user/admin/report/Stats?header=TRUE' alt='stats' title='dataset statistics' target='_blank'>datasets</a>", getRequest().getRootRef());
+		String datasets = "datasets"; //String.format("<a href='%s/user/admin/report/Stats?header=TRUE' alt='stats' title='dataset statistics' target='_blank'>datasets</a>", getRequest().getRootRef());
 		String models = "";
 		String endpoints = "";
 		

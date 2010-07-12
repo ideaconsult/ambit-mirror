@@ -105,6 +105,7 @@ public class ReportingResource  extends FastoxStepResource {
 				return "";
 			}
 		},		
+		/*
 		Stats {
 			@Override
 			public String report(Reference baseRef,String q,String ontology,String application) throws Exception  {
@@ -113,7 +114,8 @@ public class ReportingResource  extends FastoxStepResource {
 				report.setDatasetReportRef(baseRef);
 				return report.report(ontology);
 			}
-		},			
+		},		
+		*/	
 		Feature {
 			@Override
 			public String report(Reference baseRef,String q,String ontology,String application) throws Exception  {
