@@ -70,7 +70,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		                "setWeb",
 		                new Class[] {Boolean.class}).
 		        invoke(o, new Object[] { Boolean.TRUE});					
-			} catch (Exception x) {x.printStackTrace();}
+			} catch (Exception x) {}
 			
 			if (o instanceof IMolecularDescriptor) {
 				d = (IMolecularDescriptor) o;
