@@ -25,12 +25,12 @@ import ambit2.rest.model.predictor.ModelPredictor;
  */
 public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor> extends CallableQueryProcessor<Object, IStructureRecord> {
 	protected Reference applicationRootReference;
-	protected ModelPredictor predictor;
+	protected Predictor predictor;
 	
 	public CallableModelPredictor(Form form, 
 			Reference appReference,
 			Context context,
-			ModelPredictor predictor
+			Predictor predictor
 				) {
 		super(form,context);
 		this.predictor = predictor;
@@ -39,7 +39,12 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor> 
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		return getQueryObject(reference, applicationRootReference);
+		try {
+			Object q = getQueryObject(reference, applicationRootReference);
+			return q==null?reference:q;
+		} catch (Exception x) {
+			return reference;
+		}
 	}
 
 	

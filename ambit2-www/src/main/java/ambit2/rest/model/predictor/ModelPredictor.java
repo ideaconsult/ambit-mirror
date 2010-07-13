@@ -147,7 +147,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 	protected boolean isSupported(Object predictor) throws  ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
-	protected void extractRecordID(String url,IStructureRecord record) throws AmbitException {
+	protected void extractRecordID(NativeTypeItem target, String url,IStructureRecord record) throws AmbitException {
 		Object id = OpenTox.URI.compound.getId(url, compoundURITemplate);
 		if (id != null) record.setIdchemical((Integer)id);
 		else {
@@ -232,7 +232,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 	
 	public IStructureRecord process(NativeTypeItem target) throws AmbitException {
 		record.clear();
-		extractRecordID(getCompoundURL(target),record);
+		extractRecordID(target,getCompoundURL(target),record);
 		Object value = predict(target);
 		assignResults(record, value);
 		return record;
@@ -315,7 +315,9 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 					return new NumericADPredictor(
 							request.getRootRef(),
 							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),null);
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+							new PropertyURIReporter(request),
+							null);
 	
 				}
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {

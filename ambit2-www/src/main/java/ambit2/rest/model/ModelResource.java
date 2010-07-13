@@ -23,7 +23,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryTemplateReporter;
 import ambit2.db.search.property.ModelTemplates;
 import ambit2.db.update.model.ReadModel;
-import ambit2.model.numeric.DataCoverage;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
@@ -35,6 +34,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
 import ambit2.rest.model.predictor.ModelPredictor;
+import ambit2.rest.model.predictor.NumericADPredictor;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableDescriptorCalculator;
@@ -223,22 +223,35 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						predictor)
 						;
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
+
 				if (model.getPredictors().size()== 0) { //hack for structure based AD
-					return //reads Instances, instead of IStructureRecord
-					new CallableModelPredictor<IStructureRecord,FingerprintsPredictor>(
-							form,
-							getRequest().getRootRef(),
-							getContext(),
-							predictor) {
-						
-					}	;					
+					if (predictor instanceof FingerprintsPredictor)
+						return 
+						new CallableModelPredictor<IStructureRecord,FingerprintsPredictor>(
+								form,
+								getRequest().getRootRef(),
+								getContext(),
+								(FingerprintsPredictor)predictor) {
+							
+						}	;
+					else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Not supported %s",predictor.getClass().getName()));
 				} else {
-					return new CallableWekaPredictor<DataCoverage>(
+					return
+						new CallableModelPredictor(
+								form,
+								getRequest().getRootRef(),
+								getContext(),
+								predictor) {
+							
+						}	;
+						/*
+					return new CallableWekaPredictor<DataCoverage>( //reads Instances, instead of IStructureRecord
 							form,
 							getRequest().getRootRef(),
 							getContext(),
 							predictor)
 							;
+							*/
 				}
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				return
