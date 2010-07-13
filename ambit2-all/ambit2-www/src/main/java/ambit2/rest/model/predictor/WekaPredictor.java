@@ -8,6 +8,7 @@ import weka.clusterers.Clusterer;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.SparseInstance;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.ReplaceMissingValues;
 import ambit2.base.exceptions.AmbitException;
@@ -61,7 +62,7 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 	}
 	
 	protected Instance predictionInstance(Instance target) throws AmbitException {
-		Instance n = new Instance(header.numAttributes());
+		Instance n = new SparseInstance(header.numAttributes());
 		for (int i=0; i < header.numAttributes();i++) {
 			Attribute attr = target.dataset().attribute(header.attribute(i).name());
 			if (attr != null) {

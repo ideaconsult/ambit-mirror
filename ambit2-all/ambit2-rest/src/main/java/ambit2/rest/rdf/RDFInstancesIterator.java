@@ -12,6 +12,7 @@ import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.SparseInstance;
 import ambit2.rest.rdf.OT.OTClass;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -121,7 +122,7 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 	@Override
 	protected Instance createRecord() {
 		if (instances != null) {
-			return new Instance(attributes.size());
+			return new SparseInstance(attributes.size());
 		} else return null;
 	}
 	@Override
