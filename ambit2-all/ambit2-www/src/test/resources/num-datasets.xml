@@ -97,14 +97,14 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <template idtemplate="2" name="All"/>
   <dictionary idsubject="1" idobject="2"/>  
 
-  <property_values id="1" idproperty="1" idstructure="100211" value_num="0.1" user_name="guest"/>
-  <property_values id="2" idproperty="1" idstructure="100214" value_num="0.2" user_name="guest"/>
-  <property_values id="3" idproperty="1" idstructure="100215" value_num="0.3" user_name="guest"/>
-  <property_values id="4" idproperty="1" idstructure="129345" value_num="0.4" user_name="guest"/>
+  <property_values id="1" idproperty="1" idstructure="100211" idtype="NUMERIC" value_num="0.1" user_name="guest"/>
+  <property_values id="2" idproperty="1" idstructure="100214" idtype="NUMERIC" value_num="0.2" user_name="guest"/>
+  <property_values id="3" idproperty="1" idstructure="100215" idtype="NUMERIC" value_num="0.3" user_name="guest"/>
+  <property_values id="4" idproperty="1" idstructure="129345" idtype="NUMERIC" value_num="0.4" user_name="guest"/>
 
-  <property_values id="5" idproperty="2" idstructure="100211" value_num="10.7463289" user_name="guest"/>
-  <property_values id="6" idproperty="2" idstructure="100214" value_num="20.4738563" user_name="guest"/>
-  <property_values id="7" idproperty="2" idstructure="100215" value_num="33" user_name="guest"/>
+  <property_values id="5" idproperty="2" idstructure="100211" idtype="NUMERIC" value_num="10.7463289" user_name="guest"/>
+  <property_values id="6" idproperty="2" idstructure="100214" idtype="NUMERIC" value_num="20.4738563" user_name="guest"/>
+  <property_values id="7" idproperty="2" idstructure="100215" idtype="NUMERIC" value_num="33" user_name="guest"/>
 
   
   <src_dataset id_srcdataset="1" name="Dbunit dataset" user_name="guest" idreference="3"/>
