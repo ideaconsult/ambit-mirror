@@ -252,6 +252,8 @@ public class DataCoverageDescriptors extends DataCoverage<Matrix> {
 	
 	public boolean estimate(Matrix m) {
 		//TODO to throw exception
+		pca = pca && (m.getRowDimension()>=m.getColumnDimension());
+
 		if (!pca) scale = false;
 		if ((m == null) || (m.getRowDimension() < 1)) return false;
 		int d = m.getColumnDimension();
@@ -262,7 +264,7 @@ public class DataCoverageDescriptors extends DataCoverage<Matrix> {
 			pcaTransform = new OrthogonalTransform();
 			//System.err.println("PCA running ...");
 			pcaTransform.InitializeFilter(m,d,d);
-			//System.err.println("PCA trasnform ...");			
+			//System.err.println("PCA transform ...");			
 			Matrix pcapoints = pcaTransform.TransformPoints(m);
 			doEstimation(pcapoints,m.getRowDimension(),d);
 			pcapoints = null;
