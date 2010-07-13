@@ -220,7 +220,7 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 		return get(variant);
 	}
 	
-	protected void initList() {
+	protected synchronized void initList() {
 		if (algorithmList==null) {
 			algorithmList = new ArrayList<Algorithm<String>>();
 			for (Object[] d : algorithms) {
