@@ -54,7 +54,9 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		"yahoo-mmcrawler",
 		"psbot",
 		"asterias",
-		"yahoo-blogs/v3.9"
+		"yahoo-blogs/v3.9",
+		"YandexBot/3.0",
+		"MJ12bot/v1.3.3"
 
 	};
 	
