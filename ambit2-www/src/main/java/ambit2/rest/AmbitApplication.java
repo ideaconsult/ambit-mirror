@@ -26,9 +26,11 @@ import org.restlet.util.RouteList;
 
 import ambit2.base.config.Preferences;
 import ambit2.rest.aa.DBVerifier;
+import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
+import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
+import ambit2.rest.aa.opensso.ProtectedTestResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
-import ambit2.rest.algorithm.chart.ChartResource.ChartMode;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
@@ -143,6 +145,16 @@ public class AmbitApplication extends TaskApplication {
 		//router.attach("", SmartsQueryResource.class);	
 		//router.attach("/", SmartsQueryResource.class);
 		
+		Router protectedRouter = new MyRouter(getContext());
+		protectedRouter.attachDefault(ProtectedTestResource.class);
+		protectedRouter.attach(String.format("/{%s}",ProtectedTestResource.resourceKey), ProtectedTestResource.class);
+		
+		Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
+		Filter openssoAuthz = new OpenSSOAuthorizer();
+		
+		openssoAuth.setNext(openssoAuthz);
+		openssoAuthz.setNext(protectedRouter);
+	 	router.attach(ProtectedTestResource.resource, openssoAuth);
 		
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
 		router.attach(StatisticsResource.resource,StatisticsResource.class);
