@@ -272,7 +272,6 @@ function load(){
 </table>
 <jsp:include page="footer.jsp" flush="true"/>
 
-
 </body>
 </html>
 
