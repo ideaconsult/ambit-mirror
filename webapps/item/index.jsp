@@ -90,7 +90,7 @@ function load(){
 
 
 <form action="search_tags.jsp"  name="identifiersForm" method="post" onReset="return clearFields()">
-
+<tr colspan="4"><h2>Structural Search Module</h2></tr>
 <tr bgcolor="${querycolor}">
 <th bgcolor="${headercolor}" colspan="3">Identification</th>
 <td colspan="1" align="right"><i>Results appearance</i>
@@ -270,7 +270,7 @@ function load(){
 </tr>
 </form>
 </table>
-
+<jsp:include page="footer.jsp" flush="true"/>
 
 
 </body>
