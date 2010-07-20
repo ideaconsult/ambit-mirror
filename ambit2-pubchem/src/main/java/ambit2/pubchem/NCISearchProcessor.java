@@ -9,7 +9,6 @@ import java.net.URLEncoder;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
-import ambit2.core.config.AmbitCONSTANTS;
 
 
 /**
@@ -61,6 +60,31 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 				return new String[] {Property.opentox_IupacName, Property.opentox_Name,Property.opentox_CAS,Property.opentox_EC};
 			}
 		},
+		iupac_name {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_IupacName};
+			}
+		},		
+		synonym {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_Name};
+			}
+		},		
+		
+		cas {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_CAS};
+			}
+		},		
+		einecs {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_EC};
+			}
+		},				
 		image,
 		ficus,
 		ficts,
