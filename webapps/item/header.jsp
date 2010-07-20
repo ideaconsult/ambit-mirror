@@ -48,4 +48,4 @@ return false;
 
 <body bgcolor="#ffffff">
 
-<h2>${param.title}</h2>
+<h3>${param.title}</h3>
