@@ -3,11 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/xml"  prefix="x" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
-<jsp:include page="header.jsp" flush="true"/>
-
-<div style="text-align:left;">f
-
+<tr colspan="4"><h2>Structural Search Module</h2></tr><jsp:include page="header.jsp" flush="true"/>
+<div style="text-align:left;">
 </div>
 
 <c:set var="selected" value=""/>
