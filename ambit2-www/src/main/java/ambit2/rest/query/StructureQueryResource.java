@@ -222,8 +222,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
-			return new StringConvertor(
-					new SmilesReporter<QueryStructureByID>(true),MediaType.TEXT_PLAIN);
+			CSVReporter csvreporter = new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString());
+			csvreporter.setSeparator("\t");
+			csvreporter.setNumberofHeaderLines(0);
+			csvreporter.setWriteCompoundURI(false);
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					csvreporter,MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			ConformerURIReporter<QueryStructureByID> reporter = new ConformerURIReporter<QueryStructureByID>(getRequest(),queryObject.isPrescreen());
 			reporter.setDelimiter("\n");

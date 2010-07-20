@@ -25,7 +25,28 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	 */
 	private static final long serialVersionUID = -4569410787926615089L;
 	protected int numberofHeaderLines  = 1;
+	protected boolean writeCompoundURI = true;
+	public boolean isWriteCompoundURI() {
+		return writeCompoundURI;
+	}
+	public void setWriteCompoundURI(boolean writeCompoundURI) {
+		this.writeCompoundURI = writeCompoundURI;
+	}
+	public int getNumberofHeaderLines() {
+		return numberofHeaderLines;
+	}
+	public void setNumberofHeaderLines(int numberofHeaderLines) {
+		this.numberofHeaderLines = numberofHeaderLines;
+	}
+
 	protected String urlPrefix = "";
+	protected String separator = ",";
+	public String getSeparator() {
+		return separator;
+	}
+	public void setSeparator(String separator) {
+		this.separator = separator;
+	}
 	public String getUrlPrefix() {
 		return urlPrefix;
 	}
@@ -83,30 +104,31 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		if (header == null) {
 			header = template2Header(template,true);
 
-			
-			if (numberofHeaderLines == 1) {
+			if (numberofHeaderLines <= 0) {
+				//no header
+			} else 	if (numberofHeaderLines == 1) {
 				writer.write("");
 				for (Property p : header) 
-					writer.write(String.format(",\"%s %s\"", p.getName()==null?"N?A":p.getName(),p.getUnits()==null?"":p.getUnits()));	
+					writer.write(String.format("%s\"%s %s\"", separator,p.getName()==null?"N?A":p.getName(),p.getUnits()==null?"":p.getUnits()));	
 				writer.write("\n");
 			} else {
 				writer.write("");
 				for (Property p : header) 
-					writer.write(String.format(",\"%s\"", p.getUrl()));
+					writer.write(String.format("%s\"%s\"", separator,p.getUrl()));
 				writer.write("\n");
 				writer.write("");
 				for (Property p : header) 
-					writer.write(String.format(",\"%s\"", p.getTitle()));
+					writer.write(String.format("%s\"%s\"", separator,p.getTitle()));
 				
 				writer.write("\n");
 				writer.write("URI");
 				for (Property p : header) 
-					writer.write(String.format(",\"%s\"", p.getName()));
+					writer.write(String.format("%s\"%s\"", separator,p.getName()));
 				writer.write("\n");
 				
 				writer.write("");
 				for (Property p : header) 
-					writer.write(String.format(",\"%s\"", p.getUnits()));
+					writer.write(String.format("%s\"%s\"", separator,p.getUnits()));
 				writer.write("\n");			
 			}
 		}
@@ -123,24 +145,32 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			
 			writeHeader(writer);
 			int i = 0;
-			writer.write(String.format("%s/compound/%d",urlPrefix,item.getIdchemical()));
-			if (item.getIdstructure()>0)
-				writer.write(String.format("/conformer/%d",item.getIdstructure()));
+			
+			if (writeCompoundURI) {
+				writer.write(String.format("%s/compound/%d",urlPrefix,item.getIdchemical()));
+				if (item.getIdstructure()>0)
+					writer.write(String.format("/conformer/%d",item.getIdstructure()));
+			}
+			String delimiter = writeCompoundURI?separator:"";
 			for (Property p : header) {
+				
 				Object value = item.getProperty(p);
 				if (p.getClazz()==Number.class) 
-					writer.write(String.format(",%s",
+					writer.write(String.format("%s%s",
+							delimiter,
 							value==null?"":value
 							));
 				else
 					if ((value !=null)&& (value.toString().indexOf("<html>")>=0))
-						writer.write(",\" \"");
+						writer.write(String.format("%s\" \"",delimiter));
 					else
-					writer.write(String.format(",\"%s\"",
+					writer.write(String.format("%s\"%s\"",
+							delimiter,
 							value==null?"":
 							value.toString().replace("\n", "").replace("\r","")
 							));					
 				i++;
+				delimiter = separator;
 			}
 			
 		} catch (Exception x) {
