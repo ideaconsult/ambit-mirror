@@ -143,18 +143,23 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
         else return defaultImage;
     }
 
-
     public synchronized BufferedImage generateImage(String value) throws CDKException {
+    	return generateImage(value, null,false,false);
+    }
+
+    public synchronized BufferedImage generateImage(String value,IProcessor<IAtomContainer,IChemObjectSelection> selector, 
+    		boolean build2d,
+    		boolean atomNumbers) throws CDKException {
    		if (value.startsWith(AmbitCONSTANTS.INCHI)) {
     			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
     			InChIToStructure c =f.getInChIToStructure(value, DefaultChemObjectBuilder.getInstance());
     			
     			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
     				throw new CDKException(String.format("%s %s %s", c.getReturnStatus(),c.getMessage(),c.getLog()));
-    			return getImage(c.getAtomContainer());
+    			return getImage(c.getAtomContainer(),selector,build2d,atomNumbers);
     	}  else { 	
 	        if (parser == null) parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
-	        return getImage(parser.parseSmiles(value));
+	        return getImage(parser.parseSmiles(value),selector,build2d,atomNumbers);
     	}
     }    
     public synchronized BufferedImage getImage(String smiles) {
@@ -167,7 +172,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
         }
         return getImage(m);
     }
-
+    
 	public synchronized BufferedImage getImage(IAtomContainer molecule) {
 		return getImage(molecule,null,false,false);
 	}
@@ -441,6 +446,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
 		IProcessor<IAtomContainer,IChemObjectSelection> selector = null;
 		if (smarts != null) {
 			//get smarts pattern
+
 			selector = null;
 		}
 		return getImage(mol,selector,false,atomnumbers);
