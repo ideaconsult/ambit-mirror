@@ -216,7 +216,7 @@ public class AmbitResource extends ServerResource {
 			{String.format("/dataset/2/smarts?search=%s&max=100",Reference.encode("[NX3][CX3](=[OX1])[#6]")),"Search by SMARTS [NX3][CX3](=[OX1])[#6] within /dataset/2",format,"GET","Yes"},
 			
 			{"[ambit - algorithms]","Structure diagram generation (DEMO)",formatHeader,null},
-			{"/depict/cdk?search=c1ccccc1","Structure diagram (based on CDK)",format,"GET"},
+			{"/depict/cdk?search=c1ccccc1O&smarts=aO","Structure diagram (based on CDK) (with SMARTS highlighting)",format,"GET"},
 			{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict",format,"GET"},
 			{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
 
@@ -494,6 +494,7 @@ window.setInterval(function() {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
 //		w.write("<script language=\"JavaScript\">\nvar smiles = \"\";\n var jme = \"0 0\"></script>\n");
 
+		w.write("<script>function changeImage(img,src)  {    document.getElementById(img).src=src;} </script>\n");
 
 		w.write("</head>\n");
 		w.write("<body>");
