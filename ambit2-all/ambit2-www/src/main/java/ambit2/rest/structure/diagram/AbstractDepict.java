@@ -32,7 +32,8 @@ import ambit2.rest.query.QueryResource;
  */
 public class AbstractDepict extends ServerResource {
 	protected Form params;
-	protected String smiles = null;
+	protected String smiles ;
+	protected String smarts ;
 
 	@Override
 	protected void doInit() throws ResourceException {
@@ -83,7 +84,8 @@ public class AbstractDepict extends ServerResource {
 			int w = 400; int h = 200;
 			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
-			smiles = form.getFirstValue(QueryResource.search_param);		
+			smiles = form.getFirstValue(QueryResource.search_param);
+			smarts = form.getFirstValue("smarts");	
         	
 	    		if(variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 	    			StringConvertor convertor = new StringConvertor(new AbstractReporter<String,Writer>() {
