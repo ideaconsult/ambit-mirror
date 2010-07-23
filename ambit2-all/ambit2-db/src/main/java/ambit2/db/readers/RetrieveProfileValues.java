@@ -173,8 +173,7 @@ union
 			Iterator<Property> i = getFieldname().getProperties(true);
 			
 			int count = 0;
-			b.append(getCondition());
-			
+		
 			String delimiter = "";
 			while (i.hasNext()) {
 				String p = searchMode.getParam(i.next());
@@ -184,10 +183,10 @@ union
 					b.append("select idproperty,idstructure,ifnull(text,value) as value_string,value_num,idchemical,id\n");
 					b.append("from structure\n");
 					b.append("join property_values using(idstructure) left join property_string using(idvalue_string)\n");
-					b.append(String.format("where status != 'ERROR' and idchemical=? and %s %s\n",searchMode,p));
+					b.append(String.format("where status != 'ERROR' and idchemical=? and %s = %s\n",searchMode,p));
 							
 					count++;
-					delimiter = "union";
+					delimiter = "union\n";
 				}
 				
 			}
