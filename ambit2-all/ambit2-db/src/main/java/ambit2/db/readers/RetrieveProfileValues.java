@@ -144,12 +144,63 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 
 	protected final String where = "and %s ";
 
+	/* use union instead on in
+select name,idreference,idproperty,idstructure,value_string,value_num,title,url,idchemical,id,units  from (
+select idproperty,idstructure,ifnull(text,value) as value_string,value_num,idchemical,id
+from structure 
+join property_values using(idstructure) left join property_string using(idvalue_string)
+where status != 'ERROR' and idchemical=460 and idproperty  = 11389
+union
+[similar statement]
+) a join properties using(idproperty) join catalog_references using(idreference)
+	 */
+	
+	/**
+	 * 
+	 * @return
+	 */
 	protected String sql() {
 		return isChemicalsOnly()?
 				(addNew?sql_chemical_novalue:sql_chemical):
 				(addNew?sql_structure_novalue:sql_structure);
 	}
+	
+	protected String getPropertySQL() {
+		StringBuilder b = new StringBuilder();
+		b.append("select name,idreference,idproperty,idstructure,value_string,value_num,title,url,idchemical,id,units  from (\n");
+		
+		if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
+			Iterator<Property> i = getFieldname().getProperties(true);
+			
+			int count = 0;
+			b.append(getCondition());
+			
+			String delimiter = "";
+			while (i.hasNext()) {
+				String p = searchMode.getParam(i.next());
+				if (p != null) {
+					b.append(delimiter);
+					
+					b.append("select idproperty,idstructure,ifnull(text,value) as value_string,value_num,idchemical,id\n");
+					b.append("from structure\n");
+					b.append("join property_values using(idstructure) left join property_string using(idvalue_string)\n");
+					b.append(String.format("where status != 'ERROR' and idchemical=? and %s %s\n",searchMode,p));
+							
+					count++;
+					delimiter = "union";
+				}
+				
+			}
+		}
+		
+
+		b.append(") a join properties using(idproperty) join catalog_references using(idreference)");
+		return b.toString();
+	}
 	public String getSQL() throws AmbitException {
+		//should be faster
+		if (isChemicalsOnly() && !addNew) return getPropertySQL();
+		
 		StringBuilder b = new StringBuilder();
 
 		if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
@@ -186,7 +237,19 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
+		if (isChemicalsOnly() && !addNew) {
+			if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
+				Iterator<Property> i = getFieldname().getProperties(true);
+				while (i.hasNext()) {
+					String p = searchMode.getParam(i.next());
+					if (p != null) {
+						params.add(new QueryParam<Integer>(Integer.class, getValue().getIdchemical()));
+					}
+					
+				}
+			}
+		} else
+			params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
 
 		return params;		
 	}
