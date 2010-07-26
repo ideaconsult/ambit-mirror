@@ -39,12 +39,15 @@ public class ProcessorsChain<Target, Result, P extends IProcessor> extends Array
 		Object o = object;
 		for (int i=0; i < size(); i++) {
 			try {
-		    if (get(i).isEnabled())
+		    if (get(i).isEnabled()) {
+		    	preprocess(get(i),o);
 		        o = get(i).process(o);
+		        postprocess(get(i),o);
+		    }    
 			} catch (Exception x) {
+				x.printStackTrace();
 				if (abortOnError)
 					throw new AmbitException(x);
-				x.printStackTrace();
 			}
 		}
 		try {
@@ -55,6 +58,9 @@ public class ProcessorsChain<Target, Result, P extends IProcessor> extends Array
 		
 	}
 
+	protected void preprocess(P p,Object object) {}
+	protected void postprocess(P p,Object object) {}
+	
     public void close() {
     	/**
     	for (int i=0; i < size(); i++) {
