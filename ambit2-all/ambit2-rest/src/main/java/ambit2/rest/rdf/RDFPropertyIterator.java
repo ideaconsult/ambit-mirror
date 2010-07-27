@@ -101,10 +101,12 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 					property = iterator.next();
 					break;
 				}
-				return property;
+				if (!forceReadRDFLocalObjects)  return property;
+				//otherwise read what's in rdf as well
 			} catch (Exception x) {}
 			finally { try { iterator.close();} catch (Exception x) {}}		
-		}  else { //foreign, will live with what's available in RDF
+		} 
+		 //foreign, will live with what's available in RDF
 		
 			String name = thisurl==null?null:thisurl.toString();
 			String label = name;
@@ -170,7 +172,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 				else if (type.equals(OT.OTClass.Model)) le.setType(_type.Model);
 				else if (type.equals(OT.OTClass.Dataset)) le.setType(_type.Dataset);
 			}
-		}
+	
 		property.setClazz(String.class);
 		StmtIterator it = null;
 		property.setNominal(false);

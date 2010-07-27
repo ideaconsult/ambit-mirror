@@ -345,6 +345,61 @@ public class PropertyResourceTest extends ResourceTest {
 		c.close();
 	}	
 	
+	//this fails because of mysql foreign key constraints
+	public void testUpdateExistingEntry1() throws Exception {
+
+		Property p = new Property("Property 1",new LiteratureEntry("Dummy 1","NA"));
+		p.setLabel("Test");
+		p.setId(1);
+		OntModel model = OT.createModel();
+		PropertyRDFReporter.addToModel(model,p,
+				new PropertyURIReporter(),
+				new ReferenceURIReporter());
+		StringWriter writer = new StringWriter();
+		model.write(writer,"RDF/XML");
+
+		Response response =  testPost(
+					String.format("http://localhost:%d%s/2", port,PropertyResource.featuredef),
+					MediaType.APPLICATION_RDF_XML,
+					writer.toString());
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT * FROM properties join catalog_references using(idreference) where name='Property 1' and comments='%s' and title='Dummy' and url='NA'","http://www.opentox.org/api/1.1#Test"));
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		Assert.assertEquals("http://localhost:8181/feature/2", response.getLocationRef().toString());
+	}	
+	
+	@Test
+	public void testUpdateExistingEntry() throws Exception {
+
+		Property p = new Property("Property 1",new LiteratureEntry("Dummy","NA"));
+		p.setLabel("Test");
+		OntModel model = OT.createModel();
+		PropertyRDFReporter.addToModel(model,p,
+				new PropertyURIReporter(),
+				new ReferenceURIReporter());
+		StringWriter writer = new StringWriter();
+		model.write(writer,"RDF/XML");
+
+		Response response =  testPost(
+					String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef),
+					MediaType.APPLICATION_RDF_XML,
+					writer.toString());
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT * FROM properties join catalog_references using(idreference) where name='Property 1' and comments='%s' and title='Dummy' and url='NA'","http://www.opentox.org/api/1.1#Test"));
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		Assert.assertEquals("http://localhost:8181/feature/1", response.getLocationRef().toString());
+	}	
+	
 	@Test
 	public void testCreateExistingEntry() throws Exception {
 

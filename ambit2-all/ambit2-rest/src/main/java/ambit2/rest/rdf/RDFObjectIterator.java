@@ -27,6 +27,14 @@ import com.hp.hpl.jena.vocabulary.DC;
  * @param <Item>
  */
 public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
+	protected boolean forceReadRDFLocalObjects = false;
+	public boolean isForceReadRDFLocalObjects() {
+		return forceReadRDFLocalObjects;
+	}
+
+	public void setForceReadRDFLocalObjects(boolean forceReadRDFLocalObjects) {
+		this.forceReadRDFLocalObjects = forceReadRDFLocalObjects;
+	}
 	protected OntModel jenaModel;
 	public OntModel getJenaModel() {
 		return jenaModel;
