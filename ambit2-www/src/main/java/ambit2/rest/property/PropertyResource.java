@@ -218,9 +218,9 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
-		if (getRequest().getAttributes().get(idfeaturedef)==null)
+		//if (getRequest().getAttributes().get(idfeaturedef)==null)
 			createNewObject(entity);
-		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		//else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		return getResponse().getEntity();
 	}
 	
@@ -236,6 +236,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	protected RDFObjectIterator<Property> createObjectIterator(
 			Representation entity) throws ResourceException {
 		RDFPropertyIterator iterator = new RDFPropertyIterator(entity,entity.getMediaType());
+		iterator.setForceReadRDFLocalObjects(true);
 		iterator.setBaseReference(getRequest().getRootRef());
 		return iterator;
 	}
@@ -254,6 +255,10 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	protected AbstractUpdate createUpdateObject(Property entry)
 			throws ResourceException {
+		if (getRequest().getAttributes().get(idfeaturedef) != null) try {
+			entry.setId(Integer.parseInt(getRequest().getAttributes().get(idfeaturedef).toString()));
+		} catch (Exception x) { entry.setId(-1);} 
+			
 		if (entry.getReference().getId()>0)
 			return new CreatePropertyReferenceID(entry);
 		else if (entry.getId()>0) return new UpdateProperty(entry);
