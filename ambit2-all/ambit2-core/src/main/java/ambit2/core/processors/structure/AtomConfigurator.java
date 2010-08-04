@@ -30,7 +30,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package ambit2.core.processors.structure;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.interfaces.IAtom;
@@ -75,6 +78,7 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
         	//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
     		CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
     		Iterator<IAtom> atoms = mol.atoms().iterator();
+    		List<String> errors = null;
     		while (atoms.hasNext()) {
     			IAtom atom = atoms.next();
                 if (!(atom instanceof IPseudoAtom)) 
@@ -85,15 +89,25 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
                     	atom.setValency(matched.getValency());
                         atom.setAtomicNumber(matched.getAtomicNumber());
                         atom.setExactMass(matched.getExactMass());                      	
+                    } else {
+                    	if (errors == null) errors = new ArrayList<String>();
+                    	if (errors.indexOf(atom.getSymbol())<0)
+                    		errors.add(String.format("%s",atom.getSymbol()));
                     }
  	           } catch (Exception x) {
-	        	   logger.error(x.getMessage() + " " + atom.getSymbol(),x);
-                   if ("true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
-                       throw new AmbitException(atom.getSymbol(),x);
-                   }
+               	if (errors == null) errors = new ArrayList<String>();
+            	if (errors.indexOf(atom.getSymbol())<0) {
+            		errors.add(String.format("%s",atom.getSymbol()));
+            		
+            	}
+
                    
 	           }
-            }        	
+            }    
+            if ((errors != null) && "true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
+            	Collections.sort(errors);
+                throw new AmbitException(errors.toString());
+            }    		
         	/*
             CDKHueckelAromaticityDetector.detectAromaticity(molecule);    		
 	        CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
