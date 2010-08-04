@@ -59,6 +59,10 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					new String[] {Algorithm.typeClassification,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised},null,Algorithm.requires.property},
 			{"LR","Regression: Linear regression","weka.classifiers.functions.LinearRegression",null,
 						new String[] {Algorithm.typeRegression,Algorithm.typeSingleTarget,Algorithm.typeEagerLearning,Algorithm.typeSupervised},null,Algorithm.requires.property},
+/*
+			{"PCA","Principal Component Analysis","weka.attributeSelection.PrincipalComponents",null,
+							new String[] {Algorithm.typeFeatureSelection,Algorithm.typeMultipleTarget,Algorithm.typeEagerLearning,Algorithm.typeUnSupervised},null,Algorithm.requires.property},
+*/						
 			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#Dissociation_constant_pKa",Algorithm.requires.structure},
 			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
 			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {Algorithm.typeRules},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
@@ -146,7 +150,9 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			
 			{"ambit2.descriptors.InChI","InChI 1.02","ambit2.descriptors.InChI",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
+			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
+
 			
 			
 			
