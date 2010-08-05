@@ -151,10 +151,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"ambit2.descriptors.InChI","InChI 1.02","ambit2.descriptors.InChI",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
 			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
-			
-
-			
-			
+			{"ambit2.descriptors.KekulizationVerifier","Kekulization verifier","ambit2.descriptors.KekulizationVerifier",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
+		
 			
 			
 /*
