@@ -10,6 +10,7 @@
  applications,  which are  able to  store information  about  chemical compounds and efficiently  search large databases  of  chemicals by  various criteria.</description>
   <url>http://ambit.sourceforge.net</url>
   <repositories>
+    <!-- 
   	<repository>
         <id>website_ambit</id>
   		<url>http://ambit.sourceforge.net/jars</url>
@@ -17,7 +18,15 @@
   			<enabled>false</enabled>
   		</snapshots>
   	</repository>
-
+  	-->
+  	 <repository>
+        <id>ambit-plovdiv</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+        <snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+    </repository>
+    
   	<repository>
   		<id>mvnrepository</id>
   		<name>mvnrepository</name>
@@ -255,16 +264,20 @@
      -->
     </modules>
   <distributionManagement>
+  <!-- 
     <repository>
       <id>dev_web_sourceforge</id>
       <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url>
     </repository>  
-  	<!-- 
-    <site>
-      <id>website_acad</id>
-      <url>scp://ambit.acad.bg/var/www/html/ambit/ambit2</url>
-    </site>
-     -->
+ -->
+    <snapshotRepository>
+  		<id>ambit-plovdiv-snapshots</id>
+  		<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+	 </snapshotRepository>
+	<repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
     <site>
       <id>website_ambit</id>
       <url>scp://shell.sourceforge.net/home/groups/a/am/ambit/htdocs/AMBIT2-LIBS</url>
