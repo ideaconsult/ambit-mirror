@@ -9,12 +9,13 @@ import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
 
 import ambit2.core.data.ArrayResult;
 import ambit2.core.data.StringArrayResult;
+import ambit2.core.smiles.DeduceBondSystemTool;
 
 public class KekulizationVerifier implements IMolecularDescriptor {
+	protected static final String version="1.3.3_patched";
 	protected DeduceBondSystemTool typer = new DeduceBondSystemTool();
 	protected static final String OK = "OK";
 	protected enum names_index {
@@ -27,8 +28,16 @@ public class KekulizationVerifier implements IMolecularDescriptor {
 		NumAromaticBondKekule,
 		
 		time_ms,
-		status //error reporting
+		status; //error reporting
+		@Override
+		public String toString() {
+			return String.format("%s_%s",super.toString(),version);
+		}
 	};
+	public KekulizationVerifier() {
+		super();
+		//typer.setTimeout(30*60*1000); //15 min
+	}
 	protected static String[] names = {
 		names_index.NumSingleBondOriginal.toString(),
 		names_index.NumDoubleBondOriginal.toString(),
@@ -50,7 +59,7 @@ public class KekulizationVerifier implements IMolecularDescriptor {
 
 			for (IBond bond:mol.bonds()) {
 				if (bond.getFlag(CDKConstants.ISAROMATIC)) 
-						results[names_index.NumAromaticBondOriginal.ordinal()] = (Integer)results[names_index.NumAromaticBondOriginal.ordinal()]+1;
+					results[names_index.NumAromaticBondOriginal.ordinal()] = (Integer)results[names_index.NumAromaticBondOriginal.ordinal()]+1;
 				if (bond.getOrder().equals(IBond.Order.SINGLE)) 
 					results[names_index.NumSingleBondOriginal.ordinal()] = (Integer)results[names_index.NumSingleBondOriginal.ordinal()]+1;
 				if (bond.getOrder().equals(IBond.Order.DOUBLE)) 

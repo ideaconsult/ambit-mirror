@@ -30,7 +30,12 @@
 package ambit2.core.test;
 
 
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.StringReader;
+
+import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
 
@@ -39,19 +44,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.MoleculeTools;
+import ambit2.core.io.CompoundImageTools;
+import ambit2.core.io.FileInputState;
+import ambit2.core.smiles.DeduceBondSystemTool;
+import ambit2.core.test.io.RawIteratingWrapperTest;
 
 public class SmilesTest {
 
@@ -183,4 +194,92 @@ public class SmilesTest {
 		for (IBond bond: mol.bonds())
 			System.out.println(bond.getOrder());		
 	}	
+	
+	public static void printMol(IMolecule mol) {
+		System.out.println(mol.getAtomCount());
+		System.out.println(mol.getBondCount());
+        for (IAtom atom : mol.atoms())
+            if (atom.getFlag(CDKConstants.ISAROMATIC)) System.out.println(atom);
+        for (IBond bond : mol.bonds())
+            System.out.println(bond.getOrder());
+	}
+	public static void main(String[] args) {
+		testsmiles(args);
+		//testsdf(args);
+	}
+    public static void testsmiles(String[] args) {
+        try {
+                SmilesParser parser = new
+                SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+                IMolecule mol =
+                	parser.parseSmiles("O=C5C(=NNc1ccc(c2ccccc12)S(=O)(=O)O)C=C(C(=O)C5(=NNc3ccc(c4ccccc34)S(=O)(=O)O))CO");
+                printMol(mol);
+
+                //AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+//fails with Cannot percieve atom type for the 17th atom: N
+                DeduceBondSystemTool d = new DeduceBondSystemTool();
+                d.setTimeout(60*60*1000); //3 min
+                d.fixAromaticBondOrders(mol);
+                for (IBond bond: mol.bonds())
+                        System.out.println(bond.getOrder());
+        } catch (Exception x) {
+                x.printStackTrace();
+        }
+
+    }
+	public static void testsdf(String[] args) {
+		try {
+			IIteratingChemObjectReader reader = FileInputState.getReader(
+					RawIteratingWrapperTest.class.getClassLoader().getResourceAsStream(
+							"ambit2/core/data/smiles/250731.sdf")
+							,"250731.sdf");
+			while (reader.hasNext()) {
+				IMolecule mol = (IMolecule) reader.next();
+
+				
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);  //fails with Cannot percieve atom type for the 17th atom: N
+				CDKHueckelAromaticityDetector.detectAromaticity(mol);
+				
+				printMol(mol);
+				int aromatic = 0;
+				for (IAtom atom : mol.atoms()) {
+					if (atom.getFlag(CDKConstants.ISAROMATIC)) aromatic++;
+				}
+				for (IBond bond : mol.bonds()) {
+					if (bond.getFlag(CDKConstants.ISAROMATIC)) 
+						bond.setOrder(Order.SINGLE);
+				}
+				
+				CompoundImageTools img = new CompoundImageTools(new Dimension(400,400));
+				BufferedImage image = img.getImage(mol,null,false,true);
+				File file = new File("kekuletest.png");
+				ImageIO.write(image,"png",file);				
+				
+				DeduceBondSystemTool d = new DeduceBondSystemTool();
+				d.setTimeout(100000000*1000); //100 sec
+				d.fixAromaticBondOrders(mol);
+				for (IBond bond: mol.bonds())
+					System.out.println(bond.getOrder());
+			}
+			reader.close();
+			/*
+			//String smiles= "O=C5C(=NNc1ccc(c2ccccc12)S(=O)(=O)O)C=C(C(=O)C5(=NNc3ccc(c4ccccc34)S(=O)(=O)O))CO";
+			SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+			IMolecule mol = //parser.parseSmiles("O=C1c2ccccc2C(=O)c3c1ccc4c3[nH]c5c6C(=O)c7ccccc7C(=O)c6c8[nH]c9c%10C(=O)c%11ccccc%11C(=O)c%10ccc9c8c45");
+				//parser.parseSmiles("O1c4cccc5ccc3ccc2cccc1c2c3c45");
+				//parser.parseSmiles("O=C5C=CC(=NNc1ccc(cc1)c2ccc(cc2)NN=C4C(=O)C=Cc3cc(cc(c34)S(=O)(=O)O)S(=O)(=O)O)C=C5");
+				//parser.parseSmiles("c1ccc(cc1)P(c2ccccc2)c3ccccc3");OK
+				//parser.parseSmiles("[O+]#[C-][Ru+2][C-]#[O+].c1ccc(cc1)P(c2ccccc2)c3ccccc3.c1ccc(cc1)P(c2ccccc2)c3ccccc3.[Cl-].[Cl-]");
+				//parser.parseSmiles("[O+]#[C-][Ru+2][C-]#[O+].c1ccc(cc1)P(c2ccccc2)c3ccccc3.c1ccc(cc1)P(c2ccccc2)c3ccccc3");
+				//parser.parseSmiles("O(c1ccccc1)c7cccc(Oc6cccc(Oc5cccc(Oc4cccc(Oc3cccc(Oc2ccccc2)c3)c4)c5)c6)c7"); //OK
+				//parser.parseSmiles("c1ccc(cc1)P(c2ccccc2)CCP(CCP(c3ccccc3)c4ccccc4)CCP(c5ccccc5)c6ccccc6"); //OK
+				//parser.parseSmiles("O=C3c5c(O)ccc(Nc1ccccc1)c5(C(=O)c4c(O)ccc(Nc2ccccc2)c34)");
+				parser.parseSmiles(smiles);
+			*/
+			
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		
+	}
 }
