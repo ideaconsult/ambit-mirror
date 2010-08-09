@@ -51,6 +51,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -85,6 +86,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
     private NanoPluginsManager pluginsManager;
     protected static Logger logger = Logger.getLogger("nplugins.shell.application.NPluginsApplication");
     
+    protected JMenu moduleMenu;
     protected JSplitPane mainPane;
     protected JSplitPane rightPane;
     protected final SimpleInternalFrame mainPanel;
@@ -122,6 +124,7 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
         
         INanoPlugin defaultPlugin = pluginsManager;
         JComponent leftComponent = buildMainLeftPanel(defaultPlugin);
+
         leftPanel = new SimpleInternalFrame((leftComponent != null)?leftComponent.toString():"Options");
         leftPanel.setPreferredSize(leftComponent.getPreferredSize());
         leftPanel.setMaximumSize(leftComponent.getMaximumSize());
@@ -217,7 +220,9 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
 	}
 	protected JMenuBar createMenuBar() {
 		JMenuBar bar =  new JMenuBar();
+		moduleMenu = createModuleMenu();
 		bar.add(createFileMenu());
+		bar.add(moduleMenu);
 		bar.add(createAboutMenu());
 		return bar;
 	}
@@ -294,7 +299,9 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
     	 return c;
     }
         
-	
+    public JMenu createModuleMenu() {
+        return new JMenu("Module");
+    }	
     public JMenu createFileMenu() {
         JMenu menu = new JMenu("File");
         menu.add(new AbstractAction("Exit") {
@@ -556,6 +563,8 @@ public abstract class NPluginsApplication implements PropertyChangeListener {
                 if (title == null) title = " ";
                 mainPanel.setTitle(title);
                 mainPanel.setFrameIcon(p.getIcon());
+                moduleMenu.removeAll();
+                moduleMenu.add(new JLabel(title));
                 
                 
             }

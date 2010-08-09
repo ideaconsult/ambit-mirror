@@ -13,11 +13,18 @@
       <id>ambit_acad</id>
       <url>scp://nina@unicom.acad.bg/var/www/html/ambit/maven</url>
 	 </snapshotRepository>
+
+    <!--	
     <repository>
       <id>website_ambit</id>
       <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url>
     </repository>    
+    -->
 
+    <repository>
+        <id>ambit-plovdiv</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+    </repository>
     
 
   </distributionManagement>
