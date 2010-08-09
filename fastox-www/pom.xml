@@ -36,6 +36,7 @@
   			<enabled>false</enabled>
   		</snapshots>
   	</repository>
+<!--
   	<repository>
   		<id>website_ambit</id>
   		<name>website_ambit</name>
@@ -44,7 +45,11 @@
   			<enabled>false</enabled>
   		</snapshots>
   	</repository>
-
+-->
+	 <repository>
+        <id>ambit-plovdiv</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+	    </repository>
   	<repository>
   		<id>mvnrepository</id>
   		<name>mvnrepository</name>
@@ -65,7 +70,7 @@
   	<dependency>
   		<groupId>net.bull.javamelody</groupId>
   		<artifactId>javamelody</artifactId>
-  		<version>1.15.0</version>
+  		<version>1.18.0</version>
   		<scope>runtime</scope>
   	</dependency>
   	<dependency>
