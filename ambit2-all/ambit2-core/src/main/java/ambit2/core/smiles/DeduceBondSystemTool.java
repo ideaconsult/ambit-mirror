@@ -637,13 +637,13 @@ public class DeduceBondSystemTool {
 
             if (index + 1 <= MasterList.size() - 1) {
                // System.out.println("here3="+counter);
-            	System.out.println(String.format("Enter %d ",level));
+            	//System.out.println(String.format("Enter %d ",level));
             	//for (int choice:choices) System.out.print(String.format("%d\t",choice));
             	//System.out.println();
                 mnew2 = loop(starttime, molecule, index + 1, MasterList, choices, som,level+1); //recursive def
                 
-                for (int choice:choices) System.out.print(String.format("%d\t",choice));
-                System.out.println("\nExit "+level);
+                //for (int choice:choices) System.out.print(String.format("%d\t",choice));
+                //System.out.println("\nExit "+level);
             }
 
 
