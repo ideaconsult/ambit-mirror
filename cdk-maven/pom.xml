@@ -3,17 +3,21 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk</artifactId>
-  <version>1.3.4</version>
+  <version>1.3.37</version>
   <packaging>jar</packaging>
   <name>cdk</name>
    <url>http://cdk.sourceforge.net</url>
    <distributionManagement>
-	<!-- Replace with URL of the repository to be deployed -->
+	<!-- 
     <repository>
       <id>website_ambit</id>
 		<url>scp://shell.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url>
     </repository>    
-
+-->
+ <repository>
+        <id>ambit-plovdiv</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+    </repository>
     
 
   </distributionManagement>
