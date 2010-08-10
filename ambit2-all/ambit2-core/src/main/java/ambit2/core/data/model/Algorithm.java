@@ -25,8 +25,10 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeRules = "http://www.opentox.org/algorithmTypes.owl#Rules";
 	public static String typeClustering = "http://www.opentox.org/algorithmTypes.owl#Clustering";
 	public static String typeRegression = "http://www.opentox.org/algorithmTypes.owl#Regression";
+	public static String typeFeatureSelection = "http://www.opentox.org/algorithmTypes.owl#FeatureSelection";
 	public static String typeClassification = "http://www.opentox.org/algorithmTypes.owl#Classification";
 	public static String typeSingleTarget = "http://www.opentox.org/algorithmTypes.owl#SingleTarget";
+	public static String typeMultipleTarget = "http://www.opentox.org/algorithmTypes.owl#MultipleTarget";
 	public static String typeEagerLearning = "http://www.opentox.org/algorithmTypes.owl#EagerLearning";
 	public static String typeLazyLearning = "http://www.opentox.org/algorithmTypes.owl#LazyLearning";
 	public static String typeSupervised = "http://www.opentox.org/algorithmTypes.owl#Supervised";
