@@ -22,6 +22,7 @@ import org.restlet.resource.ServerResource;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
+import ambit2.db.chart.BarChartGeneratorDataset;
 import ambit2.db.chart.PieChartGenerator;
 import ambit2.db.chart.PieChartGeneratorDataset;
 import ambit2.db.chart.PropertiesChartGenerator;
@@ -34,7 +35,8 @@ public class ChartResource extends ServerResource {
 	public static final String resourceKey = "mode";
 	public enum ChartMode {
 		pie,
-		xy
+		xy,
+		bar
 	}
 	protected Form params;
 	protected SourceDataset dataset;
@@ -131,6 +133,25 @@ public class ChartResource extends ServerResource {
     			image = chart.process(dataset);
     			break;
     		}    		
+    		case bar: {
+    			Property[] p = new Property[2];
+    			int i=0;
+    			Iterator<Property> it = profile.getProperties(true);
+    			while (it.hasNext()) {
+    				p[i] = it.next();
+    				i++;
+    				if (i>=2) break;
+    			}
+    			BarChartGeneratorDataset chart = new BarChartGeneratorDataset();
+    			chart.setPropertyX(p[0]);
+    			chart.setPropertyY(p.length<2?p[0]:p[1]);   
+    			chart.setConnection(connection);
+    			chart.setWidth(w);
+    			chart.setHeight(h);    
+    			image = chart.process(dataset);
+   			
+    			break;
+    		}
     		default: {
     			image = null;
     		}
