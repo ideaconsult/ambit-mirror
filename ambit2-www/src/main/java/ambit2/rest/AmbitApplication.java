@@ -33,6 +33,7 @@ import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
+import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
@@ -144,6 +145,13 @@ public class AmbitApplication extends TaskApplication {
 
 		//router.attach("", SmartsQueryResource.class);	
 		//router.attach("/", SmartsQueryResource.class);
+		
+		router.attach(BookmarkResource.resource,BookmarkResource.class);
+		router.attach(String.format("%s/{%s}",BookmarkResource.resource,BookmarkResource.creator),BookmarkResource.class);
+		router.attach(String.format("%s/{%s}/{%s}",
+				BookmarkResource.resource,
+				BookmarkResource.creator,
+				BookmarkResource.idbookmark),BookmarkResource.class);
 		
 		Router protectedRouter = new MyRouter(getContext());
 		protectedRouter.attachDefault(ProtectedTestResource.class);

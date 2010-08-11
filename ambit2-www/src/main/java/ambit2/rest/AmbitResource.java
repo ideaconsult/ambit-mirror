@@ -232,6 +232,11 @@ public class AmbitResource extends ServerResource {
 			{"[ambit - chart]","Charts",formatHeader,null},
 			{"/chart/pie?dataset_uri=...&feature_uris[]=...","Pie chart",format,"GET"},
 			{"/chart/xy?dataset_uri=...&feature_uris[]=...&feature_uris[]=...","XY Scatter plot",format,"GET"},
+			{"/chart/bar?dataset_uri=...&feature_uris[]=...&feature_uris[]=...","Bar chart",format,"GET"},
+			
+			{"[ambit - bookmarks]","Bookmarks",formatHeader,null},
+			{"/bookmark/creator/{id}?search={name}&hasTopic={Model,Dataset,Algorithm,Feature,Compound}","Bookmark",format,"GET"},
+
 			
 	};
 
@@ -480,7 +485,21 @@ window.setInterval(function() {
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
-		w.write(String.format("<html><head><title>%s</title>",title));
+		
+		w.write(String.format("<html %s %s %s>",
+				"xmlns=\"http://www.w3.org/1999/xhtml\"",
+				"xmlns:dc=\"http://purl.org/dc/elements/1.1/\"",
+				"xmlns:ot=\"http://opentox.org/api/1.1/\"")
+				);
+		
+		w.write(String.format("<head> <meta property=\"dc:creator\" content=\"%s\"/> <meta property=\"dc:title\" content=\"%s\"/>",
+				request.getResourceRef(),
+				title
+				)
+				);
+		
+
+		w.write(String.format("<title>%s</title>",title));
 		
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));

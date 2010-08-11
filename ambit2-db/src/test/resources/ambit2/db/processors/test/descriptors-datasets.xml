@@ -4,6 +4,7 @@
   <users user_name="admin" password="" email="guest" registration_status="confirmed" registration_date="2008-10-29 06:32:21.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="false"/>  
   <roles role_name="ambit_admin"/>
   <roles role_name="ambit_guest"/>
+  <bookmark idbookmark="1" creator="test" recalls="http://example.com" hasTopic="Model" title="my model" description="" created="2010-08-11 19:05:19.0" date="2010-08-11 19:05:19.0"/>
   <user_roles user_name="guest" role_name="ambit_guest"/>
   <user_roles user_name="admin" role_name="ambit_admin"/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
