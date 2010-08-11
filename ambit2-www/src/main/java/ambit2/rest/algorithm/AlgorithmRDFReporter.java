@@ -62,7 +62,7 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 						//algorithm.addProperty(RDF.type, type); 
 						algorithm.addOntClass(c);
 					}
-				algorithm.addProperty(OT.OTProperty.isA.createProperty(getJenaModel()), type);
+				//algorithm.addProperty(OT.OTProperty.isA.createProperty(getJenaModel()), type);
 				
 			}
 		
