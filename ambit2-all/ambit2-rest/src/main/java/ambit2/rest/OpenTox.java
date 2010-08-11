@@ -22,6 +22,7 @@ public class OpenTox {
 			}
 		},
 		feature,
+		bookmark,
 		reference,
 		compound ,
 		conformer {

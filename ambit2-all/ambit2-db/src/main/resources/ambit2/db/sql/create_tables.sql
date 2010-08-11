@@ -639,6 +639,25 @@ CREATE TABLE  `atom_structure` (
   CONSTRAINT `atom_distance_fk_2` FOREIGN KEY (`iddistance`) REFERENCES `atom_distance` (`iddistance`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+-- -----------------------------------------------------
+-- Table `bookmarks` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bookmark`;
+CREATE TABLE  `bookmark` (
+  `idbookmark` int(10) unsigned NOT NULL auto_increment,
+  `creator` varchar(45) collate utf8_bin NOT NULL COMMENT 'dc:creator',
+  `recalls` text collate utf8_bin NOT NULL COMMENT 'b:recalls Relates the bookmark with the resource that has been bookmarked. ',
+  `hasTopic` varchar(45) collate utf8_bin NOT NULL COMMENT 'b:hasTopic Associates the bookmark with a Topic ',
+  `title` varchar(45) collate utf8_bin NOT NULL COMMENT 'dc:title',
+  `description` text collate utf8_bin NOT NULL COMMENT 'dc:description',
+  `created` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT 'a:created The date and time on which the bookmark was created. Format should be YYYY-MM-DDTHH:MM[:SS]TZD (see [DATETIME])',
+  `date` timestamp NOT NULL  COMMENT 'dc:date The date and time on which the bookmark was last modified. Format should be YYYY-MM-DDTHH:MM[:SS]TZD (see [DATETIME])',
+  PRIMARY KEY  (`idbookmark`),
+  KEY `Index_3` USING BTREE (`hasTopic`),
+  KEY `Index_2` USING BTREE (`creator`,`hasTopic`,`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 -- -----------------------------------------------------
 -- Table `version` Version
 -- -----------------------------------------------------

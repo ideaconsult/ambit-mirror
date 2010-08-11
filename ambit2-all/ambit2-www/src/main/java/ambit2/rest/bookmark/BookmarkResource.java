@@ -1,0 +1,153 @@
+package ambit2.rest.bookmark;
+
+import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.Response;
+import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
+import org.restlet.resource.ResourceException;
+
+import com.hp.hpl.jena.vocabulary.DC;
+
+import ambit2.base.data.Bookmark;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.bookmark.CreateBookmark;
+import ambit2.db.update.bookmark.ReadBookmark;
+import ambit2.db.update.bookmark.UpdateBookmark;
+import ambit2.rest.OpenTox;
+import ambit2.rest.OutputWriterConvertor;
+import ambit2.rest.QueryURIReporter;
+import ambit2.rest.RDFJenaConvertor;
+import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.StringConvertor;
+import ambit2.rest.query.QueryResource;
+import ambit2.rest.rdf.Annotea;
+import ambit2.rest.rdf.RDFBookmarkIterator;
+import ambit2.rest.rdf.RDFObjectIterator;
+
+public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
+
+	public final static String resource = OpenTox.URI.bookmark.getURI();
+	public final static String idbookmark = OpenTox.URI.bookmark.getKey();
+	public final static String creator = "creator";
+	
+
+	@Override
+	public RepresentationConvertor createConvertor(Variant variant)
+			throws AmbitException, ResourceException {
+		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+				return new StringConvertor(	new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(getRequest()) {
+					@Override
+					public Object processItem(Bookmark dataset) throws AmbitException  {
+						super.processItem(dataset);
+						try {
+							output.write('\n');
+						} catch (Exception x) {}
+						return null;
+					}
+				},MediaType.TEXT_URI_LIST);
+				
+			} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
+					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
+					variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
+					variant.getMediaType().equals(MediaType.APPLICATION_JSON)
+					) {
+		
+				return new RDFJenaConvertor<Bookmark, IQueryRetrieval<Bookmark>>(
+						new BookmarkRDFReporter<IQueryRetrieval<Bookmark>>(getRequest(),variant.getMediaType())
+						,variant.getMediaType());					
+								
+			} else 
+				return new OutputWriterConvertor(
+						new BookmarkHTMLReporter(getRequest(),queryObject.getValue()==null),
+						MediaType.TEXT_HTML);
+	}
+
+	@Override
+	protected ReadBookmark createQuery(Context context, Request request, Response response)
+			throws ResourceException {
+		Object idref = request.getAttributes().get(idbookmark);
+		Object user = request.getAttributes().get(creator);
+		Bookmark bookmark = user==null?null:new Bookmark(user.toString());
+		
+		Form form = request.getResourceRef().getQueryAsForm();
+		Object key = form.getFirstValue(QueryResource.search_param);
+		if (key != null) {
+			if (bookmark==null) bookmark = new Bookmark();
+			bookmark.setTitle(Reference.decode(key.toString()));
+		} 
+		key = form.getFirstValue(Annotea.BookmarkProperty.hasTopic.toString());
+		if (key != null) {
+			if (bookmark==null) bookmark = new Bookmark();
+			bookmark.setHasTopic(Reference.decode(key.toString()));
+		} 		
+			
+		try {
+			if (idref==null) {
+				return new ReadBookmark(null,bookmark); //all
+			}			
+			else return new ReadBookmark(
+					new Integer(Reference.decode(idref.toString())),
+					bookmark);
+		} catch (Exception x) {
+			throw new ResourceException(
+					Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Invalid resource id %d",idref),
+					x
+					);
+		}
+	} 
+	@Override
+	protected Representation post(Representation entity)
+			throws ResourceException {
+		if (getRequest().getAttributes().get(idbookmark)==null)
+			createNewObject(entity);
+		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		return getResponse().getEntity();
+	}
+	@Override
+	protected Bookmark createObjectFromWWWForm(Representation entity)
+			throws ResourceException {
+		Bookmark bookmark = new Bookmark();
+		Form queryForm = new Form(entity);
+		bookmark.setHasTopic(queryForm.getFirstValue(Annotea.BookmarkProperty.hasTopic.toString()));
+		bookmark.setRecalls(queryForm.getFirstValue(Annotea.BookmarkProperty.recalls.toString()));
+		bookmark.setCreator(queryForm.getFirstValue(DC.creator.toString()));
+		bookmark.setTitle(queryForm.getFirstValue(DC.title.toString()));
+		bookmark.setDescription(queryForm.getFirstValue(DC.description.toString()));
+		return bookmark;
+	}
+	@Override
+	protected QueryURIReporter<Bookmark, ReadBookmark> getURUReporter(
+			Request baseReference) throws ResourceException {
+		return new BookmarkURIReporter<ReadBookmark>(baseReference);
+	}
+	@Override
+	protected RDFObjectIterator<Bookmark> createObjectIterator(
+			Reference reference, MediaType mediaType) throws ResourceException {
+		return new RDFBookmarkIterator(reference,mediaType);
+	}
+	@Override
+	protected RDFObjectIterator<Bookmark> createObjectIterator(
+			Representation entity) throws ResourceException {
+		return new RDFBookmarkIterator(entity,entity.getMediaType());
+	}
+	@Override
+	protected Bookmark onError(String sourceURI) {
+		return null;
+	}
+
+	@Override
+	protected AbstractUpdate createUpdateObject(
+			Bookmark entry) throws ResourceException {
+		if(entry.getId()>0) return new UpdateBookmark(entry);
+		else return new CreateBookmark(entry);
+	}
+}
