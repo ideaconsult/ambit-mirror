@@ -110,7 +110,6 @@ public class OT {
 		    values ,
 		    hasSource,
 		    conformer ,
-		    isA ,
 		    model ,
 		    parameters ,
 		    report ,
