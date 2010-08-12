@@ -12,6 +12,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
@@ -207,15 +208,20 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query, IRingSet ringSet)
 	{
-		Vector<IRingSet> rs = getCondensedRingSystems(ringSet);
+		Vector<IRingSet> rs = getMaxCondensedRingSystems(ringSet);
 		if (rs.size() == 0)
 			return(query);
 		
 		for (int i = 0; i < rs.size(); i++)
 		{
 			QueryAtomContainer qac = getCondensedFragmentFromRingSets(query, rs.get(i));
+			
+			
 			IAtomContainer ac = extractAtomContainerFullyConnected(qac, ringSet);
+			
 			//TODO - perceive aromaticity 
+			
+			
 			String smiles = SmartsHelper.moleculeToSMILES(ac);
 			System.out.println(smiles);
 		}
@@ -612,8 +618,11 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return(b);	
 	}
 	
-	
-	Vector<IRingSet> getCondensedRingSystems(IRingSet ringSet )
+	/**
+	 * This function finds all condensed ring systems and returns
+	 * a vector where each element of is a maximal condensed system
+	 */
+	Vector<IRingSet> getMaxCondensedRingSystems(IRingSet ringSet)
 	{			
 		Vector<IRingSet> v = new Vector<IRingSet>();
 		int n = ringSet.getAtomContainerCount();
@@ -637,10 +646,25 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	}
 	
 	
-	IRingSet getCondenzedRingsTo(IAtomContainer ac, IRingSet ringSet, BitSet flagUsedRings)
-	{
+	IRingSet getCondenzedRingsTo(IAtomContainer startAC, IRingSet ringSet, BitSet flagUsedRings)
+	{			
 		RingSet rs = new RingSet();
-		//TODO
+		IAtomContainer ac;
+		int expandPos = 0;
+		rs.addAtomContainer(startAC);
+		while (expandPos < rs.getAtomContainerCount())
+		{
+			IRingSet rsConnected = rs.getConnectedRings((IRing)rs.getAtomContainer(expandPos));
+			for (int i = 0; i < rsConnected.getAtomContainerCount(); i++)
+			{
+				
+			}
+			
+			expandPos++;
+		}
+		
+		
+		
 		return (rs);
 	}
 	
@@ -649,8 +673,6 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		//TODO
 		return(null);
 	}
-	
-	
 	
 	
 }
