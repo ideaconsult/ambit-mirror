@@ -25,6 +25,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.CMLWriter;
@@ -1096,9 +1097,42 @@ public class TestUtilities
 				IAtom a = ring.getAtom(k);
 				System.out.print(" "+ mol.getAtomNumber(a));
 			}
+			System.out.println();
 		}	
 		System.out.println();
 	}	
+	
+	
+	public void testRingInfo(String smiles)
+	{	
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		SSSRFinder sssrf = new SSSRFinder(mol);
+		IRingSet ringSet = sssrf.findSSSR();
+		
+		IRingSet rsConnected = ringSet.getConnectedRings((IRing)ringSet.getAtomContainer(0));
+		
+		System.out.println(smiles);
+		System.out.print("Connected Rings to ring 0:");
+		for (int i = 0; i < rsConnected.getAtomContainerCount(); i++)
+		{
+			System.out.print("  Ring:");
+			IAtomContainer ring =  ringSet.getAtomContainer(i);
+			for (int k = 0; k < ring.getAtomCount(); k++)
+			{
+				IAtom a = ring.getAtom(k);
+				System.out.print(" "+ mol.getAtomNumber(a));
+			}
+			System.out.println();
+		}	
+		System.out.println();
+	}
+	
+	
+	public void testConvertKekuleSmartsToAromatic(String smarts)	
+	{
+		QueryAtomContainer qac = sp.parse(smarts);
+		smToChemObj.convertKekuleSmartsToAromatic(qac);
+	}
 	
 	
 //-------------------------------------------------------------------------------
@@ -1291,12 +1325,19 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[C^1]","CC#CC");
 		//tu.testSmartsManagerBoolSearch("[C^1]","CC=C=C");
 		
-		tu.showFullIsomorphismMappings("N", "CCCNCCCNCC");
-		tu.showFullIsomorphismMappings("CN", "CCCNCCCNCC");
-		tu.showFullIsomorphismMappings("CNC", "CCCNCCCNCC");
-		tu.showFullIsomorphismMappings("CN(N)C", "CCCN(N)CCCNCC");
-		tu.showFullIsomorphismMappings("C1NCC1", "CCC1NCC1C");
+		//tu.showFullIsomorphismMappings("N", "CCCNCCCNCC");
+		//tu.showFullIsomorphismMappings("CN", "CCCNCCCNCC");
+		//tu.showFullIsomorphismMappings("CNC", "CCCNCCCNCC");
+		//tu.showFullIsomorphismMappings("CN(N)C", "CCCN(N)CCCNCC");
+		//tu.showFullIsomorphismMappings("C1NCC1", "CCC1NCC1C");
+				
+		//tu.testRingInfo("C1CCC2CCCC3CCCC1C23");
+		//tu.testRingInfo("C1CCC1C2CCCC2");
+		//tu.testRingInfo("C1CCC12CCCC2");
 		
+		
+		//tu.testConvertKekuleSmartsToAromatic("C1CNC1CCCC2COCC2");
+		tu.testConvertKekuleSmartsToAromatic("C2CNC1CCCC1CC2");
 	}
 	
 }
