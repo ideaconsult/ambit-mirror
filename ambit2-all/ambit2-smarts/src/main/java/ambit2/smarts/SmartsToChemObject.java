@@ -215,13 +215,9 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		for (int i = 0; i < rs.size(); i++)
 		{
 			QueryAtomContainer qac = getCondensedFragmentFromRingSets(query, rs.get(i));
-			
-			
-			IAtomContainer ac = extractAtomContainerFullyConnected(qac, ringSet);
-			
 			//TODO - perceive aromaticity 
 			
-			
+			IAtomContainer ac = extractAtomContainerFullyConnected(qac, ringSet);
 			String smiles = SmartsHelper.moleculeToSMILES(ac);
 			System.out.println(smiles);
 		}
@@ -650,28 +646,50 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	{			
 		RingSet rs = new RingSet();
 		IAtomContainer ac;
-		int expandPos = 0;
+		int curRing = 0;
 		rs.addAtomContainer(startAC);
-		while (expandPos < rs.getAtomContainerCount())
+		
+		while (curRing < rs.getAtomContainerCount())
 		{
-			IRingSet rsConnected = rs.getConnectedRings((IRing)rs.getAtomContainer(expandPos));
+			//Adding all neighbors of the currentRing which are not in rs container
+			IRingSet rsConnected = rs.getConnectedRings((IRing)rs.getAtomContainer(curRing));
 			for (int i = 0; i < rsConnected.getAtomContainerCount(); i++)
 			{
-				
+				if (!rs.contains(rsConnected.getAtomContainer(i)))
+					rs.addAtomContainer(rsConnected.getAtomContainer(i));
 			}
-			
-			expandPos++;
+			curRing++; //The cycle will stop if curRing is the last one and no other rings are added
 		}
-		
-		
 		
 		return (rs);
 	}
 	
 	QueryAtomContainer getCondensedFragmentFromRingSets(QueryAtomContainer query, IRingSet rs)
 	{
-		//TODO
-		return(null);
+		//All atoms and bonds from each ring are added
+		//Check for duplication of atoms and bonds is done
+		
+		QueryAtomContainer qac = new QueryAtomContainer();
+		for (int i = 0; i < rs.getAtomContainerCount(); i++)
+		{
+			IAtomContainer ac = rs.getAtomContainer(i);
+			//Adding atoms
+			for (int k = 0; k < ac.getAtomCount(); k++)
+			{
+				IAtom a = ac.getAtom(k);
+				if (!qac.contains(a))
+					qac.addAtom(a);
+			}
+			//Adding bonds
+			for (int k = 0; k < ac.getBondCount(); k++)
+			{
+				IBond b = ac.getBond(k);
+				if (!qac.contains(b))
+					qac.addBond(b);
+			}
+		}
+				
+		return(qac);
 	}
 	
 	
