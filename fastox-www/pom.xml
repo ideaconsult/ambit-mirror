@@ -25,6 +25,12 @@
   			<enabled>false</enabled>
   		</snapshots>
   	</repository>
+	<repository>
+		<id>glassfish</id>
+		<name>javamelody is here</name>
+		<url>http://maven.glassfish.org/content/groups/public</url>
+		<releases><enabled>true</enabled></releases>
+	</repository>
   	<repository>
   		<id>opennms-repo</id>
   		<name>OpenNMS Repository</name>
@@ -69,7 +75,7 @@
   	</dependency>  	
   	<dependency>
   		<groupId>net.bull.javamelody</groupId>
-  		<artifactId>javamelody</artifactId>
+  		<artifactId>javamelody-core</artifactId>
   		<version>1.18.0</version>
   		<scope>runtime</scope>
   	</dependency>
