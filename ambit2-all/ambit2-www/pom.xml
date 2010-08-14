@@ -36,6 +36,7 @@
 		<plugin>
 			<groupId>org.codehaus.cargo</groupId>
 			<artifactId>cargo-maven2-plugin</artifactId>
+			<version>1.0.2</version>
 		</plugin>    
 		<!--
 			<plugin>
