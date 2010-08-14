@@ -99,10 +99,10 @@ public class AtomEnvironmentHammingDistanceTest extends TestCase {
             assertEquals(1.0,hd.getDistance(ae,ae1),1E-10);
             assertEquals(hd.getDistance(ae1,ae),hd.getDistance(ae,ae1),1E-10);
             
-            System.out.println(ae);
-            System.out.println(ae2);
+            //System.out.println(ae);
+            //System.out.println(ae2);
             float d = hd.getDistance(ae,ae2);
-            System.out.println(d);
+            //System.out.println(d);
             assertTrue(d<1.0);
             
             assertEquals(hd.getDistance(ae2,ae),hd.getDistance(ae1,ae2),1E-10);

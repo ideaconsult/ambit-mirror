@@ -116,7 +116,7 @@ public class NearestNeighborsSimilarityTest extends TestCase {
         
         dataset.first();
         while (dataset.next()) {
-        	System.out.println(dataset.getPredicted());
+        	//System.out.println(dataset.getPredicted());
         }
     }
     public void runTest(NearestNeighborsSimilarity nns, IDataset a, IModelStatistics stats) throws Exception{
@@ -126,7 +126,7 @@ public class NearestNeighborsSimilarityTest extends TestCase {
             assertEquals(a.size(),nns.getNearestNeighborsSearch().size());
             
 
-            System.out.println(nns);
+           // System.out.println(nns);
             nns.predict(a, stats);
     }
 

@@ -170,7 +170,7 @@ public class HistogramTest extends TestCase {
     	h.addValue("1", "2", 1.3);
     	h.addValue("1", "2", 13.0);
     	h.addValue("1", "2", 0.25);
-    	System.out.println(h);
+    	//System.out.println(h);
     }
     public void testCompareBins() {
     	DoubleHistogramBin b = new DoubleHistogramBin(0.1,0.2);
@@ -189,11 +189,11 @@ public class HistogramTest extends TestCase {
     	h.addObject(b);
     	h.addObject(b1);
     	h.addObject(b2);
-    	System.out.println(h);
+    	//System.out.println(h);
     	
     	DoubleHistogramBin b3 = new DoubleHistogramBin(0.7,0.8);
     	h.addObject(b3);
-    	System.out.println(h);
+    	//System.out.println(h);
     	
     	
     }
