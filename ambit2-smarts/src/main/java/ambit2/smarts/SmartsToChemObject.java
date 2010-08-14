@@ -627,6 +627,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		IRingSet workRS = new RingSet();
 		workRS.add(ringSet);
+		workRS = filterAromaticSmartsRings(workRS);
 		
 		while (workRS.getAtomContainerCount() > 0)
 		{	
@@ -690,6 +691,24 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		}
 				
 		return(qac);
+	}
+	
+	IRingSet filterAromaticSmartsRings(IRingSet ringSet)
+	{
+		//All rings that contain aromatic info or Smarts expressions are removed
+		IRingSet newRS = new RingSet();
+		for (int i = 0; i < ringSet.getAtomContainerCount(); i++)
+		{
+			IAtomContainer ac = ringSet.getAtomContainer(i);
+			boolean FlagAdd = true;
+			
+			//TODO
+			
+			if (FlagAdd)
+				newRS.addAtomContainer(ac);
+		}
+		
+		return (newRS);
 	}
 	
 	
