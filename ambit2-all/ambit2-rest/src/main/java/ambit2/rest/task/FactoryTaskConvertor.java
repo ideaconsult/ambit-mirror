@@ -80,7 +80,7 @@ public class FactoryTaskConvertor<USERID> {
 	
 	public synchronized Representation createTaskRepresentation(Iterator<Task<Reference,USERID>> tasks, Variant variant, Request request, Response response) throws ResourceException {
 		try {
-			System.out.println("convertor" );
+			//System.out.println("convertor" );
 			if (tasks==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			IProcessor<Iterator<Task<Reference,USERID>>,Representation> p = createTaskConvertor(variant,request);
 			return p.process(tasks);

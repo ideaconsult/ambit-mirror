@@ -111,7 +111,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		try {
 			return tasks.get(UUID.fromString(id));
 		} catch (Exception x) {
-			System.out.println(x);
+			//System.out.println(x);
 			return null;
 		}
 	}
@@ -119,7 +119,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		try {
 			tasks.remove(UUID.fromString(id));
 		} catch (Exception x) {
-			System.out.println(x);
+			//System.out.println(x);
 			return;
 		}
 	}
