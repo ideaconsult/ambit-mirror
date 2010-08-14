@@ -57,7 +57,7 @@ public class PropertyStatsStringTest  extends QueryTest<PropertyStatsString>  {
 		while (rs.next()) {
 			records ++;
 			String stat = query.getObject(rs);
-			System.out.println(stat);
+			//System.out.println(stat);
 		}
 		Assert.assertEquals(0,records);
 		

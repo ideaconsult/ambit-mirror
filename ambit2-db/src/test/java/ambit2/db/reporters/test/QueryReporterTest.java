@@ -36,7 +36,7 @@ public class QueryReporterTest extends DbUnitTest {
 		reporter.process(query_property);
 		reporter.getOutput().flush();
 		reporter.getOutput().close();
-		System.out.println(reporter.getOutput().toString());
+		
 		reporter.close();
 		
 		

@@ -57,7 +57,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		dataset.setValue(new SourceDataset("Dataset 1"));
 		qc.setScope(dataset);
 		qc.add(qs);
-		System.out.println(qc.getSQL());
+		//System.out.println(qc.getSQL());
 		
 	}	
 	@Test

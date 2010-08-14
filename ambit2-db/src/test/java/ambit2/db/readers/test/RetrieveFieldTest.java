@@ -74,7 +74,7 @@ public class RetrieveFieldTest extends RetrieveTest<Object> {
 		int count = 0; 
 		while (rs.next()) {
 					
-			System.out.println(query.getObject(rs));
+			
 			count++;
 		}
 		Assert.assertTrue(count>0);
@@ -113,15 +113,9 @@ public class RetrieveFieldTest extends RetrieveTest<Object> {
 				if ((expected == null) && (actual == null)) continue;
 				else
 					Assert.assertEquals(expected.toString(),actual.toString());
-				/*
-				System.out.print(rows.getMetaData().getColumnName(i));
-				System.out.print('=');
-				System.out.print(rows.getObject(i));
-				System.out.print('\t');
-				System.out.println(table.getTableMetaData().getColumns()[i-1].getDataType());
-				*/
+	
 			}
-			//System.out.println();
+			
 		}
 	}
 }

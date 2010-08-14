@@ -73,8 +73,7 @@ public class FP1024WriterTest extends DbUnitTest {
 			o.clear();
 
 			records ++;
-			if ((records % 50) == 0)
-				System.out.println(records);
+
 		}
 		reader.close();
 		
