@@ -67,7 +67,7 @@ public class SelectionEditorTest {
 		Assert.assertEquals("B",options.getSelected());
 		IAmbitEditor editor = EditorPreferences.getEditor(options);
 		JOptionPane.showMessageDialog(null,editor.getJComponent());
-		System.out.println(options.getSelected());
+		//System.out.println(options.getSelected());
 		
 	}
 	

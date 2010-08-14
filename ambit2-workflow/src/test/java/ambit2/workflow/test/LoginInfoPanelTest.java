@@ -47,7 +47,7 @@ public class LoginInfoPanelTest {
 		WizardPanel p = new WizardPanel("x",panel.getJComponent(),"Help");
 		p.setBorder(BorderFactory.createLineBorder(Color.red));
 		JOptionPane.showConfirmDialog(null,p,"",JOptionPane.OK_OPTION,JOptionPane.PLAIN_MESSAGE);
-		System.out.println(info.getPassword());
+		//System.out.println(info.getPassword());
 	}
     public static void main(String[] args) {
         try {

@@ -45,7 +45,7 @@ public class WorkflowExportTest {
     	serializer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
     	serializer.setOutputProperty(OutputKeys.INDENT,"yes");
     	serializer.transform(domSource, streamResult);		
-    	System.out.println(writer.toString());
+    	//System.out.println(writer.toString());
 	}
 	@Test
 	public void testRead() throws Exception  {

@@ -40,13 +40,13 @@ public class EditorPreferencesTest {
 				Class.forName(EditorPreferences.default_values[i][0].toString());
 			} catch (ClassNotFoundException x) {
 				failed = true;
-				System.err.println(EditorPreferences.default_values[i][0]);
+				//System.err.println(EditorPreferences.default_values[i][0]);
 			}
 			try {
 				Class.forName(EditorPreferences.default_values[i][1].toString());
 			} catch (ClassNotFoundException x) {
 				failed = true;
-				System.err.println(EditorPreferences.default_values[i][1]);
+				//System.err.println(EditorPreferences.default_values[i][1]);
 			}			
 		}
 		Assert.assertFalse(failed);
