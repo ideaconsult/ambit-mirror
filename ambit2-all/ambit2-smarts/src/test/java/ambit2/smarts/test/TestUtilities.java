@@ -1130,6 +1130,7 @@ public class TestUtilities
 	
 	public void testConvertKekuleSmartsToAromatic(String smarts)	
 	{
+		System.out.println("testing Kekule to Aromatic: " + smarts);
 		QueryAtomContainer qac = sp.parse(smarts);
 		smToChemObj.convertKekuleSmartsToAromatic(qac);
 	}
@@ -1336,7 +1337,7 @@ public class TestUtilities
 		//tu.testRingInfo("C1CCC12CCCC2");
 		
 		
-		//tu.testConvertKekuleSmartsToAromatic("C1CNC1CCCC2COCC2");
+		tu.testConvertKekuleSmartsToAromatic("C1CNC1CCCC2COCC23CCCC3");
 		tu.testConvertKekuleSmartsToAromatic("C2CNC1CCCC1CC2");
 	}
 	

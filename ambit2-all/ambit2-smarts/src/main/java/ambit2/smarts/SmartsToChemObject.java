@@ -625,43 +625,43 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		if (n == 0)
 			return(v);  //empty container is returned
 		
-		BitSet flagUsedRings = new BitSet(n);
-		flagUsedRings.set(0, n, false);
+		IRingSet workRS = new RingSet();
+		workRS.add(ringSet);
 		
-		int k = flagUsedRings.nextClearBit(0);
-		while (k < n)
-		{
-			IAtomContainer ac = ringSet.getAtomContainer(k);
-			flagUsedRings.set(k);
-			IRingSet rs = getCondenzedRingsTo(ac, ringSet, flagUsedRings);
+		while (workRS.getAtomContainerCount() > 0)
+		{	
+			IAtomContainer ac = workRS.getAtomContainer(0);
+			IRingSet rs = getCondenzedRingsTo(ac, ringSet);
 			v.add(rs);
-			k = flagUsedRings.nextClearBit(0);
+			//Removing the rs elements from workRS
+			for (int i = 0; i < rs.getAtomContainerCount();i++)
+			{
+				workRS.removeAtomContainer(rs.getAtomContainer(i));
+			}
 		}
-		
 		return v;
 	}
 	
 	
-	IRingSet getCondenzedRingsTo(IAtomContainer startAC, IRingSet ringSet, BitSet flagUsedRings)
+	IRingSet getCondenzedRingsTo(IAtomContainer startAC, IRingSet ringSet)
 	{			
-		RingSet rs = new RingSet();
-		IAtomContainer ac;
+		RingSet condRS = new RingSet();
 		int curRing = 0;
-		rs.addAtomContainer(startAC);
+		condRS.addAtomContainer(startAC);
 		
-		while (curRing < rs.getAtomContainerCount())
+		while (curRing < condRS.getAtomContainerCount())
 		{
 			//Adding all neighbors of the currentRing which are not in rs container
-			IRingSet rsConnected = rs.getConnectedRings((IRing)rs.getAtomContainer(curRing));
+			IRingSet rsConnected = ringSet.getConnectedRings((IRing)condRS.getAtomContainer(curRing));
 			for (int i = 0; i < rsConnected.getAtomContainerCount(); i++)
 			{
-				if (!rs.contains(rsConnected.getAtomContainer(i)))
-					rs.addAtomContainer(rsConnected.getAtomContainer(i));
+				if (!condRS.contains(rsConnected.getAtomContainer(i)))
+					condRS.addAtomContainer(rsConnected.getAtomContainer(i));
 			}
 			curRing++; //The cycle will stop if curRing is the last one and no other rings are added
 		}
 		
-		return (rs);
+		return (condRS);
 	}
 	
 	QueryAtomContainer getCondensedFragmentFromRingSets(QueryAtomContainer query, IRingSet rs)
