@@ -62,8 +62,8 @@ public class DescriptorMopacShellTest {
 		Assert.assertEquals(DescriptorMopacShell.ELUMO,v.getNames()[8]);
 		
 		DoubleArrayResult r = (DoubleArrayResult) v.getValue();
-		System.out.println(r.get(7));
-		System.out.println(r.get(8));
+		//System.out.println(r.get(7));
+		//System.out.println(r.get(8));
 
 		Assert.assertEquals(-9.70887,r.get(7),1E-2); //ehomo
 		Assert.assertEquals(-3.54057,r.get(8),1E-2); //elumo
