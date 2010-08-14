@@ -57,8 +57,7 @@ public class DescriptorEngineProcessorTest {
 		for (String s : p.getDescriptorEngine().getAvailableDictionaryClasses())
 			System.out.println(s);
 			*/
-		for (Object s : p.getDescriptorEngine().getDescriptorClassNames())
-			System.out.println(s);		
+		//for (Object s : p.getDescriptorEngine().getDescriptorClassNames())	System.out.println(s);		
 		/*
 		for (Object s : p.getDescriptorEngine().getDescriptorInstances())
 			System.out.println(s);

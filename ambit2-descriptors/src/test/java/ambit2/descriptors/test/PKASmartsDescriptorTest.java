@@ -104,10 +104,12 @@ public class PKASmartsDescriptorTest {
         }
 
         if (smarts.size()>0) {
+        	/*
             System.out.println("Failed nodes "+failedNodes);
             System.out.println("Failed smarts "+failedSmarts);        	
 	        for (int i=0; i < smarts.size();i++)
 	            System.out.println('\''+smarts.get(i)+'\'');
+	            */
         }
         
         Assert.assertEquals(1,nullSmarts); //root smarts
@@ -134,13 +136,13 @@ public class PKASmartsDescriptorTest {
 		}		
 //        CDKHueckelAromaticityDetector.detectAromaticity(a);    		
 		DescriptorValue value = pka.calculate(a);
-		System.out.println(value.getValue());
+		//System.out.println(value.getValue());
     }
     @Test
     public void testPredictions() throws Exception {
     	File file = File.createTempFile("ambit_results", ".csv");
     	file.deleteOnExit();
-    	System.out.println(file.getAbsolutePath());
+    	//System.out.println(file.getAbsolutePath());
     	DelimitedFileWriter writer = new DelimitedFileWriter(new FileOutputStream(file));
     	
     	HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
@@ -163,17 +165,19 @@ public class PKASmartsDescriptorTest {
 	    		
 	    		Double d = Double.valueOf(a.getProperty("pKa-SMARTS").toString());
 	    		if (!d.equals(result.getResult().doubleValue())) {
+	    			/*
 	        		System.out.print(result.getResult().doubleValue());
 	        		System.out.print('\t');
 	        		System.out.print(a.getProperty("pKa-SMARTS"));
 	        		System.out.print('\t');
 	        		System.out.println(a.getProperty("SMILES"));
+	        		*/
 	    			
 	    		}
 	
 	    		writer.write(a);
     		} catch (CDKException x) {
-    			System.err.println(a.getProperty("SMILES"));
+    			//System.err.println(a.getProperty("SMILES"));
     			continue;
     		} catch (AmbitException x) {
     			continue;
