@@ -72,7 +72,7 @@ public class CommandShellTest {
 		String exec = shell.getExecutable(CommandShell.os_WINDOWS);
 		//Assert.assertEquals(name,exec);
 		File file = new File(exec);
-		System.out.println(file.getAbsolutePath());
+		//System.out.println(file.getAbsolutePath());
 		Assert.assertTrue(file.exists());
 	}
 
@@ -82,7 +82,7 @@ public class CommandShellTest {
 		shell.addExecutableLinux(name,null);
 		String exec = shell.getExecutable(CommandShell.os_LINUX);
 		File file = new File(exec);
-		System.out.println(file.getAbsolutePath());
+		//System.out.println(file.getAbsolutePath());
 		Assert.assertTrue(file.exists());
 	}
 
