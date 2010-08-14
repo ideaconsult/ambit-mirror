@@ -18,10 +18,10 @@ public class QueryOntologyTest extends QueryTest<QueryOntology> {
 	protected void verify(QueryOntology query, ResultSet rs) throws Exception {
 		int count=0;
 		while (rs.next()) {
-			System.out.println(query.getObject(rs));
+			//System.out.println(query.getObject(rs));
 			count++;
 		}
-		System.out.println(count);
+		//System.out.println(count);
 	}
 
 }

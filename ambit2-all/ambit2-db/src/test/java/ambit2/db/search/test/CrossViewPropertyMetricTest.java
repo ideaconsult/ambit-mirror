@@ -68,7 +68,7 @@ public class CrossViewPropertyMetricTest extends DbUnitTest{
 
 		long now = System.currentTimeMillis();
 		Assert.assertEquals(expected, view.toString());
-		System.out.println("\n"+(System.currentTimeMillis()-now)+"ms");
+		//System.out.println("\n"+(System.currentTimeMillis()-now)+"ms");
 		executor.close();
 		
 		c.close();

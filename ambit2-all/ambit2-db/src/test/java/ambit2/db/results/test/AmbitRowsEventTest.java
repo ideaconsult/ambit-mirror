@@ -257,7 +257,7 @@ public class AmbitRowsEventTest extends DbUnitTest {
 			final QueryField qf = new QueryField();
 			properties.addPropertyChangeListener(properties.getPropertyname(),new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
-					System.out.println(evt.getNewValue().getClass().getName() + " "+evt.getNewValue());
+					
 					try {
 						IQueryRetrieval r = properties.process((Property)evt.getNewValue());
 						qf.setFieldname(((QueryField)r).getFieldname());				
@@ -329,7 +329,6 @@ public class AmbitRowsEventTest extends DbUnitTest {
 			
 			properties.addPropertyChangeListener("status",new PropertyChangeListener(){
 				public void propertyChange(PropertyChangeEvent evt) {
-					System.out.println(evt.getPropertyName() + evt.getNewValue());
 					combo.setEnabled((Boolean)evt.getNewValue());
 				}
 			});				

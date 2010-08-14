@@ -30,7 +30,7 @@ public class QueryExactStructureTest extends QueryTest<QueryExactStructure> {
 		int count = 0;
 		while (rs.next()) {
 			IStructureRecord record = query.getObject(rs);
-			System.out.println(record);
+
 			count++;
 		}
 		Assert.assertEquals(1,count);

@@ -247,7 +247,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		
 		value = xlogp.calculate(MoleculeFactory.makeAlkane(12));
 		Assert.assertEquals(144.0,((DoubleResult)value.getValue()).doubleValue(),1E-4);		
-		System.out.println(value.getValue());
+
         writer.write(value);
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-144)<1E-4");	
 		Assert.assertEquals(1,values.getRowCount());
