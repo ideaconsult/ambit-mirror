@@ -53,7 +53,7 @@ public class CallablePOST implements Callable<Reference>{
 		this.applicationRootReference = root;
 	}
 	public Reference call() throws Exception {
-		System.out.println(getClass().getName());
+		//System.out.println(getClass().getName());
 		long now = System.currentTimeMillis();
 		Form form = new Form(input);
 		String dataset_service = form.getFirstValue(OpenTox.params.dataset_service.toString());
@@ -67,8 +67,8 @@ public class CallablePOST implements Callable<Reference>{
 		
 		try { 
 			if (modelURI != null) {
-				System.out.println(modelURI);
-				System.out.println(datasetURI);
+				//System.out.println(modelURI);
+				//System.out.println(datasetURI);
 				results = OTSuperModel.model(modelURI)
 						.withDatasetService(dataset_service)
 						.withParams(form)
@@ -90,7 +90,7 @@ public class CallablePOST implements Callable<Reference>{
 			//x.printStackTrace();
 			throw x;
 		} finally {
-			System.out.println(String.format("Elapsed %s", System.currentTimeMillis()-now));
+			//System.out.println(String.format("Elapsed %s", System.currentTimeMillis()-now));
 		}
 	}
 

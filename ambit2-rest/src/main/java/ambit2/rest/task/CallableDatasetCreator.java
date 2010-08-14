@@ -142,7 +142,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		}
 		
 		jobs.run();
-		for (RemoteTask task : jobs.pool) System.out.println(task); 		
+		//for (RemoteTask task : jobs.pool) System.out.println(task); 		
 		//here we should have everything calculated 
 		jobs.clear();
 		algorithms.clear();
@@ -177,7 +177,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			currentJob = new RemoteTask(new Reference(modelURI),MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication);
 			jobs.add(currentJob);
 			jobs.run();		
-			for (RemoteTask task : jobs.pool) System.out.println(task); 		
+			//for (RemoteTask task : jobs.pool) System.out.println(task); 		
 			
 			jobs.clear();
 			if (Status.SUCCESS_OK.equals(currentJob.getStatus()))
