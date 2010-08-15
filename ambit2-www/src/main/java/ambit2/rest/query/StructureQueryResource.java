@@ -47,10 +47,12 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.PDFConvertor;
 import ambit2.rest.RDFJenaConvertor;
+import ambit2.rest.RDFStaXConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
+import ambit2.rest.dataset.DatasetRDFStaxReporter;
 import ambit2.rest.property.ProfileReader;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
@@ -192,6 +194,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		if ((queryObject == null) && !(variant.getMediaType().equals(MediaType.TEXT_HTML))) 
 			throw new NotFoundException();
 		
+		Object jenaOption = getRequest().getResourceRef().getQueryAsForm().getFirstValue("jena");
+		boolean noJena = (jenaOption!=null) &&  jenaOption.toString().toLowerCase().equals("false"); 
+			
 		setTemplate(template);
 		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
@@ -239,6 +244,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString()),MediaType.TEXT_CSV);
+		} else if (noJena && variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
+			return new RDFStaXConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
+					new DatasetRDFStaxReporter(getRequest(),template,getGroupProperties())				
+					);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
