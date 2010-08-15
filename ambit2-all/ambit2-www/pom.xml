@@ -230,20 +230,30 @@
 		<version>1.5.9</version>
 		<scope>runtime</scope>
 	</dependency>
+	<!-- 
   	<dependency>
   		<groupId>jmol</groupId>
   		<artifactId>jmol</artifactId>
   		<version>11.8.23</version>
   	</dependency>
+  	-->
+  	<dependency>
+  		<groupId>dnsjava</groupId>
+  		<artifactId>dnsjava</artifactId>
+  		<version>2.0.8</version>
+  	</dependency>
 
   </dependencies>
 	<repositories>
-	<repository>
-		<id>glassfish</id>
-		<name>javamelody is here</name>
-		<url>http://maven.glassfish.org/content/groups/public</url>
-		<releases><enabled>true</enabled></releases>
-	</repository>
+	
+
+  	 <repository>
+        <id>ambit-plovdiv</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+        <snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+    </repository>
 	    <repository>
 	      <id>opennms-repo</id>
 	      <name>OpenNMS Repository</name>
@@ -253,13 +263,6 @@
 	      </snapshots>
 	    </repository>
 
-  	<repository>
-        <id>website_ambit</id>
-  		<url>http://ambit.sourceforge.net/jars</url>
-  		<snapshots>
-  			<enabled>false</enabled>
-  		</snapshots>
-  	</repository>
 
 		<repository>
 			<id>maven-restlet</id>
@@ -269,7 +272,140 @@
   			<enabled>false</enabled>
   			</snapshots>
 		</repository>
-		
+		<repository>
+		<id>glassfish</id>
+		<name>javamelody is here</name>
+		<url>http://maven.glassfish.org/content/groups/public</url>
+		<releases><enabled>true</enabled></releases>
+	</repository>
 	</repositories>  
 
+<reporting>
+    <plugins>
+<!-- 
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+      </plugin>
+-->      
+      <!-- 
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+     <plugin>
+        <artifactId>maven-clover-plugin</artifactId>
+      </plugin>      
+	-->             
+          <plugin>
+          <!-- UML class diagrams  -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+			<version>2.1</version>            
+             <!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
+	        <configuration>
+	          <source>1.5</source>
+	          <aggregate>false</aggregate>
+	          <doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
+	          <docletArtifact>
+	            <groupId>gr.spinellis</groupId>
+	            <artifactId>UmlGraph</artifactId>
+	            <version>4.6</version>
+	          </docletArtifact>
+	          <additionalparam>
+	          <!--  http://www.umlgraph.org/doc/cd-opt.html 
+	          	-attributes
+	          	-views
+	          	-types 
+	            -inferrel -inferdep -quiet -hide java.*
+	            -collpackages java.util.* -qualify
+	            -postfixpackage 
+	            --> 
+	            -all
+	          </additionalparam>
+	    
+	        </configuration>
+          
+         </plugin>
+         <!-- 
+		<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-project-info-reports-plugin</artifactId>
+ 			<version>2.1</version> 		    
+		    <configuration>
+		      <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+		    </configuration>
+		  </plugin>
+		   -->          
+         <!-- 
+          <plugin>
+          	<groupId>org.apache.maven.plugins</groupId>
+          	<artifactId>maven-pmd-plugin</artifactId>
+          	<version>2.4</version>
+			<configuration>
+				<linkXref>false</linkXref>
+				<sourceEncoding>utf-8</sourceEncoding>
+				<minimumTokens>100</minimumTokens>
+				<targetJdk>
+					1.5
+				</targetJdk>
+				<excludes>
+					<exclude>*/generated/.java</exclude>
+				</excludes>
+			</configuration>          	
+          </plugin>
+           -->
+           
+          <!-- 
+          <plugin>
+          	<groupId>org.codehaus.mojo</groupId>
+          	<artifactId>taglist-maven-plugin</artifactId>
+			<configuration>
+				<tags>
+					<tag>TODO</tag>
+					<tag>@todo</tag>
+					<tag>FIXME</tag>
+					<tag>XXX</tag>
+				</tags>
+			</configuration>          	
+          </plugin>
+          -->
+          <plugin>
+          	<groupId>org.codehaus.mojo</groupId>
+          	<artifactId>jdepend-maven-plugin</artifactId>
+          	<version>2.0-beta-2</version>
+          </plugin>
+          <!-- 
+          <plugin>
+          	<groupId>org.codehaus.mojo</groupId>
+          	<artifactId>cobertura-maven-plugin</artifactId>
+          </plugin>
+           -->
+          <!-- Develop our own rules or follow foreign ones ...
+          <plugin>
+          	<groupId>org.apache.maven.plugins</groupId>
+          	<artifactId>maven-checkstyle-plugin</artifactId>
+          	<configuration>
+				<configLocation>config/maven_checks.xml</configLocation>
+			</configuration>
+          </plugin>
+           -->
+         <!-- needs svn executable  
+ 	  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+      </plugin>
+ 	
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
+ 	  -->
+    </plugins>
+
+    
+  </reporting>
 </project>

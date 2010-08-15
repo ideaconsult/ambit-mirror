@@ -29,6 +29,9 @@ import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
 import ambit2.rest.aa.opensso.ProtectedTestResource;
+import ambit2.rest.admin.AdminResource;
+import ambit2.rest.admin.DBCreateAllowedGuard;
+import ambit2.rest.admin.DatabaseResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
@@ -145,6 +148,14 @@ public class AmbitApplication extends TaskApplication {
 
 		//router.attach("", SmartsQueryResource.class);	
 		//router.attach("/", SmartsQueryResource.class);
+
+		Router adminRouter = new MyRouter(getContext());
+		adminRouter.attachDefault(AdminResource.class);
+		adminRouter.attach(String.format("/%s",DatabaseResource.resource),DatabaseResource.class);
+		DBCreateAllowedGuard sameIPguard = new DBCreateAllowedGuard();
+		sameIPguard.setNext(adminRouter);
+		router.attach(String.format("/%s",AdminResource.resource),sameIPguard);
+		
 		
 		router.attach(BookmarkResource.resource,BookmarkResource.class);
 		router.attach(String.format("%s/{%s}",BookmarkResource.resource,BookmarkResource.creator),BookmarkResource.class);
