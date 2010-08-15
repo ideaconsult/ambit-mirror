@@ -6,16 +6,9 @@ import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
 
 import Jama.Matrix;
 
-/**
- * Leverage
- * @author nina
- *
- */
 public class DataCoverageLeverage extends DataCoverage<Matrix> {
 
 	/**

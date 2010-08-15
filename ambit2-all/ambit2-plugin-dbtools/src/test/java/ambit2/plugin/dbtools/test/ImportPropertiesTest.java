@@ -77,7 +77,7 @@ public class ImportPropertiesTest extends WorkflowTest<ImportPropertiesWorkflow>
 					public void propertyChange(PropertyChangeEvent evt) {
 
 						if (evt.getNewValue() != null) {
-							System.out.println(evt.getNewValue());
+							//System.out.println(evt.getNewValue());
 							count++;
 						}
 

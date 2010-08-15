@@ -50,15 +50,15 @@ public class MysqlServerLauncherTest extends DbUnitTest {
 		context.put(MySQLCommand.MYSQLCOMMAND, cmd);
 		context.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				System.out.println(evt.getNewValue());
+				//System.out.println(evt.getNewValue());
 				
 			}
 		});
 		start.executeWith(context);		
 		if (testPing())
 			stop.executeWith(context);		
-		if (testPing())
-			System.out.println("Error");
+		if (testPing()) {}
+			//System.out.println("Error");
 		start.executeWith(context);		
 		if (cmd.getProcess() != null)
 			stop.executeWith(context);

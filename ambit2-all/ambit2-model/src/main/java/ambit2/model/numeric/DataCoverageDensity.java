@@ -147,7 +147,7 @@ public class DataCoverageDensity extends DataCoverageDescriptors {
 		    if (tIndex < 0) tIndex = 0;
 			t = values[tIndex];
 		}
-		System.err.println("Percent\t"+pThreshold*100+"\tThreshold\t"+t+"\tIndex\t"+tIndex);
+		//System.err.println("Percent\t"+pThreshold*100+"\tThreshold\t"+t+"\tIndex\t"+tIndex);
 		return t;
 		
 	}

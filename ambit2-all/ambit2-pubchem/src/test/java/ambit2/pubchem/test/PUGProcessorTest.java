@@ -63,7 +63,7 @@ public class PUGProcessorTest {
         sids.add(new StructureRecord(-1,-1,"99",PUGProcessor.PUBCHEM_CID));
         StringWriter out = new StringWriter();
         pug.createDownloadRequest(sids,out);
-        System.out.println(out.toString());
+        //System.out.println(out.toString());
     }
     @Test
     public void testProcess() throws Exception {
@@ -73,7 +73,7 @@ public class PUGProcessorTest {
         List<IStructureRecord> results = pug.process(sids);
         for (IStructureRecord record: results) {
         	Assert.assertEquals("SDF",record.getFormat());
-        	System.out.println(record.getContent());
+        	//System.out.println(record.getContent());
         }
         Assert.assertEquals(2,results.size());        
     }    
