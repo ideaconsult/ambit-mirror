@@ -50,7 +50,6 @@ public class TestWhile extends TestActivity {
 		
 		for (int i = 0; i < times.length; i++) {
 			int count = times[i];
-			System.out.println("Running test for "+count);
 			w.setTestCondition(getTestFor(count));
 			wc = executeWorkflow(w);
 			assertEquals(

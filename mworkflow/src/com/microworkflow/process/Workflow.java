@@ -47,7 +47,6 @@ public class Workflow extends ObjectWithPropertyChangeSupport implements Propert
 
 	protected synchronized void setInterrupted(boolean interrupted) {
 		this.interrupted = interrupted;
-		System.out.println("interrupted "+interrupted);
 	}
 
 	public Workflow () {

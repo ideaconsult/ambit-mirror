@@ -5,22 +5,11 @@
   <groupId>ambit</groupId>
   <artifactId>mworkflow</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
   <name>Micro-workflow</name>
     
    <distributionManagement>
-   <snapshotRepository>
-      <id>ambit_acad</id>
-      <url>scp://nina@unicom.acad.bg/var/www/html/ambit/maven</url>
-	 </snapshotRepository>
-
-<!--
-    <repository>
-      <id>website_ambit</id>
-      <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url>
-    </repository>  
-
--->  
+ 
     <repository>
         <id>ambit-plovdiv</id>
         <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>

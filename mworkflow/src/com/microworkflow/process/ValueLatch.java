@@ -57,12 +57,11 @@ public class ValueLatch<T> {
     }
 
     public T getValue() throws InterruptedException {
-        System.out.println("wait");
         if (getTimeout_seconds()<0)
         	done.await();
         else
         	done.await(getTimeout_seconds(),TimeUnit.SECONDS);
-        System.out.println("ready");        
+    
         synchronized (this) {
             return value;
         }
