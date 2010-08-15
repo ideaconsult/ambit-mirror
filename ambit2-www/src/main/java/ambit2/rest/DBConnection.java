@@ -40,7 +40,12 @@ public class DBConnection {
 			properties = null;
 		}
 	}	
-	protected LoginInfo getLoginInfo() {
+	public boolean allowDBCreate() {
+		loadProperties();
+		String ok = properties.getProperty("database.create");
+		return (ok != null) && ok.toLowerCase().equals("true");
+	}
+	public LoginInfo getLoginInfo() {
 		loadProperties();
 		LoginInfo li = new LoginInfo();
 		String p = properties.getProperty("Database");
@@ -51,6 +56,7 @@ public class DBConnection {
 		li.setUser(p==null?"guest":p);			
 		p = properties.getProperty("Password");
 		li.setPassword(p==null?"guest":p);	
+		
 		return li;
 	}
 	protected String getConnectionURI() throws AmbitException {
@@ -84,7 +90,7 @@ public class DBConnection {
 			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
 				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
 	
-			//li.setDatabase("ambit-test");
+			
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
