@@ -82,6 +82,18 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected boolean collapsed = false;
 	
 	@Override
+	protected void doInit() throws ResourceException {
+		// TODO Auto-generated method stub
+		super.doInit();
+		getVariants().add(new Variant(MediaType.IMAGE_PNG));
+		/*
+		MediaType.IMAGE_BMP,
+		MediaType.IMAGE_JPEG,
+		MediaType.IMAGE_TIFF,
+		MediaType.IMAGE_GIF,
+		*/
+	}
+	@Override
 	protected String getDefaultTemplateURI(Context context, Request request,
 			Response response) {
 		/*
