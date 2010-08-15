@@ -377,6 +377,7 @@ public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
             logger.debug("Line " + linecount + ": " + line);
             line = input.readLine(); linecount++;
             logger.debug("Line " + linecount + ": " + line);
+            if (line == null) throw new CDKException("Empty line");
             if (line.length() > 0) {
                 molecule.setProperty(CDKConstants.REMARK, line);
             }
