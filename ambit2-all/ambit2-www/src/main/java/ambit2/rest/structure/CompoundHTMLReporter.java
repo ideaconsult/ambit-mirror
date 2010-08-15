@@ -477,7 +477,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						));
 		
 		b.append(String.format(
-				"<td ><a href=\"%s\"><img src=\"%s?accept-header=image/png&w=150&h=150\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
+				"<td ><a href=\"%s?media=text/html\"><img src=\"%s?accept-header=image/png&w=150&h=150\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
 				
 				w, w, 
 				w, record.getIdchemical()));
