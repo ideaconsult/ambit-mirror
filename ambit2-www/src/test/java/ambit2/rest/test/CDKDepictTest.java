@@ -1,7 +1,5 @@
 package ambit2.rest.test;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.InputStream;
@@ -10,10 +8,6 @@ import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
 
-import org.jmol.adapter.smarter.SmarterJmolAdapter;
-import org.jmol.api.JmolAdapter;
-import org.jmol.viewer.JmolConstants;
-import org.jmol.viewer.Viewer;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -57,6 +51,8 @@ public class CDKDepictTest extends ResourceTest {
 	//todo wrap as web service
 	@Test
 	public void testJMol() throws Exception {
+		//TODO revive the attempt to make use of jmol for online pictures
+		/*
 		java.awt.Canvas display = new Canvas();
 		JmolAdapter adapter = new SmarterJmolAdapter();
 		org.jmol.viewer.Viewer viewer = (Viewer)
@@ -81,5 +77,7 @@ public class CDKDepictTest extends ResourceTest {
 		// Ensure threads are stopped
 		viewer.setModeMouse(JmolConstants.MOUSE_NONE);
 		}
+		
+		*/
 	}
 }
