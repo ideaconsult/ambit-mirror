@@ -157,7 +157,7 @@ public class DataCoverageDescriptors extends DataCoverage<Matrix> {
 		    if (tIndex > values.length) tIndex = values.length;
 			t = values[tIndex-1];
 		}
-		System.err.println("Percent\t"+pThreshold*100+"\tThreshold\t"+t+"\tIndex\t"+tIndex);
+		//System.err.println("Percent\t"+pThreshold*100+"\tThreshold\t"+t+"\tIndex\t"+tIndex);
 		return t;
 		
 	}
