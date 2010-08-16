@@ -1338,7 +1338,7 @@ public class TestUtilities
 		
 		
 		tu.testConvertKekuleSmartsToAromatic("C1CNC1CCCC2COCC23CCCC3");
-		tu.testConvertKekuleSmartsToAromatic("C2CNC1CCCC1CC2");
+		tu.testConvertKekuleSmartsToAromatic("C2CNC1CCCC1CC2CCCC3C=C[C;++]=CC=C3");
 	}
 	
 }

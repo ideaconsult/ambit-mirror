@@ -215,11 +215,21 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		for (int i = 0; i < rs.size(); i++)
 		{
 			QueryAtomContainer qac = getCondensedFragmentFromRingSets(query, rs.get(i));
+			IAtomContainer container = condensedFragmentToContainer(qac);
+			if (container != null)
+			{	
+				String smiles = SmartsHelper.moleculeToSMILES(container);
+				System.out.print("condensed: " + smiles);
+			}
+			else
+				System.out.println("condensed: null");
 			//TODO - perceive aromaticity 
 			
+			
+			//This is helper code for debugging
 			IAtomContainer ac = extractAtomContainerFullyConnected(qac, ringSet);
 			String smiles = SmartsHelper.moleculeToSMILES(ac);
-			System.out.println(smiles);
+			System.out.print("extract: " + smiles);
 		}
 		
 		return(null);
@@ -627,7 +637,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		IRingSet workRS = new RingSet();
 		workRS.add(ringSet);
-		workRS = filterAromaticSmartsRings(workRS);
+		//workRS = filterAromaticSmartsRings(workRS);
 		
 		while (workRS.getAtomContainerCount() > 0)
 		{	
@@ -692,24 +702,48 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				
 		return(qac);
 	}
+		
 	
-	IRingSet filterAromaticSmartsRings(IRingSet ringSet)
+	IAtomContainer condensedFragmentToContainer(QueryAtomContainer frag)
 	{
-		//All rings that contain aromatic info or Smarts expressions are removed
-		IRingSet newRS = new RingSet();
-		for (int i = 0; i < ringSet.getAtomContainerCount(); i++)
+		Molecule container = new Molecule();
+		
+		//Converting atoms
+		Vector<IAtom> atoms = new Vector<IAtom>();
+		for (int i = 0; i < frag.getAtomCount(); i++)
 		{
-			IAtomContainer ac = ringSet.getAtomContainer(i);
-			boolean FlagAdd = true;
-			
-			//TODO
-			
-			if (FlagAdd)
-				newRS.addAtomContainer(ac);
+			IAtom a = toAtom(frag.getAtom(i));
+			if (a == null)
+				return(null);
+			if (a.getFlag(CDKConstants.ISAROMATIC))
+				return(null);
+			atoms.add(a);
 		}
 		
-		return (newRS);
+		//Adding atoms
+		for (int i = 0; i < atoms.size(); i++)
+		{	
+			IAtom a = atoms.get(i);
+			container.addAtom(a);
+		}
+				
+		for (int i = 0; i < frag.getBondCount(); i++)			
+		{
+			mFlagConfirmAromaticBond = false;
+			IBond b = toBond(frag.getBond(i));
+			if (b != null)
+			{
+				IAtom[] ats = new IAtom[2];
+				int atNum = frag.getAtomNumber(frag.getBond(i).getAtom(0));				
+				ats[0] = atoms.get(atNum);
+				atNum = frag.getAtomNumber(frag.getBond(i).getAtom(1));				
+				ats[1] = atoms.get(atNum);
+				b.setAtoms(ats);
+				
+				container.addBond(b);
+			}
+		}
+		
+		return (container);
 	}
-	
-	
 }
