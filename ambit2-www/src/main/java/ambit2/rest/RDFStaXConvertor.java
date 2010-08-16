@@ -1,6 +1,5 @@
 package ambit2.rest;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -32,24 +31,28 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 		 return new OutputRepresentation(MediaType.APPLICATION_RDF_XML) {
 			 @Override
 			public void write(OutputStream out) throws IOException {
-				 BufferedOutputStream buf = new BufferedOutputStream(out);
-;				XMLStreamWriter writer = null;
+				//BufferedWriter buf = new BufferedWriter(new OutputStreamWriter(out));
+				XMLStreamWriter writer = null;
 				try {
+					
 					XMLOutputFactory factory      = XMLOutputFactory.newInstance();
-					factory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, "TRUE");
+					//factory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, "TRUE");
 
-					writer  = factory.createXMLStreamWriter(buf);
+					writer  = factory.createXMLStreamWriter(out,"UTF-8");
 					
 					getReporter().setOutput(writer);
             		getReporter().process(query);
-	
+					
+					//buf.write("rrrrrrrrrrr");
+					//buf.flush();
 				} catch (Exception  x) {
 					x.printStackTrace();
 					throw new IOException(x.getMessage());
 				} finally {
-					try { writer.flush();} catch (Exception x) {}
-					try { out.flush();} catch (Exception x) {}
-					try { writer.close();} catch (Exception x) {}
+					//try { writer.flush();} catch (Exception x) {}
+					//try { buf.flush();} catch (Exception x) {}
+					//
+					try { out.close();} catch (Exception x) {}
 					
 				}
 				
