@@ -20,6 +20,7 @@ public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>> extends 
 	private static final long serialVersionUID = 1L;
 	protected QueryURIReporter<T, IQueryRetrieval<T>> uriReporter;
 	protected abstract QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(Request req);
+	
 	protected final static String ot = "ot";
 	protected final static String rdf = "rdf";
 	protected final static String dc = "dc";
@@ -79,18 +80,21 @@ public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>> extends 
 		 */
 		try {
 			writer.writeStartDocument();
-			writer.setPrefix(ot, OT.NS);
+
 			writer.setPrefix(rdf, RDF.getURI());
-			writer.setPrefix(rdf, OWL.getURI());
+			writer.writeStartElement(RDF.getURI(),"RDF");
+			writer.setPrefix(ot, OT.NS);
+			writer.setPrefix(owl, OWL.getURI());
 			writer.setPrefix(dc, DC.getURI());
 			
-			writer.writeStartElement(rdf,"RDF");
 		    writer.writeNamespace(ot, OT.NS);
 			writer.writeNamespace(rdf, RDF.getURI());
-			writer.writeNamespace(rdf, OWL.getURI());
+			writer.writeNamespace(owl, OWL.getURI());
 			writer.writeNamespace(dc, DC.getURI());			    
 		    writer.setDefaultNamespace(ot);
-		} catch (Exception x) {}
+		} catch (Exception x) {
+			
+		}
 		
 	}
 
