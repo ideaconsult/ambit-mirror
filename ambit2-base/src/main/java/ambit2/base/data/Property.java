@@ -29,6 +29,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 import ambit2.base.exceptions.AmbitIOException;
 
@@ -116,11 +118,23 @@ public class Property extends Model implements Serializable {
 	protected Class clazz = java.lang.String.class;
 	protected boolean enabled = false;
 	protected ILiteratureEntry reference = LiteratureEntry.getInstance();
+	protected List<Comparable> allowedValues;  //list of allowed values, if nominal property
 	
+	public List<Comparable> getAllowedValues() {
+		return allowedValues;
+	}
+	public void setAllowedValues(List<Comparable> allowedValues) {
+		this.allowedValues = allowedValues;
+	}
 	public int getId() {
 		return id;
 	}
 
+	public void addAllowedValue(Comparable value) {
+		if (allowedValues==null) allowedValues = new ArrayList<Comparable>();
+		else if (allowedValues.contains(value)) return;
+		allowedValues.add(value);
+	}
 	public void setId(int id) {
 		this.id = id;
 	}
