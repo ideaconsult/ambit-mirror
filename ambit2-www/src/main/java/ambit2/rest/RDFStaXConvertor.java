@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.codehaus.stax2.XMLOutputFactory2;
 import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
@@ -35,11 +36,13 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 				XMLStreamWriter writer = null;
 				try {
 					
-					XMLOutputFactory factory      = XMLOutputFactory.newInstance();
-					//factory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, "TRUE");
-
-					writer  = factory.createXMLStreamWriter(out,"UTF-8");
+					XMLOutputFactory factory      = XMLOutputFactory2.newInstance();
 					
+					//factory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, "TRUE");
+					//final IndentingXMLStreamWriter sw = new IndentingXMLStreamWriter(defaultWriter);
+			        //sw.setIndentStep("    ");
+					writer  = factory.createXMLStreamWriter(out,"UTF-8");
+					System.out.println(writer.getClass().getName());
 					getReporter().setOutput(writer);
             		getReporter().process(query);
 					

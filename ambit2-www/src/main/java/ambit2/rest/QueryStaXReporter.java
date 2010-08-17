@@ -7,6 +7,8 @@ import org.restlet.Request;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.OT.OTClass;
+import ambit2.rest.rdf.OT.OTProperty;
 
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
@@ -97,6 +99,46 @@ public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>> extends 
 		}
 		
 	}
-
+    /**
+     * Writes OWL class triple. 
+     * <pre>
+     * <owl:Class rdf:about="http://www.opentox.org/api/1.1#Dataset"/>
+     * </pre>
+     * @param writer
+     * @param otclass {@link OTClass}
+     * @throws Exception
+     */
+	public void writeClassTriple(javax.xml.stream.XMLStreamWriter writer,OT.OTClass otclass) throws Exception {
+		writer.writeStartElement(OWL.getURI(),"Class");
+		writer.writeAttribute(RDF.getURI(),"about",otclass.getNS());
+		writer.writeEndElement();
+	}
+	/**
+     * Writes OWL object property triple. 
+     * <pre>
+	 * owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#dataEntry"/> 
+     * </pre>
+	 * @param writer
+	 * @param otproperty
+	 * @throws Exception
+	 */
+	public void writeObjectPropertyTriple(javax.xml.stream.XMLStreamWriter writer,OT.OTProperty otproperty) throws Exception {
+		writer.writeStartElement(OWL.getURI(),"ObjectProperty");
+		writer.writeAttribute(RDF.getURI(),"about",otproperty.getURI());
+		writer.writeEndElement();
+	}	
+	
+	public void writeDataPropertyTriple(javax.xml.stream.XMLStreamWriter writer,OT.DataProperty otproperty) throws Exception {
+		writer.writeStartElement(OWL.getURI(),"DatatypeProperty");
+		writer.writeAttribute(RDF.getURI(),"about",otproperty.getURI());
+		writer.writeEndElement();
+	}	
+	
+	
+	public void writeAnnotationPropertyTriple(javax.xml.stream.XMLStreamWriter writer,String uri) throws Exception {
+		writer.writeStartElement(OWL.getURI(),"AnnotationProperty");
+		writer.writeAttribute(RDF.getURI(),"about",uri);
+		writer.writeEndElement();
+	}	
 
 }
