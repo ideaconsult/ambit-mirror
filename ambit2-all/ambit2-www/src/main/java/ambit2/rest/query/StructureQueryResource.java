@@ -194,9 +194,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		if ((queryObject == null) && !(variant.getMediaType().equals(MediaType.TEXT_HTML))) 
 			throw new NotFoundException();
 		
-		Object jenaOption = getRequest().getResourceRef().getQueryAsForm().getFirstValue("jena");
-		boolean noJena = (jenaOption!=null) &&  jenaOption.toString().toLowerCase().equals("false"); 
-			
 		setTemplate(template);
 		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
@@ -244,11 +241,20 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString()),MediaType.TEXT_CSV);
-		} else if (noJena && variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
-			return new RDFStaXConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-					new DatasetRDFStaxReporter(getRequest(),template,getGroupProperties())				
-					);
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
+			switch (rdfwriter) {
+			case stax: {
+				return new RDFStaXConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
+						new DatasetRDFStaxReporter(getRequest(),template,getGroupProperties())				
+						);				
+			}
+			default : { //jena
+				return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
+						new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());
+				
+			}
+			}
+		} else if (
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||

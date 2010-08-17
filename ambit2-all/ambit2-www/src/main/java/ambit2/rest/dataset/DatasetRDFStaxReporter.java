@@ -1,6 +1,9 @@
 package ambit2.rest.dataset;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import org.restlet.Request;
@@ -25,10 +28,61 @@ import ambit2.rest.QueryStaXReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.OT.DataProperty;
 import ambit2.rest.rdf.OT.OTClass;
+import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
+
+/**
+<pre>
+<rdf:RDF
+    xmlns:ac="http://apps.ideaconsult.net:8080/ambit2/compound/"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:bx="http://purl.org/net/nknouf/ns/bibtex#"
+    xmlns:otee="http://www.opentox.org/echaEndpoints.owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:ar="http://apps.ideaconsult.net:8080/ambit2/reference/"
+    xmlns="http://apps.ideaconsult.net:8080/ambit2/"
+    xmlns:am="http://apps.ideaconsult.net:8080/ambit2/model/"
+    xmlns:af="http://apps.ideaconsult.net:8080/ambit2/feature/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ad="http://apps.ideaconsult.net:8080/ambit2/dataset/"
+    xmlns:ag="http://apps.ideaconsult.net:8080/ambit2/algorithm/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://apps.ideaconsult.net:8080/ambit2/">
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Dataset"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Compound"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Feature"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#FeatureValue"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#DataEntry"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#dataEntry"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#compound"/>
+  <ot:Dataset rdf:about="dataset/112">
+    <ot:dataEntry>
+      <ot:DataEntry>
+        <ot:compound>
+          <ot:Compound rdf:about="compound/147678/conformer/419677"/>
+        </ot:compound>
+      </ot:DataEntry>
+    </ot:dataEntry>
+  </ot:Dataset>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/type"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/title"/>
+</rdf:RDF>
+</pre>
+ * @author nina
+ *
+ * @param <Q>
+ */
 public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>> extends QueryStaXReporter<IStructureRecord,Q> {
 
 	/**
@@ -39,6 +93,8 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	protected CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter;
 	protected PropertyURIReporter propertyReporter;
 	protected Comparator<Property> comp;
+	
+
 
 	
 	protected Profile groupProperties;
@@ -63,6 +119,13 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
 		propertyReporter = new PropertyURIReporter(request);
+
+		comp = new Comparator<Property>() {
+			public int compare(Property o1, Property o2) {
+				return o1.getId()-o2.getId();
+			}
+		};
+				
 		
 	}
 	@Override
@@ -105,68 +168,47 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
+		
+		if (header == null) 
+			header = template2Header(template,true);
 		try {
-/**
- *   <ot:dataEntry>
-      <ot:DataEntry>
- */
-			getOutput().writeStartElement(ot,"dataEntry"); //property
-			getOutput().writeStartElement(ot,"DataEntry");  //object
+
+			getOutput().writeStartElement(OT.NS,"dataEntry"); //property
+			getOutput().writeStartElement(OT.NS,"DataEntry");  //object
 			
-/**
- * 	        <ot:compound>
-	          <ot:Compound rdf:about="compound/147763/conformer/419873"/>
-	        </ot:compound>
- */
-			getOutput().writeStartElement(ot,"compound"); //property
-			getOutput().writeStartElement(ot,"Compound"); //property
+			getOutput().writeStartElement(OT.NS,"compound"); //property
+			getOutput().writeStartElement(OT.NS,"Compound"); //property
 			
 			String uri = item.getType().equals(STRUC_TYPE.NA)?
 					compoundReporter.getURI(item):uriReporter.getURI(item);
 					
-			getOutput().writeAttribute(rdf,"about",uri);
+			getOutput().writeAttribute(RDF.getURI(),"about",uri);
 			getOutput().writeEndElement();
 			getOutput().writeEndElement();
-/**
- *  <ot:values>
-          <ot:FeatureValue>
-            <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#double"
-            >1000000.0</ot:value>
-            <ot:feature>
-              <ot:NumericFeature rdf:about="feature/22562">
-                <dc:creator>194.141.0.136</dc:creator>
-                <ot:hasSource>ToxCast_Cellumen_20091214.txt</ot:hasSource>
-                <owl:sameAs rdf:resource="http://www.opentox.org/echaEndpoints.owl#ToxicoKinetics"/>
-                <ot:units></ot:units>
-                <dc:title>CLM_Hepat_Apoptosis_48hr</dc:title>
-                <rdf:type rdf:resource="http://www.opentox.org/api/1.1#Feature"/>
-              </ot:NumericFeature>
-            </ot:feature>
-          </ot:FeatureValue>
-        </ot:values>
- */
-			
+
+			if (header != null)
 			for (ambit2.base.data.Property p : header) {
 				Object value = item.getProperty(p);
 				if (value == null) continue;
 				try {
-					getOutput().writeStartElement(ot,"values"); //property
-					getOutput().writeStartElement(ot,"FeatureValue"); //property
-					getOutput().writeStartElement(ot,"feature"); //feature
-					getOutput().writeAttribute(rdf,"resource",propertyReporter.getURI(p));
+					getOutput().writeStartElement(OT.NS,"values"); //property
+					getOutput().writeStartElement(OT.NS,"FeatureValue"); //property
+					
+					getOutput().writeStartElement(OT.NS,"feature"); //feature
+					getOutput().writeAttribute(RDF.getURI(),"resource",propertyReporter.getURI(p));
 					getOutput().writeEndElement(); //feature
 					
-					getOutput().writeStartElement(ot,"value"); //value
+					getOutput().writeStartElement(OT.NS,"value"); //value
 					if (value instanceof Number) {
-						getOutput().writeAttribute(rdf,"dataType","http://www.w3.org/2001/XMLSchema#double");
+						getOutput().writeAttribute(RDF.getURI(),"datatype","http://www.w3.org/2001/XMLSchema#double");
 					} else {
-						getOutput().writeAttribute(rdf,"dataType","http://www.w3.org/2001/XMLSchema#string");
+						getOutput().writeAttribute(RDF.getURI(),"datatype","http://www.w3.org/2001/XMLSchema#string");
 					}
 					getOutput().writeCharacters(value.toString());
 					getOutput().writeEndElement(); //value					
 					
-					//getOutput().writeAttribute(ot,"about",propertyURIReporter.getURI(item));
-					getOutput().flush();
+					if (p.isNominal() && (value instanceof Comparable)) 
+						p.addAllowedValue((Comparable)value);
 				} catch (Exception x) {
 					
 				} finally {
@@ -176,11 +218,10 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					getOutput().writeEndElement();//values
 					
 				}
-	/*
-				
-				if (p.isNominal())
-					feature.addProperty(OTProperty.acceptValue.createProperty(getJenaModel()), value.toString());
-					*/
+	
+				//if (p.isNominal())
+				//	feature.addProperty(OTProperty.acceptValue.createProperty(getJenaModel()), value.toString());
+					
 			}
 
 
@@ -189,55 +230,81 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		} finally {
-			//<ot:dataEntry
 			try { getOutput().writeEndElement(); } catch (Exception x) {}
-			//ot:DataEntry
 			try { getOutput().writeEndElement(); } catch (Exception x) {}
 		}
+	
+
 	}
 
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	public void header(javax.xml.stream.XMLStreamWriter writer, Q query) {
+		super.header(writer,query);
 		try {
-			writer.writeStartElement("ot","Dataset");
-			/*
-			dataset = output.createIndividual(
-					String.format("%s:%s",uriReporter.getRequest().getOriginalRef().getScheme(),uriReporter.getRequest().getOriginalRef().getHierarchicalPart()),
-					OT.OTClass.Dataset.getOntClass(output));
-					*/
-		} catch (Exception x) {
+			writeClassTriple(writer, OTClass.Dataset);
+			writeClassTriple(writer, OTClass.DataEntry);
+			writeClassTriple(writer, OTClass.Feature);
+			writeClassTriple(writer, OTClass.FeatureValue);
+			writeClassTriple(writer, OTClass.Compound);
 			
+			writeObjectPropertyTriple(writer, OTProperty.compound);
+			writeObjectPropertyTriple(writer, OTProperty.dataEntry);
+			writeObjectPropertyTriple(writer, OTProperty.values);
+			writeObjectPropertyTriple(writer, OTProperty.feature);
+			writeObjectPropertyTriple(writer, OTProperty.hasSource);
+			writeObjectPropertyTriple(writer, OTProperty.acceptValue);
+			
+			writeDataPropertyTriple(writer, DataProperty.units);
+			writeDataPropertyTriple(writer, DataProperty.value);
+			
+			writeAnnotationPropertyTriple(writer,"http://purl.org/dc/elements/1.1/description");
+			writeAnnotationPropertyTriple(writer,"http://purl.org/dc/elements/1.1/creator");
+			writeAnnotationPropertyTriple(writer,"http://purl.org/dc/elements/1.1/type");
+			writeAnnotationPropertyTriple(writer,"http://purl.org/dc/elements/1.1/title");
+			
+			String datasetUri = 
+					String.format("%s:%s",uriReporter.getRequest().getOriginalRef().getScheme(),
+							uriReporter.getRequest().getOriginalRef().getHierarchicalPart());
+			writer.writeStartElement(OT.NS,"Dataset");
+			writer.writeAttribute(RDF.getURI(),"about",datasetUri);
+
+		} catch (Exception x) {
+			x.printStackTrace();
 		}
 	};
 	
 	public void footer(javax.xml.stream.XMLStreamWriter writer, Q query) {
+		
 		try {
 			writer.writeEndElement();
-		} catch (Exception x) {}
-		
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+	
 			//write properties
+		if (header!=null)
 		for (ambit2.base.data.Property p : header) try {
-				/**
-              <ot:Feature rdf:about="feature/21586">
-                <dc:creator>http://www.epa.gov/NCCT/dsstox/sdf_isscan_external.html</dc:creator>
-                <ot:hasSource>ISSCAN_v3a_1153_19Sept08.1222179139.sdf</ot:hasSource>
-                <owl:sameAs rdf:resource="http://www.opentox.org/api/1.1#ChemicalName"/>
-                <ot:units></ot:units>
-                <dc:title>ChemName</dc:title>
-              </ot:Feature>
-				 */
-				getOutput().writeStartElement(ot,"Feature"); //feature
-				getOutput().writeAttribute(rdf,"about",propertyReporter.getURI(p));
+
+				getOutput().writeStartElement(OT.NS,"Feature"); //feature
+				getOutput().writeAttribute(RDF.getURI(),"about",propertyReporter.getURI(p));
 				
 				if (p.isNominal()) {
 					//NominalFeature
-					getOutput().writeStartElement(rdf,"type"); //feature
-					getOutput().writeAttribute(rdf,"resource","http://www.opentox.org/api/1.1#NominalFeature");
+					getOutput().writeStartElement(RDF.getURI(),"type"); //feature
+					getOutput().writeAttribute(RDF.getURI(),"resource","http://www.opentox.org/api/1.1#NominalFeature");
 					getOutput().writeCharacters(p.getReference().getURL());	
 					getOutput().writeEndElement();
+					
+					if (p.getAllowedValues()!=null)
+						for (Comparable value : p.getAllowedValues()) {
+							getOutput().writeStartElement(OT.NS,OTProperty.acceptValue.getURI());
+							getOutput().writeCharacters(value.toString()); //TODO make use of data type
+							getOutput().writeEndElement();
+						}
 				}
 				
 				boolean numeric = (p.getClazz()==Number.class) || (p.getClazz()==Double.class)
@@ -245,46 +312,45 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 								|| (p.getClazz()==Long.class);
 				if (numeric) {
 					//NominalFeature
-					getOutput().writeStartElement(rdf,"type"); //feature
-					getOutput().writeAttribute(rdf,"resource","http://www.opentox.org/api/1.1#NumericFeature");
+					getOutput().writeStartElement(RDF.getURI(),"type"); //feature
+					getOutput().writeAttribute(RDF.getURI(),"resource","http://www.opentox.org/api/1.1#NumericFeature");
 					getOutput().writeCharacters(p.getReference().getURL());	
 					getOutput().writeEndElement();
 				}
 				
 				if (p.getClazz() ==Dictionary.class ) {
 					//TupleFeature
-					getOutput().writeStartElement(rdf,"type"); //feature
-					getOutput().writeAttribute(rdf,"resource","http://www.opentox.org/api/1.1#TupleFeature");
+					getOutput().writeStartElement(RDF.getURI(),"type"); //feature
+					getOutput().writeAttribute(RDF.getURI(),"resource","http://www.opentox.org/api/1.1#TupleFeature");
 					getOutput().writeCharacters(p.getReference().getURL());	
 					getOutput().writeEndElement();					
 				}
 		
-				getOutput().writeStartElement(dc,"creator"); //feature
+				getOutput().writeStartElement(DC.getURI(),"creator"); //feature
 				getOutput().writeCharacters(p.getReference().getURL());	
 				getOutput().writeEndElement();
 				
-				getOutput().writeStartElement(dc,"hasSource"); //feature
-				getOutput().writeCharacters(hasSource(p));		
-				getOutput().writeEndElement();				
 				
-	
+				writeHasSource(p);
 				
 				String uri = p.getLabel();
 				if(uri==null) uri  = Property.guessLabel(p.getName());
 				if ((uri!=null) && (uri.indexOf("http://")<0)) {
 					uri = String.format("%s%s",OT.NS,Reference.encode(uri));
 				}
-				getOutput().writeStartElement(owl,"sameAs"); //feature
-				getOutput().writeCharacters(uri);
+				
+
+				getOutput().writeStartElement(OWL.getURI(),"sameAs"); //feature
+				getOutput().writeAttribute(RDF.getURI(), "resource",uri);
 				getOutput().writeEndElement();						
 				
 				if (p.getUnits()!=null) {
-					getOutput().writeStartElement(ot,"units"); //feature
+					getOutput().writeStartElement(OT.NS,"units"); //feature
 					getOutput().writeCharacters(p.getUnits());	
 					getOutput().writeEndElement();
 				}
 				
-				getOutput().writeStartElement(dc,"title"); //feature
+				getOutput().writeStartElement(DC.getURI(),"title"); //feature
 				getOutput().writeCharacters(p.getName());
 				getOutput().writeEndElement();	
 			} 
@@ -292,26 +358,89 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 			finally {
 				try {getOutput().writeEndElement(); } catch (Exception x) {}
 			}
+			
+			super.footer(writer, query);
 	};
-	
-	protected String hasSource(Property item) throws Exception {
+	/**
+<pre>
+    <ot:hasSource>
+      <ot:Algorithm rdf:about="algorithm/ambit2.descriptors.PKASmartsDescriptor"/>
+    </ot:hasSource>
+</pre>
+	 * @param item
+	 * @return
+	 * @throws Exception
+	 */
+	protected String writeHasSource(Property item) throws Exception {
+		String otclass = null;
+		String namespace = null;
 		String uri = item.getTitle();
+		
 		if (uri.indexOf("http://")<0) {
 			String source  = null;
-			
-			
 			if (_type.Algorithm.equals(item.getReference().getType())) {
+				otclass = OTClass.Algorithm.toString();
+				namespace = OT.NS;
 				uri = String.format("%s/algorithm/%s",uriReporter.getBaseReference(),Reference.encode(uri));
-				//TODO ot:Algorithm
 			} else if (_type.Model.equals(item.getReference().getType())) {
+				otclass = OTClass.Model.toString();
+				namespace = OT.NS;
 				uri = String.format("%s/model/%s",uriReporter.getBaseReference(),Reference.encode(uri));
-				//TODO ot:Model
 			} else if (_type.Dataset.equals(item.getReference().getType())) {
-				//this seems to confuse everybody's else parsers ...
+				//otclass = "Class";
+				//namespace = OWL.getURI();
+				//otclass = OTClass.Dataset;
+				//should be as above , but this seems to confuse everybody's else parsers ...
 				//uri = String.format("%s/dataset/%s",uriReporter.getBaseReference(),Reference.encode(uri));
 			}
 			
-		} 
+		} else  {
+			
+		}
+		
+		getOutput().writeStartElement(OT.NS,"hasSource"); //feature
+		
+		if (otclass==null) {
+			
+			getOutput().writeCharacters(uri); //TODO this is wrong, should be a resource 
+
+
+		} else {
+			getOutput().writeStartElement(namespace,otclass); //algorithm or model
+			getOutput().writeAttribute(RDF.getURI(),"about",uri);
+			getOutput().writeEndElement();
+		}
+
+		
+		getOutput().writeEndElement();						
 		return uri;
+	}
+	
+	protected List<Property> template2Header(Template template, boolean propertiesOnly) {
+		List<Property> h = new ArrayList<Property>();
+		Iterator<Property> it;
+		if (groupProperties!=null) {
+			it = groupProperties.getProperties(true);
+			while (it.hasNext()) {
+				Property t = it.next();
+				h.add(t);
+			}
+		}			
+		
+		it = template.getProperties(true);
+		while (it.hasNext()) {
+			Property t = it.next();
+			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
+				h.add(t);
+		}
+		/*
+		Collections.sort(h,new Comparator<Property>() {
+			public int compare(Property o1, Property o2) {
+				return o1.getOrder()-o2.getOrder();
+			}
+		});	
+		*/
+		Collections.sort(h,comp);
+		return h;
 	}
 }
