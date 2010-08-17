@@ -45,6 +45,11 @@ public class DBConnection {
 		String ok = properties.getProperty("database.create");
 		return (ok != null) && ok.toLowerCase().equals("true");
 	}
+	public String rdfWriter() {
+		loadProperties();
+		String rdfwriter = properties.getProperty("rdf.writer");
+		return (rdfwriter==null)?"jena":rdfwriter;//jena or stax 
+	}	
 	public LoginInfo getLoginInfo() {
 		loadProperties();
 		LoginInfo li = new LoginInfo();

@@ -52,6 +52,11 @@ import ambit2.rest.task.TaskCreator;
  * @param <T>
  */
 public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Serializable>  extends AbstractResource<Q,T,IProcessor<Q,Representation>> {
+	protected enum RDF_WRITER  {
+		jena,
+		stax
+	}
+	protected RDF_WRITER rdfwriter = RDF_WRITER.jena;
 	public final static String query_resource = "/query";
 	
 	/**TODO
@@ -118,9 +123,18 @@ Then, when the "get(Variant)" method calls you back,
 	        	int retry=0;
 	        	while (retry <maxRetry) {
 		        	try {
-		        		convertor = createConvertor(variant);
-		        		
 		        		DBConnection dbc = new DBConnection(getContext());
+		        		try { 
+		        			Object jenaOption = getRequest().getResourceRef().getQueryAsForm().getFirstValue("rdfwriter");
+		        			//if no option ?rdfwriter=jena|stax , then take from properties rdf.writer
+		        			//if not defined there, use jena
+		        			rdfwriter = RDF_WRITER.valueOf(jenaOption==null?dbc.rdfWriter():jenaOption.toString().toLowerCase());
+		        		} catch (Exception x) { 
+		        			rdfwriter = RDF_WRITER.jena;
+		        		}
+		        				        		
+		        		convertor = createConvertor(variant);
+
 		        		connection = dbc.getConnection(getRequest());
 		        		Reporter reporter = ((RepresentationConvertor)convertor).getReporter();
 			        	if (reporter instanceof IDBProcessor)

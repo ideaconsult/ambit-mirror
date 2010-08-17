@@ -8,7 +8,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTClass;
-import ambit2.rest.rdf.OT.OTProperty;
 
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
