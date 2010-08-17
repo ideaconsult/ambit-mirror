@@ -23,7 +23,7 @@ public class StaXRDFTest extends ResourceTest {
 	}
 	
 	@Test
-	public void testRDFXML() throws Exception {
+	public void simpleTestRDFXML() throws Exception {
 		//testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
 		ClientResource r = new ClientResource(getTestURI());
 		Representation rep = r.get(MediaType.APPLICATION_RDF_XML);
@@ -33,16 +33,29 @@ public class StaXRDFTest extends ResourceTest {
 		
 		rep.release();
 		r.release();
+	}		
+	@Test
+	public void testRDFXML() throws Exception {
+		//testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
+		
+		RDFStructuresIterator i = new RDFStructuresIterator(new Reference(getTestURI()));
+		i.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
+		int count = 0;
+		while (i.hasNext()) {
+			IStructureRecord record = i.next();
+			System.out.println(record);
+			Assert.assertTrue(record.getIdchemical()>0);
+			Assert.assertTrue(record.getIdstructure()>0);
+			count++;
+		}
+		i.close();
+		Assert.assertEquals(4,count);
+
 	}	
 	@Override
 	public OntModel verifyResponseRDFXML(String uri, MediaType media,
 			InputStream in) throws Exception {
-		RDFStructuresIterator i = new RDFStructuresIterator(new Reference(uri));
-		while (i.hasNext()) {
-			IStructureRecord record = i.next();
-			System.out.println(record);
-		}
-		i.close();
+
 		return null;
 	}
 }

@@ -133,6 +133,9 @@ public class OT {
 		   		return p!= null?p:
 		   				jenaModel.createObjectProperty(String.format(_NS, toString()));
 		   	}
+		   	public String getURI() {
+		   		return String.format(_NS, toString());
+		   	}
     }
     /**
      * Data properties
@@ -155,6 +158,9 @@ public class OT {
 	   		Property p = jenaModel.getDatatypeProperty(String.format(_NS, toString()));
 	   		return p!= null?p:
 	   				jenaModel.createDatatypeProperty(String.format(_NS, toString()));
+	   	}
+	   	public String getURI() {
+	   		return String.format(_NS, toString());
 	   	}
     };
     /*
