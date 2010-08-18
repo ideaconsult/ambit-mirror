@@ -296,7 +296,6 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					//NominalFeature
 					getOutput().writeStartElement(RDF.getURI(),"type"); //feature
 					getOutput().writeAttribute(RDF.getURI(),"resource","http://www.opentox.org/api/1.1#NominalFeature");
-					getOutput().writeCharacters(p.getReference().getURL());	
 					getOutput().writeEndElement();
 					
 					if (p.getAllowedValues()!=null)
@@ -314,7 +313,6 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					//NominalFeature
 					getOutput().writeStartElement(RDF.getURI(),"type"); //feature
 					getOutput().writeAttribute(RDF.getURI(),"resource","http://www.opentox.org/api/1.1#NumericFeature");
-					getOutput().writeCharacters(p.getReference().getURL());	
 					getOutput().writeEndElement();
 				}
 				
@@ -322,7 +320,6 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					//TupleFeature
 					getOutput().writeStartElement(RDF.getURI(),"type"); //feature
 					getOutput().writeAttribute(RDF.getURI(),"resource","http://www.opentox.org/api/1.1#TupleFeature");
-					getOutput().writeCharacters(p.getReference().getURL());	
 					getOutput().writeEndElement();					
 				}
 		
