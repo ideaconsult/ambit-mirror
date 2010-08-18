@@ -301,7 +301,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					
 					if (p.getAllowedValues()!=null)
 						for (Comparable value : p.getAllowedValues()) {
-							getOutput().writeStartElement(OT.NS,OTProperty.acceptValue.getURI());
+							getOutput().writeStartElement(OT.NS,OTProperty.acceptValue.toString());
 							getOutput().writeCharacters(value.toString()); //TODO make use of data type
 							getOutput().writeEndElement();
 						}
