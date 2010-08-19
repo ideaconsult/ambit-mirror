@@ -20,11 +20,16 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.restlet.Client;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.ChallengeResponse;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
+import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 
 import weka.core.Attribute;
 import weka.core.Instances;
@@ -321,4 +326,43 @@ public class CompoundResourceTest extends ResourceTest {
 		
 	}		
 
+	@Test
+	public void testCreateEntry() throws Exception {
+		
+		InputStream in  = getClass().getClassLoader().getResourceAsStream("input.sdf");
+
+		StringBuilder b = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		while ((line=reader.readLine())!=null) {
+			b.append(line);
+			b.append('\n');
+		}
+		
+		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, 
+				new StringRepresentation(b.toString(),ChemicalMediaType.CHEMICAL_MDLSDF),Method.POST,
+				new Reference(String.format("http://localhost:%d/compound/29142/conformer/129346",port)));
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		c.close();
+		
+	}	
+	
+	@Test
+	public void testCreateEntrySMILES() throws Exception {
+		
+		String smiles = "c1ccccc1O";
+		
+		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_SMILES, 
+				new StringRepresentation(smiles,ChemicalMediaType.CHEMICAL_SMILES),Method.POST,
+				new Reference(String.format("http://localhost:%d/compound/29142/conformer/129346",port)));
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		c.close();
+		
+	}		
 }
