@@ -111,9 +111,15 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 			try {
 				if (processor != null) {
 					Object output = processor.process(input);
-					onItemProcessed(input, output, result);
+					try {
+						onItemProcessed(input, output, result);
+					} catch (ClassCastException x) {
+						//weird class cast exception 
+						onItemProcessed(null, output, result);
+					}
 				} 
 			} catch (Exception x) {
+				x.printStackTrace();
 				onError(input, null, result, x);			
 				continue;
 			}				
