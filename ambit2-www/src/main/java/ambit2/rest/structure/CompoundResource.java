@@ -13,7 +13,9 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -48,6 +50,7 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
+import ambit2.rest.dataset.FileUpload;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
@@ -74,12 +77,13 @@ image/png
  * @author nina
  */
 public class CompoundResource extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
-	
+	protected FileUpload upload;
 	public final static String compound = OpenTox.URI.compound.getURI();
 	public final static String idcompound = OpenTox.URI.compound.getKey();
 	public final static String compoundID = OpenTox.URI.compound.getResourceID();
 	protected boolean chemicalsOnly = true;
 	protected boolean collapsed = false;
+	
 	
 	@Override
 	protected void doInit() throws ResourceException {
@@ -355,6 +359,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 
 	}	
+	/*
 	@Override
 	protected Representation post(Representation entity)
 			throws ResourceException {
@@ -363,7 +368,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		return getResponse().getEntity();
 	}
-
+	*/
 	@Override
 	protected RDFObjectIterator<IStructureRecord> createObjectIterator(
 			Representation entity) throws ResourceException {
@@ -423,5 +428,31 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			Request baseReference) throws ResourceException {
 
 		return null;
+	}
+	
+	/**
+	 * POST as in the dataset resource
+	 */
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		
+		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+		
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+			//return copyDatasetToQueryResultsTable(new Form(entity),true);
+			throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,entity.getMediaType().toString());
+		} else {
+			if(upload == null) {
+				upload = new FileUpload();
+				upload.setFirstCompoundOnly(true);
+				upload.setRequest(getRequest());
+				upload.setResponse(getResponse());
+				upload.setContext(getContext());
+				upload.setApplication(getApplication());
+			}
+			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", getRequest().getResourceRef().toString())));
+			return  upload.upload(entity,variant,true,false);
+		}
 	}
 }

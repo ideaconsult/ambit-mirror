@@ -21,12 +21,13 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
-import ambit2.core.processors.structure.key.IStructureKey;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.structure.ConformerURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableFileImport;
 import ambit2.rest.task.CallableQueryResultsCreator;
@@ -37,7 +38,16 @@ public class FileUpload {
 	protected Request request;
 	protected Application application;
 	protected SourceDataset dataset;
+	protected boolean firstCompoundOnly = false;
 	
+	public boolean isFirstCompoundOnly() {
+		return firstCompoundOnly;
+	}
+
+	public void setFirstCompoundOnly(boolean firstCompoundOnly) {
+		this.firstCompoundOnly = firstCompoundOnly;
+	}
+
 	public SourceDataset getDataset() {
 		return dataset;
 	}
@@ -103,7 +113,7 @@ public class FileUpload {
 	
 	
 	
-	protected Representation upload(Representation entity, Variant variant,boolean newEntry, boolean propertyOnly)
+	public Representation upload(Representation entity, Variant variant,boolean newEntry, boolean propertyOnly)
 				throws ResourceException {	
 
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
@@ -122,8 +132,18 @@ public class FileUpload {
 	              DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
 	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());
 	              
+	              ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = 
+	            	  	new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest());
+	              
 	              CallableFileImport callable =
-	              new CallableFileImport(getRequest().getClientInfo(),dataset,items,DatasetsHTMLReporter.fileUploadField,connection,reporter);
+	              new CallableFileImport(getRequest().getClientInfo(),
+	            		  dataset,
+	            		  items,
+	            		  DatasetsHTMLReporter.fileUploadField,
+	            		  connection,
+	            		  reporter,
+	            		  compoundReporter,
+	            		  firstCompoundOnly);
 	              
 	              callable.setPropertyOnly(propertyOnly);
 
@@ -148,9 +168,18 @@ public class FileUpload {
 						DBConnection dbc = new DBConnection(getApplication().getContext());
 						connection = dbc.getConnection(getRequest());						
 			          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
-			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());		
+			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());	
+		              ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = 
+		            	  	new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest());			          
 			          
-			          CallableFileImport callable = new CallableFileImport(getRequest().getClientInfo(),dataset,(InputRepresentation)entity,connection,reporter);
+			          CallableFileImport callable = new CallableFileImport(getRequest().getClientInfo(),
+			        		  dataset,
+			        		  (InputRepresentation)entity,
+			        		  connection,
+			        		  reporter,
+			        		  compoundReporter,
+			        		  firstCompoundOnly);
+			          
 		              callable.setPropertyOnly(propertyOnly);
 			          Task<Reference,Object> task =  ((AmbitApplication)getApplication()).addTask(
 							  
