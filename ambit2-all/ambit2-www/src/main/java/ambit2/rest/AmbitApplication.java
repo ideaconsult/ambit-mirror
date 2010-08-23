@@ -9,8 +9,11 @@ import org.restlet.Restlet;
 import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.ClientInfo;
+import org.restlet.data.Language;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
+import org.restlet.ext.wadl.ApplicationInfo;
+import org.restlet.ext.wadl.DocumentationInfo;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
 import org.restlet.routing.Filter;
@@ -596,6 +599,22 @@ public class AmbitApplication extends TaskApplication {
 	 		return b.toString();
 
 	 	}
+   
+	@Override
+	public ApplicationInfo getApplicationInfo(Request request, Response response) {
+
+	        ApplicationInfo result = super.getApplicationInfo(request, response);
+
+	        DocumentationInfo docInfo = new DocumentationInfo(getName());
+	        docInfo.setTitle(getName());
+	        docInfo.setLanguage(Language.ENGLISH);
+	        docInfo.setTextContent(getDescription());
+	        
+	        result.setDocumentation(docInfo);
+
+	        return result;
+    }
+
 
 }
 

@@ -3,15 +3,19 @@ package ambit2.rest;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 
-import org.restlet.Application;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.Reference;
+import org.restlet.ext.wadl.ApplicationInfo;
+import org.restlet.ext.wadl.DocumentationInfo;
+import org.restlet.ext.wadl.WadlApplication;
 
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskStorage;
 
-public class TaskApplication<USERID> extends Application {
+public class TaskApplication<USERID> extends WadlApplication {
 	protected ITaskStorage<USERID> taskStorage;
 	public TaskApplication() {
 		super();
@@ -54,5 +58,16 @@ public class TaskApplication<USERID> extends Application {
 	public synchronized Task<Reference,USERID> findTask(String id) {
 		return taskStorage.findTask(id);
 	}
+	@Override
+	public ApplicationInfo getApplicationInfo(Request request, Response response) {
+	        ApplicationInfo result = super.getApplicationInfo(request, response);
+
+	        DocumentationInfo docInfo = new DocumentationInfo(
+	                "TaskApplication");
+	        docInfo.setTitle("Task application");
+	        result.setDocumentation(docInfo);
+
+	        return result;
+    }
 	
 }

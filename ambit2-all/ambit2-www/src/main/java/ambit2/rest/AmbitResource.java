@@ -14,11 +14,13 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.ext.wadl.WadlApplication;
+import org.restlet.ext.wadl.WadlRepresentation;
+import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.dataset.DatasetResource;
@@ -40,7 +42,7 @@ import ambit2.rest.template.OntologyResource;
  * @author nina
  *
  */
-public class AmbitResource extends ServerResource {
+public class AmbitResource extends WadlServerResource {
 	protected static String jsGoogleAnalytics = null;
 	String format = "<tr ><td>%s</td><td><a href=\"%s%s\">%s</a></td><td>%s</td><td>%s</td></tr>";
 	String formatHeader = "<tr bgcolor=\"#EEEEEE\" align=\"left\"><th>%s</th><th %s>API <a href=\"%s\" target=\"_blank\">%s</a></th><th>%s</th><th>%s</th></tr>";
@@ -248,6 +250,7 @@ public class AmbitResource extends ServerResource {
         getVariants().add(new Variant(MediaType.TEXT_XML));
         getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
         getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+        getVariants().add(new Variant(MediaType.APPLICATION_WADL));
         //getVariants().put(Method.GET, variants);
 	
 	}
@@ -267,6 +270,9 @@ public class AmbitResource extends ServerResource {
 	public Representation get(Variant variant) {
 		//System.out.println(getRequest().getClientInfo().isAuthenticated());
 		//System.out.println(getRequest().getClientInfo().getSubject().getPrincipals());
+		if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) 
+			return new WadlRepresentation(
+					((WadlApplication)getApplication()).getApplicationInfo(getRequest(), getResponse()));
 		try {
 			//TODO redirect with freetext query
 			String search = getSearchString();

@@ -1,6 +1,7 @@
 package ambit2.rest;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 import org.restlet.Context;
@@ -9,11 +10,15 @@ import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.ext.wadl.FaultInfo;
+import org.restlet.ext.wadl.MethodInfo;
+import org.restlet.ext.wadl.RepresentationInfo;
+import org.restlet.ext.wadl.WadlRepresentation;
+import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -27,7 +32,7 @@ import ambit2.base.interfaces.IProcessor;
  * @param <T>
  * @param <P>
  */
-public abstract class AbstractResource<Q,T extends Serializable,P extends IProcessor<Q, Representation>> extends ServerResource {
+public abstract class AbstractResource<Q,T extends Serializable,P extends IProcessor<Q, Representation>> extends WadlServerResource {
 	protected Q queryObject;
 	protected Exception error = null;	
 	protected Status response_status = Status.SUCCESS_OK;
@@ -60,6 +65,10 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 
 	};
 	
+	public AbstractResource() {
+		super();
+		setAutoDescribed(true);
+	}
 	public String[] URI_to_handle() {
 		return null;
 	}
@@ -100,6 +109,12 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 	try {
+			if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) {
+				WadlRepresentation wadl =  new WadlRepresentation(describe());
+				//wadl.setApplication(((WadlApplication)getApplication()).getApplicationInfo(getRequest(), getResponse()));
+
+				return wadl;
+			} else	
 	    	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
 	    		if ((queryObject!=null) && (queryObject instanceof Serializable))
 	    		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
@@ -170,6 +185,26 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		return post(entity);
 	}
 	
-	
+	@Override
+	protected void describeGet(MethodInfo info) {
+        info.setIdentifier("item");
+        info.setDocumentation("To retrieve details of a specific item");
+
+        Iterator<Variant> vars = getVariants().iterator();
+        while (vars.hasNext()) {
+        	Variant var = vars.next();
+            RepresentationInfo repInfo = new RepresentationInfo(var.getMediaType());
+            //repInfo.setXmlElement("item");
+            repInfo.setDocumentation(String.format("%s representation",var.getMediaType()));
+            info.getResponse().getRepresentations().add(repInfo);        	
+        }
+
+
+        FaultInfo faultInfo = new FaultInfo(Status.CLIENT_ERROR_NOT_FOUND,"Not found");
+        faultInfo.setIdentifier("itemError");
+        faultInfo.setMediaType(MediaType.TEXT_HTML);
+        info.getResponse().getFaults().add(faultInfo);
+
+	}
 
 }
