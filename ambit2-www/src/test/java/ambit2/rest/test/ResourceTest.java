@@ -294,7 +294,9 @@ public abstract class ResourceTest extends DbUnitTest {
 	public Instances verifyResponseARFF(String uri, MediaType media,InputStream in) throws Exception {
 		return  new Instances(new InputStreamReader(in));
 	}			
-
+	public boolean verifyResponseWADL(String uri, MediaType media,InputStream in) throws Exception {
+		throw new Exception("Not implemented");
+	}	
 	public OntModel verifyResponseRDFXML(String uri, MediaType media, InputStream in)
 			throws Exception {
 		OntModel model = OT.createModel();
@@ -314,6 +316,8 @@ public abstract class ResourceTest extends DbUnitTest {
 	public boolean verifyResponse(String uri, MediaType media,InputStream in) throws Exception {
 		if (MediaType.APPLICATION_PDF.equals(media))
 			return verifyResponsePDF(uri, media, in);
+		else if (MediaType.APPLICATION_WADL.equals(media))
+			return verifyResponseWADL(uri, media, in);
 		else if (MediaType.TEXT_HTML.equals(media))
 			return verifyResponseHTML(uri, media, in);
 		else if (MediaType.TEXT_XML.equals(media))

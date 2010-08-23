@@ -20,6 +20,7 @@ import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.ext.wadl.WadlRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -183,6 +184,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
+				MediaType.APPLICATION_WADL
+
 				});
 				
 	}
@@ -200,6 +203,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		if (media != null) {
 			variant.setMediaType(new MediaType(media));
 		}
+		
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(template,getGroupProperties()),ChemicalMediaType.CHEMICAL_MDLSDF);
@@ -278,6 +282,35 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}	
 	}
 	
+	protected String getSDFFromURI(String uri) throws ResourceException {
+		Reader reader = null;
+		long now = System.currentTimeMillis();
+		try {
+			Request rq = new Request();
+			Client client = new Client(Protocol.HTTP);
+			client.setConnectTimeout(5*60*1000); //5 min
+			rq.setResourceRef(uri);
+			rq.setMethod(Method.GET);
+			rq.getClientInfo().getAcceptedMediaTypes().clear();
+			rq.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(ChemicalMediaType.CHEMICAL_MDLSDF));
+			Response resp = client.handle(rq);
+			if (resp.getStatus().equals(Status.SUCCESS_OK)) {
+				return resp.getEntityAsText();
+			} else return null;				
+		
+		} catch (Exception x) {
+			if ((System.currentTimeMillis()-now) > (5*60*1000)) 
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,"Timeout 5 min exceeded"
+						);		
+			else
+				throw new ResourceException(
+					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x
+					);
+		} finally {
+			try {reader.close();} catch (Exception x){};
+		}		
+	}		
 	protected IMolecule getFromURI(String uri) throws ResourceException {
 		Reader reader = null;
 		try {

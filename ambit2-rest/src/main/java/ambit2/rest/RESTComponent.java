@@ -1,11 +1,11 @@
 package ambit2.rest;
 
 import org.restlet.Application;
-import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.Protocol;
+import org.restlet.ext.wadl.WadlComponent;
 
-public class RESTComponent extends Component {
+public class RESTComponent extends WadlComponent {
 
 	public RESTComponent(Context context,Application[] applications) {
 		super();

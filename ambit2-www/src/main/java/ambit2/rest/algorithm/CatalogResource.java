@@ -8,8 +8,13 @@ import java.util.concurrent.Callable;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.ext.wadl.FaultInfo;
+import org.restlet.ext.wadl.MethodInfo;
+import org.restlet.ext.wadl.RepresentationInfo;
+import org.restlet.ext.wadl.ResourceInfo;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -64,7 +69,8 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
-				MediaType.TEXT_HTML
+				MediaType.TEXT_HTML,
+				MediaType.APPLICATION_WADL
 				});
 		
 	}
@@ -176,5 +182,52 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			setPageSize(1000);
 		}			
 	}
-	
+	@Override
+	protected Representation describe() {
+        setTitle(getClass().getName());
+		return super.describe();
+	}
+	@Override
+	protected void describeGet(MethodInfo info) {
+		super.describeGet(info);
+	}
+
+	/*
+	@Override
+	public void describe(String arg0, ResourceInfo info) {
+		// TODO Auto-generated method stub
+		super.describe(arg0, info);
+	}
+
+
+	@Override
+	protected void describePost(MethodInfo info) {
+		// TODO Auto-generated method stub
+		super.describePost(info);
+	}
+	@Override
+	protected void describePut(MethodInfo info) {
+		// TODO Auto-generated method stub
+		super.describePut(info);
+	}
+	@Override
+	protected void describeOptions(MethodInfo info) {
+		info.setDocumentation("Not implemented");
+		super.describeOptions(info);
+	}
+	@Override
+	protected Representation describeVariants() {
+		//TODO 
+		return super.describeVariants();
+	}
+	@Override
+	protected void describeDelete(MethodInfo info) {
+        info.setDocumentation("Delete the current item.");
+
+        RepresentationInfo repInfo = new RepresentationInfo();
+        repInfo.setDocumentation("No representation is returned.");
+        repInfo.getStatuses().add(Status.SUCCESS_NO_CONTENT);
+        info.getResponse().getRepresentations().add(repInfo);
+	}
+	*/
 }

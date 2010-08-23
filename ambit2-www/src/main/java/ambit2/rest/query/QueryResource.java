@@ -15,6 +15,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.ext.wadl.WadlRepresentation;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
@@ -85,7 +86,7 @@ Then, when the "get(Variant)" method calls you back,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JSON,
 				MediaType.APPLICATION_JAVA_OBJECT,
-
+				MediaType.APPLICATION_WADL
 				
 		});		
 		if (queryObject!=null) {
@@ -111,6 +112,9 @@ Then, when the "get(Variant)" method calls you back,
 	protected Representation get(Variant variant) throws ResourceException {
 		try {
 			int maxRetry=3;
+			if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) {
+				return new WadlRepresentation();
+			} else	
         	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
         		if ((queryObject!=null) && (queryObject instanceof Serializable))
         		return new ObjectRepresentation((Serializable)returnQueryObject(),MediaType.APPLICATION_JAVA_OBJECT);
