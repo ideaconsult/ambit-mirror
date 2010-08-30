@@ -13,6 +13,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.ext.wadl.MethodInfo;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -121,6 +122,9 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			
 			/** Descriptors */
 			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor","ALogP","org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor","Prediction of logP based on the number of carbon and hetero atoms","org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure},
+	
 			{"ambit2.descriptors.MolecularWeight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {Algorithm.typeDescriptor},"http://www.opentox.org/echaEndpoints.owl#MolecularWeight",Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {Algorithm.typeDescriptor}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
@@ -148,6 +152,35 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor","BCUT descriptors","org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			{"org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor","ZagrebIndex","org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor","Atomic polarizabilities","org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge","ATS autocorrelation descriptor charge","org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass","ATS autocorrelation descriptor mass","org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability","ATS autocorrelation descriptor polarizability","org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+
+			{"org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor","Difference between atomic polarizabilities of all bonded atoms","org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor","Topological descriptor characterizing the carbon connectivity","org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor","A topological descriptor combining distance and adjacency information","org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+
+			{"org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor","Fragment complexity","org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor","Characterizing the mass distribution of the molecule","org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor","Characterizing the mass distribution of the molecule","org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.IPMolecularDescriptor","Ionization potential of a molecule","org.openscience.cdk.qsar.descriptors.molecular.IPMolecularDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor","Kier and Hall kappa molecular shape indices","org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor","A fragment count descriptor that uses e-state fragments","org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor","Evaluates length over breadth descriptors","org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor","Number of atoms in the longest aliphatic chain","org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+
+			{"org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor","Molecular Distance Edge","org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.MomentOfInertiaDescriptor","Moment of inertia and radius of gyration","org.openscience.cdk.qsar.descriptors.molecular.MomentOfInertiaDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor","The graph diameter D is defined as the largest vertex eccentricity in the graph","org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor","Petitjean shape indices","org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor","Vertex adjacency information (magnitude)","org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor","Wiener Path number and Wiener Polarity Number","org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
 			{"ambit2.descriptors.InChI","InChI 1.02","ambit2.descriptors.InChI",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
 			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
@@ -155,50 +188,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		
 			
 			
-/*
- * ;org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge
-;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass
-;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability
-;org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.IPMolecularDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.MomentOfInertiaDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor
-org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor
-ambit2.descriptors.MolecularWeight
-;org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor
-org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
-;org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor
- */
+
 			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
 			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
 			{"distanceCityBlock","Applicability domain: Cityblock distance","ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
@@ -261,6 +251,8 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 		else  
 			return algorithmList.get(index);
 	}
+	
+	
 	@Override
 	protected Iterator<Algorithm<String>> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
@@ -447,5 +439,16 @@ org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor
 		
 
 			
+	}
+	
+	@Override
+	protected void describeGet(MethodInfo info) {
+
+		super.describeGet(info);
+	}
+	@Override
+	protected void describePost(MethodInfo info) {
+		super.describePost(info);
+
 	}
 }
