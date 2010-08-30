@@ -1,10 +1,17 @@
 package ambit2.namestructure;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import nu.xom.Element;
+import nu.xom.Serializer;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
+import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.MoleculeTools;
@@ -56,17 +63,61 @@ public class Name2StructureProcessor extends
 	 */
 	private static final long serialVersionUID = -6157770369957204199L;
 	protected NameToStructure nameToStructure = null;
+	
 	public synchronized IAtomContainer process(String target) throws AmbitException {
 		try {
-			if (nameToStructure == null) nameToStructure = NameToStructure.getInstance();
-			Element cmlElement = nameToStructure.parseToCML(target.trim());
-			if (cmlElement != null)
-				return MoleculeTools.readCMLMolecule(cmlElement.toXML());
+			OpsinResult result = name2structure(target);
+			return opsin2cdk(result);
+		} catch (AmbitException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}
-		throw new AmbitException("Unable to parse chemical name '"+target+"'");
 	}
+	
+	public synchronized void opsin2cml(OpsinResult result, OutputStream out) throws AmbitException {
+		Element cmlElement = result.getCml();
+        try {
+            Serializer serializer = new Serializer(out, "UTF-8");
+            serializer.setIndent(4);
+            serializer.setMaxLength(64);
+            serializer.setPreserveBaseURI(true);
+            serializer.write(cmlElement.getDocument());
+            serializer.flush();
+          }
+          catch (IOException ex) { 
+        	  throw new AmbitException(ex);
+          }
+	}	
+	
+	public synchronized IAtomContainer opsin2cdk(OpsinResult result) throws AmbitException {
+		try {
+			Element cmlElement = result.getCml();
+
+			if (cmlElement != null) {
+				IMolecule mol =  MoleculeTools.readCMLMolecule(cmlElement.toXML());
+				mol.getProperties().clear();
+				mol.setProperty(
+						Property.getInstance("Name", 
+						Property.opentox_IupacName, 
+						"http://www-ucc.ch.cam.ac.uk/products/software/opsin-0"),
+						result.getChemicalName());
+				return mol;
+			}
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+		throw new AmbitException("Unable to parse chemical name '"+result.getChemicalName()+"'");
+	}
+	public synchronized OpsinResult name2structure(String target) throws AmbitException {
+		try {
+			if (nameToStructure == null) nameToStructure = NameToStructure.getInstance();
+			return nameToStructure.parseChemicalName(target.trim(),false);
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+	}	
+
     /*
 	public static void main(String[] args) {
 		if (args.length == 0) {

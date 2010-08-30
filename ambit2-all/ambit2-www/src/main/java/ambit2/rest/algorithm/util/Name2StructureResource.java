@@ -4,17 +4,21 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.Mol2Writer;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.ext.wadl.DocumentationInfo;
+import org.restlet.ext.wadl.MethodInfo;
+import org.restlet.ext.wadl.ParameterStyle;
+import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
+import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
+import ambit2.core.io.MDLWriter;
 import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.query.QueryResource;
@@ -23,7 +27,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  *
  */
-public class Name2StructureResource extends ServerResource {
+public class Name2StructureResource extends WadlServerResource {
 	public static final String resource = "name2structure";
 	protected Name2StructureProcessor processor = new Name2StructureProcessor();
 	protected String name = null;
@@ -31,15 +35,15 @@ public class Name2StructureResource extends ServerResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		MediaType[] mimeTypes = new MediaType[] {
-				MediaType.TEXT_HTML,
+				//MediaType.TEXT_HTML,
 				ChemicalMediaType.CHEMICAL_MDLSDF,
-				ChemicalMediaType.CHEMICAL_SMILES,
+				//ChemicalMediaType.CHEMICAL_SMILES,
 				ChemicalMediaType.CHEMICAL_CML,
-				MediaType.IMAGE_PNG,
-				MediaType.APPLICATION_PDF,
+				//MediaType.IMAGE_PNG,
+				//MediaType.APPLICATION_PDF,
 			//	MediaType.TEXT_XML,
-				MediaType.TEXT_URI_LIST,
-				MediaType.TEXT_PLAIN
+				//MediaType.TEXT_URI_LIST,
+				//MediaType.TEXT_PLAIN
 				};
         
         for (MediaType mileType:mimeTypes) getVariants().add(new Variant(mileType));
@@ -58,12 +62,27 @@ public class Name2StructureResource extends ServerResource {
 		
 		try {
 	        if (name != null) {
+	        	if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) 
+	        		return new OutputRepresentation(ChemicalMediaType.CHEMICAL_CML) {
+	        			@Override
+	        			public void write(OutputStream out) throws IOException {
+	        				try {
+		        				OpsinResult result = processor.name2structure(name);
+		        				processor.opsin2cml(result, out);
+		        				out.flush();
+	        				} catch (Exception x) {
+	        					throw new IOException(x.getMessage());
+	        				}
+	        			}
+	        		};
+	        	else 
 	        	return new OutputRepresentation(ChemicalMediaType.CHEMICAL_MDLSDF) {
 	        		@Override
 	        		public void write(OutputStream out) throws IOException {
 	        			try {
 		    	        	IAtomContainer mol = processor.process(name);
-		        			Mol2Writer writer = new Mol2Writer();
+		        			MDLWriter writer = new MDLWriter();
+		        			writer.setSdFields(mol.getProperties());
 		        			writer.setWriter(out);
 		        			writer.write(mol);
 	        			} catch (Exception x) {
@@ -83,5 +102,12 @@ public class Name2StructureResource extends ServerResource {
 			return null;	
 		
 		}
-	}		
+	}	
+	
+	@Override
+	protected void describeGet(MethodInfo arg0) {
+		super.describeGet(arg0);
+		arg0.addRequestParameter("search", true, "string", ParameterStyle.QUERY, "chemical name to convert to structure");
+		arg0.setDocumentation("Converts chemical name to structure, based on OPSIN");
+	}
 }
