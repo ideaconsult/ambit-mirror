@@ -34,6 +34,27 @@ public class AlgorithmResourceTest extends ResourceTest {
 		return String.format("http://localhost:%d/algorithm", port);
 	}
 	@Test
+	public void testWADL() throws Exception {
+		testGet(String.format("http://localhost:%d/algorithm/pka", port),MediaType.APPLICATION_WADL);
+	}	
+	
+	@Test
+	public void testWADLApp() throws Exception {
+		testGet(String.format("http://localhost:%d", port),MediaType.APPLICATION_WADL);
+	}
+	@Override
+	public boolean verifyResponseWADL(String uri, MediaType media,
+			InputStream in) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			count++;
+			System.out.println(line);
+		}
+		return false;
+	}
+	@Test
 	public void testRDFXML() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
 	}	
@@ -50,7 +71,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 52;
+		return count == 77;
 	}	
 	
 	@Test
@@ -565,6 +586,35 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(4,table.getRowCount());
 
 		c.close();				
+	}	
+	
+	@Test
+	public void testPCA() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/PCA", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name regexp '^PCA_'");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name regexp '^PCA_'");
+		Assert.assertEquals(4,table.getRowCount());
+
+		c.close();			
+		
 	}	
 	
 	@Test
