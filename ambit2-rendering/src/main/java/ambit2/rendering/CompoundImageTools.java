@@ -2,7 +2,7 @@
  * Created on 2006-3-5
  *
  */
-package ambit2.core.io;
+package ambit2.rendering;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -34,32 +34,35 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.renderer.Renderer;
+import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.elements.ElementGroup;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.OvalElement;
+import org.openscience.cdk.renderer.elements.RectangleElement;
+import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.generators.AtomNumberGenerator;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGeneratorParameter;
+import org.openscience.cdk.renderer.generators.RingGenerator;
+import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
+import org.openscience.cdk.renderer.generators.SelectBondGenerator;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator.CompactShape;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IncrementalSelection;
+import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
-import org.openscience.jchempaint.renderer.elements.ElementGroup;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.OvalElement;
-import org.openscience.jchempaint.renderer.elements.RectangleElement;
-import org.openscience.jchempaint.renderer.font.AWTFontManager;
-import org.openscience.jchempaint.renderer.generators.AtomNumberGenerator;
-import org.openscience.jchempaint.renderer.generators.BasicAtomGenerator;
-import org.openscience.jchempaint.renderer.generators.BasicBondGenerator;
-import org.openscience.jchempaint.renderer.generators.IGenerator;
-import org.openscience.jchempaint.renderer.generators.IGeneratorParameter;
-import org.openscience.jchempaint.renderer.generators.RingGenerator;
-import org.openscience.jchempaint.renderer.generators.SelectBondGenerator;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
-import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.IStructureDiagramHighlights;
+import ambit2.core.io.ICompoundImageTools;
 import ambit2.core.processors.structure.StructureTypeProcessor;
+
 
 
 /**
@@ -67,7 +70,7 @@ import ambit2.core.processors.structure.StructureTypeProcessor;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> 2006-3-5
  */
-public class CompoundImageTools implements IStructureDiagramHighlights {
+public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
     RendererModel r2dm;
     Renderer renderer;
     protected Dimension imageSize = new Dimension(200,200);
@@ -108,13 +111,14 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
     }
     
     private Renderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
-       List<IGenerator> generators = new ArrayList<IGenerator>();
-       generators.add(new BasicBondGenerator());
+       List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
+       
        generators.add(new BasicAtomGenerator());
+       generators.add(new BasicBondGenerator());
        if (atomNumbers)
            generators.add(new AtomNumberGenerator());
        
-       generators.add(new MySelectAtomGenerator());
+       generators.add(new SelectAtomGenerator());
        generators.add(new SelectBondGenerator());
        if (rings)
        generators.add(new RingGenerator());
@@ -123,7 +127,8 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
     	
 	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
 		RendererModel r2dm = renderer.getRenderer2DModel();	
-		r2dm.setDrawNumbers(atomNumbers);
+
+		//r2dm.setDrawNumbers(atomNumbers);
 		//r2dm.setBackgroundDimension(cellSize);
 		/*
 		r2dm.setBackColor(background);
@@ -134,7 +139,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
 		r2dm.setShowImplicitHydrogens(false);
 		
 		*/
-		r2dm.setShowAromaticity(true);  
+		//r2dm.setShowAromaticity(true);  
 		return renderer;
     }
     public synchronized BufferedImage getImage(Object o) {
@@ -242,8 +247,9 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
             
             molecules.removeAllAtomContainers();
             if (!generateCoordinates) {
-                IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(molecule);             	
-            	molecules.addAtomContainer(c);
+                //IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(molecule);             	
+            	//molecules.addAtomContainer(c);
+            	molecules.addAtomContainer(molecule);
             	return;
             }            
             try
@@ -345,7 +351,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
 				Rectangle drawArea = new Rectangle(w,h);
 				renderer.setup(mol, drawArea);
 
-				renderer.getRenderer2DModel().setZoomFactor(0.8);
+				//renderer.getRenderer2DModel().setZoomFactor(0.8);
 
 				   /*
 	            GeometryTools.translateAllPositive(mol,r2dm.getRenderingCoordinates());
@@ -368,12 +374,12 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
 	            		x.printStackTrace();
 	            	}
     	    	if (highlighted != null) {
-    	    		r2dm.setSelectedPartColor(new Color(0,183,239,128));
+    	    		//r2dm.setSelectedPartColor(new Color(0,183,239,128));
     	    		//r2dm.setSelectionRadius(10);
-    	    		r2dm.setSelectionShape(AtomShape.OVAL);
+    	    		//r2dm.setSelectionShape(AtomShape.OVAL);
     	    		r2dm.setSelection(highlighted);
-    	    		r2dm.setColorAtomsByType(true);
-    	    		r2dm.setShowAtomTypeNames(true);
+    	    		//r2dm.setColorAtomsByType(true);
+    	    		//r2dm.setShowAtomTypeNames(true);
 
     	    	} 	  
     	    	try {
@@ -458,15 +464,16 @@ public class CompoundImageTools implements IStructureDiagramHighlights {
  * Can't find how to highlight atoms with filled -in ovals
  * @author nina
  *
- */
-class MySelectAtomGenerator  implements IGenerator  {
+ 
+class MySelectAtomGenerator  implements IGenerator<IAtomContainer>  {
 	 private boolean autoUpdateSelection = true;
 
 	    public MySelectAtomGenerator() {}
 
+
 	    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
-	        Color selectionColor = model.getSelectedPartColor();
-	        AtomShape shape = model.getSelectionShape();
+	        Color selectionColor = model.getgetParameter(
+	        CompactShape shape = model.getSelectionShape();
 	        IChemObjectSelection selection = model.getSelection();
 	        ElementGroup selectionElements = new ElementGroup();
 
@@ -507,9 +514,10 @@ class MySelectAtomGenerator  implements IGenerator  {
 	        return selectionElements;
 	    }
 
-	    public List<IGeneratorParameter> getParameters() {
-	        // TODO Auto-generated method stub
-	        return null;
+	    @Override
+	    public List<IGeneratorParameter<?>> getParameters() {
+	    	return null;
 	    }
 	    
 }
+*/

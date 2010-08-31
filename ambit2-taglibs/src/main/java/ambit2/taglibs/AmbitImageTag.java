@@ -12,7 +12,7 @@ import javax.servlet.jsp.PageContext;
 
 import org.openscience.cdk.interfaces.IMolecule;
 
-import ambit2.core.io.CompoundImageTools;
+import ambit2.jchempaint.CompoundImageTools;
 
 public class AmbitImageTag extends AmbitMolTag {
 	protected int width = 100;

@@ -30,12 +30,7 @@
 package ambit2.core.test;
 
 
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.StringReader;
-
-import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
 
@@ -59,7 +54,6 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.io.CompoundImageTools;
 import ambit2.core.io.FileInputState;
 import ambit2.core.smiles.DeduceBondSystemTool;
 import ambit2.core.test.io.RawIteratingWrapperTest;
@@ -249,12 +243,12 @@ public class SmilesTest {
 					if (bond.getFlag(CDKConstants.ISAROMATIC)) 
 						bond.setOrder(Order.SINGLE);
 				}
-				
+				/*
 				CompoundImageTools img = new CompoundImageTools(new Dimension(400,400));
 				BufferedImage image = img.getImage(mol,null,false,true);
 				File file = new File("kekuletest.png");
 				ImageIO.write(image,"png",file);				
-				
+				*/
 				DeduceBondSystemTool d = new DeduceBondSystemTool();
 				d.setTimeout(100000000*1000); //100 sec
 				d.fixAromaticBondOrders(mol);

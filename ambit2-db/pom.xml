@@ -69,6 +69,12 @@
     	<artifactId>jfreechart</artifactId>
     	<version>1.0.12</version>
     </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-jchempaint</artifactId>
+    	<version>${version}</version>
+    </dependency>
+
   </dependencies>
 <licenses>
   <license>

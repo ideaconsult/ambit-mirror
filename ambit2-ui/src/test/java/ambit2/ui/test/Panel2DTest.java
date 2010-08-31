@@ -48,7 +48,7 @@ import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.core.io.CompoundImageTools;
+import ambit2.jchempaint.CompoundImageTools;
 import ambit2.ui.editors.Panel2D;
 
 

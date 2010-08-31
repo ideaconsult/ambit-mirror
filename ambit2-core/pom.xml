@@ -50,11 +50,6 @@
     	<artifactId>cdk</artifactId>
     	<version>1.3.37</version>
     </dependency>
-    <dependency>
-    	<groupId>org.openscience.cdk</groupId>
-    	<artifactId>jchempaint</artifactId>
-    	<version>3.0.1</version>
-    </dependency>
   </dependencies>
 <licenses>
   <license>

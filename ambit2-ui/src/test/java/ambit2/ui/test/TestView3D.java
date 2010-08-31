@@ -24,17 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.ui.test;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-
 import javax.swing.JOptionPane;
 import javax.vecmath.Point3d;
 
-import org.jmol.adapter.smarter.SmarterJmolAdapter;
-import org.jmol.api.JmolAdapter;
-import org.jmol.viewer.JmolConstants;
-import org.jmol.viewer.Viewer;
-import org.junit.Test;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;

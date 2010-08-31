@@ -61,15 +61,25 @@ public class PDFWriter extends FilesWithHeaderWriter {
     protected Document pdfDoc = null;
     protected PdfWriter pdfWriter;
     protected PdfPTable table;
-    protected CompoundImageTools imageTools;
+    protected ICompoundImageTools imageTools;
     protected Dimension cell = new Dimension(200,200);
     /**
      * 
      */
     public PDFWriter(OutputStream outputStream) throws CDKException {
+        this(outputStream,null);
+    } 
+    
+    public PDFWriter(OutputStream outputStream, ICompoundImageTools imgTools) throws CDKException {
         super();
         setWriter(outputStream);
-        imageTools = new CompoundImageTools(cell);
+        if (imgTools==null) try {
+	        	
+	        	Class c = Class.forName("ambit2.rendering.CompoundImageTools");
+	        	imageTools = (ICompoundImageTools) c.newInstance();
+	        } catch (Exception x) { imageTools = null; }
+        else imageTools = imgTools;
+        
     }       
 
     /* (non-Javadoc)

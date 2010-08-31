@@ -47,7 +47,7 @@ import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.io.CompoundImageTools;
+import ambit2.jchempaint.CompoundImageTools;
 
 
 /**
