@@ -87,6 +87,11 @@
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-jchempaint</artifactId>
+    	<version>${version}</version>
+    </dependency>
     
   </dependencies>
 </project>
