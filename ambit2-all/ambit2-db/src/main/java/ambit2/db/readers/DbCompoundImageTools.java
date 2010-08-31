@@ -34,10 +34,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.core.io.CompoundImageTools;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
+import ambit2.jchempaint.CompoundImageTools;
 
 public class DbCompoundImageTools extends CompoundImageTools {
 

@@ -27,16 +27,10 @@
  */
 package ambit2.core.smiles;
 
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.Ring;
@@ -61,7 +55,6 @@ import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.RingManipulator;
 
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.io.CompoundImageTools;
 /**
  * This is a copy of patched /cdk/src/main/org/openscience/cdk/smiles/DeduceBondSystemTool
  * 0001-Added-a-constructor-to-set-a-custom-ring-finder-inst.patch
@@ -134,12 +127,14 @@ public class DeduceBondSystemTool {
         IRingSet rs = allRingsFinder.findAllRings(molecule,7);
     	storeRingSystem(molecule, rs);
     	
+    	/*
     	try {
 			CompoundImageTools img = new CompoundImageTools(new Dimension(400,400));
 			BufferedImage image = img.getImage(molecule,null,false,true);
 			File file = new File("fixAromaticBondOrders.png");
 			ImageIO.write(image,"png",file);	
     	} catch (Exception x) {}
+    	*/
 		
         IRingSet ringSet;
 
@@ -345,7 +340,7 @@ public class DeduceBondSystemTool {
         // 6 possibilities for placing 2 double bonds
         // 6 possibilities for placing 1 double bonds
 
-        IAtom [] ringatoms = new Atom [6];
+        IAtom [] ringatoms = new IAtom [6];
 
         ringatoms[0] = r.getAtom(0);
 
@@ -451,7 +446,7 @@ public class DeduceBondSystemTool {
     private void sevenMemberedRingPossibilities(IMolecule m, IRing r, List MasterList) {
         // for now only consider case where have 3 double bonds
 
-        IAtom[] ringatoms = new Atom[7];
+        IAtom[] ringatoms = new IAtom[7];
 
         ringatoms[0] = r.getAtom(0);
 

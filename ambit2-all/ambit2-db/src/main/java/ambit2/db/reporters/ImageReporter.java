@@ -15,7 +15,6 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.io.CompoundImageTools;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.SessionID;
 import ambit2.db.UpdateExecutor;
@@ -29,6 +28,7 @@ import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.CreateStoredQuery;
+import ambit2.jchempaint.CompoundImageTools;
 
 /**
 SELECT idchemical,idstructure,text,title FROM structure

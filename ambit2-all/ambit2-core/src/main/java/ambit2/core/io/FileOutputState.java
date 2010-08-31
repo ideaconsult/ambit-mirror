@@ -108,9 +108,9 @@ public class FileOutputState extends FileState implements IOutputState {
 			else if ((fname.endsWith(extensions[PNG_INDEX])))  
 				writer = new ImageWriter(stream);
 				*/
-			else if ((fname.endsWith(extensions[PDF_INDEX]))) 
+			else if ((fname.endsWith(extensions[PDF_INDEX]))) {
 				writer = new PDFWriter(stream);			
-			else if ((fname.endsWith(extensions[XYZ_INDEX]))) 
+			} else if ((fname.endsWith(extensions[XYZ_INDEX]))) 
 				writer = new XYZWriter(stream);
 			else if ((fname.endsWith(extensions[HIN_INDEX]))) 
 				writer = new HINWriter(stream);

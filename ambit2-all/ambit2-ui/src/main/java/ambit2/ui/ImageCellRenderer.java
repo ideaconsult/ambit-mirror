@@ -22,7 +22,8 @@ import javax.swing.table.TableCellRenderer;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.core.io.CompoundImageTools;
+import ambit2.core.io.ICompoundImageTools;
+import ambit2.jchempaint.CompoundImageTools;
 import ambit2.ui.table.IBrowserMode;
 
 
@@ -39,7 +40,7 @@ public class ImageCellRenderer extends DefaultTableCellRenderer implements
 	 */
 	private static final long serialVersionUID = -4507345423562728344L;
 
-	protected CompoundImageTools imageTools;
+	protected ICompoundImageTools imageTools;
     private final ImageIcon icon = new ImageIcon();
     
 

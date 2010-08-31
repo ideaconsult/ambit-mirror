@@ -14,7 +14,6 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.io.CompoundImageTools;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
@@ -23,6 +22,7 @@ import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
+import ambit2.jchempaint.CompoundImageTools;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
