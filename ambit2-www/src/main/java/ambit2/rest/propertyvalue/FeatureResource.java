@@ -38,7 +38,7 @@ import ambit2.rest.structure.ConformerResource;
 /**
  * http://opentox.org/development/wiki/feature
 <pre>
-REST operations¶
+REST operations
 Description 	Method 	URI 	Parameters 	Result 	Status codes
 get the value for a specific feature 	GET 	/feature_value/compound/{cid}/feature/{f_def_id} 	- 	text/xml -> xml representation of feature; text/plain -> text value of the feature 	200,404,503
 get the value for a all features 	GET 	/feature_value/compound/{cid} 	- 	xml representation of all features 	200,404,503
