@@ -141,10 +141,10 @@
   			<plugin>
   				<groupId>org.apache.maven.plugins</groupId>
   				<artifactId>maven-compiler-plugin</artifactId>
-  				<version>2.0.2</version>
+  				<version>2.3.1</version>
 		        <configuration>
-		          <source>1.5</source>
-		          <target>1.5</target>
+		          <source>1.6</source>
+		          <target>1.6</target>
 		       </configuration>  				
   			</plugin>
 			<plugin>
@@ -264,6 +264,8 @@
     <module>ambit2-plugin-pbt</module>
     <module>ambit2-plugin-dbtools</module>
     <module>ambit2-plugin-usermgr</module>
+    <module>ambit2-rendering</module>
+    <module>ambit2-jchempaint</module>
     <!--     
     <module>ambit2-taglibs</module>
      -->
