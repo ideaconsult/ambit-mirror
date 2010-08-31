@@ -29,6 +29,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.SmartsManager;
 import ambit2.smarts.processors.SMARTSPropertiesReader;
 
@@ -88,7 +89,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		if (set.getAtomContainerCount()==0) return null;
 		if (set.getAtomContainerCount()==1) return set.getAtomContainer(0);
 		//a hack before refactoring code to use set for selections
-		IAtomContainer match = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
+		IAtomContainer match = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
 		for (int i=0; i < set.getAtomContainerCount();i++)
 			match.add(set.getAtomContainer(i));
 		return match;

@@ -21,6 +21,7 @@ import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomParity;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
@@ -326,7 +327,11 @@ public class MoleculeTools {
     }
     public static IMoleculeSet newMoleculeSet(IChemObjectBuilder builder) {
     	return builder.newMoleculeSet();
+    }
+    public static IAtomContainerSet newAtomContainerSet(IChemObjectBuilder builder) {
+    	return builder.newAtomContainerSet();
     }    
+
     public static IChemModel newChemModel(IChemObjectBuilder builder) {
     	return builder.newChemModel();
     }  
