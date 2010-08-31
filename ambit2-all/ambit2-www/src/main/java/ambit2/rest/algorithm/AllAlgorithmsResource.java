@@ -72,7 +72,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				new Property[] 
 				{
 				new Property("MolWeight","A", toxTreeReference),
-				new Property("Melting Point","°C", toxTreeReference),
+				new Property("Melting Point","\u2103C", toxTreeReference),
 				new Property("LogP","", toxTreeReference),
 				new Property("Lipid Solubility","g/kg", toxTreeReference),
 				new Property("Water Solubility","g/l", toxTreeReference),
@@ -85,7 +85,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			new Property[] 
 				{
 				new Property("MolWeight","A", toxTreeReference),
-				new Property("Melting Point","°C", toxTreeReference),
+				new Property("Melting Point","\u2103C", toxTreeReference),
 				new Property("LogP","", toxTreeReference),
 				new Property("Lipid Solubility","g/kg", toxTreeReference),
 				new Property("Water Solubility","g/l", toxTreeReference),
