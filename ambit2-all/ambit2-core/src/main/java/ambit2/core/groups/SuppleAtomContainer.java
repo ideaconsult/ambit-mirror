@@ -802,6 +802,16 @@ public class SuppleAtomContainer extends ChemObject implements
         setFiltered(false);
         if (!bonds.contains(newbond))
             addBond(newbond);
-    }    
+    }
+    /*
+	public void addStereoElement(IStereoElement arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	public Iterable<IStereoElement> stereoElements() {
+		// TODO Auto-generated method stub
+		return null;
+	} 
+	*/   
 }
 
