@@ -61,7 +61,7 @@ public class DescriptorsFactoryTest {
 		while (p.hasNext()) {
 			//System.out.println(p.next().getClazz());
 		}
-		Assert.assertEquals(44,profile.size());		
+		Assert.assertEquals(43,profile.size());		
 	}
 
 }
