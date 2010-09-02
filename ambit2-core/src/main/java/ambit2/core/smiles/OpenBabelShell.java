@@ -33,7 +33,7 @@ public class OpenBabelShell extends ShellSDFoutput<String> {
 	}
 	
 	@Override
-	protected List<String> prepareInput(String path, String mol) throws ShellException {
+	protected synchronized List<String> prepareInput(String path, String mol) throws ShellException {
 		try {
 			FileWriter writer = new FileWriter(path + File.separator + getInputFile());
 			writer.write(mol);
