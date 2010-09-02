@@ -115,6 +115,7 @@ public class Mopac7Reader extends DefaultChemObjectReader {
      * @see org.openscience.cdk.io.ChemObjectReader#read(IChemObject)
      */
     public IChemObject read(IChemObject arg0) throws CDKException {
+    	final String[] expected_columns = { "NO.","ATOM","X","Y","Z"};
         StringBuffer eigenvalues = new StringBuffer();
         if (arg0 instanceof IAtomContainer) {
              IAtomContainer a = (IAtomContainer) arg0;
@@ -126,11 +127,20 @@ public class Mopac7Reader extends DefaultChemObjectReader {
 	            	if (line.indexOf("TO CONTINUE CALCULATION SPECIFY \"GEO-OK\"")> -1)
 	            		throw new CDKException(line);
 	            	if ("CARTESIAN COORDINATES".equals(line.trim())) {
-	            		//System.out.println(((IMolecule)arg0).getAtomCount());
+
 	            		IAtomContainer atomcontainer = ((IAtomContainer)arg0);
 	            		input.readLine(); //reads blank line
 	            		line = input.readLine();
-	            		if (!"    NO.       ATOM         X         Y         Z".equals(line)) continue;
+	            		
+	            		String[] columns = line.trim().split(" +");
+	            		int ok = 0;
+	            		if (columns.length==expected_columns.length)
+	            			for (int i=0; i < expected_columns.length;i++)
+	            				ok += (columns[i].equals(expected_columns[i]))?1:0;
+
+	            		if (ok < expected_columns.length) continue;
+	            		//if (!"    NO.       ATOM         X         Y         Z".equals(line)) continue;
+
 	            		input.readLine(); //reads blank line
                         int atomIndex = 0;
 	                    while (!line.trim().equals("")) {
