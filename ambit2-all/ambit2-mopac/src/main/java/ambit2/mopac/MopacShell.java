@@ -266,6 +266,11 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	public String toString() {
 		return "mopac";
 	}
+	@Override
+	public synchronized IAtomContainer process(IAtomContainer target)
+			throws AmbitException {
+		return super.process(target);
+	}
 
 }
 
