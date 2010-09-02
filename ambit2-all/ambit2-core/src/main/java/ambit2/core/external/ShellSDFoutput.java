@@ -28,7 +28,7 @@ public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IMolecule
 	}
 	
 	@Override
-	protected IMolecule parseOutput(String path, INPUT mol) throws ShellException {
+	protected synchronized IMolecule parseOutput(String path, INPUT mol) throws ShellException {
 		try {
 			if (isReadOutput()) {
 				MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(path + File.separator + getOutputFile()));

@@ -142,7 +142,7 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 		setOutputFile("rough.sdf");		
 	}	
 	@Override
-	protected IAtomContainer transform_input(IAtomContainer mol) throws ShellException {
+	protected synchronized IAtomContainer transform_input(IAtomContainer mol) throws ShellException {
 			final String msg="Empty molecule after %s processing"; 
 		    if ((mol==null) || (mol.getAtomCount()==0)) throw new ShellException(this,"Empty molecule");
 		    IAtomContainer newmol=null;
@@ -157,9 +157,10 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 		    } else newmol=mol;
 	    	logger.debug("Writing MOPAC input");
 	    	String exe = getExecutable();
-	    	String mopac_path = new File(exe).getParent();
+	    	//String mopac_path = new File(exe).getParent();
+	    	String homeDir = getHomeDir(null); // getPath(new File(exe));
 	    	try {
-		        Mopac7Writer wri = new Mopac7Writer(new FileOutputStream(mopac_path + "/" + inFile));
+		        Mopac7Writer wri = new Mopac7Writer(new FileOutputStream(homeDir + "/" + inFile));
 		        wri.setOptimize(isOptimize()?1:0);
 		        wri.setMopacCommands(mopac_commands);
 		        wri.write(newmol);
@@ -168,21 +169,25 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	    		throw new ShellException(this,x);
 	    	}
 	        for (int i=0; i< outFile.length;i++) {
-	            File f = new File(mopac_path + "/"+outFile[i]);
+	            File f = new File(homeDir + "/"+outFile[i]);
 	            if (f.exists()) f.delete();
 	        }
 			return newmol;
 
 	}
 	@Override
-	protected List<String> prepareInput(String path, IAtomContainer mol)	throws ShellException {
+	protected String getPath(File file) {
+		return getHomeDir(null);
+	}
+	@Override
+	protected synchronized List<String> prepareInput(String path, IAtomContainer mol)	throws ShellException {
 
     	List<String> params = new ArrayList<String>();
     	params.add(inFile);
 		return params;
 	}
 	@Override
-	protected IAtomContainer parseOutput(String mopac_path, IAtomContainer mol)
+	protected synchronized IAtomContainer parseOutput(String mopac_path, IAtomContainer mol)
 			throws ShellException {
         for (int i=0; i< 2;i++) {
             String fname = mopac_path+"/" + outFile[i]; 
@@ -205,18 +210,18 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	}
 
 	@Override
-	protected IAtomContainer transform(IAtomContainer mol) {
+	protected synchronized IAtomContainer transform(IAtomContainer mol) {
 		return mol;
 	}
 	
 	@Override
-	public IAtomContainer runShell(IAtomContainer mol) throws ShellException {
+	public synchronized IAtomContainer runShell(IAtomContainer mol) throws ShellException {
 		if (canApply(mol))
 			return super.runShell(mol);
 		else 
 			return mol;
 	}	
-	protected boolean canApply(IAtomContainer atomcontainer) throws ShellException {
+	protected synchronized boolean canApply(IAtomContainer atomcontainer) throws ShellException {
 		if ((atomcontainer==null) || (atomcontainer.getAtomCount()==0)) 
 			throw new ShellException(this,"Undefined structure");
     	IAtomContainerSet a  = ConnectivityChecker.partitionIntoMolecules(atomcontainer);
@@ -261,11 +266,7 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	public String toString() {
 		return "mopac";
 	}
-	@Override
-	public IAtomContainer process(IAtomContainer target) throws AmbitException {
 
-		return super.process(target);
-	}
 }
 
 /**

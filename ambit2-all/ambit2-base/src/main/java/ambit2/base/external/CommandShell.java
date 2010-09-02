@@ -119,7 +119,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public String addExecutableFreeBSD(String executable, String[] morefiles) throws ShellException  {
 		return addExecutable(os_FreeBSD,executable,morefiles);
 	}		
-	public String getExecutable(String osname) throws Exception {
+	public synchronized String getExecutable(String osname) throws Exception {
 		
 		//ambit2/
 		Command command = executables.get(osname);
@@ -127,7 +127,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 		File file = new File(exe);
 		
 		if (!file.exists()) {
-			String homeDir = System.getProperty("user.home") +"/.ambit2";
+			String homeDir = getHomeDir(file);
 			file = new File(homeDir,exe);
 			if (!file.exists()) {
 				logger.info("Writing "+exe + " to "+ file);
@@ -175,12 +175,12 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
         }
         throw new ShellException(this,"Not supported for "+osName);		
 	}
-    public OUTPUT runShell(INPUT mol) throws ShellException {
+    public synchronized OUTPUT runShell(INPUT mol) throws ShellException {
 
         return runShell(mol,getExecutable());
  
     }
-    public OUTPUT process(INPUT target) throws ambit2.base.exceptions.AmbitException {
+    public synchronized OUTPUT process(INPUT target) throws ambit2.base.exceptions.AmbitException {
     	try {
     		return runShell(target);
     	} catch (ShellException x) {
@@ -193,7 +193,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
      * @return list of command line parameters (exe name excluded) to be passed to the executable
      * @throws ShellException
      */
-    protected List<String> prepareInput(String path, INPUT mol) throws ShellException {
+    protected synchronized List<String> prepareInput(String path, INPUT mol) throws ShellException {
     	return null;
     }
     /**
@@ -210,11 +210,15 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
         return path;
     }
     
-    protected INPUT transform_input(INPUT input) throws ShellException {
+    protected String getHomeDir(File file) {
+    	return System.getProperty("user.home") +"/.ambit2";
+    }
+    
+    protected synchronized INPUT transform_input(INPUT input) throws ShellException {
     	return input;
     }
 
-    protected OUTPUT runShell(INPUT input,String execString) throws ShellException {
+    protected synchronized OUTPUT runShell(INPUT input,String execString) throws ShellException {
     	try {
     		    setExitCode(0);
     			File file = new File(execString);
@@ -230,6 +234,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	                	command.add(inFile.get(j));
 
                 ProcessBuilder builder = new ProcessBuilder(command);
+                builder.directory(new File(path));
                 //If the value is set to true, the standard error is merged with the standard output
                 Map<String, String> environ = builder.environment();
                 builder.directory(new File(path));
@@ -280,7 +285,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
                 throw new ShellException(this,x);
             }
     }
-    protected OUTPUT transform(Process process,INPUT cmd) {
+    protected synchronized OUTPUT transform(Process process,INPUT cmd) {
     	return transform(cmd);
     }
     /*

@@ -106,7 +106,7 @@ public class Mopac7Writer extends DefaultChemObjectWriter {
     /* (non-Javadoc)
      * @see org.openscience.cdk.io.ChemObjectWriter#write(IChemObject)
      */
-    public void write(IChemObject arg0) throws CDKException {
+    public synchronized void  write(IChemObject arg0) throws CDKException {
         if (arg0 instanceof IMolecule)
 	        try {
 	            IMolecule a = (IMolecule) arg0;
