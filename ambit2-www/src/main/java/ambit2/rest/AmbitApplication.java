@@ -402,7 +402,7 @@ public class AmbitApplication extends TaskApplication {
 		Router chebi = new MyRouter(getContext());
 		queryRouter.attach(ChEBIResource.resource,chebi);
 		chebi.attachDefault(ChEBIResource.class);
-		chebi.attach(ChEBIResource.resourceID,CSLSResource.class);
+		chebi.attach(ChEBIResource.resourceID,ChEBIResource.class);
 
 		
 		Router lookup = new MyRouter(getContext());
