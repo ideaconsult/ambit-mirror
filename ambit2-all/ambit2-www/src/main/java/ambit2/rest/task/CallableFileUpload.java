@@ -21,7 +21,8 @@ import org.restlet.resource.ResourceException;
 public abstract class CallableFileUpload implements Callable<Reference> {
 	protected List<FileItem> items;
 	protected String fileUploadField;
-	protected long maxSize = 20000000;
+
+	protected long maxSize = 1000000000;
 
 	
 	public CallableFileUpload(List<FileItem> items, String fileUploadField) {
