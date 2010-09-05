@@ -32,6 +32,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 	protected String dataset;
 	protected String param;
 	protected Dimension d;
+	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelURIReporter;
 	
 	public ModelImageReporter(Request request, Form form,Dimension d) throws ResourceException {
 		super();
@@ -41,6 +42,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 		if (dataset==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
 		
 		param = form.getFirstValue(OpenTox.params.parameters.toString());
+		modelURIReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request);
 	
 	}
 	@Override
@@ -56,7 +58,8 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 	@Override
 	public Object processItem(ModelQueryResults model) throws AmbitException {
 		ModelPredictor predictor = ModelPredictor.getPredictor(model,request);
-		setOutput(getImage(predictor));
+		String resultsURI = String.format("%s/%s",modelURIReporter.getURI(model),OpenTox.URI.feature);
+		setOutput(getImage(predictor,resultsURI));
 		return model;
 	}
 
@@ -65,8 +68,9 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 	}	
 	
 	
-	protected BufferedImage getImage(ModelPredictor predictor) throws ResourceException {
+	protected BufferedImage getImage(ModelPredictor predictor,String resultsURI) throws ResourceException {
 		Reference firstmol = new Reference(dataset);
+		firstmol.addQueryParameter(OpenTox.params.feature_uris.toString(),resultsURI);
 		firstmol.addQueryParameter("max", "1");
 		ClientResource client = new ClientResource(firstmol);
 		Representation r = null;
