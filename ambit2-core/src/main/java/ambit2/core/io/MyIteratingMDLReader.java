@@ -213,11 +213,13 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
                     str = new String(currentLine);
                 }
                 String data = "";
+                String del = "";
                 while (str.trim().length() > 0) {
                     logger.debug("data line: ", currentLine);
-                    data += str;
+                    data = String.format("%s%s%s",data,del,str);
                     currentLine = input.readLine();
                     str = new String(currentLine).trim();
+                    del = "\n";
                 }
                 if (fieldName != null) {
                     logger.info("fieldName, data: ", fieldName, ", ", data);
