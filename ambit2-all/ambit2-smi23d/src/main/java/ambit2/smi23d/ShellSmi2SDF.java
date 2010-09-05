@@ -74,7 +74,7 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 	}
 	
 
-	protected List<String> prepareInput(String path, IMolecule mol) throws ShellException {
+	protected  synchronized List<String> prepareInput(String path, IMolecule mol) throws ShellException {
 		try {
 			//Object smiles = mol.getProperty("SMILES"); 
 			//if (smiles == null) 
@@ -123,7 +123,7 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
     	return exitVal != 0;
     }	
 	@Override
-	protected IMolecule transform(IMolecule mol) {
+	protected  synchronized IMolecule transform(IMolecule mol) {
 		return mol;
 	}
     public synchronized boolean isGenerateSmiles() {

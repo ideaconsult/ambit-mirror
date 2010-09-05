@@ -60,7 +60,7 @@ public class ShellMengine extends ShellSDFoutput<IMolecule> {
 		setOutputFile("opt.sdf");
 		setReadOutput(true);
 	}
-	protected List<String> prepareInput(String path, IMolecule mol) throws ShellException {
+	protected synchronized List<String> prepareInput(String path, IMolecule mol) throws ShellException {
 		List<String> list = new ArrayList<String>();
 		list.add("-p");
 		list.add("mmff94.prm");
