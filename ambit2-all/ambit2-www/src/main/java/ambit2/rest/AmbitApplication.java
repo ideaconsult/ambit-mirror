@@ -60,6 +60,7 @@ import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.CSLSResource;
+import ambit2.rest.pubchem.ChEBIResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.ExactStructureQueryResource;
 import ambit2.rest.query.QLabelQueryResource;
@@ -398,6 +399,12 @@ public class AmbitApplication extends TaskApplication {
 		csls.attach(CSLSResource.resourceID,CSLSResource.class);
 		csls.attach(CSLSResource.resourceID+CSLSResource.representationID,CSLSResource.class);
 
+		Router chebi = new MyRouter(getContext());
+		queryRouter.attach(ChEBIResource.resource,chebi);
+		chebi.attachDefault(ChEBIResource.class);
+		chebi.attach(ChEBIResource.resourceID,CSLSResource.class);
+
+		
 		Router lookup = new MyRouter(getContext());
 		queryRouter.attach(CompoundLookup.resource,lookup);
 		lookup.attachDefault(CompoundLookup.class);
