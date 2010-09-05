@@ -1,4 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<description>ChEBI web services dependency</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -7,7 +8,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-chebi</artifactId>
+  <name>ChEBI web services </name>
   <version>2.1.2-SNAPSHOT</version>
+  <organization>
+  	<name>Ideaconsult Ltd.</name>
+  </organization>
   <repositories>
   	<repository>
   		<id>ebi-repo</id>
