@@ -184,6 +184,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			
 			{"ambit2.mopac.MopacOriginalStructure","MOPAC descriptors (Energy, EHOMO, ELUMO,etc.)","ambit2.mopac.MopacOriginalStructure",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
 			
+			{"ambit2.some.DescriptorSOMEShell","Site Of Metabolism Estimator (SOME) Bioinformatics (2009) 25(10):1251-1258.","ambit2.some.DescriptorSOMEShell",null,new String[] {Algorithm.typeDescriptor},"",Algorithm.requires.structure},
+
 			{"ambit2.descriptors.InChI","InChI 1.02","ambit2.descriptors.InChI",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			
 			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},

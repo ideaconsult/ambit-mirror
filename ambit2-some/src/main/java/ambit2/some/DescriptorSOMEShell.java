@@ -1,0 +1,147 @@
+/* DescriptorMopacShell.java
+ * Author: Nina Jeliazkova
+ * Date: 2008-12-13 
+ * Revision: 1.0 
+ * 
+ * Copyright (C) 2005-2008  Ideaconsult Ltd.
+ * 
+ * Contact: nina@acad.bg
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * All we ask is that proper credit is given for our work, which includes
+ * - but is not limited to - adding the above copyright notice to the beginning
+ * of your source code files, and to any copyright notice that you may distribute
+ * with programs based on this work.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ */
+package ambit2.some;
+
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.qsar.DescriptorSpecification;
+import org.openscience.cdk.qsar.DescriptorValue;
+import org.openscience.cdk.qsar.IMolecularDescriptor;
+import org.openscience.cdk.qsar.result.IDescriptorResult;
+
+import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.external.ShellException;
+import ambit2.base.log.AmbitLogger;
+import ambit2.core.data.IStructureDiagramHighlights;
+import ambit2.core.data.StringDescriptorResultType;
+import ambit2.core.processors.structure.StructureTypeProcessor;
+
+
+/**
+ * Used by {@link DescriptorSOMEShell} <br> 
+ * Invokes some.exe from Mopac 7.1 http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz.<br>
+ * @author Nina Jeliazkova nina@acad.bg
+ * <b>Modified</b> 2010-9-4
+ */
+public class DescriptorSOMEShell implements IMolecularDescriptor , IStructureDiagramHighlights {
+    protected static AmbitLogger logger = new  AmbitLogger(DescriptorSOMEShell.class);
+    protected SOMEShell some_shell;
+    protected SOMEVisualizer visualizer;
+    
+
+    /**
+     * 
+     */
+
+    public DescriptorSOMEShell() throws ShellException {
+        super();
+        some_shell = new SOMEShell();
+        
+    }
+
+    public String toString() {
+    	return "Site Of Metabolism Estimator " + some_shell + " (http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz.)";
+    }
+    
+    public String[] getParameterNames() {
+        return null;
+    }
+    public Object[] getParameters() {
+        return null;
+    }
+    public Object getParameterType(String arg0) {
+        return "";
+    }
+    public DescriptorSpecification getSpecification() {
+        return new DescriptorSpecification(
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"SOME"),
+            this.getClass().getName(),
+            "$Id: DescriptorSOMEShell.java,v 0.2 2010/09/04 18:24:00 jeliazkova.nina@gmail.com$",
+            "http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz");
+    };
+    public void setParameters(Object[] arg0) throws CDKException {
+    }
+    public DescriptorValue calculate(IAtomContainer arg0) {
+    	StringDescriptorResultType r = null;
+    	try {
+    		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
+    		if (!StructureTypeProcessor.has3DCoordinates(arg0)) throw new CDKException("No 3D coordinates!");
+    		logger.info(toString());
+	        IAtomContainer newmol = some_shell.runShell(arg0);
+	        
+	        Object value = newmol.getProperty(SOMEShell.SOME_RESULT);
+	        
+	        if (value == null) value = "@SOME results: NONE";
+	         
+        	r = new StringDescriptorResultType(value.toString());
+	        return new DescriptorValue(
+		        		getSpecification(),
+		                getParameterNames(),
+		                getParameters(),r,getDescriptorNames());    	        	
+   		
+    	} catch (Exception x) {
+	        return new DescriptorValue(getSpecification(),
+	                getParameterNames(),getParameters(),r,getDescriptorNames(),x);    
+    	}
+        
+    }
+    public String[] getDescriptorNames() {
+    	return new String[] {SOMEShell.SOME_RESULT};
+    }
+    public IDescriptorResult getDescriptorResultType() {
+    	return new StringDescriptorResultType();
+    }
+    protected void debug(String message) {
+    	logger.info(message);
+    }
+   
+    public BufferedImage getImage(IAtomContainer mol) throws AmbitException {
+    	if (visualizer==null) visualizer = new SOMEVisualizer();
+    	return visualizer.getImage(mol);
+    }
+    public BufferedImage getImage(IAtomContainer mol,String ruleID,int width,int height,boolean atomnumbers) throws AmbitException {
+    	if (visualizer==null) visualizer = new SOMEVisualizer();
+    	return visualizer.getImage(mol,ruleID,width,height,atomnumbers);
+    }
+    
+    
+    public Dimension getImageSize() {
+    	if (visualizer==null) visualizer = new SOMEVisualizer();
+		return visualizer.imageSize;
+	}
+	public void setImageSize(Dimension imageSize) {
+		if (visualizer==null) visualizer = new SOMEVisualizer();
+		this.visualizer.imageSize = imageSize;
+	}
+
+}

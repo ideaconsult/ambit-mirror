@@ -266,6 +266,8 @@
     <module>ambit2-plugin-usermgr</module>
     <module>ambit2-rendering</module>
     <module>ambit2-jchempaint</module>
+    <module>ambit2-chebi</module>
+    <module>ambit2-some</module>
     <!--     
     <module>ambit2-taglibs</module>
      -->
