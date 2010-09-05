@@ -3,6 +3,7 @@ package ambit2.some;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
@@ -34,6 +35,9 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 			int height, boolean atomnumbers) throws AmbitException {
 		this.ruleid = ruleID;
 		this.mol = mol;
+		Object some = mol.getProperty(SOMEShell.SOME_RESULT);
+		if (some != null) 
+			try {parseRecord(some.toString());} catch (Exception x) {x.printStackTrace();}
     	CompoundImageTools tools = new CompoundImageTools(new Dimension(width,height));
     	return tools.getImage(mol, this, true, atomnumbers);
 	}
@@ -47,8 +51,10 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	@Override
 	protected void process(int atomNum, String atomSymbol, someindex index,
 			double value, boolean star) {
-		if ((ruleid==null) || ruleid.equals(index.toString()))
-			selected.addAtom(mol.getAtom(atomNum));
+		if (!star) return;
+		if ((ruleid==null) || ruleid.equals(index.name()))
+			mol.getAtom(atomNum-1).setProperty(SOMEShell.SOME_RESULT, value);
+			//selected.addAtom(mol.getAtom(atomNum));
 	}
 
     public Dimension getImageSize() {
@@ -68,14 +74,15 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	@Override
 	public IChemObjectSelection process(IAtomContainer mol)
 			throws AmbitException {
-		Object some = mol.getProperty(SOMEShell.SOME_RESULT);
-		if (some == null) return null;
+
 		try {
-			parseRecord(some.toString());
+			for (IAtom atom: mol.atoms()) {
+				if (atom.getProperty(SOMEShell.SOME_RESULT)!=null)
+					selected.addAtom(atom);
+			}
 			if (selected.getAtomCount()==0) return null;
 			else return new SingleSelection<IAtomContainer>(selected);
-		} catch (AmbitException x) {
-			throw x;
+
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}

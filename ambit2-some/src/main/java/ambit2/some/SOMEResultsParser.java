@@ -20,9 +20,9 @@ public class SOMEResultsParser {
 				line = reader.readLine(); //skip next line as well
 				continue;
 			}
-			String[] tokens = line.split(" +");
-			int atomNum = Integer.parseInt(tokens[someindex.atomIndex.ordinal()+1]);
-			String atomSymbol = tokens[someindex.atomType.ordinal()+1];
+			String[] tokens = line.trim().split(" +");
+			int atomNum = Integer.parseInt(tokens[someindex.atomIndex.ordinal()]);
+			String atomSymbol = tokens[someindex.atomType.ordinal()];
 
 			//if (!structure.getAtom(atomNum).getSymbol().equals(atomSymbol)) throw new Exception("Mismatch of atoms in some and structure"); 
 				
