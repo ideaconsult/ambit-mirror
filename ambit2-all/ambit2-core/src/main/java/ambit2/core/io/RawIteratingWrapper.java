@@ -22,7 +22,7 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 	protected R reader;
 	protected MoleculeWriter writer ;
 	protected LiteratureEntry reference;	
-	protected final StructureRecord r = new StructureRecord();
+	protected final IStructureRecord r = new StructureRecord();
    // protected IChemObjectReader.Mode mode = IChemObjectReader.Mode.RELAXED;
    // protected IChemObjectReaderErrorHandler errorHandler = null;
 	
@@ -89,8 +89,7 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 		return reader.hasNext();
 	}
 
-	public Object next() {
-		Object o = reader.next();
+	protected Object transform(Object o) {
 		if (o instanceof IAtomContainer) try {
 			
 			r.setIdchemical(-1);
@@ -110,6 +109,10 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 			r.setReference(getReference());
 			return r;  
 		} else return o;
+	}
+	public Object next() {
+		Object o = reader.next();
+		return transform(o);
 	}
 
 	public void remove() {
