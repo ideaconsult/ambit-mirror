@@ -54,7 +54,7 @@ public class ChEBIResource extends WadlServerResource {
 	        if (term != null) {
 	        	
 	        	//if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF))
-		        	return new OutputRepresentation(variant.getMediaType()) {
+		        	return new OutputRepresentation(ChemicalMediaType.CHEMICAL_MDLSDF) {
 			            @Override
 			            public void write(OutputStream stream) throws IOException {
 		            		OutputStreamWriter writer = null;          	
@@ -70,7 +70,7 @@ public class ChEBIResource extends WadlServerResource {
 			            			}
 			            		}
 			            		
-			            		stream.flush();
+			            		writer.flush();
 			            	} catch (ResourceException x) {
 			            		throw x;
 			            	} catch (Exception x) {
