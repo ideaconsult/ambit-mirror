@@ -110,8 +110,9 @@ public class DescriptorSOMEShell implements IMolecularDescriptor , IStructureDia
 		                getParameters(),r,getDescriptorNames());    	        	
    		
     	} catch (Exception x) {
+    		r = new StringDescriptorResultType(x.getMessage());
 	        return new DescriptorValue(getSpecification(),
-	                getParameterNames(),getParameters(),r,getDescriptorNames(),x);    
+	                getParameterNames(),getParameters(),r,getDescriptorNames());    
     	}
         
     }
