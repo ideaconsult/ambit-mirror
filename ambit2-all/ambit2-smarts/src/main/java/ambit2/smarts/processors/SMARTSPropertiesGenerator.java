@@ -2,7 +2,6 @@ package ambit2.smarts.processors;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
@@ -23,9 +22,14 @@ public class SMARTSPropertiesGenerator extends AbstractPropertyGenerator<String>
 	@Override
 	protected String generateProperty(IAtomContainer atomContainer)
 			throws AmbitException {
+		if ((atomContainer==null) || (atomContainer.getAtomCount()==0))
+			throw new AmbitException("Empty molecule");
 		try {
+			
 			IAtomContainer c = config.process(atomContainer);
-			CDKHueckelAromaticityDetector.detectAromaticity(c);
+			try {
+				CDKHueckelAromaticityDetector.detectAromaticity(c);
+			} catch (Exception x) { x.printStackTrace(); }
 			StringBuilder b = new StringBuilder();
 			utils.setCMLSMARTSProperties((IMolecule)atomContainer);
 			for (int i=0; i < atomContainer.getAtomCount();i++) {
@@ -38,8 +42,11 @@ public class SMARTSPropertiesGenerator extends AbstractPropertyGenerator<String>
 				b.append(',');
 			}			
 			return b.toString();
-		} catch (CDKException x) {
-			throw new AmbitException(x.getMessage());
+		} catch (AmbitException x) {
+			return "";
+		} catch (Exception x) {
+			return ""; //otherwise atomproperties is null and the thing cycles forever
+			//throw new AmbitException(x.getMessage());
 		}
 	}
 
