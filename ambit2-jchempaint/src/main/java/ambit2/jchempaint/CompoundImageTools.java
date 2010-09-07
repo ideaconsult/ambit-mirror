@@ -70,6 +70,7 @@ import ambit2.core.processors.structure.StructureTypeProcessor;
  * <b>Modified</b> 2006-3-5
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
+	public final static String SELECTED_ATOM_COLOR = "ambit2.color";
     RendererModel r2dm;
     Renderer renderer;
     protected Dimension imageSize = new Dimension(200,200);
@@ -483,6 +484,12 @@ class MySelectAtomGenerator  implements IGenerator  {
 	            IAtomContainer selectedAC = selection.getConnectedAtomContainer();
 	            if (selectedAC != null) {
 	                for (IAtom atom : selectedAC.atoms()) {
+	                	Color atomColor = selectionColor;
+	                	Object clr = atom.getProperty(CompoundImageTools.SELECTED_ATOM_COLOR);
+	                	if ((clr != null) && (clr instanceof Color)) {
+	                		atomColor = (Color) clr;
+	                	}
+	                	
 	                    Point2d p = atom.getPoint2d();
 	                    if (p==null) continue;
 	                    IRenderingElement element;
@@ -491,12 +498,12 @@ class MySelectAtomGenerator  implements IGenerator  {
 	                            element =
 	                                new RectangleElement(
 	                                    p.x - r, p.y - r, d, d, true,
-	                                    selectionColor);
+	                                    atomColor);
 	                            break;
 	                        case OVAL:
 	                        default:
 	                            element = new OvalElement(
-	                                            p.x, p.y, d, true, selectionColor);
+	                                            p.x, p.y, d, true, atomColor);
 	                    }
 	                    selectionElements.add(element);
 	                }
