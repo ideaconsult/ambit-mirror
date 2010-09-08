@@ -58,6 +58,9 @@
 			<version>2.1</version>            
          </plugin>
 </plugins>         
-</reporting>	
+</reporting>
+<properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>	
 
 </project>

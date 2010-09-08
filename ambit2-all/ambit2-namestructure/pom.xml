@@ -55,5 +55,8 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
 			
 		</plugins>  
   	</pluginManagement>
-</build>  	
+</build>
+ <properties>
+ 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>  	
 </project>
