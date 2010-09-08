@@ -38,6 +38,12 @@ import ambit2.db.search.structure.QueryField;
 
 
 public class QueryFieldsTest extends  QueryTest<QueryField>  {
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		dbFile = "src/test/resources/ambit2/db/processors/test/query-datasets-string.xml";
+	}
 	@Test
 	public void test() throws Exception {
 		QueryField qf = new QueryField();
@@ -80,7 +86,7 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 	protected QueryField createQuery() throws Exception {
 		QueryField qf = new QueryField();
 		qf.setFieldname(null);
-		qf.setValue("VeryHigh");
+		qf.setValue("abietic acid");
 		qf.setCondition(StringCondition.getInstance("="));
 		qf.setId(1);
 		return qf;
@@ -88,14 +94,15 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 
 	@Override
 	protected void verify(QueryField query, ResultSet rs) throws Exception {
+		int count = 0;
 		while (rs.next()) {
 			Assert.assertEquals(query.getId().intValue(),rs.getInt(1));
-			Assert.assertEquals(29141,rs.getInt(2));
-			Assert.assertEquals(129345,rs.getInt(3));
-			Assert.assertEquals(1,rs.getInt(4));
-			Assert.assertEquals(1,rs.getInt(5));			
+			Assert.assertEquals(1,rs.getInt(2));
+			Assert.assertEquals(1,rs.getInt(3));
+			count++;
 			//assertEquals(query.getValue(),rs.getInt(2));
 		}
+		Assert.assertEquals(1,count);
 	}
 }
 
