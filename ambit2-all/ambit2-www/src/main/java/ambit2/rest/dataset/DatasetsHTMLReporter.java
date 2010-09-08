@@ -54,6 +54,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						"Add new dataset (SDF, MOL, SMI, CSV, TXT file)",
 						fileUploadField,
 						ChemicalMediaType.CHEMICAL_MDLSDF.toString())); 
+				output.write("<select name='match'>");
+				for (Matcher matcher : IStructureKey.Matcher.values())
+					output.write(String.format("<option value='%s' %s>%s</option>",
+								matcher.toString(),
+								IStructureKey.Matcher.CAS.equals(matcher)?"selected":"",
+								matcher.getDescription()));
+				output.write("</select>");				
 				output.write("<br><input type='submit' value='Submit'>");
 				output.write("</form>");
 				output.write("</span></div>\n");	
@@ -68,7 +75,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 				
 				output.write("<select name='match'>");
 				for (Matcher matcher : IStructureKey.Matcher.values())
-					output.write(String.format("<option value='%s'>%s</option>",matcher.toString(),matcher.getDescription()));
+					output.write(String.format("<option value='%s' %s>%s</option>",
+							matcher.toString(),
+							IStructureKey.Matcher.CAS.equals(matcher)?"selected":"",
+							matcher.getDescription()));
 				output.write("</select>");
 				
 				output.write("<br><input type='submit' value='Submit'>");
