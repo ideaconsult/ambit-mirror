@@ -108,6 +108,16 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 				return "Match by SMILES";
 			}
 		},
+		ChEMBL {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.ChEMBLCompoundURI";
+			}
+			@Override
+			public String getDescription() {
+				return "http://rdf.farmbio.uu.se/chembl/onto/#forMolecule";
+			}
+		},		
 		None {
 			@Override
 			public String getClassName() {
@@ -115,7 +125,7 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 			}
 			@Override
 			public String getDescription() {
-				return "Add as a new structure";
+				return "Don't match, add as a new structure";
 			}			
 		};	
 		public abstract String getClassName();
