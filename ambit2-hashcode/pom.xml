@@ -23,5 +23,8 @@
   		<id>martin.martinov</id>
   		<name>Martin Martinov</name>
   	</developer>
-  </developers>  
+  </developers>
+  <properties>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>  
 </project>
