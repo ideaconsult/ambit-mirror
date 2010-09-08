@@ -19,7 +19,7 @@ import com.microworkflow.process.Workflow;
 7.Load data for the similar substances	
 8.Analysis	
 [Calculate measure of homogeneity;
-Remove substances that does not fit in the category – manually or by comparing to a threshold
+Remove substances that does not fit in the category manually or by comparing to a threshold
 Fill datagaps by read across
 
 member of the category, mutual similarity 1-2 , 1-3, 2-3; this is basicaly pairwise similarity; 
