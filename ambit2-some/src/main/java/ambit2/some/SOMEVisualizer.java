@@ -26,6 +26,7 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	protected String ruleid = null;
 	protected IAtomContainer mol;
 	
+	
 	public SOMEVisualizer() {
 		super();
 		selected = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
@@ -52,8 +53,10 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	protected void process(int atomNum, String atomSymbol, someindex index,
 			double value, boolean star) {
 		if (!star) return;
-		if ((ruleid==null) || ruleid.equals(index.name()))
+		if ((ruleid==null) || ruleid.equals(index.name())) {
 			mol.getAtom(atomNum-1).setProperty(SOMEShell.SOME_RESULT, value);
+			mol.getAtom(atomNum-1).setProperty(CompoundImageTools.SELECTED_ATOM_COLOR,index.getColor(value));
+		}
 			//selected.addAtom(mol.getAtom(atomNum));
 	}
 

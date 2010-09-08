@@ -1,5 +1,6 @@
 package ambit2.some;
 
+import java.awt.Color;
 import java.io.Reader;
 
 import org.openscience.cdk.exception.CDKException;
@@ -57,7 +58,9 @@ public class SOMERawReader extends RawIteratingReader<String> {
         		return "metabolic priority for (6) S-Oxidation";
         	}
         };
-
+        public Color getColor(double value) {
+        	return Color.getHSBColor((ordinal()-1.0f)/6.0f,0.8f,(float)value);
+        }
 	}
 	protected String firstLine = null;
 	public SOMERawReader(Reader in) throws CDKException {
