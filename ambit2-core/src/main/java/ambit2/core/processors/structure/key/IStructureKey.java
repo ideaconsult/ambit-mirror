@@ -117,7 +117,17 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 			public String getDescription() {
 				return "http://rdf.farmbio.uu.se/chembl/onto/#forMolecule";
 			}
-		},		
+		},	
+		SAMPLE {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.SampleKey";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by column \"SAMPLE\"";
+			}
+		},				
 		None {
 			@Override
 			public String getClassName() {
