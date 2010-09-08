@@ -99,3 +99,32 @@ join structure using(idstructure)
   comments="http://www.opentox.org/api/1.1#InChI" or
    comments="http://www.opentox.org/api/1.1#REACHRegistrationDate" ) 
    group by comments order by comments\G
+
+   -- 3.1 
+   --- pairwise properties
+   
+-- -----------------------------------------------------
+-- Table `property_pairstruc` values, assigned for pair of structures
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `property_pairstruc`;
+CREATE TABLE  `property_pairstruc` (
+  `idstructure1` int(10) unsigned NOT NULL auto_increment COMMENT 'First structure id',
+  `idstructure2` int(10) unsigned NOT NULL COMMENT 'Second structure id',
+  `idproperty` int(10) unsigned NOT NULL COMMENT 'Property id',
+  `user_name` varchar(16) collate utf8_bin NOT NULL COMMENT 'User',
+  `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') collate utf8_bin NOT NULL,
+  `text` text collate utf8_bin COMMENT 'Text value, if longer than allowed by property_string',
+  `idvalue_string` int(10) unsigned NOT NULL COMMENT 'link to property_string',
+  `value_num` double(14,4) NOT NULL COMMENT 'numeric value',
+  `idtype` enum('STRING','NUMERIC') collate utf8_bin NOT NULL,
+  PRIMARY KEY  USING BTREE (`idstructure1`,`idstructure2`,`idproperty`),
+  KEY `FK_relationship_struc_2` (`idstructure2`),
+  KEY `FK_relationship_struc_3` (`idproperty`),
+  KEY `FK_relationship_struc_4` (`user_name`),
+  KEY `FK_relationship_struc_5` (`idvalue_string`),
+  CONSTRAINT `FK_relationship_struc_1` FOREIGN KEY (`idstructure1`) REFERENCES `structure` (`idstructure`),
+  CONSTRAINT `FK_relationship_struc_2` FOREIGN KEY (`idstructure2`) REFERENCES `structure` (`idstructure`),
+  CONSTRAINT `FK_relationship_struc_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`),
+  CONSTRAINT `FK_relationship_struc_4` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`),
+  CONSTRAINT `FK_relationship_struc_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
