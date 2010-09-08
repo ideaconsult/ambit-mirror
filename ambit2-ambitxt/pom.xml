@@ -131,5 +131,8 @@ AMBIT XT introduces the concept of workflows, allowing guiding the users step by
 
   
   </dependencies>
+  <properties>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
   
 </project>
