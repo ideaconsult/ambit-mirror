@@ -15,7 +15,7 @@ import org.restlet.data.ClientInfo;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.representation.InputRepresentation;
+import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.LiteratureEntry;
@@ -174,7 +174,7 @@ public class CallableFileImport implements
 	}
 
 	public CallableFileImport(ClientInfo client, SourceDataset dataset,
-			InputRepresentation input, Connection connection,
+			Representation input, Connection connection,
 			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter,
 			ConformerURIReporter compoundReporter,
 			boolean firstCompoundOnly) {
@@ -313,6 +313,7 @@ public class CallableFileImport implements
 			IBatchStatistics stats = batch.process(new FileInputState(file));
 
 			if (firstCompoundOnly) {
+				if (recordImported == null) throw new Exception("No compound imported");
 				if (compoundReporter == null)
 					compoundReporter = new ConformerURIReporter();
 				return new Reference(compoundReporter.getURI(recordImported));				

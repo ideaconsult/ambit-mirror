@@ -22,6 +22,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Preference;
@@ -357,6 +358,24 @@ public class CompoundResourceTest extends ResourceTest {
 		
 		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_SMILES, 
 				new StringRepresentation(smiles,ChemicalMediaType.CHEMICAL_SMILES),Method.POST,
+				new Reference(String.format("http://localhost:%d/compound/29142/conformer/129346",port)));
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		c.close();
+		
+	}		
+	
+	@Test
+	public void testCreateEntryFromURI() throws Exception {
+		
+		String uri = String.format("http://localhost:%d/query/csls/50-00-0",port);
+		Form form = new Form();
+		form.add(OpenTox.params.compound_uri.toString(),uri);
+		
+		testAsyncPoll(new Reference(getTestURI()),MediaType.APPLICATION_WWW_FORM,
+				form.getWebRepresentation(),Method.POST,
 				new Reference(String.format("http://localhost:%d/compound/29142/conformer/129346",port)));
 
         IDatabaseConnection c = getConnection();	
