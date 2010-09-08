@@ -285,7 +285,9 @@ public class Property extends Model implements Serializable {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Property) {
-			return
+			if (((Property)obj).getReference()==null)
+				return ((Property)obj).getName().equals(getName());
+			else return
 			((Property)obj).getName().equals(getName()) &&
 			((Property)obj).getReference().equals(getReference()) ; 
 		} else return false;

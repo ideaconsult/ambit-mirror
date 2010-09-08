@@ -82,7 +82,7 @@ public abstract class PropertyKey<Result> extends DefaultAmbitProcessor<IStructu
 	}
 	@Override
 	public String toString() {
-		return "Property tag";
+		return "Custom key to match structures";
 	}
 	protected boolean isValid(Object key, Object value) {
 		return key != null;

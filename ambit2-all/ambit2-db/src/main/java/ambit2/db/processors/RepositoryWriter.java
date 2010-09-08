@@ -36,7 +36,6 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
-import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.SmilesKey;
@@ -104,8 +103,10 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		this.propertyKey = propertyKey==null?new CASKey():propertyKey;
 		if ((this.propertyKey.getType() == Number.class) || (this.propertyKey.getType() == Integer.class) ||(this.propertyKey.getType() == Double.class))
 			query_property = new QueryFieldNumeric();
-		else
+		else {
 			query_property = new QueryField();
+			((QueryField)query_property).setNameCondition(StringCondition.getInstance("="));
+		}	
 		
 		query_property.setId(-1);
 
