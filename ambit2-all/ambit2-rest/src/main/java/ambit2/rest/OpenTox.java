@@ -125,6 +125,15 @@ public class OpenTox {
 			public String getDescription() {
 				return "Algorithm URI";
 			}
+		},		
+		compound_uri {
+			public boolean isMandatory() {
+				return false;
+			}
+	
+			public String getDescription() {
+				return "Compound URI";
+			}			
 		},			
 		compound_uris {
 			public boolean isMandatory() {
