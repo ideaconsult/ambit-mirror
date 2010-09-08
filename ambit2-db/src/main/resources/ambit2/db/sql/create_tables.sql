@@ -256,6 +256,7 @@ CREATE TABLE  `tuples` (
 
 -- -----------------------------------------------------
 -- Table `property_values` all values
+-- v3.2 value_num changed to double instead of double(14,4)
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `property_values`;
 CREATE TABLE  `property_values` (
@@ -266,7 +267,7 @@ CREATE TABLE  `property_values` (
   `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') collate utf8_bin NOT NULL default 'UNKNOWN',
   `text` text collate utf8_bin,
   `idvalue_string` int(10) unsigned default NULL,
-  `value_num` double(14,4) default NULL,
+  `value_num` double default NULL,
   `idtype` enum('STRING','NUMERIC') collate utf8_bin NOT NULL default 'STRING',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `Index_1` USING BTREE (`idproperty`,`idstructure`),
@@ -280,6 +281,33 @@ CREATE TABLE  `property_values` (
   CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `property_pairstruc` values, assigned for pair of structures
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `property_pairstruc`;
+CREATE TABLE  `property_pairstruc` (
+  `idstructure1` int(10) unsigned NOT NULL auto_increment COMMENT 'First structure id',
+  `idstructure2` int(10) unsigned NOT NULL COMMENT 'Second structure id',
+  `idproperty` int(10) unsigned NOT NULL COMMENT 'Property id',
+  `user_name` varchar(16) collate utf8_bin NOT NULL COMMENT 'User',
+  `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') collate utf8_bin NOT NULL,
+  `text` text collate utf8_bin COMMENT 'Text value, if longer than allowed by property_string',
+  `idvalue_string` int(10) unsigned NOT NULL COMMENT 'link to property_string',
+  `value_num` double(14,4) NOT NULL COMMENT 'numeric value',
+  `idtype` enum('STRING','NUMERIC') collate utf8_bin NOT NULL,
+  PRIMARY KEY  USING BTREE (`idstructure1`,`idstructure2`,`idproperty`),
+  KEY `FK_relationship_struc_2` (`idstructure2`),
+  KEY `FK_relationship_struc_3` (`idproperty`),
+  KEY `FK_relationship_struc_4` (`user_name`),
+  KEY `FK_relationship_struc_5` (`idvalue_string`),
+  CONSTRAINT `FK_relationship_struc_1` FOREIGN KEY (`idstructure1`) REFERENCES `structure` (`idstructure`),
+  CONSTRAINT `FK_relationship_struc_2` FOREIGN KEY (`idstructure2`) REFERENCES `structure` (`idstructure`),
+  CONSTRAINT `FK_relationship_struc_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`),
+  CONSTRAINT `FK_relationship_struc_4` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`),
+  CONSTRAINT `FK_relationship_struc_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -669,7 +697,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (3,0,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (3,2,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma seperated strings
