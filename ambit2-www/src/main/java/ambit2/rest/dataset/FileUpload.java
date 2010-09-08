@@ -174,7 +174,7 @@ public class FileUpload {
 			          
 			          CallableFileImport callable = new CallableFileImport(getRequest().getClientInfo(),
 			        		  dataset,
-			        		  (InputRepresentation)entity,
+			        		  entity,
 			        		  connection,
 			        		  reporter,
 			        		  compoundReporter,

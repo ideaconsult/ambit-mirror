@@ -10,6 +10,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -38,6 +39,7 @@ import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.DeleteChemical;
+import ambit2.pubchem.CSLSRequest;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
@@ -440,19 +442,50 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			//return copyDatasetToQueryResultsTable(new Form(entity),true);
-			throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,entity.getMediaType().toString());
-		} else {
-			if(upload == null) {
-				upload = new FileUpload();
-				upload.setFirstCompoundOnly(true);
-				upload.setRequest(getRequest());
-				upload.setResponse(getResponse());
-				upload.setContext(getContext());
-				upload.setApplication(getApplication());
+			
+			Form form = new Form(entity);
+			String uri = form.getFirstValue(OpenTox.params.compound_uri.toString());
+			if (uri == null)
+				if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.compound_uris.toString() + " empty.");
+			
+			String sdf = getSDFFromURI(uri);
+			if(upload == null) upload = createFileUpload();
+			String source = uri;
+			String name = "Copied from URL";
+			if (uri.startsWith(CSLSRequest.CSLS_URL))  {
+				source = CSLSRequest.CSLS_URL; 
+				name = "Chemical Structure Lookup Service (CSLS)";
+				uri = name;
 			}
+			
+			if (uri.startsWith(String.format("%s/query/csls",getRequest().getRootRef()))) { 
+				source = CSLSRequest.CSLS_URL;name = "Chemical Structure Lookup Service (CSLS)";
+				uri = name;
+			}
+			if (uri.startsWith(String.format("%s/query/pubchem",getRequest().getRootRef()))) {
+				source = "http://www.ncbi.nlm.nih.gov/entrez/eutils"; name = "PUBCHEM"; uri = name;
+			}
+			
+			upload.setDataset(new SourceDataset(uri,LiteratureEntry.getInstance(name,source)));
+			
+			return  upload.upload(new StringRepresentation(sdf,ChemicalMediaType.CHEMICAL_MDLSDF),variant,true,false);
+			
+			//return copyDatasetToQueryResultsTable(new Form(entity),true);
+			//throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,entity.getMediaType().toString());
+		} else {
+			if(upload == null) upload = createFileUpload();
 			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", getRequest().getResourceRef().toString())));
 			return  upload.upload(entity,variant,true,false);
 		}
+	}
+	
+	protected FileUpload createFileUpload() {
+		FileUpload upload = new FileUpload();
+		upload.setFirstCompoundOnly(true);
+		upload.setRequest(getRequest());
+		upload.setResponse(getResponse());
+		upload.setContext(getContext());
+		upload.setApplication(getApplication());
+		return upload;
 	}
 }
