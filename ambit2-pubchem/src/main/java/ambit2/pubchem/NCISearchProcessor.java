@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 
+import org.openscience.cdk.index.CASNumber;
+
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
@@ -169,7 +171,10 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 				StringBuilder b = new StringBuilder();
 				b.append(super.process(target));
 				
-				return b.toString().replace("$$$$",String.format("\n> <CAS>\n%s\n\n$$$$",target)).trim();
+				if (CASNumber.isValid(target)) 
+					return b.toString().replace("$$$$",String.format("\n> <CAS>\n%s\n\n$$$$",target)).trim();
+				else 
+					return b.toString();
 				
 			} catch (FileNotFoundException x) {
 				throw x;
