@@ -26,7 +26,6 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	protected String ruleid = null;
 	protected IAtomContainer mol;
 	
-	
 	public SOMEVisualizer() {
 		super();
 		selected = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
@@ -47,19 +46,36 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	public BufferedImage getImage(IAtomContainer mol) throws AmbitException {
 		return  getImage(mol,null,150,150,false);
 	}
-	
+	/*
+	@Override
+	protected void process(int atomNum, String atomSymbol, someindex index,
+			double value, boolean star) {
+		double[] size = new double[] {1.0,1.33,1.66};
+		
+		mol.getAtom(atomNum-1).setProperty(SOMEShell.SOME_RESULT, value);
+		mol.getAtom(atomNum-1).setProperty(CompoundImageTools.SELECTED_ATOM_COLOR,index.getColor(0.75));
+		mol.getAtom(atomNum-1).setProperty(CompoundImageTools.SELECTED_ATOM_SIZE,size[atomNum % 3]);
+		mol.getAtom(atomNum-1).setProperty(CompoundImageTools.ATOM_ANNOTATION,String.format("%d",index.ordinal()-1));
+		
+			//selected.addAtom(mol.getAtom(atomNum));
+	}
+	*/
 
 	@Override
 	protected void process(int atomNum, String atomSymbol, someindex index,
 			double value, boolean star) {
+
 		if (!star) return;
 		if ((ruleid==null) || ruleid.equals(index.name())) {
 			mol.getAtom(atomNum-1).setProperty(SOMEShell.SOME_RESULT, value);
-			mol.getAtom(atomNum-1).setProperty(CompoundImageTools.SELECTED_ATOM_COLOR,index.getColor(value));
+			mol.getAtom(atomNum-1).setProperty(CompoundImageTools.SELECTED_ATOM_SIZE,1+value);
+			mol.getAtom(atomNum-1).setProperty(CompoundImageTools.SELECTED_ATOM_COLOR,index.getColor(0.75));
+			mol.getAtom(atomNum-1).setProperty(CompoundImageTools.ATOM_ANNOTATION,
+					String.format("(%d)",index.ordinal()-1));
 		}
-			//selected.addAtom(mol.getAtom(atomNum));
+			
 	}
-
+	
     public Dimension getImageSize() {
 		return imageSize;
 	}
