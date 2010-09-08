@@ -1,5 +1,8 @@
 package ambit2.rest.structure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -32,6 +35,7 @@ import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryExactStructure;
 import ambit2.db.search.structure.QueryField;
+import ambit2.db.search.structure.QueryFieldMultiple;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.rest.query.StructureQueryResource;
@@ -52,6 +56,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	public static final String resourceID = String.format("/{%s}",resourceKey);
 	public static final String representationID = String.format("/{%s}",representationKey);
 	protected String text = null;
+	protected String[] text_multi = null;
 	protected NCISearchProcessor.METHODS rep_id = null;
 	
 	protected static String URL_as_id = "url";
@@ -107,12 +112,14 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			if (isSearchParam(text)) {
 				Form form = getParams();
 				text = form.getFirstValue(search_param);
+				text_multi = form.getValuesArray(search_param);
 			}
 
 			int idcompound = isAmbitID(text);
 			//query
-			
-			if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
+			if ((text_multi!= null) && (text_multi.length>1)) {
+				query =  getMultiTextQuery(null,true,text_multi);
+			} else	if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
 				if (CASNumber.isValid(text)) query =  getTextQuery(Property.getCASInstance(),true,text);
 			} else if (EINECS.isValidFormat(text)) { //this is EINECS
 				//we'd better not search for invalid numbers
@@ -177,6 +184,36 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
     	q_by_name.setValue(value);
 		return q_by_name;
 	}
+	
+	protected QueryFieldMultiple getMultiTextQuery(Property property, boolean caseSensitive, String[] value) {
+		QueryFieldMultiple q_by_name = new QueryFieldMultiple();
+		
+    	q_by_name.setCaseSensitive(caseSensitive);
+    	q_by_name.setRetrieveProperties(true);
+    	q_by_name.setSearchByAlias(true);
+    	List<String> values = new ArrayList<String>();
+    	
+    	int cas = 0;
+    	int einecs = 0;
+    	for (String v : value) {
+			if (CASProcessor.isValidFormat(v))
+			if (CASNumber.isValid(v)) cas++;
+			else if (EINECS.isValidFormat(v)) 
+			if (EINECS.isValid(v)) einecs++;
+			
+    		values.add(v);
+    	}
+    	if (cas==value.length) { property = Property.getCASInstance(); q_by_name.setCaseSensitive(true); }
+    	else
+    	if (einecs==value.length) { property = Property.getEINECSInstance();  q_by_name.setCaseSensitive(true);}
+    	else if((cas+einecs)==value.length) q_by_name.setCaseSensitive(true); 
+    	else q_by_name.setCaseSensitive(false);
+    	
+    	q_by_name.setFieldname(property);
+    	q_by_name.setChemicalsOnly(true);
+    	q_by_name.setValue(values);
+		return q_by_name;
+	}	
 	@Override
 	protected void setGroupProperties(Context context, Request request,
 			Response response) throws ResourceException {
