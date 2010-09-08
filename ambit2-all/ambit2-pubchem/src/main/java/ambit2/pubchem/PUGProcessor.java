@@ -139,7 +139,7 @@ public class PUGProcessor extends DefaultAmbitProcessor<List<IStructureRecord>,L
 	}
 	/**
 <pre>
-Example:   You want to download CID 1 and CID 99 – being uids 1 and 99 in the “pccompound” Entrez database – in SDF format with gzip compression.
+Example:   You want to download CID 1 and CID 99  being uids 1 and 99 in the 'pccompound' Entrez database  in SDF format with gzip compression.
 
 The typical flow of information is as follows.  First, the initial input XML is sent to PUG via HTTP POST.  Note the input data container with the download request and uid and format options:
 
@@ -194,7 +194,7 @@ If the request is small and finishes very quickly, you may get a final URL right
 </PCT-Data>
 
 
-You would then parse out this request id, being “402936103567975582”, in this case, and use this id to “poll” PUG on the status of the request, composing an XML message like:
+You would then parse out this request id, being '402936103567975582', in this case, and use this id to 'poll' PUG on the status of the request, composing an XML message like:
 
 <PCT-Data>
   <PCT-Data_input>
@@ -209,9 +209,9 @@ You would then parse out this request id, being “402936103567975582”, in this ca
   </PCT-Data_input>
 </PCT-Data>
 
-Note that here the request type “status” is used; there is also the request type “cancel” that you may use to cancel a running job. 
+Note that here the request type 'status' is used; there is also the request type 'cancel' that you may use to cancel a running job. 
 
-If the request is still running, you well get back another waiting message as above, and then you’d poll again after some reasonable interval. If the request is finished, you will get a final result message like:
+If the request is still running, you well get back another waiting message as above, and then you would poll again after some reasonable interval. If the request is finished, you will get a final result message like:
 
 <PCT-Data>
   <PCT-Data_output>
