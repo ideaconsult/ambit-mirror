@@ -71,6 +71,8 @@ import ambit2.core.processors.structure.StructureTypeProcessor;
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
 	public final static String SELECTED_ATOM_COLOR = "ambit2.color";
+	public final static String SELECTED_ATOM_SIZE = "ambit2.size";
+	public final static String ATOM_ANNOTATION = "ambit2.tooltip";
     RendererModel r2dm;
     Renderer renderer;
     protected Dimension imageSize = new Dimension(200,200);
@@ -120,14 +122,16 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
        
        generators.add(new MySelectAtomGenerator());
        generators.add(new SelectBondGenerator());
-       if (rings)
-       generators.add(new RingGenerator());
+       if (rings)  generators.add(new RingGenerator());
        
+       generators.add(new AtomAnnotationGenerator());
 
     	
 	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
 		RendererModel r2dm = renderer.getRenderer2DModel();	
+		
 		r2dm.setDrawNumbers(atomNumbers);
+		r2dm.setUseAntiAliasing(true);
 		//r2dm.setBackgroundDimension(cellSize);
 		/*
 		r2dm.setBackColor(background);
@@ -485,6 +489,11 @@ class MySelectAtomGenerator  implements IGenerator  {
 	            if (selectedAC != null) {
 	                for (IAtom atom : selectedAC.atoms()) {
 	                	Color atomColor = selectionColor;
+	                	double m = 1;
+	                	Object size = atom.getProperty(CompoundImageTools.SELECTED_ATOM_SIZE);
+	                	if (size != null) try {
+	                		m = Double.parseDouble(size.toString());
+	                	} catch (Exception x) {}
 	                	Object clr = atom.getProperty(CompoundImageTools.SELECTED_ATOM_COLOR);
 	                	if ((clr != null) && (clr instanceof Color)) {
 	                		atomColor = (Color) clr;
@@ -503,7 +512,7 @@ class MySelectAtomGenerator  implements IGenerator  {
 	                        case OVAL:
 	                        default:
 	                            element = new OvalElement(
-	                                            p.x, p.y, d, true, atomColor);
+	                                            p.x, p.y, d * m, true, atomColor);
 	                    }
 	                    selectionElements.add(element);
 	                }

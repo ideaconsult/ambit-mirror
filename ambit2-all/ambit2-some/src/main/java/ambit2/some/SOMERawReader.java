@@ -25,41 +25,71 @@ public class SOMERawReader extends RawIteratingReader<String> {
         aliphaticHydroxylation {
         	@Override
         	public String toString() {
-        		return "metabolic priority for (1) Aliphatic Hydroxylation";
+        		return "Aliphatic Hydroxylation";
+        	}
+        	@Override
+        	public Color getColor(double arg0) {
+        		return new Color(0xeb,0xbe,0x9f,(int)(arg0*255));
         	}
         },
         aromaticHydroxylation {
         	@Override
         	public String toString() {
-        		return "metabolic priority for (2) Aromatic Hydroxylation";
+        		return "Aromatic Hydroxylation";
         	}
+        	@Override
+        	public Color getColor(double arg0) {
+        		return new Color(0x3e,0xa6,0x3b,(int)(arg0*255));
+        	}        	
         },        
         NDealkylation {
         	@Override
         	public String toString() {
-        		return "metabolic priority for (3) N-Dealkylation";
+        		return "N-Dealkylation";
         	}
+        	@Override
+        	public Color getColor(double arg0) {
+        		return new Color(0xd1,0x2c,0x8b,(int)(arg0*255));
+        	}           	
         },   
         NOxidation {
         	@Override
         	public String toString() {
-        		return "metabolic priority for (4) N-Oxidation";
+        		return "N-Oxidation";
         	}
+        	@Override
+        	public Color getColor(double arg0) {
+        		return new Color(0x0a,0x55,0xa3,(int)(arg0*255));
+        	}         	
         },           
         ODealkylation {
         	@Override
         	public String toString() {
-        		return "metabolic priority for (5) O-Dealkylation";
+        		return "O-Dealkylation";
         	}
+        	@Override
+        	public Color getColor(double arg0) {
+        		return new Color(0xff,0x6d,0x06,(int)(arg0*255));
+        	}           	
         },   
         SOxidation {
         	@Override
         	public String toString() {
-        		return "metabolic priority for (6) S-Oxidation";
+        		return "S-Oxidation";
         	}
+           	@Override
+        	public Color getColor(double arg0) {
+        		return new  Color(0x90,0x62,0x0c,(int)(arg0*255));
+        	}          	
         };
         public Color getColor(double value) {
         	return Color.getHSBColor((ordinal()-1.0f)/6.0f,0.8f,(float)value);
+        	
+			
+			
+		
+		
+		
         }
 	}
 	protected String firstLine = null;
