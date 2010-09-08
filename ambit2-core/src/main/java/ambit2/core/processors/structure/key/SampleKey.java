@@ -9,4 +9,9 @@ public class SampleKey extends PropertyNameKey {
 	public SampleKey() {
 		super("SAMPLE");
 	}	
+	@Override
+	protected boolean isValid(Object newkey, Object value) {
+		return (value != null) && !".".equals(value);
+	}
+	
 }
