@@ -5,8 +5,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
-
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.exceptions.HttpException;
@@ -17,7 +15,7 @@ public abstract class CSLSRequest<R> extends DefaultAmbitProcessor<String, R> {
 	 * 
 	 */
 	private static final long serialVersionUID = -4821305383980518514L;
-
+	public static final String CSLS_URL = "http://cactus.nci.nih.gov/chemical/structure";
 	protected NCISearchProcessor.METHODS representation;
 	public NCISearchProcessor.METHODS getRepresentation() {
 		return representation;
@@ -29,7 +27,7 @@ public abstract class CSLSRequest<R> extends DefaultAmbitProcessor<String, R> {
 	public R process(String target) throws AmbitException {
 		try {
 			return get(new URL(
-				String.format("http://cactus.nci.nih.gov/chemical/structure/%s/%s%s", target,representation.toString(),getOptions())));
+				String.format("%s/%s/%s%s", CSLS_URL, target,representation.toString(),getOptions())));
 		} catch (MalformedURLException x) {
 			throw new AmbitException(x);
 		}
