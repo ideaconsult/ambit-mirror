@@ -45,8 +45,8 @@ import org.openscience.jchempaint.renderer.elements.OvalElement;
 import org.openscience.jchempaint.renderer.elements.RectangleElement;
 import org.openscience.jchempaint.renderer.font.AWTFontManager;
 import org.openscience.jchempaint.renderer.generators.AtomNumberGenerator;
-import org.openscience.jchempaint.renderer.generators.BasicAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.BasicBondGenerator;
+import org.openscience.jchempaint.renderer.generators.ExtendedAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.generators.RingGenerator;
@@ -115,12 +115,15 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     private Renderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
        List<IGenerator> generators = new ArrayList<IGenerator>();
        
+       generators.add(new MySelectAtomGenerator());
        generators.add(new BasicAtomGenerator());
        generators.add(new BasicBondGenerator());
+       
+       
        if (atomNumbers)
            generators.add(new AtomNumberGenerator());
        
-       generators.add(new MySelectAtomGenerator());
+      
        generators.add(new SelectBondGenerator());
        if (rings)  generators.add(new RingGenerator());
        
