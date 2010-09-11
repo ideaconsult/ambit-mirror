@@ -113,15 +113,17 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     private Renderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
        List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
        
-       generators.add(new BasicAtomGenerator());
+       
        generators.add(new BasicBondGenerator());
+       if (rings)
+           generators.add(new RingGenerator());
+       generators.add(new BasicAtomGenerator());
        if (atomNumbers)
            generators.add(new AtomNumberGenerator());
        
        generators.add(new SelectAtomGenerator());
        generators.add(new SelectBondGenerator());
-       if (rings)
-       generators.add(new RingGenerator());
+       
        
 
     	
@@ -457,6 +459,10 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		}
 		return getImage(mol,selector,false,atomnumbers);
 		
+	}
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		return null;
 	}
 }
 
