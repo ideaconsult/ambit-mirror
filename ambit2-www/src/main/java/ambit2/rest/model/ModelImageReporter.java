@@ -14,6 +14,7 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
@@ -39,7 +40,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 		this.request = request;
 		this.d = d;
 		dataset = form.getFirstValue(OpenTox.params.dataset_uri.toString());
-		if (dataset==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
+		//if (dataset==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
 		
 		param = form.getFirstValue(OpenTox.params.parameters.toString());
 		modelURIReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request);
@@ -69,6 +70,14 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 	
 	
 	protected BufferedImage getImage(ModelPredictor predictor,String resultsURI) throws ResourceException {
+		if (dataset==null) { //legend only
+			if (predictor instanceof IStructureDiagramHighlights) try {
+				return ((IStructureDiagramHighlights)predictor).getLegend(d.width,d.height);
+			} catch (AmbitException x) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+			}
+			else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
+		}
 		Reference firstmol = new Reference(dataset);
 		firstmol.addQueryParameter(OpenTox.params.feature_uris.toString(),resultsURI);
 		firstmol.addQueryParameter("max", "1");

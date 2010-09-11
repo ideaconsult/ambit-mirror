@@ -1,5 +1,6 @@
 package ambit2.rest.model.predictor;
 
+import java.awt.image.BufferedImage;
 import java.sql.Connection;
 
 import org.restlet.data.Reference;
@@ -80,4 +81,8 @@ public class DescriptorPredictor  extends	ModelPredictor<DescriptorsCalculator,I
 		return b.toString();
 				
 	}	
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		return calculator.getLegend(width, height);
+	}
 }

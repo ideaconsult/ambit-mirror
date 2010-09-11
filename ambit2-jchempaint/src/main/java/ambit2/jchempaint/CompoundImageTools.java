@@ -465,6 +465,10 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		return getImage(mol,selector,false,atomnumbers);
 		
 	}
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		return null;
+	}
 }
 
 /**

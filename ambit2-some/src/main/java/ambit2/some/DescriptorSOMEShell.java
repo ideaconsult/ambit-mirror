@@ -144,5 +144,11 @@ public class DescriptorSOMEShell implements IMolecularDescriptor , IStructureDia
 		if (visualizer==null) visualizer = new SOMEVisualizer();
 		this.visualizer.imageSize = imageSize;
 	}
+	
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		if (visualizer==null) visualizer = new SOMEVisualizer();
+		return visualizer.getLegend(width, height);
+	}
 
 }

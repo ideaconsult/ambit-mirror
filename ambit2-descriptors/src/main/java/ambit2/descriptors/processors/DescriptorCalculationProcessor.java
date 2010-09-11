@@ -77,4 +77,12 @@ public class DescriptorCalculationProcessor extends
 		} else throw new AmbitException("Not supported");
 
 	}
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		if (descriptor == null) 
+			throw new AmbitException("Undefined descriptor");
+		if (descriptor instanceof IStructureDiagramHighlights) {
+			return ((IStructureDiagramHighlights)descriptor).getLegend(width, height);
+		} else throw new AmbitException("Not supported");
+	}
 }
