@@ -212,5 +212,24 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     	}    	    		
       	return null;
 	}
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+        if (descriptors==null)	descriptors = d.process(null);
+    	Iterator<Property> i = descriptors.getProperties(true);
+    	while (i.hasNext()) {
+    		try {
+    			Property p = i.next();
+    			if (p.isEnabled()) {
+    				calc.setProperty(i.next());
+    				return calc.getLegend(width, height);
+    			}	
+    		} catch (AmbitException x) {
+    			throw x;
+   			} catch (Exception x) {
+   				throw new AmbitException(x);
+    		}
+    	}    	    		
+      	return null;
+	}
 }
 

@@ -1,6 +1,9 @@
 package ambit2.some;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -148,7 +151,26 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	public void setEnabled(boolean value) {
 		
 	}
-
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		BufferedImage buffer = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = buffer.createGraphics();
+		g.setColor(Color.white);
+		g.fillRect(0, 0, width,height);
+		int h = height/ (someindex.SOxidation.ordinal() - someindex.aliphaticHydroxylation.ordinal() +1);
+		g.setFont(new Font("TrebuchetMS",Font.BOLD,h/3==0?12:h/3));
+		for (int i = someindex.aliphaticHydroxylation.ordinal() ; i <= someindex.SOxidation.ordinal(); i ++) {
+			g.setBackground(someindex.values()[i].getColor(0.75));
+			g.setColor(someindex.values()[i].getColor(0.75));
+			g.fillOval(3, 3+h*(i-someindex.aliphaticHydroxylation.ordinal()), h-6, h-6);
+			g.setColor(Color.black);
+			
+			g.drawString(someindex.values()[i].toString(), 
+					h+10,
+					3+h/2+h*(i-someindex.aliphaticHydroxylation.ordinal()));
+		}
+		return buffer;
+	}
 }
 
 

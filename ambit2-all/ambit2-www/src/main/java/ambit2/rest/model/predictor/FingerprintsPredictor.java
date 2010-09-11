@@ -1,5 +1,6 @@
 package ambit2.rest.model.predictor;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
@@ -60,4 +61,8 @@ public class FingerprintsPredictor extends	CoveragePredictor<IStructureRecord,Li
 		assignResults(target, value);
 		return target;
 	}	
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		return null;
+	}
 }

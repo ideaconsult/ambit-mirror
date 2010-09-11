@@ -10,6 +10,7 @@ import ambit2.base.exceptions.AmbitException;
 public interface IStructureDiagramHighlights {
 	BufferedImage getImage(IAtomContainer mol,String ruleID,int width,int height,boolean atomnumbers)  throws AmbitException;
 	BufferedImage getImage(IAtomContainer mol)  throws AmbitException;
+	BufferedImage getLegend(int width,int height)  throws AmbitException;
 	void setImageSize(Dimension imageSize);
 	Dimension getImageSize();
 }

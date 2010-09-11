@@ -89,5 +89,5 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 			setDescriptor(null);
 		}
 	}
-
+	
 }
