@@ -79,7 +79,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     protected Color background = Color.white;
     protected BufferedImage defaultImage = null;
     BufferedImage buffer = null;
-    protected Color borderColor = Color.GRAY;
+    protected Color borderColor = Color.white;
     protected int borderWidth = 5;
 
 	public int getBorderWidth() {
@@ -115,20 +115,23 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     private Renderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
        List<IGenerator> generators = new ArrayList<IGenerator>();
        
-       generators.add(new MySelectAtomGenerator());
-       
        generators.add(new BasicBondGenerator());
        if (rings)  generators.add(new RingGenerator());
+
+       generators.add(new MyBasicAtomGenerator());
+       generators.add(new MySelectAtomGenerator());
        generators.add(new BasicAtomGenerator());
        
        if (atomNumbers)
            generators.add(new AtomNumberGenerator());
        
        generators.add(new SelectBondGenerator());
+
        generators.add(new AtomAnnotationGenerator());
-    	
-	   Renderer renderer = new Renderer(generators, new AWTFontManager());
+       
+	   Renderer renderer = new Renderer(generators, new AWTFontManager()) ;
 	   RendererModel r2dm = renderer.getRenderer2DModel();	
+		r2dm.setCompactShape(AtomShape.SQUARE);
 		
 		r2dm.setDrawNumbers(atomNumbers);
 		r2dm.setUseAntiAliasing(true);
@@ -469,16 +472,46 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
  * @author nina
  *
  */
-class MySelectAtomGenerator  implements IGenerator  {
+class MyBasicAtomGenerator extends BasicAtomGenerator {
+	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+		ElementGroup elementGroup = new ElementGroup();
+		for (IAtom atom : ac.atoms()) {
+
+			if ("C".equals(atom.getSymbol())) continue;
+    	    Point2d p = atom.getPoint2d();
+
+			if (p==null) continue;
+    	    double r = model.getAtomRadius() / model.getScale();
+    	    double d = 2 * r;
+    	    if (model.getCompactShape() == AtomShape.SQUARE) {
+    	    	elementGroup.add(new RectangleElement(
+        	            p.x - r, p.y - r, d, d, true, Color.white));
+    	    } else {
+    	    	elementGroup.add(new OvalElement(
+    	                p.x, p.y, r, true, Color.white));
+    	    }
+		}
+		return elementGroup;
+	}
+	
+	@Override
+	public List<IGeneratorParameter> getParameters() {
+		return super.getParameters();
+	}
+}
+class MySelectAtomGenerator implements IGenerator  {
 	 private boolean autoUpdateSelection = true;
 
-	    public MySelectAtomGenerator() {}
+	 public MySelectAtomGenerator() {}
+
 
 	    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+	    	ElementGroup selectionElements = new ElementGroup();
+	    	
 	        Color selectionColor = model.getSelectedPartColor();
 	        AtomShape shape = model.getSelectionShape();
 	        IChemObjectSelection selection = model.getSelection();
-	        ElementGroup selectionElements = new ElementGroup();
+	        
 
 	        if(selection==null)
 	        	return selectionElements;
@@ -534,3 +567,4 @@ class MySelectAtomGenerator  implements IGenerator  {
 	    }
 	    
 }
+
