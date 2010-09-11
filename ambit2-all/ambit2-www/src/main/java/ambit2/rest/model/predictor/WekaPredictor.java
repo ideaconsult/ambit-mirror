@@ -2,7 +2,7 @@ package ambit2.rest.model.predictor;
 
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
-
+import java.awt.image.BufferedImage;
 import weka.classifiers.Classifier;
 import weka.clusterers.Clusterer;
 import weka.core.Attribute;
@@ -129,5 +129,10 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 		return b.toString();
 				
 	}	
-	
+
+
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+			return null;
+	}	
 }

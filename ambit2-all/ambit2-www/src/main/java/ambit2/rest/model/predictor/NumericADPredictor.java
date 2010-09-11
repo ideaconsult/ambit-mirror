@@ -2,7 +2,7 @@ package ambit2.rest.model.predictor;
 
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
-
+import java.awt.image.BufferedImage;
 import weka.core.Attribute;
 import Jama.Matrix;
 import ambit2.base.data.Property;
@@ -90,5 +90,10 @@ public class NumericADPredictor extends	CoveragePredictor<IStructureRecord,Matri
 			throws AmbitException {
 		record.setIdchemical(target.getIdchemical());
 		record.setIdstructure(target.getIdstructure());
+	}
+
+		@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+			return null;
 	}
 }
