@@ -127,11 +127,12 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
        generators.add(new SelectBondGenerator());
        generators.add(new AtomAnnotationGenerator());
     	
-	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
-		RendererModel r2dm = renderer.getRenderer2DModel();	
+	   Renderer renderer = new Renderer(generators, new AWTFontManager());
+	   RendererModel r2dm = renderer.getRenderer2DModel();	
 		
 		r2dm.setDrawNumbers(atomNumbers);
 		r2dm.setUseAntiAliasing(true);
+		r2dm.setBackColor(new Color(background.getRed(),background.getGreen(),background.getBlue(),0));
 		//r2dm.setBackgroundDimension(cellSize);
 		/*
 		r2dm.setBackColor(background);
