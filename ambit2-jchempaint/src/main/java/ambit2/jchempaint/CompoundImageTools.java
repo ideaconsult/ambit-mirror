@@ -116,19 +116,16 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
        List<IGenerator> generators = new ArrayList<IGenerator>();
        
        generators.add(new MySelectAtomGenerator());
-       generators.add(new BasicAtomGenerator());
-       generators.add(new BasicBondGenerator());
        
+       generators.add(new BasicBondGenerator());
+       if (rings)  generators.add(new RingGenerator());
+       generators.add(new BasicAtomGenerator());
        
        if (atomNumbers)
            generators.add(new AtomNumberGenerator());
        
-      
        generators.add(new SelectBondGenerator());
-       if (rings)  generators.add(new RingGenerator());
-       
        generators.add(new AtomAnnotationGenerator());
-
     	
 	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
 		RendererModel r2dm = renderer.getRenderer2DModel();	
