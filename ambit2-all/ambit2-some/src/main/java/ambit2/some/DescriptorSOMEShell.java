@@ -42,9 +42,11 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.ShellException;
 import ambit2.base.log.AmbitLogger;
+import ambit2.core.data.ArrayResult;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.core.processors.structure.StructureTypeProcessor;
+import ambit2.some.SOMERawReader.someindex;
 
 
 /**
@@ -92,7 +94,7 @@ public class DescriptorSOMEShell implements IMolecularDescriptor , IStructureDia
     public void setParameters(Object[] arg0) throws CDKException {
     }
     public DescriptorValue calculate(IAtomContainer arg0) {
-    	StringDescriptorResultType r = null;
+    	ArrayResult r = null;
     	try {
     		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
     		if (!StructureTypeProcessor.has3DCoordinates(arg0)) throw new CDKException("No 3D coordinates!");
@@ -101,23 +103,56 @@ public class DescriptorSOMEShell implements IMolecularDescriptor , IStructureDia
 	        
 	        Object value = newmol.getProperty(SOMEShell.SOME_RESULT);
 	        
+	        final int[] count = new int[SOMERawReader.someindex.values().length];
+	        for (int i=0; i < count.length;i++) count[i] = 0;
+	        
 	        if (value == null) value = "@SOME results: NONE";
+	        else {
+	        	SOMEResultsParser parser = new SOMEResultsParser() {
+	        		@Override
+	        		protected void process(int atomNum, String atomSymbol,
+	        				someindex index, double value, boolean star) {
+	        			if (star) count[index.ordinal()] ++;
+	        		}
+	        	};
+	        	parser.parseRecord(value.toString());
+	        }
 	         
-        	r = new StringDescriptorResultType(value.toString());
+	        r = new ArrayResult(new Object[] {
+	        		value.toString(),
+	        		count[someindex.aliphaticHydroxylation.ordinal()],
+	        		count[someindex.aromaticHydroxylation.ordinal()],
+	        		count[someindex.NDealkylation.ordinal()],
+	        		count[someindex.NOxidation.ordinal()],
+	        		count[someindex.ODealkylation.ordinal()],
+	        		count[someindex.SOxidation.ordinal()],
+	        });
+        	
 	        return new DescriptorValue(
 		        		getSpecification(),
 		                getParameterNames(),
 		                getParameters(),r,getDescriptorNames());    	        	
    		
     	} catch (Exception x) {
-    		r = new StringDescriptorResultType(x.getMessage());
+    		r = new ArrayResult(new Object[] {
+    			x.getMessage(),
+    			0,0,0,0,0,0
+    		});
 	        return new DescriptorValue(getSpecification(),
 	                getParameterNames(),getParameters(),r,getDescriptorNames());    
     	}
         
     }
     public String[] getDescriptorNames() {
-    	return new String[] {SOMEShell.SOME_RESULT};
+    	return new String[] {
+    			SOMEShell.SOME_RESULT,
+        		someindex.aliphaticHydroxylation.name(),
+        		someindex.aromaticHydroxylation.name(),
+        		someindex.NDealkylation.name(),
+        		someindex.NOxidation.name(),
+        		someindex.ODealkylation.name(),
+        		someindex.SOxidation.name()
+    	};
     }
     public IDescriptorResult getDescriptorResultType() {
     	return new StringDescriptorResultType();
