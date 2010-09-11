@@ -59,7 +59,7 @@ public class SOMERawReader extends RawIteratingReader<String> {
         	}
         	@Override
         	public Color getColor(double arg0) {
-        		return new Color(0x0a,0x55,0xa3,(int)(arg0*255));
+        		return new  Color(0x90,0x62,0x0c,(int)(arg0*255));
         	}         	
         },           
         ODealkylation {
@@ -79,7 +79,7 @@ public class SOMERawReader extends RawIteratingReader<String> {
         	}
            	@Override
         	public Color getColor(double arg0) {
-        		return new  Color(0x90,0x62,0x0c,(int)(arg0*255));
+        		return new Color(0x0a,0x55,0xa3,(int)(arg0*255));
         	}          	
         };
         public Color getColor(double value) {
