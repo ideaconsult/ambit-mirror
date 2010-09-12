@@ -39,6 +39,7 @@ import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableWekaModelCreator;
+import ambit2.rest.task.OptimizerModelBuilder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
@@ -191,6 +192,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 			{"ambit2.descriptors.KekulizationVerifier","Kekulization verifier","ambit2.descriptors.KekulizationVerifier",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 		
+			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {Algorithm.typeStructure},"",Algorithm.requires.structure},			
 			
 			
 
@@ -332,6 +334,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		if (model.hasType(Algorithm.typeFingerprints)) return null;
 		if (model.hasType(Algorithm.typeMockup)) return null;
 		if (model.hasType(Algorithm.typeSuperService)) return null;
+		if (model.hasType(Algorithm.typeStructure)) return null;
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -360,7 +363,18 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
 						new AlgorithmURIReporter(getRequest()),
 						false
-						);	
+						);
+			else if (algorithm.hasType(Algorithm.typeStructure)) {
+				return new CallableSimpleModelCreator(
+						form,
+						getContext(),
+						algorithm,
+						false,
+						new OptimizerModelBuilder(getRequest().getRootRef(),
+								new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+								new AlgorithmURIReporter(getRequest()),false)
+						);
+			}
 			else if (algorithm.hasType(Algorithm.typeDescriptor)) {
 				try {
 					CallableSimpleModelCreator modelCreator = new CallableSimpleModelCreator(

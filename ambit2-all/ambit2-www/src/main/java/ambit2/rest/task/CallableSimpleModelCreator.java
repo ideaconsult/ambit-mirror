@@ -14,10 +14,21 @@ import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.model.builder.ModelBuilder;
 import ambit2.rest.model.builder.SimpleModelBuilder;
 
-public class CallableSimpleModelCreator<Result> extends CallableModelCreator<Object,Result,SimpleModelBuilder> {
+public class CallableSimpleModelCreator<Result> extends CallableModelCreator<Object,Result,ModelBuilder<Object,Algorithm, ModelQueryResults>> {
+
+
+	public CallableSimpleModelCreator(Form form,
+			Context context,
+			Algorithm algorithm,
+			boolean hidden,
+			ModelBuilder<Object,Algorithm, ModelQueryResults> builder
+			) {
+		super(form,context,algorithm,builder);
 	
+	}	
 	public CallableSimpleModelCreator(Form form,
 				Reference applicationRootReference,
 				Context context,
