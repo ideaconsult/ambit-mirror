@@ -40,7 +40,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 public class UpdateStructure extends AbstractObjectUpdate<IStructureRecord> {
 	
 	public static final String[] create_sql = {
-		"UPDATE structure set structure=compress(?),format=?,user_name=SUBSTRING_INDEX(user(),'@',1),atomproperties=NULL,updated=CURRENT_TIMESTAMP where idstructure=?"
+		"UPDATE structure set structure=compress(?),format=?,user_name=SUBSTRING_INDEX(user(),'@',1),type_structure=?,atomproperties=NULL,updated=CURRENT_TIMESTAMP where idstructure=?"
 	};
 
 	public UpdateStructure(IStructureRecord structure) {
@@ -53,6 +53,7 @@ public class UpdateStructure extends AbstractObjectUpdate<IStructureRecord> {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
 		params1.add(new QueryParam<String>(String.class, getObject().getWritableContent()));		
 		params1.add(new QueryParam<String>(String.class, getObject().getFormat()));
+		params1.add(new QueryParam<String>(String.class, getObject().getType().toString()));
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdstructure()));		
 		return params1;
 		
