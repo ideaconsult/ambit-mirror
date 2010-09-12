@@ -37,6 +37,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeFingerprints = "http://www.opentox.org/algorithmTypes.owl#Fingerprints";
 	public static String typeMockup = "http://www.opentox.org/algorithmTypes.owl#Mockup";
 	public static String typeSuperService = "http://www.opentox.org/algorithmTypes.owl#SuperService";
+	public static String typeStructure = "http://www.opentox.org/algorithmTypes.owl#Structure";
 	
 	
 	public enum AlgorithmFormat {
@@ -58,6 +59,12 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 				return "application/x-java-serialized-object";
 			}
 		},
+		MOPAC {
+			@Override
+			public String getMediaType() {
+				return "application/java";
+			}
+		},		
 		COVERAGE_SERIALIZED {
 			@Override
 			public String getMediaType() {

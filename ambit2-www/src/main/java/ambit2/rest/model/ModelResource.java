@@ -34,12 +34,13 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
 import ambit2.rest.model.predictor.ModelPredictor;
-import ambit2.rest.model.predictor.NumericADPredictor;
+import ambit2.rest.model.predictor.StructureProcessor;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableModelPredictor;
 import ambit2.rest.task.CallableQueryProcessor;
+import ambit2.rest.task.CallableStructureOptimizer;
 import ambit2.rest.task.CallableWekaPredictor;
 
 /**
@@ -253,6 +254,14 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 							;
 							*/
 				}
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.MOPAC.getMediaType())) {
+				return
+				new CallableStructureOptimizer(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						(StructureProcessor) predictor
+						);				
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				return
 				new CallableDescriptorCalculator(
