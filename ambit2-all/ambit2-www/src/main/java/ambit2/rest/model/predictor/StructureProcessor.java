@@ -46,6 +46,10 @@ public class StructureProcessor  extends	ModelPredictor<MopacShell,IStructureRec
 	}
 	
 	@Override
+	public void assignResults(IStructureRecord record, Object value)
+			throws AmbitException {
+	}
+	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
 		super.setConnection(connection);
 		exec.setConnection(connection);
