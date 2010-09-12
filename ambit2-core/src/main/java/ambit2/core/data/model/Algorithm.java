@@ -62,7 +62,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 		MOPAC {
 			@Override
 			public String getMediaType() {
-				return "application/java";
+				return "mopac/java";
 			}
 		},		
 		COVERAGE_SERIALIZED {
