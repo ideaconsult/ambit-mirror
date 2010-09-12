@@ -1,5 +1,6 @@
 package ambit2.rest.structure;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.Connection;
@@ -18,7 +19,6 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -51,21 +51,25 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected PropertyURIReporter pReporter;
 	protected boolean table = true;
 	protected int count = 0;
+	protected String hilightPredictions = null;
+	protected Dimension cellSize = new Dimension(150,150);
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
 	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter) {
 		this(request,collapsed,urireporter,null);
 	}
 	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter,Template template) {
-		this(request,collapsed,urireporter,template,null);
+		this(request,collapsed,urireporter,template,null,null);
 	}
 	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter,
-				Template template,Profile groupedProperties) {
+				Template template,Profile groupedProperties,Dimension d) {
 		super(request,collapsed);
+		if (d != null) cellSize = d; 
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		if (urireporter != null) this.uriReporter = urireporter;
 		
+		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 		pReporter = new PropertyURIReporter(request);
 		table = collapsed;
 		getProcessors().clear();
@@ -144,18 +148,18 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	
 	protected String templates(Reference baseReference) throws IOException {
 		StringBuilder w = new StringBuilder();
-		w.append("<input type='submit' value='Retrieve data'><p>");
+		w.append("<input type='submit' value='Select table columns'>");
 		String[][] options= {
 				{"template/All/Identifiers/view/tree","Identifiers"},
 				{"template/All/Dataset/view/tree","Datasets"},
 				{"template/All/Models/view/tree","Models"},
 				{"template/All/Endpoints/view/tree","Endpoints"},
 				{"template/All/Descriptors/view/tree","All descriptors"},				
-				{"template/Descriptors/Adam+C.+Lee%2C+Jing-yu+Yu+and+Gordon+M.+Crippen%2C+J.+Chem.+Inf.+Model.%2C+2008%2C+48+%2810%29%2C+pp+2042%E2%80%932053","pKa"},
-				{"template/Descriptors/ambit2.descriptors.SizeDescriptor","Molecule size"},
-				{"template/Descriptors/ambit2.mopac.DescriptorMopacShell","Electronic descriptors (PM3 optimized structure)"},
-				{"template/Descriptors/ambit2.mopac.MopacOriginalStructure","Electronic descriptors (original structure)"},
-				{"template/Descriptors/template/Descriptors/Cramer+rules","Toxtree: Cramer rules"},
+				//{"template/Descriptors/Adam+C.+Lee%2C+Jing-yu+Yu+and+Gordon+M.+Crippen%2C+J.+Chem.+Inf.+Model.%2C+2008%2C+48+%2810%29%2C+pp+2042%E2%80%932053","pKa"},
+				//{"template/Descriptors/ambit2.descriptors.SizeDescriptor","Molecule size"},
+				//{"template/Descriptors/ambit2.mopac.DescriptorMopacShell","Electronic descriptors (PM3 optimized structure)"},
+				//{"template/Descriptors/ambit2.mopac.MopacOriginalStructure","Electronic descriptors (original structure)"},
+				//{"template/Descriptors/template/Descriptors/Cramer+rules","Toxtree: Cramer rules"},
 		};
 		
 		Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
@@ -166,7 +170,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			String checked = "";
 			for (String value:values) if (value.equals(String.format("%s/%s", baseReference,option[0]))) 
 			{ checked = "CHECKED"; break;}
-			w.append(String.format("<br><input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s/%s\" name=\"%s\">%s</option>\n",
+			w.append(String.format("<input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s/%s\" name=\"%s\">%s</option>\n",
 						checked,
 						baseReference,
 						option[0],
@@ -177,7 +181,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			for (String option[]:options) 
 				if (value.equals(String.format("%s/%s", baseReference,option[0]))) { add = false; break;}
 			if (add)
-				w.append(String.format("<br><input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s\" name=\"%s\"><a href='%s' target='_blank'>%s</a></option>\n",
+				w.append(String.format("<input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s\" name=\"%s\"><a href='%s' target='_blank'>%s</a></option>\n",
 						"checked",
 						value,
 						OpenTox.params.feature_uris.toString(),value,value));				
@@ -233,6 +237,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					image[i],
 					mime,
 					mime));	
+
 		}			
 		return w.toString();
 	}
@@ -381,8 +386,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 			if (table) {
 				
-				output.write(String.format("<div class=\"rowwhite\"><span class=\"left\">%s</span><span class=\"center\">",
-							templates(baseReference)));
+				output.write(String.format("<div><span class=\"left\">%s</span></div>",templates(baseReference)));
+				
+				output.write("<div class=\"rowwhite\"><span class=\"center\">");
 					
 				output.write(AmbitResource.jsTableSorter("results","pager"));
 				output.write("<table class='tablesorter' id='results' border='0' cellpadding='0' cellspacing='1'>"); 
@@ -393,7 +399,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						String.format("<input name='max' type='text' title='Maximum number of hits' size='10' value='%s'>\n",maxrecords==null?"100":maxrecords)));//resultsForm(query)
 						//,resultsForm(query)
 				output.write("<thead><tr>");
-				output.write("<th width='20'>#</th><th width='150' bgcolor='#99CC00'>Compound</th>"); //ECB42C
+				output.write(String.format("<th width='20'>#</th><th width='%d' bgcolor='#99CC00'>Compound</th>",cellSize.width)); //ECB42C
 				List<Property> props = template2Header(getTemplate(),true);
 				int hc = 0;
 				for(Property p: props) {
@@ -476,10 +482,22 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference())							
 						));
 		
-		b.append(String.format(
-				"<td ><a href=\"%s?media=text/html\"><img src=\"%s?accept-header=image/png&w=150&h=150\" width='150' height='150' alt=\"%s\" title=\"%d\"/></a></td>",
+		String imguri;
+		
+		if (hilightPredictions!= null) {
+			imguri= String.format("%s?%s=%s&media=image/png",hilightPredictions,OpenTox.params.dataset_uri.toString(),w);
+		}
+		
+		else imguri = w + "?media=image/png";		
 				
-				w, w, 
+		b.append(String.format(
+				"<td ><a href=\"%s?media=text/html%s\"><img src=\"%s&w=%d&h=%d\" width='%d' height='%d' alt=\"%s\" title=\"%d\"/></a></td>",
+				
+				w,
+				hilightPredictions==null?"":String.format("&%s=%s",OpenTox.params.model_uri,hilightPredictions),
+				imguri, 
+				cellSize.width,cellSize.height,
+				cellSize.width,cellSize.height,
 				w, record.getIdchemical()));
 
 
@@ -572,12 +590,21 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		StringBuilder b = new StringBuilder();
 		
 		
+		String imguri;
+		if (hilightPredictions!= null)
+			imguri= String.format("%s?%s=%s&media=image/png",
+				hilightPredictions,
+				OpenTox.params.dataset_uri.toString(),w);
+		else imguri=w+"?media=image/png";		
+		
 		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
 		
 		b.append(String.format(
-				"<a href=\"%s\"><img src=\"%s?accept-header=image/png&w=250&h=250\" width='250' height='250' alt=\"%s\" title=\"%d\"/></a>",
+				"<a href=\"%s\"><img src=\"%s&w=%d&h=%d\" width='%d' height='%d' alt=\"%s\" title=\"%d\"/></a>",
 				
-				w, w, 
+				w, imguri, 
+				cellSize.width,cellSize.height,
+				cellSize.width,cellSize.height,
 				w, record.getIdchemical()));
 		b.append("<div id=\"div-1d\">");
 

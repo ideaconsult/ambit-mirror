@@ -181,13 +181,23 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
 			return new DocumentConvertor(new QueryXMLReporter(getRequest()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
+			Dimension d = collapsed?new Dimension(150,150):new Dimension(250,250);
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			try {
+				
+				d.width = Integer.parseInt(form.getFirstValue("w").toString());
+			} catch (Exception x) {}
+			try {
+				d.height = Integer.parseInt(form.getFirstValue("h").toString());
+			} catch (Exception x) {}			
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundHTMLReporter(
 							getRequest(),
 							collapsed,
 							getURIReporter(),
 							getTemplate(),
-							getGroupProperties()),
+							getGroupProperties(),
+							d),
 					MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter)getURIReporter();

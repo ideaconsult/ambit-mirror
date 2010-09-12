@@ -1,5 +1,6 @@
 package ambit2.rest.query;
 
+import java.awt.Dimension;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
@@ -237,8 +238,17 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
 					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
+			Dimension d = new Dimension(150,150);
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			try {
+				
+				d.width = Integer.parseInt(form.getFirstValue("w").toString());
+			} catch (Exception x) {}
+			try {
+				d.height = Integer.parseInt(form.getFirstValue("h").toString());
+			} catch (Exception x) {}			
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter(getRequest(),true,null,getTemplate(),getGroupProperties()),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter(getRequest(),true,null,getTemplate(),getGroupProperties(),d),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest()),ChemicalMediaType.WEKA_ARFF);			
