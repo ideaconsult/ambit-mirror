@@ -78,9 +78,13 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 						model.getName()));
 			
 			output.write(String.format(
-					"&nbsp;<a href=\"%s?media=text/plain\" target='_model'>%s</a></td>",
+					"&nbsp;<a href=\"%s?media=text/plain\" target='_model'>%s</a>",
 					w.toString(),
 					"txt"));			
+			output.write(String.format(
+					"&nbsp;<a href=\"%s?media=image/png\" target='_model'>%s</a></td>",
+					w.toString(),
+					"legend"));
 			
 			output.write(String.format(
 					"<td><a href=\"%s\">%s</a></td>",
