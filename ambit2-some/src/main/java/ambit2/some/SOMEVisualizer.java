@@ -91,13 +91,13 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 				 Double prevValue = null;
 				 for (int r=0; r < atoms.size();r++ ) {
 					 Object value = atoms.get(r).getProperty(someindex.values()[i].name());
+					 if ((prevValue !=null) && (prevValue>((Double)value))) rank++;
+					 prevValue = (Double) value; 	
+					 
+					 if (rank>3) continue;
 					 atoms.get(r).setProperty(SOMEShell.SOME_RESULT, r+1);
-					 //atoms.get(r).setProperty(CompoundImageTools.ATOM_ANNOTATION,String.format("[%s]",someindex.values()[i].name()));
+					 //atoms.get(r).setProperty(CompoundImageTools.ATOM_ANNOTATION,String.format("%d [%f]",rank,value));
 					 atoms.get(r).setProperty(CompoundImageTools.SELECTED_ATOM_SIZE,rank>3?0.66:size[rank-1]);
-					 
-					 if ((prevValue==null) || (prevValue<((Double)value))) rank++;
-					 prevValue = (Double) value; 	 
-					 
 				 }
 			}
 					
