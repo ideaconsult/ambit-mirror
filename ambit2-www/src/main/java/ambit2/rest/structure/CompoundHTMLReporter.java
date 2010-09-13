@@ -53,6 +53,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected int count = 0;
 	protected String hilightPredictions = null;
 	protected Dimension cellSize = new Dimension(150,150);
+	protected Form featureURI = null;
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
 	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter) {
@@ -64,6 +65,20 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter,
 				Template template,Profile groupedProperties,Dimension d) {
 		super(request,collapsed);
+		
+		Reference f = request.getResourceRef().clone(); 
+		f.setQuery(null);
+		featureURI =  new Form(); 
+		
+		String[] features = request.getResourceRef().getQueryAsForm().getValuesArray(OpenTox.params.feature_uris.toString());
+		if ((features == null) || (features.length==0)) {
+			if (f.toString().indexOf("/dataset")>0) 
+				featureURI.add(OpenTox.params.feature_uris.toString(),f.addSegment("feature").toString());
+			else if (f.toString().indexOf("/compound")>0) 
+				featureURI.add(OpenTox.params.feature_uris.toString(),f.addSegment("feature").toString());
+		} else for (String ff:features)
+			featureURI.add(OpenTox.params.feature_uris.toString(),ff);
+		
 		if (d != null) cellSize = d; 
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
@@ -565,7 +580,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 							String.format("%s/feature/compound/%d/feature_definition/%d", uriReporter.getBaseReference(),record.getIdchemical(),property.getId()),
 							value));
 					*/
-					b.append(String.format("<a href=\"%s/compound?%s=%s%s/%d&property=%s&search=%s\">%s</a>", 
+					StringBuilder f = new StringBuilder();
+					for (String ff: featureURI.getValuesArray(OpenTox.params.feature_uris.toString())) {
+						f.append(String.format("&%s=%s", OpenTox.params.feature_uris,ff));
+					}
+					b.append(String.format("<a href=\"%s/compound?%s=%s%s/%d&property=%s&search=%s%s\">%s</a>", 
 						uriReporter.getBaseReference(),
 						OpenTox.params.feature_uris.toString(),
 						uriReporter.getBaseReference(),
@@ -573,6 +592,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						property.getId(),
 						Reference.encode(property.getName()),
 						searchValue==null?"":Reference.encode(searchValue.toString()),
+								
+						f,
 						value
 					));
 									
