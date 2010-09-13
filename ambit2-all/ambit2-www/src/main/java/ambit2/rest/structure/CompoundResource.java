@@ -153,10 +153,10 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_INCHI)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SmilesReporter<QueryStructureByID>(false,Mode.InChI),ChemicalMediaType.CHEMICAL_INCHI);				
+					new SmilesReporter<QueryStructureByID>(false,Mode.InChI,getTemplate()),ChemicalMediaType.CHEMICAL_INCHI);				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			return new StringConvertor(
-					new SmilesReporter<QueryStructureByID>(true),MediaType.TEXT_PLAIN);				
+					new SmilesReporter<QueryStructureByID>(true,getTemplate()),MediaType.TEXT_PLAIN);				
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG) ||
 				variant.getMediaType().equals(MediaType.IMAGE_BMP) ||
 				variant.getMediaType().equals(MediaType.IMAGE_JPEG) ||

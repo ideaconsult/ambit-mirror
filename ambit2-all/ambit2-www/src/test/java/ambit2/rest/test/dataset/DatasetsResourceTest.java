@@ -238,7 +238,7 @@ public class DatasetsResourceTest extends ResourceTest {
 		FileRepresentation rep = new FileRepresentation(
 				url.getFile(),
 				ChemicalMediaType.CHEMICAL_MDLSDF, 0);
-
+//curl -H "Content-type:chemical/x-mdl-sdfile/
 		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, rep,Method.POST,
 				new Reference(String.format("http://localhost:%d/dataset/4",port)));
 		
