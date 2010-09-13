@@ -633,15 +633,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 		String[][] s = new String[][] {
 				{PropertyValueResource.featureKey,Property.opentox_CAS,"CAS RN"},
-				{PropertyValueResource.featureKey,"EC","EINECS"},
+				{PropertyValueResource.featureKey,Property.opentox_EC,"EINECS"},
 				{PropertyValueResource.featureKey,Property.opentox_Name,"Chemical name(s)"},
 				{PropertyValueResource.featureKey,null,"All available feature values"},
-				{"template",null,"Feature values by groups"},
+		};
+		for (String[] n:s)
+				b.append(String.format("<a href=\"%s%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":Reference.encode(n[1]),n[2]));
+		
+		s = new String[][] {
+				{"/template",null,"Feature values by groups"},
 				{TupleResource.resourceTag,null,"Feature values by dataset"},
 				{PropertyResource.featuredef,null,"Features"},
 				{null,null,"Model predictions",String.format("%s/model/null/predicted",uriReporter.getBaseReference().toString())},
-				
-		};
+		};		
 		for (String[] n:s)
 			if (n[0]==null)
 				b.append(String.format("<a href=\"%s?%s=%s\">%s</a><br>",w,OpenTox.params.feature_uris.toString(),Reference.encode(n[3]),n[2]));
