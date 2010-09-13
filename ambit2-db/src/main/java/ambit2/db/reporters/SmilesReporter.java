@@ -5,6 +5,7 @@ import java.io.Writer;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -13,6 +14,8 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
+import ambit2.db.readers.RetrieveProfileValues;
+import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.db.search.QuerySmilesByID;
 
 public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureReporter<Q, Writer> {
@@ -20,6 +23,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	 * 
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
+	protected Template template;
 	protected boolean writeProperties = false;
 	protected Profile groupProperties;
 	public Profile getGroupProperties() {
@@ -63,13 +67,14 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		key = mode.getProperty();
 	}
 	public SmilesReporter() {
-		this(false);
+		this(false,null);
 	}
-	public SmilesReporter(boolean writeProperties) {
-		this(writeProperties,Mode.SMILES);
+	public SmilesReporter(boolean writeProperties,Template template) {
+		this(writeProperties,Mode.SMILES,template);
 	}
-	public SmilesReporter(boolean writeProperties,Mode mode) {
+	public SmilesReporter(boolean writeProperties,Mode mode,Template template) {
 		super();
+		setTemplate(template);
 		setMode(mode);
 		this.writeProperties = writeProperties;
 		getProcessors().clear();
@@ -95,6 +100,16 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		}
 		}
 		
+		if (getTemplate().size()>0) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveProfileValues)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});		
+		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
@@ -114,15 +129,19 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 			if (writeProperties && (item.getProperties() != null)) {
 				for (Property key: item.getProperties()) {
 
-				if (key.getName().equals(mode.getTag())) continue;
+				boolean ok = true;
+				for (Mode m: mode.values())	
+					if (key.getName().toLowerCase().equals(m.name().toString().toLowerCase())) { ok = false;break;}
+					else if (key.getLabel().toLowerCase().equals(m.getTag().toString().toLowerCase())) { ok = false;break;}
+
+				if (ok) {
 					Object property = item.getProperty(key);
 					String d = key.getName().indexOf(' ')>0?"\"":"";
-					output.write(String.format("\t%s%s%s=%s",d,key.toString(),d,
-							property==null?"":property.toString()
-							));
-
+					output.write(String.format(",%s%s%s",d,d,
+						property==null?"":property.toString()
+						));
 				}
-						
+				}
 			}
 			output.write('\n');
 			output.flush();
@@ -138,7 +157,12 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		// TODO Auto-generated method stub
 		
 	}
-
+	public Template getTemplate() {
+		return template;
+	}
+	public void setTemplate(Template template) {
+		this.template = template;
+	}
 	public void footer(Writer output, Q query) {};
 	public void header(Writer output, Q query) {};
 }

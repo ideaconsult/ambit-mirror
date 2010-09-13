@@ -224,6 +224,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				MediaType.TEXT_XML,
 				MediaType.APPLICATION_PDF,
 				MediaType.TEXT_CSV,
+				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.WEKA_ARFF,
 				MediaType.APPLICATION_RDF_XML
 				};
@@ -234,6 +235,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				"link.png",
 				"xml.png",
 				"pdf.png",
+				"excel.png",
 				"excel.png",
 				"weka.jpg",
 				"rdf.gif"

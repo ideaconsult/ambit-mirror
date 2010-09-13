@@ -216,10 +216,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 						new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML);				
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
+						new SmilesReporter<QueryStructureByID>(true,getTemplate()),ChemicalMediaType.CHEMICAL_SMILES);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_INCHI)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SmilesReporter<QueryStructureByID>(false,Mode.InChI),ChemicalMediaType.CHEMICAL_INCHI);				
+					new SmilesReporter<QueryStructureByID>(false,Mode.InChI,getTemplate()),ChemicalMediaType.CHEMICAL_INCHI);				
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
