@@ -606,7 +606,7 @@ public class AmbitApplication extends TaskApplication {
 	 		return b.toString();
 
 	 	}
-   
+   /*
 	@Override
 	public ApplicationInfo getApplicationInfo(Request request, Response response) {
 
@@ -621,7 +621,7 @@ public class AmbitApplication extends TaskApplication {
 
 	        return result;
     }
-
+*/
 
 }
 
