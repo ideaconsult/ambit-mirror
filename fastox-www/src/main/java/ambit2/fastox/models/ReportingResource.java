@@ -317,8 +317,8 @@ public class ReportingResource  extends FastoxStepResource {
 									endpoints,
 									showModels,
 									models==null?null:models.predictedVariables(),
-									wizard.getService(SERVICE.application).toString(),page,pageSize).
-						setRequestref(getRequest().getResourceRef());
+									wizard.getService(SERVICE.application).toString(),page,pageSize);
+						rep.setRequestref(getRequest().getResourceRef());
 
 						rep.setJenaModel(store_models);
 						//((ToxPredictDatasetReport)report).setModels(models);
@@ -449,8 +449,8 @@ public class ReportingResource  extends FastoxStepResource {
 									endpoints,
 									showModels,
 									models==null?null:models.predictedVariables(),
-									wizard.getService(SERVICE.application).toString(),page,pageSize).
-						setRequestref(getRequest().getResourceRef());
+									wizard.getService(SERVICE.application).toString(),page,pageSize);
+						rep.setRequestref(getRequest().getResourceRef());
 	
 						//rep.setJenaModel(store_models);
 						//((ToxPredictDatasetReport)report).setModels(models);
