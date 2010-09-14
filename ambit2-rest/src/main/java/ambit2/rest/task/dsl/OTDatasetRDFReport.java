@@ -355,7 +355,7 @@ public class OTDatasetRDFReport extends OTObject {
 				page+1,next(true)));
 		b.append("</td><td align='right'>");
 		
-		
+		System.out.println("--------------"+ getClass().getName() + " " + requestref.getBaseRef() + " " + requestref);
 		b.append(String.format("\n<a href='%s' onClick=\"contentDisp('%s',%d,'%s');\">%s</a>&nbsp;",
 				"#",
 				requestref.getBaseRef(),
