@@ -35,7 +35,7 @@ public class OptimizerModelBuilder extends SimpleModelBuilder {
 		try {
 			ModelQueryResults mr = new ModelQueryResults();
 			mr.setHidden(modelHidden);
-			mr.setContentMediaType(AlgorithmFormat.JAVA_CLASS.getMediaType());
+			mr.setContentMediaType(AlgorithmFormat.MOPAC.getMediaType());
 			mr.setName(algorithm.getName());
 			mr.setContent(algorithm.getContent().toString());
 			mr.setAlgorithm(alg_reporter.getURI(algorithm));

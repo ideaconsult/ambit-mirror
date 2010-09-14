@@ -228,7 +228,9 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				System.out.println(d);
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 				alg.setType((String[])d[4]);
-				alg.setFormat(alg.hasType(Algorithm.typeRules)||alg.hasType(Algorithm.typeFingerprints)?AlgorithmFormat.JAVA_CLASS:
+				alg.setFormat(
+						alg.hasType(Algorithm.typeStructure)?AlgorithmFormat.MOPAC:
+						alg.hasType(Algorithm.typeRules)||alg.hasType(Algorithm.typeFingerprints)?AlgorithmFormat.JAVA_CLASS:
 						alg.hasType(Algorithm.typeAppDomain)?AlgorithmFormat.COVERAGE_SERIALIZED:AlgorithmFormat.WEKA);
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());

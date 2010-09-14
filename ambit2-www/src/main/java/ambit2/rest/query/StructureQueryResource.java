@@ -129,6 +129,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			Connection conn = dbc.getConnection(getRequest());
 			try {
 				for (String featureURI:featuresURI) {
+					if (featureURI == null) continue;
 					reader.setConnection(conn);
 					profile = reader.process(new Reference(featureURI));
 					reader.setProfile(profile);
