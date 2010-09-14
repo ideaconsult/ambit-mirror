@@ -168,7 +168,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				{"template/All/Identifiers/view/tree","Identifiers"},
 				{"template/All/Dataset/view/tree","Datasets"},
 				{"template/All/Models/view/tree","Models"},
-				{"template/All/Endpoints/view/tree","Endpoints"},
+				//{"template/All/Endpoints/view/tree","Endpoints"},
 				{"template/All/Descriptors/view/tree","All descriptors"},				
 				//{"template/Descriptors/Adam+C.+Lee%2C+Jing-yu+Yu+and+Gordon+M.+Crippen%2C+J.+Chem.+Inf.+Model.%2C+2008%2C+48+%2810%29%2C+pp+2042%E2%80%932053","pKa"},
 				//{"template/Descriptors/ambit2.descriptors.SizeDescriptor","Molecule size"},
@@ -201,6 +201,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						value,
 						OpenTox.params.feature_uris.toString(),value,value));				
 		}
+		w.append(String.format("<input type='TEXT' size='30'alt='Enter OpenTox Feature URL here, to be added as column table' name=\"%s\">\n",
+				OpenTox.params.feature_uris.toString()));		
 		/*
 		w.append(String.format(
 				"<select size='60' STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;width: 120px\" multiple name=\"%s\">\n",
