@@ -146,6 +146,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 					} catch (Exception x) { structure = null;}
 				//exact structure
 				if (structure != null) {
+					rdfwriter = RDF_WRITER.jena;
 					QueryExactStructure q = new QueryExactStructure();
 					q.setChemicalsOnly(true);
 					q.setValue(structure);
