@@ -43,6 +43,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 						getRequest().getRootRef(),PropertyResource.featuredef,Reference.encode(textSearch))				
 			:
 				
+				
 			String.format("%s%s/%s%s",
 						getRequest().getRootRef(),OpenTox.URI.dataset.getURI(),dataset_id,PropertyResource.featuredef);				
 			//String.format("riap://application/dataset/%s%s",dataset_id,PropertyResource.featuredef);
@@ -72,6 +73,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
+			rdfwriter = RDF_WRITER.jena;
 			IQueryRetrieval<IStructureRecord> freetextQuery = getScopeQuery(context, request, response);
 			
 			Form form = request.getResourceRef().getQueryAsForm();
