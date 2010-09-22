@@ -260,7 +260,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			switch (rdfwriter) {
 			case stax: {
 				return new RDFStaXConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-						new DatasetRDFStaxReporter(getRequest(),template,getGroupProperties())				
+						new DatasetRDFStaxReporter(getRequest(),getTemplate(),getGroupProperties())				
 						);				
 			}
 			default : { //jena
