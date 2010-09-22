@@ -18,6 +18,8 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.db.DbReader;
+import ambit2.db.DbReaderStructure;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -210,7 +212,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					if (p.isNominal() && (value instanceof Comparable)) 
 						p.addAllowedValue((Comparable)value);
 				} catch (Exception x) {
-					
+
 				} finally {
 
 					
@@ -440,4 +442,12 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		Collections.sort(h,comp);
 		return h;
 	}
+	protected ambit2.db.processors.AbstractBatchProcessor<ambit2.db.readers.IQueryRetrieval<IStructureRecord>,IStructureRecord> createBatch(Q query) {
+		if (query.isPrescreen()) {
+			DbReader<IStructureRecord> reader = new DbReaderStructure();
+			reader.setHandlePrescreen(true);
+			return reader;
+		} else	
+			return super.createBatch(query);
+	};
 }

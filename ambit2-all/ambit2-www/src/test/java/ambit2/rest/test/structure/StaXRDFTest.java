@@ -29,6 +29,95 @@ public class StaXRDFTest extends ResourceTest {
 	protected void setDatabase() throws Exception {
 		setUpDatabase("src/test/resources/src-datasets_model.xml");
 	}
+	/**
+<pre>
+<rdf:RDF
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:ac="http://localhost:8181/compound/"
+    xmlns:bx="http://purl.org/net/nknouf/ns/bibtex#"
+    xmlns:otee="http://www.opentox.org/echaEndpoints.owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:ar="http://localhost:8181/reference/"
+    xmlns:ad="http://localhost:8181/dataset/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:am="http://localhost:8181/model/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:af="http://localhost:8181/feature/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl#"
+    xmlns="http://localhost:8181/"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ag="http://localhost:8181/algorithm/"
+  xml:base="http://localhost:8181/">
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Dataset"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Compound"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Feature"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#FeatureValue"/>
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#DataEntry"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#dataEntry"/>
+  <owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#compound"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description"/>
+  <ot:Dataset rdf:about="query/smarts">
+    <ot:dataEntry>
+      <ot:DataEntry>
+        <ot:compound>
+          <ot:Compound rdf:about="compound/11/conformer/100215"/>
+        </ot:compound>
+      </ot:DataEntry>
+    </ot:dataEntry>
+  </ot:Dataset>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/type"/>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/title"/>
+</rdf:RDF>
+</pre>
+<pre>
+<?xml version="1.0" ?>
+<rdf:RDF xmlns:ot="http://www.opentox.org/api/1.1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<owl:Class rdf:about="http://www.opentox.org/api/1.1#Dataset">
+</owl:Class><owl:Class rdf:about="http://www.opentox.org/api/1.1#DataEntry">
+</owl:Class><owl:Class rdf:about="http://www.opentox.org/api/1.1#Feature">
+</owl:Class><owl:Class rdf:about="http://www.opentox.org/api/1.1#FeatureValue">
+</owl:Class><owl:Class rdf:about="http://www.opentox.org/api/1.1#Compound">
+</owl:Class><owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#compound">
+</owl:ObjectProperty><owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#dataEntry">
+</owl:ObjectProperty><owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#values">
+</owl:ObjectProperty><owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#feature">
+</owl:ObjectProperty><owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#hasSource">
+</owl:ObjectProperty><owl:ObjectProperty rdf:about="http://www.opentox.org/api/1.1#acceptValue">
+</owl:ObjectProperty><owl:DatatypeProperty rdf:about="http://www.opentox.org/api/1.1#units">
+</owl:DatatypeProperty><owl:DatatypeProperty rdf:about="http://www.opentox.org/api/1.1#value">
+</owl:DatatypeProperty><owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description">
+</owl:AnnotationProperty><owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/creator">
+</owl:AnnotationProperty><owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/type">
+</owl:AnnotationProperty><owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/title">
+</owl:AnnotationProperty>
+<ot:Dataset rdf:about="http://localhost:8181/query/smarts"></ot:Dataset></rdf:RDF>
+</pre>
+	 * @throws Exception
+	 */
+	@Test
+	public void testSmartsQueryStax() throws Exception {
+		String rdfwriter = "stax";
+		String uri = 
+		String.format("http://localhost:%d/query/smarts?rdfwriter=%s&search=%s",
+				port,rdfwriter,Reference.encode("c1ccccc1"));
+		
+		RDFStructuresIterator i = new RDFStructuresIterator(new Reference(uri));
+		i.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
+		int count = 0;
+
+		while (i.hasNext()) {
+			IStructureRecord record = i.next();
+
+			Assert.assertTrue(record.getIdchemical()>0);
+			Assert.assertTrue(record.getIdstructure()>0);
+
+			count++;
+		}
+		i.close();
+		Assert.assertEquals(1,count);
+
+	}		
 	@Test
 	public void simpleTestRDFXML() throws Exception {
 		//testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
