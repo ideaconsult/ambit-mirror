@@ -457,7 +457,7 @@ CREATE TABLE  `sessions` (
   `idsessions` int(10) unsigned NOT NULL auto_increment,
   `user_name` varchar(16) collate utf8_bin NOT NULL,
   `started` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `completed` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `completed` timestamp NOT NULL DEFAULT '2010-01-01 01:01:01',
   `title` varchar(45) collate utf8_bin NOT NULL default 'Default',
   PRIMARY KEY  (`idsessions`),
   UNIQUE KEY `Index_3` USING BTREE (`title`,`user_name`),
@@ -680,7 +680,7 @@ CREATE TABLE  `bookmark` (
   `title` varchar(45) collate utf8_bin NOT NULL COMMENT 'dc:title',
   `description` text collate utf8_bin NOT NULL COMMENT 'dc:description',
   `created` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT 'a:created The date and time on which the bookmark was created. Format should be YYYY-MM-DDTHH:MM[:SS]TZD (see [DATETIME])',
-  `date` timestamp NOT NULL  COMMENT 'dc:date The date and time on which the bookmark was last modified. Format should be YYYY-MM-DDTHH:MM[:SS]TZD (see [DATETIME])',
+  `date` timestamp NOT NULL DEFAULT '2010-01-01 01:01:01' COMMENT 'dc:date The date and time on which the bookmark was last modified. Format should be YYYY-MM-DDTHH:MM[:SS]TZD (see [DATETIME])',
   PRIMARY KEY  (`idbookmark`),
   KEY `Index_3` USING BTREE (`hasTopic`),
   KEY `Index_2` USING BTREE (`creator`,`hasTopic`,`title`)
