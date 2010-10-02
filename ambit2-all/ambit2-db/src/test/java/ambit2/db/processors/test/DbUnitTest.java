@@ -40,6 +40,7 @@ import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 
@@ -115,15 +116,15 @@ public abstract class DbUnitTest {
 	   return getConnection(getDatabase(),getPort(),getUser(),getPWD());
 	}
     public void setUpDatabase(String xmlfile) throws Exception {
-
         IDatabaseConnection connection = getConnection();
-        IDataSet dataSet = new FlatXmlDataSet(new File(xmlfile));
+        FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+        builder.setCaseSensitiveTableNames(false);
+        IDataSet dataSet = builder.build(new File(xmlfile));
         try {
-        	DatabaseConfig config = connection.getConfig();
-        	config.setFeature(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
             DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
         } finally {
             connection.close();
+
         }
     }
 }
