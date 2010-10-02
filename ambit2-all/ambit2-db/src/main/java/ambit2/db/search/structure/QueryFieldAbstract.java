@@ -51,9 +51,10 @@ public abstract class QueryFieldAbstract<T,C extends IQueryCondition,NC extends 
 	"select idchemical,group_concat(distinct value SEPARATOR ';') as value,group_concat(distinct name) as name,group_concat(distinct comments) as comments\n"+
 	"from structure\n"+
 	"join  property_values using(idstructure)\n"+
-	"join property_string using (idvalue_string)\n"+
+	//"join property_string using (idvalue_string)\n"+
 	"join properties using(idproperty)\n"+
-	"where %s %s\n"+
+	"join (select value,idvalue_string from property_string where %s %s) x using (idvalue_string)\n"+
+	//"where %s %s\n"+
 	"group by idchemical\n"+
 	") a on a.idchemical=s1.idchemical\n"+
 	"where s2.idchemical is null\n";
