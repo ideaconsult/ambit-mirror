@@ -27,6 +27,13 @@
   	<name>Ideaconsult Ltd.</name>
   	<url>http://www.ideaconsult.net</url>
   </organization>
+  <dependencies>
+  	<dependency>
+  		<groupId>ambit</groupId>
+  		<artifactId>ambit2-smarts</artifactId>
+  		<version>2.1.2-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
