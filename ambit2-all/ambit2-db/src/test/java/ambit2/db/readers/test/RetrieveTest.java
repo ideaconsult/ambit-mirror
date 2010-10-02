@@ -48,6 +48,7 @@ public abstract class RetrieveTest<T> extends DbUnitTest {
 	@Before
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		query = createQuery();
 	}
 	
