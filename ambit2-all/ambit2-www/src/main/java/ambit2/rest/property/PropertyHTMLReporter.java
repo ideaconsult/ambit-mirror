@@ -40,7 +40,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 		try {w.write(collapsed?"<h3>Feature</h3>":"<h3>Features</h3>");
 			w.write(AmbitResource.jsTableSorter("features","pager"));
 			w.write("<table width='80%' id='features' class=\"tablesorter\" border='0' cellpadding='0' cellspacing='1'><thead>");
-			w.write("<tr><th width='5%'>Find</th><th width='25%'>Name</th><th width='5%'>Units</th><th width='30%'>Same as</th><th>Origin (Dataset, Model or Algorithm)</th><th>Nominal values</th></tr></thead>");
+			w.write("<tr><th width='5%'>Find</th><th width='25%'>Name</th><th width='5%'>Units</th><th width='30%'>Same as</th><th>Origin (Dataset, Model or Algorithm)</th><th>Type</th><th>Nominal values</th></tr></thead>");
 			w.write("<tbody>");
 		} catch (Exception x) {}
 	}	
@@ -82,9 +82,14 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 					item.getReference().getId(),
 					item.getReference().getName()
 					));	
+			output.write("</td>");			
+			output.write("<td>");
+			output.write(item.getClazz()==null?"":
+					String.class.equals(item.getClazz())?"String":
+					Number.class.equals(item.getClazz())?"Numeric":item.getClazz().toString());
+			output.write("</td>");			
 			output.write("<td>");
 			output.write(item.isNominal()?"YES":"NO");
-			output.write("</td>");
 			output.write("</td>");
 			output.write("</tr>");
 		} catch (Exception x) {
