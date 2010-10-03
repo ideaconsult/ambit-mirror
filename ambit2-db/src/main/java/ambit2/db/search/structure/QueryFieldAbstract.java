@@ -26,8 +26,10 @@ public abstract class QueryFieldAbstract<T,C extends IQueryCondition,NC extends 
 	}
 
 	protected static String queryField = "%s %s ? and"; //name namecondition value
-	protected static String queryValueCaseSensitive = "value %s ?"; 
-	protected static String queryValueCaseInsensitive = "lower(value) %s lower(?)"; 
+	protected static String queryValueCaseSensitive =  "value %s convert(? using utf8 ) collate utf8_bin ";
+		//"value %s ?"; 
+	protected static String queryValueCaseInsensitive =  "value %s convert(? using utf8 ) collate utf8_general_ci ";
+		//"lower(value) %s lower(?)"; 
 	
 	public final static String sqlField = 
 		"select ? as idquery,s1.idchemical,s1.idstructure,if(s1.type_structure='NA',0,1) as selected,s1.preference as metric,null as text\n" +	
