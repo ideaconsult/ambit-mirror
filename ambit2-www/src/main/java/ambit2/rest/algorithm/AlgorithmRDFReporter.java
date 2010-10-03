@@ -10,6 +10,7 @@ import org.restlet.data.MediaType;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Parameter;
+import ambit2.rest.BO;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OTA;
 import ambit2.rest.rdf.OTA.OTAClass;
@@ -41,6 +42,7 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 		Individual algorithm = getJenaModel().createIndividual(
 				reporter.getURI(item),
 				OT.OTClass.Algorithm.getOntClass(getJenaModel()));
+		
 		algorithm.addLiteral(DC.title,
 				 getJenaModel().createTypedLiteral(item.getName(),XSDDatatype.XSDstring));
 		algorithm.addLiteral(DC.date,
@@ -51,6 +53,13 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 				 getJenaModel().createTypedLiteral(item.getDescription()==null?"":item.getDescription(),XSDDatatype.XSDstring));			
 		algorithm.addLiteral(DC.publisher,
 				 getJenaModel().createTypedLiteral(reporter.getURI(null),XSDDatatype.XSDanyURI));	
+		
+		if (item.getImplementationOf() !=null) {
+			Individual boAlgorithm = getJenaModel().createIndividual(
+					item.getImplementationOf(),
+					BO.BOClass.MolecularDescriptor.getOntClass(getJenaModel()));
+			algorithm.addProperty(BO.instanceOf,boAlgorithm);
+		}
 		
 		String[] types = item.getType();
 		for (String type:types)

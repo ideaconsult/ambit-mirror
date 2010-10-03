@@ -52,5 +52,6 @@ public class BO {
      * Object properties
      */
     public static final Property isClassifiedAs = m_model.createProperty(String.format(_NS, "isClassifiedAs"));
+    public static final Property instanceOf = m_model.createProperty(String.format(_NS, "instanceOf"));
 
 }
