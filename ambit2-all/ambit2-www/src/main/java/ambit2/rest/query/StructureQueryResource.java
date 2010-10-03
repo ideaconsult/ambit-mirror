@@ -111,9 +111,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}			
 	protected Template createTemplate(Form form) throws ResourceException {
 		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
-		if ((featuresURI!=null) && (featuresURI.length>0))
-			return createTemplate(getContext(),getRequest(),getResponse(), featuresURI);
-		else return null;
+		return createTemplate(getContext(),getRequest(),getResponse(), featuresURI);
 	}
 	protected Template createTemplate(Context context, Request request,
 			Response response,String[] featuresURI) throws ResourceException {
