@@ -116,6 +116,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			*/
 		return null;
 	}
+	
+	protected Template createTemplate(Form form) throws ResourceException {
+		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
+		if ((featuresURI!=null) && (featuresURI.length>0))
+			return super.createTemplate(form);
+		else return null;
+	}	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		if (queryObject == null) try {
