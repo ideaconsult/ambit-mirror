@@ -23,6 +23,9 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.CASProcessor;
+import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.data.EINECS;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
@@ -330,6 +333,12 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 							
 							property = null;
 						}
+						casesens = CASProcessor.isValidFormat(theKey)?"true":casesens;
+						casesens = EINECS.isValidFormat(theKey)?"true":casesens;
+						casesens = theKey.startsWith(AmbitCONSTANTS.INCHI)?"true":casesens;
+						casesens = theKey.startsWith("AuxInfo=")?"true":casesens;
+						
+						//check for smiles will be more time consuming, skip for now
 						IQueryRetrieval<IStructureRecord> q =  createSingleQuery(property,
 								condition, 
 								theKey,
