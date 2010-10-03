@@ -81,8 +81,17 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	protected String[] type;
 	protected String endpoint = null;
 	protected requires requirement;
+	protected String implementationOf = null;
 	
 
+
+	public String getImplementationOf() {
+		return implementationOf;
+	}
+
+	public void setImplementationOf(String implementationOf) {
+		this.implementationOf = implementationOf;
+	}
 
 	public requires getRequirement() {
 		return requirement;
