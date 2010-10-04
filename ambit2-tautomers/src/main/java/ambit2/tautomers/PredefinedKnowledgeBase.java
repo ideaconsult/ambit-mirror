@@ -4,7 +4,7 @@ public class PredefinedKnowledgeBase
 {
 	public static final String rules[] = 
 	{
-		"$$NAME=keto/enol $$",
+		"$$NAME=keto/enol $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES=   $$GROUP_POS=   $$INFO=",
 		""
 	};
 }
