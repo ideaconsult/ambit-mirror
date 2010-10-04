@@ -5,32 +5,58 @@ import java.util.Vector;
 
 public class TautomerManager 
 {
-	KnowledgeBase knowledgeBase = new KnowledgeBase(); 
+	KnowledgeBase knowledgeBase; 
 	IAtomContainer molecule;
+	Vector<RuleInstance> extendedRuleInstances = new Vector<RuleInstance>(); 
 	Vector<RuleInstance> ruleInstances = new Vector<RuleInstance>(); 
+	
+	
+	TautomerManager()
+	{
+		knowledgeBase = new KnowledgeBase();
+		if (knowledgeBase.errors.size() > 0)
+		{	
+			System.out.println(knowledgeBase.getAllErrors());
+		}	
+	}
+	
 	
 	public void setStructure(IAtomContainer str)
 	{	
 		molecule = str;
 	}
 	
-	void searchRulePositions()
-	{
-		ruleInstances.clear();
-	}
 	
 	public Vector<IAtomContainer> generateTautomers()
 	{
-		searchRulePositions();
+		searchAllRulePositions();
+		handleOverlapedInstances();
 		
 		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
 		if (ruleInstances.isEmpty())
 			return(v);
 		
-		//Generate rule combinations
-		//TODO
+		generateRuleCombinations();
 		
 		return(v);
+	}
+	
+	void searchAllRulePositions()
+	{
+		extendedRuleInstances.clear();
+		ruleInstances.clear();
+		
+		//TODO
+	}
+	
+	void handleOverlapedInstances()
+	{
+		//TODO
+	}
+	
+	void generateRuleCombinations()
+	{
+		//TODO
 	}
 	
 }
