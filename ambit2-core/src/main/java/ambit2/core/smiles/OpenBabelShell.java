@@ -16,17 +16,31 @@ public class OpenBabelShell extends ShellSDFoutput<String> {
 	 */
 	private static final long serialVersionUID = -89551999366481056L;
 	protected static String[] libFiles = {
-			"bin/openbabel/win/iconv.dll",
-				"bin/openbabel/win/libinchi.dll",
-				"bin/openbabel/win/libxml2.dll",
-				"bin/openbabel/win/OpenBabelDLL.dll",
-				"bin/openbabel/win/zlib1.dll"};
+			"bin/openbabel/2.2.3/win/iconv.dll",
+			"bin/openbabel/2.2.3/win/zlib1.dll",
+			"bin/openbabel/2.2.3/win/libstdinchi.dll",
+			"bin/openbabel/2.2.3/win/libxml2.dll",
+			"bin/openbabel/2.2.3/win/OBDLL.dll",
+			"bin/openbabel/2.2.3/win/oberror.dll",
+			"bin/openbabel/2.2.3/win/OBConvDLL.dll",
+			
+			"bin/openbabel/2.2.3/win/License.txt",
+			"bin/openbabel/2.2.3/win/obcommon.obf",
+			"bin/openbabel/2.2.3/win/OBDESC.obf",
+			"bin/openbabel/2.2.3/win/OBFPRT.obf",
+			"bin/openbabel/2.2.3/win/OBInchi.obf",
+			"bin/openbabel/2.2.3/win/OBMCDL.obf",
+			"bin/openbabel/2.2.3/win/OBMore.obf",
+			"bin/openbabel/2.2.3/win/OBUtil.obf",
+			"bin/openbabel/2.2.3/win/OBXML.obf",
+			
+				};
 	public OpenBabelShell() throws ShellException {
 		super();
 	}
 	protected void initialize() throws ShellException {
 		super.initialize();
-		addExecutableWin("bin/openbabel/win/babel.exe",libFiles);
+		addExecutableWin("bin/openbabel/2.2.3/win/babel.exe",libFiles);
 		setInputFile("obabel.smi");
 		setOutputFile("obabel.sdf");		
 		setReadOutput(true);
