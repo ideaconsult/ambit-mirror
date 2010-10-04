@@ -22,7 +22,7 @@ public class OpenBabelShell extends ShellSDFoutput<String> {
 			"bin/openbabel/2.2.3/win/libxml2.dll",
 			"bin/openbabel/2.2.3/win/OBDLL.dll",
 			"bin/openbabel/2.2.3/win/oberror.dll",
-			"bin/openbabel/2.2.3/win/OBConvDLL.dll",
+			"bin/openbabel/2.2.3/win/OBConv.dll",
 			
 			"bin/openbabel/2.2.3/win/License.txt",
 			"bin/openbabel/2.2.3/win/obcommon.obf",
@@ -37,10 +37,12 @@ public class OpenBabelShell extends ShellSDFoutput<String> {
 				};
 	public OpenBabelShell() throws ShellException {
 		super();
+		prefix = "";
 	}
 	protected void initialize() throws ShellException {
 		super.initialize();
 		addExecutableWin("bin/openbabel/2.2.3/win/babel.exe",libFiles);
+
 		setInputFile("obabel.smi");
 		setOutputFile("obabel.sdf");		
 		setReadOutput(true);
