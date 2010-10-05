@@ -42,16 +42,8 @@
   			<enabled>false</enabled>
   		</snapshots>
   	</repository>
-<!--
-  	<repository>
-  		<id>website_ambit</id>
-  		<name>website_ambit</name>
-  		<url>http://ambit.sourceforge.net/jars</url>
-  		<snapshots>
-  			<enabled>false</enabled>
-  		</snapshots>
-  	</repository>
--->
+
+    
 	 <repository>
         <id>ambit-plovdiv</id>
         <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
@@ -62,6 +54,24 @@
   		<url>http://mvnrepository.com/</url>
   	</repository>
   </repositories>
+  
+   <distributionManagement>
+  <!-- 
+    <repository>
+      <id>dev_web_sourceforge</id>
+      <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url>
+    </repository>  
+ -->
+    <snapshotRepository>
+  		<id>ambit-plovdiv-snapshots</id>
+  		<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+	 </snapshotRepository>
+	<repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
+ 	
+  </distributionManagement>
   <dependencies>
   	<dependency>
   		<groupId>ambit</groupId>
