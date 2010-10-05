@@ -146,6 +146,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		r2dm.setShowImplicitHydrogens(false);
 		
 		*/
+		r2dm.setShowImplicitHydrogens(false);
 		r2dm.setShowAromaticity(true);  
 		return renderer;
     }
@@ -248,7 +249,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         if (molecule != null) {
             if ((molecule ==null) || (molecule.getAtomCount() == 0)) 
                 generateCoordinates=false;
-            else if (StructureTypeProcessor.has2DCoordinates(molecule)>0)   
+            else if (StructureTypeProcessor.has2DCoordinates(molecule)>1)   
                generateCoordinates=false;
             else generateCoordinates = true;
             
@@ -356,8 +357,9 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 				IAtomContainer mol = molecules.getAtomContainer(i);
 				
 				Rectangle drawArea = new Rectangle(w,h);
-				renderer.setup(mol, drawArea);
-
+				try {
+					renderer.setup(mol, drawArea);
+				} catch (Exception x) {}
 				renderer.getRenderer2DModel().setZoomFactor(0.8);
 
 				   /*
@@ -392,7 +394,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     	    	try {
     	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
     	    	} catch (Exception x) {
-    	    		x.printStackTrace();
+    	    		//x.printStackTrace();
     	    		r2dm.setSelection(null);
     	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
     	    	}
