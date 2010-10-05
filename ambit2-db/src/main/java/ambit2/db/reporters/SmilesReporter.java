@@ -100,7 +100,7 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 		}
 		}
 		
-		if (getTemplate().size()>0) 
+		if ((template!=null) && getTemplate().size()>0) 
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
