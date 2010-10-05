@@ -5,10 +5,10 @@ Specification-Title: REACH PBT SCREENING TOOL FOR AMBIT XT
 Specification-Version: 1.2 2009-05-25
 Specification-Vendor: Clariant
 Package-Title: ambit2.plugin.pbt
-Package-Version: 2.0
+Package-Version: ${project.version}
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: REACH PBT Assessment
-Implementation-Version: 2.0.2
+Implementation-Version: ${project.version}
 Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net

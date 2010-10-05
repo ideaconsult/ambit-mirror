@@ -10,7 +10,6 @@
   <artifactId>ambit2-db</artifactId>
   <packaging>jar</packaging>
   <name>ambit2-db</name>
-  <version>2.1.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
     	<groupId>mysql</groupId>
@@ -74,6 +73,12 @@
     	<artifactId>ambit2-jchempaint</artifactId>
     	<version>${version}</version>
     </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-chebi</artifactId>
+    	<version>${version}</version>
+    	<scope>test</scope>
+    </dependency>
 
   </dependencies>
 <licenses>
@@ -103,6 +108,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.6</version>
 				<configuration>
 				<skip>false</skip>
 				</configuration>

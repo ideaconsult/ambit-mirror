@@ -11,7 +11,6 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-usmiles</artifactId>
   <name>Canonical SMILES</name>
-  <version>2.1.2-SNAPSHOT</version>
   <issueManagement>
   	<url>http://sourceforge.net/tracker/?group_id=191756</url>
   </issueManagement>

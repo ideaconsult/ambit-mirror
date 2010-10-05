@@ -10,7 +10,6 @@
   <artifactId>ambit2-core</artifactId>
   <packaging>jar</packaging>    
   <name>ambit2-core</name>
-  <version>2.1.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
     	<groupId>org.apache.poi</groupId>

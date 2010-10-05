@@ -11,7 +11,6 @@ http://www.dddc.ac.cn/adme/myzheng/SOME_1_0.tar.gz.
   <groupId>ambit</groupId>
   <artifactId>ambit2-some</artifactId>
   <name>SOME wrapper</name>
-  <version>2.1.2-SNAPSHOT</version>
   <organization>
   	<name>Ideaconsult Ltd.</name>
   	<url>http://www.ideaconsult.net</url>

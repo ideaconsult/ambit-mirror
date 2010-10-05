@@ -11,7 +11,6 @@
   <artifactId>ambit2-taglibs</artifactId>
 	<packaging>jar</packaging>  
   <name>ambit2-taglibs</name>
-  <version>2.1.2-SNAPSHOT</version>
   <build>
   	<plugins>
 			<plugin>

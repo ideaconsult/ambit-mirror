@@ -9,7 +9,6 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-rendering</artifactId>
   <name>cdk-jchempaint dependency</name>
-  <version>2.1.2-SNAPSHOT</version>
   <issueManagement>
   	<url>http://sourceforge.net/tracker/?group_id=191756</url>
   </issueManagement>

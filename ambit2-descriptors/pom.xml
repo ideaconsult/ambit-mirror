@@ -11,7 +11,6 @@ CDK descriptors, listed at http://qsar.sourceforge.net/dicts/qsar-descriptors/in
   <groupId>ambit</groupId>
   <artifactId>ambit2-descriptors</artifactId>
   <name>ambit2-descriptors</name>
-  <version>2.1.2-SNAPSHOT</version>
   <dependencies>
   	<dependency>
   		<groupId>ambit</groupId>

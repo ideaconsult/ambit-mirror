@@ -9,7 +9,6 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-hashcode</artifactId>
   <name>ambit2-hashcode</name>
-  <version>2.1.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
     	<groupId>ambit</groupId>

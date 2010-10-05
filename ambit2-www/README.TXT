@@ -44,7 +44,7 @@ normal user and password are guest/guest by default and are used in database que
       </activation>
       <properties>
 	<google.analytics>your-google-analytics-key</google.analytics>
-
+        <rdf.writer>jena|stax</rdf.writer> 
 	<ambit.db>database name, default ambit2</ambit.db>
         <ambit.db.user.root.password>root password</ambit.db.user.root.password>
         <ambit.db.user.test>normal user name</ambit.db.user.test>
@@ -64,3 +64,9 @@ To switch on G.A., insert the google analytics tag into .m2/settings.xml
 ...
 </properties>
 
+
+<rdf.writer> property sets usage of Jena or StAX libraries for writing RDF. Jena is stable, while StAX is lot faster, but may be buggy (it's our implementation of writing RDF/XML directly)
+Toggle between jena and stax for application/rdf+xml mime type is controlled via
+1)<rdf.writer>jena|stax</rdf.writer> in .m2/settings.xml (compile time)
+2)HTTP query parameter ?rdfwriter=jena|stax  (run time, has priority over 1)
+3)if none of 1) or 2) is specified, the default is jena

@@ -10,7 +10,6 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
   <groupId>ambit</groupId>
   <artifactId>ambit2-namestructure</artifactId>
   <name>ambit2-namestructure</name>
-  <version>2.1.2-SNAPSHOT</version>
   <repositories>
   	<repository>
   		<id>ucc-repo</id>

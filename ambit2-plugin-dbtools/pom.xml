@@ -10,7 +10,6 @@
   <artifactId>ambit2-plugin-dbtools</artifactId>
   <packaging>jar</packaging>        
   <name>AmbitXT plugin: Database tools</name>
-  <version>2.1.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
     	<groupId>ambit</groupId>

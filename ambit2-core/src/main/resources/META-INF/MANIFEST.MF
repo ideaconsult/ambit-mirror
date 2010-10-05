@@ -1,1 +1,11 @@
 Package: ambit2.core
+Manifest-version: ${project.version}
+Specification-Title: ambit2.core
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.core
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.core
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

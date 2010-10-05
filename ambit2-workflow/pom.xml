@@ -10,7 +10,6 @@
   <artifactId>ambit2-workflow</artifactId>
   <packaging>jar</packaging>    
   <name>ambit2-workflow</name>
-  <version>2.1.2-SNAPSHOT</version>
   <description>Workflow module contains classes, common for all workflows, used by AmbitXT plugins.</description>
   <url />
   <organization>

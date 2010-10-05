@@ -8,7 +8,6 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-pubchem</artifactId>
   <name>Pubchem utilities</name>
-  <version>2.1.2-SNAPSHOT</version>
   <description>Pubchem access utilities</description>
   <dependencies>
   	<dependency>

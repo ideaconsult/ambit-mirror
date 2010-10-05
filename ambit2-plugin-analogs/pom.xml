@@ -10,7 +10,6 @@
   <artifactId>ambit2-plugin-analogs</artifactId>
   <packaging>jar</packaging>      
   <name>AmbitXT plugin: Category building</name>
-  <version>2.1.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
     	<groupId>ambit</groupId>

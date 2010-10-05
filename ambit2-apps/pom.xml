@@ -41,6 +41,12 @@
     	<url>http://apps.ideaconsult.net:8080</url>
     </organization>
   <build>
+      <resources>
+	<resource>
+		<directory>src/main/resources</directory>
+		<filtering>true</filtering>
+	</resource>
+  </resources>
   	<pluginManagement>
   		<plugins>
   			<plugin>
@@ -92,7 +98,7 @@
 		              <mode>development</mode>
 		              <url>${project.url}</url>
 		            </manifestEntries>
-		            <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+		            <manifestFile>target/classes/META-INF/MANIFEST.MF</manifestFile>
 		          </archive>
 		        </configuration>
 			</plugin>
