@@ -2,13 +2,13 @@ Package: ambit2.plugin.analogs
 
 Name: ambit2/plugin/analogs/AnalogsFinderPlugin.class
 Specification-Title: Analogs finder plugin for Ambit XT
-Specification-Version: 2.0
+Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Package-Title: ambit2.plugin.analogs
-Package-Version: 2.0
+Package-Version: ${project.version}
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: Profile & Category
-Implementation-Version: 2.0
+Implementation-Version: ${project.version}
 Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net

@@ -9,7 +9,6 @@ AMBIT XT introduces the concept of workflows, allowing guiding the users step by
   <artifactId>ambit2-ambitxt</artifactId>
   <packaging>jar</packaging>  
   <name>AmbitXT</name>
-  <version>2.1.2-SNAPSHOT</version>
 
   <parent>
   	<artifactId>ambit2-apps</artifactId>

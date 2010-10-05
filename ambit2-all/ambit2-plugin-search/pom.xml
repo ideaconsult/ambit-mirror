@@ -10,7 +10,6 @@
   <artifactId>ambit2-plugin-search</artifactId>
   <packaging>jar</packaging>    
   <name>AmbitXT plugin: Database search and Analogue identification</name>
-  <version>2.1.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
     	<groupId>ambit</groupId>

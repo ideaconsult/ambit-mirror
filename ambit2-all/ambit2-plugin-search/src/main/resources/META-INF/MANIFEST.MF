@@ -2,13 +2,13 @@ Package: ambit2.plugin.search
 
 Name: ambit2/plugin/search/SearchPlugin.class
 Specification-Title: Simple search plugin for Ambit XT
-Specification-Version: 2.0
+Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Package-Title: ambit2.plugin.search
-Package-Version: 2.0
+Package-Version: ${project.version}
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: Simple search
-Implementation-Version: 2.0
+Implementation-Version: ${project.version}
 Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net

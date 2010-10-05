@@ -9,7 +9,6 @@
   <artifactId>ambit2-plugin-usermgr</artifactId>
 	<packaging>jar</packaging>        
   <name>AmbitXT plugin: Database administration</name>
-  <version>2.1.2-SNAPSHOT</version>
   <description>AmbitXT plugin for database administration activities</description>
   <url />
   <dependencies>

@@ -9,7 +9,6 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-smarts</artifactId>  
   <name>ambit2-smarts</name>
-  <version>2.1.2-SNAPSHOT</version>
   <description>Implementation of a SMARTS parser.</description>
   <dependencies>
   	<dependency>

@@ -69,20 +69,30 @@
     <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >2009-01-13</dc:date>
   </bo:MolecularDescriptor>
-  <bo:MolecularDescriptor rdf:ID="CrossectionalDiameter">
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cross sectional diameter of the molecule</bo:definition>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-    <bo:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >returns double[] where [max length, max diameter, min diameter ]</bo:description>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Crossectional diameter</rdfs:label>
-  </bo:MolecularDescriptor>
+  <bo:Reference rdf:ID="PAT2008">
+    <rdfs:comment xml:lang="en">null</rdfs:comment>
+    <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >&lt;bibtex:article xmlns:bibtex="http://bibtexml.sf.net/"&gt;
+&lt;bibtex:author&gt;Patlewicz G, Jeliazkova N, Safford RJ, Worth AP, Aleksiev B.&lt;/bibtex:author&gt;
+&lt;bibtex:title&gt;An evaluation of the implementation of the Cramer classification scheme in the Toxtree software.&lt;/bibtex:title&gt;
+&lt;bibtex:journal&gt;SAR QSAR Environ Res.&lt;/bibtex:journal&gt;
+&lt;bibtex:year&gt;2008&lt;/bibtex:year&gt;
+&lt;bibtex:volume&gt;19(5-6)&lt;/bibtex:volume&gt;
+&lt;bibtex:pages&gt;495-524&lt;/bibtex:pages&gt;
+&lt;/bibtex:article&gt;</bibtex:entry>
+  </bo:Reference>
+  <bo:Reference rdf:ID="CRA1978">
+    <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >&lt;bibtex:article xmlns:bibtex="http://bibtexml.sf.net/"&gt;
+&lt;bibtex:author&gt;Cramer GM, Ford RA, Hall RL&lt;/bibtex:author&gt;
+&lt;bibtex:title&gt;Estimation of Toxic Hazard - A Decision Tree Approach.&lt;/bibtex:title&gt;
+&lt;bibtex:journal&gt;J. Cosmet. Toxicol.&lt;/bibtex:journal&gt;
+&lt;bibtex:year&gt;1978&lt;/bibtex:year&gt;
+&lt;bibtex:volume&gt;16&lt;/bibtex:volume&gt;
+&lt;bibtex:pages&gt;255-276&lt;/bibtex:pages&gt;
+&lt;/bibtex:article&gt;</bibtex:entry>
+    <rdfs:comment xml:lang="en">null</rdfs:comment>
+  </bo:Reference>
   <bo:MolecularDescriptor rdf:ID="MolecularWeight">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Molecular Weight</rdfs:label>
@@ -97,6 +107,20 @@
     >http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#weight</rdfs:seeAlso>
     <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+  </bo:MolecularDescriptor>
+  <bo:MolecularDescriptor rdf:ID="CrossectionalDiameter">
+    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
+    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cross sectional diameter of the molecule</bo:definition>
+    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2009-01-13</dc:date>
+    <bo:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >returns double[] where [max length, max diameter, min diameter ]</bo:description>
+    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
+    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Crossectional diameter</rdfs:label>
   </bo:MolecularDescriptor>
   <bo:Reference rdf:ID="JAW2007">
     <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -135,6 +159,18 @@
 
            &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="XING2002"&gt;&lt;/bibtex:cite&gt; and &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="JAW2007"&gt;&lt;/bibtex:cite&gt;</bo:definition>
   </bo:MolecularDescriptor>
+  <bo:MolecularDescriptor rdf:ID="toxtreecramer">
+    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >implements atom environment fingerprints, according to
+
+           &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="CRA1978"&gt;&lt;/bibtex:cite&gt; and &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="PAT2008"&gt;&lt;/bibtex:cite&gt;</bo:definition>
+    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2010-10-03</dc:date>
+    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >toxtreecramer</rdfs:label>
+  </bo:MolecularDescriptor>
   <bo:Reference rdf:ID="XING2002">
     <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >&lt;bibtex:article xmlns:bibtex="http://bibtexml.sf.net/"&gt;
@@ -166,8 +202,8 @@
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >OpenMopac</rdfs:label>
     <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#electronicDescriptor"/>
     <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
+    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#electronicDescriptor"/>
   </bo:MolecularDescriptor>
 </rdf:RDF>
 

@@ -6,7 +6,6 @@
   <artifactId>ambit2-www</artifactId>
   <packaging>war</packaging>
   <name>Ambit2 REST web services</name>
-  <version>2.1.2-SNAPSHOT</version>
 
   <parent>
   	<artifactId>ambit2-apps</artifactId>
