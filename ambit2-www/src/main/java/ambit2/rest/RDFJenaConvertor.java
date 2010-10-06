@@ -3,6 +3,7 @@ package ambit2.rest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import org.restlet.Context;
 import org.restlet.data.MediaType;
@@ -14,6 +15,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.rdf.OT;
 
+import com.epimorphics.jsonrdf.Encoder;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -129,6 +131,22 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	        };				
 
 	}
+	/**
+	 * using http://code.google.com/p/linked-data-api/
+	 * @param model
+	 * @param out
+	 */
+	
+	public void exportToJSON(Model model,OutputStream out) throws Exception {
+		Encoder encoder = Encoder.get(model);
+		OutputStreamWriter writer = new OutputStreamWriter(out);
+		
+		encoder.encode(model, writer, true);
+		writer.flush();
+		
+		
+	}
+	/*
 //http://tech.groups.yahoo.com/group/jena-dev/message/23035
 //JSON serialisation
 	public void exportToJSON(Model model,OutputStream out) {
@@ -159,4 +177,5 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 		}
 		return m;
 	}
+	*/
 }
