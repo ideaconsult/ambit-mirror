@@ -253,6 +253,11 @@
   		<version>${ambit.version}</version>
   		<scope>compile</scope>
   	</dependency>
+	<dependency>
+	  <groupId>com.epimorphics.json</groupId>
+	  <artifactId>json-rdf</artifactId>
+	  <version>0.0.1</version>
+	</dependency>
 
   </dependencies>
 	<repositories>
@@ -265,7 +270,7 @@
   			<enabled>false</enabled>
   		</snapshots>
     </repository>
-	    <repository>
+    <repository>
 	      <id>opennms-repo</id>
 	      <name>OpenNMS Repository</name>
 	      <url>http://repo.opennms.org/maven2</url>
@@ -273,9 +278,7 @@
 	        <enabled>false</enabled>
 	      </snapshots>
 	    </repository>
-
-
-		<repository>
+    <repository>
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>
 			<url>http://maven.restlet.org</url>
@@ -283,7 +286,7 @@
   			<enabled>false</enabled>
   			</snapshots>
 		</repository>
-		<repository>
+    <repository>
 		<id>glassfish</id>
 		<name>javamelody is here</name>
 		<url>http://maven.glassfish.org/content/groups/public</url>
