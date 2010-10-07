@@ -427,7 +427,6 @@ public class MDLWriter extends DefaultChemObjectWriter {
         writer.write("M  END");
         writer.newLine();
         
-        writer.newLine();
         //write sdfields, if any
         if(sdFields!=null){
           Set set = sdFields.keySet();
