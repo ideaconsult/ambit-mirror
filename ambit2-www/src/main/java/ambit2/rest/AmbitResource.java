@@ -548,7 +548,7 @@ window.setInterval(function() {
 		w.write("<div>");		
 		
 		w.write(String.format("<a href='http://toxpredict.org' title='Predict'>ToxPredict</a>&nbsp;"));
-		w.write(String.format("<a href='%s/ttc?text=50-00-0&search=%s' title='Thresholf of toxicological concern prediction'>TTC</a>&nbsp;",baseReference,Reference.encode("C=O")));
+		//w.write(String.format("<a href='%s/ttc?text=50-00-0&search=%s' title='Threshold of toxicological concern prediction'>TTC</a>&nbsp;",baseReference,Reference.encode("C=O")));
 		w.write(String.format("<a href='%s/depict?search=c1ccccc1' title='Structure diagram'>Depiction</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/compound'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
