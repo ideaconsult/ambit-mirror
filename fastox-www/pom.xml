@@ -120,6 +120,12 @@
   		<groupId>org.restlet.jee</groupId>
   		<artifactId>org.restlet.ext.xml</artifactId>
   		<version>2.0-M6</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.0</version>
+  		<scope>test</scope>
   	</dependency>  	
   </dependencies>
   <description>OpenTox demo application </description>

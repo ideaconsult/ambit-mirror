@@ -1,7 +1,8 @@
 package ambit2.fastox.test;
 
+import junit.framework.Assert;
+
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.restlet.Component;
@@ -12,6 +13,7 @@ import ambit2.fastox.FastoxComponent;
 import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+
 
 public abstract class StepProcessorTest {
 	protected WizardStep step;
