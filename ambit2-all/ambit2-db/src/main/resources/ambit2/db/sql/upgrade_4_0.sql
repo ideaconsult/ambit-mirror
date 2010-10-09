@@ -5,8 +5,8 @@
 -- -----------------------------------------------------
 insert ignore into version (idmajor,idminor,comment) values (4,0,"AMBIT2 schema");
 
-DROP trigger copy_history;
-DROP table history;
+DROP trigger IF_EXISTS copy_history;
+DROP table IF EXISTS  history;
 
 CREATE TABLE IF NOT EXISTS `property_ci` (
   `id_ci` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -62,7 +62,7 @@ INSERT IGNORE INTO summary_property_chemicals (idchemical,id_ci,idproperty)
 	
 END LOOP the_loop;   
 
-END ;;
+END */;;
 
 
 DROP TRIGGER IF EXISTS insert_string_ci;;
