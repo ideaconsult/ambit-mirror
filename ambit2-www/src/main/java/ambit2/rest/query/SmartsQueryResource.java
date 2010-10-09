@@ -38,9 +38,10 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return (dataset_id == null)?
+				null
 			//String.format("riap://application%s?text=%s",PropertyResource.featuredef,Reference.encode(textSearch))
-				String.format("%s%s?text=%s",
-						getRequest().getRootRef(),PropertyResource.featuredef,Reference.encode(textSearch))				
+			//	String.format("%s%s?text=%s",
+				//		getRequest().getRootRef(),PropertyResource.featuredef,Reference.encode(textSearch))				
 			:
 				
 				
