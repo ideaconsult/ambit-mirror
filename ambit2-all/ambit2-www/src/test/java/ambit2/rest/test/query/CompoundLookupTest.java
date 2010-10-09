@@ -20,12 +20,32 @@ public class CompoundLookupTest extends ResourceTest {
 				CompoundLookup.resource,
 				//"/smarts",
 				Reference.encode("1530-32-1"),
-				Reference.encode(String.format("50-00-0", port)));
+				Reference.encode(String.format("50-00-0")));
 	}
 	@Test
 	public void testURI() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
 	}
+	
+	@Test
+	public void testSingleCAS() throws Exception {
+		String q = String.format("http://localhost:%d/query%s/search/all?search=%s", port,
+				CompoundLookup.resource,
+				//"/smarts",
+				Reference.encode("1530-32-1")
+				);
+		testGet(q,MediaType.TEXT_URI_LIST);
+	}
+	
+	@Test
+	public void testSingleName() throws Exception {
+		String q = String.format("http://localhost:%d/query%s/%s", port,
+				CompoundLookup.resource,
+				//"/smarts",
+				Reference.encode("1530-32-1")
+				);
+		testGet(q,MediaType.TEXT_URI_LIST);
+	}	
 	@Override
 	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
 			throws Exception {

@@ -20,22 +20,33 @@ public class QueryFieldMultiple extends QueryFieldAbstract<List<String>,SetCondi
 		setCondition(new SetCondition(SetCondition.conditions.in));
 	}
 	
-	protected static String queryValueCaseSensitive = "value in (?,..?)"; 
-	protected static String queryValueCaseInsensitive = "lower(value) %s (?...?)"; 
+	protected static String queryValueCaseSensitive = "value %s (%s)"; 
+	protected static String queryValueCaseInsensitive = "value_ci %s (%s)"; 
 	
-	public final static String sqlField = 
-		"select ? as idquery,s1.idchemical,s1.idstructure,if(s1.type_structure='NA',0,1) as selected,s1.preference as metric,null as text\n" +	
-		"FROM structure s1\n"+
-		"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (1E10*s1.preference+s1.idstructure) > (1E10*s2.preference+s2.idstructure)\n"+
-		"join (\n"+
-		"select distinct(structure.idchemical)\n"+
-		"from structure\n"+
-		"join  property_values using(idstructure)\n"+
-		"join property_string using (idvalue_string)\n"+
-		"join properties using(idproperty)\n"+
-		"where %s %s\n"+
-		") a on a.idchemical=s1.idchemical\n"+
-		"where s2.idchemical is null\n";
+	@Override
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitive = false;
+	}
+	public String getSQL() throws AmbitException {
+		
+		String whereName = ((getFieldname() ==null) || "".equals(getFieldname().getName()))?"":
+				String.format(queryField,searchMode.getSQL(),getNameCondition().getSQL().toString());
+		//no property retrieval for case sensitive queries, because it is slow
+		if (isCaseSensitive()) 
+			return String.format(
+					sqlField,
+					whereName,
+					String.format(queryValueCaseSensitive,getCondition().getSQL(),getWhereQuery())
+					);
+		else
+			return String.format(
+					isRetrieveProperties()?sqlFieldProperties:sqlField_ci,
+					whereName,
+					String.format(queryValueCaseInsensitive,getCondition().getSQL(),getWhereQuery())
+					);
+		
+	}
+	/*
 	public String getSQL() throws AmbitException {
 		
 		String whereName = ((getFieldname() ==null) || "".equals(getFieldname().getName()))?"":
@@ -47,6 +58,7 @@ public class QueryFieldMultiple extends QueryFieldAbstract<List<String>,SetCondi
 				);
 
 	}
+	*/
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getValue() == null) throw new AmbitException("Parameter not defined!");
 		List<QueryParam> params = new ArrayList<QueryParam>();
@@ -71,13 +83,10 @@ public class QueryFieldMultiple extends QueryFieldAbstract<List<String>,SetCondi
 	
 	protected String getWhereQuery() {
 		StringBuilder b = new StringBuilder();
-		b.append(isCaseSensitive()?" value ":" lower(value) ");
-		b.append(getCondition().getSQL());
 		for (int i = 0; i < value.size(); i++) {
-			b.append(i==0?" (":",");
+			b.append(i==0?" ":",");
 			b.append("?");
 		}
-		b.append(")");
 		return b.toString();
 	}
 }

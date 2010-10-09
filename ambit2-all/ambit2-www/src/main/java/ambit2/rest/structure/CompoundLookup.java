@@ -38,6 +38,7 @@ import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.task.CallableQueryProcessor;
 
@@ -75,6 +76,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			Request request, Response response) throws ResourceException {
 		//parse params
 
+		
 		Object id = null;
 		try {
 			id = getRequest().getAttributes().get(resourceKey);
@@ -91,10 +93,16 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} catch (Exception x) {
 			rep_id = null;
 		}
+		
+		Form form = getParams();
+		boolean casesens = "true".equals(form.getFirstValue(QueryResource.caseSensitive))?true:false;
+		boolean retrieveProperties = "true".equals(form.getFirstValue(QueryResource.returnProperties))?true:false;
+			
+		
 		String url = null;
 		IQueryRetrieval<IStructureRecord>  query = null;
 		if (isURL(text)) try {
-			Form form = getParams();
+			
 			url = form.getFirstValue(search_param);
 			if (url==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No search parameter!");
 			Object q = CallableQueryProcessor.getQueryObject(new Reference(url), getRequest().getRootRef());
@@ -110,7 +118,6 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} 
 		else {
 			if (isSearchParam(text)) {
-				Form form = getParams();
 				text = form.getFirstValue(search_param);
 				text_multi = form.getValuesArray(search_param);
 			}
@@ -118,12 +125,12 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			int idcompound = isAmbitID(text);
 			//query
 			if ((text_multi!= null) && (text_multi.length>1)) {
-				query =  getMultiTextQuery(null,true,text_multi);
+				query =  getMultiTextQuery(null,casesens,retrieveProperties, text_multi);
 			} else	if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
-				if (CASNumber.isValid(text)) query =  getTextQuery(Property.getCASInstance(),true,text);
+				if (CASNumber.isValid(text)) query =  getTextQuery(Property.getCASInstance(),casesens,retrieveProperties,text);
 			} else if (EINECS.isValidFormat(text)) { //this is EINECS
 				//we'd better not search for invalid numbers
-				if (EINECS.isValid(text)) query =  getTextQuery(Property.getEINECSInstance(),true,text);
+				if (EINECS.isValid(text)) query =  getTextQuery(Property.getEINECSInstance(),casesens,retrieveProperties,text);
 			} else if (idcompound>0)  {
 				IStructureRecord record = new StructureRecord();
 				record.setIdchemical(idcompound);
@@ -155,9 +162,8 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 				} 
 			}
 		}
-		if (query == null) query = getTextQuery(null,false,text);
+		if (query == null) query = getTextQuery(null,casesens,retrieveProperties, text);
 
-		Form form = getParams();
 		setPaging(form, query);
 		
 		setTemplate(createTemplate(form));
@@ -173,11 +179,11 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			else params = getRequest().getEntityAsForm();
 		return params;
 	}
-	protected QueryField getTextQuery(Property property, boolean caseSensitive, String value) {
+	protected QueryField getTextQuery(Property property, boolean caseSensitive, boolean retrieveProperties, String value) {
 		QueryField q_by_name = new QueryField();
 		q_by_name.setFieldname(property);
     	q_by_name.setCaseSensitive(caseSensitive);
-    	q_by_name.setRetrieveProperties(true);
+    	q_by_name.setRetrieveProperties(retrieveProperties);
     	q_by_name.setSearchByAlias(true);
     	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_EQ));
     	q_by_name.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
@@ -186,29 +192,36 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		return q_by_name;
 	}
 	
-	protected QueryFieldMultiple getMultiTextQuery(Property property, boolean caseSensitive, String[] value) {
+	protected QueryFieldMultiple getMultiTextQuery(Property property, boolean caseSensitive, boolean retrieveProperties,  String[] value) {
 		QueryFieldMultiple q_by_name = new QueryFieldMultiple();
 		
     	q_by_name.setCaseSensitive(caseSensitive);
-    	q_by_name.setRetrieveProperties(true);
+    	q_by_name.setRetrieveProperties(retrieveProperties);
     	q_by_name.setSearchByAlias(true);
     	List<String> values = new ArrayList<String>();
     	
-    	int cas = 0;
-    	int einecs = 0;
-    	for (String v : value) {
-			if (CASProcessor.isValidFormat(v))
-			if (CASNumber.isValid(v)) cas++;
-			else if (EINECS.isValidFormat(v)) 
-			if (EINECS.isValid(v)) einecs++;
-			
-    		values.add(v);
-    	}
-    	if (cas==value.length) { property = Property.getCASInstance(); q_by_name.setCaseSensitive(true); }
-    	else
-    	if (einecs==value.length) { property = Property.getEINECSInstance();  q_by_name.setCaseSensitive(true);}
-    	else if((cas+einecs)==value.length) q_by_name.setCaseSensitive(true); 
-    	else q_by_name.setCaseSensitive(false);
+
+	    	int cas = 0;
+	    	int einecs = 0;
+	    	int inchi = 0;
+	    	for (String v : value) {
+				if (CASProcessor.isValidFormat(v))
+				if (CASNumber.isValid(v)) cas++;
+				else if (EINECS.isValidFormat(v)) 
+				if (EINECS.isValid(v)) einecs++;
+				if (v.startsWith("InChI=")) inchi++;
+	    		values.add(v);
+	    	}
+	    	/*
+	   
+	    	if (cas==value.length) { property = Property.getCASInstance(); q_by_name.setCaseSensitive(false); }
+	    	else
+	    	if (einecs==value.length) { property = Property.getEINECSInstance();  q_by_name.setCaseSensitive(false);}
+	    	else if((cas+einecs)==value.length) q_by_name.setCaseSensitive(false);
+	    	else if (inchi>0) q_by_name.setCaseSensitive(false);
+	    	else q_by_name.setCaseSensitive(false);
+    		*/
+    
     	
     	q_by_name.setFieldname(property);
     	q_by_name.setChemicalsOnly(true);

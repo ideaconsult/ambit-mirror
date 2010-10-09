@@ -84,26 +84,20 @@ where s2.idchemical is null;
 		
 		String whereName = ((getFieldname() ==null) || "".equals(getFieldname().getName()))?"":
 				String.format(queryField,searchMode.getSQL(),getNameCondition().getSQL().toString());
-		return String.format(
-				isRetrieveProperties()?sqlFieldProperties:sqlField,
-				whereName,
-				String.format(isCaseSensitive()?queryValueCaseSensitive:queryValueCaseInsensitive,getCondition().getSQL())
-				);
-		/*
-		if ((getFieldname() ==null) || "".equals(getFieldname().getName()))
-			return String.format(isRetrieveProperties()?sqlAnyFieldProperties:sqlAnyField,
-					isChemicalsOnly()?group:"",
-					isChemicalsOnly()?where_group:"",							
-					getCondition().getSQL(),"");
+		//no property retrieval for case sensitive queries, because it is slow
+		if (isCaseSensitive()) 
+			return String.format(
+					sqlField,
+					whereName,
+					String.format(queryValueCaseSensitive,getCondition().getSQL())
+					);
 		else
-			return String.format(isRetrieveProperties()?sqlFieldProperties:sqlField,
-					isChemicalsOnly()?group:"",
-					isChemicalsOnly()?where_group:"",
-					searchMode.getSQL(),
-					getNameCondition().getSQL().toString(),
-					getCondition().getSQL(),
-					"");
-			*/		
+			return String.format(
+					isRetrieveProperties()?sqlFieldProperties:sqlField_ci,
+					whereName,
+					String.format(queryValueCaseInsensitive,getCondition().getSQL())
+					);
+		
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		if (getValue() == null) throw new AmbitException("Parameter not defined!");

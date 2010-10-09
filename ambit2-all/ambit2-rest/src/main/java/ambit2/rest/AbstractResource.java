@@ -40,6 +40,8 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	public final static String property = "property";
 	public final static String condition = "condition";
 	public final static String caseSensitive = "casesens";
+	public final static String returnProperties = "returnProperties";
+	
 	public final static String max_hits = "max";
 	protected static String[] filter = {
 		"googlebot","msnbot",

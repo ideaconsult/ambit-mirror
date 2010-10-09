@@ -108,15 +108,14 @@ CREATE TABLE  `structure` (
   CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
-DELIMITER $
-CREATE TRIGGER copy_history BEFORE UPDATE ON structure
-  FOR EACH ROW BEGIN
-   INSERT INTO history (idstructure,structure,format,updated,user_name,type_structure,label)
-        SELECT idstructure,structure,format,updated,user_name,type_structure,label FROM structure
-        WHERE structure.idstructure = OLD.idstructure;
-  END $
-DELIMITER ;
+--DELIMITER $
+--CREATE TRIGGER copy_history BEFORE UPDATE ON structure
+-- FOR EACH ROW BEGIN
+--   INSERT INTO history (idstructure,structure,format,updated,user_name,type_structure,label)
+--        SELECT idstructure,structure,format,updated,user_name,type_structure,label FROM structure
+--        WHERE structure.idstructure = OLD.idstructure;
+--  END $
+--DELIMITER ;
 
 -- -----------------------------------------------------
 -- Table `properties`
@@ -393,25 +392,27 @@ CREATE TABLE  `property_tuples` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
--- Table `history`
+-- Table `history` removed
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `history`;
 
-CREATE TABLE  `history` (
-  `version` int(11) NOT NULL auto_increment,
-  `idstructure` int(11) unsigned NOT NULL,
-  `structure` blob NOT NULL,
-  `format` enum('SDF','CML','MOL') collate utf8_bin NOT NULL default 'CML',
-  `label` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN' COMMENT 'quality label',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `user_name` varchar(16) collate utf8_bin default NULL,
-  `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') collate utf8_bin NOT NULL default 'NA',
-  PRIMARY KEY  (`version`),
-  KEY `idstructure` (`idstructure`),
-  KEY `f_idstructure` (`idstructure`),
-  KEY `FK_history_1` (`user_name`),
-  CONSTRAINT `FK_history_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+--DROP TABLE IF EXISTS `history`;
+
+--CREATE TABLE  `history` (
+--  `version` int(11) NOT NULL auto_increment,
+--  `idstructure` int(11) unsigned NOT NULL,
+--  `structure` blob NOT NULL,
+--  `format` enum('SDF','CML','MOL') collate utf8_bin NOT NULL default 'CML',
+--  `label` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN' COMMENT 'quality label',
+--  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+--  `user_name` varchar(16) collate utf8_bin default NULL,
+--  `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') collate utf8_bin NOT NULL default 'NA',
+--  PRIMARY KEY  (`version`),
+--  KEY `idstructure` (`idstructure`),
+--  KEY `f_idstructure` (`idstructure`),
+--  KEY `FK_history_1` (`user_name`),
+--  CONSTRAINT `FK_history_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
+--) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 -- -----------------------------------------------------
 -- Table `src_dataset` datasets
@@ -686,6 +687,73 @@ CREATE TABLE  `bookmark` (
   KEY `Index_2` USING BTREE (`creator`,`hasTopic`,`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+-- ----------------------------------------------------------------------------------------------
+-- Table `property_ci` Case insensitive properties, (almost) a duplicate of property_string table
+-- ----------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS `property_ci`;
+CREATE TABLE  `property_ci` (
+  `id_ci` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `value_ci` varchar(255) NOT NULL,
+  PRIMARY KEY (`id_ci`),
+  UNIQUE KEY `Index_3` (`value_ci`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------------------------------------------------------------------------
+-- Table `summary_property_chemicals` 
+-- Similar to property_values, but properties are assigned to idchemical, rather than idstructure
+-- Speeds up 'select distinct idchemical' queries 
+-- ----------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS `summary_property_chemicals`;
+CREATE TABLE  `summary_property_chemicals` (
+  `idchemical` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_ci` int(10) unsigned NOT NULL,
+  `idproperty` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`idchemical`,`id_ci`,`idproperty`),
+  KEY `FK_ppci_2` (`id_ci`),
+  KEY `FK_ppci_3` (`idproperty`),
+  CONSTRAINT `FK_ppci_1` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ppci_2` FOREIGN KEY (`id_ci`) REFERENCES `property_ci` (`id_ci`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ppci_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+DELIMITER $
+CREATE TRIGGER insert_string_ci AFTER INSERT ON property_string
+ FOR EACH ROW BEGIN
+    INSERT IGNORE INTO property_ci (value_ci) values (NEW.value);
+ END $
+ 
+CREATE TRIGGER update_string_ci AFTER UPDATE ON property_string
+ FOR EACH ROW BEGIN
+    UPDATE property_ci set value_ci=NEW.value where value_ci=OLD.value;
+ END $
+ 
+ CREATE TRIGGER summary_chemical_prop_insert AFTER INSERT ON property_values
+ FOR EACH ROW BEGIN
+    INSERT IGNORE INTO summary_property_chemicals (idchemical,id_ci,idproperty) 
+    	SELECT idchemical,id_ci,idproperty from property_ci
+		JOIN structure
+		JOIN properties
+		WHERE
+		NEW.idvalue_string is not null 
+		and value_ci = (select value from property_string where idvalue_string=NEW.idvalue_string)
+		and idstructure=NEW.idstructure
+		and idproperty=NEW.idproperty;   
+ END $
+
+ CREATE TRIGGER summary_chemical_prop_update AFTER UPDATE ON property_values
+ FOR EACH ROW BEGIN
+    INSERT IGNORE INTO summary_property_chemicals (idchemical,id_ci,idproperty) 
+    	SELECT idchemical,id_ci,idproperty from property_ci
+		JOIN structure
+		JOIN properties
+		WHERE
+		NEW.idvalue_string is not null 
+		and value_ci = (select value from property_string where idvalue_string=NEW.idvalue_string)
+		and idstructure=NEW.idstructure
+		and idproperty=NEW.idproperty;   
+ END $
+DELIMITER ;
+
 -- -----------------------------------------------------
 -- Table `version` Version
 -- -----------------------------------------------------
@@ -697,10 +765,10 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (3,2,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,0,"AMBIT2 schema");
 
 -- -----------------------------------------------------
--- Sorts comma seperated strings
+-- Sorts comma separated strings
 -- -----------------------------------------------------
 DROP FUNCTION IF EXISTS `sortstring`;
 
