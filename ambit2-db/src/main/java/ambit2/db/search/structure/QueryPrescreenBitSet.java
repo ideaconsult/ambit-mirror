@@ -84,7 +84,7 @@ public class QueryPrescreenBitSet extends AbstractStructureQuery<BitSet,BitSet,N
 	"select idchemical,fp.bc+sk.bc as m from fp1024 fp\n"+
 	"join sk1024 sk\n"+
 	"using(idchemical)\n"+
-	"where %s\n"+
+	"where \n"+
 	"(? = sk.fp1) and (? = sk.fp2) and (? = sk.fp3) and\n"+
 	"(? = sk.fp4) and (? = sk.fp5) and (? = sk.fp6) and (? = sk.fp7) and\n"+
 	"(? = sk.fp8) and (? = sk.fp9) and (? = sk.fp10) and (? = sk.fp11) and\n"+
