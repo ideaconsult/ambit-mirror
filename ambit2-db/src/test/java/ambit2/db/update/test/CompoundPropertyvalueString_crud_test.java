@@ -50,6 +50,17 @@ public class CompoundPropertyvalueString_crud_test extends CRUDTest<IStructureRe
 		Assert.assertEquals(1,table.getRowCount());
 		StringBuilder b = new StringBuilder();
 		Assert.assertEquals("AABBCC",table.getValue(0,"value"));
+		/**
+		 * Test trigger update_string_ci
+		 */
+		table = 	c.createQueryTable("EXPECTED","SELECT value_ci from property_ci where value_ci='aabbcc'");
+		Assert.assertEquals(1,table.getRowCount());
+		/**
+		 * Test trigger summary_chemical_prop_update
+		 */
+		table = 	c.createQueryTable("EXPECTED",
+				"SELECT idchemical,idstructure,idproperty,value_ci from summary_property_chemicals join structure using(idchemical) join property_ci using(id_ci) where idstructure=100211 and idproperty=2 and value_ci='aabbcc'");
+		Assert.assertEquals(1,table.getRowCount());
 		c.close();	
 		
 	}
@@ -65,6 +76,17 @@ public class CompoundPropertyvalueString_crud_test extends CRUDTest<IStructureRe
 		for (int i=0; i < 500; i++) b.append("A");
 		Assert.assertEquals(b.toString(),table.getValue(0,"text"));
 		Assert.assertEquals(b.toString().substring(0,255),table.getValue(0,"value"));
+		/**
+		 * Test trigger insert_string_ci
+		 */
+		table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT value_ci from property_ci where value_ci='%s'",b.toString().substring(0,255).toLowerCase()));
+		Assert.assertEquals(1,table.getRowCount());	
+		
+		table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT idchemical,idstructure,idproperty,value_ci from summary_property_chemicals join structure using(idchemical) join property_ci using(id_ci) where idstructure=100211 and idproperty=2 and value_ci='%s'",
+						b.toString().substring(0,255).toLowerCase()));
+		Assert.assertEquals(1,table.getRowCount());		
 		c.close();	
 		
 	}
