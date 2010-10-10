@@ -101,13 +101,22 @@ public class RepositoryWriterTest extends DbUnitTest {
 		Assert.assertEquals(3,chemicals.getRowCount());		
 		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(7,strucs.getRowCount());
-		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='TEST INPUT'");
+		srcdataset = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,idtemplate FROM src_dataset where name='TEST INPUT'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
+		
+		//verifies if trigger insert_dataset_template works ok
+		Assert.assertNotNull(srcdataset.getValue(0,"idtemplate"));
+		
 		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
 		Assert.assertEquals(7,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
 		Assert.assertEquals(73,property.getRowCount());
+		
+		//verifies if insert_property_tuple works ok
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM template_def join src_dataset using(idtemplate) where name='TEST INPUT'");
+		Assert.assertEquals(73,property.getRowCount());
+		
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(228,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");

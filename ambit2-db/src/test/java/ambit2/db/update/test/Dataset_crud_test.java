@@ -60,10 +60,17 @@ public class Dataset_crud_test extends CRUDTest<Object,SourceDataset> {
 	@Override
 	protected void createVerify(IQueryUpdate<Object,SourceDataset> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT * FROM src_dataset where name='ambit'");
+		ITable table = 	c.createQueryTable("EXPECTED_USER","SELECT idtemplate FROM src_dataset where name='ambit'");
 		Assert.assertEquals(1,table.getRowCount());
+		Object idtemplate = table.getValue(0,"idtemplate");
+		Assert.assertNotNull(idtemplate);
+		
 		table = c.createQueryTable("EXPECTED_USERROLE","SELECT * FROM catalog_references where title='new_title'");
-		Assert.assertEquals(1,table.getRowCount());		
+		Assert.assertEquals(1,table.getRowCount());
+		
+		table = c.createQueryTable("EXPECTED_TEMPLATE",
+				String.format("SELECT * FROM template where name='ambit' and idtemplate=%s",idtemplate));
+		Assert.assertEquals(1,table.getRowCount());				
 		c.close();
 	}
 

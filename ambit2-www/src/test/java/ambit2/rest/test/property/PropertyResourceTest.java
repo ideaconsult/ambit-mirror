@@ -76,7 +76,7 @@ public class PropertyResourceTest extends ResourceTest {
 	public void testQuerySameAS() throws Exception {
 		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(
 				String.format("http://localhost:%d%s?%s=%s", port,
-						PropertyResource.featuredef,OpenTox.params.sameas.toString(),"CasRN")
+						PropertyResource.featuredef,OpenTox.params.sameas.toString(),"CASRN")
 				));
 		iterator.setCloseModel(true);
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d", port)));
@@ -421,7 +421,7 @@ public class PropertyResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-				String.format("SELECT * FROM properties join catalog_references using(idreference) where name='CAS' and comments='%s' and title='Dummy' and url='NA'","http://www.opentox.org/api/1.1#CasRN"));
+				String.format("SELECT * FROM properties join catalog_references using(idreference) where name='CAS' and comments='%s' and title='Dummy' and url='NA'","http://www.opentox.org/api/1.1#CASRN"));
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 		Assert.assertEquals("http://localhost:8181/feature/3", response.getLocationRef().toString());
