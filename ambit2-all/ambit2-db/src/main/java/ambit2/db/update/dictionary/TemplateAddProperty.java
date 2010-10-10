@@ -44,7 +44,7 @@ public class TemplateAddProperty extends AbstractUpdate<Dictionary,Property> {
 	protected CreateProperty createProperty;
 	
 	public static final String create_sql = 
-		"INSERT IGNORE INTO template_def " +
+		"INSERT IGNORE INTO template_def (idtemplate,idproperty,`order`) " +
 		"SELECT idtemplate,idproperty,idproperty FROM template join properties join catalog_references using(idreference) "+
 		"where properties.name=? and catalog_references.title=? and template.name=?";
 

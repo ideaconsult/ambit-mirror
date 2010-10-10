@@ -105,7 +105,114 @@ CREATE TRIGGER update_string_ci AFTER UPDATE ON property_string
 
 DELIMITER ;
 
+insert ignore into version (idmajor,idminor,comment) values (4,1,"AMBIT2 schema");
 -----------------------------------------------------
--- speeeds up retral of all properties of a chemical
+-- speeds up retrieval of all properties of a chemical
 -----------------------------------------------------
 ALTER TABLE `summary_property_chemicals` ADD INDEX `Index_4`(`idchemical`, `idproperty`);
+
+
+-----------------------------------------------------
+-- speeds up retrieval of all properties of a dataset
+-----------------------------------------------------
+
+-----------------------------------------------------
+-- A template entry, linked to every dataset
+-----------------------------------------------------
+ALTER TABLE `src_dataset` ADD COLUMN `idtemplate` INTEGER UNSIGNED AFTER `created`,
+ ADD CONSTRAINT `FK_src_dataset_3` FOREIGN KEY `FK_src_dataset_3` (`idtemplate`)
+    REFERENCES `template` (`idtemplate`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+    
+-----------------------------------------------------
+-- properties type
+-----------------------------------------------------    
+ALTER TABLE `template_def` ADD COLUMN `ptype` SET('STRING','NUMERIC') NOT NULL AFTER `order`;
+
+-- ------------------------------------------------------------------------------------------
+-- Triggers to duplicate info of properties used in a dataset via template/template_def table
+-- ------------------------------------------------------------------------------------------
+DELIMITER ;;
+
+-- -----------------------------------------------------
+-- Trigger to create template entry for a dataset
+-- -----------------------------------------------------
+CREATE TRIGGER insert_dataset_template BEFORE INSERT ON src_dataset
+ FOR EACH ROW BEGIN
+    INSERT IGNORE INTO template (name) values (NEW.name);
+    SET NEW.idtemplate = (SELECT idtemplate FROM template where template.name=NEW.name);
+END ;;
+
+-- -----------------------------------------------------
+-- Trigger to add property entry to template_def 
+-- -----------------------------------------------------
+CREATE TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
+ FOR EACH ROW BEGIN
+    INSERT INTO template_def (idtemplate,idproperty,`order`,ptype) (
+    SELECT idtemplate,idproperty,idproperty,idtype FROM
+      (SELECT idtemplate FROM src_dataset join tuples using(id_srcdataset) WHERE idtuple=NEW.idtuple) a
+      JOIN
+      (SELECT idproperty,idtype from property_values WHERE id=NEW.id) b
+    ) ON DUPLICATE KEY UPDATE ptype=concat(ptype,',',values(ptype));
+ END ;;
+DELIMITER ;
+ 
+
+--------------------------------------------------------------------------------------------------------
+-- Procedure to create entries in template/template_def tables, storing features per dataset
+-- This is redundant information, but necessary to speed up queries retrieving properties for a dataset
+--------------------------------------------------------------------------------------------------------
+DELIMITER ;;
+
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `copy_dataset_features`()
+    READS SQL DATA
+BEGIN  
+DECLARE no_more_rows BOOLEAN;
+DECLARE dataset_id INTEGER;
+DECLARE dataset_name VARCHAR(255);
+DECLARE template_id INTEGER;
+
+DECLARE datasets CURSOR FOR
+SELECT id_srcdataset,name,idtemplate FROM src_dataset ;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND     SET no_more_rows = TRUE;  
+
+SELECT "open";
+
+OPEN datasets;
+
+SELECT "start loop";
+the_loop: LOOP
+
+FETCH datasets into dataset_id,dataset_name,template_id;
+IF no_more_rows THEN
+	CLOSE datasets;
+	LEAVE the_loop;
+END IF;
+
+SELECT dataset_name,dataset_id,template_id;
+
+IF template_id IS NULL THEN
+  INSERT IGNORE INTO template (idtemplate,name) values (null,dataset_name);
+
+  UPDATE src_dataset, template SET src_dataset.idtemplate=template.idtemplate
+  WHERE id_srcdataset=dataset_id AND template.name=src_dataset.name;
+ELSE
+  DELETE FROM template_def WHERE idtemplate= template_id;
+END IF;
+
+INSERT IGNORE into template_def (idtemplate,idproperty,`order`,ptype)
+SELECT idtemplate,idproperty,idproperty,group_concat(distinct(idtype))
+FROM property_values
+JOIN property_tuples using(id)
+JOIN tuples using (idtuple)
+JOIN src_dataset using(id_srcdataset)
+WHERE id_srcdataset=dataset_id
+GROUP by idproperty;
+
+END LOOP the_loop;   
+
+END */;;
+
+DELIMITER ;

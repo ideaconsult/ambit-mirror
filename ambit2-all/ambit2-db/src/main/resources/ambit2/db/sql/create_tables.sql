@@ -175,13 +175,13 @@ DROP TABLE IF EXISTS `template_def`;
 CREATE TABLE  `template_def` (
   `idtemplate` int(10) unsigned NOT NULL,
   `idproperty` int(10) unsigned NOT NULL,
-  `order` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  USING BTREE (`idtemplate`,`idproperty`),
+  `order` int(10) unsigned NOT NULL DEFAULT '0',
+  `ptype` set('STRING','NUMERIC') COLLATE utf8_bin DEFAULT 'STRING',
+  PRIMARY KEY (`idtemplate`,`idproperty`) USING BTREE,
   KEY `FK_template_def_2` (`idproperty`),
-  CONSTRAINT `FK_template_def_2` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_template_def_1` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_template_def_1` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_template_def_2` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 
 -- -----------------------------------------------------
 -- Table `dictionary`
@@ -419,19 +419,50 @@ CREATE TABLE  `property_tuples` (
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `src_dataset`;
 CREATE TABLE  `src_dataset` (
-  `id_srcdataset` int(11) unsigned NOT NULL auto_increment,
-  `name` varchar(255) collate utf8_bin NOT NULL default 'default',
-  `user_name` varchar(16) collate utf8_bin default NULL,
+  `id_srcdataset` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'default',
+  `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `idreference` int(11) unsigned NOT NULL,
-  `created` timestamp NOT NULL default CURRENT_TIMESTAMP,  
-  PRIMARY KEY  (`id_srcdataset`),
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `idtemplate` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id_srcdataset`),
   UNIQUE KEY `src_dataset_name` (`name`),
   KEY `FK_src_dataset_1` (`user_name`),
   KEY `FK_src_dataset_2` (`idreference`),
-  CONSTRAINT `FK_src_dataset_2` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE,
-  CONSTRAINT `FK_src_dataset_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
+  KEY `FK_src_dataset_3` (`idtemplate`),
+  CONSTRAINT `FK_src_dataset_3` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_src_dataset_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `FK_src_dataset_2` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+-- ------------------------------------------------------------------------------------------
+-- Triggers to duplicate info of properties used in a dataset via template/template_def table
+-- ------------------------------------------------------------------------------------------
+DELIMITER $
+
+-- -----------------------------------------------------
+-- Trigger to create template entry for a dataset
+-- -----------------------------------------------------
+CREATE TRIGGER insert_dataset_template BEFORE INSERT ON src_dataset
+ FOR EACH ROW BEGIN
+    INSERT IGNORE INTO template (name) values (NEW.name);
+    SET NEW.idtemplate = (SELECT idtemplate FROM template where template.name=NEW.name);
+END $
+
+-- -----------------------------------------------------
+-- Trigger to add property entry to template_def 
+-- -----------------------------------------------------
+CREATE TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
+ FOR EACH ROW BEGIN
+    INSERT INTO template_def (idtemplate,idproperty,`order`,ptype) (
+    SELECT idtemplate,idproperty,idproperty,idtype FROM
+      (SELECT idtemplate FROM src_dataset join tuples using(id_srcdataset) WHERE idtuple=NEW.idtuple) a
+      JOIN
+      (SELECT idproperty,idtype from property_values WHERE id=NEW.id) b
+    ) ON DUPLICATE KEY UPDATE ptype=concat(ptype,',',values(ptype));
+ END $
+DELIMITER ;
+ 
 -- -----------------------------------------------------
 -- Table `struc_dataset` structures per dataset
 -- -----------------------------------------------------
@@ -766,7 +797,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,0,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,1,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -962,6 +993,67 @@ begin
 end $$
 
 DELIMITER ;
+
+
+--------------------------------------------------------------------------------------------------------
+-- Procedure to create entries in template/template_def tables, storing features per dataset
+-- This is redundant information, but necessary to speed up queries retrieving properties for a dataset
+--------------------------------------------------------------------------------------------------------
+
+DROP PROCEDURE IF EXISTS `copy_dataset_features`;
+DELIMITER $$
+CREATE PROCEDURE `copy_dataset_features`()
+    READS SQL DATA
+ BEGIN  
+DECLARE no_more_rows BOOLEAN;
+DECLARE dataset_id INTEGER;
+DECLARE dataset_name VARCHAR(255);
+DECLARE template_id INTEGER;
+
+DECLARE datasets CURSOR FOR
+SELECT id_srcdataset,name,idtemplate FROM src_dataset ;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND     SET no_more_rows = TRUE;  
+
+SELECT "open";
+
+OPEN datasets;
+
+SELECT "start loop";
+the_loop: LOOP
+
+	FETCH datasets into dataset_id,dataset_name,template_id;
+	IF no_more_rows THEN
+		CLOSE datasets;
+		LEAVE the_loop;
+	END IF;
+	
+	SELECT dataset_name,dataset_id,template_id;
+	
+	IF template_id IS NULL THEN
+	  INSERT IGNORE INTO template (idtemplate,name) values (null,dataset_name);
+	
+	  UPDATE src_dataset, template SET src_dataset.idtemplate=template.idtemplate
+	  WHERE id_srcdataset=dataset_id AND template.name=src_dataset.name;
+	ELSE
+	  DELETE FROM template_def WHERE idtemplate= template_id;
+	END IF;
+	
+	INSERT IGNORE into template_def (idtemplate,idproperty,`order`,ptype)
+	SELECT idtemplate,idproperty,idproperty,group_concat(distinct(idtype))
+	FROM property_values
+	JOIN property_tuples using(id)
+	JOIN tuples using (idtuple)
+	JOIN src_dataset using(id_srcdataset)
+	WHERE id_srcdataset=dataset_id
+	GROUP by idproperty;
+
+END LOOP the_loop;   
+
+END $$
+
+DELIMITER ;
+
 -- -----------------------------------------------------
 -- numeric property values
 -- -----------------------------------------------------
@@ -1003,7 +1095,7 @@ SELECT t1.idtemplate as subjectid,t2.idtemplate as objectid,t1.name as subject,r
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `template_properties`;
 create view template_properties as
-SELECT idtemplate,template.name as template,idproperty,properties.name as property FROM template join template_def using(idtemplate) join properties using(idproperty);
+SELECT idtemplate,template.name as template,idproperty,properties.name as property,ptype as property_type FROM template join template_def using(idtemplate) join properties using(idproperty);
 
 -- -----------------------------------------------------
 -- default users (guest, admin)
@@ -1039,3 +1131,4 @@ insert into catalog_references (idreference,title,url) values (2,"IUPAC name","h
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+

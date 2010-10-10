@@ -1,13 +1,17 @@
 package ambit2.db.search.property;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.AbstractPropertyRetrieval._PROPERTY_TYPE;
 
 /**
  * Retrieves Property-es used by particular dataset
@@ -19,7 +23,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, Sou
 		name {
 			@Override
 			public String getSQL() {
-				return " id_srcdataset in (select id_srcdataset from src_dataset where name %s ?)";
+				return " name %s ?";
 			}
 		},
 		id {
@@ -37,9 +41,8 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, Sou
 	public static String whereproperty  = " idproperty = ?";
 	public static String wherepropertyName  = " property.name = ?";
 	public static String join  = 
-		//" join property_values using(idproperty) join  property_tuples using(id) join tuples using (idtuple) where %s %s %s group by idproperty";
-		" join (select distinct idproperty,idtype from  property_values join  property_tuples using(id) join tuples using (idtuple) where  %s %s %s ) x using (idproperty)";
-	public static String base_sql_type = "select idproperty,properties.name,units,title,url,idreference,comments,idtype,islocal,type from properties join catalog_references using(idreference)";
+		"\njoin template_def using(idproperty) join src_dataset using(idtemplate) where %s ";
+	public static String base_sql_type = "select idproperty,properties.name,units,title,url,properties.idreference,comments,ptype as idtype,islocal,type from properties join catalog_references using(idreference)";
 	
 	/**
  * 
@@ -111,5 +114,36 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, Sou
 	}
 	public Class getValueType() {
 		return SourceDataset.class;
+	}
+	
+	public Property getObject(ResultSet rs) throws AmbitException {
+		try {
+			Property p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
+			p.setId(rs.getInt(1));
+			p.setUnits(rs.getString(3));
+			p.setLabel(rs.getString(7));
+			p.getReference().setId(rs.getInt(6));
+
+			try {
+				String type = rs.getString(8);
+				
+				if (type != null) {
+					String[] types = type.split(",");
+					for (String t:types) //TODO support multiple types per property
+						p.setClazz(_PROPERTY_TYPE.valueOf(t).getClazz());
+				}
+			} catch (Exception x) {}
+			try {
+				p.setNominal(rs.getBoolean(9));
+			} catch (Exception x) { p.setNominal(false);}
+			try {
+				String _type = rs.getString(10);
+				if (_type != null)
+				p.getReference().setType(ILiteratureEntry._type.valueOf(_type));
+			} catch (Exception x) {}			
+			return p;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
 	}
 }
