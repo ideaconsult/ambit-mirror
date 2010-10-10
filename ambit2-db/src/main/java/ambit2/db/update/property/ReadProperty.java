@@ -24,11 +24,18 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 	public static String sqlPerStructure = 
 		"select idproperty,name,units,title,url,idreference,comments,null,islocal,type from properties join catalog_references using(idreference)\n"+
 		"where idproperty in (select idproperty from property_values where idstructure = ?) \n";
-
+	/*
 	public static String sqlPerChemical = 
 		"select idproperty,name,units,title,url,idreference,comments,null,islocal,type from properties join catalog_references using(idreference)\n"+
 		"where idproperty in (select idproperty from structure join property_values using(idstructure) where idchemical = ?) \n";
-
+	*/
+	public static String sqlPerChemical = 
+	"select idproperty,properties.name,units,title,url,idreference,comments,null,islocal,type from properties\n"+
+	"join catalog_references using(idreference)\n"+
+	"join (\n"+
+	"select idproperty from summary_property_chemicals where idchemical=? group by idchemical,idproperty\n"+
+	") a using(idproperty)\n";
+	
 	public static String propertyWithType = 
 		/*
 		"select idproperty,properties.name,units,title,url,idreference,comments,idtype,islocal,type from properties\n"+
@@ -72,7 +79,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 			return getValue()==null?base_sql:propertyWithType;
 		else {
 			String sql = isChemicalsOnly()?ReadProperty.sqlPerChemical:ReadProperty.sqlPerStructure;
-			return getValue()==null?sql:(sql + "where idproperty=?");
+			return getValue()==null?sql:String.format("%s where idproperty=?",sql);
 		}	
 	}
 

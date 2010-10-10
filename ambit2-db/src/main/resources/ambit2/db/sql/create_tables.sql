@@ -711,6 +711,7 @@ CREATE TABLE  `summary_property_chemicals` (
   PRIMARY KEY (`idchemical`,`id_ci`,`idproperty`),
   KEY `FK_ppci_2` (`id_ci`),
   KEY `FK_ppci_3` (`idproperty`),
+  KEY `Index_4` (`idchemical`,`idproperty`),
   CONSTRAINT `FK_ppci_1` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ppci_2` FOREIGN KEY (`id_ci`) REFERENCES `property_ci` (`id_ci`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ppci_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE

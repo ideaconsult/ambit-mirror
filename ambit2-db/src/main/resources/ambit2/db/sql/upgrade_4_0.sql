@@ -104,3 +104,8 @@ CREATE TRIGGER update_string_ci AFTER UPDATE ON property_string
  END ;;
 
 DELIMITER ;
+
+-----------------------------------------------------
+-- speeeds up retral of all properties of a chemical
+-----------------------------------------------------
+ALTER TABLE `summary_property_chemicals` ADD INDEX `Index_4`(`idchemical`, `idproperty`);
