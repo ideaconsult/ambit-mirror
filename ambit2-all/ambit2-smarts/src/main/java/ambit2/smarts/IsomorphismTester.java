@@ -373,9 +373,99 @@ public class IsomorphismTester
 				result.add(v);
 			}
 		}
-		return result;
-		
+		return result;		
 	}
+	
+	public Vector<Vector<IAtom>> getNonIdenticalMappings(IAtomContainer container)
+	{
+		Vector<Vector<IAtom>> result = new Vector<Vector<IAtom>>();
+		Vector<Vector<IAtom>> allMaps = getAllIsomorphismMappings(container);
+		if (allMaps.isEmpty())
+			return(result);
+		
+		int nMaps = allMaps.size();
+		int nAtoms = allMaps.get(0).size();
+		Vector<IAtom> map;
+		Vector<IAtom> map1;
+		boolean FlagOK;
+		boolean FlagOneFifferent;
+		
+		for (int i = 0; i < nMaps; i++)
+		{
+			map = allMaps.get(i);
+			FlagOK = true;
+			for (int j = 0; j < result.size(); j++)
+			{
+				//comparing map against j-th element of result 
+				map1 = result.get(j);
+				FlagOneFifferent = false;
+				for (int k = 0; k < nAtoms; k++)
+				{
+					//map1 MUST NOT conatin at least one atom from map
+					if (!map1.contains(map.get(k)))
+					{
+						FlagOneFifferent = true;
+						break;
+					}
+				}
+				
+				if (!FlagOneFifferent)
+				{	
+					FlagOK = false;
+					break;
+				}
+			}
+			
+			if (FlagOK)
+				result.add(map);
+		}
+		
+		return(result);
+	}
+	
+	
+	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer container)
+	{
+		Vector<Vector<IAtom>> result = new Vector<Vector<IAtom>>();
+		Vector<Vector<IAtom>> allMaps = getAllIsomorphismMappings(container);
+		if (allMaps.isEmpty())
+			return(result);
+		
+		int nMaps = allMaps.size();
+		int nAtoms = allMaps.get(0).size();
+		Vector<IAtom> map;
+		Vector<IAtom> map1;
+		boolean FlagOK;
+		
+		for (int i = 0; i < nMaps; i++)
+		{
+			map = allMaps.get(i);
+			FlagOK = true;
+			for (int j = 0; j < result.size(); j++)
+			{
+				//comparing map against j-th element of result 
+				map1 = result.get(j);				
+				for (int k = 0; k < nAtoms; k++)
+				{
+					//map1 must not have any intersection
+					if (map1.contains(map.get(k)))
+					{
+						FlagOK = false;
+						break;
+					}
+				}
+				
+				if (!FlagOK)
+					break;
+			}
+			
+			if (FlagOK)
+				result.add(map);
+		}
+		
+		return(result);
+	}
+
 	
 	
 	boolean singleAtomIsomorphism()
