@@ -123,7 +123,7 @@ public abstract class QueryFieldAbstract<T,C extends IQueryCondition,NC extends 
 		
 		try {
 			IStructureRecord record = super.getObject(rs);
-			if (isRetrieveProperties()) {
+			if (isRetrieveProperties() && (rs.getMetaData().getColumnCount()>6)) {
 				Property p = Property.getInstance(rs.getString(8),"","");
 				p.setId(rs.getInt(7));
 				p.setUnits(rs.getString(3));
