@@ -44,7 +44,9 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	
 	public final static String max_hits = "max";
 	protected static String[] filter = {
-		"googlebot","msnbot",
+		"googlebot",
+		"msnbot",
+		"msnbot/2.0b",
 		"yahoo-slurp",
 		"teoma",
 		"twiceler",
@@ -63,7 +65,8 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		"asterias",
 		"yahoo-blogs/v3.9",
 		"YandexBot/3.0",
-		"MJ12bot/v1.3.3"
+		"MJ12bot/v1.3.3",
+		"MJ12bot"
 
 	};
 	
