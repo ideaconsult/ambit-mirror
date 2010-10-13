@@ -43,32 +43,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	public final static String returnProperties = "returnProperties";
 	
 	public final static String max_hits = "max";
-	protected static String[] filter = {
-		"googlebot",
-		"msnbot",
-		"msnbot/2.0b",
-		"yahoo-slurp",
-		"teoma",
-		"twiceler",
-		"gigabot",
-		"scrubby",
-		"robozilla",
-		"nutch",
-		"ia_archiver",
-		"baiduspider",
-		"naverbot",
-		"yeti",
-		"googlebot-image",
-		"googlebot-mobile",
-		"yahoo-mmcrawler",
-		"psbot",
-		"asterias",
-		"yahoo-blogs/v3.9",
-		"YandexBot/3.0",
-		"MJ12bot/v1.3.3",
-		"MJ12bot"
-
-	};
+	
 	
 	public AbstractResource() {
 		super();
@@ -81,20 +56,13 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		checkForBots();
+		BotsGuard.checkForBots(getRequest());
 		response_status = Status.SUCCESS_OK;
 		queryObject = createQuery(getContext(), getRequest(), getResponse());
 		error = null;
 
 	}
-	protected void checkForBots() throws ResourceException {
-		if (getRequest().getClientInfo()==null) return;
-		if (getRequest().getClientInfo().getAgent()==null) return;
-		for (int i=0;i < filter.length;i++)
-			if (getRequest().getClientInfo().getAgent().toLowerCase().indexOf(filter[i])>=0)
-					throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED,getRequest().getClientInfo().getAgentName());
-		
-	}
+
 	protected void customizeVariants(MediaType[] mimeTypes) {
        // List<Variant> variants = new ArrayList<Variant>();
         for (MediaType m:mimeTypes) getVariants().add(new Variant(m));
