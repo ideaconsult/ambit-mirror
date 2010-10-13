@@ -29,6 +29,7 @@ import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+import ambit2.rest.BotsGuard;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.TaskApplication;
 import ambit2.rest.toxpredict.simple.SimplePredict;
@@ -69,6 +70,8 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 	
     @Override
     public Restlet createInboundRoot() {
+    	
+    	
         final Router router = new Router(getContext());
         router.attach(WelcomeResource.resource, WelcomeResource.class);
         router.attach("", WelcomeResource.class);
@@ -89,6 +92,8 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
         router.attach("/{x}", WelcomeResource.class); //this is a hack to avoid not-matching if navigated to /ToxPredict/whatever
         router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
         router.setRoutingMode(Router.MODE_BEST_MATCH); 
+        
+        
         
         Router userRouter = new Router(getContext());
         userRouter.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
@@ -163,7 +168,11 @@ public class FastoxApplication extends TaskApplication<IToxPredictUser> {
 		 StringWriter w = new StringWriter();
 		 //printRoutes(router," ",w);
 		 //System.out.println(w.toString());
-		 return router;
+		 
+        BotsGuard botsGuard = new BotsGuard();
+        botsGuard.setNext(router);
+
+		 return botsGuard;
         
     }
     public static String printRoutes(Restlet re,String delimiter,StringWriter b) {
