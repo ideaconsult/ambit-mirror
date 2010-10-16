@@ -154,7 +154,8 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 					Object value = rs.getString(name);
 					if (value == null) {
 						name = String.format("n%d",p.getId());
-						 value = rs.getFloat(name);
+						if (rs.getObject(name)!= null)
+							value = rs.getFloat(name);
 					}
 					record.setProperty(p,value);
 				} catch (Exception x) {
