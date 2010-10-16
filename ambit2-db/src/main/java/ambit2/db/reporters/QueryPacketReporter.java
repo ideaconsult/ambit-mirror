@@ -76,6 +76,7 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 	}
 
 	protected void processChunks() throws AmbitException {
+		if ((index==0)&& chunks[index]<=0) return;
 		ResultSet rs = null ;
 		try {
 			chunkQuery.setValue(chunks);
@@ -94,6 +95,7 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 	
 	@Override
 	protected void wrapup() throws AmbitException {
+		
 		processChunks();
 		super.wrapup();
 	}
