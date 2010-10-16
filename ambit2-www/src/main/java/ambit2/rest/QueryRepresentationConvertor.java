@@ -5,7 +5,7 @@ import org.restlet.representation.Representation;
 
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
+import ambit2.db.reporters.QueryAbstractReporter;
 
 /**
  * An abstract {@link IProcessor} , converting between a query results {@link IQueryRetrieval} and restlet Representation.
@@ -16,7 +16,7 @@ import ambit2.db.reporters.QueryReporter;
  * @param <Output>
  */
 public abstract class QueryRepresentationConvertor<T,Q extends IQueryRetrieval<T>,Output> 
-						extends RepresentationConvertor<T,Q,Output,QueryReporter<T,Q,Output>> {
+						extends RepresentationConvertor<T,Q,Output,QueryAbstractReporter<T,Q,Output>> {
 
 	/**
 	 * 
@@ -24,11 +24,11 @@ public abstract class QueryRepresentationConvertor<T,Q extends IQueryRetrieval<T
 	private static final long serialVersionUID = -2458607015810762273L;
 
 
-	public QueryRepresentationConvertor(QueryReporter<T,Q,Output> reporter) {
+	public QueryRepresentationConvertor(QueryAbstractReporter<T,Q,Output> reporter) {
 		this(reporter,MediaType.TEXT_PLAIN);
-		if (this.reporter != null) ((QueryReporter<T,Q,Output>)this.reporter).setMaxRecords(5000);
+		if (this.reporter != null) ((QueryAbstractReporter<T,Q,Output>)this.reporter).setMaxRecords(5000);
 	}
-	public QueryRepresentationConvertor(QueryReporter<T,Q,Output> reporter,MediaType media) {
+	public QueryRepresentationConvertor(QueryAbstractReporter<T,Q,Output> reporter,MediaType media) {
 		super(reporter,media);
 	}
 	
@@ -36,13 +36,11 @@ public abstract class QueryRepresentationConvertor<T,Q extends IQueryRetrieval<T
 	@Override
 	public abstract Representation process(Q query) throws ambit2.base.exceptions.AmbitException;
 	
+	
 	@Override
-	public QueryReporter<T, Q, Output> getReporter() {
+	public QueryAbstractReporter<T, Q, Output> getReporter() {
 		return super.getReporter();
 	}
-	
-	
-	
 
 	
 }

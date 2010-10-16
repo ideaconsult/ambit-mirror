@@ -9,11 +9,8 @@ import org.restlet.Restlet;
 import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.ClientInfo;
-import org.restlet.data.Language;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
-import org.restlet.ext.wadl.ApplicationInfo;
-import org.restlet.ext.wadl.DocumentationInfo;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
 import org.restlet.routing.Filter;
@@ -44,6 +41,7 @@ import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.dataset.FastDatasetStructuresResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
@@ -210,6 +208,15 @@ public class AmbitApplication extends TaskApplication {
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
 		router.attach(OntologyResource.resourceTree, OntologyResource.class);
 		
+		Router fastDatasetRouter = new MyRouter(getContext());
+		fastDatasetRouter.attachDefault(FastDatasetStructuresResource.class);
+		router.attach(String.format("%s",FastDatasetStructuresResource.resource), FastDatasetStructuresResource.class);
+		router.attach(String.format("%s/{%s}",FastDatasetStructuresResource.resource,DatasetResource.datasetKey), fastDatasetRouter);
+		router.attach(String.format("%s/{%s}/metadata",FastDatasetStructuresResource.resource,DatasetResource.datasetKey), DatasetsResource.class);
+		
+		
+		fastDatasetRouter.attach(PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.class);
+		fastDatasetRouter.attach(String.format("%s/{%s}",PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.idfeaturedef),PropertiesByDatasetResource.class);
 
 		Router allDatasetsRouter = new MyRouter(getContext());
 		allDatasetsRouter.attachDefault(DatasetsResource.class);

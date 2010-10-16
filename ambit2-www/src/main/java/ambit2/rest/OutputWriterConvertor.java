@@ -12,7 +12,7 @@ import org.restlet.representation.Representation;
 
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.QueryReporter;
+import ambit2.db.reporters.QueryAbstractReporter;
 
 public class OutputWriterConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepresentationConvertor<T,Q,Writer> {
 
@@ -21,7 +21,7 @@ public class OutputWriterConvertor<T,Q extends IQueryRetrieval<T>>  extends Quer
 	 */
 	private static final long serialVersionUID = -7974532412944774457L;
 	
-	public OutputWriterConvertor(QueryReporter<T, Q, Writer> reporter,MediaType mediaType) {
+	public OutputWriterConvertor(QueryAbstractReporter<T, Q, Writer> reporter,MediaType mediaType) {
 		super(reporter,mediaType);
 	}
 
