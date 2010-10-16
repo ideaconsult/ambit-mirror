@@ -57,7 +57,7 @@ public class FastDatasetStructuresResource extends DatasetStructuresResource<IQu
 			variant.setMediaType(new MediaType(media));
 		}
 		return new OutputWriterConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-				new ChunkedCSVReporter(getTemplate(),getRequest().getRootRef().toString()),
+				new ChunkedCSVReporter(getTemplate(),getRequest().getRootRef().toString(),packetSize),
 				MediaType.TEXT_CSV);
 		
 		/*
@@ -98,8 +98,8 @@ class ChunkedCSVReporter extends QueryPacketReporter<IQueryRetrieval<IStructureR
 
 	protected List<Property> header = null;
 	
-	public ChunkedCSVReporter(Profile<Property> template,String urlPrefix) {
-		super(template);
+	public ChunkedCSVReporter(Profile<Property> template,String urlPrefix,int chunkSize) {
+		super(template,chunkSize);
 		this.urlPrefix = urlPrefix;
 	}
 

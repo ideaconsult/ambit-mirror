@@ -48,8 +48,9 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 		exec.close();
 		super.close();
 	}
-	public QueryPacketReporter(Profile<Property> template) {
+	public QueryPacketReporter(Profile<Property> template,int chunkSize) {
 		super();
+		setChunkSize(chunkSize);
 		this.template = template;
 		exec = new QueryExecutor();
 		exec.setCloseConnection(false);
