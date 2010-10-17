@@ -32,6 +32,7 @@ public class RetrieveProfileAsRowTest extends RetrieveTest<IStructureRecord> {
 		}
 		
 		RetrieveProfileValuesAsRow q = new RetrieveProfileValuesAsRow();
+		q.setChemicalsOnly(false);
 		q.setFieldname(profile);
 		q.setValue(new int[] {100211,100214,100215,129345});
 		return q;
