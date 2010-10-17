@@ -84,12 +84,14 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 		if ((index==0)&& idstructure[index]<=0) return;
 		ResultSet rs = null ;
 		try {
-			chunkQuery.setValue(idcompound);
-			chunkQuery.setChemicalsOnly(true);
-			/*
-			chunkQuery.setValue(idstructure);
-			chunkQuery.setChemicalsOnly(false);
-			*/
+			if (chunkQuery.getChemicalsOnly())  {
+				chunkQuery.setValue(idcompound);
+				chunkQuery.setChemicalsOnly(true);
+			} else {
+				chunkQuery.setValue(idstructure);
+				chunkQuery.setChemicalsOnly(false);
+			}
+		
 			rs = exec.process(chunkQuery);
 			while (rs.next()) {
 				IStructureRecord record = chunkQuery.getObject(rs);
