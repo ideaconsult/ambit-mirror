@@ -24,6 +24,15 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 	 */
 	private static final long serialVersionUID = 6445434992210833166L;
 	public static final String NaN = "NaN";
+	protected Boolean chemicalsOnly = true;
+	
+	public Boolean getChemicalsOnly() {
+		return chemicalsOnly;
+	}
+
+	public void setChemicalsOnly(Boolean chemicalsOnly) {
+		this.chemicalsOnly = chemicalsOnly;
+	}
 	protected IStructureRecord record;
 	public IStructureRecord getRecord() {
 		return record;
@@ -48,6 +57,7 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 	}
 	public RetrieveProfileValuesAsRow(Profile profile,boolean chemicalsOnly) {
 		super();
+		setChemicalsOnly(chemicalsOnly);
 		setFieldname(profile);
 		setCondition(new SetCondition(conditions.in));
 
@@ -55,23 +65,28 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 	protected final String sql_property = 
 		"MAX(CASE WHEN st.idproperty = ? THEN value ELSE NULL END) AS v%d,\n"+
 		"MAX(CASE WHEN st.idproperty = ? THEN value_num ELSE NULL END) AS n%d\n";
-	/*
-	protected final String sql_chemical = 
-	    "JOIN (SELECT idstructure FROM structure WHERE idchemical=?) a USING(idstructure)\n";
-	    */
+
 	protected final String sql_structure = 
-		 "WHERE idstructure %s %s\n";
-		
-	protected final String sql = 
-		"SELECT pv.idstructure, \n" +
+		"SELECT -1,pv.idstructure, \n" +
 		"%s\n"+
 	    "FROM\n"+
 	    "property_values AS pv\n"+
 	    "INNER JOIN properties AS st ON pv.idproperty = st.idproperty\n"+
 	    "LEFT JOIN property_string s ON s.idvalue_string=pv.idvalue_string\n"+
-	    "%s\n"+
-	    "GROUP BY pv.idstructure ORDER by idstructure\n";
+	    "WHERE idstructure %s %s\n"+
+	    "GROUP BY pv.idstructure\n";
 		
+	
+	protected final String sql_chemical = 
+		"SELECT idchemical,pv.idstructure, \n" +
+		"%s\n"+
+	    "FROM\n"+
+	    "property_values AS pv\n"+
+	    "INNER JOIN properties AS st ON pv.idproperty = st.idproperty\n"+
+	    "LEFT JOIN property_string s ON s.idvalue_string=pv.idvalue_string\n"+
+	    "JOIN structure USING(idstructure)\n" +
+	    "WHERE idchemical %s %s\n"+
+	    "GROUP BY idchemical\n";
 	
 	protected String getStructureWhere() throws AmbitException {
 		if ((getValue()==null) || (getValue().length==0)) throw new AmbitException("Structure id missing");
@@ -111,9 +126,10 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 		return b.toString();
 	}
 	public String getSQL() throws AmbitException {
-		return String.format(sql,
+		return String.format(String.format(chemicalsOnly?sql_chemical:sql_structure,
 				getPropertySQL(),
-				String.format(sql_structure,getCondition().getSQL(),getStructureWhere()));
+				getCondition().getSQL(),
+				getStructureWhere()));
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
@@ -143,8 +159,8 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 		try {
 			IStructureRecord record = getRecord();
 			if (record==null) record = new StructureRecord();
-			record.setIdchemical(-1);
-			record.setIdstructure(rs.getInt(1));
+			record.setIdchemical(rs.getInt(1));
+			record.setIdstructure(rs.getInt(2));
 			
 			Iterator<Property> i = getFieldname().getProperties(true);
 			while (i.hasNext()) {

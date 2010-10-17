@@ -26,15 +26,18 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 
 	protected Profile<Property> template;
 	protected int index = 0;
-	protected int[] chunks = new int[10];
+	protected int[] idstructure = new int[10];
+	protected int[] idcompound = new int[10];
 	
 	public int getChunkSize() {
-		return chunks.length;
+		return idstructure.length;
 	}
 
 	public void setChunkSize(int chunkSize) {
-		chunks  = new int[chunkSize];
-		for (int i=0; i < chunks.length;i++) chunks[i] = 0;
+		idstructure  = new int[chunkSize];
+		idcompound  = new int[chunkSize];
+		for (int i=0; i < idstructure.length;i++) idstructure[i] = 0;
+		for (int i=0; i < idcompound.length;i++) idcompound[i] = 0;
 	}
 	
 	@Override
@@ -62,9 +65,11 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 		processors.add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				
-				chunks[index] = target.getIdstructure();
+				idstructure[index] = target.getIdstructure();
+				idcompound[index] = target.getIdchemical();
+				
 				index++;
-				if (index>=chunks.length) { 
+				if (index>=idstructure.length) { 
 					
 					processChunks();
 
@@ -76,13 +81,19 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 	}
 
 	protected void processChunks() throws AmbitException {
-		if ((index==0)&& chunks[index]<=0) return;
+		if ((index==0)&& idstructure[index]<=0) return;
 		ResultSet rs = null ;
 		try {
-			chunkQuery.setValue(chunks);
+			chunkQuery.setValue(idcompound);
+			chunkQuery.setChemicalsOnly(true);
+			/*
+			chunkQuery.setValue(idstructure);
+			chunkQuery.setChemicalsOnly(false);
+			*/
 			rs = exec.process(chunkQuery);
 			while (rs.next()) {
 				IStructureRecord record = chunkQuery.getObject(rs);
+				//Arrays.binarySearch(idstructure, record.getIdstructure());
 				processItem(record);
 			}
 		} catch (Exception x) {
@@ -90,7 +101,7 @@ public abstract class QueryPacketReporter<Q extends IQueryRetrieval<IStructureRe
 		} finally {
 			try { rs.close();} catch (Exception x) {}
 		}
-		for (int i=0; i < chunks.length;i++) chunks[i] = 0; 
+		for (int i=0; i < idstructure.length;i++) idstructure[i] = 0; 
 	}
 	
 	@Override
