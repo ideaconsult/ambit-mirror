@@ -28,6 +28,7 @@ import ambit2.rest.property.PropertyResource;
 public class FastDatasetStructuresResource extends DatasetStructuresResource<IQueryRetrieval<IStructureRecord>> {
 	public final static String resource = "/fastdataset";
 	protected int packetSize = 100;
+	protected boolean chemicals = true;
 	
 	@Override
 	protected void doInit() throws ResourceException {
@@ -39,6 +40,13 @@ public class FastDatasetStructuresResource extends DatasetStructuresResource<IQu
 		} catch (Exception x) {
 			packetSize = 100;
 		}
+		try {
+			Object v = getRequest().getResourceRef().getQueryAsForm().getFirstValue("chemicals");
+			if (v!=null)
+				chemicals = Boolean.parseBoolean(v.toString());
+		} catch (Exception x) {
+			chemicals = true;
+		}		
 	}
 	/**
 	 * Test setup, CSV support only
@@ -57,7 +65,7 @@ public class FastDatasetStructuresResource extends DatasetStructuresResource<IQu
 			variant.setMediaType(new MediaType(media));
 		}
 		return new OutputWriterConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-				new ChunkedCSVReporter(getTemplate(),getRequest().getRootRef().toString(),packetSize),
+				new ChunkedCSVReporter(getTemplate(),getRequest().getRootRef().toString(),packetSize,chemicals),
 				MediaType.TEXT_CSV);
 		
 		/*
@@ -98,9 +106,10 @@ class ChunkedCSVReporter extends QueryPacketReporter<IQueryRetrieval<IStructureR
 
 	protected List<Property> header = null;
 	
-	public ChunkedCSVReporter(Profile<Property> template,String urlPrefix,int chunkSize) {
+	public ChunkedCSVReporter(Profile<Property> template,String urlPrefix,int chunkSize,boolean chemicalsOnly) {
 		super(template,chunkSize);
 		this.urlPrefix = urlPrefix;
+		chunkQuery.setChemicalsOnly(chemicalsOnly);
 	}
 
 	@Override
