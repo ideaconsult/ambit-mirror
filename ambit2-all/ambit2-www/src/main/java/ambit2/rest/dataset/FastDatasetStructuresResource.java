@@ -128,7 +128,7 @@ class ChunkedCSVReporter extends QueryPacketReporter<IQueryRetrieval<IStructureR
 			if (numberofHeaderLines <= 0) {
 				//no header
 			} else 	if (numberofHeaderLines == 1) {
-				writer.write("");
+				writer.write("Compound");
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s %s\"", separator,p.getName()==null?"N?A":p.getName(),p.getUnits()==null?"":p.getUnits()));	
 				writer.write("\n");
