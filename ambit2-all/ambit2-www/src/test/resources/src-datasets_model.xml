@@ -106,22 +106,22 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <property_string idvalue_string="5" value="P1"/>
   <property_string idvalue_string="6" value="P2"/>
   
-  <property_values id="1" idproperty="3" idstructure="100215" idvalue_string="1" user_name="guest"/>
+  <property_values id="1" idproperty="3" idchemical="11" idstructure="100215" idvalue_string="1" user_name="guest"/>
   
-  <property_values id="2" idproperty="1" idstructure="100215" idvalue_string="3" user_name="guest"/>
-  <property_values id="3" idproperty="2" idstructure="100215" idvalue_string="2" user_name="guest"/>
-  <property_values id="10" idproperty="4" idstructure="100215" idvalue_string="5" user_name="guest"/>
+  <property_values id="2" idproperty="1" idchemical="11" idstructure="100215" idvalue_string="3" user_name="guest"/>
+  <property_values id="3" idproperty="2" idchemical="11" idstructure="100215" idvalue_string="2" user_name="guest"/>
+  <property_values id="10" idproperty="4" idchemical="11" idstructure="100215" idvalue_string="5" user_name="guest"/>
 
-  <property_values id="4" idproperty="1" idstructure="100211" idvalue_string="4" user_name="guest"/>
-  <property_values id="5" idproperty="2" idstructure="100211" idvalue_string="2" user_name="guest"/>
-  <property_values id="11" idproperty="4" idstructure="100211" idvalue_string="6" user_name="guest"/>
+  <property_values id="4" idproperty="1" idchemical="7" idstructure="100211" idvalue_string="4" user_name="guest"/>
+  <property_values id="5" idproperty="2" idchemical="7" idstructure="100211" idvalue_string="2" user_name="guest"/>
+  <property_values id="11" idproperty="4" idchemical="7" idstructure="100211" idvalue_string="6" user_name="guest"/>
   
-  <property_values id="6" idproperty="1" idstructure="100214" idvalue_string="3" user_name="guest"/>
-  <property_values id="7" idproperty="2" idstructure="100214" value_num="2" user_name="guest"/>
-  <property_values id="12" idproperty="4" idstructure="100214" idvalue_string="5" user_name="guest"/>
+  <property_values id="6" idproperty="1" idchemical="10" idstructure="100214" idvalue_string="3" user_name="guest"/>
+  <property_values id="7" idproperty="2" idchemical="10" idstructure="100214" value_num="2" user_name="guest"/>
+  <property_values id="12" idproperty="4" idchemical="10" idstructure="100214" idvalue_string="5" user_name="guest"/>
   
-  <property_values id="8" idproperty="1" idstructure="129345" idvalue_string="4" user_name="guest"/>
-  <property_values id="9" idproperty="2" idstructure="129345" idvalue_string="2" user_name="guest"/>
+  <property_values id="8" idproperty="1" idchemical="29141" idstructure="129345" idvalue_string="4" user_name="guest"/>
+  <property_values id="9" idproperty="2" idchemical="29141" idstructure="129345" idvalue_string="2" user_name="guest"/>
     
   <src_dataset id_srcdataset="1" name="Dbunit dataset" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="2" name="Dataset 1" user_name="guest" idreference="3"/>

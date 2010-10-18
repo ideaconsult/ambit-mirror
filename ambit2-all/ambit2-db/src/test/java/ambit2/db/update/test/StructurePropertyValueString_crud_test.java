@@ -18,7 +18,7 @@ public class StructurePropertyValueString_crud_test extends CRUDTest<IStructureR
 	protected IQueryUpdate<IStructureRecord, PropertyValue<String>> createQuery()
 			throws Exception {
 		UpdateStructurePropertyIDString q = new UpdateStructurePropertyIDString();
-		StructureRecord record = new StructureRecord(-1,100211,null,null);
+		StructureRecord record = new StructureRecord(7,100211,null,null);
 		q.setGroup(record);
 		Property p =new Property("");
 		p.setId(2);
@@ -31,7 +31,7 @@ public class StructurePropertyValueString_crud_test extends CRUDTest<IStructureR
 	protected IQueryUpdate<IStructureRecord, PropertyValue<String>> createQueryNew()
 			throws Exception {
 		UpdateStructurePropertyIDString q = new UpdateStructurePropertyIDString();
-		StructureRecord record = new StructureRecord(-1,100211,null,null);
+		StructureRecord record = new StructureRecord(7,100211,null,null);
 		q.setGroup(record);
 		Property p =new Property("");
 		p.setId(2);

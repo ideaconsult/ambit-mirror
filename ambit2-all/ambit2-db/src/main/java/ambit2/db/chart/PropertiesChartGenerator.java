@@ -17,7 +17,7 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 	protected static final String sql_dataset = 
 		"select a,b from\n"+
 		"(\n"+
-		"select value_num as a,idchemical from struc_dataset join structure using(idstructure)\n"+
+		"select value_num as a,idchemical from struc_dataset \n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
 		"where idproperty = %d and id_srcdataset=%d\n"+
 		"and value_num is not null\n"+
@@ -25,7 +25,7 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 		") as X\n"+
 		"join\n"+
 		"(\n"+
-		"select value_num as b,idchemical from struc_dataset join structure using(idstructure)\n"+
+		"select value_num as b,idchemical from struc_dataset \n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
 		"where idproperty = %d and id_srcdataset=%d\n"+
 		"and value_num is not null\n"+

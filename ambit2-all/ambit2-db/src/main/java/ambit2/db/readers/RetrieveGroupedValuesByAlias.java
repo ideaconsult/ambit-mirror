@@ -34,7 +34,6 @@ public class RetrieveGroupedValuesByAlias extends AbstractQuery<Profile,IStructu
 	"select idchemical,idstructure,comments,group_concat(distinct(if(status='TRUNCATED',text,value))),group_concat(distinct(value_num))," +
 	"group_concat(distinct(title)),group_concat(distinct(url))\n"+
 	"from property_values left join property_string using(idvalue_string) \n"+
-	"join structure using(idstructure)\n"+
 	"join properties using(idproperty)\n"+
 	"join catalog_references using(idreference) where idchemical = ? and comments in\n"+ 
 	"(%s) group by comments order by comments\n";

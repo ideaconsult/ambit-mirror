@@ -82,9 +82,9 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
   <template_def idtemplate="1" idproperty="3"/>
   <tuples/>
   <property_string/>
-  <property_values id="1" idproperty="1" idstructure="100215" value_num="12.0"  status="OK" user_name="guest"/>
-  <property_values id="2" idproperty="2" idstructure="100215" value_num="12.0"  status="OK" user_name="guest"/>
-  <property_values id="3" idproperty="1" idstructure="100211" value_num="13.0" status="OK" user_name="guest"/>  
+  <property_values id="1" idproperty="1" idchemical="11" idstructure="100215" value_num="12.0"  status="OK" user_name="guest"/>
+  <property_values id="2" idproperty="2" idchemical="11" idstructure="100215" value_num="12.0"  status="OK" user_name="guest"/>
+  <property_values id="3" idproperty="1" idchemical="7" idstructure="100211" value_num="13.0" status="OK" user_name="guest"/>  
   <property_tuples/>
   <src_dataset/>
   <struc_dataset/>

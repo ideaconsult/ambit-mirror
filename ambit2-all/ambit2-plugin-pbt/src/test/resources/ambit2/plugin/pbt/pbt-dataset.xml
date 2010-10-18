@@ -166,80 +166,80 @@ YBo=" format="SDF" updated="2009-05-31 14:48:34.0" user_name="guest" type_struct
   <property_string idvalue_string="2"  value="NaN"/>
   <property_string idvalue_string="3"  value="Benzene"/>
   
-  <property_values id="1" idproperty="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="2" idproperty="2" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="3" idproperty="3" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="4" idproperty="4" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="5" idproperty="5" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="6" idproperty="6" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="7" idproperty="7" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="8" idproperty="8" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="9" idproperty="9" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="10" idproperty="10" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="11" idproperty="11" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="12" idproperty="12" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="13" idproperty="13" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="14" idproperty="14" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="15" idproperty="15" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="16" idproperty="16" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="17" idproperty="17" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="18" idproperty="18" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="19" idproperty="19" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="20" idproperty="20" idstructure="1" idvalue_string="3"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="21" idproperty="21" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="22" idproperty="22" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="23" idproperty="23" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="24" idproperty="24" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="25" idproperty="25" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="26" idproperty="26" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="27" idproperty="27" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="28" idproperty="28" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="29" idproperty="29" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="30" idproperty="30" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="31" idproperty="31" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="32" idproperty="32" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="33" idproperty="33" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="34" idproperty="34" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="35" idproperty="35" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="36" idproperty="36" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="37" idproperty="37" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="38" idproperty="38" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="39" idproperty="39" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="40" idproperty="40" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="41" idproperty="41" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="42" idproperty="42" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="43" idproperty="43" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="44" idproperty="44" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="45" idproperty="45" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="46" idproperty="46" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="47" idproperty="47" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="48" idproperty="48" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="49" idproperty="49" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="50" idproperty="50" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="51" idproperty="51" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="52" idproperty="52" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="53" idproperty="53" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="54" idproperty="54" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="55" idproperty="55" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="56" idproperty="56" idstructure="1" value_num="100" status="UNKNOWN" user_name="guest"/>
-  <property_values id="57" idproperty="57" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="58" idproperty="58" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="59" idproperty="59" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="60" idproperty="60" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="61" idproperty="61" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="62" idproperty="62" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="63" idproperty="63" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="64" idproperty="64" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="1" idproperty="1" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="2" idproperty="2" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="3" idproperty="3" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="4" idproperty="4" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="5" idproperty="5" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="6" idproperty="6" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="7" idproperty="7" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="8" idproperty="8" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="9" idproperty="9" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="10" idproperty="10" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="11" idproperty="11" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="12" idproperty="12" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="13" idproperty="13" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="14" idproperty="14" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="15" idproperty="15" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="16" idproperty="16" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="17" idproperty="17" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="18" idproperty="18" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="19" idproperty="19" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="20" idproperty="20" idchemical="1" idstructure="1" idvalue_string="3"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="21" idproperty="21" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="22" idproperty="22" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="23" idproperty="23" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="24" idproperty="24" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="25" idproperty="25" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="26" idproperty="26" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="27" idproperty="27" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="28" idproperty="28" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="29" idproperty="29" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="30" idproperty="30" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="31" idproperty="31" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="32" idproperty="32" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="33" idproperty="33" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="34" idproperty="34" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="35" idproperty="35" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="36" idproperty="36" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="37" idproperty="37" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="38" idproperty="38" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="39" idproperty="39" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="40" idproperty="40" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="41" idproperty="41" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="42" idproperty="42" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="43" idproperty="43" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="44" idproperty="44" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="45" idproperty="45" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="46" idproperty="46" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="47" idproperty="47" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="48" idproperty="48" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="49" idproperty="49" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="50" idproperty="50" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="51" idproperty="51" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="52" idproperty="52" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="53" idproperty="53" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="54" idproperty="54" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="55" idproperty="55" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="56" idproperty="56" idchemical="1" idstructure="1" value_num="100" status="UNKNOWN" user_name="guest"/>
+  <property_values id="57" idproperty="57" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="58" idproperty="58" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="59" idproperty="59" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="60" idproperty="60" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="61" idproperty="61" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="62" idproperty="62" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="63" idproperty="63" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="64" idproperty="64" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
   
-  <property_values id="65" idproperty="65" idstructure="1" value_num="72.2" status="UNKNOWN" user_name="guest"/>
+  <property_values id="65" idproperty="65" idchemical="1" idstructure="1" value_num="72.2" status="UNKNOWN" user_name="guest"/>
   
-  <property_values id="66" idproperty="66" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="67" idproperty="67" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="68" idproperty="68" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="69" idproperty="69" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="70" idproperty="70" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
-  <property_values id="71" idproperty="71" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
-  <property_values id="72" idproperty="72" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="66" idproperty="66" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="67" idproperty="67" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="68" idproperty="68" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="69" idproperty="69" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="70" idproperty="70" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
+  <property_values id="71" idproperty="71" idchemical="1" idstructure="1" idvalue_string="2"  status="ERROR" user_name="guest"/>
+  <property_values id="72" idproperty="72" idchemical="1" idstructure="1" idvalue_string="1"  status="UNKNOWN" user_name="guest"/>
   <property_tuples idtuple="1" id="1"/>
   <property_tuples idtuple="1" id="2"/>
   <property_tuples idtuple="1" id="3"/>

@@ -13,7 +13,7 @@ import ambit2.db.update.AbstractUpdate;
 
 public class UpdateCompoundPropertyValueNumber  extends AbstractUpdate<IStructureRecord, PropertyValue<Double>> {
 
-	public static final String select_number_compound = "select null,?,idstructure,null,?,SUBSTRING_INDEX(user(),'@',1),null,?,'NUMERIC' from structure where idchemical=? order by idstructure limit 1";
+	public static final String select_number_compound = "select null,?,idchemical,idstructure,null,?,SUBSTRING_INDEX(user(),'@',1),null,?,'NUMERIC' from structure where idchemical=? order by idstructure limit 1";
 	protected String[] sql = new String[] {
 			String.format("%s %s %s",
 					ValueWriter.insert_descriptorvalue,
@@ -35,8 +35,8 @@ public class UpdateCompoundPropertyValueNumber  extends AbstractUpdate<IStructur
 			l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));
 			l.add(new QueryParam<Double>(Double.class,value));
 			l.add(new QueryParam<Integer>(Integer.class,getGroup().getIdchemical()));
-			l.add(new QueryParam<Double>(Double.class,value));
-			l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));
+			//l.add(new QueryParam<Double>(Double.class,value));
+			//l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));
 		} else throw new AmbitException("Undefined index"+index);
 		
 		return l;

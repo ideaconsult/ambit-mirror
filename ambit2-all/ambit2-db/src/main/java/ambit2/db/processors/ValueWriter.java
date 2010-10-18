@@ -50,15 +50,23 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	/**
 	 * 
 	 */
+	public static final int n_idproperty = 1;
+	public static final int n_idchemical = 2;
+	public static final int n_idstructure = 3;
+	public static final int n_error = 4;
+	public static final int n_value_num = 5;
+	public static final int n_text = 5;
+	public static final int n_value = 6;
+	
 	private static final long serialVersionUID = 8373222804070419878L;
-	public static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue_string,status,user_name,text,value_num,idtype) ";
+	public static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idchemical,idstructure,idvalue_string,status,user_name,text,value_num,idtype) ";
 	public static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
 	
-	public static final String select_string = "select null,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
-	public static final String select_number = "values (null,?,?,null,?,SUBSTRING_INDEX(user(),'@',1),null,?,'NUMERIC')";
+	public static final String select_string = "select null,?,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
+	public static final String select_number = "values (null,?,?,?,null,?,SUBSTRING_INDEX(user(),'@',1),null,?,'NUMERIC')";
 	
-	public static final String onduplicate_number = " on duplicate key update value_num=?, status=?, idvalue_string=null,text=null,idtype='NUMERIC',user_name=values(user_name) ";
-	public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=?, text=?,value_num=null,idtype='STRING',user_name=values(user_name) ";
+	public static final String onduplicate_number = " on duplicate key update value_num=values(value_num), status=values(status), idvalue_string=null,text=null,idtype='NUMERIC',user_name=values(user_name) ";
+	public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=values(status), text=values(text),value_num=null,idtype='STRING',user_name=values(user_name) ";
 	
 	protected static final String insert_tuple = "insert into property_tuples select ?,id from property_values where idproperty=? and idstructure=?";
 	
@@ -126,17 +134,19 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
             ps_descriptorvalue_string = connection.prepareStatement(insert_descriptorvalue+select_string+onduplicate_string);
     	
     	ps_descriptorvalue_string.clearParameters();
-    	ps_descriptorvalue_string.setInt(1,property.getId());
-    	ps_descriptorvalue_string.setInt(2,structure.getIdstructure());
-    	ps_descriptorvalue_string.setString(3, error.toString());
-    	if (longText == null) ps_descriptorvalue_string.setNull(4,Types.VARCHAR);
-    	else ps_descriptorvalue_string.setString(4, longText);
-    	if (value == null) ps_descriptorvalue_string.setNull(5,Types.VARCHAR);
-    	else ps_descriptorvalue_string.setString(5, value);
-    	ps_descriptorvalue_string.setString(6, error.toString());
+    	ps_descriptorvalue_string.setInt(n_idproperty,property.getId());
+    	ps_descriptorvalue_string.setInt(n_idchemical,structure.getIdchemical());
+    	ps_descriptorvalue_string.setInt(n_idstructure,structure.getIdstructure());
+    	ps_descriptorvalue_string.setString(n_error, error.toString());
+    	if (longText == null) ps_descriptorvalue_string.setNull(n_text,Types.VARCHAR);
+    	else ps_descriptorvalue_string.setString(n_text, longText);
+    	if (value == null) ps_descriptorvalue_string.setNull(n_value,Types.VARCHAR);
+    	else ps_descriptorvalue_string.setString(n_value, value);
     	
-    	if (longText == null) ps_descriptorvalue_string.setNull(7,Types.VARCHAR);
-    	else ps_descriptorvalue_string.setString(7, longText);
+    	//ps_descriptorvalue_string.setString(6, error.toString());
+    	
+    	//if (longText == null) ps_descriptorvalue_string.setNull(7,Types.VARCHAR);
+    	//else ps_descriptorvalue_string.setString(7, longText);
     	
     	if (ps_descriptorvalue_string.executeUpdate()>0) { 
     		if (idtuple >0 ) {
@@ -165,12 +175,14 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	//"values (null,idproperty,idstructure,null,?,SUBSTRING_INDEX(user(),'@',1),null,?)";
     	    	
     	ps_descriptorvalue_number.clearParameters();
-    	ps_descriptorvalue_number.setInt(1,property.getId());
-    	ps_descriptorvalue_number.setInt(2,structure.getIdstructure());
-        ps_descriptorvalue_number.setString(3, error.toString());
-        ps_descriptorvalue_number.setDouble(4, value);
-        ps_descriptorvalue_number.setDouble(5, value);
-        ps_descriptorvalue_number.setString(6, error.toString());     
+    	ps_descriptorvalue_number.setInt(n_idproperty,property.getId());
+    	ps_descriptorvalue_number.setInt(n_idchemical,structure.getIdchemical());
+    	ps_descriptorvalue_number.setInt(n_idstructure,structure.getIdstructure());
+        ps_descriptorvalue_number.setString(n_error, error.toString());
+        ps_descriptorvalue_number.setDouble(n_value_num, value);
+        
+        //ps_descriptorvalue_number.setDouble(5, value);
+        //ps_descriptorvalue_number.setString(6, error.toString());     
         
         if (ps_descriptorvalue_number.executeUpdate()>0) {
         	if (idtuple >0 ) {
@@ -206,12 +218,14 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	//"values (null,idproperty,idstructure,null,?,SUBSTRING_INDEX(user(),'@',1),null,?)";
     	    	
     	ps_descriptorvalue_number.clearParameters();
-    	ps_descriptorvalue_number.setInt(1,property.getId());
-    	ps_descriptorvalue_number.setInt(2,structure.getIdstructure());
-        ps_descriptorvalue_number.setString(3, error.toString());
-        ps_descriptorvalue_number.setNull(4, Types.DOUBLE);
-        ps_descriptorvalue_number.setNull(5, Types.DOUBLE);
-        ps_descriptorvalue_number.setString(6, error.toString());     
+    	ps_descriptorvalue_number.setInt(n_idproperty,property.getId());
+    	ps_descriptorvalue_number.setInt(n_idchemical,structure.getIdchemical());
+    	ps_descriptorvalue_number.setInt(n_idstructure,structure.getIdstructure());
+        ps_descriptorvalue_number.setString(n_error, error.toString());
+        ps_descriptorvalue_number.setNull(n_value_num, Types.DOUBLE);
+        
+        //ps_descriptorvalue_number.setNull(5, Types.DOUBLE);
+        //ps_descriptorvalue_number.setString(6, error.toString());     
         
         if (ps_descriptorvalue_number.executeUpdate()>0) {
         	if (idtuple >0 ) {

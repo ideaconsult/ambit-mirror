@@ -41,7 +41,6 @@ public class RetrieveModelTemplates<ResultType> extends AbstractQuery<ModelQuery
 		"join template_def using(idproperty)\n"+
 		"join template using(idtemplate)\n"+		
 		"join models on template.idtemplate=models.dependent\n"+
-		"join structure using (idstructure)\n"+
 		"join catalog_references using(idreference)\n"+
 		"where idchemical=? %s group by idproperty";
 	protected String sql_structure = 

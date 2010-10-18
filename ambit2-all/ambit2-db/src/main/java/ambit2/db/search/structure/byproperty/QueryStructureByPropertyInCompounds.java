@@ -19,7 +19,7 @@ public class QueryStructureByPropertyInCompounds  extends	QueryStructureByProper
 		"LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (1E10*s1.preference+s1.idstructure) > (1E10*s2.preference+s2.idstructure)\n"+
 		"where s2.idchemical is null\n"+	
 		"and s1.idchemical %s\n"+
-		"(select idchemical from property_values join structure using(idstructure)\n"+
+		"(select idchemical from property_values\n"+
 		"where idproperty in (%s))\n"+
 		"and s1.idchemical in (%s)";	
 	@Override

@@ -19,8 +19,8 @@ public class BarChartGeneratorDataset extends BarChartGenerator<SourceDataset> {
 	 */
 	private static final long serialVersionUID = 5297256309410169743L;
 	protected static final String sql = 
-		"SELECT ifnull(value_num,value) as v,count(distinct(structure.idchemical)) as num_chemicals\n"+
-		"FROM struc_dataset join structure using(idstructure) join property_values using(idstructure) " +
+		"SELECT ifnull(value_num,value) as v,count(distinct(idchemical)) as num_chemicals\n"+
+		"FROM struc_dataset join property_values using(idstructure) " +
 		"left join property_string using(idvalue_string) join properties using(idproperty)\n"+
 		"where idproperty=%d and id_srcdataset=%d\n"+
 		"group by v\n";	

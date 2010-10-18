@@ -67,24 +67,25 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 		"MAX(CASE WHEN st.idproperty = ? THEN value_num ELSE NULL END) AS n%d\n";
 
 	protected final String sql_structure = 
-		"SELECT -1,pv.idstructure, \n" +
+		"SELECT pv.idchemical,pv.idstructure \n" +
 		"%s\n"+
 	    "FROM\n"+
 	    "property_values AS pv\n"+
 	    "INNER JOIN properties AS st ON pv.idproperty = st.idproperty\n"+
 	    "LEFT JOIN property_string s ON s.idvalue_string=pv.idvalue_string\n"+
+	  //  "JOIN structure USING(idstructure)\n" +
 	    "WHERE idstructure %s %s\n"+
 	    "GROUP BY pv.idstructure\n";
 		
 	
 	protected final String sql_chemical = 
-		"SELECT idchemical,pv.idstructure, \n" +
+		"SELECT pv.idchemical,pv.idstructure \n" +
 		"%s\n"+
 	    "FROM\n"+
 	    "property_values AS pv\n"+
 	    "INNER JOIN properties AS st ON pv.idproperty = st.idproperty\n"+
 	    "LEFT JOIN property_string s ON s.idvalue_string=pv.idvalue_string\n"+
-	    "JOIN structure USING(idstructure)\n" +
+	  //  "JOIN structure USING(idstructure)\n" +
 	    "WHERE idchemical %s %s\n"+
 	    "GROUP BY idchemical\n";
 	
@@ -111,14 +112,13 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 			
 			int count = 0;
 		
-			String delimiter = "";
+			String delimiter = ",";
 			while (i.hasNext()) {
 				int p = i.next().getId();
 				if (p > 0) {
 					b.append(delimiter);
 					b.append(String.format(sql_property,p,p));
 					count++;
-					delimiter = ",";
 				}
 				
 			}

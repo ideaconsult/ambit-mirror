@@ -41,11 +41,12 @@ public class UpdateStructurePropertyIDNumber extends AbstractUpdate<IStructureRe
 		if (index == 0) {
 
 			l.add(new QueryParam<Integer>(Integer.class,getObject().getProperty().getId()));
+			l.add(new QueryParam<Integer>(Integer.class,getGroup().getIdchemical()));
 			l.add(new QueryParam<Integer>(Integer.class,getGroup().getIdstructure()));
 			l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));
 			l.add(new QueryParam<Double>(Double.class,value));
-			l.add(new QueryParam<Double>(Double.class,value));
-			l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));
+			//l.add(new QueryParam<Double>(Double.class,value));
+			//l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));
 			
 		} else throw new AmbitException("Undefined index"+index);
 		

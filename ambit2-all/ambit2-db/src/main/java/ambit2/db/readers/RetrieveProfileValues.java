@@ -132,7 +132,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 	
 	protected final String sql_chemical = 
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units from property_values \n"+
-		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
+		"left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
 		"where status != 'ERROR' and idchemical=? %s %s";
 	
@@ -144,16 +144,6 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 
 	protected final String where = "and %s ";
 
-	/* use union instead on in
-select name,idreference,idproperty,idstructure,value_string,value_num,title,url,idchemical,id,units  from (
-select idproperty,idstructure,ifnull(text,value) as value_string,value_num,idchemical,id
-from structure 
-join property_values using(idstructure) left join property_string using(idvalue_string)
-where status != 'ERROR' and idchemical=460 and idproperty  = 11389
-union
-[similar statement]
-) a join properties using(idproperty) join catalog_references using(idreference)
-	 */
 	
 	/**
 	 * 
@@ -181,8 +171,7 @@ union
 					b.append(delimiter);
 					
 					b.append("select idproperty,idstructure,ifnull(text,value) as value_string,value_num,idchemical,id\n");
-					b.append("from structure\n");
-					b.append("join property_values using(idstructure) left join property_string using(idvalue_string)\n");
+					b.append("from property_values left join property_string using(idvalue_string)\n");
 					b.append(String.format("where status != 'ERROR' and idchemical=? and %s = %s\n",searchMode,p));
 							
 					count++;

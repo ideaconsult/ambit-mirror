@@ -73,7 +73,7 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 	
 	protected final String sql_chemical = 
 		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units,comments from property_values \n"+
-		"join structure using(idstructure) left join property_string using(idvalue_string) \n"+
+		"left join property_string using(idvalue_string) \n"+
 		"join properties using(idproperty) join catalog_references using(idreference) \n"+
 		"where idchemical=? %s group by comments,idvalue_string";
 	
@@ -82,15 +82,6 @@ public class RetrieveField<ResultType> extends AbstractQuery<Property,IStructure
 		"join  properties join catalog_references using(idreference)\n"+
 		"where idchemical=? %s order by idstructure limit 1";
 				
-	/*
-		"select idstructure,idproperty,ifnull(text,value) as value_string,value_num,1,name as idtype from property_values join structure using(idstructure) left join property_string using(idvalue_string) join properties using(idproperty) where idchemical=7435 and comments="Names"
-		"select name,idreference,idproperty,idstructure,value_string,value_num,L.idtype from properties join\n"+
-		"(\n"+
-		"select idstructure,idproperty,null as value_string,value_num,1 as idtype from property_values join structure using(idstructure) where idchemical=? and value_num is not null\n"+
-		"union\n"+
-		"select idstructure,idproperty,ifnull(text,value) as value_string,null,0 as idtype from structure join property_values using(idstructure) join property_string using(idvalue_string) where idvalue_string is not null and idchemical=?\n"+
-		") as L using (idproperty)\n";	
-		*/
 	protected final String where = "and %s=?";
 
 	protected String sql() {
