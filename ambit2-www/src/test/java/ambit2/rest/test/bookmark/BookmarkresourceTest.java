@@ -27,7 +27,7 @@ import com.hp.hpl.jena.vocabulary.DC;
 public class BookmarkresourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/bookmark/1", port);
+		return String.format("http://localhost:%d/bookmark/test/1", port);
 	}
 	@Test
 	public void testHTML() throws Exception {
@@ -134,7 +134,7 @@ public class BookmarkresourceTest extends ResourceTest {
 		Form form = new Form();
 		form.add(Annotea.BookmarkProperty.hasTopic.toString(),"Model");
 		form.add(Annotea.BookmarkProperty.recalls.toString(),"http://example.com");
-		form.add(DC.creator.toString(),"test");
+		form.add(DC.creator.toString(),"guest");
 		form.add(DC.title.toString(),"title");
 		form.add(DC.description.toString(),"description");
 		
@@ -145,9 +145,12 @@ public class BookmarkresourceTest extends ResourceTest {
 					form.getWebRepresentation());
 					//writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
-        IDatabaseConnection c = getConnection();	
+		
+		Assert.assertEquals(String.format("http://localhost:%d/bookmark/guest/2",port),response.getEntityAsText());
+        
+		IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-				"SELECT * FROM bookmark where title='title' and recalls='http://example.com' and creator='test' and hasTopic='Model'");
+				"SELECT * FROM bookmark where title='title' and recalls='http://example.com' and creator='guest' and hasTopic='Model'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}		
@@ -158,8 +161,9 @@ public class BookmarkresourceTest extends ResourceTest {
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 		
+		String bookmark = String.format("http://localhost:%d%s/test/1", port,BookmarkResource.resource);
 		Form form = new Form();  
-		form.add(OpenTox.params.source_uri.toString(),String.format("http://localhost:%d%s/1", port,BookmarkResource.resource));
+		form.add(OpenTox.params.source_uri.toString(),bookmark);
 		
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,BookmarkResource.resource),
@@ -168,7 +172,7 @@ public class BookmarkresourceTest extends ResourceTest {
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
          c = getConnection();	
-		table = 	c.createQueryTable("EXPECTED","SELECT * FROM bookmark where title='my model' and url='http://example.com'");
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM bookmark where title='my model' and recalls='http://example.com'");
 		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 	}	

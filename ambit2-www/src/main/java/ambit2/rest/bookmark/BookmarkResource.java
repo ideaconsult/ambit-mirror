@@ -11,8 +11,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import com.hp.hpl.jena.vocabulary.DC;
-
 import ambit2.base.data.Bookmark;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -30,6 +28,8 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.Annotea;
 import ambit2.rest.rdf.RDFBookmarkIterator;
 import ambit2.rest.rdf.RDFObjectIterator;
+
+import com.hp.hpl.jena.vocabulary.DC;
 
 public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 
@@ -115,14 +115,27 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 	@Override
 	protected Bookmark createObjectFromWWWForm(Representation entity)
 			throws ResourceException {
-		Bookmark bookmark = new Bookmark();
+		
 		Form queryForm = new Form(entity);
-		bookmark.setHasTopic(queryForm.getFirstValue(Annotea.BookmarkProperty.hasTopic.toString()));
-		bookmark.setRecalls(queryForm.getFirstValue(Annotea.BookmarkProperty.recalls.toString()));
-		bookmark.setCreator(queryForm.getFirstValue(DC.creator.toString()));
-		bookmark.setTitle(queryForm.getFirstValue(DC.title.toString()));
-		bookmark.setDescription(queryForm.getFirstValue(DC.description.toString()));
-		return bookmark;
+		String uri = queryForm.getFirstValue(OpenTox.params.source_uri.toString());
+		if (uri!= null) {
+			Bookmark bookmark = null;
+			RDFBookmarkIterator it = new RDFBookmarkIterator(new Reference(uri));
+			while (it.hasNext()) {
+				bookmark = it.next();
+				break;
+			}
+			if (bookmark == null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+			return bookmark;
+		} else {
+			Bookmark bookmark = new Bookmark();
+			bookmark.setHasTopic(queryForm.getFirstValue(Annotea.BookmarkProperty.hasTopic.toString()));
+			bookmark.setRecalls(queryForm.getFirstValue(Annotea.BookmarkProperty.recalls.toString()));
+			bookmark.setCreator(queryForm.getFirstValue(DC.creator.toString()));
+			bookmark.setTitle(queryForm.getFirstValue(DC.title.toString()));
+			bookmark.setDescription(queryForm.getFirstValue(DC.description.toString()));
+			return bookmark;
+		}
 	}
 	@Override
 	protected QueryURIReporter<Bookmark, ReadBookmark> getURUReporter(
