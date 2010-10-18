@@ -15,7 +15,7 @@ public class QueryStructuresByPropertyInResults extends	QueryStructureByProperty
 		"select ? as idquery,s.idchemical,s.idstructure,1 as selected,preference as metric,type_structure as text from structure s\n"+
 		"join query_results using(idstructure)\n"+
 		"where s.idchemical %s\n"+
-		"(select idchemical from property_values join structure using(idstructure)\n"+
+		"(select idchemical from property_values \n"+
 		"where idproperty in (%s))\n"+
 		"and query_results.idquery=?";
 	@Override

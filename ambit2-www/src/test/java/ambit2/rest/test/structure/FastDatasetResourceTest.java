@@ -12,7 +12,7 @@ import ambit2.rest.test.ResourceTest;
 public class FastDatasetResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/fastdataset/1", port);
+		return String.format("http://localhost:%d/fastdataset/1?chemicals=false", port);
 	}
 	
 	@Test
@@ -29,6 +29,6 @@ public class FastDatasetResourceTest extends ResourceTest {
 			System.out.println(line);
 			count++;
 		}
-		return count >0;
+		return count == 4;
 	}	
 }

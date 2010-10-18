@@ -195,7 +195,7 @@ public class CompoundResourceTest extends ResourceTest {
 		//	Assert.assertEquals(0,mol.getProperties().size());test datasets has properties inside structure table field
 			count++;
 		}
-		return count==1;
+		return count==2;
 	}
 	@Test
 	public void testTXT() throws Exception {

@@ -5,6 +5,9 @@ import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardPieToolTipGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.general.PieDataset;
 import org.jfree.data.jdbc.JDBCPieDataset;
 
@@ -52,13 +55,29 @@ public abstract class PieChartGenerator<T> extends ChartGenerator<T> {
 	         PieDataset pieDataset =  new JDBCPieDataset(getConnection(),
 	        		 String.format(getSQL(),property.getId(),getID(target))); 
 	         
-
+	         
 	         pieChart =
 	            ChartFactory.createPieChart3D( property.getName() , // chart title
 	                                         pieDataset,
 	                                         true,      // legend displayed
 	                                         true,      // tooltips displayed
-	                                         false );   // no URLs
+	                                         true );   // no URLs
+
+	         ((PiePlot) pieChart.getPlot()).setToolTipGenerator(new StandardPieToolTipGenerator() {
+	        	 @Override
+	        	public String generateToolTip(PieDataset dataset, Comparable key) {
+	        		return super.generateToolTip(dataset, key);
+	        	}
+	         });
+	         ((PiePlot) pieChart.getPlot()).setURLGenerator(new StandardPieURLGenerator(){
+	        	 @Override
+	        	public String generateURL(PieDataset dataset, Comparable key,
+	        			int pieIndex) {
+	        		return String.format(String.format("%s %d",key,pieIndex)); 
+	        		//super.generateURL(dataset, key, pieIndex);
+	        	}
+	         }) ;
+	         
 	         return pieChart.createBufferedImage(width,height);
 
 	      }

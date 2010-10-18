@@ -18,7 +18,7 @@ public class StructurePropertyValueSNumber_crud_test extends CRUDTest<IStructure
 	protected IQueryUpdate<IStructureRecord, PropertyValue<Double>> createQuery()
 			throws Exception {
 		UpdateStructurePropertyIDNumber q = new UpdateStructurePropertyIDNumber();
-		StructureRecord record = new StructureRecord(-1,100211,null,null);
+		StructureRecord record = new StructureRecord(7,100211,null,null);
 		q.setGroup(record);
 		Property p =new Property("");
 		p.setId(2);

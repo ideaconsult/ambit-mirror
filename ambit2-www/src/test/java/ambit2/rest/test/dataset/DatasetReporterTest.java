@@ -22,7 +22,7 @@ import ambit2.rest.rdf.RDFStructuresIterator;
 import ambit2.rest.test.ResourceTest;
 
 /**
- * ambit.acad.bg/query/scope/dataset/all/similarity/method/fingerprints/distance/tanimoto/threshold/0.5/smiles/CCC
+ * 
  * @author nina
  *
  */

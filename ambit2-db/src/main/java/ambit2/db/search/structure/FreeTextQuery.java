@@ -52,20 +52,20 @@ public class FreeTextQuery extends AbstractStructureQuery<String[], String[], St
 	
 	protected static final String pairSQL = 
 		"(select idchemical,1 as metric  from properties join property_values using(idproperty)\n"+
-		"join property_string using(idvalue_string)\n  join structure using(idstructure)\n"+
+		"join property_string using(idvalue_string)\n"+
 		"    where name like ? and `value` like ?\n"+
 		")\n"+
 		"union\n"+
 		"(select idchemical,1 as metric  from properties join property_values using(idproperty)\n"+
-		"join property_string using(idvalue_string)\n join structure using(idstructure)\n"+
+		"join property_string using(idvalue_string)\n"+
 		"    where `value` like ? and name like ?\n"+
 		")\n";
 	protected static final String singleSQLName = 
 		"(select idchemical,1 as metric from properties\n"+
-		"join property_values using(idproperty) join structure using(idstructure) where name like ?)\n";
+		"join property_values using(idproperty) where name like ?)\n";
 	protected static final String singleSQLValue =
 		"(select idchemical,1 as metric  from property_values\n"+
-		"join property_string using(idvalue_string)  join structure using(idstructure)  where `value` like ?)\n";
+		"join property_string using(idvalue_string)  where `value` like ?)\n";
 
 
 

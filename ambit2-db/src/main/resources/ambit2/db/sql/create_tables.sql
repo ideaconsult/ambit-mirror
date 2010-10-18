@@ -256,32 +256,37 @@ CREATE TABLE  `tuples` (
 -- -----------------------------------------------------
 -- Table `property_values` all values
 -- v3.2 value_num changed to double instead of double(14,4)
+-- v 4.2 added idchemical field
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `property_values`;
 CREATE TABLE  `property_values` (
-  `id` int(10) unsigned NOT NULL auto_increment,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idproperty` int(10) unsigned NOT NULL,
   `idstructure` int(10) unsigned NOT NULL,
-  `user_name` varchar(16) collate utf8_bin NOT NULL,
-  `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') collate utf8_bin NOT NULL default 'UNKNOWN',
+  `idchemical` int(10) unsigned NOT NULL,
+  `user_name` varchar(16) COLLATE utf8_bin NOT NULL,
+  `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') COLLATE utf8_bin NOT NULL DEFAULT 'UNKNOWN',
+  `idvalue_string` int(10) unsigned DEFAULT NULL,
+  `value_num` double(14,4) DEFAULT NULL,
+  `idtype` enum('STRING','NUMERIC') COLLATE utf8_bin NOT NULL DEFAULT 'STRING',
   `text` text collate utf8_bin,
-  `idvalue_string` int(10) unsigned default NULL,
-  `value_num` double default NULL,
-  `idtype` enum('STRING','NUMERIC') collate utf8_bin NOT NULL default 'STRING',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `Index_1` USING BTREE (`idproperty`,`idstructure`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Index_1` (`idproperty`,`idstructure`) USING BTREE,
   KEY `FK_property_values_1` (`user_name`),
   KEY `FK_property_values_2` (`idstructure`),
   KEY `Index_2` (`value_num`),
   KEY `FK_property_values_5` (`idvalue_string`),
-  KEY `Index_3` USING BTREE (`idproperty`,`idtype`),
+  KEY `Index_3` (`idproperty`,`idtype`) USING BTREE,
   KEY `Index_8` (`idproperty`,`idvalue_string`),
+  KEY `Index_11` (`idproperty`,`id`),
+  KEY `Index_10` (`idvalue_string`) USING BTREE,
+  KEY `FK_property_values_6` (`idchemical`),
+  CONSTRAINT `FK_property_values_6` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 
 -- -----------------------------------------------------
 -- Table `property_pairstruc` values, assigned for pair of structures
@@ -797,7 +802,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,1,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,2,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

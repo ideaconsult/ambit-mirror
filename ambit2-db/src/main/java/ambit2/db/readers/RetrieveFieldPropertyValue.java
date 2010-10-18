@@ -16,7 +16,7 @@ public class RetrieveFieldPropertyValue extends RetrieveField<PropertyValue> {
 	@Override
 	public PropertyValue getObject(ResultSet rs) throws AmbitException {
 		try {
-			//"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url from property_values \n"+
+
 			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
 			Property p = new Property(rs.getString(1),le); 
 			p.setUnits(rs.getString(11));
