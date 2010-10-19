@@ -74,17 +74,19 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 	    "LEFT JOIN property_string s ON s.idvalue_string=pv.idvalue_string\n"+
 	  //  "JOIN structure USING(idstructure)\n" +
 	    "WHERE idstructure %s %s\n"+
+	    "AND idproperty in (%s)\n"+
 	    "GROUP BY pv.idstructure\n";
 		
 	
 	protected final String sql_chemical = 
-		"SELECT pv.idchemical,pv.idstructure \n" +
+		"SELECT idchemical,idstructure \n" +
 		"%s\n"+
 	    "FROM\n"+
 	    "property_values AS pv\n"+
 	    "LEFT JOIN property_string s ON s.idvalue_string=pv.idvalue_string\n"+
-	  //  "JOIN structure USING(idstructure)\n" +
+	    //"LEFT JOIN structure USING(idstructure)\n"+
 	    "WHERE idchemical %s %s\n"+
+	    "AND idproperty in (%s)\n"+
 	    "GROUP BY idchemical\n";
 	
 	protected String getStructureWhere() throws AmbitException {
@@ -123,11 +125,35 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 		}
 		return b.toString();
 	}
+	
+	protected String getPropertyWhere() {
+		StringBuilder b = new StringBuilder();
+
+		if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
+			Iterator<Property> i = getFieldname().getProperties(true);
+			
+			int count = 0;
+		
+			String delimiter = "";
+			while (i.hasNext()) {
+				int p = i.next().getId();
+				if (p > 0) {
+					b.append(delimiter);
+					b.append("?");
+					count++;
+					delimiter = ",";
+				}
+				
+			}
+		}
+		return b.toString();
+	}	
 	public String getSQL() throws AmbitException {
 		return String.format(String.format(chemicalsOnly?sql_chemical:sql_structure,
 				getPropertySQL(),
 				getCondition().getSQL(),
-				getStructureWhere()));
+				getStructureWhere(),
+				getPropertyWhere()));
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
@@ -150,6 +176,16 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 			if (getValue()[i]<=0) continue;
 			else params.add(new QueryParam<Integer>(Integer.class, getValue()[i]));
 		
+		
+		if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
+			Iterator<Property> i = getFieldname().getProperties(true);
+			while (i.hasNext()) {
+				int p = i.next().getId();
+				if (p >0) {
+					params.add(new QueryParam<Integer>(Integer.class, p));
+				}
+			}
+		}
 		return params;		
 	}
 

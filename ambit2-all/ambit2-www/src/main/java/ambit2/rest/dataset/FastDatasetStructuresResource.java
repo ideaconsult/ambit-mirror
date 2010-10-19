@@ -27,7 +27,7 @@ import ambit2.rest.property.PropertyResource;
 
 public class FastDatasetStructuresResource extends DatasetStructuresResource<IQueryRetrieval<IStructureRecord>> {
 	public final static String resource = "/fastdataset";
-	protected int packetSize = 100;
+	protected int packetSize = 50;
 	protected boolean chemicals = true;
 	
 	@Override
@@ -38,7 +38,7 @@ public class FastDatasetStructuresResource extends DatasetStructuresResource<IQu
 			if (v!=null)
 				packetSize = Integer.parseInt(v.toString());
 		} catch (Exception x) {
-			packetSize = 100;
+			packetSize = 50;
 		}
 		try {
 			Object v = getRequest().getResourceRef().getQueryAsForm().getFirstValue("chemicals");
