@@ -152,7 +152,7 @@ CREATE TABLE  `property_string` (
 DROP TABLE IF EXISTS `template`;
 CREATE TABLE  `template` (
   `idtemplate` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(128) collate utf8_bin default NULL,
+  `name` varchar(255) collate utf8_bin default NULL,
   PRIMARY KEY  (`idtemplate`),
   UNIQUE KEY `template_list_index4157` USING BTREE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
