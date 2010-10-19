@@ -257,6 +257,7 @@ CREATE TABLE  `tuples` (
 -- Table `property_values` all values
 -- v3.2 value_num changed to double instead of double(14,4)
 -- v 4.2 added idchemical field
+-- v 4.3 added index on idchemical and idproperty
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `property_values`;
 CREATE TABLE  `property_values` (
@@ -280,6 +281,7 @@ CREATE TABLE  `property_values` (
   KEY `Index_8` (`idproperty`,`idvalue_string`),
   KEY `Index_11` (`idproperty`,`id`),
   KEY `Index_10` (`idvalue_string`) USING BTREE,
+  KEY `Index_12` (`idchemical`,`idproperty`),
   KEY `FK_property_values_6` (`idchemical`),
   CONSTRAINT `FK_property_values_6` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -802,7 +804,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,2,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,3,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
