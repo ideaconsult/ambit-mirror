@@ -41,7 +41,7 @@ public class CreateDataset extends AbstractObjectUpdate<SourceDataset> {
 	
 	public static final String[] create_sql = {
 		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
-		"INSERT IGNORE INTO src_dataset (id_srcdataset, name,user_name,idreference) SELECT ?,?,SUBSTRING_INDEX(user(),'@',1),idreference FROM catalog_references WHERE title=?"
+		"INSERT IGNORE INTO src_dataset (id_srcdataset, name,user_name,idreference,idtemplate) SELECT ?,?,SUBSTRING_INDEX(user(),'@',1),idreference,null FROM catalog_references WHERE title=?"
 	};
 
 	public CreateDataset(SourceDataset dataset) {

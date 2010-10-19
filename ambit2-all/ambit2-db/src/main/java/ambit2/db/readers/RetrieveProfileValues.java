@@ -120,30 +120,36 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		searchMode = value?SearchMode.idproperty:SearchMode.name;
 	}	
 	protected final String sql_structure = 
-		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,-1,id,units from property_values \n"+
-		"left join property_string using(idvalue_string) \n"+
-		"join properties using(idproperty) join catalog_references using(idreference) \n"+
-		"where status != 'ERROR' and idstructure=? %s %s";
+		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units\n"+ 
+		"from property_values\n"+ 
+		"left join property_string using(idvalue_string)\n"+
+		"join properties using(idproperty) join catalog_references using(idreference)\n"+ 
+		"where status != 'ERROR'\n" +
+		"%s\n"+
+		"and idstructure=?\n";
 	
 	protected final String sql_structure_novalue = 
 		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
 		"join  properties join catalog_references using(idreference)\n"+
-		"where status != 'ERROR' and  idstructure=? %s %s";
+		"where status != 'ERROR' %s and idstructure=?";
+	
 	
 	protected final String sql_chemical = 
-		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units from property_values \n"+
-		"left join property_string using(idvalue_string) \n"+
-		"join properties using(idproperty) join catalog_references using(idreference) \n"+
-		"where status != 'ERROR' and idchemical=? %s %s";
+		"select name,idreference,idproperty,idstructure,ifnull(text,value) as value_string,value_num,title,url,idchemical,id,units\n"+ 
+		"from property_values\n"+ 
+		"left join property_string using(idvalue_string)\n"+
+		"join properties using(idproperty) join catalog_references using(idreference)\n"+ 
+		"where status != 'ERROR'\n"+
+		"%s\n"+
+		"and idchemical=?\n";
+
 	
 	protected final String sql_chemical_novalue = 
 		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
 		"join  properties join catalog_references using(idreference)\n"+
-		"where status != 'ERROR' and  idchemical=? %s %s order by idstructure limit 1";
-				
-
-	protected final String where = "and %s ";
-
+		"where status != 'ERROR' %s and idchemical=? order by idstructure limit 1";
+			
+	protected final String sql_propery = "and idproperty in (%s)";
 	
 	/**
 	 * 
@@ -155,89 +161,47 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 				(addNew?sql_structure_novalue:sql_structure);
 	}
 	
-	protected String getPropertySQL() {
+	protected String getPropertyWhere() {
 		StringBuilder b = new StringBuilder();
-		b.append("select name,idreference,idproperty,idstructure,value_string,value_num,title,url,idchemical,id,units  from (\n");
-		
 		if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
 			Iterator<Property> i = getFieldname().getProperties(true);
 			
-			int count = 0;
-		
 			String delimiter = "";
 			while (i.hasNext()) {
 				String p = searchMode.getParam(i.next());
 				if (p != null) {
 					b.append(delimiter);
-					
-					b.append("select idproperty,idstructure,ifnull(text,value) as value_string,value_num,idchemical,id\n");
-					b.append("from property_values left join property_string using(idvalue_string)\n");
-					b.append(String.format("where status != 'ERROR' and idchemical=? and %s = %s\n",searchMode,p));
-							
-					count++;
-					delimiter = "union\n";
-				}
-				
-			}
-		}
-		
-
-		b.append(") a join properties using(idproperty) join catalog_references using(idreference)");
-		return b.toString();
-	}
-	public String getSQL() throws AmbitException {
-		//should be faster
-		if (isChemicalsOnly() && !addNew) return getPropertySQL();
-		
-		StringBuilder b = new StringBuilder();
-
-		if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
-			Iterator<Property> i = getFieldname().getProperties(true);
-			
-			int count = 0;
-			b.append(getCondition());
-			b.append(" (");
-			String delimiter = "";
-			while (i.hasNext()) {
-				String p = searchMode.getParam(i.next());
-				if (p != null) {
-					b.append(delimiter);
-					b.append(p);
-					count++;
+					b.append("?");
 					delimiter = ",";
 				}
 				
 			}
-			b.append(")");
-			if (count == 0) {
-				b = new StringBuilder();
-				b.append(" is null");
-			}
 		}
+		return b.toString();
+	}
+	public String getSQL() throws AmbitException {
+		
 		
 		return String.format(
 				sql(),
 				(getFieldname()==null || "".equals(getFieldname()) )
-				?"":String.format(where,searchMode.getSQL()),
-				b.toString()
+				?"":String.format(sql_propery,getPropertyWhere())
 				);
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		if (isChemicalsOnly() && !addNew) {
+
 			if ((getFieldname()!=null) &&(getFieldname().size()>0)) {
 				Iterator<Property> i = getFieldname().getProperties(true);
 				while (i.hasNext()) {
-					String p = searchMode.getParam(i.next());
-					if (p != null) {
-						params.add(new QueryParam<Integer>(Integer.class, getValue().getIdchemical()));
-					}
-					
+					Property p = i.next();
+					params.add(new QueryParam<Integer>(Integer.class, p.getId()));
 				}
 			}
-		} else
-			params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
+
+
+		params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
 
 		return params;		
 	}
