@@ -63,15 +63,14 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 
 	}		
 	protected final String sql_property = 
-		"MAX(CASE WHEN st.idproperty = ? THEN value ELSE NULL END) AS v%d,\n"+
-		"MAX(CASE WHEN st.idproperty = ? THEN value_num ELSE NULL END) AS n%d\n";
+		"MAX(CASE WHEN pv.idproperty = ? THEN value ELSE NULL END) AS v%d,\n"+
+		"MAX(CASE WHEN pv.idproperty = ? THEN value_num ELSE NULL END) AS n%d\n";
 
 	protected final String sql_structure = 
 		"SELECT pv.idchemical,pv.idstructure \n" +
 		"%s\n"+
 	    "FROM\n"+
 	    "property_values AS pv\n"+
-	    "INNER JOIN properties AS st ON pv.idproperty = st.idproperty\n"+
 	    "LEFT JOIN property_string s ON s.idvalue_string=pv.idvalue_string\n"+
 	  //  "JOIN structure USING(idstructure)\n" +
 	    "WHERE idstructure %s %s\n"+
@@ -83,7 +82,6 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 		"%s\n"+
 	    "FROM\n"+
 	    "property_values AS pv\n"+
-	    "INNER JOIN properties AS st ON pv.idproperty = st.idproperty\n"+
 	    "LEFT JOIN property_string s ON s.idvalue_string=pv.idvalue_string\n"+
 	  //  "JOIN structure USING(idstructure)\n" +
 	    "WHERE idchemical %s %s\n"+
