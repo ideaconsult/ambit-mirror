@@ -68,6 +68,7 @@ import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.report.ReportDatasetResource;
 import ambit2.rest.similarity.SimilarityResource;
+import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -151,6 +152,8 @@ public class AmbitApplication extends TaskApplication {
 		//router.attach("", SmartsQueryResource.class);	
 		//router.attach("/", SmartsQueryResource.class);
 
+		router.attach(SPARQLPointerResource.resource, SPARQLPointerResource.class);
+		
 		Router adminRouter = new MyRouter(getContext());
 		adminRouter.attachDefault(AdminResource.class);
 		adminRouter.attach(String.format("/%s",DatabaseResource.resource),DatabaseResource.class);
