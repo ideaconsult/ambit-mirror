@@ -1,9 +1,11 @@
 package ambit2.rest.sparqlendpoint;
 
+import java.io.InputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -15,6 +17,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.rest.DBConnection;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.algorithm.CatalogHTMLReporter;
 import ambit2.rest.algorithm.CatalogResource;
@@ -45,8 +48,8 @@ public class SPARQLPointerResource extends CatalogResource<String> {
 	@Override
 	protected synchronized Iterator<String> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
-		if (pointers.size()==0)
-			pointers.add(String.format("%s/ontology",getRequest().getRootRef()));
+		if (pointers.size()==0) 
+			pointers.add(getOntologyServiceURI());
 		return pointers.iterator();
 	}
 
@@ -77,4 +80,16 @@ public class SPARQLPointerResource extends CatalogResource<String> {
 
 		
 	}
+	
+	protected synchronized String getOntologyServiceURI()  {
+		try {
+			Properties properties = new Properties();
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
+			properties.load(in);
+			in.close();	
+			return properties.getProperty("service.ontology");
+		} catch (Exception x) {
+			return null;
+		}
+	}	
 }
