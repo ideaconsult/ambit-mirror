@@ -22,3 +22,4 @@ database.user.root.password=${ambit.db.user.root.password}
 database.user.test.password=${ambit.db.user.test.password}
 database.create=${ambit.db.create.allow}
 rdf.writer=${rdf.writer}
+service.ontology=${service.ontology}
