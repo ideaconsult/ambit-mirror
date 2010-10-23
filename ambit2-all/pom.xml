@@ -282,7 +282,9 @@
     <module>ambit2-plugin-pbt</module>
     <module>ambit2-plugin-dbtools</module>
     <module>ambit2-plugin-usermgr</module>
+    <!-- removed temporarily, not used anyway  
     <module>ambit2-rendering</module>
+     -->
     <module>ambit2-jchempaint</module>
     <module>ambit2-chebi</module>
     <module>ambit2-some</module>
