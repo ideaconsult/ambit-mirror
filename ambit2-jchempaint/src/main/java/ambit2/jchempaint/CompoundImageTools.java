@@ -257,7 +257,11 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
             if (!generateCoordinates) {
                 //IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(molecule);             	
             	//molecules.addAtomContainer(c);
-            	molecules.addAtomContainer(molecule);
+            	//there still could be multiple parts !
+            	IMoleculeSet mset =  ConnectivityChecker.partitionIntoMolecules(molecule);
+            	molecules.add(mset);
+            	mset.removeAllAtomContainers();
+            	mset = null;
             	return;
             }            
             try
