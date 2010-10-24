@@ -93,7 +93,7 @@ public class AbstractDepict extends ServerResource {
 	    				public Writer process(String target) throws AmbitException {
 	    					try {
 	    					AmbitResource.writeTopHeader(output, smiles, getRequest(), "");
-	    					AmbitResource.writeSearchForm(output, smiles, getRequest(), "",Method.POST);	    					
+	    					AmbitResource.writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
 	    					output.write(target);
 	    					AmbitResource.writeHTMLFooter(output, smiles, getRequest());
 	    					} catch (Exception x) {}
