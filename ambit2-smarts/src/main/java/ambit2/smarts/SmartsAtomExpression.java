@@ -124,7 +124,11 @@ public class SmartsAtomExpression extends SMARTSAtom
     		
     	case SmartsConst.AP_X:
     	{	
-    		Integer hci = atom.getHydrogenCount();
+        	/*
+        	https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
+			Integer hci = atom.getHydrogenCount();
+			*/
+    		Integer hci = atom.getImplicitHydrogenCount();
     		int hc = 0;
     		if (hci != null)
     			hc = hci.intValue();
@@ -135,7 +139,11 @@ public class SmartsAtomExpression extends SMARTSAtom
     	}
     	case SmartsConst.AP_H:
     	{	
-    		Integer hci = atom.getHydrogenCount();
+        	/*
+        	https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
+			Integer hci = atom.getHydrogenCount();
+			*/
+    		Integer hci = atom.getImplicitHydrogenCount();
     		int totalH = 0;
     		if (hci != null)
     			totalH = hci.intValue();    		

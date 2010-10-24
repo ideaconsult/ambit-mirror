@@ -285,6 +285,7 @@ public class MoleculeTools {
     }    
     /**
      * CDK 1.3.5 code
+     * */
     public static IAtom newAtom(IChemObjectBuilder builder,IElement element) {
     	return builder.newInstance(IAtom.class,element);
     }    
@@ -355,10 +356,10 @@ public class MoleculeTools {
     public static IElement newElement(IChemObjectBuilder builder,String element) {
     	return builder.newInstance(IElement.class, element);
     }
-    */
+  
     /**
      * pre- cdk 1.3.5 code 
-     */
+     
     public static IAtom newAtom(IChemObjectBuilder builder,IElement element) {
     	return builder.newAtom(element);
     }    
@@ -430,5 +431,5 @@ public class MoleculeTools {
     public static IElement newElement(IChemObjectBuilder builder,String element) {
     	return builder.newElement(element);
     }
-        
+        */
 }

@@ -47,6 +47,7 @@ import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.interfaces.ILonePair;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.ISingleElectron;
+import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 
@@ -803,7 +804,7 @@ public class SuppleAtomContainer extends ChemObject implements
         if (!bonds.contains(newbond))
             addBond(newbond);
     }
-    /*
+    
 	public void addStereoElement(IStereoElement arg0) {
 		// TODO Auto-generated method stub
 		
@@ -812,6 +813,7 @@ public class SuppleAtomContainer extends ChemObject implements
 		// TODO Auto-generated method stub
 		return null;
 	} 
-	*/   
+	
+    
 }
 

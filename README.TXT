@@ -1,4 +1,7 @@
 AMBIT2 
+2.1.4
+
+Changelog: cdk 1.3.6 and jchempaint 3.1.3
 
 This is multi module maven project;
 

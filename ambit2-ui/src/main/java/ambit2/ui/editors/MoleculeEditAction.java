@@ -50,7 +50,6 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.application.JChemPaint;
 
 import ambit2.core.data.MoleculeTools;
 
@@ -102,7 +101,8 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
     	    	if (molecules != null) {
     				jcpModel.setMoleculeSet(molecules);
     				
-    				JChemPaintPanel jcpep = new JChemPaintPanel(jcpModel, JChemPaint.GUI_APPLICATION, false,null);
+    				//JChemPaintPanel jcpep = new JChemPaintPanel(jcpModel, JChemPaint.GUI_APPLICATION, false,null);
+    				JChemPaintPanel jcpep = new JChemPaintPanel(jcpModel);
     				Dimension d = new Dimension(500,500);
     	    		jcpep.setPreferredSize(d);
     	    		//jcpep.registerModel(jcpModel);

@@ -48,7 +48,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.application.JChemPaint;
 
 /**
  * A {@link javax.swing.JDialog} containing a {@link JChemPaintEditorPanel}.
@@ -122,7 +121,8 @@ public class JChemPaintDialog extends JDialog {
         //setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE ); 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
-		jcpep = new JChemPaintPanel(jcpm, JChemPaint.GUI_APPLICATION, false,null);
+		//jcpep = new JChemPaintPanel(jcpm, JChemPaint.GUI_APPLICATION, false,null);
+		jcpep = new JChemPaintPanel(jcpm);
 		//new JChemPaintPanel(jcpm,JChemPaint.GUI_APPLICATION,true,null);
 		
 		Dimension dcp = new Dimension(400,400);

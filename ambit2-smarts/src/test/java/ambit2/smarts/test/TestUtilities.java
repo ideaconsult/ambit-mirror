@@ -782,7 +782,12 @@ public class TestUtilities
 		IAtomContainer mol = new AtomContainer();
 		mol.addAtom(new Atom("C"));
 		
+		/**
+		https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
 		Integer hc = mol.getAtom(0).getHydrogenCount();
+		 */
+		Integer hc = mol.getAtom(0).getImplicitHydrogenCount();
+		
 		Integer fc = mol.getAtom(0).getFormalCharge();
 		Integer nc = mol.getAtom(0).getFormalNeighbourCount();
 		Integer v = mol.getAtom(0).getValency();
