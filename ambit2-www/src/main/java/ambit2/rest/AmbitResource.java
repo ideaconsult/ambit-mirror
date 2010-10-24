@@ -571,7 +571,20 @@ window.setInterval(function() {
 	public static void writeSearchForm(Writer w,String title,Request request ,String meta) throws IOException {
 		writeSearchForm(w, title, request, meta,Method.GET);
 	}
+	
+	protected static Form getParams(Form params,Request request) {
+		if (params == null) 
+			if (Method.GET.equals(request.getMethod()))
+				params = request.getResourceRef().getQueryAsForm();
+			//if POST, the form should be already initialized
+			else 
+				params = request.getEntityAsForm();
+		return params;
+	}
 	public static void writeSearchForm(Writer w,String title,Request request ,String meta,Method method) throws IOException {
+		writeSearchForm(w, title, request, meta,method,null);
+	}
+	public static void writeSearchForm(Writer w,String title,Request request ,String meta,Method method,Form params) throws IOException {
 		Reference baseReference = request==null?null:request.getRootRef();
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
@@ -581,8 +594,10 @@ window.setInterval(function() {
 		w.write("<td align='center'>");
 		String query_smiles = "";
 		try {
-			Form form = request.getResourceRef().getQueryAsForm();
-			query_smiles = form.getFirstValue(QueryResource.search_param);
+			Form form = getParams(params,request);
+			if ((form != null) && (form.size()>0))
+				query_smiles = form.getFirstValue(QueryResource.search_param);
+			else query_smiles = null;
 		} catch (Exception x) {
 			query_smiles = "";
 		}
