@@ -59,13 +59,19 @@ public class AbstractDepict extends ServerResource {
 		b.append(String.format("<td><a href='%s/daylight?search=%s'>%s</a></td><td><a href='%s/cdk?search=%s'>%s</a></td>",
 				ref.getHierarchicalPart(),
 				Reference.encode(smiles),
-				"Daylight depiction",ref.getHierarchicalPart(),smiles,"CDK depiction"));		
+				"Daylight depiction",
+				ref.getHierarchicalPart(),
+				Reference.encode(smiles),
+				"CDK depiction"));		
 		b.append("</tr><tr>");
 		
 		b.append(String.format("<td><img src='%s/daylight?search=%s' alt='%s' title='%s'></td><td><img src='%s/cdk?search=%s' alt='%s' title='%s'></td>",
 				ref.getHierarchicalPart(),
 				Reference.encode(smiles),
-				smiles,smiles,ref.getHierarchicalPart(),smiles,smiles,smiles));
+				smiles,smiles,
+				ref.getHierarchicalPart(),
+				Reference.encode(smiles),
+				smiles,smiles));
 		
 		b.append("</tr><tr>");
 		b.append(String.format("<td><a href='%s/cactvs?search=%s'>%s</a></td><td></td>",
@@ -76,7 +82,9 @@ public class AbstractDepict extends ServerResource {
 		b.append("</tr><tr>");
 		
 		b.append(String.format("<td><img src='%s/cactvs?search=%s' alt='%s' title='%s'></td><td></td>",
-				ref.getHierarchicalPart(),smiles,smiles,smiles));
+				ref.getHierarchicalPart(),
+				Reference.encode(smiles),
+				smiles,smiles));
 		
 		b.append("</tr></table>");
 		return b.toString();
