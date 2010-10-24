@@ -8,7 +8,6 @@ import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.application.JChemPaint;
 
 import ambit2.core.data.MoleculeTools;
 
@@ -28,7 +27,8 @@ public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {
 		//jcpModel.setSoftware("JChemPaint " + version);
 		//jcpModel.setGendate((Calendar.getInstance()).getTime().toString());		
 		Dimension d = new Dimension(350,350);
-		jcpep = new JChemPaintPanel(jcpModel, JChemPaint.GUI_APPLICATION, false,null);
+		//jcpep = new JChemPaintPanel(jcpModel, JChemPaint.GUI_APPLICATION, false,null);
+		jcpep = new JChemPaintPanel(jcpModel);
 		jcpep.setShowStatusBar(false);
 		jcpep.setShowMenuBar(true);
 		jcpep.setShowInsertTextField(true);

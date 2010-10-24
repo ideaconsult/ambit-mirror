@@ -129,7 +129,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 
        generators.add(new AtomAnnotationGenerator());
        
-	   Renderer renderer = new Renderer(generators, new AWTFontManager()) ;
+	   Renderer renderer = new Renderer(generators, new AWTFontManager(),false) ;
 	   RendererModel r2dm = renderer.getRenderer2DModel();	
 		r2dm.setCompactShape(AtomShape.SQUARE);
 		

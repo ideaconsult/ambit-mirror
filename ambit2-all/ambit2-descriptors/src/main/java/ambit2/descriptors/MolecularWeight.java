@@ -158,7 +158,11 @@ public class MolecularWeight implements IMolecularDescriptor {
                 for (int i = 0; i < container.getAtomCount(); i++) {
                     //logger.debug("WEIGHT: "+container.getAtomAt(i).getSymbol() +" " +IsotopeFactory.getInstance().getMajorIsotope( container.getAtomAt(i).getSymbol() ).getExactMass());
                     weight += IsotopeFactory.getInstance(container.getBuilder()).getMajorIsotope( container.getAtom(i).getSymbol() ).getExactMass();
-                    Integer hcount = container.getAtom(i).getHydrogenCount();
+                    /*
+                    //Integer hcount = container.getAtom(i).getHydrogenCount();
+                    https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
+                    */
+                    Integer hcount = container.getAtom(i).getImplicitHydrogenCount();
                     if (hcount == CDKConstants.UNSET) hcount = 0;
                     weight += (hcount * 1.00782504);
                 }
@@ -176,7 +180,11 @@ public class MolecularWeight implements IMolecularDescriptor {
                         weight += factory.getMajorIsotope( container.getAtom(i).getSymbol() ).getExactMass();
                     }
                     else {
+                    	/*
+                    	https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
                         weight += (container.getAtom(i).getHydrogenCount() * h.getExactMass());
+                    	*/
+                    	weight += (container.getAtom(i).getImplicitHydrogenCount() * h.getExactMass());
                     }
                 }
             } catch (Exception e) {

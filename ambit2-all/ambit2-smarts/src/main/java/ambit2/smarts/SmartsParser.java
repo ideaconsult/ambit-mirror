@@ -1991,7 +1991,11 @@ public class SmartsParser
 		for (int i = 0; i < container.getAtomCount(); i++)
 		{
 			IAtom at = container.getAtom(i);
+        	/*
+        	https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
 			hci = at.getHydrogenCount();
+			*/				
+			hci = at.getImplicitHydrogenCount();
     		hc = 0;
     		if (hci != null)
     			hc = hci.intValue();

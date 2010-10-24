@@ -9,10 +9,10 @@ import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
+import org.openscience.cdk.smiles.DeduceBondSystemTool;
 
 import ambit2.core.data.ArrayResult;
 import ambit2.core.data.StringArrayResult;
-import ambit2.core.smiles.DeduceBondSystemTool;
 
 public class KekulizationVerifier implements IMolecularDescriptor {
 	protected static final String version="1.3.3_patched";

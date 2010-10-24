@@ -49,13 +49,13 @@ import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.FileInputState;
-import ambit2.core.smiles.DeduceBondSystemTool;
 import ambit2.core.test.io.RawIteratingWrapperTest;
 
 public class SmilesTest {
@@ -212,7 +212,8 @@ public class SmilesTest {
                 //AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 //fails with Cannot percieve atom type for the 17th atom: N
                 DeduceBondSystemTool d = new DeduceBondSystemTool();
-                d.setTimeout(60*60*1000); //3 min
+                
+                //d.setTimeout(60*60*1000); //3 min
                 d.fixAromaticBondOrders(mol);
                 for (IBond bond: mol.bonds())
                         System.out.println(bond.getOrder());
@@ -250,7 +251,7 @@ public class SmilesTest {
 				ImageIO.write(image,"png",file);				
 				*/
 				DeduceBondSystemTool d = new DeduceBondSystemTool();
-				d.setTimeout(100000000*1000); //100 sec
+				//d.setTimeout(100000000*1000); //100 sec
 				d.fixAromaticBondOrders(mol);
 				for (IBond bond: mol.bonds())
 					System.out.println(bond.getOrder());

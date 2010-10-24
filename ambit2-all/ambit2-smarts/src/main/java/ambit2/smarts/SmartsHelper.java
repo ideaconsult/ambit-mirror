@@ -98,7 +98,11 @@ public class SmartsHelper
 			int explHAt = 0;
 			if (explHInt != null)
 				explHAt = explHInt.intValue();
+        	/*
+        	https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
 			sb.append(" NumH=" + (at.getHydrogenCount() + explHAt));
+			*/			
+			sb.append(" NumH=" + (at.getImplicitHydrogenCount() + explHAt));
 			if (at.getFlag(CDKConstants.ISAROMATIC)) 
 				sb.append(" aromatic");
 			sb.append("\n");
