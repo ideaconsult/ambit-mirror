@@ -114,20 +114,18 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     
     private Renderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
        List<IGenerator> generators = new ArrayList<IGenerator>();
-       
        generators.add(new BasicBondGenerator());
        if (rings)  generators.add(new RingGenerator());
-
        generators.add(new MyBasicAtomGenerator());
        generators.add(new MySelectAtomGenerator());
        generators.add(new BasicAtomGenerator());
-       
        if (atomNumbers)
            generators.add(new AtomNumberGenerator());
        
        generators.add(new SelectBondGenerator());
 
        generators.add(new AtomAnnotationGenerator());
+       
        
 	   Renderer renderer = new Renderer(generators, new AWTFontManager(),false) ;
 	   RendererModel r2dm = renderer.getRenderer2DModel();	
@@ -136,16 +134,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		r2dm.setDrawNumbers(atomNumbers);
 		r2dm.setUseAntiAliasing(true);
 		r2dm.setBackColor(new Color(background.getRed(),background.getGreen(),background.getBlue(),0));
-		//r2dm.setBackgroundDimension(cellSize);
-		/*
-		r2dm.setBackColor(background);
-		r2dm.setForeColor(Color.BLACK);
-		
-		r2dm.setUseAntiAliasing(true);
-		r2dm.setColorAtomsByType(true);
-		r2dm.setShowImplicitHydrogens(false);
-		
-		*/
+
 		r2dm.setShowImplicitHydrogens(false);
 		r2dm.setShowAromaticity(true);  
 		return renderer;
@@ -213,7 +202,6 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(background);
 		g.fillRect(0, 0, imageSize.width, imageSize.height);
-		//g.setColor(Color.black);
 		
 		IMoleculeSet molecules = new MoleculeSet();
         generate2D(molecule, build2d, molecules);
@@ -324,26 +312,8 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	{
     	renderer = renderer==null?createRenderer(imageSize,Color.white,false,atomNumbers):renderer;
     	RendererModel r2dm = renderer.getRenderer2DModel();
-		/*
-		Renderer2DModel r2dm = renderer.getRenderer2DModel();
-		
-        r2dm.setDrawNumbers(false);
-        r2dm.setUseAntiAliasing(true);
-        r2dm.setShowImplicitHydrogens(true);
-        r2dm.setShowAromaticity(true);
-        r2dm.setColorAtomsByType(true);
-        r2dm.setSelectedPartColor(Color.orange);
-        */
-    	//r2dm.setShowAromaticity(true);
-    	//r2dm.setShowAromaticityCDKStyle(true);
-    	//r2dm.setShowMoleculeTitle(true);
-    	//r2dm.setShowEndCarbons(true);
-    	//r2dm.setShowAtomTypeNames(true);
-		if ((molecules != null) && (molecules.getAtomContainerCount()>0)) {
-//			g.setBackground(r2dm.getBackColor());
 
-			
-			
+		if ((molecules != null) && (molecules.getAtomContainerCount()>0)) {
 			int columns = (int)Math.ceil(Math.sqrt(molecules.getAtomContainerCount()));
 			int rows = (int)Math.ceil((double)molecules.getAtomContainerCount() / (double)columns);
 			
@@ -356,7 +326,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			for (int i=0;i<molecules.getAtomContainerCount();i++) {
 				
 				Rectangle2D r = new Rectangle((int)Math.round(col*w),(int)Math.round((rows-row-1)*h),w,h);
-				Dimension d = new Dimension(w,h);
+				//Dimension d = new Dimension(w,h);
 				center.set(r.getCenterX(),r.getCenterY());
 				IAtomContainer mol = molecules.getAtomContainer(i);
 				
@@ -378,8 +348,6 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	            		IMolecule mol2process = (IMolecule)mol.clone();
 	            		IChemObjectSelection selected = selector.process(mol2process);
 	    				if(selected!=null) {
-	    					//if (highlighted==null) highlighted = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
-	    					//highlighted.add(selected);
 	    					highlighted = selected;
 	    					
 	    				}
@@ -388,7 +356,6 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	            	}
     	    	if (highlighted != null) {
     	    		r2dm.setSelectedPartColor(new Color(0,183,239,128));
-    	    		//r2dm.setSelectionRadius(10);
     	    		r2dm.setSelectionShape(AtomShape.OVAL);
     	    		r2dm.setSelection(highlighted);
     	    		r2dm.setColorAtomsByType(true);
@@ -398,7 +365,6 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     	    	try {
     	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
     	    	} catch (Exception x) {
-    	    		//x.printStackTrace();
     	    		r2dm.setSelection(null);
     	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
     	    	}
@@ -411,12 +377,6 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			g.clearRect(0,0,imageSize.width,imageSize.height);
 		}
 	}
-	protected void printCoordinates(RendererModel model) {
-		
-		//System.out.println(model.getRenderingCoordinates().values());
-	}
-
-
                         
     public synchronized BufferedImage getImage(ArrayList<?> list) {
         if (buffer == null)
@@ -449,7 +409,6 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     public synchronized void setImageSize(Dimension imageSize) {
         this.imageSize = imageSize;
         buffer = null;
-       // r2dm.setBackgroundDimension(imageSize);
     }
 	public Image getDefaultImage() {
 		return defaultImage;
@@ -457,7 +416,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	public void setDefaultImage(BufferedImage defaultImage) {
 		this.defaultImage = defaultImage;
 	}
-	
+	//this should be doen via selectors ...
 	public BufferedImage getImage(IAtomContainer mol,
 			String smarts, int width, int height, boolean atomnumbers)
 			throws AmbitException {
@@ -478,7 +437,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 }
 
 /**
- * Can't find how to highlight atoms with filled -in ovals
+ * Couldn't find how to highlight atoms with filled -in ovals, so this is my workaround
  * @author nina
  *
  */
@@ -509,6 +468,18 @@ class MyBasicAtomGenerator extends BasicAtomGenerator {
 		return super.getParameters();
 	}
 }
+
+/**
+ * Atom selection size and colors are taken from properties, which might be set by different calculation procedures.
+ * Currently used to visualize SOM (SmartCYP and SOME) 
+ * Web services use
+ * http://host/compound/{id}?model_uri=http://host/model/{id}
+ * http://apps.ideaconsult.net:8080/ambit2/compound/100?model_uri=http://apps.ideaconsult.net:8080/ambit2/model/48&w=400&h=400
+ * where colors are defined by the model itself, e.g. http://apps.ideaconsult.net:8080/ambit2/model/48?media=image/png 
+ * 
+ * @author nina
+ *
+ */
 class MySelectAtomGenerator implements IGenerator  {
 	 private boolean autoUpdateSelection = true;
 
@@ -572,7 +543,6 @@ class MySelectAtomGenerator implements IGenerator  {
 	    }
 
 	    public List<IGeneratorParameter> getParameters() {
-	        // TODO Auto-generated method stub
 	        return null;
 	    }
 	    
