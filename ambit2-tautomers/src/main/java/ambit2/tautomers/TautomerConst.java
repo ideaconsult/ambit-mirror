@@ -4,6 +4,7 @@ public class TautomerConst
 {
 	
 	public static final String KeyWordPrefix = "$$";
+	public static final String KeyWordSeparator = "=";
 	
 	//Rule Types
 	public static final int RT_MobileGroup = 0;
@@ -11,6 +12,7 @@ public class TautomerConst
 	//H-Atom Rule Modes
 	public static final int HRM_Implicit = 0;
 	public static final int HRM_Explicit = 1;
+	public static final int HRM_Undefined = 2;
 	
 	
 }

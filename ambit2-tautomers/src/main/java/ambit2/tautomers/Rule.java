@@ -10,14 +10,12 @@ public class Rule
 	int HAtomMode = TautomerConst.HRM_Implicit;
 	String name;	
 	int type = TautomerConst.RT_MobileGroup;
-	String mobileGroup;
+	String mobileGroup = null;
 	int nStates = 2;
-	String smartsStates[];
-	int mobileGroupPos[];
+	String smartsStates[] = null;
+	int mobileGroupPos[] = null;
 	String RuleInfo = "";
-	QueryAtomContainer statePaterns[];
-	
-	
+	QueryAtomContainer statePaterns[] = null;
 	
 	
 	public Vector<RuleInstance>  applyRule(IAtomContainer mol)
