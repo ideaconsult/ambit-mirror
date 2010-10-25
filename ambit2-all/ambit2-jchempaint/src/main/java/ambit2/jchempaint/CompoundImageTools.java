@@ -24,6 +24,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -59,6 +60,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.IStructureDiagramHighlights;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.ICompoundImageTools;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 
@@ -70,6 +72,7 @@ import ambit2.core.processors.structure.StructureTypeProcessor;
  * <b>Modified</b> 2006-3-5
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
+
 	public final static String SELECTED_ATOM_COLOR = "ambit2.color";
 	public final static String SELECTED_ATOM_SIZE = "ambit2.size";
 	public final static String ATOM_ANNOTATION = "ambit2.tooltip";
@@ -206,6 +209,8 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		IMoleculeSet molecules = new MoleculeSet();
         generate2D(molecule, build2d, molecules);
         paint(renderer,molecules, false, g, selector,imageSize,atomNumbers);
+        
+        
         if (borderColor != background)
         	paintBorderShadow(g,getBorderWidth(),new Rectangle(imageSize));
         g.dispose();
@@ -302,6 +307,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	 * @param highlighted
 	 * @param imageSize
 	 */
+	
 	public synchronized void paint(Renderer renderer, 
     		IMoleculeSet molecules,
 			boolean explicitH,  
@@ -314,70 +320,72 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     	RendererModel r2dm = renderer.getRenderer2DModel();
 
 		if ((molecules != null) && (molecules.getAtomContainerCount()>0)) {
-			int columns = (int)Math.ceil(Math.sqrt(molecules.getAtomContainerCount()));
-			int rows = (int)Math.ceil((double)molecules.getAtomContainerCount() / (double)columns);
 			
-			int w = (int)Math.ceil((double)imageSize.width/(double)columns);
-			int h = (int)Math.ceil((double)imageSize.height/(double)rows);
-			int row = 0;
-			int col = 0;
-			Point2d center = new Point2d();
+			IMolecule all;
+			int c = 0;
+			if (molecules.getAtomContainerCount()>1) {
 			
-			for (int i=0;i<molecules.getAtomContainerCount();i++) {
+				Rectangle2D b = new Rectangle2D.Double(0,0,0,0);
 				
-				Rectangle2D r = new Rectangle((int)Math.round(col*w),(int)Math.round((rows-row-1)*h),w,h);
-				//Dimension d = new Dimension(w,h);
-				center.set(r.getCenterX(),r.getCenterY());
-				IAtomContainer mol = molecules.getAtomContainer(i);
+				all = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
 				
-				Rectangle drawArea = new Rectangle(w,h);
-				try {
-					renderer.setup(mol, drawArea);
-				} catch (Exception x) {}
-				renderer.getRenderer2DModel().setZoomFactor(0.8);
+				for (IAtomContainer  m : molecules.molecules()) {
+					c++;
+					Rectangle2D r = GeometryTools.getRectangle2D(m);
+					GeometryTools.translate2D(m, - r.getX() + b.getX() + b.getWidth(), -r.getY() + b.getY());
+					b.setRect(
+							b.getX(),
+							b.getY(),
+							1 + b.getWidth() + (r.getWidth()==0?1.5:r.getWidth()),
+							r.getHeight()> b.getHeight()?r.getHeight():b.getHeight()
+									);
+					
+					//System.out.println(String.format("%d R %s\nAll %s\n",c,r,b));
+					all.add(m);
+				}
+				b.setRect(b.getX(),b.getY(),b.getWidth()+4.0,b.getHeight());
+				
+			} else all = molecules.getMolecule(0);
+			
+			
+			Rectangle drawArea = new Rectangle(imageSize.width,imageSize.height);
+			renderer.setup(all,drawArea);
+			//renderer.getRenderer2DModel().setZoomFactor(0.8);
+			
+			IChemObjectSelection highlighted = null;
+            if (selector!= null)
+            	try {
+            		IMolecule mol2process = (IMolecule)all.clone();
+            		IChemObjectSelection selected = selector.process(mol2process);
+    				if(selected!=null) {
+    					highlighted = selected;
+    					
+    				}
+            	} catch (Exception e) {
+            		e.printStackTrace();
+            	}
+            	
+	    	if (highlighted != null) {
+	    		r2dm.setSelectedPartColor(new Color(0,183,239,128));
+	    		r2dm.setSelectionShape(AtomShape.OVAL);
+	    		r2dm.setSelection(highlighted);
+	    		r2dm.setColorAtomsByType(true);
+	    		r2dm.setShowAtomTypeNames(true);
 
-				   /*
-	            GeometryTools.translateAllPositive(mol,r2dm.getRenderingCoordinates());
-	            GeometryTools.scaleMolecule(mol, d, 0.8,r2dm.getRenderingCoordinates());
-	            GeometryTools.center(mol, d,r2dm.getRenderingCoordinates());
-	            GeometryTools.translate2DCenterTo(mol,center,r2dm.getRenderingCoordinates());
-	            */
-	            IChemObjectSelection highlighted = null;
-	            if (selector!= null)
-	            	try {
-	            		IMolecule mol2process = (IMolecule)mol.clone();
-	            		IChemObjectSelection selected = selector.process(mol2process);
-	    				if(selected!=null) {
-	    					highlighted = selected;
-	    					
-	    				}
-	            	} catch (Exception x) {
-	            		x.printStackTrace();
-	            	}
-    	    	if (highlighted != null) {
-    	    		r2dm.setSelectedPartColor(new Color(0,183,239,128));
-    	    		r2dm.setSelectionShape(AtomShape.OVAL);
-    	    		r2dm.setSelection(highlighted);
-    	    		r2dm.setColorAtomsByType(true);
-    	    		r2dm.setShowAtomTypeNames(true);
+	    	} 	  
+	    	try {
+	    		renderer.paintMolecule(all,new AWTDrawVisitor(g),drawArea,false);
 
-    	    	} 	  
-    	    	try {
-    	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
-    	    	} catch (Exception x) {
-    	    		r2dm.setSelection(null);
-    	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
-    	    	}
-				col++;
-				if (col >= columns) { col = 0; row++; }
-			}	
-
+	    	} catch (Exception e) {
+	    		r2dm.setSelection(null);
+	    		renderer.paintMolecule(all,new AWTDrawVisitor(g),drawArea,false);
+	    	}
 		} else {
 			g.setBackground(Color.white);
 			g.clearRect(0,0,imageSize.width,imageSize.height);
 		}
 	}
-                        
+           
     public synchronized BufferedImage getImage(ArrayList<?> list) {
         if (buffer == null)
             buffer = new BufferedImage(imageSize.width, imageSize.height,
