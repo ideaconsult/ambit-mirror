@@ -29,8 +29,9 @@
 
 package ambit2.similarity.measure.test;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
+import org.junit.Test;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -45,37 +46,14 @@ import ambit2.similarity.measure.AtomEnvironmentsDistance;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Mar 13, 2007
  */
-public class AtomEnvironmentHammingDistanceTest extends TestCase {
-
-    /**
-     * @param arg0
-     */
-    public AtomEnvironmentHammingDistanceTest(String arg0) {
-        super(arg0);
-    }
-
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#tearDown()
-     */
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
+public class AtomEnvironmentHammingDistanceTest {
 
     /**
      * Test method for {@link ambit2.similarity.AtomEnvironmentHammingDistance#getDistance(ambit2.data.descriptors.AtomEnvironmentList, ambit2.data.descriptors.AtomEnvironmentList)}.
      */
-    public void testGetDistance() {
+	@Test
+    public void testGetDistance() throws Exception {
         
-       
-        try {
-
             IMolecule mol = MoleculeFactory.makeAlkane(3);
             IMolecule mol1 = MoleculeFactory.makeAlkane(3);
             
@@ -96,20 +74,16 @@ public class AtomEnvironmentHammingDistanceTest extends TestCase {
             AtomEnvironmentList ae2 = (AtomEnvironmentList) mol2.getProperty(AmbitCONSTANTS.AtomEnvironment);
             
             AtomEnvironmentsDistance hd = new AtomEnvironmentsDistance();
-            assertEquals(1.0,hd.getDistance(ae,ae1),1E-10);
-            assertEquals(hd.getDistance(ae1,ae),hd.getDistance(ae,ae1),1E-10);
+            Assert.assertEquals(1.0,hd.getDistance(ae,ae1),1E-10);
+            Assert.assertEquals(hd.getDistance(ae1,ae),hd.getDistance(ae,ae1),1E-10);
             
-            //System.out.println(ae);
-            //System.out.println(ae2);
+            System.out.println(ae);
+            System.out.println(ae2);
             float d = hd.getDistance(ae,ae2);
             //System.out.println(d);
-            assertTrue(d<1.0);
+            Assert.assertTrue(d<1.0);
             
-            assertEquals(hd.getDistance(ae2,ae),hd.getDistance(ae1,ae2),1E-10);
-        } catch (Exception x) {
-            x.printStackTrace();
-            fail();
-        }
+            Assert.assertEquals(hd.getDistance(ae2,ae),hd.getDistance(ae1,ae2),1E-10);
         
      
     }
@@ -117,8 +91,8 @@ public class AtomEnvironmentHammingDistanceTest extends TestCase {
     /**
      * Test method for {@link ambit2.similarity.AtomEnvironmentHammingDistance#getHammingDistance(int[], int[])}.
      */
-    public void testGetHammingDistance() {
-        fail("Not yet implemented");
+    public void testGetHammingDistance() throws Exception {
+       Assert.fail("Not yet implemented");
     }
 
 }

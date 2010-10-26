@@ -9,7 +9,6 @@ package ambit2.descriptors;
 import java.io.InputStream;
 import java.util.TreeMap;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.IAtomTypeMatcher;
 import org.openscience.cdk.atomtype.SybylAtomTypeMatcher;
 import org.openscience.cdk.config.AtomTypeFactory;
@@ -117,7 +116,7 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
 	 *params[1]  MaxLevel, optional , default 3
 	 *params[2]  perceiveCyclicAtoms, optional , default false
 	 *params[3]  useExistingConnectionMatrix, optional , default false
-	 *params[4]  AtomTypeFactory factory, optional, default AtomTypeFactory.getInstance("org/openscience/cdk/config/data/hybridization_atomtypes.xml")
+	 *params[4]  AtomTypeFactory factory, optional, default AtomTypeFactory.getInstance("org/openscience/cdk/dict/data/sybyl-atom-types.owl")
 	 *params[5]  AtomTypeMatcher atm, optional , default HybridizationStateATMatcher
 	 */
     public void setParameters(Object[] params) throws CDKException {
@@ -368,19 +367,22 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
         //else leave the same matrix
     }
     protected InputStream getAtomTypeFactoryStream() {
-    	//return this.getClass().getClassLoader().getResourceAsStream("ambit/data/descriptors/test_atomtypes.xml");
-    	return this.getClass().getClassLoader().getResourceAsStream("ambit/data/descriptors/hybridization_atomtypes.xml");
+    	//return this.getClass().getClassLoader().getResourceAsStream("ambit2/descriptors/hybridization_atomtypes.xml");
+        return this.getClass().getClassLoader().getResourceAsStream("org/openscience/cdk/dict/data/sybyl-atom-types.owl");
+
     }
     private void initAtomTypes(AtomTypeFactory factory,IAtomTypeMatcher atm) throws CDKException {
         //the idea is not to create objects if they already exist...
         if ((atm == null) || (factory == null)) {
             if ( (this.atm == null) || (!(this.atm instanceof SybylAtomTypeMatcher))) {
                 this.atm = SybylAtomTypeMatcher.getInstance(NoNotificationChemObjectBuilder.getInstance());
+                
                 try {
                     //InputStream ins = this.getClass().getClassLoader().getResourceAsStream("ambit/data/descriptors/hybridization_atomtypes.xml");
                 	InputStream ins = getAtomTypeFactoryStream();
                     this.factory = 
-                        AtomTypeFactory.getInstance(ins,"xml",DefaultChemObjectBuilder.getInstance());
+                        AtomTypeFactory.getInstance(ins,"owl",NoNotificationChemObjectBuilder.getInstance());
+
                 } catch (Exception x) {
                     throw new CDKException(x.getMessage());
                 }

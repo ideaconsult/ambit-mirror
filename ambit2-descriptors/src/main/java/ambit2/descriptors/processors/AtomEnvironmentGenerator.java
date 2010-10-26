@@ -23,7 +23,11 @@ import ambit2.descriptors.AtomEnvironmentDescriptor;
  * <b>Modified</b> Aug 30, 2006
  */
 public class AtomEnvironmentGenerator extends DefaultAmbitProcessor<IAtomContainer,IAtomContainer>  {
-    protected CDKHydrogenAdder hAdder = null;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7279981279903286909L;
+	protected CDKHydrogenAdder hAdder = null;
 	protected AtomEnvironmentDescriptor aeDescriptor = null;
 	protected Object[] aeParams = null;
     protected boolean useHydrogens = false;
