@@ -325,14 +325,34 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			int c = 0;
 			if (molecules.getAtomContainerCount()>1) {
 			
-				Rectangle2D b = new Rectangle2D.Double(0,0,0,0);
+				Rectangle2D box = new Rectangle2D.Double(0,0,0,0);
 				
 				all = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
 				
+				//calculate box dimension, so that we can center vertically
 				for (IAtomContainer  m : molecules.molecules()) {
 					c++;
 					Rectangle2D r = GeometryTools.getRectangle2D(m);
-					GeometryTools.translate2D(m, - r.getX() + b.getX() + b.getWidth(), -r.getY() + b.getY());
+					
+					box.setRect(
+							box.getX(),
+							box.getY(),
+							1 + box.getWidth() + (r.getWidth()==0?1.5:r.getWidth()),
+							r.getHeight()> box.getHeight()?r.getHeight():box.getHeight()
+									);
+
+				}				
+				double hoffset = box.getHeight()/2.0;
+				Rectangle2D b = new Rectangle2D.Double(0,0,0,0);
+				for (IAtomContainer  m : molecules.molecules()) {
+					c++;
+					Rectangle2D r = GeometryTools.getRectangle2D(m);
+					
+					GeometryTools.translate2D(
+							m, 
+							- r.getX() + b.getX() + b.getWidth(),
+							-r.getY() + b.getY() + hoffset - (r.getHeight()/2.0) 
+							);
 					b.setRect(
 							b.getX(),
 							b.getY(),
@@ -343,7 +363,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 					//System.out.println(String.format("%d R %s\nAll %s\n",c,r,b));
 					all.add(m);
 				}
-				b.setRect(b.getX(),b.getY(),b.getWidth()+4.0,b.getHeight());
+				b.setRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
 				
 			} else all = molecules.getMolecule(0);
 			
