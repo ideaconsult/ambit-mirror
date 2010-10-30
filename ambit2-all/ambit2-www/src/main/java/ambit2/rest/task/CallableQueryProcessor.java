@@ -32,7 +32,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 
 	public CallableQueryProcessor(Form form,Context context) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
-		this.sourceReference = dataset==null?null:new Reference(dataset.toString());
+		this.sourceReference = dataset==null?null:new Reference(dataset.toString().trim());
 		this.context = context;
 	}
 	
