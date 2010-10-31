@@ -18,17 +18,19 @@ import ambit2.core.data.model.Algorithm;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.AbstractUpdateProcessor;
-import ambit2.db.processors.BitSetGenerator;
 import ambit2.db.processors.FP1024Writer;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.AbstractRepositoryWriter.OP;
-import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.processors.quality.FPStructureWriter;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
+import ambit2.db.update.fpae.AtomEnvironmentWriter;
 import ambit2.db.update.qlabel.CreateQLabelPair;
 import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
+import ambit2.descriptors.processors.AtomEnvironmentGenerator;
+import ambit2.descriptors.processors.BitSetGenerator;
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 
@@ -93,6 +95,11 @@ public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Objec
 			p.add(new SMARTSAcceleratorWriter());
 			break;
 		}
+		case atomenvironments: {
+			p.add(new AtomEnvironmentGenerator());
+			p.add(new AtomEnvironmentWriter());
+			break;
+		}
 		}
 		
 		return p;
@@ -145,6 +152,9 @@ public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Objec
 		case smarts_accelerator: {
 			return null;
 		}		
+		case atomenvironments: {
+			return null;
+		}			
 		default: {
 			throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,getFingerprintsType().toString());
 		}

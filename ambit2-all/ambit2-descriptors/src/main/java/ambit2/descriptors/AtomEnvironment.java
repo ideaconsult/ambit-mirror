@@ -1,14 +1,19 @@
 package ambit2.descriptors;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
- * An atom environment. Used by  {@link ambit2.processors.structure.AtomEnvironmentGenerator} 
+ * An atom environment. Used by  {@link ambit2.AtomEnvironmentGeneratorTest.structure.AtomEnvironmentGenerator} 
  * and {@link ambit2.database.writers.AtomEnvironmentWriter}.
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
  */
 public class AtomEnvironment implements Comparable<AtomEnvironment> , Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 596283081660825735L;
 	protected int levels;
 	protected int atomno;
 	protected String central_atom;
@@ -69,13 +74,41 @@ public class AtomEnvironment implements Comparable<AtomEnvironment> , Serializab
 			//control sum on the fly
 			subArray[0] += subArray[i];
 		}
-		
-		
 		AtomEnvironment ae = new AtomEnvironment(atomno,central_atom,subArray,levels,time_elapsed,status);
 		return ae;
 	}
 	
+	public int[] getLevel(int level) {
+		
+		int offset = 2;
+		if (level == 0) 
+			return Arrays.copyOfRange(atom_environment,0,offset);
+		else {
+			int L = (atom_environment.length-offset)/level;
+			return Arrays.copyOfRange(atom_environment,offset+(level-1)*L,offset+level*L);
+		}
+	}
 	
+	public String getLevel2String(int level) {
+		StringBuilder b = new StringBuilder();
+		int offset = 2;
+		if (level == 0) 
+			return getCentral_atom();
+		else {
+			int L = (atom_environment.length-offset)/levels;
+			int start = offset+(level-1)*L;
+			int stop = offset+(level)*L;
+			if (atom_environment.length<start) return null;
+			for (int i = start; i < stop ;i++) {
+				if (i<atom_environment.length)
+				b.append(
+						atom_environment[i]
+						); 
+				b.append(',');
+			}
+			return b.toString();
+		}
+	}	
 	public int[] getAtom_environment() {
 		return atom_environment;
 	}

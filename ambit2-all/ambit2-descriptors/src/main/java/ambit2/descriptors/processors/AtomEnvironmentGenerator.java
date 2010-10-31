@@ -7,12 +7,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.base.processors.IAmbitResult;
 import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.processors.structure.AbstractPropertyGenerator;
 import ambit2.descriptors.AtomEnvironment;
 import ambit2.descriptors.AtomEnvironmentDescriptor;
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 
 /**
  * A processor to generate atom environments. Uses {@link ambit2.data.descriptors.AtomEnvironmentDescriptor} for actual generation.
@@ -22,7 +23,7 @@ import ambit2.descriptors.AtomEnvironmentDescriptor;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 30, 2006
  */
-public class AtomEnvironmentGenerator extends DefaultAmbitProcessor<IAtomContainer,IAtomContainer>  {
+public class AtomEnvironmentGenerator extends AbstractPropertyGenerator<AtomEnvironmentList>   {
     /**
 	 * 
 	 */
@@ -34,6 +35,8 @@ public class AtomEnvironmentGenerator extends DefaultAmbitProcessor<IAtomContain
     protected Integer maxLevels = new Integer(3);
     protected boolean createSubLevels = false;
     protected boolean noDuplicates = true;
+    protected FPTable fpmode = FPTable.atomenvironments;
+    
 	public AtomEnvironmentGenerator() {
 		super();
 		aeDescriptor = createAtomEnvironmentDescriptor();
@@ -42,28 +45,26 @@ public class AtomEnvironmentGenerator extends DefaultAmbitProcessor<IAtomContain
 	protected AtomEnvironmentDescriptor createAtomEnvironmentDescriptor() {
 		return new AtomEnvironmentDescriptor();
 	}
-	public IAtomContainer process(IAtomContainer object) throws AmbitException {
+	@Override
+	public AtomEnvironmentList generateProperty(IAtomContainer atomContainer)
+			throws AmbitException {
 
 			try {
 				
 				int[] aeResult = null;
-				IAtomContainer mol = (IAtomContainer) ((IAtomContainer) object).clone();
-                //IAtomContainer mol;
-
+				IAtomContainer mol = (IAtomContainer) ((IAtomContainer) atomContainer).clone();
                 
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);				
                 //if (useHydrogens) { //always, otherwise atom types are not recognised correctly
                 	//for some reason H atoms are added as bond references, but not in atom list - bug?
-    			    if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
-    		        hAdder.addImplicitHydrogens(mol);
-    				CDKHueckelAromaticityDetector.detectAromaticity(mol);                    
+				try {
+	    			if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
+	    		    hAdder.addImplicitHydrogens(mol);
+				} catch (Exception x) {
+					
+				}
+    			CDKHueckelAromaticityDetector.detectAromaticity(mol);                    
                 //}    
-    		        /*
-                } else {
-                    MFAnalyser mfa =  new MFAnalyser(((IMolecule) object));
-                    mol = mfa.removeHydrogensPreserveMultiplyBonded();
-                }
-                */
                 
                 AtomEnvironmentList aeList = new AtomEnvironmentList();
                 aeList.setNoDuplicates(noDuplicates);
@@ -116,39 +117,13 @@ public class AtomEnvironmentGenerator extends DefaultAmbitProcessor<IAtomContain
 					    
 					}	
 	
-				//System.out.println(aeList);
-				((IAtomContainer) object).setProperty(AmbitCONSTANTS.AtomEnvironment,aeList);
+				return aeList;
 			} catch (Exception x) {
-				((IAtomContainer) object).getProperties().remove(AmbitCONSTANTS.AtomEnvironment);
-				throw new AmbitException("Error generating atom environment\t",x);
+				x.printStackTrace();
 			}
-		return object;
-	}
-
-	public IAmbitResult createResult() {
 		return null;
 	}
 
-	public IAmbitResult getResult() {
-		return null;
-	}
-
-	public void setResult(IAmbitResult result) {
-
-	}
-	/* (non-Javadoc)
-     * @see ambit2.processors.IAmbitProcessor#close()
-     */
-    public void close() {
-
-    }
-    /*
-    public IAmbitEditor getEditor() {
-
-    	return new DefaultProcessorEditor(this);
-    }
-    */
-    
     /* (non-Javadoc)
      * @see ambit2.processors.DefaultAmbitProcessor#toString()
      */
@@ -183,4 +158,13 @@ public class AtomEnvironmentGenerator extends DefaultAmbitProcessor<IAtomContain
 	public void setCreateSubLevels(boolean createSubLevels) {
 		this.createSubLevels = createSubLevels;
 	}
+
+    @Override
+    public Property getProperty() {
+    	return Property.getInstance(fpmode.getProperty(),fpmode.getProperty());
+    }
+    @Override
+    protected Property getTimeProperty() {
+    	return null;
+    }	
 }

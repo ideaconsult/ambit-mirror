@@ -35,7 +35,6 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.descriptors.processors.AtomEnvironmentGenerator;
 import ambit2.descriptors.processors.AtomEnvironmentList;
@@ -65,13 +64,9 @@ public class AtomEnvironmentHammingDistanceTest {
             g.setUseHydrogens(true);
             g.setMaxLevels(3);
             
-            g.process(mol);
-            g.process(mol1);
-            g.process(mol2);
-            
-            AtomEnvironmentList ae = (AtomEnvironmentList) mol.getProperty(AmbitCONSTANTS.AtomEnvironment);
-            AtomEnvironmentList ae1 = (AtomEnvironmentList) mol1.getProperty(AmbitCONSTANTS.AtomEnvironment);
-            AtomEnvironmentList ae2 = (AtomEnvironmentList) mol2.getProperty(AmbitCONSTANTS.AtomEnvironment);
+            AtomEnvironmentList ae =  g.generateProperty(mol);
+            AtomEnvironmentList ae1 = g.generateProperty(mol1);
+            AtomEnvironmentList ae2 = g.generateProperty(mol2);
             
             AtomEnvironmentsDistance hd = new AtomEnvironmentsDistance();
             Assert.assertEquals(1.0,hd.getDistance(ae,ae1),1E-10);

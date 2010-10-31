@@ -299,6 +299,27 @@ public class AlgorithmResourceTest extends ResourceTest {
 	}	
 	
 	@Test
+	public void testAtomEnvironments() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+        Connection connection = c.getConnection();
+        Statement t = connection.createStatement();
+        t.executeUpdate("delete from fpaechemicals");
+        t.close();
+		Form headers = new Form();  
+		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/atomenvironments", port),
+				headers, Status.SUCCESS_OK,
+				"");		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		
+        c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from fpaechemicals group by idchemical");
+		Assert.assertEquals(4,table.getRowCount());
+		c.close();			
+	}			
+	@Test
 	public void testCalculateSOME() throws Exception {
 		Form headers = new Form();  
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
@@ -346,9 +367,9 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testClassifier() throws Exception {
 			Form headers = new Form();  
 			headers.add(OpenTox.params.dataset_uri.toString(), 
-					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948&max=10");
+					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/12?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21692&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21691&max=100&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21686");
 			headers.add(OpenTox.params.target.toString(),
-					"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11948");
+					"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21686");
 			testAsyncTask(
 					String.format("http://localhost:%d/algorithm/J48", port),
 							//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
@@ -362,12 +383,12 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testLocalRegressionRemoteDataset() throws Exception {
 		
 		Form headers = new Form();  
-		Reference dataset = new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798");
+		Reference dataset = new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/12?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21692&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21691&max=100");
 
 		
 		headers.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
 
-		headers.add(OpenTox.params.target.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/255510");
+		headers.add(OpenTox.params.target.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21692");
 		
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/LR", port),
@@ -381,7 +402,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/model/3", port),
 						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
 				headers, Status.SUCCESS_OK,
-				"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
+				"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/12?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
@@ -510,7 +531,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testClustering() throws Exception {
 		Form headers = new Form();  
 		headers.add(OpenTox.params.dataset_uri.toString(), 
-				"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/6?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11937&max=100");
+				"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/12?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21692&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21691&max=100");
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/SimpleKMeans", port),
 						//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
