@@ -67,7 +67,9 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 				List<QueryParam> params = target.getParameters(i);
 				statement = getCachedStatement(sql[i]);
 				if (statement == null) {
-					if (target.returnKeys(i))
+					if (target.isStoredProcedure()) 
+						statement = c.prepareCall(sql[i]);
+					else if (target.returnKeys(i))
 						statement = c.prepareStatement(sql[i],Statement.RETURN_GENERATED_KEYS);
 					else {
 						statement = c.prepareStatement(sql[i]);
@@ -77,6 +79,7 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 				}
 				setParameters(statement, params);
 					logger.debug(statement);
+					System.out.println(statement);
 					count += statement.executeUpdate();
 					if (target.returnKeys(i)) {
 						//TODO if on duplicate is used two generated keys are returned!  http://bugs.mysql.com/bug.php?id=42309

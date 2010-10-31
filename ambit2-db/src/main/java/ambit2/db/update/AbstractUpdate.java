@@ -54,5 +54,8 @@ public abstract class AbstractUpdate<Group,Target>  implements IQueryUpdate<Grou
 	public boolean returnKeys(int index) {
 		return false;
 	}
-
+	@Override
+	public boolean isStoredProcedure() {
+		return false;
+	}
 }
