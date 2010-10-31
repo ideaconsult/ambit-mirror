@@ -14,7 +14,7 @@ import Jama.Matrix;
 public class DataCoverageLeverageTest {
 	@Test
 	public void testRoundTrip() throws Exception {
-		DataCoverageLeverage predictor = new DataCoverageLeverage();
+		DataCoverageLeverageHatMatrix predictor = new DataCoverageLeverageHatMatrix();
 		Matrix matrix = Matrix.random(2300,1);
 		predictor.build(matrix);
 		
@@ -28,12 +28,12 @@ public class DataCoverageLeverageTest {
 		
 		byte[] content = out.toByteArray();
 		
-		System.out.println(String.format(" %d bytes", content.length));
+		//System.out.println(String.format(" %d bytes", content.length));
 		InputStream in = new ByteArrayInputStream(content);
 		ObjectInputStream ois =  new ObjectInputStream(in);
 	 	Object o = ois.readObject();
-	 	Assert.assertTrue(o instanceof DataCoverageLeverage);
-	 	DataCoverageLeverage l = (DataCoverageLeverage) o;
+	 	Assert.assertTrue(o instanceof DataCoverageLeverageHatMatrix);
+	 	DataCoverageLeverageHatMatrix l = (DataCoverageLeverageHatMatrix) o;
 	 	Assert.assertEquals(predictor.getAppDomainMethodType(),l.getAppDomainMethodType());
 	 	Assert.assertEquals(predictor.getPThreshold(),l.getPThreshold());
 	 	Assert.assertEquals(predictor.threshold,l.threshold);
