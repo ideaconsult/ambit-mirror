@@ -9,7 +9,7 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
 public class CreateBookmark extends AbstractObjectUpdate<Bookmark>{
-	protected int sql_size = 0;
+	protected int sql_size = 1;
 	public static final String create_sql = 
 		"INSERT INTO bookmark (idbookmark,creator,recalls,hasTopic,title,description,created,date) values (?,?,?,?,?,?,NOW(),NOW()) " +
 		"ON DUPLICATE KEY UPDATE recalls=values(recalls),hasTopic=values(hasTopic),title=values(title),description=values(description),date=now()"
