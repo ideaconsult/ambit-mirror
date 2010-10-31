@@ -133,9 +133,8 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
             
             // now try to parse the next Molecule
             try {
-                if (input.ready()) {
+                if ((currentLine = input.readLine()) != null) {
                 	currentFormat = (IChemFormat)MDLV2000Format.getInstance();
-                    currentLine = input.readLine();
                     StringBuffer buffer = new StringBuffer();
                     while (currentLine != null && !currentLine.equals("M  END")) {
                         // still in a molecule
