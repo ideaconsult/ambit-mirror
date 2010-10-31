@@ -5,12 +5,12 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.DbReader;
-import ambit2.db.processors.BitSetGenerator;
 import ambit2.db.processors.FP1024Writer;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
+import ambit2.descriptors.processors.BitSetGenerator;
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 import ambit2.workflow.ActivityPrimitive;
 import ambit2.workflow.DBWorkflowContext;
 

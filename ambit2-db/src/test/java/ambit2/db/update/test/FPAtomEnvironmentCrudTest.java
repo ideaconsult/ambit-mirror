@@ -4,21 +4,14 @@ import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.config.AmbitCONSTANTS;
-import ambit2.core.processors.structure.AtomConfigurator;
-import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.fpae.CreateAtomEnvironment;
 import ambit2.db.update.fpae.DeleteAtomEnvironment;
 import ambit2.descriptors.processors.AtomEnvironmentGenerator;
-import ambit2.descriptors.processors.AtomEnvironmentList;
 
 public class FPAtomEnvironmentCrudTest extends CRUDTest<IStructureRecord,IStructureRecord>  {
 
