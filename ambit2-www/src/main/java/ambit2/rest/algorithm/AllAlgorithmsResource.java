@@ -205,6 +205,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.structure},
 			
 			{"fingerprints","Generate fingerprints","fp1024",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
+			{"atomenvironments","Generate atomenvironments","atomenvironments",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
 			{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
 			{"struckeys","Generate structure keys","sk1024",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
 			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
@@ -341,7 +342,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		if (datasetURI==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 					String.format("Empty %s [%s]", OpenTox.params.dataset_uri.toString(), OpenTox.params.dataset_uri.getDescription()));
-		return new Reference(Reference.decode(datasetURI.toString()));		
+		return new Reference(Reference.decode(datasetURI.toString().trim()));		
 	}
 
 	@Override

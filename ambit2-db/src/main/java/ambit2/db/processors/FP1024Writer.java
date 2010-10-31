@@ -29,16 +29,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.BitSet;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-
 import ambit2.base.data.Property;
-import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
-import ambit2.core.processors.structure.FingerprintGenerator;
-import ambit2.smarts.CMLUtilities;
-import ambit2.smarts.processors.StructureKeysBitSetGenerator;
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 
 /**
  * Writes fingerprints, taken from IStructureRecord.getProperties().get(AmbitCONSTANTS.Fingerprint).
@@ -46,120 +40,7 @@ import ambit2.smarts.processors.StructureKeysBitSetGenerator;
  *
  */
 public class FP1024Writer extends AbstractRepositoryWriter<IStructureRecord, IStructureRecord> {
-	public enum FPTable {
-			fp1024 {
-				@Override
-				public String getProperty() {
-					return AmbitCONSTANTS.Fingerprint;
-				}
-				@Override
-				public String getStatusProperty() {
-					return AmbitCONSTANTS.FingerprintSTATUS;
-				}
-				@Override
-				public String getTimeProperty() {
-					return AmbitCONSTANTS.FingerprintTIME;
-				}
-				@Override
-				public IProcessor<IAtomContainer, BitSet> getGenerator() {
-					return new FingerprintGenerator();
-				}
-				@Override
-				public String getTable() {
-					return "fp1024";
-				}
-				@Override
-				public String toString() {
-					return "Fingerprints (hashed 1024 fingerprnts used for similarity search and prescreening)";
-				}
-				
-			},
-			fp1024_struc {
-				@Override
-				public String getProperty() {
-					return AmbitCONSTANTS.Fingerprint;
-				}
-				@Override
-				public String getStatusProperty() {
-					return AmbitCONSTANTS.FingerprintSTATUS;
-				}
-				@Override
-				public String getTimeProperty() {
-					return AmbitCONSTANTS.FingerprintTIME;
-				}
-				@Override
-				public IProcessor<IAtomContainer, BitSet> getGenerator() {
-					return new FingerprintGenerator();
-				}
-				@Override
-				public String getTable() {
-					return "fp1024_struc";
-				}
-				@Override
-				public String toString() {
-					return "Fingerprints (hashed 1024 fingerprnts used for similarity search and prescreening)";
-				}
-				
-			},			
-			sk1024 {
-				@Override
-				public String getProperty() {
-					return AmbitCONSTANTS.StructuralKey;
-				}
-				@Override
-				public String getTimeProperty() {
-					return AmbitCONSTANTS.StructuralKey_TIME;
-				}
-				@Override
-				public String getStatusProperty() {
-					return AmbitCONSTANTS.StructuralKey_STATUS;
-				}
-				@Override
-				public IProcessor<IAtomContainer, BitSet> getGenerator() {
-					return new StructureKeysBitSetGenerator(); 
-				}
-				@Override
-				public String getTable() {
-					return "sk1024";
-				}
-				@Override
-				public String toString() {
-					return "Structural keys (1024 structural fragments used to speed up SMARTS search)";
-				}				
-			},
-			smarts_accelerator {
-				@Override
-				public String getProperty() {
-					return CMLUtilities.SMARTSProp;
-				}
-				@Override
-				public String getStatusProperty() {
-					return null;
-				}
-				@Override
-				public String getTimeProperty() {
-					return null;
-				}
-				@Override
-				public IProcessor<IAtomContainer, BitSet> getGenerator() {
-					return null;
-				}
-				@Override
-				public String getTable() {
-					return "structure";
-				}
-				@Override
-				public String toString() {
-					return "SMARTS data";
-				}
-				
-			};						
-			abstract public String getProperty();
-			abstract public String getTimeProperty();
-			abstract public String getStatusProperty();
-			abstract public IProcessor<IAtomContainer,BitSet> getGenerator();
-			abstract public String getTable();
-	};
+
 	protected FPTable fpTable = FPTable.fp1024;
 	public FP1024Writer() {
 		

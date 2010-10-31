@@ -18,7 +18,6 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 
@@ -88,8 +87,8 @@ public class AtomEnvironmentDescriptorTest {
     }
     @Test
     public void testAtomEnvironmentDescriptor() throws Exception {
-		IMolecularDescriptor descriptor = new AtomEnvironmentDescriptor();
-		int maxLevel = 1;
+    	AtomEnvironmentDescriptor descriptor = new AtomEnvironmentDescriptor();
+		int maxLevel = 3;
 		Object[] params = {null,new Integer(maxLevel),new Boolean(true),new Boolean(true)};
 
 	    SmilesParserWrapper sp = SmilesParserWrapper.getInstance();
@@ -102,21 +101,12 @@ public class AtomEnvironmentDescriptorTest {
 		    //AtomContainer mol = sp.parseSmiles("N#CC(=Cc1ccc(O)c(O)c1)C(=O)NCCCNC(=O)C(C#N)=Cc2ccc(O)c(O)c2"); 
 		    CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
 		    hAdder.addImplicitHydrogens(mol);
-		    
-		    /*
-			File logfile = new File(String
-					.format("%s/%s", System.getProperty("java.io.tmpdir"),"mol.logger"));
-			logfile.deleteOnExit();
-		    
-		    CDKSourceCodeWriter w = new CDKSourceCodeWriter(new FileOutputStream(logfile));
-		    w.writeMolecule((Molecule) mol);
-		    w.close();
-		     */
+
 			for (int i = 0; i < mol.getAtomCount(); i++) {
 				//System.out.println(mol.getAtom(i));
 				params[0] = new Integer(i);
 			    descriptor.setParameters(params);
-	
+
 			    IntegerArrayResult r = (IntegerArrayResult) descriptor.calculate(mol).getValue();
 			    //System.out.println(r.size());
 			    if (i==0) { // just for test

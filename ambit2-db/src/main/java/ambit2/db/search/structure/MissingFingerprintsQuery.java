@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 
 public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, String, EQCondition> {
 
@@ -73,6 +73,7 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		"from structure\n"+
 		"where (structure.type_structure != 'NA')  and atomproperties is null";
 		
+
 
 	
 	public MissingFingerprintsQuery(FPTable table) {

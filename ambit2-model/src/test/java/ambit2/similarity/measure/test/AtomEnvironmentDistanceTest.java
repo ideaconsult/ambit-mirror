@@ -48,11 +48,17 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
-import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.descriptors.AtomEnvironment;
 import ambit2.descriptors.AtomEnvironmentDescriptor;
@@ -85,8 +91,7 @@ public class AtomEnvironmentDistanceTest {
    
     
     protected AtomEnvironmentList getAE(AtomEnvironmentGenerator g,IMolecule mol) throws Exception {
-    	g.process(mol);
-        return(AtomEnvironmentList) mol.getProperty(AmbitCONSTANTS.AtomEnvironment);
+    	return g.generateProperty(mol);
     	
     }
     @Test
@@ -142,9 +147,9 @@ public class AtomEnvironmentDistanceTest {
 		    //Amino-2nitro-3.4-5 hydroxy-methyl benzene (ANMB) 
 		    //IMolecule mol1 = sp.parseSmiles("Cc1c(C)c(cc(N)c1(O))N(=O)=O");
 		    
-		    IMolecule mol = sp.parseSmiles("Nc1c(C)cccc1");
+		    IMolecule molecule1 = sp.parseSmiles("Nc1c(C)cccc1");
 		    //Amino-2nitro-3.4-5 hydroxy-methyl benzene (ANMB) 
-		    IMolecule mol1 = sp.parseSmiles("Nc1ccccc1");
+		    IMolecule molecule2 = sp.parseSmiles("Nc1c(O)cccc1");
 
 		    
 		    //Amino-2nitro-3.4-5 hydroxy-methyl benzene (ANMB) 
@@ -156,11 +161,9 @@ public class AtomEnvironmentDistanceTest {
 		    g.setUseHydrogens(true);
 		    g.setMaxLevels(maxLevel);
 		   
-		    g.process(mol);
-		    g.process(mol1);
+		    AtomEnvironmentList ae = g.generateProperty(molecule1);
+		    AtomEnvironmentList ae1 = g.generateProperty(molecule2);
 		    
-		    AtomEnvironmentList ae = (AtomEnvironmentList) mol.getProperty(AmbitCONSTANTS.AtomEnvironment);
-		    AtomEnvironmentList ae1 = (AtomEnvironmentList) mol1.getProperty(AmbitCONSTANTS.AtomEnvironment);
 		    
 		    Collections.sort(ae);
 		    Collections.sort(ae1);
@@ -187,13 +190,13 @@ public class AtomEnvironmentDistanceTest {
 		    System.out.println(intersection);
 		    
 		    if (display)
-		    	displayAE(mol,ae,mol1,ae1);
+		    	displayAE(molecule1,ae,molecule2,ae1);
 		    Assert.assertNotNull(ae);
 		    Assert.assertNotNull(ae1);
 
     }
     
-    public void  displayAE(IMolecule mol1, AtomEnvironmentList aelist1,IMolecule mol2, AtomEnvironmentList aelist2) {
+    public void  displayAE(final IMolecule mol1, AtomEnvironmentList aelist1,final IMolecule mol2, AtomEnvironmentList aelist2) {
     	
     	AEComparator aec = new AEComparator();
     	Collections.sort(aelist1,aec);
@@ -201,10 +204,13 @@ public class AtomEnvironmentDistanceTest {
     	final AtomEnvironmentListTableModel m1 = new AtomEnvironmentListTableModel(aelist1);
     	final AtomEnvironmentListTableModel m2 = new AtomEnvironmentListTableModel(aelist2);
     	
-    	CompoundImageTools tools = new CompoundImageTools();
+    	
+    	final MySelector s1 = new MySelector();
+    	final MySelector s2 = new MySelector();
+    	final CompoundImageTools tools = new CompoundImageTools();
     	
     	final JLabel p1 = new JLabel();
-    	p1.setIcon(new ImageIcon(tools.getImage(mol1)));
+    	p1.setIcon(new ImageIcon(tools.getImage(mol1,s1,true,false)));
     	p1.setPreferredSize(new Dimension(100,100));
     	/*
     	
@@ -216,7 +222,7 @@ public class AtomEnvironmentDistanceTest {
     	*/
 
     	final JLabel p2 = new JLabel();
-    	p2.setIcon(new ImageIcon(tools.getImage(mol2)));
+    	p2.setIcon(new ImageIcon(tools.getImage(mol2,s2,true,false)));
     	p2.setPreferredSize(new Dimension(100,100));
     	
     	final JTable t1 = new JTable(m1);
@@ -226,16 +232,23 @@ public class AtomEnvironmentDistanceTest {
     			int row = t1.rowAtPoint(e.getPoint());
     			int natom = ((Integer)m1.getValueAt(row, 0)).intValue()-1;
     			    		
-    			/*
-    			p1.setHighlightedAtoms(new int[] {
-    					natom }
-    					);
-    			p1.repaint();
-    			*/
+    			s1.setSelected(natom);
+    			p1.setIcon(new ImageIcon(tools.getImage(mol1,s1,true,true)));
     		};
     		
     	});
-    	JTable t2 = new JTable(m2);
+    	final JTable t2 = new JTable(m2);
+    	t2.addMouseListener(new MouseAdapter() {
+    		@Override
+    		public void mouseClicked(MouseEvent e) {
+    			int row = t2.rowAtPoint(e.getPoint());
+    			int natom = ((Integer)m2.getValueAt(row, 0)).intValue()-1;
+    			    		
+    			s2.setSelected(natom);
+    			p2.setIcon(new ImageIcon(tools.getImage(mol2,s2,true,true)));
+    		};
+    		
+    	});
     	
     	JOptionPane.showMessageDialog(null,
     			new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -271,3 +284,33 @@ public class AtomEnvironmentDistanceTest {
     	}
     }
 }
+
+class MySelector implements IProcessor<IAtomContainer,IChemObjectSelection> {
+	protected int selected = 0;
+	
+	public MySelector() {
+	}
+	@Override
+	public IChemObjectSelection process(IAtomContainer target)
+			throws AmbitException {
+		IAtomContainer ac = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
+		ac.addAtom(target.getAtom(selected));
+		return
+		new SingleSelection<IAtomContainer>(ac);
+	}
+	@Override
+	public void setEnabled(boolean value) {
+	}
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	@Override
+	public long getID() {
+		return 0;
+	}
+	public void setSelected(int s) {
+		selected = s;
+	}
+	
+};

@@ -706,6 +706,112 @@ CREATE TABLE  `atom_structure` (
   CONSTRAINT `atom_distance_fk_2` FOREIGN KEY (`iddistance`) REFERENCES `atom_distance` (`iddistance`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+-- -----------------------------------------------------
+-- atom environment strings (single level)
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fpae`;
+CREATE TABLE  `fpae` (
+  `idfpae` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ae` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
+  PRIMARY KEY (`idfpae`),
+  UNIQUE KEY `ae` (`ae`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
+
+-- -----------------------------------------------------
+-- atom environment of a chemical. 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `fpaechemicals`;
+CREATE TABLE  `fpaechemicals` (
+  `idchemical` int(10) unsigned NOT NULL DEFAULT '0',
+  `idfpae1` int(10) unsigned NOT NULL,
+  `idfpae2` int(10) unsigned NOT NULL,
+  `idfpae3` int(10) unsigned NOT NULL,
+  `idfpae4` int(10) unsigned NOT NULL,
+  `idfpae5` int(10) unsigned NOT NULL,
+  `idfpae6` int(10) unsigned NOT NULL,
+  `status` enum('valid','invalid','error') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'valid',
+  `freq` int(10) unsigned NOT NULL DEFAULT '1',
+  `atom` varchar(6) COLLATE latin1_bin NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idchemical`,`atom`) USING BTREE,
+  KEY `FK_fpaelevels_1` (`idfpae1`),
+  KEY `FK_fpaelevels_2` (`idfpae2`),
+  KEY `FK_fpaelevels_3` (`idfpae3`),
+  KEY `FK_fpaelevels_4` (`idfpae4`),
+  KEY `FK_fpaelevels_5` (`idfpae5`),
+  KEY `FK_fpaelevels_6` (`idfpae6`),
+  KEY `Index_8` (`status`),
+  KEY `Index_9` (`atom`,`idfpae1`,`idfpae2`,`idfpae3`,`idfpae4`,`idfpae5`,`idfpae6`),
+  CONSTRAINT `FK_fpaelevels_1` FOREIGN KEY (`idfpae1`) REFERENCES `fpae` (`idfpae`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_fpaelevels_2` FOREIGN KEY (`idfpae2`) REFERENCES `fpae` (`idfpae`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_fpaelevels_3` FOREIGN KEY (`idfpae3`) REFERENCES `fpae` (`idfpae`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_fpaelevels_4` FOREIGN KEY (`idfpae4`) REFERENCES `fpae` (`idfpae`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_fpaelevels_5` FOREIGN KEY (`idfpae5`) REFERENCES `fpae` (`idfpae`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_fpaelevels_6` FOREIGN KEY (`idfpae6`) REFERENCES `fpae` (`idfpae`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
+
+-- -----------------------------------------------------
+-- Procedure to add atom environments
+-- -----------------------------------------------------
+DELIMITER $
+CREATE PROCEDURE setAtomEnvironment(
+
+     IN chemical_id INTEGER,
+     IN chemical_atom VARCHAR(6),
+     IN ae_freq INT,
+     IN ae_1 VARCHAR(255),
+     IN ae_2 VARCHAR(255),
+     IN ae_3 VARCHAR(255),
+     IN ae_4 VARCHAR(255),
+     IN ae_5 VARCHAR(255),
+     IN ae_6 VARCHAR(255),
+     IN ae_status VARCHAR(10)
+)
+BEGIN
+  insert ignore into fpae (ae) values (ae_1),(ae_2),(ae_3),(ae_4),(ae_5),(ae_6);
+
+  insert into fpaechemicals
+      (idchemical,
+      atom,
+      freq,
+      idfpae1,
+      idfpae2,
+      idfpae3,
+      idfpae4,
+      idfpae5,
+      idfpae6,
+      `status`
+  )
+  SELECT chemical_id,
+      chemical_atom,
+      ae_freq,
+      a1.idfpae,
+      a2.idfpae,
+      a3.idfpae,
+      a4.idfpae,
+      a5.idfpae,
+      a6.idfpae,
+      ae_status
+  FROM fpae a1
+  join (SELECT idfpae FROM fpae where ae= ae_2) as a2
+  join (SELECT idfpae FROM fpae where ae= ae_3) as a3
+  join (SELECT idfpae FROM fpae where ae= ae_4) as a4
+  join (SELECT idfpae FROM fpae where ae= ae_5) as a5
+  join (SELECT idfpae FROM fpae where ae= ae_6) as a6
+  where a1.ae=ae_1
+  ON DUPLICATE KEY UPDATE
+    freq =values(freq),
+    idfpae1=values(idfpae1),
+    idfpae2=values(idfpae2),
+    idfpae3=values(idfpae3),
+    idfpae4=values(idfpae4),
+    idfpae5=values(idfpae5),
+    idfpae6=values(idfpae6),
+    `status`=values(`status`)
+  ;
+END $
+
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- Table `bookmarks` 

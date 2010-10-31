@@ -185,13 +185,13 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         	createFunctions();
 	        st = connection.createStatement();
 	        st.executeQuery("GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost';");
-	        st.close();        	
 	        st.executeQuery("GRANT EXECUTE ON FUNCTION sql_xtab TO 'guest'@'localhost';");
-	        st.close();    	        
 	        st.executeQuery("GRANT EXECUTE ON PROCEDURE p_xtab TO 'guest'@'localhost';");
-	        st.close();    
-        	
+	        st.executeQuery("GRANT EXECUTE ON PROCEDURE setAtomEnvironment TO 'guest'@'localhost';");
+	        st.executeQuery("GRANT SELECT ON `mysql`.`proc` TO 'guest'@'localhost';");
+	         
         } catch (Exception x) {
+        	x.printStackTrace();
         	logger.warn(x);
         }
         return database.toString();

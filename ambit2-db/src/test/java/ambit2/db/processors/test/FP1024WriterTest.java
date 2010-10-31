@@ -13,11 +13,11 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.RepositoryReader;
-import ambit2.db.processors.BitSetGenerator;
 import ambit2.db.processors.FP1024Writer;
-import ambit2.db.processors.FP1024Writer.FPTable;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.QueryExecutor;
+import ambit2.descriptors.processors.BitSetGenerator;
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 
 public class FP1024WriterTest extends DbUnitTest {
 	
