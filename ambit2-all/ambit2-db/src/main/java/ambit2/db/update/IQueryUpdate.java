@@ -44,4 +44,5 @@ public interface IQueryUpdate<Group,Target> extends IStatement {
 	List<QueryParam> getParameters(int index) throws AmbitException;
 	void setID(int index, int id);
 	boolean returnKeys(int index);
+	boolean isStoredProcedure();
 }
