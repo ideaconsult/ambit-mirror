@@ -7,6 +7,8 @@ public class RuleParser
 	
 	public Rule parse(String ruleString)
 	{	
+		System.out.println("rule: " + ruleString);
+		errors = "";
 		Rule rule = new Rule();
 		curRule = rule;
 		int curPos = 0;
@@ -25,16 +27,117 @@ public class RuleParser
 			}
 			
 			parseKeyWord(keyword);
-		}
+		}			
 		
-		return(rule);
+		
+		postProcessing();
+		
+		//System.out.println("errors: " + errors);		
+		if (errors.equals(""))
+			return(rule);
+		else
+			return(null);
 	}
 	
 	
-	void parseKeyWord(String keyWord)
+	void postProcessing()
 	{
 		
 	}
+	
+	void parseKeyWord(String keyWord)
+	{		
+		//System.out.println("   keyword: " + keyWord);
+		int sepPos = keyWord.indexOf(TautomerConst.KeyWordSeparator);		
+		if (sepPos == -1)
+		{	
+			errors += "Incorrect key word syntax: " + keyWord + "\n";
+			return;
+		}
+		
+		String key = keyWord.substring(TautomerConst.KeyWordPrefix.length(), sepPos).trim();		
+		String keyValue = keyWord.substring(sepPos+1).trim();
+		//System.out.println(">"+keyValue+"<");
+		
+		if (key.equals("NAME"))	
+		{	
+			parseName(keyValue);
+			return;
+		}
+		
+				
+		if (key.equals("TYPE"))
+		{	
+			parseType(keyValue);
+			return;
+		}
+		
+		if (key.equals("GROUP"))	
+		{	
+			parseGroup(keyValue);
+			return;
+		}
+		
+		if (key.equals("STATES"))	
+		{	
+			parseStates(keyValue);
+			return;
+		}
+		
+		if (key.equals("GROUP_POS"))	
+		{	
+			parseGroup_Pos(keyValue);
+			return;
+		}
+		
+		if (key.equals("INFO"))	
+		{	
+			parseInfo(keyValue);
+			return;
+		}
+		
+		errors += "Unknow key word: " + key + "\n";
+		
+	}
+	
+	void parseName(String keyValue)
+	{
+		curRule.name = keyValue;
+	}
+	
+	void parseType(String keyValue)
+	{
+		if (keyValue.equals("MOBILE_GROUP"))
+		{	
+			curRule.type = TautomerConst.RT_MobileGroup;
+			return;
+		}	
+		
+		errors += "Unknow rule type: " + keyValue + "\n";
+	}
+	
+	void parseGroup(String keyValue)
+	{
+		curRule.mobileGroup = keyValue;
+	}
+	
+	
+	void parseStates(String keyValue)
+	{
+		
+	}
+	
+	void parseGroup_Pos(String keyValue)
+	{	
+	}
+	
+	void parseInfo(String keyValue)
+	{	
+	}
+	
+	
+	
+	
 	
 	
 }
