@@ -1,5 +1,7 @@
 package ambit2.tautomers;
 
+import java.util.Vector;
+
 public class RuleParser 
 {
 	String errors = "";
@@ -11,8 +13,9 @@ public class RuleParser
 		errors = "";
 		Rule rule = new Rule();
 		curRule = rule;
-		int curPos = 0;
-		int res = ruleString.indexOf(TautomerConst.KeyWordPrefix, curPos);
+		
+		int res = ruleString.indexOf(TautomerConst.KeyWordPrefix, 0);
+		int curPos = res;
 		
 		while (res != -1)
 		{	
@@ -124,20 +127,66 @@ public class RuleParser
 	
 	void parseStates(String keyValue)
 	{
-		
+		Vector<String> elements = getStringElements(keyValue, TautomerConst.KeyWordElementSeparator);
+		curRule.smartsStates = new String[elements.size()]; 
+		for (int i = 0; i < elements.size(); i++)
+			curRule.smartsStates[i] = elements.get(i).trim();
 	}
 	
 	void parseGroup_Pos(String keyValue)
-	{	
+	{
+		Vector<String> elements = getStringElements(keyValue, TautomerConst.KeyWordElementSeparator);
+		curRule.mobileGroupPos = new int[elements.size()]; 
+		for (int i = 0; i < elements.size(); i++)
+		{	
+			//TODO
+		}	
 	}
 	
 	void parseInfo(String keyValue)
-	{	
+	{
+		curRule.RuleInfo = keyValue.trim();
 	}
 	
 	
-	
-	
+	Vector<String> getStringElements(String string, String separator)
+	{
+		Vector<String> elements = new Vector<String>();
+		int curPos = 0;
+		int res = string.indexOf(separator, curPos);
+		
+		if (res == -1)
+		{	
+			elements.add(string);
+			return(elements);
+		}
+		else
+		{
+			String el = string.substring(curPos,res);
+			elements.add(el);
+			curPos = res + separator.length();
+		}
+			
+				
+		while (res != -1)
+		{	
+			res = string.indexOf(separator, curPos + separator.length());
+						
+			if (res == -1)
+			{	
+				String el = string.substring(curPos);
+				elements.add(el);
+			}	
+			else
+			{	
+				String el = string.substring(curPos,res);
+				elements.add(el);
+				curPos = res + separator.length();	
+			}
+		}	
+		return (elements);
+	}
+	 
 	
 	
 }
