@@ -56,6 +56,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 		Ids,
 		OtherIds,
 		Names,
+		InChI,
 		Descriptors,
 		Manufacturers,
 		Formulae,
@@ -160,6 +161,13 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				record.setIdchemical(compounds);
 				break;
 			}	
+			case InChI: {
+				if (toxml_tags.InChI.toString().equals(parentTag)) throw new Exception("Level 2");
+				else {
+					record.clearProperties();
+					break;
+				}
+			}
 			case ToxicityStudies: {
 				study = 0;
 				break;
@@ -181,6 +189,9 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				study++;
 				test = 0;
 				record.clearProperties();
+				break;
+			}
+			case InChI: {
 				break;
 			}
 			case Tests: {
@@ -207,7 +218,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			String pname = tag_num==1?String.format("%s%s",parent,tag):String.format("%s%s_%d",parent,tag,tag_num-1);
 			p = new Property(pname,
 					//new LiteratureEntry(path.replace(",", "."),String.format("%s%s",URI,"")));
-					new LiteratureEntry(String.format("Study %d Test %d",study,test),"ToXML"));
+					new LiteratureEntry(String.format("%s%s",URI,path),"ToXML"));
 			p.setLabel(String.format("%s%s",URI,path));			
 			properties.push(p);
 		}
@@ -224,8 +235,13 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			switch (thetag1) {
 			case	Compounds: return false;
 			case	Compound: return false;
+			case InChI: {
+				if (toxml_tags.InChI.toString().equals(parentTag)) throw new Exception("Level 2");
+				else return true;
+			}
 			case ToxicityStudies: return study==0; //if > 0  was already written
 			default: {
+				System.out.println(tag);
 				newRecord =true;
 				break;
 			}
@@ -350,7 +366,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	            	 
 	            	String value = reader.getText();
 	            	if ((value!=null) && (!"".equals(value))) {
-	            		tmpValue = tmpValue==null?value:String.format("%s%s",tmpValue,value);
+	            		tmpValue = tmpValue==null?value:String.format("%s%s",tmpValue,value.trim());
 	            	}
 	            	break;
 	            }
