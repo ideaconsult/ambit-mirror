@@ -40,11 +40,12 @@ public class FileInputState extends FileState implements IInputState {
 	public transient static final int XLS_INDEX = 10;	
 	public transient static final int EURAS_INDEX = 11;
 	public transient static final int ECHAXML_INDEX = 12;
-	public transient static final int MALARIA_HTS_SHEETS = 13;
+	public transient static final int TOXML_INDEX = 13;
+	public transient static final int MALARIA_HTS_SHEETS = 14;
 	
 	//TODO support for .xlsx 
 	public transient static final String[] extensions = {
-		".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls",".xls",".xml",".sht"};
+		".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls",".xls",".echaxml",".xml",".sht"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
 		"CSV files (Comma delimited) *.csv)",
@@ -58,7 +59,8 @@ public class FileInputState extends FileState implements IInputState {
 		"PDB files (*.pdb)",
 		"Microsoft Office Excel file (*.xls)",
 		"EURAS Excel file with BCF data (*.xls)",
-		"ECHA preregistration list XML format (*.xml)",
+		"ECHA preregistration list XML format (*.echaxml)",
+		"Leadscope ToXML 3.08 (*.xml)",
 		"Malaria HTS data sheets (*.sht)",
 		};	
 	public FileInputState() {
@@ -136,7 +138,9 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[XLS_INDEX])) {
 			return new IteratingXLSReader(stream,0);
 		} else if (ext.endsWith(extensions[ECHAXML_INDEX])) {
-			return new ECHAPreregistrationListReader(stream);	
+			return new ECHAPreregistrationListReader(stream);
+		} else if (ext.endsWith(extensions[TOXML_INDEX])) {
+			return new ToXMLReaderSimple(stream);	
 		} else if (ext.endsWith(extensions[MALARIA_HTS_SHEETS])) {
 			return new MalariaHTSDataDelimitedReader(stream);				
 		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    

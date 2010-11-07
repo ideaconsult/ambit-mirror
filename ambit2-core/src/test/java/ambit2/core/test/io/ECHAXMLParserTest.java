@@ -26,7 +26,7 @@ Names [ECHA] = 29H,31H-phthalocyaninato(2-)-N29,N30,N31,N32 copper
 public class ECHAXMLParserTest {
 	@Test
 	public void test() throws Exception {
-		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/echa_preregistration.xml");
+		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/echa_preregistration.echaxml");
 		ECHAPreregistrationListReader reader = new ECHAPreregistrationListReader(in);
 		int count = 0;
 		int foundCas=0;
