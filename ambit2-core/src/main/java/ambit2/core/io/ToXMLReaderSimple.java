@@ -18,6 +18,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 
+import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
@@ -31,6 +32,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	protected int test = 0;
 	protected Property inchiProperty = Property.getInChIInstance();
 	
+	protected Hashtable<Dictionary,Integer> dictionary = new Hashtable<Dictionary, Integer>();
 	protected Hashtable<String, Integer> tagCount = new Hashtable<String, Integer>();
 	
 	protected enum toxml_names {
@@ -42,6 +44,12 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			}
 		},
 		synonym,
+		tradeName {
+			@Override
+			public String sameas() {
+				return Property.opentox_TradeName;
+			}
+		},		
 		trade {
 			@Override
 			public String sameas() {
@@ -160,6 +168,8 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 
 	protected boolean newRecord(String tag,Integer tag_num,String parentTag,String path)  {
 
+		boolean addProperties = true;
+		
 		//read attributes
 		String[] attr = readAttributes();
 		attributes.push(attr);
@@ -172,6 +182,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				String.format("%s%s",URI,path):attr[toxml_attributes.sources.ordinal()];
 		String alias = String.format("%s%s",URI,path);
 		
+
 		try { 
 			toxml_tags_level1 thetag1;
 			thetag1 =  toxml_tags_level1.valueOf(tag); 
@@ -206,6 +217,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				break;
 			}
 			default: {
+				
 				record.clearProperties();
 				break;
 			}
@@ -215,7 +227,30 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			toxml_tags thetag = toxml_tags.Default;
 			try {thetag =  toxml_tags.valueOf(tag); } catch (Exception xx) {} 
 			
+			toxml_tags theParentTag = toxml_tags.Default;
+			
+			try {theParentTag =  toxml_tags.valueOf(parentTag); } catch (Exception xx) {} 
+			if (toxml_tags.TextDatum.equals(theParentTag) || toxml_tags.Datum.equals(theParentTag)) {
+				switch (thetag) {
+				case Name: {
+					addProperties = false;
+					break;
+				}
+				case Value: {
+					addProperties = false;
+					break;
+				}
+				case Source: {
+					addProperties = false;
+					break;
+				}
+				}
+				addProperties = false;
+				return false;
+			}
+
 			Property p;
+			Class clazz = String.class;
 			
 			switch (thetag) {
 			case Study: {
@@ -228,7 +263,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				break;
 			}
 			case Code: {
-				if (toxml_tags.InChI.toString().equals(parentTag))
+				if (toxml_tags.InChI.equals(theParentTag))
 					alias = Property.opentox_InChI;
 			}
 			case Tests: {
@@ -261,22 +296,28 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				try {
 					alias = toxml_names.valueOf(attr[toxml_attributes.type.ordinal()]).sameas();
 				} catch (Exception xx) { }
-
 					
 				break;
 			}			
-
+			case Datum: {
+				clazz = Number.class;
+				break;
+			}
+			case TextDatum: {
+				break;
+			}
 			default: {
 
-				
 				break;
 			}
 			}
 			
-			p = new Property(pname,
-					new LiteratureEntry(reference,"ToXML"));
+			p = new Property(pname,	new LiteratureEntry(reference,"ToXML"));
+			p.setClazz(clazz);
 			p.setLabel(alias);			
 			properties.push(p);
+			System.out.println("--> "+properties.toString());
+			//System.out.println(parentTag + " " + properties);
 		}
 		
 		return false;
@@ -310,7 +351,47 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			newRecord = false;
 			toxml_tags thetag = toxml_tags.Default;
 			try {thetag =  toxml_tags.valueOf(tag);} catch (Exception xx) {} 
+			
+			toxml_tags theParentTag = toxml_tags.Default;
+			try {theParentTag =  toxml_tags.valueOf(parentTag); } catch (Exception xx) {} 
+			
+			System.out.println("<-- "+properties.toString());
 			Property key = properties.pop();
+			
+			if (toxml_tags.TextDatum.equals(theParentTag) || toxml_tags.Datum.equals(theParentTag)) {
+				
+				switch (thetag) {
+				case Name: {
+					key.setName(value.trim());
+					properties.push(key);
+					System.out.println("Name--> "+properties.toString());
+					return false;
+				}
+				case Value: {
+					if (String.class.equals(key.getClazz())) 
+						setProperty(key,value.trim());
+					else try {
+						setProperty(key,Double.parseDouble(value.trim()));
+					} catch (Exception xx) {
+						setProperty(key,value.trim());
+					}
+					properties.push(key);
+					System.out.println("Value--> "+properties.toString());
+					return false;
+				}
+				case Source: {
+					Object v = record.getProperty(key);
+					record.removeProperty(key);
+					key.setReference(new LiteratureEntry(value.trim(),toxml_tags.Datum.toString()));
+					properties.push(key);
+					System.out.println("Source--> "+properties.toString());
+					setProperty(key,v);
+					return false;
+				}
+				}
+			}
+			
+			
 			switch (thetag) {
 			case Study: {
 				newRecord = (test==0);  //if there are tests, these were already written
@@ -330,10 +411,19 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			}
 			
 			if ((value!=null) && !"".equals(value.trim())) {
+
 				if (toxml_tags.InChI.toString().equals(parentTag)) { 
 					record.setInchi(String.format("InChI=%s", value.trim()));
 					setProperty(key,record.getInchi());
 				} else 	setProperty(key,value.trim());
+
+			} else {
+				if (properties.size()>0) {
+					Dictionary d = new Dictionary(key.getName(),properties.peek().getName());
+					Integer dcount = dictionary.get(d);
+					if (dcount==null) dictionary.put(d,1);
+					else dictionary.put(d,dcount.intValue()+1);
+				}
 			}
 	
 		}
@@ -346,6 +436,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	}	
 	
 	protected void setProperty(Property key, Object value) {
+		//System.out.println(String.format("%s,%s,%s",key,value,branches));
 		Object anotherValue = record.getProperty(key);
 		String oldName = key.getName();
 		int count = 1;
