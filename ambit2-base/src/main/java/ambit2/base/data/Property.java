@@ -38,7 +38,7 @@ import com.jgoodies.binding.beans.Model;
 
 
 
-public class Property extends Model implements Serializable {
+public class Property extends Model implements Serializable, Comparable<Property> {
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -57,6 +57,7 @@ public class Property extends Model implements Serializable {
 	public static final String opentox_REACHDATE = "http://www.opentox.org/api/1.1#REACHRegistrationDate";
 	public static final String opentox_CAS = "http://www.opentox.org/api/1.1#CASRN";
 	public static final String opentox_Name = "http://www.opentox.org/api/1.1#ChemicalName";
+	public static final String opentox_TradeName = "http://www.opentox.org/api/1.1#TradeName";
 	public static final String opentox_IupacName = "http://www.opentox.org/api/1.1#IUPACName";
 	public static final String opentox_EC = "http://www.opentox.org/api/1.1#EINECS";
 	public static final String opentox_InChI_std = "http://www.opentox.org/api/1.1#InChI_std";
@@ -92,6 +93,9 @@ public class Property extends Model implements Serializable {
 	}			
 	public static synchronized Property getInstance(String name,String reference) {
 		return getInstance(name, reference,"");
+	}
+	public static synchronized Property getInChIInstance() {
+		return Property.getInstance(Property.opentox_InChI, new LiteratureEntry(Property.opentox_InChI,Property.opentox_InChI));
 	}
 	public static synchronized Property getInstance(String name,ILiteratureEntry reference) {
 		if (reference == null)
@@ -215,13 +219,19 @@ public class Property extends Model implements Serializable {
 	}	
 	
     public int hashCode() {
-    	int hash = 7;
-    	int var_code = (null == getName() ? 0 : getName().hashCode());
-    	hash = 31 * hash + var_code; 
-    	var_code = (null == getReference().getTitle() ? 0 : getReference().getTitle().hashCode());
-    	hash = 31 * hash + var_code; 
-	
-    	return hash;
+    	try {
+	    	int hash = 7;
+	    	int var_code = (null == getName() ? 0 : getName().hashCode());
+	    	hash = 31 * hash + var_code; 
+	    	var_code = getReference()==null?0: 
+	    		(null == getReference().getTitle() ? 0 : getReference().getTitle().hashCode());
+	    	hash = 31 * hash + var_code; 
+		
+	    	return hash;
+    	} catch (Exception x) {
+    		x.printStackTrace();
+    		return 0;
+    	}
     }	
 	public Class getClazz() {
 		return clazz;
@@ -292,6 +302,11 @@ public class Property extends Model implements Serializable {
 			((Property)obj).getReference().equals(getReference()) ; 
 		} else return false;
 	}
+	@Override
+	public int compareTo(Property o) {
+		return hashCode()-o.hashCode();
+	}
+	
 	public void assign(Property newProperty) {
 		this.id = newProperty.id;
 		this.name = newProperty.name;
