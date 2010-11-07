@@ -161,13 +161,17 @@ public class StructureRecord implements IStructureRecord {
 	}
 	public void setProperty(Property key,Object value) {
 		if (key == null) return;
-		if (properties == null) properties = new Hashtable<Property,Object>();
+		if (properties == null) properties = createProperties();
 		if (value == null) properties.remove(key);
 		else properties.put(key, value);
 			
 	}
+	protected Map<Property,Object> createProperties() {
+		return new Hashtable<Property, Object>();
+		//return new TreeMap<Property, Object>();
+	}
 	public Iterable<Property> getProperties() {
-		if (properties==null) properties = new Hashtable<Property,Object>();
+		if (properties==null) properties = createProperties();
 		return properties.keySet();
 	}
 	
