@@ -29,6 +29,9 @@
 
 package ambit2.core.processors.structure;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
@@ -39,7 +42,7 @@ import ambit2.core.data.MoleculeTools;
 
 public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtomContainer> {
 	
-
+	protected InChIGeneratorFactory inchiFactory = null;
 
 
     /**
@@ -72,6 +75,16 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
                 } catch (Exception x) {
                     throw new AmbitException(x);
                 }
+           case INC: 
+        	   try {
+        		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
+    		
+        		   InChIToStructure c =inchiFactory.getInChIToStructure(target.getContent(), DefaultChemObjectBuilder.getInstance());
+        		   return c.getAtomContainer();
+        	   } catch (Exception x) {
+        		   throw new AmbitException(x);
+        	   }
+        	   
             default: {
             	 throw new AmbitException("Unknown format "+target.getFormat());
             }

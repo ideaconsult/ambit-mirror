@@ -90,7 +90,7 @@ CREATE TABLE  `structure` (
   `idstructure` int(11) unsigned NOT NULL auto_increment,
   `idchemical` int(11) unsigned NOT NULL,
   `structure` blob NOT NULL,
-  `format` enum('SDF','CML','MOL') collate utf8_bin NOT NULL default 'CML',
+  `format` enum('SDF','CML','MOL','INC') collate utf8_bin NOT NULL default 'SDF',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `user_name` varchar(16) collate utf8_bin default NULL,
   `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') collate utf8_bin NOT NULL default 'NA',
