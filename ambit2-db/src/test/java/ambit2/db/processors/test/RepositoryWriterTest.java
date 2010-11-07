@@ -399,7 +399,7 @@ delete from struc_dataset where idstructure>3
 		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
 		Assert.assertEquals(0,property_values.getRowCount());
 		
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/echa_preregistration.xml");
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/echa_preregistration.echaxml");
 		Assert.assertNotNull(in);
 		ECHAPreregistrationListReader reader = new ECHAPreregistrationListReader(in);
 		write(reader,c.getConnection());
