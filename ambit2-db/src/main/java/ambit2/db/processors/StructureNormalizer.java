@@ -86,8 +86,10 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		}		
 		
 		try {
-			structure.setInchi(inchiKey.process(structure));
-			if ("".equals(structure.getInchi())) structure.setInchi(null);
+			if (structure.getInchi()== null) {
+				structure.setInchi(inchiKey.process(structure));
+				if ("".equals(structure.getInchi())) structure.setInchi(null);
+			}
 		} catch (Exception x) {
 			structure.setInchi(null);
 		}				

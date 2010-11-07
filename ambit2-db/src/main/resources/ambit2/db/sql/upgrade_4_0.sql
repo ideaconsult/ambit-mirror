@@ -216,3 +216,8 @@ END LOOP the_loop;
 END */;;
 
 DELIMITER ;
+
+
+---
+
+ALTER TABLE `structure` MODIFY COLUMN `format` ENUM('SDF','CML','MOL','INC') NOT NULL DEFAULT 'SDF';

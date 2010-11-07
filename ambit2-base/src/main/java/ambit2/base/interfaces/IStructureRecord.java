@@ -36,7 +36,7 @@ import ambit2.base.data.Property;
 
 
 public interface IStructureRecord extends IChemical{
-	public enum MOL_TYPE {SDF,CML,CSV,URI};
+	public enum MOL_TYPE {SDF,CML,CSV,URI,INC};
 	public static enum STRUC_TYPE {
 
 		NA {
