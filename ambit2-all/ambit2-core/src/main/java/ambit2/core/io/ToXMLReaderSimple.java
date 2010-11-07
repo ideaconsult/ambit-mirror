@@ -33,6 +33,13 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	protected Property inchiProperty = Property.getInChIInstance();
 	
 	protected Hashtable<Dictionary,Integer> dictionary = new Hashtable<Dictionary, Integer>();
+	public Hashtable<Dictionary, Integer> getDictionary() {
+		return dictionary;
+	}
+
+
+
+
 	protected Hashtable<String, Integer> tagCount = new Hashtable<String, Integer>();
 	
 	protected enum toxml_names {
@@ -471,6 +478,8 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 
 				if (toxml_tags.InChI.toString().equals(parentTag)) { 
 					record.setInchi(String.format("InChI=%s", value.trim()));
+					record.setFormat(MOL_TYPE.INC.toString());
+					record.setContent(record.getInchi());
 					setProperty(key,record.getInchi());
 				} else 	setProperty(key,value.trim());
 

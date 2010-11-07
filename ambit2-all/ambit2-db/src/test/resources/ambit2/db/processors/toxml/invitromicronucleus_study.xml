@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--  Fake ToXML file, just for testing. Created with Leadscope free ToXML edior. InChI added as per 3/0.8 version -->
+<Compounds>
+  <Compound version="2.0.40">
+    <Ids>
+      <Id type="authority">111</Id>
+      <Id type="cas">50-00-0</Id>
+    </Ids>
+    <Names>
+      <Name type="chemName">ssssss</Name>
+      <Name type="tradeName">sssssssssss</Name>
+      <Name type="synonym">sssssssss</Name>
+    </Names>
+    <InChI>
+      <InChI>
+        <Code>1S/CH2O/c1-2/h1H2</Code>
+      </InChI>
+    </InChI>
+    <Descriptors>
+      <SubstanceUseTypes>
+        <SubstanceUseType>Antimicrobial agent</SubstanceUseType>
+      </SubstanceUseTypes>
+      <SubstanceChemicalTypes>
+        <SubstanceChemicalType>Defined organic</SubstanceChemicalType>
+      </SubstanceChemicalTypes>
+      <TherapeuticIndications>
+        <TherapeuticIndication>Analgesia</TherapeuticIndication>
+      </TherapeuticIndications>
+      <PharmacologicalActions>
+        <PharmacologicalAction>Angiotensin-converting enzyme (ACE)</PharmacologicalAction>
+      </PharmacologicalActions>
+      <Metabolites>
+        <Metabolite>aaaaaaa</Metabolite>
+      </Metabolites>
+    </Descriptors>
+    <ToxicityStudies>
+      <InVivoMicronucleusStudies>
+        <Study>
+          <StudyType>in vivo micronucleus</StudyType>
+          <StudyCalls>
+            <Call>Positive</Call>
+          </StudyCalls>
+          <StudyCallCriteria>AAA</StudyCallCriteria>
+          <StudyComments>ZZZZZ</StudyComments>
+          <ReviewerStudyCallCriteria>QQQQQQ</ReviewerStudyCallCriteria>
+          <ReviewerStudyComments>CCCCCC</ReviewerStudyComments>
+          <EntryInformation>
+            <Owner></Owner>
+            <OwnerEmail></OwnerEmail>
+            <CreationDate>20101105</CreationDate>
+            <ModificationDate>20101105</ModificationDate>
+          </EntryInformation>
+          <Background>
+            <StudyReportNumber>c</StudyReportNumber>
+            <NDANumber>ZZ</NDANumber>
+            <BatchLotNumber>a</BatchLotNumber>
+            <DocumentNumber>A-1</DocumentNumber>
+            <DocumentType>ASP : Food Additive Safety Profile</DocumentType>
+            <DocumentStatus>99</DocumentStatus>
+            <StudyTitle>d</StudyTitle>
+            <Guideline>ABCDEF</Guideline>
+            <Protocol>QWERT</Protocol>
+            <ProtocolDeviations>here and there</ProtocolDeviations>
+            <RegulatoryTestType>Regulatory confirmatory</RegulatoryTestType>
+            <PerformingLaboratory>TestLab</PerformingLaboratory>
+            <References>
+              <Reference>Reference 1</Reference>
+            </References>
+            <Duration>
+              <Value>1.0</Value>
+              <Units>day</Units>
+            </Duration>
+            <Reviewer>ZZ</Reviewer>
+            <ContractNumber>99-99-9</ContractNumber>
+            <SampleNumber>b</SampleNumber>
+            <GLPQACompliance>QA &amp; GLP compliant</GLPQACompliance>
+            <Completeness>B</Completeness>
+            <SummaryData>Yes</SummaryData>
+            <Confidentiality>Yes</Confidentiality>
+            <FARM>Yes</FARM>
+            <ReportDate>20101116</ReportDate>
+            <StudyStartDate>20101101</StudyStartDate>
+            <StudyEndDate>20101102</StudyEndDate>
+            <ReviewDate>20101121</ReviewDate>
+            <PhysicalCharacteristics>
+              <TestMatrix>Formulation</TestMatrix>
+              <TestForm>Metabolite</TestForm>
+              <PercentPurity>99</PercentPurity>
+              <PercentActive>50</PercentActive>
+              <Color>Red</Color>
+              <Grade>Reagent</Grade>
+              <ColorIndex>FF00FF</ColorIndex>
+              <StorageCondition>Any</StorageCondition>
+            </PhysicalCharacteristics>
+          </Background>
+          <Tests>
+            <Test>
+              <TestSystem>
+                <Species>Chinese hamster</Species>
+                <TargetCell>Bone marrow</TargetCell>
+                <Sex>Male</Sex>
+                <Supplier>111</Supplier>
+                <TestSystemComments>11</TestSystemComments>
+                <InitialAge>1</InitialAge>
+                <InitialWeight>11</InitialWeight>
+              </TestSystem>
+              <TestCondition>
+                <SolventVehicle>Citrate</SolventVehicle>
+                <ControlComments>11</ControlComments>
+                <Solubility>1</Solubility>
+                <TestConditionComments>11</TestConditionComments>
+                <ExperimentId>1</ExperimentId>
+                <RegulatoryTestType>Regulatory confirmatory</RegulatoryTestType>
+                <RouteOfExposure>Dermal</RouteOfExposure>
+                <FeedingAdLib>Yes</FeedingAdLib>
+                <FeedingDietOptimization>1</FeedingDietOptimization>
+                <ScoringTechnique>Microscopy</ScoringTechnique>
+                <StainName>Methylene blue</StainName>
+              </TestCondition>
+              <TestResults>
+                <TestResultComments>111</TestResultComments>
+                <TestCalls>
+                  <Call>Equivocal</Call>
+                </TestCalls>
+                <TestCallCriteria>111</TestCallCriteria>
+                <TestSubjectObservations>111</TestSubjectObservations>
+              </TestResults>
+              <NegativeTestControls>
+                <TestControl>
+                  <ControlCompoundName>Acetone</ControlCompoundName>
+                  <TreatmentGroup>
+                    <DosageRegimen>
+                      <DoseVolume>11</DoseVolume>
+                    </DosageRegimen>
+                    <Results>
+                      <PercentPCE>11.0</PercentPCE>
+                      <MNPCEPer1000PCE>11.0</MNPCEPer1000PCE>
+                      <MNNCEPer1000NCE>11.0</MNNCEPer1000NCE>
+                    </Results>
+                  </TreatmentGroup>
+                  <HistoricalPCECells>11</HistoricalPCECells>
+                  <HistoricalPercentMNPCECells>11.0</HistoricalPercentMNPCECells>
+                </TestControl>
+              </NegativeTestControls>
+              <PositiveTestControls>
+                <TestControl>
+                  <ControlCompoundName>Cyclophosphamide (CP)</ControlCompoundName>
+                  <TreatmentGroup>
+                    <DosageRegimen>
+                      <Dose>
+                        <Value>1.0</Value>
+                        <Units>feed%</Units>
+                      </Dose>
+                    </DosageRegimen>
+                    <Results>
+                      <PercentPCE>11.0</PercentPCE>
+                      <MNPCEPer1000PCE>11.0</MNPCEPer1000PCE>
+                      <MNNCEPer1000NCE>11.0</MNNCEPer1000NCE>
+                    </Results>
+                  </TreatmentGroup>
+                  <HistoricalPCECells>11</HistoricalPCECells>
+                  <HistoricalPercentMNPCECells>11.0</HistoricalPercentMNPCECells>
+                </TestControl>
+              </PositiveTestControls>
+              <Treatments>
+                <TreatmentGroup>
+                  <DosageRegimen>
+                    <Dose>
+                      <Value>1.0</Value>
+                      <Units>micro-mol/mL</Units>
+                    </Dose>
+                    <TreatmentTime>
+                      <Value>1.0</Value>
+                      <Units>minute</Units>
+                    </TreatmentTime>
+                    <HarvestTime>
+                      <Value>2.0</Value>
+                      <Units>week</Units>
+                    </HarvestTime>
+                  </DosageRegimen>
+                  <RecoveryDuration>
+                    <Value>2.0</Value>
+                    <Units>minute</Units>
+                  </RecoveryDuration>
+                  <IndividualSubjectCount>11</IndividualSubjectCount>
+                  <Results>
+                    <PercentPCE>11.0</PercentPCE>
+                    <MNPCEPer1000PCE>11.0</MNPCEPer1000PCE>
+                    <MNNCEPer1000NCE>11.0</MNNCEPer1000NCE>
+                    <MNPCESignificance>Not significant</MNPCESignificance>
+                    <MNNCESignificance>Significant</MNNCESignificance>
+                  </Results>
+                </TreatmentGroup>
+              </Treatments>
+            </Test>
+          </Tests>
+        </Study>
+      </InVivoMicronucleusStudies>
+    </ToxicityStudies>
+  </Compound>
+</Compounds>
