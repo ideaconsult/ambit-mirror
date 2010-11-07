@@ -29,6 +29,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	protected final String URI = "http://opentox.org/toxml.owl#";
 	protected int study = 0;
 	protected int test = 0;
+	protected Property inchiProperty = Property.getInChIInstance();
 	
 	protected Hashtable<String, Integer> tagCount = new Hashtable<String, Integer>();
 	
@@ -40,7 +41,13 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				return Property.opentox_IupacName;
 			}
 		},
-		synonym;
+		synonym,
+		trade {
+			@Override
+			public String sameas() {
+				return Property.opentox_TradeName;
+			}
+		};
 		public String sameas() {
 			return Property.opentox_Name;
 		}
@@ -49,7 +56,9 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 		sources,
 		type
 	}
-	
+	/**
+	 * toxml.xsd 3.0.8
+	 */
 	protected enum toxml_tags_level1 {
 		Compounds,
 		Compound,
@@ -60,15 +69,20 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 		Descriptors,
 		Manufacturers,
 		Formulae,
+		PhysicalProperties,
+		OtherProperties,
 		ToxicityStudies,
 		KnownDrugInformation,
+		ModelApplications,
 		Datasets,
 		TextDatasets,
+		OtherRtecsInformation,
 		Structure,
 		AdditionalMolFiles,
 		InvalidMolFiles,
 		AdditionalMolecularFormulas,
 		InvalidMolecularFormulas,
+		Comments
 	}
 	
 	protected enum toxml_tags {
@@ -145,7 +159,18 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	}
 
 	protected boolean newRecord(String tag,Integer tag_num,String parentTag,String path)  {
+
+		//read attributes
+		String[] attr = readAttributes();
+		attributes.push(attr);
 		
+		//prepare property
+		String parent = properties.size()==0?"":String.format("%s.",properties.peek());
+		String pname = tag_num==1?String.format("%s%s",parent,tag):String.format("%s%s_%d",parent,tag,tag_num-1);
+		
+		String reference = attr[toxml_attributes.sources.ordinal()]==null?
+				String.format("%s%s",URI,path):attr[toxml_attributes.sources.ordinal()];
+		String alias = String.format("%s%s",URI,path);
 		
 		try { 
 			toxml_tags_level1 thetag1;
@@ -158,18 +183,26 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				study = 0; test = 0;
 				compounds++;
 				record.clear();
-				record.setIdchemical(compounds);
+				//record.setIdchemical(compounds);
 				break;
 			}	
 			case InChI: {
 				if (toxml_tags.InChI.toString().equals(parentTag)) throw new Exception("Level 2");
 				else {
-					record.clearProperties();
 					break;
 				}
 			}
 			case ToxicityStudies: {
 				study = 0;
+				break;
+			}
+			case Ids: {
+				break;
+			}
+			case Names: {
+				break;
+			}
+			case OtherIds: {
 				break;
 			}
 			default: {
@@ -194,6 +227,10 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			case InChI: {
 				break;
 			}
+			case Code: {
+				if (toxml_tags.InChI.toString().equals(parentTag))
+					alias = Property.opentox_InChI;
+			}
 			case Tests: {
 				test = 0;
 				break;
@@ -207,19 +244,38 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				for (Property pp : l)
 						record.removeProperty(pp);
 				break;
+			}
+			case Id: {
+				if (attr[toxml_attributes.type.ordinal()]!=null)
+					pname = tag_num==1?String.format("%s%s",parent,attr[toxml_attributes.type.ordinal()]):
+						//String.format("%s%s_%d",parent,attr[toxml_attributes.type.ordinal()],tag_num-1);
+						String.format("%s%s",parent,attr[toxml_attributes.type.ordinal()]);
+				break;
 			}			
+			case Name: {
+				if (attr[toxml_attributes.type.ordinal()]!=null) {
+					pname = tag_num==1?String.format("%s%s",parent,attr[toxml_attributes.type.ordinal()]):
+						//String.format("%s%s_%d",parent,attr[toxml_attributes.type.ordinal()],tag_num-1);
+						String.format("%s%s",parent,attr[toxml_attributes.type.ordinal()]);
+				}	
+				try {
+					alias = toxml_names.valueOf(attr[toxml_attributes.type.ordinal()]).sameas();
+				} catch (Exception xx) { }
+
+					
+				break;
+			}			
+
 			default: {
 
 				
 				break;
 			}
 			}
-			String parent = properties.size()==0?"":String.format("%s.",properties.peek());
-			String pname = tag_num==1?String.format("%s%s",parent,tag):String.format("%s%s_%d",parent,tag,tag_num-1);
+			
 			p = new Property(pname,
-					//new LiteratureEntry(path.replace(",", "."),String.format("%s%s",URI,"")));
-					new LiteratureEntry(String.format("%s%s",URI,path),"ToXML"));
-			p.setLabel(String.format("%s%s",URI,path));			
+					new LiteratureEntry(reference,"ToXML"));
+			p.setLabel(alias);			
 			properties.push(p);
 		}
 		
@@ -235,13 +291,16 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			switch (thetag1) {
 			case	Compounds: return false;
 			case	Compound: return false;
+			case Ids: return false; //will read all ids after InChI
+			case Names: return false;
+			case OtherIds: return false;
 			case InChI: {
 				if (toxml_tags.InChI.toString().equals(parentTag)) throw new Exception("Level 2");
 				else return true;
 			}
 			case ToxicityStudies: return study==0; //if > 0  was already written
 			default: {
-				System.out.println(tag);
+
 				newRecord =true;
 				break;
 			}
@@ -269,18 +328,19 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 				break;
 			}
 			}
-			//if (
-				// (key.getName().indexOf(".Treatments")<0) &&
-				 //(key.getName().indexOf(".TreatmentGroup")<0)) { //skip
-				
-				if ((value!=null) && !"".equals(value.trim())) 
-					setProperty(key,value.trim());
-				//else 
-					//setProperty(key,String.format("!!! %d",tag_num));
-			//}
+			
+			if ((value!=null) && !"".equals(value.trim())) {
+				if (toxml_tags.InChI.toString().equals(parentTag)) { 
+					record.setInchi(String.format("InChI=%s", value.trim()));
+					setProperty(key,record.getInchi());
+				} else 	setProperty(key,value.trim());
+			}
 	
 		}
 
+		if (newRecord) {
+			record.setProperty(inchiProperty,record.getInchi());
+		}
 		return newRecord;
 	
 	}	
@@ -323,11 +383,8 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	            	if (tag_num==null) tag_num=1;
 	            	else tag_num++; 
 	            	counts.put(tag,tag_num);
-	            	
-	            	//processItem(tags.size()==0?"":tags.peek(),tag,false);
 
 	            	String parentTag = tags.size()==0?null:tags.peek();
-	            	
 	            	
 	            	//stats
 	            	tags.push(tag);
@@ -352,7 +409,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 	            	
 	            	tags.pop();
 	            	
-	            	if (endRecord(tag,tag_num,tags.peek(),getDotPath(),tmpValue)) {
+	            	if (endRecord(tag,tag_num,tags.size()==0?null:tags.peek(),getDotPath(),tmpValue)) {
 	            		tmpValue = null;
 	            		return true;
 	            	} else {
