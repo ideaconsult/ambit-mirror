@@ -106,7 +106,50 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 		Datum,
 		Source,
 		Value,
-		LeadscopeStudyId;
+		Units,
+		LeadscopeStudyId,
+		Dose;
+	}
+	
+	protected enum toxml_quantity_types {
+		
+		ApplicationVolume,
+		BackgroundCount,
+		Concentration,
+		Count3HTdRMean,
+		Count3HTdRNetTotal,
+		DistributionDuration,
+		Dose,
+		DoseDuration,
+		Duration,
+		EC3,
+		EC3At100PercentPurity,
+		FlowRate,
+		FrequencyPeriod,
+		HarvestTime,
+		//IL6-ConcentrationByMass,
+		//IL6-ConcentrationByUnits,
+		InterimChangeTime,
+		LNCLabelActivity,
+		LNCLabelConcentration,
+		LNCLabelInjectionVolume,
+		LymphNodesWeight,
+		PreparationVolume,
+		Quantity,
+		RadioActivity,
+		RecoveryDuration,
+		ReferenceCompoundDose,
+		SacrificeTime,
+		SampleTime,
+		TestSubstance,
+		TestSubstanceInFormulation,
+		TestSubstanceInPreparation,
+		TestSubstanceInSolventVehicle,
+		Time,
+		TimeOfFindings,
+		TreatmentTime,
+		Value,
+		Weight;
 	}
 	protected IStructureRecord record;
 	protected XMLStreamReader reader ;
@@ -230,24 +273,20 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			toxml_tags theParentTag = toxml_tags.Default;
 			
 			try {theParentTag =  toxml_tags.valueOf(parentTag); } catch (Exception xx) {} 
+			
 			if (toxml_tags.TextDatum.equals(theParentTag) || toxml_tags.Datum.equals(theParentTag)) {
-				switch (thetag) {
-				case Name: {
-					addProperties = false;
-					break;
-				}
-				case Value: {
-					addProperties = false;
-					break;
-				}
-				case Source: {
-					addProperties = false;
-					break;
-				}
-				}
 				addProperties = false;
 				return false;
 			}
+			
+			toxml_quantity_types value_units_tag = null;
+			try {
+				value_units_tag =  toxml_quantity_types.valueOf(parentTag);
+				addProperties = false;
+				return false;
+			}	catch (Exception xx) {
+				
+			} 
 
 			Property p;
 			Class clazz = String.class;
@@ -316,7 +355,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			p.setClazz(clazz);
 			p.setLabel(alias);			
 			properties.push(p);
-			System.out.println("--> "+properties.toString());
+			//System.out.println("--> "+properties.toString());
 			//System.out.println(parentTag + " " + properties);
 		}
 		
@@ -355,16 +394,17 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 			toxml_tags theParentTag = toxml_tags.Default;
 			try {theParentTag =  toxml_tags.valueOf(parentTag); } catch (Exception xx) {} 
 			
-			System.out.println("<-- "+properties.toString());
+			//System.out.println("<-- "+properties.toString());
 			Property key = properties.pop();
 			
+			//Datasets.Datum & TextDatasets.TextDatum
 			if (toxml_tags.TextDatum.equals(theParentTag) || toxml_tags.Datum.equals(theParentTag)) {
 				
 				switch (thetag) {
 				case Name: {
 					key.setName(value.trim());
 					properties.push(key);
-					System.out.println("Name--> "+properties.toString());
+					//System.out.println("Name--> "+properties.toString());
 					return false;
 				}
 				case Value: {
@@ -376,7 +416,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 						setProperty(key,value.trim());
 					}
 					properties.push(key);
-					System.out.println("Value--> "+properties.toString());
+					//System.out.println("Value--> "+properties.toString());
 					return false;
 				}
 				case Source: {
@@ -384,14 +424,31 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 					record.removeProperty(key);
 					key.setReference(new LiteratureEntry(value.trim(),toxml_tags.Datum.toString()));
 					properties.push(key);
-					System.out.println("Source--> "+properties.toString());
+					//System.out.println("Source--> "+properties.toString());
 					setProperty(key,v);
 					return false;
 				}
 				}
 			}
 			
-			
+			//Value/Units pairs
+			try {
+				toxml_quantity_types value_units_tag =  toxml_quantity_types.valueOf(parentTag);
+				switch (thetag) {
+				case Value: {
+					setProperty(key,value.trim());
+				}
+				case Units: {
+					key.setUnits(value==null?"":value.trim());
+					break;
+				}
+				}
+				properties.push(key);
+				return false;
+			}	catch (Exception xx) {
+				
+			} 
+			//continue as normal
 			switch (thetag) {
 			case Study: {
 				newRecord = (test==0);  //if there are tests, these were already written
