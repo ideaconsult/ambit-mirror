@@ -10,8 +10,8 @@ public class PredefinedKnowledgeBase
 	
 	public static final String rules[] = 
 	{
-		"$$NAME=keto/enol    $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CC,OC=C  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=amide/imid   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CN,OC=N  $$GROUP_POS=3,1   $$INFO=",
+		"$$NAME=keto/enol    $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CC OC=C  $$GROUP_POS=3,1   $$INFO=",
+		"$$NAME=amide/imid   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CN OC=N  $$GROUP_POS=3,1   $$INFO=",
 		
 	};
 }
