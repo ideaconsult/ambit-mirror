@@ -8,6 +8,7 @@ import org.restlet.Request;
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.OpenTox;
+import ambit2.rest.ResourceDoc;
 
 /**
  * Generates HTML output for {@link AllAlgorithmsResource}
@@ -21,8 +22,8 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	 */
 	private static final long serialVersionUID = 7544605965468875232L;
 	protected boolean collapsed = false;
-	public AlgorithmHTMLReporter(Request ref, boolean collapsed) {
-		super(ref);
+	public AlgorithmHTMLReporter(Request ref, boolean collapsed,ResourceDoc doc) {
+		super(ref,doc);
 		this.collapsed = collapsed;
 	}
 	@Override

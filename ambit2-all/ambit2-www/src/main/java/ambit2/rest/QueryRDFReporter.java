@@ -25,13 +25,13 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	 */
 	private static final long serialVersionUID = 1160842325900158717L;
 	protected QueryURIReporter<T, IQueryRetrieval<T>> uriReporter;
-	protected abstract QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(Request req);
+	protected abstract QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(Request req,ResourceDoc doc);
 	protected MediaType mediaType;
 	
 	
-	public QueryRDFReporter(Request request,MediaType mediaType) {
+	public QueryRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
 		super();
-		uriReporter = createURIReporter(request);
+		uriReporter = createURIReporter(request,doc);
 		this.mediaType = mediaType;
 	}
 	public OntModel getJenaModel() {

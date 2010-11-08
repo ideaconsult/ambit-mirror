@@ -16,6 +16,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.PropertiesTuple;
 import ambit2.db.update.tuple.QueryTuple;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.query.QueryResource;
@@ -35,7 +36,10 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 
 //	public static String resourceDataset = String.format("%s%s/{%s}",DatasetsResource.datasetID,CompoundResource.compoundID,resourceTag);
 
-
+	public TupleResource() {
+		super();
+		setDocumentation(new ResourceDoc("dataset","DataEntry"));
+	}
 	@Override
 	public IProcessor<QueryTuple, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
@@ -45,10 +49,10 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 			*/
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
-					new TupleHTMLReporter(getRequest(),queryObject.getFieldname()),MediaType.TEXT_HTML);
+					new TupleHTMLReporter(getRequest(),queryObject.getFieldname(),getDocumentation()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		
-			return new StringConvertor(	new TupleURIReporter(getRequest(),queryObject.getFieldname()) {
+			return new StringConvertor(	new TupleURIReporter(getRequest(),queryObject.getFieldname(),getDocumentation()) {
 				@Override
 				public Object processItem(PropertiesTuple src) throws AmbitException {
 					super.processItem(src);
@@ -61,7 +65,7 @@ public class TupleResource extends QueryResource<QueryTuple, PropertiesTuple> {
 			
 		} else //html 	
 			return new StringConvertor(
-					new TupleHTMLReporter(getRequest(),queryObject.getFieldname()),MediaType.TEXT_HTML);
+					new TupleHTMLReporter(getRequest(),queryObject.getFieldname(),getDocumentation()),MediaType.TEXT_HTML);
 		
 	}
 	

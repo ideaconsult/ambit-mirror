@@ -31,10 +31,7 @@ public class PropertyValueResourceTest extends ResourceTest {
 				PropertyValueResource.featureKey,
 				Reference.encode(Property.opentox_CAS));
 	}
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
+
 	@Test
 	public void testRDFTurtle() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_TURTLE);
@@ -80,7 +77,7 @@ public class PropertyValueResourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals("[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3	1530-32-1", line);
+			Assert.assertEquals("http://www.opentox.org/api/1.1#CASRN = 1530-32-1", line);
 			count++;
 		}
 		return count==1;

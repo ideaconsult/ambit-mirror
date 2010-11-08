@@ -42,7 +42,7 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 
 		FactoryTaskConvertor<USERID> tc = new AmbitFactoryTaskConvertor<USERID>();
 	
-		return tc.createTaskConvertor(variant, getRequest());
+		return tc.createTaskConvertor(variant, getRequest(),getDocumentation());
 
 	}
 

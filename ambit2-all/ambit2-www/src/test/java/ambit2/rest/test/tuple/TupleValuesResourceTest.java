@@ -54,10 +54,7 @@ public class TupleValuesResourceTest extends ResourceTest {
 		}
 		return count >0;
 	}	
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
+
 	@Test
 	public void testRDFTurtle() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_TURTLE);

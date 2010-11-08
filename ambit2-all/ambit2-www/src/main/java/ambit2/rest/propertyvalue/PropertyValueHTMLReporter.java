@@ -13,6 +13,7 @@ import ambit2.db.readers.PropertyValue;
 import ambit2.db.search.AbstractQuery;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
@@ -40,19 +41,19 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
-	public PropertyValueHTMLReporter(Request baseRef) {
-		this(baseRef,false);
+	public PropertyValueHTMLReporter(Request baseRef,ResourceDoc doc) {
+		this(baseRef,false,doc);
 	}
-	public PropertyValueHTMLReporter(Request baseRef, boolean editable) {
+	public PropertyValueHTMLReporter(Request baseRef, boolean editable,ResourceDoc doc) {
 	
 		super(baseRef,true);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,editable);
-		propertyURIReporter = new PropertyURIReporter(baseRef);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,doc,editable);
+		propertyURIReporter = new PropertyURIReporter(baseRef,doc);
 		this.editable = editable;
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new PropertyValueURIReporter(request);
+	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
+		return new PropertyValueURIReporter(request,doc);
 	}
 	
 

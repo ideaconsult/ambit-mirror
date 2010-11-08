@@ -9,6 +9,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 
 public class ModelURIReporter<Q extends IQueryRetrieval<ModelQueryResults>> extends QueryURIReporter<ModelQueryResults, Q> {
 	/**
@@ -16,10 +17,14 @@ public class ModelURIReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 
+	public ModelURIReporter(Request baseRef,ResourceDoc doc) {
+		super(baseRef,doc);
+	}
 	public ModelURIReporter(Request baseRef) {
-		super(baseRef);
+		super(baseRef,null);
 	}
 	public ModelURIReporter() {
+		super();
 	}	
 	@Override
 	public String getURI(String ref, ModelQueryResults model) {

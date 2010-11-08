@@ -12,13 +12,13 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.Classifier;
 import weka.classifiers.functions.LinearRegression;
 import weka.clusterers.Clusterer;
 import weka.core.Instances;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
-import weka.filters.unsupervised.attribute.RemoveUseless;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -38,6 +38,7 @@ import ambit2.rest.model.ModelURIReporter;
 public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQueryResults> {
 	protected Clusterer clusterer = null;
 	protected Classifier classifier = null;
+	protected PrincipalComponents pca = null;
 
 	/**
 	 * 
@@ -67,11 +68,13 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 		
-		clusterer = null; classifier = null;
+		clusterer = null; classifier = null; pca = null;
 		if (weka instanceof Clusterer) clusterer = (Clusterer) weka;
 		else if (weka instanceof Classifier) {
 			classifier = (Classifier) weka;
 			if (targetURI == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No target variable! "+OpenTox.params.target);
+		} else if (weka instanceof PrincipalComponents) {
+			pca = (PrincipalComponents) weka;
 		}
 		else throw new AmbitException(String.format("Unknown algorithm %s",algorithm.toString()));
 
@@ -80,6 +83,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 		if (prm!=null)
 		try {
 			if (classifier!= null) classifier.setOptions(prm);
+			else if (pca != null)  pca.setOptions(prm);
 			else if (clusterer != null) {
 					clusterer.getClass().getMethod(
 			                "setOptions",
@@ -198,6 +202,34 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 				property.setOrder(i+1);
 				predictors.add(property);
 			}				
+		} else if (pca != null) {
+			
+			try {
+				pca.setVarianceCovered(1.0);
+				pca.buildEvaluator(newInstances);
+			} catch (Exception x) {
+				throw new AmbitException(x);
+			}
+			
+			Property property; 
+			
+			dependent = new Template("Empty");
+			
+			predictors = new Template(name+"#Independent");
+			for (int i=0; i < newInstances.numAttributes(); i++) {
+				if (newInstances.classIndex()==i) continue;
+				property = createPropertyFromReference(new Reference(newInstances.attribute(i).name()), entry);
+				property.setOrder(i+1);
+				predictors.add(property);
+			}	
+
+			predicted = new Template(name+"#predicted");
+			for (int i=0; i < newInstances.numAttributes(); i++) {
+				if (newInstances.classIndex()==i) continue;
+				property = createPropertyFromReference(new Reference(String.format("PCA_%d",i+1)), entry);
+				property.setOrder(i+1);
+				predicted.add(property);
+			}			
 		}
 		//System.out.println("Done");
 
@@ -206,7 +238,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 		m.setPredicted(predicted);
 		
 		try {
-			serializeModel(clusterer==null?classifier:clusterer, newInstances, m);
+			serializeModel(clusterer==null?classifier==null?pca:classifier:clusterer, newInstances, m);
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}

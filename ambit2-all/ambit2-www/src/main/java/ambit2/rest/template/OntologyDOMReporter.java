@@ -1,30 +1,20 @@
 package ambit2.rest.template;
 
-import java.io.IOException;
-import java.io.Reader;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.restlet.Request;
-import org.restlet.data.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
-import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryDOMReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.property.PropertyDOMParser;
-import ambit2.rest.property.PropertyDOMReporter;
-import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.XMLTags;
 import ambit2.rest.reference.AbstractDOMParser;
 
 public class OntologyDOMReporter<Q extends IQueryRetrieval<Property>> extends QueryDOMReporter<Property, Q> {
-	protected PropertyDOMReporter<IQueryRetrieval<Property>> reporterProperty;
+	//protected PropertyDOMReporter<IQueryRetrieval<Property>> reporterProperty;
 
 	/**
 	 * 
@@ -33,11 +23,12 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	protected boolean recursive = false;
 	protected int count = 0;
 	protected AbstractDOMParser parser;
-	public OntologyDOMReporter(Request ref) {
-		this(ref,false);
+	public OntologyDOMReporter(Request ref,ResourceDoc doc) {
+		this(ref,false,doc);
 	}
-	public OntologyDOMReporter(Request ref,Boolean isRecursive) {
-		super(ref);
+	public OntologyDOMReporter(Request ref,Boolean isRecursive,ResourceDoc doc) {
+		super(ref,doc);
+		/*
 		reporterProperty = new PropertyDOMReporter<IQueryRetrieval<Property>>(ref);
 		recursive = isRecursive;
 		parser = new PropertyDOMParser(){
@@ -53,15 +44,17 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
 				
 			}
 		};	
+		*/
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request reference) {
-		return new PropertyURIReporter(reference);
+	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
+		//return new PropertyURIReporter(reference);
+		return null;
 	}
 	@Override
 	public Document getOutput() throws AmbitException {
 		Document doc = super.getOutput();
-		reporterProperty.setOutput(doc);
+		//reporterProperty.setOutput(doc);
 		return doc;
 	}
 	@Override
@@ -76,6 +69,7 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
 
 	@Override
 	public Object processItem(Property item) throws AmbitException {
+		/*
 		if (item == null) return null;
 		count++;
 		if (!item.getClazz().equals(Dictionary.class)) {
@@ -103,14 +97,18 @@ public class OntologyDOMReporter<Q extends IQueryRetrieval<Property>> extends Qu
 			}
 
 		}
+		*/
 		return null;
+		
 	}
 	@Override
 	public Element getItemElement(Document doc, Property item) {
+		/*
 		if (!item.getClazz().equals(Dictionary.class)) 
 			return reporterProperty.getItemElement(doc,(Property) item);
-
+*/
         return null;
+        
 	}
 
 }

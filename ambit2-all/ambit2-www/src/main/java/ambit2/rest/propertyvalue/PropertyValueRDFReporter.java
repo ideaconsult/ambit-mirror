@@ -11,6 +11,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OT;
@@ -36,15 +37,15 @@ public class PropertyValueRDFReporter<T> extends QueryRDFReporter<T,IQueryRetrie
 	protected ReferenceURIReporter referenceReporter;
 	protected PropertyURIReporter propertyReporter;
 	protected CompoundURIReporter cmpReporter;
-	public PropertyValueRDFReporter(Request req, MediaType mediaType) {
-		super(req,mediaType);
-		propertyReporter = new PropertyURIReporter(req);
+	public PropertyValueRDFReporter(Request req, MediaType mediaType,ResourceDoc doc) {
+		super(req,mediaType,doc);
+		propertyReporter = new PropertyURIReporter(req,doc);
 		referenceReporter = new ReferenceURIReporter(req);
 	}
 	@Override
 	protected QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(
-			Request req) {
-		return new PropertyValueURIReporter<T, IQueryRetrieval<T>>(req);
+			Request req,ResourceDoc doc) {
+		return new PropertyValueURIReporter<T, IQueryRetrieval<T>>(req,doc);
 	}
 	public  Individual jenaProcess(Property property) throws AmbitException {
 		return

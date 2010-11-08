@@ -28,6 +28,7 @@ import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.predictor.DescriptorPredictor;
@@ -48,7 +49,10 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public final static String resourceID =  OpenTox.URI.algorithm.getResourceID();	
 	protected static List<Algorithm<String>> algorithmList;
 
-
+	public AllAlgorithmsResource() {
+		super();
+		setDocumentation(new ResourceDoc("Algorithm","Algorithm"));
+	}
 	
 	private LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
 	private Object[][] algorithms = new Object[][] {
@@ -296,10 +300,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
 					new AlgorithmHTMLReporter(getRequest(),
-							getRequest().getAttributes().get(algorithmKey)==null
+							getRequest().getAttributes().get(algorithmKey)==null,
+							getDocumentation()
 							),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest()) {
+			AlgorithmURIReporter r = new AlgorithmURIReporter(getRequest(),getDocumentation()) {
 				@Override
 				public void processItem(Algorithm item, Writer output) {
 					super.processItem(item, output);
@@ -313,11 +318,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				) {
 			return new StringConvertor(
-					new AlgorithmRDFReporter(getRequest(),variant.getMediaType())
+					new AlgorithmRDFReporter(getRequest(),variant.getMediaType(),getDocumentation())
 					,variant.getMediaType());					
 		} else //html 	
 			return new StringConvertor(
-					new CatalogHTMLReporter(getRequest()),MediaType.TEXT_HTML);
+					new CatalogHTMLReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
 		
 	}
 				
@@ -363,8 +368,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						getRequest().getRootRef(),
 						getContext(),
 						algorithm,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-						new AlgorithmURIReporter(getRequest()),
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
+						new AlgorithmURIReporter(getRequest(),getDocumentation()),
 						false
 						);
 			else if (algorithm.hasType(Algorithm.typeStructure)) {
@@ -374,8 +379,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						algorithm,
 						false,
 						new OptimizerModelBuilder(getRequest().getRootRef(),
-								new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-								new AlgorithmURIReporter(getRequest()),false)
+								new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
+								new AlgorithmURIReporter(getRequest(),getDocumentation()),false)
 						);
 			}
 			else if (algorithm.hasType(Algorithm.typeDescriptor)) {
@@ -385,8 +390,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							getContext(),
 							algorithm,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-							new AlgorithmURIReporter(getRequest()),
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
+							new AlgorithmURIReporter(getRequest(),getDocumentation()),
 							true
 							);	
 					Reference modelRef = modelCreator.call();
@@ -395,8 +400,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					DescriptorPredictor predictor = new DescriptorPredictor(
 							getRequest().getRootRef(),
 							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-							new PropertyURIReporter(getRequest()),
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
+							new PropertyURIReporter(getRequest(),getDocumentation()),
 							null
 							);
 					return
@@ -419,8 +424,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							getContext(),
 							algorithm,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-							new AlgorithmURIReporter(getRequest()));						
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
+							new AlgorithmURIReporter(getRequest(),getDocumentation()));						
 				}
 				case property: {
 					return new CallableNumericalModelCreator(
@@ -428,8 +433,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							getContext(),
 							algorithm,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-							new AlgorithmURIReporter(getRequest()));					
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
+							new AlgorithmURIReporter(getRequest(),getDocumentation()));					
 				}		
 				default: {
 						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,algorithm.toString());
@@ -448,8 +453,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						getRequest().getRootRef(),
 						getContext(),
 						algorithm,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
-						new AlgorithmURIReporter(getRequest()));	
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
+						new AlgorithmURIReporter(getRequest(),getDocumentation()));	
 			} 
 		} catch (ResourceException x) {
 			throw x;

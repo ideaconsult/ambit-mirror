@@ -26,11 +26,11 @@ public abstract class QueryDOMReporter<T,Q extends IQueryRetrieval<T>> extends Q
 	 */
 	private static final long serialVersionUID = 2357730001828019569L;
 	protected QueryURIReporter<T, IQueryRetrieval<T>> uriReporter;
-	public QueryDOMReporter(Request req) {
+	public QueryDOMReporter(Request req,ResourceDoc doc) {
 		super();
-		uriReporter = createURIReporter(req); 
+		uriReporter = createURIReporter(req,doc); 
 	}
-	protected abstract QueryURIReporter createURIReporter(Request req);
+	protected abstract QueryURIReporter createURIReporter(Request req,ResourceDoc doc);
 
 	public void open() throws DbAmbitException {
 	}	

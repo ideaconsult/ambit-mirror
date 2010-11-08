@@ -12,11 +12,11 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTClass;
 import ambit2.rest.reference.ReferenceURIReporter;
 
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.vocabulary.DC;
@@ -35,13 +35,13 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	 */
 	private static final long serialVersionUID = -8857789530109166243L;
 	protected ReferenceURIReporter referenceReporter;
-	public PropertyRDFReporter(Request request,MediaType mediaType) {
-		super(request,mediaType);
+	public PropertyRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
+		super(request,mediaType,doc);
 		referenceReporter = new ReferenceURIReporter(request);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request reference) {
-		return new PropertyURIReporter(reference);
+	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
+		return new PropertyURIReporter(reference,doc);
 	}
 	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		super.header(output, query);

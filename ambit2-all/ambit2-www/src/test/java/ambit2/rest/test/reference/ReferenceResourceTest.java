@@ -3,10 +3,7 @@ package ambit2.rest.test.reference;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -18,17 +15,13 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.w3c.dom.Document;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
-import ambit2.rest.query.XMLTags;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFReferenceIterator;
-import ambit2.rest.reference.ReferenceDOMParser;
 import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 import ambit2.rest.test.ResourceTest;
@@ -124,7 +117,7 @@ public class ReferenceResourceTest extends ResourceTest {
 		return count==1;
 	}
 	*/
-	@Test
+	/*
 	public void testParser() throws Exception {
 		String xml = String.format( 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><References xmlns=\"http://www.opentox.org/Reference/1.0\">"+
@@ -152,6 +145,7 @@ public class ReferenceResourceTest extends ResourceTest {
         parser.parse(doc);
         Assert.assertEquals(1,le.size());
 	}
+	*/
 	@Test
 	public void testCreateForeignEntry() throws Exception {
 		Form form = new Form();  

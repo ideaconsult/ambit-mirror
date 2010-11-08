@@ -36,6 +36,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.RDFIteratingReader;
 import ambit2.rest.structure.ConformerURIReporter;
@@ -315,7 +316,7 @@ public class CallableFileImport implements
 			if (firstCompoundOnly) {
 				if (recordImported == null) throw new Exception("No compound imported");
 				if (compoundReporter == null)
-					compoundReporter = new ConformerURIReporter();
+					compoundReporter = new ConformerURIReporter(null);
 				return new Reference(compoundReporter.getURI(recordImported));				
 			} else {
 				ReadDataset q = new ReadDataset();

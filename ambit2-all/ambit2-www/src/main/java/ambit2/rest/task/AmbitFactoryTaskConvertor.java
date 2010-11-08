@@ -9,6 +9,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.Reporter;
+import ambit2.rest.ResourceDoc;
 
 /**
  * Same as parent class, with custom HTML reporter for Task object
@@ -20,7 +21,7 @@ public class AmbitFactoryTaskConvertor<USERID> extends
 		FactoryTaskConvertor<USERID> {
 	@Override
 	public synchronized Reporter<Iterator<Task<Reference, USERID>>, Writer> createTaskReporterHTML(
-			Request request) throws AmbitException, ResourceException {
-		return	new TaskHTMLReporter<USERID>(request);
+			Request request,ResourceDoc doc) throws AmbitException, ResourceException {
+		return	new TaskHTMLReporter<USERID>(request,doc);
 	}
 }

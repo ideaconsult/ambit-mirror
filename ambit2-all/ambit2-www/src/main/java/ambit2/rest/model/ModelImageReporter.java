@@ -22,6 +22,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.model.predictor.ModelPredictor;
 
 public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> extends QueryReporter<ModelQueryResults, Q,BufferedImage > {
@@ -35,7 +36,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 	protected Dimension d;
 	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelURIReporter;
 	
-	public ModelImageReporter(Request request, Form form,Dimension d) throws ResourceException {
+	public ModelImageReporter(Request request, Form form,Dimension d,ResourceDoc doc) throws ResourceException {
 		super();
 		this.request = request;
 		this.d = d;
@@ -43,7 +44,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 		//if (dataset==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
 		
 		param = form.getFirstValue(OpenTox.params.parameters.toString());
-		modelURIReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request);
+		modelURIReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request,doc);
 	
 	}
 	@Override

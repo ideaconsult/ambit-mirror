@@ -30,6 +30,7 @@ public class OpenSSOTest extends ResourceTest {
 	@Test
 	public void testURI_user_pass() throws Exception {
 		String user = AAServicesConfig.getSingleton().getTestUser();
+		System.out.println(user);
 		String token  = OpenSSOToken.getTokenByUserPass(user, AAServicesConfig.getSingleton().getTestUserPass());
 		Assert.assertTrue(OpenSSOToken.isValid(token));
 		
@@ -38,9 +39,13 @@ public class OpenSSOTest extends ResourceTest {
 		String uri = ref.toString();
 		ref = OpenSSOToken.addTokenToReference(ref, token);
 		
-		Status status = OpenSSOToken.createPolicy(String.format("%s",uri),uri,user,token);
+		OpenSSOToken.listPolicies(token);
+		
+		/*
+		Status status = OpenSSOToken.createPolicy(String.format("%s",uri.replace("/", "_")),uri,user,token);
 		System.out.println(status);
 		testGet(ref.toString(),MediaType.TEXT_URI_LIST,Status.SUCCESS_OK);
+		*/
 		OpenSSOToken.logout(token);
 		
 		Assert.assertFalse(OpenSSOToken.isValid(token));

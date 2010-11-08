@@ -4,7 +4,6 @@ import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.Request;
-import org.restlet.data.Reference;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
@@ -14,10 +13,8 @@ import ambit2.db.search.property.QueryOntology;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
-import ambit2.rest.RESTClient;
-import ambit2.rest.property.PropertyDOMParser;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.rest.reference.AbstractDOMParser;
 
 /**
  * Reporter for {@link Dictionary} or {@link Property}
@@ -37,8 +34,8 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 
 	}	
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new PropertyURIReporter(request);
+	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
+		return new PropertyURIReporter(request,doc);
 	}
 	
 	public String toURI(Property record) {
@@ -69,6 +66,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			if ( record.getClazz().equals(Dictionary.class) ){
 				output.write(toURI(record));
 				
+				/*
 				if (!collapsed) {
 					AbstractDOMParser parser = new PropertyDOMParser(){
 						@Override
@@ -88,6 +86,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 					
 							
 				}				
+				*/
 				
 			} else 
 				output.write(toURI(record));

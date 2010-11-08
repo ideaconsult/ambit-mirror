@@ -70,7 +70,8 @@ public class CSLSResource extends ServerResource {
 
 
 	}
-	public Representation get(Variant variant) {
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
 		
 		try {
 	        if (term != null) {
@@ -89,8 +90,10 @@ public class CSLSResource extends ServerResource {
 			            		q.setRepresentation(representation);			            		
 			            		DownloadTool.download(q.process(term), stream);
 			            		stream.flush();
+			            	} catch (ResourceException x) {
+			            		throw x;
 			            	} catch (AmbitException x) {
-			            		x.printStackTrace();
+			            		throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 			            		//throw new IOException(x.getMessage());
 			            	} finally {
 			            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}

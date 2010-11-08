@@ -1,5 +1,8 @@
 package ambit2.rest.aa.opensso;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -240,4 +243,32 @@ public class OpenSSOToken {
 		}
 		//curl -i -H 'Content-Type: application/xml' -T policy-nina.xml -X POST -H 'subjectid: AQIC5wM2LY4Sfcx1OKHtFWI53gDhXr5thikBu1%2BG6ze64Lg%3D%40AAJTSQACMDE%3D%23' 'http://opensso.in-silico.ch/Pol/opensso-pol'
 	}	
+	
+	public static void listPolicies(String token) {
+		String policyService = AAServicesConfig.getSingleton().getPolicyService();
+		Form headers = new Form();  
+		headers.add(subjectid_tag, token);
+		
+		Representation response = null;
+		ClientResource client = new ClientResource(policyService);
+		try {
+			client.getRequest().getAttributes().put(headers_tag, headers);  
+			response = client.get();
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(response.getStream()));
+			String line = null;
+			int count=0;
+			while ((line = reader.readLine())!=null) {
+				System.out.println(line);
+			}
+			
+		} catch (Exception x) {
+			try { System.out.println(response.getText()); } catch (Exception xx ) {x.printStackTrace();}
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x.getMessage());
+		} finally {
+			try {response.release(); } catch (Exception x) {}
+		//	try {r.release(); } catch (Exception x) {}
+			try {client.release(); } catch (Exception x) {}
+		}		
+	}
 }

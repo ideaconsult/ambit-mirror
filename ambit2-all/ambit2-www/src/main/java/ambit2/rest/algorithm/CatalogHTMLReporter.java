@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.restlet.Request;
 
 import ambit2.rest.AmbitResource;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.reporters.CatalogURIReporter;
 
 /**
@@ -20,8 +21,8 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = 7644836050657868159L;
-	public CatalogHTMLReporter(Request request) {
-		super(request);
+	public CatalogHTMLReporter(Request request,ResourceDoc doc) {
+		super(request,doc);
 	}
 	@Override
 	public void header(Writer output, Iterator<T> query) {

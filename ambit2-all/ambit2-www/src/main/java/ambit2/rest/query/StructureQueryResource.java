@@ -51,6 +51,7 @@ import ambit2.rest.PDFConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RDFStaXConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
@@ -72,6 +73,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected Template template;
 	protected Profile groupProperties;
 
+	public StructureQueryResource() {
+		super();
+		setDocumentation(new ResourceDoc("dataset","Dataset"));
+	}
 	public Profile getGroupProperties() {
 		return groupProperties;
 	}
@@ -232,7 +237,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					csvreporter,MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			ConformerURIReporter<QueryStructureByID> reporter = new ConformerURIReporter<QueryStructureByID>(getRequest(),queryObject.isPrescreen());
+			ConformerURIReporter<QueryStructureByID> reporter = 
+				new ConformerURIReporter<QueryStructureByID>(getRequest(),queryObject.isPrescreen(),getDocumentation());
 			reporter.setDelimiter("\n");
 			return new StringConvertor(reporter,MediaType.TEXT_URI_LIST);			
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
@@ -249,10 +255,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				d.height = Integer.parseInt(form.getFirstValue("h").toString());
 			} catch (Exception x) {}			
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter(getRequest(),true,null,getTemplate(),getGroupProperties(),d),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter(getRequest(),getDocumentation(),true,null,getTemplate(),getGroupProperties(),d),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest()),ChemicalMediaType.WEKA_ARFF);			
+					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation()),ChemicalMediaType.WEKA_ARFF);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString()),MediaType.TEXT_CSV);
@@ -260,12 +266,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			switch (rdfwriter) {
 			case stax: {
 				return new RDFStaXConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-						new DatasetRDFStaxReporter(getRequest(),getTemplate(),getGroupProperties())				
+						new DatasetRDFStaxReporter(getRequest(),getDocumentation(),getTemplate(),getGroupProperties())				
 						);				
 			}
 			default : { //jena
 				return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-						new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());
+						new DatasetRDFReporter(getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());
 				
 			}
 			}
@@ -278,7 +284,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());			
+					new DatasetRDFReporter(getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());			
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(template,getGroupProperties()),ChemicalMediaType.CHEMICAL_MDLSDF);

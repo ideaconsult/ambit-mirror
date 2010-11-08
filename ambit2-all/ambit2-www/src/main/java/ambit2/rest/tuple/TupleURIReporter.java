@@ -7,6 +7,7 @@ import ambit2.db.PropertiesTuple;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.tuple.QueryTuple;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.structure.CompoundURIReporter;
 
 /**
@@ -28,9 +29,9 @@ public class TupleURIReporter extends QueryURIReporter<PropertiesTuple, QueryTup
 	public void setRecord(IStructureRecord record) {
 		this.record = record;
 	}
-	public TupleURIReporter(Request baseRef,IStructureRecord record) {
-		super(baseRef);
-		reporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(baseRef);
+	public TupleURIReporter(Request baseRef,IStructureRecord record,ResourceDoc doc) {
+		super(baseRef,doc);
+		reporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(baseRef,doc);
 		this.record = record;
 	}
 	@Override

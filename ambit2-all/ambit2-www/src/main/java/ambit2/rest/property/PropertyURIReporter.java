@@ -7,6 +7,7 @@ import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.template.OntologyResource;
 
 /**
@@ -21,13 +22,12 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 	 */
 	private static final long serialVersionUID = 711954935147788056L;
 
-	public PropertyURIReporter(Request ref) {
-		super(ref);
+	public PropertyURIReporter(Request ref,ResourceDoc doc) {
+		super(ref,doc);
 	}
 	public PropertyURIReporter() {
-		this(null);
+		this(null,null);
 	}
-	
 	@Override
 	public String getURI(String ref, Property record) {
 		

@@ -19,7 +19,7 @@ public class ReferenceURIReporter <Q extends IQueryRetrieval<ILiteratureEntry>> 
 	 */
 	private static final long serialVersionUID = 8868430033131766579L;
 	public ReferenceURIReporter(Request baseRef) {
-		super(baseRef);
+		super(baseRef,null);
 	}
 	public ReferenceURIReporter() {
 		this(null);

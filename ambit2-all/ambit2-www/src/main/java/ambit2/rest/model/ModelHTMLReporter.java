@@ -12,6 +12,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.template.OntologyResource;
@@ -25,20 +26,20 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	//only necessary if applying the model
 	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
 	
-	public ModelHTMLReporter() {
-		this(null,true);
+	public ModelHTMLReporter(ResourceDoc doc) {
+		this(null,true,doc);
 	}
-	public ModelHTMLReporter(Request request,boolean collapsed) {
-		this(request,request,collapsed);
+	public ModelHTMLReporter(Request request,boolean collapsed,ResourceDoc doc) {
+		this(request,request,collapsed,doc);
 	}
-	public ModelHTMLReporter(Request request,Request originalRef,boolean collapsed) {
+	public ModelHTMLReporter(Request request,Request originalRef,boolean collapsed,ResourceDoc doc) {
 		super(request,collapsed);
-		templateReporter = new PropertyURIReporter(request);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,collapsed);
+		templateReporter = new PropertyURIReporter(request,doc);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,doc,collapsed);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request);
+	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
+		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request,doc);
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<ModelQueryResults> query) {

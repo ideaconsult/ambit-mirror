@@ -8,6 +8,7 @@ import ambit2.base.data.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.XMLTags;
 
 
@@ -17,8 +18,8 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<SourceDataset>> extend
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 
-	public DatasetURIReporter(Request baseRef) {
-		super(baseRef);
+	public DatasetURIReporter(Request baseRef,ResourceDoc doc) {
+		super(baseRef,doc);
 	}
 	public DatasetURIReporter() {
 	}	

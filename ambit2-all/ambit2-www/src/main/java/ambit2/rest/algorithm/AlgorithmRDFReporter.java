@@ -11,6 +11,7 @@ import org.restlet.data.MediaType;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Parameter;
 import ambit2.rest.BO;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OTA;
 import ambit2.rest.rdf.OTA.OTAClass;
@@ -32,9 +33,9 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 	 * 
 	 */
 	private static final long serialVersionUID = -2332767360556001891L;
-	public AlgorithmRDFReporter(Request request,MediaType mediaType) {
-		super(request,mediaType);
-		reporter =  new AlgorithmURIReporter(request);
+	public AlgorithmRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
+		super(request,mediaType,doc);
+		reporter =  new AlgorithmURIReporter(request,doc);
 	}
 	@Override
 	public void processItem(Algorithm item, Writer output) {
@@ -94,6 +95,12 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 	@Override
 	public void header(Writer output, Iterator<Algorithm> query) {
 		super.header(output, query);
+		try {
+			getJenaModel().setNsPrefix("bo","http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/");
+			getJenaModel().setNsPrefix("bo1","http://ambit.sourceforge.net/descriptors.owl#");
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 		OT.OTClass.Algorithm.createOntClass(getJenaModel());
 		OT.OTClass.Parameter.createOntClass(getJenaModel());
 		/*
@@ -113,6 +120,7 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 		getJenaModel().createAnnotationProperty(DC.publisher.getURI());
 		getJenaModel().createAnnotationProperty(DC.format.getURI());
 		getJenaModel().createAnnotationProperty(DC.date.getURI());		
+
 	}
 
 

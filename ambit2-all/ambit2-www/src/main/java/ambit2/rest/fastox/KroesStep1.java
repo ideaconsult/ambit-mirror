@@ -26,6 +26,7 @@ public class KroesStep1 extends FastToxStep1 {
 		return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 				new CompoundHTMLReporter(
 						getRequest(),
+						getDocumentation(),
 						false) {
 					
 					

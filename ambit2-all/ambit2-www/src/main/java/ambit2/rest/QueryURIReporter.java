@@ -24,6 +24,13 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 	 * 
 	 */
 	private static final long serialVersionUID = -4566136103208284105L;
+	protected ResourceDoc documentation;
+	public ResourceDoc getDocumentation() {
+		return documentation;
+	}
+	public void setDocumentation(ResourceDoc documentation) {
+		this.documentation = documentation;
+	}
 	protected String delimiter = "";
 	public String getDelimiter() {
 		return delimiter;
@@ -42,11 +49,12 @@ public abstract class QueryURIReporter<T,Q extends IQueryRetrieval<T>>  extends 
 	public Reference getBaseReference() {
 		return baseReference;
 	}
-	protected QueryURIReporter(Reference baseRef) {
+	protected QueryURIReporter(Reference baseRef,ResourceDoc doc) {
 		this.baseReference = baseRef;
+		this.documentation = doc;
 	}
-	public QueryURIReporter(Request request) {
-		this(request==null?null:request.getRootRef());
+	public QueryURIReporter(Request request,ResourceDoc doc) {
+		this(request==null?null:request.getRootRef(),doc);
 		setRequest(request);
 	}	
 	protected QueryURIReporter() {

@@ -32,12 +32,12 @@ import ambit2.db.update.property.CreatePropertyReferenceID;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.db.update.property.UpdateProperty;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
@@ -79,6 +79,11 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 
 	protected boolean collapsed ;
 	
+	public PropertyResource() {
+		super();
+
+		setDocumentation(new ResourceDoc("Feature","Feature"));
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -99,10 +104,8 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
-		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new PropertyDOMReporter(getRequest()));
-		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				PropertyURIReporter r = new PropertyURIReporter(getRequest());
+		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+				PropertyURIReporter r = new PropertyURIReporter(getRequest(),getDocumentation());
 				r.setDelimiter("\n");
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
@@ -112,7 +115,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
-					new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(),variant.getMediaType())
+					new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(),variant.getMediaType(),getDocumentation())
 					,variant.getMediaType());		
 		} else 
 			return new OutputWriterConvertor(
@@ -268,7 +271,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return new PropertyURIReporter(baseReference);
+		return new PropertyURIReporter(baseReference,getDocumentation());
 	}
 	
 	@Override

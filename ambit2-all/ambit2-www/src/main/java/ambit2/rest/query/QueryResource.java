@@ -76,7 +76,7 @@ Then, when the "get(Variant)" method calls you back,
 		super.doInit();
 		customizeVariants(new MediaType[] {
 				MediaType.TEXT_HTML,
-				MediaType.TEXT_XML,
+				//MediaType.TEXT_XML,
 				MediaType.TEXT_PLAIN,
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
@@ -417,9 +417,9 @@ Then, when the "get(Variant)" method calls you back,
 					if (r.size()==1) {
 						r.get(0).update();
 						setStatus(r.get(0).isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
-						return tc.createTaskRepresentation(r.get(0), variant,getRequest(), getResponse());
+						return tc.createTaskRepresentation(r.get(0), variant,getRequest(), getResponse(),getDocumentation());
 					} else 
-						return tc.createTaskRepresentation(r.iterator(), variant,getRequest(), getResponse());
+						return tc.createTaskRepresentation(r.iterator(), variant,getRequest(), getResponse(),getDocumentation());
 				}
 
 			} catch (AmbitException x) {

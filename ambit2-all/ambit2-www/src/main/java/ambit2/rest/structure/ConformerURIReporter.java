@@ -4,6 +4,7 @@ import org.restlet.Request;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.ResourceDoc;
 
 /**
  * Generates conformer URI as /compound/{id}/conformer/{id}
@@ -18,14 +19,14 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	 */
 	private static final long serialVersionUID = -3240656616658257198L;
 
-	public ConformerURIReporter() {
-		this(null,false);
+	public ConformerURIReporter(ResourceDoc doc) {
+		this(null,false,doc);
 	}	
-	public ConformerURIReporter(Request baseRef) {
-		super(baseRef,false);
+	public ConformerURIReporter(Request baseRef,ResourceDoc doc) {
+		super(baseRef,false,doc);
 	}	
-	public ConformerURIReporter(Request baseRef,boolean readStructure) {
-		super(baseRef,readStructure);
+	public ConformerURIReporter(Request baseRef,boolean readStructure,ResourceDoc doc) {
+		super(baseRef,readStructure,doc);
 	}
 
 	public String getURI(String ref, IStructureRecord item) {

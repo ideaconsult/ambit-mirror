@@ -11,6 +11,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryDOMReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.XMLTags;
 
 /**
@@ -32,13 +33,13 @@ public class DatasetsXMLReporter extends QueryDOMReporter<SourceDataset, IQueryR
 	 */
 	private static final long serialVersionUID = -7889958961008530806L;
 
-	public DatasetsXMLReporter(Request reference) {
-		super(reference);
+	public DatasetsXMLReporter(Request reference,ResourceDoc doc) {
+		super(reference,doc);
 	}
 
 	@Override
-	protected QueryURIReporter createURIReporter(Request reference) {
-		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference);
+	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
+		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference,doc);
 	}
 	@Override
 	public void header(Document doc, IQueryRetrieval<SourceDataset> query) {

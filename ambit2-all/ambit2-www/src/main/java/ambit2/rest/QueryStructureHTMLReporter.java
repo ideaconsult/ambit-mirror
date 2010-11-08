@@ -39,12 +39,12 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 	/**
 	 * 
 	 */
-	public QueryStructureHTMLReporter() {
-		this(null,true);
+	public QueryStructureHTMLReporter(ResourceDoc doc) {
+		this(null,true,doc);
 	}
-	public QueryStructureHTMLReporter(Request request, boolean collapsed) {
+	public QueryStructureHTMLReporter(Request request, boolean collapsed,ResourceDoc doc) {
 		super();
-		uriReporter =  createURIReporter(request);
+		uriReporter =  createURIReporter(request,doc);
 		this.collapsed = collapsed;
 		processors.clear();
 		/*
@@ -62,7 +62,7 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 		});
 		
 	}	
-	protected abstract QueryURIReporter createURIReporter(Request request);
+	protected abstract QueryURIReporter createURIReporter(Request request,ResourceDoc doc);
 	
 	@Override
 	public void header(Writer w, Q query) {

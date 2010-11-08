@@ -8,6 +8,7 @@ import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.ARFFReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
 
 /**
@@ -24,12 +25,12 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	private static final long serialVersionUID = 2627930277795024333L;
 	protected PropertyURIReporter reporter;
 	
-	public ARFFResourceReporter(Template template, Request request) {
-		this(template,null,request);
+	public ARFFResourceReporter(Template template, Request request,ResourceDoc doc) {
+		this(template,null,request,doc);
 	}
-	public ARFFResourceReporter(Template template,Profile groupedProperties, Request request) {
+	public ARFFResourceReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc) {
 		super(template,groupedProperties);
-		reporter = new PropertyURIReporter(request);
+		reporter = new PropertyURIReporter(request,doc);
 	}
 	@Override
 	protected String getRelationName() {

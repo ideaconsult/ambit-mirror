@@ -1,13 +1,9 @@
 package ambit2.rest.property;
 
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -80,15 +76,14 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 					//the reporter closes the connection as well
 					try { reporter.close();} catch (Exception x) {}
 				}
-			} else 
-				readFeaturesXML(uri,profile);
+			}
 			return profile;
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}
 	}
 
-	
+	/*
 	protected void readFeaturesXML(Reference uri,final Template profile) throws Exception {
 		if (uri==null) return;
 		Representation r = null;
@@ -118,6 +113,7 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 			
 		}
 	}	
+	*/
 	public void open() throws DbAmbitException {
 		
 	}

@@ -28,18 +28,28 @@ public class OTRemoteModelTest extends ResourceTest {
 	@Test
 	public void testModelTUM() throws Exception {
 		
-		OTModel model = OTSuperModel.model("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_8").
-					withDatasetService("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R8291");
+		OTModel model = OTSuperModel.model("http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/model/TUMOpenToxModel_j48_22").
+					withDatasetService("http://apps.ideaconsult.net:8080/ambit2/dataset");
 		
 		OTFeatures features = model.load().getIndependentVariables();
-		Assert.assertEquals(264,features.size());
+		Assert.assertEquals(9,features.size());
+		/*
+		OTAlgorithms algorithms = OTAlgorithms.algorithms();
+		for (OTFeature feature : features.getItems())
+			if (feature!=null) 
+				algorithms.add(feature.algorithm().getAlgorithm());
 
-		OTDataset result  = model.process(OTDataset.dataset("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R8291").
-					withDatasetService("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset"));
+		Assert.assertEquals(9,algorithms.size());		
+	*/
+		OTDataset result  = model.process(OTDataset.dataset("http://apps.ideaconsult.net:8080/ambit2/dataset/R864").
+					withDatasetService("http://apps.ideaconsult.net:8080/ambit2/dataset"));
 		
+		System.out.println(result);
+		/*
 		result.getUri().toString().equals(
 				"http://194.141.0.136:8181/dataset/1?feature_uris[]=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fmodel%2F16%2Fpredicted"
 				);
+				*/
 
 	}		
 	@Test

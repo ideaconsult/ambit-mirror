@@ -12,11 +12,11 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFPropertyIterator;
 
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.vocabulary.DC;
 
@@ -33,14 +33,14 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 	 */
 	private static final long serialVersionUID = 7230106201606494227L;
 	protected PropertyURIReporter propertyReporter;
-	public ModelRDFReporter(Request request, MediaType mediaType) {
-		super(request,mediaType);
-		propertyReporter = new PropertyURIReporter(request);
+	public ModelRDFReporter(Request request, MediaType mediaType,ResourceDoc doc) {
+		super(request,mediaType,doc);
+		propertyReporter = new PropertyURIReporter(request,doc);
 	}
 	@Override
 	protected QueryURIReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> createURIReporter(
-			Request req) {
-		return new ModelURIReporter(req);
+			Request req,ResourceDoc doc) {
+		return new ModelURIReporter(req,doc);
 	}
 	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		super.header(output,query);

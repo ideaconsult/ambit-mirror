@@ -3,9 +3,6 @@ package ambit2.rest.test.property;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -18,15 +15,12 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.w3c.dom.Document;
 
-import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.PropertyValue;
-import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyValueDOMParser;
 import ambit2.rest.propertyvalue.PropertyValueResource;
-import ambit2.rest.query.XMLTags;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.test.ResourceTest;
 
@@ -41,10 +35,7 @@ public class FeatureResourceTest extends ResourceTest {
 				3);
 	}
 
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
+
 	/*
 <?xml version="1.0" encoding="UTF-8"?><Features xmlns="http://opentox.org/Feature/1.0"><Feature CompoundID="11" ID="1" Name="CAS" Value="1530-32-1"/></Features>
 	 */
@@ -168,7 +159,7 @@ public class FeatureResourceTest extends ResourceTest {
 		Assert.assertEquals(3.14,table.getValue(0,"value_num"));
 		c.close();
 	}		
-	
+	/*
 	@Test
 	public void testParserReferenceChild() throws Exception {
 		String xml = String.format( 
@@ -203,5 +194,5 @@ public class FeatureResourceTest extends ResourceTest {
         Assert.assertEquals("Property",le.get(0).getLabel());
         Assert.assertEquals(8,le.get(0).getReference().getId());
 	}
-	
+	*/
 }

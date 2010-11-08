@@ -316,7 +316,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 							request.getRootRef(),
 							model,
 							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-							new PropertyURIReporter(request),
+							new PropertyURIReporter(request,null),
 							null);
 	
 				}
@@ -326,7 +326,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-						new PropertyURIReporter(request),
+						new PropertyURIReporter(request,null),
 						null
 						);				
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
@@ -335,7 +335,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
-						new PropertyURIReporter(request),
+						new PropertyURIReporter(request,null),
 						null
 						);
 

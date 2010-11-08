@@ -3,10 +3,7 @@ package ambit2.rest.test.property;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -20,19 +17,15 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.w3c.dom.Document;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.rest.OpenTox;
-import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.query.XMLTags;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.reference.ReferenceURIReporter;
@@ -53,10 +46,7 @@ public class PropertyResourceTest extends ResourceTest {
 		return String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef);
 	}
 	
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
+
 	@Test
 	public void testQueryName() throws Exception {
 		RDFPropertyIterator iterator = new RDFPropertyIterator(new Reference(
@@ -115,7 +105,7 @@ public class PropertyResourceTest extends ResourceTest {
 			Assert.assertTrue(true);
 		}
 	}		
-	@Override
+	/*
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
 
@@ -130,7 +120,8 @@ public class PropertyResourceTest extends ResourceTest {
         };
         parser.parse(doc);
         return true;
-	}	
+	}
+	*/	
 
 	@Test
 	public void testHTML() throws Exception {
@@ -195,7 +186,7 @@ public class PropertyResourceTest extends ResourceTest {
 		
 		Request q = new Request();
 		q.setRootRef(new Reference(String.format("http://localhost:%d", port)));
-		PropertyURIReporter reporter = new PropertyURIReporter(q);
+		PropertyURIReporter reporter = new PropertyURIReporter(q,null);
 		
 		PropertyRDFReporter.addToModel(model, 
 				p,
@@ -473,7 +464,7 @@ public class PropertyResourceTest extends ResourceTest {
 
 	}
 
-	@Test
+	/*
 	public void testParser() throws Exception {
 		String xml = String.format( 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?><FeatureDefinitions xmlns=\"http://opentox.org/1.0\">" +
@@ -506,6 +497,7 @@ public class PropertyResourceTest extends ResourceTest {
         Assert.assertEquals("Property",le.get(0).getLabel());
         Assert.assertEquals(8,le.get(0).getReference().getId());
 	}	
+	*/
 	@Test
 	public void testGetJavaObject() throws Exception {
 		testGetJavaObject(String.format("http://localhost:%d%s?%s=%s", port,PropertyResource.featuredef,

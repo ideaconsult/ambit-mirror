@@ -9,6 +9,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 
 public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetrieval<Bookmark>> {
 	/**
@@ -23,8 +24,8 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 		super(baseRef,collapsed);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(request);
+	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
+		return new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(request,doc);
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<Bookmark> query) {

@@ -18,7 +18,6 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.db.update.reference.UpdateReference;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -55,8 +54,6 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			
 			return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
-			} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-				return new DocumentConvertor(new ReferenceDOMReporter(getRequest()));
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				return new StringConvertor(	new ReferenceURIReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest()) {
 					@Override
@@ -75,7 +72,8 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 					variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 					) {
 				return new RDFJenaConvertor<ILiteratureEntry, IQueryRetrieval<ILiteratureEntry>>(
-						new ReferenceRDFReporter<IQueryRetrieval<ILiteratureEntry>>(getRequest(),variant.getMediaType())
+						new ReferenceRDFReporter<IQueryRetrieval<ILiteratureEntry>>(
+								getRequest(),variant.getMediaType(),getDocumentation())
 						,variant.getMediaType());					
 			} else 
 				return new OutputWriterConvertor(

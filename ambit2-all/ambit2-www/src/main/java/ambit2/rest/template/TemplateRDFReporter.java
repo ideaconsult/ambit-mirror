@@ -11,6 +11,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
@@ -27,15 +28,15 @@ public class TemplateRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 	protected boolean recursive = false;
 	protected int count = 0;
 	
-	public TemplateRDFReporter(Request request,MediaType mediaType,Boolean isRecursive) {
-		super(request,mediaType);
-		reporterProperty = new PropertyRDFReporter<IQueryRetrieval<Property>>(request,mediaType);
+	public TemplateRDFReporter(Request request,ResourceDoc doc,MediaType mediaType,Boolean isRecursive) {
+		super(request,mediaType,doc);
+		reporterProperty = new PropertyRDFReporter<IQueryRetrieval<Property>>(request,mediaType,doc);
 		recursive = isRecursive;
 		
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request reference) {
-		return new PropertyURIReporter(reference);
+	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
+		return new PropertyURIReporter(reference,doc);
 	}
 
 	@Override

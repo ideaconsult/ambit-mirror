@@ -17,9 +17,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.rest.DBConnection;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.algorithm.CatalogHTMLReporter;
 import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.reporters.CatalogURIReporter;
 
@@ -57,7 +55,7 @@ public class SPARQLPointerResource extends CatalogResource<String> {
 	public IProcessor<Iterator<String>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 		MediaType mime = variant.getMediaType().equals(MediaType.TEXT_URI_LIST)?MediaType.TEXT_URI_LIST:MediaType.TEXT_PLAIN;
-			return new StringConvertor(	new CatalogURIReporter<String>(getRequest()) {
+			return new StringConvertor(	new CatalogURIReporter<String>(getRequest(),getDocumentation()) {
 				@Override
 				public void processItem(String src, Writer output) {
 					super.processItem(src, output);
