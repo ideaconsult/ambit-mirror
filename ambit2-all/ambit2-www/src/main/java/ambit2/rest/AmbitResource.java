@@ -504,7 +504,12 @@ window.setInterval(function() {
 				)
 				);
 		
-
+		Reference ref = request.getResourceRef().clone();
+		ref.addQueryParameter("media", "application/rdf+xml");
+		w.write(String.format("<link rel=\"meta\" type=\"application/rdf+xml\" title=\"%s\" href=\"%s\"/>",
+				title,
+				ref
+				)); 
 		w.write(String.format("<title>%s</title>",title));
 		
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
