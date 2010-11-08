@@ -13,6 +13,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.tuple.QueryTuple;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
 
@@ -28,16 +29,16 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 	private static final long serialVersionUID = -221066858588150887L;
 	protected DatasetURIReporter<IQueryRetrieval<SourceDataset>> ds_reporter;
 	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
-	public TupleHTMLReporter(Request ref,IStructureRecord record) {
+	public TupleHTMLReporter(Request ref,IStructureRecord record,ResourceDoc doc) {
 		super(ref,true);
 		((TupleURIReporter) uriReporter).setRecord(record);
-		ds_reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(ref);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(ref,true);
+		ds_reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(ref,doc);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(ref,doc,true);
 		
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return  new TupleURIReporter(request,null);
+	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
+		return  new TupleURIReporter(request,null,doc);
 	}
 	@Override
 	public void header(Writer w, QueryTuple query) {

@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
+import org.jfree.chart.ChartUtilities;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -58,6 +59,7 @@ public class ChartResource extends ServerResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));
+		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		
 		String uri = getParams().getFirstValue(OpenTox.params.dataset_uri.toString());
 		dataset = new SourceDataset(uri);
@@ -110,6 +112,7 @@ public class ChartResource extends ServerResource {
 	    			chart.setWidth(w);
 	    			chart.setHeight(h);    
 	    			image = chart.process(dataset);
+	    			//ChartUtilities.writeImageMap(writer, name, info, useOverLibForToolTips)
 	    			break;
     			}
     			

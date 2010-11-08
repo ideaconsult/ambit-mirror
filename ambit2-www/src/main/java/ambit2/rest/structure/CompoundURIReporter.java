@@ -11,6 +11,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 
 /**
  * {@link MediaType.TEXT_URI_LIST}
@@ -24,16 +25,16 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 	protected boolean readStructure = false;
-	public CompoundURIReporter(Request request) {
-		this(request,false);
+	public CompoundURIReporter(Request request,ResourceDoc doc) {
+		this(request,false,doc);
 	}
-	public CompoundURIReporter(Request request,boolean readStructure) {
-		super(request);
+	public CompoundURIReporter(Request request,boolean readStructure,ResourceDoc doc) {
+		super(request,doc);
 		this.readStructure = readStructure;
 		
 	}
-	public CompoundURIReporter() {
-		this(null,false);
+	public CompoundURIReporter(ResourceDoc doc) {
+		this(null,false,doc);
 	}	
 
 

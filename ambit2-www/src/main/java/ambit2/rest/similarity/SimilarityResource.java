@@ -20,6 +20,7 @@ import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.update.structure.ChemicalByDataset;
 import ambit2.rest.OpenTox;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
@@ -40,6 +41,10 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 
 	protected IMolecule mol ;
 
+	public SimilarityResource() {
+		super();
+		setDocumentation(new ResourceDoc("dataset","Dataset"));
+	}
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return (dataset_id == null)?null:
 			String.format("%s%s/%s%s",

@@ -31,7 +31,7 @@ public class FastToxStep2 extends ModelResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		structureReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest());
+		structureReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest(),getDocumentation());
 	}
 	@Override
 	protected Representation post(Representation entity, Variant variant)
@@ -60,7 +60,7 @@ public class FastToxStep2 extends ModelResource {
 	*/
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),false) {
+				new ModelHTMLReporter(getRequest(),false,getDocumentation()) {
 					
 					@Override
 					public void header(Writer w,
@@ -88,7 +88,7 @@ public class FastToxStep2 extends ModelResource {
 					}
 				},MediaType.TEXT_HTML) ;
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
+		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()) {
 			@Override
 			public Object processItem(ModelQueryResults dataset) throws AmbitException {
 				super.processItem(dataset);
@@ -100,7 +100,7 @@ public class FastToxStep2 extends ModelResource {
 		},MediaType.TEXT_URI_LIST);
 	} else //html 	
 		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
+				new ModelHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
 	}
 	
 

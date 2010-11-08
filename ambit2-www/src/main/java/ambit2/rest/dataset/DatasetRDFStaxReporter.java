@@ -28,6 +28,7 @@ import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.QueryStaXReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.DataProperty;
@@ -115,12 +116,12 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		this.template = template;
 	}
 	
-	public DatasetRDFStaxReporter(Request request,Template template,Profile groupedProperties) {
-		super(request);
+	public DatasetRDFStaxReporter(Request request,ResourceDoc doc,Template template,Profile groupedProperties) {
+		super(request,doc);
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
-		propertyReporter = new PropertyURIReporter(request);
+		propertyReporter = new PropertyURIReporter(request,doc);
 
 		comp = new Comparator<Property>() {
 			public int compare(Property o1, Property o2) {
@@ -132,9 +133,9 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	}
 	@Override
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
-			Request req) {
-		compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(req);
-		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req);
+			Request req,ResourceDoc doc) {
+		compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
+		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
 	}
 
 	protected void initProcessors() {

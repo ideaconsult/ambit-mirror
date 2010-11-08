@@ -4,7 +4,11 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Assert;
 import org.junit.Test;
+import org.restlet.data.Form;
+import org.restlet.data.Reference;
 
+import ambit2.rest.OpenTox;
+import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.test.ResourceTest;
 
 public class OTDatasetTest extends ResourceTest {
@@ -46,15 +50,26 @@ public class OTDatasetTest extends ResourceTest {
 	
 	@Test
 	public void testAddColumn() throws Exception {
-		OTFeature feature1 = OTFeature.feature(String.format("http://localhost:%d/feature/3",port));
-		OTFeature feature2 = OTFeature.feature(String.format("http://localhost:%d/feature/1",port));
+		String f3 = String.format("http://localhost:%d/feature/3",port);
+		OTFeature feature1 = OTFeature.feature(f3);
+		String f1 = String.format("http://localhost:%d/feature/1",port);
+		OTFeature feature2 = OTFeature.feature(f1);
 		OTDataset dataset = OTDataset.dataset(String.format("http://localhost:%d/dataset/1",port)).
 			withDatasetService(String.format("http://localhost:%d/dataset",port)).
 			addColumns(feature1).
 			addColumns(feature2);
 
-		Assert.assertEquals("http://localhost:8181/dataset/1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1",dataset);
-
+	
+		Assert.assertEquals(
+				String.format("http://localhost:%d/dataset/1?%s=%s&%s=%s",
+						port,
+						Reference.encode(OpenTox.params.feature_uris.toString()),
+						Reference.encode(f3),
+						Reference.encode(OpenTox.params.feature_uris.toString()),
+						Reference.encode(f1)),
+						dataset.toString());
+		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1
+		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1
 		Assert.fail("verify if the features are there");
 	}		
 	

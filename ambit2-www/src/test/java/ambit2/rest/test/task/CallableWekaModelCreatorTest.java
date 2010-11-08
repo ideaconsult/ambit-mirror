@@ -5,6 +5,7 @@ import org.restlet.data.Reference;
 
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.AmbitApplication;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.task.CallableWekaModelCreator;
@@ -18,7 +19,7 @@ public class CallableWekaModelCreatorTest extends ResourceTest {
 		Form form = new Form();
 		form.add("dataset_uri", DatasetReporterTest.class.getResource("/input.rdf").toString());
 		form.add("target", "http://ambit.uni-plovdiv.bg:8080/ambit2/feature/11938");
-		ModelURIReporter uriReporter = new ModelURIReporter(null);
+		ModelURIReporter uriReporter = new ModelURIReporter(null,new ResourceDoc());
 		
 		CallableWekaModelCreator c = new CallableWekaModelCreator(
 				form,
@@ -26,7 +27,7 @@ public class CallableWekaModelCreatorTest extends ResourceTest {
 				((AmbitApplication)component.getApplication()).getContext(),
 				(Algorithm)null, 
 				uriReporter,
-				new AlgorithmURIReporter(null));
+				new AlgorithmURIReporter(null,new ResourceDoc()));
 		Reference ref = c.call();
 	}
 	@Override

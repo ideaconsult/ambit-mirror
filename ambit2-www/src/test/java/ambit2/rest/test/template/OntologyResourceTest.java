@@ -6,11 +6,7 @@ import java.io.InputStreamReader;
 
 import org.junit.Test;
 import org.restlet.data.MediaType;
-import org.w3c.dom.Document;
 
-import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.test.ResourceTest;
 
@@ -54,10 +50,7 @@ public class OntologyResourceTest extends ResourceTest {
 		}
 		return count >0;
 	}	
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
+
 	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
@@ -73,27 +66,5 @@ public class OntologyResourceTest extends ResourceTest {
 		throw new Exception("TODO: Parse XML and verify values");
 	}		
 	*/
-	@Override
-	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
-			throws Exception {
-		
-		Document doc = createDOM(in);
-		PropertyDOMParser parser = new PropertyDOMParser() {
-			@Override
-			public void handleItem(Property item) throws AmbitException {
-				System.out.print(item);
-				System.out.print("\t");
-				System.out.print(item.getId());
-				System.out.print("\t");
-				System.out.print(item.getClazz());
-				System.out.print("\t");				
-				System.out.println(item.getClass().getName());
-				
-				
-			}
-        };
-        parser.parse(doc);
-        return true;
-        
-	}	
+
 }

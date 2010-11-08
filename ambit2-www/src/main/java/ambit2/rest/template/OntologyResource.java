@@ -25,6 +25,7 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
@@ -43,6 +44,11 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 	public static String resourceID = String.format("%s/{%s}/{%s}",resource,resourceParent,resourceKey);
 	public static String resourceTree = String.format("%s/{%s}/{%s}/view/{tree}",resource,resourceParent,resourceKey);
 	protected boolean isRecursive = false;
+	
+	public OntologyResource() {
+		super();
+		setDocumentation(new ResourceDoc("Feature","Feature"));
+	}
 	public boolean isRecursive() {
 		return isRecursive;
 	}
@@ -68,9 +74,9 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	public IProcessor<IQueryRetrieval<Property>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new OntologyDOMReporter(getRequest(),isRecursive()));
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
+		//if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
+		//	return new DocumentConvertor(new OntologyDOMReporter(getRequest(),isRecursive()));
+		if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 					variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
@@ -78,12 +84,12 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 					) {
 				return new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
 						new TemplateRDFReporter<IQueryRetrieval<Property>>(
-								getRequest(),variant.getMediaType(),isRecursive())
+								getRequest(),getDocumentation(),variant.getMediaType(),isRecursive())
 						,variant.getMediaType());		
 				
 				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				PropertyURIReporter r = new PropertyURIReporter(getRequest());
+				PropertyURIReporter r = new PropertyURIReporter(getRequest(),null);
 				r.setDelimiter("\n");
 				return new StringConvertor(	r,MediaType.TEXT_URI_LIST);
 				
@@ -148,6 +154,6 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 	protected QueryURIReporter<Property, IQueryRetrieval<Property>> getURUReporter(
 			Request baseReference) throws ResourceException {
 		//return (QueryURIReporter) new OntologyURIReporter(getRequest());
-		return new PropertyURIReporter(getRequest());
+		return new PropertyURIReporter(getRequest(),getDocumentation());
 	}
 }

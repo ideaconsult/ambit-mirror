@@ -36,6 +36,7 @@ import ambit2.db.update.structure.ChemicalByDataset;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.task.CallableQueryResultsCreator;
 import ambit2.rest.task.CallableUpdateDataset;
@@ -56,6 +57,10 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 	public final static String dataset_intersection_uri = "common";
 	protected FileUpload upload;
 	
+	public DatasetResource() {
+		super();
+		setDocumentation(new ResourceDoc("dataset","Dataset"));
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -215,7 +220,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 					getRequest().getRootRef(),
 					getContext(),
 					dataset,
-					new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest())
+					new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation())
 					);
 			((CallableUpdateDataset)callable).setClearPreviousContent(clearPreviousContent);
 		} else {

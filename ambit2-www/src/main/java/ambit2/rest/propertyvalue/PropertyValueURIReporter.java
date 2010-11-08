@@ -7,6 +7,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 
@@ -23,8 +24,8 @@ public class PropertyValueURIReporter<T,Q extends IQueryRetrieval<T>> extends Qu
 	public void setRecord(IStructureRecord record) {
 		this.record = record;
 	}
-	public PropertyValueURIReporter(Request baseRef) {
-		super(baseRef);
+	public PropertyValueURIReporter(Request baseRef,ResourceDoc doc) {
+		super(baseRef,doc);
 	}
 	public PropertyValueURIReporter() {
 	}	

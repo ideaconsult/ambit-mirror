@@ -11,11 +11,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.ReferenceList;
 import org.restlet.representation.Representation;
-import org.w3c.dom.Document;
 
-import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.rest.property.PropertyDOMParser;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.test.ResourceTest;
 
@@ -29,64 +25,7 @@ public class AllFeatureDefinitionsTest extends ResourceTest {
 	public String getTestURI() {
 		return String.format("http://localhost:%d%s", port,PropertyResource.featuredef);
 	}
-	
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
-	/*
-<?xml version="1.0" encoding="UTF-8"?><FeatureDefinitions xmlns="http://opentox.org/1.0"><FeatureDefinition ID="1" Name="Property 1" Reference="8" type="TODO"><link href="http://localhost:8181/feature_definition/1"/><Reference xmlns="http://www.opentox.org/Reference/1.0" AlgorithmID="NA" ID="8" Name="Dummy"/></FeatureDefinition></FeatureDefinitions>
-	 */
-	
-	@Override
-	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
-			throws Exception {
 
-		Document doc = createDOM(in);
-        PropertyDOMParser parser = new PropertyDOMParser() {
-        	@Override
-        	public void handleItem(Property entry) throws AmbitException {
-        		System.out.println(entry);
-        		switch (entry.getId()) {
-        		case 1: {
-            		Assert.assertEquals("Property 1",entry.getName());
-            		Assert.assertEquals(8,entry.getReference().getId());      
-            		break;
-        		}
-        		case 2: {
-            		Assert.assertEquals("Property 2",entry.getName());
-            		Assert.assertEquals(8,entry.getReference().getId());   
-            		break;
-        		}
-        		case 3: {
-            		Assert.assertEquals("CAS",entry.getName());
-            		Assert.assertEquals(8,entry.getReference().getId());  
-            		break;
-        		}
-        		default: Assert.fail("Undefined id "+entry.getId());
-        		}
-        		//Assert.assertEquals(1,entry.getId());
-        		//Assert.assertEquals("Property 1",entry.getName());
-        		//Assert.assertEquals(8,entry.getReference().getId());
-        	}
-        };
-        parser.parse(doc);
-        return true;
-	}	
-	/*
-	@Override
-	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
-			throws Exception {
-		BufferedReader r = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count = 0;
-		while ((line = r.readLine())!= null) {
-			System.out.println(line);
-			count++;
-		}
-		return count>0;
-	}	
-	 */
 	@Test
 	public void testRDFTurtle() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_TURTLE);

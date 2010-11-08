@@ -9,6 +9,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.rdf.Annotea;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -22,12 +23,12 @@ public class BookmarkRDFReporter <Q extends IQueryRetrieval<Bookmark>> extends Q
 	 */
 	private static final long serialVersionUID = -8857789530109166243L;
 
-	public BookmarkRDFReporter(Request request,MediaType mediaType) {
-		super(request,mediaType);
+	public BookmarkRDFReporter(Request request,ResourceDoc doc,MediaType mediaType) {
+		super(request,mediaType,doc);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request reference) {
-		return new BookmarkURIReporter(reference);
+	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
+		return new BookmarkURIReporter(reference,doc);
 	}
 	@Override
 	public Object processItem(Bookmark item) throws AmbitException {

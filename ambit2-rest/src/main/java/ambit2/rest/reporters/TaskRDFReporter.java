@@ -7,6 +7,7 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.task.Task;
@@ -29,10 +30,10 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 	protected Reference baseRef;
 	protected TaskURIReporter<USERID> urireporter;
 	
-	public TaskRDFReporter(Request request, MediaType mediaType) {
-		super(request, mediaType);
+	public TaskRDFReporter(Request request, MediaType mediaType,ResourceDoc doc) {
+		super(request, mediaType,doc);
 		baseRef = request.getRootRef();
-		urireporter = new TaskURIReporter<USERID>(request);
+		urireporter = new TaskURIReporter<USERID>(request,doc);
 	}
 	@Override
 	public void header(Writer output, Iterator<Task<Reference,USERID>> query) {

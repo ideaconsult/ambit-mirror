@@ -30,6 +30,7 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.propertyvalue.PropertyValueResource;
@@ -56,15 +57,15 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected Form featureURI = null;
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
-	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter) {
-		this(request,collapsed,urireporter,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter) {
+		this(request,doc,collapsed,urireporter,null);
 	}
-	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter,Template template) {
-		this(request,collapsed,urireporter,template,null,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter,Template template) {
+		this(request,doc,collapsed,urireporter,template,null,null);
 	}
-	public CompoundHTMLReporter(Request request,boolean collapsed,QueryURIReporter urireporter,
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter,
 				Template template,Profile groupedProperties,Dimension d) {
-		super(request,collapsed);
+		super(request,collapsed,doc);
 		
 		Reference f = request.getResourceRef().clone(); 
 		f.setQuery(null);
@@ -85,7 +86,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		if (urireporter != null) this.uriReporter = urireporter;
 		
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
-		pReporter = new PropertyURIReporter(request);
+			pReporter = new PropertyURIReporter(request,this.uriReporter==null?null:this.uriReporter.getDocumentation());
 		table = collapsed;
 		getProcessors().clear();
 		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
@@ -122,17 +123,18 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		uriReporter.setOutput(w);
 		return w;
 	}
-	public CompoundHTMLReporter(Request request,boolean collapsed,Template template) {
-		this(request,collapsed,null,template);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,Template template) {
+		this(request,doc,collapsed,null,template);
 	}
-	public CompoundHTMLReporter(Request request,boolean collapsed) {
-		this(request,collapsed,null,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed) {
+		this(request,doc,collapsed,null,null);
 
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request);
+	protected QueryURIReporter createURIReporter(Request request,ResourceDoc doc) {
+		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request,doc);
 	}
+	
 	@Override
 	public Object processItem(IStructureRecord record) throws AmbitException  {
 		

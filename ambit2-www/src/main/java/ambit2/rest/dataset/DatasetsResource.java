@@ -128,14 +128,14 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			throws AmbitException, ResourceException {
 
 	if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-		return new DocumentConvertor(new DatasetsXMLReporter(getRequest()));	
+		return new DocumentConvertor(new DatasetsXMLReporter(getRequest(),getDocumentation()));	
 	} else if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
-			return new YAMLConvertor(new DatasetYamlReporter(getRequest()),ChemicalMediaType.TEXT_YAML);			
+			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest()) {
+		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
 			public Object processItem(SourceDataset dataset) throws AmbitException  {
 				super.processItem(dataset);
@@ -154,7 +154,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 			) {
 		return new RDFJenaConvertor<SourceDataset, IQueryRetrieval<SourceDataset>>(
-				new MetadataRDFReporter<IQueryRetrieval<SourceDataset>>(getRequest(),variant.getMediaType()),variant.getMediaType());			
+				new MetadataRDFReporter<IQueryRetrieval<SourceDataset>>(getRequest(),
+						getDocumentation(),variant.getMediaType()),variant.getMediaType());			
 
 		
 	} else //html 	

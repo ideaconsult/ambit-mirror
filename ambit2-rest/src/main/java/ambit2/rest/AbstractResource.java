@@ -43,8 +43,17 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	public final static String returnProperties = "returnProperties";
 	
 	public final static String max_hits = "max";
+
 	
-	
+	protected ResourceDoc documentation = new ResourceDoc();
+
+
+	public ResourceDoc getDocumentation() {
+		return documentation;
+	}
+	public void setDocumentation(ResourceDoc documentation) {
+		this.documentation = documentation;
+	}
 	public AbstractResource() {
 		super();
 		setAutoDescribed(true);

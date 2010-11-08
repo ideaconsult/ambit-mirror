@@ -1,8 +1,12 @@
 package ambit2.rest.model.predictor;
 
+import java.awt.image.BufferedImage;
+import java.util.Iterator;
+
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 import java.awt.image.BufferedImage;
+import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.Classifier;
 import weka.clusterers.Clusterer;
 import weka.core.Attribute;
@@ -11,7 +15,9 @@ import weka.core.Instances;
 import weka.core.SparseInstance;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.ReplaceMissingValues;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.rest.model.ModelURIReporter;
 
@@ -29,7 +35,14 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 	private static final long serialVersionUID = 1394180227835161276L;
 	protected Classifier classifier;
 	protected Clusterer clusterer;
+	protected PrincipalComponents pca;
 	
+	public PrincipalComponents getPca() {
+		return pca;
+	}
+	public void setPca(PrincipalComponents pca) {
+		this.pca = pca;
+	}
 	public WekaPredictor(Reference applicationRootReference,ModelQueryResults model, ModelURIReporter modelReporter) {
 		this(applicationRootReference,model,modelReporter,null);
 	}
@@ -57,6 +70,9 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 			return true;
 		} else if  (predictor instanceof Clusterer) {
 			clusterer = (Clusterer) predictor;
+			return true;
+		} else if (predictor instanceof PrincipalComponents) {
+			pca = (PrincipalComponents) predictor;
 			return true;
 		} return false;
 	}
@@ -106,6 +122,9 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 						value = newInstances.classAttribute().value(((Double)value).intValue());
 				} else if (clusterer != null) {
 					value = clusterer.clusterInstance(target);
+				} else if (pca != null) {
+					
+					value = pca.convertInstance(target);
 				} else throw new AmbitException();
 				
 			}
@@ -120,6 +139,25 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 			testInstances.delete();
 		}
 	}
+	
+	@Override
+	public void assignResults(IStructureRecord record, Object value)
+			throws AmbitException {
+		if (value instanceof Instance)  {
+			assignTransformedInstance(record, (Instance) value);
+		}
+		else super.assignResults(record, value);
+	}
+	
+	public void assignTransformedInstance(IStructureRecord record, Instance value) throws AmbitException {
+		Iterator<Property> predicted = model.getPredicted().getProperties(true);
+		int count = 0;
+		while (predicted.hasNext()) {
+			record.setProperty(predicted.next(),value.value(count));
+			count++;
+		}
+		if (count==0) throw new AmbitException("No property to assign results!!!");
+	}	
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
@@ -130,9 +168,9 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 				
 	}	
 
-
 	@Override
 	public BufferedImage getLegend(int width, int height) throws AmbitException {
 			return null;
 	}	
 }
+

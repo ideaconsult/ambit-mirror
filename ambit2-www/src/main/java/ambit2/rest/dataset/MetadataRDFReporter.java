@@ -9,6 +9,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
@@ -30,15 +31,15 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 	 */
 	private static final long serialVersionUID = 6747452583425280704L;
 	protected ReferenceURIReporter referenceReporter;
-	public MetadataRDFReporter(Request request, MediaType mediaType) {
-		super(request, mediaType);
+	public MetadataRDFReporter(Request request,ResourceDoc doc, MediaType mediaType) {
+		super(request, mediaType,doc);
 		referenceReporter = new ReferenceURIReporter(request);
 	}
 	
 	@Override
 	protected QueryURIReporter<SourceDataset, IQueryRetrieval<SourceDataset>> createURIReporter(
-			Request req) {
-		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(req);
+			Request req,ResourceDoc doc) {
+		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(req,doc);
 	}
 	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		OT.OTClass.Dataset.createOntClass(output);

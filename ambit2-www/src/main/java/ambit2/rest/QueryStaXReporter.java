@@ -20,16 +20,16 @@ public abstract class QueryStaXReporter<T,Q extends IQueryRetrieval<T>> extends 
 	 */
 	private static final long serialVersionUID = 1L;
 	protected QueryURIReporter<T, IQueryRetrieval<T>> uriReporter;
-	protected abstract QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(Request req);
+	protected abstract QueryURIReporter<T, IQueryRetrieval<T>> createURIReporter(Request req,ResourceDoc doc);
 	
 	protected final static String ot = "ot";
 	protected final static String rdf = "rdf";
 	protected final static String dc = "dc";
 	protected final static String owl = "owl";
 	
-	public QueryStaXReporter(Request request) {
+	public QueryStaXReporter(Request request,ResourceDoc doc) {
 		super();
-		uriReporter = createURIReporter(request);
+		uriReporter = createURIReporter(request,doc);
 	}
 	@Override
 	public void footer(XMLStreamWriter writer, Q query) {

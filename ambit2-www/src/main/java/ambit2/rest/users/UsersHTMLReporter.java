@@ -9,6 +9,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 
 public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrieval<AmbitUser>> {
 	/**
@@ -23,8 +24,8 @@ public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrie
 		super(baseRef,collapsed);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new UsersURIReporter<IQueryRetrieval<AmbitUser>>(request);
+	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
+		return new UsersURIReporter<IQueryRetrieval<AmbitUser>>(request,doc);
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<AmbitUser> query) {

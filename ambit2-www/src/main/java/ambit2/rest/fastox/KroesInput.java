@@ -19,7 +19,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
@@ -27,7 +26,6 @@ import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyValueHTMLReporter;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
-import ambit2.rest.propertyvalue.PropertyValueXMLReporter;
 import ambit2.rest.structure.CompoundResource;
 
 public class KroesInput extends FeatureResource {
@@ -47,12 +45,11 @@ public class KroesInput extends FeatureResource {
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
 		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
-		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
+
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputWriterConvertor(
-					new PropertyValueHTMLReporter<PropertyValue>(getRequest(),true) {
+					new PropertyValueHTMLReporter<PropertyValue>(getRequest(),true,getDocumentation()) {
 						protected int count = 0;
 						@Override
 						public Object processItem(PropertyValue item) throws AmbitException  {

@@ -7,6 +7,7 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 
 /**
  * Generates YAML representation for {@link SourceDataset}
@@ -21,16 +22,16 @@ public class DatasetYamlReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 	 */
 	private static final long serialVersionUID = -42331029292913894L;
 	
-	public DatasetYamlReporter() {
-		this(null);
+	public DatasetYamlReporter(ResourceDoc doc) {
+		this(null,doc);
 	}
-	public DatasetYamlReporter(Request request) {
-		super(request);
+	public DatasetYamlReporter(Request request,ResourceDoc doc) {
+		super(request,doc);
 	}	
 
 	@Override
-	protected QueryURIReporter createURIReporter(Request reference) {
-		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference);
+	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
+		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference,doc);
 	}	
 	@Override
 	public Object processItem(SourceDataset item) throws AmbitException  {

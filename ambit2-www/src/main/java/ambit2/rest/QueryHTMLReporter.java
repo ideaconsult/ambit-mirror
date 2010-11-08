@@ -20,7 +20,7 @@ import ambit2.db.reporters.QueryReporter;
  */
 public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends QueryReporter<T,Q,Writer>  {
 	protected QueryURIReporter uriReporter;
-	
+
 
 	
 	public QueryURIReporter getUriReporter() {
@@ -44,7 +44,7 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 	}
 	public QueryHTMLReporter(Request request, boolean collapsed) {
 		super();
-		uriReporter =  createURIReporter(request);
+		uriReporter =  createURIReporter(request, null);
 		this.collapsed = collapsed;
 		processors.clear();
 		/*
@@ -62,7 +62,7 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 		});
 		
 	}	
-	protected abstract QueryURIReporter createURIReporter(Request request);
+	protected abstract QueryURIReporter createURIReporter(Request request, ResourceDoc doc);
 	
 	@Override
 	public void header(Writer w, Q query) {

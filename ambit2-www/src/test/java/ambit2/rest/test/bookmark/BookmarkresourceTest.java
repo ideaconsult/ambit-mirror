@@ -91,7 +91,7 @@ public class BookmarkresourceTest extends ResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals(String.format("http://localhost:%d/bookmark/1",port), line);
+			Assert.assertEquals(String.format("http://localhost:%d/bookmark/test/1",port), line);
 			count++;
 		}
 		return count==1;

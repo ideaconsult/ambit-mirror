@@ -34,7 +34,7 @@ public class LauncherTest extends ResourceTest {
 		testAsyncTask(getTestURI(), headers, Status.SUCCESS_OK, String.format(
 				"%s?%s=%s",
 				dataset, 
-				OpenTox.params.feature_uris.toString(),
+				Reference.encode(OpenTox.params.feature_uris.toString()),
 				Reference.encode(String
 						.format("%s/predicted", model))));
 		IDatabaseConnection c = getConnection();	
@@ -59,7 +59,7 @@ public class LauncherTest extends ResourceTest {
 		testAsyncTask(superservice, headers, Status.SUCCESS_OK, String.format(
 				"%s?%s=%s",
 				dataset, 
-				OpenTox.params.feature_uris.toString(),
+				Reference.encode(OpenTox.params.feature_uris.toString()),
 				Reference.encode(String
 						.format("%s/predicted", model))))
 						);

@@ -30,6 +30,7 @@ import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
@@ -68,6 +69,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	public ModelResource() {
 		super();
 		getVariants().add(new Variant(MediaType.IMAGE_PNG));
+		setDocumentation(new ResourceDoc("Model","Model"));
+
 	}
 	protected Object getModelID(Object id) throws ResourceException {
 		
@@ -100,9 +103,9 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
+				new ModelHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()) {
+		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()) {
 			@Override
 			public Object processItem(ModelQueryResults dataset) throws AmbitException  {
 				super.processItem(dataset);
@@ -123,7 +126,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 			) {
 		return new RDFJenaConvertor<ModelQueryResults,IQueryRetrieval<ModelQueryResults>>(
-				new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),variant.getMediaType())
+				new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),variant.getMediaType(),getDocumentation())
 				,variant.getMediaType());	
 	} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG) ||
 			variant.getMediaType().equals(MediaType.IMAGE_BMP) ||
@@ -142,16 +145,16 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		} catch (Exception x) {}		
 		
 		return new ImageConvertor<ModelQueryResults, IQueryRetrieval<ModelQueryResults>>(
-				new ModelImageReporter(getRequest(), getRequest().getResourceRef().getQueryAsForm(), d),variant.getMediaType());			
+				new ModelImageReporter(getRequest(), getRequest().getResourceRef().getQueryAsForm(), d,getDocumentation()),variant.getMediaType());			
 	} else//html
 		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
+				new ModelHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
 	}
 	
 	@Override
 	protected QueryURIReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest());
+		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation());
 	}
 	
 	protected void readVariables(ModelQueryResults model) throws ResourceException {

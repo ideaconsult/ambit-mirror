@@ -8,6 +8,7 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 
 import ambit2.base.processors.batch.ListReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -26,7 +27,7 @@ public abstract class CatalogRDFReporter<T> extends ListReporter<T,Writer> {
 	protected MediaType mediaType;
 	protected OntModel jenaModel;
 	
-	public CatalogRDFReporter(Request request,MediaType mediaType) {
+	public CatalogRDFReporter(Request request,MediaType mediaType,ResourceDoc doc) {
 		super();
 		this.mediaType = mediaType;
 	}

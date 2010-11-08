@@ -16,6 +16,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 
@@ -39,8 +40,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 		super(baseRef,collapsed);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(request);
+	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
+		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(request,doc);
 	}
 	@Override
 	public void footer(Writer output, IQueryRetrieval<SourceDataset> query) {

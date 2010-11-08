@@ -71,7 +71,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 79;
+		return count == 80;
 	}	
 	
 	@Test
@@ -657,7 +657,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 		c.close();				
 	}	
-	
+	//algorithm/PCA is commented 
 	@Test
 	public void testPCA() throws Exception {
 		Form headers = new Form();  

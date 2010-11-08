@@ -16,6 +16,7 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.structure.DeleteStructure;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 
 /**
  * Conformer resource as in http://opentox.org/development/wiki/structure
@@ -48,7 +49,7 @@ public class ConformerResource extends CompoundResource {
 	
 	public ConformerResource() {
 		super();
-		//chemicalsOnly = false;
+		setDocumentation(new ResourceDoc("structure","Conformer"));
 	}
 	@Override
 	protected String getDefaultTemplateURI(Context context, Request request,
@@ -108,7 +109,7 @@ public class ConformerResource extends CompoundResource {
 		}
 	}	
 	protected QueryURIReporter getURIReporter() {
-		return new ConformerURIReporter<QueryStructureByID>(getRequest());
+		return new ConformerURIReporter<QueryStructureByID>(getRequest(),getDocumentation());
 	}
 	
 	

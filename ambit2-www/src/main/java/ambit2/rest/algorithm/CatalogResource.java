@@ -8,13 +8,9 @@ import java.util.concurrent.Callable;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.wadl.FaultInfo;
 import org.restlet.ext.wadl.MethodInfo;
-import org.restlet.ext.wadl.RepresentationInfo;
-import org.restlet.ext.wadl.ResourceInfo;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -85,9 +81,9 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
-					new CatalogHTMLReporter<T>(getRequest()),MediaType.TEXT_HTML);
+					new CatalogHTMLReporter<T>(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	new CatalogURIReporter<T>(getRequest()) {
+			return new StringConvertor(	new CatalogURIReporter<T>(getRequest(),getDocumentation()) {
 				@Override
 				public void processItem(T src, Writer output) {
 					super.processItem(src, output);
@@ -99,7 +95,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			
 		} else //html 	
 			return new StringConvertor(
-					new CatalogHTMLReporter<T>(getRequest()),MediaType.TEXT_HTML);
+					new CatalogHTMLReporter<T>(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
 		
 	}
 	
@@ -150,9 +146,9 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			else {
 				FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
 				if (tasks.size()==1)
-					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse());
+					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse(),getDocumentation());
 				else
-					return tc.createTaskRepresentation(tasks.iterator(), variant, getRequest(),getResponse());				
+					return tc.createTaskRepresentation(tasks.iterator(), variant, getRequest(),getResponse(),getDocumentation());				
 			}
 		}
 	}

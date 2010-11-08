@@ -42,7 +42,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-				return new StringConvertor(	new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(getRequest()) {
+				return new StringConvertor(	new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation()) {
 					@Override
 					public Object processItem(Bookmark dataset) throws AmbitException  {
 						super.processItem(dataset);
@@ -61,7 +61,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 					) {
 		
 				return new RDFJenaConvertor<Bookmark, IQueryRetrieval<Bookmark>>(
-						new BookmarkRDFReporter<IQueryRetrieval<Bookmark>>(getRequest(),variant.getMediaType())
+						new BookmarkRDFReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation(),variant.getMediaType())
 						,variant.getMediaType());					
 								
 			} else 
@@ -140,7 +140,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 	@Override
 	protected QueryURIReporter<Bookmark, ReadBookmark> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return new BookmarkURIReporter<ReadBookmark>(baseReference);
+		return new BookmarkURIReporter<ReadBookmark>(baseReference,getDocumentation());
 	}
 	@Override
 	protected RDFObjectIterator<Bookmark> createObjectIterator(

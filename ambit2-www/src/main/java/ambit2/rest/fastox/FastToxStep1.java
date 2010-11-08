@@ -24,6 +24,7 @@ public class FastToxStep1 extends SmartsQueryResource {
 		return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 				new CompoundHTMLReporter(
 						getRequest(),
+						getDocumentation(),
 						false) {
 					
 					

@@ -44,7 +44,6 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.DeleteChemical;
 import ambit2.pubchem.CSLSRequest;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -52,12 +51,12 @@ import ambit2.rest.PDFConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.FileUpload;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.query.QueryXMLReporter;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
@@ -89,7 +88,10 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected boolean chemicalsOnly = true;
 	protected boolean collapsed = false;
 	
-	
+	public CompoundResource() {
+		super();
+		setDocumentation(new ResourceDoc("structure","Compound"));
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		// TODO Auto-generated method stub
@@ -188,8 +190,6 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
 	
-		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new QueryXMLReporter(getRequest()));
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			Dimension d = collapsed?new Dimension(150,150):new Dimension(250,250);
 			Form form = getRequest().getResourceRef().getQueryAsForm();
@@ -203,6 +203,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundHTMLReporter(
 							getRequest(),
+							getDocumentation(),
 							collapsed,
 							getURIReporter(),
 							getTemplate(),
@@ -216,7 +217,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					r,MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest()),ChemicalMediaType.WEKA_ARFF);	
+					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation()),ChemicalMediaType.WEKA_ARFF);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CSVReporter(getTemplate(),getGroupProperties(),getRequest().getRootRef().toString()),MediaType.TEXT_CSV);				
@@ -229,14 +230,15 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-					new DatasetRDFReporter(getRequest(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());			
+					new DatasetRDFReporter(getRequest(),getDocumentation(),
+							variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());			
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
 		
 	}
 	protected QueryURIReporter getURIReporter() {
-		return new CompoundURIReporter<QueryStructureByID>(getRequest());
+		return new CompoundURIReporter<QueryStructureByID>(getRequest(),getDocumentation());
 	}
 	protected IQueryRetrieval<IStructureRecord> createSingleQuery(String property,
 			String cond,String key,boolean chemicalsOnly, boolean byAlias, boolean caseSens) {

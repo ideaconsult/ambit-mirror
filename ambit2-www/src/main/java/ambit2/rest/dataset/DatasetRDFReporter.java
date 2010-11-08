@@ -28,6 +28,7 @@ import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTProperty;
@@ -73,12 +74,12 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	}
 	protected Resource dataset;
 	
-	public DatasetRDFReporter(Request request,MediaType mediaType, Template template,Profile groupedProperties) {
-		super(request,mediaType);
+	public DatasetRDFReporter(Request request,ResourceDoc doc,MediaType mediaType, Template template,Profile groupedProperties) {
+		super(request,mediaType,doc);
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
-		propertyReporter = new PropertyRDFReporter(request,mediaType);
+		propertyReporter = new PropertyRDFReporter(request,mediaType,doc);
 		comp = new Comparator<Property>() {
 			public int compare(Property o1, Property o2) {
 				return o1.getId()-o2.getId();
@@ -88,9 +89,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	}
 	@Override
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
-			Request req) {
-		compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(req);
-		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req);
+			Request req,ResourceDoc doc) {
+		compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
+		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
 	}
 
 	protected void initProcessors() {

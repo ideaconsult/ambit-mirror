@@ -93,7 +93,7 @@ public class LauncherResource extends ServerResource {
 			//System.out.println(task);
 			setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>();
-			return tc.createTaskRepresentation(task, variant,getRequest(), getResponse());
+			return tc.createTaskRepresentation(task, variant,getRequest(), getResponse(),null);
 
 		} catch (Exception x) {
 			x.printStackTrace();

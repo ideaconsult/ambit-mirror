@@ -14,7 +14,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
-import org.restlet.representation.InputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
@@ -130,10 +129,10 @@ public class FileUpload {
 					connection = dbc.getConnection(getRequest());	
 	              List<FileItem> items = upload.parseRequest(getRequest());
 	              DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
-	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());
+	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest(),null);
 	              
 	              ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = 
-	            	  	new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest());
+	            	  	new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest(),null);
 	              
 	              CallableFileImport callable =
 	              new CallableFileImport(getRequest().getClientInfo(),
@@ -155,7 +154,7 @@ public class FileUpload {
 				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
 				  task.update();
 				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
-	              return tc.createTaskRepresentation(task, variant,getRequest(), getResponse());
+	              return tc.createTaskRepresentation(task, variant,getRequest(), getResponse(),null);
 
 				  
 	          } catch (Exception x) {
@@ -168,9 +167,9 @@ public class FileUpload {
 						DBConnection dbc = new DBConnection(getApplication().getContext());
 						connection = dbc.getConnection(getRequest());						
 			          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
-			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest());	
+			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest(),null);	
 		              ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = 
-		            	  	new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest());			          
+		            	  	new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest(),null);			          
 			          
 			          CallableFileImport callable = new CallableFileImport(getRequest().getClientInfo(),
 			        		  dataset,
@@ -189,7 +188,7 @@ public class FileUpload {
 			          FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
 					  task.update();
 					  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);			          
-			          return tc.createTaskRepresentation(task, variant,getRequest(), getResponse());
+			          return tc.createTaskRepresentation(task, variant,getRequest(), getResponse(),null);
 			          
 					} catch (Exception x) {
 						try { connection.close(); } catch (Exception xx) {xx.printStackTrace();}

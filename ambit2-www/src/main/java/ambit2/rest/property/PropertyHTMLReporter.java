@@ -13,6 +13,7 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -30,8 +31,8 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 		super(ref,collapsed);
 	}
 	@Override
-	protected QueryURIReporter createURIReporter(Request request) {
-		return new PropertyURIReporter(request);
+	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
+		return new PropertyURIReporter(request,doc);
 	}
 	
 	@Override

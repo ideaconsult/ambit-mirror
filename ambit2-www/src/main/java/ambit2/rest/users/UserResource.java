@@ -17,7 +17,6 @@ import ambit2.base.data.AmbitUser;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.search.QueryUser;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
@@ -43,8 +42,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			
 			return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
-			} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-				return new DocumentConvertor(new UsersDOMReporter(getRequest()));
+
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				QueryURIReporter reporter = getURUReporter(getRequest());
 				reporter.setDelimiter("\n");
@@ -57,7 +55,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 	@Override
 	protected QueryURIReporter<AmbitUser, QueryUser> getURUReporter(
 			Request baseReference) throws ResourceException {
-		return new UsersURIReporter<QueryUser>(baseReference);
+		return new UsersURIReporter<QueryUser>(baseReference,getDocumentation());
 	}
 	
 	@Override

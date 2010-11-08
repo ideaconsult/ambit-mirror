@@ -66,12 +66,10 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
 		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
-		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputWriterConvertor(
-					new PropertyValueHTMLReporter(getRequest()),MediaType.TEXT_HTML);			
+					new PropertyValueHTMLReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
@@ -81,7 +79,7 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<T, IQueryRetrieval<T>>(
-					new PropertyValueRDFReporter<T>(getRequest(),variant.getMediaType())
+					new PropertyValueRDFReporter<T>(getRequest(),variant.getMediaType(),getDocumentation())
 					,variant.getMediaType());		
 		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
 					
@@ -89,7 +87,7 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 	@Override
 	protected QueryURIReporter<T, IQueryRetrieval<T>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		PropertyValueURIReporter reporter = new PropertyValueURIReporter<T, IQueryRetrieval<T>>(baseReference);
+		PropertyValueURIReporter reporter = new PropertyValueURIReporter<T, IQueryRetrieval<T>>(baseReference,getDocumentation());
 		if (queryObject instanceof AbstractQuery) {
 			if (((AbstractQuery)queryObject).getValue() instanceof IStructureRecord)
 			reporter.setRecord((IStructureRecord)((AbstractQuery)queryObject).getValue());

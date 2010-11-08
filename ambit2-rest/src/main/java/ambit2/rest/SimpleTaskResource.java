@@ -54,6 +54,10 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 	protected String searchStatus = null;
 	protected int max = 10;
 	
+	public SimpleTaskResource() {
+		super();
+		setDocumentation(new ResourceDoc("AsyncTask","Task"));
+	}
 	protected int page = 0;
 	public int getPage() {
 		return page;
@@ -193,7 +197,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 
 		FactoryTaskConvertor<USERID> tc = new FactoryTaskConvertor<USERID>();
 	
-		return tc.createTaskConvertor(variant, getRequest());
+		return tc.createTaskConvertor(variant, getRequest(),getDocumentation());
 
 	}
 	

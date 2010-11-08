@@ -29,6 +29,7 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
@@ -36,20 +37,7 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
 /**
- * http://opentox.org/development/wiki/feature
-<pre>
-REST operations
-Description 	Method 	URI 	Parameters 	Result 	Status codes
-get the value for a specific feature 	GET 	/feature_value/compound/{cid}/feature/{f_def_id} 	- 	text/xml -> xml representation of feature; text/plain -> text value of the feature 	200,404,503
-get the value for a all features 	GET 	/feature_value/compound/{cid} 	- 	xml representation of all features 	200,404,503
-get the value for a all feature values for a given feature definition in a dataset 	GET 	/feature_value/dataset/{did}/feature/{fid} 	- 	xml representation of all features 	200,404,503
-get the value for a all feature values for a given feature definition 	GET 	/feature_value/feature/{fid} 	- 	xml representation of all features 	200,404,503
-update the value for a specific feature 	PUT 	/feature_value/compound/{cid}/feature/{f_def_id} 	value 	- 	200,400,404,503
-update the value for a specific feature 	PUT 	/feature_value/compound/{cid}/conformer/{cid}/feature/{f_def_id} 	value 	- 	200,400,404,503
-save a new feature per compound 	POST 	/feature_value/compound/{cid}/feature/{f_def_id} 	value 	URI of feature representation 	200,404,503
-save a new feature per conformer 	POST 	/feature_value/compound/{cid}/conformer/{cid}/feature/{f_def_id} 	value 	URI of feature representation 	200,404,503
-Not supported yet: delete a feature 	DELETE 	/feature_value/compound/{cid}/feature/{f_def_id} 	- 	- 	200,404,503 
-</pre>
+
  * @author nina
  *
  */
@@ -76,6 +64,10 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	public static final String featureID = "idfeature";
 	public static final String resource = String.format("%s/{%s}",PropertyValueResource.featureKey,featureID);
 
+	public FeatureResource() {
+		super();
+		setDocumentation(new ResourceDoc("Feature","FeatureValue"));
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		try {
@@ -98,12 +90,10 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
 		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
-		} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			return new DocumentConvertor(new PropertyValueXMLReporter(getRequest()));
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputWriterConvertor(
-					new PropertyValueHTMLReporter(getRequest(),true),MediaType.TEXT_HTML);			
+					new PropertyValueHTMLReporter(getRequest(),true,getDocumentation()),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);
 		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_URI_LIST);
@@ -112,7 +102,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	@Override
 	protected QueryURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>> getURUReporter(
 			Request baseReference) throws ResourceException {
-		PropertyValueURIReporter reporter = new PropertyValueURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>>(baseReference);
+		PropertyValueURIReporter reporter = new PropertyValueURIReporter<PropertyValue, IQueryRetrieval<PropertyValue>>(baseReference,getDocumentation());
 		if (queryObject instanceof AbstractQuery) {
 			if (((AbstractQuery)queryObject).getValue() instanceof IStructureRecord)
 			reporter.setRecord((IStructureRecord)((AbstractQuery)queryObject).getValue());
