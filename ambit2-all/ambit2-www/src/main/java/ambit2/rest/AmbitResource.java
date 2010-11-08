@@ -30,6 +30,7 @@ import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.reference.ReferenceResource;
+import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.template.OntologyResource;
@@ -43,6 +44,7 @@ import ambit2.rest.template.OntologyResource;
  *
  */
 public class AmbitResource extends WadlServerResource {
+	protected static String sparqlEndpoint = null;
 	protected static String jsGoogleAnalytics = null;
 	String format = "<tr ><td>%s</td><td><a href=\"%s%s\">%s</a></td><td>%s</td><td>%s</td></tr>";
 	String formatHeader = "<tr bgcolor=\"#EEEEEE\" align=\"left\"><th>%s</th><th %s>API <a href=\"%s\" target=\"_blank\">%s</a></th><th>%s</th><th>%s</th></tr>";
@@ -239,6 +241,7 @@ public class AmbitResource extends WadlServerResource {
 			{"[ambit - bookmarks]","Bookmarks",formatHeader,null},
 			{"/bookmark/creator/{id}?search={name}&hasTopic={Model,Dataset,Algorithm,Feature,Compound}","Bookmark",format,"GET"},
 
+
 			
 	};
 
@@ -310,7 +313,7 @@ public class AmbitResource extends WadlServerResource {
 			} else { //if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 				variant.setMediaType(MediaType.TEXT_HTML);
 				StringWriter writer = new StringWriter();
-				writeHTMLHeader(writer, "AMBIT", getRequest());
+				writeHTMLHeader(writer, "AMBIT", getRequest(),null);
 				writer.write("<table border='0'>");
 				
 				writer.write(String.format("<tr align='center'><th colspan='4'>%s%s</th></tr>",
@@ -355,6 +358,10 @@ public class AmbitResource extends WadlServerResource {
 					*/
 				}
 				writer.write("</table>");
+				
+				writer.write(String.format("<a href='%s/ontology' title='BlueObelisk, endpoints, algorithm types ontology'>Ontology</a>&nbsp;",getRequest().getRootRef()));
+				writer.write(String.format("<a href='%s/ontology/test' title='Reads RDF output from an URI and displays clickable statements. Enter URI in the search box.'>RDF playground</a>&nbsp;",getRequest().getRootRef()));
+
 				writeHTMLFooter(writer, "AMBIT", getRequest());
 				return new StringRepresentation(writer.toString(),MediaType.TEXT_HTML);				
 			}
@@ -365,12 +372,12 @@ public class AmbitResource extends WadlServerResource {
 		}
 	}
 	
-	public static void writeHTMLHeader(Writer w,String title,Request request) throws IOException {
-		writeHTMLHeader(w, title, request,"");
+	public static void writeHTMLHeader(Writer w,String title,Request request,ResourceDoc doc) throws IOException {
+		writeHTMLHeader(w, title, request,"",doc);
 	}
-	public static void writeHTMLHeader(Writer w,String title,Request request,String meta) throws IOException {
+	public static void writeHTMLHeader(Writer w,String title,Request request,String meta,ResourceDoc doc) throws IOException {
 
-		writeTopHeader(w, title, request, meta);
+		writeTopHeader(w, title, request, meta,doc);
 		writeSearchForm(w, title, request, meta);
 		
 	}
@@ -486,7 +493,7 @@ window.setInterval(function() {
 		
 		 */
 	}	
-	public static void writeTopHeader(Writer w,String title,Request request,String meta) throws IOException {
+	public static void writeTopHeader(Writer w,String title,Request request,String meta,ResourceDoc doc) throws IOException {
 		Reference baseReference = request==null?null:request.getRootRef();
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
@@ -539,18 +546,32 @@ window.setInterval(function() {
 		w.write("<div style= \"width: 100%; background-color: #516373;");
 		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
 		w.write("<div class=\"spacer\"></div>");
+		
+		String top;
+		if (doc!= null) {
+			top = String.format("&nbsp;<a style=\"color:#99CC00\" href='%s' target='_Ontology' title='Opentox %s (%s), describes representation of OpenTox REST resources'>OpenTox %s</a>&nbsp;",
+					doc.getPrimaryTopic(),
+					doc.getResource(),doc.getPrimaryTopic(),doc.getResource());
+			top += String.format("<a style=\"color:#99CC00\" href='%s' target='_API' title='REST API documentation'>REST API</a>&nbsp;",doc.getPrimaryDoc());
+		} else top = "";
 
-		w.write(String.format("<div class=\"row\"><span class=\"left\"><a href=\"%s\">Home</a>",baseReference.toString()));
+		w.write(String.format("<div class=\"row\"><span class=\"left\">&nbsp;%s",top));
 		w.write("</span>");
 		Iterator<Principal> i = request.getClientInfo().getPrincipals().iterator();
 		Principal p = null;
 		while (i.hasNext()) { p = i.next(); break; }
-		if (p==null)
-		w.write(String.format("	<span class=\"right\"><a href='%s/user/login'>Login</a>",
+		
+		top = "";
+		
+		if (p==null) 
+		w.write(String.format("	<span class=\"right\">%s&nbsp;<a style=\"color:#99CC00\" href='%s/user/login'>Login</a>",
+				top,
 				baseReference.toString()));
 		else
-		w.write(String.format("	<span class=\"right\">%s&nbsp;<a href='%s/protected/%s'>Switch user</a>",
-				p.getName(),baseReference.toString(),p.getName()));
+		w.write(String.format("	<span class=\"right\">%snbsp;%s&nbsp;<a style=\"color:#99CC00\" href='%s/protected/%s'>Switch user</a>",
+				top,
+				p.getName(),
+				baseReference.toString(),p.getName()));
 		
 		//w.write(String.format("&nbsp;<a href=\"%s/help\">Help</a>",baseReference.toString()));
 		w.write("</span></div>");
@@ -558,26 +579,54 @@ window.setInterval(function() {
 		w.write("</div>");
 		w.write("<div>");		
 		
-		w.write(String.format("<a href='http://toxpredict.org' title='Predict'>ToxPredict</a>&nbsp;"));
 		//w.write(String.format("<a href='%s/ttc?text=50-00-0&search=%s' title='Threshold of toxicological concern prediction'>TTC</a>&nbsp;",baseReference,Reference.encode("C=O")));
-		w.write(String.format("<a href='%s/depict?search=c1ccccc1' title='Structure diagram'>Depiction</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/query/compound'>Query compounds</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/compound'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
+
+		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/algorithm' title='Predictive algorithms'>Algorithms</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/model' title='Models'>Models</a>&nbsp;",baseReference));
+		//w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
+		w.write(String.format("<a href='%s%s' title='Compound properties'>Features</a>&nbsp;",baseReference,PropertyResource.featuredef));
+		w.write(String.format("<a href='%s%s/Taxonomy' title='Features grouped in several categories'>Templates</a>&nbsp;",baseReference,OntologyResource.resource));
+
 		w.write(String.format("<a href='%s/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9' title='Search for similar structures'>Similarity</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/query/smarts?text=\"\"' title='Substructure search by SMARTS patterns'>Substructure</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/algorithm' title='Predictive algorithms'>Algorithms</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
-		w.write(String.format("<a href='%s%s' title='Compound properties'>Features</a>&nbsp;",baseReference,PropertyResource.featuredef));
-		w.write(String.format("<a href='%s%s/Taxonomy' title='Features grouped in several categories'>Templates</a>&nbsp;",baseReference,OntologyResource.resource));		
-		w.write(String.format("<a href='%s/model'>Models</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/ontology' title='BlueObelisk, endpoints, algorithm types ontology'>Ontology</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/ontology/test' title='Reads RDF output from an URI and displays clickable statements. Enter URI in the search box.'>RDF playground</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/help'>Help</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s' title='Ontology service, SPARQL endpoint'>Ontology service</a>&nbsp;",getSparql(request)));
+		
+		w.write(String.format("&nbsp;<a href='http://toxpredict.org' title='Predict'>ToxPredict</a>&nbsp;"));
+		w.write(String.format("<a href='%s/depict?search=c1ccccc1' title='Structure diagram'>Depiction</a>&nbsp;",baseReference));
+
+
+
+		w.write(String.format("&nbsp;<a href='%s/help'>Help</a>&nbsp;",baseReference));
+
 		w.write("</div>");
 
 		w.write("\n<div id=\"targetDiv\"></div>\n");
 		w.write("\n<div id=\"statusDiv\"></div>\n");
 		//w.write("\n<textarea id=\"targetDiv\"></textarea>\n");
+	}
+	
+	public static String getSparql(Request request) {
+		
+		return SPARQLPointerResource.getOntologyServiceURI();
+		/*
+		if (sparqlEndpoint!=null) return sparqlEndpoint;
+		
+		ClientResource c = null;
+		Representation r = null;
+		try {
+			c = new ClientResource(String.format("%s/sparqlendpoint", request.getResourceRef()));
+			r = c.get();
+			return r.getText();
+		} catch (Exception x) {
+			return "";
+		} finally {
+			try { r.release();} catch (Exception x) {}
+			try { c.release();} catch (Exception x) {}
+		}
+		*/
 	}
 	public static void writeSearchForm(Writer w,String title,Request request ,String meta) throws IOException {
 		writeSearchForm(w, title, request, meta,Method.GET);

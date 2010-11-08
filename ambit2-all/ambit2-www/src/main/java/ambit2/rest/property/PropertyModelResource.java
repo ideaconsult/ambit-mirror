@@ -13,6 +13,7 @@ import ambit2.base.data.Property;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ModelTemplates;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.model.ModelResource;
 
 
@@ -26,6 +27,10 @@ public class PropertyModelResource extends PropertyResource {
 	public static final String resourceKey = "modelvars";
 	public static final String resourceID = String.format("/{%s}", resourceKey);
 	
+	public PropertyModelResource() {
+		super();
+		setDocumentation(new ResourceDoc("Model","Model"));
+	}
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
 			Request request, Response response) throws ResourceException {

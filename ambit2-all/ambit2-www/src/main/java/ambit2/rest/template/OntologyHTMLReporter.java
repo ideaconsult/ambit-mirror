@@ -30,7 +30,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	protected int count = 0;
 	
 	public OntologyHTMLReporter(Request reference,boolean collapsed) {
-		super(reference,collapsed);
+		super(reference,collapsed,null);
 
 	}	
 	@Override
@@ -117,7 +117,8 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			AmbitResource.writeHTMLHeader(output,
 					query.toString()
 					,
-					uriReporter.getRequest()
+					uriReporter.getRequest(),
+					uriReporter.getDocumentation()
 					);
 			output.write(String.format("<h4>%s</h4>",query.toString()));
 

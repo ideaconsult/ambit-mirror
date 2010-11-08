@@ -106,7 +106,7 @@ public class AbstractDepict extends ServerResource {
 	    				public void close() throws Exception {};
 	    				public Writer process(String target) throws AmbitException {
 	    					try {
-	    					AmbitResource.writeTopHeader(output, smiles, getRequest(), "");
+	    					AmbitResource.writeTopHeader(output, smiles, getRequest(), "",null);
 	    					AmbitResource.writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
 	    					output.write(target);
 	    					AmbitResource.writeHTMLFooter(output, smiles, getRequest());

@@ -33,7 +33,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 		this(request,request,collapsed,doc);
 	}
 	public ModelHTMLReporter(Request request,Request originalRef,boolean collapsed,ResourceDoc doc) {
-		super(request,collapsed);
+		super(request,collapsed,doc);
 		templateReporter = new PropertyURIReporter(request,doc);
 		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,doc,collapsed);
 	}

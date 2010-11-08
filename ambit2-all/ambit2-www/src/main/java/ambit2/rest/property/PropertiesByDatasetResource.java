@@ -13,6 +13,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.property.PropertiesByDataset;
 import ambit2.db.search.property.PropertiesByQuery;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.error.InvalidResourceIDException;
@@ -29,7 +30,10 @@ public class PropertiesByDatasetResource extends PropertyResource {
 	//public final static String DatasetFeaturedefID = String.format("%s%s/{%s}",DatasetsResource.datasetID,featuredef,idfeaturedef);
 	//public final static String DatasetFeaturedef = String.format("%s%s",DatasetsResource.datasetID,featuredef);
 
-
+	public PropertiesByDatasetResource() {
+		super();
+		setDocumentation(new ResourceDoc("Feature","Feature"));
+	}
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
 			Request request, Response response) throws ResourceException {

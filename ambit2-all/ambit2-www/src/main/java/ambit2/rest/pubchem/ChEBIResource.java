@@ -85,7 +85,7 @@ public class ChEBIResource extends WadlServerResource {
 	        	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 					variant.setMediaType(MediaType.TEXT_HTML);
 					StringWriter writer = new StringWriter();
-					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest());
+					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),null);
 					writer.write("<h2>ChEBI search</h2>");
 					writer.write("<p>Enter query term and click <b>Search</b> button. The result will be an SDF file.<p>Examples:<p>");
 					writer.write(String.format("<a href=\"%s/query/chebi/CHEBI:580068\">%s/query/chebi/CHEBI:580068</a><br>",getRequest().getRootRef(),getRequest().getRootRef()));

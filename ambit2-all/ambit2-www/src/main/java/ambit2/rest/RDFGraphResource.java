@@ -234,7 +234,7 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 					@Override
 					public void write(OutputStream out) throws IOException {
 						OutputStreamWriter writer = new OutputStreamWriter(out);
-						AmbitResource.writeHTMLHeader(writer,"Ontology playground" ,getRequest());
+						AmbitResource.writeHTMLHeader(writer,"Ontology playground" ,getRequest(),getDocumentation());
 						
 						//queryObject.l
 						StmtIterator iter =  queryObject.listStatements(

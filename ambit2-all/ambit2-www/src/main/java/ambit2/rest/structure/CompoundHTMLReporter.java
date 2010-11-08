@@ -289,7 +289,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					collapsed?"Chemical compounds":"Chemical compound"
 					,
 					uriReporter.getRequest(),
-					""
+					"",
+					uriReporter.getDocumentation()
 					);
 			
 			w.write("<table width='100%' bgcolor='#ffffff'>");

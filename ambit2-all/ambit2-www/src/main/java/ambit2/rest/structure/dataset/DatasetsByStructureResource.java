@@ -42,7 +42,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),false),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),false,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
@@ -70,7 +70,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 		
 	} else //html 	
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),false),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),false,getDocumentation()),MediaType.TEXT_HTML);
 	}
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context, Request request,

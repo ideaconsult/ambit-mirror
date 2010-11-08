@@ -10,7 +10,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.ClassHolder;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
@@ -23,6 +22,7 @@ import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.YAMLConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
@@ -56,6 +56,10 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	
 	protected boolean collapsed;
 
+	public DatasetsResource() {
+		super();
+		setDocumentation(new ResourceDoc("dataset","Dataset"));
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -133,7 +137,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
@@ -160,7 +164,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		
 	} else //html 	
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),collapsed),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
 	}
 	@Override
 	protected Representation post(Representation entity, Variant variant)

@@ -103,7 +103,7 @@ public class PubchemResource extends ServerResource {
 	        	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 					variant.setMediaType(MediaType.TEXT_HTML);
 					StringWriter writer = new StringWriter();
-					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest());
+					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),null);
 					writer.write("<h2>PubChem search</h2>");
 					writer.write("<p>Enter query term and click <b>Search</b> button. The result will be an SDF file.<p>Examples:<p>");
 					writer.write(String.format("<a href=\"%s/query/pubchem/50-00-0\">%s/query/pubchem/50-00-0</a><br>",getRequest().getRootRef(),getRequest().getRootRef()));

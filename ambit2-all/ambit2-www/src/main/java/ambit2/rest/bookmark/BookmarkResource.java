@@ -66,7 +66,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 								
 			} else 
 				return new OutputWriterConvertor(
-						new BookmarkHTMLReporter(getRequest(),queryObject.getValue()==null),
+						new BookmarkHTMLReporter(getRequest(),queryObject.getValue()==null,getDocumentation()),
 						MediaType.TEXT_HTML);
 	}
 

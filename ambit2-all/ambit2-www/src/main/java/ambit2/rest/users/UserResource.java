@@ -19,6 +19,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.db.search.QueryUser;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
@@ -30,6 +31,10 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 	public final static String login = "login";
 	public final static String resourceID = String.format("/{%s}",resourceKey);
 	
+	public UserResource() {
+		super();
+		setDocumentation(new ResourceDoc("User","User"));
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -49,7 +54,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 				return new StringConvertor(	reporter,MediaType.TEXT_URI_LIST);
 			} else 
 				return new OutputWriterConvertor(
-						new UsersHTMLReporter(getRequest(),queryObject.getValue()==null),
+						new UsersHTMLReporter(getRequest(),queryObject.getValue()==null,getDocumentation()),
 						MediaType.TEXT_HTML);
 	}
 	@Override
