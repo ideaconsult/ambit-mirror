@@ -27,7 +27,8 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 	@Override
 	public void header(Writer output, Iterator<T> query) {
 		try {
-			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest());//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),
+					getDocumentation());//,"<meta http-equiv=\"refresh\" content=\"10\">");
 		} catch (Exception x) {
 			
 		}

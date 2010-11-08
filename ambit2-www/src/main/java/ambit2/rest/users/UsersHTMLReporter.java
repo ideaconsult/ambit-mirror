@@ -18,10 +18,10 @@ public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrie
 	private static final long serialVersionUID = -7959033048710547839L;
 	
 	public UsersHTMLReporter() {
-		this(null,true);
+		this(null,true,null);
 	}
-	public UsersHTMLReporter(Request baseRef, boolean collapsed) {
-		super(baseRef,collapsed);
+	public UsersHTMLReporter(Request baseRef, boolean collapsed, ResourceDoc doc) {
+		super(baseRef,collapsed,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

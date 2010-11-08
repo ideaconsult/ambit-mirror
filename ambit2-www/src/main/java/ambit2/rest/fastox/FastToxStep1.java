@@ -33,7 +33,8 @@ public class FastToxStep1 extends SmartsQueryResource {
 							AmbitResource.writeHTMLHeader(output,
 									collapsed?"Chemical compounds":"Chemical compound"
 									,
-									getRequest()
+									getRequest(),
+									getDocumentation()
 									);
 							
 						} catch (Exception x) {}		

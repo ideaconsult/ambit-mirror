@@ -67,7 +67,7 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 	@Override
 	public void header(Writer w, Q query) {
 		try {
-			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest());
+			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest(),uriReporter.getDocumentation());
 		} catch (IOException x) {}
 	}
 	

@@ -35,7 +35,8 @@ public class KroesStep1 extends FastToxStep1 {
 							AmbitResource.writeHTMLHeader(output,
 									collapsed?"Chemical compounds":"Chemical compound"
 									,
-									getRequest()
+									getRequest(),
+									getDocumentation()
 									);
 							
 						} catch (Exception x) {}		

@@ -27,8 +27,8 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	 * 
 	 */
 	private static final long serialVersionUID = 3196496706491834527L;
-	public PropertyHTMLReporter(Request ref,boolean collapsed) {
-		super(ref,collapsed);
+	public PropertyHTMLReporter(Request ref,boolean collapsed, ResourceDoc doc) {
+		super(ref,collapsed,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

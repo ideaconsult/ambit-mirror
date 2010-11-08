@@ -25,7 +25,7 @@ public class AmbitStatusService extends StatusService {
 		try {
 			
 			StringWriter w = new StringWriter();
-			AmbitResource.writeHTMLHeader(w, status.getName(), request);
+			AmbitResource.writeHTMLHeader(w, status.getName(), request,null);
 			
 			
 			w.write(String.format("<h4>%s</h4>",

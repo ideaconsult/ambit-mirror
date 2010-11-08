@@ -7,6 +7,8 @@ import java.util.Iterator;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
+import com.ibm.icu.util.UResourceBundle;
+
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
@@ -29,7 +31,9 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 	public void header(Writer output, Iterator<Task<Reference,USERID>> query) {
 		try {
 			String ajax = AmbitResource.js(getRequest().getOriginalRef().toString(),baseReference);
-			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),ajax);//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),ajax,
+					getDocumentation()
+					);//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<h4>Tasks:");
 			for (TaskStatus status :TaskStatus.values())
 				output.write(String.format("<a href='%s%s?search=%s'>%s</a>&nbsp;",

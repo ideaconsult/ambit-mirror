@@ -79,10 +79,10 @@ public class SPARQLPointerResource extends CatalogResource<String> {
 		
 	}
 	
-	protected synchronized String getOntologyServiceURI()  {
+	public static synchronized String getOntologyServiceURI()  {
 		try {
 			Properties properties = new Properties();
-			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
+			InputStream in = SPARQLPointerResource.class.getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
 			properties.load(in);
 			in.close();	
 			return properties.getProperty("service.ontology");

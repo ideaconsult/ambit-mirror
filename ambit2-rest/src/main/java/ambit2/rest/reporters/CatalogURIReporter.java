@@ -17,7 +17,14 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
 	 */
 	private static final long serialVersionUID = 2871865183499748866L;
 	protected Request request;
+	protected ResourceDoc documentation;
 	
+	public ResourceDoc getDocumentation() {
+		return documentation;
+	}
+	public void setDocumentation(ResourceDoc documentation) {
+		this.documentation = documentation;
+	}
 	public Request getRequest() {
 		return request;
 	}
@@ -29,9 +36,12 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
 		this(request==null?null:request.getRootRef(),doc);
 		setRequest(request);
 		
+		
 	}	
 	protected CatalogURIReporter(Reference baseRef,ResourceDoc doc) {
 		this.baseReference = baseRef;
+		setDocumentation(doc);
+
 		
 	}
 	protected CatalogURIReporter() {

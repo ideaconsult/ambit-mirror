@@ -21,7 +21,7 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, I
 		this(null,true);
 	}
 	public ReferenceHTMLReporter(Request baseRef, boolean collapsed) {
-		super(baseRef,collapsed);
+		super(baseRef,collapsed,null);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

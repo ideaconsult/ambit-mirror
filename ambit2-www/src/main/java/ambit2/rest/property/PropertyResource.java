@@ -119,7 +119,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 					,variant.getMediaType());		
 		} else 
 			return new OutputWriterConvertor(
-					new PropertyHTMLReporter(getRequest(),collapsed)
+					new PropertyHTMLReporter(getRequest(),collapsed,getDocumentation())
 					,MediaType.TEXT_HTML);
 	}
 

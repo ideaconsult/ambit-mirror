@@ -30,14 +30,14 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
 	public static String fileUploadField = "file";
-	public DatasetsHTMLReporter() {
-		this(null,true);
+	public DatasetsHTMLReporter(ResourceDoc doc) {
+		this(null,true,doc);
 	}
-	public DatasetsHTMLReporter(Request baseRef,boolean collapsed) {
-		this(baseRef,baseRef,collapsed);
+	public DatasetsHTMLReporter(Request baseRef,boolean collapsed,ResourceDoc doc) {
+		this(baseRef,baseRef,collapsed,doc);
 	}
-	public DatasetsHTMLReporter(Request baseRef,Request originalRef,boolean collapsed) {
-		super(baseRef,collapsed);
+	public DatasetsHTMLReporter(Request baseRef,Request originalRef,boolean collapsed,ResourceDoc doc) {
+		super(baseRef,collapsed,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

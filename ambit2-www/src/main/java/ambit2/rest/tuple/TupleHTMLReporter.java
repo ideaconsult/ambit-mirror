@@ -30,7 +30,7 @@ public class TupleHTMLReporter extends QueryHTMLReporter<PropertiesTuple, QueryT
 	protected DatasetURIReporter<IQueryRetrieval<SourceDataset>> ds_reporter;
 	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
 	public TupleHTMLReporter(Request ref,IStructureRecord record,ResourceDoc doc) {
-		super(ref,true);
+		super(ref,true,doc);
 		((TupleURIReporter) uriReporter).setRecord(record);
 		ds_reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(ref,doc);
 		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(ref,doc,true);

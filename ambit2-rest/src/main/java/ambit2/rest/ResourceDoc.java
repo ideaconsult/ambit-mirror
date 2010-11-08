@@ -20,7 +20,9 @@ public class ResourceDoc implements Serializable {
 		setPrimaryDoc(primaryDoc);
 		setPrimaryTopic(primaryTopic);
 	}
-
+	public String getResource() {
+		return primaryTopic;
+	}
 	public String getPrimaryDoc() {
 		return String.format(rootDocURL, primaryDoc);
 	}
