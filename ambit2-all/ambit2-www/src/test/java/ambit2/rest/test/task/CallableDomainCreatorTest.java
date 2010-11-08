@@ -31,7 +31,7 @@ public class CallableDomainCreatorTest extends ResourceTest {
 				((AmbitApplication)component.getApplication()).getContext(),
 				alg, 
 				uriReporter,
-				new AlgorithmURIReporter(null));
+				new AlgorithmURIReporter(null,null));
 		Reference ref = c.call();
 	}
 	@Override
