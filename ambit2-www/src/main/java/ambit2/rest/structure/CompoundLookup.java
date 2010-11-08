@@ -261,7 +261,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	}
 	
 	public IAtomContainer isInChI(String inchi) throws Exception {
-		if (inchi.startsWith(AmbitCONSTANTS.INCHI)) {
+		if ((inchi!= null) && inchi.startsWith(AmbitCONSTANTS.INCHI)) {
 			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
 			InChIToStructure c =f.getInChIToStructure(inchi, DefaultChemObjectBuilder.getInstance());
 			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
