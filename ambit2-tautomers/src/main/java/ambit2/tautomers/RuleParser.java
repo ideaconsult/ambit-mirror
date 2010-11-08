@@ -127,10 +127,27 @@ public class RuleParser
 	
 	void parseStates(String keyValue)
 	{
+		/*
 		Vector<String> elements = getStringElements(keyValue, TautomerConst.KeyWordElementSeparator);
 		curRule.smartsStates = new String[elements.size()]; 
 		for (int i = 0; i < elements.size(); i++)
+		{	
 			curRule.smartsStates[i] = elements.get(i).trim();
+			System.out.println(elements.get(i));
+		}
+		*/		
+		//String elements [] = keyValue.split(TautomerConst.KeyWordElementSeparator);
+		
+		
+		String elements [] = keyValue.split(" ");
+		curRule.smartsStates = new String[elements.length]; 
+		for (int i = 0; i < elements.length; i++)
+		{	
+			String s = elements[i].trim();
+			if(!s.equals(""))
+				curRule.smartsStates[i] = s;
+		}
+		
 	}
 	
 	void parseGroup_Pos(String keyValue)
