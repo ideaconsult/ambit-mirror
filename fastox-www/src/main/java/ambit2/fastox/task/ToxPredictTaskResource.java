@@ -4,7 +4,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.restlet.Request;
-import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -14,6 +13,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
 import ambit2.fastox.users.UserResource;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.Task;
@@ -39,12 +39,12 @@ public class ToxPredictTaskResource<IToxPredictUser> extends SimpleTaskResource<
 		FactoryTaskConvertor<IToxPredictUser> tc = new FactoryTaskConvertor<IToxPredictUser>() {
 			@Override
 			public synchronized Reporter<Iterator<Task<Reference, IToxPredictUser>>, Writer> createTaskReporterHTML(
-					Request request) throws AmbitException, ResourceException {
-				return new TaskHTMLReporter(getRequest());
+					Request request,ResourceDoc doc) throws AmbitException, ResourceException {
+				return new TaskHTMLReporter(getRequest(),doc);
 			}
 		};
 	
-		return tc.createTaskConvertor(variant, getRequest());
+		return tc.createTaskConvertor(variant, getRequest(),getDocumentation());
 
 	}
 	/*

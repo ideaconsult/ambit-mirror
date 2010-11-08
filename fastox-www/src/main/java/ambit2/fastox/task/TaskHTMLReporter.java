@@ -7,6 +7,7 @@ import java.util.Iterator;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.Task;
@@ -18,8 +19,8 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 	 * 
 	 */
 	private static final long serialVersionUID = 7644836050657868159L;
-	public TaskHTMLReporter(Request ref) {
-		super(ref);
+	public TaskHTMLReporter(Request ref,ResourceDoc doc) {
+		super(ref,doc);
 	}
 	
 	@Override
