@@ -667,7 +667,7 @@ window.setInterval(function() {
 		//w.write(baseReference.toString());
 
 		w.write("</form>\n");
-		w.write("<br><b><i>This site and AMBIT REST services are under development!</i></b>");		
+		w.write("<br><b title='These pages offer minimalistic user interface to AMBIT implementation of OpenTox REST services. Full featured user interface is available via external applicaiton, like ToxPredict (http://toxpredict.org), ToxCreate (http://toxcreate.org) and QPRF editor. More applications are under development.'><i>These pages and AMBIT REST services are under development!</i></b>");		
 		w.write("</td>");
 		w.write("<td align='right' width='256px'>");
 //		w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
