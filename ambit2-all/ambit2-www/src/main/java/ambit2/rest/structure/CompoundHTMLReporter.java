@@ -185,7 +185,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 		for (String option[]:options) {
 			String checked = "";
-			for (String value:values) if (value.equals(String.format("%s/%s", baseReference,option[0]))) 
+			for (String value:values)
+				if (value==null) continue;
+				else if (value.equals(String.format("%s/%s", baseReference,option[0]))) 
 			{ checked = "CHECKED"; break;}
 			w.append(String.format("<input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s/%s\" name=\"%s\">%s</option>\n",
 						checked,
@@ -193,10 +195,13 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						option[0],
 						OpenTox.params.feature_uris.toString(),option[1]));
 		}
+		
 		for (String value:values) {
+			if (value==null) continue;
 			boolean add = true;
 			for (String option[]:options) 
 				if (value.equals(String.format("%s/%s", baseReference,option[0]))) { add = false; break;}
+			
 			if (add)
 				w.append(String.format("<input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s\" name=\"%s\"><a href='%s' target='_blank'>%s</a></option>\n",
 						"checked",
@@ -466,7 +471,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 			
 
-		} catch (Exception x) {}		
+		} catch (Exception x) {
+			x.printStackTrace();
+		}		
 	};
 	public void footer(Writer output, Q query) {
 		try {
