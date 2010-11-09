@@ -37,6 +37,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.InchiPropertyKey;
@@ -53,6 +54,8 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	protected SmilesKey smilesKey;
 	protected InchiPropertyKey inchiKey;
 	protected StructureTypeProcessor strucType;
+	protected InchiProcessor inchiProcessor;
+	
 	public StructureNormalizer() {
 		molReader = new MoleculeReader();
 		hashcode = new HashcodeKey();
@@ -87,8 +90,16 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		
 		try {
 			if (structure.getInchi()== null) {
-				structure.setInchi(inchiKey.process(structure));
-				if ("".equals(structure.getInchi())) structure.setInchi(null);
+				String inchi = null; 
+				if (molecule.getAtomCount()==0) 
+					inchi = inchiKey.process(structure);
+				else
+				try {
+					if (inchiProcessor==null) inchiProcessor = new InchiProcessor();
+					inchi = inchiProcessor.process(molecule).getInchi();
+				} catch (Exception x) {}
+				if ("".equals(inchi)) inchi = null;
+				structure.setInchi(inchi);
 			}
 		} catch (Exception x) {
 			structure.setInchi(null);

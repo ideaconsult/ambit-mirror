@@ -29,6 +29,8 @@
 
 package ambit2.core.processors.structure.key;
 
+import java.util.Iterator;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -59,10 +61,20 @@ public class InchiKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 		this.key = key;
 	}
 	public String process(IAtomContainer molecule) throws AmbitException {
-		return inchi.process(molecule).getInchi();
+		if (molecule.getAtomCount()>0)
+			try { 
+				return inchi.process(molecule).getInchi(); 
+			} catch (Exception x) {}
+		Iterator<Object> keys = molecule.getProperties().keySet().iterator();
+		while (keys.hasNext()) {
+			Object value = molecule.getProperties().get(keys.next());
+			if (value.toString().startsWith("InChI=")) 
+				return value.toString();
+		}
+		return null;
 	}
 	public Object getQueryKey() {
-		return null;
+		return "inchi";
 	}
 	public Class getType() {
 		return String.class;
