@@ -2,6 +2,10 @@ package ambit2.tautomers;
 
 import java.util.Vector;
 
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+
+import ambit2.smarts.SmartsParser;
+
 public class RuleParser 
 {
 	String errors = "";
@@ -45,7 +49,30 @@ public class RuleParser
 	
 	void postProcessing()
 	{
+		if (curRule.smartsStates.length <= 1)
+		{	
+			errors += "Too few states. At leats two states are need! \n";
+			return;
+		}	
 		
+		if (curRule.smartsStates.length != curRule.mobileGroupPos.length)
+		{
+			errors += "The number of states and number of group positionas are not the same!\n";
+			return;
+		}
+		
+		curRule.statePaterns = new QueryAtomContainer[curRule.smartsStates.length];
+		SmartsParser sp = new SmartsParser();
+		for (int i = 0; i<curRule.smartsStates.length; i++)
+		{
+			QueryAtomContainer q = sp.parse(curRule.smartsStates[i]);
+			sp.setNeededDataFlags();
+			String errorMsg = sp.getErrorMessages();
+			if (!errorMsg.equals(""))			
+				errors += "Incorrect state description: " + errorMsg + "\n";
+			else
+				curRule.statePaterns[i] = q;
+		}
 	}
 	
 	void parseKeyWord(String keyWord)
@@ -126,18 +153,8 @@ public class RuleParser
 	
 	
 	void parseStates(String keyValue)
-	{
-		/*
-		Vector<String> elements = getStringElements(keyValue, TautomerConst.KeyWordElementSeparator);
-		curRule.smartsStates = new String[elements.size()]; 
-		for (int i = 0; i < elements.size(); i++)
-		{	
-			curRule.smartsStates[i] = elements.get(i).trim();
-			System.out.println(elements.get(i));
-		}
-		*/		
+	{	
 		//String elements [] = keyValue.split(TautomerConst.KeyWordElementSeparator);
-		
 		
 		String elements [] = keyValue.split(" ");
 		curRule.smartsStates = new String[elements.length]; 
@@ -156,7 +173,14 @@ public class RuleParser
 		curRule.mobileGroupPos = new int[elements.size()]; 
 		for (int i = 0; i < elements.size(); i++)
 		{	
-			//TODO
+			try {
+			int pos = Integer.parseInt(elements.get(i));
+			curRule.mobileGroupPos[i]  = pos;
+			}
+			catch (Exception e)
+			{
+				errors += "Incorrect group position: " + keyValue + "\n";
+			}
 		}	
 	}
 	
@@ -165,6 +189,8 @@ public class RuleParser
 		curRule.RuleInfo = keyValue.trim();
 	}
 	
+	
+	//Helper function --------------------------------------------------
 	
 	Vector<String> getStringElements(String string, String separator)
 	{

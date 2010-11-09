@@ -5,7 +5,7 @@ import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 
-public class RuleInstance 
+public class RuleInstance implements IRuleInstance
 {
 	Rule rule;
 	int state = 0;
@@ -15,5 +15,10 @@ public class RuleInstance
 	public void nextState()
 	{
 		
+	}
+	
+	public int getNumberOfStates()
+	{
+		return rule.nStates;
 	}
 }
