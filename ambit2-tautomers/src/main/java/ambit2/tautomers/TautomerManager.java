@@ -7,8 +7,8 @@ public class TautomerManager
 {
 	KnowledgeBase knowledgeBase; 
 	IAtomContainer molecule;
-	Vector<RuleInstance> extendedRuleInstances = new Vector<RuleInstance>(); 
-	Vector<RuleInstance> ruleInstances = new Vector<RuleInstance>(); 
+	Vector<IRuleInstance> extendedRuleInstances = new Vector<IRuleInstance>(); 
+	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>(); 
 	
 	
 	TautomerManager()
@@ -34,7 +34,10 @@ public class TautomerManager
 		
 		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
 		if (ruleInstances.isEmpty())
+		{	
+			v.add(molecule);
 			return(v);
+		}	
 		
 		generateRuleCombinations();
 		
