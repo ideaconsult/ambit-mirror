@@ -99,7 +99,7 @@ public class ImportWorkflow extends Workflow {
 								"", ""),
 						new ClassHolder(
 								"ambit2.core.processors.structure.key.InchiPropertyKey",
-								"InChi", "", ""),
+								"InChI", "", ""),
 						new ClassHolder(
 								"ambit2.core.processors.structure.key.SmilesKey",
 								"SMILES", "", ""),

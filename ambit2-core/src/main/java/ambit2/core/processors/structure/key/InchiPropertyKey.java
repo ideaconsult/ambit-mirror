@@ -29,16 +29,22 @@
 
 package ambit2.core.processors.structure.key;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.core.processors.structure.InchiProcessor;
 
 public class InchiPropertyKey extends PropertyKey<String> {
 	protected static String inchitag="InChI=";
+	protected InchiProcessor inchi;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1718062022783509128L;
 	public InchiPropertyKey() {
-		super(Property.getInstance("InChI","GENERATED_InChI", "http://www.iupac.org/inchi/"));
+		super(Property.getInChIInstance());
 	}
 	@Override
 	protected boolean isValid(Object key, Object value) {

@@ -95,7 +95,7 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 			}
 			@Override
 			public String getDescription() {
-				return "Match by InChi";
+				return "Match by InChI";
 			}
 		},
 		SMILES {
