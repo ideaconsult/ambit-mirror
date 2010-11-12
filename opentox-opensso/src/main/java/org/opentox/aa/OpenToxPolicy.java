@@ -2,6 +2,8 @@ package org.opentox.aa;
 
 import java.util.Hashtable;
 
+import org.opentox.aa.opensso.OpenSSOToken;
+
 
 public abstract class OpenToxPolicy<Token extends OpenToxToken,PolicyContent> {
 	protected static final String MSG_EMPTY_POLICYID = "Empty policy id";
@@ -11,12 +13,21 @@ public abstract class OpenToxPolicy<Token extends OpenToxToken,PolicyContent> {
 	public OpenToxPolicy(String policyService) {
 		this.policyService = policyService;
 	}
+	public abstract int createGroupPolicy(String group,OpenSSOToken token, String uri, String[] methods) throws Exception;
 	/**
 	 * Create a policy
 	 * @param token
 	 * @return 200 (OK) 400 (XML contains errors) 500 (Other Errors)
 	 */
-	public abstract int createPolicy(Token token,String uri, String[] methods, String policyID) throws Exception;
+	public abstract int createGroupPolicy(String group, Token token,String uri, String[] methods, String policyID) throws Exception;
+	
+	public abstract int createUserPolicy(String user,OpenSSOToken token, String uri, String[] methods) throws Exception;
+	/**
+	 * Create a policy
+	 * @param token
+	 * @return 200 (OK) 400 (XML contains errors) 500 (Other Errors)
+	 */
+	public abstract int createUserPolicy(String user,Token token,String uri, String[] methods, String policyID) throws Exception;
 	/**
 	 * List my policies
 	 * @param token

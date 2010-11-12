@@ -15,8 +15,6 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
-import com.sun.net.httpserver.Authenticator.Success;
-
 public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	protected static final String headers_tag = "org.restlet.http.headers";
 	
@@ -26,7 +24,7 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 		"                <Value>allow</Value>\n"+
 		"            </AttributeValuePair>\n";
 	
-	protected String policyTemplate = 
+	protected String policyGroupTemplate = 
 	"<!DOCTYPE Policies PUBLIC \"-//Sun Java System Access Manager7.1 2006Q3  Admin CLI DTD//EN\" \"jar://com/sun/identity/policy/policyAdmin.dtd\">\n"+
 	"<Policies>\n"+
 	"    <Policy name=\"%s\" referralPolicy=\"false\" active=\"true\">\n"+
@@ -36,37 +34,102 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	"            %s\n"+	
 	"        </Rule>\n"+
 	"        <Subjects name=\"s1\" description=\"\">\n"+
-	"            <Subject name=\"%s\" type=\"LDAPUsers\" includeType=\"inclusive\">\n"+
+	"            <Subject name=\"%s\" type=\"LDAPGroups\" includeType=\"inclusive\">\n"+
 	"                <AttributeValuePair>\n"+
 	"                    <Attribute name=\"Values\"/>\n"+
-	"                    <Value>uid=%s,ou=people,dc=opentox,dc=org</Value>\n"+
+	"                    <Value>cn=%s, ou=groups, dc=opentox, dc=org</Value>\n"+
 	"                </AttributeValuePair>\n"+
 	"            </Subject>\n"+
 	"        </Subjects>\n"+
 	"    </Policy>\n"+
 	"</Policies>\n";
+	
+	protected String policyUserTemplate = 
+		"<!DOCTYPE Policies PUBLIC \"-//Sun Java System Access Manager7.1 2006Q3  Admin CLI DTD//EN\" \"jar://com/sun/identity/policy/policyAdmin.dtd\">\n"+
+		"<Policies>\n"+
+		"    <Policy name=\"%s\" referralPolicy=\"false\" active=\"true\">\n"+
+		"        <Rule name=\"tr1\">\n"+
+		"            <ServiceName name=\"iPlanetAMWebAgentService\"/>\n"+
+		"            <ResourceName name=\"%s\"/>\n"+
+		"            %s\n"+	
+		"        </Rule>\n"+
+		"        <Subjects name=\"s1\" description=\"\">\n"+
+		"            <Subject name=\"%s\" type=\"LDAPUsers\" includeType=\"inclusive\">\n"+
+		"                <AttributeValuePair>\n"+
+		"                    <Attribute name=\"Values\"/>\n"+
+		"                    <Value>uid=%s,ou=people,dc=opentox,dc=org</Value>\n"+
+		"                </AttributeValuePair>\n"+
+		"            </Subject>\n"+
+		"        </Subjects>\n"+
+		"    </Policy>\n"+
+		"</Policies>\n";	
 	public OpenSSOPolicy(String policyService) {
 		super(policyService);
 	}
 
+
 	@Override
-	public int createPolicy(OpenSSOToken token, String uri, String[] methods, String policyId) throws Exception {
+	public int createGroupPolicy(String group,OpenSSOToken token, String uri, String[] methods) throws Exception {
+
+		StringBuffer b = new StringBuffer();
+		b.append(uri.replace(":","").replace("/",""));
+		for (String method: methods) b.append(method);
+		return createUserPolicy(group,token, uri, methods,b.toString());
+	}
+	
+	@Override
+	public int createGroupPolicy(String group,OpenSSOToken token, String uri, String[] methods, String policyId) throws Exception {
 		if ((token==null) || (token.getToken()==null)) throw new Exception(OpenSSOToken.MSG_EMPTY_TOKEN,null);
 		if (policyId==null) throw new Exception(MSG_EMPTY_POLICYID,null);
 		
-		//get username and other attributes
-		Hashtable<String, String> results = new Hashtable<String, String>();
-		if (!token.getAttributes(new String[] {"uid"},results))
-			throw new Exception("Can't retrieve user name",null);
-		
-		String username = results.get("uid");
+		if (group == null) {
+			throw new Exception("No group id");
+		}
 		
 		StringBuffer actions = new StringBuffer();
 		for (String method: methods) {
 			actions.append(String.format(policyActionTemplate,method));
 		}
-		String p = String.format(policyTemplate,policyId,uri,actions,username,username);
-		Representation r = new StringRepresentation(p,MediaType.APPLICATION_XML);
+		String p = String.format(policyGroupTemplate,policyId,uri,actions,group,group);
+		return sendPolicy(token,p);
+		
+	}	
+	
+	@Override
+	public int createUserPolicy(String user,OpenSSOToken token, String uri, String[] methods) throws Exception {
+
+		StringBuffer b = new StringBuffer();
+		b.append(uri.replace(":","").replace("/",""));
+		for (String method: methods) b.append(method);
+		return createUserPolicy(user,token, uri, methods,b.toString());
+	}
+	@Override
+	public int createUserPolicy(String user,OpenSSOToken token, String uri, String[] methods, String policyId) throws Exception {
+		if ((token==null) || (token.getToken()==null)) throw new Exception(OpenSSOToken.MSG_EMPTY_TOKEN,null);
+		if (policyId==null) throw new Exception(MSG_EMPTY_POLICYID,null);
+		
+		if (user == null) {
+			//get username and other attributes
+			Hashtable<String, String> results = new Hashtable<String, String>();
+			if (!token.getAttributes(new String[] {"uid"},results))
+				throw new Exception("Can't retrieve user name",null);
+			
+			user = results.get("uid");
+		}
+		
+		StringBuffer actions = new StringBuffer();
+		for (String method: methods) {
+			actions.append(String.format(policyActionTemplate,method));
+		}
+		String p = String.format(policyUserTemplate,policyId,uri,actions,user,user);
+		return sendPolicy(token,p);
+		
+	}	
+	
+	protected int sendPolicy(OpenSSOToken token,String xml) throws Exception {
+
+		
+		Representation r = new StringRepresentation(xml,MediaType.APPLICATION_XML);
 		ClientResource client = new ClientResource(policyService);
 		
 		Form headers = new Form();  
@@ -88,7 +151,8 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 			try {client.release(); } catch (Exception x) {}
 		}
 		
-	}	
+	}
+	
 	@Override
 	public int deletePolicy(OpenSSOToken token, String policyId) throws Exception {
 		if ((token==null) || (token.getToken()==null)) throw new Exception(OpenSSOToken.MSG_EMPTY_TOKEN,null);

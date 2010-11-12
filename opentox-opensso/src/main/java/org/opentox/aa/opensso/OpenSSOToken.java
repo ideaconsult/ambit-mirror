@@ -157,9 +157,8 @@ public class OpenSSOToken extends OpenToxToken {
 			try {r.release();} catch (Exception x) {}
 			try {client.release();} catch (Exception x) {}
 		}
-		
-
 	}
+	
 	/**
 	 * http://developers.sun.com/identity/reference/techart/id-svcs.html
 	 */
