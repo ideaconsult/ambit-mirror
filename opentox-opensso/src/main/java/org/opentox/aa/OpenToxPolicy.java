@@ -16,7 +16,7 @@ public abstract class OpenToxPolicy<Token extends OpenToxToken,PolicyContent> {
 	 * @param token
 	 * @return 200 (OK) 400 (XML contains errors) 500 (Other Errors)
 	 */
-	public abstract int createPolicy(Token token,String uri, String policyID) throws Exception;
+	public abstract int createPolicy(Token token,String uri, String[] methods, String policyID) throws Exception;
 	/**
 	 * List my policies
 	 * @param token
