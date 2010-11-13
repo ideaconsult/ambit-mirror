@@ -6,49 +6,49 @@ import java.io.InputStreamReader;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.restlet.data.Form;
+import org.opentox.aa.opensso.OpenSSOPolicy;
+import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
-import ambit2.rest.aa.AAServicesConfig;
-import ambit2.rest.aa.opensso.OpenSSOToken;
-import ambit2.rest.aa.opensso.ProtectedTestResource;
+import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
+import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.test.ResourceTest;
 
 public class OpenSSOTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d%s", port,ProtectedTestResource.resource);
+		return String.format("http://localhost:%d%s", port,DatasetsResource.datasets);
 	}
 	@Test
 	public void testURI_notoken() throws Exception {
-		testGet(String.format("http://localhost:%d%s/1", port,ProtectedTestResource.resource)
+		testGet(String.format("http://localhost:%d%s/1", port,DatasetsResource.datasets)
 				,MediaType.TEXT_URI_LIST,Status.CLIENT_ERROR_UNAUTHORIZED);
 	}
 	
 	@Test
 	public void testURI_user_pass() throws Exception {
-		String user = AAServicesConfig.getSingleton().getTestUser();
+		String user = OpenSSOServicesConfig.getInstance().getTestUser();
 		System.out.println(user);
-		String token  = OpenSSOToken.getTokenByUserPass(user, AAServicesConfig.getSingleton().getTestUserPass());
-		Assert.assertTrue(OpenSSOToken.isValid(token));
+		OpenSSOToken token = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
+		token.login(user, OpenSSOServicesConfig.getInstance().getTestUserPass());
+		Assert.assertTrue(token.isTokenValid());
 		
-		Reference ref = new Reference(String.format("http://localhost:%d%s", port,ProtectedTestResource.resource));
+		OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
 		
-		String uri = ref.toString();
-		ref = OpenSSOToken.addTokenToReference(ref, token);
+		Reference ref = new Reference(String.format("http://localhost:%d%s", port,DatasetsResource.datasets));
 		
-		OpenSSOToken.listPolicies(token);
+		System.out.println(token.authorize(ref.toString(), "GET"));
+		
 		
 		/*
 		Status status = OpenSSOToken.createPolicy(String.format("%s",uri.replace("/", "_")),uri,user,token);
 		System.out.println(status);
 		testGet(ref.toString(),MediaType.TEXT_URI_LIST,Status.SUCCESS_OK);
 		*/
-		OpenSSOToken.logout(token);
+		token.logout();
 		
-		Assert.assertFalse(OpenSSOToken.isValid(token));
 	}
 	
 	@Override

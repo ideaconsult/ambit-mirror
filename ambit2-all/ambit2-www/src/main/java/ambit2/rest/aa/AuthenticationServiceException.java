@@ -1,6 +1,6 @@
 package ambit2.rest.aa;
 
-import org.restlet.data.Reference;
+import org.opentox.aa.exception.AAException;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
