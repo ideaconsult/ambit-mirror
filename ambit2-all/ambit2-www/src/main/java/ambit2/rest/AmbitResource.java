@@ -274,9 +274,11 @@ public class AmbitResource extends WadlServerResource {
 	public Representation get(Variant variant) {
 		//System.out.println(getRequest().getClientInfo().isAuthenticated());
 		//System.out.println(getRequest().getClientInfo().getSubject().getPrincipals());
+		/*
 		if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) 
 			return new WadlRepresentation(
 					((WadlApplication)getApplication()).getApplicationInfo(getRequest(), getResponse()));
+					*/
 		try {
 			//TODO redirect with freetext query
 			String search = getSearchString();
