@@ -28,7 +28,6 @@ import ambit2.base.config.Preferences;
 import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
-import ambit2.rest.aa.opensso.ProtectedTestResource;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DBCreateAllowedGuard;
 import ambit2.rest.admin.DatabaseResource;
@@ -169,16 +168,12 @@ public class AmbitApplication extends TaskApplication {
 				BookmarkResource.creator,
 				BookmarkResource.idbookmark),BookmarkResource.class);
 		
-		Router protectedRouter = new MyRouter(getContext());
-		protectedRouter.attachDefault(ProtectedTestResource.class);
-		protectedRouter.attach(String.format("/{%s}",ProtectedTestResource.resourceKey), ProtectedTestResource.class);
+		//Router protectedRouter = new MyRouter(getContext());
+		//protectedRouter.attachDefault(ProtectedTestResource.class);
+		//protectedRouter.attach(String.format("/{%s}",ProtectedTestResource.resourceKey), ProtectedTestResource.class);
 		
-		Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
-		Filter openssoAuthz = new OpenSSOAuthorizer();
-		
-		openssoAuth.setNext(openssoAuthz);
-		openssoAuthz.setNext(protectedRouter);
-	 	router.attach(ProtectedTestResource.resource, openssoAuth);
+
+	 	//router.attach(ProtectedTestResource.resource, openssoAuth);
 		
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
 		router.attach(StatisticsResource.resource,StatisticsResource.class);
@@ -486,7 +481,14 @@ public class AmbitApplication extends TaskApplication {
 	     StringWriter w = new StringWriter();
 	     AmbitApplication.printRoutes(router,">",w);
 	     System.out.println(w.toString());
-		 return router;
+	     
+	     //OpenSSO
+		Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
+		Filter openssoAuthz = new OpenSSOAuthorizer();
+			
+		openssoAuth.setNext(openssoAuthz);
+		openssoAuthz.setNext(router);
+		 return openssoAuth;
 	}
 
 
