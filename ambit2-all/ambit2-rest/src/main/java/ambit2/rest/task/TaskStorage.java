@@ -27,7 +27,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	
 	protected ConcurrentMap<UUID,Task<Reference,USERID>> tasks;
 	public enum pool_task  { INTERNAL, EXTERNAL};
-	protected long taskCleanupRate = 2L*60L*60L*1000L; //2h
+	protected long taskCleanupRate = 30L*60L*1000L; //30 min
 	protected Hashtable<pool_task,ExecutorService> pools;
 	
 	public TaskStorage(String name, Logger logger) {
