@@ -231,6 +231,7 @@ public class AmbitResource extends WadlServerResource {
 			{"/stats/dataset_intersection?dataset_uri=..&dataset_uri=..","Number of common chemicals in two datasets",format,"GET"},
 			{"/stats/properties","Number of properties",format,"GET"},
 			{"/stats/values","Number of values",format,"GET"},
+			{"/stats/models","Number of models",format,"GET"},
 
 
 			{"[ambit - chart]","Charts",formatHeader,null},
