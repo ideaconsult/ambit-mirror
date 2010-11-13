@@ -17,6 +17,7 @@ import org.restlet.routing.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.model.QueryCountModels;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.update.dataset.QueryCount;
 import ambit2.db.update.dataset.QueryCountChemicalInDataset;
@@ -40,7 +41,9 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 		dataset_intersection,
 		properties,
 		values,
-		dataset
+		dataset,
+		models
+		//algorithms
 	}
 	
 	@Override
@@ -97,6 +100,9 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 		case dataset: {
 			return new QueryCountDataset();
 		}	
+		case models: {
+			return new QueryCountModels();
+		}
 		case chemicals_in_dataset: {
 			QueryCountChemicalInDataset q = new QueryCountChemicalInDataset();
 			for (int i=0; i < datasetsURI.length;i++ ) {
