@@ -15,7 +15,7 @@ import ambit2.base.external.ShellException;
 
 
 public class SmilesParserWrapper implements PropertyChangeListener {
-	protected static SmilesParserWrapper wrapper = null;
+	
 	protected OpenBabelShell babel = null;
 	protected SmilesParser cdkParser = null;
 	protected DeduceBondSystemTool  dbt;
@@ -82,10 +82,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		this.parser = parser;
 	}
 	public static SmilesParserWrapper getInstance(SMILES_PARSER mode) {
-		if (wrapper == null) {
-			wrapper = new SmilesParserWrapper(mode);
-		}
-		return wrapper;
+		return new SmilesParserWrapper(mode);
 	}	
 	public static SmilesParserWrapper getInstance() {
 		return getInstance("true".equals(Preferences.getProperty(Preferences.SMILESPARSER).toLowerCase()) ? SMILES_PARSER.OPENBABEL : SMILES_PARSER.CDK);
