@@ -41,7 +41,7 @@ import ambit2.base.data.Property;
 public class PropertyCalculationProcessor extends  DescriptorCalculationProcessor {
 	protected Property property = null;
 	protected Map<Class,IMolecularDescriptor> cache = new ConcurrentHashMap<Class, IMolecularDescriptor>(); 
-
+	protected boolean useCache = false;
 	/**
 	 * 
 	 */
@@ -55,7 +55,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 	}
 
 	public synchronized IMolecularDescriptor getCachedDescriptor(Class className) throws Exception {
-		IMolecularDescriptor d = cache.get(className);
+		IMolecularDescriptor d = useCache?cache.get(className):null;
 		if (d == null) {
 			Object o = className.newInstance();
 			//this is to remove swing listeners from toxtree rules
@@ -73,7 +73,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		        invoke(o, new Object[] { Boolean.TRUE});					
 			} catch (Exception x) {}
 			
-			if (o instanceof IMolecularDescriptor) {
+			if (useCache && (o instanceof IMolecularDescriptor)) {
 				d = (IMolecularDescriptor) o;
 				cache.put(className,d);
 			}
