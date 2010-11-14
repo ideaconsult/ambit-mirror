@@ -67,6 +67,7 @@ public class PropertyCalculationProcessorTest {
 	@Test
 	public void testInChI() throws Exception {
 		PropertyCalculationProcessor p = new PropertyCalculationProcessor();
+		
 		Property prop = Property.getInstance("Count","Descriptors");
 		prop.setLabel("Count");
 		prop.setClazz(Class.forName("ambit2.descriptors.InChI"));
