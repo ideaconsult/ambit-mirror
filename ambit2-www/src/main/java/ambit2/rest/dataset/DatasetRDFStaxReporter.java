@@ -163,7 +163,11 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target);
+				try {
+					processItem(target);
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
 				return target;
 			};
 		});			
