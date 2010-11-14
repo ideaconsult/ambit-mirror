@@ -35,8 +35,10 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		setParser(mode);
 		//dbt = new org.openscience.cdk.smiles.DeduceBondSystemTool();
 		dbt = new DeduceBondSystemTool();
-		Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
+		//this is major source of memory leaks ... should be done in a different way
+		//Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
 	}
+	
 	public IMolecule parseSmiles(String smiles) throws InvalidSmilesException {
 		//System.out.println(smiles + " " + parser);
 		switch (parser) {
@@ -83,7 +85,12 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	}
 	public static SmilesParserWrapper getInstance(SMILES_PARSER mode) {
 		return new SmilesParserWrapper(mode);
-	}	
+	}
+	public static void  returnInstance(SmilesParserWrapper wrapper) {
+		Preferences.getPropertyChangeSupport().removePropertyChangeListener(wrapper);
+		wrapper = null;
+	}
+	
 	public static SmilesParserWrapper getInstance() {
 		return getInstance("true".equals(Preferences.getProperty(Preferences.SMILESPARSER).toLowerCase()) ? SMILES_PARSER.OPENBABEL : SMILES_PARSER.CDK);
 	}
