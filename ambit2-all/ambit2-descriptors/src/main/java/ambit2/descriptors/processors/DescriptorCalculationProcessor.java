@@ -34,7 +34,7 @@ public class DescriptorCalculationProcessor extends
 		return descriptor;
 	}
 
-	public void setDescriptor(IMolecularDescriptor descriptor) {
+	public synchronized void setDescriptor(IMolecularDescriptor descriptor) {
 		this.descriptor = descriptor;
 	}
 
