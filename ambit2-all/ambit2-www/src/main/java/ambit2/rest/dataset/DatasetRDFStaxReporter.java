@@ -217,7 +217,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					if (p.isNominal() && (value instanceof Comparable)) 
 						p.addAllowedValue((Comparable)value);
 				} catch (Exception x) {
-
+						x.printStackTrace();
 				} finally {
 
 					
@@ -431,11 +431,14 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 			}
 		}			
 		
-		it = template.getProperties(true);
-		while (it.hasNext()) {
-			Property t = it.next();
-			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
-				h.add(t);
+		if (template!=null) {
+			it = template.getProperties(true);
+			if (it != null)
+				while (it.hasNext()) {
+					Property t = it.next();
+					if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
+						h.add(t);
+				}
 		}
 		/*
 		Collections.sort(h,new Comparator<Property>() {
