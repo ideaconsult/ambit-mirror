@@ -50,7 +50,7 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 	private static final long serialVersionUID = 275242996048077139L;
 	
 	@Override
-	protected void addToResult(String name, boolean enabled, int order,
+	protected synchronized void addToResult(String name, boolean enabled, int order,
 			Profile<Property> result) throws Exception {
 		Property property = createDescriptor2Property(name);
 		if (property != null) {
@@ -64,7 +64,7 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 		return new Template();
 	}
 
-	public static List<Property> createDescriptor2Properties(String className) throws Exception  {
+	public static synchronized List<Property> createDescriptor2Properties(String className) throws Exception  {
 		Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
 		//if (o instanceof IMolecularDescriptor) {verify for interface
 			Object o = clazz.newInstance();
@@ -88,7 +88,7 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 			} else return null;
 	}
 	
-	public static Property descriptorValue2Property(IMolecularDescriptor descriptor, String name, DescriptorValue value) throws Exception  {
+	public static synchronized Property descriptorValue2Property(IMolecularDescriptor descriptor, String name, DescriptorValue value) throws Exception  {
 
 		String label = value.getSpecification().getSpecificationReference();
 		if (Property.opentox_InChI_std.equals(name) || Property.opentox_InChIKey_std.equals(name) || Property.opentox_InChIAuxInfo_std.equals(name) ) {
@@ -106,7 +106,7 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 
 		return property;
 	}
-	public static Property createDescriptor2Property(String className) throws Exception  {
+	public static synchronized Property createDescriptor2Property(String className) throws Exception  {
 		IMolecularDescriptor descriptor = createDescriptor(className);
 		if (descriptor!=null) {
 			Property property = Property.getInstance(descriptor.getClass().getName().substring(descriptor.getClass().getName().lastIndexOf('.')+1),
@@ -119,7 +119,7 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 		} else return null;
 	}
 	
-	public static IMolecularDescriptor createDescriptor(String className) throws Exception  {
+	public static synchronized IMolecularDescriptor createDescriptor(String className) throws Exception  {
 			Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
 			Object o = clazz.newInstance();
 			if (o instanceof IMolecularDescriptor) {
