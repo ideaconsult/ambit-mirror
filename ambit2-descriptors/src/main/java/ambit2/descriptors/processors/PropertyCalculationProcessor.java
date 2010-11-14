@@ -31,7 +31,8 @@ package ambit2.descriptors.processors;
 
 
 
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 
@@ -39,7 +40,7 @@ import ambit2.base.data.Property;
 
 public class PropertyCalculationProcessor extends  DescriptorCalculationProcessor {
 	protected Property property = null;
-	protected Hashtable<Class,IMolecularDescriptor> cache = new Hashtable<Class, IMolecularDescriptor>(); 
+	protected Map<Class,IMolecularDescriptor> cache = new ConcurrentHashMap<Class, IMolecularDescriptor>(); 
 
 	/**
 	 * 
@@ -53,7 +54,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		return property;
 	}
 
-	public IMolecularDescriptor getCachedDescriptor(Class className) throws Exception {
+	public synchronized IMolecularDescriptor getCachedDescriptor(Class className) throws Exception {
 		IMolecularDescriptor d = cache.get(className);
 		if (d == null) {
 			Object o = className.newInstance();
@@ -79,7 +80,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		}
 		return d;
 	}
-	public void setProperty(Property property) {
+	public synchronized void  setProperty(Property property) {
 		this.property = property;
 		if (property == null) return;
 		try {
