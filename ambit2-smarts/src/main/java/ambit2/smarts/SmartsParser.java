@@ -197,6 +197,11 @@ public class SmartsParser
 		return(mNeedNeighbourData);
 	}
 	
+	public boolean needExplicitHData()
+	{
+		return(mNeedExplicitHData);
+	}
+	
 	public boolean needValencyData()
 	{
 		return(mNeedValencyData);
