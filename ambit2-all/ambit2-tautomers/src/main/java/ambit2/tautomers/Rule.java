@@ -13,6 +13,8 @@ public class Rule
 	String mobileGroup = null;
 	int nStates = 2;
 	String smartsStates[] = null;
+	RuleStateFlags stateFlags[] = null;
+	RuleStateBondDistribution   stateBonds[] = null;
 	int mobileGroupPos[] = null;
 	String RuleInfo = "";
 	QueryAtomContainer statePaterns[] = null;

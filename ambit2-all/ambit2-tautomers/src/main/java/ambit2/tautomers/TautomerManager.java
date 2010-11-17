@@ -49,7 +49,16 @@ public class TautomerManager
 		extendedRuleInstances.clear();
 		ruleInstances.clear();
 		
-		//TODO
+		for (int i = 0; i < knowledgeBase.rules.size(); i++)
+			mapRule(knowledgeBase.rules.get(i));
+	}
+	
+	void mapRule(Rule rule)
+	{
+		for (int i = 0; i < rule.statePaterns.length; i++)
+		{
+			//TODO
+		}
 	}
 	
 	void handleOverlapedInstances()
