@@ -62,16 +62,34 @@ public class RuleParser
 		}
 		
 		curRule.statePaterns = new QueryAtomContainer[curRule.smartsStates.length];
+		curRule.stateFlags = new RuleStateFlags[curRule.smartsStates.length];
+		curRule.stateBonds = new RuleStateBondDistribution[curRule.smartsStates.length];
+		
 		SmartsParser sp = new SmartsParser();
 		for (int i = 0; i<curRule.smartsStates.length; i++)
 		{
-			QueryAtomContainer q = sp.parse(curRule.smartsStates[i]);
-			sp.setNeededDataFlags();
+			QueryAtomContainer q = sp.parse(curRule.smartsStates[i]);			
 			String errorMsg = sp.getErrorMessages();
 			if (!errorMsg.equals(""))			
 				errors += "Incorrect state description: " + errorMsg + "\n";
 			else
+			{	
+				sp.setNeededDataFlags();	
+				RuleStateFlags flags = new RuleStateFlags();
+				flags.hasRecursiveSmarts = sp.hasRecursiveSmarts;
+				flags.mNeedExplicitHData = sp.needExplicitHData();
+				flags.mNeedNeighbourData = sp.needNeighbourData();
+				flags.mNeedParentMoleculeData = sp.needParentMoleculeData();
+				flags.mNeedRingData = sp.needRingData();
+				flags.mNeedRingData2 = sp.needRingData2();
+				flags.mNeedValencyData = sp.needValencyData();
+				RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
+				bdistr.calcDistribution(q);
+				
 				curRule.statePaterns[i] = q;
+				curRule.stateFlags[i] = flags;
+				curRule.stateBonds[i] = bdistr;
+			}	
 		}
 	}
 	
