@@ -85,7 +85,7 @@ public class RuleParser
 				flags.mNeedValencyData = sp.needValencyData();
 				RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
 				bdistr.calcDistribution(q);
-				
+				//System.out.println("  BondDistribution:" + bdistr.toString());				
 				curRule.statePaterns[i] = q;
 				curRule.stateFlags[i] = flags;
 				curRule.stateBonds[i] = bdistr;
