@@ -20,12 +20,16 @@ public class Rule
 	QueryAtomContainer statePaterns[] = null;
 	
 	
-	public Vector<RuleInstance>  applyRule(IAtomContainer mol)
+	public Vector<IRuleInstance>  applyRule(IAtomContainer mol)
 	{
-		Vector<RuleInstance> instances = new Vector<RuleInstance>(); 
+		Vector<IRuleInstance> instances = new Vector<IRuleInstance>();
+		for (int i = 0; i < statePaterns.length; i++)
+		{
+			//TODO
+		}
 		return instances;
 	}
-		
+	
 	
 	public String toString()
 	{
