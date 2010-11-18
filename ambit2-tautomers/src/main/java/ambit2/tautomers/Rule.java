@@ -33,7 +33,7 @@ public class Rule
 		sb.append("TAUTOMER RULE\n");
 		sb.append("NAME = " + name  + "\n");
 		sb.append("TYPE = " + type  + "\n");
-		sb.append("GROUP = " + mobileGroup  + "\n");
+		sb.append("GROUP = " + mobileGroup  + "\n");		
 		return(sb.toString());
 	}
 }
