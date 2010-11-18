@@ -50,15 +50,10 @@ public class TautomerManager
 		ruleInstances.clear();
 		
 		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-			mapRule(knowledgeBase.rules.get(i));
-	}
-	
-	void mapRule(Rule rule)
-	{
-		for (int i = 0; i < rule.statePaterns.length; i++)
-		{
-			//TODO
-		}
+		{	
+			Vector<IRuleInstance> instances = knowledgeBase.rules.get(i).applyRule(molecule); 
+			extendedRuleInstances.addAll(instances);
+		}	
 	}
 	
 	void handleOverlapedInstances()
