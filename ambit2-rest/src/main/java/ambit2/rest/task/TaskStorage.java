@@ -44,8 +44,8 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	public TaskStorage(String name, Logger logger) {
 		this.name = name;
 		this.logger = logger;
-		pool_internal = createExecutorService(
-				(int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime)));
+		pool_internal = createExecutorService(5);
+			//	(int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime)));
 		pool_external = createExecutorService(1);
 
 		completionService_internal = new ExecutorCompletionService<Reference>(pool_internal);
@@ -72,7 +72,10 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 					System.out.println(f);
 					f= null;
 				}
-				
+				while ((f = completionService_external.poll()) != null) {
+					System.out.println(f);
+					f= null;
+				}
 			}
 		};
 		
