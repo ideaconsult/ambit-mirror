@@ -3,7 +3,6 @@ package ambit2.rest.task;
 import java.util.Iterator;
 import java.util.UUID;
 
-import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -11,6 +10,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.SimpleTaskResource;
+import ambit2.rest.TaskApplication;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs
@@ -37,10 +37,10 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 
 	
 	@Override
-	public synchronized IProcessor<Iterator<Task<Reference,USERID>>, Representation> createConvertor(
+	public synchronized IProcessor<Iterator<UUID>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-
-		FactoryTaskConvertor<USERID> tc = new AmbitFactoryTaskConvertor<USERID>();
+		ITaskStorage<USERID> storage = ((TaskApplication)getApplication()).getTaskStorage();
+		FactoryTaskConvertor<USERID> tc = new AmbitFactoryTaskConvertor<USERID>(storage);
 	
 		return tc.createTaskConvertor(variant, getRequest(),getDocumentation());
 

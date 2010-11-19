@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.restlet.Context;
@@ -42,6 +43,7 @@ import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskCreator;
 
@@ -410,13 +412,15 @@ Then, when the "get(Variant)" method calls you back,
 				DBConnection dbc = new DBConnection(getApplication().getContext());
 				conn = dbc.getConnection(getRequest());	
 				taskCreator.setConnection(conn);
-	    		List<Task<Reference,Object>> r =  taskCreator.process(query);
+	    		List<UUID> r =  taskCreator.process(query);
 				if ((r==null) || (r.size()==0)) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 				else {
-					FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
+					ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
+					FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 					if (r.size()==1) {
-						r.get(0).update();
-						setStatus(r.get(0).isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+						Task<Reference,Object> task = storage.findTask(r.get(0));
+						task.update();
+						setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 						return tc.createTaskRepresentation(r.get(0), variant,getRequest(), getResponse(),getDocumentation());
 					} else 
 						return tc.createTaskRepresentation(r.iterator(), variant,getRequest(), getResponse(),getDocumentation());

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.restlet.data.Form;
@@ -21,10 +22,12 @@ import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.TaskApplication;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 
 /**
@@ -120,7 +123,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			Iterator<T> query = queryObject;
 			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			
-			ArrayList<Task<Reference,Object>> tasks = new ArrayList<Task<Reference,Object>>();
+			ArrayList<UUID> tasks = new ArrayList<UUID>();
 			while (query.hasNext()) 
 			try {
 				T model = query.next();
@@ -134,7 +137,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 						);	
 				task.update();
 				setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
-				tasks.add(task);
+				tasks.add(task.getUuid());
 
 			} catch (ResourceException x) {
 				throw x;
@@ -144,7 +147,9 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			if (tasks.size()==0)
 				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			else {
-				FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
+				
+				ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
+				FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 				if (tasks.size()==1)
 					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse(),getDocumentation());
 				else

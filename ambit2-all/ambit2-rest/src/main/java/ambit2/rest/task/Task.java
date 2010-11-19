@@ -44,6 +44,13 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	protected String name = "Default";
 	protected long started = System.currentTimeMillis();
 	protected long completed = -1;
+	protected boolean internal = true;
+	public boolean isInternal() {
+		return internal;
+	}
+	public void setInternal(boolean internal) {
+		this.internal = internal;
+	}
 	public long getCompleted() {
 		return completed;
 	}

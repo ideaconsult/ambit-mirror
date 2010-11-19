@@ -3,11 +3,10 @@ package ambit2.rest.task;
 import java.io.Writer;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
-
-import com.ibm.icu.util.UResourceBundle;
 
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ResourceDoc;
@@ -16,19 +15,20 @@ import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.Task.TaskStatus;
 
-public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,USERID>> {
-
+public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
+	protected ITaskStorage<USERID> storage;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7644836050657868159L;
-	public TaskHTMLReporter(Request ref,ResourceDoc doc) {
+	public TaskHTMLReporter(ITaskStorage<USERID> storage,Request ref,ResourceDoc doc) {
 		super(ref,doc);
+		this.storage = storage;
 	}
 	
 
 	@Override
-	public void header(Writer output, Iterator<Task<Reference,USERID>> query) {
+	public void header(Writer output, Iterator<UUID> query) {
 		try {
 			String ajax = AmbitResource.js(getRequest().getOriginalRef().toString(),baseReference);
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),ajax,
@@ -45,7 +45,9 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 			
 		}
 	}
-	public void processItem(Task<Reference,USERID> item, Writer output) {
+	@Override
+	public void processItem(UUID name, Writer output) {
+		Task<Reference,USERID> item = storage.findTask(name);
 		String t = "";
 		String status = "Unknown";
 		try {
@@ -75,7 +77,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<Task<Reference,
 		}
 	};
 	@Override
-	public void footer(Writer output, Iterator<Task<Reference,USERID>> query) {
+	public void footer(Writer output, Iterator<UUID> query) {
 		try {
 			output.write("</table>");
 			//output.write("<form name=\"myForm\"><input type=BUTTON value=\"Stop polling\" onClick=\"stopPolling()\"></form>");

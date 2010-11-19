@@ -4,26 +4,28 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.restlet.Component;
-import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.Preferences;
+import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.RemoteTask;
+import ambit2.rest.task.RemoteTaskPool;
 import ambit2.rest.test.ResourceTest;
 
 public class TaskResourceTest extends ResourceTest {
@@ -31,8 +33,9 @@ public class TaskResourceTest extends ResourceTest {
 
 	@Before
 	public void setUp() throws Exception {
+		super.setUp();
 		setUpDatabase("src/test/resources/src-datasets.xml");
-
+/*
 		Context context = new Context();
 		context.getParameters().add(Preferences.DATABASE, getDatabase());
 		context.getParameters().add(Preferences.USER, getUser());
@@ -59,6 +62,7 @@ public class TaskResourceTest extends ResourceTest {
 		component.getServers().add(Protocol.HTTPS, port);
 
 		component.start();
+		*/
 	}
 
 	@Override
@@ -68,7 +72,7 @@ public class TaskResourceTest extends ResourceTest {
 
 	@After
 	public void cleanup() {
-		((AmbitApplication) app).removeTasks();
+		//((AmbitApplication) app).removeTasks();
 	}
 
 	@Test
@@ -139,7 +143,7 @@ public class TaskResourceTest extends ResourceTest {
 
 		
 		Reference url = new Reference(String.format("http://localhost:%d/algorithm/mockup", port));
-		for (int i=0; i < 10; i++) {
+		for (int i=0; i < 600; i++) {
 			Form form = new Form();  
 			form.add(OpenTox.params.dataset_uri.toString(),String.format("dataseturi-%d",i+1));
 			form.add(OpenTox.params.delay.toString(),"1000");
@@ -274,4 +278,92 @@ public class TaskResourceTest extends ResourceTest {
 	@Override
 	public void testGetJavaObject() throws Exception {
 	}
+	
+	@Test
+	public void testMultiplePOST() throws Exception {
+		Preferences.setProperty(Preferences.SMILESPARSER.toString(),SMILES_PARSER.CDK.toString());
+		//setUpDatabase("src/test/resources/src-datasets.xml");
+		final Reference url = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreeskinirritation", port),
+				new Form(), Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));		
+		
+		final RemoteTaskPool pool = new RemoteTaskPool();
+		ExecutorService xs= Executors.newCachedThreadPool();
+		Runnable[] t = new Runnable[3];
+		final int batch = 500;
+		for (int j=0; j < t.length; j++) {
+
+			t[j] = new Runnable() {
+				@Override
+				public void run() {
+					for (int i=0; i < batch; i++) {
+						Form form = new Form();  
+						form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/compound/11", port));
+						RemoteTask task = new RemoteTask(
+								url,
+								MediaType.TEXT_URI_LIST,form.getWebRepresentation(),Method.POST,null);
+						pool.add(task);
+						System.out.println(i);
+					}
+				}
+				@Override
+				public String toString() {
+					return "Task creator";
+				}
+			};
+		
+		}
+		for (Runnable r: t) xs.submit(r);
+		
+		
+		/*
+		Reference alltasks = new Reference(String.format("http://localhost:%d/task", port));
+		RemoteTask tasks = new RemoteTask(
+				alltasks,
+				MediaType.TEXT_URI_LIST,null,Method.GET,null);
+		
+		System.out.println("Polling!");
+		*/
+		System.out.println(String.format("Poll %d",pool.size()));
+		while (pool.size()<t.length*batch) {
+			//System.out.println(String.format("Poll %d",pool.size()));
+			Thread.yield();
+		}
+		int running = pool.poll();
+		System.out.println(String.format("Poll %d running %d",pool.size(),running));
+		while ((running = pool.poll())>0) {
+			//System.out.println(String.format("Poll %d running %d",pool.size(),running));
+			Thread.yield();
+
+			/*
+			tasks = new RemoteTask(
+					alltasks,
+					MediaType.TEXT_URI_LIST,null,Method.GET,null);
+					*/
+			
+		}
+		
+		System.out.println("Done!!!!!!!");
+		xs.awaitTermination(1,TimeUnit.SECONDS);
+		xs.shutdown();
+		System.out.println(pool.size());
+		
+	}	
+	
+	public static void main(String[] args) {
+		TaskResourceTest test = new TaskResourceTest();
+		try {
+			
+			test.setUp();
+			test.testMultiplePOST();
+			
+		} catch (Exception x) {
+			x.printStackTrace();
+		} finally {
+			try {test.tearDown(); } catch (Exception x) {x.printStackTrace();}
+		}
+		
+	}
+	
 }

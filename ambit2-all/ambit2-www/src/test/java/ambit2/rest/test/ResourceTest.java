@@ -74,8 +74,11 @@ public abstract class ResourceTest extends DbUnitTest {
 	}
 	@After
 	public void tearDown() throws Exception {
-		if (component != null)
+		
+		if (component != null) {
 			component.stop();
+			component = null;
+		}
 	}
 	public void testGet(String uri, MediaType media) throws Exception {
 		testGet(uri, media,Status.SUCCESS_OK);

@@ -1,7 +1,7 @@
 package ambit2.rest;
 
-import java.util.Iterator;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import org.restlet.Application;
 import org.restlet.data.Reference;
@@ -25,16 +25,23 @@ public class TaskApplication<USERID> extends Application {
 	public void setTaskStorage(ITaskStorage<USERID> taskStorage) {
 		this.taskStorage = taskStorage;
 	}
-
+	/*
 	public Iterator<Task<Reference,USERID>> getTasks() {
 		return taskStorage.getTasks();
 	}
+	*/
 
 	@Override
 	protected void finalize() throws Throwable {
 		taskStorage.removeTasks();
 		super.finalize();
 	}
+	@Override
+	public synchronized void stop() throws Exception {
+		taskStorage.shutdown(1,TimeUnit.MILLISECONDS);
+		super.stop();
+	}
+	
 	
 	public void removeTasks() {
 		taskStorage.removeTasks();
