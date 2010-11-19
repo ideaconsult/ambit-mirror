@@ -246,6 +246,7 @@ public class OT {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 		} finally {
 			try {r.release();} catch (Exception x) {}
+			try {client.release();} catch (Exception x) {}
 		}
 		
     }
