@@ -117,6 +117,7 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 			protected void done() {
 				super.done();
 				completed = System.currentTimeMillis();
+				update();
 			}
 			
 		};
