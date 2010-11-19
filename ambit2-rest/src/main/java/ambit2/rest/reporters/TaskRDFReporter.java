@@ -2,6 +2,7 @@ package ambit2.rest.reporters;
 
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -10,6 +11,7 @@ import org.restlet.data.Reference;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -21,8 +23,8 @@ import com.hp.hpl.jena.vocabulary.DC;
  * @author nina
  *
  */
-public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,USERID>> {
-
+public class TaskRDFReporter<USERID> extends CatalogRDFReporter<UUID> {
+	protected ITaskStorage<USERID> storage;
 	/**
 	 * 
 	 */
@@ -30,13 +32,14 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 	protected Reference baseRef;
 	protected TaskURIReporter<USERID> urireporter;
 	
-	public TaskRDFReporter(Request request, MediaType mediaType,ResourceDoc doc) {
+	public TaskRDFReporter(ITaskStorage<USERID> storage, Request request, MediaType mediaType,ResourceDoc doc) {
 		super(request, mediaType,doc);
 		baseRef = request.getRootRef();
-		urireporter = new TaskURIReporter<USERID>(request,doc);
+		urireporter = new TaskURIReporter<USERID>(storage,request,doc);
+		this.storage = storage;
 	}
 	@Override
-	public void header(Writer output, Iterator<Task<Reference,USERID>> query) {
+	public void header(Writer output, Iterator<UUID> query) {
 		super.header(output, query);
 		OT.OTClass.Task.createOntClass(getJenaModel());
 		getJenaModel().createAnnotationProperty(DC.title.getURI());
@@ -44,8 +47,9 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<Task<Reference,U
 	}
 	
 	@Override
-	public void processItem(Task<Reference,USERID> item, Writer output) {
+	public void processItem(UUID name, Writer output) {
 		String ref;
+		Task<Reference,USERID> item = storage.findTask(name.toString());
 		try {
 			ref = item.getUri().toString();
 		} catch (Exception x) {

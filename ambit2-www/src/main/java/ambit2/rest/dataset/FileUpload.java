@@ -31,6 +31,7 @@ import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableFileImport;
 import ambit2.rest.task.CallableQueryResultsCreator;
 import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 
 public class FileUpload {
@@ -151,10 +152,11 @@ public class FileUpload {
 							callable,
 							getRequest().getRootRef());
 							
-				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
+				  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 				  task.update();
 				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
-	              return tc.createTaskRepresentation(task, variant,getRequest(), getResponse(),null);
+	              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
 
 				  
 	          } catch (Exception x) {
@@ -185,10 +187,11 @@ public class FileUpload {
 							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
 								callable,
 								getRequest().getRootRef());		
-			          FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>();
+			          ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
+			          FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 					  task.update();
 					  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);			          
-			          return tc.createTaskRepresentation(task, variant,getRequest(), getResponse(),null);
+			          return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
 			          
 					} catch (Exception x) {
 						try { connection.close(); } catch (Exception xx) {xx.printStackTrace();}

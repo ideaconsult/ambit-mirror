@@ -2,11 +2,11 @@ package ambit2.rest.task;
 
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -22,16 +22,22 @@ import ambit2.rest.reporters.TaskURIReporter;
 
 public class FactoryTaskConvertor<USERID> {
 	
-	public synchronized IProcessor<Iterator<Task<Reference,USERID>>, Representation> createTaskConvertor(
+	protected ITaskStorage<USERID> storage;
+	public FactoryTaskConvertor(ITaskStorage<USERID> storage) {
+		super();
+		this.storage = storage;
+	}
+	
+	public synchronized IProcessor<Iterator<UUID>, Representation> createTaskConvertor(
 			Variant variant, Request request,ResourceDoc doc) throws AmbitException, ResourceException {
 
 		return new StringConvertor(createTaskReporter(variant, request,doc),variant.getMediaType());
 	}
-	public synchronized Reporter<Iterator<Task<Reference,USERID>>,Writer> createTaskReporter(
+	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporter(
 			Variant variant, Request request,ResourceDoc doc) throws AmbitException, ResourceException {
 
 		
-		Reporter<Iterator<Task<Reference,USERID>>,Writer> reporter = null;
+		Reporter<Iterator<UUID>,Writer> reporter = null;
 		
 		if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
@@ -48,28 +54,30 @@ public class FactoryTaskConvertor<USERID> {
 			reporter = createTaskReporterURI(request,doc);
 		return reporter;
 	}
-	public synchronized Reporter<Iterator<Task<Reference,USERID>>,Writer> createTaskReporterURI(Request request,ResourceDoc doc) throws AmbitException, ResourceException {
-		return new TaskURIReporter<USERID>(request,doc) {
+	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporterURI(Request request,ResourceDoc doc) throws AmbitException, ResourceException {
+		
+		return new TaskURIReporter<USERID>(storage,request,doc) {
 			@Override
-			public void processItem(Task<Reference, USERID> item, Writer output) {
+			public void processItem(UUID item, Writer output) {
+
 				super.processItem(item, output);
 				try {output.write('\n'); } catch (Exception x) {}
 			}
 		};
 	}	
-	public synchronized Reporter<Iterator<Task<Reference,USERID>>,Writer> createTaskReporterRDF(
+	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporterRDF(
 			Variant variant, Request request,ResourceDoc doc) throws AmbitException, ResourceException {
-		return new TaskRDFReporter<USERID>(request,variant.getMediaType(),doc);
+		return new TaskRDFReporter<USERID>(storage,request,variant.getMediaType(),doc);
 	}		
-	public synchronized Reporter<Iterator<Task<Reference,USERID>>,Writer> createTaskReporterHTML(Request request,ResourceDoc doc) throws AmbitException, ResourceException {
-		return new TaskURIReporter<USERID>(request,doc);
+	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporterHTML(Request request,ResourceDoc doc) throws AmbitException, ResourceException {
+		return new TaskURIReporter<USERID>(storage,request,doc);
 	}	
 	
-	public synchronized Representation createTaskRepresentation(Task<Reference,USERID> task, 
+	public synchronized Representation createTaskRepresentation(UUID task, 
 			Variant variant, Request request, Response response,ResourceDoc doc) throws ResourceException {
 		try {
 			if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-			IProcessor<Iterator<Task<Reference,USERID>>,Representation> p = createTaskConvertor(variant,request,doc);
+			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc);
 			//task.update();
 			//System.out.println("convertor" + task.getUri() + " " + task.getStatus());
 			//response.setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
@@ -81,12 +89,12 @@ public class FactoryTaskConvertor<USERID> {
 		}
 	}
 	
-	public synchronized Representation createTaskRepresentation(Iterator<Task<Reference,USERID>> tasks, 
+	public synchronized Representation createTaskRepresentation(Iterator<UUID> tasks, 
 			Variant variant, Request request, Response response,ResourceDoc doc) throws ResourceException {
 		try {
 			//System.out.println("convertor" );
 			if (tasks==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-			IProcessor<Iterator<Task<Reference,USERID>>,Representation> p = createTaskConvertor(variant,request,doc);
+			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc);
 			return p.process(tasks);
 		} catch (AmbitException x) {
 			x.printStackTrace();

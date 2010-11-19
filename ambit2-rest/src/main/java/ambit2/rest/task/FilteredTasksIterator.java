@@ -1,28 +1,31 @@
 package ambit2.rest.task;
 
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.restlet.data.Reference;
 
-public class FilteredTasksIterator<USERID> implements Iterator<Task<Reference,USERID>> {
-	protected Iterator<Task<Reference,USERID>> tasks;
-	protected Task<Reference, USERID> task;
+public class FilteredTasksIterator<USERID> implements Iterator<UUID> {
+	protected Iterator<UUID> keys;
+	protected UUID task_id;
 	protected int num;
+	protected ITaskStorage<USERID> storage ;
 	
-	public FilteredTasksIterator(ITaskStorage<USERID> tasks) {
-		this.tasks = tasks.getTasks();
+	public FilteredTasksIterator(ITaskStorage<USERID> storage) {
+		this.storage = storage;
+		this.keys =  storage.getTasks();
 		num = 0;
 	}
 	public boolean hasNext() {
-
-		while (tasks.hasNext()) {
-			task = tasks.next();
-			if (accepted(task)) {
+		
+		while (keys.hasNext()) {
+			task_id = keys.next();
+			if (accepted(storage.findTask(task_id))) {
 				num++;
 				return true;
 			}
 		}
-		task = null;
+		task_id = null;
 		return false;
 	}
 
@@ -30,8 +33,8 @@ public class FilteredTasksIterator<USERID> implements Iterator<Task<Reference,US
 		return num;
 	}
 
-	public Task<Reference, USERID> next() {
-		return task;
+	public UUID next() {
+		return task_id;
 	}
 
 	public void remove() {

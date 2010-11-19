@@ -1,6 +1,5 @@
 package ambit2.rest;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.UUID;
@@ -19,7 +18,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
-import ambit2.rest.task.FilteredTasksIterator;
+import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.SingleTaskIterator;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.Task.TaskStatus;
@@ -45,8 +44,8 @@ Location: http://example.org/thenewurl
  * @author nina
  *
  */
-public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<Reference,USERID>>,
-							Task<Reference,USERID>,IProcessor<Iterator<Task<Reference,USERID>>, Representation>> {
+public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
+						UUID,IProcessor<Iterator<UUID>, Representation>> {
 	public static final String resource = "/task";
 	public static final String resourceKey = "idtask";
 	public static final String resourceID = String.format("/{%s}", resourceKey);
@@ -110,8 +109,10 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 		if ((max > 0) && (taskNumber>=max)) return false;
 		else return searchStatus==null?true:searchStatus.equals(task.getStatus());
 	}
-	protected Iterator<Task<Reference, USERID>> getTasks() {
+	/*
+	protected Iterator<UUID> getTasks() {
 
+		
 		return new FilteredTasksIterator<USERID>(((TaskApplication)getApplication()).getTaskStorage()){
 			@Override
 			protected boolean accepted(Task<Reference, USERID> task) {
@@ -121,8 +122,9 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 			}
 		};
 	}
+	*/
 	@Override
-	protected synchronized Iterator<Task<Reference,USERID>> createQuery(Context context, Request request,
+	protected synchronized Iterator<UUID> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		
 		Object id = request.getAttributes().get(resourceKey);
@@ -142,12 +144,10 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 			//response.setLocationRef(task.getReference());			
 			 * 
 			 */
-			ArrayList<Task<Reference,USERID>> list = new ArrayList<Task<Reference,USERID>>();
+
 			if (id == null) {
 				response_status = Status.SUCCESS_OK;
-				return getTasks();
-
-					/*
+				return  ((TaskApplication)getApplication()).getTaskStorage().getTasks();					/*
 					Iterator<Task<Reference,USERID>> tasks = ((TaskApplication)getApplication()).getTasks();
 					while (tasks.hasNext()) {
 						Task<Reference,USERID> task = tasks.next();
@@ -172,7 +172,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 				else 
 					response_status = task.getError().getStatus();
 				
-				return new SingleTaskIterator<USERID>(task);
+				return new SingleTaskIterator<USERID>(task.getUuid());
 			}
 		} catch (ResourceException x) {
 			throw x;
@@ -192,10 +192,11 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<Task<R
 	}
 	
 	@Override
-	public synchronized IProcessor<Iterator<Task<Reference,USERID>>, Representation> createConvertor(
+	public synchronized IProcessor<Iterator<UUID>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 
-		FactoryTaskConvertor<USERID> tc = new FactoryTaskConvertor<USERID>();
+		ITaskStorage<USERID> storage = ((TaskApplication)getApplication()).getTaskStorage();
+		FactoryTaskConvertor<USERID> tc = new FactoryTaskConvertor<USERID>(storage);
 	
 		return tc.createTaskConvertor(variant, getRequest(),getDocumentation());
 

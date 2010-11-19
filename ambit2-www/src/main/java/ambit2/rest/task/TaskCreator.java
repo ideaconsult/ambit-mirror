@@ -2,6 +2,7 @@ package ambit2.rest.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.restlet.data.Form;
@@ -19,23 +20,23 @@ import ambit2.db.reporters.QueryReporter;
  * @author nina
  *
  */
-public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, List<Task<Reference,USERID>>> {
+public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, List<UUID>> {
 	protected boolean async;
 	protected Form form;
-	protected List<Task<Reference,USERID>> tasks;
+	protected List<UUID> tasks;
 	
 	public TaskCreator(Form form, boolean async) throws AmbitException {
 		super();
-		tasks = new ArrayList<Task<Reference,USERID>>();
+		tasks = new ArrayList<UUID>();
 		setAsync(async);
 		setForm(form);
 	}
 	@Override
-	public void setOutput(List<Task<Reference,USERID>> output)
+	public void setOutput(List<UUID> output)
 			throws AmbitException {
 	}
 	@Override
-	public List<Task<Reference,USERID>> getOutput() throws AmbitException {
+	public List<UUID> getOutput() throws AmbitException {
 		return tasks;
 	}
 	public boolean isAsync() {
@@ -64,7 +65,10 @@ public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, L
 	public Object processItem(T item) throws AmbitException {
 		try {
 			Callable<Reference> callable = getCallable(form,item);
-			if (async)	tasks.add(createTask(callable,item));
+			if (async)	{
+				Task<Reference,USERID> task = createTask(callable,item);
+				tasks.add(task.getUuid());
+			}
 			else {
 				Reference ref = callable.call();
 			}
@@ -87,11 +91,11 @@ public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, L
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	@Override
-	public void footer(List<Task<Reference,USERID>> output, IQueryRetrieval<T> query) {
+	public void footer(List<UUID> output, IQueryRetrieval<T> query) {
 		
 	}
 	@Override
-	public void header(List<Task<Reference,USERID>> output, IQueryRetrieval<T> query) {
+	public void header(List<UUID> output, IQueryRetrieval<T> query) {
 		
 	}
 }

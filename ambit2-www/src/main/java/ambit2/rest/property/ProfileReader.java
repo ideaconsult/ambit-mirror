@@ -57,7 +57,22 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 	public void setProfile(Template profile) {
 		this.profile = profile;
 	}
-
+/*
+ * (non-Javadoc)
+ * @see ambit2.base.interfaces.IProcessor#process(java.lang.Object)
+ */
+	/*
+ambit2.base.exceptions.AmbitException: Communication Error (1001) - sun.security.validator.ValidatorException: PKIX path building failed: sun.
+security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+        at ambit2.rest.property.ProfileReader.process(ProfileReader.java:82)
+        at ambit2.rest.query.StructureQueryResource.createTemplate(StructureQueryResource.java:147)
+        at ambit2.rest.query.StructureQueryResource.createTemplate(StructureQueryResource.java:119)
+        at ambit2.rest.query.StructureQueryResource.createTemplate(StructureQueryResource.java:115)
+        at ambit2.rest.dataset.DatasetStructuresResource.createQuery(DatasetStructuresResource.java:39)
+        at ambit2.rest.dataset.DatasetResource.createQuery(DatasetResource.java:188)
+        at ambit2.rest.dataset.DatasetResource.createQuery(DatasetResource.java:55)
+        at
+	 */
 	public Template process(Reference uri) throws AmbitException {
 		if (profile == null) setProfile(new Template());
 		if (uri==null) return profile;
