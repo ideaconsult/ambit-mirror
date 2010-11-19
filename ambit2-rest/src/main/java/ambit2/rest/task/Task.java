@@ -1,20 +1,12 @@
 package ambit2.rest.task;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import org.restlet.resource.ResourceException;
 
-public class Task<Reference,USERID> implements Serializable, PropertyChangeListener {
+public class Task<Reference,USERID> implements Serializable /*, PropertyChangeListener */ {
 	public enum TaskProperty {
 		PROPERTY_NAME {
 			@Override
@@ -38,8 +30,8 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	 */
 	private static final long serialVersionUID = -646087833848914553L;
 
-	public enum TaskStatus {Running,Cancelled,Completed,Error};
-	protected FutureTask<Reference> future;
+	public enum TaskStatus {Running,Cancelled,Completed,Error,Queued};
+	//protected FutureTask<Reference> future;
 	protected Reference uri;
 	protected String name = "Default";
 	protected long started = System.currentTimeMillis();
@@ -51,18 +43,27 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	public void setInternal(boolean internal) {
 		this.internal = internal;
 	}
-	public long getCompleted() {
+	public long getTimeCompleted() {
 		return completed;
+	}
+	public void setTimeCompleted(long completed) {
+		this.completed = completed;
 	}
 	protected float percentCompleted = 0;
 	protected USERID userid;
 	protected UUID uuid = UUID.randomUUID();
 	protected ResourceException error = null;
+	public void setError(ResourceException error) {
+		this.error = error;
+	}
 	public ResourceException getError() {
 		return error;
 	}
-	protected TaskStatus status= TaskStatus.Running;
+	protected TaskStatus status= TaskStatus.Queued;
 	
+	public void setStatus(TaskStatus status) {
+		this.status = status;
+	}
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -97,90 +98,26 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Reference getUri() {
+	public synchronized Reference getUri() {
 		return uri;
 	}
-	public void setUri(Reference uri) {
+	public synchronized void setUri(Reference uri) {
 		this.uri = uri;
 	}
 	
-	public Task(Callable<Reference> callable,USERID user) {
+	public Task(USERID user) {
 		
 		this.userid = user;
-		this.future = new FutureTask<Reference>(callable) {
-			@Override
-			public void run() {
-				status = TaskStatus.Running;
-				super.run();
-			}
-			@Override
-			protected void done() {
-				super.done();
-				completed = System.currentTimeMillis();
-				update();
-			}
-			
-		};
-		/*
-		this.future = new FutureTask<Reference>(callable) {
-			@Override
-			protected void done() {
-				//status = TaskStatus.Completed;
-				super.done();
-				update();
-			}
-			
-			@Override
-			public boolean cancel(boolean mayInterruptIfRunning) {
-				boolean ok = super.cancel(mayInterruptIfRunning);
-				update();
-				status = TaskStatus.Cancelled;
-				return ok;
-			}
-			@Override
-			public void run() {
-				status = TaskStatus.Running;
-				super.run();
-			}
-			
-		};
-	*/
 	}
-	
 
-	public FutureTask<Reference> getFuture() {
-		return future;
-	}
-	public synchronized void update()  {
-		
-		try {
-			if (future!=null) {
-				Reference ref = future.get(100, TimeUnit.MILLISECONDS);
-				future = null;
-				completed = System.currentTimeMillis();
-				status = TaskStatus.Completed;
-				setUri(ref);
-			}
-		} catch (TimeoutException x) {
-		} catch (ExecutionException x) {
-			Throwable err = x.getCause()==null?x:x.getCause();
-			if (err instanceof ResourceException) error = (ResourceException) err;
-			else error = new ResourceException(err);
-			status = TaskStatus.Error;
-		} catch (InterruptedException x) {
-			error = null;
-			status = TaskStatus.Cancelled;
-		} catch (CancellationException x) {
-			error = null;
-			status = TaskStatus.Cancelled;
-		}
-	}
+
 	public boolean isDone() {
 		return TaskStatus.Completed.equals(status) || TaskStatus.Error.equals(status);
 	}
 	public boolean cancel(boolean mayInterruptIfRunning) {
-		if (getFuture()!=null) return getFuture().cancel(mayInterruptIfRunning);
-		else return false;
+		//if (getFuture()!=null) return getFuture().cancel(mayInterruptIfRunning);
+		//else return false;
+		return false;
 	}
 
 	@Override
@@ -199,6 +136,7 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 			return x.getMessage();
 		}
 	}
+	/*
 	public void propertyChange(PropertyChangeEvent evt) {
 		try {
 			TaskProperty p = TaskProperty.valueOf(evt.getPropertyName());
@@ -207,5 +145,12 @@ public class Task<Reference,USERID> implements Serializable, PropertyChangeListe
 			
 		}
 		
+	}
+	*/
+	/**
+	* does nothing, should be autoupdated by ExecutableTask
+	 */
+	public synchronized void update()  {
+
 	}
 }
