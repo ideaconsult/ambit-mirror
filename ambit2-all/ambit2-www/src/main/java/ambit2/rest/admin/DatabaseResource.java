@@ -132,8 +132,9 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 					"Database already exist, if you really needs to create a new one, drop it manually first.\n");
 		} catch (Exception e) {	
 		} finally {
-			try {res.release(); } catch (Exception x) {}
 			try {r.release(); } catch (Exception x) {}
+			try {res.release(); } catch (Exception x) {}
+			
 		}
 		if (z!=null) throw z;
 		if (form.getFirstValue("user")==null)

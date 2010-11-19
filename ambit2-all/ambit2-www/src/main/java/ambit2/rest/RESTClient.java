@@ -56,9 +56,10 @@ public class RESTClient<Result,Q extends IQueryRetrieval<Result>, Parser extends
 	}
 	public Result process(Reference target) throws AmbitException {
 		Representation r = null;
+		ClientResource client = null ;
 		try {
 			Context.getCurrentLogger().info(target.toString());
-			ClientResource client = new ClientResource(target);
+			client = new ClientResource(target);
 			
 
 			r = client.get(MediaType.TEXT_XML);
@@ -81,7 +82,9 @@ public class RESTClient<Result,Q extends IQueryRetrieval<Result>, Parser extends
 
 		} finally {
 			
-			try {if (r != null) r.getStream().close(); } catch (Exception x) {}
+		
+			try {if (r != null) r.release(); } catch (Exception x) {}
+			try {if (client != null) client.release(); } catch (Exception x) {}
 			
 		}
 	}

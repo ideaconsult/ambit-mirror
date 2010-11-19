@@ -78,8 +78,9 @@ public class CallableNumericalModelCreator extends CallableModelCreator<Instance
 	protected Object createTarget(Reference reference) throws Exception {
 		Representation r = null;
 		BufferedReader reader = null;
+		ClientResource client = null;
 		try {
-			ClientResource client = new ClientResource(reference);
+			client = new ClientResource(reference);
 			r = client.get(ChemicalMediaType.WEKA_ARFF);
 			reader = new BufferedReader(new InputStreamReader(r.getStream()));
 			return new Instances(reader);
@@ -88,6 +89,7 @@ public class CallableNumericalModelCreator extends CallableModelCreator<Instance
 		} finally {
 			try {reader.close(); } catch (Exception x) {}
 			try {r.release(); } catch (Exception x) {}
+			try {if (client!=null) client.release(); } catch (Exception x) {}
 		}
 	}
 

@@ -49,9 +49,9 @@ public class OTOntologyService<Z> extends OTObject {
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,toString() + " " + x.getMessage(),x);
 		} finally {
-
-			try { resource.release();} catch (Exception x) {} ;
 			try { r.release();} catch (Exception x) {} ;
+			try { resource.release();} catch (Exception x) {} ;
+			
 		}
 
 	}	

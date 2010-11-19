@@ -82,9 +82,10 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 	@Override
 	public boolean readStructure(RDFNode target, IStructureRecord record) {
 		Representation r = null;
+		ClientResource client = null;
 		try {
 			if (target.isURIResource()) {
-				ClientResource client = new ClientResource(((Resource)target).getURI());
+				client = new ClientResource(((Resource)target).getURI());
 	
 				r = client.get(ChemicalMediaType.CHEMICAL_MDLSDF);
 				if (client.getStatus().equals(Status.SUCCESS_OK)) {
@@ -103,7 +104,8 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 			record.setContent(target.toString());	
 			return false;
 		} finally {
-			try {r.release();} catch (Exception x) {}
+			try {if (r != null) r.release();} catch (Exception x) {}
+			try {if (client != null) client.release();} catch (Exception x) {}
 		}
 	}
 

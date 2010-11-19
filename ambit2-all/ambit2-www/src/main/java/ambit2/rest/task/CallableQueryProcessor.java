@@ -119,8 +119,9 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 		if (!applicationRootReference.isParent(reference)) throw 
 			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
 		ObjectRepresentation<Serializable> repObject = null;
+		ClientResource resource = null;
 		try {
-			ClientResource resource  = new ClientResource(reference);
+			resource  = new ClientResource(reference);
 			resource.setMethod(Method.GET);
 			resource.get(MediaType.APPLICATION_JAVA_OBJECT);
 			if (resource.getStatus().isSuccess()) {
@@ -133,6 +134,7 @@ public abstract class CallableQueryProcessor<Target,Result> implements Callable<
 			throw x;
 		} finally {
 			try { if (repObject!=null) repObject.release();} catch (Exception x) {}
+			try { if (resource!=null) resource.release();} catch (Exception x) {}
 		}
 	}		
 }

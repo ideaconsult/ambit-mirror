@@ -216,9 +216,10 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 	
 	public boolean readStructure(RDFNode target,IStructureRecord record) {
 		Representation r  = null;
+		ClientResource client  = null;
 		try {
 			if (target.isURIResource()) {
-				ClientResource client = new ClientResource(((Resource)target).getURI());
+				client = new ClientResource(((Resource)target).getURI());
 				r = client.get(ChemicalMediaType.CHEMICAL_MDLMOL);
 				if (client.getStatus().equals(Status.SUCCESS_OK)) {
 					record.setContent(r.getText());
@@ -235,6 +236,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 			record.setContent(target.toString());	
 			return false;
 		} finally {
+			try { if (client != null) client.release();} catch (Exception x) {}
 			try { r.release();} catch (Exception x) {}
 		}
 

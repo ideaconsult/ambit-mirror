@@ -88,9 +88,10 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 		this.useStatic = useStatic;
 	}	
 	protected OntModel getOntology(OntModel model) throws ResourceException {
+		ClientResource client = null;
 		try {
 			if (search==null) return model;
-			ClientResource client = new ClientResource(Reference.decode(search.trim()));
+			client = new ClientResource(Reference.decode(search.trim()));
 			MediaType[] mt = {
 					MediaType.APPLICATION_RDF_XML,
 					MediaType.TEXT_RDF_N3,
@@ -115,6 +116,8 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 			
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		} finally {
+			try {client.release();} catch (Exception x) {};
 		}
 		return model;
 	}
