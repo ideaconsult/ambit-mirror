@@ -3,7 +3,7 @@ package ambit2.rest.test.task;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.concurrent.Callable;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +24,7 @@ import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.CallablePOST;
+import ambit2.rest.task.CallableTask;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
 import ambit2.rest.test.ResourceTest;
@@ -77,9 +78,18 @@ public class TaskResourceTest extends ResourceTest {
 
 	@Test
 	public void testRDF() throws Exception {
-		Callable<Reference> c = new Callable<Reference>() {
+		CallableTask c = new CallableTask() {
+			protected UUID uuid;
 			public Reference call() throws Exception {
 				return new Reference("http://localhost/newResult");
+			}
+			@Override
+			public UUID getUuid() {
+				return uuid;
+			}
+			@Override
+			public void setUuid(UUID uuid) {
+				this.uuid = uuid;
 			}
 		};
 		((AmbitApplication) app).addTask("Test task", c, new Reference(String
@@ -91,9 +101,18 @@ public class TaskResourceTest extends ResourceTest {
 
 	@Test
 	public void testURI() throws Exception {
-		Callable<Reference> c = new Callable<Reference>() {
+		CallableTask c = new CallableTask() {
+			protected UUID uuid;
 			public Reference call() throws Exception {
 				return new Reference("quickTaskURI");
+			}
+			@Override
+			public UUID getUuid() {
+				return uuid;
+			}
+			@Override
+			public void setUuid(UUID uuid) {
+				this.uuid = uuid;
 			}
 		};
 		((AmbitApplication) app).addTask("Test task", c, new Reference(String
@@ -283,15 +302,19 @@ public class TaskResourceTest extends ResourceTest {
 	public void testMultiplePOST() throws Exception {
 		Preferences.setProperty(Preferences.SMILESPARSER.toString(),SMILES_PARSER.CDK.toString());
 		//setUpDatabase("src/test/resources/src-datasets.xml");
+		/*
 		final Reference url = testAsyncTask(
-				String.format("http://localhost:%d/algorithm/toxtreeskinirritation", port),
+				String.format("http://localhost:%d/algorithm/toxtreeverhaar", port),
 				new Form(), Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));		
+		*/
+		
+		final Reference url = new Reference(String.format("http://localhost:%d/algorithm/ambit2.descriptors.AtomTypeVerifierDescriptor", port));
 		
 		final RemoteTaskPool pool = new RemoteTaskPool();
 		ExecutorService xs= Executors.newCachedThreadPool();
-		Runnable[] t = new Runnable[3];
-		final int batch = 500;
+		Runnable[] t = new Runnable[10];
+		final int batch = 1000;
 		for (int j=0; j < t.length; j++) {
 
 			t[j] = new Runnable() {

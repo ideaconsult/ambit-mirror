@@ -230,6 +230,7 @@ public class OT {
     	//Client httpclient = new Client(Protocol.HTTP);
     	//httpclient.setConnectTimeout(300000);
     	ClientResource client = new ClientResource(uri);
+    	client.setRetryOnError(false);
     	//System.out.println("Connecting "+uri);
 		//client.setNext(httpclient);
 		client.setFollowingRedirects(true);

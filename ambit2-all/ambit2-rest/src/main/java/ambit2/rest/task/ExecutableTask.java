@@ -28,6 +28,7 @@ public class ExecutableTask<USERID> extends FutureTask<Reference> {
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
 		task.setStatus(TaskStatus.Cancelled);
+		task.setTimeCompleted(System.currentTimeMillis());
 		task = null;
 		return super.cancel(mayInterruptIfRunning);
 	}
@@ -38,7 +39,7 @@ public class ExecutableTask<USERID> extends FutureTask<Reference> {
 			task.setTimeCompleted(System.currentTimeMillis());
 			task.setStatus(TaskStatus.Completed);
 			task.setUri(ref);
-			task = null;
+
 		} catch (TimeoutException x) {
 		} catch (ExecutionException x) {
 			task.setStatus(TaskStatus.Error);
@@ -52,6 +53,7 @@ public class ExecutableTask<USERID> extends FutureTask<Reference> {
 			task.setError(null);
 			task.setStatus(TaskStatus.Cancelled);
 		}		
+		task = null;
 		super.done();
 	}
 	@Override
@@ -64,6 +66,7 @@ public class ExecutableTask<USERID> extends FutureTask<Reference> {
 		task.setStatus(TaskStatus.Running);
 		super.run();
 	}
+	
 	@Override
 	protected void setException(Throwable x) {
 		super.setException(x);
@@ -98,4 +101,9 @@ public class ExecutableTask<USERID> extends FutureTask<Reference> {
 		}
 	}
 	*/
+	@Override
+	public String toString() {
+		
+		return super.toString();
+	}
 }

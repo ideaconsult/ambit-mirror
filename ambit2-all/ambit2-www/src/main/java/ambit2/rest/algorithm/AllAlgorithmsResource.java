@@ -4,7 +4,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -39,6 +38,7 @@ import ambit2.rest.task.CallableMockup;
 import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
+import ambit2.rest.task.CallableTask;
 import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.OptimizerModelBuilder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
@@ -351,7 +351,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	}
 
 	@Override
-	protected Callable<Reference> createCallable(Form form,
+	protected CallableTask createCallable(Form form,
 			Algorithm<String> algorithm)
 			throws ResourceException {
 				

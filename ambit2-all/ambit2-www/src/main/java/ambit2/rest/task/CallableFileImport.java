@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
@@ -36,13 +37,20 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.RDFIteratingReader;
 import ambit2.rest.structure.ConformerURIReporter;
 
-public class CallableFileImport implements
-		java.util.concurrent.Callable<Reference> {
+public class CallableFileImport implements CallableTask {
+	protected UUID uuid;
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
 	protected SourceDataset targetDataset;
 	protected ClientInfo client;
 	protected boolean propertyOnly = false;

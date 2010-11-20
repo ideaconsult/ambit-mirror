@@ -5,15 +5,18 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -30,7 +33,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	protected Logger logger;
 	protected String name;
 	protected TimeUnit taskCleanupUnit = TimeUnit.MINUTES;
-	protected long taskCleanupRate = 60; //30 min
+	protected long taskCleanupRate = 120; //30 min
 	protected double cpuutilisation = 0.75;
 	protected double waittime=1;
 	protected double cputime=1;
@@ -72,11 +75,19 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 			public void run() {
 				Future<Reference> f = null;
 				while ((f = completionService_internal.poll()) != null) {
-					System.out.println(f);
+					if ((f instanceof ExecutableTask) && ((ExecutableTask)f).getTask()!=null) {
+						((ExecutableTask)f).getTask().setStatus(TaskStatus.Cancelled);
+						((ExecutableTask)f).getTask().setTimeCompleted(System.currentTimeMillis());
+						((ExecutableTask)f).setTask(null);
+					}					
 					f= null;
 				}
 				while ((f = completionService_external.poll()) != null) {
-					System.out.println(f);
+					if ((f instanceof ExecutableTask) && ((ExecutableTask)f).getTask()!=null) {
+						((ExecutableTask)f).getTask().setStatus(TaskStatus.Cancelled);
+						((ExecutableTask)f).getTask().setTimeCompleted(System.currentTimeMillis());
+						((ExecutableTask)f).setTask(null);
+					}
 					f= null;
 				}
 			}
@@ -104,11 +115,8 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	protected ExecutorService createExecutorService(int maxThreads) {
 		ThreadFactory tf =
         new ThreadFactory() {
-    		//return Executors.newCachedThreadPool(new ThreadFactory() {
     			public Thread newThread(Runnable r) {
     				Thread thread = new Thread(r);
-    				//thread.setPriority(Thread.MIN_PRIORITY);
-    				//thread.setDaemon(true);
     				thread.setName(String.format("%s task executor",name));
     				thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
     					public void uncaughtException(Thread t, Throwable e) {
@@ -120,42 +128,69 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
     				return thread;
     			}
     			
+    			
     		};
         RejectedExecutionHandler rjh = new RejectedExecutionHandler() {
         	@Override
         	public void rejectedExecution(Runnable r,
         			ThreadPoolExecutor executor) {
-        		 /**
-                 * Does nothing, which has the effect of discarding task r.
-                 * @param r the runnable task requested to be executed
-                 * @param e the executor attempting to execute this task
-                 */
-        		if (r instanceof ExecutableTask) {
-        			((ExecutableTask)r).getTask().setStatus(TaskStatus.Cancelled);
-        			((ExecutableTask)r).getTask().setTimeCompleted(System.currentTimeMillis());
-        			System.out.println("Discard "+((ExecutableTask)r).getTask());
-        		} else
-        			System.out.println("Discard "+r);
+
+        		
+        		if (r instanceof FutureTask) {
+        			((FutureTask)r).cancel(true);
+        		}
+
         		
         	}
         };
         
+        //SynchronousQueue<Runnable> taskQueue = new SynchronousQueue<Runnable>(true);        
+        BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<Runnable>(6+100);
+       // BlockingQueue<Runnable> taskQueue = new ArrayBlockingQueue<Runnable>(5,true);
+        
         ExecutorService xs =
 				new ThreadPoolExecutor(maxThreads, maxThreads,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(),tf,rjh);
+                taskQueue,
+                tf,rjh) {
+        	
+        	@Override
+        	protected <T> RunnableFuture<T> newTaskFor(
+        			Callable<T> callable) {
+          		if (callable instanceof ExecutableTask) {
+        			((ExecutableTask)callable).getTask().setStatus(TaskStatus.Queued);
+        			return (RunnableFuture<T>)callable;
+          		} else if (callable instanceof RunnableFuture)
+        			return (RunnableFuture<T>)callable;
+        		else
+        			return super.newTaskFor(callable);
+        	}
+        	protected <T extends Object> java.util.concurrent.RunnableFuture<T> newTaskFor(Runnable runnable, T value) {
+        		if (runnable instanceof ExecutableTask) {
+        			((ExecutableTask)runnable).getTask().setStatus(TaskStatus.Queued);
+        			return (RunnableFuture<T>)runnable;
+        		} else if (runnable instanceof RunnableFuture)
+        			return (RunnableFuture<T>)runnable;
+        		else
+        			return super.newTaskFor(runnable, value);
+        		
+        	};
+        
+        };
+        
 		
 		return xs;
 	}
 	
 	public Task<Reference,USERID> addTask(String taskName, 
-			Callable<Reference> callable, 
+			CallableTask callable, 
 			Reference baseReference,
 			USERID user,boolean internal) {
 		if (callable == null) return null;
 		Task<Reference,USERID> task = new Task<Reference,USERID>(user);
 		task.setName(taskName);
 		task.setInternal(internal);
+		callable.setUuid(task.getUuid());
 		
 		ExecutableTask<USERID> xtask = new ExecutableTask<USERID>(callable,task);
 		
@@ -177,7 +212,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 				Future future = task.isInternal()?
 						completionService_internal.submit(xtask,null):
 						completionService_external.submit(xtask,null);
-						System.out.println(pool_internal.toString());
+
 						return theTask;
 			} catch (RejectedExecutionException x) {
 				return null;
@@ -236,7 +271,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 			UUID key = keys.next();
 			Task<Reference,USERID> task = tasks.get(key);
 			try {
-				if (!task.isDone()) task.cancel(true);
+				if (!task.isDone()) task.setStatus(TaskStatus.Cancelled);
 				} catch (Exception x) {logger.warning(x.getMessage());}
 		}
 	}

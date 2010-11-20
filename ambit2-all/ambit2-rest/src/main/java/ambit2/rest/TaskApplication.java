@@ -1,12 +1,12 @@
 package ambit2.rest;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import org.restlet.Application;
 import org.restlet.data.Reference;
 
 import ambit2.rest.task.CallablePOST;
+import ambit2.rest.task.CallableTask;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskStorage;
@@ -48,13 +48,13 @@ public class TaskApplication<USERID> extends Application {
 	}
 
 	public synchronized Task<Reference,USERID> addTask(String taskName, 
-			Callable<Reference> callable, 
+			CallableTask callable, 
 			Reference baseReference) {
 		return addTask(taskName,callable,baseReference,!(callable instanceof CallablePOST));
 	}
 	
 	public synchronized Task<Reference,USERID> addTask(String taskName, 
-			Callable<Reference> callable, 
+			CallableTask callable, 
 			Reference baseReference,boolean internal) {
 		return taskStorage.addTask(taskName,callable,baseReference,(USERID) "guest",internal);
 	}

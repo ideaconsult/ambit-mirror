@@ -79,8 +79,8 @@ public class Task<Reference,USERID> implements Serializable /*, PropertyChangeLi
 	public boolean isExpired(long lifetime) {
 		return (System.currentTimeMillis()-started) > lifetime;
 	}
-	public String getStatus() {
-		return status.toString();
+	public TaskStatus getStatus() {
+		return status;
 
 	}
 	public float getPercentCompleted() {
@@ -112,12 +112,7 @@ public class Task<Reference,USERID> implements Serializable /*, PropertyChangeLi
 
 
 	public boolean isDone() {
-		return TaskStatus.Completed.equals(status) || TaskStatus.Error.equals(status);
-	}
-	public boolean cancel(boolean mayInterruptIfRunning) {
-		//if (getFuture()!=null) return getFuture().cancel(mayInterruptIfRunning);
-		//else return false;
-		return false;
+		return TaskStatus.Completed.equals(status) || TaskStatus.Error.equals(status)  || TaskStatus.Cancelled.equals(status);
 	}
 
 	@Override

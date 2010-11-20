@@ -3,7 +3,6 @@ package ambit2.rest.task;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.concurrent.Callable;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -106,7 +105,7 @@ public class LauncherResource extends ServerResource {
 		return null;
 	}
 	
-	protected Callable<Reference> createCallable(Form form) throws ResourceException {
+	protected CallableTask createCallable(Form form) throws ResourceException {
 				
 		try {
 			if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
