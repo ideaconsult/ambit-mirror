@@ -45,10 +45,12 @@ public class Rule
 			Vector<Vector<IAtom>> maps = isoTester.getAllIsomorphismMappings(mol);		
 			for (int k = 0; k < maps.size(); k++)
 			{
+				//TODO check for the mobile group
+				//..
 				RuleInstance rinst = new RuleInstance();
 				rinst.atoms = maps.get(k);
-				rinst.curState = i;
-				rinst.beginState = i;
+				rinst.getBondMappings();
+				rinst.foundState = i;
 				rinst.rule = this;
 				instances.add(rinst);
 			}
