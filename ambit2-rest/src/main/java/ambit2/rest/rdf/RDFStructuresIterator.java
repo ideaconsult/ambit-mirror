@@ -86,7 +86,8 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 		try {
 			if (target.isURIResource()) {
 				client = new ClientResource(((Resource)target).getURI());
-	
+				client.setRetryOnError(false);
+				client.setFollowingRedirects(true);
 				r = client.get(ChemicalMediaType.CHEMICAL_MDLSDF);
 				if (client.getStatus().equals(Status.SUCCESS_OK)) {
 					record.setContent(r.getText());

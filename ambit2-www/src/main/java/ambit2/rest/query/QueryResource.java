@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -42,6 +41,7 @@ import ambit2.rest.TaskApplication;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
+import ambit2.rest.task.CallableTask;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
@@ -393,13 +393,13 @@ Then, when the "get(Variant)" method calls you back,
 			try {
 				TaskCreator<Object,T> taskCreator = new TaskCreator<Object,T>(form,async) {
 					@Override
-					protected Callable<Reference> getCallable(Form form,
+					protected CallableTask getCallable(Form form,
 							T item) throws ResourceException {
 						return createCallable(form,item);
 					}
 					@Override
 					protected Task<Reference, Object> createTask(
-							Callable<Reference> callable,
+							CallableTask callable,
 							T item) throws ResourceException {
 	
 							return ((TaskApplication)getApplication()).addTask(

@@ -1,6 +1,6 @@
 package ambit2.rest.task;
 
-import java.util.concurrent.Callable;
+import java.util.UUID;
 
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.Form;
@@ -20,12 +20,20 @@ import ambit2.rest.task.dsl.OTSuperModel;
  * @author nina
  *
  */
-public class CallablePOST implements Callable<Reference>{
+public class CallablePOST implements CallableTask{
 	protected MediaType media; 
 	protected Representation input;
 	protected Status status;
 	protected Reference applicationRootReference;
+	protected UUID uuid;
 	
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
 	protected OTSuperModel superModel;
 	
 	

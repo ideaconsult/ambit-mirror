@@ -44,7 +44,9 @@ public class RemoteTask implements Serializable {
 		try {
 			client = new ClientResource(url);
 			client.setChallengeResponse(authentication);
-			client.setFollowingRedirects(false);
+			client.setFollowingRedirects(true);
+			client.setRetryAttempts(1);
+			client.setRetryOnError(false);
 			
 			
 			if (method.equals(Method.POST)) 
@@ -107,6 +109,9 @@ public class RemoteTask implements Serializable {
 	public boolean isCompletedOK() {
 		return Status.SUCCESS_OK.equals(status);
 	}
+	public boolean isCancelled() {
+		return Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status);
+	}
 	public boolean isAccepted() {
 		return Status.SUCCESS_ACCEPTED.equals(status);
 	}	
@@ -115,7 +120,7 @@ public class RemoteTask implements Serializable {
 		return error != null;
 	}		
 	public boolean isDone() {
-		return isCompletedOK() || isERROR();
+		return isCompletedOK() || isERROR() || isCancelled();
 	}		
 	public Reference getUrl() {
 		return url;
@@ -138,6 +143,8 @@ public class RemoteTask implements Serializable {
 	 * @return
 	 */
 	public boolean poll() {
+
+			
 		if (isDone()) return true;
 
 		ClientResource client = null;
@@ -146,10 +153,18 @@ public class RemoteTask implements Serializable {
 		try {
 			
 			client = new ClientResource(result.toString());
+			client.setRetryOnError(false);
+			client.setRetryAttempts(1);
+			client.setFollowingRedirects(true);
 	        r = client.get(MediaType.TEXT_URI_LIST);
 			status = client.getStatus();
+			System.out.println(status);
+			if (Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status)) {
+				return true;
+			}
 			
 //			if (!r.getEntity().isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",result));
+			
 			result = handleOutput(r.getStream(),status);
 //			System.out.println(String.format("poll %s %s",status,result));
 		} catch (ResourceException x) {
@@ -202,8 +217,13 @@ public boolean poll() {
 	 */
 	protected Reference handleOutput(InputStream in,Status status) throws ResourceException {
 		Reference ref = null;
-		
-		if (Status.SUCCESS_OK.equals(status) || Status.SUCCESS_ACCEPTED.equals(status) || Status.SUCCESS_CREATED.equals(status) || Status.REDIRECTION_SEE_OTHER.equals(status)) {
+		System.out.println("handleOutput "+status );
+		if (Status.SUCCESS_OK.equals(status) 
+						|| Status.SUCCESS_ACCEPTED.equals(status) 
+						|| Status.SUCCESS_CREATED.equals(status) 
+						//|| Status.REDIRECTION_SEE_OTHER.equals(status)
+						|| Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status)
+						) {
 			int count=0;
 			try {
 				

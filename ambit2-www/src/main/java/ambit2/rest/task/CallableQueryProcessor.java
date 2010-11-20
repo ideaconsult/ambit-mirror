@@ -3,7 +3,7 @@ package ambit2.rest.task;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.util.concurrent.Callable;
+import java.util.UUID;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -23,12 +23,21 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
 
-public abstract class CallableQueryProcessor<Target,Result> implements Callable<Reference> {
+public abstract class CallableQueryProcessor<Target,Result> implements CallableTask {
 	protected AbstractBatchProcessor batch; 
 	protected Target target;
 	protected Reference sourceReference;
 	//protected AmbitApplication application;
 	protected Context context;
+	protected UUID uuid;
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
 
 	public CallableQueryProcessor(Form form,Context context) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);

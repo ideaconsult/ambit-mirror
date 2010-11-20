@@ -3,7 +3,6 @@ package ambit2.rest.task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -64,7 +63,7 @@ public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, L
 	@Override
 	public Object processItem(T item) throws AmbitException {
 		try {
-			Callable<Reference> callable = getCallable(form,item);
+			CallableTask callable = getCallable(form,item);
 			if (async)	{
 				Task<Reference,USERID> task = createTask(callable,item);
 				tasks.add(task.getUuid());
@@ -84,10 +83,10 @@ public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, L
 	public void open() throws DbAmbitException {
 	}
 	
-	protected Callable<Reference> getCallable(Form form,T item) throws ResourceException  {
+	protected CallableTask getCallable(Form form,T item) throws ResourceException  {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
-	protected Task<Reference,USERID> createTask(Callable<Reference> callable, T item) throws ResourceException  {
+	protected Task<Reference,USERID> createTask(CallableTask callable, T item) throws ResourceException  {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	@Override

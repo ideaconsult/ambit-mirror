@@ -111,7 +111,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 
 	protected boolean filterTask(Task<Reference, USERID> task, int taskNumber) {
 		if ((max > 0) && (taskNumber>=max)) return false;
-		else return searchStatus==null?true:searchStatus.equals(task.getStatus());
+		else return searchStatus==null?true:searchStatus.equals(task.getStatus().toString());
 	}
 	
 	protected Iterator<UUID> getTasks() {
@@ -159,11 +159,37 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 				Task<Reference,USERID> task = ((TaskApplication<USERID>)getApplication()).findTask(Reference.decode(id.toString()));
 				
 				if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-				task.update();
+			
 				
-				if (task.getError()==null)
-					response_status = task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED;
-				else 
+				if (task.getError()==null) {
+					
+					switch (task.getStatus()) {
+					case Cancelled: {
+						response_status = Status.SERVER_ERROR_SERVICE_UNAVAILABLE;
+						break;						
+					}
+					case Completed: {
+						response_status = Status.SUCCESS_OK;
+						break;
+					}
+					case Error: {
+						response_status =  Status.SERVER_ERROR_INTERNAL;
+						break;												
+					}
+					case Queued: {
+						response_status = Status.SUCCESS_ACCEPTED;
+						break;						
+					}
+					case Running: {
+						response_status = Status.SUCCESS_ACCEPTED;
+						break;
+					}
+					default: {
+						response_status = Status.SUCCESS_ACCEPTED;
+						break;						
+					}
+					}
+				} else 
 					response_status = task.getError().getStatus();
 				
 				return new SingleTaskIterator<USERID>(task.getUuid());

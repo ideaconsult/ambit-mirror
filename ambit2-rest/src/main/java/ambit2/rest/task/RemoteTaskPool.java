@@ -30,8 +30,10 @@ public class RemoteTaskPool {
 	public int poll() {
 		int running = 0;
 		synchronized (pool) {
-		for (RemoteTask task : pool) 
+		for (RemoteTask task : pool) { 
 			running += task.poll()?0:1;
+		}	
+		
 		}
 		return running;
 	}	
@@ -42,7 +44,7 @@ public class RemoteTaskPool {
 		try {
 			while (running()>0) {
 				poll();
-				//for (RemoteTask task : pool) System.out.println(task);
+
 				Thread.sleep(1500);
 				Thread.yield();
 				

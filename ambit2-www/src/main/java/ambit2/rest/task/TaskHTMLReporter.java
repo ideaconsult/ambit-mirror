@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
+import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
@@ -31,13 +32,17 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 	public void header(Writer output, Iterator<UUID> query) {
 		try {
 			String ajax = AmbitResource.js(getRequest().getOriginalRef().toString(),baseReference);
+			
+			String max = getRequest().getResourceRef().getQueryAsForm().getFirstValue(AbstractResource.max_hits);
+			max = max==null?"10":max;
+			
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),ajax,
 					getDocumentation()
 					);//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<h4>Tasks:");
 			for (TaskStatus status :TaskStatus.values())
-				output.write(String.format("<a href='%s%s?search=%s'>%s</a>&nbsp;",
-						baseReference,SimpleTaskResource.resource,status,status));
+				output.write(String.format("<a href='%s%s?search=%s&%s=%s'>%s</a>&nbsp;",
+						baseReference,SimpleTaskResource.resource,status,AbstractResource.max_hits,max,status));
 			output.write("</h4><p>");
 			output.write("<table>");
 			output.write("<tr><th>Start time</th><th>Elapsed time,ms</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
@@ -52,7 +57,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 		String status = "Unknown";
 		try {
 			t = item.getUri()==null?"":item.getUri().toString();
-			status = item.getStatus();
+			status = item.getStatus().toString();
 		} catch (Exception x) {
 			x.printStackTrace();
 			status = "Error";

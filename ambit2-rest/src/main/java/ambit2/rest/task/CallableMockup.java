@@ -1,6 +1,6 @@
 package ambit2.rest.task;
 
-import java.util.concurrent.Callable;
+import java.util.UUID;
 
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -17,10 +17,18 @@ import ambit2.rest.OpenTox;
  * @author nina
  *
  */
-public class CallableMockup implements Callable<Reference> {
+public class CallableMockup implements CallableTask {
 	protected long delay;
 	protected Object resultURI;
 	protected Exception error;
+	protected UUID uuid;
+	
+	public UUID getUuid() {
+		return uuid;
+	}
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
 	public CallableMockup(Form form) {
 		try {
 			this.delay = Long.parseLong(OpenTox.params.delay.getFirstValue(form).toString());
