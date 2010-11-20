@@ -99,6 +99,9 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 		} catch (Exception x) { searchStatus = null; }
 		
 		try {
+			max = Integer.parseInt(Reference.decode(form.getFirstValue(AbstractResource.max_hits)));
+		} catch (Exception x) { max = 10; }		
+		try {
 			if (searchStatus != null) TaskStatus.valueOf(searchStatus);
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Allowed status values: %s %s, %s, %s", 
