@@ -58,12 +58,17 @@ public class TautomerManager
 	
 	void handleOverlapedInstances()
 	{
-		//TODO
+		//Currently no special treatment is performed		
+		ruleInstances.addAll(extendedRuleInstances);
 	}
 	
 	void generateRuleCombinations()
 	{
+		for (int i = 0; i < ruleInstances.size(); i++)
+			ruleInstances.get(i).firstState();
+		
 		//TODO
+		
 	}
 	
 }
