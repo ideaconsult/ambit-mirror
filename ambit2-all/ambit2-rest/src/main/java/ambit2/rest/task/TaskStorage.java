@@ -107,8 +107,8 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
     		//return Executors.newCachedThreadPool(new ThreadFactory() {
     			public Thread newThread(Runnable r) {
     				Thread thread = new Thread(r);
-    				thread.setPriority(Thread.MIN_PRIORITY);
-    				thread.setDaemon(true);
+    				//thread.setPriority(Thread.MIN_PRIORITY);
+    				//thread.setDaemon(true);
     				thread.setName(String.format("%s task executor",name));
     				thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
     					public void uncaughtException(Thread t, Throwable e) {
