@@ -18,6 +18,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.FilteredTasksIterator;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.SingleTaskIterator;
 import ambit2.rest.task.Task;
@@ -109,20 +110,20 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 		if ((max > 0) && (taskNumber>=max)) return false;
 		else return searchStatus==null?true:searchStatus.equals(task.getStatus());
 	}
-	/*
+	
 	protected Iterator<UUID> getTasks() {
 
 		
 		return new FilteredTasksIterator<USERID>(((TaskApplication)getApplication()).getTaskStorage()){
 			@Override
 			protected boolean accepted(Task<Reference, USERID> task) {
-				task.update();
+				//task.update();
 				if (!task.isDone()) getResponse().setStatus(Status.SUCCESS_ACCEPTED);
 				return filterTask(task,getNum());
 			}
 		};
 	}
-	*/
+	
 	@Override
 	protected synchronized Iterator<UUID> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
@@ -147,18 +148,8 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 
 			if (id == null) {
 				response_status = Status.SUCCESS_OK;
-				return  ((TaskApplication)getApplication()).getTaskStorage().getTasks();					/*
-					Iterator<Task<Reference,USERID>> tasks = ((TaskApplication)getApplication()).getTasks();
-					while (tasks.hasNext()) {
-						Task<Reference,USERID> task = tasks.next();
-						task.update();
-						if (search.equals(task.getStatus())) 
-							list.add(task);
-						
-					}
-					Collections.sort(list, new TaskComparator<USERID>());
-					return list.iterator();
-					*/
+				//turn  ((TaskApplication)getApplication()).getTaskStorage().getTasks();
+				return getTasks();
 
 			} else {
 
