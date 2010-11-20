@@ -2,8 +2,13 @@ package ambit2.tautomers;
 
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
+
 import java.util.Vector;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+
+import ambit2.smarts.SmartsParser;
+import ambit2.smarts.IsomorphismTester;
 
 public class Rule 
 {
@@ -17,19 +22,39 @@ public class Rule
 	RuleStateBondDistribution   stateBonds[] = null;
 	int mobileGroupPos[] = null;
 	String RuleInfo = "";
-	QueryAtomContainer statePaterns[] = null;
+	QueryAtomContainer stateQueries[] = null;
 	
 	
 	public Vector<IRuleInstance>  applyRule(IAtomContainer mol)
 	{
+		IsomorphismTester isoTester = new IsomorphismTester(); 
 		Vector<IRuleInstance> instances = new Vector<IRuleInstance>();
-		for (int i = 0; i < statePaterns.length; i++)
+		for (int i = 0; i < stateQueries.length; i++)
 		{
-			//TODO
+			QueryAtomContainer query = stateQueries[i];			
+			RuleStateFlags flags = stateFlags[i];			
+			SmartsParser.prepareTargetForSMARTSSearch(
+				flags.mNeedNeighbourData, 
+				flags.mNeedValenceData, 
+				flags.mNeedRingData, 
+				flags.mNeedRingData2, 
+				flags.mNeedExplicitHData , 
+				flags.mNeedParentMoleculeData, mol);	
+			
+			isoTester.setQuery(query);
+			Vector<Vector<IAtom>> maps = isoTester.getAllIsomorphismMappings(mol);		
+			for (int k = 0; k < maps.size(); k++)
+			{
+				RuleInstance rinst = new RuleInstance();
+				rinst.atoms = maps.get(k);
+				rinst.curState = i;
+				rinst.beginState = i;
+				rinst.rule = this;
+				instances.add(rinst);
+			}
 		}
 		return instances;
 	}
-	
 	
 	public String toString()
 	{

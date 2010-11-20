@@ -61,7 +61,7 @@ public class RuleParser
 			return;
 		}
 		
-		curRule.statePaterns = new QueryAtomContainer[curRule.smartsStates.length];
+		curRule.stateQueries = new QueryAtomContainer[curRule.smartsStates.length];
 		curRule.stateFlags = new RuleStateFlags[curRule.smartsStates.length];
 		curRule.stateBonds = new RuleStateBondDistribution[curRule.smartsStates.length];
 		
@@ -82,11 +82,11 @@ public class RuleParser
 				flags.mNeedParentMoleculeData = sp.needParentMoleculeData();
 				flags.mNeedRingData = sp.needRingData();
 				flags.mNeedRingData2 = sp.needRingData2();
-				flags.mNeedValencyData = sp.needValencyData();
+				flags.mNeedValenceData = sp.needValencyData();
 				RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
 				bdistr.calcDistribution(q);
 				//System.out.println("  BondDistribution:" + bdistr.toString());				
-				curRule.statePaterns[i] = q;
+				curRule.stateQueries[i] = q;
 				curRule.stateFlags[i] = flags;
 				curRule.stateBonds[i] = bdistr;
 			}	
