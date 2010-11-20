@@ -10,11 +10,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -22,6 +24,7 @@ import org.restlet.Context;
 import org.restlet.data.Reference;
 
 import ambit2.rest.SimpleTaskResource;
+import ambit2.rest.task.Task.TaskStatus;
 
 public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	protected Logger logger;
@@ -99,24 +102,50 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		}
 	}	
 	protected ExecutorService createExecutorService(int maxThreads) {
+		ThreadFactory tf =
+        new ThreadFactory() {
+    		//return Executors.newCachedThreadPool(new ThreadFactory() {
+    			public Thread newThread(Runnable r) {
+    				Thread thread = new Thread(r);
+    				thread.setPriority(Thread.MIN_PRIORITY);
+    				thread.setDaemon(true);
+    				thread.setName(String.format("%s task executor",name));
+    				thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+    					public void uncaughtException(Thread t, Throwable e) {
+    			            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
+    			            e.printStackTrace(new PrintWriter(stackTraceWriter));
+    						logger.severe(stackTraceWriter.toString());
+    					}
+    				});
+    				return thread;
+    			}
+    			
+    		};
+        RejectedExecutionHandler rjh = new RejectedExecutionHandler() {
+        	@Override
+        	public void rejectedExecution(Runnable r,
+        			ThreadPoolExecutor executor) {
+        		 /**
+                 * Does nothing, which has the effect of discarding task r.
+                 * @param r the runnable task requested to be executed
+                 * @param e the executor attempting to execute this task
+                 */
+        		if (r instanceof ExecutableTask) {
+        			((ExecutableTask)r).getTask().setStatus(TaskStatus.Cancelled);
+        			((ExecutableTask)r).getTask().setTimeCompleted(System.currentTimeMillis());
+        			System.out.println("Discard "+((ExecutableTask)r).getTask());
+        		} else
+        			System.out.println("Discard "+r);
+        		
+        	}
+        };
+        
+        ExecutorService xs =
+				new ThreadPoolExecutor(maxThreads, maxThreads,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(),tf,rjh);
 		
-		return Executors.newFixedThreadPool(maxThreads,new ThreadFactory() {
-		//return Executors.newCachedThreadPool(new ThreadFactory() {
-			public Thread newThread(Runnable r) {
-				Thread thread = new Thread(r);
-				thread.setPriority(Thread.MIN_PRIORITY);
-				thread.setDaemon(true);
-				thread.setName(String.format("%s task executor",name));
-				thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-					public void uncaughtException(Thread t, Throwable e) {
-			            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-			            e.printStackTrace(new PrintWriter(stackTraceWriter));
-						logger.severe(stackTraceWriter.toString());
-					}
-				});
-				return thread;
-			}
-		});
+		return xs;
 	}
 	
 	public Task<Reference,USERID> addTask(String taskName, 
