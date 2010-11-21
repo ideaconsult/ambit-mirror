@@ -51,6 +51,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		this.name = name;
 		this.logger = logger;
 		int nthreads = (int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime));
+		nthreads = 1;
 		pool_internal = createExecutorService("internal",nthreads);
 		
 		//		(int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime))
