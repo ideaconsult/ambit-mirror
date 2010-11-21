@@ -46,13 +46,14 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 			CreateModel update = new CreateModel(model);
 			
 			x.setConnection(connection);
-			x.process(update);
+			Integer i = x.process(update);
 			
 			if ((model.getId()==null) || (model.getId()<0)) {
 				ReadModel q = new ReadModel();
 				q.setFieldname(model.getName());
 				QueryExecutor<ReadModel> exec = new QueryExecutor<ReadModel>();
 				exec.setConnection(connection);
+				exec.setCloseConnection(false);
 				java.sql.ResultSet rs = null;
 				try {
 					rs = exec.process(q);
@@ -63,7 +64,8 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
-					try {rs.close(); } catch (Exception xx) { }
+					try {rs.close(); rs = null;} catch (Exception xx) { }
+					try {exec.closeResults(null); exec = null;} catch (Exception xx) { }
 				}
 				
 			}

@@ -1,7 +1,13 @@
 package ambit2.db.reporters;
 
+import java.sql.ResultSet;
+import java.util.Iterator;
+
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.DbReader;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 
 public abstract class QueryProperyReporter<Q extends IQueryRetrieval<Property>,Output> extends QueryReporter<Property, Q, Output> {
@@ -22,5 +28,9 @@ public abstract class QueryProperyReporter<Q extends IQueryRetrieval<Property>,O
 	public void open() throws DbAmbitException {
 	}
 
-
+	protected AbstractBatchProcessor<IQueryRetrieval<Property>, Property> createBatch(Q query) {
+		DbReader<Property> reader = new DbReader<Property>();
+		reader.setHandlePrescreen(false);
+		return reader;
+	}
 }

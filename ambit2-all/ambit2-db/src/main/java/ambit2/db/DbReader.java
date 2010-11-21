@@ -186,17 +186,17 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 		super.afterProcessing(target,iterator);
 	}
 	
+	@Override
+	public void close() throws SQLException {
+		try { if (resultSet!=null) {resultSet.close(); resultSet=null; }} catch (Exception x) {}
+		super.close();
+	}
 	protected ResultSet getResultSet() {
 		return resultSet;
 	}
 	public void setResultSet(ResultSet resultSet) {
 		this.resultSet = resultSet;
 	}
-
-
-
-
-
 
 
 }

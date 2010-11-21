@@ -128,12 +128,14 @@ public class DBConnection {
 		Statement t = null;
 		for (int retry=0; retry< 3; retry++)
 		try {
+			//System.out.println("trying to getConnection "+Thread.currentThread().getName());
 			c = DatasourceFactory.getDataSource(connectionURI).getConnection();
+			//System.out.println("got the Connection! "+Thread.currentThread().getName());
 			t = c.createStatement();
 			rs = t.executeQuery("SELECT 1");
 			while (rs.next()) {rs.getInt(1);}
-			rs.close();
-			t.close();
+			rs.close(); rs = null;
+			t.close(); t = null;
 			error= null;
 			return c;
 		} catch (SQLException x) {
@@ -143,8 +145,8 @@ public class DBConnection {
 			//remove the connection from the pool
 			try {if (c != null) c.close();} catch (Exception e) {}
 		} finally {
-			try { rs.close();} catch (Exception x) {}
-			try { t.close();} catch (Exception x) {}
+			try { if (rs != null) rs.close();} catch (Exception x) {}
+			try { if (t!= null) t.close();} catch (Exception x) {}
 		}
 		if (error != null) throw error; else throw new SQLException("Can't establish connection "+connectionURI);
 	}
