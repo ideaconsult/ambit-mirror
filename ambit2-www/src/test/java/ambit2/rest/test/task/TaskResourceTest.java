@@ -302,19 +302,19 @@ public class TaskResourceTest extends ResourceTest {
 	public void testMultiplePOST() throws Exception {
 		Preferences.setProperty(Preferences.SMILESPARSER.toString(),SMILES_PARSER.CDK.toString());
 		//setUpDatabase("src/test/resources/src-datasets.xml");
-		/*
-		final Reference url = testAsyncTask(
-				String.format("http://localhost:%d/algorithm/toxtreeverhaar", port),
-				new Form(), Status.SUCCESS_OK,
-				String.format("http://localhost:%d/model/%s", port,"3"));		
-		*/
 		
-		final Reference url = new Reference(String.format("http://localhost:%d/algorithm/ambit2.descriptors.AtomTypeVerifierDescriptor", port));
+		final Reference url = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/pka", port),
+				new Form(), Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"2"));		
+		
+		
+		//final Reference url = new Reference(String.format("http://localhost:%d/algorithm/ambit2.descriptors.AtomTypeVerifierDescriptor", port));
 		
 		final RemoteTaskPool pool = new RemoteTaskPool();
 		ExecutorService xs= Executors.newCachedThreadPool();
-		Runnable[] t = new Runnable[10];
-		final int batch = 1000;
+		Runnable[] t = new Runnable[5];
+		final int batch = 500;
 		for (int j=0; j < t.length; j++) {
 
 			t[j] = new Runnable() {
