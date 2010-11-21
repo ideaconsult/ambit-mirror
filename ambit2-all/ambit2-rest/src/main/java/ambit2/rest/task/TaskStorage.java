@@ -34,7 +34,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	protected String name;
 	protected TimeUnit taskCleanupUnit = TimeUnit.MINUTES;
 	protected long taskCleanupRate = 120; //30 min
-	protected double cpuutilisation = 0.75;
+	protected double cpuutilisation = 0.5;
 	protected double waittime=1;
 	protected double cputime=1;
 	
@@ -50,9 +50,12 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	public TaskStorage(String name, Logger logger) {
 		this.name = name;
 		this.logger = logger;
-		pool_internal = createExecutorService(5);
-			//	(int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime)));
-		pool_external = createExecutorService(1);
+		int nthreads = (int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime));
+		pool_internal = createExecutorService("internal",nthreads);
+		
+		//		(int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime))
+			//	);
+		pool_external = createExecutorService("external",nthreads);
 
 		completionService_internal = new ExecutorCompletionService<Reference>(pool_internal);
 		completionService_external = new ExecutorCompletionService<Reference>(pool_external);
@@ -112,7 +115,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 			} catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
 		}
 	}	
-	protected ExecutorService createExecutorService(int maxThreads) {
+	protected ExecutorService createExecutorService(final String name, int maxThreads) {
 		ThreadFactory tf =
         new ThreadFactory() {
     			public Thread newThread(Runnable r) {
@@ -145,7 +148,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
         };
         
         //SynchronousQueue<Runnable> taskQueue = new SynchronousQueue<Runnable>(true);        
-        BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<Runnable>(6+100);
+        BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<Runnable>(1000);
        // BlockingQueue<Runnable> taskQueue = new ArrayBlockingQueue<Runnable>(5,true);
         
         ExecutorService xs =
