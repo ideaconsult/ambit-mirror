@@ -32,7 +32,6 @@ package ambit2.db;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -53,7 +52,7 @@ public class DatasourceFactory {
     protected static final String colon=":";
     protected static final String eqmark="=";
     protected static final String amark="&";
-    protected Map<String, DataSourceAndPool> datasources;
+    protected ConcurrentHashMap<String, DataSourceAndPool> datasources;
     private DatasourceFactory() {
         datasources = new ConcurrentHashMap<String, DataSourceAndPool>();
     }
@@ -61,16 +60,19 @@ public class DatasourceFactory {
         private final static DatasourceFactory instance = new DatasourceFactory();
       }
     
-    public static DatasourceFactory getInstance() {
+    public static synchronized DatasourceFactory getInstance() {
         return DatasourceFactoryHolder.instance;
     }
     
     public static synchronized DataSource getDataSource(String connectURI) throws AmbitException {
         if (connectURI == null) throw new AmbitException("Connection URI not specified!");
+        
         DataSourceAndPool ds = getInstance().datasources.get(connectURI);
         if (ds == null) {
         	ds = setupDataSource(connectURI);
-            getInstance().datasources.put(connectURI, ds);
+        	DataSourceAndPool oldds = getInstance().datasources.putIfAbsent(connectURI, ds);
+            if (oldds != null) ds = oldds;
+            
             
         }
         if (ds!= null) return ds.getDatasource();
@@ -192,8 +194,8 @@ public class DatasourceFactory {
 }
 
 class DataSourceAndPool {
-	protected PoolingDataSource datasource;
-	protected PoolableConnectionFactory poolableConnectionFactory;
+	protected volatile PoolingDataSource datasource;
+	protected volatile PoolableConnectionFactory poolableConnectionFactory;
 	public PoolingDataSource getDatasource() {
 		return datasource;
 	}
@@ -241,7 +243,7 @@ class DataSourceAndPool {
         Properties jdbcProperties = new Properties();
         
         jdbcProperties.setProperty("autoReconnectForPools", "true");
-        jdbcProperties.setProperty("testOnBorrow", "true");
+        jdbcProperties.setProperty("testOnBorrow", "false");
         jdbcProperties.setProperty("testWhileIdle", "false");
         jdbcProperties.setProperty("timeBetweenEvictionRunsMillis", "-1");
         jdbcProperties.setProperty("minEvictableIdleTimeMillis", "1000 * 60 * 30");
@@ -250,7 +252,7 @@ class DataSourceAndPool {
         jdbcProperties.setProperty("maxIdle", "100");
         jdbcProperties.setProperty("minIdle", "0");
         jdbcProperties.setProperty("maxWait", "1000");
-        jdbcProperties.setProperty("validationQuery", "/* ping */SELECT 1"); ///* ping */
+       //jdbcProperties.setProperty("validationQuery", "/* ping */SELECT 1"); ///* ping */
         
         jdbcProperties.setProperty("removeAbandoned", "false");
         jdbcProperties.setProperty("removeAbandonedTimeout", "300");

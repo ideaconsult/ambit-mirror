@@ -411,8 +411,18 @@ Then, when the "get(Variant)" method calls you back,
 			
 				DBConnection dbc = new DBConnection(getApplication().getContext());
 				conn = dbc.getConnection(getRequest());	
-				taskCreator.setConnection(conn);
-	    		List<UUID> r =  taskCreator.process(query);
+				
+				List<UUID> r = null;
+				try {
+					taskCreator.setConnection(conn);
+					r =  taskCreator.process(query);
+				} finally {
+					try {
+			    		taskCreator.setConnection(null);
+			    		taskCreator.close();
+					} catch (Exception x) {}
+		    		try { conn.close(); conn=null;} catch  (Exception x) {}
+				}
 				if ((r==null) || (r.size()==0)) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 				else {
 					ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
@@ -431,7 +441,7 @@ Then, when the "get(Variant)" method calls you back,
 			} catch (SQLException x) {
 				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 			} finally {
-				try { conn.close();} catch  (Exception x) {}
+				try { if (conn != null) conn.close(); } catch  (Exception x) {}
 			}
 		}
 	}
