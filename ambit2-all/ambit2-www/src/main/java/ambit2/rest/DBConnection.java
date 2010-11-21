@@ -128,9 +128,9 @@ public class DBConnection {
 		Statement t = null;
 		for (int retry=0; retry< 3; retry++)
 		try {
-			//System.out.println("trying to getConnection "+Thread.currentThread().getName());
+			System.out.println("trying to getConnection "+Thread.currentThread().getName());
 			c = DatasourceFactory.getDataSource(connectionURI).getConnection();
-			//System.out.println("got the Connection! "+Thread.currentThread().getName());
+			System.out.println("got the Connection! "+Thread.currentThread().getName());
 			t = c.createStatement();
 			rs = t.executeQuery("SELECT 1");
 			while (rs.next()) {rs.getInt(1);}
