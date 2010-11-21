@@ -29,7 +29,7 @@
 
 package ambit2.workflow.library;
 
-import ambit2.db.DatasourceFactory;
+import ambit2.db.pool.DatasourceFactory;
 import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.execution.Performer;

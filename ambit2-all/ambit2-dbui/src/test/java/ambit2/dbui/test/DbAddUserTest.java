@@ -36,8 +36,8 @@ import javax.sql.DataSource;
 import javax.swing.JOptionPane;
 
 import ambit2.base.data.AmbitUser;
-import ambit2.db.DatasourceFactory;
 import ambit2.db.LoginInfo;
+import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.processors.DbAddUser;
 import ambit2.db.processors.DbDeleteUser;
 import ambit2.dbui.LoginPanel;

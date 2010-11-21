@@ -27,7 +27,7 @@ package ambit2.dbui.test;
 import javax.sql.DataSource;
 
 import junit.framework.TestCase;
-import ambit2.db.DatasourceFactory;
+import ambit2.db.pool.DatasourceFactory;
 
 public abstract class RepositoryTest extends TestCase {
 	protected DataSource datasource;

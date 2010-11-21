@@ -42,8 +42,8 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.MyIteratingMDLReader;
-import ambit2.db.DatasourceFactory;
 import ambit2.db.RepositoryReader;
+import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.processors.test.DbUnitTest;
 
 /**
