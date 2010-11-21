@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
-import ambit2.db.DatasourceFactory;
 import ambit2.db.chart.FuncGroupsChartGenerator;
 import ambit2.db.chart.HistogramChartGenerator;
 import ambit2.db.chart.Nominal2SimilarityChartGenerator;
@@ -23,6 +22,7 @@ import ambit2.db.chart.Numeric2SimilarityChartGenerator;
 import ambit2.db.chart.PieChartGenerator;
 import ambit2.db.chart.PieChartGeneratorDataset;
 import ambit2.db.chart.PropertiesChartGenerator;
+import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StoredQuery;
 import ambit2.dbui.test.RepositoryTest;
