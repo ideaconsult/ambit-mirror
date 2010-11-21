@@ -239,7 +239,7 @@
   	<dependency>
   	<groupId>net.bull.javamelody</groupId>
   	<artifactId>javamelody-core</artifactId>
-  	<version>1.21.0</version>
+  	<version>1.22.0</version>
   	<scope>runtime</scope>
 	</dependency>
   	<dependency>
