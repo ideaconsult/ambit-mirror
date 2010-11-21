@@ -51,13 +51,17 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		this.name = name;
 		this.logger = logger;
 		int nthreads = (int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime));
-		nthreads = 1;
+		nthreads = 8;
 		pool_internal = createExecutorService("internal",nthreads);
 		
 		//		(int)Math.ceil(Runtime.getRuntime().availableProcessors()*cpuutilisation*(1+waittime/cputime))
 			//	);
 		pool_external = createExecutorService("external",nthreads);
 
+		/**
+		 * TODO for internal tasks
+		 * https://www.securecoding.cert.org/confluence/display/java/TPS01-J.+Do+not+execute+interdependent+tasks+in+a+bounded+thread+pool
+		 */
 		completionService_internal = new ExecutorCompletionService<Reference>(pool_internal);
 		completionService_external = new ExecutorCompletionService<Reference>(pool_external);
 
