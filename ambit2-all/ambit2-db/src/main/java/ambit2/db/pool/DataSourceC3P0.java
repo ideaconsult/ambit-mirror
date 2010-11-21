@@ -23,7 +23,7 @@ http://www.mchange.com/projects/c3p0/index.html#using_c3p0
 		cpds.setAcquireIncrement(5); 
 		cpds.setMaxPoolSize(20); 
     	 */
-
+     	datasource.setMaxPoolSize(512); 
       
 
 	}
