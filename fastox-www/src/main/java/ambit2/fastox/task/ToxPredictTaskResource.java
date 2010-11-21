@@ -2,6 +2,7 @@ package ambit2.fastox.task;
 
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -15,8 +16,9 @@ import ambit2.base.processors.Reporter;
 import ambit2.fastox.users.UserResource;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
+import ambit2.rest.TaskApplication;
 import ambit2.rest.task.FactoryTaskConvertor;
-import ambit2.rest.task.Task;
+import ambit2.rest.task.ITaskStorage;
 
 public class ToxPredictTaskResource<IToxPredictUser> extends SimpleTaskResource<IToxPredictUser> {
 
@@ -33,12 +35,14 @@ public class ToxPredictTaskResource<IToxPredictUser> extends SimpleTaskResource<
 	}	
 	
 	@Override
-	public synchronized IProcessor<Iterator<Task<Reference,IToxPredictUser>>, Representation> createConvertor(
+	public synchronized IProcessor<Iterator<UUID>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 
-		FactoryTaskConvertor<IToxPredictUser> tc = new FactoryTaskConvertor<IToxPredictUser>() {
+		ITaskStorage<IToxPredictUser> storage = ((TaskApplication)getApplication()).getTaskStorage();
+		
+		FactoryTaskConvertor<IToxPredictUser> tc = new FactoryTaskConvertor<IToxPredictUser>(storage) {
 			@Override
-			public synchronized Reporter<Iterator<Task<Reference, IToxPredictUser>>, Writer> createTaskReporterHTML(
+			public synchronized Reporter<Iterator<UUID>, Writer> createTaskReporterHTML(
 					Request request,ResourceDoc doc) throws AmbitException, ResourceException {
 				return new TaskHTMLReporter(getRequest(),doc);
 			}

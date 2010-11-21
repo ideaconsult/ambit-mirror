@@ -55,7 +55,7 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 		String status = "Unknown";
 		try {
 			t = item.getUri()==null?"":item.getUri().toString();
-			status = item.getStatus();
+			status = item.getStatus().toString();
 		} catch (Exception x) {
 			x.printStackTrace();
 			status = "Error";
@@ -64,7 +64,7 @@ public class TaskHTMLReporter<IToxPredictUser> extends CatalogURIReporter<Task<R
 			try {output.write(
 					String.format("<tr><td>%s</td><td>%s</td><td><a href='%s%s/%s'>%s</a></td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td><td>%s</td></tr>",
 							new Date(item.getStarted()),
-							item.getCompleted()>0?item.getCompleted()-item.getStarted():"",
+							item.getTimeCompleted()>0?item.getTimeCompleted()-item.getStarted():"",
 							baseReference.toString(),
 							SimpleTaskResource.resource,
 							item.getUuid(),
