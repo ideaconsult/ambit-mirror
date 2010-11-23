@@ -132,7 +132,7 @@ public class OpenSSOToken extends OpenToxToken {
 	public boolean authorize(String uri, String action) throws Exception {
 		if (token==null) throw new Exception(MSG_EMPTY_TOKEN,null);
 		Form form = new Form();		
-		form.add(OTAAParams.tokenid.toString(),token);
+		form.add(OTAAParams.subjectid.toString(),token);
 		form.add(OTAAParams.uri.toString(),uri);
 		form.add(OTAAParams.action.toString(),action);
 		
