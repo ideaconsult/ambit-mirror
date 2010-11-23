@@ -74,7 +74,7 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 		StringBuffer b = new StringBuffer();
 		b.append(uri.replace(":","").replace("/",""));
 		for (String method: methods) b.append(method);
-		return createUserPolicy(group,token, uri, methods,b.toString());
+		return createGroupPolicy(group,token, uri, methods,b.toString());
 	}
 	
 	@Override
