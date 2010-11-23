@@ -216,6 +216,16 @@ public class TestUtilities
 		System.out.println();
 	}
 	
+	//helper function
+	public String getBondMapping(IMolecule mol, Vector<IAtom> amap)
+	{
+		Vector<IBond> v = isoTester.generateBondMapping(mol,amap);
+		StringBuffer sb = new StringBuffer();		
+		for (int i = 0; i < v.size(); i++)		
+			sb.append(" "+mol.getBondNumber(v.get(i)));
+		return(sb.toString());
+	}
+	
 	public void testIsomorphismMapping(String smarts, String smiles)
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
@@ -238,6 +248,7 @@ public class TestUtilities
 			System.out.print("  " + n);
 		}
 		System.out.println();
+		System.out.println("Bond mapping: " + getBondMapping(mol,map));		
 	}
 	
 	public void testIsomorphismAllMappings(String smarts, String smiles)
@@ -264,7 +275,7 @@ public class TestUtilities
 				int n = mol.getAtomNumber(a);
 				System.out.print("  " + n);
 			}
-			System.out.println();
+			System.out.println("    bond mapping: " + getBondMapping(mol,map));
 		}
 	}
 	
@@ -1283,7 +1294,7 @@ public class TestUtilities
 		//tu.testIsomorphismMapping("C1CCC1", "CCCCNC1CCC1");
 		//tu.testIsomorphismMapping("CCN", "CCCCN");
 		
-		//tu.testIsomorphismAllMappings("CCN", "CCCCNCC");
+		tu.testIsomorphismAllMappings("CCN", "CCCCNCC");
 		//tu.testIsomorphismAllMappings("C1CCC1", "C1CCC1N");
 		//tu.testIsomorphismAllMappings("C1CCC1N", "C1CCC1N");
 		
@@ -1342,8 +1353,8 @@ public class TestUtilities
 		//tu.testRingInfo("C1CCC12CCCC2");
 		
 		
-		tu.testConvertKekuleSmartsToAromatic("C1CNC1CCCC2COCC23CCCC3");
-		tu.testConvertKekuleSmartsToAromatic("C2CNC1CCCC1CC2CCCC3C=C[C;++]=CC=C3");
+		//tu.testConvertKekuleSmartsToAromatic("C1CNC1CCCC2COCC23CCCC3");
+		//tu.testConvertKekuleSmartsToAromatic("C2CNC1CCCC1CC2CCCC3C=C[C;++]=CC=C3");
 	}
 	
 }
