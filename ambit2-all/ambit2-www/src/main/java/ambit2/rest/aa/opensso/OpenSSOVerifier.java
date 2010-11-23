@@ -4,6 +4,7 @@ import org.opentox.aa.OTAAParams;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.security.Verifier;
 
 /**
@@ -14,9 +15,16 @@ import org.restlet.security.Verifier;
  */
 public class OpenSSOVerifier implements Verifier {
 
+	public OpenSSOVerifier() {
+
+	}
 	public int verify(Request request, Response response) {
 		if (!OpenSSOServicesConfig.getInstance().isEnabled()) return Verifier.RESULT_VALID;
-		String token = request.getResourceRef().getQueryAsForm().getFirstValue(OTAAParams.subjectid.toString());
+		
+		Form headers = (Form) request.getAttributes().get("org.restlet.http.headers");  
+		if (headers==null) return Verifier.RESULT_MISSING;
+		
+		String token = headers.getFirstValue(OTAAParams.subjectid.toString());
 		if (token != null) {
 			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 			ssoToken.setToken(token);
@@ -24,7 +32,7 @@ public class OpenSSOVerifier implements Verifier {
 				return ssoToken.isTokenValid()?Verifier.RESULT_VALID:Verifier.RESULT_INVALID;
 			} catch (Exception x) {
 				x.printStackTrace(); //TODO
-				return Verifier.RESULT_MISSING;
+				return  Verifier.RESULT_MISSING;
 			}
 		} else return Verifier.RESULT_MISSING;
 

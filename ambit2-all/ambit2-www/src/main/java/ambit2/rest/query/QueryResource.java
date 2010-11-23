@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
+import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.CharacterSet;
@@ -405,7 +406,8 @@ Then, when the "get(Variant)" method calls you back,
 							return ((TaskApplication)getApplication()).addTask(
 								String.format("Apply %s %s %s",item.toString(),reference==null?"":"to",reference==null?"":reference),									
 								callable,
-								getRequest().getRootRef());		
+								getRequest().getRootRef(),
+								getUserToken(OTAAParams.subjectid.toString()));		
 						}
 				};
 			

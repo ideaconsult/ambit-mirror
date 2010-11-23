@@ -2,6 +2,7 @@ package ambit2.rest.structure;
 
 import java.awt.Dimension;
 
+import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -496,14 +497,19 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			
 			upload.setDataset(new SourceDataset(uri,LiteratureEntry.getInstance(name,source)));
 			
-			return  upload.upload(new StringRepresentation(sdf,ChemicalMediaType.CHEMICAL_MDLSDF),variant,true,false);
+			return  upload.upload(new StringRepresentation(sdf,ChemicalMediaType.CHEMICAL_MDLSDF),
+					variant,true,false,
+					getUserToken(OTAAParams.subjectid.toString())
+					);
 			
 			//return copyDatasetToQueryResultsTable(new Form(entity),true);
 			//throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,entity.getMediaType().toString());
 		} else {
 			if(upload == null) upload = createFileUpload();
 			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", getRequest().getResourceRef().toString())));
-			return  upload.upload(entity,variant,true,false);
+			return  upload.upload(entity,variant,true,false,
+					getUserToken(OTAAParams.subjectid.toString())
+					);
 		}
 	}
 	

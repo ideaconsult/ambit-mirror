@@ -15,7 +15,11 @@ public class TaskApplication<USERID> extends Application {
 	protected ITaskStorage<USERID> taskStorage;
 	public TaskApplication() {
 		super();
-		taskStorage = new TaskStorage<USERID>(getName(),getLogger());
+		taskStorage = createTaskStorage();
+	}
+	
+	protected TaskStorage<USERID> createTaskStorage() {
+		return new TaskStorage<USERID>(getName(),getLogger());
 	}
 	
 	public ITaskStorage<USERID> getTaskStorage() {
@@ -49,14 +53,15 @@ public class TaskApplication<USERID> extends Application {
 
 	public synchronized Task<Reference,USERID> addTask(String taskName, 
 			CallableTask callable, 
-			Reference baseReference) {
-		return addTask(taskName,callable,baseReference,!(callable instanceof CallablePOST));
+			Reference baseReference,
+			USERID user) {
+		return addTask(taskName,callable,baseReference,!(callable instanceof CallablePOST), user);
 	}
 	
 	public synchronized Task<Reference,USERID> addTask(String taskName, 
 			CallableTask callable, 
-			Reference baseReference,boolean internal) {
-		return taskStorage.addTask(taskName,callable,baseReference,(USERID) "guest",internal);
+			Reference baseReference,boolean internal, USERID user) {
+		return taskStorage.addTask(taskName,callable,baseReference,user,internal);
 	}
 	public synchronized Task<Reference,USERID> findTask(String id) {
 		return taskStorage.findTask(id);

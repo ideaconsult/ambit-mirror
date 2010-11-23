@@ -188,5 +188,15 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
         info.getResponse().getFaults().add(faultInfo);
 
 	}
+	
+	protected String getUserToken(String tag) {
+		try {
+			Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+			if (headers==null) return null;
+			return headers.getFirstValue(tag);
+		} catch (Exception x) {
+			return null;
+		}
+	}
 
 }
