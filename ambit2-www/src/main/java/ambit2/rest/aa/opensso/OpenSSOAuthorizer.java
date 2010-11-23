@@ -19,7 +19,7 @@ public class OpenSSOAuthorizer extends Authorizer {
 		
 		String token = headers.getFirstValue(OTAAParams.subjectid.toString());
 		if (token != null) {
-			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getPolicyService());
+			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 			ssoToken.setToken(token);
 			try {
 				Reference ref = request.getResourceRef().clone();
