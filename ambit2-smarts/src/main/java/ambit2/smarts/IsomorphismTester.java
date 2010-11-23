@@ -327,6 +327,25 @@ public class IsomorphismTester
 			return (null);
 	}
 	
+	public Vector<IBond> generateBondMapping(IAtomContainer container, Vector<IAtom> atomMapping)
+	{
+		if (query == null) 
+			return null;
+		
+		Vector<IBond> v  = new Vector<IBond>();
+		for (int i = 0; i < query.getBondCount(); i++)
+		{
+			IAtom qa0 = query.getBond(i).getAtom(0);
+			IAtom qa1 = query.getBond(i).getAtom(1);
+			IAtom a0 = atomMapping.get(query.getAtomNumber(qa0));
+			IAtom a1 = atomMapping.get(query.getAtomNumber(qa1));
+			
+			v.add(container.getBond(a0,a1));
+		}
+		
+		return (v);
+	}
+	
 	
 	/**
 	 * If no isomorphism is found the result is empty vector
