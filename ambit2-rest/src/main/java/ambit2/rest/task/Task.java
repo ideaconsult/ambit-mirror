@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.restlet.resource.ResourceException;
 
 public class Task<Reference,USERID> implements Serializable /*, PropertyChangeListener */ {
+	
 	public enum TaskProperty {
 		PROPERTY_NAME {
 			@Override
@@ -37,6 +38,7 @@ public class Task<Reference,USERID> implements Serializable /*, PropertyChangeLi
 	protected long started = System.currentTimeMillis();
 	protected long completed = -1;
 	protected boolean internal = true;
+	
 	public boolean isInternal() {
 		return internal;
 	}
@@ -53,6 +55,14 @@ public class Task<Reference,USERID> implements Serializable /*, PropertyChangeLi
 	protected USERID userid;
 	protected UUID uuid = UUID.randomUUID();
 	protected ResourceException error = null;
+	protected Exception policyError = null;
+	
+	public Exception getPolicyError() {
+		return policyError;
+	}
+	public void setPolicyError(Exception policyError) {
+		this.policyError = policyError;
+	}
 	public void setError(ResourceException error) {
 		this.error = error;
 	}
@@ -147,5 +157,11 @@ public class Task<Reference,USERID> implements Serializable /*, PropertyChangeLi
 	 */
 	public synchronized void update()  {
 
+	}
+	/**
+	 * Does nothing so far, but should register the result URI to the policy server
+	 */
+	public void setPolicy() throws Exception {
+		
 	}
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -247,7 +248,9 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			return copyDatasetToQueryResultsTable(new Form(entity),true);
 		} else {
 			upload.setDataset(null);
-			return  upload.upload(entity,variant,true,false);
+			return  upload.upload(entity,variant,true,false,
+					getUserToken(OTAAParams.subjectid.toString())
+					);
 		}
 	}
 	protected SourceDataset readDataset() throws ResourceException {
@@ -285,7 +288,9 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		} else if ((datasetID!=null) && (datasetID>0)) {
 			SourceDataset dataset = readDataset();
  			upload.setDataset(dataset);
-			return  upload.upload(entity,variant,true,false);
+			return  upload.upload(entity,variant,true,false,
+					getUserToken(OTAAParams.subjectid.toString())
+					);
 		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 

@@ -87,7 +87,8 @@ public class LauncherResource extends ServerResource {
 			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 					getRequest().getRootRef().toString(),
 					createCallable(form),
-					getRequest().getRootRef(),false);		
+					getRequest().getRootRef(),false, 
+					getUserToken("subjectid"));		
 			task.update();
 			//System.out.println(task);
 			setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
@@ -122,4 +123,13 @@ public class LauncherResource extends ServerResource {
 
 			
 	}	
+	protected String getUserToken(String tag) {
+		try {
+			Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+			if (headers==null) return null;
+			return headers.getFirstValue(tag);
+		} catch (Exception x) {
+			return null;
+		}
+	}
 }

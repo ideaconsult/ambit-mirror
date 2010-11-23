@@ -1,5 +1,6 @@
 package ambit2.rest.dataset;
 
+import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -169,7 +170,9 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
-		return  upload.upload(entity,variant,true,false);
+		return  upload.upload(entity,variant,true,false,
+				getUserToken(OTAAParams.subjectid.toString())
+				);
 		
 	}
 	/**
@@ -178,7 +181,9 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected Representation put(Representation entity, Variant variant)
 			throws ResourceException {
-		return  upload.upload(entity,variant,true,true);
+		return  upload.upload(entity,variant,true,true,
+				getUserToken(OTAAParams.subjectid.toString())
+				);
 	}
 
 

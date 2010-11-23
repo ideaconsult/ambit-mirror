@@ -190,12 +190,16 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		return xs;
 	}
 	
+	protected Task<Reference,USERID> createTask(USERID user) {
+		return new Task<Reference,USERID>(user);
+	}
 	public Task<Reference,USERID> addTask(String taskName, 
 			CallableTask callable, 
 			Reference baseReference,
 			USERID user,boolean internal) {
 		if (callable == null) return null;
-		Task<Reference,USERID> task = new Task<Reference,USERID>(user);
+		
+		Task<Reference,USERID> task = createTask(user);
 		task.setName(taskName);
 		task.setInternal(internal);
 		callable.setUuid(task.getUuid());

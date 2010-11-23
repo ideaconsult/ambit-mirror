@@ -93,7 +93,7 @@ public class TaskResourceTest extends ResourceTest {
 			}
 		};
 		((AmbitApplication) app).addTask("Test task", c, new Reference(String
-				.format("http://localhost:%d", port)));
+				.format("http://localhost:%d", port)),getUserToken());
 
 		testGet(getTestURI(), MediaType.APPLICATION_RDF_XML);
 
@@ -116,7 +116,7 @@ public class TaskResourceTest extends ResourceTest {
 			}
 		};
 		((AmbitApplication) app).addTask("Test task", c, new Reference(String
-				.format("http://localhost:%d", port)));
+				.format("http://localhost:%d", port)),getUserToken());
 
 		testGet(getTestURI(), MediaType.TEXT_URI_LIST);
 
@@ -302,19 +302,19 @@ public class TaskResourceTest extends ResourceTest {
 	public void testMultiplePOST() throws Exception {
 		Preferences.setProperty(Preferences.SMILESPARSER.toString(),SMILES_PARSER.CDK.toString());
 		//setUpDatabase("src/test/resources/src-datasets.xml");
-		
+		/*
 		final Reference url = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/pka", port),
 				new Form(), Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"2"));		
+		*/
 		
-		
-		//final Reference url = new Reference(String.format("http://localhost:%d/algorithm/ambit2.descriptors.AtomTypeVerifierDescriptor", port));
+		final Reference url = new Reference(String.format("http://localhost:%d/algorithm/ambit2.descriptors.InChI", port));
 		
 		final RemoteTaskPool pool = new RemoteTaskPool();
 		ExecutorService xs= Executors.newCachedThreadPool();
 		Runnable[] t = new Runnable[5];
-		final int batch = 500;
+		final int batch = 2000;
 		for (int j=0; j < t.length; j++) {
 
 			t[j] = new Runnable() {

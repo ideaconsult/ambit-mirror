@@ -45,7 +45,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 						baseReference,SimpleTaskResource.resource,status,AbstractResource.max_hits,max,status));
 			output.write("</h4><p>");
 			output.write("<table>");
-			output.write("<tr><th>Start time</th><th>Elapsed time,ms</th><th>Task</th><th>Name</th><th colspan='2'>Status</th></tr>");
+			output.write("<tr><th>Start time</th><th>Elapsed time,ms</th><th>Task</th><th>Name</th><th colspan='2'>Status</th><th></th></tr>");
 		} catch (Exception x) {
 			
 		}
@@ -64,7 +64,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 			t = x.getMessage();
 		} finally {
 			try {output.write(
-					String.format("<tr><td>%s</td><td>%s</td><td><a href='%s%s/%s'>%s</a></td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td><td>%s</td></tr>",
+					String.format("<tr><td>%s</td><td>%s</td><td><a href='%s%s/%s'>%s</a></td><td><a href='%s'>%s</a></td><td><img src=\"%s/images/%s\"></td><td>%s</td><td>%s</td><td>%s</td></tr>",
 							new Date(item.started),
 							item.completed>0?item.completed-item.started:"",
 							baseReference.toString(),
@@ -75,7 +75,8 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 							baseReference.toString(),
 							item.isDone()?"tick.png":"24x24_ambit.gif",
 							status,
-							item.getError()==null?"":item.getError().getMessage()
+							item.getError()==null?"":item.getError().getMessage(),
+							item.getPolicyError()==null?"":item.getPolicyError().getMessage()		
 							)); } catch (Exception x) {
 				x.printStackTrace();
 			}

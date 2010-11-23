@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
+import org.opentox.aa.OTAAParams;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -129,11 +130,12 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				T model = query.next();
 				Reference reference = getSourceReference(form,model);
 				CallableTask callable= createCallable(form,model);
-				Task<Reference,Object> task =  ((AmbitApplication)getApplication()).addTask(
+				Task<Reference,String> task =  ((AmbitApplication)getApplication()).addTask(
 						String.format("Apply %s %s %s",model.toString(),reference==null?"":"to",reference==null?"":reference),
 						callable,
 						getRequest().getRootRef(),
-						callable instanceof CallablePOST
+						callable instanceof CallablePOST, 
+						getUserToken(OTAAParams.subjectid.toString())
 						);	
 				task.update();
 				setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);

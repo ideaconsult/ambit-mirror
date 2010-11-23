@@ -363,4 +363,8 @@ public abstract class ResourceTest extends DbUnitTest {
 	protected Document createDOM(Reader reader) throws Exception {
         return createDOM(new InputSource(reader));
 	}
+	
+	protected String getUserToken() {
+		return null;
+	}
 }

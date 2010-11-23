@@ -39,7 +39,13 @@ public class ExecutableTask<USERID> extends FutureTask<Reference> {
 			task.setTimeCompleted(System.currentTimeMillis());
 			task.setStatus(TaskStatus.Completed);
 			task.setUri(ref);
-
+			
+			try {
+				task.setPolicy();
+			} catch (Exception x) {
+				task.setPolicyError(x);
+			}
+			
 		} catch (TimeoutException x) {
 		} catch (ExecutionException x) {
 			task.setStatus(TaskStatus.Error);

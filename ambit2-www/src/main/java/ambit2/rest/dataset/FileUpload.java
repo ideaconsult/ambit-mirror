@@ -34,7 +34,7 @@ import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 
-public class FileUpload {
+public class FileUpload<USERID> {
 	protected Request request;
 	protected Application application;
 	protected SourceDataset dataset;
@@ -113,7 +113,12 @@ public class FileUpload {
 	
 	
 	
-	public Representation upload(Representation entity, Variant variant,boolean newEntry, boolean propertyOnly)
+	public Representation upload(Representation entity, 
+			Variant variant,
+			boolean newEntry, 
+			boolean propertyOnly,
+			USERID token
+			)
 				throws ResourceException {	
 
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
@@ -150,7 +155,8 @@ public class FileUpload {
 				  Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 							 "File import",
 							callable,
-							getRequest().getRootRef());
+							getRequest().getRootRef(),
+							token);
 							
 				  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
 				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
@@ -182,11 +188,12 @@ public class FileUpload {
 			        		  firstCompoundOnly);
 			          
 		              callable.setPropertyOnly(propertyOnly);
-			          Task<Reference,Object> task =  ((AmbitApplication)getApplication()).addTask(
+			          Task<Reference,String> task =  ((AmbitApplication)getApplication()).addTask(
 							  
 							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
 								callable,
-								getRequest().getRootRef());		
+								getRequest().getRootRef(),
+								token.toString());		
 			          ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
 			          FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 					  task.update();
