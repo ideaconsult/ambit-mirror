@@ -68,25 +68,38 @@ public class TautomerManager
 	{
 		for (int i = 0; i < ruleInstances.size(); i++)
 			ruleInstances.get(i).firstState();
-		
-		registerTautomer();
-		
+						
 		int n;
-		int instNumber = 0; 
-		while (instNumber < ruleInstances.size())
-		{
+		int instNumber; 
+		
+		do 	{
+			registerTautomer();
+			
 			n = ruleInstances.get(0).nextState();
 			instNumber = 0;
+			
 			while(n == 0)
 			{
-				//TODO
+				instNumber++;
+				if (instNumber == ruleInstances.size())
+					break;
+				n = ruleInstances.get(instNumber).nextState();
 			}
-		}
+		} while (instNumber < ruleInstances.size()); 
 	}
 	
 	void registerTautomer()
+	{	
+		System.out.println("  tautomer: " + getTautomerCombination());
+	}
+	
+	
+	String getTautomerCombination()
 	{
-		
+		StringBuffer sb = new StringBuffer();
+		for (int i = ruleInstances.size()-1; i >= 0; i--)
+			sb.append(""+ruleInstances.get(i).getCurrentState() + " ");
+		return (sb.toString());
 	}
 	
 }

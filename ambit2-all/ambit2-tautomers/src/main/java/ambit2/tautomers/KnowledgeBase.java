@@ -38,7 +38,7 @@ public class KnowledgeBase
 		else
 		{
 			rules.add(rule);
-			System.out.println(rule.toString());
+			//System.out.println(rule.toString());
 		}
 	}
 	

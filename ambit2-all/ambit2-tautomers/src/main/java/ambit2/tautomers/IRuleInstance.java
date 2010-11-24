@@ -5,5 +5,6 @@ public interface IRuleInstance
 	public int firstState();
 	public int nextState();	
 	public int getNumberOfStates();
+	public int getCurrentState();
 	
 }

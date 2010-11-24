@@ -76,7 +76,7 @@ public class Rule
 		if (mobileGroup.equals("H"))
 		{
 			int pos = mobileGroupPos[curState];
-			IAtom atom = amap.get(pos);
+			IAtom atom = amap.get(pos-1);  //position in the rule is 1-base indexed
 			
 			//Check for implicit hydrogens
 			if (atom.getImplicitHydrogenCount().intValue() > 0)
