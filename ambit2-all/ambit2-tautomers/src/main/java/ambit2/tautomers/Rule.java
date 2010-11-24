@@ -5,6 +5,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 
 import java.util.Vector;
+import java.util.List;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 import ambit2.smarts.SmartsParser;
@@ -45,18 +46,53 @@ public class Rule
 			Vector<Vector<IAtom>> maps = isoTester.getAllIsomorphismMappings(mol);		
 			for (int k = 0; k < maps.size(); k++)
 			{
-				//TODO check for the mobile group
-				//..
+				Vector<IAtom> amap = maps.get(k);
+				int mobCheck = checkMobileGroup(i, amap, mol); 
+				if (mobCheck == -1)
+					continue;
+				
 				RuleInstance rinst = new RuleInstance();
-				rinst.atoms = maps.get(k);
-				rinst.getBondMappings();
+				if (mobCheck == TautomerConst.IHA_INDEX)
+					rinst.FlagImplicitH = true;
+				else
+				{	
+					rinst.FlagImplicitH = false;
+					rinst.explicitH = mol.getAtom(mobCheck);
+				}	
+				
+				rinst.atoms = amap;
+				rinst.bonds = isoTester.generateBondMapping(mol, amap);
 				rinst.foundState = i;
+				rinst.curState = i;
 				rinst.rule = this;
 				instances.add(rinst);
 			}
 		}
 		return instances;
 	}
+	
+	int checkMobileGroup(int curState, Vector<IAtom> amap, IAtomContainer mol)
+	{
+		if (mobileGroup.equals("H"))
+		{
+			int pos = mobileGroupPos[curState];
+			IAtom atom = amap.get(pos);
+			
+			//Check for implicit hydrogens
+			if (atom.getImplicitHydrogenCount().intValue() > 0)
+				return (TautomerConst.IHA_INDEX);
+			
+			//Check for explicit hydrogens
+			List<IAtom> conAtoms = mol.getConnectedAtomsList(atom);
+			for (int i = 0; i < conAtoms.size(); i++)
+			{
+				if (conAtoms.get(i).getSymbol().equals("H"))
+					return(mol.getAtomNumber(conAtoms.get(i)));
+			}
+		}
+		return -1;
+	}
+	
 	
 	public String toString()
 	{
