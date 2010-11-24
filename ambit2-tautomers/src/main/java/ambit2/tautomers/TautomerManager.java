@@ -8,7 +8,9 @@ public class TautomerManager
 	KnowledgeBase knowledgeBase; 
 	IAtomContainer molecule;
 	Vector<IRuleInstance> extendedRuleInstances = new Vector<IRuleInstance>(); 
-	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>(); 
+	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
+	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();
+	
 	
 	
 	TautomerManager()
@@ -32,16 +34,16 @@ public class TautomerManager
 		searchAllRulePositions();
 		handleOverlapedInstances();
 		
-		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		resultTautomers.clear();
 		if (ruleInstances.isEmpty())
 		{	
-			v.add(molecule);
-			return(v);
+			resultTautomers.add(molecule);
+			return(resultTautomers);
 		}	
 		
 		generateRuleCombinations();
 		
-		return(v);
+		return(resultTautomers);
 	}
 	
 	void searchAllRulePositions()
@@ -67,7 +69,23 @@ public class TautomerManager
 		for (int i = 0; i < ruleInstances.size(); i++)
 			ruleInstances.get(i).firstState();
 		
-		//TODO
+		registerTautomer();
+		
+		int n;
+		int instNumber = 0; 
+		while (instNumber < ruleInstances.size())
+		{
+			n = ruleInstances.get(0).nextState();
+			instNumber = 0;
+			while(n == 0)
+			{
+				//TODO
+			}
+		}
+	}
+	
+	void registerTautomer()
+	{
 		
 	}
 	

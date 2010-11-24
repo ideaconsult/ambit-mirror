@@ -16,5 +16,7 @@ public class TautomerConst
 	public static final int HRM_Explicit = 1;
 	public static final int HRM_Undefined = 2;
 	
+	public static final int IHA_INDEX = 1000000;
+	
 	
 }
