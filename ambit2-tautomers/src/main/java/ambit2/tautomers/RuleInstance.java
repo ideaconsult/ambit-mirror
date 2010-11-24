@@ -34,6 +34,11 @@ public class RuleInstance implements IRuleInstance
 		return(nextState);
 	}
 	
+	public int getCurrentState()
+	{
+		return(curState);
+	}
+	
 	int gotoState(int state)
 	{
 		if (curState == state)
