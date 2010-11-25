@@ -193,7 +193,7 @@ public class FileUpload<USERID> {
 							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
 								callable,
 								getRequest().getRootRef(),
-								token.toString());		
+								token==null?null:token.toString());		
 			          ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
 			          FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 					  task.update();
