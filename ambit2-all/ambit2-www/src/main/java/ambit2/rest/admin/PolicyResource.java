@@ -34,6 +34,7 @@ public class PolicyResource extends CatalogResource<String>{
 	protected OpenSSOToken ssoToken;
 	protected boolean logout = false;
 	protected List<String> topics = new ArrayList<String>();
+	
 
 	public PolicyResource() {
 		super();
@@ -140,10 +141,11 @@ public class PolicyResource extends CatalogResource<String>{
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
 			}			
 			
+			if (deleteOld)
 			try { policy.deletePolicy(ssoToken,policyid.toString()); } catch (Exception x) {
 				b.append(x);
 			}
-			
+		} catch (ResourceException x) {	
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
 		} finally {
