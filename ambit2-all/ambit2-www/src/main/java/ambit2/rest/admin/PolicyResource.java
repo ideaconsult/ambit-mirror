@@ -1,6 +1,8 @@
 package ambit2.rest.admin;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -117,6 +119,17 @@ public class PolicyResource extends CatalogResource<String>{
 				OpenToxUser u = new OpenToxUser();
 				policy.getURIOwner(ssoToken, uri, u);
 				b.append(String.format("URI owner=%s\n",u.getUsername()));
+/*
+				Hashtable<String, String> policies = new Hashtable<String, String>();
+				policy.listPolicies(ssoToken, policies);
+				Enumeration<String> keys = policies.keys();
+				while (keys.hasMoreElements()) {
+					String key = keys.nextElement();
+					policy.listPolicy(ssoToken, key, policies);
+				}
+				
+				b.append(policies.toString());
+*/
 			} catch (Exception x) {
 				b.append(x);
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
@@ -145,7 +158,8 @@ public class PolicyResource extends CatalogResource<String>{
 			try { policy.deletePolicy(ssoToken,policyid.toString()); } catch (Exception x) {
 				b.append(x);
 			}
-		} catch (ResourceException x) {	
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
 		} finally {
