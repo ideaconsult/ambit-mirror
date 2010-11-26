@@ -63,6 +63,7 @@ public class PolicyResource extends CatalogResource<String>{
 		password = getUserToken("password");
 		methods = form.getValuesArray("method");
 		uri = form.getFirstValue("uri");		
+		if (uri==null) uri = String.format("%s/%s",getRequest().getRootRef(),UUID.randomUUID());
 		if (user ==null) user = form.getFirstValue("user");
 		if (password ==null) password = form.getFirstValue("password");
 	}
