@@ -1,6 +1,5 @@
 package ambit2.descriptors.pairwise;
 
-import java.lang.ref.Reference;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -29,6 +28,8 @@ public class SMSDProcessor extends MoleculePairProcessor {
 	public SMSDProcessor(LiteratureEntry prediction) {
 		super();
 		this.prediction = prediction;
+		smigen.setUseAromaticityFlag(true);
+
 	}
 	@Override
 	public IStructureRecord[] process(IStructureRecord[] target,
@@ -46,8 +47,8 @@ public class SMSDProcessor extends MoleculePairProcessor {
 	        comparison.init(molecules[0],molecules[1], removeHydrogen,true);
 	        comparison.setChemFilters(stereoMatch, fragmentMinimization, energyMinimization);
 	        
-	        IAtomContainer Query = comparison.getReactantMolecule();
-	        IAtomContainer Target = comparison.getProductMolecule();
+	        //IAtomContainer Query = comparison.getReactantMolecule();
+	        //IAtomContainer Target = comparison.getProductMolecule();
 	
 	        //comparison.getTanimotoSimilarity();
 	        
