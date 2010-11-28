@@ -22,7 +22,6 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	 * 
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
-	protected PropertyURIReporter templateReporter ;
 	//only necessary if applying the model
 	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
 	
@@ -34,7 +33,6 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	}
 	public ModelHTMLReporter(Request request,Request originalRef,boolean collapsed,ResourceDoc doc) {
 		super(request,collapsed,doc);
-		templateReporter = new PropertyURIReporter(request,doc);
 		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,doc,collapsed);
 	}
 	@Override
@@ -103,27 +101,21 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 						));
 			
 			output.write(String.format(
-					"<td><img src=\"%s/images/feature.png\" alt=\"Features\" title=\"Browse features\" border=\"0\"/>&nbsp;<a href=\"%s%s/All/%s\">%s</a></td>",
+					"<td><img src=\"%s/images/feature.png\" alt=\"Features\" title=\"Browse features\" border=\"0\"/>&nbsp;<a href=\"%s/independent\">%s</a></td>",
 					uriReporter.getBaseReference(),
-					uriReporter.getBaseReference(),
-					OntologyResource.resource,
-					model.getPredictors()==null?"":Reference.encode(model.getPredictors().getName()),
+					uriReporter.getURI(model),
 					"Independent variables"	
 			));						
 			output.write(String.format(
-					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Dependent variable(s)\" title=\"Dependent variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s%s/All/%s\">%s</a></td>",
+					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Dependent variable(s)\" title=\"Dependent variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s/dependent\">%s</a></td>",
 					uriReporter.getBaseReference(),
-					uriReporter.getBaseReference(),
-					OntologyResource.resource,
-					model.getDependent()==null?"":Reference.encode(model.getDependent().getName()),
+					uriReporter.getURI(model),
 					"Dependent"		
 			));				
 			output.write(String.format(
-					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Predicted variable(s)\" title=\"Predicted variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s%s/All/%s\">%s</a></td>",
+					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Predicted variable(s)\" title=\"Predicted variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s/predicted\">%s</a></td>",
 					uriReporter.getBaseReference(),
-					uriReporter.getBaseReference(),
-					OntologyResource.resource,
-					model.getPredicted()==null?"":Reference.encode(model.getPredicted().getName()),
+					uriReporter.getURI(model),
 					"Predicted"		
 			));	
 		
