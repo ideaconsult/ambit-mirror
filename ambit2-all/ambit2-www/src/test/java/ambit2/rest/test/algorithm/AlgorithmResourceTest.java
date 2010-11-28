@@ -71,7 +71,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 80;
+		return count == 81;
 	}	
 	
 	@Test
@@ -363,6 +363,33 @@ public class AlgorithmResourceTest extends ResourceTest {
 			
 		}
 	}
+	
+	@Test
+	public void testSMSD() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/mcss", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		//prediction
+		/*
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+		*/
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from properties where name='CC'");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * from properties join property_values using(idproperty) join catalog_references using(idreference) where name='CC' and type='Model'");
+		Assert.assertEquals(2,table.getRowCount());
+		c.close();
+		
+	}		
 	@Test
 	public void testClassifier() throws Exception {
 			Form headers = new Form();  
@@ -526,6 +553,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Property 2'");
 		Assert.assertEquals(7,table.getRowCount());
    }		
+	
+
 
 	@Test
 	public void testClustering() throws Exception {
@@ -817,6 +846,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
 	}	
+	
+
 	
 	@Test
 	public void testBiodegModel() throws Exception {

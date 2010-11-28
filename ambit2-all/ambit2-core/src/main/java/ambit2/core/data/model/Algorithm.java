@@ -39,6 +39,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeSuperService = "http://www.opentox.org/algorithmTypes.owl#SuperService";
 	public static String typeStructure = "http://www.opentox.org/algorithmTypes.owl#Structure";
 	
+	public static String typeSMSD = "http://www.opentox.org/algorithmTypes.owl#SMSD";
 	
 	public enum AlgorithmFormat {
 		JAVA_CLASS {
@@ -65,6 +66,12 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 				return "mopac/java";
 			}
 		},		
+		WWW_FORM {
+			@Override
+			public String getMediaType() {
+				return "application/x-www-form-urlencoded";
+			}
+		},			
 		COVERAGE_SERIALIZED {
 			@Override
 			public String getMediaType() {
@@ -116,7 +123,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public boolean isRequiresDataset() {
 		return hasType(typeClustering) || hasType(typeClassification) || hasType(typeRegression) || 
 		hasType(typeLearning) || hasType(typeLazyLearning) || hasType(typeEagerLearning) ||
-		hasType(typeDescriptor) || hasType(typeAppDomain) || hasType(typeMockup) ;
+		hasType(typeDescriptor) || hasType(typeAppDomain) || hasType(typeMockup) || hasType(typeSMSD) ;
 	}
 	public boolean isDataProcessing() {
 		return hasType(typeDescriptor) || hasType(typeFingerprints) || hasType(typeMockup);

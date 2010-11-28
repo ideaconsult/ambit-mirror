@@ -30,6 +30,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.model.builder.SMSDModelBuilder;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.task.CallableDescriptorCalculator;
@@ -38,6 +39,7 @@ import ambit2.rest.task.CallableMockup;
 import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
+import ambit2.rest.task.CallableStructurePairsModelCreator;
 import ambit2.rest.task.CallableTask;
 import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.OptimizerModelBuilder;
@@ -214,6 +216,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"struckeys","Generate structure keys","sk1024",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
 			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {Algorithm.typeFingerprints},null,Algorithm.requires.structure},
 			
+			{"mcss","Find maximum common substructures of a dataset","mcss",null,new String[] {Algorithm.typeSMSD},null,Algorithm.requires.structure},
+			
 			{"superservice","Calls a remote service",null,null,new String[] {Algorithm.typeSuperService},null,null},
 			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {Algorithm.typeMockup},null,null}
 			
@@ -233,9 +237,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 				alg.setType((String[])d[4]);
 				alg.setFormat(
+						alg.hasType(Algorithm.typeSMSD)?AlgorithmFormat.WWW_FORM:
 						alg.hasType(Algorithm.typeStructure)?AlgorithmFormat.MOPAC:
 						alg.hasType(Algorithm.typeRules)||alg.hasType(Algorithm.typeFingerprints)?AlgorithmFormat.JAVA_CLASS:
-						alg.hasType(Algorithm.typeAppDomain)?AlgorithmFormat.COVERAGE_SERIALIZED:AlgorithmFormat.WEKA);
+						alg.hasType(Algorithm.typeAppDomain)?AlgorithmFormat.COVERAGE_SERIALIZED:
+						AlgorithmFormat.WEKA);
 				alg.setId(d[0].toString());
 				alg.setName(d[1].toString());
 				alg.setContent(d[2]==null?null:d[2].toString());
@@ -356,7 +362,24 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			throws ResourceException {
 				
 		try {
-			if (algorithm.hasType(Algorithm.typeSuperService))  {
+			if (algorithm.hasType(Algorithm.typeSMSD))  {
+				if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
+					form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
+				ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation());
+				AlgorithmURIReporter algReporter = new AlgorithmURIReporter(getRequest(),getDocumentation());
+				return new CallableStructurePairsModelCreator(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						algorithm,
+						modelReporter,
+						algReporter,
+						new SMSDModelBuilder(getRequest().getRootRef(),
+								modelReporter,
+								algReporter)
+						);
+				
+			} else if (algorithm.hasType(Algorithm.typeSuperService))  {
 				if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
 					form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
 				return new CallablePOST(form,getRequest().getRootRef());			
