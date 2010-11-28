@@ -28,6 +28,12 @@ public abstract class ModelBuilder<DATA,A extends Algorithm,Model extends ModelQ
 	protected AlgorithmURIReporter alg_reporter;
 	protected Reference applicationRootReference;
 	protected String[] targetURI = null;
+	public String[] getTargetURI() {
+		return targetURI;
+	}
+	public void setTargetURI(String[] targetURI) {
+		this.targetURI = targetURI;
+	}
 	protected String[] parameters = null;	
 	protected DATA trainingData = null;
 

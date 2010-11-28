@@ -27,7 +27,8 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	}
 	public void setParameters(String[] parameters) {
 		StringBuilder b = new StringBuilder();
-		for (String p:parameters) {b.append(p);b.append('\t');}
+		if (parameters!=null)
+			for (String p:parameters) {b.append(p);b.append('\t');}
 		this.parameters = b.toString();
 	}
 	public void setParameters(String parameters) {

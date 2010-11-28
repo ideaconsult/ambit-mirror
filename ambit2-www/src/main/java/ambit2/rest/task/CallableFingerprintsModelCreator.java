@@ -24,9 +24,7 @@ import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.FingerprintsModelBuilder;
 
-public class CallableFingerprintsModelCreator 
-				extends	 CallableModelCreator<List<BitSet>,IStructureRecord,FingerprintsModelBuilder>  {
-	protected Reference applicationRootReference;
+public class CallableFingerprintsModelCreator extends CallableStructuresModelCreator<List<BitSet>,FingerprintsModelBuilder>  {
 	
 
 	public CallableFingerprintsModelCreator(Form form,
@@ -35,20 +33,20 @@ public class CallableFingerprintsModelCreator
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter) {
 
-		super(form, context,algorithm,
+		super(form,
+				applicationRootReference,
+				context,
+				algorithm,
+				reporter,alg_reporter,
 				new FingerprintsModelBuilder(applicationRootReference,
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
 						OpenTox.params.parameters.getValuesArray(form)));
-		this.applicationRootReference =applicationRootReference;
 	
 	}	
 
-	@Override
-	protected Object createTarget(Reference reference) throws Exception {
-		return getQueryObject(reference, applicationRootReference);
-	}
+
 	
 	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
 
