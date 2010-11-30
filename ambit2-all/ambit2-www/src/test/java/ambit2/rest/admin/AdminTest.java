@@ -32,7 +32,7 @@ public class AdminTest extends ResourceTest {
 		boolean ok = false;
 		while ((line = reader.readLine())!=null) {
 			System.out.println(line);
-			if ("Version: 4.1".equals(line)) ok = true;
+			if ("Version: 4.3".equals(line)) ok = true;
 			count++;
 		}
 		return ok;
@@ -41,6 +41,7 @@ public class AdminTest extends ResourceTest {
 	@Test
 	public void testCreateExistingDB() throws Exception {
 		Form form = new Form();
+		
 		form.add("dbname", getDatabase());
 		form.add("user", getAdminUser());
 		form.add("pass",getAdminPWD());
