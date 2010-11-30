@@ -3,7 +3,9 @@ package ambit2.rest.admin;
 import java.io.Writer;
 import java.net.InetAddress;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -118,29 +120,25 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 					"Not allowed to create the database via REST; set <ambit.db.create.allow>true</ambit.db.create.allow> into maven settings.xml file and recompile to allow.");
 		
+		
 		if (!c.getLoginInfo().getDatabase().equals(form.getFirstValue("dbname")))
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("dbname parameter doesn't match the database name",form.getFirst("dbname")));
 
-		ClientResource res = null;
-		Representation r = null;
-		ResourceException z = null;
-		try {
-			res = new ClientResource(getRequest().getResourceRef());
-			r = res.get();
-			if ((r!=null) && res.getStatus().equals(Status.SUCCESS_OK))
-				z = new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Database already exist, if you really needs to create a new one, drop it manually first.\n");
-		} catch (Exception e) {	
-		} finally {
-			try {r.release(); } catch (Exception x) {}
-			try {res.release(); } catch (Exception x) {}
-			
-		}
-		if (z!=null) throw z;
 		if (form.getFirstValue("user")==null)
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 					"User credentials should be specified via user={} and pass={} web form parameters");
-						
+		
+		try {
+			if (dbExists(form.getFirstValue("dbname"),form.getFirstValue("user"),form.getFirstValue("pass")))
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+					"Database already exist, if you really need to create a new one, drop it manually first.\n");
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Throwable e) {	
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,e.getMessage());
+		} finally {
+		
+		}
 		return createDB(form.getFirstValue("dbname"),form.getFirstValue("user"),form.getFirstValue("pass"));	
 		
 		/*
@@ -155,11 +153,40 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 			
 	}
 	
+	public boolean dbExists(String dbname,String user,String pass) throws Exception {
+		boolean ok = false;
+		ResultSet rs = null;
+		Statement st = null;
+		Connection c = null;
+		try {
+    		DBConnection dbc = new DBConnection(getContext());
+    		LoginInfo li = dbc.getLoginInfo();
+    		
+			String uri = DatasourceFactory.getConnectionURI(
+	               li.getScheme(), li.getHostname(), li.getPort(), 
+	               "mysql", user,pass); 
+			c = dbc.getConnection(uri);
+			
+			st = c.createStatement();
+			rs = st.executeQuery("show databases");
+			while (rs.next()) {
+				if (dbname.equals(rs.getString(1))) ok = true;
+			}
+			
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			try {if (rs != null) rs.close();} catch (Exception x) {}
+			try {if (st != null) st.close();} catch (Exception x) {}
+			try {if(c != null) c.close();} catch (Exception x) {}
+		}
+		return ok;
+	}		
 	
 	public Representation createDB(String dbname,String user,String pass) throws ResourceException {
 		//TODO refactor with Query/Update classes
 		Connection c = null;
-
+		
 		DbCreateDatabase dbCreate = new DbCreateDatabase();
 		try {
     		DBConnection dbc = new DBConnection(getContext());

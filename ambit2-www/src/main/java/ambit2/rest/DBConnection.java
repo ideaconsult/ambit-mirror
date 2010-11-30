@@ -53,6 +53,7 @@ public class DBConnection {
 	public LoginInfo getLoginInfo() {
 		loadProperties();
 		LoginInfo li = new LoginInfo();
+		
 		String p = properties.getProperty("Database");
 		li.setDatabase(p==null?"ambit2":p);
 		p = properties.getProperty("Port");
@@ -61,6 +62,19 @@ public class DBConnection {
 		li.setUser(p==null?"guest":p);			
 		p = properties.getProperty("Password");
 		li.setPassword(p==null?"guest":p);	
+		
+		if (getContext().getParameters().getFirstValue(Preferences.DATABASE)!=null)
+			li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
+		if (getContext().getParameters().getFirstValue(Preferences.USER)!=null)
+			li.setUser(getContext().getParameters().getFirstValue(Preferences.USER));
+		if (getContext().getParameters().getFirstValue(Preferences.PASSWORD)!=null)
+			li.setPassword(getContext().getParameters().getFirstValue(Preferences.PASSWORD));
+		if (getContext().getParameters().getFirstValue(Preferences.HOST)!=null)
+			li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
+		if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
+			li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
+		
+
 		
 		return li;
 	}
@@ -83,19 +97,6 @@ public class DBConnection {
 	
 		try {
 			LoginInfo li = getLoginInfo();
-
-			if (getContext().getParameters().getFirstValue(Preferences.DATABASE)!=null)
-				li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
-			if (getContext().getParameters().getFirstValue(Preferences.USER)!=null)
-				li.setUser(getContext().getParameters().getFirstValue(Preferences.USER));
-			if (getContext().getParameters().getFirstValue(Preferences.PASSWORD)!=null)
-				li.setPassword(getContext().getParameters().getFirstValue(Preferences.PASSWORD));
-			if (getContext().getParameters().getFirstValue(Preferences.HOST)!=null)
-				li.setHostname(getContext().getParameters().getFirstValue(Preferences.HOST));
-			if (getContext().getParameters().getFirstValue(Preferences.PORT)!=null)
-				li.setPort(getContext().getParameters().getFirstValue(Preferences.PORT));
-	
-			
 			return DatasourceFactory.getConnectionURI(
 	                li.getScheme(), li.getHostname(), li.getPort(), 
 	                li.getDatabase(), user==null?li.getUser():user, password==null?li.getPassword():password); 
@@ -120,7 +121,6 @@ public class DBConnection {
 	}
 	
 	public synchronized Connection getConnection(String connectionURI) throws AmbitException , SQLException{
-		
 		SQLException error = null;
 		Connection c = null;
 		
@@ -128,9 +128,9 @@ public class DBConnection {
 		Statement t = null;
 		for (int retry=0; retry< 3; retry++)
 		try {
-			System.out.println("trying to getConnection "+Thread.currentThread().getName());
+			//System.out.println("trying to getConnection "+Thread.currentThread().getName());
 			c = DatasourceFactory.getDataSource(connectionURI).getConnection();
-			System.out.println("got the Connection! "+Thread.currentThread().getName());
+			//System.out.println("got the Connection! "+Thread.currentThread().getName());
 			t = c.createStatement();
 			rs = t.executeQuery("SELECT 1");
 			while (rs.next()) {rs.getInt(1);}
@@ -143,6 +143,9 @@ public class DBConnection {
 			error = x;
 			Context.getCurrentLogger().severe(x.getMessage());
 			//remove the connection from the pool
+			try {if (c != null) c.close();} catch (Exception e) {}
+		} catch (Throwable x) {
+			Context.getCurrentLogger().severe(x.getMessage());
 			try {if (c != null) c.close();} catch (Exception e) {}
 		} finally {
 			try { if (rs != null) rs.close();} catch (Exception x) {}
