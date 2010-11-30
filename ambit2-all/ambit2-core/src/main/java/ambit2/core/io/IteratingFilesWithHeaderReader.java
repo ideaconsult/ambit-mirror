@@ -29,6 +29,7 @@ package ambit2.core.io;
 
 import java.util.ArrayList;
 
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
@@ -45,10 +46,13 @@ import ambit2.core.smiles.SmilesParserWrapper;
 public abstract class IteratingFilesWithHeaderReader<COLUMN> extends
 		DefaultIteratingChemObjectReader {
 	protected SmilesParserWrapper sp = null;
+	protected InChIGeneratorFactory inchiFactory = null;
 	protected static LoggingTool logger = new LoggingTool(DelimitedFileWriter.class);	
 	public static String defaultSMILESHeader = "SMILES";
+	
 	private ArrayList<COLUMN> header;
 	protected int smilesIndex = -1;
+	protected int inchiIndex = -1;
 	protected long timeout = 60000; //ms
 	protected int numberOfHeaderLines = 1;
 	/**
