@@ -34,10 +34,13 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
@@ -70,7 +73,7 @@ public class IteratingDelimitedFileReader extends
 
 	private boolean hasNext;
 
-	private IMolecule nextMolecule;
+	private IAtomContainer nextMolecule;
 
 	protected DelimitedFileFormat format;
 
@@ -150,9 +153,17 @@ public class IteratingDelimitedFileReader extends
 
 					extractRowKeyAndData(input.readLine().trim());
 
-					if (smilesIndex == -1)
-						nextMolecule = new Molecule();
-					else {
+					if (inchiIndex>=0) try {
+	        		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
+		           		
+	        		   InChIToStructure c =inchiFactory.getInChIToStructure(values[inchiIndex].toString(), DefaultChemObjectBuilder.getInstance());
+	        		   nextMolecule = c.getAtomContainer();
+	        		   
+					} catch (Exception x) {
+						nextMolecule = null;
+					}
+					
+					if ((nextMolecule==null) && (smilesIndex >= 0)) {
 						try {
 							if (values[smilesIndex]==null) {
 								nextMolecule = new Molecule();
@@ -163,11 +174,11 @@ public class IteratingDelimitedFileReader extends
 								logger.warn("Empty molecule!");
 								nextMolecule = new Molecule(); // just create
 								nextMolecule.setProperty("SMILES", "Invalid SMILES");
-							//}
 						}
-						
 					}
 
+					if (nextMolecule == null) nextMolecule = new Molecule();
+					
 					for (int i = 0; i < values.length; i++) 
 						if (values[i]!=null)  {
 							String cas = casTransformer.process(values[i].toString());
@@ -302,9 +313,11 @@ public class IteratingDelimitedFileReader extends
 			while (st.hasMoreTokens()) {
 				if (fieldIndex>=values.length) break;
 				String next = st.nextToken();
-				if (next != null)
+				if (next != null) {
 					values[fieldIndex] = removeStringDelimiters(next);
-				else values[fieldIndex] = "";
+					if (next.startsWith("InChI=")) inchiIndex = fieldIndex;
+				} else values[fieldIndex] = "";
+				
 				fieldIndex ++;
 			}
 
