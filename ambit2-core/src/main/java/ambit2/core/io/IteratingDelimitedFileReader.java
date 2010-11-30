@@ -152,7 +152,7 @@ public class IteratingDelimitedFileReader extends
 				if (input.ready()) {
 
 					extractRowKeyAndData(input.readLine().trim());
-
+					nextMolecule = null;
 					if (inchiIndex>=0) try {
 	        		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
 		           		
