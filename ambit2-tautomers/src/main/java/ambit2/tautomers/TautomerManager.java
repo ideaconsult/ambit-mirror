@@ -96,9 +96,9 @@ public class TautomerManager
 				+  "    " + SmartsHelper.moleculeToSMILES(molecule));
 		
 		//Print H Atoms info
-		//for (int i = 0; i < molecule.getAtomCount(); i++)
-		//	System.out.print(" " + molecule.getAtom(i).getImplicitHydrogenCount());
-		//System.out.println();
+		for (int i = 0; i < molecule.getAtomCount(); i++)
+			System.out.print(" " + molecule.getAtom(i).getImplicitHydrogenCount());
+		System.out.println();
 		
 		System.out.println();
 	}
