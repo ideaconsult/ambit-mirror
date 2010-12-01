@@ -3,12 +3,14 @@ package ambit2.tautomers;
 import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 
 public class RuleInstance implements IRuleInstance
 {
 	Rule rule;
+	IAtomContainer molecule;
 	int foundState = 0;
 	int curState = 0;  //Current state is used to define the current position of the mobile group
 	int beginState = 0;
@@ -65,15 +67,25 @@ public class RuleInstance implements IRuleInstance
 		}
 		
 		//mobile group is moved
-		if (FlagImplicitH)
-		{
-			//TODO
-		}
-		else
-		{
+		if (rule.isMobileH == true)
+		{	
+			int curHPos = rule.mobileGroupPos[curState];
+			int newHPos = rule.mobileGroupPos[state];
+			IAtom curAt = atoms.get(curHPos-1);
+			IAtom newAt = atoms.get(newHPos-1);
 			
+			if (FlagImplicitH)
+			{	
+				curAt.setImplicitHydrogenCount(curAt.getImplicitHydrogenCount()-1);				
+				newAt.setImplicitHydrogenCount(newAt.getImplicitHydrogenCount()+1);
+			}
+			else
+			{	
+				//handling explicit H atom
+				IBond b = molecule.getBond(curAt,explicitH);
+				b.setAtoms(new IAtom[]{newAt, explicitH});
+			}
 		}
-		
 		
 		curState = state;
 		return(state);

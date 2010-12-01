@@ -14,6 +14,7 @@ import ambit2.smarts.IsomorphismTester;
 public class Rule 
 {
 	int HAtomMode = TautomerConst.HRM_Implicit;
+	boolean isMobileH = true;
 	String name = null;	
 	int type = TautomerConst.RT_MobileGroup;
 	String mobileGroup = null;
@@ -65,6 +66,7 @@ public class Rule
 				rinst.foundState = i;
 				rinst.curState = i;
 				rinst.rule = this;
+				rinst.molecule = mol;
 				instances.add(rinst);
 			}
 		}
