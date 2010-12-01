@@ -2,6 +2,8 @@ package ambit2.tautomers;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import java.util.Vector;
+import ambit2.smarts.SmartsHelper;
+
 
 public class TautomerManager 
 {
@@ -90,7 +92,15 @@ public class TautomerManager
 	
 	void registerTautomer()
 	{	
-		System.out.println("  tautomer: " + getTautomerCombination());
+		System.out.print("  tautomer: " + getTautomerCombination()  
+				+  "    " + SmartsHelper.moleculeToSMILES(molecule));
+		
+		//Print H Atoms info
+		//for (int i = 0; i < molecule.getAtomCount(); i++)
+		//	System.out.print(" " + molecule.getAtom(i).getImplicitHydrogenCount());
+		//System.out.println();
+		
+		System.out.println();
 	}
 	
 	

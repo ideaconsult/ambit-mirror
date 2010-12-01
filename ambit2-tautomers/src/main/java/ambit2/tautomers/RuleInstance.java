@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
 
 public class RuleInstance implements IRuleInstance
 {
@@ -45,13 +46,33 @@ public class RuleInstance implements IRuleInstance
 			return(state); //It is already at this state
 		
 		//current state double bonds are made single
-		//TODO
+		RuleStateBondDistribution bondDistr = rule.stateBonds[curState];
+		for (int i = 0; i < bondDistr.DBPositions.length; i++)
+		{
+			int bpos = bondDistr.DBPositions[i];
+			IBond bond = bonds.get(bpos);
+			bond.setOrder(Order.SINGLE);
+		}
+		
 		
 		//new state double bonds are set
-		//TODO
+		bondDistr = rule.stateBonds[state];
+		for (int i = 0; i < bondDistr.DBPositions.length; i++)
+		{
+			int bpos = bondDistr.DBPositions[i];
+			IBond bond = bonds.get(bpos);
+			bond.setOrder(Order.DOUBLE);
+		}
 		
 		//mobile group is moved
-		//TODO
+		if (FlagImplicitH)
+		{
+			//TODO
+		}
+		else
+		{
+			
+		}
 		
 		
 		curState = state;
