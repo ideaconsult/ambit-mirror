@@ -8,12 +8,12 @@ import ambit2.smarts.SmartsHelper;
 public class TautomerManager 
 {
 	KnowledgeBase knowledgeBase; 
+	IAtomContainer originalMolecule;
 	IAtomContainer molecule;
 	Vector<IRuleInstance> extendedRuleInstances = new Vector<IRuleInstance>(); 
 	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
 	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();
-	
-	
+		
 	
 	TautomerManager()
 	{
@@ -28,6 +28,12 @@ public class TautomerManager
 	public void setStructure(IAtomContainer str)
 	{	
 		molecule = str;
+		originalMolecule = str;
+		try{
+			molecule = (IAtomContainer)originalMolecule.clone();
+		}
+		catch(Exception e)
+		{}
 	}
 	
 	
@@ -92,15 +98,23 @@ public class TautomerManager
 	
 	void registerTautomer()
 	{	
+		try{
+			IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
+			resultTautomers.add(newTautomer);
+		}
+		catch(Exception e)
+		{}
+		
+		
 		System.out.print("  tautomer: " + getTautomerCombination()  
 				+  "    " + SmartsHelper.moleculeToSMILES(molecule));
 		
 		//Print H Atoms info
-		for (int i = 0; i < molecule.getAtomCount(); i++)
-			System.out.print(" " + molecule.getAtom(i).getImplicitHydrogenCount());
-		System.out.println();
+		//for (int i = 0; i < molecule.getAtomCount(); i++)
+		//	System.out.print(" " + molecule.getAtom(i).getImplicitHydrogenCount());
+		//System.out.println();		
+		//System.out.println();
 		
-		System.out.println();
 	}
 	
 	

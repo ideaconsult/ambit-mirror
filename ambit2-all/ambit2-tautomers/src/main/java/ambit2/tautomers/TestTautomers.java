@@ -1,6 +1,10 @@
 package ambit2.tautomers;
 
+import java.util.Vector;
+
 import ambit2.smarts.SmartsHelper;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
 public class TestTautomers 
@@ -23,7 +27,12 @@ public class TestTautomers
 		System.out.println("Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		tman.setStructure(mol);
-		tman.generateTautomers();
+		Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
+		
+		//for (int i = 0; i < resultTautomers.size(); i++)		
+		//	System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+		
+			
 	}
 	
 	
