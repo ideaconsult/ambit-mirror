@@ -50,7 +50,7 @@ public class TautomerManager
 			return(resultTautomers);
 		}	
 		
-		generateRuleCombinations();
+		generateRuleInstanceCombinations();
 		
 		return(resultTautomers);
 	}
@@ -71,11 +71,12 @@ public class TautomerManager
 	void handleOverlapedInstances()
 	{			
 		ruleInstances.addAll(extendedRuleInstances);
-		RuleManager rman = new RuleManager(this);
-		rman.handleOverlappingRuleInstances();
+		
+		//RuleManager rman = new RuleManager(this);
+		//rman.handleOverlappingRuleInstances();
 	}
 	
-	void generateRuleCombinations()
+	void generateRuleInstanceCombinations()
 	{
 		for (int i = 0; i < ruleInstances.size(); i++)
 			ruleInstances.get(i).firstState();
