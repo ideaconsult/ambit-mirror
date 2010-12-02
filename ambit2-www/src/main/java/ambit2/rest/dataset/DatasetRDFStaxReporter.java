@@ -202,7 +202,33 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					getOutput().writeStartElement(OT.NS,"FeatureValue"); //property
 					
 					getOutput().writeStartElement(OT.NS,"feature"); //feature
-					getOutput().writeAttribute(RDF.getURI(),"resource",propertyReporter.getURI(p));
+					
+					String featureURI = propertyReporter.getURI(p);
+					if (p.getId()>0)
+						getOutput().writeAttribute(RDF.getURI(),"resource",featureURI);
+					else {
+						/**
+              <ot:Feature>
+                <dc:creator>http://ambit.sourceforge.net</dc:creator>
+                <ot:hasSource>Default</ot:hasSource>
+                <owl:sameAs rdf:resource="http://www.opentox.org/api/1.1#IUPACName"/>
+                <ot:units></ot:units>
+                <dc:title>http://www.opentox.org/api/1.1#IUPACName</dc:title>
+              </ot:Feature>
+						 */
+						getOutput().writeStartElement(OT.NS,"Feature");
+						
+						getOutput().writeStartElement(DC.NS,"title"); //value
+						getOutput().writeCharacters(p.getName());
+						getOutput().writeEndElement();
+						
+						getOutput().writeStartElement(OWL.NS,"sameAs"); //value
+						getOutput().writeAttribute(RDF.getURI(),"resource",p.getLabel());
+						getOutput().writeEndElement();
+						
+						getOutput().writeEndElement();
+					}
+					
 					getOutput().writeEndElement(); //feature
 					
 					getOutput().writeStartElement(OT.NS,"value"); //value
