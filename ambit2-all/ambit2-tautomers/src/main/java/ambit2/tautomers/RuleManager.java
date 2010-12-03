@@ -64,6 +64,10 @@ public class RuleManager
 	IRuleInstance combineRuleInstances(IRuleInstance r1, IRuleInstance r2)
 	{
 		//TODO
+		
+		
+		// TODO   see also for the generation of combined states 
+		//and eventually if needed new CombinedRule		
 		return(null);
 	}
 	
