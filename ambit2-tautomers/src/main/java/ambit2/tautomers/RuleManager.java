@@ -33,8 +33,12 @@ public class RuleManager
 			while (k < unprocessedInstances.size())
 			{
 				IRuleInstance r1 = unprocessedInstances.get(k);
-				if (overlapInstances(r, r1))
+				int nOverlappedAtoms = overlapInstances(r, r1);
+				
+				if (nOverlappedAtoms > 0)
 				{
+					//TODO - handle the case where one instance is entirely overlapped by the other one
+					
 					r = combineRuleInstances(r,r1);
 					unprocessedInstances.remove(r1);
 					k=0;
@@ -43,8 +47,7 @@ public class RuleManager
 				k++;
 			}
 			
-			ruleInstances.add(r);
-			
+			ruleInstances.add(r);			
 		}
 		
 		//Adding the last one 
@@ -55,11 +58,38 @@ public class RuleManager
 	}
 	
 	
-	boolean overlapInstances(IRuleInstance r1, IRuleInstance r2)
+	int overlapInstances(IRuleInstance r1, IRuleInstance r2)
 	{
-		//TODO
-		return(false);
+		int n = 0;
+		if (r1 instanceof RuleInstance)
+		{
+			if (r2 instanceof RuleInstance)
+			{
+				
+			}
+			else
+			{
+				
+			}
+		}
+		else
+		{
+			
+		}
+			
+			
+		return(n);
 	}
+	
+	int getNumOfOverlappedAtoms(RuleInstance r1, RuleInstance r2)
+	{
+		int n = 0;
+		for (int i = 0; i < r1.atoms.size(); i++)
+			if (r2.atoms.contains(r1.atoms.get(i)))
+				n++;
+		return (n);
+	}
+	
 	
 	IRuleInstance combineRuleInstances(IRuleInstance r1, IRuleInstance r2)
 	{
