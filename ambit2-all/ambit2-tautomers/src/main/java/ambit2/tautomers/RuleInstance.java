@@ -66,25 +66,32 @@ public class RuleInstance implements IRuleInstance
 			bond.setOrder(Order.DOUBLE);
 		}
 		
-		//mobile group is moved
-		if (rule.isMobileH == true)
+		//mobile groups are moved
+		for (int i = 0; i < rule.nMobileGroups; i++)
 		{	
-			int curHPos = rule.mobileGroupPos[curState];
-			int newHPos = rule.mobileGroupPos[state];
-			IAtom curAt = atoms.get(curHPos-1);
-			IAtom newAt = atoms.get(newHPos-1);
-			
-			if (FlagImplicitH)
+			if (rule.isMobileH[i] == true)
 			{	
-				curAt.setImplicitHydrogenCount(curAt.getImplicitHydrogenCount()-1);				
-				newAt.setImplicitHydrogenCount(newAt.getImplicitHydrogenCount()+1);
+				int curHPos = rule.mobileGroupPos[i][curState];
+				int newHPos = rule.mobileGroupPos[i][state];
+				IAtom curAt = atoms.get(curHPos-1);
+				IAtom newAt = atoms.get(newHPos-1);
+
+				if (FlagImplicitH)
+				{	
+					curAt.setImplicitHydrogenCount(curAt.getImplicitHydrogenCount()-1);				
+					newAt.setImplicitHydrogenCount(newAt.getImplicitHydrogenCount()+1);
+				}
+				else
+				{	
+					//handling explicit H atom
+					IBond b = molecule.getBond(curAt,explicitH);
+					b.setAtoms(new IAtom[]{newAt, explicitH});
+				}
 			}
 			else
 			{	
-				//handling explicit H atom
-				IBond b = molecule.getBond(curAt,explicitH);
-				b.setAtoms(new IAtom[]{newAt, explicitH});
-			}
+				//TODO handle other types of mobiles groups 
+			}	
 		}
 		
 		curState = state;

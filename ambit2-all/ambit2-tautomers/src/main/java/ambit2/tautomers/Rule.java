@@ -14,7 +14,6 @@ import ambit2.smarts.IsomorphismTester;
 public class Rule 
 {
 	int HAtomMode = TautomerConst.HRM_Implicit;
-	boolean isMobileH = true;
 	String name = null;	
 	int type = TautomerConst.RT_MobileGroup;
 	String mobileGroup = null;
@@ -22,7 +21,9 @@ public class Rule
 	String smartsStates[] = null;
 	RuleStateFlags stateFlags[] = null;
 	RuleStateBondDistribution   stateBonds[] = null;
-	int mobileGroupPos[] = null;
+	int nMobileGroups = 1;
+	boolean isMobileH[] = new boolean[1]; //by default this class is prepared for a rule with one mobile group
+	int mobileGroupPos[][] = null;   
 	String RuleInfo = "";
 	QueryAtomContainer stateQueries[] = null;
 	
@@ -48,7 +49,8 @@ public class Rule
 			for (int k = 0; k < maps.size(); k++)
 			{
 				Vector<IAtom> amap = maps.get(k);
-				int mobCheck = checkMobileGroup(i, amap, mol); 
+				//This check currently is done only for one mobile group
+				int mobCheck = checkMobileGroup(0, i, amap, mol); 
 				if (mobCheck == -1)
 					continue;
 				
@@ -73,11 +75,11 @@ public class Rule
 		return instances;
 	}
 	
-	int checkMobileGroup(int curState, Vector<IAtom> amap, IAtomContainer mol)
+	int checkMobileGroup(int mobGroupNum, int curState, Vector<IAtom> amap, IAtomContainer mol)
 	{
 		if (mobileGroup.equals("H"))
 		{
-			int pos = mobileGroupPos[curState];
+			int pos = mobileGroupPos[mobGroupNum][curState];
 			IAtom atom = amap.get(pos-1);  //position in the rule is 1-base indexed
 			
 			//Check for implicit hydrogens
