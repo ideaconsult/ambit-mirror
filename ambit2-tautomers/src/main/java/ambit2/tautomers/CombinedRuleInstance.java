@@ -3,6 +3,8 @@ package ambit2.tautomers;
 import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+//This class currently is not used since the combined states generate
+//a new rule and an instance for it.
 public class CombinedRuleInstance implements IRuleInstance
 {	
 	IAtomContainer molecule;
