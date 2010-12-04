@@ -96,7 +96,7 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 	public void header(Writer output, Iterator<Algorithm> query) {
 		super.header(output, query);
 		try {
-			getJenaModel().setNsPrefix("bo","http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/");
+			getJenaModel().setNsPrefix("bo","http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#");
 			getJenaModel().setNsPrefix("bo1","http://ambit.sourceforge.net/descriptors.owl#");
 		} catch (Exception x) {
 			x.printStackTrace();
