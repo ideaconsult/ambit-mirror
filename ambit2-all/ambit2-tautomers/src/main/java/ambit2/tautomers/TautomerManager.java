@@ -105,6 +105,9 @@ public class TautomerManager
 		try{
 			IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
 			resultTautomers.add(newTautomer);
+			
+			//TODO search for hidden tautomers 
+			//i.e. overlapping of some rules occur only for specific states of both rules
 		}
 		catch(Exception e)
 		{}
