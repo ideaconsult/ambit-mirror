@@ -34,8 +34,10 @@ public class OpenSSOToken extends OpenToxToken {
 	protected static final String logout = "%s/logout"; 
 	//parsing helpers
 	private static final String tokenReceived = "token.id=";
-	private static final String boolean_true_result = "boolean=true";	
+	private static final String boolean_true_result = "boolean=true";
 	
+	public static final String authz_result_ok = "boolean=true";
+	public static final String authz_result_bad = "boolean=false";
 	
 	public OpenSSOToken(String authService) {
 		super(authService);
@@ -142,9 +144,8 @@ public class OpenSSOToken extends OpenToxToken {
 		
 		try {
 			r = client.post(form.getWebRepresentation());
-			
 			if (Status.SUCCESS_OK.equals(client.getStatus())) {
-				return true;
+				return authz_result_ok.equals(r.getText());
 			} else if (Status.CLIENT_ERROR_UNAUTHORIZED.equals(client.getStatus())) {
 				return false;
 			} else  {
