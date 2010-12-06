@@ -16,6 +16,7 @@ public class RuleInstance implements IRuleInstance
 	int beginState = 0;
 	boolean FlagImplicitH = true;   //This flag is true when mobile h group is implicitly described
 	IAtom explicitH = null;
+	boolean FlagOverlapMode = false; //This is true when this instance overlaps with another one i.e. it is a part from combination
 	
 	Vector<IAtom> atoms = new  Vector<IAtom>();
 	Vector<IBond> bonds = new  Vector<IBond>();
@@ -46,6 +47,8 @@ public class RuleInstance implements IRuleInstance
 	{
 		if (curState == state)
 			return(state); //It is already at this state
+		
+		
 		
 		//current state double bonds are made single
 		RuleStateBondDistribution bondDistr = rule.stateBonds[curState];

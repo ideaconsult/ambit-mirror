@@ -80,8 +80,7 @@ public class RuleManager
 			{	
 				//This case should not happen!!!
 			}	
-		}
-		
+		}		
 		
 		return(n);
 	}
