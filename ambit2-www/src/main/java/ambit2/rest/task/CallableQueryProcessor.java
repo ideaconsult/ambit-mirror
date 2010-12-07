@@ -22,6 +22,8 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
+import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTFeature;
 
 public abstract class CallableQueryProcessor<Target,Result> implements CallableTask {
 	protected AbstractBatchProcessor batch; 
@@ -41,6 +43,21 @@ public abstract class CallableQueryProcessor<Target,Result> implements CallableT
 
 	public CallableQueryProcessor(Form form,Context context) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
+		String[] xvars = OpenTox.params.feature_uris.getValuesArray(form);
+		if (xvars != null) try {
+			
+			OTDataset ds = OTDataset.dataset(dataset.toString());
+			for (String xvar :xvars) {
+				String[] xx = xvar.split("\n");
+				for (String x : xx )
+					if (!x.trim().equals("")) 
+						ds = ds.addColumns(OTFeature.feature(x));
+			}
+			dataset =  ds.getUri().toString();
+
+		} catch (Exception x) {
+			
+		}
 		this.sourceReference = dataset==null?null:new Reference(dataset.toString().trim());
 		this.context = context;
 	}
