@@ -1,8 +1,6 @@
 package ambit2.rest.admin;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -114,13 +112,16 @@ public class PolicyResource extends CatalogResource<String>{
 			authenticate();
 
 			
-			int r = policy.createGroupPolicy("opentox", ssoToken, uri, methods,policyid.toString());
-			b.append(String.format("Result code=%d METHOD=%s URI=%s PolicyID=%s\n",r, methods,uri,policyid));
+			int r = policy.createGroupPolicy("partner", ssoToken, uri, methods,policyid.toString());
+			//int r = policy.createUserPolicy("nina", ssoToken, uri, methods,policyid.toString());
+			b.append(String.format("Result code=%d URI=%s PolicyID=%s METHOD=",r, uri,policyid));
+			for (String method:methods) b.append(method);
+			b.append("\n");
 			try {
 				OpenToxUser u = new OpenToxUser();
 				r=policy.getURIOwner(ssoToken, uri, u);
 				b.append(String.format("Result code=%d\tURI owner=%s\n",r,u.getUsername()));
-/*
+				/*
 				Hashtable<String, String> policies = new Hashtable<String, String>();
 				policy.listPolicies(ssoToken, policies);
 				Enumeration<String> keys = policies.keys();
@@ -130,7 +131,8 @@ public class PolicyResource extends CatalogResource<String>{
 				}
 				
 				b.append(policies.toString());
-*/
+				*/
+
 			} catch (Exception x) {
 				b.append(x);
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
