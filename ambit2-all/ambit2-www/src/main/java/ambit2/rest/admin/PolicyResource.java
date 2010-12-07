@@ -154,17 +154,17 @@ public class PolicyResource extends CatalogResource<String>{
 			} catch (Exception x) {
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
 			}			
-			
-			if (deleteOld)
-			try { policy.deletePolicy(ssoToken,policyid.toString()); } catch (Exception x) {
-				b.append(x);
-			}
+
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
 		} finally {
 			
+			if (deleteOld)
+			try { policy.deletePolicy(ssoToken,policyid.toString()); } catch (Exception x) {
+				b.append(x);
+			}
 			try { if (logout) ssoToken.logout();} catch (Exception x) {
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
 			}
