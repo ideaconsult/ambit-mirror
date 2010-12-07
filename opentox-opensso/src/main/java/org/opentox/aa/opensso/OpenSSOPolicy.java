@@ -287,6 +287,7 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 				String line = null;
 	
 				while ((line = reader.readLine())!=null) {
+					if ("".equals(line.trim())) continue;
 					policies.put(line,line);
 				}
 				
