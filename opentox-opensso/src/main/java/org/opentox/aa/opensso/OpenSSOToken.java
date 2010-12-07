@@ -144,8 +144,9 @@ public class OpenSSOToken extends OpenToxToken {
 		
 		try {
 			r = client.post(form.getWebRepresentation());
+			String content = r.getText();
 			if (Status.SUCCESS_OK.equals(client.getStatus())) {
-				return authz_result_ok.equals(r.getText());
+				return (content!=null) && authz_result_ok.equals(content.trim());
 			} else if (Status.CLIENT_ERROR_UNAUTHORIZED.equals(client.getStatus())) {
 				return false;
 			} else  {
