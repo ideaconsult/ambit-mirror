@@ -50,11 +50,11 @@ public class PolicyResource extends CatalogResource<String>{
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
 	}
 
-	protected void authenticate() throws Exception {
+	protected boolean authenticate() throws Exception {
 		if (ssoToken.getToken()==null) {
-			ssoToken.login(user, password);
-			logout = true;
-		}	
+			logout = ssoToken.login(user, password);
+			return logout;
+		} else return true;	
 	}
 	protected void getValues(Form form) {
 		user = getUserToken("user");
@@ -75,14 +75,22 @@ public class PolicyResource extends CatalogResource<String>{
 			ssoToken.setToken(getUserToken(OTAAParams.subjectid.toString()));
 	
 			try {
-				authenticate();
-				for (String action : methods) 
-					try {
-						boolean ok = ssoToken.authorize(uri, action);
-						topics.add(String.format("Authorized=%s METHOD=%s URI=%s",Boolean.toString(ok), action,uri));
-					} catch (Exception x) {
-						topics.add(String.format("Authorized=%s METHOD=%s URI=%s",x.getMessage(), action,uri));
-					}
+				if (authenticate()) {
+					for (String action : methods) 
+						try {
+							if (ssoToken.authorize(uri, action)) 
+								topics.add(String.format("Authorized METHOD=%s URI=%s", action,uri));
+							else
+								throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED,uri);
+						} catch (ResourceException x) {
+							throw x;
+						} catch (Exception x) {
+							throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+							//topics.add(String.format("Authorized=%s METHOD=%s URI=%s",x.getMessage(), action,uri));
+						}
+				} else throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);	
+			} catch (ResourceException x) {
+				throw x;				
 			} catch (Exception x) {
 				topics.add(x.getMessage());
 			} finally {
