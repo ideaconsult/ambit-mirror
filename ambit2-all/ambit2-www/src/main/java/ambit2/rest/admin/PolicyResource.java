@@ -118,8 +118,8 @@ public class PolicyResource extends CatalogResource<String>{
 			b.append(String.format("Result code=%d METHOD=%s URI=%s PolicyID=%s\n",r, methods,uri,policyid));
 			try {
 				OpenToxUser u = new OpenToxUser();
-				policy.getURIOwner(ssoToken, uri, u);
-				b.append(String.format("URI owner=%s\n",u.getUsername()));
+				r=policy.getURIOwner(ssoToken, uri, u);
+				b.append(String.format("Result code=%d\tURI owner=%s\n",r,u.getUsername()));
 /*
 				Hashtable<String, String> policies = new Hashtable<String, String>();
 				policy.listPolicies(ssoToken, policies);
