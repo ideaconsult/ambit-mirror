@@ -26,6 +26,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
@@ -138,9 +139,16 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		//output.createAnnotationProperty(DC.identifier.getURI());
 		output.createAnnotationProperty(DC.type.getURI());
 		
-		dataset = output.createIndividual(
-				String.format("%s:%s",uriReporter.getRequest().getOriginalRef().getScheme(),uriReporter.getRequest().getOriginalRef().getHierarchicalPart()),
+		if (uriReporter.getRequest().getOriginalRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
+			dataset = output.createIndividual(OT.OTClass.Dataset.getOntClass(output));
+		} else {
+			dataset = output.createIndividual(
+				String.format("%s:%s",
+						uriReporter.getRequest().getOriginalRef().getScheme(),
+						uriReporter.getRequest().getOriginalRef().getHierarchicalPart()
+						),
 				OT.OTClass.Dataset.getOntClass(output));
+		}
 		
 		//dataset.addProperty(DC.identifier, uriReporter.getRequest().getOriginalRef().toString());
 		//dataset.addProperty(DC.title,query.toString());
