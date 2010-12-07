@@ -54,10 +54,11 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 			else {
 				
 				String target = item.isSupervised()?"<td><label for='prediction_feature'>Target&nbsp;</label></td><td><input type='text' name='prediction_feature' size='60' value='Enter feature URL'></td>":"";
+				String features = "<td><label for='feature_uris[]'>X variables&nbsp;</label></td><td><textarea rows='2' cols='45'name='feature_uris[]' alt='independent variables'></textarea></td>";
 				if (item.isDataProcessing()) {
 					String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";
 					output.write(String.format(
-							"<tr><form action=\"\" method=\"POST\"><tr><td>Algorithm:&nbsp;<a href='%s'>%s</a></td><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Run\"></td></form></tr>",
+							"<tr><form action=\"\" method=\"POST\"><tr><td>Algorithm:&nbsp;<a href='%s'>%s</a></td><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input align='bottom' type=\"submit\" value=\"Run\"></td></form></tr>",
 							t,item.getName(),
 							dataset,
 							target));
@@ -76,10 +77,12 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 				} else  {//create a model
 					String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Training dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";					
 					output.write(String.format(
-						"<tr><form action=\"\" method=\"POST\"><tr><td>Algorithm:&nbsp;<a href='%s'>%s</a></td><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
+						"<tr><form action=\"\" method=\"POST\"><tr><td>Algorithm:&nbsp;<a href='%s'>%s</a></td><td><table><tr>%s</tr><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
 						t,item.getName(),
 						dataset,
-						target));
+						features,
+						target
+						));
 				}
 			}
 		} catch (Exception x) {
