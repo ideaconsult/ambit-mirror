@@ -40,6 +40,8 @@ public class RuleManager
 				if (nOverlappedAtoms > 0)
 				{
 					//TODO - handle the case where one instance is entirely overlapped by the other one
+					//Currently not needed hence not  critical. 
+					//It depends from the rule definitions added in the future.
 					
 					r = addRuleInstanceToCombination(r,r1);
 					unprocessedInstances.remove(r1);
@@ -49,7 +51,9 @@ public class RuleManager
 				k++;
 			}
 			
-			//TODO handle rule combination
+			//handle rule combination
+			if (r instanceof CombinedRuleInstance)
+				generateCombinedRuleStates( (CombinedRuleInstance)r );
 			
 			ruleInstances.add(r);			
 		}
@@ -131,10 +135,29 @@ public class RuleManager
 	
 	IRuleInstance addRuleInstanceToCombination(IRuleInstance baseRule, IRuleInstance addRule)
 	{
-		//TODO
-		return(null);
+		if (baseRule instanceof RuleInstance)
+		{
+			CombinedRuleInstance cri = new CombinedRuleInstance();
+			//TODO
+			
+			return(cri);
+		}
+		else
+		{
+			//baseRule is a CombinedRuleInstance
+			//TODO
+			return(baseRule);
+		}
 	}
 	
+	int generateCombinedRuleStates(CombinedRuleInstance r)
+	{
+		return(0);
+	}
+	
+	
+	
+	/*
 	IRuleInstance combineRuleInstances(IRuleInstance ir1, IRuleInstance ir2)
 	{
 		RuleInstance r1 = (RuleInstance)ir1;
@@ -146,15 +169,13 @@ public class RuleManager
 			for (int k = 0; k < r2.getNumberOfStates(); k++)
 			{
 				r1.gotoState(i);
-				
-			}
-		
+			}	
 		
 		
 		// TODO   see also for the generation of combined states 
 		//and eventually if needed new CombinedRule		
 		return(null);
 	}
-	
+	*/
 	
 }
