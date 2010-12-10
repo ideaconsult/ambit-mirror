@@ -11,6 +11,8 @@ import org.restlet.data.MediaType;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 
+import com.sun.xml.txw2.output.IndentingXMLStreamWriter;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
@@ -36,13 +38,11 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 				XMLStreamWriter writer = null;
 				try {
 					
-					XMLOutputFactory factory      = XMLOutputFactory2.newInstance();
+					XMLOutputFactory factory      =  XMLOutputFactory2.newInstance();
 					
-					//factory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, "TRUE");
-					//final IndentingXMLStreamWriter sw = new IndentingXMLStreamWriter(defaultWriter);
-			        //sw.setIndentStep("    ");
-					writer  = factory.createXMLStreamWriter(out,"UTF-8");
-					System.out.println(writer.getClass().getName());
+					//TODO verify if performance is similar to the original stream writer
+					writer  = new IndentingXMLStreamWriter(factory.createXMLStreamWriter(out,"UTF-8"));
+
 					getReporter().setOutput(writer);
             		getReporter().process(query);
 					
