@@ -34,12 +34,13 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 		boolean isDictionary= record.getClazz().equals(Dictionary.class);
 		
 		if (isDictionary) {
-			return String.format("%s%s/%s/%s",
+			return String.format("%s%s/%s/%s%s",
 					ref,
 					OntologyResource.resource,
 					record.getReference()==null?"All":
 					Reference.encode(record.getTitle()),
-					Reference.encode(record.getName())
+					Reference.encode(record.getName()),
+					getDelimiter()
 					);
 		} else
 		if (record.getId()>0)
