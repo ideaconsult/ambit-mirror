@@ -13,6 +13,7 @@ import org.apache.commons.pool.impl.GenericObjectPool;
 
 
 public class DataSourceDBCP implements IDataSourcePool {
+
 	protected volatile PoolingDataSource datasource;
 	protected volatile PoolableConnectionFactory poolableConnectionFactory;
 	
@@ -112,4 +113,5 @@ public class DataSourceDBCP implements IDataSourcePool {
 		}
 		super.finalize();
 	}
+	
 }
