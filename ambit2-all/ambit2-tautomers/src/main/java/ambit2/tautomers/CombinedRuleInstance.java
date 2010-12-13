@@ -51,6 +51,63 @@ public class CombinedRuleInstance implements IRuleInstance
 		//TODO
 		
 		return(0);
-	}	
+	}
+	
+	
+	//Utilities for generation of combination of states -----------------------------
+	
+	
+	int generateCombinedRuleStates()
+	{
+		boolean FlagOKComb = false;
+		int n; 
+		int instNumber;
+		int nInst = instances.size();
+						
+		for (int i = 0; i < nInst; i++)
+			instances.get(i).firstState();
+						
+		do 	{
+			
+			//Register Combined State
+			if (FlagOKComb)
+			{
+				int combState[] = new int[nInst];
+				for (int i = 0; i < nInst; i++)
+					combState[i] = instances.get(i).getCurrentState();
+				combinedStates.add(combState);
+			}
+			
+			n = instances.get(0).nextState();
+			instNumber = 0;
+			
+			while(n == 0)
+			{
+				instNumber++;
+				if (instNumber == nInst)
+					break;
+				n = instances.get(instNumber).nextState();
+			}
+		} while (instNumber < nInst); 
+						
+		
+		return(0);
+	}
+	
+	public int firstStateSpecial(RuleInstance r)
+	{	
+		gotoStateSpecial(0, r);
+		return(0);
+	}
+	
+	int gotoStateSpecial(int state, RuleInstance r)
+	{
+		if (curState == state)
+			return(state); //It is already at this state
+				
+		//TODO
+		
+		return(0);
+	}
 	
 }
