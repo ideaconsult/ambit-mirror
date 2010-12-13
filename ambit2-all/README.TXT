@@ -1,12 +1,19 @@
-AMBIT2 
-2.1.4
+http://ambit.sourceforge.net
+
+AMBIT 2.2.0
+
+Changelog: 
+cdk 1.3.7
+DB schema modified
+ 
+AMBIT 2.1.4
 
 Changelog: cdk 1.3.6 and jchempaint 3.1.3
 
 This is multi module maven project;
 
 Prerequisites for building AMBIT2
-JDK 1.5 or higher
+JDK 1.6 or higher
 MySQL 5.0 or higher
 Maven
 
@@ -47,11 +54,18 @@ normal user and password are guest/guest by default and are used in database que
       </activation>
       <properties>
 	<google.analytics>your-google-analytics-key</google.analytics>
+	 <!-- Write RDF via jena or stax Could be altered via ?rdfwriter=jena|stax query paramater -->
+         <rdf.writer>stax</rdf.writer>
 
 	<ambit.db>database name, default ambit2</ambit.db>
         <ambit.db.user.root.password>root password</ambit.db.user.root.password>
         <ambit.db.user.test>normal user name</ambit.db.user.test>
         <ambit.db.user.test.password>normal user password</ambit.db.user.test.password>
+	<!-- Default ontology service -->
+         <!-- AA -->
+	<service.ontology>http://ambit.uni-plovdiv.bg:8082/ontology</service.ontology>
+	 <aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
+        <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
 
       </properties>
     </profile>
