@@ -104,4 +104,11 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		}
 		
 	}
+	@Override
+	protected void finalize() throws Throwable {
+		dbt = null;
+		babel = null;
+		cdkParser = null;
+		super.finalize();
+	}
 }
