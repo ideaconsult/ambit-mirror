@@ -21,6 +21,11 @@ public class RuleInstance implements IRuleInstance
 	Vector<IAtom> atoms = new  Vector<IAtom>();
 	Vector<IBond> bonds = new  Vector<IBond>();
 	
+	//Containers used in the case when this instance overlaps with other instances
+	Vector<IAtom> overlappedAtoms = new  Vector<IAtom>(); 
+	Vector<IBond> overlappedBonds = new  Vector<IBond>();
+	
+	
 	public int firstState()
 	{	
 		gotoState(0);
