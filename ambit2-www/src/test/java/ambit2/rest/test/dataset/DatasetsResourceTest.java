@@ -125,7 +125,21 @@ public class DatasetsResourceTest extends ResourceTest {
 		c.close();
 		
 	}	
-	
+
+	@Test
+	public void testCreateEntry_TUM500() throws Exception {
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+				
+		CreateEntryRDF("dataset_tum_500.rdf");
+		
+		c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(7,table.getRowCount());
+		c.close();
+	}
 	@Test
 	public void testCreateEntryRDF() throws Exception {
         IDatabaseConnection c = getConnection();	
@@ -186,6 +200,26 @@ public class DatasetsResourceTest extends ResourceTest {
 		Assert.assertEquals(7,table.getRowCount());
 		c.close();
 	}	
+	
+	@Test
+	public void testCreateEntryRDF2() throws Exception {
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+				
+		CreateEntryRDF("2765_2.rdf");
+		
+		
+	//	CreateEntryRDF("FeatureGenerationExample.rdf");
+		
+		c = getConnection();	
+        table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		c.close();
+	}		
+	
 	public void CreateEntryRDF(String name) throws Exception {
 			
 		
@@ -211,7 +245,6 @@ public class DatasetsResourceTest extends ResourceTest {
 		URL url = getClass().getClassLoader().getResource("input.rdf");
 		FileRepresentation rep = new FileRepresentation(
 				url.getFile(),
-				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
 				 MediaType.APPLICATION_RDF_XML, 0);
 				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
 				
@@ -225,6 +258,26 @@ public class DatasetsResourceTest extends ResourceTest {
 		c.close();
 		
 	}		
+	
+	@Test
+	public void testCreateEntryFromFileRDF2() throws Exception {
+		URL url = getClass().getClassLoader().getResource("dataset_mna_multi.rdf");
+		FileRepresentation rep = new FileRepresentation(
+				url.getFile(),
+				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
+				 MediaType.APPLICATION_RDF_XML, 0);
+				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
+				
+		testAsyncPoll(new Reference(getTestURI()),MediaType.TEXT_URI_LIST,
+				rep,Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(7,table.getRowCount());
+		c.close();
+		
+	}	
 	
 	@Test
 	public void testCreateEntryFromFile() throws Exception {
