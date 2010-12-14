@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.fileupload.FileItem;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.restlet.data.ClientInfo;
 import org.restlet.data.MediaType;
@@ -227,7 +228,7 @@ public class CallableFileImport implements CallableTask {
 		}
 	}
 
-	protected RDFIteratingReader getRDFIterator(File file, String baseReference) {
+	protected RDFIteratingReader getRDFIterator(File file, String baseReference) throws Exception {
 		String format = "RDF/XML";
 		if (file.getName().endsWith(".rdf"))
 			format = "RDF/XML";
@@ -241,9 +242,10 @@ public class CallableFileImport implements CallableTask {
 			return new RDFIteratingReader(new FileInputStream(file),
 					NoNotificationChemObjectBuilder.getInstance(),
 					baseReference, format);
+		} catch (CDKException x) {
+			throw x;
 		} catch (Exception x) {
-			x.printStackTrace();
-			return null;
+			throw new AmbitException(String.format("Error reading %s %s",file.toString(),x.getMessage()),x);
 		}
 	}
 
@@ -286,6 +288,7 @@ public class CallableFileImport implements CallableTask {
 							return i;
 						}
 					} catch (AmbitException x) {
+
 						throw x;
 					} catch (Exception x) {
 						throw new AmbitException(x);
