@@ -53,7 +53,11 @@ public class RuleManager
 			
 			//handle rule combination
 			if (r instanceof CombinedRuleInstance)
-				((CombinedRuleInstance)r).generateCombinedRuleStates();
+			{	
+				CombinedRuleInstance cri = (CombinedRuleInstance)r;
+				prepareOverlappedAtoms(cri);
+				cri.generateCombinedRuleStates();
+			}	
 			
 			ruleInstances.add(r);			
 		}
@@ -130,6 +134,28 @@ public class RuleManager
 				ob.add(r1.bonds.get(i));
 				
 		return (ob);
+	}
+	
+	void prepareOverlappedAtoms(CombinedRuleInstance cri)
+	{
+		int n = cri.instances.size();
+		for (int i = 0; i < n; i++)
+		{
+			RuleInstance r = cri.instances.get(i);
+			for (int j = 0; j < n; j++)
+			if ( i != j)
+			{
+				Vector<IAtom> va = getOverlappedAtoms(r, cri.instances.get(j));
+				for (int k = 0; k < va.size(); k++)
+					if (!r.overlappedAtoms.contains(va.get(k))) //This check is needed since an could be part of two overlapping
+						r.overlappedAtoms.add(va.get(k));
+				
+				Vector<IBond> vb = getOverlappedBonds(r, cri.instances.get(j));
+				for (int k = 0; k < vb.size(); k++)
+					if (!r.overlappedBonds.contains(vb.get(k))) 
+						r.overlappedBonds.add(vb.get(k));
+			}	
+		}
 	}
 	
 	
