@@ -58,17 +58,21 @@ public class CombinedRuleInstance implements IRuleInstance
 	
 	
 	int generateCombinedRuleStates()
-	{
-		boolean FlagOKComb = false;
+	{	
 		int n; 
 		int instNumber;
-		int nInst = instances.size();
-						
+		int nInst = instances.size();		
+		boolean FlagOKComb = true;
+		
+		//Generation of the first combined state (0, 0,..., 0)
 		for (int i = 0; i < nInst; i++)
-			instances.get(i).firstState();
+		{	
+			instances.get(i).firstStateSpecial();
+			if (!instances.get(i).FlagGoToStateSpecialOK)
+				FlagOKComb = false;
+		}	
 						
-		do 	{
-			
+		do 	{			
 			//Register Combined State
 			if (FlagOKComb)
 			{
@@ -78,22 +82,36 @@ public class CombinedRuleInstance implements IRuleInstance
 				combinedStates.add(combState);
 			}
 			
-			n = instances.get(0).nextState();
+			//Started generation of a new combined state
+			FlagOKComb = true;
+			
+			n = instances.get(0).nextStateSpecial();
 			instNumber = 0;
+			if (!instances.get(0).FlagGoToStateSpecialOK)
+				FlagOKComb = false;
 			
 			while(n == 0)
 			{
 				instNumber++;
 				if (instNumber == nInst)
 					break;
-				n = instances.get(instNumber).nextState();
+				n = instances.get(instNumber).nextStateSpecial();
+				if (!instances.get(instNumber).FlagGoToStateSpecialOK)
+					FlagOKComb = false;
+				
+				//It might be needed to check all other instances: instNumber+1, instNumber+2, ... 
 			}
 		} while (instNumber < nInst); 
 						
 		
-		return(0);
+		return(combinedStates.size());
 	}
 	
+	
+	/* 
+	 * These function are transfered to class Rule
+	 * If needed they can be returned to this class again
+	 * 
 	public int firstStateSpecial(RuleInstance r)
 	{	
 		gotoStateSpecial(0, r);
@@ -109,5 +127,6 @@ public class CombinedRuleInstance implements IRuleInstance
 		
 		return(0);
 	}
+	*/
 	
 }

@@ -17,6 +17,7 @@ public class RuleInstance implements IRuleInstance
 	boolean FlagImplicitH = true;   //This flag is true when mobile h group is implicitly described
 	IAtom explicitH = null;
 	boolean FlagOverlapMode = false; //This is true when this instance overlaps with another one i.e. it is a part from combination
+	boolean FlagGoToStateSpecialOK = true;
 	
 	Vector<IAtom> atoms = new  Vector<IAtom>();
 	Vector<IBond> bonds = new  Vector<IBond>();
@@ -110,4 +111,35 @@ public class RuleInstance implements IRuleInstance
 	{
 		return rule.nStates;
 	}
+	
+	//Utilities for generation of combination of states -----------------------------
+	
+	public int firstStateSpecial()
+	{	
+		gotoStateSpecial(0);
+		return(0);
+	}
+	
+	public int nextStateSpecial()
+	{	
+		int nextState = curState + 1;
+		if (nextState == rule.nStates)
+			nextState = 0;
+		
+		gotoStateSpecial(nextState);
+	
+		return(nextState);
+	}
+	
+	int gotoStateSpecial(int state)
+	{
+		if (curState == state)
+			return(state); //It is already at this state
+				
+		//TODO
+		
+		return(0);
+	}
+	
+	
 }

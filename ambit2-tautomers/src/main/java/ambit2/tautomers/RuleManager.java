@@ -55,7 +55,7 @@ public class RuleManager
 			if (r instanceof CombinedRuleInstance)
 			{	
 				CombinedRuleInstance cri = (CombinedRuleInstance)r;
-				prepareOverlappedAtoms(cri);
+				prepareOverlappedAtomsBonds(cri);
 				cri.generateCombinedRuleStates();
 			}	
 			
@@ -136,7 +136,7 @@ public class RuleManager
 		return (ob);
 	}
 	
-	void prepareOverlappedAtoms(CombinedRuleInstance cri)
+	void prepareOverlappedAtomsBonds(CombinedRuleInstance cri)
 	{
 		int n = cri.instances.size();
 		for (int i = 0; i < n; i++)
