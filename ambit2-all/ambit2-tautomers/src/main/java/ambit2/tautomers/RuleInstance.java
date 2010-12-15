@@ -10,6 +10,7 @@ import org.openscience.cdk.interfaces.IBond.Order;
 public class RuleInstance implements IRuleInstance
 {
 	Rule rule;
+	CombinedRuleInstance combRI;
 	IAtomContainer molecule;
 	int foundState = 0;
 	int curState = 0;  //Current state is used to define the current position of the mobile group
@@ -131,14 +132,36 @@ public class RuleInstance implements IRuleInstance
 		return(nextState);
 	}
 	
+	
 	int gotoStateSpecial(int state)
 	{
+		FlagGoToStateSpecialOK = true;
+		
 		if (curState == state)
 			return(state); //It is already at this state
 				
-		//TODO
+		int nMissingDB = 0;
 		
-		return(0);
+		//current state double bonds are made single
+		RuleStateBondDistribution bondDistr = rule.stateBonds[curState];
+		for (int i = 0; i < bondDistr.DBPositions.length; i++)
+		{
+			int bpos = bondDistr.DBPositions[i];
+			IBond bond = bonds.get(bpos);
+			if (overlappedBonds.contains(bond))
+			{
+				if (bond.getOrder() == Order.DOUBLE)
+					bond.setOrder(Order.SINGLE);
+				else
+					nMissingDB++;
+			}
+			else			
+				bond.setOrder(Order.SINGLE);
+		}
+		
+		
+		
+		return(state);
 	}
 	
 	
