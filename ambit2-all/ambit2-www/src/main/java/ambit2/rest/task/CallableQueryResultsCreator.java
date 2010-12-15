@@ -96,9 +96,17 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 	}
 
 	public Reference call(Reference uri) throws Exception {
-	
-		Object query = getQueryObject(uri, applicationRootReference);
-		if (query == null) throw new Exception("");
+		final String msg = "Error when trying to copy the dataset at %s. Is this OpenTox dataset URI?";
+		Object query = null;
+		try {
+			query = getQueryObject(uri, applicationRootReference);
+		} catch (ResourceException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format(msg,uri),x);
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format(msg,uri),x);
+		};
+		if (query == null) 
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format(msg,uri));
 		
 		if (applicationRootReference.isParent(uri)) {
 			if (query instanceof AbstractStructureQuery) {
@@ -112,7 +120,7 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 				throw new Exception("Not implemented");
 			}
 		} else throw new Exception(String.format(
-				"Copy of external datasets not allowed, use POST to %s/dataset instead",
+				"Copy of external datasets not implemented yet, use POST to %s/dataset instead",
 				applicationRootReference
 				));
 			

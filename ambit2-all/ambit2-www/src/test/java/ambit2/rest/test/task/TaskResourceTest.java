@@ -200,6 +200,68 @@ public class TaskResourceTest extends ResourceTest {
 	}
 	
 	@Test
+	public void testSuperServiceMultiAlgorithm() throws Exception {
+		Form form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/1", port));
+		form.add(OpenTox.params.delay.toString(),"1000");
+		form.add(OpenTox.params.algorithm_uri.toString(),
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", port));
+		form.add(OpenTox.params.algorithm_uri.toString(),
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor", port)
+				);
+		
+		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
+		
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, String.format("http://localhost:%s/dataset/R3",port));
+
+		Assert.assertEquals(String.format("http://localhost:%s/dataset/R3",port),ref.toString());
+		
+	}
+	
+	@Test
+	public void testSuperServiceMultiAlgorithmRemote() throws Exception {
+
+		Form form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/dataset/1", port));
+		form.add(OpenTox.params.dataset_service.toString(),String.format("http://localhost:%d/dataset", port));
+		form.add(OpenTox.params.delay.toString(),"1000");
+		form.add(OpenTox.params.algorithm_uri.toString(),
+				String.format("http://localhost:%d/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", 8080));
+		form.add(OpenTox.params.algorithm_uri.toString(),
+				String.format("http://localhost:%d/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor", 8080)
+				);
+		
+		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
+		
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, String.format("http://localhost:%s/dataset/R3",port));
+
+		Assert.assertEquals(String.format("http://localhost:%s/dataset/R3",port),ref.toString());
+		
+	}
+	
+	@Test
+	public void testSuperServiceMultiAlgorithmTUM() throws Exception {
+
+		String host = "ideaconsult.dyndns.org";
+		Form form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(),String.format("http://%s:%d/dataset/1", host,port));
+		form.add(OpenTox.params.dataset_service.toString(),String.format("http://%s:%d/dataset",host, port));
+		form.add(OpenTox.params.delay.toString(),"1000");
+		form.add(OpenTox.params.algorithm_uri.toString(),
+				"http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/ALOGPDescriptor");
+		form.add(OpenTox.params.algorithm_uri.toString(),
+				"http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/JOELIB2/GeometricalRadius"
+				);
+		
+		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
+		
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, String.format("http://%S:%s/dataset/R3",host,port));
+
+		Assert.assertEquals(String.format("http://%s:%s/dataset/R3",host,port),ref.toString());
+		
+	}
+	
+	@Test
 	public void testSuperServiceWithError() throws Exception {
 		Form form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(),"dataseturi");
