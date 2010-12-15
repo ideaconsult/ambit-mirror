@@ -57,6 +57,11 @@ public class CombinedRuleInstance implements IRuleInstance
 	//Utilities for generation of combination of states -----------------------------
 	
 	
+	void findAllDoubleBonds()
+	{
+		//TODO
+	}
+	
 	int generateCombinedRuleStates()
 	{	
 		int n; 
