@@ -42,7 +42,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 		this.cache = cache;
 	}
 	//ResultSet.TYPE_FORWARD_ONLY, ResultSet.TYPE_SCROLL_INSENSITIVE
-	protected int resultType = ResultSet.TYPE_SCROLL_INSENSITIVE;
+	protected int resultType =  ResultSet.TYPE_SCROLL_INSENSITIVE;
 	public int getResultType() {
 		return resultType;
 	}
@@ -84,6 +84,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 				} else {
 					String sql = getSQL(target);
 					sresults = getCachedStatement(sql);
+					
 					if (sresults == null) {
 						sresults = c.prepareStatement(sql,getResultType(),getResultTypeConcurency());
 						if (cache)	addStatementToCache(sql,sresults);		
@@ -93,6 +94,8 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 					
 					QueryExecutor.setParameters(sresults, params);
 					logger.debug(sresults);
+					sresults.setFetchDirection(ResultSet.FETCH_FORWARD);
+					sresults.setFetchSize(Integer.MIN_VALUE);
 					rs = sresults.executeQuery();
 					
 				}
