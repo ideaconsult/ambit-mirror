@@ -95,7 +95,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		
 		uri = item.getTitle();
 		//drop using /reference objects
-		if (uri.indexOf("http://")<0) {
+		if ((uri.indexOf("http://")<0) && (uri.indexOf("https://")<0)) {
 			Individual source  = null;
 			
 			

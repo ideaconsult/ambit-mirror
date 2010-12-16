@@ -365,7 +365,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 				
 				String uri = p.getLabel();
 				if(uri==null) uri  = Property.guessLabel(p.getName());
-				if ((uri!=null) && (uri.indexOf("http://")<0)) {
+				if ((uri!=null) && (uri.indexOf("http://")<0) && (uri.indexOf("https://")<0)) {
 					uri = String.format("%s%s",OT.NS,Reference.encode(uri));
 				}
 				
@@ -406,7 +406,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		String namespace = null;
 		String uri = item.getTitle();
 		
-		if (uri.indexOf("http://")<0) {
+		if ((uri.indexOf("http://")<0) && (uri.indexOf("https://")<0)) {
 			String source  = null;
 			if (_type.Algorithm.equals(item.getReference().getType())) {
 				otclass = OTClass.Algorithm.toString();
