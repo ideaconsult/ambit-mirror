@@ -30,6 +30,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.dataEntry.DataEntryURIReporter;
 import ambit2.rest.property.PropertyRDFReporter;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OT.OTProperty;
@@ -56,6 +57,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	private static final long serialVersionUID = -6410553622662161903L;
 	protected PropertyRDFReporter propertyReporter;
 	protected CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter;
+	protected DataEntryURIReporter<IQueryRetrieval<IStructureRecord>> dataEntryReporter;
 	protected Comparator<Property> comp;
 	
 	protected Profile groupProperties;
@@ -92,6 +94,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
 			Request req,ResourceDoc doc) {
 		compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
+		dataEntryReporter = new DataEntryURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
 		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
 	}
 
@@ -183,9 +186,12 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				}
 			if (sort) Collections.sort(header,comp);
 			
-				
-			Individual dataEntry = getJenaModel().createIndividual(
-						OT.OTClass.DataEntry.getOntClass(getJenaModel()));
+			Individual dataEntry ;
+			if (item.getDataEntryID()>0) {
+				dataEntry = getJenaModel().createIndividual(dataEntryReporter.getURI(item),OT.OTClass.DataEntry.getOntClass(getJenaModel()));
+			} else
+				dataEntry = getJenaModel().createIndividual(OT.OTClass.DataEntry.getOntClass(getJenaModel()));
+			
 			dataset.addProperty(OT.OTProperty.dataEntry.createProperty(getJenaModel()),dataEntry);
 			int i = 0;
 			

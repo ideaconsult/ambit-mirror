@@ -31,11 +31,13 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.dataEntry.DataEntryResource;
+import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.tuple.TupleResource;
 
 /**
 Generates HTML file with links to structures . TODO - make use of a template engine 
@@ -172,11 +174,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				{"template/All/Models/view/tree","Models"},
 				//{"template/All/Endpoints/view/tree","Endpoints"},
 				{"template/All/Descriptors/view/tree","All descriptors"},				
-				//{"template/Descriptors/Adam+C.+Lee%2C+Jing-yu+Yu+and+Gordon+M.+Crippen%2C+J.+Chem.+Inf.+Model.%2C+2008%2C+48+%2810%29%2C+pp+2042%E2%80%932053","pKa"},
-				//{"template/Descriptors/ambit2.descriptors.SizeDescriptor","Molecule size"},
-				//{"template/Descriptors/ambit2.mopac.DescriptorMopacShell","Electronic descriptors (PM3 optimized structure)"},
-				//{"template/Descriptors/ambit2.mopac.MopacOriginalStructure","Electronic descriptors (original structure)"},
-				//{"template/Descriptors/template/Descriptors/Cramer+rules","Toxtree: Cramer rules"},
+
 		};
 		
 		Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
@@ -643,6 +641,41 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				w, record.getIdchemical()));
 		b.append("<div id=\"div-1d\">");
 
+		b.append(String.format("<a href=\"%s%s%s/url/all?search=%s\">Identifiers</a><br>",
+				uriReporter.getBaseReference(),
+				QueryResource.query_resource,
+				CompoundLookup.resource,
+				Reference.encode(w)
+				));
+		
+	
+		
+		b.append(String.format("<a href=\"%s?%s=%s\">Feature values</a><br>",
+				w,
+				OpenTox.params.feature_uris,
+				Reference.encode(String.format("%s/%s",w,OpenTox.URI.feature))
+				));		
+		
+		b.append(String.format("<a href=\"%s/%s\">Datasets</a><br>",
+				w,
+				"datasets"
+			));	
+		
+		b.append(String.format("<a href=\"%s%s\">Data entries</a><br>",
+				w,
+				DataEntryResource.resourceTag
+			));	
+		
+		b.append(String.format("<a href=\"%s/%s\">Features</a><br>",
+				w,
+				OpenTox.URI.feature
+				));	
+		
+		b.append(String.format("<a href=\"%s/%s\">QA label</a><br>",
+				w,
+				"consensus"
+				));			
+		/*
 		String[][] s = new String[][] {
 				{PropertyValueResource.featureKey,Property.opentox_CAS,"CAS RN"},
 				{PropertyValueResource.featureKey,Property.opentox_EC,"EINECS"},
@@ -654,16 +687,17 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		s = new String[][] {
 				{"/template",null,"Feature values by groups"},
-				{TupleResource.resourceTag,null,"Feature values by dataset"},
+				{DataEntryResource.resourceTag,null,"Feature values by dataset"},
 				{PropertyResource.featuredef,null,"Features"},
 				{null,null,"Model predictions",String.format("%s/model/null/predicted",uriReporter.getBaseReference().toString())},
 		};		
+		
 		for (String[] n:s)
 			if (n[0]==null)
 				b.append(String.format("<a href=\"%s?%s=%s\">%s</a><br>",w,OpenTox.params.feature_uris.toString(),Reference.encode(n[3]),n[2]));
 			else
 				b.append(String.format("<a href=\"%s%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
-			
+		*/	
 			List<Property> props = template2Header(getTemplate(),true);
 
 			for(Property property: props) 

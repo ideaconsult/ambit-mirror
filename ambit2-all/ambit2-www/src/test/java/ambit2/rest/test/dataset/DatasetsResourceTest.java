@@ -240,7 +240,7 @@ public class DatasetsResourceTest extends ResourceTest {
 
 		
 	}	
-	@Test
+	
 	public void testCreateEntryFromFileRDF() throws Exception {
 		URL url = getClass().getClassLoader().getResource("input.rdf");
 		FileRepresentation rep = new FileRepresentation(

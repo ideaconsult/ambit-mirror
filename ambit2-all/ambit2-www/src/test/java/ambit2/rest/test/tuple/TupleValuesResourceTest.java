@@ -20,7 +20,7 @@ public class TupleValuesResourceTest extends ResourceTest {
 	
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/compound/11/tuple/1", port);
+		return String.format("http://localhost:%d/compound/11/dataEntry/1", port);
 	}
 	@Test
 	public void testURI() throws Exception {

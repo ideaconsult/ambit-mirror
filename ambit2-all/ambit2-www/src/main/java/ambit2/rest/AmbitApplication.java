@@ -38,6 +38,7 @@ import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
+import ambit2.rest.dataEntry.DataEntryResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
@@ -46,11 +47,6 @@ import ambit2.rest.dataset.FastDatasetStructuresResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
-import ambit2.rest.fastox.FastToxStep1;
-import ambit2.rest.fastox.FastToxStep2;
-import ambit2.rest.fastox.KroesInput;
-import ambit2.rest.fastox.KroesStep1;
-import ambit2.rest.fastox.KroesStep2;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertiesByDatasetResource;
 import ambit2.rest.property.PropertyModelResource;
@@ -86,8 +82,6 @@ import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskStorage;
 import ambit2.rest.template.OntologyResource;
-import ambit2.rest.tuple.TuplePropertyValueResource;
-import ambit2.rest.tuple.TupleResource;
 import ambit2.rest.users.SwitchUserResource;
 import ambit2.rest.users.UserResource;
 
@@ -205,7 +199,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
 		
 		router.attach("/launch", LauncherResource.class);
-		
+		/*
 		Router fastoxRouter = new MyRouter(getContext());
 		router.attach(FastToxStep1.resource,fastoxRouter);
 		fastoxRouter.attachDefault(FastToxStep1.class);
@@ -217,18 +211,19 @@ public class AmbitApplication extends TaskApplication<String> {
 		ttcRouter.attach("/step2", KroesStep2.class);
 		ttcRouter.attach("/input", KroesInput.class);
 		
-		
+		*/
 		router.attach(OntologyResource.resource, OntologyResource.class);
 		router.attach(OntologyResource.resourceID, OntologyResource.class);
 		router.attach(OntologyResource.resourceTree, OntologyResource.class);
 		
 		Router fastDatasetRouter = new MyRouter(getContext());
+		
 		fastDatasetRouter.attachDefault(FastDatasetStructuresResource.class);
 		router.attach(String.format("%s",FastDatasetStructuresResource.resource), FastDatasetStructuresResource.class);
 		router.attach(String.format("%s/{%s}",FastDatasetStructuresResource.resource,DatasetResource.datasetKey), fastDatasetRouter);
 		router.attach(String.format("%s/{%s}/metadata",FastDatasetStructuresResource.resource,DatasetResource.datasetKey), DatasetsResource.class);
 		
-		
+
 		fastDatasetRouter.attach(PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.class);
 		fastDatasetRouter.attach(String.format("%s/{%s}",PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.idfeaturedef),PropertiesByDatasetResource.class);
 
@@ -352,12 +347,15 @@ public class AmbitApplication extends TaskApplication<String> {
 		
 		router.attach(String.format("%s%s",ModelResource.resourceID,PropertyModelResource.resourceID),PropertyModelResource.class);
 		
+		
 		Router tupleRouter = new MyRouter(getContext());
-		tupleRouter.attachDefault(TupleResource.class);
-		tupleRouter.attach(String.format("/{%s}", TupleResource.resourceKey),TuplePropertyValueResource.class);
-
-		compoundRouter.attach(TupleResource.resourceTag,tupleRouter);
-		conformerRouter.attach(TupleResource.resourceTag,tupleRouter);
+		tupleRouter.attachDefault(DataEntryResource.class);
+		tupleRouter.attach(String.format("/{%s}", DataEntryResource.resourceKey),DataEntryResource.class);
+		
+		datasetRouter.attach(DataEntryResource.resourceTag,tupleRouter);
+		compoundRouter.attach(DataEntryResource.resourceTag,tupleRouter);
+		conformerRouter.attach(DataEntryResource.resourceTag,tupleRouter);
+		
 		
 		Router referenceRouter = new MyRouter(getContext());
 		router.attach(ReferenceResource.reference,referenceRouter);
