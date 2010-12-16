@@ -299,4 +299,16 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 				String.format("%s not supported",entity==null?"":entity.getMediaType()));
 	}
+	
+	protected void configureRDFWriterOption(String defaultWriter) {
+		try { 
+			Object jenaOption = params.getFirstValue("rdfwriter");
+			
+			//if no option ?rdfwriter=jena|stax , then take from properties rdf.writer
+			//if not defined there, use jena
+			rdfwriter = RDF_WRITER.valueOf(jenaOption==null?defaultWriter:jenaOption.toString().toLowerCase());
+		} catch (Exception x) { 
+			rdfwriter = RDF_WRITER.jena;
+		}
+	}
 }
