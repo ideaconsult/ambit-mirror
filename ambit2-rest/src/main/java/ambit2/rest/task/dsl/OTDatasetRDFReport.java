@@ -172,7 +172,7 @@ public class OTDatasetRDFReport extends OTObject {
 		boolean e = showEndpoints && (endpoints!=null) && (endpoints.size()>0);
 		boolean f = showModels && (features!=null) && (features.size()>0);
 		return
-		String.format("%s/query/compound/url%s?search=%s%s%s%s%s",
+		String.format("%s/query/compound/url%s?search=%s%s%s%s%s&rdfwriter=jena",
 				application,
 				representation==null?"/names":representation,
 				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),

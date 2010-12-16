@@ -111,6 +111,17 @@ Then, when the "get(Variant)" method calls you back,
 	protected  Q returnQueryObject() {
 		return queryObject;
 	}
+	
+	protected void configureRDFWriterOption(String defaultWriter) {
+		try { 
+			Object jenaOption = getRequest().getResourceRef().getQueryAsForm().getFirstValue("rdfwriter");
+			//if no option ?rdfwriter=jena|stax , then take from properties rdf.writer
+			//if not defined there, use jena
+			rdfwriter = RDF_WRITER.valueOf(jenaOption==null?defaultWriter:jenaOption.toString().toLowerCase());
+		} catch (Exception x) { 
+			rdfwriter = RDF_WRITER.jena;
+		}
+	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		try {
@@ -131,14 +142,7 @@ Then, when the "get(Variant)" method calls you back,
 	        	while (retry <maxRetry) {
 		        	try {
 		        		DBConnection dbc = new DBConnection(getContext());
-		        		try { 
-		        			Object jenaOption = getRequest().getResourceRef().getQueryAsForm().getFirstValue("rdfwriter");
-		        			//if no option ?rdfwriter=jena|stax , then take from properties rdf.writer
-		        			//if not defined there, use jena
-		        			rdfwriter = RDF_WRITER.valueOf(jenaOption==null?dbc.rdfWriter():jenaOption.toString().toLowerCase());
-		        		} catch (Exception x) { 
-		        			rdfwriter = RDF_WRITER.jena;
-		        		}
+		        		configureRDFWriterOption(dbc.rdfWriter());
 		        				        		
 		        		convertor = createConvertor(variant);
 
