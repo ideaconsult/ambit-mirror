@@ -66,9 +66,12 @@ public class CallablePOST implements CallableTask{
 		Form form = new Form(input);
 		String dataset_service = form.getFirstValue(OpenTox.params.dataset_service.toString());
 		if (dataset_service==null) dataset_service = String.format("%s/dataset", applicationRootReference);
+		else dataset_service = dataset_service.trim();
 		String datasetURI = form.getFirstValue(OpenTox.params.dataset_uri.toString());
+		if (datasetURI!=null) datasetURI = datasetURI.trim();
 		
 		String modelURI = form.getFirstValue(OpenTox.params.model_uri.toString());
+		if (modelURI!=null) modelURI=modelURI.trim();
 		String[] algoURIs = form.getValuesArray(OpenTox.params.algorithm_uri.toString());
 		
 		OTDataset results = null;
@@ -88,7 +91,7 @@ public class CallablePOST implements CallableTask{
 				
 				for (String algoUri : algoURIs)
 					if (algoUri!=null) 
-						algorithms.add(OTAlgorithm.algorithm(algoUri).withParams(form));
+						algorithms.add(OTAlgorithm.algorithm(algoUri.trim()).withParams(form));
 				
 				results = algorithms.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service));
 			}
