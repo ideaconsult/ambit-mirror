@@ -232,6 +232,8 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			getResponse().setLocationRef(callable.call());
 			getResponse().setStatus(Status.SUCCESS_OK);
 			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
+		} catch (ResourceException x) {
+			throw x;
 		} catch  (Exception x) {
 			throw new ResourceException(x);
 		}

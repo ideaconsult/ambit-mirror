@@ -153,7 +153,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				String condition = form.getFirstValue(QueryResource.condition);
 				if (key != null) {
 					key = Reference.decode(key.toString());
-					if (!key.toString().startsWith("http://"))
+					if (!key.toString().startsWith("http://") && !key.toString().startsWith("https://"))
 						key = String.format("%s%s",OT.NS,key);
 					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(key.toString());
 					q.setSearchByAlias(true);
