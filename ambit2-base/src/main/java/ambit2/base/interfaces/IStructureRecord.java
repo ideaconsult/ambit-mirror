@@ -123,4 +123,10 @@ public interface IStructureRecord extends IChemical{
     Object clone() throws CloneNotSupportedException ;
     STRUC_TYPE getType();
     void setType(STRUC_TYPE type);
+    /**
+     * Data entry (tuples) in a dataset, i.e. row identifier
+     * @return
+     */
+    int getDataEntryID();
+    void setDataEntryID(int id);
 }

@@ -255,7 +255,7 @@ public class TaskResourceTest extends ResourceTest {
 		
 		String superservice = String.format("http://localhost:%d/algorithm/superservice", port);
 		
-		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, String.format("http://%S:%s/dataset/R3",host,port));
+		Reference ref = testAsyncTask(superservice, form, Status.SUCCESS_OK, String.format("http://%s:%s/dataset/R3",host,port));
 
 		Assert.assertEquals(String.format("http://%s:%s/dataset/R3",host,port),ref.toString());
 		

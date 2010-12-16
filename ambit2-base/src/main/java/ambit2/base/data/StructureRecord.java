@@ -32,6 +32,17 @@ import ambit2.base.interfaces.IStructureRecord;
 
 
 public class StructureRecord implements IStructureRecord {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -650816773926953033L;
+	protected int dataEntryID=-1;
+	public int getDataEntryID() {
+		return dataEntryID;
+	}
+	public void setDataEntryID(int dataEntryID) {
+		this.dataEntryID = dataEntryID;
+	}
 	protected long hash;
 	protected String formula;
 	protected String smiles;
