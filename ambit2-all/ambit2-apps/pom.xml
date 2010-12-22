@@ -40,6 +40,14 @@
     	<name>Ideaconsult Ltd.</name>
     	<url>http://apps.ideaconsult.net:8080</url>
     </organization>
+<!--
+<pluginRepositories>
+  <pluginRepository>
+    <id>Codehaus Snapshots</id>     
+    <url>https://nexus.codehaus.org/content/repositories/codehaus-snapshots</url>
+  </pluginRepository> 
+</pluginRepositories> 
+-->
   <build>
       <resources>
 	<resource>
