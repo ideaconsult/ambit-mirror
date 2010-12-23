@@ -62,6 +62,8 @@ public class DBConnection {
 		li.setUser(p==null?"guest":p);			
 		p = properties.getProperty("Password");
 		li.setPassword(p==null?"guest":p);	
+		p = properties.getProperty(Preferences.HOST);
+		li.setHostname(p==null?"localhost":p);			
 		
 		if (getContext().getParameters().getFirstValue(Preferences.DATABASE)!=null)
 			li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
