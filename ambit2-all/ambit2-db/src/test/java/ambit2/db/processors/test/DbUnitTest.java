@@ -63,7 +63,11 @@ public abstract class DbUnitTest {
 			properties = null;
 		}
 	}
-
+	protected String getHost() {
+		loadProperties();
+		String p = properties.getProperty("Host");
+		return p==null?"localhost":p;
+	}
 	protected String getDatabase() {
 		loadProperties();
 		String p = properties.getProperty("database.test");
@@ -94,7 +98,7 @@ public abstract class DbUnitTest {
 	}	
 	@Before
 	public void setUp() throws Exception {
-		IDatabaseConnection c = getConnection("mysql",getPort(),getAdminUser(),getAdminPWD());
+		IDatabaseConnection c = getConnection(getHost(),"mysql",getPort(),getAdminUser(),getAdminPWD());
 		try {
 			DbCreateDatabase db = new DbCreateDatabase();
 			db.setConnection(c.getConnection());
@@ -103,17 +107,18 @@ public abstract class DbUnitTest {
 			c.close();
 		}
 	}
-	protected IDatabaseConnection getConnection(String db,String port,String user, String pass) throws Exception {
+	protected IDatabaseConnection getConnection(String host,String db,String port,String user, String pass) throws Exception {
 		  
         Class.forName("com.mysql.jdbc.Driver");
         Connection jdbcConnection = DriverManager.getConnection(
-                String.format("jdbc:mysql://localhost:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8",port,db)
+                String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8",
+                		host,port,db)
                 , user,pass);
 //SET NAMES utf8	        
 	   return new DatabaseConnection(jdbcConnection);
 	}	
 	protected IDatabaseConnection getConnection() throws Exception {
-	   return getConnection(getDatabase(),getPort(),getUser(),getPWD());
+	   return getConnection(getHost(),getDatabase(),getPort(),getUser(),getPWD());
 	}
     public void setUpDatabase(String xmlfile) throws Exception {
         IDatabaseConnection connection = getConnection();
