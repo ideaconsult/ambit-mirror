@@ -27,7 +27,6 @@ public class ConsensusLabelResource extends QueryResource<QueryConsensus,String>
 				MediaType.TEXT_PLAIN,
 				/*
 				MediaType.TEXT_HTML,
-				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
 				MediaType.APPLICATION_RDF_XML,

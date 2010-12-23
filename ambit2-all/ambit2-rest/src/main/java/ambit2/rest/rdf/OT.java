@@ -7,8 +7,9 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
+
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -229,7 +230,7 @@ public class OT {
     public static OntModel createModel(OntModel model,Reference uri, MediaType mediaType) throws ResourceException {
     	//Client httpclient = new Client(Protocol.HTTP);
     	//httpclient.setConnectTimeout(300000);
-    	ClientResource client = new ClientResource(uri);
+    	ClientResourceWrapper client = new ClientResourceWrapper(uri);
     	client.setRetryOnError(false);
     	//System.out.println("Connecting "+uri);
 		//client.setNext(httpclient);

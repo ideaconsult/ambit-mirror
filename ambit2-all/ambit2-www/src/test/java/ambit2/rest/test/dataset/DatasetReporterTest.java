@@ -102,23 +102,7 @@ public class DatasetReporterTest extends ResourceTest {
 		}
 		return count ==4;
 	}			
-	@Test
-	public void testXML() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_XML);
-	}
-	@Override
-	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
-			throws Exception {
-		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		int count=0;
-		while ((line = reader.readLine())!=null) {
-			System.out.println(line);
-			count++;
-		}
-		return count >0;
-	}		
+	
 	@Test
 	public void testCSV() throws Exception {
 		testGet(String.format(

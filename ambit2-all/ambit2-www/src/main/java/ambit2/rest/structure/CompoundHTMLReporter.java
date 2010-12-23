@@ -32,11 +32,8 @@ import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataEntry.DataEntryResource;
-import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.rest.propertyvalue.FeatureResource;
-import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -228,7 +225,6 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				ChemicalMediaType.CHEMICAL_CML,
 				ChemicalMediaType.CHEMICAL_SMILES,					
 				MediaType.TEXT_URI_LIST,
-				MediaType.TEXT_XML,
 				MediaType.APPLICATION_PDF,
 				MediaType.TEXT_CSV,
 				MediaType.TEXT_PLAIN,

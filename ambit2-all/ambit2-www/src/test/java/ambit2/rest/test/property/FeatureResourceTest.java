@@ -37,9 +37,6 @@ public class FeatureResourceTest extends ResourceTest {
 
 
 	/*
-<?xml version="1.0" encoding="UTF-8"?><Features xmlns="http://opentox.org/Feature/1.0"><Feature CompoundID="11" ID="1" Name="CAS" Value="1530-32-1"/></Features>
-	 */
-	
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
@@ -56,6 +53,7 @@ public class FeatureResourceTest extends ResourceTest {
         parser.parse(doc);
         return true;
 	}	
+	*/
 	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)

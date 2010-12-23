@@ -21,7 +21,6 @@ import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.db.update.dictionary.DeleteDictionary;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
@@ -60,7 +59,6 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 		super.doInit();
 		customizeVariants(new MediaType[] {
 				MediaType.TEXT_HTML,
-				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
@@ -74,8 +72,6 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	public IProcessor<IQueryRetrieval<Property>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		//if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-		//	return new DocumentConvertor(new OntologyDOMReporter(getRequest(),isRecursive()));
 		if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||

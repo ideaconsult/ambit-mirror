@@ -14,6 +14,7 @@ public class AllReferencesResourceTest  extends ResourceTest {
 	public String getTestURI() {
 		return String.format("http://localhost:%d/reference", port);
 	}
+	/*
 	@Test
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
@@ -30,6 +31,7 @@ public class AllReferencesResourceTest  extends ResourceTest {
 		}
 		return count>0;
 	}	
+	*/
 	@Test
 	public void testURI() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_URI_LIST);

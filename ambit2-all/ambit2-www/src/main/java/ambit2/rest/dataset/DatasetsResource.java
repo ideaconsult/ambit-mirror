@@ -65,7 +65,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(new MediaType[] {
-				MediaType.TEXT_HTML,MediaType.TEXT_XML,MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,
+				MediaType.TEXT_HTML,
+				MediaType.TEXT_URI_LIST,ChemicalMediaType.TEXT_YAML,
 				ChemicalMediaType.CHEMICAL_SMILES,
 				ChemicalMediaType.CHEMICAL_CML,
 				ChemicalMediaType.CHEMICAL_MDLSDF,
@@ -132,9 +133,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
 
-	if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-		return new DocumentConvertor(new DatasetsXMLReporter(getRequest(),getDocumentation()));	
-	} else if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
+	if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(

@@ -8,7 +8,6 @@ import java.util.List;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
 public abstract class OTContainers<T extends OTObject>  extends OTProcessingResource {
 	protected List<T> items;
@@ -99,11 +98,11 @@ public abstract class OTContainers<T extends OTObject>  extends OTProcessingReso
 	}
 	 
 		public OTContainers<T> read(String uri) throws Exception {
-			ClientResource client = null;
+			ClientResourceWrapper client = null;
 			Representation r = null;
 			try {
 		
-				client = new ClientResource(new Reference(uri));
+				client = new ClientResourceWrapper(new Reference(uri));
 						
 				r = client.get(MediaType.TEXT_URI_LIST);
 				BufferedReader reader = new BufferedReader(new InputStreamReader(r.getStream()));

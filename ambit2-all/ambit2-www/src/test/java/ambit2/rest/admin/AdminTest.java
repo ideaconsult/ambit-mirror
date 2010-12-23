@@ -11,6 +11,7 @@ import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 import ambit2.rest.test.ResourceTest;
 
 public class AdminTest extends ResourceTest {
@@ -46,7 +47,7 @@ public class AdminTest extends ResourceTest {
 		form.add("user", getAdminUser());
 		form.add("pass",getAdminPWD());
 		//should fail
-		ClientResource c = new ClientResource(getTestURI());
+		ClientResourceWrapper c = new ClientResourceWrapper(getTestURI());
 		Representation r = null;
 		try {
 			r = c.post(form.getWebRepresentation(),MediaType.APPLICATION_WWW_FORM);

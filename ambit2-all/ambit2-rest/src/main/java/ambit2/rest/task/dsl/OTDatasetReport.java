@@ -11,7 +11,6 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
 import ambit2.core.io.QuotedTokenizer;
 import ambit2.rest.OpenTox;
@@ -60,7 +59,7 @@ public abstract class OTDatasetReport extends OTObject {
 		Reference ref = uri.clone();
 		Form form = ref.getQueryAsForm();;
 		ref.setQuery("");
-		ClientResource client = new ClientResource(ref);
+		ClientResourceWrapper client = new ClientResourceWrapper(ref);
 		Representation r = null;
 		try {
 			

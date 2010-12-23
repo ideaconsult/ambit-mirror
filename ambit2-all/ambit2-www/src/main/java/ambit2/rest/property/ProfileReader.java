@@ -98,37 +98,6 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 		}
 	}
 
-	/*
-	protected void readFeaturesXML(Reference uri,final Template profile) throws Exception {
-		if (uri==null) return;
-		Representation r = null;
-		try {
-			
-			ClientResource client = new ClientResource(uri);
-			//client.setClientInfo(getRequest().getClientInfo());
-			//client.setReferrerRef(getRequest().getOriginalRef());
-			r = client.get(MediaType.TEXT_XML);
-			
-			PropertyDOMParser parser = new PropertyDOMParser() {
-				@Override
-				public void handleItem(Property property)
-						throws AmbitException {
-					if (property!= null)  {
-						property.setEnabled(true);
-						profile.add(property);
-					}
-				}
-			};		
-			parser.parse(new InputStreamReader(r.getStream(),"UTF-8"));
-		} catch (Exception x) {
-			throw x;
-
-		} finally {
-			try {if (r != null) r.release(); } catch (Exception x) {}
-			
-		}
-	}	
-	*/
 	public void open() throws DbAmbitException {
 		
 	}

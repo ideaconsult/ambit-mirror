@@ -138,7 +138,6 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						ChemicalMediaType.CHEMICAL_CML,
 						ChemicalMediaType.CHEMICAL_SMILES,						
 						MediaType.TEXT_URI_LIST,
-						MediaType.TEXT_XML,
 						MediaType.APPLICATION_PDF,
 						MediaType.TEXT_CSV,
 						ChemicalMediaType.WEKA_ARFF,

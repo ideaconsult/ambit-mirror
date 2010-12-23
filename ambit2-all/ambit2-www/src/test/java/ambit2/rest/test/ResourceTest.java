@@ -31,7 +31,6 @@ import org.restlet.data.Status;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -41,6 +40,7 @@ import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.task.RemoteTask;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
@@ -223,7 +223,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	}
 	
 	public void testGetJavaObject(String uri, MediaType media, Status expectedStatus) throws Exception {
-		ClientResource resource  = new ClientResource(uri);
+		ClientResourceWrapper resource  = new ClientResourceWrapper(uri);
 		resource.setMethod(Method.GET);
 		resource.get(media);
 		Assert.assertEquals(expectedStatus,resource.getStatus());
@@ -240,7 +240,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	}		
 	
 	public void testGetRepresentation(String uri, MediaType media) throws Exception {
-		ClientResource client = new ClientResource(uri);
+		ClientResourceWrapper client = new ClientResourceWrapper(uri);
 		Assert.assertTrue(verifyRepresentation(uri,media,client.get(media)));
 	}	
 	
@@ -264,9 +264,11 @@ public abstract class ResourceTest extends DbUnitTest {
 	public boolean verifyResponseHTML(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}	
+	/*
 	public boolean verifyResponseXML(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
-	}		
+	}
+	*/		
 	public boolean verifyResponseCML(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}		
@@ -323,8 +325,10 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseWADL(uri, media, in);
 		else if (MediaType.TEXT_HTML.equals(media))
 			return verifyResponseHTML(uri, media, in);
+		/*
 		else if (MediaType.TEXT_XML.equals(media))
 			return verifyResponseXML(uri, media, in);
+			*/
 		else if (MediaType.TEXT_URI_LIST.equals(media))
 			return verifyResponseURI(uri, media, in);		
 		else if (MediaType.TEXT_PLAIN.equals(media))

@@ -9,7 +9,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
@@ -189,7 +188,7 @@ public class OTDatasetRDFReport extends OTObject {
 		Reference ref = uri.clone();
 		Form form = ref.getQueryAsForm();;
 		ref.setQuery("");
-		ClientResource client = new ClientResource(ref);
+		ClientResourceWrapper client = new ClientResourceWrapper(ref);
 		Representation r = null;
 		
 		try {
@@ -620,7 +619,7 @@ public class OTDatasetRDFReport extends OTObject {
 			Reference ref = uri.clone();
 			Form form = ref.getQueryAsForm();;
 			ref.setQuery("");
-			ClientResource client = new ClientResource(ref);
+			ClientResourceWrapper client = new ClientResourceWrapper(ref);
 			Representation r = null;
 			
 			try {

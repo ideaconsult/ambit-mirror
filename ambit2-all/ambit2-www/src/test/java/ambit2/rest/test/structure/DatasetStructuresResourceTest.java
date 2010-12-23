@@ -1,8 +1,6 @@
 package ambit2.rest.test.structure;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import junit.framework.Assert;
 
@@ -48,6 +46,7 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 		public void testARFF() throws Exception {
 			testGet(getTestURI(),ChemicalMediaType.WEKA_ARFF);
 		}			
+		/*
 		@Test
 		public void testXML() throws Exception {
 			testGet(getTestURI(),MediaType.TEXT_XML);
@@ -64,6 +63,7 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 			}
 			return count >0;
 		}	
+		*/
 		@Test
 		public void testSDF() throws Exception {
 			testGet(getTestURI(),ChemicalMediaType.CHEMICAL_MDLSDF);

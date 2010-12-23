@@ -16,7 +16,6 @@ import org.restlet.data.Status;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
@@ -26,6 +25,7 @@ import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.model.AbstractModel;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.OT;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
@@ -88,10 +88,10 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 		this.useStatic = useStatic;
 	}	
 	protected OntModel getOntology(OntModel model) throws ResourceException {
-		ClientResource client = null;
+		ClientResourceWrapper client = null;
 		try {
 			if (search==null) return model;
-			client = new ClientResource(Reference.decode(search.trim()));
+			client = new ClientResourceWrapper(Reference.decode(search.trim()));
 			MediaType[] mt = {
 					MediaType.APPLICATION_RDF_XML,
 					MediaType.TEXT_RDF_N3,
@@ -217,7 +217,6 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
-				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,

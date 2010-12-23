@@ -78,7 +78,6 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 		}
 		customizeVariants(new MediaType[] {
 				MediaType.TEXT_HTML,
-				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				ChemicalMediaType.TEXT_YAML,
 				MediaType.TEXT_PLAIN,

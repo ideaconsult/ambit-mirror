@@ -19,7 +19,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveFieldPropertyValue;
 import ambit2.db.search.AbstractQuery;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
@@ -47,7 +46,6 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 			error = x;
 		}		
 		customizeVariants(new MediaType[] {MediaType.TEXT_HTML,
-				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
 				MediaType.APPLICATION_RDF_XML,

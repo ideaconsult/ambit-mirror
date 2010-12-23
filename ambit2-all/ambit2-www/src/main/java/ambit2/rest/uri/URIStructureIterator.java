@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
@@ -15,6 +14,7 @@ import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 public class URIStructureIterator extends AbstractBatchProcessor<String[], IStructureRecord>  {
 	protected Reference baseReference;
@@ -67,7 +67,7 @@ public class URIStructureIterator extends AbstractBatchProcessor<String[], IStru
 
 		Representation r = null;
 		try {
-			ClientResource client = new ClientResource(uri);
+			ClientResourceWrapper client = new ClientResourceWrapper(uri);
 			
 			
 			r = client.get(ChemicalMediaType.CHEMICAL_MDLSDF);
