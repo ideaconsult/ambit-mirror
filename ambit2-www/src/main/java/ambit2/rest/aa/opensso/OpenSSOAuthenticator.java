@@ -21,7 +21,7 @@ public class OpenSSOAuthenticator extends ChallengeAuthenticator {
 	}
 
     public static ChallengeScheme getOpenSSOChallengeScheme() {
-    	return new ChallengeScheme("OpenSSO","OpenSSO","OpenSSO");
+    	return OpenSSOChallengeScheme.OpenSSO;
     }
 
     @Override

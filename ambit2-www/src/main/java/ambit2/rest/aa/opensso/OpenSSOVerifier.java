@@ -5,6 +5,7 @@ import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
+import org.restlet.security.User;
 import org.restlet.security.Verifier;
 
 /**
@@ -29,7 +30,13 @@ public class OpenSSOVerifier implements Verifier {
 			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 			ssoToken.setToken(token);
 			try {
-				return ssoToken.isTokenValid()?Verifier.RESULT_VALID:Verifier.RESULT_INVALID;
+				if (ssoToken.isTokenValid()) {
+					User user = new User();
+					user.setSecret(ssoToken.getToken().toCharArray());
+					request.getClientInfo().setUser(user);
+					return Verifier.RESULT_VALID;
+				} else 
+					return Verifier.RESULT_INVALID;
 			} catch (Exception x) {
 				x.printStackTrace(); //TODO
 				return  Verifier.RESULT_MISSING;
