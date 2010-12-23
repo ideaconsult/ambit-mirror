@@ -22,6 +22,7 @@ import org.restlet.resource.ClientResource;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.task.RemoteTask;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {
@@ -436,7 +437,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				"SELECT * from properties where name='caco2'");
 		Assert.assertEquals(2,table.getRowCount());
 		
-		ClientResource client = new ClientResource(new Reference(String.format("http://localhost:%d/model/3", port)));
+		ClientResourceWrapper client = new ClientResourceWrapper(new Reference(String.format("http://localhost:%d/model/3", port)));
 
 		Representation r = client.get(MediaType.TEXT_PLAIN);
 		System.out.println(r.getText());
@@ -534,7 +535,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				"SELECT * from properties where name='Property 2'");
 		Assert.assertEquals(2,table.getRowCount());
 		
-		ClientResource client = new ClientResource(new Reference(String.format("http://localhost:%d/model/3", port)));
+		ClientResourceWrapper client = new ClientResourceWrapper(new Reference(String.format("http://localhost:%d/model/3", port)));
 
 		Representation r = client.get(MediaType.TEXT_PLAIN);
 		System.out.println(r.getText());

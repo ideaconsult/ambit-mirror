@@ -10,7 +10,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
@@ -19,6 +18,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -82,10 +82,10 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 	@Override
 	public boolean readStructure(RDFNode target, IStructureRecord record) {
 		Representation r = null;
-		ClientResource client = null;
+		ClientResourceWrapper client = null;
 		try {
 			if (target.isURIResource()) {
-				client = new ClientResource(((Resource)target).getURI());
+				client = new ClientResourceWrapper(((Resource)target).getURI());
 				client.setRetryOnError(false);
 				client.setFollowingRedirects(true);
 				r = client.get(ChemicalMediaType.CHEMICAL_MDLSDF);

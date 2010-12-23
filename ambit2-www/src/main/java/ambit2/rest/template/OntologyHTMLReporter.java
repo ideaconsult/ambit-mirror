@@ -66,27 +66,6 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			if ( record.getClazz().equals(Dictionary.class) ){
 				output.write(toURI(record));
 				
-				/*
-				if (!collapsed) {
-					AbstractDOMParser parser = new PropertyDOMParser(){
-						@Override
-						public void handleItem(Property item) throws AmbitException {
-							processItem(item);
-							
-						}
-					};				
-
-					
-					
-					Reference newuri = new Reference(String.format("%s/view/tree", uriReporter.getURI(record)));
-					if (!newuri.equals(uriReporter.getRequest().getOriginalRef())) {
-						RESTClient client = new RESTClient(parser,null);
-						client.process(newuri);
-					}
-					
-							
-				}				
-				*/
 				
 			} else 
 				output.write(toURI(record));

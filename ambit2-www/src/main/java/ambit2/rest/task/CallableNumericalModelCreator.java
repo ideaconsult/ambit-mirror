@@ -9,7 +9,6 @@ import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
 import weka.core.Instances;
 import Jama.Matrix;
@@ -23,6 +22,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.CoverageModelBuilder;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 public class CallableNumericalModelCreator extends CallableModelCreator<Instances,Matrix,CoverageModelBuilder> {
 	
@@ -78,9 +78,9 @@ public class CallableNumericalModelCreator extends CallableModelCreator<Instance
 	protected Object createTarget(Reference reference) throws Exception {
 		Representation r = null;
 		BufferedReader reader = null;
-		ClientResource client = null;
+		ClientResourceWrapper client = null;
 		try {
-			client = new ClientResource(reference);
+			client = new ClientResourceWrapper(reference);
 			r = client.get(ChemicalMediaType.WEKA_ARFF);
 			reader = new BufferedReader(new InputStreamReader(r.getStream()));
 			return new Instances(reader);

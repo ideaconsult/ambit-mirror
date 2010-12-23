@@ -8,11 +8,11 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.rest.rdf.RDFStructuresIterator;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 import ambit2.rest.test.ResourceTest;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -121,7 +121,7 @@ public class StaXRDFTest extends ResourceTest {
 	@Test
 	public void simpleTestRDFXML() throws Exception {
 		//testGet(getTestURI(),MediaType.APPLICATION_RDF_XML);
-		ClientResource r = new ClientResource(getTestURI());
+		ClientResourceWrapper r = new ClientResourceWrapper(getTestURI());
 		Representation rep = r.get(MediaType.APPLICATION_RDF_XML);
 		Assert.assertEquals(Status.SUCCESS_OK,r.getStatus());
 		Assert.assertTrue(rep.isAvailable());

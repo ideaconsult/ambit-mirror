@@ -11,7 +11,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.representation.ObjectRepresentation;
-import org.restlet.resource.ClientResource;
 
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -22,6 +21,7 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 import ambit2.rest.task.dsl.OTDataset;
 import ambit2.rest.task.dsl.OTFeature;
 
@@ -145,9 +145,9 @@ public abstract class CallableQueryProcessor<Target,Result> implements CallableT
 		if (!applicationRootReference.isParent(reference)) throw 
 			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
 		ObjectRepresentation<Serializable> repObject = null;
-		ClientResource resource = null;
+		ClientResourceWrapper resource = null;
 		try {
-			resource  = new ClientResource(reference);
+			resource  = new ClientResourceWrapper(reference);
 			resource.setMethod(Method.GET);
 			resource.get(MediaType.APPLICATION_JAVA_OBJECT);
 			if (resource.getStatus().isSuccess()) {

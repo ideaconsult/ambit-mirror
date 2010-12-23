@@ -6,7 +6,6 @@ import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
@@ -112,7 +111,7 @@ public class OTDataset extends OTObject implements IOTDataset {
 			 Reference ref = uri.clone();
 			 ref.addQueryParameter(OpenTox.params.page.toString(), "0");
 			 ref.addQueryParameter(OpenTox.params.pagesize.toString(), "1");
-			 ClientResource client = new ClientResource(ref);
+			 ClientResourceWrapper client = new ClientResourceWrapper(ref);
 			 Representation r = null;
 			 try {
 				 r = client.get(MediaType.TEXT_URI_LIST);

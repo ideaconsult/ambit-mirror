@@ -57,7 +57,7 @@ public class AllConformersResourceTest extends ConformerResourceTest {
 		}
 		return true;
 	}
-
+	/*
 	@Test
 	public void testXML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_XML);
@@ -73,4 +73,5 @@ public class AllConformersResourceTest extends ConformerResourceTest {
 		}
 		return true;
 	}	
+	*/
 }

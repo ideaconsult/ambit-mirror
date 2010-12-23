@@ -17,7 +17,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RDFJenaConvertor;
@@ -26,7 +25,6 @@ import ambit2.rest.YAMLConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.DatasetYamlReporter;
 import ambit2.rest.dataset.DatasetsHTMLReporter;
-import ambit2.rest.dataset.DatasetsXMLReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.query.QueryResource;
 
@@ -36,9 +34,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 	public IProcessor<IQueryRetrieval<SourceDataset>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 
-	if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-		return new DocumentConvertor(new DatasetsXMLReporter(getRequest(),getDocumentation()));	
-	} else if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
+	if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(

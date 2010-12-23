@@ -6,7 +6,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
@@ -102,7 +101,7 @@ public class OTObject implements Comparable<OTObject>, IOTObject{
 	}
 	
 	public OTObject readTextLineAsName() throws Exception {
-		ClientResource client = new ClientResource(uri);
+		ClientResourceWrapper client = new ClientResourceWrapper(uri);
 		Representation r=null;
 		try {
 			r =	client.get(MediaType.TEXT_PLAIN);

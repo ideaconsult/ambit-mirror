@@ -62,7 +62,6 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(new MediaType[] {
-				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,

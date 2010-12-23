@@ -79,7 +79,6 @@ Then, when the "get(Variant)" method calls you back,
 		super.doInit();
 		customizeVariants(new MediaType[] {
 				MediaType.TEXT_HTML,
-				//MediaType.TEXT_XML,
 				MediaType.TEXT_PLAIN,
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,

@@ -17,7 +17,6 @@ import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.routing.Template;
 
 import ambit2.base.data.Property;
@@ -30,6 +29,7 @@ import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -216,10 +216,10 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 	
 	public boolean readStructure(RDFNode target,IStructureRecord record) {
 		Representation r  = null;
-		ClientResource client  = null;
+		ClientResourceWrapper client  = null;
 		try {
 			if (target.isURIResource()) {
-				client = new ClientResource(((Resource)target).getURI());
+				client = new ClientResourceWrapper(((Resource)target).getURI());
 				r = client.get(ChemicalMediaType.CHEMICAL_MDLMOL);
 				if (client.getStatus().equals(Status.SUCCESS_OK)) {
 					record.setContent(r.getText());

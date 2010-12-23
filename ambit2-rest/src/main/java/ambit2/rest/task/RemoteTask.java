@@ -11,8 +11,9 @@ import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
+
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 /**
  * Convenience class to launch and poll remote POST jobs
@@ -40,9 +41,9 @@ public class RemoteTask implements Serializable {
 		super();
 		this.url = url;
 		Representation r=null;
-		ClientResource client = null;
+		ClientResourceWrapper client = null;
 		try {
-			client = new ClientResource(url);
+			client = new ClientResourceWrapper(url);
 			client.setChallengeResponse(authentication);
 			client.setFollowingRedirects(true);
 			client.setRetryAttempts(1);
@@ -89,7 +90,7 @@ public class RemoteTask implements Serializable {
 		try {
 			System.out.println(url);
 			System.out.println(input.getText());
-			ClientResource client = new ClientResource(url);
+			ClientResourceWrapper client = new ClientResourceWrapper(url);
 			client.setChallengeResponse(authentication);
 			r = client.post(input,media);
 			result = handleOutput(client, r);
@@ -147,12 +148,12 @@ public class RemoteTask implements Serializable {
 			
 		if (isDone()) return true;
 
-		ClientResource client = null;
+		ClientResourceWrapper client = null;
 		Representation r = null;
 		
 		try {
 			
-			client = new ClientResource(result.toString());
+			client = new ClientResourceWrapper(result.toString());
 			client.setRetryOnError(false);
 			client.setRetryAttempts(1);
 			client.setFollowingRedirects(true);

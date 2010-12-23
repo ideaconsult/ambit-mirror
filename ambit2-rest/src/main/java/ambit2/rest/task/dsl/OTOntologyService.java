@@ -5,7 +5,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import com.hp.hpl.jena.query.QueryExecution;
@@ -33,10 +32,10 @@ public class OTOntologyService<Z> extends OTObject {
 	public String report(String query) throws Exception  {
 
 
-		ClientResource resource = null;
+		ClientResourceWrapper resource = null;
 		Representation  r = null;
 		try {
-			resource = new ClientResource(uri);
+			resource = new ClientResourceWrapper(uri);
 			Form form = new Form();
 			form.add("query",query);
 			r = resource.post(form,MediaType.TEXT_HTML);

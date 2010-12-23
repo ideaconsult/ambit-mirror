@@ -89,7 +89,6 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		super.doInit();
 		customizeVariants(new MediaType[] {
 				MediaType.TEXT_HTML,
-				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				ChemicalMediaType.TEXT_YAML,
 				MediaType.APPLICATION_RDF_XML,

@@ -21,7 +21,6 @@ import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.wadl.WadlRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -176,7 +175,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				ChemicalMediaType.CHEMICAL_INCHI,
 				ChemicalMediaType.CHEMICAL_CML,
 				MediaType.APPLICATION_PDF,
-				MediaType.TEXT_XML,
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.TEXT_YAML,

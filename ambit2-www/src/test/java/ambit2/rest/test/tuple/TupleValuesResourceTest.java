@@ -4,15 +4,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.restlet.data.MediaType;
-import org.w3c.dom.Document;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.readers.PropertyValue;
-import ambit2.rest.propertyvalue.PropertyValueDOMParser;
 import ambit2.rest.test.ResourceTest;
 
 public class TupleValuesResourceTest extends ResourceTest {
@@ -78,6 +72,7 @@ public class TupleValuesResourceTest extends ResourceTest {
 		throw new Exception("TODO: Parse XML and verify values");
 	}		
 	*/
+	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
@@ -94,5 +89,6 @@ public class TupleValuesResourceTest extends ResourceTest {
         parser.parse(doc);
         return true;
 	}	
+	*/
 	
 }

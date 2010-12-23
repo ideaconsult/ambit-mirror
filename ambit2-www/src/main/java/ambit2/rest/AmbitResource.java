@@ -14,8 +14,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.wadl.WadlApplication;
-import org.restlet.ext.wadl.WadlRepresentation;
 import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -251,7 +249,6 @@ public class AmbitResource extends WadlServerResource {
 		super.doInit();
         //List<Variant> variants = new ArrayList<Variant>();
         getVariants().add(new Variant(MediaType.TEXT_HTML));
-        getVariants().add(new Variant(MediaType.TEXT_XML));
         getVariants().add(new Variant(MediaType.TEXT_URI_LIST));
         getVariants().add(new Variant(MediaType.TEXT_PLAIN));
         getVariants().add(new Variant(MediaType.APPLICATION_WADL));
@@ -294,18 +291,7 @@ public class AmbitResource extends WadlServerResource {
 			     StringWriter w = new StringWriter();
 			     AmbitApplication.printRoutes(getApplication().getRoot(),">",w);
 				return new StringRepresentation(w.toString());		
-			} else if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-				StringBuilder xml = new StringBuilder();
-				xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-				xml.append("<ambit xmlns=\"http://ambit.sourceforge.net/ambit/rest/v2\">");
-				for (String[] s:uri) {
-					xml.append("<uri>");
-					xml.append(getRequest().getRootRef());
-					xml.append(s[0]);
-					xml.append("</uri>");
-				}
-				xml.append("</ambit>");
-				return new StringRepresentation(xml.toString());
+			
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				StringBuilder xml = new StringBuilder();
 				for (String[] s:uri) {
@@ -614,22 +600,7 @@ window.setInterval(function() {
 	public static String getSparql(Request request) {
 		
 		return SPARQLPointerResource.getOntologyServiceURI();
-		/*
-		if (sparqlEndpoint!=null) return sparqlEndpoint;
-		
-		ClientResource c = null;
-		Representation r = null;
-		try {
-			c = new ClientResource(String.format("%s/sparqlendpoint", request.getResourceRef()));
-			r = c.get();
-			return r.getText();
-		} catch (Exception x) {
-			return "";
-		} finally {
-			try { r.release();} catch (Exception x) {}
-			try { c.release();} catch (Exception x) {}
-		}
-		*/
+	
 	}
 	public static void writeSearchForm(Writer w,String title,Request request ,String meta) throws IOException {
 		writeSearchForm(w, title, request, meta,Method.GET);

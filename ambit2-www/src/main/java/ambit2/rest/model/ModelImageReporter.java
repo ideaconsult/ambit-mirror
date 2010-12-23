@@ -10,7 +10,6 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
@@ -24,6 +23,7 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.model.predictor.ModelPredictor;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> extends QueryReporter<ModelQueryResults, Q,BufferedImage > {
 	/**
@@ -82,7 +82,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 		Reference firstmol = new Reference(dataset);
 		firstmol.addQueryParameter(OpenTox.params.feature_uris.toString(),resultsURI);
 		firstmol.addQueryParameter("max", "1");
-		ClientResource client = new ClientResource(firstmol);
+		ClientResourceWrapper client = new ClientResourceWrapper(firstmol);
 		Representation r = null;
 		MyIteratingMDLReader reader = null;
 		try {

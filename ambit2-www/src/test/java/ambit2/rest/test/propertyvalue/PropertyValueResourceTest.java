@@ -9,12 +9,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.w3c.dom.Document;
 
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.readers.PropertyValue;
-import ambit2.rest.propertyvalue.PropertyValueDOMParser;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.test.ResourceTest;
 
@@ -36,6 +32,7 @@ public class PropertyValueResourceTest extends ResourceTest {
 	public void testRDFTurtle() throws Exception {
 		testGet(getTestURI(),MediaType.APPLICATION_RDF_TURTLE);
 	}	
+	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
 			throws Exception {
@@ -52,6 +49,7 @@ public class PropertyValueResourceTest extends ResourceTest {
         parser.parse(doc);
         return true;
 	}	
+	*/
 	/*
 	@Override
 	public boolean verifyResponseXML(String uri, MediaType media, InputStream in)
