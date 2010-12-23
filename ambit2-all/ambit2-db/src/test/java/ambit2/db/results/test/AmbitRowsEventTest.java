@@ -243,7 +243,7 @@ public class AmbitRowsEventTest extends DbUnitTest {
 
 			AmbitRowsEventTest test = new AmbitRowsEventTest();
 			test.setUpDatabase(test.getTestDatabase());
-			IDatabaseConnection c = test.getConnection("ambit2","3306","guest","guest");
+			IDatabaseConnection c = test.getConnection("localhost","ambit2","3306","guest","guest");
 			dictionary.setConnection(c.getConnection());
 			properties.setConnection(c.getConnection());
 			
