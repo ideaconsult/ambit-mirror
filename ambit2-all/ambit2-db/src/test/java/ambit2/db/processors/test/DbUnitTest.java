@@ -64,12 +64,13 @@ public abstract class DbUnitTest {
 	protected String getHost() {
 		loadProperties();
 		String p = properties.getProperty("Host");
-		return p==null?"localhost":p;
+		return p==null?"localhost":
+			("${ambit.db.host}".equals(p))?"localhost":p;
 	}
 	protected String getDatabase() {
 		loadProperties();
 		String p = properties.getProperty("database.test");
-		return p==null?"ambit-test":p;
+		return (p==null)||("${ambit.db}".equals(p))?"ambit-test":p;
 	}
 	protected String getPort() {
 		loadProperties();
@@ -79,12 +80,12 @@ public abstract class DbUnitTest {
 	protected String getUser() {
 		loadProperties();
 		String p = properties.getProperty("database.user.test");
-		return p==null?"guest":p;			
+		return (p==null) || ("${ambit.db.user.test}".equals(p))?"guest":p;			
 	}
 	protected String getPWD() {
 		loadProperties();
 		String p = properties.getProperty("database.user.test.password");
-		return p==null?"guest":p;	
+		return (p==null) || ("${ambit.db.user.test.password}".equals(p))?"guest":p;	
 	}
 	protected String getAdminUser() {
 		return "root";
@@ -92,7 +93,7 @@ public abstract class DbUnitTest {
 	protected String getAdminPWD() {
 		loadProperties();
 		String p = properties.getProperty("database.user.root.password");
-		return p==null?"":p;	
+		return (p==null) || ("${ambit.db.user.root.password}".equals(p))?"":p;	
 	}	
 	@Before
 	public void setUp() throws Exception {
