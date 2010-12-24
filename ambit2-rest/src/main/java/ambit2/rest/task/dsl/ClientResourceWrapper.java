@@ -36,8 +36,9 @@ public class ClientResourceWrapper extends ClientResource {
 		if (token !=null) addToken2Header(token); 
 	}
 	protected void addToken2Header(String token) {
-	    Form extraHeaders = new Form();
-        extraHeaders.add(subjectid, token);
+	    Object extraHeaders =  getRequest().getAttributes().get("org.restlet.http.headers");
+	    if (extraHeaders ==null) extraHeaders = new Form();
+        ((Form)extraHeaders).add(subjectid, token);
         getRequest().getAttributes().put("org.restlet.http.headers",extraHeaders);
 	}
 	protected String getToken() {

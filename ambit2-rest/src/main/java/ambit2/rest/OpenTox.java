@@ -22,7 +22,12 @@ public class OpenTox {
 			}
 		},
 		feature,
-		bookmark,
+		bookmark {
+			@Override
+			public String getResourceID() {
+				return String.format("%s/{creator}/{%s}",getURI(),getKey());
+			}	
+		},
 		reference,
 		compound ,
 		conformer {

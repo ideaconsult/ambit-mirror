@@ -12,7 +12,7 @@ public class OpenSSOAuthorizer extends Authorizer {
 
 	@Override
 	protected boolean authorize(Request request, Response response) {
-		if (!OpenSSOServicesConfig.getInstance().isEnabled()) return true;
+		if (!isEnabled()) return true;
 		
 		Form headers = (Form) request.getAttributes().get("org.restlet.http.headers");  
 		if (headers==null) return false;
@@ -22,15 +22,23 @@ public class OpenSSOAuthorizer extends Authorizer {
 			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 			ssoToken.setToken(token);
 			try {
-				Reference ref = request.getResourceRef().clone();
-				ref.setQuery(null);
-				return ssoToken.authorize(ref.toString(),request.getMethod().toString());
+
+				return authorize(ssoToken,request);
 			} catch (Exception x) {
 				x.printStackTrace(); //TODO
 				return false;
 			}
 		} else return false;		
 
+	}
+
+	protected boolean isEnabled() {
+		return OpenSSOServicesConfig.getInstance().isEnabled();
+	}
+	protected boolean authorize(OpenSSOToken ssoToken, Request request)  throws Exception {
+		Reference ref = request.getResourceRef().clone();
+		ref.setQuery(null);
+		return ssoToken.authorize(ref.toString(),request.getMethod().toString());
 	}
 
 }

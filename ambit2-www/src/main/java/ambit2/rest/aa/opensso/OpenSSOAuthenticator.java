@@ -16,8 +16,11 @@ import org.restlet.security.ChallengeAuthenticator;
 public class OpenSSOAuthenticator extends ChallengeAuthenticator {
 
 	public OpenSSOAuthenticator(Context context, boolean optional, String realm) {
+		this(context,optional,realm,new OpenSSOVerifier());
+	}
+	public OpenSSOAuthenticator(Context context, boolean optional, String realm,OpenSSOVerifier verifier) {
 		super(context, optional, getOpenSSOChallengeScheme(), realm);
-		setVerifier(new OpenSSOVerifier());
+		setVerifier(verifier);
 	}
 
     public static ChallengeScheme getOpenSSOChallengeScheme() {
