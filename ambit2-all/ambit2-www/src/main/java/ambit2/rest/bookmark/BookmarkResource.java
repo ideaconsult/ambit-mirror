@@ -16,6 +16,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.bookmark.CreateBookmark;
+import ambit2.db.update.bookmark.DeleteBookmark;
 import ambit2.db.update.bookmark.ReadBookmark;
 import ambit2.db.update.bookmark.UpdateBookmark;
 import ambit2.rest.OpenTox;
@@ -167,5 +168,29 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 			Bookmark entry) throws ResourceException {
 		if(entry.getId()>0) return new UpdateBookmark(entry);
 		else return new CreateBookmark(entry);
+	}
+	
+	@Override
+	protected Representation delete(Variant variant) throws ResourceException {
+		return super.delete(variant);
+	}
+	@Override
+	protected Bookmark createObjectFromHeaders(Form queryForm,
+			Representation entity) throws ResourceException {
+		try {
+			Object idref = getRequest().getAttributes().get(idbookmark);
+			Bookmark bkm = new Bookmark();
+			bkm.setId(Integer.parseInt(idref.toString()));
+			return bkm;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage());
+		}
+	}
+	@Override
+	protected AbstractUpdate createDeleteObject(Bookmark entry)
+			throws ResourceException {
+		DeleteBookmark x = new DeleteBookmark();
+		x.setObject(entry);
+		return x;
 	}
 }

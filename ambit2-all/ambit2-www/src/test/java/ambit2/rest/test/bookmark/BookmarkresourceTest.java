@@ -236,7 +236,25 @@ public class BookmarkresourceTest extends ResourceTest implements IAuthToken {
 		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 	}
-
+	@Test
+	public void testDeleteEntry() throws Exception {
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM bookmark where title='my model' and recalls='http://example.com'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		
+		Form form = new Form();
+		Response response =  testDelete(
+					String.format("http://localhost:%d%s/%s/1", port,BookmarkResource.resource,getCreator()),
+					MediaType.APPLICATION_RDF_XML,
+					form.getWebRepresentation());
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+         c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM bookmark where title='my model' and recalls='http://example.com'");
+		Assert.assertEquals(0,table.getRowCount());
+		c.close();
+	}
 	@Override
 	public String getToken() {
 		return ssoToken==null?null:ssoToken.getToken();
