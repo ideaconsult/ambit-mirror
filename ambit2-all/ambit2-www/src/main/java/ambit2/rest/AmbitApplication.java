@@ -350,7 +350,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		Filter modelAuthn = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
 		Router modelRouter = new MyRouter(getContext());
 		modelRouter.attachDefault(ModelResource.class);
-		modelRouter.attach(ModelResource.resourceKey,ModelResource.class);
+		modelRouter.attach(String.format("/{%s}",ModelResource.resourceKey),ModelResource.class);
 		modelRouter.attach(String.format("/{%s}%s",
 									ModelResource.resourceKey,
 									PropertyModelResource.resourceID),

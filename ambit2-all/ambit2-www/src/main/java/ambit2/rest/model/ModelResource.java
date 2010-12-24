@@ -60,9 +60,6 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	public final static String resourceID = OpenTox.URI.model.getResourceID();
 	protected boolean collapsed = true;
 	
-	public enum modeltypes  {
-		pka,toxtree
-	};
 	
 	protected String category = "";
 
