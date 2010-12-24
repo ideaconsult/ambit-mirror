@@ -131,7 +131,12 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 			Bookmark bookmark = new Bookmark();
 			bookmark.setHasTopic(queryForm.getFirstValue(Annotea.BookmarkProperty.hasTopic.toString()));
 			bookmark.setRecalls(queryForm.getFirstValue(Annotea.BookmarkProperty.recalls.toString()));
-			bookmark.setCreator(queryForm.getFirstValue(DC.creator.toString()));
+			
+			if ((getRequest().getClientInfo()==null) || getRequest().getClientInfo().getUser()==null)
+				bookmark.setCreator(queryForm.getFirstValue(DC.creator.toString()));
+			else try {
+				bookmark.setCreator(getRequest().getClientInfo().getUser().getIdentifier());
+			} catch (Exception x) {}
 			bookmark.setTitle(queryForm.getFirstValue(DC.title.toString()));
 			bookmark.setDescription(queryForm.getFirstValue(DC.description.toString()));
 			return bookmark;

@@ -27,8 +27,9 @@ import org.restlet.util.RouteList;
 
 import ambit2.base.config.Preferences;
 import ambit2.rest.aa.DBVerifier;
+import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
-import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
+import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DBCreateAllowedGuard;
 import ambit2.rest.admin.DatabaseResource;
@@ -171,20 +172,25 @@ public class AmbitApplication extends TaskApplication<String> {
 		
 		router.attach(String.format("/%s",PolicyResource.resource),PolicyResource.class);
 		
-		router.attach(BookmarkResource.resource,BookmarkResource.class);
-		router.attach(String.format("%s/{%s}",BookmarkResource.resource,BookmarkResource.creator),BookmarkResource.class);
-		router.attach(String.format("%s/{%s}/{%s}",
-				BookmarkResource.resource,
+		
+	    //Bookmarks protected by OpenSSO
+		Router bookmarkRouter = new MyRouter(getContext());
+		bookmarkRouter.attachDefault(BookmarkResource.class);
+		bookmarkRouter.attach(String.format("/{%s}",BookmarkResource.creator),BookmarkResource.class);
+		bookmarkRouter.attach(String.format("/{%s}/{%s}",
 				BookmarkResource.creator,
 				BookmarkResource.idbookmark),BookmarkResource.class);
 		
-		//Router protectedRouter = new MyRouter(getContext());
-		//protectedRouter.attachDefault(ProtectedTestResource.class);
-		//protectedRouter.attach(String.format("/{%s}",ProtectedTestResource.resourceKey), ProtectedTestResource.class);
+		//Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
+		//Filter openssoAuthz = new OpenSSOAuthorizer();
+		Filter bookmarkAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
+		Filter bookmarkAuthz = new BookmarksAuthorizer();
+			
+		bookmarkAuth.setNext(bookmarkAuthz);
+		bookmarkAuthz.setNext(bookmarkRouter);
 		
+		router.attach(BookmarkResource.resource,bookmarkAuth);
 
-	 	//router.attach(ProtectedTestResource.resource, openssoAuth);
-		
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
 		router.attach(StatisticsResource.resource,StatisticsResource.class);
 		router.attach(String.format("%s/{%s}",StatisticsResource.resource,StatisticsResource.resourceKey),
@@ -341,12 +347,16 @@ public class AmbitApplication extends TaskApplication<String> {
 		compoundRouter.attach(PropertyTemplateResource.resource,templateRouter);
 		conformerRouter.attach(PropertyTemplateResource.resource,templateRouter);
 
-		
-		router.attach(ModelResource.resource,ModelResource.class);
-		router.attach(ModelResource.resourceID,ModelResource.class);
-		
-		router.attach(String.format("%s%s",ModelResource.resourceID,PropertyModelResource.resourceID),PropertyModelResource.class);
-		
+		Filter modelAuthn = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
+		Router modelRouter = new MyRouter(getContext());
+		modelRouter.attachDefault(ModelResource.class);
+		modelRouter.attach(ModelResource.resourceKey,ModelResource.class);
+		modelRouter.attach(String.format("/{%s}%s",
+									ModelResource.resourceKey,
+									PropertyModelResource.resourceID),
+							PropertyModelResource.class);
+		modelAuthn.setNext(modelRouter);
+		router.attach(ModelResource.resource,modelAuthn);
 		
 		Router tupleRouter = new MyRouter(getContext());
 		tupleRouter.attachDefault(DataEntryResource.class);
@@ -449,11 +459,15 @@ public class AmbitApplication extends TaskApplication<String> {
 		
 		queryRouter.attach(ExactStructureQueryResource.resource,ExactStructureQueryResource.class);
 		
+		//algorithms
 		Router algoRouter = new MyRouter(getContext());
 		algoRouter.attachDefault(AllAlgorithmsResource.class);
-		router.attach(AllAlgorithmsResource.algorithm,algoRouter);
-		router.attach(AllAlgorithmsResource.resourceID,algoRouter);
+		algoRouter.attach(String.format("/{%s}",AllAlgorithmsResource.algorithmKey),AllAlgorithmsResource.class);
 		
+		Filter algAuthn = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
+		algAuthn.setNext(algoRouter);
+		router.attach(AllAlgorithmsResource.algorithm,algAuthn);
+
 		
 		Router taskRouter = new MyRouter(getContext());
 		taskRouter.attachDefault(TaskResource.class);
@@ -491,18 +505,13 @@ public class AmbitApplication extends TaskApplication<String> {
 
 	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
-	     
+	     /*
 	     StringWriter w = new StringWriter();
 	     AmbitApplication.printRoutes(router,">",w);
 	     System.out.println(w.toString());
-	     
-	     //OpenSSO
-		Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
-		Filter openssoAuthz = new OpenSSOAuthorizer();
-			
-		openssoAuth.setNext(openssoAuthz);
-		openssoAuthz.setNext(router);
-		 return openssoAuth;
+	     */
+
+		 return router;
 	}
 
 

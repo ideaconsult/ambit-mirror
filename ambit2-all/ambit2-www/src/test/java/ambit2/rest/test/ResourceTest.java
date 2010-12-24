@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
@@ -38,6 +39,7 @@ import weka.core.Instances;
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.dsl.ClientResourceWrapper;
@@ -46,6 +48,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 
 public abstract class ResourceTest extends DbUnitTest {
 	protected Component component=null;
+	protected OpenSSOToken ssoToken = null;
 
 	protected int port = 8181;
 	@Before
@@ -69,6 +72,7 @@ public abstract class ResourceTest extends DbUnitTest {
         component.start();        
 	}
 
+		
 	protected void setDatabase() throws Exception {
 		setUpDatabase("src/test/resources/src-datasets.xml");
 	}
@@ -102,6 +106,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	public Response testUpdate(String uri, MediaType media, Representation inputEntity,Method method) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
+		addToken2Header(request);
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
 		ChallengeResponse authentication = new ChallengeResponse(scheme,  
 		         "guest", "guest");  
@@ -201,9 +206,18 @@ public abstract class ResourceTest extends DbUnitTest {
 		return ref;
 	}	
 	*/
+	protected void addToken2Header(Request request) {
+		if ((ssoToken!=null) && (ssoToken.getToken()!=null)) {
+		    Object extraHeaders =  request.getAttributes().get("org.restlet.http.headers");
+		    if (extraHeaders ==null) extraHeaders = new Form();
+	        ((Form)extraHeaders).add("subjectid", ssoToken.getToken());
+	        request.getAttributes().put("org.restlet.http.headers",extraHeaders);
+		}
+	}
 	public Response testGet(String uri, MediaType media, Status expectedStatus) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
+		addToken2Header(request);
 		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));
@@ -250,6 +264,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	public Status testHandleError(String uri, MediaType media) throws Exception {
 		Request request = new Request();
 		Client client = new Client(Protocol.HTTP);
+		addToken2Header(request);
 		request.setResourceRef(uri);
 		request.setMethod(Method.GET);
 		request.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(media));

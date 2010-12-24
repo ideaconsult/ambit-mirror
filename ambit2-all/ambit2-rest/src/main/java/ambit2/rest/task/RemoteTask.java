@@ -42,9 +42,9 @@ public class RemoteTask implements Serializable {
 		this.url = url;
 		Representation r=null;
 		ClientResourceWrapper client = null;
+		
 		try {
 			client = new ClientResourceWrapper(url);
-			client.setChallengeResponse(authentication);
 			client.setFollowingRedirects(true);
 			client.setRetryAttempts(1);
 			client.setRetryOnError(false);
@@ -81,32 +81,7 @@ public class RemoteTask implements Serializable {
 			try { client.release(); } catch (Exception x) { x.printStackTrace();}
 		}
 	}	
-	/*
-	public RemoteTask(Reference url,MediaType media, Representation input,Method method,ChallengeResponse authentication) {
-		super();
-		
-		this.url = url;
-		Representation r=null;
-		try {
-			System.out.println(url);
-			System.out.println(input.getText());
-			ClientResourceWrapper client = new ClientResourceWrapper(url);
-			client.setChallengeResponse(authentication);
-			r = client.post(input,media);
-			result = handleOutput(client, r);
-			this.status = client.getStatus();
-		} catch (ResourceException x) {
-			error = x;
-			status = x.getStatus();
-		} catch (Exception x) {
-			error = x;
-			status = null;
-		} finally {
-			try { r.release(); } catch (Exception x) {}
-			System.out.println(toString());
-		}
-	}		
-	*/
+	
 	public boolean isCompletedOK() {
 		return Status.SUCCESS_OK.equals(status);
 	}

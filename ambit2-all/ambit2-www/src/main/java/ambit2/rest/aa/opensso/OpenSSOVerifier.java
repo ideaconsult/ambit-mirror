@@ -9,21 +9,26 @@ import org.restlet.security.User;
 import org.restlet.security.Verifier;
 
 /**
- * subjectid=token , as form parameter - !!! query parameter, not form parameter !!!
+ * subjectid=token , as header parameter 
  * 
  * @author nina
  *
  */
 public class OpenSSOVerifier implements Verifier {
-
+	protected boolean enabled = false;
+	
 	public OpenSSOVerifier() {
-
+		this( OpenSSOServicesConfig.getInstance().isEnabled());
+	}
+	public OpenSSOVerifier(boolean enabled) {
+		this.enabled = enabled;
 	}
 	public int verify(Request request, Response response) {
-		if (!OpenSSOServicesConfig.getInstance().isEnabled()) return Verifier.RESULT_VALID;
+		
 		
 		Form headers = (Form) request.getAttributes().get("org.restlet.http.headers");  
-		if (headers==null) return Verifier.RESULT_MISSING;
+		if (headers==null) 
+			return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
 		
 		String token = headers.getFirstValue(OTAAParams.subjectid.toString());
 		if (token != null) {
@@ -31,18 +36,25 @@ public class OpenSSOVerifier implements Verifier {
 			ssoToken.setToken(token);
 			try {
 				if (ssoToken.isTokenValid()) {
-					User user = new User();
-					user.setSecret(ssoToken.getToken().toCharArray());
-					request.getClientInfo().setUser(user);
+					setUser(ssoToken, request);
 					return Verifier.RESULT_VALID;
 				} else 
-					return Verifier.RESULT_INVALID;
+					return enabled?Verifier.RESULT_INVALID:Verifier.RESULT_VALID;
 			} catch (Exception x) {
 				x.printStackTrace(); //TODO
-				return  Verifier.RESULT_MISSING;
+				return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
 			}
-		} else return Verifier.RESULT_MISSING;
+		} else
+			return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
 
 	}
-
+	
+	protected void setUser(OpenSSOToken ssoToken,Request request) throws Exception {
+		request.getClientInfo().setUser(createUser(ssoToken, request));
+	}
+	protected User createUser(OpenSSOToken ssoToken,Request request) throws Exception {
+		User user = new User();
+		user.setSecret(ssoToken.getToken().toCharArray());
+		return user;
+	}
 }
