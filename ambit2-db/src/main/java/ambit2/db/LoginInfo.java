@@ -70,13 +70,15 @@ public class LoginInfo extends Model {
 		return database;
 	}
 	public void setDatabase(String database) {
+		if ("${ambit.db}".equals(database)) this.host = "ambit2";
 		this.database = database;
 	}
 	public String getHostname() {
 		return host;
 	}
 	public void setHostname(String hostname) {
-		this.host = hostname;
+		if ("${ambit.db.host}".equals(hostname)) this.host = hostname;
+		else this.host = hostname;
 	}
 	public String getPassword() {
 		return password;
