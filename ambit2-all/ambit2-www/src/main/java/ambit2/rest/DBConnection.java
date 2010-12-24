@@ -55,7 +55,7 @@ public class DBConnection {
 		LoginInfo li = new LoginInfo();
 		
 		String p = properties.getProperty("Database");
-		li.setDatabase(p==null?"ambit2":p);
+		li.setDatabase(p==null||("${ambit.db}".equals(p))?"ambit2":p);
 		p = properties.getProperty("Port");
 		li.setPort(p==null?"3306":p);		
 		p = properties.getProperty("User");
@@ -63,7 +63,7 @@ public class DBConnection {
 		p = properties.getProperty("Password");
 		li.setPassword(p==null?"guest":p);	
 		p = properties.getProperty(Preferences.HOST);
-		li.setHostname(p==null?"localhost":p);			
+		li.setHostname(p==null||("${ambit.db.host}".equals(p))?"localhost":p);			
 		
 		if (getContext().getParameters().getFirstValue(Preferences.DATABASE)!=null)
 			li.setDatabase(getContext().getParameters().getFirstValue(Preferences.DATABASE));
