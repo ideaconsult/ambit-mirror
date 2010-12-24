@@ -23,6 +23,8 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
+import ambit2.rest.task.dsl.IAuthToken;
 
 /**
  * Abstract class for resources
@@ -32,7 +34,8 @@ import ambit2.base.interfaces.IProcessor;
  * @param <T>
  * @param <P>
  */
-public abstract class AbstractResource<Q,T extends Serializable,P extends IProcessor<Q, Representation>> extends WadlServerResource {
+public abstract class AbstractResource<Q,T extends Serializable,P extends IProcessor<Q, Representation>> 
+																	extends WadlServerResource implements IAuthToken {
 	protected Q queryObject;
 	protected Exception error = null;	
 	protected Status response_status = Status.SUCCESS_OK;
@@ -65,13 +68,25 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
+		try {ClientResourceWrapper.setTokenFactory(this);} catch (Exception x){}
 		BotsGuard.checkForBots(getRequest());
 		response_status = Status.SUCCESS_OK;
 		queryObject = createQuery(getContext(), getRequest(), getResponse());
 		error = null;
 
 	}
-
+	
+	@Override
+	protected void doRelease() throws ResourceException {
+		try {ClientResourceWrapper.setTokenFactory(null);} catch (Exception x){}
+		super.doRelease();
+	}
+	
+	@Override
+	public String getToken() {
+		Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+		return headers==null?null:headers.getFirstValue("subjectid");
+	}
 	protected void customizeVariants(MediaType[] mimeTypes) {
        // List<Variant> variants = new ArrayList<Variant>();
         for (MediaType m:mimeTypes) getVariants().add(new Variant(m));
