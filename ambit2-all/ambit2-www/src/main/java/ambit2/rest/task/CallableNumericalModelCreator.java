@@ -94,5 +94,11 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 			try {if (client!=null) client.release(); } catch (Exception x) {}
 		}
 	}
-
+	@Override
+	protected ModelQueryResults createModel() throws Exception {
+		ModelQueryResults model = super.createModel();
+		if ((model != null) && (model.getTrainingInstances()==null) && (sourceReference!=null))
+			model.setTrainingInstances(sourceReference.toString());
+		return model;
+	}
 }

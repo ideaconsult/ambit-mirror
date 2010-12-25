@@ -72,6 +72,11 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 				OT.OTClass.Algorithm.getOntClass(getJenaModel()));
 		model.addProperty(OT.OTProperty.algorithm.createProperty(getJenaModel()), algorithm);
 		
+		if (item.getTrainingInstances()!=null) {
+			Individual dataset = getJenaModel().createIndividual(item.getTrainingInstances(),
+					OT.OTClass.Dataset.getOntClass(getJenaModel()));
+			model.addProperty(OT.OTProperty.trainingDataset.createProperty(getJenaModel()), dataset);
+		}
 		
 		readProperties(new Reference(String.format("%s/independent",uriReporter.getURI(item))), 
 					OT.OTProperty.independentVariables.createProperty(getJenaModel()), model);

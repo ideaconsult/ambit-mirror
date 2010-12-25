@@ -227,7 +227,8 @@ CREATE TABLE  `models` (
   `parameters` text COLLATE utf8_bin COMMENT 'Model parameters',
   `predicted` int(10) unsigned NOT NULL COMMENT 'template for predicted variables',
   `hidden` tinyint(1) NOT NULL DEFAULT '0',
-  `creator` varchar(45) COLLATE utf8_bin NOT NULL default 'guest',
+  `creator` varchar(45) COLLATE utf8_bin DEFAULT 'guest' NOT NULL,
+  `dataset` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT 'dataset uri',
   PRIMARY KEY (`idmodel`),
   UNIQUE KEY `Index_5` (`name`) USING BTREE,
   KEY `FK_models_predictors` (`predictors`),
@@ -237,6 +238,7 @@ CREATE TABLE  `models` (
   KEY `Index_7` (`parameters`(255)),
   KEY `FK_models_predicted` (`predicted`),
   KEY `Index_creator` (`creator`),
+  KEY `Index_10` (`dataset`),
   CONSTRAINT `FK_models_dataset` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_dependent` FOREIGN KEY (`dependent`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predicted` FOREIGN KEY (`predicted`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
@@ -911,7 +913,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,4,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,5,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
