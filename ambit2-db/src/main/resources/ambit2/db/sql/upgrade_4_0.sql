@@ -221,3 +221,9 @@ DELIMITER ;
 ---
 
 ALTER TABLE `structure` MODIFY COLUMN `format` ENUM('SDF','CML','MOL','INC') NOT NULL DEFAULT 'SDF';
+
+--- 4.3 -> 4.5
+
+ALTER TABLE `models` ADD COLUMN `creator` VARCHAR(45) NOT NULL default 'guest' AFTER `hidden`,
+ ADD INDEX `Index_creator`(`creator`);
+

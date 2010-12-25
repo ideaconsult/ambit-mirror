@@ -17,7 +17,6 @@ import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
@@ -757,8 +756,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 					new Reference("http://localhost:8080/algorithm/leverage"),
 					MediaType.APPLICATION_WWW_FORM,
 					form.getWebRepresentation(),
-					Method.POST,
-					null);
+					Method.POST);
 		while (taskTrain.poll()) {
 			System.out.println(taskTrain.getStatus());
 		}
@@ -772,8 +770,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				taskTrain.getResult(),
 				MediaType.APPLICATION_WWW_FORM,
 				form.getWebRepresentation(),
-				Method.POST,
-				null);
+				Method.POST);
 		while (taskEstimate.poll()) {
 			System.out.println(taskTrain.getStatus());
 		}

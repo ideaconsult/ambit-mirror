@@ -29,7 +29,7 @@ import ambit2.rest.model.builder.WekaModelBuilder;
  * @author nina
  *
  */
-public class CallableWekaModelCreator extends CallableModelCreator<Instances,Instance,WekaModelBuilder> {
+public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Instances,Instance,WekaModelBuilder,USERID> {
 	
 
 	/**
@@ -44,13 +44,15 @@ public class CallableWekaModelCreator extends CallableModelCreator<Instances,Ins
 			Reference applicationRootReference,Context context,
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
-			AlgorithmURIReporter alg_reporter) {
+			AlgorithmURIReporter alg_reporter,
+			USERID token) {
 		super(form, context,algorithm,
 				new WekaModelBuilder(applicationRootReference,
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
-						OpenTox.params.parameters.getValuesArray(form)));
+						OpenTox.params.parameters.getValuesArray(form)),
+			token);
 	}
 
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{

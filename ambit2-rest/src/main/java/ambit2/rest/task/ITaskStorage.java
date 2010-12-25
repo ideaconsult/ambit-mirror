@@ -9,7 +9,7 @@ import org.restlet.data.Reference;
 public interface ITaskStorage<USERID> {
 	Iterator<UUID> getTasks();
 	void removeTasks();
-	Task<Reference,USERID> addTask(String taskName, CallableTask callable, Reference baseReference,USERID user, boolean internal);
+	Task<Reference,USERID> addTask(String taskName, ICallableTask callable, Reference baseReference,USERID user, boolean internal);
 	Task<Reference,USERID> findTask(String id);
 	Task<Reference,USERID> findTask(UUID id);
 	void shutdown(long timeout,TimeUnit unit) throws Exception;

@@ -3,7 +3,6 @@ package ambit2.rest.task;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.util.UUID;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -25,23 +24,16 @@ import ambit2.rest.task.dsl.ClientResourceWrapper;
 import ambit2.rest.task.dsl.OTDataset;
 import ambit2.rest.task.dsl.OTFeature;
 
-public abstract class CallableQueryProcessor<Target,Result> implements CallableTask {
+public abstract class CallableQueryProcessor<Target,Result,USERID> extends CallableProtectedTask<USERID> {
 	protected AbstractBatchProcessor batch; 
 	protected Target target;
 	protected Reference sourceReference;
 	//protected AmbitApplication application;
 	protected Context context;
-	protected UUID uuid;
 
-	public UUID getUuid() {
-		return uuid;
-	}
 
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	public CallableQueryProcessor(Form form,Context context) {
+	public CallableQueryProcessor(Form form,Context context,USERID token) {
+		super(token);
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
 		String[] xvars = OpenTox.params.feature_uris.getValuesArray(form);
 		if (xvars != null) try {
@@ -62,7 +54,8 @@ public abstract class CallableQueryProcessor<Target,Result> implements CallableT
 		this.context = context;
 	}
 	
-	public Reference call() throws Exception {
+	@Override
+	public Reference doCall() throws Exception {
 		
 		Context.getCurrentLogger().info("Start()");
 		Connection connection = null;

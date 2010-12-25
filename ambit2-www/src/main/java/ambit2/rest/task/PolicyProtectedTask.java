@@ -24,10 +24,11 @@ public class PolicyProtectedTask extends Task<Reference, String> {
 			OpenSSOToken ssoToken = new OpenSSOToken(config.getOpenSSOService());
 			ssoToken.setToken(getUserid());
 			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
-			policy.createGroupPolicy("opentox", 
+			policy.createGroupPolicy("partner", 
 					ssoToken, 
 					getUri().toString(), 
 					new String[] {"GET","PUT","POST","DELETE"});
 		}
+		
 	}
 }

@@ -16,7 +16,7 @@ import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ModelBuilder;
 
-public abstract class CallableStructuresModelCreator<DATA,Builder extends ModelBuilder<DATA,Algorithm,ModelQueryResults>> extends	CallableModelCreator<DATA, IStructureRecord, Builder> {
+public abstract class CallableStructuresModelCreator<DATA,Builder extends ModelBuilder<DATA,Algorithm,ModelQueryResults>,USERID> extends	CallableModelCreator<DATA, IStructureRecord, Builder,USERID> {
 	protected Reference applicationRootReference;
 	
 	public CallableStructuresModelCreator(Form form,
@@ -24,9 +24,10 @@ public abstract class CallableStructuresModelCreator<DATA,Builder extends ModelB
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
-			Builder builder) {
+			Builder builder,
+			USERID token) {
 
-		super(form, context,algorithm,builder);
+		super(form, context,algorithm,builder,token);
 		this.applicationRootReference =applicationRootReference;
 	
 	}	

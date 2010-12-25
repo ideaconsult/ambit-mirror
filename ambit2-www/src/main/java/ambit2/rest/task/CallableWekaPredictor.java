@@ -9,11 +9,11 @@ import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.dataset.RDFInstancesParser;
 import ambit2.rest.model.predictor.ModelPredictor;
 
-public class CallableWekaPredictor<T> extends CallableModelPredictor<Instance,ModelPredictor<T,Instance>> {
+public class CallableWekaPredictor<T,USERID> extends CallableModelPredictor<Instance,ModelPredictor<T,Instance>,USERID> {
 	//protected String[] targetURI;
 	public CallableWekaPredictor(Form form, Reference appReference,
-			Context context, ModelPredictor<T,Instance> predictor) {
-		super(form, appReference, context,predictor);
+			Context context, ModelPredictor<T,Instance> predictor,USERID token) {
+		super(form, appReference, context,predictor,token);
 	}
 
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{

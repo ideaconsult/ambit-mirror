@@ -1,7 +1,5 @@
 package ambit2.rest.task;
 
-import java.util.UUID;
-
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -20,47 +18,43 @@ import ambit2.rest.task.dsl.OTSuperModel;
  * @author nina
  *
  */
-public class CallablePOST implements CallableTask{
+public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 	protected MediaType media; 
 	protected Representation input;
 	protected Status status;
 	protected Reference applicationRootReference;
-	protected UUID uuid;
-	
-	public UUID getUuid() {
-		return uuid;
-	}
 
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
 	protected OTSuperModel superModel;
 	
 	
-	public CallablePOST(Form form,Reference root) throws Exception {
-		this(MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root);
+	public CallablePOST(Form form,Reference root,USERID token) throws Exception {
+		this(MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root,token);
 	}	
 	
 	public CallablePOST(MediaType media, 
-			  Representation input,Reference root) {
-		this(media,input,null,root);
+			  Representation input,Reference root,USERID token) {
+		this(media,input,null,root,token);
 	}		
 	public CallablePOST(MediaType media, 
 			  Representation input,
 			  ChallengeResponse authentication,
-			  Reference root) {
-		this(media,input,authentication,1500,root);
+			  Reference root,
+			  USERID token) {
+		this(media,input,authentication,1500,root,token);
 	}
 	public CallablePOST(MediaType media, 
 			  Representation input,
 			  ChallengeResponse authentication, long pollInterval,
-			  Reference root) {
-
+			  Reference root,
+			  USERID token) {
+		super(token);
 		this.media = media;
 		this.input = input;
 		this.applicationRootReference = root;
 	}
-	public Reference call() throws Exception {
+	@Override
+	public Reference doCall() throws Exception {
+
 		//System.out.println(getClass().getName());
 		long now = System.currentTimeMillis();
 		Form form = new Form(input);

@@ -25,6 +25,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 		q.setPredictors(new Template("New template"));
 		q.setDependent(new Template("BCF"));
 		q.setPredicted(new Template("BCF"));
+		q.setCreator("test-user");
 		return new CreateModel(q);
 	}
 
@@ -32,7 +33,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 	protected void createVerify(IQueryUpdate<Object,ModelQueryResults> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","select parameters from models where algorithm='http://localhost:8080/algorithm/pka'");
+		ITable table = 	c.createQueryTable("EXPECTED","select parameters from models where algorithm='http://localhost:8080/algorithm/pka' and creator='test-user'");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals("-M",table.getValue(0,"parameters"));
 		c.close();
@@ -93,6 +94,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 		Template t3 = new Template("Predicted template");
 		t3.add(new Property("New predicted"));
 		q.setPredicted(t3);		
+		
 		return new CreateModel(q);
 	}
 
@@ -100,7 +102,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 	protected void createVerifyNew(IQueryUpdate<Object, ModelQueryResults> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","select * from models where name=\"Test model\" and content=\"Nothing\"");
+		ITable table = 	c.createQueryTable("EXPECTED","select * from models where name=\"Test model\" and content=\"Nothing\" and creator='guest'");
 		Assert.assertEquals(1,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","select * from template where name=\"Predictors template\"");
 		Assert.assertEquals(1,table.getRowCount());

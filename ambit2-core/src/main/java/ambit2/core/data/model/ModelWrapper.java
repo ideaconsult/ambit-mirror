@@ -60,6 +60,14 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	protected Integer id;
 	protected String name;
 	protected String contentMediaType = "application/java";
+	protected String creator = "guest";
+	
+	public String getCreator() {
+		return creator;
+	}
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
 	public String getContentMediaType() {
 		return contentMediaType;
 	}

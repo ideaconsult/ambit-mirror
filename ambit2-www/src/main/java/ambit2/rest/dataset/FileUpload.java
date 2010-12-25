@@ -94,13 +94,15 @@ public class FileUpload<USERID> {
 	/**
 	 * Creates new entry in query table and adds structures into query_results
 	 */
-	protected Representation copyDatasetToQueryResultsTable(Form form)
+	protected Representation copyDatasetToQueryResultsTable(Form form,USERID token)
 			throws ResourceException {
 		CallableQueryResultsCreator callable = new CallableQueryResultsCreator(
 				form,
 				getRequest().getRootRef(),
 				getContext(),
-				null);
+				null,
+				token
+				);
 		try {
 			getResponse().setLocationRef(callable.call());
 			getResponse().setStatus(Status.SUCCESS_OK);
@@ -124,7 +126,7 @@ public class FileUpload<USERID> {
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			return copyDatasetToQueryResultsTable(new Form(entity));
+			return copyDatasetToQueryResultsTable(new Form(entity),token);
 		} else if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
               //factory.setSizeThreshold(100);
@@ -148,7 +150,8 @@ public class FileUpload<USERID> {
 	            		  connection,
 	            		  reporter,
 	            		  compoundReporter,
-	            		  firstCompoundOnly);
+	            		  firstCompoundOnly,
+	            		  token);
 	              
 	              callable.setPropertyOnly(propertyOnly);
 
@@ -185,7 +188,8 @@ public class FileUpload<USERID> {
 			        		  connection,
 			        		  reporter,
 			        		  compoundReporter,
-			        		  firstCompoundOnly);
+			        		  firstCompoundOnly,
+			        		  token);
 			          
 		              callable.setPropertyOnly(propertyOnly);
 			          Task<Reference,String> task =  ((AmbitApplication)getApplication()).addTask(

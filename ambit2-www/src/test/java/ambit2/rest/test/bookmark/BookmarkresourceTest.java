@@ -10,7 +10,6 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -23,43 +22,13 @@ import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.rdf.Annotea;
 import ambit2.rest.rdf.RDFBookmarkIterator;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
-import ambit2.rest.task.dsl.IAuthToken;
-import ambit2.rest.test.ResourceTest;
+import ambit2.rest.test.ProtectedResourceTest;
 
 import com.hp.hpl.jena.vocabulary.DC;
 
-public class BookmarkresourceTest extends ResourceTest implements IAuthToken {
+public class BookmarkresourceTest extends ProtectedResourceTest {
 	
-	protected String getCreator() {
-		if ((ssoToken!=null) && (ssoToken.getToken()!=null)) 
-			return	OpenSSOServicesConfig.getInstance().getTestUser();
-		else return "test";
-	}
-	@Override
-	public void setUp() throws Exception {
-		if (OpenSSOServicesConfig.getInstance().isEnabled()) {
-			ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
-			if (ssoToken.login(
-					OpenSSOServicesConfig.getInstance().getTestUser(),
-					OpenSSOServicesConfig.getInstance().getTestUserPass()
-					)) {
-				ClientResourceWrapper.setTokenFactory(this);
-			} else
-				throw new Exception(String.format("Error logging to SSO (%s)",OpenSSOServicesConfig.getInstance().getTestUser()));
-		}
-		super.setUp();
-	}
 	
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-		try {
-			ClientResourceWrapper.setTokenFactory(null);
-			if (ssoToken!= null) ssoToken.logout();
-		} catch (Exception x) {
-		}
-	}
 
 	@Override
 	public void setUpDatabase(String xmlfile) throws Exception {
@@ -255,8 +224,5 @@ public class BookmarkresourceTest extends ResourceTest implements IAuthToken {
 		Assert.assertEquals(0,table.getRowCount());
 		c.close();
 	}
-	@Override
-	public String getToken() {
-		return ssoToken==null?null:ssoToken.getToken();
-	}	
+	
 }

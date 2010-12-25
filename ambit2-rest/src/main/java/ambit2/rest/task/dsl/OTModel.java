@@ -229,7 +229,7 @@ public class OTModel extends OTProcessingResource implements IOTModel {
 		params.removeAll(OpenTox.params.model_uri.toString());
 		params.removeAll(OpenTox.params.dataset_uri.toString());
 		params.add(OpenTox.params.dataset_uri.toString(),inputDataset.toString());
-		return new RemoteTask(new Reference(uri),MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST,authentication);
+		return new RemoteTask(new Reference(uri),MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST);
 		 
 	 }
 

@@ -518,7 +518,7 @@ public class DatasetsResourceTest extends ResourceTest {
 	protected Reference upload(Reference datasetURI,Representation entity,Variant variant,boolean newDataset) throws ResourceException {
 		try {
               //factory.setSizeThreshold(100);
-			RemoteTask task = new RemoteTask(datasetURI,variant.getMediaType(),entity,newDataset?Method.POST:Method.PUT,null);
+			RemoteTask task = new RemoteTask(datasetURI,variant.getMediaType(),entity,newDataset?Method.POST:Method.PUT);
 			//task.poll() returns true if completed
 			while (!task.poll()) {
 				Thread.sleep(1500);

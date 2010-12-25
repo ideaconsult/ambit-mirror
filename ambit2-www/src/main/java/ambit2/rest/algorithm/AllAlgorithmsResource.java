@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -40,8 +41,8 @@ import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableStructurePairsModelCreator;
-import ambit2.rest.task.CallableTask;
 import ambit2.rest.task.CallableWekaModelCreator;
+import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.OptimizerModelBuilder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 
@@ -357,10 +358,11 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	}
 
 	@Override
-	protected CallableTask createCallable(Form form,
+	protected ICallableTask createCallable(Form form,
 			Algorithm<String> algorithm)
 			throws ResourceException {
 				
+		String token = getUserToken(OTAAParams.subjectid.toString());
 		try {
 			if (algorithm.hasType(Algorithm.typeSMSD))  {
 				if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
@@ -376,15 +378,16 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						algReporter,
 						new SMSDModelBuilder(getRequest().getRootRef(),
 								modelReporter,
-								algReporter)
+								algReporter),
+						token
 						);
 				
 			} else if (algorithm.hasType(Algorithm.typeSuperService))  {
 				if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
 					form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
-				return new CallablePOST(form,getRequest().getRootRef());			
+				return new CallablePOST<String>(form,getRequest().getRootRef(),token);			
 			} else if (algorithm.hasType(Algorithm.typeMockup))  {
-				return new CallableMockup(form);
+				return new CallableMockup<String>(form,token);
 			} else if (algorithm.hasType(Algorithm.typeRules))
 				return new CallableSimpleModelCreator(
 						form,
@@ -393,7 +396,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						algorithm,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
 						new AlgorithmURIReporter(getRequest(),getDocumentation()),
-						false
+						false,
+						token
 						);
 			else if (algorithm.hasType(Algorithm.typeStructure)) {
 				return new CallableSimpleModelCreator(
@@ -403,7 +407,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						false,
 						new OptimizerModelBuilder(getRequest().getRootRef(),
 								new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-								new AlgorithmURIReporter(getRequest(),getDocumentation()),false)
+								new AlgorithmURIReporter(getRequest(),getDocumentation()),false),
+						token
 						);
 			}
 			else if (algorithm.hasType(Algorithm.typeDescriptor)) {
@@ -415,7 +420,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							algorithm,
 							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
 							new AlgorithmURIReporter(getRequest(),getDocumentation()),
-							true
+							true,
+							token
 							);	
 					Reference modelRef = modelCreator.call();
 					ModelQueryResults model = modelCreator.getModel();
@@ -432,7 +438,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							form,
 							getRequest().getRootRef(),
 							getContext(),
-							predictor
+							predictor,
+							token
 							);					
 				} catch (ResourceException x) {
 					throw x;
@@ -448,7 +455,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getContext(),
 							algorithm,
 							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-							new AlgorithmURIReporter(getRequest(),getDocumentation()));						
+							new AlgorithmURIReporter(getRequest(),getDocumentation()),
+							token);						
 				}
 				case property: {
 					return new CallableNumericalModelCreator(
@@ -457,7 +465,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getContext(),
 							algorithm,
 							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-							new AlgorithmURIReporter(getRequest(),getDocumentation()));					
+							new AlgorithmURIReporter(getRequest(),getDocumentation()),
+							token);					
 				}		
 				default: {
 						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,algorithm.toString());
@@ -468,7 +477,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							form,
 							getRequest().getRootRef(),
 							getContext(),
-							algorithm);						
+							algorithm,
+							token);						
 			} else {
 					
 				return new CallableWekaModelCreator(
@@ -477,7 +487,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						getContext(),
 						algorithm,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-						new AlgorithmURIReporter(getRequest(),getDocumentation()));	
+						new AlgorithmURIReporter(getRequest(),getDocumentation()),
+						token);	
 			} 
 		} catch (ResourceException x) {
 			throw x;

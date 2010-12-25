@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 
-import org.restlet.data.ChallengeResponse;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
@@ -29,15 +28,13 @@ public class RemoteTask implements Serializable {
 	protected Status status = null;
 	protected Reference result = null;
 	protected Exception error = null;
-
 	
 	public Exception getError() {
 		return error;
 	}
 	public RemoteTask(Reference url,MediaType media, 
 			  Representation input,
-			  Method method,
-			  ChallengeResponse authentication) throws ResourceException {
+			  Method method) throws ResourceException {
 		super();
 		this.url = url;
 		Representation r=null;
@@ -81,6 +78,7 @@ public class RemoteTask implements Serializable {
 			try { client.release(); } catch (Exception x) { x.printStackTrace();}
 		}
 	}	
+	
 	
 	public boolean isCompletedOK() {
 		return Status.SUCCESS_OK.equals(status);
@@ -134,7 +132,6 @@ public class RemoteTask implements Serializable {
 			client.setFollowingRedirects(true);
 	        r = client.get(MediaType.TEXT_URI_LIST);
 			status = client.getStatus();
-			System.out.println(status);
 			if (Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status)) {
 				return true;
 			}
@@ -158,42 +155,9 @@ public class RemoteTask implements Serializable {
 		}
 		return isDone();
 	}
-	/*
-public boolean poll() {
-		if (isDone()) return true;
 
-		InputStream in = null;
-		URLConnection c = null;
-		try {
-			c = new URL(result.toString()).openConnection();
-	        HttpURLConnection hc = ((HttpURLConnection)c);
-	        hc.setRequestMethod("GET");
-	        hc.setUseCaches(false);
-	        hc.setFollowRedirects(false);
-	        hc.setRequestProperty("Accept",MediaType.TEXT_URI_LIST.toString());
-	       // hc.setRequestProperty("Accept",MediaType.TEXT_HTML.toString());
-			in = hc.getInputStream();
-			status = new Status(hc.getResponseCode());
-//			if (!r.getEntity().isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",result));
-			result = handleOutput(in,status);
-			
-		} catch (ResourceException x) {
-			error = x;
-			status = x.getStatus();
-		} catch (Exception x) {
-			error = x;
-			status = null;
-		} finally {
-			try {in.close();} catch (Exception x) {}
-
-
-		}
-		return isDone();
-	}
-	 */
 	protected Reference handleOutput(InputStream in,Status status) throws ResourceException {
 		Reference ref = null;
-		System.out.println("handleOutput "+status );
 		if (Status.SUCCESS_OK.equals(status) 
 						|| Status.SUCCESS_ACCEPTED.equals(status) 
 						|| Status.SUCCESS_CREATED.equals(status) 
@@ -207,7 +171,6 @@ public boolean poll() {
 				String line = null;
 				while ((line = reader.readLine())!=null) {
 					ref = new Reference(line.trim());
-					System.out.println(ref);
 					count++;
 				}
 			} catch (Exception x) {
@@ -223,6 +186,7 @@ public boolean poll() {
 		} else { //everything else considered an error
 			throw new ResourceException(status);
 		}
-	}	
+	}
+
 
 }

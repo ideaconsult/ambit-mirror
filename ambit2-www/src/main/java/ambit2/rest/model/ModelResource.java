@@ -3,6 +3,7 @@ package ambit2.rest.model;
 import java.awt.Dimension;
 import java.sql.Connection;
 
+import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -212,27 +213,30 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 
 		try {
 			readVariables(model);
-			
+			String token = getUserToken(OTAAParams.subjectid.toString());
+			try { getRequest().getClientInfo().getUser().getSecret().toString(); } catch (Exception x) {}
 			ModelPredictor predictor = ModelPredictor.getPredictor(model,getRequest());
 			
 			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
 				return //reads Instances, instead of IStructureRecord
-				new CallableWekaPredictor<Object>(
+				new CallableWekaPredictor<Object,String>(
 						form,
 						getRequest().getRootRef(),
 						getContext(),
-						predictor)
+						predictor,
+						token)
 						;
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 
 				if (model.getPredictors().size()== 0) { //hack for structure based AD
 					if (predictor instanceof FingerprintsPredictor)
 						return 
-						new CallableModelPredictor<IStructureRecord,FingerprintsPredictor>(
+						new CallableModelPredictor<IStructureRecord,FingerprintsPredictor,String>(
 								form,
 								getRequest().getRootRef(),
 								getContext(),
-								(FingerprintsPredictor)predictor) {
+								(FingerprintsPredictor)predictor,
+								token) {
 							
 						}	;
 					else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Not supported %s",predictor.getClass().getName()));
@@ -242,7 +246,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 								form,
 								getRequest().getRootRef(),
 								getContext(),
-								predictor) {
+								predictor,
+								token) {
 							
 						}	;
 						/*
@@ -260,7 +265,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						form,
 						getRequest().getRootRef(),
 						getContext(),
-						(StructureProcessor) predictor
+						(StructureProcessor) predictor,
+						token
 						);				
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				return
@@ -268,7 +274,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						form,
 						getRequest().getRootRef(),
 						getContext(),
-						(DescriptorPredictor) predictor
+						(DescriptorPredictor) predictor,
+						token
 						);
 		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
 		} catch (ResourceException x) {

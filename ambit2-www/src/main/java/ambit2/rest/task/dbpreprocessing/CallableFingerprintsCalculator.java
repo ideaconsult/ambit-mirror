@@ -39,7 +39,7 @@ import ambit2.smarts.processors.SMARTSPropertiesGenerator;
  * @author nina
  *
  */
-public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Object, IStructureRecord> {
+public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcessor<Object, IStructureRecord,USERID> {
 	protected FPTable fingerprintsType = FPTable.fp1024;
 	
 	public FPTable getFingerprintsType() {
@@ -52,8 +52,8 @@ public class CallableFingerprintsCalculator extends	CallableQueryProcessor<Objec
 
 	public CallableFingerprintsCalculator(Form form,
 			Reference applicationRootReference,Context context,
-			Algorithm algorithm) throws ResourceException {
-		super(form, context);
+			Algorithm algorithm,USERID token) throws ResourceException {
+		super(form, context,token);
 		try {
 			setFingerprintsType(FPTable.valueOf(algorithm.getContent().toString()));
 		} catch (Exception x) {

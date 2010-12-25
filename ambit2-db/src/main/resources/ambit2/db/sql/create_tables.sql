@@ -216,31 +216,32 @@ where t1.name = "Models" and t2.name is null;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `models`;
 CREATE TABLE  `models` (
-  `idmodel` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(255) collate utf8_bin NOT NULL,
-  `idquery` int(10) unsigned default NULL COMMENT 'dataset',
+  `idmodel` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL,
+  `idquery` int(10) unsigned DEFAULT NULL COMMENT 'dataset',
   `predictors` int(10) unsigned NOT NULL COMMENT 'template for predictors',
   `dependent` int(10) unsigned NOT NULL COMMENT 'template for dependent variables',
   `content` longblob NOT NULL,
-  `algorithm` varchar(255) collate utf8_bin NOT NULL default 'N/A' COMMENT 'URI of the algorithm',
-  `mediatype` varchar(48) collate utf8_bin NOT NULL default 'application/java' COMMENT 'Content formats: JAVA_CLASS, WEKA_BASE64, PMML',
-  `parameters` text collate utf8_bin COMMENT 'Model parameters',
+  `algorithm` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'N/A' COMMENT 'URI of the algorithm',
+  `mediatype` varchar(48) COLLATE utf8_bin NOT NULL DEFAULT 'application/java' COMMENT 'Content formats: JAVA_CLASS, WEKA_BASE64, PMML',
+  `parameters` text COLLATE utf8_bin COMMENT 'Model parameters',
   `predicted` int(10) unsigned NOT NULL COMMENT 'template for predicted variables',
-  `hidden` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`idmodel`),
-  UNIQUE KEY `Index_5` USING BTREE (`name`),
+  `hidden` tinyint(1) NOT NULL DEFAULT '0',
+  `creator` varchar(45) COLLATE utf8_bin NOT NULL default 'guest',
+  PRIMARY KEY (`idmodel`),
+  UNIQUE KEY `Index_5` (`name`) USING BTREE,
   KEY `FK_models_predictors` (`predictors`),
   KEY `FK_models_dataset` (`idquery`),
   KEY `FK_models_dependent` (`dependent`),
   KEY `Index_6` (`algorithm`),
   KEY `Index_7` (`parameters`(255)),
   KEY `FK_models_predicted` (`predicted`),
+  KEY `Index_creator` (`creator`),
   CONSTRAINT `FK_models_dataset` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_dependent` FOREIGN KEY (`dependent`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predicted` FOREIGN KEY (`predicted`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predictors` FOREIGN KEY (`predictors`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 -- -----------------------------------------------------
 -- Table `tuples` for non-scalar values
 -- -----------------------------------------------------
@@ -910,7 +911,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,3,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,4,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

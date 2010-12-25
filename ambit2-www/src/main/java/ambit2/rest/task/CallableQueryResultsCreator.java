@@ -2,7 +2,6 @@ package ambit2.rest.task;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.util.Iterator;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -10,7 +9,6 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -30,7 +28,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.rdf.RDFPropertyIterator;
 
-public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor<Object, Result> {
+public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryProcessor<Object, Result,USERID> {
 	protected IStoredQuery storedQuery;
 	protected boolean clearPreviousContent = false;
 	protected Template template;
@@ -49,9 +47,10 @@ public class CallableQueryResultsCreator< Result> extends CallableQueryProcessor
 			Form form,
 			Reference applicationRootReference, 
 			Context context,
-			IStoredQuery storedQuery
+			IStoredQuery storedQuery,
+			USERID token
 			) throws ResourceException {
-		super(form, context);
+		super(form, context,token);
 		this.applicationRootReference = applicationRootReference;
 		datasets = form.getValuesArray(OpenTox.params.dataset_uri.toString());
 		if (datasets==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());

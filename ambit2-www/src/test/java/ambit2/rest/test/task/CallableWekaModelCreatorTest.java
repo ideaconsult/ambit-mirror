@@ -27,7 +27,8 @@ public class CallableWekaModelCreatorTest extends ResourceTest {
 				((AmbitApplication)component.getApplication()).getContext(),
 				(Algorithm)null, 
 				uriReporter,
-				new AlgorithmURIReporter(null,new ResourceDoc()));
+				new AlgorithmURIReporter(null,new ResourceDoc()),
+				null);
 		Reference ref = c.call();
 	}
 	@Override

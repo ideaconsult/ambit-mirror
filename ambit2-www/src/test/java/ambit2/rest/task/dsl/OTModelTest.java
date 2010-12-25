@@ -107,8 +107,7 @@ public class OTModelTest extends ResourceTest {
 		RemoteTask task = new RemoteTask(new Reference(String.format("http://localhost:%d/algorithm/toxtreeskinirritation",port)),
 				MediaType.TEXT_URI_LIST,
 				null,
-				Method.POST,
-				null
+				Method.POST
 				);
 		while (!task.poll()) ;
 		
