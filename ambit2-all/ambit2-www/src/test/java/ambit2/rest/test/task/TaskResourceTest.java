@@ -24,7 +24,7 @@ import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.CallablePOST;
-import ambit2.rest.task.CallableTask;
+import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
 import ambit2.rest.test.ResourceTest;
@@ -78,7 +78,7 @@ public class TaskResourceTest extends ResourceTest {
 
 	@Test
 	public void testRDF() throws Exception {
-		CallableTask c = new CallableTask() {
+		ICallableTask c = new ICallableTask() {
 			protected UUID uuid;
 			public Reference call() throws Exception {
 				return new Reference("http://localhost/newResult");
@@ -101,7 +101,7 @@ public class TaskResourceTest extends ResourceTest {
 
 	@Test
 	public void testURI() throws Exception {
-		CallableTask c = new CallableTask() {
+		ICallableTask c = new ICallableTask() {
 			protected UUID uuid;
 			public Reference call() throws Exception {
 				return new Reference("quickTaskURI");
@@ -168,14 +168,14 @@ public class TaskResourceTest extends ResourceTest {
 			form.add(OpenTox.params.delay.toString(),"1000");
 			RemoteTask task = new RemoteTask(
 					url,
-					MediaType.APPLICATION_WWW_FORM,form.getWebRepresentation(),Method.POST,null);
+					MediaType.APPLICATION_WWW_FORM,form.getWebRepresentation(),Method.POST);
 		}
 		
 
 		Reference alltasks = new Reference(String.format("http://localhost:%d/task", port));
 		RemoteTask tasks = new RemoteTask(
 				alltasks,
-				MediaType.TEXT_URI_LIST,null,Method.GET,null);
+				MediaType.TEXT_URI_LIST,null,Method.GET);
 		while (!tasks.poll()) {
 			System.out.println(tasks);
 		}
@@ -299,6 +299,7 @@ public class TaskResourceTest extends ResourceTest {
 		CallablePOST post = new CallablePOST(
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation(),
+				null,
 				null);
 		try {
 			Reference ref = post.call();
@@ -316,6 +317,7 @@ public class TaskResourceTest extends ResourceTest {
 		CallablePOST post = new CallablePOST(
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation(),
+				null,
 				null);
 		Reference ref = post.call();
 		long now = System.currentTimeMillis();
@@ -387,7 +389,7 @@ public class TaskResourceTest extends ResourceTest {
 						form.add(OpenTox.params.dataset_uri.toString(),String.format("http://localhost:%d/compound/11", port));
 						RemoteTask task = new RemoteTask(
 								url,
-								MediaType.TEXT_URI_LIST,form.getWebRepresentation(),Method.POST,null);
+								MediaType.TEXT_URI_LIST,form.getWebRepresentation(),Method.POST);
 						pool.add(task);
 						System.out.println(i);
 					}

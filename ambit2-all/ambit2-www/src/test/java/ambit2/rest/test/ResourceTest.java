@@ -39,7 +39,6 @@ import weka.core.Instances;
 import ambit2.base.config.Preferences;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.dsl.ClientResourceWrapper;
@@ -124,7 +123,7 @@ public abstract class ResourceTest extends DbUnitTest {
 	}
 	
 	protected void testAsyncPoll(Reference ref, MediaType media, Representation rep, Method method, Reference expected) throws Exception {
-		RemoteTask task = new RemoteTask(ref,media,rep,method,new ChallengeResponse(ChallengeScheme.HTTP_BASIC,"guest","guest"));
+		RemoteTask task = new RemoteTask(ref,media,rep,method);
 		
 		while (!task.poll()) {
 			Thread.yield();
@@ -145,8 +144,7 @@ public abstract class ResourceTest extends DbUnitTest {
 				new Reference(uri),
 				MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation(),
-				Method.POST,
-				null);
+				Method.POST);
 		if (task.isERROR()) throw task.getError();
 		Assert.assertNotNull(task.getResult());
 		while (!task.poll()) {

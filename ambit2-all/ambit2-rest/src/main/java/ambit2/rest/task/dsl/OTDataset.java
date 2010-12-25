@@ -35,7 +35,7 @@ public class OTDataset extends OTObject implements IOTDataset {
 		long now = System.currentTimeMillis(); 
 		Form form = new Form(); 
 		form.add(OpenTox.params.dataset_uri.toString(),uri.toString());
-		RemoteTask task = new RemoteTask(new Reference(dataset_service),MediaType.TEXT_URI_LIST,form.getWebRepresentation(),Method.POST,authentication);
+		RemoteTask task = new RemoteTask(new Reference(dataset_service),MediaType.TEXT_URI_LIST,form.getWebRepresentation(),Method.POST);
 		task = wait(task,now);
 		if (task.getError()!=null) throw task.getError();
 		return OTDataset.dataset(task.getResult()).withDatasetService(dataset_service);
@@ -55,9 +55,9 @@ public class OTDataset extends OTObject implements IOTDataset {
 			
 			RemoteTask task = null;
 			if (uri==null)
-				task = new RemoteTask(dataset_service,MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST,authentication);
+				task = new RemoteTask(dataset_service,MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST);
 			else
-				task = new RemoteTask(uri,MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.PUT,authentication);
+				task = new RemoteTask(uri,MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.PUT);
 			task = wait(task,now);
 			Reference ref = task.getResult();
 			datasets.clear();

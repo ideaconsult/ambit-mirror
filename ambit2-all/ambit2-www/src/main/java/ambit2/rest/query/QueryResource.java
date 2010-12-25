@@ -42,7 +42,7 @@ import ambit2.rest.TaskApplication;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
-import ambit2.rest.task.CallableTask;
+import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
@@ -397,13 +397,13 @@ Then, when the "get(Variant)" method calls you back,
 			try {
 				TaskCreator<Object,T> taskCreator = new TaskCreator<Object,T>(form,async) {
 					@Override
-					protected CallableTask getCallable(Form form,
+					protected ICallableTask getCallable(Form form,
 							T item) throws ResourceException {
 						return createCallable(form,item);
 					}
 					@Override
 					protected Task<Reference, Object> createTask(
-							CallableTask callable,
+							ICallableTask callable,
 							T item) throws ResourceException {
 	
 							return ((TaskApplication)getApplication()).addTask(

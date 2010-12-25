@@ -194,7 +194,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		return new Task<Reference,USERID>(user);
 	}
 	public Task<Reference,USERID> addTask(String taskName, 
-			CallableTask callable, 
+			ICallableTask callable, 
 			Reference baseReference,
 			USERID user,boolean internal) {
 		if (callable == null) return null;

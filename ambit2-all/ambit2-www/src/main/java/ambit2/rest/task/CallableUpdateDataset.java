@@ -23,7 +23,7 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.uri.URIStructureIterator;
 
-public class CallableUpdateDataset extends	CallableQueryProcessor<Object, String> {
+public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object, String,USERID> {
 	protected String[] compounds = null;
 	protected SourceDataset dataset;
 	protected boolean clearPreviousContent = false;
@@ -43,9 +43,10 @@ public class CallableUpdateDataset extends	CallableQueryProcessor<Object, String
 			Reference applicationRootReference, 
 			Context context,
 			SourceDataset dataset,
-			DatasetURIReporter<IQueryRetrieval<SourceDataset>> datasetUriReporter
+			DatasetURIReporter<IQueryRetrieval<SourceDataset>> datasetUriReporter,
+			USERID token
 			) throws ResourceException {
-		super(form, context);
+		super(form, context,token);
 		this.applicationRootReference = applicationRootReference;
 		compounds = form.getValuesArray(OpenTox.params.compound_uris.toString());
 

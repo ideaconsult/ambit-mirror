@@ -39,8 +39,8 @@ import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.AbstractStructuresModelBuilder;
 
-public class CallableStructurePairsModelCreator extends	
-					CallableModelCreator<ModelQueryResults, IStructureRecord[], AbstractStructuresModelBuilder<ModelQueryResults>> {
+public class CallableStructurePairsModelCreator<USERID> extends	
+					CallableModelCreator<ModelQueryResults, IStructureRecord[], AbstractStructuresModelBuilder<ModelQueryResults>,USERID> {
 	protected Reference applicationRootReference;
 	protected LiteratureEntry prediction;
 	
@@ -49,9 +49,10 @@ public class CallableStructurePairsModelCreator extends
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
-			AbstractStructuresModelBuilder<ModelQueryResults> builder) {
+			AbstractStructuresModelBuilder<ModelQueryResults> builder,
+			USERID token) {
 
-		super(form, context,algorithm,builder);
+		super(form, context,algorithm,builder,token);
 		this.applicationRootReference =applicationRootReference;
 		builder.setTargetURI(form.getValuesArray(OpenTox.params.dataset_uri.toString()));
 		

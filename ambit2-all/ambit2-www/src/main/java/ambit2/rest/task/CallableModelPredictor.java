@@ -23,16 +23,18 @@ import ambit2.rest.model.predictor.ModelPredictor;
  * @author nina
  *
  */
-public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor> extends CallableQueryProcessor<Object, IStructureRecord> {
+public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,USERID> 
+					extends CallableQueryProcessor<Object, IStructureRecord,USERID> {
 	protected Reference applicationRootReference;
 	protected Predictor predictor;
 	
 	public CallableModelPredictor(Form form, 
 			Reference appReference,
 			Context context,
-			Predictor predictor
+			Predictor predictor,
+			USERID token
 				) {
-		super(form,context);
+		super(form,context,token);
 		this.predictor = predictor;
 		this.applicationRootReference = appReference;
 	}	

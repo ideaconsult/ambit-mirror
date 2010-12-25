@@ -42,7 +42,7 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.RDFIteratingReader;
 import ambit2.rest.structure.ConformerURIReporter;
 
-public class CallableFileImport implements CallableTask {
+public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	protected UUID uuid;
 	public UUID getUuid() {
 		return uuid;
@@ -105,7 +105,9 @@ public class CallableFileImport implements CallableTask {
 			File file, Connection connection,
 			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter,
 			ConformerURIReporter compoundReporter,
-			boolean firstCompoundOnly) {
+			boolean firstCompoundOnly,
+			USERID token) {
+		super(token);
 		this.file = file;
 		this.connection = connection;
 		upload = null;
@@ -121,9 +123,10 @@ public class CallableFileImport implements CallableTask {
 			Connection connection,
 			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter,
 			ConformerURIReporter compoundReporter,
-			boolean firstCompoundOnly) {
+			boolean firstCompoundOnly,
+			USERID token) {
 		this(client, dataset, (File) null, connection, reporter,compoundReporter,
-				firstCompoundOnly);
+				firstCompoundOnly,token);
 
 		for (final Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 			FileItem fi = it.next();
@@ -187,9 +190,10 @@ public class CallableFileImport implements CallableTask {
 			Representation input, Connection connection,
 			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter,
 			ConformerURIReporter compoundReporter,
-			boolean firstCompoundOnly) {
+			boolean firstCompoundOnly,
+			USERID token) {
 		this(client, dataset, (File) null, connection, reporter,compoundReporter,
-				firstCompoundOnly);
+				firstCompoundOnly,token);
 		try {
 			String extension = getExtension(input.getMediaType());
 			System.out.println(input.getIdentifier());
@@ -211,8 +215,8 @@ public class CallableFileImport implements CallableTask {
 		}
 
 	}
-
-	public Reference call() throws Exception {
+	@Override
+	public Reference doCall() throws Exception {
 		try {
 			if (file == null)
 				if (upload != null)

@@ -17,7 +17,7 @@ import ambit2.rest.OpenTox;
  * @author nina
  *
  */
-public class CallableMockup implements CallableTask {
+public class CallableMockup<USERID> extends CallableProtectedTask<USERID> {
 	protected long delay;
 	protected Object resultURI;
 	protected Exception error;
@@ -29,7 +29,8 @@ public class CallableMockup implements CallableTask {
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
 	}
-	public CallableMockup(Form form) {
+	public CallableMockup(Form form,USERID token) {
+		super(token);
 		try {
 			this.delay = Long.parseLong(OpenTox.params.delay.getFirstValue(form).toString());
 		} catch (Exception x) {
@@ -43,7 +44,9 @@ public class CallableMockup implements CallableTask {
 		resultURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (resultURI==null) resultURI = OpenTox.params.model_uri.getFirstValue(form);
 	}
-	public Reference call() throws Exception {
+	@Override
+	public Reference doCall() throws Exception {
+
 		Thread.sleep(delay);
 		Thread.yield();
 		if (error != null) throw error;

@@ -24,14 +24,15 @@ import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.FingerprintsModelBuilder;
 
-public class CallableFingerprintsModelCreator extends CallableStructuresModelCreator<List<BitSet>,FingerprintsModelBuilder>  {
+public class CallableFingerprintsModelCreator<USERID> extends CallableStructuresModelCreator<List<BitSet>,FingerprintsModelBuilder,USERID>  {
 	
 
 	public CallableFingerprintsModelCreator(Form form,
 			Reference applicationRootReference,Context context,
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
-			AlgorithmURIReporter alg_reporter) {
+			AlgorithmURIReporter alg_reporter,
+			USERID token) {
 
 		super(form,
 				applicationRootReference,
@@ -42,7 +43,8 @@ public class CallableFingerprintsModelCreator extends CallableStructuresModelCre
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
-						OpenTox.params.parameters.getValuesArray(form)));
+						OpenTox.params.parameters.getValuesArray(form)),
+				token);
 	
 	}	
 

@@ -202,14 +202,15 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	 */
 	protected Representation copyDatasetToQueryResultsTable(Form form, boolean clearPreviousContent)
 			throws ResourceException {
+		String token = getUserToken(OTAAParams.subjectid.toString());
 		Callable<Reference> callable = null;
 		if ((queryResultsID!=null) && (queryResultsID>0)) {
-			
 			callable = new CallableQueryResultsCreator(
 					form,
 					getRequest().getRootRef(),
 					getContext(),
-					new StoredQuery(queryResultsID));
+					new StoredQuery(queryResultsID),
+					token);
 			((CallableQueryResultsCreator)callable).setClearPreviousContent(clearPreviousContent);
 		} else if ((datasetID!=null) && (datasetID>0)) {
 			//PUT only for compound_uris[]=... & feature_uris[]=....
@@ -221,7 +222,8 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 					getRequest().getRootRef(),
 					getContext(),
 					dataset,
-					new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation())
+					new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation()),
+					token
 					);
 			((CallableUpdateDataset)callable).setClearPreviousContent(clearPreviousContent);
 		} else {

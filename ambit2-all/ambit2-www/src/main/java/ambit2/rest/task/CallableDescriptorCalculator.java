@@ -16,12 +16,12 @@ import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 
-public class CallableDescriptorCalculator extends CallableModelPredictor<IStructureRecord,DescriptorPredictor> {
+public class CallableDescriptorCalculator<USERID> extends CallableModelPredictor<IStructureRecord,DescriptorPredictor,USERID> {
 
 	public CallableDescriptorCalculator(Form form,
 			Reference appReference,Context context,
-			DescriptorPredictor predictor) {
-		super(form, appReference, context, predictor);
+			DescriptorPredictor predictor,USERID token) {
+		super(form, appReference, context, predictor,token);
 
 	}
 

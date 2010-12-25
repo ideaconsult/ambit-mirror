@@ -106,12 +106,12 @@ public class LauncherResource extends ServerResource {
 		return null;
 	}
 	
-	protected CallableTask createCallable(Form form) throws ResourceException {
+	protected ICallableTask createCallable(Form form) throws ResourceException {
 				
 		try {
 			if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
 				form.add(OpenTox.params.dataset_service.toString(), getDatasetService().toString());
-			return new CallablePOST(form,getRequest().getRootRef());		
+			return new CallablePOST(form,getRequest().getRootRef(),getUserToken("subjectid"));		
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
@@ -123,6 +123,7 @@ public class LauncherResource extends ServerResource {
 
 			
 	}	
+	
 	protected String getUserToken(String tag) {
 		try {
 			Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  

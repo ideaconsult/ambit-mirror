@@ -6,7 +6,7 @@ import org.restlet.Application;
 import org.restlet.data.Reference;
 
 import ambit2.rest.task.CallablePOST;
-import ambit2.rest.task.CallableTask;
+import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskStorage;
@@ -52,14 +52,14 @@ public class TaskApplication<USERID> extends Application {
 	}
 
 	public synchronized Task<Reference,USERID> addTask(String taskName, 
-			CallableTask callable, 
+			ICallableTask callable, 
 			Reference baseReference,
 			USERID user) {
 		return addTask(taskName,callable,baseReference,!(callable instanceof CallablePOST), user);
 	}
 	
 	public synchronized Task<Reference,USERID> addTask(String taskName, 
-			CallableTask callable, 
+			ICallableTask callable, 
 			Reference baseReference,boolean internal, USERID user) {
 		return taskStorage.addTask(taskName,callable,baseReference,user,internal);
 	}

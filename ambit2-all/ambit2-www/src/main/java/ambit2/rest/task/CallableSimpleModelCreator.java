@@ -17,16 +17,17 @@ import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ModelBuilder;
 import ambit2.rest.model.builder.SimpleModelBuilder;
 
-public class CallableSimpleModelCreator<Result> extends CallableModelCreator<Object,Result,ModelBuilder<Object,Algorithm, ModelQueryResults>> {
+public class CallableSimpleModelCreator<Result,USERID> extends CallableModelCreator<Object,Result,ModelBuilder<Object,Algorithm, ModelQueryResults>,USERID> {
 
 
 	public CallableSimpleModelCreator(Form form,
 			Context context,
 			Algorithm algorithm,
 			boolean hidden,
-			ModelBuilder<Object,Algorithm, ModelQueryResults> builder
+			ModelBuilder<Object,Algorithm, ModelQueryResults> builder,
+			USERID token
 			) {
-		super(form,context,algorithm,builder);
+		super(form,context,algorithm,builder,token);
 	
 	}	
 	public CallableSimpleModelCreator(Form form,
@@ -35,10 +36,12 @@ public class CallableSimpleModelCreator<Result> extends CallableModelCreator<Obj
 				Algorithm algorithm,
 				ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 				AlgorithmURIReporter alg_reporter,
-				boolean hidden
+				boolean hidden,
+				USERID token
 				) {
 		super(form,context,algorithm,
-				new SimpleModelBuilder(applicationRootReference,reporter,alg_reporter,hidden)
+				new SimpleModelBuilder(applicationRootReference,reporter,alg_reporter,hidden),
+				token
 		);
 	}	
 	@Override

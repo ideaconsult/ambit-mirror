@@ -46,7 +46,7 @@ public class OTAlgorithm extends OTProcessingResource implements IOTAlgorithm  {
 
 	 public RemoteTask processAsync(Form params) throws Exception {
 
-			return new RemoteTask(new Reference(uri),MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST,authentication);
+			return new RemoteTask(new Reference(uri),MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST);
 	 }
 	 @Override
 	 public OTDataset process(OTDataset inputDataset) throws Exception {

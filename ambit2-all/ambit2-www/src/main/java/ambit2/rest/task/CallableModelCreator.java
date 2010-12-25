@@ -1,7 +1,9 @@
 package ambit2.rest.task;
 
 import java.sql.Connection;
+import java.util.Hashtable;
 
+import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -15,9 +17,10 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.model.CreateModel;
 import ambit2.db.update.model.ReadModel;
+import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.model.builder.ModelBuilder;
 
-public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilder<DATA,Algorithm,ModelQueryResults>>  extends	CallableQueryProcessor<Object, Item> {
+public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilder<DATA,Algorithm,ModelQueryResults>,USERID>  extends	CallableQueryProcessor<Object, Item,USERID> {
 	protected Algorithm algorithm;
 	protected Builder builder; 
 	protected ModelQueryResults model;
@@ -29,8 +32,9 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 			Form form,
 			Context context,
 			Algorithm algorithm,
-			Builder builder) {
-		super(form, context);
+			Builder builder,
+			USERID token) {
+		super(form, context,token);
 		this.algorithm = algorithm;
 		this.builder = builder;
 		
@@ -78,9 +82,22 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 		}
 	}
 	
-	
+	protected String getUser() throws Exception {
+		if (getToken()==null) return "guest";
+		OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
+		ssoToken.setToken(getToken());
+		Hashtable<String,String> results = new Hashtable<String, String>();
+		ssoToken.getAttributes(new String[] {"uid"}, results);
+		return results.get("uid");
+	}
 	protected ModelQueryResults createModel() throws Exception {
-		return builder.process(algorithm);
+		ModelQueryResults model = builder.process(algorithm);
+		if (model != null) try {
+			model.setCreator(getUser());
+		} catch (Exception x) {
+			model.setCreator(x.getMessage());
+		}
+		return model;
 	}
 	
 	@Override

@@ -24,23 +24,25 @@ import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.CoverageModelBuilder;
 import ambit2.rest.task.dsl.ClientResourceWrapper;
 
-public class CallableNumericalModelCreator extends CallableModelCreator<Instances,Matrix,CoverageModelBuilder> {
+public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<Instances,Matrix,CoverageModelBuilder,USERID> {
 	
 	public CallableNumericalModelCreator(Form form,
 			Reference applicationRootReference,Context context,
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
-			AlgorithmURIReporter alg_reporter) {
+			AlgorithmURIReporter alg_reporter,
+			USERID token) {
 
 		super(form, context,algorithm,
 				new CoverageModelBuilder(applicationRootReference,
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
-						OpenTox.params.parameters.getValuesArray(form)));
+						OpenTox.params.parameters.getValuesArray(form)),
+						token);
 	}
-	
-	public Reference call() throws Exception {
+	@Override
+	public Reference doCall() throws Exception {
 		Context.getCurrentLogger().info("Start()");
 		Connection connection = null;
 		try {

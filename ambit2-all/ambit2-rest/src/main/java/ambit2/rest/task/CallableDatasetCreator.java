@@ -60,7 +60,6 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 	protected String datasetURI;
 	protected Reference datasetService;
 	protected Form input;
-	protected ChallengeResponse authentication ;
 	protected RemoteTaskPool jobs = new RemoteTaskPool();
 	protected Hashtable<Reference,RemoteTask> algorithms = new Hashtable<Reference, RemoteTask>(); 
 	protected Form featuresQuery = new Form();
@@ -86,7 +85,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		input.add(OpenTox.params.dataset_uri.toString(),this.datasetURI);
 		input.add(OpenTox.params.dataset_service.toString(),this.datasetService.toString());
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
-		authentication = new ChallengeResponse(scheme, "guest", "guest");  
+ 
 	}
 	/*
 	public Reference call() throws Exception {
@@ -136,7 +135,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 				Form input = new Form();
 				input.add(OpenTox.params.dataset_uri.toString(),task.getResult().toString());
 				input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
-				jobs.add(new RemoteTask(alg,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication));
+				jobs.add(new RemoteTask(alg,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST));
 			}
 			
 		}
@@ -158,7 +157,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		dataset.setQuery(query.getQueryString());
 		input.add(OpenTox.params.dataset_uri.toString(),dataset.toString());
 		input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
-		currentJob = new RemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication);
+		currentJob = new RemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
 		jobs.add(currentJob);
 		jobs.run();
 		jobs.clear();
@@ -174,7 +173,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
 			
 			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start model (finally) %s",modelURI));
-			currentJob = new RemoteTask(new Reference(modelURI),MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication);
+			currentJob = new RemoteTask(new Reference(modelURI),MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
 			jobs.add(currentJob);
 			jobs.run();		
 			//for (RemoteTask task : jobs.pool) System.out.println(task); 		
@@ -305,7 +304,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		input.add(OpenTox.params.dataset_uri.toString(),filter.toString());
 		input.removeAll(OpenTox.params.dataset_service.toString());
 		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Missing values"));		
-		RemoteTask job = new RemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST,authentication);
+		RemoteTask job = new RemoteTask(datasetService,MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
 		algorithms.put(algorithm,job);
 		jobs.add(job);
 		firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Start descriptor calculation %s",algorithm));

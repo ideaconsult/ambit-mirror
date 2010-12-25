@@ -46,7 +46,6 @@ public class OTObject implements Comparable<OTObject>, IOTObject{
 
 	
 	 
-	 protected ChallengeResponse authentication;
 		protected long pollInterval = 1500;
 		protected long pollTimeout = 1000L*60L*5L; //5 min
 	 
@@ -54,10 +53,7 @@ public class OTObject implements Comparable<OTObject>, IOTObject{
 		 uri = null;
 	 }
 		
-	 public OTObject withAuthentication(ChallengeResponse authentication) throws Exception { 
-		  this.authentication = authentication;
-		  return this; 
-	 }		 
+
 	 @Override
 	public String toString() {
 		return uri==null?null:uri.toString();
