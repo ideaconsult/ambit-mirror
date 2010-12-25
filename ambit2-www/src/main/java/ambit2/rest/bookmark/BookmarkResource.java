@@ -7,6 +7,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -170,12 +171,9 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 		else return new CreateBookmark(entry);
 	}
 	
-	@Override
-	protected Representation delete(Variant variant) throws ResourceException {
-		return super.delete(variant);
-	}
-	@Override
-	protected Bookmark createObjectFromHeaders(Form queryForm,
+
+	
+	protected Bookmark createObjectFromURI(Form queryForm,
 			Representation entity) throws ResourceException {
 		try {
 			Object idref = getRequest().getAttributes().get(idbookmark);
@@ -186,6 +184,19 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage());
 		}
 	}
+	
+	protected Representation delete(Variant variant) throws ResourceException {
+		Representation entity = getRequestEntity();
+		Form queryForm = null;
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType()))
+			queryForm = new Form(entity);
+		Bookmark entry = createObjectFromURI(queryForm, entity);
+		executeUpdate(entity, 
+				entry,
+				createDeleteObject(entry));
+		getResponse().setStatus(Status.SUCCESS_OK);
+		return new EmptyRepresentation();
+	};
 	@Override
 	protected AbstractUpdate createDeleteObject(Bookmark entry)
 			throws ResourceException {
