@@ -73,7 +73,7 @@ public class Step5Processor extends StepProcessor {
 							task = new RemoteTask(new Reference(launcher),
 										MediaType.TEXT_URI_LIST,
 										query.getWebRepresentation()
-										,Method.POST,authentication);
+										,Method.POST);
 			
 							
 							session.addModel(model, task);

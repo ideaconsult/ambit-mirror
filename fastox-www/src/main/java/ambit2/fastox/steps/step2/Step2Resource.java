@@ -114,7 +114,7 @@ public class Step2Resource extends FastoxStepResource {
 		RemoteTaskPool pool = new RemoteTaskPool();
 		try {
               //factory.setSizeThreshold(100);
-			RemoteTask task = new RemoteTask(wizard.getService(SERVICE.dataset),MediaType.TEXT_URI_LIST,entity,Method.POST,null);
+			RemoteTask task = new RemoteTask(wizard.getService(SERVICE.dataset),MediaType.TEXT_URI_LIST,entity,Method.POST);
 			
 			pool.add(task);
 			pool.run();

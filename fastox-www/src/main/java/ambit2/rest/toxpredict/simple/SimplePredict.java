@@ -92,7 +92,7 @@ public class SimplePredict extends ServerResource {
 			params.add(OpenTox.params.dataset_uri.toString(),ref.toString());
 			params.add(OpenTox.params.model_uri.toString(),model);
 			
-			task = new RemoteTask(superservice,MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST,null);
+			task = new RemoteTask(superservice,MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.POST);
 			setStatus(Status.SUCCESS_OK);
 			
 		} catch (ResourceException x) {
