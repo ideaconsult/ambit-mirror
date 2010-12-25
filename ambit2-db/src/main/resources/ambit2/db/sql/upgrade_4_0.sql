@@ -227,3 +227,5 @@ ALTER TABLE `structure` MODIFY COLUMN `format` ENUM('SDF','CML','MOL','INC') NOT
 ALTER TABLE `models` ADD COLUMN `creator` VARCHAR(45) NOT NULL default 'guest' AFTER `hidden`,
  ADD INDEX `Index_creator`(`creator`);
 
+ALTER TABLE `models` ADD COLUMN `dataset` VARCHAR(255) COMMENT 'dataset uri' AFTER `creator`,
+ ADD INDEX `Index_10`(`dataset`);

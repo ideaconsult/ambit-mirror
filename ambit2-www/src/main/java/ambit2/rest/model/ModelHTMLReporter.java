@@ -4,7 +4,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.restlet.Request;
-import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
@@ -13,9 +12,7 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
-import ambit2.rest.template.OntologyResource;
 
 public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> {
 	/**
@@ -90,14 +87,14 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 					model.getAlgorithm(),
 					model.getAlgorithm()));
 			
-			if ((model.getTrainingInstances()==null) || (model.getTrainingInstances().getFieldname()==null))
+			if (model.getTrainingInstances()==null)
 				output.write("<td></td>");
 			else
 				output.write(String.format(
 						"<td><img src=\"%s/images/table.png\" alt=\"Compounds\" title=\"Browse compounds\" border=\"0\"/>&nbsp;<a href=\"%s/query/results/%d\">Browse</a></td>",
 						uriReporter.getBaseReference(),
 						uriReporter.getBaseReference(),
-						model.getTrainingInstances().getFieldname().getId()
+						model.getTrainingInstances()
 						));
 			
 			output.write(String.format(

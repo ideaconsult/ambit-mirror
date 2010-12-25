@@ -12,7 +12,7 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
 /**
- * ModelQueryResults
+ * Bookmark
  * @author nina
  *
  */

@@ -86,7 +86,13 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 	protected Object createTarget(Reference reference) throws Exception {
 		return reference;
 	}
-	
+	@Override
+	protected ModelQueryResults createModel() throws Exception {
+		ModelQueryResults model = super.createModel();
+		if ((model != null) && (model.getTrainingInstances()==null) && (sourceReference!=null))
+			model.setTrainingInstances(sourceReference.toString());
+		return model;
+	}
 
 
 }

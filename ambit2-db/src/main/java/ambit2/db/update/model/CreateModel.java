@@ -24,7 +24,7 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	protected CreateDictionary createDictionary;
 	protected int sql_size = 0;
 	public static final String create_sql = 
-		"INSERT IGNORE INTO models (idmodel,name,idquery,predictors,dependent,predicted,content,mediatype,algorithm,parameters,hidden,creator) " +
+		"INSERT IGNORE INTO models (idmodel,name,dataset,predictors,dependent,predicted,content,mediatype,algorithm,parameters,hidden,creator) " +
 		"SELECT null,?,?,t1.idtemplate,t2.idtemplate,t3.idtemplate,?,?,?,?,?,? from template t1 join template t2 join template t3 where t1.name=? and t2.name =? and t3.name=?";
 	;
 
@@ -111,9 +111,9 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 		
 		params1.add(new QueryParam<String>(String.class, getObject().getName()));
 		if (getObject().getTrainingInstances()==null)
-			params1.add(new QueryParam<Integer>(Integer.class, null));
+			params1.add(new QueryParam<String>(String.class, null));
 		else
-			params1.add(new QueryParam<Integer>(Integer.class, getObject().getTrainingInstances().getFieldname().getId()));
+			params1.add(new QueryParam<String>(String.class, getObject().getTrainingInstances()));
 		params1.add(new QueryParam<String>(String.class, getObject().getContent()));
 		params1.add(new QueryParam<String>(String.class, getObject().getContentMediaType()));
 		params1.add(new QueryParam<String>(String.class, getObject().getAlgorithm()));
