@@ -824,7 +824,7 @@ CREATE TABLE  `bookmark` (
   `idbookmark` int(10) unsigned NOT NULL auto_increment,
   `creator` varchar(45) collate utf8_bin NOT NULL COMMENT 'dc:creator',
   `recalls` text collate utf8_bin NOT NULL COMMENT 'b:recalls Relates the bookmark with the resource that has been bookmarked. ',
-  `hasTopic` varchar(45) collate utf8_bin NOT NULL COMMENT 'b:hasTopic Associates the bookmark with a Topic ',
+  `hasTopic` varchar(255) collate utf8_bin NOT NULL COMMENT 'b:hasTopic Associates the bookmark with a Topic ',
   `title` varchar(45) collate utf8_bin NOT NULL COMMENT 'dc:title',
   `description` text collate utf8_bin NOT NULL COMMENT 'dc:description',
   `created` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT 'a:created The date and time on which the bookmark was created. Format should be YYYY-MM-DDTHH:MM[:SS]TZD (see [DATETIME])',
