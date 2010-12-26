@@ -83,7 +83,7 @@ public class OTObject implements Comparable<OTObject>, IOTObject{
 		 return this;
 	 }
 	 public OTObject withParams(String name,String value) throws Exception { 
-		 if (form!=null) form = new Form();
+		 if (form==null) form = new Form();
 		 form.add(name, value);
 		 return this;
 	 }
