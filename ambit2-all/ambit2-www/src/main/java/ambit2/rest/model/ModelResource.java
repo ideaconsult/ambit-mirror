@@ -34,6 +34,7 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
+import ambit2.rest.model.predictor.ExpertModelpredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
 import ambit2.rest.model.predictor.ModelPredictor;
 import ambit2.rest.model.predictor.StructureProcessor;
@@ -215,38 +216,54 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			readVariables(model);
 			String token = getUserToken(OTAAParams.subjectid.toString());
 			try { getRequest().getClientInfo().getUser().getSecret().toString(); } catch (Exception x) {}
-			ModelPredictor predictor = ModelPredictor.getPredictor(model,getRequest());
+			final ModelPredictor thepredictor = ModelPredictor.getPredictor(model,getRequest());
 			
+			if (model.getContentMediaType().equals(AlgorithmFormat.WWW_FORM.getMediaType())) {
+				
+				return
+				new CallableModelPredictor<IStructureRecord,ExpertModelpredictor,String>(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						(ExpertModelpredictor)thepredictor,
+						token) {
+					
+					protected void processForm(Form form) {
+						super.processForm(form);
+						((ExpertModelpredictor)thepredictor).setValue(form.getFirstValue("value"));
+					};
+				}	;
+			} else 
 			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
 				return //reads Instances, instead of IStructureRecord
 				new CallableWekaPredictor<Object,String>(
 						form,
 						getRequest().getRootRef(),
 						getContext(),
-						predictor,
+						thepredictor,
 						token)
 						;
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 
 				if (model.getPredictors().size()== 0) { //hack for structure based AD
-					if (predictor instanceof FingerprintsPredictor)
+					if (thepredictor instanceof FingerprintsPredictor)
 						return 
 						new CallableModelPredictor<IStructureRecord,FingerprintsPredictor,String>(
 								form,
 								getRequest().getRootRef(),
 								getContext(),
-								(FingerprintsPredictor)predictor,
+								(FingerprintsPredictor)thepredictor,
 								token) {
 							
 						}	;
-					else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Not supported %s",predictor.getClass().getName()));
+					else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Not supported %s",thepredictor.getClass().getName()));
 				} else {
 					return
 						new CallableModelPredictor(
 								form,
 								getRequest().getRootRef(),
 								getContext(),
-								predictor,
+								thepredictor,
 								token) {
 							
 						}	;
@@ -265,7 +282,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						form,
 						getRequest().getRootRef(),
 						getContext(),
-						(StructureProcessor) predictor,
+						(StructureProcessor) thepredictor,
 						token
 						);				
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
@@ -274,7 +291,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						form,
 						getRequest().getRootRef(),
 						getContext(),
-						(DescriptorPredictor) predictor,
+						(DescriptorPredictor) thepredictor,
 						token
 						);
 		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());

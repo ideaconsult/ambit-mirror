@@ -8,6 +8,7 @@ import org.restlet.data.Status;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
 import ambit2.rest.test.ProtectedResourceTest;
 
 public class ProtectedModelBuilder extends ProtectedResourceTest {
@@ -59,6 +60,65 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 				String.format("http://localhost:%d/dataset/1%s", port,
 						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
+		
+	}	
+	
+	@Test
+	public void testExpert() throws Exception {
+		if (OpenSSOServicesConfig.getInstance().isEnabled()) try {
+			OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
+			int resultcode = policy.deletePolicy(ssoToken, "httplocalhost8181model3GETPUTPOSTDELETE");
+			System.out.println(resultcode);
+		} catch (Exception x) {}
+		
+		
+		Form form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/expert", port),
+				form, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		
+		form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		ClientResourceWrapper.setTokenFactory(this);
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/expert", port),
+				form, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		ClientResourceWrapper.setTokenFactory(this);
+		form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(), String.format("http://localhost:%d/compound/11", port));
+		form.add("value", "AAABBBCCC");
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				form, Status.SUCCESS_OK,
+				String.format("http://localhost:%s/compound/%s%s", port,"11","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
+		/*
+		form = new Form();  
+		form.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/compound/11", port));
+		ClientResourceWrapper.setTokenFactory(this);
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/expert", port),
+				form, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"4"));
+				*/
+		
+		Assert.assertTrue(ssoToken.authorize(String.format("http://localhost:%d/model/3", port), "GET"));
+		Assert.assertTrue(ssoToken.authorize(String.format("http://localhost:%d/model/3", port), "POST"));
+		
+		/*
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+		*/
 		
 	}	
 }

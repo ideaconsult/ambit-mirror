@@ -43,24 +43,45 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 		super(applicationRootReference,model_reporter,alg_reporter);
 		this.modelHidden = isModelHidden;
 	}
+	protected List<Property> createProperties(Algorithm algorithm) throws Exception {
+		return DescriptorsFactory.createDescriptor2Properties(algorithm.getContent().toString());
+	}
+	
+	protected String getMediaType() throws AmbitException {
+		return AlgorithmFormat.JAVA_CLASS.getMediaType();
+	}
+	protected String getContent(Algorithm algorithm) throws AmbitException {
+		return algorithm.getContent().toString();
+	}
+	protected String getName(Algorithm algorithm) throws AmbitException {
+		return algorithm.getName();
+	}
+	protected ModelQueryResults createModel(Algorithm algorithm) throws AmbitException {
+		ModelQueryResults mr = new ModelQueryResults();
+		mr.setHidden(modelHidden);
+		mr.setContentMediaType(getMediaType());
+		mr.setName(getName(algorithm));
+		mr.setContent(getContent(algorithm));
+		mr.setAlgorithm(alg_reporter.getURI(algorithm));
+		mr.setPredictors(algorithm.getInput());
+		return mr;
+	}
+	protected Template createPredictedTemplate(Algorithm algorithm) throws Exception {
+		Template predicted = new Template();
+		predicted.setName(String.format("%s",algorithm.getName()));
+		return predicted;
+	}
 	public ModelQueryResults process(Algorithm algorithm) throws AmbitException {
 		try {
-			List<Property> p = DescriptorsFactory.createDescriptor2Properties(algorithm.getContent().toString());
+			List<Property> p = createProperties(algorithm);
 			if ((p == null)||(p.size()==0)) throw new ResourceException(Status.SERVER_ERROR_INTERNAL,"Can't create a model from "+algorithm);
 
-			ModelQueryResults mr = new ModelQueryResults();
-			mr.setHidden(modelHidden);
-			mr.setContentMediaType(AlgorithmFormat.JAVA_CLASS.getMediaType());
-			mr.setName(algorithm.getName());
-			mr.setContent(algorithm.getContent().toString());
-			mr.setAlgorithm(alg_reporter.getURI(algorithm));
-			mr.setPredictors(algorithm.getInput());
+			ModelQueryResults mr = createModel(algorithm);
 
 			Template dependent = new Template("Empty");
 			mr.setDependent(dependent);
 			
-			Template predicted = new Template();
-			predicted.setName(String.format("%s",algorithm.getName()));		
+			Template predicted = createPredictedTemplate(algorithm);
 			mr.setPredicted(predicted);
 			
 			for (Property property:p) {

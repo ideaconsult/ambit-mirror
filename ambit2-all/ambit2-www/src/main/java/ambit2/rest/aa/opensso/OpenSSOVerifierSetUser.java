@@ -20,11 +20,14 @@ public class OpenSSOVerifierSetUser extends OpenSSOVerifier {
 
 		User user = super.createUser(ssoToken, request);
 		Hashtable<String,String> results = new Hashtable<String, String>();
-		
+				
 		try {
 			ssoToken.getAttributes(new String[] {"uid"}, results);
-			request.getClientInfo().getUser().setIdentifier(results.get("uid"));} 
-		catch (Exception x) {}
+
+			user.setIdentifier(results.get("uid"));} 
+		catch (Exception x) {
+			x.printStackTrace();
+		}
 		return user;
 	}
 }

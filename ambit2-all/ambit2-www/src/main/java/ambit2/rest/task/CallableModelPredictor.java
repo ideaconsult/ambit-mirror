@@ -55,19 +55,21 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p1 = 
 			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
 
-		if (predictor.isStructureRequired()) {
-			RetrieveStructure r = new RetrieveStructure(true);
-			r.setPageSize(1);
-			r.setPage(0);
-			p1.add(new ProcessorStructureRetrieval(r));
+		if (predictor != null) {
+			if (predictor.isStructureRequired()) {
+				RetrieveStructure r = new RetrieveStructure(true);
+				r.setPageSize(1);
+				r.setPage(0);
+				p1.add(new ProcessorStructureRetrieval(r));
+			}
+			if  ((predictor.getModel().getPredictors().size()>0) &&  (predictor.isValuesRequired())) {
+				ValuesReader readProfile = new ValuesReader(null);  //no reader necessary
+				readProfile.setProfile(predictor.getModel().getPredictors());
+				p1.add(readProfile);
+			}
+			
+			p1.add(predictor);
 		}
-		if  ((predictor.getModel().getPredictors().size()>0) &&  (predictor.isValuesRequired())) {
-			ValuesReader readProfile = new ValuesReader(null);  //no reader necessary
-			readProfile.setProfile(predictor.getModel().getPredictors());
-			p1.add(readProfile);
-		}
-		
-		p1.add(predictor);
 		p1.setAbortOnError(true);
 		
 		IProcessor<IStructureRecord, IStructureRecord> writer = getWriter();
