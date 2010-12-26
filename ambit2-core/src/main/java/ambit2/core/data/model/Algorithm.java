@@ -38,6 +38,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeMockup = "http://www.opentox.org/algorithmTypes.owl#Mockup";
 	public static String typeSuperService = "http://www.opentox.org/algorithmTypes.owl#SuperService";
 	public static String typeStructure = "http://www.opentox.org/algorithmTypes.owl#Structure";
+	public static String typeExpert = "http://www.opentox.org/algorithmTypes.owl#Expert";
 	
 	public static String typeSMSD = "http://www.opentox.org/algorithmTypes.owl#SMSD";
 	
