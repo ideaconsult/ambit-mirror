@@ -11,7 +11,9 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.processors.DescriptorsCalculator;
@@ -19,12 +21,12 @@ import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 
-public class DescriptorPredictor  extends	ModelPredictor<DescriptorsCalculator,IStructureRecord> {
+public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,IStructureRecord>>  extends	ModelPredictor<C,IStructureRecord> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8106073411946010587L;
-	DescriptorsCalculator calculator;
+	protected C calculator;
 	public DescriptorPredictor(
 			Reference applicationRootReference,
 			ModelQueryResults model, 
@@ -41,8 +43,9 @@ public class DescriptorPredictor  extends	ModelPredictor<DescriptorsCalculator,I
 		super.setConnection(connection);
 		calculator.setConnection(connection);
 	}
+	
 	@Override
-	public DescriptorsCalculator createPredictor(ModelQueryResults model)
+	public C createPredictor(ModelQueryResults model)
 			throws ResourceException {
 		if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType()))
 			try {
@@ -51,8 +54,9 @@ public class DescriptorPredictor  extends	ModelPredictor<DescriptorsCalculator,I
 				property.setEnabled(true);
 				p.add(property);
 				
-				calculator = new DescriptorsCalculator();
-				calculator.setDescriptors(p);	
+				DescriptorsCalculator c = new DescriptorsCalculator();
+				c.setDescriptors(p);
+				calculator = (C) c;
 				return calculator;
 			} catch (Exception x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
@@ -83,6 +87,11 @@ public class DescriptorPredictor  extends	ModelPredictor<DescriptorsCalculator,I
 	}	
 	@Override
 	public BufferedImage getLegend(int width, int height) throws AmbitException {
-		return calculator.getLegend(width, height);
+		try {
+			return ((IStructureDiagramHighlights)calculator).getLegend(width, height);
+		} catch (Exception x) {
+			return null;
+		}
 	}
+	
 }

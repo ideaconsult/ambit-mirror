@@ -34,6 +34,10 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 
 	public CallableQueryProcessor(Form form,Context context,USERID token) {
 		super(token);
+		processForm(form);
+		this.context = context;
+	}
+	protected void processForm(Form form) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
 		String[] xvars = OpenTox.params.feature_uris.getValuesArray(form);
 		if (xvars != null) try {
@@ -51,9 +55,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 			
 		}
 		this.sourceReference = dataset==null?null:new Reference(dataset.toString().trim());
-		this.context = context;
 	}
-	
 	@Override
 	public Reference doCall() throws Exception {
 		

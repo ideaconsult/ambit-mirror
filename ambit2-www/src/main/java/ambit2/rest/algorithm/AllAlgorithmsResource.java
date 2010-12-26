@@ -31,6 +31,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.model.builder.ExpertModelBuilder;
 import ambit2.rest.model.builder.SMSDModelBuilder;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.property.PropertyURIReporter;
@@ -220,7 +221,9 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"mcss","Find maximum common substructures of a dataset","mcss",null,new String[] {Algorithm.typeSMSD},null,Algorithm.requires.structure},
 			
 			{"superservice","Calls a remote service",null,null,new String[] {Algorithm.typeSuperService},null,null},
-			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {Algorithm.typeMockup},null,null}
+			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {Algorithm.typeMockup},null,null},
+			
+			{"expert","Human experts input","expert",null,new String[] {Algorithm.typeExpert},null,Algorithm.requires.structure}
 			
 			
 			
@@ -238,6 +241,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 				alg.setType((String[])d[4]);
 				alg.setFormat(
+						alg.hasType(Algorithm.typeExpert)?AlgorithmFormat.WWW_FORM:
 						alg.hasType(Algorithm.typeSMSD)?AlgorithmFormat.WWW_FORM:
 						alg.hasType(Algorithm.typeStructure)?AlgorithmFormat.MOPAC:
 						alg.hasType(Algorithm.typeRules)||alg.hasType(Algorithm.typeFingerprints)?AlgorithmFormat.JAVA_CLASS:
@@ -362,13 +366,15 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			Algorithm<String> algorithm)
 			throws ResourceException {
 				
+		if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
+			form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
+		
+		ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation());
+		AlgorithmURIReporter algReporter = new AlgorithmURIReporter(getRequest(),getDocumentation());
+		
 		String token = getUserToken(OTAAParams.subjectid.toString());
 		try {
 			if (algorithm.hasType(Algorithm.typeSMSD))  {
-				if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
-					form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
-				ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation());
-				AlgorithmURIReporter algReporter = new AlgorithmURIReporter(getRequest(),getDocumentation());
 				return new CallableStructurePairsModelCreator(
 						form,
 						getRequest().getRootRef(),
@@ -381,10 +387,26 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 								algReporter),
 						token
 						);
+			} else if (algorithm.hasType(Algorithm.typeExpert))  {
+				String userName = "guest";
+				try { userName = getRequest().getClientInfo().getUser().getIdentifier(); } catch (Exception x) { userName = "guest"; }
+				Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
+				return new CallableSimpleModelCreator(
+						form,
+						getContext(),
+						algorithm,
+						false,
+						new ExpertModelBuilder(
+								datasetURI==null?null:datasetURI.toString(),
+								userName,
+								getRequest().getRootRef(),
+								modelReporter,
+								algReporter),
+						token
+						);				
+
 				
 			} else if (algorithm.hasType(Algorithm.typeSuperService))  {
-				if (form.getFirstValue(OpenTox.params.dataset_service.toString())==null)
-					form.add(OpenTox.params.dataset_service.toString(),String.format("%s/%s",getRequest().getRootRef(),OpenTox.URI.dataset.toString()));
 				return new CallablePOST<String>(form,getRequest().getRootRef(),token);			
 			} else if (algorithm.hasType(Algorithm.typeMockup))  {
 				return new CallableMockup<String>(form,token);
@@ -394,8 +416,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						getRequest().getRootRef(),
 						getContext(),
 						algorithm,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-						new AlgorithmURIReporter(getRequest(),getDocumentation()),
+						modelReporter,
+						algReporter,
 						false,
 						token
 						);
@@ -406,8 +428,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						algorithm,
 						false,
 						new OptimizerModelBuilder(getRequest().getRootRef(),
-								new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-								new AlgorithmURIReporter(getRequest(),getDocumentation()),false),
+								modelReporter,
+								algReporter,false),
 						token
 						);
 			}
@@ -418,8 +440,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							getContext(),
 							algorithm,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-							new AlgorithmURIReporter(getRequest(),getDocumentation()),
+							modelReporter,
+							algReporter,
 							true,
 							token
 							);	
@@ -429,7 +451,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					DescriptorPredictor predictor = new DescriptorPredictor(
 							getRequest().getRootRef(),
 							model,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
+							modelReporter,
 							new PropertyURIReporter(getRequest(),getDocumentation()),
 							null
 							);
@@ -454,8 +476,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							getContext(),
 							algorithm,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-							new AlgorithmURIReporter(getRequest(),getDocumentation()),
+							modelReporter,
+							algReporter,
 							token);						
 				}
 				case property: {
@@ -464,8 +486,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							getContext(),
 							algorithm,
-							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-							new AlgorithmURIReporter(getRequest(),getDocumentation()),
+							modelReporter,
+							algReporter,
 							token);					
 				}		
 				default: {
@@ -486,8 +508,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						getRequest().getRootRef(),
 						getContext(),
 						algorithm,
-						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()),
-						new AlgorithmURIReporter(getRequest(),getDocumentation()),
+						modelReporter,
+						algReporter,
 						token);	
 			} 
 		} catch (ResourceException x) {

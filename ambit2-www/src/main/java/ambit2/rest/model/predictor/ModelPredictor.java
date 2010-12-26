@@ -338,7 +338,18 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						new PropertyURIReporter(request,null),
 						null
 						);
-
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.WWW_FORM.getMediaType())) {
+				if (model.getContent().equals("expert")) 
+					return new ExpertModelpredictor(
+							request.getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+							new PropertyURIReporter(request,null),
+							null
+							
+							);
+				else 
+					throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
 		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
 		} catch (ResourceException x) {
 			throw x;
