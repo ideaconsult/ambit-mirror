@@ -229,3 +229,6 @@ ALTER TABLE `models` ADD COLUMN `creator` VARCHAR(45) NOT NULL default 'guest' A
 
 ALTER TABLE `models` ADD COLUMN `dataset` VARCHAR(255) COMMENT 'dataset uri' AFTER `creator`,
  ADD INDEX `Index_10`(`dataset`);
+ 
+ALTER TABLE `bookmark` MODIFY COLUMN `hasTopic` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'b:hasTopic Associates the bookmark with a Topic ';
+
