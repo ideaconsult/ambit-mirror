@@ -10,6 +10,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
@@ -170,7 +173,24 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	
 	}
 	protected BufferedImage createImage(IStructureRecord item) throws AmbitException  {
-		return depict.getImage(reader.process(item));
+		IAtomContainer ac = reader.process(item);
+		try {
+			switch (item.getType()) {
+				case D2withH: {
+					ac = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(ac);
+					break;
+				}
+				case D3withH: {
+					ac = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(ac);
+					break;
+				}
+				case NA: { 
+					return null;
+				}
+			}
+		} catch (Exception x) {}
+		
+		return depict.getImage(ac);
 	}
 	
 	public void open() throws DbAmbitException {
