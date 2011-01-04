@@ -15,7 +15,10 @@ public class ClientResourceWrapper extends ClientResource {
 		return tokenFactory==null?null:tokenFactory.get();
 	}
 	public static void setTokenFactory(IAuthToken tokenFactory) {
+		
 		if (ClientResourceWrapper.tokenFactory==null) ClientResourceWrapper.tokenFactory =  new ThreadLocal<IAuthToken> ();
+		else ClientResourceWrapper.tokenFactory.remove();
+		
 		ClientResourceWrapper.tokenFactory.set(tokenFactory);
 	}
 	public ClientResourceWrapper(Reference uri, String token) {
