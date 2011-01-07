@@ -148,6 +148,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 			if (resource.getStatus().isSuccess()) {
 				repObject = new ObjectRepresentation<Serializable>(resource.getResponseEntity());
 				Serializable object = repObject.getObject();
+				repObject.setObject(null);
 				return object;
 			}
 			return reference;
