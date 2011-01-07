@@ -76,8 +76,9 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 	public Template process(Reference uri) throws AmbitException {
 		if (profile == null) setProfile(new Template());
 		if (uri==null) return profile;
+		Object q;
 		try {
-			Object q = CallableQueryProcessor.getQueryObject(uri, applicationReference);
+			q = CallableQueryProcessor.getQueryObject(uri, applicationReference);
 			if ((q!=null) && (q instanceof AbstractPropertyRetrieval)) {
 				
 				try {
@@ -89,12 +90,18 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 					x.printStackTrace();
 				} finally {
 					//the reporter closes the connection as well
-					try { reporter.close();} catch (Exception x) {}
+					try {
+						reporter.setCloseConnection(true);
+						reporter.close();
+					} 
+					catch (Exception x) {}
 				}
 			}
 			return profile;
 		} catch (Exception x) {
 			throw new AmbitException(x);
+		} finally {
+			q = null;
 		}
 	}
 
