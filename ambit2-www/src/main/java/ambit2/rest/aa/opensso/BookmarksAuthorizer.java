@@ -6,6 +6,7 @@ import java.util.Map;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
 import org.restlet.data.Method;
+import org.restlet.data.Reference;
 import org.restlet.routing.Template;
 
 import ambit2.rest.OpenTox;
@@ -28,8 +29,10 @@ public class BookmarksAuthorizer extends OpenSSOAuthorizer {
 		Template template1 = new Template(String.format("%s/bookmark/{%s}",request.getRootRef(),BookmarkResource.creator));
 		Template template2 = OpenTox.URI.bookmark.getTemplate(request.getRootRef());
 		Map<String, Object> vars = new HashMap<String, Object>();
-		template1.parse(request.getResourceRef().toString(),vars);
-		template2.parse(request.getResourceRef().toString(),vars);
+		Reference ref = request.getResourceRef().clone();
+		ref.setQuery(null);
+		template1.parse(ref.toString(),vars);
+		template2.parse(ref.toString(),vars);
 
 		
 		try {retrieveUserAttributes(ssoToken, request);} catch (Exception x) { x.printStackTrace();}
