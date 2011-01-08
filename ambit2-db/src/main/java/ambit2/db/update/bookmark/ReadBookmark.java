@@ -23,7 +23,7 @@ public class ReadBookmark  extends AbstractQuery<Bookmark, Integer, StringCondit
 	protected static String whereID = " idbookmark = ? ";
 	protected static String whereUser = " creator = substr(?,1,45) ";
 	protected static String whereLabel = " title = substr(?,1,45) ";
-	protected static String whereType = " hasTopic = substr(?,1,45) ";
+	protected static String whereType = " hasTopic = substr(?,1,255) ";
 	/**
 	 * 
 	 */
