@@ -237,7 +237,20 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 		
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM bookmark where title='my model' and recalls='http://example.com'");
-		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+	}	
+	
+	@Test
+	public void testSearchTopicNone() throws Exception {
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM bookmark where hasTopic='ZZZZZZZ'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		
+		String bookmark = String.format("http://localhost:%d%s/%s?hasTopic=ZZZZZZZ", port,BookmarkResource.resource,getCreator());
+		testGet(bookmark,MediaType.TEXT_HTML);
+
 		c.close();
 	}	
 }
