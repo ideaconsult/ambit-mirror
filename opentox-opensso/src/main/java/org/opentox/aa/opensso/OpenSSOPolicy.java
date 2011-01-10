@@ -114,6 +114,7 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 			if (!token.getAttributes(new String[] {"uid"},results))
 				throw new Exception("Can't retrieve user name",null);
 			
+			
 			user = results.get("uid");
 		}
 		
@@ -142,9 +143,12 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 			response = client.post(r);
 			return client.getStatus().getCode();
 			
+		} catch (ResourceException x) {
+			throw new ResourceException(x.getStatus(),String.format("Error querying policy service %s %d %s",
+					policyService,x.getStatus().getCode(), x.getMessage()),
+					x);			
 		} catch (Exception x) {
-			try { System.out.println(response.getText()); } catch (Exception xx ) {x.printStackTrace();}
-			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x.getMessage());
+			throw new Exception(String.format("Error querying policy service %s %s",policyService,x.getMessage()),x);
 		} finally {
 			try {response.release(); } catch (Exception x) {}
 			try {r.release(); } catch (Exception x) {}
@@ -170,8 +174,12 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 			
 			return client.getStatus().getCode();
 			
+		} catch (ResourceException x) {
+			throw new ResourceException(x.getStatus(),String.format("Error querying policy service %s %d %s",
+					policyService,x.getStatus().getCode(), x.getMessage()),
+					x);			
 		} catch (Exception x) {
-			throw x;
+			throw new Exception(String.format("Error querying policy service %s %s",policyService,x.getMessage()),x);
 		} finally {
 			try {response.release(); } catch (Exception x) {}
 		//	try {r.release(); } catch (Exception x) {}
@@ -219,9 +227,12 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 				}
 			} 
 			return client.getStatus().getCode();
-		
+		} catch (ResourceException x) {
+			throw new ResourceException(x.getStatus(),String.format("Error querying policy service %s %d %s",
+					policyService,x.getStatus().getCode(), x.getMessage()),
+					x);			
 		} catch (Exception x) {
-			throw x;
+			throw new Exception(String.format("Error querying policy service %s %s",policyService,x.getMessage()),x);
 		} finally {
 			try {response.release(); } catch (Exception x) {}
 		//	try {r.release(); } catch (Exception x) {}
@@ -257,9 +268,12 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 				
 			} 
 			return client.getStatus().getCode();
-		
+		} catch (ResourceException x) {
+			throw new ResourceException(x.getStatus(),String.format("Error querying policy service %s %d %s",
+					policyService,x.getStatus().getCode(), x.getMessage()),
+					x);			
 		} catch (Exception x) {
-			throw x;
+			throw new Exception(String.format("Error querying policy service %s %s",policyService,x.getMessage()),x);
 		} finally {
 			try {response.release(); } catch (Exception x) {}
 		//	try {r.release(); } catch (Exception x) {}
@@ -293,9 +307,12 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 				
 			} 
 			return client.getStatus().getCode();
-		
+		} catch (ResourceException x) {
+			throw new ResourceException(x.getStatus(),String.format("Error querying policy service %s %d %s",
+					policyService,x.getStatus().getCode(), x.getMessage()),
+					x);
 		} catch (Exception x) {
-			throw x;
+			throw new Exception(String.format("Error querying policy service %s %s",policyService,x.getMessage()),x);
 		} finally {
 			try {response.release(); } catch (Exception x) {}
 		//	try {r.release(); } catch (Exception x) {}

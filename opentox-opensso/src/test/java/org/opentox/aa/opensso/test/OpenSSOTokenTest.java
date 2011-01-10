@@ -59,7 +59,17 @@ public class OpenSSOTokenTest {
 		Assert.assertTrue(token.logout());
 
 	}
-	
+	/*
+	@Test
+	public void testAuthorizeValidUser() throws Exception {
+		
+		OpenSSOToken token = new OpenSSOToken(config.getOpenSSOService());
+		Assert.assertTrue(token.login(config.getTestUser(),config.getTestUserPass()));
+		Assert.assertFalse(token.authorize("blabla", "GET"));
+		Assert.assertTrue(token.logout());
+
+	}
+	*/
 	@Test
 	public void testGetAttributes() throws Exception {
 		

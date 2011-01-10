@@ -1,6 +1,7 @@
 package org.opentox.aa.opensso.test;
 
 import java.util.Hashtable;
+import java.util.UUID;
 
 import junit.framework.Assert;
 
@@ -33,14 +34,14 @@ public class OpenToxPolicyTest {
 			Assert.assertTrue(token.isTokenValid());
 		
 			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
-			String uri="http://blabla.uni-plovdiv.bg:8080/ambit2";
-			String policyID = uri.replace(":","_").replace("/","_");
+			String uri= "http://blabla.uni-plovdiv.bg:8080/ambit2";
+			String policyID =  UUID.randomUUID().toString(); //uri.replace(":","_").replace("/","_");
 			try {
 				policy.deletePolicy(token, policyID);
 			} catch (Exception x) {}
 			
 			Assert.assertEquals(Status.SUCCESS_OK.getCode(),
-					policy.createGroupPolicy("opentox",token, 
+					policy.createGroupPolicy("partner",token, 
 						uri, 
 						new String[] {"GET","POST"} ,
 						policyID)
