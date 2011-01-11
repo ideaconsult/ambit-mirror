@@ -83,6 +83,7 @@
   		<artifactId>log4j</artifactId>
   		<version>1.2.14</version>
   	</dependency>  	
+  	<!-- 
   	<dependency>
   		<groupId>net.bull.javamelody</groupId>
   		<artifactId>javamelody-core</artifactId>
@@ -95,6 +96,7 @@
 		<version>1.5.9</version>
 		<scope>runtime</scope>
 	</dependency>
+	 -->
   	<dependency>
   		<groupId>javax.servlet</groupId>
   		<artifactId>servlet-api</artifactId>

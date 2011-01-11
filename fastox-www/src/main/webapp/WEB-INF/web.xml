@@ -29,7 +29,7 @@
 		<param-value>/ontology</param-value>
 	</context-param>		
 				
-<!-- javamelody -->
+<!-- javamelody 
        <filter>
                 <filter-name>monitoring</filter-name>
                 <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
@@ -41,7 +41,7 @@
         <listener>
                 <listener-class>net.bull.javamelody.SessionListener</listener-class>
         </listener>
-
+-->
 	<servlet>
 		<servlet-name>RestletServlet</servlet-name>
 		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
