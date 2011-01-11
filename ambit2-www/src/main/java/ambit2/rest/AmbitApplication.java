@@ -124,7 +124,7 @@ public class AmbitApplication extends TaskApplication<String> {
 			}
 		});
 		getTunnelService().setUserAgentTunnel(true);
-
+		getTunnelService().setExtensionsTunnel(true);
 
 		Preferences.setProperty(Preferences.MAXRECORDS,"0");
 		
