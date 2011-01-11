@@ -227,18 +227,21 @@
   		<artifactId>org.restlet.ext.fileupload</artifactId>
   		<version>${restlet.version}</version>
   	</dependency>
+<!-- 
   	<dependency>
   	<groupId>net.bull.javamelody</groupId>
   	<artifactId>javamelody-core</artifactId>
   	<version>1.22.0</version>
   	<scope>runtime</scope>
 	</dependency>
+	 
   	<dependency>
 		<groupId>org.jrobin</groupId>
 		<artifactId>jrobin</artifactId>
 		<version>1.5.9</version>
 		<scope>runtime</scope>
 	</dependency>
+	-->
 	<!-- 
   	<dependency>
   		<groupId>jmol</groupId>
