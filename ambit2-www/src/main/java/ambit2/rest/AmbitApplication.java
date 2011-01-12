@@ -29,6 +29,7 @@ import ambit2.base.config.Preferences;
 import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
+import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DBCreateAllowedGuard;
@@ -147,6 +148,7 @@ public class AmbitApplication extends TaskApplication<String> {
 					@Override
 					public synchronized void setPolicy() throws Exception {
 							//skip policy for now
+						super.setPolicy();
 					}
 				};
 			}
@@ -242,13 +244,34 @@ public class AmbitApplication extends TaskApplication<String> {
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
 		router.attach(DatasetsResource.datasets, allDatasetsRouter);		
 
+		//datasets list and metadata
+		/**
+		 * /dataset/id/feature and /dataset/id/metadata are not protected
+		 */
+		router.attach(String.format("%s",DatasetResource.dataset), DatasetsResource.class);
+		router.attach(String.format("%s/{%s}/metadata",DatasetResource.dataset,DatasetResource.datasetKey), DatasetsResource.class);
+
+		router.attach(String.format("%s/{%s}%s",DatasetResource.dataset,DatasetResource.datasetKey,PropertiesByDatasetResource.featuredef),
+						PropertiesByDatasetResource.class);
+		/* Not in the API anyway
+		router.attach(String.format("%s/{%s}",PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.idfeaturedef),
+						PropertiesByDatasetResource.class);
+		*/
 		
 		Router datasetRouter = new MyRouter(getContext());
 		datasetRouter.attachDefault(DatasetResource.class);
 		//this is for backward compatibility
-		router.attach(String.format("%s",DatasetResource.dataset), DatasetsResource.class);
-		router.attach(String.format("%s/{%s}",DatasetResource.dataset,DatasetResource.datasetKey), datasetRouter);
-		router.attach(String.format("%s/{%s}/metadata",DatasetResource.dataset,DatasetResource.datasetKey), DatasetsResource.class);
+
+		datasetRouter.attach(PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.class);
+		datasetRouter.attach(String.format("%s/{%s}",PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.idfeaturedef),PropertiesByDatasetResource.class);
+		
+		Filter datasetAuthn = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
+		Filter datasetAuthz = new OpenSSOAuthorizer();
+		datasetAuthn.setNext(datasetAuthz);
+		datasetAuthz.setNext(datasetRouter);
+		
+		router.attach(String.format("%s/{%s}",DatasetResource.dataset,DatasetResource.datasetKey), datasetAuthn);
+
 		
 		DBVerifier verifier = new DBVerifier(this);
 		/**
@@ -393,11 +416,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		
 		//public final static String DatasetFeaturedefID = String.format("%s%s/{%s}",DatasetsResource.datasetID,featuredef,idfeaturedef);
 		//public final static String DatasetFeaturedef = String.format("%s%s",DatasetsResource.datasetID,featuredef);
-		datasetRouter.attach(PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.class);
-		datasetRouter.attach(String.format("%s/{%s}",PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.idfeaturedef),PropertiesByDatasetResource.class);
-		
-
-
+	
 		
 				
 		router.attach("/depict",AbstractDepict.class);

@@ -1,5 +1,7 @@
 package ambit2.rest.task;
 
+import java.util.Hashtable;
+
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.data.Reference;
@@ -19,16 +21,35 @@ public class PolicyProtectedTask extends Task<Reference, String> {
 	public synchronized void setPolicy() throws Exception {
 		
 		OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
+		
 		if (config.isEnabled()) {
-			if (getUserid()==null)  return;
-			OpenSSOToken ssoToken = new OpenSSOToken(config.getOpenSSOService());
-			ssoToken.setToken(getUserid());
-			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
-			policy.createGroupPolicy("partner", 
-					ssoToken, 
-					getUri().toString(), 
-					new String[] {"GET","PUT","POST","DELETE"});
-		}
+			if (getUserid()==null) { //policy for everybody
+				OpenSSOToken ssoToken = new OpenSSOToken(config.getOpenSSOService());
+				try {
+					if (ssoToken.login("guest","guest")) {
+						OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
+						policy.createGroupPolicy(
+								"member", 
+								ssoToken, 
+								getUri().toString(), 
+								new String[] {"GET","PUT","POST","DELETE"});
+					}
+				} catch (Exception x) {
+					x.printStackTrace();
+				} finally {
+					try {ssoToken.logout(); } catch (Exception x) {}
+				}
+				
+			}  else { //policy for the user only
+				OpenSSOToken ssoToken = new OpenSSOToken(config.getOpenSSOService());
+				ssoToken.setToken(getUserid());
+				Hashtable<String, String> results = new Hashtable<String, String>();
+				ssoToken.getAttributes(new String[] {"uid"}, results);
+				OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
+				//user policy
+				policy.createUserPolicy(results.get("uid"), ssoToken, getUri().toString(), new String[] {"GET","PUT","POST","DELETE"});
+			}
+		} 
 		
 	}
 }
