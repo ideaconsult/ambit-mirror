@@ -15,60 +15,77 @@ public class AutomaticTestUtilities
 		String value = null;		
 	};
 	
+	String outFile = null;
+	String inFile = null;
+	
 	
 	public static void main(String[] args)
 	{
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
-		atu.produceRandomStructures();
+		//atu.handleArguments(args);
+		
+		
+		atu.handleArguments(new String[] {"-i","input-file.txt","-o","output-file.txt"});
+		
+		//atu.produceRandomStructures();
 	}
 	
 	
 	public int handleArguments(String[] args)
 	{
-		Vector<CmdOption> v = extractOptions(args);
+		Vector<CmdOption> options = extractOptions(args);
+		//for (int i = 0; i < v.size(); i++)
+		//	System.out.println(v.get(i).option + "  " +v.get(i).value);
 		
+		CmdOption opt;
+		
+		opt = getOption("i", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+				inFile = opt.value; 
+		}
+		
+		opt = getOption("o", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+				outFile = opt.value; 
+		}
+		
+		
+		System.out.println("input file: " + inFile);
+		System.out.println("output file: " + outFile);
 		
 		return(0);
-		
 	}
 	
 	public Vector<CmdOption> extractOptions(String[] args)
-	{
-		CmdOption curOption = null;
-		
+	{		
+		CmdOption curOption = null;		
 		Vector<CmdOption> v = new Vector<CmdOption>();
+		if (args.length == 0)
+			return(v);
+		
+		
 		for (int i = 0; i < args.length; i++)
-		{
+		{	
 			if (args[i].startsWith("--"))
 			{
-				if (curOption == null)
-				{	
-					curOption = new CmdOption();
-					curOption.option = args[i].substring(2);
-				}
-				else
-				{	
-					if (curOption.value == null)
-						curOption.value = args[i];
-					else					
-						curOption.value += " " + args[i];
-				}	
+				if (curOption != null)				
+					v.add(curOption);
+				
+				curOption = new CmdOption();
+				curOption.option = args[i].substring(2);
 			}
 			else
 				if (args[i].startsWith("-"))
 				{
-					if (curOption == null)
-					{
-						curOption = new CmdOption();
-						curOption.option = args[i].substring(1);
-					}
-					else
-					{	
-						if (curOption.value == null)
-							curOption.value = args[i];
-						else					
-							curOption.value += " " + args[i];
-					}
+					if (curOption != null)				
+						v.add(curOption);
+					
+					curOption = new CmdOption();
+					curOption.option = args[i].substring(1);
 				}
 				else
 				{
@@ -88,8 +105,25 @@ public class AutomaticTestUtilities
 				}
 		}
 		
+		v.add(curOption);
+		
+		
 		return(v);
 	}
+	
+	CmdOption getOption(String opt, Vector<CmdOption> options)
+	{
+		for (int i = 0; i < options.size(); i++)
+		{
+			if (options.get(i).option.equals(opt))
+				return (options.get(i));
+		}
+		
+		return null;
+	}
+	
+	
+	
 	
 	
 	
