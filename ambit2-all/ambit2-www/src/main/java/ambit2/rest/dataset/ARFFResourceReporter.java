@@ -34,7 +34,7 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	}
 	@Override
 	protected String getRelationName() {
-		return reporter.getRequest().getOriginalRef().toString();
+		return reporter.getRequest().getResourceRef().toString();
 	}
 	
 	@Override

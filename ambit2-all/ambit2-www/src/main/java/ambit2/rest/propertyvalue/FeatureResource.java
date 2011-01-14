@@ -195,7 +195,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			throws ResourceException {
 
 		createNewObject(entity);
-		getResponse().setLocationRef(getRequest().getOriginalRef());
+		getResponse().setLocationRef(getRequest().getResourceRef());
 		getResponse().setStatus(Status.SUCCESS_OK);
 		getResponse().setEntity(get(new Variant(MediaType.TEXT_HTML)));
 		return getResponse().getEntity();

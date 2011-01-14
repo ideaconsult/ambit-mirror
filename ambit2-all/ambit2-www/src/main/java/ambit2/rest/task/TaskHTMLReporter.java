@@ -30,7 +30,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 	@Override
 	public void header(Writer output, Iterator<UUID> query) {
 		try {
-			String ajax = AmbitResource.js(getRequest().getOriginalRef().toString(),baseReference);
+			String ajax = AmbitResource.js(getRequest().getResourceRef().toString(),baseReference);
 			
 			String max = getRequest().getResourceRef().getQueryAsForm().getFirstValue(AbstractResource.max_hits);
 			max = max==null?"10":max;

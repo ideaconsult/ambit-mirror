@@ -142,20 +142,18 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		//output.createAnnotationProperty(DC.identifier.getURI());
 		output.createAnnotationProperty(DC.type.getURI());
 		
-		if (uriReporter.getRequest().getOriginalRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
+		if (uriReporter.getRequest().getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
 			dataset = output.createIndividual(OT.OTClass.Dataset.getOntClass(output));
 		} else {
 			dataset = output.createIndividual(
 				String.format("%s:%s",
-						uriReporter.getRequest().getOriginalRef().getScheme(),
-						uriReporter.getRequest().getOriginalRef().getHierarchicalPart()
+						uriReporter.getRequest().getResourceRef().getScheme(),
+						uriReporter.getRequest().getResourceRef().getHierarchicalPart()
 						),
 				OT.OTClass.Dataset.getOntClass(output));
 		}
 		
-		//dataset.addProperty(DC.identifier, uriReporter.getRequest().getOriginalRef().toString());
-		//dataset.addProperty(DC.title,query.toString());
-		//dataset.addProperty(DC.description,uriReporter.getRequest().getOriginalRef().toString());
+
 		try {
 			propertyReporter.setOutput(getJenaModel());
 		} catch (Exception x) {}

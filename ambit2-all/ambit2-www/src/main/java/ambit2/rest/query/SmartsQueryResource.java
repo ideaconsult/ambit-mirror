@@ -146,7 +146,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 				
 			} catch (NumberFormatException x) {
 				throw new ResourceException(
-						Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid resource id %s",getRequest().getOriginalRef()),x
+						Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid resource id %s",getRequest().getResourceRef()),x
 						);				
 			} catch (Exception x) {
 				throw new ResourceException(
