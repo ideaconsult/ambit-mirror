@@ -5,8 +5,15 @@ import org.restlet.data.Reference;
 
 
 public class TaskResult {
-	public String uri;
+	protected String uri;
+	protected boolean newResource = true;
 
+	public boolean isNewResource() {
+		return newResource;
+	}
+	public void setNewResource(boolean newResource) {
+		this.newResource = newResource;
+	}
 	public String getUri() {
 		return uri;
 	}
@@ -19,6 +26,10 @@ public class TaskResult {
 
 	public TaskResult(String uri) {
 		setUri(uri);
+	}
+	public TaskResult(String uri,boolean newResource) {
+		setUri(uri);
+		setNewResource(newResource);
 	}
 
 	@Override

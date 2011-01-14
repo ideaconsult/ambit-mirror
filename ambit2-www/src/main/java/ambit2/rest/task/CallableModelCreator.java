@@ -73,7 +73,7 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 				}
 				
 			}
-			return new TaskResult(builder.getModelReporter().getURI(model));
+			return new TaskResult(builder.getModelReporter().getURI(model),newModel);
 		} catch (Exception e) {
 			Context.getCurrentLogger().severe(e.getMessage());
 			throw e;
