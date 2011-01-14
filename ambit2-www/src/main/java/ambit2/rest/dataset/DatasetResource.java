@@ -12,7 +12,6 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -41,6 +40,7 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.task.CallableQueryResultsCreator;
 import ambit2.rest.task.CallableUpdateDataset;
+import ambit2.rest.task.TaskResult;
 
 
 /**
@@ -203,7 +203,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	protected Representation copyDatasetToQueryResultsTable(Form form, boolean clearPreviousContent)
 			throws ResourceException {
 		String token = getUserToken(OTAAParams.subjectid.toString());
-		Callable<Reference> callable = null;
+		Callable<TaskResult> callable = null;
 		if ((queryResultsID!=null) && (queryResultsID>0)) {
 			callable = new CallableQueryResultsCreator(
 					form,
@@ -231,7 +231,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		try {
-			getResponse().setLocationRef(callable.call());
+			getResponse().setLocationRef(callable.call().getReference());
 			getResponse().setStatus(Status.SUCCESS_OK);
 			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
 		} catch (ResourceException x) {

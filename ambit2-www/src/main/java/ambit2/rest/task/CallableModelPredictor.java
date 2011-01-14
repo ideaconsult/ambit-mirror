@@ -87,12 +87,12 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 	 * Returns reference to the same dataset, with additional features, predicted by the model
 	 */
 	@Override
-	protected Reference createReference(Connection connection) throws Exception {
+	protected TaskResult createReference(Connection connection) throws Exception {
 		;
 
 			String predicted = predictor.createResultReference();
 			String q = sourceReference.toString().indexOf("?")>0?"&":"?";
-			return new Reference(
+			return new TaskResult(
 					String.format("%s%s%s",
 					sourceReference.toString(),
 					q,

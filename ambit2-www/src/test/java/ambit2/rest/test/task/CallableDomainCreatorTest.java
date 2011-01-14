@@ -10,6 +10,7 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.task.CallableNumericalModelCreator;
+import ambit2.rest.task.TaskResult;
 import ambit2.rest.test.ResourceTest;
 
 public class CallableDomainCreatorTest extends ResourceTest {
@@ -33,7 +34,7 @@ public class CallableDomainCreatorTest extends ResourceTest {
 				uriReporter,
 				new AlgorithmURIReporter(null,null),
 				null);
-		Reference ref = c.call();
+		TaskResult ref = c.call();
 	}
 	@Override
 	public void testGetJavaObject() throws Exception {

@@ -52,7 +52,7 @@ public class ClientResourceWrapper extends ClientResource {
 
 	@Override
 	protected void doRelease() throws ResourceException {
-		setTokenFactory(null);
+		//setTokenFactory(null);
 		super.doRelease();
 	}
 	

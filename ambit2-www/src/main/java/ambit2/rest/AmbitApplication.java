@@ -11,7 +11,6 @@ import org.restlet.data.ChallengeScheme;
 import org.restlet.data.ClientInfo;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
-import org.restlet.data.Reference;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
 import org.restlet.routing.Filter;
@@ -82,6 +81,7 @@ import ambit2.rest.task.LauncherResource;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
+import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.users.SwitchUserResource;
@@ -142,7 +142,7 @@ public class AmbitApplication extends TaskApplication<String> {
 	protected TaskStorage<String> createTaskStorage() {
 		return new TaskStorage<String>(getName(),getLogger()) {
 			@Override
-			protected Task<Reference, String> createTask(String user) {
+			protected Task<TaskResult, String> createTask(String user) {
 
 				return new PolicyProtectedTask(user) {
 					@Override

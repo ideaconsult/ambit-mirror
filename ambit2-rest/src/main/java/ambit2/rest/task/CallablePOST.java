@@ -53,7 +53,7 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 		this.applicationRootReference = root;
 	}
 	@Override
-	public Reference doCall() throws Exception {
+	public TaskResult doCall() throws Exception {
 
 		//System.out.println(getClass().getName());
 		long now = System.currentTimeMillis();
@@ -89,7 +89,7 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 				
 				results = algorithms.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service));
 			}
-			return results.getUri();
+			return new TaskResult(results.getUri().toString());
 			
 		} catch (Exception x) {
 			//x.printStackTrace();

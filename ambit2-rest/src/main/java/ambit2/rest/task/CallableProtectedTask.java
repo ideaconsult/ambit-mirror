@@ -31,9 +31,10 @@ public abstract class CallableProtectedTask<USERID> implements ICallableTask, IA
 	public String getToken() {
 		return token==null?null:token.toString();
 	}
-	public abstract Reference doCall() throws Exception;
+	public abstract TaskResult doCall() throws Exception;
+	
 	@Override
-	public Reference call() throws Exception {
+	public TaskResult call() throws Exception {
 		try {
 			ClientResourceWrapper.setTokenFactory(this);
 			return doCall();

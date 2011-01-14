@@ -31,10 +31,11 @@ import org.restlet.resource.ResourceException;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
-import ambit2.rest.test.ResourceTest;
+import ambit2.rest.test.ProtectedResourceTest;
 
 
-public class DatasetsResourceTest extends ResourceTest {
+public class DatasetsResourceTest extends ProtectedResourceTest {
+
 	@Override
 	public String getTestURI() {
 		return String.format("http://localhost:%d/dataset", port);

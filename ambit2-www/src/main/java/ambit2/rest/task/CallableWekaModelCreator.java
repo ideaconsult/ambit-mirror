@@ -62,7 +62,7 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 
 
 	@Override
-	protected Reference createReference(Connection connection) throws Exception {
+	protected TaskResult createReference(Connection connection) throws Exception {
 		builder.setTrainingData(((RDFInstancesParser)batch).getInstances());
 		UpdateExecutor<CreateModel> x = new UpdateExecutor<CreateModel>();
 		try {
@@ -71,7 +71,7 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 			
 			x.setConnection(connection);
 			x.process(update);
-			return new Reference(builder.getModelReporter().getURI(model));
+			return new TaskResult(builder.getModelReporter().getURI(model));
 		} catch (WekaException e) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,e.getMessage(),e);
 		} catch (Exception e) {

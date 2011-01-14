@@ -6,7 +6,6 @@ import java.util.Hashtable;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.data.Form;
-import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -24,6 +23,7 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 	protected Algorithm algorithm;
 	protected Builder builder; 
 	protected ModelQueryResults model;
+	protected boolean newModel = true;
 	
 	public ModelQueryResults getModel() {
 		return model;
@@ -43,7 +43,7 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 	 * Writes the model into database and returns a reference
 	 */
 	@Override
-	protected Reference createReference(Connection connection) throws Exception {
+	protected TaskResult createReference(Connection connection) throws Exception {
 		UpdateExecutor<CreateModel> x = new UpdateExecutor<CreateModel>();
 		try {
 			model = createModel();
@@ -51,7 +51,7 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 			
 			x.setConnection(connection);
 			Integer i = x.process(update);
-			
+			newModel = i>0;
 			if ((model.getId()==null) || (model.getId()<0)) {
 				ReadModel q = new ReadModel();
 				q.setFieldname(model.getName());
@@ -73,7 +73,7 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 				}
 				
 			}
-			return new Reference(builder.getModelReporter().getURI(model));
+			return new TaskResult(builder.getModelReporter().getURI(model));
 		} catch (Exception e) {
 			Context.getCurrentLogger().severe(e.getMessage());
 			throw e;

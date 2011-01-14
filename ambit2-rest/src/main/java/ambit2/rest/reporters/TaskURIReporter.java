@@ -8,6 +8,7 @@ import org.restlet.data.Reference;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
+import ambit2.rest.task.TaskResult;
 
 /**
  * URI of the task
@@ -33,7 +34,7 @@ public class TaskURIReporter<USERID> extends CatalogURIReporter<UUID> {
 		this.storage =storage;
 	}	
 	public String getURI(String ref, UUID name) {
-		Task<Reference,USERID> task = storage.findTask(name);
+		Task<TaskResult,USERID> task = storage.findTask(name);
 		return task.getUri()==null?null:task.getUri().toString();
 
 	}

@@ -216,7 +216,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 
 	}
 	@Override
-	public Reference doCall() throws Exception {
+	public TaskResult doCall() throws Exception {
 		try {
 			if (file == null)
 				if (upload != null)
@@ -253,7 +253,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		}
 	}
 
-	public Reference importFile(File file) throws Exception {
+	public TaskResult importFile(File file) throws Exception {
 		try {
 			// if target dataset is not defined, create new dataset
 			final SourceDataset dataset = targetDataset != null ? targetDataset
@@ -332,7 +332,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 				if (recordImported == null) throw new Exception("No compound imported");
 				if (compoundReporter == null)
 					compoundReporter = new ConformerURIReporter(null);
-				return new Reference(compoundReporter.getURI(recordImported));				
+				return new TaskResult(compoundReporter.getURI(recordImported));				
 			} else {
 				ReadDataset q = new ReadDataset();
 				q.setValue(dataset);
@@ -351,7 +351,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 					throw new ResourceException(Status.SUCCESS_NO_CONTENT);
 				if (reporter == null)
 					reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>();
-				return new Reference(reporter.getURI(newDataset));
+				return new TaskResult(reporter.getURI(newDataset));
 			}
 
 		} catch (Exception x) {

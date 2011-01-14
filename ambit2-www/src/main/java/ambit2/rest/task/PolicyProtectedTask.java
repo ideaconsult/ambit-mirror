@@ -4,22 +4,27 @@ import java.util.Hashtable;
 
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
-import org.restlet.data.Reference;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 
-public class PolicyProtectedTask extends Task<Reference, String> {
+public class PolicyProtectedTask extends Task<TaskResult, String> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5631652362392618557L;
-
+	protected boolean createPolicy = true;
+	public boolean isCreatePolicy() {
+		return createPolicy;
+	}
+	public void setCreatePolicy(boolean createPolicy) {
+		this.createPolicy = createPolicy;
+	}
 	public PolicyProtectedTask(String user) {
 		super(user);	
 	}
 	@Override
 	public synchronized void setPolicy() throws Exception {
-		
+		if (!createPolicy) return;
 		OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
 		
 		if (config.isEnabled()) {
@@ -28,6 +33,7 @@ public class PolicyProtectedTask extends Task<Reference, String> {
 				try {
 					if (ssoToken.login("guest","guest")) {
 						OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
+						
 						policy.createGroupPolicy(
 								"member", 
 								ssoToken, 

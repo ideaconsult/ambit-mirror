@@ -57,7 +57,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 		this.sourceReference = dataset==null?null:new Reference(dataset.toString().trim());
 	}
 	@Override
-	public Reference doCall() throws Exception {
+	public TaskResult doCall() throws Exception {
 		
 		Context.getCurrentLogger().info("Start()");
 		Connection connection = null;
@@ -129,7 +129,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 			return new RDFStructuresReader(target.toString());
 	}
 	protected abstract Target createTarget(Reference reference) throws Exception;
-	protected abstract Reference createReference(Connection connection) throws Exception ;
+	protected abstract TaskResult createReference(Connection connection) throws Exception ;
 	protected abstract ProcessorsChain<Result, IBatchStatistics, IProcessor> createProcessors() throws Exception;
 	//protected abstract QueryURIReporter createURIReporter(Request request); 
 	

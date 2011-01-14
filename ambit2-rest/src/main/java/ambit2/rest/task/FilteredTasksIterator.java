@@ -3,8 +3,6 @@ package ambit2.rest.task;
 import java.util.Iterator;
 import java.util.UUID;
 
-import org.restlet.data.Reference;
-
 public class FilteredTasksIterator<USERID> implements Iterator<UUID> {
 	protected Iterator<UUID> keys;
 	protected UUID task_id;
@@ -39,7 +37,7 @@ public class FilteredTasksIterator<USERID> implements Iterator<UUID> {
 
 	public void remove() {
 	}
-	protected boolean accepted(Task<Reference,USERID> task) {
+	protected boolean accepted(Task<TaskResult,USERID> task) {
 		return task==null?false:true;
 	}
 	

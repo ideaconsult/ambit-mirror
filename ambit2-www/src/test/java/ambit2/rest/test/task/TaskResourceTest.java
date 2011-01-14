@@ -27,6 +27,7 @@ import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
+import ambit2.rest.task.TaskResult;
 import ambit2.rest.test.ResourceTest;
 
 public class TaskResourceTest extends ResourceTest {
@@ -80,8 +81,8 @@ public class TaskResourceTest extends ResourceTest {
 	public void testRDF() throws Exception {
 		ICallableTask c = new ICallableTask() {
 			protected UUID uuid;
-			public Reference call() throws Exception {
-				return new Reference("http://localhost/newResult");
+			public TaskResult call() throws Exception {
+				return new TaskResult("http://localhost/newResult");
 			}
 			@Override
 			public UUID getUuid() {
@@ -103,8 +104,8 @@ public class TaskResourceTest extends ResourceTest {
 	public void testURI() throws Exception {
 		ICallableTask c = new ICallableTask() {
 			protected UUID uuid;
-			public Reference call() throws Exception {
-				return new Reference("quickTaskURI");
+			public TaskResult call() throws Exception {
+				return new TaskResult("quickTaskURI");
 			}
 			@Override
 			public UUID getUuid() {
@@ -302,7 +303,7 @@ public class TaskResourceTest extends ResourceTest {
 				null,
 				null);
 		try {
-			Reference ref = post.call();
+			TaskResult ref = post.call();
 			Assert.fail("Should throw an error");
 		} catch (ResourceException x) {
 			Assert.assertEquals(Status.SERVER_ERROR_GATEWAY_TIMEOUT,x.getStatus());
@@ -319,7 +320,7 @@ public class TaskResourceTest extends ResourceTest {
 				form.getWebRepresentation(),
 				null,
 				null);
-		Reference ref = post.call();
+		TaskResult ref = post.call();
 		long now = System.currentTimeMillis();
 		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/model/2",ref.toString());
 		System.out.println(System.currentTimeMillis()-now);		

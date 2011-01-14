@@ -42,7 +42,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 						token);
 	}
 	@Override
-	public Reference doCall() throws Exception {
+	public TaskResult doCall() throws Exception {
 		Context.getCurrentLogger().info("Start()");
 		Connection connection = null;
 		try {
