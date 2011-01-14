@@ -69,7 +69,7 @@ public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, L
 				tasks.add(task.getUuid());
 			}
 			else {
-				Reference ref = callable.call();
+				TaskResult ref = callable.call();
 			}
 		} catch (AmbitException x) {
 			throw x;

@@ -33,6 +33,7 @@ import ambit2.rest.task.CallableQueryResultsCreator;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
+import ambit2.rest.task.TaskResult;
 
 public class FileUpload<USERID> {
 	protected Request request;
@@ -104,7 +105,7 @@ public class FileUpload<USERID> {
 				token
 				);
 		try {
-			getResponse().setLocationRef(callable.call());
+			getResponse().setLocationRef(callable.call().getReference());
 			getResponse().setStatus(Status.SUCCESS_OK);
 			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
 		} catch  (Exception x) {
@@ -192,7 +193,7 @@ public class FileUpload<USERID> {
 			        		  token);
 			          
 		              callable.setPropertyOnly(propertyOnly);
-			          Task<Reference,String> task =  ((AmbitApplication)getApplication()).addTask(
+			          Task<TaskResult,String> task =  ((AmbitApplication)getApplication()).addTask(
 							  
 							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
 								callable,

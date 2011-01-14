@@ -22,6 +22,7 @@ import ambit2.rest.task.FilteredTasksIterator;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.SingleTaskIterator;
 import ambit2.rest.task.Task;
+import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.Task.TaskStatus;
 
 /**
@@ -109,7 +110,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 		}		
 	}
 
-	protected boolean filterTask(Task<Reference, USERID> task, int taskNumber) {
+	protected boolean filterTask(Task<TaskResult, USERID> task, int taskNumber) {
 		if ((max > 0) && (taskNumber>=max)) return false;
 		else return searchStatus==null?true:searchStatus.equals(task.getStatus().toString());
 	}
@@ -119,7 +120,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 		
 		return new FilteredTasksIterator<USERID>(((TaskApplication)getApplication()).getTaskStorage()){
 			@Override
-			protected boolean accepted(Task<Reference, USERID> task) {
+			protected boolean accepted(Task<TaskResult, USERID> task) {
 				//task.update();
 				if (!task.isDone()) getResponse().setStatus(Status.SUCCESS_ACCEPTED);
 				return filterTask(task,getNum());
@@ -156,7 +157,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 
 			} else {
 
-				Task<Reference,USERID> task = ((TaskApplication<USERID>)getApplication()).findTask(Reference.decode(id.toString()));
+				Task<TaskResult,USERID> task = ((TaskApplication<USERID>)getApplication()).findTask(Reference.decode(id.toString()));
 				
 				if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			

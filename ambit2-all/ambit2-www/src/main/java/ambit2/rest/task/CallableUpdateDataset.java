@@ -72,8 +72,8 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 	}
 
 	@Override
-	protected Reference createReference(Connection connection) throws Exception {
-		return new Reference(datasetUriReporter.getURI(dataset));
+	protected TaskResult createReference(Connection connection) throws Exception {
+		return new TaskResult(datasetUriReporter.getURI(dataset));
 	}
 
 	@Override

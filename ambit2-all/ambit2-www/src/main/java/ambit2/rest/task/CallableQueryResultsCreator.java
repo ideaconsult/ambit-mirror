@@ -87,14 +87,14 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 	}
 	
 	@Override
-	public Reference call() throws Exception {
-		Reference ref  = null;
+	public TaskResult call() throws Exception {
+		TaskResult ref  = null;
 		for (String dataset:datasets)
 			ref = call(new Reference(dataset));
 		return ref;
 	}
 
-	public Reference call(Reference uri) throws Exception {
+	public TaskResult call(Reference uri) throws Exception {
 		final String msg = "Error when trying to copy the dataset at %s. Is this OpenTox dataset URI?";
 		Object query = null;
 		try {
@@ -124,7 +124,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 				));
 			
 	}
-	protected Reference createQueryResults(IQueryObject<IStructureRecord> target) throws Exception {
+	protected TaskResult createQueryResults(IQueryObject<IStructureRecord> target) throws Exception {
 		Connection connection = null;
 		UpdateExecutor xx = new UpdateExecutor();
 		try {
@@ -148,7 +148,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			p.setConnection(connection);
 			IStoredQuery q = p.process((IQueryObject<IStructureRecord>)target);
 			
-			return new Reference(String.format("%s/dataset/%s%d",
+			return new TaskResult(String.format("%s/dataset/%s%d",
 					applicationRootReference,DatasetStructuresResource.QR_PREFIX,q.getId()));
 		} catch (Exception x) {
 
@@ -170,7 +170,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 	}
 
 	@Override
-	protected Reference createReference(Connection connection) throws Exception {
+	protected TaskResult createReference(Connection connection) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

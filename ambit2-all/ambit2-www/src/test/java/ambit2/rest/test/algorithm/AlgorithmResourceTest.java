@@ -71,7 +71,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 81;
+		return count == 82;
 	}	
 	
 	@Test
@@ -392,6 +392,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 	}		
 	@Test
 	public void testClassifier() throws Exception {
+		System.setProperty("javax.net.ssl.trustStore",  "C:\\Program Files\\Java\\jre6\\lib\\security\\ambit-plovdiv");
 			Form headers = new Form();  
 			headers.add(OpenTox.params.dataset_uri.toString(), 
 					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/12?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21692&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21691&max=100&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21686");
@@ -408,6 +409,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 //	http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798
 	@Test
 	public void testLocalRegressionRemoteDataset() throws Exception {
+		
+	
 		
 		Form headers = new Form();  
 		Reference dataset = new Reference("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/12?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21692&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21691&max=100");

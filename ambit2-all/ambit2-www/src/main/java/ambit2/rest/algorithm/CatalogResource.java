@@ -26,10 +26,11 @@ import ambit2.rest.TaskApplication;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
-import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
+import ambit2.rest.task.TaskResult;
 
 /**
  * Algorithms as per http://opentox.org/development/wiki/Algorithms
@@ -129,7 +130,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				T model = query.next();
 				Reference reference = getSourceReference(form,model);
 				ICallableTask callable= createCallable(form,model);
-				Task<Reference,String> task =  ((AmbitApplication)getApplication()).addTask(
+				Task<TaskResult,String> task =  ((AmbitApplication)getApplication()).addTask(
 						String.format("Apply %s %s %s",model.toString(),reference==null?"":"to",reference==null?"":reference),
 						callable,
 						getRequest().getRootRef(),

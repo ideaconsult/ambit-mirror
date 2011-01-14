@@ -9,6 +9,7 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.task.CallableWekaModelCreator;
+import ambit2.rest.task.TaskResult;
 import ambit2.rest.test.ResourceTest;
 import ambit2.rest.test.dataset.DatasetReporterTest;
 
@@ -29,7 +30,7 @@ public class CallableWekaModelCreatorTest extends ResourceTest {
 				uriReporter,
 				new AlgorithmURIReporter(null,new ResourceDoc()),
 				null);
-		Reference ref = c.call();
+		TaskResult ref = c.call();
 	}
 	@Override
 	public void testGetJavaObject() throws Exception {

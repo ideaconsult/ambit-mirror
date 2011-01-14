@@ -45,6 +45,7 @@ import ambit2.rest.task.CallableStructurePairsModelCreator;
 import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.OptimizerModelBuilder;
+import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
@@ -445,7 +446,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							true,
 							token
 							);	
-					Reference modelRef = modelCreator.call();
+					TaskResult modelRef = modelCreator.call();
 					ModelQueryResults model = modelCreator.getModel();
 					
 					DescriptorPredictor predictor = new DescriptorPredictor(

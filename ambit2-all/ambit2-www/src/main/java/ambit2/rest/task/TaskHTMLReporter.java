@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import org.restlet.Request;
-import org.restlet.data.Reference;
 
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitResource;
@@ -52,7 +51,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 	}
 	@Override
 	public void processItem(UUID name, Writer output) {
-		Task<Reference,USERID> item = storage.findTask(name);
+		Task<TaskResult,USERID> item = storage.findTask(name);
 		String t = "";
 		String status = "Unknown";
 		try {

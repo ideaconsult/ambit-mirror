@@ -32,6 +32,7 @@ import ambit2.descriptors.processors.AtomEnvironmentGenerator;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 import ambit2.rest.task.CallableQueryProcessor;
+import ambit2.rest.task.TaskResult;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 
 /**
@@ -138,7 +139,7 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 	
 
 	@Override
-	protected Reference createReference(Connection connection) throws Exception {
+	protected TaskResult createReference(Connection connection) throws Exception {
 		switch (getFingerprintsType()) {
 		case fp1024: {
 			return null;
@@ -161,7 +162,7 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 		}
 	}	
 	
-	protected Reference structureQuality(Connection connection) throws Exception {
+	protected TaskResult structureQuality(Connection connection) throws Exception {
 		try {
 			CreateQLabelPair q = new CreateQLabelPair();
 			AbstractUpdateProcessor<AmbitUser, String> p = new AbstractUpdateProcessor<AmbitUser, String>(OP.CREATE,q);

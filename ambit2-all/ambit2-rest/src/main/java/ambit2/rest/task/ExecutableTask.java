@@ -12,16 +12,16 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.rest.task.Task.TaskStatus;
 
-public class ExecutableTask<USERID> extends FutureTask<Reference> {
-	protected Task<Reference,USERID> task;
+public class ExecutableTask<USERID> extends FutureTask<TaskResult> {
+	protected Task<TaskResult,USERID> task;
 	
-	public Task<Reference, USERID> getTask() {
+	public Task<TaskResult, USERID> getTask() {
 		return task;
 	}
-	public void setTask(Task<Reference, USERID> task) {
+	public void setTask(Task<TaskResult, USERID> task) {
 		this.task = task;
 	}
-	public ExecutableTask(Callable<Reference> callable,Task<Reference,USERID> task) {
+	public ExecutableTask(Callable<TaskResult> callable,Task<TaskResult,USERID> task) {
 		super(callable);
 		this.task = task;
 	}
@@ -35,7 +35,7 @@ public class ExecutableTask<USERID> extends FutureTask<Reference> {
 	@Override
 	protected void done() {
 		try {
-			Reference ref = get(100, TimeUnit.MILLISECONDS);
+			TaskResult ref = get(100, TimeUnit.MILLISECONDS);
 			task.setTimeCompleted(System.currentTimeMillis());
 			task.setStatus(TaskStatus.Completed);
 			task.setUri(ref);
@@ -63,7 +63,7 @@ public class ExecutableTask<USERID> extends FutureTask<Reference> {
 		super.done();
 	}
 	@Override
-	protected void set(Reference v) {
+	protected void set(TaskResult v) {
 		super.set(v);
 		task.setUri(v);
 	}

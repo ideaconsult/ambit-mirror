@@ -3,7 +3,6 @@ package ambit2.rest.task;
 import java.util.UUID;
 
 import org.restlet.data.Form;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
@@ -45,12 +44,12 @@ public class CallableMockup<USERID> extends CallableProtectedTask<USERID> {
 		if (resultURI==null) resultURI = OpenTox.params.model_uri.getFirstValue(form);
 	}
 	@Override
-	public Reference doCall() throws Exception {
+	public TaskResult doCall() throws Exception {
 
 		Thread.sleep(delay);
 		Thread.yield();
 		if (error != null) throw error;
 		if (resultURI==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No result URI specified");
-		else return new Reference(resultURI.toString());
+		else return new TaskResult(resultURI.toString());
 	}
 }

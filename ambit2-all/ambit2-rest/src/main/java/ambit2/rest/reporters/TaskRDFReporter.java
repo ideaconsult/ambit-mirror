@@ -13,6 +13,7 @@ import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
+import ambit2.rest.task.TaskResult;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
@@ -49,7 +50,7 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<UUID> {
 	@Override
 	public void processItem(UUID name, Writer output) {
 		String ref;
-		Task<Reference,USERID> item = storage.findTask(name.toString());
+		Task<TaskResult,USERID> item = storage.findTask(name.toString());
 		try {
 			ref = item.getUri().toString();
 		} catch (Exception x) {

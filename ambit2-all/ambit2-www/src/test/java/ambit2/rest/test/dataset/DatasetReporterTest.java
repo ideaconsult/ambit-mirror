@@ -19,14 +19,34 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.rdf.RDFInstancesIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
-import ambit2.rest.test.ResourceTest;
+import ambit2.rest.test.ProtectedResourceTest;
 
 /**
  * 
  * @author nina
  *
  */
-public class DatasetReporterTest extends ResourceTest {
+public class DatasetReporterTest extends ProtectedResourceTest {
+	protected String policyID ;
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		try {
+			policyID = createPolicy(getTestURI());
+		} catch (Exception x) {
+			throw x;
+		}
+	}
+	
+	@Override
+	public void tearDown() throws Exception {
+
+		
+		try {
+			if (policyID != null) deletePolicy(policyID);
+		} catch (Exception x) { x.printStackTrace(); }
+		super.tearDown();
+	}
 	@Override
 	public String getTestURI() {
 		return String.format("http://localhost:%d/dataset/1", port);
@@ -83,7 +103,8 @@ public class DatasetReporterTest extends ResourceTest {
 	}		
 	@Test
 	public void testURI() throws Exception {
-		testGet(getTestURI(),MediaType.TEXT_URI_LIST);
+			testGet(getTestURI(),MediaType.TEXT_URI_LIST);
+
 	}
 	@Override
 	public boolean verifyResponseURI(String uri, MediaType media, InputStream in)
