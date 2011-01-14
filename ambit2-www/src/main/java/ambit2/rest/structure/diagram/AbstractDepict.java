@@ -114,7 +114,7 @@ public class AbstractDepict extends ServerResource {
 	    					return output;
 	    				};
 	    			},MediaType.TEXT_HTML);
-	    			return convertor.process(getTitle(getRequest().getOriginalRef(),smiles));
+	    			return convertor.process(getTitle(getRequest().getResourceRef(),smiles));
 	    		}
 					    		
 	    	if (smiles != null) {

@@ -300,8 +300,8 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 			writeAnnotationPropertyTriple(writer,"http://purl.org/dc/elements/1.1/title");
 			
 			String datasetUri = 
-					String.format("%s:%s",uriReporter.getRequest().getOriginalRef().getScheme(),
-							uriReporter.getRequest().getOriginalRef().getHierarchicalPart());
+					String.format("%s:%s",uriReporter.getRequest().getResourceRef().getScheme(),
+							uriReporter.getRequest().getResourceRef().getHierarchicalPart());
 			writer.writeStartElement(OT.NS,"Dataset");
 			writer.writeAttribute(RDF.getURI(),"about",datasetUri);
 
