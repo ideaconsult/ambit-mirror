@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.restlet.resource.ResourceException;
 
-public class Task<Reference,USERID> implements Serializable /*, PropertyChangeListener */ {
+public class Task<REFERENCE,USERID> implements Serializable /*, PropertyChangeListener */ {
 	
 	public enum TaskProperty {
 		PROPERTY_NAME {
@@ -33,7 +33,7 @@ public class Task<Reference,USERID> implements Serializable /*, PropertyChangeLi
 
 	public enum TaskStatus {Running,Cancelled,Completed,Error,Queued};
 	//protected FutureTask<Reference> future;
-	protected Reference uri;
+	protected REFERENCE result;
 	protected String name = "Default";
 	protected long started = System.currentTimeMillis();
 	protected long completed = -1;
@@ -108,11 +108,11 @@ public class Task<Reference,USERID> implements Serializable /*, PropertyChangeLi
 	public void setName(String name) {
 		this.name = name;
 	}
-	public synchronized Reference getUri() {
-		return uri;
+	public synchronized REFERENCE getUri() {
+		return result;
 	}
-	public synchronized void setUri(Reference uri) {
-		this.uri = uri;
+	public synchronized void setUri(REFERENCE uri) {
+		this.result = uri;
 	}
 	
 	public Task(USERID user) {
