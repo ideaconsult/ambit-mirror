@@ -17,15 +17,26 @@ public class AutomaticTestUtilities
 	
 	String outFile = null;
 	String inFile = null;
+	String dbFile = null;
+	String command = null;
+	String configFile = null;
+	
+	
+	int maxNumSeqSteps = 4;
+	int maxStrSize = 30;
+	int nDBStr = 1000;
+	int nInputStr = 0;
+	int nOutputStr = 0;
+	
 	
 	
 	public static void main(String[] args)
 	{
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
-		//atu.handleArguments(args);
+		//atu.handleArguments(args);		
 		
-		
-		atu.handleArguments(new String[] {"-i","input-file.txt","-o","output-file.txt"});
+		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/test-out2.txt", 
+				"-nDBStr", "100", "-maxSeqStep", "10", "-c", "exhaustive-str" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -33,6 +44,12 @@ public class AutomaticTestUtilities
 	
 	public int handleArguments(String[] args)
 	{
+		if (args.length == 0)
+		{	
+			printHelp();
+			return(0);
+		}	
+		
 		Vector<CmdOption> options = extractOptions(args);
 		//for (int i = 0; i < v.size(); i++)
 		//	System.out.println(v.get(i).option + "  " +v.get(i).value);
@@ -51,14 +68,161 @@ public class AutomaticTestUtilities
 		{
 			if (opt.value != null)
 				outFile = opt.value; 
+		}	
+		
+		opt = getOption("db", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+				dbFile = opt.value; 
+		}	
+		
+		opt = getOption("c", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+				command = opt.value; 
+		}	
+		
+		opt = getOption("nDBStr", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					nDBStr = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect nDBStr value: "+ e.toString());
+				}
+			}	
 		}
 		
+		opt = getOption("nInpStr", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					nInputStr = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect nInpStr value: "+ e.toString());
+				}
+			}	
+		}
 		
-		System.out.println("input file: " + inFile);
-		System.out.println("output file: " + outFile);
+		opt = getOption("nOutStr", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					nOutputStr = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect nOutStr value: "+ e.toString());
+				}
+			}	
+		}
+		
+		opt = getOption("maxSeqStep", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					this.maxNumSeqSteps = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect maxSeqStep value: "+ e.toString());
+				}
+			}	
+		}
+		
+		opt = getOption("maxStrSize", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					this.maxStrSize = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect maxStrSize value: "+ e.toString());
+				}
+			}	
+		}
+		
+		handleCommand();
 		
 		return(0);
 	}
+	
+	public int handleCommand()
+	{
+		if (command == null)
+			return(0);
+		
+		if (command.equals("random-str"))
+		{
+			System.out.println("Running generation of random structures:");
+			ChemObjectFactory cof = new ChemObjectFactory();
+			Vector<StructInfo> vStr = new Vector<StructInfo>();
+			cof.produceRandomStructsFromMDL(dbFile, maxNumSeqSteps, nDBStr, vStr, outFile);
+			return(0);
+		}
+		
+		if (command.equals("exhaustive-str"))
+		{
+			System.out.println("Running exhaustive generation structures:");
+			ChemObjectFactory cof = new ChemObjectFactory();
+			Vector<StructInfo> vStr = new Vector<StructInfo>();			
+			cof.produceStructsFromMDL(dbFile, maxNumSeqSteps, nDBStr, maxStrSize, vStr, outFile);
+			return(0);
+		}
+		
+		
+		System.out.println("Unknown command: " + command);
+		
+		return(-1);
+	}
+	
+	
+	
+	public void printHelp()
+	{
+		System.out.println("Program for automatic testing of structure searching algorithms");
+		System.out.println("-h            print help info");
+		System.out.println("-i            input file");
+		System.out.println("-o            output file");
+		System.out.println("-db           db file");
+		System.out.println("-c            command: ");
+		System.out.println("                 random-str - generates random structures");
+		System.out.println("                 exhaustive-str - generates structures exhaustively");
+		System.out.println("-cfg          config file");
+		System.out.println("-nDBStr       the number of used structures from DB");
+		System.out.println("-nInpStr      the number of used input structures");
+		System.out.println("-nOutStr      the number of used output structures");	
+		System.out.println("-maxSeqStep   maximal number of sequence steps");
+		System.out.println("-maxStrSize   maximal size of the generated structures");
+	}
+	
 	
 	public Vector<CmdOption> extractOptions(String[] args)
 	{		
@@ -111,6 +275,7 @@ public class AutomaticTestUtilities
 		return(v);
 	}
 	
+	
 	CmdOption getOption(String opt, Vector<CmdOption> options)
 	{
 		for (int i = 0; i < options.size(); i++)
@@ -121,21 +286,6 @@ public class AutomaticTestUtilities
 		
 		return null;
 	}
-	
-	
-	
-	
-	
-	
-	
-	public void produceRandomStructures() 
-	{
-		ChemObjectFactory cof = new ChemObjectFactory();
-		Vector<StructInfo> vStr = new Vector<StructInfo>();
-		cof.produceRandomStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
-					30, 50000, vStr, "/my-test---.txt");
-	}
-	
 	
 	
 }
