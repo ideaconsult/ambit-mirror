@@ -109,6 +109,7 @@ public class CSLSResource extends ServerResource {
 	            				String line = null;
 	            				while ((line = reader.readLine())!=null) {
 	            					w.write(line);
+	            					w.write("\n");
 	            				}
 	            				return w.toString();
 	            			}
