@@ -478,6 +478,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.compound_uris.toString() + " empty.");
 			
 			String sdf = getSDFFromURI(uri);
+			if (sdf == null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			if(upload == null) upload = createFileUpload();
 			String source = uri;
 			String name = "Copied from URL";
@@ -495,9 +496,11 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				source = "http://www.ncbi.nlm.nih.gov/entrez/eutils"; name = "PUBCHEM"; uri = name;
 			}
 			
-			upload.setDataset(new SourceDataset(uri,LiteratureEntry.getInstance(name,source)));
-			
-			return  upload.upload(new StringRepresentation(sdf,ChemicalMediaType.CHEMICAL_MDLSDF),
+			SourceDataset dataset = new SourceDataset(uri,LiteratureEntry.getInstance(name,source));
+			upload.setDataset(dataset);
+			StringRepresentation representation = new StringRepresentation(sdf,ChemicalMediaType.CHEMICAL_MDLSDF);
+			//representation.setDownloadName(dataset.getName());
+			return  upload.upload(representation,
 					variant,true,false,
 					getUserToken(OTAAParams.subjectid.toString())
 					);
@@ -507,6 +510,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else {
 			if(upload == null) upload = createFileUpload();
 			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", getRequest().getResourceRef().toString())));
+
 			return  upload.upload(entity,variant,true,false,
 					getUserToken(OTAAParams.subjectid.toString())
 					);
