@@ -368,13 +368,13 @@ public class CompoundResourceTest extends ResourceTest {
 	}		
 	
 	@Test
-	public void testCreateEntryFromURI() throws Exception {
+	public void testCreateEntryFromURI_CSLS() throws Exception {
 		
 		String uri = String.format("http://localhost:%d/query/csls/50-00-0",port);
 		Form form = new Form();
 		form.add(OpenTox.params.compound_uri.toString(),uri);
 		
-		testAsyncPoll(new Reference(getTestURI()),MediaType.APPLICATION_WWW_FORM,
+		testAsyncPoll(new Reference(getTestURI()),MediaType.TEXT_URI_LIST,
 				form.getWebRepresentation(),Method.POST,
 				new Reference(String.format("http://localhost:%d/compound/29142/conformer/129346",port)));
 
@@ -384,4 +384,22 @@ public class CompoundResourceTest extends ResourceTest {
 		c.close();
 		
 	}		
+	
+	@Test
+	public void testCreateEntryFromURI_PUBCHEM() throws Exception {
+		
+		String uri = String.format("http://localhost:%d/query/pubchem/50-00-0",port);
+		Form form = new Form();
+		form.add(OpenTox.params.compound_uri.toString(),uri);
+		
+		testAsyncPoll(new Reference(getTestURI()),MediaType.TEXT_URI_LIST,
+				form.getWebRepresentation(),Method.POST,
+				new Reference(String.format("http://localhost:%d/compound/29142/conformer/129346",port)));
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		c.close();
+		
+	}	
 }
