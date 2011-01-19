@@ -85,7 +85,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		
 		String uri = item.getLabel();
 		if(uri==null) uri  = Property.guessLabel(item.getName());
-		if ((uri!=null) && (uri.indexOf("http://")<0)) {
+		if ((uri!=null) && (uri.indexOf("http://")<0)  && (uri.indexOf("https://")<0)) {
 			uri = String.format("%s%s",OT.NS,Reference.encode(uri));
 		}
 		feature.addProperty(OWL.sameAs,jenaModel.createResource(uri));
