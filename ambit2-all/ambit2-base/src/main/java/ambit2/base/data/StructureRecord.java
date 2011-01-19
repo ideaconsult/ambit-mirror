@@ -36,6 +36,7 @@ public class StructureRecord implements IStructureRecord {
 	 * 
 	 */
 	private static final long serialVersionUID = -650816773926953033L;
+	protected boolean preferedStructure = true;
 	protected int dataEntryID=-1;
 	public int getDataEntryID() {
 		return dataEntryID;
@@ -260,6 +261,15 @@ public class StructureRecord implements IStructureRecord {
 	}
 	public void setSelected(boolean value) {
 		this.selected = true;
+		
+	}
+	@Override
+	public boolean usePreferedStructure() {
+		return preferedStructure;
+	}
+	@Override
+	public void setUsePreferedStructure(boolean value) {
+		preferedStructure = value;
 		
 	}
 }	
