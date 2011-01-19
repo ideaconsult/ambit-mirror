@@ -39,6 +39,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public static String typeSuperService = "http://www.opentox.org/algorithmTypes.owl#SuperService";
 	public static String typeStructure = "http://www.opentox.org/algorithmTypes.owl#Structure";
 	public static String typeExpert = "http://www.opentox.org/algorithmTypes.owl#Expert";
+	public static String typeFinder = "http://www.opentox.org/algorithmTypes.owl#Finder";
 	
 	public static String typeSMSD = "http://www.opentox.org/algorithmTypes.owl#SMSD";
 	
@@ -71,6 +72,12 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			@Override
 			public String getMediaType() {
 				return "application/x-www-form-urlencoded";
+			}
+		},			
+		SEARCH {
+			@Override
+			public String getMediaType() {
+				return "text/plain";
 			}
 		},			
 		COVERAGE_SERIALIZED {

@@ -18,8 +18,7 @@ import ambit2.rest.model.builder.ModelBuilder;
 import ambit2.rest.model.builder.SimpleModelBuilder;
 
 public class CallableSimpleModelCreator<Result,USERID> extends CallableModelCreator<Object,Result,ModelBuilder<Object,Algorithm, ModelQueryResults>,USERID> {
-
-
+	
 	public CallableSimpleModelCreator(Form form,
 			Context context,
 			Algorithm algorithm,
@@ -59,5 +58,7 @@ public class CallableSimpleModelCreator<Result,USERID> extends CallableModelCrea
 			throws Exception {
 		return null;
 	}
+
+
 
 }

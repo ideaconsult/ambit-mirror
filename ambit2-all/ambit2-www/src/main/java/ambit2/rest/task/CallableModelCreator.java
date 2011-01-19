@@ -22,6 +22,13 @@ import ambit2.rest.model.builder.ModelBuilder;
 public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilder<DATA,Algorithm,ModelQueryResults>,USERID>  extends	CallableQueryProcessor<Object, Item,USERID> {
 	protected Algorithm algorithm;
 	protected Builder builder; 
+	public Builder getBuilder() {
+		return builder;
+	}
+	public void setBuilder(Builder builder) {
+		this.builder = builder;
+	}
+
 	protected ModelQueryResults model;
 	protected boolean newModel = true;
 	
@@ -36,7 +43,7 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 			USERID token) {
 		super(form, context,token);
 		this.algorithm = algorithm;
-		this.builder = builder;
+		setBuilder(builder);
 		
 	}
 	/**

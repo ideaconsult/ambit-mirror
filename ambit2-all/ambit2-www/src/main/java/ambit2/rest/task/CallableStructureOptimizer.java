@@ -6,13 +6,13 @@ import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.rest.model.predictor.StructureProcessor;
+import ambit2.rest.model.predictor.AbstractStructureProcessor;
 
-public class CallableStructureOptimizer<USERID> extends CallableModelPredictor<IStructureRecord,StructureProcessor,USERID> {
+public class CallableStructureOptimizer<USERID> extends CallableModelPredictor<IStructureRecord,AbstractStructureProcessor,USERID> {
 
 	public CallableStructureOptimizer(Form form,
 			Reference appReference,Context context,
-			StructureProcessor predictor,USERID token) {
+			AbstractStructureProcessor predictor,USERID token) {
 		super(form, appReference, context, predictor,token);
 
 	}
@@ -23,4 +23,5 @@ public class CallableStructureOptimizer<USERID> extends CallableModelPredictor<I
 		return null;
 	}
 
+	
 }	

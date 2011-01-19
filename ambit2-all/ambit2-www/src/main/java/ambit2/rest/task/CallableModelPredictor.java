@@ -62,11 +62,10 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 				r.setPage(0);
 				p1.add(new ProcessorStructureRetrieval(r));
 			}
-			if  ((predictor.getModel().getPredictors().size()>0) &&  (predictor.isValuesRequired())) {
-				ValuesReader readProfile = new ValuesReader(null);  //no reader necessary
-				readProfile.setProfile(predictor.getModel().getPredictors());
-				p1.add(readProfile);
-			}
+			
+			IProcessor<IStructureRecord, IStructureRecord> valuesReader = getValuesReader();
+			if (valuesReader != null)
+				p1.add(valuesReader);
 			
 			p1.add(predictor);
 		}
@@ -76,6 +75,14 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 		if (writer != null) p1.add(writer);
 		
 		return p1;
+	}
+	
+	protected IProcessor<IStructureRecord,IStructureRecord> getValuesReader() {
+		if  ((predictor.getModel().getPredictors().size()>0) &&  (predictor.isValuesRequired())) {
+			ValuesReader readProfile = new ValuesReader(null);  //no reader necessary
+			readProfile.setProfile(predictor.getModel().getPredictors());
+			return readProfile;
+		} else return null;
 	}
 	protected IProcessor<IStructureRecord, IStructureRecord> getWriter() {
 		PropertyValuesWriter writer = new PropertyValuesWriter();
