@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.sql.Connection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.restlet.Context;
@@ -20,10 +21,10 @@ import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
-import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.search.property.ValuesReader;
@@ -59,7 +60,9 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 				for (String x : xx )
 					if (!x.trim().equals("")) {
 						ds = ds.addColumns(OTFeature.feature(x));
-						profile.add(createPropertyFromReference(x,null));
+						Property key = createPropertyFromReference(x,null);
+						key.setEnabled(true);
+						profile.add(key);
 					}
 			}
 			dataset =  ds.getUri().toString();
@@ -79,7 +82,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 
 		IProcessor<IStructureRecord,IStructureRecord> valuesReader = getValuesReader();
 		if (valuesReader!=null) p.add(valuesReader);
-		p.add(new CSLSFinder());
+		p.add(new CSLSFinder(profile));
 		
 		RepositoryWriter writer = new RepositoryWriter() {
 			@Override
@@ -95,10 +98,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 		return p;
 	}
 	
-	protected IProcessor<IStructureRecord,IStructureRecord> createFinder() throws Exception {
-		return new CSLSFinder();
-	}
-	
+
 	@Override
 	protected TaskResult createReference(Connection connection)
 			throws Exception {
@@ -146,8 +146,10 @@ class CSLSFinder extends DefaultAmbitProcessor<IStructureRecord, IStructureRecor
 	 */
 	private static final long serialVersionUID = -7059985528732316425L;
 	protected CSLSRequest<String> request;
-	public CSLSFinder() {
+	protected Template profile;
+	public CSLSFinder(Template profile) {
 		super();
+		this.profile = profile;
 		request =  new CSLSRequest<String>() {
 			@Override
 			protected String read(InputStream in) throws Exception {
@@ -167,11 +169,15 @@ class CSLSFinder extends DefaultAmbitProcessor<IStructureRecord, IStructureRecor
 	public IStructureRecord process(IStructureRecord target)
 			throws AmbitException {
 		try {
-			for (Property key:target.getProperties()) {
+			Iterator<Property> keys = profile.getProperties(true);
+			while (keys.hasNext()) {
+				Property key = keys.next();
 				String content = request.process(target.getProperty(key).toString());
 				if (content!= null) { 
+					
 					target.setContent(content);
 					target.setFormat(MOL_TYPE.SDF.toString());
+					if (STRUC_TYPE.NA != target.getType()) target.setIdstructure(-1) ;
 					return target;
 				}
 			}
