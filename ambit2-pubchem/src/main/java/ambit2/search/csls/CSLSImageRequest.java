@@ -1,9 +1,12 @@
-package ambit2.pubchem;
+package ambit2.search.csls;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
+
+import ambit2.pubchem.NCISearchProcessor;
+import ambit2.pubchem.NCISearchProcessor.METHODS;
 
 /**
  * http://cactus.nci.nih.gov/chemical/structure/c1ccccc1/image
