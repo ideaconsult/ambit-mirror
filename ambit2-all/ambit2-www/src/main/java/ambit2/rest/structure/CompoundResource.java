@@ -43,7 +43,6 @@ import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.DeleteChemical;
-import ambit2.pubchem.CSLSRequest;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
@@ -61,6 +60,7 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
+import ambit2.search.csls.CSLSRequest;
 
 /**
  * Chemical compound resource as in http://opentox.org/development/wiki/structure

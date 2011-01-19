@@ -21,11 +21,27 @@ public class OnlineStructureFinderTest  extends ResourceTest {
 	}
 	
 	@Test
-	public void testFinder() throws Exception {
+	public void testFinderCSLS() throws Exception {
+		testFinder("csls","replace");
+	}
+	
+	@Test
+	public void testFinderChemidplus() throws Exception {
+		testFinder("chemidplus","replace");
+	}
+	
+	@Test
+	public void testFinderBoth() throws Exception {
+		testFinder("chemidplus","add");
+		testFinder("csls","add");
+	}
+	public void testFinder(String search, String mode) throws Exception {
 		Form headers = new Form();  
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		String feature = String.format("http://localhost:%d/feature/3", port);
 		headers.add("feature_uris[]",feature);
+		headers.add("mode",mode);
+		headers.add("search",search);
 		Reference ref = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/finder", port),
 				headers, Status.SUCCESS_OK,
