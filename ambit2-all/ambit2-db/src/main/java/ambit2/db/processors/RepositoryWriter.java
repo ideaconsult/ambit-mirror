@@ -223,7 +223,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         }
         //add a new idchemical if idchemical <=0
 
-        return structureWriter.writeStructure(structure);
+        return structureWriter.writeStructure(structure,OP.UPDATE==getOperation());
         
 	}
 	protected void prepareStatement(Connection connection) throws SQLException {
@@ -242,5 +242,13 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
             logger.error(x);
         }
         super.close();
+	}
+	
+	@Override
+	public List<IStructureRecord> update(IStructureRecord arg0)
+			throws SQLException, OperationNotSupportedException, AmbitException {
+		setOperation(OP.UPDATE);
+		structureWriter.setOperation(OP.UPDATE);
+		return write(arg0);
 	}
 }
