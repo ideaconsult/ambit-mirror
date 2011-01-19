@@ -1,38 +1,23 @@
-package ambit2.pubchem;
+package ambit2.search.chemidplus;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.exceptions.HttpException;
 
-public abstract class CSLSRequest<R> extends DefaultAmbitProcessor<String, R> {
 
+public abstract class AbstractSearchRequest<R> extends DefaultAmbitProcessor<String, R> {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4821305383980518514L;
-	public static final String CSLS_URL = "http://cactus.nci.nih.gov/chemical/structure";
-	protected NCISearchProcessor.METHODS representation;
-	public NCISearchProcessor.METHODS getRepresentation() {
-		return representation;
-	}
-	public void setRepresentation(NCISearchProcessor.METHODS representation) {
-		this.representation = representation;
-	}
-	protected String getOptions() { return "";}
-	public R process(String target) throws AmbitException {
-		try {
-			return get(new URL(
-				String.format("%s/%s/%s%s", CSLS_URL, target,representation.toString(),getOptions())));
-		} catch (MalformedURLException x) {
-			throw new AmbitException(x);
-		}
-	}
+	private static final long serialVersionUID = -5629570446572417364L;
+
 	protected abstract R read(InputStream in) throws Exception;
+	
 	public R get(URL url) throws AmbitException {
 
 		InputStream in = null;
@@ -58,5 +43,4 @@ public abstract class CSLSRequest<R> extends DefaultAmbitProcessor<String, R> {
 			}
 		}
 	}
-	
 }
