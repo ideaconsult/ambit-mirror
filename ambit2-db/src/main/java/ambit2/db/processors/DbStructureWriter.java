@@ -42,10 +42,12 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.update.dataset.DatasetAddStructure;
 import ambit2.db.update.structure.CreateStructure;
+import ambit2.db.update.structure.UpdateStructure;
 
 public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord, IStructureRecord> {
 	protected DatasetAddStructure datasetAddStruc = new DatasetAddStructure();
-	protected CreateStructure createStructure = new CreateStructure();
+	protected CreateStructure createStructure;
+	protected UpdateStructure updateStructure;
 	protected PropertyValuesWriter propertyWriter;
 	protected SourceDataset dataset;	
 	
@@ -79,20 +81,34 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
 	@Override
 	public IStructureRecord write(IStructureRecord structure) throws SQLException,AmbitException, OperationNotSupportedException {
 
-		writeStructure(structure);
+		writeStructure(structure,false);
 		return structure;
 	}
 
-	public List<IStructureRecord> writeStructure(IStructureRecord structure) throws SQLException, AmbitException, OperationNotSupportedException {
+	@Override
+	public IStructureRecord update(IStructureRecord structure) throws SQLException,
+			OperationNotSupportedException, AmbitException {
+		writeStructure(structure,true);
+		return structure;
+	}
+	public List<IStructureRecord> writeStructure(IStructureRecord structure, boolean update) throws SQLException, AmbitException, OperationNotSupportedException {
 		 List<IStructureRecord> sr = new ArrayList<IStructureRecord>();
+
         if (structure.getIdstructure() <= 0) {
+        	if (createStructure ==null) createStructure = new CreateStructure();
         	createStructure.setObject(structure);
 	        exec.process(createStructure);
         	writeDataset(structure);
        		writeProperties(structure);
             sr.add(structure);
         } else {
+        	
         	try {
+        		if (update) {
+        			if (updateStructure==null) updateStructure = new UpdateStructure();
+        			updateStructure.setObject(structure);
+        			exec.process(updateStructure);
+        		}
         		writeDataset(structure);
         		writeProperties(structure);
         	} catch (AmbitException x) {

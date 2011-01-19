@@ -92,9 +92,11 @@ public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDB
 			}
 			case DELETE: { 
 				result = delete(target);
+				break;
 			}
 			case UPDATE: {
 				result = update(target);
+				break;
 			}
 			default:
 				throw new SQLException("OperationNotSupported " + getOperation());
