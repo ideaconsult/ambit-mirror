@@ -46,6 +46,7 @@ import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.OptimizerModelBuilder;
 import ambit2.rest.task.TaskResult;
+import ambit2.rest.task.dbpreprocessing.CallableFinder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
@@ -201,7 +202,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"ambit2.descriptors.KekulizationVerifier","Kekulization verifier","ambit2.descriptors.KekulizationVerifier",null,new String[] {Algorithm.typeDescriptor},null,Algorithm.requires.structure},
 		
 			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {Algorithm.typeStructure},"",Algorithm.requires.structure},			
-			
+
+			{"finder","Find","finder",null,new String[] {Algorithm.typeFinder},"",Algorithm.requires.structure},
 			
 
 			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {Algorithm.typeAppDomain},null,Algorithm.requires.property},
@@ -383,7 +385,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						algorithm,
 						modelReporter,
 						algReporter,
-						new SMSDModelBuilder(getRequest().getRootRef(),
+						new SMSDModelBuilder(
+								getRequest().getRootRef(),
 								modelReporter,
 								algReporter),
 						token
@@ -422,6 +425,15 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						false,
 						token
 						);
+			else if (algorithm.hasType(Algorithm.typeFinder)) {
+				return new CallableFinder(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						algorithm,
+						token);		
+
+			}			
 			else if (algorithm.hasType(Algorithm.typeStructure)) {
 				return new CallableSimpleModelCreator(
 						form,

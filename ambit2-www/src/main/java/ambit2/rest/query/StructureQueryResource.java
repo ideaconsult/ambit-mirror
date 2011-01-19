@@ -298,21 +298,24 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}
 	
 	protected String getSDFFromURI(String uri) throws ResourceException {
-		Reader reader = null;
+		Request rq = null;
+		Response resp = null;
 		long now = System.currentTimeMillis();
 		try {
-			Request rq = new Request();
+			rq = new Request();
 			Client client = new Client(Protocol.HTTP);
 			client.setConnectTimeout(5*60*1000); //5 min
 			rq.setResourceRef(uri);
 			rq.setMethod(Method.GET);
-			rq.getClientInfo().getAcceptedMediaTypes().clear();
-			rq.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(ChemicalMediaType.CHEMICAL_MDLSDF));
-			Response resp = client.handle(rq);
+			//rq.getClientInfo().getAcceptedMediaTypes().clear();
+			//rq.getClientInfo().getAcceptedMediaTypes().add(new Preference<MediaType>(ChemicalMediaType.CHEMICAL_MDLSDF));
+			resp = client.handle(rq);
 			if (resp.getStatus().equals(Status.SUCCESS_OK)) {
-				return resp.getEntityAsText();
+				String content = resp.getEntity().getText();
+				return content;
+
 			} else return null;				
-		
+			
 		} catch (Exception x) {
 			if ((System.currentTimeMillis()-now) > (5*60*1000)) 
 				throw new ResourceException(
@@ -323,7 +326,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x
 					);
 		} finally {
-			try {reader.close();} catch (Exception x){};
+			try {resp.release();} catch (Exception x){};
+			try {rq.release();} catch (Exception x){};
 		}		
 	}		
 	protected IMolecule getFromURI(String uri) throws ResourceException {

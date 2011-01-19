@@ -1,9 +1,6 @@
 package ambit2.rest.model.predictor;
 
-import java.awt.image.BufferedImage;
 import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -16,23 +13,19 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.structure.StructureTypeProcessor;
-import ambit2.db.UpdateExecutor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
-import ambit2.db.update.structure.UpdateStructure;
 import ambit2.mopac.MopacShell;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 
-public class StructureProcessor  extends	ModelPredictor<MopacShell,IStructureRecord> {
+public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8106073411946010587L;
 	protected MopacShell mopacshell;
 	protected StructureTypeProcessor stype = new StructureTypeProcessor();
-	protected UpdateStructure updateStructure = new UpdateStructure();
-	protected UpdateExecutor<UpdateStructure> exec = new UpdateExecutor<UpdateStructure>();
+
 	
 	public StructureProcessor(
 			Reference applicationRootReference,
@@ -45,20 +38,6 @@ public class StructureProcessor  extends	ModelPredictor<MopacShell,IStructureRec
 		valuesRequired = false;
 	}
 	
-	@Override
-	public void assignResults(IStructureRecord record, Object value)
-			throws AmbitException {
-	}
-	@Override
-	public void setConnection(Connection connection) throws DbAmbitException {
-		super.setConnection(connection);
-		exec.setConnection(connection);
-	}
-	@Override
-	public void close() throws SQLException {
-		try {exec.close();} catch (Exception x) {}
-		super.close();
-	}
 
 	@Override
 	public synchronized MopacShell createPredictor(ModelQueryResults model)
@@ -70,10 +49,7 @@ public class StructureProcessor  extends	ModelPredictor<MopacShell,IStructureRec
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 			}
 	}
-	@Override
-	public String getCompoundURL(IStructureRecord target) throws AmbitException {
-		return null;
-	}
+
 
 	@Override
 	public Object predict(IStructureRecord target) throws AmbitException {
@@ -110,8 +86,5 @@ public class StructureProcessor  extends	ModelPredictor<MopacShell,IStructureRec
 		return b.toString();
 				
 	}	
-	@Override
-	public BufferedImage getLegend(int width, int height) throws AmbitException {
-		return null;
-	}
+
 }
