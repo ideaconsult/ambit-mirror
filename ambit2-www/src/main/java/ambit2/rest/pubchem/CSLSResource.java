@@ -1,9 +1,7 @@
 package ambit2.rest.pubchem;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 
@@ -21,12 +19,13 @@ import org.restlet.resource.ServerResource;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.io.DownloadTool;
-import ambit2.pubchem.CSLSRequest;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.pubchem.NCISearchProcessor.METHODS;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.query.QueryResource;
+import ambit2.search.csls.CSLSRequest;
+import ambit2.search.csls.CSLSStringRequest;
 
 public class CSLSResource extends ServerResource {
 
@@ -101,19 +100,7 @@ public class CSLSResource extends ServerResource {
 			            }
 			        };	
 			     else {
-	            		CSLSRequest<String> q = new CSLSRequest<String>() {
-	            			@Override
-	            			protected String read(InputStream in) throws Exception {
-	            				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-	            				StringWriter w = new StringWriter();
-	            				String line = null;
-	            				while ((line = reader.readLine())!=null) {
-	            					w.write(line);
-	            					w.write("\n");
-	            				}
-	            				return w.toString();
-	            			}
-	            		};
+			    	 CSLSStringRequest q = new CSLSStringRequest();
 	            		q.setRepresentation(representation);			            		
 	            	 return new StringRepresentation(q.process(term),MediaType.TEXT_PLAIN);
 			     }

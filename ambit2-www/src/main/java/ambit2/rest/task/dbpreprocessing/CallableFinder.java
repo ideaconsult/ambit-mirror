@@ -1,9 +1,5 @@
 package ambit2.rest.task.dbpreprocessing;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
@@ -25,21 +21,48 @@ import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
+import ambit2.core.exceptions.HttpException;
+import ambit2.db.DbReaderStructure;
+import ambit2.db.processors.AbstractBatchProcessor;
+import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.processors.AbstractRepositoryWriter.OP;
+import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.property.ValuesReader;
-import ambit2.pubchem.CSLSRequest;
-import ambit2.pubchem.NCISearchProcessor.METHODS;
+import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.OpenTox;
+import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.dsl.OTDataset;
 import ambit2.rest.task.dsl.OTFeature;
+import ambit2.search.chemidplus.ChemIdPlusRequest;
+import ambit2.search.csls.CSLSStringRequest;
 
+/**
+ * http://chem.sis.nlm.nih.gov/molfiles/0000050000.mol chemidplus
+ *  cas bez tireta i dopqlnen do 10 znaka s prefix ot nuli
+ * @author nina
+ *
+ * @param <USERID>
+ */
 public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStructureRecord,USERID>  {
+	public enum MODE {
+		emptyonly,
+		replace,
+		add
+	}
+	public enum SITE {
+		CSLS,
+		CHEMIDPLUS,
+		PUBCHEM,
+		OPENTOX
+	}
 	protected Reference applicationRootReference;
 	protected Template profile;
+	protected SITE searchSite ;
+	protected MODE mode;
 	
 	public CallableFinder(Form form,
 			Reference applicationRootReference,Context context,
@@ -49,7 +72,28 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 	}
 	@Override
 	protected void processForm(Form form) {
+		//mode
+		Object modeParam = form.getFirstValue("mode");
+		try {
+			if (modeParam != null)
+				this.mode = MODE.valueOf(modeParam.toString().toLowerCase());
+			else this.mode = MODE.emptyonly;
+		} catch (Exception x) {
+			this.mode = MODE.emptyonly;
+		}
+		//search
+		Object search = form.getFirstValue("search");
+		try {
+			if (search != null)
+				searchSite = SITE.valueOf(search.toString().toUpperCase());
+			else
+				searchSite = SITE.CSLS;
+		} catch (Exception x) {
+			searchSite = SITE.CSLS;
+		}
+		//dataset
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
+		//
 		String[] xvars = OpenTox.params.feature_uris.getValuesArray(form);
 		if (xvars != null) try {
 			profile = new Template();
@@ -80,9 +124,26 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
 			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
 
+		RetrieveStructure r = new RetrieveStructure(true);
+		r.setPageSize(1);
+		r.setPage(0);
+		p.add(new ProcessorStructureRetrieval(r));
+
 		IProcessor<IStructureRecord,IStructureRecord> valuesReader = getValuesReader();
 		if (valuesReader!=null) p.add(valuesReader);
-		p.add(new CSLSFinder(profile));
+		
+		IProcessor<String,String> request;
+		switch (searchSite) {
+		case CHEMIDPLUS: {
+			request = new ChemIdPlusRequest();
+			break;
+		}
+		default : {
+			request = new CSLSStringRequest();
+			break;
+		}
+		}
+		p.add(new AllSourcesFinder(profile,request,mode));
 		
 		RepositoryWriter writer = new RepositoryWriter() {
 			@Override
@@ -93,7 +154,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			}
 		};
 		writer.setOperation(OP.UPDATE);
-		writer.setDataset(new SourceDataset("CSLS",new LiteratureEntry(CSLSRequest.CSLS_URL,CSLSRequest.CSLS_URL)));
+		writer.setDataset(new SourceDataset(searchSite.toString(),new LiteratureEntry(request.toString(),request.toString())));
 		p.add(writer);
 		return p;
 	}
@@ -104,7 +165,17 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			throws Exception {
 		return new TaskResult(sourceReference.toString(),false);
 	}
-
+	@Override
+	protected AbstractBatchProcessor createBatch(Object target)
+			throws Exception {
+		if (target == null) throw new Exception("");
+		if (target instanceof AbstractStructureQuery) {
+			DbReaderStructure reader = new DbReaderStructure();
+			reader.setHandlePrescreen(true);
+			return reader;
+		} else
+			return new RDFStructuresReader(target.toString());
+	}
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
 		if (profile.size()==0) throw new Exception("No columns to search!");
@@ -140,45 +211,71 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 	}
 }
 
-class CSLSFinder extends DefaultAmbitProcessor<IStructureRecord, IStructureRecord> {
+class AllSourcesFinder extends DefaultAmbitProcessor<IStructureRecord, IStructureRecord> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7059985528732316425L;
-	protected CSLSRequest<String> request;
+	protected IProcessor<String, String> request;
 	protected Template profile;
-	public CSLSFinder(Template profile) {
+	protected CallableFinder.MODE mode = CallableFinder.MODE.emptyonly;
+	
+
+	public CallableFinder.MODE getMode() {
+		return mode;
+	}
+	public void setMode(CallableFinder.MODE mode) {
+		this.mode = mode;
+	}
+	public AllSourcesFinder(Template profile) {
+		this(profile,new CSLSStringRequest(),CallableFinder.MODE.emptyonly);
+	}
+	public AllSourcesFinder(Template profile,IProcessor<String, String> request,CallableFinder.MODE mode) {
 		super();
 		this.profile = profile;
-		request =  new CSLSRequest<String>() {
-			@Override
-			protected String read(InputStream in) throws Exception {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-				StringWriter w = new StringWriter();
-				String line = null;
-				while ((line = reader.readLine())!=null) {
-					w.write(line);
-					w.write("\n");
-				}
-				return w.toString();
-			}
-		};
-		request.setRepresentation(METHODS.sdf);
+		this.request = request;
+		this.mode = mode;
+
 	}
 	@Override
 	public IStructureRecord process(IStructureRecord target)
 			throws AmbitException {
 		try {
+			if (CallableFinder.MODE.emptyonly.equals(mode) && !STRUC_TYPE.NA.equals(target.getType())) return null;
+			
 			Iterator<Property> keys = profile.getProperties(true);
+			Object value = null;
 			while (keys.hasNext()) {
 				Property key = keys.next();
-				String content = request.process(target.getProperty(key).toString());
-				if (content!= null) { 
-					
-					target.setContent(content);
-					target.setFormat(MOL_TYPE.SDF.toString());
-					if (STRUC_TYPE.NA != target.getType()) target.setIdstructure(-1) ;
-					return target;
+				try {
+					value = target.getProperty(key);
+					if ((value==null) || "".equals(value.toString().trim())) continue;
+					String content = request.process(target.getProperty(key).toString());
+					if (content!= null) { 
+						
+						target.setContent(content);
+						target.setFormat(MOL_TYPE.SDF.toString());
+						
+						switch (mode) {
+						case replace: {
+							target.setUsePreferedStructure(false);
+							break;
+						}	
+						default: 
+							if (!STRUC_TYPE.NA.equals(target.getType())) {
+								target.setIdstructure(-1) ;
+							}
+							target.setUsePreferedStructure(false);
+							break;
+						}
+						
+						System.out.println(value + "Found");
+						return target;
+					}
+				} catch (HttpException x) {
+					if (x.getCode()==404) System.out.println(value + x.getMessage());
+				} catch (Exception x) {
+					x.printStackTrace();
 				}
 			}
 			
