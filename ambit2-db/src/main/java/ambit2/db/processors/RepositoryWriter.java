@@ -176,21 +176,23 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         		//don't search for anything
 
         	} else {
-        		ResultSet rs = null;
-        		try {
-        			query_prefered_structure.setValue(structure);
-        			query_prefered_structure.setPreferedStructure(true);
-        			query_prefered_structure.setFieldname(true);
-        			rs = queryexec.process(query_prefered_structure);
-        			while (rs.next()) {
-        				structure.setIdstructure(rs.getInt("idstructure"));
-        				break;
-        			}
-        		} catch (Exception x) {
-        			logger.warn(x);
-        			structure.setIdchemical(-1);
-        		} finally {
-        			try { rs.close(); } catch (Exception x) {}
+        		if (structure.usePreferedStructure()) {
+	        		ResultSet rs = null;
+	        		try {
+	        			query_prefered_structure.setValue(structure);
+	        			query_prefered_structure.setPreferedStructure(true);
+	        			query_prefered_structure.setFieldname(true);
+	        			rs = queryexec.process(query_prefered_structure);
+	        			while (rs.next()) {
+	        				structure.setIdstructure(rs.getInt("idstructure"));
+	        				break;
+	        			}
+	        		} catch (Exception x) {
+	        			logger.warn(x);
+	        			structure.setIdchemical(-1);
+	        		} finally {
+	        			try { rs.close(); } catch (Exception x) {}
+	        		}
         		}
         	}
         } else {
