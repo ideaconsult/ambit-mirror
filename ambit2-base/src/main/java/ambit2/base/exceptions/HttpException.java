@@ -1,4 +1,4 @@
-package ambit2.core.exceptions;
+package ambit2.base.exceptions;
 
 import ambit2.base.processors.ProcessorException;
 

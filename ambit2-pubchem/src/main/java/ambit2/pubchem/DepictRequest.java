@@ -13,9 +13,9 @@ import java.net.URLEncoder;
 import javax.imageio.ImageIO;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.HttpException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.processors.ProcessorException;
-import ambit2.core.exceptions.HttpException;
 
 public class DepictRequest extends DefaultAmbitProcessor<String,BufferedImage> {
 

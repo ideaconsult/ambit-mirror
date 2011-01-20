@@ -73,6 +73,14 @@ public class MDLV2000ReaderExtendedTest  {
 		return newMol;
 	}
 	@Test
+	public void testAnyAtom() throws Exception {
+        IChemObject mol = readSGroup("A.mol");
+		Assert.assertNotNull(mol);
+		Assert.assertTrue(mol instanceof IMolecule);
+      
+        
+	}
+	@Test
 	public void testAbbreviation() throws Exception {
         IChemObject mol = readSGroup("abbreviation.mol");
 		Assert.assertNotNull(mol);
@@ -461,7 +469,10 @@ public class MDLV2000ReaderExtendedTest  {
             			//IMolecule
             		} else Assert.assertTrue(a instanceof SuppleAtomContainer);
             	}
-            	Assert.assertEquals(23,records);
+            	if ("sgroup.sdf".equals(file.getName()))
+            			Assert.assertEquals(23,records);
+            	else
+            		Assert.assertEquals(1,records);
                 count++;
             } catch (Exception x) {
                 throw x;
