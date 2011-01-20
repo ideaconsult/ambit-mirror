@@ -40,7 +40,7 @@ import com.jgoodies.binding.beans.Model;
 
 public class Property extends Model implements Serializable, Comparable<Property> {
 	public void setName(String name) {
-		this.name = name;
+		this.name = name==null?null:name.length()>=128?name.substring(0,127):name;
 	}
 	/**
 	 * 
@@ -211,7 +211,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 	}	
 	
 	private Property(String name,String label,int order, Class clazz, boolean enabled) {
-		this.name = name;
+		setName(name);
 		setLabel(label);
 		setOrder(order);
 		setClazz(clazz);
@@ -309,7 +309,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 	
 	public void assign(Property newProperty) {
 		this.id = newProperty.id;
-		this.name = newProperty.name;
+		setName(newProperty.name);
 		this.reference = new LiteratureEntry(newProperty.getTitle(),newProperty.getUrl());
 		this.label = newProperty.label;
 		this.clazz = newProperty.clazz;
