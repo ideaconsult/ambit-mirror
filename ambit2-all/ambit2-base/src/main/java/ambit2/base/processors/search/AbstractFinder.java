@@ -81,7 +81,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 					if ((value==null) || "".equals(value.toString().trim())) continue;
 					RESULT content = query(value.toString());
 					if (content!= null) { 
-						
+						STRUC_TYPE originalType = target.getType();
 						target = transform(target,content);
 						
 						switch (mode) {
@@ -90,7 +90,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 							break;
 						}	
 						default: 
-							if (!STRUC_TYPE.NA.equals(target.getType())) {
+							if (!STRUC_TYPE.NA.equals(originalType)) {
 								target.setIdstructure(-1) ;
 							}
 							target.setUsePreferedStructure(false);
