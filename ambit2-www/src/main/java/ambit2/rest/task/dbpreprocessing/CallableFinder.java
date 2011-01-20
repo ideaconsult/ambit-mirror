@@ -131,6 +131,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 		case PUBCHEM: {
 			p.add(new PubchemFinder(profile,mode));
 			le =  new LiteratureEntry("PubChem",EntrezSearchProcessor.entrezURL);
+			break;
 		}
 		case OPENTOX: {
 			request = new OpenToxRequest("http://apps.ideaconsult.net:8080/ambit2");
