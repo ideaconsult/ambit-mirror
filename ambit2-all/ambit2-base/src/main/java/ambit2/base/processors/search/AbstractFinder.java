@@ -49,11 +49,11 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 	protected abstract RESULT query(String value) throws AmbitException ;
 	
 	protected IStructureRecord transformResult(IStructureRecord record,IStructureRecord result) throws AmbitException {
-		result.setIdchemical(record.getIdchemical());
-		result.setIdstructure(record.getIdstructure());
-		for (Property key : record.getProperties())
-			result.setProperty(key, record.getProperty(key));
-		return result;
+		record.setContent(result.getContent());
+		record.setFormat(result.getFormat());
+		for (Property key : result.getProperties())
+			record.setProperty(key, result.getProperty(key));
+		return record;
 	}
 	
 	protected IStructureRecord transformResult(IStructureRecord record,String result) throws AmbitException {
