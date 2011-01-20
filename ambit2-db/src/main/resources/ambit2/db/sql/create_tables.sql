@@ -263,17 +263,17 @@ CREATE TABLE  `tuples` (
 -- v 4.3 added index on idchemical and idproperty
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `property_values`;
-CREATE TABLE  `property_values` (
+CREATE TABLE `property_values` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idproperty` int(10) unsigned NOT NULL,
   `idstructure` int(10) unsigned NOT NULL,
   `idchemical` int(10) unsigned NOT NULL,
   `user_name` varchar(16) COLLATE utf8_bin NOT NULL,
   `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') COLLATE utf8_bin NOT NULL DEFAULT 'UNKNOWN',
+  `text` text COLLATE utf8_bin,
   `idvalue_string` int(10) unsigned DEFAULT NULL,
   `value_num` double(14,4) DEFAULT NULL,
   `idtype` enum('STRING','NUMERIC') COLLATE utf8_bin NOT NULL DEFAULT 'STRING',
-  `text` text collate utf8_bin,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Index_1` (`idproperty`,`idstructure`) USING BTREE,
   KEY `FK_property_values_1` (`user_name`),
@@ -282,15 +282,12 @@ CREATE TABLE  `property_values` (
   KEY `FK_property_values_5` (`idvalue_string`),
   KEY `Index_3` (`idproperty`,`idtype`) USING BTREE,
   KEY `Index_8` (`idproperty`,`idvalue_string`),
-  KEY `Index_11` (`idproperty`,`id`),
-  KEY `Index_10` (`idvalue_string`) USING BTREE,
   KEY `Index_12` (`idchemical`,`idproperty`),
-  KEY `FK_property_values_6` (`idchemical`),
-  CONSTRAINT `FK_property_values_6` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_property_values_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_property_values_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_property_values_6` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -478,18 +475,18 @@ DELIMITER ;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `struc_dataset`;
 CREATE TABLE IF NOT EXISTS  `struc_dataset` (
-  `idstructure` int unsigned  NOT NULL ,
-  `id_srcdataset` int unsigned NOT NULL ,
-  `created` timestamp NOT NULL default CURRENT_TIMESTAMP,  
-  PRIMARY KEY  (`idstructure`,`id_srcdataset`),
+  `idstructure` int(10) unsigned NOT NULL,
+  `id_srcdataset` int(10) unsigned NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idstructure`,`id_srcdataset`),
   KEY `struc_dataset` (`id_srcdataset`),
-  CONSTRAINT `struc_dataset_ibfk_1`
-    FOREIGN KEY (`idstructure`)
-    REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `struc_dataset_ibfk_2`
-    FOREIGN KEY (`id_srcdataset`)
-    REFERENCES `src_dataset` (`id_srcdataset`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+  CONSTRAINT `struc_dataset_ibfk_1` 
+  	FOREIGN KEY (`idstructure`) 
+  	REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `struc_dataset_ibfk_2` 
+  	FOREIGN KEY (`id_srcdataset`) 
+  	REFERENCES `src_dataset` (`id_srcdataset`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
 -- Table `sessions` User sessions
