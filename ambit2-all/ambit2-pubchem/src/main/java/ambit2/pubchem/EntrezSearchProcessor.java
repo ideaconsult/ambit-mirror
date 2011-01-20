@@ -46,7 +46,7 @@ import ambit2.base.processors.ProcessorException;
  */
 public class EntrezSearchProcessor extends HTTPRequest<String, List<IStructureRecord>> {
 	
-	protected String entrezURL = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&maxret=1&term=%s";
+	public static String entrezURL = "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&maxret=1&term=%s";
 	//protected String term = "\"EINECS %s\"[All Fields] AND \"ChemIDplus\"[SourceName]";
 
 	protected final EntrezESearchParser parser = new EntrezESearchParser();

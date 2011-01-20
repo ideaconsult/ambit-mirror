@@ -21,6 +21,11 @@ public class OnlineStructureFinderTest  extends ResourceTest {
 	}
 	
 	@Test
+	public void testFinderChEBI() throws Exception {
+		testFinder("chebi","replace");
+	}
+	
+	@Test
 	public void testFinderCSLS() throws Exception {
 		testFinder("csls","replace");
 	}

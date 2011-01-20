@@ -24,7 +24,7 @@ public class ChEBIClientTest {
 	}
 	
 	@Test
-	public void searchInchi() throws Exception {
+	public void searchInchiKey() throws Exception {
 		ChEBIClient client = new ChEBIClient("InChIKey=SMQUZDBALVYZAC-UHFFFAOYAD",SearchCategory.INCHI_INCHI_KEY);
 		while (client.hasNext()) {
 			IStructureRecord struc = client.next();
@@ -33,7 +33,16 @@ public class ChEBIClientTest {
 		    	  System.out.println(String.format("%s %s %s",p.getName(),p.getLabel(),struc.getProperty(p)));
 		}
 	}
-	
+	@Test
+	public void searchInchi() throws Exception {
+		ChEBIClient client = new ChEBIClient("InChI=1S/C6H8O6/c7-1-2(8)5-3(9)4(10)6(11)12-5/h2",SearchCategory.ALL);
+		while (client.hasNext()) {
+			IStructureRecord struc = client.next();
+		      System.out.println(struc.getContent());
+		      for (Property p : struc.getProperties())
+		    	  System.out.println(String.format("%s %s %s",p.getName(),p.getLabel(),struc.getProperty(p)));
+		}
+	}
 	@Test
 	public void searchChebi() throws Exception {
 		ChEBIClient client = new ChEBIClient("CHEBI:16008",SearchCategory.ALL);

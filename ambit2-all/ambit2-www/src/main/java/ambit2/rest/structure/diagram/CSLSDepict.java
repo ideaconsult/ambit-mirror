@@ -9,7 +9,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.core.exceptions.HttpException;
+import ambit2.base.exceptions.HttpException;
 import ambit2.search.csls.CSLSImageRequest;
 
 /**
