@@ -18,6 +18,7 @@ import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * Iterates over objects of a specified OT.class
@@ -153,7 +154,7 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		if (recordIterator == null) {
 			Resource s = createResource(otclass);
 			if (s==null) return null;
-			recordIterator =  jenaModel.listStatements(new SimpleSelector(null,null,s));
+			recordIterator =  jenaModel.listStatements(new SimpleSelector(null,RDF.type,s));
 		}
 		return recordIterator;
 	}	
