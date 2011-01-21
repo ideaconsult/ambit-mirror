@@ -17,6 +17,11 @@ public class AutomaticTestUtilities
 		String value = null;		
 	};
 	
+	public static final int LPM_SSS_AMBIT = 0;
+	public static final int LPM_SSS_CDK = 1;
+	public static final int LPM_SSS_AMBIT_CDK = 2;
+	
+	
 	String outFile = null;
 	String inFile = null;
 	String dbFile = null;
@@ -30,6 +35,8 @@ public class AutomaticTestUtilities
 	int nInputStr = 0;
 	int nOutputStr = 0;
 	int portionSize = 100;
+	int lineProcessMode = 0;
+	
 	
 	
 	
@@ -200,6 +207,30 @@ public class AutomaticTestUtilities
 			return(0);
 		}
 		
+		if (command.equals("sss-ambit"))
+		{
+			System.out.println("Running sss with Ambit isomorphims:");
+			lineProcessMode = LPM_SSS_AMBIT;
+			iterateInputFile();
+			return(0);
+		}
+		
+		if (command.equals("sss-cdk"))
+		{
+			System.out.println("Running sss with CDK isomprphims algorithm:");
+			lineProcessMode = LPM_SSS_CDK;
+			iterateInputFile();
+			return(0);
+		}
+		
+		if (command.equals("sss-ambit-cdk"))
+		{
+			System.out.println("Running sss with Ambit Parser and CDK isomprphims algorithm:");
+			lineProcessMode = LPM_SSS_CDK;
+			iterateInputFile();
+			return(0);
+		}
+		
 		
 		System.out.println("Unknown command: " + command);
 		
@@ -296,7 +327,7 @@ public class AutomaticTestUtilities
 	
 	//Substructure search comparison and statistics utilities
 	
-	void iterateInputFileQueries()
+	void iterateInputFile()
 	{
 		try
 		{	
@@ -304,46 +335,15 @@ public class AutomaticTestUtilities
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
 			long length = f.length();
 			
-			Vector<String> lines = new Vector<String>();
-			Vector<String> allSmiles = new Vector<String>();
-			Vector<Integer> allStat = new Vector<Integer>();
 			int n = 0;
 			while (f.getFilePointer() < length)
 			{	
 				n++;
-				//System.out.print(" " + n);
+				System.out.print(" " + n);
 				String line = f.readLine();
-				lines.add(line);
-				if (lines.size() % portionSize == 0)
-				{
-					
-					System.out.println("line " + n);
-					/*
-					Vector<Integer> stat = doStatisticsForStructs(smiles, mdlFile, nUsedStr);
-					for (int i = 0; i < smiles.size(); i++)
-					{
-						allSmiles.add(smiles.get(i));
-						allStat.add(stat.get(i));
-					}
-					smiles.clear();
-					saveStructStatistics(allSmiles, allStat, outFile);
-					*/
-				}
+				System.out.print("line " + n + "  " + line);
+				processLine(line);
 			}
-			
-			/*
-			//What left from smiles vector is processed as well
-			if (!smiles.isEmpty())
-			{	
-				Vector<Integer> stat = doStatisticsForStructs(smiles, mdlFile, nUsedStr);
-				for (int i = 0; i < smiles.size(); i++)
-				{
-					allSmiles.add(smiles.get(i));
-					allStat.add(stat.get(i));
-				}			
-				saveStructStatistics(allSmiles, allStat, outFile);
-			}
-			*/
 			
 			f.close();
 		}
@@ -352,6 +352,13 @@ public class AutomaticTestUtilities
 			System.out.println(e.toString());
 		}
 	}
+	
+	
+	int processLine(String line)
+	{
+		return(0);
+	}
+	
 	
 	int doSSS_Ambit()
 	{
