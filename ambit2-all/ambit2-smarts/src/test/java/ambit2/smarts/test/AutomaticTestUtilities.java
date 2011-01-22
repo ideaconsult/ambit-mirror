@@ -22,12 +22,18 @@ public class AutomaticTestUtilities
 	public static final int LPM_SSS_AMBIT_CDK = 2;
 	
 	
-	String outFile = null;
-	String inFile = null;
-	String dbFile = null;
-	String command = null;
-	String configFile = null;
+	public static final int STAT_TYPE_SSS_TIME_SINGLE_DBSTR = 1;
+	public static final int STAT_TYPE_SSS_TIME_ENTIRE_DB = 2;
+	public static final int STAT_TYPE_OCCURENCES = 10;
 	
+	
+	String outFileName = null;
+	String inFileName = null;
+	String dbFileName = null;
+	String command = null;
+	String configFileName = null;
+		
+	RandomAccessFile outFile = null;
 	
 	int maxNumSeqSteps = 4;
 	int maxStrSize = 30;
@@ -36,8 +42,8 @@ public class AutomaticTestUtilities
 	int nOutputStr = 0;
 	int portionSize = 100;
 	int lineProcessMode = 0;
-	
-	
+	int statisticsType = STAT_TYPE_SSS_TIME_SINGLE_DBSTR;
+		
 	
 	
 	public static void main(String[] args)
@@ -70,21 +76,21 @@ public class AutomaticTestUtilities
 		if (opt != null)
 		{
 			if (opt.value != null)
-				inFile = opt.value; 
+				inFileName = opt.value; 
 		}
 		
 		opt = getOption("o", options);
 		if (opt != null)
 		{
 			if (opt.value != null)
-				outFile = opt.value; 
+				outFileName = opt.value; 
 		}	
 		
 		opt = getOption("db", options);
 		if (opt != null)
 		{
 			if (opt.value != null)
-				dbFile = opt.value; 
+				dbFileName = opt.value; 
 		}	
 		
 		opt = getOption("c", options);
@@ -194,7 +200,7 @@ public class AutomaticTestUtilities
 			System.out.println("Running generation of random structures:");
 			ChemObjectFactory cof = new ChemObjectFactory();
 			Vector<StructInfo> vStr = new Vector<StructInfo>();
-			cof.produceRandomStructsFromMDL(dbFile, maxNumSeqSteps, nDBStr, vStr, outFile);
+			cof.produceRandomStructsFromMDL(dbFileName, maxNumSeqSteps, nDBStr, vStr, outFileName);
 			return(0);
 		}
 		
@@ -203,7 +209,7 @@ public class AutomaticTestUtilities
 			System.out.println("Running exhaustive generation structures:");
 			ChemObjectFactory cof = new ChemObjectFactory();
 			Vector<StructInfo> vStr = new Vector<StructInfo>();			
-			cof.produceStructsFromMDL(dbFile, maxNumSeqSteps, nDBStr, maxStrSize, vStr, outFile);
+			cof.produceStructsFromMDL(dbFileName, maxNumSeqSteps, nDBStr, maxStrSize, vStr, outFileName);
 			return(0);
 		}
 		
@@ -327,11 +333,42 @@ public class AutomaticTestUtilities
 	
 	//Substructure search comparison and statistics utilities
 	
+	int openOutputFile()
+	{
+		try
+		{
+			File file = new File(outFileName);
+			RandomAccessFile outFile = new RandomAccessFile(file,"rw");
+			outFile.setLength(0);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		return(0);
+	}
+	
+	
+	int closeOutputFile()
+	{
+		try
+		{
+			if (outFile != null)
+				outFile.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return(0);
+	}
+	
 	void iterateInputFile()
 	{
 		try
 		{	
-			File file = new File(inFile);
+			File file = new File(inFileName);
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
 			long length = f.length();
 			
