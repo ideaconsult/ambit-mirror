@@ -91,7 +91,7 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 				} finally {
 					//the reporter closes the connection as well
 					try {
-						reporter.setCloseConnection(true);
+						//reporter.setCloseConnection(true); //the caller should decide!
 						reporter.close();
 					} 
 					catch (Exception x) {}
@@ -105,6 +105,11 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 		}
 	}
 
+	@Override
+	public void setCloseConnection(boolean closeConnection) {
+		super.setCloseConnection(closeConnection);
+		reporter.setCloseConnection(closeConnection);
+	}
 	public void open() throws DbAmbitException {
 		
 	}
