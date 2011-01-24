@@ -327,7 +327,8 @@ Then, when the "get(Variant)" method calls you back,
 				iterator.setBaseReference(getRequest().getRootRef());
 				
 				while (iterator.hasNext()) {
-					return iterator.next();
+					T nextObject = iterator.next();
+					if (accept(nextObject)) return nextObject;
 				}
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Nothing to write! "+getRequest().getRootRef() );	
 			} catch (ResourceException x)  {
@@ -338,6 +339,10 @@ Then, when the "get(Variant)" method calls you back,
 				try { iterator.close(); } catch (Exception x) {}
 			}
 		
+	}
+	
+	protected boolean accept(T object) throws ResourceException  {
+		return true;
 	}
 	protected String getObjectURI(Form queryForm) throws ResourceException {
 		return getParameter(queryForm,

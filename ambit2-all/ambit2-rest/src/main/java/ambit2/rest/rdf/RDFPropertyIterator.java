@@ -15,6 +15,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.rest.OpenTox;
+import ambit2.rest.rdf.OT.OTProperty;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
@@ -83,6 +84,8 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 	
 	@Override
 	public Property parseRecord(RDFNode propertyEntry, Property property) {
+		
+			
 		if (property == null) property=createRecord();
 		if (propertyEntry.isLiteral()) {
 			property.setName(((Literal)propertyEntry).getString());
@@ -140,38 +143,10 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 						stmt.getObject().isLiteral()?((Literal)stmt.getObject()).getString():stmt.getObject().toString();
 			
 			String hasSource = creator;
-			stmt = newEntry.getProperty(OT.OTProperty.hasSource.createProperty(jenaModel));
-			if ((stmt!=null) && (stmt.getObject()!=null) ) {
-				RDFNode source = stmt.getObject();
-				if (source.isURIResource()) {
-					hasSource = ((Resource)source).getURI();
-					if (baseReference!=null) {
-						if (hasSource.startsWith(String.format("%s/algorithm/",baseReference.toString()))) {
-							hasSource = hasSource.substring(baseReference.toString().length()+11);
-						} else if (hasSource.startsWith(String.format("%s/model/",baseReference.toString()))) {
-							hasSource = hasSource.substring(baseReference.toString().length()+7);
-						} if (hasSource.startsWith(String.format("%s/dataset/",baseReference.toString()))) {
-							hasSource = hasSource.substring(baseReference.toString().length()+9);
-						}
-					}
-							
-				} else if (source.isLiteral()) {
-					hasSource = ((Literal)source).getString();
-				} else if (source.isAnon()) {
-					hasSource = source.toString(); //what should we do here ?
-				} else hasSource = source.toString();
-			}
 			
-			LiteratureEntry le = new LiteratureEntry(hasSource,creator);
-			property.setReference(le);
+			property.setReference(processSource(newEntry, hasSource, creator));
 			
-			stmt = newEntry.getProperty(RDF.type);
-			RDFNode type = stmt==null?null:stmt.getObject();
-			if ((type != null) && type.isURIResource()) { 
-				if (type.equals(OT.OTClass.Algorithm)) le.setType(_type.Algorithm);
-				else if (type.equals(OT.OTClass.Model)) le.setType(_type.Model);
-				else if (type.equals(OT.OTClass.Dataset)) le.setType(_type.Dataset);
-			}
+
 	
 		property.setClazz(String.class);
 		StmtIterator it = null;
@@ -200,6 +175,48 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}
 
 		return property;
+	}
+	
+	protected LiteratureEntry processSource(Resource newEntry, String hasSource,String creator) {
+		_type sourceType = _type.BibtexEntry;
+		Statement stmt = newEntry.getProperty(OT.OTProperty.hasSource.createProperty(jenaModel));
+		if ((stmt!=null) && (stmt.getObject()!=null) ) {
+			RDFNode source = stmt.getObject();
+			if (source.isURIResource()) {
+				hasSource = ((Resource)source).getURI();
+				if (baseReference!=null) {
+					if (hasSource.startsWith(String.format("%s/algorithm/",baseReference.toString()))) {
+						hasSource = hasSource.substring(baseReference.toString().length()+11);
+					} else if (hasSource.startsWith(String.format("%s/model/",baseReference.toString()))) {
+						hasSource = hasSource.substring(baseReference.toString().length()+7);
+					} if (hasSource.startsWith(String.format("%s/dataset/",baseReference.toString()))) {
+						hasSource = hasSource.substring(baseReference.toString().length()+9);
+					} if (hasSource.startsWith(String.format("%s/feature/",baseReference.toString()))) {
+						hasSource = hasSource.substring(baseReference.toString().length()+9);
+					}
+				}
+				
+				Statement stmt1 = ((Resource)source).getProperty(RDF.type);
+
+				RDFNode type = stmt1==null?null:stmt1.getObject();
+				if ((type != null) && type.isURIResource()) { 
+					if (type.equals(OT.OTClass.Algorithm.getOntClass(jenaModel))) sourceType = _type.Algorithm;
+					else if (type.equals(OT.OTClass.Model.getOntClass(jenaModel))) sourceType = _type.Model;
+					else if (type.equals(OT.OTClass.Dataset.getOntClass(jenaModel))) sourceType = _type.Dataset;
+					else if (type.equals(OT.OTClass.Feature.getOntClass(jenaModel))) sourceType = _type.Feature;
+				}
+
+						
+			} else if (source.isLiteral()) {
+				hasSource = ((Literal)source).getString();
+			} else if (source.isAnon()) {
+				hasSource = source.toString(); //what should we do here ?
+			} else hasSource = source.toString();
+		}
+		
+		LiteratureEntry le = new LiteratureEntry(hasSource,creator);
+		le.setType(sourceType);
+		return le;
 	}
 	
 	public static void readFeaturesRDF(String uri,final ambit2.base.data.Template profile, Reference rootRef) {
@@ -232,4 +249,22 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}
 	}	
 
+	@Override
+	protected boolean skip(Resource newEntry) {
+		return super.skip(newEntry) || isFeatureSource(newEntry);
+	}
+	protected boolean isFeatureSource(Resource entry) {
+		StmtIterator iterator =  jenaModel.listStatements(
+				new SimpleSelector(null,OTProperty.hasSource.createProperty(jenaModel),entry)); 
+		try {
+			while(iterator.hasNext()) {
+				return true;
+			}
+		} finally {
+			try {iterator.close();} catch (Exception x){}
+		}
+		return false;
+	}
+	
+	
 }

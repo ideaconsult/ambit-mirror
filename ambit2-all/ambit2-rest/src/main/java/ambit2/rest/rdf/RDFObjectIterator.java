@@ -96,6 +96,13 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		setBaseReference(null);
 
 	}
+	protected boolean skip(Resource newEntry) {
+		return newEntry.isURIResource() && (
+				   newEntry.getURI().equals("http://www.opentox.org/api/1.1#NumericFeature") ||
+				   newEntry.getURI().equals("http://www.opentox.org/api/1.1#NominalFeature") ||
+				   newEntry.getURI().equals("http://www.opentox.org/api/1.1#StringFeature") 
+				   );
+	}
 	/**
 	 * Verifies if there are more objects of the type
 	 */
@@ -106,12 +113,7 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 				Resource newEntry = null;
 				if (iterateSubjects) {
 					newEntry = (Resource) st.getSubject();
-					while (newEntry.isURIResource() && (
-							   newEntry.getURI().equals("http://www.opentox.org/api/1.1#NumericFeature") ||
-							   newEntry.getURI().equals("http://www.opentox.org/api/1.1#NominalFeature") ||
-							   newEntry.getURI().equals("http://www.opentox.org/api/1.1#StringFeature") 
-							   )
-							   ) {
+					while (skip(newEntry)) {
 						if ( recordIterator.hasNext() ) 	st = recordIterator.next();
 						else return false;
 						newEntry = (Resource) st.getSubject();
