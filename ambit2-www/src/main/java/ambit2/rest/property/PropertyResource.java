@@ -44,8 +44,14 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
+import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
+
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
 
 /**
  * Feature definition resource http://opentox.org/development/wiki/feature
@@ -302,4 +308,5 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			try {x.close();} catch (Exception e){}
 		}
 	}
+
 }
