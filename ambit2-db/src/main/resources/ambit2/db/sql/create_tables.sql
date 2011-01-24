@@ -54,11 +54,11 @@ CREATE TABLE  `user_roles` (
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `catalog_references`;
 CREATE TABLE  `catalog_references` (
-  `idreference` int(11) unsigned NOT NULL auto_increment,
-  `title` varchar(255) character set utf8 collate utf8_bin NOT NULL,
-  `url` varchar(255) character set utf8 collate utf8_bin NOT NULL,
-  `type` enum('Unknown','Dataset','Algorithm','Model','BibtexEntry','BibtexArticle','BibtexBook') NOT NULL default 'Dataset',
-  PRIMARY KEY  (`idreference`),
+  `idreference` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `type` enum('Unknown','Dataset','Algorithm','Model','BibtexEntry','BibtexArticle','BibtexBook','Feature') NOT NULL DEFAULT 'Dataset',
+  PRIMARY KEY (`idreference`),
   UNIQUE KEY `Index_2` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- -----------------------------------------------------
@@ -910,7 +910,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,5,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,6,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

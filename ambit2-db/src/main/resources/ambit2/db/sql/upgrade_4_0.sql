@@ -232,3 +232,5 @@ ALTER TABLE `models` ADD COLUMN `dataset` VARCHAR(255) COMMENT 'dataset uri' AFT
  
 ALTER TABLE `bookmark` MODIFY COLUMN `hasTopic` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'b:hasTopic Associates the bookmark with a Topic ';
 
+--- 4.5 -> 4.6
+ALTER TABLE `catalog_references` MODIFY COLUMN `type` ENUM('Unknown','Dataset','Algorithm','Model','BibtexEntry','BibtexArticle','BibtexBook','Feature') NOT NULL DEFAULT 'Dataset';
