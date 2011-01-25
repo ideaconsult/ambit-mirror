@@ -1,9 +1,17 @@
 package ambit2.smarts.test;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.util.Vector;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.StructInfo;
 
@@ -20,39 +28,45 @@ public class AutomaticTestUtilities
 	public static final int LPM_SSS_AMBIT = 0;
 	public static final int LPM_SSS_CDK = 1;
 	public static final int LPM_SSS_AMBIT_CDK = 2;
+	public static final int LPM_SSS_ALL = 100;
 	
 	
-	public static final int STAT_TYPE_SSS_TIME_SINGLE_DBSTR = 1;
-	public static final int STAT_TYPE_SSS_TIME_ENTIRE_DB = 2;
-	public static final int STAT_TYPE_OCCURENCES = 10;
+	
+	public static final int STAT_SINGLE_DBSTR = 1;
+	public static final int STAT_ENTIRE_DB = 2;
+	public static final int STAT_OCCURENCES = 10;
 	
 	
-	String outFileName = null;
-	String inFileName = null;
-	String dbFileName = null;
-	String command = null;
-	String configFileName = null;
+	String outFileName = "";
+	String inFileName = "";
+	String dbFileName = "";
+	String command = "";
+	String configFileName = "";
 		
 	RandomAccessFile outFile = null;
 	
 	int maxNumSeqSteps = 4;
 	int maxStrSize = 30;
 	int nDBStr = 1000;
-	int nInputStr = 0;
+	int nInputStr = 10;
 	int nOutputStr = 0;
 	int portionSize = 100;
 	int lineProcessMode = 0;
-	int statisticsType = STAT_TYPE_SSS_TIME_SINGLE_DBSTR;
+	int statisticsType = STAT_SINGLE_DBSTR;
 		
+	
+	boolean FlagStat_SingleDBStr_Ambit = false;
+	boolean FlagStat_SingleDBStr_CDK = false;
+	boolean FlagStat_SingleDBStr_Ambit_CDK = false;
 	
 	
 	public static void main(String[] args)
 	{
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
-		atu.handleArguments(args);		
+		//atu.handleArguments(args);		
 		
-		//atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/test-out2.txt", 
-		//		"-nDBStr", "100", "-maxSeqStep", "10", "-c", "exhaustive-str" });
+		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/test-out--.txt", 
+				"-i","/frags.smi","-nDBStr", "100", "-maxSeqStep", "10", "-c", "sss-ambit" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -168,20 +182,22 @@ public class AutomaticTestUtilities
 			}	
 		}
 		
-		opt = getOption("maxStrSize", options);
+		opt = getOption("statType", options);
 		if (opt != null)
 		{
 			if (opt.value != null)
 			{	
-				try
-				{
-					Integer intObj = new Integer(0);
-					this.maxStrSize = Integer.parseInt(opt.value);
-				}
-				catch(Exception e)
-				{
-					System.out.println("Incorrect maxStrSize value: "+ e.toString());
-				}
+				int stT = -1;
+				if (opt.value.equals("single-str"))
+					stT = STAT_SINGLE_DBSTR;
+				
+				if (opt.value.equals("entire-db"))
+					stT = STAT_ENTIRE_DB;
+				
+				if (stT == -1)
+					System.out.println("Incorrect statistics type: " + opt.value);
+				else
+					statisticsType = stT;
 			}	
 		}
 		
@@ -237,6 +253,14 @@ public class AutomaticTestUtilities
 			return(0);
 		}
 		
+		if (command.equals("sss-all"))
+		{
+			System.out.println("Running sss with all isomprphims algorithm:");
+			lineProcessMode = LPM_SSS_ALL;
+			iterateInputFile();
+			return(0);
+		}
+		
 		
 		System.out.println("Unknown command: " + command);
 		
@@ -255,15 +279,19 @@ public class AutomaticTestUtilities
 		System.out.println("-cfg          config file");
 		System.out.println("-nDBStr       the number of used structures from DB");
 		System.out.println("-nInpStr      the number of used input structures");
-		System.out.println("-nOutStr      the number of used output structures");	
+		//System.out.println("-nOutStr      the number of used output structures");	
 		System.out.println("-maxSeqStep   maximal number of sequence steps");
 		System.out.println("-maxStrSize   maximal size of the generated structures");
+		System.out.println("-statType     the type of statistics saved in the output file");
+		System.out.println("                 single-str       ");
+		System.out.println("                 entire-db        ");
 		System.out.println("-c            command: ");
 		System.out.println("                 random-str       generates random structures");
 		System.out.println("                 exhaustive-str   generates structures exhaustively");
 		System.out.println("                 sss-ambit        substructure searching with Ambit Algorithm");
 		System.out.println("                 sss-cdk          substructure searching with CDK Parser and Algorithm");
 		System.out.println("                 sss-ambit-cdk    substructure searching with Ambit Parser and CDK Algorithm");
+		System.out.println("                 sss-all          substructure searching with all algorithms");
 	}
 	
 	
@@ -349,7 +377,7 @@ public class AutomaticTestUtilities
 	}
 	
 	
-	int closeOutputFile()
+	int closeOutputFile() 
 	{
 		try
 		{
@@ -365,7 +393,7 @@ public class AutomaticTestUtilities
 	}
 	
 	void iterateInputFile()
-	{
+	{	
 		try
 		{	
 			File file = new File(inFileName);
@@ -385,22 +413,141 @@ public class AutomaticTestUtilities
 			f.close();
 		}
 		catch (Exception e)
-		{
-			System.out.println(e.toString());
+		{	
+			System.out.println(e.getMessage());
 		}
 	}
 	
 	
 	int processLine(String line)
 	{
+		if (statisticsType == STAT_SINGLE_DBSTR)
+		{
+			switch(this.lineProcessMode)
+			{
+			case LPM_SSS_AMBIT:			
+				FlagStat_SingleDBStr_Ambit = true;
+				break;
+			case LPM_SSS_CDK:
+				FlagStat_SingleDBStr_CDK = true;
+				break;	
+			case LPM_SSS_AMBIT_CDK:
+				FlagStat_SingleDBStr_Ambit_CDK = true;
+				break;
+			}
+			sss_SingleDBStrStat(line);
+			
+			return(0);
+		}
+		
+		
+		if (statisticsType == STAT_ENTIRE_DB)
+		{
+			switch(this.lineProcessMode)
+			{
+			case LPM_SSS_AMBIT:			
+				sss_Ambit(line);
+				break;
+			case LPM_SSS_CDK:
+				sss_CDK(line);
+				break;	
+			case LPM_SSS_AMBIT_CDK:
+				sss_Ambit_CDK(line);
+				break;
+			}
+		}
+		
 		return(0);
 	}
 	
 	
-	int doSSS_Ambit()
+	int sss_Ambit(String line)
+	{	
+		try
+		{
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				record++;				
+				if (record > this.nDBStr)
+					break;
+				
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					
+					//TODO
+										
+					//System.out.println("record " + record+ "  " + vStr.size());
+				}
+			}	
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+			return(-1);
+		}
+		
+		return(0);
+	}
+	
+	int sss_CDK(String line)
 	{
 		return(0);
 	}
+	
+	int sss_Ambit_CDK(String line)
+	{
+		return(0);
+	}
+	
+	int sss_SingleDBStrStat(String line)
+	{
+		//Performs statistics for each structure from the DB
+		//It could be applied for several algorithms simultaneously
+		
+		try
+		{
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				record++;				
+				if (record > this.nDBStr)
+					break;
+				
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					
+					//TODO
+										
+					System.out.println("record " + record+ "  " + mol.getAtomCount());
+				}
+			}	
+		}
+		
+		catch(Exception e){
+			System.out.println(e.toString());
+			return(-1);
+		}
+		
+		return(0);
+		
+	}
+	
 	
 	
 }
