@@ -236,14 +236,24 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	protected RDFObjectIterator<Property> createObjectIterator(
 			Reference reference, MediaType mediaType) throws ResourceException {
-		RDFPropertyIterator iterator = new RDFPropertyIterator(reference,mediaType);
+		RDFPropertyIterator iterator = new RDFPropertyIterator(reference,mediaType) {
+			@Override
+			protected boolean skip(Resource newEntry) {
+				return super.skip(newEntry) || isFeatureSource(newEntry);
+			}
+		};
 		iterator.setBaseReference(getRequest().getRootRef());
 		return iterator;
 	}
 	@Override
 	protected RDFObjectIterator<Property> createObjectIterator(
 			Representation entity) throws ResourceException {
-		RDFPropertyIterator iterator = new RDFPropertyIterator(entity,entity.getMediaType());
+		RDFPropertyIterator iterator = new RDFPropertyIterator(entity,entity.getMediaType()) {
+			@Override
+			protected boolean skip(Resource newEntry) {
+				return super.skip(newEntry) || isFeatureSource(newEntry);
+			}
+		};
 		iterator.setForceReadRDFLocalObjects(true);
 		iterator.setBaseReference(getRequest().getRootRef());
 		return iterator;

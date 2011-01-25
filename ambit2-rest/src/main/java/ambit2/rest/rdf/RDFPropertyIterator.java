@@ -249,10 +249,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		}
 	}	
 
-	@Override
-	protected boolean skip(Resource newEntry) {
-		return super.skip(newEntry) || isFeatureSource(newEntry);
-	}
+
 	protected boolean isFeatureSource(Resource entry) {
 		StmtIterator iterator =  jenaModel.listStatements(
 				new SimpleSelector(null,OTProperty.hasSource.createProperty(jenaModel),entry)); 
