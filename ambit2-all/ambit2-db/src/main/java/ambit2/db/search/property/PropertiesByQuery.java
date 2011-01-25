@@ -32,7 +32,7 @@ public class PropertiesByQuery  extends AbstractPropertyRetrieval<Property, ISto
 	private static final long serialVersionUID = -7265871901186884735L;
 	public static String whereproperty  = " idproperty = ?";
 	public static String wherepropertyName  = " property.name = ?";
-	public static String join  = " join property_values using(idproperty) join template_def using(idproperty) join query using(idtemplate) where %s %s %s group by idproperty";
+	public static String join  = " join template_def using(idproperty) join query using(idtemplate) where %s %s %s ";
 
 	
 	/**

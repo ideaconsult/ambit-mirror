@@ -302,6 +302,24 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 		c.close();
 		
 	}	
+	@Test
+	public void testCreate2Entries() throws Exception {
+		
+		testCreateEntryFromFile();
+		
+		URL url = getClass().getClassLoader().getResource("PK-test.csv");
+		FileRepresentation rep = new FileRepresentation(
+				url.getFile(), 
+				//"E:/src/ambit2-all/src/test/resources/endpoints/skin_sensitisation/LLNA_3D.sdf",
+				MediaType.TEXT_CSV, 0);
+				//EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,rep);
+				
+
+		testAsyncPoll(new Reference(getTestURI()), MediaType.TEXT_URI_LIST, 
+				rep,
+				Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/5",port)));
+	}	
 	
 
 	@Test

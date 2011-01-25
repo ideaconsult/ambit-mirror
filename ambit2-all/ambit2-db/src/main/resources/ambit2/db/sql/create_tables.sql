@@ -128,6 +128,7 @@ CREATE TABLE  `properties` (
   `units` varchar(16) collate utf8_bin NOT NULL default '',
   `comments` varchar(128) collate utf8_bin NOT NULL default '',
   `islocal` tinyint(1) NOT NULL default '0',
+  `ptype` set('STRING','NUMERIC') COLLATE utf8_bin DEFAULT null,
   PRIMARY KEY  USING BTREE (`idproperty`),
   UNIQUE KEY `ddictionary_name` USING BTREE (`name`,`idreference`),
   KEY `ddictionary_idref` (`idreference`),
@@ -176,13 +177,11 @@ CREATE TABLE  `template_def` (
   `idtemplate` int(10) unsigned NOT NULL,
   `idproperty` int(10) unsigned NOT NULL,
   `order` int(10) unsigned NOT NULL DEFAULT '0',
-  `ptype` set('STRING','NUMERIC') COLLATE utf8_bin DEFAULT 'STRING',
   PRIMARY KEY (`idtemplate`,`idproperty`) USING BTREE,
   KEY `FK_template_def_2` (`idproperty`),
   CONSTRAINT `FK_template_def_1` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_template_def_2` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 -- -----------------------------------------------------
 -- Table `dictionary`
 -- -----------------------------------------------------
@@ -461,12 +460,12 @@ END $
 -- -----------------------------------------------------
 CREATE TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
  FOR EACH ROW BEGIN
-    INSERT INTO template_def (idtemplate,idproperty,`order`,ptype) (
-    SELECT idtemplate,idproperty,idproperty,idtype FROM
+    INSERT IGNORE INTO template_def (idtemplate,idproperty,`order`) (
+    SELECT idtemplate,idproperty,idproperty FROM
       (SELECT idtemplate FROM src_dataset join tuples using(id_srcdataset) WHERE idtuple=NEW.idtuple) a
       JOIN
-      (SELECT idproperty,idtype from property_values WHERE id=NEW.id) b
-    ) ON DUPLICATE KEY UPDATE ptype=concat(ptype,',',values(ptype));
+      (SELECT idproperty from property_values WHERE id=NEW.id) b
+    ) ;
  END $
 DELIMITER ;
  
@@ -874,6 +873,8 @@ CREATE TRIGGER update_string_ci AFTER UPDATE ON property_string
  
  CREATE TRIGGER summary_chemical_prop_insert AFTER INSERT ON property_values
  FOR EACH ROW BEGIN
+    UPDATE properties set ptype=CONCAT_WS(',',ptype,NEW.idtype)  where idproperty=NEW.idproperty;
+    
     INSERT IGNORE INTO summary_property_chemicals (idchemical,id_ci,idproperty) 
     	SELECT idchemical,id_ci,idproperty from property_ci
 		JOIN structure
@@ -887,6 +888,8 @@ CREATE TRIGGER update_string_ci AFTER UPDATE ON property_string
 
  CREATE TRIGGER summary_chemical_prop_update AFTER UPDATE ON property_values
  FOR EACH ROW BEGIN
+ 	UPDATE properties set ptype=CONCAT_WS(',',ptype,NEW.idtype)  where idproperty=NEW.idproperty;
+ 
     INSERT IGNORE INTO summary_property_chemicals (idchemical,id_ci,idproperty) 
     	SELECT idchemical,id_ci,idproperty from property_ci
 		JOIN structure
@@ -1152,8 +1155,8 @@ the_loop: LOOP
 	  DELETE FROM template_def WHERE idtemplate= template_id;
 	END IF;
 	
-	INSERT IGNORE into template_def (idtemplate,idproperty,`order`,ptype)
-	SELECT idtemplate,idproperty,idproperty,group_concat(distinct(idtype))
+	INSERT IGNORE into template_def (idtemplate,idproperty,`order`)
+	SELECT idtemplate,idproperty,idproperty
 	FROM property_values
 	JOIN property_tuples using(id)
 	JOIN tuples using (idtuple)
