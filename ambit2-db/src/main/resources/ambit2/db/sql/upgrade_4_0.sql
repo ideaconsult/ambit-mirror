@@ -234,3 +234,59 @@ ALTER TABLE `bookmark` MODIFY COLUMN `hasTopic` VARCHAR(255) CHARACTER SET utf8 
 
 --- 4.5 -> 4.6
 ALTER TABLE `catalog_references` MODIFY COLUMN `type` ENUM('Unknown','Dataset','Algorithm','Model','BibtexEntry','BibtexArticle','BibtexBook','Feature') NOT NULL DEFAULT 'Dataset';
+
+--- 4.6 -> 4.7
+ALTER TABLE `properties` ADD COLUMN `ptype` SET('STRING','NUMERIC') NOT NULL DEFAULT 'NUMERIC' AFTER `islocal`;
+insert into properties (idproperty,ptype)
+(
+select idproperty,group_concat(distinct(ptype)) from template_def where ptype != "" group by idproperty
+) on duplicate key update ptype=values(ptype);
+ALTER TABLE `template_def` DROP COLUMN `ptype`;
+DROP TRIGGER insert_property_tuple;
+DROP TRIGGER summary_chemical_prop_insert;
+DROP TRIGGER summary_chemical_prop_update;
+-- -----------------------------------------------------
+-- Trigger to add property entry to template_def 
+-- -----------------------------------------------------
+DELIMITER $
+CREATE TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
+ FOR EACH ROW BEGIN
+    INSERT IGNORE INTO template_def (idtemplate,idproperty,`order`) (
+    SELECT idtemplate,idproperty,idproperty FROM
+      (SELECT idtemplate FROM src_dataset join tuples using(id_srcdataset) WHERE idtuple=NEW.idtuple) a
+      JOIN
+      (SELECT idproperty from property_values WHERE id=NEW.id) b
+    ) ;
+ END $
+ 
+  CREATE TRIGGER summary_chemical_prop_insert AFTER INSERT ON property_values
+ FOR EACH ROW BEGIN
+    UPDATE properties set ptype=CONCAT_WS(',',ptype,NEW.idtype)  where idproperty=NEW.idproperty;
+    
+    INSERT IGNORE INTO summary_property_chemicals (idchemical,id_ci,idproperty) 
+    	SELECT idchemical,id_ci,idproperty from property_ci
+		JOIN structure
+		JOIN properties
+		WHERE
+		NEW.idvalue_string is not null 
+		and value_ci = (select value from property_string where idvalue_string=NEW.idvalue_string)
+		and idstructure=NEW.idstructure
+		and idproperty=NEW.idproperty;   
+ END $
+ 
+  CREATE TRIGGER summary_chemical_prop_update AFTER UPDATE ON property_values
+ FOR EACH ROW BEGIN
+ 	UPDATE properties set ptype=CONCAT_WS(',',ptype,NEW.idtype)  where idproperty=NEW.idproperty;
+ 
+    INSERT IGNORE INTO summary_property_chemicals (idchemical,id_ci,idproperty) 
+    	SELECT idchemical,id_ci,idproperty from property_ci
+		JOIN structure
+		JOIN properties
+		WHERE
+		NEW.idvalue_string is not null 
+		and value_ci = (select value from property_string where idvalue_string=NEW.idvalue_string)
+		and idstructure=NEW.idstructure
+		and idproperty=NEW.idproperty;   
+ END $
+DELIMITER ;
+insert into version (idmajor,idminor,comment) values (4,7,"AMBIT2 schema");

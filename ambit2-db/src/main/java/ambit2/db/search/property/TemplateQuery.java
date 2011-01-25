@@ -46,7 +46,7 @@ public class TemplateQuery extends AbstractPropertyRetrieval<String, String, Str
 	private static final long serialVersionUID = 6746077496508519227L;
 
 	public static String SQL = 
-			"select idproperty,properties.name,units,title,url,idreference,comments,null,islocal,type " +
+			"select idproperty,properties.name,units,title,url,idreference,comments,ptype,islocal,type " +
 			"from template join template_def using(idtemplate) join properties using(idproperty)" +
 			" join catalog_references using(idreference) %s";
 	

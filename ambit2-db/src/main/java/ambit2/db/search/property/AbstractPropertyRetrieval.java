@@ -54,7 +54,7 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 		title,
 		url
 	}	
-	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments,null,islocal,type from properties join catalog_references using(idreference)";
+	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments,ptype as idtype,islocal,type from properties join catalog_references using(idreference)";
 	/**
 	 * 
 	 */
