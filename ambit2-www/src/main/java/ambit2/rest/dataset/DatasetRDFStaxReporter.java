@@ -233,6 +233,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					
 					getOutput().writeStartElement(OT.NS,"value"); //value
 					if (value instanceof Number) {
+						p.setClazz(Double.class);
 						getOutput().writeAttribute(RDF.getURI(),"datatype","http://www.w3.org/2001/XMLSchema#double");
 					} else {
 						getOutput().writeAttribute(RDF.getURI(),"datatype","http://www.w3.org/2001/XMLSchema#string");
@@ -349,7 +350,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 					getOutput().writeEndElement();
 				}
 				
-				if (p.getClazz() ==Dictionary.class ) {
+				if (p.getClazz().equals(Dictionary.class )) {
 					//TupleFeature
 					getOutput().writeStartElement(RDF.getURI(),"type"); //feature
 					getOutput().writeAttribute(RDF.getURI(),"resource","http://www.opentox.org/api/1.1#TupleFeature");
