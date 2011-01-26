@@ -148,7 +148,6 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 						"cml.jpg",
 						"smi.png",						
 						"link.png",
-						"xml.png",
 						"pdf.png",
 						"excel.png",
 						"weka.jpg",
@@ -159,7 +158,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 					MediaType mime = mimes[i];
 					output.write("&nbsp;");
 					output.write(String.format(
-							"<a href=\"%s%s?accept-header=%s&max=100\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							"<a href=\"%s%s?media=%s&max=100\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
 							w.toString(),
 							"",
 							//CompoundResource.compound,
