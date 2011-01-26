@@ -9,10 +9,13 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.ChemObjectFactory;
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsParser;
 import ambit2.smarts.StructInfo;
 
 
@@ -59,6 +62,10 @@ public class AutomaticTestUtilities
 	boolean FlagStat_SingleDBStr_CDK = false;
 	boolean FlagStat_SingleDBStr_Ambit_CDK = false;
 	
+	SmartsParser sp = new SmartsParser();
+	IsomorphismTester isoTester = new IsomorphismTester();
+	
+	
 	
 	public static void main(String[] args)
 	{
@@ -66,7 +73,7 @@ public class AutomaticTestUtilities
 		//atu.handleArguments(args);		
 		
 		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/test-out--.txt", 
-				"-i","/frags.smi","-nDBStr", "100", "-maxSeqStep", "10", "-c", "sss-ambit" });
+				"-i","/input.txt","-nDBStr", "100", "-maxSeqStep", "10", "-c", "sss-ambit" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -404,9 +411,8 @@ public class AutomaticTestUtilities
 			while (f.getFilePointer() < length)
 			{	
 				n++;
-				System.out.print(" " + n);
 				String line = f.readLine();
-				System.out.print("line " + n + "  " + line);
+				System.out.println("line " + n + "  " + line);
 				processLine(line);
 			}
 			
@@ -434,7 +440,13 @@ public class AutomaticTestUtilities
 			case LPM_SSS_AMBIT_CDK:
 				FlagStat_SingleDBStr_Ambit_CDK = true;
 				break;
+			case LPM_SSS_ALL:
+				FlagStat_SingleDBStr_Ambit = true;
+				FlagStat_SingleDBStr_CDK = true;
+				FlagStat_SingleDBStr_Ambit_CDK = true;
+				break;
 			}
+			
 			sss_SingleDBStrStat(line);
 			
 			return(0);
@@ -512,6 +524,15 @@ public class AutomaticTestUtilities
 		//Performs statistics for each structure from the DB
 		//It could be applied for several algorithms simultaneously
 		
+		QueryAtomContainer query  = sp.parse(line);
+		sp.setNeededDataFlags();
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + errorMsg);			
+			return -1;
+		}						
+		
 		try
 		{
 			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
@@ -532,9 +553,22 @@ public class AutomaticTestUtilities
 					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 					CDKHueckelAromaticityDetector.detectAromaticity(mol);
 					
+					if (FlagStat_SingleDBStr_Ambit)
+					{
+						isoTester.setQuery(query);
+						sp.setSMARTSData(mol);
+						boolean hasIso = isoTester.hasIsomorphism(mol);
+						System.out.println("record " + record+ "  " + hasIso);
+					}
+					
 					//TODO
+					if (FlagStat_SingleDBStr_CDK)
+					{
+						
+					}
+					
 										
-					System.out.println("record " + record+ "  " + mol.getAtomCount());
+					//System.out.println("record " + record+ "  " + mol.getAtomCount());
 				}
 			}	
 		}
@@ -547,6 +581,15 @@ public class AutomaticTestUtilities
 		return(0);
 		
 	}
+	
+	//Matching functions for sss
+	
+	int matchAmbit()
+	{
+		return(0);
+	}
+	
+	
 	
 	
 	
