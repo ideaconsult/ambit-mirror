@@ -236,7 +236,6 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				"cml.jpg",
 				"smi.png",					
 				"link.png",
-				"xml.png",
 				"pdf.png",
 				"excel.png",
 				"excel.png",
@@ -249,7 +248,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			MediaType mime = mimes[i];
 			w.append("&nbsp;");
 			w.append(String.format(
-					"<a href=\"?%s%saccept-header=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+					"<a href=\"?%s%smedia=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
 					q==null?"":q,
 					q==null?"":"&",
 					Reference.encode(mime.toString()),
