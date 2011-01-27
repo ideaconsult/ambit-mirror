@@ -9,6 +9,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -39,7 +40,7 @@ public class AutomaticTestUtilities
 	public static final int STAT_ENTIRE_DB = 2;
 	public static final int STAT_OCCURENCES = 10;
 	
-	
+	String endLine = "\r\n";
 	String outFileName = "";
 	String inFileName = "";
 	String dbFileName = "";
@@ -72,8 +73,8 @@ public class AutomaticTestUtilities
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
 		//atu.handleArguments(args);		
 		
-		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/test-out--.txt", 
-				"-i","/input.txt","-nDBStr", "100", "-maxSeqStep", "10", "-c", "sss-ambit" });
+		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/out1.txt", 
+				"-i","/input.txt","-nDBStr", "100", "-maxSeqStep", "10", "-c", "sss-all" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -217,6 +218,7 @@ public class AutomaticTestUtilities
 	{
 		if (command == null)
 			return(0);
+			
 		
 		if (command.equals("random-str"))
 		{
@@ -239,32 +241,40 @@ public class AutomaticTestUtilities
 		if (command.equals("sss-ambit"))
 		{
 			System.out.println("Running sss with Ambit isomorphims:");
+			openOutputFile();
 			lineProcessMode = LPM_SSS_AMBIT;
 			iterateInputFile();
+			closeOutputFile();
 			return(0);
 		}
 		
 		if (command.equals("sss-cdk"))
 		{
 			System.out.println("Running sss with CDK isomprphims algorithm:");
+			openOutputFile();
 			lineProcessMode = LPM_SSS_CDK;
 			iterateInputFile();
+			closeOutputFile();
 			return(0);
 		}
 		
 		if (command.equals("sss-ambit-cdk"))
 		{
 			System.out.println("Running sss with Ambit Parser and CDK isomprphims algorithm:");
+			openOutputFile();
 			lineProcessMode = LPM_SSS_CDK;
 			iterateInputFile();
+			closeOutputFile();
 			return(0);
 		}
 		
 		if (command.equals("sss-all"))
 		{
 			System.out.println("Running sss with all isomprphims algorithm:");
+			openOutputFile();
 			lineProcessMode = LPM_SSS_ALL;
 			iterateInputFile();
+			closeOutputFile();
 			return(0);
 		}
 		
@@ -373,13 +383,17 @@ public class AutomaticTestUtilities
 		try
 		{
 			File file = new File(outFileName);
-			RandomAccessFile outFile = new RandomAccessFile(file,"rw");
+			outFile = new RandomAccessFile(file,"rw");
 			outFile.setLength(0);
 		}
 		catch(Exception e)
 		{
 			System.out.println(e.toString());
 		}
+		
+		if (outFile == null)
+			System.out.println("Incorrect outFile");
+		
 		return(0);
 	}
 	
@@ -396,6 +410,20 @@ public class AutomaticTestUtilities
 			System.out.println(e.toString());
 		}
 		
+		return(0);
+	}
+	
+	int output(String data)
+	{
+		try
+		{
+			outFile.write(data.getBytes());
+		}
+		catch (Exception e)
+		{
+			System.out.println("output error: " + e.toString());
+			return(-1);
+		}
 		return(0);
 	}
 	
@@ -524,15 +552,19 @@ public class AutomaticTestUtilities
 		//Performs statistics for each structure from the DB
 		//It could be applied for several algorithms simultaneously
 		
-		QueryAtomContainer query  = sp.parse(line);
+		long startTime, endTime;
+		
+		
+		QueryAtomContainer query_ambit  = sp.parse(line);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))
 		{
 			System.out.println("Smarts Parser errors:\n" + errorMsg);			
 			return -1;
-		}						
+		}	
 		
+		output("###" + line + endLine);
 		try
 		{
 			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
@@ -545,6 +577,8 @@ public class AutomaticTestUtilities
 				if (record > this.nDBStr)
 					break;
 				
+				output("db_str_" + record);
+				
 				Object o = reader.next();
 				if (o instanceof IAtomContainer) 
 				{
@@ -555,19 +589,30 @@ public class AutomaticTestUtilities
 					
 					if (FlagStat_SingleDBStr_Ambit)
 					{
-						isoTester.setQuery(query);
+						isoTester.setQuery(query_ambit);
+						
+						startTime = System.nanoTime();
 						sp.setSMARTSData(mol);
 						boolean hasIso = isoTester.hasIsomorphism(mol);
-						System.out.println("record " + record+ "  " + hasIso);
+						endTime = System.nanoTime();
+						output("  "+(endTime-startTime));
+						
+						
+						System.out.println("record " + record+ "  " + hasIso + "   " + startTime + "  " + endTime);
 					}
 					
 					//TODO
-					if (FlagStat_SingleDBStr_CDK)
+					if (FlagStat_SingleDBStr_Ambit_CDK)
 					{
-						
+						startTime = System.nanoTime();
+						sp.setSMARTSData(mol);
+						boolean res = UniversalIsomorphismTester.isSubgraph(mol, query_ambit);
+						endTime = System.nanoTime();
+						output("  "+(endTime-startTime));
+						System.out.println("record " + record+ "  " + res + "   " + startTime + "  " + endTime);
 					}
 					
-										
+					output(endLine);					
 					//System.out.println("record " + record+ "  " + mol.getAtomCount());
 				}
 			}	
