@@ -33,6 +33,7 @@ public class AutomaticTestUtilities
 	public static final int LPM_SSS_CDK = 1;
 	public static final int LPM_SSS_AMBIT_CDK = 2;
 	public static final int LPM_SSS_ALL = 100;
+	public static final int LPM_PARSERS_ALL = 101;
 	
 	
 	
@@ -278,6 +279,16 @@ public class AutomaticTestUtilities
 			return(0);
 		}
 		
+		if (command.equals("parsers-all"))
+		{
+			System.out.println("Running comparison of the SMARTS parsers:");
+			openOutputFile();			
+			lineProcessMode = LPM_PARSERS_ALL;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
 		
 		System.out.println("Unknown command: " + command);
 		
@@ -296,7 +307,7 @@ public class AutomaticTestUtilities
 		System.out.println("-cfg          config file");
 		System.out.println("-nDBStr       the number of used structures from DB");
 		System.out.println("-nInpStr      the number of used input structures");
-		//System.out.println("-nOutStr      the number of used output structures");	
+		System.out.println("-nOutStr      the number of used output structures");	
 		System.out.println("-maxSeqStep   maximal number of sequence steps");
 		System.out.println("-maxStrSize   maximal size of the generated structures");
 		System.out.println("-statType     the type of statistics saved in the output file");
@@ -309,6 +320,7 @@ public class AutomaticTestUtilities
 		System.out.println("                 sss-cdk          substructure searching with CDK Parser and Algorithm");
 		System.out.println("                 sss-ambit-cdk    substructure searching with Ambit Parser and CDK Algorithm");
 		System.out.println("                 sss-all          substructure searching with all algorithms");
+		System.out.println("                 parsers-all      comparison of the parsing time");
 	}
 	
 	
@@ -441,7 +453,7 @@ public class AutomaticTestUtilities
 				n++;
 				String line = f.readLine();
 				System.out.println("line " + n + "  " + line);
-				processLine(line);
+				processLine(line.trim());
 			}
 			
 			f.close();
@@ -455,6 +467,12 @@ public class AutomaticTestUtilities
 	
 	int processLine(String line)
 	{
+		if (lineProcessMode == LPM_PARSERS_ALL)
+		{
+			compareParsers(line);
+			return(0);
+		}
+		
 		if (statisticsType == STAT_SINGLE_DBSTR)
 		{
 			switch(this.lineProcessMode)
@@ -634,6 +652,13 @@ public class AutomaticTestUtilities
 		return(0);
 	}
 	
+	
+	
+	int compareParsers(String line)
+	{
+		//TODO 
+		return(0);
+	}
 	
 	
 	
