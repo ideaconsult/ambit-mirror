@@ -133,4 +133,28 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		
 	}
 
+	public static String hasSourceURI(Property item, QueryURIReporter<Property, IQueryRetrieval<Property>> uriReporter) {
+		String uri = item.getTitle();
+		if ((uri.indexOf("http://")<0) && (uri.indexOf("https://")<0)) {
+			Individual source  = null;
+			
+			
+			if (_type.Algorithm.equals(item.getReference().getType())) {
+				return String.format("%s/algorithm/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+			} else if (_type.Model.equals(item.getReference().getType())) {
+				return String.format("%s/model/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+			} else if (_type.Feature.equals(item.getReference().getType())) {
+				return String.format("%s/feature/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+	
+			} else if (_type.Dataset.equals(item.getReference().getType())) {
+				//this seems to confuse everybody's else parsers ...
+				return String.format("%s/dataset/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+
+			} else {
+				return uri;
+			}
+		}  else {
+			return uri;
+		}
+	}
 }
