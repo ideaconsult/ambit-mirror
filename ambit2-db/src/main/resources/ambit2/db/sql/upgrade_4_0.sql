@@ -236,7 +236,7 @@ ALTER TABLE `bookmark` MODIFY COLUMN `hasTopic` VARCHAR(255) CHARACTER SET utf8 
 ALTER TABLE `catalog_references` MODIFY COLUMN `type` ENUM('Unknown','Dataset','Algorithm','Model','BibtexEntry','BibtexArticle','BibtexBook','Feature') NOT NULL DEFAULT 'Dataset';
 
 --- 4.6 -> 4.7
-ALTER TABLE `properties` ADD COLUMN `ptype` SET('STRING','NUMERIC') NOT NULL DEFAULT 'NUMERIC' AFTER `islocal`;
+ALTER TABLE `properties` ADD COLUMN `ptype` SET('STRING','NUMERIC') NOT NULL DEFAULT '' AFTER `islocal`;
 insert into properties (idproperty,ptype)
 (
 select idproperty,group_concat(distinct(ptype)) from template_def where ptype != "" group by idproperty
@@ -259,7 +259,7 @@ CREATE TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
     ) ;
  END $
  
-  CREATE TRIGGER summary_chemical_prop_insert AFTER INSERT ON property_values
+CREATE TRIGGER summary_chemical_prop_insert AFTER INSERT ON property_values
  FOR EACH ROW BEGIN
     UPDATE properties set ptype=CONCAT_WS(',',ptype,NEW.idtype)  where idproperty=NEW.idproperty;
     
@@ -272,7 +272,7 @@ CREATE TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
 		and value_ci = (select value from property_string where idvalue_string=NEW.idvalue_string)
 		and idstructure=NEW.idstructure
 		and idproperty=NEW.idproperty;   
- END $
+END $
  
   CREATE TRIGGER summary_chemical_prop_update AFTER UPDATE ON property_values
  FOR EACH ROW BEGIN
