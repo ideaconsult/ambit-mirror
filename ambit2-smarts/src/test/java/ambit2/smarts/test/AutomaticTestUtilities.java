@@ -12,6 +12,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.smiles.smarts.parser.SMARTSParser;
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.ChemObjectFactory;
@@ -64,7 +65,7 @@ public class AutomaticTestUtilities
 	boolean FlagStat_SingleDBStr_CDK = false;
 	boolean FlagStat_SingleDBStr_Ambit_CDK = false;
 	
-	SmartsParser sp = new SmartsParser();
+	SmartsParser spAmbit = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	
 	
@@ -75,7 +76,7 @@ public class AutomaticTestUtilities
 		//atu.handleArguments(args);		
 		
 		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/out1.txt", 
-				"-i","/input.txt","-nDBStr", "100", "-maxSeqStep", "10", "-c", "sss-all" });
+				"-i","/input.txt","-nDBStr", "100", "-maxSeqStep", "10", "-c", "parsers-all" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -573,9 +574,9 @@ public class AutomaticTestUtilities
 		long startTime, endTime;
 		
 		
-		QueryAtomContainer query_ambit  = sp.parse(line);
-		sp.setNeededDataFlags();
-		String errorMsg = sp.getErrorMessages();
+		QueryAtomContainer query_ambit  = spAmbit.parse(line);
+		spAmbit.setNeededDataFlags();
+		String errorMsg = spAmbit.getErrorMessages();
 		if (!errorMsg.equals(""))
 		{
 			System.out.println("Smarts Parser errors:\n" + errorMsg);			
@@ -610,7 +611,7 @@ public class AutomaticTestUtilities
 						isoTester.setQuery(query_ambit);
 						
 						startTime = System.nanoTime();
-						sp.setSMARTSData(mol);
+						spAmbit.setSMARTSData(mol);
 						boolean hasIso = isoTester.hasIsomorphism(mol);
 						endTime = System.nanoTime();
 						output("  "+(endTime-startTime));
@@ -623,7 +624,7 @@ public class AutomaticTestUtilities
 					if (FlagStat_SingleDBStr_Ambit_CDK)
 					{
 						startTime = System.nanoTime();
-						sp.setSMARTSData(mol);
+						spAmbit.setSMARTSData(mol);
 						boolean res = UniversalIsomorphismTester.isSubgraph(mol, query_ambit);
 						endTime = System.nanoTime();
 						output("  "+(endTime-startTime));
@@ -656,7 +657,43 @@ public class AutomaticTestUtilities
 	
 	int compareParsers(String line)
 	{
-		//TODO 
+		
+		long timeAmbit, timeCDK;
+		long startTime, endTime;
+		boolean Flag_OK = true;
+		
+		//Ambit parser
+		startTime = System.nanoTime();
+		QueryAtomContainer query_ambit  = spAmbit.parse(line);
+		spAmbit.setNeededDataFlags();
+		endTime = System.nanoTime();
+		timeAmbit = endTime - startTime;
+		
+		
+		//CDK parser
+		try
+		{
+			startTime = System.nanoTime();
+			QueryAtomContainer query_CDK  =  SMARTSParser.parse(line);
+			spAmbit.setNeededDataFlags();
+			endTime = System.nanoTime();
+			timeCDK = endTime - startTime;
+		}
+		catch(Exception e)
+		{
+			System.out.println("CDK parsing error: " + e.toString());
+			Flag_OK = false;
+			timeCDK = 0;
+		}
+		
+		if (Flag_OK)
+		{	
+			String out_line = line + "  " + timeAmbit + "  "+timeCDK; 
+			output(out_line + endLine);
+			System.out.println(out_line);
+		}	
+		
+		
 		return(0);
 	}
 	
