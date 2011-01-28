@@ -8,9 +8,11 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
+import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.rest.OpenTox;
@@ -29,6 +31,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 	public final static String QR_PREFIX="R";
 	protected Integer datasetID;
 	protected Integer queryResultsID;
+	protected String datasetName;
 
 
 	@Override
@@ -70,6 +73,17 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		return (Q)query;
 	}
 	
+	protected Q getDatasetByName(String key) throws ResourceException {
+		datasetID = null;
+		queryResultsID = null;
+		datasetName = key;
+		QueryDataset query = new QueryDataset();
+		query.setValue(new SourceDataset(key));
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		setPaging(form, query);
+		return (Q)query;
+	}
+	
 	protected Q getQueryById(String key) throws ResourceException {
 		if (key.startsWith(QR_PREFIX)) {
 			key = key.substring(QR_PREFIX.length());
@@ -78,7 +92,9 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			} catch (NumberFormatException x) {
 				throw new InvalidResourceIDException(key);
 			}
-		} else throw new InvalidResourceIDException(key);
+		} else 
+			return getDatasetByName(key);
+			//throw new InvalidResourceIDException(key);
 		
 		QueryStoredResults q = new QueryStoredResults();
 		q.setChemicalsOnly(true);

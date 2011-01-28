@@ -142,16 +142,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		//output.createAnnotationProperty(DC.identifier.getURI());
 		output.createAnnotationProperty(DC.type.getURI());
 		
-		if (uriReporter.getRequest().getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
-			dataset = output.createIndividual(OT.OTClass.Dataset.getOntClass(output));
-		} else {
-			dataset = output.createIndividual(
-				String.format("%s:%s",
-						uriReporter.getRequest().getResourceRef().getScheme(),
-						uriReporter.getRequest().getResourceRef().getHierarchicalPart()
-						),
-				OT.OTClass.Dataset.getOntClass(output));
-		}
+		dataset = null;
 		
 
 		try {
@@ -165,12 +156,35 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			propertyReporter.processItem(p);
 		} catch (Exception x) {}		 
 	}
+	
+	protected void createDatasetIndividual(int datasetID) {
+		if (uriReporter.getRequest().getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
+			dataset = output.createIndividual(OT.OTClass.Dataset.getOntClass(output));
+		} else {
+			if (datasetID<=0)
+				dataset = output.createIndividual(
+					String.format("%s:%s",
+							uriReporter.getRequest().getResourceRef().getScheme(),
+							uriReporter.getRequest().getResourceRef().getHierarchicalPart()
+							),
+					OT.OTClass.Dataset.getOntClass(output));
+			else
+				dataset = output.createIndividual(
+						String.format("%s/%s/%d",
+								uriReporter.getBaseReference(),
+								OpenTox.URI.dataset.name(),
+								datasetID
+								),
+						OT.OTClass.Dataset.getOntClass(output));
+		}
+	}
 
 	@Override
 
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
-			
+			if (dataset==null) createDatasetIndividual(item.getDatasetID());
+				
 			if (header == null) 
 				header = template2Header(template,true);
 			

@@ -23,7 +23,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Property, Sou
 		name {
 			@Override
 			public String getSQL() {
-				return " name %s ?";
+				return " src_dataset.name %s ?";
 			}
 		},
 		id {

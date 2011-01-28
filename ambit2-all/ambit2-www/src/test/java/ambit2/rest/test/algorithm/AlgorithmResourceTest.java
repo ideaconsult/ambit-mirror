@@ -22,6 +22,8 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.dsl.ClientResourceWrapper;
+import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {
@@ -71,7 +73,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 82;
+		return count == 83;
 	}	
 	
 	@Test
@@ -834,6 +836,10 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/algorithm/toxtreeskinsens", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
+		System.out.println(dataset);
 		
 	}
 	

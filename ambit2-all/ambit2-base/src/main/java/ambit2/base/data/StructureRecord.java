@@ -38,6 +38,8 @@ public class StructureRecord implements IStructureRecord {
 	private static final long serialVersionUID = -650816773926953033L;
 	protected boolean preferedStructure = true;
 	protected int dataEntryID=-1;
+	protected int id_srcdataset = -1;
+	
 	public int getDataEntryID() {
 		return dataEntryID;
 	}
@@ -271,5 +273,13 @@ public class StructureRecord implements IStructureRecord {
 	public void setUsePreferedStructure(boolean value) {
 		preferedStructure = value;
 		
+	}
+	@Override
+	public int getDatasetID() {
+		return id_srcdataset;
+	}
+	@Override
+	public void setDatasetID(int id) {
+		id_srcdataset = id;
 	}
 }	

@@ -26,6 +26,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStaXReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
@@ -97,7 +98,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	protected PropertyURIReporter propertyReporter;
 	protected Comparator<Property> comp;
 	
-
+	protected String datasetIndividual = null;
 
 	
 	protected Profile groupProperties;
@@ -175,7 +176,19 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
-		
+		if (datasetIndividual == null) try {
+			getOutput().writeStartElement(OT.NS,"Dataset");
+			datasetIndividual = createDatasetURI(item.getDatasetID());
+			if (datasetIndividual!= null) getOutput().writeAttribute(RDF.getURI(),"about",datasetIndividual);
+			else {
+				datasetIndividual = String.format("%s:%s",uriReporter.getRequest().getResourceRef().getScheme(),
+						uriReporter.getRequest().getResourceRef().getHierarchicalPart());
+			}
+		} catch (Exception x) {
+			
+		}
+
+	
 		if (header == null) 
 			header = template2Header(template,true);
 		try {
@@ -300,17 +313,48 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 			writeAnnotationPropertyTriple(writer,"http://purl.org/dc/elements/1.1/type");
 			writeAnnotationPropertyTriple(writer,"http://purl.org/dc/elements/1.1/title");
 			
-			String datasetUri = 
-					String.format("%s:%s",uriReporter.getRequest().getResourceRef().getScheme(),
-							uriReporter.getRequest().getResourceRef().getHierarchicalPart());
-			writer.writeStartElement(OT.NS,"Dataset");
-			writer.writeAttribute(RDF.getURI(),"about",datasetUri);
+			datasetIndividual = null;
+
 
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
 	};
 	
+	protected String createDatasetURI(int datasetID) {
+		if (uriReporter.getRequest().getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
+			return null;
+		} else {
+			if (datasetID<=0)
+				return
+					String.format("%s:%s",
+							uriReporter.getRequest().getResourceRef().getScheme(),
+							uriReporter.getRequest().getResourceRef().getHierarchicalPart()
+							);
+			else
+				return
+						String.format("%s/%s/%d",
+								uriReporter.getBaseReference(),
+								OpenTox.URI.dataset.name(),
+								datasetID
+								);
+		}
+	}
+	
+	/*
+	protected void createDatasetIndividual(int datasetID) {
+		if (uriReporter.getRequest().getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
+			dataset = output.createIndividual(OT.OTClass.Dataset.getOntClass(output));
+		} else {
+			dataset = output.createIndividual(
+				String.format("%s:%s",
+						uriReporter.getRequest().getResourceRef().getScheme(),
+						uriReporter.getRequest().getResourceRef().getHierarchicalPart()
+						),
+				OT.OTClass.Dataset.getOntClass(output));
+		}
+	}
+	*/
 	public void footer(javax.xml.stream.XMLStreamWriter writer, Q query) {
 		
 		try {

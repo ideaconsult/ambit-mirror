@@ -65,7 +65,10 @@ public class ReadDataset extends AbstractQuery<String,SourceDataset,StringCondit
     }
 	@Override
 	public String toString() {
-		return (getValue()!=null?String.format("Dataset id=%d",getValue().getId()):"Datasets");
+		return (getValue()!=null?getValue().getId()>0
+				?String.format("Dataset: id=%d",getValue().getId())
+				:String.format("Dataset: '%s'",getValue().getName())
+				:"Datasets");
 	}
 
 }

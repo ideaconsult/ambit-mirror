@@ -19,6 +19,7 @@ import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
 
@@ -113,9 +114,9 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);				
 			} else if (_type.Dataset.equals(item.getReference().getType())) {
 				//this seems to confuse everybody's else parsers ...
-				//uri = String.format("%s/dataset/%s",uriReporter.getBaseReference(),Reference.encode(uri));
-				//source = jenaModel.createIndividual(uri,OT.OTClass.Dataset.createOntClass(jenaModel));
-				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), uri);
+				uri = String.format("%s/dataset/%s",uriReporter.getBaseReference(),Reference.encode(uri));
+				Resource src = jenaModel.createResource(uri);
+				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), src);
 			} else {
 				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), uri);
 			}

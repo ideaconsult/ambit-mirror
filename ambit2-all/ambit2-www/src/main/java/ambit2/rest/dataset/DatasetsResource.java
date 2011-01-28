@@ -111,11 +111,18 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		
 		Object id = request.getAttributes().get(DatasetStructuresResource.datasetKey);
 		if (id != null)  try {
+			Integer idnum = new Integer(Reference.decode(id.toString()));
 			dataset = new SourceDataset();
-			dataset.setId(new Integer(Reference.decode(id.toString())));
+			dataset.setId(idnum);
 			query.setValue(dataset);
 		} catch (NumberFormatException x) {
-			throw new InvalidResourceIDException(id);
+			if (id.toString().startsWith(DatasetStructuresResource.QR_PREFIX)) 
+				throw new InvalidResourceIDException(id);
+			else {
+				dataset = new SourceDataset();
+				dataset.setName(id.toString());
+				query.setValue(dataset);
+			}
 		} catch (Exception x) {
 			throw new InvalidResourceIDException(id);
 		}
