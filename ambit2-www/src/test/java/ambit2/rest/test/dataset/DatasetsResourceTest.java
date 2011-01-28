@@ -276,6 +276,9 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(7,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset join struc_dataset using(id_srcdataset) where id_srcdataset=4");
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 	}	

@@ -252,15 +252,22 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			throw new AmbitException(String.format("Error reading %s %s",file.toString(),x.getMessage()),x);
 		}
 	}
+	
+	protected SourceDataset datasetMeta(File file) {
+		int ext_index = file.getName().lastIndexOf(".");
+		return new SourceDataset(ext_index<=0?file.getName():file.getName().substring(0,ext_index), 
+				LiteratureEntry
+				.getInstance(file.getName(),
+						client == null ? "File uploaded by user"
+								: client.getAddress())
+								);
+	}
 
 	public TaskResult importFile(File file) throws Exception {
 		try {
 			// if target dataset is not defined, create new dataset
 			final SourceDataset dataset = targetDataset != null ? targetDataset
-					: new SourceDataset(file.getName(), LiteratureEntry
-							.getInstance(file.getName(),
-									client == null ? "File uploaded by user"
-											: client.getAddress()));
+					:datasetMeta(file);
 
 			if (targetDataset == null)
 				dataset.setId(-1);

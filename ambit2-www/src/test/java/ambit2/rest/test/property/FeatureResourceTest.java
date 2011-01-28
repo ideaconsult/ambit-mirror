@@ -13,13 +13,9 @@ import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-import org.w3c.dom.Document;
 
-import ambit2.base.exceptions.AmbitException;
-import ambit2.db.readers.PropertyValue;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
-import ambit2.rest.propertyvalue.PropertyValueDOMParser;
 import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.test.ResourceTest;

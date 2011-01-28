@@ -129,6 +129,9 @@ public interface IStructureRecord extends IChemical{
      */
     int getDataEntryID();
     void setDataEntryID(int id);
+
+    int getDatasetID();
+    void setDatasetID(int id);
     
     boolean usePreferedStructure();
     void setUsePreferedStructure(boolean value);

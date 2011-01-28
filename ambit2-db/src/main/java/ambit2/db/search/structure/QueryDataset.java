@@ -1,10 +1,12 @@
 package ambit2.db.search.structure;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
@@ -19,7 +21,7 @@ public class QueryDataset extends AbstractStructureQuery<String,SourceDataset,St
 	 */
 	private static final long serialVersionUID = -8329798753353233477L;
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text from structure join struc_dataset using(idstructure) join src_dataset using (id_srcdataset) ";
+		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,1 as metric,null as text,id_srcdataset from structure join struc_dataset using(idstructure) join src_dataset using (id_srcdataset) ";
 	public final static String where = " where src_dataset.name %s ?";
 	public QueryDataset(SourceDataset dataset) {
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
@@ -59,5 +61,12 @@ public class QueryDataset extends AbstractStructureQuery<String,SourceDataset,St
 		return String.format("Dataset %s %s",getCondition(),getValue().getName());
 	}
 
-
+	@Override
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+		IStructureRecord record =  super.getObject(rs);
+		try {
+			record.setDatasetID(rs.getInt("id_srcdataset"));
+		} catch (Exception x) {}
+		return record;
+	}
 }

@@ -65,6 +65,18 @@ public class PropertiesByDatasetResource extends PropertyResource {
 
 	}
 	
+	protected IQueryRetrieval<Property> getQueryByName(String key) throws ResourceException {
+
+		try {
+			PropertiesByDataset q = new PropertiesByDataset();
+			q.setFieldname(null);
+			SourceDataset dataset = new SourceDataset(key);			
+			q.setValue(dataset);
+			return q;
+		} catch (Exception x) { throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,key.toString(),x);}
+
+	}
+	
 	protected IQueryRetrieval<Property> getQueryById(String key) throws ResourceException {
 		int queryResultsID = -1;
 		if (key.startsWith(DatasetStructuresResource.QR_PREFIX)) {
@@ -72,9 +84,9 @@ public class PropertiesByDatasetResource extends PropertyResource {
 			try {
 				queryResultsID = Integer.parseInt(key.toString());
 			} catch (NumberFormatException x) {
-				throw new InvalidResourceIDException(key);
+				return getQueryByName(key);
 			}
-		} else throw new InvalidResourceIDException(key);
+		} else return getQueryByName(key);
 		
 		PropertiesByQuery q = new PropertiesByQuery();
 		q.setChemicalsOnly(true);
