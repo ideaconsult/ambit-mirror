@@ -13,6 +13,10 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.smiles.smarts.parser.SMARTSParser;
+import org.openscience.cdk.smsd.Isomorphism;
+import org.openscience.cdk.smsd.interfaces.Algorithm;
+
+
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.ChemObjectFactory;
@@ -33,9 +37,12 @@ public class AutomaticTestUtilities
 	public static final int LPM_SSS_AMBIT = 0;
 	public static final int LPM_SSS_CDK = 1;
 	public static final int LPM_SSS_AMBIT_CDK = 2;
+	public static final int LPM_SSS_CDK_AMBIT = 3;
+	public static final int LPM_SSS_AMBIT_SMSD = 4;
+	public static final int LPM_SSS_CDK_SMSD = 5;
 	public static final int LPM_SSS_ALL = 100;
 	public static final int LPM_PARSERS_ALL = 101;
-	
+	public static final int LPM_CALC_STAT = 102;	
 	
 	
 	public static final int STAT_SINGLE_DBSTR = 1;
@@ -61,9 +68,13 @@ public class AutomaticTestUtilities
 	int statisticsType = STAT_SINGLE_DBSTR;
 		
 	
-	boolean FlagStat_SingleDBStr_Ambit = false;
-	boolean FlagStat_SingleDBStr_CDK = false;
-	boolean FlagStat_SingleDBStr_Ambit_CDK = false;
+	boolean FlagStat_SingleDBStr_Ambit = false;       //ambit parser and isomorphims
+	boolean FlagStat_SingleDBStr_CDK = false;         //cdk parser and isomorphims
+	boolean FlagStat_SingleDBStr_Ambit_CDK = false;   //ambit parser + cdk isomorphims
+	boolean FlagStat_SingleDBStr_CDK_Ambit = false;	  //cdk parser + ambit isomorphism
+	boolean FlagStat_SingleDBStr_Ambit_SMSD = false;   //ambit parser + SMSD isomorphims
+	boolean FlagStat_SingleDBStr_CDK_SMSD = false;	  //cdk parser + SMSD isomorphism
+	
 	
 	SmartsParser spAmbit = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
@@ -76,7 +87,7 @@ public class AutomaticTestUtilities
 		//atu.handleArguments(args);		
 		
 		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/out1.txt", 
-				"-i","/input.txt","-nDBStr", "100", "-maxSeqStep", "10", "-c", "parsers-all" });
+				"-i","/input.txt","-nDBStr", "100", "-maxSeqStep", "10", "-c", "sss-all" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -242,7 +253,7 @@ public class AutomaticTestUtilities
 		
 		if (command.equals("sss-ambit"))
 		{
-			System.out.println("Running sss with Ambit isomorphims:");
+			System.out.println("Running sss with Ambit Parser and Isomorphims algorithm:");
 			openOutputFile();
 			lineProcessMode = LPM_SSS_AMBIT;
 			iterateInputFile();
@@ -252,7 +263,7 @@ public class AutomaticTestUtilities
 		
 		if (command.equals("sss-cdk"))
 		{
-			System.out.println("Running sss with CDK isomprphims algorithm:");
+			System.out.println("Running sss with CDK Parser and Isomprphims algorithm:");
 			openOutputFile();
 			lineProcessMode = LPM_SSS_CDK;
 			iterateInputFile();
@@ -264,7 +275,17 @@ public class AutomaticTestUtilities
 		{
 			System.out.println("Running sss with Ambit Parser and CDK isomprphims algorithm:");
 			openOutputFile();
-			lineProcessMode = LPM_SSS_CDK;
+			lineProcessMode = LPM_SSS_AMBIT_CDK;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("sss-cdk-ambit"))
+		{
+			System.out.println("Running sss with CDK Parser and Ambit isomprphims algorithm:");
+			openOutputFile();
+			lineProcessMode = LPM_SSS_CDK_AMBIT;
 			iterateInputFile();
 			closeOutputFile();
 			return(0);
@@ -282,9 +303,19 @@ public class AutomaticTestUtilities
 		
 		if (command.equals("parsers-all"))
 		{
-			System.out.println("Running comparison of the SMARTS parsers:");
+			System.out.println("Running comparison of the SMARTS parsers: Ambit, CDK");
 			openOutputFile();			
 			lineProcessMode = LPM_PARSERS_ALL;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}		
+		
+		if (command.equals("calc-stat"))
+		{
+			System.out.println("Calculates statistics");
+			openOutputFile();
+			lineProcessMode = LPM_CALC_STAT;
 			iterateInputFile();
 			closeOutputFile();
 			return(0);
@@ -317,11 +348,13 @@ public class AutomaticTestUtilities
 		System.out.println("-c            command: ");
 		System.out.println("                 random-str       generates random structures");
 		System.out.println("                 exhaustive-str   generates structures exhaustively");
-		System.out.println("                 sss-ambit        substructure searching with Ambit Algorithm");
+		System.out.println("                 sss-ambit        substructure searching with Ambit Aprser and Algorithm");
 		System.out.println("                 sss-cdk          substructure searching with CDK Parser and Algorithm");
 		System.out.println("                 sss-ambit-cdk    substructure searching with Ambit Parser and CDK Algorithm");
+		System.out.println("                 sss-cdk-ambit    substructure searching with CDK Parser and Ambit Algorithm");
 		System.out.println("                 sss-all          substructure searching with all algorithms");
 		System.out.println("                 parsers-all      comparison of the parsing time");
+		System.out.println("                 cals-stat        calculates statistics from previous tests");
 	}
 	
 	
@@ -389,7 +422,7 @@ public class AutomaticTestUtilities
 	}
 	
 	
-	//Substructure search comparison and statistics utilities
+	//Input - Output handling 
 	
 	int openOutputFile()
 	{
@@ -466,6 +499,8 @@ public class AutomaticTestUtilities
 	}
 	
 	
+	//Substructure search comparison and statistics utilities
+	
 	int processLine(String line)
 	{
 		if (lineProcessMode == LPM_PARSERS_ALL)
@@ -487,10 +522,17 @@ public class AutomaticTestUtilities
 			case LPM_SSS_AMBIT_CDK:
 				FlagStat_SingleDBStr_Ambit_CDK = true;
 				break;
+			case LPM_SSS_CDK_AMBIT:
+				FlagStat_SingleDBStr_CDK_Ambit = true;
+				break;	
+				
 			case LPM_SSS_ALL:
 				FlagStat_SingleDBStr_Ambit = true;
 				FlagStat_SingleDBStr_CDK = true;
 				FlagStat_SingleDBStr_Ambit_CDK = true;
+				FlagStat_SingleDBStr_CDK_Ambit = true;
+				FlagStat_SingleDBStr_Ambit_SMSD = true;
+				FlagStat_SingleDBStr_CDK_SMSD = true;
 				break;
 			}
 			
@@ -569,11 +611,17 @@ public class AutomaticTestUtilities
 	int sss_SingleDBStrStat(String line)
 	{
 		//Performs statistics for each structure from the DB
-		//It could be applied for several algorithms simultaneously
+		//It is applied for several algorithms simultaneously
 		
 		long startTime, endTime;
+		long timeAmbit = 0;
+		long timeCDK = 0;
+		long timeAmbitCDK = 0;
+		long timeCDKAmbit = 0;
+		long timeAmbitSMSD = 0;
+		long timeCDKSMSD = 0;
 		
-		
+		//Ambit parser
 		QueryAtomContainer query_ambit  = spAmbit.parse(line);
 		spAmbit.setNeededDataFlags();
 		String errorMsg = spAmbit.getErrorMessages();
@@ -583,7 +631,25 @@ public class AutomaticTestUtilities
 			return -1;
 		}	
 		
+		//CDK parser
+		QueryAtomContainer query_CDK = null;
+		try
+		{	
+			query_CDK  =  SMARTSParser.parse(line);
+		}
+		catch(Exception e)
+		{
+			System.out.println("CDK parsing error: " + e.toString());
+			return -1;
+		}
+		
+		boolean bondSensitive = true;
+        boolean removeHydrogen = true;
+		Isomorphism comparisonSMSD = new Isomorphism(Algorithm.SubStructure, bondSensitive);
+
+				
 		output("###" + line + endLine);
+		
 		try
 		{
 			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
@@ -596,7 +662,7 @@ public class AutomaticTestUtilities
 				if (record > this.nDBStr)
 					break;
 				
-				output("db_str_" + record);
+				
 				
 				Object o = reader.next();
 				if (o instanceof IAtomContainer) 
@@ -614,24 +680,66 @@ public class AutomaticTestUtilities
 						spAmbit.setSMARTSData(mol);
 						boolean hasIso = isoTester.hasIsomorphism(mol);
 						endTime = System.nanoTime();
-						output("  "+(endTime-startTime));
-						
+						timeAmbit = endTime - startTime;
 						
 						System.out.println("record " + record+ "  " + hasIso + "   " + startTime + "  " + endTime);
 					}
 					
-					//TODO
+					
+					if (FlagStat_SingleDBStr_CDK)
+					{
+						startTime = System.nanoTime();
+						spAmbit.setSMARTSData(mol);
+						boolean res = UniversalIsomorphismTester.isSubgraph(mol, query_CDK);
+						endTime = System.nanoTime();
+						timeCDK = endTime - startTime;
+					}
+					
 					if (FlagStat_SingleDBStr_Ambit_CDK)
 					{
 						startTime = System.nanoTime();
 						spAmbit.setSMARTSData(mol);
 						boolean res = UniversalIsomorphismTester.isSubgraph(mol, query_ambit);
 						endTime = System.nanoTime();
-						output("  "+(endTime-startTime));
-						System.out.println("record " + record+ "  " + res + "   " + startTime + "  " + endTime);
+						timeAmbitCDK = endTime - startTime;
 					}
 					
-					output(endLine);					
+					if (FlagStat_SingleDBStr_CDK_Ambit)
+					{
+						isoTester.setQuery(query_CDK);
+						
+						startTime = System.nanoTime();
+						spAmbit.setSMARTSData(mol);
+						boolean hasIso = isoTester.hasIsomorphism(mol);
+						endTime = System.nanoTime();
+						timeCDKAmbit = endTime - startTime;
+					}
+					
+					if (FlagStat_SingleDBStr_Ambit_SMSD)
+					{	
+						try
+						{
+							startTime = System.nanoTime();
+							spAmbit.setSMARTSData(mol);
+							comparisonSMSD.init(query_ambit,mol, removeHydrogen,true);
+							//comparisonSMSD.setChemFilters(false, false, false);
+							//boolean res = comparisonSMSD.isSubgraph();
+							endTime = System.nanoTime();						
+							timeAmbitSMSD = endTime - startTime;
+							//System.out.println("record " + record+ "  " + res + "   " + startTime + "  " + endTime);
+						}
+						catch(Exception e)
+						{
+							System.out.println("SMSD error: " );
+							continue;
+						}
+					}
+					
+					//TODO
+					
+					output("db-str-" + record+"  " + timeAmbit + "  " + timeCDK + "  " 
+							+ timeAmbitCDK + "  " +timeCDKAmbit + "  " +timeAmbitSMSD + endLine);
+										
 					//System.out.println("record " + record+ "  " + mol.getAtomCount());
 				}
 			}	
@@ -646,18 +754,9 @@ public class AutomaticTestUtilities
 		
 	}
 	
-	//Matching functions for sss
-	
-	int matchAmbit()
-	{
-		return(0);
-	}
-	
-	
 	
 	int compareParsers(String line)
-	{
-		
+	{		
 		long timeAmbit, timeCDK;
 		long startTime, endTime;
 		boolean Flag_OK = true;
@@ -675,7 +774,6 @@ public class AutomaticTestUtilities
 		{
 			startTime = System.nanoTime();
 			QueryAtomContainer query_CDK  =  SMARTSParser.parse(line);
-			spAmbit.setNeededDataFlags();
 			endTime = System.nanoTime();
 			timeCDK = endTime - startTime;
 		}
@@ -686,13 +784,13 @@ public class AutomaticTestUtilities
 			timeCDK = 0;
 		}
 		
+		
 		if (Flag_OK)
 		{	
 			String out_line = line + "  " + timeAmbit + "  "+timeCDK; 
 			output(out_line + endLine);
 			System.out.println(out_line);
-		}	
-		
+		}
 		
 		return(0);
 	}
