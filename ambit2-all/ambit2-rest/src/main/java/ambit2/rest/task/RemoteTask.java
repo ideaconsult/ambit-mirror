@@ -29,6 +29,9 @@ public class RemoteTask implements Serializable {
 	protected Reference result = null;
 	protected Exception error = null;
 	
+	protected void setError(Exception error) {
+		this.error = error;
+	}
 	public Exception getError() {
 		return error;
 	}
@@ -58,7 +61,10 @@ public class RemoteTask implements Serializable {
 			else throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			this.status = client.getStatus();
 			
-			if (!r.isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",url));
+			if (!r.isAvailable()) {
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+						String.format("[%s] Representation not available %s",this.status,url));
+			}
 			
 			result = handleOutput(r.getStream(),status);
 		} catch (ResourceException x) {
@@ -71,7 +77,7 @@ public class RemoteTask implements Serializable {
 						x); 
 			}	catch (Exception xx) { error = x; }
 		} catch (Exception x) {
-			error = x;
+			setError(x);
 			status = null;
 		} finally {
 			try { if (r != null) r.release(); } catch (Exception x) { x.printStackTrace();}
@@ -141,10 +147,10 @@ public class RemoteTask implements Serializable {
 			result = handleOutput(r.getStream(),status);
 //			System.out.println(String.format("poll %s %s",status,result));
 		} catch (ResourceException x) {
-			error = x;
+			setError(x);
 			status = x.getStatus();
 		} catch (Exception x) {
-			error = x;
+			setError(x);
 			status = null;
 		} finally {
 			try {r.release();} catch (Exception x) {}

@@ -31,20 +31,16 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 		this(MediaType.TEXT_URI_LIST,form.getWebRepresentation(),root,token);
 	}	
 	
-	public CallablePOST(MediaType media, 
-			  Representation input,Reference root,USERID token) {
-		this(media,input,null,root,token);
-	}		
+
 	public CallablePOST(MediaType media, 
 			  Representation input,
-			  ChallengeResponse authentication,
 			  Reference root,
 			  USERID token) {
-		this(media,input,authentication,1500,root,token);
+		this(media,input,1500,root,token);
 	}
 	public CallablePOST(MediaType media, 
 			  Representation input,
-			  ChallengeResponse authentication, long pollInterval,
+			  long pollInterval,
 			  Reference root,
 			  USERID token) {
 		super(token);
