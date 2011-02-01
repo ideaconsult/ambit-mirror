@@ -73,9 +73,16 @@ public class OTObject implements Comparable<OTObject>, IOTObject{
 			}
 			
 			if (task.getError()!=null) 
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-						String.format("%s %s",result==null?task.getUrl():result,task.getError().getMessage()),
-						task.getError());
+				if(task.getError() instanceof ResourceException)
+					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+							String.format("%s %d %s",result==null?task.getUrl():result,
+							((ResourceException)task.getError()).getStatus().getCode(),
+							task.getError().getMessage()),
+							task.getError());
+				else
+					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+							String.format("%s %s",result==null?task.getUrl():result,task.getError().getMessage()),
+							task.getError());
 			return task;
 	}	 
 	public OTObject withParams(Form form) throws Exception { 
