@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -23,11 +24,14 @@ import ambit2.base.config.Preferences;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
+import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
 import ambit2.rest.task.TaskResult;
+import ambit2.rest.task.dsl.ClientResourceWrapper;
+import ambit2.rest.task.dsl.IAuthToken;
 import ambit2.rest.test.ResourceTest;
 
 public class TaskResourceTest extends ResourceTest {
@@ -310,22 +314,7 @@ public class TaskResourceTest extends ResourceTest {
 		} 
 	}	
 	
-	public void testSuperServiceRemote() throws Exception {
-		Form form = new Form();  
-		form.add(OpenTox.params.algorithm_uri.toString(),"http://ambit.uni-plovdiv.bg:8080/ambit2/algorithm/toxtreecarc");
-		//form.add("dataset_uri","http://ambit.uni-plovdiv.bg:8080/ambit2/algorithm/J48");
-		
-		CallablePOST post = new CallablePOST(
-				MediaType.TEXT_URI_LIST,
-				form.getWebRepresentation(),
-				null,
-				null);
-		TaskResult ref = post.call();
-		long now = System.currentTimeMillis();
-		Assert.assertEquals("http://ambit.uni-plovdiv.bg:8080/ambit2/model/2",ref.toString());
-		System.out.println(System.currentTimeMillis()-now);		
-		
-	}	
+
 	@Test
 	public void testMockup() throws Exception {
 		Form form = new Form();  
@@ -438,6 +427,59 @@ public class TaskResourceTest extends ResourceTest {
 		System.out.println(pool.size());
 		
 	}	
+	@Test
+	public void testSuperServiceRemote() throws Exception {
+		//delete from property_values where idchemical=163134 and idproperty in (22127,22137,22213,22252,26056,49790)
+		String result = testSuperServiceRemote_("http://ideaconsult.dyndns.org:8080/ambit2","http://opentox.ntua.gr:4000/model/1b2399f5-1f22-4c9c-8b53-d4c392586961");
+		Assert.assertEquals("http://ideaconsult.dyndns.org:8080/ambit2/dataset/2765?feature_uris%5B%5D=http%3A%2F%2Fideaconsult.dyndns.org%3A8080%2Fambit2%2Ffeature%2F49790",result);
+	}
+	
+	@Test
+	public void testSuperServiceRemote1() throws Exception {
+		testSuperServiceRemote_("http://ideaconsult.dyndns.org:8080/ambit2","http://ideaconsult.dyndns.org:8080/ambit2/model/17");
+	}
+	public String testSuperServiceRemote_(String myname, String themodel) throws Exception {
+		
+		AuthTokenFactory tokenFactory = new AuthTokenFactory();
+		
+		OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
+		if (ssoToken.login(
+				OpenSSOServicesConfig.getInstance().getTestUser(),
+				OpenSSOServicesConfig.getInstance().getTestUserPass()
+				)) {
+			//ClientResourceWrapper.setTokenFactory(tokenFactory);
+		} else
+			throw new Exception(String.format("Error logging to SSO (%s)",OpenSSOServicesConfig.getInstance().getTestUser()));
+
+		try {
+			Form form = new Form();  
+			form.add(OpenTox.params.model_uri.toString(),themodel);
+			form.add(OpenTox.params.dataset_uri.toString(),
+					String.format("%s/dataset/2765",myname));
+						//String.format("%s/dataset/6?page=0&pagesize=2",myname));
+			form.add(OpenTox.params.dataset_service.toString(),
+					String.format("%s/dataset/",myname));
+			
+			CallablePOST post = new CallablePOST(
+					MediaType.TEXT_URI_LIST,
+					form.getWebRepresentation(),
+					null,
+					ssoToken.getToken());
+			TaskResult ref = post.call();
+			long now = System.currentTimeMillis();
+			System.out.println(ref.toString());
+			System.out.println(System.currentTimeMillis()-now);		
+			return ref.getUri();
+			
+		
+		} finally {
+			try {
+				ssoToken.logout();
+				ClientResourceWrapper.setTokenFactory(null);
+			} catch (Exception x ) {}
+			
+		}
+	}	
 	
 	public static void main(String[] args) {
 		TaskResourceTest test = new TaskResourceTest();
@@ -455,3 +497,17 @@ public class TaskResourceTest extends ResourceTest {
 	}
 	
 }
+
+class AuthTokenFactory  implements IAuthToken {
+	String token;
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	@Override
+	public String getToken() {
+
+		return token;
+	}
+};
