@@ -94,7 +94,7 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	protected ShellSmi2SDF smi2sdf;
 	protected ShellMengine mengine;   
     protected String inFile = "mopac.dat";
-    protected String[] outFile = {
+    protected String[] outFiles = {
     		"mopac.dat.out",
     		"mopac.dat.arc",
     		"mopac.dat.log",
@@ -141,6 +141,9 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 		setInputFile("mol.smi");
 		setOutputFile("rough.sdf");		
 	}	
+	/**
+	 * This is not thread safe!
+	 */
 	@Override
 	protected synchronized IAtomContainer transform_input(IAtomContainer mol) throws ShellException {
 			final String msg="Empty molecule after %s processing"; 
@@ -168,13 +171,21 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	    	} catch (Exception x) {
 	    		throw new ShellException(this,x);
 	    	}
-	        for (int i=0; i< outFile.length;i++) {
-	            File f = new File(homeDir + "/"+outFile[i]);
+	    	String os = System.getProperty("os.name");
+	        for (int i=0; i< outFiles.length;i++) {
+	            File f = new File(homeDir + "/"+getOutFile(i, os));
 	            if (f.exists()) f.delete();
 	        }
 			return newmol;
 
 	}
+	
+	protected String getOutFile(int i,String os) {
+		if (os_LINUX.equals(os) || os_FreeBSD.equals(os)) //generates mopac.out from mopac.dat
+			return outFiles[i].replace(".dat", "");
+		else return outFiles[i]; //generates mopac.dat.out from mopac.dat
+	}
+	
 	@Override
 	protected String getPath(File file) {
 		return getHomeDir(null);
@@ -189,8 +200,9 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	@Override
 	protected synchronized IAtomContainer parseOutput(String mopac_path, IAtomContainer mol)
 			throws ShellException {
+		String os = System.getProperty("os.name");
         for (int i=0; i< 2;i++) {
-            String fname = mopac_path+"/" + outFile[i]; 
+            String fname = mopac_path+"/" + getOutFile(i, os); 
             File f = new File(fname);
             if (!f.exists()) continue;
             logger.debug("<outfile name=\""+ fname + "\">");
