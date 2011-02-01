@@ -162,21 +162,26 @@ public class OTModel extends OTProcessingResource implements IOTModel {
 			OTDatasets datasets = OTDatasets.datasets();
 			datasets.withDatasetService(dataset_service);
 			
+
 			for (OTFeature feature : features.getItems()) {
 				if ((feature!=null) && (feature.algorithm().getAlgorithm()!=null)) {
 					try {
 						OTDataset subset = inputDataset.filterByFeature(feature,false);
-						if ((subset!=null) && subset.isEmpty()) {
-							//TODO logger
-							//System.out.println("Nothing to calculate");
-							OTDataset newdataset = OTDataset.dataset(inputDataset.uri).withDatasetService(dataset_service).
+						if (subset!= null) {
+							if (subset.isEmpty(false)) { //nothing to calculate
+								OTDataset newdataset = OTDataset.dataset(inputDataset.uri).withDatasetService(dataset_service).
 								addColumns(feature);
-							datasets.add(newdataset);
-						} else {
-							//algorithms.add(feature.algorithm().getAlgorithm());
-							RemoteTask task = feature.getAlgorithm().processAsync(subset==null?inputDataset:subset);
+								datasets.add(newdataset);
+							} else { //run descriptors on the subset
+								OTDataset newDataset = subset.copy();
+								RemoteTask task = feature.getAlgorithm().processAsync(newDataset);
+								pool.add(task);								
+							}
+						} else { //subset == null, run descriptors on entire dataset
+							RemoteTask task = feature.getAlgorithm().processAsync(inputDataset);
 							pool.add(task);
 						}
+						
 					} catch (Exception x) {
 						x.printStackTrace();
 						RemoteTask task = feature.getAlgorithm().processAsync(inputDataset);
@@ -215,8 +220,9 @@ public class OTModel extends OTProcessingResource implements IOTModel {
 			 long now = System.currentTimeMillis();
 			 RemoteTask task = processAsync(subsetToCalculate);
 			 wait(task,now);
+			 if (task.getError()!=null) throw task.getError();
 			 return OTDataset.dataset(task.getResult()).withDatasetService(dataset_service);
-
+			 
 	 }		 
 	 @Override
 	 public RemoteTask processAsync(OTDataset inputDataset) throws Exception  { 
