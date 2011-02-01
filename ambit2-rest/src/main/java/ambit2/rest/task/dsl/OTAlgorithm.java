@@ -53,6 +53,7 @@ public class OTAlgorithm extends OTProcessingResource implements IOTAlgorithm  {
 			long now = System.currentTimeMillis();
 			RemoteTask task = processAsync(inputDataset);
 			task = wait(task,now);
+			if (task.getError()!=null) throw task.getError();
 			return OTDataset.dataset(task.getResult());		 
 	 }	 
 	 
@@ -60,6 +61,7 @@ public class OTAlgorithm extends OTProcessingResource implements IOTAlgorithm  {
 			long now = System.currentTimeMillis();
 			RemoteTask task = processAsync(inputDataset,feature);
 			task = wait(task,now);
+			if (task.getError()!=null) throw task.getError();
 			return OTModel.model(task.getResult());		 
 	 }		 
 	 @Override

@@ -59,6 +59,7 @@ public class OTDataset extends OTObject implements IOTDataset {
 			else
 				task = new RemoteTask(uri,MediaType.TEXT_URI_LIST,params.getWebRepresentation(),Method.PUT);
 			task = wait(task,now);
+			if (task.getError()!=null) throw task.getError();
 			Reference ref = task.getResult();
 			datasets.clear();
 			if (ref.equals(uri)) return this; else return dataset(uri).withDatasetService(dataset_service); 
