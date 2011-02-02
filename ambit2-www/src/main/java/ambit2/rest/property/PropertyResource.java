@@ -222,13 +222,27 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			return query;
 		} else return null;
 	}
-
+	/**
+	 * PUT allowed for feature resources only (updates the feature representation)
+	 */
+	@Override
+	protected Representation put(Representation entity, Variant variant)
+			throws ResourceException {
+		if (getRequest().getAttributes().get(idfeaturedef)!=null)
+			createNewObject(entity);
+		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		
+		return getResponse().getEntity();
+	}
+	/**
+	 * POST allowed to feature collections only (creates new feature)
+	 */
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
-		//if (getRequest().getAttributes().get(idfeaturedef)==null)
+		if (getRequest().getAttributes().get(idfeaturedef)==null)
 			createNewObject(entity);
-		//else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		return getResponse().getEntity();
 	}
 	

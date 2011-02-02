@@ -1,12 +1,17 @@
 package ambit2.rest.task.dsl;
 
+import java.io.StringWriter;
+
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
@@ -134,4 +139,34 @@ public class OTObject implements Comparable<OTObject>, IOTObject{
 		 ref.setQuery(form.getQueryString());
 		 return ref;
 	 }		
+	 protected OTObject put(Model jenaModel) throws Exception {
+		 return send(jenaModel, false);
+	 }
+	 protected OTObject post(Model jenaModel) throws Exception {
+		 return send(jenaModel, true);
+	 }
+	 /**
+	  * 
+	  * @param jenaModel
+	  * @param post true POST , false PUT
+	  * @return
+	  * @throws Exception
+	  */
+	 protected OTObject send(Model jenaModel, boolean post) throws Exception {
+		 StringWriter writer = new StringWriter();
+		 jenaModel.write(writer);
+		 Representation r=null;
+		 ClientResourceWrapper client = new ClientResourceWrapper(getUri());
+		 try {
+			 r = new StringRepresentation(writer.toString(),MediaType.APPLICATION_RDF_XML);
+			 if (post) client.post(r); else client.put(r);
+		 } catch (Exception x) {
+			 throw x;
+		 } finally {
+			 try {r.release(); } catch (Exception x) {}
+			 try {client.release(); } catch (Exception x) {}
+			 
+		 }
+		 return this;
+	 }
 }

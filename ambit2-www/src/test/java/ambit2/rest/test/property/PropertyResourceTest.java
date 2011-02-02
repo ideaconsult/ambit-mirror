@@ -29,6 +29,7 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.reference.ReferenceURIReporter;
+import ambit2.rest.task.dsl.OTFeature;
 import ambit2.rest.test.ResourceTest;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -469,6 +470,24 @@ public class PropertyResourceTest extends ResourceTest {
 		Assert.assertEquals("http://localhost:8181/feature/1", response.getLocationRef().toString());
 	}	
 	
+	@Test
+	public void testUpdateSameAs() throws Exception {
+		IDatabaseConnection c = getConnection();
+		String sameAs ="http://example.org/#testEntry";
+
+		ITable table = 	c.createQueryTable("EXPECTED",String.format("SELECT * FROM properties where idproperty=1 and comments='%s'",sameAs));
+		Assert.assertEquals(0,table.getRowCount());
+		OTFeature feature = OTFeature.feature(
+					String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef));
+
+		feature.setSameas(sameAs);
+		
+        
+		table = 	c.createQueryTable("EXPECTED",String.format("SELECT * FROM properties where idproperty= 1 and comments='%s'",sameAs));
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		
+	}		
 	@Test
 	public void testCreateExistingEntry() throws Exception {
 
