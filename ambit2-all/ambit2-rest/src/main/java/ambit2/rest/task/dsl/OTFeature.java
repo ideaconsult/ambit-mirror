@@ -15,6 +15,10 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.OWL;
 
 public class OTFeature extends OTProcessingResource  {
      protected OTAlgorithm algorithm = null;
@@ -109,6 +113,26 @@ public class OTFeature extends OTProcessingResource  {
 	 public OTFeature getPage(int page,int pageSize) throws Exception {
 		 return feature(OTObject.getPagedReference(uri,page, pageSize));
 	 }
+	 
+	 public OTFeature setSameas(String newLabel) throws Exception {
+		OntModel jenaModel = OT.createModel(null, getUri(), MediaType.APPLICATION_RDF_XML);
+		
+		Resource thisFeature  = jenaModel.createResource(getUri().toString());
+		StmtIterator i  =  jenaModel.listStatements(new SimpleSelector(thisFeature,OWL.sameAs,(RDFNode) null));
+		Statement st = null;
+		while (i.hasNext()) {
+			st = i.next();
+			break;
+		}	
+		i.close();
+		if (st != null) jenaModel.remove(st);
+		jenaModel.add(thisFeature,OWL.sameAs,newLabel);
+		put(jenaModel);
+		jenaModel.close();
+		return this;
+	 }
+	 
+
 }
 
 
