@@ -71,8 +71,12 @@ public class OTFeature extends OTProcessingResource  {
 				while (results.hasNext()) {
 					QuerySolution solution = results.next();
 					RDFNode var = solution.get("algorithm");
-					if (var.isResource())
-						algorithm =  OTAlgorithm.algorithm(((Resource)var).getURI());
+					if (var.isResource()) {
+						String uri = ((Resource)var).getURI();
+						//this is a hack, should verify if it is of rdf:type ot:Algorithm or ot:Model
+						if ((uri.indexOf("algorithm")>0) || (uri.indexOf("model")>0))
+							algorithm =  OTAlgorithm.algorithm(((Resource)var).getURI());
+					}
 				}
 	        }  catch (Exception x) {
 	        	throw x;
