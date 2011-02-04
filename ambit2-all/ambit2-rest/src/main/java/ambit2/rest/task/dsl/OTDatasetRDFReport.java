@@ -42,11 +42,13 @@ public class OTDatasetRDFReport extends OTObject {
 		"	     ?dataset ot:dataEntry ?d.\n"+
 		"		 ?d rdf:type ot:DataEntry.\n"+
 		"	     ?d ot:compound ?c.\n"+
+		"		 OPTIONAL {\n"+
 		"	     ?d ot:values ?v.\n"+
 		"	     ?v ot:value ?value.\n"+
 		"	     ?v ot:feature ?f.\n"+
-		"	     ?f ot:hasSource 'Default'\n"+
-		"	     {?f dc:title ?title}.\n"+
+		"	     ?f ot:hasSource 'Default'.\n"+
+		"	     ?f dc:title ?title.\n"+
+		"        }"+
 		" }\n"+
 		"	ORDER by ?c ?title";
 	
@@ -227,6 +229,8 @@ public class OTDatasetRDFReport extends OTObject {
 			int records = 0;
 			int columns = 0;
 			String cmp = null;
+			
+
 			while (results.hasNext()) {
 	
 				QuerySolution solution = results.next();
