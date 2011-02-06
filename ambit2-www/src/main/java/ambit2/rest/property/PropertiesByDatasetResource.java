@@ -13,6 +13,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.property.PropertiesByDataset;
 import ambit2.db.search.property.PropertiesByQuery;
+import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
@@ -93,5 +94,11 @@ public class PropertiesByDatasetResource extends PropertyResource {
 		q.setValue(new StoredQuery(queryResultsID));
 		q.setFieldname(null);
 		return q;
+	}
+	
+	@Override
+	protected AbstractUpdate createDeleteObject(Property entry)
+			throws ResourceException {
+		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 }

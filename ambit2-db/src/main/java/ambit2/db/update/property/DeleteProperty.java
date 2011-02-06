@@ -39,7 +39,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class DeleteProperty extends AbstractObjectUpdate<Property> {
 
-	public static final String[] delete_sql = {"delete properties from properties,catalog_references where name=? and title=? and properties.idreference=catalog_references.idreference"};
+	public static final String[] delete_sql = {"delete from properties where idproperty=?"};
 
 	public DeleteProperty(Property property) {
 		super(property);
@@ -49,8 +49,7 @@ public class DeleteProperty extends AbstractObjectUpdate<Property> {
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<String>(String.class, getObject().getName()));
-		params.add(new QueryParam<String>(String.class, getObject().getReference().getTitle()));		
+		params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
 		return params;
 		
 	}

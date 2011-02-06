@@ -64,14 +64,15 @@ public class Property_crud_test  extends CRUDTest<Object,Property> {
 
 	@Override
 	protected IQueryUpdate<Object,Property> deleteQuery() throws Exception {
-		Property property = Property.getInstance("Property 1","Dummy reference");		
+		Property property = new Property("");	
+		property.setId(1);
 		return new DeleteProperty(property);
 	}
 
 	@Override
 	protected void deleteVerify(IQueryUpdate<Object,Property> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where name='Property 1'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where idproperty=1");
 		Assert.assertEquals(0,table.getRowCount());
 
 		c.close();

@@ -169,4 +169,18 @@ public class OTObject implements Comparable<OTObject>, IOTObject{
 		 }
 		 return this;
 	 }
+	 
+	 public void delete() throws Exception {
+		 Representation r=null;
+		 ClientResourceWrapper client = new ClientResourceWrapper(getUri());
+		 try {
+			r =  client.delete();
+		 } catch (Exception x) {
+			 throw x;
+		 } finally {
+			 try {r.release(); } catch (Exception x) {}
+			 try {client.release(); } catch (Exception x) {}
+			 
+		 }
+	 }
 }
