@@ -29,6 +29,7 @@ import ambit2.db.search.property.RetrieveFieldNamesByAlias;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.CreatePropertyReferenceID;
+import ambit2.db.update.property.DeleteProperty;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.db.update.property.UpdateProperty;
 import ambit2.rest.ChemicalMediaType;
@@ -332,5 +333,36 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			try {x.close();} catch (Exception e){}
 		}
 	}
+	
 
+	@Override
+	protected Representation delete(Variant variant) throws ResourceException {
+		Object o = getRequest().getAttributes().get(idfeaturedef);
+		if (o==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		
+		Representation entity = getRequestEntity();
+		
+		try {
+			int propertyid = Integer.parseInt(o.toString());
+			Property p = new Property(null);
+			p.setId(propertyid);
+			executeUpdate(entity, 
+					p,
+					createDeleteObject(p));
+			return getResponseEntity();
+		} catch (NumberFormatException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid id",x);
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		}
+	}	
+	@Override
+	protected AbstractUpdate createDeleteObject(Property entry)
+			throws ResourceException {
+		DeleteProperty delete = new DeleteProperty();
+		delete.setObject(entry);
+		return delete;
+	}
 }

@@ -161,6 +161,18 @@ public class PropertyResourceTest extends ResourceTest {
 		}
 		return count==1;
 	}	
+	
+	@Test
+	public void testDeleteEntry() throws Exception {
+		
+		OTFeature feature = OTFeature.feature(String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef));
+		feature.delete();
+		IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where idproperty=1");
+		Assert.assertEquals(0,table.getRowCount());
+		c.close();
+	}	
+	
 	@Test
 	public void testCopyEntry() throws Exception {
 		
