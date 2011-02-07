@@ -33,7 +33,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 			}
 			@Override
 			public String explain(Property p) {
-				if (isDefined(p)) return String.format("Datasets with feature id=%d",p.getId());
+				if (isDefined(p)) return String.format("feature id=%d",p.getId());
 				else return "";
 			}
 		},
@@ -52,7 +52,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 			}
 			@Override
 			public String explain(Property p) {
-				if (isDefined(p)) return String.format("Datasets with feature name=%s",p.getName());
+				if (isDefined(p)) return String.format("feature name=%s",p.getName());
 				else return "";
 			}
 		},
@@ -71,7 +71,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 			}
 			@Override
 			public String explain(Property p) {
-				if (isDefined(p)) return String.format("Datasets with feature sameas=%s",p.getLabel());
+				if (isDefined(p)) return String.format("feature sameas=%s",p.getLabel());
 				else return "";
 			}			
 		},
@@ -94,7 +94,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 			}
 			@Override
 			public String explain(Property p) {
-				if (isDefined(p)) return String.format("Datasets with feature hasSource=%s",p.getTitle());
+				if (isDefined(p)) return String.format("feature hasSource=%s",p.getTitle());
 				else return "";
 			}
 		},
@@ -113,7 +113,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 			}			
 			@Override
 			public String explain(Property p) {
-				if (isDefined(p)) return String.format("Datasets with feature of type=%s",p.getClazz().equals(String.class)?"STRING":"NUMERIC");
+				if (isDefined(p)) return String.format("feature of type=%s",p.getClazz().equals(String.class)?"STRING":"NUMERIC");
 				else return "";
 			}
 		};
@@ -177,8 +177,11 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		
 		if (getFieldname()==null) return super.toString();
 		StringBuilder b = new StringBuilder();
-		for (c_feature c : c_feature.values())
+		b.append("Datasets with ");
+		for (c_feature c : c_feature.values()) {
 			b.append(c.explain(getFieldname()));
+			b.append(",");
+		}
 		return b.toString();
 	}
 }
