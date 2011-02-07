@@ -11,15 +11,18 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.StringCondition;
+import ambit2.db.update.dataset.AbstractReadDataset;
+import ambit2.db.update.dataset.QueryDatasetByFeatures;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
@@ -52,6 +55,38 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	public final static String metadata = "/metadata";	
 	protected FileUpload upload;
 	protected IStructureKey matcher;
+	
+	public enum search_features {
+
+		feature_name {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				p.setName(arg1.toString());
+			}
+		},
+		feature_sameas {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				p.setLabel(arg1.toString());
+			}
+		},
+		feature_hassource {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				p.setReference(new LiteratureEntry(arg1.toString(),""));
+
+				
+			}
+		},
+		feature_type {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				p.setClazz(arg1.toString().equals("STRING")?String.class:Number.class);
+				
+			}
+		};
+		public abstract void setProperty(Property p, Object value);
+	}
 
 	//public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
 	
@@ -104,9 +139,33 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		
+		Form form = request.getResourceRef().getQueryAsForm();
+		AbstractReadDataset query = null;
+		Property property = new Property(null);
+		property.setClazz(null);property.setLabel(null);property.setReference(null);
+		for (search_features sf : search_features.values()) {
+			Object id = form.getFirstValue(sf.name());
+			if (id != null)  { //because we are not storing full local references!
+				if (search_features.feature_hassource.equals(sf)) {
+					String parent = getRequest().getRootRef().toString();
+					int p = id.toString().indexOf(parent);
+					if (p>=0) {
+						//yet one more hack ... should store at least prefixes
+						id = id.toString().substring(p+parent.length()).replace("/algorithm/","").replace("/model/", "");
+					}
+				}
+				
+				sf.setProperty(property,id);
+				if (query == null) query = new QueryDatasetByFeatures(property);
+			}
+		}
+		
+		if (query == null) {
+			query = new ReadDataset();
+			query.setValue(null);
+		}
 
-		ReadDataset query = new ReadDataset();
-		query.setValue(null);
 		collapsed = false;
 		
 		Object id = request.getAttributes().get(DatasetStructuresResource.datasetKey);
@@ -127,7 +186,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			throw new InvalidResourceIDException(id);
 		}
 		
-		Form form = request.getResourceRef().getQueryAsForm();
+		
 		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
 			RetrieveDatasets query_by_name = new RetrieveDatasets(null,new SourceDataset(Reference.decode(key.toString())));
