@@ -2,8 +2,10 @@ package ambit2.rest.task;
 
 import java.util.Hashtable;
 
+import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
+import org.restlet.data.Reference;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 
@@ -47,7 +49,22 @@ public class PolicyProtectedTask extends Task<TaskResult, String> {
 				ssoToken.getAttributes(new String[] {"uid"}, results);
 				OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
 				//user policy
-				policy.createUserPolicy(results.get("uid"), ssoToken, getUri().toString(), new String[] {"GET","PUT","POST","DELETE"});
+				Reference newUri = new Reference(getUri().getUri());
+				newUri.setQuery(null);
+				
+				/*
+				OpenToxUser user = new OpenToxUser();
+				int code = policy.getURIOwner(ssoToken, newUri.toString(), user);
+				if (200==code) {
+					if ((user.getUsername()!=null) && !user.getUsername().equals("null")) throw new Exception("Has a policy");
+				} 
+				*/
+				try {
+					policy.createUserPolicy(results.get("uid"), ssoToken, newUri.toString(), new String[] {"GET","PUT","POST","DELETE"});
+				} catch (Exception x ) {
+					//TODO write smth in the db why policy creation failed
+					//x.printStackTrace();
+				}
 			}
 		} 
 		

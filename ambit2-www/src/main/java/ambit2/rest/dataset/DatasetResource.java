@@ -40,6 +40,7 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.task.CallableQueryResultsCreator;
 import ambit2.rest.task.CallableUpdateDataset;
+import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.TaskResult;
 
 
@@ -232,8 +233,11 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		}
 		try {
 			getResponse().setLocationRef(callable.call().getReference());
+			PolicyProtectedTask task = new PolicyProtectedTask(token.toString());
+			task.setUri(new TaskResult(getResponse().getLocationRef().toString(),true));
+			task.setPolicy();
 			getResponse().setStatus(Status.SUCCESS_OK);
-			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
+			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);			
 		} catch (ResourceException x) {
 			throw x;
 		} catch  (Exception x) {
