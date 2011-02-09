@@ -1,10 +1,13 @@
 package ambit2.rest.dataset;
 
 import java.sql.Connection;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.opentox.aa.opensso.OpenSSOPolicy;
+import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -26,14 +29,18 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.structure.ConformerURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableFileImport;
 import ambit2.rest.task.CallableQueryResultsCreator;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.ITaskStorage;
+import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResult;
+
+import com.sun.xml.bind.v2.TODO;
 
 public class FileUpload<USERID> {
 	protected Request request;
@@ -106,15 +113,18 @@ public class FileUpload<USERID> {
 				);
 		try {
 			getResponse().setLocationRef(callable.call().getReference());
+			PolicyProtectedTask task = new PolicyProtectedTask(token.toString());
+			task.setUri(new TaskResult(getResponse().getLocationRef().toString(),true));
+			task.setPolicy();
 			getResponse().setStatus(Status.SUCCESS_OK);
 			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
+
 		} catch  (Exception x) {
 			throw new ResourceException(x);
 		}
 
 	}	
-	
-	
+
 	
 	public Representation upload(Representation entity, 
 			Variant variant,

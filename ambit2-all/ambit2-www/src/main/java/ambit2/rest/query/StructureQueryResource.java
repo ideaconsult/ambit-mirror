@@ -147,7 +147,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					reader.setProfile(profile);
 				}
 			} catch (Exception x) {
-				x.printStackTrace();
+				//System.out.println(getRequest().getResourceRef());
+				//x.printStackTrace();
 			} finally {
 				//the reader closes the connection
 				reader.setCloseConnection(true);
