@@ -42,7 +42,8 @@ public class AutomaticTestUtilities
 	public static final int LPM_SSS_CDK_SMSD = 5;
 	public static final int LPM_SSS_ALL = 100;
 	public static final int LPM_PARSERS_ALL = 101;
-	public static final int LPM_CALC_STAT = 102;	
+	public static final int LPM_CALC_STAT = 102;
+	public static final int LPM_SIZE_STAT = 103;
 	
 	
 	public static final int STAT_SINGLE_DBSTR = 1;
@@ -60,6 +61,7 @@ public class AutomaticTestUtilities
 	
 	int maxNumSeqSteps = 4;
 	int maxStrSize = 30;
+	int minGenStrSize = 5;
 	int nDBStr = 1000;
 	int nInputStr = 10;
 	int nOutputStr = 0;
@@ -79,6 +81,16 @@ public class AutomaticTestUtilities
 	SmartsParser spAmbit = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	
+	//Statistics variables
+	Vector<String> sssMethods;
+	double averageSSSTime[];
+	double stdSSSTime[];
+	double averageSSSTime10[];
+	double stdSSSTime10[];
+	double averageSSSTime30[];
+	double stdSSSTime30[];
+	double averageSSSTime50[];
+	double stdSSSTime50[];
 	
 	
 	public static void main(String[] args)
@@ -86,8 +98,8 @@ public class AutomaticTestUtilities
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
 		//atu.handleArguments(args);		
 		
-		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-o","/out1.txt", 
-				"-i","/input.txt","-nDBStr", "100", "-maxSeqStep", "10", "-c", "sss-all" });
+		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-i","/gen-str-seq50-db5000.txt", 
+				"-o","/gen-str-seq50-db5000-sizes.txt","-nDBStr", "5000", "-maxSeqStep", "40", "-c", "size-stat" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -238,7 +250,7 @@ public class AutomaticTestUtilities
 			System.out.println("Running generation of random structures:");
 			ChemObjectFactory cof = new ChemObjectFactory();
 			Vector<StructInfo> vStr = new Vector<StructInfo>();
-			cof.produceRandomStructsFromMDL(dbFileName, maxNumSeqSteps, nDBStr, vStr, outFileName);
+			cof.produceRandomStructsFromMDL(dbFileName, maxNumSeqSteps, minGenStrSize, nDBStr, vStr, outFileName);
 			return(0);
 		}
 		
@@ -316,6 +328,17 @@ public class AutomaticTestUtilities
 			System.out.println("Calculates statistics");
 			openOutputFile();
 			lineProcessMode = LPM_CALC_STAT;
+			//iterateInputFile();
+			makeStatistics(inFileName);
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("size-stat"))
+		{
+			System.out.println("Calculates statistics");
+			openOutputFile();
+			lineProcessMode = LPM_SIZE_STAT;
 			iterateInputFile();
 			closeOutputFile();
 			return(0);
@@ -355,6 +378,7 @@ public class AutomaticTestUtilities
 		System.out.println("                 sss-all          substructure searching with all algorithms");
 		System.out.println("                 parsers-all      comparison of the parsing time");
 		System.out.println("                 cals-stat        calculates statistics from previous tests");
+		System.out.println("                 size-stat        calculates the sizes of input structures");
 	}
 	
 	
@@ -515,15 +539,19 @@ public class AutomaticTestUtilities
 			{
 			case LPM_SSS_AMBIT:			
 				FlagStat_SingleDBStr_Ambit = true;
+				sss_SingleDBStrStat(line);
 				break;
 			case LPM_SSS_CDK:
 				FlagStat_SingleDBStr_CDK = true;
+				sss_SingleDBStrStat(line);
 				break;	
 			case LPM_SSS_AMBIT_CDK:
 				FlagStat_SingleDBStr_Ambit_CDK = true;
+				sss_SingleDBStrStat(line);
 				break;
 			case LPM_SSS_CDK_AMBIT:
 				FlagStat_SingleDBStr_CDK_Ambit = true;
+				sss_SingleDBStrStat(line);
 				break;	
 				
 			case LPM_SSS_ALL:
@@ -533,10 +561,20 @@ public class AutomaticTestUtilities
 				FlagStat_SingleDBStr_CDK_Ambit = true;
 				FlagStat_SingleDBStr_Ambit_SMSD = true;
 				FlagStat_SingleDBStr_CDK_SMSD = true;
+				sss_SingleDBStrStat(line);
 				break;
+				
+			case LPM_CALC_STAT:
+				//It is not done here.
+				//A separate input file iteration function is used.
+				break;
+				
+			case LPM_SIZE_STAT:
+				processLineForSizeStatistics(line);
+				break;	
 			}
 			
-			sss_SingleDBStrStat(line);
+			
 			
 			return(0);
 		}
@@ -643,12 +681,17 @@ public class AutomaticTestUtilities
 			return -1;
 		}
 		
+		//Initial line in the output
+		output("###test  Ambit  CDK  AmbitCDK  CDKAmbit  AmbitSMSD CDKSMSD " +  endLine);
+		
+		
+		int sssResult = 0;
 		boolean bondSensitive = true;
         boolean removeHydrogen = true;
 		Isomorphism comparisonSMSD = new Isomorphism(Algorithm.SubStructure, bondSensitive);
 
 				
-		output("###" + line + endLine);
+		output("###  " + query_ambit.getAtomCount() + "   "+line + endLine);
 		
 		try
 		{
@@ -681,15 +724,17 @@ public class AutomaticTestUtilities
 						boolean hasIso = isoTester.hasIsomorphism(mol);
 						endTime = System.nanoTime();
 						timeAmbit = endTime - startTime;
-						
-						System.out.println("record " + record+ "  " + hasIso + "   " + startTime + "  " + endTime);
+						if (hasIso)
+							sssResult = 1;
+						else
+							sssResult = 0;
+						//System.out.println("record " + record+ "  " + hasIso + "   " + startTime + "  " + endTime);
 					}
 					
 					
 					if (FlagStat_SingleDBStr_CDK)
 					{
 						startTime = System.nanoTime();
-						spAmbit.setSMARTSData(mol);
 						boolean res = UniversalIsomorphismTester.isSubgraph(mol, query_CDK);
 						endTime = System.nanoTime();
 						timeCDK = endTime - startTime;
@@ -707,9 +752,7 @@ public class AutomaticTestUtilities
 					if (FlagStat_SingleDBStr_CDK_Ambit)
 					{
 						isoTester.setQuery(query_CDK);
-						
 						startTime = System.nanoTime();
-						spAmbit.setSMARTSData(mol);
 						boolean hasIso = isoTester.hasIsomorphism(mol);
 						endTime = System.nanoTime();
 						timeCDKAmbit = endTime - startTime;
@@ -735,10 +778,29 @@ public class AutomaticTestUtilities
 						}
 					}
 					
+					if (FlagStat_SingleDBStr_CDK_SMSD)
+					{	
+						try
+						{
+							startTime = System.nanoTime();							
+							comparisonSMSD.init(query_CDK,mol, removeHydrogen,true);							
+							endTime = System.nanoTime();						
+							timeCDKSMSD = endTime - startTime;
+							//System.out.println("record " + record+ "  " + res + "   " + startTime + "  " + endTime);
+						}
+						catch(Exception e)
+						{
+							System.out.println("SMSD error: " );
+							continue;
+						}
+					}
+					
+					
 					//TODO
 					
-					output("db-str-" + record+"  " + timeAmbit + "  " + timeCDK + "  " 
-							+ timeAmbitCDK + "  " +timeCDKAmbit + "  " +timeAmbitSMSD + endLine);
+					output("db-" + record+"  "+mol.getAtomCount()+"  " + sssResult + "       "  
+							+ timeAmbit + "  " + timeCDK + "  " + timeAmbitCDK + "  " 
+							+timeCDKAmbit + "  " +timeAmbitSMSD + "  " +timeCDKSMSD +  endLine);
 										
 					//System.out.println("record " + record+ "  " + mol.getAtomCount());
 				}
@@ -795,6 +857,64 @@ public class AutomaticTestUtilities
 		return(0);
 	}
 	
+	
+	public int makeStatistics(String fname)
+	{
+				
+		try
+		{	
+			File file = new File(fname);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+						
+			String line = f.readLine();
+			processFirstLineStatistics(line);
+			
+			
+			int n = 0;
+			while (f.getFilePointer() < length)
+			{	
+				n++;
+				line = f.readLine();				
+				processLineStatistics(line);
+			}
+			
+			f.close();
+		}
+		
+		catch(Exception e)
+		{
+			System.out.println("Statistic file error:" + e.toString());
+		}
+		
+		return(0);
+	}
+	
+	
+	public int processFirstLineStatistics(String line)
+	{		
+		String tokens[] = line.split(" ");
+		int n = tokens.length - 1;
+		if (n <= 0)
+			return -1;
+		
+		
+		return(0);
+	}
+	
+	public int processLineStatistics(String line)
+	{
+		return(0);
+	}
+	
+	
+	public int processLineForSizeStatistics(String line)
+	{
+		QueryAtomContainer query_ambit  = spAmbit.parse(line);
+		output(line+"  "+query_ambit.getAtomCount() + endLine);
+		System.out.println(line+"  "+query_ambit.getAtomCount());
+		return(0);
+	}
 	
 	
 	

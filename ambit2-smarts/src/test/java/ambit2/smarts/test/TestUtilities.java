@@ -864,7 +864,7 @@ public class TestUtilities
 		ChemObjectFactory cof = new ChemObjectFactory();
 		Vector<StructInfo> vStr = new Vector<StructInfo>();
 		cof.produceRandomStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
-					30, 50000, vStr, "/java_random_frags.txt");
+					30, 5, 50000, vStr, "/java_random_frags.txt");
 	}
 	
 	void makeStructureStatistics()

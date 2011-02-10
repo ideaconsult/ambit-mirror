@@ -388,7 +388,7 @@ public class ChemObjectFactory
 	}
 	
 	public void produceStructuresRandomly(IAtomContainer mol, Vector<StructInfo> vStr, 
-			int maxNumSeqSteps, int numStructs)
+			int maxNumSeqSteps, int numStructs, int minGenStrSize)
 	{	
 		Random random = new Random();
 		
@@ -406,6 +406,9 @@ public class ChemObjectFactory
 				numSteps = 1 + random.nextInt(n-1);			
 			
 			IAtomContainer struct = getFragmentFromSequence(numSteps);				
+			if (struct.getAtomCount() < minGenStrSize)
+				continue;
+			
 			String smiles = cots.getSMILES(struct);
 			
 			StructInfo strInfo = new StructInfo();
@@ -482,7 +485,7 @@ public class ChemObjectFactory
 		saveStructs(vStr,outFile);
 	}
 	
-	public void produceRandomStructsFromMDL(String mdlFile, int maxNumSeqSteps, int maxNumRecord,
+	public void produceRandomStructsFromMDL(String mdlFile, int maxNumSeqSteps, int minGenStrSize,  int maxNumRecord,
 			Vector<StructInfo> vStr, String outFile)
 	{	
 		try
@@ -507,7 +510,7 @@ public class ChemObjectFactory
 					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 					CDKHueckelAromaticityDetector.detectAromaticity(mol);
 					
-					produceStructuresRandomly(mol, vStr, maxNumSeqSteps, 4);					
+					produceStructuresRandomly(mol, vStr, maxNumSeqSteps, 4, minGenStrSize);					
 					System.out.println("record " + record+ "  " + vStr.size());
 				}
 			}	
