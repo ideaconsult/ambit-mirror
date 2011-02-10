@@ -28,11 +28,37 @@ import ambit2.smarts.StructInfo;
 //This class provides utilities for automatic testing of Substructure Searching algorithms
 public class AutomaticTestUtilities 
 {	
+	
 	class CmdOption
 	{	
 		String option = null;
 		String value = null;		
 	};
+	
+		
+	class StatisticsData
+	{
+		String info = "";
+		int numObjects = 0;
+		double sum = 0.0;
+		//double average = 0.0;
+		//double std = 0.0;
+		
+		public void addValue(double value)
+		{
+			sum += value;
+			numObjects++;
+		}
+		
+		public double getAverage()
+		{
+			if (numObjects == 0)
+				return(0);
+			else
+				return(sum / numObjects);
+		}
+	};
+	
 	
 	public static final int LPM_SSS_AMBIT = 0;
 	public static final int LPM_SSS_CDK = 1;
@@ -81,16 +107,16 @@ public class AutomaticTestUtilities
 	SmartsParser spAmbit = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	
+	
 	//Statistics variables
-	Vector<String> sssMethods;
-	double averageSSSTime[];
-	double stdSSSTime[];
-	double averageSSSTime10[];
-	double stdSSSTime10[];
-	double averageSSSTime30[];
-	double stdSSSTime30[];
-	double averageSSSTime50[];
-	double stdSSSTime50[];
+	String statLinePrefix = "###";
+	String[] statMethods;
+	StatisticsData statAllObjs[];
+	int binsStrSize[] =  {5,10,20,30,40,50};
+	Vector<StatisticsData[]> statBins = new Vector<StatisticsData[]>();
+	int statCurSrtSize = 0;
+	int statCurBinIndex = 0;
+	
 	
 	
 	public static void main(String[] args)
@@ -98,8 +124,8 @@ public class AutomaticTestUtilities
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
 		//atu.handleArguments(args);		
 		
-		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-i","/gen-str-seq50-db5000.txt", 
-				"-o","/gen-str-seq50-db5000-sizes.txt","-nDBStr", "5000", "-maxSeqStep", "40", "-c", "size-stat" });
+		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-i","D:/out-sss-test-db2000.txt", 
+				"-o","/output.txt","-nDBStr", "5000", "-maxSeqStep", "40", "-c", "calc-stat" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -859,32 +885,75 @@ public class AutomaticTestUtilities
 	
 	
 	public int makeStatistics(String fname)
-	{
-				
+	{			
 		try
 		{	
 			File file = new File(fname);
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
 			long length = f.length();
-						
+			
+			int curStatLine = 1;
 			String line = f.readLine();
-			processFirstLineStatistics(line);
+			int res = processFirstLineStatistics(line);			
+			if (res != 0)
+			{
+				System.out.println("Error at the initializing line " + curStatLine + "  "+line);
+				return(-1);
+			}	
 			
 			
-			int n = 0;
 			while (f.getFilePointer() < length)
 			{	
-				n++;
+				curStatLine++;
+				if ((curStatLine % 1000) == 0)
+					System.out.println("line "+ curStatLine);
+				
+				if (curStatLine > 10000)
+					break;
+				
 				line = f.readLine();				
-				processLineStatistics(line);
+				res = processLineStatistics(line);
+				
+				if (res < 0)
+				{
+					//Errors >= 1 do not stop the statistics process 
+					System.out.println("Error at line " + curStatLine + "  "+line);
+					break;
+				}
 			}
 			
 			f.close();
+			
+			
+			
+			
+			//Print statistics
+			output("StrSize" + "\t");
+			for (int k = 0; k < statMethods.length; k++)
+				output(statMethods[k]+"\t");
+			output(endLine);
+			
+			output("all" + "\t");
+			for (int k = 0; k < statMethods.length; k++)
+				output(this.statAllObjs[k].getAverage()+"\t");
+			output(endLine);
+			
+			for (int i = 0; i < binsStrSize.length ; i++)
+			{	
+				output(binsStrSize[i] + "\t");
+				
+				for (int k = 0; k < statMethods.length; k++)
+					output(statBins.get(i)[k].getAverage()+"\t");
+				output(endLine);
+			}	
+			
+			
+			
 		}
-		
 		catch(Exception e)
 		{
-			System.out.println("Statistic file error:" + e.toString());
+			System.out.println("Statistic file error: " + e.toString());
+			e.printStackTrace();
 		}
 		
 		return(0);
@@ -893,18 +962,105 @@ public class AutomaticTestUtilities
 	
 	public int processFirstLineStatistics(String line)
 	{		
-		String tokens[] = line.split(" ");
-		int n = tokens.length - 1;
+		//The statistics process is initialized by the first line data (methods info/names)
+		
+		Vector<String> tokens = filterTokens(line.split(" "));
+		
+		int n = tokens.size()- 1;
 		if (n <= 0)
 			return -1;
 		
+		statMethods = new String[n];
+		for (int k = 0; k < n; k++)	
+		{	
+			statMethods[k] = tokens.get(k+1);
+			System.out.println(statMethods[k]);
+		}	
+		
+		statAllObjs = new StatisticsData[n];
+		for (int k = 0; k < n; k++)
+			statAllObjs[k] = new StatisticsData();
+		
+		
+		for (int i = 1; i <= binsStrSize.length +1; i++)
+		{	
+			StatisticsData bStat[] = new StatisticsData[n];
+			for (int k = 0; k < n; k++)
+				bStat[k] = new StatisticsData();
+			
+			statBins.add(bStat);
+		}	
+				
+		return(0);
+	}
+	
+	
+	public int processLineStatistics(String line)
+	{
+		//System.out.println("Processing line: " + line);
+		
+		Vector<String> tokens = filterTokens(line.split(" "));
+		
+		try
+		{
+			if (line.startsWith("###"))
+			{
+				if (!tokens.get(0).equals("###"))  //This is needed since inside the test file initilizin line is repeted
+					return(0);
+					
+				statCurSrtSize =  Integer.parseInt(tokens.get(1));
+				statCurBinIndex = getBinIndex(statCurSrtSize);
+			}
+			else
+			{
+				if (tokens.size() != (3 + statMethods.length))
+				{
+					System.out.println("Wrong number of tokens at line " + line);
+					return(1);
+				}
+
+				//Handling the time for each method
+				for (int i = 0; i < statMethods.length; i++)
+				{
+					long methodTime =  Long.parseLong(tokens.get(3+i));						
+					statAllObjs[i].addValue(methodTime);
+					statBins.get(statCurBinIndex)[i].addValue(methodTime);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error at line " + line);
+			//e.printStackTrace();
+			return(2);
+		}
 		
 		return(0);
 	}
 	
-	public int processLineStatistics(String line)
+	
+	public Vector<String> filterTokens(String tokens[])
 	{
-		return(0);
+		Vector<String> v = new Vector<String>();
+		for (int i = 0; i < tokens.length; i++)
+			if (!tokens[i].equals(""))
+				v.add(tokens[i]);
+		return v;
+	}
+	
+	public int getBinIndex(int value)
+	{
+		int binIndex = binsStrSize.length;
+		for (int i = 0; i < binsStrSize.length; i++)
+		{	
+			if (value <= binsStrSize[i])
+			{	
+				binIndex = i;
+				break;
+			}
+		}
+		
+		return binIndex;
 	}
 	
 	
