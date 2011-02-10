@@ -36,6 +36,22 @@
 		<directory>src/main/resources/ambit2/bin</directory>
 		<filtering>false</filtering>
 	</resource>
+	<resource>
+		<directory>src/main/resources/ambit2/bin/linux</directory>
+		<filtering>false</filtering>
+	</resource>
+	<resource>
+		<directory>src/main/resources/ambit2/bin/freebsd</directory>
+		<filtering>false</filtering>
+	</resource>	
+	<resource>
+		<directory>src/main/resources/ambit2/bin/win</directory>
+		<filtering>false</filtering>
+	</resource>	
+	<resource>
+		<directory>src/main/resources/ambit2/bin/mac</directory>
+		<filtering>false</filtering>
+	</resource>		
   </resources>
  </build>  	
   <dependencies>
