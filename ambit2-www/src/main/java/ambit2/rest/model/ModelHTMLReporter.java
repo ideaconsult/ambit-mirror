@@ -91,8 +91,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 				output.write("<td></td>");
 			else
 				output.write(String.format(
-						"<td><img src=\"%s/images/table.png\" alt=\"Compounds\" title=\"Browse compounds\" border=\"0\"/>&nbsp;<a href=\"%s/query/results/%d\">Browse</a></td>",
-						uriReporter.getBaseReference(),
+						"<td><img src=\"%s/images/table.png\" alt=\"Compounds\" title=\"Browse compounds\" border=\"0\"/>&nbsp;<a href=\"%s\">Browse</a></td>",
 						uriReporter.getBaseReference(),
 						model.getTrainingInstances()
 						));
