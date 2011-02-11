@@ -38,25 +38,46 @@ public class AutomaticTestUtilities
 		
 	class StatisticsData
 	{
+		boolean firstPass = true;
 		String info = "";
 		int numObjects = 0;
 		double sum = 0.0;
-		//double average = 0.0;
-		//double std = 0.0;
+		double sum_std = 0.0;
+		double average = 0.0;
+		double std = 0.0;
 		
 		public void addValue(double value)
 		{
-			sum += value;
-			numObjects++;
+			if (firstPass)
+			{
+				sum += value;
+				numObjects++;
+			}
+			else
+				sum_std += (value - average) * (value - average); 
 		}
 		
 		public double getAverage()
-		{
+		{	
 			if (numObjects == 0)
-				return(0);
+				average = 0;
 			else
-				return(sum / numObjects);
+				average = sum / numObjects;
+			
+			return (average);
 		}
+		
+		public double getStdDev()
+		{	
+			return (Math.sqrt(sum_std/(numObjects-1)));
+		}
+		
+		public double getRSD()
+		{	
+			return (100.0*Math.sqrt(sum_std/(numObjects-1))/average);
+		}
+		
+		
 	};
 	
 	
@@ -88,6 +109,7 @@ public class AutomaticTestUtilities
 	int maxNumSeqSteps = 4;
 	int maxStrSize = 30;
 	int minGenStrSize = 5;
+	int maxStatLines = 10000000;
 	int nDBStr = 1000;
 	int nInputStr = 10;
 	int nOutputStr = 0;
@@ -112,8 +134,12 @@ public class AutomaticTestUtilities
 	String statLinePrefix = "###";
 	String[] statMethods;
 	StatisticsData statAllObjs[];
+	StatisticsData statAllObjs_MapTrue[];
+	StatisticsData statAllObjs_MapFalse[];
 	int binsStrSize[] =  {5,10,20,30,40,50};
-	Vector<StatisticsData[]> statBins = new Vector<StatisticsData[]>();
+	Vector<StatisticsData[]> statBins = new Vector<StatisticsData[]>();  //according to the query size
+	Vector<StatisticsData[]> statBins2 = new Vector<StatisticsData[]>(); //according to the db str. size
+	
 	int statCurSrtSize = 0;
 	int statCurBinIndex = 0;
 	
@@ -124,8 +150,8 @@ public class AutomaticTestUtilities
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
 		//atu.handleArguments(args);		
 		
-		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-i","D:/out-sss-test-db2000.txt", 
-				"-o","/output.txt","-nDBStr", "5000", "-maxSeqStep", "40", "-c", "calc-stat" });
+		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-i","D:/work/out-sss-test-input-4500-db2000.txt", 
+				"-o","/work/stat-output.txt","-nDBStr", "5000", "-maxSeqStep", "40", "-c", "calc-stat" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -886,68 +912,88 @@ public class AutomaticTestUtilities
 	
 	public int makeStatistics(String fname)
 	{			
+		//maxStatLines = 5000;
 		try
 		{	
 			File file = new File(fname);
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
-			long length = f.length();
-			
-			int curStatLine = 1;
+					
+			//First line
 			String line = f.readLine();
 			int res = processFirstLineStatistics(line);			
 			if (res != 0)
 			{
-				System.out.println("Error at the initializing line " + curStatLine + "  "+line);
+				System.out.println("Error at the initializing line " + 1 + "  "+line);
 				return(-1);
 			}	
 			
+			processFile(f);
 			
-			while (f.getFilePointer() < length)
-			{	
-				curStatLine++;
-				if ((curStatLine % 1000) == 0)
-					System.out.println("line "+ curStatLine);
-				
-				if (curStatLine > 10000)
-					break;
-				
-				line = f.readLine();				
-				res = processLineStatistics(line);
-				
-				if (res < 0)
-				{
-					//Errors >= 1 do not stop the statistics process 
-					System.out.println("Error at line " + curStatLine + "  "+line);
-					break;
-				}
-			}
+			
+			/*
+			//Setting for the second pass
+			for (int k = 0; k < statMethods.length; k++)
+				statAllObjs[k].firstPass = false;			
+			
+			for (int i = 0; i < binsStrSize.length ; i++)
+			{
+				for (int k = 0; k < statMethods.length; k++)
+					statBins.get(i)[k].firstPass = false;
+			}					
+						
+			//Second pass
+			f.seek(0);
+			line = f.readLine();  //first line
+			processFile(f);
+			*/
 			
 			f.close();
 			
-			
-			
-			
+						
 			//Print statistics
 			output("StrSize" + "\t");
+			output("nObj" + "\t");
 			for (int k = 0; k < statMethods.length; k++)
-				output(statMethods[k]+"\t");
+				output(statMethods[k]+"\t");  //+"RSD%" + "\t");
 			output(endLine);
 			
+			
 			output("all" + "\t");
+			output(statAllObjs[0].numObjects + "\t");
 			for (int k = 0; k < statMethods.length; k++)
-				output(this.statAllObjs[k].getAverage()+"\t");
+				output(statAllObjs[k].getAverage()+"\t"); // + statAllObjs[k].getRSD() + "\t");
 			output(endLine);
+			
+			output("Map1" + "\t");
+			output(statAllObjs_MapTrue[0].numObjects + "\t");
+			for (int k = 0; k < statMethods.length; k++)
+				output(statAllObjs_MapTrue[k].getAverage()+"\t"); // + statAllObjs_MapTrue[k].getRSD() + "\t");
+			output(endLine);
+			
+			output("Map0" + "\t");
+			output(statAllObjs_MapFalse[0].numObjects + "\t");
+			for (int k = 0; k < statMethods.length; k++)
+				output(statAllObjs_MapFalse[k].getAverage()+"\t"); // + statAllObjs_MapTrue[k].getRSD() + "\t");
+			output(endLine);
+			
 			
 			for (int i = 0; i < binsStrSize.length ; i++)
 			{	
-				output(binsStrSize[i] + "\t");
-				
+				output("Q"+binsStrSize[i] + "\t");
+				output(statBins.get(i)[0].numObjects + "\t");
 				for (int k = 0; k < statMethods.length; k++)
-					output(statBins.get(i)[k].getAverage()+"\t");
+					output(statBins.get(i)[k].getAverage()+"\t"); // + statBins.get(i)[k].getRSD()+"\t");
 				output(endLine);
-			}	
+			}
 			
-			
+			for (int i = 0; i < binsStrSize.length ; i++)
+			{	
+				output("DB"+binsStrSize[i] + "\t");
+				output(statBins2.get(i)[0].numObjects + "\t");
+				for (int k = 0; k < statMethods.length; k++)
+					output(statBins2.get(i)[k].getAverage()+"\t"); // + statBins2.get(i)[k].getRSD()+"\t");
+				output(endLine);
+			}
 			
 		}
 		catch(Exception e)
@@ -957,6 +1003,35 @@ public class AutomaticTestUtilities
 		}
 		
 		return(0);
+	}
+	
+	public void processFile(RandomAccessFile f) throws Exception
+	{
+		String line;
+		int curStatLine = 1;
+		long length = f.length();
+		
+		while (f.getFilePointer() < length)
+		{	
+			curStatLine++;
+			
+			
+			if (curStatLine > maxStatLines)
+				break;
+			
+			line = f.readLine();				
+			int res = processLineStatistics(line);
+			
+			if (res < 0)
+			{
+				//Errors >= 1 do not stop the statistics process 
+				System.out.println("Error at line " + curStatLine + "  "+line);
+				break;
+			}
+			
+			if ((curStatLine % 1000) == 0)
+				System.out.println("line "+ curStatLine);
+		}
 	}
 	
 	
@@ -981,6 +1056,13 @@ public class AutomaticTestUtilities
 		for (int k = 0; k < n; k++)
 			statAllObjs[k] = new StatisticsData();
 		
+		statAllObjs_MapTrue = new StatisticsData[n];
+		for (int k = 0; k < n; k++)
+			statAllObjs_MapTrue[k] = new StatisticsData();
+		
+		statAllObjs_MapFalse = new StatisticsData[n];
+		for (int k = 0; k < n; k++)
+			statAllObjs_MapFalse[k] = new StatisticsData();
 		
 		for (int i = 1; i <= binsStrSize.length +1; i++)
 		{	
@@ -989,6 +1071,12 @@ public class AutomaticTestUtilities
 				bStat[k] = new StatisticsData();
 			
 			statBins.add(bStat);
+			
+			bStat = new StatisticsData[n];
+			for (int k = 0; k < n; k++)
+				bStat[k] = new StatisticsData();
+			
+			statBins2.add(bStat);			
 		}	
 				
 		return(0);
@@ -1018,6 +1106,10 @@ public class AutomaticTestUtilities
 					System.out.println("Wrong number of tokens at line " + line);
 					return(1);
 				}
+				
+				int dbStrSize =  Integer.parseInt(tokens.get(1));
+				int sssRes  =  Integer.parseInt(tokens.get(2));
+				int dbBin = getBinIndex(dbStrSize);
 
 				//Handling the time for each method
 				for (int i = 0; i < statMethods.length; i++)
@@ -1025,6 +1117,11 @@ public class AutomaticTestUtilities
 					long methodTime =  Long.parseLong(tokens.get(3+i));						
 					statAllObjs[i].addValue(methodTime);
 					statBins.get(statCurBinIndex)[i].addValue(methodTime);
+					statBins2.get(dbBin)[i].addValue(methodTime);
+					if (sssRes == 0)
+						statAllObjs_MapFalse[i].addValue(methodTime);
+					else
+						statAllObjs_MapTrue[i].addValue(methodTime);
 				}
 			}
 		}
