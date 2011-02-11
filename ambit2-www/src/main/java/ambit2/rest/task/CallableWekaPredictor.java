@@ -26,6 +26,7 @@ public class CallableWekaPredictor<T,USERID> extends CallableModelPredictor<Inst
 	
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
+		prepareForeignProcessing(reference);
 		return reference;
 	}
 }
