@@ -45,16 +45,10 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 
 					getReporter().setOutput(writer);
             		getReporter().process(query);
-					
-					//buf.write("rrrrrrrrrrr");
-					//buf.flush();
+
 				} catch (Exception  x) {
-					x.printStackTrace();
 					throw new IOException(x.getMessage());
 				} finally {
-					//try { writer.flush();} catch (Exception x) {}
-					//try { buf.flush();} catch (Exception x) {}
-					//
 					try { out.close();} catch (Exception x) {}
 					
 				}
