@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.stream.XMLStreamWriter;
-
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
@@ -29,6 +27,7 @@ import ambit2.rest.rdf.OT.DataProperty;
 import ambit2.rest.rdf.OT.OTClass;
 import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.structure.CompoundURIReporter;
+import ambit2.rest.structure.ConformerURIReporter;
 
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
@@ -75,14 +74,26 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 	public void setPropertyReporter(PropertyURIReporter propertyReporter) {
 		this.propertyReporter = propertyReporter;
 	}
+	public DatasetRDFWriter(Reference baseReference,ResourceDoc doc) {
+		this(new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(baseReference,doc),
+			new PropertyURIReporter(baseReference,doc),
+			new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(baseReference,doc)
+		);
+	}
 	public DatasetRDFWriter(Request request,ResourceDoc doc) {
 		this(new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request,doc),new PropertyURIReporter(request,doc));
-	}	
+	}
 	public DatasetRDFWriter(CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter,
 			PropertyURIReporter propertyReporter) {
+		this(compoundReporter,propertyReporter,null);
+	}
+	public DatasetRDFWriter(CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter,
+			PropertyURIReporter propertyReporter,
+			QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> uriReporter) {
 		super();
 		setCompoundReporter(compoundReporter);
 		setPropertyReporter(propertyReporter);
+		setUriReporter(uriReporter);
 		datasetIndividual = null;
 
 		comp = new Comparator<Property>() {
@@ -230,7 +241,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 		}
 	}
 	public void header(javax.xml.stream.XMLStreamWriter writer) {
-		
+		super.header(writer);
 		try {
 			writeClassTriple(writer, OTClass.Dataset);
 			writeClassTriple(writer, OTClass.DataEntry);
@@ -338,6 +349,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 			finally {
 				try {getOutput().writeEndElement(); } catch (Exception x) {}
 			}
+			super.footer(writer);
 			
 	};
 	
@@ -426,5 +438,9 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 			*/
 			Collections.sort(h,comp);
 			return h;
+		}
+		
+		public void close() {
+			try { getOutput().close();} catch (Exception x) {}
 		}
 }

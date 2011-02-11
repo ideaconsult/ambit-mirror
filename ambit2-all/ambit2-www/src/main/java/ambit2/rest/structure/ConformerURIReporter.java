@@ -1,6 +1,7 @@
 package ambit2.rest.structure;
 
 import org.restlet.Request;
+import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
@@ -27,6 +28,9 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	}	
 	public ConformerURIReporter(Request baseRef,boolean readStructure,ResourceDoc doc) {
 		super(baseRef,readStructure,doc);
+	}
+	public ConformerURIReporter(Reference baseRef,ResourceDoc doc) {
+		super(baseRef,doc);
 	}
 
 	public String getURI(String ref, IStructureRecord item) {

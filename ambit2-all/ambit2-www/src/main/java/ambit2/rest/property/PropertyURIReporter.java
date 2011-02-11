@@ -22,11 +22,14 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 	 */
 	private static final long serialVersionUID = 711954935147788056L;
 
+	public PropertyURIReporter(Reference baseRef,ResourceDoc doc) {
+		super(baseRef,doc);
+	}
 	public PropertyURIReporter(Request ref,ResourceDoc doc) {
 		super(ref,doc);
 	}
 	public PropertyURIReporter() {
-		this(null,null);
+		this((Request)null,null);
 	}
 	@Override
 	public String getURI(String ref, Property record) {

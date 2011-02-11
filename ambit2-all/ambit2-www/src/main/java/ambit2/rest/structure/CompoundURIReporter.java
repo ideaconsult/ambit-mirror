@@ -2,6 +2,7 @@ package ambit2.rest.structure;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
@@ -25,6 +26,10 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 	protected boolean readStructure = false;
+	
+	public CompoundURIReporter(Reference baseRef,ResourceDoc doc) {
+		super(baseRef,doc);
+	}
 	public CompoundURIReporter(Request request,ResourceDoc doc) {
 		this(request,false,doc);
 	}
