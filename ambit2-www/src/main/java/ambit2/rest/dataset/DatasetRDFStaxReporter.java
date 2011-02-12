@@ -159,17 +159,6 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		
 	}
 	
-	public void header(javax.xml.stream.XMLStreamWriter writer, Q query) {
-		super.header(writer,query);
-		recordWriter.header(writer);
-	};
-	
-	public void footer(javax.xml.stream.XMLStreamWriter writer, Q query) {
-		
-		recordWriter.footer(writer);
-		super.footer(writer, query);
-	};
-
 	
 	protected ambit2.db.processors.AbstractBatchProcessor<ambit2.db.readers.IQueryRetrieval<IStructureRecord>,IStructureRecord> createBatch(Q query) {
 		if (query.isPrescreen()) {
