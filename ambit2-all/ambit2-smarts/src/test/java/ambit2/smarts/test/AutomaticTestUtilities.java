@@ -3,6 +3,7 @@ package ambit2.smarts.test;
 import java.io.File;
 import java.io.FileReader;
 import java.io.RandomAccessFile;
+import java.util.BitSet;
 import java.util.Vector;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -23,6 +24,8 @@ import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.StructInfo;
+import ambit2.smarts.Screening;
+import ambit2.smarts.ScreeningData;
 
 
 //This class provides utilities for automatic testing of Substructure Searching algorithms
@@ -100,6 +103,11 @@ public class AutomaticTestUtilities
 	String endLine = "\r\n";
 	String outFileName = "";
 	String inFileName = "";
+	String inFileName2 = "";
+	String inFileName3 = "";
+	String inFileName4 = "";
+	String inFileName5 = "";
+	
 	String dbFileName = "";
 	String command = "";
 	String configFileName = "";
@@ -150,8 +158,8 @@ public class AutomaticTestUtilities
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
 		//atu.handleArguments(args);		
 		
-		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-i","D:/work/out-sss-test-input-4500-db2000.txt", 
-				"-o","/work/stat-output.txt","-nDBStr", "5000", "-maxSeqStep", "40", "-c", "calc-stat" });
+		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-i","/input1.txt", 
+				"-o","/out1.txt","-nDBStr", "200", "-maxSeqStep", "40", "-c", "calc-bitsets" });
 		
 		//atu.produceRandomStructures();
 	}
@@ -176,6 +184,34 @@ public class AutomaticTestUtilities
 		{
 			if (opt.value != null)
 				inFileName = opt.value; 
+		}
+		
+		opt = getOption("i2", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+				inFileName2 = opt.value; 
+		}
+		
+		opt = getOption("i3", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+				inFileName3 = opt.value; 
+		}
+		
+		opt = getOption("4", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+				inFileName4 = opt.value; 
+		}
+		
+		opt = getOption("i5", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+				inFileName5 = opt.value; 
 		}
 		
 		opt = getOption("o", options);
@@ -370,6 +406,8 @@ public class AutomaticTestUtilities
 			System.out.println("Running comparison of the SMARTS parsers: Ambit, CDK");
 			openOutputFile();			
 			lineProcessMode = LPM_PARSERS_ALL;
+			
+			output("smiles  timeAmbit   timeCDK"+endLine);
 			iterateInputFile();
 			closeOutputFile();
 			return(0);
@@ -386,12 +424,33 @@ public class AutomaticTestUtilities
 			return(0);
 		}
 		
+		
 		if (command.equals("size-stat"))
 		{
 			System.out.println("Calculates statistics");
 			openOutputFile();
 			lineProcessMode = LPM_SIZE_STAT;
 			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("calc-bitsets"))
+		{
+			System.out.println("Calculates bit sets for each db structure");
+			openOutputFile();
+			//lineProcessMode = 
+			calcBitVectorStrings();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("calc-screen-ratio"))
+		{
+			System.out.println("Calculates screenign ratio for each query");
+			openOutputFile();
+			//lineProcessMode = 
+			calcScreeningRatio();
 			closeOutputFile();
 			return(0);
 		}
@@ -409,6 +468,7 @@ public class AutomaticTestUtilities
 		System.out.println("Program for automatic testing of structure searching algorithms");
 		System.out.println("-h            print help info");
 		System.out.println("-i            input file");
+		System.out.println("-i<n>         additional input files n = 2,3,4,5");
 		System.out.println("-o            output file");
 		System.out.println("-db           db file");
 		System.out.println("-cfg          config file");
@@ -431,6 +491,10 @@ public class AutomaticTestUtilities
 		System.out.println("                 parsers-all      comparison of the parsing time");
 		System.out.println("                 cals-stat        calculates statistics from previous tests");
 		System.out.println("                 size-stat        calculates the sizes of input structures");
+		System.out.println("                 calc-bitsets     calculates bitset for each db structure");
+		System.out.println("                 calc-screen-ratio  calculates scrrenig ration for a set of queries");
+		System.out.println("                                    -i queries; -i2 keys; -i3 db-bit-sets");
+		
 	}
 	
 	
@@ -654,37 +718,6 @@ public class AutomaticTestUtilities
 	
 	int sss_Ambit(String line)
 	{	
-		try
-		{
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
-			int record=0;
-
-			while (reader.hasNext()) 
-			{	
-				record++;				
-				if (record > this.nDBStr)
-					break;
-				
-				Object o = reader.next();
-				if (o instanceof IAtomContainer) 
-				{
-					IAtomContainer mol = (IAtomContainer)o;
-					if (mol.getAtomCount() == 0) continue;
-					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-					CDKHueckelAromaticityDetector.detectAromaticity(mol);
-					
-					//TODO
-										
-					//System.out.println("record " + record+ "  " + vStr.size());
-				}
-			}	
-		}
-		catch(Exception e){
-			System.out.println(e.toString());
-			return(-1);
-		}
-		
 		return(0);
 	}
 	
@@ -846,9 +879,6 @@ public class AutomaticTestUtilities
 							continue;
 						}
 					}
-					
-					
-					//TODO
 					
 					output("db-" + record+"  "+mol.getAtomCount()+"  " + sssResult + "       "  
 							+ timeAmbit + "  " + timeCDK + "  " + timeAmbitCDK + "  " 
@@ -1167,6 +1197,171 @@ public class AutomaticTestUtilities
 		output(line+"  "+query_ambit.getAtomCount() + endLine);
 		System.out.println(line+"  "+query_ambit.getAtomCount());
 		return(0);
+	}
+	
+	
+	
+	public int calcBitVectorStrings()
+	{
+		//Input file is interpreted as str. keys set
+		//for each DB structure BitVector is calculated and saved to the output file
+		
+		
+		//Loading the structure keys
+		Vector<String> externKeySet = new Vector<String>(); 
+		try
+		{	
+			File file = new File(inFileName);
+			RandomAccessFile f = new RandomAccessFile(file,"r");
+			
+			String line;
+			long length = f.length();
+			
+			 
+			while (f.getFilePointer() < length)
+			{	
+				line = f.readLine();
+				String smiles = line.trim();
+				if (!smiles.equals(""))
+					externKeySet.add(smiles);
+			}
+			
+		}
+		catch(Exception e)
+		{	
+			System.out.println("Probleb with the input file:");
+			e.printStackTrace();
+			return(-1);
+		}
+		
+		
+		Screening screen = new Screening(externKeySet);
+		
+		
+		try
+		{
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				record++;				
+				if (record > this.nDBStr)
+					break;				
+				
+				if ((record % 100) == 0 )
+					System.out.println("rec " + record);
+				
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					
+					BitSet bs = screen.getStructureKeyBits(mol);
+					String s = screen.getBitSetString(bs);
+					output(s + endLine);
+					
+					//Test 
+					//BitSet bs2 = screen.stringToBitSet(s);
+					//String s2 = screen.getBitSetString(bs2);
+					//System.out.println(s + "   " + s2);
+					
+				}
+			}
+		}	
+		catch(Exception e)
+		{	
+			System.out.println("Problem with the DB file:");
+			e.printStackTrace();
+			return(-1);
+		}
+		
+		
+		return(0);
+	}
+	
+	
+	
+	
+	public int calcScreeningRatio()
+	{
+		//Input file interpretation
+		//-i queries
+		//-i2 keys
+		// -i3 db-bit-sets
+		
+		
+		//Loading the structure keys
+		Vector<String> externKeySet = new Vector<String>(); 
+		try
+		{	
+			File file = new File(inFileName2);
+			RandomAccessFile f = new RandomAccessFile(file,"r");
+			
+			String line;
+			long length = f.length();
+			
+			 
+			while (f.getFilePointer() < length)
+			{	
+				line = f.readLine();
+				String smiles = line.trim();
+				if (!smiles.equals(""))
+					externKeySet.add(smiles);
+			}
+			
+		}
+		catch(Exception e)
+		{	
+			System.out.println("Probleb with the structure keys (-i2 input file):");
+			e.printStackTrace();
+			return(-1);
+		}
+		
+		
+		Screening screen = new Screening(externKeySet);
+		
+		try
+		{	
+			File file = new File(inFileName);
+			RandomAccessFile f = new RandomAccessFile(file,"r");
+			
+			String line;
+			long length = f.length();
+			
+			 
+			while (f.getFilePointer() < length)
+			{	
+				line = f.readLine();
+				String smiles = line.trim();
+				
+				int res = countScreenResult(smiles, screen);
+				if (res > -1)
+					output(smiles + "  " + res + endLine);
+			}
+			
+		}
+		catch(Exception e)
+		{	
+			System.out.println("Probleb with the query structures (-i input file):");
+			e.printStackTrace();
+			return(-1);
+		}
+		
+		
+		return(0);
+	}
+	
+	
+	public int countScreenResult(String smiles, Screening screen)
+	{
+		//TODO
+		//...
+		return 0;
 	}
 	
 	

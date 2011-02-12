@@ -177,6 +177,30 @@ public class Screening
 		return(buf.toString());
 	}
 	
+	public String getBitSetString(BitSet bs)
+	{	
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < smartsKeys.size(); i++)
+		{	
+			if (bs.get(i))
+				buf.append("1");
+			else
+				buf.append("0");
+		}
+		return(buf.toString());
+	}
+	
+	public BitSet stringToBitSet(String s)
+	{
+		BitSet bs = new BitSet(s.length());
+		for (int i = 0; i < s.length(); i++)
+		{
+			if(s.charAt(i) != '0')
+				bs.set(i);
+		}	
+		return(bs);
+	}
+	
 	public String queryKeysToString()
 	{
 		StringBuffer buf = new StringBuffer();
