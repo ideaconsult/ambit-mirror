@@ -211,7 +211,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 			}
 
 
-
+			getOutput().flush();
 			return item;
 		} catch (Exception x) {
 			throw new AmbitException(x);

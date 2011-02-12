@@ -47,6 +47,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 	protected boolean foreignInputDataset = false;
 	protected String tmpFileName;
 	protected String dataset_service;
+	protected RDFFileWriter rdfFileWriter = null;
 	
 	public CallableModelPredictor(Form form, 
 			Reference appReference,
@@ -111,11 +112,19 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 		} else return null;
 	}
 
+	@Override
+	protected IBatchStatistics runBatch(Object target) throws Exception {
+		IBatchStatistics stats = super.runBatch(target);
+		if (rdfFileWriter!=null) rdfFileWriter.close(); 
+		//can't find good way to close processors(writers) ... TODO extension of iprocessor interface & batch 
+		return stats;
+	}
 	protected IProcessor<IStructureRecord, IStructureRecord> getWriter() throws Exception  {
 		if (foreignInputDataset) {
 			File file = File.createTempFile("mresult_",".rdf");
 			tmpFileName = file.getAbsolutePath();
-			return new RDFFileWriter(file,applicationRootReference);
+			rdfFileWriter = new RDFFileWriter(file,applicationRootReference);
+			return rdfFileWriter;
 		} else {
 			PropertyValuesWriter writer = new PropertyValuesWriter();
 			writer.setDataset(new SourceDataset(sourceReference.toString(),
@@ -174,7 +183,7 @@ class RDFFileWriter extends AbstractDBProcessor<IStructureRecord, IStructureReco
 			writer  = new IndentingXMLStreamWriter(factory.createXMLStreamWriter(new FileOutputStream(file),"UTF-8"));
 			recordWriter.setOutput(writer);
 			recordWriter.header(writer);
-
+			
 		} catch (Exception  x) {
 			throw new IOException(x.getMessage());
 		} finally {
@@ -186,6 +195,7 @@ class RDFFileWriter extends AbstractDBProcessor<IStructureRecord, IStructureReco
 	public void close() {
 		try {
 			recordWriter.footer(recordWriter.getOutput());
+			
 			recordWriter.close();} catch (Exception x) {}
 	}
 	@Override
