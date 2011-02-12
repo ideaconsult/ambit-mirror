@@ -1,11 +1,15 @@
 package ambit2.db.chart;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.jdbc.JDBCXYDataset;
 
 import ambit2.base.data.Property;
@@ -98,7 +102,13 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 	                                     PlotOrientation.HORIZONTAL,
 	                                         true,      // legend displayed
 	                                         true,      // tooltips displayed
-	                                         false );   // no URLs
+	                                         true );   // no URLs
+
+	         chart.getPlot().setBackgroundPaint(Color.white) ;
+	         ((XYPlot)chart.getPlot()).setRangeGridlinePaint(Color.gray);
+	         ((XYPlot)chart.getPlot()).setDomainGridlinePaint(Color.gray);
+
+	         ///ChartUtilities.writeImageMap(writer, name, info, useOverLibForToolTips)
 	         return chart.createBufferedImage(width,height);
 
 	      }
