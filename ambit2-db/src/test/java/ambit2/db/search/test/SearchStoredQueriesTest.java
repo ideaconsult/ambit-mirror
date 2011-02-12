@@ -33,7 +33,7 @@ import java.sql.ResultSet;
 
 import junit.framework.Assert;
 import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.storedquery.SearchStoredQueries;
+import ambit2.db.update.storedquery.SearchStoredQueries;
 
 public class SearchStoredQueriesTest extends QueryTest<SearchStoredQueries> {
 

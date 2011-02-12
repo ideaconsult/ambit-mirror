@@ -24,12 +24,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.db.search;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 
 
 
-public interface IStoredQuery extends IQueryObject<IStructureRecord>{
+public interface IStoredQuery extends IQueryObject<IStructureRecord> , ISourceDataset{
 	static String SQL_INSERT = "insert ignore into query_results (idquery,idchemical,idstructure,selected,metric,text) ";
 	void setName(String name);
 	String getName();

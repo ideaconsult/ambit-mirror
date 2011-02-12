@@ -41,8 +41,8 @@ public class ReadDataset extends AbstractReadDataset<String>{
 	@Override
 	public String toString() {
 		return (getValue()!=null?getValue().getId()>0
-				?String.format("Dataset: id=%d",getValue().getId())
-				:String.format("Dataset: '%s'",getValue().getName())
+				?String.format("/dataset/%d",getValue().getId())
+				:String.format("/dataset/%s",getValue().getName())
 				:"Datasets");
 	}
 

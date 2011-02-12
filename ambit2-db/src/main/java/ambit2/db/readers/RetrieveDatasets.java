@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -12,7 +13,7 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.ReadDataset;
 
-public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDataset,StringCondition,SourceDataset>  implements IQueryRetrieval<SourceDataset>{
+public class RetrieveDatasets extends AbstractQuery<IStructureRecord,ISourceDataset,StringCondition,ISourceDataset>  implements IQueryRetrieval<ISourceDataset>{
     
     public static final String select_datasets_bystruc = "SELECT id_srcdataset,name,src_dataset.user_name,idreference,title,url FROM structure join  struc_dataset using(idstructure) join src_dataset using(id_srcdataset) join catalog_references using(idreference) where %s order by name";
     
@@ -64,7 +65,7 @@ public class RetrieveDatasets extends AbstractQuery<IStructureRecord,SourceDatas
 	public SourceDataset getObject(ResultSet rs) throws AmbitException {
 		return readDataset.getObject(rs);
     }
-	public double calculateMetric(SourceDataset object) {
+	public double calculateMetric(ISourceDataset object) {
 		return 1;
 	}
 	public boolean isPrescreen() {

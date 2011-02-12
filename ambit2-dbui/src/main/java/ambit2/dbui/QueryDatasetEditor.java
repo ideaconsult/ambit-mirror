@@ -38,6 +38,7 @@ import javax.swing.ListModel;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
@@ -59,10 +60,10 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
 	 * 
 	 */
 	private static final long serialVersionUID = -3741781796086220256L;
-	protected AmbitRows<SourceDataset> datasets;
+	protected AmbitRows<ISourceDataset> datasets;
 	
 	public JComponent buildPanel() {
-		datasets = new AmbitRows<SourceDataset>();
+		datasets = new AmbitRows<ISourceDataset>();
 		FormLayout layout = new FormLayout(
 	            "75dlu,3dlu,125dlu,3dlu,125dlu",
 				"pref,pref");        
@@ -106,7 +107,7 @@ public class QueryDatasetEditor extends QueryEditor<String,SourceDataset,StringC
 
 	@Override
 	protected JComponent createValueComponent() {
-		ListModel fieldnames = new RowsModel<SourceDataset>(datasets);		
+		ListModel fieldnames = new RowsModel<ISourceDataset>(datasets);		
 		JComboBox box = BasicComponentFactory.createComboBox(
 				new SelectionInList<SourceDataset>(fieldnames, presentationModel.getModel("dataset")));
 		AutoCompleteDecorator.decorate(box);

@@ -32,22 +32,30 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
-import ambit2.db.SessionID;
 import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.storedquery.RetrieveStoredQuery;
+import ambit2.db.search.StoredQuery;
+import ambit2.db.update.storedquery.ReadStoredQuery;
 
-public class QueryStoredTest extends QueryTest<RetrieveStoredQuery> {
+public class QueryStoredTest extends QueryTest<ReadStoredQuery> {
 
 	@Override
-	protected RetrieveStoredQuery createQuery() throws Exception {
-		RetrieveStoredQuery q = new RetrieveStoredQuery();
-		q.setFieldname(new SessionID(1));
-		Assert.assertEquals("select idquery,idsessions,name,content from query join sessions using(idsessions)\nwhere user_name=SUBSTRING_INDEX(user(),'@',1) and idsessions = ? ",q.getSQL());
+	protected ReadStoredQuery createQuery() throws Exception {
+		ReadStoredQuery q = new ReadStoredQuery();
+		Assert.assertEquals(
+				"select idquery,name,title,content from query join sessions using(idsessions)\n where  title = ? order by name",
+				q.getSQL());
+		StoredQuery sq = new StoredQuery(1);
+		sq.setName(null);
+		q.setValue(sq);
+		Assert.assertEquals(
+				"select idquery,name,title,content from query join sessions using(idsessions)\n where  idquery = ? and  title = ? order by name",
+				q.getSQL());		
 		return q;
 	}
 
 	@Override
-	protected void verify(RetrieveStoredQuery query, ResultSet rs) throws Exception {
+	protected void verify(ReadStoredQuery query, ResultSet rs) throws Exception {
+		int c = 0;
 		while (rs.next()) {
 			IStoredQuery q = query.getObject(rs);
 			
@@ -56,7 +64,9 @@ public class QueryStoredTest extends QueryTest<RetrieveStoredQuery> {
 					||
 					((q.getId()==2) && (q.getName().equals("test query 2")))
 					);
+			c++;
 		}
+		Assert.assertEquals(1,c);
 		
 	}
 

@@ -12,7 +12,7 @@ package ambit2.base.data;
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2008-4-20
  */
-public class SourceDataset extends AmbitBean implements Comparable<SourceDataset>{
+public class SourceDataset extends AmbitBean implements Comparable<SourceDataset>, ISourceDataset{
 	/**
 	 * 
 	 */
@@ -97,5 +97,23 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
     }
     public void setURL(String url) {
     	reference = LiteratureEntry.getInstance(getTitle(),url);
-    }    
+    }
+    //new interface
+    @Override
+    public int getID() {
+    	return getId();
+    }
+    @Override
+    public void setID(int id) {
+    	setId(id);
+    }
+    @Override
+    public String getSource() {
+    	return getTitle();
+    }
+    @Override
+    public void setSource(String name) {
+    	setTitle(name);
+    	
+    }
 }

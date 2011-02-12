@@ -43,8 +43,8 @@ import ambit2.db.results.RowsModel;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StringCondition;
-import ambit2.db.search.storedquery.SearchStoredQueries;
 import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.update.storedquery.SearchStoredQueries;
 
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;

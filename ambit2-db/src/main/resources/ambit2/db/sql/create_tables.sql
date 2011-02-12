@@ -496,7 +496,7 @@ CREATE TABLE  `sessions` (
   `user_name` varchar(16) collate utf8_bin NOT NULL,
   `started` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `completed` timestamp NOT NULL DEFAULT '2010-01-01 01:01:01',
-  `title` varchar(45) collate utf8_bin NOT NULL default 'Default',
+  `title` varchar(45) collate utf8_bin NOT NULL default 'temp',
   PRIMARY KEY  (`idsessions`),
   UNIQUE KEY `Index_3` USING BTREE (`title`,`user_name`),
   KEY `FK_sessions_1` (`user_name`),

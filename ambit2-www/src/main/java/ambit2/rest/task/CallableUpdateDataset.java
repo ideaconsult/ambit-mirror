@@ -8,6 +8,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -29,7 +30,7 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 	protected boolean clearPreviousContent = false;
 	protected Template template;
 	protected Reference applicationRootReference;
-	protected DatasetURIReporter<IQueryRetrieval<SourceDataset>> datasetUriReporter;
+	protected DatasetURIReporter<IQueryRetrieval<ISourceDataset>> datasetUriReporter;
 	
 	public boolean isClearPreviousContent() {
 		return clearPreviousContent;
@@ -43,7 +44,7 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 			Reference applicationRootReference, 
 			Context context,
 			SourceDataset dataset,
-			DatasetURIReporter<IQueryRetrieval<SourceDataset>> datasetUriReporter,
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> datasetUriReporter,
 			USERID token
 			) throws ResourceException {
 		super(form, context,token);
