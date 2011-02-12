@@ -17,6 +17,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
@@ -69,7 +70,7 @@ public class FingerprintsModelBuilder extends ModelBuilder<List<BitSet>,Algorith
 		
 		LiteratureEntry prediction = new LiteratureEntry(m.getName(),
 				model_reporter.getURI(applicationRootReference.toString(),m));		
-		
+		prediction.setType(_type.Model);
 		Template predictors = null;
 		Template dependent = null;
 		Template predicted = null;
