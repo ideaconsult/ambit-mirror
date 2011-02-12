@@ -73,6 +73,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 
 	protected void prepareForeignProcessing(Reference reference) throws Exception {
 		foreignInputDataset = !applicationRootReference.isParent(reference);
+		//foreignInputDataset = true; //test
 		int pos = reference.toString().lastIndexOf("/dataset/");
 		dataset_service = reference.toString().substring(0,pos+9);
 	}
@@ -123,7 +124,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 		if (foreignInputDataset) {
 			File file = File.createTempFile("mresult_",".rdf");
 			tmpFileName = file.getAbsolutePath();
-			rdfFileWriter = new RDFFileWriter(file,applicationRootReference);
+			rdfFileWriter = new RDFFileWriter(file,applicationRootReference,null);
 			return rdfFileWriter;
 		} else {
 			PropertyValuesWriter writer = new PropertyValuesWriter();
@@ -139,7 +140,6 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 	protected TaskResult createReference(Connection connection) throws Exception {
 		  //TODO fix - this will not work for foreign datasets!
 			if (foreignInputDataset) {
-				System.out.println(tmpFileName);
 				try {
 					RemoteTask task = new RemoteTask(new Reference(dataset_service),MediaType.TEXT_URI_LIST,
 							new FileRepresentation(new File(tmpFileName),MediaType.APPLICATION_RDF_XML),Method.POST);
@@ -172,10 +172,10 @@ class RDFFileWriter extends AbstractDBProcessor<IStructureRecord, IStructureReco
 	private static final long serialVersionUID = -7626753873168651075L;
 	protected DatasetRDFWriter recordWriter;
 
-	public RDFFileWriter(File file, Reference appReference) throws Exception {
+	public RDFFileWriter(File file, Reference appReference, Template template) throws Exception {
 		super();
 		recordWriter = new DatasetRDFWriter(appReference,null);
-		recordWriter.setTemplate(new Template());
+		recordWriter.setTemplate(template==null?new Template():template);
 		XMLStreamWriter writer = null;
 		try {
 			
