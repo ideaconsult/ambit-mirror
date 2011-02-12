@@ -17,6 +17,7 @@ import org.restlet.data.Reference;
 import org.restlet.representation.FileRepresentation;
 
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -73,7 +74,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 
 	protected void prepareForeignProcessing(Reference reference) throws Exception {
 		foreignInputDataset = !applicationRootReference.isParent(reference);
-		//foreignInputDataset = true; //test
+		foreignInputDataset = true; //test
 		int pos = reference.toString().lastIndexOf("/dataset/");
 		dataset_service = reference.toString().substring(0,pos+9);
 	}
@@ -201,6 +202,9 @@ class RDFFileWriter extends AbstractDBProcessor<IStructureRecord, IStructureReco
 	@Override
 	public IStructureRecord process(IStructureRecord target)
 			throws AmbitException {
+		for (Property p: target.getProperties())
+			recordWriter.getTemplate().add(p);
+		
 		return recordWriter.process(target);
 	}
 	@Override
