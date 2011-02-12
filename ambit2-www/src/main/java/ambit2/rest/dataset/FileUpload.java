@@ -113,9 +113,11 @@ public class FileUpload<USERID> {
 				);
 		try {
 			getResponse().setLocationRef(callable.call().getReference());
-			PolicyProtectedTask task = new PolicyProtectedTask(token.toString());
-			task.setUri(new TaskResult(getResponse().getLocationRef().toString(),true));
-			task.setPolicy();
+			if (token!=null) {
+				PolicyProtectedTask task = new PolicyProtectedTask(token.toString());
+				task.setUri(new TaskResult(getResponse().getLocationRef().toString(),true));
+				task.setPolicy();
+			}
 			getResponse().setStatus(Status.SUCCESS_OK);
 			return new StringRepresentation(getResponse().getLocationRef().toString(),MediaType.TEXT_URI_LIST);
 
