@@ -74,7 +74,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 
 	protected void prepareForeignProcessing(Reference reference) throws Exception {
 		foreignInputDataset = !applicationRootReference.isParent(reference);
-		foreignInputDataset = true; //test
+		//foreignInputDataset = true; //test
 		int pos = reference.toString().lastIndexOf("/dataset/");
 		dataset_service = reference.toString().substring(0,pos+9);
 	}
