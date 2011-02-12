@@ -14,7 +14,9 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.representation.FileRepresentation;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -34,6 +36,7 @@ import ambit2.db.search.property.ValuesReader;
 import ambit2.rest.dataset.DatasetRDFWriter;
 import ambit2.rest.model.predictor.ModelPredictor;
 
+import com.mchange.v2.util.ResourceClosedException;
 import com.sun.xml.txw2.output.IndentingXMLStreamWriter;
 
 /**
@@ -121,6 +124,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 		//can't find good way to close processors(writers) ... TODO extension of iprocessor interface & batch 
 		return stats;
 	}
+	
 	protected IProcessor<IStructureRecord, IStructureRecord> getWriter() throws Exception  {
 		if (foreignInputDataset) {
 			File file = File.createTempFile("mresult_",".rdf");
@@ -139,15 +143,28 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 	 */
 	@Override
 	protected TaskResult createReference(Connection connection) throws Exception {
-		  //TODO fix - this will not work for foreign datasets!
 			if (foreignInputDataset) {
+				File tmpFile = new File(tmpFileName);
+				if (!tmpFile.exists()) throw new ResourceException(Status.SERVER_ERROR_INTERNAL,"No results available!");
 				try {
+					
 					RemoteTask task = new RemoteTask(new Reference(dataset_service),MediaType.TEXT_URI_LIST,
-							new FileRepresentation(new File(tmpFileName),MediaType.APPLICATION_RDF_XML),Method.POST);
-					//TODO fix to post the status
-					return new TaskResult(task.getResult().toString());
+							new FileRepresentation(tmpFile,MediaType.APPLICATION_RDF_XML),Method.POST);
+					//wait to complete, so that we can delete the tmp file
+					
+					while (!task.isDone()) {
+						task.poll();
+						Thread.sleep(500);
+						Thread.yield();
+					}
+					if (task.isERROR()) 
+						throw task.error;
+					else	
+						return new TaskResult(task.getResult().toString());
 				} catch (Exception x) {
 					throw x;
+				} finally {
+					try { if (tmpFile.exists()) tmpFile.delete();} catch (Exception x) {}
 				}
 
 			} else {
