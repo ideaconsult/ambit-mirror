@@ -9,7 +9,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.SourceDataset;
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -28,10 +28,10 @@ import ambit2.rest.dataset.DatasetsHTMLReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.query.QueryResource;
 
-public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
+public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
 
 	@Override
-	public IProcessor<IQueryRetrieval<SourceDataset>, Representation> createConvertor(
+	public IProcessor<IQueryRetrieval<ISourceDataset>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 
 	if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
@@ -40,9 +40,9 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),false,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation()) {
+		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
-			public Object processItem(SourceDataset dataset) throws AmbitException  {
+			public Object processItem(ISourceDataset dataset) throws AmbitException  {
 				super.processItem(dataset);
 				try {
 				output.write('\n');
@@ -58,8 +58,8 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 			) {
-		return new RDFJenaConvertor<SourceDataset, IQueryRetrieval<SourceDataset>>(
-				new MetadataRDFReporter<IQueryRetrieval<SourceDataset>>(getRequest(),
+		return new RDFJenaConvertor<ISourceDataset, IQueryRetrieval<ISourceDataset>>(
+				new MetadataRDFReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),
 						getDocumentation(),
 						variant.getMediaType()),variant.getMediaType());			
 
@@ -69,7 +69,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<S
 				new DatasetsHTMLReporter(getRequest(),false,getDocumentation()),MediaType.TEXT_HTML);
 	}
 	@Override
-	protected IQueryRetrieval<SourceDataset> createQuery(Context context, Request request,
+	protected IQueryRetrieval<ISourceDataset> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 
 		int idcompound = -1;

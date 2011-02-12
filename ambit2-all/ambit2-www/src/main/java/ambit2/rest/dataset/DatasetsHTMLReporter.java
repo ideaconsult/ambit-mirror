@@ -8,7 +8,7 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.SourceDataset;
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.IStructureKey.Matcher;
@@ -24,7 +24,7 @@ import ambit2.rest.structure.CompoundResource;
  * @author nina
  *
  */
-public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQueryRetrieval<SourceDataset>> {
+public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQueryRetrieval<ISourceDataset>> {
 	/**
 	 * 
 	 */
@@ -41,10 +41,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
-		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(request,doc);
+		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(request,doc);
 	}
 	@Override
-	public void footer(Writer output, IQueryRetrieval<SourceDataset> query) {
+	public void footer(Writer output, IQueryRetrieval<ISourceDataset> query) {
 		try {
 			//if (collapsed) {
 				output.write("\n<hr>");
@@ -90,7 +90,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 		super.footer(output, query);
 	}
 	@Override
-	public Object processItem(SourceDataset dataset) throws AmbitException {
+	public Object processItem(ISourceDataset dataset) throws AmbitException {
 		try {
 			StringWriter w = new StringWriter();
 			uriReporter.setOutput(w);
@@ -179,7 +179,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<SourceDataset, IQuer
 			output.write(String.format(
 					"&nbsp;<a href=\"%s?max=100\">%s</a>",
 					w.toString(),
-					(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getId()):dataset.getName()
+					(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getID()):dataset.getName()
 					));
 			/*
 			output.write(String.format(

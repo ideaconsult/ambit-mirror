@@ -34,6 +34,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.SourceDatasetRows;
 import ambit2.db.processors.test.DbUnitTest;
@@ -52,9 +53,10 @@ public class SourceDatasetRowsTest extends DbUnitTest {
         rows.setQuery(query);
  
         while (rows.next()) {
-            SourceDataset d = rows.getObject();
-            Assert.assertTrue(d.getId() > 0);
-            Assert.assertTrue(d.getReference().getId() > 0);
+            ISourceDataset d = rows.getObject();
+            Assert.assertTrue(d.getID() > 0);
+            Assert.assertTrue(d instanceof SourceDataset);
+            Assert.assertTrue(((SourceDataset)d).getReference().getId() > 0);
         }
         rows.close();
         c.close();

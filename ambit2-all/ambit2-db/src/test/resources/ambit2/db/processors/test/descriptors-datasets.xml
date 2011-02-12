@@ -60,7 +60,7 @@
   <sk1024 idchemical="10" fp1="0" fp2="0" fp3="524288" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="33554432" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="2" status="valid"/>
   <sk1024 idchemical="11" fp1="4127" fp2="128" fp3="0" fp4="0" fp5="0" fp6="536870912" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="8" status="valid"/>
   <sk1024 idchemical="29141" fp1="0" fp2="0" fp3="0" fp4="0" fp5="0" fp6="0" fp7="0" fp8="0" fp9="0" fp10="0" fp11="0" fp12="0" fp13="0" fp14="0" fp15="0" fp16="0" time="0" bc="0" status="valid"/> 
-  <sessions idsessions="1" user_name="guest" completed='2010-01-01 01:01:01'/>
+  <sessions idsessions="1" user_name="guest" completed='2010-01-01 01:01:01' title='temp'/>
   <query idquery="1" idsessions="1" name="test query 1" content=""/>
   <query idquery="2" idsessions="1" name="test query 2" content="" idtemplate="1"/>
   

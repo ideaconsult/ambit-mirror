@@ -37,6 +37,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
@@ -47,7 +48,7 @@ import ambit2.db.results.AmbitRows;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
 
-public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
+public class RetrieveDatasetsTest extends RetrieveTest<ISourceDataset> {
 
 
 	@Test
@@ -72,8 +73,8 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		ResultSet rs = qe.process((RetrieveDatasets)query);
 		
 		while (rs.next()) {
-			SourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getId() + " and name='"+ dataset.getName()+"'");		
+			ISourceDataset dataset = query.getObject(rs);
+			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getID() + " and name='"+ dataset.getName()+"'");		
 			Assert.assertEquals(1,names.getRowCount());
 		}
 		rs.close();
@@ -95,8 +96,8 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		ResultSet rs = qe.process((RetrieveDatasets)query);
 		
 		while (rs.next()) {
-			SourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getId() + " and name='"+ dataset.getName()+"'");		
+			ISourceDataset dataset = query.getObject(rs);
+			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getID() + " and name='"+ dataset.getName()+"'");		
 			Assert.assertEquals(1,names.getRowCount());
 		}
 		rs.close();
@@ -119,8 +120,8 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		ResultSet rs = qe.process((RetrieveDatasets)query);
 		int count = 0;
 		while (rs.next()) {
-			SourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getId() + " and name='"+ dataset.getName()+"'");		
+			ISourceDataset dataset = query.getObject(rs);
+			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getID() + " and name='"+ dataset.getName()+"'");		
 			Assert.assertEquals(1,names.getRowCount());
 			count++; 
 		}
@@ -145,8 +146,8 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		ResultSet rs = qe.process((RetrieveDatasets)query);
 		int count = 0;
 		while (rs.next()) {
-			SourceDataset dataset = query.getObject(rs);
-			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getId() + " and name='"+ dataset.getName()+"'");		
+			ISourceDataset dataset = query.getObject(rs);
+			names = c.createQueryTable("EXPECTED_DATASETS","SELECT * FROM src_dataset where id_srcdataset="+dataset.getID() + " and name='"+ dataset.getName()+"'");		
 			Assert.assertEquals(1,names.getRowCount());
 			count++;
 		}
@@ -156,12 +157,12 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		c.close();
 	}		
 	@Override
-	protected void verifyRows(AmbitRows<SourceDataset> rows) throws Exception {
+	protected void verifyRows(AmbitRows<ISourceDataset> rows) throws Exception {
 		IDatabaseConnection c = getConnection();
 		Assert.assertNotNull(rows);
 		Assert.assertEquals(3,rows.size());
 		while (rows.next()) {
-			SourceDataset dataset = rows.getObject();
+			ISourceDataset dataset = rows.getObject();
 			ITable table = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,name,user_name,idreference,title,url FROM src_dataset join catalog_references using(idreference) where name='"+ dataset.getName() +"'");		
 			Assert.assertEquals(1,table.getRowCount());			
 			for (int i=1; i <= rows.getMetaData().getColumnCount();i++) {
@@ -171,11 +172,11 @@ public class RetrieveDatasetsTest extends RetrieveTest<SourceDataset> {
 		
 	}
 	@Override
-	protected AmbitRows<SourceDataset> createRows() throws Exception {
+	protected AmbitRows<ISourceDataset> createRows() throws Exception {
 		return new SourceDatasetRows();
 	}
 	@Override
-	protected IQueryRetrieval<SourceDataset> createQuery() {
+	protected IQueryRetrieval<ISourceDataset> createQuery() {
 		return new RetrieveDatasets();
 	}	
 }

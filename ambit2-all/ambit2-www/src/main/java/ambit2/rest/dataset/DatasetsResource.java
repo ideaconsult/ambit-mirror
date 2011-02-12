@@ -11,6 +11,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
@@ -18,10 +19,12 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
+import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.AbstractReadDataset;
 import ambit2.db.update.dataset.QueryDatasetByFeatures;
 import ambit2.db.update.dataset.ReadDataset;
+import ambit2.db.update.storedquery.ReadStoredQuery;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RDFJenaConvertor;
@@ -48,7 +51,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina 
  *
  */
-public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDataset>, SourceDataset> {
+public class DatasetsResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
 	
 	protected SourceDataset dataset;
 	public final static String datasets = "/datasets";	
@@ -137,7 +140,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		
 	}
 	@Override
-	protected IQueryRetrieval<SourceDataset> createQuery(Context context,
+	protected IQueryRetrieval<ISourceDataset> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		
 		Form form = request.getResourceRef().getQueryAsForm();
@@ -175,9 +178,15 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			dataset.setId(idnum);
 			query.setValue(dataset);
 		} catch (NumberFormatException x) {
-			if (id.toString().startsWith(DatasetStructuresResource.QR_PREFIX)) 
-				throw new InvalidResourceIDException(id);
-			else {
+			if (id.toString().startsWith(DatasetStructuresResource.QR_PREFIX)) {
+				String key = id.toString().substring(DatasetStructuresResource.QR_PREFIX.length());
+				try {
+					IQueryRetrieval<ISourceDataset> q = new ReadStoredQuery(Integer.parseInt(key.toString()));
+					return q;
+				} catch (NumberFormatException xx) {
+					throw new InvalidResourceIDException(id);
+				}
+			} else {
 				dataset = new SourceDataset();
 				dataset.setName(id.toString());
 				query.setValue(dataset);
@@ -205,9 +214,9 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation()) {
+		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
-			public Object processItem(SourceDataset dataset) throws AmbitException  {
+			public Object processItem(ISourceDataset dataset) throws AmbitException  {
 				super.processItem(dataset);
 				try {
 				output.write('\n');
@@ -223,8 +232,8 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<SourceDatase
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 			) {
-		return new RDFJenaConvertor<SourceDataset, IQueryRetrieval<SourceDataset>>(
-				new MetadataRDFReporter<IQueryRetrieval<SourceDataset>>(getRequest(),
+		return new RDFJenaConvertor<ISourceDataset, IQueryRetrieval<ISourceDataset>>(
+				new MetadataRDFReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),
 						getDocumentation(),variant.getMediaType()),variant.getMediaType());			
 
 		

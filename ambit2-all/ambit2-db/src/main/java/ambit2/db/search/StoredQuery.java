@@ -65,7 +65,7 @@ public class StoredQuery implements IStoredQuery {
 		return name;
 	}
 	public void setName(String name) {
-		if (name.length()>200)
+		if ((name!= null) && (name.length()>200))
 			this.name = name.substring(0,200);
 		else this.name = name;
 	}
@@ -139,6 +139,23 @@ public class StoredQuery implements IStoredQuery {
 	}
 	public String getCategory() {
 		return null;
+	}
+	@Override
+	public int getID() {
+		return getId();
+	}
+	@Override
+	public void setID(int id) {
+		setId(id);
+		
+	}
+	@Override
+	public String getSource() {
+		return content;
+	}
+	@Override
+	public void setSource(String name) {
+		this.content = name;
 	}
 }
 

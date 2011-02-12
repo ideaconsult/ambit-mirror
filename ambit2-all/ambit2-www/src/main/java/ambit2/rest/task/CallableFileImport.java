@@ -20,6 +20,7 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
@@ -89,21 +90,21 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	protected Connection connection;
 	protected CallableFileUpload upload;
 
-	protected DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter;
+	protected DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter;
 	protected ConformerURIReporter compoundReporter;
 
-	public DatasetURIReporter<IQueryRetrieval<SourceDataset>> getReporter() {
+	public DatasetURIReporter<IQueryRetrieval<ISourceDataset>> getReporter() {
 		return reporter;
 	}
 
 	public void setReporter(
-			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter) {
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter) {
 		this.reporter = reporter;
 	}
 
 	public CallableFileImport(ClientInfo client, SourceDataset dataset,
 			File file, Connection connection,
-			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter,
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter,
 			ConformerURIReporter compoundReporter,
 			boolean firstCompoundOnly,
 			USERID token) {
@@ -121,7 +122,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	public CallableFileImport(ClientInfo client, SourceDataset dataset,
 			List<FileItem> items, String fileUploadField,
 			Connection connection,
-			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter,
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter,
 			ConformerURIReporter compoundReporter,
 			boolean firstCompoundOnly,
 			USERID token) {
@@ -188,7 +189,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 
 	public CallableFileImport(ClientInfo client, SourceDataset dataset,
 			Representation input, Connection connection,
-			DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter,
+			DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter,
 			ConformerURIReporter compoundReporter,
 			boolean firstCompoundOnly,
 			USERID token) {
@@ -357,15 +358,12 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 				if (newDataset == null)
 					throw new ResourceException(Status.SUCCESS_NO_CONTENT);
 				if (reporter == null)
-					reporter = new DatasetURIReporter<IQueryRetrieval<SourceDataset>>();
+					reporter = new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>();
 				return new TaskResult(reporter.getURI(newDataset));
 			}
 
 		} catch (Exception x) {
-			try {
-				connection.close();
-			} catch (Exception xx) {
-			}
+
 			throw new ResourceException(new Status(
 					Status.SERVER_ERROR_INTERNAL, x.getMessage()));
 		} finally {

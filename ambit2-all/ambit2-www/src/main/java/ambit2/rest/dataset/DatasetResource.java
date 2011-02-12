@@ -19,6 +19,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
@@ -223,7 +224,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 					getRequest().getRootRef(),
 					getContext(),
 					dataset,
-					new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(getRequest(),getDocumentation()),
+					new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()),
 					token
 					);
 			((CallableUpdateDataset)callable).setClearPreviousContent(clearPreviousContent);

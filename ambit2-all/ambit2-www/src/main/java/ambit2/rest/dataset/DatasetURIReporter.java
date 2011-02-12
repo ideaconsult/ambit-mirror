@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import org.restlet.Request;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -12,7 +13,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 
 
-public class DatasetURIReporter<Q extends IQueryRetrieval<SourceDataset>> extends QueryURIReporter<SourceDataset, Q> {
+public class DatasetURIReporter<Q extends IQueryRetrieval<ISourceDataset>> extends QueryURIReporter<ISourceDataset, Q> {
 	/**
 	 * 
 	 */
@@ -24,16 +25,22 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<SourceDataset>> extend
 	public DatasetURIReporter() {
 	}	
 	@Override
-	public String getURI(String ref, SourceDataset dataset) {
+	public String getURI(String ref, ISourceDataset dataset) {
 		if (dataset == null) return null;
-		if (dataset.getId()<0)
-			return String.format("%s/%s/%s", 
+		String id;
+		if (dataset instanceof SourceDataset) {
+			if (dataset.getID()<0)
+				return String.format("%s/%s/%s", 
+						ref,
+						OpenTox.URI.dataset.name(),dataset==null?"":dataset.getName());
+			else
+				return String.format("%s/%s/%d", 
+						ref,
+						OpenTox.URI.dataset.name(),dataset==null?"":dataset.getID());
+		} else 
+			return String.format("%s/%s/R%d", 
 					ref,
-					OpenTox.URI.dataset.name(),dataset==null?"":dataset.getName());
-		else
-			return String.format("%s/%s/%d", 
-					ref,
-					OpenTox.URI.dataset.name(),dataset==null?"":dataset.getId());
+					OpenTox.URI.dataset.name(),dataset==null?"":dataset.getID());
 
 	}
 	public void footer(Writer output, Q query) {};

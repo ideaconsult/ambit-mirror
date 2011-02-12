@@ -3,6 +3,7 @@ package ambit2.rest.dataset;
 import org.ho.yaml.YamlEncoder;
 import org.restlet.Request;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -31,7 +32,7 @@ public class DatasetYamlReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 
 	@Override
 	protected QueryURIReporter createURIReporter(Request reference,ResourceDoc doc) {
-		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(reference,doc);
+		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(reference,doc);
 	}	
 	@Override
 	public Object processItem(SourceDataset item) throws AmbitException  {

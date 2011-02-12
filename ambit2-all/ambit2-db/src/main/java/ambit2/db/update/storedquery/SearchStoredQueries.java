@@ -27,7 +27,7 @@
  * 
  */
 
-package ambit2.db.search.storedquery;
+package ambit2.db.update.storedquery;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;

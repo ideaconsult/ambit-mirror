@@ -1,13 +1,10 @@
 package ambit2.rest.dataset;
 
 import java.sql.Connection;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.opentox.aa.opensso.OpenSSOPolicy;
-import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -22,6 +19,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
@@ -29,7 +27,6 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.TaskApplication;
-import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.structure.ConformerURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableFileImport;
@@ -39,8 +36,6 @@ import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResult;
-
-import com.sun.xml.bind.v2.TODO;
 
 public class FileUpload<USERID> {
 	protected Request request;
@@ -149,8 +144,8 @@ public class FileUpload<USERID> {
 					DBConnection dbc = new DBConnection(getApplication().getContext());
 					connection = dbc.getConnection(getRequest());	
 	              List<FileItem> items = upload.parseRequest(getRequest());
-	              DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
-	            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest(),null);
+	              DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter = 
+	            	  	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>> (getRequest(),null);
 	              
 	              ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = 
 	            	  	new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest(),null);
@@ -190,8 +185,8 @@ public class FileUpload<USERID> {
 					try {
 						DBConnection dbc = new DBConnection(getApplication().getContext());
 						connection = dbc.getConnection(getRequest());						
-			          DatasetURIReporter<IQueryRetrieval<SourceDataset>> reporter = 
-			            	  	new DatasetURIReporter<IQueryRetrieval<SourceDataset>> (getRequest(),null);	
+			          DatasetURIReporter<IQueryRetrieval<ISourceDataset>> reporter = 
+			            	  	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>> (getRequest(),null);	
 		              ConformerURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter = 
 		            	  	new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(getRequest(),null);			          
 			          

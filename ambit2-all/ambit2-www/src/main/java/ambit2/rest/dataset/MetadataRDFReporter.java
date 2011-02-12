@@ -3,6 +3,7 @@ package ambit2.rest.dataset;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
@@ -24,7 +25,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  *
  * @param <Q>
  */
-public class MetadataRDFReporter<Q extends IQueryRetrieval<SourceDataset>> extends QueryRDFReporter<SourceDataset,Q> {
+public class MetadataRDFReporter<Q extends IQueryRetrieval<ISourceDataset>> extends QueryRDFReporter<ISourceDataset,Q> {
 
 	/**
 	 * 
@@ -37,23 +38,26 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<SourceDataset>> exten
 	}
 	
 	@Override
-	protected QueryURIReporter<SourceDataset, IQueryRetrieval<SourceDataset>> createURIReporter(
+	protected QueryURIReporter<ISourceDataset, IQueryRetrieval<ISourceDataset>> createURIReporter(
 			Request req,ResourceDoc doc) {
-		return new DatasetURIReporter<IQueryRetrieval<SourceDataset>>(req,doc);
+		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(req,doc);
 	}
 	public void header(com.hp.hpl.jena.ontology.OntModel output, Q query) {
 		OT.OTClass.Dataset.createOntClass(output);
 	};
 	@Override
-	public Object processItem(SourceDataset item) throws AmbitException {
+	public Object processItem(ISourceDataset item) throws AmbitException {
 		Individual dataset = output.createIndividual(uriReporter.getURI(item),
 				OT.OTClass.Dataset.getOntClass(output));
-		
-		Individual ref = ReferenceRDFReporter.addToModel(output, item.getReference(), referenceReporter);
 		dataset.addProperty(DC.title,item.getName());
-		dataset.addProperty(RDFS.seeAlso,ref);
-		dataset.addProperty(DC.publisher,item.getUsername());
-		dataset.addProperty(DC.source,item.getTitle());
+		dataset.addProperty(DC.source,item.getSource());
+		if (item instanceof SourceDataset) {
+			SourceDataset ditem = (SourceDataset) item;
+			Individual ref = ReferenceRDFReporter.addToModel(output, ditem.getReference(), referenceReporter);
+			dataset.addProperty(RDFS.seeAlso,ref);
+			dataset.addProperty(DC.publisher,ditem.getUsername());
+
+		}
 		return dataset;
 	}
 
