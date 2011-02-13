@@ -66,7 +66,7 @@ public class RemoteTask implements Serializable {
 						String.format("[%s] Representation not available %s",this.status,url));
 			}
 			
-			result = handleOutput(r.getStream(),status);
+			result = handleOutput(r.getStream(),status,getUrl());
 		} catch (ResourceException x) {
 			status = x.getStatus();
 			try { 
@@ -144,7 +144,7 @@ public class RemoteTask implements Serializable {
 			
 //			if (!r.getEntity().isAvailable()) throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Representation not available %s",result));
 			
-			result = handleOutput(r.getStream(),status);
+			result = handleOutput(r.getStream(),status,result);
 //			System.out.println(String.format("poll %s %s",status,result));
 		} catch (ResourceException x) {
 			setError(x);
@@ -161,8 +161,15 @@ public class RemoteTask implements Serializable {
 		}
 		return isDone();
 	}
-
-	protected Reference handleOutput(InputStream in,Status status) throws ResourceException {
+	/**
+	 * 
+	 * @param in
+	 * @param status
+	 * @param url  the url contacted - for returning proper error only
+	 * @return
+	 * @throws ResourceException
+	 */
+	protected Reference handleOutput(InputStream in,Status status,Reference url) throws ResourceException {
 		Reference ref = null;
 		if (Status.SUCCESS_OK.equals(status) 
 						|| Status.SUCCESS_ACCEPTED.equals(status) 
@@ -170,12 +177,13 @@ public class RemoteTask implements Serializable {
 						//|| Status.REDIRECTION_SEE_OTHER.equals(status)
 						|| Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status)
 						) {
+			if (in==null) 
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+					String.format("Error reading from %s: %s", url, "Empty content"));
+			
 			int count=0;
 			try {
-				if (in==null) 
-					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-						String.format("Error when polling task %s: %s", getUrl(), "Empty content"));
-				
+
 				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 				String line = null;
 				while ((line = reader.readLine())!=null) {
@@ -184,7 +192,7 @@ public class RemoteTask implements Serializable {
 				}
 			} catch (Exception x) {
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-						String.format("Error when polling task %s: %s", getUrl(), x.getMessage()),x);
+						String.format("Error reading from %s: %s", url, x.getMessage()),x);
 			} finally {
 				try { in.close(); } catch (Exception x) {} ;
 			}
