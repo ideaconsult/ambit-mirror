@@ -66,7 +66,7 @@ public class RemoteTask implements Serializable {
 						String.format("[%s] Representation not available %s",this.status,url));
 			}
 			
-			result = handleOutput(r.getStream(),status,getUrl());
+			result = handleOutput(r.getStream(),status,null);
 		} catch (ResourceException x) {
 			status = x.getStatus();
 			try { 
@@ -178,9 +178,22 @@ public class RemoteTask implements Serializable {
 						|| Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status)
 						) {
 
-			if (in==null) 
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-					String.format("Error reading response from %s: %s. Status was %s", url, "Empty content",status));
+			if (in==null) {
+				String msg = String.format("Error reading response from %s: %s. Status was %s", url, "Empty content",status);
+				if (Status.SUCCESS_OK.equals(status) || Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status)) 
+					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,msg);
+				
+				if (url==null) //the original request, so smth got wrong
+					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,msg);
+				
+				else {  //workaround for freiburg dataset services, TODO !!!!!! - remove this when fixed there!
+					System.out.println(msg); 
+					return url;
+				}
+				/*
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,msg);
+					*/
+			}
 			
 			int count=0;
 			try {
@@ -193,12 +206,13 @@ public class RemoteTask implements Serializable {
 				}
 			} catch (Exception x) {
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-						String.format("Error reading response from %s: %s", url, x.getMessage()),x);
+						String.format("Error reading response from %s: %s", url==null?getUrl():url, x.getMessage()),x);
 			} finally {
 				try { in.close(); } catch (Exception x) {} ;
 			}
 			if (count == 0) 
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,"No status indications!");
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+							String.format("No task status indications from %s",url==null?getUrl():url));
 			
 			return ref;
 						
