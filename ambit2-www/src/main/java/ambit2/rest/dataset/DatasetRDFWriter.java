@@ -76,7 +76,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 		this.propertyReporter = propertyReporter;
 	}
 	public DatasetRDFWriter(Reference baseReference,ResourceDoc doc) {
-		this(new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(baseReference,doc),
+		this(new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(baseReference,doc),
 			new PropertyURIReporter(baseReference,doc),
 			new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(baseReference,doc)
 		);
