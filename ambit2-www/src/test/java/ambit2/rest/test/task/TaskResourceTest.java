@@ -431,13 +431,29 @@ public class TaskResourceTest extends ResourceTest {
 	public void testSuperServiceRemote() throws Exception {
 		//delete from property_values where idchemical=163134 and idproperty in (22127,22137,22213,22252,26056,49790)
 		String result = testSuperServiceRemote_("http://ideaconsult.dyndns.org:8080/ambit2","http://opentox.ntua.gr:4000/model/1b2399f5-1f22-4c9c-8b53-d4c392586961");
-		Assert.assertEquals("http://ideaconsult.dyndns.org:8080/ambit2/dataset/2765?feature_uris%5B%5D=http%3A%2F%2Fideaconsult.dyndns.org%3A8080%2Fambit2%2Ffeature%2F49790",result);
+		Assert.assertEquals("http://ideaconsult.dyndns.org:8080/ambit2/dataset/5760?feature_uris%5B%5D=http%3A%2F%2Fideaconsult.dyndns.org%3A8080%2Fambit2%2Ffeature%2F49790",result);
 	}
+	
+	@Test
+	public void testSuperServiceRemote3() throws Exception {
+		//delete from property_values where idchemical=163134 and idproperty in (22127,22137,22213,22252,26056,49790)
+		String result = testSuperServiceRemote_("http://apps.ideaconsult.net:8080/ambit2","http://opentox.ntua.gr:4000/model/88eb031e-1984-4e7e-bfc7-9af30f0e55d6");
+		Assert.assertEquals("http://apps.ideaconsult.net:8080/ambit2/dataset/82872?feature_uris%5B%5D=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Ffeature%2F367815",result);
+	}
+	
 	
 	@Test
 	public void testSuperServiceRemote1() throws Exception {
 		testSuperServiceRemote_("http://ideaconsult.dyndns.org:8080/ambit2","http://ideaconsult.dyndns.org:8080/ambit2/model/17");
 	}
+	
+	@Test
+	public void testSuperServiceRemote2() throws Exception {
+		//delete from property_values where idchemical=163134 and idproperty in (22127,22137,22213,22252,26056,49790)
+		String result = testSuperServiceRemote_("http://nina:8080/ambit2","http://alphaville:4000/model/a97def7b-14ee-4bce-b7ff-604eadfe8699");
+		//Assert.assertEquals("http://nina:8080/ambit2/dataset/2765?feature_uris%5B%5D=http%3A%2F%2Fnina%3A8080%2Fambit2%2Ffeature%2F51305",result);
+		Assert.assertEquals("http://nina:8080/ambit2/dataset/5760?feature_uris%5B%5D=http%3A%2F%2Fnina%3A8080%2Fambit2%2Ffeature%2F51305",result);
+	}	
 	public String testSuperServiceRemote_(String myname, String themodel) throws Exception {
 		
 		AuthTokenFactory tokenFactory = new AuthTokenFactory();
@@ -455,8 +471,10 @@ public class TaskResourceTest extends ResourceTest {
 			Form form = new Form();  
 			form.add(OpenTox.params.model_uri.toString(),themodel);
 			form.add(OpenTox.params.dataset_uri.toString(),
-					String.format("%s/dataset/2765",myname));
-						//String.format("%s/dataset/6?page=0&pagesize=2",myname));
+					//String.format("%s/dataset/2765",myname));
+						//String.format("%s/dataset/5760",myname));
+					String.format("%s/dataset/82872",myname));
+					
 			form.add(OpenTox.params.dataset_service.toString(),
 					String.format("%s/dataset/",myname));
 			
