@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -36,8 +37,8 @@ public class MissingFeatureValuesResourceTest extends ResourceTest {
 		Reference ref = createMissingValuesReference();
 		Form form = new Form();
 		form.add(OpenTox.params.dataset_uri.toString(),ref.toString());
-		testPost(String.format("http://localhost:%d/dataset", port),MediaType.APPLICATION_WWW_FORM,form.getWebRepresentation());
-		
+		Response r = testPost(String.format("http://localhost:%d/dataset", port),MediaType.APPLICATION_WWW_FORM,form.getWebRepresentation());
+		r.release();
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM query join query_results using(idquery) where idquery=3");
 		Assert.assertEquals(3,table.getRowCount());

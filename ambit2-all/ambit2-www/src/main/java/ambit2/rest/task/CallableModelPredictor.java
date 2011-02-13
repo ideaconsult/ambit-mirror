@@ -36,7 +36,6 @@ import ambit2.db.search.property.ValuesReader;
 import ambit2.rest.dataset.DatasetRDFWriter;
 import ambit2.rest.model.predictor.ModelPredictor;
 
-import com.mchange.v2.util.ResourceClosedException;
 import com.sun.xml.txw2.output.IndentingXMLStreamWriter;
 
 /**
