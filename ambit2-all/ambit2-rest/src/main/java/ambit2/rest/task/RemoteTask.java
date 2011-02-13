@@ -177,9 +177,10 @@ public class RemoteTask implements Serializable {
 						//|| Status.REDIRECTION_SEE_OTHER.equals(status)
 						|| Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status)
 						) {
+
 			if (in==null) 
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-					String.format("Error reading response from %s: %s", url, "Empty content"));
+					String.format("Error reading response from %s: %s. Status was %s", url, "Empty content",status));
 			
 			int count=0;
 			try {
