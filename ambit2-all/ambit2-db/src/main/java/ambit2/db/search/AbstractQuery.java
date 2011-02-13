@@ -26,7 +26,7 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 	protected boolean selected;
 	protected String name;
 	protected Integer id=-1;
-	protected long maxRecords = 1000;
+	protected long maxRecords = 10000;
 	protected int page = 0;
 
 	public AbstractQuery() {
@@ -102,7 +102,7 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  e
 		return b.toString();
 	}
 	public void setPageSize(long records) {
-		this.maxRecords = records>0?records:1000;
+		this.maxRecords = records>0?records:10000;
 		
 	}
 	public long getPageSize() {
