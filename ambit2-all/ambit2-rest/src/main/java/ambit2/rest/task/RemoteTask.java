@@ -179,7 +179,7 @@ public class RemoteTask implements Serializable {
 						) {
 			if (in==null) 
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-					String.format("Error reading from %s: %s", url, "Empty content"));
+					String.format("Error reading response from %s: %s", url, "Empty content"));
 			
 			int count=0;
 			try {
@@ -192,7 +192,7 @@ public class RemoteTask implements Serializable {
 				}
 			} catch (Exception x) {
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
-						String.format("Error reading from %s: %s", url, x.getMessage()),x);
+						String.format("Error reading response from %s: %s", url, x.getMessage()),x);
 			} finally {
 				try { in.close(); } catch (Exception x) {} ;
 			}

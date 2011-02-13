@@ -152,9 +152,9 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 					//wait to complete, so that we can delete the tmp file
 					
 					while (!task.isDone()) {
-						task.poll();
 						Thread.sleep(500);
 						Thread.yield();
+						task.poll();
 					}
 					if (task.isERROR()) 
 						throw task.error;
