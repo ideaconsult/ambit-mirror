@@ -150,11 +150,11 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 					RemoteTask task = new RemoteTask(new Reference(dataset_service),MediaType.TEXT_URI_LIST,
 							new FileRepresentation(tmpFile,MediaType.APPLICATION_RDF_XML),Method.POST);
 					//wait to complete, so that we can delete the tmp file
-					
+					Thread.sleep(200);
 					while (!task.isDone()) {
-						Thread.sleep(1000);
-						Thread.yield();
 						task.poll();
+						Thread.sleep(800);
+						Thread.yield();
 					}
 					if (task.isERROR()) 
 						throw task.error;
