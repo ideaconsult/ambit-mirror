@@ -172,6 +172,9 @@ public class RemoteTask implements Serializable {
 						) {
 			int count=0;
 			try {
+				if (in==null) 
+					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+						String.format("Error when polling task %s: %s", getUrl(), "Empty content"));
 				
 				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 				String line = null;
@@ -180,7 +183,8 @@ public class RemoteTask implements Serializable {
 					count++;
 				}
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x.getMessage(),x);
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+						String.format("Error when polling task %s: %s", getUrl(), x.getMessage()),x);
 			} finally {
 				try { in.close(); } catch (Exception x) {} ;
 			}
