@@ -179,20 +179,8 @@ public class RemoteTask implements Serializable {
 						) {
 
 			if (in==null) {
-				String msg = String.format("Error reading response from %s: %s. Status was %s", url, "Empty content",status);
-				if (Status.SUCCESS_OK.equals(status) || Status.SERVER_ERROR_SERVICE_UNAVAILABLE.equals(status)) 
-					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,msg);
-				
-				if (url==null) //the original request, so smth got wrong
-					throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,msg);
-				
-				else {  //workaround for freiburg dataset services, TODO !!!!!! - remove this when fixed there!
-					System.out.println(msg); 
-					return url;
-				}
-				/*
+				String msg = String.format("Error reading response from %s: %s. Status was %s", url==null?getUrl():url, "Empty content",status);
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,msg);
-					*/
 			}
 			
 			int count=0;
