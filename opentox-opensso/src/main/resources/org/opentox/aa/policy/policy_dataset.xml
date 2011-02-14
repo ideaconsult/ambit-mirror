@@ -1,0 +1,115 @@
+<!DOCTYPE Policies PUBLIC "-//Sun Java System Access Manager7.1 2006Q3
+  Admin CLI DTD//EN" "jar://com/sun/identity/policy/policyAdmin.dtd">
+
+<Policies>
+<Policy name="%s" referralPolicy="false" active="true">
+  <Rule name="rule_dataset">
+     <ServiceName name="iPlanetAMWebAgentService" />
+     <ResourceName name="%s"/>
+     <AttributeValuePair>
+        <Attribute name="GET" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="POST" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="PUT" />
+        <Value>allow</Value>
+     </AttributeValuePair>  
+     <AttributeValuePair>
+        <Attribute name="DELETE" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+  </Rule>
+  <Rule name="rule_metadata">
+     <ServiceName name="iPlanetAMWebAgentService" />
+     <ResourceName name="%s/metadata"/>
+     <AttributeValuePair>
+        <Attribute name="GET" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="POST" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="DELETE" />
+        <Value>deny</Value>
+     </AttributeValuePair>     
+     <AttributeValuePair>
+        <Attribute name="POST" />
+        <Value>allow</Value>
+     </AttributeValuePair>       
+  </Rule>
+  <Rule name="rule_features">
+     <ServiceName name="iPlanetAMWebAgentService" />
+     <ResourceName name="%s/feature/-*-"/>
+     <AttributeValuePair>
+        <Attribute name="GET" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="POST" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="PUT" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="DELETE" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+  </Rule>
+  <Rule name="rule_compounds">
+     <ServiceName name="iPlanetAMWebAgentService" />
+     <ResourceName name="%s/compound/-*-"/>
+     <AttributeValuePair>
+        <Attribute name="GET" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="POST" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="DELETE" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="PUT" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+  </Rule>
+  <Rule name="rule_conformers">
+     <ServiceName name="iPlanetAMWebAgentService" />
+     <ResourceName name="%s/compound/-*-/conformer/-*-"/>
+    <AttributeValuePair>
+        <Attribute name="GET" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="POST" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="DELETE" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+     <AttributeValuePair>
+        <Attribute name="PUT" />
+        <Value>allow</Value>
+     </AttributeValuePair>
+  </Rule>
+  <Subjects name="%s" description="">
+       <Subject name="%s" type="LDAPUsers" includeType="inclusive">
+           <AttributeValuePair>
+               <Attribute name="Values"/>
+               <Value>uid=%s,ou=people,dc=opentox,dc=org</Value>
+           </AttributeValuePair>
+       </Subject>
+  </Subjects>
+</Policy>
+</Policies>
