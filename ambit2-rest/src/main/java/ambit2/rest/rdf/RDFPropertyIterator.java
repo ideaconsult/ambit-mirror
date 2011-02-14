@@ -186,13 +186,13 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 				hasSource = ((Resource)source).getURI();
 				if (baseReference!=null) {
 					if (hasSource.startsWith(String.format("%s/algorithm/",baseReference.toString()))) {
-						hasSource = hasSource.substring(baseReference.toString().length()+11);
+						hasSource = Reference.decode(hasSource.substring(baseReference.toString().length()+11));
 					} else if (hasSource.startsWith(String.format("%s/model/",baseReference.toString()))) {
-						hasSource = hasSource.substring(baseReference.toString().length()+7);
+						hasSource = Reference.decode(hasSource.substring(baseReference.toString().length()+7));
 					} if (hasSource.startsWith(String.format("%s/dataset/",baseReference.toString()))) {
-						hasSource = hasSource.substring(baseReference.toString().length()+9);
+						hasSource = Reference.decode(hasSource.substring(baseReference.toString().length()+9));
 					} if (hasSource.startsWith(String.format("%s/feature/",baseReference.toString()))) {
-						hasSource = hasSource.substring(baseReference.toString().length()+9);
+						hasSource = Reference.decode(hasSource.substring(baseReference.toString().length()+9));
 					}
 				}
 				
