@@ -870,9 +870,9 @@ public class TestUtilities
 	void makeStructureStatistics()
 	{
 		ChemObjectFactory cof = new ChemObjectFactory();
-		cof.performStructureStatistics("/java_frags.txt", 
+		cof.performStructureStatistics("/exhaustive-str-set-ambit-first-900str.txt", 
 							"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
-							100, 20000, "/java_frags_stat20000.txt");
+							100, 5000, "/frags_stat_ambit_5000.txt");
 	}
 	
 	void filterStructsBySize(String inputSmilesFile, String outSmilesFile, int maxNumAtoms)	
@@ -1355,6 +1355,8 @@ public class TestUtilities
 		
 		//tu.testConvertKekuleSmartsToAromatic("C1CNC1CCCC2COCC23CCCC3");
 		//tu.testConvertKekuleSmartsToAromatic("C2CNC1CCCC1CC2CCCC3C=C[C;++]=CC=C3");
+		
+		tu.makeStructureStatistics();
 	}
 	
 }
