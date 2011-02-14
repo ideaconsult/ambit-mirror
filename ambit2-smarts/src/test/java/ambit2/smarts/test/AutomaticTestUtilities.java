@@ -10,6 +10,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -22,6 +23,7 @@ import org.openscience.cdk.smsd.interfaces.Algorithm;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.Screening;
@@ -121,6 +123,7 @@ public class AutomaticTestUtilities
 	int nDBStr = 1000;
 	int nInputStr = 10;
 	int nOutputStr = 0;
+	int nBits = 0;
 	int portionSize = 100;
 	int lineProcessMode = 0;
 	int statisticsType = STAT_SINGLE_DBSTR;
@@ -158,8 +161,12 @@ public class AutomaticTestUtilities
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
 		//atu.handleArguments(args);		
 		
-		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", "-i","/input1.txt", 
-				"-o","/out1.txt","-nDBStr", "200", "-maxSeqStep", "40", "-c", "calc-bitsets" });
+		//atu.handleArguments(new String[] {"-db","/gen-str-seq50-db5000.txt", "-i","/keys-eff80.txt",	
+		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", 
+				"-i","/key-bits-eff80-queries.txt","-i2","/key-bits-eff80-db.txt",
+				"-o","/keys-eff80-ratio-64___.txt",
+				"-nDBStr", "5200", "-maxSeqStep", "40", "-c", "calc-screen-ratio", 
+				"-nBits", "64"});
 		
 		//atu.produceRandomStructures();
 	}
@@ -282,6 +289,23 @@ public class AutomaticTestUtilities
 				catch(Exception e)
 				{
 					System.out.println("Incorrect nOutStr value: "+ e.toString());
+				}
+			}	
+		}
+		
+		opt = getOption("nBits", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					nBits = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect nBits value: "+ e.toString());
 				}
 			}	
 		}
@@ -493,7 +517,7 @@ public class AutomaticTestUtilities
 		System.out.println("                 size-stat        calculates the sizes of input structures");
 		System.out.println("                 calc-bitsets     calculates bitset for each db structure");
 		System.out.println("                 calc-screen-ratio  calculates scrrenig ration for a set of queries");
-		System.out.println("                                    -i queries; -i2 keys; -i3 db-bit-sets");
+		System.out.println("                                    -i queries-bits; -i2 db-bits");
 		
 	}
 	
@@ -1225,6 +1249,7 @@ public class AutomaticTestUtilities
 				if (!smiles.equals(""))
 					externKeySet.add(smiles);
 			}
+			f.close();
 			
 		}
 		catch(Exception e)
@@ -1237,13 +1262,56 @@ public class AutomaticTestUtilities
 		
 		Screening screen = new Screening(externKeySet);
 		
+		if (dbFileName.endsWith(".txt") || dbFileName.endsWith(".smi"))
+		{
+			try
+			{	
+				File file = new File(dbFileName);
+				RandomAccessFile f = new RandomAccessFile(file,"r");
+				
+				String line;
+				long length = f.length();
+				
+				int record = 0;
+				 
+				while (f.getFilePointer() < length)
+				{		
+					line = f.readLine();
+					String smiles = line.trim();
+					IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+										
+					BitSet bs = screen.getStructureKeyBits(mol);
+					String s = screen.getBitSetString(bs);
+					output(s + endLine);
+					
+					record++;
+					if (record % 100 == 0)
+						System.out.println("rec " + record);
+					
+					
+				}
+				f.close();
+				
+			}
+			catch(Exception e)
+			{	
+				System.out.println("Probleb with the SMILES DB file :");
+				e.printStackTrace();
+				return(-1);
+			}
+		
+			return(0);
+		}
+		
 		
 		try
 		{
 			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
 			int record=0;
+			int readComp = 0;
 
+			
 			while (reader.hasNext()) 
 			{	
 				record++;				
@@ -1251,11 +1319,14 @@ public class AutomaticTestUtilities
 					break;				
 				
 				if ((record % 100) == 0 )
-					System.out.println("rec " + record);
+					System.out.println("rec " + record + "   (" + readComp +")");
 				
 				Object o = reader.next();
 				if (o instanceof IAtomContainer) 
 				{
+					readComp++;
+					
+					
 					IAtomContainer mol = (IAtomContainer)o;
 					if (mol.getAtomCount() == 0) continue;
 					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
@@ -1290,40 +1361,14 @@ public class AutomaticTestUtilities
 	public int calcScreeningRatio()
 	{
 		//Input file interpretation
-		//-i queries
-		//-i2 keys
-		// -i3 db-bit-sets
+		//-i queries-bits
+		// -i2 db-bits
 		
+		Screening screen = new Screening();
+		Vector<BitSet> db = loadDbBitSets(screen);
 		
-		//Loading the structure keys
-		Vector<String> externKeySet = new Vector<String>(); 
-		try
-		{	
-			File file = new File(inFileName2);
-			RandomAccessFile f = new RandomAccessFile(file,"r");
-			
-			String line;
-			long length = f.length();
-			
-			 
-			while (f.getFilePointer() < length)
-			{	
-				line = f.readLine();
-				String smiles = line.trim();
-				if (!smiles.equals(""))
-					externKeySet.add(smiles);
-			}
-			
-		}
-		catch(Exception e)
-		{	
-			System.out.println("Probleb with the structure keys (-i2 input file):");
-			e.printStackTrace();
+		if (db == null)
 			return(-1);
-		}
-		
-		
-		Screening screen = new Screening(externKeySet);
 		
 		try
 		{	
@@ -1333,21 +1378,30 @@ public class AutomaticTestUtilities
 			String line;
 			long length = f.length();
 			
-			 
+			int lineNum = 0; 
 			while (f.getFilePointer() < length)
 			{	
 				line = f.readLine();
-				String smiles = line.trim();
+				lineNum++;
+				if (lineNum % 100 == 0)
+					System.out.println("query-bits " + lineNum);
 				
-				int res = countScreenResult(smiles, screen);
-				if (res > -1)
-					output(smiles + "  " + res + endLine);
+				
+				BitSet queryBitSet = screen.stringToBitSet(line);
+				int res = getRejectedDBStructs(queryBitSet, db, screen);
+				output("#"+lineNum + "    " + res + endLine);
+				
+				//File based version
+				//int res = countScreenResultFromFile(line, screen);
+				//if (res > -1)
+				//	output("#"+lineNum + "    " + res + endLine);
 			}
+			f.close();
 			
 		}
 		catch(Exception e)
 		{	
-			System.out.println("Probleb with the query structures (-i input file):");
+			System.out.println("Probleb with the query bits (-i input file):");
 			e.printStackTrace();
 			return(-1);
 		}
@@ -1357,11 +1411,106 @@ public class AutomaticTestUtilities
 	}
 	
 	
-	public int countScreenResult(String smiles, Screening screen)
+	public int countScreenResultFromFile(String queryBitSetString, Screening screen)
 	{
-		//TODO
-		//...
-		return 0;
+		
+		try
+		{	
+			File file = new File(inFileName2);
+			RandomAccessFile f = new RandomAccessFile(file,"r");
+			
+			String line;
+			long length = f.length();
+			
+			int rejectNum = 0;
+			int lineNum = 0; 
+			while (f.getFilePointer() < length)
+			{	
+				line = f.readLine();
+				lineNum++;
+				
+				BitSet queryBitSet = screen.stringToBitSet(queryBitSetString);
+				BitSet dbBitSet = screen.stringToBitSet(line);
+				boolean res = screen.bitSetCheck(queryBitSet, dbBitSet);
+				if (res == false)
+					rejectNum++;
+					
+			}
+			
+			f.close();
+			return(rejectNum);
+			
+		}
+		catch(Exception e)
+		{	
+			System.out.println("Probleb with the db-bits (-i2 input file):");
+			e.printStackTrace();
+			return(-1);
+		}
+		
+		//return 0;
+	}
+	
+	public Vector<BitSet> loadDbBitSets(Screening screen)
+	{	
+		Vector<BitSet> v = new Vector<BitSet>();
+		
+		try
+		{	
+			File file = new File(inFileName2);
+			RandomAccessFile f = new RandomAccessFile(file,"r");
+			
+			String line;
+			long length = f.length();
+			
+			int rejectNum = 0;
+			int lineNum = 0; 
+			while (f.getFilePointer() < length)
+			{	
+				line = f.readLine();
+				lineNum++;
+				BitSet dbBitSet = screen.stringToBitSet(line);
+				v.add(dbBitSet);
+			}
+			
+			f.close();
+			return(v);
+			
+		}
+		catch(Exception e)
+		{	
+			System.out.println("Probleb with the db-bits (-i2 input file):");
+			e.printStackTrace();
+			return(null);
+		}
+		
+		//return 0;
+	}
+	
+	int getRejectedDBStructs(BitSet queryBits, Vector<BitSet> db, Screening screen)
+	{
+		int rejectNum = 0;
+		
+		if (nBits > 0)
+		{
+			for (int i = 0; i < db.size(); i++)
+			{	
+				boolean res = screen.bitSetCheck(queryBits, db.get(i), nBits);
+				if (res == false)
+					rejectNum++;
+			}
+		}
+		else
+		{
+			for (int i = 0; i < db.size(); i++)
+			{	
+				boolean res = screen.bitSetCheck(queryBits, db.get(i));
+				if (res == false)
+					rejectNum++;
+			}
+		}
+			
+		return(rejectNum);
 	}
 	
 	

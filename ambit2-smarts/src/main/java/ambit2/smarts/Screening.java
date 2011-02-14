@@ -95,9 +95,23 @@ public class Screening
 	 * @param target
 	 * @return
 	 */
-	boolean bitSetCheck(BitSet query, BitSet target)
+	public boolean bitSetCheck(BitSet query, BitSet target)
 	{
 		for (int i = 0; i < query.size(); i++)
+		{	
+			if (query.get(i))
+			{
+				if (!target.get(i))
+					return (false);
+			}
+		}	
+		return (true);
+	}
+	
+	
+	public boolean bitSetCheck(BitSet query, BitSet target, int nBits)
+	{
+		for (int i = 0; i < nBits; i++)
 		{	
 			if (query.get(i))
 			{
