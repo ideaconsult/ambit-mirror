@@ -53,7 +53,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 		super(form, context,token);
 		this.applicationRootReference = applicationRootReference;
 		datasets = form.getValuesArray(OpenTox.params.dataset_uri.toString());
-		if (datasets==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
+		if ((datasets==null) || (datasets[0]==null)) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
 		sourceReference = new Reference(datasets[0]);
 		this.storedQuery = storedQuery;
 		this.template = null;
