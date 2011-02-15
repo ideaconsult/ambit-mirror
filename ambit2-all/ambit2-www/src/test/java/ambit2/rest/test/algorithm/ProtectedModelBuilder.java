@@ -9,6 +9,10 @@ import org.restlet.data.Status;
 import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.task.dsl.ClientResourceWrapper;
+import ambit2.rest.task.dsl.OTAlgorithm;
+import ambit2.rest.task.dsl.OTDataset;
+import ambit2.rest.task.dsl.OTFeature;
+import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.test.ProtectedResourceTest;
 
 public class ProtectedModelBuilder extends ProtectedResourceTest {
@@ -121,4 +125,17 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 		*/
 		
 	}	
+	
+	@Test
+	public void testClassifier() throws Exception {
+		System.setProperty("javax.net.ssl.trustStore",  "C:\\Program Files\\Java\\jre6\\lib\\security\\ambit-plovdiv");
+
+		ClientResourceWrapper.setTokenFactory(this);
+			
+		OTAlgorithm algorithm = OTAlgorithm.algorithm("https://ambit.uni-plovdiv.bg:8443/ambit2/algorithm/J48");
+		OTModel model = algorithm.process(OTDataset.dataset("https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/R401577?feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/R401577/feature&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/26221&max=5000"), 
+					          OTFeature.feature("https://ambit.uni-plovdiv.bg:8443/ambit2/feature/26221"));
+		System.out.println(model);
+	}	
+	
 }
