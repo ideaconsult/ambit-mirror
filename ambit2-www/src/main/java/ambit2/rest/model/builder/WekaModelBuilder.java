@@ -15,6 +15,7 @@ import org.restlet.resource.ResourceException;
 import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.Classifier;
 import weka.classifiers.functions.LinearRegression;
+import weka.classifiers.trees.J48;
 import weka.clusterers.Clusterer;
 import weka.core.Instances;
 import weka.filters.Filter;
@@ -191,11 +192,19 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			Property property = createPropertyFromReference(new Reference(newInstances.attribute(newInstances.classIndex()).name()), entry); 
 			dependent.add(property);
 			
-			predicted = new Template(name+"#predicted");
+			predicted = new Template(name+"#Predicted");
 			Property predictedProperty = new Property(property.getName(),prediction); 
 			predictedProperty.setLabel(property.getLabel());
 			predictedProperty.setUnits(property.getUnits());
 			predicted.add(predictedProperty);
+			
+			if (supportsDistribution(classifier)) {
+				Property confidenceProperty = new Property(String.format("%s Confidence",property.getName()),prediction); 
+				confidenceProperty.setLabel(Property.opentox_ConfidenceFeature);
+				confidenceProperty.setUnits("");
+				confidenceProperty.setClazz(Number.class);
+				predicted.add(confidenceProperty);
+			}
 			
 			predictors = new Template(name+"#Independent");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
@@ -225,7 +234,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 				predictors.add(property);
 			}	
 
-			predicted = new Template(name+"#predicted");
+			predicted = new Template(name+"#Predicted");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				if (newInstances.classIndex()==i) continue;
 				property = createPropertyFromReference(new Reference(String.format("PCA_%d",i+1)), entry);
@@ -246,7 +255,14 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 		}
 		return m;
 	}
-	
+	/**
+	 * TODO - verify via reflection, not fixed check
+	 * @param classifier
+	 * @return true if supports distributionForInstance method
+	 */
+	protected boolean supportsDistribution(Classifier classifier) {
+		return classifier instanceof J48;
+	}
 	protected void serializeModel(Object predictor, Instances newInstances, ModelQueryResults m) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
@@ -268,4 +284,6 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 		form.add("header", newInstances.toString());
 		m.setContent(form.getWebRepresentation().getText());
 	}
+	
+	
 }

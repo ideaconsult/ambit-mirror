@@ -14,8 +14,10 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
+import ambit2.base.data.Property;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelResource;
+import ambit2.rest.task.dsl.OTDataset;
 import ambit2.rest.test.ResourceTest;
 
 public class ModelResourceTest extends ResourceTest {
@@ -142,6 +144,7 @@ public class ModelResourceTest extends ResourceTest {
 		
 	@Test
 	public void testClustering() throws Exception {
+		setUpDatabase("src/test/resources/src-datasets_model.xml");
 		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port),
 				null,
 				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port),
@@ -155,6 +158,7 @@ public class ModelResourceTest extends ResourceTest {
 	}
 	@Test
 	public void testJ48Test() throws Exception {
+		setUpDatabase("src/test/resources/src-datasets_model.xml");
 		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/4",port,port,port,port),
 				String.format("http://localhost:%d/feature/4",port),
 				String.format("http://localhost:%d/dataset/2?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/3",port,port,port),
@@ -165,9 +169,37 @@ public class ModelResourceTest extends ResourceTest {
 		Assert.assertEquals(2,table.getRowCount());
 		c.close();			
 	}	
+	@Test
+	public void testJ48_R() throws Exception {
+		setUpDatabase("src/test/resources/src-datasets_model.xml");
+		
+		OTDataset dataset = OTDataset.dataset(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/4",port,port,port,port));
+		dataset.withDatasetService(String.format("http://localhost:%d/dataset",port));
+		OTDataset newDataset = dataset.copy();
+		
+		System.out.println(newDataset);
+		predict(newDataset.getUri().toString(),
+				String.format("http://localhost:%d/feature/4",port),
+				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port,port),
+				String.format("http://localhost:%d/algorithm/J48", port));
+	
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT id_srcdataset,idstructure,idproperty,name,value_string,value_number FROM values_all join struc_dataset using(idstructure) where id_srcdataset=1 and idproperty=5 order by idstructure");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT dependent,idproperty from models join template_def t on t.idtemplate=models.dependent where models.name regexp 'J48'");
+		Assert.assertEquals(1,table.getRowCount());
+		
+		c.close();		
+		
+	}	
 	
 	@Test
 	public void testJ48() throws Exception {
+		
+		setUpDatabase("src/test/resources/src-datasets_model.xml");
 		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/4",port,port,port,port),
 				String.format("http://localhost:%d/feature/4",port),
 				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port,port),
@@ -177,11 +209,24 @@ public class ModelResourceTest extends ResourceTest {
 		ITable table = 	c.createQueryTable("EXPECTED",
 				"SELECT id_srcdataset,idstructure,idproperty,name,value_string,value_number FROM values_all join struc_dataset using(idstructure) where id_srcdataset=1 and idproperty=5 order by idstructure");
 		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT dependent,idproperty from models join template_def t on t.idtemplate=models.dependent where models.name regexp 'J48'");
+		Assert.assertEquals(1,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		String.format("SELECT * from properties where comments='%s'",Property.opentox_ConfidenceFeature));
+		Assert.assertEquals(1,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT * from property_values join properties using(idproperty) where comments='%s' and value_num is not null",Property.opentox_ConfidenceFeature));
+				Assert.assertEquals(4,table.getRowCount());
+				
 		c.close();		
 		
 	}	
 	public void predict(String dataset, String target, String datasetTest, String algorithmURI) throws Exception {		
-		setUpDatabase("src/test/resources/src-datasets_model.xml");
+		
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",

@@ -69,6 +69,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static final String opentox_InChIKey = "http://www.opentox.org/api/1.1#InChIKey";
 	public static final String opentox_SMILES = "http://www.opentox.org/api/1.1#SMILES";
 	public static final String opentox_TupleFeature = "http://www.opentox.org/api/1.1#TupleFeature";
+	public static final String opentox_ConfidenceFeature = "http://www.opentox.org/api/1.1#ConfidenceFeature";
 	
 	public static final String EC = "EC";
 	protected boolean isNominal = false;

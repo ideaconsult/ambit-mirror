@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
-import java.awt.image.BufferedImage;
+
 import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.Classifier;
 import weka.clusterers.Clusterer;
@@ -103,7 +103,8 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 
 		Instances testInstances = target.dataset();
 		try {
-			Object value = null;
+			Object[] value = new Object[] {null,null}; //value itself (Instance) + confidence
+
 			//create new instance
 			header.add(predictionInstance(target));
 			
@@ -117,14 +118,20 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 				target = newInstances.instance(i);
 				
 				if (classifier != null) {
-					value = classifier.classifyInstance(target);
-					if (newInstances.classAttribute().isNominal())
-						value = newInstances.classAttribute().value(((Double)value).intValue());
+					double result = classifier.classifyInstance(target);
+					if (newInstances.classAttribute().isNominal()) {
+						value[0] = newInstances.classAttribute().value((int) result);
+						try {
+							value[1] = classifier.distributionForInstance(target)[(int) result];
+						} catch (Exception x) {
+							value[1] = null;
+						}
+					}
 				} else if (clusterer != null) {
-					value = clusterer.clusterInstance(target);
+					value[0] = clusterer.clusterInstance(target);
 				} else if (pca != null) {
 					
-					value = pca.convertInstance(target);
+					value[0] = pca.convertInstance(target);
 				} else throw new AmbitException();
 				
 			}
@@ -143,18 +150,42 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 	@Override
 	public void assignResults(IStructureRecord record, Object value)
 			throws AmbitException {
-		if (value instanceof Instance)  {
-			assignTransformedInstance(record, (Instance) value);
+		Object[] values = (Object[]) value;
+		if (values[0] instanceof Instance)  {
+			assignTransformedInstance(record, (Instance) value, (Double) values[1]);
 		}
-		else super.assignResults(record, value);
-	}
-	
-	public void assignTransformedInstance(IStructureRecord record, Instance value) throws AmbitException {
+		else {
+			
+			Iterator<Property> predicted = model.getPredicted().getProperties(true);
+			int count = 0;
+			while (predicted.hasNext()) {
+				Property property = predicted.next();
+				if (Property.opentox_ConfidenceFeature.equals(property.getLabel())) {
+					try { 
+						record.setProperty(property,values[1]);
+					} catch (Exception x) { record.setProperty(property,"NA");}
+				} else {
+					record.setProperty(property,values[0]);
+					count++;
+				}
+			}
+			if (count==0) throw new AmbitException("No property to assign results!!!");
+		}
+		
+	}	
+	public void assignTransformedInstance(IStructureRecord record, Instance value, double confidence) throws AmbitException {
 		Iterator<Property> predicted = model.getPredicted().getProperties(true);
 		int count = 0;
 		while (predicted.hasNext()) {
-			record.setProperty(predicted.next(),value.value(count));
-			count++;
+			Property property = predicted.next();
+			if (Property.opentox_ConfidenceFeature.equals(property.getLabel())) {
+				try { 
+					record.setProperty(property,confidence);
+				} catch (Exception x) { record.setProperty(property,"NA");}
+			} else {
+				record.setProperty(property,value.value(count));
+				count++;
+			}
 		}
 		if (count==0) throw new AmbitException("No property to assign results!!!");
 	}	
@@ -172,5 +203,14 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 	public BufferedImage getLegend(int width, int height) throws AmbitException {
 			return null;
 	}	
+	/**
+Evaluation evaluation = new Evaluation( trainDataset );
+evaluation.evaluateModel( classifier, testDataset );
+for (int i = 0; i < evaluation.predictions(); i++) {
+ NominalPrediction prediction = (NominalPrediction)
+evaluation.predictions().elementAt(i);
+ double[] distribution = prediction.distribution();
+}
+	 */
 }
 
