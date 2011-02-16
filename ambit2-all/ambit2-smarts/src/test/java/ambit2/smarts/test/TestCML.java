@@ -3,6 +3,7 @@ package ambit2.smarts.test;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 
+import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
@@ -22,6 +23,11 @@ public class TestCML
 		//testCML2("c1ccccc1");
 	}
 	
+	@Test
+	public void fakeTest() {
+		//there should be at least one test 
+		//TODO convert static methods to tests
+	}
 	public static void testCML1(String smiles)
 	{		
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
