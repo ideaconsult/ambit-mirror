@@ -114,6 +114,53 @@ public class TestUtilities
 		System.out.println("Man_search " + smarts + " in " + smiles + "   --> " + res);
 	}
 	
+	
+	public void testSmartsManagerBoolSearchMDL(String smarts, String mdlFile)
+	{		
+		try
+		{
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+
+			if (!reader.hasNext()) 
+			{
+				System.out.println("Could find a molecule in the file: " + mdlFile);
+				return;	
+			}	
+				
+				
+			Object o = reader.next();
+			if (o instanceof IAtomContainer) 
+			{
+				
+				IAtomContainer mol = (IAtomContainer)o;
+				if (mol.getAtomCount() == 0) 
+				{
+					System.out.println("Empty molecule (0 atoms)!");
+					return;
+				}
+				
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+				CDKHueckelAromaticityDetector.detectAromaticity(mol);
+				
+				man.setQuery(smarts);
+				if (!man.getErrors().equals(""))
+				{
+					System.out.println(man.getErrors());
+					return;
+				}		
+				boolean res = man.searchIn(mol);
+				System.out.println("Man_search " + smarts + " in MDL_FILE   -->  " + res);
+			}
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		
+		
+	}
+	
 	public void showFullAtomMappings(String smarts, String smiles)
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
@@ -1294,7 +1341,7 @@ public class TestUtilities
 		//tu.testIsomorphismMapping("C1CCC1", "CCCCNC1CCC1");
 		//tu.testIsomorphismMapping("CCN", "CCCCN");
 		
-		tu.testIsomorphismAllMappings("CCN", "CCCCNCC");
+		//tu.testIsomorphismAllMappings("CCN", "CCCCNCC");
 		//tu.testIsomorphismAllMappings("C1CCC1", "C1CCC1N");
 		//tu.testIsomorphismAllMappings("C1CCC1N", "C1CCC1N");
 		
@@ -1356,7 +1403,26 @@ public class TestUtilities
 		//tu.testConvertKekuleSmartsToAromatic("C1CNC1CCCC2COCC23CCCC3");
 		//tu.testConvertKekuleSmartsToAromatic("C2CNC1CCCC1CC2CCCC3C=C[C;++]=CC=C3");
 		
-		tu.makeStructureStatistics();
+		//tu.makeStructureStatistics();
+		
+		//System.out.println(man.isFlagUseCDKIsomorphismTester());
+		man.setUseCDKIsomorphismTester(false);
+		//tu.testSmartsManagerBoolSearch("cccc","C1=CC=CC=C1");
+		//tu.testSmartsManagerBoolSearch("cccc","c1ccccc1");
+		//tu.testSmartsManagerBoolSearch("c1ccccc1c2ccccc2","C1=CC=CC=C1-C2=CC=CC=C2");
+		tu.testSmartsManagerBoolSearch("c1ccccc1!@c2ccccc2","c1ccccc1c2ccccc2");
+		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1");
+		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1-C2=CC=CC=C2");
+		
+		/*
+		tu.testSmartsManagerBoolSearch("cc-c","c1ccccc1ccc");
+		tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1C2=CC=CC=C2");		
+		tu.testSmartsManagerBoolSearch("cc=c","C1=CC=CC=C1C2=CC=CC=C2");
+		tu.testSmartsManagerBoolSearch("cc=c","c1ccccc1c2ccccc2");
+		
+		tu.testSmartsManagerBoolSearchMDL("CC=C","D:/projects/nina/biphenyl.mol");
+		tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
+		*/
 	}
 	
 }

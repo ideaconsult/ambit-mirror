@@ -48,13 +48,18 @@ public class RingQueryBond extends SMARTSBond
     };
     
     public static boolean isRingBond(IBond bond)
-    {
+    {    	
     	//This function uses atom ring info for the two atoms of this bond
-    	//in order to determine wether this bond is a ring bond
-    	int atomRings0[] = (int[])bond.getAtom(0).getProperty(CMLUtilities.RingData);
-    	int atomRings1[] = (int[])bond.getAtom(1).getProperty(CMLUtilities.RingData); 
+    	//in order to determine whether this bond is a ring bond
+    	//RingData2 contains the formal indexes of the rings 
+    	//In order this bond to be a ring bond the atoms must participate in the same ring
+    	//i.e. at least one index must be the same
+    	int atomRings0[] = (int[])bond.getAtom(0).getProperty(CMLUtilities.RingData2);
+    	int atomRings1[] = (int[])bond.getAtom(1).getProperty(CMLUtilities.RingData2); 
     	if ((atomRings0 == null) || (atomRings1 == null))
     		return(false);
+    	
+    	
     	for (int i = 0; i < atomRings0.length; i++)
     		for (int j = 0; j < atomRings1.length; j++)
     			if (atomRings0[i] == atomRings1[j])

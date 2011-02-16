@@ -161,12 +161,12 @@ public class AutomaticTestUtilities
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
 		//atu.handleArguments(args);		
 		
-		//atu.handleArguments(new String[] {"-db","/gen-str-seq50-db5000.txt", "-i","/keys-eff80.txt",	
+		//atu.handleArguments(new String[] {"-db","/gen-str-seq40-db-after-40000.txt", "-i","/keys-eff80.txt",	
 		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", 
 				"-i","/key-bits-eff80-queries.txt","-i2","/key-bits-eff80-db.txt",
-				"-o","/keys-eff80-ratio-64___.txt",
-				"-nDBStr", "5200", "-maxSeqStep", "40", "-c", "calc-screen-ratio", 
-				"-nBits", "64"});
+				"-o","/out1.txt",
+				"-nDBStr", "50000", "-maxSeqStep", "40", "-c", "calc-screen-ratio", 
+				"-nBits", "32"});
 		
 		//atu.produceRandomStructures();
 	}
