@@ -154,7 +154,16 @@ public class TestIsomorphismTester extends TestCase
 		assertEquals(true, boolResult);
 		assertEquals(1, mappingPosCount);
 	}
-		
+	
+	public void testDoubleNonAromaticBond1() throws Exception {
+		match("cc=c", "C1=CC=CC=C1C2=CC=CC=C2");		
+		assertEquals(false, boolResult);
+	}
+	
+	public void testDoubleNonAromaticBond2() throws Exception {
+		match("cc=c", "c1ccccc1c2ccccc2");
+		assertEquals(false, boolResult);
+	}
 	
 	//----------------  Test recursive SMARTS -------------------
 	
