@@ -42,6 +42,8 @@ import ambit2.smarts.processors.SMARTSPropertiesGenerator;
  */
 public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcessor<Object, IStructureRecord,USERID> {
 	protected FPTable fingerprintsType = FPTable.fp1024;
+	protected Reference applicationRootReference;
+	
 	
 	public FPTable getFingerprintsType() {
 		return fingerprintsType;
@@ -55,6 +57,7 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 			Reference applicationRootReference,Context context,
 			Algorithm algorithm,USERID token) throws ResourceException {
 		super(form, context,token);
+		this.applicationRootReference = applicationRootReference;
 		try {
 			setFingerprintsType(FPTable.valueOf(algorithm.getContent().toString()));
 		} catch (Exception x) {
@@ -109,11 +112,22 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		//can have combined query with a dataset query if dataset_uri is present
-		MissingFingerprintsQuery q =  new MissingFingerprintsQuery(getFingerprintsType());
-		q.setPageSize(batchSize);
-		q.setPage(0);
-		return q;
+		if (reference!= null)
+			if (applicationRootReference.isParent(reference)) {
+				try {
+					Object q = getQueryObject(reference, applicationRootReference);
+					return q==null?reference:q;
+				} catch (Exception x) {
+					return reference;
+				}
+			} else throw new Exception("Remote URI not supported, this is for housekeeping the database only!");
+		else { 	
+			//can have combined query with a dataset query if dataset_uri is present
+			MissingFingerprintsQuery q =  new MissingFingerprintsQuery(getFingerprintsType());
+			q.setPageSize(batchSize);
+			q.setPage(0);
+			return q;
+		}
 	}
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
 
@@ -129,10 +143,12 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 		IBatchStatistics stats;
 		while (true) {
 			stats = batch.process(target);
-			if (stats.getRecords(RECORDS_STATS.RECORDS_PROCESSED)==0) break;
-			stats.setRecords(RECORDS_STATS.RECORDS_PROCESSED, 0);
-			stats.setRecords(RECORDS_STATS.RECORDS_ERROR, 0);
-			stats.setRecords(RECORDS_STATS.RECORDS_READ,0);
+			if (target instanceof MissingFingerprintsQuery) { //loop until no missing fingerprints
+				if (stats.getRecords(RECORDS_STATS.RECORDS_PROCESSED)==0) break;
+				stats.setRecords(RECORDS_STATS.RECORDS_PROCESSED, 0);
+				stats.setRecords(RECORDS_STATS.RECORDS_ERROR, 0);
+				stats.setRecords(RECORDS_STATS.RECORDS_READ,0);
+			} else break;
 		}
 		return stats;
 	}
@@ -140,21 +156,22 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 
 	@Override
 	protected TaskResult createReference(Connection connection) throws Exception {
+		TaskResult result = sourceReference==null?null:new TaskResult(sourceReference.toString(),false);
 		switch (getFingerprintsType()) {
 		case fp1024: {
-			return null;
+			return result;
 		}
 		case fp1024_struc: {
 			return structureQuality(connection);
 		}
 		case sk1024: {
-			return null;
+			return result;
 		}
 		case smarts_accelerator: {
-			return null;
+			return result;
 		}		
 		case atomenvironments: {
-			return null;
+			return result;
 		}			
 		default: {
 			throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,getFingerprintsType().toString());
