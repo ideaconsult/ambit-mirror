@@ -3,6 +3,9 @@ package ambit2.smarts.processors;
 import java.util.BitSet;
 import java.util.Vector;
 
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
