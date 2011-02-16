@@ -289,17 +289,17 @@ public class SmartsParser
 					{
 						if (sb.tokens.get(j).intValue() == SmartsConst.BT_RING)
 						{	
-							mNeedRingData = true;
+							mNeedRingData2 = true;
 							break;
 						}	
 					}
-					if (mNeedRingData)
+					if (mNeedRingData2)
 						break;
 				}
 				else
 					if (container.getBond(i) instanceof RingQueryBond)
 					{
-						mNeedRingData = true;
+						mNeedRingData2 = true;
 						break;
 					}
 			}
