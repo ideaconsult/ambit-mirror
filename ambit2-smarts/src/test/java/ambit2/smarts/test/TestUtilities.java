@@ -1414,7 +1414,7 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1");
 		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1-C2=CC=CC=C2");
 		
-		/*
+		
 		tu.testSmartsManagerBoolSearch("cc-c","c1ccccc1ccc");
 		tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1C2=CC=CC=C2");		
 		tu.testSmartsManagerBoolSearch("cc=c","C1=CC=CC=C1C2=CC=CC=C2");
@@ -1422,7 +1422,7 @@ public class TestUtilities
 		
 		tu.testSmartsManagerBoolSearchMDL("CC=C","D:/projects/nina/biphenyl.mol");
 		tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
-		*/
+		
 	}
 	
 }

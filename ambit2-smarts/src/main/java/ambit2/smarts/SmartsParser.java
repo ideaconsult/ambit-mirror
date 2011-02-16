@@ -368,7 +368,7 @@ public class SmartsParser
 				curBond = new SingleNonAromaticBond();
 				break;
 			case SmartsConst.BT_DOUBLE:
-				curBond = new OrderQueryBond(IBond.Order.DOUBLE);									
+				curBond = new DoubleNonAromaticBond();									
 				break;
 			case SmartsConst.BT_TRIPLE:	
 				curBond = new OrderQueryBond(IBond.Order.TRIPLE);									
@@ -1528,6 +1528,8 @@ public class SmartsParser
 			return(getBondType(bond.getOrder()));
 		if (bond instanceof SingleOrAromaticBond)
 			return(1);
+		if (bond instanceof DoubleNonAromaticBond)
+			return(2);
 		if (bond instanceof DoubleStereoBond)
 			return(2);
 		return(-1);
