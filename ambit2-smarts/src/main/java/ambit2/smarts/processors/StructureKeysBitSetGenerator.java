@@ -88,6 +88,13 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	
 	protected synchronized BitSet getStructureKeyBits(IAtomContainer ac)
 	{
+		//quick workaround for aromatic compounds, to avoid matching non-aromatic keys
+		//TODO remove this when isoTester/keys processing is fixed 
+		for (IBond bond : ac.bonds()) {
+			if (bond.getFlag(CDKConstants.ISAROMATIC))
+				bond.setOrder(Order.SINGLE);
+		}
+		//end of the workaround
 		BitSet keys = new BitSet(nKeys);
 		boolean res;
 		for (int i = 0; i < nKeys; i++) 
