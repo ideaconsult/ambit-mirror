@@ -32,6 +32,13 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	protected static int nKeys;
 	protected AtomConfigurator cfg = new AtomConfigurator();
 	protected CDKHueckelAromaticityDetector aromaticDetector = new CDKHueckelAromaticityDetector();
+	protected boolean cleanKekuleBonds = true;
+	public boolean isCleanKekuleBonds() {
+		return cleanKekuleBonds;
+	}
+	public void setCleanKekuleBonds(boolean cleanKekuleBonds) {
+		this.cleanKekuleBonds = cleanKekuleBonds;
+	}
 	/**
 	 * 
 	 */
@@ -93,11 +100,11 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	{
 		//quick workaround for aromatic compounds, to avoid matching non-aromatic keys
 		//TODO remove this when isoTester/keys processing is fixed 
-		for (IBond bond : ac.bonds()) {
-			if (bond.getFlag(CDKConstants.ISAROMATIC))
-				bond.setOrder(Order.SINGLE);
-		}
+		if (cleanKekuleBonds)
+			for (IBond bond : ac.bonds()) 
+				if (bond.getFlag(CDKConstants.ISAROMATIC)) bond.setOrder(Order.SINGLE);
 		//end of the workaround
+		
 		BitSet keys = new BitSet(nKeys);
 		boolean res;
 		for (int i = 0; i < nKeys; i++) 
