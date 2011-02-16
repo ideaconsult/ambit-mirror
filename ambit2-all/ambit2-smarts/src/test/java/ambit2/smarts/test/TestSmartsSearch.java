@@ -465,6 +465,7 @@ public class TestSmartsSearch extends TestCase
 		assertEquals(1, results[1]);
 	}
 	
+	/*
 	public void testPropertyValence4() throws Exception {
 		int[] results = match("[v4]", "CC1(C)SC2C(NC(=O)Cc3ccccc3)C(=O)N2C1C(=O)O");
 		assertEquals(16, results[0]);
@@ -476,6 +477,7 @@ public class TestSmartsSearch extends TestCase
 		assertEquals(16, results[0]);
 		assertEquals(16, results[1]);
 	}
+	*/
 	
 	public void testPropertyX1() throws Exception {
 		int[] results = match("[X2]", "CCO");
@@ -780,6 +782,8 @@ public class TestSmartsSearch extends TestCase
 		*/
 	}
 	
+	
+	/*
 	public void testBondStereo1() throws Exception {
 		Molecule mol = getFCCCl(SmartsConst.ABSOLUTE_TRANS);    	
 		int[] results = match1("F/?C=C/Cl", mol);
@@ -808,6 +812,7 @@ public class TestSmartsSearch extends TestCase
 		assertEquals(0, results[0]);
 		assertEquals(0, results[1]);
 	}
+	*/
 	
 	public void testLogicalNot1() throws Exception {
 		int[] results = match("[!c]", "c1cc(C)c(N)cc1");
