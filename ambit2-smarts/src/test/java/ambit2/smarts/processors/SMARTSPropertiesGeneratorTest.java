@@ -1,16 +1,12 @@
 package ambit2.smarts.processors;
 
 import java.io.InputStreamReader;
-import java.util.BitSet;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.io.RawIteratingSDFReader;
@@ -123,36 +119,4 @@ public class SMARTSPropertiesGeneratorTest {
 		reader.close();
 	}
 	
-	@Test
-	public void testBiphenylKeys_kekuleBondscleaned() throws Exception {
-		testBiphenylKeys(true);
-	}
-	@Test
-	public void testBiphenylKeys_kekuleBondsNOTcleaned() throws Exception {
-		testBiphenylKeys(false);
-	}	
-
-	public void testBiphenylKeys(boolean cleanKekuleBonds) throws Exception {		
-		MoleculeReader mr = new MoleculeReader();
-		AtomConfigurator config = new AtomConfigurator();
-
-		RawIteratingSDFReader reader = new RawIteratingSDFReader(
-				new InputStreamReader(getClass().getClassLoader().getResourceAsStream("biphenyl.sdf")));
-		
-		BitSet bitsetKekule = null;
-		StructureKeysBitSetGenerator bitsetGenerator = new StructureKeysBitSetGenerator();
-		bitsetGenerator.setCleanKekuleBonds(cleanKekuleBonds);
-		while (reader.hasNext()) {
-			IStructureRecord record = reader.nextRecord();
-			IAtomContainer c = config.process(mr.process(record));
-			bitsetKekule = bitsetGenerator.process(c);
-		}
-		reader.close();
-		
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
-		IMolecule mol = parser.parseSmiles("c1ccccc1c2ccccc2");
-		BitSet bitsetAromatic = bitsetGenerator.process(mol);
-
-		Assert.assertEquals(bitsetKekule,bitsetAromatic);
-	}
 }

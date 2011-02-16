@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
+import org.junit.Test;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -64,7 +64,10 @@ public class TestUtilities
 	public TestUtilities()
 	{	
 	}
-	
+	@Test
+	public void fakeTest() {
+		//there should be at least one test
+	}
 	public static void printSmartsTokens(String smarts)
 	{
 		System.out.println("Smarts " + smarts); 
