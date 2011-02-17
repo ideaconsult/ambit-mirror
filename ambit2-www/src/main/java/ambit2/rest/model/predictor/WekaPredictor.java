@@ -126,9 +126,13 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 						} catch (Exception x) {
 							value[1] = null;
 						}
+					} else {
+						value[0] = result;
+						value[1] = null;
 					}
 				} else if (clusterer != null) {
 					value[0] = clusterer.clusterInstance(target);
+					
 				} else if (pca != null) {
 					
 					value[0] = pca.convertInstance(target);
@@ -152,7 +156,10 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 			throws AmbitException {
 		Object[] values = (Object[]) value;
 		if (values[0] instanceof Instance)  {
-			assignTransformedInstance(record, (Instance) value, (Double) values[1]);
+			if (values[1] != null)
+				assignTransformedInstance(record, (Instance) values[0], (Double) values[1]);
+			else
+				assignTransformedInstance(record, (Instance) values[0], 1);
 		}
 		else {
 			
