@@ -22,7 +22,10 @@ import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryTemplateReporter;
+import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.ModelTemplates;
+import ambit2.db.update.model.AbstractModelQuery;
+import ambit2.db.update.model.QueryModel;
 import ambit2.db.update.model.ReadModel;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
@@ -88,12 +91,9 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	@Override
 	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		
-		ReadModel query = getModelQuery(getModelID(getRequest().getAttributes().get(resourceKey)));
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-		String name = form.getFirstValue(QueryResource.search_param);
-		if (name!=null) query.setFieldname(name);
-		collapsed = query.getValue()!=null;
+		AbstractModelQuery query = getModelQuery(getModelID(getRequest().getAttributes().get(resourceKey)),form);
+
 		return query;
 	}
 	@Override
@@ -304,14 +304,60 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		}
 	}
 
-	protected ReadModel getModelQuery(Object idmodel) throws ResourceException {
-		if (idmodel == null) return new ReadModel();
-		else if (idmodel instanceof Integer)
-			return new ReadModel((Integer)idmodel);
-		else {
-			ReadModel query = new ReadModel(null);
-			query.setFieldname(idmodel.toString());
-			return query;
+	protected AbstractModelQuery getModelQuery(Object idmodel, Form form) throws ResourceException {
+		collapsed = false;
+		AbstractModelQuery query = null;
+		ModelQueryResults model_query = null;
+		String algorithm = form.getFirstValue(AbstractModelQuery._models_criteria.algorithm.name());
+		if (algorithm!=null) {
+			model_query = new ModelQueryResults();
+			model_query.setCreator(null);
+			model_query.setAlgorithm(algorithm);
+		}
+		String dataset = form.getFirstValue(AbstractModelQuery._models_criteria.dataset.name());
+		if (dataset!=null) {
+			if (model_query == null) { model_query = new ModelQueryResults(); model_query.setCreator(null);}
+			model_query.setTrainingInstances(dataset);
+		}
+		String creator = form.getFirstValue(AbstractModelQuery._models_criteria.creator.name());
+		if (creator!=null) {
+			if (model_query == null) { model_query = new ModelQueryResults(); }
+			model_query.setCreator(creator);
+		}
+	
+		String endpoint = form.getFirstValue(AbstractModelQuery._models_criteria.endpoint.name());
+		if (endpoint!=null) {
+			if (model_query == null) { model_query = new ModelQueryResults(); model_query.setCreator(null); }
+			
+			model_query.setEndpoint(endpoint);
+		}
+		
+		if (model_query==null) {
+			query = new ReadModel();
+			String name = form.getFirstValue(QueryResource.search_param);
+			if (name!=null)	query.setFieldname(name);
+			
+			String condition = form.getFirstValue(QueryResource.condition);
+			if (condition!=null) query.setCondition(StringCondition.getInstance(condition));
+			
+			if (idmodel == null) { return new ReadModel(); }
+			else if (idmodel instanceof Integer) {
+				collapsed = true;
+				return new ReadModel((Integer)idmodel);
+			} else {
+				collapsed = true;
+				query.setFieldname(idmodel.toString());
+				return query;
+			}
+		} else {
+			String name = form.getFirstValue(QueryResource.search_param);
+			if (name!=null)	model_query.setName(name);
+			if (idmodel != null) 
+				if (idmodel instanceof Integer)
+					model_query.setId((Integer)idmodel);
+				else model_query.setName(idmodel.toString());
+			
+			return new QueryModel(model_query);
 		}
 	}
 	

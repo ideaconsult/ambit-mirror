@@ -33,9 +33,9 @@ public class DeleteModel extends AbstractObjectUpdate<ModelQueryResults> {
 
 	public String[] getSQL() throws AmbitException {
 		if (getObject().getId()!= null) {
-			return new String[] {String.format(delete_sql,ReadModel.whereID)};
+			return new String[] {String.format(delete_sql,AbstractModelQuery._models_criteria.id.getSQL())};
 		} else	if (getObject().getName()!= null) 
-			return new String[] {String.format(delete_sql,ReadModel.whereName)};
+			return new String[] {String.format(delete_sql,AbstractModelQuery._models_criteria.name.getSQL())};
 		throw new AmbitException("no model specified");
 	}
 	public void setID(int index, int id) {

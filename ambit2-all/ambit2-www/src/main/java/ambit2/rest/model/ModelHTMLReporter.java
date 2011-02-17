@@ -4,11 +4,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.restlet.Request;
+import org.restlet.data.Reference;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
@@ -74,7 +76,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 						model.getName()));
 			
 			output.write(String.format(
-					"&nbsp;<a href=\"%s?media=text/plain\" target='_model'>%s</a>",
+					"<br><a href=\"%s?media=text/plain\" target='_model'>%s</a>",
 					w.toString(),
 					"txt"));			
 			output.write(String.format(
@@ -83,17 +85,32 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 					"legend"));
 			
 			output.write(String.format(
-					"<td><a href=\"%s\">%s</a></td>",
+					"<td><a href=\"%s\">%s</a>&nbsp;%s</td>",
 					model.getAlgorithm(),
-					model.getAlgorithm()));
+					model.getAlgorithm(),
+					String.format("<a href='%s/%s?algorithm=%s' title='%s'>%s</a>", 
+							uriReporter.getBaseReference(),
+							OpenTox.URI.model,
+							Reference.encode(model.getAlgorithm()),
+							"All models created by this algorithm",
+							"<br>Search"
+							)
+			));
 			
 			if (model.getTrainingInstances()==null)
 				output.write("<td></td>");
 			else
 				output.write(String.format(
-						"<td><img src=\"%s/images/table.png\" alt=\"Compounds\" title=\"Browse compounds\" border=\"0\"/>&nbsp;<a href=\"%s\">Browse</a></td>",
+						"<td><img src=\"%s/images/table.png\" alt=\"Compounds\" title=\"Browse compounds\" border=\"0\"/>&nbsp;<a href=\"%s\">Browse</a>&nbsp;%s</td>",
 						uriReporter.getBaseReference(),
-						model.getTrainingInstances()
+						model.getTrainingInstances(),
+						String.format("<a href='%s/%s?dataset=%s' title='%s'>%s</a>", 
+								uriReporter.getBaseReference(),
+								OpenTox.URI.model,
+								Reference.encode(model.getTrainingInstances()),
+								"All models using this training set",
+								"<br>Search"
+								)
 						));
 			
 			output.write(String.format(
@@ -109,10 +126,19 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 					"Dependent"		
 			));				
 			output.write(String.format(
-					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Predicted variable(s)\" title=\"Predicted variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s/predicted\">%s</a></td>",
+					"<td><img src=\"%s/images/16x16_toxicological_endpoints.png\" alt=\"Predicted variable(s)\" title=\"Predicted variable(s)\" border=\"0\"/>&nbsp;<a href=\"%s/predicted\">%s</a><h5>%s</h5></td>",
 					uriReporter.getBaseReference(),
 					uriReporter.getURI(model),
-					"Predicted"		
+					"Predicted",
+					model.getEndpoint()==null?"":
+						String.format("<a href='%s/%s?endpoint=%s' title='%s'>%s</a>", 
+								uriReporter.getBaseReference(),
+								OpenTox.URI.model,
+								Reference.encode(model.getEndpoint()),
+								"All models for this endpoint",
+								model.getEndpoint()
+								)						
+						
 			));	
 		
 			/*
