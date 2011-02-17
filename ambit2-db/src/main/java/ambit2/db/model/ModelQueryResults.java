@@ -18,6 +18,13 @@ public class ModelQueryResults extends ModelWrapper<
 	 * 
 	 */
 	private static final long serialVersionUID = 6622500017764287129L;
+	protected String endpoint;
+	public String getEndpoint() {
+		return endpoint;
+	}
+	public void setEndpoint(String endpoint) {
+		this.endpoint = endpoint;
+	}
 	protected boolean hidden = false;
 	public boolean isHidden() {
 		return hidden;
