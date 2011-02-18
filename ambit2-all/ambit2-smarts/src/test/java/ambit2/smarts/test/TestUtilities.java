@@ -159,9 +159,64 @@ public class TestUtilities
 		catch(Exception e){
 			System.out.println(e.toString());
 		}
+	}
+	
+	public void structureStatisticsMDL(int nStr, String mdlFile, String outFile)
+	{		
+		String endLine = "\r\n";
 		
-		
-		
+		try
+		{
+			//Input
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+					
+			//Output
+			File file = new File(outFile);
+			RandomAccessFile outf = new RandomAccessFile(file,"rw");
+			outf.setLength(0);
+			
+			int record = 0;
+			while (reader.hasNext()) 
+			{	
+				record++;
+				if (record > nStr)
+					break;
+				
+				if (record % 100 == 0)
+					System.out.println("rec " + record);
+				
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{	
+					IAtomContainer mol = (IAtomContainer)o;
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					
+					//Calc. ring statistics
+					SSSRFinder sssrf = new SSSRFinder(mol);
+					IRingSet ringSet = sssrf.findSSSR();
+					int n = ringSet.getAtomContainerCount();
+					double ringSizeSum = 0;
+					double ringAverSize = 0;
+					for(int i = 0; i < n; i++)					
+						ringSizeSum += ringSet.getAtomContainer(i).getAtomCount();
+					
+					if (n > 0)
+						ringAverSize = ringSizeSum / n;
+					
+					String outData = "" + record + "  " + mol.getAtomCount() +  "   "
+						+ n + "    " + ringAverSize + endLine;
+					
+					outf.write(outData.getBytes());
+				}
+			}
+			
+			outf.close();
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
 	}
 	
 	public void showFullAtomMappings(String smarts, String smiles)
@@ -1409,22 +1464,24 @@ public class TestUtilities
 		//tu.makeStructureStatistics();
 		
 		//System.out.println(man.isFlagUseCDKIsomorphismTester());
+		
 		man.setUseCDKIsomorphismTester(false);
 		//tu.testSmartsManagerBoolSearch("cccc","C1=CC=CC=C1");
 		//tu.testSmartsManagerBoolSearch("cccc","c1ccccc1");
 		//tu.testSmartsManagerBoolSearch("c1ccccc1c2ccccc2","C1=CC=CC=C1-C2=CC=CC=C2");
-		tu.testSmartsManagerBoolSearch("c1ccccc1!@c2ccccc2","c1ccccc1c2ccccc2");
+		//tu.testSmartsManagerBoolSearch("c1ccccc1!@c2ccccc2","c1ccccc1c2ccccc2");
 		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1");
 		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1-C2=CC=CC=C2");
+				
+		//tu.testSmartsManagerBoolSearch("cc-c","c1ccccc1ccc");
+		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1C2=CC=CC=C2");		
+		//tu.testSmartsManagerBoolSearch("cc=c","C1=CC=CC=C1C2=CC=CC=C2");
+		//tu.testSmartsManagerBoolSearch("cc=c","c1ccccc1c2ccccc2");
 		
+		//tu.testSmartsManagerBoolSearchMDL("CC=C","D:/projects/nina/biphenyl.mol");
+		//tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
 		
-		tu.testSmartsManagerBoolSearch("cc-c","c1ccccc1ccc");
-		tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1C2=CC=CC=C2");		
-		tu.testSmartsManagerBoolSearch("cc=c","C1=CC=CC=C1C2=CC=CC=C2");
-		tu.testSmartsManagerBoolSearch("cc=c","c1ccccc1c2ccccc2");
-		
-		tu.testSmartsManagerBoolSearchMDL("CC=C","D:/projects/nina/biphenyl.mol");
-		tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
+		tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		
 	}
 	
