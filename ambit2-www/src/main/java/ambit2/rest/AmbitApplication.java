@@ -34,6 +34,8 @@ import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DBCreateAllowedGuard;
 import ambit2.rest.admin.DatabaseResource;
 import ambit2.rest.admin.PolicyResource;
+import ambit2.rest.admin.fingerprints.FingerprintResource;
+import ambit2.rest.admin.fingerprints.StructuresByFingerprintResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
@@ -172,6 +174,13 @@ public class AmbitApplication extends TaskApplication<String> {
 		Router adminRouter = new MyRouter(getContext());
 		adminRouter.attachDefault(AdminResource.class);
 		adminRouter.attach(String.format("/%s",DatabaseResource.resource),DatabaseResource.class);
+		
+		Router adminFingerprintRouter = new MyRouter(getContext()); //to browse fingerprints/stats
+		adminFingerprintRouter.attachDefault(FingerprintResource.class);
+		adminFingerprintRouter.attach(String.format("/{%s}",FingerprintResource.resourceKey),FingerprintResource.class);
+		adminFingerprintRouter.attach(String.format("/{%s}%s",FingerprintResource.resourceKey,StructuresByFingerprintResource.resource),StructuresByFingerprintResource.class);
+		
+		adminRouter.attach(FingerprintResource.resource,adminFingerprintRouter);
 		
 		DBCreateAllowedGuard sameIPguard = new DBCreateAllowedGuard();
 		sameIPguard.setNext(adminRouter);
