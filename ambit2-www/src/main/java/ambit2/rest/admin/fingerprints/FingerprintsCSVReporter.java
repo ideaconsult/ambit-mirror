@@ -38,7 +38,7 @@ public class FingerprintsCSVReporter extends QueryReporter<IFingerprint<FPTable,
 	public Object processItem(IFingerprint<FPTable, String> item)
 			throws AmbitException {
 		try {
-		getOutput().write(String.format("'%s',%d,'%s'\n",item.getType().name(),item.getFrequency(),item.getBits()));
+		getOutput().write(String.format("%s,%d,%s\n",item.getType().name(),item.getFrequency(),item.getBits()));
 		} catch (Exception x) {}
 		return item;
 	}
