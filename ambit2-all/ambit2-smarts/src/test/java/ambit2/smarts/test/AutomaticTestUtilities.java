@@ -116,6 +116,8 @@ public class AutomaticTestUtilities
 		
 	RandomAccessFile outFile = null;
 	
+	// start 1248
+	boolean FlagGarbCollector = false;
 	int maxNumSeqSteps = 4;
 	int maxStrSize = 30;
 	int minGenStrSize = 5;
@@ -127,7 +129,7 @@ public class AutomaticTestUtilities
 	int portionSize = 100;
 	int lineProcessMode = 0;
 	int statisticsType = STAT_SINGLE_DBSTR;
-		
+	
 	
 	boolean FlagStat_SingleDBStr_Ambit = false;       //ambit parser and isomorphims
 	boolean FlagStat_SingleDBStr_CDK = false;         //cdk parser and isomorphims
@@ -163,9 +165,9 @@ public class AutomaticTestUtilities
 		
 		//atu.handleArguments(new String[] {"-db","/gen-str-seq40-db-after-40000.txt", "-i","/keys-eff80.txt",	
 		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", 
-				"-i","/key-bits-eff80-queries.txt","-i2","/key-bits-eff80-db.txt",
-				"-o","/out1.txt",
-				"-nDBStr", "50000", "-maxSeqStep", "40", "-c", "calc-screen-ratio", 
+				"-i","/gen-str-seq50-db5000.txt","-i2","/key-bits-eff80-db.txt",
+				"-o","/garb-collect-test-db-500-part02.txt",
+				"-nDBStr", "500", "-maxSeqStep", "40", "-c", "sss-all", 
 				"-nBits", "32"});
 		
 		//atu.produceRandomStructures();
@@ -814,7 +816,8 @@ public class AutomaticTestUtilities
 				if (record > this.nDBStr)
 					break;
 				
-				
+				if (record % 100 == 0)
+					System.out.println("db-rec " + record);
 				
 				Object o = reader.next();
 				if (o instanceof IAtomContainer) 
@@ -828,6 +831,8 @@ public class AutomaticTestUtilities
 					{
 						isoTester.setQuery(query_ambit);
 						
+						if (FlagGarbCollector)
+							callGarbCollector();
 						startTime = System.nanoTime();
 						spAmbit.setSMARTSData(mol);
 						boolean hasIso = isoTester.hasIsomorphism(mol);
@@ -843,6 +848,8 @@ public class AutomaticTestUtilities
 					
 					if (FlagStat_SingleDBStr_CDK)
 					{
+						if (FlagGarbCollector)
+							callGarbCollector();
 						startTime = System.nanoTime();
 						boolean res = UniversalIsomorphismTester.isSubgraph(mol, query_CDK);
 						endTime = System.nanoTime();
@@ -851,6 +858,8 @@ public class AutomaticTestUtilities
 					
 					if (FlagStat_SingleDBStr_Ambit_CDK)
 					{
+						if (FlagGarbCollector)
+							callGarbCollector();
 						startTime = System.nanoTime();
 						spAmbit.setSMARTSData(mol);
 						boolean res = UniversalIsomorphismTester.isSubgraph(mol, query_ambit);
@@ -860,6 +869,8 @@ public class AutomaticTestUtilities
 					
 					if (FlagStat_SingleDBStr_CDK_Ambit)
 					{
+						if (FlagGarbCollector)
+							callGarbCollector();
 						isoTester.setQuery(query_CDK);
 						startTime = System.nanoTime();
 						boolean hasIso = isoTester.hasIsomorphism(mol);
@@ -871,6 +882,8 @@ public class AutomaticTestUtilities
 					{	
 						try
 						{
+							if (FlagGarbCollector)
+								callGarbCollector();
 							startTime = System.nanoTime();
 							spAmbit.setSMARTSData(mol);
 							comparisonSMSD.init(query_ambit,mol, removeHydrogen,true);
@@ -883,6 +896,7 @@ public class AutomaticTestUtilities
 						catch(Exception e)
 						{
 							System.out.println("SMSD error: " );
+							//e.printStackTrace();
 							continue;
 						}
 					}
@@ -922,6 +936,14 @@ public class AutomaticTestUtilities
 		
 	}
 	
+	
+	public void callGarbCollector()
+	{	
+		System.gc();
+		for (int i = 0; i < 100; i++)
+		{	
+		}
+	}
 	
 	int compareParsers(String line)
 	{		
