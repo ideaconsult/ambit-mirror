@@ -38,6 +38,7 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
+import ambit2.db.readers.AbstractStructureRetrieval._sqlids;
 import ambit2.db.search.QueryParam;
 import ambit2.smarts.CMLUtilities;
 
@@ -46,10 +47,6 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
      * 
      */
     private static final long serialVersionUID = 7257863166977468657L;
-    protected static String s_idchemical = "idchemical";
-    protected static String s_idstructure = "idstructure";
-    protected static String s_ustructure = "ustructure";
-    protected static String s_format = "format";
     protected boolean preferedStructure = false;
     public boolean isPreferedStructure() {
 		return preferedStructure;
@@ -107,17 +104,18 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
     public IStructureRecord getObject(ResultSet rs) throws AmbitException {
         try {
             IStructureRecord r = getValue();
-            r.setIdchemical(rs.getInt(s_idchemical));
-            r.setIdstructure(rs.getInt(s_idstructure));
-            r.setContent(rs.getString(s_ustructure));
-            r.setFormat(rs.getString(s_format));
+            r.setIdchemical(rs.getInt(_sqlids.idchemical.name()));
+            r.setIdstructure(rs.getInt(_sqlids.idstructure.name()));
+            r.setContent(rs.getString(_sqlids.ustructure.name()));
+            r.setFormat(rs.getString(_sqlids.format.name()));
+            
             try {
             	r.setSelected(rs.getBoolean("selected"));
             } catch (Exception x) {
             	r.setSelected(true);
             }            
             try {
-            	String t = rs.getString(5);
+            	String t = rs.getString(_sqlids.type_structure.name());
             	for (STRUC_TYPE type : STRUC_TYPE.values()) if (type.toString().equals(t)) {
             		r.setType(type);
             		break;
@@ -125,14 +123,18 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
             } catch (Exception x) {
             	r.setType(STRUC_TYPE.NA);
             }
-            if ((rs.getString(6)==null) || "".equals(rs.getString(6).trim()))
+            /*
+            Object ts = rs.getString(_sqlids.atomproperties.name());
+            if ((ts==null) || "".equals(ts.toString().trim()))
             	r.removeProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));
             else
-            r.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), rs.getString(6));
+            r.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), ts);
+            */
             return r;
         } catch (SQLException x){
             throw new AmbitException(x);
         }
     }
 
+    
 }
