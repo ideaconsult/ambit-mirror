@@ -15,8 +15,7 @@ import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.QueryFingerprints;
 import ambit2.db.update.fp.QueryFingerprints._order;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
-import ambit2.rest.OutputStreamConvertor;
-import ambit2.rest.StringConvertor;
+import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.query.QueryResource;
 
 public class FingerprintResource  extends QueryResource<QueryFingerprints,IFingerprint<FPTable,String>>  {
