@@ -1,5 +1,8 @@
 package ambit2.db.update.fp;
 
+import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.smarts.SmartsScreeningKeys;
+
 
 public class Fingerprint<Type,Content> implements IFingerprint<Type,Content> {
 
@@ -7,6 +10,7 @@ public class Fingerprint<Type,Content> implements IFingerprint<Type,Content> {
 	 * 
 	 */
 	private static final long serialVersionUID = 5550890711527303929L;
+	protected static SmartsScreeningKeys keys;
 	Type type;
 	public Type getType() {
 		return type;
@@ -33,8 +37,12 @@ public class Fingerprint<Type,Content> implements IFingerprint<Type,Content> {
 		return frequency;
 	}
 	@Override
-	public String getInterpretation(int bitindex) {
-		return null;
+	public synchronized String getInterpretation(int bitindex) {
+		if (FPTable.sk1024.equals(type)) {
+			if (keys==null) keys = new SmartsScreeningKeys();
+			return keys.getKeys().get(bitindex);
+		} else
+			return null;
 	}
 	@Override
 	public void setBits(Content bits) {
