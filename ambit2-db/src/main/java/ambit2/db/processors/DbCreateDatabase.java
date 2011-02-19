@@ -143,7 +143,16 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         createDatabase(database.toString());
         createTables(database.toString());
         
-        
+        String[] local = new String[] {"localhost","127.0.0.1","::1"};  
+        /**
+         * to work with this MySQL, one needs to have privileges for localhost & 127.0.0.1 
+# Do not resolve host names when checking client connections.
+# Use only IP addresses. If you use this option, all Host column values
+# in the grant tables must be IP addresses or localhost.
+skip-name-resolve
+         */
+        	String adminPass = "*4ACFE3202A5FF5CF467898FC58AAB1D615029441";
+        	String userPass = "*11DB58B0DD02E290377535868405F11E4CBEFF58";
         
         	String[] users = {
         	"insert into roles (role_name) values (\"ambit_guest\");",
@@ -156,12 +165,26 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         	"insert into user_roles (user_name,role_name) values (\"admin\",\"ambit_admin\");",
         	"insert into user_roles (user_name,role_name) values (\"quality\",\"ambit_quality\");",
         	
-        	"REVOKE ALL PRIVILEGES ON `"+database+"`.* FROM 'admin'@'localhost';",
-        	"REVOKE ALL PRIVILEGES ON `"+database+"`.* FROM 'guest'@'localhost';",
+        	
+        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'admin'@'%s';",database,"localhost"),
+        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'guest'@'%s';",database,"localhost"),
 
-        	"GRANT USAGE ON `"+database+"`.* TO 'admin'@'localhost' IDENTIFIED BY PASSWORD '*4ACFE3202A5FF5CF467898FC58AAB1D615029441';",
-        	"GRANT ALL PRIVILEGES ON `"+database+"`.* TO 'admin'@'localhost' WITH GRANT OPTION;",
-        	"GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `"+database+"`.* TO 'guest'@'localhost' IDENTIFIED BY PASSWORD '*11DB58B0DD02E290377535868405F11E4CBEFF58';",
+        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'admin'@'%s';",database,"127.0.0.1"),
+        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'guest'@'%s';",database,"127.0.0.1"),
+
+        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'admin'@'%s';",database,"::1"),
+        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'guest'@'%s';",database,"::1"),
+        	
+        	String.format("GRANT USAGE ON `%s`.* TO 'admin'@'%s' IDENTIFIED BY PASSWORD '%s';",database,"localhost",adminPass),
+        	String.format("GRANT USAGE ON `%s`.* TO 'admin'@'%s' IDENTIFIED BY PASSWORD '%s';",database,"127.0.0.1",adminPass),
+        	
+        	String.format("GRANT ALL PRIVILEGES ON `%s`.* TO 'admin'@'%s' WITH GRANT OPTION;",database,"localhost"),
+        	String.format("GRANT ALL PRIVILEGES ON `%s`.* TO 'admin'@'%s' WITH GRANT OPTION;",database,"127.0.0.1"),
+        	
+        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY PASSWORD '%s';",database,"localhost",userPass),
+        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY PASSWORD '%s';",database,"127.0.0.1",userPass),
+        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY PASSWORD '%s';",database,"::1",userPass),
+        	
         	//"GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost';"
 
         	};
@@ -184,11 +207,13 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
         try {
         	createFunctions();
 	        st = connection.createStatement();
-	        st.executeQuery("GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost';");
-	        st.executeQuery("GRANT EXECUTE ON FUNCTION sql_xtab TO 'guest'@'localhost';");
-	        st.executeQuery("GRANT EXECUTE ON PROCEDURE p_xtab TO 'guest'@'localhost';");
-	        st.executeQuery("GRANT EXECUTE ON PROCEDURE setAtomEnvironment TO 'guest'@'localhost';");
-	        st.executeQuery("GRANT SELECT ON `mysql`.`proc` TO 'guest'@'localhost';");
+	        for (String localAddr : local) {
+		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION sql_xtab TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE p_xtab TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE setAtomEnvironment TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT SELECT ON `mysql`.`proc` TO 'guest'@'%s';",localAddr));
+	        }
 	         
         } catch (Exception x) {
         	x.printStackTrace();
