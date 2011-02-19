@@ -38,11 +38,13 @@ import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.MoleculeReader;
 
 public class RetrieveAtomContainer extends AbstractStructureRetrieval<IAtomContainer> {
     protected MoleculeReader transform;
+    protected RetrieveStructure reader;
     /**
      * 
      */
@@ -50,29 +52,38 @@ public class RetrieveAtomContainer extends AbstractStructureRetrieval<IAtomConta
     public RetrieveAtomContainer() {
         super();
         transform = new MoleculeReader();
+        reader = new RetrieveStructure();
+    }
+    @Override
+    public void setValue(IStructureRecord value) {
+    	super.setValue(value);
+    	reader.setValue(value);
     }
     public IAtomContainer getObject(ResultSet rs) throws AmbitException {
         try {
-            IStructureRecord r = getValue();
-            r.setIdchemical(rs.getInt(ID_idchemical));
-            r.setIdstructure(rs.getInt(ID_idstructure));
-            r.setFormat(rs.getString(ID_format));
+            IStructureRecord r = reader.getObject(rs);
+            
             /**
              * Structure
              */
-            int type = rs.getMetaData().getColumnType(ID_structure);
+            int type = rs.getMetaData().getColumnType(_sqlids.ustructure.getIndex());
             if (type == java.sql.Types.VARBINARY) {
-	              InputStream s = rs.getBinaryStream(ID_structure);
+	              InputStream s = rs.getBinaryStream(_sqlids.ustructure.getIndex());
 	              IMolecule m = null;
 	              if ("SDF".equals(r.getFormat()))
 	                	m = MoleculeTools.readMolfile(new InputStreamReader(s));
-	              else
+	              else if ("CML".equals(r.getFormat()))
 	            	    m = MoleculeTools.readCMLMolecule(s);
+	              else if ("MOL".equals(r.getFormat()))
+	            	  m = MoleculeTools.readMolfile(new InputStreamReader(s));
+	              
 	                s = null;
 	                return m;
             } else {
-            		return MoleculeTools.readCMLMolecule(rs.getString(ID_structure));
+            		return MoleculeTools.readMolfile(rs.getString(_sqlids.ustructure.getIndex()));
             }        	
+            
+
             //return transform.process(r);
         } catch (Exception x){
             throw new AmbitException(x);
