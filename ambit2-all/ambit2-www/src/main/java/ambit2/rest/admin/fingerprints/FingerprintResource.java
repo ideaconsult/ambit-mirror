@@ -15,6 +15,7 @@ import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.QueryFingerprints;
 import ambit2.db.update.fp.QueryFingerprints._order;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.rest.OutputStreamConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
@@ -28,11 +29,11 @@ public class FingerprintResource  extends QueryResource<QueryFingerprints,IFinge
 	    if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			FingerprintURIReporter reporter = 	new FingerprintURIReporter (getRequest(),getDocumentation());
 			reporter.setDelimiter("\n");
-			return new StringConvertor(reporter,MediaType.TEXT_URI_LIST);
+			return new OutputWriterConvertor(reporter,MediaType.TEXT_URI_LIST);
 	    } else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-	    	return new StringConvertor(new FingerprintsCSVReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
+	    	return new OutputWriterConvertor(new FingerprintsCSVReporter(getRequest(),getDocumentation()),MediaType.TEXT_CSV);
 	    } else {
-	    	return new StringConvertor(new FingerprintsHTMLReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
+	    	return new OutputWriterConvertor(new FingerprintsHTMLReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
 	    }
 	}
 	@Override
