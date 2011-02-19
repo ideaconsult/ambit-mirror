@@ -3,6 +3,7 @@ package ambit2.rest.admin.fingerprints;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -22,6 +23,19 @@ public class FingerprintResource  extends QueryResource<QueryFingerprints,IFinge
 
 	public final static String resource = "/fingerprint";	
 	public final static String resourceKey = "fptype";
+	
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		getVariants().clear();
+		customizeVariants(new MediaType[] {
+				MediaType.TEXT_HTML,
+				MediaType.TEXT_URI_LIST,
+				MediaType.TEXT_CSV,
+				MediaType.APPLICATION_JAVA_OBJECT,
+				
+		});		
+	}	
+	
 	@Override
 	public IProcessor<QueryFingerprints, Representation> createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
