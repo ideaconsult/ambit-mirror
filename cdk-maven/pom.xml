@@ -87,13 +87,13 @@
   		<url>http://jni-inchi.sourceforge.net/m2repo</url>
   	</repository>
   	<repository>
-  		<id>https://maven.ch.cam.ac.uk/m2repo</id>
-  		<name>https://maven.ch.cam.ac.uk/m2repo</name>
+  		<id>ucc-repo</id>
+  		<name>ucc-repo</name>
   		<url>https://maven.ch.cam.ac.uk/m2repo</url>
   	</repository>
   	  	<repository>
-  		<id>http://dev.biordf.net/maven/</id>
-  		<name>http://dev.biordf.net/maven/</name>
+  		<id>biordf</id>
+  		<name>biordf</name>
   		<url>http://dev.biordf.net/maven/</url>
   	</repository>
   </repositories>
