@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
-  <artifactId>cdk</artifactId>
+  <artifactId>cdk-all</artifactId>
   <version>1.3.8</version>
   <packaging>pom</packaging>
   <name>cdk</name>
@@ -95,7 +95,11 @@
     <module>cdk-render</module>
     <module>cdk-sdg</module>
     <module>cdk-signature</module>
+    <module>cdk-standard</module>
     <module>cdk-smarts</module>
+    <module>cdk-smiles</module>
+    <module>cdk-smsd</module>
+        <module>cdk-structgen</module>
     <module>cdk-valencycheck</module>
   </modules>
   
