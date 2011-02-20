@@ -91,6 +91,11 @@
   		<name>https://maven.ch.cam.ac.uk/m2repo</name>
   		<url>https://maven.ch.cam.ac.uk/m2repo</url>
   	</repository>
+  	  	<repository>
+  		<id>http://dev.biordf.net/maven/</id>
+  		<name>http://dev.biordf.net/maven/</name>
+  		<url>http://dev.biordf.net/maven/</url>
+  	</repository>
   </repositories>
 
   <pluginRepositories>
