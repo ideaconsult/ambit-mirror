@@ -1,10 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk</artifactId>
   <version>1.3.8</version>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <name>cdk</name>
    <url>http://cdk.sourceforge.net</url>
    <distributionManagement>
@@ -36,7 +36,7 @@
             </goals>
             <configuration>
               <tasks>
-                <attachArtifact file="dist/cdk-${project.version}.jar" />
+                <attachArtifact file="dist/${project.artifactId}-${project.version}.jar"/>
               </tasks>
             </configuration>
           </execution>
@@ -51,6 +51,53 @@
       </extension>
     </extensions>
   </build>
+ <modules>
+    <module>cdk-annotation</module>
+    <module>cdk-atomtype</module>
+    <module>cdk-builder3d</module>
+    <module>cdk-builder3dtools</module>
+    <module>cdk-charges</module>
+    <module>cdk-cip</module>
+    <module>cdk-control</module>
+    <module>cdk-core</module>
+    <module>cdk-data</module>
+    <module>cdk-datadebug</module>
+    <module>cdk-dict</module>
+    <module>cdk-diff</module>
+    <module>cdk-extra</module>
+    <module>cdk-fingerprint</module>
+    <module>cdk-forcefield</module>
+    <module>cdk-formula</module>
+    <module>cdk-inchi</module>
+    <module>cdk-interfaces</module>
+    <module>cdk-io</module>
+    <module>cdk-ioformats</module>
+    <module>cdk-ionpot</module>
+    <module>cdk-iordf</module>
+    <module>cdk-isomorphism</module>
+    <module>cdk-libiocml</module>
+    <module>cdk-libiomd</module>
+    <module>cdk-log4j</module>
+    <module>cdk-nonotify</module>
+    <module>cdk-pcore</module>
+    <module>cdk-pdb</module>
+    <module>cdk-pdbcml</module>
+    <module>cdk-pure</module>
+    <module>cdk-qm</module>
+    <module>cdk-qsar</module>
+    <module>cdk-qsaratomic</module>
+    <module>cdk-qsarbond</module>
+    <module>cdk-qsarcml</module>
+    <module>cdk-qsarionpot</module>
+    <module>cdk-qsarmolecular</module>
+    <module>cdk-qsarprotein</module>
+    <module>cdk-reaction</module>
+    <module>cdk-render</module>
+    <module>cdk-sdg</module>
+    <module>cdk-signature</module>
+    <module>cdk-smarts</module>
+    <module>cdk-valencycheck</module>
+  </modules>
   
   <repositories>
     <repository>
@@ -58,6 +105,16 @@
       <name>Java.net Repository for Maven</name>
       <url>http://download.java.net/maven/2/</url>
     </repository>
+  	<repository>
+  		<id>jni-inchi</id>
+  		<name>JNI-InChI Maven Repository</name>
+  		<url>http://jni-inchi.sourceforge.net/m2repo</url>
+  	</repository>
+  	<repository>
+  		<id>https://maven.ch.cam.ac.uk/m2repo</id>
+  		<name>https://maven.ch.cam.ac.uk/m2repo</name>
+  		<url>https://maven.ch.cam.ac.uk/m2repo</url>
+  	</repository>
   </repositories>
 
   <pluginRepositories>
@@ -67,6 +124,9 @@
       <url>http://download.java.net/maven/2/</url>
     </pluginRepository>
   </pluginRepositories>
+  <properties>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
   
 </project>

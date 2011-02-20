@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <parent>
+    <artifactId>cdk</artifactId>
+    <groupId>org.openscience.cdk</groupId>
+    <version>1.3.8</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.openscience.cdk</groupId>
+  <artifactId>cdk-qsarcml</artifactId>
+  <name>cdk-qsarcml</name>
+  <version>1.3.8</version>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.openscience.cdk</groupId>
+    	<artifactId>cdk-qsar</artifactId>
+    	<version>${project.version}</version>
+    	<scope>compile</scope>
+    </dependency>
+      	<dependency>
+  		<groupId>cml</groupId>
+  		<artifactId>cmlxom</artifactId>
+  		<version>2.5-b1</version>
+  	</dependency>
+  </dependencies>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+</project>
