@@ -2,6 +2,10 @@ This is a hack to upload cdk-*.jar (The Chemistry Development Kit) into Maven re
 
 The CDK site where all credits should go is http://cdk.sourceforge.net/
 
+Feb 21, 2011  - updated to use cdk 1.3.8.jar as separate jars.  
+The project was converted to multimodule maven project, each module is for one cdk jar.
+The jars are expected in dist subfolders of each module project, in the form of cdk-{module}-{version}.jar
+
 April 02, 2010  - updated to use cdk-1.3.4.jar , released on 2010/03/31
 
 Download  cdk-1.3.4.jar and copy into dist folder, then run mvn deploy
