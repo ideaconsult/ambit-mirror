@@ -3,21 +3,23 @@ package ambit2.rest.property;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.Template;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.property.PropertiesByDataset;
 import ambit2.db.search.property.PropertiesByQuery;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
-import ambit2.rest.error.InvalidResourceIDException;
 
 /**
  * Retrieves feature definitions by dataset 
@@ -38,26 +40,28 @@ public class PropertiesByDatasetResource extends PropertyResource {
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		
+		Form form = request.getResourceRef().getQueryAsForm();
 		Object id = request.getAttributes().get(DatasetResource.datasetKey);
 		collapsed = true;
 
 		IQueryRetrieval<Property>  q = null;
 		if (id != null) try {
-			q = getQueryById(new Integer(Reference.decode(id.toString())));
+			q = getQueryById(new Integer(Reference.decode(id.toString())),form);
 			collapsed = false;
 		} catch (NumberFormatException x) {
-			q = getQueryById(Reference.decode(id.toString()));
+			q = getQueryById(Reference.decode(id.toString()),form);
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 		return q;
 	}
 	
-	protected IQueryRetrieval<Property> getQueryById(Integer key) throws ResourceException {
+	protected IQueryRetrieval<Property> getQueryById(Integer key,Form form) throws ResourceException {
 
 		try {
 			PropertiesByDataset q = new PropertiesByDataset();
-			q.setFieldname(null);
+			q.setFieldname(createTemplate(form));
 			SourceDataset dataset = new SourceDataset();			
 			dataset.setId(key);
 			q.setValue(dataset);
@@ -66,11 +70,11 @@ public class PropertiesByDatasetResource extends PropertyResource {
 
 	}
 	
-	protected IQueryRetrieval<Property> getQueryByName(String key) throws ResourceException {
+	protected IQueryRetrieval<Property> getQueryByName(String key,Form form) throws ResourceException {
 
 		try {
 			PropertiesByDataset q = new PropertiesByDataset();
-			q.setFieldname(null);
+			q.setFieldname(createTemplate(form));
 			SourceDataset dataset = new SourceDataset(key);			
 			q.setValue(dataset);
 			return q;
@@ -78,21 +82,21 @@ public class PropertiesByDatasetResource extends PropertyResource {
 
 	}
 	
-	protected IQueryRetrieval<Property> getQueryById(String key) throws ResourceException {
+	protected IQueryRetrieval<Property> getQueryById(String key,Form form) throws ResourceException {
 		int queryResultsID = -1;
 		if (key.startsWith(DatasetStructuresResource.QR_PREFIX)) {
 			key = key.substring(DatasetStructuresResource.QR_PREFIX.length());
 			try {
 				queryResultsID = Integer.parseInt(key.toString());
 			} catch (NumberFormatException x) {
-				return getQueryByName(key);
+				return getQueryByName(key,form);
 			}
-		} else return getQueryByName(key);
+		} else return getQueryByName(key,form);
 		
 		PropertiesByQuery q = new PropertiesByQuery();
 		q.setChemicalsOnly(true);
 		q.setValue(new StoredQuery(queryResultsID));
-		q.setFieldname(null);
+		q.setFieldname(createTemplate(form));
 		return q;
 	}
 	
@@ -100,5 +104,11 @@ public class PropertiesByDatasetResource extends PropertyResource {
 	protected AbstractUpdate createDeleteObject(Property entry)
 			throws ResourceException {
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	}
+	protected Template createTemplate(Form form) throws ResourceException {
+		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
+		if (featuresURI!=null)
+			return createTemplate(getContext(),getRequest(),getResponse(), featuresURI);
+		else return null;
 	}
 }
