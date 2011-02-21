@@ -17,7 +17,7 @@
   		<version>${project.version}</version>
   	</dependency>
 	  	<dependency>
-  		<groupId>gov.nist.math.javanumerics</groupId>
+  		<groupId>jama</groupId>
   		<artifactId>jama</artifactId>
   		<version>1.0.2</version>
   	</dependency>
