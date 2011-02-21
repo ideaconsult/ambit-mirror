@@ -51,7 +51,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 					}
 				}
 				b.append(")");
-				return count==0?"":b.toString();
+				return count==0?null:b.toString();
 			}
 		};
 		public abstract String getSQL(PropertiesByDataset value);
@@ -101,11 +101,12 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 			String wherePropertyID = " ";
 			if (getFieldname()!=null) {
 				and = " and ";
-				wherePropertyID = and + QField.properties.getSQL(this);
-			}
+				String w = QField.properties.getSQL(this);
+				wherePropertyID = w==null?"":(and + QField.properties.getSQL(this));
+			} 
 			
 			return base_sql_type + String.format(join,whereDataset+wherePropertyID);
-		}
+		} 
 		throw new AmbitException("No dataset defined");
 	}
 
