@@ -5,12 +5,13 @@ import java.util.List;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class PropertiesByQuery  extends AbstractPropertyRetrieval<Property, IStoredQuery, StringCondition> {
+public class PropertiesByQuery  extends AbstractPropertyRetrieval<Template, IStoredQuery, StringCondition> {
 	public enum QField  {
 		name {
 			@Override
@@ -106,4 +107,5 @@ public class PropertiesByQuery  extends AbstractPropertyRetrieval<Property, ISto
 	public Class getValueType() {
 		return SourceDataset.class;
 	}
+
 }

@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -23,6 +24,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
@@ -39,11 +41,12 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.property.ProfileReader;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
-import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskCreator;
@@ -81,7 +84,7 @@ Then, when the "get(Variant)" method calls you back,
 				MediaType.TEXT_HTML,
 				MediaType.TEXT_PLAIN,
 				MediaType.TEXT_URI_LIST,
-				MediaType.TEXT_PLAIN,
+				MediaType.TEXT_CSV,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,
@@ -155,7 +158,7 @@ Then, when the "get(Variant)" method calls you back,
 		        	} catch (ResourceException x) {
 		    			throw x;			        	
 		        	} catch (NotFoundException x) {
-		    			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
+		        		processNotFound(x,retry);
 		    			
 		        	} catch (SQLException x) {
 		        		Context.getCurrentLogger().severe(x.getMessage());
@@ -172,6 +175,7 @@ Then, when the "get(Variant)" method calls you back,
 		    			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 	
 		        	} finally {
+		        		System.out.println("finally");
 		        		//try { if (connection !=null) connection.close(); } catch (Exception x) {};
 		        		//try { if ((convertor !=null) && (convertor.getReporter() !=null)) convertor.getReporter().close(); } catch (Exception x) {}
 		        	}
@@ -197,6 +201,9 @@ Then, when the "get(Variant)" method calls you back,
 		}
 	}		
 	
+	protected void processNotFound(NotFoundException x, int retry) throws Exception {
+		throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
+	}
 	protected void customizeEntry(T entry, Connection conection) throws ResourceException {
 		
 	}
@@ -482,5 +489,58 @@ Then, when the "get(Variant)" method calls you back,
 		} catch (Exception x) {
 
 		}			
+	}
+	
+	protected Template createTemplate(Form form) throws ResourceException {
+		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
+		return createTemplate(getContext(),getRequest(),getResponse(), featuresURI);
+	}
+	protected Template createTemplate(Context context, Request request,
+			Response response,String[] featuresURI) throws ResourceException {
+		
+		try {
+			Template profile = new Template(null);
+			profile.setId(-1);				
+			
+			ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile);
+			reader.setCloseConnection(false);
+			
+			
+
+			DBConnection dbc = new DBConnection(getContext());
+			Connection conn = dbc.getConnection(getRequest());
+			try {
+				for (String featureURI:featuresURI) {
+					if (featureURI == null) continue;
+					reader.setConnection(conn);
+					profile = reader.process(new Reference(featureURI));
+					reader.setProfile(profile);
+					
+				}
+				//	readFeatures(featureURI, profile);
+				if (profile.size() == 0) {
+					reader.setConnection(conn);
+					String templateuri = getDefaultTemplateURI(context,request,response);
+					if (templateuri!= null) profile = reader.process(new Reference(templateuri));
+					reader.setProfile(profile);
+				}
+			} catch (Exception x) {
+				System.out.println(getRequest().getResourceRef());
+				//x.printStackTrace();
+			} finally {
+				//the reader closes the connection
+				reader.setCloseConnection(true);
+				try { reader.close();} catch (Exception x) {}
+				//try { conn.close();} catch (Exception x) {}
+			}
+			return profile;
+		} catch (Exception x) {
+			getLogger().info(x.getMessage());
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+		}
+		
+	}	
+	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
+		return null;
 	}
 }
