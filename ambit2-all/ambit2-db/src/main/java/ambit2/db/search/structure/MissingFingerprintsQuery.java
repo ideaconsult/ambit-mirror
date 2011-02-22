@@ -45,6 +45,7 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 	private static final long serialVersionUID = -8554160549010780854L;
 	
 	public final static String sqlField =
+		/*
 		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
 		"from structure join chemicals using(idchemical)\n"+
 		"left join %s using(idchemical)\n"+
@@ -55,9 +56,28 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		"from structure join chemicals using(idchemical)\n"+
 		"join %s using(idchemical)\n"+
 		"where (structure.type_structure != 'NA') && (%s.status = 'invalid')\n";
+	*/
+		"select ? as idquery, chemicals.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
+		"from structure join chemicals using(idchemical)\n"+
+		"left join %s as fingerprints using(idchemical)\n"+
+		"where (structure.type_structure != 'NA') and\n"+
+		"(\n"+
+		"(fingerprints.status is null) or (structure.updated > fingerprints.updated) or (fingerprints.status = 'invalid')\n"+
+		")\n"+
+		"order by idchemical\n";
+		//limit 100
 	
 	public final static String sqlFieldStruc =
 		
+		"select ? as idquery, idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
+		"from structure\n"+
+		"left join %s as fingerprint using(idchemical,idstructure)\n"+
+		"where (structure.type_structure != 'NA') &&\n"+
+		"(\n"+
+		"(fingerprint.status is null) or (structure.updated > fingerprint.updated) or (fingerprint.status = 'invalid')\n"+
+		") order by idchemical,idstructure\n";
+		
+		/*
 		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
 		"from structure\n"+
 		"left join %s using(idchemical,idstructure)\n"+
@@ -66,12 +86,12 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		"union\n"+
 		"select ? as idquery, idchemical,idstructure,1 as selected,0 as metric,null as text\n"+
 		"from %s where (%s.status = 'invalid')";
-	
+		*/
 	public final static String sqlSMARTS =
 		
 		"select ? as idquery, structure.idchemical,idstructure,1 as selected,1 as metric,null as text\n"+
 		"from structure\n"+
-		"where (structure.type_structure != 'NA')  and atomproperties is null";
+		"where (structure.type_structure != 'NA')  and atomproperties is null order by idchemical ";
 		
 
 
@@ -89,14 +109,11 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		if (FPTable.smarts_accelerator.equals(getFieldname())) return sqlSMARTS;
 		else
 		return String.format(
-				getFieldname().equals(FPTable.fp1024_struc)?sqlFieldStruc:sqlField
-				,table,table,table,table,table);
+				getFieldname().equals(FPTable.fp1024_struc)?sqlFieldStruc:sqlField,table);
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<Integer>(Integer.class, getId()));
-		if (FPTable.smarts_accelerator.equals(getFieldname())) return params;
-		params.add(new QueryParam<Integer>(Integer.class, getId()));		
 		return params;
 	}
 	@Override
