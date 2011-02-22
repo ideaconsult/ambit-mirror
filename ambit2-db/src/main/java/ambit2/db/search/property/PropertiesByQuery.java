@@ -1,6 +1,7 @@
 package ambit2.db.search.property;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ambit2.base.data.Property;
@@ -15,17 +16,38 @@ public class PropertiesByQuery  extends AbstractPropertyRetrieval<Template, ISto
 	public enum QField  {
 		name {
 			@Override
-			public String getSQL() {
+			public String getSQL(PropertiesByQuery q) {
 				return " name %s ?";
 			}
 		},
 		id {
 			@Override
-			public String getSQL() {
+			public String getSQL(PropertiesByQuery q) {
 				return " idquery = ?";
 			}
-		};
-		public abstract String getSQL();
+		},
+		properties {
+			@Override
+			public String getSQL(PropertiesByQuery value) {
+				if (value.getFieldname()==null) return null;
+				StringBuilder b = new StringBuilder();
+				int count =0;
+				String d = " idproperty in (";
+				Iterator<Property> p = value.getFieldname().getProperties(true);
+				while (p.hasNext()) {
+					Property property = p.next();
+					if (property.getId()>-1) {
+						b.append(d);
+						b.append(property.getId());
+						d = ",";
+						count++;
+					}
+				}
+				b.append(")");
+				return count==0?null:b.toString();
+			}
+		};		
+		public abstract String getSQL(PropertiesByQuery q);
 	};
 	/**
 	 * 
@@ -33,7 +55,7 @@ public class PropertiesByQuery  extends AbstractPropertyRetrieval<Template, ISto
 	private static final long serialVersionUID = -7265871901186884735L;
 	public static String whereproperty  = " idproperty = ?";
 	public static String wherepropertyName  = " property.name = ?";
-	public static String join  = " join template_def using(idproperty) join query using(idtemplate) where %s %s %s ";
+	public static String join  = " join template_def using(idproperty) join query using(idtemplate) where %s ";
 
 	
 	/**
@@ -53,8 +75,8 @@ public class PropertiesByQuery  extends AbstractPropertyRetrieval<Template, ISto
 			else if (getValue().getName()!=null) 
 				params.add(new QueryParam<String>(String.class, getValue().getName()));
 			else throw new AmbitException(getValue().toString()); 
-			if (getFieldname()!=null)
-				params.add(new QueryParam<Integer>(Integer.class, getFieldname().getId()));
+			//if (getFieldname()!=null)
+			//	params.add(new QueryParam<Integer>(Integer.class, getFieldname().getId()));
 			return params;
 		} else return null;
 		
@@ -64,17 +86,20 @@ public class PropertiesByQuery  extends AbstractPropertyRetrieval<Template, ISto
 			String whereDataset;
 			String and = "";
 			if (getValue().getId() >  0) {
-				whereDataset = QField.id.getSQL();
+				whereDataset = QField.id.getSQL(this);
 			} else if (getValue().getName()!=null) {
-				whereDataset = String.format(QField.name.getSQL(),getCondition().getSQL());
+				whereDataset = String.format(QField.name.getSQL(this),getCondition().getSQL());
 			} else throw new AmbitException(getValue().toString());
 			String wherePropertyID = "";
+			
 			if (getFieldname()!=null) {
 				and = " and ";
-				wherePropertyID = whereproperty;
-			}
+				String w = QField.properties.getSQL(this);
+				wherePropertyID = w==null?"":(and + QField.properties.getSQL(this));
+			} 
+			return PropertiesByDataset.base_sql_type + String.format(join,whereDataset+wherePropertyID);
+
 			
-			return PropertiesByDataset.base_sql_type + String.format(join,whereDataset,and,wherePropertyID);
 		}
 		throw new AmbitException("No dataset defined");
 	}
