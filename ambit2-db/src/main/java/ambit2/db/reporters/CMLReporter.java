@@ -108,7 +108,8 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public void header(Writer output, Q query) {
 		try {
 			output.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
-			output.write("<list dictRef=\"cdk:moleculeSet\" xmlns=\"http://www.xml-cml.org/schema\">");
+			//output.write("<list dictRef=\"cdk:moleculeSet\" xmlns=\"http://www.xml-cml.org/schema\">");
+			output.write("<list xmlns=\"http://www.xml-cml.org/schema\">");
 		} catch (Exception x) {}
 
 
