@@ -116,7 +116,8 @@ public class AutomaticTestUtilities
 		
 	RandomAccessFile outFile = null;
 	
-	// start 1248
+	// start at 1248 for the garbage collector tests 
+	boolean FlagTargetLargerThanQuery = false;
 	boolean FlagGarbCollector = false;
 	int maxNumSeqSteps = 4;
 	int maxStrSize = 30;
@@ -149,6 +150,7 @@ public class AutomaticTestUtilities
 	StatisticsData statAllObjs[];
 	StatisticsData statAllObjs_MapTrue[];
 	StatisticsData statAllObjs_MapFalse[];
+	StatisticsData statAllObjs_MapFalse_[];
 	int binsStrSize[] =  {5,10,20,30,40,50};
 	Vector<StatisticsData[]> statBins = new Vector<StatisticsData[]>();  //according to the query size
 	Vector<StatisticsData[]> statBins2 = new Vector<StatisticsData[]>(); //according to the db str. size
@@ -165,9 +167,9 @@ public class AutomaticTestUtilities
 		
 		//atu.handleArguments(new String[] {"-db","/gen-str-seq40-db-after-40000.txt", "-i","/keys-eff80.txt",	
 		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", 
-				"-i","/gen-str-seq50-db5000.txt","-i2","/key-bits-eff80-db.txt",
-				"-o","/garb-collect-test-db-500-part02.txt",
-				"-nDBStr", "500", "-maxSeqStep", "40", "-c", "sss-all", 
+				"-i","/garb-collect-test-db-500-part01.txt","-i2","/key-bits-eff80-db.txt",
+				"-o","/gc-stat-sss_TLTQ__.txt",
+				"-nDBStr", "500", "-maxSeqStep", "40", "-c", "calc-stat", 
 				"-nBits", "32"});
 		
 		//atu.produceRandomStructures();
@@ -1052,6 +1054,12 @@ public class AutomaticTestUtilities
 				output(statAllObjs_MapFalse[k].getAverage()+"\t"); // + statAllObjs_MapTrue[k].getRSD() + "\t");
 			output(endLine);
 			
+			//This is for hose case when query.size() < target.size()
+			output("Map0_" + "\t");
+			output(statAllObjs_MapFalse_[0].numObjects + "\t");
+			for (int k = 0; k < statMethods.length; k++)
+				output(statAllObjs_MapFalse_[k].getAverage()+"\t"); // + statAllObjs_MapTrue_[k].getRSD() + "\t");
+			output(endLine);
 			
 			for (int i = 0; i < binsStrSize.length ; i++)
 			{	
@@ -1140,6 +1148,10 @@ public class AutomaticTestUtilities
 		for (int k = 0; k < n; k++)
 			statAllObjs_MapFalse[k] = new StatisticsData();
 		
+		statAllObjs_MapFalse_ = new StatisticsData[n];
+		for (int k = 0; k < n; k++)
+			statAllObjs_MapFalse_[k] = new StatisticsData();
+		
 		for (int i = 1; i <= binsStrSize.length +1; i++)
 		{	
 			StatisticsData bStat[] = new StatisticsData[n];
@@ -1186,6 +1198,12 @@ public class AutomaticTestUtilities
 				int dbStrSize =  Integer.parseInt(tokens.get(1));
 				int sssRes  =  Integer.parseInt(tokens.get(2));
 				int dbBin = getBinIndex(dbStrSize);
+				
+				if (FlagTargetLargerThanQuery)
+				{
+					if (statCurSrtSize >= dbStrSize)
+						return(0);
+				}
 
 				//Handling the time for each method
 				for (int i = 0; i < statMethods.length; i++)
@@ -1195,7 +1213,11 @@ public class AutomaticTestUtilities
 					statBins.get(statCurBinIndex)[i].addValue(methodTime);
 					statBins2.get(dbBin)[i].addValue(methodTime);
 					if (sssRes == 0)
+					{	
 						statAllObjs_MapFalse[i].addValue(methodTime);
+						if (statCurSrtSize < dbStrSize)
+							statAllObjs_MapFalse_[i].addValue(methodTime);
+					}	
 					else
 						statAllObjs_MapTrue[i].addValue(methodTime);
 				}
