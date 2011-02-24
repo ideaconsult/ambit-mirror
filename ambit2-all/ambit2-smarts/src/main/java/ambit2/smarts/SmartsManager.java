@@ -172,6 +172,11 @@ public class SmartsManager
 		FlagSetSmartsDataForTarget  = flag;
 	}
 	
+	public void calcSmartsDataForTarget(IAtomContainer mol)
+	{	
+		parser.setSMARTSData(mol);
+	}
+	
 	public void setUseCDKIsomorphismTester(boolean flag)
 	{
 		FlagUseCDKIsomorphismTester  = flag;
