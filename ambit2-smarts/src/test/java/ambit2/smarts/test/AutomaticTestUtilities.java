@@ -5,7 +5,12 @@ import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.util.BitSet;
 import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -15,8 +20,17 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.smiles.smarts.parser.SMARTSParser;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.isomorphism.matchers.smarts.HydrogenAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.LogicalOperatorAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.RecursiveSmartsAtom;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
+import org.openscience.cdk.ringsearch.AllRingsFinder;
+import org.openscience.cdk.ringsearch.SSSRFinder;
+import org.openscience.cdk.CDKConstants;
 
 
 
@@ -24,6 +38,7 @@ import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsManager;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.Screening;
@@ -91,11 +106,12 @@ public class AutomaticTestUtilities
 	public static final int LPM_SSS_AMBIT_CDK = 2;
 	public static final int LPM_SSS_CDK_AMBIT = 3;
 	public static final int LPM_SSS_AMBIT_SMSD = 4;
-	public static final int LPM_SSS_CDK_SMSD = 5;
+	public static final int LPM_SSS_CDK_SMSD = 5;	
 	public static final int LPM_SSS_ALL = 100;
 	public static final int LPM_PARSERS_ALL = 101;
 	public static final int LPM_CALC_STAT = 102;
 	public static final int LPM_SIZE_STAT = 103;
+	public static final int LPM_FULL_SMARTS = 110;
 	
 	
 	public static final int STAT_SINGLE_DBSTR = 1;
@@ -139,7 +155,7 @@ public class AutomaticTestUtilities
 	boolean FlagStat_SingleDBStr_Ambit_SMSD = false;   //ambit parser + SMSD isomorphims
 	boolean FlagStat_SingleDBStr_CDK_SMSD = false;	  //cdk parser + SMSD isomorphism
 	
-	
+	SmartsManager man = new SmartsManager();
 	SmartsParser spAmbit = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	
@@ -167,9 +183,9 @@ public class AutomaticTestUtilities
 		
 		//atu.handleArguments(new String[] {"-db","/gen-str-seq40-db-after-40000.txt", "-i","/keys-eff80.txt",	
 		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", 
-				"-i","/garb-collect-test-db-500-part01.txt","-i2","/key-bits-eff80-db.txt",
-				"-o","/gc-stat-sss_TLTQ__.txt",
-				"-nDBStr", "500", "-maxSeqStep", "40", "-c", "calc-stat", 
+				"-i2","/query04-mutag.txt","-i","/sss-tests-query04.txt",
+				"-o","/stat-tests-query04__.txt",
+				"-nDBStr", "2000", "-maxSeqStep", "40", "-c", "calc-stat", 
 				"-nBits", "32"});
 		
 		//atu.produceRandomStructures();
@@ -429,6 +445,16 @@ public class AutomaticTestUtilities
 			return(0);
 		}
 		
+		if (command.equals("full-smarts"))
+		{
+			System.out.println("Running sss with all isomprphims algorithm:");
+			openOutputFile();
+			lineProcessMode = LPM_FULL_SMARTS;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
 		if (command.equals("parsers-all"))
 		{
 			System.out.println("Running comparison of the SMARTS parsers: Ambit, CDK");
@@ -516,6 +542,7 @@ public class AutomaticTestUtilities
 		System.out.println("                 sss-ambit-cdk    substructure searching with Ambit Parser and CDK Algorithm");
 		System.out.println("                 sss-cdk-ambit    substructure searching with CDK Parser and Ambit Algorithm");
 		System.out.println("                 sss-all          substructure searching with all algorithms");
+		System.out.println("                 full-smarts      substructure searching with full smarts queries");
 		System.out.println("                 parsers-all      comparison of the parsing time");
 		System.out.println("                 cals-stat        calculates statistics from previous tests");
 		System.out.println("                 size-stat        calculates the sizes of input structures");
@@ -708,6 +735,12 @@ public class AutomaticTestUtilities
 				sss_SingleDBStrStat(line);
 				break;
 				
+			case LPM_FULL_SMARTS:				
+				FlagStat_SingleDBStr_Ambit = true;
+				FlagStat_SingleDBStr_CDK = true;
+				sss_SingleDBStrStat_FullSmarts(line);
+				break;	
+				
 			case LPM_CALC_STAT:
 				//It is not done here.
 				//A separate input file iteration function is used.
@@ -758,6 +791,276 @@ public class AutomaticTestUtilities
 	{
 		return(0);
 	}
+	
+	//----------Processing of full smarts standard queries
+	
+	
+	int sss_SingleDBStrStat_FullSmarts(String line)
+	{
+		//Performs statistics for each structure from the DB
+		//It is applied for several algorithms simultaneously
+		
+		long startTime, endTime;
+		long timeAmbit = 0;
+		long timeCDK = 0;
+		
+		//Ambit parser
+		//QueryAtomContainer query_ambit  = spAmbit.parse(line);
+		//spAmbit.setNeededDataFlags();
+		//String errorMsg = spAmbit.getErrorMessages();
+		
+		man.setQuery(line);
+		String errorMsg = man.getErrors();
+		if (!errorMsg.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + errorMsg);			
+			return -1;
+		}	
+		
+		
+		//CDK parser
+		QueryAtomContainer query_CDK = null;
+		try
+		{	
+			query_CDK  =  SMARTSParser.parse(line);
+		}
+		catch(Exception e)
+		{
+			System.out.println("CDK parsing error: " + e.toString());
+			return -1;
+		}
+		
+		//Initial line in the output
+		output("###test  Ambit  CDK  " +  endLine);
+		output("###  " + query_CDK.getAtomCount() + "   "+line + endLine);
+		
+		try
+		{
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				record++;				
+				if (record > this.nDBStr)
+					break;
+				
+				if (record % 100 == 0)
+					System.out.println("db-rec " + record);
+				
+				Object o = reader.next();
+				if (o instanceof IAtomContainer) 
+				{	
+					IAtomContainer mol = (IAtomContainer)o;
+					if (mol.getAtomCount() == 0) continue;
+					
+					initializeMolecule(mol);					
+					//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+					//CDKHueckelAromaticityDetector.detectAromaticity(mol);
+					
+					int sssResultCDK = 0;
+					int sssResultAmbit = 0;
+					
+					
+					//Ambit test
+					man.calcSmartsDataForTarget(mol);
+					man.setUseCDKIsomorphismTester(false);
+					man.setSmartsDataForTarget(false);
+					
+					startTime = System.nanoTime();
+					boolean res0 = man.searchIn(mol);
+					endTime = System.nanoTime();
+					timeAmbit = endTime - startTime;
+					if (res0)
+						sssResultAmbit = 1;
+					
+					
+					
+					//CDK test
+					startTime = System.nanoTime();
+					initializeRecursiveSmarts(query_CDK, mol);
+					boolean res = UniversalIsomorphismTester.isSubgraph(mol, query_CDK);
+					endTime = System.nanoTime();
+					timeCDK = endTime - startTime;
+					
+					if (res)
+						sssResultCDK = 1;
+					
+					
+					output("db-" + record+"  "+mol.getAtomCount()+"  " + 
+							sssResultAmbit + sssResultCDK + "       "  
+							+ timeAmbit + "  " + timeCDK + endLine);
+					
+				}
+			}
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+			return(-1);
+		}
+		
+		//TODO
+		return (0);
+	}
+	
+	
+	private void initializeRecursiveSmarts(QueryAtomContainer query, IAtomContainer atomContainer) throws CDKException {
+        for (IAtom atom : query.atoms()) {
+            initializeRecursiveSmartsAtom(atom, atomContainer);
+        }
+    }	
+	
+	private void initializeRecursiveSmartsAtom(IAtom atom, IAtomContainer atomContainer) throws CDKException {
+        if (atom instanceof LogicalOperatorAtom) {
+            initializeRecursiveSmartsAtom(((LogicalOperatorAtom) atom).getLeft(), atomContainer);
+            if (((LogicalOperatorAtom) atom).getRight() != null) {
+                initializeRecursiveSmartsAtom(((LogicalOperatorAtom) atom).getRight(), atomContainer);
+            }
+        } else if (atom instanceof RecursiveSmartsAtom) {
+            ((RecursiveSmartsAtom) atom).setAtomContainer(atomContainer);
+        } else if (atom instanceof HydrogenAtom) {
+            ((HydrogenAtom) atom).setAtomContainer(atomContainer);
+        }
+    }
+	
+	
+	private void initializeMolecule(IAtomContainer atomContainer) throws CDKException {
+        // Code copied from 
+        // org.openscience.cdk.qsar.descriptors.atomic.AtomValenceDescriptor;
+        Map<String, Integer> valencesTable = new HashMap<String, Integer>();
+        valencesTable.put("H", 1);
+        valencesTable.put("Li", 1);
+        valencesTable.put("Be", 2);
+        valencesTable.put("B", 3);
+        valencesTable.put("C", 4);
+        valencesTable.put("N", 5);
+        valencesTable.put("O", 6);
+        valencesTable.put("F", 7);
+        valencesTable.put("Na", 1);
+        valencesTable.put("Mg", 2);
+        valencesTable.put("Al", 3);
+        valencesTable.put("Si", 4);
+        valencesTable.put("P", 5);
+        valencesTable.put("S", 6);
+        valencesTable.put("Cl", 7);
+        valencesTable.put("K", 1);
+        valencesTable.put("Ca", 2);
+        valencesTable.put("Ga", 3);
+        valencesTable.put("Ge", 4);
+        valencesTable.put("As", 5);
+        valencesTable.put("Se", 6);
+        valencesTable.put("Br", 7);
+        valencesTable.put("Rb", 1);
+        valencesTable.put("Sr", 2);
+        valencesTable.put("In", 3);
+        valencesTable.put("Sn", 4);
+        valencesTable.put("Sb", 5);
+        valencesTable.put("Te", 6);
+        valencesTable.put("I", 7);
+        valencesTable.put("Cs", 1);
+        valencesTable.put("Ba", 2);
+        valencesTable.put("Tl", 3);
+        valencesTable.put("Pb", 4);
+        valencesTable.put("Bi", 5);
+        valencesTable.put("Po", 6);
+        valencesTable.put("At", 7);
+        valencesTable.put("Fr", 1);
+        valencesTable.put("Ra", 2);
+        valencesTable.put("Cu", 2);
+        valencesTable.put("Mn", 2);
+        valencesTable.put("Co", 2);
+
+        // do all ring perception
+        AllRingsFinder arf = new AllRingsFinder();
+        IRingSet allRings;
+        try {
+            allRings = arf.findAllRings(atomContainer);
+        } catch (CDKException e) {        	
+            //logger.debug(e.toString());
+            throw new CDKException(e.toString(), e);
+        }
+
+        // sets SSSR information
+        SSSRFinder finder = new SSSRFinder(atomContainer);
+        IRingSet sssr = finder.findEssentialRings();
+
+        for (IAtom atom : atomContainer.atoms()) {
+
+            // add a property to each ring atom that will be an array of
+            // Integers, indicating what size ring the given atom belongs to
+            // Add SSSR ring counts
+            if (allRings.contains(atom)) { // it's in a ring
+                atom.setFlag(CDKConstants.ISINRING, true);
+                // lets find which ring sets it is a part of
+                List<Integer> ringsizes = new ArrayList<Integer>();
+                IRingSet currentRings = allRings.getRings(atom);
+                int min = 0;
+                for (int i = 0; i < currentRings.getAtomContainerCount(); i++) {
+                    int size = currentRings.getAtomContainer(i).getAtomCount();
+                    if (min > size) min = size;
+                    ringsizes.add(size);
+                }
+                atom.setProperty(CDKConstants.RING_SIZES, ringsizes);
+                atom.setProperty(CDKConstants.SMALLEST_RINGS, sssr.getRings(atom));
+            } else {
+                atom.setFlag(CDKConstants.ISINRING, false);
+            }
+
+            // determine how many rings bonds each atom is a part of
+            int hCount;
+            if (atom.getImplicitHydrogenCount() == CDKConstants.UNSET) hCount = 0;
+            else hCount = atom.getImplicitHydrogenCount();
+
+            List<IAtom> connectedAtoms = atomContainer.getConnectedAtomsList(atom);
+            int total = hCount + connectedAtoms.size();
+            for (IAtom connectedAtom : connectedAtoms) {
+                if (connectedAtom.getSymbol().equals("H")) {
+                    hCount++;
+                }
+            }
+            atom.setProperty(CDKConstants.TOTAL_CONNECTIONS, total);
+            atom.setProperty(CDKConstants.TOTAL_H_COUNT, hCount);
+
+            if (valencesTable.get(atom.getSymbol()) != null) {
+                int formalCharge = atom.getFormalCharge() == CDKConstants.UNSET ? 0 : atom.getFormalCharge();
+                atom.setValency(valencesTable.get(atom.getSymbol()) - formalCharge);
+            }
+        }
+
+        for (IBond bond : atomContainer.bonds()) {
+            if (allRings.getRings(bond).getAtomContainerCount() > 0) {
+                bond.setFlag(CDKConstants.ISINRING, true);
+            }
+        }
+
+        for (IAtom atom : atomContainer.atoms()) {
+            List<IAtom> connectedAtoms = atomContainer.getConnectedAtomsList(atom);
+
+            int counter = 0;
+            IAtom any;
+            for (IAtom connectedAtom : connectedAtoms) {
+                any = connectedAtom;
+                if (any.getFlag(CDKConstants.ISINRING)) {
+                    counter++;
+                }
+            }
+            atom.setProperty(CDKConstants.RING_CONNECTIONS, counter);
+        }
+
+        // check for atomaticity
+        try {
+            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(atomContainer);
+            CDKHueckelAromaticityDetector.detectAromaticity(atomContainer);
+        } catch (CDKException e) {
+            //logger.debug(e.toString());
+            throw new CDKException(e.toString(), e);
+        }
+    }
+	
+	
+	
+	//-----------------------------------------------------
 	
 	int sss_SingleDBStrStat(String line)
 	{
