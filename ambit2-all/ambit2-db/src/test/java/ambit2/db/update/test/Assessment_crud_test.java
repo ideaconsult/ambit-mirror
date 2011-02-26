@@ -33,7 +33,7 @@ public class Assessment_crud_test extends CRUDTest<AmbitUser,SessionID> {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idsessions, user_name, title from sessions where user_name='guest' and idsessions =1");
 		Assert.assertEquals(1,table.getRowCount());
-		Assert.assertEquals("Default",table.getValue(0,"title"));
+		Assert.assertEquals("temp",table.getValue(0,"title"));
 		c.close();			
 		
 	}

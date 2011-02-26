@@ -69,7 +69,7 @@ public abstract class CRUDTest<G,T> extends DbUnitTest {
 		c.close();
 	}
 
-	@Test
+
 	public void testCreate() throws Exception {
 		setUpDatabase(dbFile);
 		IQueryUpdate<G,T> query = createQuery();		

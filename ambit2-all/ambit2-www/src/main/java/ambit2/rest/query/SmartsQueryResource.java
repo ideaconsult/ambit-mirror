@@ -89,8 +89,35 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					}
 				}
 			}
+			
+			boolean fp1024_screenining = true;
+			if (form.getFirstValue("fp1024")!=null)
+			try {
+				fp1024_screenining = Boolean.parseBoolean(form.getFirstValue("fp1024"));
+			} catch (Exception x) {
+				fp1024_screenining = true;
+			}
+			boolean sk1024_screenining = true;
+			if (form.getFirstValue("sk1024")!=null)
+				try {
+					sk1024_screenining = Boolean.parseBoolean(form.getFirstValue("sk1024"));
+				} catch (Exception x) {
+					sk1024_screenining = true;
+				}			
+			
+			boolean read_atomprops = true;
+			if (form.getFirstValue("atomproperties")!=null)
+				try {
+					read_atomprops = Boolean.parseBoolean(form.getFirstValue("atomproperties"));
+				} catch (Exception x) {
+					read_atomprops = true;
+				}	
+				
 			String smarts = getSMILES(form,true);
 			QuerySMARTS query = new QuerySMARTS();
+			query.setFp1024_screening(fp1024_screenining);
+			query.setSk1024_screening(sk1024_screenining);
+			query.setUsePrecalculatedAtomProperties(read_atomprops);
 			query.setChemicalsOnly(true);
 			query.setValue(new FunctionalGroup(smarts,smarts,smarts));
 			try {

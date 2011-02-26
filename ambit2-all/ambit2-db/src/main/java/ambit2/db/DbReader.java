@@ -123,7 +123,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 						try {
 							
 							counter++;
-							long max = (query.getPageSize()>0)?query.getPageSize():10000;
+							long max = (query.getPageSize()>0)?query.getPageSize():1000000;
 							if (counter > max) return false;
 							boolean loop=getResultSet().next();
 							long attemptsStart = System.currentTimeMillis();
@@ -133,7 +133,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 								if (prescreen(query, cachedRecord)) return loop;
 								else {
 									cachedRecord = null;
-									if ((System.currentTimeMillis() - attemptsStart)>5000) {
+									if ((System.currentTimeMillis() - attemptsStart)>60000) {
 										loop = false; 
 										break;
 									} else	loop=getResultSet().next();
