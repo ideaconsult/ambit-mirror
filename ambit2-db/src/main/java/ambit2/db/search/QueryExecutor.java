@@ -136,12 +136,11 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 		
 		if ((target instanceof IQueryRetrieval) && ((IQueryRetrieval)target).isPrescreen()) {
 			page = 0;
-			psize = (psize*100)>100000?100000:(psize*100);
+			psize = (psize*100)>10000?10000:(psize*100);
 		}
 
 		return (target.getPageSize()>0?
-					String.format(paged_limit,sql,
-							target.getPage()==0?target.getPage():target.getPage()*target.getPageSize(),target.getPageSize()):
+					String.format(paged_limit,sql,page==0?0:page*psize,psize):
 					sql);
 	}
 
