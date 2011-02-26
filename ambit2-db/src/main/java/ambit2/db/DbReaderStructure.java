@@ -56,6 +56,7 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 		cache.setObject(qs);
 
 	}
+	
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
 		super.setConnection(connection);
@@ -74,6 +75,11 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 	@Override
 	protected boolean prescreen(IQueryRetrieval<IStructureRecord> query,
 			IStructureRecord object) throws AmbitException {
+		if ((object.getIdstructure()<=0) && (retriever.getQuery() instanceof RetrieveStructure)) {
+			((RetrieveStructure) retriever.getQuery()).setPreferedStructure(true);
+			retriever.getQuery().setPage(0);
+			retriever.getQuery().setPageSize(1);
+		}
 		IStructureRecord record = retriever.process(object);
 		object.setIdchemical(record.getIdchemical());
 		object.setIdstructure(record.getIdstructure());

@@ -2,7 +2,6 @@ package ambit2.db.search.structure;
 
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -36,6 +35,7 @@ public class QuerySMARTS extends
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = -4539445262832597492L;
 	protected SmartsToChemObject smartsToChemObject = new SmartsToChemObject();
 	protected transient StructureKeysBitSetGenerator skGenerator = new StructureKeysBitSetGenerator();
@@ -46,6 +46,37 @@ public class QuerySMARTS extends
 	protected Property smartsProperty = Property.getInstance(
 			CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	protected static final String SMARTS = "SMARTS";
+	
+	protected boolean fp1024_screening = true;
+	protected boolean sk1024_screening = true;
+	protected boolean usePrecalculatedAtomProperties = true;
+	
+	public boolean isFp1024_screening() {
+		return fp1024_screening;
+	}
+
+	public void setFp1024_screening(boolean fp1024_screening) {
+		this.fp1024_screening = fp1024_screening;
+	}
+
+	public boolean isSk1024_screening() {
+		return sk1024_screening;
+	}
+
+	public void setSk1024_screening(boolean sk1024_screening) {
+		this.sk1024_screening = sk1024_screening;
+	}
+
+	public boolean isUsePrecalculatedAtomProperties() {
+		return usePrecalculatedAtomProperties;
+	}
+
+	public void setUsePrecalculatedAtomProperties(
+			boolean usePrecalculatedAtomProperties) {
+		this.usePrecalculatedAtomProperties = usePrecalculatedAtomProperties;
+	}
+
+	
 	public QuerySMARTS() {
 		super();
 		screening = new QueryPrescreenBitSet();
@@ -78,7 +109,9 @@ public class QuerySMARTS extends
 	
 	public void prepareScreening() throws AmbitException {
 		try {
-			if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
+			if (((screening.getValue()==null) && isFp1024_screening()) || 
+				((screening.getFieldname()==null)) && isSk1024_screening()) {
+			//if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
 				screening.setPageSize(0);
 				screening.setPage(0);
 				SmartsPatternAmbit matcher = new SmartsPatternAmbit();
@@ -97,12 +130,12 @@ public class QuerySMARTS extends
 					screening.setFieldname(null);
 				} else {
 					try {
-						screening.setValue(fpGenerator.process(atomContainer));
+						screening.setValue(fp1024_screening?fpGenerator.process(atomContainer):null);
 					} catch (Exception x) {
 						screening.setValue(null);
 					}		
 					try {
-						screening.setFieldname(skGenerator.process(atomContainer));
+						screening.setFieldname(sk1024_screening?skGenerator.process(atomContainer):null);
 					} catch (Exception x) {
 						screening.setFieldname(null);
 					}						
@@ -146,8 +179,7 @@ public class QuerySMARTS extends
 						|| (mol instanceof SuppleAtomContainer))
 					return 0;
 
-				if ("true".equals(Preferences
-						.getProperty(Preferences.FASTSMARTS))) {
+				if ("true".equals(Preferences.getProperty(Preferences.FASTSMARTS)) && isUsePrecalculatedAtomProperties()) {
 					Object smartsdata = object.getProperty(smartsProperty);
 
 					if (smartsdata != null) {
@@ -179,7 +211,11 @@ public class QuerySMARTS extends
 
 	@Override
 	public String toString() {
-		return String.format("SMARTS %s", getValue() == null ? "" : getValue()
-				.toString());
+		return String.format("SMARTS %s %s %s %s", 
+				getValue() == null ? "" : getValue().toString(),
+				isFp1024_screening()?"":",No fp screening",
+				isSk1024_screening()?"":",No sk screening",
+				isUsePrecalculatedAtomProperties()?"":",No precalculated properties"
+				);
 	}
 }
