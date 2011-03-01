@@ -1,6 +1,5 @@
 package ambit2.rest.task;
 
-import org.restlet.data.ChallengeResponse;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -63,7 +62,9 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 		String modelURI = form.getFirstValue(OpenTox.params.model_uri.toString());
 		if (modelURI!=null) modelURI=modelURI.trim();
 		String[] algoURIs = form.getValuesArray(OpenTox.params.algorithm_uri.toString());
-		
+		//removing algorithm_uri parameters, no need to pass to algorithms 
+		form.removeAll(OpenTox.params.algorithm_uri.toString());
+			
 		OTDataset results = null;
 		
 		try { 
