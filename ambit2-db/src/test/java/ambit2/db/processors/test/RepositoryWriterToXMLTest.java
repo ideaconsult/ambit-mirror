@@ -39,6 +39,7 @@ public class RepositoryWriterToXMLTest extends DbUnitTest {
 		Assert.assertEquals(0,property_values.getRowCount());
 		
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/toxml/invitromicronucleus_study.xml");
+	
 		Assert.assertNotNull(in);
 		IRawReader reader = (IRawReader) FileInputState.getReader(in,"study.xml");
 				//LiteratureEntry.getInstance("study.toxml"));
@@ -48,24 +49,24 @@ public class RepositoryWriterToXMLTest extends DbUnitTest {
         
         c = getConnection();
 		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
-		Assert.assertEquals(1,chemicals.getRowCount());
+		Assert.assertEquals(2,chemicals.getRowCount());
 		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles is not null and inchi is not null and formula is not null");
 		Assert.assertEquals(1,chemicals.getRowCount());		
 		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		Assert.assertEquals(1,strucs.getRowCount());
+		Assert.assertEquals(2,strucs.getRowCount());
 		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='TEST INPUT'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
 		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
-		Assert.assertEquals(1,struc_src.getRowCount());
+		Assert.assertEquals(2,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
 		Assert.assertEquals(97,property	.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(97,property_values.getRowCount());		
+		Assert.assertEquals(194,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
-		Assert.assertEquals(3,tuples.getRowCount());			
+		Assert.assertEquals(6,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
-		Assert.assertEquals(98,p_tuples.getRowCount());				
+		Assert.assertEquals(196,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties

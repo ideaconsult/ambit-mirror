@@ -40,7 +40,7 @@ import com.jgoodies.binding.beans.Model;
 
 public class Property extends Model implements Serializable, Comparable<Property> {
 	public void setName(String name) {
-		this.name = name==null?null:name.length()>=128?name.substring(0,127):name;
+		this.name = name==null?null:name.length()>=256?name.substring(0,255):name;
 	}
 	/**
 	 * 
