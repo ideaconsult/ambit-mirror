@@ -124,9 +124,9 @@ DROP TABLE IF EXISTS `properties`;
 CREATE TABLE  `properties` (
   `idproperty` int(10) unsigned NOT NULL auto_increment,
   `idreference` int(11) unsigned NOT NULL default '0',
-  `name` varchar(128) collate utf8_bin NOT NULL default '',
+  `name` varchar(255) collate utf8_bin NOT NULL default '',
   `units` varchar(16) collate utf8_bin NOT NULL default '',
-  `comments` varchar(128) collate utf8_bin NOT NULL default '',
+  `comments` varchar(255) collate utf8_bin NOT NULL default '',
   `islocal` tinyint(1) NOT NULL default '0',
   `ptype` set('STRING','NUMERIC') COLLATE utf8_bin DEFAULT null,
   PRIMARY KEY  USING BTREE (`idproperty`),
@@ -222,7 +222,7 @@ CREATE TABLE  `models` (
   `dependent` int(10) unsigned NOT NULL COMMENT 'template for dependent variables',
   `content` longblob NOT NULL,
   `algorithm` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'N/A' COMMENT 'URI of the algorithm',
-  `mediatype` varchar(48) COLLATE utf8_bin NOT NULL DEFAULT 'application/java' COMMENT 'Content formats: JAVA_CLASS, WEKA_BASE64, PMML',
+  `mediatype` varchar(48) COLLATE utf8_bin NOT NULL DEFAULT 'application/java' COMMENT 'Content formats: application/java,application/x-coverage-serialized-object, application/x-java-serialized-object, application/x-www-form-urlencoded',
   `parameters` text COLLATE utf8_bin COMMENT 'Model parameters',
   `predicted` int(10) unsigned NOT NULL COMMENT 'template for predicted variables',
   `hidden` tinyint(1) NOT NULL DEFAULT '0',
@@ -913,7 +913,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,6,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,9,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

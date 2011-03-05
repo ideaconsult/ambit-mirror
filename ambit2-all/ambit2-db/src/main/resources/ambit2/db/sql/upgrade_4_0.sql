@@ -290,3 +290,13 @@ END $
  END $
 DELIMITER ;
 insert into version (idmajor,idminor,comment) values (4,7,"AMBIT2 schema");
+
+
+---------------------
+-- 4.9 
+-- Longer properties name / sameas fields to work with ToxML flattened hierarchy
+---------------------
+
+ALTER TABLE `properties` MODIFY COLUMN `name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+ MODIFY COLUMN `comments` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL;
+ insert into version (idmajor,idminor,comment) values (4,9,"AMBIT2 schema");
