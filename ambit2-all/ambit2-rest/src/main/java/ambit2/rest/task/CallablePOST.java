@@ -47,23 +47,35 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 		this.input = input;
 		this.applicationRootReference = root;
 	}
+	protected String getDatasetService(Form form) {
+		String dataset_service = form.getFirstValue(OpenTox.params.dataset_service.toString());
+		if (dataset_service==null) dataset_service = String.format("%s/dataset", applicationRootReference);
+		else dataset_service = dataset_service.trim();
+		return dataset_service;
+	}
+	protected String getDatasetURI(Form form) {
+		String datasetURI = form.getFirstValue(OpenTox.params.dataset_uri.toString());
+		if (datasetURI!=null) datasetURI = datasetURI.trim();
+		return datasetURI;
+	}	
+	protected String[] getAlgorithms(Form form, String tag) {
+		String[] algoURIs = form.getValuesArray(tag);
+		//removing algorithm_uri parameters, no need to pass to algorithms 
+		form.removeAll(tag);
+		return algoURIs;
+	}	
 	@Override
 	public TaskResult doCall() throws Exception {
 
 		//System.out.println(getClass().getName());
 		long now = System.currentTimeMillis();
 		Form form = new Form(input);
-		String dataset_service = form.getFirstValue(OpenTox.params.dataset_service.toString());
-		if (dataset_service==null) dataset_service = String.format("%s/dataset", applicationRootReference);
-		else dataset_service = dataset_service.trim();
-		String datasetURI = form.getFirstValue(OpenTox.params.dataset_uri.toString());
-		if (datasetURI!=null) datasetURI = datasetURI.trim();
+		String dataset_service = getDatasetService(form);
+		String datasetURI = getDatasetURI(form);
 		
 		String modelURI = form.getFirstValue(OpenTox.params.model_uri.toString());
 		if (modelURI!=null) modelURI=modelURI.trim();
-		String[] algoURIs = form.getValuesArray(OpenTox.params.algorithm_uri.toString());
-		//removing algorithm_uri parameters, no need to pass to algorithms 
-		form.removeAll(OpenTox.params.algorithm_uri.toString());
+		String[] algoURIs = getAlgorithms(form,OpenTox.params.algorithm_uri.toString());
 			
 		OTDataset results = null;
 		
