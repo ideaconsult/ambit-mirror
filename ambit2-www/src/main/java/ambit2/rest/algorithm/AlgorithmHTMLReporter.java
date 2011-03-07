@@ -75,6 +75,19 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 					output.write(String.format("<tr><td>OpenSSO token</td><td><input type='text' size='120' name='%s' value=''></td></tr>","subjectid"));
 					output.write(String.format("<tr><td><input type='submit' name='launch' value='%s'></td></tr>","Run"));
 					output.write("</form>");
+				} else if (item.hasType(Algorithm.typeSuperBuilder)) {
+					output.write("<tr><th>Model builder</th><th>Calculate descriptors, prepares a dataset and builds the model</th></tr>");
+					output.write(String.format("<form action='' method='%s' name='form'>","POST"));
+					output.write(String.format("<tr><td>Dataset URI</td><td><input type='text'  size='120'  name='%s' value=''></td></tr>",OpenTox.params.dataset_uri));
+					output.write(String.format("<tr><td>Prediction feature URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.target));
+					output.write(String.format("<tr><td title='If no learning algorithm specified, only builds a dataset with all features'>Learning algorithm URI (e.g. regression)</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.model_learning));
+					for ( int i=0; i < 4; i++)
+						output.write(String.format("<tr><td>Descriptor calculation algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.feature_calculation));
+					
+					output.write(String.format("<tr><td>Dataset service URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.dataset_service));
+					output.write(String.format("<tr><td>OpenSSO token</td><td><input type='text' size='120' name='%s' value=''></td></tr>","subjectid"));
+					output.write(String.format("<tr><td><input type='submit' name='launch' value='%s'></td></tr>","Run"));
+					output.write("</form>");					
 				} else  {//create a model
 					String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Training dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";					
 					output.write(String.format(

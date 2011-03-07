@@ -35,6 +35,7 @@ import ambit2.rest.model.builder.ExpertModelBuilder;
 import ambit2.rest.model.builder.SMSDModelBuilder;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.task.CallableBuilder;
 import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableFingerprintsModelCreator;
 import ambit2.rest.task.CallableMockup;
@@ -224,6 +225,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			{"mcss","Find maximum common substructures of a dataset","mcss",null,new String[] {Algorithm.typeSMSD},null,Algorithm.requires.structure},
 			
 			{"superservice","Calls a remote service",null,null,new String[] {Algorithm.typeSuperService},null,null},
+			{"superbuilder","Builds a model with all dependencies",null,null,new String[] {Algorithm.typeSuperBuilder},null,null},
 			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {Algorithm.typeMockup},null,null},
 			
 			{"expert","Human experts input","expert",null,new String[] {Algorithm.typeExpert},null,Algorithm.requires.structure}
@@ -356,6 +358,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		if (model.hasType(Algorithm.typeFingerprints)) return null;
 		if (model.hasType(Algorithm.typeMockup)) return null;
 		if (model.hasType(Algorithm.typeSuperService)) return null;
+		if (model.hasType(Algorithm.typeSuperBuilder)) return null;
 		if (model.hasType(Algorithm.typeStructure)) return null;
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) 
@@ -412,6 +415,10 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				
 			} else if (algorithm.hasType(Algorithm.typeSuperService))  {
 				return new CallablePOST<String>(form,getRequest().getRootRef(),token);			
+				
+			} else if (algorithm.hasType(Algorithm.typeSuperBuilder))  {
+				return new CallableBuilder<String>(form,getRequest().getRootRef(),token);		
+				
 			} else if (algorithm.hasType(Algorithm.typeMockup))  {
 				return new CallableMockup<String>(form,token);
 			} else if (algorithm.hasType(Algorithm.typeRules))

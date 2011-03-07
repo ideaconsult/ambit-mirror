@@ -206,6 +206,53 @@ public class OpenTox {
 				return "Destination dataset service, used by Algorithms and Models to store results";
 			}
 		},
+		//superbuilder_param 
+		feature_calculation {
+			@Override
+			public boolean isMandatory() {
+				return false;
+			}
+			public String getDescription() {
+				return "Feature calculation algorithms, used by superservice for model creation";
+			}
+		},
+		feature_selection {
+			@Override
+			public boolean isMandatory() {
+				return false;
+			}
+			public String getDescription() {
+				return "Feature selection algorithms, used by superservice for model creation";
+			}			
+		},
+		model_learning {
+			@Override
+			public boolean isMandatory() {
+				return false;
+			}	
+			public String getDescription() {
+				return "Model learning algorithms, used by superservice for model creation";
+			}			
+		},
+		applicability_domain {
+			@Override
+			public boolean isMandatory() {
+				return false;
+			}
+			public String getDescription() {
+				return "Applicability domain algorithms, used by superservice for model creation";
+			}	
+		},
+		validation_service {
+			@Override
+			public boolean isMandatory() {
+				return false;
+			}
+			public String getDescription() {
+				return "Validation service, used by superservice for model creation";
+			}				
+		},
+		
 		page {
 			public String getDescription() {
 				return "Page";

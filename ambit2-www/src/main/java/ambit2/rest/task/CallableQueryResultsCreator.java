@@ -116,7 +116,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 					return createQueryResults((QueryCombinedStructure)query);				
 			} else {
 				//return new RDFStructuresReader(target.toString());
-				throw new Exception("Not implemented");
+				throw new Exception(String.format(" Not implemented %s %s", query.getClass().getName(),uri));
 			}
 		} else throw new Exception(String.format(
 				"Copy of external datasets not implemented yet, use POST to %s/dataset instead",
