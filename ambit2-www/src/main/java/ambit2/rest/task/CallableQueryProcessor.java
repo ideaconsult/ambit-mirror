@@ -31,13 +31,15 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 	//protected AmbitApplication application;
 	protected Context context;
 
-
 	public CallableQueryProcessor(Form form,Context context,USERID token) {
+		this(null,form,context,token);
+	}
+	public CallableQueryProcessor(Reference applicationRootReference,Form form,Context context,USERID token) {
 		super(token);
-		processForm(form);
+		processForm(applicationRootReference,form);
 		this.context = context;
 	}
-	protected void processForm(Form form) {
+	protected void processForm(Reference applicationRootReference,Form form) {
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
 		String[] xvars = OpenTox.params.feature_uris.getValuesArray(form);
 		if (xvars != null) try {

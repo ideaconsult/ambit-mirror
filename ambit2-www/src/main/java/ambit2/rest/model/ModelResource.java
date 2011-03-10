@@ -227,9 +227,11 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						getContext(),
 						(ExpertModelpredictor)thepredictor,
 						token) {
-					
-					protected void processForm(Form form) {
-						super.processForm(form);
+					@Override
+							protected void processForm(
+									Reference applicationRootReference,
+									Form form) {
+						super.processForm(applicationRootReference,form);
 						((ExpertModelpredictor)thepredictor).setValue(form.getFirstValue("value"));
 					};
 				}	;

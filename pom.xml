@@ -45,11 +45,13 @@
   			<enabled>false</enabled>
   		</snapshots>
   	</repository>
+<!--
   	<repository>
   		<id>ucc-repo</id>
   		<name>ucc-repo</name>
   		<url>https://maven.ch.cam.ac.uk/m2repo</url>
   	</repository>
+-->
   	<!-- 
   	<repository>
   		<id>CDK repository</id>

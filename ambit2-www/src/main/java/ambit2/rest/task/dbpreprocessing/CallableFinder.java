@@ -60,11 +60,12 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 	public CallableFinder(Form form,
 			Reference applicationRootReference,Context context,
 			Algorithm algorithm,USERID token) {
-		super(form,context,token);
+		super(applicationRootReference,form,context,token);
 		this.applicationRootReference = applicationRootReference;
 	}
 	@Override
-	protected void processForm(Form form) {
+	protected void processForm(Reference applicationRootReference,Form form) {
+		this.applicationRootReference = applicationRootReference;
 		//mode
 		Object modeParam = form.getFirstValue("mode");
 		try {
