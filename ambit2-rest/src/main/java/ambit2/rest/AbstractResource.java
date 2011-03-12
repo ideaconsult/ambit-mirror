@@ -7,6 +7,8 @@ import java.util.List;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Cookie;
+import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -82,11 +84,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		super.doRelease();
 	}
 	
-	@Override
-	public String getToken() {
-		Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-		return headers==null?null:headers.getFirstValue("subjectid");
-	}
+
 	protected void customizeVariants(MediaType[] mimeTypes) {
        // List<Variant> variants = new ArrayList<Variant>();
         for (MediaType m:mimeTypes) getVariants().add(new Variant(m));
@@ -103,9 +101,20 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		return vars;
 	}
 	
+	protected void setTokenCookies(Variant variant) {
+		CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
+		cS.setSecure(true);
+		cS.setComment("OpenSSO token");
+		cS.setPath("/");
+        this.getResponse().getCookieSettings().add(cS);
+	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 	try {
+			setTokenCookies(variant);
+	        // SEND RESPONSE
+	        setStatus(Status.SUCCESS_OK);
+
 			if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) {
 				WadlRepresentation wadl =  new WadlRepresentation(describe());
 				//wadl.setApplication(((WadlApplication)getApplication()).getApplicationInfo(getRequest(), getResponse()));
@@ -124,6 +133,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		        		getResponse().setStatus(response_status);
 		        		convertor = createConvertor(variant);
 			        	Representation r = convertor.process(queryObject);
+			        	
 			        	return r;
 		        	} catch (NotFoundException x) {
 
@@ -204,7 +214,13 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 
 	}
 	
-	protected String getUserToken(String tag) {
+	protected String getUserName() {
+		return getHeaderValue("user");
+	}
+	protected String getPassword() {
+		return getHeaderValue("password");
+	}	
+	private String getHeaderValue(String tag) {
 		try {
 			Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
 			if (headers==null) return null;
@@ -212,6 +228,22 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		} catch (Exception x) {
 			return null;
 		}
+	}
+	
+	protected String getTokenFromCookies(Request request) {
+		for (Cookie cookie : request.getCookies()) {
+			if ("subjectid".equals(cookie.getName()))
+				return cookie.getValue();
+		}
+		return null;
+	}
+	@Override
+	public String getToken() {
+		String token = getHeaderValue("subjectid");
+		
+		if (token == null) token = getTokenFromCookies(getRequest());
+		return token== null?null:token;
+		 
 	}
 
 }

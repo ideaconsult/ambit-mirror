@@ -204,7 +204,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	 */
 	protected Representation copyDatasetToQueryResultsTable(Form form, boolean clearPreviousContent)
 			throws ResourceException {
-		String token = getUserToken(OTAAParams.subjectid.toString());
+		String token = getToken();
 		Callable<TaskResult> callable = null;
 		if ((queryResultsID!=null) && (queryResultsID>0)) {
 			callable = new CallableQueryResultsCreator(
@@ -260,7 +260,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		} else {
 			upload.setDataset(null);
 			return  upload.upload(entity,variant,true,false,
-					getUserToken(OTAAParams.subjectid.toString())
+					getToken()
 					);
 		}
 	}
@@ -300,7 +300,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			SourceDataset dataset = readDataset();
  			upload.setDataset(dataset);
 			return  upload.upload(entity,variant,true,false,
-					getUserToken(OTAAParams.subjectid.toString())
+					getToken()
 					);
 		} else throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}

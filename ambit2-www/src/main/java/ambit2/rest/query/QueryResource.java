@@ -13,6 +13,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.CharacterSet;
+import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -127,6 +128,10 @@ Then, when the "get(Variant)" method calls you back,
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		try {
+			CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
+			cS.setPath("/");
+	        this.getResponse().getCookieSettings().add(cS);
+	        
 			int maxRetry=3;
 			if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) {
 				return new WadlRepresentation();
@@ -422,7 +427,7 @@ Then, when the "get(Variant)" method calls you back,
 								String.format("Apply %s %s %s",item.toString(),reference==null?"":"to",reference==null?"":reference),									
 								callable,
 								getRequest().getRootRef(),
-								getUserToken(OTAAParams.subjectid.toString()));		
+								getToken());		
 						}
 				};
 			

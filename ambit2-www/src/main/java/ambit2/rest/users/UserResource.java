@@ -43,7 +43,6 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 	@Override
 	public IProcessor<QueryUser, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		System.out.println(getRequest().getClientInfo());
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			
 			return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
