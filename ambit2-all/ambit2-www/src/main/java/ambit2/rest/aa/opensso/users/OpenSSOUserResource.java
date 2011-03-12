@@ -1,10 +1,8 @@
 package ambit2.rest.aa.opensso.users;
 
 import java.io.Writer;
-import java.util.Hashtable;
 import java.util.Iterator;
 
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -23,7 +21,6 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
-import ambit2.rest.algorithm.CatalogHTMLReporter;
 import ambit2.rest.algorithm.CatalogResource;
 
 public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
@@ -76,7 +73,7 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 			
 		} else //html 	
 			return new StringConvertor(
-					new CatalogHTMLReporter<T>(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
+					new OpenSSOUserHTMLReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
 		
 	}
 	
