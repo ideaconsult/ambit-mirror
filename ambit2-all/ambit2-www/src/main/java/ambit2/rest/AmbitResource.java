@@ -546,6 +546,7 @@ window.setInterval(function() {
 
 		w.write(String.format("<div class=\"row\"><span class=\"left\">&nbsp;%s",top));
 		w.write("</span>");
+		/*
 		Iterator<Principal> i = request.getClientInfo().getPrincipals().iterator();
 		Principal p = null;
 		while (i.hasNext()) { p = i.next(); break; }
@@ -553,14 +554,22 @@ window.setInterval(function() {
 		top = "";
 		
 		if (p==null) 
-		w.write(String.format("	<span class=\"right\">%s&nbsp;<a style=\"color:#99CC00\" href='%s/user/login'>Login</a>",
+		w.write(String.format("	<span class=\"right\">%s&nbsp;<a style=\"color:#99CC00\" href='%s/opentoxuser'>Login</a>",
 				top,
-				baseReference.toString()));
+				baseReference.toString(),
+				request.getClientInfo().getUser()==null?"Login":request.getClientInfo().getUser()));
 		else
 		w.write(String.format("	<span class=\"right\">%snbsp;%s&nbsp;<a style=\"color:#99CC00\" href='%s/protected/%s'>Switch user</a>",
 				top,
 				p.getName(),
 				baseReference.toString(),p.getName()));
+				*/
+		
+		w.write(String.format("	<span class=\"right\">%s&nbsp;<a style=\"color:#99CC00\" href='%s/opentoxuser'>%s</a>",
+				top,
+				baseReference.toString(),
+				request.getClientInfo().getUser()==null?"Login":"My account"));
+		
 		
 		//w.write(String.format("&nbsp;<a href=\"%s/help\">Help</a>",baseReference.toString()));
 		w.write("</span></div>");

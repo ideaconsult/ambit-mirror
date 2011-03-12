@@ -57,8 +57,8 @@ public class PolicyResource extends CatalogResource<String>{
 		} else return true;	
 	}
 	protected void getValues(Form form) {
-		user = getUserToken("user");
-		password = getUserToken("password");
+		user = getUserName();
+		password = getPassword();
 		methods = form.getValuesArray("method");
 		uri = form.getFirstValue("uri");		
 		if (uri==null) uri = String.format("%s/%s",getRequest().getRootRef(),UUID.randomUUID());
@@ -72,7 +72,7 @@ public class PolicyResource extends CatalogResource<String>{
 			topics.clear();
 		
 			getValues(getRequest().getResourceRef().getQueryAsForm());
-			ssoToken.setToken(getUserToken(OTAAParams.subjectid.toString()));
+			ssoToken.setToken(getToken());
 	
 			try {
 				if (authenticate()) {

@@ -9,7 +9,6 @@ import org.restlet.Restlet;
 import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.ClientInfo;
-import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
@@ -19,7 +18,6 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.Enroler;
-import org.restlet.security.MethodAuthorizer;
 import org.restlet.security.Verifier;
 import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
@@ -30,6 +28,7 @@ import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
+import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DBCreateAllowedGuard;
 import ambit2.rest.admin.DatabaseResource;
@@ -87,7 +86,6 @@ import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.users.SwitchUserResource;
-import ambit2.rest.users.UserResource;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in http://opentox.org/development/wiki/
@@ -282,28 +280,21 @@ public class AmbitApplication extends TaskApplication<String> {
 		router.attach(String.format("%s/{%s}",DatasetResource.dataset,DatasetResource.datasetKey), datasetAuthn);
 
 		
-		DBVerifier verifier = new DBVerifier(this);
+		//
+		
 		/**
-		 * /user
-		 */
+		//   These are users from the DB
+		//  /user
+		DBVerifier verifier = new DBVerifier(this);
 		Router usersRouter = new MyRouter(getContext());
 		usersRouter.attachDefault(UserResource.class);
-	 	
-		/**
-		 * /user/{userid}
-		 */
+		//   /user/{userid}
 		Router userRouter = new MyRouter(getContext());
 		userRouter.attachDefault(UserResource.class);
 	 	usersRouter.attach(UserResource.resourceID,userRouter);
-	 	
-	 	/**
-	 	 *  authentication mandatory for users resource
-	 	 */
+	 	//  authentication mandatory for users resource
 		Filter guard = createGuard(verifier,false);
-		
-    	/*
-    	 * Simple authorizer
-    	 */
+		// Simple authorizer
     	MethodAuthorizer authorizer = new MethodAuthorizer();
     	authorizer.getAnonymousMethods().add(Method.GET);
     	authorizer.getAnonymousMethods().add(Method.HEAD);
@@ -312,13 +303,16 @@ public class AmbitApplication extends TaskApplication<String> {
     	authorizer.getAuthenticatedMethods().add(Method.DELETE);
     	authorizer.getAuthenticatedMethods().add(Method.POST);
     	authorizer.getAuthenticatedMethods().add(Method.OPTIONS);
-    	
 		authorizer.setNext(usersRouter);
 		guard.setNext(authorizer);
 	 	router.attach(UserResource.resource, guard);
 	 	router.attach(UserResource.resource, usersRouter);
-
-	 			
+		*/
+		Filter userAuthn = new OpenSSOAuthenticator(getContext(),true,"opentox.org",
+									new OpenSSOVerifierSetUser(false));
+		userAuthn.setNext(OpenSSOUserResource.class);
+	 	router.attach("/"+OpenSSOUserResource.resource,userAuthn );
+	 	
 		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
 		router.attach(FeatureResource.ConformerFeaturedefID,FeatureResource.class);
 
@@ -604,11 +598,7 @@ public class AmbitApplication extends TaskApplication<String> {
 	                return super.verify(request, response);
 	        	}
 	     };
-	     /*
-	     verifier.getSecrets().put("nina", "nina".toCharArray());
-	     verifier.getSecrets().put("guest", "guest".toCharArray());
-	     verifier.getSecrets().put("admin", "admin".toCharArray());
-	     */
+
     	Enroler enroler = new Enroler() {
     		public void enrole(ClientInfo subject) {
     			System.out.println(subject);

@@ -502,7 +502,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			//representation.setDownloadName(dataset.getName());
 			return  upload.upload(representation,
 					variant,true,false,
-					getUserToken(OTAAParams.subjectid.toString())
+					getToken()
 					);
 			
 			//return copyDatasetToQueryResultsTable(new Form(entity),true);
@@ -512,7 +512,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", getRequest().getResourceRef().toString())));
 
 			return  upload.upload(entity,variant,true,false,
-					getUserToken(OTAAParams.subjectid.toString())
+					getToken()
 					);
 		}
 	}

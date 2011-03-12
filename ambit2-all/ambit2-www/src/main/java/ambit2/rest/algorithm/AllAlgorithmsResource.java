@@ -378,7 +378,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		ModelURIReporter<IQueryRetrieval<ModelQueryResults>> modelReporter = new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation());
 		AlgorithmURIReporter algReporter = new AlgorithmURIReporter(getRequest(),getDocumentation());
 		
-		String token = getUserToken(OTAAParams.subjectid.toString());
+		String token = getToken();
 		try {
 			if (algorithm.hasType(Algorithm.typeSMSD))  {
 				return new CallableStructurePairsModelCreator(

@@ -214,8 +214,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 
 		try {
 			readVariables(model);
-			String token = getUserToken(OTAAParams.subjectid.toString());
-			try { getRequest().getClientInfo().getUser().getSecret().toString(); } catch (Exception x) {}
+			String token = getToken();
+			
 			final ModelPredictor thepredictor = ModelPredictor.getPredictor(model,getRequest());
 			
 			if (model.getContentMediaType().equals(AlgorithmFormat.WWW_FORM.getMediaType())) {

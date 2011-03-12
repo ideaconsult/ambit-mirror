@@ -245,7 +245,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<ISourceDatas
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		return  upload.upload(entity,variant,true,false,
-				getUserToken(OTAAParams.subjectid.toString())
+				getToken()
 				);
 		
 	}
@@ -256,7 +256,7 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<ISourceDatas
 	protected Representation put(Representation entity, Variant variant)
 			throws ResourceException {
 		return  upload.upload(entity,variant,true,true,
-				getUserToken(OTAAParams.subjectid.toString())
+				getToken()
 				);
 	}
 

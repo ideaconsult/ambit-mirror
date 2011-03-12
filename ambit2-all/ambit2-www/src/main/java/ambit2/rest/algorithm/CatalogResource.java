@@ -135,7 +135,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 						callable,
 						getRequest().getRootRef(),
 						callable instanceof CallablePOST, 
-						getUserToken(OTAAParams.subjectid.toString())
+						getToken()
 						);	
 				task.update();
 				setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);

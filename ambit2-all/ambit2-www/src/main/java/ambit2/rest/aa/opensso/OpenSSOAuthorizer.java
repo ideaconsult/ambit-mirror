@@ -6,6 +6,7 @@ import org.opentox.aa.OTAAParams;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Cookie;
 import org.restlet.data.Form;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
@@ -16,11 +17,13 @@ public class OpenSSOAuthorizer extends Authorizer {
 	@Override
 	protected boolean authorize(Request request, Response response) {
 		if (!isEnabled()) return true;
-		
+		String token = null;
 		Form headers = (Form) request.getAttributes().get("org.restlet.http.headers");  
-		if (headers==null) return false;
+		if (headers !=null) 
+			token = headers.getFirstValue(OTAAParams.subjectid.toString());
 		
-		String token = headers.getFirstValue(OTAAParams.subjectid.toString());
+		if (token == null) token = getTokenFromCookies(request);
+		
 		if (token != null) {
 			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 			ssoToken.setToken(token);
@@ -55,5 +58,18 @@ public class OpenSSOAuthorizer extends Authorizer {
 		ssoToken.getAttributes(new String[] {"uid"}, results);
 		request.getClientInfo().getUser().setIdentifier(results.get("uid"));
 	}
-
+	protected String getTokenFromCookies(Request request) {
+		for (Cookie cookie : request.getCookies()) {
+			if ("subjectid".equals(cookie.getName()))
+				return cookie.getValue();
+				/*	
+		    System.out.println("name = " + cookie.getName());
+		    System.out.println("value = " + cookie.getValue());
+		    System.out.println("domain = " + cookie.getDomain());
+		    System.out.println("path = " + cookie.getPath());
+		    System.out.println("version = " + cookie.getVersion());
+		    */
+		}
+		return null;
+	}
 }
