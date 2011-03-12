@@ -21,7 +21,8 @@ public class OpenSSOUsersURIReporter  extends CatalogURIReporter<OpenSSOUser> {
 
 	@Override
 	public String getURI(String ref, OpenSSOUser item) {
-		return String.format("%s/%s/%s",ref,OpenSSOUserResource.resource,item==null?"":item.getUsername());
+		return String.format("%s/%s/%s",ref,OpenSSOUserResource.resource,
+				(item==null)||(item.getUsername()==null)?"":item.getUsername());
 	}
 
 }
