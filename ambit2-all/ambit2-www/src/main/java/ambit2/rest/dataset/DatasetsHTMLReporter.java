@@ -44,10 +44,42 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 		return new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(request,doc);
 	}
 	@Override
+	public void header(Writer w, IQueryRetrieval<ISourceDataset> query) {
+		super.header(w, query);
+		
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";  
+		try {
+			w.write(String.format("<a href='?search=' title='List all datasets'>%s</a>&nbsp","All"));
+			w.write(String.format("<a href='' title='Refresh this page'>%s</a>&nbsp","Refresh"));
+			w.write("|&nbsp;");
+			for (int i=0; i < alphabet.length(); i++) {
+				String search = alphabet.substring(i,i+1);
+				w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
+							search.toUpperCase(),search.toUpperCase(),search.toUpperCase()));
+			}
+			w.write("|&nbsp;");
+			for (int i=0; i < alphabet.length(); i++) {
+				String search = alphabet.substring(i,i+1);
+				w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
+							search.toLowerCase(),search.toLowerCase(),search.toLowerCase()));
+			}
+			w.write("|&nbsp;");
+			for (int i=0; i < 10; i++) {
+				w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
+							i,i,i));
+			}			
+			w.write("<hr>");
+		} catch (Exception x) {
+			
+		}
+		
+			
+	}
+	@Override
 	public void footer(Writer output, IQueryRetrieval<ISourceDataset> query) {
 		try {
 			//if (collapsed) {
-				output.write("\n<hr>");
+				output.write("\n<p>");
 				output.write("<div class=\"actions\"><span class=\"center\">");
 				output.write("<form method=\"post\" ENCTYPE=\"multipart/form-data\">");
 
