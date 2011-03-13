@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.restlet.data.Reference;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 import ambit2.rest.test.ResourceTest;
@@ -27,11 +28,12 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		int count = 0;
 		while (iterator.hasNext()) {
-			SourceDataset target = iterator.next();
-			Assert.assertEquals(1,target.getId());
+			ISourceDataset target = iterator.next();
+			Assert.assertEquals(1,target.getID());
 			Assert.assertEquals("Dbunit dataset", target.getName());
-			Assert.assertEquals("XLogP", target.getTitle());
-			Assert.assertEquals("XLogP", target.getURL());
+			Assert.assertEquals("XLogP", target.getSource());
+			if (target instanceof SourceDataset)
+				Assert.assertEquals("XLogP reference", ((SourceDataset)target).getURL());
 			count++;
 		}
 		Assert.assertEquals(1,count);

@@ -1,6 +1,5 @@
 package ambit2.rest.dataset;
 
-import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -19,7 +18,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
-import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.AbstractReadDataset;
 import ambit2.db.update.dataset.QueryDatasetByFeatures;
