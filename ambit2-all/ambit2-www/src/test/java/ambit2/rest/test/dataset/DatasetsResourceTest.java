@@ -1,6 +1,9 @@
 package ambit2.rest.test.dataset;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -28,6 +31,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.AbstractDataset;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
@@ -281,6 +285,84 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
+	}	
+	
+	@Test
+	public void testCreateEntryFromMultipartWeb() throws Exception {
+		URL url = getClass().getClassLoader().getResource("input.sdf");
+		File file = new File(url.getFile());
+		Representation rep = getMultipartWebFormRepresentation(file);
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+
+//curl -H "Content-type:chemical/x-mdl-sdfile/
+		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, rep,Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
+		
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(12,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT name,title,url FROM src_dataset join catalog_references using(idreference) where name='new-file-name' and id_srcdataset=4");
+		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals("junit test on input.sdf",table.getValue(0,"title"));
+		Assert.assertEquals("http://ambit.sourceforge.net",table.getValue(0,"url"));
+		c.close();
+	}	
+	protected Representation getMultipartWebFormRepresentation(File file) throws Exception {
+		String docPath = file.getAbsolutePath();
+		StringBuffer str_b = new StringBuffer();
+		final String bndry ="XCVBGFDS";
+		String paramName = "file";
+		String fileName = file.getName();
+		final MediaType type = new MediaType(String.format("multipart/form-data; boundary=%s",bndry));
+	    file = new File(docPath);
+	    
+	    /**
+	     * WRITE THE fields
+	     */
+	    String disptn = String.format("--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
+	    			bndry,"title","new-file-name");
+	    str_b.append(disptn);
+	    disptn = String.format("--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
+    			bndry,AbstractDataset._props.seeAlso,"http://ambit.sourceforge.net");
+	    str_b.append(disptn);	
+	    disptn = String.format("--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
+    			bndry,AbstractDataset._props.source,"junit test on input.sdf");	    
+	    str_b.append(disptn);	    
+	    /**
+	     * WRITE THE FIRST/START BOUNDARY
+	     */
+	    disptn = String.format("--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\nContent-Type: %s\r\n\r\n",
+	    			bndry,paramName,fileName,ChemicalMediaType.CHEMICAL_MDLSDF);
+	    str_b.append(disptn);
+	    /**
+	     * WRITE THE FILE CONTENT
+	     */
+	    FileInputStream is;
+	    byte[] buffer = new byte[4096];
+	    int bytes_read;
+	    try {
+	        	is = new FileInputStream(file);
+				while((bytes_read = is.read(buffer)) != -1) {
+				    
+				    str_b.append(new String(buffer, 0, bytes_read));
+				}
+				is.close();
+		} catch (IOException e) {
+			throw e;
+		}
+		/**
+		 * WRITE THE CLOSING BOUNDARY
+		 */
+	    String boundar = String.format("\r\n--%s--",bndry);
+	    str_b.append(boundar); // another 2 new lines
+	    StringRepresentation st_b = new  StringRepresentation(str_b.toString(), type);
+	        //PUT
+	    return st_b;
+	        
 	}	
 	
 	@Test

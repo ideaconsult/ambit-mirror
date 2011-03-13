@@ -1,6 +1,7 @@
 package ambit2.rest.task;
 
 import java.io.File;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -35,11 +36,18 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                     // Process only the uploaded item called "fileToUpload" and
                     // save it on disk
                     boolean found = false;
+                    Hashtable<String, String> properties = new Hashtable<String, String>();
+                    
                     for (final Iterator<FileItem> it = items.iterator(); 
                     		it.hasNext()
                             && !found;) {
                         FileItem fi = it.next();
-                        if (fi.isFormField()) continue;
+                        if (fi.isFormField()) {
+
+                        	if ((fi.getFieldName()!=null) && (fi.getString()!=null))
+                        		properties.put(fi.getFieldName(), fi.getString());
+                        	continue;
+                        }
                         if (fi.getSize()>maxSize) {
                         	throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,String.format("File size %d > max allowed size %d",fi.getSize(),maxSize)));
                         }
@@ -59,7 +67,7 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                             processFile(file);
                         }
                     }    
-
+                    processProperties(properties);
                     return createReference();
 				 } catch (ResourceException x) {
 					 throw x;
@@ -75,6 +83,7 @@ public abstract class CallableFileUpload implements Callable<Reference> {
 
 	}
 	protected void processFile(File file) throws Exception { };
+	protected void processProperties(Hashtable<String, String> properties) throws Exception { };
 	public abstract Reference createReference() ;
 	
 

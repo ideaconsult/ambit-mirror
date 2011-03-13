@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
@@ -78,13 +80,17 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	}
 
 	protected File file;
-
+	protected Hashtable<String, String> properties;
+	
 	protected File getFile() {
 		return file;
 	}
 
 	protected void setFile(File file) {
 		this.file = file;
+	}
+	protected void setProperties(Hashtable<String, String> properties) {
+		this.properties = properties;
 	}
 
 	protected Connection connection;
@@ -154,6 +160,11 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			protected void processFile(File file) throws Exception {
 				setFile(file);
 			}
+			@Override
+			protected void processProperties(
+					Hashtable<String, String> properties) throws Exception {
+				setProperties(properties);
+			}
 		};
 
 	}
@@ -197,7 +208,6 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 				firstCompoundOnly,token);
 		try {
 			String extension = getExtension(input.getMediaType());
-			System.out.println(input.getIdentifier());
 			File file = null;
 			if (input.getDownloadName() == null) {
 				file = File.createTempFile("ambit2_", extension);
@@ -255,13 +265,21 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	}
 	
 	protected SourceDataset datasetMeta(File file) {
+		
 		int ext_index = file.getName().lastIndexOf(".");
-		return new SourceDataset(ext_index<=0?file.getName():file.getName().substring(0,ext_index), 
+		String filename = ext_index<=0?file.getName():file.getName().substring(0,ext_index);
+		String title = properties.get("title")==null?filename:properties.get("title");
+		String source = properties.get(AbstractDataset._props.source.name())==null?file.getName():properties.get(AbstractDataset._props.source.name());
+		
+		String publisher = properties.get(AbstractDataset._props.seeAlso.name())==null?
+				client == null ? "File uploaded by user":
+						(client.getUser()==null?client.getAddress():
+								client.getUser().getIdentifier()==null?client.getAddress():client.getUser().getIdentifier())
+				:properties.get(AbstractDataset._props.seeAlso.name());
+		
+		return new SourceDataset(title, 
 				LiteratureEntry
-				.getInstance(file.getName(),
-						client == null ? "File uploaded by user"
-								: client.getAddress())
-								);
+				.getInstance(source,publisher));
 	}
 
 	public TaskResult importFile(File file) throws Exception {
