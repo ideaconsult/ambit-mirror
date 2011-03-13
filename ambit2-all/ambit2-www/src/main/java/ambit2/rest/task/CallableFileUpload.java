@@ -39,8 +39,8 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                     Hashtable<String, String> properties = new Hashtable<String, String>();
                     
                     for (final Iterator<FileItem> it = items.iterator(); 
-                    		it.hasNext()
-                            && !found;) {
+                    		it.hasNext();) {
+                            //&& !found;) {
                         FileItem fi = it.next();
                         if (fi.isFormField()) {
 
@@ -51,7 +51,7 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                         if (fi.getSize()>maxSize) {
                         	throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,String.format("File size %d > max allowed size %d",fi.getSize(),maxSize)));
                         }
-                        if (fi.getFieldName().equals(fileUploadField)) {
+                        if ((!found) && fi.getFieldName().equals(fileUploadField)) {
                         	if (fi.getSize()==0)
                         		 throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,"Empty file!"));	
                             found = true;
