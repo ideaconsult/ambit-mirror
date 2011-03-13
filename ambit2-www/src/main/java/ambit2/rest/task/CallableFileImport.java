@@ -268,14 +268,20 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		
 		int ext_index = file.getName().lastIndexOf(".");
 		String filename = ext_index<=0?file.getName():file.getName().substring(0,ext_index);
-		String title = properties.get("title")==null?filename:properties.get("title");
-		String source = properties.get(AbstractDataset._props.source.name())==null?file.getName():properties.get(AbstractDataset._props.source.name());
 		
-		String publisher = properties.get(AbstractDataset._props.seeAlso.name())==null?
+		String title = properties==null?null:properties.get("title");
+		title = title==null?filename:title;
+		
+		String source = properties==null?null:properties.get(AbstractDataset._props.source.name());
+		source = source==null?file.getName():source;
+		
+		String seeAlso = properties==null?null:properties.get(AbstractDataset._props.seeAlso.name());
+		
+		String publisher = seeAlso==null?
 				client == null ? "File uploaded by user":
 						(client.getUser()==null?client.getAddress():
 								client.getUser().getIdentifier()==null?client.getAddress():client.getUser().getIdentifier())
-				:properties.get(AbstractDataset._props.seeAlso.name());
+				:seeAlso;
 		
 		return new SourceDataset(title, 
 				LiteratureEntry

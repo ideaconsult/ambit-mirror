@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:ot="http://www.opentox.org/api/1.1#">
+
+<ot:Dataset>
+<!-- first compound -->
+<ot:dataEntry>
+
+  <ot:DataEntry> 
+    <ot:compound rdf:resource="http://apps.ideaconsult.net:8080/ambit2/compound/163134/conformer/506294"/>
+    <ot:values>
+    <ot:FeatureValue>
+    <ot:feature rdf:nodeID="xxxx"/>
+    <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HC
+CCCC
+CCCCC
+CCCCCCC
+</ot:value>
+</ot:FeatureValue>
+    </ot:values> 
+  </ot:DataEntry> 
+
+</ot:dataEntry>
+
+<!-- second compound -->
+<ot:dataEntry>
+
+  <ot:DataEntry> 
+    <ot:compound rdf:resource="http://apps.ideaconsult.net:8080/ambit2/compound/100"/>
+    <ot:values rdf:nodeID="YYY"/>
+  </ot:DataEntry> 
+
+</ot:dataEntry>
+</ot:Dataset>
+
+<ot:FeatureValue rdf:nodeID="YYY">
+    <ot:feature rdf:nodeID="xxxx"/>
+    <ot:value rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HC
+HO
+CHHHN
+CHHCC
+CHCC
+CHCN
+CCCC
+CCCN
+NCCC
+NCO
+OHN
+C(C(CCC)C(CC-H)N(CC-C))
+C(C(CCC)C(CC-H)-H(C))
+C(C(CCC)C(CN-H)-C(C-C-N))
+C(C(CCN)C(CC-H)C(CC-C))
+C(C(CCN)C(CC-H)-H(C))
+C(C(CC-H)C(CC-H)-H(C))
+C(C(CC-H)C(CC-H)-C(C-H-H-C))
+C(C(CC-H)C(CC-C)-H(C))
+C(C(CC-C)N(CC-C)-H(C))
+N(C(CCN)C(CN-H)-C(N-H-H-H))
+-H(C(CC-H))
+-H(C(CN-H))
+-H(-C(C-H-H-C))
+-H(-C(N-H-H-H))
+-H(-O(-H-N))
+-C(C(CC-C)-H(-C)-H(-C)-C(C-C-N))
+-C(C(CC-C)-C(C-H-H-C)-N(-C-O))
+-C(N(CC-C)-H(-C)-H(-C)-H(-C))
+-N(-C(C-C-N)-O(-H-N))
+-O(-H(-O)-N(-C-O))
+</ot:value>
+</ot:FeatureValue>
+
+
+
+<!-- Anonymous feature, which will be created on the server "xxxx" is only an identifier within this file -->
+
+<ot:Feature rdf:nodeID="xxxx">
+<dc:creator>whatever is relevant</dc:creator>
+<dc:title>MNA</dc:title>
+<ot:hasSource>http://ibmc.ru/MNA-replace-by-the-corect-url-of-algorithm</ot:hasSource>
+</ot:Feature>
+
+</rdf:RDF>
