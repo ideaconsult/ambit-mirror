@@ -165,7 +165,7 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -178,9 +178,9 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 	
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(3,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query_results join query using(idquery) join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(1,table.getRowCount());		
+		Assert.assertEquals(3,table.getRowCount());		
 		c.close();
 
 		CreateEntryRDF("R3_descriptors.rdf");
