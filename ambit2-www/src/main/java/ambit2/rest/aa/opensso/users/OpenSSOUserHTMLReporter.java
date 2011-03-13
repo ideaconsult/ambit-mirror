@@ -38,6 +38,7 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 			
 			output.write("<table width='80%' class='tablesorter' id='users' border='0' cellpadding='0' cellspacing='1'>");
 			output.write("<tbody>");
+			
 			output.write(String.format("<tr><td>OpenSSO service</td><td>%s</td></tr>",
 						OpenSSOServicesConfig.getInstance().getOpenSSOService()));
 			
@@ -62,6 +63,11 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 				output.write(String.format("<tr><td>%s</td><td>%s</td></tr>","User name",item.getUsername()));
 				output.write(String.format("<tr><td>%s</td><td>%s</td></tr>","Token",item.getToken().toString()));
 				
+
+				String warning = "<h5><font color='red'>Secure cookie is used to transfer the OpenSSO token within a web browser.<br>You will only be able to access protected resources via web browser, if accessing via https://</font></h5>";
+				output.write(String.format("<tr>Warning<td></td><td>%s</td></tr>",warning));
+
+				
 				output.write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log out\"></td></tr>");
 				output.write("</form>");
 			}
@@ -72,7 +78,7 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 	@Override
 	public void footer(Writer output, Iterator<OpenSSOUser> query) {
 		try {
-			output.write("</table>");
+
 			output.write("</tbody></table>");
 			AmbitResource.writeHTMLFooter(output, "OpenSSO User", getRequest());
 			output.flush();
