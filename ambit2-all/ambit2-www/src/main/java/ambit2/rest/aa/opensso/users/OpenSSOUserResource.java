@@ -99,7 +99,7 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 		
 				return get(variant);					
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
+				throw new ResourceException(new Status(Status.SERVER_ERROR_BAD_GATEWAY,x));
 			}
 		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 		

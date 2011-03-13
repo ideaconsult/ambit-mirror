@@ -36,10 +36,13 @@ public class OpenSSOVerifier implements Verifier {
 		if (token == null) //backup, check cookies
 			token = getTokenFromCookies(request);
 		
-		if (token==null) //still nothing
+		if (token==null) { //still nothing  
+			request.getCookies().removeAll("subjectid");
 			return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
+	    } else token = token.trim();
 		
-		if (token != null) {
+		
+		if ((token != null) && (!"".equals(token))) {
 			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 			ssoToken.setToken(token);
 			try {
@@ -54,8 +57,10 @@ public class OpenSSOVerifier implements Verifier {
 				x.printStackTrace(); //TODO
 				return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
 			}
-		} else
+		} else {
+			request.getCookies().removeAll("subjectid");
 			return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
+		}
 
 	}
 	
