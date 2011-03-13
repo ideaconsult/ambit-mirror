@@ -270,7 +270,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		String filename = ext_index<=0?file.getName():file.getName().substring(0,ext_index);
 		
 		String title = properties==null?null:properties.get("title");
-		title = title==null?filename:title;
+		title = title==null?filename:("".equals(title.trim())?filename:title.trim());
 		
 		String source = properties==null?null:properties.get(AbstractDataset._props.source.name());
 		source = source==null?file.getName():source;
@@ -387,7 +387,6 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			}
 
 		} catch (Exception x) {
-
 			throw new ResourceException(new Status(
 					Status.SERVER_ERROR_INTERNAL, x.getMessage()));
 		} finally {

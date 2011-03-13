@@ -8,6 +8,7 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
@@ -46,63 +47,123 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	@Override
 	public void header(Writer w, IQueryRetrieval<ISourceDataset> query) {
 		super.header(w, query);
-		
-		String alphabet = "abcdefghijklmnopqrstuvwxyz";  
-		try {
-			w.write(String.format("<a href='?search=' title='List all datasets'>%s</a>&nbsp","All"));
-			w.write(String.format("<a href='' title='Refresh this page'>%s</a>&nbsp","Refresh"));
-			w.write("|&nbsp;");
-			for (int i=0; i < alphabet.length(); i++) {
-				String search = alphabet.substring(i,i+1);
-				w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
-							search.toUpperCase(),search.toUpperCase(),search.toUpperCase()));
+		uploadUI(w, query);
+		//if (collapsed) {
+			String alphabet = "abcdefghijklmnopqrstuvwxyz";  
+			try {
+				w.write(String.format("<a href='?search=' title='List all datasets'>%s</a>&nbsp","All"));
+				w.write(String.format("<a href='' title='Refresh this page'>%s</a>&nbsp","Refresh"));
+				w.write("|&nbsp;");
+				for (int i=0; i < alphabet.length(); i++) {
+					String search = alphabet.substring(i,i+1);
+					w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
+								search.toUpperCase(),search.toUpperCase(),search.toUpperCase()));
+				}
+				w.write("|&nbsp;");
+				for (int i=0; i < alphabet.length(); i++) {
+					String search = alphabet.substring(i,i+1);
+					w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
+								search.toLowerCase(),search.toLowerCase(),search.toLowerCase()));
+				}
+				w.write("|&nbsp;");
+				for (int i=0; i < 10; i++) {
+					w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
+								i,i,i));
+				}			
+				w.write("<hr>");
+			} catch (Exception x) {
+				
 			}
-			w.write("|&nbsp;");
-			for (int i=0; i < alphabet.length(); i++) {
-				String search = alphabet.substring(i,i+1);
-				w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
-							search.toLowerCase(),search.toLowerCase(),search.toLowerCase()));
-			}
-			w.write("|&nbsp;");
-			for (int i=0; i < 10; i++) {
-				w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
-							i,i,i));
-			}			
-			w.write("<hr>");
-		} catch (Exception x) {
-			
-		}
+		//}
 		
 			
 	}
 	@Override
 	public void footer(Writer output, IQueryRetrieval<ISourceDataset> query) {
+		super.footer(output, query);
+	}
+	public void uploadUI(Writer output, IQueryRetrieval<ISourceDataset> query) {		
 		try {
-			//if (collapsed) {
-				output.write("\n<p>");
-				output.write("<div class=\"actions\"><span class=\"center\">");
-				output.write("<form method=\"post\" ENCTYPE=\"multipart/form-data\">");
-
-				output.write(String.format("<label accesskey=F>%s&nbsp;<input type=\"file\" name=\"%s\" accept=\"%s\" size=\"80\"></label>",
-						"Add new dataset (SDF, MOL, SMI, CSV, TXT file)",
+			String[][] methods = new String[][] {
+					{"post","Add new dataset","Adds all compounds and data from the file, even empty structures."},
+					{"put","Import properties","Import properties only for compounds from the file, which could be found in the database"}
+			};
+			output.write("<table width='95%' border='1' border-style='solid' >");
+			output.write("<tr>");
+			for (int i=0; i < methods.length;i ++) {
+				String[] method = methods[i];
+				output.write("<td width='50%'>\n");
+				output.write("<table border='0' width='95%'>");
+				output.write("<caption>");
+				output.write(String.format("<label accesskey='F' title='%s'>%s</label>",
+						method[2],
+						String.format("%s (SDF, MOL, SMI, CSV, TXT, ToxML (.xml) file)",method[1])
+				)); 	
+				output.write("</caption>");
+				output.write("<tbody>");
+				output.write(String.format("<form method=\"post\" action=\"?method=%s\" ENCTYPE=\"multipart/form-data\">",method[0]));
+				//file
+				output.write("<tr>");
+				output.write("<th>File<label title='Mandatory'>*</label></th>");
+				output.write("<td>");
+				output.write(String.format("<input type=\"file\" name=\"%s\" accept=\"%s\" title='%s' size=\"60\">",
 						fileUploadField,
-						ChemicalMediaType.CHEMICAL_MDLSDF.toString())); 
+						ChemicalMediaType.CHEMICAL_MDLSDF.toString(),
+						String.format("%s (SDF, MOL, SMI, CSV, TXT, ToxML (.xml) file)",method[1]))); 
+				output.write("</td>");
+				output.write("</tr>");
+				//title
+				output.write("<tr>");
+				output.write("<th>Dataset name</th>");
+				output.write("<td>");
+				output.write(String.format("<input type=\"text\" name='title' title='%s' size=\"60\">","Dataset name (dc:title)")); 
+				output.write("</td>");
+				output.write("</tr>");
+				//match
+				output.write("<tr>");
+				output.write("<th>Match</th>");
+		
+				output.write("<td>");
 				output.write("<select name='match'>");
 				for (Matcher matcher : IStructureKey.Matcher.values())
-					output.write(String.format("<option value='%s' %s>%s</option>",
+					output.write(String.format("<option title='%s' value='%s' %s>%s</option>",
+							    "On import, finds the same compound in the database by matching with the selected criteria \""+matcher.getDescription()+"\"\n",
 								matcher.toString(),
 								IStructureKey.Matcher.CAS.equals(matcher)?"selected":"",
-								matcher.getDescription()));
-				output.write("</select>");				
-				output.write("<br><input type='submit' value='Submit'>");
-				output.write("</form>");
-				output.write("</span></div>\n");	
+								(matcher.getDescription().length()>60)?matcher.getDescription().substring(0,60)+"...":matcher.getDescription()));
+				output.write("</select>");
+				output.write("</td>");
+				output.write("</tr>");
+
+				//URL
+				output.write("<tr>");
+				output.write("<th>URL</th>");
+				output.write("<td>");
+				output.write(String.format("<input type=\"text\" name='seeAlso' title='%s' size=\"60\">","Related URL (rdfs:seeAlso)")); 
+				output.write("</td>");
 				
+				output.write("</tr>");
+				
+				
+				output.write("<tr><td align='right'><input type='submit' value='Submit'></td></tr>");
+				output.write("</form>");
+				output.write("</tbody>");
+				output.write("</table>");
+				
+				output.write("</td>\n");
+			}
+			output.write("</tr>");
+			output.write("</table>");
+			output.write("<hr>");
+			//if (collapsed) {
+
+				
+				/*
 				output.write("<div class=\"actions\"><span class=\"center\">");
 				output.write("<form method=\"post\" action=\"?method=put\" ENCTYPE=\"multipart/form-data\">");
 
 				output.write(String.format("<label accesskey=F>%s&nbsp;<input type=\"file\" name=\"%s\" accept=\"%s\" size=\"80\"></label>",
-						"Import properties (SDF, MOL, SMI, CSV, TXT file)",
+						"Import properties (SDF, MOL, SMI, CSV, TXT, ToxML (.xml) file)",
 						fileUploadField,
 						ChemicalMediaType.CHEMICAL_MDLSDF.toString())); 
 				
@@ -116,10 +177,11 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 				output.write("<br><input type='submit' value='Submit'>");
 				output.write("</form>");
-				output.write("</span></div>\n");						
+				output.write("</span></div>\n");	
+				*/					
 			//}
 		} catch (Exception x) {}
-		super.footer(output, query);
+		
 	}
 	@Override
 	public Object processItem(ISourceDataset dataset) throws AmbitException {
@@ -128,7 +190,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			uriReporter.setOutput(w);
 			uriReporter.processItem(dataset);
 			
-			//output.write("<br>");
+			
 			output.write("<div id=\"div-1b\">");
 
 			output.write("<div class=\"rowwhite\"><span class=\"left\">");
