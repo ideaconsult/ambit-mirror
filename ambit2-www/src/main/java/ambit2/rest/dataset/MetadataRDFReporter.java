@@ -12,10 +12,10 @@ import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.rdf.OT;
-import ambit2.rest.reference.ReferenceRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.RDFS;
@@ -48,6 +48,11 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<ISourceDataset>> exte
 	};
 	@Override
 	public Object processItem(ISourceDataset item) throws AmbitException {
+		return addToModel(output, item, uriReporter);
+	}
+	
+	public static Individual addToModel(OntModel output,ISourceDataset item, 
+			QueryURIReporter<ISourceDataset, IQueryRetrieval<ISourceDataset>> uriReporter) throws AmbitException {
 		Individual dataset = output.createIndividual(uriReporter.getURI(item),
 				OT.OTClass.Dataset.getOntClass(output));
 		dataset.addProperty(DC.title,item.getName());

@@ -294,20 +294,20 @@ Then, when the "get(Variant)" method calls you back,
 		return new EmptyRepresentation();
 	};
 	protected QueryURIReporter<T, Q>  getURUReporter(Request baseReference) throws ResourceException {
-		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,String.format("%s getURUReporter()", getClass().getName()) );
 	}
 	protected  AbstractUpdate createUpdateObject(T entry) throws ResourceException {
-		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,String.format("%s createUpdateObject()", getClass().getName()));
 	}
 	protected  AbstractUpdate createDeleteObject(T entry) throws ResourceException {
-		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,String.format("%s createDeleteObject()", getClass().getName()));
 	}	
 	protected RDFObjectIterator<T> createObjectIterator(Reference reference, MediaType mediaType) throws ResourceException {
-		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,String.format("%s createObjectIterator()", getClass().getName()));
 	}
 	
 	protected RDFObjectIterator<T> createObjectIterator(Representation entity) throws ResourceException {
-		throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,String.format("%s createObjectIterator", getClass().getName()));
 	}
 	/**
 	 * Return this object if can't parse source_uri
