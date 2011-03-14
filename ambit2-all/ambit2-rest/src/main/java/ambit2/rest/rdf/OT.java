@@ -23,6 +23,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.impl.RDFDefaultErrorHandler;
 import com.hp.hpl.jena.shared.Lock;
 import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.OWL;
 
 public class OT {
@@ -183,6 +184,7 @@ public class OT {
 		jenaModel.setNsPrefix( "otee", OTEE.NS );
 		jenaModel.setNsPrefix( "owl", OWL.NS );
 		jenaModel.setNsPrefix( "dc", DC.NS );
+		jenaModel.setNsPrefix( "dcterms", DCTerms.NS );
 		jenaModel.setNsPrefix( "bx", BibTex.NS );
 		jenaModel.setNsPrefix( "xsd", XSDDatatype.XSD+"#" );
 		return jenaModel;
