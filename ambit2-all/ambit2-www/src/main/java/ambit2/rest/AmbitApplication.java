@@ -46,6 +46,7 @@ import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.FastDatasetStructuresResource;
+import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
@@ -256,7 +257,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		 * /dataset/id/feature and /dataset/id/metadata are not protected
 		 */
 		router.attach(String.format("%s",DatasetResource.dataset), DatasetsResource.class);
-		router.attach(String.format("%s/{%s}/metadata",DatasetResource.dataset,DatasetResource.datasetKey), DatasetsResource.class);
+		router.attach(String.format("%s/{%s}%s",DatasetResource.dataset,DatasetResource.datasetKey,MetadatasetResource.metadata), MetadatasetResource.class);
 
 		router.attach(String.format("%s/{%s}%s",DatasetResource.dataset,DatasetResource.datasetKey,PropertiesByDatasetResource.featuredef),
 						PropertiesByDatasetResource.class);

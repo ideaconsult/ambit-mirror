@@ -3,6 +3,7 @@ package ambit2.rest.dataset;
 import java.io.Writer;
 
 import org.restlet.Request;
+import org.restlet.data.Reference;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
@@ -22,6 +23,9 @@ public class DatasetURIReporter<Q extends IQueryRetrieval<ISourceDataset>> exten
 	public DatasetURIReporter(Request baseRef,ResourceDoc doc) {
 		super(baseRef,doc);
 	}
+	public DatasetURIReporter(Reference baseRef,ResourceDoc doc) {
+		super(baseRef,doc);
+	}	
 	public DatasetURIReporter() {
 	}	
 	@Override

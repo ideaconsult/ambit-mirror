@@ -8,8 +8,8 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.IStructureKey.Matcher;
@@ -47,8 +47,11 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	@Override
 	public void header(Writer w, IQueryRetrieval<ISourceDataset> query) {
 		super.header(w, query);
-		uploadUI(w, query);
-		//if (collapsed) {
+		/**
+		 * /dataset
+		 */
+		if (collapsed) { 
+			uploadUI("",w, query);
 			String alphabet = "abcdefghijklmnopqrstuvwxyz";  
 			try {
 				w.write(String.format("<a href='?search=' title='List all datasets'>%s</a>&nbsp","All"));
@@ -74,7 +77,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			} catch (Exception x) {
 				
 			}
-		//}
+		} 
+		/**
+		 * else /dataset/{id}/metadata
+		 */
 		
 			
 	}
@@ -82,7 +88,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	public void footer(Writer output, IQueryRetrieval<ISourceDataset> query) {
 		super.footer(output, query);
 	}
-	public void uploadUI(Writer output, IQueryRetrieval<ISourceDataset> query) {		
+	public void uploadUI(String uri, Writer output, IQueryRetrieval<ISourceDataset> query) {		
 		try {
 			String[][] methods = new String[][] {
 					{"post","Add new dataset","Adds all compounds and data from the file, even empty structures."},
@@ -101,7 +107,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				)); 	
 				output.write("</caption>");
 				output.write("<tbody>");
-				output.write(String.format("<form method=\"post\" action=\"?method=%s\" ENCTYPE=\"multipart/form-data\">",method[0]));
+				output.write(String.format("<form method=\"post\" action=\"%s?method=%s\" ENCTYPE=\"multipart/form-data\">",uri,method[0]));
 				//file
 				output.write("<tr>");
 				output.write("<th>File<label title='Mandatory'>*</label></th>");
@@ -143,7 +149,6 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 				output.write("</tr>");
 				
-				//match
 				output.write("<tr>");
 				output.write("<th>License</th>");
 				output.write("<td>");
@@ -157,7 +162,6 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("</td>");
 				output.write("</tr>");
 
-				
 				output.write("<tr><td align='right'><input type='submit' value='Submit'></td></tr>");
 				output.write("</form>");
 				output.write("</tbody>");
@@ -203,14 +207,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			uriReporter.setOutput(w);
 			uriReporter.processItem(dataset);
 			
-			
-			output.write("<div id=\"div-1b\">");
 
-			output.write("<div class=\"rowwhite\"><span class=\"left\">");
 			
-			if (!collapsed) {
-
+			if (collapsed) {
 				
+				output.write("<div id=\"div-1b\">");
+
+				output.write("<div class=\"rowwhite\"><span class=\"left\">");
 				output.write("&nbsp;");
 				output.write(String.format(
 						"<a href=\"%s%s?max=100\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
@@ -235,7 +238,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("&nbsp;");
 				
 				output.write(String.format(
-						"<a href=\"%s%s?max=100\"><img src=\"%s/images/search.png\" alt=\"/similarity\" title=\"Search for similarcompounds within this dataset\" border=\"0\"/></a>",
+						"<a href=\"%s%s?max=100\"><img src=\"%s/images/search.png\" alt=\"/similarity\" title=\"Search for similar compounds within this dataset\" border=\"0\"/></a>",
 						w.toString(),
 						"/similarity",
 						uriReporter.getBaseReference().toString()));
@@ -281,51 +284,78 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 
 				output.write("&nbsp;");	
 				
-			} else {
-			
-			}
-			output.write(String.format(
-					"&nbsp;<a href=\"%s%s\">[Metadata]</a>",
-					w.toString(),
-					"/metadata"));
-			
-			if (dataset.getLicenseURI()!= null)
 				output.write(String.format(
-						"&nbsp;<a href=\"%s\" target=_blank title='%s'>[License]</a>",
-						dataset.getLicenseURI(),
-						dataset.getLicenseURI()
-						));			
-			else 
+						"&nbsp;<a href=\"%s%s\">[Metadata]</a>",
+						w.toString(),
+						"/metadata"));
+				/*
+				if (dataset.getLicenseURI()!= null)
+					output.write(String.format(
+							"&nbsp;<a href=\"%s\" target=_blank title='%s'>[License]</a>",
+							dataset.getLicenseURI(),
+							dataset.getLicenseURI()
+							));			
+				else 
+					output.write(String.format(
+							"&nbsp;<label title='%s'>[License]</label>",
+							ISourceDataset.license.Unknown
+							));		
+				*/
 				output.write(String.format(
-						"&nbsp;<label title='%s'>[License]</label>",
-						ISourceDataset.license.Unknown
-						));		
-			
-			output.write(String.format(
-					"&nbsp;<a href=\"%s?max=100\">%s</a>",
-					w.toString(),
-					(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getID()):dataset.getName()
-					));
+						"&nbsp;<a href=\"%s?max=100\">%s</a>",
+						w.toString(),
+						(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getID()):dataset.getName()
+						));
+				output.write("</span></div>");
+				output.write("</div>");
+			}  else 
+				renderMetadata(dataset, w.toString(),null);
+
 			/*
 			output.write(String.format(
 					"<form method=POST action='%s?method=DELETE'><input type='submit' value='Delete'></form>",
 					w.toString()
 					));
 					*/			
-			output.write("</span></div>");
-			/*
-			output.write(String.format(
-					"&nbsp;<a href=\"%s\">%s</a>",
-					w.toString(),
-					dataset.getReference().getTitle()));			
-			*/
-			output.write("</div>");
+
 		} catch (Exception x) {
 			Context.getCurrentLogger().severe(x.getMessage());
 		}
 		return null;
 	}
 
+	protected Object renderMetadata(ISourceDataset dataset,String uri,IQueryRetrieval<ISourceDataset> query)  throws AmbitException  {
+		try {
+			//output.write("<h4>Dataset metadata</h4>");
+			output.write("<table width='90%'>");
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Dataset URI",uri));
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Dataset name",dataset.getName()));
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "License",dataset.getLicenseURI()==null?"NA":dataset.getLicenseURI()));
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Source",dataset.getSource()));
+			
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
+			
+			output.write(String.format("<tr><th>%s</th><td><a href='%s'>%s</a></td></tr>", "Browse the dataset",uri,uri));
+			output.write(String.format("<tr><th>%s</th><td><a href='%s/compounds'>%s/compounds</a></td></tr>", "Browse the compounds only",uri,uri));
+			output.write(String.format("<tr><th>%s</th><td><a href='%s/feature'>%s/feature</a></td></tr>", "Browse the dataset features",uri,uri));
+			
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
+			output.write(String.format("<tr><th>%s</th><td><a href='%s/similarity?search=c1ccccc1'>%s/similarity</a></td></tr>", "Search for similar compounds within this dataset",uri,uri));
+			output.write(String.format("<tr><th>%s</th><td><a href='%s/smarts?search=c1ccccc1'>%s/smarts</a></td></tr>", "Search compounds with SMARTS",uri,uri));
+
+			//don't write ip addresses
+			if ((dataset instanceof SourceDataset) && ((SourceDataset)dataset).getURL().startsWith("http"))
+				output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "See also",((SourceDataset)dataset).getURL()));
+
+			output.write("</table>");
+			output.write("<hr>");
+			//output.write("<h4>Add more data to this dataset</h4>");
+			//uploadUI(uri,output, query);
+		} catch (Exception x) {
+			
+		}
+		return dataset;
+	}
 
 }
 /*

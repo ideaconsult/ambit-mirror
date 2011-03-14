@@ -21,6 +21,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
@@ -97,6 +98,7 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 			try {	dataset.setName(getTitle(newEntry));} catch (Exception x) { dataset.setName(null);}
 			try {	id = getURI(newEntry);} catch (Exception x) { }
 			try { dataset.setSource(getPropertyValue(DC.source, newEntry)); } catch (Exception x) {}
+			try { dataset.setLicenseURI(getPropertyValue(DCTerms.license, newEntry)); } catch (Exception x) {}
 
 			if (dataset instanceof SourceDataset) {
 				SourceDataset srcdataset = (SourceDataset) dataset;
