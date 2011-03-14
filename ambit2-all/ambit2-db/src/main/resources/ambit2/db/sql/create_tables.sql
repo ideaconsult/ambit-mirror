@@ -431,16 +431,17 @@ CREATE TABLE  `src_dataset` (
   `idreference` int(11) unsigned NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `idtemplate` int(10) unsigned DEFAULT NULL,
+  `licenseURI` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   PRIMARY KEY (`id_srcdataset`),
   UNIQUE KEY `src_dataset_name` (`name`),
   KEY `FK_src_dataset_1` (`user_name`),
   KEY `FK_src_dataset_2` (`idreference`),
   KEY `FK_src_dataset_3` (`idtemplate`),
-  CONSTRAINT `FK_src_dataset_3` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `Index_license` (`licenseURI`),
   CONSTRAINT `FK_src_dataset_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `FK_src_dataset_2` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE
+  CONSTRAINT `FK_src_dataset_2` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_src_dataset_3` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 -- ------------------------------------------------------------------------------------------
 -- Triggers to duplicate info of properties used in a dataset via template/template_def table
 -- ------------------------------------------------------------------------------------------

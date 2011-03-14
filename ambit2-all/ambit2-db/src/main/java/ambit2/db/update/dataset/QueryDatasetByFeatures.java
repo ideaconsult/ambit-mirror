@@ -9,7 +9,7 @@ import ambit2.db.search.QueryParam;
 
 public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 	protected String sql = 
-	"SELECT id_srcdataset,name,user_name,idreference,title,url from	src_dataset	join catalog_references using(idreference)\n"+
+	"SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI from	src_dataset	join catalog_references using(idreference)\n"+
 	"join  template_def using(idtemplate)\n"+
 	"where idproperty in (\n"+
 	"select idproperty from properties %s\n"+

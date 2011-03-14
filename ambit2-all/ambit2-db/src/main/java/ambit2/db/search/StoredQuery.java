@@ -41,6 +41,13 @@ public class StoredQuery implements IStoredQuery {
 	 * 
 	 */
 	private static final long serialVersionUID = -4144504244895601171L;
+	protected String licenseURI;
+	public String getLicenseURI() {
+		return licenseURI;
+	}
+	public void setLicenseURI(String licenseURI) {
+		this.licenseURI = licenseURI;
+	}
 	protected Integer id;
 	protected String name="Default query";
 	protected String content=null;

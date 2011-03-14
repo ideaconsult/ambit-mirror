@@ -38,6 +38,7 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
 public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
+	public static final String MSG_EMPTY = "No name or license to update!";
 	public static final String[] update_sql = {
 		/*
 		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
@@ -46,8 +47,14 @@ public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
 			"SELECT null,?,SUBSTRING_INDEX(user(),'@',1),idreference FROM catalog_references WHERE title=?\n"+
 			"ON DUPLICATE KEY UPDATE name=?, src_dataset.idreference = catalog_references.idreference",
 			*/
-		"update src_dataset set name=?, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
+		"update src_dataset set name=?, licenseURI=?, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
 	};
+	public static final String[] update_license = {
+		"update src_dataset set licenseURI=?, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
+	};	
+	public static final String[] update_name = {
+		"update src_dataset set name=?, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
+	};	
 	public UpdateDataset(SourceDataset dataset) {
 		super(dataset);
 	}
@@ -67,7 +74,12 @@ public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
 		params2.add(new QueryParam<String>(String.class, getObject().getName()));	
 		*/
 		List<QueryParam> params3 = new ArrayList<QueryParam>();
-		params3.add(new QueryParam<String>(String.class, getObject().getName()));
+		if (getObject().getName()!=null)
+			params3.add(new QueryParam<String>(String.class, getObject().getName()));
+		if (getObject().getLicenseURI()!=null)
+			params3.add(new QueryParam<String>(String.class, getObject().getLicenseURI()));
+		if (params3.size()==0)
+			throw new AmbitException(MSG_EMPTY);
 		params3.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
 		
 		return params3;
@@ -75,7 +87,13 @@ public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return update_sql;
+		if ((getObject().getName()!=null) && (getObject().getLicenseURI()!=null))
+			return update_sql;
+		else if (getObject().getName()!=null)
+			return update_name;
+		else if (getObject().getLicenseURI()!=null)
+			return update_license;
+		else throw new AmbitException(MSG_EMPTY);
 	}
 	public void setID(int index, int id) {
 		

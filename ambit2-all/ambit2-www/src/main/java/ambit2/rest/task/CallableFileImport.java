@@ -275,6 +275,9 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		String source = properties==null?null:properties.get(AbstractDataset._props.source.name());
 		source = source==null?file.getName():source;
 		
+		String license = properties==null?null:properties.get(AbstractDataset._props.license.name());
+		license = license==null?ISourceDataset.license.Unknown.getURI():license;
+		
 		String seeAlso = properties==null?null:properties.get(AbstractDataset._props.seeAlso.name());
 		
 		String publisher = seeAlso==null?
@@ -283,9 +286,9 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 								client.getUser().getIdentifier()==null?client.getAddress():client.getUser().getIdentifier())
 				:seeAlso;
 		
-		return new SourceDataset(title, 
-				LiteratureEntry
-				.getInstance(source,publisher));
+		SourceDataset dataset = new SourceDataset(title,LiteratureEntry.getInstance(source,publisher));
+		dataset.setLicenseURI(license);
+		return dataset;
 	}
 
 	public TaskResult importFile(File file) throws Exception {
