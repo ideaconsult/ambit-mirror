@@ -18,6 +18,13 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
 	 */
 	private static final long serialVersionUID = 6881106188176017447L;
 	protected LiteratureEntry reference = null;
+	protected String licenseURI;
+	public String getLicenseURI() {
+		return licenseURI;
+	}
+	public void setLicenseURI(String license) {
+		this.licenseURI = license;
+	}
 	protected int id;
     protected String name;
     protected String userName;

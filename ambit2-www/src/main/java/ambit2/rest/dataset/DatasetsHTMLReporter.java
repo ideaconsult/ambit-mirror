@@ -122,7 +122,6 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				//match
 				output.write("<tr>");
 				output.write("<th>Match</th>");
-		
 				output.write("<td>");
 				output.write("<select name='match'>");
 				for (Matcher matcher : IStructureKey.Matcher.values())
@@ -144,6 +143,20 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 				output.write("</tr>");
 				
+				//match
+				output.write("<tr>");
+				output.write("<th>License</th>");
+				output.write("<td>");
+				output.write("<select name='license'>");
+				for (ISourceDataset.license license : ISourceDataset.license.values())
+					output.write(String.format("<option title='%s' value='%s'>%s</option>",
+							    license.getTitle(),
+								license.getURI(),
+								license.getURI()));
+				output.write("</select>");
+				output.write("</td>");
+				output.write("</tr>");
+
 				
 				output.write("<tr><td align='right'><input type='submit' value='Submit'></td></tr>");
 				output.write("</form>");
@@ -196,6 +209,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			output.write("<div class=\"rowwhite\"><span class=\"left\">");
 			
 			if (!collapsed) {
+
+				
 				output.write("&nbsp;");
 				output.write(String.format(
 						"<a href=\"%s%s?max=100\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
@@ -269,6 +284,22 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			} else {
 			
 			}
+			output.write(String.format(
+					"&nbsp;<a href=\"%s%s\">[Metadata]</a>",
+					w.toString(),
+					"/metadata"));
+			
+			if (dataset.getLicenseURI()!= null)
+				output.write(String.format(
+						"&nbsp;<a href=\"%s\" target=_blank title='%s'>[License]</a>",
+						dataset.getLicenseURI(),
+						dataset.getLicenseURI()
+						));			
+			else 
+				output.write(String.format(
+						"&nbsp;<label title='%s'>[License]</label>",
+						ISourceDataset.license.Unknown
+						));		
 			
 			output.write(String.format(
 					"&nbsp;<a href=\"%s?max=100\">%s</a>",

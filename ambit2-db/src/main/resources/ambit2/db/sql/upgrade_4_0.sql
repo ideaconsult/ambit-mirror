@@ -300,3 +300,12 @@ insert into version (idmajor,idminor,comment) values (4,7,"AMBIT2 schema");
 ALTER TABLE `properties` MODIFY COLUMN `name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
  MODIFY COLUMN `comments` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL;
  insert into version (idmajor,idminor,comment) values (4,9,"AMBIT2 schema");
+
+---------------------
+-- 4.10
+-- Datasets license URI
+---------------------
+ALTER TABLE `src_dataset` ADD COLUMN `licenseURI` VARCHAR(128) NOT NULL DEFAULT 'Unknown' AFTER `idtemplate`,
+ ADD INDEX `Index_license`(`licenseURI`);
+insert into version (idmajor,idminor,comment) values (4,10,"AMBIT2 schema"); 
+ 

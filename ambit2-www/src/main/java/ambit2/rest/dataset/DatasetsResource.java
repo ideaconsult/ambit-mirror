@@ -121,21 +121,6 @@ public class DatasetsResource extends QueryResource<IQueryRetrieval<ISourceDatas
 		upload.setApplication(getApplication());
 		upload.setDataset(dataset);
 		
-
-		/*
-				new ClassHolder[] {
-						new ClassHolder("ambit2.core.processors.structure.key.CASKey","CAS registry number","",""),
-						new ClassHolder("ambit2.core.processors.structure.key.EINECSKey","EINECS registry number","",""),
-						new ClassHolder("ambit2.core.processors.structure.key.PubchemCID","PubChem Compound ID (PUBCHEM_COMPOUND_CID)","",""),
-						new ClassHolder("ambit2.core.processors.structure.key.DSSToxCID","DSSTox Chemical ID DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files","",""),
-						new ClassHolder("ambit2.core.processors.structure.key.DSSToxRID","DSSTox Record ID (DSSTox_RID) is number uniquely assigned to each DSSTox record across all DSSTox files","",""),						
-						new ClassHolder("ambit2.core.processors.structure.key.InchiPropertyKey","InChi","",""),
-						new ClassHolder("ambit2.core.processors.structure.key.SmilesKey","SMILES","",""),
-						//new ClassHolder("ambit2.core.processors.structure.key.PropertyKey","Other property - to be defined","",""),
-				},"Match chemical compounds from file and the database by:"
-				);
-		 */
-		
 	}
 	@Override
 	protected IQueryRetrieval<ISourceDataset> createQuery(Context context,

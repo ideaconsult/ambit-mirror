@@ -41,7 +41,7 @@ public class CreateDataset extends AbstractObjectUpdate<SourceDataset> {
 	
 	public static final String[] create_sql = {
 		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
-		"INSERT IGNORE INTO src_dataset (id_srcdataset, name,user_name,idreference,idtemplate) SELECT ?,?,SUBSTRING_INDEX(user(),'@',1),idreference,null FROM catalog_references WHERE title=?"
+		"INSERT IGNORE INTO src_dataset (id_srcdataset, name,user_name,idreference,idtemplate,licenseURI) SELECT ?,?,SUBSTRING_INDEX(user(),'@',1),idreference,null,? FROM catalog_references WHERE title=?"
 	};
 
 	public CreateDataset(SourceDataset dataset) {
@@ -62,7 +62,9 @@ public class CreateDataset extends AbstractObjectUpdate<SourceDataset> {
 			List<QueryParam> params2 = new ArrayList<QueryParam>();
 			params2.add(new QueryParam<Integer>(Integer.class, getObject().getId()>0?getObject().getId():null));
 			params2.add(new QueryParam<String>(String.class, getObject().getName()));
-			params2.add(new QueryParam<String>(String.class, getObject().getTitle()));		
+			params2.add(new QueryParam<String>(String.class, getObject().getLicenseURI()));
+			params2.add(new QueryParam<String>(String.class, getObject().getTitle()));
+			
 			return params2;
 		}
 		default: {

@@ -8,7 +8,8 @@ public class AbstractDataset implements ISourceDataset {
 	public enum _props {
 		name,
 		source,
-		seeAlso
+		seeAlso,
+		license
 	}
 	/**
 	 * 
@@ -51,4 +52,13 @@ public class AbstractDataset implements ISourceDataset {
 
 	}
 
+	@Override
+	public String getLicenseURI() {
+		return properties.get(_props.license.name());
+	}
+	@Override
+	public void setLicenseURI(String uri) {
+		properties.put(_props.license.name(), uri);
+		
+	}
 }

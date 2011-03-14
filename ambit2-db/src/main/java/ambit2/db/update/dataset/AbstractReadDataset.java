@@ -11,7 +11,18 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.StringCondition;
 
 public abstract class AbstractReadDataset<T> extends AbstractQuery<T,SourceDataset,StringCondition,SourceDataset>  implements IQueryRetrieval<SourceDataset>{
-
+	protected enum _fields {
+		id_srcdataset,
+		name,
+		user_name,
+		idreference,
+		title,
+		url,
+		licenseURI;
+		public int getIndex() {
+			return ordinal()+1;
+		}
+	}
 	/**
 	 * 
 	 */
@@ -20,11 +31,12 @@ public abstract class AbstractReadDataset<T> extends AbstractQuery<T,SourceDatas
 	public SourceDataset getObject(ResultSet rs) throws AmbitException {
 		try {
 			
-	        LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(5),rs.getString(6));
-	        le.setId(rs.getInt(4));
-	        SourceDataset d = new SourceDataset(rs.getString(2),le);
-	        d.setUsername(rs.getString(3));
-	        d.setId(rs.getInt(1));
+	        LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(_fields.title.getIndex()),rs.getString(_fields.url.getIndex()));
+	        le.setId(rs.getInt(_fields.idreference.getIndex()));
+	        SourceDataset d = new SourceDataset(rs.getString(_fields.name.getIndex()),le);
+	        d.setUsername(rs.getString(_fields.user_name.getIndex()));
+	        d.setId(rs.getInt(_fields.id_srcdataset.getIndex()));
+	        d.setLicenseURI(rs.getString(_fields.licenseURI.getIndex()));
 	        return d;
         } catch (SQLException x) {
         	throw new AmbitException(x);

@@ -32,6 +32,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.AbstractDataset;
+import ambit2.base.data.ISourceDataset;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.task.RemoteTask;
@@ -305,10 +306,11 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
         c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(12,table.getRowCount());
-		table = 	c.createQueryTable("EXPECTED","SELECT name,title,url FROM src_dataset join catalog_references using(idreference) where name='new-file-name' and id_srcdataset=4");
+		table = 	c.createQueryTable("EXPECTED","SELECT name,title,url,licenseURI FROM src_dataset join catalog_references using(idreference) where name='new-file-name' and id_srcdataset=4");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals("junit test on input.sdf",table.getValue(0,"title"));
 		Assert.assertEquals("http://ambit.sourceforge.net",table.getValue(0,"url"));
+		Assert.assertEquals(ISourceDataset.license.CC0_1_0.getURI(),table.getValue(0,"licenseURI"));
 		c.close();
 	}	
 	protected Representation getMultipartWebFormRepresentation(File file) throws Exception {
@@ -328,9 +330,14 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 	    str_b.append(disptn);
 	    disptn = String.format("--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
     			bndry,AbstractDataset._props.seeAlso,"http://ambit.sourceforge.net");
-	    str_b.append(disptn);	
+	    str_b.append(disptn);
+	    //source
 	    disptn = String.format("--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
     			bndry,AbstractDataset._props.source,"junit test on input.sdf");	    
+	    str_b.append(disptn);
+	    //license
+	    disptn = String.format("--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
+    			bndry,AbstractDataset._props.license,ISourceDataset.license.CC0_1_0.getURI());	    
 	    str_b.append(disptn);	    
 	    /**
 	     * WRITE THE FIRST/START BOUNDARY

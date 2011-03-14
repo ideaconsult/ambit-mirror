@@ -34,6 +34,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.dataset.CreateDataset;
@@ -52,6 +53,7 @@ public class Dataset_crud_test extends CRUDTest<Object,SourceDataset> {
 		adataset.setName("ambit");
 		adataset.setTitle("new_title");
 		adataset.setURL("new_url");
+		adataset.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		CreateDataset user = new CreateDataset();
 		user.setObject(adataset);
 		return user;
@@ -99,6 +101,7 @@ public class Dataset_crud_test extends CRUDTest<Object,SourceDataset> {
 		adataset.setId(1);		
 		adataset.setName("nina");
 		adataset.setTitle("EURAS.BE");
+		adataset.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		return new UpdateDataset(adataset);
 	}
 

@@ -17,6 +17,7 @@ import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
@@ -51,6 +52,8 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<ISourceDataset>> exte
 				OT.OTClass.Dataset.getOntClass(output));
 		dataset.addProperty(DC.title,item.getName());
 		dataset.addProperty(DC.source,item.getSource());
+		dataset.addProperty(DCTerms.license,
+				item.getLicenseURI()==null?ISourceDataset.license.Unknown.toString():item.getLicenseURI());
 		
 		if (item instanceof SourceDataset) {
 			SourceDataset ditem = (SourceDataset) item;
