@@ -70,6 +70,7 @@ public class OpenSSOVerifier implements Verifier {
 	protected User createUser(OpenSSOToken ssoToken,Request request) throws Exception {
 		OpenSSOUser user = new OpenSSOUser();
 		user.setToken(ssoToken.getToken());
+		user.setUseSecureCookie(useSecureCookie(request));
 		request.getCookies().removeAll("subjectid");
 		request.getCookies().add("subjectid",ssoToken.getToken());
 		return user;
@@ -89,4 +90,15 @@ public class OpenSSOVerifier implements Verifier {
 		}
 		return null;
 	}
+	
+	protected boolean useSecureCookie(Request request) {
+		for (Cookie cookie : request.getCookies()) {
+			if ("subjectid_secure".equals(cookie.getName())) try {
+				return Boolean.parseBoolean(cookie.getValue());
+			} catch (Exception x) {
+			}
+		}
+		//secure cookie by default
+		return true;
+	}	
 }

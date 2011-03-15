@@ -4,7 +4,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.restlet.Request;
-import org.restlet.data.Cookie;
 
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ResourceDoc;
@@ -24,6 +23,9 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 	 */
 	private static final long serialVersionUID = 7544605965468875232L;
 	protected boolean collapsed = false;
+	protected final static String securecookie_warning = "Secure cookie is used to transfer the OpenSSO token within a web browser.<br>You will only be able to access protected resources via web browser, if accessing via https://";
+	protected final static String cookie_warning = "HTTP cookie is used to transfer the OpenSSO token between web browser and the server.";
+
 	public OpenSSOUserHTMLReporter(Request ref, ResourceDoc doc) {
 		super(ref,doc);
 	}
@@ -55,7 +57,9 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 				output.write(String.format("<tr><td>%s</td><td><input type='text' size='40' name='%s' value=''></td></tr>",
 						"User name","user"));
 				output.write(String.format("<tr><td>%s</td><td><input type='password' size='40' name='%s' value=''></td></tr>",
-						"Password","password"));				
+						"Password","password"));
+				output.write(String.format("<tr><td title=''></td><td><input type=CHECKBOX name='subjectid_secure' %s>Use secure cookie for OpenSSO token</option></td></tr>",
+						item.isUseSecureCookie()?"SELECTED CHECKED":""));
 				output.write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log in\"></td></tr>");
 				output.write("</form>");
 			} else {
@@ -64,7 +68,7 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 				output.write(String.format("<tr><td>%s</td><td>%s</td></tr>","Token",item.getToken().toString()));
 				
 
-				String warning = "<h5><font color='red'>Secure cookie is used to transfer the OpenSSO token within a web browser.<br>You will only be able to access protected resources via web browser, if accessing via https://</font></h5>";
+				String warning = String.format("<h5><font color='red'>%s</font></h5>",item.isUseSecureCookie()?securecookie_warning:cookie_warning);
 				output.write(String.format("<tr>Warning<td></td><td>%s</td></tr>",warning));
 
 				

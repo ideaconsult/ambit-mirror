@@ -101,17 +101,24 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		return vars;
 	}
 	
-	protected void setTokenCookies(Variant variant) {
+	protected void setTokenCookies(Variant variant, boolean secure) {
 		CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
-		cS.setSecure(true);
+		cS.setSecure(secure);
 		cS.setComment("OpenSSO token");
 		cS.setPath("/");
         this.getResponse().getCookieSettings().add(cS);
+        //
+		cS = new CookieSetting(0, "subjectid_secure", Boolean.toString(secure));
+		cS.setSecure(false);
+		cS.setComment("Whether to transfer OpenSSO in secure token");
+		cS.setPath("/");
+        this.getResponse().getCookieSettings().add(cS);
+       
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 	try {
-			setTokenCookies(variant);
+			setTokenCookies(variant, useSecureCookie(getRequest()));
 	        // SEND RESPONSE
 	        setStatus(Status.SUCCESS_OK);
 
@@ -228,6 +235,16 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		} catch (Exception x) {
 			return null;
 		}
+	}
+	protected boolean useSecureCookie(Request request) {
+		for (Cookie cookie : request.getCookies()) {
+			if ("subjectid_secure".equals(cookie.getName())) try {
+				return Boolean.parseBoolean(cookie.getValue());
+			} catch (Exception x) {
+			}
+		}
+		//secure cookie by default
+		return true;
 	}
 	
 	protected String getTokenFromCookies(Request request) {
