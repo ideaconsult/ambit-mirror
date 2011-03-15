@@ -17,16 +17,94 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 	 */
 	private static final long serialVersionUID = 2897055153094159861L;
 	public enum MODE {
-		emptyonly,
-		replace,
-		add
+		emptyonly {
+			@Override
+			public String getDescription() {
+				return "Lookup only empty structures and replace the current structure representation";
+			}
+		},
+		replace {
+			@Override
+			public String getDescription() {
+				return "Lookup all structures and replace the current structure representation";
+			}
+		},
+		add {
+			@Override
+			public String getDescription() {
+				return "Lookup all structures and add the result as additional structure representation";
+			}
+		};
+		public String getDescription() {
+			return toString();
+		}
 	}
 	public enum SITE {
-		CSLS,
-		CHEMIDPLUS,
-		PUBCHEM,
-		CHEBI,
-		OPENTOX
+		CSLS {
+			@Override
+			public String getTitle() {
+				return "Chemical Identifier Resolver";
+			}
+			@Override
+			public String getURI() {
+				return "http://cactus.nci.nih.gov/chemical/structure";
+			}
+		},
+		CHEMIDPLUS {
+			@Override
+			public String getTitle() {
+				return "ChemIDplus";
+			}
+			@Override
+			public String getURI() {
+				return "http://chem.sis.nlm.nih.gov/chemidplus";
+			}
+		},
+		PUBCHEM {
+			@Override
+			public String getTitle() {
+				return "PubChem";
+			}
+			@Override
+			public String getURI() {
+				return "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&maxret=1&term=";
+			}
+		},
+		CHEBI {
+			@Override
+			public String getTitle() {
+				return "Chemical Entities of Biological Interest (ChEBI)";
+			}
+			@Override
+			public String getURI() {
+				return "http://www.ebi.ac.uk/chebi";
+			}
+			@Override
+			public boolean isEnabled() {
+				return false;
+			}
+		},
+		OPENTOX {
+			@Override
+			public String getTitle() {
+				return "OpenTox";
+			}
+			@Override
+			public String getURI() {
+				return "http://apps.ideaconsult.net:8080/ambit2";
+			}
+			@Override
+			public boolean isEnabled() {
+				return false;
+			}
+		};
+		public String getTitle() {
+			return toString();
+		}		
+		public String getURI() {
+			return toString();
+		}
+		public boolean isEnabled() {return true; }
 	}
 	
 	protected REQUEST request;
