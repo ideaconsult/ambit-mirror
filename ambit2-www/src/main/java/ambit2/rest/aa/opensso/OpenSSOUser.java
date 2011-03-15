@@ -12,7 +12,16 @@ public class OpenSSOUser extends User implements IOpenToxUser , Serializable {
 	 */
 	private static final long serialVersionUID = -1578876344936555656L;
 	protected String token;
+	protected boolean useSecureCookie = true;
 	
+	public boolean isUseSecureCookie() {
+		return useSecureCookie;
+	}
+
+	public void setUseSecureCookie(boolean useSecureCookie) {
+		this.useSecureCookie = useSecureCookie;
+	}
+
 	public String getToken() {
 		return token;
 	}

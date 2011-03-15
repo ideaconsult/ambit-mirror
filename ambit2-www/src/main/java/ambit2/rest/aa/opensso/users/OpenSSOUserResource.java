@@ -7,6 +7,7 @@ import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Cookie;
 import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -31,21 +32,31 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 			Request request, Response response) throws ResourceException {
 		
 		User user = request.getClientInfo().getUser();
-		if (user == null) user = new OpenSSOUser();
+		if (user == null) {
+			user = new OpenSSOUser();
+			((OpenSSOUser)user).setUseSecureCookie(useSecureCookie(request));
+		}
 		if (user instanceof OpenSSOUser) 
 			return new SingleItemIterator<OpenSSOUser>(((OpenSSOUser)user));
 		else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 	
-	protected void setTokenCookies(Variant variant) {
+	@Override
+	protected void setTokenCookies(Variant variant,boolean secure) {
 		User user = getRequest().getClientInfo().getUser();
 		if (user instanceof OpenSSOUser) {
 			if ((user==null) || (((OpenSSOUser)user).getToken()==null))
-				super.setTokenCookies(variant);
+				super.setTokenCookies(variant, secure);
 			else {
 				CookieSetting cS = new CookieSetting(0, "subjectid", ((OpenSSOUser)user).getToken());
-				cS.setSecure(true);
+				cS.setSecure(secure);
 				cS.setComment("OpenSSO token");
+				cS.setPath("/");
+			    this.getResponse().getCookieSettings().add(cS);
+			    
+				cS = new CookieSetting(0, "subjectid_secure", Boolean.toString(secure));
+				cS.setSecure(false);
+				cS.setComment("Send OpenSSO token by secure cookie");
 				cS.setPath("/");
 			    this.getResponse().getCookieSettings().add(cS);
 			} 
@@ -89,6 +100,10 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 				if (ssoToken.login(username,pass)) {
 					OpenSSOUser user = new OpenSSOUser();
 					user.setToken(ssoToken.getToken());
+					try {
+						Object secure_box = form.getFirst("subjectid_secure");
+						user.setUseSecureCookie(secure_box==null?false:"on".equals(secure_box.toString().toLowerCase()));
+					} catch (Exception x) { user.setUseSecureCookie(true);}
 					getRequest().getClientInfo().setUser(user);
 					user.setIdentifier(username);
 				} else {
@@ -138,5 +153,16 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 		getRequest().getOriginalRef().setQuery(null);
 		getRequest().getResourceRef().setQuery(null);
 		return get(variant);
+	}
+	
+	protected boolean useSecureCookie(Request request) {
+		boolean yes = super.useSecureCookie(request);
+		if (yes)
+			try {
+				return ((OpenSSOUser)request.getClientInfo().getUser()).isUseSecureCookie();
+			} catch (Exception x) {
+				return yes;
+			}
+		else return false;
 	}
 }
