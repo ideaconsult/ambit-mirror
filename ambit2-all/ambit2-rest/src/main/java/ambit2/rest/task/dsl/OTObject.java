@@ -52,7 +52,7 @@ public class OTObject implements Comparable<OTObject>, IOTObject{
 	
 	 
 		protected long pollInterval = 1500;
-		protected long pollTimeout = 1000L*60L*5L; //5 min
+		protected long pollTimeout = 10000L*60L*5L; //50 min
 	 
 	 protected OTObject() {
 		 uri = null;
