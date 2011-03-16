@@ -19,30 +19,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 		structure,
 		property
 	}
-	public static String typeAny = "http://www.opentox.org/algorithmTypes.owl#AlgorithmType";
-	public static String typeLearning = "http://www.opentox.org/algorithmTypes.owl#Learning";
-	public static String typeDescriptor = "http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation";
-	public static String typeRules = "http://www.opentox.org/algorithmTypes.owl#Rules";
-	public static String typeClustering = "http://www.opentox.org/algorithmTypes.owl#Clustering";
-	public static String typeRegression = "http://www.opentox.org/algorithmTypes.owl#Regression";
-	public static String typeFeatureSelection = "http://www.opentox.org/algorithmTypes.owl#FeatureSelection";
-	public static String typeClassification = "http://www.opentox.org/algorithmTypes.owl#Classification";
-	public static String typeSingleTarget = "http://www.opentox.org/algorithmTypes.owl#SingleTarget";
-	public static String typeMultipleTarget = "http://www.opentox.org/algorithmTypes.owl#MultipleTarget";
-	public static String typeEagerLearning = "http://www.opentox.org/algorithmTypes.owl#EagerLearning";
-	public static String typeLazyLearning = "http://www.opentox.org/algorithmTypes.owl#LazyLearning";
-	public static String typeSupervised = "http://www.opentox.org/algorithmTypes.owl#Supervised";
-	public static String typeUnSupervised = "http://www.opentox.org/algorithmTypes.owl#Unsupervised";
-	public static String typeAppDomain = "http://www.opentox.org/algorithmTypes.owl#ApplicabilityDomain";
-	public static String typeFingerprints = "http://www.opentox.org/algorithmTypes.owl#Fingerprints";
-	public static String typeMockup = "http://www.opentox.org/algorithmTypes.owl#Mockup";
-	public static String typeSuperService = "http://www.opentox.org/algorithmTypes.owl#SuperService";
-	public static String typeSuperBuilder = "http://www.opentox.org/algorithmTypes.owl#SuperBuilder";
-	public static String typeStructure = "http://www.opentox.org/algorithmTypes.owl#Structure";
-	public static String typeExpert = "http://www.opentox.org/algorithmTypes.owl#Expert";
-	public static String typeFinder = "http://www.opentox.org/algorithmTypes.owl#Finder";
-	
-	public static String typeSMSD = "http://www.opentox.org/algorithmTypes.owl#SMSD";
+
 	
 	public enum AlgorithmFormat {
 		JAVA_CLASS {
@@ -126,16 +103,20 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	}
 
 	public boolean isSupervised() {
-		return hasType(typeClassification) || hasType(typeRegression);
+		return hasType(AlgorithmType.Classification.toString()) || hasType(AlgorithmType.Regression.toString());
 	}
 
 	public boolean isRequiresDataset() {
-		return hasType(typeClustering) || hasType(typeClassification) || hasType(typeRegression) || 
-		hasType(typeLearning) || hasType(typeLazyLearning) || hasType(typeEagerLearning) ||
-		hasType(typeDescriptor) || hasType(typeAppDomain) || hasType(typeMockup) || hasType(typeSMSD) ;
+		return hasType(AlgorithmType.Clustering.toString()) || hasType(AlgorithmType.Classification.toString()) 
+				|| hasType(AlgorithmType.Regression.toString()) || 
+		hasType(AlgorithmType.Learning.toString()) || hasType(AlgorithmType.LazyLearning.toString()) 
+		|| hasType(AlgorithmType.EagerLearning.toString()) ||
+		hasType(AlgorithmType.Descriptor.toString()) || hasType(AlgorithmType.AppDomain.toString()) || 
+		hasType(AlgorithmType.Mockup.toString()) || hasType(AlgorithmType.SMSD.toString()) ;
 	}
 	public boolean isDataProcessing() {
-		return hasType(typeDescriptor) || hasType(typeFingerprints) || hasType(typeMockup);
+		return hasType(AlgorithmType.Descriptor.toString()) || hasType(AlgorithmType.Fingerprints.toString())
+		|| hasType(AlgorithmType.Mockup.toString());
 	}
 
 	public String[] getType() {
@@ -144,6 +125,11 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	public void setType(String[] type) {
 		this.type = type;
 	}
+	public boolean hasType(AlgorithmType type) {
+		for (String t: this.type)
+			if (t.equals(type.toString())) return true;
+		return false;
+	}		
 	public boolean hasType(String type) {
 		for (String t: this.type)
 			if (t.equals(type)) return true;
@@ -183,7 +169,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	}
 	public Algorithm(String name) {
 		setName(name);
-		setType(new String[] {typeAny});
+		setType(new String[] {AlgorithmType.AlgorithmType.toString()});
 	}
 
 	public String getId() {
