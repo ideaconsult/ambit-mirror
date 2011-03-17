@@ -43,37 +43,7 @@ public class DatasetsResource extends MetadatasetResource {
 	protected FileUpload upload;
 	protected IStructureKey matcher;
 	
-	public enum search_features {
 
-		feature_name {
-			@Override
-			public void setProperty(Property p, Object arg1) {
-				p.setName(arg1.toString());
-			}
-		},
-		feature_sameas {
-			@Override
-			public void setProperty(Property p, Object arg1) {
-				p.setLabel(arg1.toString());
-			}
-		},
-		feature_hassource {
-			@Override
-			public void setProperty(Property p, Object arg1) {
-				p.setReference(new LiteratureEntry(arg1.toString(),""));
-
-				
-			}
-		},
-		feature_type {
-			@Override
-			public void setProperty(Property p, Object arg1) {
-				p.setClazz(arg1.toString().equals("STRING")?String.class:Number.class);
-				
-			}
-		};
-		public abstract void setProperty(Property p, Object value);
-	}
 
 	//public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
 	

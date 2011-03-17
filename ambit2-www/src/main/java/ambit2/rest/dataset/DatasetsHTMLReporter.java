@@ -231,7 +231,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s?max=100\"><img src=\"%s/images/search.png\" alt=\"/smarts\" title=\"Search compounds with SMARTS\" border=\"0\"/></a>",
+						"<a href=\"%s%s?max=100\"><img src=\"%s/images/search.png\" alt=\"/smarts\" title=\"Search compounds by SMARTS\" border=\"0\"/></a>",
 						w.toString(),
 						"/smarts",
 						uriReporter.getBaseReference().toString()));
@@ -341,7 +341,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
 			output.write(String.format("<tr><th>%s</th><td><a href='%s/similarity?search=c1ccccc1'>%s/similarity</a></td></tr>", "Search for similar compounds within this dataset",uri,uri));
-			output.write(String.format("<tr><th>%s</th><td><a href='%s/smarts?search=c1ccccc1'>%s/smarts</a></td></tr>", "Search compounds with SMARTS",uri,uri));
+			output.write(String.format("<tr><th>%s</th><td><a href='%s/smarts?search=c1ccccc1'>%s/smarts</a></td></tr>", "Search compounds by SMARTS",uri,uri));
 
 			//don't write ip addresses
 			if ((dataset instanceof SourceDataset) && ((SourceDataset)dataset).getURL().startsWith("http"))

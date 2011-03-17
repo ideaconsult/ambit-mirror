@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.Request;
+import org.restlet.data.Reference;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
@@ -11,10 +12,14 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.dataset.MetadatasetResource.search_features;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.rdf.OT;
+import ambit2.rest.rdf.OTEE;
 
 /**
  * Reporter for {@link Dictionary} or {@link Property}
@@ -62,49 +67,39 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	public Object processItem(Property record) throws AmbitException  {
 
 		try {
-
+			output.write("<tr>");
+			output.write(String.format("<td>%s</td>",toURI(record)));
+			output.write("<td>");
 			if ( record.getClazz().equals(Dictionary.class) ){
-				output.write(toURI(record));
-				
-				
+				output.write(String.format("<a href='%s/%s?%s=%s'>%s</a>", 
+						getUriReporter().getBaseReference(),
+						OpenTox.URI.dataset.name(),
+						search_features.feature_sameas.name(),
+						Reference.encode(String.format("%s%s",OTEE.NS,record.getName())),
+						"Datasets"
+						));
 			} else 
-				output.write(toURI(record));
-			if (!collapsed) {
-/*
-				String[] more = new String[] {
-						"conformer/all",
-						
-						"feature/",
-						"query/similar/",
-						"query/smarts/",
-						"model/",
-						"dataset/"
-						
-						};
-				for (String m:more)
-					output.write(String.format("<a href='%s'>%s</a>&nbsp;",m,m));
-*/
-			}
+				output.write(String.format("<a href='%s/%s?%s=%s'>%s</a>", 
+						getUriReporter().getBaseReference(),
+						OpenTox.URI.dataset.name(),
+						search_features.feature_id.name(),
+						Reference.encode(String.format("%s%s",OTEE.NS,record.getId())),
+						"Datasets"
+						));
+			
+			output.write("</td>");
+			output.write("</tr>");
 		} catch (Exception x) {
 			Context.getCurrentLogger().severe(x.getMessage());
 		}
 		return null;
 	}
-	public void header(Writer output, QueryOntology query) {
+	
+	@Override
+	public void footer(Writer output, IQueryRetrieval<Property> query) {
 		try {
-			count = 0;
-			AmbitResource.writeHTMLHeader(output,
-					query.toString()
-					,
-					uriReporter.getRequest(),
-					uriReporter.getDocumentation()
-					);
-			output.write(String.format("<h4>%s</h4>",query.toString()));
-
-		} catch (Exception x) {}		
-	};
-	public void footer(Writer output, QueryOntology query) {
-		try {
+			output.write("</tbody>");
+			output.write("</table>");
 			AmbitResource.writeHTMLFooter(output,
 					"",
 					uriReporter.getRequest()
@@ -114,4 +109,22 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	};
 
 
+	@Override
+	public void header(Writer w, IQueryRetrieval<Property> query) {
+		try {
+			count = 0;
+			AmbitResource.writeHTMLHeader(output,
+					query.toString()
+					,
+					uriReporter.getRequest(),
+					uriReporter.getDocumentation()
+					);
+			
+			output.write("<table>");
+			output.write(String.format("<caption>%s</caption>",query.toString()));
+			output.write("<tbody>");
+			output.flush();			
+		} catch (Exception x) {}
+		
+	}
 }
