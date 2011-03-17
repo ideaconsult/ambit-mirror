@@ -14,6 +14,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
@@ -31,7 +32,6 @@ import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.YAMLConvertor;
-import ambit2.rest.dataset.DatasetsResource.search_features;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
@@ -41,6 +41,50 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 	protected SourceDataset dataset;
 	public final static String metadata = "/metadata";	
 	protected boolean collapsed;
+	
+	public enum search_features {
+
+		feature_name {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				p.setName(arg1.toString());
+			}
+		},
+		feature_sameas {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				p.setLabel(arg1.toString());
+			}
+		},
+		feature_hassource {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				p.setReference(new LiteratureEntry(arg1.toString(),""));
+
+				
+			}
+		},
+		feature_type {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				p.setClazz(arg1.toString().equals("STRING")?String.class:Number.class);
+				
+			}
+		},
+		feature_id {
+			@Override
+			public void setProperty(Property p, Object arg1) {
+				try {
+					p.setId(Integer.parseInt(arg1.toString()));
+				} catch (Exception x) {
+					
+				}
+			}
+		}
+
+		;	
+		public abstract void setProperty(Property p, Object value);
+	}
 	
 	public MetadatasetResource() {
 		super();
