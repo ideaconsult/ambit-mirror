@@ -26,6 +26,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -37,6 +38,7 @@ import ambit2.db.search.structure.QueryExactStructure;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
@@ -60,9 +62,18 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	protected String[] text_multi = null;
 	protected NCISearchProcessor.METHODS rep_id = null;
 	
+	enum _searchtype {
+		cas,
+		einecs,
+		text,
+		smiles,
+		inchi,
+		url,
+		ambitid
+	}
 	protected static String URL_as_id = "url";
 	protected static String SEARCH_as_id = "search";
-	
+	protected _searchtype searchType = null;
 	protected Form params;
 
 	/**
@@ -127,10 +138,16 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			if ((text_multi!= null) && (text_multi.length>1)) {
 				query =  getMultiTextQuery(null,casesens,retrieveProperties, text_multi);
 			} else	if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
-				if (CASNumber.isValid(text)) query =  getTextQuery(Property.getCASInstance(),casesens,retrieveProperties,text);
+				if (CASNumber.isValid(text)) {
+					searchType = _searchtype.cas;
+					query =  getTextQuery(Property.getCASInstance(),casesens,retrieveProperties,text);
+				}
 			} else if (EINECS.isValidFormat(text)) { //this is EINECS
 				//we'd better not search for invalid numbers
-				if (EINECS.isValid(text)) query =  getTextQuery(Property.getEINECSInstance(),casesens,retrieveProperties,text);
+				if (EINECS.isValid(text)) {
+					searchType = _searchtype.einecs;
+					query =  getTextQuery(Property.getEINECSInstance(),casesens,retrieveProperties,text);
+				}
 			} else if (idcompound>0)  {
 				IStructureRecord record = new StructureRecord();
 				record.setIdchemical(idcompound);
@@ -266,12 +283,14 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			InChIToStructure c =f.getInChIToStructure(inchi, DefaultChemObjectBuilder.getInstance());
 			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
 				throw new Exception("Invalid InChI");
+			searchType = _searchtype.inchi;
 			return c.getAtomContainer();
 		} else return null;
 	}
 	public IAtomContainer isSMILES(String smiles) throws Exception {
 		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 		IAtomContainer c = p.parseSmiles(smiles);
+		searchType = _searchtype.smiles;
 		if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(smiles);
 		return c;
 	}	
@@ -283,8 +302,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	}	
 	public int isAmbitID(String text) {
 		try {
+			searchType = _searchtype.ambitid;
 			return Integer.parseInt(text);
 		} catch (Exception x) {
+			searchType = null;
 			return 0;
 		}
 	}
@@ -311,4 +332,20 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			rdfwriter = RDF_WRITER.jena;
 		}
 	}
+	/*
+	@Override
+	protected void processNotFound(NotFoundException x, int retry) throws Exception {
+		if (retry>0) super.processNotFound(x, retry);
+		else
+			if (searchType == null) { //not cas, smiles, einecs, inchi, ambitid, just plain text
+				Name2StructureProcessor processor = new Name2StructureProcessor();
+				IAtomContainer atomcontainer = processor.process(text);
+				QueryExactStructure q = new QueryExactStructure();
+				q.setChemicalsOnly(true);
+				q.setValue(atomcontainer);
+				queryObject = q;
+			} else 
+				super.processNotFound(x, retry);
+	}
+	*/
 }

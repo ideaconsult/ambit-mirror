@@ -3,6 +3,12 @@ package ambit2.rest.task.dsl;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.opentox.dsl.OTAlgorithms;
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeature;
+import org.opentox.dsl.OTFeatures;
+import org.opentox.dsl.OTModel;
+import org.opentox.dsl.OTSuperModel;
 
 import ambit2.rest.test.ResourceTest;
 

@@ -1,16 +1,21 @@
 package ambit2.rest.test.structure;
 
+import java.io.InputStream;
+
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.rest.OpenTox;
 
 
@@ -114,4 +119,6 @@ public class ConformerResourceTest extends CompoundResourceTest {
 				
 		
 	}		
+	
+
 }

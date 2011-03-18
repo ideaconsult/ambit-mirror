@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeatures;
+
 public class OTDatasetScrollableReport extends OTDatasetReport {
 
 	protected OTDatasetScrollableReport(OTDataset dataset,OTFeatures features, String application, int page, int pageSize) throws Exception {

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.opentox.dsl.aa.IAuthToken;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -25,8 +27,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
-import ambit2.rest.task.dsl.IAuthToken;
 
 /**
  * Abstract class for resources

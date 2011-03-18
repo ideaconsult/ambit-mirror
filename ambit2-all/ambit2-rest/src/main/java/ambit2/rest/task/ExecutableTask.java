@@ -7,7 +7,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.task.Task.TaskStatus;

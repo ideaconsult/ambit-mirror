@@ -2,6 +2,7 @@ package ambit2.rest.uri;
 
 import java.util.Iterator;
 
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -14,7 +15,6 @@ import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 public class URIStructureIterator extends AbstractBatchProcessor<String[], IStructureRecord>  {
 	protected Reference baseReference;

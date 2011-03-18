@@ -1,11 +1,11 @@
 package ambit2.rest.test.dataset;
 
 import org.junit.Test;
+import org.opentox.dsl.OTOntologyService;
 
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.rest.rdf.chembl.ChEMBLRawReader;
-import ambit2.rest.task.dsl.OTOntologyService;
 import ambit2.rest.test.ResourceTest;
 
 import com.hp.hpl.jena.query.QuerySolution;

@@ -1,5 +1,7 @@
 package ambit2.rest.task;
 
+import java.io.File;
+
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -26,9 +28,15 @@ public class CallableDescriptorCalculator<USERID> extends CallableModelPredictor
 	}
 
 	@Override
-	protected IProcessor<IStructureRecord, IStructureRecord> getWriter() {
-		//DescriptorCalculator has a writer embedded
-		return null;
+	protected IProcessor<IStructureRecord, IStructureRecord> getWriter() throws Exception {
+		if (foreignInputDataset) {
+			File file = File.createTempFile("dresult_",".rdf");
+			tmpFileName = file.getAbsolutePath();
+			rdfFileWriter = new RDFFileWriter(file,applicationRootReference,null);
+			return rdfFileWriter;
+		} else 		
+			//DescriptorCalculator has a writer embedded
+			return null;
 	}
 	
 	protected static IProcessor<IStructureRecord,IStructureRecord> createPredictor(ModelQueryResults model) throws Exception {

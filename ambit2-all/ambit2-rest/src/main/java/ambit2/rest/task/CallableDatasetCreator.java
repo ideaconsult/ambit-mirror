@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.restlet.Context;
-import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;

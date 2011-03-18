@@ -81,6 +81,11 @@
     	<artifactId>org.restlet.ext.wadl</artifactId>
     	<version>${restlet.version}</version>
     </dependency>
+    <dependency>
+    	<groupId>net.ideaconsult</groupId>
+    	<artifactId>opentox-dsl</artifactId>
+    	<version>1.0.0-SNAPSHOT</version>
+    </dependency>
  
   </dependencies>
   	<repositories>

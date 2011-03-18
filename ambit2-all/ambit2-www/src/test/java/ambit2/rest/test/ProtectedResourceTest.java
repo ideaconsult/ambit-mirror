@@ -4,10 +4,10 @@ import java.util.UUID;
 
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
+import org.opentox.dsl.aa.IAuthToken;
+import org.opentox.dsl.task.ClientResourceWrapper;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
-import ambit2.rest.task.dsl.IAuthToken;
 
 
 public abstract class ProtectedResourceTest extends ResourceTest implements IAuthToken  {

@@ -26,7 +26,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -38,10 +38,10 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query_results join query using(idquery) join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(2,table.getRowCount());		
+		Assert.assertEquals(4,table.getRowCount());		
 
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery,idtemplate FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(3,table.getRowCount());
 		Assert.assertNotNull(table.getValue(0,"idtemplate"));
 
 	
@@ -54,7 +54,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -67,9 +67,9 @@ public class QueryResultsResourceTest extends ResourceTest {
 	
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(3,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query_results join query using(idquery) join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(1,table.getRowCount());		
+		Assert.assertEquals(3,table.getRowCount());		
 		c.close();
 		
 		
@@ -89,7 +89,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -102,11 +102,11 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
          c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(3,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query_results join query using(idquery) join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(2,table.getRowCount());		
+		Assert.assertEquals(4,table.getRowCount());		
 		table = 	c.createQueryTable("EXPECTED","SELECT idquery,idtemplate FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(3,table.getRowCount());
 		Assert.assertNotNull(table.getValue(0,"idtemplate"));		
 		c.close();
 		
@@ -167,7 +167,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -193,7 +193,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -218,7 +218,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -244,7 +244,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -331,7 +331,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -350,7 +350,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  
@@ -423,7 +423,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idquery FROM query join sessions using(idsessions) where title='temp'");
-		Assert.assertEquals(0,table.getRowCount());
+		Assert.assertEquals(2,table.getRowCount());
 		c.close();
 		
 		Form form = new Form();  

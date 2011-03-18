@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -22,7 +23,6 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.CoverageModelBuilder;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<Instances,Matrix,CoverageModelBuilder,USERID> {
 	

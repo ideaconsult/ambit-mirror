@@ -1,14 +1,20 @@
 package ambit2.rest.task.dsl;
 
+import java.util.Hashtable;
+
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Assert;
 import org.junit.Test;
-import org.restlet.data.Form;
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTDatasets;
+import org.opentox.dsl.OTFeature;
+import org.opentox.dsl.OTFeatures;
+import org.opentox.rdf.iterators.RDFFeaturesIterator;
 import org.restlet.data.Reference;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.OT.OTProperty;
+import ambit2.rest.rdf.sparql.RDFFeatureIterator;
 import ambit2.rest.test.ResourceTest;
 
 public class OTDatasetTest extends ResourceTest {
@@ -50,6 +56,7 @@ public class OTDatasetTest extends ResourceTest {
 	
 	@Test
 	public void testAddColumn() throws Exception {
+		
 		String f3 = String.format("http://localhost:%d/feature/3",port);
 		OTFeature feature1 = OTFeature.feature(f3);
 		String f1 = String.format("http://localhost:%d/feature/1",port);
@@ -70,7 +77,15 @@ public class OTDatasetTest extends ResourceTest {
 						dataset.toString());
 		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1
 		//http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F3&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1
-		Assert.fail("verify if the features are there");
+		int count = 0;
+		RDFFeaturesIterator i = new RDFFeaturesIterator(dataset.toString());
+		while (i.hasNext()) {
+			OTFeature feature = i.next();
+			System.out.println(feature);
+			if (feature.getUri().toString().equals(f3)) count ++;
+			else if (feature.getUri().toString().equals(f1)) count ++;
+		}
+		Assert.assertEquals(2,count);
 	}		
 	
 	@Test
@@ -109,31 +124,6 @@ public class OTDatasetTest extends ResourceTest {
 		Assert.assertEquals(4,table.getRowCount());		
 	}		
 	
-	
-	@Test
-	public void testMergeRemote() throws Exception {
-		String dataset_service = "http://ambit.uni-plovdiv.bg:8080/ambit2/dataset";
-		OTFeature feature1 = OTFeature.feature("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/1");
-		OTFeature feature2 = OTFeature.feature("http://ambit.uni-plovdiv.bg:8080/ambit2/feature/29683");
-		
-		OTDataset dataset1 = OTDataset.dataset("http://ambit.uni-plovdiv.bg:8080/ambit2/compound/1").
-			withDatasetService(dataset_service).
-			addColumns(feature1);
-		
-		OTDataset dataset2 = OTDataset.dataset("http://ambit.uni-plovdiv.bg:8080/ambit2/compound/2").
-		withDatasetService(dataset_service).
-		addColumns(feature2);
-		
-		OTDataset dataset3 = OTDataset.dataset("http://ambit.uni-plovdiv.bg:8080/ambit2/compound/200").
-		withDatasetService(dataset_service).
-		addColumns(feature1);		
-		
-		OTDatasets datasets = OTDatasets.datasets();
-		datasets.withDatasetService(dataset_service).add(dataset1).add(dataset2).add(dataset3);
-		OTDataset dataset = datasets.merge();
-		Assert.assertTrue(dataset.getUri().toString().startsWith("http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R"));
-		Assert.fail("verify there are 3 compounds and 2 features");
-	}		
 	
 	@Override
 	public void testGetJavaObject() throws Exception {

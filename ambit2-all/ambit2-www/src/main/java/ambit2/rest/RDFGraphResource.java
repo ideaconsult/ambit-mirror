@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -25,7 +26,6 @@ import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.model.AbstractModel;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.OT;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;

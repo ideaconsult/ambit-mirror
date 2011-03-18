@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.opentox.aa.opensso.OpenSSOToken;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Client;
 import org.restlet.Component;
 import org.restlet.Context;
@@ -41,7 +42,6 @@ import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.task.RemoteTask;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.ontology.OntModel;
 

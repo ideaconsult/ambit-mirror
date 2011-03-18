@@ -2,10 +2,8 @@ package ambit2.rest.task;
 
 import java.util.UUID;
 
-import org.restlet.data.Reference;
-
-import ambit2.rest.task.dsl.ClientResourceWrapper;
-import ambit2.rest.task.dsl.IAuthToken;
+import org.opentox.dsl.aa.IAuthToken;
+import org.opentox.dsl.task.ClientResourceWrapper;
 
 public abstract class CallableProtectedTask<USERID> implements ICallableTask, IAuthToken {
 

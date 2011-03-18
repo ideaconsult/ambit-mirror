@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeatures;
+import org.opentox.dsl.OTObject;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -176,7 +180,7 @@ public class OTDatasetRDFReport extends OTObject {
 		String.format("%s/query/compound/url%s?search=%s%s%s%s%s&rdfwriter=jena",
 				application,
 				representation==null?"/names":representation,
-				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),
+				Reference.encode(dataset.getPage(page, pageSize).getUri().toString()),
 				f?"&":"",
 				f?features.getQuery(null).getQueryString():"",
 				e?"&":"",
@@ -187,7 +191,7 @@ public class OTDatasetRDFReport extends OTObject {
 	
 	public OTDatasetRDFReport write(Writer writer) throws Exception {
 		writer.write(header());
-		Reference ref = uri.clone();
+		Reference ref = getUri().clone();
 		Form form = ref.getQueryAsForm();;
 		ref.setQuery("");
 		ClientResourceWrapper client = new ClientResourceWrapper(ref);
@@ -620,7 +624,7 @@ public class OTDatasetRDFReport extends OTObject {
 		
 		public OTDatasetRDFReport download(OutputStream out,MediaType media) throws Exception {
 			
-			Reference ref = uri.clone();
+			Reference ref = getUri().clone();
 			Form form = ref.getQueryAsForm();;
 			ref.setQuery("");
 			ClientResourceWrapper client = new ClientResourceWrapper(ref);

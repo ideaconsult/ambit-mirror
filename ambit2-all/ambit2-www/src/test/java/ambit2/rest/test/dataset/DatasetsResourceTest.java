@@ -460,7 +460,21 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 			c.close();
 
 	}
-	
+	@Test
+	public void testCreateEntryLazarRDFLocal() throws Exception {
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+				
+		CreateEntryRDF("lazar/test-lazar.rdf");
+		
+		c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		c.close();
+
+	}	
 	public void testCreateEntryTUMRDFLocal() throws Exception {
 	        IDatabaseConnection c = getConnection();	
 			ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
@@ -475,10 +489,7 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 			c.close();
 
 	}	
-	@Test
-	public void testCreateEntryTUMRDF2() throws Exception {
-		Assert.fail("test with tum1.rdf");
-	}
+
 	@Test
 	public void testSameAs() throws Exception {
 		Assert.fail("Same as is always the same as Name, like here http://ambit.uni-plovdiv.bg:8080/ambit2/feature/82119 or here http://ambit.uni-plovdiv.bg:8080/ambit2/feature/82138. Maybe this is a bug while parsing an rdf or sdf file.");
