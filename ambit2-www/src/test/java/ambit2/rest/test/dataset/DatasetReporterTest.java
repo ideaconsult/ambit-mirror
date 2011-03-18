@@ -19,20 +19,20 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.rdf.RDFInstancesIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
-import ambit2.rest.test.ProtectedResourceTest;
+import ambit2.rest.test.ResourceTest;
 
 /**
  * 
  * @author nina
  *
  */
-public class DatasetReporterTest extends ProtectedResourceTest {
+public class DatasetReporterTest extends ResourceTest {
 	protected String policyID ;
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 		try {
-			policyID = createPolicy(getTestURI());
+			//policyID = createPolicy(getTestURI());
 		} catch (Exception x) {
 			throw x;
 		}
@@ -43,7 +43,7 @@ public class DatasetReporterTest extends ProtectedResourceTest {
 
 		
 		try {
-			if (policyID != null) deletePolicy(policyID);
+			//if (policyID != null) deletePolicy(policyID);
 		} catch (Exception x) { x.printStackTrace(); }
 		super.tearDown();
 	}
@@ -60,6 +60,7 @@ public class DatasetReporterTest extends ProtectedResourceTest {
 						OpenTox.params.feature_uris.toString(),
 						Reference.encode(String.format("http://localhost:%d%s", port,	PropertyResource.featuredef))
 						));
+
 		RDFStructuresIterator iterator = new RDFStructuresIterator(ref);
 		iterator.setBaseReference(new Reference(String.format("http://localhost:%d",port)));
 		while (iterator.hasNext()) {
@@ -75,6 +76,7 @@ public class DatasetReporterTest extends ProtectedResourceTest {
 			Assert.assertNotNull(target.getContent());
 			Assert.assertEquals(MOL_TYPE.SDF.toString(),target.getFormat());			
 		}
+
 
 	}	
 	

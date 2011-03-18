@@ -4,6 +4,9 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.Connection;
 
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeature;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -20,9 +23,6 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
-import ambit2.rest.task.dsl.OTDataset;
-import ambit2.rest.task.dsl.OTFeature;
 
 public abstract class CallableQueryProcessor<Target,Result,USERID> extends CallableProtectedTask<USERID> {
 	protected AbstractBatchProcessor batch; 

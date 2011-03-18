@@ -1,5 +1,6 @@
 package ambit2.rest.query;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -39,7 +40,7 @@ public class ExactStructureQueryResource extends StructureQueryResource<QueryExa
 	@Override
 	protected QueryExactStructure createQuery(Context context, Request request,
 			Response response) throws ResourceException {
-		smiles = getSMILES(new Form(getRequest().getResourceRef().getQueryAsForm()),true);
+		smiles = getSMILES(getRequest().getResourceRef().getQueryAsForm(),true);
 		if (smiles == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty SMILES");
 		try {
 			SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());

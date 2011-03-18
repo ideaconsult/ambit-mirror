@@ -3,13 +3,12 @@ package ambit2.rest.rdf;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
-
-import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.OntClass;

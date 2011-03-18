@@ -10,6 +10,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.opentox.dsl.OTFeature;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
@@ -17,6 +18,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -29,7 +31,6 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.reference.ReferenceURIReporter;
-import ambit2.rest.task.dsl.OTFeature;
 import ambit2.rest.test.ResourceTest;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -457,7 +458,7 @@ public class PropertyResourceTest extends ResourceTest {
 	
 	@Test
 	public void testUpdateExistingEntry() throws Exception {
-
+		//now we can only update by PUT, not POST
 		Property p = new Property("Property 1",new LiteratureEntry("Dummy","NA"));
 		p.setLabel("Test");
 		OntModel model = OT.createModel();
@@ -467,10 +468,11 @@ public class PropertyResourceTest extends ResourceTest {
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
 
-		Response response =  testPost(
+		Response response =  testPut(
 					String.format("http://localhost:%d%s/1", port,PropertyResource.featuredef),
-					MediaType.APPLICATION_RDF_XML,
-					writer.toString());
+					MediaType.TEXT_URI_LIST,
+					new StringRepresentation(writer.toString(),MediaType.APPLICATION_RDF_XML)
+					);
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
 		

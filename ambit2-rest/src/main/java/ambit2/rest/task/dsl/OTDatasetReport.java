@@ -7,6 +7,10 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeatures;
+import org.opentox.dsl.OTObject;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -41,7 +45,7 @@ public abstract class OTDatasetReport extends OTObject {
 		super(String.format("%s/query/compound/url%s?search=%s%s%s",
 				application,
 				representation==null?"/all":representation,
-				Reference.encode(dataset.getPage(page, pageSize).uri.toString()),
+				Reference.encode(dataset.getPage(page, pageSize).getUri().toString()),
 				features==null?"":"&",
 				features==null?"":features.getQuery(null).getQueryString()
 				));
@@ -56,7 +60,7 @@ public abstract class OTDatasetReport extends OTObject {
 
 	
 	public OTDatasetReport write(Writer writer) {
-		Reference ref = uri.clone();
+		Reference ref = getUri().clone();
 		Form form = ref.getQueryAsForm();;
 		ref.setQuery("");
 		ClientResourceWrapper client = new ClientResourceWrapper(ref);

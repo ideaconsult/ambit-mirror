@@ -7,7 +7,11 @@ import java.io.InputStreamReader;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.data.MediaType;
+
+import ambit2.core.io.MyIteratingMDLReader;
 
 public class AllConformersResourceTest extends ConformerResourceTest {
 	@Override
@@ -56,6 +60,23 @@ public class AllConformersResourceTest extends ConformerResourceTest {
 			
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
+			throws Exception {
+		MyIteratingMDLReader reader = new MyIteratingMDLReader(in, DefaultChemObjectBuilder.getInstance());
+		int count = 0;
+		while (reader.hasNext()) {
+			Object o = reader.next();
+			Assert.assertTrue(o instanceof IAtomContainer);
+			IAtomContainer mol = (IAtomContainer)o;
+			Assert.assertEquals(3,mol.getAtomCount());
+			Assert.assertEquals(0,mol.getBondCount());
+		//	Assert.assertEquals(0,mol.getProperties().size());test datasets has properties inside structure table field
+			count++;
+		}
+		return count==2;
 	}
 	/*
 	@Test

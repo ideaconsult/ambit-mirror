@@ -3,6 +3,10 @@ package ambit2.rest.task.dsl;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTDatasets;
+import org.opentox.dsl.OTObject;
+import org.opentox.dsl.OTOntologyService;
 import org.restlet.data.Reference;
 
 import com.hp.hpl.jena.query.QuerySolution;
@@ -42,7 +46,7 @@ public class OTDatasetComparisonReport extends OTObject {
 	public OTDatasetComparisonReport(Reference application, OTDataset dataset) throws Exception {
 		super();
 		this.application = application;
-		if ((dataset!=null) && (dataset.uri!=null)) {
+		if ((dataset!=null) && (dataset.getUri()!=null)) {
 			datasets2 = OTDatasets.datasets();
 			datasets2.add(dataset);
 		}
@@ -80,37 +84,37 @@ public class OTDatasetComparisonReport extends OTObject {
 			for (int i=0; i < datasets1.size();i++) {
 				OTDataset dataset1 = datasets1.getItem(i);
 				writer.write("\n<tr>");
-				writer.write(String.format("\n<th align='left'>&nbsp;%d.<a href='%s'>%s</a></th>",i+1,dataset1.uri,
-						dataset1.getName()==null?dataset1.uri:dataset1.name));
+				writer.write(String.format("\n<th align='left'>&nbsp;%d.<a href='%s'>%s</a></th>",i+1,dataset1.getUri(),
+						dataset1.getName()==null?dataset1.getUri():dataset1.getName()));
 				for (int j=0; j < datasets2.size();j++) {
 					OTDataset dataset2 = datasets2.getItem(j);
-					boolean same= dataset1.uri.equals(dataset2.uri);
+					boolean same= dataset1.getUri().equals(dataset2.getUri());
 					Reference link;
 					Reference link_count=null;
-					if (dataset1.uri.equals(dataset2.uri)) { //same dataset
+					if (dataset1.getUri().equals(dataset2.getUri())) { //same dataset
 						//http://apps.ideaconsult.net:8080/ambit2/stats/chemicals_in_dataset?dataset_uri=http://apps.ideaconsult.net:8080/ambit2/dataset/1
 						link_count = new Reference(String.format("%s/stats/chemicals_in_dataset",application));
-						link_count.addQueryParameter("dataset_uri",dataset1.uri.toString());
+						link_count.addQueryParameter("dataset_uri",dataset1.getUri().toString());
 
 						OTObject o = OTObject.object(link_count.toString()).readTextLineAsName();
 						count[i][j] = o.getName();
-						link = dataset1.uri.clone();
+						link = dataset1.getUri().clone();
 						link.addQueryParameter("page", "0");
 						link.addQueryParameter("pagesize", "25");
 						
 					} else  {
 						//if (count[i][j] == null) {
 							link_count = new Reference(String.format("%s/stats",application));
-							link_count.addQueryParameter("dataset_uri",dataset1.uri.toString());
-							link_count.addQueryParameter("dataset_uri",dataset2.uri.toString());
+							link_count.addQueryParameter("dataset_uri",dataset1.getUri().toString());
+							link_count.addQueryParameter("dataset_uri",dataset2.getUri().toString());
 	
 						//	OTObject o = OTObject.object(link_count.toString()).readTextLineAsName();
 						//	count[i][j] = o.getName();
 						//} 
 	
 						
-						link = dataset1.uri.clone();
-						link.addQueryParameter("common",dataset2.uri.toString());	
+						link = dataset1.getUri().clone();
+						link.addQueryParameter("common",dataset2.getUri().toString());	
 						link.addQueryParameter("page", "0");
 						link.addQueryParameter("pagesize", "25");						
 					}
@@ -140,8 +144,8 @@ public class OTDatasetComparisonReport extends OTObject {
 					writer.write(String.format("\n<t%s><a href='%s' title='Common structures \"%s\" and \"%s\"' target='_blank'><label id='%s'>#</label></a>",
 								same?"h":"d",
 								link,
-								dataset1.uri,
-								dataset2.uri,
+								dataset1.getUri(),
+								dataset2.getUri(),
 								cell));
 
 					writer.write(String.format("</t%s>",same?"h":"d"));

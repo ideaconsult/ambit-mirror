@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -23,7 +24,6 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.model.predictor.ModelPredictor;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> extends QueryReporter<ModelQueryResults, Q,BufferedImage > {
 	/**

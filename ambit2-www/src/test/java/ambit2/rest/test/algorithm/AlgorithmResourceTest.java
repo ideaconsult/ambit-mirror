@@ -11,6 +11,9 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTModel;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -21,9 +24,6 @@ import org.restlet.representation.Representation;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.task.RemoteTask;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
-import ambit2.rest.task.dsl.OTDataset;
-import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {
@@ -392,21 +392,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		c.close();
 		
 	}		
-	@Test
-	public void testClassifier() throws Exception {
-		System.setProperty("javax.net.ssl.trustStore",  "C:\\Program Files\\Java\\jre6\\lib\\security\\ambit-plovdiv");
-			Form headers = new Form();  
-			headers.add(OpenTox.params.dataset_uri.toString(), 
-					"http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/12?feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21692&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21691&max=100&feature_uris[]=http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21686");
-			headers.add(OpenTox.params.target.toString(),
-					"http://ambit.uni-plovdiv.bg:8080/ambit2/feature/21686");
-			testAsyncTask(
-					String.format("http://localhost:%d/algorithm/J48", port),
-							//Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
-					headers, Status.SUCCESS_OK,
-					String.format("http://localhost:%d/model/%s", port,"3"));
-	}	
-	
+
 
 //	http://ambit.uni-plovdiv.bg:8080/ambit2/dataset/R7798
 	@Test

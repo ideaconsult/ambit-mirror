@@ -3,16 +3,16 @@ package ambit2.rest.test.algorithm;
 import org.junit.Assert;
 import org.junit.Test;
 import org.opentox.aa.opensso.OpenSSOPolicy;
+import org.opentox.dsl.OTAlgorithm;
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeature;
+import org.opentox.dsl.OTModel;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
-import ambit2.rest.task.dsl.OTAlgorithm;
-import ambit2.rest.task.dsl.OTDataset;
-import ambit2.rest.task.dsl.OTFeature;
-import ambit2.rest.task.dsl.OTModel;
 import ambit2.rest.test.ProtectedResourceTest;
 
 public class ProtectedModelBuilder extends ProtectedResourceTest {

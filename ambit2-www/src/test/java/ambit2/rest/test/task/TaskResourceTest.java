@@ -13,6 +13,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.opentox.aa.opensso.OpenSSOToken;
+import org.opentox.dsl.aa.IAuthToken;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -30,8 +32,6 @@ import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
 import ambit2.rest.task.TaskResult;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
-import ambit2.rest.task.dsl.IAuthToken;
 import ambit2.rest.test.ResourceTest;
 
 public class TaskResourceTest extends ResourceTest {
@@ -162,7 +162,7 @@ public class TaskResourceTest extends ResourceTest {
 
 	}
 	
-	@Test
+	
 	public void testMultipleRunningTasks() throws Exception {
 
 		

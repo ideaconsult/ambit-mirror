@@ -5,9 +5,12 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeatures;
+
 public class OTDatasetTableReport extends OTDatasetReport {
 	protected OTDatasetTableReport(OTDataset dataset,OTFeatures features, String application, int page, int pageSize) throws Exception {
-			super(dataset.uri);
+			super(dataset.getUri());
 			this.application = application;
 			this.dataset = dataset;
 			header = new ArrayList<String>();

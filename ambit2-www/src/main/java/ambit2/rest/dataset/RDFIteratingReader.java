@@ -14,6 +14,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -29,7 +30,6 @@ import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
-import ambit2.rest.task.dsl.ClientResourceWrapper;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
@@ -126,7 +126,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 					record = parseRecord( newEntry,createRecord());
 					return true;
 				} catch (Exception x) {
-					//x.printStackTrace();
+					x.printStackTrace();
 					return false;
 				}
 		} else return false;
@@ -161,7 +161,11 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 			Statement st = values.next();
 			if (st.getObject().isResource()) {
 				Resource fv = (Resource)st.getObject();
-				RDFNode value = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel)).getObject();
+				Statement property = fv.getProperty(OT.DataProperty.value.createProperty(jenaModel));
+				
+				RDFNode value = null;
+				if (property!=null)
+					value = property.getObject();
 				
 				RDFNode feature = fv.getProperty(OT.OTProperty.feature.createProperty(jenaModel)).getObject();
 				
@@ -180,7 +184,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 					}
 				}		
 				
-				if (value.isLiteral()) {
+				if ((value != null) && value.isLiteral()) {
 					RDFDatatype datatype = ((Literal)value).getDatatype();
 					if (XSDDatatype.XSDdouble.equals(datatype)) 
 						record.setProperty(key, ((Literal)value).getDouble());

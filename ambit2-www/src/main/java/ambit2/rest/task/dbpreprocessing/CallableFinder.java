@@ -3,6 +3,8 @@ package ambit2.rest.task.dbpreprocessing;
 import java.sql.Connection;
 import java.util.List;
 
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeature;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -36,8 +38,6 @@ import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.TaskResult;
-import ambit2.rest.task.dsl.OTDataset;
-import ambit2.rest.task.dsl.OTFeature;
 import ambit2.search.AllSourcesFinder;
 import ambit2.search.chemidplus.ChemIdPlusRequest;
 import ambit2.search.csls.CSLSStringRequest;

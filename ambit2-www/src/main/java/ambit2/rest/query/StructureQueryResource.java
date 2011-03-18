@@ -3,7 +3,6 @@ package ambit2.rest.query;
 import java.awt.Dimension;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.sql.Connection;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -42,7 +41,6 @@ import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.reporters.SmilesReporter.Mode;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -55,7 +53,6 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
-import ambit2.rest.property.ProfileReader;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
@@ -113,55 +110,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		Form form = getParams();
 		return createTemplate(form);
 	}			
-	protected Template createTemplate(Form form) throws ResourceException {
-		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
-		return createTemplate(getContext(),getRequest(),getResponse(), featuresURI);
-	}
-	protected Template createTemplate(Context context, Request request,
-			Response response,String[] featuresURI) throws ResourceException {
-		
-		try {
-			Template profile = new Template(null);
-			profile.setId(-1);				
-			
-			ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile);
-			reader.setCloseConnection(false);
-			
-			
 
-			DBConnection dbc = new DBConnection(getContext());
-			Connection conn = dbc.getConnection(getRequest());
-			try {
-				for (String featureURI:featuresURI) {
-					if (featureURI == null) continue;
-					reader.setConnection(conn);
-					profile = reader.process(new Reference(featureURI));
-					reader.setProfile(profile);
-					
-				}
-				//	readFeatures(featureURI, profile);
-				if (profile.size() == 0) {
-					reader.setConnection(conn);
-					String templateuri = getDefaultTemplateURI(context,request,response);
-					if (templateuri!= null) profile = reader.process(new Reference(templateuri));
-					reader.setProfile(profile);
-				}
-			} catch (Exception x) {
-				//System.out.println(getRequest().getResourceRef());
-				//x.printStackTrace();
-			} finally {
-				//the reader closes the connection
-				reader.setCloseConnection(true);
-				try { reader.close();} catch (Exception x) {}
-				//try { conn.close();} catch (Exception x) {}
-			}
-			return profile;
-		} catch (Exception x) {
-			getLogger().info(x.getMessage());
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
-		}
-		
-	}	
 	
 
 

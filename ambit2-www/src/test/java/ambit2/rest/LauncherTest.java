@@ -9,12 +9,6 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
-import ambit2.rest.task.dsl.OTAlgorithms;
-import ambit2.rest.task.dsl.OTDataset;
-import ambit2.rest.task.dsl.OTFeature;
-import ambit2.rest.task.dsl.OTFeatures;
-import ambit2.rest.task.dsl.OTModel;
-import ambit2.rest.task.dsl.OTSuperModel;
 import ambit2.rest.test.ResourceTest;
 
 public class LauncherTest extends ResourceTest {
