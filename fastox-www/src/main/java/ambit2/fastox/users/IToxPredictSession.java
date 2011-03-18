@@ -2,11 +2,9 @@ package ambit2.fastox.users;
 
 import java.util.Iterator;
 
-import org.restlet.data.Form;
-import org.restlet.data.Reference;
+import org.opentox.dsl.OTModels;
 
 import ambit2.fastox.users.ToxPredictSession.SearchMode;
-import ambit2.rest.task.dsl.OTModels;
 
 
 

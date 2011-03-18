@@ -3,11 +3,12 @@ package ambit2.fastox.users;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import ambit2.rest.rdf.OT.OTProperty;
+import org.opentox.dsl.OTModel;
+import org.opentox.dsl.OTModels;
+import org.opentox.rdf.OT.OTProperty;
+
 import ambit2.rest.task.RemoteTask;
 import ambit2.rest.task.RemoteTaskPool;
-import ambit2.rest.task.dsl.OTModel;
-import ambit2.rest.task.dsl.OTModels;
 
 
 /**

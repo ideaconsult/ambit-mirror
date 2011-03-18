@@ -164,16 +164,16 @@ public abstract class FastoxStepResource extends WizardResource {
 		ClientResource client = null;
 		Representation r = null;
 		try {
-	
-			client = new ClientResource(
-					new Reference(
-							String.format("%s/user/%s/report/Dataset?header=false&page=0&pagesize=1&endpoints=%s&models=%s&search=%s",
-									getRequest().getRootRef(),
-									session.getUser().getId(),
-									showEndpoints?"TRUE":"FALSE",
-									showPredictedResults?"TRUE":"FALSE",
-									Reference.encode(session.getDatasetURI()))
-					));
+			Reference ref = new Reference(
+					String.format("%s/user/%s/report/Dataset?header=false&page=0&pagesize=1&endpoints=%s&models=%s&search=%s",
+							getRequest().getRootRef(),
+							session.getUser().getId(),
+							showEndpoints?"TRUE":"FALSE",
+							showPredictedResults?"TRUE":"FALSE",
+							Reference.encode(session.getDatasetURI()))
+			);
+			System.out.println(ref);
+			client = new ClientResource(ref);
 			r = client.get(MediaType.TEXT_HTML);
 			if (Status.SUCCESS_OK.equals(client.getStatus()) && (r.isAvailable()))
 				writer.write(r.getText());

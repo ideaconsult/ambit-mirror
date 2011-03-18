@@ -5,6 +5,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.opentox.dsl.OTFeature;
+import org.opentox.dsl.OTFeatures;
+import org.opentox.dsl.OTModel;
+import org.opentox.dsl.OTModels;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -12,10 +16,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.steps.FastoxStepResource;
-import ambit2.rest.task.dsl.OTFeature;
-import ambit2.rest.task.dsl.OTFeatures;
-import ambit2.rest.task.dsl.OTModel;
-import ambit2.rest.task.dsl.OTModels;
 
 /**
  * Features from selected models

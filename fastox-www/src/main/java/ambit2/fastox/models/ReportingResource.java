@@ -2,9 +2,15 @@ package ambit2.fastox.models;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.opentox.dsl.OTAlgorithm;
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTFeature;
+import org.opentox.dsl.OTFeatures;
+import org.opentox.dsl.OTModel;
+import org.opentox.dsl.OTModels;
+import org.opentox.dsl.OTValidation;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -20,18 +26,10 @@ import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
-import ambit2.rest.task.dsl.OTAlgorithm;
-import ambit2.rest.task.dsl.OTDataset;
-import ambit2.rest.task.dsl.OTDatasetComparisonReport;
 import ambit2.rest.task.dsl.OTDatasetRDFReport;
 import ambit2.rest.task.dsl.OTDatasetReport;
 import ambit2.rest.task.dsl.OTDatasetScrollableReport;
 import ambit2.rest.task.dsl.OTDatasetTableReport;
-import ambit2.rest.task.dsl.OTFeature;
-import ambit2.rest.task.dsl.OTFeatures;
-import ambit2.rest.task.dsl.OTModel;
-import ambit2.rest.task.dsl.OTModels;
-import ambit2.rest.task.dsl.OTValidation;
 
 import com.hp.hpl.jena.ontology.OntModel;
 

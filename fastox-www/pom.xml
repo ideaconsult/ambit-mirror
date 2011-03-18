@@ -4,7 +4,7 @@
   <artifactId>ToxPredict</artifactId>
   <packaging>war</packaging>
   <name>ToxPredict</name>
-  <version>0.0.5-SNAPSHOT</version>
+  <version>0.0.6-SNAPSHOT</version>
   <repositories>
   	<repository>
   		<id>repo1.maven.org</id>

@@ -3,6 +3,8 @@ package ambit2.fastox.steps.step3;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTDatasets;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -19,8 +21,6 @@ import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
-import ambit2.rest.task.dsl.OTDataset;
-import ambit2.rest.task.dsl.OTDatasets;
 
 public class Step3Processor extends StepProcessor {
 

@@ -7,9 +7,9 @@ import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.fastox.users.IToxPredictSession;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 
@@ -450,9 +450,11 @@ public class DatasetTools {
 			writer.write("<td colspan='2'>");
 			String delimiter = "";
 			while(i.hasNext()) {
-				SourceDataset d = i.next();
+				ISourceDataset d = i.next();
 				if (d.getName().indexOf(".rdf")>0) continue;
-				writer.write(String.format("%s&nbsp;<a href='%s' title='%s' target=_blank>%s</a>",delimiter,d.getURL(),d.getTitle(),d.getName()));
+				writer.write(String.format("%s&nbsp;<a href='%s' title='%s' target=_blank>%s</a>",delimiter,
+						d instanceof SourceDataset?((SourceDataset)d).getURL():"",
+						d.getSource(),d.getName()));
 				delimiter = ",";
 			}
 			writer.write("</td>");
