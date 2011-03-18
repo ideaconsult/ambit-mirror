@@ -100,6 +100,7 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	{
 		//quick workaround for aromatic compounds, to avoid matching non-aromatic keys
 		//TODO remove this when isoTester/keys processing is fixed 
+		//isoTester is fixed, but CDK isomorphism tester still needs the workaround, should be fixed in CDK nightly Mar 2010
 		if (cleanKekuleBonds)
 			for (IBond bond : ac.bonds()) 
 				if (bond.getFlag(CDKConstants.ISAROMATIC)) bond.setOrder(Order.SINGLE);
