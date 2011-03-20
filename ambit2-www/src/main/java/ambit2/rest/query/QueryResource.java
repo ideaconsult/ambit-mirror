@@ -180,7 +180,7 @@ Then, when the "get(Variant)" method calls you back,
 		    			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 	
 		        	} finally {
-		        		System.out.println("finally");
+
 		        		//try { if (connection !=null) connection.close(); } catch (Exception x) {};
 		        		//try { if ((convertor !=null) && (convertor.getReporter() !=null)) convertor.getReporter().close(); } catch (Exception x) {}
 		        	}
