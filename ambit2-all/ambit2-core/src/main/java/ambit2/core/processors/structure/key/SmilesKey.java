@@ -69,7 +69,7 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 			mol = (IAtomContainer)molecule.clone();
 
 			mol = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(mol);
-			return gen.createChiralSMILES((IMolecule)mol,new boolean[mol.getAtomCount()]);
+			return gen.createSMILES((IMolecule)mol,false,new boolean[mol.getAtomCount()]);
 		} catch (CDKException x) {
 			logger.warn(x);
 			return gen.createSMILES((IMolecule)mol);

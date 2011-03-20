@@ -222,6 +222,41 @@ public class SmilesTest {
         }
 
     }
+    @Test
+    public void testChiralSmiles() {
+		try {
+			IIteratingChemObjectReader reader = FileInputState.getReader(
+					RawIteratingWrapperTest.class.getClassLoader().getResourceAsStream(
+							"ambit2/core/data/427282-1.sdf")
+							,"427282-1.sdf");
+			while (reader.hasNext()) {
+				IMolecule mol = (IMolecule) reader.next();
+
+				
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);  //fails with Cannot percieve atom type for the 17th atom: N
+				CDKHueckelAromaticityDetector.detectAromaticity(mol);
+				
+				printMol(mol);
+				int aromatic = 0;
+				for (IAtom atom : mol.atoms()) {
+					if (atom.getFlag(CDKConstants.ISAROMATIC)) aromatic++;
+				}
+				for (IBond bond : mol.bonds()) {
+					if (bond.getFlag(CDKConstants.ISAROMATIC)) 
+						bond.setOrder(Order.SINGLE);
+				}
+				
+				SmilesGenerator g = new SmilesGenerator();
+				System.out.println(g.createChiralSMILES(mol, new boolean[mol.getAtomCount()]));
+				//[H][C@]14(COP\(=O)(O)O\[C@]4([H])(C\(O)C/(O1)N/2C\3N\C\N\C\(N)C\3(N\C\2Cl)))
+			}
+			reader.close();
+			
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		
+	}
 	public static void testsdf(String[] args) {
 		try {
 			IIteratingChemObjectReader reader = FileInputState.getReader(
