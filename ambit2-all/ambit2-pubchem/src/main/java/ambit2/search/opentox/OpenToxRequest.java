@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -27,8 +28,10 @@ public class OpenToxRequest extends AbstractSearchRequest<String> {
 	@Override
 	public String process(String target) throws AmbitException {
 		try {
-			if (CASNumber.isValid(target) || EINECS.isValid(target)) 
-				return get(new URL(String.format("%s/query/compound/%s/all.sdf", opentoxservice, URLEncoder.encode(target))));
+			if (CASNumber.isValid(target) || EINECS.isValid(target))  {
+				return get(new URL(String.format("%s/query/compound/%s/reach?media=chemical%%2Fx-mdl-sdfile", 
+										opentoxservice, URLEncoder.encode(target))));
+			}	
 			else return null;
 		} catch (MalformedURLException x) {
 			throw new AmbitException(x);

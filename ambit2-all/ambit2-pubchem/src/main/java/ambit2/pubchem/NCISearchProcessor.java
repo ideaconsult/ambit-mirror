@@ -41,7 +41,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 		reach {
 			@Override
 			public String[] getOpenToxEntry() {
-				return new String[] {Property.opentox_REACHDATE};
+				return new String[] {Property.opentox_CAS,Property.opentox_EC,Property.opentox_REACHDATE};
 			}
 		},		
 		stdinchi {
@@ -86,7 +86,8 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 			public String[] getOpenToxEntry() {
 				return new String[] {Property.opentox_EC};
 			}
-		},				
+		},	
+		
 		image,
 		ficus,
 		ficts,
