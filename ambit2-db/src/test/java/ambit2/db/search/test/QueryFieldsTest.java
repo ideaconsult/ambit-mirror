@@ -42,7 +42,7 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/query-datasets-string.xml";
+		setDbFile("src/test/resources/ambit2/db/processors/test/query-datasets-string.xml");
 	}
 	@Test
 	public void test() throws Exception {

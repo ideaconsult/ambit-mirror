@@ -9,7 +9,6 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.data.Property;
-import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
 import ambit2.db.search.QueryExecutor;

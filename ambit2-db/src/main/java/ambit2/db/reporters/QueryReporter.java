@@ -1,7 +1,5 @@
 package ambit2.db.reporters;
 
-import java.sql.SQLException;
-
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;

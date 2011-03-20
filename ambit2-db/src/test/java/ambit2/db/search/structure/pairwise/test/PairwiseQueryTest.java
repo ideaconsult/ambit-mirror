@@ -13,7 +13,7 @@ public class PairwiseQueryTest extends QueryTest<QueryStructurePairsDataset> {
 	@Override
 	public void setUp() throws Exception {
 
-		dbFile = "src/test/resources/ambit2/db/processors/test/src-datasets.xml";
+		setDbFile("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
 		super.setUp();
 	}
 	@Override

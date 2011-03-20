@@ -7,7 +7,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
-import ambit2.descriptors.processors.AtomEnvironmentList;
 
 public class DeleteAtomEnvironment extends AbstractUpdate<IStructureRecord,IStructureRecord> {
 	protected static String[] sql = new String[] {"DELETE from fpaechemicals where idchemical=?"};

@@ -1,10 +1,6 @@
 package ambit2.db.reporters;
 
-import java.sql.ResultSet;
-import java.util.Iterator;
-
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.db.DbReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.AbstractBatchProcessor;

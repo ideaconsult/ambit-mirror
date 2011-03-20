@@ -1,6 +1,9 @@
 package ambit2.rest.rdf;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -9,7 +12,6 @@ import java.util.Map;
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
@@ -81,16 +83,23 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 
 	@Override
 	public boolean readStructure(RDFNode target, IStructureRecord record) {
-		Representation r = null;
-		ClientResourceWrapper client = null;
+		InputStream in = null;
+		HttpURLConnection uc = null;
 		try {
 			if (target.isURIResource()) {
-				client = new ClientResourceWrapper(((Resource)target).getURI());
-				client.setRetryOnError(false);
-				client.setFollowingRedirects(true);
-				r = client.get(ChemicalMediaType.CHEMICAL_MDLSDF);
-				if (client.getStatus().equals(Status.SUCCESS_OK)) {
-					record.setContent(r.getText());
+				uc = ClientResourceWrapper.getHttpURLConnection(((Resource)target).getURI(), "GET", ChemicalMediaType.CHEMICAL_MDLSDF.toString());
+				uc.setFollowRedirects(true);
+				if (HttpURLConnection.HTTP_OK== uc.getResponseCode()) {
+					in = uc.getInputStream();
+					StringBuilder b = new StringBuilder();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+					String line = null;
+					final String newline = System.getProperty("line.separator");
+					while ((line = reader.readLine())!=null) {
+						b.append(line);
+						b.append(newline);
+					}	
+					record.setContent(b.toString());
 					record.setFormat(MOL_TYPE.SDF.toString());
 				}
 	
@@ -105,8 +114,8 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 			record.setContent(target.toString());	
 			return false;
 		} finally {
-			try {if (r != null) r.release();} catch (Exception x) {}
-			try {if (client != null) client.release();} catch (Exception x) {}
+			try {if (in != null) in.close();} catch (Exception x) {}
+			try {if (uc != null) uc.disconnect();} catch (Exception x) {}
 		}
 	}
 

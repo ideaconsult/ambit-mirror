@@ -1,6 +1,5 @@
 package ambit2.db.chart;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 

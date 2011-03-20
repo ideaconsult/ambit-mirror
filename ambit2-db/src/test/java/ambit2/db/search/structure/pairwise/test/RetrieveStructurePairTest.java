@@ -3,7 +3,6 @@ package ambit2.db.search.structure.pairwise.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
-
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.structure.pairwise.RetrieveStructurePair;
@@ -13,7 +12,7 @@ public class RetrieveStructurePairTest extends QueryTest<RetrieveStructurePair> 
 
 	@Override
 	public void setUp() throws Exception {
-		dbFile = "src/test/resources/ambit2/db/processors/test/src-datasets.xml";
+		setDbFile("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
 		super.setUp();
 	}
 	

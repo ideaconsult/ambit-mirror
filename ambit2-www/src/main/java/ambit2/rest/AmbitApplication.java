@@ -50,6 +50,7 @@ import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
+import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertiesByDatasetResource;
 import ambit2.rest.property.PropertyModelResource;
@@ -442,6 +443,9 @@ public class AmbitApplication extends TaskApplication<String> {
 		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
 		queryRouter.attach(MissingFeatureValuesResource.resource,MissingFeatureValuesResource.class);
 		
+		queryRouter.attach(CompoundsByPropertyValueInDatasetResource.resource,CompoundsByPropertyValueInDatasetResource.class);
+		
+		
 		datasetRouter.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
 				
 		
@@ -500,7 +504,9 @@ public class AmbitApplication extends TaskApplication<String> {
 		Router taskRouter = new MyRouter(getContext());
 		taskRouter.attachDefault(TaskResource.class);
 		taskRouter.attach(TaskResource.resourceID, TaskResource.class);
-		router.attach(TaskResource.resource, taskRouter);		
+		router.attach(TaskResource.resource, taskRouter);
+		
+		
 		/*
         router.attach(
                 "/images",

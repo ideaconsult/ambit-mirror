@@ -34,13 +34,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
-import ambit2.db.readers.AbstractStructureRetrieval._sqlids;
 import ambit2.db.search.QueryParam;
-import ambit2.smarts.CMLUtilities;
 
 public class RetrieveStructure extends AbstractStructureRetrieval<IStructureRecord> {
     /**
