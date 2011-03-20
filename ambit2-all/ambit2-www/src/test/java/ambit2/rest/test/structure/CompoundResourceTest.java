@@ -17,6 +17,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.opentox.dsl.OTCompound;
 import org.restlet.Client;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -366,6 +367,56 @@ public class CompoundResourceTest extends ResourceTest {
 		c.close();
 		
 	}		
+	
+	@Test
+	public void testCreateEntryFromName() throws Exception {
+		
+		String name = "benzene";
+		IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM property_string where value = 'benzene'");
+		Assert.assertEquals(0,table.getRowCount());
+		
+		OTCompound compound = OTCompound.createFromName(name, String.format("http://localhost:%d/compound",port));
+        
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM property_string where value = 'benzene'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		
+	}	
+	
+	@Test
+	public void testCreateEntryFromSmilesWebForm() throws Exception {
+		
+		String name = "c1ccccc1O";
+		IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM property_string where value = 'c1ccccc1O'");
+		Assert.assertEquals(0,table.getRowCount());
+		
+		OTCompound compound = OTCompound.createFromName(name, String.format("http://localhost:%d/compound",port));
+        
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM property_string where value = 'c1ccccc1O'");
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		
+	}
+	
+	@Test
+	public void testCreateEntryFromCAS() throws Exception {
+		
+		String name = "1530-32-1";
+		
+		OTCompound compound = OTCompound.createFromName(name, String.format("http://localhost:%d/compound",port));
+		System.out.println(compound);
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,table.getRowCount());
+		c.close();
+		
+	}	
 	
 	@Test
 	public void testCreateEntryFromURI_CSLS() throws Exception {

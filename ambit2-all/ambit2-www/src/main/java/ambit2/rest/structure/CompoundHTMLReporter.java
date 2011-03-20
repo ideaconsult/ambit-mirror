@@ -476,7 +476,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			}
 			else output.write("</div>");
 			output.write("</form>\n");
-			//output.write("</form>");			
+			
+			
+			output.write(String.format("<form method='post' action='%s/compound'>",uriReporter.getBaseReference()));
+			output.write("<input type='text' name='identifier' title='Compound identifier'>&nbsp;");
+			output.write("<input type='submit' value='Find compound'>");
+			output.write("</form>");			
 			AmbitResource.writeHTMLFooter(output,
 					"",
 					uriReporter.getRequest()
