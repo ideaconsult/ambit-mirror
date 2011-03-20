@@ -15,7 +15,7 @@ import ambit2.core.data.ArrayResult;
 import ambit2.core.data.StringArrayResult;
 
 public class KekulizationVerifier implements IMolecularDescriptor {
-	protected static final String version="1.3.3_patched";
+	protected static final String version="1.3.8";
 	protected DeduceBondSystemTool typer = new DeduceBondSystemTool();
 	protected static final String OK = "OK";
 	protected enum names_index {
