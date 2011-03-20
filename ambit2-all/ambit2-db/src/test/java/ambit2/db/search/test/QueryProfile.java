@@ -45,8 +45,8 @@ public class QueryProfile   extends QueryTest<IQueryRetrieval<IStructureRecord>>
 	}	
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery() throws Exception {
-		dbFile = "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";	
-		setUpDatabase(dbFile);
+		setDbFile("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");	
+		setUpDatabase(getDbFile());
 		ProcessorCreateProfileQuery p = new ProcessorCreateProfileQuery();
 		p.setTag(null);
 		try {

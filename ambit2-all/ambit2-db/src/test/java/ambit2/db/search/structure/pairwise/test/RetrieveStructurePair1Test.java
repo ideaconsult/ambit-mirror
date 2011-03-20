@@ -13,7 +13,7 @@ public class RetrieveStructurePair1Test extends QueryTest<RetrieveStructurePair>
 	@Override
 	public void setUp() throws Exception {
 
-		dbFile = "src/test/resources/ambit2/db/processors/test/src-datasets.xml";
+		setDbFile("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
 		super.setUp();
 	}
 	

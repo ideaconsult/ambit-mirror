@@ -61,7 +61,6 @@ import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.core.processors.structure.key.EINECSKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.InchiKey;
-import ambit2.core.processors.structure.key.InchiPropertyKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.PubchemCID;
 import ambit2.core.processors.structure.key.SmilesKey;

@@ -49,7 +49,7 @@ public class DictionaryObjectTest extends QueryTest<DictionaryQuery<Dictionary>>
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml";
+		setDbFile("src/test/resources/ambit2/db/processors/test/descriptors-datasets.xml");
 	}
 	@Override
 	protected DictionaryQuery<Dictionary> createQuery() throws Exception {

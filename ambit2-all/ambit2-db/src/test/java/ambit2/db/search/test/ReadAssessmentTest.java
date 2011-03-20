@@ -15,8 +15,8 @@ public class ReadAssessmentTest extends QueryTest<IQueryRetrieval<SessionID>>{
 	}	
 	@Override
 	protected IQueryRetrieval<SessionID> createQuery() throws Exception {
-		dbFile = "src/test/resources/ambit2/db/processors/test/query-datasets-string.xml";	
-		setUpDatabase(dbFile);
+		setDbFile("src/test/resources/ambit2/db/processors/test/query-datasets-string.xml");	
+		setUpDatabase(getDbFile());
 		SessionID id = new SessionID(1);
 		id.setName("test");
 		return new ReadAssessment(null,id);

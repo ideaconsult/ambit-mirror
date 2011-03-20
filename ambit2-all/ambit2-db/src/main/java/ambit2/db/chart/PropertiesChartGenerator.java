@@ -2,11 +2,9 @@ package ambit2.db.chart;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;

@@ -2,7 +2,6 @@ package ambit2.db.reporters;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;

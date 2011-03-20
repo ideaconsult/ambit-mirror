@@ -40,7 +40,7 @@ public class PropertyStatsStringTest  extends QueryTest<PropertyStatsString>  {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";	
+		setDbFile("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");	
 	}
 	@Override
 	protected PropertyStatsString createQuery() throws Exception {

@@ -13,7 +13,7 @@ public class QueryDatasetByFeaturesTest  extends QueryTest<IQueryRetrieval<Sourc
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/src-datasets.xml";
+		setDbFile("src/test/resources/ambit2/db/processors/test/src-datasets.xml");
 	}
 	@Override
 	protected IQueryRetrieval<SourceDataset> createQuery() throws Exception {

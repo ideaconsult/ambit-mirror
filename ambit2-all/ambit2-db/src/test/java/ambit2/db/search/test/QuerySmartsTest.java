@@ -36,8 +36,8 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 	@Test
 	public void testSelectChemicals() throws Exception {
 		Preferences.setProperty(Preferences.FASTSMARTS,"true");		
-		dbFile = "src/test/resources/ambit2/db/processors/test/smarts-dataset.xml";	
-		setUpDatabase(dbFile);
+		setDbFile("src/test/resources/ambit2/db/processors/test/smarts-dataset.xml");	
+		setUpDatabase(getDbFile());
 		IDatabaseConnection c = getConnection();
 		
 		ITable fp = c.createQueryTable("EXPECTED","select * from structure");
@@ -71,8 +71,8 @@ public class QuerySmartsTest extends QueryTest<QuerySMARTS> {
 	@Test
 	public void testSelectStructures() throws Exception {
 		Preferences.setProperty(Preferences.FASTSMARTS,"true");		
-		dbFile = "src/test/resources/ambit2/db/processors/test/smarts-dataset.xml";	
-		setUpDatabase(dbFile);
+		setDbFile("src/test/resources/ambit2/db/processors/test/smarts-dataset.xml");	
+		setUpDatabase(getDbFile());
 		IDatabaseConnection c = getConnection();
 		
 		ITable fp = c.createQueryTable("EXPECTED","select * from structure");

@@ -1,10 +1,6 @@
 package ambit2.db.readers.test;
 
 import junit.framework.Assert;
-
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.ITable;
-
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;

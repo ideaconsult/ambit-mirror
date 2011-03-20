@@ -6,7 +6,6 @@ import java.util.List;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 import ambit2.db.update.property.ReadProperty;
