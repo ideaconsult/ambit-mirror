@@ -70,6 +70,20 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 				return "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&maxret=1&term=";
 			}
 		},
+		NAME2STRUCTURE {
+			@Override
+			public String getTitle() {
+				return "Chemical Name to Structure converter (OPSIN) ";
+			}
+			@Override
+			public String getURI() {
+				return "http://www-ucc.ch.cam.ac.uk/products/software/opsin";
+			}
+			@Override
+			public boolean isEnabled() {
+				return true;
+			}
+		},		
 		CHEBI {
 			@Override
 			public String getTitle() {
@@ -95,7 +109,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			}
 			@Override
 			public boolean isEnabled() {
-				return false;
+				return true;
 			}
 		};
 		public String getTitle() {
