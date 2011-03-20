@@ -136,7 +136,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			break;
 		}
 		case OPENTOX: {
-			request = new OpenToxRequest("http://apps.ideaconsult.net:8080/ambit2");
+			request = new OpenToxRequest(searchSite.getURI());
 			p.add(new AllSourcesFinder(profile,request,mode));
 			le =  new LiteratureEntry(request.toString(),request.toString());
 			break;
