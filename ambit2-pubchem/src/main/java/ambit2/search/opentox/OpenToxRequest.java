@@ -29,7 +29,7 @@ public class OpenToxRequest extends AbstractSearchRequest<String> {
 	public String process(String target) throws AmbitException {
 		try {
 			if (CASNumber.isValid(target) || EINECS.isValid(target))  {
-				return get(new URL(String.format("%s/query/compound/%s/reach?media=chemical%%2Fx-mdl-sdfile", 
+				return get(new URL(String.format("%s/query/compound/%s/reach?media=chemical%%2Fx-mdl-sdfile&max=1", 
 										opentoxservice, URLEncoder.encode(target))));
 			}	
 			else return null;
