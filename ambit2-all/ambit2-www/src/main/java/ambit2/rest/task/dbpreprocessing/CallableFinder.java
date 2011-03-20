@@ -31,6 +31,7 @@ import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.namestructure.Name2StructureFinder;
 import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.pubchem.PubchemFinder;
 import ambit2.rest.OpenTox;
@@ -140,6 +141,11 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			le =  new LiteratureEntry(request.toString(),request.toString());
 			break;
 		}		
+		case NAME2STRUCTURE: {
+			p.add(new Name2StructureFinder(profile,mode));
+			le =  new LiteratureEntry(searchSite.getTitle(),searchSite.getURI());
+			break;
+		}
 		case CHEBI: {
 			p.add(new ChebiFinder(profile,mode));
 			le =  new LiteratureEntry("ChEBI","http://www.ebi.ac.uk/chebi");
