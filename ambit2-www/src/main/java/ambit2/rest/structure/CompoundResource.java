@@ -2,7 +2,11 @@ package ambit2.rest.structure;
 
 import java.awt.Dimension;
 
-import org.opentox.aa.OTAAParams;
+import org.openscience.cdk.index.CASNumber;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.opentox.dsl.OTContainers;
+import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTDatasets;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -43,6 +47,7 @@ import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.DeleteChemical;
+import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
@@ -473,38 +478,63 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			
 			Form form = new Form(entity);
+			String cmpname = form.getFirstValue("identifier");
 			String uri = form.getFirstValue(OpenTox.params.compound_uri.toString());
+			
+			if (cmpname != null) 
+				try {
+					OTDatasets datasets = OTDatasets.datasets();
+					OTContainers<OTDataset> result  = datasets.read(String.format("%s/query/compound/%s",getRequest().getRootRef(),Reference.encode(cmpname)));
+					if (result.size()==0) { //not found
+						uri =  String.format("%s/query/csls/%s",getRequest().getRootRef(),Reference.encode(cmpname));
+					} else 
+						return new StringRepresentation(result.getItem(0).getUri().toString(),MediaType.TEXT_URI_LIST);
+				} catch (Exception x) {
+					
+				}
+				
+			
+			
 			if (uri == null)
 				if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.compound_uris.toString() + " empty.");
 			
 			String sdf = getSDFFromURI(uri);
 			if (sdf == null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+			if (cmpname != null) {
+				
+				if (CASNumber.isValid(cmpname)) 
+					sdf = sdf.replace("$$$$",String.format("\n> <CAS>\n%s\n\n$$$$",cmpname)).trim();
+				else if (cmpname.startsWith("InChI"))
+					sdf = sdf.replace("$$$$",String.format("\n> <InChI>\n%s\n\n$$$$",cmpname)).trim();
+				else
+					sdf = sdf.replace("$$$$",String.format("\n> <Name>\n%s\n\n$$$$",cmpname)).trim();
+			}
 			if(upload == null) upload = createFileUpload();
 			String source = uri;
 			String name = "Copied from URL";
 			if (uri.startsWith(CSLSRequest.CSLS_URL))  {
 				source = CSLSRequest.CSLS_URL; 
-				name = "Chemical Structure Lookup Service (CSLS)";
+				name = "CIR";
 				uri = name;
 			}
 			
 			if (uri.startsWith(String.format("%s/query/csls",getRequest().getRootRef()))) { 
-				source = CSLSRequest.CSLS_URL;name = "Chemical Structure Lookup Service (CSLS)";
-				uri = name;
+				source = CSLSRequest.CSLS_URL;name = "Chemical Identifier Resolver (CIR)";
+				uri = "CIR";
 			}
 			if (uri.startsWith(String.format("%s/query/pubchem",getRequest().getRootRef()))) {
-				source = "http://www.ncbi.nlm.nih.gov/entrez/eutils"; name = "PUBCHEM"; uri = name;
+				source = "http://www.ncbi.nlm.nih.gov/entrez/eutils"; name = "PUBCHEM"; uri = "PUBCHEM";
 			}
 			
 			SourceDataset dataset = new SourceDataset(uri,LiteratureEntry.getInstance(name,source));
 			upload.setDataset(dataset);
 			StringRepresentation representation = new StringRepresentation(sdf,ChemicalMediaType.CHEMICAL_MDLSDF);
 			//representation.setDownloadName(dataset.getName());
-			return  upload.upload(representation,
+			Representation  r = upload.upload(representation,
 					variant,true,false,
 					getToken()
 					);
-			
+			return r;
 			//return copyDatasetToQueryResultsTable(new Form(entity),true);
 			//throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,entity.getMediaType().toString());
 		} else {
