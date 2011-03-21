@@ -159,13 +159,18 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			} else {
 				IAtomContainer structure = null;
 				//if inchi
+				boolean isinchi = false;
 				try { 
 					structure = isInChI(text);
-				} catch (Exception x) { 
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+					isinchi = structure!= null;
+				} catch (Exception x) {
+					structure = null;
+					isinchi = true; 
+					//lookup as text, in case JNI-Inchi fails to load
+					//throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 				}
 				//if smiles
-				if (structure==null)
+				if (!isinchi && (structure==null))
 					try { structure = isSMILES(text);
 					} catch (Exception x) { structure = null;}
 				//exact structure
