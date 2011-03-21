@@ -1,5 +1,8 @@
 package ambit2.rest.dataset;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -7,16 +10,23 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
+import org.restlet.routing.Template;
 
+import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.PropertyValue;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.update.dataset.DatasetQueryFieldString;
 import ambit2.rest.OpenTox;
 import ambit2.rest.error.InvalidResourceIDException;
+import ambit2.rest.property.PropertyResource;
+import ambit2.rest.propertyvalue.FeatureResource;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 
 /**
@@ -32,7 +42,8 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 	protected Integer datasetID;
 	protected Integer queryResultsID;
 	protected String datasetName;
-
+	protected String search;
+	protected int property;
 
 	@Override
 	protected Q createQuery(Context context, Request request,
@@ -40,6 +51,28 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		try {
 			setGroupProperties(context, request, response);
 			setTemplate(createTemplate(context, request, response));
+			
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			/**
+			 * ?search=<value>
+			 */
+			search = form.getFirstValue(QueryResource.search_param);
+			/**
+			 * ?property=<feature_uri>
+			 */
+			try {
+				String p  = form.getFirstValue(QueryResource.property);
+				Reference basereference = getRequest().getRootRef();
+				Template featureTemplate = new Template(String.format("%s%s%s",basereference==null?"":basereference,PropertyResource.featuredef,PropertyResource.featuredefID));
+				Map<String, Object> vars = new HashMap<String, Object>();
+				featureTemplate.parse(p, vars);
+				try {property = Integer.parseInt(vars.get(FeatureResource.featureID).toString()); } 
+				catch (Exception x) { property = -1;};
+
+			} catch (Exception x) {
+				property  = -1;
+			}
+			
 			Object id = request.getAttributes().get(datasetKey);
 			if (id != null)  try {
 				
@@ -65,12 +98,29 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 	
 	
 	protected Q getQueryById(Integer key) throws ResourceException {
+		Q query = null;
 		datasetID = key;
-		QueryDatasetByID query = new QueryDatasetByID();
-		query.setValue(key);
-		Form form = getRequest().getResourceRef().getQueryAsForm();
-		setPaging(form, query);
-		return (Q)query;
+		if ((property>0) && (search != null)) {
+			DatasetQueryFieldString q = new DatasetQueryFieldString();
+			PropertyValue<String> pv = new PropertyValue<String>();
+			Property p = new Property("");
+			p.setId(property);
+			pv.setProperty(p);
+			pv.setValue(search);
+			q.setValue(pv);
+			SourceDataset d = new SourceDataset();
+			d.setId(key);
+			q.setFieldname(d);
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			setPaging(form, q);
+			return (Q)q;
+		} else {
+			QueryDatasetByID q = new QueryDatasetByID();
+			((QueryDatasetByID)q).setValue(key);
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			setPaging(form, q);
+			return (Q)q;
+		}
 	}
 	
 	protected Q getDatasetByName(String key) throws ResourceException {
@@ -96,11 +146,26 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			return getDatasetByName(key);
 			//throw new InvalidResourceIDException(key);
 		
-		QueryStoredResults q = new QueryStoredResults();
-		q.setChemicalsOnly(true);
-		q.setFieldname(new StoredQuery(Integer.parseInt(key.toString())));
-		q.setValue(null);
-		return (Q)q;
+		if ((property>0) && (search != null)) {
+			DatasetQueryFieldString q = new DatasetQueryFieldString();
+			PropertyValue<String> pv = new PropertyValue<String>();
+			Property p = new Property("");
+			p.setId(property);
+			pv.setProperty(p);
+			pv.setValue(search);
+			q.setValue(pv);
+			StoredQuery d = new StoredQuery(Integer.parseInt(key.toString()));
+			q.setFieldname(d);
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			setPaging(form, q);
+			return (Q)q;
+		} else {	
+			QueryStoredResults q = new QueryStoredResults();
+			q.setChemicalsOnly(true);
+			q.setFieldname(new StoredQuery(Integer.parseInt(key.toString())));
+			q.setValue(null);
+			return (Q)q;
+		}
 	}
 
 }
