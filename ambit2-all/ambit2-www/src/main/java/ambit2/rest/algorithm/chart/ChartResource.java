@@ -8,7 +8,6 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
-import org.jfree.chart.ChartUtilities;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -24,6 +23,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
 import ambit2.db.chart.BarChartGeneratorDataset;
+import ambit2.db.chart.FingerprintHistogramDataset;
 import ambit2.db.chart.PieChartGenerator;
 import ambit2.db.chart.PieChartGeneratorDataset;
 import ambit2.db.chart.PropertiesChartGenerator;
@@ -43,10 +43,12 @@ public class ChartResource extends ServerResource {
 	protected SourceDataset dataset;
 	protected String[] property;
 
+	protected boolean legend = false;
 	protected int w = 400;
 	protected int h = 400;
 	protected ChartMode mode = ChartMode.pie;
-
+	protected String param;
+	
 	public ChartMode getMode() {
 		return mode;
 	}
@@ -68,8 +70,14 @@ public class ChartResource extends ServerResource {
 		property = getParams().getValuesArray(OpenTox.params.feature_uris.toString());
 		
 		w = 400; h = 400;
-		try { w = Integer.parseInt(getParams().getFirstValue("w"));} catch (Exception x) {w =400;}
-		try { h = Integer.parseInt(getParams().getFirstValue("h"));} catch (Exception x) {h =400;}		
+		try { w = Integer.parseInt(getParams().getFirstValue("w"));} catch (Exception x) {w =-1;}
+		try { h = Integer.parseInt(getParams().getFirstValue("h"));} catch (Exception x) {h =-1;}
+		legend = false;
+		try { legend = Boolean.parseBoolean(getParams().getFirstValue("legend"));} catch (Exception x) {legend = false;}	
+
+		param = null;
+		try { param = getParams().getFirstValue("param");} catch (Exception x) {param = null;}	
+
 		
 		try {
 			mode = ChartMode.valueOf(getRequest().getAttributes().get(resourceKey).toString());
@@ -111,6 +119,7 @@ public class ChartResource extends ServerResource {
 	    			chart.setConnection(connection);
 	    			chart.setWidth(w);
 	    			chart.setHeight(h);    
+	    			chart.setLegend(legend);
 	    			image = chart.process(dataset);
 	    			//ChartUtilities.writeImageMap(writer, name, info, useOverLibForToolTips)
 	    			break;
@@ -133,6 +142,7 @@ public class ChartResource extends ServerResource {
     			chart.setConnection(connection);
     			chart.setWidth(w);
     			chart.setHeight(h);    
+    			chart.setLegend(legend);
     			image = chart.process(dataset);
     			break;
     		}    		
@@ -145,13 +155,24 @@ public class ChartResource extends ServerResource {
     				i++;
     				if (i>=2) break;
     			}
-    			BarChartGeneratorDataset chart = new BarChartGeneratorDataset();
-    			chart.setPropertyX(p[0]);
-    			chart.setPropertyY(p.length<2?p[0]:p[1]);   
-    			chart.setConnection(connection);
-    			chart.setWidth(w);
-    			chart.setHeight(h);    
-    			image = chart.process(dataset);
+    			if (i==0)  {
+    				FingerprintHistogramDataset chart = new FingerprintHistogramDataset();
+	    			chart.setConnection(connection);
+	    			chart.setWidth(w);
+	    			chart.setHeight(h);  
+	    			chart.setLegend(legend);
+	    			chart.setParam(param);
+	    			image = chart.process(dataset);
+    			} else {
+	    			BarChartGeneratorDataset chart = new BarChartGeneratorDataset();
+	    			chart.setPropertyX(p[0]);
+	    			chart.setPropertyY(p.length<2?p[0]:p[1]);   
+	    			chart.setConnection(connection);
+	    			chart.setWidth(w);
+	    			chart.setHeight(h);    
+	    			chart.setLegend(legend);
+	    			image = chart.process(dataset);
+    			}
    			
     			break;
     		}
