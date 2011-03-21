@@ -1,12 +1,12 @@
 package ambit2.db.chart;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.jdbc.JDBCCategoryDataset;
 
 import ambit2.base.data.SourceDataset;
@@ -31,10 +31,10 @@ public class BarChartGeneratorDataset extends BarChartGenerator<SourceDataset> {
 
 	      try
 	      {
-	    	  CategoryDataset barDataset =  new JDBCCategoryDataset(getConnection(),
+	    	  JDBCCategoryDataset barDataset =  new JDBCCategoryDataset(getConnection(),
 		        		 String.format(getSQL(),propertyX.getId(),getID(target))); 
 		         
-
+	    	
 	    	  chart =
 		            ChartFactory.createBarChart(
 		            		propertyX.getName() , // chart title
@@ -45,7 +45,7 @@ public class BarChartGeneratorDataset extends BarChartGenerator<SourceDataset> {
 		                                         true,      // legend displayed
 		                                         true,      // tooltips displayed
 		                                         false );   // no URLs
-
+	    	  chart.getPlot().setBackgroundPaint(Color.white);
 	         return chart.createBufferedImage(width,height);
 
 	      }

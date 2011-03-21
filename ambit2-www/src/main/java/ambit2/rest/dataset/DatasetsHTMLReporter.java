@@ -347,7 +347,12 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			if ((dataset instanceof SourceDataset) && ((SourceDataset)dataset).getURL().startsWith("http"))
 				output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "See also",((SourceDataset)dataset).getURL()));
 
+			output.write(String.format("<tr><th></th><td colspan='2'><a href='%s/chart/bar?dataset_uri=%s&param=sk1024'  target='_blank'>%s</a></td></tr>", 
+					uriReporter.getBaseReference(),uri,"Structure fragments bar chart"));
+			output.write(String.format("<tr><th></th><td colspan='2'><a href='%s/chart/bar?dataset_uri=%s&param=fp1024' target='_blank'>%s</a></td></tr>", 
+					uriReporter.getBaseReference(),uri,"Hashed fingerprints bar chart"));			
 			output.write("</table>");
+			
 			output.write("<hr>");
 			//output.write("<h4>Add more data to this dataset</h4>");
 			//uploadUI(uri,output, query);
