@@ -58,6 +58,7 @@ import ambit2.base.processors.CASProcessor;
 public class IteratingDelimitedFileReader extends
 		IteratingFilesWithHeaderReader<String> implements IIteratingChemObjectReader {
     public static String defaultSMILESHeader = "SMILES";
+    public static String optionalSMILESHeader = "CANONICAL_SMILES";
     protected String commentChar = "#";
 	public String getCommentChar() {
 		return commentChar;
@@ -277,10 +278,15 @@ public class IteratingDelimitedFileReader extends
 			while (st.hasMoreTokens()) {
 				addHeaderColumn(st.nextToken().trim());	
 			}
-			for (int i=0; i < getNumberOfColumns(); i++)
-				if (getHeaderColumn(i).toString().equals(defaultSMILESHeader)) {
+			for (int i=0; i < getNumberOfColumns(); i++) {
+				String smiHeader = getHeaderColumn(i).toUpperCase();
+				if (smiHeader.equals(defaultSMILESHeader)) {
+					smilesIndex = i; break;
+				} 
+				if ((smilesIndex<0) && smiHeader.equals(optionalSMILESHeader)) {
 					smilesIndex = i; break;
 				}
+			}
 			values = new Object[getNumberOfColumns()];
 			
 			
