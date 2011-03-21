@@ -210,7 +210,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			String extension = getExtension(input.getMediaType());
 			File file = null;
 			if (input.getDownloadName() == null) {
-				file = File.createTempFile("ambit2_", extension);
+				file = File.createTempFile("_ambit2_", extension);
 				file.deleteOnExit();
 			} else
 				file = new File(String
