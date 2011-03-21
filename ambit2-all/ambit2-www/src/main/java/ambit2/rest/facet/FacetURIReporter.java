@@ -34,10 +34,10 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 		if (item instanceof PropertyDatasetFacet)  {
 			Reference root = getBaseReference();
 			PropertyDatasetFacet<Property,SourceDataset> q = (PropertyDatasetFacet<Property,SourceDataset>) item;
-			return String.format("%s/compound?feature_uris[]=%s/feature/%s&dataset_uri=%s/dataset/%d&search=%s",
-						    root,
-						    root,q.getProperty().getId(),
+			return String.format("%s/dataset/%d?feature_uris[]=%s/dataset/%s/feature&property=%s/feature/%s&search=%s",
 							root,q.getDataset().getId(),
+						    root,q.getDataset().getId(),
+						    root,q.getProperty().getId(),
 							item.getValue());
 		} else 
 			return item.getResultsURL();
