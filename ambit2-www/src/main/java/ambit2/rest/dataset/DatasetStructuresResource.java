@@ -21,6 +21,8 @@ import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.update.dataset.DatasetQueryFieldGeneric;
+import ambit2.db.update.dataset.DatasetQueryFieldNumeric;
 import ambit2.db.update.dataset.DatasetQueryFieldString;
 import ambit2.rest.OpenTox;
 import ambit2.rest.error.InvalidResourceIDException;
@@ -101,13 +103,9 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		Q query = null;
 		datasetID = key;
 		if ((property>0) && (search != null)) {
-			DatasetQueryFieldString q = new DatasetQueryFieldString();
-			PropertyValue<String> pv = new PropertyValue<String>();
 			Property p = new Property("");
 			p.setId(property);
-			pv.setProperty(p);
-			pv.setValue(search);
-			q.setValue(pv);
+			DatasetQueryFieldGeneric q = getSearchQuery(search,p);			
 			SourceDataset d = new SourceDataset();
 			d.setId(key);
 			q.setFieldname(d);
@@ -147,13 +145,9 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			//throw new InvalidResourceIDException(key);
 		
 		if ((property>0) && (search != null)) {
-			DatasetQueryFieldString q = new DatasetQueryFieldString();
-			PropertyValue<String> pv = new PropertyValue<String>();
 			Property p = new Property("");
 			p.setId(property);
-			pv.setProperty(p);
-			pv.setValue(search);
-			q.setValue(pv);
+			DatasetQueryFieldGeneric q = getSearchQuery(search,p);
 			StoredQuery d = new StoredQuery(Integer.parseInt(key.toString()));
 			q.setFieldname(d);
 			Form form = getRequest().getResourceRef().getQueryAsForm();
@@ -168,4 +162,22 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		}
 	}
 
+	protected DatasetQueryFieldGeneric getSearchQuery(String search,Property p) {
+		try {
+			Double d = Double.parseDouble(search);
+			DatasetQueryFieldNumeric q = new DatasetQueryFieldNumeric();
+			PropertyValue<Double> pv = new PropertyValue<Double>();
+			pv.setProperty(p);
+			pv.setValue(d);
+			q.setValue(pv);
+			return q;
+		} catch (Exception x) {
+			DatasetQueryFieldString q = new DatasetQueryFieldString();
+			PropertyValue<String> pv = new PropertyValue<String>();
+			pv.setProperty(p);
+			pv.setValue(search);
+			q.setValue(pv);
+			return q;
+		}
+	}
 }
