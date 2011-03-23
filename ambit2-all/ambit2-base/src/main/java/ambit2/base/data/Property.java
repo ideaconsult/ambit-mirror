@@ -98,6 +98,9 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static synchronized Property getInChIInstance() {
 		return Property.getInstance(Property.opentox_InChI, new LiteratureEntry(Property.opentox_InChI,"http://www.iupac.org/inchi/"));
 	}
+	public static synchronized Property getInChIStdInstance() {
+		return Property.getInstance(Property.opentox_InChI_std, new LiteratureEntry(Property.opentox_InChI_std,"http://www.iupac.org/inchi/"));
+	}	
 	public static synchronized Property getInstance(String name,ILiteratureEntry reference) {
 		if (reference == null)
 			return getInstance(name, defaultReference,"http://ambit.sourceforge.net");
@@ -107,6 +110,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static synchronized Property getInstance(String name,String reference, String url) {
 		Property p = new Property(name,LiteratureEntry.getInstance(reference,url));
 		p.setLabel(name);
+		p.setEnabled(true);
 
 		return p;
 	}		
@@ -176,6 +180,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 		else if (n.contains("iupac")) return opentox_IupacName;	
 		else if (n.contains("name")) return opentox_Name;
 		else if (n.contains("title")) return opentox_Name;
+		else if (n.contains("inchikey")) return opentox_InChIKey;
 		else if (n.contains("inchi")) return opentox_InChI;
 		else if (n.contains("smiles")) return opentox_SMILES;
 		else if (n.equals("ec-number")) return opentox_EC;

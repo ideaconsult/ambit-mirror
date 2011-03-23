@@ -96,4 +96,8 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 		return isChemicalsOnly()?String.format("idcompound=%d",getValue().getIdchemical()):String.format("idconformer=%d",getValue().getIdstructure());
 	}
 
+	@Override
+	protected boolean isPreferredStructure() {
+		return isChemicalsOnly();
+	}
 }

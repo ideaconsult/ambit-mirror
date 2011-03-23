@@ -62,12 +62,16 @@ public abstract class AbstractStructureQuery<F, T, C extends IQueryCondition>
 			record.setIdchemical(rs.getInt(2));
 			record.setIdstructure(rs.getInt(3));
 			retrieveStrucType(record, rs);
+			record.setUsePreferedStructure(isPreferredStructure());
 			//metric
 			retrieveMetric(record, rs);
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
+	}
+	protected boolean isPreferredStructure() {
+		return false;
 	}
 	protected void retrieveStrucType(IStructureRecord record, ResultSet rs) throws SQLException {
 		try {

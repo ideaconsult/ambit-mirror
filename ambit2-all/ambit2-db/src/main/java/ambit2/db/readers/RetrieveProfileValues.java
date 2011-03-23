@@ -150,6 +150,8 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		"where status != 'ERROR' %s and idchemical=? order by idstructure limit 1";
 			
 	protected final String sql_propery = "and idproperty in (%s)";
+	protected final String sql_alias = "and comments in (%s)";
+	protected final String sql_name = "and properties.name in (%s)";
 	
 	/**
 	 * 
@@ -180,13 +182,32 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		return b.toString();
 	}
 	public String getSQL() throws AmbitException {
+		switch (searchMode) {
+		case idproperty: {
+			return String.format(
+					sql(),
+					(getFieldname()==null || "".equals(getFieldname()) )
+					?"":String.format(sql_propery,getPropertyWhere())
+					);
+		} 
+		case alias: {
+			return String.format(
+					sql(),
+					(getFieldname()==null || "".equals(getFieldname()) )
+					?"":String.format(sql_alias,getPropertyWhere())
+					);
+		}
+		case name: {
+			return String.format(
+					sql(),
+					(getFieldname()==null || "".equals(getFieldname()) )
+					?"":String.format(sql_name,getPropertyWhere())
+					);
+		}
+		default: throw new AmbitException("Undefined");
+		}
 		
-		
-		return String.format(
-				sql(),
-				(getFieldname()==null || "".equals(getFieldname()) )
-				?"":String.format(sql_propery,getPropertyWhere())
-				);
+
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
@@ -196,7 +217,23 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 				Iterator<Property> i = getFieldname().getProperties(true);
 				while (i.hasNext()) {
 					Property p = i.next();
-					params.add(new QueryParam<Integer>(Integer.class, p.getId()));
+					switch (searchMode) {
+					case idproperty: {
+						params.add(new QueryParam<Integer>(Integer.class, p.getId()));
+						break;
+					}
+					case alias: {
+						params.add(new QueryParam<String>(String.class, p.getLabel()));
+						break;
+					}
+					case name: {
+						params.add(new QueryParam<String>(String.class, p.getName()));
+						break;
+						
+					}
+					default: throw new AmbitException("Undefined");
+					}
+				
 				}
 			}
 

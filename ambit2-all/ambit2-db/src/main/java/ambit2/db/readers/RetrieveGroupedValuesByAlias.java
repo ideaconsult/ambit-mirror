@@ -31,7 +31,7 @@ public class RetrieveGroupedValuesByAlias extends AbstractQuery<Profile,IStructu
 		this.record = record;
 	}
 	protected final String sql_grouped = 
-	"select idchemical,idstructure,comments,group_concat(distinct(if(status='TRUNCATED',text,value))),group_concat(distinct(value_num))," +
+	"select idchemical,idstructure,comments,group_concat(distinct(if(status='TRUNCATED',text,value)) SEPARATOR '\n'),group_concat(distinct(value_num))," +
 	"group_concat(distinct(title)),group_concat(distinct(url))\n"+
 	"from property_values left join property_string using(idvalue_string) \n"+
 	"join properties using(idproperty)\n"+

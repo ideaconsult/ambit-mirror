@@ -13,7 +13,6 @@ import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.db.search.QuerySmilesByID;
@@ -86,13 +85,16 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 			
 		}
 		case InChI: {
-			if (getGroupProperties()==null) setGroupProperties(new Profile());
-			getGroupProperties().add(mode.getProperty());
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+			Template inchis = new Template();
+			inchis.add(Property.getInChIInstance());
+			inchis.add(Property.getInChIStdInstance());
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.alias,inchis,false)) {
 				@Override
 				public IStructureRecord process(IStructureRecord target)
 						throws AmbitException {
-					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					((RetrieveProfileValues)getQuery()).setRecord(target);
+					
+					//((RetrieveProfileValues)getQuery()).setChemicalsOnly(target.usePreferedStructure() || target.getIdstructure()<=0);
 					return super.process(target);
 				}
 			});
@@ -120,7 +122,23 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
-			Object smiles = item.getProperty(key);
+			Object smiles = null;
+			switch (mode) {
+			case InChI : {
+				for (Property p : item.getProperties()) 
+					if (p.getLabel().equals(Property.opentox_InChI_std)) {
+						smiles = item.getProperty(p);
+						break;
+					} else if (p.getLabel().equals(Property.opentox_InChI)) {
+						smiles = item.getProperty(p);
+						break;
+					}
+				break;
+			}
+			default: {
+				smiles = item.getProperty(key);
+			}
+			}
 			if (smiles == null)
 				output.write("");
 			else 
