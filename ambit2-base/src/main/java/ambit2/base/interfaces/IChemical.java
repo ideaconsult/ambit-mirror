@@ -13,5 +13,6 @@ public interface IChemical extends Serializable {
 	void setHash(long hash);
     int getIdchemical();
     void setIdchemical(int idchemical);
-    
+	public boolean usePreferedStructure();
+	public void setUsePreferedStructure(boolean value);
 }

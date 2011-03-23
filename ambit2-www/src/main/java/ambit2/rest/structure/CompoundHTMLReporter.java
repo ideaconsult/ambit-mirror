@@ -223,7 +223,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		StringBuilder w = new StringBuilder();
 		MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
 				ChemicalMediaType.CHEMICAL_CML,
-				ChemicalMediaType.CHEMICAL_SMILES,					
+				ChemicalMediaType.CHEMICAL_SMILES,
+				ChemicalMediaType.CHEMICAL_INCHI,
 				MediaType.TEXT_URI_LIST,
 				MediaType.APPLICATION_PDF,
 				MediaType.TEXT_CSV,
@@ -234,7 +235,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		String[] image = {
 				"sdf.jpg",
 				"cml.jpg",
-				"smi.png",					
+				"smi.png",
+				"inchi.png",		
 				"link.png",
 				"pdf.png",
 				"excel.png",
