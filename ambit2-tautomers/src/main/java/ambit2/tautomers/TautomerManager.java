@@ -55,6 +55,29 @@ public class TautomerManager
 		return(resultTautomers);
 	}
 	
+	public Vector<IAtomContainer> generateTautomersIncrementaly()
+	{
+		//Another approach for generation of tautomers
+		//based on incremental steps of analysis with first-depth approach
+		//In each Incremental steps one rule instance is added
+		//and the other rule instances are revised and accordingly 
+		//appropriate rule-instance sets are supported (derived from extendedRuleInstance)
+		
+		resultTautomers.clear();	
+		searchAllRulePositions();
+		
+		
+		RuleManager rman = new RuleManager(this);
+		rman.firstIncrementalStep();
+		rman.iterateIncrementalSteps();
+		
+		
+		
+		return(resultTautomers);
+	}
+	
+	
+	
 	void searchAllRulePositions()
 	{
 		generatedRules.clear();

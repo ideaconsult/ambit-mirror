@@ -202,4 +202,22 @@ public class RuleManager
 	}
 	*/
 	
+	
+	
+	
+	//------------Incremental Approach--------------------------
+	
+	void firstIncrementalStep()
+	{
+		//TODO
+	}
+	
+	void iterateIncrementalSteps()
+	{
+		//something like first depth search
+		//TODO
+	}
+	
+		
+	
 }
