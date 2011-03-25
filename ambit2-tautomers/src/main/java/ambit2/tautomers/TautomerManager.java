@@ -14,6 +14,7 @@ public class TautomerManager
 	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
 	Vector<Rule> generatedRules = new Vector<Rule>(); 
 	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();
+	
 		
 	
 	TautomerManager()
@@ -66,12 +67,15 @@ public class TautomerManager
 		resultTautomers.clear();	
 		searchAllRulePositions();
 		
+		if (ruleInstances.isEmpty())
+		{	
+			resultTautomers.add(molecule);
+			return(resultTautomers);
+		}
 		
 		RuleManager rman = new RuleManager(this);
 		rman.firstIncrementalStep();
-		rman.iterateIncrementalSteps();
-		
-		
+		rman.iterateIncrementalSteps();		
 		
 		return(resultTautomers);
 	}
