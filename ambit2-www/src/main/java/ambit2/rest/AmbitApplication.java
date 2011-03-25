@@ -51,6 +51,7 @@ import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
 import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
+import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertiesByDatasetResource;
 import ambit2.rest.property.PropertyModelResource;
@@ -443,8 +444,15 @@ public class AmbitApplication extends TaskApplication<String> {
 		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
 		queryRouter.attach(MissingFeatureValuesResource.resource,MissingFeatureValuesResource.class);
 		
+		/**
+		 * Facets
+		 */
 		queryRouter.attach(CompoundsByPropertyValueInDatasetResource.resource,CompoundsByPropertyValueInDatasetResource.class);
+		queryRouter.attach(DatasetsByEndpoint.resource,DatasetsByEndpoint.class);
 		
+		/**
+		 * End facets
+		 */
 		
 		datasetRouter.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
 				
