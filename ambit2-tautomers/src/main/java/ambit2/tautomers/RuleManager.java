@@ -5,8 +5,13 @@ import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.Molecule;
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.Bond;
 
-;
+import ambit2.smarts.SmartsHelper;
+
 
 public class RuleManager 
 {
@@ -226,17 +231,20 @@ public class RuleManager
 		//Creation of the 0-th increment step:
 		TautomerIncrementStep incStep0 = new TautomerIncrementStep(); 
 		incStep0.struct = tman.molecule;
-		incStep0.unUsedRuleInstances.addAll(extendedRuleInstances);
-		
+		for (int i = 0; i < extendedRuleInstances.size(); i++)
+			incStep0.unUsedRuleInstances.add((RuleInstance)extendedRuleInstances.get(i));
+				
 		stackIncSteps.push(incStep0);
 	}
 	
 	
 	void iterateIncrementalSteps()
 	{
+		System.out.println("stack_size = " + stackIncSteps.size());
 		//first depth search approach 
 		while (!stackIncSteps.isEmpty())
 		{
+			//System.out.println("stack_size = " + stackIncSteps.size());
 			expandIncremenStep(stackIncSteps.pop());
 		}
 	}
@@ -251,6 +259,7 @@ public class RuleManager
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
 				tman.resultTautomers.add(newTautomer);
+				//System.out.print("   new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer));
 			}
 			catch(Exception e)
 			{}
@@ -270,7 +279,7 @@ public class RuleManager
 	{	
 		//incStep objects fields are not preserved since it will no longer be used in the 
 		//depth-first search algorithm
-		IRuleInstance ri = incStep.unUsedRuleInstances.lastElement();
+		RuleInstance ri = incStep.unUsedRuleInstances.lastElement();
 		incStep.unUsedRuleInstances.remove(ri);
 		
 		int n = ri.getNumberOfStates();
@@ -278,34 +287,166 @@ public class RuleManager
 		for (int i = 0; i < n; i++)
 		{	
 			incSteps[i] = new TautomerIncrementStep();
-			setNewIncrementStep(tman.molecule,ri,i,incSteps[i]);
+			incSteps[i].usedRuleInstances.addAll(incStep.usedRuleInstances);
 			incSteps[i].unUsedRuleInstances.addAll(incStep.unUsedRuleInstances);
-			reviseUnusedRuleInstances(incSteps[i]);
+			setNewIncrementStep(tman.molecule,ri,i,incSteps[i]);
+			
+			//reviseUnusedRuleInstances(incSteps[i]) is included inside function setNewIncrementStep
 		}
 		
 		return incSteps;
 	}
 	
 	
-	void setNewIncrementStep(IAtomContainer prevStruct, IRuleInstance ri, int state, TautomerIncrementStep incStep)
+	void setNewIncrementStep(IAtomContainer prevStruct, RuleInstance ri, int state, TautomerIncrementStep incStep)
 	{
 		//(1)generate new structure  (modified clone of prevStruct)
-		//incStep.struct = prevStruct;
+		//(2)Generate and store a modified RuleInstance in usedRuleInstances
+		//(3)reviseUnusedRuleInstances  ????
+	
+		Molecule mol = new Molecule();
+		RuleInstance newRI = new RuleInstance(ri); 
+		
+		//helper arrays
+		IAtom newRIAtoms[] = new IAtom[ri.atoms.size()];
+		IBond newRIBonds[] = new IBond[ri.bonds.size()];
+		
+		//Transfer/clone atoms
+		for (int i = 0; i < prevStruct.getAtomCount(); i++)
+		{
+			IAtom a = prevStruct.getAtom(i);
+			if (ri.atoms.contains(a))
+			{
+				IAtom a1 = cloneAtom(a);
+				mol.addAtom(a1);
+				int index = ri.atoms.indexOf(a);
+				newRIAtoms[index] = a1;
+			}
+			else
+				mol.addAtom(a);
+		}
+		
+		for (int i = 0; i < newRIAtoms.length; i++)
+			newRI.atoms.add(newRIAtoms[i]);
+		
+		
+		//Transfer/clone bonds
+		for (int i = 0; i < prevStruct.getBondCount(); i++)
+		{
+			IBond b = prevStruct.getBond(i);
+			if (ri.bonds.contains(b))
+			{
+				//This bond is part of the current RuleInstance being used for generation of next incremental steps				
+				IBond b1 = new Bond();
+				IAtom a01[] = new IAtom[2];
+				int ind0 = ri.atoms.indexOf(b.getAtom(0));
+				int ind1 = ri.atoms.indexOf(b.getAtom(1));
+				a01[0] = newRIAtoms[ind0];
+				a01[1] = newRIAtoms[ind1];
+				b1.setAtoms(a01);
+				b1.setOrder(b.getOrder());
+				mol.addBond(b1);
+				int index = ri.bonds.indexOf(b);
+				newRIBonds[index] = b1;
+			}
+			else
+			{	
+				if (ri.atoms.contains(b.getAtom(0)))
+				{
+					//atom 0 is part of the ri, atom 1 is not
+					IBond b1 = new Bond();
+					IAtom a01[] = new IAtom[2];
+					int ind0 = ri.atoms.indexOf(b.getAtom(0));
+					a01[0] = newRIAtoms[ind0];
+					a01[1] = b.getAtom(1);
+					b1.setAtoms(a01);
+					b1.setOrder(b.getOrder());
+					mol.addBond(b1);
+				}
+				else
+				{
+					if (ri.atoms.contains(b.getAtom(1)))
+					{
+						//atom 1 is part of the ri, atom 0 is not
+						IBond b1 = new Bond();
+						IAtom a01[] = new IAtom[2];
+						int ind1 = ri.atoms.indexOf(b.getAtom(1));
+						a01[0] = b.getAtom(0);
+						a01[1] = newRIAtoms[ind1];
+						b1.setAtoms(a01);
+						b1.setOrder(b.getOrder());
+						mol.addBond(b1);
+					}
+					else
+						mol.addBond(b);
+				}
+					
+			}	
+		}
+		
+		for (int i = 0; i < newRIAtoms.length; i++)
+			newRI.atoms.add(newRIAtoms[i]);
+		for (int i = 0; i < newRIBonds.length; i++)
+			newRI.bonds.add(newRIBonds[i]);
+						
+		//(1) and (2)
+		incStep.struct = mol;
+		incStep.usedRuleInstances.add(newRI);		
+		//Set the rule instance state
+		newRI.gotoState(state);
+		
+				
+		 
+		//(3) Revision of the UnusedRuleInstances
+		//This is very important since in guarantees the the left instances are still valid and correct
+		//e.g. double bonds and protons are OK
+		
+		
 		//TODO
 		
-		//(2)store modified RuleInstance in
-		//TODO
+		//Handle explicitH ???
+		
 	}
 	
+	IAtom cloneAtom(IAtom a)
+	{
+		try
+		{
+			IAtom a1 = (IAtom)a.clone();
+			return (a1);
+		}	
+		catch(Exception e)
+		{}
+		
+		return(null);
+	}
+	
+	/*
+	IBond cloneBond(IBond b)
+	{
+		try
+		{
+			IBond b1 = (IBond)b.clone();
+			return (b1);
+		}	
+		catch(Exception e)
+		{}
+		
+		return(null);
+	}
+	*/
+	
+	
+	/*
 	void reviseUnusedRuleInstances(TautomerIncrementStep incStep)
 	{
 		//The unused rule instances the overlap with the used rule instances are revised
 		//Strategy for economy rule application (searching) is used  
 		//Topological distances from the used rule instances are taken inti account ...
-		
 				
-		//TODO
+		
 	}
+	*/
 		
 	
 }

@@ -27,10 +27,11 @@ public class TestTautomers
 		System.out.println("Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		tman.setStructure(mol);
-		Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
+		//Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
 		
-		//for (int i = 0; i < resultTautomers.size(); i++)		
-		//	System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		for (int i = 0; i < resultTautomers.size(); i++)		
+			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 		
 			
 	}

@@ -67,7 +67,7 @@ public class TautomerManager
 		resultTautomers.clear();	
 		searchAllRulePositions();
 		
-		if (ruleInstances.isEmpty())
+		if (extendedRuleInstances.isEmpty())
 		{	
 			resultTautomers.add(molecule);
 			return(resultTautomers);
