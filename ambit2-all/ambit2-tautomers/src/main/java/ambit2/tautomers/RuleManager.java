@@ -1,8 +1,12 @@
 package ambit2.tautomers;
 
+import java.util.Stack;
 import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+
+;
 
 public class RuleManager 
 {
@@ -11,6 +15,9 @@ public class RuleManager
 	Vector<IRuleInstance> ruleInstances;
 	Vector<Rule> generatedRules;
 	Vector<IRuleInstance> unprocessedInstances = new Vector<IRuleInstance>();
+	
+	//Vector<TautomerIncrementStep> incSteps = new Vector<TautomerIncrementStep>(); 
+	Stack<TautomerIncrementStep> stackIncSteps = new Stack<TautomerIncrementStep>();
 		
 	
 	public RuleManager(TautomerManager man)
@@ -19,6 +26,8 @@ public class RuleManager
 		extendedRuleInstances = tman.extendedRuleInstances;
 		ruleInstances = tman.ruleInstances;
 		generatedRules = tman.generatedRules;
+		
+		
 	}
 	
 	public int handleOverlappingRuleInstances()
@@ -205,19 +214,98 @@ public class RuleManager
 	
 	
 	
+	
 	//------------Incremental Approach--------------------------
+	
+	
 	
 	void firstIncrementalStep()
 	{
-		//TODO
+		stackIncSteps.clear();
+		
+		//Creation of the 0-th increment step:
+		TautomerIncrementStep incStep0 = new TautomerIncrementStep(); 
+		incStep0.struct = tman.molecule;
+		incStep0.unUsedRuleInstances.addAll(extendedRuleInstances);
+		
+		stackIncSteps.push(incStep0);
 	}
+	
 	
 	void iterateIncrementalSteps()
 	{
-		//something like first depth search
+		//first depth search approach 
+		while (!stackIncSteps.isEmpty())
+		{
+			expandIncremenStep(stackIncSteps.pop());
+		}
+	}
+	
+	
+	void expandIncremenStep(TautomerIncrementStep incStep)
+	{		
+		//Condition for reaching the bottom of the generation tree
+		//e.g. at this point real tautomers are obtained
+		if (incStep.unUsedRuleInstances.isEmpty())
+		{
+			try{
+				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
+				tman.resultTautomers.add(newTautomer);
+			}
+			catch(Exception e)
+			{}
+			
+			return;
+		}
+		
+		//Register in the stack the descendants of incStep 
+		TautomerIncrementStep newIncSteps[] = generateNextIncrementSteps(incStep);
+		for (int i = 0; i < newIncSteps.length; i++)
+			stackIncSteps.push(newIncSteps[i]);
+	}
+	
+		
+	
+	TautomerIncrementStep[] generateNextIncrementSteps(TautomerIncrementStep incStep)
+	{	
+		//incStep objects fields are not preserved since it will no longer be used in the 
+		//depth-first search algorithm
+		IRuleInstance ri = incStep.unUsedRuleInstances.lastElement();
+		incStep.unUsedRuleInstances.remove(ri);
+		
+		int n = ri.getNumberOfStates();
+		TautomerIncrementStep incSteps[] = new TautomerIncrementStep[n]; 
+		for (int i = 0; i < n; i++)
+		{	
+			incSteps[i] = new TautomerIncrementStep();
+			setNewIncrementStep(tman.molecule,ri,i,incSteps[i]);
+			incSteps[i].unUsedRuleInstances.addAll(incStep.unUsedRuleInstances);
+			reviseUnusedRuleInstances(incSteps[i]);
+		}
+		
+		return incSteps;
+	}
+	
+	
+	void setNewIncrementStep(IAtomContainer prevStruct, IRuleInstance ri, int state, TautomerIncrementStep incStep)
+	{
+		//(1)generate new structure  (modified clone of prevStruct)
+		//incStep.struct = prevStruct;
+		//TODO
+		
+		//(2)store modified RuleInstance in
 		//TODO
 	}
 	
+	void reviseUnusedRuleInstances(TautomerIncrementStep incStep)
+	{
+		//The unused rule instances the overlap with the used rule instances are revised
+		//Strategy for economy rule application (searching) is used  
+		//Topological distances from the used rule instances are taken inti account ...
+		
+				
+		//TODO
+	}
 		
 	
 }
