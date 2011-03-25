@@ -27,6 +27,23 @@ public class RuleInstance implements IRuleInstance
 	Vector<IAtom> overlappedAtoms = new  Vector<IAtom>(); 
 	Vector<IBond> overlappedBonds = new  Vector<IBond>();
 	
+	public RuleInstance()
+	{
+	}
+	
+	public RuleInstance(RuleInstance prevRI)
+	{
+		rule = prevRI.rule;
+		combRI = prevRI.combRI;
+		molecule = prevRI.molecule;
+		foundState = prevRI.foundState;
+		curState = prevRI.curState; 
+		beginState = prevRI.beginState;
+		FlagImplicitH = prevRI.FlagImplicitH; 
+		explicitH = prevRI.explicitH;
+		//FlagOverlapMode = prevRI.FlagOverlapMode; 
+		//FlagGoToStateSpecialOK = prevRI.FlagGoToStateSpecialOK;
+	}
 	
 	public int firstState()
 	{	

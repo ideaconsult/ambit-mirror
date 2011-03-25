@@ -6,8 +6,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class TautomerIncrementStep 
 {
-	Vector<IRuleInstance> usedRuleInstances = new Vector<IRuleInstance>();
-	Vector<IRuleInstance> unUsedRuleInstances = new Vector<IRuleInstance>();
+	Vector<RuleInstance> usedRuleInstances = new Vector<RuleInstance>();
+	Vector<RuleInstance> unUsedRuleInstances = new Vector<RuleInstance>();
 		
 	//Struct container is a virtual molecule which describes the current state of the 
 	//structure at this incremental step
