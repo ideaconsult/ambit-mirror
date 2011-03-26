@@ -17,7 +17,9 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
+import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.dataset.AbstractReadDataset;
@@ -26,6 +28,7 @@ import ambit2.db.update.dataset.ReadDataset;
 import ambit2.db.update.dataset.UpdateDataset;
 import ambit2.db.update.storedquery.ReadStoredQuery;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
@@ -159,6 +162,9 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		
 		Form form = request.getResourceRef().getQueryAsForm();
 		AbstractReadDataset query = null;
+		
+		IStructureRecord structureParam = getStructureParameter();
+		
 		Property property = new Property(null);
 		property.setClazz(null);property.setLabel(null);property.setReference(null);
 		for (search_features sf : search_features.values()) {
@@ -174,7 +180,10 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 				}
 				
 				sf.setProperty(property,id);
-				if (query == null) query = new QueryDatasetByFeatures(property);
+				if (query == null) {
+					query = new QueryDatasetByFeatures(property);
+					((QueryDatasetByFeatures)query).setStructure(structureParam);
+				}
 			}
 		}
 		
@@ -213,6 +222,25 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		return query;
 	}
 	
+	protected IStructureRecord getStructureParameter() {
+		String uri = getParams().getFirstValue(OpenTox.params.compound_uri.toString());
+
+		if (uri!= null) {
+			IStructureRecord record = new StructureRecord();
+			Object id = OpenTox.URI.compound.getId(uri,getRequest().getRootRef());
+			if (id == null) {
+				Object[] ids;
+				ids = OpenTox.URI.conformer.getIds(uri,getRequest().getRootRef());
+				if (ids != null)
+					if (ids[0]!=null)
+						record.setIdchemical(((Integer) ids[0]).intValue());
+					if (ids[1]!=null)
+						record.setIdstructure(((Integer) ids[1]).intValue());
+			} else 
+				record.setIdchemical(((Integer)id).intValue());
+			return record;
+		} else return null;
+	}
 	//udpate support
 	@Override
 	protected ISourceDataset createObjectFromWWWForm(Representation entity)

@@ -5,9 +5,19 @@ import java.util.List;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 
 public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
+	protected IStructureRecord structure;
+	
+	public IStructureRecord getStructure() {
+		return structure;
+	}
+	public void setStructure(IStructureRecord structure) {
+		this.structure = structure;
+	}
+
 	protected String sql = 
 	"SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI from	src_dataset	join catalog_references using(idreference)\n"+
 	"join  template_def using(idtemplate)\n"+
@@ -15,7 +25,33 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 	"select idproperty from properties %s\n"+
 	")\n"+
 	"%s\n"+
-	"group by id_srcdataset\n";
+	"group by id_srcdataset\n"+
+	"order by id_srcdataset\n";
+	
+	protected String sql_structure = 
+		"SELECT id_srcdataset,src_dataset.name,src_dataset.user_name,src_dataset.idreference,title,url,licenseURI from structure\n" +
+		"join struc_dataset using(idstructure) " +
+		"join src_dataset using(id_srcdataset) " +
+		"join catalog_references using(idreference)\n"+
+		"join template_def using(idtemplate)\n"+
+		"where idproperty in (\n"+
+		"select idproperty from properties %s\n"+
+		")\n"+
+		"%s\n"+
+		"group by id_srcdataset\n"+
+		"order by id_srcdataset\n";
+	
+	protected String sql_chemical = 
+		"SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI from struc_dataset\n" +
+		"join src_dataset using(id_srcdataset) " +
+		"join catalog_references using(idreference)\n"+
+		"join template_def using(idtemplate)\n"+
+		"where idproperty in (\n"+
+		"select idproperty from properties %s\n"+
+		")\n"+
+		"%s\n"+
+		"group by id_srcdataset\n"+
+		"order by id_srcdataset\n";	
 	
 	protected enum c_feature {
 		featureid {
@@ -152,6 +188,12 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 			if (c.isDefined(getFieldname())) {
 				params.add(c.getParameter(getFieldname()));
 			}
+		if (getStructure()!=null)
+			if (getStructure().getIdstructure()>0) {
+				params.add(new QueryParam<Integer>(Integer.class,getStructure().getIdstructure()));
+			} else if (getStructure().getIdchemical()>0) 
+				params.add(new QueryParam<Integer>(Integer.class,getStructure().getIdchemical()));
+		
 		return params;
 			
 	}
@@ -169,7 +211,14 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 				if (c.needJoin()) join = "join catalog_references using(idreference)\n" ;
 			}
 		String properties_sql = String.format("%s %s", join,b.toString());
-		return String.format(sql, properties_sql,"");
+		
+		if ((getStructure()==null) || ((getStructure().getIdchemical()==-1) && getStructure().getIdstructure()==-1))
+			return String.format(sql, properties_sql,"");
+		else if (getStructure().getIdstructure()>0) {
+			return String.format(sql_structure, properties_sql,"and idstructure = ?\n");
+		} else 
+			return String.format(sql_chemical, properties_sql,"and idchemical = ?\n");
+			
 	}
 
 	@Override

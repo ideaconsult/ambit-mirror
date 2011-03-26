@@ -9,7 +9,6 @@ public class PropertyDatasetFacet<PROPERTY,DATASET> extends AbstractFacet<String
 	private static final long serialVersionUID = -2260081381044742166L;
 	protected PROPERTY property;
 	protected DATASET dataset;
-	
 
 	public PropertyDatasetFacet() {
 		super();

@@ -2,6 +2,7 @@ package ambit2.rest.dataset;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URLEncoder;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -18,6 +19,7 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 
@@ -52,6 +54,17 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 		 */
 		if (collapsed) { 
 			uploadUI("",w, query);
+			try {
+				w.write(String.format("<a href='%s/query%s?%s=%s&condition=startswith' title='List datasets by endpoints'>%s</a><br>",
+						uriReporter.getBaseReference(),
+						DatasetsByEndpoint.resource,
+						MetadatasetResource.search_features.feature_sameas,
+						URLEncoder.encode("http://www.opentox.org/echaEndpoints.owl"),
+						"Datasets by endpoints"));
+			} catch (Exception x) {
+				
+			}
+			
 			String alphabet = "abcdefghijklmnopqrstuvwxyz";  
 			try {
 				w.write(String.format("<a href='?search=' title='List all datasets'>%s</a>&nbsp","All"));

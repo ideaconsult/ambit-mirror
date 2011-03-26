@@ -8,6 +8,7 @@ import org.restlet.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
@@ -25,13 +26,15 @@ public class CompoundsByPropertyValueInDatasetResource extends FacetResource<Pro
 	protected PropertyDatasetFacetQuery createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		
+		ISourceDataset dataset = null;
 		String uri = getParams().getFirstValue(OpenTox.params.dataset_uri.toString());
-		int datasetid = (Integer)OpenTox.URI.dataset.getId(uri,getRequest().getRootRef());
-		if (datasetid<1) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No dataset_uri!");
-		
-		SourceDataset dataset = new SourceDataset(uri);
-		dataset.setId(datasetid);
-		
+		if (uri!=null) {
+			int datasetid = (Integer)OpenTox.URI.dataset.getId(uri,getRequest().getRootRef());
+			if (datasetid<1) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No dataset_uri!");
+			
+			dataset = new SourceDataset(uri);
+			dataset.setID(datasetid);
+		}
 		
 		Template profile = getProperty(getParams().getValuesArray(OpenTox.params.feature_uris.toString()),1);
 		if ((profile==null) || (profile.size()==0))
@@ -43,7 +46,9 @@ public class CompoundsByPropertyValueInDatasetResource extends FacetResource<Pro
 			q.setFieldname(i.next());
 			break;
 		}
-		q.setValue(dataset);
+		
+		q.setValue((SourceDataset)dataset);
+		if ((q.getValue()==null) && (q.getFieldname()==null)) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		return q;
 	}
 }

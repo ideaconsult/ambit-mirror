@@ -3,6 +3,7 @@ package ambit2.rest.structure;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -32,6 +33,8 @@ import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataEntry.DataEntryResource;
+import ambit2.rest.dataset.MetadatasetResource;
+import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
@@ -662,7 +665,17 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				w,
 				"datasets"
 			));	
+
 		
+		b.append(String.format("<a href='%s/query%s?%s=%s&condition=startswith&%s=%s' title='List datasets by endpoints'>Datasets by endpoints</a><br>",
+				uriReporter.getBaseReference(),
+				DatasetsByEndpoint.resource,
+				MetadatasetResource.search_features.feature_sameas,
+				URLEncoder.encode("http://www.opentox.org/echaEndpoints.owl"),
+				OpenTox.params.compound_uri,
+				URLEncoder.encode(w)
+			));	
+	
 		b.append(String.format("<a href=\"%s%s\">Data entries</a><br>",
 				w,
 				DataEntryResource.resourceTag

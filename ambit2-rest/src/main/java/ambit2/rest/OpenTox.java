@@ -35,9 +35,11 @@ public class OpenTox {
 			public String getResourceID() {
 				return String.format("%s%s/{%s}",OpenTox.URI.compound.getResourceID(),getURI(),getKey());
 			}
+			@Override
 			public Object[] getIds(String uri,Reference baseReference)  {
 				return getIds(uri,getTemplate(baseReference));
 			}
+			@Override
 			public Object[] getIds(String uri,Template template)  {
 				Map<String, Object> vars = new HashMap<String, Object>();
 				Object[] ids = new Object[2];
@@ -72,9 +74,11 @@ public class OpenTox {
 		public Template getTemplate(Reference baseReference) {
 			return new Template(String.format("%s%s",baseReference==null?"":baseReference,getResourceID()));
 		}
+		
 		public Object getId(String uri, Reference baseReference) {
 			return getId(uri, getTemplate(baseReference));
 		}
+		
 		public Object getId(String uri,Template template)  {
 			Map<String, Object> vars = new HashMap<String, Object>();
 			
@@ -83,9 +87,11 @@ public class OpenTox {
 				return Integer.parseInt(vars.get(getKey()).toString()); 
 			} catch (Exception x) { return null; }
 		}
+
 		public Object[] getIds(String uri,Reference baseReference)  {
 			return null;
 		}
+		
 		public Object[] getIds(String uri,Template template)  { return null; }
 	};
 	

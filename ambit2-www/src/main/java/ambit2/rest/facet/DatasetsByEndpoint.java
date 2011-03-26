@@ -24,8 +24,13 @@ public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacetQuery
 		String uri = getParams().getFirstValue(OpenTox.params.compound_uri.toString());
 		int compoundid  = -1;
 		if (uri!= null) {
-			Object[] ids = OpenTox.URI.compound.getIds(uri,getRequest().getRootRef());
-			compoundid  = ((Integer) ids[0]).intValue();
+			Object id = OpenTox.URI.compound.getId(uri,getRequest().getRootRef());
+			if (id == null) {
+				Object[] ids;
+				ids = OpenTox.URI.conformer.getIds(uri,getRequest().getRootRef());
+				compoundid  = ((Integer) ids[0]).intValue();
+			} else 
+				compoundid = ((Integer)id).intValue();
 		}
 		
 				
