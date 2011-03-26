@@ -581,7 +581,7 @@ window.setInterval(function() {
 		w.write(String.format("<a href='%s/query/compound/search/all'>Query compounds</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/compound'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
 
-		w.write(String.format("<a href='%s/dataset'>Datasets</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/dataset?max=25'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/algorithm' title='Predictive algorithms'>Algorithms</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/model' title='Models'>Models</a>&nbsp;",baseReference));
 		//w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
