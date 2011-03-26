@@ -28,7 +28,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 	"group by id_srcdataset\n"+
 	"order by id_srcdataset\n";
 	
-	protected String sql_structure = 
+	protected String sql_chemical = 
 		"SELECT id_srcdataset,src_dataset.name,src_dataset.user_name,src_dataset.idreference,title,url,licenseURI from structure\n" +
 		"join struc_dataset using(idstructure) " +
 		"join src_dataset using(id_srcdataset) " +
@@ -41,7 +41,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		"group by id_srcdataset\n"+
 		"order by id_srcdataset\n";
 	
-	protected String sql_chemical = 
+	protected String sql_structure = 
 		"SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI from struc_dataset\n" +
 		"join src_dataset using(id_srcdataset) " +
 		"join catalog_references using(idreference)\n"+
