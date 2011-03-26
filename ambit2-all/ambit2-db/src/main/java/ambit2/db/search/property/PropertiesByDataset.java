@@ -105,7 +105,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 				wherePropertyID = w==null?"":(and + QField.properties.getSQL(this));
 			} 
 			
-			return base_sql_type + String.format(join,whereDataset+wherePropertyID);
+			return base_sql_type + String.format(join,whereDataset+wherePropertyID) + "\n order by template_def.idproperty";
 		} 
 		throw new AmbitException("No dataset defined");
 	}
