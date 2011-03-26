@@ -43,11 +43,12 @@ public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStr
 		"join struc_dataset using(id_srcdataset)\n"+
 		"join structure using(idstructure)\n"+
 		"where " +
-		//"comments regexp \"^http://www.opentox.org/echaEndpoints.owl\" \n"+
 		"comments %s ? \n"+
 		"and cr.type=\"Dataset\"\n" +
-		"and idcompound=?\n" +
-		"group by comments\n";	
+		"and idchemical=?\n" +
+		"group by comments\n";
+	
+	//"comments regexp \"^http://www.opentox.org/echaEndpoints.owl\" \n"+
 	/**
 	 * 
 	 */
@@ -110,4 +111,8 @@ public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStr
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Dataset by endpoint";
+	}
 }
