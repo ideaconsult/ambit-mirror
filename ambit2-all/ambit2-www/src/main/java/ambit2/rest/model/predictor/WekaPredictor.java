@@ -206,10 +206,6 @@ public class WekaPredictor<T> extends ModelPredictor<T,Instance> {
 				
 	}	
 
-	@Override
-	public BufferedImage getLegend(int width, int height) throws AmbitException {
-			return null;
-	}	
 	/**
 Evaluation evaluation = new Evaluation( trainDataset );
 evaluation.evaluateModel( classifier, testDataset );
@@ -219,5 +215,19 @@ evaluation.predictions().elementAt(i);
  double[] distribution = prediction.distribution();
 }
 	 */
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		String msg = (classifier!=null?classifier.toString():clusterer!=null?clusterer.toString():"").trim();
+		try {
+			String[] m = (msg.split("\n")[0]).split(" ");
+			String[] t = new String[m.length+1];
+			for (int i=0; i < m.length;i++) t[i+1]= m[i];
+			t[0] = "WEKA";
+			return writeMessages(t, width, height);
+		} catch (Exception x) {
+			return writeMessages(new String[] {"WEKA"}, width, height);	
+		}
+		
+	}
 }
 

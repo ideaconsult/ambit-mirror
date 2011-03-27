@@ -92,8 +92,5 @@ public class NumericADPredictor extends	CoveragePredictor<IStructureRecord,Matri
 		record.setIdstructure(target.getIdstructure());
 	}
 
-		@Override
-	public BufferedImage getLegend(int width, int height) throws AmbitException {
-			return null;
-	}
+
 }
