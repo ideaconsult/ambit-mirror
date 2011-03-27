@@ -71,9 +71,5 @@ public class ExpertModelpredictor<Predictor> extends ModelPredictor<Predictor, I
 		*/
 	}
 
-	@Override
-	public BufferedImage getLegend(int width, int height) throws AmbitException {
-		return null;
-	}
 
 }

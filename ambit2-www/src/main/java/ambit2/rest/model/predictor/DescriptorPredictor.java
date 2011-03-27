@@ -90,7 +90,8 @@ public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,
 		try {
 			return ((IStructureDiagramHighlights)calculator).getLegend(width, height);
 		} catch (Exception x) {
-			return null;
+			String[] msg = model.getName().split(" ");
+			return writeMessages(msg, width, height);
 		}
 	}
 	

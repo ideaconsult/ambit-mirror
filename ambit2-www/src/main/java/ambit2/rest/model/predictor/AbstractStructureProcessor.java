@@ -42,11 +42,7 @@ public abstract class AbstractStructureProcessor<Predictor>  extends	ModelPredic
 		try {exec.close();} catch (Exception x) {}
 		super.close();
 	}
-	@Override
-	public BufferedImage getLegend(int width, int height) throws AmbitException {
-		return null;
-	}
-	
+
 	
 	@Override
 	public String getCompoundURL(IStructureRecord target) throws AmbitException {

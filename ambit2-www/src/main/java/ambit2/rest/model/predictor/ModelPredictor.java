@@ -1,6 +1,10 @@
 package ambit2.rest.model.predictor;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -382,4 +386,30 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		return b.toString();
 				
 	}	
+	@Override
+	public BufferedImage getLegend(int width, int height) throws AmbitException {
+		String[] msg = model.getName().split(" ");
+		return writeMessages(msg, width, height);
+	}
+	
+	protected BufferedImage writeMessages(String[] msg,int width, int height) throws AmbitException {
+		BufferedImage buffer = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = buffer.createGraphics();
+		g.setColor(Color.white);
+		g.fillRect(0, 0, width,height);
+		RenderingHints rh = g.getRenderingHints ();
+		rh.put (RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		g.addRenderingHints(rh);
+		g.setColor(new Color(81,99,115));
+		int h = (int) (height*14/75); //looks nice at size 14 h=75
+		g.setFont(new Font("Arial",Font.BOLD,h<8?8:h));
+		
+		for (int i = 0; i < msg.length;i++) {
+			if (msg[i]==null) continue;
+			g.drawString(msg[i].toString(), 
+					3,
+					h+h*i);
+		}
+		return buffer;
+	}
 }
