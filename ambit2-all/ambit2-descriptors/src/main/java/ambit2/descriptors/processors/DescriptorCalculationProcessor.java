@@ -1,9 +1,14 @@
 package ambit2.descriptors.processors;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 
@@ -83,6 +88,29 @@ public class DescriptorCalculationProcessor extends
 			throw new AmbitException("Undefined descriptor");
 		if (descriptor instanceof IStructureDiagramHighlights) {
 			return ((IStructureDiagramHighlights)descriptor).getLegend(width, height);
-		} else throw new AmbitException("Not supported");
+		} else {
+			DescriptorSpecification spec = descriptor.getSpecification();
+			return writeMessages(new String[] {spec.getImplementationTitle()}, width, height);
+		}
+	}
+	protected BufferedImage writeMessages(String[] msg,int width, int height) throws AmbitException {
+		BufferedImage buffer = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = buffer.createGraphics();
+		g.setColor(Color.white);
+		g.fillRect(0, 0, width,height);
+		RenderingHints rh = g.getRenderingHints ();
+		rh.put (RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		g.addRenderingHints(rh);
+		g.setColor(new Color(81,99,115));
+		int h = (int) (height*14/75); //looks nice at size 14 h=75
+		g.setFont(new Font("Arial",Font.BOLD,h<8?8:h));
+		
+		for (int i = 0; i < msg.length;i++) {
+			if (msg[i]==null) continue;
+			g.drawString(msg[i].toString(), 
+					3,
+					h+h*i);
+		}
+		return buffer;
 	}
 }
