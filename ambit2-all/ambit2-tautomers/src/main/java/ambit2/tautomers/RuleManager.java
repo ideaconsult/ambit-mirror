@@ -21,6 +21,7 @@ public class RuleManager
 	Vector<Rule> generatedRules;
 	Vector<IRuleInstance> unprocessedInstances = new Vector<IRuleInstance>();
 	
+	
 	//Vector<TautomerIncrementStep> incSteps = new Vector<TautomerIncrementStep>(); 
 	Stack<TautomerIncrementStep> stackIncSteps = new Stack<TautomerIncrementStep>();
 		
@@ -239,13 +240,16 @@ public class RuleManager
 	
 	
 	void iterateIncrementalSteps()
-	{
-		System.out.println("stack_size = " + stackIncSteps.size());
+	{	
+		
 		//first depth search approach 
 		while (!stackIncSteps.isEmpty())
-		{
-			//System.out.println("stack_size = " + stackIncSteps.size());
-			expandIncremenStep(stackIncSteps.pop());
+		{	
+			System.out.println("stack_size = " + stackIncSteps.size());
+			TautomerIncrementStep tStep = stackIncSteps.pop();
+			//System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
+			System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct)); 
+			expandIncremenStep(tStep);
 		}
 	}
 	
@@ -259,10 +263,13 @@ public class RuleManager
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
 				tman.resultTautomers.add(newTautomer);
-				//System.out.print("   new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer));
+				//System.out.println("   new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
+				//		+ "    " + incStep.getTautomerCombination());
 			}
 			catch(Exception e)
-			{}
+			{
+				tman.errors.add("Error clonning molecule to get tatutomer!");
+			}
 			
 			return;
 		}
@@ -270,7 +277,10 @@ public class RuleManager
 		//Register in the stack the descendants of incStep 
 		TautomerIncrementStep newIncSteps[] = generateNextIncrementSteps(incStep);
 		for (int i = 0; i < newIncSteps.length; i++)
+		{
 			stackIncSteps.push(newIncSteps[i]);
+			System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct)); 
+		}	
 	}
 	
 		
@@ -301,7 +311,7 @@ public class RuleManager
 	void setNewIncrementStep(IAtomContainer prevStruct, RuleInstance ri, int state, TautomerIncrementStep incStep)
 	{
 		//(1)generate new structure  (modified clone of prevStruct)
-		//(2)Generate and store a modified RuleInstance in usedRuleInstances
+		//(2)Generate and store the modified RuleInstance in usedRuleInstances
 		//(3)reviseUnusedRuleInstances  ????
 	
 		Molecule mol = new Molecule();
@@ -325,9 +335,6 @@ public class RuleManager
 			else
 				mol.addAtom(a);
 		}
-		
-		for (int i = 0; i < newRIAtoms.length; i++)
-			newRI.atoms.add(newRIAtoms[i]);
 		
 		
 		//Transfer/clone bonds
@@ -393,8 +400,10 @@ public class RuleManager
 		incStep.struct = mol;
 		incStep.usedRuleInstances.add(newRI);		
 		//Set the rule instance state
+		//System.out.println("curState = " + newRI.curState + "   -->  state = " + state);
+		//System.out.print("   " + SmartsHelper.moleculeToSMILES(incStep.struct));
 		newRI.gotoState(state);
-		
+		//System.out.print("   " + SmartsHelper.moleculeToSMILES(incStep.struct));
 				
 		 
 		//(3) Revision of the UnusedRuleInstances
@@ -402,8 +411,7 @@ public class RuleManager
 		//e.g. double bonds and protons are OK
 		
 		
-		//TODO
-		
+		//TODO		
 		//Handle explicitH ???
 		
 	}
@@ -416,7 +424,9 @@ public class RuleManager
 			return (a1);
 		}	
 		catch(Exception e)
-		{}
+		{
+			tman.errors.add("Error cloning atom " + a.getSymbol());
+		}
 		
 		return(null);
 	}
@@ -430,7 +440,9 @@ public class RuleManager
 			return (b1);
 		}	
 		catch(Exception e)
-		{}
+		{
+			tman.errors.add("Error cloning bond ");
+		}
 		
 		return(null);
 	}

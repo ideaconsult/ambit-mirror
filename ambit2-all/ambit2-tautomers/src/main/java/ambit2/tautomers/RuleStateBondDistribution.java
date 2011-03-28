@@ -4,6 +4,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import java.util.Vector;
+import ambit2.smarts.DoubleNonAromaticBond;
 
 public class RuleStateBondDistribution 
 {
@@ -15,12 +16,19 @@ public class RuleStateBondDistribution
 		Vector<Integer> v = new Vector<Integer>(); 
 		for (int i = 0; i < statePattern.getBondCount(); i++)
 		{	
+			if (statePattern.getBond(i) instanceof DoubleNonAromaticBond)
+			{	
+				v.add(new Integer(i));
+				continue;
+			}
+			
 			if (statePattern.getBond(i) instanceof OrderQueryBond)
 			{	
 				OrderQueryBond bo = (OrderQueryBond)statePattern.getBond(i);
 				if (bo.getOrder() == IBond.Order.DOUBLE)
 					v.add(new Integer(i));
-			}	
+			}
+			
 		}
 		
 		DBPositions = new int[v.size()];
