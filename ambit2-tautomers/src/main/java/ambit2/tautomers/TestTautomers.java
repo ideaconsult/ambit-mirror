@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import ambit2.smarts.SmartsHelper;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
@@ -16,9 +17,11 @@ public class TestTautomers
 		TestTautomers tt = new TestTautomers();
 		
 		
-		tt.test("OC=CCC(CC=CO)CCCC=O");
-		tt.test("O=CC(C)([H])C");
-		tt.test("O=CC(C)(C)C");
+		//tt.test("OC=CCC(CC=CO)CCCC=O");
+		//tt.test("O=CC(C)([H])C");  --> problem with the explicit H atoms 
+		//tt.test("OC=NCC(CC=CO)CCCC");
+		tt.test("OC=CCCNC=O");
+		//tt.testCloning("CC(C)C");
 	}
 	
 	
@@ -29,12 +32,52 @@ public class TestTautomers
 		tman.setStructure(mol);
 		//Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
 		
+		
 		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 		for (int i = 0; i < resultTautomers.size(); i++)		
 			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 		
 			
 	}
+	
+	//helper utilities for the tests
+	public boolean identicalStructureSets(Vector<IAtomContainer> v, Vector<String> smi)
+	{
+		//TODO
+		return(true);
+	}
+	
+	public void testCloning(String smi)
+	{	
+		System.out.println("Atom Clone Testing: " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		
+		for (int i = 0; i < mol.getAtomCount(); i++)
+		{
+			IAtom a = mol.getAtom(i);
+			IAtom a1 = cloneAtom(a);
+			System.out.println(a.getSymbol() + "  " 
+					+ a.getImplicitHydrogenCount() + "  " + a1.getImplicitHydrogenCount());
+		}
+		
+			
+	}
+	
+	IAtom cloneAtom(IAtom a)
+	{
+		try
+		{
+			IAtom a1 = (IAtom)a.clone();
+			return (a1);
+		}	
+		catch(Exception e)
+		{
+			tman.errors.add("Error cloning atom " + a.getSymbol());
+		}
+		
+		return(null);
+	}
+	
 	
 	
 	

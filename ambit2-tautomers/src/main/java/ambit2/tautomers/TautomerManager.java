@@ -14,7 +14,7 @@ public class TautomerManager
 	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
 	Vector<Rule> generatedRules = new Vector<Rule>(); 
 	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();
-	
+	Vector<String> errors = new Vector<String>(); 
 		
 	
 	TautomerManager()

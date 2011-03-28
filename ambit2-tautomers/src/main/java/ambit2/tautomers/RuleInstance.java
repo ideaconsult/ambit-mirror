@@ -68,7 +68,7 @@ public class RuleInstance implements IRuleInstance
 	}
 	
 	int gotoState(int state)
-	{
+	{	
 		if (curState == state)
 			return(state); //It is already at this state
 		
@@ -78,7 +78,7 @@ public class RuleInstance implements IRuleInstance
 		RuleStateBondDistribution bondDistr = rule.stateBonds[curState];
 		for (int i = 0; i < bondDistr.DBPositions.length; i++)
 		{
-			int bpos = bondDistr.DBPositions[i];
+			int bpos = bondDistr.DBPositions[i];			
 			IBond bond = bonds.get(bpos);
 			bond.setOrder(Order.SINGLE);
 		}
@@ -88,7 +88,7 @@ public class RuleInstance implements IRuleInstance
 		bondDistr = rule.stateBonds[state];
 		for (int i = 0; i < bondDistr.DBPositions.length; i++)
 		{
-			int bpos = bondDistr.DBPositions[i];
+			int bpos = bondDistr.DBPositions[i];			
 			IBond bond = bonds.get(bpos);
 			bond.setOrder(Order.DOUBLE);
 		}

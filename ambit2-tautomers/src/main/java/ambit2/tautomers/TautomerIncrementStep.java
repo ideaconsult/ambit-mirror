@@ -15,5 +15,13 @@ public class TautomerIncrementStep
 	//The other atoms/bonds are clones of the original atoms
 	IAtomContainer struct;
 	
+	String getTautomerCombination()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = usedRuleInstances.size()-1; i >= 0; i--)
+			sb.append(""+usedRuleInstances.get(i).getCurrentState() + " ");
+		return (sb.toString());
+	}
+	
 	
 }
