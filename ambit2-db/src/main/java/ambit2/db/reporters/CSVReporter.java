@@ -166,8 +166,9 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					writer.write(String.format("%s\"%s\"",
 							delimiter,
 							value==null?"":
-							value.toString().replace("\n", "").replace("\r","")
+							value.toString().replace("\r\n","")
 							));					
+				
 				i++;
 				delimiter = separator;
 			}
@@ -176,7 +177,8 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			logger.error(x);
 			x.printStackTrace();
 		} finally {
-			try { writer.write('\n'); } catch (Exception x) {}
+			//http://www.rfc-editor.org/rfc/rfc4180.txt
+			try { writer.write("\r\n"); } catch (Exception x) {}
 		}
 		return null;
 	}
