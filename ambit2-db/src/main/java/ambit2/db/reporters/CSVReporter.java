@@ -40,6 +40,8 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 	protected String urlPrefix = "";
 	protected String separator = ",";
+	//http://www.rfc-editor.org/rfc/rfc4180.txt
+	protected String lineseparator = "\r\n";
 	public String getSeparator() {
 		return separator;
 	}
@@ -100,6 +102,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	};
 	
 	protected void writeHeader(Writer writer) throws IOException {
+		
 		if (header == null) {
 			header = template2Header(template,true);
 
@@ -109,26 +112,26 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				writer.write("Compound");
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s %s\"", separator,p.getName()==null?"N?A":p.getName(),p.getUnits()==null?"":p.getUnits()));	
-				writer.write("\n");
+				writer.write(lineseparator);
 			} else {
 				writer.write("");
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s\"", separator,p.getUrl()));
-				writer.write("\n");
+				writer.write(lineseparator);
 				writer.write("");
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s\"", separator,p.getTitle()));
 				
-				writer.write("\n");
+				writer.write(lineseparator);
 				writer.write("URI");
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s\"", separator,p.getName()));
-				writer.write("\n");
+				writer.write(lineseparator);
 				
 				writer.write("");
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s\"", separator,p.getUnits()));
-				writer.write("\n");			
+				writer.write(lineseparator);			
 			}
 		}
 	}	
@@ -166,7 +169,9 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					writer.write(String.format("%s\"%s\"",
 							delimiter,
 							value==null?"":
-							value.toString().replace("\r\n","")
+							//value.toString().replace(lineseparator,"\n") 
+							//would be nice to have Excel compatibility with multiline \n, but it breaks too many readers elsewhere ...
+							value.toString().replace(lineseparator,"|").replace("\n", "|").replace("\r", "|")
 							));					
 				
 				i++;
@@ -177,8 +182,8 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			logger.error(x);
 			x.printStackTrace();
 		} finally {
-			//http://www.rfc-editor.org/rfc/rfc4180.txt
-			try { writer.write("\r\n"); } catch (Exception x) {}
+
+			try { writer.write(lineseparator); } catch (Exception x) {}
 		}
 		return null;
 	}
