@@ -274,6 +274,7 @@ public class RuleManager
 			return;
 		}
 		
+		
 		//Register in the stack the descendants of incStep 
 		TautomerIncrementStep newIncSteps[] = generateNextIncrementSteps(incStep);
 		for (int i = 0; i < newIncSteps.length; i++)
@@ -285,21 +286,23 @@ public class RuleManager
 	
 		
 	
-	TautomerIncrementStep[] generateNextIncrementSteps(TautomerIncrementStep incStep)
+	TautomerIncrementStep[] generateNextIncrementSteps(TautomerIncrementStep curIncStep)
 	{	
 		//incStep objects fields are not preserved since it will no longer be used in the 
 		//depth-first search algorithm
-		RuleInstance ri = incStep.unUsedRuleInstances.lastElement();
-		incStep.unUsedRuleInstances.remove(ri);
+		RuleInstance ri = curIncStep.unUsedRuleInstances.lastElement();
+		curIncStep.unUsedRuleInstances.remove(ri);
+		
+		System.out.println("Used rule: " + ri.rule.OriginalRuleString);
 		
 		int n = ri.getNumberOfStates();
 		TautomerIncrementStep incSteps[] = new TautomerIncrementStep[n]; 
 		for (int i = 0; i < n; i++)
 		{	
 			incSteps[i] = new TautomerIncrementStep();
-			incSteps[i].usedRuleInstances.addAll(incStep.usedRuleInstances);
-			incSteps[i].unUsedRuleInstances.addAll(incStep.unUsedRuleInstances);
-			setNewIncrementStep(tman.molecule,ri,i,incSteps[i]);
+			incSteps[i].usedRuleInstances.addAll(curIncStep.usedRuleInstances);
+			incSteps[i].unUsedRuleInstances.addAll(curIncStep.unUsedRuleInstances);
+			setNewIncrementStep(curIncStep.struct,ri,i,incSteps[i]);
 			
 			//reviseUnusedRuleInstances(incSteps[i]) is included inside function setNewIncrementStep
 		}

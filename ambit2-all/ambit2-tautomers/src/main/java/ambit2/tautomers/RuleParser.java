@@ -38,6 +38,7 @@ public class RuleParser
 		
 		
 		postProcessing();
+		rule.OriginalRuleString = ruleString;
 		
 		//System.out.println("errors: " + errors);		
 		if (errors.equals(""))
