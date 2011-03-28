@@ -43,7 +43,7 @@ public class TestTautomers
 	//helper utilities for the tests
 	public boolean identicalStructureSets(Vector<IAtomContainer> v, Vector<String> smi)
 	{
-		//TODO
+		//TODO - very important for the theoretical testing
 		return(true);
 	}
 	

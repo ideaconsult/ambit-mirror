@@ -27,6 +27,7 @@ public class Rule
 	int mobileGroupPos[][] = null;   
 	String RuleInfo = "";
 	QueryAtomContainer stateQueries[] = null;
+	String OriginalRuleString = "";
 	
 	
 	public Vector<IRuleInstance>  applyRule(IAtomContainer mol)
