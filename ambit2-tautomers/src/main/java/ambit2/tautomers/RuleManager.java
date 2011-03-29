@@ -245,10 +245,10 @@ public class RuleManager
 		//first depth search approach 
 		while (!stackIncSteps.isEmpty())
 		{	
-			System.out.println("stack_size = " + stackIncSteps.size());
+			//System.out.println("stack_size = " + stackIncSteps.size());
 			TautomerIncrementStep tStep = stackIncSteps.pop();
 			//System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
-			System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct)); 
+			//System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct)); 
 			expandIncremenStep(tStep);
 		}
 	}
@@ -280,7 +280,7 @@ public class RuleManager
 		for (int i = 0; i < newIncSteps.length; i++)
 		{
 			stackIncSteps.push(newIncSteps[i]);
-			System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct)); 
+			//System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct)); 
 		}	
 	}
 	
@@ -293,7 +293,7 @@ public class RuleManager
 		RuleInstance ri = curIncStep.unUsedRuleInstances.lastElement();
 		curIncStep.unUsedRuleInstances.remove(ri);
 		
-		System.out.println("Used rule: " + ri.rule.OriginalRuleString);
+		//System.out.println("Used rule: " + ri.rule.OriginalRuleString);
 		
 		int n = ri.getNumberOfStates();
 		TautomerIncrementStep incSteps[] = new TautomerIncrementStep[n]; 
