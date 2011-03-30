@@ -110,6 +110,7 @@ public class RuleManager
 	
 	int getNumOfOverlappedAtoms(RuleInstance r1, RuleInstance r2)
 	{
+		//TODO - to check explicitH atoms if needed
 		int n = 0;
 		for (int i = 0; i < r1.atoms.size(); i++)
 			if (r2.atoms.contains(r1.atoms.get(i)))
@@ -315,7 +316,7 @@ public class RuleManager
 	{
 		//(1)generate new structure  (modified clone of prevStruct)
 		//(2)Generate and store the modified RuleInstance in usedRuleInstances
-		//(3)reviseUnusedRuleInstances  ????
+		//(3)Revise UnusedRuleInstances  
 	
 		Molecule mol = new Molecule();
 		RuleInstance newRI = new RuleInstance(ri); 
@@ -323,6 +324,10 @@ public class RuleManager
 		//helper arrays
 		IAtom newRIAtoms[] = new IAtom[ri.atoms.size()];
 		IBond newRIBonds[] = new IBond[ri.bonds.size()];
+		
+		
+		//TODO		
+		//Handle explicitH !!!
 		
 		//Transfer/clone atoms
 		for (int i = 0; i < prevStruct.getAtomCount(); i++)
@@ -409,14 +414,60 @@ public class RuleManager
 		//System.out.print("   " + SmartsHelper.moleculeToSMILES(incStep.struct));
 				
 		 
+		
 		//(3) Revision of the UnusedRuleInstances
-		//This is very important since in guarantees the the left instances are still valid and correct
+		//This is very important since in guarantees that the left instances are still valid and correct
 		//e.g. double bonds and protons are OK
 		
+		//(3.1) All unused instances that overlap with the current rule instance ri 
+		//are removed. Operation is performed in terms of the atoms from prevStruct. 
 		
-		//TODO		
-		//Handle explicitH ???
+		Vector<RuleInstance> checkedInstances = new Vector<RuleInstance>();
+		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
+		{
+			RuleInstance unusedRI = incStep.unUsedRuleInstances.get(i);
+			int nOvAt = getNumOfOverlappedAtoms(ri,unusedRI);
+			if (nOvAt == 0)
+				checkedInstances.add(unusedRI);
+		}
+		incStep.unUsedRuleInstances = checkedInstances;
 		
+		//(3.2)Also new instances are searched in several topological layers 
+		//around the atoms from the current instance
+		Vector<RuleInstance> newUnusedInstances = new Vector<RuleInstance>();
+		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);
+		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
+		{	
+			//System.out.println("$$ "  + i);
+			Vector<IRuleInstance> instances = tman.knowledgeBase.rules.get(i).applyRule(fragment); 
+			for (int k = 0; k < instances.size(); k++)
+			{	
+				RuleInstance genRI = (RuleInstance)instances.get(k);
+				int nOvAt = getNumOfOverlappedAtoms(newRI, genRI);
+				if (nOvAt < newRI.atoms.size())
+					newUnusedInstances.add(genRI);
+			}	
+		}
+		
+		incStep.unUsedRuleInstances.addAll(newUnusedInstances);
+		
+		
+	}
+	
+	IAtomContainer generateFragmentShell(IAtomContainer mol, RuleInstance ri, int nLayers)
+	{
+		Molecule fragment = new Molecule();
+		
+		//Initial fragment
+		for (int i = 0; i < ri.atoms.size(); i++)
+			fragment.addAtom(ri.atoms.get(i));
+		
+		for (int i = 0; i < ri.bonds.size(); i++)
+			fragment.addBond(ri.bonds.get(i));
+		
+		//TODO
+		//.. to add several layers around initial fragment
+		return fragment;
 	}
 	
 	IAtom cloneAtom(IAtom a)
@@ -458,8 +509,7 @@ public class RuleManager
 		//The unused rule instances the overlap with the used rule instances are revised
 		//Strategy for economy rule application (searching) is used  
 		//Topological distances from the used rule instances are taken inti account ...
-				
-		
+		  
 	}
 	*/
 		
