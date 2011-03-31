@@ -21,6 +21,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.StringCondition;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.dataset.AbstractReadDataset;
 import ambit2.db.update.dataset.QueryDatasetByFeatures;
@@ -164,7 +165,12 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		AbstractReadDataset query = null;
 		
 		IStructureRecord structureParam = getStructureParameter();
-		
+		StringCondition condition;
+		try {
+			condition = StringCondition.getInstance(form.getFirstValue(QueryResource.condition));
+		} catch   (Exception x) {
+			condition = StringCondition.getInstance(StringCondition.C_EQ);
+		}
 		Property property = new Property(null);
 		property.setClazz(null);property.setLabel(null);property.setReference(null);
 		for (search_features sf : search_features.values()) {
@@ -181,7 +187,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 				
 				sf.setProperty(property,id);
 				if (query == null) {
-					query = new QueryDatasetByFeatures(property);
+					query = new QueryDatasetByFeatures(property,condition);
 					((QueryDatasetByFeatures)query).setStructure(structureParam);
 				}
 			}
