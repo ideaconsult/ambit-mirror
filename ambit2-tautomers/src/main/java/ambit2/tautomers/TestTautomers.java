@@ -26,7 +26,7 @@ public class TestTautomers
 		//tt.test("OC=NCC(CC=CO)CCCC");
 		//tt.test("OC=CCCNC=O");
 		tt.testCase("OC=CCCNC=O", new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"});
-		//tt.testCloning("CC(C)C");
+		tt.testCloning("CC(C)C");
 	}
 	
 	
