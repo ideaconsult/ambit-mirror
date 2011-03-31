@@ -26,7 +26,7 @@ public class PropertyDatasetFacetQueryTest extends QueryTest<IQueryRetrieval<IFa
 	
 	@Override
 	protected IQueryRetrieval<IFacet<String>> createQuery() throws Exception {
-		PropertyDatasetFacetQuery q = new PropertyDatasetFacetQuery();
+		PropertyDatasetFacetQuery q = new PropertyDatasetFacetQuery(null);
 		Property p = new Property("");
 		p.setId(48);
 		q.setFieldname(p);

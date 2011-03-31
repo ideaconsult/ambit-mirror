@@ -53,9 +53,12 @@ public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStr
 	 * 
 	 */
 
-	public EndpointCompoundFacetQuery() {
-		super();
+	public EndpointCompoundFacetQuery(String url) {
+		super(url);
 		setCondition(StringCondition.getInstance(StringCondition.C_STARTS_WITH));
+		record = new EndpointCompoundFacet(url);
+		record.setProperty(getFieldname());
+		record.setDataset(getValue());		
 	}
 	@Override
 	public double calculateMetric(IFacet<String> object) {
@@ -96,7 +99,7 @@ public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStr
 	@Override
 	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
-			record = new EndpointCompoundFacet();
+			record = new EndpointCompoundFacet(null);
 			record.setProperty(getFieldname());
 			record.setDataset(getValue());
 		}

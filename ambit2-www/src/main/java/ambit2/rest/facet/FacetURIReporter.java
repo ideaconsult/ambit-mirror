@@ -57,11 +57,8 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 			if ((q.getDataset()!=null) && (q.getDataset().getIdchemical()>0 || q.getDataset().getIdstructure()>0)) 
 				cmpURI = String.format("&%s=%s",OpenTox.params.compound_uri,URLEncoder.encode(cmpReporter.getURI(q.getDataset())));
 
-			return String.format("%s/dataset?%s=%s%s",
-							root,
-							MetadatasetResource.search_features.feature_sameas,
-							URLEncoder.encode(item.getValue().toString()),
-							cmpURI);
+			return q.getResultsURL(root.toString(),cmpURI);
+			
 		} else if (item instanceof PropertyDatasetFacet)  {
 			PropertyDatasetFacet<Property,SourceDataset> q = (PropertyDatasetFacet<Property,SourceDataset>) item;
 			return String.format("%s/dataset/%d?feature_uris[]=%s/dataset/%s/feature&feature_uris[]=%s/feature/%s&property=%s/feature/%s&search=%s",
@@ -72,7 +69,7 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 							item.getValue());
 
 		} else 
-			return item.getResultsURL();
+			return item.getResultsURL(root.toString());
 	}
 
 }

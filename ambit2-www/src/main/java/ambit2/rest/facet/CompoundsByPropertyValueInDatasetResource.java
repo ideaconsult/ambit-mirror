@@ -40,7 +40,7 @@ public class CompoundsByPropertyValueInDatasetResource extends FacetResource<Pro
 		if ((profile==null) || (profile.size()==0))
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No feature_uris[] !");
 		
-		PropertyDatasetFacetQuery q = new PropertyDatasetFacetQuery();
+		PropertyDatasetFacetQuery q = new PropertyDatasetFacetQuery(getRequest().getResourceRef().toString());
 		Iterator<Property> i = profile.getProperties(true);
 		while (i.hasNext()) {
 			q.setFieldname(i.next());
