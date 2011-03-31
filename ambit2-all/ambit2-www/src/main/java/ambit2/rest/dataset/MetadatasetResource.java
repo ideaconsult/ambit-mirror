@@ -45,7 +45,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 	protected SourceDataset dataset;
 	public final static String metadata = "/metadata";	
 	protected boolean collapsed;
-	
+	protected IStructureRecord structureParam;
 	public enum search_features {
 
 		feature_name {
@@ -164,7 +164,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		Form form = request.getResourceRef().getQueryAsForm();
 		AbstractReadDataset query = null;
 		
-		IStructureRecord structureParam = getStructureParameter();
+		structureParam = getStructureParameter();
 		StringCondition condition;
 		try {
 			condition = StringCondition.getInstance(form.getFirstValue(QueryResource.condition));

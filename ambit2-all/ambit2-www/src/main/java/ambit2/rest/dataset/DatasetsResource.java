@@ -17,6 +17,7 @@ import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.StringCondition;
+import ambit2.db.update.dataset.QueryDatasetByFeatures;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
 
@@ -73,7 +74,9 @@ public class DatasetsResource extends MetadatasetResource {
 		Form form = request.getResourceRef().getQueryAsForm();
 		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
+			
 			RetrieveDatasets query_by_name = new RetrieveDatasets(null,new SourceDataset(Reference.decode(key.toString())));
+			query_by_name.setFieldname(structureParam);
 			query_by_name.setCondition(StringCondition.getInstance(StringCondition.C_REGEXP));
 			return query_by_name;
 		}

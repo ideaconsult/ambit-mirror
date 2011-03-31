@@ -61,16 +61,19 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 				return "idproperty=?";
 			}
 			@Override
-			public boolean isDefined(Property p) {
+			public boolean isDefined(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return p.getId()>0;
 			}
 			@Override
-			public QueryParam getParameter(Property p) {
+			public QueryParam getParameter(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return new QueryParam<Integer>(Integer.class,p.getId());
 			}
 			@Override
-			public String explain(Property p) {
-				if (isDefined(p)) return String.format("feature id=%d",p.getId());
+			public String explain(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
+				if (isDefined(q)) return String.format("feature id=%d",p.getId());
 				else return "";
 			}
 		},
@@ -80,16 +83,19 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 				return String.format("name %s ?",condition);
 			}
 			@Override
-			public boolean isDefined(Property p) {
+			public boolean isDefined(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return p.getName()!=null;
 			}
 			@Override
-			public QueryParam getParameter(Property p) {
+			public QueryParam getParameter(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return new QueryParam<String>(String.class,p.getName());
 			}
 			@Override
-			public String explain(Property p) {
-				if (isDefined(p)) return String.format("feature name=%s",p.getName());
+			public String explain(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
+				if (isDefined(q)) return String.format("feature name=%s",p.getName());
 				else return "";
 			}
 		},
@@ -99,16 +105,19 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 				return String.format("comments %s ?",condition);
 			}
 			@Override
-			public boolean isDefined(Property p) {
+			public boolean isDefined(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return p.getLabel()!=null;
 			}			
 			@Override
-			public QueryParam getParameter(Property p) {
+			public QueryParam getParameter(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return new QueryParam<String>(String.class,p.getLabel());
 			}
 			@Override
-			public String explain(Property p) {
-				if (isDefined(p)) return String.format("feature sameas=%s",p.getLabel());
+			public String explain(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
+				if (isDefined(q)) return String.format("feature sameas=%s",p.getLabel());
 				else return "";
 			}			
 		},
@@ -122,16 +131,19 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 				return true;
 			}
 			@Override
-			public boolean isDefined(Property p) {
+			public boolean isDefined(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return (p.getReference()!= null) && (p.getTitle() != null);
 			}
 			@Override
-			public QueryParam getParameter(Property p) {
+			public QueryParam getParameter(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return new QueryParam<String>(String.class,p.getTitle());
 			}
 			@Override
-			public String explain(Property p) {
-				if (isDefined(p)) return String.format("feature hasSource=%s",p.getTitle());
+			public String explain(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
+				if (isDefined(q)) return String.format("feature hasSource=%s",p.getTitle());
 				else return "";
 			}
 		},
@@ -141,29 +153,55 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 				return "FIND_IN_SET(?, ptype)";
 			}
 			@Override
-			public boolean isDefined(Property p) {
+			public boolean isDefined(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return p.getClazz() != null;
 			}
 			@Override
-			public QueryParam getParameter(Property p) {
+			public QueryParam getParameter(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
 				return new QueryParam<String>(String.class,(p.getClazz().equals(String.class))?"STRING":"NUMERIC");
 			}			
 			@Override
-			public String explain(Property p) {
-				if (isDefined(p)) return String.format("feature of type=%s",p.getClazz().equals(String.class)?"STRING":"NUMERIC");
+			public String explain(QueryDatasetByFeatures q) {
+				Property p = q.getFieldname();
+				if (isDefined(q)) return String.format("feature of type=%s",p.getClazz().equals(String.class)?"STRING":"NUMERIC");
+				else return "";
+			}
+		},
+		search {
+			@Override
+			public String getSQL(String condition) {
+				return String.format("src_dataset.name %s ?",condition);
+			}
+			@Override
+			public boolean needJoin() {
+				return false;
+			}
+			@Override
+			public boolean isDefined(QueryDatasetByFeatures q) {
+				return (q.getValue()!=null) && (q.getValue().getName()!=null);
+			}
+			@Override
+			public QueryParam getParameter(QueryDatasetByFeatures q) {
+				return new QueryParam<String>(String.class,q.getValue().getName());
+			}
+			@Override
+			public String explain(QueryDatasetByFeatures q) {
+				if (isDefined(q)) return String.format("dataset name %s",q.getValue().getName());
 				else return "";
 			}
 		};
 		
 		public abstract String getSQL(String condition);
-		public abstract String explain(Property p);
+		public abstract String explain(QueryDatasetByFeatures q);
 		public boolean needJoin() {
 			return false;
 		}
-		public boolean isDefined(Property p) {
+		public boolean isDefined(QueryDatasetByFeatures q) {
 			return false;
 		}
-		public abstract QueryParam getParameter(Property p);
+		public abstract QueryParam getParameter(QueryDatasetByFeatures q);
 		
 		
 	}
@@ -187,8 +225,8 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		if (getFieldname()==null) return null;	
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		for (c_feature c : c_feature.values()) 
-			if (c.isDefined(getFieldname())) {
-				params.add(c.getParameter(getFieldname()));
+			if (c.isDefined(this)) {
+				params.add(c.getParameter(this));
 			}
 		if (getStructure()!=null)
 			if (getStructure().getIdstructure()>0) {
@@ -206,7 +244,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		String d = "where ";
 		String join = "";
 		for (c_feature c : c_feature.values()) 
-			if (c.isDefined(getFieldname())) {
+			if (c.isDefined(this)) {
 				b.append(d);
 				b.append(c.getSQL(getCondition().getSQL()));
 				d = " and ";
@@ -230,7 +268,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		StringBuilder b = new StringBuilder();
 		b.append("Datasets with ");
 		for (c_feature c : c_feature.values()) {
-			b.append(c.explain(getFieldname()));
+			b.append(c.explain(this));
 			b.append(",");
 		}
 		return b.toString();
