@@ -150,7 +150,6 @@ public class StringCondition implements IQueryCondition {
 			StringCondition c = getAlowedValues().get(condition);
 			if (c != null) return c;
 		} catch (Exception x) {
-			x.printStackTrace();
 
 		}
 		return getAlowedValues().get(C_EQ);
