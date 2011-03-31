@@ -5,8 +5,14 @@ public abstract class AbstractFacet<T> implements IFacet<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1486718382701377463L;
+	protected String url;
 	protected int count;
-
+	public AbstractFacet() {
+		this(null);
+	}
+	public AbstractFacet(String url) {
+		this.url = url;
+	}
 	public int getCount() {
 		return count;
 	}
@@ -20,8 +26,16 @@ public abstract class AbstractFacet<T> implements IFacet<T> {
 		this.value = value;
 	}
 	@Override
-	public String getResultsURL() {
+	public String getResultsURL(String... params) {
 		return null;
 	}
 	protected T value;
+	@Override
+	public String getSubCategoryURL(String... params) {
+		return null;
+	}
+	@Override
+	public String getURL() {
+		return url;
+	}
 }

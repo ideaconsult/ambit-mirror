@@ -35,11 +35,11 @@ public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacetQuery
 		
 				
 		String endpoint = getParams().getFirstValue(MetadatasetResource.search_features.feature_sameas.toString());
-		EndpointCompoundFacetQuery q = new EndpointCompoundFacetQuery();
+		EndpointCompoundFacetQuery q = new EndpointCompoundFacetQuery(getRequest().getResourceRef().toString());
 		if (endpoint != null) {
 			Property p  = new Property("");
 			p.setLabel(endpoint);
-			p.setLabel(endpoint);
+			q.setFieldname(p);
 		}
 		if (compoundid>0) {
 			IStructureRecord record = new StructureRecord(compoundid,-1,null,null);

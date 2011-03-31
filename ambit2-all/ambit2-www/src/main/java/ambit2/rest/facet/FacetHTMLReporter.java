@@ -55,6 +55,14 @@ public class FacetHTMLReporter extends QueryHTMLReporter<IFacet, IQueryRetrieval
 						"<a href=\"%s\">%s&nbsp;(%d)</a>",
 						uriReporter.getURI(item),
 						item.getValue(),item.getCount()));
+			output.write("</td>");
+			output.write("<td>");
+			String subcategory = item.getSubCategoryURL(uriReporter.getBaseReference().toString());
+			if (subcategory!=null)
+				output.write(String.format(
+							"<a href=\"%s\">%s</a>",
+							subcategory,
+							"Subcategory"));
 			output.write("</td>");				
 			output.write("</tr>");
 			

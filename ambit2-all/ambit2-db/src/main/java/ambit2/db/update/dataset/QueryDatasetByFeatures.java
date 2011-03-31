@@ -7,6 +7,7 @@ import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
+import ambit2.db.search.StringCondition;
 
 public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 	protected IStructureRecord structure;
@@ -56,7 +57,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 	protected enum c_feature {
 		featureid {
 			@Override
-			public String getSQL() {
+			public String getSQL(String condition) {
 				return "idproperty=?";
 			}
 			@Override
@@ -75,8 +76,8 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		},
 		featurename {
 			@Override
-			public String getSQL() {
-				return "name regexp ?";
+			public String getSQL(String condition) {
+				return String.format("name %s ?",condition);
 			}
 			@Override
 			public boolean isDefined(Property p) {
@@ -94,8 +95,8 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		},
 		featuresameas {
 			@Override
-			public String getSQL() {
-				return "comments=?";
+			public String getSQL(String condition) {
+				return String.format("comments %s ?",condition);
 			}
 			@Override
 			public boolean isDefined(Property p) {
@@ -113,7 +114,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		},
 		featurehassource {
 			@Override
-			public String getSQL() {
+			public String getSQL(String condition) {
 				return "title=?";
 			}
 			@Override
@@ -136,7 +137,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		},
 		featuretype {
 			@Override
-			public String getSQL() {
+			public String getSQL(String condition) {
 				return "FIND_IN_SET(?, ptype)";
 			}
 			@Override
@@ -154,7 +155,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 			}
 		};
 		
-		public abstract String getSQL();
+		public abstract String getSQL(String condition);
 		public abstract String explain(Property p);
 		public boolean needJoin() {
 			return false;
@@ -173,11 +174,12 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 	private static final long serialVersionUID = -3278861415939066571L;
 
 	public QueryDatasetByFeatures() {
-		this(null);
+		this(null,StringCondition.getInstance(StringCondition.C_EQ));
 	}
-	public QueryDatasetByFeatures(Property property) {
+	public QueryDatasetByFeatures(Property property,StringCondition condition) {
 		super();
 		setFieldname(property);
+		setCondition(condition);
 	}
 	
 	@Override
@@ -206,7 +208,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		for (c_feature c : c_feature.values()) 
 			if (c.isDefined(getFieldname())) {
 				b.append(d);
-				b.append(c.getSQL());
+				b.append(c.getSQL(getCondition().getSQL()));
 				d = " and ";
 				if (c.needJoin()) join = "join catalog_references using(idreference)\n" ;
 			}

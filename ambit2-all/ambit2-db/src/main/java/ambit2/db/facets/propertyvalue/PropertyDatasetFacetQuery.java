@@ -32,6 +32,12 @@ public class PropertyDatasetFacetQuery extends AbstractFacetQuery<Property,Sourc
 	
 	protected PropertyDatasetFacet<Property,SourceDataset> record;
 	
+	public PropertyDatasetFacetQuery(String url) {
+		super(url);
+		record = new PropertyDatasetFacet<Property,SourceDataset>(url);
+		record.setProperty(getFieldname());
+		record.setDataset(getValue());		
+	}
 	@Override
 	public double calculateMetric(IFacet<String> object) {
 		return 0;
@@ -63,7 +69,7 @@ public class PropertyDatasetFacetQuery extends AbstractFacetQuery<Property,Sourc
 	@Override
 	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
-			record = new PropertyDatasetFacet<Property,SourceDataset>();
+			record = new PropertyDatasetFacet<Property,SourceDataset>(null);
 			record.setProperty(getFieldname());
 			record.setDataset(getValue());
 		}

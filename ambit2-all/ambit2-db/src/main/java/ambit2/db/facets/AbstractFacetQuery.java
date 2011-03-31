@@ -21,5 +21,7 @@ public abstract class AbstractFacetQuery<F,T,C extends IQueryCondition,FACET ext
 	 * 
 	 */
 	private static final long serialVersionUID = -6912724132776390125L;
+	public AbstractFacetQuery(String facetURL) {
+	}
 
 }

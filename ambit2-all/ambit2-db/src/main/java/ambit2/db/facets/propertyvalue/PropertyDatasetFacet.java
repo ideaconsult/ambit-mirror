@@ -10,8 +10,8 @@ public class PropertyDatasetFacet<PROPERTY,DATASET> extends AbstractFacet<String
 	protected PROPERTY property;
 	protected DATASET dataset;
 
-	public PropertyDatasetFacet() {
-		super();
+	public PropertyDatasetFacet(String url) {
+		super(url);
 	}
 	
 	public PROPERTY getProperty() {
@@ -35,5 +35,6 @@ public class PropertyDatasetFacet<PROPERTY,DATASET> extends AbstractFacet<String
 	public String toString() {
 		return String.format("%s (%d)",getValue(),getCount());
 	}
+
 
 }
