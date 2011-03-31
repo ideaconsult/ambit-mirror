@@ -1,6 +1,12 @@
 package ambit2.db.facets.datasets;
 
+import java.sql.ResultSet;
+import java.util.List;
+
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.facet.IFacet;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.search.QueryParam;
 
 /**
  * getFieldname - prefix length
@@ -8,7 +14,7 @@ import ambit2.base.exceptions.AmbitException;
  * @author nina
  *
  */
-public class DatasetByPrefixNameFacetQuery extends PrefixFacetQuery<DatasetPrefixFacet>  {
+public class DatasetByPrefixNameFacetQuery extends PrefixFacetQuery<IStructureRecord,DatasetPrefixFacet>  {
 
 	/**
 	 * 
@@ -17,8 +23,28 @@ public class DatasetByPrefixNameFacetQuery extends PrefixFacetQuery<DatasetPrefi
 	protected static final String sql = 
 		"select substring(name,1,?) as prefix, count(*) from src_dataset\n" +
 		"%s\n"+
+		"%s\n"+
 		"group by prefix order by prefix";
 
+	protected static final String sql_structure = 
+		"select substring(name,1,?) as prefix, count(*) from src_dataset\n" +
+		"join struc_dataset using(id_srcdataset)\n" +
+		"where \n" +
+		"%s\n"+
+		"%s\n"+
+		"idstructure=?\n"+
+		"group by prefix order by prefix";
+	
+	protected static final String sql_compound = 
+		"select substring(name,1,?) as prefix, count(*) from src_dataset\n" +
+		"join struc_dataset using(id_srcdataset)\n" +
+		"join structure using(idstructure)\n" +
+		"where \n" +
+		"%s\n"+
+		"%s\n"+
+		"idchemical=?\n"+
+		"group by prefix order by prefix";
+	
 	public DatasetByPrefixNameFacetQuery(String url) {
 		super(url);
 	}	
@@ -28,21 +54,45 @@ public class DatasetByPrefixNameFacetQuery extends PrefixFacetQuery<DatasetPrefi
 	protected DatasetPrefixFacet createRecord(String url) {
 		//record.setProperty(getFieldname());
 		//record.setDataset(getValue());
-		return new DatasetPrefixFacet(url);
-	}
-	
-	@Override
-	public void setValue(String value) {
-		super.setValue(value);
-		int minlength = 1;
-		if (value!=null) minlength = getValue().length()+1;
-		if ((getFieldname()==null) || (getFieldname()<minlength))
-			setFieldname(minlength);
+		DatasetPrefixFacet record = new DatasetPrefixFacet(url);
+		record.setStructure(getFieldname());
+		return record;
 	}
 
 	@Override
+	public List<QueryParam> getParameters() throws AmbitException {
+		List<QueryParam> param = super.getParameters();
+		if (noStructure()) return param;
+		if (getFieldname().getIdstructure()!=-1) {
+			param.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdstructure()));
+		} else if (getFieldname().getIdchemical()!=-1) {
+			param.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdchemical()));
+
+		}   
+		return param;		
+			
+	}
+	protected boolean noStructure() {
+		return getFieldname()==null || ((getFieldname().getIdchemical()==-1)  && (getFieldname().getIdstructure()==-1));
+	}
+	@Override
 	public String getSQL() throws AmbitException {
-		return String.format(sql,(getValue()==null)?"":where);
+		if (!noStructure()) {
+			if (getFieldname().getIdstructure()!=-1) 
+				return String.format(sql_structure,getValue()==null?"":where_name,getValue()==null?"":"and");
+			else if (getFieldname().getIdchemical()!=-1) 
+				return String.format(sql_compound,getValue()==null?"":where_name,getValue()==null?"":"and");
+		}
+		return String.format(sql,getValue()==null?"":"where",getValue()==null?"":where_name);
 	}		
-	
+	@Override
+	public void setFieldname(IStructureRecord fieldname) {
+		super.setFieldname(fieldname);
+		try {
+		if (record != null)
+			record.setStructure(getFieldname());
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+	}
 }

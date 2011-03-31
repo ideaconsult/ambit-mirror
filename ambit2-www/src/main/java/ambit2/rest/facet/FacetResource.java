@@ -9,12 +9,15 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.DBConnection;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.property.ProfileReader;
 import ambit2.rest.query.QueryResource;
@@ -93,5 +96,24 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 			try { connection.close(); } catch (Exception x) {}
 		}	
 
+	}	
+	protected IStructureRecord getStructure() {
+		String uri = getParams().getFirstValue(OpenTox.params.compound_uri.toString());
+		int compoundid  = -1;
+		int conformerid  = -1;
+		if (uri!= null) {
+			Object id = OpenTox.URI.compound.getId(uri,getRequest().getRootRef());
+			if (id == null) {
+				Object[] ids;
+				ids = OpenTox.URI.conformer.getIds(uri,getRequest().getRootRef());
+				compoundid  = ((Integer) ids[0]).intValue();
+				conformerid = ((Integer) ids[1]).intValue();
+			} else  
+				compoundid = ((Integer)id).intValue();
+		}
+		
+		if ((compoundid>0) || (conformerid>0))
+			return new StructureRecord(compoundid,conformerid,null,null);
+		else return null;
 	}	
 }
