@@ -17,21 +17,12 @@ import ambit2.rest.query.QueryResource;
 public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacetQuery> {
 	public static final String resource = "/ndatasets_endpoint";
 	
+
 	@Override
 	protected EndpointCompoundFacetQuery createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		
-		String uri = getParams().getFirstValue(OpenTox.params.compound_uri.toString());
-		int compoundid  = -1;
-		if (uri!= null) {
-			Object id = OpenTox.URI.compound.getId(uri,getRequest().getRootRef());
-			if (id == null) {
-				Object[] ids;
-				ids = OpenTox.URI.conformer.getIds(uri,getRequest().getRootRef());
-				compoundid  = ((Integer) ids[0]).intValue();
-			} else 
-				compoundid = ((Integer)id).intValue();
-		}
+
 		
 				
 		String endpoint = getParams().getFirstValue(MetadatasetResource.search_features.feature_sameas.toString());
@@ -41,10 +32,8 @@ public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacetQuery
 			p.setLabel(endpoint);
 			q.setFieldname(p);
 		}
-		if (compoundid>0) {
-			IStructureRecord record = new StructureRecord(compoundid,-1,null,null);
-			q.setValue(record);
-		}
+		q.setValue(getStructure());
+		
 		StringCondition c = StringCondition.getInstance(StringCondition.C_REGEXP);
 		String param = getParams().getFirstValue(QueryResource.condition.toString());
 		try {

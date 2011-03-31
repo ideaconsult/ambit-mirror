@@ -40,12 +40,17 @@ public class FacetCSVReporter<Q extends IQueryRetrieval<IFacet>> extends QueryRe
 	@Override
 	public Object processItem(IFacet item) throws AmbitException {
 		try {
+			String subcategory = null;
+			if ((uriReporter!=null) && (uriReporter.getBaseReference()!=null))
+				subcategory = uriReporter.getBaseReference().toString();
 			output.write(String.format("%s,%s,%s,%s\n",
 					item.getValue(),
 					item.getCount(),
 					uriReporter.getURI(item),
-					item.getSubCategoryURL(uriReporter.getBaseReference().toString())));
-		} catch (Exception x) {}
+					item.getSubCategoryURL(subcategory)));
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 		return item;
 	}
 

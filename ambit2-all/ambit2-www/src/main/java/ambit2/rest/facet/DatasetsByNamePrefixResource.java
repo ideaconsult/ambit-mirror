@@ -25,8 +25,12 @@ public class DatasetsByNamePrefixResource  extends FacetResource<DatasetByPrefix
 			q.setValue(request.getResourceRef().getQueryAsForm().getFirstValue(QueryResource.search_param));
 		} catch (Exception x) {
 			q.setValue(null);
-			q.setFieldname(1);
 		}
+		try {
+			q.setFieldname(getStructure());
+		} catch (Exception x) {
+			q.setFieldname(null);
+		}		
 		return q;
 		
 	}

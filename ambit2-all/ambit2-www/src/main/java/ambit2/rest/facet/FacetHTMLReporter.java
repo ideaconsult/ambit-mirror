@@ -67,7 +67,7 @@ public class FacetHTMLReporter extends QueryHTMLReporter<IFacet, IQueryRetrieval
 			output.write("</tr>");
 			
 		} catch (Exception x) {
-			
+			x.printStackTrace();
 		}
 		return item;
 	}
