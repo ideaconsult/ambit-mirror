@@ -18,7 +18,7 @@ public class RetrieveDatasets extends AbstractQuery<IStructureRecord,ISourceData
     public static final String select_datasets_bystruc = "SELECT id_srcdataset,name,src_dataset.user_name,idreference,title,url,licenseURI FROM structure join  struc_dataset using(idstructure) join src_dataset using(id_srcdataset) join catalog_references using(idreference) where %s order by name";
     
     public static final String select_WHERE = "where name %s ?";
-    public static final String select_AND = "and name %s ?";
+    public static final String select_AND = " name %s ?";
     public static final String select_structure = " idstructure = ? ";
     public static final String select_chemical = " idchemical = ? ";
     protected ReadDataset readDataset = new ReadDataset();
