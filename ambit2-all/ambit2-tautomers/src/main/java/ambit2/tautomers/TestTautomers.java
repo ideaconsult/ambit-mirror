@@ -25,8 +25,17 @@ public class TestTautomers
 		//tt.test("O=CC(C)([H])C");  --> problem with the explicit H atoms 
 		//tt.test("OC=NCC(CC=CO)CCCC");
 		//tt.test("OC=CCCNC=O");
-		tt.testCase("OC=CCCNC=O", new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"});
-		tt.testCloning("CC(C)C");
+		//tt.testCase("OC=CCCNC=O", new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"});
+		//tt.testCloning("CC(C)C");
+		tt.test("C=C(O)N");
+	}
+	
+	public void test0(String smi)
+	{	
+		System.out.println("Testing0(combinatorial aproach)0: " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		tman.setStructure(mol);
+		Vector<IAtomContainer> resultTautomers = tman.generateTautomers();			
 	}
 	
 	

@@ -2,6 +2,8 @@ package ambit2.tautomers;
 
 import java.util.Stack;
 import java.util.Vector;
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -465,10 +467,70 @@ public class RuleManager
 		for (int i = 0; i < ri.bonds.size(); i++)
 			fragment.addBond(ri.bonds.get(i));
 		
-		//TODO
-		//.. to add several layers around initial fragment
+		//adding several layers around initial fragment
+		Vector<IAtom> terminalAtoms = null;
+		Vector<IAtom> layerAtoms = null;
+		for (int i = 0; i < nLayers; i++)
+		{	
+			layerAtoms = addLayerToFragment(mol, fragment, terminalAtoms);
+			terminalAtoms = layerAtoms;
+		}
 		return fragment;
 	}
+	
+	Vector<IAtom> addLayerToFragment(IAtomContainer mol, Molecule fragment, Vector<IAtom> terminalAtoms)
+	{
+		
+		Vector<IAtom> atoms;		
+		Vector<IAtom> layerAtoms = new Vector<IAtom>();
+		
+		if (terminalAtoms == null)
+		{
+			atoms = new Vector<IAtom>();
+			for (int i = 0; i < fragment.getAtomCount(); i++)
+				atoms.add(fragment.getAtom(i));
+		}
+		else
+			atoms = terminalAtoms;
+		
+		if(atoms.isEmpty())
+			return(layerAtoms);
+		
+		//Adding the atoms and bonds from the first layer around the current fragment		
+		for (int i = 0; i < atoms.size(); i++)
+		{
+			IAtom a = atoms.get(i);
+			List<IAtom> list = mol.getConnectedAtomsList(a);
+			for (int k = 0; k < list.size(); k++)
+			{
+				IAtom newAt = list.get(k);
+				if (!atoms.contains(newAt))
+				{
+					layerAtoms.add(newAt);
+					fragment.addAtom(newAt);
+					fragment.addBond(mol.getBond(a, newAt));
+				}
+			}
+			
+		}
+		
+		//Checking for bonds between the atoms from the first layer		
+		for (int i = 0; i < layerAtoms.size(); i++)
+		{
+			IAtom a = layerAtoms.get(i);
+			List<IAtom> list = mol.getConnectedAtomsList(a);
+			for (int k = 0; k < list.size(); k++)
+			{
+				IAtom a1 = list.get(k);
+				if (layerAtoms.contains(a1))
+					fragment.addBond(mol.getBond(a, a1));
+			}
+		}
+		
+		return(layerAtoms);
+		
+	}
+	
 	
 	IAtom cloneAtom(IAtom a)
 	{
