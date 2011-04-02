@@ -32,6 +32,13 @@
   		<artifactId>ambit2-smarts</artifactId>
   		<version>${project.version}</version>
   	</dependency>
+  	<dependency>
+  		<groupId>ambit</groupId>
+  		<artifactId>ambit2-ui</artifactId>
+  		<version>${project.version}</version>
+  		<type>jar</type>
+  		<scope>test</scope>
+  	</dependency>
   </dependencies>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
