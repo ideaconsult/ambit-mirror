@@ -244,15 +244,19 @@ public class RuleManager
 	
 	void iterateIncrementalSteps()
 	{	
-		
 		//first depth search approach 
+		int n = 0;
 		while (!stackIncSteps.isEmpty())
 		{	
+			n++;
 			//System.out.println("stack_size = " + stackIncSteps.size());
 			TautomerIncrementStep tStep = stackIncSteps.pop();
+			System.out.println(tStep.debugInfo());
 			//System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
 			//System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct)); 
 			expandIncremenStep(tStep);
+			if (n > 10)
+				break;
 		}
 	}
 	
@@ -285,8 +289,7 @@ public class RuleManager
 			stackIncSteps.push(newIncSteps[i]);
 			//System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct)); 
 		}	
-	}
-	
+	}	
 		
 	
 	TautomerIncrementStep[] generateNextIncrementSteps(TautomerIncrementStep curIncStep)
@@ -420,10 +423,10 @@ public class RuleManager
 		//(3) Revision of the UnusedRuleInstances
 		//This is very important since in guarantees that the left instances are still valid and correct
 		//e.g. double bonds and protons are OK
+		//Also new possibilities are searched.
 		
 		//(3.1) All unused instances that overlap with the current rule instance ri 
-		//are removed. Operation is performed in terms of the atoms from prevStruct. 
-		
+		//are removed. Operation is performed in terms of the atoms from prevStruct. 		
 		Vector<RuleInstance> checkedInstances = new Vector<RuleInstance>();
 		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
 		{
@@ -435,9 +438,9 @@ public class RuleManager
 		incStep.unUsedRuleInstances = checkedInstances;
 		
 		//(3.2)Also new instances are searched in several topological layers 
-		//around the atoms from the current instance
-		Vector<RuleInstance> newUnusedInstances = new Vector<RuleInstance>();
-		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);
+		//around the atoms from the current instance. This operation is performed in terms of the new atoms
+		Vector<RuleInstance> newInstances = new Vector<RuleInstance>();
+		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		
 		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
 		{	
 			//System.out.println("$$ "  + i);
@@ -445,14 +448,52 @@ public class RuleManager
 			for (int k = 0; k < instances.size(); k++)
 			{	
 				RuleInstance genRI = (RuleInstance)instances.get(k);
+				//Check whether genRI duplicates newRI
 				int nOvAt = getNumOfOverlappedAtoms(newRI, genRI);
 				if (nOvAt < newRI.atoms.size())
-					newUnusedInstances.add(genRI);
+					newInstances.add(genRI);
 			}	
 		}
 		
-		incStep.unUsedRuleInstances.addAll(newUnusedInstances);
+		//(3.3)Filter new instances so that they do not duplicate 
+		//used and unused rule instances. 
+		//Otherwise infinite recursion loops are obtained.  
+		Vector<RuleInstance> filteredNewInstances = new Vector<RuleInstance>();
+		for (int i = 0; i < newInstances.size(); i++)
+		{
+			RuleInstance testedRI = newInstances.get(i);
+			boolean FlagOK = true;
+			
+			for (int k = 0; k < incStep.usedRuleInstances.size(); k++)
+			{
+				RuleInstance r = incStep.usedRuleInstances.get(k);
+				int nOvAt = getNumOfOverlappedAtoms(testedRI,r);
+				if (nOvAt == testedRI.atoms.size())
+				{
+					FlagOK = false;
+					break;
+				}
+			}
+			
+			if (!FlagOK)
+				continue;
+			
+			for (int k = 0; k < incStep.unUsedRuleInstances.size(); k++)
+			{
+				RuleInstance r = incStep.unUsedRuleInstances.get(k);
+				int nOvAt = getNumOfOverlappedAtoms(testedRI,r);
+				if (nOvAt == testedRI.atoms.size())
+				{
+					FlagOK = false;
+					break;
+				}
+			}
+			
+			if (FlagOK)
+				filteredNewInstances.add(testedRI);
+		}
 		
+		incStep.unUsedRuleInstances.addAll(filteredNewInstances);
 		
 	}
 	
@@ -467,6 +508,8 @@ public class RuleManager
 		for (int i = 0; i < ri.bonds.size(); i++)
 			fragment.addBond(ri.bonds.get(i));
 		
+		System.out.print("initial fragment: " + SmartsHelper.moleculeToSMILES(fragment)); 
+		
 		//adding several layers around initial fragment
 		Vector<IAtom> terminalAtoms = null;
 		Vector<IAtom> layerAtoms = null;
@@ -475,44 +518,55 @@ public class RuleManager
 			layerAtoms = addLayerToFragment(mol, fragment, terminalAtoms);
 			terminalAtoms = layerAtoms;
 		}
+		
+		System.out.print("layered fragment: " + SmartsHelper.moleculeToSMILES(fragment));
 		return fragment;
 	}
 	
 	Vector<IAtom> addLayerToFragment(IAtomContainer mol, Molecule fragment, Vector<IAtom> terminalAtoms)
 	{
 		
-		Vector<IAtom> atoms;		
+		Vector<IAtom> termAtoms;		
 		Vector<IAtom> layerAtoms = new Vector<IAtom>();
 		
-		if (terminalAtoms == null)
+		if (terminalAtoms == null) //all atoms are treated as terminal ones
 		{
-			atoms = new Vector<IAtom>();
+			termAtoms = new Vector<IAtom>();
 			for (int i = 0; i < fragment.getAtomCount(); i++)
-				atoms.add(fragment.getAtom(i));
+				termAtoms.add(fragment.getAtom(i));
 		}
 		else
-			atoms = terminalAtoms;
+			termAtoms = terminalAtoms;
 		
-		if(atoms.isEmpty())
-			return(layerAtoms);
+		if(termAtoms.isEmpty())
+			return(layerAtoms); //No additional layer can be added
 		
 		//Adding the atoms and bonds from the first layer around the current fragment		
-		for (int i = 0; i < atoms.size(); i++)
+		for (int i = 0; i < termAtoms.size(); i++)
 		{
-			IAtom a = atoms.get(i);
+			IAtom a = termAtoms.get(i);
 			List<IAtom> list = mol.getConnectedAtomsList(a);
 			for (int k = 0; k < list.size(); k++)
 			{
 				IAtom newAt = list.get(k);
-				if (!atoms.contains(newAt))
+				if (!termAtoms.contains(newAt))
 				{
-					layerAtoms.add(newAt);
-					fragment.addAtom(newAt);
-					fragment.addBond(mol.getBond(a, newAt));
+					//It is possible that current atom is already added
+					//being connected to another terminal atom. However the bond should be checked in this case;
+					if (!fragment.contains(newAt))
+					{	
+						layerAtoms.add(newAt);
+						fragment.addAtom(newAt);
+					}
+					//Also it is possible that fragment already contains the new Atom 
+					//but it does not contain Bond(a,newAt) 
+					IBond newBo = mol.getBond(a, newAt);
+					if (!fragment.contains(newBo))
+						fragment.addBond(newBo);
 				}
 			}
-			
 		}
+		
 		
 		//Checking for bonds between the atoms from the first layer		
 		for (int i = 0; i < layerAtoms.size(); i++)
@@ -523,12 +577,16 @@ public class RuleManager
 			{
 				IAtom a1 = list.get(k);
 				if (layerAtoms.contains(a1))
-					fragment.addBond(mol.getBond(a, a1));
+				{	
+					//The bond could be already added to this fragment. Check is needed.
+					IBond newLayerBo = mol.getBond(a, a1);
+					if (!fragment.contains(newLayerBo))
+						fragment.addBond(newLayerBo);
+				}	
 			}
 		}
 		
 		return(layerAtoms);
-		
 	}
 	
 	

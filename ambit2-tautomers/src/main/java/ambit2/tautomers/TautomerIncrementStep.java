@@ -24,4 +24,20 @@ public class TautomerIncrementStep
 	}
 	
 	
+	public String debugInfo()
+	{		
+		StringBuffer sb = new StringBuffer();
+		sb.append("IncStep:\n");
+		sb.append("  used_ri:");
+		for (int i = 0; i < usedRuleInstances.size(); i++)
+			sb.append("{"+usedRuleInstances.get(i).debugInfo(struct)+"} ");
+		sb.append("\n");	
+		sb.append("  unUsed_ri:");
+		for (int i = 0; i < unUsedRuleInstances.size(); i++)
+			sb.append("{"+unUsedRuleInstances.get(i).debugInfo(struct)+"} ");
+		sb.append("\n");
+		
+		return(sb.toString());
+	}
+	
 }
