@@ -181,5 +181,16 @@ public class RuleInstance implements IRuleInstance
 		return(state);
 	}
 	
+	public String debugInfo(IAtomContainer mol)
+	{
+		StringBuffer sb = new StringBuffer();
+		//sb.append(rule.name);
+		sb.append(rule.smartsStates[curState]);
+		sb.append(" at");
+		for (int i = 0; i < atoms.size(); i++)
+			sb.append(" "+mol.getAtomNumber(atoms.get(i)));
+		return(sb.toString());
+	}
+	
 	
 }
