@@ -25,9 +25,25 @@ public class TestTautomers
 		//tt.test("O=CC(C)([H])C");  --> problem with the explicit H atoms 
 		//tt.test("OC=NCC(CC=CO)CCCC");
 		//tt.test("OC=CCCNC=O");
-		//tt.testCase("OC=CCCNC=O", new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"});
+		//tt.testCase("OC=CCCNC=O", new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"} , true);
 		//tt.testCloning("CC(C)C");
-		tt.test("C=C(O)N");
+		//tt.test("C=C(O)N");
+		
+		//tt.performTestCases();
+		
+	}
+	
+	public void performTestCases()
+	{
+		int nErrors = 0;
+		
+		nErrors += testCase("OC=CCCNC=O", 
+				new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"}, false);
+		
+		
+		
+		System.out.println("Errors: " + nErrors);
+		
 	}
 	
 	public void test0(String smi)
@@ -53,7 +69,7 @@ public class TestTautomers
 			
 	}
 	
-	public void testCase(String smi, String expectedTautomers[] )
+	public int testCase(String smi, String expectedTautomers[], boolean FlagPrintTautomers)
 	{			
 		System.out.println("Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
@@ -62,16 +78,24 @@ public class TestTautomers
 		
 		
 		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
-		for (int i = 0; i < resultTautomers.size(); i++)		
-			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+		if (FlagPrintTautomers)
+			for (int i = 0; i < resultTautomers.size(); i++)		
+				System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 		
 		int res = checkResultTautomerSet(resultTautomers, expectedTautomers);
 		if (res == 0)
+		{	
 			System.out.println("Tautomers OK");
+			return (0);
+		}	
 		else
+		{	
 			System.out.println("Tautomers test error = " + res);
+			return (1);
+		}
 		
 	}
+	
 	
 	//helper utilities for the tests
 	public int checkResultTautomerSet(Vector<IAtomContainer> resultStr, String expectedStr[])
