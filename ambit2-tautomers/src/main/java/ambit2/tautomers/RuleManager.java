@@ -244,19 +244,16 @@ public class RuleManager
 	
 	void iterateIncrementalSteps()
 	{	
-		//first depth search approach 
-		int n = 0;
+		//first depth search approach
 		while (!stackIncSteps.isEmpty())
 		{	
-			n++;
 			//System.out.println("stack_size = " + stackIncSteps.size());
 			TautomerIncrementStep tStep = stackIncSteps.pop();
-			System.out.println(tStep.debugInfo());
+			
+			//System.out.println(tStep.debugInfo());
 			//System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
 			//System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct)); 
 			expandIncremenStep(tStep);
-			if (n > 10)
-				break;
 		}
 	}
 	
@@ -321,7 +318,7 @@ public class RuleManager
 	{
 		//(1)generate new structure  (modified clone of prevStruct)
 		//(2)Generate and store the modified RuleInstance in usedRuleInstances
-		//(3)Revise UnusedRuleInstances  
+		//(3)Revise Used and Unused Rule Instances which intersect with the current active RuleInstance 
 	
 		Molecule mol = new Molecule();
 		RuleInstance newRI = new RuleInstance(ri); 
@@ -420,13 +417,65 @@ public class RuleManager
 				
 		 
 		
-		//(3) Revision of the UnusedRuleInstances
+		//(3) Revision of the Used and Unused Rule Instances
 		//This is very important since in guarantees that the left instances are still valid and correct
 		//e.g. double bonds and protons are OK
 		//Also new possibilities are searched.
 		
-		//(3.1) All unused instances that overlap with the current rule instance ri 
+		
+		//(3.1) All used instances that overlap with the newly generated instance (newRI) 
+		//are updated. They must described in the terms of the new atoms. 
+		//Old atoms references are replaces with references to the new atoms (and bonds correspondingly).
+		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
+		{			
+			RuleInstance usedRI =  incStep.usedRuleInstances.get(i);
+			int nOvAt = getNumOfOverlappedAtoms(ri,usedRI);
+			if (nOvAt > 0)
+			{
+				//TODO - handle excplicitH
+				
+				//Registering the old atoms which overlap with newRI
+				//into the helper 
+				IAtom newUsedRIAtoms[] = new IAtom[usedRI.atoms.size()];
+				IBond newUsedRIBonds[] = new IBond[usedRI.bonds.size()];				
+				for (int k = 0; k < usedRI.atoms.size(); k++)
+				{
+					IAtom a = usedRI.atoms.get(k);
+					int index = ri.atoms.indexOf(a);
+					if (index == -1)
+						newUsedRIAtoms[k] = a;  //atom is not part of the old ri hence it does not overlap with newRI
+					else
+						newUsedRIAtoms[k] = newRIAtoms[index]; //new replacement atom is taken
+				}
+				
+				for (int k = 0; k < usedRI.bonds.size(); k++)
+				{
+					IBond b = usedRI.bonds.get(k);
+					int index = ri.bonds.indexOf(b);
+					if (index == -1)
+						newUsedRIBonds[k] = b; //bond is not part of the old ri hence it does not overlap with newRI
+					else
+						newUsedRIBonds[k] = newRIBonds[index];
+				}
+				
+				
+				//Final replacement of the old atoms/bonds with new ones
+				usedRI.atoms.clear();
+				usedRI.bonds.clear();
+				for (int k = 0; k < newUsedRIAtoms.length; k++)
+					usedRI.atoms.add(newUsedRIAtoms[k]);
+				for (int k = 0; k < newUsedRIBonds.length; k++)
+					usedRI.bonds.add(newUsedRIBonds[k]);
+			}
+			
+			
+		}
+		
+		
+		//(3.2) All unused instances that overlap with the current rule instance ri 
 		//are removed. Operation is performed in terms of the atoms from prevStruct. 		
+		
+		//System.out.println("check 3.1");
 		Vector<RuleInstance> checkedInstances = new Vector<RuleInstance>();
 		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
 		{
@@ -434,10 +483,12 @@ public class RuleManager
 			int nOvAt = getNumOfOverlappedAtoms(ri,unusedRI);
 			if (nOvAt == 0)
 				checkedInstances.add(unusedRI);
+			//else
+			//	System.out.println("**excluded unused: " + unusedRI.debugInfo(prevStruct));
 		}
 		incStep.unUsedRuleInstances = checkedInstances;
 		
-		//(3.2)Also new instances are searched in several topological layers 
+		//(3.3)Also new instances are searched in several topological layers 
 		//around the atoms from the current instance. This operation is performed in terms of the new atoms
 		Vector<RuleInstance> newInstances = new Vector<RuleInstance>();
 		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		
@@ -455,7 +506,7 @@ public class RuleManager
 			}	
 		}
 		
-		//(3.3)Filter new instances so that they do not duplicate 
+		//(3.4)Filter new instances so that they do not duplicate 
 		//used and unused rule instances. 
 		//Otherwise infinite recursion loops are obtained.  
 		Vector<RuleInstance> filteredNewInstances = new Vector<RuleInstance>();
@@ -508,7 +559,7 @@ public class RuleManager
 		for (int i = 0; i < ri.bonds.size(); i++)
 			fragment.addBond(ri.bonds.get(i));
 		
-		System.out.print("initial fragment: " + SmartsHelper.moleculeToSMILES(fragment)); 
+		//System.out.print("initial fragment: " + SmartsHelper.moleculeToSMILES(fragment)); 
 		
 		//adding several layers around initial fragment
 		Vector<IAtom> terminalAtoms = null;
@@ -519,7 +570,7 @@ public class RuleManager
 			terminalAtoms = layerAtoms;
 		}
 		
-		System.out.print("layered fragment: " + SmartsHelper.moleculeToSMILES(fragment));
+		//System.out.print("layered fragment: " + SmartsHelper.moleculeToSMILES(fragment));
 		return fragment;
 	}
 	
