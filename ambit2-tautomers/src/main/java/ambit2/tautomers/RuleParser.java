@@ -13,7 +13,7 @@ public class RuleParser
 	
 	public Rule parse(String ruleString)
 	{	
-		System.out.println("rule: " + ruleString);
+		//System.out.println("rule: " + ruleString);
 		errors = "";
 		Rule rule = new Rule();
 		curRule = rule;
