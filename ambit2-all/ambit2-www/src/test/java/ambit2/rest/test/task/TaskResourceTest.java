@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.opentox.dsl.aa.IAuthToken;
 import org.opentox.dsl.task.ClientResourceWrapper;
+import org.opentox.dsl.task.RemoteTask;
+import org.opentox.dsl.task.RemoteTaskPool;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -29,8 +31,6 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.ICallableTask;
-import ambit2.rest.task.RemoteTask;
-import ambit2.rest.task.RemoteTaskPool;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.test.ResourceTest;
 

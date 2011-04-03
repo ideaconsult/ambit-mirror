@@ -22,8 +22,8 @@ import ambit2.rest.task.FilteredTasksIterator;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.SingleTaskIterator;
 import ambit2.rest.task.Task;
-import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.Task.TaskStatus;
+import ambit2.rest.task.TaskResult;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs

@@ -9,6 +9,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.codehaus.stax2.XMLOutputFactory2;
+import org.opentox.dsl.task.RemoteTask;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -157,7 +158,7 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 						Thread.yield();
 					}
 					if (task.isERROR()) 
-						throw task.error;
+						throw task.getError();
 					else	
 						return new TaskResult(task.getResult().toString());
 				} catch (Exception x) {

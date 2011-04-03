@@ -10,11 +10,11 @@ import org.opentox.dsl.OTFeature;
 import org.opentox.dsl.OTFeatures;
 import org.opentox.dsl.OTModel;
 import org.opentox.dsl.OTSuperModel;
+import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 
-import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ResourceTest;
 
 public class OTModelTest extends ResourceTest {
