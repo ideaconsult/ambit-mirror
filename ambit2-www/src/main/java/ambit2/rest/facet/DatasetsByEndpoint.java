@@ -27,8 +27,9 @@ public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacetQuery
 				
 		String endpoint = getParams().getFirstValue(MetadatasetResource.search_features.feature_sameas.toString());
 		EndpointCompoundFacetQuery q = new EndpointCompoundFacetQuery(getRequest().getResourceRef().toString());
+		Property p = null;
 		if (endpoint != null) {
-			Property p  = new Property("");
+			p  = new Property("");
 			p.setLabel(endpoint);
 			q.setFieldname(p);
 		}
@@ -37,8 +38,14 @@ public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacetQuery
 		StringCondition c = StringCondition.getInstance(StringCondition.C_REGEXP);
 		String param = getParams().getFirstValue(QueryResource.condition.toString());
 		try {
-			if (param != null)	c = StringCondition.getInstance(param);
+			if (param != null)	{
+				if ("startswith".equals(param.toLowerCase()))
+					q.setCondition(StringCondition.getInstance(StringCondition.C_STARTS_WITH));
+				else
+					c = StringCondition.getInstance(param);
+			}
 		} catch (Exception x) {	
+			
 		} finally {
 			q.setCondition(c);
 		}
