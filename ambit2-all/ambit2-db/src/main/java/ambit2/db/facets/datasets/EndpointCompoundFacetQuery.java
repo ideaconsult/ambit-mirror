@@ -100,9 +100,9 @@ public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStr
 	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
 			record = new EndpointCompoundFacet(null);
-			record.setProperty(getFieldname());
-			record.setDataset(getValue());
 		}
+		record.setProperty(getFieldname());
+		record.setDataset(getValue());		
 		try {
 			record.setValue(rs.getString(1));
 			record.setCount(rs.getInt(2));
