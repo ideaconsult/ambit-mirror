@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTModel;
 import org.opentox.dsl.task.ClientResourceWrapper;
+import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -23,7 +24,6 @@ import org.restlet.representation.Representation;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
-import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {

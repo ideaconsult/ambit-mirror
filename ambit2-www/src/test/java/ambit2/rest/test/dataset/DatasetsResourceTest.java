@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.opentox.dsl.task.RemoteTask;
 import org.restlet.Client;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -35,7 +36,6 @@ import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
-import ambit2.rest.task.RemoteTask;
 import ambit2.rest.test.ProtectedResourceTest;
 
 

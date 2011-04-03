@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.opentox.dsl.task.RemoteTask;
+import org.opentox.dsl.task.RemoteTaskPool;
 import org.restlet.Context;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
@@ -130,7 +132,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		while (algs.hasMoreElements()) {
 			Reference alg = algs.nextElement();
 			RemoteTask task = algorithms.get(alg);
-			if (Status.SUCCESS_OK.equals(task.status)) {
+			if (Status.SUCCESS_OK.equals(task.getStatus())) {
 				Form input = new Form();
 				input.add(OpenTox.params.dataset_uri.toString(),task.getResult().toString());
 				input.add(OpenTox.params.dataset_service.toString(),datasetService.toString());
@@ -163,7 +165,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		
 		
 		
-		if (Status.SUCCESS_OK.equals(currentJob.status)) {
+		if (Status.SUCCESS_OK.equals(currentJob.getStatus())) {
 			if (currentJob.getResult() == null) 
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,currentJob.toString());
 			//and finally run the model
@@ -179,12 +181,12 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			
 			jobs.clear();
 			if (Status.SUCCESS_OK.equals(currentJob.getStatus()))
-					return currentJob.result;
+					return currentJob.getResult();
 
 		} 
-		if (currentJob.error!= null) 
-			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,currentJob.toString(),currentJob.error);
-		else throw new ResourceException(currentJob.status);		
+		if (currentJob.getError()!= null) 
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,currentJob.toString(),currentJob.getError());
+		else throw new ResourceException(currentJob.getStatus());		
 
 	}
 	
