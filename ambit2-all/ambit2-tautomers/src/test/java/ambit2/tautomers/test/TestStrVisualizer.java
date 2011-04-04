@@ -14,8 +14,8 @@ public class TestStrVisualizer
 {
 	JFrame frame;
 	int nStr = 0;
-	int nCol = 10;	
-	int size = 100;
+	int nCol = 8;	
+	int size = 150;
 	
 	public static void main(String[] args) 
 	{
