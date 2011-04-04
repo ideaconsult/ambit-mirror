@@ -17,7 +17,7 @@ public class TautomerManager
 	Vector<String> errors = new Vector<String>(); 
 		
 	
-	TautomerManager()
+	public TautomerManager()
 	{
 		knowledgeBase = new KnowledgeBase();
 		if (knowledgeBase.errors.size() > 0)
