@@ -28,8 +28,9 @@ public class TestTautomers
 		//tt.test("OC=CCCNC=O");
 		//tt.testCase("OC=CCCNC=O", new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"} , true);
 		//tt.testCloning("CC(C)C");
-		tt.test("C=C(O)N");
-		
+		//tt.test("NC=C(O)N");
+		tt.test("NN=CO");
+		//tt.visualTest("N=C(N)NC=O");
 		//tt.performTestCases();
 		
 	}
@@ -69,6 +70,23 @@ public class TestTautomers
 			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 			
 	}
+	
+	public void visualTest(String smi)
+	{
+		System.out.println("Visual Testing: " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		tman.setStructure(mol);
+		//Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
+		
+		
+		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		for (int i = 0; i < resultTautomers.size(); i++)		
+			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+		
+		TestStrVisualizer tsv = new TestStrVisualizer(resultTautomers);
+	}
+	
+	
 	
 	public int testCase(String smi, String expectedTautomers[], boolean FlagPrintTautomers)
 	{			

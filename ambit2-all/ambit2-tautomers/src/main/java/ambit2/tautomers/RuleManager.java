@@ -245,6 +245,8 @@ public class RuleManager
 	void iterateIncrementalSteps()
 	{	
 		//first depth search approach
+		int nMax = 20;
+		int n = 0;
 		while (!stackIncSteps.isEmpty())
 		{	
 			//System.out.println("stack_size = " + stackIncSteps.size());
@@ -254,6 +256,10 @@ public class RuleManager
 			//System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
 			//System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct)); 
 			expandIncremenStep(tStep);
+			
+			n++;
+			if (n > nMax)
+				break;
 		}
 	}
 	
@@ -424,7 +430,7 @@ public class RuleManager
 		
 		
 		//(3.1) All used instances that overlap with the newly generated instance (newRI) 
-		//are updated. They must described in the terms of the new atoms. 
+		//are updated. They must be described in the terms of the new atoms. 
 		//Old atoms references are replaces with references to the new atoms (and bonds correspondingly).
 		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
 		{			
@@ -466,10 +472,16 @@ public class RuleManager
 					usedRI.atoms.add(newUsedRIAtoms[k]);
 				for (int k = 0; k < newUsedRIBonds.length; k++)
 					usedRI.bonds.add(newUsedRIBonds[k]);
+				
+				System.out.println("revised used instance: " + usedRI.debugInfo(incStep.struct));
+				
 			}
 			
 			
 		}
+		
+		
+		//System.out.println(incStep.debugInfo());
 		
 		
 		//(3.2) All unused instances that overlap with the current rule instance ri 
