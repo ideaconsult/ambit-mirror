@@ -6,6 +6,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class TautomerIncrementStep 
 {
+	public static int counter = 0;
+	int ID = 0;
+	int parentID = 0;
 	Vector<RuleInstance> usedRuleInstances = new Vector<RuleInstance>();
 	Vector<RuleInstance> unUsedRuleInstances = new Vector<RuleInstance>();
 		

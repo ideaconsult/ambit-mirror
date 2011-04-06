@@ -231,13 +231,17 @@ public class RuleManager
 	void firstIncrementalStep()
 	{
 		stackIncSteps.clear();
+		TautomerIncrementStep.counter = 0;
 		
 		//Creation of the 0-th increment step:
 		TautomerIncrementStep incStep0 = new TautomerIncrementStep(); 
 		incStep0.struct = tman.molecule;
+		incStep0.ID = TautomerIncrementStep.counter;
+		TautomerIncrementStep.counter++;
 		for (int i = 0; i < extendedRuleInstances.size(); i++)
 			incStep0.unUsedRuleInstances.add((RuleInstance)extendedRuleInstances.get(i));
-				
+		
+		System.out.println(incStep0.debugInfo());
 		stackIncSteps.push(incStep0);
 	}
 	
@@ -273,8 +277,8 @@ public class RuleManager
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
 				tman.resultTautomers.add(newTautomer);
-				//System.out.println("   new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
-				//		+ "    " + incStep.getTautomerCombination());
+				System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
+						+ "    " + incStep.getTautomerCombination());
 			}
 			catch(Exception e)
 			{
@@ -309,6 +313,9 @@ public class RuleManager
 		for (int i = 0; i < n; i++)
 		{	
 			incSteps[i] = new TautomerIncrementStep();
+			incSteps[i].ID = TautomerIncrementStep.counter;
+			incSteps[i].parentID = curIncStep.ID;
+			TautomerIncrementStep.counter++;
 			incSteps[i].usedRuleInstances.addAll(curIncStep.usedRuleInstances);
 			incSteps[i].unUsedRuleInstances.addAll(curIncStep.unUsedRuleInstances);
 			setNewIncrementStep(curIncStep.struct,ri,i,incSteps[i]);
@@ -326,6 +333,9 @@ public class RuleManager
 		//(2)Generate and store the modified RuleInstance in usedRuleInstances
 		//(3)Revise Used and Unused Rule Instances which intersect with the current active RuleInstance 
 	
+		System.out.println(">>>>>>Input: used:" + incStep.usedRuleInstances.size() 
+				+ "  unused:" + incStep.unUsedRuleInstances.size());
+		
 		Molecule mol = new Molecule();
 		RuleInstance newRI = new RuleInstance(ri); 
 		
@@ -421,7 +431,8 @@ public class RuleManager
 		newRI.gotoState(state);
 		//System.out.print("   " + SmartsHelper.moleculeToSMILES(incStep.struct));
 				
-		 
+		System.out.println();
+		System.out.println(">>>>>IncStep ID = " + incStep.ID + "       parent = " + incStep.parentID);
 		
 		//(3) Revision of the Used and Unused Rule Instances
 		//This is very important since in guarantees that the left instances are still valid and correct
@@ -435,6 +446,15 @@ public class RuleManager
 		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
 		{			
 			RuleInstance usedRI =  incStep.usedRuleInstances.get(i);
+			
+			if (usedRI == newRI)
+			{	
+				System.out.println("   --usedRI (" +i+")" + usedRI.debugInfo(incStep.struct) + "  newRI");
+				continue;
+			}
+			
+			System.out.println("   --usedRI (" +i+")" + usedRI.debugInfo(prevStruct));
+			
 			int nOvAt = getNumOfOverlappedAtoms(ri,usedRI);
 			if (nOvAt > 0)
 			{
@@ -481,7 +501,7 @@ public class RuleManager
 		}
 		
 		
-		//System.out.println(incStep.debugInfo());
+		
 		
 		
 		//(3.2) All unused instances that overlap with the current rule instance ri 
@@ -492,6 +512,7 @@ public class RuleManager
 		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
 		{
 			RuleInstance unusedRI = incStep.unUsedRuleInstances.get(i);
+			System.out.println("   unusedRI (" +i+")" + unusedRI.debugInfo(prevStruct));
 			int nOvAt = getNumOfOverlappedAtoms(ri,unusedRI);
 			if (nOvAt == 0)
 				checkedInstances.add(unusedRI);
@@ -500,10 +521,15 @@ public class RuleManager
 		}
 		incStep.unUsedRuleInstances = checkedInstances;
 		
+		
+		System.out.print("  new_struct: " +SmartsHelper.moleculeToSMILES(incStep.struct));
+		
+		
 		//(3.3)Also new instances are searched in several topological layers 
 		//around the atoms from the current instance. This operation is performed in terms of the new atoms
 		Vector<RuleInstance> newInstances = new Vector<RuleInstance>();
 		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		
+		System.out.print("  fragment: " +SmartsHelper.moleculeToSMILES(fragment));
 		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
 		{	
 			//System.out.println("$$ "  + i);
@@ -514,7 +540,10 @@ public class RuleManager
 				//Check whether genRI duplicates newRI
 				int nOvAt = getNumOfOverlappedAtoms(newRI, genRI);
 				if (nOvAt < newRI.atoms.size())
+				{	
 					newInstances.add(genRI);
+					System.out.println("   ++genRI (" +k+")" + genRI.debugInfo(incStep.struct));
+				}	
 			}	
 		}
 		
@@ -557,6 +586,9 @@ public class RuleManager
 		}
 		
 		incStep.unUsedRuleInstances.addAll(filteredNewInstances);
+		
+		System.out.println("<<<<<Output: used:" + incStep.usedRuleInstances.size() 
+				+ "  unused:" + incStep.unUsedRuleInstances.size());
 		
 	}
 	
