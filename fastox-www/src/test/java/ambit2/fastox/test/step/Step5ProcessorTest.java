@@ -11,9 +11,9 @@ import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.users.ToxPredictSession;
 import ambit2.fastox.users.ToxPredictUser;
 import ambit2.fastox.wizard.Wizard;
-import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+import ambit2.fastox.wizard.WizardStep;
 
 public class Step5ProcessorTest extends StepProcessorTest {
 

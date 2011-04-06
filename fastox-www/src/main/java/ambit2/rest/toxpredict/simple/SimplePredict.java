@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -21,7 +22,6 @@ import ambit2.base.io.DownloadTool;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.OpenTox;
-import ambit2.rest.task.RemoteTask;
 
 public class SimplePredict extends ServerResource {
 	protected Form params;

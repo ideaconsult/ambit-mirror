@@ -8,8 +8,8 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.fastox.users.IToxPredictUser;
 import ambit2.fastox.users.MemoryUsersStorage;
-import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
+import ambit2.fastox.wizard.WizardResource;
 
 public class AdminResource extends WizardResource {
 	

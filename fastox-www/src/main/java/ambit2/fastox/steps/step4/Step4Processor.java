@@ -5,8 +5,8 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.steps.FastoxStepResource.params;
+import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.users.IToxPredictSession;
 
 public class Step4Processor extends StepProcessor {

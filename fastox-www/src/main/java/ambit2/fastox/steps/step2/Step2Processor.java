@@ -25,7 +25,6 @@ import ambit2.fastox.users.ToxPredictSession.SearchMode;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
-import ambit2.rest.OpenTox;
 
 public class Step2Processor extends StepProcessor {
 

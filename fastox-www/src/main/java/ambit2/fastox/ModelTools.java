@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -14,7 +15,6 @@ import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.WizardResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.rdf.OT;
-import ambit2.rest.task.RemoteTask;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.QuerySolution;

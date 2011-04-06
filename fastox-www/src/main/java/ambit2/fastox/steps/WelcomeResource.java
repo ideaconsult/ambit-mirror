@@ -11,9 +11,9 @@ import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.users.IToxPredictUser;
 import ambit2.fastox.users.ToxPredictUser;
 import ambit2.fastox.users.UserResource;
-import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+import ambit2.fastox.wizard.WizardResource;
 
 /**
  * Entry point

@@ -14,9 +14,9 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.steps.StepException;
 import ambit2.fastox.steps.StepProcessor;
-import ambit2.fastox.steps.FastoxStepResource.params;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.wizard.Wizard;
 import ambit2.fastox.wizard.Wizard.SERVICE;

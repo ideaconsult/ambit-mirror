@@ -1,5 +1,6 @@
 package ambit2.fastox.steps.step5;
 
+import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -8,10 +9,9 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.steps.FastoxStepResource.params;
+import ambit2.fastox.steps.StepProcessor;
 import ambit2.fastox.users.IToxPredictSession;
-import ambit2.rest.task.RemoteTask;
 
 /**
  * Form.model contains uri to models.

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
+import org.opentox.dsl.task.RemoteTask;
+import org.opentox.dsl.task.RemoteTaskPool;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -16,8 +18,6 @@ import ambit2.fastox.steps.FastoxStepResource;
 import ambit2.fastox.steps.StepException;
 import ambit2.fastox.wizard.Wizard.SERVICE;
 import ambit2.rest.OpenTox;
-import ambit2.rest.task.RemoteTask;
-import ambit2.rest.task.RemoteTaskPool;
 
 /**
  * Browse & check structure

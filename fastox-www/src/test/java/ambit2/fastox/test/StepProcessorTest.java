@@ -11,8 +11,8 @@ import org.restlet.data.Protocol;
 
 import ambit2.fastox.FastoxComponent;
 import ambit2.fastox.steps.StepProcessor;
-import ambit2.fastox.wizard.WizardStep;
 import ambit2.fastox.wizard.Wizard.WizardMode;
+import ambit2.fastox.wizard.WizardStep;
 
 
 public abstract class StepProcessorTest {

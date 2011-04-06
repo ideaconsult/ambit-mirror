@@ -19,8 +19,8 @@ import org.restlet.resource.ResourceException;
 import ambit2.fastox.ModelTools;
 import ambit2.fastox.users.IToxPredictSession;
 import ambit2.fastox.users.UserResource;
-import ambit2.fastox.wizard.WizardResource;
 import ambit2.fastox.wizard.Wizard.SERVICE;
+import ambit2.fastox.wizard.WizardResource;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;

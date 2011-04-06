@@ -11,7 +11,6 @@ import ambit2.fastox.steps.WelcomeResource;
 import ambit2.fastox.steps.step1.Step1;
 import ambit2.fastox.steps.step2.Step2;
 import ambit2.fastox.steps.step3.Step3;
-import ambit2.fastox.steps.step4.Step4;
 import ambit2.fastox.steps.step5.Step5;
 import ambit2.fastox.steps.step6.Step6;
 

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.restlet.Response;
-import org.restlet.data.ChallengeResponse;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;

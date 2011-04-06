@@ -5,10 +5,9 @@ import java.util.Iterator;
 
 import org.opentox.dsl.OTModel;
 import org.opentox.dsl.OTModels;
+import org.opentox.dsl.task.RemoteTask;
+import org.opentox.dsl.task.RemoteTaskPool;
 import org.opentox.rdf.OT.OTProperty;
-
-import ambit2.rest.task.RemoteTask;
-import ambit2.rest.task.RemoteTaskPool;
 
 
 /**
