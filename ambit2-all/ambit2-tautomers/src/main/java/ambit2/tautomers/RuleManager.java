@@ -200,6 +200,8 @@ public class RuleManager
 	
 	
 	
+	
+	
 	/*
 	IRuleInstance combineRuleInstances(IRuleInstance ir1, IRuleInstance ir2)
 	{
@@ -254,6 +256,8 @@ public class RuleManager
 		while (!stackIncSteps.isEmpty())
 		{	
 			//System.out.println("stack_size = " + stackIncSteps.size());
+			System.out.print(debugStack());
+			
 			TautomerIncrementStep tStep = stackIncSteps.pop();
 			
 			//System.out.println(tStep.debugInfo());
@@ -327,12 +331,129 @@ public class RuleManager
 	}
 	
 	
+	void setNewIncrementStep_FullClone(IAtomContainer prevStruct, RuleInstance ri, int state, TautomerIncrementStep incStep)
+	{
+		//The structure is fully cloned as well as all used and unused rule instances
+		
+		Molecule mol = new Molecule(); //clone structure
+		IAtom newAtoms[] = new IAtom[prevStruct.getAtomCount()];
+		IBond newBonds[] = new IBond[prevStruct.getBondCount()];
+		
+		//Clone atoms
+		for (int i = 0; i < prevStruct.getAtomCount(); i++)
+		{
+			IAtom a = prevStruct.getAtom(i);
+			IAtom a1 = cloneAtom(a);
+			mol.addAtom(a1);
+			newAtoms[i] = a1;
+		}
+		
+		//Clone bonds
+		for (int i = 0; i < prevStruct.getBondCount(); i++)
+		{
+			IBond b = prevStruct.getBond(i);
+			IBond b1 = new Bond();
+			IAtom a01[] = new IAtom[2];
+			int ind0 = prevStruct.getAtomNumber(b.getAtom(0));
+			int ind1 = prevStruct.getAtomNumber(b.getAtom(1));;
+			a01[0] = mol.getAtom(ind0);
+			a01[1] = mol.getAtom(ind1);
+			b1.setAtoms(a01);
+			b1.setOrder(b.getOrder());
+			mol.addBond(b1);
+			newBonds[i] = b1;
+		}
+		
+		//Cloning all rule instances
+		Vector<RuleInstance> cloneInstances = new Vector<RuleInstance>();
+		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
+		{	
+			RuleInstance oldRI = incStep.usedRuleInstances.get(i);
+			RuleInstance cloneRI = cloneInstance(prevStruct,mol,oldRI);
+			cloneInstances.add(cloneRI);			
+		}	
+		incStep.usedRuleInstances = cloneInstances;	
+		
+		cloneInstances = new Vector<RuleInstance>();
+		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
+		{	
+			RuleInstance oldRI = incStep.unUsedRuleInstances.get(i);
+			RuleInstance cloneRI = cloneInstance(prevStruct,mol,oldRI);
+			cloneInstances.add(cloneRI);			
+		}	
+		incStep.unUsedRuleInstances = cloneInstances;
+		
+		
+		//Cloning the current active instance
+		RuleInstance newRI = cloneInstance(prevStruct,mol,ri);
+		incStep.usedRuleInstances.add(newRI);
+		newRI.gotoState(state);
+		
+		
+		//Revision of all unused instances
+		//This is very important since in guarantees that the left instances are still valid and correct
+		//e.g. double bonds and protons are OK
+		//Also new possibilities are searched.
+		
+		
+		//(a) All unused instances that overlap with the current rule instance newRI 
+		//are removed. Operation is performed in terms of cloned structure. 		
+		Vector<RuleInstance> checkedInstances = new Vector<RuleInstance>();
+		for (int i = 0; i < incStep.unUsedRuleInstances.size(); i++)
+		{
+			RuleInstance unusedRI = incStep.unUsedRuleInstances.get(i);
+			int nOvAt = getNumOfOverlappedAtoms(newRI,unusedRI);
+			if (nOvAt == 0)
+				checkedInstances.add(unusedRI);
+			//else
+			//	System.out.println("**excluded unused: " + unusedRI.debugInfo(prevStruct));
+		}
+		incStep.unUsedRuleInstances = checkedInstances;
+		
+		
+		//(b) new instances are searched in several topological layers 
+		//around the atoms from the current instance. This operation is performed in terms of the new atoms
+		
+		//TODO
+		
+	}
+		
+	RuleInstance cloneInstance(IAtomContainer prevStruct,IAtomContainer cloneStruct, RuleInstance oldRI)
+	{
+		
+		RuleInstance cloneRI = new RuleInstance(oldRI);
+		
+		for (int k = 0; k < oldRI.atoms.size(); k++)
+		{
+			IAtom a = oldRI.atoms.get(k);
+			int index = prevStruct.getAtomNumber(a);
+			cloneRI.atoms.add(cloneStruct.getAtom(index));
+		}
+		
+		for (int k = 0; k < oldRI.bonds.size(); k++)
+		{
+			IBond b = oldRI.bonds.get(k);
+			int ind0 = prevStruct.getAtomNumber(b.getAtom(0));
+			int ind1 = prevStruct.getAtomNumber(b.getAtom(1));
+			IAtom a0 = cloneStruct.getAtom(ind0);
+			IAtom a1 = cloneStruct.getAtom(ind1);
+			cloneRI.bonds.add(cloneStruct.getBond(a0, a1));
+		}
+		
+		//TODO handle explicit H
+		
+		return(cloneRI);
+	}
+	
+	
+	
 	void setNewIncrementStep(IAtomContainer prevStruct, RuleInstance ri, int state, TautomerIncrementStep incStep)
 	{
 		//(1)generate new structure  (modified clone of prevStruct)
 		//(2)Generate and store the modified RuleInstance in usedRuleInstances
 		//(3)Revise Used and Unused Rule Instances which intersect with the current active RuleInstance 
 	
+		System.out.println();
 		System.out.println(">>>>>>Input: used:" + incStep.usedRuleInstances.size() 
 				+ "  unused:" + incStep.unUsedRuleInstances.size());
 		
@@ -426,12 +547,12 @@ public class RuleManager
 		incStep.struct = mol;
 		incStep.usedRuleInstances.add(newRI);		
 		//Set the rule instance state
-		//System.out.println("curState = " + newRI.curState + "   -->  state = " + state);
-		//System.out.print("   " + SmartsHelper.moleculeToSMILES(incStep.struct));
+		System.out.println("curState = " + newRI.curState + "   -->  state = " + state);
+		System.out.print("   " + SmartsHelper.moleculeToSMILES(incStep.struct));
 		newRI.gotoState(state);
-		//System.out.print("   " + SmartsHelper.moleculeToSMILES(incStep.struct));
+		System.out.print("   " + SmartsHelper.moleculeToSMILES(incStep.struct));
 				
-		System.out.println();
+		
 		System.out.println(">>>>>IncStep ID = " + incStep.ID + "       parent = " + incStep.parentID);
 		
 		//(3) Revision of the Used and Unused Rule Instances
@@ -495,8 +616,7 @@ public class RuleManager
 				
 				System.out.println("revised used instance: " + usedRI.debugInfo(incStep.struct));
 				
-			}
-			
+			}			
 			
 		}
 		
@@ -700,33 +820,32 @@ public class RuleManager
 		return(null);
 	}
 	
-	/*
-	IBond cloneBond(IBond b)
-	{
-		try
-		{
-			IBond b1 = (IBond)b.clone();
-			return (b1);
-		}	
-		catch(Exception e)
-		{
-			tman.errors.add("Error cloning bond ");
-		}
+	
 		
-		return(null);
-	}
-	*/
 	
-	
-	/*
-	void reviseUnusedRuleInstances(TautomerIncrementStep incStep)
+	public String debugStack()
 	{
-		//The unused rule instances the overlap with the used rule instances are revised
-		//Strategy for economy rule application (searching) is used  
-		//Topological distances from the used rule instances are taken inti account ...
-		  
+		String prompt = "              >";
+		StringBuffer sb = new StringBuffer();
+		sb.append("********** stack\n");
+		
+		for (int i = 0; i < stackIncSteps.size(); i++)
+		{
+			TautomerIncrementStep incStep = stackIncSteps.get(i);
+			sb.append(prompt + "IncStep " + incStep.ID + "    parent = " + incStep.parentID +
+					"    " + SmartsHelper.moleculeToSMILES(incStep.struct));
+			sb.append(prompt + "    used_ri:");
+			for (int k = 0; k < incStep.usedRuleInstances.size(); k++)
+				sb.append("{"+incStep.usedRuleInstances.get(k).debugInfo(incStep.struct)+"} ");
+			sb.append("\n");	
+			sb.append(prompt + "  unUsed_ri:");
+			for (int k = 0; k < incStep.unUsedRuleInstances.size(); k++)
+				sb.append("{"+incStep.unUsedRuleInstances.get(k).debugInfo(incStep.struct)+"} ");
+			sb.append("\n");
+			
+		}
+		return(sb.toString());
 	}
-	*/
 		
 	
 }
