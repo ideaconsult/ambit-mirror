@@ -13,8 +13,9 @@ public class TautomerManager
 	Vector<IRuleInstance> extendedRuleInstances = new Vector<IRuleInstance>(); 
 	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
 	Vector<Rule> generatedRules = new Vector<Rule>(); 
-	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();
+	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();	
 	Vector<String> errors = new Vector<String>(); 
+	FilterTautomers tautomerFilter = new FilterTautomers();
 		
 	
 	public TautomerManager()
@@ -75,7 +76,9 @@ public class TautomerManager
 		
 		RuleManager rman = new RuleManager(this);
 		rman.firstIncrementalStep();
-		rman.iterateIncrementalSteps();		
+		rman.iterateIncrementalSteps();	
+		
+		resultTautomers = tautomerFilter.filter(resultTautomers);
 		
 		return(resultTautomers);
 	}
@@ -150,6 +153,9 @@ public class TautomerManager
 		//System.out.println();
 		
 	}
+	
+	
+	
 	
 	
 	String getTautomerCombination()
