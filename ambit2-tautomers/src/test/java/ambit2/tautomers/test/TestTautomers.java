@@ -22,16 +22,19 @@ public class TestTautomers
 		TestTautomers tt = new TestTautomers();
 		
 		
-		//tt.test("OC=CCC(CC=CO)CCCC=O");
+		//tt.visualTest("OC=CCC(CC=CO)CCCC=O");
 		//tt.test("O=CC(C)([H])C");  --> problem with the explicit H atoms 
 		//tt.test("OC=NCC(CC=CO)CCCC");
 		//tt.test("OC=CCCNC=O");
 		//tt.testCase("OC=CCCNC=O", new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"} , true);
 		//tt.testCloning("CC(C)C");
 		//tt.test("C=C(O)N");
-		tt.test("NN=CO");
+		//tt.test("NN=CO");
 		//tt.visualTest("N=C(N)NC=O");
 		//tt.performTestCases();
+		tt.visualTest("C1=CN=C(N)NC1(=O)");
+		tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
+		//tt.visualTest("C=CN");
 		
 	}
 	
