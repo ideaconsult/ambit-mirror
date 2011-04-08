@@ -243,7 +243,7 @@ public class RuleManager
 		for (int i = 0; i < extendedRuleInstances.size(); i++)
 			incStep0.unUsedRuleInstances.add((RuleInstance)extendedRuleInstances.get(i));
 		
-		System.out.println(incStep0.debugInfo());
+		//System.out.println(incStep0.debugInfo());
 		stackIncSteps.push(incStep0);
 	}
 	
@@ -256,7 +256,7 @@ public class RuleManager
 		while (!stackIncSteps.isEmpty())
 		{	
 			//System.out.println("stack_size = " + stackIncSteps.size());
-			System.out.print(debugStack());
+			//System.out.print(debugStack());
 			
 			TautomerIncrementStep tStep = stackIncSteps.pop();
 			
@@ -281,8 +281,8 @@ public class RuleManager
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
 				tman.resultTautomers.add(newTautomer);
-				System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
-						+ "    " + incStep.getTautomerCombination());
+				//System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
+				//		+ "    " + incStep.getTautomerCombination());
 			}
 			catch(Exception e)
 			{
@@ -322,7 +322,7 @@ public class RuleManager
 			TautomerIncrementStep.counter++;
 			incSteps[i].usedRuleInstances.addAll(curIncStep.usedRuleInstances);
 			incSteps[i].unUsedRuleInstances.addAll(curIncStep.unUsedRuleInstances);
-			setNewIncrementStep(curIncStep.struct,ri,i,incSteps[i]);
+			setNewIncrementStep_FullClone(curIncStep.struct,ri,i,incSteps[i]);
 			
 			//reviseUnusedRuleInstances(incSteps[i]) is included inside function setNewIncrementStep
 		}
@@ -383,11 +383,14 @@ public class RuleManager
 		}	
 		incStep.unUsedRuleInstances = cloneInstances;
 		
+		//Set the new structure
+		incStep.struct = mol;
 		
 		//Cloning the current active instance
 		RuleInstance newRI = cloneInstance(prevStruct,mol,ri);
 		incStep.usedRuleInstances.add(newRI);
 		newRI.gotoState(state);
+		
 		
 		
 		//Revision of all unused instances
@@ -413,8 +416,62 @@ public class RuleManager
 		
 		//(b) new instances are searched in several topological layers 
 		//around the atoms from the current instance. This operation is performed in terms of the new atoms
+				
+		Vector<RuleInstance> newInstances = new Vector<RuleInstance>();
+		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		
+		//System.out.print("  fragment: " +SmartsHelper.moleculeToSMILES(fragment));
+		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
+		{	
+			Vector<IRuleInstance> instances = tman.knowledgeBase.rules.get(i).applyRule(fragment); 
+			for (int k = 0; k < instances.size(); k++)
+			{	
+				RuleInstance genRI = (RuleInstance)instances.get(k);
+				newInstances.add(genRI);
+				//System.out.println("   ++genRI (" +k+")" + genRI.debugInfo(incStep.struct));
+			}	
+		}
 		
-		//TODO
+		//(c) Filter new instances so that they do not duplicate 
+		//used and unused rule instances. 
+		//Otherwise infinite recursion loops are obtained.  
+		Vector<RuleInstance> filteredNewInstances = new Vector<RuleInstance>();
+		for (int i = 0; i < newInstances.size(); i++)
+		{
+			RuleInstance testedRI = newInstances.get(i);
+			boolean FlagOK = true;
+			
+			for (int k = 0; k < incStep.usedRuleInstances.size(); k++)
+			{
+				RuleInstance r = incStep.usedRuleInstances.get(k);
+				int nOvAt = getNumOfOverlappedAtoms(testedRI,r);
+				if (nOvAt == testedRI.atoms.size())
+				{
+					FlagOK = false;
+					break;
+				}
+			}
+			
+			if (!FlagOK)
+				continue;
+			
+			for (int k = 0; k < incStep.unUsedRuleInstances.size(); k++)
+			{
+				RuleInstance r = incStep.unUsedRuleInstances.get(k);
+				int nOvAt = getNumOfOverlappedAtoms(testedRI,r);
+				if (nOvAt == testedRI.atoms.size())
+				{
+					FlagOK = false;
+					break;
+				}
+			}
+			
+			if (FlagOK)
+				filteredNewInstances.add(testedRI);
+		}
+		
+		incStep.unUsedRuleInstances.addAll(filteredNewInstances);
+		
+		
 		
 	}
 		
