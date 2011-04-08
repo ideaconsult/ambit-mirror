@@ -11,6 +11,7 @@ public class PredefinedKnowledgeBase
 	public static final String rules[] = 
 	{
 		"$$NAME=keto/enol              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CC OC=C  $$GROUP_POS=3,1   $$INFO=",
+		"$$NAME=amin/imin              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= N=CC NC=C  $$GROUP_POS=3,1   $$INFO=",
 		"$$NAME=amide/imid             $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CN OC=N  $$GROUP_POS=3,1   $$INFO=",
 		"$$NAME=nitroso/oxime          $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=NC ON=C  $$GROUP_POS=3,1   $$INFO=",
 		"$$NAME=azo/hydrazone          $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= N=NC NN=C  $$GROUP_POS=3,1   $$INFO=",
@@ -22,5 +23,12 @@ public class PredefinedKnowledgeBase
 		"$$NAME=nitrosamine/diazohydroxide  $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=NN ON=N  $$GROUP_POS=3,1   $$INFO="
 			
 			
+	};
+	
+	
+	public static final String filters[] =
+	{
+		"$$TYPE=EXCLUDE    $$FRAGMENT= *=[C;r4,r5,r6,r7,r8]=*  ",
+		"$$TYPE=WARN       $$FRAGMENT= *=[C;!R]=*              "
 	};
 }

@@ -280,6 +280,9 @@ public class RuleManager
 		{
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
+				
+				//TODO check for duplication 
+				
 				tman.resultTautomers.add(newTautomer);
 				//System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
 				//		+ "    " + incStep.getTautomerCombination());
