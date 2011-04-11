@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
+import org.opentox.rdf.OT;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -19,7 +20,6 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 import ambit2.rest.test.ResourceTest;
 

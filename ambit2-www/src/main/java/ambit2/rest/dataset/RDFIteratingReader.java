@@ -1,9 +1,11 @@
 package ambit2.rest.dataset;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -15,9 +17,8 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.opentox.dsl.task.ClientResourceWrapper;
+import org.opentox.rdf.OT;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
-import org.restlet.representation.Representation;
 import org.restlet.routing.Template;
 
 import ambit2.base.data.Property;
@@ -26,7 +27,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.io.IRawReader;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -40,6 +40,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * Reading RDF representation of a dataset. This is a copy paste from {@link RDFStructuresReader}
@@ -100,7 +101,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		if (recordIterator == null) {
 			Resource s = OT.OTClass.DataEntry.getOntClass(jenaModel);
 			if (s==null) return null;
-			recordIterator =  jenaModel.listStatements(new SimpleSelector(null,null,s));
+			recordIterator =  jenaModel.listStatements(new SimpleSelector(null,RDF.type,s));
 		}
 		return recordIterator;
 	}	
@@ -126,7 +127,6 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 					record = parseRecord( newEntry,createRecord());
 					return true;
 				} catch (Exception x) {
-					x.printStackTrace();
 					return false;
 				}
 		} else return false;
@@ -140,6 +140,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 	}
 	protected IStructureRecord parseRecord(Resource newEntry, IStructureRecord record) throws Exception {
 		//get the compound
+
 		StmtIterator compound =  jenaModel.listStatements(new SimpleSelector(newEntry,OT.OTProperty.compound.createProperty(jenaModel),(RDFNode)null));
 		while (compound.hasNext()) {
 			Statement st = compound.next();
@@ -205,24 +206,66 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		Map<String, Object> vars = new HashMap<String, Object>();
 		conformerTemplate.parse(uri, vars);
 		try {record.setIdchemical(Integer.parseInt(vars.get(CompoundResource.idcompound).toString())); } 
-		catch (Exception x) {};
+		catch (Exception x) {
+		};
 		
 		try {record.setIdstructure(Integer.parseInt(vars.get(ConformerResource.idconformer).toString())); } 
-		catch (Exception x) {};
+		catch (Exception x) {
+		};
 		
 		if (record.getIdchemical()<=0) {
 			try {
 			compoundTemplate.parse(uri, vars);
 			record.setIdchemical(Integer.parseInt(vars.get(CompoundResource.idcompound).toString())); } 
-			catch (Exception x) {};
+			catch (Exception x) {
+			};
 		}
+
 	}
 	
+	public boolean readStructure(RDFNode target, IStructureRecord record) {
+		InputStream in = null;
+		HttpURLConnection uc = null;
+		try {
+			if (target.isURIResource()) {
+				uc = ClientResourceWrapper.getHttpURLConnection(((Resource)target).getURI(), "GET", ChemicalMediaType.CHEMICAL_MDLSDF.toString());
+				uc.setFollowRedirects(true);
+				if (HttpURLConnection.HTTP_OK== uc.getResponseCode()) {
+					in = uc.getInputStream();
+					StringBuilder b = new StringBuilder();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+					String line = null;
+					final String newline = System.getProperty("line.separator");
+					while ((line = reader.readLine())!=null) {
+						b.append(line);
+						b.append(newline);
+					}	
+					record.setContent(b.toString());
+					record.setFormat(MOL_TYPE.SDF.toString());
+				}
+	
+				return true;
+			} else {
+				record.setFormat(IStructureRecord.MOL_TYPE.URI.toString());
+				record.setContent(target.toString());	
+				return false;					
+			}
+		} catch (Exception x) {
+			record.setFormat(IStructureRecord.MOL_TYPE.URI.toString());
+			record.setContent(target.toString());	
+			return false;
+		} finally {
+			try {if (in != null) in.close();} catch (Exception x) {}
+			try {if (uc != null) uc.disconnect();} catch (Exception x) {}
+		}
+	}
+	/*
 	public boolean readStructure(RDFNode target,IStructureRecord record) {
 		Representation r  = null;
 		ClientResourceWrapper client  = null;
 		try {
 			if (target.isURIResource()) {
+				
 				client = new ClientResourceWrapper(((Resource)target).getURI());
 				r = client.get(ChemicalMediaType.CHEMICAL_MDLMOL);
 				if (client.getStatus().equals(Status.SUCCESS_OK)) {
@@ -245,6 +288,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		}
 
 	}
+	*/
 	
 
 		

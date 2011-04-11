@@ -1,8 +1,12 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.Hashtable;
 
+import org.opentox.rdf.OT;
+import org.opentox.rdf.OT.OTClass;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -13,10 +17,9 @@ import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SparseInstance;
-import ambit2.rest.rdf.OT.OTClass;
 
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -31,23 +34,23 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 		this(OT.createModel(null,representation,mediaType));
 	}
 	
-	public RDFInstancesIterator(Reference reference) throws ResourceException {
+	public RDFInstancesIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML));
 	}
 	
-	public RDFInstancesIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFInstancesIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, mediaType));
 	}
 	
-	public RDFInstancesIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFInstancesIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,in, mediaType));
 	}	
 
-	public RDFInstancesIterator(OntModel model, StmtIterator recordIterator) {
+	public RDFInstancesIterator(Model model, StmtIterator recordIterator) {
 		this(model);
 		this.recordIterator = recordIterator;
 	}
-	public RDFInstancesIterator(OntModel model) {
+	public RDFInstancesIterator(Model model) {
 		super(model);
 		urilookup = new Hashtable<String, Attribute>();
 		attributes = parseFeatures();

@@ -4,13 +4,13 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
 
+import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResult;

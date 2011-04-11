@@ -1,8 +1,11 @@
 package ambit2.rest.rdf.sparql;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.Hashtable;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -10,13 +13,12 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.OT;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 
 public abstract class RDFAbstractCompoundIterator<COMPOUND,PROPERTY> extends RDFSparqlIterator<COMPOUND> {
@@ -47,22 +49,22 @@ public abstract class RDFAbstractCompoundIterator<COMPOUND,PROPERTY> extends RDF
 		"}\n"+
 		"ORDER by ?dataset ?dataEntry ?compound ?feature ?value\n"
 		;
-	public RDFAbstractCompoundIterator(Representation representation, MediaType mediaType) throws ResourceException {
+	public RDFAbstractCompoundIterator(Representation representation, MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,representation,mediaType),sparql);
 	}
 	
-	public RDFAbstractCompoundIterator(Reference reference) throws ResourceException {
+	public RDFAbstractCompoundIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),sparql);
 	}
 	
-	public RDFAbstractCompoundIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFAbstractCompoundIterator(Reference reference,MediaType mediaType) throws ResourceException ,MalformedURLException,IOException{
 		this(OT.createModel(null,reference, mediaType),sparql);
 	}
 	
-	public RDFAbstractCompoundIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFAbstractCompoundIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,in, mediaType),sparql);
 	}	
-	public RDFAbstractCompoundIterator(OntModel model, String sparql) throws ResourceException {
+	public RDFAbstractCompoundIterator(Model model, String sparql) throws ResourceException {
 		super(model,sparql);
 		recordIDVar = "compound";
 		conformerTemplate = OpenTox.URI.conformer.getTemplate(baseReference);
@@ -90,7 +92,7 @@ public abstract class RDFAbstractCompoundIterator<COMPOUND,PROPERTY> extends RDF
 		}		
 	}
 
-	protected abstract  RDFAbstractFeatureIterator<PROPERTY> getPropertyIterator(OntModel jenaModel);
+	protected abstract  RDFAbstractFeatureIterator<PROPERTY> getPropertyIterator(Model jenaModel);
 	
 
 	protected abstract COMPOUND newCompound(RDFNode node);

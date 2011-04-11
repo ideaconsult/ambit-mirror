@@ -1,20 +1,23 @@
 package ambit2.rest.rdf.sparql;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 
-import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 
 public class RDFFeatureIterator extends RDFAbstractFeatureIterator<Property> {
 
 
-	public RDFFeatureIterator(Reference reference) throws ResourceException {
+	public RDFFeatureIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		super(reference);
 	}
-	public RDFFeatureIterator(OntModel jenaModel) {
+	public RDFFeatureIterator(Model jenaModel) {
 		super(jenaModel);
 	}
 	@Override

@@ -1,5 +1,9 @@
 package ambit2.rest.uri;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.util.Iterator;
 
 import org.opentox.dsl.task.ClientResourceWrapper;
@@ -7,6 +11,9 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
+
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -63,6 +70,39 @@ public class URIStructureIterator extends AbstractBatchProcessor<String[], IStru
 		
 	}
 
+	public boolean retrieveStructure(String uri) {
+		InputStream in = null;
+		HttpURLConnection uc = null;
+		try {
+
+				uc = ClientResourceWrapper.getHttpURLConnection(uri, "GET", ChemicalMediaType.CHEMICAL_MDLSDF.toString());
+				uc.setFollowRedirects(true);
+				if (HttpURLConnection.HTTP_OK== uc.getResponseCode()) {
+					in = uc.getInputStream();
+					StringBuilder b = new StringBuilder();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+					String line = null;
+					final String newline = System.getProperty("line.separator");
+					while ((line = reader.readLine())!=null) {
+						b.append(line);
+						b.append(newline);
+					}	
+					record.setContent(b.toString());
+					record.setFormat(MOL_TYPE.SDF.toString());
+				}
+	
+				return true;
+					
+		} catch (Exception x) {
+			record.setFormat(IStructureRecord.MOL_TYPE.URI.toString());
+			record.setContent(uri);	
+			return false;
+		} finally {
+			try {if (in != null) in.close();} catch (Exception x) {}
+			try {if (uc != null) uc.disconnect();} catch (Exception x) {}
+		}
+	}
+	/*
 	protected boolean retrieveStructure(String uri) throws ResourceException {
 
 		Representation r = null;
@@ -99,5 +139,6 @@ public class URIStructureIterator extends AbstractBatchProcessor<String[], IStru
 			try { r.release(); } catch (Exception x) {}
 		}
 	}
+	*/
 	
 }

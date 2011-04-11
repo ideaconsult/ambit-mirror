@@ -1,6 +1,8 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ import org.restlet.routing.Template;
 import ambit2.base.data.Bookmark;
 import ambit2.rest.OpenTox;
 
-import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
@@ -25,21 +27,21 @@ public class RDFBookmarkIterator  extends RDFObjectIterator<Bookmark> {
 		super(representation,mediaType,Annotea.Bookmark.Bookmark.toString());
 	}
 		
-	public RDFBookmarkIterator(Reference reference) throws ResourceException {
+	public RDFBookmarkIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		super(reference,Annotea.Bookmark.Bookmark.toString());
 	}	
-	public RDFBookmarkIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFBookmarkIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(reference,mediaType,Annotea.Bookmark.Bookmark.toString());
 	}
 	
-	public RDFBookmarkIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFBookmarkIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(in,mediaType,Annotea.Bookmark.Bookmark.toString());
 	}	
 	
-	public RDFBookmarkIterator(OntModel model,StmtIterator recordIterator) {
+	public RDFBookmarkIterator(Model model,StmtIterator recordIterator) {
 		super (model,Annotea.Bookmark.Bookmark.toString(),recordIterator);
 	}	
-	public RDFBookmarkIterator(OntModel model) {
+	public RDFBookmarkIterator(Model model) {
 		super(model, Annotea.Bookmark.Bookmark.toString());
 	}
 	

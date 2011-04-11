@@ -1,5 +1,6 @@
 package ambit2.rest.model;
 
+import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -14,7 +15,6 @@ import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFPropertyIterator;
 
 import com.hp.hpl.jena.ontology.Individual;

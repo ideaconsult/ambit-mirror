@@ -1,7 +1,10 @@
 package ambit2.rest.rdf.sparql;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -9,11 +12,10 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.OT;
 
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 
 /**
@@ -47,28 +49,28 @@ public abstract class RDFAbstractFeatureIterator<PROPERTY> extends RDFSparqlIter
 		"}\n"+
 		"ORDER by ?feature ?title ?units ?src ?sameas\n"
 		;	
-	public RDFAbstractFeatureIterator(Representation representation, MediaType mediaType) throws ResourceException {
+	public RDFAbstractFeatureIterator(Representation representation, MediaType mediaType) throws ResourceException , MalformedURLException,IOException{
 		this(OT.createModel(null,representation,mediaType),sparql);
 	}
 	
-	public RDFAbstractFeatureIterator(Reference reference) throws ResourceException {
+	public RDFAbstractFeatureIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),sparql);
 	}
 	
-	public RDFAbstractFeatureIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFAbstractFeatureIterator(Reference reference,MediaType mediaType) throws ResourceException, MalformedURLException,IOException {
 		this(OT.createModel(null,reference, mediaType),sparql);
 	}
 	
-	public RDFAbstractFeatureIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFAbstractFeatureIterator(InputStream in,MediaType mediaType) throws ResourceException, MalformedURLException,IOException {
 		this(OT.createModel(null,in, mediaType),sparql);
 	}	
-	public RDFAbstractFeatureIterator(OntModel model, String sparql) throws ResourceException {
+	public RDFAbstractFeatureIterator(Model model, String sparql) throws ResourceException {
 		super(model,sparql);
 		recordIDVar = "feature";
 		featureTemplate = OpenTox.URI.feature.getTemplate(baseReference);
 
 	}
-	public RDFAbstractFeatureIterator(OntModel model) throws ResourceException {
+	public RDFAbstractFeatureIterator(Model model) throws ResourceException {
 		this(model,sparql);
 
 	}	

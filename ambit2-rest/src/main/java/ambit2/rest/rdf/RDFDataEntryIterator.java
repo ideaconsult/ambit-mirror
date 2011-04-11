@@ -1,9 +1,12 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -12,7 +15,7 @@ import org.restlet.routing.Template;
 
 import ambit2.rest.OpenTox;
 
-import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -26,21 +29,21 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 		super(representation,mediaType,OT.OTClass.DataEntry.toString());
 	}
 		
-	public RDFDataEntryIterator(Reference reference) throws ResourceException {
+	public RDFDataEntryIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		super(reference,OT.OTClass.DataEntry.toString());
 	}	
-	public RDFDataEntryIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFDataEntryIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(reference,mediaType,OT.OTClass.DataEntry.toString());
 	}
 	
-	public RDFDataEntryIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFDataEntryIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(in,mediaType,OT.OTClass.DataEntry.toString());
 	}	
-	public RDFDataEntryIterator(OntModel model, StmtIterator recordIterator) {
+	public RDFDataEntryIterator(Model model, StmtIterator recordIterator) {
 		super(model,OT.OTClass.DataEntry.toString(),recordIterator);
 	}
 	
-	public RDFDataEntryIterator(OntModel model) {
+	public RDFDataEntryIterator(Model model) {
 		super(model,OT.OTClass.DataEntry.toString());
 	}	
 

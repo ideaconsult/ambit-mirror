@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -42,17 +43,12 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
-import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
 
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
 
 /**
  * Feature definition resource http://opentox.org/development/wiki/feature
@@ -251,6 +247,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	protected RDFObjectIterator<Property> createObjectIterator(
 			Reference reference, MediaType mediaType) throws ResourceException {
+		try {
 		RDFPropertyIterator iterator = new RDFPropertyIterator(reference,mediaType) {
 			@Override
 			protected boolean skip(Resource newEntry) {
@@ -259,6 +256,11 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		};
 		iterator.setBaseReference(getRequest().getRootRef());
 		return iterator;
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(x);
+		}
 	}
 	@Override
 	protected RDFObjectIterator<Property> createObjectIterator(

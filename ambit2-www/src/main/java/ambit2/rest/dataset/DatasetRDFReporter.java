@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.opentox.rdf.OT;
+import org.opentox.rdf.OT.OTProperty;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -32,8 +34,6 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataEntry.DataEntryURIReporter;
 import ambit2.rest.property.PropertyRDFReporter;
-import ambit2.rest.rdf.OT;
-import ambit2.rest.rdf.OT.OTProperty;
 import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 

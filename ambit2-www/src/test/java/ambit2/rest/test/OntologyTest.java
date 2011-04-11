@@ -3,8 +3,7 @@ package ambit2.rest.test;
 import java.io.InputStream;
 
 import org.junit.Test;
-
-import ambit2.rest.rdf.OT;
+import org.opentox.rdf.OT;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;

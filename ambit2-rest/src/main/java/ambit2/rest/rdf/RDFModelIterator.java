@@ -1,9 +1,12 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -24,14 +27,14 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 public abstract class RDFModelIterator<T,TrainingInstances extends T,TestInstances extends T,Content> 
 								extends RDFObjectIterator<ModelWrapper<T,TrainingInstances,TestInstances,Content>> {
 
-	public RDFModelIterator(Representation representation,MediaType mediaType) throws ResourceException {
+	public RDFModelIterator(Representation representation,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(representation,mediaType,OT.OTClass.Model.toString());
 	}
 		
-	public RDFModelIterator(Reference reference) throws ResourceException {
+	public RDFModelIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		super(reference,OT.OTClass.Model.toString());
 	}	
-	public RDFModelIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFModelIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(reference,mediaType,OT.OTClass.Model.toString());
 	}
 	

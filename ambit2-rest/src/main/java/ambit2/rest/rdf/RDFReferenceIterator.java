@@ -1,6 +1,8 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +16,8 @@ import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.rest.OpenTox;
 
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
@@ -32,21 +34,21 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 		super(representation,mediaType,BibTex.BTClass.Entry.toString());
 	}
 		
-	public RDFReferenceIterator(Reference reference) throws ResourceException {
+	public RDFReferenceIterator(Reference reference) throws ResourceException , MalformedURLException,IOException {
 		super(reference,BibTex.BTClass.Entry.toString());
 	}	
-	public RDFReferenceIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFReferenceIterator(Reference reference,MediaType mediaType) throws ResourceException , MalformedURLException,IOException {
 		super(reference,mediaType,BibTex.BTClass.Entry.toString());
 	}
 	
-	public RDFReferenceIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFReferenceIterator(InputStream in,MediaType mediaType) throws ResourceException  , MalformedURLException,IOException{
 		super(in,mediaType,BibTex.BTClass.Entry.toString());
 	}	
 	
-	public RDFReferenceIterator(OntModel model,StmtIterator recordIterator) {
+	public RDFReferenceIterator(Model model,StmtIterator recordIterator) {
 		super (model,BibTex.BTClass.Entry.toString(),recordIterator);
 	}	
-	public RDFReferenceIterator(OntModel model) {
+	public RDFReferenceIterator(Model model) {
 		super(model, BibTex.BTClass.Entry.toString());
 	}
 	
@@ -81,9 +83,10 @@ public class RDFReferenceIterator extends RDFObjectIterator<ILiteratureEntry> {
 		record = new LiteratureEntry(title==null?thisurl.toString():title,seeAlso==null?thisurl.toString():seeAlso);
 		parseObjectURI(newEntry,record);
 		if ((record.getId()>0) && !thisurl.equals(reference)) {
-			RDFReferenceIterator iterator = new RDFReferenceIterator(new Reference(thisurl));
+			RDFReferenceIterator iterator = null;
 			
 			try {
+				iterator = new RDFReferenceIterator(new Reference(thisurl));
 				iterator.setCloseModel(true);	
 				iterator.setBaseReference(baseReference);
 				while (iterator.hasNext()) {
