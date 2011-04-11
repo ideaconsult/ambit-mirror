@@ -123,7 +123,13 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 	@Override
 	protected RDFObjectIterator<ILiteratureEntry> createObjectIterator(
 			Reference reference, MediaType mediaType) throws ResourceException {
+		try {
 		return new RDFReferenceIterator(reference,mediaType);
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(x);
+		}		
 	}
 	@Override
 	protected RDFObjectIterator<ILiteratureEntry> createObjectIterator(

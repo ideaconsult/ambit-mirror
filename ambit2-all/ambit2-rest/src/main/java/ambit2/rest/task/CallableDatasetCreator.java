@@ -11,6 +11,7 @@ import java.util.concurrent.Callable;
 
 import org.opentox.dsl.task.RemoteTask;
 import org.opentox.dsl.task.RemoteTaskPool;
+import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
@@ -22,10 +23,10 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.task.Task.TaskProperty;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -195,7 +196,8 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		StmtIterator features = null;
 		try {
 			firePropertyChange(TaskProperty.PROPERTY_NAME.toString(),null,String.format("Retrieving model %s",modelURI));
-			jenaModel = OT.createModel(null, modelURI,MediaType.APPLICATION_RDF_XML);
+			jenaModel = OT.createModel(OntModelSpec.OWL_DL_MEM);
+			jenaModel = (OntModel) OT.createModel(jenaModel, modelURI,MediaType.APPLICATION_RDF_XML);
 			features =  jenaModel.listStatements(
 					new SimpleSelector(null,OT.OTProperty.independentVariables.createProperty(jenaModel),(RDFNode)null));
 			int count = 0;
@@ -204,7 +206,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 				RDFNode feature = st.getObject();
 				if (feature.isURIResource()) {
 					//read feature
-					jenaModel = OT.createModel(jenaModel,new Reference(((Resource)feature).getURI()),MediaType.APPLICATION_RDF_XML);
+					jenaModel =  (OntModel)OT.createModel(jenaModel,new Reference(((Resource)feature).getURI()),MediaType.APPLICATION_RDF_XML);
 					count++;
 				
 				}

@@ -1,9 +1,13 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.opentox.rdf.OT;
+import org.opentox.rdf.OT.OTProperty;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -11,14 +15,14 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.base.data.Dictionary;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.OT.OTProperty;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -39,20 +43,20 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		super(representation,mediaType,OT.OTClass.Feature.toString());
 	}
 		
-	public RDFPropertyIterator(Reference reference) throws ResourceException {
+	public RDFPropertyIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		super(reference,OT.OTClass.Feature.toString());
 	}	
-	public RDFPropertyIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFPropertyIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(reference,mediaType,OT.OTClass.Feature.toString());
 	}
 	
 	public RDFPropertyIterator(InputStream in,MediaType mediaType) throws ResourceException {
 		super(in,mediaType,OT.OTClass.Feature.toString());
 	}	
-	public RDFPropertyIterator(OntModel model,StmtIterator recordIterator) {
+	public RDFPropertyIterator(Model model,StmtIterator recordIterator) {
 		super(model,OT.OTClass.Feature.toString(),recordIterator);
 	}	
-	public RDFPropertyIterator(OntModel model) {
+	public RDFPropertyIterator(Model model) {
 		super(model,OT.OTClass.Feature.toString());
 	}
 
@@ -96,8 +100,9 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		try { String uri = getURI(newEntry); thisurl = uri!=null?new Reference(uri):null; } catch (Exception x) {}
 		parseObjectURI(newEntry,property); 
 		if ((property.getId()>0) && !thisurl.equals(reference))  { //ours, let's retrieve what we have
-			RDFPropertyIterator iterator = new RDFPropertyIterator(thisurl);
+			RDFPropertyIterator iterator = null;
 			try {
+				iterator = new RDFPropertyIterator(thisurl);
 				iterator.setCloseModel(true);
 				iterator.setBaseReference(getBaseReference());
 				while (iterator.hasNext()) {

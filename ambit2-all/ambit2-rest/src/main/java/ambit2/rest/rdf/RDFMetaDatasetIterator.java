@@ -1,10 +1,12 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.lucene.document.Field.Store;
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -16,7 +18,7 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.rest.OpenTox;
 
-import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
@@ -35,21 +37,21 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 		super(representation,mediaType,OT.OTClass.Dataset.toString());
 	}
 		
-	public RDFMetaDatasetIterator(Reference reference) throws ResourceException {
+	public RDFMetaDatasetIterator(Reference reference) throws ResourceException  , MalformedURLException,IOException{
 		super(reference,OT.OTClass.Dataset.toString());
 	}	
-	public RDFMetaDatasetIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFMetaDatasetIterator(Reference reference,MediaType mediaType) throws ResourceException , MalformedURLException,IOException{
 		super(reference,mediaType,OT.OTClass.Dataset.toString());
 	}
 	
-	public RDFMetaDatasetIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFMetaDatasetIterator(InputStream in,MediaType mediaType) throws ResourceException , MalformedURLException,IOException {
 		super(in,mediaType,OT.OTClass.Dataset.toString());
 	}	
-	public RDFMetaDatasetIterator(OntModel model, StmtIterator recordIterator) {
+	public RDFMetaDatasetIterator(Model model, StmtIterator recordIterator) {
 		super(model,OT.OTClass.Dataset.toString(),recordIterator);
 	}
 	
-	public RDFMetaDatasetIterator(OntModel model) {
+	public RDFMetaDatasetIterator(Model model) {
 		super(model,OT.OTClass.Dataset.toString());
 	}	
 

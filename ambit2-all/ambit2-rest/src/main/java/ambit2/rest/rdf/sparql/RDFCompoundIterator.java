@@ -1,6 +1,8 @@
 package ambit2.rest.rdf.sparql;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -12,32 +14,33 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class RDFCompoundIterator extends RDFAbstractCompoundIterator<IStructureRecord,Property> {
-	public RDFCompoundIterator(Representation representation, MediaType mediaType) throws ResourceException {
+	public RDFCompoundIterator(Representation representation, MediaType mediaType) throws ResourceException ,MalformedURLException,IOException{
 		super(representation,mediaType);
 	}
 	
-	public RDFCompoundIterator(Reference reference) throws ResourceException {
+	public RDFCompoundIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		super(reference);
 	}
 	
-	public RDFCompoundIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFCompoundIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(reference,mediaType);
 	}
 	
-	public RDFCompoundIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFCompoundIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(in,mediaType);
 	}	
-	public RDFCompoundIterator(OntModel model, String sparql) throws ResourceException {
+	public RDFCompoundIterator(OntModel model, String sparql) throws ResourceException,MalformedURLException,IOException {
 		super(model,sparql);
 
 	}
 	@Override
 	protected RDFAbstractFeatureIterator<Property> getPropertyIterator(
-			OntModel jenaModel) {
+				Model jenaModel) {
 		return new RDFFeatureIterator(jenaModel);
 	}
 

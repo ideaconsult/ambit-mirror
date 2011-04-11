@@ -10,7 +10,6 @@ import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.property.QueryOntology;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
@@ -18,7 +17,6 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.MetadatasetResource.search_features;
 import ambit2.rest.property.PropertyURIReporter;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.OTEE;
 
 /**

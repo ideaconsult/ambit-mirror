@@ -1,15 +1,18 @@
 package ambit2.rest.rdf;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 import org.opentox.dsl.task.ClientResourceWrapper;
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -24,8 +27,8 @@ import ambit2.rest.OpenTox;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -45,23 +48,23 @@ public class RDFStructuresIterator extends RDFDataEntryIterator<IStructureRecord
 		this(OT.createModel(null,representation,mediaType));
 	}
 	
-	public RDFStructuresIterator(Reference reference) throws ResourceException {
+	public RDFStructuresIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML));
 	}
 	
-	public RDFStructuresIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFStructuresIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, mediaType));
 	}
 	
-	public RDFStructuresIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFStructuresIterator(InputStream in,MediaType mediaType) throws ResourceException ,MalformedURLException,IOException{
 		this(OT.createModel(null,in, mediaType));
 	}	
 
-	public RDFStructuresIterator(OntModel model, StmtIterator recordIterator) {
+	public RDFStructuresIterator(Model model, StmtIterator recordIterator) {
 		this(model);
 		this.recordIterator = recordIterator;
 	}
-	public RDFStructuresIterator(OntModel model) {
+	public RDFStructuresIterator(Model model) {
 		super(model);
 		lookup = new Hashtable<String, Property>();
 		propertyIterator = new RDFPropertyIterator(model);

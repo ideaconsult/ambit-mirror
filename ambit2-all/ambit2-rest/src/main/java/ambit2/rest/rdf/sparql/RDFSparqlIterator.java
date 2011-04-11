@@ -1,23 +1,24 @@
 package ambit2.rest.rdf.sparql;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
-import ambit2.rest.rdf.OT;
-
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -30,7 +31,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @param <Item>
  */
 public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
-	protected OntModel jenaModel;
+	protected Model jenaModel;
 	protected Reference reference;
 	protected Reference baseReference;
 	public Reference getBaseReference() {
@@ -68,7 +69,7 @@ public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
 	 * @throws ResourceException
 	 */
 	
-	public RDFSparqlIterator(Reference reference, String sparql) throws ResourceException {
+	public RDFSparqlIterator(Reference reference, String sparql) throws ResourceException ,MalformedURLException,IOException{
 		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),sparql);
 		this.reference = reference;
 	}
@@ -79,7 +80,7 @@ public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
 	 * @param sparql
 	 * @throws ResourceException
 	 */
-	public RDFSparqlIterator(Reference reference,MediaType mediaType, String sparql) throws ResourceException {
+	public RDFSparqlIterator(Reference reference,MediaType mediaType, String sparql) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, mediaType),sparql);
 		this.reference = reference;
 	}
@@ -100,7 +101,7 @@ public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
 	 * @param sparql
 	 * @throws ResourceException
 	 */
-	public RDFSparqlIterator(OntModel model, String sparql) throws ResourceException {
+	public RDFSparqlIterator(Model model, String sparql) throws ResourceException {
 		super();
 		this.jenaModel = model;
 
@@ -131,7 +132,7 @@ public abstract class RDFSparqlIterator<Item> implements Iterator<Item>{
 		close();
 		super.finalize();
 	}
-	public OntModel getJenaModel() {
+	public Model getJenaModel() {
 		return jenaModel;
 	}
 	/**

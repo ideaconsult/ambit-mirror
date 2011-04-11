@@ -8,6 +8,7 @@ import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTFeatures;
 import org.opentox.dsl.OTObject;
 import org.opentox.dsl.task.ClientResourceWrapper;
+import org.opentox.rdf.OT;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -18,9 +19,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.io.DownloadTool;
 import ambit2.rest.OpenTox;
-import ambit2.rest.rdf.OT;
 
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -28,6 +27,7 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -111,11 +111,11 @@ public class OTDatasetRDFReport extends OTObject {
 		" }\n"+
 		"	ORDER by ?endpoint ?Model ?f";	
 	
-	protected OntModel jenaModel;
-	public OntModel getJenaModel() {
+	protected Model jenaModel;
+	public Model getJenaModel() {
 		return jenaModel;
 	}
-	public void setJenaModel(OntModel jenaModel) {
+	public void setJenaModel(Model jenaModel) {
 		this.jenaModel = jenaModel;
 	}
 	protected String application;
@@ -496,7 +496,7 @@ public class OTDatasetRDFReport extends OTObject {
 		public static int renderCompoundFeatures(
 				//IToxPredictSession session,
 			    String sparqlQuery,
-				OntModel model, 
+				Model model, 
 				Writer writer,
 				String compoundURI, 
 				String param,

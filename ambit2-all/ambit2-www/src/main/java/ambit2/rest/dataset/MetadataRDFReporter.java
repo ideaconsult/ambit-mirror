@@ -1,5 +1,6 @@
 package ambit2.rest.dataset;
 
+import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
@@ -11,7 +12,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;

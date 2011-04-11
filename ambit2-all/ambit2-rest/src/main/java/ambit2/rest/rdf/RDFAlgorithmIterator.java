@@ -1,9 +1,12 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -31,14 +34,14 @@ public class RDFAlgorithmIterator extends RDFObjectIterator<Algorithm> {
 		super(representation,mediaType,OT.OTClass.Algorithm.toString());
 	}
 		
-	public RDFAlgorithmIterator(Reference reference) throws ResourceException {
+	public RDFAlgorithmIterator(Reference reference) throws ResourceException,MalformedURLException,IOException {
 		super(reference,OT.OTClass.Algorithm.toString());
 	}	
-	public RDFAlgorithmIterator(Reference reference,MediaType mediaType) throws ResourceException {
+	public RDFAlgorithmIterator(Reference reference,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(reference,mediaType,OT.OTClass.Algorithm.toString());
 	}
 	
-	public RDFAlgorithmIterator(InputStream in,MediaType mediaType) throws ResourceException {
+	public RDFAlgorithmIterator(InputStream in,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(in,mediaType,OT.OTClass.Algorithm.toString());
 	}	
 	

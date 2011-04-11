@@ -125,10 +125,16 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 		String uri = queryForm.getFirstValue(OpenTox.params.source_uri.toString());
 		if (uri!= null) {
 			Bookmark bookmark = null;
-			RDFBookmarkIterator it = new RDFBookmarkIterator(new Reference(uri));
-			while (it.hasNext()) {
-				bookmark = it.next();
-				break;
+			try {
+				RDFBookmarkIterator it = new RDFBookmarkIterator(new Reference(uri));
+				while (it.hasNext()) {
+					bookmark = it.next();
+					break;
+				}
+			} catch (ResourceException x) {
+				throw x;
+			} catch (Exception x) {
+				throw new ResourceException(x);
 			}
 			if (bookmark == null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			return bookmark;
@@ -155,7 +161,13 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 	@Override
 	protected RDFObjectIterator<Bookmark> createObjectIterator(
 			Reference reference, MediaType mediaType) throws ResourceException {
-		return new RDFBookmarkIterator(reference,mediaType);
+		try {
+			return new RDFBookmarkIterator(reference,mediaType);
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(x);
+		}
 	}
 	@Override
 	protected RDFObjectIterator<Bookmark> createObjectIterator(

@@ -1,8 +1,11 @@
 package ambit2.rest.rdf;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -11,6 +14,7 @@ import org.restlet.routing.Template;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -69,12 +73,12 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		this(OT.createModel(null,representation,mediaType),topObject);
 	}
 	
-	public RDFObjectIterator(Reference reference, String topObject) throws ResourceException {
+	public RDFObjectIterator(Reference reference, String topObject) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, MediaType.APPLICATION_RDF_XML),topObject);
 		this.reference = reference;
 	}
 	
-	public RDFObjectIterator(Reference reference,MediaType mediaType, String topObject) throws ResourceException {
+	public RDFObjectIterator(Reference reference,MediaType mediaType, String topObject) throws ResourceException,MalformedURLException,IOException {
 		this(OT.createModel(null,reference, mediaType),topObject);
 		this.reference = reference;
 	}
@@ -83,13 +87,13 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		this(OT.createModel(null,in, mediaType),topObject);
 	}	
 
-	public RDFObjectIterator(OntModel model,String topObject, StmtIterator recordIterator) {
+	public RDFObjectIterator(Model model,String topObject, StmtIterator recordIterator) {
 		this(model,topObject);
 		this.recordIterator = recordIterator;
 	}
-	public RDFObjectIterator(OntModel model,String topObject) {
+	public RDFObjectIterator(Model model,String topObject) {
 		super();
-		this.jenaModel = model;
+		this.jenaModel = (OntModel)model;
 		this.topObject = topObject;
 		record = createRecord();
 		recordIterator = null;

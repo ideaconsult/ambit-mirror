@@ -1,12 +1,12 @@
 package ambit2.rest.dataset;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.rest.RDFBatchParser;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
 
@@ -29,8 +29,14 @@ public class RDFStructuresReader extends RDFBatchParser<IStructureRecord> {
 	@Override
 	protected RDFObjectIterator<IStructureRecord> createObjectIterator(
 			Reference target, MediaType mediaType) throws ResourceException {
-		RDFStructuresIterator i = new RDFStructuresIterator(target,mediaType);
-		i.setBaseReference(new Reference(baseReference));
-		return i;
+		try {
+			RDFStructuresIterator i = new RDFStructuresIterator(target,mediaType);
+			i.setBaseReference(new Reference(baseReference));
+			return i;
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(x);
+		}
 	}
 }
