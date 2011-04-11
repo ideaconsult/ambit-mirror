@@ -17,9 +17,13 @@ public abstract class ProtectedResourceTest extends ResourceTest implements IAut
 			return	OpenSSOServicesConfig.getInstance().getTestUser();
 		else return "test";
 	}
+
+	protected boolean isAAEnabled() {
+		return (OpenSSOServicesConfig.getInstance().isEnabled());
+	}
 	@Override
 	public void setUp() throws Exception {
-		if (OpenSSOServicesConfig.getInstance().isEnabled()) {
+		if (isAAEnabled()) {
 			ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 			if (ssoToken.login(
 					OpenSSOServicesConfig.getInstance().getTestUser(),

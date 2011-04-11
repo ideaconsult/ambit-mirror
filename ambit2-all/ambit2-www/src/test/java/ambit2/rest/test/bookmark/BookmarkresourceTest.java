@@ -28,8 +28,12 @@ import com.hp.hpl.jena.vocabulary.DC;
 
 public class BookmarkresourceTest extends ProtectedResourceTest {
 	
+	@Override
+	protected boolean isAAEnabled() {
+		//no access to bookmarks without AA
+		return true;
+	}
 	
-
 	@Override
 	public void setUpDatabase(String xmlfile) throws Exception {
 		super.setUpDatabase(xmlfile);
@@ -69,7 +73,22 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 		}
 		return count>0;
 	}		
-
+	@Test
+	public void testCSV() throws Exception {
+		testGet(getTestURI(),MediaType.TEXT_CSV);
+	}
+	@Override
+	public boolean verifyResponseCSV(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader r = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count = 0;
+		while ((line = r.readLine())!= null) {
+			System.out.println(line);
+			count++;
+		}
+		return count>0;
+	}		
 	
 	@Test
 	public void testRDFXML() throws Exception {

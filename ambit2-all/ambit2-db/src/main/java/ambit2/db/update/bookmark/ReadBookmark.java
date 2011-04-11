@@ -105,8 +105,8 @@ public class ReadBookmark  extends AbstractQuery<Bookmark, Integer, StringCondit
 			q.setHasTopic(rs.getString(4));
 			q.setTitle(rs.getString(5));
 			q.setDescription(rs.getString(6));
-			q.setCreated(rs.getLong(7));
-			q.setDate(rs.getLong(8));
+			q.setCreated(rs.getTimestamp(7).getTime());
+			q.setDate(rs.getTime(8).getTime());
 			
 			return q;
 		} catch (Exception x) {
