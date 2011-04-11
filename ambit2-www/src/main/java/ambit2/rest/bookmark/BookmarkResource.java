@@ -43,7 +43,10 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
-		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
+		if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
+			return new StringConvertor(new BookmarkCSVReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation())
+					,MediaType.TEXT_CSV);
+		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				return new StringConvertor(	new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation()) {
 					@Override
 					public Object processItem(Bookmark dataset) throws AmbitException  {
