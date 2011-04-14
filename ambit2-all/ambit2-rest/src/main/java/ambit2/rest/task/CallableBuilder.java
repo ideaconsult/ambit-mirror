@@ -91,8 +91,12 @@ public class CallableBuilder<USERID> extends CallablePOST<USERID> {
 		String[] model_learning = getAlgorithms(form, OpenTox.params.model_learning.toString());
 		if ((model_learning!=null) && (model_learning.length>0)) { //model
 			OTAlgorithm algorithm = OTAlgorithm.algorithm(model_learning[0]);
-			OTModel model = algorithm.process(dataset, prediction_feature);
-			return new TaskResult(model.getUri().toString());
+			try {
+				OTModel model = algorithm.process(dataset, prediction_feature);
+				return new TaskResult(model.getUri().toString());
+			} catch (Exception x) {
+				throw x;
+			}
 		} else {
 			if (dataset==null)  throw new Exception("No dataset!");
 			return new TaskResult(dataset.getUri().toString());
@@ -111,6 +115,6 @@ public class CallableBuilder<USERID> extends CallablePOST<USERID> {
 			if (algoUri!=null) 
 				algorithms.add(OTAlgorithm.algorithm(algoUri.trim()).withParams(form));
 		
-		return algorithms.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service));
+		return algorithms.process(OTDataset.dataset(datasetURI).withDatasetService(dataset_service),true);
 	}
 }
