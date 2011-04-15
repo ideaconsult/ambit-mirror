@@ -2,6 +2,7 @@ package ambit2.fastox;
 
 import java.io.Writer;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -10,7 +11,6 @@ import org.restlet.resource.ClientResource;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.fastox.users.IToxPredictSession;
-import ambit2.rest.rdf.OT;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 
 import com.hp.hpl.jena.query.Query;
