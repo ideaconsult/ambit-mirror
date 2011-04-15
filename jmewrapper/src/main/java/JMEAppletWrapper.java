@@ -295,21 +295,25 @@ public class JMEAppletWrapper extends JME {
 					readSmiles(params[0].toString());
 				break;	
 			}
+/*
 			case readTopology: {
 				if (params.length>0)
 					readTopology(params[0].toString());
 				break;					
 			}
+			*/
 			case setText: {
 				if (params.length>0)
 					setText(params[0].toString());
 				break;					
 			}		
+			/*
 			case setTemplate: {
 				if (params.length>0)
 					setTemplate(params[0].toString());
 				break;					
-			}				
+			}			
+			*/	
 			case showAtomNumbers: {
 				showAtomNumbers();
 				break;					

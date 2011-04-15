@@ -3,12 +3,12 @@
   <groupId>net.ideaconsult</groupId>
   <artifactId>jmewrapper</artifactId>
   <name>JME Applet wrapper</name>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <dependencies>
   	<dependency>
   		<groupId>jme</groupId>
   		<artifactId>jme-applet</artifactId>
-  		<version>2006.05</version>
+  		<version>2010.03</version>
   	</dependency>
   </dependencies>
   <build>
