@@ -80,6 +80,13 @@ public class MoleculeTools {
 	}
 	
 	public static IMolecule getMolecule(String smiles) throws InvalidSmilesException {
+	
+		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		return parser.parseSmiles(smiles);
+	}	
+	
+	/*
+	public static IMolecule getMolecule(String smiles) throws InvalidSmilesException {
 		if (delim == null) {
 			StringBuilder d = new StringBuilder();
 			d.append("-=#+-()/\\.@");
@@ -115,6 +122,7 @@ public class MoleculeTools {
 	
 		return parser.parseSmiles(smiles);
 	}	
+	*/
 //CMLReader(java.lang.String url)  
 	public static BitSet getFingerPrint(String smiles, int fpLength) throws Exception  {
 	    SmilesParserWrapper sp = SmilesParserWrapper.getInstance();
