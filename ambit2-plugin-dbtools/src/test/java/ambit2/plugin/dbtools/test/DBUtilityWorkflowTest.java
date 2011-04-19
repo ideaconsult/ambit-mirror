@@ -30,7 +30,7 @@ import com.microworkflow.process.Workflow;
 public class DBUtilityWorkflowTest extends WorkflowTest<DBUtilityWorkflow> {
 
 	@Override
-	protected DBUtilityWorkflow getWorkflow() {
+	protected DBUtilityWorkflow getWorkflow() throws Exception {
 
 		return new DBUtilityWorkflow();
 	}

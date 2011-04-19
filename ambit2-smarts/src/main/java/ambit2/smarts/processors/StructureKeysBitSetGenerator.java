@@ -44,7 +44,7 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	 */
 	private static final long serialVersionUID = 696373923085520847L;
 	
-	public StructureKeysBitSetGenerator() {
+	public StructureKeysBitSetGenerator() throws Exception {
 		if ((smartsQueries==null) || (sequences==null)) {
 			smartsQueries = new Vector<QueryAtomContainer>();
 			sequences = new Vector<Vector<QuerySequenceElement>>();
@@ -54,7 +54,7 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 		}
 
 	}	
-	public StructureKeysBitSetGenerator(Vector<String> externalSmartsKeys)	
+	public StructureKeysBitSetGenerator(Vector<String> externalSmartsKeys)	throws Exception
 	{
 		setSmartsKeys(externalSmartsKeys);
 

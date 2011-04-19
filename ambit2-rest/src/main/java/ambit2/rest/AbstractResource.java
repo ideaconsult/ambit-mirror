@@ -21,12 +21,14 @@ import org.restlet.ext.wadl.WadlRepresentation;
 import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.rest.exception.RResourceException;
 
 /**
  * Abstract class for resources
@@ -146,6 +148,11 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 
 		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND, new NotFoundException(x.getMessage()));
 		    			return null;
+		    			
+		        	} catch (RResourceException x) {
+		    			getResponse().setStatus(x.getStatus());
+		    			return x.getRepresentation();
+		    			
 		        	} catch (ResourceException x) {
 		    			getResponse().setStatus(x.getStatus());
 		    			return null;

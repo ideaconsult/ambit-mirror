@@ -76,7 +76,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 	protected static final String EXACT = "EXACT";
 	protected transient UniversalIsomorphismTester uit;
 	
-	public QueryExactStructure() {
+	public QueryExactStructure() throws Exception {
 		super();
 		screening = new QueryPrescreenBitSet();
 		screening.setCondition(NumberCondition.getInstance("="));
@@ -126,6 +126,8 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 			}
 		} catch (AmbitException x) {
 			throw x;
+		} catch (Exception x) {
+			throw new AmbitException();
 			//screening.setValue(null);
 			//screening.setFieldname(null);
 		}		

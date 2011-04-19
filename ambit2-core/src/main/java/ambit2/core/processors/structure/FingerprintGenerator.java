@@ -35,7 +35,7 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
     protected CDKHydrogenAdder hAdder = null;
 	protected AtomConfigurator config = new AtomConfigurator();
 	
-    public FingerprintGenerator() {
+    public FingerprintGenerator()  {
 		this(1024);
 	}
 	public FingerprintGenerator(int length) {

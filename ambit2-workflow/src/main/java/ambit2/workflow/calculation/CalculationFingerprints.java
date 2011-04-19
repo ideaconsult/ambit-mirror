@@ -24,10 +24,10 @@ import com.microworkflow.process.Primitive;
  */
 public class CalculationFingerprints extends CalculationSequence {
 	
-	public CalculationFingerprints() {
+	public CalculationFingerprints() throws Exception{
 		this(10000);
 	}
-	public CalculationFingerprints(long maxsize) {
+	public CalculationFingerprints(long maxsize) throws Exception {
 		super(maxsize);
 		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
 				new Performer() {
