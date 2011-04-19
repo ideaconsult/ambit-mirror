@@ -1,5 +1,7 @@
 package ambit2.rest.structure;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
-import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -38,8 +39,8 @@ import ambit2.db.search.structure.QueryExactStructure;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
 import ambit2.db.search.structure.QueryStructureByID;
-import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.pubchem.NCISearchProcessor;
+import ambit2.rest.exception.RResourceException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.task.CallableQueryProcessor;
@@ -174,14 +175,16 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 					try { structure = isSMILES(text);
 					} catch (Exception x) { structure = null;}
 				//exact structure
-				if (structure != null) {
+				if (structure != null) try {
 					
 					QueryExactStructure q = new QueryExactStructure();
 					q.setChemicalsOnly(true);
 					q.setValue(structure);
 					
 					query = q;
-				} 
+				} catch (Exception x) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Error when processing query %s", text),x);
+				}
 			}
 		}
 		if (query == null) query = getTextQuery(null,casesens,retrieveProperties, text);

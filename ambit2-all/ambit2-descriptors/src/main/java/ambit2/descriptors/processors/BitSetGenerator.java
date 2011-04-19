@@ -35,7 +35,7 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 				return AmbitCONSTANTS.FingerprintTIME;
 			}
 			@Override
-			public IProcessor<IAtomContainer, BitSet> getGenerator() {
+			public IProcessor<IAtomContainer, BitSet> getGenerator() throws Exception {
 				return new FingerprintGenerator();
 			}
 			@Override
@@ -62,7 +62,7 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 				return AmbitCONSTANTS.FingerprintTIME;
 			}
 			@Override
-			public IProcessor<IAtomContainer, BitSet> getGenerator() {
+			public IProcessor<IAtomContainer, BitSet> getGenerator() throws Exception {
 				return new FingerprintGenerator();
 			}
 			@Override
@@ -89,7 +89,7 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 				return AmbitCONSTANTS.StructuralKey_STATUS;
 			}
 			@Override
-			public IProcessor<IAtomContainer, BitSet> getGenerator() {
+			public IProcessor<IAtomContainer, BitSet> getGenerator() throws Exception{
 				return new StructureKeysBitSetGenerator(); 
 			}
 			@Override
@@ -115,7 +115,7 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 				return null;
 			}
 			@Override
-			public IProcessor<IAtomContainer, BitSet> getGenerator() {
+			public IProcessor<IAtomContainer, BitSet> getGenerator() throws Exception{
 				return null;
 			}
 			@Override
@@ -158,7 +158,7 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 		abstract public String getProperty();
 		abstract public String getTimeProperty();
 		abstract public String getStatusProperty();
-		abstract public IProcessor<IAtomContainer,BitSet> getGenerator();
+		abstract public IProcessor<IAtomContainer,BitSet> getGenerator() throws Exception;
 		abstract public String getTable();
 };
 	/**
@@ -171,14 +171,14 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 	public FPTable getFpmode() {
 		return fpmode;
 	}
-	public BitSetGenerator() {
+	public BitSetGenerator() throws Exception{
 		this(FPTable.fp1024);
 	}
-	public BitSetGenerator(FPTable fpmode) {
+	public BitSetGenerator(FPTable fpmode) throws Exception {
 		super();
 		setFpmode(fpmode);
 	}
-	public void setFpmode(FPTable fpmode) {
+	public void setFpmode(FPTable fpmode) throws Exception{
 		this.fpmode = fpmode;
 		processor = fpmode.getGenerator();
 	}

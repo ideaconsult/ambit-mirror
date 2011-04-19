@@ -34,5 +34,5 @@ public abstract class WorkflowTest<W extends Workflow> extends DbUnitTest {
 		contextListener.setWorkflowContext(context);
 	}	
 	
-	protected abstract W getWorkflow();
+	protected abstract W getWorkflow() throws Exception;
 }

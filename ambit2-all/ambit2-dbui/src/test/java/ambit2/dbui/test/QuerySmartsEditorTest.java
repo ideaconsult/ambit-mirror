@@ -17,8 +17,9 @@ public class QuerySmartsEditorTest {
 	public void tearDown() throws Exception {
 	}
 	public static void main(String args[]) {
-		QuerySMARTS query = new QuerySMARTS();
+		QuerySMARTS query;
 		try {
+			query = new QuerySMARTS();
 			JOptionPane.showMessageDialog(null,EditorPreferences.getEditor(query).getJComponent());
 			System.out.println(query.toString());
 			System.out.println(query.getSQL());

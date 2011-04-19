@@ -48,7 +48,7 @@ public class DBUtilityWorkflow extends Workflow {
 				return "Fingerprints (1024 bit hashed fingerprints used for similarity search and prescreening)";
 			}
 			@Override
-			public Sequence getSequence() {
+			public Sequence getSequence() throws Exception {
 				return new CalculationFingerprints();
 			}
 		},
@@ -58,7 +58,7 @@ public class DBUtilityWorkflow extends Workflow {
 				return "Structural keys (used to speed up SMARTS searching)";
 			}
 			@Override
-			public Sequence getSequence() {
+			public Sequence getSequence() throws Exception {
 				return new CalculationStructuralKeys();
 			}			
 		},
@@ -68,7 +68,7 @@ public class DBUtilityWorkflow extends Workflow {
 				return "SMARTS accelerator data";
 			}
 			@Override
-			public Sequence getSequence() {
+			public Sequence getSequence() throws Exception {
 				return new CalculationSmartsData();
 			}
 		},	
@@ -78,7 +78,7 @@ public class DBUtilityWorkflow extends Workflow {
 				return "Descriptors";
 			}
 			@Override
-			public Sequence getSequence() {
+			public Sequence getSequence() throws Exception {
 				return new CalculationDescriptors();
 			}			
 		},
@@ -89,13 +89,13 @@ public class DBUtilityWorkflow extends Workflow {
 				return "Quit, calculations are completed.";
 			}		
 			@Override
-			public Sequence getSequence() {
+			public Sequence getSequence() throws Exception{
 				return null;
 			}
 		};
-		public abstract Sequence getSequence();
+		public abstract Sequence getSequence() throws Exception;
 	};
-	public DBUtilityWorkflow() {
+	public DBUtilityWorkflow() throws Exception {
         
         Sequence seq=new Sequence();
         seq.setName("[Calculator]");    	
@@ -107,7 +107,7 @@ public class DBUtilityWorkflow extends Workflow {
      
 
 	}
-	public While getCalculationOptionsSequence() {
+	public While getCalculationOptionsSequence() throws Exception {
 		
 		
 		While loop = new While();

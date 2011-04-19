@@ -38,8 +38,8 @@ public class QuerySMARTS extends
 	
 	private static final long serialVersionUID = -4539445262832597492L;
 	protected SmartsToChemObject smartsToChemObject = new SmartsToChemObject();
-	protected transient StructureKeysBitSetGenerator skGenerator = new StructureKeysBitSetGenerator();
-	protected transient FingerprintGenerator fpGenerator = new FingerprintGenerator();
+	protected final transient StructureKeysBitSetGenerator skGenerator ;
+	protected final transient FingerprintGenerator fpGenerator;
 	protected QueryPrescreenBitSet screening;
 	protected transient MoleculeReader reader = new MoleculeReader();
 	protected transient AtomConfigurator configurator = new AtomConfigurator();
@@ -77,8 +77,10 @@ public class QuerySMARTS extends
 	}
 
 	
-	public QuerySMARTS() {
+	public QuerySMARTS() throws Exception {
 		super();
+		skGenerator = new StructureKeysBitSetGenerator();
+		fpGenerator = new FingerprintGenerator();
 		screening = new QueryPrescreenBitSet();
 		setChemicalsOnly(false);
 		setValue(null);

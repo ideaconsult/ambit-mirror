@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -42,6 +41,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.exception.RResourceException;
 import ambit2.rest.property.ProfileReader;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
@@ -160,6 +160,7 @@ Then, when the "get(Variant)" method calls you back,
 			        	Representation r = convertor.process(queryObject);
 			        	r.setCharacterSet(CharacterSet.UTF_8);
 			        	return r;
+			        	
 		        	} catch (ResourceException x) {
 		    			throw x;			        	
 		        	} catch (NotFoundException x) {
@@ -173,11 +174,11 @@ Then, when the "get(Variant)" method calls you back,
 		        			continue;
 		        		}
 		        		else {
-		        			throw new ResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x);
+		        			throw new RResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x,variant);
 		        		}
 		        	} catch (Exception x) {
 		        		Context.getCurrentLogger().severe(x.getMessage());
-		    			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+		    			throw new RResourceException(Status.SERVER_ERROR_INTERNAL,x,variant);
 	
 		        	} finally {
 
@@ -193,16 +194,18 @@ Then, when the "get(Variant)" method calls you back,
 	    			Representation r = convertor.process(null);
 	            	return r;			
 	    		} catch (Exception x) { 
-	    			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x); 
+	    			throw new RResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x,variant); 
 	    		}  else {
-	    			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,error);
+	    			throw new RResourceException(Status.CLIENT_ERROR_BAD_REQUEST,error,variant);
 	    		}
     	
 	        }
+		} catch (RResourceException x) {
+			throw x;	        
 		} catch (ResourceException x) {
-			throw x;
+			throw new RResourceException(x.getStatus(),x,variant);
 		} catch (Exception x) {
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+			throw new RResourceException(Status.SERVER_ERROR_INTERNAL,x,variant);
 		}
 	}		
 	
@@ -403,15 +406,16 @@ Then, when the "get(Variant)" method calls you back,
 	protected Representation process(Representation entity, final Variant variant, final boolean async)
 			throws ResourceException {
 		synchronized (this) {
-			final Form form = new Form(entity);
-			final Reference reference = new Reference(getObjectURI(form));
-			//models
-			IQueryRetrieval<T> query = createQuery(getContext(),getRequest(),getResponse());
-			if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			
 			
 			Connection conn = null;
 			try {
+				
+				final Form form = new Form(entity);
+				final Reference reference = new Reference(getObjectURI(form));
+				//models
+				IQueryRetrieval<T> query = createQuery(getContext(),getRequest(),getResponse());
+				if (query==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+				
 				TaskCreator<Object,T> taskCreator = new TaskCreator<Object,T>(form,async) {
 					@Override
 					protected ICallableTask getCallable(Form form,
@@ -457,11 +461,16 @@ Then, when the "get(Variant)" method calls you back,
 					} else 
 						return tc.createTaskRepresentation(r.iterator(), variant,getRequest(), getResponse(),getDocumentation());
 				}
-
+			} catch (RResourceException x) {				
+				throw x;
+			} catch (ResourceException x) {				
+				throw new RResourceException(x.getStatus(),x, variant);
 			} catch (AmbitException x) {
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+				throw new RResourceException(new Status(Status.SERVER_ERROR_INTERNAL,x),variant);
 			} catch (SQLException x) {
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+				throw new RResourceException(new Status(Status.SERVER_ERROR_INTERNAL,x),variant);		
+			} catch (Exception x) {
+				throw new RResourceException(new Status(Status.SERVER_ERROR_INTERNAL,x),variant);				
 			} finally {
 				try { if (conn != null) conn.close(); } catch  (Exception x) {}
 			}

@@ -22,11 +22,11 @@ import com.microworkflow.process.Primitive;
  * @author nina
  *
  */
-public class CalculationStructuralKeys extends CalculationSequence {
-	public CalculationStructuralKeys() {
+public class CalculationStructuralKeys extends CalculationSequence  {
+	public CalculationStructuralKeys() throws Exception {
 		this(10000);
 	}
-	public CalculationStructuralKeys(long maxsize) {
+	public CalculationStructuralKeys(long maxsize) throws Exception {
 		super(maxsize);	
 		Primitive query = new Primitive(DBWorkflowContext.QUERY,DBWorkflowContext.QUERY,
 				new Performer() {
