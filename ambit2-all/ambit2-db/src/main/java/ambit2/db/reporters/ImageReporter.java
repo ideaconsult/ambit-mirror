@@ -109,6 +109,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	}	
 
 	protected void cache(IStructureRecord item, BufferedImage image) {
+		if (image==null) return; //don't attempt to cache 
 		try {
 			String dimensions = getQueryName();
 			String tmpDir = System.getProperty("java.io.tmpdir");
