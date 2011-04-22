@@ -191,7 +191,11 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			query.setValue("predicted");
 			reporter.setConnection(connection);
 			reporter.setOutput(model.getPredicted());
-			reporter.process(query);
+			try {
+				reporter.process(query);
+			} catch (NotFoundException x) {
+				//ok, it may change the structure only
+			}			
 			
 		} catch (Exception x) {
 			x.printStackTrace();
