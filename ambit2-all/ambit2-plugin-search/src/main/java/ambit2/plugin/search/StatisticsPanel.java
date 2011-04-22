@@ -36,7 +36,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.results.AmbitRows;
-import ambit2.db.results.CrossViewPropertyMetric;
 import ambit2.db.results.RowsModel;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;

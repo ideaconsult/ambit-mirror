@@ -13,10 +13,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryParam;
 
-import com.jgoodies.binding.beans.Model;
-
-public abstract class FilteredCount<T extends Comparable<T>> extends Model 
-										implements IQueryRetrieval<PropertyStats<T>> {
+public abstract class FilteredCount<T extends Comparable<T>> implements IQueryRetrieval<PropertyStats<T>> {
 	/**
 	 * 
 	 */

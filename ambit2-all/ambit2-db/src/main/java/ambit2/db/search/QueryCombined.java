@@ -8,15 +8,13 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.ScopeQuery;
 
-import com.jgoodies.binding.beans.Model;
-
 /**
  * Set of {@link IQueryObject}, combined with logical "and or logical "or".
  * @author nina
  *
  * @param <Q>
  */
-public abstract class QueryCombined<T> extends Model implements IQueryRetrieval<T> {
+public abstract class QueryCombined<T> implements IQueryRetrieval<T> {
 	protected ArrayList<IQueryRetrieval<T>> queries;
 	protected Integer id = null;
 	protected static final String union="\nunion\n";

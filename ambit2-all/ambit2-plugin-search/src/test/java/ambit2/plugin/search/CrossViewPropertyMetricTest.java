@@ -1,4 +1,4 @@
-package ambit2.db.search.test;
+package ambit2.plugin.search;
 
 import javax.swing.DefaultListModel;
 
@@ -10,15 +10,13 @@ import org.junit.Test;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Range;
-import ambit2.db.processors.test.DbUnitTest;
-import ambit2.db.results.CrossViewPropertyMetric;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.StoredQuery;
 
 public class CrossViewPropertyMetricTest extends DbUnitTest{
 	protected CrossViewPropertyMetric view;
 	protected QueryExecutor executor;
-	protected String dbFile = "src/test/resources/ambit2/db/processors/test/query-datasets-string.xml";
+	protected String dbFile = "src/test/resources/ambit2/plugin/test/query-datasets-string.xml";
 	
 	@Override
 	@Before

@@ -29,9 +29,7 @@ import java.sql.Connection;
 
 import ambit2.base.config.Preferences;
 
-import com.jgoodies.binding.beans.Model;
-
-public class LoginInfo extends Model {
+public class LoginInfo {
 	protected String scheme;
 	protected String host;
 	protected String port;
