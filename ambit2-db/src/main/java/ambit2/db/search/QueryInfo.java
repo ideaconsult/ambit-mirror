@@ -4,14 +4,12 @@ import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.data.SourceDataset;
 
-import com.jgoodies.binding.beans.Model;
-
 /**
  * TODO add a working test
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryInfo extends Model {
+public class QueryInfo  {
 	
 	public static String COMBINE_ALL = "AND";
 	public static String COMBINE_ANY = "OR";

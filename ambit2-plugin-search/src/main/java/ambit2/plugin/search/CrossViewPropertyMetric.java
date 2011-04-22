@@ -1,4 +1,4 @@
-package ambit2.db.results;
+package ambit2.plugin.search;
 
 import java.beans.PropertyChangeListener;
 import java.sql.ResultSet;
@@ -18,6 +18,7 @@ import ambit2.db.search.property.FilteredCountNumeric;
 import com.jgoodies.binding.beans.ExtendedPropertyChangeSupport;
 
 /*
+ * TODO This should be in the ui module!
  * TODO cache results
  * TODO hook this as with the Find tool in the QueryBrowser
  * TODO use it as an editor for defining ranges/criteria
