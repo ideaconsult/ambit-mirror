@@ -70,7 +70,7 @@ public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> 
 				}
 			}
 		} catch (Exception x) {
-			
+			x.printStackTrace();
 		}
 		return target;
 	}
