@@ -1,5 +1,7 @@
 package ambit2.rest.reporters;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
@@ -8,6 +10,7 @@ import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.resource.ResourceException;
 
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
@@ -72,11 +75,23 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<UUID> {
 		
 		if (item.getError()!=null) {
 			Individual error = getJenaModel().createIndividual(OT.OTClass.ErrorReport.getOntClass(getJenaModel()));
-			error.addLiteral(OT.DataProperty.errorCode.createProperty(getJenaModel()),item.getError().getStatus().getCode());
+			
+			ResourceException exception = item.getError();
+			
+			error.addLiteral(OT.DataProperty.errorCode.createProperty(getJenaModel()),exception.getStatus().getCode());
 			//error.addLiteral(OT.DataProperty.actor.createProperty(getJenaModel()),);
-			error.addLiteral(OT.DataProperty.message.createProperty(getJenaModel()),item.getError().getMessage());
-			error.addLiteral(OT.DataProperty.errorDetails.createProperty(getJenaModel()),item.getError().getStatus().getDescription());
-			error.addLiteral(OT.DataProperty.errorCause.createProperty(getJenaModel()),item.getError().getCause());
+			error.addLiteral(OT.DataProperty.message.createProperty(getJenaModel()),exception.getMessage());
+			error.addLiteral(OT.DataProperty.errorDetails.createProperty(getJenaModel()),exception.getStatus().getDescription());
+			
+			try {
+		    	StringWriter w = new StringWriter();
+		    	if (exception.getCause()==null)
+		    		exception.printStackTrace(new PrintWriter(w));
+		    	else exception.getCause().printStackTrace(new PrintWriter(w));
+				error.addLiteral(OT.DataProperty.errorCause.createProperty(getJenaModel()),w.toString());
+			} catch (Exception x) {
+				
+			}
 			
 			task.addProperty(OT.OTProperty.error.createProperty(jenaModel),error);
 		}
