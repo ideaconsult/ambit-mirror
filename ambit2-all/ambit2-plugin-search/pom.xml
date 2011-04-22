@@ -39,6 +39,13 @@
 
     <resources>
 	<resource>
+		<directory>src/main/resources</directory>
+		<filtering>true</filtering>
+		<excludes>
+		<exclude>*.png</exclude>
+		</excludes>
+	</resource>    
+	<resource>
 		<directory>src/test/resources</directory>
 		<filtering>true</filtering>
 		<excludes>
