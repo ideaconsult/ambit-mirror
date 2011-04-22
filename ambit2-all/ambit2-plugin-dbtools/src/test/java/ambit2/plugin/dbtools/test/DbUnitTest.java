@@ -33,6 +33,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Properties;
 
 import org.dbunit.database.DatabaseConnection;
@@ -98,14 +100,35 @@ public abstract class DbUnitTest {
 	@Before
 	public void setUp() throws Exception {
 		IDatabaseConnection c = getConnection(getHost(),"mysql",getPort(),getAdminUser(),getAdminPWD());
+		
+		boolean dbExists = false;
+		Statement st = null;
+		ResultSet rs = null;
 		try {
-			DbCreateDatabase db = new DbCreateDatabase();
-			db.setConnection(c.getConnection());
-			db.process(new StringBean(getDatabase()));
+			String sql = String.format("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '%s'",getDatabase());
+			st = c.getConnection().createStatement();
+			rs = st.executeQuery(sql);
+			while (rs.next()) {
+				dbExists = rs.getString(1).equals(getDatabase());
+			}
+		} catch (Exception x) {
+			dbExists = false;
 		} finally {
-			c.close();
+			rs.close();
+			st.close();
 		}
-	}
+
+		if (!dbExists)
+			try {
+				DbCreateDatabase db = new DbCreateDatabase();
+				db.setConnection(c.getConnection());
+				db.process(new StringBean(getDatabase()));
+			} finally {
+				c.close();
+			}
+		
+
+	}	
 	protected IDatabaseConnection getConnection(String host,String db,String port,String user, String pass) throws Exception {
 		  
         Class.forName("com.mysql.jdbc.Driver");
@@ -119,16 +142,28 @@ public abstract class DbUnitTest {
 	protected IDatabaseConnection getConnection() throws Exception {
 	   return getConnection(getHost(),getDatabase(),getPort(),getUser(),getPWD());
 	}
+ 
     public void setUpDatabase(String xmlfile) throws Exception {
-        IDatabaseConnection connection = getConnection();
+    	//This ensures all tables as defined in the schema are cleaned up, and is a single place to modify if a schema changes
+    	initDB("src/test/resources/ambit2/plugin/dbtools/test/tables.xml",DatabaseOperation.DELETE_ALL,true);
+    	//This will import only records, defined in the xmlfile
+    	initDB(xmlfile,DatabaseOperation.INSERT,false);
+    }
+    
+    private void initDB(String xmlfile,DatabaseOperation op,boolean admin ) throws Exception {
+        IDatabaseConnection connection = admin?getConnection(getHost(),getDatabase(),getPort(),getAdminUser(),getAdminPWD()):getConnection();
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
         builder.setCaseSensitiveTableNames(false);
         IDataSet dataSet = builder.build(new File(xmlfile));
         try {
-            DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+            //DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+            op.execute(connection, dataSet);
+        } catch (Exception x) {
+        	x.printStackTrace();
+        	throw x;
         } finally {
             connection.close();
 
         }
-    }
+    }    
 }
