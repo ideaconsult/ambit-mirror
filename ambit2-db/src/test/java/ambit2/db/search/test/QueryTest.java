@@ -38,13 +38,17 @@ public abstract class QueryTest<T extends IQueryObject> extends DbUnitTest {
 	public void testSelect() throws Exception {
 		setUpDatabase(getDbFile());
 		IDatabaseConnection c = getConnection();
-		executor.setConnection(c.getConnection());
-		executor.open();
-		ResultSet rs = executor.process(query); 
-		Assert.assertNotNull(rs);
-		verify(query,rs);
-		rs.close();
-		c.close();
+		ResultSet rs = null;
+		try {
+			executor.setConnection(c.getConnection());
+			executor.open();
+			rs = executor.process(query); 
+			Assert.assertNotNull(rs);
+			verify(query,rs);
+		} finally {
+			rs.close();
+			c.close();
+		}
 	}
 	protected abstract T createQuery() throws Exception;
 	protected abstract void verify(T query, ResultSet rs) throws Exception ;

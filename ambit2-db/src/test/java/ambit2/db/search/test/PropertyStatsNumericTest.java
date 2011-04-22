@@ -37,10 +37,11 @@ import ambit2.base.data.PropertyStats;
 import ambit2.db.search.property.PropertyStatsNumeric;
 
 public class PropertyStatsNumericTest extends QueryTest<PropertyStatsNumeric>  {
+
 	@Override
-	public void setUp() throws Exception {
-		super.setUp();
+	public String getDbFile() {
 		setDbFile("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");	
+		return super.getDbFile();
 	}
 	@Override
 	protected PropertyStatsNumeric createQuery() throws Exception {

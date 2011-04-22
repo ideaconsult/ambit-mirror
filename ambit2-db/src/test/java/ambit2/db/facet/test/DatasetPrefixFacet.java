@@ -11,11 +11,11 @@ import ambit2.db.search.test.QueryTest;
 public class DatasetPrefixFacet extends QueryTest<IQueryRetrieval<IFacet<String>>>  {
 
 	@Override
-	public void setUp() throws Exception {
-		super.setUp();
+	public String getDbFile() {
 		setDbFile("src/test/resources/ambit2/db/processors/test/query-datasets-string.xml");
+		return super.getDbFile();
 	}
-	
+
 	@Override
 	protected IQueryRetrieval<IFacet<String>> createQuery() throws Exception {
 		DatasetByPrefixNameFacetQuery q = new DatasetByPrefixNameFacetQuery(null);
