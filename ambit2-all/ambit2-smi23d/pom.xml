@@ -22,36 +22,34 @@
 				<skip>false</skip>
 				</configuration>
 			</plugin>
-		</plugins>  
+	      <plugin>
+        	<groupId>org.apache.maven.plugins</groupId>
+        	<artifactId>maven-resources-plugin</artifactId>
+       		 <version>2.5</version>
+        	<configuration>
+          	<nonFilteredFileExtensions>
+            	<nonFilteredFileExtension></nonFilteredFileExtension>
+		<nonFilteredFileExtension>exe</nonFilteredFileExtension>
+          	</nonFilteredFileExtensions>
+       		 </configuration>
+      		</plugin>
+
+	</plugins>  
+
   	</pluginManagement>
-  	    <resources>
+  	<resources>
 	<resource>
 		<directory>src/main/resources</directory>
-		<filtering>true</filtering>
-		<excludes>
-		<exclude>**/bin/*</exclude>
-		</excludes>
-	</resource>
-	<resource>
-		<directory>src/main/resources/ambit2/bin</directory>
-		<filtering>false</filtering>
-	</resource>
-	<resource>
-		<directory>src/main/resources/ambit2/bin/linux</directory>
-		<filtering>false</filtering>
-	</resource>
-	<resource>
-		<directory>src/main/resources/ambit2/bin/freebsd</directory>
-		<filtering>false</filtering>
-	</resource>	
-	<resource>
-		<directory>src/main/resources/ambit2/bin/win</directory>
-		<filtering>false</filtering>
-	</resource>	
-	<resource>
-		<directory>src/main/resources/ambit2/bin/mac</directory>
 		<filtering>false</filtering>
 	</resource>		
+	<resource>
+              <directory>src/main/resources/META-INF</directory>
+		<targetPath>${project.build.OutputDirectory}/META-INF</targetPath>
+                <filtering>true</filtering>
+		<includes>
+			<include>**/*</include>
+		</includes>
+	</resource>
   </resources>
  </build>  	
   <dependencies>
