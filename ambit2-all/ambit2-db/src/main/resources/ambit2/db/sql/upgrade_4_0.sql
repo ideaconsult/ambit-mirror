@@ -308,4 +308,15 @@ ALTER TABLE `properties` MODIFY COLUMN `name` VARCHAR(255) CHARACTER SET utf8 CO
 ALTER TABLE `src_dataset` ADD COLUMN `licenseURI` VARCHAR(128) NOT NULL DEFAULT 'Unknown' AFTER `idtemplate`,
  ADD INDEX `Index_license`(`licenseURI`);
 insert into version (idmajor,idminor,comment) values (4,10,"AMBIT2 schema"); 
+
+---------------------
+-- 4.11
+-- Bookmark table index (order by date)
+---------------------
+alter table bookmark drop key `Index_3`;
+alter table bookmark drop key `Index_2`;
+alter table bookmark add key `Index_4` (`creator`,`hasTopic`,`date`) using btree;
+alter table bookmark add key `Index_3` (`hasTopic`) using btree;
+alter table bookmark add key `Index_2` (`creator`,`hasTopic`,`title`) using btree;
+insert into version (idmajor,idminor,comment) values (4,11,"AMBIT2 schema - added table bookmark index");
  
