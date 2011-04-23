@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -18,17 +20,21 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+import org.restlet.routing.Template;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.data.Template;
 import ambit2.db.chart.BarChartGeneratorDataset;
 import ambit2.db.chart.FingerprintHistogramDataset;
 import ambit2.db.chart.PieChartGenerator;
 import ambit2.db.chart.PieChartGeneratorDataset;
 import ambit2.db.chart.PropertiesChartGenerator;
+import ambit2.db.search.StoredQuery;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
+import ambit2.rest.dataset.DatasetStructuresResource;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.ProfileReader;
 
 public class ChartResource extends ServerResource {
@@ -40,10 +46,11 @@ public class ChartResource extends ServerResource {
 		bar
 	}
 	protected Form params;
-	protected SourceDataset dataset;
+	protected ISourceDataset dataset;
 	protected String[] property;
 
 	protected boolean legend = false;
+	protected boolean thumbnail = false;
 	protected int w = 400;
 	protected int h = 400;
 	protected ChartMode mode = ChartMode.pie;
@@ -57,6 +64,36 @@ public class ChartResource extends ServerResource {
 		this.mode = mode;
 	}
 
+	protected ISourceDataset getDataset(String uri) throws InvalidResourceIDException {
+		Map<String, Object> vars = new HashMap<String, Object>();
+		Template template = OpenTox.URI.dataset.getTemplate(getRequest().getRootRef());
+		String id = null;
+		try {
+			template.parse(uri, vars);
+			id = vars.get(OpenTox.URI.dataset.getKey()).toString();
+		} catch (Exception x) { return null; }
+		
+		if (id != null)  try {
+			Integer idnum = new Integer(Reference.decode(id.toString()));
+			SourceDataset dataset = new SourceDataset();
+			dataset.setID(idnum);
+			return dataset;
+		} catch (NumberFormatException x) {
+			if (id.toString().startsWith(DatasetStructuresResource.QR_PREFIX)) {
+				String key = id.toString().substring(DatasetStructuresResource.QR_PREFIX.length());
+				try {
+					ISourceDataset dataset = new StoredQuery();
+					dataset.setID(Integer.parseInt(key.toString()));
+					return dataset;
+				} catch (NumberFormatException xx) {
+					throw new InvalidResourceIDException(id);
+				}
+			}
+		} catch (Exception x) {
+			throw new InvalidResourceIDException(id);
+		}
+		return null;
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -64,8 +101,13 @@ public class ChartResource extends ServerResource {
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 		
 		String uri = getParams().getFirstValue(OpenTox.params.dataset_uri.toString());
-		dataset = new SourceDataset(uri);
-		dataset.setId((Integer)OpenTox.URI.dataset.getId(uri,getRequest().getRootRef()));
+		
+		try {
+			dataset = getDataset(uri);
+
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,uri);
+		}
 		
 		property = getParams().getValuesArray(OpenTox.params.feature_uris.toString());
 		
@@ -78,6 +120,8 @@ public class ChartResource extends ServerResource {
 		param = null;
 		try { param = getParams().getFirstValue("param");} catch (Exception x) {param = null;}	
 
+		thumbnail = false;
+		try { thumbnail = Boolean.parseBoolean(getParams().getFirstValue("thumbnail"));} catch (Exception x) {thumbnail = false;}	
 		
 		try {
 			mode = ChartMode.valueOf(getRequest().getAttributes().get(resourceKey).toString());
@@ -104,7 +148,7 @@ public class ChartResource extends ServerResource {
     		DBConnection dbc = new DBConnection(getContext());
     		connection = dbc.getConnection(getRequest());    		
     		
-    		Template profile = new Template();
+    		ambit2.base.data.Template profile = new ambit2.base.data.Template();
     		ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile);
     		reader.setCloseConnection(false);
     		reader.setConnection(connection);
@@ -120,6 +164,7 @@ public class ChartResource extends ServerResource {
 	    			chart.setWidth(w);
 	    			chart.setHeight(h);    
 	    			chart.setLegend(legend);
+	    			chart.setThumbnail(thumbnail);
 	    			image = chart.process(dataset);
 	    			//ChartUtilities.writeImageMap(writer, name, info, useOverLibForToolTips)
 	    			break;
@@ -137,6 +182,7 @@ public class ChartResource extends ServerResource {
     				if (i>=2) break;
     			}
     			PropertiesChartGenerator chart = new PropertiesChartGenerator();
+    			chart.setThumbnail(thumbnail);
     			chart.setPropertyX(p[0]);
     			chart.setPropertyY(p.length<2?p[0]:p[1]);   
     			chart.setConnection(connection);
@@ -162,6 +208,7 @@ public class ChartResource extends ServerResource {
 	    			chart.setHeight(h);  
 	    			chart.setLegend(legend);
 	    			chart.setParam(param);
+	    			chart.setThumbnail(thumbnail);
 	    			image = chart.process(dataset);
     			} else {
 	    			BarChartGeneratorDataset chart = new BarChartGeneratorDataset();
@@ -171,6 +218,7 @@ public class ChartResource extends ServerResource {
 	    			chart.setWidth(w);
 	    			chart.setHeight(h);    
 	    			chart.setLegend(legend);
+	    			chart.setThumbnail(thumbnail);
 	    			image = chart.process(dataset);
     			}
    			

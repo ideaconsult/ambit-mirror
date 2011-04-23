@@ -8,49 +8,48 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.data.jdbc.JDBCXYDataset;
+import org.jfree.ui.RectangleInsets;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 
-public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
+public class PropertiesChartGenerator extends ChartGenerator<ISourceDataset> {
 	protected static final String sql_dataset = 
 		"select a,b from\n"+
 		"(\n"+
-		"select value_num as a,idchemical from struc_dataset \n"+
+		"select value_num as a,idstructure from struc_dataset \n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
 		"where idproperty = %d and id_srcdataset=%d\n"+
 		"and value_num is not null\n"+
-		"group by idchemical,value_num\n"+
 		") as X\n"+
 		"join\n"+
 		"(\n"+
-		"select value_num as b,idchemical from struc_dataset \n"+
+		"select value_num as b,idstructure from struc_dataset \n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
 		"where idproperty = %d and id_srcdataset=%d\n"+
 		"and value_num is not null\n"+
-		"group by idchemical,value_num\n"+
 		") as Y\n"+
-		"using(idchemical)\n";
+		"using(idstructure)\n";
 	
 	protected static final String sql_query = 
 		"select a,b from\n"+
 		"(\n"+
-		"select value_num as a,idchemical from query_results\n"+
+		"select value_num as a,idstructure from query_results\n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
 		"where idproperty = %d and idquery=%d\n"+
-		"group by idchemical,value_num\n"+
 		") as X\n"+
 		"join\n"+
 		"(\n"+
-		"select value_num as b,idchemical from query_results\n"+
+		"select value_num as b,idstructure from query_results\n"+
 		"join property_values using(idstructure) join properties using(idproperty)\n"+
 		"where idproperty = %d and idquery=%d\n"+
-		"group by idchemical,value_num\n"+
 		") as Y\n"+
-		"using(idchemical)\n";	
+		"using(idstructure)\n";	
 	
 	protected Property propertyX;
 	public Property getPropertyX() {
@@ -76,7 +75,7 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 	 */
 	private static final long serialVersionUID = 81990940570873057L;
 
-	public BufferedImage process(SourceDataset target) throws AmbitException {
+	public BufferedImage process(ISourceDataset target) throws AmbitException {
 		  if ((propertyX == null) || (propertyY == null)) throw new AmbitException("Property not defined");
 
 		  JFreeChart chart = null;
@@ -85,9 +84,9 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 	      {
 	    	  JDBCXYDataset dataset =  new JDBCXYDataset(
 	        		 getConnection(),
-	        		 String.format(sql_dataset,
-	        				 propertyX.getId(),target.getId(),
-	        				 propertyY.getId(),target.getId()
+	        		 String.format(target instanceof SourceDataset?sql_dataset:sql_query,
+	        				 propertyX.getId(),target.getID(),
+	        				 propertyY.getId(),target.getID()
 	        				 )); 
 	         
 
@@ -98,10 +97,20 @@ public class PropertiesChartGenerator extends ChartGenerator<SourceDataset> {
 	            		propertyY.getName(), // chart title
 	                                     dataset,
 	                                     PlotOrientation.HORIZONTAL,
-	                                         true,      // legend displayed
+	                                         legend && !thumbnail,      // legend displayed
 	                                         true,      // tooltips displayed
 	                                         true );   // no URLs
 
+	         if (thumbnail) {
+		         chart.getXYPlot().setRenderer(new XYDotRenderer());
+		         chart.getXYPlot().getDomainAxis().setVisible(false);
+		         chart.getXYPlot().getRangeAxis().setVisible(false);
+		         chart.getXYPlot().setInsets(new RectangleInsets(0,0,0,0));
+		         chart.setAntiAlias(true);
+		         chart.setTitle("");
+
+	         }
+	         
 	         chart.getPlot().setBackgroundPaint(Color.white) ;
 	         ((XYPlot)chart.getPlot()).setRangeGridlinePaint(Color.gray);
 	         ((XYPlot)chart.getPlot()).setDomainGridlinePaint(Color.gray);

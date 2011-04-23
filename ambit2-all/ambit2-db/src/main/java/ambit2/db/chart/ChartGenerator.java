@@ -16,7 +16,16 @@ public abstract class ChartGenerator<T> extends AbstractDBProcessor<T,BufferedIm
 	protected int height= 400;
 	protected boolean legend = false;
 	protected String param = null;
+	protected boolean thumbnail = false;
 	
+	public boolean isThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(boolean thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
 	public String getParam() {
 		return param;
 	}

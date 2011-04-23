@@ -1,9 +1,10 @@
 package ambit2.db.chart;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.db.exceptions.DbAmbitException;
 
-public abstract class BarChartGenerator<T> extends ChartGenerator<T> {
+public abstract class BarChartGenerator<T extends ISourceDataset> extends ChartGenerator<T> {
 
 	
 	protected Property propertyX;
