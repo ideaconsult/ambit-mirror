@@ -25,7 +25,7 @@ public class OpenTox {
 		bookmark {
 			@Override
 			public String getResourceID() {
-				return String.format("%s/{creator}/{%s}",getURI(),getKey());
+				return String.format("%s/{creator}/entries/{%s}",getURI(),getKey());
 			}	
 		},
 		reference,

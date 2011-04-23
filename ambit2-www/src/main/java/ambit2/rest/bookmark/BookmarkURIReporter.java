@@ -22,7 +22,7 @@ public class BookmarkURIReporter <Q extends IQueryRetrieval<Bookmark>> extends Q
 
 	@Override
 	public String getURI(String ref, Bookmark item) {
-		return String.format("%s%s/%s/%d",ref,BookmarkResource.resource,item.getCreator(),item.getId());
+		return String.format("%s%s/%s/entries/%d",ref,BookmarkResource.resource,item.getCreator(),item.getId());
 	}
 
 }

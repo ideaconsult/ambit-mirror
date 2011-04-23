@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 
 import ambit2.base.data.Bookmark;
 import ambit2.base.exceptions.AmbitException;
@@ -35,7 +36,11 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 	public void header(Writer w, IQueryRetrieval<Bookmark> query) {
 		super.header(w, query);
 		try {
-			w.write(String.format("<h3>Bookmarks</h3>",""));
+			w.write(String.format("<h3>Bookmarks </h3>",""));
+			
+			Reference ref = getUriReporter().getRequest().getResourceRef().clone();
+			ref.setQuery(null);
+			w.write(String.format("<a href='%s/topics'>Topics</a><br>",ref));
 			
 			w.write(String.format("<a href='?media=%s'>RDF/XML</a>&nbsp;",URLEncoder.encode(MediaType.APPLICATION_RDF_XML.toString())));
 			w.write(String.format("<a href='?media=%s'>RDF N3</a>&nbsp;",URLEncoder.encode(MediaType.TEXT_RDF_N3.toString())));
