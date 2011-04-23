@@ -9,22 +9,22 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.jdbc.JDBCCategoryDataset;
 
-import ambit2.base.data.SourceDataset;
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.exceptions.AmbitException;
 
-public class BarChartGeneratorDataset extends BarChartGenerator<SourceDataset> {
+public class BarChartGeneratorDataset extends BarChartGenerator<ISourceDataset> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5297256309410169743L;
-	protected static final String sql = 
+	protected static final String sql_dataset = 
 		"SELECT ifnull(value_num,value) as v,count(distinct(idchemical)) as num_chemicals\n"+
 		"FROM struc_dataset join property_values using(idstructure) " +
 		"left join property_string using(idvalue_string) join properties using(idproperty)\n"+
 		"where idproperty=%d and id_srcdataset=%d\n"+
 		"group by v\n";	
-	public BufferedImage process(SourceDataset target) throws AmbitException {
+	public BufferedImage process(ISourceDataset target) throws AmbitException {
 		  if (propertyX == null) throw new AmbitException("Property not defined");
 
 		  JFreeChart chart = null;
@@ -56,12 +56,12 @@ public class BarChartGeneratorDataset extends BarChartGenerator<SourceDataset> {
 
 	}
 	@Override
-	protected int getID(SourceDataset target) {
-		return target.getId();
+	protected int getID(ISourceDataset target) {
+		return target.getID();
 	}
 	@Override
 	protected String getSQL() {
-		return sql;
+		return sql_dataset;
 	}
 
 }

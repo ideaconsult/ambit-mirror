@@ -11,6 +11,7 @@ import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.general.PieDataset;
 import org.jfree.data.jdbc.JDBCPieDataset;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
@@ -20,7 +21,7 @@ import ambit2.db.exceptions.DbAmbitException;
  * @author nina
  *
  */
-public abstract class PieChartGenerator<T> extends ChartGenerator<T> {
+public abstract class PieChartGenerator<T extends ISourceDataset> extends ChartGenerator<T> {
 	protected Property property;
 	public Property getProperty() {
 		return property;
