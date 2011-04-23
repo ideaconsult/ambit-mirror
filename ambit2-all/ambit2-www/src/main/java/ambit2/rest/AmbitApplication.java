@@ -40,6 +40,7 @@ import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
+import ambit2.rest.bookmark.BookmarkTopicsResource;
 import ambit2.rest.dataEntry.DataEntryResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
@@ -195,9 +196,15 @@ public class AmbitApplication extends TaskApplication<String> {
 		Router bookmarkRouter = new MyRouter(getContext());
 		bookmarkRouter.attachDefault(BookmarkResource.class);
 		bookmarkRouter.attach(String.format("/{%s}",BookmarkResource.creator),BookmarkResource.class);
-		bookmarkRouter.attach(String.format("/{%s}/{%s}",
+
+		bookmarkRouter.attach(String.format("/{%s}/topics",
+				BookmarkResource.creator),BookmarkTopicsResource.class);
+		
+		bookmarkRouter.attach(String.format("/{%s}/entries",BookmarkResource.creator),BookmarkResource.class);
+		bookmarkRouter.attach(String.format("/{%s}/entries/{%s}",
 				BookmarkResource.creator,
-				BookmarkResource.idbookmark),BookmarkResource.class);
+				BookmarkResource.idbookmark),BookmarkResource.class);		
+		
 		
 		//Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
 		//Filter openssoAuthz = new OpenSSOAuthorizer();

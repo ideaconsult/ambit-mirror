@@ -55,7 +55,7 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 	}
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/bookmark/%s/1", port,getCreator());
+		return String.format("http://localhost:%d/bookmark/%s/entries/1", port,getCreator());
 	}
 	@Test
 	public void testHTML() throws Exception {
@@ -134,7 +134,7 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 		String line = null;
 		int count = 0;
 		while ((line = r.readLine())!= null) {
-			Assert.assertEquals(String.format("http://localhost:%d/bookmark/%s/1",port,getCreator()), line);
+			Assert.assertEquals(String.format("http://localhost:%d/bookmark/%s/entries/1",port,getCreator()), line);
 			count++;
 		}
 		return count==1;
@@ -189,7 +189,7 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 					//writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
-		Assert.assertEquals(String.format("http://localhost:%d/bookmark/%s/2",port,getCreator()),
+		Assert.assertEquals(String.format("http://localhost:%d/bookmark/%s/entries/2",port,getCreator()),
 				
 				response.getEntityAsText());
         
@@ -209,7 +209,7 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 		
-		String bookmark = String.format("http://localhost:%d%s/%s/1", port,BookmarkResource.resource,getCreator());
+		String bookmark = String.format("http://localhost:%d%s/%s/entries/1", port,BookmarkResource.resource,getCreator());
 		Form form = new Form();  
 		form.add(OpenTox.params.source_uri.toString(),bookmark);
 		
@@ -233,7 +233,7 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 		
 		Form form = new Form();
 		Response response =  testDelete(
-					String.format("http://localhost:%d%s/%s/1", port,BookmarkResource.resource,getCreator()),
+					String.format("http://localhost:%d%s/%s/entries/1", port,BookmarkResource.resource,getCreator()),
 					MediaType.APPLICATION_RDF_XML,
 					form.getWebRepresentation());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
@@ -264,7 +264,7 @@ public class BookmarkresourceTest extends ProtectedResourceTest {
 	public void testSearchTopicNone() throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM bookmark where hasTopic='ZZZZZZZ'");
-		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(0,table.getRowCount());
 		c.close();
 		
 		String bookmark = String.format("http://localhost:%d%s/%s?hasTopic=ZZZZZZZ", port,BookmarkResource.resource,getCreator());

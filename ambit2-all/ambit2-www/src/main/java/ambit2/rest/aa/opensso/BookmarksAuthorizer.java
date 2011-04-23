@@ -27,13 +27,17 @@ public class BookmarksAuthorizer extends OpenSSOAuthorizer {
 		}
 		
 		Template template1 = new Template(String.format("%s/bookmark/{%s}",request.getRootRef(),BookmarkResource.creator));
+
 		Template template2 = OpenTox.URI.bookmark.getTemplate(request.getRootRef());
+		Template template3 = new Template(String.format("%s/bookmark/{%s}/entries",request.getRootRef(),BookmarkResource.creator));
+		Template template4 = new Template(String.format("%s/bookmark/{%s}/topics",request.getRootRef(),BookmarkResource.creator));
 		Map<String, Object> vars = new HashMap<String, Object>();
 		Reference ref = request.getResourceRef().clone();
 		ref.setQuery(null);
 		template1.parse(ref.toString(),vars);
 		template2.parse(ref.toString(),vars);
-
+		template3.parse(ref.toString(),vars);
+		template4.parse(ref.toString(),vars);
 		
 		try {retrieveUserAttributes(ssoToken, request);} catch (Exception x) { x.printStackTrace();}
 		return request.getClientInfo().getUser().getIdentifier().equals(vars.get(BookmarkResource.creator));
