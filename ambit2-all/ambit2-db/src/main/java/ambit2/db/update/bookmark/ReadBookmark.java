@@ -18,7 +18,7 @@ import ambit2.db.search.StringCondition;
  */
 public class ReadBookmark  extends AbstractQuery<Bookmark, Integer, StringCondition, Bookmark>  implements IQueryRetrieval<Bookmark> {
 	protected static String sql = 
-		"select idbookmark,creator,recalls,hasTopic,title,description,created,date from bookmark %s";
+		"select idbookmark,creator,recalls,hasTopic,title,description,created,date from bookmark %s order by date desc";
 	
 	protected static String whereID = " idbookmark = ? ";
 	protected static String whereUser = " creator = substr(?,1,45) ";
