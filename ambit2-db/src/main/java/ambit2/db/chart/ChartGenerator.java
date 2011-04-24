@@ -17,13 +17,32 @@ public abstract class ChartGenerator<T> extends AbstractDBProcessor<T,BufferedIm
 	protected boolean legend = false;
 	protected String param = null;
 	protected boolean thumbnail = false;
+	protected boolean logX = false;
+	public boolean isLogX() {
+		return logX;
+	}
+
+	public void setLogX(boolean logX) {
+		this.logX = logX;
+	}
+	protected boolean logY = false;
 	
+	public boolean isLogY() {
+		return logY;
+	}
+
+	public void setLogY(boolean logY) {
+		this.logY = logY;
+	}
+
 	public boolean isThumbnail() {
 		return thumbnail;
 	}
 
 	public void setThumbnail(boolean thumbnail) {
 		this.thumbnail = thumbnail;
+		this.width = 100;
+		this.height = 100;
 	}
 
 	public String getParam() {

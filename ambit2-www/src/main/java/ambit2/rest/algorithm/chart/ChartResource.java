@@ -27,6 +27,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.chart.BarChartGeneratorDataset;
 import ambit2.db.chart.FingerprintHistogramDataset;
+import ambit2.db.chart.HistogramChartGenerator;
 import ambit2.db.chart.PieChartGenerator;
 import ambit2.db.chart.PieChartGeneratorDataset;
 import ambit2.db.chart.PropertiesChartGenerator;
@@ -43,7 +44,8 @@ public class ChartResource extends ServerResource {
 	public enum ChartMode {
 		pie,
 		xy,
-		bar
+		bar,
+		histogram
 	}
 	protected Form params;
 	protected ISourceDataset dataset;
@@ -55,6 +57,8 @@ public class ChartResource extends ServerResource {
 	protected int h = 400;
 	protected ChartMode mode = ChartMode.pie;
 	protected String param;
+	protected boolean logX = false;
+	protected boolean logY = false;
 	
 	public ChartMode getMode() {
 		return mode;
@@ -111,17 +115,24 @@ public class ChartResource extends ServerResource {
 		
 		property = getParams().getValuesArray(OpenTox.params.feature_uris.toString());
 		
-		w = 400; h = 400;
-		try { w = Integer.parseInt(getParams().getFirstValue("w"));} catch (Exception x) {w =-1;}
-		try { h = Integer.parseInt(getParams().getFirstValue("h"));} catch (Exception x) {h =-1;}
+		thumbnail = false;
+		try { thumbnail = Boolean.parseBoolean(getParams().getFirstValue("thumbnail"));} catch (Exception x) {thumbnail = false;}	
+		
+		w = thumbnail?100:400; h = thumbnail?100:400;
+		try { w = Integer.parseInt(getParams().getFirstValue("w"));} catch (Exception x) {}
+		try { h = Integer.parseInt(getParams().getFirstValue("h"));} catch (Exception x) {}
+		
+		logX = false; logY = false;
+		try { logX = Boolean.parseBoolean(getParams().getFirstValue("logX"));} catch (Exception x) {}
+		try { logY = Boolean.parseBoolean(getParams().getFirstValue("logY"));} catch (Exception x) {}
+
+		
 		legend = false;
 		try { legend = Boolean.parseBoolean(getParams().getFirstValue("legend"));} catch (Exception x) {legend = false;}	
 
 		param = null;
 		try { param = getParams().getFirstValue("param");} catch (Exception x) {param = null;}	
 
-		thumbnail = false;
-		try { thumbnail = Boolean.parseBoolean(getParams().getFirstValue("thumbnail"));} catch (Exception x) {thumbnail = false;}	
 		
 		try {
 			mode = ChartMode.valueOf(getRequest().getAttributes().get(resourceKey).toString());
@@ -161,10 +172,12 @@ public class ChartResource extends ServerResource {
 	    			PieChartGenerator chart = new PieChartGeneratorDataset();
 	    			chart.setProperty(i.next());    
 	    			chart.setConnection(connection);
-	    			chart.setWidth(w);
-	    			chart.setHeight(h);    
 	    			chart.setLegend(legend);
 	    			chart.setThumbnail(thumbnail);
+	    			chart.setWidth(w);
+	    			chart.setHeight(h);  	    		
+	    			chart.setLogX(logX);
+	    			chart.setLogY(logY);
 	    			image = chart.process(dataset);
 	    			//ChartUtilities.writeImageMap(writer, name, info, useOverLibForToolTips)
 	    			break;
@@ -172,6 +185,27 @@ public class ChartResource extends ServerResource {
     			
     			break;
     		}
+
+    		case histogram: {
+    			Iterator<Property> i = profile.getProperties(true);
+    			while (i.hasNext()) {
+	    			HistogramChartGenerator chart = new HistogramChartGenerator();
+	    			chart.setLogX(logX);
+	    			chart.setLogY(logY);
+	    			chart.setPropertyX(i.next());    
+	    			chart.setConnection(connection);
+	    			chart.setLegend(legend);
+	    			chart.setThumbnail(thumbnail);
+	    			chart.setWidth(w);
+	    			chart.setHeight(h); 	    			
+	    			image = chart.process(dataset);
+	    			//ChartUtilities.writeImageMap(writer, name, info, useOverLibForToolTips)
+	    			break;
+    			}
+    			
+    			break;
+    		}    		
+
     		case xy: {
     			Property[] p = new Property[2];
     			int i=0;
@@ -182,6 +216,8 @@ public class ChartResource extends ServerResource {
     				if (i>=2) break;
     			}
     			PropertiesChartGenerator chart = new PropertiesChartGenerator();
+    			chart.setLogX(logX);
+    			chart.setLogY(logY);
     			chart.setThumbnail(thumbnail);
     			chart.setPropertyX(p[0]);
     			chart.setPropertyY(p.length<2?p[0]:p[1]);   
@@ -203,22 +239,28 @@ public class ChartResource extends ServerResource {
     			}
     			if (i==0)  {
     				FingerprintHistogramDataset chart = new FingerprintHistogramDataset();
+	    			chart.setLogX(logX);
+	    			chart.setLogY(logY);
 	    			chart.setConnection(connection);
-	    			chart.setWidth(w);
-	    			chart.setHeight(h);  
+ 
 	    			chart.setLegend(legend);
 	    			chart.setParam(param);
 	    			chart.setThumbnail(thumbnail);
+	    			chart.setWidth(w);
+	    			chart.setHeight(h); 	    			
 	    			image = chart.process(dataset);
     			} else {
 	    			BarChartGeneratorDataset chart = new BarChartGeneratorDataset();
+	    			chart.setLogX(logX);
+	    			chart.setLogY(logY);
 	    			chart.setPropertyX(p[0]);
 	    			chart.setPropertyY(p.length<2?p[0]:p[1]);   
 	    			chart.setConnection(connection);
-	    			chart.setWidth(w);
-	    			chart.setHeight(h);    
+  
 	    			chart.setLegend(legend);
 	    			chart.setThumbnail(thumbnail);
+	    			chart.setWidth(w);
+	    			chart.setHeight(h);  	    			
 	    			image = chart.process(dataset);
     			}
    			
