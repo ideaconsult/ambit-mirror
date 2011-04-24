@@ -32,7 +32,7 @@ public abstract class BarChartGenerator<T extends ISourceDataset> extends ChartG
 	private static final long serialVersionUID = 81990940570873057L;
 
 	protected abstract int getID(T target);
-	protected abstract String getSQL();
+	protected abstract String getSQL(T target);
 	
 	
 
