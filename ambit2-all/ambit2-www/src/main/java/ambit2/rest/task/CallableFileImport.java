@@ -240,6 +240,8 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 				throw new Exception("No file");
 		} catch (Exception x) {
 			throw x;
+		} finally {
+			try { if (file.exists()) file.delete(); } catch (Exception x) { x.printStackTrace();}
 		}
 	}
 
