@@ -220,4 +220,8 @@ public class QuerySMARTS extends
 				isUsePrecalculatedAtomProperties()?"":",No precalculated properties"
 				);
 	}
+	@Override
+	public boolean supportsPaging() {
+		return false;
+	}
 }

@@ -118,5 +118,9 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  i
 	public String getCategory() {
 		return null;
 	}
+	@Override
+	public boolean supportsPaging() {
+		return true;
+	}
 	
 }
