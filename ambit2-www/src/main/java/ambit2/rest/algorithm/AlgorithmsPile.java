@@ -8,8 +8,8 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.core.data.model.Algorithm;
-import ambit2.core.data.model.AlgorithmType;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.AlgorithmType;
 
 public class AlgorithmsPile {
 	private static final LiteratureEntry toxTreeReference = new LiteratureEntry("User input","http://toxtree.sourceforge.net");
@@ -28,6 +28,10 @@ public class AlgorithmsPile {
 							new String[] {AlgorithmType.FeatureSelection,AlgorithmType.MultipleTarget,AlgorithmType.EagerLearning.toString(),AlgorithmType.UnSupervised.toString()},null,Algorithm.requires.property},
 */						
 			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Dissociation_constant_pKa",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#pkaSMARTS"},
+			
+			{"categories","OECD Categories","ambit2.descriptors.FunctionalGroupDescriptor",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Endpoints",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#categories"},
+			
+			
 			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#toxtreecramer"},
 			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
 			{"toxtreeverhaar","ToxTree: Verhaar scheme for predicting toxicity mode of action","verhaar.VerhaarScheme",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",Algorithm.requires.structure},
@@ -169,7 +173,7 @@ public class AlgorithmsPile {
 			
 			{"fingerprints","Generate fingerprints","fp1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			{"atomenvironments","Generate atomenvironments","atomenvironments",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
-			{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
+			//{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			{"struckeys","Generate structure keys","sk1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			

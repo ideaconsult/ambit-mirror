@@ -34,10 +34,12 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.Property;
@@ -89,15 +91,16 @@ public class FunctionalGroupDescriptorTest {
 		groups = new ArrayList<FunctionalGroup>();
 		groups.add(new FunctionalGroup("C4","CCCC","test4"));	
 		groups.add(new FunctionalGroup("C5","CCCCC","test5"));	
-		calculate(groups,false,MoleculeFactory.makeAlkane(4),1);
+		calculate(groups,false,MoleculeFactory.makeAlkane(4),2);
 
 	}		
 	
 	@Test
 	public void testDefaultGroups() throws Exception {
 		FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
-		IAtomContainer mol = MoleculeFactory.makeAlkane(10);
-		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,2);
+		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IAtomContainer mol =  p.parseSmiles("C(=O)Cl");
+		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,83);
 		//Alkyl C [CX4]
 		//Alanine side chain [CH3X4]
 	}			
@@ -155,7 +158,7 @@ public class FunctionalGroupDescriptorTest {
 	public void testGetSpecification() {
 		DescriptorSpecification spec = d.getSpecification();
 		assertEquals(FunctionalGroupDescriptor.class.getName(),spec.getImplementationTitle());
-		assertEquals(String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"FunctionalGroups")
+		assertEquals(String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"OECDCategories")
 				,spec.getSpecificationReference());
 	}
 

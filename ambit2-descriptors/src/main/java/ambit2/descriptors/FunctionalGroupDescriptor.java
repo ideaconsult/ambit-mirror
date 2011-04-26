@@ -92,11 +92,11 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 			
 			for (int i=0; i < groups.size();i++) { 
 					VerboseDescriptorResult<Object,IntegerResult> result = groups.get(i).process(target);
-					if (result.getResult().intValue()>0) {
+					//if (result.getResult().intValue()>0) {
 						results.add(result.getResult().intValue());
 						explanation.add(result.getExplanation());
 						realNames.add(groups.get(i).getName());
-					}
+					//}
 			}
 
 			String[] n = new String[realNames.size()];
@@ -110,6 +110,7 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 	                result,
 	                realNames.toArray(n));
 		} catch (Exception x) {
+			x.printStackTrace();
 	        return new DescriptorValue(getSpecification(), getParameterNames(), 
 	                getParameters(), 
 	                null,
@@ -134,10 +135,10 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 
 	public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
-        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"FunctionalGroups"),
+        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"OECDCategories"),
 		    this.getClass().getName(),
 		    "$Id: FunctionalGroupDescriptor.java,v 0.2 2009/03/19 08:10:00 Nina Jeliazkova Exp $",
-            "http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml");
+            "http://ambit.sourceforge.net/OECDCategories.xml");
     };
     /**
      * 3 parameters : Smarts,name,hint; first two are mandatory.
