@@ -243,4 +243,8 @@ using(idstructure)
 	public String getCategory() {
 		return null;
 	}
+	@Override
+	public boolean supportsPaging() {
+		return true;
+	}
 }

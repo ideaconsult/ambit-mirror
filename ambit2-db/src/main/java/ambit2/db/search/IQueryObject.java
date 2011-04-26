@@ -67,6 +67,6 @@ public interface IQueryObject<ResultType> extends IStatement,Serializable {
 	 * @return
 	 */
 	String getCategory();
-	
+	boolean supportsPaging();
 
 }

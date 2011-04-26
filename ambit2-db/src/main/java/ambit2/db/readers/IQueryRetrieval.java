@@ -36,5 +36,5 @@ public interface IQueryRetrieval<ResultType> extends IQueryObject<ResultType>,
 	public static final String NaN = "NaN";
 	boolean isPrescreen();
 	double calculateMetric(ResultType object);
-
+	
 }

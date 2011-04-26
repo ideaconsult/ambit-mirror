@@ -112,4 +112,8 @@ public abstract class FilteredCount<T extends Comparable<T>> implements IQueryRe
 	public String getCategory() {
 		return null;
 	}
+	@Override
+	public boolean supportsPaging() {
+		return true;
+	}
 }

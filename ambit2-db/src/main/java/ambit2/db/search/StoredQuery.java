@@ -164,6 +164,10 @@ public class StoredQuery implements IStoredQuery {
 	public void setSource(String name) {
 		this.content = name;
 	}
+	@Override
+	public boolean supportsPaging() {
+		return true;
+	}
 }
 
 
