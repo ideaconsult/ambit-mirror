@@ -8,6 +8,7 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.search.NumberCondition;
@@ -56,7 +57,7 @@ where
  </pre>
  */
 public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberCondition> {
-
+	/*
 	protected final String sql_all = 
 		"select ? as idquery,s1.idchemical,s1.idstructure,if(s1.type_structure='NA',0,1) as selected,round(cbits/(bc+?-cbits),2) as metric,null as text\n"+
 		"FROM structure s1\n"+
@@ -77,7 +78,23 @@ public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberC
 	
 	protected final String sql_chemicals = "LEFT JOIN structure s2 ON s1.idchemical = s2.idchemical  AND (1E10*s1.preference+s1.idstructure) > (1E10*s2.preference+s2.idstructure)\n";
 	protected final String where_chemicals = "s2.idchemical is null and\n";
+	*/
 	protected final String order = "order by metric desc";
+
+	
+	protected final String sql_similarity = 
+			"select ? as idquery,idchemical,-1,1 as selected,round(cbits/(bc+?-cbits),2) as metric,null as text\n"+
+			"from (\n"+
+			"select fp1024.idchemical,(bit_count(? & fp1) + bit_count(? & fp2) + bit_count(? & fp3) + bit_count(? & fp4) +\n"+
+			"bit_count(? & fp5) + bit_count(? & fp6) + bit_count(? & fp7) + bit_count(? & fp8) + bit_count(? & fp9) + bit_count(? & fp10) +\n"+
+			"bit_count(? & fp11) + bit_count(? & fp12) + bit_count(? & fp13) + bit_count(? & fp14) + bit_count(? & fp15) + bit_count(? & fp16))\n"+
+			" as cbits,bc from fp1024\n"+
+			") as a\n"+
+			"where\n"+
+			"(cbits/(bc+?-cbits)>?)\n%s";
+			//"order by metric desc\n";
+			
+			
 	/**
 	 * 
 	 */
@@ -90,12 +107,14 @@ public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberC
 	 * select ? as idquery,idchemical,idstructure,1 as selected,Tanimoto as metric
 	 */
 	public String getSQL() throws AmbitException {
+		return String.format(sql_similarity,isForceOrdering()?order:"");
+		/*
 		
 		return String.format(sql_all, 
 				isChemicalsOnly()?sql_chemicals:"", 
 				isChemicalsOnly()?where_chemicals:"",
 				isForceOrdering()?order:"");
-		
+		*/
 
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
@@ -112,8 +131,14 @@ public class QuerySimilarityBitset extends QuerySimilarity<String,BitSet,NumberC
 		params.add(new QueryParam<Double>(Double.class, getThreshold()));		
 		return params;
 	}
-	/*
-			    
- */
+	
+	@Override
+	public boolean isPrescreen() {
+		return true;
+	}
+	@Override
+	public double calculateMetric(IStructureRecord object) {
 
+		return 1;
+	}
 }
