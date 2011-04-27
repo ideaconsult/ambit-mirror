@@ -144,7 +144,17 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				});
 				
 	}
+	protected CSVReporter createTXTReporter() {
+		CSVReporter csvreporter = new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString());
+		csvreporter.setSeparator("\t");
+		csvreporter.setNumberofHeaderLines(0);
+		csvreporter.setWriteCompoundURI(false);
+		return csvreporter;
+	}
 	
+	protected CSVReporter createCSVReporter() {
+		return new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString());
+	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
@@ -178,12 +188,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
-			CSVReporter csvreporter = new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString());
-			csvreporter.setSeparator("\t");
-			csvreporter.setNumberofHeaderLines(0);
-			csvreporter.setWriteCompoundURI(false);
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					csvreporter,MediaType.TEXT_PLAIN);
+					createTXTReporter(),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			ConformerURIReporter<QueryStructureByID> reporter = 
 				new ConformerURIReporter<QueryStructureByID>(getRequest(),queryObject.isPrescreen(),getDocumentation());
@@ -209,7 +215,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation()),ChemicalMediaType.WEKA_ARFF);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString()),MediaType.TEXT_CSV);
+					createCSVReporter()
+					,MediaType.TEXT_CSV);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
 			switch (rdfwriter) {
 			case stax: {
