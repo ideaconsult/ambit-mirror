@@ -11,10 +11,12 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.CSVReporter;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
@@ -51,6 +53,13 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 					getRequest().getRootRef(),OpenTox.URI.dataset.getURI(),dataset_id,PropertyResource.featuredef);				
 			
 //			String.format("riap://application/dataset/%s%s",dataset_id,PropertyResource.featuredef);
+	}
+	
+	@Override
+	protected CSVReporter createCSVReporter() {
+		CSVReporter csvReporter = super.createCSVReporter();
+		csvReporter.setSimilarityColumn(Property.getInstance("metric",queryObject==null?"":queryObject.toString(),"http://ambit.sourceforge.net"));
+		return csvReporter;
 	}
 
 	@Override

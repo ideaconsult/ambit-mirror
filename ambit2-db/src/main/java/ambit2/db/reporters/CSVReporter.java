@@ -2,6 +2,7 @@ package ambit2.db.reporters;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -25,6 +26,14 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	private static final long serialVersionUID = -4569410787926615089L;
 	protected int numberofHeaderLines  = 1;
 	protected boolean writeCompoundURI = true;
+	protected Property similarityColumn;
+			
+	public Property getSimilarityColumn() {
+		return similarityColumn;
+	}
+	public void setSimilarityColumn(Property similarityColumn) {
+		this.similarityColumn = similarityColumn;
+	}
 	public boolean isWriteCompoundURI() {
 		return writeCompoundURI;
 	}
@@ -54,6 +63,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public void setUrlPrefix(String urlPrefix) {
 		this.urlPrefix = urlPrefix;
 	}
+	
 	public CSVReporter() {
 		this(null);
 	}
@@ -101,6 +111,14 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			output.flush(); } catch (Exception x) {};
 	};
 	
+	@Override
+	protected List<Property> template2Header(Template template,
+			boolean propertiesOnly) {
+		List<Property> p = super.template2Header(template, propertiesOnly);
+		if (similarityColumn!=null) 
+			p.add(similarityColumn);
+		return p;
+	}
 	protected void writeHeader(Writer writer) throws IOException {
 		
 		if (header == null) {
@@ -157,6 +175,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			for (Property p : header) {
 				
 				Object value = item.getProperty(p);
+			
 				if (p.getClazz()==Number.class) 
 					writer.write(String.format("%s%s",
 							delimiter,
