@@ -134,7 +134,7 @@ public class QueryExecutor<Q extends IQueryObject> extends StatementExecutor<Q,R
 		int page = target.getPage();
 		long psize = target.getPageSize();
 		
-		if ((target instanceof IQueryRetrieval) && ((IQueryRetrieval)target).supportsPaging()) {
+		if ((target instanceof IQueryRetrieval) && !((IQueryRetrieval)target).supportsPaging()) {
 			page = 0;
 			psize = (psize*100)>10000?10000:(psize*100);
 		}
