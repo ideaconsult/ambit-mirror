@@ -131,7 +131,7 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         writer.setConnection(c.getConnection());
         writer.open();
         FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
-        Assert.assertEquals(113,((List)d.getParameters()[0]).size());
+        Assert.assertEquals(83,((List)d.getParameters()[0]).size());
 
         DescriptorValue v = d.calculate(MoleculeFactory.makePhenylAmine());
         Assert.assertEquals(6,v.getNames().length);
