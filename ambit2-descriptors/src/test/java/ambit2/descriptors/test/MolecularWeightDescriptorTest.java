@@ -1,5 +1,7 @@
 package ambit2.descriptors.test;
 
+import java.util.Locale;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -24,6 +26,7 @@ public class MolecularWeightDescriptorTest {
 		DescriptorResultFormatter f = new DescriptorResultFormatter(false);
 		Assert.assertEquals(78.111, ((Double)f.process(value)).doubleValue(),1E-3);
 		f = new DescriptorResultFormatter(true);
+		f.setLocale(Locale.US);
 		Assert.assertEquals("78.111", f.process(value));		
 	}
 }
