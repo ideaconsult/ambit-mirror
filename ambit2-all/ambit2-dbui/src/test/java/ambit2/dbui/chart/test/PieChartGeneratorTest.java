@@ -13,10 +13,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.junit.Test;
+
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.db.chart.FuncGroupsChartGenerator;
-import ambit2.db.chart.HistogramChartGenerator;
+import ambit2.db.chart.XTabChartGenerator;
 import ambit2.db.chart.Nominal2SimilarityChartGenerator;
 import ambit2.db.chart.Numeric2SimilarityChartGenerator;
 import ambit2.db.chart.PieChartGenerator;
@@ -101,7 +103,9 @@ public class PieChartGeneratorTest extends RepositoryTest  {
 		} finally {
 			try {c.close(); } catch (Exception x) {}
 		}
-	}	
+	}
+	
+	@Test
 	public Image testPropertyHistogramPlot() {
 		Connection c = null;
 		try {
@@ -109,7 +113,7 @@ public class PieChartGeneratorTest extends RepositoryTest  {
 			c = datasource.getConnection();
 			IStoredQuery q = new StoredQuery(13);//this is dataset now
 			q.setName("IRISTR: EPA Integrated Risk Information System (IRIS) Toxicity Review Data");
-			HistogramChartGenerator gen = new HistogramChartGenerator();
+			XTabChartGenerator gen = new XTabChartGenerator();
 			gen.setBinWidth(0.001);
 			gen.setConnection(c);
 			gen.setPropertyX(Property.getInstance("Inhalation_UnitRisk_micromol_per_m3", ""));
