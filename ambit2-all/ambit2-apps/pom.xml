@@ -274,4 +274,17 @@
 
 
   	</dependencies>
+  	<repositories>
+  	    	<repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
+	<repository>
+        <id>ambit-plovdiv-snapshots</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+	      <snapshots>
+	        <enabled>true</enabled>
+	      </snapshots>        
+    </repository>  
+  	</repositories>
 </project>
