@@ -58,7 +58,7 @@ public class FuncGroupsDescriptorFactoryTest {
 		FuncGroupsDescriptorFactory factory = new FuncGroupsDescriptorFactory();
 		Collection<FunctionalGroup> list = factory.process(null);
 		Assert.assertNotNull(list);
-		Assert.assertEquals(83,list.size());
+		Assert.assertEquals(82,list.size());
 		for (FunctionalGroup group : list)  {
 			Assert.assertNotSame("",group.getSmarts());
 			Assert.assertNotSame("",group.getName());

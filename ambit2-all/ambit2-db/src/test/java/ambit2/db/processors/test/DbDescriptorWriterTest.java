@@ -131,16 +131,16 @@ public class DbDescriptorWriterTest extends DbUnitTest {
         writer.setConnection(c.getConnection());
         writer.open();
         FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
-        Assert.assertEquals(83,((List)d.getParameters()[0]).size());
+        Assert.assertEquals(82,((List)d.getParameters()[0]).size());
 
         DescriptorValue v = d.calculate(MoleculeFactory.makePhenylAmine());
-        Assert.assertEquals(83,v.getNames().length);
+        Assert.assertEquals(82,v.getNames().length);
         writer.write(v);
         c.close();
         
         c = getConnection();
 		names = 	c.createQueryTable("EXPECTED_NAMES","SELECT * FROM properties");	
-		Assert.assertEquals(86,names.getRowCount());
+		Assert.assertEquals(85,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
 		Assert.assertEquals(0,values.getRowCount());		
 		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template where name=\""+d.getSpecification().getImplementationTitle()+"\"");	

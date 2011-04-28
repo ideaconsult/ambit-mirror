@@ -10,8 +10,9 @@
 <group family="Acrylates/Methacrylates" name="Acrylates/Methacrylates" smarts="[CX3H1](=[CX3H2])[CX3](=[OX1])[O-,OX2]"/>
 <group family="Acrylates/Methacrylates" name="Acrylates (Methacrylates)" smarts="[CH3][CX3](=[CX3H2])[CX3](=[OX1])[O-,OX2]"/>
 <group family="Aldehydes" name="Aldehydes" smarts="[CX3H1](=O)[C,c,H]"/>
-
+<!-- wrong smarts
 <group family="Aldehydes" name="Aldehydes (polyaldehydes)" smarts="([CX3H1](=O)[C,c].[CX3H1](=O)[C,c])"/>
+ -->
 <group family="Aldehydes" name="Aldehydes (vinyl)" smarts="[CX3H2]=[CX3][CX3H1]=[O]"/>
 <group family="Aldehydes" name="Aldehydes (allylic)" smarts="[CX3]=[CX3][CH2][CX3H1]=[O]"/>
 <group family="Aliphatic Amines" name="Aliphatic Amines (primary amines or monoalkyl amines)" smarts="[C][NX3H2,NX4H3;!$(NC=[!#6])]"/>
