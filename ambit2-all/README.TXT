@@ -1,14 +1,21 @@
 http://ambit.sourceforge.net
 
-AMBIT 2.2.0
+AMBIT2 2.4.0-SNAPSHOT
+.r3436
+ cdk 1.3.8 and cdk-jchempaint-18 
+jchempaint 3.1.3 only in ambit2-jchempaint and AmbitXT
+MySQL 5.5
 
 Changelog: 
-cdk 1.3.7
-DB schema modified
- 
+
+AMBIT 2.2.0
+.r2845
+ cdk 1.3.7 and jchempaint 3.1.3
+
 AMBIT 2.1.4
 
 Changelog: cdk 1.3.6 and jchempaint 3.1.3
+
 
 This is multi module maven project;
 
@@ -31,7 +38,7 @@ NOTE 1: Applications build depend on Toxtree jars. All ambit and Toxtree artifac
 
 http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty
 
-Optionally, to build Toxtree version on your , get the source from https://toxtree.svn.sourceforge.net/svnroot/toxtree/trunk and run mvn install.
+Optionally, to build Toxtree version on your own, get the source from https://toxtree.svn.sourceforge.net/svnroot/toxtree/trunk and run mvn install.
 
 
 NOTE 2: The build process includes mandatory database tests and can take a while. 
