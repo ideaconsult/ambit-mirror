@@ -23,7 +23,7 @@ import javax.swing.table.TableCellRenderer;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.core.io.ICompoundImageTools;
-import ambit2.jchempaint.CompoundImageTools;
+import ambit2.rendering.CompoundImageTools;
 import ambit2.ui.table.IBrowserMode;
 
 

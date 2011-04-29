@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-import ambit2.ui.editors.Panel2D;
+import ambit2.ui.Panel2D;
 
 public class TautomersVisualisationTest {
 

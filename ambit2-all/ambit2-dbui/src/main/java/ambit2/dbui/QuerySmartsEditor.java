@@ -21,9 +21,9 @@ import javax.swing.JToolBar;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -37,8 +37,8 @@ import ambit2.descriptors.FuncGroupsDescriptorFactory;
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
 import ambit2.smarts.SmartsToChemObject;
+import ambit2.ui.Panel2D;
 import ambit2.ui.Utils;
-import ambit2.ui.editors.Panel2D;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.beans.BeanAdapter;

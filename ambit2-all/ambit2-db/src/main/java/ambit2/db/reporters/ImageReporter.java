@@ -31,7 +31,7 @@ import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.CreateStoredQuery;
-import ambit2.jchempaint.CompoundImageTools;
+import ambit2.rendering.CompoundImageTools;
 
 /**
 SELECT idchemical,idstructure,text,title FROM structure

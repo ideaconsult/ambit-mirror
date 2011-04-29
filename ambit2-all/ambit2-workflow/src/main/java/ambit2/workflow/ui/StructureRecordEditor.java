@@ -15,11 +15,11 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.MoleculeWriter;
-import ambit2.ui.editors.IAmbitEditor;
-import ambit2.ui.editors.StructureDiagramEditor;
+import ambit2.jchempaint.editor.StructureDiagramEditor;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;

@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListModel;
 
+import ambit2.base.interfaces.IAmbitEditor;
+
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.forms.builder.PanelBuilder;

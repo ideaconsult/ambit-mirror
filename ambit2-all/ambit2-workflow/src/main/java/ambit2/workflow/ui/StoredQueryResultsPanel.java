@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import javax.swing.JComponent;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SessionID;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.QueryStoredResults;
-import ambit2.ui.editors.IAmbitEditor;
 
 /**
  * This is a wrapper for {@link QueryResultsPanel}

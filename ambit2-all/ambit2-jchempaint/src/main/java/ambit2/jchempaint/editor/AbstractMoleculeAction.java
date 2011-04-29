@@ -1,4 +1,4 @@
-package ambit2.ui.editors;
+package ambit2.jchempaint.editor;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;

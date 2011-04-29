@@ -12,6 +12,7 @@ import javax.swing.JToolBar;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.IDBProcessor;
@@ -21,7 +22,6 @@ import ambit2.db.search.QueryCombined.COMBINE;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.SCOPE;
 import ambit2.ui.EditorPreferences;
-import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.editors.ListEditor;
 
 import com.jgoodies.binding.PresentationModel;

@@ -34,7 +34,7 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 import ambit2.base.config.Preferences;
-import ambit2.ui.editors.IAmbitEditor;
+import ambit2.base.interfaces.IAmbitEditor;
 
 public class EditorPreferences {
 	protected static PropertyChangeSupport propertyChangeSupport;

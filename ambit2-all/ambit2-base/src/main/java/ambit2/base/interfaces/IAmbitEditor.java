@@ -1,4 +1,4 @@
-package ambit2.ui.editors;
+package ambit2.base.interfaces;
 
 import javax.swing.JComponent;
 

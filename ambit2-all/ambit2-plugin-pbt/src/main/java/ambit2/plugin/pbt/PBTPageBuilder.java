@@ -64,7 +64,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.ui.editors.Panel2D;
+import ambit2.ui.Panel2D;
 import ambit2.ui.jmol.Panel3D;
 
 import com.jgoodies.binding.PresentationModel;

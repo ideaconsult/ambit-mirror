@@ -36,11 +36,11 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 import junit.framework.Assert;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.results.PropertyRows;
 import ambit2.db.results.RowsModel;
 import ambit2.db.search.property.TemplateQuery;
 import ambit2.ui.EditorPreferences;
-import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.editors.ListEditor;
 
 public class TemplateRowsTest extends QueryTest<TemplateQuery>{

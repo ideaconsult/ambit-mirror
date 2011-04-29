@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.SourceDataset;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.processors.QueryInfo2Query;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryCombined;
@@ -17,7 +18,6 @@ import ambit2.db.search.property.RetrieveFieldNames;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryField;
 import ambit2.ui.EditorPreferences;
-import ambit2.ui.editors.IAmbitEditor;
 
 
 

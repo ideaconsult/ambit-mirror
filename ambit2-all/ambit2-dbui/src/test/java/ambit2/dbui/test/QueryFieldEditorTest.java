@@ -37,10 +37,10 @@ import javax.swing.JOptionPane;
 import org.junit.After;
 import org.junit.Before;
 
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.IDBProcessor;
 import ambit2.db.search.structure.QueryField;
 import ambit2.ui.EditorPreferences;
-import ambit2.ui.editors.IAmbitEditor;
 
 public class QueryFieldEditorTest  extends  RepositoryTest {
 

@@ -20,9 +20,9 @@ import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
-import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
-import ambit2.jchempaint.CompoundImageTools;
+import ambit2.db.readers.RetrieveStructure;
+import ambit2.rendering.CompoundImageTools;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;

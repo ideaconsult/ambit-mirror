@@ -13,14 +13,14 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.SingleSelection;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.MoleculeTools;
-import ambit2.jchempaint.CompoundImageTools;
+import ambit2.rendering.CompoundImageTools;
 import ambit2.some.SOMERawReader.someindex;
 
 public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagramHighlights, IProcessor<IAtomContainer, IChemObjectSelection>  {

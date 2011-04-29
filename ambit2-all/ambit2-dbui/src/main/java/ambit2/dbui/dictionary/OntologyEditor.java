@@ -21,6 +21,7 @@ import javax.swing.JList;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorOntology;
@@ -31,7 +32,6 @@ import ambit2.db.results.RowsModel;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.Utils;
-import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.editors.ListEditor;
 
 import com.jgoodies.forms.builder.PanelBuilder;

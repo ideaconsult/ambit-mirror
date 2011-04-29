@@ -4,8 +4,8 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -14,7 +14,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.jchempaint.CompoundImageTools;
+import ambit2.rendering.CompoundImageTools;
 import ambit2.smarts.query.ISmartsPattern;
 import ambit2.smarts.query.SmartsPatternAmbit;
 

@@ -38,6 +38,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import ambit2.base.data.Property;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.IDBProcessor;
 import ambit2.db.results.DictionaryRows;
 import ambit2.db.search.DictionaryObjectQuery;
@@ -45,7 +46,6 @@ import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.DictionarySubjectQuery;
 import ambit2.dbui.dictionary.DictionaryQueryPanel;
 import ambit2.ui.EditorPreferences;
-import ambit2.ui.editors.IAmbitEditor;
 
 
 public class DictionaryRowsTest extends QueryTest<DictionaryQuery>{

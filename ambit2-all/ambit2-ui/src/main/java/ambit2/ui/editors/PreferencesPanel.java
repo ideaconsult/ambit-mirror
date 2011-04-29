@@ -41,6 +41,7 @@ import javax.swing.JTabbedPane;
 import ambit2.base.config.Preferences;
 import ambit2.base.config.Preferences.VINDEX;
 import ambit2.base.config.Preferences.VTAGS;
+import ambit2.base.interfaces.IAmbitEditor;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;

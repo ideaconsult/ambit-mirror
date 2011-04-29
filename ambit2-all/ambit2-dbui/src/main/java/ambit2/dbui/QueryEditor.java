@@ -33,11 +33,11 @@ import javax.swing.JComponent;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.IQueryCondition;
-import ambit2.ui.editors.IAmbitEditor;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;

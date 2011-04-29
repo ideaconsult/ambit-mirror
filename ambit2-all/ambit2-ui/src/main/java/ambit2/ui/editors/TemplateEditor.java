@@ -5,6 +5,7 @@ import javax.swing.JComponent;
 import ambit2.base.data.Profile;
 import ambit2.base.data.ProfileListModel;
 import ambit2.base.data.Property;
+import ambit2.base.interfaces.IAmbitEditor;
 
 public class TemplateEditor implements IAmbitEditor<Profile<Property>> {
 	protected Profile<Property> profile;
