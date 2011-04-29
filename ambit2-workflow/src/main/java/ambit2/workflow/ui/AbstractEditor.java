@@ -26,7 +26,7 @@ package ambit2.workflow.ui;
 
 import javax.swing.JComponent;
 
-import ambit2.ui.editors.IAmbitEditor;
+import ambit2.base.interfaces.IAmbitEditor;
 
 import com.microworkflow.ui.IWorkflowContextFactory;
 import com.microworkflow.ui.WorkflowContextListenerPanel;

@@ -13,11 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import ambit2.base.data.SourceDataset;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.search.QueryInfo;
 import ambit2.db.search.StringCondition.STRING_CONDITION;
-import ambit2.ui.editors.IAmbitEditor;
-import ambit2.ui.editors.MoleculeEditAction;
-import ambit2.ui.editors.Panel2D;
+import ambit2.jchempaint.editor.MoleculeEditAction;
+import ambit2.ui.Panel2D;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;

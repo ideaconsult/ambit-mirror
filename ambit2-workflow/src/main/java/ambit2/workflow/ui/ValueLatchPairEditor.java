@@ -35,9 +35,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.editors.EditorPanel;
-import ambit2.ui.editors.IAmbitEditor;
 
 import com.microworkflow.events.WorkflowContextEvent;
 import com.microworkflow.process.ValueLatchPair;

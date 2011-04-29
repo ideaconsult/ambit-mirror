@@ -31,6 +31,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import ambit2.base.interfaces.IAmbitEditor;
+
 public class EditorPanel extends JPanel {
 
     /**

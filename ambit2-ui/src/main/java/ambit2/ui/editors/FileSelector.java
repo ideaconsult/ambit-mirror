@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import ambit2.base.config.Preferences;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.io.MyIOUtilities;
 import ambit2.core.io.FileState;
 import ambit2.core.io.IInputState;

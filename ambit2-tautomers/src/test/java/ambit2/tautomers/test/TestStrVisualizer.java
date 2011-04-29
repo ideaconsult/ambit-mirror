@@ -7,7 +7,8 @@ import org.openscience.cdk.templates.MoleculeFactory;
 
 
 import javax.swing.*;
-import ambit2.ui.editors.Panel2D;
+
+import ambit2.ui.Panel2D;
 
 
 public class TestStrVisualizer 

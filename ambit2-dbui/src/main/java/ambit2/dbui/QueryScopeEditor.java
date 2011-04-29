@@ -33,13 +33,13 @@ import javax.swing.AbstractListModel;
 import javax.swing.JComponent;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.IDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.structure.SCOPE;
 import ambit2.db.search.structure.ScopeQuery;
 import ambit2.ui.EditorPreferences;
-import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.editors.ListEditor;
 
 public class QueryScopeEditor extends AbstractDBProcessor<ScopeQuery, ScopeQuery> implements IAmbitEditor<ScopeQuery>{

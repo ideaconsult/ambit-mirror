@@ -48,6 +48,7 @@ import ambit2.base.data.Dictionary;
 import ambit2.base.data.ProfileListModel;
 import ambit2.base.data.Property;
 import ambit2.base.data.TypedListModel;
+import ambit2.base.interfaces.IAmbitEditor;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.adapter.Bindings;

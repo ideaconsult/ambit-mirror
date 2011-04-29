@@ -42,8 +42,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.base.data.SelectionBean;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.ui.EditorPreferences;
-import ambit2.ui.editors.IAmbitEditor;
 
 public class SelectionEditorTest {
 

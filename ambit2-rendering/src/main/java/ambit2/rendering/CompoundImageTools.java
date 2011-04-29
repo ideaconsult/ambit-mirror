@@ -24,6 +24,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -34,8 +35,10 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.renderer.Renderer;
+import org.openscience.cdk.renderer.AtomContainerRenderer;
+import org.openscience.cdk.renderer.IRenderer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.color.CDK2DAtomColors;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
@@ -44,12 +47,12 @@ import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.AtomNumberGenerator;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.renderer.generators.RingGenerator;
 import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.generators.SelectBondGenerator;
-import org.openscience.cdk.renderer.generators.BasicAtomGenerator.CompactShape;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
@@ -60,6 +63,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.IStructureDiagramHighlights;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.ICompoundImageTools;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 
@@ -71,13 +75,17 @@ import ambit2.core.processors.structure.StructureTypeProcessor;
  * <b>Modified</b> 2006-3-5
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
+
+	public final static String SELECTED_ATOM_COLOR = "ambit2.color";
+	public final static String SELECTED_ATOM_SIZE = "ambit2.size";
+	public final static String ATOM_ANNOTATION = "ambit2.tooltip";
     RendererModel r2dm;
-    Renderer renderer;
+    IRenderer renderer;
     protected Dimension imageSize = new Dimension(200,200);
     protected Color background = Color.white;
     protected BufferedImage defaultImage = null;
     BufferedImage buffer = null;
-    protected Color borderColor = Color.GRAY;
+    protected Color borderColor = Color.white;
     protected int borderWidth = 5;
 
 	public int getBorderWidth() {
@@ -109,41 +117,83 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         r2dm = renderer.getRenderer2DModel();
 		this.imageSize = cellSize;
     }
-    
-    private Renderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
+    private IRenderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
+        List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
+        generators.add(new BasicSceneGenerator());
+
+        generators.add(new BasicBondGenerator());
+        
+        generators.add(new SelectBondGenerator());
+        if (rings)  generators.add(new RingGenerator());
+        //generators.add(new MyBasicAtomGenerator()); //this was to clean the background behind the labels
+        generators.add(new BasicAtomGenerator());
+        if (atomNumbers)
+            generators.add(new AtomNumberGenerator());
+
+        generators.add(new MySelectAtomGenerator());
+
+
+       generators.add(new AtomAnnotationGenerator());
+        
+        
+ 	   IRenderer renderer = new AtomContainerRenderer(generators, new AWTFontManager()) ;
+ 	   RendererModel r2dm = renderer.getRenderer2DModel();	
+ 	   
+ 	   RendererModelWrapper.setCompactShape(r2dm,BasicAtomGenerator.Shape.OVAL);
+ 	
+ 	   if (atomNumbers)
+ 		   RendererModelWrapper.setDrawNumbers(r2dm,atomNumbers);
+ 	   
+ 	   RendererModelWrapper.setUseAntiAliasing(r2dm,true);	
+
+ 	   //r2dm.set(paramType, value)
+ 	   RendererModelWrapper.setBackColor(r2dm,new Color(background.getRed(),background.getGreen(),background.getBlue(),128));
+
+ 	   RendererModelWrapper.setShowExplicitHydrogens(r2dm,false);
+ 	   
+ 	   RendererModelWrapper.setShowAromaticity(r2dm,true);  
+ 	   
+ 	   RendererModelWrapper.setAtomColorer(r2dm,new CDK2DAtomColorsHalogens());
+ 	   
+ 	  
+ 		return renderer;
+     }
+    /*
+    private IRenderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
        List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
-       
-       
+       generators.add(new BasicSceneGenerator());
+
        generators.add(new BasicBondGenerator());
-       if (rings)
-           generators.add(new RingGenerator());
+       if (rings)  generators.add(new RingGenerator());
+       generators.add(new MyBasicAtomGenerator());
+       generators.add(new MySelectAtomGenerator());
        generators.add(new BasicAtomGenerator());
        if (atomNumbers)
            generators.add(new AtomNumberGenerator());
        
-       generators.add(new SelectAtomGenerator());
        generators.add(new SelectBondGenerator());
+
+       generators.add(new AtomAnnotationGenerator());
        
        
+	   IRenderer renderer = new AtomContainerRenderer(generators, new AWTFontManager()) ;
+	   RendererModel r2dm = renderer.getRenderer2DModel();	
+	   
+	   RendererModelWrapper.setCompactShape(r2dm,BasicAtomGenerator.Shape.OVAL);
+	
+	   if (atomNumbers)
+		   RendererModelWrapper.setDrawNumbers(r2dm,atomNumbers);
+	   
+	   RendererModelWrapper.setUseAntiAliasing(r2dm,true);	
 
-    	
-	   	Renderer renderer = new Renderer(generators, new AWTFontManager());
-		RendererModel r2dm = renderer.getRenderer2DModel();	
+	   RendererModelWrapper.setBackColor(r2dm,new Color(background.getRed(),background.getGreen(),background.getBlue(),0));
 
-		//r2dm.setDrawNumbers(atomNumbers);
-		//r2dm.setBackgroundDimension(cellSize);
-		/*
-		r2dm.setBackColor(background);
-		r2dm.setForeColor(Color.BLACK);
-		
-		r2dm.setUseAntiAliasing(true);
-		r2dm.setColorAtomsByType(true);
-		r2dm.setShowImplicitHydrogens(false);
-		
-		*/
-		//r2dm.setShowAromaticity(true);  
+	   RendererModelWrapper.setShowExplicitHydrogens(r2dm,false);
+	   
+	   RendererModelWrapper.setShowAromaticity(r2dm,true);  
 		return renderer;
     }
+    */
     public synchronized BufferedImage getImage(Object o) {
         if (o instanceof IAtomContainer)
             return getImage((IAtomContainer)o);
@@ -207,11 +257,12 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(background);
 		g.fillRect(0, 0, imageSize.width, imageSize.height);
-		//g.setColor(Color.black);
 		
 		IMoleculeSet molecules = new MoleculeSet();
         generate2D(molecule, build2d, molecules);
         paint(renderer,molecules, false, g, selector,imageSize,atomNumbers);
+        
+        
         if (borderColor != background)
         	paintBorderShadow(g,getBorderWidth(),new Rectangle(imageSize));
         g.dispose();
@@ -243,7 +294,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         if (molecule != null) {
             if ((molecule ==null) || (molecule.getAtomCount() == 0)) 
                 generateCoordinates=false;
-            else if (StructureTypeProcessor.has2DCoordinates(molecule)>0)   
+            else if (StructureTypeProcessor.has2DCoordinates(molecule)>1)   
                generateCoordinates=false;
             else generateCoordinates = true;
             
@@ -251,7 +302,11 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
             if (!generateCoordinates) {
                 //IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(molecule);             	
             	//molecules.addAtomContainer(c);
-            	molecules.addAtomContainer(molecule);
+            	//there still could be multiple parts !
+            	IMoleculeSet mset =  ConnectivityChecker.partitionIntoMolecules(molecule);
+            	molecules.add(mset);
+            	mset.removeAllAtomContainers();
+            	mset = null;
             	return;
             }            
             try
@@ -287,7 +342,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 
 
 	
-	public synchronized void paint(Renderer renderer, 
+	public synchronized void paint(IRenderer renderer, 
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
@@ -304,7 +359,8 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	 * @param highlighted
 	 * @param imageSize
 	 */
-	public synchronized void paint(Renderer renderer, 
+	
+	public synchronized void paint(IRenderer renderer, 
     		IMoleculeSet molecules,
 			boolean explicitH,  
 			Graphics2D g,
@@ -314,99 +370,94 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	{
     	renderer = renderer==null?createRenderer(imageSize,Color.white,false,atomNumbers):renderer;
     	RendererModel r2dm = renderer.getRenderer2DModel();
-		/*
-		Renderer2DModel r2dm = renderer.getRenderer2DModel();
-		
-        r2dm.setDrawNumbers(false);
-        r2dm.setUseAntiAliasing(true);
-        r2dm.setShowImplicitHydrogens(true);
-        r2dm.setShowAromaticity(true);
-        r2dm.setColorAtomsByType(true);
-        r2dm.setSelectedPartColor(Color.orange);
-        */
-    	//r2dm.setShowAromaticity(true);
-    	//r2dm.setShowAromaticityCDKStyle(true);
-    	//r2dm.setShowMoleculeTitle(true);
-    	//r2dm.setShowEndCarbons(true);
-    	//r2dm.setShowAtomTypeNames(true);
+
 		if ((molecules != null) && (molecules.getAtomContainerCount()>0)) {
-//			g.setBackground(r2dm.getBackColor());
-
 			
+			IMolecule all;
+			int c = 0;
+			if (molecules.getAtomContainerCount()>1) {
 			
-			int columns = (int)Math.ceil(Math.sqrt(molecules.getAtomContainerCount()));
-			int rows = (int)Math.ceil((double)molecules.getAtomContainerCount() / (double)columns);
-			
-			int w = (int)Math.ceil((double)imageSize.width/(double)columns);
-			int h = (int)Math.ceil((double)imageSize.height/(double)rows);
-			int row = 0;
-			int col = 0;
-			Point2d center = new Point2d();
-			
-			for (int i=0;i<molecules.getAtomContainerCount();i++) {
+				Rectangle2D box = new Rectangle2D.Double(0,0,0,0);
 				
-				Rectangle2D r = new Rectangle((int)Math.round(col*w),(int)Math.round((rows-row-1)*h),w,h);
-				Dimension d = new Dimension(w,h);
-				center.set(r.getCenterX(),r.getCenterY());
-				IAtomContainer mol = molecules.getAtomContainer(i);
+				all = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
 				
-				Rectangle drawArea = new Rectangle(w,h);
-				renderer.setup(mol, drawArea);
+				//calculate box dimension, so that we can center vertically
+				for (IAtomContainer  m : molecules.molecules()) {
+					c++;
+					Rectangle2D r = GeometryTools.getRectangle2D(m);
+					
+					box.setRect(
+							box.getX(),
+							box.getY(),
+							1 + box.getWidth() + (r.getWidth()==0?1.5:r.getWidth()),
+							r.getHeight()> box.getHeight()?r.getHeight():box.getHeight()
+									);
 
-				//renderer.getRenderer2DModel().setZoomFactor(0.8);
+				}				
+				double hoffset = box.getHeight()/2.0;
+				Rectangle2D b = new Rectangle2D.Double(0,0,0,0);
+				for (IAtomContainer  m : molecules.molecules()) {
+					c++;
+					Rectangle2D r = GeometryTools.getRectangle2D(m);
+					
+					GeometryTools.translate2D(
+							m, 
+							- r.getX() + b.getX() + b.getWidth(),
+							-r.getY() + b.getY() + hoffset - (r.getHeight()/2.0) 
+							);
+					b.setRect(
+							b.getX(),
+							b.getY(),
+							1 + b.getWidth() + (r.getWidth()==0?1.5:r.getWidth()),
+							r.getHeight()> b.getHeight()?r.getHeight():b.getHeight()
+									);
+					
+					//System.out.println(String.format("%d R %s\nAll %s\n",c,r,b));
+					all.add(m);
+				}
+				b.setRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
+				
+			} else all = molecules.getMolecule(0);
+			
+			
+			Rectangle drawArea = new Rectangle(imageSize.width,imageSize.height);
+			renderer.setup(all,drawArea);
+			//renderer.getRenderer2DModel().setZoomFactor(0.8);
+			
+			IChemObjectSelection highlighted = null;
+            if (selector!= null)
+            	try {
+            		IMolecule mol2process = (IMolecule)all.clone();
+            		IChemObjectSelection selected = selector.process(mol2process);
+    				if(selected!=null) {
+    					highlighted = selected;
+    					
+    				}
+            	} catch (Exception e) {
+            		e.printStackTrace();
+            	}
+            	
+	    	if (highlighted != null) {
+	    		RendererModelWrapper.setSelectedPartColor(r2dm,new Color(0,183,239,128));
+	    		RendererModelWrapper.setSelectionShape(r2dm,BasicAtomGenerator.Shape.OVAL);
+	    		r2dm.setSelection(highlighted);
+	    		RendererModelWrapper.setColorAtomsByType(r2dm,true);
+	    		RendererModelWrapper.setShowAtomTypeNames(r2dm,true);
 
-				   /*
-	            GeometryTools.translateAllPositive(mol,r2dm.getRenderingCoordinates());
-	            GeometryTools.scaleMolecule(mol, d, 0.8,r2dm.getRenderingCoordinates());
-	            GeometryTools.center(mol, d,r2dm.getRenderingCoordinates());
-	            GeometryTools.translate2DCenterTo(mol,center,r2dm.getRenderingCoordinates());
-	            */
-	            IChemObjectSelection highlighted = null;
-	            if (selector!= null)
-	            	try {
-	            		IMolecule mol2process = (IMolecule)mol.clone();
-	            		IChemObjectSelection selected = selector.process(mol2process);
-	    				if(selected!=null) {
-	    					//if (highlighted==null) highlighted = NoNotificationChemObjectBuilder.getInstance().newAtomContainer();
-	    					//highlighted.add(selected);
-	    					highlighted = selected;
-	    					
-	    				}
-	            	} catch (Exception x) {
-	            		x.printStackTrace();
-	            	}
-    	    	if (highlighted != null) {
-    	    		//r2dm.setSelectedPartColor(new Color(0,183,239,128));
-    	    		//r2dm.setSelectionRadius(10);
-    	    		//r2dm.setSelectionShape(AtomShape.OVAL);
-    	    		r2dm.setSelection(highlighted);
-    	    		//r2dm.setColorAtomsByType(true);
-    	    		//r2dm.setShowAtomTypeNames(true);
+	    	} 	  
+	    	try {
+	    		renderer.paint(all,new AWTDrawVisitor(g),drawArea,false);
 
-    	    	} 	  
-    	    	try {
-    	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
-    	    	} catch (Exception x) {
-    	    		x.printStackTrace();
-    	    		r2dm.setSelection(null);
-    	    		renderer.paintMolecule(molecules.getAtomContainer(i),new AWTDrawVisitor(g),r,true);
-    	    	}
-				col++;
-				if (col >= columns) { col = 0; row++; }
-			}	
-
+	    	} catch (Exception e) {
+	    		r2dm.setSelection(null);
+	    		renderer.paint(all,new AWTDrawVisitor(g),drawArea,false);
+	    	}
 		} else {
 			g.setBackground(Color.white);
 			g.clearRect(0,0,imageSize.width,imageSize.height);
 		}
 	}
-	protected void printCoordinates(RendererModel model) {
-		
-		//System.out.println(model.getRenderingCoordinates().values());
-	}
-
-
-                        
+           
     public synchronized BufferedImage getImage(ArrayList<?> list) {
         if (buffer == null)
             buffer = new BufferedImage(imageSize.width, imageSize.height,
@@ -438,7 +489,6 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     public synchronized void setImageSize(Dimension imageSize) {
         this.imageSize = imageSize;
         buffer = null;
-       // r2dm.setBackgroundDimension(imageSize);
     }
 	public Image getDefaultImage() {
 		return defaultImage;
@@ -446,7 +496,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	public void setDefaultImage(BufferedImage defaultImage) {
 		this.defaultImage = defaultImage;
 	}
-	
+	//this should be done via selectors ...
 	public BufferedImage getImage(IAtomContainer mol,
 			String smarts, int width, int height, boolean atomnumbers)
 			throws AmbitException {
@@ -467,31 +517,88 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 }
 
 /**
- * Can't find how to highlight atoms with filled -in ovals
+ * Couldn't find how to highlight atoms with filled -in ovals, so this is my workaround
  * @author nina
  *
- 
-class MySelectAtomGenerator  implements IGenerator<IAtomContainer>  {
+ */
+class MyBasicAtomGenerator extends BasicAtomGenerator {
+	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+		ElementGroup elementGroup = new ElementGroup();
+		for (IAtom atom : ac.atoms()) {
+
+			if ("C".equals(atom.getSymbol())) continue;
+    	    Point2d p = atom.getPoint2d();
+    	    
+			if (p==null) continue;
+    	    double r = RendererModelWrapper.getAtomRadius(model) / RendererModelWrapper.getScale(model);
+    	    double d = 2 * r;
+    	    if (RendererModelWrapper.getCompactShape(model) == Shape.SQUARE) {
+    	    	elementGroup.add(new RectangleElement(
+        	            p.x - r, p.y - r, d, d, true, Color.white));
+    	    } else {
+    	    	elementGroup.add(new OvalElement(
+    	                p.x, p.y, r, true, Color.white));
+    	    }
+		}
+		return elementGroup;
+	}
+	
+	
+	@Override
+	public List<IGeneratorParameter<?>> getParameters() {
+		return super.getParameters();
+	}
+}
+
+/**
+ * Atom selection size and colors are taken from properties, which might be set by different calculation procedures.
+ * Currently used to visualize SOM (SmartCYP and SOME) 
+ * Web services use
+ * http://host/compound/{id}?model_uri=http://host/model/{id}
+ * http://apps.ideaconsult.net:8080/ambit2/compound/100?model_uri=http://apps.ideaconsult.net:8080/ambit2/model/48&w=400&h=400
+ * where colors are defined by the model itself, e.g. http://apps.ideaconsult.net:8080/ambit2/model/48?media=image/png 
+ * 
+ * @author nina
+ *
+ */
+class MySelectAtomGenerator extends SelectAtomGenerator  {
 	 private boolean autoUpdateSelection = true;
 
-	    public MySelectAtomGenerator() {}
+	 public MySelectAtomGenerator() { super(); }
+
+	 @Override
+	public IRenderingElement generate(IAtomContainer arg0, RendererModel model) {
 
 
-	    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
-	        Color selectionColor = model.getgetParameter(
-	        CompactShape shape = model.getSelectionShape();
+	    	ElementGroup selectionElements = new ElementGroup();
+	    	
+
+	        Color selectionColor = RendererModelWrapper.getSelectedPartColor(model);
+	        BasicAtomGenerator.Shape shape = RendererModelWrapper.getSelectionShape(model);
 	        IChemObjectSelection selection = model.getSelection();
-	        ElementGroup selectionElements = new ElementGroup();
+	        
 
 	        if(selection==null)
 	        	return selectionElements;
 	        if (this.autoUpdateSelection || selection.isFilled()) {
-	            double r = model.getSelectionRadius() / model.getScale();
+	            double r = RendererModelWrapper.getSelectionRadius(model) / RendererModelWrapper.getScale(model);
 
-	            double d = 2 * r;
+	            double d = 4 * r;
 	            IAtomContainer selectedAC = selection.getConnectedAtomContainer();
 	            if (selectedAC != null) {
 	                for (IAtom atom : selectedAC.atoms()) {
+	                	Color atomColor = selectionColor;
+	                	double m = 1;
+	                	Object size = atom.getProperty(CompoundImageTools.SELECTED_ATOM_SIZE);
+	                	if (size != null) try {
+	                		m = Double.parseDouble(size.toString());
+	                	} catch (Exception x) {}
+	                	Object clr = atom.getProperty(CompoundImageTools.SELECTED_ATOM_COLOR);
+	                	if ((clr != null) && (clr instanceof Color)) {
+	                		Color c = (Color) clr;
+	                		atomColor = new Color(c.getRed(),c.getGreen(),c.getBlue(),128); //semitransparent
+	                	}
+	                	
 	                    Point2d p = atom.getPoint2d();
 	                    if (p==null) continue;
 	                    IRenderingElement element;
@@ -500,12 +607,12 @@ class MySelectAtomGenerator  implements IGenerator<IAtomContainer>  {
 	                            element =
 	                                new RectangleElement(
 	                                    p.x - r, p.y - r, d, d, true,
-	                                    selectionColor);
+	                                    atomColor);
 	                            break;
 	                        case OVAL:
 	                        default:
 	                            element = new OvalElement(
-	                                            p.x, p.y, d, true, selectionColor);
+	                                            p.x, p.y, d * m, true, atomColor);
 	                    }
 	                    selectionElements.add(element);
 	                }
@@ -520,10 +627,41 @@ class MySelectAtomGenerator  implements IGenerator<IAtomContainer>  {
 	        return selectionElements;
 	    }
 
-	    @Override
-	    public List<IGeneratorParameter<?>> getParameters() {
-	    	return null;
-	    }
-	    
 }
-*/
+
+class CDK2DAtomColorsHalogens extends CDK2DAtomColors {
+	public CDK2DAtomColorsHalogens() {
+		super();
+	}
+	@Override
+	public Color getAtomColor(IAtom atom, Color defaultColor) {
+        Color color = defaultColor;
+        int atomnumber = 0;
+        if(atom.getAtomicNumber()!=null)
+            atomnumber = atom.getAtomicNumber();
+        if (atomnumber != 0) {
+            switch (atomnumber) {
+                case 9: color = Color.GREEN; break; //F
+                case 17: color = Color.GREEN; break; //Cl
+                case 35: color = Color.GREEN; break; //Br
+                case 53: color = Color.GREEN; break; //I
+                default: return super.getAtomColor(atom,defaultColor);
+            }
+        } else {
+            String symbol = atom.getSymbol();
+            if (symbol.equals("F")) {
+                color = Color.GREEN;
+            } else
+            if (symbol.equals("Cl")) {
+            	 color = Color.GREEN;
+            } else
+            if (symbol.equals("Br")) {
+            	 color = Color.GREEN;
+            } else
+            if (symbol.equals("I")) {
+            	 color = Color.GREEN;
+            } else return super.getAtomColor(atom, defaultColor);
+        }
+        return color;
+	}
+}

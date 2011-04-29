@@ -22,7 +22,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-package ambit2.ui.editors;
+package ambit2.ui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -43,11 +43,12 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.MoleculeTools;
-import ambit2.jchempaint.CompoundImageTools;
+import ambit2.rendering.CompoundImageTools;
 
 
 /**
@@ -55,7 +56,7 @@ import ambit2.jchempaint.CompoundImageTools;
  * @author Nina Jeliazkova
  *
  */
-public class Panel2D extends JPanel implements ICDKChangeListener, ComponentListener, IAmbitEditor<IAtomContainer>, PropertyChangeListener
+public class Panel2D<A extends IMoleculeEditAction> extends JPanel implements ICDKChangeListener, ComponentListener, IAmbitEditor<IAtomContainer>, PropertyChangeListener
 {
 	/**
 	 * 
@@ -80,7 +81,7 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
 	protected Image image=null;
 	protected boolean generate2d = true;
 	protected boolean editable = false;
-	protected MoleculeEditAction editAction;
+	protected A editAction;
 	protected boolean atomNumbers = false;
 	
 	public boolean isAtomNumbers() {
@@ -102,21 +103,7 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
     			super.mouseClicked(e);        		
         		if (isEditable()) {
         			if  (e.getClickCount()==1) {
-        		
-	        			if (editAction == null)
-	        				editAction = new MoleculeEditAction(null);
-	        			editAction.setParentComponent(e.getComponent());
-	        			editAction.setModal(true);
-	        			editAction.setMolecule(
-	        					getObject()==null?MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance()):(IMolecule)getObject());
-	        			editAction.actionPerformed(null);
-	        			IMolecule molecule = editAction.getMolecule();
-	        			if (molecule != null) {
-	        				//to force 2D generation, otherwise the image is broken
-		        			//Iterator<IAtom> atoms = molecule.atoms();
-		        			//while (atoms.hasNext()) {atoms.next().setPoint2d(null);}
-	        			}
-	        			setAtomContainer(molecule, true);
+        				launchEditor(e.getComponent());
         			}
         		} else {
         			atomNumbers = ! atomNumbers;
@@ -126,6 +113,29 @@ public class Panel2D extends JPanel implements ICDKChangeListener, ComponentList
         	}
         });
         setPreferredSize(new Dimension(150,150));
+	}
+	
+	protected void launchEditor(Component parentComponent) {
+			if (editAction == null) try {
+				
+				Class clazz = Class.forName("ambit2.jchempaint.editor.MoleculeEditAction");
+				editAction = (A) clazz.newInstance();
+				//editAction = new MoleculeEditAction(null);
+			} catch (Exception x) {
+				return ; //no JCP on the classpath ?
+			}
+			editAction.setParentComponent(parentComponent);
+			editAction.setModal(true);
+			editAction.setMolecule(
+					getObject()==null?MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance()):(IMolecule)getObject());
+			editAction.actionPerformed(null);
+			IMolecule molecule = editAction.getMolecule();
+			if (molecule != null) {
+				//to force 2D generation, otherwise the image is broken
+    			//Iterator<IAtom> atoms = molecule.atoms();
+    			//while (atoms.hasNext()) {atoms.next().setPoint2d(null);}
+			}
+			setAtomContainer(molecule, true);
 	}
 	@Override
 	public void paint(Graphics g) {

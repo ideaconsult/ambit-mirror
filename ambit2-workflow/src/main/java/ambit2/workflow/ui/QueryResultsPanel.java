@@ -40,6 +40,7 @@ import javax.swing.JComponent;
 import ambit2.base.data.Profile;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.IDBProcessor;
 import ambit2.db.SessionID;
@@ -48,7 +49,6 @@ import ambit2.db.results.StoredQueryTableModel;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryStoredResults;
-import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 

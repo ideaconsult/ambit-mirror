@@ -39,10 +39,10 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.border.TitledBorder;
 
 import org.openscience.cdk.io.formats.IChemFormat;

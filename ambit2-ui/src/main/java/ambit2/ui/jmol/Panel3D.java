@@ -37,7 +37,7 @@ import org.jmol.api.JmolStatusListener;
 import org.jmol.popup.JmolPopup;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.ui.editors.IAmbitEditor;
+import ambit2.base.interfaces.IAmbitEditor;
 
 /**
  * Makes use of {@link org.jmol.api.JmolViewer} to display 3D molecule.

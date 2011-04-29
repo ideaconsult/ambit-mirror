@@ -32,11 +32,11 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.IDBProcessor;
 import ambit2.ui.EditorPreferences;
 import ambit2.ui.Utils;
 import ambit2.ui.WizardPanel;
-import ambit2.ui.editors.IAmbitEditor;
 import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.events.WorkflowContextEvent;

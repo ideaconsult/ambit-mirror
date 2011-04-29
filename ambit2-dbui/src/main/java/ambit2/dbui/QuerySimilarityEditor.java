@@ -43,7 +43,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QuerySimilarityStructure;
-import ambit2.ui.editors.StructureDiagramEditor;
+import ambit2.jchempaint.editor.StructureDiagramEditor;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;

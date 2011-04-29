@@ -1,4 +1,4 @@
-package ambit2.ui.editors;
+package ambit2.jchempaint.editor;
 
 import java.awt.Dimension;
 
@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.jchempaint.JChemPaintPanel;
 
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.core.data.MoleculeTools;
 
 public class StructureDiagramEditor implements IAmbitEditor<IMoleculeSet> {

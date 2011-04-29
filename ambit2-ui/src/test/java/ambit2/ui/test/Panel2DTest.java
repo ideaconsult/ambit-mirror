@@ -42,14 +42,14 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.jchempaint.CompoundImageTools;
-import ambit2.ui.editors.Panel2D;
+import ambit2.rendering.CompoundImageTools;
+import ambit2.ui.Panel2D;
 
 
 public class Panel2DTest {

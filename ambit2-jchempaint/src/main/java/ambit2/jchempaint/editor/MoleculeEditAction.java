@@ -22,7 +22,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-package ambit2.ui.editors;
+package ambit2.jchempaint.editor;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -71,6 +71,9 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 	 */
 	private static final long serialVersionUID = 5166718649430988452L;
 
+	public MoleculeEditAction() {
+		this(null);
+	}
 	public MoleculeEditAction(IMolecule molecule) {
 		super(molecule);
 		setJCPModel();
@@ -304,4 +307,5 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 	public void setModal(boolean modal) {
 		this.modal = modal;
 	}
+
 }

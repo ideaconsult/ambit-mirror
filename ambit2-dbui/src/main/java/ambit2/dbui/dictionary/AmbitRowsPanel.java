@@ -30,10 +30,10 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.results.AmbitRows;
 import ambit2.dbui.CachedRowSetTableModel;
 import ambit2.ui.QueryBrowser;
-import ambit2.ui.editors.IAmbitEditor;
 import ambit2.ui.table.BrowsableTableModel;
 
 public class AmbitRowsPanel<T, Rows extends AmbitRows<T>> 

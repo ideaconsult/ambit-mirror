@@ -52,9 +52,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.templates.MoleculeFactory;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -64,8 +64,8 @@ import ambit2.descriptors.AtomEnvironment;
 import ambit2.descriptors.AtomEnvironmentDescriptor;
 import ambit2.descriptors.processors.AtomEnvironmentGenerator;
 import ambit2.descriptors.processors.AtomEnvironmentList;
-import ambit2.jchempaint.CompoundImageTools;
 import ambit2.model.AtomEnvironmentListTableModel;
+import ambit2.rendering.CompoundImageTools;
 import ambit2.similarity.measure.AtomEnvironmentsDistance;
 
 

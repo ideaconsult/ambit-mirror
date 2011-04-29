@@ -37,7 +37,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.QueryExecutor;
-import ambit2.jchempaint.CompoundImageTools;
+import ambit2.rendering.CompoundImageTools;
 
 public class DbCompoundImageTools extends CompoundImageTools {
 
