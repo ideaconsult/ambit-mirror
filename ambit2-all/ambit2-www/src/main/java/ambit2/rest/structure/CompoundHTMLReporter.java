@@ -409,6 +409,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("</table>");		
 			w.write("<hr>");	
 			
+			if (hilightPredictions!= null) 
+				w.write(String.format("<div><span class=\"center\"><h4>Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",hilightPredictions,hilightPredictions));
 			if (table) {
 				
 				output.write(String.format("<div><span class=\"left\">%s</span></div>",templates(baseReference)));
