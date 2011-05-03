@@ -319,4 +319,11 @@ alter table bookmark add key `Index_4` (`creator`,`hasTopic`,`date`) using btree
 alter table bookmark add key `Index_3` (`hasTopic`) using btree;
 alter table bookmark add key `Index_2` (`creator`,`hasTopic`,`title`) using btree;
 insert into version (idmajor,idminor,comment) values (4,11,"AMBIT2 schema - added table bookmark index");
+
+---------------------
+-- 4.12
+-- Datasets rights holder
+---------------------
+ALTER TABLE `src_dataset` ADD COLUMN `rightsHolder` VARCHAR(128) NOT NULL AFTER `licenseURI`;
+insert into version (idmajor,idminor,comment) values (4,12,"AMBIT2 schema - Datasets rights holder added"); 
  

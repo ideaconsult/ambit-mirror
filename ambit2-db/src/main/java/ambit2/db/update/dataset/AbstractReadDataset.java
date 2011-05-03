@@ -18,7 +18,8 @@ public abstract class AbstractReadDataset<T> extends AbstractQuery<T,SourceDatas
 		idreference,
 		title,
 		url,
-		licenseURI;
+		licenseURI,
+		rightsHolder;
 		public int getIndex() {
 			return ordinal()+1;
 		}
@@ -37,6 +38,7 @@ public abstract class AbstractReadDataset<T> extends AbstractQuery<T,SourceDatas
 	        d.setUsername(rs.getString(_fields.user_name.getIndex()));
 	        d.setId(rs.getInt(_fields.id_srcdataset.getIndex()));
 	        d.setLicenseURI(rs.getString(_fields.licenseURI.getIndex()));
+	        d.setrightsHolder(rs.getString(_fields.rightsHolder.getIndex()));
 	        return d;
         } catch (SQLException x) {
         	throw new AmbitException(x);

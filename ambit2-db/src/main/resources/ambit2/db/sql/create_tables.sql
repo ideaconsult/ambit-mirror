@@ -446,16 +446,17 @@ CREATE TABLE  `src_dataset` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `idtemplate` int(10) unsigned DEFAULT NULL,
   `licenseURI` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
+  `rightsHolder` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   PRIMARY KEY (`id_srcdataset`),
   UNIQUE KEY `src_dataset_name` (`name`),
   KEY `FK_src_dataset_1` (`user_name`),
   KEY `FK_src_dataset_2` (`idreference`),
   KEY `FK_src_dataset_3` (`idtemplate`),
-  KEY `Index_license` (`licenseURI`),
   CONSTRAINT `FK_src_dataset_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_src_dataset_2` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE,
   CONSTRAINT `FK_src_dataset_3` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 -- ------------------------------------------------------------------------------------------
 -- Triggers to duplicate info of properties used in a dataset via template/template_def table
 -- ------------------------------------------------------------------------------------------
@@ -929,7 +930,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,11,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,12,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

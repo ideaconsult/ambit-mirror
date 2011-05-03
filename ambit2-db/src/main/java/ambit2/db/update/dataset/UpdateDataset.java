@@ -38,23 +38,17 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
 public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
-	public static final String MSG_EMPTY = "No name or license to update!";
-	public static final String[] update_sql = {
-		/*
-		"INSERT IGNORE INTO catalog_references (idreference, title, url) VALUES (null,?,?)",
-		
-		"INSERT INTO src_dataset (id_srcdataset, name,user_name,idreference)\n"+
-			"SELECT null,?,SUBSTRING_INDEX(user(),'@',1),idreference FROM catalog_references WHERE title=?\n"+
-			"ON DUPLICATE KEY UPDATE name=?, src_dataset.idreference = catalog_references.idreference",
-			*/
-		"update src_dataset set name=?, licenseURI=?, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
-	};
-	public static final String[] update_license = {
-		"update src_dataset set licenseURI=?, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
-	};	
-	public static final String[] update_name = {
-		"update src_dataset set name=?, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
-	};	
+	public static final String MSG_EMPTY = "No name, license or rightsHolder to update!";
+	public static final String update_sql = 
+
+		"update src_dataset set %s, user_name=SUBSTRING_INDEX(user(),'@',1) where id_srcdataset=?"
+	;
+	public static final String _license = "licenseURI=?";
+	
+	public static final String _name = "name=?";
+	
+	public static final String _rightsHolder = "rightsHolder=?";
+	
 	public UpdateDataset(SourceDataset dataset) {
 		super(dataset);
 	}
@@ -76,8 +70,13 @@ public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
 		List<QueryParam> params3 = new ArrayList<QueryParam>();
 		if (getObject().getName()!=null)
 			params3.add(new QueryParam<String>(String.class, getObject().getName()));
+
 		if (getObject().getLicenseURI()!=null)
 			params3.add(new QueryParam<String>(String.class, getObject().getLicenseURI()));
+		
+		if (getObject().getrightsHolder()!=null)
+			params3.add(new QueryParam<String>(String.class, getObject().getrightsHolder()));
+		
 		if (params3.size()==0)
 			throw new AmbitException(MSG_EMPTY);
 		params3.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
@@ -87,13 +86,28 @@ public class UpdateDataset extends AbstractObjectUpdate<SourceDataset> {
 	}
 
 	public String[] getSQL() throws AmbitException {
-		if ((getObject().getName()!=null) && (getObject().getLicenseURI()!=null))
-			return update_sql;
-		else if (getObject().getName()!=null)
-			return update_name;
-		else if (getObject().getLicenseURI()!=null)
-			return update_license;
-		else throw new AmbitException(MSG_EMPTY);
+		StringBuilder b = new StringBuilder();
+		int i=0;
+		if (getObject().getName()!=null) {
+			b.append(_name.toString());
+			i++;
+		}
+		if (getObject().getLicenseURI()!=null) {
+			b.append(i>0?",":"");
+			b.append(_license);
+			i++;
+		}
+
+		if (getObject().getrightsHolder()!=null) {
+			b.append(i>0?",":"");
+			b.append(_rightsHolder);
+			i++;
+		}
+			
+		if (i>0)
+			return new String[] {String.format(update_sql,b.toString())};
+		else
+			throw new AmbitException(MSG_EMPTY);
 	}
 	public void setID(int index, int id) {
 		

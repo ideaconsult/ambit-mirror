@@ -9,6 +9,7 @@ import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.base.data.AbstractDataset._props;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
@@ -343,7 +344,34 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			output.write("<table width='90%'>");
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Dataset URI",uri));
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Dataset name",dataset.getName()));
-			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "License",dataset.getLicenseURI()==null?"NA":dataset.getLicenseURI()));
+			
+			String licenseLabel = dataset.getLicenseURI();
+			try {
+				if (dataset.getLicenseURI()!=null)
+				for (ISourceDataset.license license : ISourceDataset.license.values()) 
+					if (license.getURI().equals(dataset.getLicenseURI())) {
+						licenseLabel = license.getTitle();
+					}
+				
+			} catch (Exception x) {}
+			
+			if (dataset.getLicenseURI()!=null)
+				output.write(String.format("<tr><th>%s</th><td><a href='%s' target='_blank'>%s</a></td></tr>", 
+							"License",
+							licenseLabel==null?dataset.getLicenseURI():licenseLabel,
+							dataset.getLicenseURI()==null?"NA":dataset.getLicenseURI()));
+			else
+				output.write("<tr><th>License</th><td>NA</td></tr>"); 
+			
+			if (dataset.getrightsHolder()!=null)
+				output.write(String.format("<tr><th>%s</th><td><a href='%s' target='_blank'>%s</a></td></tr>", 
+							"Rights holder",
+							dataset.getrightsHolder(),
+							dataset.getrightsHolder()));
+
+			else
+				output.write("<tr><th>Rights holder</th><td>NA</td></tr>"); 			
+						
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Source",dataset.getSource()));
 			
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));

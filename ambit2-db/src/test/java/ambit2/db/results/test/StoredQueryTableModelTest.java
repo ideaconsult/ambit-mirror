@@ -93,6 +93,7 @@ public class StoredQueryTableModelTest extends QueryTest<QueryStoredResults> {
 		queryModel.setConnection(connection.getConnection());
 		queryModel.setQuery(query);
 		queryModel.setValueAt(false,0,0);
+		Thread.yield();
 		Assert.assertFalse((Boolean)queryModel.getValueAt(0,0));
 		/*
 		for (int r=0;r< queryModel.getRowCount();r++)

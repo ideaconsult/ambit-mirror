@@ -112,6 +112,16 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 				if (license!=null) dataset.setLicenseURI(license); 
 			}catch (Exception x) {}
 
+			try { 
+				String rights = null;
+				if (newEntry.isResource()) {
+					Statement st = ((Resource)newEntry).getProperty(DCTerms.rightsHolder);
+					RDFNode rightsNode = st.getObject();
+					rights = rightsNode.isLiteral()?((Literal)rightsNode).getString():((Resource)rightsNode).getURI();
+				} else throw new Exception("Not a resource");
+				if (rights!=null) dataset.setrightsHolder(rights); 
+			}catch (Exception x) {}
+			
 			if (dataset instanceof SourceDataset) {
 				SourceDataset srcdataset = (SourceDataset) dataset;
 				try { srcdataset.setUsername(getPropertyValue(DC.publisher, newEntry)); } catch (Exception x) {}

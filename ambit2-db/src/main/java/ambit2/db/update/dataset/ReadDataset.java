@@ -14,7 +14,7 @@ import ambit2.db.search.QueryParam;
  */
 public class ReadDataset extends AbstractReadDataset<String>{
 
-	public static final String select_datasets = "SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI FROM src_dataset join catalog_references using(idreference) %s order by name";
+	public static final String select_datasets = "SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder FROM src_dataset join catalog_references using(idreference) %s order by name";
 	/**
 	 * 
 	 */
