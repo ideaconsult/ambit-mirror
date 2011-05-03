@@ -146,7 +146,6 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 						output.write(String.format("<tr><td>Descriptor calculation algorithm URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.feature_calculation));
 					
 					output.write(String.format("<tr><td>Dataset service URI</td><td><input type='text' size='120' name='%s' value=''></td></tr>",OpenTox.params.dataset_service));
-					output.write(String.format("<tr><td>OpenSSO token</td><td><input type='text' size='120' name='%s' value=''></td></tr>","subjectid"));
 					output.write(String.format("<tr><td><input type='submit' name='launch' value='%s'></td></tr>","Run"));
 					output.write("</form>");					
 				} else	if (item.isDataProcessing()) {
