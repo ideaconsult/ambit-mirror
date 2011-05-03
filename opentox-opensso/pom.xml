@@ -3,7 +3,7 @@
   <groupId>ambit</groupId>
   <artifactId>opentox-opensso</artifactId>
   <name>OpenTox AA</name>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <description>OpenTox Authorization and Authentication client library</description>
    <build>
     <resources>
@@ -184,7 +184,7 @@
     	<dependency>
     		<groupId>junit</groupId>
     		<artifactId>junit</artifactId>
-    		<version>4.0</version>
+    		<version>4.8.1</version>
     		<scope>test</scope>
     	</dependency>
     </dependencies>

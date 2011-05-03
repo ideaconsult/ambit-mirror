@@ -176,7 +176,7 @@ public class OpenToxPolicyTest {
 		}
 
 	}
-	//http://nina-vpn.acad.bg:8080/sso_protected/1000
+
 	@Test
 	public void testListPolicy() throws Exception {
 		//TODO create policy and then list
@@ -188,7 +188,7 @@ public class OpenToxPolicyTest {
 		
 			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
 			Hashtable<String,String> policies = new Hashtable<String, String>();
-			String policyId = "nina_test_service_1000"; //"ninas_evil_policy_1";
+			String policyId = "httpsambit.uni-plovdiv.bg8443ambit2model28768GETPUTPOSTDELETE"; //"ninas_evil_policy_1";
 			if (Status.SUCCESS_OK.getCode() == policy.listPolicy(token,policyId,policies)) {
 				System.out.println(policies.get(policyId));
 				Assert.assertNotNull(policies.get(policyId));
@@ -213,7 +213,7 @@ public class OpenToxPolicyTest {
 		
 			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
 			
-			String uri = "http://nina-vpn.acad.bg:8080/sso_protected/1000";
+			String uri = "https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/63634";
 			
 			IOpenToxUser user = new OpenToxUser();
 			if (Status.SUCCESS_OK.getCode() == policy.getURIOwner(token, uri, user)) {
@@ -240,7 +240,7 @@ public class OpenToxPolicyTest {
 		
 			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
 			
-			String uri = "http://nina-vpn.acad.bg:8080/sso_protected/1000";
+			String uri = "https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/63634";
 			
 			IOpenToxUser user = new OpenToxUser();
 			Hashtable<String,String> policies = new Hashtable<String, String>();

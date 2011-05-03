@@ -1,7 +1,13 @@
 package org.opentox.aa.opensso;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Hashtable;
 
 import org.opentox.aa.IOpenToxUser;
@@ -111,22 +117,48 @@ public class OpenSSOToken extends OpenToxToken {
 	public boolean isTokenValid() throws Exception {
 		if (token==null) throw new Exception(MSG_EMPTY_TOKEN,null);
 		
-		Form form = new Form();		form.add(OTAAParams.tokenid.toString(),token);
+		//Form form = new Form();		form.add(OTAAParams.tokenid.toString(),token);
 		String tokenValidationService = String.format(token_validation, authService);
-		ClientResource client = new ClientResource(tokenValidationService);
-		Representation r=null;
+		
+		String urlParameters = String.format("%s=%s",
+				OTAAParams.tokenid.toString(),
+				URLEncoder.encode(token, "UTF-8"));
+					
+		HttpURLConnection uc = null;
+		InputStream in = null;
+		int code = -1;
 		try {
-			r = client.post(form.getWebRepresentation());
-			String text = r.getText();
-			return text.indexOf(boolean_true_result)>=0;
-		} catch (ResourceException x) {
-			if  (Status.CLIENT_ERROR_UNAUTHORIZED.equals(client.getStatus())) return false;
-			else throw new AATokenValidationException(tokenValidationService,x);
+			URL url = new URL(tokenValidationService);
+			uc = (HttpURLConnection) url.openConnection();
+			uc.setRequestMethod("POST");
+			uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			uc.setRequestProperty("Content-Length", "" + Integer.toString(urlParameters.getBytes().length));
+			uc.setUseCaches (false);
+		    uc.setDoInput(true);
+		    uc.setDoOutput(true);
+		     //Send request
+		    DataOutputStream wr = new DataOutputStream (uc.getOutputStream ());
+		    wr.writeBytes (urlParameters);
+		    wr.flush ();
+		    wr.close ();		    
+		  //Get Response	
+		    code = uc.getResponseCode();
+		    if  (HttpURLConnection.HTTP_UNAUTHORIZED == code) return false;
+		    in = uc.getInputStream();
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(in)); 
+		    String line;
+		    boolean ok = false;
+		    while((line = reader.readLine()) != null) {
+		    	ok = line.indexOf(boolean_true_result)>=0;
+		    	if (ok) break;
+		    }
+		    return ok;
 		} catch (Exception x) {
-			throw new AATokenValidationException(tokenValidationService,x);
+			if  (HttpURLConnection.HTTP_UNAUTHORIZED == code) return false;
+			else throw new AATokenValidationException(tokenValidationService,x);
 		} finally {
-			try {r.release();} catch (Exception x) {}
-			try {client.release();} catch (Exception x) {}
+			try {in.close();} catch (Exception x) {}
+			try {uc.disconnect();} catch (Exception x) {}
 		}
 	}
 
@@ -176,15 +208,23 @@ public class OpenSSOToken extends OpenToxToken {
 			for (String aName : attributeNames) 
 				attrService.addQueryParameter(OTAAParams.attributes_names.toString(), aName);
 			
-		
-		ClientResource client = new ClientResource(attrService);
-		Representation r=null;
-		
+		URL url = null;
+    	try {
+    		url = new URL(attrService.toString());
+    	} catch (MalformedURLException x) {
+    		throw x;
+    	}
+    	HttpURLConnection uc = null;
+		InputStream in = null;
+		int code = -1;
 		try {
-			r = client.get();
-			
-			if (Status.SUCCESS_OK.equals(client.getStatus())) {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(r.getStream()));
+			uc = (HttpURLConnection) url.openConnection();
+			uc.setDoOutput(true);
+			uc.setRequestMethod("GET"); 
+			code = uc.getResponseCode();
+			if (HttpURLConnection.HTTP_OK == code) {
+				in = uc.getInputStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
 				String line = null;
 				String name_tag = "userdetails.attribute.name";
@@ -201,12 +241,12 @@ public class OpenSSOToken extends OpenToxToken {
 				}
 				return true;
 			} else return false;
-		} catch (ResourceException x) {
-			if  (Status.CLIENT_ERROR_UNAUTHORIZED.equals(client.getStatus())) return false;
+		} catch (Exception x) {
+			if (HttpURLConnection.HTTP_UNAUTHORIZED == code) return false;
 			else throw x;
 		} finally {
-			try {r.release();} catch (Exception x) {}
-			try {client.release();} catch (Exception x) {}
+			try {in.close();} catch (Exception x) {}
+			try {uc.disconnect();} catch (Exception x) {}
 		}
 		
 	}

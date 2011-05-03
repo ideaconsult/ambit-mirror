@@ -1,7 +1,10 @@
 package org.opentox.aa.opensso;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Hashtable;
 
 import org.opentox.aa.IOpenToxUser;
@@ -287,17 +290,24 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	 */
 	public int listPolicies(OpenSSOToken token,Hashtable<String, String> policies)  throws Exception{
 		if (!token.isTokenValid()) throw new Exception("Invalid token",null);
-		Form headers = new Form();  
-		headers.add(OTAAParams.subjectid.toString(), token.getToken());
+		//Form headers = new Form();  
+		//headers.add(OTAAParams.subjectid.toString(), token.getToken());
 		
-		Representation response = null;
-		ClientResource client = new ClientResource(policyService);
+		InputStream in = null;
+		HttpURLConnection uc = null;
+		
+		int code = -1;
 		try {
-			client.getRequest().getAttributes().put(headers_tag, headers);  
-			response = client.get();
-			
-			if (Status.SUCCESS_OK.equals(client.getStatus())) {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(response.getStream()));
+			URL url = new URL(policyService);
+			uc = (HttpURLConnection) url.openConnection();
+			((HttpURLConnection)uc).setRequestProperty(OTAAParams.subjectid.toString(), token.getToken());
+			uc.setDoOutput(true);
+			uc.setRequestMethod("GET"); 
+
+			code = uc.getResponseCode();
+			in = uc.getInputStream();
+			if (HttpURLConnection.HTTP_OK == code) {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 				String line = null;
 	
 				while ((line = reader.readLine())!=null) {
@@ -306,7 +316,7 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 				}
 				
 			} 
-			return client.getStatus().getCode();
+			return code;
 		} catch (ResourceException x) {
 			throw new ResourceException(x.getStatus(),String.format("Error querying policy service %s %d %s",
 					policyService,x.getStatus().getCode(), x.getMessage()),
@@ -314,9 +324,9 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 		} catch (Exception x) {
 			throw new Exception(String.format("Error querying policy service %s %s",policyService,x.getMessage()),x);
 		} finally {
-			try {response.release(); } catch (Exception x) {}
+			try {in.close(); } catch (Exception x) {}
 		//	try {r.release(); } catch (Exception x) {}
-			try {client.release(); } catch (Exception x) {}
+			try {uc.disconnect(); } catch (Exception x) {}
 		}		
 	}
 
