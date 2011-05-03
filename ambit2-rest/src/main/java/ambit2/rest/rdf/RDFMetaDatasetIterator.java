@@ -18,9 +18,11 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.rest.OpenTox;
 
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
@@ -100,7 +102,15 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 			try {	dataset.setName(getTitle(newEntry));} catch (Exception x) { dataset.setName(null);}
 			try {	id = getURI(newEntry);} catch (Exception x) { }
 			try { dataset.setSource(getPropertyValue(DC.source, newEntry)); } catch (Exception x) {}
-			try { dataset.setLicenseURI(getPropertyValue(DCTerms.license, newEntry)); } catch (Exception x) {}
+			try { 
+				String license = null;
+				if (newEntry.isResource()) {
+					Statement st = ((Resource)newEntry).getProperty(DCTerms.license);
+					RDFNode licenseNode = st.getObject();
+					license = licenseNode.isLiteral()?((Literal)licenseNode).getString():((Resource)licenseNode).getURI();
+				} else throw new Exception("Not a resource");
+				if (license!=null) dataset.setLicenseURI(license); 
+			}catch (Exception x) {}
 
 			if (dataset instanceof SourceDataset) {
 				SourceDataset srcdataset = (SourceDataset) dataset;
