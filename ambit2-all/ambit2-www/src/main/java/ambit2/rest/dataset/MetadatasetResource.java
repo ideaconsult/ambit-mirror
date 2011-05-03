@@ -256,6 +256,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		SourceDataset dataset = new SourceDataset();
 		dataset.setName(form.getFirstValue("title"));
 		dataset.setLicenseURI(form.getFirstValue("license"));
+		dataset.setrightsHolder(form.getFirstValue("rightsHolder"));
 		return dataset;
 	}
 	@Override

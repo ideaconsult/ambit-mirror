@@ -280,6 +280,9 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		String license = properties==null?null:properties.get(AbstractDataset._props.license.name());
 		license = license==null?ISourceDataset.license.Unknown.getURI():license;
 		
+		String rightsHolder = properties==null?null:properties.get(AbstractDataset._props.rightsHolder.name());
+		rightsHolder = rightsHolder==null?"Unknown":rightsHolder;
+		
 		String seeAlso = properties==null?null:properties.get(AbstractDataset._props.seeAlso.name());
 		
 		String publisher = seeAlso==null?
@@ -290,6 +293,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		
 		SourceDataset dataset = new SourceDataset(title,LiteratureEntry.getInstance(source,publisher));
 		dataset.setLicenseURI(license);
+		dataset.setrightsHolder(rightsHolder);
 		return dataset;
 	}
 

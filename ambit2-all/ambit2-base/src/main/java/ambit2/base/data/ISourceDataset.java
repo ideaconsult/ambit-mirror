@@ -83,6 +83,7 @@ public interface ISourceDataset extends Serializable {
 		}
 		
 		
+		
 	}
 	public void setName(String name);
 	public String getName();
@@ -92,4 +93,6 @@ public interface ISourceDataset extends Serializable {
     public void setSource(String name);
     public String getLicenseURI();
     public void setLicenseURI(String uri);
+    public String getrightsHolder();
+    public void setrightsHolder(String uri);
 }

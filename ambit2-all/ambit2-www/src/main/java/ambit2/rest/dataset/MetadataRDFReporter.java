@@ -56,14 +56,25 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<ISourceDataset>> exte
 			QueryURIReporter<ISourceDataset, IQueryRetrieval<ISourceDataset>> uriReporter) throws AmbitException {
 		Individual dataset = output.createIndividual(uriReporter.getURI(item),
 				OT.OTClass.Dataset.getOntClass(output));
-		dataset.addProperty(DC.title,item.getName());
-		dataset.addProperty(DC.source,item.getSource());
+		
+		if (item.getName()!=null) dataset.addProperty(DC.title,item.getName());
+		
+		if (item.getSource()!=null) dataset.addProperty(DC.source,item.getSource());
 		
 		if (item.getLicenseURI()!=null) {
 			Resource licenseNode = output.createResource(item.getLicenseURI());
 			dataset.addProperty(DCTerms.license,licenseNode);
 		} else {
-			dataset.addProperty(DCTerms.license,ISourceDataset.license.Unknown.toString());
+			//dataset.addProperty(DCTerms.license,ISourceDataset.license.Unknown.toString());
+		}
+		
+
+		
+		if (item.getrightsHolder()!=null) {
+			Resource rightsNode = output.createResource(item.getrightsHolder());
+			dataset.addProperty(DCTerms.rightsHolder,rightsNode);
+		} else {
+			//dataset.addProperty(DCTerms.rightsHolder,"Unknown");
 		}
 		
 		if (item instanceof SourceDataset) {

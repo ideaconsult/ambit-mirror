@@ -25,6 +25,18 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
 	public void setLicenseURI(String license) {
 		this.licenseURI = license;
 	}
+	
+	protected String rightsHolder;
+
+	@Override
+	public String getrightsHolder() {
+		return rightsHolder;
+	}
+	@Override
+	public void setrightsHolder(String uri) {
+		this.rightsHolder = uri;
+		
+	}
 	protected int id;
     protected String name;
     protected String userName;

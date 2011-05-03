@@ -108,6 +108,11 @@ public class AmbitRowsEventTest extends DbUnitTest {
 		dictionary.setPropertyname("dictionary");
 		return dictionary;
 	}
+	@Test 
+	public void atest() {
+		
+	}
+	
 	protected AmbitRows<Property> createPropertyQuery() throws Exception {
 		AmbitRows<Property> properties = new AmbitRows<Property>() {
 			@Override
@@ -176,7 +181,7 @@ public class AmbitRowsEventTest extends DbUnitTest {
 		property.setPropertyname("property");
 		return property;
 	}
-	@Test
+
 	public void test() throws Exception {
 		top= 0;
 		dict = 0;

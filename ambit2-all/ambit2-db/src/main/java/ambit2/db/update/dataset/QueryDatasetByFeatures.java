@@ -20,7 +20,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 	}
 
 	protected String sql = 
-	"SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI from	src_dataset	join catalog_references using(idreference)\n"+
+	"SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder from	src_dataset	join catalog_references using(idreference)\n"+
 	"join  template_def using(idtemplate)\n"+
 	"where idproperty in (\n"+
 	"select idproperty from properties %s\n"+
@@ -30,7 +30,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 	"order by id_srcdataset\n";
 	
 	protected String sql_chemical = 
-		"SELECT id_srcdataset,src_dataset.name,src_dataset.user_name,src_dataset.idreference,title,url,licenseURI from structure\n" +
+		"SELECT id_srcdataset,src_dataset.name,src_dataset.user_name,src_dataset.idreference,title,url,licenseURI,rightsHolder from structure\n" +
 		"join struc_dataset using(idstructure) " +
 		"join src_dataset using(id_srcdataset) " +
 		"join catalog_references using(idreference)\n"+
@@ -43,7 +43,7 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 		"order by id_srcdataset\n";
 	
 	protected String sql_structure = 
-		"SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI from struc_dataset\n" +
+		"SELECT id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder from struc_dataset\n" +
 		"join src_dataset using(id_srcdataset) " +
 		"join catalog_references using(idreference)\n"+
 		"join template_def using(idtemplate)\n"+
