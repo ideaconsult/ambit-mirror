@@ -344,3 +344,5 @@ ALTER TABLE `structure` ADD CONSTRAINT `fk_idchemical` FOREIGN KEY `fk_idchemica
     REFERENCES `chemicals` (`idchemical`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE;
+
+insert into version (idmajor,idminor,comment) values (4,13,"AMBIT2 schema - user_name for models"); 
