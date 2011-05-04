@@ -25,7 +25,7 @@ CDK descriptors, listed at http://qsar.sourceforge.net/dicts/qsar-descriptors/in
   	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
-  		<version>4.0</version>
+  		<version>${junit.version}</version>
   		<scope>test</scope>
   	</dependency>
   	<dependency>
