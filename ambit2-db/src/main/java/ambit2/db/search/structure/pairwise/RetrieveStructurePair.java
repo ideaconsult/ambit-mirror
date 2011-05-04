@@ -147,7 +147,7 @@ public class RetrieveStructurePair extends AbstractQuery<IStructureRecord,IStruc
 		
 	}
 	protected void getObject(ResultSet rs, IStructureRecord r, int offset) throws SQLException {
-
+				r.clear();
 	            r.setIdchemical(rs.getInt(rs_index.idchemical.ordinal()+offset));
 	            r.setIdstructure(rs.getInt(rs_index.idstructure.ordinal()+offset));
 	            r.setContent(rs.getString(rs_index.ustructure.ordinal()+offset));

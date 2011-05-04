@@ -158,6 +158,9 @@ public class StructureRecord implements IStructureRecord {
      */
 	public void setContent(String content) {
 		this.content = content;
+		setSmiles(null);
+		setInchi(null);
+		setHash(0L);
 	}
 	/* 
 	public Map getProperties() {

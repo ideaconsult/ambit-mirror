@@ -38,6 +38,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
+import ambit2.core.processors.structure.key.InchiKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.RetrieveStructure;
@@ -62,6 +63,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
      */
     private static final long serialVersionUID = 6530309499663693100L;
 	protected DbStructureWriter structureWriter;
+	protected InchiKey inchiKey;
 	protected SmilesKey smilesKey;
 	protected IStructureKey propertyKey;
 	protected AbstractStructureQuery<String,String,StringCondition> query_chemicals;
@@ -84,11 +86,18 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	
 	public RepositoryWriter() {
 		structureWriter = new DbStructureWriter();
-		smilesKey = new SmilesKey();
+		
+		try {
+			inchiKey = new InchiKey();
+		} catch (Exception x) {
+			inchiKey=null;
+		}
+		smilesKey = new SmilesKey(); //last resort use smiles - not canonical!		
 		setPropertyKey(new CASKey());
 		query_chemicals = new QueryStructure();
 		query_chemicals.setId(-1);
-		query_chemicals.setFieldname(smilesKey.getKey().toString());
+		
+		query_chemicals.setFieldname(inchiKey==null?smilesKey.getQueryKey().toString():inchiKey.getQueryKey().toString());
 		queryexec.setCache(true);
 		query_prefered_structure = new RetrieveStructure();
 		query_prefered_structure.setPreferedStructure(true);
@@ -204,8 +213,12 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         			findChemical(query_property,propertyKey.getKey(),property,structure);
         		else
 	        		if (structure.getIdchemical() <= 0) {
-	        			query_chemicals.setFieldname(smilesKey.getKey().toString());        			
-	        			findChemical(query_chemicals,null,structure.getSmiles(),structure);
+            			query_chemicals.setFieldname(structure.getInchi()==null?
+        						smilesKey.getQueryKey().toString():
+        						inchiKey.getQueryKey().toString());
+            			findChemical(query_chemicals,null,structure.getInchi()==null?
+        					   structure.getSmiles():
+        					   structure.getInchi(),structure);	        			
 	        		}
         	} catch (SQLException x) {
         		throw x;
@@ -215,7 +228,12 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
             	//if not found, find by SMILES
             	if (structure.getIdchemical()<=0)
             		try {
-            			findChemical(query_chemicals,null,structure.getSmiles(),structure);
+            			query_chemicals.setFieldname(structure.getInchi()==null?
+            						smilesKey.getQueryKey().toString():
+            						inchiKey.getQueryKey().toString());
+            			findChemical(query_chemicals,null,structure.getInchi()==null?
+            					   structure.getSmiles():
+            					   structure.getInchi(),structure);
             		} catch (Exception ex) {
                 		//x.printStackTrace();
                 		logger.warn(x);

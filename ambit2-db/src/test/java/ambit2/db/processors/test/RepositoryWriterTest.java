@@ -572,6 +572,7 @@ delete from struc_dataset where idstructure>3
             IStructureRecord record = reader.nextRecord();
 			writer.write(record);
 			records ++;
+			
 
 		}
 		reader.close();
@@ -932,7 +933,45 @@ delete from struc_dataset where idstructure>3
 		 */
 
 	}				
-	
+	@Test
+	public void testImport3Same() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+        IDatabaseConnection c = getConnection();
+        
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/match/99-72-9.sdf");
+		Assert.assertNotNull(in);
+		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		reader.setReference(LiteratureEntry.getInstance("input.sdf"));
+		write(reader,c.getConnection());
+        c.close();
+        
+        c = getConnection();
+
+  		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+  		Assert.assertEquals(1,chemicals.getRowCount());
+  		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles is not null and inchi is not null and formula is not null");
+  		Assert.assertEquals(1,chemicals.getRowCount());		
+  		ITable strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+  		Assert.assertEquals(3,strucs.getRowCount());
+  		ITable srcdataset = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,idtemplate FROM src_dataset where name='TEST INPUT'");
+  		Assert.assertEquals(1,srcdataset.getRowCount());
+
+  	
+  		in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/match/99-72-9.csv");
+		Assert.assertNotNull(in);
+		IIteratingChemObjectReader reader1 = FileInputState.getReader(in, "99-72-9.csv");
+		RawIteratingWrapper wrapper = new RawIteratingWrapper(reader1);
+		
+		wrapper.setReference(LiteratureEntry.getInstance("input.csv"));
+		write(wrapper,c.getConnection());
+		
+		 c = getConnection();
+		  chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+  		Assert.assertEquals(2,chemicals.getRowCount());
+  		
+        c.close();
+
+	}
 	@Test
 	public void testImportByInChI() throws Exception {
 		
