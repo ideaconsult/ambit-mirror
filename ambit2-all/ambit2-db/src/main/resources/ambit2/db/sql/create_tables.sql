@@ -933,7 +933,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,12,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (4,13,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
