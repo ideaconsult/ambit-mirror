@@ -9,7 +9,7 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
 public class DeleteAtomEnvironment extends AbstractUpdate<IStructureRecord,IStructureRecord> {
-	protected static String[] sql = new String[] {"DELETE from fpaechemicals where idchemical=?"};
+	protected static String[] sql = new String[] {"DELETE from fpaechemicals where idchemical=? and user_name=(SUBSTRING_INDEX(user(),'@',1))"};
 	@Override
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();

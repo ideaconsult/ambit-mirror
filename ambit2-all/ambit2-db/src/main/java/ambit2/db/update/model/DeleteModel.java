@@ -10,7 +10,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class DeleteModel extends AbstractObjectUpdate<ModelQueryResults> {
 
-	public static final String delete_sql = "delete from models where %s";
+	public static final String delete_sql = "delete from models where %s and user_name=(SUBSTRING_INDEX(user(),'@',1))";
 
 	public DeleteModel(ModelQueryResults ref) {
 		super(ref);
