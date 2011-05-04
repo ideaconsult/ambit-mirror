@@ -40,7 +40,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 public class DeleteStructure extends AbstractObjectUpdate<IStructureRecord> {
 
 
-	public static final String[] delete_sql = {"delete from structure where idstructure=?"};
+	public static final String[] delete_sql = {"delete from structure where idstructure=? and user_name=(SUBSTRING_INDEX(user(),'@',1))"};
 
 	public DeleteStructure(IStructureRecord structure) {
 		super(structure);

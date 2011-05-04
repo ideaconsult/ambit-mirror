@@ -326,4 +326,21 @@ insert into version (idmajor,idminor,comment) values (4,11,"AMBIT2 schema - adde
 ---------------------
 ALTER TABLE `src_dataset` ADD COLUMN `rightsHolder` VARCHAR(128) NOT NULL AFTER `licenseURI`;
 insert into version (idmajor,idminor,comment) values (4,12,"AMBIT2 schema - Datasets rights holder added"); 
- 
+
+---------------------
+-- 4.13
+-- User name for models
+---------------------
+ALTER TABLE `models` ADD COLUMN `user_name` VARCHAR(16) NOT NULL DEFAULT 'guest' AFTER `dataset`,
+ ADD CONSTRAINT `FK_models_users` FOREIGN KEY `FK_models_users` (`user_name`)
+    REFERENCES `users` (`user_name`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+ ALTER TABLE `structure`
+ DROP FOREIGN KEY `fk_idchemical`;
+
+ALTER TABLE `structure` ADD CONSTRAINT `fk_idchemical` FOREIGN KEY `fk_idchemical` (`idchemical`)
+    REFERENCES `chemicals` (`idchemical`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;

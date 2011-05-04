@@ -39,8 +39,8 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class DeleteDataset extends AbstractObjectUpdate<SourceDataset> {
 
-	public static final String[] delete_sql_by_name = {"delete from src_dataset where name=?"};
-	public static final String[] delete_sql_by_id = {"delete from src_dataset where id_srcdataset=?"};
+	public static final String[] delete_sql_by_name = {"delete from src_dataset where name=? and user_name=(SUBSTRING_INDEX(user(),'@',1))"};
+	public static final String[] delete_sql_by_id = {"delete from src_dataset where id_srcdataset=? and user_name=(SUBSTRING_INDEX(user(),'@',1))"};
 
 	public DeleteDataset(SourceDataset dataset) {
 		super(dataset);

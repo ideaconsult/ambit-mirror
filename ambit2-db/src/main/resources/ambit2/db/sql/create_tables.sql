@@ -87,26 +87,26 @@ CREATE TABLE  `chemicals` (
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `structure` ;
 CREATE TABLE  `structure` (
-  `idstructure` int(11) unsigned NOT NULL auto_increment,
+  `idstructure` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `idchemical` int(11) unsigned NOT NULL,
   `structure` blob NOT NULL,
-  `format` enum('SDF','CML','MOL','INC') collate utf8_bin NOT NULL default 'SDF',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `user_name` varchar(16) collate utf8_bin default NULL,
-  `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') collate utf8_bin NOT NULL default 'NA',
-  `label` enum('OK','UNKNOWN','ERROR') collate utf8_bin NOT NULL default 'UNKNOWN' COMMENT 'quality label',
+  `format` enum('SDF','CML','MOL','INC') COLLATE utf8_bin NOT NULL DEFAULT 'SDF',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') COLLATE utf8_bin NOT NULL DEFAULT 'NA',
+  `label` enum('OK','UNKNOWN','ERROR') COLLATE utf8_bin NOT NULL DEFAULT 'UNKNOWN' COMMENT 'quality label',
   `atomproperties` blob,
-  `preference` int(10) unsigned NOT NULL default '9999',
-  PRIMARY KEY  (`idstructure`),
+  `preference` int(10) unsigned NOT NULL DEFAULT '9999',
+  PRIMARY KEY (`idstructure`),
   KEY `FK_structure_2` (`user_name`),
-  KEY `idchemical` USING BTREE (`idchemical`),
+  KEY `idchemical` (`idchemical`) USING BTREE,
   KEY `Index_4` (`label`),
   KEY `Index_5` (`idstructure`,`user_name`),
-  KEY `Index_6` USING BTREE (`idchemical`,`preference`,`idstructure`),
-  KEY `Index_pref` USING BTREE (`preference`,`idchemical`),
-  CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  KEY `Index_6` (`idchemical`,`preference`,`idstructure`) USING BTREE,
+  KEY `Index_pref` (`preference`,`idchemical`) USING BTREE,
+  CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --DELIMITER $
 --CREATE TRIGGER copy_history BEFORE UPDATE ON structure
@@ -236,12 +236,13 @@ CREATE TABLE  `models` (
   `dependent` int(10) unsigned NOT NULL COMMENT 'template for dependent variables',
   `content` longblob NOT NULL,
   `algorithm` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'N/A' COMMENT 'URI of the algorithm',
-  `mediatype` varchar(48) COLLATE utf8_bin NOT NULL DEFAULT 'application/java' COMMENT 'Content formats: application/java,application/x-coverage-serialized-object, application/x-java-serialized-object, application/x-www-form-urlencoded',
+  `mediatype` varchar(48) COLLATE utf8_bin NOT NULL DEFAULT 'application/java' COMMENT 'Content formats: JAVA_CLASS, WEKA_BASE64, PMML',
   `parameters` text COLLATE utf8_bin COMMENT 'Model parameters',
   `predicted` int(10) unsigned NOT NULL COMMENT 'template for predicted variables',
   `hidden` tinyint(1) NOT NULL DEFAULT '0',
-  `creator` varchar(45) COLLATE utf8_bin DEFAULT 'guest' NOT NULL,
+  `creator` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'guest',
   `dataset` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT 'dataset uri',
+  `user_name` varchar(16) COLLATE utf8_bin NOT NULL DEFAULT 'guest',
   PRIMARY KEY (`idmodel`),
   UNIQUE KEY `Index_5` (`name`) USING BTREE,
   KEY `FK_models_predictors` (`predictors`),
@@ -252,6 +253,8 @@ CREATE TABLE  `models` (
   KEY `FK_models_predicted` (`predicted`),
   KEY `Index_creator` (`creator`),
   KEY `Index_10` (`dataset`),
+  KEY `FK_models_users` (`user_name`),
+  CONSTRAINT `FK_models_users` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`),
   CONSTRAINT `FK_models_dataset` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_dependent` FOREIGN KEY (`dependent`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predicted` FOREIGN KEY (`predicted`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
