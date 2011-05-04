@@ -60,13 +60,13 @@ public class RepositoryWriterToXMLTest extends DbUnitTest {
 		Assert.assertEquals(2,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
-		Assert.assertEquals(97,property	.getRowCount());
+		Assert.assertEquals(96,property	.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(194,property_values.getRowCount());		
+		Assert.assertEquals(191,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
 		Assert.assertEquals(6,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
-		Assert.assertEquals(196,p_tuples.getRowCount());				
+		Assert.assertEquals(192,p_tuples.getRowCount());				
 		c.close();
 		/**
 		 * Removing redundant properties

@@ -1,0 +1,4 @@
+SMILES,Name
+Cc1ccc(cc1)C(C)C=O,"Test 1"
+CC/1CCOC\(C)O1,"Smth else for a test"
+CC1=CC=C(C=C1)C(C)C=O,"Test 2"

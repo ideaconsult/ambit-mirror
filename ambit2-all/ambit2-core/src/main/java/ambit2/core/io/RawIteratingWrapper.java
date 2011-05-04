@@ -91,9 +91,7 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 
 	protected Object transform(Object o) {
 		if (o instanceof IAtomContainer) try {
-			
-			r.setIdchemical(-1);
-			r.setIdstructure(-1);
+			r.clear();
 			r.setFormat("SDF");
 			r.setContent(writer.process((IAtomContainer)o));
 			Object ref = ((IAtomContainer)o).getProperty("REFERENCE");
@@ -102,8 +100,7 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 			else r.setReference(getReference());
 			return r;  
 		} catch (Exception x) {
-			r.setIdchemical(-1);
-			r.setIdstructure(-1);
+			r.clear();
 			r.setFormat("SDF");
 			r.setContent(null);
 			r.setReference(getReference());

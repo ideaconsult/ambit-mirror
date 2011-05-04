@@ -29,6 +29,7 @@
 
 package ambit2.db.processors;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -55,6 +56,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	protected InchiPropertyKey inchiKey;
 	protected StructureTypeProcessor strucType;
 	protected InchiProcessor inchiProcessor;
+
 	
 	public StructureNormalizer() {
 		molReader = new MoleculeReader();
@@ -74,13 +76,15 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 			structure.addProperties(molecule.getProperties());
 		
 		try {
-			structure.setHash(hashcode.process(molecule));
+			//otherwise InChI tries to guess the stereo, even if it is not there...
+			for (IAtom atom : molecule.atoms()) {
+				atom.setPoint2d(null);
+				atom.setPoint3d(null);
+			}
+
 		} catch (Exception x) {
-			logger.warn(x);
-			structure.setHash(0L);
-		} finally {
+			
 		}
-		
 		try {
 			structure.setSmiles(smilesKey.process(molecule));
 			if ("".equals(structure.getSmiles())) structure.setSmiles(null);
@@ -97,7 +101,9 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 				try {
 					if (inchiProcessor==null) inchiProcessor = new InchiProcessor();
 					inchi = inchiProcessor.process(molecule).getInchi();
-				} catch (Exception x) {}
+				} catch (Exception x) {
+					inchi=null;
+				}
 				if ("".equals(inchi)) inchi = null;
 				structure.setInchi(inchi);
 			}

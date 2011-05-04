@@ -101,6 +101,7 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
     public IStructureRecord getObject(ResultSet rs) throws AmbitException {
         try {
             IStructureRecord r = getValue();
+            r.clear();
             r.setIdchemical(rs.getInt(_sqlids.idchemical.name()));
             r.setIdstructure(rs.getInt(_sqlids.idstructure.name()));
             r.setContent(rs.getString(_sqlids.ustructure.name()));
