@@ -1,5 +1,7 @@
 package ambit2.namestructure;
 
+import uk.ac.cam.ch.wwmm.opsin.NameToInchi;
+import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult.OPSIN_RESULT_STATUS;
 import ambit2.base.data.StructureRecord;
@@ -22,13 +24,13 @@ public class Name2StructureFinder extends AbstractFinder<Name2StructureProcessor
 
 	@Override
 	protected IStructureRecord query(String value) throws AmbitException {
-		String smiles = request.name2smiles(value);
-		record.clear();
-		if (smiles==null) 
-			return null;
-		record.setContent(smiles);
-		record.setFormat("SMILES");
-		return record;
+		OpsinResult result = request.name2structure(value);
+		if (result.getStatus().equals(OPSIN_RESULT_STATUS.SUCCESS)) {
+			record.clear();
+			record.setContent(NameToInchi.convertResultToInChI(result));
+			record.setFormat("INC");
+			return record;
+		} else return null;
 	}
 
 }
