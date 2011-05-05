@@ -204,7 +204,7 @@ public class AmbitResource extends WadlServerResource {
 			
 			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
 			{"/query/pubchem/50-00-0","Queries PubChem for specific term and retrieves structure(s) as SDF file",format,"GET","Yes"},
-			{"/query/csls/50-00-0/smiles","Queries Chemical Identifier Resolver /query/csls/{term}/{representation} http://cactus.nci.nih.gov/chemical/structure/documentation",format,"GET","Yes"},
+			{"/query/cir/50-00-0/smiles","Queries Chemical Identifier Resolver /query/cir/{term}/{representation} http://cactus.nci.nih.gov/chemical/structure/documentation",format,"GET","Yes"},
 			{"/query/compound/50-00-0/smiles","Queries this database /query/lookup/{term}/{representation}",format,"GET","Yes"},
 			{"/query/similarity?search=c1ccccc1&threshold=0.8","Similarity search",format,"GET","Yes"},
 			{"/query/qlabel?search=ProbablyERROR","Search compounds by Quality Labels",format,"GET","Yes"},

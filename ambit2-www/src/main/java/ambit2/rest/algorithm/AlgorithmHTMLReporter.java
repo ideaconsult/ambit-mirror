@@ -104,7 +104,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 					for (AbstractFinder.SITE site : AbstractFinder.SITE.values())
 						output.write(String.format("<option value='%s' %s %s title='%s'>%s</option>",
 								site.name(),
-								AbstractFinder.SITE.CSLS.equals(site)?"selected":"",
+								AbstractFinder.SITE.CIR.equals(site)?"selected":"",
 								site.isEnabled()?"":"disabled",
 								site.getURI(),		
 								site.getTitle()));

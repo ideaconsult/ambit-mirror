@@ -27,7 +27,7 @@ public class OnlineStructureFinderTest  extends ResourceTest {
 	
 	@Test
 	public void testFinderCSLS() throws Exception {
-		testFinder("csls","replace");
+		testFinder("cir","replace");
 	}
 	
 	@Test
@@ -38,7 +38,7 @@ public class OnlineStructureFinderTest  extends ResourceTest {
 	@Test
 	public void testFinderBoth() throws Exception {
 		testFinder("chemidplus","add");
-		testFinder("csls","add");
+		testFinder("cir","add");
 	}
 	public void testFinder(String search, String mode) throws Exception {
 		Form headers = new Form();  
