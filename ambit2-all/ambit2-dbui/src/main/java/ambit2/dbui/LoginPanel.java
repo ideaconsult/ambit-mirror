@@ -32,7 +32,7 @@ import ambit2.ui.editors.BeanEditor;
  * @author nina
  *
  */
-public class LoginPanel extends BeanEditor<LoginInfo> {
+public class LoginPanel extends BeanEditor<LoginInfoBean> {
 
 	public LoginPanel() {
 		super(null,new String[] {

@@ -14,7 +14,7 @@ import ambit2.base.interfaces.IBatchStatistics.RECORDS_STATS;
 import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.key.CASKey;
-import ambit2.db.LoginInfo;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.plugin.dbtools.ImportPropertiesWorkflow;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.library.InputFileSelection;
@@ -48,7 +48,7 @@ public class ImportPropertiesTest extends WorkflowTest<ImportPropertiesWorkflow>
 				"SELECT * FROM dictionary");
 		Assert.assertEquals(0, dictionary.getRowCount());
 
-		LoginInfo li = new LoginInfo();
+		LoginInfoBean li = new LoginInfoBean();
 		li.setDatabase(getDatabase());
 		li.setPort(getPort());
 		li.setUser(getUser());

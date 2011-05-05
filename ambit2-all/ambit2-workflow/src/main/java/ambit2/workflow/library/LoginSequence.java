@@ -29,8 +29,8 @@ import java.sql.Connection;
 import javax.sql.DataSource;
 
 import ambit2.base.config.Preferences;
-import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.workflow.DBWorkflowContext;
 
 import com.microworkflow.execution.Performer;
@@ -61,13 +61,13 @@ public class LoginSequence extends Sequence {
                 Object o = getTarget();
                 if (o == null) {
                 	Object ol = context.get(DBWorkflowContext.LOGININFO);
-                	if ((ol == null) || !(ol instanceof LoginInfo)) {
-                		ol = new LoginInfo();
+                	if ((ol == null) || !(ol instanceof LoginInfoBean)) {
+                		ol = new LoginInfoBean();
                 	}
-                	LoginInfo li = null;
+                	LoginInfoBean li = null;
                 	if (!silent) {
                 		
-	                    ValueLatchPair<LoginInfo> latch = new ValueLatchPair<LoginInfo>((LoginInfo)ol);
+	                    ValueLatchPair<LoginInfoBean> latch = new ValueLatchPair<LoginInfoBean>((LoginInfoBean)ol);
 	                    context.put(DBWorkflowContext.USERINTERACTION,latch);
 	                    //This is a blocking operation!
 	                    
@@ -89,7 +89,7 @@ public class LoginSequence extends Sequence {
 	                    } finally {
 	                    	context.remove(DBWorkflowContext.USERINTERACTION);
 	                    }
-                	} else li = (LoginInfo)ol;
+                	} else li = (LoginInfoBean)ol;
                 	
                     if (li != null) {
                     	

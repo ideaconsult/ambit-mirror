@@ -15,8 +15,8 @@ import javax.swing.JTabbedPane;
 import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import ambit2.base.data.ClassHolder;
-import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
@@ -54,7 +54,7 @@ public class SearchPlugin extends DBWorkflowPlugin {
 		contextListener.setProperties(props);
 		contextListener.setWorkflowContext(getWorkflowContext());
 		
-		LoginInfo li = new LoginInfo();
+		LoginInfoBean li = new LoginInfoBean();
 		li.setUser("guest");
 		li.setPassword(li.getUser());
 		String uri = DatasourceFactory.getConnectionURI(li.getScheme(), li.getHostname(), li.getPort(), li.getDatabase(), li.getUser(), li.getPassword());

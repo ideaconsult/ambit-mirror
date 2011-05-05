@@ -31,9 +31,9 @@ import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
-import ambit2.db.LoginInfo;
 import ambit2.db.processors.DBProcessorsChain;
 import ambit2.db.processors.RepositoryWriter;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.plugin.pbt.DbUnitTest;
 import ambit2.plugin.pbt.PBTWorkBook;
 import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
@@ -61,7 +61,7 @@ public class PBTWriterTest extends DbUnitTest {
 				"SELECT * FROM dictionary");
 		Assert.assertEquals(0, dictionary.getRowCount());
 
-		LoginInfo li = new LoginInfo();
+		LoginInfoBean li = new LoginInfoBean();
 		li.setDatabase(getDatabase());
 		li.setPort(getPort());
 		li.setUser(getUser());

@@ -40,9 +40,9 @@ import ambit2.base.data.ClassHolder;
 import ambit2.base.io.MolFileFilter;
 import ambit2.base.processors.batch.BatchProcessor;
 import ambit2.core.io.FileInputState;
-import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.processors.MySQLCommand;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.library.InputFileSelection;
@@ -103,7 +103,7 @@ public class DBUtilityPlugin extends DBWorkflowPlugin {
 		fs.setSupportedExtensions(MolFileFilter.supported_extensions);
 		getWorkflowContext().put(InputFileSelection.INPUTFILE, fs);
 		
-		LoginInfo li = new LoginInfo();
+		LoginInfoBean li = new LoginInfoBean();
 		li.setUser("guest");
 		li.setPassword(li.getUser());
 		String uri = DatasourceFactory.getConnectionURI(li.getScheme(), li.getHostname(), li.getPort(), li.getDatabase(), li.getUser(), li.getPassword());

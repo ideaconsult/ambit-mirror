@@ -35,7 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import ambit2.db.LoginInfo;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.ui.editors.ClassHolderEditor;
 import ambit2.workflow.DBWorkflowContext;
 
@@ -128,13 +128,13 @@ public class StatusPanel extends WorkflowContextListenerPanel {
 				labels[0][2].setVisible(true);
 				
 				Object li = getWorkflowContext().get(DBWorkflowContext.LOGININFO);
-				if ((li == null) || !(li instanceof LoginInfo)) {
+				if ((li == null) || !(li instanceof LoginInfoBean)) {
 					labels[0][1].setText( e.getNewValue().toString());
 					labels[1][1].setText( e.getNewValue().toString());			
 					labels[0][1].setToolTipText(e.getNewValue().toString());
 				} else {
-					labels[0][1].setText(((LoginInfo)li).getUser());
-					labels[1][1].setText(((LoginInfo)li).getDatabase());	
+					labels[0][1].setText(((LoginInfoBean)li).getUser());
+					labels[1][1].setText(((LoginInfoBean)li).getDatabase());	
 					labels[0][1].setToolTipText(e.getNewValue().toString());					
 				}
 

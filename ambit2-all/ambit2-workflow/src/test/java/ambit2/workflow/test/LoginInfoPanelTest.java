@@ -32,7 +32,7 @@ import javax.swing.UIManager;
 
 import org.junit.Test;
 
-import ambit2.db.LoginInfo;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.dbui.LoginPanel;
 import ambit2.ui.WizardPanel;
 
@@ -41,7 +41,7 @@ public class LoginInfoPanelTest {
 
 	@Test public void testPanel() throws Exception {
 	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
-		LoginInfo info = new LoginInfo();
+	    LoginInfoBean info = new LoginInfoBean();
 		LoginPanel panel = new LoginPanel();
 		panel.setObject(info);
 		WizardPanel p = new WizardPanel("x",panel.getJComponent(),"Help");

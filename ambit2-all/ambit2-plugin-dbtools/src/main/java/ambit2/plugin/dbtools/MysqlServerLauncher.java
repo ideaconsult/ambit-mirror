@@ -1,10 +1,13 @@
 package ambit2.plugin.dbtools;
 
+import java.sql.Connection;
+import java.sql.Statement;
+
 import ambit2.base.config.Preferences;
-import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.db.processors.MySQLShell;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.ProcessorPerformer;
 
@@ -51,11 +54,11 @@ public class MysqlServerLauncher extends Workflow {
         Conditional connected = new Conditional(
                 new TestCondition() {
                     public boolean evaluate() {
-	    				LoginInfo li = new LoginInfo();
+                    	LoginInfoBean li = new LoginInfoBean();
 	    				li.setPort("3306");
 	    				li.setUser("guest");
 	    				li.setPassword("guest");
-                        return DatasourceFactory.ping(li);
+                        return ping(li);
                     }
                 }, 
                 null,
@@ -64,5 +67,25 @@ public class MysqlServerLauncher extends Workflow {
         
         setDefinition(connected);
 	}
+	
+    public static boolean ping(LoginInfoBean li) {
+    	Connection connection = null;
+    	Statement st = null;
+    	try {
+	        String dburi = DatasourceFactory.getConnectionURI(
+	                    li.getScheme(), li.getHostname(), li.getPort(), 
+	                    li.getDatabase(), li.getUser(), li.getPassword());    	    					
+	
+	        connection = DatasourceFactory.getConnection(dburi.toString());
+	        st = connection.createStatement();
+	        st.execute("/*ping*/SELECT 1");
+	        return true;    
+    	} catch (Exception x) {
+    		return false;
+    	} finally {
+    		if (st != null) try {st.close();} catch (Exception x) {};
+            if (connection != null) try {connection.close();} catch (Exception x) {};
+    	}
+    }	
 	
 }

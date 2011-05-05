@@ -37,6 +37,7 @@ import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.processors.MySQLCommand;
 import ambit2.db.search.IStoredQuery;
+import ambit2.dbui.LoginInfoBean;
 
 import com.microworkflow.process.WorkflowContext;
 
@@ -113,8 +114,8 @@ public class DBWorkflowContext extends WorkflowContext {
     public void setConnectionURI(String connURI) {
         put(DBCONNECTION_URI,connURI);
     }
-    public LoginInfo getLoginInfo() {
-    	return (LoginInfo)get(LOGININFO);
+    public LoginInfoBean getLoginInfo() {
+    	return (LoginInfoBean)get(LOGININFO);
     }
     public boolean isMySQLStarted() {
     	Object o = get(MySQLCommand.MYSQLCOMMAND);
