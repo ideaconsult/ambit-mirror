@@ -34,13 +34,23 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			public String getDescription() {
 				return "Lookup all structures and add the result as additional structure representation";
 			}
-		};
+		}
+/*
+,
+		importproperties {
+			@Override
+			public String getDescription() {
+				return "Lookup all structures, retrieve and add properties";
+			}
+		}
+*/
+;		
 		public String getDescription() {
 			return toString();
 		}
 	}
 	public enum SITE {
-		CSLS {
+		CIR {
 			@Override
 			public String getTitle() {
 				return "Chemical Identifier Resolver";
@@ -98,6 +108,16 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 				return false;
 			}
 		},
+		CHEMBL {
+			@Override
+			public String getTitle() {
+				return "ChEMBL Web Services";
+			}
+			@Override
+			public String getURI() {
+				return "https://www.ebi.ac.uk/chembldb/index.php/ws/";
+			}
+		},		
 		OPENTOX {
 			@Override
 			public String getTitle() {

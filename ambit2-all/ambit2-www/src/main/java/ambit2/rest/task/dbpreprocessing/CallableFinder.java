@@ -25,9 +25,9 @@ import ambit2.chebi.ChebiFinder;
 import ambit2.core.data.model.Algorithm;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;
+import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.RepositoryWriter;
-import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.db.search.structure.AbstractStructureQuery;
@@ -82,9 +82,9 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			if (search != null)
 				searchSite = SITE.valueOf(search.toString().toUpperCase());
 			else
-				searchSite = SITE.CSLS;
+				searchSite = SITE.CIR;
 		} catch (Exception x) {
-			searchSite = SITE.CSLS;
+			searchSite = SITE.CIR;
 		}
 		//dataset
 		Object dataset = OpenTox.params.dataset_uri.getFirstValue(form);
@@ -151,6 +151,13 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			le =  new LiteratureEntry("ChEBI","http://www.ebi.ac.uk/chebi");
 			break;
 		}
+		/*
+		case CHEMBL: {
+			p.add(new ChemBLFinder(profile,mode));
+			le =  new LiteratureEntry(searchSite.name(),"https://www.ebi.ac.uk/chemblws");
+			break;
+		}	
+		*/	
 		case CHEMIDPLUS: {
 			request = new ChemIdPlusRequest();
 			p.add(new AllSourcesFinder(profile,request,mode));

@@ -43,6 +43,7 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.test.ResourceTest;
 
 import com.lowagie.text.pdf.PdfReader;
@@ -421,7 +422,7 @@ public class CompoundResourceTest extends ResourceTest {
 	@Test
 	public void testCreateEntryFromURI_CSLS() throws Exception {
 		
-		String uri = String.format("http://localhost:%d/query/csls/50-00-0",port);
+		String uri = String.format("http://localhost:%d/query%s/50-00-0",port,CSLSResource.resource);
 		Form form = new Form();
 		form.add(OpenTox.params.compound_uri.toString(),uri);
 		

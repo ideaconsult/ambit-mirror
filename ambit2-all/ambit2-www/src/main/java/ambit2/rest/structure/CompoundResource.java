@@ -61,6 +61,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.FileUpload;
+import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
@@ -486,7 +487,10 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					OTDatasets datasets = OTDatasets.datasets();
 					OTContainers<OTDataset> result  = datasets.read(String.format("%s/query/compound/%s",getRequest().getRootRef(),Reference.encode(cmpname)));
 					if (result.size()==0) { //not found
-						uri =  String.format("%s/query/csls/%s",getRequest().getRootRef(),Reference.encode(cmpname));
+						uri =  String.format("%s/query%s/%s",
+								getRequest().getRootRef(),
+								CSLSResource.resource,
+								Reference.encode(cmpname));
 					} else 
 						return new StringRepresentation(result.getItem(0).getUri().toString(),MediaType.TEXT_URI_LIST);
 				} catch (Exception x) {
@@ -518,7 +522,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				uri = name;
 			}
 			
-			if (uri.startsWith(String.format("%s/query/csls",getRequest().getRootRef()))) { 
+			if (uri.startsWith(String.format("%s/query%s",getRequest().getRootRef(),CSLSResource.resource))) { 
 				source = CSLSRequest.CSLS_URL;name = "Chemical Identifier Resolver (CIR)";
 				uri = "CIR";
 			}

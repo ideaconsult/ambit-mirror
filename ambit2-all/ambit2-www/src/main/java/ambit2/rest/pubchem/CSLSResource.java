@@ -29,7 +29,7 @@ import ambit2.search.csls.CSLSStringRequest;
 
 public class CSLSResource extends ServerResource {
 
-	public static final String resource = "/csls";
+	public static final String resource = "/cir";
 	protected static final String resourceKey = "term";
 	protected static final String representationKey = "representation";
 	public static final String resourceID = String.format("/{%s}",resourceKey);
@@ -111,8 +111,16 @@ public class CSLSResource extends ServerResource {
 					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),null);
 					writer.write("<h2>CSLS search</h2>");
 					writer.write("<p>Enter query term and click <b>Search</b> button. The result will be an SDF file.<p>Examples:<p>");
-					writer.write(String.format("<a href=\"%s/query/csls/50-00-0\">%s/query/csls/50-00-0</a><br>",getRequest().getRootRef(),getRequest().getRootRef()));
-					writer.write(String.format("<a href=\"%s/query/csls?search=50-00-0\">%s/query/csls?search=50-00-0</a><br>",getRequest().getRootRef(),getRequest().getRootRef()));
+					writer.write(String.format("<a href=\"%s/query%s/50-00-0\">%s/query%s/50-00-0</a><br>",
+							getRequest().getRootRef(),
+							resource,
+							getRequest().getRootRef(),
+							resource));
+					writer.write(String.format("<a href=\"%s/query%s?search=50-00-0\">%s/query%s?search=50-00-0</a><br>",
+								getRequest().getRootRef(),
+								resource,
+								getRequest().getRootRef(),
+								resource));
 					AmbitResource.writeHTMLFooter(writer, "AMBIT", getRequest());
 					return new StringRepresentation(writer.toString(),MediaType.TEXT_HTML);				
 	        	} else {      	
