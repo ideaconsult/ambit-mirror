@@ -346,3 +346,19 @@ ALTER TABLE `structure` ADD CONSTRAINT `fk_idchemical` FOREIGN KEY `fk_idchemica
     ON UPDATE CASCADE;
 
 insert into version (idmajor,idminor,comment) values (4,13,"AMBIT2 schema - user_name for models"); 
+
+---------------------
+-- 4.14
+-- Property annotations table
+---------------------
+CREATE TABLE  `property_annotation` (
+  `idproperty` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'subject',
+  `rdf_type` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Feature',
+  `predicate` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'property',
+  `object` text CHARACTER SET utf8 NOT NULL COMMENT 'object',
+  PRIMARY KEY (`idproperty`,`rdf_type`,`predicate`,`object`(250)) USING BTREE,
+  KEY `Index_2` (`predicate`,`object`(250)) USING BTREE,
+  CONSTRAINT `FK_property_annotation_1` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+insert into version (idmajor,idminor,comment) values (4,14,"AMBIT2 schema - Property annotations table added");
