@@ -40,14 +40,15 @@ import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.processors.DbAddUser;
 import ambit2.db.processors.DbDeleteUser;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.dbui.LoginPanel;
 
 
 public class DbAddUserTest extends RepositoryTest {
-	protected LoginInfo info;
+	protected LoginInfoBean info;
     protected void setUp() throws Exception {
     	//The default guest user doesn't have CREATE USER rights
-    	info = new LoginInfo();
+    	info = new LoginInfoBean();
     	info.setDatabase("ambit2");
     	info.setUser("root");
     	info.setPassword("");

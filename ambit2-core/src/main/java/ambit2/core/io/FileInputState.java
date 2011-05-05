@@ -53,7 +53,7 @@ public class FileInputState extends FileState implements IInputState {
 		"Text files (Tab delimited) (*.txt)",
 		"MDL MOL files (*.mol)",
 		"ICHI files (*.ichi)",
-		"InCHi files (*.inchi)",
+		"InChI files (*.inchi)",
 		"Chemical Markup Language files (*.cml)",
 		"HIN files (*.hin)",
 		"PDB files (*.pdb)",

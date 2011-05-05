@@ -35,8 +35,8 @@ import nplugins.shell.INPluginUI;
 import nplugins.shell.INanoPlugin;
 import nplugins.shell.application.Utils;
 import ambit2.base.data.ClassHolder;
-import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.DBWorkflowPlugin;
 import ambit2.workflow.IMultiWorkflowsPlugin;
@@ -90,7 +90,7 @@ public class PBTCheckerPlugin extends DBWorkflowPlugin {
 		try {
 			getWorkflowContext().put(PBTWorkBook.PBT_WORKBOOK,new PBTWorkBook());
 			
-			LoginInfo li = new LoginInfo();
+			LoginInfoBean li = new LoginInfoBean();
 			li.setUser("guest");
 			li.setPassword(li.getUser());
 			String uri = DatasourceFactory.getConnectionURI(li.getScheme(), li.getHostname(), li.getPort(), li.getDatabase(), li.getUser(), li.getPassword());

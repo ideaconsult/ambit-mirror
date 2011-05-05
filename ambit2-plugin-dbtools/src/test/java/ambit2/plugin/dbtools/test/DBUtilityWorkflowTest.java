@@ -12,8 +12,8 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.processors.batch.BatchProcessor;
-import ambit2.db.LoginInfo;
 import ambit2.db.search.structure.QueryDataset;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.plugin.dbtools.DBUtilityWorkflow;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.calculation.CalculationDescriptors;
@@ -93,7 +93,7 @@ public class DBUtilityWorkflowTest extends WorkflowTest<DBUtilityWorkflow> {
 				"SELECT * FROM fp1024 where status = 'valid'");
 	//	Assert.assertEquals(0, fp.getRowCount());
 
-		LoginInfo li = new LoginInfo();
+		LoginInfoBean li = new LoginInfoBean();
 		li.setDatabase(getDatabase());
 		li.setPort(getPort());
 		li.setUser(getUser());

@@ -8,13 +8,13 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.db.LoginInfo;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.search.structure.SCOPE;
 import ambit2.db.search.structure.ScopeQuery;
+import ambit2.dbui.LoginInfoBean;
 import ambit2.workflow.DBWorkflowContext;
 import ambit2.workflow.library.ScopeSelection;
 import ambit2.workflow.ui.SilentWorkflowListener;
@@ -55,7 +55,7 @@ public class SelectionWorkflowTest extends WorkflowTest {
 	public void runWorkflow(ScopeQuery scope) throws Exception {
 		setUpDatabase("src/test/resources/ambit2/plugin/dbtools/test/dataset-properties.xml");
 
-		LoginInfo li = new LoginInfo();
+		LoginInfoBean li = new LoginInfoBean();
 		li.setDatabase(getDatabase());
 		li.setPort(getPort());
 		li.setUser(getUser());
