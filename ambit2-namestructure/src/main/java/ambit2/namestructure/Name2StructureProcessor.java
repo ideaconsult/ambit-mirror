@@ -112,12 +112,20 @@ public class Name2StructureProcessor extends
 	public synchronized OpsinResult name2structure(String target) throws AmbitException {
 		try {
 			if (nameToStructure == null) nameToStructure = NameToStructure.getInstance();
-			return nameToStructure.parseChemicalName(target.trim(),false);
+			return nameToStructure.parseChemicalName(target.trim());
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}
 	}	
 
+	public synchronized String name2smiles(String target) throws AmbitException {
+		try {
+			if (nameToStructure == null) nameToStructure = NameToStructure.getInstance();
+			return nameToStructure.parseToSmiles(target.trim());
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+	}	
     /*
 	public static void main(String[] args) {
 		if (args.length == 0) {

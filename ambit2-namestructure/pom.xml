@@ -12,16 +12,16 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
   <name>ambit2-namestructure</name>
   <repositories>
   	<repository>
-  		<id>ucc-repo</id>
-  		<name>ucc-repo</name>
-  		<url>https://maven.ch.cam.ac.uk/m2repo</url>
+  		<id>ucc</id>
+  		<name>ucc</name>
+  		<url>https://maven.ch.cam.ac.uk/content/repositories/releases</url>
   	</repository>
   </repositories>
   <dependencies>
     <dependency>
-    	<groupId>opsin</groupId>
-    	<artifactId>core</artifactId>
-    	<version>0.9.0</version>
+    	<groupId>uk.ac.cam.ch.opsin</groupId>
+    	<artifactId>opsin-core</artifactId>
+    	<version>1.0.0</version>
     </dependency>
     <dependency>
     	<groupId>junit</groupId>
@@ -36,9 +36,9 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
     	<type>jar</type>
     </dependency>
     <dependency>
-    	<groupId>opsin</groupId>
-    	<artifactId>inchi</artifactId>
-    	<version>0.9.0</version>
+    	<groupId>uk.ac.cam.ch.opsin</groupId>
+    	<artifactId>opsin-inchi</artifactId>
+    	<version>1.0.0</version>
     </dependency>
   </dependencies>
  <build>
