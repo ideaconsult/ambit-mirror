@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 
 import org.restlet.Context;
 import org.restlet.Request;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
@@ -22,6 +23,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 
 /**Generates html page for {@link QueryDatasetResource}
@@ -91,6 +93,45 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			} catch (Exception x) {
 				
 			}
+			
+			String page = "";
+			Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
+			try {
+				
+				page = form.getFirstValue("page");
+			} catch (Exception x) {
+				page = "0";
+			}			
+			String pageSize = "50";
+		
+			try {
+				
+				pageSize = form.getFirstValue("pagesize");
+			} catch (Exception x) {
+				pageSize = "50";
+			}	
+			String search = "";
+			try {
+				
+				search = form.getFirstValue("search");
+			} catch (Exception x) {
+				search = "";
+			}			
+			try {
+				output.write("<div><span class=\"center\">");
+			output.write("<form method='GET' action=''>");
+			output.write(String.format("<b>Page:</b><input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
+			if (search !=null) output.write(String.format("<input name='search' type='hidden' value='%s'>\n",search));
+			output.write(String.format("<b>Page size:</b><input name='pagesize' type='text' title='Page size' size='10' value='%s'>\n",pageSize==null?"50":pageSize));
+			output.write("<input type='submit' value='Refresh'>");			
+			output.write("</form>");
+			output.write("</span></div><p>");
+			} catch (Exception x) {
+				
+			} finally {
+				
+			}
+			
 		} 
 		/**
 		 * else /dataset/{id}/metadata
