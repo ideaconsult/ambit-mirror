@@ -3,6 +3,8 @@ package ambit2.db.search;
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 
+import com.jgoodies.binding.beans.Model;
+
 /**
  * Abstract class for a query.
  * <pre>
@@ -13,7 +15,7 @@ import ambit2.base.exceptions.AmbitException;
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 10, 2008
  */
-public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType>  implements IQueryObject<ResultType> {
+public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType> extends Model implements IQueryObject<ResultType> {
 	/**
 	 * 
 	 */
