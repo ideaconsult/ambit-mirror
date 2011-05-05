@@ -164,7 +164,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				left,right);
 
 	}
-	
+	/*
 	protected String templates(Reference baseReference) throws IOException {
 		StringBuilder w = new StringBuilder();
 		w.append("<input type='submit' value='Select table columns'>");
@@ -208,19 +208,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		}
 		w.append(String.format("<input type='TEXT' size='30'alt='Enter OpenTox Feature URL here, to be added as column table' name=\"%s\">\n",
 				OpenTox.params.feature_uris.toString()));		
-		/*
-		w.append(String.format(
-				"<select size='60' STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;width: 120px\" multiple name=\"%s\">\n",
-				OpenTox.params.feature_uris.toString()));
-		w.append("<option value=\"\">Default</option>\n");
-
-		for (String option[]:options)
-		w.append(String.format("<option value=\"%s/%s\">%s</option>\n",baseReference,option[0],option[1]));
-		w.append("</select>");
-		*/
-		
+	
 		return w.toString();
 	}	
+	*/
 	
 	protected String downloadLinks() throws IOException {
 		StringBuilder w = new StringBuilder();
@@ -413,7 +404,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				w.write(String.format("<div><span class=\"center\"><h4>Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",hilightPredictions,hilightPredictions));
 			if (table) {
 				
-				output.write(String.format("<div><span class=\"left\">%s</span></div>",templates(baseReference)));
+				//output.write(String.format("<div><span class=\"left\">%s</span></div>",templates(baseReference)));
 				
 				output.write("<div class=\"rowwhite\"><span class=\"center\">");
 					
@@ -484,15 +475,17 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			else output.write("</div>");
 			output.write("</form>\n");
 			
-			
+			/*
 			output.write(String.format("<form method='post' action='%s/compound'>",uriReporter.getBaseReference()));
 			output.write("<input type='text' name='identifier' title='Compound identifier'>&nbsp;");
 			output.write("<input type='submit' value='Find compound'>");
-			output.write("</form>");			
+			output.write("</form>");	
+			*/		
 			AmbitResource.writeHTMLFooter(output,
 					"",
 					uriReporter.getRequest()
 					);
+					
 			output.flush();			
 		} catch (Exception x) {}		
 	};

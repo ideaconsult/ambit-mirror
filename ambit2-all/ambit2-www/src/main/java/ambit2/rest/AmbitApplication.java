@@ -225,27 +225,15 @@ public class AmbitApplication extends TaskApplication<String> {
 		router.attach(String.format("%s/{%s}",ChartResource.resource,ChartResource.resourceKey),ChartResource.class);
 		
 		router.attach(ReportDatasetResource.resource,ReportDatasetResource.class);
-		//test
-		router.attach(RDFGraphResource.resource,RDFGraphResource.class);
-		router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
+		//test removed, there is ontology service
+		//router.attach(RDFGraphResource.resource,RDFGraphResource.class);
+		//router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
 		
-		router.attach("/launch", LauncherResource.class);
-		/*
-		Router fastoxRouter = new MyRouter(getContext());
-		router.attach(FastToxStep1.resource,fastoxRouter);
-		fastoxRouter.attachDefault(FastToxStep1.class);
-		fastoxRouter.attach("/step2", FastToxStep2.class);
+		//router.attach("/launch", LauncherResource.class); removed, this is done via superservice
 
-		Router ttcRouter = new MyRouter(getContext());
-		router.attach("/ttc",ttcRouter);
-		ttcRouter.attachDefault(KroesStep1.class);
-		ttcRouter.attach("/step2", KroesStep2.class);
-		ttcRouter.attach("/input", KroesInput.class);
-		
-		*/
-		router.attach(OntologyResource.resource, OntologyResource.class);
-		router.attach(OntologyResource.resourceID, OntologyResource.class);
-		router.attach(OntologyResource.resourceTree, OntologyResource.class);
+		//router.attach(OntologyResource.resource, OntologyResource.class);
+		//router.attach(OntologyResource.resourceID, OntologyResource.class);
+		//router.attach(OntologyResource.resourceTree, OntologyResource.class);
 		
 		Router fastDatasetRouter = new MyRouter(getContext());
 		
@@ -368,19 +356,19 @@ public class AmbitApplication extends TaskApplication<String> {
 		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,DatasetsResource.datasets),DatasetsByStructureResource.class);
 
 		
-		compoundRouter.attach(PropertyValueResource.featureKey,PropertyValueResource.class);
+		//compoundRouter.attach(PropertyValueResource.featureKey,PropertyValueResource.class);
 
-		Router featureByAlias = new MyRouter(getContext());
-		featureByAlias.attachDefault(PropertyValueResource.class);
+		//Router featureByAlias = new MyRouter(getContext());
+		//featureByAlias.attachDefault(PropertyValueResource.class);
 		
-		compoundRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
-		conformerRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
+		//compoundRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
+		//conformerRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
 		
 		//router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
 		//router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
 		
-		router.attach(PropertyValueResource.FeatureNameCompound,PropertyValueResource.class);
-		router.attach(PropertyValueResource.FeatureNameConformer,PropertyValueResource.class);
+		//router.attach(PropertyValueResource.FeatureNameCompound,PropertyValueResource.class);
+		//router.attach(PropertyValueResource.FeatureNameConformer,PropertyValueResource.class);
 
 		Router templateRouter = new MyRouter(getContext());
 		templateRouter.attachDefault(PropertyTemplateResource.class);
@@ -408,12 +396,13 @@ public class AmbitApplication extends TaskApplication<String> {
 		compoundRouter.attach(DataEntryResource.resourceTag,tupleRouter);
 		conformerRouter.attach(DataEntryResource.resourceTag,tupleRouter);
 		
-		
+		/*
 		Router referenceRouter = new MyRouter(getContext());
 		router.attach(ReferenceResource.reference,referenceRouter);
 		referenceRouter.attachDefault(ReferenceResource.class);
 		referenceRouter.attach(String.format("/{%s}",ReferenceResource.idreference),ReferenceResource.class);
-
+		*/
+		
 		Router feature_def = new MyRouter(getContext());
 		router.attach(PropertyResource.featuredef,feature_def);
 		feature_def.attachDefault(PropertyResource.class);
@@ -441,7 +430,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		
 		router.attach("/name2structure",Name2StructureResource.class);	
 		
-		router.attach(String.format("/%s",Build3DResource.resource),Build3DResource.class);	
+		//router.attach(String.format("/%s",Build3DResource.resource),Build3DResource.class);	
 		
 		/**
 		 * Queries
