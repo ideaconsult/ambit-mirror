@@ -37,7 +37,6 @@ import ambit2.rest.admin.fingerprints.FingerprintResource;
 import ambit2.rest.admin.fingerprints.StructuresByFingerprintResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
-import ambit2.rest.algorithm.quantumchemical.Build3DResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.bookmark.BookmarkTopicsResource;
@@ -46,7 +45,6 @@ import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
-import ambit2.rest.dataset.FastDatasetStructuresResource;
 import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
@@ -60,7 +58,6 @@ import ambit2.rest.property.PropertyModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.FeatureResource;
 import ambit2.rest.propertyvalue.PropertyTemplateResource;
-import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.pubchem.ChEBIResource;
 import ambit2.rest.pubchem.PubchemResource;
@@ -69,7 +66,6 @@ import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
-import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.report.ReportDatasetResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
@@ -83,13 +79,11 @@ import ambit2.rest.structure.diagram.CSLSDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 import ambit2.rest.structure.quality.ConsensusLabelResource;
 import ambit2.rest.structure.quality.QualityLabelResource;
-import ambit2.rest.task.LauncherResource;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
-import ambit2.rest.template.OntologyResource;
 import ambit2.rest.users.SwitchUserResource;
 
 /**
@@ -235,6 +229,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		//router.attach(OntologyResource.resourceID, OntologyResource.class);
 		//router.attach(OntologyResource.resourceTree, OntologyResource.class);
 		
+		/*
 		Router fastDatasetRouter = new MyRouter(getContext());
 		
 		fastDatasetRouter.attachDefault(FastDatasetStructuresResource.class);
@@ -245,7 +240,8 @@ public class AmbitApplication extends TaskApplication<String> {
 
 		fastDatasetRouter.attach(PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.class);
 		fastDatasetRouter.attach(String.format("%s/{%s}",PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.idfeaturedef),PropertiesByDatasetResource.class);
-
+*/
+		
 		Router allDatasetsRouter = new MyRouter(getContext());
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
 		router.attach(DatasetsResource.datasets, allDatasetsRouter);		
