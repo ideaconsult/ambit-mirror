@@ -55,6 +55,7 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		iterator.close();
 	}	
 	
+
 	@Test
 	public void testUpdateExistingEntry() throws Exception {
 		//name and license uri can be updated only (for now)
@@ -88,6 +89,69 @@ public class MetaDatasetResourceTest extends ResourceTest {
 		Assert.assertEquals("http://localhost:8181/dataset/1/metadata", response.getLocationRef().toString());
 	}
 	
+	@Test
+	public void testUpdateExistingEntryN3() throws Exception {
+		//name and license uri can be updated only (for now)
+		String name = "New dataset name";
+		String title = "AAAA";
+		String url = "BBBB";
+		SourceDataset p = new SourceDataset(name,new LiteratureEntry(title,url));
+		p.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
+		
+		OntModel model = OT.createModel();
+		MetadataRDFReporter.addToModel(model,p,new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null));
+		StringWriter writer = new StringWriter();
+		model.write(writer,"N3");
+		System.out.println(writer.toString());
+		
+		Response response =  testPut(
+					getTestURI(),
+					MediaType.TEXT_URI_LIST,
+					new StringRepresentation(writer.toString(),MediaType.TEXT_RDF_N3)
+					);
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT * FROM src_dataset join catalog_references using(idreference) where name='%s' and licenseURI='%s' ",
+						name,
+						ISourceDataset.license.CC0_1_0.getURI()));
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		Assert.assertEquals("http://localhost:8181/dataset/1/metadata", response.getLocationRef().toString());
+	}	
+	
+	@Test
+	public void testUpdateExistingEntryN3RightsHolder() throws Exception {
+
+		SourceDataset p = new SourceDataset(null);
+		p.setLicenseURI(null);
+		p.setrightsHolder("http://me.myself");
+		
+		
+		OntModel model = OT.createModel();
+		MetadataRDFReporter.addToModel(model,p,new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null));
+		StringWriter writer = new StringWriter();
+		model.write(writer,"N3");
+		System.out.println(writer.toString());
+		
+		Response response =  testPut(
+					getTestURI(),
+					MediaType.TEXT_URI_LIST,
+					new StringRepresentation(writer.toString(),MediaType.TEXT_RDF_N3)
+					);
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT * FROM src_dataset join catalog_references using(idreference) where id_srcdataset=1 and rightsHolder='%s' ",
+						"http://me.myself"));
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		Assert.assertEquals("http://localhost:8181/dataset/1/metadata", response.getLocationRef().toString());
+	}		
 	@Test
 	public void testUpdateExistingEntryWWW() throws Exception {
 		//name and license uri can be updated only (for now)

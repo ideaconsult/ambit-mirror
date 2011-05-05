@@ -46,7 +46,7 @@ public class AmbitStatusService extends StatusService {
 						status.getDescription()
 						));
 				if (status.getThrowable()!= null) {
-					w.write("<p>");				
+					w.write("<blockquote>");				
 					status.getThrowable().printStackTrace(new PrintWriter(w) {
 						@Override
 						public void print(String s) {
@@ -54,6 +54,7 @@ public class AmbitStatusService extends StatusService {
 							
 						}
 					});
+					w.write("</blockquote>");
 					AmbitResource.writeHTMLFooter(w, status.getName(), request);
 					
 				 

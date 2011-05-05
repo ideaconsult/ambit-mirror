@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.security.Principal;
-import java.util.Iterator;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -48,27 +46,27 @@ public class AmbitResource extends WadlServerResource {
 	String formatHeader = "<tr bgcolor=\"#EEEEEE\" align=\"left\"><th>%s</th><th %s>API <a href=\"%s\" target=\"_blank\">%s</a></th><th>%s</th><th>%s</th></tr>";
 	protected String[][] uri = {
 			
-			{"http://opentox.org/dev/apis/api-1.1/structure","Chemical compounds",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.2/structure","Chemical compounds",formatHeader,null,"Implemented"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Get the representation of chemical compound",format,"GET","Yes"},
-			{String.format("%s",CompoundResource.compound),"create a new chemical compound",format,"POST","No"},
+			{String.format("%s",CompoundResource.compound),"create a new chemical compound",format,"POST","Yes"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Update the representation of chemical compound",format,"PUT","No"},
 			{String.format("%s/%d",CompoundResource.compound,100),"Remove chemical compound",format,"DELETE","No"},
 
-			{"http://opentox.org/dev/apis/api-1.1/structure","Chemical compounds query",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.2/structure","Chemical compounds query",formatHeader,null,"Implemented"},
 			
-			{"/compound?search=55-55-0","Search for a compound by any property value",format,"GET","Yes"},
-			{"/compound?search=phenolphthalein","Search for a compound by any property value",format,"GET","Yes"},
-			{String.format("/compound?search=%s&sameas=%s","formaldehyde",Reference.encode("http://www.opentox.org/api/1.1#ChemicalName"))
-				,"Search for a compound by name",format,"GET","Yes"},
-			{String.format("/compound?search=%s&sameas=%s","50-00-0",Reference.encode("http://www.opentox.org/api/1.1#CASRN"))
-					,"Search for a compound by CAS RN",format,"GET","Yes"},		
+			{"/query/compound/55-55-0/all","Search for a compound by any property value",format,"GET","Yes"},
+			{"/query/compound/phenolphthalein/all","Search for a compound by any property value",format,"GET","Yes"},
+			{String.format("/query/compound/search/all?search=%s","formaldehyde"),"Search for a compound by name",format,"GET","Yes"},
+			{String.format("/query/compound/search/all?search=%s",Reference.encode("C=O")),"Search for a compound by SMILES",format,"GET","Yes"},
+			{String.format("/query/compound/search/all?search=%s",Reference.encode("InChI=1S/CH2O/c1-2/h1H2")),"Search for a compound by InChI",format,"GET","Yes"},
+
 			{String.format("/compound?property=%s&search=%s",Reference.encode("species common name"),Reference.encode("common carp")),
 					"Search for a compound with data for species 'common carp'",format,"GET","Yes"},
 			{String.format("/compound?property=%s&search=%s",Reference.encode("LogP"),Reference.encode("7 .. 8")),
 						"Search for a compound with property value of LogP between 7 and 8",format,"GET","Yes"},
 
 			
-			{"http://opentox.org/dev/apis/api-1.1/structure","Conformers",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.2/structure","Conformers",formatHeader,null,"Implemented"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"Get the representation of chemical compound",format,"GET","Yes"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100),"update the representation of a structure",format,"PUT","No"},
 			{String.format("%s/%d%s/%d",CompoundResource.compound,100,ConformerResource.conformerKey,100)," Remove structure",format,"DELETE","Yes"},
@@ -76,6 +74,7 @@ public class AmbitResource extends WadlServerResource {
 			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"create a new structure",format,"POST","No"},
 			{String.format("%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey),"Remove conformers",format,"DELETE","Yes"},
 
+			/*
 			{"[ambit]","Compound properties",formatHeader,null,"Implemented"},
 			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"update the value for a specific feature",format,"PUT","Yes"},
 			{String.format("%s/compound/{cid}/conformer/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"update the value for a specific feature",format,"PUT","Yes"},
@@ -84,8 +83,9 @@ public class AmbitResource extends WadlServerResource {
 			{String.format("%s/compound/{cid}%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a new feature per compound",format,"POST","No"},
 			{String.format("%s/compound/{cid}/conformer/{cid}%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"save the value for a given feature per conformer",format,"POST","No"},
 			{String.format("%s/compound/{cid}%s/{f_def_id}",PropertyValueResource.featureKey,PropertyResource.featuredef),"Delete feature value",format,"DELETE","No"},
+			*/
 			
-			{"http://opentox.org/dev/apis/api-1.1/dataset","Datasets",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.2/dataset","Datasets",formatHeader,null,"Implemented"},
 			{DatasetsResource.datasets,"get list of datasets available",format,"GET","Yes"},
 			{DatasetsResource.datasets+"?search=Skin","Search for datasets by name",format,"GET","Yes"},			
 			{DatasetsResource.datasets,"create a new dataset application/x-www-form-urlencoded with compound_uris[] or dataset_uri; multipart form with 'file' parameter with supported mime type",format,"POST","Yes"},
@@ -95,7 +95,7 @@ public class AmbitResource extends WadlServerResource {
 			
 			{"/filter?dataset_uri={dataset uri}&filter={features uri}&condition={yes/no}","Returns only compounds, which have/have not any values for the specified features",format,"GET","Yes"},
 			
-			{"http://opentox.org/dev/apis/api-1.1/dataset","A Dataset",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.2/dataset","A Dataset",formatHeader,null,"Implemented"},
 			{DatasetResource.dataset+"/8","get dataset",format,"GET","Yes"},
 			{DatasetResource.dataset+"/R100","get dataset",format,"GET","Yes"},
 			{DatasetResource.dataset+"/8/metadata","get dataset metadata",format,"GET","Yes"},
@@ -120,7 +120,7 @@ public class AmbitResource extends WadlServerResource {
 			{"http://opentox.org/development/wiki/dataset","Features in a dataset",formatHeader,null,"Implemented"},
 			{String.format("%s/8%s",DatasetResource.dataset,PropertyResource.featuredef),"get features available in the dataset",format,"GET","Yes"},
 
-			{"http://opentox.org/dev/apis/api-1.1/Feature","Features",formatHeader,null},
+			{"http://opentox.org/dev/apis/api-1.2/Feature","Features",formatHeader,null},
 			{String.format("%s?%s=LogP",PropertyResource.featuredef,QueryResource.search_param),"Search for a feature by name",format,"GET","Yes"},
 			{PropertyResource.featuredef,"Retrieve all features",format,"GET","Yes"},
 			{PropertyResource.featuredef+"/12142","Get description of a specific feature",format,"GET","Yes"},
@@ -129,11 +129,11 @@ public class AmbitResource extends WadlServerResource {
 				"Get description of feature which is same as a resource, defined in some ontology'",format,"GET","Yes"},
 			{PropertyResource.featuredef,"Create a new feature<ul><li>RDF representation of ot:Feature in the content, RDF mime type<li>feature_uris[]=feature-URL in application/x-www-form-urlencoded</ul>",format,"POST","Yes"},
 	
-			{"http://opentox.org/dev/apis/api-1.1/structure","Features per compound/conformer",formatHeader,null,"Implemented"},
+			{"http://opentox.org/dev/apis/api-1.2/structure","Features per compound/conformer",formatHeader,null,"Implemented"},
 			{String.format("%s/%d?feature_uris[]=%s",CompoundResource.compound,100,"featureuri"),"features and values ",format,"GET","Yes"},
 			
 
-			{"http://www.opentox.org/dev/apis/Algorithm","Algorithms",formatHeader,null},
+			{"http://opentox.org/dev/apis/api-1.2/Algorithm","Algorithms",formatHeader,null},
 			{String.format("%s",AllAlgorithmsResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
 			{String.format("%s/pka",AllAlgorithmsResource.algorithm),"get the representation of an pKa algorthm",format,"GET","Yes"},
 			{String.format("%s/toxtreecramer",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Cramer rules\" algorthm",format,"GET","Yes"},
@@ -148,25 +148,25 @@ public class AmbitResource extends WadlServerResource {
 			
 			{String.format("%s/leverage",AllAlgorithmsResource.algorithm),"Applicability domain by leverage. Requires dataset_uri as parameter. Creates a model, which can be used for AD estimation of other datasets",format,"POST","Yes"},
 						
-			{"http://opentox.org/dev/apis/Model","Models",formatHeader,null},
+			{"http://opentox.org/dev/apis/api-1.2/Model","Models",formatHeader,null},
 			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"get the representation of a model",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"delete a model",format,"DELETE","No"},
 			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Yes"},
 
-			{"http://opentox.org/dev/apis/Model","Model variables",formatHeader,null},
+			{"http://opentox.org/dev/apis/api-1.2/Model","Model variables",formatHeader,null},
 			{String.format("%s/1/independent",ModelResource.resource),"Independent variables",format,"GET","Yes"},
 			{String.format("%s/1/dependent",ModelResource.resource),"Dependent variables",format,"GET","Yes"},
 			{String.format("%s/1/predicted",ModelResource.resource),"Predicted variables",format,"GET","Yes"},
 			
-			{"http://opentox.org/dev/apis/api-1.1/AsyncTask","Asynchronous jobs",formatHeader,null},
+			{"http://opentox.org/dev/apis/api-1.2/AsyncTask","Asynchronous jobs",formatHeader,null},
 			{"/task","List of asynchronous jobs and their status",format,"GET","Yes"},
 			{"/task/{task id}","Information about a specific task",format,"GET","Yes"},		
 			
 			{"[ambit]","Features per compound/conformer",formatHeader,null,"Implemented"},
-			{String.format("%s/%d%s",CompoundResource.compound,100,PropertyResource.featuredef),"All feature definitions, available for a compound",format,"GET","Yes"},
-			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
-			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100304,PropertyResource.featuredef),"All feature definitions, available for a conformer",format,"GET","Yes"},
+			{String.format("%s/%d%s",CompoundResource.compound,100,PropertyResource.featuredef),"All features, available for a compound",format,"GET","Yes"},
+			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100,PropertyResource.featuredef),"All features, available for a conformer",format,"GET","Yes"},
+			{String.format("%s/%d%s/%d%s",CompoundResource.compound,100,ConformerResource.conformerKey,100304,PropertyResource.featuredef),"All features, available for a conformer",format,"GET","Yes"},
 			
 			{"[ambit]","Actions on datasets (split, merge, subset)",formatHeader,null,"Implemented"},
 			{String.format("%s/{dataset1}?%s=%s",DatasetResource.dataset,DatasetResource.dataset_intersection_uri,
@@ -181,13 +181,7 @@ public class AmbitResource extends WadlServerResource {
 			{String.format("%s/{id}%s/{fdid}",DatasetResource.dataset,PropertyResource.featuredef),"update feature ",format,"PUT","No"},
 			{String.format("%s/{id}%s/{fdid}",DatasetResource.dataset,PropertyResource.featuredef),"remove feature ",format,"DELETE","No"},
 
-			{"[ambit]","References [obsolete, handled as Feature attributes]",formatHeader,null},
-			{ReferenceResource.reference,"read all references",format,"GET","Yes"},
-			{ReferenceResource.reference+"/11845","read information on a specific reference",format,"GET","Yes"},
-			{ReferenceResource.reference,"create a new reference",format,"POST","Yes"},
-			{ReferenceResource.reference+"/11845","update information on a specific reference",format,"PUT","No"},
-			{ReferenceResource.reference+"?search={query}","Search for a reference by name",format,"GET","Under development"},
-					
+				/*
 			{"[ambit]","Feature ontology (This is available at ontology service)",formatHeader,null},
 			{String.format("%s/All/Endpoints",OntologyResource.resource),"Hierarchical view of endpoints",format,"GET","Yes"},
 			{String.format("%s/All/Descriptors",OntologyResource.resource),"Hierarchical view of descriptors",format,"GET","Yes"},
@@ -195,16 +189,17 @@ public class AmbitResource extends WadlServerResource {
 			{String.format("%s/All/Identifiers",OntologyResource.resource),"Hierarchical view of identifiers",format,"GET","Yes"},
 			{String.format("%s/{subject}/{object}",OntologyResource.resource),"Delete entry",format,"DELETE","Yes"},
 			
+			
 			{"[ambit]","Feature values",formatHeader,null},
 			{String.format("%s/compound/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a specific feature",format,"GET","Yes"},
 			{String.format("%s/compound/1%s",PropertyValueResource.featureKey,PropertyResource.featuredef),"get values for all features ",format,"GET","No"},
 			{String.format("%s/dataset/1%s/1",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for all compounds in a dataset for a given feature definition in a dataset",format,"GET","No"}, 
 			{String.format("%s%s/{fid}",PropertyValueResource.featureKey,PropertyResource.featuredef),"get the value for a all compounds for a given feature definition",format,"GET","No"},
-
+*/
 			{"Data entries","Data entries",formatHeader,null},
 			{"/compound/1/dataEntry","All available data entries per compound",format,"GET","Yes"},
 			{"/compound/1/dataEntry/264168","Specific data entry",format,"GET","Yes"},
-			{"TODO","create/update/delete",format,"POST/PUT/DELETE","Under development"},
+			{"","create/update/delete",format,"POST/PUT/DELETE","Under development"},
 
 			
 			{QueryResource.query_resource,"List available search options",format,"GET","Under development"},
@@ -220,7 +215,7 @@ public class AmbitResource extends WadlServerResource {
 			{"[ambit - algorithms]","Structure diagram generation (DEMO)",formatHeader,null},
 			{"/depict/cdk?search=c1ccccc1O&smarts=aO","Structure diagram (based on CDK) (with SMARTS highlighting)",format,"GET"},
 			{"/depict/daylight?search=c1ccccc1","Structure diagram (based on Daylight depict",format,"GET"},
-			{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
+			//{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
 
 			{"[ambit - stats]","Statistics",formatHeader,null},
 			{"/stats/dataset","Number of datasets",format,"GET"},
@@ -303,10 +298,11 @@ public class AmbitResource extends WadlServerResource {
 				variant.setMediaType(MediaType.TEXT_HTML);
 				StringWriter writer = new StringWriter();
 				writeHTMLHeader(writer, "AMBIT", getRequest(),null);
+				
 				writer.write("<table border='0'>");
 				
 				writer.write(String.format("<tr align='center'><th colspan='4'>%s%s</th></tr>",
-						"Services listed below are an initial implementation of <a href=\"http://opentox.org/dev/apis/api-1.1\" target=\"blank\">OpenTox REST API 1.1</a>",
+						"Services listed below are an implementation of <a href=\"http://opentox.org/dev/apis/api-1.2\" target=\"blank\">OpenTox REST API 1.2</a>",
 						String.format("<h6>All services support MIME types '%s','%s','%s','%s','%s','%s' on GET<br>Services listing chemical structures support Chemical MIME types ('%s','%s','%s','%s') as well</h6>",
 						MediaType.APPLICATION_RDF_XML,
 						MediaType.APPLICATION_RDF_TURTLE,
@@ -347,6 +343,7 @@ public class AmbitResource extends WadlServerResource {
 					*/
 				}
 				writer.write("</table>");
+				writer.write("<h6 align='center'>These pages offer minimalistic user interface to AMBIT implementation of OpenTox REST services. Full featured user interface is available via external applicaiton, like <a href='http://toxpredict.org' target='_blank'>ToxPredict</a>,&nbsp;<a href='http://http://toxcreate.org' target='_blank'>ToxCreate</a> and QPRF editor. More applications are under development.</h6>");
 				
 				writer.write(String.format("<a href='%s/ontology' title='BlueObelisk, endpoints, algorithm types ontology'>Ontology</a>&nbsp;",getRequest().getRootRef()));
 				writer.write(String.format("<a href='%s/ontology/test' title='Reads RDF output from an URI and displays clickable statements. Enter URI in the search box.'>RDF playground</a>&nbsp;",getRequest().getRootRef()));
@@ -672,7 +669,7 @@ window.setInterval(function() {
 		output.write(String.format("<a href='http://www.cefic.be'><img src=%s/images/logocefic.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		output.write(String.format("<a href='http://www.cefic-lri.org'><img src=%s/images/logolri.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		output.write(String.format("<a href='http://www.opentox.org'><img src=%s/images/logo.png border='0' width='115' height='60'></a>",baseReference));
-		output.write("<br>Developed by Ideaconsult Ltd. (2005-2010)"); 
+		output.write("<br>Developed by Ideaconsult Ltd. (2005-2011)"); 
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
 		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>&nbsp; ");

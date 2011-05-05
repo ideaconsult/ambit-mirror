@@ -34,15 +34,8 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),getDocumentation()
 					);//,"<meta http-equiv=\"refresh\" content=\"10\">");
-
-			output.write(AmbitResource.jsTableSorter("users","pager"));
 			
 			
-			output.write("<table width='80%' class='tablesorter' id='users' border='0' cellpadding='0' cellspacing='1'>");
-			output.write("<tbody>");
-			
-			output.write(String.format("<tr><td>OpenSSO service</td><td>%s</td></tr>",
-						OpenSSOServicesConfig.getInstance().getOpenSSOService()));
 			
 		} catch (Exception x) {
 			
@@ -50,30 +43,40 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 	}
 	public void processItem(OpenSSOUser item, Writer output) {
 		try {
+			output.write("<table width='80%' id='users' border='0' cellpadding='0' cellspacing='1'>");
+			output.write("<tbody>");
+			
+			output.write(String.format("<tr><th align='right'>OpenSSO service:&nbsp;</th><td>%s</td></tr>",
+						OpenSSOServicesConfig.getInstance().getOpenSSOService()));
 
 			if (item.getToken()==null)  {
 				output.write("<form method='post' action='?method=post'>");
 				
-				output.write(String.format("<tr><td>%s</td><td><input type='text' size='40' name='%s' value=''></td></tr>",
-						"User name","user"));
-				output.write(String.format("<tr><td>%s</td><td><input type='password' size='40' name='%s' value=''></td></tr>",
-						"Password","password"));
-				output.write(String.format("<tr><td title=''></td><td><input type=CHECKBOX name='subjectid_secure' %s>Use secure cookie for OpenSSO token</option></td></tr>",
+				output.write(String.format("<tr><th align='right'>%s</th><td><input type='text' size='40' name='%s' value=''></td></tr>",
+						"User name:&nbsp;","user"));
+				output.write(String.format("<tr><th align='right'>%s</th><td><input type='password' size='40' name='%s' value=''></td></tr>",
+						"Password:&nbsp;","password"));
+				output.write(String.format("<tr><td title=''></td><td><input type=CHECKBOX name='subjectid_secure' %s>Use secure cookie for the OpenSSO token</option></td></tr>",
 						item.isUseSecureCookie()?"SELECTED CHECKED":""));
 				output.write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log in\"></td></tr>");
 				output.write("</form>");
+				output.write("</tbody></table>");
 			} else {
 				output.write("<form method='post' action='?method=delete'>");
-				output.write(String.format("<tr><td>%s</td><td>%s</td></tr>","User name",item.getUsername()));
-				output.write(String.format("<tr><td>%s</td><td>%s</td></tr>","Token",item.getToken().toString()));
+				output.write(String.format("<tr><th align='right'>%s</th><td>%s</td></tr>","User name:&nbsp;",item.getUsername()));
+				output.write(String.format("<tr><th align='right'>%s</th><td>%s</td></tr>","Token:&nbsp;",item.getToken().toString()));
 				
 
 				String warning = String.format("<h5><font color='red'>%s</font></h5>",item.isUseSecureCookie()?securecookie_warning:cookie_warning);
-				output.write(String.format("<tr>Warning<td></td><td>%s</td></tr>",warning));
+				output.write(String.format("<tr><td></td><td>%s</td></tr>",warning));
 
 				
 				output.write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log out\"></td></tr>");
 				output.write("</form>");
+				
+				output.write("</tbody></table>");
+				output.write(String.format("<hr><a href='%s/bookmark/%s'>My workspace</a>",getRequest().getRootRef(),item.getUsername(),item.getUsername()));			
+				
 			}
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -83,7 +86,7 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 	public void footer(Writer output, Iterator<OpenSSOUser> query) {
 		try {
 
-			output.write("</tbody></table>");
+			
 			AmbitResource.writeHTMLFooter(output, "OpenSSO User", getRequest());
 			output.flush();
 		} catch (Exception x) {

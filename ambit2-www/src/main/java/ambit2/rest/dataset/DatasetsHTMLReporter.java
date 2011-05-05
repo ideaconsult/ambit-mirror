@@ -358,8 +358,9 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			if (dataset.getLicenseURI()!=null)
 				output.write(String.format("<tr><th>%s</th><td><a href='%s' target='_blank'>%s</a></td></tr>", 
 							"License",
-							licenseLabel==null?dataset.getLicenseURI():licenseLabel,
-							dataset.getLicenseURI()==null?"NA":dataset.getLicenseURI()));
+							dataset.getLicenseURI()==null?"NA":dataset.getLicenseURI(),
+							licenseLabel==null?dataset.getLicenseURI():licenseLabel
+							));
 			else
 				output.write("<tr><th>License</th><td>NA</td></tr>"); 
 			
