@@ -461,6 +461,7 @@ public class PropertyResourceTest extends ResourceTest {
 		//now we can only update by PUT, not POST
 		Property p = new Property("Property 1",new LiteratureEntry("Dummy","NA"));
 		p.setLabel("Test");
+		p.setNominal(true);
 		OntModel model = OT.createModel();
 		PropertyRDFReporter.addToModel(model,p,
 				new PropertyURIReporter(),
@@ -478,8 +479,9 @@ public class PropertyResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-				String.format("SELECT * FROM properties join catalog_references using(idreference) where name='Property 1' and comments='%s' and title='Dummy' and url='NA'","http://www.opentox.org/api/1.1#Test"));
+				String.format("SELECT isLocal FROM properties join catalog_references using(idreference) where name='Property 1' and comments='%s' and title='Dummy' and url='NA'","http://www.opentox.org/api/1.1#Test"));
 		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(true,table.getValue(0,"isLocal"));
 		c.close();
 		Assert.assertEquals("http://localhost:8181/feature/1", response.getLocationRef().toString());
 	}	

@@ -39,8 +39,73 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class UpdateProperty extends AbstractObjectUpdate<Property> {
 
-	public static final String[] update_sql = {
-		"update properties,catalog_references set name=?, comments=?, units=? where idproperty=? and properties.idreference=catalog_references.idreference"};
+	enum _props {
+		name {
+			@Override
+			public String getSQL() {
+				return "name=?";
+			}
+			@Override
+			public boolean isEnabled(Property p) {
+				return p.getName()!=null;
+			}
+			@Override
+			public QueryParam getParam(Property p) {
+				
+				return new QueryParam<String>(String.class, p.getName());
+			}
+		},
+		comments {
+			@Override
+			public String getSQL() {
+				return "comments=?";
+			}
+			@Override
+			public boolean isEnabled(Property p) {
+				return p.getLabel()!=null;
+			}
+			@Override
+			public QueryParam getParam(Property p) {
+				
+				return new QueryParam<String>(String.class, p.getLabel());
+			}
+		},
+		units {
+			@Override
+			public String getSQL() {
+				return "units=?";
+			}
+			@Override
+			public boolean isEnabled(Property p) {
+				return p.getUnits()!=null;
+			}
+			@Override
+			public QueryParam getParam(Property p) {
+				return new QueryParam<String>(String.class, p.getUnits());
+
+			}
+		},
+		isLocal {
+			@Override
+			public String getSQL() {
+				return "isLocal =?";
+			}
+			@Override
+			public boolean isEnabled(Property p) {
+				return true;
+			}
+			@Override
+			public QueryParam getParam(Property p) {
+				return new QueryParam<Boolean>(Boolean.class, p.isNominal());
+			}
+		};
+		public abstract String getSQL();
+		public abstract boolean isEnabled(Property p);
+		public abstract QueryParam getParam(Property p);
+
+	}
+	public static final String update_sql = 
+		"update properties,catalog_references set %s where idproperty=? and properties.idreference=catalog_references.idreference";
 
 	public UpdateProperty(Property property) {
 		super(property);
@@ -50,17 +115,31 @@ public class UpdateProperty extends AbstractObjectUpdate<Property> {
 	}			
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<String>(String.class, getObject().getName()));
-		params.add(new QueryParam<String>(String.class, getObject().getLabel()));
-		params.add(new QueryParam<String>(String.class, getObject().getUnits()));
-		params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
+		for (_props p : _props.values()) 
+			if (p.isEnabled(getObject())) {
+				params.add(p.getParam(getObject()));
+			}
+
 			
+		if (params.size()==0) throw new AmbitException("No parameters!");
+		else
+			params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
+		
 		return params;
 		
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return update_sql;
+		StringBuilder b = new StringBuilder();
+		String d = "";
+		for (_props p : _props.values()) {
+			if (p.isEnabled(getObject())) {
+				b.append(d);
+				b.append(p.getSQL());
+				d = ",";
+			}
+		}
+		return new String[] {String.format(update_sql,b.toString())};
 	}
 	public void setID(int index, int id) {
 			
