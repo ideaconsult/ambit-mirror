@@ -63,7 +63,12 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
             switch (format) {
             case SDF: {
             	try {
-            		return MoleculeTools.readMolfile(target.getContent());
+            		IAtomContainer ac =  MoleculeTools.readMolfile(target.getContent());
+            		if ((ac!=null) && (ac.getProperties()!=null)) {
+	        	   		ac.removeProperty("cdk:Title");
+	        	   		ac.removeProperty("cdk:Remark");            	
+            		}
+            		return ac;
                 } catch (Exception x) {
                     throw new AmbitException(x);
                 }
@@ -71,7 +76,12 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
             }
            case CML:     
         	   	try {
-        	   		return MoleculeTools.readCMLMolecule(target.getContent());
+        	   		IAtomContainer ac =  MoleculeTools.readCMLMolecule(target.getContent());
+            		if ((ac!=null) && (ac.getProperties()!=null)) {
+	        	   		ac.removeProperty("cdk:Title");
+	        	   		ac.removeProperty("cdk:Remark");            	
+            		}
+        	   		return ac;
                 } catch (Exception x) {
                     throw new AmbitException(x);
                 }
