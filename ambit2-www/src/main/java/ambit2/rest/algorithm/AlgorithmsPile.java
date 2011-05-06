@@ -173,7 +173,7 @@ public class AlgorithmsPile {
 			
 			{"fingerprints","Generate fingerprints","fp1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			{"atomenvironments","Generate atomenvironments","atomenvironments",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
-			//{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
+			{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			{"struckeys","Generate structure keys","sk1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			
