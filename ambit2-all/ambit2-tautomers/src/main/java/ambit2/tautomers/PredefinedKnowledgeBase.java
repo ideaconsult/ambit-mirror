@@ -26,9 +26,18 @@ public class PredefinedKnowledgeBase
 	};
 	
 	
-	public static final String filters[] =
-	{
-		"$$TYPE=EXCLUDE    $$FRAGMENT= *=[C;r4,r5,r6,r7,r8]=*  ",
-		"$$TYPE=WARN       $$FRAGMENT= *=[C;!R]=*              "
+	//Warning Filters	
+	public static final String warningFragments[] =
+	{	
+		"[C;!R](=*)=*",
 	};
+	
+	
+	//Exclude Filters	
+	public static final String excludeFragments[] =
+	{
+		"[C;r4,r5,r6,r7,r8](=*)=* ",
+		
+	};
+	
 }
