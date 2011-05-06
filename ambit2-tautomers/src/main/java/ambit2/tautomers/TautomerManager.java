@@ -15,7 +15,7 @@ public class TautomerManager
 	Vector<Rule> generatedRules = new Vector<Rule>(); 
 	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();	
 	Vector<String> errors = new Vector<String>(); 
-	FilterTautomers tautomerFilter = new FilterTautomers();
+	FilterTautomers tautomerFilter = new FilterTautomers(this);
 		
 	
 	public TautomerManager()
