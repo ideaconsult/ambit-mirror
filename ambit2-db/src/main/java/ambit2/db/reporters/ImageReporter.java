@@ -135,7 +135,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 			//
 			cacheUpdater.process(cache);
 			
-		} catch (Exception x) {
+		} catch (Throwable x) {
 			x.printStackTrace();
 		}
 
