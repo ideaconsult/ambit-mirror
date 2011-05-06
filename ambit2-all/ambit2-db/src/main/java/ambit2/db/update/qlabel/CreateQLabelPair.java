@@ -40,13 +40,18 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"THEN cast(s1.idstructure as char) ELSE concat_WS(',',cast(s1.idstructure as char),cast(s2.idstructure as char)) END\n"+
 		"from fp1024_struc s1\n"+
 		"join fp1024_struc s2\n"+
+		"join struc_dataset d1 on s1.idstructure=d1.idstructure\n"+
+		"join struc_dataset d2 on s2.idstructure=d2.idstructure\n"+
 		"join structure sa on s1.idstructure=sa.idstructure\n"+
 		"join structure sb on s2.idstructure=sb.idstructure\n"+
+		"join src_dataset ds1 on d1.id_srcdataset=ds1.id_srcdataset\n"+
+	    "join src_dataset ds2 on d2.id_srcdataset=ds2.id_srcdataset\n"+		
 		"where s1.idchemical = s2.idchemical and s1.idstructure != s2.idstructure and s1.status='valid' && s2.status='valid'\n"+
 		"and sa.type_structure != 'MARKUSH'\n"+
 		"and sa.type_structure != 'NA'\n"+
 		"and sb.type_structure != 'MARKUSH'\n"+
 		"and sb.type_structure != 'NA'\n"+		
+		"and ds1.user_name != 'guest' and ds2.user_name != 'guest'\n"+
 		"on duplicate key update rel=rel+values(rel),\n"+
 		"user_name=values(user_name),\n"+
 		"updated=CURRENT_TIMESTAMP(),\n"+
