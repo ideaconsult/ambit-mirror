@@ -97,9 +97,16 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 			} catch (SQLException x) {
 				throw x;
 			} finally {
-				if (target.returnKeys(i))
-					try { statement.close();} catch (Exception x) {} finally {statement = null;}
-				else
+				/**
+				 * Statements, returning generated keys were not cached, due to MySQL bug, causing memory leak :		
+				 * http://bugs.mysql.com/bug.php?id=44056
+				 * Connector/J claims bug to be fixed since 5.1.8 
+				 * Prepared statements caching back again.
+				 * 
+				*/
+				//if (target.returnKeys(i))
+				//	try { statement.close();} catch (Exception x) {} finally {statement = null;}
+				//else
 					addStatementToCache(sql[i],statement);						
 			}	
 		}
