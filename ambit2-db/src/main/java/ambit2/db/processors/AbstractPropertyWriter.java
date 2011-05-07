@@ -87,21 +87,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
         for (Property property: names) {
         	boolean found = false;
         	property.setId(-1);
-        	/*
-        	if (property.getId()>0) {  // quick hack
-        		readProperty.setValue(property.getId());
-	            ResultSet rs1 = queryexec.process(readProperty);
-	            while (rs1.next()) {
-	            	Property p = readProperty.getObject(rs1);
-	            	property.assign(p);
-	            	templateEntry(target, property);	  
-	                descriptorEntry(target, property,i,idtuple);
-	                found = true;
-	            }
-	            queryexec.closeResults(rs1);
-	            
-        	} else {
-        	*/
+
 	            selectField.setValue(property);
 	            ResultSet rs1 = queryexec.process(selectField);
 	            while (rs1.next()) {
@@ -137,8 +123,10 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     }
     protected  void write(Property property) throws SQLException {
     	try {
-	    	propertyWriter.setObject(property);
-	    	exec.process(propertyWriter);	  
+    		if (property.getId()<=0) {
+		    	propertyWriter.setObject(property);
+		    	exec.process(propertyWriter);
+    		}
 
     	} catch (Exception x) {
     		throw new SQLException(x.getMessage());
