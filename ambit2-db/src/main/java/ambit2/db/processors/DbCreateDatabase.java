@@ -183,9 +183,9 @@ skip-name-resolve
         	"insert into roles (role_name) values (\"ambit_guest\");",
         	"insert into roles (role_name) values (\"ambit_admin\");",
         	"insert into roles (role_name) values (\"ambit_quality\");",
-        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"guest\",MD5(\"%s\"),\"guest\",\"Default guest user\",now(),\"confirmed\",\"guest\",\"http://ambit.sourceforge.net\");",userPass),
-        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"admin\",MD5(\"%s\"(,\"admin\",\"Default admin user\",now(),\"confirmed\",\"admin\",\"http://ambit.sourceforge.net\");",adminPass),
-        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"quality\",MD5(\"%s\"),\"quality\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",adminPass),
+        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"guest\",MD5(\"%s\"),\"guest\",\"Default guest user\",now(),\"confirmed\",\"guest\",\"http://ambit.sourceforge.net\");",""),
+        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"admin\",MD5(\"%s\"),\"admin\",\"Default admin user\",now(),\"confirmed\",\"admin\",\"http://ambit.sourceforge.net\");",""),
+        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"quality\",MD5(\"%s\"),\"quality\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",""),
         	"insert into user_roles (user_name,role_name) values (\"guest\",\"ambit_guest\");",
         	"insert into user_roles (user_name,role_name) values (\"admin\",\"ambit_admin\");",
         	"insert into user_roles (user_name,role_name) values (\"quality\",\"ambit_quality\");",
@@ -200,15 +200,15 @@ skip-name-resolve
         	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'admin'@'%s';",database,"::1"),
         	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'guest'@'%s';",database,"::1"),
         	
-        	String.format("GRANT USAGE ON `%s`.* TO 'admin'@'%s' IDENTIFIED BY PASSWORD PASSWORD('%s');",database,"localhost",adminPass),
-        	String.format("GRANT USAGE ON `%s`.* TO 'admin'@'%s' IDENTIFIED BY PASSWORD PASSWORD('%s');",database,"127.0.0.1",adminPass),
+        	String.format("GRANT USAGE ON `%s`.* TO 'admin'@'%s' IDENTIFIED BY '%s';",database,"localhost",adminPass),
+        	String.format("GRANT USAGE ON `%s`.* TO 'admin'@'%s' IDENTIFIED BY '%s';",database,"127.0.0.1",adminPass),
         	
         	String.format("GRANT ALL PRIVILEGES ON `%s`.* TO 'admin'@'%s' WITH GRANT OPTION;",database,"localhost"),
         	String.format("GRANT ALL PRIVILEGES ON `%s`.* TO 'admin'@'%s' WITH GRANT OPTION;",database,"127.0.0.1"),
         	
-        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY PASSWORD PASSWORD('%s');",database,"localhost",userPass),
-        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY PASSWORD PASSWORD('%s');",database,"127.0.0.1",userPass),
-        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY PASSWORD PASSWORD('%s');",database,"::1",userPass),
+        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY '%s';",database,"localhost",userPass),
+        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY '%s';",database,"127.0.0.1",userPass),
+        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY '%s';",database,"::1",userPass),
         	
         	//"GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost';"
 
