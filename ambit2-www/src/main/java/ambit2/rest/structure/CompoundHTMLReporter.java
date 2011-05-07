@@ -6,7 +6,9 @@ import java.io.Writer;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -537,6 +539,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				Object value = record.getProperty(property);
 				//System.out.println(String.format("%s [%s] %s",property.getName(),property.getTitle(),value==null?null:value.toString()));
 					
+				if (value instanceof Number) {
+					value = NumberFormat.getInstance(Locale.ENGLISH).format(((Number)value).doubleValue());
+				}
 					boolean isLong = (value==null)?false:value.toString().length()>255;
 					b.append(String.format("<td %s width='%s'>",
 							//"class='results_col'",
