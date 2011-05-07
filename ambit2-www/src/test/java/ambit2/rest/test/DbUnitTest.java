@@ -99,7 +99,7 @@ public abstract class DbUnitTest {
 	public void setUp() throws Exception {
 		IDatabaseConnection c = getConnection(getHost(),"mysql",getPort(),getAdminUser(),getAdminPWD());
 		try {
-			DbCreateDatabase db = new DbCreateDatabase();
+			DbCreateDatabase db = new DbCreateDatabase(getPWD(),getAdminPWD());
 			db.setConnection(c.getConnection());
 			db.process(new StringBean(getDatabase()));
 		} finally {
