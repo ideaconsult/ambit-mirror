@@ -75,7 +75,7 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 			}
 			@Override
 			public String getDescription() {
-				return "Match by SSTox Chemical ID (DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files";
+				return "Match by DSSTox Chemical ID (DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files";
 			}			
 		},
 		DSSToxRID {
