@@ -41,9 +41,11 @@ import ambit2.db.update.AbstractUpdate;
 public class DatasetAddStructure extends AbstractUpdate<SourceDataset,IStructureRecord> {
 	protected CreateDataset createDataset = new CreateDataset();
 	
-	public static final String create_sql = 
+	public static final String create_sql_byname = 
 		"insert ignore into struc_dataset (idstructure,id_srcdataset) SELECT ?,id_srcdataset from src_dataset where name=?";
 
+	public static final String create_sql_byid = 
+		"insert ignore into struc_dataset (idstructure,id_srcdataset) values (?,?)";	
 
 	public DatasetAddStructure(SourceDataset dataset,IStructureRecord record) {
 		super();
@@ -63,13 +65,19 @@ public class DatasetAddStructure extends AbstractUpdate<SourceDataset,IStructure
 		if (getObject()==null || getObject().getIdstructure()<=0) throw new AmbitException("Structure not defined!");
 		if (getGroup()==null || getGroup().getName()==null) throw new AmbitException("Dataset not defined!");
 
-		
-		if (index < createDataset.getSQL().length) 
-			return createDataset.getParameters(index);
-		else  {
+		if (createDataset.getObject().getID()<=0) { //create the dataset , if necessary
+			if (index < createDataset.getSQL().length) 
+				return createDataset.getParameters(index);
+			else  {
+				List<QueryParam> params1 = new ArrayList<QueryParam>();
+				params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdstructure()));
+				params1.add(new QueryParam<String>(String.class, getGroup().getName()));
+				return params1;
+			}
+		} else { //skip createDataset query
 			List<QueryParam> params1 = new ArrayList<QueryParam>();
 			params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdstructure()));
-			params1.add(new QueryParam<String>(String.class, getGroup().getName()));
+			params1.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
 			return params1;
 		}
 		
@@ -79,12 +87,15 @@ public class DatasetAddStructure extends AbstractUpdate<SourceDataset,IStructure
 	}
 
 	public String[] getSQL() throws AmbitException {
-		String[] dataset = createDataset.getSQL();
-		String[] sql = new String[dataset.length+1];
-		for (int i=0; i < dataset.length;i++)
-			sql[i]=dataset[i];
-		sql[sql.length-1]=create_sql;
-		return sql;
+		if (createDataset.getObject().getID()<=0) { 
+			String[] dataset = createDataset.getSQL();
+			String[] sql = new String[dataset.length+1];
+			for (int i=0; i < dataset.length;i++)
+				sql[i]=dataset[i];
+			sql[sql.length-1]=create_sql_byname;
+			return sql;
+		} else 
+			return new String[] {create_sql_byid};
 	}
 
 }
