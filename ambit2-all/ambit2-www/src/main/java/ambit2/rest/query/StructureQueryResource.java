@@ -197,7 +197,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new StringConvertor(reporter,MediaType.TEXT_URI_LIST);			
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
-					new ImageReporter<QueryStructureByID>(),MediaType.IMAGE_PNG);	
+					new ImageReporter<QueryStructureByID>(MediaType.IMAGE_PNG.getMainType(),MediaType.IMAGE_PNG.getSubType()),MediaType.IMAGE_PNG);	
+		} else if (variant.getMediaType().equals(MediaType.IMAGE_GIF)) {
+			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
+					new ImageReporter<QueryStructureByID>(MediaType.IMAGE_GIF.getMainType(),MediaType.IMAGE_GIF.getSubType()),MediaType.IMAGE_GIF);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			Dimension d = new Dimension(150,150);
 			Form form = getRequest().getResourceRef().getQueryAsForm();

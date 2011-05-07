@@ -57,6 +57,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected String hilightPredictions = null;
 	protected Dimension cellSize = new Dimension(150,150);
 	protected Form featureURI = null;
+	protected String imgMime = "image/gif";
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
 	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter) {
@@ -512,10 +513,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		String imguri;
 		
 		if (hilightPredictions!= null) {
-			imguri= String.format("%s?%s=%s&media=image/png",hilightPredictions,OpenTox.params.dataset_uri.toString(),w);
+			imguri= String.format("%s?%s=%s&media=%s",hilightPredictions,OpenTox.params.dataset_uri.toString(),w,Reference.encode(imgMime));
 		}
 		
-		else imguri = w + "?media=image/png";		
+		else imguri = String.format("%s?media=%s",w,Reference.encode(imgMime));		
 				
 		b.append(String.format(
 				"<td ><a href=\"%s?media=text/html%s\"><img src=\"%s&w=%d&h=%d\" width='%d' height='%d' alt=\"%s\" title=\"%d\"/></a></td>",
@@ -625,9 +626,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		String imguri;
 		if (hilightPredictions!= null)
-			imguri= String.format("%s?%s=%s&media=image/png",
+			imguri= String.format("%s?%s=%s&media=%s",
 				hilightPredictions,
-				OpenTox.params.dataset_uri.toString(),w);
+				OpenTox.params.dataset_uri.toString(),w,
+				Reference.encode(imgMime));
 		else imguri=w+"?media=image/png";		
 		
 		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));

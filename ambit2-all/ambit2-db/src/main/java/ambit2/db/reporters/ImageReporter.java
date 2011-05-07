@@ -6,9 +6,12 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -55,17 +58,23 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	protected CreateStoredQuery cache ;
 	protected UpdateExecutor<IQueryUpdate> cacheUpdater = new UpdateExecutor<IQueryUpdate>();
 	protected MyQuery strucQuery = new MyQuery();
-	protected Property img = Property.getInstance(RetrieveStructureImagePath.IMAGE_PATH,RetrieveStructureImagePath.IMAGE_PATH);
+	protected Property img ;
+	protected String mainType;
+	protected String subType;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2931123688036795689L;
 	
-	public ImageReporter() {
-		this(new Dimension(250,250));
+	public ImageReporter(String mainType,String subType) {
+		this(mainType,subType,new Dimension(250,250));
 	}
-	public ImageReporter(Dimension dimension) {
+	public ImageReporter(String mainType,String subType,Dimension dimension) {
 		super();
+		this.mainType = mainType;
+		this.subType = subType;
+		String mimeType = String.format("%s/%s",mainType,subType);
+		img = Property.getInstance(mimeType,mimeType);
 		strucQuery.setPageSize(1);
 		strucQuery.setPage(0);
 		
@@ -114,23 +123,35 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 			String dimensions = getQueryName();
 			String tmpDir = System.getProperty("java.io.tmpdir");
 			
-	        File file = new File(tmpDir,String.format("%s/%s/%d_%d.png",
+	        File file = new File(tmpDir,String.format("%s/%s/%d_%d.%s",
 	        		getConnection().getCatalog(),
 	        		dimensions,
-	        		item.getIdchemical(),item.getIdstructure()));
+	        		item.getIdchemical(),item.getIdstructure(),
+	        		subType));
 			File dir = file.getParentFile();
 			//synchronized (this) {
 				if ((dir!=null) && !dir.exists())	dir.mkdirs();		 
-		        ImageIO.write(image,"png", file);
+		        //ImageIO.write(image,"png", file);
+		        
+				Iterator<ImageWriter> writers = ImageIO.getImageWritersBySuffix(subType);
+
+				while (writers.hasNext()) {
+					ImageWriter writer = (ImageWriter) writers.next();
+					ImageOutputStream ios = ImageIO.createImageOutputStream(file);
+					writer.setOutput(ios);
+					writer.write(image);
+
+				}
 			//}
 	        
 	        
 	        strucQuery.setValue(item);
 	        strucQuery.setText(file.getAbsolutePath());
 	        strucQuery.setFieldname(dimensions);
-	        strucQuery.setCategory(RetrieveStructureImagePath.IMAGE_PATH);
+	        String mimeType = String.format("%s/%s",mainType,subType);
+	        strucQuery.setCategory(mimeType);
 
-			cache.getGroup().setName(RetrieveStructureImagePath.IMAGE_PATH);
+			cache.getGroup().setName(mimeType);
 			cache.getObject().setName(dimensions);
 			//
 			cacheUpdater.process(cache);
