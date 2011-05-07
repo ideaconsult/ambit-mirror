@@ -28,7 +28,6 @@ import java.sql.SQLException;
 
 import javax.naming.OperationNotSupportedException;
 
-import ambit2.base.data.Dictionary;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
@@ -48,18 +47,14 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	 * 
 	 */
 	private static final long serialVersionUID = 3140079486695024274L;
-	protected Dictionary dictionary = new Dictionary();
-	protected Dictionary propertyDictionary = new Dictionary();
 	protected LiteratureEntry reference = LiteratureEntry.getInstance("Structure properties");
 
 	@Override
 	public void setDataset(SourceDataset dataset) {
 		super.setDataset(dataset);
 		if (getDataset() != null) {
-			dictionary = new Dictionary(getDataset().getName(),"Dataset");
 			reference = LiteratureEntry.getInstance(dataset.getTitle(),dataset.getURL());
-		} else
-			dictionary = new Dictionary("Dataset","All");
+		} 
 	}
 	@Override
 	protected Object getValue(IStructureRecord record, Property property,
@@ -82,15 +77,10 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 	}
 
 	@Override
-	protected Dictionary getComments(String name,IStructureRecord target) {
+	protected String getComments(String name,IStructureRecord target) {
 		String n = name.toLowerCase();
-		propertyDictionary.setRelationship("is_a");
-		propertyDictionary.setParentTemplate("Identifiers");
-		String label = Property.guessLabel(n);
-		if (label != null)  {
-			propertyDictionary.setTemplate(label);
-			return propertyDictionary;
-		} else return null;
+		return Property.guessLabel(n);
+
 	}
 
 	@Override
@@ -114,11 +104,7 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 		setStructure(target);
 		return super.write(target);
 	}
-	@Override
-	protected Dictionary getTemplate(IStructureRecord target)
-			throws SQLException {
-		return dictionary;
-	}
+
 }
 
 

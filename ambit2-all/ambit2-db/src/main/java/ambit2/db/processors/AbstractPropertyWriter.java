@@ -34,18 +34,17 @@ import java.sql.SQLException;
 
 import javax.naming.OperationNotSupportedException;
 
-import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.property.RetrieveFieldNames;
-import ambit2.db.update.dictionary.TemplateAddProperty;
+import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.ReadProperty;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
 	public enum mode  {OK, UNKNOWN,ERROR,TRUNCATED};
-	protected TemplateAddProperty templateWriter;
+	protected CreateProperty propertyWriter;
     protected SourceDataset dataset = null;
     protected RetrieveFieldNames selectField = new RetrieveFieldNames();
     protected ReadProperty readProperty = new ReadProperty();
@@ -53,7 +52,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     public AbstractPropertyWriter() {
 		super();
 		selectField.setFieldname("name");
-        templateWriter = new TemplateAddProperty();
+        propertyWriter = new CreateProperty();
 	}
 
 	public SourceDataset getDataset() {
@@ -72,7 +71,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
  
    // protected abstract LiteratureEntry getReference(Target target);
     protected abstract Iterable<Property> getPropertyNames(Target target);
-    protected abstract Dictionary getComments(String name,Target target);
+    protected abstract String getComments(String name,Target target);
     protected abstract void descriptorEntry(Target target,Property property, int propertyIndex,int idtuple) throws SQLException;
 
     protected int getTuple(SourceDataset dataset) {
@@ -107,7 +106,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 	            ResultSet rs1 = queryexec.process(selectField);
 	            while (rs1.next()) {
 	            	property = selectField.getObject(rs1);
-	            	templateEntry(target, property);	  
+	            	propertyEntry(property);	  
 	                descriptorEntry(target, property,i,idtuple);
 	                found = true;
 	            }
@@ -115,18 +114,13 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
         	//}
             if (!found) {
             	
-                Dictionary comments = getComments(property.getName(),target);
+                String comments = getComments(property.getName(),target);
                 if (comments == null)
                 	property.setLabel(property.getName());
                 else
-                	property.setLabel(comments.getTemplate());
+                	property.setLabel(comments);
 
-                if (comments != null) {
-                	comments.setParentTemplate(comments.getTemplate());
-                	comments.setTemplate(property.getName());
-                	write(comments,property);                	
-                }	                	
-            	templateEntry(target,property);	                	
+            	propertyEntry(property);	                	
                 descriptorEntry(target,property,i,idtuple);
                 
             }
@@ -135,20 +129,16 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 
         return transform(target);    	
     };
-    protected abstract Dictionary getTemplate(Target target)  throws SQLException ;
-
     
-    protected  void templateEntry(Target target,Property property) throws SQLException {
+    protected  void propertyEntry(Property property) throws SQLException {
     	
-    	write(getTemplate(target),property);
+    	write(property);
 
     }
-    protected  void write(Dictionary template,Property property) throws SQLException {
+    protected  void write(Property property) throws SQLException {
     	try {
-    	
-	    	templateWriter.setGroup(template);
-	    	templateWriter.setObject(property);
-	    	exec.process(templateWriter);	  
+	    	propertyWriter.setObject(property);
+	    	exec.process(propertyWriter);	  
 
     	} catch (Exception x) {
     		throw new SQLException(x.getMessage());

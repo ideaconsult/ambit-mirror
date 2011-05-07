@@ -384,8 +384,8 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		Assert.assertEquals(3+countValues,names.getRowCount());
 		values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values WHERE status ='OK' ");	
 		Assert.assertEquals(countValues,values.getRowCount());    
-		template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT subject,object,properties.name FROM ontology join template_def on ontology.subjectid = template_def.idtemplate join properties using(idproperty) where object=\"Descriptors\"");	
-		Assert.assertEquals(countValues,template_def.getRowCount());			
+		template_def = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT type FROM catalog_references where type=\"Algorithm\"");	
+		Assert.assertEquals(4,template_def.getRowCount());			
         
 		/*
         DescriptorValue v = new DescriptorValue(

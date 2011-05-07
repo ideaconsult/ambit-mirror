@@ -35,9 +35,8 @@ import java.util.List;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 
-import ambit2.base.data.Dictionary;
-import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.descriptors.processors.DescriptorsFactory;
 
 
 
@@ -46,10 +45,9 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
 	 * 
 	 */
 	private static final long serialVersionUID = -358115974932302101L;
-	protected Dictionary descriptorDictionary;
+
 	public DbDescriptorWriter() {
-		descriptorDictionary = new Dictionary();
-		descriptorDictionary.setParentTemplate("Descriptors");
+		super();
 	}
     @Override
     protected DescriptorValue transform(DescriptorValue target) {
@@ -62,33 +60,20 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
     }
 
 	@Override
-	protected Dictionary getComments(String name,DescriptorValue descriptor) {
+	protected String getComments(String name,DescriptorValue descriptor) {
 		//descriptorDictionary.setParentTemplate(descriptor.getSpecification().getSpecificationReference());
 		//descriptorDictionary.setTemplate(name);
 		return null;//descriptorDictionary;
 	}
 	@Override
-	protected Iterable<Property> getPropertyNames(DescriptorValue descriptor) {
+	protected Iterable<Property> getPropertyNames( DescriptorValue value) {
 		List<Property> p = new ArrayList<Property>();
-		for (String name: descriptor.getNames()) {
-			p.add(Property.getInstance(name,
-					 LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationIdentifier(),descriptor.getSpecification().getSpecificationReference())
-					 ));
-		}
+		for (String name : value.getNames()) try {
+			p.add(DescriptorsFactory.descriptorValue2Property(null,name,value));
+		} catch (Exception x) {}
 		return p;
+
 	}
-	/*
-	@Override
-	protected LiteratureEntry getReference(DescriptorValue descriptor) {
-		return LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationIdentifier(),descriptor.getSpecification().getSpecificationReference());
-	}
-	*/
-	@Override
-	protected Dictionary getTemplate(DescriptorValue descriptor)
-			throws SQLException {
-		descriptorDictionary.setTemplate(descriptor.getSpecification().getImplementationTitle());
-		descriptorDictionary.setParentTemplate("Descriptors");
-		return descriptorDictionary;
-	}
+
 
 }
