@@ -139,7 +139,7 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
 		
 		if (getDataset().getID()<=0) {
 			if (readDatasetQuery==null) readDatasetQuery = new ReadDataset();
-			readDatasetQuery.setFieldname(getDataset().getName());
+			readDatasetQuery.setValue(getDataset());
 			readDatasetQuery.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
 			readDatasetQuery.setPageSize(2); readDatasetQuery.setPage(0);
 			ResultSet rs = null;
