@@ -42,10 +42,13 @@ public class DatasetAddTuple extends AbstractUpdate<SourceDataset,Integer>{
 
 	protected CreateDataset createDataset = new CreateDataset();
 	
-	public static final String create_sql = 
+	public static final String create_sql_byname =	
 		"insert into tuples select null,id_srcdataset from src_dataset where name=?";
+	public static final String create_sql_byid =	
+		"insert into tuples (idtuple,id_srcdataset) values (null,?)";
 
-
+	protected boolean byName = true;
+	
 	public DatasetAddTuple(SourceDataset dataset,Integer tuple) {
 		super();
 		setGroup(dataset);
@@ -59,29 +62,38 @@ public class DatasetAddTuple extends AbstractUpdate<SourceDataset,Integer>{
 	public void setGroup(SourceDataset group) {
 		super.setGroup(group);
 		createDataset.setObject(group);
+		byName = group==null || group.getID()<=0;
 	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		if (getGroup()==null || getGroup().getName()==null) throw new AmbitException("Dataset not defined!");
 		
-		if (index < createDataset.getSQL().length) 
-			return createDataset.getParameters(index);
-		else  {
+		if (byName) {
+			if (index < createDataset.getSQL().length) 
+				return createDataset.getParameters(index);
+			else  {
+				List<QueryParam> params1 = new ArrayList<QueryParam>();
+				params1.add(new QueryParam<String>(String.class, getGroup().getName()));
+				return params1;
+			}
+		} else {
 			List<QueryParam> params1 = new ArrayList<QueryParam>();
-			params1.add(new QueryParam<String>(String.class, getGroup().getName()));
+			params1.add(new QueryParam<Integer>(Integer.class, getGroup().getID()));
 			return params1;
 		}
 		
 	}
 	public void setID(int index, int id) {
-		try {
-			String[] dataset = createDataset.getSQL();
-			if (index >= dataset.length)
-				setObject(id);
-			else
-				createDataset.setID(index, id);
-		} catch (Exception x) {
-			
-		}
+		if (byName)
+			try {
+				String[] dataset = createDataset.getSQL();
+				if (index >= dataset.length)
+					setObject(id);
+				else
+					createDataset.setID(index, id);
+			} catch (Exception x) {
+				
+			}
+		else setObject(id);
 		
 	}
 	@Override
@@ -89,11 +101,14 @@ public class DatasetAddTuple extends AbstractUpdate<SourceDataset,Integer>{
 		return true;
 	}
 	public String[] getSQL() throws AmbitException {
-		String[] dataset = createDataset.getSQL();
-		String[] sql = new String[dataset.length+1];
-		for (int i=0; i < dataset.length;i++)
-			sql[i]=dataset[i];
-		sql[sql.length-1]=create_sql;
-		return sql;
+		if (byName) {
+			String[] dataset = createDataset.getSQL();
+			String[] sql = new String[dataset.length+1];
+			for (int i=0; i < dataset.length;i++)
+				sql[i]=dataset[i];
+			sql[sql.length-1]=create_sql_byname;
+			return sql;
+		} else 
+			return new String[] {create_sql_byid};
 	}
 }

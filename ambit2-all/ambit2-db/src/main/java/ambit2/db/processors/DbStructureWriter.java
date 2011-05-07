@@ -30,6 +30,7 @@
 package ambit2.db.processors;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,9 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.search.StringCondition;
 import ambit2.db.update.dataset.DatasetAddStructure;
+import ambit2.db.update.dataset.ReadDataset;
 import ambit2.db.update.structure.CreateStructure;
 import ambit2.db.update.structure.UpdateStructure;
 
@@ -50,7 +53,7 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
 	protected UpdateStructure updateStructure;
 	protected PropertyValuesWriter propertyWriter;
 	protected SourceDataset dataset;	
-	
+	protected ReadDataset readDatasetQuery;
 	/**
 	 * 
 	 */
@@ -134,9 +137,30 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
 	protected void writeDataset(IStructureRecord structure) throws SQLException, AmbitException, OperationNotSupportedException {
 		if (getDataset() == null) setDataset(new SourceDataset("Default"));
 		
+		if (getDataset().getID()<=0) {
+			if (readDatasetQuery==null) readDatasetQuery = new ReadDataset();
+			readDatasetQuery.setFieldname(getDataset().getName());
+			readDatasetQuery.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
+			readDatasetQuery.setPageSize(2); readDatasetQuery.setPage(0);
+			ResultSet rs = null;
+			try {
+				rs = queryexec.process(readDatasetQuery);
+				int record = 0; //should be 1 only
+				while (rs.next()) {
+					SourceDataset d = readDatasetQuery.getObject(rs);
+					getDataset().setID(d.getID());
+					record++;
+				}
+				if (record>1) getDataset().setID(-1); //smth is wrong
+			} catch (Exception x) {
+				getDataset().setID(-1);
+			}
+		}
 		datasetAddStruc.setObject(structure);
 		datasetAddStruc.setGroup(dataset);
 		exec.process(datasetAddStruc);
+		
+		propertyWriter.setDataset(dataset); 
 	}
 	
 	public void writeProperties(IStructureRecord structure) throws SQLException, AmbitException {

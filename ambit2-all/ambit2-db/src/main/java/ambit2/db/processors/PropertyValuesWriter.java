@@ -54,6 +54,7 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 		super.setDataset(dataset);
 		if (getDataset() != null) {
 			reference = LiteratureEntry.getInstance(dataset.getTitle(),dataset.getURL());
+			tuple.setGroup(dataset);
 		} 
 	}
 	@Override

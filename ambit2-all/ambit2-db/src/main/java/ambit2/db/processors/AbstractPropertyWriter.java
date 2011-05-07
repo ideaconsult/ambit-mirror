@@ -52,6 +52,8 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     public AbstractPropertyWriter() {
 		super();
 		selectField.setFieldname("name");
+		selectField.setPage(0);
+		selectField.setPageSize(1);
         propertyWriter = new CreateProperty();
 	}
 
@@ -89,6 +91,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
         	property.setId(-1);
 
 	            selectField.setValue(property);
+
 	            ResultSet rs1 = queryexec.process(selectField);
 	            while (rs1.next()) {
 	            	property = selectField.getObject(rs1);
