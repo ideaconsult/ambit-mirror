@@ -174,7 +174,7 @@ public class ImportWorkflowTest extends WorkflowTest<ImportWorkflow> {
 		structures = c.createQueryTable("EXPECTED_STRUCTURES",	"SELECT idstructure FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name='sdf'");
 		Assert.assertEquals(8, structures.getRowCount());	
 		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT * FROM template join template_def using(idtemplate) where name='sdf'");
-		Assert.assertEquals(39, templates.getRowCount());
+		Assert.assertEquals(38, templates.getRowCount());
 		templates = c.createQueryTable("EXPECTED_TEMPLATES",	"SELECT name,value FROM values_string where name='CasRN' and value='110-51-0'");
 		Assert.assertEquals(1, templates.getRowCount());			
 		
