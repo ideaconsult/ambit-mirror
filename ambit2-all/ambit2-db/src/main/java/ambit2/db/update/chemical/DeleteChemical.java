@@ -36,10 +36,25 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IChemical;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
+import ambit2.db.update.structure.DeleteStructure;
 
 public class DeleteChemical extends AbstractObjectUpdate<IChemical>  {
-
-	public static final String[] delete_sql = {"delete from chemicals where idchemical=?"};
+	protected boolean forceStructureDelete = false;
+	public boolean isForceStructureDelete() {
+		return forceStructureDelete;
+	}
+	public void setForceStructureDelete(boolean forceStructureDelete) {
+		this.forceStructureDelete = forceStructureDelete;
+	}
+	
+	public static final String[] forcedelete_sql_ = {
+		"delete from structure where idchemical=? and user_name=(SUBSTRING_INDEX(user(),'@',1))",
+		"delete from chemicals where idchemical=?"
+	};
+	
+	public static final String[] delete_sql = {
+		"delete from chemicals where idchemical=?"
+	};
 
 	public DeleteChemical(IChemical chemical) {
 		super(chemical);
@@ -56,7 +71,7 @@ public class DeleteChemical extends AbstractObjectUpdate<IChemical>  {
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return delete_sql;
+		return isForceStructureDelete()?forcedelete_sql_:delete_sql;
 	}
 	public void setID(int index, int id) {
 		

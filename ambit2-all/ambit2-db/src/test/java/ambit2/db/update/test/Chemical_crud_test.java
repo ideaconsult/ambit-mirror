@@ -109,7 +109,9 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 	protected IQueryUpdate<Object, IChemical> deleteQuery() throws Exception {
 		IChemical c = new StructureRecord();
 		c.setIdchemical(10);
-		return new DeleteChemical(c);
+		DeleteChemical q = new DeleteChemical(c);
+		q.setForceStructureDelete(true);
+		return q;
 	}
 
 	@Override
