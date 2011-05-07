@@ -25,7 +25,8 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
 	protected static String s_text = "text";
 	protected static String s_idquery = "idquery";	
 	public static final String IMAGES= "IMAGES";
-	public static final String IMAGE_PATH = "image/png";
+
+	
 	private static final long serialVersionUID = -2535919053818523334L;
 	public static final String sqlField=
 		"select structure.idstructure,idchemical,uncompress(structure) as ustructure,format,type_structure,atomproperties,text,idquery from structure\n"+
@@ -43,6 +44,8 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
 		"order by type_structure desc";
 	//TODO order by requires filesort
 	protected String queryName = null;
+	protected String mimeType = "image/gif";
+	
 	public String getQueryName() {
 		return queryName;
 	}
@@ -74,9 +77,9 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
         try {
             IStructureRecord r = super.getObject(rs);
             try {
-                r.setProperty(Property.getInstance(IMAGE_PATH,IMAGE_PATH), rs.getString(s_text));
+                r.setProperty(Property.getInstance(mimeType,mimeType), rs.getString(s_text));
             } catch (SQLException x){
-                r.removeProperty(Property.getInstance(IMAGE_PATH,IMAGE_PATH));
+                r.removeProperty(Property.getInstance(mimeType,mimeType));
             }
             try {
             	String t = rs.getString(5);

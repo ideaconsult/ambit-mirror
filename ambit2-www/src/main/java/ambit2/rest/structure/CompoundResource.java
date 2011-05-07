@@ -104,6 +104,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		// TODO Auto-generated method stub
 		super.doInit();
 		getVariants().add(new Variant(MediaType.IMAGE_PNG));
+		getVariants().add(new Variant(MediaType.IMAGE_GIF));
+		
 		/*
 		MediaType.IMAGE_BMP,
 		MediaType.IMAGE_JPEG,
@@ -192,7 +194,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				d.height = Integer.parseInt(form.getFirstValue("h").toString());
 			} catch (Exception x) {}			
 			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
-					new ImageReporter<QueryStructureByID>(d),variant.getMediaType());	
+					new ImageReporter<QueryStructureByID>(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d),
+					variant.getMediaType());	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
