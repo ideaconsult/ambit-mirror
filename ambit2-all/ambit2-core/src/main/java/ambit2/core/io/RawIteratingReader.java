@@ -16,7 +16,7 @@ import ambit2.base.log.AmbitLogger;
 public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectReader implements IRawReader<T>{
 	protected static AmbitLogger logger = new AmbitLogger(RawIteratingReader.class);
 	protected BufferedReader input;
-	protected StringBuffer recordBuffer = null;
+	protected StringBuilder recordBuffer = null;
 	protected LiteratureEntry reference;
 	public LiteratureEntry getReference() {
 		return reference;
@@ -48,10 +48,10 @@ public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectRe
 	public boolean hasNext() {
 		recordBuffer = null;
 		try {
-			while (input.ready()) {
+			String line;
+			while ((line=input.readLine()) != null) {
 				if (recordBuffer==null)
-					recordBuffer = new StringBuffer();
-				String line = input.readLine();
+					recordBuffer = new StringBuilder();
 				recordBuffer.append(line);
 				recordBuffer.append('\n');
 				if (isEndOfRecord(line))

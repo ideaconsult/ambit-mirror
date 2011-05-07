@@ -125,7 +125,7 @@ public class SOMERawReader extends RawIteratingReader<String> {
 				}
 				
 				if (recordBuffer==null) {
-					recordBuffer = new StringBuffer();
+					recordBuffer = new StringBuilder();
 					if (firstLine!= null) recordBuffer.append(firstLine);
 				}
 				recordBuffer.append(line);
