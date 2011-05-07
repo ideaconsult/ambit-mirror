@@ -120,7 +120,7 @@ public abstract class DbUnitTest {
 
 		if (!dbExists)
 			try {
-				DbCreateDatabase db = new DbCreateDatabase();
+				DbCreateDatabase db = new DbCreateDatabase(getPWD(),getAdminPWD());
 				db.setConnection(c.getConnection());
 				db.process(new StringBean(getDatabase()));
 			} finally {

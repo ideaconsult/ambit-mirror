@@ -186,7 +186,8 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 		//TODO refactor with Query/Update classes
 		Connection c = null;
 		
-		DbCreateDatabase dbCreate = new DbCreateDatabase();
+		
+		DbCreateDatabase dbCreate=null;
 		try {
     		DBConnection dbc = new DBConnection(getContext());
     		LoginInfo li = dbc.getLoginInfo();
@@ -195,6 +196,9 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 	               li.getScheme(), li.getHostname(), li.getPort(), 
 	               "mysql", user,pass); 
 			c = dbc.getConnection(uri);
+			
+			
+			dbCreate = new DbCreateDatabase(li.getPassword(),li.getPassword());
     		dbCreate.setConnection(c);
     		dbCreate.open();
     		dbCreate.process(new StringBean(dbname));
@@ -215,7 +219,7 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x,x.getMessage());			
 			getResponse().setEntity(null);
 		} finally {
-			try {dbCreate.close();} catch (Exception x) {}
+			try {if (dbCreate!=null) dbCreate.close();} catch (Exception x) {}
 			try {if(c != null) c.close();} catch (Exception x) {}
 			return new StringRepresentation(dbname);
 		}
