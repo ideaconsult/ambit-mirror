@@ -143,10 +143,9 @@ public class DbDescriptorWriterTest extends DbUnitTest {
 		Assert.assertEquals(85,names.getRowCount());
 		ITable values = 	c.createQueryTable("EXPECTED_VALUES","SELECT * FROM property_values");	
 		Assert.assertEquals(0,values.getRowCount());		
-		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template where name=\""+d.getSpecification().getImplementationTitle()+"\"");	
-		Assert.assertEquals(1,templates.getRowCount());			
-		templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM template_properties where template=\""+d.getSpecification().getImplementationTitle()+"\"");	
-		Assert.assertEquals(v.getNames().length,templates.getRowCount());			
+		ITable templates = 	c.createQueryTable("EXPECTED_TEMPLATES","SELECT * FROM properties join catalog_references using(idreference) where title=\""+d.getClass().getName()+"\"");	
+		Assert.assertEquals(82,templates.getRowCount());			
+
 
 		c.close();
     }	
