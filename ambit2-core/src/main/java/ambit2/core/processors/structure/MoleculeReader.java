@@ -29,6 +29,7 @@
 
 package ambit2.core.processors.structure;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -37,13 +38,15 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.processors.CASProcessor;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
 
 public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtomContainer> {
 	
 	protected InChIGeneratorFactory inchiFactory = null;
-
+	protected CASProcessor casTransformer = null;
 
     /**
      * 
@@ -65,8 +68,15 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
             	try {
             		IAtomContainer ac =  MoleculeTools.readMolfile(target.getContent());
             		if ((ac!=null) && (ac.getProperties()!=null)) {
-	        	   		ac.removeProperty("cdk:Title");
-	        	   		ac.removeProperty("cdk:Remark");            	
+            			Object title = ac.getProperty(CDKConstants.TITLE);
+            			if (title != null) {
+            				if (CASProcessor.isValidFormat(title.toString())) try {
+            					if (casTransformer==null) casTransformer = new CASProcessor();
+            					ac.setProperty(AmbitCONSTANTS.CASRN,casTransformer.process(title.toString()));
+	            			} catch (Exception x) {}
+	            			ac.removeProperty(CDKConstants.TITLE);
+	            		}
+	        	   		ac.removeProperty(CDKConstants.REMARK);          	
             		}
             		return ac;
                 } catch (Exception x) {
@@ -78,8 +88,15 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
         	   	try {
         	   		IAtomContainer ac =  MoleculeTools.readCMLMolecule(target.getContent());
             		if ((ac!=null) && (ac.getProperties()!=null)) {
-	        	   		ac.removeProperty("cdk:Title");
-	        	   		ac.removeProperty("cdk:Remark");            	
+            			Object title = ac.getProperty(CDKConstants.TITLE);
+            			if (title != null) {
+            				if (CASProcessor.isValidFormat(title.toString())) try {
+            					if (casTransformer==null) casTransformer = new CASProcessor();
+            					ac.setProperty(AmbitCONSTANTS.CASRN,casTransformer.process(title.toString()));
+	            			} catch (Exception x) {}
+	            			ac.removeProperty(CDKConstants.TITLE);
+	            		}
+	        	   		ac.removeProperty(CDKConstants.REMARK);            	
             		}
         	   		return ac;
                 } catch (Exception x) {
