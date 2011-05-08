@@ -972,6 +972,41 @@ delete from struc_dataset where idstructure>3
         c.close();
 
 	}
+	
+	@Test
+	public void testZeroLeadingCAS() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+        IDatabaseConnection c = getConnection();
+        
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/weirdcasformatting.sdf");
+		Assert.assertNotNull(in);
+		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		reader.setReference(LiteratureEntry.getInstance("input.sdf"));
+		write(reader,c.getConnection());
+        c.close();
+        
+        c = getConnection();
+
+  		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+  		Assert.assertEquals(10,chemicals.getRowCount());
+  		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles is not null and inchi is not null and formula is not null");
+  		Assert.assertEquals(10,chemicals.getRowCount());		
+  		ITable strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+  		Assert.assertEquals(10,strucs.getRowCount());
+  		ITable srcdataset = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,idtemplate FROM src_dataset where name='TEST INPUT'");
+  		Assert.assertEquals(1,srcdataset.getRowCount());
+
+  		ITable table = 	c.createQueryTable("EXPECTED","SELECT value from property_string where value='1728-95-6'");
+  		Assert.assertEquals(1,table.getRowCount());
+
+  		table = 	c.createQueryTable("Z0",
+  		"SELECT value,name FROM property_values left join property_string using(idvalue_string) join properties using(idproperty) join catalog_references using(idreference) where comments='http://www.opentox.org/api/1.1#CASRN' and !(value regexp '^0')"
+  				);
+  		Assert.assertEquals(10,table.getRowCount());
+
+  		c.close();
+
+	}	
 	@Test
 	public void testImportByInChI() throws Exception {
 		

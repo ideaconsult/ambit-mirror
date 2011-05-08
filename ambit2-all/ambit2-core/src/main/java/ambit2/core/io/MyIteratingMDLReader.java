@@ -32,6 +32,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.NoSuchElementException;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -44,6 +45,7 @@ import org.openscience.cdk.io.formats.MDLV3000Format;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.base.processors.CASProcessor;
 import ambit2.core.data.MoleculeTools;
 
 /**
@@ -89,6 +91,8 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
     private boolean hasNext;
     private IChemObjectBuilder builder;
     private IMolecule nextMolecule;
+    
+    protected CASProcessor casTransformer = new CASProcessor();
     
     /**
      * Contructs a new MyIteratingMDLReader that can read Molecule from a given Reader.
@@ -160,7 +164,7 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
                     ISimpleChemObjectReader reader = factory.createReader(currentFormat);
                     reader.setReader(new StringReader(buffer.toString()));
                     Object newmol = reader.read(MoleculeTools.newMolecule(builder));
-                    
+
                     nextMolecule = newmol==null?null:(IMolecule)newmol;
                     
                     if (nextMolecule.getAtomCount() > 0) {
@@ -222,7 +226,12 @@ public class MyIteratingMDLReader extends DefaultIteratingChemObjectReader {
                 }
                 if (fieldName != null) {
                     logger.info("fieldName, data: ", fieldName, ", ", data);
-                    m.setProperty(fieldName, data);
+                   
+                    
+                    if (CASProcessor.isValidFormat(data)) try {
+                    	m.setProperty(fieldName,casTransformer.process(data));
+                    } catch (Exception x) { m.setProperty(fieldName, data); }
+                    else  m.setProperty(fieldName, data);
                 }
             }
             currentLine = input.readLine();
