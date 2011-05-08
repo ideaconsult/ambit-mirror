@@ -3,9 +3,18 @@ package ambit2.db.readers;
 import java.io.Serializable;
 
 import ambit2.base.data.Property;
+import ambit2.db.processors.AbstractPropertyWriter;
+import ambit2.db.processors.AbstractPropertyWriter.mode;
 
 public class PropertyValue<T> implements Serializable {
 	int id;
+	AbstractPropertyWriter.mode error = mode.UNKNOWN;
+	public AbstractPropertyWriter.mode getError() {
+		return error;
+	}
+	public void setError(AbstractPropertyWriter.mode error) {
+		this.error = error;
+	}
 	public int getId() {
 		return id;
 	}
@@ -21,8 +30,12 @@ public class PropertyValue<T> implements Serializable {
 		this(property,null);
 	}
 	public PropertyValue(Property property,T value) {
+		this(property,value,mode.UNKNOWN);
+	}
+	public PropertyValue(Property property,T value,mode error) {
 		setProperty(property);
 		setValue(value);
+		setError(error);
 	}		
 	public Property getProperty() {
 		return property;

@@ -110,9 +110,20 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 	public boolean isPrescreen() {
 		return false;
 	}
+	
+	@Override
 	public Property getObject(ResultSet rs) throws AmbitException {
+		return getObject(rs,null);
+
+	}
+	public Property getObject(ResultSet rs,Property p) throws AmbitException {
 		try {
-			Property p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
+			if (p==null) {
+				p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
+			} else {
+				p.setName(rs.getString(2));
+				//!!!!!!!!!!!!!!!!!! update the rest 
+			}
 			p.setId(rs.getInt(1));
 			p.setUnits(rs.getString(3));
 			p.setLabel(rs.getString(7));
