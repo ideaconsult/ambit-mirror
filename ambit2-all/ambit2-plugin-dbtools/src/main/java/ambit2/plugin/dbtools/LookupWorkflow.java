@@ -81,7 +81,7 @@ public class LookupWorkflow extends Workflow {
 								"", ""),
 						new ClassHolder(
 								"ambit2.core.processors.structure.key.DSSToxCID",
-								"SSTox Chemical ID DSSTox_CID) is a number uniquely assigned to a particular STRUCTURE across all DSSTox files",
+								"DSSTox Chemical ID (DSSTox_CID) is a number uniquely assigned to a particular STRUCTURE across all DSSTox files",
 								"", ""),
 						new ClassHolder(
 								"ambit2.core.processors.structure.key.DSSToxRID",
