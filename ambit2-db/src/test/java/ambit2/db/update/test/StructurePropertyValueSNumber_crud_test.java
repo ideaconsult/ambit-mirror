@@ -12,10 +12,10 @@ import ambit2.db.readers.PropertyValue;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 
-public class StructurePropertyValueSNumber_crud_test extends CRUDTest<IStructureRecord,PropertyValue<Double>> {
+public class StructurePropertyValueSNumber_crud_test extends CRUDTest<IStructureRecord,PropertyValue<Number>> {
 
 	@Override
-	protected IQueryUpdate<IStructureRecord, PropertyValue<Double>> createQuery()
+	protected IQueryUpdate<IStructureRecord, PropertyValue<Number>> createQuery()
 			throws Exception {
 		UpdateStructurePropertyIDNumber q = new UpdateStructurePropertyIDNumber();
 		StructureRecord record = new StructureRecord(7,100211,null,null);
@@ -28,14 +28,14 @@ public class StructurePropertyValueSNumber_crud_test extends CRUDTest<IStructure
 	}
 
 	@Override
-	protected IQueryUpdate<IStructureRecord, PropertyValue<Double>> createQueryNew()
+	protected IQueryUpdate<IStructureRecord, PropertyValue<Number>> createQueryNew()
 			throws Exception {
 		return createQuery();
 	}
 
 	@Override
 	protected void createVerify(
-			IQueryUpdate<IStructureRecord, PropertyValue<Double>> query)
+			IQueryUpdate<IStructureRecord, PropertyValue<Number>> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT value_num FROM property_values where idstructure=100211 and idproperty=2");
@@ -47,14 +47,14 @@ public class StructurePropertyValueSNumber_crud_test extends CRUDTest<IStructure
 
 	@Override
 	protected void createVerifyNew(
-			IQueryUpdate<IStructureRecord, PropertyValue<Double>> query)
+			IQueryUpdate<IStructureRecord, PropertyValue<Number>> query)
 			throws Exception {
 		createVerify(query);
 		
 	}
 
 	@Override
-	protected IQueryUpdate<IStructureRecord, PropertyValue<Double>> deleteQuery()
+	protected IQueryUpdate<IStructureRecord, PropertyValue<Number>> deleteQuery()
 			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
@@ -65,21 +65,21 @@ public class StructurePropertyValueSNumber_crud_test extends CRUDTest<IStructure
 	}
 	@Override
 	protected void deleteVerify(
-			IQueryUpdate<IStructureRecord, PropertyValue<Double>> query)
+			IQueryUpdate<IStructureRecord, PropertyValue<Number>> query)
 			throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected IQueryUpdate<IStructureRecord, PropertyValue<Double>> updateQuery()
+	protected IQueryUpdate<IStructureRecord, PropertyValue<Number>> updateQuery()
 			throws Exception {
 		return createQuery();
 	}
 
 	@Override
 	protected void updateVerify(
-			IQueryUpdate<IStructureRecord, PropertyValue<Double>> query)
+			IQueryUpdate<IStructureRecord, PropertyValue<Number>> query)
 			throws Exception {
 		createVerify(query);
 		

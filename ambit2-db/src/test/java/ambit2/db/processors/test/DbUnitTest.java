@@ -134,12 +134,15 @@ public abstract class DbUnitTest {
 		  
         Class.forName("com.mysql.jdbc.Driver");
         Connection jdbcConnection = DriverManager.getConnection(
-                String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8",//&profileSQL=true",
-                		host,port,db)
+                String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s",
+                		host,port,db,Boolean.toString(isProfileSQL()))
                 , user,pass);
 //SET NAMES utf8	        
 	   return new DatabaseConnection(jdbcConnection);
 	}	
+	protected boolean isProfileSQL() {
+		return false;
+	}
 	protected IDatabaseConnection getConnection() throws Exception {
 	   return getConnection(getHost(),getDatabase(),getPort(),getUser(),getPWD());
 	}

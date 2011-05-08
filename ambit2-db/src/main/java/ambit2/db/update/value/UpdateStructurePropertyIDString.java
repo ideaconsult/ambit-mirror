@@ -5,8 +5,8 @@ import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.processors.ValueWriter;
 import ambit2.db.processors.AbstractPropertyWriter.mode;
+import ambit2.db.processors.ValueWriter;
 import ambit2.db.readers.PropertyValue;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
@@ -17,24 +17,24 @@ import ambit2.db.update.AbstractUpdate;
  *
  */
 public class UpdateStructurePropertyIDString extends AbstractUpdate<IStructureRecord, PropertyValue<String>> {
-	protected String[] sql = new String[] {
-			ValueWriter.insert_string,
-			String.format("%s %s %s",
-					ValueWriter.insert_descriptorvalue,
-					ValueWriter.select_string,
-					ValueWriter.onduplicate_string)
-	};
-	//public static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
-	//public static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idstructure,idvalue_string,status,user_name,text,value_num,idtype) ";	
-	//	public static final String select_string = "select null,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
-	//public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=?, text=?,value_num=null,idtype='STRING'";
+	public static final String select_string = "select null,?,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
+	public static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
+	public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=values(status), text=values(text),value_num=null,idtype='STRING',user_name=values(user_name) ";
 	
+	protected String[] sql = new String[] {
+			insert_string,
+			String.format("%s %s %s",
+					UpdateStructurePropertyIDNumber.insert_descriptorvalue,
+					select_string,
+					onduplicate_string)
+	};
+
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		if ((getObject().getProperty()==null) || getObject().getProperty().getId()<=0) throw new AmbitException("Undefined property");
 		if ((getGroup() == null) || getGroup().getIdstructure()<=0) throw new AmbitException("Undefined structure");		
 		List<QueryParam> l = new ArrayList<QueryParam>();
 		String value = getObject().getValue();
-		mode error = mode.UNKNOWN;
+		mode error = getObject().getError();
 		String longText = null;
     	if ((value != null) && (value.length()>255)) {
     		longText = value;    		
@@ -47,7 +47,7 @@ public class UpdateStructurePropertyIDString extends AbstractUpdate<IStructureRe
 			l.add(new QueryParam<Integer>(Integer.class,getObject().getProperty().getId()));
 			l.add(new QueryParam<Integer>(Integer.class,getGroup().getIdchemical()));
 			l.add(new QueryParam<Integer>(Integer.class,getGroup().getIdstructure()));
-			l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));
+			l.add(new QueryParam<Integer>(Integer.class,error.ordinal()+1));
 			l.add(new QueryParam<String>(String.class,longText));
 			l.add(new QueryParam<String>(String.class,value));
 			//l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));

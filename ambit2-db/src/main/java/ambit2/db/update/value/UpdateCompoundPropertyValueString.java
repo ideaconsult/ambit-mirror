@@ -5,7 +5,6 @@ import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.processors.ValueWriter;
 import ambit2.db.processors.AbstractPropertyWriter.mode;
 import ambit2.db.readers.PropertyValue;
 import ambit2.db.search.QueryParam;
@@ -15,11 +14,11 @@ public class UpdateCompoundPropertyValueString extends AbstractUpdate<IStructure
 	public static final String select_string_compound = "select null,?,idchemical,idstructure,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string join structure where value=? and idchemical=? order by idstructure limit 1";
 	
 	protected String[] sql = new String[] {
-			ValueWriter.insert_string,
+			UpdateStructurePropertyIDString.insert_string,
 			String.format("%s %s %s",
-					ValueWriter.insert_descriptorvalue,
+					UpdateStructurePropertyIDNumber.insert_descriptorvalue,
 					select_string_compound,
-					ValueWriter.onduplicate_string)
+					UpdateStructurePropertyIDString.onduplicate_string)
 	};
 
 	public List<QueryParam> getParameters(int index) throws AmbitException {
@@ -27,7 +26,7 @@ public class UpdateCompoundPropertyValueString extends AbstractUpdate<IStructure
 		if ((getGroup() == null) || getGroup().getIdchemical()<=0) throw new AmbitException("Undefined compound");		
 		List<QueryParam> l = new ArrayList<QueryParam>();
 		String value = getObject().getValue();
-		mode error = mode.UNKNOWN;
+		mode error = getObject().getError();
 		String longText = null;
     	if ((value != null) && (value.length()>255)) {
     		longText = value;    		
@@ -38,7 +37,7 @@ public class UpdateCompoundPropertyValueString extends AbstractUpdate<IStructure
 			l.add(new QueryParam<String>(String.class,value));
 		} else if (index == 1) {
 			l.add(new QueryParam<Integer>(Integer.class,getObject().getProperty().getId()));
-			l.add(new QueryParam<Integer>(Integer.class,error.ordinal()));
+			l.add(new QueryParam<Integer>(Integer.class,error.ordinal()+1));
 			l.add(new QueryParam<String>(String.class,longText));
 			l.add(new QueryParam<String>(String.class,value));
 			l.add(new QueryParam<Integer>(Integer.class,getGroup().getIdchemical()));			

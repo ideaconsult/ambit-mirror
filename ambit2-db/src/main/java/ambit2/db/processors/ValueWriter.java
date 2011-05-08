@@ -38,6 +38,8 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.update.tuple.DatasetAddTuple;
+import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
+import ambit2.db.update.value.UpdateStructurePropertyIDString;
 
 /**
  * Writes values into property tables
@@ -59,14 +61,12 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	public static final int n_value = 6;
 	
 	private static final long serialVersionUID = 8373222804070419878L;
-	public static final String insert_descriptorvalue = "INSERT INTO property_values (id,idproperty,idchemical,idstructure,idvalue_string,status,user_name,text,value_num,idtype) ";
-	public static final String insert_string = "INSERT IGNORE INTO property_string (value) VALUES (?)";	
 	
-	public static final String select_string = "select null,?,?,?,idvalue_string,?,SUBSTRING_INDEX(user(),'@',1),?,null,'STRING' from property_string where value=?";
-	public static final String select_number = "values (null,?,?,?,null,?,SUBSTRING_INDEX(user(),'@',1),null,?,'NUMERIC')";
+	
+	
+
 	
 	public static final String onduplicate_number = " on duplicate key update value_num=values(value_num), status=values(status), idvalue_string=null,text=null,idtype='NUMERIC',user_name=values(user_name) ";
-	public static final String onduplicate_string = " on duplicate key update property_values.idvalue_string=property_string.idvalue_string, property_values.status=values(status), text=values(text),value_num=null,idtype='STRING',user_name=values(user_name) ";
 	
 	protected static final String insert_tuple = "insert into property_tuples select ?,id from property_values where idproperty=? and idstructure=?";
 	
@@ -124,14 +124,16 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	}
     	if (structure == null) throw new SQLException("Undefined structure");    	
     	if (ps_insertstring == null)
-    		ps_insertstring = connection.prepareStatement(insert_string);
+    		ps_insertstring = connection.prepareStatement(UpdateStructurePropertyIDString.insert_string);
     	
     	ps_insertstring.clearParameters();
     	ps_insertstring.setString(1,value);
     	ps_insertstring.execute();    	
     	
     	if (ps_descriptorvalue_string == null)
-            ps_descriptorvalue_string = connection.prepareStatement(insert_descriptorvalue+select_string+onduplicate_string);
+            ps_descriptorvalue_string = connection.prepareStatement(UpdateStructurePropertyIDNumber.insert_descriptorvalue+
+            		UpdateStructurePropertyIDString.select_string+
+            		UpdateStructurePropertyIDString.onduplicate_string);
     	
     	ps_descriptorvalue_string.clearParameters();
     	ps_descriptorvalue_string.setInt(n_idproperty,property.getId());
@@ -170,7 +172,8 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	if (structure == null) throw new SQLException("Undefined structure");
 
     	if (ps_descriptorvalue_number == null)
-    		ps_descriptorvalue_number = connection.prepareStatement(insert_descriptorvalue+select_number+onduplicate_number);
+    		ps_descriptorvalue_number = connection.prepareStatement(
+    				UpdateStructurePropertyIDNumber.insert_descriptorvalue+UpdateStructurePropertyIDNumber.select_number+onduplicate_number);
     	
     	//"values (null,idproperty,idstructure,null,?,SUBSTRING_INDEX(user(),'@',1),null,?)";
     	    	
@@ -213,7 +216,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	if (structure == null) throw new SQLException("Undefined structure");
 
     	if (ps_descriptorvalue_number == null)
-    		ps_descriptorvalue_number = connection.prepareStatement(insert_descriptorvalue+select_number+onduplicate_number);
+    		ps_descriptorvalue_number = connection.prepareStatement(UpdateStructurePropertyIDNumber.insert_descriptorvalue+UpdateStructurePropertyIDNumber.select_number+onduplicate_number);
     	
     	//"values (null,idproperty,idstructure,null,?,SUBSTRING_INDEX(user(),'@',1),null,?)";
     	    	
