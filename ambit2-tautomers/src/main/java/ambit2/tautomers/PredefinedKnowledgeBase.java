@@ -22,21 +22,20 @@ public class PredefinedKnowledgeBase
 		"$$NAME=thioamide/iminothiol   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= S=CN SC=N  $$GROUP_POS=3,1   $$INFO=",
 		"$$NAME=nitrosamine/diazohydroxide  $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=NN ON=N  $$GROUP_POS=3,1   $$INFO="
 			
-			
 	};
 	
 	
 	//Warning Filters	
 	public static final String warningFragments[] =
 	{	
-		"[C;!R](=*)=*",
+		"[C;!R](=*)=*",     //allene atom
 	};
 	
 	
 	//Exclude Filters	
 	public static final String excludeFragments[] =
 	{
-		"[C;r4,r5,r6,r7,r8](=*)=* ",
+		"[C;r4,r5,r6,r7,r8](=*)=* ",  //allene atom in a cycle (up to 8 atoms)
 		
 	};
 	
