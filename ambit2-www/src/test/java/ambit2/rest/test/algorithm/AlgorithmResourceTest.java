@@ -73,7 +73,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 84;
+		return count == 85;
 	}	
 	
 	@Test
@@ -711,12 +711,15 @@ public class AlgorithmResourceTest extends ResourceTest {
 	public void testLeverage() throws Exception {
 		Form headers = new Form();  
 		headers.add(OpenTox.params.dataset_uri.toString(), 
-				String.format("http://localhost:%d/dataset/1", port));
+				String.format("http://localhost:%d/dataset/1?max=3", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/leverage", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 
+		headers.removeAll(OpenTox.params.dataset_uri.toString());
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));		
 		testAsyncTask(
 				String.format("http://localhost:%d/model/3", port),
 				headers, Status.SUCCESS_OK,
@@ -732,6 +735,13 @@ public class AlgorithmResourceTest extends ResourceTest {
 		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Leverage'");
 		Assert.assertEquals(4,table.getRowCount());
 
+		table = 	c.createQueryTable("INDOMAIN",
+		"SELECT idproperty,name,value_num FROM property_values join properties using(idproperty) where name='AppDomain_Leverage' and value_num=0");
+		Assert.assertEquals(3,table.getRowCount());	
+		
+		table = 	c.createQueryTable("OUTOFDOMAIN",
+		"SELECT idproperty,name,value_num FROM property_values join properties using(idproperty) where name='AppDomain_Leverage' and value_num=1 and idstructure=129345");
+		Assert.assertEquals(1,table.getRowCount());		
 		c.close();			
 		
 	}		
