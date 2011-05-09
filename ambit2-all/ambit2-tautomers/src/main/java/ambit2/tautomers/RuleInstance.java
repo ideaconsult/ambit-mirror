@@ -192,5 +192,12 @@ public class RuleInstance implements IRuleInstance
 		return(sb.toString());
 	}
 	
+	public static String getTautomerSpecialString()
+	{
+		StringBuffer sb = new StringBuffer();
+		//TODO
+		return(sb.toString());
+	}
+	
 	
 }
