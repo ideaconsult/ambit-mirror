@@ -31,8 +31,8 @@ public class KnowledgeBase
 		for (int i = 0; i < PredefinedKnowledgeBase.warningFragments.length; i++)
 			addFilterRule(PredefinedKnowledgeBase.warningFragments[i], Filter.FT_WARNING);
 		
-		//for (int i = 0; i < PredefinedKnowledgeBase.excludeFragments.length; i++)
-		//	addFilterRule(PredefinedKnowledgeBase.excludeFragments[i], Filter.FT_EXCLUDE);
+		for (int i = 0; i < PredefinedKnowledgeBase.excludeFragments.length; i++)
+			addFilterRule(PredefinedKnowledgeBase.excludeFragments[i], Filter.FT_EXCLUDE);
 		
 		if (errors.size() > 0)
 		{

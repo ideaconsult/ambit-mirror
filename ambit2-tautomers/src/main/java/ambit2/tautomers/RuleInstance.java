@@ -1,6 +1,8 @@
 package ambit2.tautomers;
 
 import java.util.Vector;
+import java.util.List;
+
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -192,12 +194,7 @@ public class RuleInstance implements IRuleInstance
 		return(sb.toString());
 	}
 	
-	public static String getTautomerSpecialString()
-	{
-		StringBuffer sb = new StringBuffer();
-		//TODO
-		return(sb.toString());
-	}
+	
 	
 	
 }
