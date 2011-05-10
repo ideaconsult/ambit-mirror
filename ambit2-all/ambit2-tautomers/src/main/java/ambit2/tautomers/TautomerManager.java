@@ -1,6 +1,8 @@
 package ambit2.tautomers;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+
 import java.util.Vector;
 import ambit2.smarts.SmartsHelper;
 
@@ -155,7 +157,25 @@ public class TautomerManager
 	}
 	
 	
-	
+	public static String getTautomerCodeString(IAtomContainer tautomer)
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("bo");
+		
+		//All bonds are described in canonical numbering (i < j) 
+		for (int i = 0; i < tautomer.getAtomCount(); i++)
+		{
+			for (int j = i+1; j < tautomer.getAtomCount(); j++)
+			{
+				IBond bo = tautomer.getBond(tautomer.getAtom(i), tautomer.getAtom(j));
+				if (bo != null)
+					sb.append(bo.getOrder().ordinal());
+					
+			}
+		}
+		
+		return(sb.toString());
+	}
 	
 	
 	String getTautomerCombination()
