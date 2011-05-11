@@ -49,6 +49,9 @@ import ambit2.smarts.SmartsScreeningKeys;
 import ambit2.smarts.SmartsToChemObject;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
+import ambit2.smarts.SMIRKSManager;
+import ambit2.smarts.SMIRKSReaction;
+
 
 
 
@@ -1256,6 +1259,16 @@ public class TestUtilities
 		smToChemObj.convertKekuleSmartsToAromatic(qac);
 	}
 	
+	public void testSMIRKS(String smirks)
+	{
+		SMIRKSManager smrkMan = new SMIRKSManager();
+		SMIRKSReaction sr = smrkMan.parse(smirks);
+		if (!smrkMan.getErrors().equals(""))
+		{
+			System.out.println(smrkMan.getErrors());
+		}
+	}
+	
 	
 //-------------------------------------------------------------------------------
 	
@@ -1481,7 +1494,9 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearchMDL("CC=C","D:/projects/nina/biphenyl.mol");
 		//tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
 		
-		tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
+		tu.testSMIRKS("CCCC>>CC=CC");
+		
+		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		
 	}
 	
