@@ -184,18 +184,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.IMAGE_TIFF) ||
 				variant.getMediaType().equals(MediaType.IMAGE_GIF) 
 				) {
-			Dimension d = new Dimension(250,250);
-			Form form = getRequest().getResourceRef().getQueryAsForm();
-			try {
-				
-				d.width = Integer.parseInt(form.getFirstValue("w").toString());
-			} catch (Exception x) {}
-			try {
-				d.height = Integer.parseInt(form.getFirstValue("h").toString());
-			} catch (Exception x) {}			
-			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
-					new ImageReporter<QueryStructureByID>(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d),
-					variant.getMediaType());	
+			return createImageConvertor(variant);
+			
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
@@ -246,6 +236,22 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES);
 		
+	}
+	
+	protected ImageConvertor<IStructureRecord, QueryStructureByID> createImageConvertor(Variant variant) throws ResourceException {
+
+		Dimension d = new Dimension(250,250);
+		Form form = getRequest().getResourceRef().getQueryAsForm();
+		try {
+			
+			d.width = Integer.parseInt(form.getFirstValue("w").toString());
+		} catch (Exception x) {}
+		try {
+			d.height = Integer.parseInt(form.getFirstValue("h").toString());
+		} catch (Exception x) {}			
+		return new ImageConvertor<IStructureRecord, QueryStructureByID>(
+				new ImageReporter<QueryStructureByID>(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d),
+				variant.getMediaType());
 	}
 	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getRequest(),getDocumentation());
