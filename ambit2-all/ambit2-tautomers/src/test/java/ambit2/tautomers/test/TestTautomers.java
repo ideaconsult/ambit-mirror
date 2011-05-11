@@ -32,8 +32,10 @@ public class TestTautomers
 		//tt.test("NN=CO");
 		//tt.visualTest("N=C(N)NC=O");
 		//tt.performTestCases();
-		tt.visualTest("C1=CN=C(N)NC1(=O)");
-		tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
+		//tt.visualTest("NC(C)=N");
+		tt.visualTest("C1=CN=C(N)NC1=O");
+		//tt.visualTest("C1=CN=C(N)NC1(=O)");
+		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		//tt.visualTest("C=CN");
 		
 	}

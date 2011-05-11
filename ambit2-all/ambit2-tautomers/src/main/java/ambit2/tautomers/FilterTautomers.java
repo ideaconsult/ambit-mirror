@@ -6,6 +6,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 
 import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 
 
@@ -66,6 +67,7 @@ public class FilterTautomers
 		//Filtration according to the filter rules
 		for (int i = 0; i < uniqueTautomers.size(); i++)
 		{			
+			//System.out.println("Tautomer #" + i + "  " + SmartsHelper.moleculeToSMILES(uniqueTautomers.get(i)));
 			Vector<Integer> vWarnF = getWarnFilters(uniqueTautomers.get(i));
 			Vector<Integer> vExcludF = getExcludeFilters(uniqueTautomers.get(i));
 			
