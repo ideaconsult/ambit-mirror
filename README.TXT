@@ -46,7 +46,6 @@ normal user and password are guest/guest by default and are used in database que
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-	<google.analytics>your-google-analytics-key</google.analytics>
 	 <!-- Write RDF via jena or stax Could be altered via ?rdfwriter=jena|stax query paramater -->
          <rdf.writer>stax</rdf.writer>
 
@@ -73,6 +72,23 @@ normal user and password are guest/guest by default and are used in database que
 	<google.analytics>UA-...</google.analytics>
 
       </properties>
+    </profile>
+ 	
+    <profile>
+      <!-- use this profile via mvn -P aa-enabled to have the REST services protected by OpenTox AA -->
+      <id>aa-enabled</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+	<properties>
+	 <!-- OpenTox AA services-->
+        <aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
+        <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
+	<!-- default user for tests only -->
+        <aa.user></aa.user>
+        <aa.pass></aa.pass>
+	<aa.enabled>true</aa.enabled>
+	</properties>
     </profile>
   </profiles>
 </settings>
