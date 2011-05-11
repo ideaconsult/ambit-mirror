@@ -55,8 +55,11 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"on duplicate key update rel=rel+values(rel),\n"+
 		"user_name=values(user_name),\n"+
 		"updated=CURRENT_TIMESTAMP(),\n"+
-		"`text`=CASE 1 WHEN values(rel)=0 THEN `text`  ELSE concat_WS(',',`text`,cast(s2.idstructure as char)) END",
-		
+		"`text`=CASE 1 WHEN values(rel)=0 THEN `text`  " +
+		"ELSE " +
+		"IF (FIND_IN_SET(s2.idstructure,`text`)=0,concat_WS(',',`text`,cast(s2.idstructure as char)),`text`) " +
+		"END",
+
 		/*
 		DbCreateDatabase.func[0],
 		DbCreateDatabase.func[1],
