@@ -69,8 +69,10 @@ import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.report.ReportDatasetResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
+import ambit2.rest.structure.CompoundImageResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
+import ambit2.rest.structure.ConformerImageResource;
 import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.structure.dataset.DatasetsByStructureResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
@@ -338,11 +340,11 @@ public class AmbitApplication extends TaskApplication<String> {
 		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,ConsensusLabelResource.resource),ConsensusLabelResource.class);
 		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,QualityLabelResource.resource),QualityLabelResource.class);		
 		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,DatasetsResource.datasets),DatasetsByStructureResource.class);
+		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,CompoundImageResource.resource),CompoundImageResource.class);
 		
 		Router conformersRouter = new MyRouter(getContext());
 		conformersRouter.attachDefault(ConformerResource.class);
 		compoundRouter.attach(ConformerResource.conformerKey,conformersRouter);		
-
 		
 		Router conformerRouter = new MyRouter(getContext());
 		conformerRouter.attachDefault(ConformerResource.class);
@@ -350,6 +352,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,ConsensusLabelResource.resource),ConsensusLabelResource.class);
 		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,QualityLabelResource.resource),QualityLabelResource.class);
 		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,DatasetsResource.datasets),DatasetsByStructureResource.class);
+		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,CompoundImageResource.resource),CompoundImageResource.class);
 
 		
 		//compoundRouter.attach(PropertyValueResource.featureKey,PropertyValueResource.class);
