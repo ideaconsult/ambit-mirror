@@ -30,6 +30,9 @@
 package ambit2.core.processors.structure.key;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+
 import ambit2.core.data.EINECS;
 
 /**
@@ -55,6 +58,38 @@ public class EINECSKey extends PropertyKey<String> {
 	public Class getType() {
 		return String.class;
 	}
+	
+	public String process(IStructureRecord structure) throws AmbitException {
+		if (structure == null)
+			throw new AmbitException("Empty molecule!");
+
+		if ((key == null) || (structure.getProperty(key) == null)) {
+			// find which key corresponds to EINECS
+			for (Property newkey : structure.getProperties()) {
+				if (newkey.getName().contains("RELATED")) continue;
+				Object einecs = structure.getProperty(newkey);
+				if (einecs == null)
+					continue;
+				if (!isKeyValid(newkey)) continue;
+				
+				if (EINECS.isValid(einecs.toString())) {
+					this.key = newkey;
+					return einecs.toString();
+				}
+			}
+		}
+		if (key == null)
+			throw new AmbitException("EINECS tag not defined");
+		Object o = structure.getProperty(key);
+		if (o == null)
+			return null;
+		if (EINECS.isValidFormat(o.toString()))
+			return o.toString();
+		else
+			return null;
+	}
+
+
 	
 
 }
