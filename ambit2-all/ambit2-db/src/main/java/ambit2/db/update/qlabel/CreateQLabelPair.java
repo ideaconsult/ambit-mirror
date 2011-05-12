@@ -135,7 +135,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"select structure.idchemical,idstructure,structure,atomproperties,structure.user_name,100*q.label+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
 		"on duplicate key update `preference`=values(`preference`)\n",
 
-		//"delete from quality_pair"
+		"delete from quality_pair"
 	};
 		
 
