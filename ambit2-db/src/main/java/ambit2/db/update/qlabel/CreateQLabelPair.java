@@ -52,7 +52,8 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"and sb.type_structure != 'MARKUSH'\n"+
 		"and sb.type_structure != 'NA'\n"+		
 		"and ds1.user_name != 'guest' and ds2.user_name != 'guest'\n"+
-		"on duplicate key update rel=rel+values(rel),\n"+
+		"on duplicate key update " +
+		"rel=IF(FIND_IN_SET(s2.idstructure,`text`)=0,rel+values(rel),rel),\n"+ //don't count same structure multiple times
 		"user_name=values(user_name),\n"+
 		"updated=CURRENT_TIMESTAMP(),\n"+
 		"`text`=CASE 1 WHEN values(rel)=0 THEN `text`  " +
@@ -72,21 +73,23 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"insert into quality_chemicals (idchemical,num_sources,label,num_structures,text)\n"+
 		"select idchemical,1,'Unconfirmed',1,'1' from\n"+
 		"(\n"+
-		"SELECT count(distinct(id_srcdataset)) c ,idchemical FROM structure\n"+
+		"SELECT count(distinct(idstructure)) c ,idchemical FROM structure\n"+ //count distinct structures in datasets, otherwise in case of ToxCast same structure is counted multiple times
 		"join struc_dataset using(idstructure)\n"+
+		"join src_dataset using(id_srcdataset)\n"+
 		"where type_structure != 'NA'\n"+
 		"and type_structure != 'MARKUSH'\n"+
+		"and src_dataset.user_name != 'guest'\n"+ //restrict to datasets uploaded by users other than guest
 		"group by idchemical\n"+
 		") A where c=1\n",
-		
+
 
 		"insert into quality_chemicals (idchemical,num_sources,label,num_structures,text)\n"+
-		"SELECT idchemical,count(text) c,'Consensus',1,(rel+1) FROM quality_pair\n"+
+		"SELECT idchemical,count(distinct(text)) c,'Consensus',1,(rel+1) FROM quality_pair\n"+
 		"group by idchemical,text\n"+
 		"on duplicate key update\n"+
 		"num_structures = num_structures+1,\n"+
 		"`label`=CASE 1 WHEN values(num_sources)=num_sources THEN 'Ambiguous'  WHEN values(num_sources)<num_sources THEN 'Majority' ELSE 'Majority' END,\n"+
-		"`text`=concat_ws(',',`text`,values(`text`)),\n"+
+		"`text`=IF(FIND_IN_SET(values(`text`),`text`)=0,concat_ws(',',`text`,values(`text`)),`text`),\n"+
 		"num_sources=CASE 1 WHEN num_sources<=values(num_sources) THEN values(num_sources) ELSE num_sources END\n",
 		
 		
@@ -116,7 +119,10 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"join\n"+
 		"(\n"+
 		"SELECT idchemical,count(distinct(id_srcdataset)) c FROM structure\n"+
-		"join struc_dataset using(idstructure) where type_structure != 'NA' and type_structure != 'MARKUSH' group by idchemical\n"+
+		"join struc_dataset using(idstructure)\n" +
+		"join src_dataset using(id_srcdataset)\n" +
+		"where type_structure != 'NA' and type_structure != 'MARKUSH' and src_dataset.user_name!='guest'\n" +
+		"group by idchemical\n"+
 		") as SS\n"+
 		"using(idchemical)\n"+
 		"where c=1\n"+
@@ -129,50 +135,10 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"select structure.idchemical,idstructure,structure,atomproperties,structure.user_name,100*q.label+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
 		"on duplicate key update `preference`=values(`preference`)\n",
 
-		"delete from quality_pair"
+		//"delete from quality_pair"
 	};
 		
-/*
-select idchemical,"Consensus",Sources from
-(
-SELECT idchemical,count(*) as "Sources", count(distinct(text)) as d FROM quality_pair
-group by idchemical
-) as L
-where d=1
 
-
----
-
-SELECT idchemical,count(*) as "Sources", count(distinct(text)) as "Distinct structures" FROM quality_pair
-group by idchemical
-
-
-setting labels
---
-insert into chemicals (idchemical,label)
-select * from (
-SELECT idchemical,"Consensus", count(distinct(text)) as d FROM quality_pair
-group by idchemical
-) as L
-where d=1
-on duplicate key update label=values(label)
----
-insert into test (idchemical,flag,label)
-SELECT idchemical,count(text) c,"consensus" FROM quality_pair
-group by idchemical,text
-on duplicate key update
-`label`=CASE 1 WHEN values(flag)=flag THEN "ambiguous"  WHEN values(flag)<flag THEN "majority" ELSE label END
-
-update chemicals set label='Unknown',num_sources=0;
-
-insert into chemicals (idchemical,num_sources,label)
-SELECT idchemical,count(text) c,"Consensus" FROM quality_pair
-group by idchemical,text
-on duplicate key update
-`label`=CASE 1 WHEN values(num_sources)=num_sources THEN "Ambiguous"
-WHEN values(num_sources)<num_sources THEN "Majority" ELSE label END
-
- */
 	public CreateQLabelPair() {
 		super();
 		setGroup(new AmbitUser("quality"));
