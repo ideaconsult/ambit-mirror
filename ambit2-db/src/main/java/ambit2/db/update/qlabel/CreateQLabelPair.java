@@ -47,9 +47,9 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"join src_dataset ds1 on d1.id_srcdataset=ds1.id_srcdataset\n"+
 	    "join src_dataset ds2 on d2.id_srcdataset=ds2.id_srcdataset\n"+		
 		"where s1.idchemical = s2.idchemical and s1.idstructure != s2.idstructure and s1.status='valid' && s2.status='valid'\n"+
-		"and sa.type_structure != 'MARKUSH'\n"+
+		//"and sa.type_structure != 'MARKUSH'\n"+
 		"and sa.type_structure != 'NA'\n"+
-		"and sb.type_structure != 'MARKUSH'\n"+
+		//"and sb.type_structure != 'MARKUSH'\n"+
 		"and sb.type_structure != 'NA'\n"+		
 		"and ds1.user_name != 'guest' and ds2.user_name != 'guest'\n"+
 		"on duplicate key update " +
@@ -77,7 +77,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"join struc_dataset using(idstructure)\n"+
 		"join src_dataset using(id_srcdataset)\n"+
 		"where type_structure != 'NA'\n"+
-		"and type_structure != 'MARKUSH'\n"+
+		//"and type_structure != 'MARKUSH'\n"+
 		"and src_dataset.user_name != 'guest'\n"+ //restrict to datasets uploaded by users other than guest
 		"group by idchemical\n"+
 		") A where c=1\n",
@@ -121,13 +121,14 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"SELECT idchemical,count(distinct(id_srcdataset)) c FROM structure\n"+
 		"join struc_dataset using(idstructure)\n" +
 		"join src_dataset using(id_srcdataset)\n" +
-		"where type_structure != 'NA' and type_structure != 'MARKUSH' and src_dataset.user_name!='guest'\n" +
+		//"where type_structure != 'NA' and type_structure != 'MARKUSH' and src_dataset.user_name!='guest'\n" +
+		"where type_structure != 'NA' and src_dataset.user_name!='guest'\n" +
 		"group by idchemical\n"+
 		") as SS\n"+
 		"using(idchemical)\n"+
 		"where c=1\n"+
-		"and type_structure != 'NA'\n"+
-		"and type_structure != 'MARKUSH'\n",
+		"and type_structure != 'NA'\n",
+		//"and type_structure != 'MARKUSH'\n",
 		//"UNLOCK TABLES"
 	
 		
