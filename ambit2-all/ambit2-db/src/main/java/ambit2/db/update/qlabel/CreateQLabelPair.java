@@ -84,12 +84,12 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 
 
 		"insert into quality_chemicals (idchemical,num_sources,label,num_structures,text)\n"+
-		"SELECT idchemical,count(distinct(text)) c,'Consensus',1,(rel+1) FROM quality_pair\n"+
+		"SELECT idchemical,count(text) c,'Consensus',1,(rel+1) FROM quality_pair\n"+
 		"group by idchemical,text\n"+
 		"on duplicate key update\n"+
 		"num_structures = num_structures+1,\n"+
 		"`label`=CASE 1 WHEN values(num_sources)=num_sources THEN 'Ambiguous'  WHEN values(num_sources)<num_sources THEN 'Majority' ELSE 'Majority' END,\n"+
-		"`text`=IF(FIND_IN_SET(values(`text`),`text`)=0,concat_ws(',',`text`,values(`text`)),`text`),\n"+
+		"`text`=concat_ws(',',`text`,values(`text`)),\n"+
 		"num_sources=CASE 1 WHEN num_sources<=values(num_sources) THEN values(num_sources) ELSE num_sources END\n",
 		
 		
@@ -135,7 +135,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"select structure.idchemical,idstructure,structure,atomproperties,structure.user_name,100*q.label+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
 		"on duplicate key update `preference`=values(`preference`)\n",
 
-		"delete from quality_pair"
+		//"delete from quality_pair"
 	};
 		
 
