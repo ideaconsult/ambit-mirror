@@ -210,7 +210,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         	try {
         		property = propertyKey.process(structure);
         		if (property!=null)
-        			findChemical(query_property,propertyKey.getKey(),property,structure);
+        			findChemical(query_property,propertyKey.getQueryKey(),property,structure);
         		else
 	        		if (structure.getIdchemical() <= 0) {
             			query_chemicals.setFieldname(structure.getInchi()==null?
