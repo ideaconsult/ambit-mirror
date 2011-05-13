@@ -139,7 +139,7 @@ public class ImportPropertiesWorkflow extends Workflow  {
 						new ClassHolder("ambit2.core.processors.structure.key.CASKey","CAS registry number","",""),
 						new ClassHolder("ambit2.core.processors.structure.key.EINECSKey","EINECS registry number","",""),
 						new ClassHolder("ambit2.core.processors.structure.key.PubchemCID","PubChem Compound ID (PUBCHEM_COMPOUND_CID)","",""),
-						new ClassHolder("ambit2.core.processors.structure.key.DSSToxCID","DSSTox Chemical ID DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files","",""),
+						new ClassHolder("ambit2.core.processors.structure.key.DSSToxCID","DSSTox Chemical ID (DSSTox_CID) number uniquely assigned to a particular STRUCTURE across all DSSTox files","",""),
 						new ClassHolder("ambit2.core.processors.structure.key.DSSToxRID","DSSTox Record ID (DSSTox_RID) is number uniquely assigned to each DSSTox record across all DSSTox files","",""),						
 						new ClassHolder("ambit2.core.processors.structure.key.InchiPropertyKey","InChI","",""),
 						new ClassHolder("ambit2.core.processors.structure.key.SmilesKey","SMILES","",""),
