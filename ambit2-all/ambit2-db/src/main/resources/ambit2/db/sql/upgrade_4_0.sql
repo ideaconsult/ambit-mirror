@@ -362,3 +362,53 @@ CREATE TABLE  `property_annotation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 insert into version (idmajor,idminor,comment) values (4,14,"AMBIT2 schema - Property annotations table added");
+
+
+---------------------
+-- 5.0
+-- Chemicals table changed. Hashcode replaced by InChI key. Redundant index on InChI field is dropped.
+---------------------
+ALTER TABLE `chemicals` 
+CHANGE COLUMN `hashcode` `inchikey` VARCHAR(27) DEFAULT 0
+, DROP INDEX `sinchi`
+, DROP INDEX `ssmiles`
+, DROP INDEX `idchemical`
+, DROP INDEX `inchi`
+, DROP INDEX `formula`
+, DROP INDEX `hashcode`
+, DROP INDEX `Index_8`,
+ ADD INDEX `index_smiles` USING BTREE(`smiles`(760)),
+ ADD INDEX `index_idchemical` USING BTREE(`idchemical`),
+ ADD INDEX `index_inchi` USING BTREE(`inchi`(767)),
+ ADD INDEX `index_formula` USING BTREE(`formula`),
+ ADD INDEX `index_inchikey` USING BTREE(`inchikey`),
+ ADD INDEX `index_label` USING BTREE(`label`);
+ 
+-- -----------------------------------------------------
+-- placeholder for dataset creator name 
+-- ----------------------------------------------------- 
+ ALTER TABLE `src_dataset` ADD COLUMN `creator` VARCHAR(45) NOT NULL DEFAULT 'Unknown' AFTER `rightsHolder`,
+ ADD INDEX `Index_6`(`maintainer`);
+ 
+ -- -----------------------------------------------------
+-- Table `chem_relation` 
+-- -----------------------------------------------------
+ CREATE TABLE `chem_relation` (
+  `idchemical1` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idchemical2` INTEGER UNSIGNED NOT NULL,
+  `relation` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`idchemical1`, `idchemical2`, `relation`),
+  CONSTRAINT `FK_chem_relation_1` FOREIGN KEY `FK_chem_relation_1` (`idchemical1`)
+    REFERENCES `chemicals` (`idchemical`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `FK_chem_relation_2` FOREIGN KEY `FK_chem_relation_2` (`idchemical2`)
+    REFERENCES `chemicals` (`idchemical`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+ insert into version (idmajor,idminor,comment) values (5,0,"AMBIT2 schema - Chemicals table changed");
+ 
+ 

@@ -95,4 +95,6 @@ public interface ISourceDataset extends Serializable {
     public void setLicenseURI(String uri);
     public String getrightsHolder();
     public void setrightsHolder(String uri);
+    public String getMaintainer();
+    public void setMaintainer(String uri);    
 }

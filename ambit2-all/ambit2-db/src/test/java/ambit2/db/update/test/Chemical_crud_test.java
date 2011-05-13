@@ -51,7 +51,7 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 		c.setSmiles("CCC");
 		c.setInchi("inchi");
 		c.setFormula("formula");
-		c.setHash(100L);
+		c.setInchiKey("inchi-key");
 		return new CreateChemical(c);
 	}
 
@@ -59,7 +59,7 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 	protected void createVerify(IQueryUpdate<Object, IChemical> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles='CCC' and inchi='inchi' and formula='formula' and hashcode=100");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles='CCC' and inchi='inchi' and formula='formula' and inchikey='key'");
 		Assert.assertEquals(0,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where idchemical=7");
 		Assert.assertEquals(1,table.getRowCount());		
@@ -83,14 +83,14 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 		c.setSmiles("CCC");
 		c.setInchi("inchi");
 		c.setFormula("formula");
-		c.setHash(100L);
+		c.setInchiKey("key");
 		return new CreateChemical(c);
 	}
 
 	protected void createVerifyNew(IQueryUpdate<Object, IChemical> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles='CCC' and inchi='inchi' and formula='formula' and hashcode=100");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles='CCC' and inchi='inchi' and formula='formula' and inchikey='key'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}	
@@ -133,7 +133,7 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 		c.setSmiles("CCC");
 		c.setInchi("inchi");
 		c.setFormula("formula");
-		c.setHash(100L);
+		c.setInchiKey("key");
 		c.setIdchemical(10);
 		return new UpdateChemical(c);
 	}
@@ -146,7 +146,7 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 		Assert.assertEquals(0,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where idchemical=10");
 		Assert.assertEquals(1,table.getRowCount());
-		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles='CCC' and inchi='inchi' and formula='formula' and hashcode=100 and idchemical=10");
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles='CCC' and inchi='inchi' and formula='formula' and inchikey='key' and idchemical=10");
 		Assert.assertEquals(1,table.getRowCount());
 	
 		c.close();		

@@ -41,9 +41,9 @@ public class CreateChemical  extends AbstractObjectUpdate<IChemical> {
 	
 	
 	public static final String[] create_sql = {
-		"INSERT INTO chemicals (idchemical,smiles,hashcode,inchi,formula) values (?,?,?,?,?) " +
+		"INSERT INTO chemicals (idchemical,smiles,inchikey,inchi,formula) values (?,?,?,?,?) " +
 		"on duplicate key update smiles=ifnull(smiles,values(smiles))," +
-		"hashcode=ifnull(hashcode,values(hashcode))," +
+		"inchikey=ifnull(inchikey,values(inchikey))," +
 		"inchi=ifnull(inchi,values(inchi))," +
 		"formula=ifnull(formula,values(formula))"
 	};
@@ -61,7 +61,7 @@ public class CreateChemical  extends AbstractObjectUpdate<IChemical> {
 		else
 			params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 		params1.add(new QueryParam<String>(String.class, getObject().getSmiles()));
-		params1.add(new QueryParam<Long>(Long.class, getObject().getHash()));		
+		params1.add(new QueryParam<String>(String.class, getObject().getInchiKey()));		
 		params1.add(new QueryParam<String>(String.class, getObject().getInchi()));
 		params1.add(new QueryParam<String>(String.class, getObject().getFormula()));		
 		return params1;

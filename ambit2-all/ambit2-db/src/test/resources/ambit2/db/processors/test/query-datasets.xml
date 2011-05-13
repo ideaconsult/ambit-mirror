@@ -49,21 +49,21 @@
   <catalog_references idreference="43" title="ambit2.descriptors.MolecularWeight" url="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#weight"/>
   <catalog_references idreference="44" title="org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor" url="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#eccentricConnectivityIndex"/>
   <catalog_references idreference="45" title="org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor" url="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#hBondacceptors"/>
-  <chemicals idchemical="1" smiles="CC(C)C=3CCC1C(=CCC2C(C)(CCCC12(C))C(O)=O)C=3" formula="C20H2O2" hashcode="7607210855157489766" label="UNKNOWN"/>
-  <chemicals idchemical="2" smiles="CC(=O)C1CCCCC1(=O)" formula="C8O2" hashcode="-4217545272447145564" label="UNKNOWN"/>
-  <chemicals idchemical="3" smiles="C=CCc1ccc(cc1)OC" formula="C10O" hashcode="136543439225527002" label="UNKNOWN"/>
-  <chemicals idchemical="4" smiles="Nc1cc(cc(c1(O))Cl)[N+](=O)[O-]" formula="C6N2O3Cl" hashcode="-7900941857209151096" label="UNKNOWN"/>
-  <chemicals idchemical="5" smiles="Nc1ccc(NCCO)c(c1)[N+](=O)[O-]" formula="C8N3O3" hashcode="1358207428253431983" label="UNKNOWN"/>
-  <chemicals idchemical="6" smiles="Nc1ccccc1(O)" formula="C6NO" hashcode="6453328101337764684" label="UNKNOWN"/>
-  <chemicals idchemical="7" smiles="Nc1cccc(O)c1" formula="C6NO" hashcode="1946339108063543634" label="UNKNOWN"/>
-  <chemicals idchemical="8" smiles="CCCCCC(C=O)=Cc1ccccc1" formula="C14O" hashcode="3139077263737526169" label="UNKNOWN"/>
-  <chemicals idchemical="9" smiles="CCC(C)(C)C1CCC(CC=O)CC1" formula="C13O" hashcode="-7882203496878545860" label="UNKNOWN"/>
-  <chemicals idchemical="10" smiles="CC=Cc1ccc(cc1)OC" formula="C10O" hashcode="5965241043744100739" label="UNKNOWN"/>
-  <chemicals idchemical="11" smiles="Nc1ccccc1" formula="C6N" hashcode="-5037713945130000779" label="UNKNOWN"/>
-  <chemicals idchemical="12" smiles="O=Cc1ccccc1" formula="C7O" hashcode="3711707767986738231" label="UNKNOWN"/>
-  <chemicals idchemical="13" smiles="O=C(O)c1ccc2C(=O)OC(=O)c2(c1)" formula="C9O5" hashcode="-1876682025631041218" label="UNKNOWN"/>
-  <chemicals idchemical="14" smiles="O=C1NSc2ccccc12" formula="C7NOS" hashcode="1818076036104879311" label="UNKNOWN"/>
-  <chemicals idchemical="15" smiles="c1ccc2c(c1)cc3ccc4cccc5ccc2c3c45" formula="C20" hashcode="-2727001105672164963" label="UNKNOWN"/>
+  <chemicals idchemical="1" smiles="CC(C)C=3CCC1C(=CCC2C(C)(CCCC12(C))C(O)=O)C=3" formula="C20H2O2" inchikey="7607210855157489766" label="UNKNOWN"/>
+  <chemicals idchemical="2" smiles="CC(=O)C1CCCCC1(=O)" formula="C8O2" inchikey="-4217545272447145564" label="UNKNOWN"/>
+  <chemicals idchemical="3" smiles="C=CCc1ccc(cc1)OC" formula="C10O" inchikey="136543439225527002" label="UNKNOWN"/>
+  <chemicals idchemical="4" smiles="Nc1cc(cc(c1(O))Cl)[N+](=O)[O-]" formula="C6N2O3Cl" inchikey="-7900941857209151096" label="UNKNOWN"/>
+  <chemicals idchemical="5" smiles="Nc1ccc(NCCO)c(c1)[N+](=O)[O-]" formula="C8N3O3" inchikey="1358207428253431983" label="UNKNOWN"/>
+  <chemicals idchemical="6" smiles="Nc1ccccc1(O)" formula="C6NO" inchikey="6453328101337764684" label="UNKNOWN"/>
+  <chemicals idchemical="7" smiles="Nc1cccc(O)c1" formula="C6NO" inchikey="1946339108063543634" label="UNKNOWN"/>
+  <chemicals idchemical="8" smiles="CCCCCC(C=O)=Cc1ccccc1" formula="C14O" inchikey="3139077263737526169" label="UNKNOWN"/>
+  <chemicals idchemical="9" smiles="CCC(C)(C)C1CCC(CC=O)CC1" formula="C13O" inchikey="-7882203496878545860" label="UNKNOWN"/>
+  <chemicals idchemical="10" smiles="CC=Cc1ccc(cc1)OC" formula="C10O" inchikey="5965241043744100739" label="UNKNOWN"/>
+  <chemicals idchemical="11" smiles="Nc1ccccc1" formula="C6N" inchikey="-5037713945130000779" label="UNKNOWN"/>
+  <chemicals idchemical="12" smiles="O=Cc1ccccc1" formula="C7O" inchikey="3711707767986738231" label="UNKNOWN"/>
+  <chemicals idchemical="13" smiles="O=C(O)c1ccc2C(=O)OC(=O)c2(c1)" formula="C9O5" inchikey="-1876682025631041218" label="UNKNOWN"/>
+  <chemicals idchemical="14" smiles="O=C1NSc2ccccc12" formula="C7NOS" inchikey="1818076036104879311" label="UNKNOWN"/>
+  <chemicals idchemical="15" smiles="c1ccc2c(c1)cc3ccc4cccc5ccc2c3c45" formula="C20" inchikey="-2727001105672164963" label="UNKNOWN"/>
   <structure idstructure="1" idchemical="1" structure="LAkAAHic7ZI9DoMwDEb3nMIHqIrjhIC7QqVKVdut9z9KsSUkwK7aCTEEeYjec778EQCG8Q7TVxpu
 kE+xvaQcAlAGKgDoFjPDmxAxyEw8TyN0Rzf4FrGsXylDTakpu6fUf7em7J/yOlDKke7l7xQCiFoL
 MeE0mzXOagxu1Rhc1NAWd2pMd+cv2c9mjVnNtjuiGoOjGoPJx0mMxdnHrRiLixiLOzEe9g4v3d4G

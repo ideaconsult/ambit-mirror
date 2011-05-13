@@ -29,7 +29,7 @@
 
 package ambit2.db.processors;
 
-import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -43,7 +43,6 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.InchiPropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
-import ambit2.hashcode.HashcodeKey;
 
 public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord, IStructureRecord> {
 	/**
@@ -51,7 +50,6 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	 */
 	private static final long serialVersionUID = -218665330663424435L;
 	protected MoleculeReader molReader;
-	protected HashcodeKey hashcode;	
 	protected SmilesKey smilesKey;
 	protected InchiPropertyKey inchiKey;
 	protected StructureTypeProcessor strucType;
@@ -60,7 +58,6 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	
 	public StructureNormalizer() {
 		molReader = new MoleculeReader();
-		hashcode = new HashcodeKey();
 		smilesKey = new SmilesKey();
 		inchiKey = new InchiPropertyKey();
 		strucType = new StructureTypeProcessor();
@@ -68,44 +65,42 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	public IStructureRecord process(IStructureRecord structure)
 			throws AmbitException {
 		IAtomContainer molecule = molReader.process(structure);
+		
 		if ((molecule == null) || (molecule.getAtomCount()==0)) structure.setType(STRUC_TYPE.NA);
 		else {
 			structure.setType(strucType.process(molecule));
+
 		}
 		if ((molecule != null) && (molecule.getProperties()!=null))
 			structure.addProperties(molecule.getProperties());
-		
-		try {
-			//otherwise InChI tries to guess the stereo, even if it is not there...
-			for (IAtom atom : molecule.atoms()) {
-				atom.setPoint2d(null);
-				atom.setPoint3d(null);
-			}
 
-		} catch (Exception x) {
-			
-		}
 		try {
 			structure.setSmiles(smilesKey.process(molecule));
 			if ("".equals(structure.getSmiles())) structure.setSmiles(null);
 		} catch (Exception x) {
 			structure.setSmiles(null);
 		}		
-		
+
 		try {
 			if (structure.getInchi()== null) {
 				String inchi = null; 
-				if (molecule.getAtomCount()==0) 
+				String key = null; 
+				if (molecule.getAtomCount()==0){
 					inchi = inchiKey.process(structure);
-				else
+				} else
 				try {
 					if (inchiProcessor==null) inchiProcessor = new InchiProcessor();
-					inchi = inchiProcessor.process(molecule).getInchi();
+					InChIGenerator gen  = inchiProcessor.process(molecule);
+					inchi = gen.getInchi();
+
+					key =  gen.getInchiKey(); 
 				} catch (Exception x) {
 					inchi=null;
+					key = null;
 				}
 				if ("".equals(inchi)) inchi = null;
 				structure.setInchi(inchi);
+				structure.setInchiKey(key);
 			}
 		} catch (Exception x) {
 			structure.setInchi(null);

@@ -9,8 +9,8 @@ public interface IChemical extends Serializable {
 	void setSmiles(String smiles);
 	String getInchi();
 	void setInchi(String inchi);
-	long getHash();
-	void setHash(long hash);
+	String getInchiKey();
+	void setInchiKey(String key);
     int getIdchemical();
     void setIdchemical(int idchemical);
 	public boolean usePreferedStructure();

@@ -27,7 +27,14 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
 	}
 	
 	protected String rightsHolder;
+	protected String maintainer;
 
+	public String getMaintainer() {
+		return maintainer;
+	}
+	public void setMaintainer(String maintainer) {
+		this.maintainer = maintainer;
+	}
 	@Override
 	public String getrightsHolder() {
 		return rightsHolder;
