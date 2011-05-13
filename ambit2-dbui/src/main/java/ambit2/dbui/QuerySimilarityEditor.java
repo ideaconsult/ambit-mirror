@@ -43,7 +43,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QuerySimilarityStructure;
-import ambit2.jchempaint.editor.StructureDiagramEditor;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
@@ -58,7 +57,9 @@ public class QuerySimilarityEditor extends QueryEditor<ClassHolder, IMoleculeSet
 	 * 
 	 */
 	private static final long serialVersionUID = -7423741371866787902L;
+	/* UNCOMMENT TO USE JCHEMPAIN
 	protected StructureDiagramEditor editor;
+	*/
 	public QuerySimilarityEditor() {
 		super();
 	}
@@ -88,13 +89,18 @@ public class QuerySimilarityEditor extends QueryEditor<ClassHolder, IMoleculeSet
 	     return panel.getPanel();
 	}			
 	protected JComponent createStructureComponent() {
+		/* UNCOMMENT TO USE JCHEMPAINT
 		if (editor == null)
 			editor = new StructureDiagramEditor();
 		return editor.getJComponent();
+		*/
+		return null;
 	}
 	@Override
 	public boolean confirm() {
+		/* UNCOMMENT TO USE JCHEMPAINT
 		getObject().setValue(editor.getObject());
+		*/
 		return super.confirm();
 	}
 	@Override

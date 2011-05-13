@@ -27,11 +27,13 @@
     	<artifactId>ambit2-ui</artifactId>
     	<version>${version}</version>
     </dependency>
+    <!-- 
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-jchempaint</artifactId>
     	<version>${version}</version>
     </dependency>    
+     -->
     <dependency>
     	<groupId>jfree</groupId>
     	<artifactId>jfreechart</artifactId>
