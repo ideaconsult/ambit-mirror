@@ -16,7 +16,6 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.db.search.QueryInfo;
 import ambit2.db.search.StringCondition.STRING_CONDITION;
-import ambit2.jchempaint.editor.MoleculeEditAction;
 import ambit2.ui.Panel2D;
 
 import com.jgoodies.binding.PresentationModel;
@@ -61,11 +60,16 @@ public class QueryInfoEditor extends JPanel implements IAmbitEditor<QueryInfo> {
 	protected JComboBox and;
 	
 	protected Panel2D panel2d;
+	
+	/* UNCOMMENT TO USE JCHEMPAIN
 	protected MoleculeEditAction editAction;
+	*/
 	
 	public QueryInfoEditor() {
 		add(buildPanel());
-		editAction = new MoleculeEditAction(null);		
+		/* UNCOMMENT TO USE JCHEMPAIN
+		editAction = new MoleculeEditAction(null);
+		*/		
 	}
 	public JComponent buildPanel() {
 
@@ -206,10 +210,12 @@ public class QueryInfoEditor extends JPanel implements IAmbitEditor<QueryInfo> {
         	public void mouseClicked(MouseEvent e) {
     			super.mouseClicked(e);        		
         		if (e.getClickCount()==1) {
+        			/* UNCOMMENT TO USE JCHEMPAIN
         			editAction.setMolecule(getObject().getMolecule());
         			editAction.actionPerformed(null);
         			panel2d.setAtomContainer(editAction.getMolecule(), true);
         			object.setMolecule(editAction.getMolecule());
+        			*/
         		}	
         	}
         });

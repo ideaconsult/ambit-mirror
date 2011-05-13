@@ -1,25 +1,14 @@
 package ambit2.workflow.ui;
 
-import java.util.Iterator;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.core.data.MoleculeTools;
-import ambit2.core.processors.structure.MoleculeWriter;
-import ambit2.jchempaint.editor.StructureDiagramEditor;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -34,7 +23,9 @@ public class StructureRecordEditor  implements IAmbitEditor<StructureRecord> {
 	private static final long serialVersionUID = -7065417033780468740L;
 	protected StructureRecord record;
 	protected MapTableModel<Property, Object> propertiesModel;
+	/* UNCOMMENT TO USE JCHEMPAINT
 	protected StructureDiagramEditor strucDiagram;
+	*/
 	protected JComponent component;
 	
 	public StructureRecordEditor() {
@@ -53,7 +44,9 @@ public class StructureRecordEditor  implements IAmbitEditor<StructureRecord> {
 
 	     CellConstraints cc = new CellConstraints();   
 
+	     /* UNCOMMENT TO USE JCHEMPAINT
 	     strucDiagram = new StructureDiagramEditor();
+	     */
 	     
 	     panel.addSeparator("Identifiers", cc.xywh(1,1,1,1));
 	     panel.addSeparator("Structure diagram", cc.xywh(3,1,1,1));
@@ -82,13 +75,16 @@ public class StructureRecordEditor  implements IAmbitEditor<StructureRecord> {
 	     JScrollPane pane = new  JScrollPane(table);
 	     pane.setBorder(BorderFactory.createEmptyBorder());
 	     panel.add(pane, cc.xywh(1,2,1,1));
+	     /* UNCOMMENT TO USE JCHEMPAINT
 	     panel.add(strucDiagram.getJComponent(), cc.xywh(3,2,1,1));
+	     */
 	     //c = BasicComponentFactory.createTextField(presentati9onModel.getModel("name"));
      
 	     return panel.getPanel();
 	}			
 	
 	public boolean confirm() {
+		/* UNCOMMENT TO USE JCHEMPAINT
 		IMoleculeSet set = strucDiagram.getObject();
 		IMolecule mol = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
 		Iterator<IAtomContainer> i = set.molecules().iterator();
@@ -104,7 +100,8 @@ public class StructureRecordEditor  implements IAmbitEditor<StructureRecord> {
 			
 			return false;
 		}
-		
+		*/
+		return false;
 	}
 
 	public JComponent getJComponent() {
