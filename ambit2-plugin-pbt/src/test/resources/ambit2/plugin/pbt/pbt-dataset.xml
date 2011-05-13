@@ -6,7 +6,7 @@
   <user_roles user_name="guest" role_name="ambit_guest"/>
   <catalog_references idreference="3" title="REACH PBT SCREENING TOOL FOR AMBIT XT v.1.02" url="by Clariant"/>
   <catalog_references idreference="4" title="Default property reference" url="http://ambit.sourceforge.net"/>
-  <chemicals idchemical="1" smiles="c1ccccc1" formula="C6" hashcode="-3676696093352162140" label="UNKNOWN"/>
+  <chemicals idchemical="1" smiles="c1ccccc1" formula="C6" inchikey="-3676696093352162140" label="UNKNOWN"/>
   <structure idstructure="1" idchemical="1" structure="gQIAAHic41JQcHbxVgACU31jQ30DSx1DEysTCy4uBQUzMDLAiiwtLRXCjAwMDLhAWg30gCwDrCxn
 BVxGICPeUWPoYYyhgoIRmESSAYkDBY3BJJo4UNAEm3qgoCk29abgFIOp3gxmNYq4r4KCq58LAPvt
 YBo=" format="SDF" updated="2009-05-31 14:48:34.0" user_name="guest" type_structure="NA"/>
