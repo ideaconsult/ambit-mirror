@@ -387,7 +387,7 @@ CHANGE COLUMN `hashcode` `inchikey` VARCHAR(27) DEFAULT 0
 -- -----------------------------------------------------
 -- placeholder for dataset creator name 
 -- ----------------------------------------------------- 
- ALTER TABLE `src_dataset` ADD COLUMN `creator` VARCHAR(45) NOT NULL DEFAULT 'Unknown' AFTER `rightsHolder`,
+ ALTER TABLE `src_dataset` ADD COLUMN `maintainer` VARCHAR(45) NOT NULL DEFAULT 'Unknown' AFTER `rightsHolder`,
  ADD INDEX `Index_6`(`maintainer`);
  
  -- -----------------------------------------------------
