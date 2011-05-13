@@ -197,19 +197,22 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 						target = transform(target,content);
 						
 						switch (mode) {
+
+						case emptyonly: {
+							if (!STRUC_TYPE.NA.equals(originalType)) {
+								target.setIdstructure(-1) ;
+							}							
+							break;
+						}
 						case replace: {
 							target.setUsePreferedStructure(false);
 							break;
 						}	
-						default: 
-							if (!STRUC_TYPE.NA.equals(originalType)) {
-								target.setIdstructure(-1) ;
-							}
+						default:  //add
+							target.setIdstructure(-1) ;
 							target.setUsePreferedStructure(false);
 							break;
 						}
-						
-						System.out.println(value + " Found");
 						return target;
 					}
 				} catch (HttpException x) {
