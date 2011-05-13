@@ -39,7 +39,7 @@ import ambit2.db.update.AbstractObjectUpdate;
 
 public class UpdateChemical extends AbstractObjectUpdate<IChemical>  {
 	public static final String[] update_sql = {
-		"update chemicals set smiles=?,hashcode=?,inchi=?,formula=? where idchemical=?"
+		"update chemicals set smiles=?,inchikey=?,inchi=?,formula=? where idchemical=?"
 	};
 	public UpdateChemical(IChemical chemical) {
 		super(chemical);
@@ -52,7 +52,7 @@ public class UpdateChemical extends AbstractObjectUpdate<IChemical>  {
 		if (getObject().getIdchemical()<=0) throw new AmbitException("Chemical not defined");
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
 		params1.add(new QueryParam<String>(String.class, getObject().getSmiles()));
-		params1.add(new QueryParam<Long>(Long.class, getObject().getHash()));		
+		params1.add(new QueryParam<String>(String.class, getObject().getInchiKey()));		
 		params1.add(new QueryParam<String>(String.class, getObject().getInchi()));
 		params1.add(new QueryParam<String>(String.class, getObject().getFormula()));	
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));

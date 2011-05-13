@@ -46,7 +46,7 @@ public class StructureRecord implements IStructureRecord {
 	public void setDataEntryID(int dataEntryID) {
 		this.dataEntryID = dataEntryID;
 	}
-	protected long hash;
+	protected String inchiKey;
 	protected String formula;
 	protected String smiles;
 	protected String inchi;
@@ -74,12 +74,15 @@ public class StructureRecord implements IStructureRecord {
 	public void setFormula(String formula) {
 		this.formula = formula;
 	}
-	public long getHash() {
-		return hash;
+	@Override
+	public void setInchiKey(String key) {
+		this.inchiKey = key;
+		
 	}
-	public void setHash(long hash) {
-		this.hash = hash;
+	public String getInchiKey() {
+		return inchiKey;
 	}
+
 	public String getSmiles() {
 		return smiles;
 	}
@@ -160,7 +163,7 @@ public class StructureRecord implements IStructureRecord {
 		this.content = content;
 		setSmiles(null);
 		setInchi(null);
-		setHash(0L);
+		setInchiKey(null);
 	}
 	/* 
 	public Map getProperties() {
@@ -198,7 +201,7 @@ public class StructureRecord implements IStructureRecord {
 	public void clear() {
 		setSmiles(null);
 		setInchi(null);
-		setHash(0L);
+		setInchiKey(null);
 		setFormula(null);
 		setContent(null);
 		setIdchemical(-1);

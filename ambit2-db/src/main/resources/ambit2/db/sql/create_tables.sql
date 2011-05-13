@@ -66,21 +66,40 @@ CREATE TABLE  `catalog_references` (
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `chemicals`;
 CREATE TABLE  `chemicals` (
-  `idchemical` int(11) unsigned NOT NULL auto_increment,
-  `inchi` text character set latin1 collate latin1_bin,
-  `smiles` text character set latin1 collate latin1_bin,
-  `formula` varchar(64) default NULL,
-  `hashcode` bigint(20) NOT NULL default '0',
-  `label` enum('OK','UNKNOWN','ERROR') NOT NULL default 'UNKNOWN',
-  PRIMARY KEY  (`idchemical`),
-  KEY `sinchi` (`inchi`(760)),
-  KEY `ssmiles` (`smiles`(760)),
-  KEY `idchemical` (`idchemical`),
-  KEY `inchi` (`inchi`(767)),
-  KEY `formula` (`formula`),
-  KEY `hashcode` USING BTREE (`hashcode`),
-  KEY `Index_8` (`label`)
+  `idchemical` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `inchi` text CHARACTER SET latin1 COLLATE latin1_bin,
+  `smiles` text CHARACTER SET latin1 COLLATE latin1_bin,
+  `formula` varchar(64) DEFAULT NULL,
+  `inchikey` varchar(27) DEFAULT '0',
+  `label` enum('OK','UNKNOWN','ERROR') NOT NULL DEFAULT 'UNKNOWN',
+  PRIMARY KEY (`idchemical`),
+  KEY `index_smiles` (`smiles`(760)) USING BTREE,
+  KEY `index_idchemical` (`idchemical`) USING BTREE,
+  KEY `index_inchi` (`inchi`(767)) USING BTREE,
+  KEY `index_formula` (`formula`) USING BTREE,
+  KEY `index_inchikey` (`inchikey`) USING BTREE,
+  KEY `index_label` (`label`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- -----------------------------------------------------
+-- Table `chem_relation` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `chem_relation`;
+CREATE TABLE `chem_relation` (
+  `idchemical1` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idchemical2` INTEGER UNSIGNED NOT NULL,
+  `relation` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`idchemical1`, `idchemical2`, `relation`),
+  CONSTRAINT `FK_chem_relation_1` FOREIGN KEY `FK_chem_relation_1` (`idchemical1`)
+    REFERENCES `chemicals` (`idchemical`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `FK_chem_relation_2` FOREIGN KEY `FK_chem_relation_2` (`idchemical2`)
+    REFERENCES `chemicals` (`idchemical`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `structure`
@@ -450,11 +469,13 @@ CREATE TABLE  `src_dataset` (
   `idtemplate` int(10) unsigned DEFAULT NULL,
   `licenseURI` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `rightsHolder` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
+  `maintainer` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   PRIMARY KEY (`id_srcdataset`),
   UNIQUE KEY `src_dataset_name` (`name`),
   KEY `FK_src_dataset_1` (`user_name`),
   KEY `FK_src_dataset_2` (`idreference`),
   KEY `FK_src_dataset_3` (`idtemplate`),
+  KEY `Index_6` (`maintainer`),
   CONSTRAINT `FK_src_dataset_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_src_dataset_2` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE,
   CONSTRAINT `FK_src_dataset_3` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -523,7 +544,7 @@ CREATE TABLE  `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
--- Table `query` User queries per session
+-- Table `query` User queries per session, now used as /dataset/R*
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `query`;
 CREATE TABLE  `query` (
@@ -933,7 +954,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (4,14,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (5,0,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

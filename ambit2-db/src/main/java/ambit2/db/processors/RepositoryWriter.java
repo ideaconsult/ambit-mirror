@@ -39,6 +39,7 @@ import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.InchiKey;
+import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.RetrieveStructure;
@@ -209,16 +210,14 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         	Object property = null;
         	try {
         		property = propertyKey.process(structure);
-        		if (property!=null)
+        		if (property!=null) {
         			findChemical(query_property,propertyKey.getQueryKey(),property,structure);
-        		else
+					 // if still not found, and not empty struc, fallback to structure match
+        			if (!(propertyKey instanceof NoneKey) && (structure.getType()!=STRUC_TYPE.NA)) 
+        					if (structure.getIdchemical() <= 0) findByStructure(structure);
+        		} else
 	        		if (structure.getIdchemical() <= 0) {
-            			query_chemicals.setFieldname(structure.getInchi()==null?
-        						smilesKey.getQueryKey().toString():
-        						inchiKey.getQueryKey().toString());
-            			findChemical(query_chemicals,null,structure.getInchi()==null?
-        					   structure.getSmiles():
-        					   structure.getInchi(),structure);	        			
+            			findByStructure(structure);
 	        		}
         	} catch (SQLException x) {
         		throw x;
@@ -227,17 +226,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         		logger.warn(x);
             	//if not found, find by SMILES
             	if (structure.getIdchemical()<=0)
-            		try {
-            			query_chemicals.setFieldname(structure.getInchi()==null?
-            						smilesKey.getQueryKey().toString():
-            						inchiKey.getQueryKey().toString());
-            			findChemical(query_chemicals,null,structure.getInchi()==null?
-            					   structure.getSmiles():
-            					   structure.getInchi(),structure);
-            		} catch (Exception ex) {
-                		//x.printStackTrace();
-                		logger.warn(x);
-            		}
+            		findByStructure(structure);
         	}
 
         }
@@ -245,6 +234,20 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 
         return structureWriter.writeStructure(structure,OP.UPDATE==getOperation());
         
+	}
+	
+	private void findByStructure(IStructureRecord structure) {
+		try {
+			query_chemicals.setFieldname(structure.getInchi()==null?
+						smilesKey.getQueryKey().toString():
+						inchiKey.getQueryKey().toString());
+			findChemical(query_chemicals,null,structure.getInchi()==null?
+					   structure.getSmiles():
+					   structure.getInchi(),structure);
+		} catch (Exception ex) {
+    		//x.printStackTrace();
+    		logger.warn(ex);
+		}
 	}
 	protected void prepareStatement(Connection connection) throws SQLException {
         ps_seekdataset = connection.prepareStatement(seek_dataset);

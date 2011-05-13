@@ -10,7 +10,8 @@ public class AbstractDataset implements ISourceDataset {
 		source,
 		seeAlso,
 		license,
-		rightsHolder
+		rightsHolder,
+		maintainer
 	}
 	/**
 	 * 
@@ -70,6 +71,16 @@ public class AbstractDataset implements ISourceDataset {
 	@Override
 	public void setrightsHolder(String uri) {
 		properties.put(_props.rightsHolder.name(), uri);
+		
+	}
+	@Override
+	public String getMaintainer() {
+		return properties.get(_props.maintainer.name());
+		
+	}
+	@Override
+	public void setMaintainer(String uri) {
+		properties.put(_props.maintainer.name(), uri);
 		
 	}
 }
