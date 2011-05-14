@@ -61,4 +61,42 @@ public class Name2StructureProcessorTest {
 
 	}
 	
+	@Test
+	public void testFailed() throws Exception {
+		String[] names = new String[] {
+		"cis-1,2,3,5,6,7,8,8a-octahydro-1,8a-dimethyl-7-(1-methylethylidene)naphthalene",
+		"Polydimethylsiloxane",
+		"Poly(imino(1-oxo-1,12-dodecanediyl))",
+		"Polyoxymethylene",
+		"Poly(iminocarbonimidoyliminocarbonimidoylimino-1,6-hexanediyl), hydrochloride",
+		"polydimethylsiloxane",
+		"Polysiloxane",
+		"Poly[[6-[(1,1,3,3-tetramethylbutyl)amino]-s-triazine-2,4-diyl]-[(2,2,6,6-tetramethyl-4-piperidyl)imino]-hexamethylene-[(2,2,6,6-tetramethyl-4-piperidyl)imino]]",
+		"Polypropylene",
+		"Polyoxyethylene monooleate",
+		"POLYOXYPROPYLENE POLYOXYETHYLENE ETHYLENEDIAMINE",
+		"polysiloxane",
+		"Polydimethyl-siloxane",
+		"polyoxyethylene tristyrylphenyl ether",
+		"Poly(iminocarbonimidoyliminocarbonimidoylimino-1,6-hexanediyl)",
+		"polybutylene terephthalate"
+		};
+		
+		for (String name:names) {
+			Name2StructureProcessor p = new Name2StructureProcessor();
+			
+			OpsinResult result = p.name2structure(name);
+			System.out.print(String.format("%s %s ",result.getStatus(),name));
+			if (result.getStatus()==OPSIN_RESULT_STATUS.SUCCESS) {
+				String inchi = NameToInchi.convertResultToInChI(result);
+				System.out.println(inchi==null?"No inchi":inchi);
+				System.out.println(result.getSmiles());
+				
+				
+			}
+			
+			System.out.println();
+		}
+	}
+	
 }
