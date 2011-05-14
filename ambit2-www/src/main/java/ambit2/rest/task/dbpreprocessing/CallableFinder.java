@@ -29,6 +29,8 @@ import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.search.property.RetrieveProfile;
+import ambit2.db.search.property.RetrieveProfile.QueryMode;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.namestructure.Name2StructureFinder;
@@ -233,7 +235,10 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 	protected IProcessor<IStructureRecord,IStructureRecord> getValuesReader() {
 		if  (profile.size()>0) {
 			ValuesReader readProfile = new ValuesReader(null);  //no reader necessary
+			RetrieveProfile propertyQuery = new RetrieveProfile(QueryMode.idproperty);
+			propertyQuery.setValue(profile);
 			readProfile.setProfile(profile);
+			readProfile.setPropertyQuery(propertyQuery);
 			return readProfile;
 		} else return null;
 	}

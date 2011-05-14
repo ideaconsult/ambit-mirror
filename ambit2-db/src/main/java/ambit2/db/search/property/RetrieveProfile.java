@@ -42,7 +42,7 @@ import ambit2.db.search.StringCondition;
 
 public class RetrieveProfile extends AbstractPropertyRetrieval<String, Profile<Property>, StringCondition> {
 	public enum QueryMode {
-		id {
+		idproperty {
 			@Override
 			String getParam(Property arg0) {
 				return String.format("%d", arg0.getId());
