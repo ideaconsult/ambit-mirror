@@ -131,6 +131,16 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			}	catch (Exception x) {
 				label = Property.guessLabel(name);
 			}	
+			
+			Statement t = ((Resource)propertyEntry).getProperty( OTProperty.smarts.createProperty(jenaModel));
+			RDFNode smarts = t.getObject();
+			if ((smarts!=null) && smarts.isLiteral()) {
+				String fragment = smarts.asLiteral().getString();
+				if (name==null) name = fragment;
+				//TODO set ot:smarts property
+				property.setNominal(true);
+			}
+					
 			property.setName(name==null?thisurl==null?label:thisurl.toString():name);
 			property.setLabel(label);		
 			
@@ -183,7 +193,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 	}
 	
 	protected LiteratureEntry processSource(Resource newEntry, String hasSource,String creator) {
-		_type sourceType = _type.BibtexEntry;
+		_type sourceType = _type.Dataset;
 		Statement stmt = newEntry.getProperty(OT.OTProperty.hasSource.createProperty(jenaModel));
 		if ((stmt!=null) && (stmt.getObject()!=null) ) {
 			RDFNode source = stmt.getObject();
@@ -209,6 +219,12 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 					else if (type.equals(OT.OTClass.Model.getOntClass(jenaModel))) sourceType = _type.Model;
 					else if (type.equals(OT.OTClass.Dataset.getOntClass(jenaModel))) sourceType = _type.Dataset;
 					else if (type.equals(OT.OTClass.Feature.getOntClass(jenaModel))) sourceType = _type.Feature;
+				} else {
+					//hack
+					if (hasSource.contains("/algorithm/")) sourceType = _type.Algorithm;
+					else if (hasSource.contains("/model/")) sourceType = _type.Model;
+					else if (hasSource.contains("/dataset/")) sourceType = _type.Dataset;
+					else if (hasSource.contains("/feature/")) sourceType = _type.Feature;
 				}
 
 						
