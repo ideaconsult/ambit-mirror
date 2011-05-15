@@ -87,8 +87,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 			jenaModel.read(reader,null,rdfFormat==null?"RDF/XML":rdfFormat);
 			compoundTemplate = new Template(String.format("%s%s",basereference==null?"":basereference,CompoundResource.compoundID));
 			conformerTemplate = new Template(String.format("%s%s",basereference==null?"":basereference,ConformerResource.conformerID));
-			propertyIterator = new RDFPropertyIterator(jenaModel);
-			propertyIterator.setBaseReference(new Reference(basereference));
+			propertyIterator = createPropertyIterator(jenaModel,basereference);
 		} catch (CDKException x) {
 			throw x;
 		} catch (Exception x) {
@@ -97,6 +96,11 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		
 	}
 	
+	protected RDFPropertyIterator createPropertyIterator(OntModel jenaModel,String basereference) {
+		RDFPropertyIterator pi  = new RDFPropertyIterator(jenaModel);
+		pi.setBaseReference(new Reference(basereference));
+		return pi;
+	}
 	private StmtIterator initIterator() {
 		if (recordIterator == null) {
 			Resource s = OT.OTClass.DataEntry.getOntClass(jenaModel);
@@ -185,17 +189,9 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 					}
 				}		
 				
-				if ((value != null) && value.isLiteral()) {
-					RDFDatatype datatype = ((Literal)value).getDatatype();
-					if (XSDDatatype.XSDdouble.equals(datatype)) 
-						record.setProperty(key, ((Literal)value).getDouble());
-					else if (XSDDatatype.XSDfloat.equals(datatype)) 
-						record.setProperty(key, ((Literal)value).getFloat());
-					else if (XSDDatatype.XSDinteger.equals(datatype)) 
-						record.setProperty(key, ((Literal)value).getInt());		
-					else if (XSDDatatype.XSDstring.equals(datatype)) 
-						record.setProperty(key, ((Literal)value).getString());
-				}
+				if (value != null) 
+					setFeatureValue(record, key, value);
+				
 	
 			}
 		}
@@ -338,6 +334,10 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 				record.setProperty(key, ((Literal)value).getInt());		
 			else if (XSDDatatype.XSDstring.equals(datatype)) 
 				record.setProperty(key, value.toString());
+			else if (XSDDatatype.XSDboolean.equals(datatype)) 
+				record.setProperty(key, ((Literal)value).getBoolean());		
+			else 
+				record.setProperty(key, ((Literal)value).getString());
 		}
 	}
 	
