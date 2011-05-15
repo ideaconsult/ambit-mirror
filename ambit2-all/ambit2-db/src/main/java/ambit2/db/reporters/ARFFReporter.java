@@ -22,7 +22,14 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	 */
 	private static final long serialVersionUID = 2931123688036795689L;
 
-
+	protected String urlPrefix = "";
+	public String getUrlPrefix() {
+		return urlPrefix;
+	}
+	public void setUrlPrefix(String urlPrefix) {
+		this.urlPrefix = urlPrefix;
+	}
+	
 	public ARFFReporter() {
 		this(null,null);
 	}
@@ -120,7 +127,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			Writer writer = getOutput();
 			writeHeader(writer);
 			int i = 0;
-			writer.write(String.format("/compound/%d",item.getIdchemical()));
+			writer.write(String.format("%s/compound/%d",urlPrefix,item.getIdchemical()));
 			if (item.getIdstructure()>0)
 				writer.write(String.format("/conformer/%d",item.getIdstructure()));
 			for (Property p : header) {

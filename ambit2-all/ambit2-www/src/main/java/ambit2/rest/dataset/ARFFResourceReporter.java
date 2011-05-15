@@ -24,12 +24,13 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	 */
 	private static final long serialVersionUID = 2627930277795024333L;
 	protected PropertyURIReporter reporter;
-	
-	public ARFFResourceReporter(Template template, Request request,ResourceDoc doc) {
-		this(template,null,request,doc);
+
+	public ARFFResourceReporter(Template template, Request request,ResourceDoc doc, String urlPrefix) {
+		this(template,null,request,doc,urlPrefix);
 	}
-	public ARFFResourceReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc) {
+	public ARFFResourceReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix) {
 		super(template,groupedProperties);
+		setUrlPrefix(urlPrefix);
 		reporter = new PropertyURIReporter(request,doc);
 	}
 	@Override
