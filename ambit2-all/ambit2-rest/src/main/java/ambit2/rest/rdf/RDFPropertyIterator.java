@@ -133,15 +133,16 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			}	
 			
 			Statement t = ((Resource)propertyEntry).getProperty( OTProperty.smarts.createProperty(jenaModel));
-			RDFNode smarts = t.getObject();
+			RDFNode smarts = t==null?null:t.getObject();
+			String fragment = null;
 			if ((smarts!=null) && smarts.isLiteral()) {
-				String fragment = smarts.asLiteral().getString();
-				if (name==null) name = fragment;
+				fragment = smarts.asLiteral().getString();
+				property.setUnits(fragment);
 				//TODO set ot:smarts property
 				property.setNominal(true);
-			}
-					
-			property.setName(name==null?thisurl==null?label:thisurl.toString():name);
+				property.setName(String.format("%s#%s",name,Reference.encode(fragment)));
+			} else 
+				property.setName(name==null?thisurl==null?label:thisurl.toString():name);
 			property.setLabel(label);		
 			
 			try {	
