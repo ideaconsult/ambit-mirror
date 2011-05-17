@@ -28,14 +28,14 @@ public class PredefinedKnowledgeBase
 	//Warning Filters	
 	public static final String warningFragments[] =
 	{	
-		"[C;!R](=*)=*",     //allene atom
+		//"[C;!R](=*)=*",     //allene atom
 	};
 	
 	
 	//Exclude Filters	
 	public static final String excludeFragments[] =
 	{
-		"[*;r4,r5,r6,r7,r8](=*)=*",  //allene atom in a cycle (up to 8 atoms)
+		//"[*;r4,r5,r6,r7,r8](=*)=*",  //allene atom in a cycle (up to 8 atoms)
 		
 	};
 	

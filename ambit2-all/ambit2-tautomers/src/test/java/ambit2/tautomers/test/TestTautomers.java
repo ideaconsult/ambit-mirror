@@ -80,6 +80,8 @@ public class TestTautomers
 	{
 		System.out.println("Visual Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		
+		
 		tman.setStructure(mol);
 		//Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
 		
@@ -89,7 +91,10 @@ public class TestTautomers
 			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(resultTautomers);
-	}
+		
+		
+		System.out.println(mol.getAtom(0).getAtomicNumber().intValue());
+	} 
 	
 	
 	
