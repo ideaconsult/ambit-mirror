@@ -10,6 +10,7 @@ public interface ILiteratureEntry extends Serializable {
 	   void setId(int id);
 	   String getTitle();
 	   String getURL();
+	   void setURL(String uRL);
 	   _type getType();
 	   void setType(_type type);
 

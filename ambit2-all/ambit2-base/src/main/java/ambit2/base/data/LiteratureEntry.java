@@ -24,7 +24,10 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	public final static String p_url="URL";
 	protected String title;
 	protected String URL;
-    protected int id = -1;
+    public void setURL(String uRL) {
+		URL = uRL;
+	}
+	protected int id = -1;
     protected boolean editable;
     protected _type type = _type.BibtexEntry;
     public _type getType() {
