@@ -202,6 +202,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			} catch (Exception x) {}			
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundHTMLReporter(
+							getCompoundInDatasetPrefix(),
 							getRequest(),
 							getDocumentation(),
 							collapsed,
@@ -217,11 +218,11 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					r,MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()),
+					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
 					ChemicalMediaType.WEKA_ARFF);	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getTemplate(),getGroupProperties(),getRequest().getRootRef().toString()),MediaType.TEXT_CSV);				
+					new CSVReporter(getTemplate(),getGroupProperties(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),MediaType.TEXT_CSV);				
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
@@ -231,7 +232,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-					new DatasetRDFReporter(getRequest(),getDocumentation(),
+					new DatasetRDFReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
 							variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());			
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
@@ -255,7 +256,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType());
 	}
 	protected QueryURIReporter getURIReporter() {
-		return new CompoundURIReporter<QueryStructureByID>(getRequest(),getDocumentation());
+		return new CompoundURIReporter<QueryStructureByID>(getCompoundInDatasetPrefix(),getRequest(),getDocumentation());
 	}
 	protected IQueryRetrieval<IStructureRecord> createSingleQuery(String property,
 			String cond,String key,boolean chemicalsOnly, boolean byAlias, boolean caseSens) {
