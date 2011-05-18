@@ -13,6 +13,15 @@ import org.restlet.data.Reference;
 import org.restlet.security.Authorizer;
 
 public class OpenSSOAuthorizer extends Authorizer {
+	protected String prefix = null;
+	
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String u) {
+		this.prefix = u;//==null?null:u.lastIndexOf("/")==u.length()-1?u:String.format("%s/",u);
+	}
 
 	@Override
 	protected boolean authorize(Request request, Response response) {
@@ -41,10 +50,39 @@ public class OpenSSOAuthorizer extends Authorizer {
 	protected boolean isEnabled() {
 		return OpenSSOServicesConfig.getInstance().isEnabled();
 	}
+	
+	public String uri2check(Reference root,Reference ref) throws Exception {
+		if (prefix==null) return ref==null?null:ref.toString();
+	    if (ref == null) return null;
+	    
+	    String u = root.toString();
+		Reference fullPrefix = new Reference(String.format("%s%s%s/", 
+					u,
+					u.lastIndexOf("/")==u.length()-1?"":"/",
+					prefix));
+		
+		Reference uri = ref;
+		u = ref.toString();
+		Reference uri2check = new Reference(u==null?null:
+										u.lastIndexOf("/")==u.length()-1?u:String.format("%s/",u)); //add trailing slash
+		int prefix_len = fullPrefix.toString().length();
+		while (!fullPrefix.equals(uri)) {
+			uri2check = uri;
+			uri = uri.getParentRef();
+			if (uri.toString().length()<prefix_len) return null; //smth wrong
+		}
+		u = uri2check.toString();
+		if (u.lastIndexOf("/")==(u.length()-1))
+			return u.substring(0,u.length()-1);
+		else return u;
+	}
+	
 	protected boolean authorize(OpenSSOToken ssoToken, Request request)  throws Exception {
 		Reference ref = request.getResourceRef().clone();
 		ref.setQuery(null);
-		if (ssoToken.authorize(ref.toString(),request.getMethod().toString()))  {
+		String uri = uri2check(request.getRootRef(),ref);
+		if (uri==null) return false;
+		if (ssoToken.authorize(uri,request.getMethod().toString()))  {
 			if (!Method.GET.equals(request.getMethod())){
 				try {retrieveUserAttributes(ssoToken, request);} 
 				catch (Exception x) {}

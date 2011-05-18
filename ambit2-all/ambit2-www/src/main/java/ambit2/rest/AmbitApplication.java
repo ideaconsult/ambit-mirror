@@ -31,32 +31,20 @@ import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
 import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DBCreateAllowedGuard;
-import ambit2.rest.admin.DatabaseResource;
 import ambit2.rest.admin.PolicyResource;
-import ambit2.rest.admin.fingerprints.FingerprintResource;
-import ambit2.rest.admin.fingerprints.StructuresByFingerprintResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
-import ambit2.rest.bookmark.BookmarkTopicsResource;
-import ambit2.rest.dataEntry.DataEntryResource;
-import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
-import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.DatasetsResource;
-import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
-import ambit2.rest.dataset.filtered.StatisticsResource;
 import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.facet.DatasetsByNamePrefixResource;
 import ambit2.rest.model.ModelResource;
-import ambit2.rest.property.PropertiesByDatasetResource;
-import ambit2.rest.property.PropertyModelResource;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.pubchem.ChEBIResource;
 import ambit2.rest.pubchem.PubchemResource;
@@ -66,19 +54,23 @@ import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.report.ReportDatasetResource;
+import ambit2.rest.routers.MyRouter;
+import ambit2.rest.routers.misc.AdminRouter;
+import ambit2.rest.routers.misc.BookmarksRouter;
+import ambit2.rest.routers.misc.ChartRouter;
+import ambit2.rest.routers.misc.DataEntryRouter;
+import ambit2.rest.routers.misc.DepictDemoRouter;
+import ambit2.rest.routers.opentox.AlgorithmRouter;
+import ambit2.rest.routers.opentox.CompoundsRouter;
+import ambit2.rest.routers.opentox.DatasetsRouter;
+import ambit2.rest.routers.opentox.FeaturesRouter;
+import ambit2.rest.routers.opentox.ModelRouter;
+import ambit2.rest.routers.opentox.TaskRouter;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
-import ambit2.rest.structure.CompoundImageResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
-import ambit2.rest.structure.ConformerResource;
-import ambit2.rest.structure.dataset.DatasetsByStructureResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
-import ambit2.rest.structure.diagram.CDKDepict;
-import ambit2.rest.structure.diagram.CSLSDepict;
-import ambit2.rest.structure.diagram.DaylightDepict;
-import ambit2.rest.structure.quality.ConsensusLabelResource;
-import ambit2.rest.structure.quality.QualityLabelResource;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
@@ -148,157 +140,56 @@ public class AmbitApplication extends TaskApplication<String> {
 		router.attach("/", AmbitResource.class);
 		router.attach("", AmbitResource.class);
 
-		//router.attach("", SmartsQueryResource.class);	
-		//router.attach("/", SmartsQueryResource.class);
-
 		/**
 		 *  Points to the Ontology service
 		 *  /sparqlendpoint 
 		 */
 		router.attach(SPARQLPointerResource.resource, SPARQLPointerResource.class);
 		
-		/**
-		 *  /admin 
+		/**		 *  /admin 
 		 *  Various admin tasks, like database creation
 		 */
 		router.attach(String.format("/%s",AdminResource.resource),createAdminRouter());
-		/**
-		 * /stats - database stats - may be move to /admin ?
-		 */
-		router.attach(StatisticsResource.resource,StatisticsResource.class);
-		router.attach(String.format("%s/{%s}",StatisticsResource.resource,StatisticsResource.resourceKey),
-				StatisticsResource.class);
+
+		/** /policy - used for testing only  */
+		router.attach(String.format("/%s",PolicyResource.resource),PolicyResource.class);		
 		
-		
-		/**
-		 *  /policy - used for testing only
-		 */
-		router.attach(String.format("/%s",PolicyResource.resource),PolicyResource.class);
-		
-		
-		/**
-		 * /feature
-		 */
-		Router featuresRouter = createFeaturesRouter();
+		/** /feature */
+		FeaturesRouter featuresRouter = new FeaturesRouter(getContext());
 		router.attach(PropertyResource.featuredef,featuresRouter);		
-		
+
 		//Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
 		//Filter openssoAuthz = new OpenSSOAuthorizer();
-		/**
-		 *  /filter
-		 */
+		/** filter */
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
-
+		/** /dataEntry */ 
+		DataEntryRouter tupleRouter = new DataEntryRouter(getContext());
+		/** Similarity search TODO: move it under /algorithm  */
+		Router similarityRouter = createSimilaritySearchRouter();
+		/**  SMARTS search.  TODO: move it under /algorithm  */
+		Router smartsRouter = createSMARTSSearchRouter();
+		/**  /compound  */
+		router.attach(CompoundResource.compound,new CompoundsRouter(getContext(),featuresRouter,tupleRouter,smartsRouter));	
+		
 		/**
-		 *  /dataset
+		 *  List of datasets 
+		 *  /dataset , /datasets
 		 */
 		Router allDatasetsRouter = new MyRouter(getContext());
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
-		router.attach(DatasetsResource.datasets, allDatasetsRouter);		
-
-		//datasets list and metadata
-		/**
-		 * /dataset/id/feature and /dataset/id/metadata are not protected
-		 */
-		router.attach(String.format("%s",DatasetResource.dataset), DatasetsResource.class);
-		router.attach(String.format("%s/{%s}%s",DatasetResource.dataset,DatasetResource.datasetKey,MetadatasetResource.metadata), MetadatasetResource.class);
-
-		router.attach(String.format("%s/{%s}%s",DatasetResource.dataset,DatasetResource.datasetKey,PropertiesByDatasetResource.featuredef),
-						PropertiesByDatasetResource.class);
 		
+		router.attach(DatasetsResource.datasets, createProtectedResource(allDatasetsRouter,"datasets"));		
 
+		Router datasetRouter = new DatasetsRouter(getContext(),tupleRouter, smartsRouter, similarityRouter);
+		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
 	
 
-
-		
-		/**
-		 * Compounds router
-		 */
-		Router compoundsRouter = new MyRouter(getContext());
-		compoundsRouter.attachDefault(CompoundResource.class);
-		router.attach(CompoundResource.compound,compoundsRouter);
-		
-		/**
-		 * Single compound router
-		 */
-		Router compoundRouter = new MyRouter(getContext());
-		compoundRouter.attachDefault(CompoundResource.class);
-		compoundsRouter.attach(String.format("/{%s}",CompoundResource.idcompound),compoundRouter);
-		
-		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,ConsensusLabelResource.resource),ConsensusLabelResource.class);
-		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,QualityLabelResource.resource),QualityLabelResource.class);		
-		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,DatasetsResource.datasets),DatasetsByStructureResource.class);
-		compoundsRouter.attach(String.format("/{%s}%s",CompoundResource.idcompound,CompoundImageResource.resource),CompoundImageResource.class);
-		
-		/**
-		 * Conformers router
-		 */
-		Router conformersRouter = new MyRouter(getContext());
-		conformersRouter.attachDefault(ConformerResource.class);
-		compoundRouter.attach(ConformerResource.conformerKey,conformersRouter);		
-		
-		/**
-		 * Single conformer router
-		 */
-		Router conformerRouter = new MyRouter(getContext());
-		conformerRouter.attachDefault(ConformerResource.class);
-		conformersRouter.attach(String.format("/{%s}",ConformerResource.idconformer),conformerRouter);	
-		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,ConsensusLabelResource.resource),ConsensusLabelResource.class);
-		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,QualityLabelResource.resource),QualityLabelResource.class);
-		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,DatasetsResource.datasets),DatasetsByStructureResource.class);
-		conformersRouter.attach(String.format("/{%s}%s",ConformerResource.idconformer,CompoundImageResource.resource),CompoundImageResource.class);
-
-
-
-		/**
-		 *  Features per compound / conformer
-		 *  /compound/{id}/feature
-		 *  /compound/{id}/conformer/{id}/feature
-		 */
-		compoundRouter.attach(PropertyResource.featuredef,featuresRouter);
-		conformerRouter.attach(PropertyResource.featuredef,featuresRouter);
-		
-		/**
-		 * Similarity search
-		 * TODO: move it under /algorithm
-		 */
-		Router similarityRouter = createSimilaritySearchRouter();
-		/**
-		 * SMARTS search.  TODO: move it under /algorithm
-		 */
-		Router smartsRouter = createSMARTSSearchRouter();
-		/**
-		 * SMARTS/Similarity search restricted to a dataset
-		 */
-		
-		/**
-		 * Dataset router
-		 * /dataset
-		 */
-		router.attach(String.format("%s/{%s}",DatasetResource.dataset,DatasetResource.datasetKey), 
-					createDatasetRouter(compoundRouter,conformerRouter, smartsRouter,similarityRouter));		
-		
-		/**
-		 *  /algorithm
-		 */
-		router.attach(AllAlgorithmsResource.algorithm,createAlgorithmRouter());
-
-
-		/**
-		 *  /model
-		 */
-		router.attach(ModelResource.resource,createModelRouter());
-				
-		/**
-		 * /task
-		 */
-		router.attach(TaskResource.resource, createTaskRouter());
-		
-
-		/**
-		 * SMARTS search, restricted to a compound (with highlighting)
-		 */
-		compoundRouter.attach(SmartsQueryResource.resource,smartsRouter);
+		/**  /algorithm  */
+		router.attach(AllAlgorithmsResource.algorithm,createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
+		/**  /model  */
+		router.attach(ModelResource.resource,createAuthenticatedOpenResource(new ModelRouter(getContext())));
+		/**  /task  */
+		router.attach(TaskResource.resource, new TaskRouter(getContext()));
 		
 		/**
 		 * Queries
@@ -314,7 +205,6 @@ public class AmbitApplication extends TaskApplication<String> {
 		/**
 		 *  API extensions from this point on
 		 */
-		
 
 		/**
 		 * OpenSSO login / logout
@@ -327,49 +217,17 @@ public class AmbitApplication extends TaskApplication<String> {
 		 * Practically same as /dataset , but allows POST , so that long URIs with features could be send
 		 */
 		router.attach(ReportDatasetResource.resource,ReportDatasetResource.class);
-		
-		/**
-		 * /bookmark 
-		 */
+		/**  /bookmark  */
 		router.attach(BookmarkResource.resource,createBookmarksRouter());				
-		
-
-		/**
-		 * Visualisation
-		 * Chart /chart/xy , /chart/pie , /chart/bar - TODO - move to /algorithm ?
-		 */
-		router.attach(ChartResource.resource,ChartResource.class);
-		router.attach(String.format("%s/{%s}",ChartResource.resource,ChartResource.resourceKey),ChartResource.class);
+		/** /chart  */
+		router.attach(ChartResource.resource,new ChartRouter(getContext()));
 	
-		/**
-		 *  Sets of properties 
-		 *  /template 
-		 *  /compound/{id}/template
-		 *  /compound/{id}/conformer/{id}/template
-		 */
-		Router templateRouter = new MyRouter(getContext());
-		templateRouter.attachDefault(PropertyTemplateResource.class);
-		templateRouter.attach(PropertyTemplateResource.resourceID,PropertyTemplateResource.class);
-		
-		compoundRouter.attach(PropertyTemplateResource.resource,templateRouter);
-		conformerRouter.attach(PropertyTemplateResource.resource,templateRouter);
-
-
-
-		
 		/**
 		 * Demos
 		 */
-		router.attach("/depict",AbstractDepict.class);
-		router.attach("/depict/daylight",DaylightDepict.class);
-		router.attach("/depict/cdk",CDKDepict.class);
-		router.attach("/depict/cactvs",CSLSDepict.class);
+		router.attach(AbstractDepict.resource,new DepictDemoRouter(getContext()));
 		router.attach("/name2structure",Name2StructureResource.class);	
-		/**
-		 * available via /algorithm 
-		router.attach(String.format("/%s",Build3DResource.resource),Build3DResource.class); 
-		 */
-		
+	
 		/**
 		 * Images, styles, favicons, applets
 		 */
@@ -383,11 +241,10 @@ public class AmbitApplication extends TaskApplication<String> {
 
 	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
-	     /*
-	     StringWriter w = new StringWriter();
-	     AmbitApplication.printRoutes(router,">",w);
-	     System.out.println(w.toString());
-	     */
+	     
+	     //StringWriter w = new StringWriter();
+	     //AmbitApplication.printRoutes(router,">",w);
+	     //System.out.println(w.toString());
 
 		 return router;
 	}
@@ -397,112 +254,21 @@ public class AmbitApplication extends TaskApplication<String> {
 		userAuthn.setNext(OpenSSOUserResource.class);
 		return userAuthn;
 	}
-	/**
-	 *  OpenTox dataset
-	 * @return
-	 */
-	protected Restlet createDatasetRouter(Router compoundRouter, Router conformerRouter, Router smartsRouter, Router similarityRouter) {
-		Router datasetRouter = new MyRouter(getContext());
-		datasetRouter.attachDefault(DatasetResource.class);
-		//this is for backward compatibility
 
-		datasetRouter.attach(PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.class);
-		datasetRouter.attach(String.format("%s/{%s}",PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.idfeaturedef),PropertiesByDatasetResource.class);
-		
-		Filter datasetAuthn = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
-		Filter datasetAuthz = new OpenSSOAuthorizer();
-		datasetAuthn.setNext(datasetAuthz);
-		datasetAuthz.setNext(datasetRouter);
-
-		datasetRouter.attach(CompoundResource.compoundID, DatasetCompoundResource.class);
-		datasetRouter.attach(CompoundResource.compound, DatasetStructuresResource.class);
-		
-		/**
-		 *  Data entries (i.e. dataset rows)
-		 *  /dataset/{id}/dataEntry , as in opentox.owl
-		 *  
-		 *  /compound/{id{/dataEntry
-		 */
-		Router tupleRouter = new MyRouter(getContext());
-		tupleRouter.attachDefault(DataEntryResource.class);
-		tupleRouter.attach(String.format("/{%s}", DataEntryResource.resourceKey),DataEntryResource.class);
-		
-		datasetRouter.attach(DataEntryResource.resourceTag,tupleRouter);
-		compoundRouter.attach(DataEntryResource.resourceTag,tupleRouter);
-		conformerRouter.attach(DataEntryResource.resourceTag,tupleRouter);		
-		
-		/**
-		 * Smarts/similarity within a dataset
-		 */
-		datasetRouter.attach(SmartsQueryResource.resource,smartsRouter);
-		datasetRouter.attach(SimilarityResource.resource,similarityRouter);	
-		
-		/**
-		 * Quality label 
-		 * TODO refactor it as query with dataset_uri as parameter
-		 */
-		datasetRouter.attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
-	
-		return datasetAuthn;
-
-		
+	protected Restlet createProtectedResource(Router router) {
+		return createProtectedResource(router,null);
+	}
+	protected Restlet createProtectedResource(Router router,String prefix) {
+		Filter authN = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
+		OpenSSOAuthorizer authZ = new OpenSSOAuthorizer();
+		authZ.setPrefix(prefix);
+		authN.setNext(authZ);
+		authZ.setNext(router);		
+		return authN;
 	}
 	
-	/**
-	 * OpenTox models  
-	 * /model
-	 * /model/id 
-	 * @return
-	 */
-	protected Restlet createModelRouter() {
-		Filter modelAuthn = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
-		Router modelRouter = new MyRouter(getContext());
-		modelRouter.attachDefault(ModelResource.class);
-		modelRouter.attach(String.format("/{%s}",ModelResource.resourceKey),ModelResource.class);
-		modelRouter.attach(String.format("/{%s}%s",
-									ModelResource.resourceKey,
-									PropertyModelResource.resourceID),
-							PropertyModelResource.class);
-		modelAuthn.setNext(modelRouter);
-		return modelAuthn;
-	}
-	/**
-	 * OpenTox Features  /feature
-	 * @return
-	 */
-	protected Router createFeaturesRouter() {
-		/*
-		router.attach(PropertyResource.CompoundFeaturedef,PropertyResource.class);
-		router.attach(PropertyResource.ConformerFeaturedef,PropertyResource.class);
-		router.attach(PropertyResource.CompoundFeaturedefID,PropertyResource.class);
-		router.attach(PropertyResource.ConformerFeaturedefID,PropertyResource.class);
-		
 
-		//API 1.0 remnants
-		//compoundRouter.attach(PropertyValueResource.featureKey,PropertyValueResource.class);
 
-		//Router featureByAlias = new MyRouter(getContext());
-		//featureByAlias.attachDefault(PropertyValueResource.class);
-		
-		//compoundRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
-		//conformerRouter.attach(String.format("%s/{name}",PropertyValueResource.featureKey),featureByAlias);
-		
-		//router.attach(PropertyValueResource.compoundFeatureName,PropertyValueResource.class);
-		//router.attach(PropertyValueResource.conformerFeatureName,PropertyValueResource.class);
-		
-		//router.attach(PropertyValueResource.FeatureNameCompound,PropertyValueResource.class);
-		//router.attach(PropertyValueResource.FeatureNameConformer,PropertyValueResource.class);
-		 
-	 	//  /feature_value as per API 1.0
-		router.attach(FeatureResource.CompoundFeaturedefID,FeatureResource.class);
-		router.attach(FeatureResource.ConformerFeaturedefID,FeatureResource.class);		
-		*/
-
-		Router featuresRouter = new MyRouter(getContext());
-		featuresRouter.attachDefault(PropertyResource.class);
-		featuresRouter.attach(PropertyResource.featuredefID,PropertyResource.class);
-		return featuresRouter;
-	}
 	protected Router createSimilaritySearchRouter() {
 		Router similarity = new MyRouter(getContext());
 		similarity.attachDefault(SimilarityResource.class);
@@ -579,32 +345,18 @@ public class AmbitApplication extends TaskApplication<String> {
 		
 		return queryRouter;
 	}
+
 	/**
-	 * OpenTox Algorithms /algorithm
+	 * Check for OpenSSO token and set the user, if available
+	 * but don't verify the policy
 	 * @return
 	 */
-	protected Restlet createAlgorithmRouter() {
-
-		Router algoRouter = new MyRouter(getContext());
-		algoRouter.attachDefault(AllAlgorithmsResource.class);
-		algoRouter.attach(String.format("/{%s}",AllAlgorithmsResource.algorithmKey),AllAlgorithmsResource.class);
-		
+	protected Restlet createAuthenticatedOpenResource(Router router) {
 		Filter algAuthn = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
-		algAuthn.setNext(algoRouter);
+		algAuthn.setNext(router);
 		return algAuthn;
 	}
-	
-	/**
-	 * OpenTox tasks /task
-	 * @return
-	 */
-	protected Restlet createTaskRouter() {
-		Router taskRouter = new MyRouter(getContext());
-		taskRouter.attachDefault(TaskResource.class);
-		taskRouter.attach(TaskResource.resourceID, TaskResource.class);
-		return taskRouter;
-	}
-	
+
 	protected TaskStorage<String> createTaskStorage() {
 		return new TaskStorage<String>(getName(),getLogger()) {
 			@Override
@@ -626,17 +378,7 @@ public class AmbitApplication extends TaskApplication<String> {
 	 * @return
 	 */
 	protected Restlet createBookmarksRouter() {
-		Router bookmarkRouter = new MyRouter(getContext());
-		bookmarkRouter.attachDefault(BookmarkResource.class);
-		bookmarkRouter.attach(String.format("/{%s}",BookmarkResource.creator),BookmarkResource.class);
-
-		bookmarkRouter.attach(String.format("/{%s}/topics",
-				BookmarkResource.creator),BookmarkTopicsResource.class);
-		
-		bookmarkRouter.attach(String.format("/{%s}/entries",BookmarkResource.creator),BookmarkResource.class);
-		bookmarkRouter.attach(String.format("/{%s}/entries/{%s}",
-				BookmarkResource.creator,
-				BookmarkResource.idbookmark),BookmarkResource.class);	
+		BookmarksRouter bookmarkRouter = new BookmarksRouter(getContext());
 
 		Filter bookmarkAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
 		Filter bookmarkAuthz = new BookmarksAuthorizer();		
@@ -649,17 +391,7 @@ public class AmbitApplication extends TaskApplication<String> {
 	 * @return
 	 */
 	protected Restlet createAdminRouter() {
-		Router adminRouter = new MyRouter(getContext());
-		adminRouter.attachDefault(AdminResource.class);
-		adminRouter.attach(String.format("/%s",DatabaseResource.resource),DatabaseResource.class);
-		
-		Router adminFingerprintRouter = new MyRouter(getContext()); //to browse fingerprints/stats
-		adminFingerprintRouter.attachDefault(FingerprintResource.class);
-		adminFingerprintRouter.attach(String.format("/{%s}",FingerprintResource.resourceKey),FingerprintResource.class);
-		adminFingerprintRouter.attach(String.format("/{%s}%s",FingerprintResource.resourceKey,StructuresByFingerprintResource.resource),StructuresByFingerprintResource.class);
-		
-		adminRouter.attach(FingerprintResource.resource,adminFingerprintRouter);
-		
+		AdminRouter adminRouter = new AdminRouter(getContext());
 		DBCreateAllowedGuard sameIPguard = new DBCreateAllowedGuard();
 		sameIPguard.setNext(adminRouter);
 		return sameIPguard;
@@ -672,8 +404,6 @@ public class AmbitApplication extends TaskApplication<String> {
 		//test removed, there is ontology service
 		//router.attach(RDFGraphResource.resource,RDFGraphResource.class);
 		//router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
-		
-		//router.attach("/launch", LauncherResource.class); removed, this is done via superservice
 
 		//router.attach(OntologyResource.resource, OntologyResource.class);
 		//router.attach(OntologyResource.resourceID, OntologyResource.class);
@@ -906,13 +636,3 @@ public class AmbitApplication extends TaskApplication<String> {
 
 }
 
-/**
- * For backward compatibility with 2.0-M5 and before
- */
-class MyRouter extends Router {
-	public MyRouter(Context context) {
-		 super(context);
-	     setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
-	     setRoutingMode(Router.MODE_BEST_MATCH); 
-	}
-}
