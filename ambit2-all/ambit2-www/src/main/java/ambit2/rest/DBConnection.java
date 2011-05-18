@@ -50,6 +50,20 @@ public class DBConnection {
 		String rdfwriter = properties.getProperty("rdf.writer");
 		return (rdfwriter==null)?"jena":rdfwriter;//jena or stax 
 	}	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean dataset_prefixed_compound_uri() {
+		loadProperties();
+		String prefix = properties.getProperty("dataset.members.prefix");
+		try {
+			return Boolean.parseBoolean(prefix);
+		} catch (Exception x) {
+			return false;
+		}
+	}	
+	
 	public LoginInfo getLoginInfo() {
 		loadProperties();
 		LoginInfo li = new LoginInfo();

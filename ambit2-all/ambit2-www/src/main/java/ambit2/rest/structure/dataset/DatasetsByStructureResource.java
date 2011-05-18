@@ -34,9 +34,12 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 	public IProcessor<IQueryRetrieval<ISourceDataset>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 
+		/*
 	if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML);			
-	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
+	} else 
+	*/
+	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),false,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {

@@ -79,6 +79,30 @@ public class DatasetReporterTest extends ResourceTest {
 
 
 	}	
+	@Test
+	public void testN3() throws Exception {
+			testGet(getTestURI(),MediaType.TEXT_RDF_N3);
+
+	}
+	
+	@Override
+	public boolean verifyResponseRDFN3(String uri, MediaType media,
+			InputStream in) throws Exception {
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			System.out.println(line);
+			/*
+			Assert.assertTrue(
+					line.equals("http://localhost:8181/compound/7") ||
+					line.equals("http://localhost:8181/compound/10"));
+					*/
+			count++;
+		}
+		return count >0;
+	}			
 	
 	@Test
 	public void testParseInstances() throws Exception {

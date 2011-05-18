@@ -47,6 +47,13 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 	protected String search;
 	protected int property;
 
+	
+	@Override
+	public String getCompoundInDatasetPrefix() {
+		return
+		datasetID!=null?String.format("%s/%d", dataset,datasetID):
+			queryResultsID!=null?String.format("%s/R-%d", dataset,queryResultsID):"";
+	}
 	@Override
 	protected Q createQuery(Context context, Request request,
 			Response response) throws ResourceException {

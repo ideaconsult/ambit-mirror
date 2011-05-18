@@ -78,14 +78,11 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	 * 
 	 */
 	private static final long serialVersionUID = 1676895914680469360L;
-
-
 	
 
 	
-	public DatasetRDFStaxReporter(Request request,ResourceDoc doc,Template template,Profile groupedProperties) {
-		super(request,doc);
-
+	public DatasetRDFStaxReporter(String prefix,Request request,ResourceDoc doc,Template template,Profile groupedProperties) {
+		super(prefix,request,doc);
 		recordWriter.setGroupProperties(groupedProperties);
 		recordWriter.setTemplate(template==null?new Template(null):template);
 		initProcessors();
@@ -95,7 +92,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	@Override
 	protected DatasetRDFWriter createRecordWriter(Request request,ResourceDoc doc) {
 		return new DatasetRDFWriter(
-							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request,doc),
+							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix,request,doc),
 							new PropertyURIReporter(request,doc));
 	}
 	@Override
@@ -111,7 +108,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 	@Override
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
 			Request req,ResourceDoc doc) {
-		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
+		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix,req,doc);
 	}
 
 	protected void initProcessors() {

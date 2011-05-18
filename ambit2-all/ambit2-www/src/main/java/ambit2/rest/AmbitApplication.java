@@ -61,6 +61,7 @@ import ambit2.rest.routers.misc.ChartRouter;
 import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.routers.misc.DepictDemoRouter;
 import ambit2.rest.routers.opentox.AlgorithmRouter;
+import ambit2.rest.routers.opentox.CompoundRouter;
 import ambit2.rest.routers.opentox.CompoundsRouter;
 import ambit2.rest.routers.opentox.DatasetsRouter;
 import ambit2.rest.routers.opentox.FeaturesRouter;
@@ -156,7 +157,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		
 		/** /feature */
 		FeaturesRouter featuresRouter = new FeaturesRouter(getContext());
-		router.attach(PropertyResource.featuredef,featuresRouter);		
+		router.attach(PropertyResource.featuredef,createProtectedResource(featuresRouter,"feature"));		
 
 		//Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
 		//Filter openssoAuthz = new OpenSSOAuthorizer();
@@ -169,7 +170,8 @@ public class AmbitApplication extends TaskApplication<String> {
 		/**  SMARTS search.  TODO: move it under /algorithm  */
 		Router smartsRouter = createSMARTSSearchRouter();
 		/**  /compound  */
-		router.attach(CompoundResource.compound,new CompoundsRouter(getContext(),featuresRouter,tupleRouter,smartsRouter));	
+		CompoundsRouter compoundRouter = new CompoundsRouter(getContext(),featuresRouter,tupleRouter,smartsRouter);
+		router.attach(CompoundResource.compound,createProtectedResource(compoundRouter,"compound"));
 		
 		/**
 		 *  List of datasets 

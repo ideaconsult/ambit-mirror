@@ -87,6 +87,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		this.template = (template==null)?new Template(null):template;
 
 	}
+	public String getCompoundInDatasetPrefix() {
+		return "";
+	}
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return null;//return String.format("riap://application%s/All/Identifiers/view/tree",OntologyResource.resource);
 	}
@@ -145,7 +148,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				
 	}
 	protected CSVReporter createTXTReporter() {
-		CSVReporter csvreporter = new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString());
+		CSVReporter csvreporter = new CSVReporter(getTemplate(),groupProperties,
+						String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix()));
 		csvreporter.setSeparator("\t");
 		csvreporter.setNumberofHeaderLines(0);
 		csvreporter.setWriteCompoundURI(false);
@@ -153,7 +157,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}
 	
 	protected CSVReporter createCSVReporter() {
-		return new CSVReporter(getTemplate(),groupProperties,getRequest().getRootRef().toString());
+		return new CSVReporter(getTemplate(),groupProperties,
+				String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
+				);
 	}
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
@@ -192,7 +198,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					createTXTReporter(),MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			ConformerURIReporter<QueryStructureByID> reporter = 
-				new ConformerURIReporter<QueryStructureByID>(getRequest(),queryObject.isPrescreen(),getDocumentation());
+				new ConformerURIReporter<QueryStructureByID>(getCompoundInDatasetPrefix(),getRequest(),queryObject.isPrescreen(),getDocumentation());
 			reporter.setDelimiter("\n");
 			return new StringConvertor(reporter,MediaType.TEXT_URI_LIST);			
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
@@ -212,10 +218,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				d.height = Integer.parseInt(form.getFirstValue("h").toString());
 			} catch (Exception x) {}			
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter(getRequest(),getDocumentation(),true,null,getTemplate(),getGroupProperties(),d),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),true,null,getTemplate(),getGroupProperties(),d),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()),
+					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+								String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
+							),
 					ChemicalMediaType.WEKA_ARFF);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
@@ -225,12 +233,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			switch (rdfwriter) {
 			case stax: {
 				return new RDFStaXConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-						new DatasetRDFStaxReporter(getRequest(),getDocumentation(),getTemplate(),getGroupProperties())				
+						new DatasetRDFStaxReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),getTemplate(),getGroupProperties())				
 						);				
 			}
 			default : { //jena
 				return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-						new DatasetRDFReporter(getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());
+						new DatasetRDFReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());
 				
 			}
 			}
@@ -243,7 +251,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-					new DatasetRDFReporter(getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());			
+					new DatasetRDFReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType());			
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new SDFReporter<QueryStructureByID>(template,getGroupProperties()),ChemicalMediaType.CHEMICAL_MDLSDF);

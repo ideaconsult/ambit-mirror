@@ -21,22 +21,35 @@ public class ConformerURIReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	private static final long serialVersionUID = -3240656616658257198L;
 
 	public ConformerURIReporter(ResourceDoc doc) {
-		this(null,false,doc);
+		this("",null,false,doc);
+	}		
+	public ConformerURIReporter(String prefix,ResourceDoc doc) {
+		this(prefix,null,false,doc);
+	}	
+	public ConformerURIReporter(String prefix,Request baseRef,ResourceDoc doc) {
+		super(prefix,baseRef,false,doc);
 	}	
 	public ConformerURIReporter(Request baseRef,ResourceDoc doc) {
-		super(baseRef,false,doc);
+		super("",baseRef,false,doc);
 	}	
+	public ConformerURIReporter(String prefix,Request baseRef,boolean readStructure,ResourceDoc doc) {
+		super(prefix,baseRef,readStructure,doc);
+	}
 	public ConformerURIReporter(Request baseRef,boolean readStructure,ResourceDoc doc) {
-		super(baseRef,readStructure,doc);
+		this("",baseRef,readStructure,doc);
+	}	
+	public ConformerURIReporter(String prefix,Reference baseRef,ResourceDoc doc) {
+		super(prefix,baseRef,doc);
 	}
 	public ConformerURIReporter(Reference baseRef,ResourceDoc doc) {
-		super(baseRef,doc);
-	}
+		this("",baseRef,doc);
+	}	
 
 	public String getURI(String ref, IStructureRecord item) {
 		if (item.getIdstructure()>0)
-		return String.format("%s%s/%d%s/%d%s",
+		return String.format("%s%s%s/%d%s/%d%s",
 				ref,
+				prefix,
 				CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure(),getDelimiter());
 		else return super.getURI(ref, item);
 	}	

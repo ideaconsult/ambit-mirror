@@ -20,7 +20,7 @@ import ambit2.db.reporters.QueryHeaderReporter;
  */
 public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>  extends QueryHeaderReporter<Q,Writer>  {
 	protected QueryURIReporter uriReporter;
-	
+	protected String prefix ;
 
 	
 	public QueryURIReporter getUriReporter() {
@@ -43,7 +43,11 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 		this(null,true,doc);
 	}
 	public QueryStructureHTMLReporter(Request request, boolean collapsed,ResourceDoc doc) {
+		this("", request, collapsed, doc);
+	}
+	public QueryStructureHTMLReporter(String prefix,Request request, boolean collapsed,ResourceDoc doc) {
 		super();
+		this.prefix = prefix;
 		uriReporter =  createURIReporter(request,doc);
 		this.collapsed = collapsed;
 		processors.clear();
