@@ -61,7 +61,11 @@ public class OpenSSOAuthorizer extends Authorizer {
 					u.lastIndexOf("/")==u.length()-1?"":"/",
 					prefix));
 		
-		Reference uri = ref;
+		u = ref.toString();
+		Reference uri = new Reference(String.format("%s%s", 
+				u,
+				u.lastIndexOf("/")==u.length()-1?"":"/"
+				));
 		u = ref.toString();
 		Reference uri2check = new Reference(u==null?null:
 										u.lastIndexOf("/")==u.length()-1?u:String.format("%s/",u)); //add trailing slash
