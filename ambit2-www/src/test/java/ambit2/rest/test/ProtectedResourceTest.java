@@ -50,6 +50,18 @@ public abstract class ProtectedResourceTest extends ResourceTest implements IAut
 		return ssoToken==null?null:ssoToken.getToken();
 	}
 	
+	protected String createPublicPOSTPolicy(String uri) throws Exception {
+		OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
+		StringBuffer b = new StringBuffer();
+		b.append("member_");
+		b.append(uri.replace(":","").replace("/",""));
+	//	b.append("_");
+	//	b.append(UUID.randomUUID());
+		int httpcode = policy.createGroupPolicy("member", 
+				ssoToken, uri, new String[] {"GET","POST"},b.toString());
+		if (httpcode == 200) return b.toString();
+		else throw new Exception(String.format("Error creating policy %d",httpcode));
+	}	
 	protected String createPublicPolicy(String uri) throws Exception {
 		OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
 		StringBuffer b = new StringBuffer();
