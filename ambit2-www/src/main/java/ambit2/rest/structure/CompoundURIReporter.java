@@ -26,20 +26,37 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	 */
 	private static final long serialVersionUID = 3648376868814044783L;
 	protected boolean readStructure = false;
+	protected String prefix = "";
 	
+	public String getPrefix() {
+		return prefix;
+	}
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+	public CompoundURIReporter(String prefix,Reference baseRef,ResourceDoc doc) {
+		super(baseRef,doc);
+		setPrefix(prefix);
+	}
 	public CompoundURIReporter(Reference baseRef,ResourceDoc doc) {
 		super(baseRef,doc);
+		setPrefix("");
 	}
 	public CompoundURIReporter(Request request,ResourceDoc doc) {
-		this(request,false,doc);
+		this("",request,false,doc);
+	}	
+	public CompoundURIReporter(String prefix,Request request,ResourceDoc doc) {
+		this(prefix,request,false,doc);
 	}
-	public CompoundURIReporter(Request request,boolean readStructure,ResourceDoc doc) {
+	public CompoundURIReporter(String prefix,Request request,boolean readStructure,ResourceDoc doc) {
 		super(request,doc);
+		setPrefix(prefix);
 		this.readStructure = readStructure;
 		
 	}
-	public CompoundURIReporter(ResourceDoc doc) {
-		this(null,false,doc);
+	public CompoundURIReporter(String prefix,ResourceDoc doc) {
+		this(prefix,null,false,doc);
+		
 	}	
 
 
@@ -49,10 +66,11 @@ public class CompoundURIReporter<Q extends IQueryRetrieval<IStructureRecord>> ex
 	@Override
 	public String getURI(String ref, IStructureRecord item) {
 		if ((item.getIdstructure()==-1) || (item.getType().equals(STRUC_TYPE.NA)))
-			return String.format("%s%s/%d%s",ref,CompoundResource.compound,item.getIdchemical(),delimiter);
+			return String.format("%s%s%s/%d%s",ref,prefix,CompoundResource.compound,item.getIdchemical(),delimiter);
 		else
-			return String.format("%s%s/%d%s/%d%s",
+			return String.format("%s%s%s/%d%s/%d%s",
 						ref,
+						prefix,
 						CompoundResource.compound,item.getIdchemical(),ConformerResource.conformerKey,item.getIdstructure(),getDelimiter());				
 		
 	}

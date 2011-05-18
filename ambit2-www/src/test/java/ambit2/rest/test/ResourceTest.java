@@ -303,6 +303,9 @@ public abstract class ResourceTest extends DbUnitTest {
 	public boolean verifyResponseURI(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}	
+	public boolean verifyResponseRDFN3(String uri, MediaType media,InputStream in) throws Exception {
+		throw new Exception("Not implemented");
+	}	
 	public boolean verifyResponseTXT(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}	
@@ -322,6 +325,7 @@ public abstract class ResourceTest extends DbUnitTest {
 		Assert.assertTrue(model.size()>0);
 		return model;
 	}	
+
 	
 	public OntModel verifyResponseRDFTurtle(String uri, MediaType media,InputStream in) throws Exception {
 		OntModel model = OT.createModel();
@@ -364,6 +368,8 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseCSV(uri, media, in);
 		else if (MediaType.APPLICATION_RDF_XML.equals(media))
 			return verifyResponseRDFXML(uri, media, in)!=null;
+		else if (MediaType.TEXT_RDF_N3.equals(media))
+			return verifyResponseRDFN3(uri, media, in);		
 		else if (MediaType.APPLICATION_RDF_TURTLE.equals(media))
 			return verifyResponseRDFTurtle(uri, media, in)!=null;				
 		else throw new Exception("Unknown format "+media);

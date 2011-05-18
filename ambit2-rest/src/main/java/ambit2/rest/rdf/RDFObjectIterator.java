@@ -220,4 +220,13 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		} else return null;
 	}	
 	
+	public static String removeDatasetFragment(String uri) {
+		int posDataset = uri.indexOf("/dataset/");
+		if (posDataset<0) return uri;
+		
+		int posCompound = uri.indexOf("/compound/");
+		if (posCompound > 0) return String.format("%s%s", uri.substring(0,posDataset),uri.substring(posCompound));
+		return uri;
+	}
+	
 }

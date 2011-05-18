@@ -65,6 +65,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		stax
 	}
 	protected RDF_WRITER rdfwriter = RDF_WRITER.jena;
+	protected boolean dataset_prefixed_compound_uri = false;
 	public final static String query_resource = "/query";
 	
 	/**TODO
@@ -115,6 +116,9 @@ Then, when the "get(Variant)" method calls you back,
 		return queryObject;
 	}
 	
+	protected void configureDatasetMembersPrefixOption(boolean prefix) {
+		dataset_prefixed_compound_uri = prefix;
+	}
 	protected void configureRDFWriterOption(String defaultWriter) {
 		try { 
 			Object jenaOption = getRequest().getResourceRef().getQueryAsForm().getFirstValue("rdfwriter");
@@ -150,7 +154,7 @@ Then, when the "get(Variant)" method calls you back,
 		        	try {
 		        		DBConnection dbc = new DBConnection(getContext());
 		        		configureRDFWriterOption(dbc.rdfWriter());
-		        				        		
+		        		configureDatasetMembersPrefixOption(dbc.dataset_prefixed_compound_uri());
 		        		convertor = createConvertor(variant);
 
 		        		connection = dbc.getConnection(getRequest());

@@ -57,6 +57,8 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 
 	protected abstract void setIDChemical(int idchemical);
 	protected abstract void setIDConformer(int idchemical);
+	
+
 	@Override
 	protected void parseObjectURI(RDFNode uri, Item record) {
 		int idchemical = -1;
@@ -64,8 +66,10 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 		
 		Map<String, Object> vars = new HashMap<String, Object>();
 		
+		String cmpURI = null;
 		try { 
-			conformerTemplate.parse(getURI(uri), vars);
+			cmpURI = removeDatasetFragment(getURI(uri));
+			conformerTemplate.parse(cmpURI, vars);
 			try {
 			idchemical = Integer.parseInt(vars.get(OpenTox.URI.compound.getKey()).toString()); } 
 			catch (Exception x) {};
@@ -76,7 +80,7 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 		
 		if (idchemical<=0) {
 			try {
-			getTemplate().parse(getURI(uri), vars);
+			getTemplate().parse(cmpURI, vars);
 			idchemical = Integer.parseInt(vars.get(OpenTox.URI.compound.getKey()).toString()); } 
 			catch (Exception x) {};
 		}
@@ -84,6 +88,7 @@ public abstract class RDFDataEntryIterator<Item,Feature> extends RDFObjectIterat
 		setIDConformer(idstructure);
 	}
 
+	
 	@Override
 	protected Item parseRecord(RDFNode newEntry, Item record) {
 		//get the compound

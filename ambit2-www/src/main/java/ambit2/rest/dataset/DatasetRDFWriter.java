@@ -46,6 +46,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 	protected Comparator<Property> comp;
 	protected Profile groupProperties;
 
+
 	public Profile getGroupProperties() {
 		return groupProperties;
 	}
@@ -226,6 +227,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 	
 	}
 	protected String createDatasetURI(int datasetID) {
+
 		if (uriReporter.getRequest() ==null) {
 			return null;
 		} else 	if (uriReporter.getRequest().getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
@@ -237,13 +239,14 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 							uriReporter.getRequest().getResourceRef().getScheme(),
 							uriReporter.getRequest().getResourceRef().getHierarchicalPart()
 							);
-			else
+			else {
+				String datasetPrefix = String.format("/%s/%d",OpenTox.URI.dataset.name(), datasetID);
 				return
-						String.format("%s/%s/%d",
+						String.format("%s%s",
 								uriReporter.getBaseReference(),
-								OpenTox.URI.dataset.name(),
-								datasetID
+								datasetPrefix
 								);
+			}
 		}
 	}
 	public void header(javax.xml.stream.XMLStreamWriter writer) {

@@ -152,10 +152,11 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	protected void extractRecordID(NativeTypeItem target, String url,IStructureRecord record) throws AmbitException {
-		Object id = OpenTox.URI.compound.getId(url, compoundURITemplate);
+		String cleanURI = org.opentox.rdf.OpenTox.removeDatasetFragment(url);
+		Object id = OpenTox.URI.compound.getId(cleanURI, compoundURITemplate);
 		if (id != null) record.setIdchemical((Integer)id);
 		else {
-			Object[] ids = OpenTox.URI.conformer.getIds(url, conformerURITemplate);
+			Object[] ids = OpenTox.URI.conformer.getIds(cleanURI, conformerURITemplate);
 			if (ids[0]!=null) record.setIdchemical((Integer)ids[0]);
 			if (ids[1]!=null) record.setIdstructure((Integer)ids[1]);
 		}

@@ -69,8 +69,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		this(request,doc,collapsed,urireporter,template,null,null);
 	}
 	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter,
+			Template template,Profile groupedProperties,Dimension d) {
+		this("",request, doc, collapsed, urireporter, template,groupedProperties,d);
+	}
+	public CompoundHTMLReporter(String prefix, Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter,
 				Template template,Profile groupedProperties,Dimension d) {
-		super(request,collapsed,doc);
+		super(prefix,request,collapsed,doc);
 		
 		Reference f = request.getResourceRef().clone(); 
 		f.setQuery(null);
@@ -137,7 +141,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request,ResourceDoc doc) {
-		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(request,doc);
+		return new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(prefix ,request,doc);
 	}
 	
 	@Override

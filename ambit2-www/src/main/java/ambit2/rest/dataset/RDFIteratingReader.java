@@ -27,6 +27,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.io.IRawReader;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -200,7 +201,9 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 
 	protected void parseCompoundURI(String uri,IStructureRecord record) {
 		Map<String, Object> vars = new HashMap<String, Object>();
-		conformerTemplate.parse(uri, vars);
+		
+		String cmpURI = RDFObjectIterator.removeDatasetFragment(uri);
+		conformerTemplate.parse(cmpURI, vars);
 		try {record.setIdchemical(Integer.parseInt(vars.get(CompoundResource.idcompound).toString())); } 
 		catch (Exception x) {
 		};
@@ -211,7 +214,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 		
 		if (record.getIdchemical()<=0) {
 			try {
-			compoundTemplate.parse(uri, vars);
+			compoundTemplate.parse(cmpURI, vars);
 			record.setIdchemical(Integer.parseInt(vars.get(CompoundResource.idcompound).toString())); } 
 			catch (Exception x) {
 			};

@@ -78,7 +78,10 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected Resource dataset;
 	
 	public DatasetRDFReporter(Request request,ResourceDoc doc,MediaType mediaType, Template template,Profile groupedProperties) {
-		super(request,mediaType,doc);
+		this("", request, doc, mediaType, template, groupedProperties);
+	}
+	public DatasetRDFReporter(String prefix,Request request,ResourceDoc doc,MediaType mediaType, Template template,Profile groupedProperties) {
+		super(prefix,request,mediaType,doc);
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
@@ -93,9 +96,14 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	@Override
 	protected QueryURIReporter<IStructureRecord, IQueryRetrieval<IStructureRecord>> createURIReporter(
 			Request req,ResourceDoc doc) {
-		compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
-		dataEntryReporter = new DataEntryURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
-		return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
+		try {
+			compoundReporter = new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix,req,doc);
+			dataEntryReporter = new DataEntryURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
+			return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix,req,doc);
+		} catch (Exception x) {
+			x.printStackTrace();
+			return null;
+		}
 	}
 
 	protected void initProcessors() {
@@ -147,7 +155,9 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 
 		try {
 			propertyReporter.setOutput(getJenaModel());
-		} catch (Exception x) {}
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 		
 		if (header == null) 
 			header = template2Header(template,true);
