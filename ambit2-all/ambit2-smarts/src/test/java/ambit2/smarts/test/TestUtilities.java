@@ -1261,6 +1261,7 @@ public class TestUtilities
 	
 	public void testSMIRKS(String smirks)
 	{
+		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
 		SMIRKSReaction sr = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))
