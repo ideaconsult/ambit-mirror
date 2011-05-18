@@ -21,7 +21,13 @@ import ambit2.rest.structure.CompoundResource;
  */
 public class DatasetCompoundResource extends CompoundResource {
 	//public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
-
+	protected String prefix = "";
+	
+	@Override
+	public String getCompoundInDatasetPrefix() {
+		return prefix;
+	}
+	
 	@Override
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		Object id = request.getAttributes().get(DatasetResource.datasetKey);
@@ -45,6 +51,8 @@ public class DatasetCompoundResource extends CompoundResource {
 		ds.init(context, request, response);
 		IQueryRetrieval<IStructureRecord> datasetQuery = ds.createQuery(context, request, response);
 		if (datasetQuery == null) return null;
+		
+		prefix = ds.getCompoundInDatasetPrefix();
 		QueryCombinedStructure combinedQuery = new QueryCombinedStructure();
 		combinedQuery.add(q);
 		combinedQuery.add(datasetQuery);
