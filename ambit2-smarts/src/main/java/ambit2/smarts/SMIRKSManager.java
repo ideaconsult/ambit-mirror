@@ -2,6 +2,8 @@ package ambit2.smarts;
 
 import java.util.Vector;
 
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+
 public class SMIRKSManager 
 {
 	SmartsParser parser = new SmartsParser();
@@ -48,10 +50,21 @@ public class SMIRKSManager
 		{
 			errors.add("Invalid SMIRKS: missing second separator '>'");
 			return reaction;
-		}
+		}		
 		
-		
+		/*
 		//Parse the components
+		parser.parse(smarts);
+		parser.setNeededDataFlags();
+		String errorMsg = parser.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{
+			errors.add("Invalid SMIRKS: missing separators '>'");
+			return reaction;
+		}
+		*/
+		
+		
 		//TODO
 		
 		//Check the components
