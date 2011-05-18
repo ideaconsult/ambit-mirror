@@ -31,6 +31,7 @@ import ambit2.rest.query.QueryResource;
  *
  */
 public class AbstractDepict extends ServerResource {
+	public static final String resource = "/depict";
 	protected Form params;
 	protected String smiles ;
 	protected String smarts ;

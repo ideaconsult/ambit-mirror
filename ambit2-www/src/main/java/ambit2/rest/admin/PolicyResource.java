@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import org.opentox.aa.OTAAParams;
 import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
@@ -24,6 +23,11 @@ import org.restlet.resource.ResourceException;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.algorithm.CatalogResource;
 
+/**
+ * OpenSSO & Policy server tested workflows  
+ * @author nina
+ *
+ */
 public class PolicyResource extends CatalogResource<String>{
 	public static final String resource = "policy";
 	protected String user;
