@@ -263,7 +263,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			uriReporter.processItem(dataset);
 			
 
-			
+			String paging = "max=10";
 			if (collapsed) {
 				
 				output.write("<div id=\"div-1b\">");
@@ -271,9 +271,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("<div class=\"rowwhite\"><span class=\"left\">");
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s?max=100\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
+						"<a href=\"%s%s?%s\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
 						w.toString(),
 						CompoundResource.compound,
+						paging,
 						uriReporter.getBaseReference().toString()));	
 				
 				output.write("&nbsp;");
@@ -286,16 +287,18 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s?max=100\"><img src=\"%s/images/search.png\" alt=\"/smarts\" title=\"Search compounds by SMARTS\" border=\"0\"/></a>",
+						"<a href=\"%s%s?%s\"><img src=\"%s/images/search.png\" alt=\"/smarts\" title=\"Search compounds by SMARTS\" border=\"0\"/></a>",
 						w.toString(),
 						"/smarts",
+						paging,
 						uriReporter.getBaseReference().toString()));
 				output.write("&nbsp;");
 				
 				output.write(String.format(
-						"<a href=\"%s%s?max=100\"><img src=\"%s/images/search.png\" alt=\"/similarity\" title=\"Search for similar compounds within this dataset\" border=\"0\"/></a>",
+						"<a href=\"%s%s?%s\"><img src=\"%s/images/search.png\" alt=\"/similarity\" title=\"Search for similar compounds within this dataset\" border=\"0\"/></a>",
 						w.toString(),
 						"/similarity",
+						paging,
 						uriReporter.getBaseReference().toString()));
 				output.write("&nbsp;");				
 				
@@ -325,11 +328,12 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 					MediaType mime = mimes[i];
 					output.write("&nbsp;");
 					output.write(String.format(
-							"<a href=\"%s%s?media=%s&max=100\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							"<a href=\"%s%s?media=%s&%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
 							w.toString(),
 							"",
 							//CompoundResource.compound,
 							Reference.encode(mime.toString()),
+							paging,
 							uriReporter.getBaseReference().toString(),
 							image[i],
 							mime,
@@ -357,8 +361,9 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 							));		
 				*/
 				output.write(String.format(
-						"&nbsp;<a href=\"%s?max=100\">%s</a>",
+						"&nbsp;<a href=\"%s?%s\">%s</a>",
 						w.toString(),
+						paging,
 						(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getID()):dataset.getName()
 						));
 				output.write("</span></div>");
