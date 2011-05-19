@@ -53,7 +53,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		if (dataset_prefixed_compound_uri)
 		return
 			datasetID!=null?String.format("%s/%d", dataset,datasetID):
-				queryResultsID!=null?String.format("%s/R-%d", dataset,queryResultsID):"";
+				queryResultsID!=null?String.format("%s/R%d", dataset,queryResultsID):"";
 		else return "";
 	}
 	@Override
