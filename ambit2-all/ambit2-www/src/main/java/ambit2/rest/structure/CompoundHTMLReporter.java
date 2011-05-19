@@ -632,7 +632,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					if (hierarchy) {
 						//b.append("<br>");
 					} else
-						b.append("</div>\b");
+						b.append("</div>\n");
 					
 					if (!hierarchy) b.append("</td>\n");
 				}
