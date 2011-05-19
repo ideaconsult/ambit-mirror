@@ -673,13 +673,13 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					b.append(getPropertyTitle(p, title.substring(pos+1)));
 				} else {
 					b.append("<hr>");
-					b.append(title.substring(0,pos).replace(".", "»"));
+					b.append(title.substring(0,pos).replace(".", "\u00BB" ));
 					b.append("<br>");
 					b.append(getPropertyTitle(p, title.substring(pos+1)));
 				}
 			} else {
 				b.append("<hr>");
-				b.append(title.substring(0,pos).replace(".", "»"));
+				b.append(title.substring(0,pos).replace(".", "\u00BB"));
 				b.append("<br>");
 				b.append(getPropertyTitle(p, title.substring(pos+1)));
 			}
