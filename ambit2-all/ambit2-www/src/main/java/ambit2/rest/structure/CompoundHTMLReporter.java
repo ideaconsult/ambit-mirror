@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,6 +62,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected Dimension cellSize = new Dimension(150,150);
 	protected Form featureURI = null;
 	protected String imgMime = "image/gif";
+	boolean hierarchy = false;
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
 	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter) {
@@ -96,6 +99,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 			pReporter = new PropertyURIReporter(request,this.uriReporter==null?null:this.uriReporter.getDocumentation());
+			
 		table = collapsed;
 		getProcessors().clear();
 		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
@@ -148,11 +152,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	public Object processItem(IStructureRecord record) throws AmbitException  {
 		
 		try {
+
 			if (table) {
-				output.write("<tr>");
+				//output.write("<tr>");
 				output.write(toURITable(record));
-				output.write("</tr>");		
-				
+				//output.write("</tr>\n");		
 			} else {
 				output.write("<div id=\"div-1a\">");
 				output.write(toURI(record));
@@ -370,7 +374,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				hint = "Search by property or identifier name (optional) and value";
 				//w.write("<input type='submit' value='Search'><br>");
 			} else {
-				w.write("<table border='0'>");
+				w.write("<table cellpadding=0  border='0'>");
 
 				w.write("<tr><th>");
 				w.write(String.format("<label for='%s' title='Substructure pattern defined by SMARTS language. Enter manually, or use Draw button on the right'>SMARTS</label>&nbsp;",QueryResource.search_param));
@@ -379,13 +383,13 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				w.write(String.format("&nbsp;<input type='button' value='Draw substructure' onClick='startEditor(\"%s\");'>",
 						uriReporter.getBaseReference()));	
 
-				w.write("</td></tr>");
+				w.write("</td></tr>\n");
 				w.write("<tr><th>");
 				w.write(String.format("<label for='text' title='Any text, compound identifiers, property names and values, test names and values'>Keywords</label>"));
 				w.write("</th><td>");
 				
 				w.write(String.format("<input name='text' type='text' title='Enter text to search for'  size='60' value='%s'><br>\n",query_text==null?"":query_text));
-				w.write("</td></tr>");				
+				w.write("</td></tr>\n");				
 				hint = "Search for substructure and properties";				
 				w.write("</table>");
 			}
@@ -398,25 +402,27 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 			//w.write("</form>\n"); moved in footer
 			w.write(hint);		
-			w.write("<br><b><i>This site and AMBIT REST services are under development!</i></b>");		
+			w.write("<br>\n<b><i>This site and AMBIT REST services are under development!</i></b>");		
 			w.write("</td>");
 			w.write("<td align='left' valign='center' width='256px'>");
 			//w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
 			w.write("<input type='submit' value='Search'>");
-			w.write("</td></tr>");
+			w.write("</td></tr>\n");
 			w.write("</table>");		
 			w.write("<hr>");	
 			
 			if (hilightPredictions!= null) 
 				w.write(String.format("<div><span class=\"center\"><h4>Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",hilightPredictions,hilightPredictions));
+			
+			
 			if (table) {
 				
 				//output.write(String.format("<div><span class=\"left\">%s</span></div>",templates(baseReference)));
 				
 				output.write("<div class=\"rowwhite\"><span class=\"center\">");
 					
-				output.write(AmbitResource.jsTableSorter("results","pager"));
-				output.write("<table class='tablesorter' id='results' border='0' cellpadding='0' cellspacing='1'>"); 
+				//output.write(AmbitResource.jsTableSorter("results","pager"));
+				output.write("<table id='results' border='0' cellpadding='0' cellspacing='1'>"); 
 				
 				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Max number of hits:%s</CAPTION>",
 						query.toString(),
@@ -425,38 +431,51 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						//,resultsForm(query)
 				output.write("<thead><tr>");
 				output.write(String.format("<th width='20'>#</th><th width='%d' bgcolor='#99CC00'>Compound</th>",cellSize.width)); //ECB42C
+				
 				List<Property> props = template2Header(getTemplate(),true);
 				int hc = 0;
-				for(Property p: props) {
-					hc++;
-					int max=10;
-					int dot = 0;
-					int end = p.getTitle().indexOf("Descriptor");
-					if (end > 0) {
-						dot = p.getTitle().lastIndexOf(".");
-						if (dot<0) dot = 0; else dot++;
-					} else end = p.getTitle().length();
-					if ((end-dot)>max) end = dot + max;
-					
-					output.write(
-						String.format("<th width='%d'><a href='%s' title='%s'>%s</a></th>",
-								max,
-								//(hc %2)==1?"class=\"results\"":"class=\"results_odd\"",
-						p.getUrl(),p.getTitle(),p.getTitle().substring(dot,end)));
-				}	
-				output.write("</tr></thead><tbody><tr class=\"results\">");
-				output.write("<th ></th><th ></th>");
-				hc = 0;
-				for(Property p: props) {
-					hc++;
-					output.write(
-						String.format("<th align='center'><a href='%s' title='%s'>%s %s</a></th>",
-						pReporter.getURI(p),
-						p.getName(),
-						p.getName(),p.getUnits()));
-				}
+				
+				hierarchy = props.size()>20;
 			
-				output.write("</tr>");
+				if (hierarchy) {
+					output.write("<th>Properties</th>"); //one single cell and proeprtiws written vertically within
+					output.write("</tr>\n</thead><tbody>");
+				} else {
+					for(Property p: props) {
+						hc++;
+						int max=10;
+						int dot = 0;
+						int end = p.getTitle().indexOf("Descriptor");
+						if (end > 0) {
+							dot = p.getTitle().lastIndexOf(".");
+							if (dot<0) dot = 0; else dot++;
+						} else end = p.getTitle().length();
+						if ((end-dot)>max) end = dot + max;
+						
+						output.write(
+							String.format("<th width='%d'><a href='%s' title='%s'>%s</a></th>",
+									max,
+									//(hc %2)==1?"class=\"results\"":"class=\"results_odd\"",
+							p.getUrl(),p.getTitle(),p.getTitle().substring(dot,end)));
+					}
+					output.write("</tr>\n</thead><tbody><tr class=\"results\">");
+					output.write("<th ></th><th ></th>");
+					
+					hc = 0;
+					for(Property p: props) {
+						hc++;
+						output.write(
+							String.format("<th align='center'><a href='%s' title='%s'>%s %s</a></th>",
+							pReporter.getURI(p),
+							p.getName(),
+							p.getName(),p.getUnits()));
+					}					
+					output.write("</tr>\n");
+				}
+
+
+			
+				
 			}
 			else {
 				w.write(downloadLinks());
@@ -508,7 +527,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		b.append(String.format("<tr class=\"results_%s\">",((count % 2)==0)?"even":"odd"));
 		
-		b.append(String.format("<td >%d<br>%s<br>%s</td>",
+		b.append(String.format("<td >%d<br>%s<br>%s</td>\n",
 				count+1,
 				String.format("<a href='%s/query/similarity?search=%s&type=url&threshold=0.85' title='Find similar compounds'><img src=\"%s/images/search.png\" border='0' alt='Find similar' title='Find similar'></a>",
 							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference()),
@@ -525,7 +544,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		else imguri = String.format("%s?media=%s",w,Reference.encode(imgMime));		
 				
 		b.append(String.format(
-				"<td ><a href=\"%s?media=text/html%s\"><img src=\"%s&w=%d&h=%d\" width='%d' height='%d' alt=\"%s\" title=\"%d\"/></a></td>",
+				"<td valign='top'><a href=\"%s?media=text/html%s\"><img src=\"%s&w=%d&h=%d\" width='%d' height='%d' alt=\"%s\" title=\"%d\"/></a></td>",
 				
 				w,
 				hilightPredictions==null?"":String.format("&%s=%s",OpenTox.params.model_uri,hilightPredictions),
@@ -536,17 +555,33 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 
 			List<Property> props = template2Header(getTemplate(),true);
+			Property prevProperty = null;
 			int col = 0;
 			
+			if (hierarchy) { 
+				b.append("<td width='100%'>");
+				//b.append("<table border='1' width='90%'>"); //style='border:1px dotted blue;' 
+			}	
+			
+				
+
+
 			for(Property property: props) {
 				col++;
 				Object value = record.getProperty(property);
-				//System.out.println(String.format("%s [%s] %s",property.getName(),property.getTitle(),value==null?null:value.toString()));
 					
 				if (value instanceof Number) {
-					value = NumberFormat.getInstance(Locale.ENGLISH).format(((Number)value).doubleValue());
+					NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+					nf.setGroupingUsed(false);
+					value = nf.format(((Number)value).doubleValue());
 				}
 					boolean isLong = (value==null)?false:value.toString().length()>255;
+					
+				
+					
+					if (hierarchy) {
+						if (value==null) continue; //don't write non existing values
+					} else
 					b.append(String.format("<td %s width='%s'>",
 							//"class='results_col'",
 							((count%2)==0)?
@@ -554,80 +589,146 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 								((col % 2)==0)?"":"class='results_col'",
 							isLong?"100":"100")) ; //"#EBEEF1"
 
+					value = value==null?"":value.toString();
+					
 					boolean isHTML = (value == null)?false:value.toString().indexOf("<html>")>=0;
 					String searchValue = (value==null)?null:
 						(
 						isHTML?null:
 						value.toString().length()>255?value.toString().substring(0,255):value.toString()
 								);
-					/*
-					if (searchValue != null) {
-						
-						//?property=MW&search=100+..+200
-						b.append(String.format("<a href=\"%s/compound?features=%s/feature_definition/%d&property=%s&search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Search for %s=%s' title='Search for %s=%s'></a>", 
-								uriReporter.getBaseReference(),
-								uriReporter.getBaseReference(),
-								property.getId(),
-								Reference.encode(property.getName()),
-								Reference.encode(value.toString()),
-								uriReporter.getBaseReference(),		
-								property.getName(),
-								value.toString(),
-								property.getName(),
-								value.toString()							
-						));
-						//?property=MW&search=100+..+200
-						b.append(String.format("&nbsp;<a href=\"%s/compound?features=%s/feature_definition/%d&search=%s\"><img src=\"%s/images/search.png\" border='0' alt='Relaxed search for %s' title='Relaxed search for %s'></a>", 
-								uriReporter.getBaseReference(),
-								uriReporter.getBaseReference(),
-								property.getId(),
-								Reference.encode(value.toString()),
-								uriReporter.getBaseReference(),		
-								value.toString(),
-								value.toString()							
-						));				
-				
-					}
-					*/
-					b.append("<div>");
+			
 					
-					value = value==null?"":value.toString();
-					/*
-							value.toString().length()<40?value.toString():
-							value.toString().length()<255?value.toString().substring(0,40):
-							"See more";
-							*/
-					/* Edit link		
-					b.append(String.format("<a href=\"%s\">%s</a>",
-							String.format("%s/feature/compound/%d/feature_definition/%d", uriReporter.getBaseReference(),record.getIdchemical(),property.getId()),
-							value));
-					*/
+					
 					StringBuilder f = new StringBuilder();
 					for (String ff: featureURI.getValuesArray(OpenTox.params.feature_uris.toString())) {
 						f.append(String.format("&%s=%s", OpenTox.params.feature_uris,ff));
 					}
-					b.append(String.format("<a href=\"%s/compound?%s=%s%s/%d&property=%s&search=%s%s\">%s</a>", 
-						uriReporter.getBaseReference(),
-						OpenTox.params.feature_uris.toString(),
-						uriReporter.getBaseReference(),
-						PropertyResource.featuredef,
-						property.getId(),
-						Reference.encode(property.getName()),
-						searchValue==null?"":Reference.encode(searchValue.toString()),
-								
-						f,
-						value
-					));
+					if (hierarchy) {
+						
+						b.append("ToXML".equals(property.getUrl())?beautifyToXMLField(property,prevProperty):
+						String.format("\n<br>%s&nbsp;",property.getName()));
+						
+						b.append(String.format("<label title='%s'><u>%s</u></label>",value,searchValue));
+						
+						prevProperty = property;
+					} else {
+						b.append("<div>");
+				
+					
+						b.append(String.format("<a href=\"%s/compound?%s=%s%s/%d&property=%s&search=%s%s\">%s</a>", 
+							uriReporter.getBaseReference(),
+							OpenTox.params.feature_uris.toString(),
+							uriReporter.getBaseReference(),
+							PropertyResource.featuredef,
+							property.getId(),
+							Reference.encode(property.getName()),
+							searchValue==null?"":Reference.encode(searchValue.toString()),
 									
-					b.append("</div>");
-					b.append("</td>");
+							f,
+							value
+						));
+					}			
+					if (hierarchy) {
+						//b.append("<br>");
+					} else
+						b.append("</div>\b");
+					
+					if (!hierarchy) b.append("</td>\n");
 				}
+			if (hierarchy) {
 
-			b.append("</tr>");		
+				b.append("</td>\n");
+			}
+			b.append("</tr>\n");		
 	
 		return b.toString();
 	}		
+	/**
+	 * Some magic to show ToXML hierarchical fields, until we find a better solution. 
+	 * Fields come sorted.
+	 * @param p
+	 * @param previous
+	 * @return
+	 */
+	protected String beautifyToXMLField(Property p,Property previous) {
+		StringBuilder b = new StringBuilder();
+		
+		String title = p.getTitle().replace("http://opentox.org/toxml.owl#", "");
+		
+		int pos = title.lastIndexOf(".");
+
+		b.append("<br>");
+		if (pos>0) {
+			if (previous!=null) {
+				String prevTitle = previous.getTitle().replace("http://opentox.org/toxml.owl#", "");
+				int posPrev = prevTitle.lastIndexOf(".");
+				if ((posPrev>0) && title.substring(0,pos).equals(prevTitle.substring(0,posPrev))) {
+					//same path, one level down the hierarchy
+					posPrev = previous.getName().lastIndexOf(".");
+					int npos = p.getName().lastIndexOf(".");
+					if ((npos>0)&&(posPrev>0) && !p.getName().substring(0,npos).equals(previous.getName().substring(0,posPrev))) {
+						b.append("<br>");
+					}
+					b.append(getPropertyTitle(p, title.substring(pos+1)));
+				} else {
+					b.append("<hr>");
+					b.append(title.substring(0,pos).replace(".", "»"));
+					b.append("<br>");
+					b.append(getPropertyTitle(p, title.substring(pos+1)));
+				}
+			} else {
+				b.append("<hr>");
+				b.append(title.substring(0,pos).replace(".", "»"));
+				b.append("<br>");
+				b.append(getPropertyTitle(p, title.substring(pos+1)));
+			}
+			
+		}
+		else {
+			b.append(getPropertyTitle(p, title));
+		}
+		return b.toString();
+	}
 	
+	protected String getPropertyTitle(Property p,String title) {
+
+		return String.format("<label title='%s'>%s</label>&nbsp;<label title='%s'>%s%s%s</label>&nbsp;",
+						p.getName(),
+						"&nbsp;",
+						p.getTitle(),title,
+						"".equals(p.getUnits())?"":",",
+						p.getUnits()
+						);
+
+	
+	}
+	@Override
+	protected List<Property> template2Header(Template template,
+			boolean propertiesOnly) {
+		List<Property> h =  super.template2Header(template, propertiesOnly);
+		
+		
+		Collections.sort(h,new Comparator<Property>() {
+			public int compare(Property o1, Property o2) {
+				
+				String n1[] = o1.getName().replace(".",":").split(":");
+				String n2[] = o2.getName().replace(".",":").split(":");
+				
+				int c = n1.length<n2.length?n1.length:n2.length;
+				int r = 0;
+				for (int i=0; i < c;i++) { 
+					r = n1[i].compareTo(n2[i]);
+					if (r==0) continue;
+					return r>0?(i+1):-(i+1);
+				}
+				return r>0?(c+1):-(c+1);
+				
+			}
+		});	
+		
+		return h;
+	}
 	public String toURI(IStructureRecord record) {
 		String w = uriReporter.getURI(record);
 		StringBuilder b = new StringBuilder();
@@ -721,14 +822,17 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		*/	
 			List<Property> props = template2Header(getTemplate(),true);
 
-			for(Property property: props) 
-				if (property.getId()>0) {
-					Object value = record.getProperty(property);
-					b.append(String.format("<b>%s</b>&nbsp;%s<br>",
-							property.getName(),value==null?"":
-								value.toString()));
+				for(int i=0; i < props.size();i++) { 
+					Property property = props.get(i);
+					if (property.getId()>0) {
+						Object value = record.getProperty(property);
+						if (value!=null)
+						b.append(String.format("<b>%s</b>&nbsp;%s<br>",
+								property.getName(),value==null?"":
+									value.toString()));
+					}
 				}
-			//b.append("</table>");
+
 			b.append("</div>");		
 	
 		return b.toString();
