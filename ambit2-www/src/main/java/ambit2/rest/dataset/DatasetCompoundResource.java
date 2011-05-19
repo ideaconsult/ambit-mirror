@@ -25,7 +25,7 @@ public class DatasetCompoundResource extends CompoundResource {
 	
 	@Override
 	public String getCompoundInDatasetPrefix() {
-		return prefix;
+		return dataset_prefixed_compound_uri?prefix:"";
 	}
 	
 	@Override

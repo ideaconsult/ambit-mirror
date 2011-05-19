@@ -50,9 +50,11 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 	
 	@Override
 	public String getCompoundInDatasetPrefix() {
+		if (dataset_prefixed_compound_uri)
 		return
-		datasetID!=null?String.format("%s/%d", dataset,datasetID):
-			queryResultsID!=null?String.format("%s/R-%d", dataset,queryResultsID):"";
+			datasetID!=null?String.format("%s/%d", dataset,datasetID):
+				queryResultsID!=null?String.format("%s/R-%d", dataset,queryResultsID):"";
+		else return "";
 	}
 	@Override
 	protected Q createQuery(Context context, Request request,
