@@ -336,7 +336,7 @@ public class RDFIteratingReader extends DefaultIteratingChemObjectReader
 			else if (XSDDatatype.XSDinteger.equals(datatype)) 
 				record.setProperty(key, ((Literal)value).getInt());		
 			else if (XSDDatatype.XSDstring.equals(datatype)) 
-				record.setProperty(key, value.toString());
+				record.setProperty(key, ((Literal)value).getString());
 			else if (XSDDatatype.XSDboolean.equals(datatype)) 
 				record.setProperty(key, ((Literal)value).getBoolean());		
 			else 
