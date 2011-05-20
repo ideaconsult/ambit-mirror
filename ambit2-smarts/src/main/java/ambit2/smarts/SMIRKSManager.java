@@ -13,6 +13,7 @@ public class SMIRKSManager
 	public SMIRKSManager()
 	{
 		parser.setComponentLevelGrouping(true);
+		parser.mSupportSmirksSyntax = true;
 	}
 	
 	public boolean hasErrors()
@@ -69,7 +70,13 @@ public class SMIRKSManager
 				reaction.products, reaction.productsCLG);
 		
 		
-		//TODO
+		//Check the mapping
+		reaction.checkMappings();
+		if (reaction.mapErrors.size() > 0)
+		{
+			errors.addAll(reaction.mapErrors);
+			return (reaction);
+		}
 		
 		//Check the components
 		//TODO
