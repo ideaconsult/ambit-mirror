@@ -1496,7 +1496,7 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
 		
 		//tu.testIsomorphismTester("[]C", "CC"); - fix []
-		tu.testSMIRKS("[C:1][C:2][C:3][C:4]>>[C:4][C:3]=[C:2][C:1]");
+		tu.testSMIRKS("[*:1][C:2][C:3][C:4]>>[C:4][C:3]=[C:2][*:1]");
 		
 		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		

@@ -69,20 +69,40 @@ public class SMIRKSReaction
 		}
 			
 				
+		SmartsToChemObject stco = new SmartsToChemObject();
+		
 		//Checking for atom typing and some properties correctness for all mapped atoms
 		for (int i = 0; i < reactantAtomNum.size(); i++)
 		{
 			int rAtNum = reactantAtomNum.get(i).intValue();
 			int rNum = reactantFragmentNum.get(i).intValue();
 			Integer rMapInd = reactantMapIndex.get(i); 
-			IAtom a = reactants.get(rNum).getAtom(rAtNum);
+			IAtom ra = reactants.get(rNum).getAtom(rAtNum);
 			
 			int pIndex = getIntegerObjectIndex(productMapIndex, rMapInd);
 			int pAtNum = productAtomNum.get(pIndex).intValue();
 			int pNum = productFragmentNum.get(pIndex).intValue();
+			IAtom pa = products.get(pNum).getAtom(pAtNum);
 			
-			System.out.println("Map #" + rMapInd.intValue() + 
-					"  P" + rNum + " A"+rAtNum + "  -->  R"+pNum+" A"+pAtNum+""	);
+			//System.out.println("Map #" + rMapInd.intValue() + "  P" + rNum + " A"+rAtNum + "  -->  R"+pNum+" A"+pAtNum+""	);
+			
+			IAtom ra1 = stco.toAtom(ra);
+			IAtom pa1 = stco.toAtom(pa);
+			if (ra1 != null)
+			{
+				if (pa1 == null)
+					mapErrors.add("Map " + rMapInd.intValue() + " atom types are inconsistent!");
+				else
+				{
+					if (!ra1.getSymbol().equals(pa1.getSymbol()))
+						mapErrors.add("Map " + rMapInd.intValue() + " atom types are inconsistent!");
+				}
+			}
+			else
+			{
+				if (pa1 != null)
+					mapErrors.add("Map " + rMapInd.intValue() + " atom types are inconsistent!");
+			}
 			
 			//TODO
 			//Use:     SmartsToChemObject -->  IAtom toAtom(IAtom a)
