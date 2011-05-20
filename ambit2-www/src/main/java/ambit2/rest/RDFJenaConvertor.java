@@ -85,6 +85,8 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	        				else
 	        					fasterWriter = jenaModel.getWriter("RDF/XML");
 	        				fasterWriter.setProperty("xmlbase",jenaModel.getNsPrefixURI(""));
+	        				fasterWriter.setProperty("showXmlDeclaration", Boolean.TRUE);
+	        				fasterWriter.setProperty("showDoctypeDeclaration", Boolean.TRUE);	        				
 	        			}
 	        			else if (mediaType.equals(MediaType.APPLICATION_RDF_TURTLE))
 	        				fasterWriter = jenaModel.getWriter("TURTLE");
@@ -95,8 +97,12 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	        			else if (mediaType.equals(MediaType.APPLICATION_JSON)) {
 	        				exportToJSON(jenaModel,output);
 	        				return;
-	        			} else 
-	        				fasterWriter = jenaModel.getWriter("RDF/XML-ABBREV");	
+	        			} else {
+	        				fasterWriter = jenaModel.getWriter("RDF/XML-ABBREV");
+	        				fasterWriter.setProperty("showXmlDeclaration", Boolean.TRUE);
+	        				fasterWriter.setProperty("showDoctypeDeclaration", Boolean.TRUE);	//essential to get XSD prefixed
+	        				fasterWriter.setProperty("xmlbase",jenaModel.getNsPrefixURI(""));	        				
+	        			}
 	        			
 	        			fasterWriter.write(jenaModel,output,"http://opentox.org/api/1.1");
 	            	} catch (Exception x) {
