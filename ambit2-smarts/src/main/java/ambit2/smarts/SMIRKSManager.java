@@ -3,6 +3,8 @@ package ambit2.smarts;
 import java.util.Vector;
 
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 
 public class SMIRKSManager 
 {
@@ -82,8 +84,19 @@ public class SMIRKSManager
 		//TODO
 		
 		
+		
+		
 		return null;
 	}
+	
+	
+	public void applyTransformation(IAtomContainer mol, SMIRKSReaction reaction)
+	{
+		//Search all locations/instances  (modes of searching)
+		
+		//Apply transformation at particular location
+	}
+	
 	
 	public int parseComponent(String smarts, String compType, SMIRKSReaction reaction,
 			Vector<QueryAtomContainer> fragments, Vector<Integer> CLG)

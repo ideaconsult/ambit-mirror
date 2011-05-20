@@ -24,17 +24,28 @@ public class SMIRKSReaction
 	public Vector<Integer> agentsCLG = new Vector<Integer>();
 	public Vector<Integer> productsCLG = new Vector<Integer>();
 	
+	//Mapping data
 	public  Vector<String> mapErrors = new Vector<String>(); 
-	
-	HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
+	//HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
 	Vector<Integer> reactantMapIndex = new Vector<Integer>();
 	Vector<Integer> reactantAtomNum = new Vector<Integer>();
 	Vector<Integer> reactantFragmentNum = new Vector<Integer>();
 	Vector<Integer> productMapIndex = new Vector<Integer>();
 	Vector<Integer> productAtomNum = new Vector<Integer>();
 	Vector<Integer> productFragmentNum = new Vector<Integer>();
+		
+	//Transformation Data
+	//Vector<Integer> reactantAtCharge
+	//Vector<Integer> productAtCharge
+	//Vector<Integer> reactantAtChirality
+	//Vector<Integer> productAtChirality
 	
+	Vector<Integer> reactantAt1Index = new Vector<Integer>();
+	Vector<Integer> reactantAt2Index = new Vector<Integer>();
+	Vector<Integer> reactantBoType = new Vector<Integer>();
+	Vector<Integer> productBoType = new Vector<Integer>();
 	
+		
 	
 	public void checkMappings()
 	{
@@ -134,6 +145,21 @@ public class SMIRKSReaction
 			}
 		}
 	}
+	
+	
+	void generateTransformationData()
+	{
+		//Atom Transformation
+		//TODO
+		
+		
+		
+		//Bond Transformation
+		//TODO
+		
+		
+	}
+	
 	
 	
 	//Helper functions
