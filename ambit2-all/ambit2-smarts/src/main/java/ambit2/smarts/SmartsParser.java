@@ -74,6 +74,7 @@ public class SmartsParser
 	public boolean mUseMOEvPrimitive = false;
 	public boolean mSupportOpenEyeExtension = true;
 	public boolean mSupportOpenBabelExtension = true;
+	public boolean mSupportSmirksSyntax = false; 
 	
 	//Work variables for Component Level Grouping
 	boolean FlagCLG = false;  
@@ -95,6 +96,7 @@ public class SmartsParser
 	int curBondType;
 	int nChars;
 	boolean insideRecSmarts;
+	int curSmirksMapIndex = -1;
 	
 	public QueryAtomContainer parse(String sm)
 	{
@@ -336,7 +338,7 @@ public class SmartsParser
 	}
 	
 	void addAtom(IQueryAtom atom)
-	{
+	{	
 		container.addAtom(atom);
 		if (prevAtom != null)
 		{	
@@ -347,6 +349,16 @@ public class SmartsParser
 		{	
 			newFragment(); //A new fragments is started. It is inside "current component"
 			curFragment.addAtom(atom);
+		}	
+		
+		
+		if (mSupportSmirksSyntax)
+		{	
+			if (curSmirksMapIndex > -1)
+				atom.setProperty("SmirksMapIndex", new Integer(curSmirksMapIndex));
+			
+			//resetting for the next atom
+			curSmirksMapIndex = -1;
 		}	
 		
 		//resetting for the next atom
@@ -1025,6 +1037,15 @@ public class SmartsParser
 					curChar++;
 				}
 				break;
+			case ':':
+				if (mSupportSmirksSyntax)
+					parseAP_SmirksMaping();
+				else
+				{
+					newError("Smirks mapping is not supported!", curChar+1,"");
+					curChar++;
+				}
+				break;
 			default:
 				newError("Incorrect symbol in atom expression", curChar+1,"");
 				curChar++;
@@ -1248,6 +1269,32 @@ public class SmartsParser
 				newError("Incorrect hybridization after ^", curChar,"");
 			else
 				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_OB_Hybr,par));
+		}	
+	}
+	
+	void parseAP_SmirksMaping()
+	{
+		//it is not called in this case  testForDefaultAND()
+		curChar++;
+		
+		int par = getInteger();
+		if (par == -1)
+			newError("Missing Smirks Mapping index after ", curChar,"");
+		else
+		{	
+			if ((par < 0) || (par >10000))
+				newError("Incorrect Smirks Mapping index ", curChar,"");
+			else
+			{	
+				//System.out.println("Map Index " + par);
+				if (curSmirksMapIndex > 0)
+				{
+					newError("Smirks Mapping index is specified more than once per atom ",
+							curChar,"");
+				}
+				else
+					curSmirksMapIndex = par;
+			}
 		}	
 	}
 	
