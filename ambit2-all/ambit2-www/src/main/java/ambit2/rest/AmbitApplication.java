@@ -386,7 +386,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		Filter bookmarkAuthz = new BookmarksAuthorizer();		
 		bookmarkAuth.setNext(bookmarkAuthz);
 		bookmarkAuthz.setNext(bookmarkRouter);
-		return bookmarkAuthz;
+		return bookmarkAuth;
 	}
 	/**
 	 * Resource /admin
