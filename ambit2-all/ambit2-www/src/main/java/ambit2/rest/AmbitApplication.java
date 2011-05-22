@@ -150,7 +150,8 @@ public class AmbitApplication extends TaskApplication<String> {
 		/**		 *  /admin 
 		 *  Various admin tasks, like database creation
 		 */
-		router.attach(String.format("/%s",AdminResource.resource),createAdminRouter());
+		
+router.attach(String.format("/%s",AdminResource.resource),createProtectedResource(createAdminRouter(),"admin"));
 
 		/** /policy - used for testing only  */
 		router.attach(String.format("/%s",PolicyResource.resource),PolicyResource.class);		
@@ -257,10 +258,10 @@ public class AmbitApplication extends TaskApplication<String> {
 		return userAuthn;
 	}
 
-	protected Restlet createProtectedResource(Router router) {
+	protected Restlet createProtectedResource(Restlet router) {
 		return createProtectedResource(router,null);
 	}
-	protected Restlet createProtectedResource(Router router,String prefix) {
+	protected Restlet createProtectedResource(Restlet router,String prefix) {
 		Filter authN = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
 		OpenSSOAuthorizer authZ = new OpenSSOAuthorizer();
 		authZ.setPrefix(prefix);
