@@ -36,6 +36,14 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 	protected String dataset_id;
 	protected String textSearch = "CasRN";
 	
+	@Override
+	public String getCompoundInDatasetPrefix() {
+		if (dataset_prefixed_compound_uri)
+		return
+				dataset_id!=null?String.format("%s/%s", OpenTox.URI.dataset.getURI(),dataset_id):"";
+
+		else return "";
+	}	
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
 		return (dataset_id == null)?
 				null
