@@ -14,7 +14,7 @@ public class ChartRouter extends MyRouter {
 	public ChartRouter(Context context) {
 		super(context);
 		attachDefault(ChartResource.class);
-		attach(String.format("%s/{%s}",ChartResource.resource,ChartResource.resourceKey),ChartResource.class);
+		attach(String.format("/{%s}",ChartResource.resourceKey),ChartResource.class);
 
 	}
 
