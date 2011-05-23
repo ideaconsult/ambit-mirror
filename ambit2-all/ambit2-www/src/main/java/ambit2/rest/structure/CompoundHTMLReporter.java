@@ -422,7 +422,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				output.write("<div class=\"rowwhite\"><span class=\"center\">");
 					
 				//output.write(AmbitResource.jsTableSorter("results","pager"));
-				output.write("<table id='results' border='0' cellpadding='0' cellspacing='1'>"); 
+				output.write("<table id='results' class='tablesorter' border='0' cellpadding='0' cellspacing='1'>"); 
 				
 				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Max number of hits:%s</CAPTION>",
 						query.toString(),
@@ -607,9 +607,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					if (hierarchy) {
 						
 						b.append("ToXML".equals(property.getUrl())?beautifyToXMLField(property,prevProperty):
-						String.format("\n<br>%s&nbsp;",property.getName()));
+						String.format("\n<br><a href='%s' target=_blank>%s</a>&nbsp;",pReporter.getURI(property),property.getName()));
 						
-						b.append(String.format("<label title='%s'><u>%s</u></label>",value,searchValue));
+						b.append(String.format("<label title='%s'><i><font color='black'>%s</font></i></label>",value,searchValue));
+						//b.append(value);
 						
 						prevProperty = property;
 					} else {
@@ -673,14 +674,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					b.append(getPropertyTitle(p, title.substring(pos+1)));
 				} else {
 					b.append("<hr>");
-					b.append(title.substring(0,pos).replace(".", "\u00BB" ));
-					b.append("<br>");
+					b.append(String.format("<h5>%s</h5>",title.substring(0,pos).replace(".", "\u00BB" )));
 					b.append(getPropertyTitle(p, title.substring(pos+1)));
 				}
 			} else {
 				b.append("<hr>");
-				b.append(title.substring(0,pos).replace(".", "\u00BB"));
-				b.append("<br>");
+				b.append(String.format("<h5>%s</h5>",title.substring(0,pos).replace(".", "\u00BB" )));
 				b.append(getPropertyTitle(p, title.substring(pos+1)));
 			}
 			
@@ -693,10 +692,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	
 	protected String getPropertyTitle(Property p,String title) {
 
-		return String.format("<label title='%s'>%s</label>&nbsp;<label title='%s'>%s%s%s</label>&nbsp;",
+		return String.format("&nbsp;<a href='%s' title='%s'>%s%s%s</a>&nbsp;",
+						pReporter.getURI(p),
 						p.getName(),
-						"&nbsp;",
-						p.getTitle(),title,
+						title,
 						"".equals(p.getUnits())?"":",",
 						p.getUnits()
 						);
