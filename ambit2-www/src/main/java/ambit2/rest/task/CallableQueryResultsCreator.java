@@ -34,6 +34,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 	protected Template template;
 	protected Reference applicationRootReference;
 	protected String[] datasets;
+	protected String[] features;
 	
 	public boolean isClearPreviousContent() {
 		return clearPreviousContent;
@@ -53,9 +54,11 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 		super(form, context,token);
 		this.applicationRootReference = applicationRootReference;
 		datasets = form.getValuesArray(OpenTox.params.dataset_uri.toString());
+		features = form.getValuesArray(OpenTox.params.feature_uris.toString());
 		if ((datasets==null) || (datasets[0]==null)) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,OpenTox.params.dataset_uri.getDescription());
 		sourceReference = new Reference(datasets[0]);
 		this.storedQuery = storedQuery;
+		
 		this.template = null;
 	}
 	
@@ -77,6 +80,11 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 		
 		if(template == null) template = new Template(null);
 		RDFPropertyIterator.readFeaturesRDF(ref.toString(), template, applicationRootReference);
+		
+		if ((features!=null) && features.length>0) {
+			for (String feature : features)
+				RDFPropertyIterator.readFeaturesRDF(feature, template, applicationRootReference);
+		}
 		/*
 		Iterator<Property> properties = template.getProperties(true);
 		while (properties.hasNext()) {
