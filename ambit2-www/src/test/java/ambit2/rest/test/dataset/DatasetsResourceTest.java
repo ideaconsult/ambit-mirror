@@ -681,5 +681,11 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 	
 	}	
 	
+	public void testDeleteStructuresFromDataset() throws Exception {
+		Assert.fail("add test");
+	}
 	
+	public void testDeleteStructuresFromRDataset() throws Exception {
+		Assert.fail("add test");
+	}
 }
