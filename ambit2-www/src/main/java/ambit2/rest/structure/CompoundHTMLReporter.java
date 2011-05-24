@@ -61,7 +61,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	protected String hilightPredictions = null;
 	protected Dimension cellSize = new Dimension(150,150);
 	protected Form featureURI = null;
-	protected String imgMime = "image/gif";
+	protected String imgMime = "image/png";
 	boolean hierarchy = false;
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
@@ -743,7 +743,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				hilightPredictions,
 				OpenTox.params.dataset_uri.toString(),w,
 				Reference.encode(imgMime));
-		else imguri=w+"?media=image/png";		
+		else imguri= String.format("%s?media=%s",w,Reference.encode(imgMime));		
 		
 		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
 		
