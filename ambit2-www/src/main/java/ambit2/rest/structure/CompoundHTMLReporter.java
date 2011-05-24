@@ -691,8 +691,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	}
 	
 	protected String getPropertyTitle(Property p,String title) {
-
-		return String.format("&nbsp;<a href='%s' title='%s'>%s%s%s</a>&nbsp;",
+		StringBuilder space = new StringBuilder();
+		for (int i=0; i < p.getName().length()-1;i++)
+			if (".".equals(p.getName().substring(i,i+1))) space.append("&nbsp;"); 
+		
+		return String.format("%s<a href='%s' title='%s'>%s%s%s</a>&nbsp;",
+						space.toString(),
 						pReporter.getURI(p),
 						p.getName(),
 						title,
