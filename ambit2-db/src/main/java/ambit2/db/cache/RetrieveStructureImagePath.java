@@ -34,7 +34,7 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
 		"join `query` using(idquery)\n"+
 		"join sessions using(idsessions)\n"+
 		"where\n"+
-		"sessions.title=\"image/png\" and\n"+
+		"sessions.title=? and\n"+
 		"query.name=? and\n"+
 		"structure.%s =?\n"+
 		"union\n"+
@@ -44,20 +44,27 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
 		"order by type_structure desc";
 	//TODO order by requires filesort
 	protected String queryName = null;
-	protected String mimeType = "image/gif";
+	protected String mimeType;
 	
+	public String getMimeType() {
+		return mimeType;
+	}
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
 	public String getQueryName() {
 		return queryName;
 	}
 	public void setQueryName(String queryName) {
 		this.queryName = queryName;
 	}
-	public RetrieveStructureImagePath() {
-		this(null);
+	public RetrieveStructureImagePath(String mimeType) {
+		this(mimeType,null);
 		
 	}
-	public RetrieveStructureImagePath(IStructureRecord record) {
+	public RetrieveStructureImagePath(String mimeType,IStructureRecord record) {
 		super();
+		this.mimeType = mimeType==null?"image/png":mimeType;
 		setValue(record);
 		setCondition(EQCondition.getInstance());
 	}
@@ -67,6 +74,7 @@ public class RetrieveStructureImagePath extends RetrieveStructure  {
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
+		params.add(new QueryParam<String>(String.class,mimeType));
 		params.add(new QueryParam<String>(String.class,getQueryName()));
 		params.add(new QueryParam<Integer>(Integer.class, getFieldname()?getValue().getIdchemical():getValue().getIdstructure()));
 		params.add(new QueryParam<Integer>(Integer.class, getFieldname()?getValue().getIdchemical():getValue().getIdstructure()));
