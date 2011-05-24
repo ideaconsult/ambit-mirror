@@ -81,7 +81,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		strucQuery.setChemicalsOnly(false);
 		depict.setImageSize(dimension);
 		getProcessors().clear();
-		RetrieveStructureImagePath q = new RetrieveStructureImagePath();
+		RetrieveStructureImagePath q = new RetrieveStructureImagePath(mimeType);
 		q.setQueryName(getQueryName());
 		q.setPageSize(1);
 		q.setPage(0);
@@ -117,7 +117,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		super.close();
 	}	
 
-	protected void cache(IStructureRecord item, BufferedImage image) {
+	protected  synchronized void cache(IStructureRecord item, BufferedImage image) {
 		if (image==null) return; //don't attempt to cache 
 		try {
 			String dimensions = getQueryName();
@@ -128,10 +128,13 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	        		dimensions,
 	        		item.getIdchemical(),item.getIdstructure(),
 	        		subType));
+	        
+        	//give up, perhaps another thread started writing it
+        	if (file.exists()) return;
+
 			File dir = file.getParentFile();
 			//synchronized (this) {
 				if ((dir!=null) && !dir.exists())	dir.mkdirs();		 
-		        //ImageIO.write(image,"png", file);
 		        
 				Iterator<ImageWriter> writers = ImageIO.getImageWritersBySuffix(subType);
 
@@ -140,6 +143,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 					ImageOutputStream ios = ImageIO.createImageOutputStream(file);
 					writer.setOutput(ios);
 					writer.write(image);
+					break;
 
 				}
 			//}
