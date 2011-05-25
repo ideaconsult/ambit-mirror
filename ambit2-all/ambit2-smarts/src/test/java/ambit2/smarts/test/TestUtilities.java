@@ -1267,7 +1267,10 @@ public class TestUtilities
 		if (!smrkMan.getErrors().equals(""))
 		{
 			System.out.println(smrkMan.getErrors());
+			return;
 		}
+		
+		System.out.println(sr.transformationDataToString());
 	}
 	
 	

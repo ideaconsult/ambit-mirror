@@ -58,19 +58,39 @@ public class SMIRKSManager
 		
 		//Parse the components
 		int res = 0;
+		QueryAtomContainer fragment;
 		reaction.reactantsSmarts = smirks.substring(0, sep1Pos).trim();
-		res += parseComponent(reaction.reactantsSmarts, "Reactants", reaction,
+		fragment = parseComponent(reaction.reactantsSmarts, "Reactants", reaction.reactantFlags,
 				reaction.reactants, reaction.reactantCLG);
+		if (fragment == null)
+			res++;
+		else
+			reaction.reactant = fragment;
+		
 		
 		reaction.agentsSmarts = smirks.substring(sep1Pos+1, sep2Pos).trim();
 		if (!reaction.agentsSmarts.equals(""))
-			res += parseComponent(reaction.agentsSmarts, "Agents", reaction,
+		{	
+			fragment = parseComponent(reaction.agentsSmarts, "Agents", reaction.agentFlags,
 					reaction.agents, reaction.agentsCLG);
+			if (fragment == null)
+				res++;
+			else
+				reaction.agent = fragment;
+		}
+		
 		
 		reaction.productsSmarts = smirks.substring(sep2Pos+1).trim();
-		res += parseComponent(reaction.productsSmarts, "Products", reaction,
+		fragment = parseComponent(reaction.productsSmarts, "Products", reaction.productFlags,
 				reaction.products, reaction.productsCLG);
+		if (fragment == null)
+			res++;
+		else
+			reaction.product = fragment;
 		
+		
+		if (res > 0)
+			return reaction;
 		
 		//Check the mapping
 		reaction.checkMappings();
@@ -79,6 +99,8 @@ public class SMIRKSManager
 			errors.addAll(reaction.mapErrors);
 			return (reaction);
 		}
+		
+		reaction.generateTransformationData();
 		
 		//Check the components
 		//TODO
@@ -98,26 +120,26 @@ public class SMIRKSManager
 	}
 	
 	
-	public int parseComponent(String smarts, String compType, SMIRKSReaction reaction,
+	public QueryAtomContainer parseComponent(String smarts, String compType, SmartsFlags flags,
 			Vector<QueryAtomContainer> fragments, Vector<Integer> CLG)
 	{
-		parser.parse(smarts);
+		QueryAtomContainer fragment = parser.parse(smarts);
 		parser.setNeededDataFlags();
 		String errorMsg = parser.getErrorMessages();
 		if (!errorMsg.equals(""))
 		{
 			errors.add("Invalid " + compType + " part in SMIRKS: " + smarts
 					+ "   "+errorMsg);
-			return (-1);
+			return (null);
 		}
 		
-		reaction.reactantFlags.hasRecursiveSmarts = parser.hasRecursiveSmarts;
-		reaction.reactantFlags.mNeedExplicitHData = parser.needExplicitHData();
-		reaction.reactantFlags.mNeedNeighbourData = parser.needNeighbourData();
-		reaction.reactantFlags.mNeedParentMoleculeData = parser.needParentMoleculeData();
-		reaction.reactantFlags.mNeedRingData = parser.needRingData();
-		reaction.reactantFlags.mNeedRingData2 = parser.needRingData2();
-		reaction.reactantFlags.mNeedValenceData = parser.needValencyData();
+		flags.hasRecursiveSmarts = parser.hasRecursiveSmarts;
+		flags.mNeedExplicitHData = parser.needExplicitHData();
+		flags.mNeedNeighbourData = parser.needNeighbourData();
+		flags.mNeedParentMoleculeData = parser.needParentMoleculeData();
+		flags.mNeedRingData = parser.needRingData();
+		flags.mNeedRingData2 = parser.needRingData2();
+		flags.mNeedValenceData = parser.needValencyData();
 		
 		for (int i = 0; i < parser.fragments.size(); i++)
 			fragments.add(parser.fragments.get(i));
@@ -125,6 +147,6 @@ public class SMIRKSManager
 		for (int i = 0; i < parser.fragmentComponents.size(); i++)
 			CLG.add(parser.fragmentComponents.get(i));
 		
-		return (0);
+		return (fragment);
 	}
 }
