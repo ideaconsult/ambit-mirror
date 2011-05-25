@@ -22,7 +22,7 @@
 
     <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
- 	<toxtree.version>2.4.0-SNAPSHOT</toxtree.version>
+ 	<toxtree.version>2.4.1-SNAPSHOT</toxtree.version>
  	<ambit.version>2.4.1-SNAPSHOT</ambit.version>
 
   </properties>
