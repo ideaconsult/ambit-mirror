@@ -94,6 +94,12 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 			bookmark.setHasTopic(Reference.decode(key.toString()));
 		} 		
 			
+		key = form.getFirstValue(Annotea.BookmarkProperty.recalls.toString());
+		if (key != null) {
+			if (bookmark==null) bookmark = new Bookmark();
+			bookmark.setRecalls(Reference.decode(key.toString()));
+		} 
+		
 		try {
 			if (idref==null) {
 				return new ReadBookmark(null,bookmark); //all

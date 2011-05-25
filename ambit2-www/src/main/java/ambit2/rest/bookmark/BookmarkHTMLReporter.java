@@ -12,6 +12,7 @@ import org.restlet.data.Reference;
 import ambit2.base.data.Bookmark;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.update.bookmark.ReadBookmark;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
@@ -36,22 +37,50 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 	public void header(Writer w, IQueryRetrieval<Bookmark> query) {
 		super.header(w, query);
 		try {
-			w.write(String.format("<h3>Bookmarks </h3>",""));
+			//w.write(String.format("<h3>Bookmarks </h3>",""));
 			
 			Reference ref = getUriReporter().getRequest().getResourceRef().clone();
 			ref.setQuery(null);
+			
+			Bookmark bm = null;
+			if (query instanceof ReadBookmark)
+				bm = ((ReadBookmark)query).getFieldname();
+			//rdfa
+			output.write("<div xmlns:dc=\"http://purl.org/dc/elements/1.1/\">");
+			output.write("<div xmlns:a=\"http://www.w3.org/2000/10/annotation-ns#\">");
+			w.write("<table class='tablesorter' width='99%'>");
+			w.write("<caption><h3>Bookmarks</h3></caption>");
+			w.write("<tr ><form action='' method='get'>");
+			w.write("<th>");
 			w.write(String.format("<a href='%s/topics'>Topics</a><br>",ref));
 			
 			w.write(String.format("<a href='?media=%s'>RDF/XML</a>&nbsp;",URLEncoder.encode(MediaType.APPLICATION_RDF_XML.toString())));
 			w.write(String.format("<a href='?media=%s'>RDF N3</a>&nbsp;",URLEncoder.encode(MediaType.TEXT_RDF_N3.toString())));
-			w.write(String.format("<a href='?media=%s'>CSV</a><br>",URLEncoder.encode(MediaType.TEXT_CSV.toString())));
-			//rdfa
-			output.write("<div xmlns:dc=\"http://purl.org/dc/elements/1.1/\">");
-			output.write("<div xmlns:a=\"http://www.w3.org/2000/10/annotation-ns#\">");
-			w.write("<table width='99%'>");
+			w.write(String.format("<a href='?media=%s'>CSV</a><br>",URLEncoder.encode(MediaType.TEXT_CSV.toString())));			
+					
+			w.write("</th>");
+			w.write(String.format("<th><input type='text' name='hasTopic' value='%s' type='text'/></th>",
+					bm==null?"":bm.getHasTopic()==null?"":bm.getHasTopic()));
+			w.write(String.format("<th><input type='text' name='search' value='%s' type='text'/></th>",
+					bm==null?"":bm.getTitle()==null?"":bm.getTitle()));
+			w.write(String.format("<th><input type='text' name='recalls' value='%s' type='text'/></th>",
+					bm==null?"":bm.getRecalls()==null?"":bm.getRecalls()));
+			w.write("<th><input type='text' name='creator' type='text'/></th>");
+			w.write("<th><input type='submit' value='search'/></th>");
+			w.write("<th></th>");
+
+			w.write("</form></tr>");
 			w.write("<tr>");
-			w.write("<th>Bookmark URI</th><th>Topic</th><th>Title</th><th>Description</th><th>URI</th><th>Created</th><th>Creator</th>");
-			w.write("</tr>");
+			w.write("<th>Bookmark URI</th>");
+			w.write("<th>Topic</th>");
+			w.write("<th>Title</th>");
+			w.write("<th>URI</th>");
+			w.write("<th>Creator</th>");
+			w.write("<th>Description</th>");
+			w.write("<th>Created</th>");
+
+			w.write("</tr>");			
+
 		} catch (Exception x) {}
 	}
 	@Override
@@ -74,30 +103,35 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 						uriReporter.getURI(item)));
 			
 			output.write(String.format(
-					"<td><div><span property=\"a:hasTopic\">%s</span></div></td>",
+					"<td><div><span property=\"a:hasTopic\"><a href='?hasTopic=%s'>%s</a></span></div></td>",
+					Reference.encode(item.getHasTopic()),
 					item.getHasTopic()));	
 			
 			output.write(String.format(
-					"<td><div><span property=\"dc:title\">%s</span></div></td>",
-					item.getTitle()));					
-			
-			output.write(String.format(
-					"<td><div><span property=\"dc:description\">%s</span></div></td>",
-					item.getDescription()));					
+					"<td><div><span property=\"dc:title\"><a href='?search=%s'>%s</a></span></div></td>",
+					Reference.encode(item.getTitle()),
+					item.getTitle()				
+					));					
+		
 			
 			output.write(String.format(
 						"<td><a href=\"%s\" target='_blank'><span property=\"a:recalls\">%s</span></a></td>",
 						item.getRecalls(),
 						item.getRecalls()));	
-			
-			output.write(String.format(
-					"<td>%s</td>",
-					SimpleDateFormat.getInstance().format(new Date(item.getCreated()))));	
+
 
 			output.write(String.format(
 					"<td>%s</td>",
 					item.getCreator()));	
 			
+			
+			output.write(String.format(
+					"<td><div><span property=\"dc:description\">%s</span></div></td>",
+					item.getDescription()));			
+			
+			output.write(String.format(
+					"<td>%s</td>",
+					SimpleDateFormat.getInstance().format(new Date(item.getCreated()))));				
 				
 				output.write("</div><tr>");
 		} catch (Exception x) {
