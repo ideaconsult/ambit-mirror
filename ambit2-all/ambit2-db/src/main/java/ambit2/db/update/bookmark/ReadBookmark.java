@@ -24,6 +24,7 @@ public class ReadBookmark  extends AbstractQuery<Bookmark, Integer, StringCondit
 	protected static String whereUser = " creator = substr(?,1,45) ";
 	protected static String whereLabel = " title = substr(?,1,45) ";
 	protected static String whereType = " hasTopic = substr(?,1,255) ";
+	protected static String whereRecalls = " recalls = ? ";
 	/**
 	 * 
 	 */
@@ -57,7 +58,9 @@ public class ReadBookmark  extends AbstractQuery<Bookmark, Integer, StringCondit
 			if (getFieldname().getHasTopic()!=null)
 				params.add(new QueryParam<String>(String.class, getFieldname().getHasTopic()));
 			if (getFieldname().getTitle()!=null)
-				params.add(new QueryParam<String>(String.class, getFieldname().getTitle()));			
+				params.add(new QueryParam<String>(String.class, getFieldname().getTitle()));
+			if (getFieldname().getRecalls()!=null)
+				params.add(new QueryParam<String>(String.class, getFieldname().getRecalls()));				
 		}
 		
 		if (getValue()!=null) 
@@ -86,7 +89,12 @@ public class ReadBookmark  extends AbstractQuery<Bookmark, Integer, StringCondit
 				b.append(where);
 				b.append(whereLabel);
 				where = " and ";
-			}				
+			}	
+			if (getFieldname().getRecalls()!= null) {
+				b.append(where);
+				b.append(whereRecalls);
+				where = " and ";
+			}					
 		}
 	
 		if (getValue()!= null) {
