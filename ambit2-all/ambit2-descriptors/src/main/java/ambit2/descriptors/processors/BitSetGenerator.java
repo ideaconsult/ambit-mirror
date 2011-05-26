@@ -154,7 +154,33 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 				return "Atom Environments";
 			}
 			
-		};					
+		},
+		inchi {
+			@Override
+			public String getProperty() {
+				return Property.opentox_InChI;
+			}
+			@Override
+			public String getStatusProperty() {
+				return null;
+			}
+			@Override
+			public String getTimeProperty() {
+				return null;
+			}
+			@Override
+			public IProcessor<IAtomContainer, BitSet> getGenerator() {
+				return null;
+			}
+			@Override
+			public String getTable() {
+				return "chemicals";
+			}
+			@Override
+			public String toString() {
+				return "InChI in chemicals table";
+			}
+		};			
 		abstract public String getProperty();
 		abstract public String getTimeProperty();
 		abstract public String getStatusProperty();
