@@ -29,7 +29,7 @@
 				<web_xml>src/main/resources/web.https.xml</web_xml>
 			</properties>			
 	    </profile>
-    </profiles>
+    
     <!-- Release build, without AA -->
       <profile>
       <id>ambit-release-no-aa</id>
@@ -57,6 +57,7 @@
         <aa.enabled>false</aa.enabled>
        </properties>
     </profile>
+    
     <!--  release build, with AA -->
       <profile>
       <id>ambit-release-aa</id>
@@ -86,7 +87,7 @@
 
       </properties>
     </profile>
-    
+    </profiles>
       
   <build>
     <finalName>ambit2</finalName>
