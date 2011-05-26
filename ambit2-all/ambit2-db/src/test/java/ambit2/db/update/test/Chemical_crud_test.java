@@ -127,6 +127,43 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 		
 	}
 
+	/**
+	 * Only update inchi/inchi keys, not other fields 
+	 * @throws Exception
+	 */
+	@Test
+	public void testUpdateInChI() throws Exception {
+		
+		IChemical chem = new StructureRecord();
+		chem.setInchi("InChI=UPDATEDINCHI");
+		chem.setInchiKey("UPDATEDKEY");
+		chem.setIdchemical(10);
+		
+		IQueryUpdate<Object,IChemical> query = new UpdateChemical(chem);
+		setUpDatabase(dbFile);
+		IDatabaseConnection c = getConnection();
+		executor.setConnection(c.getConnection());
+		executor.open();
+		Assert.assertTrue(executor.process(query)>=1);
+		updateVerifyInChI(query);
+		c.close();
+	}
+	
+
+	protected void updateVerifyInChI(IQueryUpdate<Object, IChemical> query)
+			throws Exception {
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where inchi='InChI=1/2FH.Na/h2*1H;/q;;+1/p-1'");
+		Assert.assertEquals(0,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where idchemical=10");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles='F.[F-].[Na+]' and inchi='InChI=UPDATEDINCHI' and formula is null and inchikey='UPDATEDKEY' and idchemical=10");
+		Assert.assertEquals(1,table.getRowCount());
+	
+		c.close();		
+		
+	}	
+	
 	@Override
 	protected IQueryUpdate<Object, IChemical> updateQuery() throws Exception {
 		IChemical c = new StructureRecord();
