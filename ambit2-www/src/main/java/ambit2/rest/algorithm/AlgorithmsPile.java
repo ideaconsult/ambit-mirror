@@ -19,10 +19,55 @@ public class AlgorithmsPile {
 			{"SimpleKMeans","Clustering: k-means","weka.clusterers.SimpleKMeans",null,
 				new String[] {AlgorithmType.Clustering.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.LazyLearning.toString(),AlgorithmType.UnSupervised.toString()},
 				null,Algorithm.requires.property},
-			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,
-					new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
-			{"LR","Regression: Linear regression","weka.classifiers.functions.LinearRegression",null,
-						new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			/**
+			 * Classification
+			 */
+				
+			{"J48","Classification: Decision tree J48","weka.classifiers.trees.J48",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			{"RandomForest","Constructs random forests","weka.classifiers.trees.RandomForest",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			{"Functional tree","Jaoa Gama (2004). Functional Trees. Machine Learning, Vol. 55(3), ","weka.classifiers.functions.FT",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},			
+			{"LibLINEAR","A Library for Large Linear Classification","weka.classifiers.functions.LibLINEAR",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			{"IB1","IB1-type classifier. Uses a simple distance measure to find the training instance closest to the given test instance, and predicts the same class as this training instance.","weka.classifiers.lazy.IB1",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.LazyLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+
+			/**
+			 * Regression
+			 */
+			{"LR","Regression: Linear regression","weka.classifiers.functions.LinearRegression",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"GaussianProcesses","Gaussian Processes","weka.classifiers.functions.GaussianProcesses",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"IsotonicRegression","Isotonic Regression","weka.classifiers.functions.IsotonicRegression",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"LMSLR","Least median squared linear regression. Peter J. Rousseeuw, Annick M. Leroy (1987). Robust regression and outlier detection.","weka.classifiers.functions.LeastMedSq",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			//{"LibSVM","LibSVM Support Vector Machines","weka.classifiers.functions.LibSVM",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"LogisticRegression","Logistic regression","weka.classifiers.functions.Logistic",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"MLP","Multilayer Perceptron","weka.classifiers.functions.MultilayerPerceptron",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"PaceRegresion","Pace Regression","weka.classifiers.functions.PaceRegression",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"RBFNetwork","Radial Basis Function network","weka.classifiers.functions.RBFNetwork",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"SMO","SMO: Sequential Minimal Optimization algorithm for training a Support Vector classifier","weka.classifiers.functions.SMO",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"SMOreg","SMOreg: Sequential Minimal Optimization algorithm for training a Support Vector regression","weka.classifiers.functions.SMOreg",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"VotedPerceptron","Implementation of the Voted Perceptron algorithm by Freund and Schapire. Globally replaces all missing values, and transforms nominal attributes into binary ones.","weka.classifiers.functions.VotedPerceptron",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			{"Winnow","Winnow and Balanced Winnow algorithms by Littlestone. Does classification for problems with nominal attributes.","weka.classifiers.functions.Winnow",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			
+			//Bayes
+			{"Bayesian Logistic Regression","Alexander Genkin, David D. Lewis, David Madigan (2004). Large-scale bayesian logistic regression for text categorization.","weka.classifiers.functions.BayesianLogisticRegression",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},			
+			{"DMNBtext","DMNBtext: Discriminative Multinomial Naive Bayes classifier","weka.classifiers.functions.DMNBtext",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			//Naive Bayes
+			{"NaiveBayes","Naive Bayes classifier","weka.classifiers.bayes.NaiveBayes",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			{"NBM","Multinomial Naive Bayes classifier","weka.classifiers.bayes.NaiveBayesMultinomial",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			{"BayesianLogisticRegression","Alexander Genkin, David D. Lewis, David Madigan (2004). Large-scale bayesian logistic regression for text categorization.","weka.classifiers.bayes.BayesianLogisticRegression",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			{"AODE","G. Webb, J. Boughton, Z. Wang (2005). Not So Naive Bayes: Aggregating One-Dependence Estimators. Machine Learning. 58(1):5-24.","weka.classifiers.bayes.AODE",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+			{"HNB","H. Zhang, L. Jiang, J. Su: Hidden Naive Bayes. In: Twentieth National Conference on Artificial Intelligence, 919-924, 2005.","weka.classifiers.bayes.HNB",null,new String[] {AlgorithmType.Classification.toString(),AlgorithmType.SingleTarget.toString(),AlgorithmType.EagerLearning.toString(),AlgorithmType.Supervised.toString()},null,Algorithm.requires.property},
+						
 /*
 			{"PCA","Principal Component Analysis","weka.attributeSelection.PrincipalComponents",null,
 							new String[] {AlgorithmType.FeatureSelection,AlgorithmType.MultipleTarget,AlgorithmType.EagerLearning.toString(),AlgorithmType.UnSupervised.toString()},null,Algorithm.requires.property},
@@ -176,6 +221,7 @@ public class AlgorithmsPile {
 			{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			{"struckeys","Generate structure keys","sk1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
+			{"inchi","Generate InChI","inchi",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
 			
 			{"mcss","Find maximum common substructures of a dataset","mcss",null,new String[] {AlgorithmType.SMSD.toString()},null,Algorithm.requires.structure},
 			

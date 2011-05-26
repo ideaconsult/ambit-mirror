@@ -150,9 +150,17 @@ public class AlgorithmResourceTest extends ResourceTest {
 	@Test
 	public void testMOPAC() throws Exception {
 		Form headers = new Form();  
+		Reference model = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacShell", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,
+						"3"
+						));
+		
+		
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		Reference ref = testAsyncTask(
-				String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacOriginalStructure", port),
+				model.toString(),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/%s", port,
 						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
@@ -163,7 +171,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacOriginalStructure", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/%s", port,
-						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F4%2Fpredicted"
 						));
 						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 			
@@ -277,6 +285,41 @@ public class AlgorithmResourceTest extends ResourceTest {
         c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT * from structure where atomproperties is not null");
 		Assert.assertEquals(5,table.getRowCount());
+		c.close();			
+	}		
+	
+	@Test
+	public void testInChIChemicals() throws Exception {
+		
+        IDatabaseConnection c = getConnection();	
+        Connection connection = c.getConnection();
+        Statement t = connection.createStatement();
+        t.executeUpdate("update chemicals set inchi=null,inchikey=null");
+        t.close();
+        t = connection.createStatement();
+        t.executeUpdate("update structure set preference=10000,structure='' where idstructure=100214");
+        t.close();
+        t = connection.createStatement();
+        t.executeUpdate("update structure set structure='' where idchemical=11");
+        t.close();                
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * from chemicals where inchi is null");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		c.close();			
+		Form headers = new Form();  
+		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/inchi", port),
+				headers, Status.SUCCESS_OK,
+				"");		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		
+        c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * from chemicals where inchi is not null");
+		Assert.assertEquals(3,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT idchemical from chemicals where inchi is null and inchikey='ERROR'");
+		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(11,table.getValue(0,"idchemical"));	
 		c.close();			
 	}		
 	@Test
