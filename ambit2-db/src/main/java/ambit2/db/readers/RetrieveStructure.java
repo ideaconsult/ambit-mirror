@@ -68,7 +68,7 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
 	}
 	public RetrieveStructure(boolean preferredStructure) {
 		super();
-		setPreferedStructure(preferedStructure);
+		setPreferedStructure(preferredStructure);
 		setFieldname(false);
 	}
     /*

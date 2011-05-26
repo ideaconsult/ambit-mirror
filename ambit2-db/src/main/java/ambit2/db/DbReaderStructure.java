@@ -39,9 +39,13 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 	 */
 	private static final long serialVersionUID = 7593295052807885237L;
 	protected ProcessorStructureRetrieval retriever;
+	
 	public DbReaderStructure() {
+		this(false);
+	}
+	public DbReaderStructure(boolean preffered) {
 		super();
-		RetrieveStructure q = new RetrieveStructure();
+		RetrieveStructure q = new RetrieveStructure(preffered);
 		q.setPageSize(1);
 		q.setPage(0);
 		retriever = new ProcessorStructureRetrieval(q);
