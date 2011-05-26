@@ -10,21 +10,23 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IBatchStatistics.RECORDS_STATS;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.interfaces.IBatchStatistics.RECORDS_STATS;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;
+import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.FP1024Writer;
 import ambit2.db.processors.ProcessorStructureRetrieval;
-import ambit2.db.processors.AbstractRepositoryWriter.OP;
+import ambit2.db.processors.StructureNormalizer;
 import ambit2.db.processors.quality.FPStructureWriter;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
+import ambit2.db.update.chemical.InChIChemicalsWriter;
 import ambit2.db.update.fpae.AtomEnvironmentWriter;
 import ambit2.db.update.qlabel.CreateQLabelPair;
 import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
@@ -104,6 +106,11 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 			p.add(new AtomEnvironmentWriter());
 			break;
 		}
+		case  inchi: {
+			p.add(new StructureNormalizer());
+			p.add(new InChIChemicalsWriter());
+			break;			
+		}
 		}
 		
 		return p;
@@ -132,7 +139,7 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
 
 		if (target instanceof AbstractStructureQuery) {
-			DbReaderStructure reader = new DbReaderStructure();
+			DbReaderStructure reader = new DbReaderStructure(getFingerprintsType().equals(FPTable.inchi));
 			reader.setHandlePrescreen(true);
 			return reader;
 		} else throw new Exception("Can't process "+ target.toString());
@@ -172,7 +179,10 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableQueryProcess
 		}		
 		case atomenvironments: {
 			return result;
-		}			
+		}		
+		case inchi: {
+			return result;
+		}
 		default: {
 			throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,getFingerprintsType().toString());
 		}

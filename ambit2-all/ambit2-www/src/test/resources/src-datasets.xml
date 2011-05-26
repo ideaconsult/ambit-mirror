@@ -15,6 +15,7 @@
   <catalog_references idreference="6" title="Satyanarayan S, Ramakant 	Bioaccumulation kinetics and bioconcentration factor of chlorinated pesticides in tissue of Puntius ticto (Ham.)	Journal of Environmental Science and Health B	2004	39	2	321-332" url="EURAS.BE"/>
   <catalog_references idreference="7" title="EINECS" url="EINECS"/>
  <catalog_references idreference="8" title="Dummy" url="NA"/>
+ <catalog_references idreference="9" title="ambit2.descriptors.InChI" url="http://www.opentox.org/api/1.1#InChI" type="Algorithm"/>
  
   <chemicals idchemical="7" inchi="InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2" smiles="CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"/>
   <chemicals idchemical="10" smiles="F.[F-].[Na+]"/>
@@ -90,18 +91,50 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
    <properties idproperty="1" idreference="8" name="Property 1" units="" comments="Property" islocal="false"/>
   <properties idproperty="2" idreference="8" name="Property 2" units="" comments="Property" islocal="false"/>
   <properties idproperty="3" idreference="8" name="CAS" units="" comments="http://www.opentox.org/api/1.1#CASRN" islocal="false"/>
+   <properties idproperty="4" idreference="9" name="http://www.opentox.org/api/1.1#InChI_std" units="" comments="http://www.opentox.org/api/1.1#InChI_std" islocal="false" ptype="STRING"/>
+  <properties idproperty="5" idreference="9" name="http://www.opentox.org/api/1.1#InChI_AuxInfo_std" units="" comments="http://www.opentox.org/api/1.1#InChI_AuxInfo_std" islocal="false" ptype="STRING"/>
+  <properties idproperty="6" idreference="9" name="http://www.opentox.org/api/1.1#InChIKey_std" units="" comments="http://www.opentox.org/api/1.1#InChIKey_std" islocal="false" ptype="STRING"/>
+ 
   <template idtemplate="1" name="BCF"/>
   <template idtemplate="3" name="Empty"/>
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
   <template_def idtemplate="1" idproperty="3"/>
+    <template idtemplate="101" name="InChI 1.03"/>
   
   <template idtemplate="2" name="All"/>
+    <template_def idtemplate="101" idproperty="4"/>
+  <template_def idtemplate="101" idproperty="5"/>
+  <template_def idtemplate="101" idproperty="6"/>
   <dictionary idsubject="1" idobject="2"/>  
 
 
   <property_string idvalue_string="1" value="1530-32-1"/>
   <property_values id="1" idproperty="3" idchemical="11" idstructure="100215" idvalue_string="1" user_name="guest"/>
+ <property_values id="2" idproperty="4" idstructure="100211" idchemical="7" user_name="guest" status="OK" idvalue_string="2" idtype="STRING"/>
+  <property_values id="3" idproperty="5" idstructure="100211" idchemical="7" user_name="guest" status="TRUNCATED" text="AuxInfo=1/1/N:7,11,6,10,5,4,3,2,8,9;17,21,16,20,15,14,13,12,18,19;1/E:2*(9,10);/rA:21Sn+2CCCCCCOO-CCCCCCCCOO-CC/rB:;s2;s3;s4;s5;s6;d2;s2;s3;s10;;s12;s13;s14;s15;s16;d12;s12;s13;s20;/rC:0,-1.9809,0;3.7716,-1.347,0;4.9284,-1.9809,0;6.0694,-1.347,0;7.2263,-1.9809,0;8.3672,-1.347,0;9.5875,-1.9809,0;3.7716,0,0;2.6306,-1.9809,0;4.9284,-3.3279,0;6.1328,-3.9618,0;13.3591,-1.347,0;14.5,-1.9809,0;15.6569,-1.347,0;16.7979,-1.9809,0;18.0181,-1.347,0;19.1749,-1.9809,0;13.3591,0,0;12.2022,-1.9809,0;14.5,-3.3279,0;15.6569,-3.9618,0;" idvalue_string="3" idtype="STRING"/>
+  <property_values id="4" idproperty="6" idstructure="100211" idchemical="7" user_name="guest" status="OK" idvalue_string="4" idtype="STRING"/>
+  <property_values id="5" idproperty="4" idstructure="100214" idchemical="10" user_name="guest" status="OK" idvalue_string="5" idtype="STRING"/>
+  <property_values id="6" idproperty="5" idstructure="100214" idchemical="10" user_name="guest" status="OK" idvalue_string="6" idtype="STRING"/>
+  <property_values id="7" idproperty="6" idstructure="100214" idchemical="10" user_name="guest" status="OK" idvalue_string="7" idtype="STRING"/>
+  <property_values id="8" idproperty="4" idstructure="100215" idchemical="11" user_name="guest" status="OK" idvalue_string="8" idtype="STRING"/>
+  <property_values id="9" idproperty="5" idstructure="100215" idchemical="11" user_name="guest" status="TRUNCATED" text="AuxInfo=1/1/N:3,2,5,11,17,4,6,10,12,16,18,9,7,15,13,21,19,8,14,20,1;22/E:(3,4,5)(6,7,8,9,10,11)(12,13,14,15,16,17)(18,19,20);/CRV:21+1;/rA:42P+CCCCCCCCCCCCCCCCCCCCBr-HHHHHHHHHHHHHHHHHHHH/rB:s1;s2;;a4;a5;a6;s1a7;a4a8;;a10;a11;a12;s1a13;a10a14;;a16;a17;a18;s1a19;a16a20;;s2;s2;s3;s3;s3;s4;s5;s6;s7;s9;s10;s11;s12;s13;s15;s16;s17;s18;s19;s21;/rC:;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;" idvalue_string="9" idtype="STRING"/>
+  <property_values id="10" idproperty="6" idstructure="100215" idchemical="11" user_name="guest" status="OK" idvalue_string="10" idtype="STRING"/>
+  <property_values id="11" idproperty="4" idstructure="129345" idchemical="29141" user_name="guest" status="OK" idvalue_string="11" idtype="STRING"/>
+  <property_values id="12" idproperty="5" idstructure="129345" idchemical="29141" user_name="guest" status="OK" idvalue_string="12" idtype="STRING"/>
+  <property_values id="13" idproperty="6" idstructure="129345" idchemical="29141" user_name="guest" status="OK" idvalue_string="13" idtype="STRING"/>
+ <property_string idvalue_string="12" value="AuxInfo=1/0/N:1/rA:1Fe/rB:/rC:;"/>
+  <property_string idvalue_string="6" value="AuxInfo=1/1/N:1;2;3/rA:4FF-Na+H/rB:;;s1;/rC:;;;;"/>
+  <property_string idvalue_string="9" value="AuxInfo=1/1/N:3,2,5,11,17,4,6,10,12,16,18,9,7,15,13,21,19,8,14,20,1;22/E:(3,4,5)(6,7,8,9,10,11)(12,13,14,15,16,17)(18,19,20);/CRV:21+1;/rA:42P+CCCCCCCCCCCCCCCCCCCCBr-HHHHHHHHHHHHHHHHHHHH/rB:s1;s2;;a4;a5;a6;s1a7;a4a8;;a10;a11;a12;s1a13;a10a14;;a16;a17;a18;"/>
+  <property_string idvalue_string="3" value="AuxInfo=1/1/N:7,11,6,10,5,4,3,2,8,9;17,21,16,20,15,14,13,12,18,19;1/E:2*(9,10);/rA:21Sn+2CCCCCCOO-CCCCCCCCOO-CC/rB:;s2;s3;s4;s5;s6;d2;s2;s3;s10;;s12;s13;s14;s15;s16;d12;s12;s13;s20;/rC:0,-1.9809,0;3.7716,-1.347,0;4.9284,-1.9809,0;6.0694,-1.347,0;7.2263,-1"/>
+  <property_string idvalue_string="7" value="BFXAWOHHDUIALU-UHFFFAOYSA-M"/>
+  <property_string idvalue_string="2" value="InChI=1S/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2"/>
+  <property_string idvalue_string="5" value="InChI=1S/2FH.Na/h2*1H;/q;;+1/p-1"/>
+  <property_string idvalue_string="8" value="InChI=1S/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1"/>
+  <property_string idvalue_string="11" value="InChI=1S/Fe"/>
+  <property_string idvalue_string="10" value="JHYNXXDQQHTCHJ-UHFFFAOYSA-M"/>
+  <property_string idvalue_string="4" value="KSBAEPSJVUENNK-UHFFFAOYSA-L"/>
+  <property_string idvalue_string="13" value="XEEYBQQBJWHFJM-UHFFFAOYSA-N"/>  
   <src_dataset id_srcdataset="1" name="Dbunit dataset" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="2" name="Dataset 1" user_name="guest" idreference="3"/>
   <src_dataset id_srcdataset="3" name="Dataset 2" user_name="guest" idreference="3"/>
