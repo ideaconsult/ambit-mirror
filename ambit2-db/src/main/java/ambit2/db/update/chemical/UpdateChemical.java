@@ -38,8 +38,42 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
 public class UpdateChemical extends AbstractObjectUpdate<IChemical>  {
-	public static final String[] update_sql = {
-		"update chemicals set smiles=?,inchikey=?,inchi=?,formula=? where idchemical=?"
+	public static final String update_sql =	"update chemicals set %s where idchemical=?";
+	
+	enum keys {
+		smiles {
+			@Override
+			public String getField(IChemical object) {
+				return object.getSmiles();
+			}
+		},
+		inchikey {
+			@Override
+			public String getField(IChemical object) {
+				return object.getInchiKey();
+			}		
+		},
+		inchi {
+			@Override
+			public String getField(IChemical object) {
+				return object.getInchi();
+			}		
+		},
+		formula {
+			@Override
+			public String getField(IChemical object) {
+				return object.getFormula();
+			}
+		};
+		public QueryParam<String> getParam(IChemical object) {
+			if (getField(object)==null) return null;
+			return new QueryParam<String>(String.class, getField(object));
+		}
+		public abstract String getField(IChemical object);
+		public String getSQL() {
+			//smiles=?,inchikey=?,inchi=?,formula=?
+			return String.format("%s = ?",name());
+		}
 	};
 	public UpdateChemical(IChemical chemical) {
 		super(chemical);
@@ -51,10 +85,11 @@ public class UpdateChemical extends AbstractObjectUpdate<IChemical>  {
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		if (getObject().getIdchemical()<=0) throw new AmbitException("Chemical not defined");
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		params1.add(new QueryParam<String>(String.class, getObject().getSmiles()));
-		params1.add(new QueryParam<String>(String.class, getObject().getInchiKey()));		
-		params1.add(new QueryParam<String>(String.class, getObject().getInchi()));
-		params1.add(new QueryParam<String>(String.class, getObject().getFormula()));	
+		for (keys key:keys.values()) {
+			QueryParam<String> param = key.getParam(getObject());
+			if (param != null) params1.add(param);
+		}
+		if (params1.size()==0) throw new AmbitException("No smiles, inchi or formula!");
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 		
 		return params1;
@@ -62,7 +97,16 @@ public class UpdateChemical extends AbstractObjectUpdate<IChemical>  {
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return update_sql;
+		StringBuilder b = new StringBuilder();
+		String delimiter = "";
+		for (keys key:keys.values()) {
+			String field = key.getField(getObject());
+			if (field==null) continue;
+			b.append(delimiter);
+			b.append(key.getSQL());
+			delimiter = ",";
+		}
+		return new String[] { String.format(update_sql,b.toString()) };
 	}
 	public void setID(int index, int id) {
 		
