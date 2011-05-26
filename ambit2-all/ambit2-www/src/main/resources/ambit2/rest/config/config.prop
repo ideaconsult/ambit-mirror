@@ -1,5 +1,11 @@
+#OpenTox Authentication and Authorization configuration
+#If true, Ambit REST services are protected by OpenTox AA 
+#If false, Ambit REST services are not protected, besides the /bookmark service
+aa.enabled=${aa.enabled}
+#OpenTox OpenSSO server
 aa.opensso=${aa.opensso}
+#OpenTox policy server
 aa.policy=${aa.policy}
+#Test AA user, used for running tests only
 aa.user=${aa.user}
 aa.pass=${aa.pass}
-aa.enabled=${aa.enabled}

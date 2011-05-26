@@ -1,26 +1,36 @@
-#ambit2.db.processors.DbCreateDatabase
-#Mon Jul 27 22:48:08 EEST 2009
-generate2D=true
-smi2sdf.smiles.generate=true
+#MySQL Database config
 Host=${ambit.db.host}
-showAromaticity=true
-FASTSMARTS=true
 Scheme=jdbc\:mysql
-smilesParser=true
 Port=3306
-Password=${ambit.db.user.test.password}
 Database=${ambit.db}
-defaultDir=
-MAXRECORDS=0
-atomtypes.stop=false
 User=${ambit.db.user.test}
-startMySQL=true
+Password=${ambit.db.user.test.password}
+#Only for running tests, the web application does not use it
+database.user.root.password=${ambit.db.user.root.password}
+database.user.test.password=${ambit.db.user.test.password}
+#MySQL test db, user and pass
 database.test=ambit-test
 database.test.port=3306
 database.user.test=${ambit.db.user.test}
-database.user.root.password=${ambit.db.user.root.password}
-database.user.test.password=${ambit.db.user.test.password}
+#AMBIT REST services config
+#Allow to create the database via curl -X POST /admin/database -d "user=root" -d "pass=thepass" -d "dbname=thedbname"
+#The database will be created only if it does not exist. 
+#The database name should be the same as set by the Database property in this file
 database.create=${ambit.db.create.allow}
+#How to serialize RDF/XML - by Jena (standard, prettier, slower) or StAX (faster)
 rdf.writer=${rdf.writer}
+#URI of the ontology service , e.g. http://localhost:8080/ontology
 service.ontology=${service.ontology}
+#Add dataset prefix for compound URI, e.g.  /dataset/1/compound/1 , instead of /compound/1
+#Experimental. Should be used if AA is on, see config.prop file
 dataset.members.prefix=${dataset.members.prefix}
+#Ambit XT (standalone) properties only
+startMySQL=true
+showAromaticity=true
+FASTSMARTS=true
+generate2D=true
+smi2sdf.smiles.generate=true
+smilesParser=true
+defaultDir=
+MAXRECORDS=0
+atomtypes.stop=false
