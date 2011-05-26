@@ -192,7 +192,6 @@ public class SMIRKSReaction
 		//Bond Transformation
 		for (int i = 0; i < reactant.getBondCount(); i++)
 		{	
-			System.out.println("**** " + i);
 			IBond rb = reactant.getBond(i);
 			IAtom ra1 = rb.getAtom(0);
 			IAtom ra2 = rb.getAtom(1);
@@ -220,28 +219,30 @@ public class SMIRKSReaction
 				else
 				{
 					int pAt1Num = getMappedProductAtom(raMapInd1);
-					int pAt2Num = getMappedProductAtom(raMapInd1);
+					int pAt2Num = getMappedProductAtom(raMapInd2);
 					int rAt1Num = reactant.getAtomNumber(ra1);
 					int rAt2Num = reactant.getAtomNumber(ra2);
-					int pbNum = product.getBondNumber(reactant.getAtom(rAt1Num), reactant.getAtom(rAt2Num));
+					int pbNum = product.getBondNumber(product.getAtom(pAt1Num), product.getAtom(pAt2Num));
 					prodAt1.add(new Integer(pAt1Num));
 					prodAt2.add(new Integer(pAt2Num));
 					IBond rb0 = stco.toBond(rb);
 					prodBo.add(rb0.getOrder());
 					reactAt1.add(new Integer(rAt1Num));
 					reactAt2.add(new Integer(rAt2Num));
+					System.out.println("*** pb_num = " + pbNum);
 					if (pbNum == -1)
 						reactBo.add(null);
 					else
 					{	
 						IBond pb = product.getBond(pbNum);
 						IBond pb0 = stco.toBond(pb);
-						reactBo.add(pb.getOrder());
+						reactBo.add(pb0.getOrder());
 					}	
 				}
 			}	
 				
 		}
+		
 		
 		
 		for (int i = 0; i < product.getBondCount(); i++)
@@ -292,18 +293,29 @@ public class SMIRKSReaction
 		return -1;
 	}
 	
+	
 	public String transformationDataToString()
 	{
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i <  prodBo.size(); i++)
 		{
+			String bo;
 			sb.append("BondTransform: (");
 			sb.append(prodAt1.get(i).intValue() + ", ");
 			sb.append(prodAt2.get(i).intValue() + ", ");
-			sb.append(prodBo.get(i).toString() + ")  -->  (");
+			if (prodBo.get(i) == null)
+				bo = "null";
+			else	
+				bo = prodBo.get(i).toString();
+			
+			sb.append( bo + ")  -->  (");
 			sb.append(reactAt1.get(i).intValue() + ", ");
 			sb.append(reactAt2.get(i).intValue() + ", ");
-			sb.append(reactBo.get(i).toString() + ")" );
+			if (reactBo.get(i) == null)
+				bo = "null";
+			else	
+				bo = reactBo.get(i).toString();
+			sb.append(bo.toString() + ")" );
 			sb.append("\n");
 		}
 		return(sb.toString());

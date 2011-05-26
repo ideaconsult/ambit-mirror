@@ -555,7 +555,8 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	
 	public  IBond toBond(IBond b)
-	{		
+	{	
+		
 		if (b instanceof SmartsBondExpression)
 			return(smartsExpressionToBond((SmartsBondExpression)b));
 				
@@ -579,6 +580,13 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		{	
 			Bond bond = new Bond();			
 			bond.setOrder(b.getOrder());
+			return(bond);
+		}
+		
+		if (b instanceof DoubleNonAromaticBond)
+		{	
+			Bond bond = new Bond();			
+			bond.setOrder(IBond.Order.DOUBLE);
 			return(bond);
 		}	
 		
