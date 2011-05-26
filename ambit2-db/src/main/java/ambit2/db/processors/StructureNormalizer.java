@@ -104,6 +104,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 			}
 		} catch (Exception x) {
 			structure.setInchi(null);
+			structure.setInchiKey("ERROR");
 		}				
 
 		try {

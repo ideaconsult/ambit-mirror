@@ -93,7 +93,9 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 		"from structure\n"+
 		"where (structure.type_structure != 'NA')  and atomproperties is null order by idchemical ";
 		
-
+	public final static String sqlINCHI =
+			"select ? as idquery, idchemical,-1,1 as selected,1 as metric,null as text from chemicals " +
+			"where (inchi is null) and ((inchikey is null) or (inchikey is not null) and (inchikey != 'ERROR'))\n";
 
 	
 	public MissingFingerprintsQuery(FPTable table) {
@@ -106,6 +108,7 @@ public class MissingFingerprintsQuery extends AbstractStructureQuery<FPTable, St
 	}
 	public String getSQL() throws AmbitException {
 		String table = getFieldname().getTable();
+		if (FPTable.inchi.equals(getFieldname())) return sqlINCHI;
 		if (FPTable.smarts_accelerator.equals(getFieldname())) return sqlSMARTS;
 		else
 		return String.format(

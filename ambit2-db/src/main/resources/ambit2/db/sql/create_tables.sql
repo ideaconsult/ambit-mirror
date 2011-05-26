@@ -70,7 +70,7 @@ CREATE TABLE  `chemicals` (
   `inchi` text CHARACTER SET latin1 COLLATE latin1_bin,
   `smiles` text CHARACTER SET latin1 COLLATE latin1_bin,
   `formula` varchar(64) DEFAULT NULL,
-  `inchikey` varchar(27) DEFAULT '0',
+  `inchikey` varchar(27) DEFAULT NULL,
   `label` enum('OK','UNKNOWN','ERROR') NOT NULL DEFAULT 'UNKNOWN',
   PRIMARY KEY (`idchemical`),
   KEY `index_smiles` (`smiles`(760)) USING BTREE,
