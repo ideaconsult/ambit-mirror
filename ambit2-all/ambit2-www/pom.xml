@@ -29,7 +29,65 @@
 				<web_xml>src/main/resources/web.https.xml</web_xml>
 			</properties>			
 	    </profile>
-    </profiles>  
+    </profiles>
+    <!-- Release build, without AA -->
+      <profile>
+      <id>ambit-release-no-aa</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <google.analytics>UA-8771500-5</google.analytics>
+         <rdf.writer>stax</rdf.writer>
+        <ambit.db>ambit2</ambit.db>
+        <ambit.db.user.test>guest</ambit.db.user.test>
+        <ambit.db.user.test.password>guest</ambit.db.user.test.password>
+        <ambit.db.create.allow>true</ambit.db.create.allow>
+        <dataset.members.prefix>false</dataset.members.prefix>
+        <ambit.db.host>localhost</ambit.db.host>
+        <!-- root pasword for creating new db, used for testing -->
+        <ambit.db.user.root.password></ambit.db.user.root.password>
+        <!-- Ontology service , assumed on the same host-->
+        <service.ontology>http://localhost:8080/ontology</service.ontology>
+        <!-- AA -->
+        <aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
+        <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
+        <aa.user>guest</aa.user>
+        <aa.pass>guest</aa.pass>
+        <aa.enabled>false</aa.enabled>
+       </properties>
+    </profile>
+    <!--  release build, with AA -->
+      <profile>
+      <id>ambit-release-aa</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <google.analytics>UA-8771500-5</google.analytics>
+         <rdf.writer>stax</rdf.writer>
+        <ambit.db>ambit2</ambit.db>
+        <ambit.db.user.test>guest</ambit.db.user.test>
+        <ambit.db.user.test.password>guest</ambit.db.user.test.password>
+        <ambit.db.create.allow>true</ambit.db.create.allow>
+        <dataset.members.prefix>true</dataset.members.prefix>
+        <ambit.db.host>localhost</ambit.db.host>
+        <!-- root pasword for creating new db, used for testing only -->
+        <ambit.db.user.root.password></ambit.db.user.root.password>
+		
+        <service.ontology>https://localhost:8443/ontology</service.ontology>
+
+       <!-- AA -->
+        <aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
+        <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
+        <aa.user>guest</aa.user>
+        <aa.pass>guest</aa.pass>
+        <aa.enabled>true</aa.enabled>
+
+      </properties>
+    </profile>
+    
+      
   <build>
     <finalName>ambit2</finalName>
 	<resources>
