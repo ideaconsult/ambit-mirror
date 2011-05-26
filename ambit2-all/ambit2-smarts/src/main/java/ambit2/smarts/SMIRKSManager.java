@@ -108,7 +108,7 @@ public class SMIRKSManager
 		
 		
 		
-		return null;
+		return reaction;
 	}
 	
 	
