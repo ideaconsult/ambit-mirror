@@ -35,9 +35,9 @@ import java.util.List;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IChemical;
 import ambit2.db.search.QueryParam;
-import ambit2.db.update.AbstractObjectUpdate;
+import ambit2.db.update.AbstractUpdate;
 
-public class UpdateChemical extends AbstractObjectUpdate<IChemical>  {
+public class UpdateChemical<C extends IChemical> extends AbstractUpdate<C,C>  {
 	public static final String update_sql =	"update chemicals set %s where idchemical=?";
 	
 	enum keys {
@@ -75,7 +75,7 @@ public class UpdateChemical extends AbstractObjectUpdate<IChemical>  {
 			return String.format("%s = ?",name());
 		}
 	};
-	public UpdateChemical(IChemical chemical) {
+	public UpdateChemical(C chemical) {
 		super(chemical);
 	}
 	public UpdateChemical() {
