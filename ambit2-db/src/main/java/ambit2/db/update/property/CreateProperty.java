@@ -74,7 +74,7 @@ public class CreateProperty extends AbstractObjectUpdate<Property> {
 			params1.add(new QueryParam<String>(String.class, getObject().getName()));
 			params1.add(new QueryParam<String>(String.class, getObject().getUnits()));
 			params1.add(new QueryParam<String>(String.class, getObject().getLabel()));
-			params1.add(new QueryParam<Boolean>(Boolean.class, false));
+			params1.add(new QueryParam<Boolean>(Boolean.class, getObject().isNominal()));
 			params1.add(new QueryParam<String>(String.class, getObject().getReference().getTitle()));
 			return params1;
 		}
