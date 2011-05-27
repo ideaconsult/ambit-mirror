@@ -19,7 +19,7 @@ public enum AlgorithmType {
 		Supervised,
 		UnSupervised,
 		FeatureSelection,
-		Descriptor,
+		DescriptorCalculation,
 		Rules {
 			@Override
 			public String getTitle() {

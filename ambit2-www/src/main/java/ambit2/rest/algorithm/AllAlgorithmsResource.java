@@ -255,7 +255,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						token
 						);
 			}
-			else if (algorithm.hasType(AlgorithmType.Descriptor)) {
+			else if (algorithm.hasType(AlgorithmType.DescriptorCalculation)) {
 				try {
 					CallableSimpleModelCreator modelCreator = new CallableSimpleModelCreator(
 							form,
