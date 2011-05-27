@@ -1259,19 +1259,28 @@ public class TestUtilities
 		smToChemObj.convertKekuleSmartsToAromatic(qac);
 	}
 	
-	public void testSMIRKS(String smirks)
+	public void testSMIRKS(String smirks, String targetSmiles)
 	{
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
-		SMIRKSReaction sr = smrkMan.parse(smirks);
+		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))
 		{
 			System.out.println(smrkMan.getErrors());
 			return;
 		}
 		
-		System.out.println(sr.transformationDataToString());
+		System.out.println(reaction.transformationDataToString());
 		
+		if (targetSmiles.equals(""))
+			return;
+		
+		
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		smrkMan.applyTransformation(target, reaction);
+		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
+		
+		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
 	}
 	
 	
@@ -1500,7 +1509,7 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
 		
 		//tu.testIsomorphismTester("[]C", "CC"); - fix []
-		tu.testSMIRKS("[*:1][C:2][C:3][C:4]>>[C:4][C:3]=[C:2][*:1]");
+		tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3][C:2][N:1]CCl", "CCCN");
 		
 		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		

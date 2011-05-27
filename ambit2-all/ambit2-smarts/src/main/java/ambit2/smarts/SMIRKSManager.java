@@ -4,13 +4,22 @@ import java.util.Vector;
 
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.Bond;
 
 
 public class SMIRKSManager 
 {
 	SmartsParser parser = new SmartsParser();
+	IsomorphismTester isoTester = new IsomorphismTester();
+	SmartsToChemObject stco = new SmartsToChemObject();
 	
 	Vector<String> errors = new Vector<String>();
+	
+	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; 
+	
+	
 	
 	public SMIRKSManager()
 	{
@@ -112,12 +121,7 @@ public class SMIRKSManager
 	}
 	
 	
-	public void applyTransformation(IAtomContainer mol, SMIRKSReaction reaction)
-	{
-		//Search all locations/instances  (modes of searching)
-		
-		//Apply transformation at particular location
-	}
+	
 	
 	
 	public QueryAtomContainer parseComponent(String smarts, String compType, SmartsFlags flags,
@@ -148,5 +152,124 @@ public class SMIRKSManager
 			CLG.add(parser.fragmentComponents.get(i));
 		
 		return (fragment);
+	}
+	
+	public void applyTransformation(IAtomContainer target, SMIRKSReaction reaction)
+	{
+		isoTester.setQuery(reaction.reactant);
+		
+		if (FlagSSMode ==  SmartsConst.SSM_SINGLE)
+		{
+			return;
+		}
+		
+		
+		if (FlagSSMode ==  SmartsConst.SSM_NON_OVERLAPPING)
+		{	
+			Vector<Vector<IAtom>> rMaps = getNonOverlappingMappings(target);
+			for (int i = 0; i < rMaps.size(); i++)
+				applyTransformAtLocation(target, rMaps.get(i), reaction);
+		}
+		
+	}
+	
+	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer target)
+	{
+		//Special treatment for fragmented reactants
+		//TODO
+		
+		Vector<Vector<IAtom>> rMaps = isoTester.getNonOverlappingMappings(target);
+		return(rMaps);
+	}
+	
+	
+	
+	public void applyTransformAtLocation(IAtomContainer target, Vector<IAtom> rMap, SMIRKSReaction reaction)
+	{
+		//Atom Transformation
+		
+		//Create Non Existing Atoms
+		Vector<IAtom> newAtoms = new Vector<IAtom>();
+		for (int i = 0; i < reaction.productNotMappedAt.size(); i++)
+		{
+			int pAtNum = reaction.productNotMappedAt.get(i).intValue();
+			IAtom a = reaction.product.getAtom(pAtNum);
+			IAtom a0 = stco.toAtom(a);
+			newAtoms.add(a0);
+			target.addAtom(a0);
+		}
+		
+		
+		//Bond Transformations
+		for (int i = 0; i < reaction.reactBo.size(); i++)
+		{
+			int nrAt1 = reaction.reactAt1.get(i).intValue();
+			int nrAt2 = reaction.reactAt2.get(i).intValue();
+			
+			if (nrAt1 >= 0)
+			{
+				if (nrAt2 >= 0)
+				{
+					if (reaction.reactBo.get(i) == null)
+					{
+						//New bond must be created in the target
+						//TODO
+					}
+					else
+					{
+						IAtom tAt1 = rMap.get(nrAt1);
+						IAtom tAt2 = rMap.get(nrAt2);
+						IBond tBo = target.getBond(tAt1, tAt2);
+						if (reaction.prodBo.get(i) == null)
+							target.removeBond(tBo); //Target bond is deleted
+						else
+							tBo.setOrder(reaction.prodBo.get(i)); //Target bond is updated
+					}
+				}
+				else
+				{
+					//TODO - nothing so far
+				}
+			}
+			else
+			{
+				if (nrAt1 == SmartsConst.SMRK_UNSPEC_ATOM)
+				{
+					if (nrAt2 == SmartsConst.SMRK_UNSPEC_ATOM)
+					{
+						int npAt1 = reaction.prodAt1.get(i).intValue();
+						int npAt2 = reaction.prodAt2.get(i).intValue();
+						//IAtom pAt1 = reaction.product.getAtom(npAt1);
+						//IAtom pAt2 = reaction.product.getAtom(npAt2);
+						int pAt1tNotMapIndex = 0;
+						for (int k = 0; k < reaction.productNotMappedAt.size(); k++)
+							if (reaction.productNotMappedAt.get(k).intValue() == npAt1)
+							{
+								pAt1tNotMapIndex = k;
+								break;
+							}
+						
+						int pAt2tNotMapIndex = 0;
+						for (int k = 0; k < reaction.productNotMappedAt.size(); k++)
+							if (reaction.productNotMappedAt.get(k).intValue() == npAt2)
+							{
+								pAt2tNotMapIndex = k;
+								break;
+							}
+						
+						IAtom tAt1 = newAtoms.get(pAt1tNotMapIndex);
+						IAtom tAt2 = newAtoms.get(pAt2tNotMapIndex);
+						IBond tb = new Bond();
+						tb.setAtoms(new IAtom[] {tAt1, tAt2});
+						tb.setOrder(reaction.prodBo.get(i));
+						target.addBond(tb);
+					}
+				}
+				
+				//TODO  
+			}
+			
+			
+		}
 	}
 }
