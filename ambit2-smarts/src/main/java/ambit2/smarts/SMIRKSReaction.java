@@ -39,11 +39,13 @@ public class SMIRKSReaction
 	Vector<Integer> reactantFragAtomNum = new Vector<Integer>(); //local atom fragment number
 	Vector<Integer> reactantAtomNum = new Vector<Integer>(); //global atom number
 	Vector<Integer> reactantFragmentNum = new Vector<Integer>();
+	Vector<Integer> reactantNotMappedAt = new Vector<Integer>(); //The global numbers of not-mapped atoms
 	
 	Vector<Integer> productMapIndex = new Vector<Integer>();
 	Vector<Integer> productFragAtomNum = new Vector<Integer>(); //local atom fragment number
 	Vector<Integer> productAtomNum = new Vector<Integer>(); //global atom number
 	Vector<Integer> productFragmentNum = new Vector<Integer>();
+	Vector<Integer> productNotMappedAt = new Vector<Integer>(); //The global numbers of not-mapped atoms
 	
 		
 	//Transformation Data is described in terms of global numbers	
@@ -66,12 +68,12 @@ public class SMIRKSReaction
 	{
 		//Register all mappings
 		for (int i = 0; i < reactants.size(); i++)
-			registerMappings("Reactant", reactant, reactants.get(i), i,  reactantMapIndex, reactantFragAtomNum, 
-					reactantAtomNum, reactantFragmentNum);
+			registerMappings("Reactant", reactant, reactants.get(i), i,  reactantMapIndex, reactantNotMappedAt, 
+					reactantFragAtomNum, reactantAtomNum, reactantFragmentNum);
 		
 		for (int i = 0; i < products.size(); i++)
-			registerMappings("Product", product, products.get(i), i, productMapIndex, productFragAtomNum, 
-					productAtomNum, productFragmentNum);
+			registerMappings("Product", product, products.get(i), i, productMapIndex, productNotMappedAt,  
+					productFragAtomNum, productAtomNum, productFragmentNum);
 						
 		
 		//Check mapping index correctness
@@ -150,8 +152,9 @@ public class SMIRKSReaction
 	}
 	
 	
-	void registerMappings(String compType, QueryAtomContainer globalContainer, QueryAtomContainer fragment, int curFragNum, 
-			Vector<Integer> mIndex, Vector<Integer> atFragNum, Vector<Integer> atGlobalNum, Vector<Integer> fragNum)
+	void registerMappings(String compType, QueryAtomContainer globalContainer, QueryAtomContainer fragment, 
+			int curFragNum, Vector<Integer> mapIndex, Vector<Integer> notMappedAt, 
+			Vector<Integer> atFragNum, Vector<Integer> atGlobalNum, Vector<Integer> fragNum)
 	{
 		for (int i = 0; i < fragment.getAtomCount(); i++)
 		{
@@ -159,11 +162,11 @@ public class SMIRKSReaction
 			Integer iObj = (Integer)a.getProperty("SmirksMapIndex");
 			if (iObj != null)
 			{
-				if (containsInteger(mIndex, iObj))
+				if (containsInteger(mapIndex, iObj))
 					mapErrors.add(compType + " Map Index " + iObj.intValue()+ " is repeated!");
 				else
 				{
-					mIndex.add(iObj);
+					mapIndex.add(iObj);
 					atFragNum.add(new Integer(i));
 					fragNum.add(new Integer(curFragNum));
 					int globalAtNum = globalContainer.getAtomNumber(a);
@@ -174,6 +177,8 @@ public class SMIRKSReaction
 			else
 			{	
 				//This is unmapped atom
+				int globalAtNum = globalContainer.getAtomNumber(a);
+				notMappedAt.add(new Integer(globalAtNum));
 			}
 		}
 	}
@@ -185,18 +190,19 @@ public class SMIRKSReaction
 		
 		//Atom Transformation
 		//TODO
-				
-		
 		
 		
 		//Bond Transformation
 		for (int i = 0; i < reactant.getBondCount(); i++)
 		{	
 			IBond rb = reactant.getBond(i);
+			IBond rb0 = stco.toBond(rb);
+			
 			IAtom ra1 = rb.getAtom(0);
 			IAtom ra2 = rb.getAtom(1);
 			Integer raMapInd1 = (Integer)ra1.getProperty("SmirksMapIndex");
 			Integer raMapInd2 = (Integer)ra2.getProperty("SmirksMapIndex");
+			
 			if (raMapInd1 == null)
 			{
 				int rAt1Num = -reactant.getAtomNumber(ra1);  
@@ -223,31 +229,125 @@ public class SMIRKSReaction
 					int rAt1Num = reactant.getAtomNumber(ra1);
 					int rAt2Num = reactant.getAtomNumber(ra2);
 					int pbNum = product.getBondNumber(product.getAtom(pAt1Num), product.getAtom(pAt2Num));
-					prodAt1.add(new Integer(pAt1Num));
-					prodAt2.add(new Integer(pAt2Num));
-					IBond rb0 = stco.toBond(rb);
-					prodBo.add(rb0.getOrder());
-					reactAt1.add(new Integer(rAt1Num));
-					reactAt2.add(new Integer(rAt2Num));
-					System.out.println("*** pb_num = " + pbNum);
+					
+					
+					boolean FlagRegisterTransform = false;
 					if (pbNum == -1)
-						reactBo.add(null);
+					{	
+						prodBo.add(null);
+						FlagRegisterTransform = true;
+					}	
 					else
 					{	
 						IBond pb = product.getBond(pbNum);
 						IBond pb0 = stco.toBond(pb);
-						reactBo.add(pb0.getOrder());
+						
+						if (rb0 == null)
+						{	
+							if (pb0 == null)
+							{	
+							}
+							else
+							{
+								//Handle an error!
+								//TODO
+							}
+						}
+						else
+						{
+							if (pb0 == null)
+							{	
+								//Handle an error!
+								//TODO
+							}
+							else
+							{	
+							}
+						}
+						
+						
+						
+						if (rb0.getOrder() != pb0.getOrder())
+						{
+							FlagRegisterTransform = true;
+							prodBo.add(pb0.getOrder());
+						}	
 					}	
+					
+					if (FlagRegisterTransform)
+					{	
+						prodAt1.add(new Integer(pAt1Num));
+						prodAt2.add(new Integer(pAt2Num));
+						reactBo.add(rb0.getOrder());
+						reactAt1.add(new Integer(rAt1Num));
+						reactAt2.add(new Integer(rAt2Num));
+					}
 				}
 			}	
 				
 		}
 		
 		
-		
+		//Check for bonds that must be created in product (theses do not exist in the reactant)
 		for (int i = 0; i < product.getBondCount(); i++)
 		{
-			//TODO
+			IBond pb = product.getBond(i);
+			IBond pb0 = stco.toBond(pb);
+			if (pb0 == null)
+			{
+				//Handle error
+				//TODO
+			}
+			IAtom pa1 = pb.getAtom(0);
+			IAtom pa2 = pb.getAtom(1);
+			int pAt1Num = product.getAtomNumber(pa1);
+			int pAt2Num = product.getAtomNumber(pa2);
+			Integer paMapInd1 = (Integer)pa1.getProperty("SmirksMapIndex");
+			Integer paMapInd2 = (Integer)pa2.getProperty("SmirksMapIndex");
+			
+			if (paMapInd1 == null)
+			{
+				if (paMapInd2 == null)
+				{	
+					
+					prodBo.add(pb0.getOrder());
+					prodAt1.add(new Integer(pAt1Num));
+					prodAt2.add(new Integer(pAt2Num));
+					reactBo.add(null);
+					reactAt1.add(new Integer(SmartsConst.SMRK_UNSPEC_ATOM));
+					reactAt2.add(new Integer(SmartsConst.SMRK_UNSPEC_ATOM));
+					
+				}
+				else
+				{
+					//TODO	
+				}
+			}
+			else
+			{
+				if (paMapInd2 == null)
+				{
+					//TODO
+				}
+				else
+				{
+					int rAt1Num = getMappedReactantAtom(paMapInd1);
+					int rAt2Num = getMappedReactantAtom(paMapInd2);
+					int rbNum = reactant.getBondNumber(reactant.getAtom(rAt1Num), reactant.getAtom(rAt2Num));
+					if (rbNum == -1)
+					{	
+						prodBo.add(pb0.getOrder());
+						prodAt1.add(new Integer(pAt1Num));
+						prodAt2.add(new Integer(pAt2Num));
+						reactBo.add(null);
+						reactAt1.add(new Integer(rAt1Num));
+						reactAt2.add(new Integer(rAt2Num));
+					}
+					
+				}
+				
+			}
+			
 		}
 		
 	}
@@ -270,6 +370,22 @@ public class SMIRKSReaction
 		int rIndex = getIntegerObjectIndex(reactantMapIndex, paMapInd);
 		int rGlobAtNum = reactantAtomNum.get(rIndex).intValue();
 		return rGlobAtNum;
+	}
+	
+	
+	//so far not used
+	int getTransformationReactantBondIndex(int nBondsToCheck, int rAt1, int rAt2)
+	{
+		for (int i = 0; i < nBondsToCheck; i++)
+		{
+			if ((reactAt1.get(i).intValue() == rAt1) && (reactAt2.get(i).intValue() == rAt2))
+				return (i);
+			
+			if ((reactAt1.get(i).intValue() == rAt2) && (reactAt2.get(i).intValue() == rAt1))
+				return (i);	
+		}
+		
+		return(-1);
 	}
 	
 	
@@ -301,20 +417,20 @@ public class SMIRKSReaction
 		{
 			String bo;
 			sb.append("BondTransform: (");
-			sb.append(prodAt1.get(i).intValue() + ", ");
-			sb.append(prodAt2.get(i).intValue() + ", ");
-			if (prodBo.get(i) == null)
-				bo = "null";
-			else	
-				bo = prodBo.get(i).toString();
-			
-			sb.append( bo + ")  -->  (");
 			sb.append(reactAt1.get(i).intValue() + ", ");
 			sb.append(reactAt2.get(i).intValue() + ", ");
 			if (reactBo.get(i) == null)
 				bo = "null";
 			else	
 				bo = reactBo.get(i).toString();
+			
+			sb.append( bo + ")  -->  (");
+			sb.append(prodAt1.get(i).intValue() + ", ");
+			sb.append(prodAt2.get(i).intValue() + ", ");
+			if (prodBo.get(i) == null)
+				bo = "null";
+			else	
+				bo = prodBo.get(i).toString();
 			sb.append(bo.toString() + ")" );
 			sb.append("\n");
 		}

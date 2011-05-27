@@ -95,6 +95,16 @@ public class SmartsConst
 	public static final int ChC_R = 1001;
 	public static final int ChC_S = 1002;
 	
+	//SSS Modes
+	public static final int SSM_SINGLE = 0;
+	public static final int SSM_NON_OVERLAPPING = 1;
+	public static final int SSM_NON_IDENTICAL = 2;
+	public static final int SSM_NON_EQUIVALENT = 3;
+	public static final int SSM_ALL = 10;
+	
+	public static final int SMRK_UNSPEC_ATOM = -100000;
+	
+	
 	
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
