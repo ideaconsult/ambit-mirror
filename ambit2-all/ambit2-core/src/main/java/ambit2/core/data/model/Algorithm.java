@@ -111,11 +111,11 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 				|| hasType(AlgorithmType.Regression.toString()) || 
 		hasType(AlgorithmType.Learning.toString()) || hasType(AlgorithmType.LazyLearning.toString()) 
 		|| hasType(AlgorithmType.EagerLearning.toString()) ||
-		hasType(AlgorithmType.Descriptor.toString()) || hasType(AlgorithmType.AppDomain.toString()) || 
+		hasType(AlgorithmType.DescriptorCalculation.toString()) || hasType(AlgorithmType.AppDomain.toString()) || 
 		hasType(AlgorithmType.Mockup.toString()) || hasType(AlgorithmType.SMSD.toString()) ;
 	}
 	public boolean isDataProcessing() {
-		return hasType(AlgorithmType.Descriptor.toString()) || hasType(AlgorithmType.Fingerprints.toString())
+		return hasType(AlgorithmType.DescriptorCalculation.toString()) || hasType(AlgorithmType.Fingerprints.toString())
 		|| hasType(AlgorithmType.Mockup.toString());
 	}
 
