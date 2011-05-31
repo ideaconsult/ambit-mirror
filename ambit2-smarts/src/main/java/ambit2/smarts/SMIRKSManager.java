@@ -184,18 +184,34 @@ public class SMIRKSManager
 	
 	public void applyTransformAtLocation(IAtomContainer target, Vector<IAtom> rMap, SMIRKSReaction reaction)
 	{
-		//Atom Transformation
-		
+				
 		//Create Non Existing Atoms
 		Vector<IAtom> newAtoms = new Vector<IAtom>();
 		for (int i = 0; i < reaction.productNotMappedAt.size(); i++)
 		{
+			
 			int pAtNum = reaction.productNotMappedAt.get(i).intValue();
 			IAtom a = reaction.product.getAtom(pAtNum);
-			IAtom a0 = stco.toAtom(a);
+			IAtom a0 = stco.toAtom(a);  //Also atom charge is set here
 			newAtoms.add(a0);
 			target.addAtom(a0);
 		}
+		
+		//Atom Transformation		
+		//Setting atom charges for 'SMIRKS' mapped atoms
+		for (int i = 0; i < reaction.reactant.getAtomCount(); i++)
+		{
+			IAtom rAt = reaction.reactant.getAtom(i);
+			Integer raMapInd = (Integer)rAt.getProperty("SmirksMapIndex");
+			if (raMapInd != null)
+			{
+				int pAtNum = reaction.getMappedProductAtom(raMapInd);
+				Integer charge = reaction.productAtCharge.get(pAtNum);
+				IAtom tAt = rMap.get(i);
+				tAt.setFormalCharge(charge);
+			}	
+		}
+		
 		
 		
 		//Bond Transformations
@@ -235,9 +251,6 @@ public class SMIRKSManager
 					
 					if (nrAt1 == SmartsConst.SMRK_UNSPEC_ATOM)
 					{	
-						//IAtom pAt1 = reaction.product.getAtom(npAt1);
-						//IAtom pAt2 = reaction.product.getAtom(npAt2);
-						
 						int pAt1tNotMapIndex = -1;
 						int npAt1 = reaction.prodAt1.get(i).intValue();
 						for (int k = 0; k < reaction.productNotMappedAt.size(); k++)
