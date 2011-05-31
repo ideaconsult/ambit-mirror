@@ -15,7 +15,7 @@ public class SMIRKSManager
 	IsomorphismTester isoTester = new IsomorphismTester();
 	SmartsToChemObject stco = new SmartsToChemObject();
 	
-	Vector<String> errors = new Vector<String>();
+	Vector<String> parserErrors = new Vector<String>();
 	
 	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; 
 	
@@ -29,7 +29,7 @@ public class SMIRKSManager
 	
 	public boolean hasErrors()
 	{
-		if (errors.isEmpty())
+		if (parserErrors.isEmpty())
 			return false;
 		else
 			return true;
@@ -38,21 +38,21 @@ public class SMIRKSManager
 	public String getErrors()
 	{
 		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < errors.size(); i++)
-			sb.append(errors.get(i) + "\n");
+		for (int i = 0; i < parserErrors.size(); i++)
+			sb.append(parserErrors.get(i) + "\n");
 		return(sb.toString());
 	}
 	
 	public SMIRKSReaction parse(String smirks)
 	{
-		errors.clear();
+		parserErrors.clear();
 		SMIRKSReaction reaction = new SMIRKSReaction();
 				
 		//Separate the components of the SMIRKS string
 		int sep1Pos = smirks.indexOf(">");
 		if (sep1Pos == -1)
 		{
-			errors.add("Invalid SMIRKS: missing separators '>'");
+			parserErrors.add("Invalid SMIRKS: missing separators '>'");
 			return reaction;
 		}
 		
@@ -60,7 +60,7 @@ public class SMIRKSManager
 		int sep2Pos = smirks.indexOf(">", sep1Pos+1);
 		if (sep2Pos == -1)
 		{
-			errors.add("Invalid SMIRKS: missing second separator '>'");
+			parserErrors.add("Invalid SMIRKS: missing second separator '>'");
 			return reaction;
 		}		
 		
@@ -105,7 +105,7 @@ public class SMIRKSManager
 		reaction.checkMappings();
 		if (reaction.mapErrors.size() > 0)
 		{
-			errors.addAll(reaction.mapErrors);
+			parserErrors.addAll(reaction.mapErrors);
 			return (reaction);
 		}
 		
@@ -113,9 +113,7 @@ public class SMIRKSManager
 		
 		//Check the components
 		//TODO
-		
-		
-		
+				
 		
 		return reaction;
 	}
@@ -132,7 +130,7 @@ public class SMIRKSManager
 		String errorMsg = parser.getErrorMessages();
 		if (!errorMsg.equals(""))
 		{
-			errors.add("Invalid " + compType + " part in SMIRKS: " + smarts
+			parserErrors.add("Invalid " + compType + " part in SMIRKS: " + smarts
 					+ "   "+errorMsg);
 			return (null);
 		}
@@ -206,42 +204,42 @@ public class SMIRKSManager
 			int nrAt1 = reaction.reactAt1.get(i).intValue();
 			int nrAt2 = reaction.reactAt2.get(i).intValue();
 			
-			if (nrAt1 >= 0)
-			{
-				if (nrAt2 >= 0)
+			if ((nrAt1 >= 0) && (nrAt2 >= 0))
+			{	
+				if (reaction.reactBo.get(i) == null)
 				{
-					if (reaction.reactBo.get(i) == null)
-					{
-						//New bond must be created in the target
-						//TODO
-					}
-					else
-					{
-						IAtom tAt1 = rMap.get(nrAt1);
-						IAtom tAt2 = rMap.get(nrAt2);
-						IBond tBo = target.getBond(tAt1, tAt2);
-						if (reaction.prodBo.get(i) == null)
-							target.removeBond(tBo); //Target bond is deleted
-						else
-							tBo.setOrder(reaction.prodBo.get(i)); //Target bond is updated
-					}
+					//New bond must be created in the target.
+					//This happens when two fragments from the reactant are connected.
+					//TODO
 				}
 				else
 				{
-					//TODO - nothing so far
+					IAtom tAt1 = rMap.get(nrAt1);
+					IAtom tAt2 = rMap.get(nrAt2);
+					IBond tBo = target.getBond(tAt1, tAt2);
+					if (reaction.prodBo.get(i) == null)
+						target.removeBond(tBo); //Target bond is deleted
+					else
+						tBo.setOrder(reaction.prodBo.get(i)); //Target bond is updated
 				}
 			}
 			else
 			{
-				if (nrAt1 == SmartsConst.SMRK_UNSPEC_ATOM)
+				if ((nrAt1 == SmartsConst.SMRK_UNSPEC_ATOM) || (nrAt2 == SmartsConst.SMRK_UNSPEC_ATOM))
 				{
-					if (nrAt2 == SmartsConst.SMRK_UNSPEC_ATOM)
-					{
-						int npAt1 = reaction.prodAt1.get(i).intValue();
-						int npAt2 = reaction.prodAt2.get(i).intValue();
+					//This is the case when in the created bond in the target (product) 
+					//contains at least one not mapped atom
+					
+					IAtom tAt1 = null;
+					IAtom tAt2 = null;
+					
+					if (nrAt1 == SmartsConst.SMRK_UNSPEC_ATOM)
+					{	
 						//IAtom pAt1 = reaction.product.getAtom(npAt1);
 						//IAtom pAt2 = reaction.product.getAtom(npAt2);
-						int pAt1tNotMapIndex = 0;
+						
+						int pAt1tNotMapIndex = -1;
+						int npAt1 = reaction.prodAt1.get(i).intValue();
 						for (int k = 0; k < reaction.productNotMappedAt.size(); k++)
 							if (reaction.productNotMappedAt.get(k).intValue() == npAt1)
 							{
@@ -249,7 +247,19 @@ public class SMIRKSManager
 								break;
 							}
 						
-						int pAt2tNotMapIndex = 0;
+						tAt1 = newAtoms.get(pAt1tNotMapIndex);
+					}
+					else 
+					{
+						//rAt1 is a mapped atom
+						tAt1 = rMap.get(nrAt1);
+					}
+					
+
+					if (nrAt2 == SmartsConst.SMRK_UNSPEC_ATOM)
+					{
+						int pAt2tNotMapIndex = -1;
+						int npAt2 = reaction.prodAt2.get(i).intValue();
 						for (int k = 0; k < reaction.productNotMappedAt.size(); k++)
 							if (reaction.productNotMappedAt.get(k).intValue() == npAt2)
 							{
@@ -257,15 +267,26 @@ public class SMIRKSManager
 								break;
 							}
 						
-						IAtom tAt1 = newAtoms.get(pAt1tNotMapIndex);
-						IAtom tAt2 = newAtoms.get(pAt2tNotMapIndex);
-						IBond tb = new Bond();
-						tb.setAtoms(new IAtom[] {tAt1, tAt2});
-						tb.setOrder(reaction.prodBo.get(i));
-						target.addBond(tb);
+						tAt2 = newAtoms.get(pAt2tNotMapIndex);
 					}
+					else
+					{
+						//rAt2 is a mapped atom
+						tAt2 = rMap.get(nrAt2);
+					}
+
+					
+					
+					IBond tb = new Bond();
+					tb.setAtoms(new IAtom[] {tAt1, tAt2});
+					tb.setOrder(reaction.prodBo.get(i));
+					target.addBond(tb);
+
+
 				}
 				
+				
+				//Some other possible cases if needed. 
 				//TODO  
 			}
 			

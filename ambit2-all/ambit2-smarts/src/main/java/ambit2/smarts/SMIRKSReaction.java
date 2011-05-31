@@ -188,8 +188,10 @@ public class SMIRKSReaction
 	{
 		SmartsToChemObject stco = new SmartsToChemObject();
 		
-		//Atom Transformation
-		//TODO
+		//Atom Transformation. Different atom properties are handles
+		generateChargeTransformation();
+		
+		//TODO - other atom properties transformation
 		
 		
 		//Bond Transformation
@@ -288,7 +290,7 @@ public class SMIRKSReaction
 		}
 		
 		
-		//Check for bonds that must be created in product (theses do not exist in the reactant)
+		//Check for bonds that must be created in product (these do not exist in the reactant)
 		for (int i = 0; i < product.getBondCount(); i++)
 		{
 			IBond pb = product.getBond(i);
@@ -309,7 +311,7 @@ public class SMIRKSReaction
 			{
 				if (paMapInd2 == null)
 				{	
-					
+					//This is a bond between two unmapped atoms in the product
 					prodBo.add(pb0.getOrder());
 					prodAt1.add(new Integer(pAt1Num));
 					prodAt2.add(new Integer(pAt2Num));
@@ -320,17 +322,34 @@ public class SMIRKSReaction
 				}
 				else
 				{
-					//TODO	
+					//This is a bond between unmapped atom and mapped atom in the product
+					//at1 is unmapped, at2 is mapped
+					prodBo.add(pb0.getOrder());
+					prodAt1.add(new Integer(pAt1Num));
+					prodAt2.add(new Integer(pAt2Num));
+					reactBo.add(null);
+					reactAt1.add(new Integer(SmartsConst.SMRK_UNSPEC_ATOM));
+					int rAt2Num = getMappedReactantAtom(paMapInd2);
+					reactAt2.add(new Integer(rAt2Num));	
 				}
 			}
 			else
 			{
 				if (paMapInd2 == null)
 				{
-					//TODO
+					//This is a bond between unmapped atom and mapped atom in the product
+					//at2 is unmapped, at1 is mapped
+					prodBo.add(pb0.getOrder());
+					prodAt1.add(new Integer(pAt1Num));
+					prodAt2.add(new Integer(pAt2Num));
+					reactBo.add(null);
+					int rAt1Num = getMappedReactantAtom(paMapInd1);
+					reactAt1.add(new Integer(rAt1Num));
+					reactAt2.add(new Integer(SmartsConst.SMRK_UNSPEC_ATOM));
 				}
 				else
 				{
+					//This is a bond between two mapped atoms in the product which is not present in the reactant
 					int rAt1Num = getMappedReactantAtom(paMapInd1);
 					int rAt2Num = getMappedReactantAtom(paMapInd2);
 					int rbNum = reactant.getBondNumber(reactant.getAtom(rAt1Num), reactant.getAtom(rAt2Num));
@@ -344,8 +363,7 @@ public class SMIRKSReaction
 						reactAt2.add(new Integer(rAt2Num));
 					}
 					
-				}
-				
+				} 
 			}
 			
 		}
@@ -353,6 +371,10 @@ public class SMIRKSReaction
 	}
 	
 	
+	void generateChargeTransformation()
+	{
+		//TODO
+	}
 	
 	
 	//Helper functions
