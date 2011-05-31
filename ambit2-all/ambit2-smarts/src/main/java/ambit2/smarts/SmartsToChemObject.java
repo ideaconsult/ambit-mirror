@@ -30,6 +30,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	
 	public static final String markProperty = "MARKED_AB";
+	
 
 	//When this flag is true aromatic bonds are forced between any two aromatic atoms 
 	public boolean forceAromaticBondsAlways = false; 
@@ -44,7 +45,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	boolean mFlagConfirmAromaticBond;
 	
 	//Work variables which are set by functions analyzeSubExpressionsFromLowAnd and getExpressionAtomType
-	int mSubAtomType, mSubAromaticity, mCurSubArom, mRecCurSubArom;
+	int mSubAtomType, mSubAromaticity, mCurSubArom, mRecCurSubArom, mSubAtomCharge, mCurSubAtCharge;
 		
 	
 	/** 
@@ -323,6 +324,9 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		//System.out.println("\nConverting expression: " +  a.toString());
 		
+		int atomCharge = 0; 
+		
+		
 		Vector<SmartsAtomExpression> subs = getSubExpressions(a, SmartsConst.LO+ SmartsConst.LO_ANDLO);
 		int atType = -1;
 		int isArom = -1;			
@@ -359,6 +363,16 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 					}
 				}
 			}
+			
+			
+			
+			if (mSubAtomCharge != 0)
+			{	
+				//Currently Simple handling of charge
+				atomCharge = mSubAtomCharge;
+			}
+			
+			
 		}
 		
 		if ((atType != -1)&&(isArom != -1))
@@ -371,7 +385,13 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				atom.setFlag(CDKConstants.ISAROMATIC,true);
 			else
 				atom.setFlag(CDKConstants.ISAROMATIC,false);
-							
+			
+			//Setting the charge
+			if (atomCharge != 0)
+				atom.setFormalCharge(new Integer(atomCharge));
+			
+			//System.out.println("setting atom charge " + atomCharge);
+			
 			return(atom);
 		}
 		return(null);
@@ -402,15 +422,17 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		//Following rule is applied
 		//	If at least one sub-sub expression has a atom type 
 		//  then all other sub-subs must have the same type
-		//Analogously the aromaticity is treated
+		//Analogously the aromaticity and charge are treated
 		
 		Vector<SmartsAtomExpression> sub_subs = getSubExpressions(sub, SmartsConst.LO+SmartsConst.LO_OR);
 		int subAtType[] = new int[sub_subs.size()];
 		int subArom[] = new int[sub_subs.size()];
+		int subCharge[] = new int[sub_subs.size()];
 		for (int i = 0; i <sub_subs.size(); i++)
 		{	
 			subAtType[i] = getExpressionAtomType(atExp,sub_subs.get(i));
 			subArom[i] = mCurSubArom;
+			subCharge[i] = mCurSubAtCharge;
 		}
 		
 		mSubAtomType = subAtType[0];
@@ -432,12 +454,23 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				break;
 			}
 		}
+		
+		mSubAtomCharge = subCharge[0];
+		for (int i = 1; i < subCharge.length; i++)
+		{
+			if (mSubAtomCharge != subCharge[i])
+			{
+				mSubAtomCharge = 0;  //in case of inconsistency charge 0 is set. 
+				break;
+			}
+		}
 	}
 	
 	public int getExpressionAtomType(SmartsAtomExpression atExp, SmartsAtomExpression sub)
 	{
 		//'sub' expression is represented only by HI_AND and NOT operations		
 		mCurSubArom = -1;
+		mCurSubAtCharge = 0;
 		
 		//Getting the positions of HI_AND tokens
 		int pos[] = new int[sub.tokens.size()+2];
@@ -470,7 +503,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				seTok = sub.tokens.get(k);
 				if (seTok.isLogicalOperation())
 				{
-					if (seTok.getLogOperation() == SmartsConst.LO + SmartsConst.LO_NOT)					
+					if (seTok.getLogOperation() == SmartsConst.LO_NOT)					
 						FlagNot = !FlagNot;
 					
 					if (seTok.getLogOperation() == SmartsConst.LO_AND)					
@@ -478,6 +511,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 					
 					continue;
 				}
+							
 				
 				//Handling atom primitives. 
 				//When given primitive defines an atom type it must not be negated 				
@@ -505,7 +539,13 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 					if (seTok.param > 0)
 						if (!FlagNot)
 							expAtType = seTok.param;
-					break;	
+					break;
+				
+				case SmartsConst.AP_Charge:
+						if (!FlagNot)
+							mCurSubAtCharge = seTok.param;
+					break;
+					
 					
 				case SmartsConst.AP_Recursive:
 					int recExpAtType = getRecursiveExpressionAtomType(atExp,seTok.param);
@@ -514,6 +554,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 						{	
 							expAtType = recExpAtType;
 							mCurSubArom = mRecCurSubArom;
+							//TODO - handle charge
 						}	
 					break;
 					

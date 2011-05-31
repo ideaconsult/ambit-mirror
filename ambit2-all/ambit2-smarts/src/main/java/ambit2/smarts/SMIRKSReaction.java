@@ -22,6 +22,8 @@ public class SMIRKSReaction
 	QueryAtomContainer agent = new QueryAtomContainer();
 	QueryAtomContainer product = new QueryAtomContainer();
 	
+		
+	
 	//Multi-container representation
 	public Vector<QueryAtomContainer> reactants = new Vector<QueryAtomContainer>();
 	public Vector<QueryAtomContainer> agents = new Vector<QueryAtomContainer>();
@@ -50,8 +52,8 @@ public class SMIRKSReaction
 		
 	//Transformation Data is described in terms of global numbers	
 	//Atom transformation is designated for the mapped atoms
-	//Vector<Integer> reactantAtCharge
-	//Vector<Integer> productAtCharge
+	Vector<Integer> reactantAtCharge = new Vector<Integer>();
+	Vector<Integer> productAtCharge = new Vector<Integer>();
 	//Vector<Integer> reactantAtChirality
 	//Vector<Integer> productAtChirality	
 	
@@ -373,7 +375,26 @@ public class SMIRKSReaction
 	
 	void generateChargeTransformation()
 	{
-		//TODO
+		SmartsToChemObject stco = new SmartsToChemObject();
+		
+		for (int i = 0; i < reactant.getAtomCount(); i++)
+		{
+			IAtom a = stco.toAtom(reactant.getAtom(i));
+			if (a == null)
+				reactantAtCharge.add(null);
+			else
+				reactantAtCharge.add(a.getFormalCharge());
+		}
+		
+		
+		for (int i = 0; i < product.getAtomCount(); i++)
+		{
+			IAtom a = stco.toAtom(product.getAtom(i));
+			if (a == null)
+				productAtCharge.add(null);
+			else
+				productAtCharge.add(a.getFormalCharge());
+		}
 	}
 	
 	
