@@ -1509,7 +1509,15 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
 		
 		//tu.testIsomorphismTester("[]C", "CC"); - fix []
-		tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
+		
+		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
+		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); ---> Exception to fix !!!!!
+		
+		tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "NC[H]");
+		
+		
+		
+		
 		
 		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		
