@@ -183,13 +183,13 @@ public class SMIRKSManager
 	
 	
 	public void applyTransformAtLocation(IAtomContainer target, Vector<IAtom> rMap, SMIRKSReaction reaction)
-	{
-				
+	{	
+		//printSSMap(target,rMap);
+		
 		//Create Non Existing Atoms
 		Vector<IAtom> newAtoms = new Vector<IAtom>();
 		for (int i = 0; i < reaction.productNotMappedAt.size(); i++)
-		{
-			
+		{	
 			int pAtNum = reaction.productNotMappedAt.get(i).intValue();
 			IAtom a = reaction.product.getAtom(pAtNum);
 			IAtom a0 = stco.toAtom(a);  //Also atom charge is set here
@@ -197,19 +197,28 @@ public class SMIRKSManager
 			target.addAtom(a0);
 		}
 		
+		
 		//Atom Transformation		
-		//Setting atom charges for 'SMIRKS' mapped atoms
+		//Setting atom charges for 'SMIRKS' mapped atoms and deleting unmapped atoms
 		for (int i = 0; i < reaction.reactant.getAtomCount(); i++)
-		{
+		{	
 			IAtom rAt = reaction.reactant.getAtom(i);
 			Integer raMapInd = (Integer)rAt.getProperty("SmirksMapIndex");
 			if (raMapInd != null)
-			{
+			{	
 				int pAtNum = reaction.getMappedProductAtom(raMapInd);
 				Integer charge = reaction.productAtCharge.get(pAtNum);
 				IAtom tAt = rMap.get(i);
 				tAt.setFormalCharge(charge);
-			}	
+			}
+			else
+			{
+				//Atom is deleted from 
+				IAtom tAt = rMap.get(i);
+				target.removeAtomAndConnectedElectronContainers(tAt);
+			}
+				
+			
 		}
 		
 		
@@ -225,8 +234,13 @@ public class SMIRKSManager
 				if (reaction.reactBo.get(i) == null)
 				{
 					//New bond must be created in the target.
-					//This happens when two fragments from the reactant are connected.
-					//TODO
+					//This happens when two atoms from the reactant are connected.
+					IAtom tAt1 = rMap.get(nrAt1);
+					IAtom tAt2 = rMap.get(nrAt2);
+					IBond tb = new Bond();
+					tb.setAtoms(new IAtom[] {tAt1, tAt2});
+					tb.setOrder(reaction.prodBo.get(i));
+					target.addBond(tb);
 				}
 				else
 				{
@@ -286,24 +300,34 @@ public class SMIRKSManager
 					{
 						//rAt2 is a mapped atom
 						tAt2 = rMap.get(nrAt2);
-					}
-
-					
+					}					
 					
 					IBond tb = new Bond();
 					tb.setAtoms(new IAtom[] {tAt1, tAt2});
 					tb.setOrder(reaction.prodBo.get(i));
 					target.addBond(tb);
-
-
 				}
-				
 				
 				//Some other possible cases if needed. 
 				//TODO  
-			}
-			
+			}			
 			
 		}
+		
 	}
+	
+	
+	
+	//Helper
+	
+	public void printSSMap(IAtomContainer target, Vector<IAtom> rMap)
+	{	
+		System.out.print("SS Map on Target: ");
+		for (int i = 0; i < rMap.size(); i++)
+		{
+			IAtom tAt = rMap.get(i);
+			System.out.print(" "+target.getAtomNumber(tAt));
+		}
+		System.out.println();
+	}	
 }

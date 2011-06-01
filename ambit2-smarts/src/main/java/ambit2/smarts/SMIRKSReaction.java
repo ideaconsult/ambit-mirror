@@ -126,8 +126,8 @@ public class SMIRKSReaction
 			if (glob_pa != pa)
 				mapErrors.add("Critical Error: Inconsistency between global and gragment atom treatment.");
 			
-			System.out.println("Map #" + rMapInd.intValue() + "  P" + rNum + " A"+rAtNum + "  -->  R"+pNum+" A"+pAtNum+"  "
-					+ "     " + rGlobAtNum + " --> " + pGlobAtNum);
+			//System.out.println("Map #" + rMapInd.intValue() + "  P" + rNum + " A"+rAtNum + "  -->  R"+pNum+" A"+pAtNum+"  "
+			//		+ "     " + rGlobAtNum + " --> " + pGlobAtNum);
 			
 			IAtom ra1 = stco.toAtom(ra);
 			IAtom pa1 = stco.toAtom(pa);
