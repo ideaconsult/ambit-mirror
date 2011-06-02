@@ -124,15 +124,17 @@ public class SmartsAtomExpression extends SMARTSAtom
     		
     	case SmartsConst.AP_X:
     	{	
-        	/*
+    		/*
         	https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
 			Integer hci = atom.getHydrogenCount();
 			*/
+    		 
     		Integer hci = atom.getImplicitHydrogenCount();
     		int hc = 0;
     		if (hci != null)
     			hc = hci.intValue();
-    		if (tok.param == atom.getFormalNeighbourCount() + hc)
+    		
+    		if (tok.param == atom.getFormalNeighbourCount()  + hc)
     			return(true);
     		else	
     			return(false);	
