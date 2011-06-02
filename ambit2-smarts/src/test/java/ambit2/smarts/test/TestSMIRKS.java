@@ -9,6 +9,7 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SMIRKSManager;
@@ -85,6 +86,14 @@ public class TestSMIRKS extends TestCase
 	{
 		SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
 		IAtomContainer target = sp.parseSmiles(targetSmiles);
+		
+		/*
+		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(
+				DefaultChemObjectBuilder.getInstance()
+		);
+		*/
+		
+		//System.out.println("No Impl H Atoms = " + target.getAtom(0).getImplicitHydrogenCount().intValue());
 				
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))
@@ -125,12 +134,64 @@ public class TestSMIRKS extends TestCase
 		String expectedResult[] = new String[] {"SN[H]","ClC=O"};
 		
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
-		String transformedSmiles = SmartsHelper.moleculeToSMILES(result);
-		
 		int checkRes = checkReactionResult(result,expectedResult);
 		assertEquals(0, checkRes);
 	}
 	
+	public void testN_oxidation() throws Exception {
+
+		String smirks = "[N:1][C:2]([H])>>[N:1](-[O])[C:2]";
+		String target = "CCNC[H]";
+		String expectedResult[] = new String[] {"CCN([O])C"};
+
+		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		int checkRes = checkReactionResult(result,expectedResult);
+		assertEquals(0, checkRes);
+	}
+	
+	public void testS_oxidation() throws Exception {
+
+		String smirks = "[#16:1][#6:2]>>[#16:1](=[O])[#6:2]";
+		String target = "SCNCCCS";
+		String expectedResult[] = new String[] {"O=SCNCCCS=O"};
+
+		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		int checkRes = checkReactionResult(result,expectedResult);
+		assertEquals(0, checkRes);
+	}
+	
+	public void testAromatic_hydroxylation() throws Exception {
+
+		String smirks = "[c:1][H:2]>>[c:1][O][H:2]";
+		String target = "[H]c1nnc([H])nn1";
+		String expectedResult[] = new String[] {"[H]Oc1nnc(O[H])nn1"};
+
+		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		int checkRes = checkReactionResult(result,expectedResult);
+		assertEquals(0, checkRes);
+	}
+	
+	public void testAliphatic_hydroxylation() throws Exception {
+
+		String smirks = "[C;X4:1][H:2]>>[C:1][O][H:2]";
+		String target = "CC([H])([H])[H]";
+		String expectedResult[] = new String[] {"CC([H])([H])[O][H]"};
+
+		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		int checkRes = checkReactionResult(result,expectedResult);
+		assertEquals(0, checkRes);
+	}
+	
+	public void testO_dealkylation() throws Exception {
+
+		String smirks = "[O:1][C:2]([H])>>[O:1][H].[C:2]=[O]";
+		String target = "CCNCOC[H]";
+		String expectedResult[] = new String[] {"CCNCO[H]","C=O"};
+
+		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		int checkRes = checkReactionResult(result,expectedResult);
+		assertEquals(0, checkRes);
+	}
 	
 	
 	
