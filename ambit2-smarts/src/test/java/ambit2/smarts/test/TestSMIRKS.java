@@ -1,15 +1,15 @@
 package ambit2.smarts.test;
 
-import java.util.Vector;
+import junit.framework.Assert;
 
+import org.junit.BeforeClass;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SMIRKSManager;
@@ -17,25 +17,28 @@ import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-public class TestSMIRKS extends TestCase
+public class TestSMIRKS 
 {
-	public LoggingTool logger;
+	public static LoggingTool logger;
 	SMIRKSManager smrkMan = new SMIRKSManager();
 	SmartsParser smartsParser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	
+	@BeforeClass
+	public static void  init() {
+		logger = new LoggingTool(TestSMIRKS.class);
+	}
+	/*
 	public TestSMIRKS() 
 	{   
-		logger = new LoggingTool(this);
+		
 	}
 	
 	public static Test suite() {
 		return new TestSuite(TestSMIRKS.class);
 	}
+	
+	*/
 	
 	int checkReactionResult(IAtomContainer result, String expectedResult[]) throws Exception
 	{
@@ -111,7 +114,7 @@ public class TestSMIRKS extends TestCase
 	
 	//-------------------------------------------------------------
 	
-	
+	@org.junit.Test
 	public void testSM0001() throws Exception {
 		
 		String smirks = "[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].S[C:2][N-:1]Cl";
@@ -123,10 +126,10 @@ public class TestSMIRKS extends TestCase
 		//System.out.println("Reaction application: " + target + "  -->  " + transformedSmiles);
 		
 		int checkRes = checkReactionResult(result,expectedResult);
-		assertEquals(0, checkRes);
+		Assert.assertEquals(0, checkRes);
 	}
 	
-	
+	@org.junit.Test
 	public void testN_dealkylation() throws Exception {
 		
 		String smirks = "[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]";
@@ -135,9 +138,10 @@ public class TestSMIRKS extends TestCase
 		
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		int checkRes = checkReactionResult(result,expectedResult);
-		assertEquals(0, checkRes);
+		Assert.assertEquals(0, checkRes);
 	}
 	
+	@org.junit.Test
 	public void testN_oxidation() throws Exception {
 
 		String smirks = "[N:1][C:2]([H])>>[N:1](-[O])[C:2]";
@@ -146,9 +150,10 @@ public class TestSMIRKS extends TestCase
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		int checkRes = checkReactionResult(result,expectedResult);
-		assertEquals(0, checkRes);
+		Assert.assertEquals(0, checkRes);
 	}
 	
+	@org.junit.Test
 	public void testS_oxidation() throws Exception {
 
 		String smirks = "[#16:1][#6:2]>>[#16:1](=[O])[#6:2]";
@@ -157,9 +162,10 @@ public class TestSMIRKS extends TestCase
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		int checkRes = checkReactionResult(result,expectedResult);
-		assertEquals(0, checkRes);
+		Assert.assertEquals(0, checkRes);
 	}
 	
+	@org.junit.Test
 	public void testAromatic_hydroxylation() throws Exception {
 
 		String smirks = "[c:1][H:2]>>[c:1][O][H:2]";
@@ -168,9 +174,10 @@ public class TestSMIRKS extends TestCase
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		int checkRes = checkReactionResult(result,expectedResult);
-		assertEquals(0, checkRes);
+		Assert.assertEquals(0, checkRes);
 	}
 	
+	@org.junit.Test
 	public void testAliphatic_hydroxylation() throws Exception {
 
 		String smirks = "[C;X4:1][H:2]>>[C:1][O][H:2]";
@@ -179,9 +186,10 @@ public class TestSMIRKS extends TestCase
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		int checkRes = checkReactionResult(result,expectedResult);
-		assertEquals(0, checkRes);
+		Assert.assertEquals(0, checkRes);
 	}
 	
+	@org.junit.Test
 	public void testO_dealkylation() throws Exception {
 
 		String smirks = "[O:1][C:2]([H])>>[O:1][H].[C:2]=[O]";
@@ -190,7 +198,7 @@ public class TestSMIRKS extends TestCase
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		int checkRes = checkReactionResult(result,expectedResult);
-		assertEquals(0, checkRes);
+		Assert.assertEquals(0, checkRes);
 	}
 	
 	
