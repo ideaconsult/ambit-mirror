@@ -152,23 +152,25 @@ public class SMIRKSManager
 		return (fragment);
 	}
 	
-	public void applyTransformation(IAtomContainer target, SMIRKSReaction reaction)
+	public boolean applyTransformation(IAtomContainer target, SMIRKSReaction reaction)
 	{
 		isoTester.setQuery(reaction.reactant);
 		
 		if (FlagSSMode ==  SmartsConst.SSM_SINGLE)
 		{
-			return;
+			return false;
 		}
 		
 		
 		if (FlagSSMode ==  SmartsConst.SSM_NON_OVERLAPPING)
 		{	
 			Vector<Vector<IAtom>> rMaps = getNonOverlappingMappings(target);
+			if (rMaps.size()==0) return false;
 			for (int i = 0; i < rMaps.size(); i++)
 				applyTransformAtLocation(target, rMaps.get(i), reaction);
+			return true;
 		}
-		
+		return false;
 	}
 	
 	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer target)
