@@ -18,6 +18,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
@@ -29,6 +30,9 @@ import ambit2.smarts.SmartsParser;
 
 public class TestSMIRKS 
 {
+	//All tests fail , if hydrogens are explicit!
+	boolean explicitH = false;
+	
 	public static LoggingTool logger;
 	SMIRKSManager smrkMan = new SMIRKSManager();
 	SmartsParser smartsParser = new SmartsParser();
@@ -100,20 +104,29 @@ public class TestSMIRKS
 	IAtomContainer applySMIRKSReaction(String smirks, String targetSmiles) throws Exception {
 		SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
 		IAtomContainer target = sp.parseSmiles(targetSmiles);
-		System.out.println(smigen.createSMILES(target));
+		if (explicitH)
+			AtomContainerManipulator.convertImplicitToExplicitHydrogens(target);
+		//System.out.println(smigen.createSMILES(target));
 		return applySMIRKSReaction(smirks, target);
 	}
 
+	IAtomContainer applySMIRKSReaction(String smirks,IAtomContainer target) throws Exception
+	{
+	
+		SMIRKSReaction reaction = smrkMan.parse(smirks);
+		if (!smrkMan.getErrors().equals(""))
+		{
+			throw(new Exception("Smirks Parser errors:\n" + smrkMan.getErrors()));
+		}
+		
+		if (smrkMan.applyTransformation(target, reaction)) 
+			return target; //all products inside the atomcontainer, could be disconnected
+		else return null;
+	}	
+	/*
 	IAtomContainer applySMIRKSReaction(String smirks, IAtomContainer target) throws Exception
 	{
-		/*
-		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(
-				DefaultChemObjectBuilder.getInstance()
-		);
-		*/
-		
-		//System.out.println("No Impl H Atoms = " + target.getAtom(0).getImplicitHydrogenCount().intValue());
-				
+
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))
 		{
@@ -125,6 +138,7 @@ public class TestSMIRKS
 		
 		return (target);
 	}
+	*/
 	
 	
 	
@@ -138,6 +152,7 @@ public class TestSMIRKS
 		String expectedResult[] = new String[] {"C=C","SC[N-]Cl"};
 		
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(result);	
 		//System.out.println("Reaction application: " + target + "  -->  " + transformedSmiles);
 		
@@ -153,6 +168,7 @@ public class TestSMIRKS
 		String expectedResult[] = new String[] {"SN[H]","ClC=O"};
 		
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
 		checkReactionResult(result,expectedResult);
 		
 	}
@@ -165,6 +181,7 @@ public class TestSMIRKS
 		String expectedResult[] = new String[] {"CCN([O])C"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
 		checkReactionResult(result,expectedResult);
 		
 	}
@@ -177,6 +194,7 @@ public class TestSMIRKS
 		String expectedResult[] = new String[] {"O=SCNCCCS=O"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
 		checkReactionResult(result,expectedResult);
 		
 	}
@@ -189,6 +207,7 @@ public class TestSMIRKS
 		String expectedResult[] = new String[] {"[H]Oc1nnc(O[H])nn1"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
 		checkReactionResult(result,expectedResult);
 		
 	}
@@ -201,6 +220,7 @@ public class TestSMIRKS
 		String expectedResult[] = new String[] {"CC([H])([H])[O][H]"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
 		checkReactionResult(result,expectedResult);
 		
 	}
@@ -210,10 +230,8 @@ public class TestSMIRKS
 		//this crashes if read from SDF
 		String smirks = "[C;X4:1][H:2]>>[C:1][O][H:2]";
 		String target = "c1cc(c(cc1Cl)Cl)Cl";
-		String expectedResult[] = new String[] {"c1cc(c(cc1Cl)Cl)Cl"};
-
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
-		checkReactionResult(result,expectedResult);
+		Assert.assertNull(result);
 		
 	}	
 	
@@ -225,6 +243,7 @@ public class TestSMIRKS
 		String expectedResult[] = new String[] {"CCNCO[H]","C=O"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
 		checkReactionResult(result,expectedResult);
 		
 	}
@@ -238,13 +257,14 @@ public class TestSMIRKS
 		String expectedResult[] = new String[] {"CCN(CC)[CH](=O)O"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
 		
 		//System.out.println(smigen.createSMILES(result));
 		checkReactionResult(result,expectedResult);
 		
 	}
-	//Uncomment to run this test
-	//@org.junit.Test
+
+	@org.junit.Test
 	public void testAldehyde_oxidation_sdf() throws Exception {
 //NN_diethylformamide
 		String smirks = "[C;H1:1]=[O:2]>>[C:1](O)=[O:2]";
@@ -253,7 +273,7 @@ public class TestSMIRKS
 		
 		AtomConfigurator  cfg = new AtomConfigurator();
 		HydrogenAdderProcessor hadder = new HydrogenAdderProcessor();
-
+		hadder.setAddEexplicitHydrogens(explicitH); // does not work if hydrogens are explicit!
 		
 		File file = new File(getClass().getClassLoader().getResource("smirkstest.sdf").getFile());
 
@@ -266,6 +286,7 @@ public class TestSMIRKS
 				//System.out.println(smigen.createSMILES(target));
 				CDKHueckelAromaticityDetector.detectAromaticity((IAtomContainer)target);			
 				IAtomContainer result = applySMIRKSReaction(smirks, target);
+				Assert.assertNotNull(result);
 				//System.out.println(smigen.createSMILES(result));
 				checkReactionResult(result,expectedResult);
 							
