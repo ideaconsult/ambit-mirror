@@ -2,11 +2,11 @@ package ambit2.smarts;
 
 import java.util.Vector;
 
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 
 public class SMIRKSManager 
@@ -152,7 +152,11 @@ public class SMIRKSManager
 		return (fragment);
 	}
 	
-	public boolean applyTransformation(IAtomContainer target, SMIRKSReaction reaction)
+	public boolean applyTransformation(IAtomContainer target,  SMIRKSReaction reaction) {
+		return applyTransformation(target, null, reaction);
+	}
+	
+	public boolean applyTransformation(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
 	{
 		isoTester.setQuery(reaction.reactant);
 		
@@ -166,12 +170,19 @@ public class SMIRKSManager
 		{	
 			Vector<Vector<IAtom>> rMaps = getNonOverlappingMappings(target);
 			if (rMaps.size()==0) return false;
-			for (int i = 0; i < rMaps.size(); i++)
-				applyTransformAtLocation(target, rMaps.get(i), reaction);
-			return true;
+			boolean applied = false;
+			for (int i = 0; i < rMaps.size(); i++) {
+				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
+						applyTransformAtLocation(target, rMaps.get(i), reaction);
+						applied = true;
+				}
+			}
+			return applied;
 		}
 		return false;
 	}
+	
+	
 	
 	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer target)
 	{
