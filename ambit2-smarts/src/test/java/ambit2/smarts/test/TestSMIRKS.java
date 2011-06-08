@@ -31,7 +31,7 @@ import ambit2.smarts.SmartsParser;
 public class TestSMIRKS 
 {
 	//All tests fail , if hydrogens are explicit!
-	boolean explicitH = false;
+	boolean explicitH = true;
 	
 	public static LoggingTool logger;
 	SMIRKSManager smrkMan = new SMIRKSManager();
@@ -60,16 +60,23 @@ public class TestSMIRKS
 	 * @param expectedResult
 	 * @throws Exception
 	 */
-	void checkReactionResult(IAtomContainer result, String expectedResult[]) throws Exception
+	void checkReactionResult(IAtomContainer result, String expectedResult[], 
+											String expectedResultExplH[]) throws Exception
 	{
 		IMoleculeSet ms =  ConnectivityChecker.partitionIntoMolecules(result);
+		String eResult[];
 		
-		if (ms.getAtomContainerCount() != expectedResult.length)
+		if (explicitH)
+			eResult = expectedResultExplH;
+		else
+			eResult = expectedResult;
+		
+		if (ms.getAtomContainerCount() != eResult.length)
 			throw new Exception(String.format("Found %d products, expected %d",ms.getAtomContainerCount(),expectedResult.length));
 		
-		for (int i = 0; i < expectedResult.length; i++)
+		for (int i = 0; i < eResult.length; i++)
 		{
-			QueryAtomContainer query = smartsParser.parse(expectedResult[i]);
+			QueryAtomContainer query = smartsParser.parse(eResult[i]);
 			String error = smartsParser.getErrorMessages();
 			if (!error.equals(""))
 			{
@@ -150,13 +157,18 @@ public class TestSMIRKS
 		String smirks = "[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].S[C:2][N-:1]Cl";
 		String target = "NCCC";
 		String expectedResult[] = new String[] {"C=C","SC[N-]Cl"};
+		String expectedResultExplH[] = null; /*
+			new String[] {
+				"C([H])([H])=C([H])([H])",
+				"S([H])C([H])([H])[N-]([H])([H])Cl"
+				}; */
 		
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(result);	
 		//System.out.println("Reaction application: " + target + "  -->  " + transformedSmiles);
 		
-		checkReactionResult(result,expectedResult);
+		checkReactionResult(result,expectedResult, expectedResultExplH);
 		
 	}
 	
@@ -166,10 +178,15 @@ public class TestSMIRKS
 		String smirks = "[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]";
 		String target = "SNC(Cl)[H]";
 		String expectedResult[] = new String[] {"SN[H]","ClC=O"};
+		String expectedResultExplH[] =
+			new String[] {
+				"[H]SN([H])[H]",
+				"ClC([H])=O"
+				};
 		
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult);
+		checkReactionResult(result,expectedResult, expectedResultExplH);
 		
 	}
 	
@@ -178,11 +195,12 @@ public class TestSMIRKS
 
 		String smirks = "[N:1][C:2]([H])>>[N:1](-[O])[C:2]";
 		String target = "CCNC[H]";
-		String expectedResult[] = new String[] {"CCN([O])C"};
+		String expectedResult[] = new String[] {"CCN([O])C"};		
+		String expectedResultExplH[] = new String[] {"C([H])([H])([H])C([H])([H])N([H])([O])C([H])([H])"}; 
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult);
+		checkReactionResult(result,expectedResult, expectedResultExplH);
 		
 	}
 	
@@ -195,7 +213,7 @@ public class TestSMIRKS
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult);
+		checkReactionResult(result,expectedResult, null);
 		
 	}
 	
@@ -208,7 +226,7 @@ public class TestSMIRKS
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult);
+		checkReactionResult(result,expectedResult, null);
 		
 	}
 	
@@ -221,7 +239,7 @@ public class TestSMIRKS
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult);
+		checkReactionResult(result,expectedResult, null);
 		
 	}
 	
@@ -244,7 +262,7 @@ public class TestSMIRKS
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult);
+		checkReactionResult(result,expectedResult, null);
 		
 	}
 	
@@ -260,7 +278,7 @@ public class TestSMIRKS
 		Assert.assertNotNull(result);
 		
 		//System.out.println(smigen.createSMILES(result));
-		checkReactionResult(result,expectedResult);
+		checkReactionResult(result,expectedResult, null);
 		
 	}
 
@@ -288,7 +306,7 @@ public class TestSMIRKS
 				IAtomContainer result = applySMIRKSReaction(smirks, target);
 				Assert.assertNotNull(result);
 				//System.out.println(smigen.createSMILES(result));
-				checkReactionResult(result,expectedResult);
+				checkReactionResult(result,expectedResult, null);
 							
 			}
 		} finally {
