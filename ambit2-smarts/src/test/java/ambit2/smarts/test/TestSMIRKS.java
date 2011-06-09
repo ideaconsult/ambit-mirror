@@ -31,7 +31,7 @@ import ambit2.smarts.SmartsParser;
 public class TestSMIRKS 
 {
 	//All tests fail , if hydrogens are explicit!
-	boolean explicitH = true;
+	boolean explicitH = false;
 	
 	public static LoggingTool logger;
 	SMIRKSManager smrkMan = new SMIRKSManager();
@@ -129,23 +129,7 @@ public class TestSMIRKS
 		if (smrkMan.applyTransformation(target, reaction)) 
 			return target; //all products inside the atomcontainer, could be disconnected
 		else return null;
-	}	
-	/*
-	IAtomContainer applySMIRKSReaction(String smirks, IAtomContainer target) throws Exception
-	{
-
-		SMIRKSReaction reaction = smrkMan.parse(smirks);
-		if (!smrkMan.getErrors().equals(""))
-		{
-			//System.out.println(smrkMan.getErrors()); 
-			throw(new Exception("Smirks Parser errors:\n" + smrkMan.getErrors()));
-		}
-		
-		smrkMan.applyTransformation(target, reaction);
-		
-		return (target);
 	}
-	*/
 	
 	
 	
@@ -157,15 +141,15 @@ public class TestSMIRKS
 		String smirks = "[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].S[C:2][N-:1]Cl";
 		String target = "NCCC";
 		String expectedResult[] = new String[] {"C=C","SC[N-]Cl"};
-		String expectedResultExplH[] = null; /*
+		String expectedResultExplH[] = 
 			new String[] {
-				"C([H])([H])=C([H])([H])",
-				"S([H])C([H])([H])[N-]([H])([H])Cl"
-				}; */
+				"C([H])([H])=C([H])([H])[H]", 
+				"SC([H])([H])[N-]([H])([H])Cl" 			
+				}; 
 		
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		String transformedSmiles = SmartsHelper.moleculeToSMILES(result);	
+		//String transformedSmiles = SmartsHelper.moleculeToSMILES(result);	
 		//System.out.println("Reaction application: " + target + "  -->  " + transformedSmiles);
 		
 		checkReactionResult(result,expectedResult, expectedResultExplH);
@@ -208,13 +192,13 @@ public class TestSMIRKS
 	public void testS_oxidation() throws Exception {
 
 		String smirks = "[#16:1][#6:2]>>[#16:1](=[O])[#6:2]";
-		String target = "SCNCCCS";
-		String expectedResult[] = new String[] {"O=SCNCCCS=O"};
+		String target = "SCNC";
+		String expectedResult[] = new String[] {"O=SCNC"};
+		String expectedResultExplH[] = new String[] {"O=S([H])C([H])([H])N([H])C([H])([H])([H])"}; 	
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult, null);
-		
+		checkReactionResult(result,expectedResult, expectedResultExplH);
 	}
 	
 	@org.junit.Test
@@ -223,10 +207,11 @@ public class TestSMIRKS
 		String smirks = "[c:1][H:2]>>[c:1][O][H:2]";
 		String target = "[H]c1nnc([H])nn1";
 		String expectedResult[] = new String[] {"[H]Oc1nnc(O[H])nn1"};
+		String expectedResultExplH[] = new String[] {"[H]Oc1nnc(O[H])nn1"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult, null);
+		checkReactionResult(result,expectedResult, expectedResultExplH);
 		
 	}
 	
@@ -236,11 +221,14 @@ public class TestSMIRKS
 		String smirks = "[C;X4:1][H:2]>>[C:1][O][H:2]";
 		String target = "CC([H])([H])[H]";
 		String expectedResult[] = new String[] {"CC([H])([H])[O][H]"};
+		String expectedResultExplH[] = new String[] {"C([H])([H])([H])C([H])([H])[O][H]"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
-		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult, null);
+		//String transformedSmiles = SmartsHelper.moleculeToSMILES(result);
+		//System.out.println("Reaction application: " + target + "  -->  " + transformedSmiles);
 		
+		Assert.assertNotNull(result);
+		checkReactionResult(result,expectedResult, expectedResultExplH);
 	}
 	
 	@org.junit.Test
