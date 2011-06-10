@@ -2017,6 +2017,24 @@ public class SmartsParser
 			setParentMoleculeData(container);
 	}
 	
+	static public void prepareTargetForSMARTSSearch(SmartsFlags flags, IAtomContainer container)
+{
+	if (flags.mNeedNeighbourData)
+		setNeighbourData(container);
+	
+	if (flags.mNeedValenceData)
+		setValenceData(container);
+	
+	if (flags.mNeedRingData || flags.mNeedRingData2)
+		setRingData(container, flags.mNeedRingData, flags.mNeedRingData2);
+			
+	if (flags.mNeedExplicitHData)
+		setExplicitHAtomData(container);
+	
+	if (flags.mNeedParentMoleculeData)
+		setParentMoleculeData(container);
+}
+	
 	
 	static public void setNeighbourData(IAtomContainer container)
 	{	

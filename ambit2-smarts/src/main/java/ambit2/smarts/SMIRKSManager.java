@@ -159,6 +159,9 @@ public class SMIRKSManager
 	public boolean applyTransformation(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
 	{
 		isoTester.setQuery(reaction.reactant);
+		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
+		
+		
 		
 		if (FlagSSMode ==  SmartsConst.SSM_SINGLE)
 		{
