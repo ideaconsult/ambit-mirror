@@ -1517,8 +1517,6 @@ public class TestUtilities
 		
 		
 		
-		
-		
 		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		
 	}

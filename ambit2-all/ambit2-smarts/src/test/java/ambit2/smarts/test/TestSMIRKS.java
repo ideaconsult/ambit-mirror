@@ -31,7 +31,7 @@ import ambit2.smarts.SmartsParser;
 public class TestSMIRKS 
 {
 	//All tests fail , if hydrogens are explicit!
-	boolean explicitH = false;
+	boolean explicitH = true;
 	
 	public static LoggingTool logger;
 	SMIRKSManager smrkMan = new SMIRKSManager();
@@ -125,6 +125,10 @@ public class TestSMIRKS
 		{
 			throw(new Exception("Smirks Parser errors:\n" + smrkMan.getErrors()));
 		}
+		
+		//System.out.println("smirks = " + smirks);
+		//System.out.println("Reactant Flags " );
+		//System.out.println(reaction.reactantFlags.toString());
 		
 		if (smrkMan.applyTransformation(target, reaction)) 
 			return target; //all products inside the atomcontainer, could be disconnected
@@ -220,8 +224,9 @@ public class TestSMIRKS
 
 		String smirks = "[C;X4:1][H:2]>>[C:1][O][H:2]";
 		String target = "CC([H])([H])[H]";
-		String expectedResult[] = new String[] {"CC([H])([H])[O][H]"};
-		String expectedResultExplH[] = new String[] {"C([H])([H])([H])C([H])([H])[O][H]"};
+		//when H are implicit (actually 'semi-implicit') only one location is matched
+		String expectedResult[] = new String[] {"CC([H])([H])[O][H]"}; 
+		String expectedResultExplH[] = new String[] {"C([H])([H])([O][H])C([H])([H])[O][H]"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		//String transformedSmiles = SmartsHelper.moleculeToSMILES(result);
@@ -247,26 +252,34 @@ public class TestSMIRKS
 		String smirks = "[O:1][C:2]([H])>>[O:1][H].[C:2]=[O]";
 		String target = "CCNCOC[H]";
 		String expectedResult[] = new String[] {"CCNCO[H]","C=O"};
+		String expectedResultExplH[] =
+			new String[] {
+				"C([H])([H])([H])C([H])([H])N([H])C([H])([H])O[H]",
+				"C([H])([H])=O" 
+				};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
-		checkReactionResult(result,expectedResult, null);
+		checkReactionResult(result,expectedResult, expectedResultExplH);
 		
 	}
 	
 
 	@org.junit.Test
 	public void testAldehyde_oxidation() throws Exception {
-//NN_diethylformamide
+		//NN_diethylformamide
 		String smirks = "[C;H1:1]=[O:2]>>[C:1](O)=[O:2]";
 		String target = "CCN(CC)C=O";
 		String expectedResult[] = new String[] {"CCN(CC)[CH](=O)O"};
+				
+		String expectedResultExplH[] = 
+			new String[] {"C([H])([H])([H])C([H])([H])N(C([H])([H])C([H])([H])([H]))C([H])(=O)O"};
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
 		
 		//System.out.println(smigen.createSMILES(result));
-		checkReactionResult(result,expectedResult, null);
+		checkReactionResult(result,expectedResult, expectedResultExplH);
 		
 	}
 
@@ -275,6 +288,8 @@ public class TestSMIRKS
 //NN_diethylformamide
 		String smirks = "[C;H1:1]=[O:2]>>[C:1](O)=[O:2]";
 		String expectedResult[] = new String[] {"CCN(CC)[CH](=O)O"};
+		String expectedResultExplH[] = 
+			new String[] {"C([H])([H])([H])C([H])([H])N(C([H])([H])C([H])([H])([H]))C([H])(=O)O"};
 		IAtomContainer target;
 		
 		AtomConfigurator  cfg = new AtomConfigurator();
@@ -294,7 +309,7 @@ public class TestSMIRKS
 				IAtomContainer result = applySMIRKSReaction(smirks, target);
 				Assert.assertNotNull(result);
 				//System.out.println(smigen.createSMILES(result));
-				checkReactionResult(result,expectedResult, null);
+				checkReactionResult(result,expectedResult,expectedResultExplH);
 							
 			}
 		} finally {
