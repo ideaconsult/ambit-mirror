@@ -27,6 +27,11 @@ public class SMIRKSManager
 		parser.mSupportSmirksSyntax = true;
 	}
 	
+	public void setSSMode(int mode)
+	{
+		FlagSSMode = mode;
+	}
+	
 	public boolean hasErrors()
 	{
 		if (parserErrors.isEmpty())
@@ -169,6 +174,21 @@ public class SMIRKSManager
 		}
 		
 		
+		if (FlagSSMode ==  SmartsConst.SSM_NON_IDENTICAL)
+		{	
+			Vector<Vector<IAtom>> rMaps = getNonIdenticalMappings(target);
+			if (rMaps.size()==0) return false;
+			boolean applied = false;
+			for (int i = 0; i < rMaps.size(); i++) {
+				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
+						applyTransformAtLocation(target, rMaps.get(i), reaction);
+						applied = true;
+				}
+			}
+			return applied;
+		}
+		
+		
 		if (FlagSSMode ==  SmartsConst.SSM_NON_OVERLAPPING)
 		{	
 			Vector<Vector<IAtom>> rMaps = getNonOverlappingMappings(target);
@@ -182,6 +202,7 @@ public class SMIRKSManager
 			}
 			return applied;
 		}
+		
 		return false;
 	}
 	
@@ -193,6 +214,15 @@ public class SMIRKSManager
 		//TODO
 		
 		Vector<Vector<IAtom>> rMaps = isoTester.getNonOverlappingMappings(target);
+		return(rMaps);
+	}
+	
+	public Vector<Vector<IAtom>> getNonIdenticalMappings(IAtomContainer target)
+	{
+		//Special treatment for fragmented reactants
+		//TODO
+		
+		Vector<Vector<IAtom>> rMaps = isoTester.getNonIdenticalMappings(target);
 		return(rMaps);
 	}
 	
