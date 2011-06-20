@@ -1,8 +1,12 @@
 package ambit2.rest.structure;
 
 import java.awt.Dimension;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Writer;
+import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -796,10 +801,9 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				OpenTox.URI.feature
 				));	
 		
-		b.append(String.format("<a href=\"%s/%s\">QA label</a><br>",
-				w,
-				"consensus"
-				));			
+		b.append(retrieveQALabel(w,"consensus","Consensus label over all available structures of this compound","Consensus Quality Label"));		
+		b.append(retrieveQALabel(w,"comparison","This structure quality label","Structure Quality Label"));		
+
 		/*
 		String[][] s = new String[][] {
 				{PropertyValueResource.featureKey,Property.opentox_CAS,"CAS RN"},
@@ -840,6 +844,44 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	
 		return b.toString();
 	}		
+	
+	protected String retrieveQALabel(String w, String type, String alt, String title) {
+		
+		String uri = String.format("%s/%s",w,type);
+		InputStream in = null;
+		HttpURLConnection uc = null;
+		try {		
+			uc =  ClientResourceWrapper.getHttpURLConnection(uri, "GET", MediaType.TEXT_PLAIN.toString());
+			if (HttpURLConnection.HTTP_OK== uc.getResponseCode()) {
+				in = uc.getInputStream();
+				StringBuilder b = new StringBuilder();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				String line = null;
+				final String newline = System.getProperty("line.separator");
+				while ((line = reader.readLine())!=null) {
+					b.append(line);
+					b.append(newline);
+				}	
+				String value = b==null?"":b.toString().trim();
+				return String.format("<a href=\"%s/%s\" title='%s'>%s</a>&nbsp;<b><font color='%s'>%s</font></b><br>",
+						w,
+						type,
+						alt,
+						title,
+						value.indexOf("Consensus")>=0?"green":
+						value.indexOf("ERROR")>=0?"red":(value.equals("OK")?"green":"black"),
+						value
+						);
+			}
+		
+		} catch (Exception x) {
+			
+		} finally {
+			try {if (in != null) in.close();} catch (Exception x) {}
+			try {if (uc != null) uc.disconnect();} catch (Exception x) {}
+		}
+		return null;
+	}
 
 	@Override
 	public void close() throws SQLException {
