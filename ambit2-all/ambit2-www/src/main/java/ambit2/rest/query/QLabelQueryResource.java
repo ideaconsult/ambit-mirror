@@ -25,7 +25,16 @@ import ambit2.rest.OpenTox;
  */
 public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
 	public static String resource = "/qlabel";
-
+	protected Integer datasetID;
+	protected Integer queryResultsID;
+	@Override
+	public String getCompoundInDatasetPrefix() {
+		if (dataset_prefixed_compound_uri)
+		return
+			datasetID!=null?String.format("%s/%d", OpenTox.URI.dataset.getURI(),datasetID):
+				queryResultsID!=null?String.format("%s/R%d", OpenTox.URI.dataset.getURI(),queryResultsID):"";
+		else return "";
+	}	
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
@@ -50,7 +59,11 @@ public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieva
 		}
 		
 		Object id = request.getAttributes().get(OpenTox.URI.dataset.getKey());
+		
+		
 		if (id != null) try {
+
+			datasetID = Integer.parseInt(id.toString());
 			QueryDatasetByID scope = new QueryDatasetByID();
 			scope.setValue(new Integer(Reference.decode(id.toString())));
 			
@@ -59,8 +72,9 @@ public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieva
 			combined.setScope(scope);
 			return combined;
 		} catch (Exception x) {
-			return q;
-		} else return q;
+			
+		} 
+		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No dataset !");
 	}
 
 }
