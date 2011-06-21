@@ -65,10 +65,12 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		else if (getValue()!=null)
 			params.add(new QueryParam<Integer>(Integer.class, getValue()));
 		
+		/*
 		if (getValue()!=null) {
 			params.add(new QueryParam<Integer>(Integer.class, getValue()));
 			return params;
 		} 
+		*/
 		return params.size()==0?null:params;
 	}
 	public String getSQL() throws AmbitException {
