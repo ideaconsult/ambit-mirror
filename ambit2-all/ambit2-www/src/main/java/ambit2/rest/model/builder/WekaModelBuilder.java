@@ -163,6 +163,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			}
 			predicted = new Template(name+"#Predicted");
 			Property property = new Property("Cluster",prediction);
+			property.setNominal(true);
 			predicted.add(property);
 
 			dependent = new Template("Empty");
@@ -197,6 +198,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			predictedProperty.setLabel(property.getLabel());
 			predictedProperty.setUnits(property.getUnits());
 			predictedProperty.setClazz(property.getClazz());
+			predictedProperty.setNominal(property.isNominal());
 			predicted.add(predictedProperty);
 			
 			if (supportsDistribution(classifier)) {
@@ -239,6 +241,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				if (newInstances.classIndex()==i) continue;
 				property = createPropertyFromReference(new Reference(String.format("PCA_%d",i+1)), entry);
+				property.setClazz(Number.class);
 				property.setOrder(i+1);
 				predicted.add(property);
 			}			
