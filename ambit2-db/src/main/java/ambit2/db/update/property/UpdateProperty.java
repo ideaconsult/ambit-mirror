@@ -85,6 +85,21 @@ public class UpdateProperty extends AbstractObjectUpdate<Property> {
 
 			}
 		},
+		ptype {
+			@Override
+			public String getSQL() {
+				return "ptype=?";
+			}
+			@Override
+			public boolean isEnabled(Property p) {
+				return p.getClazz()!=null;
+			}
+			@Override
+			public QueryParam getParam(Property p) {
+				return new QueryParam<String>(String.class, p.getClazz().equals(String.class)?"STRING":"NUMERIC");
+
+			}
+		},		
 		isLocal {
 			@Override
 			public String getSQL() {

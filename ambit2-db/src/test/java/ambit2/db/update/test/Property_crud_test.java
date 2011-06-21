@@ -47,6 +47,7 @@ public class Property_crud_test  extends CRUDTest<Object,Property> {
 		Property p = Property.getInstance("new property","newtitle","newurl");
 		p.setLabel("new label");
 		p.setId(-1);
+		p.setClazz(Number.class);
 		return new CreateProperty(p);
 	}
 
@@ -56,7 +57,7 @@ public class Property_crud_test  extends CRUDTest<Object,Property> {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='newtitle' and url='newurl'");
 		Assert.assertEquals(1,table.getRowCount());
-		table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where title='newtitle' and name='new property'");
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where title='newtitle' and name='new property' and ptype='NUMERIC'");
 		Assert.assertEquals(1,table.getRowCount());
 		
 		c.close();	
@@ -85,13 +86,14 @@ public class Property_crud_test  extends CRUDTest<Object,Property> {
 		Property property = Property.getInstance("My new property","Dummy reference");
 		property.setId(1);		
 		property.setLabel("My new label");
+		property.setClazz(Number.class);
 		return new UpdateProperty(property);
 	}
 
 	@Override
 	protected void updateVerify(IQueryUpdate<Object,Property> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where idproperty=1 and name='My new property' and comments='My new label'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where idproperty=1 and name='My new property' and comments='My new label' and ptype='NUMERIC'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();	}
 
