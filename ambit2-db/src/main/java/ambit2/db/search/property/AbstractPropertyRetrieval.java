@@ -131,9 +131,15 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 
 			try {
 				String type = rs.getString(8);
-				if (type != null)
-				p.setClazz(_PROPERTY_TYPE.valueOf(type).getClazz());
-			} catch (Exception x) {}
+				String[] types = null;
+				if (type != null) {
+					types = type.split(",");
+					for (String t:types)
+						p.setClazz(_PROPERTY_TYPE.valueOf(t).getClazz());
+				}
+			} catch (Exception x) {
+				//x.printStackTrace();
+			}
 			try {
 				p.setNominal(rs.getBoolean(9));
 			} catch (Exception x) { p.setNominal(false);}
