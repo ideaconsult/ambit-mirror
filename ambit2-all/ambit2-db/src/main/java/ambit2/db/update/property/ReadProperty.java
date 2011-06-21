@@ -47,10 +47,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 		") p using(idproperty)\n"+
 		"join catalog_references using(idreference)\n";
 		*/
-		"select p.idproperty,p.name,units,title,url,idreference,comments,idtype,islocal,type from properties p\n"+
-		"left join\n"+
-		"(select idproperty,idtype from property_values where idproperty= ? order by idtype desc limit 1) v\n"+
-		"on p.idproperty=v.idproperty\n"+
+		"select p.idproperty,p.name,units,title,url,idreference,comments,ptype,islocal,type from properties p\n"+
 		"join catalog_references using(idreference)\n"+
 		"where p.idproperty=?\n";
 		
