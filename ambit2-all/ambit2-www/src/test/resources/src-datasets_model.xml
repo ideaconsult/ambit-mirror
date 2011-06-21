@@ -89,7 +89,7 @@ QrGFsCXsGDPGzofSHXIpjXY36O2LL9lCWqF2rswomDVK2GKd4Yr93XlX7sD9r5qiTueiF4ZRhNAX
    <properties idproperty="1" idreference="8" name="Property 1" units="" comments="Property" islocal="false"/>
   <properties idproperty="2" idreference="8" name="Property 2" units="" comments="Property" islocal="false"/>
   <properties idproperty="3" idreference="8" name="CAS" units="" comments="CasRN" islocal="false"/>
-  <properties idproperty="4" idreference="8" name="Complex Endpoint" units="" comments="Test endpoint" islocal="false"/>
+  <properties idproperty="4" idreference="8" name="Complex Endpoint" units="" comments="Test endpoint" islocal="true"/>
   <template idtemplate="1" name="BCF"/>
   <template_def idtemplate="1" idproperty="1"/>
   <template_def idtemplate="1" idproperty="2"/>
