@@ -196,6 +196,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			Property predictedProperty = new Property(property.getName(),prediction); 
 			predictedProperty.setLabel(property.getLabel());
 			predictedProperty.setUnits(property.getUnits());
+			predictedProperty.setClazz(property.getClazz());
 			predicted.add(predictedProperty);
 			
 			if (supportsDistribution(classifier)) {
