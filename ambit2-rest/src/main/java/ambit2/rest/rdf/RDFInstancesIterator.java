@@ -18,6 +18,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SparseInstance;
 
+import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -186,31 +187,51 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 		if (s==null) return null;
 		
 		Property valueProperty = OT.DataProperty.value.createProperty(jenaModel);
-		StmtIterator features =  jenaModel.listStatements(new SimpleSelector(null,null,s));
+		Property featureProperty = OT.OTProperty.feature.createProperty(jenaModel);
+		Resource nominalFeatureClass = OT.OTClass.NominalFeature.getOntClass(jenaModel);
+		
+		StmtIterator features =  jenaModel.listStatements(new SimpleSelector(null,RDF.type,s));
 		while (features.hasNext()) {
 			
 			Statement feature = features.next();
+			
+			boolean isNominal = false;
+			
+			//check if nominal
+			
+			StmtIterator nominalFeatures =  jenaModel.listStatements(
+					new SimpleSelector(feature.getSubject(),RDF.type,nominalFeatureClass));
+			
+			while (nominalFeatures.hasNext()) {
+				isNominal = true;
+			}
+			nominalFeatures.close();
+						
 			
 			int ndouble=0;
 			int nstring = 0;
 			
 			FastVector nominal = new FastVector();
 			StmtIterator entries =  jenaModel.listStatements(
-					new SimpleSelector(null,OT.OTProperty.feature.createProperty(jenaModel),feature.getSubject()));
+					new SimpleSelector(null,featureProperty,feature.getSubject()));
 			while (entries.hasNext()) {
 				
 				Resource entry = entries.next().getSubject();
 				try {
-					
+
 					Statement values = entry.getProperty(valueProperty);
+					
 					if (values.getObject().isLiteral()) {
 						Class clazz = ((Literal)values.getObject()).getDatatype().getJavaClass();
-						if (clazz == Double.class) ndouble++;
-						else if (clazz == Float.class) ndouble++;
-						else if (clazz == Integer.class) ndouble++;
-						else if (clazz == Long.class) ndouble++;
-						else if (clazz == Short.class) ndouble++;
-						else {
+						if (!isNominal) {
+							if (clazz == Double.class) ndouble++;
+							else if (clazz == Float.class) ndouble++;
+							else if (clazz == Integer.class) ndouble++;
+							else if (clazz == Long.class) ndouble++;
+							else if (clazz == Short.class) ndouble++;
+							else isNominal = true; //strings become nominals, even if not declared as such
+						}
+						if (isNominal) {
 							String value = ((Literal)values.getObject()).getString();
 							if ((nominal.size()<(maxNominalValues+1)) && !nominal.contains(value))
 								nominal.addElement(value);
@@ -224,6 +245,7 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 				}
 				
 			}
+			entries.close();
 			
 			if ((ndouble+nstring)==0) continue;
 			Attribute a = null;
