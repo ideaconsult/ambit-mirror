@@ -119,7 +119,7 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			String name = thisurl==null?null:thisurl.toString();
 			String label = name;
 			
-			try { name = getTitle(newEntry);	} catch (Exception x) {	}
+			try { name = getTitle(newEntry);	} catch (Exception x) { }
 			
 			try { 
 				Statement t = newEntry.getProperty(OWL.sameAs);
@@ -169,9 +169,10 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 		property.setNominal(false);
 		try {
 			it = jenaModel.listStatements(new SimpleSelector(newEntry,RDF.type,(RDFNode)null));
+			
 			while (it.hasNext()) {
 				Statement st = it.next();
-
+				
 				if (!st.getObject().isResource()) continue;
 				Resource resource = st.getResource();
 				if (resource.hasURI(OT.OTClass.Feature.getNS())) continue;				
@@ -185,11 +186,12 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 
 			}
 		} catch (Exception x) {
-
+			
 		} finally {
 			try {it.close(); } catch (Exception x) {}
 		}
 
+		if (property.getName()==null) property.setName("Unnamed");
 		return property;
 	}
 	
