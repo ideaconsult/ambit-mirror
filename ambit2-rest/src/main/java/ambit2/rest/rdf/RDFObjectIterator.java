@@ -208,8 +208,11 @@ public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
 		return getPropertyValue(DC.creator,rdfNode);
 	}		
 	public static String getPropertyValue(Property property,RDFNode rdfNode) throws Exception  {
-		if (rdfNode.isResource())
-			return (((Literal) ((Resource)rdfNode).getProperty(property).getObject()).getString()); 
+		if (rdfNode.isResource()) {
+			Statement st = ((Resource)rdfNode).getProperty(property);
+			if ((st==null) || st.getObject()==null) return null;
+			return (((Literal) st.getObject()).getString());
+		}
 		else throw new Exception("Not a resource");
 	}
 	public static RDFNode getPropertyNode(Property property,RDFNode rdfNode)  {
