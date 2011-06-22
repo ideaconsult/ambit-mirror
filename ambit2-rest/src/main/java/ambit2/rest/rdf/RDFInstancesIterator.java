@@ -203,7 +203,9 @@ public class RDFInstancesIterator extends RDFDataEntryIterator<Instance, Attribu
 					new SimpleSelector(feature.getSubject(),RDF.type,nominalFeatureClass));
 			
 			while (nominalFeatures.hasNext()) {
+				nominalFeatures.next();
 				isNominal = true;
+				break;
 			}
 			nominalFeatures.close();
 						
