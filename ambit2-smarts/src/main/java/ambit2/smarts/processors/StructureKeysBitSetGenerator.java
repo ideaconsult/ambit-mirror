@@ -4,6 +4,7 @@ import java.util.BitSet;
 import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -101,10 +102,15 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 		//quick workaround for aromatic compounds, to avoid matching non-aromatic keys
 		//TODO remove this when isoTester/keys processing is fixed 
 		//isoTester is fixed, but CDK isomorphism tester still needs the workaround, should be fixed in CDK nightly Mar 2010
-		if (cleanKekuleBonds)
-			for (IBond bond : ac.bonds()) 
-				if (bond.getFlag(CDKConstants.ISAROMATIC)) bond.setOrder(Order.SINGLE);
+		for (IBond bond : ac.bonds()) 
+			if (bond.getFlag(CDKConstants.ISAROMATIC)) {
+				for (IAtom a : bond.atoms()) a.setFlag(CDKConstants.ISAROMATIC,true); 
+				//in e.g. triazole the atoms are not set as aromatics, but bonds are!
+				if (cleanKekuleBonds)
+					bond.setOrder(Order.SINGLE);
+			}
 		//end of the workaround
+		
 		
 		BitSet keys = new BitSet(nKeys);
 		boolean res;
@@ -113,7 +119,6 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 			isoTester.setSequence(smartsQueries.get(i), sequences.get(i));
 			res = isoTester.hasIsomorphism(ac);
 			keys.set(i, res);
-			//System.out.println(smartsKeys.get(i) + "  " + res);
 		}
 		return(keys);
 	}

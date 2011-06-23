@@ -309,6 +309,16 @@ public class TestSmartsSearch extends TestCase
 		assertEquals(6, results[1]);
 	}
 	
+	/**
+	 * Triazoles
+	 * @throws Exception
+	 */
+	public void testPropertyAromatic9() throws Exception {
+		int[] results = match("c1cnnn1", "C1=CN=NN1");
+		assertEquals(2, results[0]);
+		assertEquals(1, results[1]);
+	}
+	
 	public void testPropertyAliphatic1() throws Exception {
 		int[] results = match("[A]", "c1cc(C)c(N)cc1");
 		assertEquals(2, results[0]);
