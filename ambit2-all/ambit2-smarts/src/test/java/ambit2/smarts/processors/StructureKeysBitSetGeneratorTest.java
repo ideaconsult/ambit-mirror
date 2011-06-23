@@ -6,8 +6,11 @@ import java.util.BitSet;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
@@ -210,8 +213,83 @@ public class StructureKeysBitSetGeneratorTest {
 		
 		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
 		IMolecule mol = parser.parseSmiles("c1ccccc1c2ccccc2");
+	
 		BitSet bitsetAromatic = bitsetGenerator.process(mol);
-
+		
 		Assert.assertEquals(bitsetKekule,bitsetAromatic);
+	}
+	
+	@Test
+	public void testTriazoleKeys_kekuleBondscleaned() throws Exception {
+		testTriazoleKeys(true);
+	}
+	@Test
+	public void testTriazoleKeys_kekuleBondsNOTcleaned() throws Exception {
+		testTriazoleKeys(false);
+	}	
+	/**
+	 * aromatic :<{113, 852}>
+	 * 113: c(c)n
+	 * 852: c(cn)n
+	 * sdf 
+	 * 8: N, 
+	 * 12 CC, 
+	 * 22 NC, 
+	 * 27 C(C)N, 
+	 * 71 C, 
+	 * 444 C(CN)N, 
+	 * 911 NN
+	 * @param cleanKekuleBonds
+	 * @throws Exception
+	 */
+	public void testTriazoleKeys(boolean cleanKekuleBonds) throws Exception {		
+		MoleculeReader mr = new MoleculeReader();
+		AtomConfigurator config = new AtomConfigurator();
+
+		RawIteratingSDFReader reader = new RawIteratingSDFReader(
+				new InputStreamReader(getClass().getClassLoader().getResourceAsStream("triazole.sdf")));
+		
+		BitSet bitsetKekule = null;
+		StructureKeysBitSetGenerator bitsetGenerator = new StructureKeysBitSetGenerator();
+		bitsetGenerator.setCleanKekuleBonds(cleanKekuleBonds);
+		while (reader.hasNext()) {
+			IStructureRecord record = reader.nextRecord();
+			IAtomContainer c = config.process(mr.process(record));
+			//CDKHueckelAromaticityDetector.detectAromaticity(c);
+			bitsetKekule = bitsetGenerator.process(c);
+			System.out.println(bitsetKekule);
+		}
+		reader.close();
+		
+		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IAtomContainer mol = parser.parseSmiles("c1cnn[nH]1");
+		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		mol = config.process(mol);
+		//CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		BitSet bitsetAromatic = bitsetGenerator.process(mol);
+		
+		System.out.println(bitsetAromatic);
+		Assert.assertEquals(bitsetKekule,bitsetAromatic);
+		
+		parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		mol = parser.parseSmiles("C1=CN=NN1");
+		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		mol = config.process(mol);
+		//CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		BitSet bitsetKekuleSMILES = bitsetGenerator.process(mol);
+		
+		System.out.println(bitsetKekuleSMILES);
+		Assert.assertEquals(bitsetKekule,bitsetKekuleSMILES);
+		
+	}
+	@Test
+	public void parseTriazole() throws Exception {
+		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IAtomContainer mol = parser.parseSmiles("c1cnn[nH]1"); //C1=CN=NN1
+		CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		for (IAtom a: mol.atoms()) System.out.println(a.getFlag(CDKConstants.ISAROMATIC));
 	}
 }
