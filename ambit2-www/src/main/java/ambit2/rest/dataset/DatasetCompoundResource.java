@@ -3,13 +3,24 @@ package ambit2.rest.dataset;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
+import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.AbstractDataset;
+import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryCombined.COMBINE;
+import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
+import ambit2.db.search.structure.QueryStoredResults;
+import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.db.update.dataset.DatasetQueryFieldGeneric;
 import ambit2.rest.OpenTox;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
 
@@ -52,11 +63,42 @@ public class DatasetCompoundResource extends CompoundResource {
 		IQueryRetrieval<IStructureRecord> datasetQuery = ds.createQuery(context, request, response);
 		if (datasetQuery == null) return null;
 		
+		if (q instanceof QueryStructureByID) {
+			Object id = request.getAttributes().get(DatasetResource.datasetKey);
+			if (id==null) throw new InvalidResourceIDException("No dataset");
+			ISourceDataset dataset = getDataset(id.toString());
+			if (dataset==null) throw new InvalidResourceIDException("No dataset");
+			((QueryStructureByID)q).setFieldname(dataset);
+			return q;
+		}
+		//else some other query
 		prefix = ds.getCompoundInDatasetPrefix();
 		QueryCombinedStructure combinedQuery = new QueryCombinedStructure();
 		combinedQuery.add(q);
 		combinedQuery.add(datasetQuery);
 		combinedQuery.setCombine_queries(COMBINE.AND);
 		return combinedQuery;
+	}
+	
+	protected ISourceDataset getDataset(String key) throws ResourceException {
+		try {
+			int id = Integer.parseInt(Reference.decode(key.toString()));
+			ISourceDataset dataset = new SourceDataset();
+			dataset.setID(id);
+			return dataset;
+		} catch (NumberFormatException x) {
+			if (key.startsWith(DatasetStructuresResource.QR_PREFIX)) {
+				key = key.substring(DatasetStructuresResource.QR_PREFIX.length());
+				try {
+					int queryResultsID = Integer.parseInt(key.toString());
+					ISourceDataset dataset = new AbstractDataset();
+					dataset.setID(queryResultsID);
+					return dataset;
+				} catch (NumberFormatException xx) {
+					throw new InvalidResourceIDException(key);
+				}
+			}
+		} 
+		throw new InvalidResourceIDException(key);
 	}
 }

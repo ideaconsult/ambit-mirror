@@ -3,6 +3,8 @@ package ambit2.db.search.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -14,13 +16,19 @@ import ambit2.db.search.QueryParam;
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
-public class QueryStructureByID extends AbstractStructureQuery<String,IStructureRecord,NumberCondition> { 
+public class QueryStructureByID extends AbstractStructureQuery<ISourceDataset,IStructureRecord,NumberCondition> { 
 	/**
      * 
      */
     private static final long serialVersionUID = -2227075383236154179L;
     protected IStructureRecord maxValue = null;
 	public static final String sqlField="select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,? as metric,? as text from structure where %s %s %s order by idchemical,preference,idstructure";
+	public static final String sqlDataset=
+		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,? as metric,? as text from structure\n" +
+		"join struc_dataset using(idstructure) where %s %s %s and id_srcdataset=? order by idchemical,preference,idstructure";
+	public static final String sqlQuery=
+		"select ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected,? as metric,? as text from structure\n" +
+		"join query_results q using(idstructure) where %s %s %s and q.idquery=? order by structure.idchemical,preference,idstructure";
 	protected int metric = 1;
 	protected String text = null;
 	public String getText() {
@@ -37,6 +45,8 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 	}
 	
 	public QueryStructureByID() {
+		super();
+		setFieldname(null);
 		setCondition(NumberCondition.getInstance("="));
 		setPageSize(1);
 		setPage(0);
@@ -70,9 +80,13 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 		setCondition(NumberCondition.getInstance(NumberCondition.between));
 	}		
 	public String getSQL() throws AmbitException {
-		
-		return String.format(sqlField, 
-					isChemicalsOnly()?"idchemical":"idstructure",
+		String sql = sqlField;
+		if ((getFieldname()!=null) && (getFieldname().getID()>0)) {
+			if (getFieldname() instanceof SourceDataset) sql = sqlDataset;
+			else sql = sqlQuery;
+		}
+		return String.format(sql, 
+					isChemicalsOnly()?"structure.idchemical":"idstructure",
 					getCondition(),
 					NumberCondition.between.equals(getCondition().getSQL())?" ? and ?":"?"
 					  );
@@ -88,6 +102,9 @@ public class QueryStructureByID extends AbstractStructureQuery<String,IStructure
 		params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getValue().getIdchemical():getValue().getIdstructure()));
 		if (NumberCondition.between.equals(getCondition().getSQL())) 
 			params.add(new QueryParam<Integer>(Integer.class, isChemicalsOnly()?getMaxValue().getIdchemical():getMaxValue().getIdstructure()));
+		
+		if ((getFieldname()!=null) && (getFieldname().getID()>0))
+			params.add(new QueryParam<Integer>(Integer.class,getFieldname().getID()));
 		return params;
 	}
 
