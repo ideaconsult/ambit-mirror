@@ -10,12 +10,12 @@ import ambit2.rest.routers.misc.DataEntryRouter;
 
 public class DatasetsRouter extends MyRouter {
 
-	public DatasetsRouter(Context context,DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
+	public DatasetsRouter(Context context,CompoundInDatasetRouter cmpdRouter, DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
 		super(context);
 		
 		attachDefault(DatasetsResource.class);
 		attach(String.format("/{%s}",DatasetResource.datasetKey), 
-					new DatasetRouter(getContext(),tupleRouter, smartsRouter,similarityRouter));	
+					new DatasetRouter(getContext(),cmpdRouter,tupleRouter, smartsRouter,similarityRouter));	
 	}
 
 	

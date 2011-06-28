@@ -23,16 +23,16 @@ import ambit2.rest.structure.CompoundResource;
 public class DatasetRouter extends MyRouter {
 	
 	
-	public DatasetRouter(Context context,DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
+	public DatasetRouter(Context context,CompoundInDatasetRouter cmpdRouter, DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
 		super(context);
-		init(tupleRouter, smartsRouter, similarityRouter);
+		init(cmpdRouter,tupleRouter, smartsRouter, similarityRouter);
 	}
 	
 	/**
 	 *  OpenTox dataset
 	 * @return
 	 */
-	protected void init(DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
+	protected void init(CompoundInDatasetRouter cmpdRouter, DataEntryRouter tupleRouter, Router smartsRouter, Router similarityRouter) {
 		attachDefault(DatasetResource.class);
 		//this is for backward compatibility
 
@@ -51,6 +51,7 @@ public class DatasetRouter extends MyRouter {
 		attach(PropertiesByDatasetResource.featuredef,PropertiesByDatasetResource.class);	
 
 
+		//attach(CompoundResource.compoundID, cmpdRouter);
 		attach(CompoundResource.compoundID, DatasetCompoundResource.class);
 		attach(CompoundResource.compound, DatasetStructuresResource.class);
 		

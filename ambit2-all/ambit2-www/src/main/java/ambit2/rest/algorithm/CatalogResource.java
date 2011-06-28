@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-import org.opentox.aa.OTAAParams;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -18,6 +17,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.Reporter;
 import ambit2.rest.AbstractResource;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
@@ -85,7 +85,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
-					new CatalogHTMLReporter<T>(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
+					createHTMLReporter(),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	new CatalogURIReporter<T>(getRequest(),getDocumentation()) {
 				@Override
@@ -98,9 +98,12 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			},MediaType.TEXT_URI_LIST);
 			
 		} else //html 	
-			return new StringConvertor(
-					new CatalogHTMLReporter<T>(getRequest(),getDocumentation()),MediaType.TEXT_HTML);
+			return new StringConvertor(createHTMLReporter(),MediaType.TEXT_HTML);
 		
+	}
+	
+	protected Reporter createHTMLReporter() {
+		return new CatalogHTMLReporter(getRequest(),getDocumentation());
 	}
 	
 	

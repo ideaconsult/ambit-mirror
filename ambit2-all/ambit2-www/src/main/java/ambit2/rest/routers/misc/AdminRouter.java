@@ -3,6 +3,8 @@ package ambit2.rest.routers.misc;
 import org.restlet.Context;
 import org.restlet.routing.Router;
 
+import ambit2.rest.aa.opensso.policy.OpenSSOPoliciesResource;
+import ambit2.rest.aa.opensso.policy.OpenSSOPolicyResource;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DatabaseResource;
 import ambit2.rest.admin.PolicyResource;
@@ -25,6 +27,11 @@ public class AdminRouter extends MyRouter {
 		 * Database info and admin interface to create the database
 		 */
 		attach(String.format("/%s",DatabaseResource.resource),DatabaseResource.class);
+		/**
+		 * Policy creation
+		 */
+		attach(String.format("/%s",OpenSSOPoliciesResource.resource),OpenSSOPoliciesResource.class);
+		attach(String.format("/%s/{%s}",OpenSSOPoliciesResource.resource,OpenSSOPolicyResource.policyKey),OpenSSOPolicyResource.class);
 		
 		/**
 		 * Fingerprint statistincs
@@ -40,7 +47,7 @@ public class AdminRouter extends MyRouter {
 		attach(StatisticsResource.resource,StatisticsResource.class);
 		attach(String.format("%s/{%s}",StatisticsResource.resource,StatisticsResource.resourceKey),
 				StatisticsResource.class);	
-
+		
 
 	}
 

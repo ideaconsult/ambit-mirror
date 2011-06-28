@@ -10,8 +10,10 @@ import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.rest.aa.opensso.policy.OpenSSOPoliciesResource;
 import ambit2.rest.admin.fingerprints.FingerprintResource;
 import ambit2.rest.algorithm.CatalogResource;
+import ambit2.rest.dataset.filtered.StatisticsResource;
 
 public class AdminResource  extends CatalogResource<String> {
 	public static final String resource = "admin";
@@ -20,6 +22,8 @@ public class AdminResource  extends CatalogResource<String> {
 	public AdminResource() {
 		super();
 		topics.add(String.format("%s/%s",resource,DatabaseResource.resource));
+		topics.add(String.format("%s/%s",resource,OpenSSOPoliciesResource.resource));
+		topics.add(String.format("%s%s",resource,StatisticsResource.resource));
 		topics.add(String.format("%s%s/%s",resource,FingerprintResource.resource,FPTable.fp1024.name()));
 		topics.add(String.format("%s%s/%s",resource,FingerprintResource.resource,FPTable.sk1024.name()));
 	}
