@@ -263,7 +263,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			uriReporter.processItem(dataset);
 			
 
-			String paging = "max=10";
+			String paging = "page=0&pagesize=10";
 			if (collapsed) {
 				
 				output.write("<div id=\"div-1b\">");
@@ -344,9 +344,16 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("&nbsp;");	
 				
 				output.write(String.format(
+						"&nbsp;<a href=\"%s%s\" title='Quality labels'>[Qlabels]</a>",
+						w.toString(),
+						"/query/qlabel"));	
+				
+				output.write(String.format(
 						"&nbsp;<a href=\"%s%s\">[Metadata]</a>",
 						w.toString(),
 						"/metadata"));
+				
+			
 				/*
 				if (dataset.getLicenseURI()!= null)
 					output.write(String.format(

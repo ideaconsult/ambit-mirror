@@ -28,6 +28,7 @@ import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
+import ambit2.rest.aa.opensso.policy.CallablePolicyCreator;
 import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.DBCreateAllowedGuard;
@@ -61,7 +62,7 @@ import ambit2.rest.routers.misc.ChartRouter;
 import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.routers.misc.DepictDemoRouter;
 import ambit2.rest.routers.opentox.AlgorithmRouter;
-import ambit2.rest.routers.opentox.CompoundRouter;
+import ambit2.rest.routers.opentox.CompoundInDatasetRouter;
 import ambit2.rest.routers.opentox.CompoundsRouter;
 import ambit2.rest.routers.opentox.DatasetsRouter;
 import ambit2.rest.routers.opentox.FeaturesRouter;
@@ -72,6 +73,7 @@ import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
+import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
@@ -183,7 +185,9 @@ router.attach(String.format("/%s",AdminResource.resource),createProtectedResourc
 		
 		router.attach(DatasetsResource.datasets, createProtectedResource(allDatasetsRouter,"datasets"));		
 
-		Router datasetRouter = new DatasetsRouter(getContext(),tupleRouter, smartsRouter, similarityRouter);
+		//can reuse CompoundRouter from above
+		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter, tupleRouter, smartsRouter);
+		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, tupleRouter, smartsRouter, similarityRouter);
 		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
 	
 
@@ -362,13 +366,15 @@ router.attach(String.format("/%s",AdminResource.resource),createProtectedResourc
 
 	protected TaskStorage<String> createTaskStorage() {
 		return new TaskStorage<String>(getName(),getLogger()) {
+			
+			
 			@Override
-			protected Task<TaskResult, String> createTask(String user) {
-
-				return new PolicyProtectedTask(user) {
+			protected Task<TaskResult, String> createTask(String user,ICallableTask callable) {
+				
+				return new PolicyProtectedTask(user,!(callable instanceof CallablePolicyCreator)) {
 					@Override
 					public synchronized void setPolicy() throws Exception {
-							//skip policy for now
+
 						super.setPolicy();
 					}
 				};

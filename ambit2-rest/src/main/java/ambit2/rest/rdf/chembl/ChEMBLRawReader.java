@@ -39,12 +39,12 @@ public class ChEMBLRawReader implements IRawReader<IStructureRecord>{
 	
 	public static final String sparqlEndpoint = "http://rdf.farmbio.uu.se/chembl/sparql";
 	public final String sparql = 
-		"PREFIX  chembl:<http://rdf.farmbio.uu.se/chembl/onto/#>\n"+
+		"PREFIX  chembl:<http://pele.farmbio.uu.se/chembl/onto/#>\n"+
 		"PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
 		"PREFIX bo:<http://www.blueobelisk.org/chemistryblogs/>\n"+
 		"select ?forMolecule ?SMILES ?Activity ?Assay ?Target ?standardValue ?standardUnits ?activityType ?relation ?classL2 ?classL3 ?classL4 ?classL5 where\n"+ 
 		"{\n"+
-		"?forMolecule a chembl:Compound.\n"+
+		"?forMolecule a chembl:SmallMolecule.\n"+
 		"?forMolecule bo:smiles ?SMILES.\n"+
 		"?Activity chembl:forMolecule ?forMolecule.\n"+
 		"?Activity a chembl:Activity.\n"+

@@ -14,12 +14,20 @@ public class PolicyProtectedTask extends Task<TaskResult, String> {
 	 * 
 	 */
 	private static final long serialVersionUID = -5631652362392618557L;
-
-	public PolicyProtectedTask(String user) {
+	protected  boolean autocreatePolicy = true;
+	/**
+	 * 
+	 * @param user
+	 * @param autocreatePolicy  Used to avoid creating policy for the policy itself by 
+	 * POST /admin/policy
+	 */
+	public PolicyProtectedTask(String user, boolean autocreatePolicy) {
 		super(user);	
+		this.autocreatePolicy = autocreatePolicy;
 	}
 	@Override
 	public synchronized void setPolicy() throws Exception {
+		if (!autocreatePolicy)  return; 
 		if (!getUri().isNewResource()) return;
 		OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
 		
