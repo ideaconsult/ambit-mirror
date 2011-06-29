@@ -1,7 +1,6 @@
 package ambit2.rest.model;
 
 import org.opentox.rdf.OT;
-import org.opentox.rdf.OT.OTClass;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -84,7 +83,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		readProperties(new Reference(String.format("%s/dependent",uriReporter.getURI(item))), 
 					OT.OTProperty.dependentVariables.createProperty(getJenaModel()), model);
 		readProperties(new Reference(String.format("%s/predicted",uriReporter.getURI(item))), 
-					OT.OTProperty.predictedVariables.createProperty(getJenaModel()), model,OTClass.OT.OTClass.ModelPredictionFeature);
+					OT.OTProperty.predictedVariables.createProperty(getJenaModel()), model,OT.OTClass.ModelPredictionFeature);
 		
 		/*
 		Template t = item.getPredictors();
