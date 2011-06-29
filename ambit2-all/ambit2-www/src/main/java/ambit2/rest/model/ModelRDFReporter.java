@@ -1,6 +1,7 @@
 package ambit2.rest.model;
 
 import org.opentox.rdf.OT;
+import org.opentox.rdf.OT.OTClass;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -64,9 +65,9 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 				OT.OTClass.Model.getOntClass(getJenaModel()));
 		model.addProperty(DC.title, item.getName());
 
-		model.addProperty(DC.creator,"N/A");
-		model.addProperty(DC.date,"N/A");
-		model.addProperty(DC.format,"N/A");
+		//model.addProperty(DC.creator,"N/A");
+		//model.addProperty(DC.date,"N/A");
+		//model.addProperty(DC.format,"N/A");
 		
 		Individual algorithm = getJenaModel().createIndividual(item.getAlgorithm(),
 				OT.OTClass.Algorithm.getOntClass(getJenaModel()));
@@ -83,7 +84,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		readProperties(new Reference(String.format("%s/dependent",uriReporter.getURI(item))), 
 					OT.OTProperty.dependentVariables.createProperty(getJenaModel()), model);
 		readProperties(new Reference(String.format("%s/predicted",uriReporter.getURI(item))), 
-					OT.OTProperty.predictedVariables.createProperty(getJenaModel()), model);
+					OT.OTProperty.predictedVariables.createProperty(getJenaModel()), model,OTClass.T.OTClass.ModelPredictionFeature);
 		
 		/*
 		Template t = item.getPredictors();
@@ -116,6 +117,9 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 		return model;
 	}
 	protected void readProperties(Reference reference, com.hp.hpl.jena.rdf.model.Property predicate, Individual model) {
+		readProperties(reference, predicate, model,OT.OTClass.Feature);
+	}
+	protected void readProperties(Reference reference, com.hp.hpl.jena.rdf.model.Property predicate, Individual model, OT.OTClass featureclass) {
 		RDFPropertyIterator reader = null;
 		try {
 			reader = new RDFPropertyIterator(reference);
@@ -123,7 +127,7 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 			while (reader.hasNext()) {
 				Property property = reader.next();
 				Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(property),
-						OT.OTClass.Feature.getOntClass(getJenaModel()));
+						featureclass.getOntClass(getJenaModel()));
 				model.addProperty(predicate, feature);				
 			}
 
