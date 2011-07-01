@@ -99,6 +99,9 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		if ((uri.indexOf("http://")<0) && (uri.indexOf("https://")<0)) {
 			Individual source  = null;
 			
+			//catch all 
+			if (uri.indexOf("/model/")>0) 
+				feature.addOntClass(OT.OTClass.ModelPredictionFeature.getOntClass(jenaModel));			
 			
 			if (_type.Algorithm.equals(item.getReference().getType())) {
 				uri = String.format("%s/algorithm/%s",uriReporter.getBaseReference(),Reference.encode(uri));
@@ -122,10 +125,12 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), uri);
 			}
 			feature.addProperty(DC.creator, item.getReference().getURL());
+
 		}  else {
 			feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), jenaModel.createResource(uri));
 			feature.addProperty(DC.creator, item.getReference().getURL());
 		}
+		
 
 		return feature;
 	}	
