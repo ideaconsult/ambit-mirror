@@ -10,8 +10,10 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByQuality;
@@ -64,17 +66,20 @@ public class QLabelQueryResource   extends StructureQueryResource<IQueryRetrieva
 		if (id != null) try {
 
 			datasetID = Integer.parseInt(id.toString());
-			QueryDatasetByID scope = new QueryDatasetByID();
-			scope.setValue(new Integer(Reference.decode(id.toString())));
-			
-			QueryCombinedStructure combined = new QueryCombinedStructure();
-			combined.add(q);
-			combined.setScope(scope);
-			return combined;
+			SourceDataset dataset = new SourceDataset();
+			dataset.setId(datasetID);
+			q.setFieldname(dataset);
+			return q;
 		} catch (Exception x) {
-			
+			if (id.toString().startsWith("R")) {
+				queryResultsID = Integer.parseInt(id.toString().substring(1));
+				StoredQuery dataset = new StoredQuery();
+				dataset.setId(queryResultsID);
+				q.setFieldname(dataset);
+				return q;
+			} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid dataset id");
 		} 
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No dataset !");
 	}
-
+ 
 }

@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
 import ambit2.base.interfaces.IStructureRecord;
@@ -17,7 +18,7 @@ import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
 
 public class QueryStructureByQualityEditor extends
-		QueryEditor<IStructureRecord, QLabel, StringCondition,IStructureRecord,QueryStructureByQuality> {
+		QueryEditor<ISourceDataset, QLabel, StringCondition,IStructureRecord,QueryStructureByQuality> {
 
 	/**
 	 * 
