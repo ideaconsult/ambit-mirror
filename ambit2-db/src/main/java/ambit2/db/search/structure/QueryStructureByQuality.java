@@ -6,27 +6,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.AmbitUser;
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class QueryStructureByQuality extends AbstractStructureQuery<IStructureRecord, QLabel, StringCondition> {
+public class QueryStructureByQuality extends AbstractStructureQuery<ISourceDataset, QLabel, StringCondition> {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3232148472829083139L;
 	public final static String sql = 
-		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected," +
+		"select ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected," +
 		"cast(quality_structure.label as unsigned) as metric,quality_structure.label as text from structure " +
-		"left join quality_structure using(idstructure) ";
+		"%s"+
+		"left join quality_structure using(idstructure)\n %s %s";
 
 	public final static String where = " where quality_structure.label %s ?";
 	public final static String where_null = " where quality_structure.label is null";
 
+	protected final static String join_struc_dataset = "join struc_dataset using(idstructure)\n";
+	protected final static String where_struc_dataset = "and id_srcdataset = ?\n";
+	
+	protected final static String join_struc_query = "join query_results using(idstructure)\n";
+	protected final static String where_struc_query = "and idquery = ?\n";
+	
 	public QueryStructureByQuality() {
 		setValue(null);
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
@@ -40,10 +48,23 @@ public class QueryStructureByQuality extends AbstractStructureQuery<IStructureRe
 		setValue(new QLabel(label));
 	}	
 	public String getSQL() throws AmbitException {
+		String join = "";
+		String where_dataset = null;
+		if ((getFieldname()!=null) && (getFieldname().getID()>0)) {
+			if (getFieldname() instanceof SourceDataset) {
+				join = join_struc_dataset;
+				where_dataset = where_struc_dataset;
+			}
+			else {
+				join = join_struc_query;
+				where_dataset = where_struc_query;
+			}
+		};
+		
 		if (getValue()==null)
-			return sql + where_null;
+			return String.format(sql,join, where_null,"");
 		else
-			return String.format(sql+where,getCondition());
+			return String.format(sql,join, String.format(where,getCondition()),where_dataset==null?"":where_dataset);
 	}
 
 	public List<QueryParam> getParameters() throws AmbitException {
@@ -53,6 +74,11 @@ public class QueryStructureByQuality extends AbstractStructureQuery<IStructureRe
 		
 		if (getValue()!=null)
 			params.add(new QueryParam<String>(String.class, getValue().getLabel().toString()));
+		
+		if ((getFieldname()!=null) && (getFieldname().getID()>0)) {
+			params.add(new QueryParam<Integer>(Integer.class, getFieldname().getID()));
+		}
+				
 		return params;
 	}
 	@Override  

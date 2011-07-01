@@ -7,9 +7,11 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.QLabel;
 import ambit2.base.data.QLabel.QUALITY;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStructureByQuality;
 
 public class QueryStructurebyQualityTest extends QueryTest<QueryStructureByQuality> {
@@ -18,6 +20,9 @@ public class QueryStructurebyQualityTest extends QueryTest<QueryStructureByQuali
 	protected QueryStructureByQuality createQuery() throws Exception {
 		QueryStructureByQuality q = new QueryStructureByQuality();
 		q.setValue(new QLabel(QUALITY.OK));
+		ISourceDataset d = new StoredQuery(2);
+		d.setID(2);
+		q.setFieldname(d);
 		return q;
 	}
 

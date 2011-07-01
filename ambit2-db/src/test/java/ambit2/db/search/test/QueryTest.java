@@ -46,7 +46,7 @@ public abstract class QueryTest<T extends IQueryObject> extends DbUnitTest {
 			Assert.assertNotNull(rs);
 			verify(query,rs);
 		} finally {
-			rs.close();
+			if (rs != null) rs.close();
 			c.close();
 		}
 	}
