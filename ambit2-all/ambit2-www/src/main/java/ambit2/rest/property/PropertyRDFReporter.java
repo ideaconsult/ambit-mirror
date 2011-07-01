@@ -95,13 +95,15 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 		//somewhat awkward, but title is the unique field in the catalog_references table
 		
 		uri = item.getTitle();
+		
+		//catch all 
+		if (uri.indexOf("/model/")>0) 
+			feature.addOntClass(OT.OTClass.ModelPredictionFeature.getOntClass(jenaModel));	
+		
 		//drop using /reference objects
 		if ((uri.indexOf("http://")<0) && (uri.indexOf("https://")<0)) {
 			Individual source  = null;
-			
-			//catch all 
-			if (uri.indexOf("/model/")>0) 
-				feature.addOntClass(OT.OTClass.ModelPredictionFeature.getOntClass(jenaModel));			
+		
 			
 			if (_type.Algorithm.equals(item.getReference().getType())) {
 				uri = String.format("%s/algorithm/%s",uriReporter.getBaseReference(),Reference.encode(uri));
