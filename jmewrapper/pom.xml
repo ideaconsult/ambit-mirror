@@ -3,7 +3,17 @@
   <groupId>net.ideaconsult</groupId>
   <artifactId>jmewrapper</artifactId>
   <name>JME Applet wrapper</name>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
+  <repositories>
+    	<repository>
+  		<id>ambit-plovdiv</id>
+  		<name>ambit-plovdiv</name>
+  		<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
+  		<snapshots>
+  			<enabled>false</enabled>
+  		</snapshots>
+  	</repository>
+  </repositories>
   <dependencies>
   	<dependency>
   		<groupId>jme</groupId>

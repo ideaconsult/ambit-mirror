@@ -62,17 +62,29 @@ public class JMEAppletWrapper extends JME {
 		super.init();
 	}
 	
+	
+	@Override
+	public boolean keyUp(Event evt, int key) {
+		boolean ok = super.keyUp(evt, key);
+		vaadinUpdateMol();
+		return ok;
+	}
 	@Override
 	public boolean mouseUp(Event arg0, int arg1, int arg2) {
+
+		boolean ok = super.mouseUp(arg0, arg1, arg2);
+		vaadinUpdateMol();
+		return ok;
+	}
+	
+	public void vaadinUpdateMol() {
 		//String smiles = smiles();
 		String molFile = molFile();
 		molFile = molFile.replace("\n", "|");
-		System.out.println(molFile);
-		boolean ok = super.mouseUp(arg0, arg1, arg2);
 		//try {vaadinUpdateVariable(commands.smiles.toString(),smiles , true);} catch (Exception x) {x.printStackTrace();}
 		try {vaadinUpdateVariable(commands.molFile.toString(),molFile.replace("\n\r", "|") , true);} catch (Exception x) {x.printStackTrace();}
-		return ok;
-	}
+	}	
+
 	  /**
      * Set the id of the applet in DOM.
      *
