@@ -1,6 +1,7 @@
 package ambit2.rest.model;
 
 import org.opentox.rdf.OT;
+import org.opentox.rdf.OT.OTClass;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -127,7 +128,8 @@ public class ModelRDFReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 				Property property = reader.next();
 				Individual feature = getJenaModel().createIndividual(propertyReporter.getURI(property),
 						featureclass.getOntClass(getJenaModel()));
-				model.addProperty(predicate, feature);				
+				model.addProperty(predicate, feature);		
+				feature.addOntClass(OT.OTClass.Feature.getOntClass(getJenaModel()));
 			}
 
 		} catch (Exception x) {

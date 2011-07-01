@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.db.model.ModelQueryResults;
@@ -24,7 +25,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 		q.setParameters("-M");
 		q.setPredictors(new Template("New template"));
 		q.setDependent(new Template("BCF"));
-		q.setPredicted(new Template("BCF"));
+		q.setPredicted(new PredictedVarsTemplate("BCF"));
 		q.setCreator("test-user");
 		return new CreateModel(q);
 	}
@@ -91,7 +92,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 		t2.add(new Property("New dependent"));
 		q.setDependent(t2);
 		
-		Template t3 = new Template("Predicted template");
+		PredictedVarsTemplate t3 = new PredictedVarsTemplate("Predicted template");
 		t3.add(new Property("New predicted"));
 		q.setPredicted(t3);		
 		

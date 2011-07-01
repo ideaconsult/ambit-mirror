@@ -2,6 +2,7 @@ package ambit2.db.update.model;
 
 import java.sql.ResultSet;
 
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.model.ModelQueryResults;
@@ -158,7 +159,7 @@ public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, Strin
 			idtemplate = rs.getObject(8);
 			if (idtemplate==null) q.setDependent(null);
 			else {
-				Template t = new Template(rs.getString(9));
+				PredictedVarsTemplate t = new PredictedVarsTemplate(rs.getString(9));
 				t.setId(rs.getInt(8));
 				q.setPredicted(t);
 			}
