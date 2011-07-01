@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<DRAGON version="6.0.9" script_version="1" generation_date="%s">
+  <OPTIONS>
+    <SaveLayout value="true"/>
+    <ShowWorksheet value="false"/>
+    <Decimal_Separator value="."/>
+    <Missing_String value="NaN"/>
+    <DefaultMolFormat value="1"/>
+    <RejectUnusualValence value="true"/>
+    <Add2DHydrogens value="false"/>
+    <LogPathWalk value="true"/>
+    <LogEdge value="true"/>
+    <Weights>
+      <weight name="Mass"/>
+      <weight name="VdWVolume"/>
+      <weight name="Electronegativity"/>
+      <weight name="Polarizability"/>
+      <weight name="Ionization"/>
+      <weight name="I-State"/>
+    </Weights>
+    <SaveOnlyData value="false"/>
+    <SaveLabelsOnSeparateFile value="false"/>
+    <SaveFormatBlock value="%b - %n.txt"/>
+    <SaveFormatSubBlock value="%b-%s - %n - %m.txt"/>
+    <SaveExcludeMisVal value="false"/>
+    <SaveExcludeAllMisVal value="false"/>
+    <SaveExcludeConst value="false"/>
+    <SaveExcludeNearConst value="false"/>
+    <SaveExcludeStdDev value="false"/>
+    <SaveStdDevThreshold value="0.0001"/>
+    <SaveExcludeCorrelated value="false"/>
+    <SaveCorrThreshold value="0.95"/>
+    <SaveExclusionOptionsToVariables value="false"/>
+    <SaveExcludeMisMolecules value="false"/>
+    <SaveExcludeRejectedMolecules value="false"/>
+  </OPTIONS>
+  <DESCRIPTORS>
+    <block id="1" SelectAll="true"/>
+    <block id="2" SelectAll="true"/>
+    <block id="3" SelectAll="true"/>
+    <block id="4" SelectAll="true"/>
+    <block id="5" SelectAll="true"/>
+    <block id="6" SelectAll="true"/>
+    <block id="7" SelectAll="true"/>
+    <block id="8" SelectAll="true"/>
+    <block id="9" SelectAll="true"/>
+    <block id="10" SelectAll="true"/>
+    <block id="11" SelectAll="true"/>
+    <block id="12" SelectAll="true"/>
+    <block id="13" SelectAll="true"/>
+    <block id="14" SelectAll="true"/>
+    <block id="15" SelectAll="true"/>
+    <block id="16" SelectAll="true"/>
+    <block id="17" SelectAll="true"/>
+    <block id="18" SelectAll="true"/>
+    <block id="19" SelectAll="true"/>
+    <block id="20" SelectAll="true"/>
+    <block id="21" SelectAll="true"/>
+    <block id="22" SelectAll="true"/>
+    <block id="23" SelectAll="true"/>
+    <block id="24" SelectAll="true"/>
+    <block id="25" SelectAll="true"/>
+    <block id="26" SelectAll="true"/>
+    <block id="27" SelectAll="true"/>
+    <block id="28" SelectAll="true"/>
+    <block id="29" SelectAll="true"/>
+  </DESCRIPTORS>
+  <MOLFILES>
+    <molInput value="file"/>
+    <molFile value="%s"/>
+  </MOLFILES>
+  <OUTPUT>
+    <SaveStdOut value="false"/>
+    <SaveProject value="false"/>
+    <SaveFile value="true"/>
+    <SaveType value="singlefile"/>
+    <SaveFilePath value="%s"/>
+    <logMode value="none"/>
+  </OUTPUT>
+</DRAGON>
