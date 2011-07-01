@@ -4,6 +4,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
@@ -44,7 +45,7 @@ public class OptimizerModelBuilder extends SimpleModelBuilder {
 			Template dependent = new Template("Empty");
 			mr.setDependent(dependent);
 			
-			Template predicted = new Template("Empty");
+			PredictedVarsTemplate predicted = new PredictedVarsTemplate("Empty");
 			mr.setPredicted(predicted);
 			
 			return mr;			

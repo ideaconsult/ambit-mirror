@@ -6,9 +6,10 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ILiteratureEntry._type;
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
@@ -66,9 +67,8 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 		mr.setPredictors(algorithm.getInput());
 		return mr;
 	}
-	protected Template createPredictedTemplate(Algorithm algorithm) throws Exception {
-		Template predicted = new Template();
-		predicted.setName(String.format("%s",algorithm.getName()));
+	protected PredictedVarsTemplate createPredictedTemplate(Algorithm algorithm) throws Exception {
+		PredictedVarsTemplate predicted = new PredictedVarsTemplate(String.format("%s",algorithm.getName()));
 		return predicted;
 	}
 	public ModelQueryResults process(Algorithm algorithm) throws AmbitException {
@@ -81,7 +81,7 @@ public class SimpleModelBuilder extends ModelBuilder<Object,Algorithm, ModelQuer
 			Template dependent = new Template("Empty");
 			mr.setDependent(dependent);
 			
-			Template predicted = createPredictedTemplate(algorithm);
+			PredictedVarsTemplate predicted = createPredictedTemplate(algorithm);
 			mr.setPredicted(predicted);
 			
 			for (Property property:p) {

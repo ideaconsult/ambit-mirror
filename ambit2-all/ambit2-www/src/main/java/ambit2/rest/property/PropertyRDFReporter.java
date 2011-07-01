@@ -108,6 +108,7 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 				uri = String.format("%s/model/%s",uriReporter.getBaseReference(),Reference.encode(uri));
 				source = jenaModel.createIndividual(uri,OT.OTClass.Model.createOntClass(jenaModel));
 				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);
+				feature.addOntClass(OT.OTClass.ModelPredictionFeature.getOntClass(jenaModel));
 			} else if (_type.Feature.equals(item.getReference().getType())) {
 				uri = String.format("%s/feature/%s",uriReporter.getBaseReference(),Reference.encode(uri));
 				source = jenaModel.createIndividual(uri,OT.OTClass.Feature.createOntClass(jenaModel));

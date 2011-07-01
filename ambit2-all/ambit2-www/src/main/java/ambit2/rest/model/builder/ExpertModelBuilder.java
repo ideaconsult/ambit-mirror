@@ -7,8 +7,8 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
-import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.db.model.ModelQueryResults;
@@ -80,9 +80,8 @@ public class  ExpertModelBuilder extends SimpleModelBuilder {
 		return p;
 	}
 	
-	protected Template createPredictedTemplate(Algorithm algorithm) throws Exception {
-		Template predicted = new Template();
-		predicted.setName(String.format("%s",getName(algorithm)));
+	protected PredictedVarsTemplate createPredictedTemplate(Algorithm algorithm) throws Exception {
+		PredictedVarsTemplate predicted = new PredictedVarsTemplate(String.format("%s",getName(algorithm)));
 		return predicted;
 	}
 }

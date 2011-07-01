@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
@@ -47,7 +47,7 @@ public class SMSDModelBuilder extends AbstractStructuresModelBuilder<ModelQueryR
 			for (Property key : record.getProperties()) {
 				if (getTrainingData().getPredicted()==null) 
 					getTrainingData().setPredicted(
-							new Template(String.format("%s#predicted", getTrainingData().getName()))
+							new PredictedVarsTemplate(String.format("%s#predicted", getTrainingData().getName()))
 							);
 				getTrainingData().getPredicted().add(key);
 			}
@@ -71,7 +71,8 @@ public class SMSDModelBuilder extends AbstractStructuresModelBuilder<ModelQueryR
 			Template empty = new Template("Empty");
 			m.setPredictors(empty);
 			m.setDependent(empty);
-			m.setPredicted(empty);
+			PredictedVarsTemplate emptyp = new PredictedVarsTemplate("Empty");
+			m.setPredicted(emptyp);
 			setTrainingData(m);
 		}
 		

@@ -10,9 +10,12 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.opentox.dsl.OTDataset;
+import org.opentox.dsl.OTModel;
 import org.opentox.dsl.OTSuperModel;
+import org.opentox.dsl.task.RemoteTask;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 
@@ -260,22 +263,5 @@ public class ModelResourceTest extends ResourceTest {
 		
 	
 	}	
-	
-	@Test
-	public void testLazarModel() throws Exception {
-		
-		OTSuperModel model = OTSuperModel.model("http://webservices.in-silico.ch/model/367");
-		model.withDatasetService(String.format("http://nina.ideaconsult.net:%d/dataset",port));
-		OTDataset input = OTDataset.dataset(String.format("http://nina.ideaconsult.net:%d/dataset/1",port));
-		input.withDatasetService(String.format("http://nina.ideaconsult.net:%d/dataset",port));
-		OTDataset result = model.process(input);
-		//http://webservices.in-silico.ch/dataset/1668
-		Assert.assertTrue(result.getUri().toString().startsWith("http://webservices.in-silico.ch/dataset"));
-		Assert.fail("parse the dataset");
-		
-		
-	}
 
-
-		
 }

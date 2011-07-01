@@ -20,10 +20,11 @@ import weka.clusterers.Clusterer;
 import weka.core.Instances;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
@@ -152,7 +153,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 		
 		Template predictors = null;
 		Template dependent = null;
-		Template predicted = null;
+		PredictedVarsTemplate predicted = null;
 		//System.out.println("Build");
 		
 		if (clusterer!= null) {
@@ -161,7 +162,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			} catch (Exception x) {
 				throw new AmbitException(x);
 			}
-			predicted = new Template(name+"#Predicted");
+			predicted = new PredictedVarsTemplate(name+"#Predicted");
 			Property property = new Property("Cluster",prediction);
 			property.setNominal(true);
 			predicted.add(property);
@@ -193,7 +194,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			Property property = createPropertyFromReference(new Reference(newInstances.attribute(newInstances.classIndex()).name()), entry); 
 			dependent.add(property);
 			
-			predicted = new Template(name+"#Predicted");
+			predicted = new PredictedVarsTemplate(name+"#Predicted");
 			Property predictedProperty = new Property(property.getName(),prediction); 
 			predictedProperty.setLabel(property.getLabel());
 			predictedProperty.setUnits(property.getUnits());
@@ -237,7 +238,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 				predictors.add(property);
 			}	
 
-			predicted = new Template(name+"#Predicted");
+			predicted = new PredictedVarsTemplate(name+"#Predicted");
 			for (int i=0; i < newInstances.numAttributes(); i++) {
 				if (newInstances.classIndex()==i) continue;
 				property = createPropertyFromReference(new Reference(String.format("PCA_%d",i+1)), entry);

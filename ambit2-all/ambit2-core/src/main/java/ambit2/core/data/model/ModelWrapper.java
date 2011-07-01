@@ -2,6 +2,7 @@ package ambit2.core.data.model;
 
 import java.io.Serializable;
 
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Template;
 
 
@@ -19,7 +20,7 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	private static final long serialVersionUID = -9217727533985055359L;
 	protected Template predictors;
 	protected Template dependent;
-	protected Template predicted;
+	protected PredictedVarsTemplate predicted;
 	protected String parameters;
 	
 	public String getParameters() {
@@ -34,10 +35,10 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	public void setParameters(String parameters) {
 		this.parameters = parameters;
 	}
-	public Template getPredicted() {
+	public PredictedVarsTemplate getPredicted() {
 		return predicted;
 	}
-	public void setPredicted(Template predicted) {
+	public void setPredicted(PredictedVarsTemplate predicted) {
 		this.predicted = predicted;
 	}
 	protected TrainingInstances instances;

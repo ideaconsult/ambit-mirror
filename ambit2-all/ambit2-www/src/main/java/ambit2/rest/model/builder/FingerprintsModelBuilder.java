@@ -14,10 +14,11 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
@@ -73,13 +74,13 @@ public class FingerprintsModelBuilder extends ModelBuilder<List<BitSet>,Algorith
 		prediction.setType(_type.Model);
 		Template predictors = null;
 		Template dependent = null;
-		Template predicted = null;
+		PredictedVarsTemplate predicted = null;
 		//System.out.println("Build");
 		
 		if (coverage!= null) {
 			coverage.build(instances);
 
-			predicted = new Template(name+"#ApplicabilityDomain");
+			predicted = new PredictedVarsTemplate(name+"#ApplicabilityDomain");
 			Property property = new Property(coverage.getMetricName(),prediction);
 			property.setLabel(String.format("http://www.opentox.org/api/1.1#%s",coverage.getMetricName()));
 			predicted.add(property);
