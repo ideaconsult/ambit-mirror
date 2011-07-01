@@ -236,7 +236,7 @@
 	      <plugin>
 	        <groupId>org.apache.maven.plugins</groupId>
 	        <artifactId>maven-source-plugin</artifactId>
-	            
+ 			<version>2.1.2</version>	            
 	        <executions>
 	          <execution>
 	            <id>attach-sources</id>
@@ -307,6 +307,7 @@
     <!--     
     <module>ambit2-taglibs</module>
      -->
+    <module>ambit2-dragon</module>
   </modules>
   <distributionManagement>
   <!-- 
