@@ -101,20 +101,33 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     		logger.info(toString());
 	        IAtomContainer newmol = shell.runShell(arg0);
 	        
-	        r = new DoubleArrayResult(newmol.getProperties().size());
+	        r = new DoubleArrayResult(newmol.getProperties().size()-2); //excluding No. and NAME columns
 	        Iterator keys = newmol.getProperties().keySet().iterator();
-	        descriptorNames = new String[newmol.getProperties().size()];
+	        descriptorNames = new String[newmol.getProperties().size()-2];
 	        int i=0;
 	        while (keys.hasNext()) {
 	        	Object key = keys.next();
+	        	if ("NAME".equals(key)) continue;
+	        	if ("No.".equals(key)) continue;
+	        	if ("".equals(key.toString())) continue;
 	        	Object value = newmol.getProperty(key);
-	            r.add(value instanceof Double?(Double) value:Double.NaN);
-	            descriptorNames[i] = key.toString();
+	        	try {
+	        		if (value instanceof Number)
+	        			r.add(((Number)value).doubleValue());
+	        		else if ("NaN".equals(value)) r.add(Double.NaN);
+	        		else 
+	        			r.add(Double.parseDouble(value.toString()));
+	        	} catch (Exception x) {
+	        		x.printStackTrace();
+	        		r.add(Double.NaN);
+	        	}
+	            descriptorNames[i] = key.toString().trim();
 	            i++;
 	        }
 	        return new DescriptorValue(getSpecification(),
 	                getParameterNames(),getParameters(),r,descriptorNames);
     	} catch (Exception x) {
+    		
     		/*
     		Throwable cause = x;
     		while (cause != null) {
@@ -128,17 +141,7 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
         
     }
     public String[] getDescriptorNames() {
-    	/*
-    	return new String[] {
-    			SOMEShell.SOME_RESULT,
-        		someindex.aliphaticHydroxylation.name(),
-        		someindex.aromaticHydroxylation.name(),
-        		someindex.NDealkylation.name(),
-        		someindex.NOxidation.name(),
-        		someindex.ODealkylation.name(),
-        		someindex.SOxidation.name()
-    	};
-    	*/
+
     	return null;
     }
     public IDescriptorResult getDescriptorResultType() {

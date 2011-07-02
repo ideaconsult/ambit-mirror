@@ -40,7 +40,7 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	public static final String DRAGON_EXE = "dragon6shell";
 	public static final String DRAGON_HOME = "DRAGON_HOME";
 
-    protected String[] inFile = {"allblocks.drs","dragon_input.sdf"};
+    protected String[] inFile = {"allblocks.drs","dragon_input.mol"};
     protected String[] outFile = {"dragon_output.txt"};
 
     @Override
@@ -50,9 +50,9 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	@Override
 	protected void initialize() throws ShellException {
 		super.initialize();
-		String some_home = System.getenv(DRAGON_HOME);
-		File exe = new File(String.format("%s/%s", some_home,DRAGON_EXE));
-		File winexe = new File(String.format("%s/%s.exe", some_home,DRAGON_EXE));
+		String dragon_home = System.getenv(DRAGON_HOME);
+		File exe = new File(String.format("%s/%s", dragon_home,DRAGON_EXE));
+		File winexe = new File(String.format("%s/%s.exe", dragon_home,DRAGON_EXE));
 		
 		if (!exe.exists() && !winexe.exists()) {
 			throw new ShellException(this,
@@ -63,7 +63,7 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 		addExecutable(CommandShell.os_FreeBSD, exe.getAbsolutePath(),null);
 		addExecutable(CommandShell.os_LINUX, exe.getAbsolutePath(),null);
 		setInputFile("allblocks.drs");
-		setOutputFile("someinput.some");		
+		setOutputFile("dragon_output.txt");		
 	}	
 	@Override
 	protected synchronized IAtomContainer transform_input(IAtomContainer mol) throws ShellException {
@@ -141,6 +141,7 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	@Override
 	protected synchronized IAtomContainer parseOutput(String mopac_path, IAtomContainer mol)
 			throws ShellException {
+		mol.getProperties().clear();
         for (int i=0; i< outFile.length;i++) {
             String fname = mopac_path+"/" + outFile[i]; 
             File f = new File(fname);
@@ -155,7 +156,7 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
             		break;
             	}
                 re.close();
-                f.delete();
+               // f.delete();
             } catch (Exception x) {
                 logger.debug("<error name=\""+ x.getMessage() + "\"/>");
                 logger.debug("</outfile>");
@@ -187,7 +188,7 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	}
 	@Override
 	public String toString() {
-		return "SOME";
+		return "DRAGON6";
 	}
 	@Override
 	public synchronized IAtomContainer process(IAtomContainer target)
