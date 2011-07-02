@@ -28,7 +28,9 @@
  */
 package ambit2.dragon;
 
-import java.util.Iterator;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -54,8 +56,8 @@ import ambit2.core.data.StringDescriptorResultType;
 public class DescriptorDragonShell implements IMolecularDescriptor  {
     protected static AmbitLogger logger = new  AmbitLogger(DescriptorDragonShell.class);
     protected DragonShell shell;
-   
-
+	protected String[] descriptorNames;
+	
     /**
      * 
      */
@@ -63,7 +65,28 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     public DescriptorDragonShell() throws ShellException {
         super();
         shell = new DragonShell();
-        
+        descriptorNames = new String[4885];
+
+        InputStream in =null;
+		try {
+			in = DescriptorDragonShell.class.getClassLoader().getResourceAsStream("ambit2/dragon/descriptors.txt");
+	      	BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+	        String line;
+	        int i=0;
+	        while ((line = reader.readLine())!=null) {
+	        	i++;
+	        	if (i==1) continue;
+	        	String[] columns = line.split("\t");
+	        	descriptorNames[i-2] = String.format("%s.%s.%s",columns[3],columns[4],columns[1]);
+	        }
+	        reader.close();
+		} catch (Exception x) {
+			
+		} finally {
+			try {
+				in.close();
+			} catch (Exception x) {}
+		}
     }
 
     public String toString() {
@@ -95,22 +118,18 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     @Override
     public DescriptorValue calculate(IAtomContainer arg0) {
     	DoubleArrayResult r = null;
-    	String[] descriptorNames = null;
+    	
     	try {
     		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
     		logger.info(toString());
 	        IAtomContainer newmol = shell.runShell(arg0);
 	        
-	        r = new DoubleArrayResult(newmol.getProperties().size()-2); //excluding No. and NAME columns
-	        Iterator keys = newmol.getProperties().keySet().iterator();
-	        descriptorNames = new String[newmol.getProperties().size()-2];
-	        int i=0;
-	        while (keys.hasNext()) {
-	        	Object key = keys.next();
-	        	if ("NAME".equals(key)) continue;
-	        	if ("No.".equals(key)) continue;
-	        	if ("".equals(key.toString())) continue;
+	        r = new DoubleArrayResult(descriptorNames.length);
+	       
+	        for (int i=0; i < descriptorNames.length; i++) {
+	        	String key = descriptorNames[i].substring(descriptorNames[i].lastIndexOf(".")+1);
 	        	Object value = newmol.getProperty(key);
+	        	if (value==null) continue;
 	        	try {
 	        		if (value instanceof Number)
 	        			r.add(((Number)value).doubleValue());
@@ -120,21 +139,13 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
 	        	} catch (Exception x) {
 	        		x.printStackTrace();
 	        		r.add(Double.NaN);
-	        	}
-	            descriptorNames[i] = key.toString().trim();
-	            i++;
+	        	}	        	
 	        }
+	        
+	    
 	        return new DescriptorValue(getSpecification(),
 	                getParameterNames(),getParameters(),r,descriptorNames);
     	} catch (Exception x) {
-    		
-    		/*
-    		Throwable cause = x;
-    		while (cause != null) {
-    			if (cause.getCause()==null) throw new CDKException(cause.getMessage());
-    			cause = cause.getCause();
-    		}
-    		*/  
 	        return new DescriptorValue(getSpecification(),
 	                getParameterNames(),getParameters(),r,descriptorNames,x);    		
     	}
@@ -142,7 +153,7 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     }
     public String[] getDescriptorNames() {
 
-    	return null;
+    	return descriptorNames;
     }
     public IDescriptorResult getDescriptorResultType() {
     	return new StringDescriptorResultType();
