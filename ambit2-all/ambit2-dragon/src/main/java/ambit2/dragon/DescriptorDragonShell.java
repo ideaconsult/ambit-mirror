@@ -77,7 +77,7 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
 	        	i++;
 	        	if (i==1) continue;
 	        	String[] columns = line.split("\t");
-	        	descriptorNames[i-2] = String.format("%s.%s.%s",columns[3],columns[4],columns[1]);
+	        	descriptorNames[i-2] = String.format("%s.%s.%s",columns[4],columns[5],columns[1]);
 	        }
 	        reader.close();
 		} catch (Exception x) {
