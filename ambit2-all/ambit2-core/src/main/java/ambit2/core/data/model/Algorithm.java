@@ -1,6 +1,7 @@
 package ambit2.core.data.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.Template;
@@ -189,6 +190,10 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 	}
 	public void setParameters(List<Parameter> parameters) {
 		this.parameters = parameters;
+	}
+	public void addParameter(Parameter param) {
+		if (parameters==null) parameters=new ArrayList<Parameter>();
+		parameters.add(param);
 	}
 
 	

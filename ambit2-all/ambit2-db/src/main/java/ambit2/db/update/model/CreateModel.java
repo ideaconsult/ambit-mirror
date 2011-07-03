@@ -117,8 +117,14 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 		params1.add(new QueryParam<String>(String.class, getObject().getContent()));
 		params1.add(new QueryParam<String>(String.class, getObject().getContentMediaType()));
 		params1.add(new QueryParam<String>(String.class, getObject().getAlgorithm()));
-		params1.add(new QueryParam<String>(String.class, getObject().getParameters()));
-		
+
+		StringBuilder b = null; 
+		String[] params = getObject().getParameters();
+		if (params!=null) {
+			b = new StringBuilder();
+			for (String param: params) {b.append(param);b.append("\t"); }
+		}
+		params1.add(new QueryParam<String>(String.class, b==null?null:b.toString()));		
 		params1.add(new QueryParam<Boolean>(Boolean.class, getObject().isHidden()));
 		//model creator
 		
