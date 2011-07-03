@@ -28,10 +28,6 @@
  */
 package ambit2.dragon;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
@@ -56,8 +52,7 @@ import ambit2.core.data.StringDescriptorResultType;
 public class DescriptorDragonShell implements IMolecularDescriptor  {
     protected static AmbitLogger logger = new  AmbitLogger(DescriptorDragonShell.class);
     protected DragonShell shell;
-	protected String[] descriptorNames;
-	
+    protected String[] descriptorNames;
     /**
      * 
      */
@@ -65,28 +60,7 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     public DescriptorDragonShell() throws ShellException {
         super();
         shell = new DragonShell();
-        descriptorNames = new String[4885];
-
-        InputStream in =null;
-		try {
-			in = DescriptorDragonShell.class.getClassLoader().getResourceAsStream("ambit2/dragon/descriptors.txt");
-	      	BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-	        String line;
-	        int i=0;
-	        while ((line = reader.readLine())!=null) {
-	        	i++;
-	        	if (i==1) continue;
-	        	String[] columns = line.split("\t");
-	        	descriptorNames[i-2] = String.format("%s.%s.%s",columns[4],columns[5],columns[1]);
-	        }
-	        reader.close();
-		} catch (Exception x) {
-			
-		} finally {
-			try {
-				in.close();
-			} catch (Exception x) {}
-		}
+      
     }
 
     public String toString() {
@@ -94,16 +68,17 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     }
     
     public String[] getParameterNames() {
-        return null;
+    	return new String[] {
+    			DragonShell._options.DESCRIPTORS.name()
+    	};
     }
-    /**
-     * TODO blocks, subblocks, descriptors
-     */
     public Object[] getParameters() {
-        return null;
+        return new Object[] {
+        	shell.getDescriptorNames()
+        };
     }
     public Object getParameterType(String arg0) {
-        return "";
+        return String.class;
     }
     public DescriptorSpecification getSpecification() {
         return new DescriptorSpecification(
@@ -112,7 +87,18 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
             "$Id: DescriptorDragonShell.java,v 0.1 2011/06/13 19:15:00 jeliazkova.nina@gmail.com$",
             "http://talete.it");
     };
-    public void setParameters(Object[] arg0) throws CDKException {
+    
+    public void setParameters(Object[] values) throws CDKException {
+    	if ((values==null) || values.length==0 || (values[0]==null)) shell.setDescriptors(null);
+    	else {
+    		for (Object v : values)
+    			if (v.toString().startsWith("-")) continue;
+    			else {
+    				shell.setDescriptors(v.toString().replace("'", "").replace("\"", "").split(","));
+    				break;
+    			}
+    	}
+    	descriptorNames = shell.getDescriptorNames();
     }
     
     @Override
@@ -124,6 +110,7 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     		logger.info(toString());
 	        IAtomContainer newmol = shell.runShell(arg0);
 	        
+	        if (descriptorNames==null) descriptorNames = shell.getDescriptorNames();
 	        r = new DoubleArrayResult(descriptorNames.length);
 	       
 	        for (int i=0; i < descriptorNames.length; i++) {
