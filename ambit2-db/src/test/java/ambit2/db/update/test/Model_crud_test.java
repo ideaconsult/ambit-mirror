@@ -22,7 +22,7 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
 		q.setAlgorithm("http://localhost:8080/algorithm/pka");
 		q.setName("Test model");
 		q.setContent("Nothing");
-		q.setParameters("-M");
+		q.setParameters(new String[] {"-M"});
 		q.setPredictors(new Template("New template"));
 		q.setDependent(new Template("BCF"));
 		q.setPredicted(new PredictedVarsTemplate("BCF"));

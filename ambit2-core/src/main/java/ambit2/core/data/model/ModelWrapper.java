@@ -21,18 +21,13 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	protected Template predictors;
 	protected Template dependent;
 	protected PredictedVarsTemplate predicted;
-	protected String parameters;
+	protected String[] parameters;
 	
-	public String getParameters() {
+	public String[] getParameters() {
 		return parameters;
 	}
+
 	public void setParameters(String[] parameters) {
-		StringBuilder b = new StringBuilder();
-		if (parameters!=null)
-			for (String p:parameters) {b.append(p);b.append('\t');}
-		this.parameters = b.toString();
-	}
-	public void setParameters(String parameters) {
 		this.parameters = parameters;
 	}
 	public PredictedVarsTemplate getPredicted() {

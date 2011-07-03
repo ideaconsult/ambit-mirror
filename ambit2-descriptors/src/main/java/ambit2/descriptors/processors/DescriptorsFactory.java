@@ -36,11 +36,11 @@ import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.templates.MoleculeFactory;
 
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.data.ILiteratureEntry._type;
 
 public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Property>> {
 
@@ -106,8 +106,12 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 
 		return property;
 	}
+	
 	public static synchronized Property createDescriptor2Property(String className) throws Exception  {
-		IMolecularDescriptor descriptor = createDescriptor(className);
+		return createDescriptor2Property(className,null);
+	}
+	public static synchronized Property createDescriptor2Property(String className,String[] parameters) throws Exception  {
+		IMolecularDescriptor descriptor = createDescriptor(className,parameters);
 		if (descriptor!=null) {
 			Property property = Property.getInstance(descriptor.getClass().getName().substring(descriptor.getClass().getName().lastIndexOf('.')+1),
 					
@@ -118,13 +122,19 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 			return property;	
 		} else return null;
 	}
-	
 	public static synchronized IMolecularDescriptor createDescriptor(String className) throws Exception  {
+		return createDescriptor(className,null);
+	}
+	public static synchronized IMolecularDescriptor createDescriptor(String className,String[] parameters) throws Exception  {
 			Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
 			Object o = clazz.newInstance();
 			if (o instanceof IMolecularDescriptor) {
 				IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
-				
+				try { 
+					if (parameters!=null) descriptor.setParameters(parameters);
+				} catch (Exception x) {
+					//x.printStackTrace();
+				}
 				try {
 					o.getClass().getMethod(
 			                "removeListener",
