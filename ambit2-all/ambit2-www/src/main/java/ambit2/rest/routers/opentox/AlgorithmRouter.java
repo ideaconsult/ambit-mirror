@@ -14,5 +14,14 @@ public class AlgorithmRouter extends MyRouter {
 		super(context);
 		attachDefault(AllAlgorithmsResource.class);
 		attach(String.format("/{%s}",AllAlgorithmsResource.algorithmKey),AllAlgorithmsResource.class);
+		attach(String.format("/{%s}/{%s}",AllAlgorithmsResource.algorithmKey,
+					AllAlgorithmsResource._param.level0.name()),
+					AllAlgorithmsResource.class);
+		attach(String.format("/{%s}/{%s}/{%s}",AllAlgorithmsResource.algorithmKey,
+				AllAlgorithmsResource._param.level0.name(),AllAlgorithmsResource._param.level1.name()),
+					AllAlgorithmsResource.class);
+		attach(String.format("/{%s}/{%s}/{%s}/{%s}",AllAlgorithmsResource.algorithmKey,
+				AllAlgorithmsResource._param.level0.name(),AllAlgorithmsResource._param.level1.name(),AllAlgorithmsResource._param.level2.name()),
+				AllAlgorithmsResource.class);
 	}
 }
