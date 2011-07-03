@@ -21,6 +21,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.AlgorithmType;
+import ambit2.core.data.model.Parameter;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
@@ -49,6 +50,12 @@ import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public final static String algorithm = OpenTox.URI.algorithm.getURI();
 	public final static String algorithmKey =  OpenTox.URI.algorithm.getKey();
+	
+	public enum _param {
+		level0,
+		level1,
+		level2
+	}
 	public final static String resourceID =  OpenTox.URI.algorithm.getResourceID();	
 	protected static List<Algorithm<String>> algorithmList;
 	protected AlgorithmsPile algorithmsPile = new AlgorithmsPile();
@@ -89,6 +96,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 
 			Object key = getRequest().getAttributes().get(algorithmKey);
 			
+			
 			if (key==null) {
 				Object type = getRequest().getResourceRef().getQueryAsForm().getFirstValue("type");
 				Object search = getRequest().getResourceRef().getQueryAsForm().getFirstValue("search");
@@ -100,7 +108,12 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				if (a == null) {
 					getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 					return null;					
-				} else { 
+				} else {
+					for (_param p: _param.values()) {
+						key = getRequest().getAttributes().get(p.name());
+						if (key!=null)
+							a.addParameter(new Parameter<String>(p.name(),key.toString()));
+					};
 					ArrayList<Algorithm<String>> q = new ArrayList<Algorithm<String>>();
 					q.add(a);
 					return q.iterator();
@@ -269,6 +282,19 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							);	
 					TaskResult modelRef = modelCreator.call();
 					ModelQueryResults model = modelCreator.getModel();
+					
+					/**
+					 *  Filtering params, specifying to calculate only some of the values
+					 *  Do not change the outcome and threfore the same model URI is generated 
+					 *  e.g. /algorithm/ambit2.dragon.DescriptorDragonShell/MW
+					 */
+					//
+					StringBuilder b = new StringBuilder();
+					for (Parameter prm : algorithm.getParameters())
+						//b.append(String.format("-%s\t'%s'\t", prm.getName(),prm.getValue()));
+						b.append(String.format("-%s\t'%s'\t", prm.getName(),prm.getValue()));
+					
+					model.setParameters(b.toString().split("\t"));
 					
 					DescriptorPredictor predictor = new DescriptorPredictor(
 							getRequest().getRootRef(),

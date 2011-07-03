@@ -50,7 +50,7 @@ public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,
 		if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType()))
 			try {
 				Profile<Property> p = new Profile<Property>();
-				Property property = DescriptorsFactory.createDescriptor2Property(model.getContent());
+				Property property = DescriptorsFactory.createDescriptor2Property(model.getContent(),model.getParameters());
 				property.setEnabled(true);
 				p.add(property);
 				
