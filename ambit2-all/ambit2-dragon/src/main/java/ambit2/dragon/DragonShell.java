@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
@@ -32,18 +33,113 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	 * 
 	 */
 	private static final long serialVersionUID = 3357377118450137010L;
-	
-	
+	protected DragonDescriptorDictionary descriptors;
+	public DragonDescriptorDictionary getDescriptors() {
+		return descriptors;
+	}
+	public enum _options {
+		DESCRIPTORS {
+			@Override
+			public Object getDefaultValue() {
+				return null;
+			}
+		},
+		Missing_String {
+			@Override
+			public Object getDefaultValue() {
+				return "NaN";
+			}
+		},
+		RejectUnusualValence {
+			@Override
+			public Object getDefaultValue() {
+				return true;
+			}
+		},
+		Add2DHydrogens {
+			@Override
+			public Object getDefaultValue() {
+				return true;
+			}
+		};
+		public Object getDefaultValue() {
+			return false;
+		}
+		public Object setParams(String[] parameters,DragonDescriptorDictionary dictionary) {
+			return null;
+		}		
+	}
+
+	/**
+	 <pre>
+	  <OPTIONS>
+	    <SaveLayout value="true"/>
+	    <ShowWorksheet value="false"/>
+	    <Decimal_Separator value="."/>
+	    <Missing_String value="NaN"/>
+	    <DefaultMolFormat value="1"/>
+	    <RejectUnusualValence value="true"/>
+	    <Add2DHydrogens value="true"/>
+	    <LogPathWalk value="true"/>
+	    <LogEdge value="true"/>
+	    <Weights>
+	      <weight name="Mass"/>
+	      <weight name="VdWVolume"/>
+	      <weight name="Electronegativity"/>
+	      <weight name="Polarizability"/>
+	      <weight name="Ionization"/>
+	      <weight name="I-State"/>
+	    </Weights>
+	    <SaveOnlyData value="false"/>
+	    <SaveLabelsOnSeparateFile value="false"/>
+	    <SaveFormatBlock value="%b - %n.txt"/>
+	    <SaveFormatSubBlock value="%b-%s - %n - %m.txt"/>
+	    <SaveExcludeMisVal value="false"/>
+	    <SaveExcludeAllMisVal value="false"/>
+	    <SaveExcludeConst value="false"/>
+	    <SaveExcludeNearConst value="false"/>
+	    <SaveExcludeStdDev value="false"/>
+	    <SaveStdDevThreshold value="0.0001"/>
+	    <SaveExcludeCorrelated value="false"/>
+	    <SaveCorrThreshold value="0.95"/>
+	    <SaveExclusionOptionsToVariables value="false"/>
+	    <SaveExcludeMisMolecules value="false"/>
+	    <SaveExcludeRejectedMolecules value="false"/>
+	  </OPTIONS>
+	</pre>
+	 */
 	public DragonShell() throws ShellException {
     	super();
+    	descriptors = new DragonDescriptorDictionary();
 	}
 	public static final String DRAGON_EXE = "dragon6shell";
 	public static final String DRAGON_HOME = "DRAGON_HOME";
 
-    protected String[] inFile = {"allblocks.drs","dragon_input.mol"};
+    public String getDescriptorNamesAsString() {
+		return descriptors.getDescriptorNamesAsString();
+	}
+    
+    public String[] getDescriptorNames() {
+		return descriptors.getDescriptorNames();
+	}
+	protected String[] inFile = {"allblocks.drs","dragon_input.mol"};
     protected String[] outFile = {"dragon_output.txt"};
-
-    @Override
+    
+    /**
+     * Descriptor or block names expected
+     * @param names
+     * @throws CDKException
+     */
+    public void setDescriptors(Object[] names) throws CDKException {
+    	
+    	descriptors.setSelected(names);
+    }
+    
+    public Object[] setDescriptors	() {
+        return descriptors.getDescriptorNames();
+    }
+    
+	@Override
     protected String getHomeDir(File file) {
     	return System.getProperty("user.home") +"/.ambit2/dragon";
     }
@@ -106,14 +202,17 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	    	    String datePattern = "generation_date=\"%s\"";
 	    	    String inPattern = "<molFile value=\"%s\"/>";
 	    	    String outPattern = "<SaveFilePath value=\"%s\"/>";
+	    	    String descriptorPattern = "<DESCRIPTORS>%s</DESCRIPTORS>";
 	    	    //lazy xml update
 	    	    script = script.replace(datePattern, String.format(datePattern,new Date()));
 	    	    script = script.replace(inPattern, String.format(inPattern,molfile));
 	    	    script = script.replace(outPattern, String.format(outPattern,txtfile));
+	    	    script = script.replace(descriptorPattern, String.format(descriptorPattern,descriptors.toXML()));
+	    	    
 	    	    writer.write(script);
 	    	    
     	    } catch (Exception x) {
-    	    	throw new ShellException(this,"Can't write Dragon script!",x);
+    	    	throw new ShellException(this,String.format("Can't write Dragon script! %s",x.getMessage()));
     	    } finally {
     	    	if (writer!=null) try { writer.close();} catch (Exception x) {}
     	    }
