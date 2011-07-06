@@ -69,6 +69,7 @@ public class DbDescriptorWriter extends AbstractPropertyWriter<DescriptorValue,D
 	protected Iterable<Property> getPropertyNames( DescriptorValue value) {
 		List<Property> p = new ArrayList<Property>();
 		for (String name : value.getNames()) try {
+			if ("".equals(name)) continue;
 			p.add(DescriptorsFactory.descriptorValue2Property(null,name,value));
 		} catch (Exception x) {}
 		return p;

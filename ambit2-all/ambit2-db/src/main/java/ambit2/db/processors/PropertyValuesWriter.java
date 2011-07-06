@@ -79,7 +79,7 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 
 	@Override
 	protected String getComments(String name,IStructureRecord target) {
-		String n = name.toLowerCase();
+		String n = name==null?"No name":name.toLowerCase();
 		return Property.guessLabel(n);
 
 	}
