@@ -30,14 +30,15 @@ public class ChemBLTest extends ResourceTest {
 		"ORDER BY ?property";	
 	
 	public static final String chemblCompounds = 
-		"PREFIX  chembl:<http://rdf.farmbio.uu.se/chembl/onto/#>\n"+
+		"PREFIX  chembl:<http://pele.farmbio.uu.se/chembl/onto/#>\n"+
 		"PREFIX dc:<http://purl.org/dc/elements/1.1/>\n"+
 		"PREFIX bo:<http://www.blueobelisk.org/chemistryblogs/>\n"+
 		"select * where \n"+
 		"{\n"+
-		" ?compound a chembl:Compound.\n"+
+		" ?compound a chembl:SmallMolecule.\n"+
 		" ?compound bo:smiles ?smiles.\n"+
-		//" ?compound dc:title ?name.\n"+
+		" ?compound bo:inchi ?inchi.\n"+
+		" OPTIONAL {?compound dc:title ?name.}\n"+
 		"}\n"+
 		"order by ?compound \n"+
 		"LIMIT 10000\n";
