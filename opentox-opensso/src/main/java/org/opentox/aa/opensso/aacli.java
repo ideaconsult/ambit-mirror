@@ -84,6 +84,12 @@ public class aacli {
 		
 			IPolicyHandler handler = new IPolicyHandler() {
 				@Override
+				public void handleOwner(String owner) throws Exception {
+					if (owner !=null)
+					log(command,String.format("Owner: %s",owner));
+					
+				}				
+				@Override
 				public void handlePolicy(String policyID) throws Exception {
 					 log(command,String.format("PolicyID: %s",policyID));
 				}
@@ -96,8 +102,9 @@ public class aacli {
 			};			
 			if (uri!=null) {
 				log(command,String.format("URI: %s",uri));
-				int code = policy.getURIOwner(ssotoken, uri, user, handler);
-				log(command,String.format("Owner: %s",user.getUsername()));
+				OpenToxUser owner = new OpenToxUser();
+				int code = policy.getURIOwner(ssotoken, uri, owner, handler);
+				
 				log(command,String.format("HTTP result code: %d",code));
 				if (policyId!=null) {
 					log(command,String.format("Retrieve XML of policyId: %s",policyId));
@@ -129,6 +136,12 @@ public class aacli {
 		case delete: {
 			IPolicyHandler deleteHandler = new IPolicyHandler() {
 				@Override
+				public void handleOwner(String owner) throws Exception {
+					if (owner !=null)
+					log(command,String.format("Owner: %s",owner));
+					
+				}
+				@Override
 				public void handlePolicy(String policyID) throws Exception {
 					log(command,String.format("Deleting PolicyID: %s",policyID));
 					 try {
@@ -153,7 +166,8 @@ public class aacli {
 				deleteHandler.handlePolicy(policyId);
 			} else if (uri!=null) {
 				log(command,String.format("Deleting all policies for the URI %s",uri));
-				policy.getURIOwner(ssotoken, uri, user, deleteHandler);
+				OpenToxUser owner = new OpenToxUser();
+				policy.getURIOwner(ssotoken, uri, owner, deleteHandler);
 			} else {	
 				log(command,String.format("Deleting all policies per user %s",user.getUsername()));
 				policy.listPolicies(ssotoken, deleteHandler);

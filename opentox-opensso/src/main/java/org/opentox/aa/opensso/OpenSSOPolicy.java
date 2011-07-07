@@ -202,6 +202,10 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 		if (policies==null) return getURIOwner(token, uri, user,(IPolicyHandler)null);
 		
 		return getURIOwner(token, uri, user, new IPolicyHandler() {
+			@Override
+			public void handleOwner(String owner) throws Exception {
+
+			}
 			
 			@Override
 			public void handlePolicy(String policyID, String content) throws Exception {
@@ -240,7 +244,10 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 				int count = 0;
 				String line = null;
 				while ((line = reader.readLine())!=null) {
-					if (count==0) user.setUserName(line.trim());
+					if (count==0) { 
+						handler.handleOwner(line.trim()); 
+						user.setUserName(line.trim());
+					}
 					else {
 						if (handler==null) break;
 						else handler.handlePolicy(line);
@@ -264,7 +271,10 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 
 	public int listPolicy(OpenSSOToken token, String policyId, final Hashtable<String, String> policies) throws Exception {
 		return listPolicy(token, policyId, new IPolicyHandler() {
-			
+			@Override
+			public void handleOwner(String owner) throws Exception {
+				
+			}
 			@Override
 			public void handlePolicy(String policyID, String content) throws Exception {
 				policies.put(policyID,content);
@@ -325,6 +335,10 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	 */
 	public int listPolicies(OpenSSOToken token,final Hashtable<String, String> policies)  throws Exception{
 		return listPolicies(token, new IPolicyHandler() {
+			@Override
+			public void handleOwner(String owner) throws Exception {
+				
+			}
 			@Override
 			public void handlePolicy(String policyID, String content)
 					throws Exception {
