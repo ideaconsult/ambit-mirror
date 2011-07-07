@@ -459,7 +459,7 @@ public class aacli {
 	
 	protected static String exampleRetrievePolicyContent() {
 		return
-		"Retrieve all policies per URI:\n"+
+		"Retrieve policy content by policy id\n"+
 		"\tjava -jar aacli\n"+
 		"\t-n http://opensso.in-silico.ch/opensso/identity\n"+
 		"\t-z http://opensso.in-silico.ch/Pol/opensso-pol\n"+
@@ -493,7 +493,7 @@ public class aacli {
 	
 	protected static String exampleDeletePolicy() {
 		return
-		"Delete all policies per URI:\n"+
+		"Delete policy by policy id:\n"+
 		"\tjava -jar aacli\n"+
 		"\t-u guest\n"+
 		"\t-p guest\n"+
