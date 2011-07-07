@@ -11,6 +11,7 @@ import org.opentox.aa.IOpenToxUser;
 import org.opentox.aa.OTAAParams;
 import org.opentox.aa.OpenToxPolicy;
 import org.opentox.aa.policy.IPolicyHandler;
+import org.opentox.aa.policy.PolicyHandler;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -201,12 +202,8 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	public int getURIOwner(OpenSSOToken token, String uri,IOpenToxUser user, final Hashtable<String, String> policies) throws Exception {
 		if (policies==null) return getURIOwner(token, uri, user,(IPolicyHandler)null);
 		
-		return getURIOwner(token, uri, user, new IPolicyHandler() {
-			@Override
-			public void handleOwner(String owner) throws Exception {
-
-			}
-			
+		return getURIOwner(token, uri, user, new PolicyHandler() {
+	
 			@Override
 			public void handlePolicy(String policyID, String content) throws Exception {
 				policies.put(policyID,content);
@@ -270,11 +267,8 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	}
 
 	public int listPolicy(OpenSSOToken token, String policyId, final Hashtable<String, String> policies) throws Exception {
-		return listPolicy(token, policyId, new IPolicyHandler() {
-			@Override
-			public void handleOwner(String owner) throws Exception {
-				
-			}
+		return listPolicy(token, policyId, new PolicyHandler() {
+
 			@Override
 			public void handlePolicy(String policyID, String content) throws Exception {
 				policies.put(policyID,content);
@@ -334,11 +328,8 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	 *Currently, the owner is in the first row, then the policy names follow row by row (if requested).
 	 */
 	public int listPolicies(OpenSSOToken token,final Hashtable<String, String> policies)  throws Exception{
-		return listPolicies(token, new IPolicyHandler() {
-			@Override
-			public void handleOwner(String owner) throws Exception {
-				
-			}
+		return listPolicies(token, new PolicyHandler() {
+
 			@Override
 			public void handlePolicy(String policyID, String content)
 					throws Exception {

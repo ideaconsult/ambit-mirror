@@ -1,5 +1,6 @@
 package org.opentox.aa.opensso;
 
+import java.io.Console;
 import java.util.Hashtable;
 
 import org.apache.commons.cli.CommandLine;
@@ -13,6 +14,7 @@ import org.opentox.aa.IOpenToxUser;
 import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.AAServicesConfig.CONFIG;
 import org.opentox.aa.policy.IPolicyHandler;
+import org.opentox.aa.policy.PolicyHandler;
 
 public class aacli {
 	protected String authService;
@@ -58,8 +60,9 @@ public class aacli {
 		
 	}
 	public void logout() throws Exception {
+		System.out.println("Invalidating the token ...");
 		if ((ssotoken!=null) && (ssotoken.getToken()!=null)) ssotoken.logout();
-		System.out.println("Logout. Token invalidated.");
+		System.out.println("Logout completed. The token is no longer valid.");
 	}
 	protected void log(policy_command command, String message) {
 		System.out.println(String.format("%s> %s",command, message));
@@ -81,21 +84,24 @@ public class aacli {
 			break;	
 		}
 		case list: {
-		
-			IPolicyHandler handler = new IPolicyHandler() {
+			
+			IPolicyHandler handler = new PolicyHandler() {
 				@Override
 				public void handleOwner(String owner) throws Exception {
+					super.handleOwner(owner);
 					if (owner !=null)
 					log(command,String.format("Owner: %s",owner));
 					
 				}				
 				@Override
 				public void handlePolicy(String policyID) throws Exception {
-					 log(command,String.format("PolicyID: %s",policyID));
+					super.handlePolicy(policyID);
+					log(command,String.format("PolicyID: %s",policyID));
 				}
 				@Override
 				public void handlePolicy(String policyID, String content)
 						throws Exception {
+					super.handlePolicy(policyID,content);
 					log(command,String.format("PolicyID: %s \n %s",policyID,content));
 					
 				}
@@ -109,8 +115,10 @@ public class aacli {
 				if (policyId!=null) {
 					log(command,String.format("Retrieve XML of policyId: %s",policyId));
 					try {
+						long now = System.currentTimeMillis();
 						code = policy.listPolicy(ssotoken, policyId, handler);
-						log(command,String.format("HTTP result code: %d",code));
+						now = System.currentTimeMillis() - now;
+						log(command,String.format("HTTP result code: %d [elapsed %s ms]",code,now));
 						if (code ==401) log(command,"Error: Only the policy creator can retrieve its content.");
 					} catch (Exception x) {
 						log(command,x.getMessage());
@@ -131,25 +139,30 @@ public class aacli {
 					policy.listPolicies(ssotoken,handler);
 				}			
 			}
+			log(command,String.format("Listed %d policies.",handler.getProcessed()));
 			break;
 		}
 		case delete: {
-			IPolicyHandler deleteHandler = new IPolicyHandler() {
+			IPolicyHandler deleteHandler = new PolicyHandler() {
 				@Override
 				public void handleOwner(String owner) throws Exception {
+					super.handleOwner(owner);
 					if (owner !=null)
 					log(command,String.format("Owner: %s",owner));
 					
 				}
 				@Override
 				public void handlePolicy(String policyID) throws Exception {
+					super.handlePolicy(policyID);
 					log(command,String.format("Deleting PolicyID: %s",policyID));
 					 try {
+						 long now = System.currentTimeMillis();
 						 int code = policy.deletePolicy(ssotoken, policyID);
+						 now = System.currentTimeMillis()-now;
 							if (code == 200)
-								log(command,String.format("Deleted PolicyID: %s",policyID));
+								log(command,String.format("Deleted PolicyID: %s  [%s ms]",policyID,now));
 							else
-								log(command,String.format("HTTP result code: %d",code));							 
+								log(command,String.format("HTTP result code: %d [%s ms]",code,now));							 
 					 } catch (Exception x) {
 						log(command,String.format("ERROR: %s",x.getMessage()));
 					 }
@@ -157,27 +170,44 @@ public class aacli {
 				@Override
 				public void handlePolicy(String policyID, String content)
 						throws Exception {
+					super.handlePolicy(policyID,content);
 				}
 			};
 			
 			int code = 0;
 			if (policyId!=null) {
 				log(command,"Deleting single policy");
-				deleteHandler.handlePolicy(policyId);
+				if (confirm(String.format("Do you really want to delete the policy %s ?",policyId))) {
+					deleteHandler.handlePolicy(policyId);
+				} else  throw new UserCancelledException();
 			} else if (uri!=null) {
 				log(command,String.format("Deleting all policies for the URI %s",uri));
-				OpenToxUser owner = new OpenToxUser();
-				policy.getURIOwner(ssotoken, uri, owner, deleteHandler);
+				if (confirm(String.format("Do you really want to delete all policies for %s ?",uri))) {
+					OpenToxUser owner = new OpenToxUser();
+					policy.getURIOwner(ssotoken, uri, owner, deleteHandler);
+				} else throw new UserCancelledException();
 			} else {	
-				log(command,String.format("Deleting all policies per user %s",user.getUsername()));
-				policy.listPolicies(ssotoken, deleteHandler);
+				log(command,String.format("Deleting all policies defined by user %s",user.getUsername()));
+				if (confirm(String.format("Do you really want to delete all policies defined by %s?",user.getUsername()))) {
+					policy.listPolicies(ssotoken, deleteHandler);
+				} else throw new UserCancelledException();
+				
 		
 			}
+			log(command,String.format("Deleted %d policies.",deleteHandler.getProcessed()));
 			return 0;
 		} 
 		default : throw new Exception(String.format("%s not supported",command));
 		}
 		return 0;
+	}
+	protected boolean confirm(String message) {
+		Console c = System.console();
+		if (c!=null) {
+			String confirm = c.readLine(String.format("Hope you know what are you doing.\n%s\nEnter Y or N:",message));
+			if ("Y".equals(confirm.trim().toUpperCase())) return true;
+		}
+		return false;
 	}
 	
 	public void setOption(_option option, String argument) throws Exception {
@@ -267,6 +297,8 @@ public class aacli {
 		    	printHelp(options,null);
 		    }		
 		       */    
+		} catch (UserCancelledException x) {
+			System.out.println(x.getMessage());
 		} catch (Exception x ) {
 			printHelp(options,x.getMessage());
 		} finally {
