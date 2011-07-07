@@ -166,10 +166,9 @@ public class OpenSSOToken extends OpenToxToken {
 	public boolean authorize(String uri, String action) throws Exception {
 		if (token==null) throw new Exception(MSG_EMPTY_TOKEN,null);
 		Form form = new Form();		
-		form.add(OTAAParams.subjectid.toString(),token);
+		form.add(OTAAParams.subjectid.toString(),token); //Reference.encode(token));
 		form.add(OTAAParams.uri.toString(),uri);
 		form.add(OTAAParams.action.toString(),action);
-		
 		String authorizationService = String.format(authz, authService);
 		ClientResource client = new ClientResource(authorizationService);
 		Representation r=null;
@@ -186,7 +185,9 @@ public class OpenSSOToken extends OpenToxToken {
 			}
 		} catch (ResourceException x) {
 			if  (Status.CLIENT_ERROR_UNAUTHORIZED.equals(client.getStatus())) return false;
-			else throw x;
+			else throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,
+					String.format("%s POST uri=%s subjectid=%s %s %s",
+							authorizationService,uri,token,x.getMessage(),x.getStatus()),x);
 		} finally {
 			try {r.release();} catch (Exception x) {}
 			try {client.release();} catch (Exception x) {}

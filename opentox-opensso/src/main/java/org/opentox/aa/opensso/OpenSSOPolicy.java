@@ -10,6 +10,7 @@ import java.util.Hashtable;
 import org.opentox.aa.IOpenToxUser;
 import org.opentox.aa.OTAAParams;
 import org.opentox.aa.OpenToxPolicy;
+import org.opentox.aa.policy.IPolicyHandler;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -134,6 +135,7 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 
 		
 		Representation r = new StringRepresentation(xml,MediaType.APPLICATION_XML);
+		System.out.println(xml);
 		ClientResource client = new ClientResource(policyService);
 		
 		Form headers = new Form();  
@@ -147,6 +149,7 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 			return client.getStatus().getCode();
 			
 		} catch (ResourceException x) {
+			x.printStackTrace();
 			throw new ResourceException(x.getStatus(),String.format("Error querying policy service %s %d %s",
 					policyService,x.getStatus().getCode(), x.getMessage()),
 					x);			
@@ -192,12 +195,28 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 
 	@Override
 	public int getURIOwner(OpenSSOToken token, String uri, IOpenToxUser user) throws Exception {
-		return getURIOwner(token, uri, user,null);
+		return getURIOwner(token, uri, user,(IPolicyHandler)null);
 	}
-
-	
 	@Override
-	public int getURIOwner(OpenSSOToken token, String uri,IOpenToxUser user, Hashtable<String, String> policies) throws Exception {
+	public int getURIOwner(OpenSSOToken token, String uri,IOpenToxUser user, final Hashtable<String, String> policies) throws Exception {
+		if (policies==null) return getURIOwner(token, uri, user,(IPolicyHandler)null);
+		
+		return getURIOwner(token, uri, user, new IPolicyHandler() {
+			
+			@Override
+			public void handlePolicy(String policyID, String content) throws Exception {
+				policies.put(policyID,content);
+			}
+			
+			@Override
+			public void handlePolicy(String policyID) throws Exception {
+				policies.put(policyID,policyID);
+				
+			}
+		});		
+	}
+	
+	public int getURIOwner(OpenSSOToken token, String uri,IOpenToxUser user, IPolicyHandler handler) throws Exception {
 		if ((token==null) || (token.getToken()==null)) throw new Exception(OpenSSOToken.MSG_EMPTY_TOKEN,null);
 		if (uri==null) throw new Exception(MSG_EMPTY_URI,null);
 		
@@ -206,7 +225,7 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 		Form headers = new Form();  
 		headers.add(OTAAParams.subjectid.toString(), token.getToken());
 		headers.add(OTAAParams.uri.toString(), uri);
-		headers.add(OTAAParams.polnames.toString(), Boolean.toString(policies!=null));
+		headers.add(OTAAParams.polnames.toString(), Boolean.toString(handler!=null));
 		
 		
 		
@@ -223,8 +242,8 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 				while ((line = reader.readLine())!=null) {
 					if (count==0) user.setUserName(line.trim());
 					else {
-						if (policies==null) break;
-						else policies.put(line,line);
+						if (handler==null) break;
+						else handler.handlePolicy(line);
 					}
 					count++;
 				}
@@ -243,9 +262,23 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 		}	
 	}
 
+	public int listPolicy(OpenSSOToken token, String policyId, final Hashtable<String, String> policies) throws Exception {
+		return listPolicy(token, policyId, new IPolicyHandler() {
+			
+			@Override
+			public void handlePolicy(String policyID, String content) throws Exception {
+				policies.put(policyID,content);
+			}
+			
+			@Override
+			public void handlePolicy(String policyID) throws Exception {
+				policies.put(policyID,policyID);
+				
+			}
+		});
+	}
 
-	@Override
-	public int listPolicy(OpenSSOToken token, String policyId, Hashtable<String, String> policies) throws Exception {
+	public int listPolicy(OpenSSOToken token, String policyId, IPolicyHandler handler) throws Exception {
 		if ((token==null) || (token.getToken()==null)) throw new Exception(OpenSSOToken.MSG_EMPTY_TOKEN,null);
 		if (policyId==null) throw new Exception(MSG_EMPTY_POLICYID,null);
 		if (!token.isTokenValid()) throw new Exception("Invalid token",null);
@@ -267,13 +300,15 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 					b.append(line);
 					b.append("\n");
 				}
-				policies.put(policyId, b.toString());
+				handler.handlePolicy(policyId, b.toString());
+
 				
 			} 
 			return client.getStatus().getCode();
 		} catch (ResourceException x) {
-			throw new ResourceException(x.getStatus(),String.format("Error querying policy service %s %d %s",
-					policyService,x.getStatus().getCode(), x.getMessage()),
+			throw new ResourceException(x.getStatus(),
+					String.format("Error querying policy service PolicyID=%s subjectid=%s %s %d %s",
+					policyService,policyId,token.getToken(),x.getStatus().getCode(), x.getMessage()),
 					x);			
 		} catch (Exception x) {
 			throw new Exception(String.format("Error querying policy service %s %s",policyService,x.getMessage()),x);
@@ -288,7 +323,21 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	/**
 	 *Currently, the owner is in the first row, then the policy names follow row by row (if requested).
 	 */
-	public int listPolicies(OpenSSOToken token,Hashtable<String, String> policies)  throws Exception{
+	public int listPolicies(OpenSSOToken token,final Hashtable<String, String> policies)  throws Exception{
+		return listPolicies(token, new IPolicyHandler() {
+			@Override
+			public void handlePolicy(String policyID, String content)
+					throws Exception {
+				policies.put(policyID,content);
+				
+			}
+			@Override
+			public void handlePolicy(String policyID) {
+				policies.put(policyID,policyID);
+			}
+		});
+	}
+	public int listPolicies(OpenSSOToken token,IPolicyHandler handler)  throws Exception{		
 		if (!token.isTokenValid()) throw new Exception("Invalid token",null);
 		//Form headers = new Form();  
 		//headers.add(OTAAParams.subjectid.toString(), token.getToken());
@@ -312,7 +361,8 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 	
 				while ((line = reader.readLine())!=null) {
 					if ("".equals(line.trim())) continue;
-					policies.put(line,line);
+					handler.handlePolicy(line.trim());
+
 				}
 				
 			} 
