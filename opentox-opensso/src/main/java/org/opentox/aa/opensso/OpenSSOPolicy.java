@@ -242,8 +242,9 @@ public class OpenSSOPolicy extends OpenToxPolicy<OpenSSOToken,String> {
 				String line = null;
 				while ((line = reader.readLine())!=null) {
 					if (count==0) { 
-						handler.handleOwner(line.trim()); 
-						user.setUserName(line.trim());
+						line = line==null?null:line.trim();
+						if (handler!=null) handler.handleOwner(line); 
+						user.setUserName(line);
 					}
 					else {
 						if (handler==null) break;
