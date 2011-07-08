@@ -14,6 +14,7 @@ import org.opentox.aa.IOpenToxUser;
 import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.AAServicesConfig.CONFIG;
 import org.opentox.aa.policy.IPolicyHandler;
+import org.opentox.aa.policy.PolicyArchiveHandler;
 import org.opentox.aa.policy.PolicyHandler;
 
 public class aacli {
@@ -29,7 +30,8 @@ public class aacli {
 		authorize,
 		list,
 		delete,
-		create
+		create,
+		archive
 	}
 	public aacli() {
 		super();
@@ -66,6 +68,44 @@ public class aacli {
 	}
 	protected void log(policy_command command, String message) {
 		System.out.println(String.format("%s> %s",command, message));
+	}
+	
+	public void listPolicies(OpenSSOPolicy policy,IPolicyHandler handler) throws Exception {
+		if (uri!=null) {
+			log(command,String.format("URI: %s",uri));
+			OpenToxUser owner = new OpenToxUser();
+			int code = policy.getURIOwner(ssotoken, uri, owner, handler);
+			
+			log(command,String.format("HTTP result code: %d",code));
+			if (policyId!=null) {
+				log(command,String.format("Retrieve XML of policyId: %s",policyId));
+				try {
+					long now = System.currentTimeMillis();
+					code = policy.listPolicy(ssotoken, policyId, handler);
+					now = System.currentTimeMillis() - now;
+					log(command,String.format("HTTP result code: %d [elapsed %s ms]",code,now));
+					if (code ==401) log(command,"Error: Only the policy creator can retrieve its content.");
+				} catch (Exception x) {
+					log(command,x.getMessage());
+				}
+			}
+		} else {
+			if (policyId!=null) {
+				log(command,String.format("Searching for PolicyID: %s",policyId));
+				try {
+					int code = policy.listPolicy(ssotoken, policyId, handler);
+					log(command,String.format("HTTP result code: %d",code));
+					if (code ==401) log(command,"Error: Only the policy creator can retrieve its content.");
+				} catch (Exception x) {
+					log(command,x.getMessage());
+				}
+			} else {
+				log(command,"Retrieving all policies for the current user");
+				policy.listPolicies(ssotoken,handler);
+			}			
+		}
+		log(command,String.format("Listed %d policies.",handler.getProcessed()));
+
 	}
 	public int run() throws Exception {
 		final OpenSSOPolicy policy = new OpenSSOPolicy(policyService);
@@ -106,40 +146,7 @@ public class aacli {
 					
 				}
 			};			
-			if (uri!=null) {
-				log(command,String.format("URI: %s",uri));
-				OpenToxUser owner = new OpenToxUser();
-				int code = policy.getURIOwner(ssotoken, uri, owner, handler);
-				
-				log(command,String.format("HTTP result code: %d",code));
-				if (policyId!=null) {
-					log(command,String.format("Retrieve XML of policyId: %s",policyId));
-					try {
-						long now = System.currentTimeMillis();
-						code = policy.listPolicy(ssotoken, policyId, handler);
-						now = System.currentTimeMillis() - now;
-						log(command,String.format("HTTP result code: %d [elapsed %s ms]",code,now));
-						if (code ==401) log(command,"Error: Only the policy creator can retrieve its content.");
-					} catch (Exception x) {
-						log(command,x.getMessage());
-					}
-				}
-			} else {
-				if (policyId!=null) {
-					log(command,String.format("Searching for PolicyID: %s",policyId));
-					try {
-						int code = policy.listPolicy(ssotoken, policyId, handler);
-						log(command,String.format("HTTP result code: %d",code));
-						if (code ==401) log(command,"Error: Only the policy creator can retrieve its content.");
-					} catch (Exception x) {
-						log(command,x.getMessage());
-					}
-				} else {
-					log(command,"Retrieving all policies for the current user");
-					policy.listPolicies(ssotoken,handler);
-				}			
-			}
-			log(command,String.format("Listed %d policies.",handler.getProcessed()));
+			listPolicies(policy, handler);
 			break;
 		}
 		case delete: {
@@ -197,6 +204,11 @@ public class aacli {
 			log(command,String.format("Deleted %d policies.",deleteHandler.getProcessed()));
 			return 0;
 		} 
+		case archive: {
+			IPolicyHandler handler = new PolicyArchiveHandler(policy);
+			listPolicies(policy, handler);
+			break;
+		}
 		default : throw new Exception(String.format("%s not supported",command));
 		}
 		return 0;
