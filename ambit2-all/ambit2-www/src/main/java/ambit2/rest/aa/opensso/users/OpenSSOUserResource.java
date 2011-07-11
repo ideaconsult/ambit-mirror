@@ -93,8 +93,9 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 			throws ResourceException {
 		if ((entity != null) && MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			Form form = new Form(entity);	
-			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
+			
 			try {
+				OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 				String username = form.getFirstValue("user");
 				String pass = form.getFirstValue("password");
 				if (ssoToken.login(username,pass)) {

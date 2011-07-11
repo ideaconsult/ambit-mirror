@@ -65,10 +65,13 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			String token = getToken();
 			if (token==null) throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
 			
-			OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
-			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
+			OpenSSOServicesConfig config = null;
 			Hashtable<String, String> policies = new Hashtable<String, String>();
+			String policyService=null;
 			try {
+				config = OpenSSOServicesConfig.getInstance();
+				policyService = config.getPolicyService();
+				OpenSSOPolicy policy = new OpenSSOPolicy(policyService);				
 				OpenSSOToken ssotoken = new OpenSSOToken(config.getOpenSSOService());
 				ssotoken.setToken(token);
 				policy.getURIOwner(ssotoken,uri,(OpenSSOUser)user, policies);
@@ -85,7 +88,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,config.getPolicyService(),x);
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,policyService,x);
 			}
 			
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

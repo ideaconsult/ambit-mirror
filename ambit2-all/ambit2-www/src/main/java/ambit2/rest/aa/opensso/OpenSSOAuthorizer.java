@@ -34,9 +34,10 @@ public class OpenSSOAuthorizer extends Authorizer {
 		if (token == null) token = getTokenFromCookies(request);
 		
 		if (token != null) {
-			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
-			ssoToken.setToken(token);
+			OpenSSOToken ssoToken = null;
 			try {
+				ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
+				ssoToken.setToken(token);
 
 				return authorize(ssoToken,request);
 			} catch (Exception x) {
@@ -48,7 +49,9 @@ public class OpenSSOAuthorizer extends Authorizer {
 	}
 
 	protected boolean isEnabled() {
+		try {
 		return OpenSSOServicesConfig.getInstance().isEnabled();
+		} catch (Exception x) {return true;}
 	}
 	
 	public String uri2check(Reference root,Reference ref) throws Exception {

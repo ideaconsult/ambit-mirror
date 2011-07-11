@@ -14,12 +14,12 @@ public abstract class ProtectedResourceTest extends ResourceTest implements IAut
 
 	protected String getCreator() {
 		if ((ssoToken!=null) && (ssoToken.getToken()!=null)) 
-			return	OpenSSOServicesConfig.getInstance().getTestUser();
+			try { return OpenSSOServicesConfig.getInstance().getTestUser();} catch (Exception x) {return null;}
 		else return "test";
 	}
 
 	protected boolean isAAEnabled() {
-		return (OpenSSOServicesConfig.getInstance().isEnabled());
+		 try {return (OpenSSOServicesConfig.getInstance().isEnabled()); } catch (Exception x) {return true;}
 	}
 	@Override
 	public void setUp() throws Exception {
@@ -50,6 +50,31 @@ public abstract class ProtectedResourceTest extends ResourceTest implements IAut
 		return ssoToken==null?null:ssoToken.getToken();
 	}
 	
+	protected String createPartnerReadOnlyPolicy(String uri) throws Exception {
+		OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
+		StringBuffer b = new StringBuffer();
+		b.append("partner_ro_");
+		b.append(uri.replace(":","").replace("/",""));
+	//	b.append("_");
+	//	b.append(UUID.randomUUID());
+		int httpcode = policy.createGroupPolicy("partner", 
+				ssoToken, uri, new String[] {"GET"},b.toString());
+		if (httpcode == 200) return b.toString();
+		else throw new Exception(String.format("Error creating policy %d",httpcode));
+	}			
+	
+	protected String createPartnerRWPolicy(String uri) throws Exception {
+		OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
+		StringBuffer b = new StringBuffer();
+		b.append("partner_rw_");
+		b.append(uri.replace(":","").replace("/",""));
+	//	b.append("_");
+	//	b.append(UUID.randomUUID());
+		int httpcode = policy.createGroupPolicy("partner", 
+				ssoToken, uri, new String[] {"GET","POST","PUT"},b.toString());
+		if (httpcode == 200) return b.toString();
+		else throw new Exception(String.format("Error creating policy %d",httpcode));
+	}		
 	protected String createPublicPOSTPolicy(String uri) throws Exception {
 		OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
 		StringBuffer b = new StringBuffer();
@@ -59,6 +84,19 @@ public abstract class ProtectedResourceTest extends ResourceTest implements IAut
 	//	b.append(UUID.randomUUID());
 		int httpcode = policy.createGroupPolicy("member", 
 				ssoToken, uri, new String[] {"GET","POST"},b.toString());
+		if (httpcode == 200) return b.toString();
+		else throw new Exception(String.format("Error creating policy %d",httpcode));
+	}	
+	
+	protected String createPublicROPolicy(String uri) throws Exception {
+		OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
+		StringBuffer b = new StringBuffer();
+		b.append("member_ro");
+		b.append(uri.replace(":","").replace("/",""));
+	//	b.append("_");
+	//	b.append(UUID.randomUUID());
+		int httpcode = policy.createGroupPolicy("member", 
+				ssoToken, uri, new String[] {"GET"},b.toString());
 		if (httpcode == 200) return b.toString();
 		else throw new Exception(String.format("Error creating policy %d",httpcode));
 	}	
