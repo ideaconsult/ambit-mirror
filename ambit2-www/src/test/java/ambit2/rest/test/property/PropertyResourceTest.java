@@ -407,12 +407,15 @@ public class PropertyResourceTest extends ResourceTest {
 	public void testCreateEntry() throws Exception {
 
 		OntModel model = OT.createModel();
+		Property p = new Property("cas",new LiteratureEntry("aaa","bbb"));
+		p.setNominal(true);
 		PropertyRDFReporter.addToModel(model, 
-				new Property("cas",new LiteratureEntry("aaa","bbb")),
+				p,
 				new PropertyURIReporter(),
 				new ReferenceURIReporter());
 		StringWriter writer = new StringWriter();
 		model.write(writer,"RDF/XML");
+		System.out.println(writer.toString());
 
 		Response response =  testPost(
 					String.format("http://localhost:%d%s", port,PropertyResource.featuredef),
@@ -420,10 +423,11 @@ public class PropertyResourceTest extends ResourceTest {
 					writer.toString());
 		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
 		
-		Assert.assertEquals("http://localhost:8181/feature/4", response.getLocationRef().toString());
+		//Assert.assertEquals("http://localhost:8181/feature/4", response.getLocationRef().toString());
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-				String.format("SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='%s' and title='aaa' and url='bbb'",Property.opentox_CAS));
+				String.format("SELECT * FROM properties join catalog_references using(idreference) where name='cas' and comments='%s' and title='aaa' and url='bbb' and isLocal=1",Property.opentox_CAS));
+
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}	

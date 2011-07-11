@@ -19,7 +19,11 @@ public class OpenSSOVerifier implements Verifier {
 	protected boolean enabled = false;
 	
 	public OpenSSOVerifier() {
-		this( OpenSSOServicesConfig.getInstance().isEnabled());
+		this( isEnabled() );
+	}
+	public static boolean isEnabled() {
+		try { return OpenSSOServicesConfig.getInstance().isEnabled();} catch (Exception x) {}
+		return true;
 	}
 	public OpenSSOVerifier(boolean enabled) {
 		this.enabled = enabled;
@@ -43,9 +47,10 @@ public class OpenSSOVerifier implements Verifier {
 		
 		
 		if ((token != null) && (!"".equals(token))) {
-			OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
-			ssoToken.setToken(token);
+
 			try {
+				OpenSSOToken ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
+				ssoToken.setToken(token);				
 				if (ssoToken.isTokenValid()) {
 					setUser(ssoToken, request);
 					return Verifier.RESULT_VALID;

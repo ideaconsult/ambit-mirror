@@ -42,9 +42,13 @@ public class PolicyResource extends CatalogResource<String>{
 
 	public PolicyResource() {
 		super();
+		try {
 		OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
 		ssoToken = new OpenSSOToken(config.getOpenSSOService());
 		policy = new OpenSSOPolicy(config.getPolicyService());
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -149,7 +153,7 @@ public class PolicyResource extends CatalogResource<String>{
 				b.append(x);
 				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x);
 			}
-			//try if can authorize agains the new policy
+			//try if can authorize against the new policy
 			try {
 				for (String action : methods) 
 					try {

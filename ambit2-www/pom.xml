@@ -233,7 +233,7 @@
 
   	</dependency>
 
-  	<dependency>
+		<dependency>
   		<groupId>net.sf.saxon</groupId>
   		<artifactId>saxon-dom</artifactId>
   		<version>8.7</version>
@@ -333,7 +333,7 @@
 	<dependency>
 		<groupId>ambit</groupId>
 		<artifactId>opentox-opensso</artifactId>
-		<version>0.0.2</version>
+		<version>1.0.0</version>
 	</dependency>
 
   </dependencies>

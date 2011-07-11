@@ -50,10 +50,13 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy>{
 			String token = getToken();
 			if (token==null) throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
 			
-			OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
-			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
+			String policyService = null;
 			Hashtable<String, String> policies = new Hashtable<String, String>();
 			try {
+
+				OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
+				policyService = config.getPolicyService();
+				OpenSSOPolicy policy = new OpenSSOPolicy(policyService);				
 				OpenSSOToken ssotoken = new OpenSSOToken(config.getOpenSSOService());
 				ssotoken.setToken(token);
 				policy.listPolicy(ssotoken, policyId.toString(), policies);
@@ -74,7 +77,7 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy>{
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,config.getPolicyService(),x);
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,policyService,x);
 			}
 			
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -101,10 +104,13 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy>{
 			String token = getToken();
 			if (token==null) throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
 			
-			OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
-			OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
+			String policyService = null;
 			Hashtable<String, String> policies = new Hashtable<String, String>();
 			try {
+
+				OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
+				policyService = config.getPolicyService();
+				OpenSSOPolicy policy = new OpenSSOPolicy(policyService);				
 				OpenSSOToken ssotoken = new OpenSSOToken(config.getOpenSSOService());
 				ssotoken.setToken(token);
 				int httpcode = policy.deletePolicy(ssotoken, policyId.toString());
@@ -115,7 +121,7 @@ public class OpenSSOPolicyResource extends CatalogResource<Policy>{
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,config.getPolicyService(),x);
+				throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,policyService,x);
 			}
 			
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);		

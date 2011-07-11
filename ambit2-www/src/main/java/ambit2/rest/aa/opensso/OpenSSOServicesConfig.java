@@ -73,8 +73,6 @@ public class OpenSSOServicesConfig {
 		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/config.prop");
 		try {
 			properties.load(in);
-		} catch (AAException x) {
-			throw x;
 		} catch (Exception x) {
 			throw new AAPropertiesException(x);
 		} finally {
