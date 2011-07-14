@@ -140,9 +140,13 @@ public class Panel2D<A extends IMoleculeEditAction> extends JPanel implements IC
 	@Override
 	public void paint(Graphics g) {
 		super.paintComponent(g);    
-		if (image == null) {
+		if (image == null) try {
 			image = tools.getImage(atomContainer,getSelector(),generate2d,atomNumbers);
+		} catch (Exception x) {
+			g.fillRect(0, 0, tools.getImageSize().width, tools.getImageSize().width);
+			return;
 		}
+		
 		g.drawImage(image,0,0,this);
 	}
 	
