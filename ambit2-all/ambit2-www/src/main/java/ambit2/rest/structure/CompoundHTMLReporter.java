@@ -339,14 +339,27 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			} catch (Exception x) {
 				query_threshold = "0.9";
 			}
-			String maxrecords = "";
+			String maxhits = "";
 			try {
 
-				maxrecords = form.getFirstValue(QueryResource.max_hits);
+				maxhits = form.getFirstValue(QueryResource.max_hits);
 			} catch (Exception x) {
-				maxrecords = "1000";
+				maxhits = "1000";
 			}		
-			
+			String page = "";
+			try {
+
+				page = form.getFirstValue("page");
+			} catch (Exception x) {
+				page = "0";
+			}	
+			String pagesize = "";
+			try {
+
+				pagesize = form.getFirstValue("pagesize");
+			} catch (Exception x) {
+				pagesize = maxhits; 
+			}				
 			/** This determines if similarity searching will be done via smiles or via URL **/
 			String type = "";
 			try {
@@ -429,10 +442,14 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				//output.write(AmbitResource.jsTableSorter("results","pager"));
 				output.write("<table id='results' class='tablesorter' border='0' cellpadding='0' cellspacing='1'>"); 
 				
-				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Max number of hits:%s</CAPTION>",
+				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Page:%s</CAPTION>",
 						query.toString(),
 						downloadLinks(),
-						String.format("<input name='max' type='text' title='Maximum number of hits' size='10' value='%s'>\n",maxrecords==null?"100":maxrecords)));//resultsForm(query)
+						String.format("<input name='page' type='text' title='Page' size='10' value='%s'>&nbsp;"+
+								"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'>",
+								page==null?"0":page,
+								pagesize==null?"100":pagesize
+										)));//resultsForm(query)
 						//,resultsForm(query)
 				output.write("<thead><tr>");
 				output.write(String.format("<th width='20'>#</th><th width='%d' bgcolor='#99CC00'>Compound</th>",cellSize.width)); //ECB42C
