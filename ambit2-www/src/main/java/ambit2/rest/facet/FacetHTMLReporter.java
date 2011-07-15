@@ -56,9 +56,11 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 		try {
 			output.write("<tr>");
 			output.write("<td>");
+			String uri = uriReporter.getURI(item);
+			String d = uri.indexOf("?")>0?"&":"?";
 			output.write(String.format(
-						"<a href=\"%s\">%s&nbsp;(%d)</a>",
-						uriReporter.getURI(item),
+						"<a href=\"%s%spage=0&pagesize=100\">%s&nbsp;(%d)</a>",
+						uri,d,
 						item.getValue(),item.getCount()));
 			output.write("</td>");
 			output.write("<td>");
