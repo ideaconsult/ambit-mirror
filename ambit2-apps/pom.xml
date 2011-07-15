@@ -225,7 +225,13 @@
   		<artifactId>toxtree-verhaar</artifactId>
   		<version>${toxtree.version}</version>
   		<type>jar</type>
-  		<scope>compile</scope>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>toxtree</groupId>
+  		<artifactId>toxtree-verhaar2</artifactId>
+  		<version>${toxtree.version}</version>
+  		<type>jar</type>
   	</dependency>
   	<dependency>
   		<groupId>toxtree</groupId>
@@ -273,7 +279,14 @@
   	</dependency>  	
 
 
-  	</dependencies>
+  	<dependency>
+  		<groupId>ambit</groupId>
+  		<artifactId>ambit2-dragon</artifactId>
+  		<version>${ambit.version}</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  </dependencies>
   	<repositories>
   	    	<repository>
         <id>ambit-plovdiv-releases</id>
