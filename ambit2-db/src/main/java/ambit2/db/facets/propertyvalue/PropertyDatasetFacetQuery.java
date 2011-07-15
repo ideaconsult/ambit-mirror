@@ -72,6 +72,9 @@ public class PropertyDatasetFacetQuery extends AbstractFacetQuery<Property,Sourc
 			record = new PropertyDatasetFacet<Property,SourceDataset>(null);
 			record.setProperty(getFieldname());
 			record.setDataset(getValue());
+		} else { 
+			if (record.getDataset()==null) record.setDataset(getValue());
+			if (record.getProperty()==null) record.setProperty(getFieldname());
 		}
 		try {
 			record.setValue(rs.getString(1));
