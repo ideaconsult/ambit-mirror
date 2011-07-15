@@ -62,10 +62,13 @@ public class CompoundsByPropertyValueInDatasetResource extends FacetResource<Pro
 			public void headerBeforeTable(Writer w, IQueryRetrieval query) {
 				try {
 					PropertyDatasetFacetQuery q = (PropertyDatasetFacetQuery) query;
-				w.write(String.format("<h4>Dataset <a href='%s' target='_blank'>%s</a> &nbsp; Property <a href='%s/feature/%d'>%s</a></h4>", 
-						q.getValue(),
+				w.write(String.format("<h5>Dataset <a href='%s/%s/%s?page=0&pagesize=100' target='_blank'>%s</a> &nbsp; Property <a href='%s/%s/%d'>%s</a></h5>", 
+						getRequest().getRootRef(),
+						OpenTox.URI.dataset.name(),
+						q.getValue().getId(),
 						q.getValue(),
 						getRequest().getRootRef(),
+						OpenTox.URI.feature.name(),
 						q.getFieldname().getId(),
 						q.getFieldname().getName()
 					));
