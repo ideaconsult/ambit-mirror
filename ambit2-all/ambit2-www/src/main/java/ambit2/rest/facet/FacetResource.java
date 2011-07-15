@@ -2,6 +2,7 @@ package ambit2.rest.facet;
 
 import java.sql.Connection;
 
+import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -58,18 +59,21 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 		
 			if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 				return new OutputWriterConvertor(
-						new FacetCSVReporter<IQueryRetrieval<IFacet>>(getRequest()),
+						new FacetCSVReporter(getRequest()),
 						MediaType.TEXT_CSV);
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 					return new OutputWriterConvertor(
-							new FacetURIReporter<IQueryRetrieval<IFacet>>(getRequest()),
+							new FacetURIReporter(getRequest()),
 							MediaType.TEXT_URI_LIST);				
 			} else 
 				return new OutputWriterConvertor(
-						new FacetHTMLReporter(getRequest()),
+						getHTMLReporter(getRequest()),
 						MediaType.TEXT_HTML);
 	}
 	
+	protected FacetHTMLReporter getHTMLReporter(Request request) {
+		return new FacetHTMLReporter(request);
+	}
 
 	protected Template getProperty(String[] propertyURI, int max)  throws ResourceException {
 		if (propertyURI==null) return null;

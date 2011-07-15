@@ -1,5 +1,6 @@
 package ambit2.rest.facet;
 
+import java.io.Writer;
 import java.util.Iterator;
 
 import org.restlet.Context;
@@ -12,7 +13,9 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
+import ambit2.base.facet.IFacet;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacetQuery;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 
 /**
@@ -50,5 +53,46 @@ public class CompoundsByPropertyValueInDatasetResource extends FacetResource<Pro
 		q.setValue((SourceDataset)dataset);
 		if ((q.getValue()==null) && (q.getFieldname()==null)) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		return q;
+	}
+
+	@Override
+	protected FacetHTMLReporter getHTMLReporter(Request request) {
+		return new FacetHTMLReporter(request) {
+			@Override
+			public void headerBeforeTable(Writer w, IQueryRetrieval query) {
+				try {
+					PropertyDatasetFacetQuery q = (PropertyDatasetFacetQuery) query;
+				w.write(String.format("<h4>Dataset <a href='%s' target='_blank'>%s</a> &nbsp; Property <a href='%s/feature/%d'>%s</a></h4>", 
+						q.getValue(),
+						q.getValue(),
+						getRequest().getRootRef(),
+						q.getFieldname().getId(),
+						q.getFieldname().getName()
+					));
+				} catch (Exception x) {
+					
+				}
+				
+			}
+			@Override
+			public void footer(Writer w, IQueryRetrieval query) {
+				try {
+					String chart = String.format("%s/chart/pie?%s",
+							getRequest().getRootRef(),
+							getRequest().getResourceRef().getQuery()
+							);
+					
+					w.write(String.format("<tr><td colspan='2'><a href='%s&w=600&h=500' alt='%s' title='%s'><img src='%s&w=600&h=500' title='%s'></a></td></tr>",
+							chart,
+							query.toString(),
+							query.toString(),
+							chart,
+							query.toString()
+							));
+				} catch (Exception x) {}
+				
+				super.footer(w, query);
+			}
+		};
 	}
 }
