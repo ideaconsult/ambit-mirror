@@ -11,7 +11,7 @@ import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 
-public class FacetHTMLReporter extends QueryHTMLReporter<IFacet, IQueryRetrieval<IFacet>> {
+public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<Facet, IQueryRetrieval<Facet>> {
 	/**
 	 * 
 	 */
@@ -25,12 +25,14 @@ public class FacetHTMLReporter extends QueryHTMLReporter<IFacet, IQueryRetrieval
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
-		return new FacetURIReporter<IQueryRetrieval<IFacet>>(request);
+		return new FacetURIReporter(request);
 	}
 	@Override
-	public void header(Writer w, IQueryRetrieval<IFacet> query) {
+	public void header(Writer w, IQueryRetrieval<Facet> query) {
 		super.header(w, query);
+		
 		try {
+			headerBeforeTable(w,query);
 			w.write(String.format("<table>"));
 		//	w.write(String.format("<caption>%s</caption>",query.toString()));
 			
@@ -39,15 +41,18 @@ public class FacetHTMLReporter extends QueryHTMLReporter<IFacet, IQueryRetrieval
 			x.printStackTrace();
 		}
 	}
+	public void headerBeforeTable(Writer w, IQueryRetrieval<Facet> query) {
+		
+	}
 	@Override
-	public void footer(Writer w, IQueryRetrieval<IFacet> query) {
+	public void footer(Writer w, IQueryRetrieval<Facet> query) {
 		try {
 			w.write(String.format("</table>"));
 		} catch (Exception x) {}
 		super.footer(w, query);
 	}	
 	@Override
-	public Object processItem(IFacet item) throws AmbitException  {
+	public Object processItem(Facet item) throws AmbitException  {
 		try {
 			output.write("<tr>");
 			output.write("<td>");
