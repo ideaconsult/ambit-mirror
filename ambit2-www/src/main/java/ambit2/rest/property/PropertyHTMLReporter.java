@@ -4,16 +4,19 @@ import java.io.Writer;
 
 import org.restlet.Context;
 import org.restlet.Request;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.property.annotations.PropertyAnnotationResource;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -38,10 +41,51 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	@Override
 	public void header(Writer w, IQueryRetrieval<Property> query) {
 		super.header(w, query);
-		try {w.write(collapsed?"<h3>Feature</h3>":"<h3>Features</h3>");
+		
+		MediaType[] mimes = {
+
+				MediaType.TEXT_URI_LIST,
+				//MediaType.TEXT_CSV,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.TEXT_RDF_N3,
+				};
+		String[] image = {
+				"link.png",
+				//"excel.png",
+				"rdf.gif",
+				"rdf.gif"
+				
+		};		
+			
+		try {
+			w.write(collapsed?"<h3>Feature":"<h3>Features");
+			String q=uriReporter.getRequest().getResourceRef().getQuery();
+
+			for (int i=0;i<mimes.length;i++) {
+				MediaType mime = mimes[i];
+				w.write("&nbsp;");
+
+				w.write(String.format(
+						//"<a href=\"?%s%smedia=%s\">%s</a>",
+						"<a href=\"?%s%smedia=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+						q==null?"":q,
+						q==null?"":"&",
+						Reference.encode(mime.getName()),
+						uriReporter.getBaseReference().toString(),
+						image[i],
+						mime.getName(),
+						mime
+						));	
+						
+
+			}	
+			w.write("</h3>");				
+			//--------
+			w.write("<hr>");
+			
 			w.write(AmbitResource.jsTableSorter("features","pager"));
 			w.write("<table width='80%' id='features' class=\"tablesorter\" border='0' cellpadding='0' cellspacing='1'><thead>");
-			w.write("<tr><th width='5%'>Find</th><th width='25%'>Name</th><th width='5%'>Units</th><th width='30%'>Same as</th><th>Origin (Dataset, Model or Algorithm)</th><th>Origin Type</th><th>Values of type</th><th>Nominal values</th></tr></thead>");
+			w.write("<tr><th width='5%'>Find</th><th width='25%'>Name</th><th width='5%'>Units</th><th width='30%'>Same as</th><th>Origin (Dataset, Model or Algorithm)</th><th>Origin Type</th><th>Values of type</th><th>Nominal values</th><th>More</th></tr></thead>");
 			w.write("<tbody>");
 		} catch (Exception x) {}
 	}	
@@ -49,6 +93,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	@Override
 	public Object processItem(Property item) throws AmbitException  {
 		try {
+			String uri = uriReporter.getURI(item);
 			output.write("<tr>");
 			output.write("<td width='5%'>");
 			output.write(String.format("<a href='%s/%s?%s=%s&condition=regexp'><img src=\"%s/images/search.png\" border='0' alt='Find' title='Find property by name'></a>",
@@ -61,7 +106,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			output.write("<td width='25%'  class=\"rowwhite\">");
 			output.write(String.format(
 						"<a href=\"%s\">%s</td><td width='5%%'>%s</a>",
-						uriReporter.getURI(item),
+						uri,
 						item.getName(),
 						item.getUnits()));
 			output.write("</td>");
@@ -90,6 +135,9 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			output.write("<td>");
 			output.write(item.isNominal()?"YES":"NO");
 			output.write("</td>");
+			output.write("<td>");
+			output.write(String.format("<a href='%s%s'>More</a>",uri,PropertyAnnotationResource.annotation));
+			output.write("</td>");			
 			output.write("</tr>");
 		} catch (Exception x) {
 			Context.getCurrentLogger().warning(x.getMessage());
