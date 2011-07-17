@@ -3,6 +3,7 @@ package ambit2.rest.routers.opentox;
 import org.restlet.Context;
 
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.property.annotations.PropertyAnnotationResource;
 import ambit2.rest.routers.MyRouter;
 
 /**
@@ -45,6 +46,8 @@ public class FeaturesRouter extends MyRouter {
 
 		attachDefault(PropertyResource.class);
 		attach(PropertyResource.featuredefID,PropertyResource.class);
+		attach(String.format("%s%s",PropertyResource.featuredefID,PropertyAnnotationResource.annotation),
+									PropertyAnnotationResource.class);
 	}
 
 }
