@@ -36,7 +36,8 @@ public class Model_crud_test extends  CRUDTest<Object,ModelQueryResults>  {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","select parameters from models where algorithm='http://localhost:8080/algorithm/pka' and creator='test-user'");
 		Assert.assertEquals(1,table.getRowCount());
-		Assert.assertEquals("-M",table.getValue(0,"parameters"));
+		Object value = table.getValue(0,"parameters");
+		Assert.assertEquals("-M\t",value.toString());
 		c.close();
 	}
 

@@ -61,6 +61,11 @@ public class StoredQuery_crud_test extends CRUDTest<SessionID,IStoredQuery> {
 	}
 
 	@Override
+	public void testCreate() throws Exception {
+	
+	}
+	
+	@Override
 	protected IQueryUpdate<SessionID, IStoredQuery> createQueryNew()
 			throws Exception {
 		StoredQuery q = new StoredQuery();
