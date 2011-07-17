@@ -31,6 +31,7 @@
   <properties idproperty="2" idreference="8" name="Property 2" units="" comments="" islocal="false"/>
   <properties idproperty="3" idreference="8" name="Property 3" units="" comments="" islocal="false"/>
 
+  <property_annotation idproperty="1" predicate="test1" object="test2"/>
   
   <template idtemplate="1" name="BCF"/>
   <template idtemplate="44" name="Octanol-water partition coefficient (Kow)"/>
