@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.opentox.rdf.OT;
@@ -41,6 +42,8 @@ import com.hp.hpl.jena.vocabulary.RDF;
  *
  */
 public class RDFPropertyIterator extends RDFObjectIterator<Property> {
+	
+	protected Hashtable<RDFNode, Property> confidenceLinks;
 	
 	public RDFPropertyIterator(Representation representation,MediaType mediaType) throws ResourceException {
 		super(representation,mediaType,OT.OTClass.Feature.toString());
@@ -91,7 +94,10 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 	
 	@Override
 	public Property parseRecord(RDFNode propertyEntry, Property property) {
-		
+		//to avoid circular recursive calls 
+		return parseRecord(propertyEntry, property,0);
+	}
+	public Property parseRecord(RDFNode propertyEntry, Property property, int level) {	
 			
 		if (property == null) property=createRecord();
 		if (propertyEntry.isLiteral()) {
@@ -164,27 +170,9 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			String hasSource = creator;
 			
 			property.setReference(processSource(newEntry, hasSource, creator));
-			
-			try { 
-				t = newEntry.getProperty(OTProperty.confidenceOf.createProperty(jenaModel));
-				if (t!=null) {
-					PropertyAnnotation pa = new PropertyAnnotation();
-					pa.setPredicate(OTProperty.confidenceOf.getURI());
-					pa.setType(OTClass.ModelConfidenceFeature.name());
-					
-					RDFNode resource = t.getObject();
-					if (resource.isLiteral()) pa.setObject(((Literal)resource).getString());
-					else pa.setObject(resource.isURIResource()?((Resource)resource).getURI():resource.toString());
-					
-					if (property.getAnnotations()==null) property.setAnnotations(new PropertyAnnotations());
-					property.getAnnotations().add(pa);
-				}
-			}	catch (Exception x) {
-				x.printStackTrace();
-			} finally {
-				t = null;
-			}
+			//predicate = jenaModel.createProperty(String.format("http://www.opentox.org/api/1.1#%s",
 	
+			
 		property.setClazz(String.class);
 		StmtIterator it = null;
 		property.setNominal(false);
@@ -217,6 +205,53 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			try {it.close(); } catch (Exception x) {}
 		}
 
+		//confidence
+		try { 
+			t = newEntry.getProperty(OTProperty.confidenceOf.createProperty(jenaModel));
+			if (t!=null) {
+				PropertyAnnotation pa=null;
+				Property theFeature = null;
+				RDFNode resource = t.getObject();
+			
+					
+				if (resource == newEntry) {
+					//link to itself, ignore
+				} else if (resource.isAnon()) {
+					try {
+						PropertyAnnotation<Property> ppa = new PropertyAnnotation<Property>();
+						if (confidenceLinks != null)  theFeature = confidenceLinks.get(resource);
+						if (theFeature==null) {
+							theFeature =  parseRecord(resource, null,level+1);
+							if (theFeature!=null) {
+								if (confidenceLinks==null) confidenceLinks = new Hashtable<RDFNode, Property>();
+								confidenceLinks.put(resource,theFeature);
+							}
+						}
+						if (theFeature!=null) {
+							ppa.setObject(theFeature);
+							pa = ppa;
+						}
+					} catch (Exception x) {
+						pa = null;
+					}
+				} else {
+					PropertyAnnotation<String> psa = new PropertyAnnotation<String>();
+					if (resource.isLiteral()) 
+						psa.setObject(((Literal)resource).getString());
+					else 
+						psa.setObject(resource.isURIResource()?((Resource)resource).getURI():resource.toString());
+					pa = psa;
+				}
+				pa.setPredicate(OTProperty.confidenceOf.getURI());
+				pa.setType(OTClass.ModelConfidenceFeature.name());
+				if (property.getAnnotations()==null) property.setAnnotations(new PropertyAnnotations());
+				property.getAnnotations().add(pa);
+			}
+		}	catch (Exception x) {
+			x.printStackTrace();
+		} finally {
+			t = null;
+		}		
 		if (property.getName()==null) property.setName("Unnamed");
 		return property;
 	}

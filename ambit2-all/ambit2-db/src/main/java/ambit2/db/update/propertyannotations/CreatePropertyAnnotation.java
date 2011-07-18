@@ -25,10 +25,18 @@ public class CreatePropertyAnnotation extends AbstractUpdate<Property,PropertyAn
 	@Override
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> param = new ArrayList<QueryParam>();
-		param.add(new QueryParam<Integer>(Integer.class,getObject().getIdproperty()));
+		if (getObject().getIdproperty()>0)
+			param.add(new QueryParam<Integer>(Integer.class,getObject().getIdproperty()));
+		else if ((getGroup()!=null) && (getGroup().getId()>0))
+			param.add(new QueryParam<Integer>(Integer.class,getGroup().getId()));
+		else throw new AmbitException("No property assigned!");
+		
 		param.add(new QueryParam<String>(String.class,getObject().getType()));
 		param.add(new QueryParam<String>(String.class,getObject().getPredicate()));
-		param.add(new QueryParam<String>(String.class,getObject().getObject()));
+		if (getObject().getObject() instanceof String)
+			param.add(new QueryParam<String>(String.class,getObject().getObject().toString()));
+		else throw new AmbitException(String.format("Found object of class %s instead of String. [%s]", 
+						getObject().getObject().getClass(),getObject().getObject()));
 		return param;
 	}
 

@@ -151,15 +151,17 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 		
 		table = c.createQueryTable("ANNOTATIONS", 
 				"SELECT name,rdf_type,predicate,object FROM property_annotation join properties using(idproperty)\n"+
-				"where name='TUM_CDK_khs.ssssB' and rdf_type='ModelConfidenceFeature' and predicate='http://www.opentox.org/api/1.1#confidenceOf' and\n"+
-				"object='http://opentox.tum.de/models/model1'"
+				"where name='TUM_CDK_ATSc4' and rdf_type='ModelConfidenceFeature' and predicate='http://www.opentox.org/api/1.1#confidenceOf' "
 				);
+				Assert.assertEquals(1,table.getRowCount());
+		Assert.assertTrue(table.getValue(0,"object").toString().startsWith("/feature/"))		;
 		table = c.createQueryTable("ANNOTATIONS", 
-		"SELECT name,rdf_type,predicate,object FROM property_annotation join properties using(idproperty)\n"+
-		"where name='TUM_CDK_ATSc4' and rdf_type='ModelConfidenceFeature' and predicate='http://www.opentox.org/api/1.1#confidenceOf' and\n"+
-		"object='http://opentox.tum.de/models/MMMMMM'"
-		);
+				"SELECT name,rdf_type,predicate,object FROM property_annotation join properties using(idproperty)\n"+
+				"where name='TUM_CDK_khs.ssssB' and rdf_type='ModelConfidenceFeature' and predicate='http://www.opentox.org/api/1.1#confidenceOf' and\n"+
+				"object='http://opentox.tum.de/feature/XXX'"
+				);
 		Assert.assertEquals(1,table.getRowCount());
+		
 		c.close();
 	}
 	@Test

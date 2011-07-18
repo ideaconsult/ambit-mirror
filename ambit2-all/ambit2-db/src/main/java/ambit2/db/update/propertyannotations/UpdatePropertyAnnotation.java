@@ -23,7 +23,10 @@ public class UpdatePropertyAnnotation extends AbstractUpdate<Property,PropertyAn
 		List<QueryParam> param = new ArrayList<QueryParam>();
 		param.add(new QueryParam<String>(String.class,getObject().getType()));
 		param.add(new QueryParam<String>(String.class,getObject().getPredicate()));
-		param.add(new QueryParam<String>(String.class,getObject().getObject()));
+		if (getObject().getObject() instanceof String)
+			param.add(new QueryParam<String>(String.class,getObject().getObject().toString()));
+		else throw new AmbitException(String.format("Found object of class %s instead of String. [%s]", 
+						getObject().getObject().getClass(),getObject().getObject()));
 		
 		int idproperty =  getGroup()==null?getObject().getIdproperty():getGroup().getId();
 		

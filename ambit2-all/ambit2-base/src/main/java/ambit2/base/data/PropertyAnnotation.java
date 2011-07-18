@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author nina
  *
  */
-public class PropertyAnnotation implements Serializable {
+public class PropertyAnnotation<OBJECT> implements Serializable {
 	/**
 	 * 
 	 */
@@ -33,14 +33,14 @@ public class PropertyAnnotation implements Serializable {
 	public void setPredicate(String predicate) {
 		this.predicate = predicate;
 	}
-	public String getObject() {
+	public OBJECT getObject() {
 		return object;
 	}
-	public void setObject(String object) {
+	public void setObject(OBJECT object) {
 		this.object = object;
 	}
 	protected String predicate;
-	protected String object;
+	protected OBJECT object;
 
 	@Override
 	public String toString() {
