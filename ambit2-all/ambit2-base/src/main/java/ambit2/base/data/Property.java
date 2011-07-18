@@ -71,7 +71,16 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static final String opentox_TupleFeature = "http://www.opentox.org/api/1.1#TupleFeature";
 	public static final String opentox_ConfidenceFeature = "http://www.opentox.org/api/1.1#ConfidenceFeature";
 	
+	
 	public static final String EC = "EC";
+	
+	protected PropertyAnnotations annotations = null;
+	public PropertyAnnotations getAnnotations() {
+		return annotations;
+	}
+	public void setAnnotations(PropertyAnnotations annotations) {
+		this.annotations = annotations;
+	}
 	protected boolean isNominal = false;
 	public boolean isNominal() {
 		return isNominal;

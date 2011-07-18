@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.opentox.rdf.OT;
+import org.opentox.rdf.OT.OTClass;
 import org.opentox.rdf.OT.OTProperty;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -18,6 +19,8 @@ import ambit2.base.data.Dictionary;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.PropertyAnnotations;
 import ambit2.rest.OpenTox;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -162,7 +165,25 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 			
 			property.setReference(processSource(newEntry, hasSource, creator));
 			
-
+			try { 
+				t = newEntry.getProperty(OTProperty.confidenceOf.createProperty(jenaModel));
+				if (t!=null) {
+					PropertyAnnotation pa = new PropertyAnnotation();
+					pa.setPredicate(OTProperty.confidenceOf.getURI());
+					pa.setType(OTClass.ModelConfidenceFeature.name());
+					
+					RDFNode resource = t.getObject();
+					if (resource.isLiteral()) pa.setObject(((Literal)resource).getString());
+					else pa.setObject(resource.isURIResource()?((Resource)resource).getURI():resource.toString());
+					
+					if (property.getAnnotations()==null) property.setAnnotations(new PropertyAnnotations());
+					property.getAnnotations().add(pa);
+				}
+			}	catch (Exception x) {
+				x.printStackTrace();
+			} finally {
+				t = null;
+			}
 	
 		property.setClazz(String.class);
 		StmtIterator it = null;
@@ -183,7 +204,12 @@ public class RDFPropertyIterator extends RDFObjectIterator<Property> {
 				else if (resource.hasURI(OT.OTClass.NominalFeature.getNS())) 
 					property.setNominal(true);
 					
-
+				else if (resource.hasURI(OT.OTClass.ModelConfidenceFeature.getNS())) {
+					//TODO
+				} else if (resource.hasURI(OT.OTClass.ModelPredictionFeature.getNS())) {
+					//TODO
+				}
+					
 			}
 		} catch (Exception x) {
 			

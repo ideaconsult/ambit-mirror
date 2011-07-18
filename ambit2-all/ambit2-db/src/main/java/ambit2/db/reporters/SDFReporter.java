@@ -91,7 +91,8 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
-			output.write(item.getContent());
+			String content = item.getContent();
+			output.write(content);
 			if (isMOLONLY()) return null;
 			for (Property p : item.getProperties()) {
 				if (CMLUtilities.SMARTSProp.equals(p.getName())) continue;
