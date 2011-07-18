@@ -148,6 +148,18 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 		c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(7,table.getRowCount());
+		
+		table = c.createQueryTable("ANNOTATIONS", 
+				"SELECT name,rdf_type,predicate,object FROM property_annotation join properties using(idproperty)\n"+
+				"where name='TUM_CDK_khs.ssssB' and rdf_type='ModelConfidenceFeature' and predicate='http://www.opentox.org/api/1.1#confidenceOf' and\n"+
+				"object='http://opentox.tum.de/models/model1'"
+				);
+		table = c.createQueryTable("ANNOTATIONS", 
+		"SELECT name,rdf_type,predicate,object FROM property_annotation join properties using(idproperty)\n"+
+		"where name='TUM_CDK_ATSc4' and rdf_type='ModelConfidenceFeature' and predicate='http://www.opentox.org/api/1.1#confidenceOf' and\n"+
+		"object='http://opentox.tum.de/models/MMMMMM'"
+		);
+		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 	}
 	@Test

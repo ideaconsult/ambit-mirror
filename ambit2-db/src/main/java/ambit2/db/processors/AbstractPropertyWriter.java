@@ -40,10 +40,13 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.property.RetrieveFieldNames;
 import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.ReadProperty;
+import ambit2.db.update.propertyannotations.CreatePropertyAnnotations;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
 	public enum mode  {OK, UNKNOWN,ERROR,TRUNCATED};
+
+	protected CreatePropertyAnnotations annotationsWriter;
 	protected CreateProperty propertyWriter;
     protected SourceDataset dataset = null;
     protected RetrieveFieldNames selectField = new RetrieveFieldNames();
@@ -129,6 +132,12 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     		if (property.getId()<=0) {
 		    	propertyWriter.setObject(property);
 		    	exec.process(propertyWriter);
+		    	if (property.getAnnotations()!=null) {
+		    		if (annotationsWriter==null) annotationsWriter=new CreatePropertyAnnotations();
+		    		annotationsWriter.setGroup(property);
+		    		annotationsWriter.setObject(property.getAnnotations());
+		    		exec.process(annotationsWriter);
+		    	}
     		}
 
     	} catch (Exception x) {
