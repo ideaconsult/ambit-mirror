@@ -2,6 +2,7 @@ package ambit2.rest.property.annotations;
 
 import java.io.Writer;
 
+import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -96,12 +97,18 @@ public class PropertyAnnotationHTMLReporter extends QueryHTMLReporter<PropertyAn
 		try {
 			output.write("<tr>");
 			String propertyURI = uriReporter.getURI(item);
+			
+			String object = item.getObject().toString();
+			if (item.getType().equals(OT.OTClass.ModelConfidenceFeature.name())) {
+				if (!object.startsWith("http")) object = String.format("%s%s",uriReporter.getBaseReference(),object);
+			} 	
+			
 			output.write(String.format("<td><a href='%s' title='Feature'>%s</a></td><td>%s</td><td>%s</td><td>%s</td>",
 					propertyURI,
 					propertyURI,
 					item.getType(),
 					item.getPredicate(),
-					item.getObject())
+					object)
 					);
 
 			output.write("</tr>");

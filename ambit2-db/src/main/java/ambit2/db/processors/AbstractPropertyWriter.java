@@ -35,18 +35,19 @@ import java.sql.SQLException;
 import javax.naming.OperationNotSupportedException;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.property.RetrieveFieldNames;
 import ambit2.db.update.property.CreateProperty;
 import ambit2.db.update.property.ReadProperty;
-import ambit2.db.update.propertyannotations.CreatePropertyAnnotations;
+import ambit2.db.update.propertyannotations.CreatePropertyAnnotation;
 
 public abstract class AbstractPropertyWriter<Target,Result> extends
 		AbstractRepositoryWriter<Target, Result> {
 	public enum mode  {OK, UNKNOWN,ERROR,TRUNCATED};
 
-	protected CreatePropertyAnnotations annotationsWriter;
+	protected CreatePropertyAnnotation annotationsWriter;
 	protected CreateProperty propertyWriter;
     protected SourceDataset dataset = null;
     protected RetrieveFieldNames selectField = new RetrieveFieldNames();
@@ -132,11 +133,34 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
     		if (property.getId()<=0) {
 		    	propertyWriter.setObject(property);
 		    	exec.process(propertyWriter);
-		    	if (property.getAnnotations()!=null) {
-		    		if (annotationsWriter==null) annotationsWriter=new CreatePropertyAnnotations();
+		    	
+		    	if (property.getAnnotations()!=null) try {
+		    		if (annotationsWriter==null) annotationsWriter=new CreatePropertyAnnotation();
 		    		annotationsWriter.setGroup(property);
-		    		annotationsWriter.setObject(property.getAnnotations());
-		    		exec.process(annotationsWriter);
+		    		for (PropertyAnnotation a:property.getAnnotations()) {
+		    			if (a.getObject() instanceof Property) {
+		    				Property linkedProperty = (Property) a.getObject();
+		    				if (linkedProperty.getId()<=0) {
+		    			    	propertyWriter.setObject(linkedProperty);
+		    			    	exec.process(propertyWriter);
+		    				}
+		    				if (linkedProperty.getId()>0) {
+		    					PropertyAnnotation<String> pa = new PropertyAnnotation<String>();
+		    					pa.setPredicate(a.getPredicate());
+		    					pa.setType(a.getType());
+		    					pa.setIdproperty(property.getId());
+		    					pa.setObject(String.format("/feature/%d",linkedProperty.getId()));
+				    			annotationsWriter.setObject(pa);
+				    			exec.process(annotationsWriter);
+		    				}
+			    		} else {
+			    			annotationsWriter.setObject(a);
+			    			exec.process(annotationsWriter);
+		    			}
+		    		}
+		    		
+		    	} catch (Exception x) {
+		    		x.printStackTrace();
 		    	}
     		}
 

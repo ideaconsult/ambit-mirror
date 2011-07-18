@@ -1,6 +1,5 @@
 package ambit2.db.update.propertyannotations;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,10 +44,17 @@ public class CreatePropertyAnnotations  extends AbstractUpdate<Property,Property
 			else if ((getGroup()!=null) && (getGroup().getId()>0))
 				param.add(new QueryParam<Integer>(Integer.class,getGroup().getId()));
 			else throw new AmbitException("No property assigned!");
+			
 			param.add(new QueryParam<String>(String.class,pa.getType()));
 			param.add(new QueryParam<String>(String.class,pa.getPredicate()));
-			param.add(new QueryParam<String>(String.class,pa.getObject()));
+			
+			if (pa.getObject() instanceof String)
+				param.add(new QueryParam<String>(String.class,pa.getObject().toString()));
+			else throw new AmbitException(String.format("Found object of class %s instead of String. [%s]", 
+							pa.getObject().getClass(),pa.getObject()));
+			
 		}
+		
 
 		return param;
 	}

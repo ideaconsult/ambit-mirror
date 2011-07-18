@@ -3674,9 +3674,11 @@
                 <ot:hasSource>http://localhost:8080/OpenTox-dev/algorithm/CDKPhysChem/AutocorrelationDescriptorCharge</ot:hasSource>
                 <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
                 <dc:title>TUM_CDK_ATSc4</dc:title>
+         
                     <ot:confidenceOf>
-                    <ot:Model rdf:about="http://opentox.tum.de/models/MMMMMM"/>
+                    <ot:Feature rdf:nodeID="A256"/>
                     </ot:confidenceOf>
+                 
               </ot:Feature>
             </ot:feature>
           </ot:FeatureValue>
@@ -3691,7 +3693,7 @@
                 <ot:hasSource>http://localhost:8080/OpenTox-dev/algorithm/CDKPhysChem/KierHallSmartsDescriptor</ot:hasSource>
                 <ot:isA>http://www.opentox.org/algorithms.owl#PhysicoChemical</ot:isA>
                 <dc:title>TUM_CDK_khs.ssssB</dc:title>
-                <ot:confidenceOf>http://opentox.tum.de/models/model1</ot:confidenceOf>
+                <ot:confidenceOf rdf:resource="http://opentox.tum.de/feature/XXX"/>
 
               </ot:Feature>
             </ot:feature>

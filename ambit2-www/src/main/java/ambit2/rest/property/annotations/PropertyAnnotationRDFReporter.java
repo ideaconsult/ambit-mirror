@@ -24,7 +24,7 @@ import com.hp.hpl.jena.ontology.OntModel;
  *
  * @param <Q>
  */
-public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnnotation>> extends QueryRDFReporter<PropertyAnnotation, Q> {
+public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnnotation<String>>> extends QueryRDFReporter<PropertyAnnotation<String>, Q> {
 
 	/**
 	 * 
@@ -62,8 +62,11 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
 			predicate = jenaModel.createProperty(String.format("http://www.opentox.org/api/1.1#%s",
 					Reference.encode(item.getPredicate())));
 		}
-		
-		feature.addProperty(predicate,item.getObject());
+		String object = item.getObject().toString();
+		if (item.getType().equals(OT.OTClass.ModelConfidenceFeature)) {
+			if (!object.startsWith("http")) object = String.format("%s%s",uriReporter.getBaseReference(),object);
+		} 	
+		feature.addProperty(predicate,object);
 		return item;
 	}
 /*
