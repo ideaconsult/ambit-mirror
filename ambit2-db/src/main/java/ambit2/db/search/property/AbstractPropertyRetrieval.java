@@ -34,6 +34,8 @@ import java.sql.SQLException;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
@@ -54,7 +56,29 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 		title,
 		url
 	}	
-	public static String base_sql = "select idproperty,properties.name,units,title,url,idreference,comments,ptype as idtype,islocal,type from properties join catalog_references using(idreference)";
+	public enum ANNOTATIONS_TABLE {
+		rdf_type {
+			@Override
+			public void setValue(PropertyAnnotation<String>  a,String value) {
+				a.setType(value);
+			}
+		},
+		predicate {
+			@Override
+			public void setValue(PropertyAnnotation<String>  a,String value) {
+				a.setPredicate(value);
+			}
+		},
+		object {
+			@Override
+			public void setValue(PropertyAnnotation<String> a,String value) {
+				a.setObject(value);
+			}
+		};
+		public abstract void setValue(PropertyAnnotation<String>  a,String value);
+	}		
+	public static String base_sql = "select properties.idproperty,properties.name,units,title,url,idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference)\n"+
+			"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate=\"http://www.opentox.org/api/1.1#confidenceOf\") a using(idproperty)\n";
 	/**
 	 * 
 	 */
@@ -148,6 +172,20 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 				if (_type != null)
 				p.getReference().setType(ILiteratureEntry._type.valueOf(_type));
 			} catch (Exception x) {}			
+			
+			PropertyAnnotation<String> a = null;
+			for (ANNOTATIONS_TABLE f : ANNOTATIONS_TABLE.values()) try {
+				String value = rs.getString(f.name());
+				if (value == null) break;
+				if (a==null) a = new PropertyAnnotation<String>();
+				f.setValue(a, value);
+			} catch (Exception x) {}	
+			
+			if (a!=null) {
+				if (p.getAnnotations()==null) p.setAnnotations(new PropertyAnnotations());
+				p.getAnnotations().add(a);
+			}
+			
 			return p;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

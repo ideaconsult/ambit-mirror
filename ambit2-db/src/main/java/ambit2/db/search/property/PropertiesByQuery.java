@@ -97,7 +97,7 @@ public class PropertiesByQuery  extends AbstractPropertyRetrieval<Template, ISto
 				String w = QField.properties.getSQL(this);
 				wherePropertyID = w==null?"":(and + QField.properties.getSQL(this));
 			} 
-			return PropertiesByDataset.base_sql_type + String.format(join,whereDataset+wherePropertyID);
+			return PropertiesByDataset.base_sql_type_confidence + String.format(join,whereDataset+wherePropertyID);
 
 			
 		}

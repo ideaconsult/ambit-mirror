@@ -52,8 +52,15 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
 		OTClass featureType = OTClass.Feature;
 		String id = uriReporter.getURI(item);
 		if (id==null) throw new AmbitException("No property id");
-		OntModel jenaModel = getOutput();
-		feature = jenaModel.createIndividual(id,featureType.getOntClass(jenaModel));
+
+		feature = getOutput().createIndividual(id,featureType.getOntClass(getOutput()));
+		annotation2RDF(item, getOutput(), feature,uriReporter.getBaseReference().toString());
+		return item;
+	}
+
+
+	public static void annotation2RDF(PropertyAnnotation item, OntModel jenaModel, Individual feature, String rootReference) throws AmbitException {
+
 		
 		com.hp.hpl.jena.rdf.model.Property predicate = null;
 		if (item.getPredicate().startsWith("http")) { //there is a chance this is an URI
@@ -64,96 +71,12 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
 		}
 		String object = item.getObject().toString();
 		if (item.getType().equals(OT.OTClass.ModelConfidenceFeature)) {
-			if (!object.startsWith("http")) object = String.format("%s%s",uriReporter.getBaseReference(),object);
+			feature.addOntClass(OT.OTClass.ModelConfidenceFeature.getOntClass(jenaModel));
+			if (!object.startsWith("http")) object = String.format("%s%s",rootReference,object);
 		} 	
 		feature.addProperty(predicate,object);
-		return item;
-	}
-/*
-	public static Individual addToModel(OntModel jenaModel,Property item, 
-			QueryURIReporter<Property, IQueryRetrieval<Property>> uriReporter,
-			ReferenceURIReporter referenceReporter
-			) {
-		Individual feature = null;
-		OTClass featureType = OTClass.Feature;
-		
-		String id = uriReporter.getURI(item);
-		if ((uriReporter==null) || (uriReporter.getBaseReference()==null) || (item.getId()<0)) {
-			if (item.getClazz() == Dictionary.class) {
-				feature = jenaModel.createIndividual(id,featureType.getOntClass(jenaModel));
-			} else
-				feature = jenaModel.createIndividual(featureType.getOntClass(jenaModel));
-		} else {
-			feature = jenaModel.createIndividual(id,featureType.getOntClass(jenaModel));
-		}
-		if (item.isNominal())
-			feature.addOntClass(OTClass.NominalFeature.getOntClass(jenaModel));
-		
-		if (item.getClazz()==Number.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
-		else if (item.getClazz()==Double.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
-		else if (item.getClazz()==Float.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
-		else if (item.getClazz()==Integer.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
-		else if (item.getClazz()==Long.class) feature.addOntClass(OTClass.NumericFeature.getOntClass(jenaModel));
-		else if (item.getClazz()==Dictionary.class) feature.addOntClass(OTClass.TupleFeature.getOntClass(jenaModel));
-		
-		if (item.getName()!=null) feature.addProperty(DC.title, item.getName());
-		if (item.getUnits()!=null) feature.addProperty(OT.DataProperty.units.createProperty(jenaModel),item.getUnits());
-		
-		String uri = item.getLabel();
-		if(uri==null) uri  = Property.guessLabel(item.getName());
-		if ((uri!=null) && (uri.indexOf("http://")<0)  && (uri.indexOf("https://")<0)) {
-			uri = String.format("%s%s",OT.NS,Reference.encode(uri));
-		}
-		feature.addProperty(OWL.sameAs,jenaModel.createResource(uri));
-		
-		//ot:hasSource  ; reference.title used as source URI, reference.url used as object type  -
-		//somewhat awkward, but title is the unique field in the catalog_references table
-		
-		uri = item.getTitle();
-		
-		//catch all 
-		if (uri.indexOf("/model/")>0) 
-			feature.addOntClass(OT.OTClass.ModelPredictionFeature.getOntClass(jenaModel));	
-		
-		//drop using /reference objects
-		if ((uri.indexOf("http://")<0) && (uri.indexOf("https://")<0)) {
-			Individual source  = null;
-		
-			
-			if (_type.Algorithm.equals(item.getReference().getType())) {
-				uri = String.format("%s/algorithm/%s",uriReporter.getBaseReference(),Reference.encode(uri));
-				source = jenaModel.createIndividual(uri,OT.OTClass.Algorithm.createOntClass(jenaModel));
-				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);
-			} else if (_type.Model.equals(item.getReference().getType())) {
-				uri = String.format("%s/model/%s",uriReporter.getBaseReference(),Reference.encode(uri));
-				source = jenaModel.createIndividual(uri,OT.OTClass.Model.createOntClass(jenaModel));
-				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);
-				feature.addOntClass(OT.OTClass.ModelPredictionFeature.getOntClass(jenaModel));
-			} else if (_type.Feature.equals(item.getReference().getType())) {
-				uri = String.format("%s/feature/%s",uriReporter.getBaseReference(),Reference.encode(uri));
-				source = jenaModel.createIndividual(uri,OT.OTClass.Feature.createOntClass(jenaModel));
-				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), source);				
-			} else if (_type.Dataset.equals(item.getReference().getType())) {
-				//this seems to confuse everybody's else parsers ...
-				uri = String.format("%s/dataset/%s",uriReporter.getBaseReference(),Reference.encode(uri));
-				Resource src = jenaModel.createResource(uri);
-				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), src);
-			} else {
-				feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), uri);
-			}
-			feature.addProperty(DC.creator, item.getReference().getURL());
 
-		}  else {
-			feature.addProperty(OT.OTProperty.hasSource.createProperty(jenaModel), jenaModel.createResource(uri));
-			feature.addProperty(DC.creator, item.getReference().getURL());
-		}
-		
-
-		return feature;
 	}	
-
-
-	*/
 	@Override
 	public void open() throws DbAmbitException {
 	}

@@ -8,11 +8,14 @@ import java.util.List;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
+import ambit2.db.search.property.AbstractPropertyRetrieval.ANNOTATIONS_TABLE;
 
 /**
  * Retrieves Property-es used by particular dataset
@@ -64,7 +67,9 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 	public static String wherepropertyName  = " property.name = ?";
 	public static String join  = 
 		"\njoin template_def using(idproperty) join src_dataset using(idtemplate) where %s ";
-	public static String base_sql_type = "select idproperty,properties.name,units,title,url,properties.idreference,comments,ptype as idtype,islocal,type from properties join catalog_references using(idreference)";
+	public static String base_sql_type_confidence = 
+		"select properties.idproperty,properties.name,units,title,url,properties.idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference)\n"+
+		"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate=\"http://www.opentox.org/api/1.1#confidenceOf\") a using(idproperty)";
 	
 	/**
  * 
@@ -105,7 +110,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 				wherePropertyID = w==null?"":(and + QField.properties.getSQL(this));
 			} 
 			
-			return base_sql_type + String.format(join,whereDataset+wherePropertyID) + "\n order by template_def.idproperty";
+			return base_sql_type_confidence + String.format(join,whereDataset+wherePropertyID) + "\n order by template_def.idproperty";
 		} 
 		throw new AmbitException("No dataset defined");
 	}
@@ -164,6 +169,19 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 				if (_type != null)
 				p.getReference().setType(ILiteratureEntry._type.valueOf(_type));
 			} catch (Exception x) {}			
+			
+			PropertyAnnotation<String> a = null;
+			for (ANNOTATIONS_TABLE f : ANNOTATIONS_TABLE.values()) try {
+				String value = rs.getString(f.name());
+				if (value == null) break;
+				if (a==null) a = new PropertyAnnotation<String>();
+				f.setValue(a, value);
+			} catch (Exception x) {}	
+			
+			if (a!=null) {
+				if (p.getAnnotations()==null) p.setAnnotations(new PropertyAnnotations());
+				p.getAnnotations().add(a);
+			}			
 			return p;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
