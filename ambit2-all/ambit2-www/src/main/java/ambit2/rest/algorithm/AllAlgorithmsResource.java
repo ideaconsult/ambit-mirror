@@ -290,6 +290,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 					 */
 					//
 					StringBuilder b = new StringBuilder();
+					if (algorithm.getParameters()!=null)
 					for (Parameter prm : algorithm.getParameters())
 						//b.append(String.format("-%s\t'%s'\t", prm.getName(),prm.getValue()));
 						b.append(String.format("-%s\t'%s'\t", prm.getName(),prm.getValue()));
@@ -314,6 +315,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
+					x.printStackTrace();
 					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 				}
 			} else if (algorithm.hasType(AlgorithmType.AppDomain)) {				
