@@ -19,7 +19,9 @@ public class RetrieveFieldNamesByAlias extends AbstractPropertyRetrieval<IStruct
 
 
 	
-	public static String sql = "select idproperty,name,units,title,url,idreference,comments,null,islocal,type from properties join catalog_references using(idreference)";
+	public static String sql = 
+			"select idproperty,name,units,title,url,idreference,comments,null,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference)\n"+
+			"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate=\"http://www.opentox.org/api/1.1#confidenceOf\") a using(idproperty)\n";
 	public static String where = " %s %s %s ?"; // COLLATE utf8_general_ci for case insensitive
 
 		/**

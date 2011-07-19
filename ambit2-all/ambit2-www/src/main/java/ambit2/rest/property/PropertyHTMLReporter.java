@@ -8,6 +8,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
@@ -136,6 +137,9 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			output.write(item.isNominal()?"YES":"NO");
 			output.write("</td>");
 			output.write("<td>");
+			if (item.getAnnotations()!=null)
+				for (PropertyAnnotation a : item.getAnnotations())
+					output.write(String.format("%s %s %s.<br>", a.getType(),a.getPredicate(),a.getObject()));
 			output.write(String.format("<a href='%s%s'>More</a>",uri,PropertyAnnotationResource.annotation));
 			output.write("</td>");			
 			output.write("</tr>");

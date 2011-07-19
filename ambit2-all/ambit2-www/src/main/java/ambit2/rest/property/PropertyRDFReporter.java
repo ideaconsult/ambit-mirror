@@ -9,12 +9,14 @@ import org.restlet.data.Reference;
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.property.annotations.PropertyAnnotationRDFReporter;
 import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -133,6 +135,12 @@ public class PropertyRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 			feature.addProperty(DC.creator, item.getReference().getURL());
 		}
 		
+		if (item.getAnnotations()!=null)
+			for (PropertyAnnotation a : item.getAnnotations()) try {
+				PropertyAnnotationRDFReporter.annotation2RDF(a, jenaModel, feature,uriReporter.getBaseReference().toString());
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
 
 		return feature;
 	}	
