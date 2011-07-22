@@ -1,13 +1,19 @@
 package ambit2.tautomers.test;
 
+import java.io.FileReader;
 import java.util.Vector;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 
 import javax.swing.*;
 
+import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.ChemObjectToSmiles;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SMIRKSManager;
@@ -17,6 +23,7 @@ import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsManager;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.SmartsToChemObject;
+import ambit2.smarts.StructInfo;
 import ambit2.ui.Panel2D;
 
 
@@ -43,8 +50,10 @@ public class TestStrVisualizer
 		//structs.add(MoleculeFactory.makeAdenine());
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(); 
-		tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "[H]CNC[H]");
+		//tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C[H])(C[H]))ccc1C(c1ccc(OCCN)cc1)=C(CC)c1ccccc1");
 		
+		tsv.testSMIRKS("[N:1][C:2]>>[N:1][H].[C:2]=[O]", 
+				tsv.getMDLStruct("D:/Projects/nina/test-smirks-structs/4_hydroxytamoxifen.sdf",1));
 		
 	}
 	
@@ -107,8 +116,70 @@ public class TestStrVisualizer
 		addStructure(target);
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
 		
+	}
+	
+	public void testSMIRKS(String smirks, IAtomContainer target) throws Exception
+	{
+		System.out.println("Testing SMIRKS: " + smirks);
+		SMIRKSManager smrkMan = new SMIRKSManager();
+		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
+		SMIRKSReaction reaction = smrkMan.parse(smirks);
+		if (!smrkMan.getErrors().equals(""))
+		{
+			System.out.println(smrkMan.getErrors());
+			return;
+		}
 		
+		System.out.println(reaction.transformationDataToString());
+		
+		setFrame();
+		String targetSmiles = SmartsHelper.moleculeToSMILES(target);
+		
+		addStructure((IAtomContainer)target.clone());
+		smrkMan.applyTransformation(target, reaction);
+		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
+		addStructure(target);
+		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
+		
+	}
+	
+	
+	public IAtomContainer getMDLStruct(String mdlFile, int recNum)
+	{	
+		IAtomContainer res = null;
+		
+		try
+		{
+			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			int record=0;
+
+			while (reader.hasNext()) 
+			{	
+				Object o = reader.next();
+				record++;
+				
+				if (record == recNum)
+				{	
+					if (o instanceof IAtomContainer) 
+					{
+						IAtomContainer mol = (IAtomContainer)o;
+						//if (mol.getAtomCount() == 0) continue;
+						AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+						CDKHueckelAromaticityDetector.detectAromaticity(mol);
+						
+						res = mol;
+					}
+					break;
+				}
+			}	
+		}
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return(res);
 		
 	}
 	
