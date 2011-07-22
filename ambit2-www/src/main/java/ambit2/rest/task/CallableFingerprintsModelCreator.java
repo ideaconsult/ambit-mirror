@@ -43,7 +43,9 @@ public class CallableFingerprintsModelCreator<USERID> extends CallableStructures
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
-						OpenTox.params.parameters.getValuesArray(form)),
+						OpenTox.params.parameters.getValuesArray(form),
+						OpenTox.params.confidenceOf.getFirstValue(form)==null?null:OpenTox.params.confidenceOf.getFirstValue(form).toString()
+				),
 				token);
 	
 	}	

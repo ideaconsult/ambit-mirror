@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.UUID;
 
 import org.apache.xerces.impl.dv.util.Base64;
+import org.opentox.rdf.OT;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -17,6 +18,8 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
@@ -35,7 +38,7 @@ import ambit2.rest.model.ModelURIReporter;
  * @param <Model>
  */
 public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,ModelQueryResults> {
-
+	protected String predictedFeatureURI;
 	/**
 	 * 
 	 */
@@ -44,8 +47,11 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> model_reporter,
 			AlgorithmURIReporter alg_reporter,
 			String[] targetURI,
-			String[] parameters) {
+			String[] parameters,
+			String predictedFeatureURI //optional, can be null
+			) {
 		super(applicationRootReference,model_reporter,alg_reporter,targetURI,parameters);
+		this.predictedFeatureURI = predictedFeatureURI;
 	}
 	public ModelQueryResults process(Algorithm algorithm) throws AmbitException {
 
@@ -103,11 +109,25 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 
 			predicted = new PredictedVarsTemplate(name+"#ApplicabilityDomain");
 			Property property = new Property(coverage.getMetricName(),prediction);
+			property.setEnabled(true);
 			property.setLabel(String.format("http://www.opentox.org/api/1.1#%s",coverage.getMetricName()));
 			predicted.add(property);
 			property = new Property(coverage.getDomainName(),prediction);
-			property.setLabel(String.format("http://www.opentox.org/api/1.1#%s",coverage.getDomainName()));
-			predicted.add(property);
+			property.setLabel(Property.opentox_ConfidenceFeature);
+			property.setClazz(Number.class);
+			property.setEnabled(true);
+			//this is a confidence feature
+			if (predictedFeatureURI!=null) {
+				PropertyAnnotation<String> a = new PropertyAnnotation<String>();
+				a.setType(OT.OTClass.ModelConfidenceFeature.name());
+				a.setPredicate(OT.OTProperty.confidenceOf.name());
+				a.setObject(predictedFeatureURI);
+				PropertyAnnotations aa = new PropertyAnnotations();
+				aa.add(a);
+				property.setAnnotations(aa);
+			}
+			predicted.add(property);			
+			
 
 			dependent = new Template("Empty");
 			

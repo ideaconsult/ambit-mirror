@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.UUID;
 
 import org.apache.xerces.impl.dv.util.Base64;
+import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -24,6 +25,8 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
@@ -201,12 +204,21 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			predictedProperty.setClazz(property.getClazz());
 			predictedProperty.setNominal(property.isNominal());
 			predicted.add(predictedProperty);
+			predictedProperty.setEnabled(true);
 			
 			if (supportsDistribution(classifier)) {
 				Property confidenceProperty = new Property(String.format("%s Confidence",property.getName()),prediction); 
 				confidenceProperty.setLabel(Property.opentox_ConfidenceFeature);
 				confidenceProperty.setUnits("");
 				confidenceProperty.setClazz(Number.class);
+				confidenceProperty.setEnabled(true);
+				PropertyAnnotation<Property> a = new PropertyAnnotation<Property>();
+				a.setType(OT.OTClass.ModelConfidenceFeature.name());
+				a.setPredicate(OT.OTProperty.confidenceOf.name());
+				a.setObject(predictedProperty);
+				PropertyAnnotations aa = new PropertyAnnotations();
+				aa.add(a);
+				confidenceProperty.setAnnotations(aa);
 				predicted.add(confidenceProperty);
 			}
 			

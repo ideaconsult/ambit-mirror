@@ -648,6 +648,9 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Form headers = new Form();  
 		headers.add(OpenTox.params.dataset_uri.toString(), 
 				String.format("http://localhost:%d/dataset/1", port));
+		headers.add(OpenTox.params.confidenceOf.toString(), 
+				String.format("http://example.com/opentox/feature/xxx")); //completely fictious example
+		
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/distanceEuclidean", port),
 				headers, Status.SUCCESS_OK,
@@ -659,6 +662,21 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/dataset/1%s", port,
 						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Euclidean distance'");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Euclidean distance'");
+		Assert.assertEquals(4,table.getRowCount());		
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT rdf_type,predicate,object FROM property_annotation join properties using(idproperty) where name='AppDomain_Euclidean distance'");
+		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals("ModelConfidenceFeature",table.getValue(0,"rdf_type"));
+		Assert.assertEquals("confidenceOf",table.getValue(0,"predicate"));
+		Assert.assertEquals("http://example.com/opentox/feature/xxx",table.getValue(0,"object"));		
 	}			
 	
 	@Test
@@ -713,7 +731,51 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/dataset/1%s", port,
 						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Tanimoto'");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Tbnimoto'");
+		Assert.assertEquals(4,table.getRowCount());		
 	}		
+	
+	@Test
+	public void testFingerprintsADConfidence() throws Exception {
+		Form headers = new Form();  
+		headers.add(OpenTox.params.dataset_uri.toString(), 
+				String.format("http://localhost:%d/dataset/1", port));
+		headers.add(OpenTox.params.confidenceOf.toString(), 
+				String.format("http://example.com/opentox/feature/xxx")); //completely fictious example
+				
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/fptanimoto", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+
+		testAsyncTask(
+				String.format("http://localhost:%d/model/3", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/1%s", port,
+						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Tanimoto'");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Tanimoto'");
+		Assert.assertEquals(4,table.getRowCount());		
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT rdf_type,predicate,object FROM property_annotation join properties using(idproperty) where name='AppDomain_Tanimoto'");
+		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals("ModelConfidenceFeature",table.getValue(0,"rdf_type"));
+		Assert.assertEquals("confidenceOf",table.getValue(0,"predicate"));
+		Assert.assertEquals("http://example.com/opentox/feature/xxx",table.getValue(0,"object"));
+	}	
 	
 	@Test
 	public void testnparamdensity() throws Exception {

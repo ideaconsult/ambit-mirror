@@ -258,7 +258,15 @@ public class OpenTox {
 				return "Validation service, used by superservice for model creation";
 			}				
 		},
-		
+		confidenceOf {
+			@Override
+			public boolean isMandatory() {
+				return false;
+			}
+			public String getDescription() {
+				return "ConfidenceOf";
+			}				
+		},
 		page {
 			public String getDescription() {
 				return "Page";

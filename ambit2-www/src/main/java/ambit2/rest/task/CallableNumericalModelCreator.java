@@ -26,8 +26,10 @@ import ambit2.rest.model.builder.CoverageModelBuilder;
 
 public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<Instances,Matrix,CoverageModelBuilder,USERID> {
 	
-	public CallableNumericalModelCreator(Form form,
-			Reference applicationRootReference,Context context,
+	public CallableNumericalModelCreator(
+			Form form,
+			Reference applicationRootReference,
+			Context context,
 			Algorithm algorithm,
 			ModelURIReporter<IQueryRetrieval<ModelQueryResults>> reporter,
 			AlgorithmURIReporter alg_reporter,
@@ -38,9 +40,12 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),
-						OpenTox.params.parameters.getValuesArray(form)),
+						OpenTox.params.parameters.getValuesArray(form),
+						OpenTox.params.confidenceOf.getFirstValue(form)==null?null:OpenTox.params.confidenceOf.getFirstValue(form).toString()
+						),
 						token);
 	}
+
 	@Override
 	public TaskResult doCall() throws Exception {
 		Context.getCurrentLogger().info("Start()");
