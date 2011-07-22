@@ -71,6 +71,9 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 			
 			x.setConnection(connection);
 			x.process(update);
+			
+			writeAnnotations(model.getPredicted(), x);
+			
 			return new TaskResult(builder.getModelReporter().getURI(model));
 		} catch (WekaException e) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,e.getMessage(),e);

@@ -211,7 +211,9 @@ public class ModelResourceTest extends ResourceTest {
 	
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-				"SELECT id_srcdataset,idstructure,idproperty,name,value_string,value_number FROM values_all join struc_dataset using(idstructure) where id_srcdataset=1 and idproperty=5 order by idstructure");
+				"SELECT id_srcdataset,idstructure,idproperty,properties.name,value_string,value_number FROM values_all join struc_dataset using(idstructure) " +
+				"	join properties using(idproperty) join catalog_references r on properties.idreference=r.idreference " +
+				" where id_srcdataset=1 and properties.name='Complex Endpoint' and type='Model' order by idstructure");
 		Assert.assertEquals(4,table.getRowCount());
 		
 		table = 	c.createQueryTable("EXPECTED",

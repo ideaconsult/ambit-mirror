@@ -2,11 +2,15 @@ package ambit2.rest.task;
 
 import java.sql.Connection;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.data.Form;
 
+import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.Template;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorsChain;
@@ -16,6 +20,7 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.model.CreateModel;
 import ambit2.db.update.model.ReadModel;
+import ambit2.db.update.propertyannotations.CreatePropertyAnnotation;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.model.builder.ModelBuilder;
 
@@ -31,6 +36,7 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 
 	protected ModelQueryResults model;
 	protected boolean newModel = true;
+	protected CreatePropertyAnnotation annotationsWriter;
 	
 	public ModelQueryResults getModel() {
 		return model;
@@ -46,18 +52,62 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 		setBuilder(builder);
 		
 	}
+	
+	protected void writeAnnotations(Template properties, UpdateExecutor exec) throws Exception {
+		
+		Iterator<Property> i = properties.getProperties(true);
+		while (i.hasNext()) {
+			Property property = i.next();
+	    	if (property.getAnnotations()!=null) try {
+	    		if (annotationsWriter==null) annotationsWriter=new CreatePropertyAnnotation();
+	    		annotationsWriter.setGroup(property);
+
+	    		for (PropertyAnnotation a:property.getAnnotations()) {
+	    			if (a.getObject() instanceof Property) {
+
+	    				Property linkedProperty = (Property) a.getObject();
+	    				if (linkedProperty.getId()<=0) {
+	    			    	//propertyWriter.setObject(linkedProperty);
+	    			    	//exec.process(propertyWriter);
+	    					//TODO
+	    				}
+	    				if (linkedProperty.getId()>0) {
+	    					PropertyAnnotation<String> pa = new PropertyAnnotation<String>();
+	    					pa.setPredicate(a.getPredicate());
+	    					pa.setType(a.getType());
+	    					pa.setIdproperty(property.getId());
+	    					pa.setObject(String.format("/feature/%d",linkedProperty.getId()));
+			    			annotationsWriter.setObject(pa);
+			    			exec.process(annotationsWriter);
+	    				}
+		    		} else {
+		    			annotationsWriter.setObject(a);
+		    			exec.process(annotationsWriter);
+	    			}
+		    	}
+
+	    	} catch (Exception x) {
+	    		//do smth
+		    		throw x;
+		    }
+		}
+	}
 	/**
 	 * Writes the model into database and returns a reference
 	 */
 	@Override
 	protected TaskResult createReference(Connection connection) throws Exception {
-		UpdateExecutor<CreateModel> x = new UpdateExecutor<CreateModel>();
+		UpdateExecutor x = new UpdateExecutor();
 		try {
 			model = createModel();
+			
 			CreateModel update = new CreateModel(model);
 			
 			x.setConnection(connection);
-			Integer i = x.process(update);
+			Integer i = (Integer) x.process(update);
+			
+			writeAnnotations(model.getPredicted(), x);
+			
 			newModel = i>0;
 			if ((model.getId()==null) || (model.getId()<0)) {
 				ReadModel q = new ReadModel();
