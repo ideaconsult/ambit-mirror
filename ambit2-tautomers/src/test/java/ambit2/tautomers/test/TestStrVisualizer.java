@@ -14,6 +14,8 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import javax.swing.*;
 
 import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.core.processors.structure.AtomConfigurator;
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.smarts.ChemObjectToSmiles;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SMIRKSManager;
@@ -52,7 +54,7 @@ public class TestStrVisualizer
 		TestStrVisualizer tsv = new TestStrVisualizer(); 
 		//tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C[H])(C[H]))ccc1C(c1ccc(OCCN)cc1)=C(CC)c1ccccc1");
 		
-		tsv.testSMIRKS("[N:1][C:2]>>[N:1][H].[C:2]=[O]", 
+		tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", 
 				tsv.getMDLStruct("D:/Projects/nina/test-smirks-structs/4_hydroxytamoxifen.sdf",1));
 		
 	}
@@ -91,6 +93,8 @@ public class TestStrVisualizer
 	
 	public void testSMIRKS(String smirks, String targetSmiles) throws Exception
 	{
+		
+		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
@@ -120,6 +124,8 @@ public class TestStrVisualizer
 	
 	public void testSMIRKS(String smirks, IAtomContainer target) throws Exception
 	{
+		
+		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
@@ -149,6 +155,9 @@ public class TestStrVisualizer
 	{	
 		IAtomContainer res = null;
 		
+		AtomConfigurator  cfg = new AtomConfigurator();
+		HydrogenAdderProcessor hadder = new HydrogenAdderProcessor();
+		
 		try
 		{
 			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
@@ -166,8 +175,14 @@ public class TestStrVisualizer
 					{
 						IAtomContainer mol = (IAtomContainer)o;
 						//if (mol.getAtomCount() == 0) continue;
-						AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+						//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+						//CDKHueckelAromaticityDetector.detectAromaticity(mol);
+						
+						//ToxTree processing
+						hadder.process(mol);
+						cfg.process(mol);
 						CDKHueckelAromaticityDetector.detectAromaticity(mol);
+						
 						
 						res = mol;
 					}
