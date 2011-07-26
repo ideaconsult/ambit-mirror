@@ -3,8 +3,10 @@ package ambit2.smarts;
 import java.util.Vector;
 
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
@@ -206,6 +208,102 @@ public class SMIRKSManager
 		return false;
 	}
 	
+	/*
+	 *  This transformation is applied in SSM_NON_OVERLAPPING mode where
+	 *  the overlapping mappings at particular site produce multiple copies of the molecule.
+	 */
+	public IAtomContainerSet applyTransformationWithCombinedOverlappedPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
+	{
+		
+		Vector<Vector<IAtom>> rMaps0 = getNonOverlappingMappings(target);
+		if (rMaps0.size()==0) 
+			return null;
+		
+		Vector<Vector<IAtom>> rMaps;
+		
+		//Preliminary filtration by means of IAcceptable
+		if (selection == null)
+			rMaps = rMaps0;
+		else
+		{
+			rMaps = new Vector<Vector<IAtom>>(); 
+			for (int i = 0; i < rMaps0.size(); i++)
+			{
+				if (selection.accept(rMaps0.get(i)))
+					rMaps.add(rMaps0.get(i));
+			}
+		}
+		
+		if (rMaps.size()==0) 
+			return null;
+		
+		IAtomContainerSet resSet = new AtomContainerSet();
+		
+		if (rMaps.size()==1)
+		{	
+			IAtomContainer product = applyTransformAtLocationsWithCloning(target, rMaps, reaction);  
+			resSet.addAtomContainer(product);
+			return(resSet);
+		}
+		
+		
+		//Make mapping clusters/groups 
+		Vector<Vector<Integer>> clusterIndexes = isoTester.getOverlappedMappingClusters(rMaps);
+		
+		
+		//Generate all combinations:
+		//Each combination is represented as a number where each digit is represents the choice from each cluster
+		int comb[] = new int[clusterIndexes.size()];
+		for (int i = 0; i < comb.length; i++)
+			comb[i] = 0;
+		
+		int digit = 0;
+		do 
+		{
+			//Prepare current combination
+			Vector<Vector<IAtom>> combMaps = new Vector<Vector<IAtom>>();
+			for (int i = 0; i < comb.length; i++)
+			{	
+				int index = clusterIndexes.get(i).get(comb[i]).intValue();				
+				combMaps.add(rMaps.get(index));
+			}	
+			
+			//Apply the transformation for the particular combination of locations with cloning
+			IAtomContainer product = applyTransformAtLocationsWithCloning(target, combMaps, reaction);  
+			resSet.addAtomContainer(product);
+			
+			
+			//Generation of next combination
+			digit = 0;
+			while (digit < comb.length)
+			{
+				comb[digit]++;
+				if(comb[digit] == clusterIndexes.get(digit).size())
+				{
+					comb[digit] = 0;
+					digit++;
+				}
+				else
+					break;
+			}
+			
+		}
+		while (digit < comb.length);		
+		//while (!isZeroCombination(comb));
+		
+		
+		return resSet;
+	}
+	
+	boolean isZeroCombination(int a[])
+	{
+		for (int i = 0; i < a.length; i++)
+		{	
+			if (a[i] != 0)
+				return false;
+		}	
+		return (true);
+	}
 	
 	
 	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer target)
@@ -219,7 +317,7 @@ public class SMIRKSManager
 	
 	public Vector<Vector<IAtom>> getNonIdenticalMappings(IAtomContainer target)
 	{
-		//Special treatment for fragmented reactants
+		//Special treatment for fragmented reactants 
 		//TODO
 		
 		Vector<Vector<IAtom>> rMaps = isoTester.getNonIdenticalMappings(target);
@@ -362,6 +460,21 @@ public class SMIRKSManager
 		
 	}
 	
+		
+	public IAtomContainer applyTransformAtLocationsWithCloning(IAtomContainer target, 
+															Vector<Vector<IAtom>> rMaps, SMIRKSReaction reaction)
+	{
+		//TODO
+		
+		//Create a target clone 
+		
+		//Update the mapping and reaction?? according to the new atoms of the close
+		
+		//Apply transformation
+		
+		
+		return null;
+	}
 	
 	
 	//Helper

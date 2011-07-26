@@ -486,6 +486,33 @@ public class IsomorphismTester
 	}
 
 	
+	/*
+	 * returns a set of groups (arrays with indexes) of overlapped mappings
+	 */
+	public Vector<Vector<Integer>> getOverlappedMappingClusters(Vector<Vector<IAtom>> maps)
+	{
+		Vector<Vector<Integer>>  v = new Vector<Vector<Integer>>();
+		if (maps.size() == 0)
+			return (v);
+		
+		if (maps.size() == 1)
+		{
+			Vector<Integer> vi = new Vector<Integer>();
+			vi.add(new Integer(0));
+			v.add(vi);
+			return(v);
+		}
+		
+		//TODO
+		return v;
+	}
+	
+	boolean overlapsWithCluster(Vector<IAtom> map, Vector<Integer> cluster, Vector<Vector<IAtom>> maps)
+	{
+		//TODO
+		return false;
+	}
+	
 	
 	boolean singleAtomIsomorphism()
 	{	
