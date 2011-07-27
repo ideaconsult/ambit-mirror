@@ -102,6 +102,8 @@ public class SmartsConst
 	public static final int SSM_NON_EQUIVALENT = 3;
 	public static final int SSM_ALL = 10;
 	
+	public static final int SSM_NON_IDENTICAL_FIRST = 21;
+	
 	public static final int SMRK_UNSPEC_ATOM = -100000;
 	
 	

@@ -3,6 +3,7 @@ package ambit2.smarts;
 import java.util.Vector;
 
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -168,8 +169,7 @@ public class SMIRKSManager
 		isoTester.setQuery(reaction.reactant);
 		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
 		
-		
-		
+				
 		if (FlagSSMode ==  SmartsConst.SSM_SINGLE)
 		{
 			return false;
@@ -185,6 +185,22 @@ public class SMIRKSManager
 				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
 						applyTransformAtLocation(target, rMaps.get(i), reaction);
 						applied = true;
+				}
+			}
+			return applied;
+		}
+		
+		if (FlagSSMode ==  SmartsConst.SSM_NON_IDENTICAL_FIRST)
+		{	
+			Vector<Vector<IAtom>> rMaps = getNonIdenticalMappings(target);
+			if (rMaps.size()==0) return false;
+			boolean applied = false;
+			for (int i = 0; i < rMaps.size(); i++) {
+				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
+						applyTransformAtLocation(target, rMaps.get(i), reaction);
+						applied = true;
+						//The first acceptable is found and stoped
+						return applied;
 				}
 			}
 			return applied;
@@ -289,21 +305,11 @@ public class SMIRKSManager
 			
 		}
 		while (digit < comb.length);		
-		//while (!isZeroCombination(comb));
 		
 		
 		return resSet;
 	}
 	
-	boolean isZeroCombination(int a[])
-	{
-		for (int i = 0; i < a.length; i++)
-		{	
-			if (a[i] != 0)
-				return false;
-		}	
-		return (true);
-	}
 	
 	
 	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer target)
@@ -463,17 +469,67 @@ public class SMIRKSManager
 		
 	public IAtomContainer applyTransformAtLocationsWithCloning(IAtomContainer target, 
 															Vector<Vector<IAtom>> rMaps, SMIRKSReaction reaction)
-	{
-		//TODO
-		
+	{	
 		//Create a target clone 
+		IAtomContainer clone =  getCloneStructure(target);
 		
 		//Update the mapping and reaction?? according to the new atoms of the close
 		
 		//Apply transformation
 		
 		
+		//TODO
+		
 		return null;
+	}
+	
+	IAtomContainer getCloneStructure(IAtomContainer target)
+	{
+		IAtomContainer mol = new AtomContainer();
+		
+		IAtom newAtoms[] = new IAtom[target.getAtomCount()];
+		IBond newBonds[] = new IBond[target.getBondCount()];
+		
+		//Clone atoms
+		for (int i = 0; i < target.getAtomCount(); i++)
+		{
+			IAtom a = target.getAtom(i);
+			IAtom a1 = cloneAtom(a);
+			mol.addAtom(a1);
+			newAtoms[i] = a1;
+		}
+		
+		//Clone bonds
+		for (int i = 0; i < target.getBondCount(); i++)
+		{
+			IBond b = target.getBond(i);
+			IBond b1 = new Bond();
+			IAtom a01[] = new IAtom[2];
+			int ind0 = target.getAtomNumber(b.getAtom(0));
+			int ind1 = target.getAtomNumber(b.getAtom(1));;
+			a01[0] = mol.getAtom(ind0);
+			a01[1] = mol.getAtom(ind1);
+			b1.setAtoms(a01);
+			b1.setOrder(b.getOrder());
+			mol.addBond(b1);
+			newBonds[i] = b1;
+		}		
+		
+		return mol;
+	}
+	
+	IAtom cloneAtom(IAtom a)
+	{
+		try
+		{
+			IAtom a1 = (IAtom)a.clone();
+			return (a1);
+		}	
+		catch(Exception e)
+		{	
+		}
+		
+		return(null);
 	}
 	
 	

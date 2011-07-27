@@ -1284,6 +1284,71 @@ public class TestUtilities
 	}
 	
 	
+	public void testCombinations()
+	{
+		Vector<Vector<Integer>> clusterIndexes = new Vector<Vector<Integer>>(); 
+		Vector<Integer> vInt;
+		
+		vInt = new Vector<Integer>();
+		vInt.add(new Integer(0));
+		vInt.add(new Integer(1));
+		vInt.add(new Integer(2));
+		clusterIndexes.add(vInt);
+		
+		vInt = new Vector<Integer>();
+		vInt.add(new Integer(0));
+		vInt.add(new Integer(1));
+		vInt.add(new Integer(2));
+		vInt.add(new Integer(3));
+		clusterIndexes.add(vInt);
+		
+		vInt = new Vector<Integer>();
+		vInt.add(new Integer(0));
+		vInt.add(new Integer(1));
+		clusterIndexes.add(vInt);
+		
+		vInt = new Vector<Integer>();
+		vInt.add(new Integer(0));
+		vInt.add(new Integer(1));
+		clusterIndexes.add(vInt);
+		
+		vInt = new Vector<Integer>();
+		vInt.add(new Integer(0));
+		vInt.add(new Integer(1));
+		clusterIndexes.add(vInt);
+		
+		
+		
+		int comb[] = new int[clusterIndexes.size()];
+		for (int i = 0; i < comb.length; i++)
+			comb[i] = 0;
+		
+		//Generation of next combination
+		int digit = 0;
+		do 
+		{
+			//printing the combination 
+			for (int i = comb.length-1; i >= 0; i--)
+				System.out.print(comb[i]);
+			System.out.println();
+			
+			digit = 0;
+			while (digit < comb.length)
+			{
+				comb[digit]++;
+				if(comb[digit] == clusterIndexes.get(digit).size())
+				{
+					comb[digit] = 0;
+					digit++;
+				}
+				else
+					break;
+			}	
+		}
+		while (digit < comb.length);
+	}
+	
+	
 //-------------------------------------------------------------------------------
 	
 	
@@ -1515,7 +1580,7 @@ public class TestUtilities
 		
 		tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "NC[H]");
 		
-		
+		//tu.testCombinations();
 		
 		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		
