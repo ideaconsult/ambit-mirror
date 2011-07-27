@@ -293,9 +293,10 @@ CREATE TABLE  `tuples` (
 
 -- -----------------------------------------------------
 -- Table `property_values` all values
--- v3.2 value_num changed to double instead of double(14,4)
--- v 4.2 added idchemical field
+-- v 3.2 value_num changed to double instead of double(14,4)
+-- v 4.2 added idchemical field (regression - double back to double 14,4!)  
 -- v 4.3 added index on idchemical and idproperty
+-- v 5.1 value_num changed to double instead of double(14,4)  
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `property_values`;
 CREATE TABLE `property_values` (
@@ -307,7 +308,7 @@ CREATE TABLE `property_values` (
   `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') COLLATE utf8_bin NOT NULL DEFAULT 'UNKNOWN',
   `text` text COLLATE utf8_bin,
   `idvalue_string` int(10) unsigned DEFAULT NULL,
-  `value_num` double(14,4) DEFAULT NULL,
+  `value_num` double DEFAULT NULL,
   `idtype` enum('STRING','NUMERIC') COLLATE utf8_bin NOT NULL DEFAULT 'STRING',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Index_1` (`idproperty`,`idstructure`) USING BTREE,
@@ -954,7 +955,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (5,0,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (5,1,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
