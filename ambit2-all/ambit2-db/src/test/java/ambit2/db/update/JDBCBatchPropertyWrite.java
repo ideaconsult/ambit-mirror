@@ -54,7 +54,7 @@ public class JDBCBatchPropertyWrite extends DbUnitTest {
 							
 			ITable props = 	c.createQueryTable("P","SELECT idproperty,name,title,ptype FROM properties join catalog_references using(idreference) where name regexp '^Property' and ptype='STRING'");
 			Assert.assertEquals(nprops, props.getRowCount());
-			ITable propsNum = 	c.createQueryTable("P","SELECT idproperty,name,title,ptype FROM properties join catalog_references using(idreference) where name regexp '^num' and ptype='NUMERIC'");
+			ITable propsNum = 	c.createQueryTable("P","SELECT idproperty,name,title,ptype FROM properties join catalog_references using(idreference) where name regexp '^num' and FIND_IN_SET('NUMERIC',ptype)>0");
 			Assert.assertEquals(nprops*3, propsNum.getRowCount());
 			ITable longprops = 	c.createQueryTable("P","SELECT idproperty,name,title,ptype FROM properties join catalog_references using(idreference) where name regexp '^Property' and ptype='STRING'");
 			Assert.assertEquals(nprops, longprops.getRowCount());	
