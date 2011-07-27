@@ -495,21 +495,45 @@ public class IsomorphismTester
 		if (maps.size() == 0)
 			return (v);
 		
-		if (maps.size() == 1)
-		{
-			Vector<Integer> vi = new Vector<Integer>();
-			vi.add(new Integer(0));
-			v.add(vi);
+		
+		Vector<Integer> vInt;
+		vInt = new Vector<Integer>();
+		vInt.add(new Integer(0));
+		v.add(vInt);
+		
+		
+		if (maps.size() == 1)	
 			return(v);
+			
+		//The case with more than 1  mapping
+		for (int i = 1; i < maps.size(); i++)
+		{
+			Vector<IAtom> map = maps.get(i);
+			
+			for (int k = 0; k < v.size(); k++)
+			{
+				if (overlapsWithCluster(map,v.get(k), maps))
+				{
+					v.get(k).add(new Integer(i));
+					break;
+				}
+			}
 		}
 		
-		//TODO
 		return v;
 	}
 	
 	boolean overlapsWithCluster(Vector<IAtom> map, Vector<Integer> cluster, Vector<Vector<IAtom>> maps)
 	{
-		//TODO
+		for (int i = 0; i < cluster.size(); i++)
+		{
+			int mapNum = cluster.get(i).intValue();
+			Vector<IAtom> clMap = maps.get(mapNum);
+			for (int k = 0; k < map.size(); k++)
+				if (clMap.contains(map.get(k)))
+					return true;
+		}
+		
 		return false;
 	}
 	
