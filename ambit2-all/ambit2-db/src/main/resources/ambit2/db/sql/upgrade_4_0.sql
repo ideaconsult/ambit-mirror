@@ -410,5 +410,10 @@ CHANGE COLUMN `hashcode` `inchikey` VARCHAR(27) DEFAULT 0
 ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
  insert into version (idmajor,idminor,comment) values (5,0,"AMBIT2 schema - Chemicals table changed");
- 
- 
+
+-- -----------------------------------------------------
+-- Double 14:8 format for numerical values changed to Double (16 significant digits) 
+-- -----------------------------------------------------  
+ALTER TABLE `property_values` MODIFY COLUMN `value_num` DOUBLE DEFAULT NULL, DROP INDEX `Index_2`;
+ALTER TABLE `property_values` ADD INDEX `Index_2`(`value_num`);
+insert into version (idmajor,idminor,comment) values (5,1,"AMBIT2 schema -num values format changed"); 
