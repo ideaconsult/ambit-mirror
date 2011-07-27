@@ -21,7 +21,9 @@ import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 
+import ambit2.base.data.Property;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.test.ResourceTest;
@@ -770,11 +772,30 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(4,table.getRowCount());		
 		
 		table = 	c.createQueryTable("EXPECTED",
-		"SELECT rdf_type,predicate,object FROM property_annotation join properties using(idproperty) where name='AppDomain_Tanimoto'");
+		"SELECT idproperty,rdf_type,predicate,object FROM property_annotation join properties using(idproperty) where name='AppDomain_Tanimoto'");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals("ModelConfidenceFeature",table.getValue(0,"rdf_type"));
 		Assert.assertEquals("confidenceOf",table.getValue(0,"predicate"));
 		Assert.assertEquals("http://example.com/opentox/feature/xxx",table.getValue(0,"object"));
+		
+		String  uri = String.format("http://localhost:%d/feature/%d", port, table.getValue(0,"idproperty"));
+		//String  uri = String.format("http://localhost:%d/model/3/predicted", port);
+		/*
+		ClientResource cli = new ClientResource(uri);
+		Representation r = cli.get(MediaType.APPLICATION_RDF_XML);
+		System.out.println(r.getText());
+		r.release();
+		cli.release();
+		*/
+		
+		RDFPropertyIterator pi = new RDFPropertyIterator(new Reference(uri));
+		while (pi.hasNext()) {
+			Property p = pi.next();
+			//System.out.println(p.getAnnotations());
+			Assert.assertNotNull(p.getAnnotations());
+		}
+		pi.close();
+		
 	}	
 	
 	@Test
