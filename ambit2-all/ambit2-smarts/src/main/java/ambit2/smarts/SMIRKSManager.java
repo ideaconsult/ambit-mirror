@@ -241,7 +241,7 @@ public class SMIRKSManager
 	}
 	
 	/*
-	 *  This transformation is applied in SSM_NON_OVERLAPPING mode where
+	 *  This transformation is applied in SSM_NON_IDENTICAL mode where
 	 *  the overlapping mappings at particular site produce multiple copies of the molecule.
 	 */
 	public IAtomContainerSet applyTransformationWithCombinedOverlappedPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
