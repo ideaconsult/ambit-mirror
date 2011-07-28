@@ -7,6 +7,9 @@ import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.diagram.CDKDepict;
 import ambit2.rest.structure.diagram.CSLSDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
+import ambit2.rest.structure.diagram.OpenBabelDepict;
+import ambit2.rest.structure.smirks.ReactionDepict;
+import ambit2.rest.structure.smirks.SMIRKSDepict;
 
 /**
  * 2Dstructure diagram demo
@@ -25,6 +28,10 @@ public class DepictDemoRouter extends MyRouter {
 		attach("/daylight",DaylightDepict.class);
 		attach("/cdk",CDKDepict.class);
 		attach("/cactvs",CSLSDepict.class);
+		attach("/obabel",OpenBabelDepict.class);
+		attach(ReactionDepict.resource,ReactionDepict.class);
+		attach(SMIRKSDepict.resource,SMIRKSDepict.class);
+		attach("/reaction/reactant",CDKDepict.class);
 	}
 
 }
