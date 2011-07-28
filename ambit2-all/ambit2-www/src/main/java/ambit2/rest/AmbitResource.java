@@ -591,6 +591,7 @@ window.setInterval(function() {
 		
 		w.write(String.format("&nbsp;<a href='http://toxpredict.org' title='Predict'>ToxPredict</a>&nbsp;"));
 		w.write(String.format("<a href='%s/depict?search=c1ccccc1' title='Structure diagram'>Depiction</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/depict/reaction?search=c1ccccc1' title='SMIRKS test'>Reactions</a>&nbsp;",baseReference));
 
 
 
