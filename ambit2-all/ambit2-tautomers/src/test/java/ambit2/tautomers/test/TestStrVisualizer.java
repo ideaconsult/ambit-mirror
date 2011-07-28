@@ -41,7 +41,7 @@ public class TestStrVisualizer
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject();
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles(); 
 	
-	
+	boolean filterEqMaps = true;
 	JFrame frame;
 	int nStr = 0;
 	int nCol = 3;	
@@ -55,11 +55,11 @@ public class TestStrVisualizer
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(); 
 		//tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])Cl))ccc1C(c1ccc(OCNC[H])cc1)=C(CC)c1ccccc1");
-		tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])Cl))ccc1CCNC[H]");
+		//tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])([H])Cl))ccc1CCNC[H]");
 		
 		
-		//tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", 
-		//		tsv.getMDLStruct("D:/Projects/nina/test-smirks-structs/4_hydroxytamoxifen.sdf",1));
+		tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", 
+				tsv.getMDLStruct("D:/Projects/nina/test-smirks-structs/4_hydroxytamoxifen.sdf",1));
 		
 	}
 	
@@ -101,6 +101,7 @@ public class TestStrVisualizer
 		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
+		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
@@ -132,6 +133,7 @@ public class TestStrVisualizer
 		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
+		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
@@ -160,6 +162,7 @@ public class TestStrVisualizer
 		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
+		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
 		SMIRKSReaction reaction = smrkMan.parse(smirks);

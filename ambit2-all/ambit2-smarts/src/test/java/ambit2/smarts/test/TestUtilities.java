@@ -51,6 +51,7 @@ import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
+import ambit2.smarts.EquivalenceTester;
 
 
 
@@ -1283,6 +1284,20 @@ public class TestUtilities
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
 	}
 	
+	public void testEquivalenceTestes(String targetSmiles)
+	{
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		EquivalenceTester eqTest = new  EquivalenceTester();
+		
+		eqTest.setTarget(target);
+		eqTest.quickFindEquivalentTerminalHAtoms();
+		System.out.println("Testting equivalnece tester: " +targetSmiles);
+		for (int i = 0; i < eqTest.atomClasses.length; i++)
+			System.out.print(" " + eqTest.atomClasses[i]);
+		
+		System.out.println();
+	}
+	
 	
 	public void testCombinations()
 	{
@@ -1578,7 +1593,11 @@ public class TestUtilities
 		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
 		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); ---> Exception to fix !!!!!
 		
-		tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "NC[H]");
+		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "NC[H]");
+		
+		
+		tu.testEquivalenceTestes("[H]C([H])CCC([H])[H]");
+		
 		
 		//tu.testCombinations();
 		
