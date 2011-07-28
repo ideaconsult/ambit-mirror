@@ -23,7 +23,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 	private static final long serialVersionUID = 6247086921731939782L;
 	public static String sqlPerStructure = 
 		"select properties.idproperty,idproperty,name,units,title,url,idreference,comments,ptype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference)\n"+
-		"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") a using(idproperty)\n"+
+		"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") b using(idproperty)\n"+
 		"where idproperty in (select idproperty from property_values where idstructure = ?) \n";
 	/*
 	public static String sqlPerChemical = 
@@ -33,7 +33,7 @@ public class ReadProperty extends AbstractPropertyRetrieval<IStructureRecord, In
 	public static String sqlPerChemical = 
 	"select idproperty,properties.name,units,title,url,idreference,comments,ptype,islocal,type,rdf_type,predicate,object from properties\n"+
 	"join catalog_references using(idreference)\n"+
-	"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") a using(idproperty)\n"+
+	"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") b using(idproperty)\n"+
 	"join (\n"+
 	"select idproperty from summary_property_chemicals where idchemical=? group by idchemical,idproperty\n"+
 	") a using(idproperty)\n";
