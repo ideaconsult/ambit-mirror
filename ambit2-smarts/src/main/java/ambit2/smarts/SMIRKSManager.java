@@ -230,8 +230,11 @@ public class SMIRKSManager
 	 */
 	public IAtomContainerSet applyTransformationWithCombinedOverlappedPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
 	{
+		isoTester.setQuery(reaction.reactant);
+		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
 		
-		Vector<Vector<IAtom>> rMaps0 = getNonOverlappingMappings(target);
+		
+		Vector<Vector<IAtom>> rMaps0 = getNonIdenticalMappings(target);
 		if (rMaps0.size()==0) 
 			return null;
 		
@@ -253,11 +256,16 @@ public class SMIRKSManager
 		if (rMaps.size()==0) 
 			return null;
 		
+		//Print mappings
+		//for (int i = 0; i < rMaps.size(); i++)
+		//	printSSMap(target, rMaps.get(i));
+		
+		
 		IAtomContainerSet resSet = new AtomContainerSet();
 		
 		if (rMaps.size()==1)
 		{	
-			IAtomContainer product = applyTransformAtLocationsWithCloning(target, rMaps, reaction);  
+			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, rMaps, reaction);  
 			resSet.addAtomContainer(product);
 			return(resSet);
 		}
@@ -265,6 +273,8 @@ public class SMIRKSManager
 		
 		//Make mapping clusters/groups 
 		Vector<Vector<Integer>> clusterIndexes = isoTester.getOverlappedMappingClusters(rMaps);
+		
+		//printMappingClusters(clusterIndexes, target);	
 		
 		
 		//Generate all combinations:
@@ -285,7 +295,7 @@ public class SMIRKSManager
 			}	
 			
 			//Apply the transformation for the particular combination of locations with cloning
-			IAtomContainer product = applyTransformAtLocationsWithCloning(target, combMaps, reaction);  
+			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, combMaps, reaction);  
 			resSet.addAtomContainer(product);
 			
 			
@@ -467,20 +477,22 @@ public class SMIRKSManager
 	}
 	
 		
-	public IAtomContainer applyTransformAtLocationsWithCloning(IAtomContainer target, 
+	public IAtomContainer applyTransformationsAtLocationsWithCloning(IAtomContainer target, 
 															Vector<Vector<IAtom>> rMaps, SMIRKSReaction reaction)
 	{	
 		//Create a target clone 
 		IAtomContainer clone =  getCloneStructure(target);
 		
-		//Update the mapping and reaction?? according to the new atoms of the close
+		//Create mappings clones (according to the new atoms of the clone)
+		Vector<Vector<IAtom>> cloneMaps = new Vector<Vector<IAtom>>(); 
+		for (int i = 0; i < rMaps.size(); i++)
+			cloneMaps.add(getCloneMapping(target, clone, rMaps.get(i)));
 		
 		//Apply transformation
-		
-		
-		//TODO
-		
-		return null;
+		for (int i = 0; i < cloneMaps.size(); i++)	
+			this.applyTransformAtLocation(clone, cloneMaps.get(i), reaction);
+				
+		return clone;
 	}
 	
 	IAtomContainer getCloneStructure(IAtomContainer target)
@@ -533,11 +545,25 @@ public class SMIRKSManager
 	}
 	
 	
+	Vector<IAtom> getCloneMapping(IAtomContainer target, IAtomContainer clone, Vector<IAtom> map)
+	{
+		Vector<IAtom> cloneMap = new Vector<IAtom>();
+		for (int i = 0; i < map.size(); i++)
+		{
+			IAtom at = map.get(i);
+			int targetIndex = target.getAtomNumber(at);
+			cloneMap.add(clone.getAtom(targetIndex));
+		}
+		
+		return(cloneMap);
+	}
+	
+	
 	//Helper
 	
 	public void printSSMap(IAtomContainer target, Vector<IAtom> rMap)
 	{	
-		System.out.print("SS Map on Target: ");
+		System.out.print("Map: ");
 		for (int i = 0; i < rMap.size(); i++)
 		{
 			IAtom tAt = rMap.get(i);
@@ -545,4 +571,16 @@ public class SMIRKSManager
 		}
 		System.out.println();
 	}	
+	
+	public void printMappingClusters(Vector<Vector<Integer>> clusterIndexes, IAtomContainer target)
+	{
+		for (int i = 0; i < clusterIndexes.size(); i++)
+		{
+			System.out.print("Cluster #" + i + " : ");
+			Vector<Integer> v = clusterIndexes.get(i);
+			for (int k = 0; k < v.size(); k++)
+				System.out.print(v.get(k) + " ");
+			System.out.println();
+		}
+	}
 }
