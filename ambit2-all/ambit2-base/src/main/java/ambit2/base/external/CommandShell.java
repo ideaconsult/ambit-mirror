@@ -61,6 +61,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public static final String os_MAC = "Mac OS";
 	public static final String os_WINDOWS = "Windows";
 	public static final String os_WINDOWSVISTA = "Windows Vista";
+	public static final String os_WINDOWS7 = "Windows 7";
 	public static final String os_LINUX = "Linux";
 	public static final String os_FreeBSD = "FreeBSD";
 	
