@@ -7,6 +7,8 @@ import org.restlet.data.Reference;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.core.smiles.OpenBabelDepiction;
+
 public class OpenBabelDepict extends AbstractDepict {
 
 	@Override
@@ -19,8 +21,10 @@ public class OpenBabelDepict extends AbstractDepict {
 	@Override
 	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
 		try {
-			return null;
-		
+			OpenBabelDepiction ob = new OpenBabelDepiction();
+			ob.setSize(w);
+			ob.process(smiles);
+			return ob.getImage();
 		} catch (Exception x) {
 			throw new ResourceException(x);
 		}
