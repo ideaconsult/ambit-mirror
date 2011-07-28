@@ -24,11 +24,14 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 		prefix = "";
 	}
 	
+	protected String getOBabelHome() {
+		return System.getenv(OBABEL_HOME);
+	}
 
 	@Override
 	protected void initialize() throws ShellException {
 		super.initialize();
-		String obabel_home = System.getenv(OBABEL_HOME);
+		String obabel_home = getOBabelHome();
 		File exe = new File(String.format("%s/%s", obabel_home,OBABEL_EXE));
 		File winexe = new File(String.format("%s/%s.exe", obabel_home,OBABEL_EXE));
 		
