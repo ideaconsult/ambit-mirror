@@ -97,10 +97,14 @@ public class AbstractDepict extends ServerResource {
 				
 		b.append("</tr><tr>");
 		
-		b.append(String.format("<td><img src='%s/cactvs?search=%s' alt='%s' title='%s'></td><td></td>",
+		b.append(String.format("<td><img src='%s/cactvs?search=%s' alt='%s' title='%s'></td><td><img src='%s/obabel?search=%s' alt='%s' title='%s'></td>",
 				ref.getHierarchicalPart(),
 				Reference.encode(smiles),
-				smiles,smiles));
+				smiles,smiles,
+				ref.getHierarchicalPart(),
+				Reference.encode(smiles),
+				smiles,smiles				
+				));
 		
 		b.append("</tr></table>");
 		return b.toString();
