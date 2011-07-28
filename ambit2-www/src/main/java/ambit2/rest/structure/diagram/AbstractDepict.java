@@ -85,14 +85,14 @@ public class AbstractDepict extends ServerResource {
 				smiles,smiles));
 		
 		b.append("</tr><tr>");
-		//b.append(String.format("<td><a href='%s/cactvs?search=%s'>%s</a></td><td><a href='%s/obabel?search=%s'>%s</a></td>",
-		b.append(String.format("<td><a href='%s/cactvs?search=%s'>%s</a></td><td></td>",
+		b.append(String.format("<td><a href='%s/cactvs?search=%s'>%s</a></td><td><a href='%s/obabel?search=%s'>%s</a></td>",
+		//b.append(String.format("<td><a href='%s/cactvs?search=%s'>%s</a></td><td></td>",
 				ref.getHierarchicalPart(),
 				Reference.encode(smiles),
-				"Cactvs depiction"
-				//ref.getHierarchicalPart(),
-				//Reference.encode(smiles),
-				//"Open Babel depiction"
+				"Cactvs depiction",
+				ref.getHierarchicalPart(),
+				Reference.encode(smiles),
+				"Open Babel depiction"
 				));		
 				
 		b.append("</tr><tr>");
