@@ -97,7 +97,7 @@ public class ReactionDepict extends AbstractDepict {
 		//w.write("<option  value=\"\" %s selected='selected'></option>");
 		for (SMARTCYPReaction reaction : SMARTCYPReaction.values()) {
 			boolean selected = reaction.getSMIRKS().equals(smirks);
-			w.write(String.format("<i><a href='?search=%s&smirks=%s' title='%s'>%s%s%s</a></i>&nbsp;", 
+			w.write(String.format("<i><a href='?search=%s&smirks=%s' title='%s'>%s%s%s</a></i>&nbsp;&nbsp;", 
 					Reference.encode(smiles),
 					Reference.encode(reaction.getSMIRKS()),
 					reaction.getSMIRKS(),
