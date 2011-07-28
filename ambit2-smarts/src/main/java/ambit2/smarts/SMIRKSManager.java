@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -551,6 +552,8 @@ public class SMIRKSManager
 			a01[1] = mol.getAtom(ind1);
 			b1.setAtoms(a01);
 			b1.setOrder(b.getOrder());
+			boolean FlagArom = b.getFlag(CDKConstants.ISAROMATIC);
+			b1.setFlag(CDKConstants.ISAROMATIC, FlagArom);
 			mol.addBond(b1);
 			newBonds[i] = b1;
 		}		
