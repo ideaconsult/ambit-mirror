@@ -84,7 +84,7 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 	    	
 			List<String> list = new ArrayList<String>();
 			list.add("-h");
-			list.add(String.format("-:\"%s\"",mol));
+			list.add(String.format("-:%s",mol));
 			list.add(getOutputOption());
 			list.add(String.format("-O%s",outfile));
 			return list;
