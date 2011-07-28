@@ -17,10 +17,12 @@ public class SMIRKSManager
 	SmartsParser parser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	SmartsToChemObject stco = new SmartsToChemObject();
+	EquivalenceTester eqTester = new EquivalenceTester();
 	
 	Vector<String> parserErrors = new Vector<String>();
 	
 	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; 
+	public boolean FlagFilterEquivalentMappings = false;
 	
 	
 	
@@ -180,6 +182,14 @@ public class SMIRKSManager
 		{	
 			Vector<Vector<IAtom>> rMaps = getNonIdenticalMappings(target);
 			if (rMaps.size()==0) return false;
+			
+			if (FlagFilterEquivalentMappings)
+			{	
+				eqTester.setTarget(target);
+				eqTester.quickFindEquivalentTerminalHAtoms();
+				rMaps = eqTester.filterEquivalentMappings(rMaps);				
+			}
+			
 			boolean applied = false;
 			for (int i = 0; i < rMaps.size(); i++) {
 				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
@@ -194,6 +204,9 @@ public class SMIRKSManager
 		{	
 			Vector<Vector<IAtom>> rMaps = getNonIdenticalMappings(target);
 			if (rMaps.size()==0) return false;
+			
+			//Map filtering here is not needed
+			
 			boolean applied = false;
 			for (int i = 0; i < rMaps.size(); i++) {
 				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
@@ -211,6 +224,9 @@ public class SMIRKSManager
 		{	
 			Vector<Vector<IAtom>> rMaps = getNonOverlappingMappings(target);
 			if (rMaps.size()==0) return false;
+			
+			//Map filtering here is applied here (it should be not needed)
+			
 			boolean applied = false;
 			for (int i = 0; i < rMaps.size(); i++) {
 				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
@@ -259,6 +275,18 @@ public class SMIRKSManager
 		//Print mappings
 		//for (int i = 0; i < rMaps.size(); i++)
 		//	printSSMap(target, rMaps.get(i));
+		
+		
+		if (FlagFilterEquivalentMappings)
+		{	
+			eqTester.setTarget(target);
+			eqTester.quickFindEquivalentTerminalHAtoms();
+			rMaps = eqTester.filterEquivalentMappings(rMaps);
+
+			//System.out.println("FilteredMappings");
+			//for (int i = 0; i < rMaps2.size(); i++)
+			//	printSSMap(target, rMaps2.get(i));
+		}
 		
 		
 		IAtomContainerSet resSet = new AtomContainerSet();
