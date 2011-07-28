@@ -18,7 +18,15 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 	private static final long serialVersionUID = -8439060274752318591L;
 	public static final String OBABEL_EXE = "obabel";
 	public static final String OBABEL_HOME = "OBABEL_HOME";
-	
+	protected boolean hydrogens = true;
+	public boolean isHydrogens() {
+		return hydrogens;
+	}
+
+	public void setHydrogens(boolean hydrogens) {
+		this.hydrogens = hydrogens;
+	}
+
 	public OpenBabelAbstractShell() throws ShellException {
 		super();
 		prefix = "";
@@ -83,7 +91,8 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 	    	String outfile = String.format("%s%s%s",homeDir,File.separator,getOutputFile());
 	    	
 			List<String> list = new ArrayList<String>();
-			list.add("-h");
+			if (hydrogens)
+				list.add("-h");
 			list.add(String.format("-:%s",mol));
 			list.add(getOutputOption());
 			list.add(String.format("-O%s",outfile));
