@@ -30,6 +30,7 @@ public class OpenBabelDepict extends AbstractDepict {
 				};
 			};
 			ob.setSize(h);
+			ob.setHydrogens(false);
 			ob.process(smiles);
 			return ob.getImage();
 		} catch (Exception x) {
