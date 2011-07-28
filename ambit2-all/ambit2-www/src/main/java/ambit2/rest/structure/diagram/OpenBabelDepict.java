@@ -29,7 +29,7 @@ public class OpenBabelDepict extends AbstractDepict {
 					return getOpenBabelHome();
 				};
 			};
-			ob.setSize(w);
+			ob.setSize(h);
 			ob.process(smiles);
 			return ob.getImage();
 		} catch (Exception x) {

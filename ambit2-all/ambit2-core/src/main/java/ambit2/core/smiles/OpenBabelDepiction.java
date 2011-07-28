@@ -14,6 +14,7 @@ import ambit2.base.external.ShellException;
 public class OpenBabelDepiction extends OpenBabelAbstractShell<String> {
 	protected String outputFileName=null;
 	protected int size=150;
+
 	public int getSize() {
 		return size;
 	}
