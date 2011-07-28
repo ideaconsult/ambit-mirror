@@ -495,7 +495,7 @@ public class IsomorphismTester
 		if (maps.size() == 0)
 			return (v);
 		
-		
+		//The first cluster is created
 		Vector<Integer> vInt;
 		vInt = new Vector<Integer>();
 		vInt.add(new Integer(0));
@@ -510,13 +510,23 @@ public class IsomorphismTester
 		{
 			Vector<IAtom> map = maps.get(i);
 			
+			boolean FlagOverlap = false;
 			for (int k = 0; k < v.size(); k++)
 			{
 				if (overlapsWithCluster(map,v.get(k), maps))
 				{
 					v.get(k).add(new Integer(i));
+					FlagOverlap = true;
 					break;
 				}
+			}
+			
+			if (!FlagOverlap)
+			{
+				//New cluster is created
+				vInt = new Vector<Integer>();
+				vInt.add(new Integer(i));
+				v.add(vInt);
 			}
 		}
 		

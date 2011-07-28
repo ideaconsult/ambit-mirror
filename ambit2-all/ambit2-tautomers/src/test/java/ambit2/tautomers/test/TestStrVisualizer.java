@@ -6,6 +6,7 @@ import java.util.Vector;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -17,6 +18,7 @@ import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.smarts.ChemObjectToSmiles;
+import ambit2.smarts.IAcceptable;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
@@ -52,10 +54,12 @@ public class TestStrVisualizer
 		//structs.add(MoleculeFactory.makeAdenine());
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(); 
-		//tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C[H])(C[H]))ccc1C(c1ccc(OCCN)cc1)=C(CC)c1ccccc1");
+		//tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])Cl))ccc1C(c1ccc(OCNC[H])cc1)=C(CC)c1ccccc1");
+		tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])Cl))ccc1CCNC[H]");
 		
-		tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", 
-				tsv.getMDLStruct("D:/Projects/nina/test-smirks-structs/4_hydroxytamoxifen.sdf",1));
+		
+		//tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", 
+		//		tsv.getMDLStruct("D:/Projects/nina/test-smirks-structs/4_hydroxytamoxifen.sdf",1));
 		
 	}
 	
@@ -74,7 +78,7 @@ public class TestStrVisualizer
 	void setFrame()
 	{
 		frame = new JFrame();
-		frame.setSize(700, 300);
+		frame.setSize(1200, 780);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
@@ -147,6 +151,46 @@ public class TestStrVisualizer
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
 		addStructure(target);
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
+		
+	}
+	
+	public void testSMIRKS2(String smirks, String targetSmiles) throws Exception
+	{
+		
+		
+		System.out.println("Testing SMIRKS: " + smirks);
+		SMIRKSManager smrkMan = new SMIRKSManager();
+		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
+		
+		SMIRKSReaction reaction = smrkMan.parse(smirks);
+		if (!smrkMan.getErrors().equals(""))
+		{
+			System.out.println(smrkMan.getErrors());
+			return;
+		}
+		
+		System.out.println(reaction.transformationDataToString());
+		
+		if (targetSmiles.equals(""))
+			return;
+		
+		setFrame();
+		
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		addStructure((IAtomContainer)target.clone());
+		
+		
+		//smrkMan.applyTransformation(target, reaction);
+		
+		IAtomContainerSet products = smrkMan.applyTransformationWithCombinedOverlappedPos(target, null, reaction);
+		for (int i = 0; i < products.getAtomContainerCount(); i++)
+		{
+			//String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
+			addStructure(products.getAtomContainer(i));
+		}
+		
+		
+		//System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
 		
 	}
 	
