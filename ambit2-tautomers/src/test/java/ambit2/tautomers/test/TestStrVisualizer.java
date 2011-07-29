@@ -3,6 +3,7 @@ package ambit2.tautomers.test;
 import java.io.FileReader;
 import java.util.Vector;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -59,7 +60,12 @@ public class TestStrVisualizer
 		//tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])([H])Cl))ccc1CC([H])NC[H]");
 		
 		//tsv.testSMIRKS("[#7:1][#6:2]>>[#7+:1]([O-])[#6:2]","CCN");
-		tsv.testSMIRKS("[#7:1][#6:2]>>[#7+:1]([O-])[#6:2]","CCN", false);
+		//tsv.testSMIRKS("[#7:1][#6:2]>>[#7+:1]([O-])[#6:2]","CCN", false);		
+		//tsv.testSMIRKS("[c:1][H:2]>>[c:1][O][H:2]","n1ccccc1", true);
+		
+		
+		tsv.testSMIRKS("[N;X3:1]1([H])[#6:2]=[#6:3][#6;X4:4]([H])[#6:5]=[#6:6]1>>[n;H0:1]1=[#6:2][#6:3]=[#6:4][#6:5]=[#6:6]1",
+				"N1C=CCC=C1", true);
 		
 		
 		//tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", 
@@ -130,14 +136,67 @@ public class TestStrVisualizer
 		cfg.process(target);
 		CDKHueckelAromaticityDetector.detectAromaticity(target);
 		
+		System.out.println("reactant:");
+		for (int i = 0; i < target.getAtomCount(); i++)
+			System.out.println(target.getAtom(i).getSymbol() + "  " + target.getAtom(i).getAtomTypeName() + "  " + 
+					target.getAtom(i).getFlag(CDKConstants.ISAROMATIC));
+		
 		
 		
 		addStructure((IAtomContainer)target.clone());
 		smrkMan.applyTransformation(target, reaction);
 		
+		//AtomContainerManipulator.clearAtomConfigurations(target);
+		
+		
+		for (int i = 0; i < target.getAtomCount(); i++)
+		{	
+			target.getAtom(i).setFormalNeighbourCount(null);
+			target.getAtom(i).setAtomTypeName(null);
+			target.getAtom(i).setHybridization(null);
+		}
+			
+			
+		cfg.process(target);
+		CDKHueckelAromaticityDetector.detectAromaticity(target);
+		
+		
+		
+		
+		System.out.println("product:");
+		for (int i = 0; i < target.getAtomCount(); i++)
+			System.out.println(target.getAtom(i).getSymbol() + "  " + target.getAtom(i).getAtomTypeName() + "  " +
+					target.getAtom(i).getFlag(CDKConstants.ISAROMATIC));
+		for (int i = 0; i < target.getBondCount(); i++)
+			System.out.println(target.getBond(i).getOrder() + "  " + target.getBond(i).getFlag(CDKConstants.ISAROMATIC));
+		
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
+		
+		
 		addStructure(target);
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
+		
+		
+		
+		/*
+		IAtomContainer pyr = MoleculeFactory.makePyridine();
+		
+		cfg.process(pyr);
+		CDKHueckelAromaticityDetector.detectAromaticity(pyr);
+		
+		System.out.println("Pyridine:");
+		for (int i = 0; i < pyr.getAtomCount(); i++)
+			System.out.println(pyr.getAtom(i).getSymbol() + "  " + pyr.getAtom(i).getFlag(CDKConstants.ISAROMATIC));
+		for (int i = 0; i < pyr.getBondCount(); i++)
+			System.out.println(pyr.getBond(i).getOrder() + "  " + pyr.getBond(i).getFlag(CDKConstants.ISAROMATIC));
+		
+		addStructure(pyr);
+		
+		String pyrSmiles = SmartsHelper.moleculeToSMILES(target);
+		System.out.println("Pyridine: " + pyrSmiles);
+		*/
+		
+		
 		
 	}
 	
