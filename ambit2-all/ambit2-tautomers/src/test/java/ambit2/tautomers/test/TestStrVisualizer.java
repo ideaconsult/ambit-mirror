@@ -45,7 +45,7 @@ public class TestStrVisualizer
 	boolean FlagSingleCopyForPos = false;
 	JFrame frame;
 	int nStr = 0;
-	int nCol = 3;	
+	int nCol = 4;	
 	int size = 250;
 	
 	public static void main(String[] args) throws Exception 
@@ -56,7 +56,10 @@ public class TestStrVisualizer
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(); 
 		//tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])Cl))ccc1C(c1ccc(OCNC[H])cc1)=C(CC)c1ccccc1");
-		tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])([H])Cl))ccc1CCNC[H]");
+		//tsv.testSMIRKS2("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "c1cc(OCCN(C([H])([H])S)(C([H])([H])Cl))ccc1CC([H])NC[H]");
+		
+		//tsv.testSMIRKS("[#7:1][#6:2]>>[#7+:1]([O-])[#6:2]","CCN");
+		tsv.testSMIRKS("[#7:1][#6:2]>>[#7+:1]([O-])[#6:2]","CCN", false);
 		
 		
 		//tsv.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", 
@@ -79,7 +82,7 @@ public class TestStrVisualizer
 	void setFrame()
 	{
 		frame = new JFrame();
-		frame.setSize(1200, 780);
+		frame.setSize(1000, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
@@ -96,9 +99,10 @@ public class TestStrVisualizer
 	}
 	
 	
-	public void testSMIRKS(String smirks, String targetSmiles) throws Exception
+	public void testSMIRKS(String smirks, String targetSmiles, boolean hAdd) throws Exception
 	{
-		
+		AtomConfigurator  cfg = new AtomConfigurator();
+		HydrogenAdderProcessor hadder = new HydrogenAdderProcessor();
 		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
@@ -120,17 +124,26 @@ public class TestStrVisualizer
 		setFrame();
 		
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		
+		if (hAdd)
+			hadder.process(target);
+		cfg.process(target);
+		CDKHueckelAromaticityDetector.detectAromaticity(target);
+		
+		
+		
 		addStructure((IAtomContainer)target.clone());
 		smrkMan.applyTransformation(target, reaction);
+		
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
 		addStructure(target);
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
 		
 	}
 	
+	
 	public void testSMIRKS(String smirks, IAtomContainer target) throws Exception
-	{
-		
+	{	
 		
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager();
