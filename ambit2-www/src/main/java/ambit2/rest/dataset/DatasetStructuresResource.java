@@ -17,6 +17,7 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.PropertyValue;
+import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryDataset;
 import ambit2.db.search.structure.QueryDatasetByID;
@@ -46,6 +47,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 	protected String datasetName;
 	protected String search;
 	protected int property;
+	protected String cond;
 
 	
 	@Override
@@ -68,6 +70,8 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			 * ?search=<value>
 			 */
 			search = form.getFirstValue(QueryResource.search_param);
+			
+			cond = form.getFirstValue(QueryResource.condition);
 			/**
 			 * ?property=<feature_uri>
 			 */
@@ -114,7 +118,8 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		if ((property>0) && (search != null)) {
 			Property p = new Property("");
 			p.setId(property);
-			DatasetQueryFieldGeneric q = getSearchQuery(search,p);			
+			
+			DatasetQueryFieldGeneric q = getSearchQuery(search,p,cond);			
 			SourceDataset d = new SourceDataset();
 			d.setId(key);
 			q.setFieldname(d);
@@ -156,7 +161,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		if ((property>0) && (search != null)) {
 			Property p = new Property("");
 			p.setId(property);
-			DatasetQueryFieldGeneric q = getSearchQuery(search,p);
+			DatasetQueryFieldGeneric q = getSearchQuery(search,p,cond);
 			StoredQuery d = new StoredQuery(Integer.parseInt(key.toString()));
 			q.setFieldname(d);
 			Form form = getRequest().getResourceRef().getQueryAsForm();
@@ -171,14 +176,20 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		}
 	}
 
-	protected DatasetQueryFieldGeneric getSearchQuery(String search,Property p) {
+	protected DatasetQueryFieldGeneric getSearchQuery(String search,Property p, String cond) {
 		try {
 			Double d = Double.parseDouble(search);
 			DatasetQueryFieldNumeric q = new DatasetQueryFieldNumeric();
+			 
 			PropertyValue<Double> pv = new PropertyValue<Double>();
 			pv.setProperty(p);
 			pv.setValue(d);
 			q.setValue(pv);
+			try {
+				q.setCondition(NumberCondition.getInstance(cond));
+			} catch (Exception x) {
+				q.setCondition(NumberCondition.getInstance("="));
+			}
 			return q;
 		} catch (Exception x) {
 			DatasetQueryFieldString q = new DatasetQueryFieldString();
