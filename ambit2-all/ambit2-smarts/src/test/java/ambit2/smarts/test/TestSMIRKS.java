@@ -43,6 +43,7 @@ public class TestSMIRKS
 	public static void  init() {
 		logger = new LoggingTool(TestSMIRKS.class);
 	}
+	
 	/*
 	public TestSMIRKS() 
 	{   
@@ -215,6 +216,8 @@ public class TestSMIRKS
 
 		IAtomContainer result = applySMIRKSReaction(smirks, target);
 		Assert.assertNotNull(result);
+		//In the current version aromaticity must be re-detected in the final result
+		CDKHueckelAromaticityDetector.detectAromaticity(result);
 		checkReactionResult(result,expectedResult, expectedResultExplH);
 		
 	}

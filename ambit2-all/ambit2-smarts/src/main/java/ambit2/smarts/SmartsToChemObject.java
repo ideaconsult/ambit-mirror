@@ -398,8 +398,6 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 			
 		}
 		
-		System.out.println("------------> return null");
-		
 		return(null);
 	}
 	
