@@ -69,10 +69,45 @@ public class QueryFieldNumeric extends AbstractStructureQuery<Property,Number,Nu
 	}
 	
 	public QueryFieldNumeric() {
+		super();
 		setFieldname(null);
 		setCondition(NumberCondition.getInstance("="));
 	}
 
+	public QueryFieldNumeric(String key,String cond, boolean byAlias, boolean chemicalsOnly, Property property) throws Exception {
+		super();
+    	String[] keys = key.toString().split(" .. ");
+    	Double d1=null;
+    	Double d2=null;
+    	NumberCondition condition = NumberCondition.getInstance(NumberCondition.between);
+    	if (keys.length==2) try {
+    		d1 = Double.parseDouble(keys[0].toString()); //number
+    		d2 = Double.parseDouble(keys[1].toString()); //number
+    	} catch (Exception x) {
+    		d1 = Double.parseDouble(key.toString()); 
+    	}
+    	else {
+    		d1 = Double.parseDouble(key.toString());
+    	}
+    	
+
+    	//q.setChemicalsOnly(true);
+    	setChemicalsOnly(chemicalsOnly);
+    	setSearchByAlias(byAlias);
+    	setFieldname(property);
+        try {
+        	if ((cond==null)||"".equals(cond.trim())) throw new Exception("Undefined condition");
+        	condition = NumberCondition.getInstance(cond);
+        	setValue(d1);
+        	setMaxValue(d2==null?(d1+1E-10):d2);
+        } catch (Exception x) {
+        	condition = NumberCondition.getInstance(NumberCondition.between);
+        	setValue(d1);
+        	setMaxValue(d2==null?(d1+1E-10):d2);
+        } finally {
+        	setCondition(condition);
+        }
+	}
 	public String getSQL() throws AmbitException {
 //where value_num %s ? %s %s and value_num is not null\n";
 //where abs(value_num - ?) < 1E-4 %s and value_num is not null\n";

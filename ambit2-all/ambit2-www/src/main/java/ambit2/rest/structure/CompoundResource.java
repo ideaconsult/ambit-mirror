@@ -3,7 +3,6 @@ package ambit2.rest.structure;
 import java.awt.Dimension;
 
 import org.openscience.cdk.index.CASNumber;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.opentox.dsl.OTContainers;
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTDatasets;
@@ -39,7 +38,6 @@ import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.reporters.SmilesReporter.Mode;
-import ambit2.db.search.NumberCondition;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
@@ -47,7 +45,6 @@ import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.DeleteChemical;
-import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
@@ -258,44 +255,18 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getCompoundInDatasetPrefix(),getRequest(),getDocumentation());
 	}
+	
+	
 	protected IQueryRetrieval<IStructureRecord> createSingleQuery(String property,
 			String cond,String key,boolean chemicalsOnly, boolean byAlias, boolean caseSens) {
 		AbstractStructureQuery query;
 		
         try {
         	key = Reference.decode(key.toString().trim());
-        	String[] keys = key.toString().split(" .. ");
-        	Double d1=null;
-        	Double d2=null;
-        	NumberCondition condition = NumberCondition.getInstance(NumberCondition.between);
-        	if (keys.length==2) try {
-        		d1 = Double.parseDouble(keys[0].toString()); //number
-        		d2 = Double.parseDouble(keys[1].toString()); //number
-        	} catch (Exception x) {
-        		d1 = Double.parseDouble(key.toString()); 
-        	}
-        	else {
-        		d1 = Double.parseDouble(key.toString());
-        	}
 
-        	QueryFieldNumeric q = new QueryFieldNumeric();
-        	//q.setChemicalsOnly(true);
-        	q.setChemicalsOnly(chemicalsOnly);
-        	q.setSearchByAlias(byAlias);
-        	if (property != null) q.setFieldname(new Property(property,null));
-	        try {
-	        	if ((cond==null)||"".equals(cond.trim())) throw new Exception("Undefined condition");
-	        	condition = NumberCondition.getInstance(cond);
-	        	q.setValue(d1);
-	        	q.setMaxValue(d2==null?(d1+1E-10):d2);
-	        } catch (Exception x) {
-	        	condition = NumberCondition.getInstance(NumberCondition.between);
-	        	q.setValue(d1);
-	        	q.setMaxValue(d2==null?(d1+1E-10):d2);
-	        } finally {
-	        	q.setCondition(condition);
-	        }
-	        query= q;
+        	
+        	query   = new QueryFieldNumeric(key,cond,byAlias,chemicalsOnly,(property == null)?null:new Property(property,null));
+
         } catch (Exception x) {
         	QueryField q_by_name =  new QueryField();
         	q_by_name.setCaseSensitive(caseSens);
