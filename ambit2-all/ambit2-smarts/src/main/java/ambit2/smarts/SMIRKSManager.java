@@ -350,6 +350,54 @@ public class SMIRKSManager
 	}
 	
 	
+	public IAtomContainerSet applyTransformationWithSingleCopyForEachPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
+	{
+		isoTester.setQuery(reaction.reactant);
+		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
+		
+		
+		Vector<Vector<IAtom>> rMaps0 = getNonIdenticalMappings(target);
+		if (rMaps0.size()==0) 
+			return null;
+		
+		Vector<Vector<IAtom>> rMaps;
+		
+		//Preliminary filtration by means of IAcceptable
+		if (selection == null)
+			rMaps = rMaps0;
+		else
+		{
+			rMaps = new Vector<Vector<IAtom>>(); 
+			for (int i = 0; i < rMaps0.size(); i++)
+			{
+				if (selection.accept(rMaps0.get(i)))
+					rMaps.add(rMaps0.get(i));
+			}
+		}
+		
+		if (rMaps.size()==0) 
+			return null;
+		
+		if (FlagFilterEquivalentMappings)
+		{	
+			eqTester.setTarget(target);
+			eqTester.quickFindEquivalentTerminalHAtoms();
+			rMaps = eqTester.filterEquivalentMappings(rMaps);
+		}
+		
+		IAtomContainerSet resSet = new AtomContainerSet();
+		
+		for (int i = 0; i < rMaps.size(); i++)
+		{	
+			Vector<Vector<IAtom>> vMaps = new Vector<Vector<IAtom>>(); 
+			vMaps.add(rMaps.get(i));
+			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, vMaps, reaction);  
+			resSet.addAtomContainer(product);
+		}
+		
+		return resSet;
+	}
+	
 	
 	public Vector<Vector<IAtom>> getNonOverlappingMappings(IAtomContainer target)
 	{
