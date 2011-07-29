@@ -34,10 +34,16 @@ public class SMIRKSReaction
 	public Vector<Integer> productsCLG = new Vector<Integer>();
 	
 	
-	//Mapping data
+	
 	public  Vector<String> mapErrors = new Vector<String>(); 
 	//HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
-	Vector<Integer> reactantMapIndex = new Vector<Integer>();
+	
+	//Mapping data
+	//Atom numbers are described in two ways
+	//1.<Global atom numbers> i.e. regardless of the reactant/product fragmenttatoin
+	//2.<Frag Num>  + <Local atom Num> 
+	
+	Vector<Integer> reactantMapIndex = new Vector<Integer>();  //Container with the mapping indexes as they appeared in the SMIRKS
 	Vector<Integer> reactantFragAtomNum = new Vector<Integer>(); //local atom fragment number
 	Vector<Integer> reactantAtomNum = new Vector<Integer>(); //global atom number
 	Vector<Integer> reactantFragmentNum = new Vector<Integer>();
@@ -104,7 +110,12 @@ public class SMIRKSReaction
 		SmartsToChemObject stco = new SmartsToChemObject();
 		
 		//Checking for atom typing and some properties correctness for all mapped atoms
-		for (int i = 0; i < reactantFragAtomNum.size(); i++)
+		
+		//reactantFragAtomNum, reactantFragmentNum  and  reactantAtomNum  have the same size
+		//The first two represent one way to number (access the mapped atoms)
+		//The third container represents another way (global atom numbers) currently utilized 
+		
+		for (int i = 0; i < reactantFragAtomNum.size(); i++)       
 		{
 			int rAtNum = reactantFragAtomNum.get(i).intValue();
 			int rNum = reactantFragmentNum.get(i).intValue();
@@ -456,6 +467,30 @@ public class SMIRKSReaction
 	public String transformationDataToString()
 	{
 		StringBuffer sb = new StringBuffer();
+		
+		System.out.println("Mappings:");
+		for (int i = 0; i < reactantMapIndex.size(); i++)
+		{	
+			Integer rMapInd = reactantMapIndex.get(i);
+			int rGlobAtNum = reactantAtomNum.get(i).intValue();
+			IAtom glob_ra = reactant.getAtom(rGlobAtNum);
+			int pIndex = getIntegerObjectIndex(productMapIndex, rMapInd);			
+			int pGlobAtNum = productAtomNum.get(pIndex).intValue();
+			IAtom glob_pa = product.getAtom(pGlobAtNum);
+			
+			System.out.println("Map #" + rMapInd.intValue()+ 
+					//"  P" + rNum + " A"+rAtNum + "  -->  R"+pNum+" A"+pAtNum+"  " +
+				 "     " + 
+				 "at# " + rGlobAtNum + 	
+				 "  Charge = " +  reactantAtCharge.get(rGlobAtNum) +
+				 "   -->  " + 
+				 "at# " + pGlobAtNum +
+				 "  Charge = " +  productAtCharge.get(pGlobAtNum) +				  
+				 "         pIndex = " + pIndex
+				 );
+		}
+		
+		
 		for (int i = 0; i <  prodBo.size(); i++)
 		{
 			String bo;

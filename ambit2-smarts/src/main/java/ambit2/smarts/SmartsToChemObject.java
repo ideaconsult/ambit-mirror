@@ -302,7 +302,8 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		//All these cases generate null atom
 		//	AliphaticAtom				
 		//	AromaticAtom
-		//	AnyAtom							
+		//	AnyAtom		
+		
 		return(null);
 	}
 	
@@ -324,8 +325,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		//System.out.println("\nConverting expression: " +  a.toString());
 		
-		int atomCharge = 0; 
-		
+		int atomCharge = 0;
 		
 		Vector<SmartsAtomExpression> subs = getSubExpressions(a, SmartsConst.LO+ SmartsConst.LO_ANDLO);
 		int atType = -1;
@@ -334,7 +334,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		{	
 			analyzeSubExpressionsFromLowAnd(a, subs.get(i));
 			//System.out.print("  sub-expression " +  subs.get(i).toString());
-			//System.out.println("    mSubAtomType = " + mSubAtomType + "  mSubAromaticity = " + mSubAromaticity);
+			//System.out.println("    mSubAtomType = " + mSubAtomType + "  mSubAromaticity = " + mSubAromaticity + "  mSubAtomCharge = " + mSubAtomCharge);
 			if (mSubAtomType != -1)
 			{
 				if (atType == -1)					
@@ -343,7 +343,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				{
 					if (atType != mSubAtomType)
 					{
-						atType = -1; //Atom Type is not defined correctly 
+						atType = -1; //Atom Type is not defined correctly
 						break;
 					}
 				}
@@ -358,12 +358,11 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				{
 					if (isArom != mSubAromaticity)
 					{	
-						isArom = -1;  //Aromaticity is not defined correctly 
+						isArom = -1;  //Aromaticity is not defined correctly
 						break;
 					}
 				}
 			}
-			
 			
 			
 			if (mSubAtomCharge != 0)
@@ -372,19 +371,22 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				atomCharge = mSubAtomCharge;
 			}
 			
-			
 		}
 		
-		if ((atType != -1)&&(isArom != -1))
+		
+		if (atType != -1)
 		{
 			Atom atom = new Atom();			
 			atom.setSymbol(PeriodicTable.getSymbol(atType));			
 						
-			//Setting the aromaticity
-			if (isArom == 1)				
-				atom.setFlag(CDKConstants.ISAROMATIC,true);
-			else
-				atom.setFlag(CDKConstants.ISAROMATIC,false);
+			//Setting the aromaticity (when it is defied)
+			if (isArom != -1)
+			{	
+				if (isArom == 1)				
+					atom.setFlag(CDKConstants.ISAROMATIC,true);
+				else
+					atom.setFlag(CDKConstants.ISAROMATIC,false);
+			}
 			
 			//Setting the charge
 			if (atomCharge != 0)
@@ -393,7 +395,11 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 			//System.out.println("setting atom charge " + atomCharge);
 			
 			return(atom);
+			
 		}
+		
+		System.out.println("------------> return null");
+		
 		return(null);
 	}
 	
@@ -536,12 +542,14 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 					break;	
 					
 				case SmartsConst.AP_AtNum:
+					//System.out.println("Primitive AtNum " + seTok.param);
 					if (seTok.param > 0)
 						if (!FlagNot)
 							expAtType = seTok.param;
 					break;
 				
 				case SmartsConst.AP_Charge:
+					//System.out.println("Charge " + seTok.param);
 						if (!FlagNot)
 							mCurSubAtCharge = seTok.param;
 					break;

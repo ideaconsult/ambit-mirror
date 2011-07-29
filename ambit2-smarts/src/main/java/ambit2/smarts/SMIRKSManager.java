@@ -12,6 +12,9 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
+import ambit2.base.exceptions.AmbitException;
+import ambit2.core.processors.structure.AtomConfigurator;
+
 
 public class SMIRKSManager 
 {
@@ -198,6 +201,13 @@ public class SMIRKSManager
 						applied = true;
 				}
 			}
+			
+			AtomConfigurator  cfg = new AtomConfigurator();
+			try {
+				cfg.process(target);
+			} 
+			catch (AmbitException e) { }
+			
 			return applied;
 		}
 		
@@ -213,7 +223,14 @@ public class SMIRKSManager
 				if ((selection==null) || ((selection!=null) && (selection.accept(rMaps.get(i))))) {
 						applyTransformAtLocation(target, rMaps.get(i), reaction);
 						applied = true;
-						//The first acceptable is found and stoped
+						//The first acceptable is found and stopped
+						
+						AtomConfigurator  cfg = new AtomConfigurator();
+						try {
+							cfg.process(target);
+						} 
+						catch (AmbitException e) { }
+						
 						return applied;
 				}
 			}
@@ -235,6 +252,13 @@ public class SMIRKSManager
 						applied = true;
 				}
 			}
+			
+			AtomConfigurator  cfg = new AtomConfigurator();
+			try {
+				cfg.process(target);
+			} 
+			catch (AmbitException e) { }
+			
 			return applied;
 		}
 		
@@ -568,7 +592,13 @@ public class SMIRKSManager
 		//Apply transformation
 		for (int i = 0; i < cloneMaps.size(); i++)	
 			this.applyTransformAtLocation(clone, cloneMaps.get(i), reaction);
-				
+		
+		AtomConfigurator  cfg = new AtomConfigurator();
+		try {
+			cfg.process(clone);
+		} 
+		catch (AmbitException e) { }
+		
 		return clone;
 	}
 	
