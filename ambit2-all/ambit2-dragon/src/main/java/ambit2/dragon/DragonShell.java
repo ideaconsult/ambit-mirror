@@ -156,6 +156,8 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 						exe.getAbsolutePath(),DRAGON_HOME));
 		}
 		addExecutable(CommandShell.os_WINDOWS, winexe.getAbsolutePath(),null);
+		addExecutable(CommandShell.os_WINDOWS7, winexe.getAbsolutePath(),null);
+		addExecutable(CommandShell.os_WINDOWSVISTA, winexe.getAbsolutePath(),null);
 		addExecutable(CommandShell.os_FreeBSD, exe.getAbsolutePath(),null);
 		addExecutable(CommandShell.os_LINUX, exe.getAbsolutePath(),null);
 		setInputFile("allblocks.drs");
