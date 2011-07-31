@@ -38,6 +38,7 @@ import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 
@@ -227,6 +228,19 @@ public class MengineCrashTest {
         IMolecule a = getChemical("ambit2/data/mengine/problem-007.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }         
+    /**
+     * https://sourceforge.net/tracker/?func=detail&aid=3138563&group_id=152702&atid=785126
+     */
+  
+    public void test_Toxtree_bug_3138563() throws  Exception {
+        smi2sdf.setGenerateSmiles(true);
+        smi2sdf.setDropHydrogens(true);
+        SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+        IMolecule a = p.parseSmiles("Cc2c(NS(=O)(=O)c1ccc(N)cc1)onc2C");
+        Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
+    } 
+    
+    
     public int goCrash(IMolecule a, String smilesfield) throws  Exception {
         AtomConfigurator c= new AtomConfigurator();
         HydrogenAdderProcessor h = new HydrogenAdderProcessor();
