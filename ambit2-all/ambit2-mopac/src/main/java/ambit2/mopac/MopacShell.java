@@ -136,6 +136,8 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	protected void initialize() throws ShellException {
 		super.initialize();
 		addExecutable(CommandShell.os_WINDOWS, "bin/mopac/MOPAC_7.1.exe",null);
+		addExecutable(CommandShell.os_WINDOWS7, "bin/mopac/MOPAC_7.1.exe",null);
+		addExecutable(CommandShell.os_WINDOWSVISTA, "bin/mopac/MOPAC_7.1.exe",null);
 		addExecutable(CommandShell.os_FreeBSD, "/usr/local/mopac/mopac",null);
 		addExecutable(CommandShell.os_LINUX, "/usr/local/mopac/mopac",null);
 		setInputFile("mol.smi");
