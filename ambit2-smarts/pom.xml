@@ -23,8 +23,8 @@
   		<version>${version}</version>
   		<type>jar</type>
   		<scope>compile</scope>
-<!--
   	</dependency>
+<!--
   	    <dependency>
     	<groupId>weka</groupId>
     	<artifactId>weka</artifactId>
