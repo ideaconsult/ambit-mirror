@@ -26,7 +26,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	protected SMILES_PARSER parser = SMILES_PARSER.OPENBABEL;
 	
 	protected SmilesParserWrapper() {
-		this((Preferences.getProperty(Preferences.SMILESPARSER) == "true") ? SMILES_PARSER.OPENBABEL : SMILES_PARSER.CDK);
+		this(("true".equals(Preferences.getProperty(Preferences.SMILESPARSER))) ? SMILES_PARSER.OPENBABEL : SMILES_PARSER.CDK);
 
 
 	}	
