@@ -82,14 +82,26 @@ public class Panel2D<A extends IMoleculeEditAction> extends JPanel implements IC
 	protected boolean generate2d = true;
 	protected boolean editable = false;
 	protected A editAction;
-	protected boolean atomNumbers = false;
+	
+	protected enum _atomrendermode {
+		symbols,
+		numbers,
+		explicith
+	}
+	protected _atomrendermode atomrendermode = _atomrendermode.symbols;
 	
 	public boolean isAtomNumbers() {
-		return atomNumbers;
+		return _atomrendermode.numbers==atomrendermode;
 	}
 	public void setAtomNumbers(boolean atomNumbers) {
-		this.atomNumbers = atomNumbers;
+		atomrendermode = atomNumbers?_atomrendermode.numbers:_atomrendermode.symbols;
 	}
+	public boolean isExplicitH() {
+		return _atomrendermode.explicith==atomrendermode;
+	}
+	public void setExplicitH(boolean value) {
+		atomrendermode = value?_atomrendermode.explicith:_atomrendermode.symbols;
+	}	
 	public Panel2D() {
 		super();
 		setEditable(true);
@@ -106,7 +118,8 @@ public class Panel2D<A extends IMoleculeEditAction> extends JPanel implements IC
         				launchEditor(e.getComponent());
         			}
         		} else {
-        			atomNumbers = ! atomNumbers;
+        			_atomrendermode[] modes = _atomrendermode.values();
+        			atomrendermode = modes[(atomrendermode.ordinal()+1) % modes.length];
         			image = null;
         			setAtomContainer(atomContainer, true);
         		}
@@ -141,7 +154,7 @@ public class Panel2D<A extends IMoleculeEditAction> extends JPanel implements IC
 	public void paint(Graphics g) {
 		super.paintComponent(g);    
 		if (image == null) try {
-			image = tools.getImage(atomContainer,getSelector(),generate2d,atomNumbers);
+			image = tools.getImage(atomContainer,getSelector(),generate2d,isAtomNumbers(),isExplicitH());
 		} catch (Exception x) {
 			g.fillRect(0, 0, tools.getImageSize().width, tools.getImageSize().width);
 			return;
