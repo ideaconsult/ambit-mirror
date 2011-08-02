@@ -61,10 +61,11 @@ public class Preferences {
 	public static String PASSWORD="Password";
 	public static String TIMEOUT="timeout";
 	public static String REMOTELOOKUP="remotelookup";
+	public static String REMOTELOOKUP_URI="remotelookup_uri";
 	
 	protected final static String filename="ambit2.pref";
 	protected static Properties props = null;
-	public enum VTAGS { General, Structure,Conversion3D,Database };
+	public enum VTAGS { General, Structure,Conversion3D,Database,RemoteQuery};
 	public enum VINDEX { NAME,TITLE,VALUE,CLASS,HINT,HIDDEN,TAG };
 
 	public static Object[][] default_values = {
@@ -81,7 +82,8 @@ public class Preferences {
 		
 		{FASTSMARTS,"Use SMARTS accelerator","true",Boolean.class,"Accelerate SMARTS search",false,VTAGS.Structure},
 		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",true,VTAGS.Structure},
-		{REMOTELOOKUP,"Remote lookup enabled","false",Boolean.class,"Enable remote lookup for CAS and EINECS",false,VTAGS.Structure},
+		{REMOTELOOKUP,"Remote lookup enabled","false",Boolean.class,"Enable remote lookup for CAS and EINECS",false,VTAGS.RemoteQuery},
+		{REMOTELOOKUP_URI,"Remote lookup URI","http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?search=%s&max=1&media=chemical%%2Fx-mdl-sdfile",String.class,"OpenTox web service address for compound lookup",false,VTAGS.RemoteQuery},
 		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false,VTAGS.Structure},
         {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false,VTAGS.Structure},
         {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"If checked, will report an error when an unknown atom type is encountered.",false,VTAGS.Structure},
