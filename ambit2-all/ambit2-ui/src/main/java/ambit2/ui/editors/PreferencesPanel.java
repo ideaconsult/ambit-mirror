@@ -96,7 +96,7 @@ public class PreferencesPanel implements IAmbitEditor<Properties>  {
 					}
 			
 	        FormLayout formlayout = new FormLayout(
-	                "right:pref, 3dlu, 150dlu:grow",
+	                "right:pref, 3dlu, 350dlu:grow",
 	                layout.toString());
 	        CellConstraints cc = new CellConstraints();
 	        PanelBuilder builder = new PanelBuilder(formlayout);
