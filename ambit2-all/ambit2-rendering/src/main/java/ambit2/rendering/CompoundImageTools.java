@@ -110,13 +110,15 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     public CompoundImageTools() {
         this(new Dimension(200,200));
     }
+    
     public CompoundImageTools(Dimension cellSize) {
         super();
-        renderer = createRenderer(cellSize,background,false,false);
+        renderer = createRenderer(cellSize,background,false,false,false);
         r2dm = renderer.getRenderer2DModel();
 		this.imageSize = cellSize;
     }
-    private IRenderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers) {
+    
+    private IRenderer createRenderer(Dimension cellSize,Color background,boolean rings, boolean atomNumbers, boolean explicitH) {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
         generators.add(new BasicSceneGenerator());
 
@@ -148,7 +150,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
  	   //r2dm.set(paramType, value)
  	   RendererModelWrapper.setBackColor(r2dm,new Color(background.getRed(),background.getGreen(),background.getBlue(),128));
 
- 	   RendererModelWrapper.setShowExplicitHydrogens(r2dm,false);
+ 	   RendererModelWrapper.setShowExplicitHydrogens(r2dm,explicitH);
  	   
  	   RendererModelWrapper.setShowAromaticity(r2dm,true);  
  	   
@@ -236,7 +238,14 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     public synchronized BufferedImage getImage(IAtomContainer molecule, 
     		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
     		boolean build2d,
-    		boolean atomNumbers) {    
+    		boolean atomNumbers) {
+    	return getImage(molecule, selector,build2d,atomNumbers,false);
+    }
+    public synchronized BufferedImage getImage(IAtomContainer molecule, 
+    		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
+    		boolean build2d,
+    		boolean atomNumbers,
+    		boolean explicitH) {    
     	boolean rings = true;
     	if (molecule!=null)
         	for (int i=0; i < molecule.getBondCount();i++)
@@ -246,7 +255,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         				break;
         			}
     	
-    	renderer = createRenderer(imageSize,background,rings,atomNumbers);
+    	renderer = createRenderer(imageSize,background,rings,atomNumbers,explicitH);
     	r2dm = renderer.getRenderer2DModel();
     	
         if (buffer == null)
@@ -349,6 +358,8 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			boolean atomNumbers) {
 		paint(renderer, molecules, explicitH, g, selector,getImageSize(),atomNumbers);
 	}
+
+	
 	/**
 	 * TODO sort molecules, in order to display the largest part first
 	 * @param renderer
@@ -365,9 +376,9 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			Graphics2D g,
 			IProcessor<IAtomContainer,IChemObjectSelection> selector,
 			Dimension imageSize,
-			boolean atomNumbers)	
+			boolean atomNumbers)
 	{
-    	renderer = renderer==null?createRenderer(imageSize,Color.white,false,atomNumbers):renderer;
+    	renderer = renderer==null?createRenderer(imageSize,Color.white,false,atomNumbers,explicitH):renderer;
     	RendererModel r2dm = renderer.getRenderer2DModel();
 
 		if ((molecules != null) && (molecules.getAtomContainerCount()>0)) {
