@@ -10,7 +10,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -25,7 +24,6 @@ import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
-import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 
 public class TestSMIRKS 
@@ -266,8 +264,29 @@ public class TestSMIRKS
 		checkReactionResult(result,expectedResult, expectedResultExplH);
 		
 	}
-	
 
+	
+	public void testAldehyde_oxidation_extraH() throws Exception {
+		//NN_diethylformamide
+		String smirks = "[C;H1:1]=[O:2]>>[C:1](O)=[O:2]";
+		String target = "[H]C(=O)C(=O)C([H])([H])C([H])([H])C([H])([H])C([H])([H])[H]";
+
+		IAtomContainer result = applySMIRKSReaction(smirks, target);
+		Assert.assertNotNull(result);
+		
+		//if wrong valencies this will fail
+		//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(result);
+		
+		String expectedResult[] = new String[] {"O=C(O)C(=O)CCCC"};
+		
+		String expectedResultExplH[] = 
+			new String[] {"[H]C([H])([H])C([H])([H])C([H])([H])C([H])([H])C(=O)C(=O)O"};
+
+		//System.out.println(smigen.createSMILES(result));
+		checkReactionResult(result,expectedResult, expectedResultExplH);		
+		
+	}	
+	                                                          
 	@org.junit.Test
 	public void testAldehyde_oxidation() throws Exception {
 		//NN_diethylformamide
