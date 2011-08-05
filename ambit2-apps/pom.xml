@@ -22,8 +22,8 @@
 
     <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
- 	<toxtree.version>2.4.1</toxtree.version>
- 	<ambit.version>2.4.1</ambit.version>
+ 	<toxtree.version>2.5.0</toxtree.version>
+ 	<ambit.version>2.4.2</ambit.version>
 
   </properties>
     <description>AmbitXT and Ambit REST web services </description>
