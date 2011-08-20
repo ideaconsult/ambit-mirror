@@ -70,3 +70,25 @@
 Previous releases
 	
 	{{{./download_ambitxt_previous.html}Downloads}}
+	
+*{{{http://maven.apache.org/}Maven}} artifact 
+   		
+   		{{{http://ambit.uni-plovdiv.bg:8083/nexus/index.html#nexus-search;quick~ambit2-ambitxt}http://ambit.uni-plovdiv.bg:8083/nexus/index.html#nexus-search;quick~ambit2-ambitxt}}
+   		
+   		Artifact 
+   		
++---------------------------------    
+<dependency>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-ambitxt</artifactId>
+</dependency>
++---------------------------------
+
+		Repository
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
++--------------------------------- 		

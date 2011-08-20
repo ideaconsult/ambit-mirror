@@ -1,0 +1,15 @@
+ -----
+ OpenTox AA client
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/19
+ -----
+
+{OpenTox Authentication and Authorization client} 
+
+    A java client library and a command line tool for accessing {{{http://opentox.org/}OpenTox}}
+    {{{http://opentox.org/dev/apis/api-1.2/AA}authentication and authorization services}}.
+    
+	{{{http://vedina.github.com/opentox-aa-cli/}http://vedina.github.com/opentox-aa-cli/}}
+ 

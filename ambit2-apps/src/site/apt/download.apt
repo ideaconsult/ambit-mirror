@@ -1,22 +1,38 @@
  -----
- AMBIT Downloads
+ AMBIT and OpenTox Downloads
  -----
  Nina Jeliazkova
  -----
  2011/08/19
  -----
 
-{AMBIT Downloads}
+{AMBIT and OpenTox Downloads}
 
+*Stand alone ({desktop}) applications
+~~~~~~~~~~~~~
+
+   * {{{./download_ambitxt.html}AMBIT XT}}
+   
+   * {{{./download_ambitdiscovery.html}AMBIT Discovery}}
+   
+   * {{{./download_qmrfeditor.html}(Q)MRF Editor and XML schema}} (Java WebStart application)
+
+*Web {services}
+~~~~~~~~~~~~~
 
    * {{{./download_ambitrest.html}AMBIT REST Web services}}
    
    * {{{./download_ontologyservice.html}OpenTox Ontology service}}
    
-   * {{{.//download_toxpredict.html}ToxPredict web application}}
+   * {{{./download_toxpredict.html}ToxPredict web application}}
    
-   * {{{./download_ambitxt.html}AMBIT XT}}
+   * {{{./download_otpolicy.html}OpenTox Policy web service}}
    
-   * {{{./download_ambitdiscovery.html}AMBIT Discovery}}
+*{Libraries}
+~~~~~~~~~~~~~
+
+   * {{{.//download_otclient.html}OpenTox client library}}
    
+   * {{{./download_aaclient.html} OpenTox Authentication and Authorization client library}}
    
+   * {{{./download_ambitlibs.html} AMBIT modules}}

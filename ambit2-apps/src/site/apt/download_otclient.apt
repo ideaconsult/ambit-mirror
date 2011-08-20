@@ -1,0 +1,48 @@
+ -----
+ OpenTox client library
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/20
+ -----
+
+{OpenTox client library} 
+
+	The OpenTox client library is used to connect to {{{http://opentox.org/dev/apis/api-1.2}OpenTox API}} compliant web services.  
+		
+*Download OpenTox client library v.1.0.1
+
+	[Web application archive] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/client/opentox-dsl-1.0.1.jar/download}opentox-dsl-1.0.1.jar}}
+	
+    []
+	
+*Publication
+ 	
+    [Jeliazkova 2010] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{http://dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}.
+ 
+*The code
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/opentox/opentox-dsl}https://ambit.svn.sourceforge.net/svnroot/ambit/branches/opentox/opentox-dsl}}
+	
+*{{{http://maven.apache.org/}Maven}} artifact 
+   		
+   		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/net/ideaconsult/opentox-dsl/1.0.1/}http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/net/ideaconsult/opentox-dsl/1.0.1/}}
+   		
+   		Artifact
+   		
++---------------------------------    
+<dependency>
+  <groupId>net.ideaconsult</groupId>
+  <artifactId>opentox-dsl</artifactId>
+  <version>1.0.1</version>
+</dependency>
++---------------------------------
+
+		Repository
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
++--------------------------------- 	

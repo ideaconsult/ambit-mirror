@@ -1,0 +1,17 @@
+ -----
+ (Q)MRF Editor and XML schema
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/19
+ -----
+
+{(Q)MRF Editor 0.05} 
+
+[./images/thumb_qmrfeditor.png] (Q)MRF Editor screenshot
+
+	{{{http://ambit.sourceforge.net/qmrf/jws/qmrfeditor.jnlp}Launch (Q)MRF Editor}}
+ 
+{(Q)MRF XML schema} 
+
+    QMRF DTD schema {{{http://ambit.sourceforge.net/qmrf/qmrf.dtd}download}}.
