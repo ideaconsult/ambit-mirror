@@ -7,19 +7,26 @@
  -----
 
 {OpenTox Ontology service} 
-	
-	The Ontology service is an implementation of {{{http://opentox.org/dev/apis/api-1.2/Ontology}OpenTox Ontology service API}}.
-	
-	The Ontology Service does not depend on AMBIT modules, and  compiles into a different web application. 
-	It currently uses the {{{http://www.jcheminf.com/content/3/1/18#B35}Jena TDB}} persistence mechanism, 
-	and was initially designed as a proof-of-concept service to illustrate the added value of 
-	gathering RDF triples of several remote OpenTox services into the same triple storage and 
-	enabling SPARQL queries. 
-	
-    Currently, the ontology service is used as a registry of all deployed OpenTox services (both local and remote),
-    and {{{http://toxpredict.org/}ToxPredict}} web application retrieves the list of QSAR models via SPARQL query to {{{http://apps.ideaconsult.net:8080/ontology}http://apps.ideaconsult.net:8080/ontology}}.
 
-*Download OpenTox Ontology service (ontology.war) v.0.0.2
+	The Ontology service is an implementation of {{{http://opentox.org/dev/apis/api-1.2/Ontology}OpenTox Ontology service API}}.
+		
+[./images/thumb_ontologyservice.png] OpenTox Ontology service.
+
+	The Ontology Service does not depend on AMBIT modules, and  compiles into a different web application. 
+	It currently uses the {{{http://openjena.org/TDB/}Jena TDB}} persistence mechanism, 
+	and was initially designed as a proof-of-concept service to illustrate the added value of 
+	gathering {{{http://www.w3.org/RDF/}RDF}} triples of several remote OpenTox services into the same triple storage and 
+	enabling {{{http://www.w3.org/TR/rdf-sparql-query/}SPARQL}} queries. 
+	
+	<<Please note>>: {{{./download_ambitrest.html}AMBIT REST web services}} do not require an Ontology service to be installed.
+	However, some applications like {{{./download_toxpredict.html}ToxPredict}} and 
+	{{{http://www.bioclipse.net/opentox}Bioclipse-OpenTox}} depend on querying an OpenTox Ontology service.    
+	
+    Currently, the {{{http://apps.ideaconsult.net:8080/ontology}Ontology service}} is used as a registry of all deployed OpenTox services (both local and remote),
+    and {{{http://toxpredict.org/}ToxPredict}} web application retrieves the list of QSAR models 
+    via {{{http://apps.ideaconsult.net:8080/ontology/query/Model}SPARQL}} query.
+
+*Download OpenTox Ontology service v.0.0.2
 
 	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/ontology/ontology.war}ontology.war}}
 	
@@ -35,7 +42,8 @@
     
 *Configuration 
 
-	Does not use MySQL database. Uses Jena TDB for persistent storage (file based), which is automatically generated on deploy. 
+	Does not use MySQL database. Uses Jena TDB for persistent storage (file based), which is automatically generated on deploy.
+	The following configuration files can be found under <webapps/ontology> folder. There are reasonable default values.
 
 **WEB-INF/classes/org/opentox/config/config.properties
 
@@ -57,18 +65,41 @@ aa.policy=URI-OF-OPENTOX-POLICY-SERVICE
 *Models registration
 
 +---------------------------------      
-	curl -X POST -d "uri=THE-URI" http://localhost:8080/ontology 
+	curl -X POST -d "uri=THE-URI" http://yourhost:8080/ontology -H "subjectid:OPENSSOTOKEN"
 +---------------------------------      
 
 	Or use the HTML form at the top, paste the URI of the model and click "Submit".
 	
 *Publication
  	
-    [Jeliazkova 2010] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}}.
+    [Jeliazkova 2010] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{http://dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}.
  
- 	[]
+ 	[REST API] {{{http://opentox.org/dev/apis/api-1.2/Ontology}http://opentox.org/dev/apis/api-1.2/Ontology}}
  	
 *The code
 	
-	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/opentox/ontology-service}https://ambit.svn.sourceforge.net/svnroot/ambit/branches/opentox/ontology-service}}
+	[v.0.0.2] {{{https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ontology-service-0.0.2}https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ontology-service-0.0.2}}
 	
+	[current development] {{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/opentox/ontology-service}https://ambit.svn.sourceforge.net/svnroot/ambit/branches/opentox/ontology-service}}
+	
+*{{{http://maven.apache.org/}Maven}} artifact 
+   		
+   		Artifact
+   		
++---------------------------------    
+<dependency>
+  <groupId>org.opentox</groupId>
+  <artifactId>ontology</artifactId>
+  <version>0.0.2</version>
+  <type>war</type>
+</dependency>
++---------------------------------
+
+		Repository
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
++--------------------------------- 	
