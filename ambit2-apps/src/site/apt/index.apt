@@ -1,0 +1,107 @@
+ -----
+ AMBIT
+ -----
+ Nina Jeliazkova
+ ----- 
+ 2011/08/19
+ -----
+ 
+{AMBIT} 
+~~~~~~~~~~
+ AMBIT is an open source software for chemoinformatics data management, which consists of a  {{{http://mysql.com}MySQL}} database and functional modules,
+ allowing a variety of queries, data mining and predictive models building and application. 
+ 
+ The modules were initially designed and developed to serve as building blocks of a desktop application (Ambit Database Tools), 
+ as per the requirements of a {{{http://www.cefic-lri.org/lri-toolbox/ambit}CEFIC LRI}} contract. 
+
+{AMBIT2}
+~~~~~~~~~~
+ AMBIT2 is the current version and a complete redesign of AMBIT software, featuring improved user interface, support for workflows, plugins and reporting for user actions.
+ AMBIT2 consists of multiple modules with well defined dependencies, which can be used in a stand alone mode or embedded in other applications.
+
+ AMBIT2 modules and applications can run on any platform, supported by Java 1.6 or higher. 
+
+{AMBIT Applications}
+~~~~~~~~~~
+
+*{AMBIT XT}
+~~~~~~~~~~
+
+ The AmbitXT desktop application features a Swing graphical user interface, and provides a set of functionalities to facilitate 
+ the evaluation and registration of chemicals according to the REACH requirements: 
+ for example workflows for analogue identification and assessment of Persistence, Bioaccumulation, and Toxicity (PBT). 
+
+ The {{{./download_ambitxt.html}downloadable installer}} includes a large database, covering all REACH registered chemicals, 
+ as well as several publicly available datasets featuring toxicity data. 
+ Users can also import their own sets of chemical structures and data. 
+ Downloading and running the application locally on the user machine is usually considered an advantage, 
+ especially when handling confidential data. 
+
+ {{{./download_ambitxt.html}Downloads}}
+ 
+*{AMBIT REST Web services}
+~~~~~~~~~~
+
+ With the growing popularity of the Web browser as a platform for applications, 
+ cumbersome downloads of custom desktop solutions are becoming less convenient nowadays and are even considered obsolete sometimes.
+
+ The AMBIT software was considerably enhanced within the framework of the {{{http://opentox.org}OpenTox}} project, 
+ not only by providing an {{{http://opentox.org/dev/apis}OpenTox API}} compliant {{{http://en.wikipedia.org/wiki/Representational_State_Transfer}REST}} web service interface to most of its functionalities, 
+ but also by adding the ability to describe data, algorithms, and model resources via corresponding ontologies 
+ and to build QSAR models. 
+ 
+ AMBIT REST web services are distributed as {{{./download_ambitrest.html}web archive (war file)}} and can be deployed in an {{{http://tomcat.apache.org/}Apache Tomcat}} application server or any other compatible servlet container. 
+ All {{{http://toxtree.sf.net}Toxtree}} modules for predicting the toxicological hazard of chemical compounds are also integrated within this package and available as REST web services via the OpenTox model API.
+ 
+ {{{./download_ambitrest.html}Downloads}} 
+
+*{AMBIT Discovery}
+~~~~~~~~~~
+
+ AMBIT Discovery is an user-friendly open source application, which estimates applicability domain of QSAR models by various methods.
+ 
+ AMBIT Discovery can run on any platform, supported by Java 1.4 or higher. 
+ 
+ It is distributed with fully automated Windows installers or as platform independent zip archive. 
+ 
+ {{{./download_ambitdiscovery.html}Downloads}}
+ 
+*{Bioconcentration factor (BCF) Gold Standard Database}
+~~~~~~~~~~
+ 
+ {{{http://www.cefic-lri.org/lri-toolbox/bcf}http://www.cefic-lri.org/lri-toolbox/bcf}}
+ 
+ {{{http://ambit.sourceforge.net/euras/}http://ambit.sourceforge.net/euras/}}
+
+*{(Q)SAR} Model Reporting Format Inventory
+~~~~~~~~~~
+ 
+  Developed by Ideaconsult Ltd. on behalf of {{{http://ihcp.jrc.ec.europa.eu/our_labs/computational_toxicology/qsar_tools/QRF}JRC Computational Toxicology}}
+  Uses {{{AMBIT}AMBIT}} for storing and searching chemical structures and training/test datasets of the (Q)SAR models.  
+  	
+  {{{http://qsardb.jrc.it/qmrf/}http://qsardb.jrc.it/qmrf/}}
+  
+*{ToxPredict} Estimate toxicological hazard of a chemical structure
+~~~~~~~~~~
+ 
+  A prototype web application (ToxPredict) that accepts chemical structures and identifiers as input and automatically generates a toxicity report based on several OpenTox toxicity models.
+  Developed by Ideaconsult Ltd. in the framework of {{{http://opentox.org}OpenTox}} project.
+  
+  Uses {{{AMBIT REST Web services}AMBIT REST Web services}}, as well as several remote {{{http://opentox.org/dev/apis}OpenTox API}} compliant web services.
+    
+  [Hands on exercise] at OpenTox Interaction meeting 9-12 Aug, 2011, Munich, Germany {{{http://opentox.org/meet/opentox2011/opentox2011toxpredict}Use ToxPredict to obtain REACH-relevant information on compounds}}
+  
+  [] 
+    
+  {{{http://toxpredict.org}http://toxpredict.org}ToxPredict}} 
+  
+  {{{http://opentox.org/data/documents/development/tutorialfiles/toxpredict}}ToxPredict Tutorial}}
+ 
+{All Downloads}
+
+	* {{{./download_ambitxt.html}Ambit XT}}
+	
+    * {{{./download_ambitrest.html}Ambit REST web services}}
+    
+    * {{{./download_ambitdiscovery.html}Ambit Discovery}}
+    

@@ -1,0 +1,72 @@
+ -----
+ Downloads
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/19
+ -----
+
+{AMBIT XT v2.2.0} 
+
+ Downloads
+	
+	[Windows setup with an embeded MySQL database] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/AmbitXT-v2.2.0-setup.exe}http://ambit.uni-plovdiv.bg/downloads/ambit2/AmbitXT-v2.2.0-setup.exe}}
+	
+	[Technical guide] {{{http://ambit.sourceforge.net/manuals/Ambitv.2.2.0TechManual.pdf}http://ambit.sourceforge.net/manuals/Ambitv.2.2.0TechManual.pdf}}
+	
+	[User Manual] {{{http://ambit.sourceforge.net/manuals/AmbitXT%20v2.2.0%20User%20Manual.pdf}http://ambit.sourceforge.net/manuals/AmbitXT%20v2.2.0%20User%20Manual.pdf}}
+
+	[Manual for the PBT assessment module] {{{http://ambit.sourceforge.net/manuals/AmbitXT%20v2.2.0%20PBT%20Assessment%20Manual.pdf}http://ambit.sourceforge.net/manuals/AmbitXT%20v2.2.0%20PBT%20Assessment%20Manual.pdf}}
+	
+	[Video guide Read across] {{{http://ambit.sourceforge.net/video/index.html}Read across using SMARTS substructure and similarity search}}
+	
+	[Video guide PBT Assessment] {{{http://www.youtube.com/watch?v=HYDA3xr3jeY}PBT Assessment}}
+		
+	[]
+		
+ Change log
+	 
+	  * Build date November 2009 
+	  
+	  * Windows setup with an embeded MySQL database
+	
+	  * integrated Toxtree (Toxtree modules available from the Descriptor calculation interface);
+	
+	  * included chemical structure data, gathered from several independent sources;
+	
+	  * Improved performance;
+	  
+	  * Updated Toxtree modules
+	  
+	  * The embedded database encompasses substances from the following sources:
+	  
+	    * {{{http://apps.echa.europa.eu/preregistered/prsDownload.aspx}ECHA Preregistration list}}
+	
+	    * {{{http://ambit.sourceforge.net/euras}Bioconcentration factor (BCF) Gold Standard Database}}
+	
+	    * ECETOC Aquatic Toxicity (EAT) Database Supplement to ECETOC. 2003. Aquatic Hazard Assessment II. Technical Report No. 91. European Centre for Ecotoxicology and Toxicology of Chemicals, Brussels, Belgium
+	
+	    * Compilation of historical local lymph node assay data for the evaluation of skin sensitization alternatives. Gerberick GF, Ryan CA, Kern PS, Schlatter H, Dearman RJ, Kimber I, Patlewicz G, Basketter DA. (2005). Dermatitis 16(4): 157-202.
+	
+	    * Skin irritation and corrosion Reference Chemicals data base (1995) ECETOC Technical Report No. 66
+	
+	    * {{{http://www.epa.gov/NCCT/dsstox/sdf_epafhm.html}DSSTox EPAFHM: EPA Fathead Minnow Acute Toxicity}}
+	
+	    * {{{http://www.epa.gov/NCCT/dsstox/sdf_fdamdd.html}FDAMDD: FDA Maximum (Recommended) Daily Dose}}
+	
+        * {{{http://www.epa.gov/NCCT/dsstox/sdf_iristr.html}IRISTR: EPA Integrated Risk Information System (IRIS) Toxicity Review Data}}
+		
+        * {{{http://www.epa.gov/NCCT/dsstox/sdf_kierbl.html}KIERBL: EPA Estrogen Receptor Ki Binding Study (Laws et al.)}}
+		
+        * {{{http://www.epa.gov/NCCT/dsstox/sdf_cpdbas.html}CPDBAS: Carcinogenic Potency Database Summary Tables - All Species}}
+		
+        * {{{http://www.epa.gov/NCCT/dsstox/sdf_isscan_external.html}ISSCAN: Istituto Superiore di Sanita, CHEMICAL CARCINOGENS: STRUCTURES AND EXPERIMENTAL DATA}}
+		
+ Publications    
+ 
+    [Jeliazkova 2010] Jeliazkova N., Jaworska J., Worth A. (2010) Chapter 17. Open Source Tools for Read-Across and Category Formation, In M. Cronin, & Madden J. (Eds.), {{{http://www.amazon.com/Silico-Toxicology-Principles-Applications-Issues/dp/1849730040}In Silico Toxicology : Principles and Applications}} (pp. 408-445). Cambridge, UK: RSC Publishing
+ 
+		
+Previous releases
+	
+	{{{./download_ambitxt_previous.html}Downloads}}
