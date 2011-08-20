@@ -40,10 +40,14 @@
       
       <item name="Download" href="/download.html" >
       		<item name="AMBIT XT" href="/download_ambitxt.html"/>
-            <item name="AMBIT REST web services" href="/download_ambitrest.html"/>
             <item name="AMBIT Discovery" href="/download_ambitdiscovery.html"/>
+
+            <item name="AMBIT REST web services" href="/download_ambitrest.html"/>
+            <item name="OpenTox ontology service" href="/download_ontologyservice.html"/>
+            <item name="ToxPredict web application" href="/download_toxpredict.html"/>
       </item>
 	</menu>
+	
 	<menu name="Support">      
 	  <item name="Support and feedback" href="/support.html" />
   	  <item name="Forum" href="http://sourceforge.net/projects/ambit/forums" />

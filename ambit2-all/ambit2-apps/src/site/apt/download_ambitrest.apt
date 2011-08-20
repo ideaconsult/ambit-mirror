@@ -66,10 +66,10 @@
 	The default database is <ambit2> and the default user is <guest>. 
 	These are created automatically, if following the {{{./install_ambitrest.html}instructions}} above. 
     
-    A pointer to an Ontology service is provided by {{{http://localhost:8080/ambit2/sparqlendpoint}http://yourhost:8080/ambit2/sparqlendpoint}}, but not directly used by AMBIT REST services. 
-    Setting the pointer may affect external applications though. 
+    A pointer to an {{{./download_ontologyservice.html}OpenTox Ontology service}} is provided by {{{http://localhost:8080/ambit2/sparqlendpoint}http://yourhost:8080/ambit2/sparqlendpoint}}, but not directly used by AMBIT REST services. 
+    Setting the pointer may affect external applications (e.g. ToxPredict). 
     
-    The preconfigured ontology service at expected at {{{http://localhost:8080/ontology}http://yourhost:8080/ontology}}. 
+    The pre-configured Ontology Service at expected at {{{http://localhost:8080/ontology}http://yourhost:8080/ontology}}. 
     After deployment to the servlet container, 
     this can be changed by editing the configuration files 
     

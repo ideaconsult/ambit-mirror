@@ -50,11 +50,13 @@ Install your own {AMBIT REST Web services}
 
 	Access to AMBIT web services can be controlled via 
 	{{{http://opentox.org/dev/apis/api-1.2/AA}OpenTox Authentication and Authorization}} infrastructure. 
-	Tokens are obtained after log in into the {{{http://opensso.in-silico.ch/auth/authenticate}OpenSSO}} service.
+	Security tokens are obtained after log in into the {{{http://forgerock.com/openam.html}OpenAM}} service at <http://opensso.in-silico.ch/auth/authenticate>.
+
 	OpenTox user accounts can be obtained via free registration at {{{http://opentox.org/join_form}OpenTox site}}.
 	
 +---------------------------
-	curl -X POST -d "username=YOUR-OPENTOX-USER" -d "password=YOUR-OPENTOX-PASSWORD" http://opensso.in-silico.ch/auth/authenticate 
+	curl -X POST -d "username=YOUR-OPENTOX-USER" -d "password=YOUR-OPENTOX-PASSWORD" \
+		http://opensso.in-silico.ch/auth/authenticate 
 +---------------------------
 
 	AMBIT services offer log in via its {{{http://apps.ideaconsult.net:8080/ambit2/opentoxuser}web page}}.
