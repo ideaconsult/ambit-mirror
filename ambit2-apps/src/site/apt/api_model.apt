@@ -1,0 +1,23 @@
+ -----
+ OpenTox Model resource
+ -----
+ Background
+ -----
+ Oct 2010
+
+OpenTox API : Model
+
+  Provides different representations for chemical compounds with a unique and defined chemical structure
+  
+  {{Documentation}}, {{Representation}}, {{Examples}}
+ 
+*{Documentation}
+~~~~~~
+  
+  {{{http://opentox.org/dev/apis/api-1.2/Model}http://opentox.org/dev/apis/api-1.1/Model}}
+
+*{Representation}
+~~~~~~  
+
+  An OpenTox model resource is an instance of class <<ot:Model>>, a subclass of <<ot:OpenToxResource>>.
+

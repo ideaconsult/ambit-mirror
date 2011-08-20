@@ -1,0 +1,172 @@
+ -----
+ OpenTox Dataset resource
+ -----
+ Background
+ -----
+ Oct 2010
+
+OpenTox API : Dataset
+
+  Provides access to chemical compounds and their features (e.g. structural, physical-chemical, biological, toxicological properties).
+  
+  {{Documentation}}, {{Representation}}, {{Examples}}, {{Summary}}
+ 
+*{Documentation}
+~~~~~~
+  
+  {{{http://opentox.org/dev/apis/api-1.2/dataset}http://opentox.org/dev/apis/api-1.2/dataset}}
+
+*{Representation}
+~~~~~~  
+
+   An OpenTox Dataset resource is an instance of class <<ot:Dataset>>, a subclass of <<ot:OpentoxResource>>.
+  
+  The concept of a Dataset of chemical compounds is central to OpenTox web services functionality. Algorithm services accept dataset URI in order to build a model, or to generate descriptor values. Model services accept dataset URI in order to apply a model and obtain predictions. Predictions are again returned as dataset URI, which could be subsequently retrieved.  Search results (similarity or substructure) are also available as datasets.
+  
+  The OpenTox Dataset can be thought as a file of chemical compounds, along with their properties, which however, doesn’t have a filename, but unique web address and can be read and written remotely. The dataset representation in RDF format is defined in OpenTox ontology as ot:Dataset class, and can be briefly summarized as follows:
+  
+  The dataset consists of data entries (or data rows);
+
+	* Each row is associated with exactly one chemical compound, identified by its URL and available via OpenTox Compound service API;
+	
+	* One and the same compound URL can be associated with multiple dataset rows;
+	
+	* Every column is associated with a Feature URL, representation should be available via OpenTox Feature API (described above). A feature is identified by its URL and has name and source,along with other properties. Any OpenTox Dataset, Algorithm or Model can serve as feature source. If the source is an algorithm or model, this allows to exactly identify how the values in the column were generated, and run the same calculations, for new chemical compounds.
+  
+  This simplified view is illustrated by Table 1.
+  
+*----------*--------------+--------+----------------:
+| | {{{http://apps.ideaconsult.net:8080/ambit2/feature/21591}/feature/21591}}     | {{{http://apps.ideaconsult.net:8080/ambit2/feature/21580}/feature/21580}} |{{{http://apps.ideaconsult.net:8080/ambit2/feature/21588}/feature/21588}}        |
+*----------*--------------+--------+----------------:
+|{{{http://apps.ideaconsult.net:8080/ambit2/compound/413/conformer/409421}/compound/413/conformer/409421}}  | 60-11-7     | Solvent Yellow 2; Butter Yellow;  | {{{http://apps.ideaconsult.net:8080/ambit2/compound/44497/conformer/409422?feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21588&media=text/n3}225.3}}       |
+*----------*--------------+--------+----------------:
+| {{{http://apps.ideaconsult.net:8080/ambit2/compound/44497/conformer/409422}/compound/44497/conformer/409422}} | 28322-02-3    |  4-AAF; 4-acetamidofluorene;       | {{{http://apps.ideaconsult.net:8080/ambit2/compound/44497/conformer/409422?feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21588&media=text/n3} 223.28}}      |
+*----------*--------------+--------+----------------:
+| {{{http://apps.ideaconsult.net:8080/ambit2/compound/4480/conformer/409423}/compound/4480/conformer/409423}}  |129-00-0     |    Benzo[def]phenanthrene;     | {{{http://apps.ideaconsult.net:8080/ambit2/compound/4480/conformer/409423?feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21588&media=text/n3}202.26}}      |
+*----------*--------------+--------+----------------:
+| {{{http://apps.ideaconsult.net:8080/ambit2/compound/602/conformer/409424}/compound/602/conformer/409424}}  |67-66-3    |  Formyl trichloride; methane trichloride      | {{{http://apps.ideaconsult.net:8080/ambit2/compound/602/conformer/409424?feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21588&media=text/n3}119.38}}      |
+*----------*--------------+--------+----------------:
+Simplified representation of OpenTox Dataset
+  
+ In practice, the RDF representation looks slightly more complex,  because each cell in the table is represented by a separate instance of  FeatureValue class, which links to the ot:Feature (column header) and holds the value itself.
+
+ Besides RDF, one can retrieve various information about the dataset by using text/uri-list mime type and following templates:
+ 
+*----------+--------------:
+| <<Description>> | <<URI Template>> |
+*----------+--------------:
+| Retrieve entire dataset content. If uri-list, retrieve only compound URIs| http://host:port/dataset/<<id>>      |
+*----------+--------------:
+| Retrieve representation of features (columns) of the dataset | http://host:port/dataset/<<id>>/feature   |
+*----------+--------------:
+|Retrieves dataset metadata  (name, etc.) | http://host:port/dataset/<<id>>/metadata    |
+*----------+--------------:
+
+ 
+*{Examples} 
+~~~~~~  
+
+ ** Example 1. Retrieve dataset metadata in RDF/XML
+
++---------------------------------------
+$ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net:8080/ambit2/dataset/9/metadata
+<rdf:RDF
+    xmlns:ac="http://apps.ideaconsult.net:8080/ambit2/compound/"
+    xmlns:ot="http://www.opentox.org/api/1.1#"
+    xmlns:bx="http://purl.org/net/nknouf/ns/bibtex#"
+    xmlns:otee="http://www.opentox.org/echaEndpoints.owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:ar="http://apps.ideaconsult.net:8080/ambit2/reference/"
+    xmlns="http://apps.ideaconsult.net:8080/ambit2/"
+    xmlns:am="http://apps.ideaconsult.net:8080/ambit2/model/"
+    xmlns:af="http://apps.ideaconsult.net:8080/ambit2/feature/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ad="http://apps.ideaconsult.net:8080/ambit2/dataset/"
+    xmlns:ag="http://apps.ideaconsult.net:8080/ambit2/algorithm/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:ota="http://www.opentox.org/algorithmTypes.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://apps.ideaconsult.net:8080/ambit2/">
+  <owl:Class rdf:about="http://www.opentox.org/api/1.1#Dataset"/>
+  <owl:Class rdf:about="http://purl.org/net/nknouf/ns/bibtex#Entry"/>
+  <ot:Dataset rdf:about="dataset/9">
+    <dc:source>ISSCAN_v3a_1153_19Sept08.1222179139.sdf</dc:source>
+    <dc:publisher>nina</dc:publisher>
+    <rdfs:seeAlso>
+      <bx:Entry rdf:about="reference/20117">
+        <rdfs:seeAlso>http://www.epa.gov/NCCT/dsstox/sdf_isscan_external.html</rdfs:seeAlso>
+        <dc:title>ISSCAN_v3a_1153_19Sept08.1222179139.sdf</dc:title>
+      </bx:Entry>
+    </rdfs:seeAlso>
+    <dc:title>ISSCAN: Istituto Superiore di Sanita, CHEMICAL CARCINOGENS: STRUCTURES AND EXPERIMENTAL DATA</dc:title>
+  </ot:Dataset>
+</rdf:RDF>
++---------------------------------------
+
+ ** Example 2. Retrieve list of features URI, used in this dataset
+
++---------------------------------------
+$ curl -H "Accept:text/uri-list" http://apps.ideaconsult.net:8080/ambit2/dataset/9/feature
+http://apps.ideaconsult.net:8080/ambit2/feature/21572
+http://apps.ideaconsult.net:8080/ambit2/feature/21573
+http://apps.ideaconsult.net:8080/ambit2/feature/21574
+http://apps.ideaconsult.net:8080/ambit2/feature/21575
+http://apps.ideaconsult.net:8080/ambit2/feature/21576
+http://apps.ideaconsult.net:8080/ambit2/feature/21577
+http://apps.ideaconsult.net:8080/ambit2/feature/21578
+http://apps.ideaconsult.net:8080/ambit2/feature/21579
+http://apps.ideaconsult.net:8080/ambit2/feature/21580
+http://apps.ideaconsult.net:8080/ambit2/feature/21581
+http://apps.ideaconsult.net:8080/ambit2/feature/21582
+http://apps.ideaconsult.net:8080/ambit2/feature/21583
+http://apps.ideaconsult.net:8080/ambit2/feature/21584
+http://apps.ideaconsult.net:8080/ambit2/feature/21585
+http://apps.ideaconsult.net:8080/ambit2/feature/21586
+http://apps.ideaconsult.net:8080/ambit2/feature/21587
+http://apps.ideaconsult.net:8080/ambit2/feature/21588
+http://apps.ideaconsult.net:8080/ambit2/feature/21589
+http://apps.ideaconsult.net:8080/ambit2/feature/21590
+http://apps.ideaconsult.net:8080/ambit2/feature/21591
+http://apps.ideaconsult.net:8080/ambit2/feature/21592
++---------------------------------------
+
+ Or just the compound URIs (restricted to first 3) via text/uri-list mime type:
+
+ ** Example 3. Dataset representation in N3 format
+
++---------------------------------------
+$ curl -H "Accept:text/uri-list" "http://apps.ideaconsult.net:8080/ambit2/dataset/9?page=0&pagesize=3"
+http://apps.ideaconsult.net:8080/ambit2/compound/413/conformer/409421
+http://apps.ideaconsult.net:8080/ambit2/compound/44497/conformer/409422
+http://apps.ideaconsult.net:8080/ambit2/compound/4480/conformer/409423
++---------------------------------------
+
+*{RDF Representation}
+
+ OpenTox Dataset encapsulates compounds and their property (feature) values.  
+ 
+ The RDF triples naturally allow to model binary relationships via <Subject-Predicate-Object> construct (e.g.  molecular_weight has_value 200 ).  In order to model higher order relationships (e.g. CompoundX hasProperty molecular_weight with value 200 and more complex statements), two more classes have been introduced in OpenTox resource ontology - namely <<ot:FeatureValue>> and <<ot:DataEntry>>. 
+ <<ot:FeatureValue>> class encapsulates the relationship Feature - hasValue - Value.  
+ 
+ This is formally defined via object property ot:feature (links to the ot:Feature class), and data property ot:value (holds the value itself). This class can be interpreted as a cell in a table, where each cell contains not only the value, but a reference to the column header as well. This results in a flexible representation, not limited to tabular values. 
+ <<ot:DataEntry>> class encapsulates the relationship Compound - has values for - specific Features. 
+ 
+ This can be thought as a row in a table, where the object property ot:compound specifies the ot:Compound resource, where ot:values object property specifies all the cells (ot:FeatureValue instances) , available in the data entry.
+ 
+ A dataset consists of multiple ot:DataEntry-ies. These classes can be represented as anonymous classes in RDF notations, or have unique URIs.  
+
+  As an illustration, the content of the dataset  {{{http://apps.ideaconsult.net:8080/ambit2/dataset/9}http://apps.ideaconsult.net:8080/ambit2/dataset/9}} can be retrieved in RDF/XML and N3
+  
+ ** Example 4. Dataset representation in RDF/XML or N3 format
+
++---------------------------------------
+curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net:8080/ambit2/dataset/9
++---------------------------------------
+ 
+ or
+  
++---------------------------------------
+curl -H "Accept:text/n3" http://apps.ideaconsult.net:8080/ambit2/dataset/9
++---------------------------------------
+  

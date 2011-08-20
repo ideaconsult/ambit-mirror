@@ -1,0 +1,30 @@
+ -----
+ SPARQL Query Language for RDF
+ -----
+ Ivelina Nikolova
+ -----
+ Oct 2010
+
+  [SPARQL] The Simple Protocol and RDF Query Language (SPARQL) is a SQL-like language for querying RDF data. 
+  For expressing RDF graphs in the matching part of the query.  
+  SPARQL is emerging as the de-facto RDF query language, and is a W3C Recommendation.
+
+  For our purposes SPARQL queries could be executed either directly through the SPARQL query panel in Protege or from inside a JAVA application using the specialised Jena library methods.  
+  Both approaches are able to handle queries concerning explicit object and property relations but Jena libraries have the advantage of using a reasoner. 
+  Thus queries executed using Jena library methods can return results taking in account also the transitive and inferred relations.
+
+  Here is an example for querying the {{{http://www.eswc2006.org/technologies/ontology}http://www.eswc2006.org/technologies/ontology}} ontology: 
+
+-------------
+PREFIX ot: <http://www.opentox.org/api/1.1#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+SELECT  ?uri 
+WHERE { 
+    ?uri rdfs:subClassOf <ot:Feature>. 
+}
+----------------    
+
+  Each SPARQL request starts with PREFIXes which denote the namespaces used in the query afterwards.The first lines defines namespace prefix, the last two lines use the prefix to express a RDF graph to be matched. Identifiers beginning with question mark ? identify variables. In this query, we are looking for resource ?uri participating in triples with predicates rdfs:subClassOf and want the subjects of these triples. Detailed SPARQL syntax description can be found here.
+
+  Since SPARQL is not aware of the rdfs semantics (hence SPARQL is not aware of owl's semantics). SPARQL doesn't understand the subclass assertions (which are processed as any assertion) and it doesn't understand that rdfs:subClassOf is transitive. Executed from inside Protege this example would return as result only the direct descendats of the class ot:Feature and nothing else. If we want to obtain a full list of subclasses of the ot:Feature class we need to do it using Jena Lib methods.
+  
