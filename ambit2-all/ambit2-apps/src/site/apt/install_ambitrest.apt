@@ -61,4 +61,7 @@ Install your own {AMBIT REST Web services}
 
 	AMBIT services offer log in via its {{{http://apps.ideaconsult.net:8080/ambit2/opentoxuser}web page}}.
 	
-	The relevant link for a local installation is {{{http://localhost:8080/ambit2/opentoxuser}http://yourhost:8080/ambit2/opentoxuser}}. 	 
+	The relevant link for a local installation is {{{http://localhost:8080/ambit2/opentoxuser}http://yourhost:8080/ambit2/opentoxuser}}.
+	
+    Java OpenTox AA client library is {{{./download_aaclient.html}available}}.
+ 	 

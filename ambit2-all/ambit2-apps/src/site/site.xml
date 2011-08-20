@@ -64,12 +64,22 @@
       
       <item name="Download" href="/download.html" collapse="true" >
           <description>AMBIT downloads</description>
+          <item name="Desktop applications" href="/download.html#desktop">
       		<item name="AMBIT XT" href="/download_ambitxt.html"/>
             <item name="AMBIT Discovery" href="/download_ambitdiscovery.html"/>
-
+            <item name="(Q)MRF Editor and XML schema" href="/download_qmrfeditor.html"/>
+          </item>
+          <item name="Web services" href="/download.html#services">
             <item name="AMBIT REST web services" href="/download_ambitrest.html"/>
             <item name="OpenTox ontology service" href="/download_ontologyservice.html"/>
-            <item name="ToxPredict web application" href="/download_toxpredict.html"/>
+            <item name="ToxPredict" href="/download_toxpredict.html"/>
+            <item name="OpenTox Policy service" href="/download_otpolicy.html"/>
+          </item>  
+		  <item name="Libraries" href="/download.html#Libraries">          
+            <item name="OpenTox client library" href="/download_otclient.html"/>
+            <item name="OpenTox AA client library" href="/download_aaclient.html"/>
+             <item name="AMBIT modules" href="/download_ambitlibs.html"/>
+ 		</item>             
       </item>
 	</menu>
 	

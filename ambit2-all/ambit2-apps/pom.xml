@@ -18,6 +18,10 @@
     <name>ambit and toxtree snapshots</name>
     <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
   </snapshotRepository>
+    <site>
+      <id>website_ambit</id>
+      <url>scp://shell.sourceforge.net/home/groups/a/am/ambit/htdocs</url>
+    </site>  
 </distributionManagement>
 
     <properties>
@@ -28,6 +32,7 @@
   </properties>
     <description>AmbitXT and Ambit REST web services </description>
     <inceptionYear>2008</inceptionYear>
+    <url>http://ambit.sf.net</url>
     <issueManagement>
     	<url>http://sourceforge.net/tracker/?group_id=191756</url>
     </issueManagement>
@@ -82,7 +87,7 @@
     </scm>
     <organization>
     	<name>Ideaconsult Ltd.</name>
-    	<url>http://apps.ideaconsult.net:8080</url>
+    	<url>http://www.ideaconsult.net</url>
     </organization>
 <!--
 <pluginRepositories>
@@ -209,6 +214,25 @@
           			<locales>en</locales>
         		</configuration>
       		</plugin>
+      		<!--  generates PDF from the site-->
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-pdf-plugin</artifactId>
+  <version>1.1</version>
+  
+  <executions>
+    <execution>
+      <id>pdf</id>
+      <phase>site</phase>
+      <goals>
+        <goal>pdf</goal>
+      </goals>
+      <configuration>
+        <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>      		
   		</plugins>
   	</pluginManagement>
   </build>
@@ -237,10 +261,10 @@
   </mailingLists>
   <licenses>
   <license>
-    <name>LGPL</name>
-    <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+    <name>GPL</name>
+    <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
     <distribution>repo</distribution>
-    <comments>LGPL 2</comments>
+    <comments>GPL</comments>
   </license>
 </licenses>
 <reporting>

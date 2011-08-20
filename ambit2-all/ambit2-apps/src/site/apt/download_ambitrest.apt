@@ -95,3 +95,29 @@
 **Code documentation
 	
 	{{{http://ambit.sourceforge.net/ambit2-www/apidocs/index.html}JavaDoc}}
+	
+*{{{http://maven.apache.org/}Maven}} artifact 
+   		
+   		{{{http://ambit.uni-plovdiv.bg:8083/nexus/index.html#nexus-search;quick~ambit2-www}http://ambit.uni-plovdiv.bg:8083/nexus/index.html#nexus-search;quick~ambit2-www}}
+   		
+   		Artifact 
+   		
++---------------------------------    
+<dependency>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-www</artifactId>
+  <type>war</type>
+</dependency>
++---------------------------------
+
+		Repository
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
++--------------------------------- 	
+	
+	
+	
