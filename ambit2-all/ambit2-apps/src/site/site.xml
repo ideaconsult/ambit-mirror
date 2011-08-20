@@ -51,7 +51,7 @@
   </head>
 
     <links>
-      <item name="Toxtree" href="/index.html"/>
+      <item name="Toxtree" href="http://toxtree.sf.net"/>
       <item name="Toxmatch" href="http://ihcp.jrc.ec.europa.eu/our_labs/computational_toxicology/qsar_tools/toxmatch"/>
       <item name="ToxPredict" href="http://toxpredict.org"/>
       <item name="AMBIT 2.0" href="http://ambit.sourceforge.net"/>
