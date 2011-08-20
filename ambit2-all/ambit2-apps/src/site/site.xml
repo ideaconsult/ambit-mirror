@@ -24,7 +24,30 @@
   })();
 
 </script>
-  <!-- Google Analytics - End --> 
+
+  <!-- Google Analytics - End -->
+  
+ <script type="text/javascript">
+      function expand( item ) {
+        var expandIt = document.getElementById( item );
+        if( expandIt.style.display == "block" ) {
+          expandIt.style.display = "none";
+          expandIt.parentNode.className = "collapsed";
+        } else {
+          expandIt.style.display = "block";
+          expandIt.parentNode.className = "expanded";
+        }
+      }
+    </script>
+    #if ( $decoration.body.head )
+      #foreach( $item in $decoration.body.head.getChildren() )
+        #if ( $item.name == "script" )
+          $item.toUnescapedString()
+        #else
+          $item.toString()
+        #end
+      #end
+    #end  
   </head>
 
     <links>
@@ -36,9 +59,11 @@
     </links>
     
    <menu name="AMBIT">
+
       <item name="Introduction" href="/index.html"/>
       
-      <item name="Download" href="/download.html" >
+      <item name="Download" href="/download.html" collapse="true" >
+          <description>AMBIT downloads</description>
       		<item name="AMBIT XT" href="/download_ambitxt.html"/>
             <item name="AMBIT Discovery" href="/download_ambitdiscovery.html"/>
 
@@ -48,7 +73,29 @@
       </item>
 	</menu>
 	
+
+	 <menu name="AMBIT REST web services">
+		
+
+    <item name="OpenTox API (with examples)"   href="/api.html" collapse="true">
+    <description>OpenTox Application Programming Interface description</description>
+      <item name="Data model" href="/api_datamodel.html" />
+      <item name="Compound" href="/api_compound.html"/>
+      <item name="Feature" href="/api_feature.html"/>
+      <item name="Datasets" href="/api_dataset.html" />
+      <item name="Algorithm" href="/api_algorithm.html" />
+      <item name="Model" href="/api_model.html" />
+      <item name="Task" href="/api_task.html" />
+      <item name="Ontology" href="/api_ontology.html" />
+      <item name="Compound query" href="/api_query.html" />
+      </item>
+     <item name="AMBIT OpenTox API implementation"  collapse="true" href="/ambit_services.html" >
+
+       	<item name="Download" href="/download_ambitrest.html"/>  
+	</item>    
+	</menu>
 	<menu name="Support">      
+	
 	  <item name="Support and feedback" href="/support.html" />
   	  <item name="Forum" href="http://sourceforge.net/projects/ambit/forums" />
 	  <item name="Mailing lists" href="/mail-lists.html" />
@@ -56,6 +103,7 @@
     </menu>
   
     <menu name="AMBIT publications">
+    
     	<item name="How to cite AMBIT" href="/pubs_citeambit.html" />
     </menu> 
     <menu ref="reports"/>

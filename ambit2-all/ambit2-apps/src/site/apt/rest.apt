@@ -1,0 +1,184 @@
+ -----
+ The AMBIT Project
+ -----
+ Background
+ -----
+ Oct 2010
+
+Representational State Transfer (REST)
+
+ {{{http://en.wikipedia.org/wiki/Representational_State_Transfer}REST}} is a software architecture style, defined by Roy Fielding in his {{{http://www.ics.uci.edu/~taylor/documents/2002-REST-TOIT.pdf}PhD thesis (2000)}}. 
+ There is a {{{http://www.google.bg/#hl=en&q=REST+web+services}multitude of information}} on RESTful design principles, development frameworks and examples. For a start, the following references could be recommended:
+
+    * {{{http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm}Chapter 5 of Fielding's dissertation}} 
+
+    * {{{http://oreilly.com/catalog/9780596529260}Leonard Richardson, Sam Ruby,RESTful Web Services,O'Reilly 2007}} 
+
+    * {{{http://dret.net/netdret/docs/soa-rest-www2009/}From SOA to REST: Designing and Implementing RESTful Services, Tutorial at WWW2009}} 
+
+    * {{{http://queue.acm.org/detail.cfm?id=1516638}How Do I Model State? Let Me Count the Ways, ACM Queue 2009}} 
+
+    * {{{http://groups.yahoo.com/group/rest-discuss/}rest-discuss Yahoo group}} 
+
+    * {{{http://martinfowler.com/articles/richardsonMaturityModel.html}Richardson Maturity Model: steps toward the glory of REST}} 
+
+ Contrary to established WS-SOAP standards, there are no (currently) standards for RESTful applications, but merely <<{{design}} guides>>. Perhaps the first move towards standardization is the 
+ {{{http://www.ws-rest.org/}First International Workshop on RESTful Design WS-REST 2010}}.
+
+ Besides all discussions, setting {{{http://www.google.com/#hl=en&q=soap+rest&aq=f&oq=soap+rest}REST against SOAP}}, this kind of comparison is not entirely correct, for {{{http://www.w3.org/TR/soap/}SOAP}} is a protocol, and REST is an architectural style, not a protocol.
+
+ {{{http://www.iks.inf.ethz.ch/education/ss07/ws_soa/slides/SOAPvsREST_ETH.pdf}SOAP vs REST}}
+
+ REST style can be briefly summarized as: 
+
+*{Design principles}
+~~~~~~
+ 
+ * {{{Resource}Resource oriented}} 
+  
+ * {{{Transport}Transport protocol}}
+ 
+ * {{Operations}} - {{RESTful}} operations, {{Non-RESTful}} operations
+ 
+ * {{{representation}Resource representation}}
+ 
+ * {{{HATEOAS}Hypermedia as the Engine of Application State (HATEOAS)}} 
+
+ * Error codes
+  
+** {Resource} oriented
+
+ Every object (resource) is named and addressable (e.g. HTTP URL )
+ Examples: 
+    
++------------------------------------------+
+http://myservice.com/molecule/1
++------------------------------------------+
+    
+ RESTfull API design starts by identifying most important objects and groups of objects, supported by the software system and proceeds by defining URL patterns. Common patterns are:
+
+    * Returns list of objects in some format http://myservice.com/myobject 
+
+    * Returns representation(s) of an object, identified by <<myobjectid>> http://myservice.com/myobject/<<myobjectid>> 
+
+    * Patterns may be nested, e.g. http://myservice.com/myobject/<<myobjectid>>/details/<<detailsid>> 
+	
+** {Transport} protocol
+
+  {{{http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol}HTTP}} is the most popular choice of transport protocol, but there are examples of systems using other protocols as well. 
+	
+** {Operations}
+
+ Resources (nouns) support limited number of operations (verbs). HTTP operations are the common choice, when the transport protocol is HTTP. 
+
+*** {RESTful} operations
+
+    * GET (retrieve the object under specified URL) 
+
+    * PUT (update the content of an object at the specified URL) 
+
+    * POST (create a new object and return the URL of the newly created resource) 
+
+    * DELETE (delete the object) 
+    
+*** {Non-RESTful} operations    
+
+    * Everything else , e.g. POST XML message to {{{http://www.ebi.ac.uk/chebi}http://www.ebi.ac.uk/chebi}} 
+
+ Deciding on the operation to be done, on the basis of interpreting POSTed message content (the way a typical SOAP service works!) is NOT recommended. This is referred to as "overloaded POST" and considered violation of RESTful principles! 
+
+ All operations, except POST should be safe (no side effects) and idempotent (same effect if executed multiple times).  
+	
+** Resource {representations}
+	
+	Every resource is defined by an URI. If GET operation on a resource URI returns some content, it is regarded as "dereferencable" (effectively it is an URL). A resource may return content in different formats (by specifying MediaType in the Accept: header of GET operation). The content is regarded as resource "representation". There could be multiple representations of the same resource (e.g. text/html or text/xml).
+
+	RESTfull API design includes specification of allowed media types for each resource/operation pair.
+	 
+** Hypermedia as the Engine of Application State ({HATEOAS})
+
+	All resources should be reachable via a single (or minimum) number of entry points into a RESTful applications. Thus, a representation of a resource should return hypermedia links to related resources
+
+    * For example /?/?/<<id>> resource should return links to /?/?/<<id>>/? and /?/?/<<id>>/?
+    
+    * REST APIs must be hypertext driven 
+	 
+** {Error} codes
+	 
+	{{{/rest/http_status_codes.html}HTTP Status codes}} are used to indicate an operation success or failure.
+
+	RESTfull API design includes specification of status codes for each resource/operation pair. 
+
+*Constraints
+~~~~~~
+ 
+	* Client-server : Clients are separated from servers by a uniform interface. 
+
+	* Cacheable : Clients are able to cache responses 
+
+	* Stateless design : No client context should be stored on the server between requests. Each request from any client contains all of the information necessary to service the request, and any state is held in the client. 
+    Cookies are considered bad practice! 
+
+	* Layered : A client cannot ordinarily tell whether it is connected directly to the end server, or to an intermediary along the way. Intermediary servers may improve system scalability by enabling load balancing and by providing shared caches. They may also enforce security policies. 
+
+	* Uniform interface : The uniform interface between clients and servers, (HTTP GET/PUT/POST/DELETE verbs only) simplifies and decouples the architecture, which enables each part to evolve independently. 
+
+*Design goals
+~~~~~~
+ 
+    * Scalability of component interactions;
+    
+    * Generality of interfaces;
+    
+    * Independent deployment of components;
+    
+    * Intermediary components to reduce latency, enforce security and encapsulate legacy systems 
+
+ RESTful design principles are advocated as being successful, for underlying the existing WWW architecture. REST application are becoming increasingly popular, the trend with major service vendors are to offer REST API along with an existing SOAP API. Some report REST API usage is increasing and SOAP API usage decreasing. 
+
+*Drawbacks
+~~~~~~
+ 
+    * Lack of standards 
+
+    * Development frameworks are relatively young 
+
+    * The commonly recommended practice for security is to use HTTP Authentication mechanisms and SSL. Other solutions are emerging as well. 
+
+    * Examples of RESTful federated systems are rare. 
+	
+*Frameworks
+~~~~~~
+ 
+ Non exhaustive list of popular frameworks for developing RESTful applications:
+ 
+  *Java: {{{http://restlet.org}Restlet}}, {{{https://jersey.dev.java.net/}Jersey}}
+	
+  *PHP: {{{www.cakephp.org}CakePHP}}
+	
+  *Ruby: {{{www.rubyonrails.org}RubyOnRails}}, {{{http://www.sinatrarb.com/}Sinatra}}
+
+  *Perl: Perl Application Framework and ERP Applications 
+
+*Examples of REST APIs
+~~~~~~
+
+	*Amazon Web Services, Amazon {{{http://docs.amazonwebservices.com/AmazonS3/latest/index.html?RESTAPI.html}S3 REST API}}
+	 
+	*{{{http://code.google.com/apis/gdata/}Google Data API protocol}}
+	
+	*{{{http://kenai.com/projects/suncloudapis/pages/Home}The Sun Cloud API}}
+	
+	*{{{http://developer.yahoo.com/php/howto-reqRestPhp.html}Yahoo web services}}
+	
+	*{{{http://www.doodle.com/xsd1/RESTfulDoodle.pdf}Doodle}}
+	
+	*{{{http://www.flickr.com/services/api/}Flickr}}
+	
+	*{{{http://developer.netflix.com/docs/REST_API_Conventions}NetFlix}}
+	
+	*{{{http://apiwiki.twitter.com/Twitter-API-Documentation}Twitter REST API}}
+	
+	*{{{http://wiki.developers.facebook.com/index.php/API}Facebook REST API}}
+	
+	*{{{http://www.blinksale.com/api/}Blinksale}} 

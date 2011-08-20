@@ -1,0 +1,19 @@
+ -----
+ OpenTox data model
+ -----
+ Background
+ -----
+ Oct 2010
+
+OpenTox data model
+
+[./images/opentox/overview.png] Overview
+
+* REST resources, operations and status codes
+
+  Defined by the OpenTox API at {{{http://opentox.org/dev/apis/api-1.2}http://opentox.org/dev/apis/api-1.2}}
+  
+* Resource representation
+
+   A REST resource may support multiple representations. The mandatory {{{http://en.wikipedia.org/wiki/Resource_Description_Framework}RDF/XML}} representation 
+   is defined by the OpenTox ontology {{{http://opentox.org/api/1.1/opentox.owl}http://opentox.org/api/1.1/opentox.owl}} 

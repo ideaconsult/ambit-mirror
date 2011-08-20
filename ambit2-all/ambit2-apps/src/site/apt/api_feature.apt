@@ -1,0 +1,224 @@
+ -----
+ OpenTox Feature resource
+ -----
+ Background
+ -----
+ Oct 2010
+
+OpenTox API : Feature
+
+  A Feature is a resource, representing any kind of a property or identifier, assigned to a {{{/api/compoud_api.apt}Compound}}. 
+  The feature types are determined via their links to ontologies, e.g.
+  {{{./api_algorithm.apt#BlueObelisk}BlueObelisk ontology}} and {{{ECHA}ECHA endpoints ontology}}.
+  
+  {{Documentation}}, {{Representation}}, {{Examples}}, {{Summary}}
+ 
+*{Documentation}
+~~~~~~
+
+  {{{http://opentox.org/dev/apis/api-1.2/Feature}http://opentox.org/dev/apis/api-1.2/Feature}}
+
+*{Representation}
+~~~~~~  
+
+   An OpenTox Feature resource is an instance of class <<ot:Feature>>, a subclass of <<ot:OpentoxResource>>. 
+   The following properties are supported:
+	
+  * Name,  defined by dc:title ({{{http://purl.org/dc/elements/1.1/}Dublin Core namespace}});
+
++-------------------------------
+<dc:title rdf:datatype="&xsd;string">XLogP</dc:title>
++-------------------------------
+
+  *	Units, defined by ot:units annotation property (OpenTox namespace);
+  
+  *	Creator,  defined by dc:creator annotation property (Dublin Core namespace);
+
+  *	The origin of the Feature is defined by ot:hasSource object property (OpenTox namespace) element and can be ot:Algorithm, ot:Model or ot:Dataset;
+
+  *	Relations to other resources, which represent the same entity, could be established via owl:sameAs property. This approach can be used for example to link the ot:Feature resource to a resource form another ontology, as in the example.
+
+  There are several subclasses of <<ot:Feature>> (namely <<ot:NumericFeature>>, <<ot:StringFeature>>, <<ot:NominalFeature>>), which are used to denote if a feature holds numeric, nominal or string values. 
+
+
+*{Examples} 
+~~~~~~  
+
+ ** Example 1. Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature/22114}http://apps.ideaconsult.net:8080/ambit2/feature/22114}} in RDF/XML format
+
++---------------------------------------
+$ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net:8080/ambit2/feature/22114
+<?xml version="1.0"?>
+<!DOCTYPE rdf:RDF [
+  <!ENTITY this 'http://apps.ideaconsult.net:8080/ambit2/'>
+  <!ENTITY dc 'http://purl.org/dc/elements/1.1/'>
+  <!ENTITY ot 'http://www.opentox.org/api/1.1#'>
+  <!ENTITY otee 'http://www.opentox.org/echaEndpoints.owl#'>
+  <!ENTITY dcterms 'http://purl.org/dc/terms/'>
+  <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+  <!ENTITY xsd 'http://www.w3.org/2001/XMLSchema#'>
+  <!ENTITY owl 'http://www.w3.org/2002/07/owl#'>
+  <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+<rdf:RDF
+    xmlns:ot="&ot;"
+    xmlns:bx="&bx;"
+    xmlns:otee="&otee;"
+    xmlns:dc="&dc;"
+    xmlns="&this;"
+    xmlns:rdf="&rdf;"
+    xmlns:owl="&owl;"
+    xmlns:dcterms="&dcterms;"
+    xmlns:xsd="&xsd;"
+    xmlns:ota="&ota;"
+    xmlns:rdfs="&rdfs;"
+  xml:base="&this;">
+  <owl:Class rdf:about="&ot;Algorithm"/>
+  <owl:Class rdf:about="&ot;Feature"/>
+  <owl:Class rdf:about="&ot;NumericFeature">
+    <rdfs:subClassOf rdf:resource="&ot;Feature"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="&ot;hasSource"/>
+  <owl:DatatypeProperty rdf:about="&ot;units"/>
+  <ot:NumericFeature rdf:about="feature/22114">
+    <ot:hasSource>
+      <ot:Algorithm rdf:about="algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"/>
+    </ot:hasSource>
+    <owl:sameAs rdf:resource="&otee;Octanol-water_partition_coefficient_Kow"/>
+    <ot:units></ot:units>
+    <dc:title>XLogP</dc:title>
+    <rdf:type rdf:resource="&ot;Feature"/>
+  </ot:NumericFeature>
+</rdf:RDF>
+
++---------------------------------------
+
+ Example 1 displays an OpenTox feature with title <<XLogP>> and identified by the URI {{{http://apps.ideaconsult.net:8080/ambit2/feature/22114}http://apps.ideaconsult.net:8080/ambit2/feature/22114}} , 
+ The algorithm used to generate values for this feature is identified by the URI
+ {{{http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}. 
+ Note the URI identifies OpenTox Algorithm resource, and the algorithm URI itself may not only be read , as will be shown later in this text, and also can be used to initiate calculations of XLogP descriptor. 
+ 
+ The link to {ECHA} endpoints ontology (<<otee: http://www.opentox.org/echaEndpoints.owl>> namespace)  is also provided, specifying that this feature represents the physicochemical property <<Octanol water partitioning coefficient>>.  
+ The ECHA endpoints ontology is derived from ECHA classification of endpoints, published in REACH guidance documents, and consists of hierarchical arrangement of physicochemical properties and various toxicological endpoints.  
+ The hierarchy doesn't represent the complexity of toxicological assays, but can be used as a first approximation to assign meaning to the data entries.  As the RDF representation doesn't restrict the usage of this particular ontology, more specific description of toxicological assays can be used as well.
+ It could be queried via {{{http://apps.ideaconsult.net:8080/ontology/query/Endpoints}OpenTox Ontology service}}.
+
+ The <<ot:hasSource>> property establishes link with the {{{./api_algorithm.html}OpenTox algorithm}}, which was used to calculate this feature, in this case {{{http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}.
+ Example how to retrieve the algorithm representation is available {{{./api_algorithm.hrml#Example4.}here}}.
+ 
+ 
+ ** Example 2. Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature/22114}http://apps.ideaconsult.net:8080/ambit2/feature/22114}} in N3 format
+
++---------------------------------------
+curl -H "Accept:text/n3" http://apps.ideaconsult.net:8080/ambit2/feature/22114
+@prefix ot:      <http://www.opentox.org/api/1.1#> .
+@prefix dc:      <http://purl.org/dc/elements/1.1/> .
+@prefix :        <http://apps.ideaconsult.net:8080/ambit2/> .
+@prefix ota:     <http://www.opentox.org/algorithmTypes.owl#> .
+@prefix otee:    <http://www.opentox.org/echaEndpoints.owl#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+ot:Algorithm
+      a       owl:Class .
+
+ot:hasSource
+      a       owl:ObjectProperty .
+
+ot:units
+      a       owl:DatatypeProperty .
+
+<http://apps.ideaconsult.net:8080/ambit2/feature/22114>
+      a       ot:Feature , ot:NumericFeature ;
+      dc:creator "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#xlogP" ;
+      dc:title "XLogP" ;
+      ot:hasSource <http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor> ;
+      ot:units "" ;
+      =       otee:Octanol-water_partition_coefficient_Kow .
+
+ot:Feature
+      a       owl:Class .
+
+ot:NumericFeature
+      a       owl:Class ;
+      rdfs:subClassOf ot:Feature .
+
+<http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor>
+      a       ot:Algorithm .
+
++---------------------------------------
+
+ Example 3 displays RDF/XML of another ot:Feature resource, again representing XLogP descriptor, but generated by different implementation. 
+ 
+ In this case, its name is <<TUM_CDK_XLogP>>, and the algorithm resource used to generate resides at Technical University of Munich (TUM) premises (
+ {{{http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/XLogPDescriptor}http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/XLogPDescriptor}} ). 
+
+ This algorithm URL could also be used to initiate descriptor calculations.
+
+ ** Example 3. Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature/26184}http://apps.ideaconsult.net:8080/ambit2/feature/26184}} in N3 notation
+
++---------------------------------------
+$ curl -H "Accept:text/n3" http://apps.ideaconsult.net:8080/ambit2/feature/26184
+@prefix ot:      <http://www.opentox.org/api/1.1#> .
+@prefix dc:      <http://purl.org/dc/elements/1.1/> .
+@prefix :        <http://apps.ideaconsult.net:8080/ambit2/> .
+@prefix bx:      <http://purl.org/net/nknouf/ns/bibtex#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix af:      <http://apps.ideaconsult.net:8080/ambit2/feature/> .
+
+ot:hasSource
+      a       owl:ObjectProperty .
+
+ot:units
+      a       owl:DatatypeProperty .
+
+ot:Feature
+      a       owl:Class .
+
+ot:NumericFeature
+      a       owl:Class ;
+      rdfs:subClassOf ot:Feature .
+
+af:26184
+      a       ot:Feature , ot:NumericFeature ;
+      dc:creator "http://ambit.uni-plovdiv.bg:8080/ambit2" ;
+      dc:title "TUM_CDK_XLogP" ;
+      ot:hasSource <http://opentox.informatik.tu-muenchen.de:8080/OpenTox-dev/algorithm/CDKPhysChem/XLogPDescriptor> ;
+      ot:units "" ;
+      =       ot:TUM_CDK_XLogP .
++---------------------------------------
+
+ And finally, all features, available at a feature resource can be listed in either of RDF formats, or just as a list of URIs , via text/uri-list mime type (Example 4).
+ 
+ ** Example 4.  Retrieve URIs of first 10 features, available at http://apps.ideaconsult.net:8080/ambit2/feature
+
++---------------------------------------
+curl -H "Accept:text/uri-list" 'http://apps.ideaconsult.net:8080/ambit2/feature?page=0&pagesize=10'
+ http://apps.ideaconsult.net:8080/ambit2/feature/1
+ http://apps.ideaconsult.net:8080/ambit2/feature/2
+ http://apps.ideaconsult.net:8080/ambit2/feature/3
+ http://apps.ideaconsult.net:8080/ambit2/feature/4
+ http://apps.ideaconsult.net:8080/ambit2/feature/5
+ http://apps.ideaconsult.net:8080/ambit2/feature/6
+ http://apps.ideaconsult.net:8080/ambit2/feature/7
+ http://apps.ideaconsult.net:8080/ambit2/feature/8
+ http://apps.ideaconsult.net:8080/ambit2/feature/9
+ http://apps.ideaconsult.net:8080/ambit2/feature/10
++--------------------------------------- 
+
+ ** Example 5. TODO : POST (create new feature) example 
+
+
+ ** Example 6. TODO : PUT (update) example (annotation)
+ 
+*{Summary}
+~~~~~~
+  
+  OpenTox Feature resource provides a way to uniquely identify properties and identifiers, assigned to a compound, via feature URIs.  These URIs are dereferencable (the content behind them can be inspected, either by web browser or by HTTP client tools).  
+  There are means to assign different levels of meaning,  by linking to entries to ontologies (e.g. algorithms or toxicological endpoints ), as well as linking to the algorithms, which can be used to generated property values.  
+  The same approach can be used to denote assays, provided that the assay is defined by  an ontology.

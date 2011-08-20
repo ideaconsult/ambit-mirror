@@ -74,8 +74,6 @@ aa.policy=URI-OF-OPENTOX-POLICY-SERVICE
  	
     [Jeliazkova 2010] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{http://dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}.
  
- 	[REST API] {{{http://opentox.org/dev/apis/api-1.2/Ontology}http://opentox.org/dev/apis/api-1.2/Ontology}}
- 	
 *The code
 	
 	[v.0.0.2] {{{https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ontology-service-0.0.2}https://ambit.svn.sourceforge.net/svnroot/ambit/tags/ontology-service-0.0.2}}

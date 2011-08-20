@@ -1,0 +1,35 @@
+ -----
+ Resource Description Framework (RDF)
+ -----
+ Background
+ -----
+ Oct 2010
+
+ [RDF] W3C Resource Description Framework
+
+  {{{http://en.wikipedia.org/wiki/Resource_Description_Framework}Resource Description Framework}} (RDF) describes any object as a collection of triples, each consisting of a subject, a predicate and an object. The predicate (also called a property) denotes the relationship. More details (definition, syntax, tutorials) are available at {{{http://www.w3.org/TR/rdf-primer/}W3C}} site and elsewhere online.
+
+ (description of the resources)  
+ {{{http://stackoverflow.com/questions/1740341/what-is-the-difference-between-rdf-and-owl}http://stackoverflow.com/questions/1740341/what-is-the-difference-between-rdf-and-owl}}
+ 
+ Resources are described in terms of properties and property values using RDF statements.
+ Statements are represented as triples, consisting of a subject, predicate and object. [S, P, O]
+
+ [Data model] RDF is a data model, not format
+
+  The data model consists of objects and their relationships. Objects are modeled in RDF as {{Classes}} (<<rdf:Class>>),
+  and {{Classes}} have specific {{Instances}}.  Relationships are modeled with {{Properties}} (<<rdf:Property>>).  
+	
+ [Formats (serialization)]  Once a data model is defined, it could be serialized into different formats:
+
+    * {{{http://www.w3.org/TR/REC-rdf-syntax/}RDF/XML}}
+    
+    * {{{http://www.w3.org/DesignIssues/Notation3.html}N3}}
+    
+    * {{{http://www.w3.org/TeamSubmission/turtle/}TURTLE}}
+    
+    * JSON serialization is being {{{http://json-ld.org/}discussed}} and some implementations are available
+  
+ [OWL] Web Ontology Language {{{/rdf_owl.html}OWL}}
+
+ [SPARQL] SPARQL Query Language for RDF {{{/rdf_sparql.html}SPARQL}}

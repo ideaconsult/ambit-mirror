@@ -1,0 +1,101 @@
+ -----
+ HTTP status codes
+ -----
+ Background
+ -----
+ Oct 2010
+
+HTTP status codes
+
+  {{{http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html}RFC2616}}
+
+*Status Code Definitions
+~~~~~~
+
+**Successful 2xx
+~~~~~~
+
+ This class of status code indicates that the client's request was successfully received, understood, and accepted. 
+
+* * {200} OK
+
+ The request has succeeded. The information returned with the response is dependent on the method used in the request, for example:
+
+ GET an entity corresponding to the requested resource is sent in the response;
+
+ HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body;
+
+ POST an entity describing or containing the result of the action;
+
+ TRACE an entity containing the request message as received by the end server. 
+ 
+* * {201} Created
+
+ The request has been fulfilled and resulted in a new resource being created. The newly created resource can be referenced by the URI(s) returned in the entity of the response, with the most specific URI for the resource given by a Location header field. The response SHOULD include an entity containing a list of resource characteristics and location(s) from which the user or user agent can choose the one most appropriate. The entity format is specified by the media type given in the Content-Type header field. The origin server MUST create the resource before returning the 201 status code. If the action cannot be carried out immediately, the server SHOULD respond with 202 (Accepted) response instead.
+
+ A 201 response MAY contain an ETag response header field indicating the current value of the entity tag for the requested variant just created, see section {{{http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19}14.19}}.
+  
+* * {202} Accepted 
+
+ The request has been accepted for processing, but the processing has not been completed. The request might or might not eventually be acted upon, as it might be disallowed when processing actually takes place. There is no facility for re-sending a status code from an asynchronous operation such as this.
+
+ The 202 response is intentionally non-committal. Its purpose is to allow a server to accept a request for some other process (perhaps a batch-oriented process that is only run once per day) without requiring that the user agent's connection to the server persist until the process is completed. The entity returned with this response SHOULD include an indication of the request's current status and either a pointer to a status monitor or some estimate of when the user can expect the request to be fulfilled.
+ 
+**Client Error 4xx
+~~~~~~
+
+ The 4xx class of status code is intended for cases in which the client seems to have erred. Except when responding to a HEAD request, the server SHOULD include an entity containing an explanation of the error situation, and whether it is a temporary or permanent condition. These status codes are applicable to any request method. User agents SHOULD display any included entity to the user.
+ If the client is sending data, a server implementation using TCP SHOULD be careful to ensure that the client acknowledges receipt of the packet(s) containing the response, before the server closes the input connection. If the client continues sending data to the server after the close, the server's TCP stack will send a reset packet to the client, which may erase the client's unacknowledged input buffers before they can be read and interpreted by the HTTP application.
+ 
+* * {400} Bad Request
+
+ The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.
+
+* * {404} Not Found    
+
+ The server has not found anything matching the Request-URI. No indication is given of whether the condition is temporary or permanent. The 410 (Gone) status code SHOULD be used if the server knows, through some internally configurable mechanism, that an old resource is permanently unavailable and has no forwarding address. This status code is commonly used when the server does not wish to reveal exactly why the request has been refused, or when no other response is applicable.
+ 
+* * {405} Method Not Allowed
+
+ The method specified in the Request-Line is not allowed for the resource identified by the Request-URI. The response MUST include an Allow header containing a list of valid methods for the requested resource.
+ 
+* * {413} Request Entity Too Large
+
+ The server is refusing to process a request because the request entity is larger than the server is willing or able to process. The server MAY close the connection to prevent the client from continuing the request.
+
+ If the condition is temporary, the server SHOULD include a Retry- After header field to indicate that it is temporary and after what time the client MAY try again.
+ 
+* * {414} Request-URI Too Long
+
+ The server is refusing to service the request because the Request-URI is longer than the server is willing to interpret. This rare condition is only likely to occur when a client has improperly converted a POST request to a GET request with long query information, when the client has descended into a URI "black hole" of redirection (e.g., a redirected URI prefix that points to a suffix of itself), or when the server is under attack by a client attempting to exploit security holes present in some servers using fixed-length buffers for reading or manipulating the Request-URI.
+ 
+* * {415} Unsupported Media Type
+
+ The server is refusing to service the request because the entity of the request is in a format not supported by the requested resource for the requested method.
+ 
+**Server Error 5xx
+~~~~~~
+
+ Response status codes beginning with the digit "5" indicate cases in which the server is aware that it has erred or is incapable of performing the request. Except when responding to a HEAD request, the server SHOULD include an entity containing an explanation of the error situation, and whether it is a temporary or permanent condition. User agents SHOULD display any included entity to the user. These response codes are applicable to any request method.
+ 
+  * {500} Internal Server Error
+
+ The server encountered an unexpected condition which prevented it from fulfilling the request.
+ 
+  * {501} Not Implemented
+
+  The server does not support the functionality required to fulfill the request. This is the appropriate response when the server does not recognize the request method and is not capable of supporting it for any resource.
+
+  * {502} Bad Gateway
+
+  The server, while acting as a gateway or proxy, received an invalid response from the upstream server it accessed in attempting to fulfill the request.
+  
+  * {503} Service Unavailable
+
+  The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. The implication is that this is a temporary condition which will be alleviated after some delay. If known, the length of the delay MAY be indicated in a Retry-After header. If no Retry-After is given, the client SHOULD handle the response as it would for a 500 response.
+
+  * {504} Gateway Timeout
+
+ The server, while acting as a gateway or proxy, did not receive a timely response from the upstream server specified by the URI (e.g. HTTP, FTP, LDAP) or some other auxiliary server (e.g. DNS) it needed to access in attempting to complete the request.
+
+  

@@ -1,0 +1,107 @@
+ -----
+ The AMBIT Project
+ -----
+ Background
+ -----
+ Oct 2010
+
+OpenTox API : Compound
+
+  Provides different representations for chemical compounds with a unique and defined chemical structure
+  
+  {{Documentation}}, {{Representation}}, {{Examples}}
+ 
+*{Documentation}
+~~~~~~
+  
+  {{{http://opentox.org/dev/apis/api-1.2/structure}http://opentox.org/dev/apis/api-1.2/structure}}
+
+*{Representation}
+~~~~~~  
+
+  An OpenTox Compound resource is an instance of class <<ot:Compound>>, a subclass of <<ot:OpentoxResource>>. 
+
+*{Examples} 
+~~~~~~  
+
+ ** Example 1. Retrieve compound as SMILES ({{{http://www.daylight.com/dayhtml/doc/theory/theory.smiles.html}Simplified Molecular Input Line Entry System}})
+
++---------------------------------------
+ $ curl -H "Accept:chemical/x-daylight-smiles" http://apps.ideaconsult.net:8080/ambit2/compound/1
+ O=C
++---------------------------------------
+
+ ** Example 2. Retrieve compound as SMILES, show HTTP headers
+
++------------------------------------------+
+ $ curl -H "Accept:chemical/x-daylight-smiles" http://apps.ideaconsult.net:8080/ambit2/compound/1 -i
+ HTTP/1.1 200 OK
+ Content-Type: chemical/x-daylight-smiles;charset=UTF-8
+
+O=C
++------------------------------------------+
+
+ ** Example 3. Retrieve compound as {{{http://www.iupac.org/inchi/}InChI}}
+
++---------------------------------------
+$ curl -H "Accept:chemical/x-inchi" http://apps.ideaconsult.net:8080/ambit2/compound/1
+InChI=1S/CH2O/c1-2/h1H2
++---------------------------------------
+
+ ** Example 4. Retrieve compound in MOL format
+
++---------------------------------------
+$ curl -H "Accept:chemical/x-mdl-molfile" http://apps.ideaconsult.net:8080/ambit2/compound/1
+CH2O
+APtclcactv09040902283D 0   0.00000     0.00000
+
+  4  3  0  0  0  0  0  0  0  0999 V2000
+   -0.6004    0.0000    0.0001 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6072    0.0000   -0.0004 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.1472    0.9353    0.0016 H   0  0  0  0  0  0  0  0  0  0  0  0
+    1.1472   -0.9353    0.0016 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  2  0  0  0  0
+  2  3  1  0  0  0  0
+  2  4  1  0  0  0  0
++---------------------------------------
+
+ ** Example 5. Retrieve compound in SDF format
+
++---------------------------------------
+curl -H "Accept:chemical/x-mdl-sdfile" http://apps.ideaconsult.net:8080/ambit2/compound/1
+CH2O
+APtclcactv09040902283D 0   0.00000     0.00000
+
+  4  3  0  0  0  0  0  0  0  0999 V2000
+   -0.6004    0.0000    0.0001 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6072    0.0000   -0.0004 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.1472    0.9353    0.0016 H   0  0  0  0  0  0  0  0  0  0  0  0
+    1.1472   -0.9353    0.0016 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  2  0  0  0  0
+  2  3  1  0  0  0  0
+  2  4  1  0  0  0  0
+M  END
+$$$$
++---------------------------------------
+
+ ** Example 6. Retrieve compound in CML format
+
++---------------------------------------
+$ curl -H "Accept:chemical/x-cml" http://apps.ideaconsult.net:8080/ambit2/compound/1
+<?xml version="1.0" encoding="ISO-8859-1"?><list dictRef="cdk:moleculeSet" xmlns="http://www.xml-cml.org/schema">
+<molecule id="m1" title="CH2O" xmlns="http://www.xml-cml.org/schema">
+  <atomArray>
+    <atom id="a1" elementType="O" x3="-0.6004" y3="0.0" z3="1.0E-4" formalCharge="0" isotopeNumber="16"/>
+    <atom id="a2" elementType="C" x3="0.6072" y3="0.0" z3="-4.0E-4" formalCharge="0" isotopeNumber="12"/>
+    <atom id="a3" elementType="H" x3="1.1472" y3="0.9353" z3="0.0016" formalCharge="0" isotopeNumber="1"/>
+    <atom id="a4" elementType="H" x3="1.1472" y3="-0.9353" z3="0.0016" formalCharge="0" isotopeNumber="1"/>
+  </atomArray>
+  <bondArray>
+    <bond id="b1" atomRefs2="a1 a2" order="D"/>
+    <bond id="b2" atomRefs2="a2 a3" order="S"/>
+    <bond id="b3" atomRefs2="a2 a4" order="S"/>
+  </bondArray>
+  <scalar dictRef="cdk:molecularProperty" title="cdk:Remark" dataType="xsd:string"/>
+</molecule>
+</list>
++---------------------------------------
