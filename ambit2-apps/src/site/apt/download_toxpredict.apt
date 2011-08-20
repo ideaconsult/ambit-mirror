@@ -1,0 +1,63 @@
+ -----
+ AMBIT REST Web services
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/20
+ -----
+
+{ToxPredict web application} 
+
+  A prototype web application that accepts chemical structures and identifiers as input and automatically generates a toxicity report based on several remote OpenTox toxicity models.
+  Developed by {{{www.ideaconsult.net}Ideaconsult Ltd.}} in the framework of {{{http://opentox.org}OpenTox}} project.
+  
+  Uses {{{http://apps.ideaconsult.net:8080/ambit2/}AMBIT REST Web services}}, as well as several remote {{{http://opentox.org/dev/apis}OpenTox API}} compliant web services.
+		
+[./images/thumb_toxpredict.png] ToxPredict web application.
+
+	<<Please note>>: You can use {{{http://www.toxpredict.org}ToxPredict}} online, without installing any softwrae locally. 
+	The only requirement is a recent Web Browser (preferably with fast JavaScript support) and Java enabled, in order to use 
+	the structure diagram editor. 
+	
+	Proceed with the download, only if you would like to install a local version of ToxPredict.   
+	
+	However, some applications like {{{./download_toxpredict.html}ToxPredict}} and 
+	{{{http://www.bioclipse.net/opentox}Bioclipse-OpenTox}} depend on querying an OpenTox Ontology service.    
+	
+    Currently, the {{{http://apps.ideaconsult.net:8080/ontology}Ontology service}} is used as a registry of all deployed OpenTox services (both local and remote),
+    and {{{http://toxpredict.org/}ToxPredict}} web application retrieves the list of QSAR models 
+    via {{{http://apps.ideaconsult.net:8080/ontology/query/Model}SPARQL}} query.
+
+*Download ToxPredict
+
+	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/ToxPredict/ToxPredict.war}ToxPredict.war}}
+	
+    []
+    
+*Deployment 
+    
+	Copy <<ToxPredict.war>> under <webapps> directory of the servlet container. The application should be accessible at
+	
++---------------------------------  	
+ http://localhost:8080/ToxPredict
++---------------------------------  
+    
+*{Configuration} 
+
+	ToxPredict depends on {{{./download_ambitrest.html}AMBIT REST services}} and 
+	{{{./download_ontologyservice}Ontology service}} installed and properly configured.
+    
+    ToxPredict can be configured to work with any combination of these services installed on the same or on a remote machine.
+
+	ToxPredict is configured to expect AMBIT2 services at {{{http://localhost:8080/ambit2}http://localhost:8080/ambit2}} 
+	and Ontology service at {{{http://localhost:8080/ontology}http://localhost:8080/ontology}}.
+	 
+    After deployment to the servlet container, this can be changed by editing the configuration file:
+ 
++----------------------- 
+WEB-INF/classes/config.prop
++-----------------------
+
+The configuration is essential for ToxPredict functioning properly, as it communicates to ambit2.war and ontology.war via OpenTox API only, 
+and does not use direct connection to the database.
+

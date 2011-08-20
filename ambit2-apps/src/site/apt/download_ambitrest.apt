@@ -6,7 +6,7 @@
  2011/08/20
  -----
 
-{AMBIT REST Web services 2.4.1} 
+{AMBIT REST Web services} 
 	
 	Explore AMBIT implementation of OpenTox REST API at {{{http://apps.ideaconsult.net:8080/ambit2}http://apps.ideaconsult.net:8080/ambit2}}.
 	
@@ -98,7 +98,7 @@
 	
 *Publication
  	
-    [Jeliazkova 2010] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}}.
+    [Jeliazkova 2010] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{http://dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}}.
  
  	[]
  	

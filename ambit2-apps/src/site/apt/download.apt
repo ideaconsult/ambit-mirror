@@ -8,9 +8,10 @@
 
 {AMBIT Downloads}
 
-   * {{{./download_ambitxt.html}AMBIT XT}}
-   
+
    * {{{./download_ambitrest.html}AMBIT REST Web services}}
-   
+   * {{{./download_ontologyservice.html}OpenTox Ontology service}}
+   * {{{.//download_toxpredict.html}ToxPredict web application}}
+   * {{{./download_ambitxt.html}AMBIT XT}}
    * {{{./download_ambitdiscovery.html}AMBIT Discovery}}
    
