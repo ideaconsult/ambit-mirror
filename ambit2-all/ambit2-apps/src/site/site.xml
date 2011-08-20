@@ -72,9 +72,11 @@
           <item name="Web services" href="./downloads.html#services">
             <item name="AMBIT REST web services" href="./download_ambitrest.html"/>
             <item name="OpenTox ontology service" href="./download_ontologyservice.html"/>
-            <item name="ToxPredict" href="./download_toxpredict.html"/>
             <item name="OpenTox Policy service" href="./download_otpolicy.html"/>
           </item>  
+          <item name="Web applications" href="./downloads.html#applications">
+            <item name="ToxPredict" href="./download_toxpredict.html"/>
+          </item>            
 		  <item name="Libraries" href="./downloads.html#Libraries">          
             <item name="OpenTox client library" href="./download_otclient.html"/>
             <item name="OpenTox AA client library" href="./download_aaclient.html"/>
@@ -90,18 +92,20 @@
     <item name="OpenTox API (with examples)"   href="/api.html" collapse="true">
     <description>OpenTox Application Programming Interface description</description>
       <item name="Data model" href="./api_datamodel.html" />
-      <item name="Compound" href="./api_compound.html"/>
-      <item name="Feature" href="./api_feature.html"/>
-      <item name="Datasets" href="./api_dataset.html" />
-      <item name="Algorithm" href="./api_algorithm.html" />
-      <item name="Model" href="./api_model.html" />
-      <item name="Task" href="./api_task.html" />
-      <item name="Ontology" href="./download_ontologyservice.html" />
-      </item>
+
+      	<item name="Compound" href="./api_compound.html"/>
+      	<item name="Feature" href="./api_feature.html"/>
+      	<item name="Datasets" href="./api_dataset.html" />
+      	<item name="Algorithm" href="./api_algorithm.html" />
+      	<item name="Model" href="./api_model.html" />
+      	<item name="Task" href="./api_task.html" />
+      	<item name="Ontology" href="./download_ontologyservice.html" />
+     </item>    
      <item name="AMBIT OpenTox API implementation"  collapse="true" href="/ambit_services.html" >
 
        	<item name="Download" href="/download_ambitrest.html"/>  
 	</item>    
+	
 	</menu>
 	<menu name="Support">      
 	
