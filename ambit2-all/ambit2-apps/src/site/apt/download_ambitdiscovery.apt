@@ -1,0 +1,33 @@
+ -----
+ AMBIT Discovery
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/19
+ -----
+
+{AMBIT Discovery 0.04} 
+
+	Downloads:
+
+	[Windows setup (Java Runtime Environment NOT included)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-online-setup.exe/download}http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-online-setup.exe/download}}
+	
+	[Windows setup (Java Runtime Environment 1.4 included)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-offline-setup.exe/download}http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-offline-setup.exe/download}}
+	
+	[Zip archive (platform independent)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04.zip/download}http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04.zip/download}}
+	 
+    []
+    
+    <<AMBIT Discovery>> is an user-friendly open source application, which estimates <<applicability domain>> of QSAR models 
+    by assessing structural similarity to a set of chemicals. It calculates the similarity of a chemical to a set in the 
+    following ways. The first approach is based on distances (Euclidean, City block) suitable when similarity 
+    is assessed in descriptors space. Several preprocessing data functionalities are available to deal with 
+    linearly dependent descriptors (rotation via Principal Component Analysis), centering to remove effects of 
+    different numerical values ranges of the descriptors before PCA. 
+    
+    <<AMBIT Discovery>> provides means to calculate the probability of a chemical belonging to a set represented 
+    by non-parametric probability density estimation. To assess structural similarity the user has a choice of 
+    Daylight style hashed fingerprints or atom environments (topological neighborhood). Details on similarity methods are provided in
+ 
+    [Jaworska 2007] Joanna Jaworska, Nina Nikolova-Jeliazkova, {{{http://www.ncbi.nlm.nih.gov/pubmed/17514565}How can structural similarity analysis help in category formation}}, SAR and QSAR in Environmental Research, vol 18, 3-4 (<<2007>>)
+ 

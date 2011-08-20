@@ -1,0 +1,69 @@
+ -----
+ Previous releases
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/19
+ -----
+
+{AMBIT XT v2.1.0} 
+	
+	June 2009
+	
+	Download {{{http://ambit.acad.bg/downloads/ambit2/30062009/AmbitXT-v2.1.0-setup.exe}Windows setup}} with an embeded MySQL database, containing 100204 EINECS chemicals with calculated properties
+	added new functionality for consistency verification of structures and identifiers;
+	
+	Fast SMARTS database searching
+	
+{AMBIT XT v2.0.2}
+ 	
+	May 2009
+	
+	Download {{{http://ambit.acad.bg/downloads/ambit2/31052009/AmbitXT-v2.0.2-setup.exe}Windows setup}} with an embeded MySQL database, containing 100204 EINECS chemicals with calculated properties
+	PBT module bug fixes and enhancements
+	
+	Initial implementation of fast SMARTS database searching
+	
+{AMBIT XT v2.0.1}
+	
+	May 2009
+	
+	Download {{{http://ambit.acad.bg/downloads/ambit2/10052009/AmbitXT-v2.0.1-setup-einecs-database.exe}Windows setup}} with an embeded MySQL database, containing 100204 EINECS chemicals with calculated properties.
+	
+	Download {{{http://ambit.acad.bg/downloads/ambit2/10052009/AmbitXT-v2.0.1-setup-empty-database.exe}Windows setup}} with an embeded MySQL database, no chemicals imported.
+	
+	{{{http://ambit.acad.bg/downloads/ambit2/10052009/Quick%20Guides%20Main.pdf}Quick Guides}} for first time users
+	
+	{{{http://ambit.acad.bg/downloads/ambit2/10052009/User%20Manual%20Main.pdf}User Manual}}
+	
+	Improved user interface
+	
+	Flexible search workflows
+	
+	Initial implementation of category building workflow
+	
+	Updated workflow for PBT assessment, following REACH guidance.
+	
+{AMBIT XT v2.0.0}
+	
+	Feb 2009
+	
+	Download AmbitXT {{{http://ambit.acad.bg/downloads/ambit2/AmbitXT-v2.0.0-setup.exe}Initial release}} Beta version of the software.
+	
+	Updated database schema
+	
+	Workflow support
+	
+	Example workflow for identifiers, substructure and similarity search.
+	
+	Workflow for PBT assessment, following REACH guidance.
+	
+	The database distributed contains the original EINECS list.
+	
+{AMBIT XT prototype}
+	
+	Oct 2008
+	
+	Prototype version of the software, incorporating updated database schema and functionalities and workflow support, with an example workflow for identifiers, substructure and similarity search. The database distributed contains the original EINECS list.
+	
+	For older AMBIT releases, please visit ambit.acad.bg
