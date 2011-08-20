@@ -14,9 +14,9 @@
 
 *Download AMBIT REST Web services 2.4.1
 
-	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/AA/ambit2.war}ambit2.war}}, AA enabled {{{./install_ambitrest.html#Protected AMBIT web services}?}}
+	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/AA/ambit2.war}ambit2.war}}, A&A enabled {{{./install_ambitrest.html#Protected AMBIT web services}?}}
 	
-	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/withoutAA/ambit2.war}ambit2.war}}, AA disabled {{{./install_ambitrest.html#Protected AMBIT web services}?}}
+	[Web application archive] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.4.1/ambit2.war/download}ambit2.war}}, A&A disabled {{{./install_ambitrest.html#Protected AMBIT web services}?}}
 	
 	[{Database content} (OPTIONAL)] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/db/ambit2-2011051401.7z}SQL dump}} of the database, used by <<ambit2.war>>. 176 MB, unzips into 1GB, MySQL database is 3GB
 	
