@@ -20,8 +20,8 @@
   </snapshotRepository>
     <site>
       <id>website_ambit</id>
-      <url>scp://shell.sourceforge.net/home/groups/a/am/ambit/htdocs</url>
-    </site>  
+      <url>scp://shell.sourceforge.net/home/project-web/ambit/htdocs</url>
+    </site>     
 </distributionManagement>
 
     <properties>

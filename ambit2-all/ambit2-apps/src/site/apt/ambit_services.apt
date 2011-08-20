@@ -19,7 +19,7 @@ AMBIT implementation of OpenTox REST API
   
   * {{{/api_compound.html}Compound}}
 
-	** {{{http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?type=smiles&property=&search=50-00-0&page=0&pagesize=1}Query compound by an identifier}} 
+	** {{{http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?type=smiles&property=&search=50-00-0&page=0&pagesize=1}Finf a compound by an identifier}} 
 	
 	** {{{http://apps.ideaconsult.net:8080/ambit2/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9}Similarity search}} 
 	
@@ -76,7 +76,7 @@ AMBIT implementation of OpenTox REST API
   
      ** {{{ http://apps.ideaconsult.net:8080/ambit2/task?search=Running&max=10}First 10 running tasks}}
 
-*{{{./download_ontologyservice.html}Ontology service}} implements Ontology service API  
+*The {{{./download_ontologyservice.html}Ontology service}} implements Ontology service API  
    
    * {{{/api_ontology.html}Ontology service API}}
   

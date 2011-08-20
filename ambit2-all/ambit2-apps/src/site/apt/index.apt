@@ -16,10 +16,11 @@
 
 {AMBIT2}
 ~~~~~~~~~~
- AMBIT2 is the current version and a complete redesign of AMBIT software, featuring improved user interface, support for workflows, plugins and reporting for user actions.
+ AMBIT2 is the current version and a complete redesign of AMBIT software, includes more features and better performance. Last but not least, 
+ all the functionality is available via REST web services. 
  AMBIT2 consists of multiple modules with well defined dependencies, which can be used in a stand alone mode or embedded in other applications.
 
- AMBIT2 modules and applications can run on any platform, supported by Java 1.6 or higher. 
+ AMBIT2 {{{./download_ambitlibs.html}modules}} and applications can run on any platform, supported by Java 1.6 or higher. 
 
 {AMBIT Applications}
 ~~~~~~~~~~

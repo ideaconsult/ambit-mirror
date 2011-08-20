@@ -96,8 +96,7 @@
       <item name="Algorithm" href="/api_algorithm.html" />
       <item name="Model" href="/api_model.html" />
       <item name="Task" href="/api_task.html" />
-      <item name="Ontology" href="/api_ontology.html" />
-      <item name="Compound query" href="/api_query.html" />
+      <item name="Ontology" href="/download_ontologyservice.html" />
       </item>
      <item name="AMBIT OpenTox API implementation"  collapse="true" href="/ambit_services.html" >
 
