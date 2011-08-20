@@ -24,9 +24,12 @@
    
    * {{{./download_ontologyservice.html}OpenTox Ontology service}}
    
-   * {{{./download_toxpredict.html}ToxPredict web application}}
-   
    * {{{./download_otpolicy.html}OpenTox Policy web service}}
+   
+*Web {applications}
+~~~~~~~~~~~~~
+
+   * {{{./download_toxpredict.html}ToxPredict}}
    
 *{Libraries}
 ~~~~~~~~~~~~~

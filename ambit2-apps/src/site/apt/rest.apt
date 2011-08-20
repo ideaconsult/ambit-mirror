@@ -105,7 +105,7 @@ http://myservice.com/molecule/1
 	 
 ** {Error} codes
 	 
-	{{{/rest/http_status_codes.html}HTTP Status codes}} are used to indicate an operation success or failure.
+	{{{./rest_http_status_codes.html}HTTP Status codes}} are used to indicate an operation success or failure.
 
 	RESTfull API design includes specification of status codes for each resource/operation pair. 
 
