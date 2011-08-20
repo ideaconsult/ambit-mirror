@@ -3,29 +3,28 @@
  -----
  Nina Jeliazkova
  -----
- 2011/07/21
+ 2011/08/20
  -----
 
 Support
 	   
-	   Tell us how do you use ToxTree. Your feedback is crucial!
+	   Tell us how do you use AMBIT. Your feedback is crucial!
 	   
 * Online support (your comments and bug reports will be publicly accessible)
 	   
-	   	* {{{http://sourceforge.net/forum/forum.php?forum_id=510090} Post a comment}}
+	   	* {{{http://sourceforge.net/projects/ambit/forums} Post a comment}}
 	   
-	   	* {{{http://sourceforge.net/tracker/?group_id=152702&atid=785126} Report a bug}}
+	   	* {{{https://sourceforge.net/tracker/?group_id=191756} Report a bug}}
 	   
-	   	* {{{http://sourceforge.net/tracker/?group_id=152702&atid=785129} Suggest a new feature}}
+	   	* {{{https://sourceforge.net/tracker/?atid=938660&group_id=191756&func=browse} Suggest a new feature}}
 	   	
-	   	* {{{mailto:toxtree-users@lists.sourceforge.net} Send an email to Toxtree users mailing list}}
+	   	* {{{https://lists.sourceforge.net/lists/listinfo/ambit-users} Subscribe/Send an email to AMBIT users mailing list}}
 	   	
-	   	* {{{mailto:toxtree-users@lists.sourceforge.net} Join the development}}    
+	   	* {{{https://lists.sourceforge.net/lists/listinfo/ambit-developers} Join the development}}    
 
 * Targeted users support
 	   	
-	   	* {{{mailto:jeliazkova.nina@gmail.com?cc=ecb.qsar@jrc.it&amp;subject=Feedback%20on%20Toxtree}Send a request or report an issue}} to {{{http://vedina.users.sourceforge.net}Nina Jeliazkova}} ({{{www.ideaconsult.net}Ideaconsult Ltd.}}) 
-	   	with copy to the {{{http://ihcp.jrc.ec.europa.eu/our_labs/computational_toxicology/qsar_tools/toxtree}Computational Toxicology Group}} at EC Joint Research Centre
+	   	* {{{mailto:jeliazkova.nina@gmail.com?subject=Feedback%20on%20AMBIT}Send a request or report an issue}} to {{{http://vedina.users.sourceforge.net}Nina Jeliazkova}} ({{{www.ideaconsult.net}Ideaconsult Ltd.}}) 
 
 		* contact {{{http://www.ideaconsult.net}IdeaConsult Ltd.}}
 			   	
@@ -33,6 +32,6 @@ Support
 		   	
 		* Request an extension
 		   	 
-		* Request a development of a new module
+		* Request development of a custom functionality
 	   
  			   	

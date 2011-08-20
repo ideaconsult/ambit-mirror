@@ -6,15 +6,15 @@
  2011/08/19
  -----
 
-{AMBIT Discovery 0.04} 
+{AMBIT Discovery} 
 
 	Downloads:
 
-	[Windows setup (Java Runtime Environment NOT included)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-online-setup.exe/download}http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-online-setup.exe/download}}
+	[Windows setup (Java Runtime Environment NOT included)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-online-setup.exe/download}AmbitDiscovery-v0.04-online-setup.exe}}
 	
-	[Windows setup (Java Runtime Environment 1.4 included)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-offline-setup.exe/download}http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-offline-setup.exe/download}}
+	[Windows setup (Java Runtime Environment 1.4 included)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04-offline-setup.exe/download}AmbitDiscovery-v0.04-offline-setup.exe}}
 	
-	[Zip archive (platform independent)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04.zip/download}http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04.zip/download}}
+	[Zip archive (platform independent)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04.zip/download}AmbitDiscovery-v0.04.zip}}
 	 
     []
     
@@ -27,7 +27,9 @@
     
     <<AMBIT Discovery>> provides means to calculate the probability of a chemical belonging to a set represented 
     by non-parametric probability density estimation. To assess structural similarity the user has a choice of 
-    Daylight style hashed fingerprints or atom environments (topological neighborhood). Details on similarity methods are provided in
+    Daylight style hashed fingerprints or atom environments (topological neighborhood). Details on similarity methods are provided in:
  
+ 	Publication
+ 	
     [Jaworska 2007] Joanna Jaworska, Nina Nikolova-Jeliazkova, {{{http://www.ncbi.nlm.nih.gov/pubmed/17514565}How can structural similarity analysis help in category formation}}, SAR and QSAR in Environmental Research, vol 18, 3-4 (<<2007>>)
  

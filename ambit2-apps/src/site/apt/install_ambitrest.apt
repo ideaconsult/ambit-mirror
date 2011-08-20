@@ -1,0 +1,62 @@
+ -----
+ Install your own {AMBIT REST Web services} 
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/20
+ -----
+
+Install your own {AMBIT REST Web services} 
+	
+	[[1]] Requirements: Java Runtime Environment 6.x, MySQL and Tomcat application server, or compatible servlet container
+	
+	[[2]] Download web application archive (war) file and run your own instance of Ambit REST services ambit2.war 2.3.0-SNAPSHOT.
+	
+	[[3]] Deploy the war file to the servlet container
+	
+	[[4]] Ensure mysql is running at the default port
+	
+	[[5]] This release comes without an embedded database. 
+	Create an empty database by issuing HTTP POST request to {{{http://localhost:8080/ambit2/admin/database}http://yourhost:8080/ambit2/admin/database}} URI, 
+	as in the following {{{http://curl.haxx.se/}cURL}} command:
+	
++---------------------------------    
+  curl -X POST -d "dbname=ambit2" -d "user=mysqladminuser" -d "pass=mysqladminpass" \
+  	http://yourhost:8080/ambit2/admin/database
++---------------------------------	
+	 
+	or if using AA enabled ambit2.war, provide an OpenSSO token 
+
++---------------------------------    
+  curl -X POST -d "dbname=ambit2" -d "user=mysqladminuser" -d "pass=mysqladminpass" \
+  	-H "subjectid:OPENSSOTOKEN" http://yourhost:8080/ambit2/admin/database 
++---------------------------------	
+
+	Note: <mysqladminuser> should be existing MySQL user with sufficient privileges to create a database.
+	
+	[[6]] If successfull, reading the URL {{{http://localhost:8080/ambit2/admin/database}http://yourhost:8080/ambit2/admin/database}} will return the database name and some other info.
+	
+	[[7]] You might import your own data by POSTing to {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}}
+	
+	[[8]] All services offer HTML representation, as well as RDF
+	
+	[[9]] Documentation and exercises (under development) can be found at 
+	{{{http://opentox.org/dev/apis/api-1.1}OpenTox site}}, 
+	{{{http://www.ideaconsult.net/downloads/echeminfo/OpenTox-exercises.pdf}OpenTox exercises}} , 
+	{{{http://www.ideaconsult.net/downloads/echeminfo/OpenTox-API.pdf}OpenTox API with examples}},
+	{{{development@opentox.org}OpenTox development list}} or {{{http://www.ideaconsult.net/web/ngn/blogs/}Ideaconsult blogs}}.
+	 
+{Protected AMBIT web services}
+
+	Access to AMBIT web services can be controlled via 
+	{{{http://opentox.org/dev/apis/api-1.2/AA}OpenTox Authentication and Authorization}} infrastructure. 
+	Tokens are obtained after log in into the {{{http://opensso.in-silico.ch/auth/authenticate}OpenSSO}} service.
+	OpenTox user accounts can be obtained via free registration at {{{http://opentox.org/join_form}OpenTox site}}.
+	
++---------------------------
+	curl -X POST -d "username=YOUR-OPENTOX-USER" -d "password=YOUR-OPENTOX-PASSWORD" http://opensso.in-silico.ch/auth/authenticate 
++---------------------------
+
+	AMBIT services offer log in via its {{{http://apps.ideaconsult.net:8080/ambit2/opentoxuser}web page}}.
+	
+	The relevant link for a local installation is {{{http://localhost:8080/ambit2/opentoxuser}http://yourhost:8080/ambit2/opentoxuser}}. 	 

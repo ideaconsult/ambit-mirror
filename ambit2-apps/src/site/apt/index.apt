@@ -48,7 +48,7 @@
  The AMBIT software was considerably enhanced within the framework of the {{{http://opentox.org}OpenTox}} project, 
  not only by providing an {{{http://opentox.org/dev/apis}OpenTox API}} compliant {{{http://en.wikipedia.org/wiki/Representational_State_Transfer}REST}} web service interface to most of its functionalities, 
  but also by adding the ability to describe data, algorithms, and model resources via corresponding ontologies 
- and to build QSAR models. 
+ and to build and apply QSAR models. 
  
  AMBIT REST web services are distributed as {{{./download_ambitrest.html}web archive (war file)}} and can be deployed in an {{{http://tomcat.apache.org/}Apache Tomcat}} application server or any other compatible servlet container. 
  All {{{http://toxtree.sf.net}Toxtree}} modules for predicting the toxicological hazard of chemical compounds are also integrated within this package and available as REST web services via the OpenTox model API.
@@ -81,21 +81,22 @@
   	
   {{{http://qsardb.jrc.it/qmrf/}http://qsardb.jrc.it/qmrf/}}
   
-*{ToxPredict} Estimate toxicological hazard of a chemical structure
+*{ToxPredict}: Estimate toxicological hazard of a chemical structure
 ~~~~~~~~~~
  
-  A prototype web application (ToxPredict) that accepts chemical structures and identifiers as input and automatically generates a toxicity report based on several OpenTox toxicity models.
-  Developed by Ideaconsult Ltd. in the framework of {{{http://opentox.org}OpenTox}} project.
+  A prototype web application that accepts chemical structures and identifiers as input and automatically generates a toxicity report based on several OpenTox toxicity models.
+  Developed by {{{www.ideaconsult.net}Ideaconsult Ltd.}} in the framework of {{{http://opentox.org}OpenTox}} project.
   
   Uses {{{AMBIT REST Web services}AMBIT REST Web services}}, as well as several remote {{{http://opentox.org/dev/apis}OpenTox API}} compliant web services.
     
-  [Hands on exercise] at OpenTox Interaction meeting 9-12 Aug, 2011, Munich, Germany {{{http://opentox.org/meet/opentox2011/opentox2011toxpredict}Use ToxPredict to obtain REACH-relevant information on compounds}}
+  Launch {{{http://toxpredict.org}ToxPredict}} 
+  
+  {{{http://opentox.org/data/documents/development/tutorialfiles/toxpredict}ToxPredict Tutorial}}
+      
+  [Hands on exercise] {{{http://opentox.org/meet/opentox2011/opentox2011toxpredict}Use ToxPredict to obtain REACH-relevant information on compounds}} at OpenTox Interaction meeting 9-12 Aug, 2011, Munich, Germany
   
   [] 
-    
-  {{{http://toxpredict.org}http://toxpredict.org}ToxPredict}} 
-  
-  {{{http://opentox.org/data/documents/development/tutorialfiles/toxpredict}}ToxPredict Tutorial}}
+
  
 {All Downloads}
 

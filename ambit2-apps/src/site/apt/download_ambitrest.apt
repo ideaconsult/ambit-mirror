@@ -1,0 +1,111 @@
+ -----
+ AMBIT REST Web services
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/20
+ -----
+
+{AMBIT REST Web services 2.4.1} 
+	
+	Explore AMBIT implementation of OpenTox REST API at {{{http://apps.ideaconsult.net:8080/ambit2}http://apps.ideaconsult.net:8080/ambit2}}.
+	
+	Algorithms: {{{http://apps.ideaconsult.net:8080/ambit2/algorithm}All}} 
+	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=Classification}Classification}} 
+	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=Regression}Regression}}
+	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=Clustering}Clustering}}
+	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=Rules}ToxTree}} 
+	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=Descriptor}Descriptors}}
+	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=AppDomain}Applicability domain}}
+	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=Finder}Retreieves structures by identifier from various remote resources}}
+	
+	{{{http://apps.ideaconsult.net:8080/ambit2/model}Models}}, {{{http://apps.ideaconsult.net:8080/ambit2/query/ndatasets_endpoint}Datasets by endpoints}}
+	{{{http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?type=smiles&property=&search=50-00-0&page=0&pagesize=1}Compound query}} 
+	{{{http://apps.ideaconsult.net:8080/ambit2/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9}Similarity search}} 
+	{{{http://apps.ideaconsult.net:8080/ambit2/query/smarts?type=smiles&search=%5Bc%3BR1%5D1%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D1%21%40%5BO%3BH1%5D&text=&page=0&pagesize=100}Substructure search}}
+	
+	Try {{{http://toxpredict.org/}ToxPredict}} - demo application, consuming OpenTox REST services.
+
+*Download AMBIT REST Web services 2.4.1
+
+	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/AA/ambit2.war}ambit2.war}}, AA enabled {{{help}?}}
+	
+	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/withoutAA/ambit2.war}ambit2.war}}, AA disabled {{{help}?}}
+	
+	[{Database content} (OPTIONAL)] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/db/ambit2-2011051401.7z}SQL dump}} of the database, used by <<ambit2.war>>. 176 MB, unzips into 1GB, MySQL database is 3GB
+	
+    []
+    
+*Deployment 
+    
+	[[1]] Follow instructions in {{{./install_ambitrest.html}Install your own service}}. When installed, the application should be accessible at:
+	
++---------------------------------  	
+ http://localhost:8080/ambit2
++---------------------------------  
+
+	After installation, the database will be empty, and no compounds or datasets available. 
+	You might import your own data, or use the {{{Database content}database content}}, available as SQL dump above.
+	
+	[[2]] Importing the database dump is OPTIONAL. If you decide to use the database dump, follow the next steps:  
+	 
+	 [[a]] Unzip the database archive.
+	
+	 [[b]] Open a {{{http://www.mysql.com}MySQL}} console. Run 
+
++---------------------------------  	
+ > source ambit2.sql
++---------------------------------
+
+     Upon completion, there should be non-empty list of datasets at the following URI 
+     {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}}
+
+    
+*Configuration 
+
+	The default database is <ambit2> and the default user is <guest>. 
+	These are created automatically, if following the {{{./install_ambitrest.html}instructions}} above. 
+    
+    A pointer to an Ontology service is provided by {{{http://localhost:8080/ambit2/sparqlendpoint}http://yourhost:8080/ambit2/sparqlendpoint}}, but not directly used by AMBIT REST services. 
+    Setting the pointer may affect external applications though. 
+    
+    The preconfigured ontology service at expected at {{{http://localhost:8080/ontology}http://yourhost:8080/ontology}}. 
+    After deployment to the servlet container, 
+    this can be changed by editing the configuration files 
+    
++---------------------------------     
+    WEB-INF/classes/ambit2/rest/config/ambit2.pref 
++---------------------------------     
+
+    and 
+    
++---------------------------------         
+    WEB-INF/classes/ambit2/rest/config/config.prop.
++---------------------------------     
+
+**Create models
+
+	Upon a fresh install, only {{{http://localhost:8080/ambit2/algorithms}Algorithms}} are available. To create models use the web form, available at each algorithm page, or {{{http://curl.haxx.se/}cURL}} command:
+
++---------------------------------      
+	curl -X POST http://yourhost:8080/ambit2/algorithm/pKa
+	curl -X POST http://yourhost:8080/ambit2/algorithm/toxtreecramer
++---------------------------------      
+
+	The commands will return a Model URI, which could be subsequently registered at the Ontology service. 
+	
+	Interesting subsets of algorithms: {{{http://localhost:8080/ambit2/algorithm?type=Rules}ToxTree}} {{{http://localhost:8080/ambit2/algorithm?type=Descriptor}Descriptors}}
+	
+*Publication
+ 	
+    [Jeliazkova 2010] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}}.
+ 
+ 	[]
+ 	
+*The code
+	
+	{{{http://ambit.svn.sourceforge.net/viewvc/ambit/trunk/ambit2-all/ambit2-www}http://ambit.svn.sourceforge.net/viewvc/ambit/trunk/ambit2-all/ambit2-www}}
+	
+**Code documentation
+	
+	{{{http://ambit.sourceforge.net/ambit2-www/apidocs/index.html}JavaDoc}}
