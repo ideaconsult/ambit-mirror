@@ -1,0 +1,74 @@
+ -----
+ AMBIT REST Web services
+ -----
+ Nina Jeliazkova
+ -----
+ 2011/08/20
+ -----
+
+{OpenTox Ontology service} 
+	
+	The Ontology service is an implementation of {{{http://opentox.org/dev/apis/api-1.2/Ontology}OpenTox Ontology service API}}.
+	
+	The Ontology Service does not depend on AMBIT modules, and  compiles into a different web application. 
+	It currently uses the {{{http://www.jcheminf.com/content/3/1/18#B35}Jena TDB}} persistence mechanism, 
+	and was initially designed as a proof-of-concept service to illustrate the added value of 
+	gathering RDF triples of several remote OpenTox services into the same triple storage and 
+	enabling SPARQL queries. 
+	
+    Currently, the ontology service is used as a registry of all deployed OpenTox services (both local and remote),
+    and {{{http://toxpredict.org/}ToxPredict}} web application retrieves the list of QSAR models via SPARQL query to {{{http://apps.ideaconsult.net:8080/ontology}http://apps.ideaconsult.net:8080/ontology}}.
+
+*Download OpenTox Ontology service (ontology.war) v.0.0.2
+
+	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/ontology/ontology.war}ontology.war}}
+	
+    []
+    
+*Deployment 
+    
+	[[1]] Copy <ontology.war> under <webapps> directory of the servlet container. The application should be accessible at
+	
++---------------------------------  	
+ http://localhost:8080/ontology
++---------------------------------  
+    
+*Configuration 
+
+	Does not use MySQL database. Uses Jena TDB for persistent storage (file based), which is automatically generated on deploy. 
+
+**WEB-INF/classes/org/opentox/config/config.properties
+
++---------------------------------     
+#tdb or sdb , currently tdb supported only 
+persistence=${jena.persistence}
+#where to store TDB files. Default is java temporary directory
+tdb=THE-PATH-TO-THE-TDB-FOLDER 
++---------------------------------     
+
+**WEB-INF/classes/org/opentox/config/aa.properties 
+    
++---------------------------------         
+
+aa.opensso=URI-OF-OPENTOX-OPENSSO-SERVICE
+aa.policy=URI-OF-OPENTOX-POLICY-SERVICE
++---------------------------------     
+
+*Models registration
+
++---------------------------------      
+	curl -X POST -d "uri=THE-URI" http://localhost:8080/ontology 
++---------------------------------      
+
+	Or use the HTML form at the top, paste the URI of the model and click "Submit".
+	
+*Publication
+ 	
+    [Jeliazkova 2010] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {{{dx.doi.org/10.1186/1758-2946-3-18}doi:10.1186/1758-2946-3-18}}}.
+ 
+ 	[]
+ 	
+*The code
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/branches/opentox/ontology-service}https://ambit.svn.sourceforge.net/svnroot/ambit/branches/opentox/ontology-service}}
+	
