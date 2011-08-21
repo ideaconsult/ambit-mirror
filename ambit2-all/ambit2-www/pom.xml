@@ -12,6 +12,12 @@
   	<groupId>ambit</groupId>
   	<version>2.4.2</version>
   </parent>
+<distributionManagement>  
+    <site>
+      <id>website_ambit</id>
+      <url>scp://shell.sourceforge.net/home/project-web/ambit/htdocs/ambit2-www</url>
+    </site>     
+</distributionManagement>  
   <profiles> 
 
 <profile>
@@ -497,13 +503,13 @@
         </configuration>
       </plugin>
  	  -->
-
+		<!-- 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changelog-plugin</artifactId>
         <version>2.2</version>
       </plugin>
-     	  
+     	   -->
     </plugins>
 
     
