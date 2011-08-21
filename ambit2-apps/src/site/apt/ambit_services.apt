@@ -113,3 +113,5 @@ AMBIT implementation of OpenTox REST API
    * {{{./api_ontology.html}Ontology service API}}
   
      ** {{{http://apps.ideaconsult.net:8080/ontology}Ontology service}}
+     
+     ** {{{https://ambit.uni-plovdiv.bg:8443/ontology}Ontology service}}

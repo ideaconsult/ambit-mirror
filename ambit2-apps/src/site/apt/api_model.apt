@@ -7,7 +7,7 @@
 
 OpenTox API : Model
 
-  Provides different representations for chemical compounds with a unique and defined chemical structure
+  Provides access to OpenTox models. 
   
   {{Documentation}}, {{Representation}}, {{Examples}}
  

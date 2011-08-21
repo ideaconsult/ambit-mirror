@@ -1,0 +1,114 @@
+ -----
+ OpenTox Ontology service
+ -----
+ Background
+ -----
+ Aug 2011
+
+OpenTox API : Ontology service
+
+  Provides storage and standard {{{http://www.w3.org/TR/rdf-sparql-protocol}SPARQL endpoint}} search functionality for objects, defined in OpenTox services and relevant ontologies.
+  
+  {{Documentation}}, {{Representation}}, {{Examples}}
+ 
+*{Documentation}
+~~~~~~
+  
+  {{{http://opentox.org/dev/apis/api-1.2/Ontology}http://opentox.org/dev/apis/api-1.2/Ontology}}
+  
+  * Query : can be sent by GET or POST, according to {{{http://www.w3.org/TR/rdf-sparql-protocol}http://www.w3.org/TR/rdf-sparql-protocol/}}, 
+  or more specific the {{{http://www.w3.org/TR/rdf-sparql-protocol/#query-bindings-http}HTTP Binding}}
+
++--------------------------
+ curl -X POST -H "Content-type:application/x-www-form-urlencoded" \
+         -d "query=the-sparql-query-url-encoded" http://apps.ideaconsult.net:8080/ontology \
+         -H "Accept:application/rdf+xml"  -H "subjectid:SECURITY-TOKEN 
++--------------------------   
+
+  * Resource registration - send via POST of a web form, with a field <<uri>>, containing the uri of the registered resource.
+  The resource should return <<application/rdf+xml>>  representation, otherwise it will not be registered. 
+  The security token is optional (depending on whether the resource is protected). 
+    
++--------------------------   
+      curl -X POST -d "uri=http://host2:8080/ambit2/dataset/1" http://host1:8080/ontology \
+               -H "subjectid:SECURITY-TOKEN"
++--------------------------   
+
+
+*{Representation}
+~~~~~~  
+
+ Results are returned in several formats, depending on the HTTP Accept header.
+ 
+   * application/sparql-results+xml
+   
+   * text/html
+   
+   * text/n3
+   
+   * text/csv
+   
+   * text/plain 
+   
+   
+*{Examples}
+~~~~~~~~
+
+
+ ** Example 1. Retrieve list of features, representing {{{http://bio2rdf.org/geneid:2099}Estrogen receptor gene}} assay from {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37}ToxCast Phase 1}} datasets:
+ 
+ We will be using the predefined SPARQL query at {{{https://ambit.uni-plovdiv.bg:8443/ontology/query/ToxCast_ESR1}https://ambit.uni-plovdiv.bg:8443/ontology/query/ToxCast_ESR1}}
+ 
++---------------------------------------
+ curl -H "Accept:text/plain" https://ambit.uni-plovdiv.bg:8443/ontology/query/ToxCast_ESR1
+
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ | Feature                                                 | title           | OpentoxDataset                                          | assay                 | genename     |
+ ==============================================================================================================================================================================
+ | <https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2643> | "NVS_NR_hER"    | <https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/4563> | toxcast:NVS_NR_hER    | toxcast:ESR1 |
+ | <https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2285> | "ATG_ERE_CIS"   | <https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/723>  | toxcast:ATG_ERE_CIS   | toxcast:ESR1 |
+ | <https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2214> | "ATG_ERa_TRANS" | <https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/723>  | toxcast:ATG_ERa_TRANS | toxcast:ESR1 |
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
++---------------------------------------
+   
+ There is one assay {{{https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2643}NVS_NR_hER}} from {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/4563}Novascreen}} ToxCast assays and
+ two ({{{https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2285}ATG_ERE_CIS}},{{{https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2214}ATG_ERa_TRANS}})
+ from  {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/723}Attagene}} ToxCast assays.
+   
+ The predefined SPARQL query looks like is as follows:
+ 
++---------------------------------------
+ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+ PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+ PREFIX owl:<http://www.w3.org/2002/07/owl#>
+ PREFIX dc:<http://purl.org/dc/elements/1.1/>
+ PREFIX ot:<http://www.opentox.org/api/1.1#>
+ PREFIX toxcast:<http://www.opentox.org/toxcast#>
+ select ?Feature ?title ?OpentoxDataset ?assay ?genename
+	where {
+	    ?Feature rdf:type ot:Feature.
+       {?Feature ot:hasSource ?OpentoxDataset}.
+	   {?Feature dc:title ?title}.
+	   {?Feature owl:sameAs ?assay}.
+	   {?assay toxcast:gene <http://bio2rdf.org/geneid:2099>}.
+	   {?assay toxcast:hasProperty ?genename}.
+	   {?genename rdf:type toxcast:GENE_NAME}.
+	}
++--------------------------------------- 
+ 
+ Once we know which features are representing the Estrogen receptor related studies, the three columns can be collated with the 
+ ToxCast dataset and data {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37?feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2643&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2285&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2214}retrieved}}
+ in various formats. 
+
++--------------------------------------- 
+
+ curl -H "Accept:chemical/x-mdl-sdfile" https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37?feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2643&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2285&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2214
+ 
+ curl -H "Accept:text/n3" https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37?feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2643&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2285&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2214
+
++---------------------------------------
+
+ Collating with columns from {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37}https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37}} dataset gives {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37?feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2643&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2285&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2214&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37/feature}a new dataset}}.
+ 
+ Or it is also possible to retrieve the assay data for specific compound (e.g. {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37?property=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/515&search=Bisphenol+A&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2643&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2285&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/2214}Bisphenol A}}).

@@ -7,7 +7,7 @@
 
 OpenTox API : Algorithm
 
-  Provides access to OpenTox algorithms.  There are several algorithm services, developed by different OpenTox partners.  List of algorithms can be retrieved by HTTP GET operation at http://host:port/algorithm (copy URLS from Example 18,Example 19,Example 20 into your browser, or use cURL command).
+  Provides access to OpenTox algorithms.  There are several algorithm services, developed by different OpenTox partners.  List of algorithms can be retrieved by HTTP GET operation at http://host:port/algorithm.
   
   {{Documentation}}, {{Representation}}, {{Examples}}
  
