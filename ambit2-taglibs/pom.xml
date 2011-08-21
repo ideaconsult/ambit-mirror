@@ -11,6 +11,12 @@
   <artifactId>ambit2-taglibs</artifactId>
 	<packaging>jar</packaging>  
   <name>ambit2-taglibs</name>
+  <distributionManagement>  
+    <site>
+      <id>website_ambit</id>
+      <url>scp://shell.sourceforge.net/home/project-web/ambit/htdocs/ambit2-taglibs</url>
+    </site>     
+</distributionManagement>  
   <build>
   	<plugins>
 			<plugin>

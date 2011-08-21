@@ -123,6 +123,12 @@ AMBIT XT introduces the concept of workflows, allowing guiding the users step by
 
   
   </dependencies>
+<distributionManagement>  
+    <site>
+      <id>website_ambit</id>
+      <url>scp://shell.sourceforge.net/home/project-web/ambit/htdocs/ambit2-ambitxt</url>
+    </site>     
+</distributionManagement>    
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>4.8.1</junit.version>
