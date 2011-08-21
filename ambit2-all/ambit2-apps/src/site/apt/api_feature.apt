@@ -3,7 +3,7 @@
  -----
  Background
  -----
- Oct 2010
+ Aug 2011
 
 OpenTox API : Feature
 
@@ -103,7 +103,7 @@ $ curl -H "Accept:application/rdf+xml" http://apps.ideaconsult.net:8080/ambit2/f
  It could be queried via {{{http://apps.ideaconsult.net:8080/ontology/query/Endpoints}OpenTox Ontology service}}.
 
  The <<ot:hasSource>> property establishes link with the {{{./api_algorithm.html}OpenTox algorithm}}, which was used to calculate this feature, in this case {{{http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}http://apps.ideaconsult.net:8080/ambit2/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor}}.
- Example how to retrieve the algorithm representation is available {{{./api_algorithm.hrml#Example4.}here}}.
+ Example how to retrieve the algorithm representation is available {{{./api_algorithm.html#Example4.}here}}.
  
  
  ** Example 2. Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature/22114}http://apps.ideaconsult.net:8080/ambit2/feature/22114}} in N3 format
