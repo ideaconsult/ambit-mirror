@@ -16,36 +16,68 @@ AMBIT implementation of OpenTox REST API
   []
   
 *{{{./download_ambitrest.apt}AMBIT REST Web services}} implement following OpenTox API 
-  
-  * {{{/api_compound.html}Compound}}
 
-	** {{{http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?type=smiles&property=&search=50-00-0&page=0&pagesize=1}Finf a compound by an identifier}} 
+  Example queries are provided for each resource.	
+  
+  * {{{./api_compound.html}Compound}}
+
+	** Find a compound by an identifier, e.g.:
 	
-	** {{{http://apps.ideaconsult.net:8080/ambit2/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9}Similarity search}} 
-	
-	** {{{http://apps.ideaconsult.net:8080/ambit2/query/smarts?type=smiles&search=%5Bc%3BR1%5D1%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D1%21%40%5BO%3BH1%5D&text=&page=0&pagesize=100}Substructure search}}
+	  *** {{{http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?type=smiles&property=&search=50-00-0&page=0&pagesize=1} CAS = <<50-00-0>>}},
+	   
+	  *** {{{http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?type=smiles&property=&search=caffeine&page=0&pagesize=1} name = <<caffeine>>}},
+	  
+	  *** {{{http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?type=smiles&property=&search=c1ccccc1Oc2ccccc2&page=0&pagesize=1} SMILES = <<c1ccccc1Oc2ccccc2>>}},
+	  
+	  *** {{{http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?type=smiles&property=&search=InChI%3D1S%2FC12H10O%2Fc1-3-7-11%288-4-1%2913-12-9-5-2-6-10-12%2Fh1-10H&page=0&pagesize=1} InChI = <<InChI=1S/C12H10O/c1-3-7-11(8-4-1)13-12-9-5-2-6-10-12/h1-10H>>}} or
 	 
-  * {{{/api_feature.html}Feature}}
+	  *** {{{http://apps.ideaconsult.net:8080/ambit2/query/compound/url/all?search=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fcompound%2F143894%2Fconformer%2F535653}InChIKey = <<NBFMTHWVRBOVPE-UHFFFAOYSA-N>>}}
+	
+	** Similarity search in the entire database {{{http://apps.ideaconsult.net:8080/ambit2/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9}for SMILES <<c1ccccc1Oc2ccccc2>> and Tanimoto distance >= <<0.9>>}} 
+	
+	** Substructure search in the entire database for SMARTS {{{http://apps.ideaconsult.net:8080/ambit2/query/smarts?type=smiles&search=%5Bc%3BR1%5D1%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D%5Bc%3BR1%5D1%21%40%5BO%3BH1%5D&text=&page=0&pagesize=100} <<[c;R1]1[c;R1][c;R1][c;R1][c;R1][c;R1]1!@[O;H1]>>}} 
+	 
+  * {{{./api_feature.html}Feature}}
   
-    ** {{{http://apps.ideaconsult.net:8080/ambit2/feature?sameas=http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECS}All features, representing EINECS number}}
+    ** Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature?sameas=http%3A%2F%2Fwww.opentox.org%2Fapi%2F1.1%23EINECS} all features}}, representing an EINECS number ( <owl:sameAs> <<http://www.opentox.org/api/1.1#EINECS>>. )
     
-    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12/feature}All features of a particular dataset}}
+    ** Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12/feature} all features}} of particular dataset (e.g. {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12/metadata}EPAFHM}})
     
-    ** {{{http://apps.ideaconsult.net:8080/ambit2/feature?sameas=http%3A%2F%2Fwww.opentox.org%2FechaEndpoints.owl%23Carcinogenicity}All features, representing readout from a carcinogenicity assay}}
+    ** Retrieve {{{http://apps.ideaconsult.net:8080/ambit2/feature?sameas=http%3A%2F%2Fwww.opentox.org%2FechaEndpoints.owl%23Carcinogenicity}all features}}, representing readout from a carcinogenicity assay ( <owl:sameAs> <<http://www.opentox.org/echaEndpoints.owl#Carcinogenicity>>. )
   
-  * {{{/api_dataset.html}Dataset}}
+  * {{{./api_dataset.html}Dataset}}
   
     ** {{{http://apps.ideaconsult.net:8080/ambit2/query/ndatasets_endpoint}Datasets by endpoints}}
     
     ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset?page=0&pagesize=25}First 25 datasets}}
     
-    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset?search=^EPA}Datasets, with name starting with "EPA"}}
+    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset?search=^EPA} List all datasets}}, with name starting with "EPA"
     
-    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12?page=0&pagesize=10}First 10 entries from EPAFHM dataset}}
+    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12?page=0&pagesize=10}First 10 entries}} from {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12/metadata}EPAFHM}} dataset
     
-    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12/metadata}Metadata of particular dataset}}
+    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12/metadata}Metadata}} of a particular dataset; the same metadata in {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12/metadata?media=text/n3} N3 format}} 
+     
+    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12?property=http://apps.ideaconsult.net:8080/ambit2/feature/21686&search=inconclusive}Search EPAFHM }} for compounds with 'inconclusive' {{{http://apps.ideaconsult.net:8080/ambit2/feature/21686}activity outcome}}
   
-  * {{{/api_algorithm.html}Algorithm}}
+    ** {{{http://apps.ideaconsult.net:8080/ambit2/query/ncompound_value?dataset_uri=http://apps.ideaconsult.net:8080/ambit2/dataset/12&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21686} Summary for the values}} of a given dataset 
+    (e.g. {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12}EPAFHM}}) and a feature (e.g. {{{http://apps.ideaconsult.net:8080/ambit2/feature/21686}Activity outcome}}) 
+    
+    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset/9/smarts?search=C1%28C%28%3DO%29O%29%3DCC%3DCC%3DC1C%28O%29%3DO}Search for phtalates}} in {{{http://apps.ideaconsult.net:8080/ambit2/dataset/9/metadata}ISSCAN}} dataset.
+    
+    ** {{{http://apps.ideaconsult.net:8080/ambit2/dataset/9/smarts?search=C1%28C%28%3DO%29O%29%3DCC%3DCC%3DC1C%28O%29%3DO&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21586&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21591&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21573}Search for phtalates}} in {{{http://apps.ideaconsult.net:8080/ambit2/dataset/9/metadata}ISSCAN}} dataset,
+    and show only {{{http://apps.ideaconsult.net:8080/ambit2/feature/21591}CAS}}, {{{http://apps.ideaconsult.net:8080/ambit2/feature/21586}Chemical name}} and {{{http://apps.ideaconsult.net:8080/ambit2/feature/21573}Carcinogenic aactivity}}.
+    
+    ** Retrieve compounds, {{{http://apps.ideaconsult.net:8080/ambit2/query/ncompound_value?dataset_uri=http://apps.ideaconsult.net:8080/ambit2/dataset/12&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21709} grouped by mode of action}}, as defined in {{{http://apps.ideaconsult.net:8080/ambit2/12}EPAFHM}} dataset     
+ 
+    ** Retrieve compounds, {{{http://apps.ideaconsult.net:8080/ambit2/query/ncompound_value?dataset_uri=http://apps.ideaconsult.net:8080/ambit2/dataset/12&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/823450} grouped by mode of action}}, as predicted by {{{http://apps.ideaconsult.net:8080/ambit2/model/351949}Toxtree Verhaar scheme }} model and stored under {{{http://apps.ideaconsult.net:8080/ambit2/feature/823450}http://apps.ideaconsult.net:8080/ambit2/feature/823450}}
+    
+    ** Retrieve compounds from {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12/metadata}EPAFHM}} dataset, and display {{{http://apps.ideaconsult.net:8080/ambit2/dataset/12?feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21709&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/823450} stored and predicted Mode of actions only }}
+    
+    ** List {{{http://apps.ideaconsult.net:8080/ambit2/dataset?search=^ToxCast}ToxCast Phase I}} datasets 
+    
+    ** Display estrogen binding activity from {{{http://apps.ideaconsult.net:8080/ambit2/dataset/13/metadata}KIERBL: EPA Estrogen Receptor Ki Binding Study}} dataset, for the {{{http://apps.ideaconsult.net:8080/ambit2/dataset/112?feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21750&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/feature/21721}ToxCast Phase I}} compounds 
+      
+  * {{{./api_algorithm.html}Algorithm}}
   
   	** Algorithms: {{{http://apps.ideaconsult.net:8080/ambit2/algorithm}All}} 
 	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=Classification}Classification}} 
@@ -56,7 +88,7 @@ AMBIT implementation of OpenTox REST API
 	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=AppDomain}Applicability domain}}
 	{{{http://apps.ideaconsult.net:8080/ambit2/algorithm?type=Finder}Retrieves structures by identifier from various remote resources}}
   
-  * {{{/api_model.html}Model}}
+  * {{{./api_model.html}Model}}
 
 	 ** {{{http://apps.ideaconsult.net:8080/ambit2/model}All Models}}
 	 
@@ -72,12 +104,12 @@ AMBIT implementation of OpenTox REST API
 	 
 	 ** {{{http://apps.ideaconsult.net:8080/ambit2/model/252837?media=text/n3}Model representation in N3 format}}
 	 	  
-  * {{{/api_task.html}Task}}
+  * {{{./api_task.html}Task}}
   
      ** {{{ http://apps.ideaconsult.net:8080/ambit2/task?search=Running&max=10}First 10 running tasks}}
 
 *The {{{./download_ontologyservice.html}Ontology service}} implements Ontology service API  
    
-   * {{{/api_ontology.html}Ontology service API}}
+   * {{{./api_ontology.html}Ontology service API}}
   
      ** {{{http://apps.ideaconsult.net:8080/ontology}Ontology service}}
