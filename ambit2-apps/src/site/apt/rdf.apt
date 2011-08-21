@@ -32,4 +32,4 @@
   
  [OWL] Web Ontology Language {{{/rdf_owl.html}OWL}}
 
- [SPARQL] SPARQL Query Language for RDF {{{/rdf_sparql.html}SPARQL}}
+ [SPARQL] {{{http://www.w3.org/TR/rdf-sparql-query/}SPARQL}} Query Language for RDF
