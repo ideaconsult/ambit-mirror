@@ -60,6 +60,9 @@ public class ChartResource extends ServerResource {
 	protected boolean logX = false;
 	protected boolean logY = false;
 	
+	protected Double minX = null;
+	protected Double maxX = null;
+	
 	public ChartMode getMode() {
 		return mode;
 	}
@@ -125,6 +128,10 @@ public class ChartResource extends ServerResource {
 		logX = false; logY = false;
 		try { logX = Boolean.parseBoolean(getParams().getFirstValue("logX"));} catch (Exception x) {}
 		try { logY = Boolean.parseBoolean(getParams().getFirstValue("logY"));} catch (Exception x) {}
+
+		minX = null; maxX = null;
+		try { minX = Double.parseDouble(getParams().getFirstValue("minX"));} catch (Exception x) {minX = null;}
+		try { maxX = Double.parseDouble(getParams().getFirstValue("maxX"));} catch (Exception x) {maxX = null;}
 
 		
 		legend = false;
@@ -192,6 +199,9 @@ public class ChartResource extends ServerResource {
 	    			HistogramChartGenerator chart = new HistogramChartGenerator();
 	    			chart.setLogX(logX);
 	    			chart.setLogY(logY);
+	    			chart.setMinX(minX);
+	    			chart.setMaxX(maxX);
+	    			
 	    			chart.setPropertyX(i.next());    
 	    			chart.setConnection(connection);
 	    			chart.setLegend(legend);

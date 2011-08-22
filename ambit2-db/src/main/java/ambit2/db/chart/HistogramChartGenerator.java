@@ -10,6 +10,7 @@ public class HistogramChartGenerator extends BarChartGeneratorDataset {
 	 */
 	private static final long serialVersionUID = -8611312548411533271L;
 
+	
 	protected final static String histogram_dataset = 
 			"select format(a,2) ,sum(if(((%s>=a) and (%s < b)),1,0)) as num_chemicals from property_values\n"+
 			"join struc_dataset using(idstructure)\n"+
@@ -71,7 +72,9 @@ public class HistogramChartGenerator extends BarChartGeneratorDataset {
 		String sql =  target instanceof SourceDataset?histogram_dataset:histogram_query;
 		String value_num = logX?"log(value_num)":"value_num";
 		return String.format(sql,
-				value_num,value_num,value_num,value_num,
+				value_num,value_num,
+				minX==null?value_num:String.format("%f",minX),
+				maxX==null?value_num:String.format("%f",maxX),
 				propertyX.getId(),getID(target),propertyX.getId(),getID(target)
 				); 
 	}

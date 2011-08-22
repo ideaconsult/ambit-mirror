@@ -6,7 +6,24 @@ import ambit2.db.exceptions.DbAmbitException;
 
 public abstract class BarChartGenerator<T extends ISourceDataset> extends ChartGenerator<T> {
 
-	
+	protected Double minX = null;
+	public Double getMinX() {
+		return minX;
+	}
+
+	public void setMinX(Double minX) {
+		this.minX = minX;
+	}
+
+	protected Double maxX = null;
+	public Double getMaxX() {
+		return maxX;
+	}
+
+	public void setMaxX(Double maxX) {
+		this.maxX = maxX;
+	}
+
 	protected Property propertyX;
 	public Property getPropertyX() {
 		return propertyX;
