@@ -16,7 +16,7 @@ public class HistogramChartGenerator extends BarChartGeneratorDataset {
 			"join struc_dataset using(idstructure)\n"+
 			"join\n"+
 			"(\n"+
-			"select m1+d*(m2-m1)/9 as a, m1+(d+1)*(m2-m1)/9 as b,d from\n"+
+			"select m1+d*(m2-m1)/19 as a, m1+(d+1)*(m2-m1)/19 as b,d from\n"+
 			"(select min(%s) as m1,max(%s) as m2 from property_values\n"+
 			"join struc_dataset using(idstructure)\n"+
 			"where idproperty=%d and value_num is not null and id_srcdataset=%d\n"+
@@ -34,6 +34,16 @@ public class HistogramChartGenerator extends BarChartGeneratorDataset {
 			"union select 8 as d\n"+
 			"union select 9 as d\n"+
 			"union select 10 as d\n"+
+			"union select 11 as d\n"+
+			"union select 12 as d\n"+
+			"union select 13 as d\n"+
+			"union select 14 as d\n"+
+			"union select 15 as d\n"+
+			"union select 16 as d\n"+
+			"union select 17 as d\n"+
+			"union select 18 as d\n"+
+			"union select 19 as d\n"+
+			"union select 20 as d\n"+			
 			") as M\n"+
 			") as BINS\n"+
 			"where idproperty=%d and value_num is not null and id_srcdataset=%d\n"+
@@ -44,7 +54,7 @@ public class HistogramChartGenerator extends BarChartGeneratorDataset {
 			"join query_results using(idstructure)\n"+
 			"join\n"+
 			"(\n"+
-			"select m1+d*(m2-m1)/9 as a, m1+(d+1)*(m2-m1)/9 as b,d from\n"+
+			"select m1+d*(m2-m1)/19 as a, m1+(d+1)*(m2-m1)/19 as b,d from\n"+
 			"(select min(%s) as m1,max(%s) as m2 from property_values\n"+
 			"join query_results using(idstructure)\n"+
 			"where idproperty=%d and value_num is not null and idquery=%d\n"+
@@ -62,6 +72,16 @@ public class HistogramChartGenerator extends BarChartGeneratorDataset {
 			"union select 8 as d\n"+
 			"union select 9 as d\n"+
 			"union select 10 as d\n"+
+			"union select 11 as d\n"+
+			"union select 12 as d\n"+
+			"union select 13 as d\n"+
+			"union select 14 as d\n"+
+			"union select 15 as d\n"+
+			"union select 16 as d\n"+
+			"union select 17 as d\n"+
+			"union select 18 as d\n"+
+			"union select 19 as d\n"+
+			"union select 20 as d\n"+			
 			") as M\n"+
 			") as BINS\n"+
 			"where idproperty=%d and value_num is not null and idquery=%d\n"+
