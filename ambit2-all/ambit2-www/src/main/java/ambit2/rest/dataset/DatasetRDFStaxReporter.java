@@ -90,6 +90,14 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		
 	}
 	@Override
+	public void setLicenseURI(String licenseURI) {
+		recordWriter.setLicenseURI(licenseURI);
+	}
+	@Override
+	public String getLicenseURI() {
+		return recordWriter.getLicenseURI();
+	}
+	@Override
 	protected DatasetRDFWriter createRecordWriter(Request request,ResourceDoc doc) {
 		return new DatasetRDFWriter(
 							new CompoundURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix,request,doc),

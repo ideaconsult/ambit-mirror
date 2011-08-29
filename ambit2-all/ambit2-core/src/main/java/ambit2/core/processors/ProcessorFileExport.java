@@ -30,7 +30,15 @@ public abstract class ProcessorFileExport<Content> extends DefaultAmbitProcessor
 	private static final long serialVersionUID = -5006607500469902058L;
 
 	protected FileOutputState output;
+	protected String licenseURI;
 
+	public String getLicenseURI() {
+		return licenseURI;
+	}
+
+	public void setLicenseURI(String licenseURI) {
+		this.licenseURI = licenseURI;
+	}
 
 	public FileOutputState getOutput() {
 		return output;

@@ -2,6 +2,7 @@ package ambit2.db.reporters;
 
 import java.io.Writer;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -92,6 +93,18 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			String content = item.getContent();
+			String licenseURI = getLicenseURI();
+			
+			if ((licenseURI!=null) && !ISourceDataset.license.Unknown.equals(licenseURI)) {
+				int n = content.indexOf('\n');
+				int r = content.indexOf('\r');
+				int index = -1;
+				if ((n>=0) && (r>=0)) index = n<r?n:r;
+				else if (n>=0) index = n;
+				else if (r>=0) index = r;
+				content = String.format("%s%s",licenseURI,content.substring(index));
+
+			}
 			output.write(content);
 			if (isMOLONLY()) return null;
 			for (Property p : item.getProperties()) {

@@ -30,6 +30,7 @@ import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
 import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -45,8 +46,14 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 	protected CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter;
 	protected Comparator<Property> comp;
 	protected Profile groupProperties;
+	protected String licenseURI = null;
 
-
+	public String getLicenseURI() {
+		return licenseURI;
+	}
+	public void setLicenseURI(String licenseURI) {
+		this.licenseURI = licenseURI;
+	}
 	public Profile getGroupProperties() {
 		return groupProperties;
 	}
@@ -127,6 +134,11 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 				else
 				datasetIndividual = String.format("%s:%s",uriReporter.getRequest().getResourceRef().getScheme(),
 						uriReporter.getRequest().getResourceRef().getHierarchicalPart());
+			}
+			if (getLicenseURI()!=null) {
+				getOutput().writeStartElement("dcterms","license",DCTerms.NS); //value
+			    getOutput().writeAttribute("rdf", RDF.getURI(),  "resource", getLicenseURI());
+			    getOutput().writeEndElement();
 			}
 		} catch (Exception x) {
 			x.printStackTrace();

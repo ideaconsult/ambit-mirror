@@ -42,6 +42,7 @@ import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 /**
  * RDF/XML
@@ -186,6 +187,13 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 								datasetID
 								),
 						OT.OTClass.Dataset.getOntClass(output));
+		}
+		
+		if (getLicenseURI()!=null) {
+			Resource licenseNode = output.createResource(getLicenseURI());
+			dataset.addProperty(DCTerms.license,licenseNode);
+		} else {
+			//dataset.addProperty(DCTerms.license,ISourceDataset.license.Unknown.toString());
 		}
 	}
 

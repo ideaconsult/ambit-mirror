@@ -30,4 +30,12 @@ public abstract class RepresentationConvertor<Item,Content,Output,R extends Repo
 		super(reporter,media);
 	}
 	
+	public String getLicenseURI() {
+		return getReporter()==null?null:getReporter().getLicenseURI();
+	}
+	
+	public void setLicenseURI(String uri) {
+		if (getReporter()!=null) getReporter().setLicenseURI(uri);
+	}
+	
 }

@@ -200,4 +200,9 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			return q;
 		}
 	}
+	
+	@Override
+	protected String getLicenseURI() {
+		return retrieveLicense(getContext(), getRequest(), datasetID);
+	}
 }

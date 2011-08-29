@@ -3,6 +3,8 @@ package ambit2.rest.query;
 import java.awt.Dimension;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -39,8 +41,11 @@ import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.reporters.SmilesReporter.Mode;
+import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.db.update.dataset.ReadDatasetLicense;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -55,6 +60,7 @@ import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
+
 
 /**
  * Abstract parent class for all resources that retrieve compounds/conformers from database
@@ -114,7 +120,49 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		return createTemplate(form);
 	}			
 
-	
+	@Override
+	protected String getLicenseURI() {
+		return null;
+	}
+	protected String retrieveLicense(Context context, Request request, Integer id_srcdataset) throws ResourceException {
+		if (id_srcdataset==null) return null;
+		if (id_srcdataset.intValue()<=0) return null;
+		String licenseURI = null;
+		try {
+			ReadDatasetLicense license = new ReadDatasetLicense();
+			license.setFieldname(null);
+			license.setValue(id_srcdataset);
+			
+			ResultSet rs = null;
+			QueryExecutor ex = new QueryExecutor();
+			
+			DBConnection dbc = new DBConnection(getContext());
+			Connection conn = dbc.getConnection(getRequest());
+			
+			try {
+				ex.setConnection(conn);
+				rs = ex.process(license);
+				while (rs.next()) {
+					licenseURI =  license.getObject(rs);
+					break;
+				}
+			} catch (Exception x) {
+				System.out.println(getRequest().getResourceRef());
+				//x.printStackTrace();
+			} finally {
+				//the reader closes the connection
+				try { if (rs !=null) rs.close();} catch (Exception x) {}
+				ex.setCloseConnection(true);
+				try { ex.close();} catch (Exception x) {}
+				//try { conn.close();} catch (Exception x) {}
+			}
+			
+		} catch (Exception x) {
+			getLogger().info(x.getMessage());
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
+		}
+		return licenseURI;
+	}		
 
 
 	@Override

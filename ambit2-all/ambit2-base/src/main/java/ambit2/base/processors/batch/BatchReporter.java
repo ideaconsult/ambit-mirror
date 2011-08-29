@@ -23,6 +23,7 @@ public abstract class BatchReporter<Item,ItemList,Output>  extends DefaultAmbitP
 	private static final long serialVersionUID = -3398613304724941241L;
 	protected Output output = null;	
 	protected BatchProcessor<ItemList, Item> batch;	
+	protected String licenseURI = null;
 	
 	public Output getOutput() throws AmbitException {
 		return output;
@@ -89,5 +90,13 @@ public abstract class BatchReporter<Item,ItemList,Output>  extends DefaultAmbitP
 	public void setTimeout(long timeout) {
 		batch.setTimeout(timeout);
 		
+	}
+	@Override
+	public String getLicenseURI() {
+		return licenseURI;
+	}
+	@Override
+	public void setLicenseURI(String uri) {
+		this.licenseURI = uri;
 	}
 }
