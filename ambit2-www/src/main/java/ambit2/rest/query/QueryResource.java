@@ -156,7 +156,9 @@ Then, when the "get(Variant)" method calls you back,
 		        		configureRDFWriterOption(dbc.rdfWriter());
 		        		configureDatasetMembersPrefixOption(dbc.dataset_prefixed_compound_uri());
 		        		convertor = createConvertor(variant);
-
+		        		if (convertor instanceof RepresentationConvertor)
+		        			((RepresentationConvertor)convertor).setLicenseURI(getLicenseURI());
+		        		
 		        		connection = dbc.getConnection(getRequest());
 		        		Reporter reporter = ((RepresentationConvertor)convertor).getReporter();
 			        	if (reporter instanceof IDBProcessor)
@@ -559,6 +561,10 @@ Then, when the "get(Variant)" method calls you back,
 		
 	}	
 	protected String getDefaultTemplateURI(Context context, Request request,Response response) {
+		return null;
+	}
+	
+	protected String getLicenseURI() {
 		return null;
 	}
 }

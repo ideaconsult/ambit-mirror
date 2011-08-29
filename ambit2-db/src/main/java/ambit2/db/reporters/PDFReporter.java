@@ -26,9 +26,12 @@ import ambit2.rendering.CompoundImageTools;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
+import com.lowagie.text.Element;
 import com.lowagie.text.Font;
+import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 
@@ -124,8 +127,16 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
         output.addCreator(getClass().getName());
         output.addSubject("");
         output.addAuthor("http://ambit.sourceforge.net");
+        output.addHeader("License", getLicenseURI());
         output.addTitle(query.toString());
         output.addKeywords(query.toString());        
+        
+        if (getLicenseURI()!=null) {
+	        HeaderFooter footer = new HeaderFooter(new Phrase(String.format("License %s",getLicenseURI())),false);
+	        footer.setAlignment(Element.ALIGN_CENTER);
+	        output.setFooter(footer) ;
+        }
+        
         output.open();		
         
         font = new Font(Font.TIMES_ROMAN,10,Font.NORMAL);

@@ -112,7 +112,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	}
 	public void header(Writer writer, Q query) {
 		try {
-			writer.write(String.format("@relation %s\n\n", getRelationName()));
+			writer.write(String.format("@relation %s License: %s\n\n", getRelationName(), getLicenseURI()));
 		} catch (IOException x) {
 			x.printStackTrace();
 			//TODO throw exception

@@ -90,7 +90,14 @@ public class StructuresExportWorkflow extends ExportWorkflow<IQueryObject<IStruc
 class MyExporter extends AbstractDBProcessor<IQueryObject<IStructureRecord>, FileOutputState> implements Reporter <IQueryObject<IStructureRecord>, FileOutputState> {
 	 protected FileOutputState output;
 	 protected SDFReporter<IQueryRetrieval<IStructureRecord>> reporter;
-	 
+	 protected String licenseURI;
+	public String getLicenseURI() {
+		return licenseURI;
+	}
+
+	public void setLicenseURI(String licenseURI) {
+		this.licenseURI = licenseURI;
+	}
 	/**
 	 * 
 	 */

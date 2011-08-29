@@ -442,14 +442,16 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				//output.write(AmbitResource.jsTableSorter("results","pager"));
 				output.write("<table id='results' class='tablesorter' border='0' cellpadding='0' cellspacing='1'>"); 
 				
-				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Page:%s</CAPTION>",
+				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Page:%s&nbsp;%s</CAPTION>",
 						query.toString(),
 						downloadLinks(),
 						String.format("<input name='page' type='text' title='Page' size='10' value='%s'>&nbsp;"+
-								"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'>",
+								"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'>&nbsp;",
 								page==null?"0":page,
 								pagesize==null?"100":pagesize
-										)));//resultsForm(query)
+										),
+						String.format("<a href='%s' title='%s'>License</a>",getLicenseURI(),getLicenseURI())				
+										));//resultsForm(query)
 						//,resultsForm(query)
 				output.write("<thead><tr>");
 				output.write(String.format("<th width='20'>#</th><th width='%d' bgcolor='#99CC00'>Compound</th>",cellSize.width)); //ECB42C
@@ -460,7 +462,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				hierarchy = props.size()>20;
 			
 				if (hierarchy) {
-					output.write("<th>Properties</th>"); //one single cell and proeprtiws written vertically within
+					output.write("<th>Properties</th>"); //one single cell and properties written vertically within
 					output.write("</tr>\n</thead><tbody>");
 				} else {
 					for(Property p: props) {

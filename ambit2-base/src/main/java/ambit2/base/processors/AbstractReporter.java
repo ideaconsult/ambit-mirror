@@ -17,6 +17,14 @@ public abstract class AbstractReporter<Content, Output> extends DefaultAmbitProc
 	protected Output output;
 	protected long timeout = 0;
 
+	protected String licenseURI;
+	
+	public String getLicenseURI() {
+		return licenseURI;
+	}
+	public void setLicenseURI(String licenseURI) {
+		this.licenseURI = licenseURI;
+	}
 	public Output getOutput() throws AmbitException {
 		return output;
 	}
