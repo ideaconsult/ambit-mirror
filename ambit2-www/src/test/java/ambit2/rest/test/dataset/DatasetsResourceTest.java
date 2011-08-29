@@ -137,6 +137,29 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 	}	
 
 	@Test
+	public void testCreateEntryCML() throws Exception {
+		
+		InputStream in  = getClass().getClassLoader().getResourceAsStream("diamantane.cml");
+
+		StringBuilder b = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		while ((line=reader.readLine())!=null) {
+			b.append(line);
+			b.append('\n');
+		}
+		
+		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_CML, 
+				new StringRepresentation(b.toString(),ChemicalMediaType.CHEMICAL_CML),Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(8,table.getRowCount());
+		c.close();
+		
+	}		
+	@Test
 	public void testCreateEntry_TUM500() throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");

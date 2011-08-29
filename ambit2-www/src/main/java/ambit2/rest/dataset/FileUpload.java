@@ -232,8 +232,8 @@ public class FileUpload<USERID> {
 		MediaType.TEXT_RDF_N3.equals(mediaType) ||
 		MediaType.TEXT_CSV.equals(mediaType) ||
 		ChemicalMediaType.CHEMICAL_SMILES.equals(mediaType) ||
-		ChemicalMediaType.CHEMICAL_MDLMOL.equals(mediaType);
-		//ChemicalMediaType.CHEMICAL_CML.equals(mediaType) ||
+		ChemicalMediaType.CHEMICAL_MDLMOL.equals(mediaType) ||
+		ChemicalMediaType.CHEMICAL_CML.equals(mediaType);
 	}
 	
 }
