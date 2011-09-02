@@ -99,7 +99,8 @@
   	<developer>
   		<id>vedina</id>
   		<name>Nina Jeliazkova</name>
-  		<email>nina@acad.bg</email>
+  		<email>jeliazkova.nina@gmail.com</email>
+  		<url>http://vedina.users.sf.net</url>
   		<roles>
   			<role>System Architecture</role>
   			<role>Java Developer</role>  		
@@ -136,12 +137,6 @@
   			<role>Quality assurance</role>  		
   			<role>Installer development</role>
   		</roles>    	  		
-  	</developer>
-  	<developer>
-  		<name>Chelsea Jiang</name>
-  		<roles>
-  			<role>Technical writer</role>
-  		</roles>
   	</developer> 
   </developers>
   <scm>
@@ -273,6 +268,15 @@
 <!--               		<preparationGoals>clean install</preparationGoals> -->  
                </configuration>
             </plugin>
+            
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-site-plugin</artifactId>
+        		<version>2.3</version>
+        		<configuration>
+          			<locales>en</locales>
+        		</configuration>
+      		</plugin>            
   		</plugins>
   	</pluginManagement>
   </build>
@@ -363,6 +367,26 @@
 </licenses>
  <reporting>
     <plugins>
+     <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.4</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>license</report>
+              <report>issue-tracking</report>
+              <report>mailing-list</report>
+              <report>project-team</report>
+              <report>scm</report>
+            <!-- 
+              <report>dependencies</report>
+               -->
+              
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
 <!-- 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

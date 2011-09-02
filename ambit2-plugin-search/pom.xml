@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<description>Ambit XT plugin , allowing various database queries and analogues identification.</description>
+	<name>ambit2-plugin-search</name>
+	<description>Database search and Analogue identification
+Ambit XT plugin , allowing various database queries and analogues identification.</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -9,7 +11,6 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-plugin-search</artifactId>
   <packaging>jar</packaging>    
-  <name>AmbitXT plugin: Database search and Analogue identification</name>
   <dependencies>
     <dependency>
     	<groupId>ambit</groupId>

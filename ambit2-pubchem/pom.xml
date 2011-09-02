@@ -7,8 +7,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-pubchem</artifactId>
-  <name>Pubchem utilities</name>
-  <description>Pubchem access utilities</description>
+  <name>ambit2-pubchem</name>
+  <description>Access to Pubchem, Chemical Identifier Resolver, OpenTox and others</description>
   <dependencies>
   	<dependency>
   		<groupId>ambit</groupId>

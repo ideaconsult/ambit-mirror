@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<name>ambit2-plugin-pbt</name>
 	<description>AmbitXT plugin , implementing an workflow for REACH compliant Persistence , Biodegradation and Toxicity (PBT) assessment.</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
@@ -9,7 +10,6 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-plugin-pbt</artifactId>
   <packaging>jar</packaging>      
-  <name>AmbitXT plugin: REACH PBT assessment</name>
   <dependencies>
     <dependency>
     	<groupId>ambit</groupId>
