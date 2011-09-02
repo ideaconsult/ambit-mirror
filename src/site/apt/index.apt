@@ -1,0 +1,74 @@
+ -----
+ AMBIT modules
+ -----
+ Nina Jeliazkova
+ ----- 
+ 2011/09/02
+ -----
+ 
+{AMBIT} 
+~~~~~~~~~~
+ For an overview of AMBIT, end-user applications and web services, please consult {{{http://ambit.sf.net}ambit.sourceforge.net}} 
+ 
+AMBIT {modules}
+~~~~~~~~~~
+ 
+ * {{{./ambit2-base.html}ambit2-base}} Base classes
+ 
+ * {{{./ambit2-core.html}ambit2-core}} ambit2-base + cheminformatics dependencies
+ 
+ * {{{./ambit2-db.html}ambit2-db}} Database functionality
+ 
+ * {{{./ambit2-descriptors.html}ambit2-descriptors}} Descriptors
+ 
+ * {{{./ambit2-model.html}ambit2-model}} Modeling
+ 
+ * {{{./ambit2-smarts.html}ambit2-smarts}} SMARTS
+ 
+ * {{{./ambit2-tautomers.html}ambit2-tautomers}} Tautomers
+
+ * {{{./ambit2-workflow.html}ambit2-workflow}} Workflow support
+
+*{2D} structure diagram
+ 
+ * {{{./ambit2-rendering.html}ambit2-rendering}} 2D structure diagrams based on cdk-render package
+ 
+ * {{{./ambit2-jchempaint.html}ambit2-jchempaint}} 2D structure diagrams based JChemPaint
+
+*{REST} web services core classes
+ 
+ * {{{./ambit2-rendering.html}ambit2-rest}} AMBIT REST web services dependency
+ 
+*Wrappers of {external} libraries
+ 
+ * {{{./ambit2-namestructure.html}ambit2-namestructure}} {OPSIN} (name to structure conversion) wrapper 
+ 
+ * {{{./ambit2-dragon.html}ambit2-dragon}} {Dragon} descriptors wrapper
+
+ * {{{./ambit2-smi23d.html}ambit2-smi23d}} {smi23d} (3D builder) wrapper
+  
+ * {{{./ambit2-mopac.html}ambit2-mopac}} {MOPAC} wrapper
+ 
+*Wrappers of external web services and {remote} resources
+
+ * {{{./ambit2-chebi.html}ambit2-chebi}} {ChEBI} web services wrapper
+ 
+ * {{{./ambit2-pubchem.html}ambit2-pubchem}} {Pubchem}, Chemical Identifier Resolver, etc.
+ 
+*Java {Swing} user interface
+
+ * {{{./ambit2-ui.html}ambit2-ui}} User interface classes
+ 
+ * {{{./ambit2-dbui.html}ambit2-dbui}} Database related user interface
+ 
+*{AmbitXT} plugins
+
+ * {{{./ambit2-plugin-analogs.html}ambit2-plugin-analogs}} Ambit XT plugin, implementing workflows for category building, verification, etc.
+ 
+ * {{{./ambit2-plugin-dbtools.html}ambit2-plugin-dbtools}} Ambit XT plugin for database import, calculations and management.
+ 
+ * {{{./ambit2-plugin-pbt.html}ambit2-plugin-pbt}} AmbitXT plugin , implementing an workflow for REACH compliant Persistence , Biodegradation and Toxicity (PBT) assessment.
+ 
+ * {{{./ambit2-plugin-search.html}ambit2-plugin-search}} Ambit XT plugin , allowing various database queries and analogues identification.
+ 
+ * {{{./ambit2-plugin-usermgr.html}ambit2-plugin-usermgr}} AmbitXT plugin for database administration activities.   
