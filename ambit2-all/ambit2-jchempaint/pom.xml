@@ -7,7 +7,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-jchempaint</artifactId>
- <name>JChemPaint dependency</name>
+  <name>ambit2-jchempaint</name>
+  <description>JChemPaint dependency</description>
   <dependencies>
     	<dependency>
   		<groupId>ambit</groupId>

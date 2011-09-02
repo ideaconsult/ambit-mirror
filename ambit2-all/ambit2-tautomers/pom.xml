@@ -7,8 +7,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-tautomers</artifactId>
-  <name>Tautomers</name>
-   <issueManagement>
+  <name>ambit2-tautomers</name>
+  <description>Tautomer generation</description>
+  <issueManagement>
   	<url>http://sourceforge.net/tracker/?group_id=191756</url>
   </issueManagement>
   <developers>

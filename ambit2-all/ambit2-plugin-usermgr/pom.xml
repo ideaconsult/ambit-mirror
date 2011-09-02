@@ -8,8 +8,9 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-plugin-usermgr</artifactId>
 	<packaging>jar</packaging>        
-  <name>AmbitXT plugin: Database administration</name>
-  <description>AmbitXT plugin for database administration activities</description>
+	<name>ambit2-plugin-usermgr</name>
+	<description>AmbitXT plugin: Database administration
+AmbitXT plugin for database administration activities</description>
   <url />
   <dependencies>
     <dependency>

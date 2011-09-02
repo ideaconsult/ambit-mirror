@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-usmiles</artifactId>
-  <name>Canonical SMILES</name>
+  <name>ambit2-usmiles</name>
   <issueManagement>
   	<url>http://sourceforge.net/tracker/?group_id=191756</url>
   </issueManagement>

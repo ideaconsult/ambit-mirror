@@ -9,7 +9,7 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-plugin-analogs</artifactId>
   <packaging>jar</packaging>      
-  <name>AmbitXT plugin: Category building</name>
+  <name>ambit2-plugin-analogs</name>
   <dependencies>
     <dependency>
     	<groupId>ambit</groupId>
