@@ -38,11 +38,11 @@ AMBIT {modules}
    *{{{http://ambit.sourceforge.net/download_ambitxt.html}AmbitXT}} standalone application for database queries;  
  
    *Embedded within {{{http://ambit.sourceforge.net/ambit_services.html}AMBIT REST web services}} 
-   via the {{{http://ambit.sourceforge.net/api.html}OpenTox web services API}} , for database queries;
+   via the {{{http://ambit.sourceforge.net/api.html}OpenTox web services API}};
    
    *Web applications as {{{http://toxpredict.org}ToxPredict}};  
 
-   *by {{{../ambit2-descriptors.html}ambit2-descriptors}} package to reproduce the {{{http://pubs.acs.org/doi/abs/10.1021/ci8001815}SMARTS-based pKa}};
+   *by {{{../ambit2-descriptors/index.html}ambit2-descriptors}} package to reproduce the {{{http://pubs.acs.org/doi/abs/10.1021/ci8001815}SMARTS-based pKa}};
 
    * Substructure search via web services for{{{http://cadaster.eu}CADASTER}} project. 
 
