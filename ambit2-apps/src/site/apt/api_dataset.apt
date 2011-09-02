@@ -23,7 +23,7 @@ OpenTox API : Dataset
   
   The concept of a Dataset of chemical compounds is central to OpenTox web services functionality. Algorithm services accept dataset URI in order to build a model, or to generate descriptor values. Model services accept dataset URI in order to apply a model and obtain predictions. Predictions are again returned as dataset URI, which could be subsequently retrieved.  Search results (similarity or substructure) are also available as datasets.
   
-  The OpenTox Dataset can be thought as a file of chemical compounds, along with their properties, which however, doesn’t have a filename, but unique web address and can be read and written remotely. The dataset representation in RDF format is defined in OpenTox ontology as ot:Dataset class, and can be briefly summarized as follows:
+  The OpenTox Dataset can be thought as a file of chemical compounds, along with their properties, which however, doesn't have a filename, but unique web address and can be read and written remotely. The dataset representation in RDF format is defined in OpenTox ontology as ot:Dataset class, and can be briefly summarized as follows:
   
   The dataset consists of data entries (or data rows);
 

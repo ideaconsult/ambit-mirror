@@ -95,15 +95,18 @@
 
       	<item name="Compound" href="./api_compound.html"/>
       	<item name="Feature" href="./api_feature.html"/>
-      	<item name="Datasets" href="./api_dataset.html" />
+      	<item name="Datasets" href="./api_dataset.html">
+      		<item name="Datasets comparison demo" href="./demo_datacomparison.html"/> 
+      	</item>
       	<item name="Algorithm" href="./api_algorithm.html" />
       	<item name="Model" href="./api_model.html" />
       	<item name="Task" href="./api_task.html" />
-      	<item name="Ontology" href="./download_ontologyservice.html" />
+      	<item name="Ontology" href="./api_ontology.html" />
      </item>    
      <item name="AMBIT OpenTox API implementation"  collapse="true" href="/ambit_services.html" >
 
-       	<item name="Download" href="/download_ambitrest.html"/>  
+       	<item name="Download" href="/download_ambitrest.html"/>
+       	  
 	</item>    
 	
 	</menu>
