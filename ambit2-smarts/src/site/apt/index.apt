@@ -1,0 +1,105 @@
+ -----
+ ambit2-smarts
+ -----
+ Nina Jeliazkova
+ ----- 
+ 2011/09/01
+ -----
+ 
+{AMBIT} 
+~~~~~~~~~~
+ For an overview of AMBIT, end-user applications and web services, please consult {{{http://ambit.sf.net}ambit.sourceforge.net}} 
+ 
+AMBIT {modules}
+~~~~~~~~~~
+
+*{AMBIT SMARTS & SMIRKS}
+~~~~~~~~~~
+
+ This module includes support for {{{http://www.daylight.com/dayhtml/doc/theory/theory.smarts.html}SMARTS}} parsing and querying, 
+ and an implementation of {{{http://www.daylight.com/dayhtml_tutorials/languages/smirks/index.html}SMIRKS Reaction Transform Language}}.
+ 
+ Code {{{./examples.html}examples}} 
+ 
+**{SMARTS}
+~~~~~~~~~~
+
+ AMBIT-SMARTS is a Java library built on top of {{{http://cdk.sf.net}The Chemistry Development Kit}}. 
+ The AMBIT-SMARTS parser implements the entire SMARTS language specification with several syntax extensions that enable support for custom 
+ modifications introduced by third party software packages such as {{{http://www.google.com/url?sa=t&source=web&cd=1&ved=0CBsQFjAA&url=http%3A%2F%2Fwww.eyesopen.com}OpenEye}}, {{{http://www.chemcomp.com/software.htm}MOE}} and {{{http://openbabel.org}OpenBabel}}. 
+ The goal of yet another open-source SMARTS parser implementation is to achieve better performance 
+ and compatibility with multiple existing flavours of the SMARTS language, as well as to provide 
+ utilities for running efficient SMARTS queries in large structural databases.
+ 
+ Used by
+ 
+   *{{{http://toxtree.sf.net}ToxTree}} for definition and query of almost all substructure alerts;
+   
+   *{{{http://ambit.sourceforge.net/download_ambitxt.html}AmbitXT}} standalone application for database queries;  
+ 
+   *Embedded within {{{http://ambit.sourceforge.net/ambit_services.html}AMBIT REST web services}} 
+   via the {{{http://ambit.sourceforge.net/api.html}OpenTox web services API}} , for database queries;
+   
+   *Web applications as {{{http://toxpredict.org}ToxPredict}};  
+
+   *by {{{../ambit2-descriptors.html}ambit2-descriptors}} package to reproduce the {{{http://pubs.acs.org/doi/abs/10.1021/ci8001815}SMARTS-based pKa}};
+
+   * Substructure search via web services for{{{http://cadaster.eu}CADASTER}} project. 
+
+ Code {{{./examples.html#SMARTS}examples}} 
+
+
+**{SMIRKS}
+~~~~~~~~~~
+
+ * Included in ambit2-smarts package since version 2.4.2
+
+ * Test SMIRKS {{{http://apps.ideaconsult.net:8080/ambit2/depict/reaction?search=c1ccccc1&smirks=%5Bc%3A1%5D%5BH%3A2%5D%3E%3E%5Bc%3A1%5D%5BO%5D%5BH%3A2%5D}online}}
+ 
+ * Used to specify reactions and as a basis for metabolite generation in {{{http://toxtree.sourceforge.net/download.html#Toxtree_2.5.0}Toxtree 2.5.0}} {{{http://toxtree.sourceforge.net/smartcyp.html}SMARTCyp}} plugin.  
+ 
+ * Examine the {{{https://toxtree.svn.sourceforge.net/svnroot/toxtree/trunk/smartcyp/smartcyp-app/src/test/resources/dk/smartcyp/app/test/3A4_substrates.sdf}test page}}
+ 
+ Code {{{./examples.html#SMIRKS}examples}}
+ 
+*Source code
+~~~~~~~~~~	
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-smarts}ambit2-smarts}} module
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}The parent Maven project}}
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/tags}tags}} 
+	
+*{{{http://maven.apache.org/}Maven}} artifacts 
+   		
+   		{{{http://ambit.uni-plovdiv.bg:8083/nexus/index.html#nexus-search;quick~ambit2-smarts }ambit2-smarts}} all versions
+   			
+   		Artifacts
+   		
++---------------------------------    
+<dependency>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-smarts</artifactId>
+  <version>2.4.2</version>
+</dependency>
++---------------------------------
+
+		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/ambit2-smarts/}Release repository}}
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
++--------------------------------- 	
+
+		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots/ambit/ambit2-smarts/}Snapshots repository}}
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-snapshots</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+    </repository>
++--------------------------------- 	
+ 

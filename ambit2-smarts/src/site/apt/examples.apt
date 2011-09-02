@@ -1,0 +1,110 @@
+ -----
+ ambit2-smarts examples
+ -----
+ Nina Jeliazkova
+ ----- 
+ 2011/09/02
+ -----
+ 
+{SMARTS} search examples 
+~~~~~~~~~~
+ 
+*Using ambit2.smarts.SmartsManager.java  
+
++---------------------------------
+		SmartsManager man = new SmartsManager();
+   		IMolecule mol = MoleculeFactory.createAlkane(5);
+   		String smarts = "CCC";	
+		man.setQuery(smarts); 
+		if (!man.getErrors().equals(""))
+		{
+			System.out.println(man.getErrors());
+			return;
+		} else {		
+			boolean res = man.searchIn(mol);
+			System.out.println(String.format("SMARTS manager search example %s in %s  --> %s",smarts,smiles,res);
+		}
++--------------------------------- 	
+  
+*Using ambit2.smarts.query.AbstractSmartsPattern.java descendants. 
+
+  All of them implement ambit2.smarts.query.ISmartsPattern interface. 
+  
+  Use ambit2.smarts.FastSmartsMatcher.java
+  
++---------------------------------
+	    IAtomContainer mol = (initialize)
+		FastSmartsMatcher match = new FastSmartsMatcher();
+   		match.setSmarts("F[r5;r6]");
+		if (match.hasSMARTSPattern(mol)>0) 
+			System.out.println("A hit");
+		else	
+			System.out.println("Not a hit");
++--------------------------------- 	
+
+  Use ambit2.smarts.FastSmartsMatcher.java. Uses ambit2.smarts.IsomorphismTester.java to match structures.
+  
++---------------------------------
+	    IAtomContainer mol = (initialize)
+		FastSmartsMatcher match = new FastSmartsMatcher();
+   		match.setSmarts("F[r5;r6]");
+		if (match.hasSMARTSPattern(mol)>0) 
+			System.out.println("A hit");
+		else	
+			System.out.println("Not a hit");
++---------------------------------
+
+  Use ambit2.smarts.SmartsPatternAmbit.java. Optionally uses ambit2.smarts.IsomorphismTester.java or CDK UIT to match structures.
+  
++---------------------------------
+	    IAtomContainer mol = (initialize)
+		SmartsPatternAmbit match = new SmartsPatternAmbit();
+		//match.setUseCDKIsomorphism(true); //will use CDK UIT
+		match.setUseCDKIsomorphism(false); //will use Ambit Isomorphism tester
+		//match.useMOEvPrimitive(true); //will use MOE syntax
+   		match.setSmarts("F[r5;r6]");
+		if (match.hasSMARTSPattern(mol)>0) 
+			System.out.println("A hit");
+		else	
+			System.out.println("Not a hit");
++---------------------------------
+
+  Use ambit2.smarts.SmartsPatternCDK.java . A wrapper for CDK SMARTS and UIT, implements ambit2.smarts.query.ISmartsPattern interface.
+  
++---------------------------------
+	    IAtomContainer mol = (initialize)
+		SmartsPatternCDK match = new SmartsPatternCDK();
+   		match.setSmarts("F[r5;r6]");
+		if (match.hasSMARTSPattern(mol)>0) 
+			System.out.println("A hit");
+		else	
+			System.out.println("Not a hit");
++---------------------------------
+ 
+{SMIRKS} examples
+~~~~~~~~~~
+
++---------------------------------
+		IAtomContainer target = (initialize)
+		SMIRKSManager smrkMan = new SMIRKSManager();
+   		SMIRKSReaction reaction = smrkMan.parse(smirks);
+		if (!smrkMan.getErrors().equals(""))
+		{
+			throw(new Exception("Smirks Parser errors:\n" + smrkMan.getErrors()));
+		}
+		
+		if (smrkMan.applyTransformation(target, reaction)) 
+			return target; //all products inside the same atomcontainer, could be disconnected
+		else return null;
++--------------------------------- 	
+
+ Generate separate products for every possible reaction (used in {{{http://toxtree.sf.net}Toxtree}}
+ 
++---------------------------------
+		SMIRKSManager smrkMan = new SMIRKSManager();
+		SMIRKSReaction smr = smrkMan.parse(reaction.getSMIRKS());
+
+		IAtomContainer product = reactant; //(IAtomContainer) reactant.clone();
+		IAtomContainerSet rproducts = smrkMan.applyTransformationWithSingleCopyForEachPos(product, null, smr);
+		//products returned in a separate atom sontainer set
++--------------------------------- 	 
