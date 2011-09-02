@@ -62,9 +62,9 @@
 
       <item name="Introduction" href="./index.html"/>
       
-      <item name="Download" href="./downloads.html" collapse="true" >
+      <item name="Download" href="http://ambit.sf.net/downloads.html" collapse="true" >
           <description>AMBIT downloads</description>
-          <item name="Desktop applications" href="./downloads.html#desktop"/>
+          <item name="Desktop applications" href="http://ambit.sf.net/downloads.html#desktop"/>
           <item name="Web services" href="http://ambit.sf.net/downloads.html#services"/>
 
           <item name="Web applications" href="http://ambit.sf.net/downloads.html#applications"/>
@@ -86,10 +86,10 @@
 	</menu>
 	<menu name="Support">      
 	
-	  <item name="Support and feedback" href="./support.html" />
+	  <item name="Support and feedback" href="http://ambit.sf.net/support.html" />
   	  <item name="Forum" href="http://sourceforge.net/projects/ambit/forums" />
-	  <item name="Mailing lists" href="./mail-lists.html" />
-	  <item name="Bug reports" href="./issue-tracking.html" />
+	  <item name="Mailing lists" href="http://ambit.sf.net/mail-lists.html" />
+	  <item name="Bug reports" href="http://ambit.sf.net/issue-tracking.html" />
     </menu>
   
     <menu name="AMBIT publications">
