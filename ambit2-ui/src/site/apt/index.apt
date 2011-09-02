@@ -1,0 +1,61 @@
+ -----
+ ambit2-ui
+ -----
+ Nina Jeliazkova
+ ----- 
+ 2011/09/01
+ -----
+ 
+{AMBIT} 
+~~~~~~~~~~
+ For an overview of AMBIT, end-user applications and web services, please consult {{{http://ambit.sf.net}ambit.sourceforge.net}} 
+ 
+AMBIT {modules}
+~~~~~~~~~~
+
+*ambit-ui
+~~~~~~~~~~
+
+ Swing user interface 
+  
+*Source code
+~~~~~~~~~~	
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-ui}ambit2-ui}} module
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}The parent Maven project}}
+	
+	{{{https://ambit.svn.sourceforge.net/svnroot/ambit/tags}tags}} 
+	
+*{{{http://maven.apache.org/}Maven}} artifacts 
+   		
+   		{{{http://ambit.uni-plovdiv.bg:8083/nexus/index.html#nexus-search;quick~ambit2-ui }ambit2-ui}} all versions
+   			
+   		Artifacts
+   		
++---------------------------------    
+<dependency>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-ui</artifactId>
+  <version>2.4.2</version>
+</dependency>
++---------------------------------
+
+		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases/ambit/ambit2-ui/}Release repository}}
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-releases</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases</url>
+    </repository>
++--------------------------------- 	
+
+		{{{http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots/ambit/ambit2-ui/}Snapshots repository}}
+		
++---------------------------------
+   <repository>
+        <id>ambit-plovdiv-snapshots</id>
+        <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+    </repository>
++--------------------------------- 	
+ 
