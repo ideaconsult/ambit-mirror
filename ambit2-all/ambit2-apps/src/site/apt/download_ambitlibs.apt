@@ -26,6 +26,8 @@
 	The {{{http://toxtree.sf.net}Toxtree}} source code  also includes dependencies on some of the {{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all}ambit2-all}} modules.
 	On the other hand, Toxtree itself a dependency of the end user applications and web services, in which it has been incorporated, 
 	such as {{{./download_ambitxt.html}AmbitXT}} and {{{./download_ambitrest.html}AMBIT REST web services}}.
+	
+	More details about ({{{./AMBIT2-LIBS/apidocs}javadoc}, code examples) at {{{./AMBIT2-LIBS}ambit modules}} web pages. 
 
 *License
 
