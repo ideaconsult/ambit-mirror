@@ -1,0 +1,62 @@
+<document xmlns="http://maven.apache.org/DOCUMENT/1.0.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DOCUMENT/1.0.1 http://maven.apache.org/xsd/document-1.0.1.xsd"
+  outputName="maven-pdf-plugin">
+
+  <meta>
+    <title>Ambit REST API</title>
+    <authors>
+    <author><firstName>Nina</firstName><lastName> Jeliazkova</lastName><email>jeliazkova.nina@gmail.com</email>
+    <companyName>Ideaconsult Ltd.</companyName>
+    <city>Sofia</city><postalCode>1000</postalCode><country>Bulgaria</country>
+    </author>
+    </authors>
+    
+    <subject>Ambit implementation of OpenTox REST API</subject>
+    <keywords>AMBIT,OpenTox,REST,API</keywords>
+    <draft>true</draft>
+  </meta>
+  
+    <toc name="Table of content">
+      
+      <item name="Tutorial" ref="/tutorial/index.apt"/>
+      <item name="Tutorial" ref="/tutorial/short/index.apt"/>
+      <item name="Tutorial" ref="/tutorial/long/index.apt"/>
+      <item name="Tutorial" ref="/tutorial/full/index.apt"/>
+      
+      <item name="Services" ref="/ambit/services/index.apt"/>
+      
+      <item name="AMBIT" ref="/ambit/ambit.apt"/>
+      <item name="OpenTox" ref="/opentox.apt"/>
+      <item name="Predictive Toxicology" ref="/tox/predictive_toxicology.apt"/>
+      <item name="REpresentational State Transfer (REST)" ref="/rest/rest.apt"/>
+      <item name="HTTP Status codes" ref="/rest/http_status_codes.apt"/>
+     
+      <item name="Resource Description Framework" ref="/rdf/rdf.apt"/>
+      
+      <item name="Compound" ref="/api/compound_api.apt"/>
+      <item name="Feature" ref="/api/feature_api.apt"/>
+      <item name="Datasets" ref="/api/dataset_api.apt" />
+      <item name="Algorithm" ref="/api/algorithm_api.apt" />
+      <item name="Model" ref="/api/model_api.apt" />
+
+	  <item name="FAQs" ref="faq.apt"/>
+	  
+    </toc>
+    
+  <cover>
+    <coverTitle>${project.name}</coverTitle>
+    <coverSubTitle>v. ${project.version}</coverSubTitle>
+    <coverType>User Guide</coverType>
+    <projectName>${project.name}</projectName>
+    <projectLogo>ambit-logo.png</projectLogo>
+    <companyName>Ideaconsult Ltd.</companyName>
+    <companyLogo>ideaconsult.png</companyLogo>
+        <authors>
+    <author><firstName>Nina</firstName><lastName> Jeliazkova</lastName><email>jeliazkova.nina@gmail.com</email>
+    <companyName>Ideaconsult Ltd.</companyName>
+    <city>Sofia</city><postalCode>1000</postalCode><country>Bulgaria</country>
+    </author>
+    </authors>
+  </cover>
+</document>
