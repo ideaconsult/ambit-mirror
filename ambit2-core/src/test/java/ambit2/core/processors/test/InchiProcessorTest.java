@@ -31,20 +31,29 @@ package ambit2.core.processors.test;
 
 import junit.framework.Assert;
 
+import net.sf.jniinchi.INCHI_RET;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.processors.structure.InchiProcessor;
@@ -68,30 +77,68 @@ public class InchiProcessorTest {
 	}
 
 	@Test
-	public void test() throws Exception {
-		SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-		IMolecule m = p.parseSmiles("CCCCOC");
-		
-		generate(m,"InChI=1S/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3");
-	}
-	@Test
 	public void testProcessBenzene() throws Exception {
 		generate(MoleculeFactory.makeBenzene(),"InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H");
 	}
+	
+	@Test
+	public void testProcessCaffeineAromaticity() throws Exception {
+		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IMolecule mol = p.parseSmiles("CN1C=NC2=C1C(=O)N(C(=O)N2C)C");
+		generate(mol,"InChI=1S/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3",true);
+	}	
+	
+	@Test
+	public void testProcessAromaticity() throws Exception {
+		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IMolecule mol = p.parseSmiles("CN1C=NC2=C1C(=O)N(C(=O)N2C)C");
+
+		CDKHydrogenAdder ha = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+		ha.addImplicitHydrogens(mol);
+		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);  // this is the most important
+		
+		InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();  
+        InChIGenerator gen = factory.getInChIGenerator(mol);
+        INCHI_RET ret = gen.getReturnStatus();
+        if (ret != INCHI_RET.OKAY) {
+			throw new Exception(String.format("InChI failed: %s [%s]",
+					ret.toString(),gen.getMessage()));
+        }
+        String inchi = gen.getInchi();
+        Assert.assertEquals("InChI=1S/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3", inchi);
+	}
+	
+	@Test
+	public void testProcess1() throws Exception {
+		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		IMolecule m = p.parseSmiles("Cc1ccc(cc1)C(C)C=O");
+		
+	}
+	
 	@Test
 	public void testProcessAlkane() throws Exception {
 		generate(MoleculeFactory.makeAlkane(10),"InChI=1S/C10H22/c1-3-5-7-9-10-8-6-4-2/h3-10H2,1-2H3");		
 
-	}	
+	}
 	public void generate(IAtomContainer mol,String expected) throws Exception {
+		generate(mol, expected,false);
+	}
+	public void generate(IAtomContainer mol,String expected,boolean aromatic) throws Exception {
 		InchiProcessor p = new InchiProcessor();
 		HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
 		mol = ha.process(mol);
+		
+		if (aromatic) {
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		}
 		InChIGenerator gen = p.process(mol);
 		String inchi = gen.getInchi();
 		String auxinfo = gen.getAuxInfo();
 		Assert.assertEquals(expected, inchi);
 	}
+	
+	
 	@Test
 	public void parse() throws Exception {
 		InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
