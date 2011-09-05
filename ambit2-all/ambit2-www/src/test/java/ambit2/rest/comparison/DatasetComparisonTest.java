@@ -21,15 +21,20 @@ import javax.net.ssl.X509TrustManager;
 
 import org.junit.Test;
 import org.opentox.aa.opensso.OpenSSOToken;
-import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTDatasets;
 import org.opentox.dsl.task.ClientResourceWrapper;
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.test.ProtectedResourceTest;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.vocabulary.DC;
 
 public class DatasetComparisonTest extends  ProtectedResourceTest  {
 	
@@ -145,7 +150,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 			ArrayList<String> d = new ArrayList<String>();
 			for (int i=0; i < datasets.size(); i++) {
 				String uri = datasets.getItem(i).getUri().toString();
-				if (Integer.parseInt(uri.substring(uri.lastIndexOf("/")+1))<6520)
+				if (Integer.parseInt(uri.substring(uri.lastIndexOf("/")+1))<6515)
 					d.add(uri);
 			}
 			Collections.sort(d,new Comparator<String>() {
@@ -162,9 +167,12 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 			w.write("<th>Dataset</th>");
 			for (int i=0; i < d.size(); i++) {
 				String uri = d.get(i);
-				w.write(String.format("<th><a href='%s'>%s<a></th>",
+				String name = readName(uri);
+				int len = name.length()>7?7:name.length();
+				w.write(String.format("<th><a href='%s/metadata' title='%s'>%s<a></th>",
 						uri,
-						uri.substring(uri.lastIndexOf("/"))
+						name,
+						name!=null?name.substring(0,len):uri.substring(uri.lastIndexOf("/"))
 						)
 						);
 			}
@@ -173,8 +181,13 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 				
 				w.write("<tr>");
 				String uri = d.get(i);
-				w.write(String.format("<th><a href='%s' title='%s' target='_blank'>%s</a></th>",
-							uri,uri,uri.substring(uri.lastIndexOf("/"))));
+				String name = readName(uri);
+				int len = name.length()>7?7:name.length();
+				w.write(String.format("<th><a href='%s/metadata' title='%s' target='_blank'>%s</a></th>",
+							uri,
+							name,
+							name!=null?name.substring(0,len):uri.substring(uri.lastIndexOf("/"))
+							));
 				String clr = "#FFFFFF";
 				uri = String.format(chemnumber, URLEncoder.encode(d.get(i)));
 				int max = read(uri);
@@ -252,4 +265,25 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 			}
 			
 		}
+	 
+	 public String readName(String uri) throws Exception {
+		   Reference meta = new Reference(String.format("%s/metadata",uri));
+		 	Model model = OT.createModel(null, meta, MediaType.APPLICATION_RDF_XML);
+		 	
+			try {
+				
+				Statement st = model.getProperty(
+						model.createResource(uri.toString()),
+						model.getProperty(DC.NS,"title")
+						);
+				return st.getLiteral().getString();
+			} catch (Exception x) {
+				return null;
+			} finally {
+				try { model.close();} catch (Exception x) {}
+
+			}
+			
+		}
+	 
 }
