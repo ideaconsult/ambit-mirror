@@ -147,6 +147,8 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 			String intersection = "https://ambit.uni-plovdiv.bg:8443/ambit2/admin/stats/dataset_intersection?dataset_uri=%s&dataset_uri=%s";
 			String chemnumber = "https://ambit.uni-plovdiv.bg:8443/ambit2/admin/stats/chemicals_in_dataset?dataset_uri=%s";
 
+			String common = "%s?common=%s&max=25";
+			
 			ArrayList<String> d = new ArrayList<String>();
 			for (int i=0; i < datasets.size(); i++) {
 				String uri = datasets.getItem(i).getUri().toString();
@@ -162,12 +164,18 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 				}
 			});
 			w.write("<table border='1'>");
-			w.write("<caption>Datasets at https://ambit.uni-plovdiv.bg:8443/ambit2/</caption>");
+			w.write(String.format("<caption align='left'>Percentage of overlapping compound in pair of datasets at <a href='%s'>%s</a></caption>",
+					"https://ambit.uni-plovdiv.bg:8443/ambit2/dataset",
+					"https://ambit.uni-plovdiv.bg:8443/ambit2/dataset"
+					));
 			w.write("<tr>");
 			w.write("<th>Dataset</th>");
+			ArrayList<String> names = new ArrayList<String>();
+			
 			for (int i=0; i < d.size(); i++) {
 				String uri = d.get(i);
 				String name = readName(uri);
+				names.add(name);
 				int len = name.length()>7?7:name.length();
 				w.write(String.format("<th><a href='%s/metadata' title='%s'>%s<a></th>",
 						uri,
@@ -193,20 +201,28 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 				int max = read(uri);
 				for (int j=0; j < d.size(); j++) {
 					int number = 0;
+					String hint = "";
 					if (i==j) {
 						number = max;
 						clr = "#FFFFFF";
+						uri = String.format("%s/metadata",d.get(i));
+						hint = String.format("Number of compounds in the dataset %s [%d]",name,number);
 					} else {
 					
-						uri = String.format(intersection, URLEncoder.encode(d.get(i)), 
-								URLEncoder.encode(d.get(j)));
+						uri = String.format(intersection, URLEncoder.encode(d.get(i)),URLEncoder.encode(d.get(j)));
+						
 						number = read(uri);
+						uri = String.format(common, d.get(i),URLEncoder.encode(d.get(j)));
 						clr = getColor(max, number);
+						hint = String.format("Percent of compounds from dataset %s [%d], found in the dataset %s [%d] = %4.2f%%",
+								name,number,names.get(j),max,100.0f*(float)number/(float)max);
 					}
-					w.write(String.format("<td bgcolor='#%s' title='%s'><a href='%s'>%4.0f<a></td>",
+										
+					w.write(String.format("<td bgcolor='#%s' title='%s'><a href='%s' target='_blank' title='%s'>%4.1f%%<a></td>",
 							clr,
 							number,
 							uri,
+							hint,
 							100.0f*(float)number/(float)max));
 				}
 				w.write("</tr>");
