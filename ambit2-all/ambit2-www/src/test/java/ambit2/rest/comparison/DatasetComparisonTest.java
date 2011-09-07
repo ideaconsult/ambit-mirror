@@ -51,7 +51,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 	@Override
 	public void setUpАА() throws Exception {
 		insecureConfig();
-        super.setUpAA();
+        super.setUpАА();
 	}	
 	protected void insecureConfig() throws Exception {
 
