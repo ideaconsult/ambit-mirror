@@ -92,7 +92,8 @@ xml:base="http://apps.ideaconsult.net:8080/ambit2/">
 		    writer.writeNamespace(ot, OT.NS);
 			writer.writeNamespace(rdf, RDF.getURI());
 			writer.writeNamespace(owl, OWL.getURI());
-			writer.writeNamespace(dc, DC.getURI());			    
+			writer.writeNamespace(dc, DC.getURI());
+			writer.writeNamespace(dcterms, DCTerms.getURI());		
 		    writer.setDefaultNamespace(ot);
 		} catch (Exception x) {
 			
