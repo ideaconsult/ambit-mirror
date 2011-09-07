@@ -23,6 +23,11 @@ public abstract class ProtectedResourceTest extends ResourceTest implements IAut
 	}
 	@Override
 	public void setUp() throws Exception {
+		setUpАА();
+		super.setUp();
+	}
+	
+	public void setUpАА() throws Exception {
 		if (isAAEnabled()) {
 			ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
 			if (ssoToken.login(
@@ -33,7 +38,6 @@ public abstract class ProtectedResourceTest extends ResourceTest implements IAut
 			} else
 				throw new Exception(String.format("Error logging to SSO (%s)",OpenSSOServicesConfig.getInstance().getTestUser()));
 		}
-		super.setUp();
 	}
 	
 	@Override

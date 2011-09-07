@@ -51,14 +51,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 	@Override
 	public void setUpАА() throws Exception {
 		insecureConfig();
-			ssoToken = new OpenSSOToken(OpenSSOServicesConfig.getInstance().getOpenSSOService());
-			if (ssoToken.login(
-					"nina",
-					"sinanica789"
-					)) {
-				ClientResourceWrapper.setTokenFactory(this);
-			} else
-				throw new Exception(String.format("Error logging to SSO (%s)",OpenSSOServicesConfig.getInstance().getTestUser()));
+        super.setUpAA();
 	}	
 	protected void insecureConfig() throws Exception {
 
@@ -164,7 +157,7 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 				}
 			});
 			w.write("<table border='1'>");
-			w.write(String.format("<caption align='left'>Percentage of overlapping compound in pair of datasets at <a href='%s'>%s</a></caption>",
+			w.write(String.format("<caption align='left'>Percentage of overlapping compounds in pairs of datasets at <a href='%s'>%s</a></caption>",
 					"https://ambit.uni-plovdiv.bg:8443/ambit2/dataset",
 					"https://ambit.uni-plovdiv.bg:8443/ambit2/dataset"
 					));
@@ -207,6 +200,13 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 						clr = "#FFFFFF";
 						uri = String.format("%s/metadata",d.get(i));
 						hint = String.format("Number of compounds in the dataset %s [%d]",name,number);
+						
+						w.write(String.format("<td bgcolor='#%s' title='%s'><a href='%s' target='_blank' title='%s'>%d<a></td>\n",
+								clr,
+								number,
+								uri,
+								hint,
+								max));						
 					} else {
 					
 						uri = String.format(intersection, URLEncoder.encode(d.get(i)),URLEncoder.encode(d.get(j)));
@@ -214,21 +214,23 @@ public class DatasetComparisonTest extends  ProtectedResourceTest  {
 						number = read(uri);
 						uri = String.format(common, d.get(i),URLEncoder.encode(d.get(j)));
 						clr = getColor(max, number);
-						hint = String.format("Percent of compounds from dataset %s [%d], found in the dataset %s [%d] = %4.2f%%",
-								name,number,names.get(j),max,100.0f*(float)number/(float)max);
+						hint = String.format("Compounds from dataset %s, found in the dataset %s Number = %d Percent = %4.2f%%",
+								name,names.get(j),number,100.0f*(float)number/(float)max);
+						
+						w.write(String.format("<td bgcolor='#%s' title='%s'><a href='%s' target='_blank' title='%s'>%4.1f%%<a></td>\n",
+								clr,
+								number,
+								uri,
+								hint,
+								100.0f*(float)number/(float)max));						
 					}
 										
-					w.write(String.format("<td bgcolor='#%s' title='%s'><a href='%s' target='_blank' title='%s'>%4.1f%%<a></td>",
-							clr,
-							number,
-							uri,
-							hint,
-							100.0f*(float)number/(float)max));
+
 				}
-				w.write("</tr>");
+				w.write("</tr>\n");
 				w.flush();
 			}
-			w.write("</table>");
+			w.write("</table>\n");
 			w.write("</body></html>");
 		} catch (Exception x) {
 			throw x;
