@@ -11,6 +11,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryURIReporter;
 
 import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -23,6 +24,7 @@ public abstract class AbstractStaxRDFWriter<INPUT,OUTPUT> extends DefaultAmbitPr
 	protected final static String ot = "ot";
 	protected final static String rdf = "rdf";
 	protected final static String dc = "dc";
+	protected final static String dcterms = "dcterms";
 	protected final static String owl = "owl";
 	protected QueryURIReporter<INPUT, IQueryRetrieval<INPUT>> uriReporter;
 	
@@ -85,6 +87,7 @@ xml:base="http://apps.ideaconsult.net:8080/ambit2/">
 			writer.setPrefix(ot, OT.NS);
 			writer.setPrefix(owl, OWL.getURI());
 			writer.setPrefix(dc, DC.getURI());
+			writer.setPrefix(dcterms, DCTerms.getURI());
 			
 		    writer.writeNamespace(ot, OT.NS);
 			writer.writeNamespace(rdf, RDF.getURI());
