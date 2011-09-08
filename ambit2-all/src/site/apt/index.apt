@@ -37,7 +37,7 @@ AMBIT {modules}
 
 *{REST} web services core classes
  
- * {{{./ambit2-rendering/index.html}ambit2-rest}} AMBIT REST web services dependency
+ * {{{./ambit2-rest/index.html}ambit2-rest}} AMBIT REST web services dependency
  
 *Wrappers of {external} libraries
  
