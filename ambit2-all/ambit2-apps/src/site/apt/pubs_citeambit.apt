@@ -1,5 +1,5 @@
  -----
- Cite Toxtree
+ How to cite AMBIT
  -----
  Nina Jeliazkova
  -----
@@ -12,7 +12,7 @@ AMBIT publications
    
   [AMBIT Web services] Jeliazkova N., Jeliazkov V. {{{http://www.jcheminf.com/content/3/1/18} AMBIT RESTful web services: an implementation of the OpenTox application programming interface}}, Journal of Cheminformatics <<2011>>, 3:18, {doi:10.1186/1758-2946-3-18}.
 
-  [AMBIT Substructure search] Jeliazkova N., Kochev N. Ambit-SMARTS: Efficient Searching Of Chemical Structures And Fragments, {{{http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1611-0218}Mol. Inf.}},  <<2011>>, 30, 2 - 15 (in print)
+  [AMBIT Substructure search] Jeliazkova N., Kochev N. {{{http://onlinelibrary.wiley.com/doi/10.1002/minf.201100028/abstract}Ambit-SMARTS:}} Efficient Searching Of Chemical Structures And Fragments, {{{http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1611-0218}Mol. Inf.}},  <<2011>>;30(8):707-720
   
   [AMBIT, AMBITXT] Jeliazkova N., Jaworska J., Worth A. (2010) Chapter 17. Open Source Tools for Read-Across and Category Formation, In M. Cronin, & Madden J. (Eds.), {{{http://www.amazon.com/Silico-Toxicology-Principles-Applications-Issues/dp/1849730040}In Silico Toxicology : Principles and Applications}} (pp. 408-445). Cambridge, UK: RSC Publishing
 
