@@ -46,6 +46,10 @@
      Upon completion, there should be non-empty list of datasets at the following URI 
      {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}}
 
+     Note: Access to chemical structures and data is assumed to be performed via {{{http://ambit.sourceforge.net/api.html}OpenTox REST web services API}}, 
+     and not via direct database access. 
+     Developers may be interested in the {{{http://ambit.sourceforge.net/AMBIT2-LIBS/ambit2-db/index.html}ambit2-db}} module 
+     for information about the database schema and related Java classes.  
     
 *Configuration 
 
