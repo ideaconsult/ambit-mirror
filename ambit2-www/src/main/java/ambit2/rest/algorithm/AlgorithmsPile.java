@@ -78,9 +78,9 @@ public class AlgorithmsPile {
 			
 			
 			{"toxtreecramer","ToxTree: Cramer rules","toxTree.tree.cramer.CramerRules",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#toxtreecramer"},
-			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
-			{"toxtreeverhaar","ToxTree: Verhaar scheme for predicting toxicity mode of action","verhaar.VerhaarScheme",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",Algorithm.requires.structure},
-			{"toxtreeverhaar2","ToxTree: Verhaar scheme (modified) for predicting toxicity mode of action","toxtree.plugins.verhaar2.VerhaarScheme2",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",Algorithm.requires.structure},
+			{"toxtreecramer2","ToxTree: Extended Cramer rules","cramer2.CramerRulesWithExtensions",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#toxtreecramer2"},
+			{"toxtreeverhaar","ToxTree: Verhaar scheme for predicting toxicity mode of action","verhaar.VerhaarScheme",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#toxtreeverhaar"},
+			{"toxtreeverhaar2","ToxTree: Verhaar scheme (modified) for predicting toxicity mode of action","toxtree.plugins.verhaar2.VerhaarScheme2",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#toxtreeverhaar2"},
 			{"toxtreeeye","ToxTree: Eye irritation","eye.EyeIrritationRules",
 				new Property[] 
 				{
@@ -92,7 +92,8 @@ public class AlgorithmsPile {
 				},
 				new String[] {AlgorithmType.Rules.toString()},
 				"http://www.opentox.org/echaEndpoints.owl#Eye_irritation_corrosion",
-				Algorithm.requires.structure
+				Algorithm.requires.structure,
+				"http://ambit.sourceforge.net/descriptors.owl#toxtreeeye"
 			},
 			{"toxtreeskinirritation","ToxTree: Skin irritation","sicret.SicretRules",
 			new Property[] 
@@ -107,31 +108,43 @@ public class AlgorithmsPile {
 				},
 				new String[] {AlgorithmType.Rules.toString()},
 				"http://www.opentox.org/echaEndpoints.owl#SkinIrritationCorrosion",
-				Algorithm.requires.structure
+				Algorithm.requires.structure,
+				"http://ambit.sourceforge.net/descriptors.owl#toxtreeskin"
 			},
 			{"toxtreemic","ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents","mic.MICRules",null,new String[] {AlgorithmType.Rules.toString()},
-				"http://www.opentox.org/echaEndpoints.owl#Endpoints",Algorithm.requires.structure},
-			{"toxtreeskinsens","ToxTree: Skin sensitisation alerts (M. Cronin)","toxtree.plugins.skinsensitisation.SkinSensitisationPlugin",null,new String[] {AlgorithmType.Rules.toString()},
+				"http://www.opentox.org/echaEndpoints.owl#Endpoints",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#toxtreemic"},
+			{"toxtreeskinsens","ToxTree: Skin sensitisation alerts (M. Cronin)","toxtree.plugins.skinsensitisation.SkinSensitisationPlugin",null,
+					new String[] {AlgorithmType.Rules.toString()},
 				"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
-				,Algorithm.requires.structure
+				,Algorithm.requires.structure,
+				"http://ambit.sourceforge.net/descriptors.owl#toxtreednabinding"
 				},
 			{"toxtreesmartcyp","SmartCYP: Cytochrome P450-Mediated Drug Metabolism","toxtree.plugins.smartcyp.SMARTCYPPlugin",null,new String[] {AlgorithmType.Rules.toString()},
 					"http://www.opentox.org/echaEndpoints.owl#Protein-binding"
-					,Algorithm.requires.structure
+					,Algorithm.requires.structure,
+					"http://ambit.sourceforge.net/descriptors.owl#toxtreesmartcyp"
 					},				
 			{"toxtreemichaelacceptors","ToxTree: Michael acceptors","michaelacceptors.MichaelAcceptorRules",null,new String[] {AlgorithmType.Rules.toString()},
 					"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
-					,Algorithm.requires.structure
+					,Algorithm.requires.structure,
+					"http://ambit.sourceforge.net/descriptors.owl#toxtreemichaelacc"
 					},
 			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,new String[] {AlgorithmType.Rules.toString()},
-				"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",Algorithm.requires.structure},
+				"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",Algorithm.requires.structure,
+				"http://ambit.sourceforge.net/descriptors.owl#toxtreecarc"},
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
-			{"toxtreebiodeg","START biodegradation and persistence plug-in","com.molecularnetworks.start.BiodgeradationRules",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",Algorithm.requires.structure},				
+			{"toxtreebiodeg","START biodegradation and persistence plug-in","com.molecularnetworks.start.BiodgeradationRules",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
+					Algorithm.requires.structure,
+					"http://ambit.sourceforge.net/descriptors.owl#toxtreestart"
+					},				
 			
 			{"toxtreekroes","ToxTree: ILSI/Kroes decision tree for TTC","toxtree.plugins.kroes.Kroes1Tree",
 				new Property[] {
 				new Property("DailyIntake","\u00B5g/day", toxTreeReference)
-			},new String[] {AlgorithmType.Rules.toString()}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure},
+			},new String[] {AlgorithmType.Rules.toString()}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",
+				Algorithm.requires.structure,
+				"http://ambit.sourceforge.net/descriptors.owl#toxtreekroes"
+				},
 			
 			/** Descriptors */
 			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#xlogP"},
@@ -194,45 +207,45 @@ public class AlgorithmsPile {
 			{"org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor","Vertex adjacency information (magnitude)","org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#vAdjMa"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor","Wiener Path number and Wiener Polarity Number","org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#wienerNumbers"},
 			
-			{"ambit2.mopac.MopacOriginalStructure","MOPAC descriptors (Energy, EHOMO, ELUMO,etc.)","ambit2.mopac.MopacOriginalStructure",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPAC"},
+			{"ambit2.mopac.MopacOriginalStructure","MOPAC descriptors (Energy, EHOMO, ELUMO,etc.)","ambit2.mopac.MopacOriginalStructure",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
 			
-			{"ambit2.dragon.DescriptorDragonShell","DRAGON6 descriptors","ambit2.dragon.DescriptorDragonShell",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl/#dragon"},
+			{"ambit2.dragon.DescriptorDragonShell","DRAGON6 descriptors","ambit2.dragon.DescriptorDragonShell",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#dragon"},
 			
-			{"ambit2.some.DescriptorSOMEShell","Site Of Metabolism Estimator (SOME) Bioinformatics (2009) 25(10):1251-1258.","ambit2.some.DescriptorSOMEShell",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure},
+			{"ambit2.some.DescriptorSOMEShell","Site Of Metabolism Estimator (SOME) Bioinformatics (2009) 25(10):1251-1258.","ambit2.some.DescriptorSOMEShell",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#SOME"},
 
-			{"ambit2.descriptors.InChI","InChI 1.03","ambit2.descriptors.InChI",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure},
+			{"ambit2.descriptors.InChI","InChI 1.03","ambit2.descriptors.InChI",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#inchi"},
 			
-			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure},
-			{"ambit2.descriptors.KekulizationVerifier","Kekulization verifier","ambit2.descriptors.KekulizationVerifier",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure},
+			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#atomtypeverifier"},
+			{"ambit2.descriptors.KekulizationVerifier","Kekulization verifier","ambit2.descriptors.KekulizationVerifier",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#kekulizationverifier"},
 		
-			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure},			
+			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},			
 
-			{"finder","Find","finder",null,new String[] {AlgorithmType.Finder.toString()},"",Algorithm.requires.structure},
+			{"finder","Find","finder",null,new String[] {AlgorithmType.Finder.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#finder"},
 			
 
-			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property},
-			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property},
-			{"distanceCityBlock","Applicability domain: Cityblock distance","ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property},
-			{"distanceMahalanobis","Applicability domain: Mahalanobis distance","ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property},			
-			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property},
-			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property},
-			{"fptanimoto","Applicability domain: Fingerprints, Tanimoto distance to a consensus fingerprints","ambit2.model.structure.DataCoverageFingerprintsTanimoto",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.structure},
-			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.structure},
+			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_pcaRanges"},
+			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_distanceEuclidean"},
+			{"distanceCityBlock","Applicability domain: Cityblock distance","ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_distanceCityBlock"},
+			{"distanceMahalanobis","Applicability domain: Mahalanobis distance","ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_distanceMahalanobis"},			
+			{"nparamdensity","Applicability domain: nonparametric density estimation","ambit2.model.numeric.DataCoverageDensity",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_nparamdensity"},
+			{"leverage","Applicability domain: Leverage","ambit2.model.numeric.DataCoverageLeverage",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_leverage"},
+			{"fptanimoto","Applicability domain: Fingerprints, Tanimoto distance to a consensus fingerprints","ambit2.model.structure.DataCoverageFingerprintsTanimoto",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#ad_fptanimoto"},
+			{"fpmissingfragments","Applicability domain: Fingerprints, Missing fragments","ambit2.model.structure.DataCoverageFingeprintsMissingFragments",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#ad_fpmissingfragments"},
 			
-			{"fingerprints","Generate fingerprints","fp1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
-			{"atomenvironments","Generate atomenvironments","atomenvironments",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
-			{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
-			{"struckeys","Generate structure keys","sk1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
-			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
-			{"inchi","Generate InChI","inchi",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure},
+			{"fingerprints","Generate fingerprints","fp1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#db_fingerprints"},
+			{"atomenvironments","Generate atomenvironments","atomenvironments",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#db_atomenvironments"},
+			{"structurequality","Structure quality workflow","fp1024_struc",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#db_structurequality"},
+			{"struckeys","Generate structure keys","sk1024",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#db_struckeys"},
+			{"smartsprop","Generate SMARTS accelerator data","smarts_accelerator",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#db_smartprop"},
+			{"inchi","Generate InChI","inchi",null,new String[] {AlgorithmType.Fingerprints.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#inchi"},
 			
-			{"mcss","Find maximum common substructures of a dataset","mcss",null,new String[] {AlgorithmType.SMSD.toString()},null,Algorithm.requires.structure},
+			{"mcss","Find maximum common substructures of a dataset","mcss",null,new String[] {AlgorithmType.SMSD.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#mcss"},
 			
-			{"superservice","Calls a remote service",null,null,new String[] {AlgorithmType.SuperService.toString()},null,null},
-			{"superbuilder","Builds a model with all dependencies",null,null,new String[] {AlgorithmType.SuperBuilder.toString()},null,null},
-			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {AlgorithmType.Mockup.toString()},null,null},
+			{"superservice","Calls a remote service",null,null,new String[] {AlgorithmType.SuperService.toString()},null,null,"http://ambit.sourceforge.net/descriptors.owl#superservice"},
+			{"superbuilder","Builds a model with all dependencies",null,null,new String[] {AlgorithmType.SuperBuilder.toString()},null,null,"http://ambit.sourceforge.net/descriptors.owl#superbuilder"},
+			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {AlgorithmType.Mockup.toString()},null,null,"http://ambit.sourceforge.net/descriptors.owl#mockup"},
 			
-			{"expert","Human experts input","expert",null,new String[] {AlgorithmType.Expert.toString()},null,Algorithm.requires.structure}
+			{"expert","Human experts input","expert",null,new String[] {AlgorithmType.Expert.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#expert_input"}
 			
 			
 			
