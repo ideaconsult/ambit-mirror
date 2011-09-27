@@ -70,7 +70,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 				output.write("</caption>\n");
 
 				output.write("<thead>");
-				output.write("<tr><th align=\"left\">Name</th><th>Description</th><th>Type</th></tr>"); 
+				output.write("<tr><th align=\"left\">Name</th><th>Description</th><th>Type</th><th>Implementation of</th></tr>"); 
 				output.write("</thead>");
 			}
 			output.write("<tbody>");
@@ -82,11 +82,12 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 		try {
 			String t = super.getURI(item);
 			if (collapsed) 
-				output.write(String.format("<tr><td align=\"left\"><a href='%s'>%s</a></td><td>%s</td><td  align='right'><a href=?type=%s>%s</a></td></tr>", 
+				output.write(String.format("<tr><td align=\"left\"><a href='%s'>%s</a></td><td>%s</td><td  align='right'><a href=?type=%s>%s</a></td><td>%s</td></tr>", 
 						t,item.getName(),
 						item.isDataProcessing()?"Processes a dataset":"Generates a model"
 						,Reference.encode(item.getType()[0])
-						,item.getType()[0]
+						,item.getType()[0],
+						item.getImplementationOf()==null?"":item.getImplementationOf()
 						               ));
 			else {
 				
