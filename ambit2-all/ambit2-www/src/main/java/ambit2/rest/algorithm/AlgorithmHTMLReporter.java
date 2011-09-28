@@ -1,7 +1,9 @@
 package ambit2.rest.algorithm;
 
+import java.io.InputStream;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.Properties;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -25,9 +27,12 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	 */
 	private static final long serialVersionUID = 7544605965468875232L;
 	protected boolean collapsed = false;
+	protected String sparql = null;
+	
 	public AlgorithmHTMLReporter(Request ref, boolean collapsed,ResourceDoc doc) {
 		super(ref,doc);
 		this.collapsed = collapsed;
+		sparql = getOntologyServiceURI();
 	}
 	@Override
 	public void header(Writer output, Iterator<Algorithm> query) {
@@ -81,15 +86,18 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	public void processItem(Algorithm item, Writer output) {
 		try {
 			String t = super.getURI(item);
-			if (collapsed) 
+			if (collapsed) {
+				String query = item.getImplementationOf()==null?"":
+					String.format("<a href='%s?uri=%s' target='ontology'>%s</a>",sparql,Reference.encode(item.getImplementationOf()),item.getImplementationOf());
+				
 				output.write(String.format("<tr><td align=\"left\"><a href='%s'>%s</a></td><td>%s</td><td  align='right'><a href=?type=%s>%s</a></td><td>%s</td></tr>", 
 						t,item.getName(),
 						item.isDataProcessing()?"Processes a dataset":"Generates a model"
 						,Reference.encode(item.getType()[0])
 						,item.getType()[0],
-						item.getImplementationOf()==null?"":item.getImplementationOf()
+						query
 						               ));
-			else {
+			} else {
 				
 				String target = item.isSupervised()?"<td><label for='prediction_feature'>Target&nbsp;</label></td><td><input type='text' name='prediction_feature' size='60' value='Enter feature URL'></td>":"";
 				String features = "<td><label for='feature_uris[]'>X variables&nbsp;</label></td><td><textarea rows='2' cols='45'name='feature_uris[]' alt='independent variables'></textarea></td>";
@@ -182,4 +190,16 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 			
 		}
 	}
+	
+	public synchronized String getOntologyServiceURI()  {
+		try {
+			Properties properties = new Properties();
+			InputStream in = AlgorithmHTMLReporter.class.getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
+			properties.load(in);
+			in.close();	
+			return properties.getProperty("service.ontology");
+		} catch (Exception x) {
+			return null;
+		}
+	}		
 }
