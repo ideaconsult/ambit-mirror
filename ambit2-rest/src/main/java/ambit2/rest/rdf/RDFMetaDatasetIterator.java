@@ -106,8 +106,13 @@ public class RDFMetaDatasetIterator extends RDFObjectIterator<ISourceDataset> {
 				String license = null;
 				if (newEntry.isResource()) {
 					Statement st = ((Resource)newEntry).getProperty(DCTerms.license);
-					RDFNode licenseNode = st.getObject();
-					license = licenseNode.isLiteral()?((Literal)licenseNode).getString():((Resource)licenseNode).getURI();
+					RDFNode licenseNode = st==null?null:st.getObject();
+					
+					if (licenseNode==null) {
+						st = ((Resource)newEntry).getProperty(DCTerms.rights);
+						licenseNode = st==null?null:st.getObject();
+					}
+					license = licenseNode==null?null:licenseNode.isLiteral()?((Literal)licenseNode).getString():((Resource)licenseNode).getURI();
 				} else throw new Exception("Not a resource");
 				if (license!=null) dataset.setLicenseURI(license); 
 			}catch (Exception x) {}

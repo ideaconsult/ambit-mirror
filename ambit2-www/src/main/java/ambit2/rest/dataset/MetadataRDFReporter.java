@@ -3,6 +3,7 @@ package ambit2.rest.dataset;
 import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
@@ -16,6 +17,7 @@ import ambit2.rest.reference.ReferenceURIReporter;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
@@ -62,8 +64,17 @@ public class MetadataRDFReporter<Q extends IQueryRetrieval<ISourceDataset>> exte
 		if (item.getSource()!=null) dataset.addProperty(DC.source,item.getSource());
 		
 		if (item.getLicenseURI()!=null) {
+			Property rights = DCTerms.rights;
+			for (ISourceDataset.license l : ISourceDataset.license.values())
+				if (l.getURI().equals(item.getLicenseURI())) {
+					rights = DCTerms.license;
+					break;
+				}
+			if (!item.getLicenseURI().startsWith("http")) {
+				item.setLicenseURI(String.format("http://ambit.sf.net/resolver/rights/%s",Reference.encode(item.getLicenseURI())));
+			}
 			Resource licenseNode = output.createResource(item.getLicenseURI());
-			dataset.addProperty(DCTerms.license,licenseNode);
+			dataset.addProperty(rights,licenseNode);
 		} else {
 			//dataset.addProperty(DCTerms.license,ISourceDataset.license.Unknown.toString());
 		}
