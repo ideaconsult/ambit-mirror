@@ -12,6 +12,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -190,8 +191,15 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		}
 		
 		if (getLicenseURI()!=null) {
+			
+			com.hp.hpl.jena.rdf.model.Property rights = DCTerms.rights;
+			for (ISourceDataset.license l : ISourceDataset.license.values())
+				if (l.getURI().equals(getLicenseURI())) {
+					rights = DCTerms.license;
+					break;
+				}
 			Resource licenseNode = output.createResource(getLicenseURI());
-			dataset.addProperty(DCTerms.license,licenseNode);
+			dataset.addProperty(rights,licenseNode);
 		} else {
 			//dataset.addProperty(DCTerms.license,ISourceDataset.license.Unknown.toString());
 		}

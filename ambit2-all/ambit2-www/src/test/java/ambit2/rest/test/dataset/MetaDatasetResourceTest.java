@@ -90,6 +90,40 @@ public class MetaDatasetResourceTest extends ResourceTest {
 	}
 	
 	@Test
+	public void testUpdateExistingEntryRightsInsteadOfLicense() throws Exception {
+		//name and license uri can be updated only (for now)
+		String name = "New dataset name";
+		String title = "AAAA";
+		String url = "BBBB";
+		String rights = "xxxx";
+	//String rights = "http://my.com/license";
+		SourceDataset p = new SourceDataset(name,new LiteratureEntry(title,url));
+		p.setLicenseURI(rights);
+		
+		OntModel model = OT.createModel();
+		MetadataRDFReporter.addToModel(model,p,new DatasetURIReporter(new Reference(String.format("http://localhost:%d", port)),null));
+		StringWriter writer = new StringWriter();
+		model.write(writer,"RDF/XML");
+		System.out.println(writer.toString());
+		
+		Response response =  testPut(
+					getTestURI(),
+					MediaType.TEXT_URI_LIST,
+					new StringRepresentation(writer.toString(),MediaType.APPLICATION_RDF_XML)
+					);
+		Assert.assertEquals(Status.SUCCESS_OK, response.getStatus());
+		
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT * FROM src_dataset join catalog_references using(idreference) where name='%s' and licenseURI='%s' ",
+						name,
+						String.format("http://ambit.sf.net/resolver/rights/%s",Reference.encode(rights))));
+		Assert.assertEquals(1,table.getRowCount());
+		c.close();
+		Assert.assertEquals("http://localhost:8181/dataset/1/metadata", response.getLocationRef().toString());
+	}	
+	@Test
 	public void testUpdateExistingEntryN3() throws Exception {
 		//name and license uri can be updated only (for now)
 		String name = "New dataset name";
