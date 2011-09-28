@@ -98,6 +98,10 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	@Override
 	public void footer(Writer output, Q query) {
 		try {
+			if (getLicenseURI()!=null) {
+				//Not specified by CML, but XML parsers should be forgiving :)
+				output.write(String.format("<license>%s</license>",getLicenseURI()));
+			}
 			output.write("</list>");
 		} catch (Exception x) {
 			logger.error(x);

@@ -183,5 +183,5 @@
   </bondArray>
   <scalar dictRef="cdk:molecularProperty" title="CasRN" dataType="xsd:string">91-08-7</scalar>
 </molecule>
-
+<license>test URI</license>
 </list>
