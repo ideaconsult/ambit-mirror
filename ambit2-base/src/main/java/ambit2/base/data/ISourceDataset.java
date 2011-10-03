@@ -73,7 +73,28 @@ public interface ISourceDataset extends Serializable {
 			public String getTitle() {
 				return "GNU Free Documentation License (GFDL)";
 			}
-		};
+		},
+		ODL10 {
+			@Override
+			public String getURI() {
+				return "http://opendatacommons.org/licenses/odbl/1.0/";
+			}
+			@Override
+			public String getTitle() {
+				return "Open Database License v1.0";
+			}
+		},
+		ODCBy10 {
+			@Override
+			public String getURI() {
+				return "http://opendatacommons.org/licenses/by/1.0/";
+			}
+			@Override
+			public String getTitle() {
+				return "http://opendatacommons.org/licenses/by/1.0/";
+			}
+		}		
+		;
 		public String toString() {
 			return name().replace("_", "-");
 		};
