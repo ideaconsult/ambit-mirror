@@ -1,6 +1,9 @@
 package ambit2.rest.aa.opensso;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 import org.opentox.aa.exception.AAException;
@@ -70,9 +73,13 @@ public class OpenSSOServicesConfig {
 	}	
 	private OpenSSOServicesConfig() throws AAException {
 		properties = new Properties();
-		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/config.prop");
+		URL url = getClass().getClassLoader().getResource("ambit2/rest/config/config.prop");
+		InputStream in = null;
 		try {
+			in =  url.openStream();
 			properties.load(in);
+		} catch (IOException x) {	
+			throw new AAPropertiesException(x);
 		} catch (Exception x) {
 			throw new AAPropertiesException(x);
 		} finally {
