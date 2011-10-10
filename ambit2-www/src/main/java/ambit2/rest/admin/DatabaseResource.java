@@ -1,7 +1,8 @@
 package ambit2.rest.admin;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
-import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,23 +11,24 @@ import java.sql.Statement;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
+import org.restlet.data.Language;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.xbill.DNS.Address;
 
 import ambit2.base.data.StringBean;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.ProcessorException;
 import ambit2.db.LoginInfo;
 import ambit2.db.pool.DatasourceFactory;
 import ambit2.db.processors.DbCreateDatabase;
-import ambit2.db.reporters.QueryReporter;
 import ambit2.db.version.AmbitDBVersion;
 import ambit2.db.version.DBVersionQuery;
 import ambit2.rest.DBConnection;
@@ -55,48 +57,33 @@ import ambit2.rest.query.QueryResource;
 public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersion> {
 	public static final String resource = "database";
 	
-	@Override
-	public IProcessor<DBVersionQuery, Representation> createConvertor(Variant variant)
-			throws AmbitException, ResourceException {
-		return new StringConvertor(	new QueryReporter<AmbitDBVersion,DBVersionQuery,Writer>() {
-			public void open() throws ambit2.db.exceptions.DbAmbitException {}
-			public void footer(Writer output, DBVersionQuery query) {}
-			public Object processItem(AmbitDBVersion item) throws AmbitException {
-					try {
-				getOutput().write(String.format("\n%s\nVersion: %d.%d\nCreated: %s\nNote: %s\n\n",
-						item.getDbname(),
-						item.getMajor(),item.getMinor(),
-						item.getCreated(),
-						item.getComments()));
-				return item;
-				} catch (Exception x) { return null;}
-			}
-			public void header(Writer output, DBVersionQuery query) {
-				try {
-					InetAddress[] ipclient;
-					InetAddress[] ipserver;
-					String client = getRequest().getClientInfo().getAddress();
-					String server = getRequest().getHostRef().getHostDomain();
-					if (!Address.isDottedQuad(client)) {
-						ipclient = Address.getAllByName(client);
-					} else ipclient = new InetAddress[] {Address.getByAddress(client)};
-					if (!Address.isDottedQuad(server)) {
-						ipserver = Address.getAllByName(server);
-					} else ipserver = new InetAddress[] {Address.getByAddress(server)};
-					
-					for (InetAddress cl : ipclient)
-						for (InetAddress s : ipserver) {
-							boolean ok = cl.equals(s);
-							output.write(String.format("Comparing %s %s : %s\n",cl.getHostAddress(),s.getHostAddress(),Boolean.toString(ok)));
-
-						}					
-				} catch (Exception x) {
-						x.printStackTrace();
-				}
-			}
-		},MediaType.TEXT_PLAIN);
+	public DatabaseResource() {
+		super();
+		maxRetry = 1;
 	}
+	
+	@Override
+	public IProcessor<DBVersionQuery, Representation> createConvertor(
+			Variant variant) throws AmbitException, ResourceException {
 
+		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
+			return new StringConvertor(new DBTextReporter(),MediaType.TEXT_PLAIN);
+		} if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
+			return new StringConvertor(new DBHtmlReporter(getRequest()),MediaType.TEXT_HTML);
+			/*} 
+		
+		
+			*/
+		} else //html 	
+			return new StringConvertor(new DBHtmlReporter(getRequest()),MediaType.TEXT_HTML);
+		
+	}	
+
+	@Override
+	protected Representation processNotFound(NotFoundException x, int retry)
+			throws Exception {
+		return null;
+	}
 	@Override
 	protected DBVersionQuery createQuery(Context context, Request request, Response response)
 			throws ResourceException {
@@ -204,7 +191,8 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
     		dbCreate.process(new StringBean(dbname));
 			
 			getResponse().setStatus(Status.SUCCESS_OK);
-			
+
+			return get();
 		} catch (SQLException x) {
 			Context.getCurrentLogger().severe(x.getMessage());
 			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN,x,x.getMessage());			
@@ -224,4 +212,46 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 			return new StringRepresentation(dbname);
 		}
 	}		
+	
+	@Override
+	protected Representation processSQLError(SQLException x, int retry,
+			Variant variant) throws Exception {
+		try {
+			AmbitDBVersion db = new AmbitDBVersion();
+			DBConnection dbc = new DBConnection(getContext());
+			db.setDbname(dbc.getLoginInfo().getDatabase());
+			dbc = null;
+			return generateRepresentation(db, true);
+		} catch (Exception xx) {
+			x.printStackTrace();
+			return null;
+		} finally {
+			
+		}
+	}
+	
+
+	protected Representation generateRepresentation(AmbitDBVersion db, boolean create) 
+			 throws Exception {
+		try {
+			Writer writer = new StringWriter();
+			DBHtmlReporter reporter = new DBHtmlReporter(getRequest());
+			reporter.setCreate(create);
+			reporter.setOutput(writer);
+			reporter.header(writer, null);
+
+			reporter.processItem(db);
+			reporter.footer(writer, null);
+			writer.flush();
+			
+			return new StringRepresentation(writer.toString(),
+					MediaType.TEXT_HTML,
+					Language.ENGLISH,CharacterSet.UTF_8);
+		} catch (Exception xx) {
+
+			return null;
+		} finally {
+			
+		}
+	}
 }
