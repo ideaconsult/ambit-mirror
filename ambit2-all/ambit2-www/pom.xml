@@ -93,6 +93,24 @@
 
       </properties>
     </profile>
+    <profile>
+	     <id>no-license-in-text-column</id>
+	      <activation>
+	        <activeByDefault>false</activeByDefault>
+	      </activation>
+    	<properties>
+    	<license.intextfiles>true</license.intextfiles>
+    	</properties>
+    </profile>
+    <profile>
+	     <id>license-in-text-column</id>
+	      <activation>
+	        <activeByDefault>true</activeByDefault>
+	      </activation>
+    	<properties>
+    	<license.intextfiles>true</license.intextfiles>
+    	</properties>
+    </profile>    
     </profiles>
       
   <build>
