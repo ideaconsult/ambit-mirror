@@ -74,9 +74,10 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 				output.write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log out\"></td></tr>");
 				output.write("</form>");
 				
-				output.write("</tbody></table>");
-				output.write(String.format("<hr><a href='%s/bookmark/%s'>My workspace</a>",getRequest().getRootRef(),item.getUsername(),item.getUsername()));			
-				
+				output.write("</tbody></table><hr/>");
+				output.write(String.format("<a href='%s/bookmark/%s'>My workspace</a>",getRequest().getRootRef(),item.getUsername(),item.getUsername()));
+				output.write(String.format("&nbsp;&nbsp;<a href='%s/admin/policy'>View/Define access rights</a>",getRequest().getRootRef()));
+				output.write(String.format("&nbsp;&nbsp;<a href='%s/admin'>Admin</a>",getRequest().getRootRef()));
 			}
 		} catch (Exception x) {
 			x.printStackTrace();
