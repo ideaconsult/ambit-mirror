@@ -45,21 +45,27 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 		try {
 			output.write("<table width='80%' id='users' border='0' cellpadding='0' cellspacing='1'>");
 			output.write("<tbody>");
+			if (item.getToken()==null)  {
+
+			output.write("<tr><th align='right'>No OpenTox user?</th><td><a href='http://opentox.org/join_form' title='If you do not have an OpenTox user, please sign in at opentox.org' target='_blank'>Sign In</a></td></tr><tr><td colspan='2'></td></tr>");
+			}
 			
-			output.write(String.format("<tr><th align='right'>OpenSSO service:&nbsp;</th><td>%s</td></tr>",
+			output.write(String.format("<tr><th align='right' title='OpenTox Authentication and Authorisation is managed by OpenAM http://forgerock.com/openam.html'><a href='http://forgerock.com/openam.html' target=_blank>OpenAM</a> service:&nbsp;</th><td>%s</td></tr>",
 						OpenSSOServicesConfig.getInstance().getOpenSSOService()));
 
 			if (item.getToken()==null)  {
 				output.write("<form method='post' action='?method=post'>");
 				
-				output.write(String.format("<tr><th align='right'>%s</th><td><input type='text' size='40' name='%s' value=''></td></tr>",
-						"User name:&nbsp;","user"));
+				output.write(String.format("<tr><th align='right'>%s</th><td align='left'><input type='text' size='40' name='%s' value=''></td></tr>",
+						"OpenTox User name:&nbsp;","user"));
 				output.write(String.format("<tr><th align='right'>%s</th><td><input type='password' size='40' name='%s' value=''></td></tr>",
 						"Password:&nbsp;","password"));
 				output.write(String.format("<tr><td title=''></td><td><input type=CHECKBOX name='subjectid_secure' %s>Use secure cookie for the OpenSSO token</option></td></tr>",
 						item.isUseSecureCookie()?"SELECTED CHECKED":""));
 				output.write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log in\"></td></tr>");
+				
 				output.write("</form>");
+
 				output.write("</tbody></table>");
 			} else {
 				output.write("<form method='post' action='?method=delete'>");
@@ -86,7 +92,6 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 	@Override
 	public void footer(Writer output, Iterator<OpenSSOUser> query) {
 		try {
-
 			
 			AmbitResource.writeHTMLFooter(output, "OpenSSO User", getRequest());
 			output.flush();
