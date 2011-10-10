@@ -78,7 +78,8 @@ Then, when the "get(Variant)" method calls you back,
  you would connect to your database, throw any exception that occurs and return a verified representation. 
 	 */
 
-
+	protected int maxRetry = 3;
+	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -136,7 +137,7 @@ Then, when the "get(Variant)" method calls you back,
 			cS.setPath("/");
 	        this.getResponse().getCookieSettings().add(cS);
 	        
-			int maxRetry=3;
+
 			if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) {
 				return new WadlRepresentation();
 			} else	
@@ -170,18 +171,12 @@ Then, when the "get(Variant)" method calls you back,
 		        	} catch (ResourceException x) {
 		    			throw x;			        	
 		        	} catch (NotFoundException x) {
-		        		processNotFound(x,retry);
+		        		Representation r = processNotFound(x,retry);
+		        		if (r!=null) return r;
 		    			
 		        	} catch (SQLException x) {
-		        		Context.getCurrentLogger().severe(x.getMessage());
-		        		if (retry <maxRetry) {
-		        			retry++;
-		        			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x,String.format("Retry %d ",retry));
-		        			continue;
-		        		}
-		        		else {
-		        			throw new RResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x,variant);
-		        		}
+		        		Representation r = processSQLError(x,retry,variant);
+		        		if (r==null) continue; else return r;
 		        	} catch (Exception x) {
 		        		Context.getCurrentLogger().severe(x.getMessage());
 		    			throw new RResourceException(Status.SERVER_ERROR_INTERNAL,x,variant);
@@ -215,9 +210,21 @@ Then, when the "get(Variant)" method calls you back,
 		}
 	}		
 	
-	protected void processNotFound(NotFoundException x, int retry) throws Exception {
+	protected Representation processNotFound(NotFoundException x, int retry) throws Exception {
 		throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Query returns no results! %s",x.getMessage()));
 	}
+	protected Representation processSQLError(SQLException x, int retry,Variant variant) throws Exception {
+		Context.getCurrentLogger().severe(x.getMessage());
+		if (retry <maxRetry) {
+			retry++;
+			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x,String.format("Retry %d ",retry));
+			return null;
+		}
+		else {
+			throw new RResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,x,variant);
+		}
+	}	
+
 	protected void customizeEntry(T entry, Connection conection) throws ResourceException {
 		
 	}
