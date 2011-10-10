@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -27,6 +28,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected int numberofHeaderLines  = 1;
 	protected boolean writeCompoundURI = true;
 	protected Property similarityColumn;
+	protected String licenseColumn = null;
 			
 	public Property getSimilarityColumn() {
 		return similarityColumn;
@@ -71,6 +73,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		this(template,null,"");
 	}
 	public CSVReporter(Template template, Profile groupedProperties, String urlPrefix) {
+
 		setUrlPrefix(urlPrefix);
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
@@ -102,6 +105,18 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			};
 		});	
 	}
+	@Override
+	public void setLicenseURI(String licenseURI) {
+		super.setLicenseURI(licenseURI);
+		if (isIncludeLicenseInTextFiles()) {
+			licenseColumn = "http://purl.org/dc/terms/rights";
+			for (ISourceDataset.license l : ISourceDataset.license.values())
+				if (l.getURI().equals(getLicenseURI())) {
+					licenseColumn = "http://purl.org/dc/terms/license";
+					break;
+				}		
+		} else licenseColumn = null;
+	}
 	public void footer(Writer output, Q query) {
 	
 		try { 
@@ -129,7 +144,11 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			} else 	if (numberofHeaderLines == 1) {
 				writer.write("Compound");
 				for (Property p : header) 
-					writer.write(String.format("%s\"%s %s\"", separator,p.getName()==null?"N?A":p.getName(),p.getUnits()==null?"":p.getUnits()));	
+					writer.write(String.format("%s\"%s %s\"", separator,p.getName()==null?"N?A":p.getName(),p.getUnits()==null?"":p.getUnits()));
+				
+				if (licenseColumn!=null)
+					writer.write(String.format("%s%s",separator,licenseColumn));
+				
 				writer.write(lineseparator);
 			} else {
 				writer.write("");
@@ -149,6 +168,10 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				writer.write("");
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s\"", separator,p.getUnits()));
+
+				if (licenseColumn!=null)
+					writer.write(String.format("%s%s",separator,licenseColumn));
+				
 				writer.write(lineseparator);			
 			}
 		}
@@ -196,6 +219,8 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				i++;
 				delimiter = separator;
 			}
+			if (licenseColumn!=null)
+				writer.write(String.format("%s%s",separator,getLicenseURI()));
 			
 		} catch (Exception x) {
 			logger.error(x);

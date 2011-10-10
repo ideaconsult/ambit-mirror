@@ -41,7 +41,7 @@ import ambit2.base.data.Property;
 public class PropertyCalculationProcessor extends  DescriptorCalculationProcessor {
 	protected Property property = null;
 	protected Map<Class,IMolecularDescriptor> cache = new ConcurrentHashMap<Class, IMolecularDescriptor>(); 
-	protected boolean useCache = false;
+	protected boolean useCache = true;
 	/**
 	 * 
 	 */

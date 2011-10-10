@@ -36,3 +36,4 @@ MAXRECORDS=0
 atomtypes.stop=false
 OBABEL_HOME=${OBABEL_HOME}
 DRAGON_HOME=${DRAGON_HOME}
+license.intextfiles=${license.intextfiles}
