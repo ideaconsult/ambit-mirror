@@ -99,13 +99,13 @@
 	        <activeByDefault>false</activeByDefault>
 	      </activation>
     	<properties>
-    	<license.intextfiles>true</license.intextfiles>
+    	<license.intextfiles>false</license.intextfiles>
     	</properties>
     </profile>
     <profile>
 	     <id>license-in-text-column</id>
 	      <activation>
-	        <activeByDefault>true</activeByDefault>
+	        <activeByDefault>false</activeByDefault>
 	      </activation>
     	<properties>
     	<license.intextfiles>true</license.intextfiles>
