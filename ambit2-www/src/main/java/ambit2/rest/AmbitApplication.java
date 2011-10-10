@@ -79,7 +79,6 @@ import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
-import ambit2.rest.users.SwitchUserResource;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in http://opentox.org/development/wiki/
@@ -140,9 +139,15 @@ public class AmbitApplication extends TaskApplication<String> {
 		Router router = new MyRouter(this.getContext());
 		router.attach("/help", AmbitResource.class);
 		
-		router.attach("/", AmbitResource.class);
-		router.attach("", AmbitResource.class);
-
+		Restlet login = createOpenSSOLoginRouter();
+		router.attach("/", login);
+		router.attach("", login);
+		/**
+		 * OpenSSO login / logout
+		 * Sets a cookie with OpenSSO token
+		 */
+		router.attach("/"+OpenSSOUserResource.resource,login );
+		
 		/**
 		 *  Points to the Ontology service
 		 *  /sparqlendpoint 
@@ -213,11 +218,7 @@ router.attach(String.format("/%s",AdminResource.resource),createProtectedResourc
 		 *  API extensions from this point on
 		 */
 
-		/**
-		 * OpenSSO login / logout
-		 * Sets a cookie with OpenSSO token
-		 */
-		router.attach("/"+OpenSSOUserResource.resource,createOpenSSOLoginRouter() );
+
 		
 		/**
 		 * Dataset reporting  /report
@@ -244,14 +245,14 @@ router.attach(String.format("/%s",AdminResource.resource),createProtectedResourc
 		 /**
 		  * login/logout for local users . TODO refactor to use cookies as in /opentoxuser
 		  */
-	     router.attach(SwitchUserResource.resource,createGuardGuest(SwitchUserResource.class));
+	   //  router.attach(SwitchUserResource.resource,createGuardGuest(SwitchUserResource.class));
 
 	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
 	     
-	     //StringWriter w = new StringWriter();
-	     //AmbitApplication.printRoutes(router,">",w);
-	     //System.out.println(w.toString());
+	     StringWriter w = new StringWriter();
+	     AmbitApplication.printRoutes(router,">",w);
+	     System.out.println(w.toString());
 
 		 return router;
 	}

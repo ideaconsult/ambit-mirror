@@ -538,13 +538,16 @@ window.setInterval(function() {
 					doc.getResource(),doc.getPrimaryTopic(),doc.getResource());
 			top += String.format("<a style=\"color:#99CC00\" href='%s' target='_API' title='REST API documentation'>REST API</a>&nbsp;",doc.getPrimaryDoc());
 			
-			if(request != null) {
-				Reference r = request.getResourceRef().hasQuery()?request.getResourceRef().clone():request.getResourceRef();
-				r.setQuery(null);
-				top += String.format("&nbsp;<a style=\"color:#99CC00\" href='%s/admin/policy?search=%s' target='_Policy' title='Click to view the access policies, assigned to this URI'>Access</a>", request.getRootRef(),Reference.encode(r.toString()));
-			}	
+	
 		} else top = "";
 
+		if(request != null) {
+			Reference r = request.getResourceRef().hasQuery()?request.getResourceRef().clone():request.getResourceRef();
+			r.setQuery(null);
+			top += String.format("&nbsp;<a style=\"color:#99CC00\" href='%s/admin/policy?search=%s' target='_Policy' title='Click to view the access policies, assigned to this URI'>Access</a>", request.getRootRef(),Reference.encode(r.toString()));
+
+		}
+		
 		w.write(String.format("<div class=\"row\"><span class=\"left\">&nbsp;%s",top));
 		w.write("</span>");
 		/*
@@ -567,7 +570,7 @@ window.setInterval(function() {
 				*/
 		
 		w.write(String.format("	<span class=\"right\">%s&nbsp;<a style=\"color:#99CC00\" href='%s/opentoxuser'>%s</a>",
-				top,
+				"",
 				baseReference.toString(),
 				request.getClientInfo().getUser()==null?"Login":"My account"));
 		
