@@ -23,9 +23,7 @@ import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.propertyvalue.PropertyValueResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.reference.ReferenceResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -539,6 +537,12 @@ window.setInterval(function() {
 					doc.getPrimaryTopic(),
 					doc.getResource(),doc.getPrimaryTopic(),doc.getResource());
 			top += String.format("<a style=\"color:#99CC00\" href='%s' target='_API' title='REST API documentation'>REST API</a>&nbsp;",doc.getPrimaryDoc());
+			
+			if(request != null) {
+				Reference r = request.getResourceRef().hasQuery()?request.getResourceRef().clone():request.getResourceRef();
+				r.setQuery(null);
+				top += String.format("&nbsp;<a style=\"color:#99CC00\" href='%s/admin/policy?search=%s' target='_Policy' title='Click to view the access policies, assigned to this URI'>Access</a>", request.getRootRef(),Reference.encode(r.toString()));
+			}	
 		} else top = "";
 
 		w.write(String.format("<div class=\"row\"><span class=\"left\">&nbsp;%s",top));
