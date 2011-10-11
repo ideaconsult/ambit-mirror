@@ -22,10 +22,12 @@ AMBIT {modules}
  
  [MySQL Workbench file] {{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-db/src/main/resources/ambit2/db/sql/ambit2.mwb}ambit2.mwb}}
  
- [SQL script] {{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-db/src/main/resources/ambit2/db/sql/ambit2.mwb}ambit2.mwb}}
+ [SQL script] {{{https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-db/src/main/resources/ambit2/db/sql/create_tables.sql}SQL}}
  
  [OpenTox report] {{{http://www.opentox.org/data/documents/development/opentoxreports/opentoxreportd32}OpenTox prototype database}}
 
+ []
+ 
  A previous version is described in
   
  [AMBIT, AMBITXT] Jeliazkova N., Jaworska J., Worth A. (2010) Chapter 17. Open Source Tools for Read-Across and Category Formation, In M. Cronin, & Madden J. (Eds.), {{{http://www.amazon.com/Silico-Toxicology-Principles-Applications-Issues/dp/1849730040}In Silico Toxicology : Principles and Applications}} (pp. 408-445). Cambridge, UK: RSC Publishing
