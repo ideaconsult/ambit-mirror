@@ -14,6 +14,7 @@ import ambit2.rest.aa.opensso.policy.OpenSSOPoliciesResource;
 import ambit2.rest.admin.fingerprints.FingerprintResource;
 import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.dataset.filtered.StatisticsResource;
+import ambit2.rest.dataset.filtered.StatisticsResource.StatsMode;
 
 public class AdminResource  extends CatalogResource<String> {
 	public static final String resource = "admin";
@@ -23,9 +24,13 @@ public class AdminResource  extends CatalogResource<String> {
 		super();
 		topics.add(String.format("%s/%s",resource,DatabaseResource.resource));
 		topics.add(String.format("%s/%s",resource,OpenSSOPoliciesResource.resource));
+
 		topics.add(String.format("%s%s",resource,StatisticsResource.resource));
+		for (StatsMode mode: StatsMode.values())
+			topics.add(String.format("%s%s/%s",resource,StatisticsResource.resource,mode.name()));
+		
 		topics.add(String.format("%s%s/%s",resource,FingerprintResource.resource,FPTable.fp1024.name()));
-		topics.add(String.format("%s%s/%s",resource,FingerprintResource.resource,FPTable.sk1024.name()));
+		topics.add(String.format("%s%s/%s",resource,FingerprintResource.resource,FPTable.sk1024.name()));		
 	}
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
@@ -33,5 +38,6 @@ public class AdminResource  extends CatalogResource<String> {
 
 		return topics.iterator();
 	}
+	
 
 }

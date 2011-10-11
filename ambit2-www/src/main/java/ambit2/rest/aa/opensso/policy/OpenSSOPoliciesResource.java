@@ -1,5 +1,7 @@
 package ambit2.rest.aa.opensso.policy;
 
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -12,23 +14,29 @@ import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
+import org.restlet.data.Language;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.security.User;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
+import ambit2.db.version.AmbitDBVersion;
 import ambit2.rest.AmbitApplication;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.TaskApplication;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
+import ambit2.rest.admin.DBHtmlReporter;
 import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
@@ -75,7 +83,21 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 				OpenSSOToken ssotoken = new OpenSSOToken(config.getOpenSSOService());
 				ssotoken.setToken(token);
 				policy.getURIOwner(ssotoken,uri,(OpenSSOUser)user, policies);
-				if (policies.size()==0) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+				if (policies.size()==0) {
+					return new Iterator<Policy>() {
+						@Override
+						public boolean hasNext() {
+							return false;
+						}
+						@Override
+						public Policy next() {
+							return null;
+						}
+						@Override
+						public void remove() {
+						}
+					};
+				}
 				//too bad, refactor the policy class to not use hashtable
 				
 				Enumeration<String> e = policies.keys();
@@ -170,4 +192,21 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			}
 		}
 	}	
+	
+	@Override
+	protected Representation processNotFound(NotFoundException x,Variant variant)
+			throws Exception {
+		if (MediaType.TEXT_HTML.equals(variant.getMediaType())) {
+			StringWriter output = new StringWriter();
+			PolicyHTMLReporter r = new PolicyHTMLReporter(getRequest(),true,getDocumentation());
+			r.setOutput(output);
+			r.header(output, null);
+			r.footer(output, null);
+			output.flush();
+			return new StringRepresentation(output.toString(),MediaType.TEXT_HTML);
+		} else return super.processNotFound(x, variant);
+	}
+	
+
+	
 }

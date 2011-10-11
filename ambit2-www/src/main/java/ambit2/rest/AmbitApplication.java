@@ -1,5 +1,7 @@
 package ambit2.rest;
+import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.Properties;
 
 import org.restlet.Component;
 import org.restlet.Context;
@@ -158,7 +160,8 @@ public class AmbitApplication extends TaskApplication<String> {
 		 *  Various admin tasks, like database creation
 		 */
 		
-router.attach(String.format("/%s",AdminResource.resource),createProtectedResource(createAdminRouter(),"admin"));
+		Restlet adminRouter = createAdminRouter();
+		router.attach(String.format("/%s",AdminResource.resource),protectAdminResource()?createProtectedResource(adminRouter,"admin"):adminRouter);
 
 		/** /policy - used for testing only  */
 		router.attach(String.format("/%s",PolicyResource.resource),PolicyResource.class);		
@@ -402,9 +405,9 @@ router.attach(String.format("/%s",AdminResource.resource),createProtectedResourc
 	 */
 	protected Restlet createAdminRouter() {
 		AdminRouter adminRouter = new AdminRouter(getContext());
-		DBCreateAllowedGuard sameIPguard = new DBCreateAllowedGuard();
-		sameIPguard.setNext(adminRouter);
-		return sameIPguard;
+		//DBCreateAllowedGuard sameIPguard = new DBCreateAllowedGuard();
+		//sameIPguard.setNext(adminRouter);
+		return adminRouter;
 	}
 	/**
 	 *  /ontology RDF playground, not used currently
@@ -643,6 +646,20 @@ router.attach(String.format("/%s",AdminResource.resource),createProtectedResourc
 	        return result;
     }
 */
+   
+
+	protected synchronized boolean protectAdminResource()  {
+		try {
+			Properties properties = new Properties();
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
+			properties.load(in);
+			in.close();		
+			return Boolean.parseBoolean(properties.getProperty("aa.admin"));
+
+		} catch (Exception x) {
+			return false;
+		}
+	}	
 
 }
 

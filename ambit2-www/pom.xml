@@ -111,6 +111,16 @@
     	<license.intextfiles>true</license.intextfiles>
     	</properties>
     </profile>    
+    <profile>
+    <!-- Activates /admin resources protection by OpenTox AA -->
+	     <id>aa.admin</id>
+	      <activation>
+	        <activeByDefault>false</activeByDefault>
+	      </activation>
+    	<properties>
+    	<aa.admin>true</aa.admin>
+    	</properties>
+    </profile>    
     </profiles>
       
   <build>
