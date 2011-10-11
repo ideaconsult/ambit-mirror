@@ -255,7 +255,13 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		//only name and license updated
 		SourceDataset dataset = new SourceDataset();
 		dataset.setName(form.getFirstValue("title"));
-		dataset.setLicenseURI(form.getFirstValue("license"));
+		String licenseOptions = form.getFirstValue("licenseOptions");
+		String license = form.getFirstValue("license");
+		if ((licenseOptions==null) || "Other".equals(licenseOptions))
+			dataset.setLicenseURI(license);
+		else 
+			dataset.setLicenseURI(licenseOptions);
+		
 		dataset.setrightsHolder(form.getFirstValue("rightsHolder"));
 		return dataset;
 	}

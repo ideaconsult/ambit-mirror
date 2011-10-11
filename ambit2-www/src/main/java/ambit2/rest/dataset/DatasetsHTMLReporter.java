@@ -394,9 +394,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	protected Object renderMetadata(ISourceDataset dataset,String uri,IQueryRetrieval<ISourceDataset> query)  throws AmbitException  {
 		try {
 			//output.write("<h4>Dataset metadata</h4>");
+			output.write("<form method='post' action='?method=put'>");
 			output.write("<table width='90%'>");
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Dataset URI",uri));
-			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Dataset name",dataset.getName()));
+			output.write(String.format("<tr><th>%s</th><td><input type='text' size='60' name='title' value='%s'></td></tr>", "Dataset name",dataset.getName()));
 			
 			String licenseLabel = dataset.getLicenseURI();
 			try {
@@ -408,24 +409,43 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 			} catch (Exception x) {}
 			
+			StringBuilder select = new StringBuilder();
+			select.append("<select name='licenseOptions'>");
+			ISourceDataset.license selected = null;
+			for (ISourceDataset.license l : ISourceDataset.license.values()) {
+				select.append(String.format("<option value='%s' %s>%s</option>",
+						l.getURI(),
+						l.getURI().equals(dataset.getLicenseURI())?"selected='selected'":"",
+						l.getTitle()));
+				if ((selected==null) & l.getURI().equals(dataset.getLicenseURI())) 
+					selected = l;
+			}
+			select.append(String.format("<option value='Other' %s>Other</option>",selected==null?"selected='selected'":""));			
+			select.append("</select>");
+			
 			if (dataset.getLicenseURI()!=null)
-				output.write(String.format("<tr><th>%s</th><td><a href='%s' target='_blank'>%s</a></td></tr>", 
-							"License",
-							dataset.getLicenseURI()==null?"NA":dataset.getLicenseURI(),
-							licenseLabel==null?dataset.getLicenseURI():licenseLabel
+				output.write(String.format("<tr><th>%s</th><td>%s<br><input type='text' size='60' name='license' title='%s' value='%s'></td></tr>", 
+							"License/Rights",
+							select.toString(),
+							licenseLabel==null?dataset.getLicenseURI():licenseLabel,
+							dataset.getLicenseURI()==null?"":dataset.getLicenseURI()
+							
+								
 							));
 			else
-				output.write("<tr><th>License</th><td>NA</td></tr>"); 
+				output.write("<tr><th>License</th><td><input type='text' size='60' name='license' title='Enter license URI' value=''></td></tr>"); 
 			
 			if (dataset.getrightsHolder()!=null)
-				output.write(String.format("<tr><th>%s</th><td><a href='%s' target='_blank'>%s</a></td></tr>", 
+				output.write(String.format("<tr><th>%s</th><td><input type='text' size='60' title='Rights holder (URI)' name='rightsHolder' value='%s'></td></tr>", 
 							"Rights holder",
 							dataset.getrightsHolder(),
 							dataset.getrightsHolder()));
 
 			else
-				output.write("<tr><th>Rights holder</th><td>NA</td></tr>"); 			
-						
+				output.write("<tr><th>Rights holder</th><td><input type='text' size='60' title='Rights holder (URI)' name='rightsHolder' value=''></td></tr>"); 			
+			
+
+			output.write(String.format("<tr><th>%s</th><td><input align='bottom' type=\"submit\" value=\"%s\"></td></tr>", "","Update"));								
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Source",dataset.getSource()));
 			
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
@@ -447,7 +467,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			output.write(String.format("<tr><th></th><td colspan='2'><a href='%s/chart/bar?dataset_uri=%s&param=fp1024' target='_blank'>%s</a></td></tr>", 
 					uriReporter.getBaseReference(),uri,"Hashed fingerprints bar chart"));			
 			output.write("</table>");
-			
+			output.write("</form>");			
 			output.write("<hr>");
 			//output.write("<h4>Add more data to this dataset</h4>");
 			//uploadUI(uri,output, query);
