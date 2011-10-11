@@ -145,9 +145,9 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 			        	
 			        	return r;
 		        	} catch (NotFoundException x) {
+		        		Representation r = processNotFound(x,variant);
+		        		return r;
 
-		    			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND, new NotFoundException(x.getMessage()));
-		    			return null;
 		    			
 		        	} catch (RResourceException x) {
 		    			getResponse().setStatus(x.getStatus());
@@ -173,7 +173,13 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL,x);
 			return null;
 		}
-	}				
+	}			
+	
+	protected Representation processNotFound(NotFoundException x,Variant variant) throws Exception {
+
+		throw new NotFoundException(x.getMessage());
+
+	}
 	/**
 	 * Returns parameter value and throwsan exception if value is missing of mandatory parameter
 	 * @param requestHeaders
