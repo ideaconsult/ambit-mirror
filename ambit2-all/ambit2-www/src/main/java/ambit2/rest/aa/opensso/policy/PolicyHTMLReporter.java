@@ -17,6 +17,7 @@ import ambit2.rest.admin.AdminResource;
  */
 public class PolicyHTMLReporter extends PolicyURIReporter {
 	protected boolean collapsed = false;
+	protected int records  = 0;
 	/**
 	 * 
 	 */
@@ -89,6 +90,7 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 
 	public void processItem(Policy item, Writer output) {
 		try {
+			records++;
 			String t = super.getURI(item);
 			output.write(String.format("Policy:&nbsp;<a href='%s'>%s</a>&nbsp;", t,item.getId()));
 			
@@ -111,8 +113,10 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 	@Override
 	public void footer(Writer output, Iterator<Policy> query) {
 		try {
-			output.write("</tbody></table>");
 			
+			output.write("</tbody></table>");
+			output.write(String.format(records==0?"<h4>%sCreate a new policy for this resource.</h4>":"<h4>%d policies found.</h4>",records==0?"Not found! ":records));
+
 			output.write(String.format("<a href='%s/%s/%s'>Back</a>",getRequest().getRootRef(),AdminResource.resource,OpenSSOPoliciesResource.resource));
 			AmbitResource.writeHTMLFooter(output, OpenSSOPoliciesResource.resource, getRequest());
 			output.flush();

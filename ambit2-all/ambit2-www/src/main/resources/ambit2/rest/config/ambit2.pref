@@ -24,6 +24,14 @@ service.ontology=${service.ontology}
 #Add dataset prefix for compound URI, e.g.  /dataset/1/compound/1 , instead of /compound/1
 #Experimental. Should be used if AA is on, see config.prop file
 dataset.members.prefix=${dataset.members.prefix}
+#Where to find OpenBabel executable
+OBABEL_HOME=${OBABEL_HOME}
+#Where to find Dragon6 executable
+DRAGON_HOME=${DRAGON_HOME}
+#Add a column with the license in CSV and TXT files
+license.intextfiles=${license.intextfiles}
+#Protect /admin resources via OpenTox AA
+aa.admin=${aa.admin}
 #Ambit XT (standalone) properties only
 startMySQL=true
 showAromaticity=true
@@ -34,6 +42,3 @@ smilesParser=true
 defaultDir=
 MAXRECORDS=0
 atomtypes.stop=false
-OBABEL_HOME=${OBABEL_HOME}
-DRAGON_HOME=${DRAGON_HOME}
-license.intextfiles=${license.intextfiles}
