@@ -113,7 +113,7 @@
     </profile>    
     <profile>
     <!-- Activates /admin resources protection by OpenTox AA -->
-	     <id>aa.admin</id>
+	     <id>aa-admin-enabled</id>
 	      <activation>
 	        <activeByDefault>false</activeByDefault>
 	      </activation>
@@ -121,6 +121,16 @@
     	<aa.admin>true</aa.admin>
     	</properties>
     </profile>    
+    <profile>
+    <!-- Disables /admin resources protection by OpenTox AA -->
+	     <id>aa-admin-disable</id>
+	      <activation>
+	        <activeByDefault>false</activeByDefault>
+	      </activation>
+    	<properties>
+    	<aa.admin>false</aa.admin>
+    	</properties>
+    </profile>     
     </profiles>
       
   <build>
