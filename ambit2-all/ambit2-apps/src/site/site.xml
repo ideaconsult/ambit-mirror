@@ -26,7 +26,8 @@
 </script>
 
   <!-- Google Analytics - End -->
-  
+
+
  <script type="text/javascript">
       function expand( item ) {
         var expandIt = document.getElementById( item );
@@ -58,6 +59,7 @@
       <item name="AMBIT REST web services" href="http://apps.ideaconsult.net:8080/ambit2"/>
     </links>
     
+    
    <menu name="AMBIT">
 
       <item name="Introduction" href="/index.html"/>
@@ -83,6 +85,9 @@
              <item name="AMBIT modules" href="./download_ambitlibs.html"/>
  		</item>             
       </item>
+      <!--
+      <item name="Search" href="/search.html"/>
+      -->
 	</menu>
 	
 

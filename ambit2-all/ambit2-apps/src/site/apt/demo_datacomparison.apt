@@ -1,0 +1,98 @@
+ -----
+ Dataset comparison demo
+ -----
+ jeliazkova.nina@gmail.com
+ -----
+ Oct 2010
+
+Dataset comparison demo 
+
+*{Dataset to compare with}
+~~~~~~~~~~
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/53?page=0&pagesize=10}Bursi AMES Toxicity Dataset}} 
+ 
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/53/metadata}Metadata}}
+
+*{Methodology}
+~~~~~~~
+
+ * Use an {{{./api_algorithm.html}OpenTox algorithm}} of type {{{https://ambit.uni-plovdiv.bg:8443/ambit2/algorithm?type=AppDomain}Applicability domain}},
+ which calculates similarity to a dataset. The algorithm accepts the {{Dataset to compare with}} via HTTP POST command 
+   
++------
+ curl -X POST http://HOST:port/ambit2/algorithm/thealgorithm -d "dataset_uri=the-dataset" -i
++------   
+ 
+ and builds an OpenTox {{{https://ambit.uni-plovdiv.bg:8443/ambit2/model/53142}http://HOST:port/ambit2/model/mymodel}} 
+	
+ * The model can be used to calculate similarity of any new compound/dataset to the {{Dataset to compare with}} via POST command to the model:
+ 
++------
+ curl -X POST http://HOST:port/ambit2/model/mymodel -d "dataset_uri=any-dataset" -i
++------   
+ 
+*Results
+ 
+ The cURL command returns URI of an {{{./api_dataset.html}OpenTox dataset}} with {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/53?feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/model/53142/predicted}predictions}}.
+ The results are stored under {{{https://ambit.uni-plovdiv.bg:8443/ambit2/model/53142/predicted}model predicted variables}} (as for any {{{./api_model.html}OpenTox model}}),
+	
+[./images/demo/histogram_bursi_53.png] 
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/53&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9} A histogram of the Tanimoto distances }}
+
+*{Comparison with other datasets}
+~~~~~~~~~~
+ 
+[./images/demo/histogram_model-bursi_ECHA-3.png] 
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/3&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/3?page=0&pagesize=10}ECHA Preregistration list}} 
+
+[./images/demo/histogram_model-bursi_PUBCHEM-6489.png] 
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/6489&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/6489?page=0&pagesize=10}PubChem}} 
+  
+[./images/demo/histogram_model-bursi_NTPBSI-27.png] 
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/27&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/27?page=0&pagesize=10}NTPBSI dataset}} 
+
+[./images/demo/histogram_model-bursi_Benchmark-51.png] 
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/51&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/51?page=0&pagesize=10}Benchmark Data Set for In Silico Prediction of Ames Mutagenicity dataset}}  	
+
+[./images/demo/histogram_model-bursi_EPIKOWWIN-71.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/11&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/71?page=0&pagesize=10}EPI_Kowwin dataset}}	 		 	
+ 
+[./images/demo/histogram_model-bursi_ISSCAN-31.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/31&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/31?page=0&pagesize=10}ISSCAN dataset}}
+
+[./images/demo/histogram_model-bursi_CPDBAS-9.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/9&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/9?page=0&pagesize=10}CPDBAS dataset}}
+
+[./images/demo/histogram_model-bursi_FDAMDD-15.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/15&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/15?page=0&pagesize=10}FDAMDD dataset}}	 	
+  
+[./images/demo/histogram_model-bursi_TOXCST2-39.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/39&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/39?page=0&pagesize=10}TOXCAST Phase II dataset}}	 	
+
+[./images/demo/histogram_model-bursi_TOXCST-37.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/37?page=0&pagesize=10}TOXCAST Phase I dataset}}	 	
+  
+[./images/demo/histogram_model-bursi_IRISTR-21.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/21&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/21?page=0&pagesize=10}IRISTR dataset}}	 	
+
+[./images/demo/histogram_model-bursi_EPAFHM-13.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/13&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/13?page=0&pagesize=10}EPAFHM dataset}}	 	
+    
+[./images/demo/histogram_model-bursi_DBPCAN-11.png]
+
+ {{{https://ambit.uni-plovdiv.bg:8443/ambit2/chart/histogram?dataset_uri=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/11&feature_uris[]=https%3A%2F%2Fambit.uni-plovdiv.bg%3A8443%2Fambit2%2Fmodel%2F53142%2Fpredicted&w=600&h=200&maxX=0.9}A histogram of the Tanimoto distances}} of {{{https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/11?page=0&pagesize=10}DBPCAN dataset}}
+ 

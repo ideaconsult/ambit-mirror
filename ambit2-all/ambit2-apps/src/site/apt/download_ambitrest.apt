@@ -12,6 +12,17 @@
 	
 	Try {{{http://toxpredict.org/}ToxPredict}} - demo application, consuming OpenTox REST services.
 
+*Download AMBIT REST Web services 2.4.3
+
+	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.3/http/aa/ambit2.war}ambit2.war}}, A&A enabled {{{./install_ambitrest.html#Protected AMBIT web services}?}}, configured to run under <<http://>> 
+	
+	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.3/https/ambit2.war}ambit2.war}}, A&A enabled {{{./install_ambitrest.html#Protected AMBIT web services}?}}, configured to run under <<https://>> 
+	
+	[{Database content}] None. Create an empty database as described in {{{./install_ambitrest.html}Install your own service}} guide. Import chemical compounds and data by navigating to {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}}
+	and using the web form for upload. Alternatively,use HTTP POST to {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}} via  {{{./api_dataset.html}OpenTox API}}.  
+	
+    []
+    
 *Download AMBIT REST Web services 2.4.1
 
 	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.1/AA/ambit2.war}ambit2.war}}, A&A enabled {{{./install_ambitrest.html#Protected AMBIT web services}?}}
@@ -53,26 +64,38 @@
     
 *Configuration 
 
-	The default database is <ambit2> and the default user is <guest>. 
-	These are created automatically, if following the {{{./install_ambitrest.html}instructions}} above. 
-    
-    A pointer to an {{{./download_ontologyservice.html}OpenTox Ontology service}} is provided by {{{http://localhost:8080/ambit2/sparqlendpoint}http://yourhost:8080/ambit2/sparqlendpoint}}, but not directly used by AMBIT REST services. 
-    Setting the pointer may affect external applications (e.g. ToxPredict). 
-    
-    The pre-configured Ontology Service at expected at {{{http://localhost:8080/ontology}http://yourhost:8080/ontology}}. 
-    After deployment to the servlet container, 
-    this can be changed by editing the configuration files 
-    
+	After deployment to the servlet container, the following configuration files can be modified:
+
+**General configuration:
+
 +---------------------------------     
     WEB-INF/classes/ambit2/rest/config/ambit2.pref 
 +---------------------------------     
 
-    and 
-    
+*** Database
+
+	The default database is <ambit2> and the default user is <guest>. 
+	These are created automatically, if following the {{{./install_ambitrest.html}instructions}} above.
+
+	To modify, editing <<ambit.pref>> configuration file and restart the service.
+
+*** Ontology service
+
+    A pointer to an {{{./download_ontologyservice.html}OpenTox Ontology service}} is provided by {{{http://localhost:8080/ambit2/sparqlendpoint}http://yourhost:8080/ambit2/sparqlendpoint}}, but not directly used by AMBIT REST services. 
+    Setting the pointer may affect external applications (e.g. ToxPredict). 
+    The pre-configured Ontology Service at expected at {{{http://localhost:8080/ontology}http://yourhost:8080/ontology}}. 
+
+	To modify, editing <<ambit.pref>> configuration file and restart the service.
+
+***Authentication and authorisation:
 +---------------------------------         
     WEB-INF/classes/ambit2/rest/config/config.prop.
 +---------------------------------     
 
+	AMBIT REST services use OpenTox {{{http://opentox.org/dev/apis/api-1.2/AA}Authentication and Authorisation}} infrastructure, which is based on {{{http://forgerock.com/openam.html}OpenAM}}.
+	Enable/disable AA, set OpenTox identity and policy service.
+ 	To modify, editing <<ambit.pref>> configuration file and restart the service.
+ 
 **Create models
 
 	Upon a fresh install, only {{{http://localhost:8080/ambit2/algorithms}Algorithms}} are available. To create models use the web form, available at each algorithm page, or {{{http://curl.haxx.se/}cURL}} command:

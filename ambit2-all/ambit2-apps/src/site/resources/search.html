@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Install your own AMBIT REST Web services</title>
+    <link rel="stylesheet" href="./css/maven-theme.css" type="text/css" />
+    <link rel="stylesheet" href="./css/maven-base.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/prettify.css" type="text/css"/>
+    <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
+      
+  <link rel="stylesheet" href="//www.google.com/cse/style/look/default.css" type="text/css" />
+  <script src="//www.google.com/jsapi" type="text/javascript"></script>
+    <script type="text/javascript" src="./js/prettify.js"></script>
+    <script type="text/javascript" src="./js/niftycube.js"></script>
+    <script type="text/javascript">
+        window.onload=function() {
+            Nifty("div\#wrapper", "big");
+            Nifty("div#breadcrumbs", "small");
+            Nifty("div\#navcolumn", "small");
+            Nifty("div.source", "medium");
+            prettyPrint();
+        }
+    </script>
+          <meta name="author" content="Nina Jeliazkova" />
+        <meta name="Date-Revision-yyyymmdd" content="20111012" />
+                                                    
+
+<script type="text/javascript">var _gaq = _gaq || [];
+
+  _gaq.push(['_setAccount', 'UA-25223944-1']);
+
+  _gaq.push(['_trackPageview']);
+
+
+
+  (function() {
+
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+
+  })();</script>
+                                                        
+
+<script type="text/javascript">function expand( item ) {
+
+        var expandIt = document.getElementById( item );
+
+        if( expandIt.style.display == "block" ) {
+
+          expandIt.style.display = "none";
+
+          expandIt.parentNode.className = "collapsed";
+
+        } else {
+
+          expandIt.style.display = "block";
+
+          expandIt.parentNode.className = "expanded";
+
+        }
+
+      }</script>
+                    </head>
+  <body>
+    <div id="wrapper">
+        <div id="banner">
+                      <a href="index.html" id="bannerLeft"  >
+    
+                                    <img src="http://ambit.sourceforge.net/images/ambit-logo.png" alt="Ambit" />
+    
+            </a>
+                              <div id="bannerRight">
+    
+                                    <img src="http://ambit.sourceforge.net/images/ambit-version.png" alt="Ambit" />
+    
+            </div>
+                <div class="clear">
+            <hr/>
+          </div>
+        </div>
+        <div id="breadcrumbs">
+              
+  
+
+  
+    
+    
+  
+    
+            <div class="xleft">
+        <span id="projectVersion">Version: 2.4.3</span>
+              </div>
+                <div class="xright">            <a href="http://toxtree.sf.net" class="externalLink">Toxtree</a>
+            |
+                <a href="http://ihcp.jrc.ec.europa.eu/our_labs/computational_toxicology/qsar_tools/toxmatch" class="externalLink">Toxmatch</a>
+            |
+                <a href="http://toxpredict.org" class="externalLink">ToxPredict</a>
+            |
+                <a href="http://ambit.sourceforge.net" class="externalLink">AMBIT 2.0</a>
+            |
+                <a href="http://apps.ideaconsult.net:8080/ambit2" class="externalLink">AMBIT REST web services</a>
+            
+  
+
+  
+    
+    
+  
+    
+  </div>
+          <div class="clear">
+            <hr/>
+          </div>
+        </div>
+        <div id="leftColumn">
+          <div id="navcolumn">
+               
+  
+
+  
+    
+    
+  
+    
+                       <h5>AMBIT</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="index.html">Introduction</a>
+          </li>
+              
+                
+                    
+                  
+                  
+                  
+                        
+                  
+                  
+                  
+                        
+                  
+                        
+                  
+                  
+                  
+                    
+        <li class="collapsed">
+                    <a href="downloads.html">Download</a>
+                </li>
+              
+    <li class="none">
+                    <a href="search.html">Search</a>
+          </li>
+          </ul>
+              <h5>AMBIT REST web services</h5>
+            <ul>
+              
+                
+                    
+                  
+                  
+                  
+                  
+                        
+                  
+                  
+                  
+              
+        <li class="collapsed">
+                    <a href="api.html">OpenTox API (with examples)</a>
+                </li>
+              
+                
+                    
+              
+        <li class="collapsed">
+                    <a href="ambit_services.html">AMBIT OpenTox API implementation</a>
+                </li>
+          </ul>
+              <h5>Support</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="support.html">Support and feedback</a>
+          </li>
+              
+    <li class="none">
+                    <a href="http://sourceforge.net/projects/ambit/forums" class="externalLink">Forum</a>
+          </li>
+              
+    <li class="none">
+                    <a href="mail-lists.html">Mailing lists</a>
+          </li>
+              
+    <li class="none">
+                    <a href="issue-tracking.html">Bug reports</a>
+          </li>
+          </ul>
+              <h5>AMBIT publications</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="pubs_citeambit.html">How to cite AMBIT</a>
+          </li>
+          </ul>
+              <h5>Project Documentation</h5>
+            <ul>
+              
+                
+                    
+                  
+                  
+                  
+                  
+              
+        <li class="collapsed">
+                    <a href="project-info.html">Project Information</a>
+                </li>
+          </ul>
+                                                     
+                        
+                        
+            <a href="http://sourceforge.net/projects/ambit" title="SourceForge" class="poweredBy">
+                            <img  class="poweredBy"
+                    alt="SourceForge"
+                    src="http://sflogo.sourceforge.net/sflogo.php?group_id=191756&type=12"
+                    width="90"
+                    height="30"
+              />
+            </a>
+                                   
+  
+
+  
+    
+    
+  
+    
+            <div id="lastPublished">
+        <span id="publishDate">Last Published: 10-12-11</span>
+              </div>
+                </div>
+        </div>
+        <div id="bodyColumn">
+          <div id="contentBox">
+
+ <div id="cse" style="width: 75%;">Loading</div>
+
+<script type="text/javascript"> 
+  google.load('search', '1', {language : 'en'});
+  google.setOnLoadCallback(function() {
+    var customSearchControl = new google.search.CustomSearchControl('003845121398893549215:uyznkyyvppa');
+    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+    customSearchControl.draw('cse');
+  }, true);
+</script>
+
+  </div>
+  </div>
+  </body>
+</html>
