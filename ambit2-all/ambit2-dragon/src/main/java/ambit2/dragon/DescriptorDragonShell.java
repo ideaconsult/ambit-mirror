@@ -59,10 +59,13 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
 
     public DescriptorDragonShell() throws ShellException {
         super();
-        shell = new DragonShell();
+        shell = createDragonShell();
       
     }
 
+    protected DragonShell createDragonShell() throws ShellException  {
+    	return new DragonShell();
+    }
     public String toString() {
     	return "Dragon6 descriptors";
     }
