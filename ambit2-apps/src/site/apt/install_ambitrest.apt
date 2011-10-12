@@ -32,7 +32,9 @@ Install your own {AMBIT REST Web services}
   	-H "subjectid:OPENSSOTOKEN" http://yourhost:8080/ambit2/admin/database 
 +---------------------------------	
 
-	Note: <mysqladminuser> should be existing MySQL user with sufficient privileges to create a database.
+   or navigate to {{{http://localhost:8080/ambit2/admin/admin/database}http://localhost:8080/ambit2/admin/admin/database}} and use the {{{[./images/create_db.png}web form}}.
+  
+	Note: <mysqladminuser> should be existing MySQL user with sufficient privileges to create a database. A database can be created only if it does not exist.
 	
 	[[6]] If successfull, reading the URL {{{http://localhost:8080/ambit2/admin/database}http://yourhost:8080/ambit2/admin/database}} will return the database name and some other info.
 	
@@ -52,7 +54,15 @@ Install your own {AMBIT REST Web services}
 	{{{http://opentox.org/dev/apis/api-1.2/AA}OpenTox Authentication and Authorization}} infrastructure. 
 	Security tokens are obtained after log in into the {{{http://forgerock.com/openam.html}OpenAM}} service at <http://opensso.in-silico.ch/auth/authenticate>.
 
+*Code
+
+    Java OpenTox AA client library is {{{./download_aaclient.html}available}}.
+
+*Accounts    
+
 	OpenTox user accounts can be obtained via free registration at {{{http://opentox.org/join_form}OpenTox site}}.
+	
+* Logging in
 	
 +---------------------------
 	curl -X POST -d "username=YOUR-OPENTOX-USER" -d "password=YOUR-OPENTOX-PASSWORD" \
@@ -62,6 +72,21 @@ Install your own {AMBIT REST Web services}
 	AMBIT services offer log in via its {{{http://apps.ideaconsult.net:8080/ambit2/opentoxuser}web page}}.
 	
 	The relevant link for a local installation is {{{http://localhost:8080/ambit2/opentoxuser}http://yourhost:8080/ambit2/opentoxuser}}.
+
+[./images/login.png] Log in web page	
 	
-    Java OpenTox AA client library is {{{./download_aaclient.html}available}}.
  	 
+*Protecting resources
+
+	After deploying AA enabled AMBIT services, <</dataset>> resources are not accessible. An access policy has to be defined, as explained below.
+
+	Navigate to {{{http://localhost:8080/ambit2/admin/policy}http://localhost:8080/ambit2/admin/policy}} and use the web interface to create new policies.
+	Replace <<http://localhost:8080>> with your real URI!
+	
+[./images/create_policy.png] Create access policy for an URI. 
+	
+	Alternatively, use {{{http://opentox.org/dev/apis/api-1.2/AA}OpenTox API}} or the Java library above.
+ 	 
+	On data upload the new datasets are assigned a default policy, allowing read write access only to the user, who has uploaded the dataset.
+	Additional policies can be defined as above.
+	
