@@ -103,13 +103,21 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 	}	
 	protected IStructureRecord getStructure() {
 		String uri = getParams().getFirstValue(OpenTox.params.compound_uri.toString());
+		Reference base = getRequest().getRootRef();
+
+		int index = uri==null?-1:uri.indexOf("/dataset/");
+		if (index>0) {
+			index = uri.indexOf("/",index+10);
+			base = new Reference(uri.substring(0,index));
+		}
+		
 		int compoundid  = -1;
 		int conformerid  = -1;
 		if (uri!= null) {
-			Object id = OpenTox.URI.compound.getId(uri,getRequest().getRootRef());
+			Object id = OpenTox.URI.compound.getId(uri,base);
 			if (id == null) {
 				Object[] ids;
-				ids = OpenTox.URI.conformer.getIds(uri,getRequest().getRootRef());
+				ids = OpenTox.URI.conformer.getIds(uri,base);
 				compoundid  = ((Integer) ids[0]).intValue();
 				conformerid = ((Integer) ids[1]).intValue();
 			} else  
