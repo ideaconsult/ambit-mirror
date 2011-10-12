@@ -117,7 +117,7 @@ Then, when the "get(Variant)" method calls you back,
 		return queryObject;
 	}
 	
-	protected void configureDatasetMembersPrefixOption(boolean prefix) {
+	public void configureDatasetMembersPrefixOption(boolean prefix) {
 		dataset_prefixed_compound_uri = prefix;
 	}
 	protected void configureRDFWriterOption(String defaultWriter) {
