@@ -36,20 +36,20 @@
 			</properties>			
 	    </profile>
     
-    <!-- Release build, without AA -->
+    <!-- Release build. Use together with profile -P aa-enabled or -P aa-disabled, and -P http or -P https -->
       <profile>
-      <id>ambit-release-no-aa</id>
+      <id>ambit-release</id>
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
         <google.analytics>UA-8771500-5</google.analytics>
-         <rdf.writer>stax</rdf.writer>
+        <rdf.writer>stax</rdf.writer>
         <ambit.db>ambit2</ambit.db>
         <ambit.db.user.test>guest</ambit.db.user.test>
         <ambit.db.user.test.password>guest</ambit.db.user.test.password>
         <ambit.db.create.allow>true</ambit.db.create.allow>
-        <dataset.members.prefix>false</dataset.members.prefix>
+      
         <ambit.db.host>localhost</ambit.db.host>
         <!-- root pasword for creating new db, used for testing -->
         <ambit.db.user.root.password></ambit.db.user.root.password>
@@ -60,39 +60,41 @@
         <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
         <aa.user>guest</aa.user>
         <aa.pass>guest</aa.pass>
-        <aa.enabled>false</aa.enabled>
+        
+       <!-- The folder, containing Dragon6 executable. Could be changed after deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref --> 
+		<DRAGON_HOME>/usr/local/dragon</DRAGON_HOME>
+		<!-- The folder, containing OpenBabel executable. Could be changed after deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
+		<OBABEL_HOME>/usr/local/openbabel/bin</OBABEL_HOME>
+		        
        </properties>
     </profile>
     
     <!--  release build, with AA -->
-      <profile>
-      <id>ambit-release-aa</id>
+    <profile>
+      <id>aa-enabled</id>
+
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
-        <google.analytics>UA-8771500-5</google.analytics>
-         <rdf.writer>stax</rdf.writer>
-        <ambit.db>ambit2</ambit.db>
-        <ambit.db.user.test>guest</ambit.db.user.test>
-        <ambit.db.user.test.password>guest</ambit.db.user.test.password>
-        <ambit.db.create.allow>true</ambit.db.create.allow>
-        <dataset.members.prefix>true</dataset.members.prefix>
-        <ambit.db.host>localhost</ambit.db.host>
-        <!-- root pasword for creating new db, used for testing only -->
-        <ambit.db.user.root.password></ambit.db.user.root.password>
-		
-        <service.ontology>https://localhost:8443/ontology</service.ontology>
-
-       <!-- AA -->
-        <aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
-        <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
-        <aa.user>guest</aa.user>
-        <aa.pass>guest</aa.pass>
         <aa.enabled>true</aa.enabled>
-
+        <dataset.members.prefix>true</dataset.members.prefix>
       </properties>
     </profile>
+    
+    
+    <!--  release build, without AA -->
+    <profile>
+      <id>aa-disabled</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <aa.enabled>false</aa.enabled>
+        <dataset.members.prefix>false</dataset.members.prefix>
+      </properties>
+    </profile>    
+    
     <profile>
 	     <id>no-license-in-text-column</id>
 	      <activation>
@@ -123,7 +125,7 @@
     </profile>    
     <profile>
     <!-- Disables /admin resources protection by OpenTox AA -->
-	     <id>aa-admin-disable</id>
+	     <id>aa-admin-disabled</id>
 	      <activation>
 	        <activeByDefault>false</activeByDefault>
 	      </activation>
