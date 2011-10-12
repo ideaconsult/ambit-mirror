@@ -71,6 +71,12 @@ normal user and password are guest/guest by default and are used in database que
 	-->
 	<google.analytics>UA-...</google.analytics>
 
+    <!-- Include license as a separate column in CSV and TXT files , default is false. 
+    Alternatively, use predefined profiles 
+    -P no-license-in-text-column
+    -P license-in-text-column
+    --> 
+    <license.intextfiles>false</license.intextfiles>
       </properties>
     </profile>
  	
