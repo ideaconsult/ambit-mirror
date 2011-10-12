@@ -143,10 +143,15 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
     protected String getHomeDir(File file) {
     	return System.getProperty("user.home") +"/.ambit2/dragon";
     }
+	
+	protected String getDragonHome() throws ShellException  {
+		return System.getenv(DRAGON_HOME);
+	}
+	
 	@Override
 	protected void initialize() throws ShellException {
 		super.initialize();
-		String dragon_home = System.getenv(DRAGON_HOME);
+		String dragon_home = getDragonHome();
 		File exe = new File(String.format("%s/%s", dragon_home,DRAGON_EXE));
 		File winexe = new File(String.format("%s/%s.exe", dragon_home,DRAGON_EXE));
 		
