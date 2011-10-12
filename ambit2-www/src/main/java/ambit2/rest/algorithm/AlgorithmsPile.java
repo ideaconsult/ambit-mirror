@@ -209,7 +209,7 @@ public class AlgorithmsPile {
 			
 			{"ambit2.mopac.MopacOriginalStructure","MOPAC descriptors (Energy, EHOMO, ELUMO,etc.)","ambit2.mopac.MopacOriginalStructure",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
 			
-			{"ambit2.dragon.DescriptorDragonShell","DRAGON6 descriptors","ambit2.dragon.DescriptorDragonShell",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#dragon"},
+			{"ambit2.rest.algorithm.descriptors.DragonDescriptorWeb","DRAGON6 descriptors","ambit2.rest.algorithm.descriptors.DragonDescriptorWeb",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#dragon"},
 			
 			{"ambit2.some.DescriptorSOMEShell","Site Of Metabolism Estimator (SOME) Bioinformatics (2009) 25(10):1251-1258.","ambit2.some.DescriptorSOMEShell",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#SOME"},
 
