@@ -32,7 +32,7 @@ Install your own {AMBIT REST Web services}
   	-H "subjectid:OPENSSOTOKEN" http://yourhost:8080/ambit2/admin/database 
 +---------------------------------	
 
-   or navigate to {{{http://localhost:8080/ambit2/admin/admin/database}http://localhost:8080/ambit2/admin/admin/database}} and use the {{{[./images/create_db.png}web form}}.
+   or navigate to {{{http://localhost:8080/ambit2/admin/admin/database}http://localhost:8080/ambit2/admin/admin/database}} and use the {{{./images/create_db.png}web form}}.
   
 	Note: <mysqladminuser> should be existing MySQL user with sufficient privileges to create a database. A database can be created only if it does not exist.
 	
