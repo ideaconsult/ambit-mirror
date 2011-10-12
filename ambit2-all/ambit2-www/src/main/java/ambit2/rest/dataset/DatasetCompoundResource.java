@@ -3,22 +3,18 @@ package ambit2.rest.dataset;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
-import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryCombined.COMBINE;
-import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
-import ambit2.db.search.structure.QueryStoredResults;
 import ambit2.db.search.structure.QueryStructureByID;
-import ambit2.db.update.dataset.DatasetQueryFieldGeneric;
+import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyResource;
@@ -34,9 +30,26 @@ public class DatasetCompoundResource extends CompoundResource {
 	//public final static String resource = String.format("%s%s",DatasetsResource.datasetID,CompoundResource.compoundID);
 	protected String prefix = "";
 	
+	public DatasetCompoundResource() {
+		super();
+	}
+	
+	@Override
+	protected void doInit() throws ResourceException {
+		DBConnection dbc = new DBConnection(getContext());
+		configureDatasetMembersPrefixOption(dbc.dataset_prefixed_compound_uri());
+		super.doInit();
+	}
 	@Override
 	public String getCompoundInDatasetPrefix() {
 		return dataset_prefixed_compound_uri?prefix:"";
+		/*
+		if (dataset_prefixed_compound_uri)
+			return
+				datasetID!=null?String.format("%s/%d", dataset,datasetID):
+					queryResultsID!=null?String.format("%s/R%d", dataset,queryResultsID):"";
+			else return "";		
+			*/
 	}
 	
 	@Override
@@ -59,9 +72,13 @@ public class DatasetCompoundResource extends CompoundResource {
 		if (q == null) return null;
 		
 		DatasetStructuresResource ds = new DatasetStructuresResource();
+
 		ds.init(context, request, response);
+		ds.configureDatasetMembersPrefixOption(dataset_prefixed_compound_uri);
 		IQueryRetrieval<IStructureRecord> datasetQuery = ds.createQuery(context, request, response);
 		if (datasetQuery == null) return null;
+		
+		prefix = ds.getCompoundInDatasetPrefix();
 		
 		if (q instanceof QueryStructureByID) {
 			Object id = request.getAttributes().get(DatasetResource.datasetKey);
@@ -72,7 +89,7 @@ public class DatasetCompoundResource extends CompoundResource {
 			return q;
 		}
 		//else some other query
-		prefix = ds.getCompoundInDatasetPrefix();
+
 		QueryCombinedStructure combinedQuery = new QueryCombinedStructure();
 		combinedQuery.add(q);
 		combinedQuery.add(datasetQuery);
