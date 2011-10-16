@@ -15,7 +15,9 @@ ambit2-all>mvn package
 2) to build applications - AMbitXT (standalone) and REST web services (war):
 
 >cd ambit2-apps
-ambit2-all\ambit2-apps>mvn package
+mvn clean buildnumber:create package -P http -P ambit-release -P aa-enabled -P aa-admin-disabled -P license-in-text-column
+
+(See ambit2-all/ambit2-apps/README.txt for options)
 
 NOTE 1: The build of applications (ambit2-ambitxt and ambit2-www) depends on Toxtree jars. 
 All ambit and Toxtree artifacts are available at
@@ -101,6 +103,19 @@ normal user and password are guest/guest by default and are used in database que
 
 ----------------------------------------------------------------------
 CHANGELOG
+
+AMBIT2 2.4.3
+.r3853
+Database schema 5.1
+Feature annotations
+Dataset licenses
+Dragon descriptor wrapper  ( set .m2/settings.xml property <DRAGON_HOME>...</DRAGON_HOME> to point to the Dragon6 directory  ) 
+OpenBabel depiction ( set .m2/settings.xml property <OBABEL_HOME> to point to the OpenBabel directory )
+Toxtree 2.5.0
+More Weka learning algorithms
+Improvements
+Bug fixes
+
 
 AMBIT2 2.4.0-SNAPSHOT
 .r3436
