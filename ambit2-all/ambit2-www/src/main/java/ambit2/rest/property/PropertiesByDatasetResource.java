@@ -44,7 +44,7 @@ public class PropertiesByDatasetResource extends PropertyResource {
 		Form form = request.getResourceRef().getQueryAsForm();
 		Object id = request.getAttributes().get(DatasetResource.datasetKey);
 		collapsed = true;
-
+		
 		IQueryRetrieval<Property>  q = null;
 		if (id != null) try {
 			q = getQueryById(new Integer(Reference.decode(id.toString())),form);
@@ -106,6 +106,17 @@ public class PropertiesByDatasetResource extends PropertyResource {
 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 	}
 	protected Template createTemplate(Form form) throws ResourceException {
+		Object featureid = getRequest().getAttributes().get(PropertiesByDatasetResource.idfeaturedef);
+		if (featureid != null) try {
+			Template profile = new Template(null);
+			Property p = new Property(null);
+			p.setEnabled(true);
+			p.setId(Integer.parseInt(featureid.toString()));
+			profile.add(p);
+			return profile;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
 		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
 		if (featuresURI!=null)
 			return createTemplate(getContext(),getRequest(),getResponse(), featuresURI);
