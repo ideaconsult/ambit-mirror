@@ -1,8 +1,11 @@
 package ambit2.rest.routers.opentox;
 
+import org.jfree.util.ObjectTable;
+import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.routing.Router;
 
+import ambit2.rest.OpenTox;
 import ambit2.rest.dataEntry.DataEntryResource;
 import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
@@ -16,6 +19,7 @@ import ambit2.rest.routers.MyRouter;
 import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.structure.CompoundResource;
+import ambit2.rest.structure.dataset.DatasetsByStructureResource;
 
 /**
  *  OpenTox dataset   /dataset/{id}
@@ -55,6 +59,9 @@ public class DatasetRouter extends MyRouter {
 		attach(CompoundResource.compoundID, DatasetCompoundResource.class);
 		attach(CompoundResource.compound, DatasetStructuresResource.class);
 		
+		attach(String.format("%s/datasets",CompoundResource.compoundID), DatasetsByStructureResource.class);
+
+		attach(String.format("%s/datasets",OpenTox.URI.conformer.getResourceID()), DatasetsByStructureResource.class);
 		/**
 		 * Data entries /dataEntry
 		 */

@@ -231,12 +231,20 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 	protected IStructureRecord getStructureParameter() {
 		String uri = getParams().getFirstValue(OpenTox.params.compound_uri.toString());
 
+		Reference base = getRequest().getRootRef();
+
+		int index = uri==null?-1:uri.indexOf("/dataset/");
+		if (index>0) {
+			index = uri.indexOf("/",index+10);
+			base = new Reference(uri.substring(0,index));
+		}
+		
 		if (uri!= null) {
 			IStructureRecord record = new StructureRecord();
-			Object id = OpenTox.URI.compound.getId(uri,getRequest().getRootRef());
+			Object id = OpenTox.URI.compound.getId(uri,base);
 			if (id == null) {
 				Object[] ids;
-				ids = OpenTox.URI.conformer.getIds(uri,getRequest().getRootRef());
+				ids = OpenTox.URI.conformer.getIds(uri,base);
 				if (ids != null)
 					if (ids[0]!=null)
 						record.setIdchemical(((Integer) ids[0]).intValue());
