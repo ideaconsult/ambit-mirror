@@ -14,7 +14,7 @@ Install your own {AMBIT REST Web services}
 	
 	[[3]] Deploy the war file to the servlet container
 	
-	[[4]] Ensure mysql is running at the default port
+	[[4]] Ensure mysql is running at the default port and database ambit2 does not exist. Otherwise the next step will fail!
 	
 	[[5]] This release comes without an embedded database. 
 	Create an empty database by issuing HTTP POST request to {{{http://localhost:8080/ambit2/admin/database}http://yourhost:8080/ambit2/admin/database}} URI, 
