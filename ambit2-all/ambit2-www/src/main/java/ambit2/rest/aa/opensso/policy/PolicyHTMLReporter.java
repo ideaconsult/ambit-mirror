@@ -69,7 +69,9 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 			output.write("<td>Methods</td>");
 			output.write("<td>");
 			for (CallablePolicyCreator._method matcher : CallablePolicyCreator._method.values())
-				output.write(String.format("<input type=CHECKBOX name='%s' %s>%s",matcher.name(),matcher.name(),matcher.name()));
+				output.write(String.format("<input type=CHECKBOX title='%s' name='%s' %s>%s",
+						matcher.getDescription(),
+						matcher.name(),matcher.name(),matcher.name()));
 			output.write("</td>");
 			output.write("</tr>");
 			output.write("<tr><td colspan='2' align='left'><input type='submit' value='Submit'></td></tr>");
