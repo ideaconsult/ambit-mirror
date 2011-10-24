@@ -20,10 +20,31 @@ public class CallablePolicyCreator<USERID> extends CallableProtectedTask<USERID>
 		user,group
 	}
 	public enum _method {
-		GET,
-		POST,
-		PUT,
-		DELETE
+		GET {
+			@Override
+			public String getDescription() {
+				return "Allow reading the content of the resource at the specified URI" ;
+			}
+		},
+		POST {
+			@Override
+			public String getDescription() {
+				return "Allow creating new resources under specified URI";
+			}
+		},		
+		PUT {
+			@Override
+			public String getDescription() {
+				return "Allow updating the content of the resource at the specified URI" ;
+			}
+		},		
+		DELETE {
+			@Override
+			public String getDescription() {
+				return "Allow deleting the resource at the specified URI" ;
+			}
+		};		
+		public abstract String getDescription();
 	}
 	protected String uri;
 	protected String name;
