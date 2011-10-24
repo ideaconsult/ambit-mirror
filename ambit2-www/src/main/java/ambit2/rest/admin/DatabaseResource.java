@@ -1,6 +1,5 @@
 package ambit2.rest.admin;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.Connection;
@@ -91,6 +90,21 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 	}
 
 
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
+		DBConnection c = new DBConnection(getContext());
+
+		try {
+			if (!dbExists(c.getLoginInfo().getDatabase(),c.getLoginInfo().getUser(),c.getLoginInfo().getPassword()))
+				return processSQLError(null,1, variant);
+		} catch (ResourceException x) {
+		} catch (Throwable e) {	
+		} finally {
+		
+		}
+		return super.get(variant);
+	}
+	
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
@@ -190,9 +204,17 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
     		dbCreate.open();
     		dbCreate.process(new StringBean(dbname));
 			
-			getResponse().setStatus(Status.SUCCESS_OK);
-
-			return get();
+    		if (dbExists(dbname, li.getUser(),li.getPassword())) {
+				getResponse().setStatus(Status.SUCCESS_OK);
+	
+				AmbitDBVersion db = new AmbitDBVersion();
+				db.setDbname(dbname);
+				return generateRepresentation(db, false);
+    		} else throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
+    				String.format("The server tried to create database '%s' but did not succeeded.",dbname)
+    				);
+			
+			
 		} catch (SQLException x) {
 			Context.getCurrentLogger().severe(x.getMessage());
 			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN,x,x.getMessage());			
