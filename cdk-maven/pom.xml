@@ -73,7 +73,6 @@
     <module>cdk-smsd</module>
         <module>cdk-structgen</module>
     <module>cdk-valencycheck</module>
-    <module>cdk-tautomers</module>
     <module>cdk-silent</module>
     <module>cdk-renderbasic</module>
     <module>cdk-renderawt</module>
