@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-all</artifactId>
-<version>1.4.0</version>
+<version>1.4.4</version>
   <packaging>pom</packaging>
   <name>cdk</name>
    <url>http://cdk.sourceforge.net</url>
@@ -73,7 +73,11 @@
     <module>cdk-smsd</module>
         <module>cdk-structgen</module>
     <module>cdk-valencycheck</module>
-  </modules>
+    <module>cdk-tautomers</module>
+    <module>cdk-silent</module>
+    <module>cdk-renderbasic</module>
+    <module>cdk-renderawt</module>
+ </modules>
   
   <repositories>
     <repository>

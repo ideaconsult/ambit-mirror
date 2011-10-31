@@ -1,15 +1,31 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>cdk-all</artifactId>
     <groupId>org.openscience.cdk</groupId>
     <version>1.4.4</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
-  <artifactId>cdk-annotation</artifactId>
-  <name>CDK annotation</name>
+  <artifactId>cdk-silent</artifactId>
+  <name>cdk-silent</name>
   <version>1.4.4</version>
-  <build>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>org.openscience.cdk</groupId>
+  		<artifactId>cdk-core</artifactId>
+  		<version>${project.version}</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.openscience.cdk</groupId>
+  		<artifactId>cdk-annotation</artifactId>
+  		<version>${project.version}</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  </dependencies>  
+<build>
     <plugins>
       <!-- fake out maven and install the binary artifact -->
       <plugin>
@@ -38,4 +54,5 @@
       </extension>
     </extensions>
   </build>
+  
 </project>

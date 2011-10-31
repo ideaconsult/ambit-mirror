@@ -2,17 +2,30 @@
   <parent>
     <artifactId>cdk-all</artifactId>
     <groupId>org.openscience.cdk</groupId>
-    <version>1.4.0</version>
+    <version>1.4.4</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-qsarprotein</artifactId>
   <name>cdk-qsarprotein</name>
-  <version>1.4.0</version>
+  <version>1.4.4</version>
   <dependencies>
   	<dependency>
   		<groupId>org.openscience.cdk</groupId>
   		<artifactId>cdk-qsar</artifactId>
+  		<version>${project.version}</version>
+  		<scope>compile</scope>
+  	</dependency>
+<!-- AminoAcids class and templates-->
+  	<dependency>
+  		<groupId>org.openscience.cdk</groupId>
+  		<artifactId>cdk-pdb</artifactId>
+  		<version>${project.version}</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.openscience.cdk</groupId>
+  		<artifactId>cdk-pdbcml</artifactId>
   		<version>${project.version}</version>
   		<scope>compile</scope>
   	</dependency>
