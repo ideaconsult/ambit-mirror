@@ -77,6 +77,7 @@
     <module>cdk-silent</module>
     <module>cdk-renderbasic</module>
     <module>cdk-renderawt</module>
+    <module>cdk-tautomer</module>
  </modules>
   
   <repositories>

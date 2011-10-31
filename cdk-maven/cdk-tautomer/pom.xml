@@ -6,7 +6,7 @@
     <version>1.4.4</version>
   </parent>
   <groupId>org.openscience.cdk</groupId>
-  <artifactId>cdk-tautomers</artifactId>
+  <artifactId>cdk-tautomer</artifactId>
   <name>cdk-valencycheck</name>
   <version>1.4.4</version>
 <dependencies>
