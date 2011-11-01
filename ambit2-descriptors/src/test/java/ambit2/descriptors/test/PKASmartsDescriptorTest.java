@@ -43,7 +43,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -253,7 +252,7 @@ public class PKASmartsDescriptorTest {
     }    
     @Test
     public void testOne() throws Exception {
-    	SmilesParser parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+    	SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
     	IAtomContainer a = MoleculeFactory.makeBenzene();
     	HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
     	//SmartParser throws error if explicit hydrogens are used - fixed

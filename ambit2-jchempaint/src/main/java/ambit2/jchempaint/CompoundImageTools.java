@@ -21,7 +21,6 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -35,6 +34,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.renderer.Renderer;
@@ -157,7 +157,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     		boolean atomNumbers) throws CDKException {
    		if (value.startsWith(AmbitCONSTANTS.INCHI)) {
     			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
-    			InChIToStructure c =f.getInChIToStructure(value, DefaultChemObjectBuilder.getInstance());
+    			InChIToStructure c =f.getInChIToStructure(value, SilentChemObjectBuilder.getInstance());
     			
     			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
     				throw new CDKException(String.format("%s %s %s", c.getReturnStatus(),c.getMessage(),c.getLog()));

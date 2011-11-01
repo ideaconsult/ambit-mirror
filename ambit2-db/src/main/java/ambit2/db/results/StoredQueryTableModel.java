@@ -32,9 +32,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.IFilteredColumns;
@@ -186,7 +186,7 @@ public class StoredQueryTableModel extends ResultSetTableModel implements ISelec
 		ProcessorCreateQuery p = new ProcessorCreateQuery();
 		try {
 			p.setSession(session);
-			IMoleculeSet set = MoleculeTools.newMoleculeSet(DefaultChemObjectBuilder.getInstance());
+			IMoleculeSet set = MoleculeTools.newMoleculeSet(SilentChemObjectBuilder.getInstance());
 			IStructureRecord record =  getRecord(row, col);
 			set.addAtomContainer(getAtomContainer(record));		
 			QuerySimilarityStructure q = new QuerySimilarityStructure();

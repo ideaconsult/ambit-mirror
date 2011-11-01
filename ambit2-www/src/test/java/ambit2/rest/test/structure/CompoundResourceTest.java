@@ -13,10 +13,10 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.opentox.dsl.OTCompound;
 import org.restlet.Client;
 import org.restlet.Request;
@@ -183,7 +183,7 @@ public class CompoundResourceTest extends ResourceTest {
 	@Override
 	public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
 			throws Exception {
-		MyIteratingMDLReader reader = new MyIteratingMDLReader(in, DefaultChemObjectBuilder.getInstance());
+		MyIteratingMDLReader reader = new MyIteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
 		int count = 0;
 		while (reader.hasNext()) {
 			Object o = reader.next();

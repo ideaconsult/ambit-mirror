@@ -34,10 +34,10 @@ import java.io.File;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.random.RandomAccessReader;
 import org.openscience.cdk.io.random.RandomAccessSDFReader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 /**
  * Test for {@link RandomAccessSDFReader}
@@ -50,7 +50,7 @@ public class RandomAccessTest  {
     @Test public void test() throws Exception {
     	int[] numberofatoms = {33,23,22,25,21,27,27};
     	String file = getClass().getClassLoader().getResource("ambit2/core/data/misc/test_properties.sdf").getFile();
-        RandomAccessReader rf = new RandomAccessSDFReader(new File(file),DefaultChemObjectBuilder.getInstance());
+        RandomAccessReader rf = new RandomAccessSDFReader(new File(file),SilentChemObjectBuilder.getInstance());
         int i = numberofatoms.length;
         rf.last();
         for (rf.last(); rf.hasNext(); rf.previous()) {

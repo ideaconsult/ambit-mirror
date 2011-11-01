@@ -32,10 +32,10 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.io.MyIteratingMDLReader;
@@ -43,7 +43,7 @@ import ambit2.core.io.MyIteratingMDLReader;
 
 public class MoleculesFileHashTest extends TestCase {
 	public void test() throws Exception {
-		IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf"),b);
 			ambit2.hashcode.MoleculeAndAtomsHashing molHash = new ambit2.hashcode.MoleculeAndAtomsHashing();
 			int record=0;

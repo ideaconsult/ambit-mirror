@@ -3,23 +3,19 @@ package ambit2.tautomers.test;
 import java.io.FileReader;
 import java.util.Vector;
 
+import javax.swing.JFrame;
+
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.templates.MoleculeFactory;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-
-
-import javax.swing.*;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.smarts.ChemObjectToSmiles;
-import ambit2.smarts.IAcceptable;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
@@ -28,7 +24,6 @@ import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsManager;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.SmartsToChemObject;
-import ambit2.smarts.StructInfo;
 import ambit2.ui.Panel2D;
 
 
@@ -36,7 +31,7 @@ public class TestStrVisualizer
 {
 	
 	static SmartsParser sp = new SmartsParser();
-	//static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	//static SmilesParser smilesparser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 	static SmartsManager man = new SmartsManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject();
@@ -287,7 +282,7 @@ public class TestStrVisualizer
 		
 		try
 		{
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
 			int record=0;
 

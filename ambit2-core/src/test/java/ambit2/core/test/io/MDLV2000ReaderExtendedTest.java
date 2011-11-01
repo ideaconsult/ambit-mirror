@@ -33,7 +33,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -67,7 +66,7 @@ public class MDLV2000ReaderExtendedTest  {
 		MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(
 				MDLV2000ReaderExtended.class.getClassLoader().getResourceAsStream(dir+file),
 				IChemObjectReader.Mode.RELAXED);
-		IMolecule mol = MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance());
+		IMolecule mol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 		IChemObject newMol = reader.read(mol);
 		reader.close();
 		return newMol;
@@ -489,7 +488,7 @@ public class MDLV2000ReaderExtendedTest  {
 		for (File file: files) 
 			try {
 				MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(new FileInputStream(file));
-				IMolecule mol = MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance());
+				IMolecule mol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 				reader.read(mol);
 				reader.close();
 			} catch (Exception x) {

@@ -3,7 +3,6 @@ package ambit2.rest.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -285,7 +284,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	public IAtomContainer isInChI(String inchi) throws Exception {
 		if ((inchi!= null) && inchi.startsWith(AmbitCONSTANTS.INCHI)) {
 			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
-			InChIToStructure c =f.getInChIToStructure(inchi, DefaultChemObjectBuilder.getInstance());
+			InChIToStructure c =f.getInChIToStructure(inchi, SilentChemObjectBuilder.getInstance());
 			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
 				throw new Exception("Invalid InChI");
 			searchType = _searchtype.inchi;

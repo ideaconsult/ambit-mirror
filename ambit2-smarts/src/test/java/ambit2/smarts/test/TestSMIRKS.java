@@ -8,7 +8,6 @@ import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -111,7 +110,7 @@ public class TestSMIRKS
 	}
 	
 	IAtomContainer applySMIRKSReaction(String smirks, String targetSmiles) throws Exception {
-		SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+		SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer target = sp.parseSmiles(targetSmiles);
 		if (explicitH)
 			AtomContainerManipulator.convertImplicitToExplicitHydrogens(target);

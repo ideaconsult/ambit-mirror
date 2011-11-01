@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
@@ -32,14 +31,18 @@ import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.ringsearch.SSSRFinder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.ChemObjectToSmiles;
+import ambit2.smarts.EquivalenceTester;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;
+import ambit2.smarts.SMIRKSManager;
+import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.Screening;
 import ambit2.smarts.ScreeningData;
 import ambit2.smarts.SmartsHelper;
@@ -49,9 +52,6 @@ import ambit2.smarts.SmartsScreeningKeys;
 import ambit2.smarts.SmartsToChemObject;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
-import ambit2.smarts.SMIRKSManager;
-import ambit2.smarts.SMIRKSReaction;
-import ambit2.smarts.EquivalenceTester;
 
 
 
@@ -59,7 +59,7 @@ import ambit2.smarts.EquivalenceTester;
 public class TestUtilities 
 {	
 	static SmartsParser sp = new SmartsParser();
-	//static SmilesParser smilesparser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	//static SmilesParser smilesparser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 	static SmartsManager man = new SmartsManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject();
@@ -126,7 +126,7 @@ public class TestUtilities
 	{		
 		try
 		{
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
 
 			if (!reader.hasNext()) 
@@ -172,7 +172,7 @@ public class TestUtilities
 		try
 		{
 			//Input
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
 					
 			//Output
@@ -832,7 +832,7 @@ public class TestUtilities
 			
 			//CMLReader reader = new CMLReader("\\test.cml");
 			//CMLReader reader = new CMLReader();
-            //IChemFile chemFile = DefaultChemObjectBuilder.getInstance().newChemFile();            
+            //IChemFile chemFile = SilentChemObjectBuilder.getInstance().newChemFile();            
             //reader.read(chemFile);
 			//Molecule m = (Molecule)reader.read(new Molecule());
 			
@@ -1060,7 +1060,7 @@ public class TestUtilities
 			else
 				fileName = mdlFile;
 				
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(fileName),b);
 			int record=0;
 
@@ -1107,7 +1107,7 @@ public class TestUtilities
 		
 		try
 		{
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
 			int record=0;
 

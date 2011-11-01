@@ -5,8 +5,8 @@ import java.io.InputStream;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.restlet.data.MediaType;
 
 import weka.core.Instances;
@@ -71,7 +71,7 @@ public class DatasetStructuresResourceTest extends ResourceTest {
 		@Override
 		public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
 				throws Exception {
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(in, DefaultChemObjectBuilder.getInstance());
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
 			int count = 0;
 			while (reader.hasNext()) {
 				Object o = reader.next();

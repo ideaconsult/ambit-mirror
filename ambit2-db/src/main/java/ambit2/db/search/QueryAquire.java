@@ -49,7 +49,7 @@ public class QueryAquire extends QueryExperiment {
 
     public Object next() {
         try {
-            IMolecule m = DefaultChemObjectBuilder.getInstance().newMolecule();
+            IMolecule m = SilentChemObjectBuilder.getInstance().newMolecule();
             m.setProperty(AmbitCONSTANTS.NAMES,resultset.getString(2));            
             m.setProperty(AmbitCONSTANTS.CASRN,
                     IdentifiersProcessor.hyphenateCAS(resultset.getString(1)));

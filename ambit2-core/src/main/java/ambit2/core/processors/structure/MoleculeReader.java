@@ -30,10 +30,10 @@
 package ambit2.core.processors.structure;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -106,7 +106,7 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
         	   try {
         		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
     		
-        		   InChIToStructure c =inchiFactory.getInChIToStructure(target.getContent(), DefaultChemObjectBuilder.getInstance());
+        		   InChIToStructure c =inchiFactory.getInChIToStructure(target.getContent(), SilentChemObjectBuilder.getInstance());
         		   return c.getAtomContainer();
         	   } catch (Exception x) {
         		   throw new AmbitException(x);

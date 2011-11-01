@@ -1,9 +1,9 @@
 package ambit2.descriptors.processors;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -58,7 +58,7 @@ public class AtomEnvironmentGenerator extends AbstractPropertyGenerator<AtomEnvi
                 //if (useHydrogens) { //always, otherwise atom types are not recognised correctly
                 	//for some reason H atoms are added as bond references, but not in atom list - bug?
 				try {
-	    			if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
+	    			if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 	    		    hAdder.addImplicitHydrogens(mol);
 				} catch (Exception x) {
 					

@@ -3,8 +3,8 @@ package ambit2.rest.model;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -87,7 +87,7 @@ public class ModelImageReporter<Q extends IQueryRetrieval<ModelQueryResults>> ex
 		MyIteratingMDLReader reader = null;
 		try {
 			r = client.get(ChemicalMediaType.CHEMICAL_MDLSDF);
-			reader = new MyIteratingMDLReader(r.getStream(),DefaultChemObjectBuilder.getInstance());
+			reader = new MyIteratingMDLReader(r.getStream(),SilentChemObjectBuilder.getInstance());
 			while (reader.hasNext()) {
 				Object o = reader.next();
 				if (o instanceof IAtomContainer)
