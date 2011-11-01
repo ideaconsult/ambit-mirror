@@ -38,12 +38,12 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 public class SmartsHelper 
 {
-	static SmilesParser smilesparser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+	static SmilesParser smilesparser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 	int curIndex;
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();	
 	//Work container - list with the processed atom nodes
@@ -343,7 +343,7 @@ public class SmartsHelper
 	{	
 		IMolecule mol = null;
 		try {
-			SmilesParser sp = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());			
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(smi);
 		}
 		catch (InvalidSmilesException e) {

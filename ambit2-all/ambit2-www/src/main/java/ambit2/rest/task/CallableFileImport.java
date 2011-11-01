@@ -13,7 +13,7 @@ import java.util.UUID;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.restlet.data.ClientInfo;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -27,9 +27,9 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
+import ambit2.base.interfaces.IBatchStatistics.RECORDS_STATS;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.interfaces.IBatchStatistics.RECORDS_STATS;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
@@ -257,7 +257,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			return null;
 		try {
 			return new RDFIteratingReader(new FileInputStream(file),
-					NoNotificationChemObjectBuilder.getInstance(),
+					SilentChemObjectBuilder.getInstance(),
 					baseReference, format);
 		} catch (CDKException x) {
 			throw x;

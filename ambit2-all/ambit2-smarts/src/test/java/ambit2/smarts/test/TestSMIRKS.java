@@ -2,18 +2,21 @@ package ambit2.smarts.test;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.LoggingTool;
@@ -265,7 +268,7 @@ public class TestSMIRKS
 		
 	}
 
-	
+	@Test
 	public void testAldehyde_oxidation_extraH() throws Exception {
 		//NN_diethylformamide
 		String smirks = "[C;H1:1]=[O:2]>>[C:1](O)=[O:2]";
@@ -282,6 +285,28 @@ public class TestSMIRKS
 		String expectedResultExplH[] = 
 			new String[] {"[H]C([H])([H])C([H])([H])C([H])([H])C([H])([H])C(=O)C(=O)O"};
 
+		//AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(result);
+		for (IAtom a : result.atoms()) {
+			System.out.println(String.format("%s valency %d hydrogens %d bond order sum %f neighbors %d",
+					a.getSymbol(),
+					a.getValency(),
+					a.getImplicitHydrogenCount(),
+					result.getBondOrderSum(a),
+					a.getFormalNeighbourCount()
+					));
+			if ("C".equals(a.getSymbol()) && result.getBondOrderSum(a)==5){
+				List<IAtom> neighbors = result.getConnectedAtomsList(a);
+				for (IAtom neighbor : neighbors) {
+					System.out.println(neighbor.getSymbol());
+					if ("H".equals(neighbor.getSymbol())) { 
+						result.removeAtom(neighbor);
+
+						break;
+					}
+				}
+			}
+			
+		}
 		//System.out.println(smigen.createSMILES(result));
 		checkReactionResult(result,expectedResult, expectedResultExplH);		
 		
@@ -320,7 +345,7 @@ public class TestSMIRKS
 		
 		File file = new File(getClass().getClassLoader().getResource("smirkstest.sdf").getFile());
 
-		IteratingMDLReader reader = new IteratingMDLReader(new FileInputStream(file), NoNotificationChemObjectBuilder.getInstance());
+		IteratingMDLReader reader = new IteratingMDLReader(new FileInputStream(file), SilentChemObjectBuilder.getInstance());
 		try {
 			while (reader.hasNext()) {
 				target = (IAtomContainer) reader.next();

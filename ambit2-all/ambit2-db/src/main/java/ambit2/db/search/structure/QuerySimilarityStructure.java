@@ -36,7 +36,7 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.ClassHolder;
 import ambit2.base.exceptions.AmbitException;
@@ -138,7 +138,7 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 		return query.getSQL();
 	}
 	public void setStructure(IAtomContainer structure) {
-		if (getValue()==null) setValue(MoleculeTools.newMoleculeSet(NoNotificationChemObjectBuilder.getInstance()));
+		if (getValue()==null) setValue(MoleculeTools.newMoleculeSet(SilentChemObjectBuilder.getInstance()));
 		else getValue().removeAllAtomContainers();
 		getValue().addAtomContainer(structure);
 		setValue(getValue());

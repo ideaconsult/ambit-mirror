@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import junit.framework.Assert;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.interfaces.IStructureRecord;
@@ -18,7 +18,7 @@ public class QueryExactStructureTest extends QueryTest<QueryExactStructure> {
 		QueryExactStructure q = new QueryExactStructure();
 		q.setChemicalsOnly(true);
 
-		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer c = p.parseSmiles("[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3"); 
 		q.setValue(c);	
 		return q;

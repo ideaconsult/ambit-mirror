@@ -15,7 +15,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.smiles.smarts.SMARTSQueryTool;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -34,7 +34,7 @@ import ambit2.smarts.query.SmartsPatternFactory.SmartsParser;
 public class StructureKeysBitSetGeneratorTest {
 	@Test
 	public void test() throws Exception {
-		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 	
 		IAtomContainer c = p.parseSmiles("c1ccccc1");
 
@@ -43,7 +43,7 @@ public class StructureKeysBitSetGeneratorTest {
 		IAtomContainer c1 = p.parseSmiles("C1=CC=CC=C1");
 		BitSet bs1 = g.process(c1);
 		Assert.assertEquals(bs,bs1);
-		CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+		CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
         hAdder.addImplicitHydrogens(c1);
         AtomContainerManipulator.convertImplicitToExplicitHydrogens(c1);
 
@@ -96,7 +96,7 @@ public class StructureKeysBitSetGeneratorTest {
 	public void testBiphenyl4CDK() throws Exception {
 		IteratingMDLReader reader = new IteratingMDLReader(
 				new InputStreamReader(getClass().getClassLoader().getResourceAsStream("biphenyl.sdf")),
-				NoNotificationChemObjectBuilder.getInstance());
+				SilentChemObjectBuilder.getInstance());
 		
 		IMolecule biphenyl_kekule=null;
 		while (reader.hasNext()) {
@@ -118,7 +118,7 @@ public class StructureKeysBitSetGeneratorTest {
 		Assert.assertNotNull(biphenyl_kekule);
 		
 		//get the biphenyl as aromatic smiles
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IMolecule biphenyl_aromaticsmiles = parser.parseSmiles("c1ccccc1c2ccccc2");
 		biphenyl_aromaticsmiles.setID("biphenyl_aromatic");
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(biphenyl_aromaticsmiles);
@@ -213,7 +213,7 @@ public class StructureKeysBitSetGeneratorTest {
 		}
 		reader.close();
 		
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IMolecule mol = parser.parseSmiles("c1ccccc1c2ccccc2");
 	
 		BitSet bitsetAromatic = bitsetGenerator.process(mol);
@@ -263,7 +263,7 @@ public class StructureKeysBitSetGeneratorTest {
 		}
 		reader.close();
 		
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer mol = parser.parseSmiles("c1cnn[nH]1");
 		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
 		mol = config.process(mol);
@@ -274,7 +274,7 @@ public class StructureKeysBitSetGeneratorTest {
 		System.out.println(bitsetAromatic);
 		Assert.assertEquals(bitsetKekule,bitsetAromatic);
 		
-		parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		mol = parser.parseSmiles("C1=CN=NN1");
 		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
 		mol = config.process(mol);
@@ -288,7 +288,7 @@ public class StructureKeysBitSetGeneratorTest {
 	}
 	@Test
 	public void parseTriazole() throws Exception {
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer mol = parser.parseSmiles("c1cnn[nH]1"); //C1=CN=NN1
 		CDKHueckelAromaticityDetector.detectAromaticity(mol);
 		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));

@@ -40,7 +40,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.IChemObjectReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.groups.ComponentGroup;
@@ -457,7 +457,7 @@ public class MDLV2000ReaderExtendedTest  {
 		if (files == null) throw new Exception("Files not found");
 		int count = 0;
 		for (File file: files) {
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileInputStream(file),NoNotificationChemObjectBuilder.getInstance());
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileInputStream(file),SilentChemObjectBuilder.getInstance());
             try {
             	int records = 0;
             	while (reader.hasNext()) {

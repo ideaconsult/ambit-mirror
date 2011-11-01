@@ -9,7 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 
@@ -43,7 +43,7 @@ public class HinReaderTest {
 	@Test
 	public void testNitro() throws Exception {
 		String smiles  = "[H]C([H])([H])C([H])([H])C([H])([H])C([H])([H])N(C1=C(F)C(F)=C(C(F)=C1(F))C(F)(F)F)N(=O)[O-]";
-		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer target = p.parseSmiles(smiles);
 		HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
 		target = ha.process(target);

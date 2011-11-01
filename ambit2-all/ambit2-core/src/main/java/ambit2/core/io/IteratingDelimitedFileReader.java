@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -45,6 +44,7 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -157,7 +157,7 @@ public class IteratingDelimitedFileReader extends
 					if (inchiIndex>=0) try {
 	        		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
 		           		
-	        		   InChIToStructure c =inchiFactory.getInChIToStructure(values[inchiIndex].toString(), DefaultChemObjectBuilder.getInstance());
+	        		   InChIToStructure c =inchiFactory.getInChIToStructure(values[inchiIndex].toString(), SilentChemObjectBuilder.getInstance());
 	        		   nextMolecule = c.getAtomContainer();
 	        		   
 					} catch (Exception x) {

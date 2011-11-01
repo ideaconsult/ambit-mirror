@@ -50,10 +50,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.exceptions.AmbitException;
@@ -293,7 +293,7 @@ class MySelector implements IProcessor<IAtomContainer,IChemObjectSelection> {
 	@Override
 	public IChemObjectSelection process(IAtomContainer target)
 			throws AmbitException {
-		IAtomContainer ac = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
+		IAtomContainer ac = MoleculeTools.newAtomContainer(SilentChemObjectBuilder.getInstance());
 		ac.addAtom(target.getAtom(selected));
 		return
 		new SingleSelection<IAtomContainer>(ac);

@@ -11,9 +11,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.BitSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.StringTokenizer;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
@@ -24,6 +21,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomParity;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -37,10 +35,9 @@ import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.interfaces.ISingleElectron;
-import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -81,7 +78,7 @@ public class MoleculeTools {
 	
 	public static IMolecule getMolecule(String smiles) throws InvalidSmilesException {
 	
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		return parser.parseSmiles(smiles);
 	}	
 	
@@ -187,7 +184,7 @@ public class MoleculeTools {
 			//TODO to insert H if necessary
 			//TODO this uses new SaturationChecker() which relies on cdk/data/config
 			if (adder == null)
-				adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+				adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 			try {
 				adder.addImplicitHydrogens(molecule);
 				int atomCount = molecule.getAtomCount();
@@ -223,7 +220,7 @@ public class MoleculeTools {
 	
 
 	public static IMolecule readMolfile(Reader molfile) throws Exception {
-		IIteratingChemObjectReader mReader = new MyIteratingMDLReader(molfile,NoNotificationChemObjectBuilder.getInstance());
+		IIteratingChemObjectReader mReader = new MyIteratingMDLReader(molfile,SilentChemObjectBuilder.getInstance());
 		IMolecule molecule = null;
 		while (mReader.hasNext()) {
 			Object mol = mReader.next();
@@ -265,7 +262,7 @@ public class MoleculeTools {
          CMLReader reader = new CMLReader(in);
          IChemFile obj = null;
          
-            obj = (IChemFile) reader.read(newChemFile(NoNotificationChemObjectBuilder.getInstance()));
+            obj = (IChemFile) reader.read(newChemFile(SilentChemObjectBuilder.getInstance()));
             int n = obj.getChemSequenceCount();
             if (n > 1)
                 System.out.println("> 1 sequence in a record");      

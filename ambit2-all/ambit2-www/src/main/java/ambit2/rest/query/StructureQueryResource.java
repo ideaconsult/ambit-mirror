@@ -74,7 +74,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected String media;
 	protected Template template;
 	protected Profile groupProperties;
-
+	
 	public StructureQueryResource() {
 		super();
 		setDocumentation(new ResourceDoc("dataset","Dataset"));

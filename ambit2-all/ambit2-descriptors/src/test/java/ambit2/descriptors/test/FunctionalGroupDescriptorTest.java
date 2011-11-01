@@ -34,11 +34,11 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -98,7 +98,7 @@ public class FunctionalGroupDescriptorTest {
 	@Test
 	public void testDefaultGroups() throws Exception {
 		FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
-		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer mol =  p.parseSmiles("C(=O)Cl");
 		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,82);
 		//Alkyl C [CX4]

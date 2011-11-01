@@ -357,11 +357,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			} else {
 				IStructureRecord record = new StructureRecord();
 				record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
-				QueryStructureByID query = new QueryStructureByID();
-				query.setPageSize(1);
-				query.setChemicalsOnly(true);
-				query.setValue(record);
-				return query;
+				return createQueryByID(record);
 			}
 		} catch (NumberFormatException x) {
 			throw new ResourceException(
@@ -377,7 +373,15 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		}
 		
 
-	}	
+	}
+	
+	protected QueryStructureByID createQueryByID(IStructureRecord record) {
+		QueryStructureByID query = new QueryStructureByID();
+		query.setPageSize(1);
+		query.setChemicalsOnly(true);
+		query.setValue(record);
+		return query;
+	}
 	/*
 	@Override
 	protected Representation post(Representation entity)

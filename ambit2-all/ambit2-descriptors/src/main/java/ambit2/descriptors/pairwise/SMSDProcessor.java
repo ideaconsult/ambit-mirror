@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
@@ -52,7 +52,7 @@ public class SMSDProcessor extends MoleculePairProcessor {
 	
 	        //comparison.getTanimotoSimilarity();
 	        
-	        IAtomContainer mcss = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
+	        IAtomContainer mcss = MoleculeTools.newAtomContainer(SilentChemObjectBuilder.getInstance());
 	         try {
 	        	 Map<IBond,IBond> mapping = comparison.getFirstBondMap();
 	        	 if (mapping != null) {

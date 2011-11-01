@@ -44,9 +44,9 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -85,7 +85,7 @@ public class Mopac7WriterTest  {
             SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
             IMolecule mol = p.parseSmiles("CCCCCc1cccc2cccc(c12)CCC");
 
-    		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+    		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
             adder.addImplicitHydrogens(mol);
             AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);            
 

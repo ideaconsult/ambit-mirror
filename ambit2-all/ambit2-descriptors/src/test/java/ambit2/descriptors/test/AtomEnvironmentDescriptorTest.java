@@ -17,8 +17,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 
 import ambit2.core.processors.structure.AtomConfigurator;
@@ -79,7 +79,7 @@ public class AtomEnvironmentDescriptorTest {
     @Test
     public void testHybridizationStateATMatcher() throws Exception {
 	    IAtomContainer mol = getMol();
-	    SybylAtomTypeMatcher h = SybylAtomTypeMatcher.getInstance(NoNotificationChemObjectBuilder.getInstance());
+	    SybylAtomTypeMatcher h = SybylAtomTypeMatcher.getInstance(SilentChemObjectBuilder.getInstance());
 		for (int i = 0; i < mol.getAtomCount(); i++) {
 		        IAtomType a = h.findMatchingAtomType(mol,mol.getAtom(i));
 		        Assert.assertTrue(a != null);
@@ -99,7 +99,7 @@ public class AtomEnvironmentDescriptorTest {
 		    typer.process(mol);
 		    
 		    //AtomContainer mol = sp.parseSmiles("N#CC(=Cc1ccc(O)c(O)c1)C(=O)NCCCNC(=O)C(C#N)=Cc2ccc(O)c(O)c2"); 
-		    CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+		    CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 		    hAdder.addImplicitHydrogens(mol);
 
 			for (int i = 0; i < mol.getAtomCount(); i++) {

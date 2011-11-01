@@ -20,9 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.exceptions.AmbitException;
@@ -96,7 +96,7 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 						//((FunctionalGroup) evt.getNewValue()).setQuery(matcher);
 						//IAtomContainer ac = smartsToChemObject.process(matcher.getQuery());
 					if (((FunctionalGroup) evt.getNewValue()).getExample()!=null) {
-						SmilesParser p = new  SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+						SmilesParser p = new  SmilesParser(SilentChemObjectBuilder.getInstance());
 						IAtomContainer ac = p.parseSmiles(((FunctionalGroup) evt.getNewValue()).getExample());
 						AtomConfigurator c = new AtomConfigurator();
 						HydrogenAdderProcessor ha = new HydrogenAdderProcessor();

@@ -38,7 +38,7 @@ import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 
@@ -235,7 +235,7 @@ public class MengineCrashTest {
     public void test_Toxtree_bug_3138563() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
-        SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+        SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
         IMolecule a = p.parseSmiles("Cc2c(NS(=O)(=O)c1ccc(N)cc1)onc2C");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     } 

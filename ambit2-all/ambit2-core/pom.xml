@@ -122,7 +122,7 @@
         </dependency>
         <dependency>
         	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-nonotify</artifactId>
+        	<artifactId>cdk-silent</artifactId>
         	<version>${cdk.version}</version>
         	<scope>compile</scope>
         </dependency>
