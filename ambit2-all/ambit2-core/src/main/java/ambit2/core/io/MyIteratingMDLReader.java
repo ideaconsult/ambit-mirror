@@ -32,7 +32,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.NoSuchElementException;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -61,7 +60,7 @@ import ambit2.core.data.MoleculeTools;
  * <pre>
  * File sdfFile = new File("../zinc-structures/ZINC_subset3_3D_charged_wH_maxmin1000.sdf");
  * MyIteratingMDLReader reader = new MyIteratingMDLReader(
- *   new FileInputStream(sdfFile), DefaultChemObjectBuilder.getInstance()
+ *   new FileInputStream(sdfFile), SilentChemObjectBuilder.getInstance()
  * );
  * while (reader.hasNext()) {
  *   IMolecule molecule = (IMolecule)reader.next();

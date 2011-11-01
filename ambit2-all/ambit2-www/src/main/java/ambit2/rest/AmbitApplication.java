@@ -33,7 +33,6 @@ import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
 import ambit2.rest.aa.opensso.policy.CallablePolicyCreator;
 import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
 import ambit2.rest.admin.AdminResource;
-import ambit2.rest.admin.DBCreateAllowedGuard;
 import ambit2.rest.admin.PolicyResource;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
@@ -200,6 +199,7 @@ public class AmbitApplication extends TaskApplication<String> {
 	
 
 		/**  /algorithm  */
+		//router.attach(AllAlgorithmsResource.algorithm,createProtectedResource(new AlgorithmRouter(getContext())));
 		router.attach(AllAlgorithmsResource.algorithm,createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
 		/**  /model  */
 		router.attach(ModelResource.resource,createAuthenticatedOpenResource(new ModelRouter(getContext())));

@@ -37,7 +37,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -140,7 +139,7 @@ public class InchiProcessorTest {
 	public void parse() throws Exception {
 		InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
 		
-		InChIToStructure c =f.getInChIToStructure("InChI=1S/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3", DefaultChemObjectBuilder.getInstance());
+		InChIToStructure c =f.getInChIToStructure("InChI=1S/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3", SilentChemObjectBuilder.getInstance());
 		
 		System.out.println(c.getLog());
 		System.out.println(c.getWarningFlags());

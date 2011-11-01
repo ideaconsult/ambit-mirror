@@ -5,9 +5,9 @@ import java.io.InputStream;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 
@@ -32,7 +32,7 @@ public class Builder3DTest  extends ResourceTest  {
 	@Override
 	public boolean verifyResponseSDF(String uri, MediaType media, InputStream in)
 			throws Exception {
-		IteratingMDLReader reader = new IteratingMDLReader(in,DefaultChemObjectBuilder.getInstance());
+		IteratingMDLReader reader = new IteratingMDLReader(in,SilentChemObjectBuilder.getInstance());
 		while (reader.hasNext()) {
 			Object object = reader.next();
 			Assert.assertTrue(object instanceof IAtomContainer);

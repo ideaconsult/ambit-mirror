@@ -1,21 +1,17 @@
 
 package ambit2.core.test.groups;
 
-import java.awt.Dimension;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomParity;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
@@ -25,6 +21,7 @@ import org.openscience.cdk.interfaces.ILonePair;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.core.data.MoleculeTools;
@@ -40,7 +37,7 @@ public class SuppleAtomContainerTest  {
 	protected static IChemObjectBuilder builder;
 	
     @BeforeClass public static void setUp() {
-    	builder = DefaultChemObjectBuilder.getInstance();
+    	builder = SilentChemObjectBuilder.getInstance();
     }
 
     @Test public void testSetAtoms_arrayIAtom() {
@@ -2173,7 +2170,7 @@ public class SuppleAtomContainerTest  {
         JOptionPane.showMessageDialog(null,panel);
         */
         
-        SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
         IMolecule origin = p.parseSmiles("CC1CC1");
         mol.setFiltered(false);
         Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(origin,mol));

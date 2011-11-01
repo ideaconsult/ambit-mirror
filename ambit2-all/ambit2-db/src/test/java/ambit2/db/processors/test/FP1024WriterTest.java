@@ -8,8 +8,8 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.RepositoryReader;
@@ -47,7 +47,7 @@ public class FP1024WriterTest extends DbUnitTest {
         reader.open();
         int records = 0;
 		long now = System.currentTimeMillis();
-		IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+		IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 		IStructureRecord o  ;
 		QueryExecutor<RetrieveStructure> exec = new QueryExecutor<RetrieveStructure>();
 		exec.setConnection(dbConnection.getConnection());

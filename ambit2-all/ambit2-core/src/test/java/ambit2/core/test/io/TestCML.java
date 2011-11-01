@@ -9,13 +9,13 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.CMLWriter;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 public class TestCML 
@@ -23,7 +23,7 @@ public class TestCML
 
     @Before
         public void setUp() throws Exception {
-              parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+              parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
         }
 		
     protected String writeCML(IMolecule mol) throws Exception {

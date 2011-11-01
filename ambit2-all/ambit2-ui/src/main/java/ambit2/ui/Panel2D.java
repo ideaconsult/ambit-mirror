@@ -39,11 +39,11 @@ import java.util.EventObject;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.interfaces.IProcessor;
@@ -140,7 +140,7 @@ public class Panel2D<A extends IMoleculeEditAction> extends JPanel implements IC
 			editAction.setParentComponent(parentComponent);
 			editAction.setModal(true);
 			editAction.setMolecule(
-					getObject()==null?MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance()):(IMolecule)getObject());
+					getObject()==null?MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance()):(IMolecule)getObject());
 			editAction.actionPerformed(null);
 			IMolecule molecule = editAction.getMolecule();
 			if (molecule != null) {

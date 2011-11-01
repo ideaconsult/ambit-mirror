@@ -55,7 +55,7 @@ public class NearestNeighborsSimilarityTest extends TestCase {
     /*
     public void testAtomEnvironments() {
         NNAtomEnvironmentSimilarity nns = new NNAtomEnvironmentSimilarity(3);
-        IAtomContainerSet a = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
+        IAtomContainerSet a = SilentChemObjectBuilder.getInstance().newAtomContainerSet();
         for (int i=6; i < 12; i++) {
             IAtomContainer a1 = MoleculeFactory.makeAlkane(i);
             a.addAtomContainer(a1);
@@ -67,7 +67,7 @@ public class NearestNeighborsSimilarityTest extends TestCase {
     /*
     public void testFingerprints() {
         NNFingerprintSimilarity nns = new NNFingerprintSimilarity(5);
-        IAtomContainerSet a = DefaultChemObjectBuilder.getInstance().newAtomContainerSet();
+        IAtomContainerSet a = SilentChemObjectBuilder.getInstance().newAtomContainerSet();
         for (int i=2; i < 12; i++) {
             IAtomContainer a1 = MoleculeFactory.makeAlkane(i);
             a.addAtomContainer(a1);

@@ -21,7 +21,6 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -210,7 +209,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     		boolean atomNumbers) throws CDKException {
    		if (value.startsWith(AmbitCONSTANTS.INCHI)) {
     			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
-    			InChIToStructure c =f.getInChIToStructure(value, DefaultChemObjectBuilder.getInstance());
+    			InChIToStructure c =f.getInChIToStructure(value, SilentChemObjectBuilder.getInstance());
     			
     			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
     				throw new CDKException(String.format("%s %s %s", c.getReturnStatus(),c.getMessage(),c.getLog()));

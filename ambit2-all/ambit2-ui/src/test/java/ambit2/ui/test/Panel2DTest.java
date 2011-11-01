@@ -38,12 +38,12 @@ import javax.swing.JSplitPane;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.exceptions.AmbitException;
@@ -58,7 +58,7 @@ public class Panel2DTest {
 	public void setup() throws Exception  {
 		//String smiles="CCc1ccccc1.C1CCCC1.C1CCC1.[Na+].CCCCCCCCCCCCCCCCC(CCCCCCCCC)CCCCCCCCCCCC";
 		String smiles = "NCCCCCCCCC";
-        SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
         mol = sp.parseSmiles(smiles);		
 
 		for (int i=0; i < mol.getBondCount();i++)

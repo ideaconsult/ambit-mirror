@@ -3,46 +3,43 @@ package ambit2.smarts.test;
 import java.io.File;
 import java.io.FileReader;
 import java.io.RandomAccessFile;
-import java.util.BitSet;
-import java.util.Vector;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.smiles.smarts.parser.SMARTSParser;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.smarts.HydrogenAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.LogicalOperatorAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.RecursiveSmartsAtom;
-import org.openscience.cdk.smsd.Isomorphism;
-import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.ringsearch.AllRingsFinder;
 import org.openscience.cdk.ringsearch.SSSRFinder;
-import org.openscience.cdk.CDKConstants;
-
-
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.smarts.parser.SMARTSParser;
+import org.openscience.cdk.smsd.Isomorphism;
+import org.openscience.cdk.smsd.interfaces.Algorithm;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.Screening;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsManager;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.StructInfo;
-import ambit2.smarts.Screening;
-import ambit2.smarts.ScreeningData;
 
 
 //This class provides utilities for automatic testing of Substructure Searching algorithms
@@ -845,7 +842,7 @@ public class AutomaticTestUtilities
 		
 		try
 		{
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
 			int record=0;
 
@@ -1120,7 +1117,7 @@ public class AutomaticTestUtilities
 		
 		try
 		{
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
 			int record=0;
 
@@ -1662,7 +1659,7 @@ public class AutomaticTestUtilities
 		
 		try
 		{
-			IChemObjectBuilder b = DefaultChemObjectBuilder.getInstance();
+			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(dbFileName),b);
 			int record=0;
 			int readComp = 0;

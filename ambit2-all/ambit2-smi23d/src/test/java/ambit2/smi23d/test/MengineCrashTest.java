@@ -33,7 +33,6 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -117,7 +116,7 @@ public class MengineCrashTest {
         String s1= g.createSMILES(a);
         String s2= g.createSMILES(b);
         
-        SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+        SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
         IMolecule a1 = p.parseSmiles(s1);
         IMolecule b1 = p.parseSmiles(s2);
         Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(a1,b1));
@@ -257,7 +256,7 @@ public class MengineCrashTest {
     public IMolecule getChemical(String file) throws Exception {
         IMolecule a = null;
         IIteratingChemObjectReader reader = new MyIteratingMDLReader(
-        		getClass().getClassLoader().getResourceAsStream(file),DefaultChemObjectBuilder.getInstance());
+        		getClass().getClassLoader().getResourceAsStream(file),SilentChemObjectBuilder.getInstance());
         while (reader.hasNext()) {
             Object o = reader.next();
             if (o instanceof IMolecule) {

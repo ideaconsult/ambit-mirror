@@ -39,7 +39,6 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
@@ -82,7 +81,7 @@ public class Mopac7WriterTest  {
             		return "test";
             	}
             };
-            SmilesParser p = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+            SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
             IMolecule mol = p.parseSmiles("CCCCCc1cccc2cccc(c12)CCC");
 
     		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
@@ -193,7 +192,7 @@ public class Mopac7WriterTest  {
     public void testNCI() throws Exception {
             IteratingMDLReader reader = new IteratingMDLReader(
                 new FileInputStream("D:\\nina\\Databases\\nciopen_3D_fixed.sdf"),
-                DefaultChemObjectBuilder.getInstance()
+                SilentChemObjectBuilder.getInstance()
                 );
             MDLWriter wriOK = new MDLWriter(new FileOutputStream(
                     "D:\\nina\\nciopen_3D_electronic_ok.sdf"));

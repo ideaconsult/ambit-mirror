@@ -54,7 +54,7 @@ import org.openscience.cdk.tools.LoggingTool;
  * <p>The use of this class is exemplified as follows. To get information 
  * about the major isotope of hydrogen, one can use this code:
  * <pre>
- *   IsotopeFactory factory = IsotopeFactory.getInstance(DefaultChemObjectBuilder.getInstance());
+ *   IsotopeFactory factory = IsotopeFactory.getInstance(SilentChemObjectBuilder.getInstance());
  *   Isotope major = factory.getMajorIsotope("H");
  * </pre> 
  *

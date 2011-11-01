@@ -40,7 +40,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -150,7 +149,7 @@ public class SmilesTest {
 		"$$$$";
 	    
 	    MDLReader r = new MDLReader(new StringReader(sdf));
-	    IMolecule m = MoleculeTools.newMolecule(DefaultChemObjectBuilder.getInstance());
+	    IMolecule m = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 	    try {
 	        m = (IMolecule)r.read(m);
 	    } catch (CDKException x) {
@@ -331,7 +330,7 @@ public class SmilesTest {
 	}
 	@Test
 	public void testMCS() throws Exception {
-		 SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+		 SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
 	        IAtomContainer mol1 = sp.parseSmiles("c1ccccc1NC");
 	        IAtomContainer mol2 = sp.parseSmiles("c1cccnc1");
 
@@ -341,7 +340,7 @@ public class SmilesTest {
 	        mcs.setChemFilters(true, true, true);
 
 	        mol1 = mcs.getReactantMolecule();
-	        IMolecule mcsmolecule = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class, mol1);
+	        IMolecule mcsmolecule = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class, mol1);
 	        List<IAtom> atomsToBeRemoved = new ArrayList<IAtom>();
 	        for (IAtom atom : mcsmolecule.atoms())
 	        {

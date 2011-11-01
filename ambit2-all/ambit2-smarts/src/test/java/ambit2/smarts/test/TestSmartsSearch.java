@@ -34,7 +34,6 @@ import junit.framework.TestSuite;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -44,10 +43,10 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.mcss.RMap;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.LoggingTool;
 
-import ambit2.smarts.SmartsConst;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 
@@ -111,7 +110,7 @@ public class TestSmartsSearch extends TestCase
 			System.out.println("Smarts Parser errors:\n" + error);
 			throw(new Exception("Smarts Parser errors:\n" + error));
 		}
-		SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+		SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer atomContainer = sp.parseSmiles(smiles);
 		mTarget = atomContainer;
 		smartsParser.setSMARTSData(atomContainer);
@@ -955,7 +954,7 @@ public class TestSmartsSearch extends TestCase
 	 //TODO: This takes a long time to match
 	  long start = Calendar.getInstance().getTimeInMillis();
 	  //int[] results = match("[N,#6&+1,+0]", "[Na+].[Na+].[O-]C(=O)c1ccccc1c2c3ccc([O-])cc3oc4cc(=O)ccc24");
-	   new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	   new SmilesParser(SilentChemObjectBuildergetInstance());
 	   SMARTSParser.parse("[N,#6&+1,+0]");
 	   long end = Calendar.getInstance().getTimeInMillis();
 	   System.out.println( (end - start) );
