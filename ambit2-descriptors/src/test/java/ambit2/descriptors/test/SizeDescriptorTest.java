@@ -29,7 +29,6 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.qsar.DescriptorValue;
@@ -142,7 +141,7 @@ public class SizeDescriptorTest  {
 		MDLReader reader = new MDLReader(getClass().getClassLoader().getResourceAsStream(
 				"ambit2/descriptors/size/224824.sdf"));
 		
-		mol = (Molecule) reader.read(mol);
+		mol = (IMolecule) reader.read(mol);
 		reader.close();
 		return mol;
 	}

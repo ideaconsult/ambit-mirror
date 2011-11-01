@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
-import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -35,7 +34,7 @@ public class IteratingChemObjectReaderWrapper extends
 			if (chemObject instanceof IChemFile) {
 				int c = ((IChemFile) chemObject).getChemSequenceCount();
 				if (c>0) {
-					IChemSequence s = ((ChemFile) chemObject).getChemSequence(0);
+					IChemSequence s = ((IChemFile) chemObject).getChemSequence(0);
 					c = s.getChemModelCount();
 					if (c > 0) { 
 						IChemModel m = s.getChemModel(0);
