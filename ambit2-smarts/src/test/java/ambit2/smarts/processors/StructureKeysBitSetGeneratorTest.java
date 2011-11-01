@@ -160,18 +160,20 @@ public class StructureKeysBitSetGeneratorTest {
 		// #3 cdk does find double bonds in kekule representation
 		ISmartsPattern smartsPattern_cdk = SmartsPatternFactory.createSmartsPattern(SmartsParser.smarts_cdk, "[#6]=[#6]", false);
 		Assert.assertTrue(smartsPattern_cdk.match(biphenyl_aromaticsmiles)==0);
-		Assert.assertTrue(smartsPattern_cdk.match(biphenyl_kekule)>0);
-		Assert.assertTrue(smartsPattern_cdk.match(biphenyl_kekulesmiles)>0);
+		//this is fixed in cdk 1.4.4
+	    Assert.assertTrue(smartsPattern_cdk.match(biphenyl_kekule)==0);
+	    Assert.assertTrue(smartsPattern_cdk.match(biphenyl_kekulesmiles)==0);
 		
 		
 		//same as #3 but using CDK code only
 		SMARTSQueryTool sqt = new SMARTSQueryTool("[#6]=[#6]");
 		//there is no any double bond in biphenyl, created via aromatic smiles
+		//Fixed in cdk 1.4.4
 		Assert.assertFalse(sqt.matches(biphenyl_aromaticsmiles));
 		//there is at least one :) double bond in the biphenyl , read from SDF
-		Assert.assertTrue(sqt.matches(biphenyl_kekule));
+		Assert.assertFalse(sqt.matches(biphenyl_kekule));
 		//there is at least one :) double bond in the biphenyl , read from SDF
-		Assert.assertTrue(sqt.matches(biphenyl_kekulesmiles));
+		Assert.assertFalse(sqt.matches(biphenyl_kekulesmiles));
 	}
 	/*
 	protected void printBonds(IAtomContainer mol) {

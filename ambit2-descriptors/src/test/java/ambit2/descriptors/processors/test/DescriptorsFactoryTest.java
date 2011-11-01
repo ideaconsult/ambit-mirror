@@ -59,9 +59,9 @@ public class DescriptorsFactoryTest {
 
 		Iterator<Property> p = profile.getProperties(false);
 		while (p.hasNext()) {
-			//System.out.println(p.next().getClazz());
+			System.out.println(p.next().getClazz());
 		}
-		Assert.assertEquals(43,profile.size());		
+		Assert.assertEquals(44,profile.size());		
 	}
 
 }

@@ -149,13 +149,13 @@ public class AlgorithmsPile {
 			/** Descriptors */
 			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#xlogP"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor","ALogP","org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#ALOGP"},
-			{"org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor","Prediction of logP based on the number of carbon and hetero atoms","org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure},
+			{"org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor","Prediction of logP based on the number of carbon and hetero atoms","org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#mannholdLogP"},
 	
 			{"ambit2.descriptors.MolecularWeight","MolecularWeight","ambit2.descriptors.MolecularWeight",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#MolecularWeight",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MolecularWeight"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor","Lipinski Rule of Five","org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()}, "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#lipinskifailures"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor","WHIM descriptors","org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#WHIM"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor","TPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#tpsa"},
-			
+
 			{"org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor","CPSA descriptor","org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#CPSA"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor","Number of aromatic atoms","org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#aromaticAtomsCount"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor","Number of aromatic bonds","org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#aromaticBondsCount"},	
@@ -206,6 +206,72 @@ public class AlgorithmsPile {
 			
 			{"org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor","Vertex adjacency information (magnitude)","org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#vAdjMa"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor","Wiener Path number and Wiener Polarity Number","org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#wienerNumbers"},
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor",
+				"Number of each amino acid in an atom container",
+				"org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor",
+				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#aminoAcidsCount"				
+			},
+		/*
+			{"org.openscience.cdk.qsar.descriptors.protein.TaeAminoAcidDescriptor",
+				"An implementation of the TAE descriptors for amino acids.",
+				"org.openscience.cdk.qsar.descriptors.protein.TaeAminoAcidDescriptor",
+				null,new String[] {
+					AlgorithmType.DescriptorCalculation.toString()},
+					"",
+					Algorithm.requires.structure,
+					"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#taeAminoAcid"				
+			},
+			*/
+			{"org.openscience.cdk.qsar.descriptors.molecular.AcidicGroupCountDescriptor",
+				"The number of acidic groups.",
+				"org.openscience.cdk.qsar.descriptors.molecular.AcidicGroupCountDescriptor",
+				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
+				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#basicGroupCount"				
+			},
+			
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.BasicGroupCountDescriptor",
+				"The number of basic groups.",
+				"org.openscience.cdk.qsar.descriptors.molecular.BasicGroupCountDescriptor",
+				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
+				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#acidicGroupCount"				
+			},			
+			 
+			{"org.openscience.cdk.qsar.descriptors.molecular.FMFDescriptor",
+				"FMF descriptor characterizing complexity of a molecule.",
+				"org.openscience.cdk.qsar.descriptors.molecular.FMFDescriptor",
+				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
+				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#fmf"				
+			},			
+			 		
+			{"org.openscience.cdk.qsar.descriptors.molecular.IPMolecularLearningDescriptor",
+				"The ionization potential of a molecule",
+				"org.openscience.cdk.qsar.descriptors.molecular.IPMolecularLearningDescriptor",
+				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
+				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#ip"				
+			},				
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.HybridizationRatioDescriptor",
+				"Reports the fraction of sp3 carbons to sp2 carbons",
+				"org.openscience.cdk.qsar.descriptors.molecular.HybridizationRatioDescriptor",
+				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
+				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#hybratio"				
+			},				
+			 
+			{"org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor",
+				"Weighted path descriptors (Randic) characterizing molecular branching.",
+				"org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor",
+				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
+				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#weightedPath"				
+			},			
+			
+			{"org.openscience.cdk.qsar.descriptors.molecular.VABCDescriptor",
+				"Volume descriptor.",
+				"org.openscience.cdk.qsar.descriptors.molecular.VABCDescriptor",
+				null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,
+				"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#vabc"				
+			},						
 			
 			{"ambit2.mopac.MopacOriginalStructure","MOPAC descriptors (Energy, EHOMO, ELUMO,etc.)","ambit2.mopac.MopacOriginalStructure",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
 			
