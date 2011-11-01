@@ -4,7 +4,7 @@ import java.util.BitSet;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -53,7 +53,7 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
 				long fp_time = System.currentTimeMillis();
 				IAtomContainer c = (IAtomContainer) object; 
                 if (hydrogens) {
-                    if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+                    if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
                     c = (IAtomContainer) ((IAtomContainer) object).clone(); 
                     hAdder.addImplicitHydrogens(c);
                     AtomContainerManipulator.convertImplicitToExplicitHydrogens(c);

@@ -6,7 +6,7 @@ import java.beans.PropertyChangeListener;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
 
@@ -48,7 +48,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 				return babel.runShell(smiles);
 			} catch (ShellException x) {
 				setParser(SMILES_PARSER.CDK);
-				if (cdkParser == null) cdkParser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+				if (cdkParser == null) cdkParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 				IMolecule mol = cdkParser.parseSmiles(smiles);
 				
 				try {
@@ -63,7 +63,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 			}
 		}
 		default: {
-			if (cdkParser == null) cdkParser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+			if (cdkParser == null) cdkParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 			IMolecule mol = cdkParser.parseSmiles(smiles);
 			try {
 				return dbt.fixAromaticBondOrders(mol);

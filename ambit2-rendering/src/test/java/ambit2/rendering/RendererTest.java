@@ -22,7 +22,6 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.IRenderer;
 import org.openscience.cdk.renderer.RendererModel;
@@ -37,7 +36,7 @@ import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
-import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -95,7 +94,7 @@ public class RendererTest {
 		}
 		StructureDiagramGenerator g = new StructureDiagramGenerator(mol);
 		g.generateCoordinates();
-		final IMolecule selectedMol = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
+		final IMolecule selectedMol = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 		selectedMol.addAtom(anAtom);
 		selectedMol.addBond(mol.getBond(0));
 		selectedMol.addAtom(mol.getBond(0).getAtom(0));
@@ -147,7 +146,7 @@ public class RendererTest {
   	    InputStream in = RendererTest.class.getClassLoader().getResourceAsStream(filename);
   	    
 		Assert.assertNotNull(in);
-		IteratingMDLReader reader = new IteratingMDLReader(in, NoNotificationChemObjectBuilder.getInstance());
+		IteratingMDLReader reader = new IteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
 
 		while (reader.hasNext()) {
 			IChemObject mol = reader.next();

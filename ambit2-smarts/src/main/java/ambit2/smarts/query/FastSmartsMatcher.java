@@ -6,7 +6,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.IsomorphismTester;
@@ -45,7 +45,7 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 		isoTester.setQuery(query);
 		Vector<IAtom> index = isoTester.getIsomorphismMapping(mol);
 		if (index ==null) return null;
-		IAtomContainer match = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
+		IAtomContainer match = MoleculeTools.newAtomContainer(SilentChemObjectBuilder.getInstance());
 		
 		for (IAtom i: index) match.addAtom(i);
 		

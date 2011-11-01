@@ -31,8 +31,8 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.result.IntegerResult;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.w3c.dom.Document;
@@ -134,7 +134,7 @@ public class FunctionalGroup extends AmbitBean implements
 		try {
 			//This is a HACK to deal with kekule structures!
 			//Find out if this is a valid smiles ,
-			SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+			SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 			IMolecule mol = parser.parseSmiles(smarts);
 			for (IAtom atom: mol.atoms()) 
 				if (atom.getFlag(CDKConstants.ISAROMATIC)) {

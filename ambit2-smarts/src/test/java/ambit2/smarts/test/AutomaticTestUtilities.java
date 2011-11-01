@@ -135,8 +135,8 @@ public class AutomaticTestUtilities
 	// start at 1248 for the garbage collector tests 
 	boolean FlagTargetLargerThanQuery = false;
 	boolean FlagGarbCollector = false;
-	int maxNumSeqSteps = 4;
-	int maxStrSize = 30;
+	int maxNumSeqSteps = 6;
+	int maxStrSize = 50;
 	int minGenStrSize = 5;
 	int maxStatLines = 10000000;
 	int nDBStr = 1000;
@@ -179,15 +179,24 @@ public class AutomaticTestUtilities
 	public static void main(String[] args)
 	{
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
-		//atu.handleArguments(args);		
+		//exhaustive
 		
+		atu.handleArguments(new String[] {
+				"-db","D:/nina/IdeaConsult/Projects/CADASTER/Data for 2011 models - TAZ&BTAZ/TAZ_BTAZ_FishToxicity/fragments/6.sdf",
+				"-c","exhaustive-str",
+				"-o","D:/nina/IdeaConsult/Projects/CADASTER/Data for 2011 models - TAZ&BTAZ/TAZ_BTAZ_FishToxicity/fragments/6strucs_big.txt",
+				//"-nDBStr","1"
+		});		
+		
+					
 		//atu.handleArguments(new String[] {"-db","/gen-str-seq40-db-after-40000.txt", "-i","/keys-eff80.txt",	
+		/*
 		atu.handleArguments(new String[] {"-db","/einecs_structures_V13Apr07.sdf", 
 				"-i2","/query04-mutag.txt","-i","/sss-tests-query04.txt",
 				"-o","/stat-tests-query04__.txt",
 				"-nDBStr", "2000", "-maxSeqStep", "40", "-c", "calc-stat", 
 				"-nBits", "32"});
-		
+		*/
 		//atu.produceRandomStructures();
 	}
 	

@@ -31,6 +31,8 @@ package ambit2.core.test;
 
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -42,13 +44,14 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -81,7 +84,7 @@ public class SmilesTest {
 	    IMolecule m = getMolecule();
 	    String m_smiles = gen.createSMILES(m);
 	    Assert.assertFalse("".equals(m_smiles));
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		
 		int count_differences = 0;
 	    for (int i=0; i < smiles.length;i++) {
@@ -157,7 +160,7 @@ public class SmilesTest {
 	}	
 	@Test
 	public void testAromaticityRing7() throws Exception {
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IMolecule mol = parser.parseSmiles("c1cccccc1");
 		for (IAtom atom : mol.atoms())
 			Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC));
@@ -165,7 +168,7 @@ public class SmilesTest {
 	
 	@Test
 	public void testAromaticityRing7a() throws Exception {
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IMolecule mol = parser.parseSmiles("c1cccccc1");
 		//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 		//for (IAtom atom : mol.atoms())	Assert.assertTrue(atom.getFlag(CDKConstants.HYBRIDIZATION_SP2));		
@@ -178,7 +181,7 @@ public class SmilesTest {
 	
 	@Test
 	public void testAromaticityRing6() throws Exception {
-		SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IMolecule mol = parser.parseSmiles("c1ccccc1");
 		for (IAtom atom : mol.atoms())
 			Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC));
@@ -188,6 +191,20 @@ public class SmilesTest {
 		for (IBond bond: mol.bonds())
 			System.out.println(bond.getOrder());		
 	}	
+	
+	
+	@Test
+	public void testHeteroaromaticRing() throws Exception {
+		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
+		IMolecule mol = parser.parseSmiles("Oc1ccc(cc1)c1coc2c(c1=O)c(O)cc(c2)O");
+		//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		//CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		int c = 0;
+		for (IAtom atom : mol.atoms())
+			c += atom.getFlag(CDKConstants.ISAROMATIC)?1:0;
+		
+		Assert.assertEquals(16,c);
+	}
 	
 	public static void printMol(IMolecule mol) {
 		System.out.println(mol.getAtomCount());
@@ -204,7 +221,7 @@ public class SmilesTest {
     public static void testsmiles(String[] args) {
         try {
                 SmilesParser parser = new
-                SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+                SmilesParser(SilentChemObjectBuilder.getInstance());
                 IMolecule mol =
                 	parser.parseSmiles("O=C5C(=NNc1ccc(c2ccccc12)S(=O)(=O)O)C=C(C(=O)C5(=NNc3ccc(c4ccccc34)S(=O)(=O)O))CO");
                 printMol(mol);
@@ -311,5 +328,44 @@ public class SmilesTest {
 			x.printStackTrace();
 		}
 		
+	}
+	@Test
+	public void testMCS() throws Exception {
+		 SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+	        IAtomContainer mol1 = sp.parseSmiles("c1ccccc1NC");
+	        IAtomContainer mol2 = sp.parseSmiles("c1cccnc1");
+
+	        org.openscience.cdk.smsd.Isomorphism mcs = new org.openscience.cdk.smsd.Isomorphism(
+	                org.openscience.cdk.smsd.interfaces.Algorithm.DEFAULT, true);
+	        mcs.init(mol1, mol2, true, true);
+	        mcs.setChemFilters(true, true, true);
+
+	        mol1 = mcs.getReactantMolecule();
+	        IMolecule mcsmolecule = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class, mol1);
+	        List<IAtom> atomsToBeRemoved = new ArrayList<IAtom>();
+	        for (IAtom atom : mcsmolecule.atoms())
+	        {
+	            int index = mcsmolecule.getAtomNumber(atom);
+	            if (!mcs.getFirstMapping().containsKey(index))
+	                atomsToBeRemoved.add(atom);
+	        }
+
+	        for (IAtom atom : atomsToBeRemoved)
+	            mcsmolecule.removeAtomAndConnectedElectronContainers(atom);
+
+	        for (int i = 0; i < mcsmolecule.getAtomCount(); i++) {
+	            System.out.println("is mcs atom aromtic: " + mcsmolecule.getAtom(i).getFlag(CDKConstants.ISAROMATIC));
+	            mcsmolecule.getAtom(i).setFlag(CDKConstants.ISINRING,true);
+	        }
+
+	        for (int i = 0; i < mcsmolecule.getBondCount(); i++) {
+	            System.out.println("is mcs bond aromtic: " + mcsmolecule.getBond(i).getFlag(CDKConstants.ISAROMATIC));
+	            mcsmolecule.getBond(i).setFlag(CDKConstants.ISINRING,true);
+	        }    
+	        
+	        SmilesGenerator g = new SmilesGenerator();
+	        g.setUseAromaticityFlag(true);
+	        System.out.println("mcs smiles: " + g.createSMILES(mcsmolecule));
+
 	}
 }

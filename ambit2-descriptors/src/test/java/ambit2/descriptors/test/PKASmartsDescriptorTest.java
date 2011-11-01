@@ -50,9 +50,9 @@ import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -190,7 +190,7 @@ public class PKASmartsDescriptorTest {
     { 
      IMolecule mol = null;
      try {
-      SmilesParser sp = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());   
+      SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());   
       mol = sp.parseSmiles(smi);
      }
      catch (InvalidSmilesException e) {
@@ -202,7 +202,7 @@ public class PKASmartsDescriptorTest {
     //
     @Test
     public void testAcid() throws Exception {
-    	SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+    	SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
     	IAtomContainer a = parser.parseSmiles("O[N+](=O)[O-]");
 		AtomConfigurator cfg = new AtomConfigurator();
     	cfg.process(a);		    

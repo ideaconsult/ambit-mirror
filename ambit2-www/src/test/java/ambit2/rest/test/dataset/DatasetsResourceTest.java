@@ -13,7 +13,6 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.opentox.dsl.task.RemoteTask;
 import org.restlet.Client;
 import org.restlet.Request;
@@ -35,11 +34,8 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.AbstractDataset;
 import ambit2.base.data.ISourceDataset;
-import ambit2.base.data.Property;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
-import ambit2.rest.dataset.RDFIteratingReader;
 import ambit2.rest.test.ProtectedResourceTest;
 
 

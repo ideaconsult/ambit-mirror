@@ -42,13 +42,12 @@ import org.openscience.cdk.io.DefaultChemObjectReader;
 import org.openscience.cdk.io.IChemObjectReader;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.setting.IOSetting;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.core.data.MoleculeTools;
-
-/**
- * Reads delimited files (CSV, TXT) 
+/*
+Reads delimited files (CSV, TXT) 
  * @author Nina Jeliazkova
  * <b>Modified</b> 2005-9-6
  */
@@ -84,9 +83,9 @@ public class DelimitedFileReader extends DefaultChemObjectReader implements IChe
         if (object instanceof IMoleculeSet) {
             return (IChemObject)readSetOfMolecules();
         } else if (object instanceof IChemFile) {
-            IChemFile file = MoleculeTools.newChemFile(NoNotificationChemObjectBuilder.getInstance());
-            IChemSequence sequence = MoleculeTools.newChemSequence(NoNotificationChemObjectBuilder.getInstance());
-            IChemModel chemModel = MoleculeTools.newChemModel(NoNotificationChemObjectBuilder.getInstance());
+            IChemFile file = MoleculeTools.newChemFile(SilentChemObjectBuilder.getInstance());
+            IChemSequence sequence = MoleculeTools.newChemSequence(SilentChemObjectBuilder.getInstance());
+            IChemModel chemModel = MoleculeTools.newChemModel(SilentChemObjectBuilder.getInstance());
             chemModel.setMoleculeSet(readSetOfMolecules());
             sequence.addChemModel(chemModel);
             file.addChemSequence(sequence);

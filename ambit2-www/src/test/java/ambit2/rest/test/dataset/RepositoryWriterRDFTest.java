@@ -37,7 +37,7 @@ import junit.framework.Assert;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 
@@ -83,7 +83,7 @@ public class RepositoryWriterRDFTest extends ResourceTest {
 		Assert.assertNotNull(in);
 		RDFIteratingReader reader = new RDFIteratingReader(
 				in,
-				NoNotificationChemObjectBuilder.getInstance(),
+				SilentChemObjectBuilder.getInstance(),
 				String.format("http://somethingelse.com:%d",port),
 				"RDF/XML");
 		//reader.setReference(LiteratureEntry.getInstance("input.rdf"));
@@ -158,7 +158,7 @@ public class RepositoryWriterRDFTest extends ResourceTest {
 		Assert.assertNotNull(in);
 		RDFIteratingReader reader = new RDFIteratingReader(
 				in,
-				NoNotificationChemObjectBuilder.getInstance(),
+				SilentChemObjectBuilder.getInstance(),
 				baseref,
 				"RDF/XML");
 		//reader.setReference(LiteratureEntry.getInstance("input.rdf"));

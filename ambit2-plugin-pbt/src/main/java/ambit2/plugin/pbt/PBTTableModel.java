@@ -17,8 +17,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import nplugins.core.Introspection;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -218,7 +218,7 @@ public class PBTTableModel extends AbstractTableModel {
 			case NODE_STRUCTURE: {
 					try {
 						Cell<IAtomContainer> cell = new Cell<IAtomContainer>(row,col,colspan,
-								MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance()));
+								MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance()));
 						cell.setMode(type);
 						table.add(cell);
 						Collections.sort(table);

@@ -8,7 +8,7 @@ import java.util.Vector;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -34,11 +34,11 @@ public class SMIRKSDepict extends CDKDepict implements IAcceptable {
 			
 			SMIRKSReaction smr = smrkMan.parse(getSmirks());
 			System.out.println(smrkMan.getErrors());
-			SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+			SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 			IAtomContainer reactant = parser.parseSmiles(smiles);
 			reactant = AtomContainerManipulator.removeHydrogens(reactant);	
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(reactant);
-			CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
+			CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 			CDKHueckelAromaticityDetector.detectAromaticity(reactant); 
 			adder.addImplicitHydrogens(reactant);
 			AtomContainerManipulator.convertImplicitToExplicitHydrogens(reactant);

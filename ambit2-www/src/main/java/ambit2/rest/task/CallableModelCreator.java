@@ -64,7 +64,7 @@ public abstract class CallableModelCreator<DATA,Item,Builder extends ModelBuilde
 
 	    		for (PropertyAnnotation a:property.getAnnotations()) {
 	    			if (a.getObject() instanceof Property) {
-
+	    				//COULD be done via sql generating the URI, given existing property name and reference
 	    				Property linkedProperty = (Property) a.getObject();
 	    				if (linkedProperty.getId()<=0) {
 	    			    	//propertyWriter.setObject(linkedProperty);

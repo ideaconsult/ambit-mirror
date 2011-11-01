@@ -12,9 +12,9 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -35,7 +35,7 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	
 	public SOMEVisualizer() {
 		super();
-		selected = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
+		selected = MoleculeTools.newAtomContainer(SilentChemObjectBuilder.getInstance());
 	}
 	@Override
 	public BufferedImage getImage(IAtomContainer mol, String ruleID, int width,

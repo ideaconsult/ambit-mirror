@@ -1,7 +1,5 @@
 package ambit2.rest.structure;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +9,7 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -40,7 +38,6 @@ import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
-import ambit2.rest.exception.RResourceException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.task.CallableQueryProcessor;
@@ -296,7 +293,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} else return null;
 	}
 	public IAtomContainer isSMILES(String smiles) throws Exception {
-		SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer c = p.parseSmiles(smiles);
 		searchType = _searchtype.smiles;
 		if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(smiles);

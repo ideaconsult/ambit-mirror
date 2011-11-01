@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
@@ -59,7 +59,7 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 	protected String normalizeValue() {
 
 		if ("smiles".equals(getFieldname())) try {
-			SmilesParser p = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+			SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 			IMolecule mol = p.parseSmiles(getValue());
 			configurator.process(mol);
 			String smiles = smilesKey.process(mol);
@@ -69,7 +69,7 @@ public class QueryStructure extends AbstractStructureQuery<String,String,StringC
 		}
 		else if ("formula".equals(getFieldname())) {
 			
-			IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(getValue(),NoNotificationChemObjectBuilder.getInstance());
+			IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(getValue(),SilentChemObjectBuilder.getInstance());
 
 			//this is to make the formula "canonical" (i.e. sorted in the right order)
 

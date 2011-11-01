@@ -30,7 +30,6 @@ import java.util.Stack;
 import java.util.Vector;
 
 import org.openscience.cdk.Atom;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -47,7 +46,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
 
@@ -741,7 +740,7 @@ public class SmartsManager
 	
 	public IAtomContainerSet getAllIsomorphismMappings(IAtomContainer target)
 	{
-		IAtomContainerSet s = MoleculeTools.newAtomContainerSet(NoNotificationChemObjectBuilder.getInstance());
+		IAtomContainerSet s = MoleculeTools.newAtomContainerSet(SilentChemObjectBuilder.getInstance());
 		if (query == null)
 			return(s);
 		
@@ -770,7 +769,7 @@ public class SmartsManager
 				Vector<IAtom> v =  getAtomMappingsFor1AtomQuery(target, query);
 				for (int i = 0; i< v.size(); i++)
 				{
-					IMolecule c = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
+					IMolecule c = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 					c.addAtom(v.get(i));
 					s.addAtomContainer(c);
 				}
@@ -990,7 +989,7 @@ public class SmartsManager
 	
 	IAtomContainerSet getAllIsomorphismMappingsFor2AtomQuery(IAtomContainer target, IAtomContainer recQuery)
 	{	
-		IAtomContainerSet s = MoleculeTools.newAtomContainerSet(NoNotificationChemObjectBuilder.getInstance());
+		IAtomContainerSet s = MoleculeTools.newAtomContainerSet(SilentChemObjectBuilder.getInstance());
 		
 		if (recQuery.getBondCount() == 0)
 			return(s); //The two atoms must be connected otherwise substr. search returns no matches
@@ -1012,7 +1011,7 @@ public class SmartsManager
 						if (bo != null)
 							if (qBond.matches(bo))
 							{	
-								IMolecule c = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
+								IMolecule c = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 								c.addAtom(at);
 								c.addAtom((IAtom)ca.get(j));
 								c.addBond(bo); 
@@ -1164,7 +1163,7 @@ public class SmartsManager
 	public IAtomContainer generateFullIsomorphismMapping(List bondMapList, IAtomContainer target, IAtomContainer queryStr)
 	{	
 		Vector<IAtom> v = generateFullAtomMapping(bondMapList, target, queryStr);
-		IMolecule ac = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
+		IMolecule ac = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 		for (int i = 0; i < v.size(); i++)
 			ac.addAtom(v.get(i));
 		

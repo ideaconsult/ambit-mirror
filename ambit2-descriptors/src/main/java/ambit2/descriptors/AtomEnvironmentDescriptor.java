@@ -18,13 +18,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IElectronContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResultType;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.base.data.Property;
@@ -375,13 +375,13 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
         //the idea is not to create objects if they already exist...
         if ((atm == null) || (factory == null)) {
             if ( (this.atm == null) || (!(this.atm instanceof SybylAtomTypeMatcher))) {
-                this.atm = SybylAtomTypeMatcher.getInstance(NoNotificationChemObjectBuilder.getInstance());
+                this.atm = SybylAtomTypeMatcher.getInstance(SilentChemObjectBuilder.getInstance());
                 
                 try {
                     //InputStream ins = this.getClass().getClassLoader().getResourceAsStream("ambit/data/descriptors/hybridization_atomtypes.xml");
                 	InputStream ins = getAtomTypeFactoryStream();
                     this.factory = 
-                        AtomTypeFactory.getInstance(ins,"owl",NoNotificationChemObjectBuilder.getInstance());
+                        AtomTypeFactory.getInstance(ins,"owl",SilentChemObjectBuilder.getInstance());
 
                 } catch (Exception x) {
                     throw new CDKException(x.getMessage());

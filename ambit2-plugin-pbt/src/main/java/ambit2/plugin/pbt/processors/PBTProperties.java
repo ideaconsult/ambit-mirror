@@ -4,7 +4,7 @@ import java.util.TreeMap;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -16,8 +16,8 @@ import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.plugin.pbt.Cell;
 import ambit2.plugin.pbt.PBTWorkBook;
-import ambit2.plugin.pbt.PBTWorksheet;
 import ambit2.plugin.pbt.PBTWorkBook.WORKSHEET_INDEX;
+import ambit2.plugin.pbt.PBTWorksheet;
 
 public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRecord>  {
 
@@ -42,7 +42,7 @@ public class PBTProperties extends AbstractDBProcessor<PBTWorkBook, IStructureRe
 	
 	public static IAtomContainer getAtomContainer(PBTWorkBook target) throws AmbitException {
 		IAtomContainer a = target.getStructure();
-		if (a == null) a = MoleculeTools.newAtomContainer(NoNotificationChemObjectBuilder.getInstance());
+		if (a == null) a = MoleculeTools.newAtomContainer(SilentChemObjectBuilder.getInstance());
 		a.setProperties(new TreeMap());
 		
 		a.getProperties().clear();
