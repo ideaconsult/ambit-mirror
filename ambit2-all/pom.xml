@@ -547,6 +547,11 @@
 <properties>
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>4.8.1</junit.version>
+   	<!-- cdk 1.3.6 is cdk 1.3.6 with jniinchi 0.7 (support for standard InChI), instead of jniinchi 0.5 package -->
+	<!-- cdk 1.3.8 is regular version, deployed to ambit repository -->
+	<!-- cdk 1.4.5 is regular version, deployed to ambit repository; used since ambit 2.4.4-SNAPSHOT -->
+	<cdk.version>1.4.5</cdk.version>
+	
 </properties>	
 
 </project>
