@@ -46,7 +46,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -320,7 +319,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		Assert.assertNotNull(in);
 		MDLV2000Reader reader = new MDLV2000Reader(in);
 		
-		mol = (Molecule) reader.read(mol);
+		mol = (IMolecule) reader.read(mol);
 		reader.close();
 		return mol;
 	}

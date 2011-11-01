@@ -30,9 +30,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -101,8 +101,8 @@ public class DelimitedFileReader extends DefaultChemObjectReader implements IChe
     		IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(input,format);
         while (reader.hasNext()) {
 	        Object object = reader.next();
-	        if (object instanceof AtomContainer) 
-	        	som.addAtomContainer((AtomContainer)object);
+	        if (object instanceof IAtomContainer) 
+	        	som.addAtomContainer((IAtomContainer)object);
         }
         
         	reader.close();

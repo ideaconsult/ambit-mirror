@@ -72,7 +72,7 @@ import ambit2.core.data.MoleculeTools;
  * For writing a MDL molfile you can this code:
  * <pre>
  * MDLWriter writer = new MDLWriter(new FileWriter(new File("output.mol")));
- * writer.write((Molecule)molecule);
+ * writer.write((IMolecule)molecule);
  * writer.close();
  * </pre>
  *

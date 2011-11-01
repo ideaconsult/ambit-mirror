@@ -32,8 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.Ring;
 import org.openscience.cdk.RingSet;
 import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.annotations.TestMethod;
@@ -42,12 +40,12 @@ import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomType;
+import org.openscience.cdk.interfaces.IAtomType.Hybridization;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
-import org.openscience.cdk.interfaces.IAtomType.Hybridization;
 import org.openscience.cdk.ringsearch.AllRingsFinder;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -558,7 +556,7 @@ public class DeduceBondSystemTool {
 
     private boolean inRingSet(IAtom atom, IRingSet ringSet) {
         for (int i = 0; i < ringSet.getAtomContainerCount(); i++) {
-            Ring ring = (Ring) ringSet.getAtomContainer(i);
+            IRing ring = (IRing) ringSet.getAtomContainer(i);
             if (ring.contains(atom)) return true;
         }
         return false;
@@ -593,7 +591,7 @@ public class DeduceBondSystemTool {
 
                 IMolecule mnew = null;
                 try {
-                    mnew = (Molecule) molecule.clone();
+                    mnew = (IMolecule) molecule.clone();
                 } catch (Exception e) {
                     logger.error("Failed to clone molecule: ", e.getMessage());
                     logger.debug(e);
@@ -670,13 +668,13 @@ public class DeduceBondSystemTool {
                 molecule.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);
             }
             for (int i = 0; i <= ringSet.getAtomContainerCount() - 1; i++) {
-                Ring r = (Ring) ringSet.getAtomContainer(i);
+                IRing r = (IRing) ringSet.getAtomContainer(i);
                 r.setFlag(CDKConstants.ISAROMATIC, false);
             }
             // now, detect aromaticity from cratch, and mark rings as aromatic too (if ...)
             CDKHueckelAromaticityDetector.detectAromaticity(molecule);
             for (int i = 0; i <= ringSet.getAtomContainerCount() - 1; i++) {
-            	Ring ring = (Ring) ringSet.getAtomContainer(i);
+            	IRing ring = (IRing) ringSet.getAtomContainer(i);
             	RingManipulator.markAromaticRings(ring);
             }
 
@@ -688,7 +686,7 @@ public class DeduceBondSystemTool {
 //			}
 
             for (int i = 0; i <= ringSet.getAtomContainerCount() - 1; i++) {
-                Ring ring = (Ring) ringSet.getAtomContainer(i);
+                IRing ring = (IRing) ringSet.getAtomContainer(i);
 
                 //logger.debug(k+"\t"+r.getAtomCount()+"\t"+r.getFlag(CDKConstants.ISAROMATIC));
                 if (Check[i]) {
@@ -739,7 +737,7 @@ public class DeduceBondSystemTool {
             iloop:
             for (int i = 0; i <= rs.getAtomContainerCount() - 1; i++) {
 
-                IRing r = (Ring) rs.getAtomContainer(i);
+                IRing r = (IRing) rs.getAtomContainer(i);
 
 
                 if (r.getAtomCount() > 7 || r.getAtomCount() < 5) {
@@ -795,7 +793,7 @@ public class DeduceBondSystemTool {
 
         for (int i = 0; i <= rs.getAtomContainerCount() - 1; i++) {
 
-            IRing r = (Ring) rs.getAtomContainer(i);
+            IRing r = (IRing) rs.getAtomContainer(i);
 
             if (r.getAtomCount() > 7) {
                 Check[i] = false;
