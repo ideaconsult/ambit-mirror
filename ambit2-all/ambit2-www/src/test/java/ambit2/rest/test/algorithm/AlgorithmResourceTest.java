@@ -417,6 +417,38 @@ public class AlgorithmResourceTest extends ResourceTest {
 						));		
 				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 	}	
+	
+	@Test
+	public void testCalculateAminoAcidCount() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		Reference ref = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						));
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+		
+		ref = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						));
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+			
+		int count = 0;
+		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		i.setCloseModel(true);
+		while (i.hasNext()) {
+			count++;
+		}
+		i.close();
+		Assert.assertEquals(1,count);
+	}	
+	
+	
 	public void testLoad() throws Exception {
 		for (int i=0; i < 100;i++) {
 			Form headers = new Form();  
