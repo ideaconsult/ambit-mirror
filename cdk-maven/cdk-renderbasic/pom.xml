@@ -24,6 +24,7 @@
             <configuration>
               <tasks>
                 <attachArtifact file="dist/${project.artifactId}-${project.version}.jar"/>
+		<attachArtifact file="dist/${project.artifactId}-${project.version}-sources.jar" classifier="sources" type="jar"/>
               </tasks>
             </configuration>
           </execution>

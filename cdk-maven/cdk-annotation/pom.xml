@@ -9,6 +9,7 @@
   <artifactId>cdk-annotation</artifactId>
   <name>CDK annotation</name>
   <version>1.4.5</version>
+
   <build>
     <plugins>
       <!-- fake out maven and install the binary artifact -->
@@ -24,12 +25,35 @@
             <configuration>
               <tasks>
                 <attachArtifact file="dist/${project.artifactId}-${project.version}.jar"/>
+		<attachArtifact file="dist/${project.artifactId}-${project.version}-sources.jar" classifier="sources" type="jar"/>
               </tasks>
             </configuration>
           </execution>
+              
         </executions>
       </plugin>
-    </plugins>
+      <!-- 
+   <plugin>
+        <groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
+        <artifactId>maven-antrun-extended-plugin</artifactId>
+        <executions>
+     
+          <execution>
+            <phase>source</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                 <attachArtifact file="dist/${project.artifactId}-sources-${project.version}.jar" classifier="sources" type="jar"/>
+              </tasks>
+            </configuration>
+          </execution>    
+              
+        </executions>
+      </plugin>     
+       --> 
+	</plugins>
     <extensions>
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
