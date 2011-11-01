@@ -66,7 +66,7 @@ public class DescriptorsFactoryTest {
 		while (p.hasNext()) {
 			Assert.assertNotNull(p.next().getClazz());
 		}
-		Assert.assertEquals(53,profile.size());		
+		Assert.assertEquals(54,profile.size());		
 	}
 	@Test
 	public void testCramerAsDescriptor() throws Exception {
