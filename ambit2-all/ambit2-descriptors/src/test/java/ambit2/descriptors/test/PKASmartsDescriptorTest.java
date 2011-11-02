@@ -85,7 +85,7 @@ public class PKASmartsDescriptorTest {
     public void test() throws Exception {
         Hashtable<Integer,PKANode> tree = pka.getTree();
         Enumeration<Integer> k = tree.keys();
-        SmartsPatternAmbit pattern = new SmartsPatternAmbit();
+        SmartsPatternAmbit pattern = new SmartsPatternAmbit(SilentChemObjectBuilder.getInstance());
         ArrayList<String> smarts = new ArrayList<String>();
         int failedNodes = 0;
         int failedSmarts = 0;

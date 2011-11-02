@@ -32,6 +32,7 @@ package ambit2.descriptors;
 import java.util.Hashtable;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.smarts.query.SMARTSException;
 import ambit2.smarts.query.SmartsPatternAmbit;
@@ -142,7 +143,7 @@ public class PKANode {
     	if (getSmarts() !=null) { 
 	    	SmartsPatternAmbit pattern = smartsPattern.get(getSmarts());
 	    	if (pattern == null) {
-	    		pattern = new SmartsPatternAmbit();
+	    		pattern = new SmartsPatternAmbit(SilentChemObjectBuilder.getInstance());
 	    		pattern.useMOEvPrimitive(true);
 	    		pattern.setUseCDKIsomorphism(false);
 	    		pattern.setSmarts(getSmarts());

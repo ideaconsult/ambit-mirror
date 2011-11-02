@@ -113,7 +113,7 @@ public class FunctionalGroupDescriptorTest {
 		int[] results = new int[] {1,0};
 		for (int i=0; i < results.length; i++) {
 			String s = smarts[i];
-			SmartsPatternAmbit p = new SmartsPatternAmbit();
+			SmartsPatternAmbit p = new SmartsPatternAmbit(SilentChemObjectBuilder.getInstance());
 			p.setSmarts(s);
 			Assert.assertEquals(results[i],p.match(m));
 		}
