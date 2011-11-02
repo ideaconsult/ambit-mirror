@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.qsar.result.IntegerResult;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
@@ -37,7 +39,7 @@ public class QuerySMARTS extends
 	 */
 	
 	private static final long serialVersionUID = -4539445262832597492L;
-	protected SmartsToChemObject smartsToChemObject = new SmartsToChemObject();
+	protected SmartsToChemObject smartsToChemObject;
 	protected final transient StructureKeysBitSetGenerator skGenerator ;
 	protected final transient FingerprintGenerator fpGenerator;
 	protected QueryPrescreenBitSet screening;
@@ -50,6 +52,7 @@ public class QuerySMARTS extends
 	protected boolean fp1024_screening = true;
 	protected boolean sk1024_screening = true;
 	protected boolean usePrecalculatedAtomProperties = true;
+	protected IChemObjectBuilder builder;
 	
 	public boolean isFp1024_screening() {
 		return fp1024_screening;
@@ -76,8 +79,10 @@ public class QuerySMARTS extends
 		this.usePrecalculatedAtomProperties = usePrecalculatedAtomProperties;
 	}
 
-	
 	public QuerySMARTS() throws Exception {
+		this(SilentChemObjectBuilder.getInstance());
+	}
+	public QuerySMARTS(IChemObjectBuilder builder) throws Exception {
 		super();
 		skGenerator = new StructureKeysBitSetGenerator();
 		fpGenerator = new FingerprintGenerator();
@@ -85,6 +90,8 @@ public class QuerySMARTS extends
 		setChemicalsOnly(false);
 		setValue(null);
 		setFieldname(null);
+		this.builder = builder;
+		smartsToChemObject = new SmartsToChemObject(builder);
 	}
 
 	public String getSQL() throws AmbitException {
@@ -116,7 +123,7 @@ public class QuerySMARTS extends
 			//if ((screening.getValue()==null) || (screening.getFieldname()==null)) {
 				screening.setPageSize(0);
 				screening.setPage(0);
-				SmartsPatternAmbit matcher = new SmartsPatternAmbit();
+				SmartsPatternAmbit matcher = new SmartsPatternAmbit(builder);
 				matcher.setUseCDKIsomorphism(false);
 				value.setQuery(matcher);
 				QueryAtomContainer container = matcher.getQuery();
