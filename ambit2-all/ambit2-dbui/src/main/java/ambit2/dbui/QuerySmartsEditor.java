@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -60,8 +61,16 @@ public class QuerySmartsEditor extends QueryEditor<String,FunctionalGroup,Boolea
 	 * 
 	 */
 	private static final long serialVersionUID = -9201007230031542807L;
-	protected SmartsToChemObject smartsToChemObject = new SmartsToChemObject();
+	protected SmartsToChemObject smartsToChemObject ;
 	protected static List<FunctionalGroup> gf;
+	
+	public QuerySmartsEditor() {
+		this(SilentChemObjectBuilder.getInstance());
+	}
+	public QuerySmartsEditor(IChemObjectBuilder builder) {
+		super();
+		smartsToChemObject = new SmartsToChemObject(builder);
+	}
 	public JComponent buildPanel() {
 
 		FormLayout layout = new FormLayout(
