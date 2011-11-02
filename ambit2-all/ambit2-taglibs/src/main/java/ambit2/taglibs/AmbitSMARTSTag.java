@@ -30,6 +30,7 @@ import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.smarts.query.SMARTSException;
 import ambit2.smarts.query.SmartsPatternAmbit;
@@ -52,7 +53,7 @@ public class AmbitSMARTSTag extends AmbitMolTag {
         		throw new JspException(getMol());
         	
         	try {
-        		SmartsPatternAmbit smartsPatern = new SmartsPatternAmbit();
+        		SmartsPatternAmbit smartsPatern = new SmartsPatternAmbit(SilentChemObjectBuilder.getInstance());
         		smartsPatern.setSmarts(smarts);
 
         		int hits = smartsPatern.hasSMARTSPattern(mol);

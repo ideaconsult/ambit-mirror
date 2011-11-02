@@ -1,16 +1,16 @@
 package ambit2.tautomers;
 
+import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
-import java.util.List;
 
+import org.openscience.cdk.Bond;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.smarts.SmartsHelper;
 
@@ -338,7 +338,7 @@ public class RuleManager
 	{
 		//The structure is fully cloned as well as all used and unused rule instances
 		
-		Molecule mol = new Molecule(); //clone structure
+		IMolecule mol = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class); //clone structure
 		IAtom newAtoms[] = new IAtom[prevStruct.getAtomCount()];
 		IBond newBonds[] = new IBond[prevStruct.getBondCount()];
 		
