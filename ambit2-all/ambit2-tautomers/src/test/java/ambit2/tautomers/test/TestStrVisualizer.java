@@ -32,9 +32,9 @@ public class TestStrVisualizer
 	
 	static SmartsParser sp = new SmartsParser();
 	//static SmilesParser smilesparser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-	static SmartsManager man = new SmartsManager();
+	static SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	static IsomorphismTester isoTester = new IsomorphismTester();
-	static SmartsToChemObject smToChemObj = new SmartsToChemObject();
+	static SmartsToChemObject smToChemObj = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles(); 
 	
 	boolean filterEqMaps = true;
@@ -106,7 +106,7 @@ public class TestStrVisualizer
 		HydrogenAdderProcessor hadder = new HydrogenAdderProcessor();
 		
 		System.out.println("Testing SMIRKS: " + smirks);
-		SMIRKSManager smrkMan = new SMIRKSManager();
+		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
@@ -200,7 +200,7 @@ public class TestStrVisualizer
 	{	
 		
 		System.out.println("Testing SMIRKS: " + smirks);
-		SMIRKSManager smrkMan = new SMIRKSManager();
+		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
@@ -229,7 +229,7 @@ public class TestStrVisualizer
 		
 		
 		System.out.println("Testing SMIRKS: " + smirks);
-		SMIRKSManager smrkMan = new SMIRKSManager();
+		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		smrkMan.FlagFilterEquivalentMappings = filterEqMaps;
 		smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL);
 		
