@@ -66,11 +66,16 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	 */
 	private static final long serialVersionUID = 4400701166436805492L;
 
+	public SmartsPatternAmbit() throws SMARTSException  {
+		this(SilentChemObjectBuilder.getInstance());
+	}
 	public SmartsPatternAmbit(IChemObjectBuilder builder) throws SMARTSException  {
 		this("C",builder);
 
 	}
-	
+	public SmartsPatternAmbit(String smarts) throws SMARTSException {
+		this(smarts,SilentChemObjectBuilder.getInstance());
+	}
 	public SmartsPatternAmbit(String smarts,IChemObjectBuilder builder) throws SMARTSException {
 		this(smarts,false,builder);
 	}	

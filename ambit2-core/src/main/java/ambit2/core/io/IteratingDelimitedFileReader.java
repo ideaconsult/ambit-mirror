@@ -40,6 +40,7 @@ import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
@@ -167,18 +168,18 @@ public class IteratingDelimitedFileReader extends
 					if ((nextMolecule==null) && (smilesIndex >= 0)) {
 						try {
 							if (values[smilesIndex]==null) {
-								nextMolecule = new Molecule();
+								nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class);
 							} else 
 						    nextMolecule = sp.parseSmiles(values[smilesIndex].toString());
 						} catch (InvalidSmilesException x) {
 								// do not want to break if a record is faulty
 								logger.warn("Empty molecule!");
-								nextMolecule = new Molecule(); // just create
+								nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class); // just create
 								nextMolecule.setProperty("SMILES", "Invalid SMILES");
 						}
 					}
 
-					if (nextMolecule == null) nextMolecule = new Molecule();
+					if (nextMolecule == null) nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class);
 					
 					for (int i = 0; i < values.length; i++) 
 						if (values[i]!=null)  {

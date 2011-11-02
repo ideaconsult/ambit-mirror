@@ -29,7 +29,7 @@ public class SMIRKSDepict extends CDKDepict implements IAcceptable {
 		try {
 			depict.setImageSize(new Dimension(w,h));
 
-			SMIRKSManager smrkMan = new SMIRKSManager();
+			SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 			smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL_FIRST);
 			
 			SMIRKSReaction smr = smrkMan.parse(getSmirks());

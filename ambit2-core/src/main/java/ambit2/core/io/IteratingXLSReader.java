@@ -45,6 +45,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -188,7 +189,7 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 				}
 	
 			}
-			if (mol == null) mol = new Molecule();
+			if (mol == null) mol = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class);
 			mol.setProperties(properties);
 			processRow(mol);
 		} catch (Exception x) {

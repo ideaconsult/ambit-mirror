@@ -39,6 +39,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -767,7 +768,7 @@ public class TestSmartsSearch extends TestCase
 	
 	//This molecule is specially created for Stereo Bond tests
 	//Since stereo bond is not implemented in smiles parser. 
-	Molecule getFCCCl(int absStereo) throws Exception
+	IMolecule getFCCCl(int absStereo) throws Exception
 	{
 		Molecule mol = new Molecule();
 		Atom a1 = new Atom("F");
