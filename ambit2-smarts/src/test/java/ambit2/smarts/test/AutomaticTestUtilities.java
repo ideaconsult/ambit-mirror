@@ -152,7 +152,7 @@ public class AutomaticTestUtilities
 	boolean FlagStat_SingleDBStr_Ambit_SMSD = false;   //ambit parser + SMSD isomorphims
 	boolean FlagStat_SingleDBStr_CDK_SMSD = false;	  //cdk parser + SMSD isomorphism
 	
-	SmartsManager man = new SmartsManager();
+	SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	SmartsParser spAmbit = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	
@@ -386,7 +386,7 @@ public class AutomaticTestUtilities
 		if (command.equals("random-str"))
 		{
 			System.out.println("Running generation of random structures:");
-			ChemObjectFactory cof = new ChemObjectFactory();
+			ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 			Vector<StructInfo> vStr = new Vector<StructInfo>();
 			cof.produceRandomStructsFromMDL(dbFileName, maxNumSeqSteps, minGenStrSize, nDBStr, vStr, outFileName);
 			return(0);
@@ -395,7 +395,7 @@ public class AutomaticTestUtilities
 		if (command.equals("exhaustive-str"))
 		{
 			System.out.println("Running exhaustive generation structures:");
-			ChemObjectFactory cof = new ChemObjectFactory();
+			ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 			Vector<StructInfo> vStr = new Vector<StructInfo>();			
 			cof.produceStructsFromMDL(dbFileName, maxNumSeqSteps, nDBStr, maxStrSize, vStr, outFileName);
 			return(0);
@@ -1717,7 +1717,7 @@ public class AutomaticTestUtilities
 		//-i queries-bits
 		// -i2 db-bits
 		
-		Screening screen = new Screening();
+		Screening screen = new Screening(SilentChemObjectBuilder.getInstance());
 		Vector<BitSet> db = loadDbBitSets(screen);
 		
 		if (db == null)

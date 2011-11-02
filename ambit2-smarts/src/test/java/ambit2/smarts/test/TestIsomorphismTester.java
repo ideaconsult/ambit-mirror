@@ -8,6 +8,7 @@ import junit.framework.TestSuite;
 
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.smarts.IsomorphismTester;
@@ -20,7 +21,7 @@ public class TestIsomorphismTester extends TestCase
 {
 	public LoggingTool logger;	
 	public SmartsParser sp = new SmartsParser();
-	public SmartsManager man = new SmartsManager();
+	public SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	public IsomorphismTester isoTester = new IsomorphismTester();
 		
 	//Helper variable where the results from match function is stored

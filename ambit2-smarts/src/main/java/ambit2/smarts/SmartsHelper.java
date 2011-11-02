@@ -33,6 +33,7 @@ import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.SMILESWriter;
@@ -43,7 +44,7 @@ import org.openscience.cdk.smiles.SmilesParser;
 
 public class SmartsHelper 
 {
-	static SmilesParser smilesparser = new SmilesParser(SilentChemObjectBuilder.getInstance());
+	static SmilesParser smilesparser;
 	int curIndex;
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();	
 	//Work container - list with the processed atom nodes
@@ -54,6 +55,10 @@ public class SmartsHelper
 	int nAtom;
 	int nBond;
 	
+	public SmartsHelper(IChemObjectBuilder builder) {
+		super();
+		smilesparser = new SmilesParser(builder);
+	}
 	static public String getAtomsString(QueryAtomContainer query)
 	{
 		StringBuffer sb = new StringBuffer();	
@@ -81,7 +86,7 @@ public class SmartsHelper
 	{
 		StringBuffer sb = new StringBuffer();	
 		
-		for (int i = 0; i < container.getAtomCount(); i++)
+		for (int i = 0; i < container.getAtomCount(); i++) 
 			sb.append(container.getAtom(i).getSymbol() + " ");
 		return(sb.toString());
 	}

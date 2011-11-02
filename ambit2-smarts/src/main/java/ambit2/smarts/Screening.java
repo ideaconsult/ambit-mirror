@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 public class Screening 
@@ -13,7 +14,7 @@ public class Screening
 	ScreeningData querySD = new ScreeningData();
 	IAtomContainer extractedQueryAC;	
 	Fingerprinter fp = new Fingerprinter();
-	SmartsToChemObject convertor = new SmartsToChemObject();
+	SmartsToChemObject convertor;
 	SmartsParser parser = new SmartsParser();
 	
 	boolean FlagUseStrKeys = true;
@@ -26,11 +27,12 @@ public class Screening
 	/**
 	 * Screening by fingerprints and structural keys
 	 */
-	public Screening()	
+	public Screening(IChemObjectBuilder builder)	
 	{
 		FlagUseStrKeys = true;			
 		getStandardKeys();
 		prepareKeySequences();
+		convertor = new SmartsToChemObject(builder);
 	}
 	
 	/**

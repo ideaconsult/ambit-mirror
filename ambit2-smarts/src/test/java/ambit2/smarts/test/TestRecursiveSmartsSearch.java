@@ -50,11 +50,11 @@ public class TestRecursiveSmartsSearch extends TestCase
 	private int nqmatch;
 	public List<List<Integer>>  matchingAtoms = null;
 	public SmartsParser smartsParser = new SmartsParser();
-	public SmartsManager man = new SmartsManager();
+	public SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	public LoggingTool logger;
 	public QueryAtomContainer mQuery;
 	public IAtomContainer mTarget;
-	SmartsHelper helper = new SmartsHelper();
+	SmartsHelper helper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
 	
 	public TestRecursiveSmartsSearch() {
 	}

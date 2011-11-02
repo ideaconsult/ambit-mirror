@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.smarts.SmartsManager;
@@ -11,7 +12,7 @@ import ambit2.smarts.SmartsManager;
 public class TestSmartsSearchCLG extends TestCase
 {
 	public LoggingTool logger;
-	SmartsManager man = new SmartsManager();
+	SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	
 	public TestSmartsSearchCLG() 
 	{   

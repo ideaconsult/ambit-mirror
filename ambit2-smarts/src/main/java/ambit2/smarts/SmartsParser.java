@@ -413,9 +413,9 @@ public class SmartsParser
 			}
 		}
 		
-		Atom[] atoms = new Atom[2];
-	    atoms[0] = (Atom)atom0;
-	    atoms[1] = (Atom)atom1;
+		IAtom[] atoms = new Atom[2];
+	    atoms[0] = (IAtom)atom0;
+	    atoms[1] = (IAtom)atom1;
 	    curBond.setAtoms(atoms);
 	    container.addBond(curBond);
 	    curFragment.addBond(curBond);
