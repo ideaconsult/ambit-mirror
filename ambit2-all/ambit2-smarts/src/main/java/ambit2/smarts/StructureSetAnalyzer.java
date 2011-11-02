@@ -3,7 +3,9 @@ package ambit2.smarts;
 import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 
 public class StructureSetAnalyzer 
@@ -30,13 +32,18 @@ public class StructureSetAnalyzer
 	SmartsParser sp = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	ChemObjectToSmiles cots = new ChemObjectToSmiles();
-	ChemObjectFactory cof = new ChemObjectFactory();
-	SmartsToChemObject stco = new SmartsToChemObject();
+	ChemObjectFactory cof ;
+	SmartsToChemObject stco ;
 		
 	int maxStructSize;
 	double minSQI;
 	int minSQIPos;
 	
+	public StructureSetAnalyzer(IChemObjectBuilder builder) {
+		super();
+		stco = new SmartsToChemObject(builder);
+		cof = new ChemObjectFactory(builder);
+	}
 	void setMaxStructSize()
 	{
 		maxStructSize = 0;

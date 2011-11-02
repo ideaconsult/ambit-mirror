@@ -10,6 +10,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
@@ -20,7 +21,7 @@ public class SMIRKSManager
 {
 	SmartsParser parser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
-	SmartsToChemObject stco = new SmartsToChemObject();
+	SmartsToChemObject stco ;
 	EquivalenceTester eqTester = new EquivalenceTester();
 	
 	Vector<String> parserErrors = new Vector<String>();
@@ -30,10 +31,11 @@ public class SMIRKSManager
 	
 	
 	
-	public SMIRKSManager()
+	public SMIRKSManager(IChemObjectBuilder builder)
 	{
 		parser.setComponentLevelGrouping(true);
 		parser.mSupportSmirksSyntax = true;
+		stco = new SmartsToChemObject(builder);
 	}
 	
 	public void setSSMode(int mode)
@@ -60,7 +62,7 @@ public class SMIRKSManager
 	public SMIRKSReaction parse(String smirks)
 	{
 		parserErrors.clear();
-		SMIRKSReaction reaction = new SMIRKSReaction();
+		SMIRKSReaction reaction = new SMIRKSReaction(stco.getBuilder());
 				
 		//Separate the components of the SMIRKS string
 		int sep1Pos = smirks.indexOf(">");

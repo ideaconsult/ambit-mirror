@@ -26,6 +26,7 @@ package ambit2.smarts.query;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
@@ -43,6 +44,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	protected transient SMARTSPropertiesReader reader = new SMARTSPropertiesReader();
 	protected boolean useCDKIsomorphism = true;
 	
+	
 	public boolean isUseCDKIsomorphism() {
 		return sman==null?useCDKIsomorphism:sman.isFlagUseCDKIsomorphismTester();
 	}
@@ -51,26 +53,30 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		this.useCDKIsomorphism = useCDKIsomorphism;
 		if (sman!=null) {
 			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
-		} else {
+		} 
+		/*
+		else {
 			sman = new SmartsManager();
 			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
 		}
+		*/
 	}
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4400701166436805492L;
 
-	public SmartsPatternAmbit() throws SMARTSException  {
-		this("C");
+	public SmartsPatternAmbit(IChemObjectBuilder builder) throws SMARTSException  {
+		this("C",builder);
 
 	}
 	
-	public SmartsPatternAmbit(String smarts) throws SMARTSException {
-		this(smarts,false);
+	public SmartsPatternAmbit(String smarts,IChemObjectBuilder builder) throws SMARTSException {
+		this(smarts,false,builder);
 	}	
-	public SmartsPatternAmbit(String smarts,boolean negate) throws SMARTSException {
-		sman = new SmartsManager();	
+	public SmartsPatternAmbit(String smarts,boolean negate,IChemObjectBuilder builder) throws SMARTSException {
+		super();
+		sman = new SmartsManager(builder);	
 		sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
 		setSmarts(smarts);
 		setNegate(negate);
@@ -130,10 +136,12 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	@Override
 	public void setSmarts(String smarts) throws SMARTSException {
 		super.setSmarts(smarts);
+		/*
 		if (sman == null) {
 			sman = new SmartsManager();
 			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
 		}
+		*/
 		sman.setQuery(smarts);		
 		if (!sman.getErrors().equals("")) {
 			String errors = sman.getErrors();
@@ -142,10 +150,12 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		} 	
 	}
 	public void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException {
+		/*
 		if (sman ==null) {
 			sman = new SmartsManager();
 			sman.setUseCDKIsomorphismTester(useCDKIsomorphism);
 		}
+		*/
 		sman.useMOEvPrimitive(flag);
 	}
 

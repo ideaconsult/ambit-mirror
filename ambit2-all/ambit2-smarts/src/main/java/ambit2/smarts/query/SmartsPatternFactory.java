@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts.query;
 
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+
 /**
  * Creates any of SMARTS pattern classes.
  * @author Nina Jeliazkova nina@acad.bg
@@ -52,7 +54,7 @@ public class SmartsPatternFactory implements ISmartsPatternFactory {
 		switch (parser) {
 		case smarts_cdk: return new SmartsPatternCDK(smarts,negate);
 		case smarts_fast: return new FastSmartsMatcher(smarts,negate);
-		default: return new SmartsPatternAmbit(smarts,negate); 
+		default: return new SmartsPatternAmbit(smarts,negate,SilentChemObjectBuilder.getInstance()); 
 
 		}
 	}

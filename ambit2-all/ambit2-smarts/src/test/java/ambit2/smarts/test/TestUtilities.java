@@ -60,9 +60,9 @@ public class TestUtilities
 {	
 	static SmartsParser sp = new SmartsParser();
 	//static SmilesParser smilesparser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-	static SmartsManager man = new SmartsManager();
+	static SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	static IsomorphismTester isoTester = new IsomorphismTester();
-	static SmartsToChemObject smToChemObj = new SmartsToChemObject();
+	static SmartsToChemObject smToChemObj = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles(); 
 	
 	public TestUtilities()
@@ -464,7 +464,8 @@ public class TestUtilities
 	
 	public boolean checkSequence(QueryAtomContainer query, Vector<QuerySequenceElement> sequence)
 	{
-		IAtomContainer skelleton = ChemObjectFactory.getCarbonSkelleton(sequence);		
+		ChemObjectFactory factory = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+		IAtomContainer skelleton = factory.getCarbonSkelleton(sequence);		
 		//System.out.println("skelleton = " + SmartsHelper.moleculeToSMILES(skelleton));
 		try
 		{
@@ -920,7 +921,7 @@ public class TestUtilities
 	void testFragmentation(String smiles)
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		ChemObjectFactory cof = new ChemObjectFactory();
+		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		cof.setAtomSequence(mol, mol.getAtom(0));
 		for (int i = 0; i < cof.sequence.size(); i++)
 		{
@@ -941,7 +942,7 @@ public class TestUtilities
 		System.out.println("-------------------------------");
 		Vector<StructInfo> vStr = new Vector<StructInfo>();
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		ChemObjectFactory cof = new ChemObjectFactory();
+		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		
 		cof.produceStructuresExhaustively(mol, vStr, maxNumSteps, 100);
 		
@@ -952,7 +953,7 @@ public class TestUtilities
 	void printSequence(String smiles)
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		ChemObjectFactory cof = new ChemObjectFactory();
+		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		cof.setAtomSequence(mol, mol.getAtom(0));
 		System.out.println(smiles);
 		for (int i = 0; i < cof.sequence.size(); i++)
@@ -961,7 +962,7 @@ public class TestUtilities
 	
 	void produceStructures() 
 	{
-		ChemObjectFactory cof = new ChemObjectFactory();
+		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		Vector<StructInfo> vStr = new Vector<StructInfo>();
 		cof.produceStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
 					5, 50000, 8, vStr, "/java_frags.txt");
@@ -970,7 +971,7 @@ public class TestUtilities
 	
 	void produceRandomStructures() 
 	{
-		ChemObjectFactory cof = new ChemObjectFactory();
+		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		Vector<StructInfo> vStr = new Vector<StructInfo>();
 		cof.produceRandomStructsFromMDL("../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
 					30, 5, 50000, vStr, "/java_random_frags.txt");
@@ -978,7 +979,7 @@ public class TestUtilities
 	
 	void makeStructureStatistics()
 	{
-		ChemObjectFactory cof = new ChemObjectFactory();
+		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		cof.performStructureStatistics("/exhaustive-str-set-ambit-first-900str.txt", 
 							"../src/test/resources/einecs/einecs_structures_V13Apr07.sdf", 
 							100, 5000, "/frags_stat_ambit_5000.txt");
@@ -1134,7 +1135,7 @@ public class TestUtilities
 	
 	void testStructureAnalysis(String mdlFile)
 	{	
-		StructureSetAnalyzer analyzer = new StructureSetAnalyzer();
+		StructureSetAnalyzer analyzer = new StructureSetAnalyzer(SilentChemObjectBuilder.getInstance());
 		analyzer.structures = getContainersFromMDL(mdlFile);
 		System.out.println("Loaded " + analyzer.structures.size() + " structures");
 		
@@ -1191,7 +1192,7 @@ public class TestUtilities
 		myKeys.add("CCN");
 		myKeys.add("CCO");
 		//Screening screen = new Screening(myKeys);
-		Screening screen = new Screening();
+		Screening screen = new Screening(SilentChemObjectBuilder.getInstance());
 		
 		System.out.println("Query " + queryString);
 		QueryAtomContainer query = sp.parse(queryString);
@@ -1263,7 +1264,7 @@ public class TestUtilities
 	public void testSMIRKS(String smirks, String targetSmiles)
 	{
 		System.out.println("Testing SMIRKS: " + smirks);
-		SMIRKSManager smrkMan = new SMIRKSManager();
+		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		SMIRKSReaction reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))
 		{

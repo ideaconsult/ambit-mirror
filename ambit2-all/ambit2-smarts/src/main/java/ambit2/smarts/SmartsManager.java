@@ -29,13 +29,13 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
@@ -95,10 +95,13 @@ public class SmartsManager
 	int components[];
 	QueryAtomContainer baseStr;	
 	public boolean mGenerateSubQueries;
+	protected IChemObjectBuilder builder;
 	
-	
-	public SmartsManager()
+	public SmartsManager(IChemObjectBuilder builder)
 	{
+		super();
+		if (builder==null) this.builder = SilentChemObjectBuilder.getInstance();
+		else this.builder = builder;
 		parser.setComponentLevelGrouping(true);
 	}
 	
@@ -342,7 +345,7 @@ public class SmartsManager
 	void printComponentFrags()  //A test helper procedure
 	{
 		System.out.println("---------------------------");
-		SmartsHelper sh = new SmartsHelper();
+		SmartsHelper sh = new SmartsHelper(builder);
 		for (int i = 0; i < compFrags.size(); i++)
 		{
 			for (int k = 0; k < fragMaps[i].length; k++)				
@@ -691,9 +694,9 @@ public class SmartsManager
 							newBond.setOrder(IBond.Order.SINGLE);
 						}
 		
-		Atom[] atoms = new Atom[2];
-	    atoms[0] = (Atom)atom0;
-	    atoms[1] = (Atom)atom1;
+		IAtom[] atoms = new IAtom[2];
+	    atoms[0] = atom0;
+	    atoms[1] = atom1;
 	    newBond.setAtoms(atoms);
 	    container.addBond(newBond);
 	}
@@ -1234,7 +1237,7 @@ public class SmartsManager
 	
 	public void testSubQueries()
 	{
-		SmartsHelper smwriter = new SmartsHelper();
+		SmartsHelper smwriter = new SmartsHelper(builder);
 		for (int i = 0; i < subQueryList.size(); i++)
 		{
 			System.out.println("subQuery " + i + "  " + 

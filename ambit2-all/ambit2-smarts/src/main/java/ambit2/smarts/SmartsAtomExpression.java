@@ -33,6 +33,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 /**
  * 
@@ -336,7 +337,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     			if (recSmartsContainers.isEmpty())
     				return("$()");
     			//return("$("+(String)recSmartsStrings.get(tok.param)+")");    			
-    			SmartsHelper sw = new SmartsHelper();    			
+    			SmartsHelper sw = new SmartsHelper(SilentChemObjectBuilder.getInstance());    			
     			return("$("+sw.toSmarts((QueryAtomContainer)recSmartsContainers.get(tok.param))+")");
     		}
     	}

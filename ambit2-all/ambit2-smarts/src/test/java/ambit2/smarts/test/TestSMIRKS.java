@@ -34,7 +34,7 @@ public class TestSMIRKS
 	boolean explicitH = true;
 	
 	public static LoggingTool logger;
-	SMIRKSManager smrkMan = new SMIRKSManager();
+	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	SmartsParser smartsParser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	SmilesGenerator smigen = new SmilesGenerator();

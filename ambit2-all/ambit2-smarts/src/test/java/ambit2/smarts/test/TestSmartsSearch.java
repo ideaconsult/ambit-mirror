@@ -61,7 +61,7 @@ public class TestSmartsSearch extends TestCase
 	public LoggingTool logger;
 	public QueryAtomContainer mQuery;
 	public IAtomContainer mTarget;
-	SmartsHelper helper = new SmartsHelper();
+	SmartsHelper helper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
 	
 	public TestSmartsSearch() 
 	{   

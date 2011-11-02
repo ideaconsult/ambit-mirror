@@ -1,23 +1,24 @@
 package ambit2.smarts;
 
 import java.util.Vector;
-import java.util.BitSet;
 
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
-import org.openscience.cdk.RingSet;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
+import org.openscience.cdk.RingSet;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IRingSet;
-import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IRing;
+import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.ringsearch.SSSRFinder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.base.exceptions.AmbitException;
@@ -47,7 +48,21 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	//Work variables which are set by functions analyzeSubExpressionsFromLowAnd and getExpressionAtomType
 	int mSubAtomType, mSubAromaticity, mCurSubArom, mRecCurSubArom, mSubAtomCharge, mCurSubAtCharge;
 		
+	protected IChemObjectBuilder builder;
 	
+	public IChemObjectBuilder getBuilder() {
+		return builder;
+	}
+
+
+	public void setBuilder(IChemObjectBuilder builder) {
+		this.builder = builder;
+	}
+
+	public SmartsToChemObject(IChemObjectBuilder builder) {
+		super();
+		setBuilder(builder);
+	}
 	/** 
 	 * Maximal possible atom container from this query is generated.
 	 * This container may be fragmented since some original atoms or bonds could be removed.
@@ -69,7 +84,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 			atoms.add(toAtom(query.getAtom(i)));
 		
 		//Adding the atoms
-		Molecule container = new Molecule();
+		IMolecule container = builder.newInstance(IMolecule.class);
 		for (int i = 0; i < atoms.size(); i++)
 		{	
 			IAtom a = atoms.get(i); 
@@ -147,7 +162,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		}	
 		
 		//Adding the atoms
-		Molecule container = new Molecule();
+		IMolecule container = builder.newInstance(IMolecule.class);
 		for (int i = 0; i < atoms.size(); i++)
 		{	
 			IAtom a = atoms.get(i); 
@@ -282,7 +297,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	{					
 		if (a instanceof AliphaticSymbolQueryAtom)
 		{	
-			Atom atom = new Atom();
+			IAtom atom = builder.newInstance(IAtom.class);
 			atom.setSymbol(a.getSymbol());
 			atom.setFlag(CDKConstants.ISAROMATIC,false);			
 			return(atom);
@@ -290,7 +305,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		if (a instanceof AromaticSymbolQueryAtom)
 		{	
-			Atom atom = new Atom();
+			IAtom atom = builder.newInstance(IAtom.class);
 			atom.setSymbol(a.getSymbol());
 			atom.setFlag(CDKConstants.ISAROMATIC,true);
 			return(atom);
@@ -376,7 +391,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		if (atType != -1)
 		{
-			Atom atom = new Atom();			
+			IAtom atom = SilentChemObjectBuilder.getInstance().newInstance(IAtom.class);			
 			atom.setSymbol(PeriodicTable.getSymbol(atType));			
 						
 			//Setting the aromaticity (when it is defied)
@@ -672,14 +687,14 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	IAtom getMarkedAtom()
 	{
-		Atom a = new Atom("C");
+		IAtom a = builder.newInstance(IAtom.class,"C");
 		a.setProperty(SmartsToChemObject.markProperty,new Integer(1));
 		return(a);
 	}
 	
 	IBond getMarkedBond()
 	{
-		Bond b = new Bond();
+		IBond b =  builder.newInstance(IBond.class);
 		b.setOrder(Order.SINGLE);
 		b.setProperty(SmartsToChemObject.markProperty,new Integer(1));
 		return(b);	
@@ -717,7 +732,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	IRingSet getCondenzedRingsTo(IAtomContainer startAC, IRingSet ringSet)
 	{			
-		RingSet condRS = new RingSet();
+		IRingSet condRS =  builder.newInstance(IRingSet.class);
 		int curRing = 0;
 		condRS.addAtomContainer(startAC);
 		
@@ -767,7 +782,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	IAtomContainer condensedFragmentToContainer(QueryAtomContainer frag)
 	{
-		Molecule container = new Molecule();
+		IMolecule container = builder.newInstance(IMolecule.class);
 		
 		//Converting atoms
 		Vector<IAtom> atoms = new Vector<IAtom>();

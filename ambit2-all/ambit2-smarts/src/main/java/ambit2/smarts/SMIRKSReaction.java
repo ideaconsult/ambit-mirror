@@ -1,12 +1,11 @@
 package ambit2.smarts;
 
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import java.util.Vector;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
-
-
-import java.util.Vector;
-import java.util.HashMap;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 
 
@@ -71,6 +70,12 @@ public class SMIRKSReaction
 	Vector<Integer> prodAt2 = new Vector<Integer>();
 	Vector<IBond.Order> prodBo = new Vector<IBond.Order>();
 	
+	protected IChemObjectBuilder builder;
+	
+	public SMIRKSReaction(IChemObjectBuilder builder) {
+		super();
+		this.builder = builder;
+	}
 				
 	public void checkMappings()
 	{
@@ -107,7 +112,7 @@ public class SMIRKSReaction
 		}
 			
 				
-		SmartsToChemObject stco = new SmartsToChemObject();
+		SmartsToChemObject stco = new SmartsToChemObject(builder);
 		
 		//Checking for atom typing and some properties correctness for all mapped atoms
 		
@@ -199,7 +204,7 @@ public class SMIRKSReaction
 	
 	void generateTransformationData()
 	{
-		SmartsToChemObject stco = new SmartsToChemObject();
+		SmartsToChemObject stco = new SmartsToChemObject(builder);
 		
 		//Atom Transformation. Different atom properties are handles
 		generateChargeTransformation();
@@ -386,7 +391,7 @@ public class SMIRKSReaction
 	
 	void generateChargeTransformation()
 	{
-		SmartsToChemObject stco = new SmartsToChemObject();
+		SmartsToChemObject stco = new SmartsToChemObject(builder);
 		
 		for (int i = 0; i < reactant.getAtomCount(); i++)
 		{

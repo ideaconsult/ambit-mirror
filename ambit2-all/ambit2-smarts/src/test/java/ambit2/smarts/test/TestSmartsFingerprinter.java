@@ -9,6 +9,7 @@ import junit.framework.TestSuite;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.smarts.SmartsFingerprinter;
@@ -18,7 +19,7 @@ import ambit2.smarts.SmartsParser;
 public class TestSmartsFingerprinter extends TestCase
 {
 	public LoggingTool logger;
-	public SmartsFingerprinter sfp = new SmartsFingerprinter(); 
+	public SmartsFingerprinter sfp = new SmartsFingerprinter(SilentChemObjectBuilder.getInstance()); 
 	public Fingerprinter fp = new Fingerprinter();
 	public SmartsParser sp = new SmartsParser();
 	

@@ -8,8 +8,6 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -19,7 +17,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.io.MyIteratingMDLReader;
@@ -34,13 +31,27 @@ public class ChemObjectFactory
 	Vector<IAtom> sequencedBondAt1 = new Vector<IAtom>();
 	Vector<IAtom> sequencedBondAt2 = new Vector<IAtom>();
 	MoleculeAndAtomsHashing molHash = new MoleculeAndAtomsHashing();
-	SmartsManager man = new SmartsManager();
+	SmartsManager man;
 	SmartsParser parser = new SmartsParser();
-	SmartsToChemObject stco = new SmartsToChemObject(); 
+	SmartsToChemObject stco ; 
 	IsomorphismTester isoTester = new IsomorphismTester();
+	IChemObjectBuilder builder;
 	
+	public ChemObjectFactory(IChemObjectBuilder builder) {
+		super();
+		setBuilder(builder);
+		stco = new SmartsToChemObject(builder); 
+		man = new SmartsManager(builder);
+	}
 	
-	
+	public IChemObjectBuilder getBuilder() {
+		return builder;
+	}
+
+	public void setBuilder(IChemObjectBuilder builder) {
+		this.builder = builder;
+	}
+
 	public void setAtomSequence(IAtomContainer target, IAtom startAtom)
 	{	
 		//This function is implemented analogously to IsomorphismTester.setQueryAtomSequence
@@ -203,7 +214,7 @@ public class ChemObjectFactory
 	
 	public IAtomContainer getFragmentFromSequence(int numSteps)
 	{
-		AtomContainer mol = new AtomContainer();		
+		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
 		HashMap<IAtom,IAtom> m = new HashMap<IAtom,IAtom>();	//Mapping original --> copy	
 		SequenceElement el;
 		
@@ -245,7 +256,7 @@ public class ChemObjectFactory
 	
 	IAtom getAtomCopy(IAtom atom)
 	{
-		IAtom copyAtom = new Atom(atom.getSymbol());
+		IAtom copyAtom = builder.newInstance(IAtom.class,atom.getSymbol());
 		
 		if (atom.getFlag(CDKConstants.ISAROMATIC))
 			copyAtom.setFlag(CDKConstants.ISAROMATIC,true);
@@ -273,21 +284,21 @@ public class ChemObjectFactory
 	
 	//This function generates a Carbon skeleton from a query atom sequence
 	//It is used mainly for testing purposes
-	public static IAtomContainer getCarbonSkelleton(Vector<QuerySequenceElement> sequence)
+	public IAtomContainer getCarbonSkelleton(Vector<QuerySequenceElement> sequence)
 	{
-		AtomContainer mol = new AtomContainer();		
+		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
 		HashMap<IAtom,IAtom> m = new HashMap<IAtom,IAtom>();		
 		QuerySequenceElement el;
 		
 		//Processing first sequence element
 		el = sequence.get(0);
-		IAtom a0 = new Atom("C");		
+		IAtom a0 = builder.newInstance(IAtom.class,"C");		
 		mol.addAtom(a0);
 		m.put(el.center, a0);
 		
 		for (int k = 0; k < el.atoms.length; k++)
 		{
-			IAtom a = new Atom("C");
+			IAtom a = builder.newInstance(IAtom.class,"C");
 			mol.addAtom(a);
 			//System.out.println("## --> " +  SmartsHelper.atomToString(el.atoms[k]));
 			m.put(el.atoms[k],a);			
@@ -308,7 +319,7 @@ public class ChemObjectFactory
 				el = sequence.get(i);
 				for (int k = 0; k < el.atoms.length; k++)
 				{
-					IAtom a = new Atom("C");
+					IAtom a = builder.newInstance(IAtom.class,"C");
 					mol.addAtom(a);
 					m.put(el.atoms[k],a);
 					addSkelletonBond(mol,m.get(el.center),a);
@@ -320,12 +331,12 @@ public class ChemObjectFactory
 	}
 	
 	
-	static void addSkelletonBond(IAtomContainer mol, IAtom at1, IAtom at2)
+	void addSkelletonBond(IAtomContainer mol, IAtom at1, IAtom at2)
 	{
 		IAtom[] atoms = new IAtom[2];
 		atoms[0] = at1;
 		atoms[1] = at2;		
-		Bond b = new Bond();
+		IBond b = builder.newInstance(IBond.class);
 		b.setAtoms(atoms);
 		b.setOrder(IBond.Order.SINGLE);
 		mol.addBond(b);
@@ -454,8 +465,7 @@ public class ChemObjectFactory
 	{	
 		try
 		{
-			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
 			int record=0;
 
 			while (reader.hasNext()) 
@@ -490,8 +500,7 @@ public class ChemObjectFactory
 	{	
 		try
 		{
-			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
 			int record=0;
 
 			while (reader.hasNext()) 
@@ -627,8 +636,7 @@ public class ChemObjectFactory
 		
 		try
 		{
-			IChemObjectBuilder b = SilentChemObjectBuilder.getInstance();
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),b);
+			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
 			int record=0;
 			boolean res;
 
