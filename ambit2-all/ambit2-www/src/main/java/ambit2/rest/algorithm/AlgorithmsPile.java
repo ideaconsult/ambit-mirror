@@ -286,6 +286,38 @@ public class AlgorithmsPile {
 		
 			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},			
 
+			//fingerprints
+			{"ambit2.descriptors.fingerprints.EStateFingerprinterWrapper","EState Fingerprints","ambit2.descriptors.fingerprints.EStateFingerprinterWrapper",null,
+						new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
+						Algorithm.requires.structure,
+						"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.EStateFingerprinter"},
+
+			{"ambit2.descriptors.fingerprints.ExtendedFingerprinterWrapper","Extended Fingerprints","ambit2.descriptors.fingerprints.ExtendedFingerprinterWrapper",null,
+						new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
+						Algorithm.requires.structure,
+						"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.ExtendedFingerprinter"},
+						
+			{"ambit2.descriptors.fingerprints.HybridizationFingerprinterWrapper","Hybridization Fingerprints","ambit2.descriptors.fingerprints.HybridizationFingerprinterWrapper",null,
+						new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
+						Algorithm.requires.structure,
+						"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.HybridizationFingerprinter"},
+					
+			{"ambit2.descriptors.fingerprints.MACCSFingerprinterWrapper","MACCS Fingerprints","ambit2.descriptors.fingerprints.MACCSFingerprinterWrapper",null,
+						new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
+						Algorithm.requires.structure,
+						"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.MACCSFingerprinter"},
+				
+			{"ambit2.descriptors.fingerprints.PubChemFingerprinterWrapper","PubChem Fingerprints","ambit2.descriptors.fingerprints.PubChemFingerprinterWrapper",null,
+						new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
+						Algorithm.requires.structure,
+						"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.PubChemFingerprinter"},
+										
+			{"ambit2.descriptors.fingerprints.SubstructureFingerprinterWrapper","Substructure Fingerprints","ambit2.descriptors.fingerprints.SubstructureFingerprinterWrapper",null,
+						new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
+						Algorithm.requires.structure,
+						"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.SubstructureFingerprinter"},
+										
+			//
 			{"finder","Find","finder",null,new String[] {AlgorithmType.Finder.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#finder"},
 			
 
