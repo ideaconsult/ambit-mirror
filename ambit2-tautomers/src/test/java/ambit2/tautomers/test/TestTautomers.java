@@ -15,12 +15,20 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 public class TestTautomers 
 {
-	TautomerManager tman = new TautomerManager();
+	public TautomerManager tman = new TautomerManager();
 	
 	public static void main(String[] args)
 	{		
 		TestTautomers tt = new TestTautomers();
+		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
+		tt.tman.tautomerFilter.FlagApplyExcludeFilter = true;
+		tt.tman.tautomerFilter.FlagApplyDuplicationFilter = true;
+		tt.tman.FlagPrintTargetMoleculeInfo = true;
+		tt.tman.FlagPrintExtendedRuleInstances = true;
+		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
 		
+		
+		//tt.performTestCases();
 		
 		//tt.visualTest("OC=CCC(CC=CO)CCCC=O");
 		//tt.test("O=CC(C)([H])C");  --> problem with the explicit H atoms 
@@ -31,9 +39,10 @@ public class TestTautomers
 		//tt.test("C=C(O)N");
 		//tt.test("NN=CO");
 		//tt.visualTest("N=C(N)NC=O");
-		//tt.performTestCases();
 		//tt.visualTest("NC(C)=N");
-		tt.visualTest("C1=CN=C(N)NC1=O");
+		//tt.visualTest("C1=CN=C(N)NC1=O");
+		tt.visualTest("OC=1C=CC=CC=1");  //Kekule aromatic - !!!!
+		//tt.visualTest("OC=1N=C(N)N=CC=1");  //Kekule aromatic - !!!!
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		//tt.visualTest("C=CN");
@@ -46,7 +55,6 @@ public class TestTautomers
 		
 		nErrors += testCase("OC=CCCNC=O", 
 				new String[]{"OC=CCCNC=O", "OC=CCCN=CO", "O=CCCCNC=O", "O=CCCCN=CO"}, false);
-		
 		
 		
 		System.out.println("Errors: " + nErrors);
@@ -87,13 +95,14 @@ public class TestTautomers
 		
 		
 		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		tman.printDebugInfo();
+		
+		System.out.println("\n  Result tautomers: ");
 		for (int i = 0; i < resultTautomers.size(); i++)		
 			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(resultTautomers);
 		
-		
-		System.out.println(mol.getAtom(0).getAtomicNumber().intValue());
 	} 
 	
 	

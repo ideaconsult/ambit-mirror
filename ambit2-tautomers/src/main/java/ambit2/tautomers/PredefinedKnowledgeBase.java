@@ -10,7 +10,7 @@ public class PredefinedKnowledgeBase
 	
 	public static final String rules[] = 
 	{
-		"$$NAME=keto/enol              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CC OC=C  $$GROUP_POS=3,1   $$INFO=",
+		"$$NAME=keto/enol              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=[#6][#6] O[#6]=[#6]  $$GROUP_POS=3,1   $$INFO=",
 		"$$NAME=amin/imin              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= N=CC NC=C  $$GROUP_POS=3,1   $$INFO=",
 		"$$NAME=amide/imid             $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CN OC=N  $$GROUP_POS=3,1   $$INFO=",
 		"$$NAME=nitroso/oxime          $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=NC ON=C  $$GROUP_POS=3,1   $$INFO=",
@@ -28,14 +28,14 @@ public class PredefinedKnowledgeBase
 	//Warning Filters	
 	public static final String warningFragments[] =
 	{	
-		//"[C;!R](=*)=*",     //allene atom
+		"[C;!R](=*)=*",     //allene atom
 	};
 	
 	
 	//Exclude Filters	
 	public static final String excludeFragments[] =
 	{
-		//"[*;r4,r5,r6,r7,r8](=*)=*",  //allene atom in a cycle (up to 8 atoms)
+		"[*;r4,r5,r6,r7,r8](=*)=*",  //allene atom in a cycle (up to 8 atoms)
 		
 	};
 	

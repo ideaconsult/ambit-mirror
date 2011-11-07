@@ -17,7 +17,14 @@ public class TautomerManager
 	Vector<Rule> generatedRules = new Vector<Rule>(); 
 	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();	
 	Vector<String> errors = new Vector<String>(); 
-	FilterTautomers tautomerFilter = new FilterTautomers(this);
+	public FilterTautomers tautomerFilter = new FilterTautomers(this);
+	
+	//Some debug info flags
+	public boolean FlagPrintTargetMoleculeInfo = false;
+	public boolean FlagPrintExtendedRuleInstances = false;
+	public boolean FlagPrintIcrementalStepDebugInfo = false;
+	
+	
 		
 	
 	public TautomerManager()
@@ -184,6 +191,30 @@ public class TautomerManager
 		for (int i = ruleInstances.size()-1; i >= 0; i--)
 			sb.append(""+ruleInstances.get(i).getCurrentState() + " ");
 		return (sb.toString());
+	}
+	
+	public void printDebugInfo()
+	{
+		if (FlagPrintTargetMoleculeInfo)
+		{
+			System.out.println("Debug info - Target Atom atributes:");
+			String s = SmartsHelper.getAtomsAttributes(molecule);
+			System.out.println(s + "\n");
+			System.out.println("Debug info - Target Bond atributes:");
+			String s2 = SmartsHelper.getBondAttributes(molecule);
+			System.out.println(s2 + "\n");
+		}
+		
+		
+		if (FlagPrintExtendedRuleInstances)
+		{	
+			System.out.println("Debug info - extendedRuleInstances:");
+			for (int i = 0; i < extendedRuleInstances.size(); i++)
+				System.out.println(((RuleInstance)extendedRuleInstances.get(i)).debugInfo(molecule));
+			if(extendedRuleInstances.isEmpty())
+				System.out.println("  NONE");
+		}	
+			
 	}
 	
 }

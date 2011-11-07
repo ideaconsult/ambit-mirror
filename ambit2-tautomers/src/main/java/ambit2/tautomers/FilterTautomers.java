@@ -12,6 +12,10 @@ import ambit2.smarts.SmartsParser;
 
 public class FilterTautomers 
 {
+	public boolean FlagApplyWarningFilter = true;
+	public boolean FlagApplyExcludeFilter = true;
+	public boolean FlagApplyDuplicationFilter = true;
+	
 	public TautomerManager tman;
 	public IAtomContainer originalMolecule;
 	public Vector<IAtomContainer> removedTautomers = new Vector<IAtomContainer>();
@@ -47,15 +51,17 @@ public class FilterTautomers
 			String tcode = TautomerManager.getTautomerCodeString(tautomers.get(i));
 			
 			boolean FlagDuplication = false;
-			for (int k = 0; k < tCodes.size(); k++)
-			{
-				if (tcode.equals(tCodes.get(k)))
-				{
-					FlagDuplication = true;
-					break;
-				}
-			}
 			
+			if (FlagApplyDuplicationFilter)
+				for (int k = 0; k < tCodes.size(); k++)
+				{
+					if (tcode.equals(tCodes.get(k)))
+					{
+						FlagDuplication = true;
+						break;
+					}
+				}
+
 			if (!FlagDuplication)
 			{
 				tCodes.add(tcode);
@@ -68,8 +74,19 @@ public class FilterTautomers
 		for (int i = 0; i < uniqueTautomers.size(); i++)
 		{			
 			//System.out.println("Tautomer #" + i + "  " + SmartsHelper.moleculeToSMILES(uniqueTautomers.get(i)));
-			Vector<Integer> vWarnF = getWarnFilters(uniqueTautomers.get(i));
-			Vector<Integer> vExcludF = getExcludeFilters(uniqueTautomers.get(i));
+			
+			Vector<Integer> vWarnF;
+			if (FlagApplyWarningFilter)
+				vWarnF = getWarnFilters(uniqueTautomers.get(i));
+			else
+				vWarnF = null;
+			
+			Vector<Integer> vExcludF;
+			if (FlagApplyExcludeFilter)
+				vExcludF = getExcludeFilters(uniqueTautomers.get(i));
+			else
+				vExcludF = null;
+			
 			
 			if (vExcludF != null)
 			{
