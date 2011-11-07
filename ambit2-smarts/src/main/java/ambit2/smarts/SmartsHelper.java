@@ -98,6 +98,7 @@ public class SmartsHelper
 		for (int i = 0; i < container.getAtomCount(); i++)
 		{	
 			IAtom at = container.getAtom(i); 
+			sb.append("  #" + i + "  ");
 			sb.append(at.getSymbol());
 			Integer explHInt = (Integer)at.getProperty(CMLUtilities.ExplicitH);
 			int explHAt = 0;
@@ -114,6 +115,28 @@ public class SmartsHelper
 		}	
 		return(sb.toString());
 	}
+	
+	static public String getBondAttributes(IAtomContainer container)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < container.getBondCount(); i++)
+		{
+			IBond bo = container.getBond(i); 
+			IAtom at0 = bo.getAtom(0);
+			IAtom at1 = bo.getAtom(1);
+			int at0_num = container.getAtomNumber(at0);
+			int at1_num = container.getAtomNumber(at1);
+			sb.append("  #" + i + "  (" + at0_num + "," + at1_num + ")");
+			
+			if (bo.getFlag(CDKConstants.ISAROMATIC)) 
+				sb.append(" aromatic");
+			
+			
+			sb.append("\n");
+		}
+		
+		return(sb.toString());
+	}	
 	
 	static public String getBondsString(IAtomContainer query)
 	{
