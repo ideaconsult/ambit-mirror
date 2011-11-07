@@ -5,12 +5,17 @@ import java.util.BitSet;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.qsar.DescriptorValue;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.StringDescriptorResultType;
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.fingerprints.EStateFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.ExtendedFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.Fingerprint2DescriptorWrapper;
@@ -58,11 +63,16 @@ public class FingerprinterTest {
 	
 	public void testDescriptor(Fingerprint2DescriptorWrapper wrapper) throws Exception {
 
+		
 		IMolecule mol = MoleculeFactory.make123Triazole();
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		CDKHueckelAromaticityDetector.detectAromaticity(mol);
+		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+		adder.addImplicitHydrogens(mol);
+		AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
 		
 		IFingerprinter fp = wrapper.getFingerprinter();
 		BitSet bs = fp.getFingerprint(mol);
-		System.out.println(bs);
 		
 		DescriptorValue result = wrapper.calculate(mol);
 		Assert.assertEquals(bs.toString(),((StringDescriptorResultType)result.getValue()).getValue());
