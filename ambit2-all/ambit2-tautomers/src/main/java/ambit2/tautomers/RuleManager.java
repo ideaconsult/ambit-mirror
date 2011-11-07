@@ -5,6 +5,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -243,7 +244,9 @@ public class RuleManager
 		for (int i = 0; i < extendedRuleInstances.size(); i++)
 			incStep0.unUsedRuleInstances.add((RuleInstance)extendedRuleInstances.get(i));
 		
-		//System.out.println(incStep0.debugInfo());
+		if (tman.FlagPrintIcrementalStepDebugInfo)
+			System.out.println(incStep0.debugInfo());
+		
 		stackIncSteps.push(incStep0);
 	}
 	
@@ -255,14 +258,21 @@ public class RuleManager
 		int n = 0;
 		while (!stackIncSteps.isEmpty())
 		{	
-			//System.out.println("stack_size = " + stackIncSteps.size());
-			//System.out.print(debugStack());
-			
+			if (tman.FlagPrintIcrementalStepDebugInfo)
+			{
+				System.out.println("stack_size = " + stackIncSteps.size());
+				System.out.print(debugStack());
+			}
+				
 			TautomerIncrementStep tStep = stackIncSteps.pop();
 			
-			//System.out.println(tStep.debugInfo());
-			//System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
-			//System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct)); 
+			if (tman.FlagPrintIcrementalStepDebugInfo)
+			{
+				System.out.println(tStep.debugInfo());
+				System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
+				System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct));
+			}
+			
 			expandIncremenStep(tStep);
 			
 			n++;
@@ -284,8 +294,11 @@ public class RuleManager
 				//TODO check for duplication 
 				
 				tman.resultTautomers.add(newTautomer);
-				//System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
-				//		+ "    " + incStep.getTautomerCombination());
+				
+				if (tman.FlagPrintIcrementalStepDebugInfo)
+					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
+							+ "    " + incStep.getTautomerCombination());
+					
 			}
 			catch(Exception e)
 			{
@@ -301,7 +314,10 @@ public class RuleManager
 		for (int i = 0; i < newIncSteps.length; i++)
 		{
 			stackIncSteps.push(newIncSteps[i]);
-			//System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct)); 
+			
+			if (tman.FlagPrintIcrementalStepDebugInfo)			
+				System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct));
+				
 		}	
 	}	
 		
@@ -363,6 +379,8 @@ public class RuleManager
 			a01[1] = mol.getAtom(ind1);
 			b1.setAtoms(a01);
 			b1.setOrder(b.getOrder());
+			if (b.getFlag(CDKConstants.ISAROMATIC)) 
+				b1.setFlag(CDKConstants.ISAROMATIC, true);
 			mol.addBond(b1);
 			newBonds[i] = b1;
 		}
@@ -473,7 +491,6 @@ public class RuleManager
 		}
 		
 		incStep.unUsedRuleInstances.addAll(filteredNewInstances);
-		
 		
 		
 	}

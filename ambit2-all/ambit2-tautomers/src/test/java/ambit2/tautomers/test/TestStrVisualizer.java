@@ -41,8 +41,8 @@ public class TestStrVisualizer
 	boolean FlagSingleCopyForPos = false;
 	JFrame frame;
 	int nStr = 0;
-	int nCol = 4;	
-	int size = 250;
+	int nCol = 6;	
+	int size = 150;
 	
 	public static void main(String[] args) throws Exception 
 	{
