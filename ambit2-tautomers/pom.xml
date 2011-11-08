@@ -33,6 +33,11 @@
   		<artifactId>ambit2-smarts</artifactId>
   		<version>${project.version}</version>
   	</dependency>
+	<dependency>
+	  <groupId>org.openscience.cdk</groupId>
+	  <artifactId>cdk-tautomer</artifactId>
+	  <version>${cdk.version}</version>
+	</dependency> 	
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-ui</artifactId>
