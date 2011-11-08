@@ -47,6 +47,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	//Work variables which are set by functions analyzeSubExpressionsFromLowAnd and getExpressionAtomType
 	int mSubAtomType, mSubAromaticity, mCurSubArom, mRecCurSubArom, mSubAtomCharge, mCurSubAtCharge;
+	int mSubBondType, mSubBoAromaticity, mCurSubBoArom;
 		
 	protected IChemObjectBuilder builder;
 	
@@ -667,8 +668,239 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	public  IBond smartsExpressionToBond(SmartsBondExpression b)
 	{	
+		//In order to extract the bond type from a SmartsBondExpresion 
+		//following rules are applied:
+		// 1. The expression is represented as a sequence of sub expressions 
+		//    separated by "LOW_AND" operation:   sub1; sub2; sub3; ...
+		// 2. Each expression is checked whether it defines clearly a bond type
+		// 3. If only one expression defines a bond then this is assigned as the 
+		//    result bond type 
+		//    or if two or more expressions define bond type these bond types
+		//    must be the same
+		
+		
+		
+		Vector<SmartsBondExpression> subs = getSubExpressions(b, SmartsConst.LO + SmartsConst.LO_ANDLO);
+		for (int  i = 0; i < subs.size(); i++)
+		{
+			//TODO
+		}
+		
+		/*
+		for (int  i = 0; i < subs.size(); i++)
+		{	
+			analyzeSubExpressionsFromLowAnd(a, subs.get(i));
+			//System.out.print("  sub-expression " +  subs.get(i).toString());
+			//System.out.println("    mSubAtomType = " + mSubAtomType + "  mSubAromaticity = " + mSubAromaticity + "  mSubAtomCharge = " + mSubAtomCharge);
+			if (mSubAtomType != -1)
+			{
+				if (atType == -1)					
+					atType = mSubAtomType;				
+				else
+				{
+					if (atType != mSubAtomType)
+					{
+						atType = -1; //Atom Type is not defined correctly
+						break;
+					}
+				}
+			}
+			
+			//Handling aromaticity 
+			if (mSubAromaticity != -1)
+			{
+				if (isArom == -1)
+					isArom = mSubAromaticity;
+				else
+				{
+					if (isArom != mSubAromaticity)
+					{	
+						isArom = -1;  //Aromaticity is not defined correctly
+						break;
+					}
+				}
+			}
+			
+			
+			if (mSubAtomCharge != 0)
+			{	
+				//Currently Simple handling of charge
+				atomCharge = mSubAtomCharge;
+			}
+			
+		}
+		
+		
+		if (atType != -1)
+		{
+			IAtom atom = SilentChemObjectBuilder.getInstance().newInstance(IAtom.class);			
+			atom.setSymbol(PeriodicTable.getSymbol(atType));			
+						
+			//Setting the aromaticity (when it is defied)
+			if (isArom != -1)
+			{	
+				if (isArom == 1)				
+					atom.setFlag(CDKConstants.ISAROMATIC,true);
+				else
+					atom.setFlag(CDKConstants.ISAROMATIC,false);
+			}
+			
+			//Setting the charge
+			if (atomCharge != 0)
+				atom.setFormalCharge(new Integer(atomCharge));
+			
+			//System.out.println("setting atom charge " + atomCharge);
+			
+			return(atom);
+			
+		}
+		
+		*/
+		
 		return(null);
 	}
+	
+	public Vector<SmartsBondExpression> getSubExpressions(SmartsBondExpression b, int separator)
+	{
+		Vector<SmartsBondExpression> v = new Vector<SmartsBondExpression>();
+		SmartsBondExpression sub = new SmartsBondExpression();
+		for (int i = 0; i < b.tokens.size(); i++)
+		{
+			if (b.tokens.get(i).intValue() == separator)
+			{
+				v.add(sub);
+				sub = new SmartsBondExpression();
+			}
+			else
+				sub.tokens.add(b.tokens.get(i));
+		}
+		v.add(sub);		
+		return v;
+	}
+	
+	public void analyzeSubExpressionsFromLowAnd(SmartsBondExpression boExp, SmartsBondExpression sub)
+	{
+		//The sub expression sub is represented as a sequence of sub-sub expressions
+		//separated by logical 'OR' 
+		//Following rule is applied
+		//	If at least one sub-sub expression has a bond type 
+		//  then all other sub-subs must have the same type
+		//Analogously the aromaticity is treated
+		
+		
+		
+		Vector<SmartsBondExpression> sub_subs = getSubExpressions(sub, SmartsConst.LO+SmartsConst.LO_OR);
+		int subBoType[] = new int[sub_subs.size()];
+		int subArom[] = new int[sub_subs.size()];
+		
+		for (int i = 0; i <sub_subs.size(); i++)
+		{	
+			//subBoType[i] = getExpressionAtomType(boExp,sub_subs.get(i));
+			subArom[i] = mCurSubArom;
+		}
+		
+		mSubBondType = subBoType[0];
+		for (int i = 1; i < subBoType.length; i++)
+		{
+			if (mSubBondType != subBoType[i])
+			{
+				mSubBondType = -1;
+				break;
+			}
+		}
+		
+		mSubBoAromaticity = subArom[0];
+		for (int i = 1; i < subBoType.length; i++)
+		{
+			if (mSubAromaticity != subArom[i])
+			{
+				mSubAromaticity = -1;
+				break;
+			}
+		}
+	}
+	
+	public int getExpressionBondType(SmartsBondExpression boExp, SmartsBondExpression sub)
+	{
+		//'sub' expression is represented only by HI_AND and NOT operations		
+		mCurSubBoArom = -1;
+		
+		//Getting the positions of HI_AND tokens
+		int pos[] = new int[sub.tokens.size()+2];
+		pos[0] = -1;
+		int n = 0; 
+		for (int i = 0; i < sub.tokens.size(); i++)
+		{
+			if (sub.tokens.get(i).intValue() == SmartsConst.LO+SmartsConst.LO_AND)
+			{
+				n++;   
+				pos[n] = i;
+			}
+		}
+		
+		n++;   
+		pos[n] = sub.tokens.size();
+		
+		int expBoType = -1;
+		boolean FlagNot;
+		
+		//using 1-based indexing for 'pos' array.
+		//pos[0] = -1 and  pos[n] = sub.tokens.size() have special use for both ends of the token sequence
+		for (int i = 1; i <= n; i++)
+		{			
+			//Handling the tokens between pos[i-1] and pos[i]
+			FlagNot = false;
+			for (int k = pos[i-1]+1; k < pos[i]; k++)
+			{	
+				int seTok = sub.tokens.get(k).intValue();
+				if (seTok >= SmartsConst.LO)
+				{
+					if (seTok  == SmartsConst.LO + SmartsConst.LO_NOT)					
+						FlagNot = !FlagNot;
+					
+					if (seTok  == SmartsConst.LO + SmartsConst.LO_AND)					
+						FlagNot = false;  //'Not' flag is reseted 
+					
+					continue;
+				}
+							
+				
+				//Handling bond primitives. 
+				//When given primitive defines a bond type it must not be negated 				
+				switch (seTok)
+				{	
+				case SmartsConst.BT_ANY:
+					break;
+					
+				case SmartsConst.BT_SINGLE:
+					if (!FlagNot)
+						expBoType = 1;
+					break;
+					
+				case SmartsConst.BT_DOUBLE:
+					if (!FlagNot)
+						expBoType = 2;
+					break;	
+					
+				case SmartsConst.BT_TRIPLE:
+					if (!FlagNot)
+						expBoType = 3;
+					break;	
+					
+				case SmartsConst.BT_AROMATIC:
+					
+					break;		
+					
+				//TODO
+					
+				//All other token types do not effect function result
+				}
+			}
+		}		
+		
+		return(expBoType);
+	}
+	
 	
 	boolean isRingBond(IBond b, IRingSet ringSet)
 	{

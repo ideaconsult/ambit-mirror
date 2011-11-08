@@ -5,6 +5,10 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import java.util.Vector;
 import ambit2.smarts.DoubleNonAromaticBond;
+import ambit2.smarts.SmartsBondExpression;
+import ambit2.smarts.SmartsToChemObject;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+
 
 public class RuleStateBondDistribution 
 {
@@ -13,6 +17,7 @@ public class RuleStateBondDistribution
 	public void calcDistribution(QueryAtomContainer statePattern)
 	{
 		int n = 0; 
+		SmartsToChemObject stco = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
 		Vector<Integer> v = new Vector<Integer>(); 
 		for (int i = 0; i < statePattern.getBondCount(); i++)
 		{	
@@ -27,8 +32,17 @@ public class RuleStateBondDistribution
 				OrderQueryBond bo = (OrderQueryBond)statePattern.getBond(i);
 				if (bo.getOrder() == IBond.Order.DOUBLE)
 					v.add(new Integer(i));
+				continue;
 			}
 			
+			if (statePattern.getBond(i) instanceof SmartsBondExpression)
+			{
+				IBond bo = stco.smartsExpressionToBond((SmartsBondExpression)statePattern.getBond(i));
+				if (bo != null)
+					if (bo.getOrder() == IBond.Order.DOUBLE)
+						v.add(new Integer(i));
+				continue;
+			}
 		}
 		
 		DBPositions = new int[v.size()];
