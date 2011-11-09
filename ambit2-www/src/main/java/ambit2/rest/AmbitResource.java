@@ -345,6 +345,9 @@ public class AmbitResource extends WadlServerResource {
 				
 				writer.write(String.format("<a href='%s/ontology' title='BlueObelisk, endpoints, algorithm types ontology'>Ontology</a>&nbsp;",getRequest().getRootRef()));
 				writer.write(String.format("<a href='%s/ontology/test' title='Reads RDF output from an URI and displays clickable statements. Enter URI in the search box.'>RDF playground</a>&nbsp;",getRequest().getRootRef()));
+				
+				writer.write(String.format("<a href='%s' title='This resource URI'>This resource URI</a>&nbsp;",getRequest().getResourceRef()));
+				writer.write(String.format("<a href='%s' title='Original URI'>Original URI</a>&nbsp;",getRequest().getOriginalRef()));
 
 				writeHTMLFooter(writer, "AMBIT", getRequest());
 				return new StringRepresentation(writer.toString(),MediaType.TEXT_HTML);				
