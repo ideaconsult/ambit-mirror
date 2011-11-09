@@ -630,7 +630,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 			return(bond);
 		}	
 		
-		if (b instanceof AromaticQueryBond)
+		if (b instanceof AromaticQueryBond)  //This case returns a bond with order null!! - Is this OK ???
 		{	
 			Bond bond = new Bond();
 			bond.setOrder(b.getOrder());
@@ -687,16 +687,16 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		for (int  i = 0; i < subs.size(); i++)
 		{
 			analyzeSubExpressionsFromLowAnd(b, subs.get(i));
-			//System.out.print("  sub-expression " +  subs.get(i).toString());
-			//System.out.println("    mSubBondType = " + mSubBondType + "  mSubBoAromaticity = " + mSubBoAromaticity );
+			System.out.print("  sub-expression " +  subs.get(i).toString());
+			System.out.println("    mSubBondType = " + mSubBondType + "  mSubBoAromaticity = " + mSubBoAromaticity );
 			
 			if (mSubBondType != -1)
 			{
 				if (boType == -1)					
-					boType = mSubAtomType;				
+					boType = mSubBondType;				
 				else
 				{
-					if (boType != mSubAtomType)
+					if (boType != mSubBondType)
 					{
 						boType = -1; //Atom Type is not defined correctly
 						break;
@@ -725,6 +725,9 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		}
 		
 		
+		System.out.println("boType = " + boType);
+		
+		
 		if (boType != -1)
 		{
 			//Atom associated to the bond are not set here
@@ -742,6 +745,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				bond.setOrder(IBond.Order.TRIPLE);
 				break;	
 			}
+			
 			
 			if (FlagAromCorrect)
 				if (isArom != -1)

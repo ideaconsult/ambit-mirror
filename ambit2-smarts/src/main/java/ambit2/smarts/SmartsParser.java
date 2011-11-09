@@ -811,8 +811,8 @@ public class SmartsParser
 			{
 				if (prevToken < SmartsConst.LO)
 				{
-					//Adding default OR (,)
-					sbe.tokens.add(new Integer(SmartsConst.LO+SmartsConst.LO_OR));
+					//Adding default HI_AND(&)         /it was OR (,) but it was wrong!!! /
+					sbe.tokens.add(new Integer(SmartsConst.LO+SmartsConst.LO_AND));
 				}
 				sbe.tokens.add(new Integer(bo));
 			}

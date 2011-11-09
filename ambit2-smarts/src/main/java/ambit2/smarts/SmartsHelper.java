@@ -172,6 +172,20 @@ public class SmartsHelper
 	}
 	
 	
+	static public int bondOrderToIntValue(IBond b)
+	{
+		if (b.getOrder() == IBond.Order.SINGLE)
+			return(1);
+		if (b.getOrder() == IBond.Order.DOUBLE)
+			return(2);
+		if (b.getOrder() == IBond.Order.TRIPLE)
+			return(3);
+		if (b.getOrder() == IBond.Order.QUADRUPLE)
+			return(4);
+		
+		
+		return 0;
+	}
 
 	static public String atomToString(IAtom a)
 	{

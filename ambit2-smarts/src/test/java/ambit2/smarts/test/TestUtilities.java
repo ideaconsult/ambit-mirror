@@ -495,6 +495,36 @@ public class TestUtilities
 		return(0);
 	}
 	
+	int testSMARTSBondToIBond(String smarts)
+	{	
+		QueryAtomContainer query  = sp.parse(smarts);		
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))	
+		{	
+			System.out.println("Smarts Error: " + errorMsg);
+			return(-1);
+		}	
+		
+		System.out.println(smarts + "  --> bond list converted to simple bonds when possible: ");
+		for (int i = 0; i < query.getBondCount(); i++)
+		{
+			IBond bo = smToChemObj.toBond(query.getBond(i));
+			if (bo == null)
+				System.out.println("#" + i + "  null");
+			else
+			{
+				String aromatic = "";
+				if (bo.getFlag(CDKConstants.ISAROMATIC))
+					aromatic = " aromatic";
+				System.out.println("#" + i + "  " + SmartsHelper.bondOrderToIntValue(bo) + "  " +aromatic + 
+						"           class = " + query.getBond(i).getClass().getName());
+			}
+		}
+		
+		
+		return(0);
+	}
+	
 	int testExtractAtomContainer(String smarts)
 	{	
 		QueryAtomContainer query  = sp.parse(smarts);		
@@ -1594,7 +1624,9 @@ public class TestUtilities
 		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
 		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); ---> Exception to fix !!!!!
 		
-		tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "NC[H]");
+		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "NC[H]");
+		
+		tu.testSMARTSBondToIBond("C=,@C");
 		
 		
 		//tu.testEquivalenceTestes("[H]C([H])CCC([H])[H]");
@@ -1603,6 +1635,10 @@ public class TestUtilities
 		//tu.testCombinations();
 		
 		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
+		
+		
+		
+		
 		
 	}
 	
