@@ -201,6 +201,8 @@ public class SmartsHelper
 	
 	static public String bondToString(IBond b)
 	{
+		//TODO - to improve it ???
+		
 		if (b instanceof SmartsBondExpression)
 			return(b.toString());		
 		if (b instanceof SingleOrAromaticBond)

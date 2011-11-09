@@ -657,6 +657,13 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 			Bond bond = new Bond();			
 			bond.setOrder(IBond.Order.DOUBLE);
 			return(bond);
+		}
+		
+		if (b instanceof DoubleBondAromaticityNotSpecified)
+		{	
+			Bond bond = new Bond();			
+			bond.setOrder(IBond.Order.DOUBLE);
+			return(bond);
 		}	
 		
 		//All these cases generate null bond:
