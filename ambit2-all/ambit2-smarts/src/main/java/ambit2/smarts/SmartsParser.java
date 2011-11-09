@@ -75,6 +75,7 @@ public class SmartsParser
 	public boolean mSupportOpenEyeExtension = true;
 	public boolean mSupportOpenBabelExtension = true;
 	public boolean mSupportSmirksSyntax = false; 
+	public boolean mSupportDoubleBondAromaticityNotSpecified = false;  //by default "=" is DoubleNonAromatic
 	
 	//Work variables for Component Level Grouping
 	boolean FlagCLG = false;  
@@ -380,7 +381,10 @@ public class SmartsParser
 				curBond = new SingleNonAromaticBond();
 				break;
 			case SmartsConst.BT_DOUBLE:
-				curBond = new DoubleNonAromaticBond();									
+				if (mSupportDoubleBondAromaticityNotSpecified)
+					curBond = new DoubleBondAromaticityNotSpecified();
+				else
+					curBond = new DoubleNonAromaticBond();									
 				break;
 			case SmartsConst.BT_TRIPLE:	
 				curBond = new OrderQueryBond(IBond.Order.TRIPLE);									
@@ -1576,6 +1580,8 @@ public class SmartsParser
 		if (bond instanceof SingleOrAromaticBond)
 			return(1);
 		if (bond instanceof DoubleNonAromaticBond)
+			return(2);
+		if (bond instanceof DoubleBondAromaticityNotSpecified)
 			return(2);
 		if (bond instanceof DoubleStereoBond)
 			return(2);

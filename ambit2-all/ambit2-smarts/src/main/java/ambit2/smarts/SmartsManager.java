@@ -199,6 +199,11 @@ public class SmartsManager
 		parser.mSupportOpenBabelExtension = support;
 	}
 	
+	public void supportDoubleBondAromaticityNotSpecified(boolean support)
+	{
+		parser.mSupportDoubleBondAromaticityNotSpecified = support;
+	}
+	
 	public void useMOEvPrimitive(boolean support)
 	{
 		parser.mUseMOEvPrimitive = support;
@@ -217,6 +222,11 @@ public class SmartsManager
 	public boolean getSupportOpenBabelExtension()
 	{
 		return(parser.mSupportOpenBabelExtension);
+	}
+	
+	public boolean getSupportDoubleBondAromaticityNotSpecified()
+	{
+		return(parser.mSupportDoubleBondAromaticityNotSpecified);
 	}
 	
 	public boolean getUseMOEvPrimitive()
