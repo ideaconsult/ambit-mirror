@@ -76,7 +76,7 @@
     </security-constraint>
         <security-constraint>
         <web-resource-collection>
-            <web-resource-name>HTTPSOrHTTP</web-resource-name>
+            <web-resource-name>HTTPS</web-resource-name>
             <url-pattern>*.ico</url-pattern>
             <url-pattern>/images/*</url-pattern>
             <url-pattern>/style/*</url-pattern>
@@ -85,7 +85,7 @@
             <url-pattern>/jme/*</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
   
