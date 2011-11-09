@@ -417,6 +417,17 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>toxtree</groupId>
+  		<artifactId>toxtree-dnabinding</artifactId>
+  		<version>${toxtree.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>toxtree-proteinbinding</groupId>
+  		<artifactId>toxtree-proteinbinding</artifactId>
+  		<version>${toxtree.version}</version>
+  		<scope>compile</scope>
+  	</dependency>
   </dependencies>
   	<repositories>
   	    	<repository>

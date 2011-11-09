@@ -1026,7 +1026,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 	}
 	
 	@Test
-	public void testSkinSensModel() throws Exception {
+	public void testToxtreeSkinSensModel() throws Exception {
 		Form headers = new Form();  
 
 		testAsyncTask(
@@ -1041,7 +1041,37 @@ public class AlgorithmResourceTest extends ResourceTest {
 	}
 	
 	@Test
-	public void testSmartCypModel() throws Exception {
+	public void testToxtreeDNABindingModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreednabinding", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
+		System.out.println(dataset);
+		
+	}
+	
+	@Test
+	public void testToxtreeProteinBindingModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreeproteinbinding", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
+		System.out.println(dataset);
+		
+	}
+	
+	@Test
+	public void testToxtreeSmartCypModel() throws Exception {
 		Form headers = new Form();  
 
 		testAsyncTask(
