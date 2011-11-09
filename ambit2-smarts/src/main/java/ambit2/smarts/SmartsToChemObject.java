@@ -679,83 +679,81 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		//    must be the same
 		
 		
-		
 		Vector<SmartsBondExpression> subs = getSubExpressions(b, SmartsConst.LO + SmartsConst.LO_ANDLO);
+		int boType = -1;
+		int isArom = -1;
+		boolean FlagAromCorrect = true;
+		
 		for (int  i = 0; i < subs.size(); i++)
 		{
-			//TODO
-		}
-		
-		/*
-		for (int  i = 0; i < subs.size(); i++)
-		{	
-			analyzeSubExpressionsFromLowAnd(a, subs.get(i));
+			analyzeSubExpressionsFromLowAnd(b, subs.get(i));
 			//System.out.print("  sub-expression " +  subs.get(i).toString());
-			//System.out.println("    mSubAtomType = " + mSubAtomType + "  mSubAromaticity = " + mSubAromaticity + "  mSubAtomCharge = " + mSubAtomCharge);
-			if (mSubAtomType != -1)
+			//System.out.println("    mSubBondType = " + mSubBondType + "  mSubBoAromaticity = " + mSubBoAromaticity );
+			
+			if (mSubBondType != -1)
 			{
-				if (atType == -1)					
-					atType = mSubAtomType;				
+				if (boType == -1)					
+					boType = mSubAtomType;				
 				else
 				{
-					if (atType != mSubAtomType)
+					if (boType != mSubAtomType)
 					{
-						atType = -1; //Atom Type is not defined correctly
+						boType = -1; //Atom Type is not defined correctly
 						break;
 					}
 				}
 			}
 			
 			//Handling aromaticity 
-			if (mSubAromaticity != -1)
+			if(!FlagAromCorrect)
+				continue;
+			if (mSubBoAromaticity != -1)
 			{
 				if (isArom == -1)
-					isArom = mSubAromaticity;
+					isArom = mSubBoAromaticity;
 				else
 				{
-					if (isArom != mSubAromaticity)
+					if (isArom != mSubBoAromaticity)
 					{	
 						isArom = -1;  //Aromaticity is not defined correctly
-						break;
+						FlagAromCorrect = false;
+						continue;
 					}
 				}
 			}
 			
-			
-			if (mSubAtomCharge != 0)
-			{	
-				//Currently Simple handling of charge
-				atomCharge = mSubAtomCharge;
-			}
-			
 		}
 		
 		
-		if (atType != -1)
+		if (boType != -1)
 		{
-			IAtom atom = SilentChemObjectBuilder.getInstance().newInstance(IAtom.class);			
-			atom.setSymbol(PeriodicTable.getSymbol(atType));			
-						
-			//Setting the aromaticity (when it is defied)
-			if (isArom != -1)
+			//Atom associated to the bond are not set here
+			IBond bond = SilentChemObjectBuilder.getInstance().newInstance(IBond.class);
+			
+			switch (boType)
 			{	
-				if (isArom == 1)				
-					atom.setFlag(CDKConstants.ISAROMATIC,true);
-				else
-					atom.setFlag(CDKConstants.ISAROMATIC,false);
+			case 1:
+				bond.setOrder(IBond.Order.SINGLE);
+				break;
+			case 2:
+				bond.setOrder(IBond.Order.DOUBLE);
+				break;
+			case 3:
+				bond.setOrder(IBond.Order.TRIPLE);
+				break;	
 			}
 			
-			//Setting the charge
-			if (atomCharge != 0)
-				atom.setFormalCharge(new Integer(atomCharge));
+			if (FlagAromCorrect)
+				if (isArom != -1)
+				{	
+					if (isArom == 1)				
+						bond.setFlag(CDKConstants.ISAROMATIC,true);
+					else
+						bond.setFlag(CDKConstants.ISAROMATIC,false);
+				}
 			
-			//System.out.println("setting atom charge " + atomCharge);
-			
-			return(atom);
-			
+			return (bond);
 		}
-		
-		*/
 		
 		return(null);
 	}
@@ -785,8 +783,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		//Following rule is applied
 		//	If at least one sub-sub expression has a bond type 
 		//  then all other sub-subs must have the same type
-		//Analogously the aromaticity is treated
-		
+		// Aromaticity is treated as well
 		
 		
 		Vector<SmartsBondExpression> sub_subs = getSubExpressions(sub, SmartsConst.LO+SmartsConst.LO_OR);
@@ -795,7 +792,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		for (int i = 0; i <sub_subs.size(); i++)
 		{	
-			//subBoType[i] = getExpressionAtomType(boExp,sub_subs.get(i));
+			subBoType[i] = getExpressionBondType(boExp,sub_subs.get(i));
 			subArom[i] = mCurSubArom;
 		}
 		
@@ -862,8 +859,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 						FlagNot = false;  //'Not' flag is reseted 
 					
 					continue;
-				}
-							
+				}			
 				
 				//Handling bond primitives. 
 				//When given primitive defines a bond type it must not be negated 				
@@ -888,10 +884,23 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 					break;	
 					
 				case SmartsConst.BT_AROMATIC:
+					if (FlagNot)
+						mCurSubBoArom = 0;
+					else
+						mCurSubBoArom = 1;
+					break;
 					
-					break;		
-					
-				//TODO
+				case SmartsConst.BT_RING:
+					//do nothing
+					break;
+				
+				case SmartsConst.BT_UP:
+				case SmartsConst.BT_DOWN:
+				case SmartsConst.BT_UPUNSPEC:
+				case SmartsConst.BT_DOWNUNSPEC:	
+					if (!FlagNot)
+						expBoType = 1;
+					break;	
 					
 				//All other token types do not effect function result
 				}
