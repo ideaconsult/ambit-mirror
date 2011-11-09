@@ -110,7 +110,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			Response response) throws ResourceException {
 		
 		
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(request).getQueryAsForm();
 		String[] datasetsURI =  form.getValuesArray(dataset_complement_uri);
 		if ((datasetsURI != null) && (datasetsURI.length>0)) {
 			QueryComplement qc = new QueryComplement();
@@ -138,7 +138,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			Response response) throws ResourceException {
 		
 		
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(request).getQueryAsForm();
 		String[] datasetsURI =  form.getValuesArray(dataset_intersection_uri);
 		if ((datasetsURI != null) && (datasetsURI.length>0)) {
 			QueryCombinedStructure qc = new QueryCombinedStructure() {
@@ -327,7 +327,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	protected Representation delete(Variant variant) throws ResourceException {
 		
 		try {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			String[] compounds = OpenTox.params.compound_uris.getValuesArray(form);
 
 			if (form.size()!=0) {

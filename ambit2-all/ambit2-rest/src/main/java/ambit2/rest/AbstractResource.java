@@ -4,24 +4,21 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.opentox.dsl.aa.IAuthToken;
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Cookie;
-import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.ext.wadl.FaultInfo;
 import org.restlet.ext.wadl.MethodInfo;
 import org.restlet.ext.wadl.RepresentationInfo;
 import org.restlet.ext.wadl.WadlRepresentation;
-import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -39,7 +36,7 @@ import ambit2.rest.exception.RResourceException;
  * @param <P>
  */
 public abstract class AbstractResource<Q,T extends Serializable,P extends IProcessor<Q, Representation>> 
-																	extends WadlServerResource implements IAuthToken {
+																	extends ProtectedResource {
 	protected Q queryObject;
 	protected Exception error = null;	
 	protected Status response_status = Status.SUCCESS_OK;
@@ -72,18 +69,10 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		try {ClientResourceWrapper.setTokenFactory(this);} catch (Exception x){}
-		BotsGuard.checkForBots(getRequest());
 		response_status = Status.SUCCESS_OK;
 		queryObject = createQuery(getContext(), getRequest(), getResponse());
 		error = null;
 
-	}
-	
-	@Override
-	protected void doRelease() throws ResourceException {
-		try {ClientResourceWrapper.setTokenFactory(null);} catch (Exception x){}
-		super.doRelease();
 	}
 	
 
@@ -103,20 +92,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		return vars;
 	}
 	
-	protected void setTokenCookies(Variant variant, boolean secure) {
-		CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
-		cS.setSecure(secure);
-		cS.setComment("OpenSSO token");
-		cS.setPath("/");
-        this.getResponse().getCookieSettings().add(cS);
-        //
-		cS = new CookieSetting(0, "subjectid_secure", Boolean.toString(secure));
-		cS.setSecure(false);
-		cS.setComment("Whether to transfer OpenSSO in secure token");
-		cS.setPath("/");
-        this.getResponse().getCookieSettings().add(cS);
-       
-	}
+
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 	try {
@@ -212,68 +188,5 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 		return post(entity);
 	}
 	
-	@Override
-	protected void describeGet(MethodInfo info) {
-        info.setIdentifier("item");
-        info.setDocumentation("To retrieve details of a specific item");
-
-        Iterator<Variant> vars = getVariants().iterator();
-        while (vars.hasNext()) {
-        	Variant var = vars.next();
-            RepresentationInfo repInfo = new RepresentationInfo(var.getMediaType());
-            //repInfo.setXmlElement("item");
-            repInfo.setDocumentation(String.format("%s representation",var.getMediaType()));
-            info.getResponse().getRepresentations().add(repInfo);        	
-        }
-
-
-        FaultInfo faultInfo = new FaultInfo(Status.CLIENT_ERROR_NOT_FOUND,"Not found");
-        faultInfo.setIdentifier("itemError");
-        faultInfo.setMediaType(MediaType.TEXT_HTML);
-        info.getResponse().getFaults().add(faultInfo);
-
-	}
-	
-	protected String getUserName() {
-		return getHeaderValue("user");
-	}
-	protected String getPassword() {
-		return getHeaderValue("password");
-	}	
-	private String getHeaderValue(String tag) {
-		try {
-			Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
-			if (headers==null) return null;
-			return headers.getFirstValue(tag);
-		} catch (Exception x) {
-			return null;
-		}
-	}
-	protected boolean useSecureCookie(Request request) {
-		for (Cookie cookie : request.getCookies()) {
-			if ("subjectid_secure".equals(cookie.getName())) try {
-				return Boolean.parseBoolean(cookie.getValue());
-			} catch (Exception x) {
-			}
-		}
-		//secure cookie by default
-		return true;
-	}
-	
-	protected String getTokenFromCookies(Request request) {
-		for (Cookie cookie : request.getCookies()) {
-			if ("subjectid".equals(cookie.getName()))
-				return cookie.getValue();
-		}
-		return null;
-	}
-	@Override
-	public String getToken() {
-		String token = getHeaderValue("subjectid");
-		
-		if (token == null) token = getTokenFromCookies(getRequest());
-		return token== null?null:token;
-		 
-	}
 
 }

@@ -170,14 +170,14 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	}
 	
 	protected void createDatasetIndividual(int datasetID) {
-		if (uriReporter.getRequest().getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
+		if (uriReporter.getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
 			dataset = output.createIndividual(OT.OTClass.Dataset.getOntClass(output));
 		} else {
 			if (datasetID<=0)
 				dataset = output.createIndividual(
 					String.format("%s:%s",
-							uriReporter.getRequest().getResourceRef().getScheme(),
-							uriReporter.getRequest().getResourceRef().getHierarchicalPart()
+							uriReporter.getResourceRef().getScheme(),
+							uriReporter.getResourceRef().getHierarchicalPart()
 							),
 					OT.OTClass.Dataset.getOntClass(output));
 			else

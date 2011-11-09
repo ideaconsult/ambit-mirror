@@ -32,7 +32,7 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 	@Override
 	public void header(Writer output, Iterator<OpenSSOUser> query) {
 		try {
-			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),getDocumentation()
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),getResourceRef(),getDocumentation()
 					);//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			
 			

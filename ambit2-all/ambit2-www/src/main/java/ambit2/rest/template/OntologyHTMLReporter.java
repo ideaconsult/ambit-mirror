@@ -115,6 +115,7 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 					query.toString()
 					,
 					uriReporter.getRequest(),
+					uriReporter.getResourceRef(),
 					uriReporter.getDocumentation()
 					);
 			

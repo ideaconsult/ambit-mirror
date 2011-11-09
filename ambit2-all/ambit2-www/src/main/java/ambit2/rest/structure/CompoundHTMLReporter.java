@@ -255,7 +255,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				"rdf.gif"
 				
 		};
-		String q=uriReporter.getRequest().getResourceRef().getQuery();
+		String q=uriReporter.getResourceRef().getQuery();
 		for (int i=0;i<mimes.length;i++) {
 			MediaType mime = mimes[i];
 			w.append("&nbsp;");
@@ -276,7 +276,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		StringBuilder w = new StringBuilder();
 		w.append(String.format("<form method=\"post\" action=\"/query\">",""));
 		w.append(String.format("<input type=\"text\" name=\"name\" value=\"%s\" size=\"30\">&nbsp;",query.toString()));
-		w.append(String.format("<input type=\"hidden\" value='%s' name='queryURI'>\n",uriReporter.getRequest().getResourceRef()));
+		w.append(String.format("<input type=\"hidden\" value='%s' name='queryURI'>\n",
+				uriReporter.getResourceRef()));
 		w.append("<input type=\"submit\" value='Save search results'>&nbsp;");
 		//output.write("</form>");
 		//output.write(String.format("<form method=\"post\" action=\"%s/model\">",uriReporter.getBaseReference()));
@@ -299,6 +300,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					collapsed?"Chemical compounds":"Chemical compound"
 					,
 					uriReporter.getRequest(),
+					uriReporter.getResourceRef(),
 					"",
 					uriReporter.getDocumentation()
 					);
@@ -312,7 +314,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("<td align='center'>");
 			String query_smiles = "";
 			String query_text = "";
-			Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
+			Form form = uriReporter.getResourceRef().getQueryAsForm();
 			try {
 				
 				query_text = form.getFirstValue("text");
@@ -373,7 +375,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 			
 			String hint= "";
-			if (uriReporter.getRequest().getResourceRef().toString().indexOf("similarity")>0) {
+			if (uriReporter.getResourceRef().toString().indexOf("similarity")>0) {
 				w.write(String.format("<label for='%s'>SMILES</label>&nbsp;",QueryResource.search_param));
 				w.write(String.format("<input name='%s' type='text' size='40' title='Enter SMILES' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
 				w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
@@ -385,7 +387,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				hint = "Draw structure and search for similar compounds";
 				//w.write("<input type='submit' value='Search'><br>");
 
-			} else if (uriReporter.getRequest().getResourceRef().toString().indexOf("compound")>0) {
+			} else if (uriReporter.getResourceRef().toString().indexOf("compound")>0) {
 				w.write(String.format("<input name='property' type='text' title='Enter property name (optional)'  size='20' value='%s'>\n",query_property==null?"":query_property));
 				w.write("&nbsp;");
 				w.write(String.format("<input name='%s' type='text' title='Enter molecule identifier, name or property value (e.g. benzene)'  size='40' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));

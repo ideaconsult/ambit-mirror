@@ -19,7 +19,6 @@ import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 import org.restlet.routing.Template;
 
 import ambit2.base.data.ISourceDataset;
@@ -34,11 +33,12 @@ import ambit2.db.chart.PropertiesChartGenerator;
 import ambit2.db.search.StoredQuery;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
+import ambit2.rest.ProtectedResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.ProfileReader;
 
-public class ChartResource extends ServerResource {
+public class ChartResource extends ProtectedResource {
 	public static final String resource = "/chart";
 	public static final String resourceKey = "mode";
 	public enum ChartMode {
@@ -151,7 +151,7 @@ public class ChartResource extends ServerResource {
 	protected Form getParams() {
 		if (params == null) 
 			if (Method.GET.equals(getRequest().getMethod()))
-				params = getRequest().getResourceRef().getQueryAsForm();
+				params = getResourceRef(getRequest()).getQueryAsForm();
 			//if POST, the form should be already initialized
 			else 
 				params = getRequest().getEntityAsForm();

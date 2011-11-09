@@ -17,12 +17,12 @@ import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.base.processors.AbstractReporter;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.ProtectedResource;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
 
@@ -31,7 +31,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  *
  */
-public class AbstractDepict extends ServerResource {
+public class AbstractDepict extends ProtectedResource {
 	public static final String resource = "/depict";
 	protected Form params;
 	protected String smiles ;
@@ -55,7 +55,7 @@ public class AbstractDepict extends ServerResource {
 	protected Form getParams() {
 		if (params == null) 
 			if (Method.GET.equals(getRequest().getMethod()))
-				params = getRequest().getResourceRef().getQueryAsForm();
+				params = getResourceRef(getRequest()).getQueryAsForm();
 			//if POST, the form should be already initialized
 			else 
 				params = getRequest().getEntityAsForm();
@@ -133,7 +133,7 @@ public class AbstractDepict extends ServerResource {
 	    				public void close() throws Exception {};
 	    				public Writer process(String target) throws AmbitException {
 	    					try {
-	    					AmbitResource.writeTopHeader(output, smiles, getRequest(), "",null);
+	    					AmbitResource.writeTopHeader(output, smiles, getRequest(),getResourceRef(getRequest()), "",null);
 	    					writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
 	    					output.write(target);
 	    					AmbitResource.writeHTMLFooter(output, smiles, getRequest());
@@ -141,7 +141,7 @@ public class AbstractDepict extends ServerResource {
 	    					return output;
 	    				};
 	    			},MediaType.TEXT_HTML);
-	    			return convertor.process(getTitle(getRequest().getResourceRef(),smiles));
+	    			return convertor.process(getTitle(getResourceRef(getRequest()),smiles));
 	    		}
 					    		
 	    	if (smiles != null) {

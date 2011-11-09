@@ -10,15 +10,12 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ISourceDataset;
-import ambit2.base.data.LiteratureEntry;
-import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.StringCondition;
-import ambit2.db.update.dataset.QueryDatasetByFeatures;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
@@ -73,7 +70,7 @@ public class DatasetsResource extends MetadatasetResource {
 		
 		IQueryRetrieval<ISourceDataset> query = getQuery(context, request, response,true);
 		
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(request).getQueryAsForm();
 		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
 			

@@ -60,7 +60,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 	protected Iterator<Policy> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		List<Policy> p = new ArrayList<Policy>();
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(request).getQueryAsForm();
 		String uri = form.getFirstValue(search_param);
 		if (uri==null) return p.iterator(); //throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Parameter missing: ?search=<uri-to-retrieve-policy-for>");
 		

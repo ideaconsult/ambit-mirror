@@ -37,7 +37,7 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 		super.header(output, query);
 		
 		try {
-			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),getDocumentation());
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),getResourceRef(),getDocumentation());
 			if (collapsed) {
 			output.write("<h4>Create a new policy</h4>");
 			output.write("<form method='POST' action=''>");
@@ -80,7 +80,7 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 			output.write("</form>");
 			output.write("<hr>");
 			
-			Form form = request.getResourceRef().getQueryAsForm();
+			Form form = getResourceRef().getQueryAsForm();
 			String uri = form.getFirstValue("search");
 			if (uri!=null)
 				output.write(String.format("<h4>Policies for <a href='%s'>%s</a></h4>",uri,uri));

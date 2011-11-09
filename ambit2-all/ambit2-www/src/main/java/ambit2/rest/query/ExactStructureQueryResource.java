@@ -38,7 +38,7 @@ public class ExactStructureQueryResource extends StructureQueryResource<QueryExa
 	@Override
 	protected QueryExactStructure createQuery(Context context, Request request,
 			Response response) throws ResourceException {
-		smiles = getSMILES(getRequest().getResourceRef().getQueryAsForm(),true);
+		smiles = getSMILES(getResourceRef(getRequest()).getQueryAsForm(),true);
 		if (smiles == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty SMILES");
 		try {
 			SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());

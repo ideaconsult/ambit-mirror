@@ -30,7 +30,7 @@ public class ConformerImageResource extends ConformerResource {
 			setTemplate(createTemplate(getContext(),getRequest(),getResponse()));
 			setGroupProperties(getContext(),getRequest(),getResponse());
 		}
-		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
+		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
 			variant.setMediaType(new MediaType(media));

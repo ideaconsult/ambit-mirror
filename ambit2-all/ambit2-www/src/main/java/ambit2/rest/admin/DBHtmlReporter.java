@@ -83,7 +83,9 @@ public class DBHtmlReporter extends QueryReporter<AmbitDBVersion,DBVersionQuery,
 	@Override
 	public void header(Writer output, DBVersionQuery query) {
 		try {
-			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),null
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),
+					getRequest().getOriginalRef()==null?getRequest().getResourceRef():getRequest().getOriginalRef()
+					,null
 					);//,"<meta http-equiv=\"refresh\" content=\"10\">");
 		} catch (Exception x) {
 			

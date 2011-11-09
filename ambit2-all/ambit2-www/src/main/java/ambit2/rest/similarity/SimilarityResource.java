@@ -74,7 +74,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 	@Override
 	protected Q createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		mol = getMolecule(form);
 		if ((mol==null)||(mol.getAtomCount()==0)) 
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,"Empty molecule");

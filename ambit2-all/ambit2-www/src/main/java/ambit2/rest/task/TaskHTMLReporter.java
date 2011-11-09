@@ -32,10 +32,12 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 		try {
 			String ajax = AmbitResource.js(getRequest().getResourceRef().toString(),baseReference);
 			
-			String max = getRequest().getResourceRef().getQueryAsForm().getFirstValue(AbstractResource.max_hits);
+			String max = getResourceRef().getQueryAsForm().getFirstValue(AbstractResource.max_hits);
 			max = max==null?"10":max;
 			
-			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),ajax,
+			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),
+					getResourceRef(),
+					ajax,
 					getDocumentation()
 					);//,"<meta http-equiv=\"refresh\" content=\"10\">");
 			output.write("<h4>Tasks:");

@@ -50,7 +50,7 @@ public class DataEntryResource extends StructureQueryResource<IQueryRetrieval<IS
 		query.setValue(getDataset());
 		query.setFieldname(getRecord());
 		
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		setPaging(form, query);
 		return query;
 	}

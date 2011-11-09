@@ -12,12 +12,10 @@ import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
-import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.query.QueryResource;
 
 /**
  * HTML for {@link PropertyResource}
@@ -61,7 +59,7 @@ public class PropertyAnnotationHTMLReporter extends QueryHTMLReporter<PropertyAn
 			
 		try {
 			w.write("<h3>Additional information of a feature");
-			String q=uriReporter.getRequest().getResourceRef().getQuery();
+			String q=uriReporter.getResourceRef().getQuery();
 
 			for (int i=0;i<mimes.length;i++) {
 				MediaType mime = mimes[i];

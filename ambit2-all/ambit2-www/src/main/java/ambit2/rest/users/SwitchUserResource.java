@@ -5,14 +5,15 @@ import java.util.Iterator;
 
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
+
+import ambit2.rest.ProtectedResource;
 
 /**
  * Test setup for a protected resource
  * @author nina
  *
  */
-public class SwitchUserResource extends  ServerResource {
+public class SwitchUserResource extends  ProtectedResource {
 	public static final String resource="/protected/{name}";
 
 	@Override

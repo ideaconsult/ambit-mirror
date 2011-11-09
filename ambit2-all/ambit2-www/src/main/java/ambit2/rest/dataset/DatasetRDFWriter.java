@@ -129,11 +129,11 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 			datasetIndividual = createDatasetURI(item.getDatasetID());
 			if (datasetIndividual!= null) getOutput().writeAttribute(RDF.getURI(),"about",datasetIndividual);
 			else {
-				if (uriReporter.getRequest()==null)
+				if (uriReporter.getResourceRef()==null)
 					datasetIndividual = "-";
 				else
-				datasetIndividual = String.format("%s:%s",uriReporter.getRequest().getResourceRef().getScheme(),
-						uriReporter.getRequest().getResourceRef().getHierarchicalPart());
+				datasetIndividual = String.format("%s:%s",uriReporter.getResourceRef().getScheme(),
+						uriReporter.getResourceRef().getHierarchicalPart());
 			}
 			if (getLicenseURI()!=null) {
 				getOutput().writeStartElement("dcterms","license",DCTerms.NS); //value
@@ -240,16 +240,16 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 	}
 	protected String createDatasetURI(int datasetID) {
 
-		if (uriReporter.getRequest() ==null) {
+		if (uriReporter.getResourceRef() ==null) {
 			return null;
-		} else 	if (uriReporter.getRequest().getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
+		} else 	if (uriReporter.getResourceRef().getQueryAsForm().getFirstValue(OpenTox.params.feature_uris.toString()) != null) {
 			return null;
 		} else {
 			if (datasetID<=0)
 				return
 					String.format("%s:%s",
-							uriReporter.getRequest().getResourceRef().getScheme(),
-							uriReporter.getRequest().getResourceRef().getHierarchicalPart()
+							uriReporter.getResourceRef().getScheme(),
+							uriReporter.getResourceRef().getHierarchicalPart()
 							);
 			else {
 				String datasetPrefix = String.format("/%s/%d",OpenTox.URI.dataset.name(), datasetID);

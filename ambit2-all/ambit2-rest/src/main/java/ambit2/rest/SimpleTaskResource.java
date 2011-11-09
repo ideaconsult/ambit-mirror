@@ -93,7 +93,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT});
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		setPaging(form);
 		try {
 			searchStatus = Reference.decode(form.getFirstValue(AbstractResource.search_param));

@@ -20,7 +20,7 @@ public class DatasetsByNamePrefixResource  extends FacetResource<DatasetByPrefix
 	@Override
 	protected DatasetByPrefixNameFacetQuery createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		DatasetByPrefixNameFacetQuery q = new DatasetByPrefixNameFacetQuery(getRequest().getResourceRef().toString());
+		DatasetByPrefixNameFacetQuery q = new DatasetByPrefixNameFacetQuery(getResourceRef(getRequest()).toString());
 		try {
 			q.setValue(request.getResourceRef().getQueryAsForm().getFirstValue(QueryResource.search_param));
 		} catch (Exception x) {

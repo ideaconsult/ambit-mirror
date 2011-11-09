@@ -67,7 +67,7 @@ public class Build3DResource extends CatalogResource {
 	protected Representation get(Variant variant) throws ResourceException {
 		try {
 			try {
-				Form form = getRequest().getResourceRef().getQueryAsForm();
+				Form form = getResourceRef(getRequest()).getQueryAsForm();
 				this.smiles = Reference.decode(form.getFirstValue(QueryResource.search_param));
 			} catch (Exception x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x);

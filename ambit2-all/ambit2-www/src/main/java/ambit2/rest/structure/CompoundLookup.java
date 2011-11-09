@@ -195,7 +195,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	protected Form getParams() {
 		if (params == null) 
 			if (Method.GET.equals(getRequest().getMethod()))
-				params = getRequest().getResourceRef().getQueryAsForm();
+				params = getResourceRef(getRequest()).getQueryAsForm();
 			//if POST, the form should be already initialized
 			else params = getRequest().getEntityAsForm();
 		return params;

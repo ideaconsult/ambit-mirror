@@ -147,7 +147,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					break;
 				}
 			} catch (Exception x) {
-				System.out.println(getRequest().getResourceRef());
+				System.out.println(getResourceRef(getRequest()));
 				//x.printStackTrace();
 			} finally {
 				//the reader closes the connection
@@ -217,7 +217,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			throw new NotFoundException();
 		
 		setTemplate(template);
-		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
+		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
 			variant.setMediaType(new MediaType(media));
@@ -257,7 +257,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ImageReporter<QueryStructureByID>(MediaType.IMAGE_GIF.getMainType(),MediaType.IMAGE_GIF.getSubType()),MediaType.IMAGE_GIF);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			Dimension d = new Dimension(150,150);
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			try {
 				
 				d.width = Integer.parseInt(form.getFirstValue("w").toString());

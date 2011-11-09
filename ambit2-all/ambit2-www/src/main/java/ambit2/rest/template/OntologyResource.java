@@ -99,7 +99,7 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 	protected IQueryRetrieval<Property> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		try {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			form.getFirstValue(QueryResource.search_param);
 		} catch (Exception x) {
 			

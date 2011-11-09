@@ -14,7 +14,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -23,11 +22,12 @@ import ambit2.pubchem.NCISearchProcessor;
 import ambit2.pubchem.NCISearchProcessor.METHODS;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.ProtectedResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.search.csls.CSLSRequest;
 import ambit2.search.csls.CSLSStringRequest;
 
-public class CSLSResource extends ServerResource {
+public class CSLSResource extends ProtectedResource {
 
 	public static final String resource = "/cir";
 	protected static final String resourceKey = "term";
@@ -49,7 +49,7 @@ public class CSLSResource extends ServerResource {
 		try {
 			this.term = Reference.decode(getRequest().getAttributes().get(resourceKey).toString());
 		} catch (Exception x) {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			Object key = form.getFirstValue(QueryResource.search_param);
 			if (key != null) {
 				term = Reference.decode(key.toString());
@@ -59,7 +59,7 @@ public class CSLSResource extends ServerResource {
 			this.representation = METHODS.valueOf(
 					Reference.decode(getRequest().getAttributes().get(representationKey).toString()));
 		} catch (Exception x) {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			Object key = form.getFirstValue(representationKey);
 			if (key != null) try {
 				representation = METHODS.valueOf(Reference.decode(key.toString()));
@@ -108,7 +108,7 @@ public class CSLSResource extends ServerResource {
 	        	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 					variant.setMediaType(MediaType.TEXT_HTML);
 					StringWriter writer = new StringWriter();
-					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),null);
+					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),getResourceRef(getRequest()),null);
 					writer.write("<h2>CSLS search</h2>");
 					writer.write("<p>Enter query term and click <b>Search</b> button. The result will be an SDF file.<p>Examples:<p>");
 					writer.write(String.format("<a href=\"%s/query%s/50-00-0\">%s/query%s/50-00-0</a><br>",

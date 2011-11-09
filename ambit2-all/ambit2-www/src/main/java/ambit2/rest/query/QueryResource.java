@@ -104,7 +104,7 @@ Then, when the "get(Variant)" method calls you back,
 
 	}	
 	protected Form getParams() {
-		return getRequest().getResourceRef().getQueryAsForm();
+		return getResourceRef(getRequest()).getQueryAsForm();
 	}
 	/*
 	protected Connection getConnection() throws SQLException , AmbitException {
@@ -122,7 +122,7 @@ Then, when the "get(Variant)" method calls you back,
 	}
 	protected void configureRDFWriterOption(String defaultWriter) {
 		try { 
-			Object jenaOption = getRequest().getResourceRef().getQueryAsForm().getFirstValue("rdfwriter");
+			Object jenaOption = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("rdfwriter");
 			//if no option ?rdfwriter=jena|stax , then take from properties rdf.writer
 			//if not defined there, use jena
 			rdfwriter = RDF_WRITER.valueOf(jenaOption==null?defaultWriter:jenaOption.toString().toLowerCase());
@@ -552,7 +552,7 @@ Then, when the "get(Variant)" method calls you back,
 					reader.setProfile(profile);
 				}
 			} catch (Exception x) {
-				System.out.println(getRequest().getResourceRef());
+				System.out.println(getResourceRef(getRequest()));
 				//x.printStackTrace();
 			} finally {
 				//the reader closes the connection
