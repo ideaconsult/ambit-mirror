@@ -30,7 +30,7 @@ public class StructuresByFingerprintResource extends StructureQueryResource<Read
 		} catch (Exception x) {
 			fp.setType(FPTable.fp1024);
 		}
-		Object fingerprint = request.getResourceRef().getQueryAsForm().getFirstValue(QueryResource.search_param);
+		Object fingerprint = getResourceRef(request).getQueryAsForm().getFirstValue(QueryResource.search_param);
 		if (fingerprint==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No query parameter ?search=<fingerprint>");
 		fp.setBits(fingerprint.toString());
 		q.setValue(fp);

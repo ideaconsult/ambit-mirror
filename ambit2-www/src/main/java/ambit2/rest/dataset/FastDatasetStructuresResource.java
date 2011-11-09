@@ -34,14 +34,14 @@ public class FastDatasetStructuresResource extends DatasetStructuresResource<IQu
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		try {
-			Object v = getRequest().getResourceRef().getQueryAsForm().getFirstValue("packet");
+			Object v = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("packet");
 			if (v!=null)
 				packetSize = Integer.parseInt(v.toString());
 		} catch (Exception x) {
 			packetSize = 50;
 		}
 		try {
-			Object v = getRequest().getResourceRef().getQueryAsForm().getFirstValue("chemicals");
+			Object v = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("chemicals");
 			if (v!=null)
 				chemicals = Boolean.parseBoolean(v.toString());
 		} catch (Exception x) {
@@ -59,7 +59,7 @@ public class FastDatasetStructuresResource extends DatasetStructuresResource<IQu
 			throw new NotFoundException();
 		
 		setTemplate(template);
-		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
+		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
 			variant.setMediaType(new MediaType(media));

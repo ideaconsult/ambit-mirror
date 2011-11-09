@@ -19,16 +19,20 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
 	protected Request request;
 	protected ResourceDoc documentation;
 	
+	public Reference getResourceRef() {
+		return request==null?null:request.getResourceRef();
+	}
+	
 	public ResourceDoc getDocumentation() {
 		return documentation;
 	}
 	public void setDocumentation(ResourceDoc documentation) {
 		this.documentation = documentation;
 	}
-	public Request getRequest() {
+	protected Request getRequest() {
 		return request;
 	}
-	public void setRequest(Request request) {
+	protected void setRequest(Request request) {
 		this.request = request;
 	}
 	protected Reference baseReference;

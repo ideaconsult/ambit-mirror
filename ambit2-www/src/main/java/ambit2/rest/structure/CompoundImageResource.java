@@ -1,10 +1,5 @@
 package ambit2.rest.structure;
 
-import java.awt.Dimension;
-
-import org.restlet.Context;
-import org.restlet.Request;
-import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -14,11 +9,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
-import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.reporters.ImageReporter;
-import ambit2.db.search.structure.QueryStructureByID;
-import ambit2.rest.ImageConvertor;
 import ambit2.rest.RepresentationConvertor;
 
 /**
@@ -48,7 +38,7 @@ public class CompoundImageResource extends CompoundResource {
 			setTemplate(createTemplate(getContext(),getRequest(),getResponse()));
 			setGroupProperties(getContext(),getRequest(),getResponse());
 		}
-		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
+		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
 			variant.setMediaType(new MediaType(media));

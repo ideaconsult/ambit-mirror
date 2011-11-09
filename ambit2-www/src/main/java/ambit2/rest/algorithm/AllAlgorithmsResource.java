@@ -98,8 +98,8 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			
 			
 			if (key==null) {
-				Object type = getRequest().getResourceRef().getQueryAsForm().getFirstValue("type");
-				Object search = getRequest().getResourceRef().getQueryAsForm().getFirstValue("search");
+				Object type = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("type");
+				Object search = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("search");
 				if ((type != null) || (search!=null))
 		    		return AlgorithmsPile.createIterator(algorithmList, type==null?null:type.toString(),search==null?null:search.toString());
 				else return algorithmList.iterator();

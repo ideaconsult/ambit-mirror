@@ -9,7 +9,6 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
@@ -22,9 +21,10 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.chebi.ChEBIClient;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.ProtectedResource;
 import ambit2.rest.query.QueryResource;
 
-public class ChEBIResource extends WadlServerResource {
+public class ChEBIResource extends ProtectedResource {
 	public static final String resource = "/chebi";
 	protected static final String resourceKey = "term";
 	public static final String resourceID = String.format("/{%s}",resourceKey);
@@ -40,7 +40,7 @@ public class ChEBIResource extends WadlServerResource {
 		try {
 			this.term = Reference.decode(getRequest().getAttributes().get(resourceKey).toString());
 		} catch (Exception x) {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			Object key = form.getFirstValue(QueryResource.search_param);
 			if (key != null) {
 				term = Reference.decode(key.toString());
@@ -85,7 +85,7 @@ public class ChEBIResource extends WadlServerResource {
 	        	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 					variant.setMediaType(MediaType.TEXT_HTML);
 					StringWriter writer = new StringWriter();
-					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),null);
+					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),getResourceRef(getRequest()),null);
 					writer.write("<h2>ChEBI search</h2>");
 					writer.write("<p>Enter query term and click <b>Search</b> button. The result will be an SDF file.<p>Examples:<p>");
 					writer.write(String.format("<a href=\"%s/query/chebi/CHEBI:580068\">%s/query/chebi/CHEBI:580068</a><br>",getRequest().getRootRef(),getRequest().getRootRef()));

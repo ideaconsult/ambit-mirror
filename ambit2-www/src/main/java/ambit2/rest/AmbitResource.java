@@ -12,7 +12,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
@@ -37,7 +36,7 @@ import ambit2.rest.template.OntologyResource;
  * @author nina
  *
  */
-public class AmbitResource extends WadlServerResource {
+public class AmbitResource extends ProtectedResource {
 	protected static String sparqlEndpoint = null;
 	protected static String jsGoogleAnalytics = null;
 	String format = "<tr ><td>%s</td><td><a href=\"%s%s\">%s</a></td><td>%s</td><td>%s</td></tr>";
@@ -249,7 +248,7 @@ public class AmbitResource extends WadlServerResource {
 	
 	}
 	protected String getSearchString() {
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		String[] keys = form.getValuesArray(QueryResource.search_param);
 		if ((keys==null)||(keys.length==0)) return null;
 		StringBuilder b = new StringBuilder();
@@ -295,7 +294,7 @@ public class AmbitResource extends WadlServerResource {
 			} else { //if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 				variant.setMediaType(MediaType.TEXT_HTML);
 				StringWriter writer = new StringWriter();
-				writeHTMLHeader(writer, "AMBIT", getRequest(),null);
+				writeHTMLHeader(writer, "AMBIT", getRequest(), getResourceRef(getRequest()), null);
 				
 				writer.write("<table border='0'>");
 				
@@ -346,7 +345,8 @@ public class AmbitResource extends WadlServerResource {
 				writer.write(String.format("<a href='%s/ontology' title='BlueObelisk, endpoints, algorithm types ontology'>Ontology</a>&nbsp;",getRequest().getRootRef()));
 				writer.write(String.format("<a href='%s/ontology/test' title='Reads RDF output from an URI and displays clickable statements. Enter URI in the search box.'>RDF playground</a>&nbsp;",getRequest().getRootRef()));
 				
-				writer.write(String.format("<a href='%s' title='This resource URI'>This resource URI</a>&nbsp;",getRequest().getResourceRef()));
+				writer.write(String.format("<a href='%s' title='This resource URI'>This resource URI</a>&nbsp;",
+						getRequest().getResourceRef()));
 				writer.write(String.format("<a href='%s' title='Original URI'>Original URI</a>&nbsp;",getRequest().getOriginalRef()));
 
 				writeHTMLFooter(writer, "AMBIT", getRequest());
@@ -359,13 +359,13 @@ public class AmbitResource extends WadlServerResource {
 		}
 	}
 	
-	public static void writeHTMLHeader(Writer w,String title,Request request,ResourceDoc doc) throws IOException {
-		writeHTMLHeader(w, title, request,"",doc);
+	public static void writeHTMLHeader(Writer w,String title,Request request,Reference resourceRef,ResourceDoc doc) throws IOException {
+		writeHTMLHeader(w, title, request,resourceRef, "",doc);
 	}
-	public static void writeHTMLHeader(Writer w,String title,Request request,String meta,ResourceDoc doc) throws IOException {
+	public static void writeHTMLHeader(Writer w,String title,Request request,Reference resourceRef,String meta,ResourceDoc doc) throws IOException {
 
-		writeTopHeader(w, title, request, meta,doc);
-		writeSearchForm(w, title, request, meta);
+		writeTopHeader(w, title, request,resourceRef, meta,doc);
+		writeSearchForm(w, title, request,resourceRef, meta);
 		
 	}
 
@@ -479,8 +479,9 @@ window.setInterval(function() {
 		return s;
 		
 		 */
-	}	
-	public static void writeTopHeader(Writer w,String title,Request request,String meta,ResourceDoc doc) throws IOException {
+	}
+	
+	public static void writeTopHeader(Writer w,String title,Request request,Reference resourceRef, String meta,ResourceDoc doc) throws IOException {
 		Reference baseReference = request==null?null:request.getRootRef();
 		w.write(
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
@@ -493,12 +494,12 @@ window.setInterval(function() {
 				);
 		
 		w.write(String.format("<head> <meta property=\"dc:creator\" content=\"%s\"/> <meta property=\"dc:title\" content=\"%s\"/>",
-				request.getResourceRef(),
+				resourceRef,
 				title
 				)
 				);
 		
-		Reference ref = request.getResourceRef().clone();
+		Reference ref = resourceRef.clone();
 		ref.addQueryParameter("media", Reference.encode("application/rdf+xml"));
 		w.write(String.format("<link rel=\"meta\" type=\"application/rdf+xml\" title=\"%s\" href=\"%s\"/>",
 				title,
@@ -545,7 +546,7 @@ window.setInterval(function() {
 		} else top = "";
 
 		if(request != null) {
-			Reference r = request.getResourceRef().hasQuery()?request.getResourceRef().clone():request.getResourceRef();
+			Reference r = resourceRef.hasQuery()?resourceRef.clone():resourceRef;
 			r.setQuery(null);
 			top += String.format("&nbsp;<a style=\"color:#99CC00\" href='%s/admin/policy?search=%s' target='_Policy' title='Click to view the access policies, assigned to this URI'>Access</a>", request.getRootRef(),Reference.encode(r.toString()));
 
@@ -619,8 +620,8 @@ window.setInterval(function() {
 		return SPARQLPointerResource.getOntologyServiceURI();
 	
 	}
-	public static void writeSearchForm(Writer w,String title,Request request ,String meta) throws IOException {
-		writeSearchForm(w, title, request, meta,Method.GET);
+	public static void writeSearchForm(Writer w,String title,Request request ,Reference resourceRef,String meta) throws IOException {
+		writeSearchForm(w, title, request, resourceRef,meta,Method.GET);
 	}
 	
 	protected static Form getParams(Form params,Request request) {
@@ -632,10 +633,10 @@ window.setInterval(function() {
 				params = request.getEntityAsForm();
 		return params;
 	}
-	public static void writeSearchForm(Writer w,String title,Request request ,String meta,Method method) throws IOException {
-		writeSearchForm(w, title, request, meta,method,null);
+	public static void writeSearchForm(Writer w,String title,Request request ,Reference resourceRef,String meta,Method method) throws IOException {
+		writeSearchForm(w, title, request, resourceRef, meta,method,null);
 	}
-	public static void writeSearchForm(Writer w,String title,Request request ,String meta,Method method,Form params) throws IOException {
+	public static void writeSearchForm(Writer w,String title,Request request ,Reference resourceRef,String meta,Method method,Form params) throws IOException {
 		Reference baseReference = request==null?null:request.getRootRef();
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");

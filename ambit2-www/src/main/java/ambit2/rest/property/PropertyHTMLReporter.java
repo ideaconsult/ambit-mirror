@@ -60,7 +60,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			
 		try {
 			w.write(collapsed?"<h3>Feature":"<h3>Features");
-			String q=uriReporter.getRequest().getResourceRef().getQuery();
+			String q=uriReporter.getResourceRef().getQuery();
 
 			for (int i=0;i<mimes.length;i++) {
 				MediaType mime = mimes[i];

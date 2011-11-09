@@ -148,7 +148,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			setTemplate(createTemplate(getContext(),getRequest(),getResponse()));
 			setGroupProperties(getContext(),getRequest(),getResponse());
 		}
-		Form acceptform = getRequest().getResourceRef().getQueryAsForm();
+		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
 		String media = acceptform.getFirstValue("accept-header");
 		if (media != null) {
 			variant.setMediaType(new MediaType(media));
@@ -189,7 +189,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			Dimension d = collapsed?new Dimension(150,150):new Dimension(250,250);
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			try {
 				
 				d.width = Integer.parseInt(form.getFirstValue("w").toString());
@@ -240,7 +240,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected ImageConvertor<IStructureRecord, QueryStructureByID> createImageConvertor(Variant variant) throws ResourceException {
 
 		Dimension d = new Dimension(250,250);
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		try {
 			
 			d.width = Integer.parseInt(form.getFirstValue("w").toString());
@@ -529,7 +529,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			//throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,entity.getMediaType().toString());
 		} else {
 			if(upload == null) upload = createFileUpload();
-			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", getRequest().getResourceRef().toString())));
+			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", 
+					getResourceRef(getRequest()).toString())));
 
 			return  upload.upload(entity,variant,true,false,
 					getToken()

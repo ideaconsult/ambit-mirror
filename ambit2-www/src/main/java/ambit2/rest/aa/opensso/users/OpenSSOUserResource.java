@@ -152,7 +152,7 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 		}
 		queryObject = createQuery(getContext(), getRequest(), getResponse());
 		getRequest().getOriginalRef().setQuery(null);
-		getRequest().getResourceRef().setQuery(null);
+		getResourceRef(getRequest()).setQuery(null);
 		return get(variant);
 	}
 	

@@ -161,7 +161,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 
 	protected IQueryRetrieval<ISourceDataset> getQuery(Context context,Request request, Response response, boolean IDcanBeEmpty) throws ResourceException {
 		
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(request).getQueryAsForm();
 		AbstractReadDataset query = null;
 		
 		structureParam = getStructureParameter();

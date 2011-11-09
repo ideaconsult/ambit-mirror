@@ -23,7 +23,7 @@ public class BookmarkTopicsResource extends FacetResource<BookmarksByTopicFacetQ
 		if (user==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No user name");
 		Bookmark bookmark = user==null?null:new Bookmark(user.toString());
 		
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(request).getQueryAsForm();
 		Object key = form.getFirstValue(Annotea.BookmarkProperty.hasTopic.toString());
 		if (key != null) {
 			if (bookmark==null) bookmark = new Bookmark();

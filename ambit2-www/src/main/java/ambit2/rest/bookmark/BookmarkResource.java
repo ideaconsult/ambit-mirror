@@ -82,7 +82,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 		Object user = request.getAttributes().get(creator);
 		Bookmark bookmark = user==null?null:new Bookmark(user.toString());
 		
-		Form form = request.getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(request).getQueryAsForm();
 		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
 			if (bookmark==null) bookmark = new Bookmark();

@@ -33,7 +33,7 @@ public class FilteredDatasetResource<Q extends IQueryRetrieval<IStructureRecord>
 	protected Q createQuery(Context context, Request request, Response response)
 			throws ResourceException {
 		Template filter= null;
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		Object dataset = form.getFirstValue(OpenTox.params.dataset_uri.toString());
 		String[] filteruris =  OpenTox.params.filter.getValuesArray(form);
 		Object condition = form.getFirstValue(OpenTox.params.condition.toString());

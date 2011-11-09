@@ -10,7 +10,6 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.AbstractDataset._props;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
@@ -23,7 +22,6 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 
 /**Generates html page for {@link QueryDatasetResource}
@@ -95,7 +93,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			}
 			
 			String page = "";
-			Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
+			Form form = uriReporter.getResourceRef().getQueryAsForm();
 			try {
 				
 				page = form.getFirstValue("page");

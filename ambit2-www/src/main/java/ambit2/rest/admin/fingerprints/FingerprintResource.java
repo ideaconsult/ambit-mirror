@@ -3,7 +3,6 @@ package ambit2.rest.admin.fingerprints;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -64,7 +63,7 @@ public class FingerprintResource  extends QueryResource<QueryFingerprints,IFinge
 		}
 		q.setValue(fp);
 		try {
-			Object order = request.getResourceRef().getQueryAsForm().getFirstValue("order");
+			Object order = getResourceRef(request).getQueryAsForm().getFirstValue("order");
 			q.setOrder(order==null?_order.frequency:_order.valueOf(order.toString()));
 		} catch (Exception x) {}
 		return  q;

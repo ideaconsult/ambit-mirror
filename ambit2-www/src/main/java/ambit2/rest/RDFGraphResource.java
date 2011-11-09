@@ -126,7 +126,7 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 			Response response) throws ResourceException {
 		try {
 			OntModel o = OT.createModel();
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			subject = arguments.subject.getResource(form, o);
 			predicate = arguments.predicate.getProperty(form, o);
 			object = arguments.object.getResource(form, o);
@@ -236,7 +236,7 @@ public class RDFGraphResource<T extends Serializable> extends AbstractResource<O
 					@Override
 					public void write(OutputStream out) throws IOException {
 						OutputStreamWriter writer = new OutputStreamWriter(out);
-						AmbitResource.writeHTMLHeader(writer,"Ontology playground" ,getRequest(),getDocumentation());
+						AmbitResource.writeHTMLHeader(writer,"Ontology playground" ,getRequest(),getResourceRef(getRequest()), getDocumentation());
 						
 						//queryObject.l
 						StmtIterator iter =  queryObject.listStatements(

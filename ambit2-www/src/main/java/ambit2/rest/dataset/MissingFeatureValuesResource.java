@@ -34,7 +34,7 @@ public class MissingFeatureValuesResource extends DatasetStructuresResource<Quer
 		
 		QueryCombinedStructure query = new QueryCombinedStructure();
 		
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		setPaging(form, query);
 		
 		query.setCombine_as_and(false);

@@ -65,7 +65,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			setGroupProperties(context, request, response);
 			setTemplate(createTemplate(context, request, response));
 			
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			/**
 			 * ?search=<value>
 			 */
@@ -123,13 +123,13 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			SourceDataset d = new SourceDataset();
 			d.setId(key);
 			q.setFieldname(d);
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			setPaging(form, q);
 			return (Q)q;
 		} else {
 			QueryDatasetByID q = new QueryDatasetByID();
 			((QueryDatasetByID)q).setValue(key);
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			setPaging(form, q);
 			return (Q)q;
 		}
@@ -141,7 +141,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 		datasetName = key;
 		QueryDataset query = new QueryDataset();
 		query.setValue(new SourceDataset(key));
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		setPaging(form, query);
 		return (Q)query;
 	}
@@ -164,7 +164,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			DatasetQueryFieldGeneric q = getSearchQuery(search,p,cond);
 			StoredQuery d = new StoredQuery(Integer.parseInt(key.toString()));
 			q.setFieldname(d);
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			setPaging(form, q);
 			return (Q)q;
 		} else {	

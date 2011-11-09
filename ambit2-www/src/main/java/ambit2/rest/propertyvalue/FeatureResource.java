@@ -25,7 +25,6 @@ import ambit2.db.update.value.UpdateCompoundPropertyValueString;
 import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
 import ambit2.rest.ChemicalMediaType;
-import ambit2.rest.DocumentConvertor;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
@@ -195,7 +194,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			throws ResourceException {
 
 		createNewObject(entity);
-		getResponse().setLocationRef(getRequest().getResourceRef());
+		getResponse().setLocationRef(getResourceRef(getRequest()));
 		getResponse().setStatus(Status.SUCCESS_OK);
 		getResponse().setEntity(get(new Variant(MediaType.TEXT_HTML)));
 		return getResponse().getEntity();

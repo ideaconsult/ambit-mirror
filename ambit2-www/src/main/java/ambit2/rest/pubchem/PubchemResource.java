@@ -15,7 +15,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
@@ -23,6 +22,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.ProtectedResource;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -33,7 +33,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  *
  */
-public class PubchemResource extends ServerResource {
+public class PubchemResource extends ProtectedResource {
 	public static final String resource = "/pubchem";
 	protected static final String resourceKey = "term";
 	public static final String resourceID = String.format("/{%s}",resourceKey);
@@ -51,7 +51,7 @@ public class PubchemResource extends ServerResource {
 		try {
 			this.term = Reference.decode(getRequest().getAttributes().get(resourceKey).toString());
 		} catch (Exception x) {
-			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			Object key = form.getFirstValue(QueryResource.search_param);
 			if (key != null) {
 				term = Reference.decode(key.toString());
@@ -103,7 +103,7 @@ public class PubchemResource extends ServerResource {
 	        	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 					variant.setMediaType(MediaType.TEXT_HTML);
 					StringWriter writer = new StringWriter();
-					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),null);
+					AmbitResource.writeHTMLHeader(writer, "AMBIT", getRequest(),getResourceRef(getRequest()),null);
 					writer.write("<h2>PubChem search</h2>");
 					writer.write("<p>Enter query term and click <b>Search</b> button. The result will be an SDF file.<p>Examples:<p>");
 					writer.write(String.format("<a href=\"%s/query/pubchem/50-00-0\">%s/query/pubchem/50-00-0</a><br>",getRequest().getRootRef(),getRequest().getRootRef()));

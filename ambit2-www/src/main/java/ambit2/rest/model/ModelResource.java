@@ -3,7 +3,6 @@ package ambit2.rest.model;
 import java.awt.Dimension;
 import java.sql.Connection;
 
-import org.opentox.aa.OTAAParams;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -91,7 +90,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	@Override
 	protected IQueryRetrieval<ModelQueryResults> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		AbstractModelQuery query = getModelQuery(getModelID(getRequest().getAttributes().get(resourceKey)),form);
 
 		return query;
@@ -144,7 +143,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		} catch (Exception x) {}		
 		
 		return new ImageConvertor<ModelQueryResults, IQueryRetrieval<ModelQueryResults>>(
-				new ModelImageReporter(getRequest(), getRequest().getResourceRef().getQueryAsForm(), d,getDocumentation()),variant.getMediaType());			
+				new ModelImageReporter(getRequest(), getResourceRef(getRequest()).getQueryAsForm(), d,getDocumentation()),variant.getMediaType());			
 	} else//html
 		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);

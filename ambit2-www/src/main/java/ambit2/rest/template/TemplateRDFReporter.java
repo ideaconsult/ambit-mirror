@@ -70,13 +70,13 @@ public class TemplateRDFReporter<Q extends IQueryRetrieval<Property>> extends Qu
 					new Reference(uriReporter.getURI(p)+"/view/tree"):
 					new Reference("riap://application"+uriReporter.getURI(p)+"/view/tree");
 					
-				if (!newuri.equals(uriReporter.getRequest().getResourceRef())) {
+				if (!newuri.equals(uriReporter.getResourceRef())) {
 					RDFPropertyIterator parser=null;
 					OntModel jenaModel = null;
 					try {
 						parser = new RDFPropertyIterator(newuri);
 						jenaModel = parser.getJenaModel();
-						parser.setBaseReference(uriReporter.getRequest().getRootRef());
+						parser.setBaseReference(uriReporter.getBaseReference());
 						while (parser.hasNext()) {
 							Property property = parser.next();
 							if (property != null)

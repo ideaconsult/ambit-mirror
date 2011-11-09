@@ -39,7 +39,7 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 		try {
 			//w.write(String.format("<h3>Bookmarks </h3>",""));
 			
-			Reference ref = getUriReporter().getRequest().getResourceRef().clone();
+			Reference ref = getUriReporter().getResourceRef().clone();
 			ref.setQuery(null);
 			
 			Bookmark bm = null;

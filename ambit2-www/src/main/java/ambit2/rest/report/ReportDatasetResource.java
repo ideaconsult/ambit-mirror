@@ -27,7 +27,7 @@ public class ReportDatasetResource<Q extends IQueryRetrieval<IStructureRecord>> 
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		Form form  = getRequest().getResourceRef().getQueryAsForm();
+		Form form  = getResourceRef(getRequest()).getQueryAsForm();
 		//dataset_uri = form.getFirstValue(OpenTox.params.dataset_uri.toString());
 		//feature_uris = form.getValuesArray(OpenTox.params.feature_uris.toString());
 	}

@@ -8,10 +8,8 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.wadl.DocumentationInfo;
 import org.restlet.ext.wadl.MethodInfo;
 import org.restlet.ext.wadl.ParameterStyle;
-import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -21,13 +19,14 @@ import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
 import ambit2.core.io.MDLWriter;
 import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.ProtectedResource;
 import ambit2.rest.query.QueryResource;
 /**
  * Name2structure convertor based on opsin
  * @author nina
  *
  */
-public class Name2StructureResource extends WadlServerResource {
+public class Name2StructureResource extends ProtectedResource {
 	public static final String resource = "name2structure";
 	protected Name2StructureProcessor processor = new Name2StructureProcessor();
 	protected String name = null;
@@ -51,7 +50,7 @@ public class Name2StructureResource extends WadlServerResource {
         //getVariants().put(Method.POST, variants);		
 
 
-		Form form = getRequest().getResourceRef().getQueryAsForm();
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
 			name = Reference.decode(key.toString());

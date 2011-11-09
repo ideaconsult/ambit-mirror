@@ -12,12 +12,12 @@ import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 import ambit2.rest.OpenTox;
+import ambit2.rest.ProtectedResource;
 import ambit2.rest.TaskApplication;
 
-public class LauncherResource extends ServerResource {
+public class LauncherResource extends ProtectedResource {
 	protected String dataset_uri;
 	protected String model_uri;
 	protected Form input;
@@ -31,7 +31,7 @@ public class LauncherResource extends ServerResource {
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		getVariants().add(new Variant(MediaType.TEXT_HTML));
-		input = getRequest().getResourceRef().getQueryAsForm();
+		input = getResourceRef(getRequest()).getQueryAsForm();
 		dataset_uri = input.getFirstValue(OpenTox.params.dataset_uri.toString());
 		model_uri = input.getFirstValue(OpenTox.params.model_uri.toString());
 		this.dataset_service = getDatasetService();
