@@ -117,8 +117,20 @@ public class AlgorithmsPile {
 					new String[] {AlgorithmType.Rules.toString()},
 				"http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
 				,Algorithm.requires.structure,
-				"http://ambit.sourceforge.net/descriptors.owl#toxtreednabinding"
+				"http://ambit.sourceforge.net/descriptors.owl#toxtreeskinsensitisation"
 				},
+			{"toxtreednabinding","ToxTree: DNA binding","toxtree.plugins.dnabinding.DNABindingPlugin",null,
+					new String[] {AlgorithmType.Rules.toString()},
+				"http://www.opentox.org/echaEndpoints.owl#DNABinding"
+				,Algorithm.requires.structure,
+				"http://ambit.sourceforge.net/descriptors.owl#toxtreednabinding"
+			},
+			{"toxtreeproteinbinding","ToxTree: Protein binding","toxtree.plugins.proteinbinding.ProteinBindingPlugin",null,
+				new String[] {AlgorithmType.Rules.toString()},
+			"http://www.opentox.org/echaEndpoints.owl#ProteinBinding"
+			,Algorithm.requires.structure,
+			"http://ambit.sourceforge.net/descriptors.owl#toxtreeproteinbinding"
+			},			
 			{"toxtreesmartcyp","SmartCYP: Cytochrome P450-Mediated Drug Metabolism","toxtree.plugins.smartcyp.SMARTCYPPlugin",null,new String[] {AlgorithmType.Rules.toString()},
 					"http://www.opentox.org/echaEndpoints.owl#Protein-binding"
 					,Algorithm.requires.structure,
