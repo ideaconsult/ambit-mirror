@@ -67,6 +67,7 @@ public class RuleParser
 		curRule.stateBonds = new RuleStateBondDistribution[curRule.smartsStates.length];
 		
 		SmartsParser sp = new SmartsParser();
+		sp.mSupportDoubleBondAromaticityNotSpecified = true;
 		for (int i = 0; i<curRule.smartsStates.length; i++)
 		{
 			QueryAtomContainer q = sp.parse(curRule.smartsStates[i]);			

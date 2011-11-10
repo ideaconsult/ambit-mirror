@@ -5,6 +5,7 @@ import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import java.util.Vector;
 import ambit2.smarts.DoubleNonAromaticBond;
+import ambit2.smarts.DoubleBondAromaticityNotSpecified;
 import ambit2.smarts.SmartsBondExpression;
 import ambit2.smarts.SmartsToChemObject;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -22,6 +23,12 @@ public class RuleStateBondDistribution
 		for (int i = 0; i < statePattern.getBondCount(); i++)
 		{	
 			if (statePattern.getBond(i) instanceof DoubleNonAromaticBond)
+			{	
+				v.add(new Integer(i));
+				continue;
+			}
+			
+			if (statePattern.getBond(i) instanceof DoubleBondAromaticityNotSpecified)
 			{	
 				v.add(new Integer(i));
 				continue;
