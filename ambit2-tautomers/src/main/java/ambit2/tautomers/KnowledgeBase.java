@@ -18,6 +18,7 @@ public class KnowledgeBase
 	
 	KnowledgeBase()
 	{
+		sp.mSupportDoubleBondAromaticityNotSpecified = true;
 		loadPredefinedBase();
 	}
 	

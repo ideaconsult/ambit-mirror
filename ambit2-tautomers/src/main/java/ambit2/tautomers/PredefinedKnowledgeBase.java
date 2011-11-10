@@ -10,17 +10,18 @@ public class PredefinedKnowledgeBase
 	
 	public static final String rules[] = 
 	{
-		"$$NAME=keto/enol              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=[#6][#6] O[#6]=[#6]  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=amin/imin              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= N=CC NC=C  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=amide/imid             $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=CN OC=N  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=nitroso/oxime          $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=NC ON=C  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=azo/hydrazone          $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= N=NC NN=C  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=thioketo/thioenol      $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= S=CC SC=C  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=thionitroso/thiooxime  $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= S=NC SN=C  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=amidine/imidine        $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= N=CN NC=N  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=diazoamino/diazoamino  $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= N=NN NN=N  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=thioamide/iminothiol   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= S=CN SC=N  $$GROUP_POS=3,1   $$INFO=",
-		"$$NAME=nitrosamine/diazohydroxide  $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= O=NN ON=N  $$GROUP_POS=3,1   $$INFO="
+		"$$NAME=keto/enol              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#6][#6] [#8][#6]=[#6]   $$GROUP_POS=3,1   $$INFO= O=CC",
+		"$$NAME=amin/imin              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#6][#6] [#7][#6]=[#6]   $$GROUP_POS=3,1   $$INFO= N=CC",
+		"$$NAME=amide/imid             $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#6][#7] [#8][#6]=[#7]   $$GROUP_POS=3,1   $$INFO= O=CN",
+		"$$NAME=nitroso/oxime          $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#7][#6] [#8][#7]=[#6]   $$GROUP_POS=3,1   $$INFO= O=NC",
+		"$$NAME=azo/hydrazone          $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#7][#6] [#7][#7]=[#6]   $$GROUP_POS=3,1   $$INFO= N=NC",
+		"$$NAME=thioketo/thioenol      $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#6][#6] [#16][#6]=[#6] $$GROUP_POS=3,1   $$INFO= S=CC",
+		"$$NAME=thionitroso/thiooxime  $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#7][#6] [#16][#7]=[#6] $$GROUP_POS=3,1   $$INFO= S=NC",
+		"$$NAME=amidine/imidine        $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#6][#7] [#7][#6]=[#7]   $$GROUP_POS=3,1   $$INFO= N=CN",
+		"$$NAME=diazoamino/diazoamino  $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#7][#7] [#7][#7]=[#7]   $$GROUP_POS=3,1   $$INFO= N=NN",
+		"$$NAME=thioamide/iminothiol   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#6][#7] [#16][#6]=[#7] $$GROUP_POS=3,1   $$INFO= S=CN",
+		"$$NAME=nitrosamine/diazohydroxide  " +
+		                               "$$TYPE=MOBILE_GROUP $$GROUP=H  $$STATES= [#8]=[#7][#7] [#8][#7]=[#7]   $$GROUP_POS=3,1   $$INFO= O=NN"
 			
 	};
 	
@@ -28,7 +29,7 @@ public class PredefinedKnowledgeBase
 	//Warning Filters	
 	public static final String warningFragments[] =
 	{	
-		"[C;!R](=*)=*",     //allene atom
+		"[#6;!R](=*)=*",     //allene atom
 	};
 	
 	

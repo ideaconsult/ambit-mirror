@@ -2,6 +2,7 @@ package ambit2.tautomers.test;
 
 import java.io.FileReader;
 import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -43,6 +44,7 @@ public class TestStrVisualizer
 	int nStr = 0;
 	int nCol = 6;	
 	int size = 150;
+	String frameTitle = "Structure Visualizer";
 	
 	public static void main(String[] args) throws Exception 
 	{
@@ -75,14 +77,48 @@ public class TestStrVisualizer
 	TestStrVisualizer(Vector<IAtomContainer> structs)
 	{
 		setFrame();
+		addStructures(structs);
+	}
+	
+	TestStrVisualizer(Vector<IAtomContainer> structs, String title)
+	{
+		frameTitle = title;
+		setFrame();
+		addStructures(structs);
+		
+	}
+	
+	TestStrVisualizer(List<IAtomContainer> structs)
+	{
+		setFrame();
+		addStructures(structs);
+	}
+	
+	TestStrVisualizer(List<IAtomContainer> structs, String title)
+	{
+		frameTitle = title;
+		setFrame();
+		addStructures(structs);
+	}
+	
+	void addStructures(Vector<IAtomContainer> structs)
+	{
+		for (int i = 0; i < structs.size(); i++)
+			addStructure(structs.get(i));
+	}
+	
+	void addStructures(List<IAtomContainer> structs)
+	{
 		for (int i = 0; i < structs.size(); i++)
 			addStructure(structs.get(i));
 	}
 	
 	
+	
 	void setFrame()
 	{
 		frame = new JFrame();
+		frame.setTitle(frameTitle);
 		frame.setSize(1000, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
