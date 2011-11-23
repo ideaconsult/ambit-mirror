@@ -27,32 +27,32 @@ public class TestSmartsSearchCLG extends TestCase
 	 * Tests of Component Level Grouping with the examples from the
 	 * Daylight SMARTS tutorial
 	 */
-	public void testCLG01()  
+	public void testCLG01()  throws Exception 
 	{	
 		assertEquals(1, TestUtilities.boolSearch("C.C","CCCC"));
 	}
 	
-	public void testCLG02()  
+	public void testCLG02()   throws Exception
 	{	
 		assertEquals(1, TestUtilities.boolSearch("(C.C)","CCCC"));
 	}
 	
-	public void testCLG03()  
+	public void testCLG03()  throws Exception
 	{	
 		assertEquals(0, TestUtilities.boolSearch("(C).(C)","CCCC"));
 	}
 	
-	public void testCLG04()  
+	public void testCLG04()  throws Exception
 	{	
 		assertEquals(1, TestUtilities.boolSearch("(C).(C)","CCCC.CCCC"));
 	}
 	
-	public void testCLG05()  
+	public void testCLG05()  throws Exception
 	{	
 		assertEquals(1, TestUtilities.boolSearch("(C).C","CCCC"));
 	}
 	
-	public void testCLG06()  
+	public void testCLG06()  throws Exception
 	{	
 		assertEquals(1, TestUtilities.boolSearch("(C).(C).C","CCCC.CCCC"));
 	}
@@ -61,7 +61,7 @@ public class TestSmartsSearchCLG extends TestCase
 	/**
 	 * Additional tests of Component Level Grouping
 	 */
-	public void testCLG07()  
+	public void testCLG07()  throws Exception
 	{	
 		assertEquals(0, TestUtilities.boolSearch("(CCCC.CC.CCCN).N.C", "CCCCC.CCCN"));
 		assertEquals(0,TestUtilities.boolSearch("(Cl.CCCC.CC.CCCCN).N.C", "CCCCC.CCCN"));
