@@ -36,9 +36,11 @@
        <repository>
         <id>ambit-plovdiv-snapshots</id>
         <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/snapshots</url>
+        	 
         <snapshots>
-                        <enabled>true</enabled>
-                </snapshots>
+              <enabled>true</enabled>
+       		  <updatePolicy>always</updatePolicy>
+        </snapshots>
     </repository>
 
     
