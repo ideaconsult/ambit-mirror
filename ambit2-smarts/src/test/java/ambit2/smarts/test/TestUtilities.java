@@ -92,7 +92,7 @@ public class TestUtilities
 		System.out.println("Bonds:\n" + SmartsHelper.getBondsString(qac));
 	}
 	
-	public static int boolSearch(String smarts, String smiles)
+	public static int boolSearch(String smarts, String smiles) throws Exception
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
@@ -108,7 +108,7 @@ public class TestUtilities
 			return(0);
 	}
 	
-	public void testSmartsManagerBoolSearch(String smarts, String smiles)
+	public void testSmartsManagerBoolSearch(String smarts, String smiles) throws Exception
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
@@ -223,7 +223,7 @@ public class TestUtilities
 		}
 	}
 	
-	public void showFullAtomMappings(String smarts, String smiles)
+	public void showFullAtomMappings(String smarts, String smiles) throws Exception
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
@@ -251,7 +251,7 @@ public class TestUtilities
 	}
 	
 	
-	public void showFullIsomorphismMappings(String smarts, String smiles)
+	public void showFullIsomorphismMappings(String smarts, String smiles) throws Exception
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
@@ -282,7 +282,7 @@ public class TestUtilities
 	}
 	
 	
-	public void testIsomorphismTester(String smarts, String smiles)
+	public void testIsomorphismTester(String smarts, String smiles) throws Exception
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		QueryAtomContainer query  = sp.parse(smarts);
@@ -304,7 +304,7 @@ public class TestUtilities
 	}
 	
 	
-	public void testIsomorphismPositions(String smarts, String smiles)
+	public void testIsomorphismPositions(String smarts, String smiles) throws Exception
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		QueryAtomContainer query  = sp.parse(smarts);
@@ -326,7 +326,7 @@ public class TestUtilities
 	}
 	
 	//helper function
-	public String getBondMapping(IMolecule mol, Vector<IAtom> amap)
+	public String getBondMapping(IMolecule mol, Vector<IAtom> amap) 
 	{
 		Vector<IBond> v = isoTester.generateBondMapping(mol,amap);
 		StringBuffer sb = new StringBuffer();		
@@ -335,7 +335,7 @@ public class TestUtilities
 		return(sb.toString());
 	}
 	
-	public void testIsomorphismMapping(String smarts, String smiles)
+	public void testIsomorphismMapping(String smarts, String smiles) throws Exception
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		QueryAtomContainer query  = sp.parse(smarts);
@@ -360,7 +360,7 @@ public class TestUtilities
 		System.out.println("Bond mapping: " + getBondMapping(mol,map));		
 	}
 	
-	public void testIsomorphismAllMappings(String smarts, String smiles)
+	public void testIsomorphismAllMappings(String smarts, String smiles) throws Exception
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		QueryAtomContainer query  = sp.parse(smarts);
@@ -525,7 +525,7 @@ public class TestUtilities
 		return(0);
 	}
 	
-	int testExtractAtomContainer(String smarts)
+	int testExtractAtomContainer(String smarts) throws Exception
 	{	
 		QueryAtomContainer query  = sp.parse(smarts);		
 		String errorMsg = sp.getErrorMessages();
@@ -636,13 +636,13 @@ public class TestUtilities
 		}
 	}
 	
-	public void printAromaticity(String smiles)
+	public void printAromaticity(String smiles)throws Exception
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		printAromaticity(mol);
 	}
 	
-	public void testSmartsManagerAtomMapping(String smarts, String smiles)
+	public void testSmartsManagerAtomMapping(String smarts, String smiles) throws Exception
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		man.setQuery(smarts);
@@ -803,7 +803,7 @@ public class TestUtilities
 		System.out.println("num = "+num);
 	}
 	
-	public void testCML(String smiles)
+	public void testCML(String smiles) throws Exception
 	{
 		System.out.println("Writing " + smiles + " to CML file");
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);		
@@ -888,7 +888,7 @@ public class TestUtilities
     }
 	
 	
-	String getFingerprint(String smiles)
+	String getFingerprint(String smiles) throws Exception
 	{
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		Fingerprinter fp = new Fingerprinter();
@@ -904,7 +904,7 @@ public class TestUtilities
 		return("");
 	}
 	
-	void testFingerprint()
+	void testFingerprint() throws Exception
 	{
 		String smiles[] = {"c1ccccc1", "C1CCCCC1","C1CCCCC1" };
 		for (int i = 0; i < smiles.length; i++)
@@ -928,7 +928,7 @@ public class TestUtilities
 		
 	}
 	
-	void testHydrogenCount()
+	void testHydrogenCount() throws Exception
 	{
 		IAtomContainer mol = new AtomContainer();
 		mol.addAtom(new Atom("C"));
@@ -948,7 +948,7 @@ public class TestUtilities
 		System.out.println("getValency() = " + v);		
 	}
 		
-	void testFragmentation(String smiles)
+	void testFragmentation(String smiles) throws Exception
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
@@ -960,13 +960,13 @@ public class TestUtilities
 		}
 	}
 	
-	void testChemObjectToSmiles(String smiles)
+	void testChemObjectToSmiles(String smiles) throws Exception
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		System.out.println(smiles+ "  --->  "+cots.getSMILES(mol)); 
 	}
 	
-	void testProduceStructuresExhaustively(String smiles, int maxNumSteps)
+	void testProduceStructuresExhaustively(String smiles, int maxNumSteps) throws Exception
 	{
 		System.out.println("Producing structs form " + smiles+ "   maxNumSteps = " + maxNumSteps);
 		System.out.println("-------------------------------");
@@ -980,7 +980,7 @@ public class TestUtilities
 			System.out.println(vStr.get(i).smiles);
 	}
 	
-	void printSequence(String smiles)
+	void printSequence(String smiles) throws Exception
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
@@ -1215,7 +1215,7 @@ public class TestUtilities
 		}
 	}
 	
-	void testScreeningKeys(String target, String queryString)
+	void testScreeningKeys(String target, String queryString) throws Exception
 	{		
 		Vector<String> myKeys = new Vector<String>(); 
 		myKeys.add("CCC");
@@ -1238,7 +1238,7 @@ public class TestUtilities
 		
 	}
 	
-	public void printSSSR(String smiles)
+	public void printSSSR(String smiles) throws Exception
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		SSSRFinder sssrf = new SSSRFinder(mol);
@@ -1259,7 +1259,7 @@ public class TestUtilities
 	}	
 	
 	
-	public void testRingInfo(String smiles)
+	public void testRingInfo(String smiles) throws Exception
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		SSSRFinder sssrf = new SSSRFinder(mol);
@@ -1291,7 +1291,7 @@ public class TestUtilities
 		smToChemObj.convertKekuleSmartsToAromatic(qac);
 	}
 	
-	public void testSMIRKS(String smirks, String targetSmiles)
+	public void testSMIRKS(String smirks, String targetSmiles)throws Exception
 	{
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
@@ -1315,7 +1315,7 @@ public class TestUtilities
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
 	}
 	
-	public void testEquivalenceTestes(String targetSmiles)
+	public void testEquivalenceTestes(String targetSmiles) throws Exception
 	{
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
 		EquivalenceTester eqTest = new  EquivalenceTester();

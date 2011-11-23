@@ -19,8 +19,12 @@ public class TestCML
 	
 	public static void main(String[] args)
 	{
+		try {
 		testCML1("CCCC");
 		//testCML2("c1ccccc1");
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 	}
 	
 	@Test
@@ -28,7 +32,7 @@ public class TestCML
 		//there should be at least one test 
 		//TODO convert static methods to tests
 	}
-	public static void testCML1(String smiles)
+	public static void testCML1(String smiles) throws Exception
 	{		
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		mol.getAtom(0).setProperty("Prop1","Test1");
@@ -58,7 +62,7 @@ public class TestCML
 		
 	}	
 	
-	public static void testCML2(String smiles)
+	public static void testCML2(String smiles) throws Exception
 	{		
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);				
 		printAromaticity(mol);

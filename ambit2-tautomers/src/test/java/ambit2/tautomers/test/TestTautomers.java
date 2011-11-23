@@ -92,7 +92,7 @@ public class TestTautomers
 		
 	}
 	
-	public void test0(String smi)
+	public void test0(String smi) throws Exception
 	{	
 		System.out.println("Testing0(combinatorial aproach)0: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
@@ -101,7 +101,7 @@ public class TestTautomers
 	}
 	
 	
-	public void test(String smi)
+	public void test(String smi) throws Exception
 	{	
 		System.out.println("Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);

@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -352,6 +351,7 @@ public class SmartsHelper
 	{	 
 		java.io.StringWriter result =  new java.io.StringWriter();
 		SMILESWriter writer = new SMILESWriter(result);
+		
 		try
 		{
 			writer.write(mol);
@@ -383,20 +383,14 @@ public class SmartsHelper
 		}
 	}
 	
-	public static  IMolecule getMoleculeFromSmiles(String smi) 
-	{	
+	public static  IMolecule getMoleculeFromSmiles(String smi) throws Exception {
 		IMolecule mol = null;
-		try {
-			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
-			mol = sp.parseSmiles(smi);
-		}
-		catch (InvalidSmilesException e) {
-			System.out.println(e.toString());
-	 	}
-		return (mol);
+		SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+		mol = sp.parseSmiles(smi);
+		return mol;
 	}
 	
-	public static String[] getCarbonSkelletonsFromString(String smiles)
+	public static String[] getCarbonSkelletonsFromString(String smiles) throws Exception
 	{	
 		IMolecule mol = getMoleculeFromSmiles(smiles);
 		IMoleculeSet ms =  ConnectivityChecker.partitionIntoMolecules(mol);
