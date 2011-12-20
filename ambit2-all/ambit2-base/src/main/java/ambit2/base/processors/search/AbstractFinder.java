@@ -34,7 +34,13 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			public String getDescription() {
 				return "Lookup all structures and add the result as additional structure representation";
 			}
-		}
+		},
+		emptyadd {
+			@Override
+			public String getDescription() {
+				return "Lookup only empty structures and add the result as additional structure representation";
+			}
+		}		
 /*
 ,
 		importproperties {
@@ -182,7 +188,8 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 	public IStructureRecord process(IStructureRecord target) throws AmbitException {
 		try {
 			if (target ==null) return null;
-			if (AbstractFinder.MODE.emptyonly.equals(mode) && !STRUC_TYPE.NA.equals(target.getType())) return null;
+			if ((AbstractFinder.MODE.emptyonly.equals(mode) || AbstractFinder.MODE.emptyadd.equals(mode)) 
+					&& !STRUC_TYPE.NA.equals(target.getType())) return null;
 			
 			Iterator<Property> keys = profile.getProperties(true);
 			Object value = null;
@@ -203,6 +210,11 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 								target.setIdstructure(-1) ;
 							}							
 							break;
+						}
+						case emptyadd: {
+							target.setIdstructure(-1) ;
+							target.setUsePreferedStructure(false);
+							break;							
 						}
 						case replace: {
 							target.setUsePreferedStructure(false);
