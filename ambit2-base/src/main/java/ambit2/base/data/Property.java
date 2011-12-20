@@ -195,6 +195,9 @@ public class Property extends Model implements Serializable, Comparable<Property
 		else if (n.equals("ec-number")) return opentox_EC;
 		else if (n.equals("ec_number")) return opentox_EC;
 		else if (n.equals("ec")) return opentox_EC;
+		else if (n.equals("einecs")) return opentox_EC;
+		else if (n.equals("einecs")) return opentox_EC;
+		else if (n.equals("substance number")) return opentox_EC;
 		else if (n.contains("synonym")) return opentox_Name;
 		return null;
 	}
