@@ -75,6 +75,7 @@ public class InchiProcessorTest {
 	public void testProcessBenzene() throws Exception {
 		generate(MoleculeFactory.makeBenzene(),"InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H");
 	}
+
 	
 	@Test
 	public void testProcessCaffeineAromaticity() throws Exception {
@@ -82,6 +83,14 @@ public class InchiProcessorTest {
 		IMolecule mol = p.parseSmiles("CN1C=NC2=C1C(=O)N(C(=O)N2C)C");
 		generate(mol,"InChI=1S/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3",true);
 	}	
+	
+	@Test
+	public void testProcess2() throws Exception {
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
+		IMolecule mol = p.parseSmiles("NC1=CC(N)=NC(O)=N1");
+		generate(mol,"InChI=1S/C4H6N4O/c5-2-1-3(6)8-4(9)7-2/h1H,(H5,5,6,7,8,9)",false);
+	}	
+	
 	
 	@Test
 	public void testProcessAromaticity() throws Exception {
