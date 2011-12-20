@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.fingerprint.IFingerprinter;
+import org.openscience.cdk.fingerprint.PubchemFingerprinter;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -16,6 +17,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
+import ambit2.core.smiles.DeduceBondSystemTool;
 import ambit2.descriptors.fingerprints.EStateFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.ExtendedFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.Fingerprint2DescriptorWrapper;
@@ -61,6 +63,15 @@ public class FingerprinterTest {
 		testDescriptor(new MACCSFingerprinterWrapper());
 	}
 	
+	
+	public void testPubChem() throws Exception {
+		IMolecule mol = MoleculeFactory.make123Triazole();
+		IFingerprinter fp = new PubchemFingerprinter();
+		BitSet bs1 = fp.getFingerprint(mol);
+		BitSet bs2 = fp.getFingerprint(mol);
+		Assert.assertEquals(bs1,bs2);
+		
+	}
 	public void testDescriptor(Fingerprint2DescriptorWrapper wrapper) throws Exception {
 
 		
