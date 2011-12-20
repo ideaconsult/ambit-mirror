@@ -367,4 +367,17 @@ public class SmilesTest {
 	        System.out.println("mcs smiles: " + g.createSMILES(mcsmolecule));
 
 	}
+	
+	
+	public void test() throws Exception {
+	SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
+	
+	IMolecule mol1 = sp.parseSmiles("O=C1OC=C(C=C1)C4CCC5(O)(C6CCC3=CC(OC2OC(C)C(O)C(O)C2(O))CCC3(C)C6(CCC45(C)))");
+	IMolecule mol2 = sp.parseSmiles("O=C1C=CC4(C(=C1)CCC3C5CC(C)C(O)(C(=O)COC2OC(CO)C(O)C(O)C2(O))C5(C)(CC(O)C34(F)))(C)");
+	System.out.println("getOverlap");
+	long now = System.currentTimeMillis();
+	UniversalIsomorphismTester.getOverlaps(mol1, mol2);
+	System.out.println(System.currentTimeMillis()-now);
+	}
+	
 }
