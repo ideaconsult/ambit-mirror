@@ -127,7 +127,17 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 			public String getDescription() {
 				return "Match by column \"SAMPLE\"";
 			}
-		},				
+		},		
+		NAME {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.NameKey";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by chemical name";
+			}
+		},			
 		None {
 			@Override
 			public String getClassName() {
