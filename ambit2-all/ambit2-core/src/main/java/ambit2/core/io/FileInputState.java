@@ -42,10 +42,13 @@ public class FileInputState extends FileState implements IInputState {
 	public transient static final int ECHAXML_INDEX = 12;
 	public transient static final int TOXML_INDEX = 13;
 	public transient static final int MALARIA_HTS_SHEETS = 14;
+	public transient static final int ZIP_INDEX = 15;
 	
 	//TODO support for .xlsx 
 	public transient static final String[] extensions = {
-		".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",".cml",".hin",".pdb",".xls",".xls",".echaxml",".xml",".sht"};
+		".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",
+		".cml",".hin",".pdb",".xls",".xls",".echaxml",".xml",
+		".sht",".zip"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
 		"CSV files (Comma delimited) *.csv)",
@@ -62,6 +65,7 @@ public class FileInputState extends FileState implements IInputState {
 		"ECHA preregistration list XML format (*.echaxml)",
 		"Leadscope ToXML 3.08 (*.xml)",
 		"Malaria HTS data sheets (*.sht)",
+		"ZIP archive (*.zip)",
 		};	
 	public FileInputState() {
 		super();
@@ -142,7 +146,9 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[TOXML_INDEX])) {
 			return new ToXMLReaderSimple(stream);	
 		} else if (ext.endsWith(extensions[MALARIA_HTS_SHEETS])) {
-			return new MalariaHTSDataDelimitedReader(stream);				
+			return new MalariaHTSDataDelimitedReader(stream);	
+		} else if (ext.endsWith(extensions[ZIP_INDEX])) {
+			return new ZipReader(stream);					
 		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
 	}
 	
