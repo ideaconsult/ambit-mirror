@@ -193,7 +193,9 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		else if (MediaType.TEXT_PLAIN.equals(mediaType))
 			return ".txt";		
 		else if (MediaType.APPLICATION_EXCEL.equals(mediaType))
-			return ".xls";				
+			return ".xls";		
+		else if (MediaType.APPLICATION_ZIP.equals(mediaType))
+			return ".zip";				
 		else
 			return null;
 	}
@@ -234,9 +236,9 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 					upload.call();
 				else
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			if (file != null)
+			if (file != null) {
 				return importFile(file);
-			else
+			} else
 				throw new Exception("No file");
 		} catch (Exception x) {
 			throw x;
