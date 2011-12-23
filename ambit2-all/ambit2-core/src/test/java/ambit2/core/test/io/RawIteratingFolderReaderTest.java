@@ -39,6 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.core.io.RawIteratingFolderReader;
+import ambit2.core.io.ZipReader;
 
 public class RawIteratingFolderReaderTest {
 
@@ -69,6 +70,19 @@ public class RawIteratingFolderReaderTest {
 		}
 		reader.close();
 		Assert.assertEquals(6,count);
+	}
+	
+	@Test
+	public void testZip() throws Exception {
+		File zfile = new File("src/test/resources/ambit2/core/data/zip/test.zip");
+		int count = 0;
+		ZipReader reader = new ZipReader(zfile);
+		while (reader.hasNext()) {
+			System.out.println(reader.next());
+			count++;
+		}
+		reader.close();
+		Assert.assertEquals(2,count);
 	}
 	
 }
