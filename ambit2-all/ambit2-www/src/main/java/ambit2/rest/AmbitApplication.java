@@ -52,6 +52,7 @@ import ambit2.rest.property.PropertyResource;
 import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.pubchem.ChEBIResource;
 import ambit2.rest.pubchem.PubchemResource;
+import ambit2.rest.query.ConsensusLabelQueryResource;
 import ambit2.rest.query.ExactStructureQueryResource;
 import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryListResource;
@@ -306,6 +307,8 @@ public class AmbitApplication extends TaskApplication<String> {
 		 * Quality labels
 		 */
 		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
+		queryRouter.attach(ConsensusLabelQueryResource.resource,ConsensusLabelQueryResource.class);
+		
 		queryRouter.attach(DatasetStructureQualityStatsResource.resource,DatasetStructureQualityStatsResource.class);
 		queryRouter.attach(DatasetChemicalsQualityStatsResource.resource,DatasetChemicalsQualityStatsResource.class);
 		
