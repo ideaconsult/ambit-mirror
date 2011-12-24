@@ -5,7 +5,6 @@ import java.net.URLEncoder;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.Bookmark;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.facet.IFacet;
@@ -13,11 +12,11 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.facets.bookmarks.BookmarksByTopicFacet;
 import ambit2.db.facets.datasets.EndpointCompoundFacet;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacet;
+import ambit2.db.facets.qlabel.DatasetStructureQLabelFacet;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.bookmark.BookmarkResource;
-import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.structure.ConformerURIReporter;
 
 /**
@@ -61,6 +60,9 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 				cmpURI = String.format("&%s=%s",OpenTox.params.compound_uri,URLEncoder.encode(cmpReporter.getURI(q.getDataset())));
 
 			return q.getResultsURL(root.toString(),cmpURI);
+		} else if (item instanceof DatasetStructureQLabelFacet) {
+			DatasetStructureQLabelFacet q = (DatasetStructureQLabelFacet) item;
+			return q.getResultsURL(root.toString());		
 			
 		} else if (item instanceof PropertyDatasetFacet)  {
 			PropertyDatasetFacet<Property,SourceDataset> q = (PropertyDatasetFacet<Property,SourceDataset>) item;
