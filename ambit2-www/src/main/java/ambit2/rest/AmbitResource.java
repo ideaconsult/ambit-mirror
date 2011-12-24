@@ -348,6 +348,8 @@ public class AmbitResource extends ProtectedResource {
 				writer.write(String.format("<a href='%s' title='This resource URI'>This resource URI</a>&nbsp;",
 						getRequest().getResourceRef()));
 				writer.write(String.format("<a href='%s' title='Original URI'>Original URI</a>&nbsp;",getRequest().getOriginalRef()));
+				writer.write(String.format("<a href='%s' title='Host'>Host</a>&nbsp;",getRequest().getHostRef()));
+				writer.write(String.format("<a href='%s' title='Client'>Client address</a>&nbsp;",getRequest().getClientInfo().getAddress()));
 
 				writeHTMLFooter(writer, "AMBIT", getRequest());
 				return new StringRepresentation(writer.toString(),MediaType.TEXT_HTML);				

@@ -12,6 +12,7 @@ import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.property.PropertiesByDatasetResource;
+import ambit2.rest.query.ConsensusLabelQueryResource;
 import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
@@ -79,6 +80,8 @@ public class DatasetRouter extends MyRouter {
 		 * TODO refactor it as query with dataset_uri as parameter
 		 */
 		attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
+		attach(String.format("%s%s",QueryResource.query_resource,ConsensusLabelQueryResource.resource),ConsensusLabelQueryResource.class);
+		
 		attach(String.format("%s%s",QueryResource.query_resource,DatasetStructureQualityStatsResource.resource),DatasetStructureQualityStatsResource.class);
 		attach(String.format("%s%s",QueryResource.query_resource,DatasetChemicalsQualityStatsResource.resource),DatasetChemicalsQualityStatsResource.class);
 		
