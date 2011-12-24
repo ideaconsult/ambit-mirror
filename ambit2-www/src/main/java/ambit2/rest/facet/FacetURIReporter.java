@@ -12,6 +12,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.facets.bookmarks.BookmarksByTopicFacet;
 import ambit2.db.facets.datasets.EndpointCompoundFacet;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacet;
+import ambit2.db.facets.qlabel.DatasetConsensusLabelFacet;
 import ambit2.db.facets.qlabel.DatasetStructureQLabelFacet;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
@@ -63,7 +64,10 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 		} else if (item instanceof DatasetStructureQLabelFacet) {
 			DatasetStructureQLabelFacet q = (DatasetStructureQLabelFacet) item;
 			return q.getResultsURL(root.toString());		
-			
+		} else if (item instanceof DatasetConsensusLabelFacet) {
+			DatasetConsensusLabelFacet q = (DatasetConsensusLabelFacet) item;
+			return q.getResultsURL(root.toString());			
+				
 		} else if (item instanceof PropertyDatasetFacet)  {
 			PropertyDatasetFacet<Property,SourceDataset> q = (PropertyDatasetFacet<Property,SourceDataset>) item;
 			return String.format("%s/dataset/%d?feature_uris[]=%s/dataset/%s/feature&feature_uris[]=%s/feature/%s&property=%s/feature/%s&search=%s",

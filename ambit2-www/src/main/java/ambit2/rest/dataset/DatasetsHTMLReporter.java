@@ -20,6 +20,7 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
@@ -347,6 +348,12 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						w.toString(),
 						"/query",
 						DatasetStructureQualityStatsResource.resource));	
+				
+				output.write(String.format(
+						"&nbsp;<a href=\"%s%s%s\" title='Consensus labels'>[Consensus]</a>",
+						w.toString(),
+						"/query",
+						DatasetChemicalsQualityStatsResource.resource));					
 				
 				output.write(String.format(
 						"&nbsp;<a href=\"%s%s\">[Metadata]</a>",
