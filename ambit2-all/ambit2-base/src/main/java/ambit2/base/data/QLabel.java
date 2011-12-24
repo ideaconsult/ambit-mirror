@@ -1,5 +1,7 @@
 package ambit2.base.data;
 
+import ambit2.base.data.QLabel.QUALITY;
+
 /**
  * Quality label
  * Q(experts) = (100*a+100*b +1) / (100*d + 10*c+1)
@@ -55,51 +57,19 @@ Auto verification
  * @author nina
  *
  */
-public class QLabel extends AmbitBean implements Comparable<QLabel> {
+public class QLabel extends AbstractLabel<QUALITY> {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6648276842177265920L;
 	public enum QUALITY { OK,ProbablyOK,Unknown,ProbablyERROR,ERROR};
-	protected QUALITY label=QUALITY.Unknown;
-	protected AmbitUser user=null;
-	protected String text=null;
+	
 	public QLabel() {
 		
 	}
 	public QLabel(QUALITY label) {
 		setLabel(label);
 	}	
-	public AmbitUser getUser() {
-		return user;
-	}
-	public void setUser(AmbitUser user) {
-		this.user = user;
-	}
-	public QUALITY getLabel() {
-		return label;
-	}
-	public void setLabel(QUALITY label) {
-		this.label = label;
-	}
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
-	@Override
-	public String toString() {
-		return getLabel().toString();
-	}
-	public int compareTo(QLabel o) {
-		return label.compareTo(o.label);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		return toString().equals(obj.toString());
-	}
 	
 }
