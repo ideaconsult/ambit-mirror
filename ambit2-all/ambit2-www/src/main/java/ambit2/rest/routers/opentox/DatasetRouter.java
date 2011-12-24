@@ -1,7 +1,5 @@
 package ambit2.rest.routers.opentox;
 
-import org.jfree.util.ObjectTable;
-import org.opentox.rdf.OT;
 import org.restlet.Context;
 import org.restlet.routing.Router;
 
@@ -11,6 +9,7 @@ import ambit2.rest.dataset.DatasetCompoundResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.MetadatasetResource;
+import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.property.PropertiesByDatasetResource;
 import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryResource;
@@ -79,6 +78,7 @@ public class DatasetRouter extends MyRouter {
 		 * TODO refactor it as query with dataset_uri as parameter
 		 */
 		attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
+		attach(String.format("%s%s",QueryResource.query_resource,DatasetStructureQualityStatsResource.resource),DatasetStructureQualityStatsResource.class);
 		
 	}	
 }

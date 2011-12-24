@@ -43,6 +43,7 @@ import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
+import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.facet.DatasetsByNamePrefixResource;
 import ambit2.rest.model.ModelResource;
@@ -304,6 +305,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		 * Quality labels
 		 */
 		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
+		queryRouter.attach(DatasetStructureQualityStatsResource.resource,DatasetStructureQualityStatsResource.class);
 		
 		
 		/**
@@ -318,6 +320,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		queryRouter.attach(CompoundsByPropertyValueInDatasetResource.resource,CompoundsByPropertyValueInDatasetResource.class);
 		queryRouter.attach(DatasetsByEndpoint.resource,DatasetsByEndpoint.class);
 		queryRouter.attach(DatasetsByNamePrefixResource.resource,DatasetsByNamePrefixResource.class);
+		
 		
 		/**
 		 *  PubChem query
