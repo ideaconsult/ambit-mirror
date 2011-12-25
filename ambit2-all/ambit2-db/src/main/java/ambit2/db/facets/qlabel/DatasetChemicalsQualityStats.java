@@ -64,11 +64,14 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 			record = new DatasetConsensusLabelFacet(null);
 		
 		try {
-			SourceDataset dataset = new SourceDataset(rs.getString("name"));
-			dataset.setId(rs.getInt("id_srcdataset"));
-			record.setDataset(dataset);
+			SourceDataset dataset = null;
+			if ((getValue() !=null) && (getValue().getId()>0)) {
+				dataset = new SourceDataset(rs.getString("name"));
+				dataset.setId(rs.getInt("id_srcdataset"));
+				record.setDataset(dataset);
+			}
 			record.setValue(String.format("[%s] Compound quality label: %s %s",
-						dataset.getName(),rs.getString("label"),rs.getString("text")));
+						dataset==null?"All":dataset.getName(),rs.getString("label"),rs.getString("text")));
 			record.setCount(rs.getInt(3));
 			ConsensusLabel l = new ConsensusLabel(CONSENSUS_LABELS.valueOf(rs.getString("label")));
 			l.setText(rs.getString("text"));

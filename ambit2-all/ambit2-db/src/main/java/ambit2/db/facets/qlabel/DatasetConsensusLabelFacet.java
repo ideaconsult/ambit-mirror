@@ -33,7 +33,15 @@ public class DatasetConsensusLabelFacet  extends PropertyDatasetFacet<ConsensusL
 
 	@Override
 	public String getResultsURL(String... params) {
-		return String.format("%s/dataset/%d/query/consensuslabel?%s=%s&%s=%s",
+		return getDataset()==null
+			   ?String.format("%s/query/consensuslabel?%s=%s&%s=%s",
+					(params.length>0)?params[0]:"",
+						"search",
+						URLEncoder.encode(getProperty().getLabel().toString()),
+						"text",
+						getProperty().getText()==null?"":URLEncoder.encode(getProperty().getText().toString())
+					)
+			   :String.format("%s/dataset/%d/query/consensuslabel?%s=%s&%s=%s",
 				(params.length>0)?params[0]:"",
 				getDataset().getId(),		
 				"search",
@@ -41,5 +49,19 @@ public class DatasetConsensusLabelFacet  extends PropertyDatasetFacet<ConsensusL
 				"text",
 				getProperty().getText()==null?"":URLEncoder.encode(getProperty().getText().toString())
 				);
+	}	
+	@Override
+	public String getSubcategoryTitle() {
+		return getDataset()==null?null:getDataset().getName();
+	}
+	
+	@Override
+	public String getSubCategoryURL(String... params) {
+		return getDataset()==null?null:
+			String.format("%s/dataset/%d",
+				(params.length>0)?params[0]:"",
+				getDataset().getId()	
+				);
+		
 	}	
 }
