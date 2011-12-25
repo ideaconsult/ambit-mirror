@@ -40,7 +40,7 @@ public abstract class AbstractFacet<T> implements IFacet<T> {
 	}
 	@Override
 	public String getSubcategoryTitle() {
-		return "Subcategory";
+		return null;
 	}
 	@Override
 	public String getTitle() {

@@ -33,11 +33,22 @@ public class DatasetConsensusLabelFacet  extends PropertyDatasetFacet<ConsensusL
 
 	@Override
 	public String getResultsURL(String... params) {
+		String label = getProperty()==null?null:URLEncoder.encode(getProperty().getLabel().toString());
+		
+
+		if (label==null)
+			return getDataset()==null
+				?String.format("%s/query/label_compounds",(params.length>0)?params[0]:"")
+				:String.format("%s/dataset/%d/query/label_compounds",
+				(params.length>0)?params[0]:"",
+				getDataset().getId());
+		else
+			
 		return getDataset()==null
 			   ?String.format("%s/query/consensuslabel?%s=%s&%s=%s",
 					(params.length>0)?params[0]:"",
 						"search",
-						URLEncoder.encode(getProperty().getLabel().toString()),
+						label,
 						"text",
 						getProperty().getText()==null?"":URLEncoder.encode(getProperty().getText().toString())
 					)
@@ -45,23 +56,20 @@ public class DatasetConsensusLabelFacet  extends PropertyDatasetFacet<ConsensusL
 				(params.length>0)?params[0]:"",
 				getDataset().getId(),		
 				"search",
-				URLEncoder.encode(getProperty().getLabel().toString()),
+				label,
 				"text",
 				getProperty().getText()==null?"":URLEncoder.encode(getProperty().getText().toString())
 				);
 	}	
 	@Override
 	public String getSubcategoryTitle() {
-		return getDataset()==null?null:getDataset().getName();
+		return getProperty()==null?"":String.format("%s %s",getProperty().getLabel().toString(),
+				getProperty().getText()==null?"":getProperty().getText().toString());
 	}
 	
 	@Override
 	public String getSubCategoryURL(String... params) {
-		return getDataset()==null?null:
-			String.format("%s/dataset/%d",
-				(params.length>0)?params[0]:"",
-				getDataset().getId()	
-				);
+		return null;
 		
 	}	
 }

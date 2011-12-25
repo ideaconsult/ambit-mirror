@@ -25,8 +25,7 @@ public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,Sour
 		"join struc_dataset using(idstructure)\n"+
 		"join src_dataset using(id_srcdataset)\n"+
 		"%s\n"+
-		"group by id_srcdataset,label\n"+
-		"order by id_srcdataset,label";
+		"group by id_srcdataset,label with rollup\n";
 	
 	protected DatasetStructureQLabelFacet record;
 	
@@ -69,16 +68,19 @@ public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,Sour
 		
 		try {
 			SourceDataset dataset = null;
-			if ((getValue() !=null) && getValue().getId()>0) {
-				dataset = new SourceDataset(rs.getString("name"));
+			Object iddataset = rs.getObject("id_srcdataset");
+			String dbname = rs.getString("name");
+			if (iddataset!=null) {
+				dataset = new SourceDataset(dbname);
 				dataset.setId(rs.getInt("id_srcdataset"));
 			}
 			record.setDataset(dataset);
-			record.setValue(String.format("[%s]  Structure quality label: %s",
-					dataset==null?"All":dataset.getName(),rs.getString("label")));
+			String label = rs.getString("label");
+			record.setValue(String.format("[%s] %s",
+					dataset==null?"Total":dataset.getName(),label==null?"All":label));
+			
 			record.setCount(rs.getInt(4));
-			QLabel q = new QLabel(QUALITY.valueOf(rs.getString("label")));
-			record.setProperty(q);
+			record.setProperty(label==null?null:new QLabel(QUALITY.valueOf(rs.getString("label"))));
 			
 			return record;
 		} catch (Exception x) {
