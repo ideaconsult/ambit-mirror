@@ -7,6 +7,7 @@ import org.restlet.Request;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
@@ -33,9 +34,11 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 		
 		try {
 			headerBeforeTable(w,query);
-			w.write(String.format("<table>"));
-		//	w.write(String.format("<caption>%s</caption>",query.toString()));
-			
+			w.write(AmbitResource.jsTableSorter("facet","pager"));
+			w.write(String.format("<table class='tablesorter' id='facet' border=\"0\" cellpadding=\"0\" cellspacing=\"1\""));
+			w.write(String.format("<caption CLASS=\"zebra\">Summary</caption>",query.toString()));
+			w.write(String.format("<thead><th>%s</th><th>Count</th><th></th></thead>",query.toString()));
+			w.write("<tbody>");
 			
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -47,6 +50,7 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 	@Override
 	public void footer(Writer w, IQueryRetrieval<Facet> query) {
 		try {
+			w.write("</tbody>");
 			w.write(String.format("</table>"));
 		} catch (Exception x) {}
 		super.footer(w, query);
@@ -56,12 +60,17 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 		try {
 			output.write("<tr>");
 			output.write("<td>");
+			output.write(item.getValue().toString());
+			output.write("</td>");
+			
+			output.write("<td>");
 			String uri = uriReporter.getURI(item);
 			String d = uri.indexOf("?")>0?"&":"?";
+			
 			output.write(String.format(
-						"<a href=\"%s%spage=0&pagesize=100\">%s&nbsp;(%d)</a>",
+						"<a href=\"%s%spage=0&pagesize=100\">(%d)</a>",
 						uri,d,
-						item.getValue(),item.getCount()));
+						item.getCount()));
 			output.write("</td>");
 			output.write("<td>");
 			String subcategory = item.getSubCategoryURL(uriReporter.getBaseReference().toString());
@@ -69,7 +78,7 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 				output.write(String.format(
 							"<a href=\"%s\">%s</a>",
 							subcategory,
-							"Subcategory"));
+							item.getSubcategoryTitle()==null?"Subcategory":item.getSubcategoryTitle()));
 			output.write("</td>");				
 			output.write("</tr>");
 			

@@ -80,10 +80,11 @@ public class ConsensusLabelQueryResource   extends StructureQueryResource<IQuery
 				StoredQuery dataset = new StoredQuery();
 				dataset.setId(queryResultsID);
 				q.setFieldname(dataset);
-				return q;
+				
 			} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid dataset id");
 		} 
-		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No dataset !");
+		return q;
+	//	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No dataset !");
 	}
  
 }

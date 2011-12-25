@@ -68,10 +68,14 @@ public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,Sour
 			record = new DatasetStructureQLabelFacet(null);
 		
 		try {
-			SourceDataset dataset = new SourceDataset(rs.getString("name"));
-			dataset.setId(rs.getInt("id_srcdataset"));
+			SourceDataset dataset = null;
+			if ((getValue() !=null) && getValue().getId()>0) {
+				dataset = new SourceDataset(rs.getString("name"));
+				dataset.setId(rs.getInt("id_srcdataset"));
+			}
 			record.setDataset(dataset);
-			record.setValue(String.format("[%s]  Structure quality label: %s",dataset.getName(),rs.getString("label")));
+			record.setValue(String.format("[%s]  Structure quality label: %s",
+					dataset==null?"All":dataset.getName(),rs.getString("label")));
 			record.setCount(rs.getInt(4));
 			QLabel q = new QLabel(QUALITY.valueOf(rs.getString("label")));
 			record.setProperty(q);

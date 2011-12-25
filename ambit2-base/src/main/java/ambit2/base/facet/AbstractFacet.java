@@ -38,4 +38,12 @@ public abstract class AbstractFacet<T> implements IFacet<T> {
 	public String getURL() {
 		return url;
 	}
+	@Override
+	public String getSubcategoryTitle() {
+		return "Subcategory";
+	}
+	@Override
+	public String getTitle() {
+		return "Category";
+	}
 }
