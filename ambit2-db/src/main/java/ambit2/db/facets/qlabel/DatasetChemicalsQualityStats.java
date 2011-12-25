@@ -25,7 +25,7 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 		"join structure using(idstructure)\n"+
 		"join quality_chemicals q using(idchemical)\n"+
 		"%s\n"+
-		"group by label,text\n";
+		"group by id_srcdataset,label,text with rollup\n";
 
 	
 	public DatasetChemicalsQualityStats(String facetURL) {
@@ -65,16 +65,24 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 		
 		try {
 			SourceDataset dataset = null;
-			if ((getValue() !=null) && (getValue().getId()>0)) {
-				dataset = new SourceDataset(rs.getString("name"));
+			Object iddataset = rs.getObject("id_srcdataset");
+			String dbname = rs.getString("name");
+			if (iddataset!=null) {
+				dataset = new SourceDataset(dbname);
 				dataset.setId(rs.getInt("id_srcdataset"));
 				record.setDataset(dataset);
 			}
-			record.setValue(String.format("[%s] Compound quality label: %s %s",
-						dataset==null?"All":dataset.getName(),rs.getString("label"),rs.getString("text")));
+			String label = rs.getString("label");
+			String text = rs.getString("text");
+			record.setValue(String.format("[%s] %s %s",
+						dataset==null?"Total":dataset.getName(),label==null?"All labels":label,text==null?"":text));
+			
 			record.setCount(rs.getInt(3));
-			ConsensusLabel l = new ConsensusLabel(CONSENSUS_LABELS.valueOf(rs.getString("label")));
-			l.setText(rs.getString("text"));
+			ConsensusLabel l = null;
+			if(label!=null) {
+				l = new ConsensusLabel(CONSENSUS_LABELS.valueOf(rs.getString("label")));
+				l.setText(text);
+			}
 			record.setProperty(l);
 			
 			return record;
@@ -83,6 +91,11 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 			record.setCount(-1);
 			return record;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Compound quality label";
 	}
 
 }

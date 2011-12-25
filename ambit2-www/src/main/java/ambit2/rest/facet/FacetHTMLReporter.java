@@ -68,7 +68,7 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 			String d = uri.indexOf("?")>0?"&":"?";
 			
 			output.write(String.format(
-						"<a href=\"%s%spage=0&pagesize=100\">(%d)</a>",
+						"<a href=\"%s%spage=0&pagesize=100\">%d</a>",
 						uri,d,
 						item.getCount()));
 			output.write("</td>");
@@ -79,6 +79,7 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 							"<a href=\"%s\">%s</a>",
 							subcategory,
 							item.getSubcategoryTitle()==null?"Subcategory":item.getSubcategoryTitle()));
+			else if (item.getSubcategoryTitle()!=null) output.write(item.getSubcategoryTitle());
 			output.write("</td>");				
 			output.write("</tr>");
 			
