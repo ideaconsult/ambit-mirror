@@ -29,6 +29,7 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.data.model.Algorithm.requires;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -478,23 +479,45 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						} else end = p.getTitle().length();
 						if ((end-dot)>max) end = dot + max;
 						
+
 						output.write(
 							String.format("<th width='%d'><a href='%s' title='%s'>%s</a></th>",
 									max,
-									//(hc %2)==1?"class=\"results\"":"class=\"results_odd\"",
-							p.getUrl(),p.getTitle(),p.getTitle().substring(dot,end)));
+									p.getUrl(),p.getTitle(),p.getTitle().substring(dot,end)
+									));
 					}
 					output.write("</tr>\n</thead><tbody><tr class=\"results\">");
 					output.write("<th ></th><th ></th>");
 					
 					hc = 0;
 					for(Property p: props) {
+						
+						String finder = "";
+						if (p.getLabel().equals(Property.opentox_Name) || p.getLabel().equals(Property.opentox_IupacName)) {
+							String dataset = "";
+							try { 
+								Reference r = uriReporter.getResourceRef().clone();
+								r.setQuery(null);
+								dataset = URLEncoder.encode(r.toString());
+							} catch (Exception x) { x.printStackTrace();}
+							String feature = "";
+							try {
+								feature = URLEncoder.encode(pReporter.getURI(p));
+							} catch (Exception x) { x.printStackTrace();} 
+							finder = String.format("&nbsp;<a href='%s/algorithm/finder?feature_uris[]=%s&search=NAME2STRUCTURE&mode=emptyadd&dataset_uri=%s' title='Retrieve structure by name'>Find</a>",
+											baseReference,
+											feature,
+											dataset);
+						}	
+						
+						
 						hc++;
 						output.write(
-							String.format("<th align='center'><a href='%s' title='%s'>%s %s</a></th>",
+							String.format("<th align='center'><a href='%s' title='%s'>%s %s</a>%s</th>",
 							pReporter.getURI(p),
 							p.getName(),
-							p.getName(),p.getUnits()));
+							p.getName(),p.getUnits(),
+							finder));
 					}					
 					output.write("</tr>\n");
 				}
