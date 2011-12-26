@@ -10,6 +10,7 @@ import ambit2.base.data.ConsensusLabel.CONSENSUS_LABELS;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
@@ -49,6 +50,7 @@ public class QueryStructureByQualityPairLabel  extends AbstractStructureQuery<IS
 		super();
 		setCondition(StringCondition.getInstance(StringCondition.C_EQ));
 		setValue(new ConsensusLabel(label));
+		
 	}	
 	public QueryStructureByQualityPairLabel(String label) {
 		this(CONSENSUS_LABELS.valueOf(label));
@@ -113,6 +115,22 @@ public class QueryStructureByQualityPairLabel  extends AbstractStructureQuery<IS
 		q.setText(rs.getString(6));
 		return q;
 	}
-	
-	
+
+	@Override
+	public String getKey() {
+		return null;
+	}
+	@Override
+	public String getCategory() {
+		return null;
+	}
+	@Override
+	public double calculateMetric(IStructureRecord object) {
+
+		return 1;
+	}
+	@Override
+	public boolean isPrescreen() {
+		return true;
+	}
 }

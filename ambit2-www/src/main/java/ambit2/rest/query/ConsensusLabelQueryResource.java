@@ -46,6 +46,7 @@ public class ConsensusLabelQueryResource   extends DatasetResource<IQueryRetriev
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		//collapsed = true;
+		setGroupProperties(context, request, response);
 		setTemplate(createTemplate(context, request, response));
 		QueryStructureByQualityPairLabel q = new QueryStructureByQualityPairLabel();
 		Form form = request.getResourceRef().getQueryAsForm();
