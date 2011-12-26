@@ -1,7 +1,6 @@
 package ambit2.namestructure;
 
 import nu.xom.Element;
-import uk.ac.cam.ch.wwmm.opsin.NameToInchi;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult.OPSIN_RESULT_STATUS;
 import ambit2.base.data.StructureRecord;
@@ -27,17 +26,22 @@ public class Name2StructureFinder extends AbstractFinder<Name2StructureProcessor
 		OpsinResult result = request.name2structure(value);
 		if (result.getStatus().equals(OPSIN_RESULT_STATUS.SUCCESS)) {
 			record.clear();
+			/*
 			String str = NameToInchi.convertResultToInChI(result);
 			if (str!=null) {
 				record.setContent(str);
 				record.setFormat(IStructureRecord.MOL_TYPE.INC.toString());
 				return record;
 			} 
-			str = result.getSmiles();
+			*/
+			/*
+			String str = result.getSmiles();
 			if (str!=null) {
+				record.setContent(null);
 				record.setSmiles(str);
 				return record;
 			} 
+			*/
 			Element cml = result.getCml();
 			if (cml!=null) {
 				record.setContent(cml.toXML());
