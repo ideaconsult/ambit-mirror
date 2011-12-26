@@ -22,16 +22,19 @@ public class QueryStructureByQualityPairLabel  extends AbstractStructureQuery<IS
 	private static final long serialVersionUID = -3232148472829083139L;
 	public final static String sql = 
 		"select ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected," +
-		"cast(quality_chemicals.label as unsigned) as metric,quality_chemicals.label as text from structure " +
+		"cast(quality_chemicals.label as unsigned) as metric,quality_chemicals.label as text,id_srcdataset from structure join struc_dataset using(idstructure)" +
 		"%s"+
 		"left join quality_chemicals using(idchemical)\n %s %s %s";
 
+	public final static String sql_chemical = 
+		"select ? as idquery,idchemical,-1,1,cast(quality_chemicals.label as unsigned) as metric,quality_chemicals.label as text from quality_chemicals %s %s %s";
+		
 	public final static String where = " where quality_chemicals.label %s ? ";
-	public final static String where_null = " where quality_chemicals.label is null";
+	public final static String where_null = " where quality_chemicals.label is null ";
 
 	public final static String where_text = " and text = ?";
 	
-	protected final static String join_struc_dataset = "join struc_dataset using(idstructure)\n";
+	//protected final static String join_struc_dataset = "join struc_dataset using(idstructure)\n";
 	protected final static String where_struc_dataset = "and id_srcdataset = ?\n";
 	
 	protected final static String join_struc_query = "join query_results using(idstructure)\n";
@@ -53,21 +56,22 @@ public class QueryStructureByQualityPairLabel  extends AbstractStructureQuery<IS
 	public String getSQL() throws AmbitException {
 		String join = "";
 		String where_dataset = null;
+		String thesql = sql;
 		if ((getFieldname()!=null) && (getFieldname().getID()>0)) {
 			if (getFieldname() instanceof SourceDataset) {
-				join = join_struc_dataset;
+				join = "";//join_struc_dataset;
 				where_dataset = where_struc_dataset;
 			}
 			else {
 				join = join_struc_query;
 				where_dataset = where_struc_query;
 			}
-		};
+		} else thesql = sql_chemical;
 		
 		if (getValue()==null)
-			return String.format(sql,join, where_null,"","");
+			return String.format(thesql,join, where_null,"","");
 		else
-			return String.format(sql,join, 
+			return String.format(thesql,join, 
 					String.format(where,getCondition()),
 							getValue().getText()==null?"":where_text,
 							where_dataset==null?"":where_dataset
