@@ -1,6 +1,7 @@
 package ambit2.rest.task.dbpreprocessing;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.List;
 
 import org.opentox.dsl.OTDataset;
@@ -29,13 +30,17 @@ import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.property.RetrieveProfile;
 import ambit2.db.search.property.RetrieveProfile.QueryMode;
 import ambit2.db.search.property.ValuesReader;
 import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.db.update.dataset.ReadDataset;
 import ambit2.namestructure.Name2StructureFinder;
 import ambit2.pubchem.EntrezSearchProcessor;
 import ambit2.pubchem.PubchemFinder;
+import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.rdf.RDFPropertyIterator;
@@ -131,6 +136,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 		
 		IProcessor<String,String> request;
 		LiteratureEntry le;
+
 		switch (searchSite) {
 		case PUBCHEM: {
 			p.add(new PubchemFinder(profile,mode));
@@ -173,7 +179,27 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			break;
 		}
 		}
+		//don't duplicate if there is already a hit
+		SourceDataset dataset = new SourceDataset(searchSite.toString(),le);
+		dataset = getDataset(dataset);
 		
+		QueryStructureByID q = new QueryStructureByID();
+		q.setChemicalsOnly(true);
+		q.setFieldname(dataset);
+		q.setPageSize(1);
+		q.setPage(0);
+		p.add(new ProcessorStructureRetrieval(q) {
+			@Override
+			public IStructureRecord process(IStructureRecord target)
+					throws AmbitException {
+				if (((QueryStructureByID)getQuery()).getFieldname().getID()>=0) {
+					IStructureRecord record = super.process(target);
+					target.setIdchemical(record.getIdchemical());
+					target.setIdstructure(record.getIdstructure());
+					return target;
+				} else return target;
+			}
+		});		
 		
 		RepositoryWriter writer = new RepositoryWriter() {
 			@Override
@@ -184,11 +210,36 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			}
 		};
 		writer.setOperation(OP.UPDATE);
-		writer.setDataset(new SourceDataset(searchSite.toString(),le));
+		writer.setDataset(dataset);
 		p.add(writer);
 		return p;
 	}
 	
+	protected SourceDataset getDataset(SourceDataset dataset) {
+		
+		QueryExecutor exec = new QueryExecutor();
+		Connection connection = null;
+		try {
+			ReadDataset q = new ReadDataset();
+			q.setPage(0);
+			q.setPageSize(1);
+			q.setValue(dataset);
+			DBConnection dbc = new DBConnection(context);
+			connection = dbc.getConnection();
+			exec.setConnection(connection);
+			ResultSet rs = exec.process(q);
+			while (rs.next()) {
+				dataset = q.getObject(rs);
+			}
+			try {exec.closeResults(rs);} catch (Exception x) {};
+		} catch (Exception x) {
+			//if failed will return the original dataset
+		} finally {
+			try {exec.close();} catch (Exception x) {};
+			try {connection.close();} catch (Exception x) {};
+		}
+		return dataset;
+	}
 
 	@Override
 	protected TaskResult createReference(Connection connection)
