@@ -121,7 +121,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 		ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor> p = 
 			new ProcessorsChain<IStructureRecord,IBatchStatistics,IProcessor>();
 
-		RetrieveStructure r = new RetrieveStructure(true);
+		RetrieveStructure r = new RetrieveStructure(false); //exactly our structure, nothing else
 		r.setPageSize(1);
 		r.setPage(0);
 		p.add(new ProcessorStructureRetrieval(r));
