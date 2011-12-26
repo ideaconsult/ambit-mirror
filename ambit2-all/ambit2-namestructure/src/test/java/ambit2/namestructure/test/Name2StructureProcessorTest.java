@@ -59,7 +59,24 @@ public class Name2StructureProcessorTest {
 		
 		System.out.println(result.getCml().toXML());
 
+
 	}
+	
+	@Test
+	public void testNitroGroup() throws Exception {
+		Name2StructureProcessor p = new Name2StructureProcessor();
+	
+		OpsinResult result = p.name2structure("(2-Butyl-5-nitro-1-benzofuran-3-yl)(4-hydroxyphenyl)methanone");
+
+		Assert.assertEquals(OPSIN_RESULT_STATUS.SUCCESS,result.getStatus()) ;
+		
+		//System.out.println(result.getCml().toXML());
+		String inchi = NameToInchi.convertResultToInChI(result);
+		//System.out.println(inchi);
+		Assert.assertEquals("C(CCC)C=1OC2=C(C1C(=O)C1=CC=C(C=C1)O)C=C(C=C2)[N+](=O)[O-]",result.getSmiles());
+
+	}
+	
 	
 	@Test
 	public void testFailed() throws Exception {
