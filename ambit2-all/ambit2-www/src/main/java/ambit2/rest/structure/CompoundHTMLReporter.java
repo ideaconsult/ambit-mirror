@@ -491,25 +491,29 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					
 					hc = 0;
 					for(Property p: props) {
-						
+						String dataset = "";
 						String finder = "";
+						try { 
+							Reference r = uriReporter.getResourceRef().clone();
+							r.setQuery(null);
+							dataset = URLEncoder.encode(r.toString());
+						} catch (Exception x) { x.printStackTrace();}
+						String feature = "";
+						try {
+							feature = URLEncoder.encode(pReporter.getURI(p));
+						} catch (Exception x) { x.printStackTrace();} 
+						
 						if (p.getLabel().equals(Property.opentox_Name) || p.getLabel().equals(Property.opentox_IupacName)) {
-							String dataset = "";
-							try { 
-								Reference r = uriReporter.getResourceRef().clone();
-								r.setQuery(null);
-								dataset = URLEncoder.encode(r.toString());
-							} catch (Exception x) { x.printStackTrace();}
-							String feature = "";
-							try {
-								feature = URLEncoder.encode(pReporter.getURI(p));
-							} catch (Exception x) { x.printStackTrace();} 
-							finder = String.format("&nbsp;<a href='%s/algorithm/finder?feature_uris[]=%s&search=NAME2STRUCTURE&mode=emptyadd&dataset_uri=%s' title='Retrieve structure by name'>Find</a>",
+							finder = String.format("&nbsp;<a href='%s/algorithm/finder?feature_uris[]=%s&search=NAME2STRUCTURE&mode=emptyadd&dataset_uri=%s' title='Retrieve structure by name'>[OPSIN]</a>",
 											baseReference,
 											feature,
 											dataset);
-						}	
-						
+						} else if (p.getLabel().equals(Property.opentox_CAS)) {
+							finder = String.format("&nbsp;<a href='%s/algorithm/finder?feature_uris[]=%s&search=CIR&mode=emptyadd&dataset_uri=%s' title='Retrieve structure by CAS'>[CIR]</a>",
+									baseReference,
+									feature,
+									dataset);
+						}
 						
 						hc++;
 						output.write(
