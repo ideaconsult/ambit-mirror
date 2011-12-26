@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import org.restlet.Request;
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
 import ambit2.base.processors.search.AbstractFinder;
@@ -99,22 +100,32 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 						query
 						               ));
 			} else {
-				
+				AbstractFinder.MODE _mode = AbstractFinder.MODE.emptyonly;
+				String _feature = "";
+				String _dataset = "";
+				AbstractFinder.SITE _method = AbstractFinder.SITE.CIR;
+				try {
+					Form form = getRequest().getResourceRef().getQueryAsForm();
+					try { _mode = AbstractFinder.MODE.valueOf(form.getFirstValue("mode"));} catch (Exception x) { _mode = AbstractFinder.MODE.emptyadd;};
+					try { _method = AbstractFinder.SITE.valueOf(form.getFirstValue("search"));} catch (Exception x) {_method = AbstractFinder.SITE.CIR;};
+					try { _dataset = form.getFirstValue("dataset_uri");} catch (Exception x) {_dataset="";};
+					try { _feature = form.getFirstValue("feature_uris[]");} catch (Exception x) { _feature = "";};
+				} catch (Exception x) {}
 				String target = item.isSupervised()?"<td><label for='prediction_feature'>Target&nbsp;</label></td><td><input type='text' name='prediction_feature' size='60' value='Enter feature URL'></td>":"";
 				String features = "<td><label for='feature_uris[]'>X variables&nbsp;</label></td><td><textarea rows='2' cols='45'name='feature_uris[]' alt='independent variables'></textarea></td>";
 				
 				if (item.hasType(AlgorithmType.Finder)) {
 					output.write("<caption>Find structures by querying online services by compound identifier</caption>");
 					output.write(String.format("<form action='' method='%s' name='form'>","POST"));
-					output.write(String.format("<tr><th>Dataset URI</td><td><input type='text'  size='120'  name='%s' value='' title='URI of the dataset, e.g. http://host/ambit2/dataset/1'></th></tr>",OpenTox.params.dataset_uri));
-					output.write(String.format("<tr><th>Dataset column, containing the identifier (OpenTox Feature URI)</th><td><input type='text' size='120' title='URI of the dataset feature (e.g. http://host/ambit2/feature/2), containing the identifier (e.g. CAS)' name='%s' value=''></td></tr>",OpenTox.params.feature_uris));
+					output.write(String.format("<tr><th>Dataset URI</td><td><input type='text'  size='120'  name='%s' value='%s' title='URI of the dataset, e.g. http://host/ambit2/dataset/1'></th></tr>",OpenTox.params.dataset_uri,_dataset==null?"":_dataset));
+					output.write(String.format("<tr><th>Dataset column, containing the identifier (OpenTox Feature URI)</th><td><input type='text' size='120' title='URI of the dataset feature (e.g. http://host/ambit2/feature/2), containing the identifier (e.g. CAS)' name='%s' value='%s'></td></tr>",OpenTox.params.feature_uris,_feature==null?"":_feature));
 					//site
 					output.write(String.format("<tr><th>Web site</th><td>"));
 					output.write("<select name='search'>");
 					for (AbstractFinder.SITE site : AbstractFinder.SITE.values())
 						output.write(String.format("<option value='%s' %s %s title='%s'>%s</option>",
 								site.name(),
-								AbstractFinder.SITE.CIR.equals(site)?"selected":"",
+								_method.equals(site)?"selected":"",
 								site.isEnabled()?"":"disabled",
 								site.getURI(),		
 								site.getTitle()));
@@ -126,7 +137,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 					for (AbstractFinder.MODE mode : AbstractFinder.MODE.values())
 						output.write(String.format("<option value='%s' %s>%s</option>",
 								mode.name(),
-								AbstractFinder.MODE.emptyonly.equals(mode)?"selected":"",
+								_mode.equals(mode)?"selected":"",
 								mode.getDescription()));
 					output.write("</select>");
 					output.write("</td></tr>");
