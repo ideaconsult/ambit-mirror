@@ -192,6 +192,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 			@Override
 			public IStructureRecord process(IStructureRecord target)
 					throws AmbitException {
+				if (target==null) return null;
 				if (((QueryStructureByID)getQuery()).getFieldname().getID()>=0) {
 					IStructureRecord record = super.process(target);
 					target.setIdchemical(record.getIdchemical());
