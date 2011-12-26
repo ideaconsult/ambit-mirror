@@ -6,6 +6,8 @@ import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.ConsensusLabel;
@@ -17,6 +19,7 @@ import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryStructureByQuality;
 import ambit2.db.search.structure.QueryStructureByQualityPairLabel;
 import ambit2.rest.OpenTox;
+import ambit2.rest.dataset.DatasetResource;
 
 /**
  * Retrieves Dataset ofcompounds, given a quality label. 
@@ -24,7 +27,7 @@ import ambit2.rest.OpenTox;
  * @author nina
  *
  */
-public class ConsensusLabelQueryResource   extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
+public class ConsensusLabelQueryResource   extends DatasetResource<IQueryRetrieval<IStructureRecord>> {
 	public static String resource = "/consensuslabel";
 	protected Integer datasetID;
 	protected Integer queryResultsID;
@@ -36,9 +39,14 @@ public class ConsensusLabelQueryResource   extends StructureQueryResource<IQuery
 				queryResultsID!=null?String.format("%s/R%d", OpenTox.URI.dataset.getURI(),queryResultsID):"";
 		else return "";
 	}	
+	
+
+
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		//collapsed = true;
+		setTemplate(createTemplate(context, request, response));
 		QueryStructureByQualityPairLabel q = new QueryStructureByQualityPairLabel();
 		Form form = request.getResourceRef().getQueryAsForm();
 		Object key = form.getFirstValue(QueryResource.search_param);
@@ -85,6 +93,22 @@ public class ConsensusLabelQueryResource   extends StructureQueryResource<IQuery
 		} 
 		return q;
 	//	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No dataset !");
+	}
+	
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+	}
+	@Override
+	protected Representation put(Representation representation, Variant variant)
+			throws ResourceException {
+		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+	}
+	
+	@Override
+	protected Representation delete(Variant variant) throws ResourceException {
+		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 	}
  
 }
