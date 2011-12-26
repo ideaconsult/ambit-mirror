@@ -1,13 +1,17 @@
 package ambit2.rest.facet;
 
+import java.io.Writer;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.db.facets.qlabel.DatasetChemicalsQualityStats;
+import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 
 public class DatasetChemicalsQualityStatsResource extends FacetResource<DatasetChemicalsQualityStats> {
@@ -18,7 +22,10 @@ public class DatasetChemicalsQualityStatsResource extends FacetResource<DatasetC
 	@Override
 	protected DatasetChemicalsQualityStats createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		Form form = getRequest().getResourceRef().getQueryAsForm();
 		DatasetChemicalsQualityStats q = new DatasetChemicalsQualityStats(getResourceRef(getRequest()).toString());
+		try {q.setSummary(Boolean.parseBoolean(form.getFirstValue("summary").toString()));} catch (Exception x) {q.setSummary(true);}
+		
 		Object id = request.getAttributes().get(OpenTox.URI.dataset.getKey());
 		if (id != null) try {
 			datasetID = Integer.parseInt(id.toString());
@@ -38,6 +45,23 @@ public class DatasetChemicalsQualityStatsResource extends FacetResource<DatasetC
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid dataset id");
 		} 		
 		return q;
+	}
+	
+	@Override
+	protected FacetHTMLReporter getHTMLReporter(Request request) {
+		return new FacetHTMLReporter(request) {
+			@Override
+			public void headerBeforeTable(Writer w, IQueryRetrieval query) {
+				super.headerBeforeTable(w, query);
+				try {
+					w.write("<a href='?summary=true'>All</a>&nbsp;");
+					w.write("<a href='?summary=false'>Per dataset</a>");
+				} catch (Exception x) {
+					
+				}
+			}
+		};
+
 	}
 
 }

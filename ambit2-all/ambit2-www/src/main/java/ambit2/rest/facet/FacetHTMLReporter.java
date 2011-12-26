@@ -36,7 +36,7 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 			headerBeforeTable(w,query);
 			w.write(AmbitResource.jsTableSorter("facet","pager"));
 			w.write(String.format("<table class='tablesorter' id='facet' border=\"0\" cellpadding=\"0\" cellspacing=\"1\""));
-			w.write(String.format("<caption CLASS=\"zebra\">Summary</caption>",query.toString()));
+			w.write(String.format("<caption CLASS=\"zebra\"></caption>",query.toString()));
 			w.write(String.format("<thead><th>%s</th><th>Count</th><th></th></thead>",query.toString()));
 			w.write("<tbody>");
 			

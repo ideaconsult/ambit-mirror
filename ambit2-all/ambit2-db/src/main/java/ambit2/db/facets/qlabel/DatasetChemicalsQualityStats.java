@@ -15,6 +15,15 @@ import ambit2.db.search.StringCondition;
 
 public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_LABELS,SourceDataset,StringCondition,IFacet<String>> {
 	protected DatasetConsensusLabelFacet record;
+	protected boolean summary = false;
+	public boolean isSummary() {
+		return summary;
+	}
+
+	public void setSummary(boolean summary) {
+		this.summary = summary;
+	}
+
 	/**
 	 * 
 	 */
@@ -27,7 +36,10 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 		"%s\n"+
 		"group by id_srcdataset,label,text with rollup\n";
 
-	
+	protected static final String sql_summary = 
+		"SELECT null,null,count(idchemical),label,text FROM quality_chemicals\n"+
+		"group by  label,text with rollup\n";
+
 	public DatasetChemicalsQualityStats(String facetURL) {
 		super(facetURL);
 	}
@@ -55,7 +67,7 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 	@Override
 	public String getSQL() throws AmbitException {
 		if ((getValue() !=null) && getValue().getId()>0) return String.format(sql,"where id_srcdataset=?");
-		else return String.format(sql,"");
+		else return String.format(isSummary()?sql_summary:sql,"");
 	}
 
 	@Override
@@ -65,11 +77,11 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 		
 		try {
 			SourceDataset dataset = null;
-			Object iddataset = rs.getObject("id_srcdataset");
-			String dbname = rs.getString("name");
+			Object iddataset = rs.getObject(1);
+			String dbname = rs.getString(2);
 			if (iddataset!=null) {
 				dataset = new SourceDataset(dbname);
-				dataset.setId(rs.getInt("id_srcdataset"));
+				dataset.setId(rs.getInt(1));
 				record.setDataset(dataset);
 			}
 			String label = rs.getString("label");
