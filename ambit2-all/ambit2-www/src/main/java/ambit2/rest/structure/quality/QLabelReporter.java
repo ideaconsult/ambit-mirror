@@ -25,7 +25,9 @@ public class QLabelReporter extends QueryReporter<QLabel, QueryQLabel, Writer> {
 
 	@Override
 	public Object processItem(QLabel item) throws AmbitException {
-		try { getOutput().write(item.toString()); } catch (Exception x) {}
+		try { getOutput().write(String.format("%s: %s\n",
+				"comparison".equals(item.getUser().getName())?"comparison":"expert",item.getLabel())); 
+		} catch (Exception x) {}
 		return item;
 	}
 

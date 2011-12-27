@@ -21,11 +21,11 @@ public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,Sour
 	private static final long serialVersionUID = 5183010855788077541L;
 
 	protected static final String sql = 
-		"SELECT id_srcdataset,name,label,count(idstructure) FROM quality_structure\n"+
+		"SELECT id_srcdataset,name,label,count(idstructure),quality_structure.user_name FROM quality_structure\n"+
 		"join struc_dataset using(idstructure)\n"+
 		"join src_dataset using(id_srcdataset)\n"+
 		"%s\n"+
-		"group by id_srcdataset,label with rollup\n";
+		"group by id_srcdataset,user_name,label with rollup\n";
 	
 	protected DatasetStructureQLabelFacet record;
 	
@@ -74,10 +74,13 @@ public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,Sour
 				dataset = new SourceDataset(dbname);
 				dataset.setId(rs.getInt("id_srcdataset"));
 			}
+			String uname = rs.getString("user_name");
 			record.setDataset(dataset);
 			String label = rs.getString("label");
-			record.setValue(String.format("[%s] %s",
-					dataset==null?"Total":dataset.getName(),label==null?"All":label));
+			record.setValue(String.format("[%s] %s: %s",
+					dataset==null?"Total":dataset.getName(),
+							"comparison".equals(uname)?uname:uname==null?"":"Expert", 
+							label==null?"All":label));
 			
 			record.setCount(rs.getInt(4));
 			record.setProperty(label==null?null:new QLabel(QUALITY.valueOf(rs.getString("label"))));

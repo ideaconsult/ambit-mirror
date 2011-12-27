@@ -133,7 +133,8 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 	
 		
 		"insert into structure (idchemical,idstructure,structure,atomproperties,user_name,`preference`)\n"+
-		"select structure.idchemical,idstructure,structure,atomproperties,structure.user_name,100*q.label+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
+		"select structure.idchemical,idstructure,structure,atomproperties,structure.user_name,100*min(q.label)+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
+		"group by idstructure\n"+
 		"on duplicate key update `preference`=values(`preference`)\n",
 
 		//"delete from quality_pair"
@@ -165,3 +166,37 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 	}
 
 }
+
+/*
+SELECT
+concat(
+hex(fp1),'-',
+hex(fp2),'-',
+hex(fp3),'-',
+hex(fp4),'-',
+hex(fp5),'-',
+hex(fp6),'-',
+hex(fp7),'-',
+hex(fp8),'-',
+hex(fp9),'-',
+hex(fp10),'-',
+hex(fp11),'-',
+hex(fp12),'-',
+hex(fp13),'-',
+hex(fp14),'-',
+hex(fp15),'-',
+hex(fp16)
+) x,
+id_srcdataset,group_concat(name),
+idstructure,f.idchemical,
+count(*) c,
+preference,type_structure,
+100*count(*) +(10-type_structure)
+from fp1024_struc f
+join struc_dataset using(idstructure)
+join src_dataset d using(id_srcdataset)
+join structure using(idstructure)
+where f.idchemical=23
+and d.user_name="admin"
+group by x,id_srcdataset,idstructure with rollup
+*/
