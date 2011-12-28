@@ -18,7 +18,7 @@ import ambit2.db.search.SetCondition;
 import ambit2.db.search.SetCondition.conditions;
 
 public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStructureRecord,SetCondition,IStructureRecord> 
-					implements IQueryRetrieval<IStructureRecord> {
+					implements IQueryRetrieval<IStructureRecord>, IMultiRetrieval<IStructureRecord> {
 	/**
 	 * 
 	 */
@@ -126,7 +126,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		"join properties using(idproperty) join catalog_references using(idreference)\n"+ 
 		"where status != 'ERROR'\n" +
 		"%s\n"+
-		"and idstructure=?\n";
+		"and idstructure=?\norder by idproperty";
 	
 	protected final String sql_structure_novalue = 
 		"select name,idreference,idproperty,idstructure,null,null,title,url,idchemical,null,units from structure \n"+
@@ -141,7 +141,7 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		"join properties using(idproperty) join catalog_references using(idreference)\n"+ 
 		"where status != 'ERROR'\n"+
 		"%s\n"+
-		"and idchemical=?\n";
+		"and idchemical=?\norder by idproperty\n";
 
 	
 	protected final String sql_chemical_novalue = 
@@ -243,16 +243,53 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 		return params;		
 	}
 
-	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+	@Override
+	public IStructureRecord getMultiObject(ResultSet rs) throws AmbitException {
 		try {
 			IStructureRecord record = getRecord();
 			if (record==null) record = new StructureRecord();
+
+			int idstructure = record.getIdstructure();
+
+	    	Property p = null;
+	    	boolean found = false;
+	    	while (rs.next()) {
+	    		Property property = retrieveProperty(rs);
+	    		if ((p==null) || (property.getId()!=p.getId())) found = false;
+	    		if (!found) 
+	    			retrieveValue(rs,record,property);
+	    		if (rs.getInt(4)==idstructure) found = true;
+	    		p = property;
+	    	}
+	    	return record;
+		
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+	}	
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+		IStructureRecord record = getRecord();
+		if (record==null) record = new StructureRecord();
+		return getObject(rs, record, -1);
+	}
+	
+	protected IStructureRecord getObject(ResultSet rs, IStructureRecord record, int idstructure) throws AmbitException {
+		try {
 			if (chemicalsOnly && record.getIdstructure()>0) 
 				; //skip
 			else record.setIdstructure(rs.getInt(4));
 			record.setIdchemical(rs.getInt(9));
-			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
-			Property p = Property.getInstance(rs.getString(1),le); 
+			Property p = retrieveProperty(rs);
+			
+			retrieveValue(rs, record, p);
+			return record;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
+		
+	}
+	protected void retrieveValue(ResultSet rs,IStructureRecord record, Property p) throws AmbitException {
+		try {
 			Object value = rs.getObject(5);
 			
 			if (value == null) {
@@ -269,11 +306,19 @@ public class RetrieveProfileValues extends AbstractQuery<Profile<Property>,IStru
 					p.setClazz(String.class);
 				}
 			}
-			return record;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}		
+	}
+	protected Property retrieveProperty(ResultSet rs) throws AmbitException {
+		try {
+			LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(7),rs.getString(8),rs.getInt(2));
+			Property p = Property.getInstance(rs.getString(1),le);
+			p.setId(rs.getInt("idproperty"));
+			return p;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
-		
 	}
 
 	public double calculateMetric(IStructureRecord object) {

@@ -36,6 +36,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.readers.IMultiRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveStructure;
@@ -45,14 +46,7 @@ import ambit2.db.search.QueryExecutor;
 
 public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureRecord, IStructureRecord> {
 	protected IQueryRetrieval<IStructureRecord> query;
-	protected boolean seekPreferredValue = false;
-	
-	public boolean isSeekPreferredValue() {
-		return seekPreferredValue;
-	}
-	public void setSeekPreferredValue(boolean seekPreferredValue) {
-		this.seekPreferredValue = seekPreferredValue;
-	}
+
 	public ProcessorStructureRetrieval() {
 		this(new RetrieveStructure());
 	}
@@ -66,8 +60,6 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
 
 	public void setQuery(IQueryRetrieval<IStructureRecord> query) {
 		this.query = query;
-		//yet another hack
-		seekPreferredValue = query instanceof RetrieveProfileValues;
 	}
 
 	/**
@@ -86,7 +78,10 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
         ResultSet rs = null;
         try { 
         	rs = exec.process(query);
-        	return seekPreferredValue?getPreferredValue(target, rs):selectResult(target, rs);
+        	if (query instanceof IMultiRetrieval) 
+        		return (IStructureRecord)((IMultiRetrieval) query).getMultiObject(rs);
+        	else	
+        		return selectResult(target, rs);
         } catch (Exception x) {
         	throw new AmbitException(query.getSQL(),x);
         } finally {
@@ -106,25 +101,7 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
     	}
     	return result;
 	}
-	/**
-	 * a hack to retrieve preferred value ...
-	 * @param target
-	 * @param rs
-	 * @return
-	 * @throws Exception
-	 */
-	protected IStructureRecord getPreferredValue(IStructureRecord target,ResultSet rs) throws Exception {
-		int idstructure = target.getIdstructure();
-    	IStructureRecord result = target;
-    	result.setIdstructure(-1);
-    	while (rs.next()) {
-    		result = query.getObject(rs);
-    		if (result.getIdstructure()==idstructure) break;
-    		result.setIdstructure(-1);
-    	}
-    	result.setIdstructure(idstructure);
-    	return result;
-	}	
+
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
 		
