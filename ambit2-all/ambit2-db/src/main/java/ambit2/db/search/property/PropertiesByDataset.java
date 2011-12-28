@@ -67,8 +67,8 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 	public static String wherepropertyName  = " property.name = ?";
 	public static String join  = 
 		"\njoin template_def using(idproperty) join src_dataset using(idtemplate) where %s ";
-	public static String base_sql_type_confidence = 
-		"select properties.idproperty,properties.name,units,title,url,properties.idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference)\n"+
+	protected static String base_sql_type_confidence = 
+		"select properties.idproperty,properties.name,units,title,url,properties.idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object,`order` from properties join catalog_references using(idreference)\n"+
 		"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") a using(idproperty)";
 	
 	/**
@@ -151,7 +151,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 			p.setUnits(rs.getString(3));
 			p.setLabel(rs.getString(7));
 			p.getReference().setId(rs.getInt(6));
-
+			try { p.setOrder(rs.getInt("order"));} catch (Exception x) {}
 			try {
 				String type = rs.getString(8);
 				
