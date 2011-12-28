@@ -162,7 +162,10 @@ class MyExporter extends AbstractDBProcessor<IQueryObject<IStructureRecord>, Fil
 		// TODO Auto-generated method stub
 		
 	}
-	
+	@Override
+	public String getFileExtension() {
+		return null;
+	}
 }
 
 class DBExporter extends DBProcessorPerformer<MyExporter,IQueryObject<IStructureRecord>,FileOutputState> {
@@ -182,5 +185,7 @@ class DBExporter extends DBProcessorPerformer<MyExporter,IQueryObject<IStructure
 		exporter.setOutput((FileOutputState)context.get(output_tag));
 		return super.execute();
 	}
+	
+	
 	
 }

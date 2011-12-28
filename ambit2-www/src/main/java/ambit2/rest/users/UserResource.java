@@ -43,14 +43,15 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 	@Override
 	public IProcessor<QueryUser, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
+		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			
-			return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
+			return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN,filenamePrefix);
 
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				QueryURIReporter reporter = getURUReporter(getRequest());
 				reporter.setDelimiter("\n");
-				return new StringConvertor(	reporter,MediaType.TEXT_URI_LIST);
+				return new StringConvertor(	reporter,MediaType.TEXT_URI_LIST,filenamePrefix);
 			} else 
 				return new OutputWriterConvertor(
 						new UsersHTMLReporter(getRequest(),queryObject.getValue()==null,getDocumentation()),

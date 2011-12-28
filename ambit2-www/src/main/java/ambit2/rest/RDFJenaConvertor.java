@@ -28,6 +28,7 @@ import com.hp.hpl.jena.rdf.model.RDFWriter;
  * @param <R>
  */
 public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractObjectConvertor<T,Q,OntModel>  {
+	
 	protected boolean xml_abbreviation = true;
 	public boolean isXml_abbreviation() {
 		return xml_abbreviation;
@@ -47,7 +48,11 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 		if (this.reporter != null) ((QueryReporter<T,Q,OntModel>)this.reporter).setMaxRecords(5000);
 	}
 	public RDFJenaConvertor(QueryReporter<T,Q,OntModel> reporter,MediaType media) {
-		super(reporter,media);
+		this(reporter,media,null);
+	}
+
+	public RDFJenaConvertor(QueryReporter<T,Q,OntModel> reporter,MediaType media,String fileNamePrefix) {
+		super(reporter,media,fileNamePrefix);
 	}
 
 	@Override
@@ -74,7 +79,7 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	   fasterWriter.setProperty("tab","0");
 
 		 */
-		 return new OutputRepresentation(mediaType) {
+		OutputRepresentation rep = new OutputRepresentation(mediaType) {
 	            @Override
 	            public void write(OutputStream output) throws IOException {
 	            	try {
@@ -121,7 +126,9 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	            		try {if (jenaModel !=null) jenaModel.close(); } catch (Exception x) { x.printStackTrace();}
 	            	}
 	            }
-	        };				
+	        };	
+	        setDisposition(rep);
+	        return rep;
 
 	}
 	/**

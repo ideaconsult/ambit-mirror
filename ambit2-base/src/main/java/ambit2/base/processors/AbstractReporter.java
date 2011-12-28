@@ -38,6 +38,10 @@ public abstract class AbstractReporter<Content, Output> extends DefaultAmbitProc
 		this.timeout = timeout;
 		
 	}
+	@Override
+	public String getFileExtension() {
+		return null;
+	}
 	
 
 

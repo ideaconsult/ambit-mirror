@@ -21,8 +21,11 @@ public abstract  class AbstractObjectConvertor<T,Q extends IQueryRetrieval<T>,Ou
 		this(reporter,MediaType.TEXT_PLAIN);
 		if (this.reporter != null) ((QueryReporter<T,Q,Output>)this.reporter).setMaxRecords(5000);
 	}
+	public AbstractObjectConvertor(QueryReporter<T,Q,Output> reporter,MediaType media,String fileNamePrefix) {
+		super(reporter,media,fileNamePrefix);
+	}
 	public AbstractObjectConvertor(QueryReporter<T,Q,Output> reporter,MediaType media) {
-		super(reporter,media);
+		this(reporter,media,null);
 	}
 	/**
 	 * 

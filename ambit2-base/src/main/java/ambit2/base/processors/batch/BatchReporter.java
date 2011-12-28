@@ -99,4 +99,8 @@ public abstract class BatchReporter<Item,ItemList,Output>  extends DefaultAmbitP
 	public void setLicenseURI(String uri) {
 		this.licenseURI = uri;
 	}
+	@Override
+	public String getFileExtension() {
+		return null;
+	}
 }

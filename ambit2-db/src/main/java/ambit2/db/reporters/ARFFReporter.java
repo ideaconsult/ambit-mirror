@@ -116,7 +116,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 				writer.write(String.format("@relation %s\n\n", getRelationName()));
 			else
 				writer.write(String.format("@relation %s_License:_%s\n\n", 
-						getRelationName(), 
+						getRelationName().trim().replace(" ", "_").replace("?", "_").replace("&", "_"), 
 						getLicenseURI().trim().replace(" ", "_")));
 		} catch (IOException x) {
 			x.printStackTrace();
@@ -163,5 +163,8 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		
 	}
 
-
+	@Override
+	public String getFileExtension() {
+		return "arff";
+	}
 }

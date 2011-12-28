@@ -25,13 +25,17 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 	 */
 	private static final long serialVersionUID = 2781666113532835085L;
 
+	
+	public RDFStaXConvertor(QueryReporter<T, Q, XMLStreamWriter> reporter,String fileNamePrefix) {
+		super(reporter,MediaType.APPLICATION_RDF_XML,fileNamePrefix);
+	}
 	public RDFStaXConvertor(QueryReporter<T, Q, XMLStreamWriter> reporter) {
-		super(reporter,MediaType.APPLICATION_RDF_XML);
+		this(reporter,null);
 	}
 	
 	@Override
 	public Representation process(final Q query) throws AmbitException {
-		 return new OutputRepresentation(MediaType.APPLICATION_RDF_XML) {
+		Representation rep = new OutputRepresentation(MediaType.APPLICATION_RDF_XML) {
 			 @Override
 			public void write(OutputStream out) throws IOException {
 				//BufferedWriter buf = new BufferedWriter(new OutputStreamWriter(out));
@@ -55,6 +59,8 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 				
 			}
 		 };
+		 setDisposition(rep);
+		 return rep;
 	}
 
 

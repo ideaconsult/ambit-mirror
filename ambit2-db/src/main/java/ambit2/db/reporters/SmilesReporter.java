@@ -38,6 +38,10 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 			public String getTag() {
 				return AmbitCONSTANTS.SMILES;
 			}
+			@Override
+			public String getFileExtension() {
+				return "smi";
+			}
 		},
 		InChI {
 			@Override
@@ -50,8 +54,13 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 				p.setLabel(getTag());
 				return p;
 			}
+			@Override
+			public String getFileExtension() {
+				return "inchi";
+			}
 		};
 		public abstract String getTag();
+		public abstract String getFileExtension();
 		public Property getProperty() {
 			return Property.getInstance(getTag(),getTag());
 		}
@@ -183,4 +192,8 @@ public class SmilesReporter<Q extends IQueryRetrieval<IStructureRecord>> extends
 	}
 	public void footer(Writer output, Q query) {};
 	public void header(Writer output, Q query) {};
+	@Override
+	public String getFileExtension() {
+		return mode.getFileExtension();
+	}
 }

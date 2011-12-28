@@ -82,7 +82,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 	@Override
 	public IProcessor<Iterator<T>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-
+		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
 					createHTMLReporter(),MediaType.TEXT_HTML);
@@ -95,7 +95,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 					output.write('\n');
 					} catch (Exception x) {}
 				}
-			},MediaType.TEXT_URI_LIST);
+			},MediaType.TEXT_URI_LIST,filenamePrefix);
 			
 		} else //html 	
 			return new StringConvertor(createHTMLReporter(),MediaType.TEXT_HTML);

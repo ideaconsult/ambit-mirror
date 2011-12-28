@@ -36,6 +36,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML);			
 	} else 
 	*/
+	String filenamePrefix = getRequest().getResourceRef().getPath();
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),false,getDocumentation()),MediaType.TEXT_HTML);
@@ -49,7 +50,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 				} catch (Exception x) {}
 				return null;
 			}
-		},MediaType.TEXT_URI_LIST);
+		},MediaType.TEXT_URI_LIST,filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
@@ -61,7 +62,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 		return new RDFJenaConvertor<ISourceDataset, IQueryRetrieval<ISourceDataset>>(
 				new MetadataRDFReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),
 						getDocumentation(),
-						variant.getMediaType()),variant.getMediaType());			
+						variant.getMediaType()),variant.getMediaType(),filenamePrefix);			
 
 		
 	} else //html 	

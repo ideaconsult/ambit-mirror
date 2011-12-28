@@ -25,9 +25,12 @@ public class YAMLConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryReprese
 	public YAMLConvertor(QueryReporter<T, Q, YamlEncoder> reporter,MediaType mediaType) {
 		super(reporter,mediaType);
 	}
+	public YAMLConvertor(QueryReporter<T, Q, YamlEncoder> reporter,MediaType mediaType,String fileNamePrefix) {
+		super(reporter,mediaType,fileNamePrefix);
+	}
 
 	public Representation process(final Q query) throws ambit2.base.exceptions.AmbitException {
-		 return new OutputRepresentation(mediaType) {
+		Representation rep = new OutputRepresentation(mediaType) {
 	            @Override
 	            public void write(OutputStream stream) throws IOException {
             		YamlEncoder writer = null;          	
@@ -54,6 +57,8 @@ public class YAMLConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryReprese
 	            	}
 	            }
 	        };		
+			 setDisposition(rep);
+			 return rep;
 	};	
 
 

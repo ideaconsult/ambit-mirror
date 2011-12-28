@@ -98,7 +98,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
-		
+	String filenamePrefix = getRequest().getResourceRef().getPath();		
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
 				new ModelHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
@@ -125,7 +125,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			) {
 		return new RDFJenaConvertor<ModelQueryResults,IQueryRetrieval<ModelQueryResults>>(
 				new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),variant.getMediaType(),getDocumentation())
-				,variant.getMediaType());	
+				,variant.getMediaType(),filenamePrefix);	
 	} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG) ||
 			variant.getMediaType().equals(MediaType.IMAGE_BMP) ||
 			variant.getMediaType().equals(MediaType.IMAGE_JPEG) ||

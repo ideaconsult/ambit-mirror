@@ -34,9 +34,11 @@ public class PDFConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Do
 	public PDFConvertor(R reporter) {
 		super(reporter);
 	}
-
+	public PDFConvertor(R reporter,String fileNamePrefix) {
+		super(reporter,MediaType.APPLICATION_PDF,fileNamePrefix);
+	}
 	public Representation process(final Q query) throws ambit2.base.exceptions.AmbitException {
-		 return new OutputRepresentation(MediaType.APPLICATION_PDF) {
+		Representation rep = new OutputRepresentation(MediaType.APPLICATION_PDF) {
 	            @Override
 	            public void write(OutputStream stream) throws IOException {
 	            	Document document = null;   
@@ -65,6 +67,8 @@ public class PDFConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Do
 	            	}
 	            }
 	        };		
+	        setDisposition(rep);
+	        return rep;
 	};	
 
 
