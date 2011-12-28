@@ -4,7 +4,7 @@ div.row span.left {
   font-weight: bold;
   background-color: #516373;
   color: #99CC00;
-  FONT-FAMILY: Verdana, Arial;
+  FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 50%;
   }
 
@@ -14,7 +14,7 @@ div.row span.right {
   font-weight: bold;
   background-color: #516373;
   color: #729203;
-  FONT-FAMILY: Verdana, Arial;
+  FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 50%;
   }
   
@@ -24,7 +24,7 @@ div.rowwhite span.left {
   font-weight: bold;
   background-color: #FFFFFF;
   color: #99CC00;
-  FONT-FAMILY: Verdana, Arial;
+  FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 10%;
   }
 
@@ -34,7 +34,7 @@ div.rowwhite span.center {
   font-weight: bold;
   background-color: #FFFFFF;
   color: #729203;
-  FONT-FAMILY: Verdana, Arial;
+  FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 90%;
   }  
   
@@ -44,7 +44,7 @@ div.rowwhite span.right {
   font-weight: bold;
   background-color: #FFFFFF;
   color: #729203;
-  FONT-FAMILY: Verdana, Arial;
+  FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 20%;
   }  
   
@@ -56,7 +56,7 @@ div.footer span.right {
   FONT-SIZE: 8pt;
   background-color: #FFFFFF;
   color: #516373;
-  FONT-FAMILY: Verdana, Arial;
+  FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 100%;
   }
   
@@ -69,7 +69,7 @@ div.actions span.center {
   FONT-SIZE: 10pt;
   background-color: #FFFFFF;
   color: #516373;
-  FONT-FAMILY: Verdana, Arial;
+  FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 100%;
   font-weight: bold;  
   }
@@ -86,7 +86,7 @@ table
     MARGIN-TOP: 7px;
     MARGIN-LEFT: 7px;
     MARGIN-RIGHT: 7px;
-    FONT-FAMILY: Verdana, Arial;
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial;
     TEXT-ALIGN: justify
 }
 
@@ -97,7 +97,7 @@ p
     MARGIN-TOP: 7px;
     MARGIN-LEFT: 7px;
     MARGIN-RIGHT: 7px;
-    FONT-FAMILY: Verdana, Arial;
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial;
     TEXT-ALIGN: justify
     
 }
@@ -108,7 +108,7 @@ ul
     MARGIN-TOP: 7px;
     MARGIN-LEFT: 7px;
     MARGIN-RIGHT: 7px;
-    FONT-FAMILY: Verdana, Arial;
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial;
     TEXT-ALIGN: justify
     
 }
@@ -119,7 +119,7 @@ br
     MARGIN-TOP: 7px;
     MARGIN-LEFT: 7px;
     MARGIN-RIGHT: 7px;
-    FONT-FAMILY: Verdana, Arial;
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial;
     TEXT-ALIGN: justify
     
 }
@@ -130,7 +130,7 @@ h2
     COLOR: #516373;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
-    FONT-FAMILY: Verdana, Arial
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial
 }
 
 h3
@@ -139,7 +139,7 @@ h3
     COLOR: #729203;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
-    FONT-FAMILY: Verdana, Arial
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial
 }
 
 h4
@@ -148,7 +148,7 @@ h4
     COLOR: #729203;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
-    FONT-FAMILY: Verdana, Arial
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial
 }
 
 A:link
@@ -157,7 +157,7 @@ A:link
     COLOR: #516373;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
-    FONT-FAMILY: Verdana, Arial
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial
 }
 A:visited
 {
@@ -165,7 +165,7 @@ A:visited
     COLOR: #516373;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
-    FONT-FAMILY: Verdana, Arial
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial
 }
 A:active
 {
@@ -173,7 +173,7 @@ A:active
     COLOR: #516373;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
-    FONT-FAMILY: Verdana, Arial
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial
 }
 A:hover
 {
@@ -181,7 +181,7 @@ A:hover
     COLOR: #99CC00;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
-    FONT-FAMILY: Verdana, Arial
+    FONT-FAMILY: Trebuchet MS, Verdana, Arial
 }
 #div-1a {
  float:left;
@@ -194,7 +194,7 @@ A:hover
  top:0px;
  left:10px;
  width:100%;
- FONT-FAMILY: Verdana, Arial;	
+ FONT-FAMILY: Trebuchet MS, Verdana, Arial;	
 }
 
 #div-1b1 {
@@ -202,7 +202,7 @@ A:hover
 	 width:30px;
 	 height: 350px;
 	 FONT-SIZE: 10pt;
-	FONT-FAMILY: Verdana, Arial;	
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial;	
 }
 
 #div-1d {
@@ -211,7 +211,7 @@ A:hover
 	padding: 10px;
   	color: #516373;
   	FONT-SIZE: 10pt;
-	FONT-FAMILY: Verdana, Arial;	
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial;	
 }
 
 CAPTION.results
@@ -225,7 +225,7 @@ CAPTION.results
 
 TABLE.results
   { 
-     font-family:verdana;
+     font-family: Trebuchet MS, Verdana, Arial;
      font-size:10pt;
      background-color:#D9D9B2;
      width:90%;
@@ -238,7 +238,7 @@ TABLE.results
 
 TH.results
   {
-  	 font-family:verdana;
+  	 font-family: Trebuchet MS, Verdana, Arial;
      font-size:10pt;
      background-color:#9FD500;
      color:#516373;
@@ -252,7 +252,7 @@ TH.results
   
 TH.results_odd
   {
-  	 font-family:verdana;
+  	 font-family: Trebuchet MS, Verdana, Arial;
      font-size:10pt;
      background-color:#93C400;
      color:#516373;
