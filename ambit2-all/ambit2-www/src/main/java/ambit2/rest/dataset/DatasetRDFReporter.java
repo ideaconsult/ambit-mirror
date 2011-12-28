@@ -309,4 +309,11 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		} else	
 			return super.createBatch(query);
 	}
+	
+	@Override
+	public String getFileExtension() {
+		if (MediaType.APPLICATION_RDF_XML.equals(mediaType)) return "rdf";
+		else if (MediaType.TEXT_RDF_N3.equals(mediaType)) return "n3";
+		return "rdf";
+	}
 }

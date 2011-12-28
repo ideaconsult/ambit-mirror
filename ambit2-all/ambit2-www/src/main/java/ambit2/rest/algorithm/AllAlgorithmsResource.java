@@ -127,7 +127,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	@Override
 	public IProcessor<Iterator<Algorithm<String>>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-
+		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new StringConvertor(
 					new AlgorithmHTMLReporter(getRequest(),
@@ -150,7 +150,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				) {
 			return new StringConvertor(
 					new AlgorithmRDFReporter(getRequest(),variant.getMediaType(),getDocumentation())
-					,variant.getMediaType());					
+					,variant.getMediaType(),filenamePrefix);					
 		} else //html 	
 			return new StringConvertor(
 					new CatalogHTMLReporter(getRequest(),getDocumentation()),MediaType.TEXT_HTML);

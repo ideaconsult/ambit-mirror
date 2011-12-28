@@ -56,7 +56,7 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 						,variant.getMediaType());					
 			} else 
 			*/
-		
+			String filenamePrefix = getRequest().getResourceRef().getPath();
 			if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 				return new OutputWriterConvertor(
 						new FacetCSVReporter(getRequest()),
@@ -64,7 +64,7 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 					return new OutputWriterConvertor(
 							new FacetURIReporter(getRequest()),
-							MediaType.TEXT_URI_LIST);				
+							MediaType.TEXT_URI_LIST,filenamePrefix);				
 			} else 
 				return new OutputWriterConvertor(
 						getHTMLReporter(getRequest()),

@@ -118,9 +118,9 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
-
+	String filenamePrefix = getRequest().getResourceRef().getPath();
 	if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
-			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML);			
+			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML,filenamePrefix);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
@@ -134,7 +134,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 				} catch (Exception x) {}
 				return null;
 			}
-		},MediaType.TEXT_URI_LIST);
+		},MediaType.TEXT_URI_LIST,filenamePrefix);
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
@@ -145,7 +145,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 			) {
 		return new RDFJenaConvertor<ISourceDataset, IQueryRetrieval<ISourceDataset>>(
 				new MetadataRDFReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),
-						getDocumentation(),variant.getMediaType()),variant.getMediaType());			
+						getDocumentation(),variant.getMediaType()),variant.getMediaType(),filenamePrefix);			
 
 		
 	} else //html 	

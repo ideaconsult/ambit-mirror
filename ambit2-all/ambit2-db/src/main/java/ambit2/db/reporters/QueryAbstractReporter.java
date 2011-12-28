@@ -134,4 +134,9 @@ public abstract class QueryAbstractReporter<T,Q extends IQueryRetrieval<T>,Outpu
 	protected void wrapup() throws AmbitException {
 		
 	}
+	@Override
+	public String getFileExtension() {
+		return null;
+	}
+	
 }

@@ -72,6 +72,7 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 	@Override
 	public IProcessor<IQueryRetrieval<Property>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
+		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 					variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
@@ -81,13 +82,13 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 				return new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
 						new TemplateRDFReporter<IQueryRetrieval<Property>>(
 								getRequest(),getDocumentation(),variant.getMediaType(),isRecursive())
-						,variant.getMediaType());		
+						,variant.getMediaType(),filenamePrefix);		
 				
 				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				PropertyURIReporter r = new PropertyURIReporter(getRequest(),null);
 				r.setDelimiter("\n");
-				return new StringConvertor(	r,MediaType.TEXT_URI_LIST);
+				return new StringConvertor(	r,MediaType.TEXT_URI_LIST,filenamePrefix);
 				
 		} else 
 			return new OutputWriterConvertor(

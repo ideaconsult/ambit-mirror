@@ -85,16 +85,17 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
+		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 	
-		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
+		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN,filenamePrefix);
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputWriterConvertor(
 					new PropertyValueHTMLReporter(getRequest(),true,getDocumentation()),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST);
-		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_URI_LIST);
+			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST,filenamePrefix);
+		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_URI_LIST,filenamePrefix);
 					
 	}		
 	@Override

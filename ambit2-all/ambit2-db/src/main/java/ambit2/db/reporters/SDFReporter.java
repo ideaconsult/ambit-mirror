@@ -166,4 +166,8 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public void footer(Writer output, Q query) {};
 	public void header(Writer output, Q query) {};
 
+	@Override
+	public String getFileExtension() {
+		return MOLONLY?"mol":"sdf";
+	}
 }

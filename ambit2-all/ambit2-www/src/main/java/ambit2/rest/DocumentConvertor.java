@@ -31,9 +31,11 @@ import ambit2.db.reporters.QueryReporter;
 public class DocumentConvertor<T,Q extends IQueryRetrieval<T>>  
 										extends AbstractObjectConvertor<T,Q,Document>  {
 
+	public DocumentConvertor(QueryReporter<T,Q,Document> reporter,String fileNamePrefix) {
+		super(reporter,MediaType.TEXT_XML,fileNamePrefix);
+	}	
 	public DocumentConvertor(QueryReporter<T,Q,Document> reporter) {
-		super(reporter,MediaType.TEXT_XML);
-		if (this.reporter != null) ((QueryReporter<T,Q,Document>)this.reporter).setMaxRecords(5000);
+		this(reporter,null);
 	}
 	/**
 	 * 

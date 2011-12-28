@@ -1,5 +1,6 @@
 package ambit2.rest.propertyvalue;
 
+import java.io.File;
 import java.io.Serializable;
 
 import org.restlet.Context;
@@ -61,9 +62,10 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
+		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
-	
-		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
+
+		return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN,filenamePrefix);
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputWriterConvertor(
@@ -78,8 +80,8 @@ public class PropertyValueResource<T extends Serializable> extends QueryResource
 				) {
 			return new RDFJenaConvertor<T, IQueryRetrieval<T>>(
 					new PropertyValueRDFReporter<T>(getRequest(),variant.getMediaType(),getDocumentation())
-					,variant.getMediaType());		
-		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN);
+					,variant.getMediaType(),filenamePrefix);		
+		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_PLAIN,filenamePrefix);
 					
 	}		
 	@Override

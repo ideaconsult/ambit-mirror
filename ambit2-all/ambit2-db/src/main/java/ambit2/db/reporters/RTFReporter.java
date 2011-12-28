@@ -45,4 +45,8 @@ public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	}
 	public void footer(Document output, Q query) {};
 	public void header(Document output, Q query) {};
+	@Override
+	public String getFileExtension() {
+		return "rtf";
+	}
 }

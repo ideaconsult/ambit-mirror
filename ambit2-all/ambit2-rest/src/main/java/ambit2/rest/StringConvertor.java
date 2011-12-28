@@ -28,9 +28,12 @@ public class StringConvertor<T,Q, R extends Reporter<Q,Writer> >  extends Repres
 	 */
 	private static final long serialVersionUID = 6126693410309179856L;
 	
-
+	
 	public StringConvertor(R reporter,MediaType mediaType) {
-		super(reporter,mediaType);
+		this(reporter,mediaType,null);
+	}
+	public StringConvertor(R reporter,MediaType mediaType,String fileNamePrefix) {
+		super(reporter,mediaType,fileNamePrefix);
 	}
 	@Override
 	public Representation process(Q query) throws AmbitException {
@@ -38,8 +41,11 @@ public class StringConvertor<T,Q, R extends Reporter<Q,Writer> >  extends Repres
 			reporter.setOutput(new StringWriter());
 			Writer writer = reporter.process(query);
 			writer.flush();
-			return new StringRepresentation(writer.toString(),getMediaType(),
+			Representation rep = new StringRepresentation(writer.toString(),getMediaType(),
 					Language.ENGLISH,CharacterSet.UTF_8);
+			setDisposition(rep);
+	
+	        return rep;
 		} catch (IOException x) {
 			throw new AmbitException(x);
 		} finally {

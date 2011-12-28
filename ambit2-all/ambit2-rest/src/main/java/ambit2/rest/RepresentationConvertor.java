@@ -17,7 +17,7 @@ import ambit2.base.processors.Reporter;
  */
 public abstract class RepresentationConvertor<Item,Content,Output,R extends Reporter<Content,Output>> 
 	extends AbstractRepresentationConvertor<Item,Content,Output,Representation,MediaType,R> {
-
+	
 	/**
 	 * 
 	 */
@@ -27,7 +27,10 @@ public abstract class RepresentationConvertor<Item,Content,Output,R extends Repo
 		super(reporter);
 	}
 	public RepresentationConvertor(R reporter, MediaType media) {
-		super(reporter,media);
+		this(reporter,media,null);
+	}	
+	public RepresentationConvertor(R reporter, MediaType media,String fileNamePrefix) {
+		super(reporter,media,fileNamePrefix);
 	}
 	
 	public String getLicenseURI() {
@@ -38,4 +41,12 @@ public abstract class RepresentationConvertor<Item,Content,Output,R extends Repo
 		if (getReporter()!=null) getReporter().setLicenseURI(uri);
 	}
 	
+	protected void setDisposition(Representation rep) {
+        if (getReporter().getFileExtension()!=null) {
+        	rep.setDownloadable(true);
+        	rep.setDownloadName(String.format("%s.%s",
+        						fileNamePrefix==null?"download":fileNamePrefix,
+        						getReporter().getFileExtension()));
+        }
+	}
 }

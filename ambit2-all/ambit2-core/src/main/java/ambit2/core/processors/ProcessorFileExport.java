@@ -86,7 +86,10 @@ public abstract class ProcessorFileExport<Content> extends DefaultAmbitProcessor
         	document.close();
         }
 	}	
-	
+	@Override
+	public String getFileExtension() {
+		return null;
+	}
 	protected abstract void write (Document document, Content content)throws DocumentException ;
 	protected abstract void  writePDF(Document document, OutputStream out) throws DocumentException ;
 	protected abstract void  writeSDF(Content content, OutputStream out) throws AmbitException ;

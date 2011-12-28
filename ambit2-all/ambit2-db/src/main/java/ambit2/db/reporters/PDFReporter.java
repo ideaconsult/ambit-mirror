@@ -236,5 +236,8 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		// TODO Auto-generated method stub
 		
 	}
-
+	@Override
+	public String getFileExtension() {
+		return "pdf";
+	}
 }

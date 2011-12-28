@@ -43,9 +43,10 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 	@Override
 	public RepresentationConvertor createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
+		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new StringConvertor(new BookmarkCSVReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation())
-					,MediaType.TEXT_CSV);
+					,MediaType.TEXT_CSV,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 				return new StringConvertor(	new BookmarkURIReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation()) {
 					@Override
@@ -56,7 +57,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 						} catch (Exception x) {}
 						return null;
 					}
-				},MediaType.TEXT_URI_LIST);
+				},MediaType.TEXT_URI_LIST,filenamePrefix);
 				
 			} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 					variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
@@ -67,7 +68,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 		
 				return new RDFJenaConvertor<Bookmark, IQueryRetrieval<Bookmark>>(
 						new BookmarkRDFReporter<IQueryRetrieval<Bookmark>>(getRequest(),getDocumentation(),variant.getMediaType())
-						,variant.getMediaType());					
+						,variant.getMediaType(),filenamePrefix);					
 								
 			} else 
 				return new OutputWriterConvertor(

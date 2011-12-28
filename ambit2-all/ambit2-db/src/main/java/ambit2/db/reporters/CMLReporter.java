@@ -118,5 +118,8 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 
 	};
-
+	@Override
+	public String getFileExtension() {
+		return "cml";
+	}
 }
