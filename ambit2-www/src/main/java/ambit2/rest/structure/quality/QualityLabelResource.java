@@ -7,6 +7,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -22,6 +23,7 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.qlabel.CreateStructureQLabel;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
+import ambit2.rest.QueryURIReporter;
 import ambit2.rest.query.QueryResource;
 
 public class QualityLabelResource extends QueryResource<QueryQLabel, QLabel> {
@@ -80,6 +82,12 @@ public class QualityLabelResource extends QueryResource<QueryQLabel, QLabel> {
 	protected Representation post(Representation entity)
 			throws ResourceException {
 		createNewObject(entity);
-		return getResponse().getEntity();
+		return new StringRepresentation("");
+	}
+	@Override
+	protected QueryURIReporter<QLabel, QueryQLabel> getURUReporter(
+			Request baseReference) throws ResourceException {
+
+		return null;
 	}
 }
