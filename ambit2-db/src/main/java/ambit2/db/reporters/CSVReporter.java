@@ -238,7 +238,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 	@Override
 	public String getFileExtension() {
-		return "csv";
+		return ",".equals(separator)?"csv":"txt";
 	}
 
 }
