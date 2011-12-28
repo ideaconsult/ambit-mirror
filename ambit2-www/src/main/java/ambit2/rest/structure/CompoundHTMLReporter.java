@@ -504,12 +504,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						} catch (Exception x) { x.printStackTrace();} 
 						
 						if (p.getLabel().equals(Property.opentox_Name) || p.getLabel().equals(Property.opentox_IupacName)) {
-							finder = String.format("&nbsp;<a href='%s/algorithm/finder?feature_uris[]=%s&search=NAME2STRUCTURE&mode=emptyadd&dataset_uri=%s' title='Retrieve structure by name'>[OPSIN]</a>",
+							finder = String.format("&nbsp;<a href='%s/algorithm/finder?feature_uris[]=%s&search=NAME2STRUCTURE&mode=emptyadd&dataset_uri=%s' title='Retrieve structure by name'>[Find]</a>",
 											baseReference,
 											feature,
 											dataset);
 						} else if (p.getLabel().equals(Property.opentox_CAS)) {
-							finder = String.format("&nbsp;<a href='%s/algorithm/finder?feature_uris[]=%s&search=CIR&mode=emptyadd&dataset_uri=%s' title='Retrieve structure by CAS'>[CIR]</a>",
+							finder = String.format("&nbsp;<a href='%s/algorithm/finder?feature_uris[]=%s&search=CIR&mode=emptyadd&dataset_uri=%s' title='Retrieve structure by CAS'>[Find]</a>",
 									baseReference,
 									feature,
 									dataset);
@@ -768,6 +768,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		Collections.sort(h,new Comparator<Property>() {
 			public int compare(Property o1, Property o2) {
 				
+				return o1.getOrder()-o2.getOrder();
+				/*
 				String n1[] = o1.getName().replace(".",":").split(":");
 				String n2[] = o2.getName().replace(".",":").split(":");
 				
@@ -779,6 +781,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					return r>0?(i+1):-(i+1);
 				}
 				return r>0?(c+1):-(c+1);
+				*/
 				
 			}
 		});	

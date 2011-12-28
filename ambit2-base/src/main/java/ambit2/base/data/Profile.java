@@ -80,7 +80,8 @@ public class Profile<P extends Property> /*implements Collection<P> */ implement
 		ps.firePropertyChange(profile_property_change,null,this);
 	}
 	public boolean add(P property) {
-		property.setOrder(size()+1);
+		if (property.getOrder()<=0)
+			property.setOrder(size()+1000);
 		ps.firePropertyChange(profile_property_added,null,property);
 		if(container.contains(property))  return false;
 		container.add(property);
