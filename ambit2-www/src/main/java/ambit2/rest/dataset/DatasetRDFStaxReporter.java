@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.restlet.Request;
+import org.restlet.data.MediaType;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Template;
@@ -173,4 +174,8 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 		} else	
 			return super.createBatch(query);
 	};
+	@Override
+	public String getFileExtension() {
+		return "rdf";
+	}
 }
