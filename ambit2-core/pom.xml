@@ -84,6 +84,11 @@
         	<version>${cdk.version}</version>
         	<scope>compile</scope>
         </dependency>
+      	<dependency>
+    		<groupId>org.openscience.cdk</groupId>
+    		<artifactId>cdk-ionpot</artifactId>
+    		<version>${cdk.version}</version>
+    	</dependency>
         <dependency>
         	<groupId>org.openscience.cdk</groupId>
         	<artifactId>cdk-qsarmolecular</artifactId>
