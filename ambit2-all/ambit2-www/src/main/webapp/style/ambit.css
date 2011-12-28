@@ -2,7 +2,7 @@ div.row span.left {
   float: left;
   text-align: left;
   font-weight: bold;
-  background-color: #516373;
+  background-color: #344049;
   color: #99CC00;
   FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 50%;
@@ -12,7 +12,7 @@ div.row span.right {
   float: right;
   text-align: right;
   font-weight: bold;
-  background-color: #516373;
+  background-color: #344049;
   color: #729203;
   FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 50%;
@@ -55,7 +55,7 @@ div.footer span.right {
   text-align: right;
   FONT-SIZE: 8pt;
   background-color: #FFFFFF;
-  color: #516373;
+  color: #344049;
   FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 100%;
   }
@@ -68,7 +68,7 @@ div.actions span.center {
   text-align: center;
   FONT-SIZE: 10pt;
   background-color: #FFFFFF;
-  color: #516373;
+  color: #344049;
   FONT-FAMILY: Trebuchet MS, Verdana, Arial;
   width: 100%;
   font-weight: bold;  
@@ -81,7 +81,7 @@ body {
 
 table
 {
-	COLOR: #516373;
+	COLOR: #344049;
     FONT-SIZE: 10pt;
     MARGIN-TOP: 7px;
     MARGIN-LEFT: 7px;
@@ -92,7 +92,7 @@ table
 
 p
 {
-    COLOR: #516373;
+    COLOR: #344049;
     FONT-SIZE: 10pt;
     MARGIN-TOP: 7px;
     MARGIN-LEFT: 7px;
@@ -103,7 +103,7 @@ p
 }
 ul
 {
-    COLOR: #516373;
+    COLOR: #344049;
     FONT-SIZE: 10pt;
     MARGIN-TOP: 7px;
     MARGIN-LEFT: 7px;
@@ -114,7 +114,7 @@ ul
 }
 br
 {
-    COLOR: #516373;
+    COLOR: #344049;
     FONT-SIZE: 10pt;
     MARGIN-TOP: 7px;
     MARGIN-LEFT: 7px;
@@ -127,7 +127,7 @@ br
 h2
 {
     FONT-SIZE: 14pt;
-    COLOR: #516373;
+    COLOR: #344049;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Trebuchet MS, Verdana, Arial
@@ -154,7 +154,7 @@ h4
 A:link
 {
     FONT-SIZE: 10pt;
-    COLOR: #516373;
+    COLOR: #344049;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Trebuchet MS, Verdana, Arial
@@ -162,7 +162,7 @@ A:link
 A:visited
 {
     FONT-SIZE: 10pt;
-    COLOR: #516373;
+    COLOR: #344049;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Trebuchet MS, Verdana, Arial
@@ -170,7 +170,7 @@ A:visited
 A:active
 {
     FONT-SIZE: 10pt;
-    COLOR: #516373;
+    COLOR: #344049;
     FONT-WEIGHT: bolder;
     font-weight: bold;  
     FONT-FAMILY: Trebuchet MS, Verdana, Arial
@@ -209,7 +209,7 @@ A:hover
 	position:relative;
 	width:250px;
 	padding: 10px;
-  	color: #516373;
+  	color: #344049;
   	FONT-SIZE: 10pt;
 	FONT-FAMILY: Trebuchet MS, Verdana, Arial;	
 }
@@ -241,13 +241,12 @@ TH.results
   	 font-family: Trebuchet MS, Verdana, Arial;
      font-size:10pt;
      background-color:#9FD500;
-     color:#516373;
+     color:#344049;
      border-style:solid;
      border-width:1px;
      border-color:#FFFFFF;
      text-align:center;
      border-collapse:collapse;
-     border-width:0px;
   }
   
 TH.results_odd
@@ -255,13 +254,11 @@ TH.results_odd
   	 font-family: Trebuchet MS, Verdana, Arial;
      font-size:10pt;
      background-color:#93C400;
-     color:#516373;
-     border-style:solid;
-     border-width:1px;
+     color:#344049;
      border-color:#FFFFFF;
      text-align:center;
      border-collapse:collapse;
-     border-width:0px;
+     border: 1px solid #FFF;
   }  
 
 
@@ -277,7 +274,7 @@ TR.results_even
      vertical-align:middle;
      font-size:10pt;
     background-color:#FFFFFF;
-     color:#516373;
+     color:#344049;
      border-width:0px;
      border-color:#FFFFFF;
      text-align:left;     
@@ -289,7 +286,7 @@ TR.results_odd
      vertical-align:middle;
      font-size:10pt;
       background-color:#E8EBEE;
-     color:#516373;
+     color:#344049;
      border-width:0px;
      
      border-color:#E9ECDD;
@@ -302,7 +299,7 @@ TD.results_col
      vertical-align:middle;
      font-size:10pt;
     background-color:#F1F3F5;
-     color:#516373;
+     color:#344049;
      border-width:0px;
      border-color:#FFFFFF;
      text-align:left;   
@@ -312,7 +309,7 @@ TD.results
   {  
      font-size:10pt;
      background-color:#F9FFE6;
-     color:#516373;
+     color:#344049;
      border-width:0px;
      border-color:#F9FFE6;
      text-align:left;
