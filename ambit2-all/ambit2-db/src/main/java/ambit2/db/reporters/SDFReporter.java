@@ -1,6 +1,12 @@
 package ambit2.db.reporters;
 
+import java.io.StringWriter;
 import java.io.Writer;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.CMLWriter;
+import org.openscience.cdk.io.SDFWriter;
+import org.openscience.cdk.renderer.color.IAtomColorer;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Profile;
@@ -8,7 +14,9 @@ import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -25,6 +33,9 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	private static final long serialVersionUID = 2931123688036795689L;
 	protected Template template;
 	protected boolean MOLONLY = false;
+	//in case the native format is not SDF
+	protected MoleculeReader reader = null;
+	
 	protected Profile groupProperties;
 	public Profile getGroupProperties() {
 		return groupProperties;
@@ -88,11 +99,20 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		});	
 	}
 
-
+	private final static String emptySDF = 
+		"\n  EMPTY     1224111917\n"+
+		"\n"+  
+		"  0  0  0  0  0  0  0  0  0  0999 V2000\n"+
+		"M  END";
+	
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
-			String content = item.getContent();
+			String content = getSDFContent(item);
+			int pi = content.indexOf("$$$$");
+			content = pi>=0?content.substring(0,pi-1):content;
+			if ("".equals(content.trim())) content = emptySDF;
+
 			String licenseURI = getLicenseURI();
 			
 			if ((licenseURI!=null) && !ISourceDataset.license.Unknown.equals(licenseURI)) {
@@ -106,22 +126,39 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 			}
 			output.write(content);
-			if (isMOLONLY()) return null;
-			for (Property p : item.getProperties()) {
-				if (CMLUtilities.SMARTSProp.equals(p.getName())) continue;
-				Object value = item.getProperty(p);
-				if (value != null)
-					output.write(String.format("\n> <%s>\n%s\n",p.getName().toString(),
-							value.toString()));
-			}
-			if (item.getContent().indexOf("$$$$")<0)
-				output.write("\n$$$$\n");
+			if (!isMOLONLY())
+				for (Property p : item.getProperties()) {
+					if (CMLUtilities.SMARTSProp.equals(p.getName())) continue;
+					Object value = item.getProperty(p);
+					if (value != null)
+						output.write(String.format("\n> <%s>\n%s\n",p.getName().toString(),
+								value.toString()));
+				}
+			output.write("\n$$$$\n");
+			
 		} catch (Exception x) {
 			logger.error(x);
 		}
 		return null;
 	}
 
+	protected String getSDFContent(IStructureRecord item) throws AmbitException {
+		//most common case
+		if (MOL_TYPE.SDF.toString().equals(item.getFormat())) return item.getContent();
+		//otherwise
+		if (reader==null) reader = new MoleculeReader();
+		try {
+			StringWriter w = new StringWriter();
+			SDFWriter sdfwriter = new SDFWriter(w); 
+			IAtomContainer ac = reader.process(item);
+			ac.getProperties().clear();
+			sdfwriter.write(ac);
+			sdfwriter.close();
+			return w.toString();
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+	}
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
 		
