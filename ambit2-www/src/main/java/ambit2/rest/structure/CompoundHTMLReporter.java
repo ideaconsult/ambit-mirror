@@ -838,12 +838,17 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				OpenTox.params.compound_uri,
 				URLEncoder.encode(w)
 			));	
-	
+		/*
 		b.append(String.format("<a href=\"%s%s\">Data entries</a><br>",
 				w,
 				DataEntryResource.resourceTag
 			));	
-		
+		*/
+		int p = w.indexOf("conformer");
+		b.append(String.format("<a href=\"%s%s\">All structures</a><br>",
+				w.substring(0,p),
+				OpenTox.URI.conformer
+			));			
 		b.append(String.format("<a href=\"%s/%s\">Features</a><br>",
 				w,
 				OpenTox.URI.feature
