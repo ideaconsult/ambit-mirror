@@ -24,6 +24,7 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.DatasetsHTMLReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.DisplayMode;
 
 public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
 
@@ -39,7 +40,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 	String filenamePrefix = getRequest().getResourceRef().getPath();
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),false,getDocumentation()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
@@ -67,7 +68,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 		
 	} else //html 	
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),false,getDocumentation()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation()),MediaType.TEXT_HTML);
 	}
 	@Override
 	protected IQueryRetrieval<ISourceDataset> createQuery(Context context, Request request,

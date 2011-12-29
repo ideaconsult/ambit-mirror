@@ -20,6 +20,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * Retrieves feature definitions by dataset 
@@ -43,12 +44,12 @@ public class PropertiesByDatasetResource extends PropertyResource {
 		
 		Form form = request.getResourceRef().getQueryAsForm();
 		Object id = request.getAttributes().get(DatasetResource.datasetKey);
-		collapsed = true;
+		_dmode = DisplayMode.table;
 		
 		IQueryRetrieval<Property>  q = null;
 		if (id != null) try {
 			q = getQueryById(new Integer(Reference.decode(id.toString())),form);
-			collapsed = false;
+			_dmode = DisplayMode.singleitem;
 		} catch (NumberFormatException x) {
 			q = getQueryById(Reference.decode(id.toString()),form);
 		} catch (Exception x) {

@@ -90,7 +90,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public final static String idcompound = OpenTox.URI.compound.getKey();
 	public final static String compoundID = OpenTox.URI.compound.getResourceID();
 	protected boolean chemicalsOnly = true;
-	protected boolean collapsed = false;
+	protected DisplayMode _dmode = DisplayMode.singleitem;
 	
 	public CompoundResource() {
 		super();
@@ -188,7 +188,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
 	
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			Dimension d = collapsed?new Dimension(150,150):new Dimension(250,250);
+			Dimension d = _dmode.isCollapsed()?new Dimension(150,150):new Dimension(250,250);
 			Form form = getResourceRef(getRequest()).getQueryAsForm();
 			try {
 				
@@ -202,7 +202,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 							getCompoundInDatasetPrefix(),
 							getRequest(),
 							getDocumentation(),
-							collapsed,
+							_dmode,
 							getURIReporter(),
 							getTemplate(),
 							getGroupProperties(),
@@ -313,7 +313,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 
 				
 				if (keys != null) {
-					collapsed = true;
+					_dmode = DisplayMode.table;
 					/*
 					QueryCombinedStructure qcombined = new QueryCombinedStructure();
 					qcombined.setCombine_as_and(true);

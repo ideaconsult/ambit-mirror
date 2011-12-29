@@ -34,6 +34,7 @@ import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
+import ambit2.rest.structure.DisplayMode;
 
 /**
 
@@ -92,7 +93,7 @@ public class FeatureResource extends QueryResource<IQueryRetrieval<PropertyValue
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			return new OutputWriterConvertor(
-					new PropertyValueHTMLReporter(getRequest(),true,getDocumentation()),MediaType.TEXT_HTML);			
+					new PropertyValueHTMLReporter(getRequest(),DisplayMode.table,getDocumentation()),MediaType.TEXT_HTML);			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			return new StringConvertor(	getURUReporter(getRequest()),MediaType.TEXT_URI_LIST,filenamePrefix);
 		} else return new StringConvertor(new PropertyValueReporter(),MediaType.TEXT_URI_LIST,filenamePrefix);

@@ -17,6 +17,7 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * Generates html out of proeprty/value pairs
@@ -42,12 +43,12 @@ public class PropertyValueHTMLReporter<T> extends QueryHTMLReporter<T,IQueryRetr
 		this.editable = editable;
 	}
 	public PropertyValueHTMLReporter(Request baseRef,ResourceDoc doc) {
-		this(baseRef,false,doc);
+		this(baseRef,DisplayMode.singleitem,doc);
 	}
-	public PropertyValueHTMLReporter(Request baseRef, boolean editable,ResourceDoc doc) {
+	public PropertyValueHTMLReporter(Request baseRef, DisplayMode _dmode,ResourceDoc doc) {
 	
-		super(baseRef,true,doc);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,doc,editable);
+		super(baseRef,DisplayMode.table,doc);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(baseRef,doc,_dmode);
 		propertyURIReporter = new PropertyURIReporter(baseRef,doc);
 		this.editable = editable;
 	}

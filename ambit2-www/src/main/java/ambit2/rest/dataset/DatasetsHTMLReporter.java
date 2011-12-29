@@ -25,6 +25,7 @@ import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.structure.CompoundResource;
+import ambit2.rest.structure.DisplayMode;
 
 /**Generates html page for {@link QueryDatasetResource}
  * @author nina
@@ -37,13 +38,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	private static final long serialVersionUID = -7959033048710547839L;
 	public static String fileUploadField = "file";
 	public DatasetsHTMLReporter(ResourceDoc doc) {
-		this(null,true,doc);
+		this(null,DisplayMode.table,doc);
 	}
-	public DatasetsHTMLReporter(Request baseRef,boolean collapsed,ResourceDoc doc) {
-		this(baseRef,baseRef,collapsed,doc);
+	public DatasetsHTMLReporter(Request baseRef,DisplayMode _dmode,ResourceDoc doc) {
+		this(baseRef,baseRef,_dmode,doc);
 	}
-	public DatasetsHTMLReporter(Request baseRef,Request originalRef,boolean collapsed,ResourceDoc doc) {
-		super(baseRef,collapsed,doc);
+	public DatasetsHTMLReporter(Request baseRef,Request originalRef,DisplayMode _dmode,ResourceDoc doc) {
+		super(baseRef,_dmode,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
@@ -55,7 +56,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 		/**
 		 * /dataset
 		 */
-		if (collapsed) { 
+		if (_dmode.isCollapsed()) { 
 			uploadUI("",w, query);
 			try {
 				w.write(String.format("<a href='%s/query%s?%s=%s&condition=startswith' title='List datasets by endpoints'>%s</a><br>",
@@ -264,7 +265,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			
 
 			String paging = "page=0&pagesize=10";
-			if (collapsed) {
+			if (_dmode.isCollapsed()) {
 				
 				output.write("<div id=\"div-1b\">");
 

@@ -21,6 +21,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.DisplayMode;
 
 public class PropertyAnnotationResource  extends QueryResource<IQueryRetrieval<PropertyAnnotation>, PropertyAnnotation> {
 	public final static String annotation = "/annotation";
@@ -62,7 +63,7 @@ public class PropertyAnnotationResource  extends QueryResource<IQueryRetrieval<P
 					,variant.getMediaType());		
 		} else 
 			return new OutputWriterConvertor(
-					new PropertyAnnotationHTMLReporter(getRequest(),false,getDocumentation())
+					new PropertyAnnotationHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation())
 					,MediaType.TEXT_HTML);
 	}	
 

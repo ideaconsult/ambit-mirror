@@ -10,6 +10,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.structure.DisplayMode;
 
 public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrieval<AmbitUser>> {
 	/**
@@ -18,10 +19,10 @@ public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrie
 	private static final long serialVersionUID = -7959033048710547839L;
 	
 	public UsersHTMLReporter() {
-		this(null,true,null);
+		this(null,DisplayMode.table,null);
 	}
-	public UsersHTMLReporter(Request baseRef, boolean collapsed, ResourceDoc doc) {
-		super(baseRef,collapsed,doc);
+	public UsersHTMLReporter(Request baseRef, DisplayMode _dmode, ResourceDoc doc) {
+		super(baseRef,_dmode,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
@@ -31,7 +32,7 @@ public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrie
 	public void header(Writer w, IQueryRetrieval<AmbitUser> query) {
 		super.header(w, query);
 		
-		try {w.write(String.format("<h3>User%s</h3>",collapsed?"s":""));} catch (Exception x) {}
+		try {w.write(String.format("<h3>User%s</h3>",_dmode.isCollapsed()?"s":""));} catch (Exception x) {}
 	}
 	@Override
 	public Object processItem(AmbitUser item) throws AmbitException {
@@ -46,7 +47,7 @@ public class UsersHTMLReporter extends QueryHTMLReporter<AmbitUser, IQueryRetrie
 						item.getFirstName(),
 						item.getLastName(),
 						item.getEmail()));
-			if (!collapsed) {
+			if (!_dmode.isCollapsed()) {
 				output.write(
 				"<form id='modifyUser' method='post' action=''>\n"+
 				"<p>Change your password:\n"+

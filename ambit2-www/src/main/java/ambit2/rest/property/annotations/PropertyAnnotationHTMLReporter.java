@@ -16,6 +16,7 @@ import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * HTML for {@link PropertyResource}
@@ -28,8 +29,8 @@ public class PropertyAnnotationHTMLReporter extends QueryHTMLReporter<PropertyAn
 	 * 
 	 */
 	private static final long serialVersionUID = 3196496706491834527L;
-	public PropertyAnnotationHTMLReporter(Request ref,boolean collapsed, ResourceDoc doc) {
-		super(ref,collapsed,doc);
+	public PropertyAnnotationHTMLReporter(Request ref,DisplayMode _dmode, ResourceDoc doc) {
+		super(ref,_dmode,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

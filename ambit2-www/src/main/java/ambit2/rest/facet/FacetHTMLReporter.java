@@ -11,6 +11,7 @@ import ambit2.rest.AmbitResource;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.structure.DisplayMode;
 
 public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<Facet, IQueryRetrieval<Facet>> {
 	/**
@@ -22,7 +23,7 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 		this(null);
 	}
 	public FacetHTMLReporter(Request baseRef) {
-		super(baseRef,false,null);
+		super(baseRef,DisplayMode.singleitem,null);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

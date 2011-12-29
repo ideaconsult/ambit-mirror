@@ -29,7 +29,6 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.data.model.Algorithm.requires;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
@@ -42,7 +41,6 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.dataEntry.DataEntryResource;
 import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
@@ -71,19 +69,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	boolean hierarchy = false;
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter) {
-		this(request,doc,collapsed,urireporter,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter) {
+		this(request,doc,_dmode,urireporter,null);
 	}
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter,Template template) {
-		this(request,doc,collapsed,urireporter,template,null,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter,Template template) {
+		this(request,doc,_dmode,urireporter,template,null,null);
 	}
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter,
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter,
 			Template template,Profile groupedProperties,Dimension d) {
-		this("",request, doc, collapsed, urireporter, template,groupedProperties,d);
+		this("",request, doc, _dmode, urireporter, template,groupedProperties,d);
 	}
-	public CompoundHTMLReporter(String prefix, Request request,ResourceDoc doc,boolean collapsed,QueryURIReporter urireporter,
+	public CompoundHTMLReporter(String prefix, Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter,
 				Template template,Profile groupedProperties,Dimension d) {
-		super(prefix,request,collapsed,doc);
+		super(prefix,request,_dmode,doc);
 		
 		Reference f = request.getResourceRef().clone(); 
 		f.setQuery(null);
@@ -106,7 +104,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 			pReporter = new PropertyURIReporter(request,this.uriReporter==null?null:this.uriReporter.getDocumentation());
 			
-		table = collapsed;
+		table = isCollapsed();
 		getProcessors().clear();
 		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
@@ -142,11 +140,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		uriReporter.setOutput(w);
 		return w;
 	}
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed,Template template) {
-		this(request,doc,collapsed,null,template);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,Template template) {
+		this(request,doc,_dmode,null,template);
 	}
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,boolean collapsed) {
-		this(request,doc,collapsed,null,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode) {
+		this(request,doc,_dmode,null,null);
 
 	}
 	@Override
@@ -298,7 +296,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			Reference baseReference = uriReporter.getBaseReference();
 			
 			AmbitResource.writeTopHeader(w,
-					collapsed?"Chemical compounds":"Chemical compound"
+					isCollapsed()?"Chemical compounds":"Chemical compound"
 					,
 					uriReporter.getRequest(),
 					uriReporter.getResourceRef(),
@@ -462,7 +460,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				List<Property> props = template2Header(getTemplate(),true);
 				int hc = 0;
 				
-				hierarchy = props.size()>20;
+				hierarchy = props.size()>15;
 			
 				if (hierarchy) {
 					output.write("<th>Properties</th>"); //one single cell and properties written vertically within
@@ -669,7 +667,20 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					} else {
 						b.append("<div>");
 				
-					
+						b.append(String.format("<a href='?property=%s%s/%d&search=%s%s'>%s</a>", 
+//								uriReporter.getBaseReference(),
+								
+	//							OpenTox.params.feature_uris.toString(),
+								uriReporter.getBaseReference(),
+								PropertyResource.featuredef,
+								property.getId(),
+								//Reference.encode(property.getName()),
+								searchValue==null?"":Reference.encode(searchValue.toString()),
+								f,
+								value
+							));						
+						
+						/*
 						b.append(String.format("<a href=\"%s/compound?%s=%s%s/%d&property=%s&search=%s%s\">%s</a>", 
 							uriReporter.getBaseReference(),
 							OpenTox.params.feature_uris.toString(),
@@ -682,6 +693,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 							f,
 							value
 						));
+						*/
 					}			
 					if (hierarchy) {
 						//b.append("<br>");

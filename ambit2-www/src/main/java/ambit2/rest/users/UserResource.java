@@ -23,6 +23,7 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.DisplayMode;
 
 
 public class UserResource extends QueryResource<QueryUser, AmbitUser> {
@@ -54,7 +55,7 @@ public class UserResource extends QueryResource<QueryUser, AmbitUser> {
 				return new StringConvertor(	reporter,MediaType.TEXT_URI_LIST,filenamePrefix);
 			} else 
 				return new OutputWriterConvertor(
-						new UsersHTMLReporter(getRequest(),queryObject.getValue()==null,getDocumentation()),
+						new UsersHTMLReporter(getRequest(),queryObject.getValue()==null?DisplayMode.table:DisplayMode.singleitem,getDocumentation()),
 						MediaType.TEXT_HTML);
 	}
 	@Override

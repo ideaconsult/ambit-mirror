@@ -60,6 +60,7 @@ import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
+import ambit2.rest.structure.DisplayMode;
 
 
 /**
@@ -266,7 +267,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				d.height = Integer.parseInt(form.getFirstValue("h").toString());
 			} catch (Exception x) {}			
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),true,null,getTemplate(),getGroupProperties(),d),MediaType.TEXT_HTML);
+					new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
+							DisplayMode.table,null,getTemplate(),getGroupProperties(),d),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),

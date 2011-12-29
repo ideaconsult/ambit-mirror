@@ -12,13 +12,13 @@ import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.annotations.PropertyAnnotationResource;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * HTML for {@link PropertyResource}
@@ -31,8 +31,8 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	 * 
 	 */
 	private static final long serialVersionUID = 3196496706491834527L;
-	public PropertyHTMLReporter(Request ref,boolean collapsed, ResourceDoc doc) {
-		super(ref,collapsed,doc);
+	public PropertyHTMLReporter(Request ref,DisplayMode _dmode, ResourceDoc doc) {
+		super(ref,_dmode,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
@@ -59,7 +59,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 		};		
 			
 		try {
-			w.write(collapsed?"<h3>Feature":"<h3>Features");
+			w.write(_dmode.isCollapsed()?"<h3>Feature":"<h3>Features");
 			String q=uriReporter.getResourceRef().getQuery();
 
 			for (int i=0;i<mimes.length;i++) {
