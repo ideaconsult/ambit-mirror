@@ -42,6 +42,7 @@ import ambit2.rest.model.predictor.ModelPredictor;
 import ambit2.rest.model.predictor.StructureProcessor;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.DisplayMode;
 import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableModelPredictor;
 import ambit2.rest.task.CallableQueryProcessor;
@@ -62,7 +63,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	public final static String resource = OpenTox.URI.model.getURI();
 	public final static String resourceKey =  OpenTox.URI.model.getKey();
 	public final static String resourceID = OpenTox.URI.model.getResourceID();
-	protected boolean collapsed = true;
+	protected DisplayMode _dmode = DisplayMode.table;
 	
 	
 	protected String category = "";
@@ -77,7 +78,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		
 		if (id != null) try {
 			id = Reference.decode(id.toString());
-			collapsed = false;
+			_dmode = DisplayMode.singleitem;
 			return new Integer(id.toString());
 			
 		} catch (NumberFormatException x) {
@@ -101,7 +102,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	String filenamePrefix = getRequest().getResourceRef().getPath();		
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
+				new ModelHTMLReporter(getRequest(),_dmode,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),getDocumentation()) {
 			@Override
@@ -146,7 +147,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 				new ModelImageReporter(getRequest(), getResourceRef(getRequest()).getQueryAsForm(), d,getDocumentation()),variant.getMediaType());			
 	} else//html
 		return new OutputWriterConvertor(
-				new ModelHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
+				new ModelHTMLReporter(getRequest(),_dmode,getDocumentation()),MediaType.TEXT_HTML);
 	}
 	
 	@Override
@@ -310,7 +311,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	}
 
 	protected AbstractModelQuery getModelQuery(Object idmodel, Form form) throws ResourceException {
-		collapsed = false;
+		_dmode = DisplayMode.singleitem;
 		AbstractModelQuery query = null;
 		ModelQueryResults model_query = null;
 		String algorithm = form.getFirstValue(AbstractModelQuery._models_criteria.algorithm.name());
@@ -347,10 +348,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			
 			if (idmodel == null) { return new ReadModel(); }
 			else if (idmodel instanceof Integer) {
-				collapsed = true;
+				_dmode = DisplayMode.table;
 				return new ReadModel((Integer)idmodel);
 			} else {
-				collapsed = true;
+				_dmode = DisplayMode.table;
 				query.setFieldname(idmodel.toString());
 				return query;
 			}

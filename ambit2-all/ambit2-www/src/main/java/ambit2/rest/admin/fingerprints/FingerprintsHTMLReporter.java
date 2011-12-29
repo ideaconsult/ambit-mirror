@@ -9,6 +9,7 @@ import ambit2.descriptors.processors.BitSetGenerator.FPTable;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.structure.DisplayMode;
 
 public class FingerprintsHTMLReporter extends QueryHTMLReporter<IFingerprint<FPTable, String>, QueryFingerprints> {
 
@@ -17,7 +18,7 @@ public class FingerprintsHTMLReporter extends QueryHTMLReporter<IFingerprint<FPT
 	 */
 	private static final long serialVersionUID = -952577019571483126L;
 	public FingerprintsHTMLReporter(Request request, ResourceDoc doc) {
-		super(request,true,doc);
+		super(request,DisplayMode.table,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request,

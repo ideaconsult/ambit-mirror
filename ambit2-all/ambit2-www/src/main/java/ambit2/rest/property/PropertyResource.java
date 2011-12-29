@@ -47,6 +47,7 @@ import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
+import ambit2.rest.structure.DisplayMode;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -80,7 +81,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	
 	public final static String featuredefID = String.format("/{%s}",idfeaturedef);
 
-	protected boolean collapsed ;
+	protected DisplayMode _dmode ;
 	
 	public PropertyResource() {
 		super();
@@ -122,7 +123,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 					,variant.getMediaType(),filenamePrefix);		
 		} else 
 			return new OutputWriterConvertor(
-					new PropertyHTMLReporter(getRequest(),collapsed,getDocumentation())
+					new PropertyHTMLReporter(getRequest(),_dmode,getDocumentation())
 					,MediaType.TEXT_HTML);
 	}
 
@@ -147,7 +148,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 		
 		Object o = request.getAttributes().get(idfeaturedef);
 		try {
-			collapsed = o==null;
+			_dmode = o==null?DisplayMode.table:DisplayMode.singleitem;
 			if (o==null) {
 				Form form = request.getResourceRef().getQueryAsForm();
 				IQueryRetrieval<Property> qf = getFreeTextQuery(getContext(), getRequest(), getResponse());
@@ -194,7 +195,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			throw new InvalidResourceIDException(o);
 			
 		} catch (Exception x) {
-			collapsed = true;
+			_dmode = DisplayMode.table;
 			return new ReadProperty();
 		} finally {
 		}

@@ -40,11 +40,12 @@ import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 import ambit2.rest.rdf.RDFObjectIterator;
+import ambit2.rest.structure.DisplayMode;
 
 public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
 	protected SourceDataset dataset;
 	public final static String metadata = "/metadata";	
-	protected boolean collapsed;
+	protected DisplayMode _dmode;
 	protected IStructureRecord structureParam;
 	public enum search_features {
 
@@ -92,7 +93,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 	
 	public MetadatasetResource() {
 		super();
-		collapsed = false;
+		_dmode = DisplayMode.singleitem;
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -123,7 +124,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML,filenamePrefix);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),_dmode,getDocumentation()),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
@@ -150,7 +151,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		
 	} else //html 	
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),collapsed,getDocumentation()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),_dmode,getDocumentation()),MediaType.TEXT_HTML);
 	}
 	
 	@Override

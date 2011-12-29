@@ -10,6 +10,7 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * Generates HTML representation of a resource
@@ -30,7 +31,7 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 		this.uriReporter = uriReporter;
 	}
 
-	protected boolean collapsed = true;
+	protected DisplayMode _dmode = DisplayMode.table;
 	/**
 	 * 
 	 */
@@ -40,12 +41,12 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 	 * 
 	 */
 	public QueryHTMLReporter() {
-		this(null,true,null);
+		this(null,DisplayMode.table,null);
 	}
-	public QueryHTMLReporter(Request request, boolean collapsed,ResourceDoc doc) {
+	public QueryHTMLReporter(Request request, DisplayMode _dmode,ResourceDoc doc) {
 		super();
 		uriReporter =  createURIReporter(request, doc);
-		this.collapsed = collapsed;
+		this._dmode = _dmode;
 		processors.clear();
 		/*
 		ValuesReader valuesReader = new ValuesReader();

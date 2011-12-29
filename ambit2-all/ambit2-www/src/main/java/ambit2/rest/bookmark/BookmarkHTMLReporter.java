@@ -16,6 +16,7 @@ import ambit2.db.update.bookmark.ReadBookmark;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.structure.DisplayMode;
 
 public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetrieval<Bookmark>> {
 	/**
@@ -24,10 +25,10 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 	private static final long serialVersionUID = -7959033048710547839L;
 
 	public BookmarkHTMLReporter() {
-		this(null,true,null);
+		this(null,DisplayMode.table,null);
 	}
-	public BookmarkHTMLReporter(Request baseRef, boolean collapsed, ResourceDoc doc) {
-		super(baseRef,collapsed,doc);
+	public BookmarkHTMLReporter(Request baseRef, DisplayMode _dmode, ResourceDoc doc) {
+		super(baseRef,_dmode,doc);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {

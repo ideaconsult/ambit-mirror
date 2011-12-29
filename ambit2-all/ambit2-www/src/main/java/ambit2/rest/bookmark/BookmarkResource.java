@@ -30,6 +30,7 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.Annotea;
 import ambit2.rest.rdf.RDFBookmarkIterator;
 import ambit2.rest.rdf.RDFObjectIterator;
+import ambit2.rest.structure.DisplayMode;
 
 import com.hp.hpl.jena.vocabulary.DC;
 
@@ -72,7 +73,9 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 								
 			} else 
 				return new OutputWriterConvertor(
-						new BookmarkHTMLReporter(getRequest(),queryObject.getValue()==null,getDocumentation()),
+						new BookmarkHTMLReporter(getRequest(),
+									queryObject.getValue()==null?DisplayMode.table:DisplayMode.singleitem,
+									getDocumentation()),
 						MediaType.TEXT_HTML);
 	}
 

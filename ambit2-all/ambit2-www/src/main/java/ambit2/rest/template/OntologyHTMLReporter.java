@@ -18,6 +18,7 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.MetadatasetResource.search_features;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.rdf.OTEE;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * Reporter for {@link Dictionary} or {@link Property}
@@ -32,8 +33,8 @@ public class OntologyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	private static final long serialVersionUID = -4281274169475316720L;
 	protected int count = 0;
 	
-	public OntologyHTMLReporter(Request reference,boolean collapsed) {
-		super(reference,collapsed,null);
+	public OntologyHTMLReporter(Request reference,DisplayMode _dmode) {
+		super(reference,_dmode,null);
 
 	}	
 	@Override

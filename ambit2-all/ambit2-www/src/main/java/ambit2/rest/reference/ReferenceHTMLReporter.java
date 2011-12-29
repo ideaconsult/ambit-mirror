@@ -10,6 +10,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.structure.DisplayMode;
 
 public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, IQueryRetrieval<ILiteratureEntry>> {
 	/**
@@ -18,10 +19,10 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, I
 	private static final long serialVersionUID = -7959033048710547839L;
 
 	public ReferenceHTMLReporter() {
-		this(null,true);
+		this(null,DisplayMode.table);
 	}
-	public ReferenceHTMLReporter(Request baseRef, boolean collapsed) {
-		super(baseRef,collapsed,null);
+	public ReferenceHTMLReporter(Request baseRef, DisplayMode _dmode) {
+		super(baseRef,_dmode,null);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
@@ -30,7 +31,7 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, I
 	@Override
 	public void header(Writer w, IQueryRetrieval<ILiteratureEntry> query) {
 		super.header(w, query);
-		try {w.write(String.format("<h3>Reference%s</h3>",collapsed?"s":""));} catch (Exception x) {}
+		try {w.write(String.format("<h3>Reference%s</h3>",_dmode.isCollapsed()?"s":""));} catch (Exception x) {}
 	}
 	@Override
 	public Object processItem(ILiteratureEntry item) throws AmbitException  {
@@ -41,7 +42,7 @@ public class ReferenceHTMLReporter extends QueryHTMLReporter<ILiteratureEntry, I
 						"<a href=\"%s\">%s</a>",
 						uriReporter.getURI(item),
 						item.getName()));
-			if (!collapsed) {
+			if (!_dmode.isCollapsed()) {
 				output.write("&nbsp;");
 				output.write("URL: ");
 				output.write(String.format(

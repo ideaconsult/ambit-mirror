@@ -28,6 +28,7 @@ import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFReferenceIterator;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * Reference resource, inOpenTox API coressponds to feature.hasSource
@@ -77,7 +78,7 @@ public class ReferenceResource	extends QueryResource<ReadReference,ILiteratureEn
 						,variant.getMediaType());					
 			} else 
 				return new OutputWriterConvertor(
-						new ReferenceHTMLReporter(getRequest(),queryObject.getValue()==null),
+						new ReferenceHTMLReporter(getRequest(),queryObject.getValue()==null?DisplayMode.table:DisplayMode.singleitem),
 						MediaType.TEXT_HTML);
 	}
 

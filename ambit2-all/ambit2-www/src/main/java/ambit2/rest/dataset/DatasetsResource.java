@@ -19,6 +19,7 @@ import ambit2.db.search.StringCondition;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * Dataset resource - A set of chemical compounds and assigned features
@@ -50,7 +51,7 @@ public class DatasetsResource extends MetadatasetResource {
 	public DatasetsResource() {
 		super();
 		setDocumentation(new ResourceDoc("dataset","Dataset"));
-		collapsed = true;		
+		_dmode = DisplayMode.table;		
 	}
 	@Override
 	protected void doInit() throws ResourceException {

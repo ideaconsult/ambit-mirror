@@ -15,6 +15,7 @@ import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.structure.CompoundHTMLReporter;
+import ambit2.rest.structure.DisplayMode;
 
 public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> {
 	/**
@@ -25,14 +26,14 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
 	
 	public ModelHTMLReporter(ResourceDoc doc) {
-		this(null,true,doc);
+		this(null,DisplayMode.table,doc);
 	}
-	public ModelHTMLReporter(Request request,boolean collapsed,ResourceDoc doc) {
-		this(request,request,collapsed,doc);
+	public ModelHTMLReporter(Request request,DisplayMode _dmode,ResourceDoc doc) {
+		this(request,request,_dmode,doc);
 	}
-	public ModelHTMLReporter(Request request,Request originalRef,boolean collapsed,ResourceDoc doc) {
-		super(request,collapsed,doc);
-		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,doc,collapsed);
+	public ModelHTMLReporter(Request request,Request originalRef,DisplayMode _dmode,ResourceDoc doc) {
+		super(request,_dmode,doc);
+		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,doc,_dmode);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
@@ -160,7 +161,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			*/
 			writeMoreColumns( model,output);
 			output.write("</tr>\n");
-			if (collapsed) {//single model
+			if (_dmode.isCollapsed()) {//single model
 				output.write(String.format(
 						"<tr ><form action=\"\" method=\"POST\"><th>Dataset URI</th><td colspan='6'><input type='text' size='80' name='dataset_uri' value=''><input type=\"submit\" value=\"Predict\"></td></form></tr>"
 						));

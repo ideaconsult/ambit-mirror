@@ -28,6 +28,7 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * 
@@ -92,7 +93,7 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 				
 		} else 
 			return new OutputWriterConvertor(
-					new OntologyHTMLReporter(getRequest(),!isRecursive())
+					new OntologyHTMLReporter(getRequest(),!isRecursive()?DisplayMode.table:DisplayMode.singleitem)
 					,MediaType.TEXT_HTML);
 	}
 

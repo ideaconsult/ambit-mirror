@@ -11,6 +11,7 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryHeaderReporter;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  * HTML generation for structure queries
@@ -30,7 +31,7 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 		this.uriReporter = uriReporter;
 	}
 
-	protected boolean collapsed = true;
+	protected DisplayMode _dmode = DisplayMode.table;
 	/**
 	 * 
 	 */
@@ -40,16 +41,16 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 	 * 
 	 */
 	public QueryStructureHTMLReporter(ResourceDoc doc) {
-		this(null,true,doc);
+		this(null, DisplayMode.table,doc);
 	}
-	public QueryStructureHTMLReporter(Request request, boolean collapsed,ResourceDoc doc) {
-		this("", request, collapsed, doc);
+	public QueryStructureHTMLReporter(Request request,  DisplayMode _dmode,ResourceDoc doc) {
+		this("", request, _dmode, doc);
 	}
-	public QueryStructureHTMLReporter(String prefix,Request request, boolean collapsed,ResourceDoc doc) {
+	public QueryStructureHTMLReporter(String prefix,Request request, DisplayMode _dmode,ResourceDoc doc) {
 		super();
 		this.prefix = prefix;
 		uriReporter =  createURIReporter(request,doc);
-		this.collapsed = collapsed;
+		this._dmode = _dmode;
 		processors.clear();
 		/*
 		ValuesReader valuesReader = new ValuesReader();
@@ -90,4 +91,7 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 	public void open() throws DbAmbitException {
 		
 	}	
+	protected boolean isCollapsed() {
+		return DisplayMode.table==_dmode;
+	}
 }
