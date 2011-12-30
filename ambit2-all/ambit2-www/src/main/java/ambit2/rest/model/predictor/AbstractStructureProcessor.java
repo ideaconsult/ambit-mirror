@@ -1,6 +1,5 @@
 package ambit2.rest.model.predictor;
 
-import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -53,4 +52,17 @@ public abstract class AbstractStructureProcessor<Predictor>  extends	ModelPredic
 	public void assignResults(IStructureRecord record, Object value)
 			throws AmbitException {
 	}
+	
+	@Override
+	public Object predict(IStructureRecord target) throws AmbitException {
+		try {
+			if (target!= null) {
+					updateStructure.setObject(target);
+					exec.process(updateStructure);
+			}
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		return target;
+	}	
 }

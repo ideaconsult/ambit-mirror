@@ -44,7 +44,6 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.rdf.RDFPropertyIterator;
-import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.TaskResult;
 import ambit2.search.AllSourcesFinder;
 import ambit2.search.chemidplus.ChemIdPlusRequest;
@@ -58,9 +57,9 @@ import ambit2.search.opentox.OpenToxRequest;
  *
  * @param <USERID>
  */
-public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStructureRecord,USERID>  {
+public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 
-	protected Reference applicationRootReference;
+
 	protected Template profile;
 	protected AbstractFinder.SITE searchSite ;
 	protected AbstractFinder.MODE mode;
@@ -68,8 +67,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 	public CallableFinder(Form form,
 			Reference applicationRootReference,Context context,
 			Algorithm algorithm,USERID token) {
-		super(applicationRootReference,form,context,token);
-		this.applicationRootReference = applicationRootReference;
+		super(form,applicationRootReference,context,algorithm,token);
 	}
 	@Override
 	protected void processForm(Reference applicationRootReference,Form form) {
@@ -242,11 +240,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 		return dataset;
 	}
 
-	@Override
-	protected TaskResult createReference(Connection connection)
-			throws Exception {
-		return new TaskResult(sourceReference.toString(),false);
-	}
+	
 	@Override
 	protected AbstractBatchProcessor createBatch(Object target)
 			throws Exception {
@@ -261,12 +255,7 @@ public class CallableFinder<USERID> extends	CallableQueryProcessor<Object, IStru
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
 		if (profile.size()==0) throw new Exception("No columns to search!");
-		try {
-			Object q = getQueryObject(reference, applicationRootReference);
-			return q==null?reference:q;
-		} catch (Exception x) {
-			return reference;
-		}
+		return super.createTarget(reference);
 	}
 	protected Property createPropertyFromReference(String attribute, LiteratureEntry le) {
 		RDFPropertyIterator reader = null;

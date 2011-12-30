@@ -35,6 +35,7 @@ import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.model.predictor.AbstractStructureProcessor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.ExpertModelpredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
@@ -290,7 +291,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						getContext(),
 						(StructureProcessor) thepredictor,
 						token
-						);				
+						);		
+		
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				return
 				new CallableDescriptorCalculator(

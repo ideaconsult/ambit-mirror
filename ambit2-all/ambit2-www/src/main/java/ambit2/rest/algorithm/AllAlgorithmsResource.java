@@ -30,6 +30,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ExpertModelBuilder;
 import ambit2.rest.model.builder.SMSDModelBuilder;
+import ambit2.rest.model.predictor.AbstractStructureProcessor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.task.CallableBuilder;
@@ -39,6 +40,7 @@ import ambit2.rest.task.CallableMockup;
 import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
+import ambit2.rest.task.CallableStructureOptimizer;
 import ambit2.rest.task.CallableStructurePairsModelCreator;
 import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.ICallableTask;
@@ -46,6 +48,7 @@ import ambit2.rest.task.OptimizerModelBuilder;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.dbpreprocessing.CallableFinder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
+import ambit2.rest.task.dbpreprocessing.CallableFixPreferredStructure;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public final static String algorithm = OpenTox.URI.algorithm.getURI();
@@ -268,6 +271,16 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						token
 						);
 			}
+			else if (algorithm.hasType(AlgorithmType.PrefferedStructure)) {
+				return
+				new CallableFixPreferredStructure(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						null,
+						token
+						);	
+			}			
 			else if (algorithm.hasType(AlgorithmType.DescriptorCalculation)) {
 				try {
 					CallableSimpleModelCreator modelCreator = new CallableSimpleModelCreator(
