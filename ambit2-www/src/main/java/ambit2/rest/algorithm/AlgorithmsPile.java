@@ -295,8 +295,8 @@ public class AlgorithmsPile {
 			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#atomtypeverifier"},
 			{"ambit2.descriptors.KekulizationVerifier","Kekulization verifier","ambit2.descriptors.KekulizationVerifier",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#kekulizationverifier"},
 		
-			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},			
-
+			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
+			
 			//fingerprints
 			{"ambit2.descriptors.fingerprints.EStateFingerprinterWrapper","EState Fingerprints","ambit2.descriptors.fingerprints.EStateFingerprinterWrapper",null,
 						new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
@@ -330,7 +330,8 @@ public class AlgorithmsPile {
 										
 			//
 			{"finder","Find","finder",null,new String[] {AlgorithmType.Finder.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#finder"},
-			
+			{"selectstructure","Replaces the current structure with the preffered one",null,null,new String[] {AlgorithmType.PrefferedStructure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#StructureSelector"},
+
 
 			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_pcaRanges"},
 			{"distanceEuclidean","Applicability domain: Euclidean distance","ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_distanceEuclidean"},

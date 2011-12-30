@@ -325,6 +325,19 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 							null);
 	
 				}
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.PREFERRED_STRUC.getMediaType())) {
+				return new AbstractStructureProcessor(
+						request.getRootRef(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request,null),
+						null						
+						) {
+					@Override
+					public boolean isStructureRequired() {
+						return true;
+					}
+				};
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.MOPAC.getMediaType())) {
 				
 				return new StructureProcessor(
