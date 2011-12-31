@@ -64,7 +64,13 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			public String getMediaType() {
 				return "application/x-coverage-serialized-object";
 			}
-		};		
+		},	
+		PREFERRED_STRUC {
+			@Override
+			public String getMediaType() {
+				return "text/plain";
+			}
+		};			
 		public abstract String getMediaType();
 		};
 	protected String id;

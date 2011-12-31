@@ -39,7 +39,8 @@ public enum AlgorithmType {
 		Expert,
 		Finder,
 		SMSD,
-		Mockup;
+		Mockup,
+		PrefferedStructure;
 		public String toString() {
 			return String.format("http://www.opentox.org/algorithmTypes.owl#%s",name());
 		}
