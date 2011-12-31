@@ -191,6 +191,8 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 				image = createImage(item);
 				cache(item,image);
 			}
+			if (image==null) 
+				image = (BufferedImage) depict.getDefaultImage();
 			setOutput(image);
 			return image;
 		} catch (Exception x) {
