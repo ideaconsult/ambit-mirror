@@ -44,6 +44,7 @@ import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
+import ambit2.rest.facet.DatasetStrucTypeStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.facet.DatasetsByNamePrefixResource;
@@ -58,6 +59,7 @@ import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryListResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
+import ambit2.rest.query.StrucTypeQueryResource;
 import ambit2.rest.report.ReportDatasetResource;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.routers.misc.AdminRouter;
@@ -307,10 +309,13 @@ public class AmbitApplication extends TaskApplication<String> {
 		 * Quality labels
 		 */
 		queryRouter.attach(QLabelQueryResource.resource,QLabelQueryResource.class);
+		queryRouter.attach(StrucTypeQueryResource.resource,StrucTypeQueryResource.class);
+		
 		queryRouter.attach(ConsensusLabelQueryResource.resource,ConsensusLabelQueryResource.class);
 		
 		queryRouter.attach(DatasetStructureQualityStatsResource.resource,DatasetStructureQualityStatsResource.class);
 		queryRouter.attach(DatasetChemicalsQualityStatsResource.resource,DatasetChemicalsQualityStatsResource.class);
+		queryRouter.attach(DatasetStrucTypeStatsResource.resource,DatasetStrucTypeStatsResource.class);
 		
 		/**
 		 * Missing features
