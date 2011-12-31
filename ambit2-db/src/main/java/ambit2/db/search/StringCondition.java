@@ -121,7 +121,7 @@ public class StringCondition implements IQueryCondition {
 
 	protected STRING_CONDITION value;
 	
-	protected StringCondition(STRING_CONDITION value) {
+	public StringCondition(STRING_CONDITION value) {
 		this.value = value;
 	}	
 	public String getParam(String value) {
