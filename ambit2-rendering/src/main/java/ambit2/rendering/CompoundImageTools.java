@@ -500,10 +500,23 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         buffer = null;
     }
 	public Image getDefaultImage() {
+		if (defaultImage==null) defaultImage = createDefaultImage();
 		return defaultImage;
 	}
 	public void setDefaultImage(BufferedImage defaultImage) {
 		this.defaultImage = defaultImage;
+	}
+	
+	protected BufferedImage createDefaultImage() {
+			BufferedImage buffer = new BufferedImage(imageSize.width, imageSize.height,
+					BufferedImage.TYPE_INT_RGB);
+	        
+			Graphics2D g = buffer.createGraphics();
+			g.setColor(background);
+			g.fillRect(0, 0, imageSize.width, imageSize.height);
+			g.setColor(Color.black);
+			g.drawString("N/A",imageSize.width/2 - 10,imageSize.height / 2);
+			return buffer;
 	}
 	//this should be done via selectors ...
 	public BufferedImage getImage(IAtomContainer mol,
