@@ -861,7 +861,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		*/
 		int p = w.indexOf("conformer");
 		b.append(String.format("<a href=\"%s%s\">All structures</a><br>",
-				p>=0?w.substring(0,p):w,
+				p>=0?w.substring(0,p):String.format("%s/",w),
 				OpenTox.URI.conformer
 			));			
 		b.append(String.format("<a href=\"%s/%s\">Features</a><br>",
