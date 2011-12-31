@@ -660,7 +660,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 						b.append("ToXML".equals(property.getUrl())?beautifyToXMLField(property,prevProperty):
 						String.format("\n<br><a href='%s' target=_blank>%s</a>&nbsp;",pReporter.getURI(property),property.getName()));
 						
-						b.append(String.format("<label title='%s'><i><font color='black'>%s</font></i></label>",value,searchValue));
+						if (Property.opentox_Name.equals(property.getLabel()))
+								b.append(String.format("<label title='%s'><i><a href='%s/query/compound/search/all?search=%s' target='_search'>%s</a></i></label>",value,uriReporter.getBaseReference(),Reference.encode(searchValue),searchValue));
+						else
+							b.append(String.format("<label title='%s'><i><font color='black'>%s</font></i></label>",value,searchValue));
 						//b.append(value);
 						
 						prevProperty = property;
