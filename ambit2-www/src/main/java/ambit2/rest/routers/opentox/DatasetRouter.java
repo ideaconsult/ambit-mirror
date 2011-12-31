@@ -10,12 +10,14 @@ import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
+import ambit2.rest.facet.DatasetStrucTypeStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.property.PropertiesByDatasetResource;
 import ambit2.rest.query.ConsensusLabelQueryResource;
 import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.SmartsQueryResource;
+import ambit2.rest.query.StrucTypeQueryResource;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.similarity.SimilarityResource;
@@ -82,8 +84,10 @@ public class DatasetRouter extends MyRouter {
 		attach(String.format("%s%s",QueryResource.query_resource,QLabelQueryResource.resource),QLabelQueryResource.class);
 		attach(String.format("%s%s",QueryResource.query_resource,ConsensusLabelQueryResource.resource),ConsensusLabelQueryResource.class);
 		
+		attach(String.format("%s%s",StrucTypeQueryResource.query_resource,StrucTypeQueryResource.resource),StrucTypeQueryResource.class);
+		
 		attach(String.format("%s%s",QueryResource.query_resource,DatasetStructureQualityStatsResource.resource),DatasetStructureQualityStatsResource.class);
 		attach(String.format("%s%s",QueryResource.query_resource,DatasetChemicalsQualityStatsResource.resource),DatasetChemicalsQualityStatsResource.class);
-		
+		attach(String.format("%s%s",QueryResource.query_resource,DatasetStrucTypeStatsResource.resource),DatasetStrucTypeStatsResource.class);
 	}	
 }
