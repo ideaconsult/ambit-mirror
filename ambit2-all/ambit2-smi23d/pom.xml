@@ -56,7 +56,7 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-core</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     </dependency>
   </dependencies>
   <reporting>

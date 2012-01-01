@@ -16,7 +16,7 @@ AmbitXT plugin for database administration activities</description>
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-workflow</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     </dependency>
   </dependencies>
   <properties>

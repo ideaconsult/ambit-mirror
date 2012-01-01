@@ -14,12 +14,12 @@ CDK descriptors, listed at http://qsar.sourceforge.net/dicts/qsar-descriptors/in
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-smarts</artifactId>
-  		<version>${version}</version>
+  		<version>${project.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-core</artifactId>
-  		<version>${version}</version>
+  		<version>${project.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>junit</groupId>
