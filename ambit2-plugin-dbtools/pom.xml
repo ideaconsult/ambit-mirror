@@ -14,7 +14,7 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-workflow</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     </dependency>
     <dependency>
     	<groupId>org.dbunit</groupId>

@@ -15,7 +15,7 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-base</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
@@ -28,14 +28,14 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-descriptors</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-rendering</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     	<scope>test</scope>
     </dependency>
   </dependencies>

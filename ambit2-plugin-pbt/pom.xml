@@ -14,12 +14,12 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-workflow</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     </dependency>
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-core</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     </dependency>
     <dependency>
     	<groupId>ambit</groupId>
@@ -29,18 +29,18 @@
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-mopac</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     </dependency>
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-namestructure</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     	<type>jar</type>
     </dependency>
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-db</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>

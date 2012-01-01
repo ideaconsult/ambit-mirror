@@ -32,7 +32,7 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-core</artifactId>
-    	<version>${version}</version>
+    	<version>${project.version}</version>
     	<type>jar</type>
     </dependency>
     <dependency>
