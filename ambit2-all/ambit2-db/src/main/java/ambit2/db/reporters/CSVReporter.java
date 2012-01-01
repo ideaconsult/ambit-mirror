@@ -2,6 +2,8 @@ package ambit2.db.reporters;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ambit2.base.data.ISourceDataset;
@@ -11,12 +13,14 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
+import ambit2.db.search.QuerySmilesByID;
 
 public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter<Q, Writer> {
 
@@ -98,6 +102,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});		
+		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
@@ -130,6 +135,12 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected List<Property> template2Header(Template template,
 			boolean propertiesOnly) {
 		List<Property> p = super.template2Header(template, propertiesOnly);
+		Collections.sort(p,new Comparator<Property>() {
+			public int compare(Property o1, Property o2) {
+				return o1.getOrder()-o2.getOrder();
+
+			}
+		});	
 		if (similarityColumn!=null) 
 			p.add(similarityColumn);
 		return p;
@@ -146,6 +157,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s %s\"", separator,p.getName()==null?"N?A":p.getName(),p.getUnits()==null?"":p.getUnits()));
 				
+				writer.write(String.format("%s%s",separator,"SMILES"));
 				if (licenseColumn!=null)
 					writer.write(String.format("%s%s",separator,licenseColumn));
 				
@@ -169,6 +181,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				for (Property p : header) 
 					writer.write(String.format("%s\"%s\"", separator,p.getUnits()));
 
+				writer.write(String.format("%s%s",separator,"SMILES"));				
 				if (licenseColumn!=null)
 					writer.write(String.format("%s%s",separator,licenseColumn));
 				
@@ -198,8 +211,11 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			for (Property p : header) {
 				
 				Object value = item.getProperty(p);
+				
+				boolean tdelimiter = false;
+				try { tdelimiter = (value!=null) && (value.toString().indexOf(delimiter)>=0);} catch (Exception x) {}
 			
-				if (p.getClazz()==Number.class) 
+				if (!tdelimiter && (p.getClazz()==Number.class)) 
 					writer.write(String.format("%s%s",
 							delimiter,
 							value==null?"":value
@@ -219,6 +235,9 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				i++;
 				delimiter = separator;
 			}
+			//smiles
+			writer.write(String.format("%s%s",separator,item.getProperty(Property.getInstance(AmbitCONSTANTS.SMILES,AmbitCONSTANTS.SMILES))));
+
 			if (licenseColumn!=null)
 				writer.write(String.format("%s%s",separator,getLicenseURI()));
 			
