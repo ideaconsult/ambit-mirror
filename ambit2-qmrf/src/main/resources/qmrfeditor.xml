@@ -1,0 +1,11 @@
+<project name="ambit">
+<property name="TMPFILE" value="QUERY.TXT"/>
+<property name="Host" value="localhost"/>
+<property name="Port" value="33060"/>
+<property name="Database" value="ambit"/>
+<property name="StartMySQL" value="True"/>
+<property name="User" value="root"/>
+<property name="Directory" value=""/>
+<property name="" value=""/>
+<property name="Templates" value="data/templates"/>
+</project>
