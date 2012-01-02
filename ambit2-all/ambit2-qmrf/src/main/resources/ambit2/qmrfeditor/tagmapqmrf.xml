@@ -1,0 +1,905 @@
+<tagmap>
+	<tag name="itext" alias="QMRF" />
+	<tag name="newpage" alias="NEWPAGE" />
+	<tag name="newline" alias="NEWLINE" />
+	<tag name="chunk" alias="QMRF_header">
+		<attribute name="leading" value="10"/>
+		<attribute name="horizontalalign" value="Left"/>
+		<attribute name="size" value="10" />		
+		<attribute name="style" value="font-family: Times New Roman; font-weight: bold;font-style: italic"/>	        		
+	</tag>	
+	<tag name="chunk" alias="QMRF_info_number">
+		<attribute name="leading" value="10"/>
+		<attribute name="size" value="10" />				
+		<attribute name="horizontalalign" value="Left"/>
+		<attribute name="style" value="font-family: Times New Roman;font-style: italic"/>	        		
+	</tag>		
+	
+	<tag name="chunk" alias="QMRF_info_title">
+		<attribute name="leading" value="10"/>
+		<attribute name="size" value="10" />				
+		<attribute name="horizontalalign" value="Left"/>
+		<attribute name="style" value="font-family: Times New Roman;font-style: italic"/>	        		
+	</tag>		
+	<tag name="chunk" alias="PRINTING_DATE">
+		<attribute name="leading" value="10"/>
+		<attribute name="size" value="10" />				
+		<attribute name="horizontalalign" value="Left"/>
+		<attribute name="style" value="font-family: Times New Roman;font-style:italic"/>	        		
+	</tag>		
+	
+	<tag name="b" alias="b">
+		<attribute name="style" value="font-family: Times New Roman;font-weight: bold;"/>	        		
+	</tag>	
+	<tag name="i" alias="i">
+		<attribute name="style" value="font-family: Times New Roman;font-style:italic;"/>	        		
+	</tag>		
+		
+	<tag name="image" alias="logoright">
+		<attribute name="url" value="logo.png"/>		
+		<attribute name="align" value="Right"/>			
+	</tag>	
+	<tag name="image" alias="logoleft">
+		<attribute name="url" value="logo.png"/>		
+		<attribute name="align" value="Left"/>			
+
+	</tag>	
+	
+	<tag name="paragraph" alias="URL">
+		<attribute name="size" value="9"/>
+		<attribute name="align" value="Center"/>
+	</tag>
+	<tag name="paragraph" alias="EMAIL">
+			<attribute name="size" value="9"/>
+			<attribute name="align" value="Center"/>
+	</tag>
+	<tag name="paragraph" alias="CONTACT">
+				<attribute name="size" value="9"/>
+				<attribute name="align" value="Center"/>
+	</tag>
+	<tag name="paragraph" alias="DATE">
+				<attribute name="size" value="9"/>
+				<attribute name="align" value="Center"/>
+	</tag>
+	<tag name="paragraph" alias="AUTHOR">
+				<attribute name="size" value="9"/>
+				<attribute name="align" value="Center"/>
+	</tag>
+	<tag name="paragraph" alias="QMRF_NAME">
+				<attribute name="size" value="9"/>
+				<attribute name="align" value="Center"/>
+	</tag>
+	<tag name="paragraph" alias="VERSION">
+					<attribute name="size" value="9"/>
+					<attribute name="align" value="Center"/>
+	</tag>
+	<tag name="paragraph" alias="URL">
+						<attribute name="size" value="9"/>
+						<attribute name="align" value="Center"/>
+	</tag>
+	<tag name="table" alias="QMRF_info_table">
+			<attribute name="width" value="100%" />
+	        <attribute name="cellpadding" value="2" />
+	        <attribute name="borderwidth" value="0.5" />
+	        <attribute name="top" value="true" />
+	        <attribute name="bottom" value="true" />
+	        <attribute name="left" value="true" />
+	        <attribute name="right" value="true" />	        
+			<attribute name="align" value="Left"/>	        
+	        <attribute name="bordercolor" value="#000000" />
+
+	</tag>
+	<tag name="row" alias="QMRF_info_row" >
+        <attribute name="borderwidth" value="1" />
+        <attribute name="bordercolor" value="#000000" />
+	</tag>
+
+	<tag name="phrase" alias="QMRF_img_phrase">
+
+	</tag>
+	<tag name="chunk" alias="QMRF_img_chunk">
+
+	</tag>
+
+	<tag name="cell" alias="QMRF_img_cell" >
+		<attribute name="width" value="100%" />
+		<attribute name="height" value="10%" />		
+        <attribute name="bordercolor" value="#000000" />
+        <attribute name="borderwidth" value="0.5" />        
+        <attribute name="top" value="true" />
+        <attribute name="bottom" value="true" />
+        <attribute name="left" value="true" />
+        <attribute name="right" value="true" />	    
+	</tag>
+			
+	<tag name="cell" alias="QMRF_info_cell" >
+		<attribute name="width" value="700%" />
+		<attribute name="horizontalalign" value="Left"/>	
+      		
+	</tag>
+	<tag name="cell" alias="QMRF_info_title" >
+		<attribute name="width" value="700%" />
+		<attribute name="horizontalalign" value="Left"/>	
+        <attribute name="borderwidth" value="0.5" />		
+        <attribute name="bordercolor" value="#000000" />        
+        <attribute name="top" value="true" />
+        <attribute name="bottom" value="true" />				
+     		
+	</tag>	
+	<!--<tag name="table" alias="QMRF_chapters">
+		        <attribute name="columns" value="1" />
+		        <attribute name="width" value="100%" />
+		        <attribute name="cellpadding" value="2" />
+		        <attribute name="widths" value="100" />
+		        <attribute name="borderwidth" value="0" />
+		        <attribute name="top" value="true" />
+		        <attribute name="bottom" value="true" />
+		        <attribute name="left" value="true" />
+		        <attribute name="right" value="true" />	        
+		        <attribute name="bordercolor" value="#FF0000" />
+		        <attribute name="red" value="#000000" />
+		        <attribute name="green" value="#000000" />
+		        <attribute name="blue" value="#000000" />		        		        		        
+		        
+	</tag>
+	<tag name="row" alias="QMRF_chapters_row" />
+	<tag name="cell" alias="QMRF_chapters_cell" />	
+	-->
+	<!--<tag name="chunk" alias="QSAR_identifier">
+				<attribute name="leading" value="14"/>
+					
+				<attribute name="size" value="36" />
+	   			<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>-->
+	<tag name="paragraph" alias="QSAR_General_information">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_Endpoint">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_Algorithm">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_Applicability_domain">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_Robustness">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_Predictivity">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_Interpretation">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_Miscelaneous">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QMRF_Summary">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	
+	<tag name="table" alias="QMRF_chapter_items">
+			        <attribute name="columns" value="2" />
+			        <attribute name="width" value="100%" />
+			        <attribute name="cellpadding" value="2" />
+			        <attribute name="widths" value="50;50" />
+			        <attribute name="borderwidth" value="0" />
+			        <attribute name="top" value="true" />
+			        <attribute name="bottom" value="true" />
+			        <attribute name="left" value="true" />
+			        <attribute name="right" value="true" />	
+			         
+			        
+	</tag>
+	<tag name="row" alias="QMRF_chapter_items_row" />
+	
+	<tag name="cell" alias="QMRF_chapter_items_cell" >
+		<attribute name="colspan" value="2"/>
+		<attribute name="horizontalalign" value="Justify" />
+		
+		
+	</tag>
+	<tag name="cell" alias="QMRF_chapter_items_cell1">
+	   	<attribute name="horizontalalign" value="Left" />
+	   	<attribute name="verticalalign" value="Middle" />	   	
+	   	<attribute name="bordercolor" value="#000000"/>
+	   	<attribute name="backgroundcolor" value="#E6E6E6"/>
+	   	<attribute name="left" value="true"/>
+	   	<attribute name="right" value="true"/>
+	   	<attribute name="top" value="true"/>
+  	    	<attribute name="bottom" value="true"/>
+  	    	<attribute name="colspan" value="2"/>
+  	    	
+	</tag>
+	
+		
+
+  	
+	
+	
+	<tag name="paragraph" alias="QSAR_title">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+	   			<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+				
+	</tag>
+	<tag name="paragraph" alias="QSAR_title_text">
+				<attribute name="size" value="9" />
+				
+				
+	</tag>
+	<tag name="paragraph" alias="QSAR_models">
+					<attribute name="leading" value="14"/>
+					
+					<attribute name="size" value="12" />
+					<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_models_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="QSAR_software">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QSAR_software_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	
+	<tag name="paragraph" alias="qmrf_date">
+					<attribute name="leading" value="14"/>
+					
+					<attribute name="size" value="12" />
+					<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="qmrf_date_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="qmrf_authors">
+					<attribute name="leading" value="14"/>
+					
+					<attribute name="size" value="12" />
+					<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="qmrf_authors_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>	
+	<tag name="paragraph" alias="qmrf_date_revision">
+					<attribute name="leading" value="14"/>
+					
+					<attribute name="size" value="12" />
+					<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="qmrf_date_revision_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>	
+	
+	<tag name="paragraph" alias="qmrf_revision">
+						<attribute name="leading" value="14"/>
+						
+						<attribute name="size" value="12" />
+						<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="qmrf_revision_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="model_authors">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="model_authors_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>	
+	<tag name="paragraph" alias="model_date">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="model_date_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="references">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="references_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="info_availability">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="info_availability_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="related_models">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="related_models_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="model_species">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="model_species_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="model_endpoint">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="model_endpoint_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="endpoint_comments">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="endpoint_comments_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="endpoint_units">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="endpoint_units_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="endpoint_variable">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="endpoint_variable_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="endpoint_protocol">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="endpoint_protocol_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="endpoint_data_quality">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="endpoint_data_quality_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="algorithm_type">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="algorithm_type_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="algorithm_explicit">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="algorithm_explicit_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>	
+	<tag name="paragraph" alias="equation">
+				<attribute name="size" value="9"/>
+				
+	</tag>		
+	<tag name="paragraph" alias="algorithm_comments">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="algorithm_comments_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="algorithms_descriptors">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="algorithms_descriptors_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="descriptors_selection">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="descriptors_selection_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="descriptors_generation">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="descriptors_generation_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="descriptors_generation_software">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="descriptors_generation_software_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="descriptors_chemicals_ratio">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="descriptors_chemicals_ratio_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+		
+	
+	<tag name="paragraph" alias="app_domain_description">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="app_domain_description_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="app_domain_method">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="app_domain_method_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="app_domain_software">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="app_domain_software_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	<tag name="paragraph" alias="applicability_limits">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="applicability_limits_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="training_set_availability">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="training_set_availability_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="training_set_data">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="training_set_data_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="training_set_data_dataset">
+				<attribute name="size" value="9"/>
+				
+	</tag>	
+	<tag name="paragraph" alias="training_set_descriptors">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="training_set_descriptors_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="dependent_var_availability">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="dependent_var_availability_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="other_info">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="other_info_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="preprocessing">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="preprocessing_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="goodness_of_fit">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="goodness_of_fit_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="loo">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="loo_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="lmo">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="lmo_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="yscrambling">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="yscrambling_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="bootstrap">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="bootstrap_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="other_statistics">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="other_statistics_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_set_availability">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="validation_set_availability_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_set_data">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="validation_set_data_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_set_data_dataset">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_set_descriptors">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="validation_set_descriptors_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_dependent_var_availability">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="validation_dependent_var_availability_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_other_info">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="validation_other_info_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="experimental_design">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="experimental_design_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_predictivity">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="validation_predictivity_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_assessment">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="validation_assessment_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="validation_comments">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="validation_comments_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="mechanistic_basis">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="mechanistic_basis_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="mechanistic_basis_comments">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="mechanistic_basis_comments_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="mechanistic_basis_info">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="mechanistic_basis_info_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="comments">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="comments_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="bibliography">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="bibliography_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="attachments">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="attachments_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="QMRF_number">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="QMRF_number_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="date_publication">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="date_publication_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="keywords">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="keywords_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	<tag name="paragraph" alias="summary_comments">
+				<attribute name="leading" value="14"/>
+				
+				<attribute name="size" value="12" />
+				<attribute name="style" value="font-family: Times New Roman; font-weight: bold"/>
+	</tag>
+	<tag name="paragraph" alias="summary_comments_text">
+				<attribute name="size" value="9"/>
+				
+	</tag>
+	
+	
+	
+	
+</tagmap>

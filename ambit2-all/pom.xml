@@ -314,6 +314,7 @@
     <module>ambit2-taglibs</module>
      -->
     <module>ambit2-dragon</module>
+    <module>ambit2-qmrf</module>
   </modules>
   <distributionManagement>
   <!-- 

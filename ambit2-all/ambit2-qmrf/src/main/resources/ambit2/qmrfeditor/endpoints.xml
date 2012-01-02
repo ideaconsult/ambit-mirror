@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<endpoints_catalog>
+<endpoint id="endpoint73"	group="1.Physicochemical effects " subgroup="" name="1.1.Melting point" />
+	  <endpoint id="endpoint74"	group="1.Physicochemical effects " subgroup="" name="1.2.Boiling point" />
+	  <endpoint id="endpoint75"	group="1.Physicochemical effects " subgroup="" name="1.3.Water solubility" />
+	  <endpoint id="endpoint76"	group="1.Physicochemical effects " subgroup="" name="1.4.Vapour pressure" />
+	  <endpoint id="endpoint77"	group="1.Physicochemical effects " subgroup="" name="1.5.Surface tension" />
+	  <endpoint id="endpoint78"	group="1.Physicochemical effects " subgroup="" name="1.6.Octanol-water partition coefficient (Kow)" />
+	  <endpoint id="endpoint79"	group="1.Physicochemical effects " subgroup="" name="1.7.Octanol-water distribution coefficient (D)" />
+	  <endpoint id="endpoint80"	group="1.Physicochemical effects " subgroup="" name="1.8.Octanol-air partition coefficient (Koa)" />
+	  <endpoint id="endpoint81"	group="1.Physicochemical effects " subgroup="" name="1.9.Air- water partition coefficient (Henry’s law constant, H)" />
+	  <endpoint id="endpoint82"	group="1.Physicochemical effects " subgroup="" name="1.10.Dissociation constant (pKa)" />
+	  <endpoint id="endpoint83"	group="2.Environmental fate parameters" subgroup="1.Persistence: Abiotic degradation in water" name="2.1.a.Hydrolysis " />
+	  <endpoint id="endpoint84"	group="2.Environmental fate parameters" subgroup="1.Persistence: Abiotic degradation in water" name="2.1.b.Oxidation " />
+	  <endpoint id="endpoint85"	group="2.Environmental fate parameters" subgroup="1.Persistence: Abiotic degradation in water" name="2.1.c.Other " />
+	  <endpoint id="endpoint86"	group="2.Environmental fate parameters" subgroup="2.Persistence: Abiotic degradation in air (Phototransformation)" name="2.2.a.Direct photolysis" />
+	  <endpoint id="endpoint87"	group="2.Environmental fate parameters" subgroup="2.Persistence: Abiotic degradation in air (Phototransformation)" name="2.2.b.Indirect photolysis (OH-radical reaction, ozone-radical reaction, other)" />
+	  <endpoint id="endpoint88"	group="2.Environmental fate parameters" subgroup="3.Persistence: Biodegradation" name="2.3.a.Ready/not ready biodegradability" />
+	  <endpoint id="endpoint89"	group="2.Environmental fate parameters" subgroup="3.Persistence: Biodegradation" name="2.3.b.Biodegradation time frame (primary, ultimate degradation)" />
+	  <endpoint id="endpoint90"	group="2.Environmental fate parameters" subgroup="4.Bioconcentration " name="2.4.a.BCF fish" />
+	  <endpoint id="endpoint91"	group="2.Environmental fate parameters" subgroup="4.Bioconcentration " name="2.4.b.BCF other organisms " />
+	  <endpoint id="endpoint92"	group="2.Environmental fate parameters" subgroup="5.Bioaccumulation" name="2.5.a.BAF fish" />
+	  <endpoint id="endpoint93"	group="2.Environmental fate parameters" subgroup="5.Bioaccumulation" name="2.5.b.BAF other organisms " />
+	  <endpoint id="endpoint94"	group="2.Environmental fate parameters " subgroup="" name="2.6.Organic carbon-sorption partition coefficient (organic carbon; Koc)" />
+	  <endpoint id="endpoint95"	group="2.Environmental fate parameters " subgroup="" name="2.7.Adsorption/Desorption in soil " />
+	  <endpoint id="endpoint96"	group="2.Environmental fate parameters " subgroup="" name="2.8.Adsorption/Desorption in sediment" />
+	  <endpoint id="endpoint97"	group="2.Environmental fate parameters " subgroup="" name="2.9.Vegetation-water partition coefficient" />
+	  <endpoint id="endpoint98"	group="2.Environmental fate parameters " subgroup="" name="2.10.Vegetation-air partition coefficient" />
+	  <endpoint id="endpoint99"	group="2.Environmental fate parameters " subgroup="" name="2.11.Vegetation-soil partition coefficient" />
+	  <endpoint id="endpoint100"	group="3.Ecotoxic effects" subgroup="" name="3.1.Short-term toxicity to Daphnia (immobilisation)" />
+	  <endpoint id="endpoint101"	group="3.Ecotoxic effects" subgroup="" name="3.2.Short-term toxicity to algae (inhibition of the exponential growth rate)" />
+	  <endpoint id="endpoint102"	group="3.Ecotoxic effects" subgroup="" name="3.3.Acute toxicity to fish (lethality)" />
+	  <endpoint id="endpoint103"	group="3.Ecotoxic effects" subgroup="" name="3.4.Long-term toxicity to Daphnia (lethality, inhibition of reproduction)" />
+	  <endpoint id="endpoint104"	group="3.Ecotoxic effects" subgroup="" name="3.5.Long-term toxicity to fish (egg/sac fry, growth inhibition of juvenile fish, early life stage, full life cycle)" />
+	  <endpoint id="endpoint105"	group="3.Ecotoxic effects" subgroup="" name="3.6.Microbial inhibition (activated sludge respiration inhibition, inhibition of nitrification, other)" />
+	  <endpoint id="endpoint106"	group="3.Ecotoxic effects" subgroup="" name="3.7.Toxicity to soil microorganisms (inhibition of C-mineralisation, inhibition of N-mineralisation, other)" />
+	  <endpoint id="endpoint107"	group="3.Ecotoxic effects" subgroup="" name="3.8.Toxicity to earthworms (survival, growth, reproduction)" />
+	  <endpoint id="endpoint108"	group="3.Ecotoxic effects" subgroup="" name="3.9.Toxicity to plants (leaves, seed germination, root elongation)" />
+	  <endpoint id="endpoint109"	group="3.Ecotoxic effects" subgroup="" name="3.10.Toxicity to soil invertebrates (survival, growth, reproduction)" />
+	  <endpoint id="endpoint110"	group="3.Ecotoxic effects" subgroup="" name="3.11.Toxicity to sediment organisms (survival, growth, reproduction)" />
+	  <endpoint id="endpoint111"	group="3.Ecotoxic effects" subgroup="12.Toxicity to birds" name="3.12.a.Short term toxicity (feeding, gavage, other)" />
+	  <endpoint id="endpoint112"	group="3.Ecotoxic effects" subgroup="12.Toxicity to birds" name="3.12.b.Long-term toxicity (survival, growth, reproduction)" />
+	  <endpoint id="endpoint113"	group="4.Human health effects" subgroup="" name="4.1.Acute inhalation toxicity" />
+	  <endpoint id="endpoint114"	group="4.Human health effects" subgroup="" name="4.2.Acute oral toxicity" />
+	  <endpoint id="endpoint115"	group="4.Human health effects" subgroup="" name="4.3.Acute dermal toxicity" />
+	  <endpoint id="endpoint116"	group="4.Human health effects" subgroup="" name="4.4.Skin irritation /corrosion" />
+	  <endpoint id="endpoint117"	group="4.Human health effects" subgroup="" name="4.5.Acute photoirritation" />
+	  <endpoint id="endpoint118"	group="4.Human health effects" subgroup="" name="4.6.Skin sensitisation" />
+	  <endpoint id="endpoint119"	group="4.Human health effects" subgroup="" name="4.7.Respiratory sensitisation" />
+	  <endpoint id="endpoint120"	group="4.Human health effects" subgroup="" name="4.8.Photosensitisation" />
+	  <endpoint id="endpoint121"	group="4.Human health effects" subgroup="" name="4.9.Eye irritation/corrosion" />
+	  <endpoint id="endpoint122"	group="4.Human health effects" subgroup="" name="4.10.Mutagenicity " />
+	  <endpoint id="endpoint123"	group="4.Human health effects" subgroup="" name="4.11.Photomutagenicity" />
+	  <endpoint id="endpoint124"	group="4.Human health effects" subgroup="" name="4.12.Carcinogenicity" />
+	  <endpoint id="endpoint125"	group="4.Human health effects" subgroup="" name="4.13.Photocarcinogenicity" />
+	  <endpoint id="endpoint126"	group="4.Human health effects" subgroup="" name="4.14.Repeated dose toxicity " />
+	  <endpoint id="endpoint127"	group="4.Human health effects" subgroup="" name="4.15.In vitro reproductive toxicity (e.g. embryotoxic effects in cell culture such as embryo stem cells)  " />
+	  <endpoint id="endpoint128"	group="4.Human health effects" subgroup="" name="4.16.In vivo pre-natal-developmental toxicity" />
+	  <endpoint id="endpoint129"	group="4.Human health effects" subgroup="" name="4.17.In vivo pre-, peri-, post natal development and / or fertility (1 or 2 gen. Study or enhanced 1 gen study) " />
+	  <endpoint id="endpoint130"	group="4.Human health effects" subgroup="18.Endocrine Activity" name="4.18.a.Receptor-binding (specify receptor)" />
+	  <endpoint id="endpoint131"	group="4.Human health effects" subgroup="18.Endocrine Activity" name="4.18.b.Receptor binding and gene expression (specify receptor)" />
+	  <endpoint id="endpoint132"	group="4.Human health effects" subgroup="18.Endocrine Activity" name="4.18.c.Other (e.g. inhibition of specific enzymes involved in hormone synthesis or regulation, specify enzyme(s) and hormone)" />
+	  <endpoint id="endpoint133"	group="5.Toxicokinetics " subgroup="" name="5.1.Skin penetration" />
+	  <endpoint id="endpoint134"	group="5.Toxicokinetics " subgroup="" name="5.2.Ocular membrane penetration" />
+	  <endpoint id="endpoint135"	group="5.Toxicokinetics " subgroup="" name="5.3.Gastrointestinal absorption" />
+	  <endpoint id="endpoint136"	group="5.Toxicokinetics " subgroup="" name="5.4.Blood-brain barrier penetration" />
+	  <endpoint id="endpoint137"	group="5.Toxicokinetics " subgroup="" name="5.5.Placental barrier penetration" />
+	  <endpoint id="endpoint138"	group="5.Toxicokinetics " subgroup="" name="5.6.Blood-testis barrier penetration" />
+	  <endpoint id="endpoint139"	group="5.Toxicokinetics " subgroup="" name="5.7.Blood-lung barrier penetration" />
+	  <endpoint id="endpoint140"	group="5.Toxicokinetics " subgroup="" name="5.8.Metabolism (including metabolic clearance)" />
+	  <endpoint id="endpoint141"	group="5.Toxicokinetics " subgroup="" name="5.9.Protein-binding" />
+	  <endpoint id="endpoint142"	group="5.Toxicokinetics " subgroup="" name="5.10.DNA-binding" />
+	  <endpoint id="endpoint143"	group="6.Other" subgroup="" name="6.6.Other" />
+	  </endpoints_catalog>
