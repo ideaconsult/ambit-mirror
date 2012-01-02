@@ -33,12 +33,12 @@ public class DatasetStrucTypeFacet  extends PropertyDatasetFacet<IStructureRecor
 				?String.format("%s/query/structype?%s=%s",
 						(params.length>0)?params[0]:"",
 						"search",
-						label)
+						label==null?"":label)
 				:String.format("%s/dataset/%d/query/structype?%s=%s",
 				(params.length>0)?params[0]:"",
 				getDataset().getId(),		
 				"search",
-				label);
+				label==null?"":label);
 	
 	}	
 	@Override

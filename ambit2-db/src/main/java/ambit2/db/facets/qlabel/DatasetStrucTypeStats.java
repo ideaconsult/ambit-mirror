@@ -78,7 +78,7 @@ public class DatasetStrucTypeStats  extends AbstractFacetQuery<IStructureRecord.
 			record.setDataset(dataset);
 			String label = rs.getString("type_structure");
 			record.setValue(String.format("[%s] %s",
-					dataset==null?"Total":dataset.getName(),label));
+					dataset==null?"Total":dataset.getName(),label==null?"All":label));
 			
 			record.setCount(rs.getInt(4));
 			String ts = rs.getString("type_structure");
