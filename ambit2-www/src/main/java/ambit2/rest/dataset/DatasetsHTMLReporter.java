@@ -95,21 +95,21 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 			}
 			
-			String page = "";
+			String page = Long.toString(query.getPage());
 			Form form = uriReporter.getResourceRef().getQueryAsForm();
 			try {
 				
-				page = form.getFirstValue("page");
+				page = form.getFirstValue("page")==null?page:form.getFirstValue("page");
 			} catch (Exception x) {
-				page = "0";
+				page = Long.toString(query.getPage());
 			}			
-			String pageSize = "50";
+			String pageSize =  Long.toString(query.getPageSize());
 		
 			try {
 				
-				pageSize = form.getFirstValue("pagesize");
+				pageSize = form.getFirstValue("pagesize")==null? Long.toString(query.getPageSize()):form.getFirstValue("pagesize");
 			} catch (Exception x) {
-				pageSize = "50";
+				pageSize = Long.toString(query.getPageSize());
 			}	
 			String search = "";
 			try {
