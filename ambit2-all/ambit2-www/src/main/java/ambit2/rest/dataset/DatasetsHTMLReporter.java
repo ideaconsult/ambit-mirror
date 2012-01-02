@@ -21,9 +21,12 @@ import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
+import ambit2.rest.facet.DatasetStrucTypeStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
+import ambit2.rest.query.QLabelQueryResource;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.DisplayMode;
 
@@ -461,6 +464,15 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			output.write(String.format("<tr><th>%s</th><td><a href='%s'>%s</a></td></tr>", "Browse the dataset",uri,uri));
 			output.write(String.format("<tr><th>%s</th><td><a href='%s/compounds'>%s/compounds</a></td></tr>", "Browse the compounds only",uri,uri));
 			output.write(String.format("<tr><th>%s</th><td><a href='%s/feature'>%s/feature</a></td></tr>", "Browse the dataset features",uri,uri));
+			
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
+			
+			output.write(String.format("<tr><th>%s</th><td><a href='%s%s%s'>%s%s%s</a></td></tr>", 
+					"Structure type statistics",uri,QueryResource.query_resource,DatasetStrucTypeStatsResource.resource,uri,QueryResource.query_resource,DatasetStrucTypeStatsResource.resource));
+			output.write(String.format("<tr><th>%s</th><td><a href='%s%s%s'>%s%s%s</a></td></tr>", 
+					"Consensus label statistics",uri,QueryResource.query_resource,DatasetChemicalsQualityStatsResource.resource,uri,QueryResource.query_resource,DatasetChemicalsQualityStatsResource.resource));
+			output.write(String.format("<tr><th>%s</th><td><a href='%s%s%s'>%s%s%s</a></td></tr>", 
+					"Structure quality label statistics",uri,QueryResource.query_resource,DatasetStructureQualityStatsResource.resource,uri,QueryResource.query_resource,DatasetStructureQualityStatsResource.resource));
 			
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
 			output.write(String.format("<tr><th>%s</th><td><a href='%s/similarity?search=c1ccccc1'>%s/similarity</a></td></tr>", "Search for similar compounds within this dataset",uri,uri));
