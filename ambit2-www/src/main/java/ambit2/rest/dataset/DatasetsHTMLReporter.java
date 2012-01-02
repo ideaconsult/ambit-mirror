@@ -346,7 +346,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	
 
 				output.write("&nbsp;");	
-				
+				/*
 				output.write(String.format(
 						"&nbsp;<a href=\"%s%s%s\" title='Quality labels'>[Qlabels]</a>",
 						w.toString(),
@@ -358,7 +358,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						w.toString(),
 						"/query",
 						DatasetChemicalsQualityStatsResource.resource));					
-				
+				*/
 				output.write(String.format(
 						"&nbsp;<a href=\"%s%s\">[Metadata]</a>",
 						w.toString(),
