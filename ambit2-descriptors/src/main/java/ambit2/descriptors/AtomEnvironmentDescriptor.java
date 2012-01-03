@@ -13,11 +13,10 @@ import org.openscience.cdk.atomtype.IAtomTypeMatcher;
 import org.openscience.cdk.atomtype.SybylAtomTypeMatcher;
 import org.openscience.cdk.config.AtomTypeFactory;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.graph.PathTools;
+import org.openscience.cdk.graph.matrix.AdjacencyMatrix;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -25,7 +24,6 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResultType;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.base.data.Property;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -38,24 +36,35 @@ import ambit2.core.config.AmbitCONSTANTS;
  */
 public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
     //parameters
-	private int targetPosition = 0;
+	public enum _param {
+		maxLevel {
+			@Override
+			public Class getType() {
+				return Integer.class;
+			}
+		},
+		atomTypeFactory {
+			@Override
+			public Class getType() {
+				return AtomTypeFactory.class;
+			}
+		},
+		atomTypeMatcher {
+			@Override
+			public Class getType() {
+				return IAtomTypeMatcher.class;
+			}
+		};
+		public abstract Class getType();
+	}
 	private int maxLevel = 3;
-	private boolean perceiveCyclicAtoms = false;
-	private boolean useExistingConnectionMatrix = true;
 	
 	private IAtomTypeMatcher atm = null;
 	private AtomTypeFactory factory = null;
-
-	//logger
-	private LoggingTool logger;
 	//internal data
 	protected boolean empty = true;
 	protected IAtomType[] atomTypes = null;
 	protected TreeMap<String,Integer> map = null;
-	private IAtomContainer atomContainer = null;
-    private int[][] aMatrix = null;
-    private int[] atomLevels = null;
-    private int[] atomIndex = null;
     /**
      * 
      */
@@ -83,13 +92,9 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
 	 *@return    The parameterNames value
 	 */
 	public String[] getParameterNames() {
-		String[] params = new String[6];
-		params[0] = "targetPosition";
-		params[1] = "maxLevel";
-		params[2] = "perceiveCyclicAtoms";
-		params[3] = "useExistingConnectionMatrix";
-		params[4] = "AtomTypeFactory";
-		params[5] = "AtomTypeMatcher";
+		String[] params = new String[_param.values().length];
+		for (int i=0; i < params.length; i++) 
+			params[i] = _param.values()[i].toString();
 		return params;
 	}
 
@@ -112,68 +117,43 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
 	/**
 	 *  Sets the parameters attribute of the AtomEnvironmentDescriptor object
 	 *@param  params - parameters, as below
-	 *params[0]  The parameter is the atom position, mandatory
-	 *params[1]  MaxLevel, optional , default 3
-	 *params[2]  perceiveCyclicAtoms, optional , default false
-	 *params[3]  useExistingConnectionMatrix, optional , default false
-	 *params[4]  AtomTypeFactory factory, optional, default AtomTypeFactory.getInstance("org/openscience/cdk/dict/data/sybyl-atom-types.owl")
-	 *params[5]  AtomTypeMatcher atm, optional , default HybridizationStateATMatcher
+	 *params[0]  MaxLevel, optional , default 3
+	 *params[1]  perceiveCyclicAtoms, optional , default false
+	 *params[2]  AtomTypeFactory factory, optional, default AtomTypeFactory.getInstance("org/openscience/cdk/dict/data/sybyl-atom-types.owl")
+	 *params[3]  AtomTypeMatcher atm, optional , default HybridizationStateATMatcher
 	 */
-    public void setParameters(Object[] params) throws CDKException {
-        Object[] allParams = new Object[6];
+    public void setParameters(Object[] allParams) throws CDKException {
         
         AtomTypeFactory afactory = null;
         IAtomTypeMatcher amatcher = null;
         
-        for (int i = 0; i < 5; i++)  
-        	if (params.length > i) { 
-        		allParams[i] = params[i]; 
-        		if (allParams[i] == null) 
-        		    if (i==0)
-        		        throw new CDKException("The first parameter is mandatory!");
-        		    else continue;    
-	        	if (i < 2) { 
-	        		if (!(allParams[i] instanceof Integer)) 
-	    			throw new CDKException("The " + (i+1) + " parameter must be of type Integer");
-	    		} else        	
-	        	if ( i < 4) { 
-	        		if (!(allParams[i] instanceof Boolean)) 
-	        		throw new CDKException("The " + (i+1) + " parameter must be of type Boolean");
-	    		} else
-		        	if ( i == 4)  {
-		        		if (!(allParams[i] instanceof Boolean))
-		        		throw new CDKException("The " + (i+1) + " parameter must be of type Boolean");
-		    		} else	  
-			        	if ( i == 5) {
-			        		if (!(allParams[i] instanceof Boolean)) 
-			        		throw new CDKException("The " + (i+1) + " parameter must be of type Boolean");
-			    		}		    			
-        	} else allParams[i] = null;
-
-        if (params.length > 6)
-        	throw new CDKException("AtomEnvironmentDescriptor only expects 5 parameters");
-        
-        targetPosition = ((Integer) allParams[0]).intValue();
-        
-		if (allParams[1] != null)
-	        maxLevel = ((Integer) allParams[1]).intValue();
-
-		if (allParams[2] != null)
-			perceiveCyclicAtoms = ((Boolean) allParams[2]).booleanValue();
-
-		if (allParams[3] != null)
-			useExistingConnectionMatrix = ((Boolean) allParams[3]).booleanValue();
-		
-		if (allParams[4] != null) 
-		    afactory = (AtomTypeFactory)allParams[4];
-
-		if (allParams[5] != null) 
-		    amatcher = (IAtomTypeMatcher) allParams[5];
-				
-		
+        for (int i = 0; i < allParams.length; i++)  {
+        	switch (i) {
+        	case 0: {
+        		if (!(allParams[i] instanceof Integer)) 
+	    			throw new CDKException(String.format("The %d parameter must be of type Integer",i+1));
+        		maxLevel = ((Integer) allParams[i]).intValue();
+        		break;
+        	}
+	    	case 1: {	
+	    		if (!(allParams[i] instanceof Boolean)) 
+	    			throw new CDKException(String.format("The %d parameter must be of type AtomTypeFactory",i+1));
+	    		afactory = (AtomTypeFactory)allParams[i];
+	    		break;
+	    	}
+			case 2: {	
+				if (!(allParams[i] instanceof Boolean)) 
+					throw new CDKException(String.format("The %d parameter must be of type IAtomTypeMatcher",i+1));
+				amatcher = (IAtomTypeMatcher) allParams[i];
+				break;
+			}
+			default: {
+				throw new CDKException(String.format("%s only expects %d parameters",getClass().getName(),allParams.length));
+			}
+        	}
+        };
 				
 		try {
-		    
 		    initAtomTypes(afactory,amatcher);
 		} catch (Exception x) {
 		    throw new CDKException(x.getMessage());
@@ -186,12 +166,9 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
      */
     public Object[] getParameters() {
 		Object[] params = new Object[6];
-		params[0] = new Integer(targetPosition);
-		params[1] = new Integer(maxLevel);
-		params[2] = new Boolean(perceiveCyclicAtoms);
-		params[3] = new Boolean(useExistingConnectionMatrix);		
-		params[4] = factory; //TODO should it be  factory.clone() ?
-		params[5] = atm; //TODO should it be  atm.clone() ?
+		params[0] = new Integer(maxLevel);
+		params[1] = factory; //TODO should it be  factory.clone() ?
+		params[2] = atm; //TODO should it be  atm.clone() ?
 		return params;
     }
 
@@ -205,11 +182,10 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
     public DescriptorValue calculate(IAtomContainer container)  {
     	IntegerArrayResult r = null;
     	try {
-	    	int[] result = new int[getAtomFingerprintSize()];
-	
-	    	doCalculation(container,result);
+	    	int[][] result = doCalculation(container);
 	    	r = new IntegerArrayResult();
-	    	for (int i : result) r.add(i);
+	    	for (int[] a: result)
+	    		for (int b: a) r.add(b);
 	    	
 	        return new DescriptorValue(
 	                getSpecification(), 
@@ -240,6 +216,7 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
      */
     public int getAtomFingerprintSize() {
         return (atomTypes.length +1)*(maxLevel)+2;
+        
     }
     public String atomTypeToString(int index) {
         IAtomType aType = getAtomType(index);
@@ -258,118 +235,56 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
      * @param result   result[i] contains the level at which ith atom is from the current atom (one set by setParameters)
      * @throws CDKException
      */
-    public void doCalculation(IAtomContainer arg0, int[] result) throws CDKException {
+    public int[][] doCalculation(IAtomContainer atomContainer) throws CDKException {
+    	int[][] result = new int[atomContainer.getAtomCount()][getAtomFingerprintSize()];
+    	
         if ((atm == null) || (factory == null)) initAtomTypes(null,null);
-        initConnectionMatrix(arg0);
-        for (int i=0; i < atomLevels.length; i++) atomLevels[i] = -1;
-        getAtomEnvironment(atomLevels,targetPosition,0);
+        //maxLevel is how many bonds from the atom we will count atom types
+		 int natoms = atomContainer.getAtomCount();
+		 //do atom type matching
+		 atomTypes = factory.getAllAtomTypes();
+		 int[] atomIndex = new int[natoms]; //array of atom type integers
+		 for (int i = 0; i < natoms; i++) 
+		    try {
+		            IAtomType a = atm.findMatchingAtomType(atomContainer,atomContainer.getAtom(i));
+		            if ( a != null) {
+		                Object mappedType = map.get(a.getAtomTypeName());
+		                if (mappedType != null) 
+		                    atomIndex[i] = ((Integer) mappedType).intValue();
+		                else {
+		                    atomIndex[i] = -1;
+		                }    
+		            } else //atom type not found 
+		             atomIndex[i] = -1;
+		    } catch (Exception x) {
+		            x.printStackTrace();
+		            throw new CDKException(x.getMessage() + "\ninitConnectionMatrix");
+		    }                
+	    //compute bond distances between all atoms
+	    int[][] aMatrix = PathTools.computeFloydAPSP(AdjacencyMatrix.getMatrix(atomContainer));
+	    //assign values to the results arrays for all atoms
+	    int L = (atomTypes.length +1) ;
 
-        int L = (atomTypes.length +1) ;
-        
-        for (int j = 0; j < result.length; j++) result[j] = 0;
-        //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-        for (int j=0; j< atomLevels.length; j++)
-        	if (atomLevels[j] == 0)
-        		result[1] = atomIndex[j];
-        	else if (atomLevels[j]>0)
-        		if (atomIndex[j] >= 0) //atomtype defined in factory
-	                result[L*(atomLevels[j]-1)+atomIndex[j]+2]++;
-        		else if (atomIndex[j] == -1) //-1, unknown  type
-        			result[L*(atomLevels[j]-1)+(L-1)+2]++;
-        		//skip if == -2
-	    //checksum for easy comparison        
-	    for (int j = 1; j < result.length; j++) result[0] += result[j];
-    }
-    
-    protected void getAtomEnvironment(int[] atomLevels, int index, int level) {
-        atomLevels[index] = level;        
-        for (int i = 0; i < aMatrix.length; i++) 
-            if ((atomLevels[i] == -1) && (level < maxLevel)) {
-                if (aMatrix[index][i] == 1) 
-                	getAtomEnvironment(atomLevels,i,level+1);
-            }    
-        
-    }    
-	public static int[][] getMatrix(IAtomContainer container) {
-		IElectronContainer electronContainer = null;
-		int indexAtom1;
-		int indexAtom2;
-		
-		int heavyatoms = 0;
-		for (int a=0; a < container.getAtomCount();a++) 
-			if (! ("H".equals(container.getAtom(a).getSymbol()))) 
-				heavyatoms++;
-		
-		int[][] conMat = new int[container.getAtomCount()][container.getAtomCount()];
-		for (int f = 0; f < container.getElectronContainerCount(); f++){
-            electronContainer = container.getElectronContainer(f);
-			if (electronContainer instanceof IBond)
-			{
-				IBond bond = (IBond) electronContainer;
-				IAtom atom1 = bond.getAtom(0);
-				IAtom atom2 = bond.getAtom(1);
-
-				if ("H".equals(atom1.getSymbol()) || "H".equals(atom2.getSymbol())) 
-					continue;
-				
-				indexAtom1 = container.getAtomNumber(atom1);
-				if (indexAtom1 < 0) {
-					System.out.println(atom1.getSymbol() + " not found");
-					continue;
-				}
-				
-				indexAtom2 = container.getAtomNumber(atom2);
-				if (indexAtom1 < 0) {
-					System.out.println(atom1.getSymbol() + " not found");
-					continue;
-				}
-				
-				conMat[indexAtom1][indexAtom2] = 1;
-				conMat[indexAtom2][indexAtom1] = 1;
-			}
-		}
-		return conMat;
+		for (int i = 0; i < natoms; i++) {
+		  //for every atom, iterate through its connections to all other atoms
+			for (int j=0; j < natoms; j++) {
+			   if (aMatrix[i][j] == 0) 
+			    result[i][1] = atomIndex[j]; //atom j is atom i
+			         else if (aMatrix[i][j] > 0 && aMatrix[i][j] <= maxLevel){ //j is not atom i and bonds less or equal to maxlevel
+			          if (atomIndex[j] >= 0) //atom type defined in factory
+			              result[i][L*(aMatrix[i][j]-1)+atomIndex[j]+2]++;
+			          else if (atomIndex[j] == -1) //-1, unknown  type
+			           result[i][L*(aMatrix[i][j]-1)+(L-1)+2]++;
+			         }
+			 }
+			 //checksum for easy comparison        
+			 for (int j = 1; j < result[i].length; j++) result[i][0] += result[i][j];
+		 }
+		return result;
 	}
-    private void initConnectionMatrix(IAtomContainer atomContainer) throws CDKException {
-        if (    (!useExistingConnectionMatrix) || 
-        		(aMatrix == null) || (this.atomContainer == null) || 
-                (this.atomContainer != atomContainer)) {
-            this.atomContainer = atomContainer;
-            //aMatrix = AdjacencyMatrix.getMatrix(this.atomContainer);
-            aMatrix = getMatrix(this.atomContainer);
-            int natoms = aMatrix.length;
-            atomLevels = new int[natoms];
-            atomIndex = new int[natoms];
-            for (int i = 0; i < natoms; i++) {
-                try {
-                    IAtomType a = atm.findMatchingAtomType(atomContainer,atomContainer.getAtom(i));
-                    if ( a != null) {
-                    	if (a.getAtomTypeName().startsWith("H")) atomIndex[i] = -2;
-                    	else {
-	                        Object mappedType = map.get(a.getAtomTypeName());
-	                        if (mappedType != null)	
-	                            atomIndex[i] = ((Integer) mappedType).intValue();
-	                        else {
-	                            //System.out.println(a.getAtomTypeName() + " not found in " + map);
-	                            atomIndex[i] = -1;
-	                        }    
-                    	}
-                    } else //atomtype not found 
-                    	atomIndex[i] = -1;
-                    
-                } catch (Exception x) {
-                    x.printStackTrace();
-                    throw new CDKException(x.getMessage() + "\ninitConnectionMatrix");
-                }                
-            }
-            
-        }
-        //else leave the same matrix
-    }
+	
     protected InputStream getAtomTypeFactoryStream() {
-    	//return this.getClass().getClassLoader().getResourceAsStream("ambit2/descriptors/hybridization_atomtypes.xml");
         return this.getClass().getClassLoader().getResourceAsStream("org/openscience/cdk/dict/data/sybyl-atom-types.owl");
-
     }
     private void initAtomTypes(AtomTypeFactory factory,IAtomTypeMatcher atm) throws CDKException {
         //the idea is not to create objects if they already exist...
@@ -378,7 +293,6 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
                 this.atm = SybylAtomTypeMatcher.getInstance(SilentChemObjectBuilder.getInstance());
                 
                 try {
-                    //InputStream ins = this.getClass().getClassLoader().getResourceAsStream("ambit/data/descriptors/hybridization_atomtypes.xml");
                 	InputStream ins = getAtomTypeFactoryStream();
                     this.factory = 
                         AtomTypeFactory.getInstance(ins,"owl",SilentChemObjectBuilder.getInstance());
@@ -400,7 +314,7 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
 	        for (int i = 0; i < atomTypes.length; i++) { 
 	            map.put(atomTypes[i].getAtomTypeName(),new Integer(i));
 	        }	
-	        //System.out.println(map);
+
         }
         
     }

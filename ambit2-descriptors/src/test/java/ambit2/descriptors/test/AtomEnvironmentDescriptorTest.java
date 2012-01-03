@@ -6,12 +6,20 @@
  */
 package ambit2.descriptors.test;
 
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.TreeMap;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.atomtype.IAtomTypeMatcher;
 import org.openscience.cdk.atomtype.SybylAtomTypeMatcher;
 import org.openscience.cdk.config.AtomTypeFactory;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.graph.PathTools;
+import org.openscience.cdk.graph.matrix.AdjacencyMatrix;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
@@ -20,6 +28,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.smiles.SmilesParserWrapper;
@@ -88,12 +97,12 @@ public class AtomEnvironmentDescriptorTest {
     @Test
     public void testAtomEnvironmentDescriptor() throws Exception {
     	AtomEnvironmentDescriptor descriptor = new AtomEnvironmentDescriptor();
-		int maxLevel = 3;
-		Object[] params = {null,new Integer(maxLevel),new Boolean(true),new Boolean(true)};
+		int maxLevel = 1;
+		Object[] params = {new Integer(maxLevel)};
 
 	    SmilesParserWrapper sp = SmilesParserWrapper.getInstance();
 		    //IAtomContainer mol = sp.parseSmiles("CCCCCC=CCC=CCCCCCCCC(=O)NCCO");
-		    IAtomContainer mol = sp.parseSmiles("CC(O)=O");
+		    IAtomContainer mol = sp.parseSmiles("C#N");
 		    //IAtomContainer mol = sp.parseSmiles("CCCC(CCC(CCCC(CCCCCCC(CCCCCCC(CCC(CCCC(CCCCCCC(CCCCC)CCC)CCC(CC(CCCC(CCC(CCCC(CCCCCCC(CCCCC)CCC)CCC(CCCCC)CCC)CCCC(CCC(CCCC(CCCCCCC(CCCCC)CCC)CCC(CCCCC)CCC)CC)CCC)CCC(CCCCC)CCC)CCC)CCC)CCCC(CCC(CCCC(CCCCCCC(CCCCC)CCC)CCC(CCCCC)CCC)CC)CCC)CCC(CCCCC)CCCCC)CCC)CCC(CC(CCCC(CCC(CCCC(CCCCCCC(CCCCC)CCC)CCC(CCCCC)CCC)CCCC(CCC(CCCC(CCCCCCC(CCCCC)CCC)CCC(CCCCC)CCC)CC)CCC)CCC(CCCCC)CCC)CCC)CCC)CCCC(CCC(CCCC(CCCCCCC(CCCCC)CCC)CCC(CCCCC)CCC)CC)CCC)CCC(CCCCC)CCC");
 		    AtomConfigurator typer = new AtomConfigurator();
 		    typer.process(mol);
@@ -102,16 +111,14 @@ public class AtomEnvironmentDescriptorTest {
 		    CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 		    hAdder.addImplicitHydrogens(mol);
 
+		    descriptor.setParameters(params);
+		    IntegerArrayResult r = (IntegerArrayResult) descriptor.calculate(mol).getValue();
+		    
 			for (int i = 0; i < mol.getAtomCount(); i++) {
-				//System.out.println(mol.getAtom(i));
-				params[0] = new Integer(i);
-			    descriptor.setParameters(params);
-
-			    IntegerArrayResult r = (IntegerArrayResult) descriptor.calculate(mol).getValue();
-			    //System.out.println(r.size());
+				
 			    if (i==0) { // just for test
 				    Object[] parameters = descriptor.getParameters();
-				    AtomTypeFactory factory = (AtomTypeFactory)parameters[4];
+				    AtomTypeFactory factory = (AtomTypeFactory)parameters[AtomEnvironmentDescriptor._param.atomTypeFactory.ordinal()];
 	
 					IAtomType[] at = factory.getAllAtomTypes();
 			    	System.out.print("Sum\tAtomType\t");
@@ -123,14 +130,14 @@ public class AtomEnvironmentDescriptorTest {
 				    }			    
 				    System.out.println("");
 				    Assert.assertTrue(factory.getSize()>0);
-				    Assert.assertEquals(maxLevel * (factory.getSize()+1)+2,r.length());
+				    System.out.println(r.toString());
+
+				    Assert.assertEquals(mol.getAtomCount() * (maxLevel * (factory.getSize()+1)+2),r.length());
 				}    
-			    System.out.println(r.toString());
+			    
 		    }
 		    
     }
-
-
 
 }
 
