@@ -21,7 +21,8 @@ import ambit2.descriptors.processors.BitSetGenerator.FPTable;
  * with a name {@link AmbitCONSTANTS#AtomEnvironment}. <br>
  * Used by {@link ambit2.database.writers.AtomEnvironmentWriter}
  * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> Aug 30, 2006
+ * @author Patrik Rydberg
+ * <b>Modified</b> Jan 3, 2012
  */
 public class AtomEnvironmentGenerator extends AbstractPropertyGenerator<AtomEnvironmentList>   {
     /**
@@ -40,7 +41,7 @@ public class AtomEnvironmentGenerator extends AbstractPropertyGenerator<AtomEnvi
 	public AtomEnvironmentGenerator() {
 		super();
 		aeDescriptor = createAtomEnvironmentDescriptor();
-		aeParams = new Object[2];
+		aeParams = new Object[1];
 	}
 	protected AtomEnvironmentDescriptor createAtomEnvironmentDescriptor() {
 		return new AtomEnvironmentDescriptor();
@@ -51,7 +52,6 @@ public class AtomEnvironmentGenerator extends AbstractPropertyGenerator<AtomEnvi
 
 			try {
 				
-				int[] aeResult = null;
 				IAtomContainer mol = (IAtomContainer) ((IAtomContainer) atomContainer).clone();
                 
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);				
@@ -68,53 +68,39 @@ public class AtomEnvironmentGenerator extends AbstractPropertyGenerator<AtomEnvi
                 
                 AtomEnvironmentList aeList = new AtomEnvironmentList();
                 aeList.setNoDuplicates(noDuplicates);
-				for (int a = 0; a < mol.getAtomCount(); a++) {
-						if ("H".equals(mol.getAtom(a).getSymbol())) continue;
+                
+                aeParams[AtomEnvironmentDescriptor._param.maxLevel.ordinal()] = maxLevels;
+                aeDescriptor.setParameters(aeParams);
+                int[][] aeResult = null;
+                try {
+                	aeResult = aeDescriptor.doCalculation(mol);
+			    } catch (CDKException x) {
+			    	throw new AmbitException(x);
+			    }		
+				for (int a = 0; a < aeResult.length; a++) {
 						AtomEnvironment atomenv = new AtomEnvironment(maxLevels); 
-					    //calculation
-					    try {
-					    	
-					    	atomenv.setTime_elapsed(System.currentTimeMillis());
-							aeParams[0] = new Integer(a);
-							aeParams[1] = maxLevels;
-							aeDescriptor.setParameters(aeParams);
+		
+					    atomenv.setTime_elapsed(System.currentTimeMillis());
+						aeParams[0] = maxLevels;
 							
-						    aeResult = new int[aeDescriptor.getAtomFingerprintSize()];
-							
-							aeDescriptor.doCalculation(mol,aeResult);
-							atomenv.setTime_elapsed(System.currentTimeMillis() - atomenv.getTime_elapsed());
-							atomenv.setStatus(1);
-							atomenv.setSublevel(maxLevels);
-							//result formatting
-							atomenv.setAtom_environment(aeResult);
-							//atomenv.setAtom_environment(aeDescriptor.atomFingerprintToString(aeResult,':'));
-							atomenv.setCentral_atom(aeDescriptor.atomTypeToString(aeResult[1]));
-							atomenv.setAtomno(a);
+						atomenv.setTime_elapsed(System.currentTimeMillis() - atomenv.getTime_elapsed());
+						atomenv.setStatus(1);
+						atomenv.setSublevel(maxLevels);
+						//result formatting
+						atomenv.setAtom_environment(aeResult[a]);
+						//atomenv.setAtom_environment(aeDescriptor.atomFingerprintToString(aeResult,':'));
+						atomenv.setCentral_atom(aeDescriptor.atomTypeToString(aeResult[a][1]));
+						atomenv.setAtomno(a);
+						aeList.add(atomenv);
 						
-							
-							aeList.add(atomenv);
-							
-							
-							
-							//lower level AE
-							if (isCreateSubLevels())
-					    		for (int i=1; i < atomenv.getLevels(); i++) {
-					    			AtomEnvironment subae = atomenv.getSubAtomEnvironment(i);
-					    			subae.setSublevel(i);
-					    			if (!atomenv.equals(subae))
-					    				aeList.add(subae);
-					    		}
-				    		
-	
-							
-					    } catch (CDKException x) {
-					    	atomenv.setTime_elapsed(0);
-					    	atomenv.setStatus(3);
-					    	atomenv.setAtom_environment(null);
-							atomenv.setCentral_atom("Error");
-							aeList.add(atomenv);
-					    }
-					    
+						//lower level AE
+						if (isCreateSubLevels())
+					    	for (int i=1; i < atomenv.getLevels(); i++) {
+					    		AtomEnvironment subae = atomenv.getSubAtomEnvironment(i);
+					    		subae.setSublevel(i);
+					    		if (!atomenv.equals(subae))
+					    			aeList.add(subae);
+					    	}
 					}	
 	
 				return aeList;
