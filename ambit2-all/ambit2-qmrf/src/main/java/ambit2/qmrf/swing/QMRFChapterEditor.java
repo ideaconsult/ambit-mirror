@@ -48,11 +48,11 @@ import javax.swing.JViewport;
 import javax.swing.SpringLayout;
 
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.qmrf.AmbitList;
 import ambit2.qmrf.chapters.AbstractQMRFChapter;
 import ambit2.qmrf.chapters.QMRFChapter;
-import ambit2.qmrf.swing.common.AmbitColors;
-import ambit2.qmrf.swing.common.SpringUtilities;
+import ambit2.swing.common.AmbitColors;
+import ambit2.swing.common.SpringUtilities;
+import ambit2.swing.interfaces.AmbitList;
 
 public class QMRFChapterEditor extends AbstractQMRFChapterEditor {
 	protected JScrollPane scrollPane;

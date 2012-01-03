@@ -35,9 +35,9 @@ import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.qmrf.catalogs.Catalog;
 import ambit2.qmrf.catalogs.CatalogEntry;
 import ambit2.qmrf.catalogs.CatalogReference;
-import ambit2.qmrf.swing.actions.AbstractActionWithTooltip;
-import ambit2.qmrf.swing.common.AmbitListOneItemEditor;
-import ambit2.qmrf.swing.common.UITools;
+import ambit2.swing.actions.AbstractActionWithTooltip;
+import ambit2.swing.common.AmbitListOneItemEditor;
+import ambit2.swing.common.UITools;
 
 public class CatalogReferenceEditor extends CatalogEditor {
 	/**

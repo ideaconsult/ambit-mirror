@@ -75,12 +75,14 @@ import ambit2.qmrf.catalogs.Catalogs;
 import ambit2.qmrf.chapters.AbstractQMRFChapter;
 import ambit2.qmrf.chapters.QMRFChapter;
 import ambit2.qmrf.chapters.QMRFSubChapterReference;
-import ambit2.qmrf.events.AmbitObjectChanged;
-import ambit2.qmrf.interfaces.IAmbitObjectListener;
 import ambit2.qmrf.swing.QMRFWelcomePanel;
 import ambit2.qmrf.xml.InterfaceQMRF;
 import ambit2.qmrf.xml.QMRFSchemaResolver;
 import ambit2.qmrf.xml.XMLException;
+import ambit2.swing.events.AmbitObjectChanged;
+import ambit2.swing.interfaces.AmbitList;
+import ambit2.swing.interfaces.AmbitObject;
+import ambit2.swing.interfaces.IAmbitObjectListener;
 
 /**
  * QMRF document.

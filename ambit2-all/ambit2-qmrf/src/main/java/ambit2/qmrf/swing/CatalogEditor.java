@@ -39,11 +39,11 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import ambit2.qmrf.AmbitList;
 import ambit2.qmrf.catalogs.Catalog;
 import ambit2.qmrf.catalogs.CatalogEntry;
-import ambit2.qmrf.swing.common.AmbitListEditor;
-import ambit2.qmrf.swing.common.AmbitListTableModelNew;
+import ambit2.swing.common.AmbitListEditor;
+import ambit2.swing.common.AmbitListTableModelNew;
+import ambit2.swing.interfaces.AmbitList;
 
 public class CatalogEditor extends AmbitListEditor {
     public CatalogEditor(Catalog list,

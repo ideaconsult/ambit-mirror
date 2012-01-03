@@ -35,8 +35,8 @@ import javax.swing.JOptionPane;
 
 import ambit2.base.io.MyIOUtilities;
 import ambit2.qmrf.QMRFData;
-import ambit2.qmrf.interfaces.ISharedData;
-import ambit2.qmrf.swing.common.UITools;
+import ambit2.swing.common.UITools;
+import ambit2.swing.interfaces.ISharedData;
 
 public class QMRFFileOpenAction extends QMRFAction {
 	

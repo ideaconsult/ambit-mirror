@@ -25,8 +25,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.qmrf;
 
 import ambit2.base.log.AmbitLogger;
-import ambit2.qmrf.events.AmbitObjectChanged;
-import ambit2.qmrf.interfaces.IAmbitObjectListener;
+import ambit2.swing.events.AmbitObjectChanged;
+import ambit2.swing.interfaces.DefaultSharedData;
+import ambit2.swing.interfaces.IAmbitObjectListener;
+import ambit2.swing.interfaces.JobStatus;
 
 
 public class QMRFData<OBJECT,LIST> extends DefaultSharedData<OBJECT,LIST>  implements IAmbitObjectListener<QMRFObject> {

@@ -26,11 +26,11 @@ package ambit2.qmrf.swing;
 
 import javax.swing.table.AbstractTableModel;
 
-import ambit2.qmrf.AmbitList;
-import ambit2.qmrf.AmbitObject;
-import ambit2.qmrf.events.AmbitListChanged;
-import ambit2.qmrf.events.AmbitObjectChanged;
-import ambit2.qmrf.interfaces.IAmbitListListener;
+import ambit2.swing.events.AmbitListChanged;
+import ambit2.swing.events.AmbitObjectChanged;
+import ambit2.swing.interfaces.AmbitList;
+import ambit2.swing.interfaces.AmbitObject;
+import ambit2.swing.interfaces.IAmbitListListener;
 
 public class AmbitListTableModelNew extends AbstractTableModel implements IAmbitListListener {
 	protected AmbitList list;

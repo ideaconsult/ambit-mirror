@@ -60,8 +60,8 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.base.io.AmbitFileFilter;
 import ambit2.base.io.MyIOUtilities;
-import ambit2.qmrf.swing.common.ColorTableCellRenderer;
-import ambit2.qmrf.swing.common.UITools;
+import ambit2.swing.common.ColorTableCellRenderer;
+import ambit2.swing.common.UITools;
 
 public class QMRFAttachmentsBrowser extends JPanel implements IAmbitEditor<QMRFAttachmentsList> {
 	protected boolean attachment_editable = true;

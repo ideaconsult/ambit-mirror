@@ -29,7 +29,7 @@ import java.awt.Container;
 import javax.swing.Icon;
 
 import ambit2.qmrf.QMRFData;
-import ambit2.qmrf.swing.actions.AmbitAction;
+import ambit2.swing.actions.AmbitAction;
 
 public class QMRFAction extends AmbitAction {
 

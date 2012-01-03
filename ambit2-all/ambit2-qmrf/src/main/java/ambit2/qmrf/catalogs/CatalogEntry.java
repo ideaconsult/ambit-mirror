@@ -33,12 +33,12 @@ import org.w3c.dom.Element;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.qmrf.AmbitObject;
-import ambit2.qmrf.IAmbitSearchable;
 import ambit2.qmrf.QMRFAttributes;
 import ambit2.qmrf.swing.CatalogEntryPanel;
 import ambit2.qmrf.xml.InterfaceQMRF;
 import ambit2.qmrf.xml.XMLException;
+import ambit2.swing.interfaces.AmbitObject;
+import ambit2.swing.interfaces.IAmbitSearchable;
 
 public class CatalogEntry extends AmbitObject implements InterfaceQMRF , IAmbitSearchable{
 	/**

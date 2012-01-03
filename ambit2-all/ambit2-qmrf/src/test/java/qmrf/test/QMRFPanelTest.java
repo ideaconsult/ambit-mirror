@@ -40,7 +40,7 @@ import ambit2.qmrf.QMRFObject;
 import ambit2.qmrf.attachments.QMRFAttachment;
 import ambit2.qmrf.attachments.QMRFAttachments;
 import ambit2.qmrf.swing.QMRFPanel;
-import ambit2.qmrf.swing.common.JUnicodePanel;
+import ambit2.swing.common.JUnicodePanel;
 
 public class QMRFPanelTest  {
 	public void test() {

@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.Icon;
 
 import ambit2.qmrf.QMRFData;
-import ambit2.qmrf.swing.common.UITools;
+import ambit2.swing.common.UITools;
 
 public class QMRFNewAction extends QMRFAction {
 

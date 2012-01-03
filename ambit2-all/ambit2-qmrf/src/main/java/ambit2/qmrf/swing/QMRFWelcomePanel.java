@@ -42,8 +42,8 @@ import javax.swing.event.HyperlinkListener;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.qmrf.QMRFObject;
-import ambit2.qmrf.swing.common.AmbitColors;
-import ambit2.qmrf.swing.common.UITools;
+import ambit2.swing.common.AmbitColors;
+import ambit2.swing.common.UITools;
 
 public class QMRFWelcomePanel extends JPanel implements IAmbitEditor<QMRFObject> {
 	/**
