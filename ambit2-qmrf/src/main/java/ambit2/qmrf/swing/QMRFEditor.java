@@ -37,6 +37,7 @@ import javax.swing.JPanel;
 
 import ambit2.base.log.AmbitLogger;
 import ambit2.qmrf.QMRFData;
+import ambit2.swing.common.CoreApp;
 
 /**
  * QSAR Model Report Format Editor.

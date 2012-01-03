@@ -40,8 +40,8 @@ import ambit2.base.io.MyIOUtilities;
 import ambit2.qmrf.QMRFData;
 import ambit2.qmrf.converters.Qmrf_Xml_Excel;
 import ambit2.qmrf.converters.Qmrf_Xml_Pdf;
-import ambit2.qmrf.interfaces.ISharedData;
-import ambit2.qmrf.swing.common.UITools;
+import ambit2.swing.common.UITools;
+import ambit2.swing.interfaces.ISharedData;
 
 public class QMRFFileSaveAsAction extends QMRFAction {
 	/**

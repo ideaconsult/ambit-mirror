@@ -40,14 +40,14 @@ import org.xml.sax.InputSource;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.qmrf.AmbitList;
-import ambit2.qmrf.AmbitObject;
-import ambit2.qmrf.IAmbitSearchable;
-import ambit2.qmrf.events.AmbitObjectChanged;
-import ambit2.qmrf.interfaces.IAmbitObjectListener;
 import ambit2.qmrf.swing.CatalogEditor;
 import ambit2.qmrf.xml.InterfaceQMRF;
 import ambit2.qmrf.xml.XMLException;
+import ambit2.swing.events.AmbitObjectChanged;
+import ambit2.swing.interfaces.AmbitList;
+import ambit2.swing.interfaces.AmbitObject;
+import ambit2.swing.interfaces.IAmbitObjectListener;
+import ambit2.swing.interfaces.IAmbitSearchable;
 
 public class Catalog extends AmbitList<CatalogEntry> implements InterfaceQMRF, IAmbitSearchable, IAmbitObjectListener<CatalogEntry> {
 	/**

@@ -32,14 +32,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ambit2.base.interfaces.IAmbitEditor;
-import ambit2.qmrf.AmbitList;
 import ambit2.qmrf.attachments.QMRFAttachments;
 import ambit2.qmrf.catalogs.Catalog;
-import ambit2.qmrf.events.AmbitObjectChanged;
-import ambit2.qmrf.interfaces.IAmbitObjectListener;
 import ambit2.qmrf.swing.QMRFChapterEditor;
 import ambit2.qmrf.xml.InterfaceQMRF;
 import ambit2.qmrf.xml.XMLException;
+import ambit2.swing.events.AmbitObjectChanged;
+import ambit2.swing.interfaces.AmbitList;
+import ambit2.swing.interfaces.IAmbitObjectListener;
 
 public class QMRFChapter extends AbstractQMRFChapter implements InterfaceQMRF, IAmbitObjectListener {
 	protected AmbitList subchapters;

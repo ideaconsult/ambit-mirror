@@ -37,13 +37,13 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-import ambit2.qmrf.AmbitObject;
 import ambit2.qmrf.QMRFObject;
 import ambit2.qmrf.chapters.QMRFChapter;
-import ambit2.qmrf.events.AmbitObjectChanged;
-import ambit2.qmrf.interfaces.IAmbitObjectListener;
-import ambit2.qmrf.swing.common.EditorPanel;
-import ambit2.qmrf.swing.common.UITools;
+import ambit2.swing.common.EditorPanel;
+import ambit2.swing.common.UITools;
+import ambit2.swing.events.AmbitObjectChanged;
+import ambit2.swing.interfaces.AmbitObject;
+import ambit2.swing.interfaces.IAmbitObjectListener;
 
 import com.l2fprod.common.swing.JButtonBar;
 

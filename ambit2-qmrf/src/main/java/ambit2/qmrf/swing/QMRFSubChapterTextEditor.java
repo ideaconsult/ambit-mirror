@@ -44,7 +44,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import ambit2.qmrf.chapters.QMRFSubChapterText;
-import ambit2.qmrf.swing.common.AmbitColors;
+import ambit2.swing.common.AmbitColors;
 
 public class QMRFSubChapterTextEditor extends AbstractQMRFChapterEditor implements FocusListener {
 	protected 		Color disabled = new Color(236,233,216);

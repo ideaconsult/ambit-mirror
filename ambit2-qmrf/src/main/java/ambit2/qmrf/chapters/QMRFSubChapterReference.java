@@ -34,11 +34,11 @@ import ambit2.base.interfaces.IAmbitEditor;
 import ambit2.qmrf.catalogs.Catalog;
 import ambit2.qmrf.catalogs.CatalogEntry;
 import ambit2.qmrf.catalogs.CatalogReference;
-import ambit2.qmrf.events.AmbitListChanged;
-import ambit2.qmrf.events.AmbitObjectChanged;
-import ambit2.qmrf.interfaces.IAmbitListListener;
 import ambit2.qmrf.swing.QMRFSubChapterReferenceEditor;
 import ambit2.qmrf.xml.XMLException;
+import ambit2.swing.events.AmbitListChanged;
+import ambit2.swing.events.AmbitObjectChanged;
+import ambit2.swing.interfaces.IAmbitListListener;
 
 public class QMRFSubChapterReference extends QMRFSubChapterText implements IAmbitListListener {
 	protected CatalogReference catalogReference;

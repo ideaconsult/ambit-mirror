@@ -15,7 +15,7 @@ import org.xml.sax.InputSource;
 import ambit2.base.io.MyIOUtilities;
 import ambit2.qmrf.QMRFData;
 import ambit2.qmrf.converters.Qmrf_Xml_Pdf;
-import ambit2.qmrf.swing.common.UITools;
+import ambit2.swing.common.UITools;
 
 public class QMRFBatchAction extends QMRFFileOpenAction {
 
