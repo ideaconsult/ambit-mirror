@@ -32,6 +32,12 @@ public class PredefinedKnowledgeBase
 		"[#6;!R](=*)=*",     //allene atom
 	};
 	
+	//Warning Filter original State Exceptions	
+	public static final String warningFragmentsOriginalStateException[] =
+	{	
+		"[#6;!R]#*",        //if original state of the allene atoms is triple bond then this warning rule is not applied
+	};
+	
 	
 	//Exclude Filters	
 	public static final String excludeFragments[] =
