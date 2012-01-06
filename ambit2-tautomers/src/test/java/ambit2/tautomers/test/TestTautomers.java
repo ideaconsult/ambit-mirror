@@ -23,6 +23,7 @@ import org.openscience.cdk.tautomers.*;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.inchi.*;
 
 
 public class TestTautomers 
@@ -37,6 +38,9 @@ public class TestTautomers
 		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
 		tt.tman.tautomerFilter.FlagApplyExcludeFilter = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationFilter = true;
+		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true;
+		tt.tman.tautomerFilter.FlagApplyDuplicationCheckInChI = false;
+		
 		tt.tman.FlagPrintTargetMoleculeInfo = false;
 		tt.tman.FlagPrintExtendedRuleInstances = true;
 		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
@@ -63,7 +67,11 @@ public class TestTautomers
 		//tt.visualTestInChI("NC1=CC(N)=NC(O)=N1");
 		
 		//tt.visualTest("NC1=CC(N)=NC(O)=N1");
-		tt.visualTest("OC1=CC=CC=C1");
+		//tt.visualTest("OC1=CC=CC=C1");
+		//tt.visualTest("CC(=O)C");
+		
+		
+		tt.visualTest("O1=CC=CN=C1");
 		
 		
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
@@ -76,6 +84,15 @@ public class TestTautomers
 		
 		
 		//tt.testAdenine();
+		
+		//tt.testInChIGenerator("C=CCCC");
+		//tt.testInChIGenerator("CCCC=C");
+		
+		//tt.testInChIGenerator("C1=CC=CC=C1");
+		//tt.testInChIGenerator("c1ccccc1");
+		
+		//tt.testInChIGenerator("N=1C=OC=CC=1");
+		//tt.testInChIGenerator("N1=CO=CC=C1");
 		
 		
 	}
@@ -167,8 +184,6 @@ public class TestTautomers
 			if (ac == null)
 				continue;
 			
-			//This processing should be done in the TautomerGenerator !!
-			
 			clearAromaticityFlags(ac);
 			
 			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
@@ -240,7 +255,7 @@ public class TestTautomers
 	//helper utilities for the tests
 	public int checkResultTautomerSet(Vector<IAtomContainer> resultStr, String expectedStr[]) throws Exception
 	{
-		preProcessStructures(resultStr);
+		//preProcessStructures(resultStr); this is done inside TautomerGenerattor
 		
 		SmartsParser sp = new SmartsParser();
 		sp.mSupportDoubleBondAromaticityNotSpecified = true;
@@ -374,6 +389,20 @@ public class TestTautomers
 		
 	}	
 	
+	
+	public void testInChIGenerator(String smi) throws Exception
+	{
+		System.out.println("Testing: " + smi);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi,true);
+		
+		
+		InChIGeneratorFactory igf = InChIGeneratorFactory.getInstance();
+		InChIGenerator ig = igf.getInChIGenerator(mol);
+		String inchi = ig.getInchi();
+		String inchiKey = ig.getInchiKey();
+		System.out.println("inchi = " + inchi);
+		System.out.println("inchiKey = " + inchiKey);
+	}
 	
 	
 	
