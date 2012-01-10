@@ -173,6 +173,43 @@ public class SmartsHelper
 		return(sb.toString());
 	}
 	
+	static public QueryAtomContainer getQueryAtomContainer(IAtomContainer ac, boolean HandleAromaticity)
+	{
+		QueryAtomContainer query = new QueryAtomContainer();
+		for (int i = 0; i < ac.getAtomCount(); i++)
+		{
+			IAtom a = ac.getAtom(i);
+			if (HandleAromaticity)
+			{
+				if (a.getFlag(CDKConstants.ISAROMATIC))
+				{
+					AromaticSymbolQueryAtom newAt = new AromaticSymbolQueryAtom();
+					newAt.setSymbol(a.getSymbol());
+					query.addAtom(newAt);
+				}
+				else
+				{
+					AliphaticSymbolQueryAtom newAt = new AliphaticSymbolQueryAtom();
+					newAt.setSymbol(a.getSymbol());
+					query.addAtom(newAt);
+				}	
+			}
+			else
+			{	
+				//TODO - to use SymbolQueryAtom class instead
+				AliphaticSymbolQueryAtom newAt = new AliphaticSymbolQueryAtom();
+				newAt.setSymbol(a.getSymbol());
+				query.addAtom(newAt);
+			}
+		}
+		
+		for (int i = 0; i < ac.getBondCount(); i++)
+		{
+			//TODO
+		}
+		
+		return query;
+	}
 	
 	static public int bondOrderToIntValue(IBond b)
 	{
