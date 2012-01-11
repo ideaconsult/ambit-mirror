@@ -27,6 +27,7 @@ package ambit2.smarts;
 import java.util.HashMap;
 import java.util.Vector;
 
+import org.openscience.cdk.Atom;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -42,6 +43,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
 
 public class SmartsHelper 
@@ -196,8 +198,7 @@ public class SmartsHelper
 			}
 			else
 			{	
-				//TODO - to use SymbolQueryAtom class instead
-				AliphaticSymbolQueryAtom newAt = new AliphaticSymbolQueryAtom();
+				SymbolQueryAtomAromaticityNotSpecified newAt = new SymbolQueryAtomAromaticityNotSpecified();
 				newAt.setSymbol(a.getSymbol());
 				query.addAtom(newAt);
 			}
@@ -205,7 +206,40 @@ public class SmartsHelper
 		
 		for (int i = 0; i < ac.getBondCount(); i++)
 		{
-			//TODO
+			IBond b = ac.getBond(i);
+			IAtom at0 = b.getAtom(0);
+			IAtom at1 = b.getAtom(1);
+			int index0 = ac.getAtomNumber(at0);
+			int index1 = ac.getAtomNumber(at1);
+			
+			SMARTSBond newBo;
+			
+			if (b.getOrder()== IBond.Order.TRIPLE)
+				newBo = new TripleBondAromaticityNotSpecified();
+			else
+			{	
+				if (b.getOrder()== IBond.Order.DOUBLE)
+					newBo = new DoubleBondAromaticityNotSpecified();
+				else
+				{
+					if (HandleAromaticity)
+					{
+						boolean isArom = b.getFlag(CDKConstants.ISAROMATIC);
+						if (isArom)
+							newBo = new SingleOrAromaticBond();
+						else
+							newBo = new SingleNonAromaticBond();
+					}
+					else
+						newBo = new SingleBondAromaticityNotSpecified();
+				}
+			}
+			
+			IAtom[] atoms = new Atom[2];
+		    atoms[0] = query.getAtom(index0);
+		    atoms[1] = query.getAtom(index1);
+		    newBo.setAtoms(atoms);
+		    query.addBond(newBo);
 		}
 		
 		return query;
