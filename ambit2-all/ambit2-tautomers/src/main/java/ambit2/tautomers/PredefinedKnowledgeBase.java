@@ -20,8 +20,11 @@ public class PredefinedKnowledgeBase
 		"$$NAME=amidine/imidine        $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#6][#7] [#7][#6]=[#7]   $$GROUP_POS=3,1   $$INFO= N=CN",
 		"$$NAME=diazoamino/diazoamino  $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#7][#7] [#7][#7]=[#7]   $$GROUP_POS=3,1   $$INFO= N=NN",
 		"$$NAME=thioamide/iminothiol   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#6][#7] [#16][#6]=[#7] $$GROUP_POS=3,1   $$INFO= S=CN",
-		"$$NAME=nitrosamine/diazohydroxide  " +
-		                               "$$TYPE=MOBILE_GROUP $$GROUP=H  $$STATES= [#8]=[#7][#7] [#8][#7]=[#7]   $$GROUP_POS=3,1   $$INFO= O=NN"
+		"$$NAME=nitrosamine/diazohydroxide $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#7][#7] [#8][#7]=[#7]   $$GROUP_POS=3,1   $$INFO= O=NN",
+		
+		"$$NAME=S=NN                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#7][#7] [#16][#7]=[#7]   $$GROUP_POS=3,1 $$INFO= S=NN",
+		"$$NAME=S=NS                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#7][#16] [#16][#7]=[#16] $$GROUP_POS=3,1 $$INFO= S=NS",
+		"$$NAME=N=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#16][#6] [#7][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= N=SC"
 			
 	};
 	
