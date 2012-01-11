@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
@@ -22,9 +23,11 @@ public class FilterTautomers
 	public boolean FlagApplyWarningFilter = true;
 	public boolean FlagApplyExcludeFilter = true;
 	public boolean FlagApplyDuplicationFilter = true;	
-	public boolean FlagApplyDuplicationCheckIsomorphism = false;
+	public boolean FlagApplyDuplicationCheckIsomorphism = true;
 	
-	//This duplication check is not so good since equal InChI keys are given to the resonance Kekeule stuctures
+	//This duplication check is suitable for any case 
+	//since equal InChI keys are given to the resonance Kekeule stuctures
+	//By default this check is switched off
 	public boolean FlagApplyDuplicationCheckInChI = false;  
 	
 	
@@ -115,7 +118,6 @@ public class FilterTautomers
 				System.out.println(e.toString());
 			}
 		}
-		
 		
 		if (FlagApplyDuplicationCheckIsomorphism)
 		{
@@ -217,6 +219,14 @@ public class FilterTautomers
 		
 		Vector<IAtomContainer> filtered = new Vector<IAtomContainer> ();
 		
+		//preparing each tautomer molecule for sss seaching
+		for (int i = 0; i < tautomers.size(); i++)
+		{
+			SmartsParser.prepareTargetForSMARTSSearch(false, false, false, 
+				false, false, false, tautomers.get(i));
+		}
+		
+		
 		for (int i = 0; i < tautomers.size(); i++)
 		{
 			if (!checkIsomorphismEquivalence(tautomers.get(i), filtered))
@@ -231,7 +241,14 @@ public class FilterTautomers
 		if (structs.isEmpty())
 			return (false);
 		
-		//TODO
+		QueryAtomContainer query = SmartsHelper.getQueryAtomContainer(target, false);
+		isoTester.setQuery(query);
+		
+		for (int i = 0; i < structs.size(); i++)
+		{
+			if (isoTester.hasIsomorphism(structs.get(i)))
+				return (true);
+		}
 		
 		return false;
 	}

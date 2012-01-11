@@ -69,9 +69,13 @@ public class TestTautomers
 		//tt.visualTest("NC1=CC(N)=NC(O)=N1");
 		//tt.visualTest("OC1=CC=CC=C1");
 		//tt.visualTest("CC(=O)C");
+		//tt.visualTest("N=NNCCC");
+		//tt.visualTest("S=CNCC");
+		
+		tt.visualTest("N1=NC=CC=N1");
 		
 		
-		tt.visualTest("O1=CC=CN=C1");
+		//tt.visualTest("O1=CC=CN=C1");
 		
 		
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
