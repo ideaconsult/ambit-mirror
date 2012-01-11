@@ -38,8 +38,9 @@ public class TestTautomers
 		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
 		tt.tman.tautomerFilter.FlagApplyExcludeFilter = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationFilter = true;
-		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true;
+		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = false;
 		tt.tman.tautomerFilter.FlagApplyDuplicationCheckInChI = false;
+		tt.tman.tautomerFilter.FlagFilterIncorrectValencySumStructures = true;
 		
 		tt.tman.FlagPrintTargetMoleculeInfo = false;
 		tt.tman.FlagPrintExtendedRuleInstances = true;
@@ -72,8 +73,10 @@ public class TestTautomers
 		//tt.visualTest("N=NNCCC");
 		//tt.visualTest("S=CNCC");
 		
+		//tt.visualTest("N1=NC=CC=N1");
+		//tt.visualTest("N1=CC=CN=C1");
 		tt.visualTest("N1=NC=CC=N1");
-		
+		             
 		
 		//tt.visualTest("O1=CC=CN=C1");
 		

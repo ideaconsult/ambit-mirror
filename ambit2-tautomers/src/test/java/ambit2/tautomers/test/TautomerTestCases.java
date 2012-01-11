@@ -189,9 +189,21 @@ public class TautomerTestCases extends TestCase
 	public void test_Rule_AmidineImidine_02() throws Exception      
 	{	
 		int res = tt.testCase("n1=cc=cn=c1", 
-				new String[]{"n1=cc=cn=c1", "n1c=cc=nc=1"}, 
+				new String[]{"n1=cc=cn=c1"}, 
 				FlagPrintTautomers);
 
+		assertEquals(0, res);
+	}
+	
+	public void test_Rule_AmidineImidine_02_noIsoCheck() throws Exception      
+	{	
+		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = false;
+		int res = tt.testCase("n1=cc=cn=c1", 
+				new String[]{"n1=cc=cn=c1", "n1c=cc=nc=1"}, 
+				FlagPrintTautomers);
+		
+		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true; //default is restored
+		
 		assertEquals(0, res);
 	}
 
@@ -204,13 +216,25 @@ public class TautomerTestCases extends TestCase
 
 		assertEquals(0, res);
 	}
-
-
+	
 	public void test_Rule_DiazoaminoDiazoamino_02() throws Exception      
 	{	
-		int res = tt.testCase("N1=NC=CC=N1", 
-				new String[]{"C1=CNNN=C1", "C1=CCN=NN1", "C1=CCNN=N1", "n1=nc=cc=n1", "n1n=cc=cn=1"}, 
+		int res = tt.testCase("N1=NC=CC=N1",
+				new String[]{"n1=nc=cc=n1"},
 				FlagPrintTautomers);
+		
+		assertEquals(0, res);
+	}
+
+
+	public void test_Rule_DiazoaminoDiazoamino_02_noIsoCheck() throws Exception      
+	{	
+		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = false;
+		int res = tt.testCase("N1=NC=CC=N1",
+				new String[]{"n1=nc=cc=n1", "n1n=cc=cn=1"},
+				FlagPrintTautomers);
+		
+		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true; //default is restored
 
 		assertEquals(0, res);
 	}

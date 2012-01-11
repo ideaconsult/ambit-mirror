@@ -29,10 +29,10 @@ public class FilterTautomers
 	//since equal InChI keys are given to the resonance Kekeule stuctures
 	//By default this check is switched off
 	public boolean FlagApplyDuplicationCheckInChI = false;  
+	public boolean FlagFilterIncorrectValencySumStructures = true;
 	
 	
 	public TautomerManager tman;
-	public IAtomContainer originalMolecule;
 	public Vector<IAtomContainer> removedTautomers = new Vector<IAtomContainer>();
 	public Vector<Vector<Integer>> warnFilters = new Vector<Vector<Integer>>();  // Vector< "<FilterNumber> <Number_of_positions> <Pos1> <Pos2> ..."  x n >
 	public Vector<Vector<Integer>> excludeFilters = new Vector<Vector<Integer>>();
@@ -47,6 +47,7 @@ public class FilterTautomers
 	public FilterTautomers(TautomerManager m)
 	{
 		tman = m;
+		
 	}
 		
 	
@@ -64,6 +65,13 @@ public class FilterTautomers
 			uniqueTautomers = dubplicationFilter(tautomers);
 		else
 			uniqueTautomers = tautomers;
+		
+		
+		if (FlagFilterIncorrectValencySumStructures)
+		{
+			Vector<IAtomContainer> tempTautomers = filterIncorrectValencySumStructs(uniqueTautomers);
+			uniqueTautomers = tempTautomers;
+		}
 		
 		
 		//Filtration according to the filter rules
@@ -175,6 +183,21 @@ public class FilterTautomers
 		
 		return uniqueTautomers0;
 	}
+	
+	Vector<IAtomContainer> filterIncorrectValencySumStructs(Vector<IAtomContainer> tautomers)
+	{	
+		int vsum = getValencySum(tman.originalMolecule);
+		Vector<IAtomContainer> filtrated = new Vector<IAtomContainer>();
+		
+		for (int i = 0; i < tautomers.size(); i++)
+		{
+			int v = getValencySum(tautomers.get(i));
+			if (v == vsum)
+				filtrated.add(tautomers.get(i));
+		}
+		
+		return (filtrated);
+	}	
 	
 	
 	Vector<IAtomContainer> duplicationFilterBasedOnInChI(Vector<IAtomContainer> tautomers) throws Exception
@@ -434,6 +457,15 @@ public class FilterTautomers
 		//AtomContainerManipulator.convertImplicitToExplicitHydrogens(ac);
 
 		CDKHueckelAromaticityDetector.detectAromaticity(ac);		
+	}
+	
+	int getValencySum(IAtomContainer ac)
+	{
+		int sum = 0;
+		for (int i = 0; i < ac.getBondCount(); i++)
+			sum += SmartsHelper.bondOrderToIntValue(ac.getBond(i));
+		
+		return sum;
 	}
 	
 	
