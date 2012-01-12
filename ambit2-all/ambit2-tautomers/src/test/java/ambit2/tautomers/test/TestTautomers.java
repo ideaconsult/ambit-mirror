@@ -38,9 +38,11 @@ public class TestTautomers
 		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
 		tt.tman.tautomerFilter.FlagApplyExcludeFilter = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationFilter = true;
-		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = false;
+		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationCheckInChI = false;
 		tt.tman.tautomerFilter.FlagFilterIncorrectValencySumStructures = true;
+		
+		tt.tman.FlagRecurseBackResultTautomers = false;
 		
 		tt.tman.FlagPrintTargetMoleculeInfo = false;
 		tt.tman.FlagPrintExtendedRuleInstances = true;

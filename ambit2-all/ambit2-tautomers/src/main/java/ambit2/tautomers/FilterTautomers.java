@@ -47,7 +47,6 @@ public class FilterTautomers
 	public FilterTautomers(TautomerManager m)
 	{
 		tman = m;
-		
 	}
 		
 	
