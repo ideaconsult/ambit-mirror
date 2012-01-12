@@ -15,17 +15,17 @@ public class TautomerManager
 	Vector<IRuleInstance> extendedRuleInstances = new Vector<IRuleInstance>(); 
 	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
 	Vector<Rule> generatedRules = new Vector<Rule>(); 
-	Vector<IAtomContainer> resultTautomers = new Vector<IAtomContainer>();	
+	Vector<IAtomContainer> resultTautomers;	
 	Vector<String> errors = new Vector<String>(); 
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
+		
+	public boolean FlagRecurseBackResultTautomers = false;
 	
 	//Some debug info flags
 	public boolean FlagPrintTargetMoleculeInfo = false;
 	public boolean FlagPrintExtendedRuleInstances = false;
 	public boolean FlagPrintIcrementalStepDebugInfo = false;
-	
-	
-		
+				
 	
 	public TautomerManager()
 	{
@@ -54,7 +54,7 @@ public class TautomerManager
 		searchAllRulePositions();
 		handleOverlapedInstances();
 		
-		resultTautomers.clear();
+		resultTautomers = new Vector<IAtomContainer>();
 		if (ruleInstances.isEmpty())
 		{	
 			resultTautomers.add(molecule);
@@ -74,7 +74,7 @@ public class TautomerManager
 		//and the other rule instances are revised and accordingly 
 		//appropriate rule-instance sets are supported (derived from extendedRuleInstance)
 		
-		resultTautomers.clear();	
+		resultTautomers = new Vector<IAtomContainer>();	
 		searchAllRulePositions();
 		
 		if (extendedRuleInstances.isEmpty())
@@ -87,11 +87,87 @@ public class TautomerManager
 		rman.firstIncrementalStep();
 		rman.iterateIncrementalSteps();	
 		
-		resultTautomers = tautomerFilter.filter(resultTautomers);
+		if (FlagRecurseBackResultTautomers)
+		{
+			//Apply special filter before recursing back the result tautomers
+			Vector<IAtomContainer> filtered = preRecursionFiltration(resultTautomers);			
+			Vector<IAtomContainer> res = generateTautomersFromMultipleTargets(filtered);
+			resultTautomers = res;
+		}
+		else
+			resultTautomers = tautomerFilter.filter(resultTautomers);
 		
 		return(resultTautomers);
 	}
 	
+	
+	Vector<IAtomContainer> preRecursionFiltration(Vector<IAtomContainer> tautomers)
+	{
+		//Save original filtration flags
+		boolean F_ApplyDuplicationCheckInChI = tautomerFilter.FlagApplyDuplicationCheckInChI;
+		boolean F_ApplyDuplicationCheckIsomorphism = tautomerFilter.FlagApplyDuplicationCheckIsomorphism;
+		boolean F_ApplyDuplicationFilter = tautomerFilter.FlagApplyDuplicationFilter;
+		boolean F_ApplyExcludeFilter = tautomerFilter.FlagApplyExcludeFilter;
+		boolean F_ApplyWarningFilter = tautomerFilter.FlagApplyWarningFilter;
+		boolean F_ExcludeWarningTautomers = tautomerFilter.FlagExcludeWarningTautomers;
+		boolean F_FilterIncorrectValencySumStructures = tautomerFilter.FlagFilterIncorrectValencySumStructures;
+		
+		//Setting the flags for filtration
+		tautomerFilter.FlagApplyDuplicationCheckInChI = false;
+		tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true;
+		tautomerFilter.FlagApplyDuplicationFilter = true;
+		tautomerFilter.FlagApplyExcludeFilter = true;
+		tautomerFilter.FlagApplyWarningFilter = true;
+		tautomerFilter.FlagExcludeWarningTautomers = true;
+		tautomerFilter.FlagFilterIncorrectValencySumStructures = true;
+		
+		//Performing filtration
+		Vector<IAtomContainer> res = tautomerFilter.filter(tautomers);
+		
+		//Restore original filtration flags
+		tautomerFilter.FlagApplyDuplicationCheckInChI = F_ApplyDuplicationCheckInChI;
+		tautomerFilter.FlagApplyDuplicationCheckIsomorphism = F_ApplyDuplicationCheckIsomorphism; 
+		tautomerFilter.FlagApplyDuplicationFilter = F_ApplyDuplicationFilter;
+		tautomerFilter.FlagApplyExcludeFilter = F_ApplyExcludeFilter;
+		tautomerFilter.FlagApplyWarningFilter = F_ApplyWarningFilter; 
+		tautomerFilter.FlagExcludeWarningTautomers = F_ExcludeWarningTautomers;
+		tautomerFilter.FlagFilterIncorrectValencySumStructures = F_FilterIncorrectValencySumStructures;
+				
+		return res;
+	}
+	
+	Vector<IAtomContainer> generateTautomersFromMultipleTargets(Vector<IAtomContainer> targets)
+	{
+		IAtomContainer tmpOrgMolecule = originalMolecule;
+		IAtomContainer tmpMolecule = molecule;
+		
+		Vector<IAtomContainer> summarizedResult = new Vector<IAtomContainer>();
+		
+		for (int i = 0; i < targets.size(); i++) 
+		{
+			setStructure(targets.get(i));
+			resultTautomers = new Vector<IAtomContainer>();	
+			searchAllRulePositions();
+			
+			if (extendedRuleInstances.isEmpty())
+			{	
+				summarizedResult.add(molecule);
+				continue;
+			}
+			
+			RuleManager rman = new RuleManager(this);
+			rman.firstIncrementalStep();
+			rman.iterateIncrementalSteps();	
+			
+			summarizedResult.addAll(resultTautomers);
+		}
+		
+		//Restore the original molecule variables
+		originalMolecule = tmpOrgMolecule;
+		molecule = tmpMolecule; 
+		
+		return tautomerFilter.filter(summarizedResult);
+	}
 	
 	
 	void searchAllRulePositions()
