@@ -459,11 +459,16 @@ public class RuleManager
 		for (int i = 0; i < newInstances.size(); i++)
 		{
 			RuleInstance testedRI = newInstances.get(i);
-			boolean FlagOK = true;
+			//This flag is true when the new rule instance is not identical with any of used or unused rule instances
+			boolean FlagOK = true;   
 			
 			for (int k = 0; k < incStep.usedRuleInstances.size(); k++)
-			{
+			{	
 				RuleInstance r = incStep.usedRuleInstances.get(k);
+				
+				if (testedRI.atoms.size() != r.atoms.size())
+					continue; //r and testedRI could not be identical
+				
 				int nOvAt = getNumOfOverlappedAtoms(testedRI,r);
 				if (nOvAt == testedRI.atoms.size())
 				{
@@ -478,6 +483,10 @@ public class RuleManager
 			for (int k = 0; k < incStep.unUsedRuleInstances.size(); k++)
 			{
 				RuleInstance r = incStep.unUsedRuleInstances.get(k);
+				
+				if (testedRI.atoms.size() != r.atoms.size())
+					continue; //r and testedRI could not be identical
+				
 				int nOvAt = getNumOfOverlappedAtoms(testedRI,r);
 				if (nOvAt == testedRI.atoms.size())
 				{
