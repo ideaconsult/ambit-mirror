@@ -24,8 +24,12 @@ public class PredefinedKnowledgeBase
 		
 		"$$NAME=S=NN                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#7][#7] [#16][#7]=[#7]   $$GROUP_POS=3,1 $$INFO= S=NN",
 		"$$NAME=S=NS                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#7][#16] [#16][#7]=[#16] $$GROUP_POS=3,1 $$INFO= S=NS",
-		"$$NAME=N=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#16][#6] [#7][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= N=SC"
-			
+		"$$NAME=N=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#16][#6] [#7][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= N=SC",
+		
+		"$$NAME=1.5 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#7,#16]=[#6][#6]=[#6][#6] [#8,#7,#16][#6]=[#6][#6]=[#6]  " +
+																												 "$$GROUP_POS=5,1  $$INFO=",
+		"$$NAME=1.7 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#6]=[#6][#6]=[#6][#6]=[#6][#8,#7,#16] [#6][#6]=[#6][#6]=[#6][#6]=[#8,#7,#16]  " +
+																												"$$GROUP_POS=7,1  $$INFO="
 	};
 	
 	

@@ -46,7 +46,7 @@ public class TestTautomers
 		
 		tt.tman.FlagPrintTargetMoleculeInfo = false;
 		tt.tman.FlagPrintExtendedRuleInstances = true;
-		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
+		tt.tman.FlagPrintIcrementalStepDebugInfo = true;
 		
 		
 		//tt.performTestCases();
@@ -77,8 +77,11 @@ public class TestTautomers
 		
 		//tt.visualTest("N1=NC=CC=N1");
 		//tt.visualTest("N1=CC=CN=C1");
-		tt.visualTest("N1=NC=CC=N1");
-		             
+		
+		//tt.visualTest("O=C1C=CC(=CC)CC1");
+		
+		
+		tt.visualTest("SC1=CC=CC=C1");  
 		
 		//tt.visualTest("O1=CC=CN=C1");
 		
