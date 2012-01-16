@@ -78,9 +78,17 @@ public class RuleInstance implements IRuleInstance
 		
 		//current state double bonds are made single
 		RuleStateBondDistribution bondDistr = rule.stateBonds[curState];
+		//double --> single
 		for (int i = 0; i < bondDistr.DBPositions.length; i++)
 		{
 			int bpos = bondDistr.DBPositions[i];			
+			IBond bond = bonds.get(bpos);
+			bond.setOrder(Order.SINGLE);
+		}
+		//triple --> single
+		for (int i = 0; i < bondDistr.TBPositions.length; i++)
+		{
+			int bpos = bondDistr.TBPositions[i];			
 			IBond bond = bonds.get(bpos);
 			bond.setOrder(Order.SINGLE);
 		}
@@ -88,12 +96,21 @@ public class RuleInstance implements IRuleInstance
 		
 		//new state double bonds are set
 		bondDistr = rule.stateBonds[state];
+		//single --> double
 		for (int i = 0; i < bondDistr.DBPositions.length; i++)
 		{
 			int bpos = bondDistr.DBPositions[i];			
 			IBond bond = bonds.get(bpos);
 			bond.setOrder(Order.DOUBLE);
 		}
+		//single --> triple
+		for (int i = 0; i < bondDistr.TBPositions.length; i++)
+		{
+			int bpos = bondDistr.TBPositions[i];			
+			IBond bond = bonds.get(bpos);
+			bond.setOrder(Order.TRIPLE);
+		}
+		
 		
 		//mobile groups are moved
 		for (int i = 0; i < rule.nMobileGroups; i++)

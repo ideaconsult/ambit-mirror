@@ -35,7 +35,7 @@ public class TestTautomers
 	public static void main(String[] args) throws Exception 
 	{		
 		TestTautomers tt = new TestTautomers();
-		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
+		tt.tman.tautomerFilter.FlagApplyWarningFilter = false;
 		tt.tman.tautomerFilter.FlagApplyExcludeFilter = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationFilter = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true;
@@ -45,8 +45,8 @@ public class TestTautomers
 		tt.tman.FlagRecurseBackResultTautomers = false;
 		
 		tt.tman.FlagPrintTargetMoleculeInfo = false;
-		tt.tman.FlagPrintExtendedRuleInstances = true;
-		tt.tman.FlagPrintIcrementalStepDebugInfo = true;
+		tt.tman.FlagPrintExtendedRuleInstances = false;
+		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
 		
 		
 		//tt.performTestCases();
@@ -81,7 +81,10 @@ public class TestTautomers
 		//tt.visualTest("O=C1C=CC(=CC)CC1");
 		
 		
-		tt.visualTest("SC1=CC=CC=C1");  
+		//tt.visualTest("SC1=CC=CC=C1");  
+		
+		tt.visualTest("OC#CCC");
+		
 		
 		//tt.visualTest("O1=CC=CN=C1");
 		

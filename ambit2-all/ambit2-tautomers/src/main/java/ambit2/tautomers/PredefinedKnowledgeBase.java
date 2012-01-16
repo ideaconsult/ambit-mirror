@@ -29,7 +29,8 @@ public class PredefinedKnowledgeBase
 		"$$NAME=1.5 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#7,#16]=[#6][#6]=[#6][#6] [#8,#7,#16][#6]=[#6][#6]=[#6]  " +
 																												 "$$GROUP_POS=5,1  $$INFO=",
 		"$$NAME=1.7 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#6]=[#6][#6]=[#6][#6]=[#6][#8,#7,#16] [#6][#6]=[#6][#6]=[#6][#6]=[#8,#7,#16]  " +
-																												"$$GROUP_POS=7,1  $$INFO="
+																												"$$GROUP_POS=7,1  $$INFO=",
+		"$$NAME=OC#C                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8][#6]#[#6] [#8]=[#6]=[#6]    $$GROUP_POS=1,3  $$INFO= "
 	};
 	
 	
