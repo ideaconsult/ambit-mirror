@@ -35,7 +35,7 @@ public class TestTautomers
 	public static void main(String[] args) throws Exception 
 	{		
 		TestTautomers tt = new TestTautomers();
-		tt.tman.tautomerFilter.FlagApplyWarningFilter = false;
+		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
 		tt.tman.tautomerFilter.FlagApplyExcludeFilter = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationFilter = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true;
@@ -83,7 +83,7 @@ public class TestTautomers
 		
 		//tt.visualTest("SC1=CC=CC=C1");  
 		
-		tt.visualTest("OC#CCC");
+		tt.visualTest("O=C1C(S=CC)CC(=N)CC1");
 		
 		
 		//tt.visualTest("O1=CC=CN=C1");
