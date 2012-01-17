@@ -37,15 +37,17 @@ public class PredefinedKnowledgeBase
 	//Warning Filters	
 	public static final String warningFragments[] =
 	{	
-		"[#6;!R](=*)=*",     //allene atom
+		"[#6;!R;^1]"   // sp carbon     *=C=*  or *#C-*      This is old version:  "[#6;!R](=*)=*",     //allene atom
 	};
 	
+	
+	/*
 	//Warning Filter original State Exceptions	
 	public static final String warningFragmentsOriginalStateException[] =
 	{	
 		"[#6;!R]#*",        //if original state of the allene atoms is triple bond then this warning rule is not applied
 	};
-	
+	*/
 	
 	//Exclude Filters	
 	public static final String excludeFragments[] =
