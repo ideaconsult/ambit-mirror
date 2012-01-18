@@ -539,4 +539,29 @@ public class SmartsHelper
 	
 	
 	
+	static public Vector<Integer> getSmartsPositions(String smartsQuery, IAtomContainer target, 
+					boolean FlagSupportDoubleBondAromaticityNotSpecified)
+	{	
+		SmartsParser sp = new SmartsParser();
+		sp.mSupportDoubleBondAromaticityNotSpecified = FlagSupportDoubleBondAromaticityNotSpecified;
+		IsomorphismTester isoTester = new IsomorphismTester();
+		
+		QueryAtomContainer query  = sp.parse(smartsQuery);
+		sp.setNeededDataFlags();
+		String errorMsg = sp.getErrorMessages();
+		if (!errorMsg.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + errorMsg);			
+			return null;
+		}
+		
+		isoTester.setQuery(query);
+		sp.setSMARTSData(target);
+		
+		return isoTester.getIsomorphismPositions(target);
+	}
+	
+	
+	
+	
 }
