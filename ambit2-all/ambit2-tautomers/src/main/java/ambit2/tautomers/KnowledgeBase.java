@@ -63,7 +63,7 @@ public class KnowledgeBase
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))	
 		{
-			String newError = "Incorrect warning filter: " + fRule;
+			String newError = "Incorrect filter: " + fRule;
 			errors.add(newError);
 		}			
 		else

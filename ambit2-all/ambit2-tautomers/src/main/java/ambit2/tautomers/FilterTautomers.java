@@ -12,6 +12,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
@@ -73,6 +74,19 @@ public class FilterTautomers
 		}
 		
 		
+		//Pre-processing is n
+		for (int i = 0; i < uniqueTautomers.size(); i++)
+		{	
+			try{
+				//System.out.println("preprocess " + i);
+				preProcessStructures(uniqueTautomers.get(i));
+			}
+			catch(Exception e){
+				System.out.println(e.toString());
+			}
+		}
+		
+		
 		//Filtration according to the filter rules
 		for (int i = 0; i < uniqueTautomers.size(); i++)
 		{			
@@ -113,18 +127,6 @@ public class FilterTautomers
 			filteredTautomers.add(uniqueTautomers.get(i));
 		}
 		
-		
-		//Pre-processing
-		for (int i = 0; i < filteredTautomers.size(); i++)
-		{	
-			try{
-				//System.out.println("preprocess " + i);
-				preProcessStructures(filteredTautomers.get(i));
-			}
-			catch(Exception e){
-				System.out.println(e.toString());
-			}
-		}
 		
 		if (FlagApplyDuplicationCheckIsomorphism)
 		{
@@ -377,12 +379,14 @@ public class FilterTautomers
 	
 	public Vector<Integer> getExcludeFilters(IAtomContainer tautomer)
 	{	
+		//System.out.print("tautomer target: " +  SmartsHelper.moleculeToSMILES(tautomer));
 		
 		Vector<Integer> v = new Vector<Integer>(); 
 		for (int i = 0; i < tman.knowledgeBase.excludeFilters.size(); i++)
 		{			
 			Filter f = tman.knowledgeBase.excludeFilters.get(i);
-			RuleStateFlags flags = f.fragmentFlags;
+			RuleStateFlags flags = f.fragmentFlags;			
+			
 			SmartsParser.prepareTargetForSMARTSSearch(
 					flags.mNeedNeighbourData, 
 					flags.mNeedValenceData, 
@@ -391,11 +395,13 @@ public class FilterTautomers
 					flags.mNeedExplicitHData , 
 					flags.mNeedParentMoleculeData, tautomer);
 			
-			isoTester.setQuery(f.fragmentQuery);			
+			isoTester.setQuery(f.fragmentQuery);
 			Vector<Integer> pos =  isoTester.getIsomorphismPositions(tautomer);
+			
 			Vector<Integer> orgPos = excludeFiltersOriginalPos.get(i);
 			Vector<Integer> notOriginalPos = new Vector<Integer>();
-			
+			//System.out.println("filter: " + f.fragmentSmarts + "  " + pos.size());			
+					
 			for (int k = 0; k < pos.size(); k++)
 			{
 				Integer IOk = pos.get(k);
@@ -422,6 +428,7 @@ public class FilterTautomers
 					v.add(notOriginalPos.get(k));
 			}
 		}
+		
 		
 		if (v.isEmpty())
 			return null;
@@ -466,6 +473,7 @@ public class FilterTautomers
 		
 		return sum;
 	}
+	
 	
 	
 	
