@@ -31,8 +31,8 @@ public class PredefinedKnowledgeBase
 																												 "$$GROUP_POS=5,1  $$INFO=",
 		"$$NAME=1.7 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#6]=[#6][#6]=[#6][#6]=[#6][#8,#7,#16] [#6][#6]=[#6][#6]=[#6][#6]=[#8,#7,#16]  " +
 																												"$$GROUP_POS=7,1  $$INFO=",
-		//"$$NAME=OC#C                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8][#6]#[#6] [#8]=[#6]=[#6]    $$GROUP_POS=1,3  $$INFO= ",
-		"$$NAME=[O,S,N][C,S]#[C,S]     $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#16,#7][#6,#16]#[#6,#16] [#8,#16,#7]=[#6,#16]=[#6,#16]    $$GROUP_POS=1,3  $$INFO= ",
+		
+		"$$NAME=[O,S,N][C,S]#[C,S]     $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#16,#7][#6,#16;!R]#[#6,#16] [#8,#16,#7]=[#6,#16;!R]=[#6,#16]    $$GROUP_POS=1,3  $$INFO= ",
 	};
 	
 	
@@ -54,9 +54,7 @@ public class PredefinedKnowledgeBase
 	//Exclude Filters	
 	public static final String excludeFragments[] =
 	{	
-		//"[*;R;^1]",
-		"[*;R]#[*;R]",
-		"[*;r4,r5,r6,r7,r8](=*)=*",  //allene atom in a cycle (up to 8 atoms)
+		"[*;r4,r5,r6,r7,r8](=*)=*"  //allene atom in a cycle (up to 8 atoms)
 	};
 	
 }

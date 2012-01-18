@@ -293,6 +293,254 @@ public class TautomerTestCases extends TestCase
 	}
 	*/
 	
+	public void test_Rule_AminImin_03() throws Exception      
+	{	
+		int res = tt.testCase("N=C(CCC)CC", 
+				new String[]{"N=C(CC)CCC", "NC(=CCC)CC", "NC(=CC)CCC"}, 
+				FlagPrintTautomers);
 
+		assertEquals(0, res);
+	}
+
+
+	public void test_Rule_KetoEnol_AminImin_01()  throws Exception
+	{	
+		int res = tt.testCase("O=C(CN=CC)CC", 
+				new String[]{"O=C(CN=CC)CC", "OC(=CN=CC)CC", "OC(=CC)CN=CC", "O=C(CNC=C)CC", "OC(C=NC=C)CC", "OC(=CNC=C)CC", "OC(=CC)CNC=C"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+
+	public void test_Rule_KetoEnol_AminImin_AmidImid_01()  throws Exception
+	{	
+		int res = tt.testCase("O=C1NC=CCC1", 
+				new String[]{"OC1=CCC=CN1", "O=C1NC=CCC1", "OC=1N=CCCC=1", "O=C1N=CCCC1", "OC1=NC=CCC1"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+
+	public void test_Rule_KetoEnol_ThioketoThioEnol_01()  throws Exception
+	{	
+		int res = tt.testCase("O=C1S(=CC)C=CCC1", 
+				new String[]{"OC1=CCC=CS1(C=C)", "OC=1CCC=CS=1(C=C)", "O=C1CCC=CS1(C=C)", "OC1=CCCC=S1(C=C)", "O=C1CCCC=S1(C=C)", "OC1=CCC=CS1(=CC)", "O=C1CCC=CS1(=CC)"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_KetoEnol_AminImin_AzoHydrazone_01()  throws Exception
+	{	
+		int res = tt.testCase("O=C1N(=N)CN=CC1", 
+				new String[]{"O=C1C=CNC=N1(N)", "O=C1C=CN=CN1(N)", "OC=1C=CN=CN=1(N)", "N=N1C=NC=CC1(O)", "OC1=CC=NC=N1(N)", "O=C1N(N)=CN=CC1","O=C1C=CNCN1(=N)", "N=N1C(O)=CC=NC1", "O=C1N(=N)CN=CC1"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_AminImin_AmidineImidine_01()  throws Exception
+	{	
+		int res = tt.testCase("CNC(=N)N=CCO", 
+				new String[]{"N=C(NC=CO)NC", "O=CCNC(=N)NC", "OC=CN=C(N)NC", "O=CCN=C(N)NC", "OC=CNC(=NC)N", "O=CCNC(=NC)N","N=C(N=CCO)NC", "OCC=NC(=NC)N"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_AminImin_AmidineImidine_NitrosoOxime_01()  throws Exception
+	{	
+		int res = tt.testCase("CNC1N=CCC=N1O", 
+				new String[]{"ON1C=CC=NC1(NC)", "ON1=CC=CNC1(NC)", "ON1=CCC=NC1(NC)", "ON1=C(NC=CC1)NC", "ON1C(=NC=CC1)NC", "ON1C(=NC)NC=CC1","ON1=C(N=CCC1)NC", "ON1C(N=CCC1)=NC", "O=N1CC=CNC1(NC)","O=N1CCC=NC1(NC)"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_AminImin_AmidineImidine_ThioNitrosoThioOxime_01()  throws Exception
+	{	
+		int res = tt.testCase("CNC1N=CCC=N1S", 
+				new String[]{"SN1C=CC=NC1(NC)", "SN1=CC=CNC1(NC)", "SN1=CCC=NC1(NC)", "SN1=C(NC=CC1)NC", "SN1C(=NC=CC1)NC", "SN1C(=NC)NC=CC1","SN1=C(N=CCC1)NC", "SN1C(N=CCC1)=NC", "S=N1CC=CNC1(NC)","S=N1CCC=NC1(NC)"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_AminImin_AmidineImidine_AzoHydrazone_01()  throws Exception
+	{	
+		int res = tt.testCase("CNC1N=CCC=N1N", 
+				new String[]{"NN1C=CC=NC1(NC)", "NN1=CC=CNC1(NC)", "NN1=CCC=NC1(NC)", "NN1=C(NC=CC1)NC", "NN1C(=NC=CC1)NC", "NN1C(=NC)NC=CC1","NN1=C(N=CCC1)NC", "NN1C(N=CCC1)=NC", "N=N1CC=CNC1(NC)","N=N1CCC=NC1(NC)"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+
+	public void test_Rule_AminImin_ThionitrosamineThioDiazoHydrazone_AzoHydrazone_01()  throws Exception
+	{	
+		int res = tt.testCase("SN=NCC", 
+				new String[]{"C=CNNS", "N(=CC)NS", "N(=NS)CC", "N(NCC)=S"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_CombinationOf5rules_01()  throws Exception
+	{	
+		int res = tt.testCase("C1CC(S)C(=O)NN1", 
+				new String[]{"OC=1NNCCC=1S", "O=C1NNCCC1S", "OC1NNCC=C1S", "OC1NNCCC1=S","OC1=NNCCC1S","OC1NNC=CC1S","OC1NN=CCC1S", "OC1N=NCCC1S"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+
+	public void test_Rule_CombinationOfRules_04()  throws Exception  
+	{	
+		int res = tt.testCase("O=C1C=CNC=C1", 
+				new String[]{"O=C1C=CNC=C1", "OC=1C=CN=CC=1", "OC1=CC=NC=C1"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_CombinationOfRules_05()  throws Exception 
+	{	
+		int res = tt.testCase("S=C1C=CNC=C1", 
+				new String[]{"S=C1C=CNC=C1", "SC=1C=CN=CC=1", "SC1=CC=NC=C1"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_CombinationOfRules_06()  throws Exception  
+	{	
+		int res = tt.testCase("N=C1C=CNC=C1", 
+				new String[]{"N=C1C=CNC=C1", "N=1C=CC(N)=CC=1", "N1=CC=C(N)C=C1"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_CombinationOfRules_08()  throws Exception  
+	{	
+		int res = tt.testCase("OC(=CN)C", 
+				new String[]{"OC(=CN)C", "OC(=C)CN", "O=C(C)CN", "N=CC(O)C"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_CombinationOfRules_09()  throws Exception  
+	{	
+		int res = tt.testCase("S=NC(N)C", 
+				new String[]{"C=C(N)NS", "N=C(NS)C", "N(=C(N)C)S", "N(C(N)C)=S"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_CombinationOfRules_10 ()  throws Exception  
+	{	
+		int res = tt.testCase("C=C(N)S", 
+				new String[]{"C=C(N)S", "NC(C)=S", "N=C(C)S"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_CombinationOfRules_11 ()  throws Exception  
+	{	
+		int res = tt.testCase("OC(=C)S", 
+				new String[]{"OC(=C)S", "O=C(C)S", "OC(C)=S"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_01 ()  throws Exception  
+	{	
+
+		int res = tt.testCase("OC#CC", 
+				new String[]{"OC#CC", "O=C=CC"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_06 ()  throws Exception  
+	{	
+
+		int res = tt.testCase("O=CC=CC=CCCC", 
+				new String[]{"O=CC=CC=CCCC", "OC=CC=CC=CCC", "O=CCC=CC=CCC", "O=CC=CCC=CCC"}, 
+				FlagPrintTautomers);
+
+
+		assertEquals(0, res);
+	}
+	
+
+	public void test_Rule_06_NoWarningFilter ()  throws Exception  
+	{	
+		tt.tman.tautomerFilter.FlagApplyWarningFilter = false;
+		int res = tt.testCase("O=CC=CC=CCCC", 
+				new String[]{"OC=CC=C=CCCC", "O=CCC=C=CCCC", "OC=C=CC=CCCC", "O=CC=CC=CCCC", "OC=CC=CC=CCC", "O=CCC=CC=CCC", "OC=C=CCC=CCC", "O=CC=CCC=CCC"}, 
+				FlagPrintTautomers);
+		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
+
+		assertEquals(0, res);
+	}
+	
+	
+	
+	//--
+	
+	public void test_Rule_02 ()  throws Exception  
+	{	
+
+		int res = tt.testCase("NC#CC", 
+				new String[]{"NC#CC", "N=C=CC"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_03 ()  throws Exception  
+	{	
+
+		int res = tt.testCase("SC#CC", 
+				new String[]{"SC#CC", "S=C=CC"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_Rule_OSC()  throws Exception  
+	{	
+		int res = tt.testCase("O=SC", 
+				new String[]{"OS=C", "O=SC"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+	public void test_Rule_Rule_OSC_01()  throws Exception  
+	{	
+		int res = tt.testCase("O=SCC", 
+				new String[]{"OSC=C", "O=SCC", "OS=CC"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
+
+	public void test_Rule_CombinationOfRules_07()  throws Exception  
+	{	
+		int res = tt.testCase("OS=C(CC)C", 
+				new String[]{"OS=C(CC)C", "OSC(=C)CC", "OS=C(C)CC", "O=SC(C)CC"}, 
+				FlagPrintTautomers);
+
+		assertEquals(0, res);
+	}
 
 }
