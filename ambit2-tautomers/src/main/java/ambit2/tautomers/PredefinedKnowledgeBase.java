@@ -25,12 +25,14 @@ public class PredefinedKnowledgeBase
 		"$$NAME=S=NN                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#7][#7] [#16][#7]=[#7]   $$GROUP_POS=3,1 $$INFO= S=NN",
 		"$$NAME=S=NS                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#16]=[#7][#16] [#16][#7]=[#16] $$GROUP_POS=3,1 $$INFO= S=NS",
 		"$$NAME=N=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#16][#6] [#7][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= N=SC",
+		"$$NAME=O=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#16][#6] [#8][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= O=SC",
 		
 		"$$NAME=1.5 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#7,#16]=[#6][#6]=[#6][#6] [#8,#7,#16][#6]=[#6][#6]=[#6]  " +
 																												 "$$GROUP_POS=5,1  $$INFO=",
 		"$$NAME=1.7 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#6]=[#6][#6]=[#6][#6]=[#6][#8,#7,#16] [#6][#6]=[#6][#6]=[#6][#6]=[#8,#7,#16]  " +
 																												"$$GROUP_POS=7,1  $$INFO=",
-		"$$NAME=OC#C                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8][#6]#[#6] [#8]=[#6]=[#6]    $$GROUP_POS=1,3  $$INFO= "
+		//"$$NAME=OC#C                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8][#6]#[#6] [#8]=[#6]=[#6]    $$GROUP_POS=1,3  $$INFO= ",
+		"$$NAME=[O,S,N][C,S]#[C,S]     $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#16,#7][#6,#16]#[#6,#16] [#8,#16,#7]=[#6,#16]=[#6,#16]    $$GROUP_POS=1,3  $$INFO= ",
 	};
 	
 	
@@ -51,9 +53,10 @@ public class PredefinedKnowledgeBase
 	
 	//Exclude Filters	
 	public static final String excludeFragments[] =
-	{
+	{	
+		//"[*;R;^1]",
+		"[*;R]#[*;R]",
 		"[*;r4,r5,r6,r7,r8](=*)=*",  //allene atom in a cycle (up to 8 atoms)
-		
 	};
 	
 }
