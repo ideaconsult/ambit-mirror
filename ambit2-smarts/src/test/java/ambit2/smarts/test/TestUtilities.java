@@ -1398,7 +1398,7 @@ public class TestUtilities
 //-------------------------------------------------------------------------------
 	
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
 		TestUtilities tu = new TestUtilities();
 		//tu.testSmartsManagerBoolSearch("[!$([OH1,SH1])]C(=O)[Br,Cl,F,I]","CN(C)C(=O)Cl");
@@ -1575,6 +1575,8 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[i][#G6v2]", "O[N+](=O)[O-]");
 		//tu.testIsomorphismTester("[i][#G6v2]", "O[N+](=O)[O-]");
 		
+		//tu.testIsomorphismTester("*#*", "C1#CCN=NN1");
+		
 		
 		//tu.sp.mSupportOpenBabelExtension = false;
 		//tu.printSmartsTokens("[C^3]N");
@@ -1626,7 +1628,7 @@ public class TestUtilities
 		
 		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "NC[H]");
 		
-		tu.testSMARTSBondToIBond("C=,@C");
+		//tu.testSMARTSBondToIBond("C=,@C");
 		
 		
 		//tu.testEquivalenceTestes("[H]C([H])CCC([H])[H]");
@@ -1638,6 +1640,10 @@ public class TestUtilities
 		
 		
 		
+		
+		//Vector<Integer> pos = SmartsHelper.getSmartsPositions("[*;r4,r5,r6,r7,r8](=*)=*", 
+		//		SmartsHelper.getMoleculeFromSmiles("N1=C=C=CNN1"));
+		//System.out.println(pos.size());
 		
 		
 	}
