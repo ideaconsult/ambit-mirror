@@ -103,6 +103,11 @@
     	<artifactId>cdk-ionpot</artifactId>
     	<version>${cdk.version}</version>
     	</dependency>
+    	 <dependency>
+    	<groupId>org.openscience.cdk</groupId>
+    	<artifactId>cdk-qsarionpot</artifactId>
+    	<version>${cdk.version}</version>
+    	</dependency>
         <dependency>
         	<groupId>org.openscience.cdk</groupId>
         	<artifactId>cdk-interfaces</artifactId>
