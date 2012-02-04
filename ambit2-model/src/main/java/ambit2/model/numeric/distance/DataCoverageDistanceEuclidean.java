@@ -11,5 +11,6 @@ public class DataCoverageDistanceEuclidean extends DataCoverageDistance {
 
 	public DataCoverageDistanceEuclidean() {
 		super(ADomainMethodType._modeEUCLIDEAN);
+		setPca(false);
 	}
 }
