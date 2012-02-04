@@ -238,8 +238,12 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 	public IStructureRecord process(NativeTypeItem target) throws AmbitException {
 		record.clear();
 		extractRecordID(target,getCompoundURL(target),record);
-		Object value = predict(target);
-		assignResults(record, value);
+		try {
+			Object value = predict(target);
+			assignResults(record, value);
+		} catch (Exception x) {
+			assignResults(record, x.getMessage());
+		}
 		return record;
 	}	
 	

@@ -2,7 +2,7 @@ package ambit2.rest.model.predictor;
 
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
-import java.awt.image.BufferedImage;
+
 import weka.core.Attribute;
 import Jama.Matrix;
 import ambit2.base.data.Property;
@@ -37,14 +37,25 @@ public class NumericADPredictor extends	CoveragePredictor<IStructureRecord,Matri
 	
 	protected Matrix getAsMatrix(IStructureRecord target) throws AmbitException {
 		Matrix matrix = new Matrix(1,header.numAttributes()-1);
+		for (int j=0; j < matrix.getColumnDimension();j++) matrix.set(0,j,Double.NaN);
+		
 		for (Property p : target.getProperties()) {
+			
 			String url = propertyReporter.getURI(p);
 			Attribute attr = header.attribute(url);
 			if (attr!=null) 
-				if (attr.isNumeric()) 
-					matrix.set(0,attr.index()-1,((Number)target.getProperty(p)).doubleValue());
+				if (attr.isNumeric()) {
+					Number number = ((Number)target.getProperty(p));
+					matrix.set(0,attr.index()-1,number.doubleValue());
+				}
 				else throw new AmbitException(String.format("%s not numeric!",attr.name()));
 		}
+		for (int j=0; j < matrix.getColumnDimension();j++)
+				if (Double.isNaN(matrix.get(0,j)))
+						throw new AmbitException(
+								String.format("Missing value %s at /compound/%d/conformer/%d",
+										header.attribute(j),target.getIdchemical(),target.getIdstructure()));
+				
 		return matrix;
 	}	
 	@Override
@@ -71,6 +82,12 @@ public class NumericADPredictor extends	CoveragePredictor<IStructureRecord,Matri
 					matrix[0][attr.index()-1] = ((Number)target.getProperty(p)).doubleValue();
 					else throw new AmbitException(String.format("%s not numeric!",attr.name()));
 		}	
+		
+		for (int j=0; j < matrix[0].length;j++)
+			if (Double.isNaN(matrix[0][j]))
+					throw new AmbitException(
+								String.format("Missing value %s at /compound/%d/conformer/%d",
+										header.attribute(j),target.getIdchemical(),target.getIdstructure()));
 		/*
 		for (int i=1; i < header.numAttributes();i++) {
 			Attribute attr = target.dataset().attribute(header.attribute(i).name());
