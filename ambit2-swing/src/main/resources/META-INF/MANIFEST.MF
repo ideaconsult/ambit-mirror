@@ -1,0 +1,4 @@
+Package: ambit2.swing
+Manifest-version: ${project.version}
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.
