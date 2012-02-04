@@ -40,10 +40,14 @@ public abstract class CoveragePredictor<Input,T>  extends	ModelPredictor<DataCov
 		int count = 0;
 		while (predicted.hasNext()) {
 			Property p = predicted.next();
-			if (p.getName().startsWith("AppDomain_"))
-				record.setProperty(p,((double[])value)[1]);
-			else
-				record.setProperty(p,((double[])value)[0]);
+			if (value instanceof double[]) {
+				if (p.getName().startsWith("AppDomain_"))
+					record.setProperty(p,((double[])value)[1]);
+				else
+					record.setProperty(p,((double[])value)[0]);
+			} else {
+				record.setProperty(p,value);
+			}
 			count++;
 		}
 		if (count==0) throw new AmbitException("No property to assign results!!!");
