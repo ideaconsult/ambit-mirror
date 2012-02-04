@@ -110,7 +110,7 @@ public class DataCoverageDescriptors extends DataCoverage<Matrix> {
 	 * @param points  The points to be transformed by the inverse transform
 	 * @return  the transformed points 
 	 */
-	public Matrix inverseTransform(Matrix points ) {
+	public Matrix inverseTransform(Matrix points ) throws Exception {
 		if (pca)
 			return pcaTransform.InverseTransformPoints(points);
 		else return points;
