@@ -423,7 +423,7 @@
   		<version>${toxtree.version}</version>
   	</dependency>
   	<dependency>
-  		<groupId>toxtree-proteinbinding</groupId>
+  		<groupId>toxtree</groupId>
   		<artifactId>toxtree-proteinbinding</artifactId>
   		<version>${toxtree.version}</version>
   		<scope>compile</scope>
