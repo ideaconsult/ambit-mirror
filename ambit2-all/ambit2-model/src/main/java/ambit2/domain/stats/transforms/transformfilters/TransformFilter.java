@@ -58,7 +58,7 @@ public class TransformFilter implements Serializable {
 
   public double getDescriptorsRankThreshold() { return FDescriptorsRankThreshold;}
 
-  public boolean InitializeFilter(Matrix points, int inputNo, int outputNo) {
+  public boolean InitializeFilter(Matrix points, int inputNo, int outputNo) throws Exception {
 
   if (! FilterIsEnabled()) {
      FMinVector    = null;
@@ -84,7 +84,7 @@ public class TransformFilter implements Serializable {
   }
 
   public boolean InitializeFilter(Matrix points, int inputNo, int outputNo,
-                  int[] rowsToProcess) {
+                  int[] rowsToProcess) throws Exception{
 
   if (rowsToProcess == null) return InitializeFilter(points,inputNo,outputNo);
   else {
@@ -128,7 +128,7 @@ public class TransformFilter implements Serializable {
    * @param points
    * @return Matrix
    */
-  public Matrix InverseTransformPoints(Matrix points) {
+  public Matrix InverseTransformPoints(Matrix points) throws Exception {
        return null;
   }
 

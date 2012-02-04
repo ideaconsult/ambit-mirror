@@ -1,5 +1,5 @@
 /**
- * Created November 2003
+` * Created November 2003
  */
 package ambit2.domain.stats.transforms.transformfilters;
 
@@ -61,8 +61,14 @@ public class OrthogonalTransform extends TransformFilter{
     FScaleInverse = new double[n];
   }
 
-  boolean CalcEigenValues(Matrix m) {
+  boolean CalcEigenValues(Matrix m) throws Exception {
     FIndices = null;
+    for (int i=0; i < m.getRowDimension(); i++ )
+    	for (int j=0; j < m.getColumnDimension(); j++ ) {
+    		System.out.println(m.get(i,j));
+    		if (Double.isNaN(m.get(i,j)))
+    			throw new Exception(String.format("NaN found at [%d,%d]",i,j));
+    	}
     SingularValueDecomposition svd = m.svd();
     EigenValues = svd.getSingularValues();
     EigenVectors = svd.getV();
@@ -110,7 +116,7 @@ public class OrthogonalTransform extends TransformFilter{
   }
 
 
-  public boolean InitializeFilter(Matrix points, int inputNo, int outputNo) {
+  public boolean InitializeFilter(Matrix points, int inputNo, int outputNo) throws Exception {
   if (! FilterIsEnabled()) {
      FMinVector    = null;
      FMaxVector    = null;
@@ -123,6 +129,9 @@ public class OrthogonalTransform extends TransformFilter{
      for (int i = 0; i < FInputDescriptorNumber; i++) {
          first = true;
          for (int j = 0; j < N; j++) {
+       		if (Double.isNaN(a[j][i]))
+      			throw new Exception(String.format("NaN found at [%d,%d], while processing matrix(%d,%d)",j,i,N,inputNo));
+
              if (first || (a[j][i] < FMinVector[i]))
                  FMinVector[i] = a[j][i];
              if (first || (a[j][i] > FMaxVector[i]))
@@ -131,6 +140,7 @@ public class OrthogonalTransform extends TransformFilter{
              first = false;
          }
      }
+     	
      if (N > 1)
      for (int i = 0; i < FInputDescriptorNumber; i++) {
        FMeanVector[i] /= N;
@@ -166,11 +176,15 @@ public class OrthogonalTransform extends TransformFilter{
    * @param points points in the transformed space
    * @return points in the original space
    */
-  public Matrix InverseTransformPoints(Matrix points) {
+  public Matrix InverseTransformPoints(Matrix points) throws Exception {
 //      timesVectorEqual(result,FScaleVector);
-      if (EigenVectorsInverse == null)
-        EigenVectorsInverse = EigenVectors.inverse();
+      if (EigenVectorsInverse == null) {
+    	double determinant = EigenVectors.det();
+    	if (determinant == 0) throw new Exception(String.format("Singular matrix %d",determinant));
 
+        EigenVectorsInverse = EigenVectors.inverse();
+      }
+      
       Matrix result = points.times(EigenVectorsInverse);
       timesVectorEqual(result,FScaleInverse);
       addVectorEqual(result,FMeanVector);
