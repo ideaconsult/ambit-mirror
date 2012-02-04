@@ -70,7 +70,12 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 			for (int j=1; j < instances.numAttributes();j++) 
 				try {	
 					double value = instances.instance(i).value(j);
+					if (Double.isNaN(value)) 
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+									String.format("Missing value %s in record %s",instances.attribute(j),instances.instance(i)));
 					matrix.set(i,j-1,value);
+				} catch (ResourceException x) {
+					throw x;
 				} catch (Exception x) {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 				}
