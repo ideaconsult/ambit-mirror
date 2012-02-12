@@ -1,7 +1,9 @@
 package org.opentox.fastox.ambit.ui;
 
+import org.opentox.rdf.OT;
+import org.opentox.rdf.OT.OTClass;
+
 import ambit2.rest.rdf.RDFObjectIterator;
-import ambit2.rest.rdf.OT.OTClass;
 import ambit2.ui.table.IBrowserMode.BrowserMode;
 
 import com.microworkflow.process.WorkflowContext;
@@ -23,7 +25,7 @@ public class RDFModelsBrowserPanel extends RDFBrowserPanel {
 
 	@Override
 	protected RDFTableModel createTableModel() {
-		return new RDFTableModel(OTClass.Model) {
+		return new RDFTableModel(OT.OTClass.Model) {
 			@Override
 			public Object getValueAt(int rowIndex, int columnIndex) {
 				switch (columnIndex) {
@@ -31,11 +33,13 @@ public class RDFModelsBrowserPanel extends RDFBrowserPanel {
 					try { return RDFObjectIterator.getTitle(resources.get(rowIndex));}
 					catch (Exception x) { return super.getValueAt(rowIndex, columnIndex);}
 				}
+				/*
 				case 1: {
 					try { return RDFObjectIterator.getIdentifier(resources.get(rowIndex));}
 					catch (Exception x) { return super.getValueAt(rowIndex, columnIndex);}
 					
 				}
+				*/
 				default: return super.getValueAt(rowIndex, columnIndex);
 				}
 				

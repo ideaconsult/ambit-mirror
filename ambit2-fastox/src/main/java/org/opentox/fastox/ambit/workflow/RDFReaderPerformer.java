@@ -1,11 +1,10 @@
 package org.opentox.fastox.ambit.workflow;
 
+import org.opentox.rdf.OT;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
-import ambit2.rest.rdf.OT;
-
-import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.microworkflow.execution.Performer;
 
 /**
@@ -13,11 +12,11 @@ import com.microworkflow.execution.Performer;
  * @author nina
  *
  */
-public class RDFReaderPerformer extends Performer<Reference, OntModel> {
+public class RDFReaderPerformer extends Performer<Reference, Model> {
 
 	@Override
-	public OntModel execute() throws Exception {
-		return	OT.createModel(getTarget(),MediaType.APPLICATION_RDF_XML);
+	public Model execute() throws Exception {
+		return	OT.createModel(null,getTarget(),MediaType.APPLICATION_RDF_XML);
 	}
 
 }

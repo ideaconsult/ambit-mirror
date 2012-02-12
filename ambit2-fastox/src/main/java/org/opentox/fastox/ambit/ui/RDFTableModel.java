@@ -6,12 +6,12 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import ambit2.base.data.Property;
-import ambit2.base.interfaces.IStructureRecord;
+import org.opentox.rdf.OT.OTClass;
+
 import ambit2.rest.rdf.RDFResourceIterator;
-import ambit2.rest.rdf.OT.OTClass;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class RDFTableModel extends AbstractTableModel {
@@ -40,8 +40,8 @@ public class RDFTableModel extends AbstractTableModel {
 			this.records = records;
 			RDFResourceIterator iterator = new RDFResourceIterator(records,openToxObject.toString());
 			while (iterator.hasNext()) {
-				Resource resource  = iterator.next();
-				resources.add(resource);
+				RDFNode resource  = iterator.next();
+				resources.add(resource.asResource());
 			}
 			iterator.close();
 		} catch (Exception x) {

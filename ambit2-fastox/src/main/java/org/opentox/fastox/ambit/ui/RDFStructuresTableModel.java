@@ -5,6 +5,9 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import org.opentox.rdf.OT.DataProperty;
+import org.opentox.rdf.OT.OTClass;
+import org.opentox.rdf.OT.OTProperty;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.representation.Representation;
@@ -12,9 +15,6 @@ import org.restlet.resource.ClientResource;
 
 import ambit2.base.io.DownloadTool;
 import ambit2.rest.rdf.RDFObjectIterator;
-import ambit2.rest.rdf.OT.DataProperty;
-import ambit2.rest.rdf.OT.OTClass;
-import ambit2.rest.rdf.OT.OTProperty;
 
 import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;

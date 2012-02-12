@@ -3,8 +3,7 @@ package org.opentox.fastox.ambit.workflow;
 import org.opentox.fastox.ambit.workflow.RDFWorkflowContext.WFC_KEY;
 import org.restlet.data.Reference;
 
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.microworkflow.process.Primitive;
 import com.microworkflow.process.Sequence;
 import com.microworkflow.process.Workflow;
@@ -19,7 +18,7 @@ public class RDFReaderWorkflow extends Workflow {
 	public RDFReaderWorkflow(WFC_KEY key) {
 		super();
 		this.key = key;
-		Primitive<Reference,OntModel> p = new Primitive<Reference,OntModel>(
+		Primitive<Reference,Model> p = new Primitive<Reference,Model>(
 				key.toString(),
 				RDFWorkflowContext.WFC_KEY.ONTMODEL.toString(),
 				new RDFReaderPerformer());

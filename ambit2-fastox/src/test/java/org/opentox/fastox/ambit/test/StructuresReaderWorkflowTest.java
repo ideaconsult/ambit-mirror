@@ -5,11 +5,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.opentox.fastox.ambit.ui.RDFTableModel;
 import org.opentox.fastox.ambit.workflow.RDFWorkflowContext;
-import org.opentox.fastox.ambit.workflow.StructureReaderWorkflow;
 import org.opentox.fastox.ambit.workflow.RDFWorkflowContext.WFC_KEY;
+import org.opentox.fastox.ambit.workflow.StructureReaderWorkflow;
+import org.opentox.rdf.OT.OTClass;
 import org.restlet.data.Reference;
-
-import ambit2.rest.rdf.OT.OTClass;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
