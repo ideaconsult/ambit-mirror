@@ -26,6 +26,7 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.smi23d.ShellMengine;
@@ -109,9 +110,13 @@ public class Mopac7Writer extends DefaultChemObjectWriter {
     public synchronized void  write(IChemObject arg0) throws CDKException {
         if (arg0 instanceof IMolecule)
 	        try {
-	            IMolecule a = (IMolecule) arg0;
+	        	IMolecule a = (IMolecule) arg0;
 	            generate2d(a);
 	            writer.write(getMopacCommands());
+
+	            int formalCharge = AtomContainerManipulator.getTotalFormalCharge(a);
+	            if (formalCharge != 0)
+	            	writer.write(" CHARGE=" + formalCharge);	            
 	            writer.newLine();
 	            if (a.getProperty(AmbitCONSTANTS.NAMES) != null)
 	                writer.write(a.getProperty(AmbitCONSTANTS.NAMES).toString());
