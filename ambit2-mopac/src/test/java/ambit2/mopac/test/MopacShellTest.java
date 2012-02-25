@@ -2,6 +2,7 @@ package ambit2.mopac.test;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Iterator;
 
 import junit.framework.Assert;
@@ -9,9 +10,12 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.silent.Atom;
+import org.openscience.cdk.silent.Molecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -24,6 +28,7 @@ import ambit2.base.log.AmbitLogger;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
+import ambit2.mopac.Mopac7Writer;
 import ambit2.mopac.MopacShell;
 
 public class MopacShellTest {
@@ -191,6 +196,20 @@ r^2=0.9948982496661197
 
     	 */
     	
+    }
+	
+    @Test 
+    public void testChargedCompounds() throws Exception {
+    	IAtomContainer mol = new Molecule();
+    	IAtom aluminum = new Atom("Al"); 
+    	aluminum.setFormalCharge(+3);
+    	mol.addAtom(aluminum);
+
+    	StringWriter strWriter = new StringWriter();
+    	Mopac7Writer writer = new Mopac7Writer(strWriter);
+    	writer.write(mol);
+    	writer.close();
+    	Assert.assertTrue(strWriter.toString().contains("CHARGE=3"));
     }
 }
 
