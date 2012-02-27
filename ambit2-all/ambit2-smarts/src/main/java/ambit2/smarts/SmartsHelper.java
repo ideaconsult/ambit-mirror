@@ -469,6 +469,9 @@ public class SmartsHelper
 		SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 		mol = sp.parseSmiles(smi);
 		
+		//TODO
+		//!!!! aromaticity might be lost in the preprocessing phase
+				
 		//some pre-processing is done 
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
