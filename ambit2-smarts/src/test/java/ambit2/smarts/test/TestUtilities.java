@@ -1394,6 +1394,19 @@ public class TestUtilities
 		while (digit < comb.length);
 	}
 	
+	public void testAtomAttributes(String targetSmiles) throws Exception
+	{
+		System.out.println("Pre atom configuration");
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		String atr = SmartsHelper.getAtomsAttributes(target);
+		System.out.println(atr);
+		
+		System.out.println("Post atom configuration");
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(target);
+		String atr1 = SmartsHelper.getAtomsAttributes(target);
+		System.out.println(atr1);
+		
+	}
 	
 //-------------------------------------------------------------------------------
 	
@@ -1639,7 +1652,7 @@ public class TestUtilities
 		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		
 		
-		
+		tu.testAtomAttributes("Oc1ccc(O)cc1");
 		
 		//Vector<Integer> pos = SmartsHelper.getSmartsPositions("[*;r4,r5,r6,r7,r8](=*)=*", 
 		//		SmartsHelper.getMoleculeFromSmiles("N1=C=C=CNN1"));
