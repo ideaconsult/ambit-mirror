@@ -12,6 +12,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
@@ -67,7 +68,11 @@ public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> 
 					writer.writeMolecule(newmol);
 					
 					target.setContent(sw.toString());
-					target.setType(stype.process(newmol));
+					STRUC_TYPE structype = stype.process(newmol);
+					if (STRUC_TYPE.D3withH.equals(structype))
+						target.setType(STRUC_TYPE.optimized);
+					else 
+						target.setType(structype);
 					target.setFormat(MOL_TYPE.SDF.toString());
 					updateStructure.setObject(target);
 					exec.process(updateStructure);
