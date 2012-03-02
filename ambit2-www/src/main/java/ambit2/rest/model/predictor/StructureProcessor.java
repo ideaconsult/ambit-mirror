@@ -46,6 +46,7 @@ public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> 
 			throws ResourceException {
 			try {
 				mopacshell = new MopacShell();
+				mopacshell.setErrorIfDisconnected(false);
 				return mopacshell;
 			} catch (Exception x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
