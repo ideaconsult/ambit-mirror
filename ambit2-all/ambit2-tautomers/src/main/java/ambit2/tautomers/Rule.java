@@ -24,6 +24,7 @@ public class Rule
 	int nMobileGroups = 1;
 	boolean isMobileH[] = new boolean[1]; //by default this class is prepared for a rule with one mobile group
 	boolean isStandardRule = true; //e.g. H-X-Y=Z  <-->  X=Y-Z-H 
+	boolean isRuleActive = true;
 	int mobileGroupPos[][] = null;   
 	String RuleInfo = "";
 	QueryAtomContainer stateQueries[] = null;

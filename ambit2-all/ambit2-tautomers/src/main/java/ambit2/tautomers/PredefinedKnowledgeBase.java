@@ -33,6 +33,9 @@ public class PredefinedKnowledgeBase
 																												"$$GROUP_POS=7,1  $$INFO=",
 		
 		"$$NAME=[O,S,N][C,S]#[C,S]     $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#16,#7][#6,#16;!R]#[#6,#16] [#8,#16,#7]=[#6,#16;!R]=[#6,#16]    $$GROUP_POS=1,3  $$INFO= ",
+		
+		//Ring Chain Rules
+		
 	};
 	
 	
