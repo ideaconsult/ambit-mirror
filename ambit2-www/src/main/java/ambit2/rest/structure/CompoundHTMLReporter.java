@@ -578,12 +578,15 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		b.append(String.format("<tr class=\"results_%s\">",((count % 2)==0)?"even":"odd"));
 		
-		b.append(String.format("<td >%d<br>%s<br>%s</td>\n",
+		b.append(String.format("<td >%d<br>%s<br>%s<br>%s</td>\n",
 				count+1,
 				String.format("<a href='%s/query/similarity?search=%s&type=url&threshold=0.85' title='Find similar compounds'><img src=\"%s/images/search.png\" border='0' alt='Find similar' title='Find similar'></a>",
 							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference()),
 				String.format("<a href='%s/query/smarts?search=%s&type=url&max=100' title='Find substructure'><img src=\"%s/images/search.png\" border='0' alt='Find substructure' title='Find substructure'></a>",
-							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference())							
+							uriReporter.getBaseReference(),Reference.encode(w),uriReporter.getBaseReference()),
+				String.format("<script type='text/javascript' src='http://chemapps.stolaf.edu/jmol/jmol.php?source=%s&link=3D'></script>",
+								Reference.encode(String.format("%s?media=chemical/x-mdl-sdfile", w)))
+															
 						));
 		
 		String imguri;
