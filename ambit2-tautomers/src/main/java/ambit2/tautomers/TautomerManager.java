@@ -20,6 +20,7 @@ public class TautomerManager
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
 		
 	public boolean FlagRecurseBackResultTautomers = false;
+	public boolean FlagUseRingChainRules = false;
 	
 	//Some debug info flags
 	public boolean FlagPrintTargetMoleculeInfo = false;
@@ -177,11 +178,22 @@ public class TautomerManager
 		ruleInstances.clear();
 		
 		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-		{	
-			Vector<IRuleInstance> instances = knowledgeBase.rules.get(i).applyRule(molecule); 
-			extendedRuleInstances.addAll(instances);
-		}	
+			if (knowledgeBase.rules.get(i).isRuleActive)
+			{	
+				Vector<IRuleInstance> instances = knowledgeBase.rules.get(i).applyRule(molecule); 
+				extendedRuleInstances.addAll(instances);
+			}	
 	}
+	
+	void activateRingChainRules(boolean FlagActivate)
+	{
+		FlagUseRingChainRules = FlagActivate;
+		
+		for (int i = 0; i < knowledgeBase.rules.size(); i++)
+			if (knowledgeBase.rules.get(i).type == TautomerConst.RT_RingChain)
+				knowledgeBase.rules.get(i).isRuleActive = FlagActivate;
+	}
+	
 	
 	void handleOverlapedInstances()
 	{			

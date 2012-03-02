@@ -16,7 +16,10 @@ public class RuleStateBondDistribution
 	int DBPositions[]; //double bond positions
 	int TBPositions[]; //triple bond positions
 	
-	public void calcDistribution(QueryAtomContainer statePattern)
+	boolean hasRingClosure = false;	
+	int ringClosureFA, ringClosureSA, ringClosureBO;  //ring closure info 
+	
+	public void calcDistribution(QueryAtomContainer statePattern, boolean hasRingClosure)
 	{
 		int n = 0; 
 		SmartsToChemObject stco = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());

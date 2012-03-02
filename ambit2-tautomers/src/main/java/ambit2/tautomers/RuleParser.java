@@ -52,7 +52,7 @@ public class RuleParser
 	{
 		if (curRule.smartsStates.length <= 1)
 		{	
-			errors += "Too few states. At leats two states are need! \n";
+			errors += "Too few states. At leats two states are needed! \n";
 			return;
 		}	
 		
@@ -86,7 +86,7 @@ public class RuleParser
 				flags.mNeedRingData2 = sp.needRingData2();
 				flags.mNeedValenceData = sp.needValencyData();
 				RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
-				bdistr.calcDistribution(q);
+				bdistr.calcDistribution(q, false);
 				//System.out.println("  BondDistribution:" + bdistr.toString());				
 				curRule.stateQueries[i] = q;
 				curRule.stateFlags[i] = flags;
@@ -161,7 +161,13 @@ public class RuleParser
 		{	
 			curRule.type = TautomerConst.RT_MobileGroup;
 			return;
-		}	
+		}
+		
+		if (keyValue.equals("RING_CHAIN"))
+		{	
+			curRule.type = TautomerConst.RT_RingChain;
+			return;
+		}
 		
 		errors += "Unknow rule type: " + keyValue + "\n";
 	}
@@ -171,6 +177,8 @@ public class RuleParser
 		curRule.mobileGroup = keyValue;
 		if (curRule.mobileGroup.equals("H"))
 			curRule.isMobileH[0] = true;
+		else
+			curRule.isMobileH[0] = false;
 	}
 	
 	
@@ -209,6 +217,19 @@ public class RuleParser
 	void parseInfo(String keyValue)
 	{
 		curRule.RuleInfo = keyValue.trim();
+	}
+	
+	
+	boolean chechAtomIndexes(QueryAtomContainer q)
+	{
+		//It is expected that the ring closure bond to be the last and
+		//the previous bonds to comply the rule: 
+		//bond #i contains atoms with indexes i and i+1
+		//These indexes are expected to be in this way 
+		//because of the SMARTS parser algorithm 
+		
+		//TODO
+		return true;
 	}
 	
 	
