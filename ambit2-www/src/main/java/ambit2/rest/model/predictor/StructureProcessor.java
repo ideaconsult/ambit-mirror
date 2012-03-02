@@ -2,6 +2,7 @@ package ambit2.rest.model.predictor;
 
 import java.io.StringWriter;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.restlet.data.Reference;
@@ -10,8 +11,9 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.data.MoleculeTools;
+import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.core.io.MDLWriter;
+import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.mopac.MopacShell;
@@ -23,9 +25,9 @@ public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> 
 	 * 
 	 */
 	private static final long serialVersionUID = -8106073411946010587L;
-	protected MopacShell mopacshell;
-	protected StructureTypeProcessor stype = new StructureTypeProcessor();
-
+	protected transient MopacShell mopacshell;
+	protected transient StructureTypeProcessor stype = new StructureTypeProcessor();
+	protected transient MoleculeReader reader = new MoleculeReader();
 	
 	public StructureProcessor(
 			Reference applicationRootReference,
@@ -54,17 +56,18 @@ public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> 
 	@Override
 	public Object predict(IStructureRecord target) throws AmbitException {
 		try {
-			IMolecule mol = MoleculeTools.readMolfile(target.getContent());
+			IAtomContainer mol = reader.process(target);
 			if (mol!= null) {
 				IAtomContainer newmol = predictor.process(mol);
 				if (newmol!= null) {
 					StringWriter sw = new StringWriter();
 					MDLWriter writer = new MDLWriter(sw);
-					newmol.setID(mopacshell.getMopac_commands());
+					newmol.setProperty(CDKConstants.TITLE,mopacshell.getMopac_commands());
 					writer.writeMolecule(newmol);
 					
 					target.setContent(sw.toString());
 					target.setType(stype.process(newmol));
+					target.setFormat(MOL_TYPE.SDF.toString());
 					updateStructure.setObject(target);
 					exec.process(updateStructure);
 				}
