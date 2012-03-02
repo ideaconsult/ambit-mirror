@@ -10,7 +10,7 @@ public class TautomerConst
 	
 	//Rule Types
 	public static final int RT_MobileGroup = 0;
-	public static final int RT_RingChain = 0;
+	public static final int RT_RingChain = 1;
 	
 	//H-Atom Rule Modes
 	public static final int HRM_Implicit = 0;
