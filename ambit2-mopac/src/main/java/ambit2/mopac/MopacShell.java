@@ -31,23 +31,19 @@ package ambit2.mopac;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
-import org.openscience.cdk.interfaces.IElement;
-import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
+import ambit2.core.data.MoleculeTools;
 import ambit2.smi23d.ShellMengine;
 import ambit2.smi23d.ShellSmi2SDF;
 
@@ -230,29 +226,40 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	
 	@Override
 	public synchronized IAtomContainer runShell(IAtomContainer mol) throws ShellException {
-		if (canApply(mol))
-			return super.runShell(mol);
-		else 
-			return mol;
-	}	
-	protected synchronized boolean canApply(IAtomContainer atomcontainer) throws ShellException {
-		if ((atomcontainer==null) || (atomcontainer.getAtomCount()==0)) 
+		if ((mol==null) || (mol.getAtomCount()==0)) 
 			throw new ShellException(this,"Undefined structure");
+    		
+		try {
+			return applyEvenIfDisconnected(mol);
+		} catch (ShellException x) {
+			throw x;
+		} catch (Exception x) {
+			return mol;
+		}
+	}	
+	protected synchronized IAtomContainer applyEvenIfDisconnected(IAtomContainer atomcontainer) throws ShellException {
+		
     	IAtomContainerSet a  = ConnectivityChecker.partitionIntoMolecules(atomcontainer);
     	IAtomContainer mol = null;
     	if (a.getAtomContainerCount()>1)
     		if (errorIfDisconnected)
     			throw new ShellException(this,"Molecule disconnected");
     		else {
-    			
-    			for (int i=0; i < a.getAtomContainerCount();i++)
-    				if ((mol == null) || (mol.getAtomCount() < a.getAtomContainer(i).getAtomCount())) 
-    					mol = a.getAtomContainer(i);
+    			IAtomContainer result = MoleculeTools.newMolecule(atomcontainer.getBuilder());
+    			for (int i=0; i < a.getAtomContainerCount();i++) {
+    				if ((a.getAtomContainer(i)!=null) && (a.getAtomContainer(i).getAtomCount()>1)) 
+    					mol = super.runShell(a.getAtomContainer(i));
+    				else mol = a.getAtomContainer(i);
+    				result.add(mol);
+    			}
+    			return result;
     		}
-    	else mol = atomcontainer;
-    		
-        IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(mol);
+    	else 
+    		return super.runShell(atomcontainer);
         
+        /*    	
+        IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(mol);
+
         List<IElement> v = MolecularFormulaManipulator.elements(formula);
         for (int i=0; i < v.size();i++) {
         	
@@ -272,9 +279,10 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
         } catch (IOException x) {
         	throw new ShellException(this,x);
         }
-        
+   
 
         return true;
+             */
 	}
 	@Override
 	public String toString() {
