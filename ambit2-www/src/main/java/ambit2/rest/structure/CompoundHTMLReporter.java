@@ -834,6 +834,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				Reference.encode(w)
 				));
 		
+		b.append(String.format("<script type='text/javascript' src='http://chemapps.stolaf.edu/jmol/jmol.php?source=%s&link=3D'></script><br>",
+				Reference.encode(String.format("%s?media=chemical/x-mdl-sdfile", w))));
+			
+
 	
 		
 		b.append(String.format("<a href=\"%s?%s=%s\">Feature values</a><br>",
