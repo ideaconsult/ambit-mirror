@@ -34,8 +34,9 @@ public class PredefinedKnowledgeBase
 		
 		"$$NAME=[O,S,N][C,S]#[C,S]     $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#16,#7][#6,#16;!R]#[#6,#16] [#8,#16,#7]=[#6,#16;!R]=[#6,#16]    $$GROUP_POS=1,3  $$INFO= ",
 		
-		//Ring Chain Rules
 		
+		//Ring Chain Rules
+		"$$NAME=3-exo-Trig            $$TYPE=RING_CHAIN    $$GROUP=H   $$STATES= [C,O,N,S;!R][C][C]=[C,O,N] [C,O,N,S]1[C][C][C,O,N]1   $$GROUP_POS=1,4   $$INFO=favoured; r3",
 	};
 	
 	
