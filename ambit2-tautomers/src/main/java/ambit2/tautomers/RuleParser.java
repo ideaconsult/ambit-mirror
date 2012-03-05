@@ -3,12 +3,14 @@ package ambit2.tautomers;
 import java.util.Vector;
 
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.smarts.SmartsParser;
 
 public class RuleParser 
 {
 	String errors = "";
+	String atomIndexCheckError = "";
 	Rule curRule = null;
 	
 	public Rule parse(String ruleString)
@@ -97,6 +99,19 @@ public class RuleParser
 				curRule.stateQueries[i] = q;
 				curRule.stateFlags[i] = flags;
 				curRule.stateBonds[i] = bdistr;
+				
+				
+				if (!chechAtomIndexes(q))
+				{	
+					//Actually this check should not be needed. 
+					//But it is just additional guarantee.  
+					//Generally the atom index conditions are expected to be in this way
+					//because of the SMARTS parser algorithm and 
+					//the 'correct linear syntax for the rule states'.
+					
+					errors += "state " + curRule.smartsStates[i] + 
+					       " is parsed with incorrect bond indexes. " + atomIndexCheckError;
+				}
 			}	
 		}
 	}
@@ -236,9 +251,30 @@ public class RuleParser
 		//These indexes are expected to be in this way 
 		//because of the SMARTS parser algorithm 
 		
-		//TODO
+		atomIndexCheckError = "";
+		//Molecule with n atoms has at least n-1 bonds
+		for (int i = 0; i < q.getAtomCount()-1; i++)
+		{
+			IBond b = q.getBond(i);
+			int ind0 = q.getAtomNumber(b.getAtom(0));
+			int ind1 = q.getAtomNumber(b.getAtom(1));
+			
+			if ((ind0 == i) && (ind1 == i+1))
+				continue; //it is OK
+			
+			if ((ind0 == i+1) && (ind1 == i))
+				continue; //it is OK
+			
+			//Error
+			atomIndexCheckError = "bond #" + i + " has atom indexes: " + ind0 + ", " + ind1 + " ";
+			return false;
+		}
+		
+		
 		return true;
 	}
+	
+	
 	
 	
 	//Helper function --------------------------------------------------
