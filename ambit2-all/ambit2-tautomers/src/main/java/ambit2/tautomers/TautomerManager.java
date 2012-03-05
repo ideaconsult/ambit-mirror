@@ -21,6 +21,7 @@ public class TautomerManager
 		
 	public boolean FlagRecurseBackResultTautomers = false;
 	public boolean FlagUseRingChainRules = false;
+	public boolean FlagUseClorineRules = false;
 	
 	//Some debug info flags
 	public boolean FlagPrintTargetMoleculeInfo = false;
@@ -34,7 +35,9 @@ public class TautomerManager
 		if (knowledgeBase.errors.size() > 0)
 		{	
 			System.out.println(knowledgeBase.getAllErrors());
-		}	
+		}
+		
+		
 	}
 	
 	
@@ -50,6 +53,7 @@ public class TautomerManager
 	}
 	
 	
+	//Approach 00: this is the initial (pure combinatorial)  approach 
 	public Vector<IAtomContainer> generateTautomers()
 	{
 		searchAllRulePositions();
@@ -67,6 +71,7 @@ public class TautomerManager
 		return(resultTautomers);
 	}
 	
+	//Approach 01 (basic one) based on first depth search algorithm
 	public Vector<IAtomContainer> generateTautomersIncrementaly()
 	{
 		//Another approach for generation of tautomers
@@ -190,11 +195,27 @@ public class TautomerManager
 		FlagUseRingChainRules = FlagActivate;
 		
 		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-			if (knowledgeBase.rules.get(i).type == TautomerConst.RT_RingChain)
-				knowledgeBase.rules.get(i).isRuleActive = FlagActivate;
+		{	
+			Rule rule = knowledgeBase.rules.get(i);
+			if (rule.type == TautomerConst.RT_RingChain)
+				rule.isRuleActive = FlagActivate;
+		}	
+	}
+	
+	void activateClorineRules(boolean FlagActivate)
+	{
+		FlagUseClorineRules = FlagActivate;		
+		for (int i = 0; i < knowledgeBase.rules.size(); i++)
+		{	
+			Rule rule = knowledgeBase.rules.get(i);
+			if (rule.type == TautomerConst.RT_MobileGroup)
+				if (rule.mobileGroup.equals("Cl"))
+					rule.isRuleActive = FlagActivate;
+		}	
 	}
 	
 	
+	//This function is applied for approach 00 
 	void handleOverlapedInstances()
 	{			
 		ruleInstances.addAll(extendedRuleInstances);
@@ -203,6 +224,7 @@ public class TautomerManager
 		//rman.handleOverlappingRuleInstances();
 	}
 	
+	//This function is applied for approach 00 
 	void generateRuleInstanceCombinations()
 	{
 		for (int i = 0; i < ruleInstances.size(); i++)
@@ -227,6 +249,7 @@ public class TautomerManager
 		} while (instNumber < ruleInstances.size()); 
 	}
 	
+	//This function is applied for approach 00 
 	void registerTautomer()
 	{	
 		try{
@@ -280,6 +303,7 @@ public class TautomerManager
 			sb.append(""+ruleInstances.get(i).getCurrentState() + " ");
 		return (sb.toString());
 	}
+	
 	
 	public void printDebugInfo()
 	{
