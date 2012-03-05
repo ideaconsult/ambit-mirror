@@ -443,6 +443,9 @@ public class RuleManager
 		//System.out.print("  fragment: " +SmartsHelper.moleculeToSMILES(fragment));
 		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
 		{	
+			if (!tman.knowledgeBase.rules.get(i).isRuleActive)
+				continue;
+			
 			Vector<IRuleInstance> instances = tman.knowledgeBase.rules.get(i).applyRule(fragment); 
 			for (int k = 0; k < instances.size(); k++)
 			{	
@@ -738,6 +741,9 @@ public class RuleManager
 		System.out.print("  fragment: " +SmartsHelper.moleculeToSMILES(fragment));
 		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
 		{	
+			if (!tman.knowledgeBase.rules.get(i).isRuleActive)
+				continue;
+			
 			//System.out.println("$$ "  + i);
 			Vector<IRuleInstance> instances = tman.knowledgeBase.rules.get(i).applyRule(fragment); 
 			for (int k = 0; k < instances.size(); k++)

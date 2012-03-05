@@ -21,7 +21,7 @@ public class TautomerManager
 		
 	public boolean FlagRecurseBackResultTautomers = false;
 	public boolean FlagUseRingChainRules = false;
-	public boolean FlagUseClorineRules = false;
+	public boolean FlagUseChlorineRules = false;
 	
 	//Some debug info flags
 	public boolean FlagPrintTargetMoleculeInfo = false;
@@ -36,6 +36,9 @@ public class TautomerManager
 		{	
 			System.out.println(knowledgeBase.getAllErrors());
 		}
+		
+		activateRingChainRules(FlagUseRingChainRules);
+		activateChlorineRules(FlagUseChlorineRules);
 		
 		
 	}
@@ -190,7 +193,7 @@ public class TautomerManager
 			}	
 	}
 	
-	void activateRingChainRules(boolean FlagActivate)
+	public void activateRingChainRules(boolean FlagActivate)
 	{
 		FlagUseRingChainRules = FlagActivate;
 		
@@ -202,9 +205,9 @@ public class TautomerManager
 		}	
 	}
 	
-	void activateClorineRules(boolean FlagActivate)
+	public void activateChlorineRules(boolean FlagActivate)
 	{
-		FlagUseClorineRules = FlagActivate;		
+		FlagUseChlorineRules = FlagActivate;		
 		for (int i = 0; i < knowledgeBase.rules.size(); i++)
 		{	
 			Rule rule = knowledgeBase.rules.get(i);

@@ -44,7 +44,12 @@ public class RuleParser
 		if (errors.equals(""))
 			return(rule);
 		else
+		{	
+			//adding rule name as a prefix
+			if (rule.name != null)
+				errors = "'" + rule.name + "' " + errors;
 			return(null);
+		}	
 	}
 	
 	
@@ -59,6 +64,7 @@ public class RuleParser
 		if (curRule.smartsStates.length != curRule.mobileGroupPos[0].length)
 		{
 			errors += "The number of states and number of group positionas are not the same!\n";
+			errors += "nStates = " + curRule.smartsStates.length + ", nPos = " + curRule.mobileGroupPos[0].length;
 			return;
 		}
 		
@@ -184,17 +190,19 @@ public class RuleParser
 	
 	void parseStates(String keyValue)
 	{	
-		//String elements [] = keyValue.split(TautomerConst.KeyWordElementSeparator);
-		
 		String elements [] = keyValue.split(" ");
-		curRule.smartsStates = new String[elements.length]; 
+		Vector<String> vs = new Vector<String>(); 
+		 
 		for (int i = 0; i < elements.length; i++)
 		{	
 			String s = elements[i].trim();
 			if(!s.equals(""))
-				curRule.smartsStates[i] = s;
+				vs.add(s);
 		}
 		
+		curRule.smartsStates = new String[vs.size()];
+		for (int i = 0; i < vs.size(); i++)
+			curRule.smartsStates[i] = vs.get(i);
 	}
 	
 	void parseGroup_Pos(String keyValue)

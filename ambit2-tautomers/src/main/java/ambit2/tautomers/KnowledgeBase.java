@@ -27,7 +27,7 @@ public class KnowledgeBase
 	{
 		errors.clear();
 		for (int i = 0; i < PredefinedKnowledgeBase.rules.length; i++)
-			addRule(PredefinedKnowledgeBase.rules[i]);
+			addRule(PredefinedKnowledgeBase.rules[i], i);
 		
 		for (int i = 0; i < PredefinedKnowledgeBase.warningFragments.length; i++)
 			addFilterRule(PredefinedKnowledgeBase.warningFragments[i], Filter.FT_WARNING);
@@ -39,17 +39,17 @@ public class KnowledgeBase
 		{
 			System.out.println("There are errors in the knowledge base:");
 			for (int i = 0; i < errors.size(); i++)
-				System.out.println("Rule " + (i+1) + ":  " + errors.get(i));
+				System.out.println(errors.get(i));
 		}
 		
 	}
 	
 	
-	public void addRule(String newRule)
+	public void addRule(String newRule, int ruleNum)
 	{	
 		Rule rule = ruleParser.parse(newRule);
 		if (rule == null)
-			errors.add(ruleParser.errors);
+			errors.add("Rule " + (ruleNum+1) + ":  " + ruleParser.errors);
 		else
 		{
 			rules.add(rule);
