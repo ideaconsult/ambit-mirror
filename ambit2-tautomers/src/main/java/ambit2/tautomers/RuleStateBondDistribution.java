@@ -19,7 +19,7 @@ public class RuleStateBondDistribution
 	boolean hasRingClosure = false;	
 	int ringClosureFA, ringClosureSA, ringClosureBO;  //ring closure info 
 	
-	public void calcDistribution(QueryAtomContainer statePattern, boolean hasRingClosure)
+	public void calcDistribution(QueryAtomContainer statePattern, int ringClosureBondIndex)
 	{
 		int n = 0; 
 		SmartsToChemObject stco = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
