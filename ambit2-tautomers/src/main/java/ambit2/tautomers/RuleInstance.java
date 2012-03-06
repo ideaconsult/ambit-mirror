@@ -26,8 +26,8 @@ public class RuleInstance implements IRuleInstance
 	Vector<IBond> bonds = new  Vector<IBond>();
 	
 	//Containers used in the case when this instance overlaps with other instances
-	Vector<IAtom> overlappedAtoms = new  Vector<IAtom>(); 
-	Vector<IBond> overlappedBonds = new  Vector<IBond>();
+	//Vector<IAtom> overlappedAtoms = new  Vector<IAtom>(); 
+	//Vector<IBond> overlappedBonds = new  Vector<IBond>();
 	
 	public RuleInstance()
 	{
@@ -149,7 +149,12 @@ public class RuleInstance implements IRuleInstance
 		return rule.nStates;
 	}
 	
+	
+	
+	/*
+	
 	//Utilities for generation of combination of states -----------------------------
+	
 	
 	public int firstStateSpecial()
 	{	
@@ -199,6 +204,10 @@ public class RuleInstance implements IRuleInstance
 		
 		return(state);
 	}
+	
+	*/
+	
+	
 	
 	public String debugInfo(IAtomContainer mol)
 	{

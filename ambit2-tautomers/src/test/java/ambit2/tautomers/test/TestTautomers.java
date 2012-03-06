@@ -48,6 +48,9 @@ public class TestTautomers
 		tt.tman.FlagPrintExtendedRuleInstances = false;
 		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
 		
+		tt.tman.activateChlorineRules(false);
+		tt.tman.activateRingChainRules(false);
+		
 		
 		//tt.performTestCases();
 		
@@ -170,6 +173,9 @@ public class TestTautomers
 			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 			v.add(resultTautomers.get(i));
 		}
+		System.out.println();
+		
+		System.out.println("Generated: " + resultTautomers.size() + " tautomers.");
 		
 		//preProcessStructures(v);
 		TestStrVisualizer tsv = new TestStrVisualizer(v);

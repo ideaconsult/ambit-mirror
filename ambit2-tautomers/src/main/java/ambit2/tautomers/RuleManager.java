@@ -39,6 +39,7 @@ public class RuleManager
 		
 	}
 	
+	/*
 	public int handleOverlappingRuleInstances()
 	{
 		unprocessedInstances.clear();
@@ -86,6 +87,7 @@ public class RuleManager
 		
 		return(0);
 	}
+	*/
 	
 	
 	int overlapInstances(IRuleInstance r1, IRuleInstance r2)
@@ -155,6 +157,7 @@ public class RuleManager
 		return (ob);
 	}
 	
+	/*
 	void prepareOverlappedAtomsBonds(CombinedRuleInstance cri)
 	{
 		int n = cri.instances.size();
@@ -176,6 +179,7 @@ public class RuleManager
 			}	
 		}
 	}
+	*/
 	
 	
 	IRuleInstance addRuleInstanceToCombination(IRuleInstance baseRule, IRuleInstance addRule)
