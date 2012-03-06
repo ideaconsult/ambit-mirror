@@ -1408,6 +1408,28 @@ public class TestUtilities
 		
 	}
 	
+	public void testBondIndexChange(String smarts)
+	{
+		QueryAtomContainer q = sp.parse(smarts);
+		if (!sp.getErrorMessages().equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());			
+			return;
+		}
+		
+				
+		for (int i = 0; i < q.getBondCount(); i++)
+		{
+			IBond b = q.getBond(i);
+			int ind0 = q.getAtomNumber(b.getAtom(0));
+			int ind1 = q.getAtomNumber(b.getAtom(1));
+			
+			System.out.println("bond #" + i + "   --> " +ind0 + "  " + ind1);
+		}	
+		
+		
+	}
+	
 //-------------------------------------------------------------------------------
 	
 	
@@ -1652,7 +1674,9 @@ public class TestUtilities
 		//tu.structureStatisticsMDL(5000, "/einecs_structures_V13Apr07.sdf", "/db-5000-str-stat.txt");
 		
 		
-		tu.testAtomAttributes("Oc1ccc(O)cc1");
+		//tu.testAtomAttributes("Oc1ccc(O)cc1");
+		
+		tu.testBondIndexChange("C1CCC1CCN");
 		
 		//Vector<Integer> pos = SmartsHelper.getSmartsPositions("[*;r4,r5,r6,r7,r8](=*)=*", 
 		//		SmartsHelper.getMoleculeFromSmiles("N1=C=C=CNN1"));
