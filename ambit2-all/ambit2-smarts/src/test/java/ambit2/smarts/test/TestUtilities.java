@@ -1417,7 +1417,9 @@ public class TestUtilities
 			return;
 		}
 		
-				
+		System.out.println(smarts);		
+		IAtomContainer mol0 =  smToChemObj.extractAtomContainer(q);
+		System.out.println(SmartsHelper.moleculeToSMILES(mol0));
 		for (int i = 0; i < q.getBondCount(); i++)
 		{
 			IBond b = q.getBond(i);
@@ -1425,10 +1427,11 @@ public class TestUtilities
 			int ind1 = q.getAtomNumber(b.getAtom(1));
 			
 			System.out.println("bond #" + i + "   --> " +ind0 + "  " + ind1);
-		}	
-		
+		}
 		
 	}
+	
+	
 	
 //-------------------------------------------------------------------------------
 	
