@@ -95,24 +95,30 @@ public class RuleParser
 				flags.mNeedRingData2 = sp.needRingData2();
 				flags.mNeedValenceData = sp.needValencyData();
 				RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
-				bdistr.calcDistribution(q, false);
+				bdistr.calcDistribution(q, -1);
 				//System.out.println("  BondDistribution:" + bdistr.toString());				
 				curRule.stateQueries[i] = q;
 				curRule.stateFlags[i] = flags;
 				curRule.stateBonds[i] = bdistr;
 				
+				/*
 				
 				if (!checkAtomIndexes(q))
 				{	
-					//Actually this check should not be needed. 
+					//Actually this check should not be needed for the ordinary 'linear rules'. 
 					//But it is just additional guarantee.  
 					//Generally the atom index conditions are expected to be in this way
 					//because of the SMARTS parser algorithm and 
 					//the 'correct linear syntax for the rule states'.
+					//Additionally some 'ring_chain' rules must be 'fixed' (re-indexed).
+					
+					
+					//TODO - to apply rule state 'fixing'
 					
 					errors += "state " + curRule.smartsStates[i] + 
 					       " is parsed with incorrect bond indexes. " + atomIndexCheckError;
 				}
+				*/
 			}	
 		}
 	}
@@ -136,7 +142,6 @@ public class RuleParser
 			parseName(keyValue);
 			return;
 		}
-		
 				
 		if (key.equals("TYPE"))
 		{	
@@ -243,7 +248,29 @@ public class RuleParser
 		curRule.RuleInfo = keyValue.trim();
 	}
 	
+	//This function returns the index of the ring closure bond if present
+	//otherwise -1
+	int checkBondIndexesAndRingClosure(QueryAtomContainer q)
+	{
+		atomIndexCheckError = "";
+		int n = q.getAtomCount() - 1;
+		int nRingClosureBond = -1;
+		boolean flagIndexOK[] = new boolean[n];
+		for(int i = 0; i < n; i++)
+			flagIndexOK[i] = false;
+		
+		for (int i = 0; i < q.getBondCount(); i++)
+		{
+			
+		}
+		
+		//Final check
+		
+		return nRingClosureBond; 
+	}
 	
+	
+	//This function is not used
 	boolean checkAtomIndexes(QueryAtomContainer q)
 	{
 		//It is expected that the ring closure bond to be the last bond and
@@ -277,7 +304,11 @@ public class RuleParser
 		return true;
 	}
 	
-	
+	/*
+	 
+	 //Index fixing is not necessary 
+	 //Also this code does not work properly 
+	  
 	boolean fixAtomIndexes(QueryAtomContainer q)
 	{
 		atomIndexFixError = "";
@@ -288,9 +319,20 @@ public class RuleParser
 		
 		q.removeAllBonds();
 		
-		//TODO
-		//for (int i = 0; i < q.getAtomCount()-1; i++)
-		//	;
+		//Handling the first groups of bond (linear part)
+		for (int i = 0; i < q.getAtomCount()-1; i++)
+		{
+			IBond b = getBondWithAtomIndexes(i, i+1, v, q);
+			if (b == null)
+				return false;
+			
+			v.remove(b);
+			q.addBond(b);
+		}
+		
+		//Handling the rest
+		for (int i = 0; i < v.size(); i++)
+			q.addBond(q.getBond(i));
 		
 		return true;
 	}
@@ -311,6 +353,8 @@ public class RuleParser
 		}
 		return null;
 	}
+	
+	*/
 	
 	
 	//Helper function --------------------------------------------------
