@@ -101,7 +101,7 @@ public class RuleParser
 				curRule.stateBonds[i] = bdistr;
 				
 				
-				if (!chechAtomIndexes(q))
+				if (!checkAtomIndexes(q))
 				{	
 					//Actually this check should not be needed. 
 					//But it is just additional guarantee.  
@@ -243,7 +243,7 @@ public class RuleParser
 	}
 	
 	
-	boolean chechAtomIndexes(QueryAtomContainer q)
+	boolean checkAtomIndexes(QueryAtomContainer q)
 	{
 		//It is expected that the ring closure bond to be the last and
 		//the previous bonds to comply the rule: 
@@ -274,6 +274,12 @@ public class RuleParser
 		return true;
 	}
 	
+	
+	int fixAtomIndexes(QueryAtomContainer q)
+	{
+		//TODO
+		return 0;
+	}
 	
 	
 	

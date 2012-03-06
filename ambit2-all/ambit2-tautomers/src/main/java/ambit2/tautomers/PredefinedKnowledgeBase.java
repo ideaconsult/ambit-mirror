@@ -36,7 +36,7 @@ public class PredefinedKnowledgeBase
 		
 		
 		//Ring Chain Rules
-		"$$NAME=3-exo-Trig            $$TYPE=RING_CHAIN    $$GROUP=H   $$STATES= [C,O,N,S;!R][C][C]=[C,O,N] [C,O,N,S]1[C][C][C,O,N]1   $$GROUP_POS=1,4   $$INFO=favoured; r3",
+		"$$NAME=3-exo-Trig            $$TYPE=RING_CHAIN    $$GROUP=H   $$STATES= [C,O,N,S;!R][C][C]=[C,O,N] [C,O,N,S]1[C][C]1[C,O,N]   $$GROUP_POS=1,4   $$INFO=favoured; r3",
 	};
 	
 	
