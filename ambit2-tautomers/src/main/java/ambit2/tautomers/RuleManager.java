@@ -40,6 +40,7 @@ public class RuleManager
 	}
 	
 	/*
+	
 	public int handleOverlappingRuleInstances()
 	{
 		unprocessedInstances.clear();
@@ -179,7 +180,7 @@ public class RuleManager
 			}	
 		}
 	}
-	*/
+	
 	
 	
 	IRuleInstance addRuleInstanceToCombination(IRuleInstance baseRule, IRuleInstance addRule)
@@ -203,11 +204,6 @@ public class RuleManager
 	
 	
 	
-	
-	
-	
-	
-	/*
 	IRuleInstance combineRuleInstances(IRuleInstance ir1, IRuleInstance ir2)
 	{
 		RuleInstance r1 = (RuleInstance)ir1;

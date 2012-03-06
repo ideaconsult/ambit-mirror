@@ -11,6 +11,7 @@ public class RuleParser
 {
 	String errors = "";
 	String atomIndexCheckError = "";
+	String atomIndexFixError = "";
 	Rule curRule = null;
 	
 	public Rule parse(String ruleString)
@@ -245,11 +246,13 @@ public class RuleParser
 	
 	boolean checkAtomIndexes(QueryAtomContainer q)
 	{
-		//It is expected that the ring closure bond to be the last and
-		//the previous bonds to comply the rule: 
+		//It is expected that the ring closure bond to be the last bond and
+		//previous bonds to comply the rule: 
 		//bond #i contains atoms with indexes i and i+1
-		//These indexes are expected to be in this way 
-		//because of the SMARTS parser algorithm 
+		//
+		//These indexes are expected to be in this way because of the SMARTS parser algorithm
+		//and the fact that 
+		//rule state definitions are written as linear simple SMARTS without branching "()" brackest  
 		
 		atomIndexCheckError = "";
 		//Molecule with n atoms has at least n-1 bonds
@@ -275,12 +278,39 @@ public class RuleParser
 	}
 	
 	
-	int fixAtomIndexes(QueryAtomContainer q)
+	boolean fixAtomIndexes(QueryAtomContainer q)
 	{
+		atomIndexFixError = "";
+		Vector<IBond> v = new Vector<IBond>(); 
+		
+		for (int i = 0; i < q.getBondCount(); i++)
+			v.add(q.getBond(i));
+		
+		q.removeAllBonds();
+		
 		//TODO
-		return 0;
+		//for (int i = 0; i < q.getAtomCount()-1; i++)
+		//	;
+		
+		return true;
 	}
 	
+	IBond getBondWithAtomIndexes(int ind0, int ind1, Vector<IBond> v, QueryAtomContainer q)
+	{
+		for (int i = 0; i < v.size(); i++)
+		{
+			IBond b = v.get(i);
+			int i0 = q.getAtomNumber(b.getAtom(0));
+			int i1 = q.getAtomNumber(b.getAtom(1));
+			
+			if ((ind0 == i0) && (ind1 == i1))
+				return b;
+			
+			if ((ind0 == i1) && (ind1 == i0))
+				return b;
+		}
+		return null;
+	}
 	
 	
 	//Helper function --------------------------------------------------
