@@ -50,7 +50,7 @@ public class RuleParser
 		{	
 			//adding rule name as a prefix
 			if (rule.name != null)
-				errors = "'" + rule.name + "' " + errors;
+				errors = "'" + rule.name + "'\n" + errors;
 			return(null);
 		}	
 	}
@@ -77,12 +77,17 @@ public class RuleParser
 		
 		SmartsParser sp = new SmartsParser();
 		sp.mSupportDoubleBondAromaticityNotSpecified = true;
+		boolean FlagStateSmartsOK = true; 
+		
 		for (int i = 0; i<curRule.smartsStates.length; i++)
 		{
 			QueryAtomContainer q = sp.parse(curRule.smartsStates[i]);			
 			String errorMsg = sp.getErrorMessages();
-			if (!errorMsg.equals(""))			
+			if (!errorMsg.equals(""))
+			{	
 				errors += "Incorrect state description: " + errorMsg + "\n";
+				FlagStateSmartsOK = false;
+			}
 			else
 			{	
 				sp.setNeededDataFlags();	
@@ -100,27 +105,11 @@ public class RuleParser
 				curRule.stateQueries[i] = q;
 				curRule.stateFlags[i] = flags;
 				curRule.stateBonds[i] = bdistr;
-				
-				/*
-				
-				if (!checkAtomIndexes(q))
-				{	
-					//Actually this check should not be needed for the ordinary 'linear rules'. 
-					//But it is just additional guarantee.  
-					//Generally the atom index conditions are expected to be in this way
-					//because of the SMARTS parser algorithm and 
-					//the 'correct linear syntax for the rule states'.
-					//Additionally some 'ring_chain' rules must be 'fixed' (re-indexed).
-					
-					
-					//TODO - to apply rule state 'fixing'
-					
-					errors += "state " + curRule.smartsStates[i] + 
-					       " is parsed with incorrect bond indexes. " + atomIndexCheckError;
-				}
-				*/
-			}	
+			}
 		}
+		
+		if (FlagStateSmartsOK)
+			checkStateAtomsBondIndexesAndRingClosure();
 	}
 	
 	void parseKeyWord(String keyWord)
@@ -248,25 +237,140 @@ public class RuleParser
 		curRule.RuleInfo = keyValue.trim();
 	}
 	
-	//This function returns the index of the ring closure bond if present
-	//otherwise -1
-	int checkBondIndexesAndRingClosure(QueryAtomContainer q)
+	void checkStateAtomsBondIndexesAndRingClosure()
 	{
-		atomIndexCheckError = "";
-		int n = q.getAtomCount() - 1;
-		int nRingClosureBond = -1;
-		boolean flagIndexOK[] = new boolean[n];
-		for(int i = 0; i < n; i++)
-			flagIndexOK[i] = false;
+		//This function checks whether all each bond with atom indexes (a1,a2)
+		//from one state is present in the other state 
+		//except the ring closure present
 		
-		for (int i = 0; i < q.getBondCount(); i++)
-		{
-			
+		//Currently this version works with two states
+		//Actually at the moment rules with more than two states are not needed
+		
+		QueryAtomContainer q0 = curRule.stateQueries[0];
+		QueryAtomContainer q1 = curRule.stateQueries[1];
+		
+		if (q0.getAtomCount() != q1.getAtomCount())
+		{	
+			errors += "The rule states have different number ot atoms: " + 
+			q0.getAtomCount() + "  " +  q1.getAtomCount() + "\n";
+			return;
 		}
 		
-		//Final check
+		if (!checkStateAtomsTypes())
+			return;
 		
-		return nRingClosureBond; 
+		
+		boolean FlagHasRingClosure = false;
+		int closureState = 1;
+		
+		if (q0.getBondCount() != q1.getBondCount())
+		{
+			FlagHasRingClosure  = true;
+			
+			if (Math.abs(q0.getBondCount() - q1.getBondCount()) > 1)
+			{	
+				errors += "Too large difference between the number of bonds for the rule states: " + 
+				q0.getBondCount() + "  " +  q1.getBondCount() + "\n";
+				//return is not called in order to have additional error messages
+			}
+			
+			if (q0.getBondCount() > q1.getBondCount())	
+				closureState = 0;
+		}
+		
+		
+		QueryAtomContainer q, q_2; 
+		
+		if (closureState == 1)
+		{
+			q = q0;
+			q_2 = q1;
+		}
+		else
+		{
+			q = q1;
+			q_2 = q0;
+		}
+		
+		//Register atom indexes for each bond from the 'non-closure' state
+		int a0[] = new int[q.getBondCount()];
+		int a1[] = new int[q.getBondCount()];
+		for (int i = 0; i < q.getBondCount(); i++)
+		{	
+			IBond b = q.getBond(i);
+			a0[i] = q.getAtomNumber(b.getAtom(0));
+			a1[i] = q.getAtomNumber(b.getAtom(1));
+		}
+		
+		int maxDiffIndexes = 0;
+		int nDiffIndexes = 0; 
+		if (FlagHasRingClosure)
+		{	
+			if (curRule.type == TautomerConst.RT_RingChain)
+				maxDiffIndexes = 1;
+			else
+			{
+				maxDiffIndexes = 0;
+				errors += "This rule is not a ring_chain but it contains a ring closure.\n";
+			}
+		}
+		
+			
+		int closureBondIndex = -1;
+		
+		//Checking the atoms indexes of the other state query (q_2)		
+		for (int i = 0; i < q_2.getBondCount(); i++)
+		{
+			IBond b = q_2.getBond(i);
+			int ind0 = q_2.getAtomNumber(b.getAtom(0));
+			int ind1 = q_2.getAtomNumber(b.getAtom(1));
+			
+			if (! containsBondIndexes(ind0, ind1,  a0, a1))
+			{
+				closureBondIndex = i;
+				nDiffIndexes++;
+				if (nDiffIndexes > maxDiffIndexes)
+				{
+					errors += "The atom ndexes for bond " + (i+1) + " of state " + (closureState + 1)
+					+ " does not match the indexes at the other state.\n"
+					+ "This means that this state has more closures than it is allowed for this rule.\n" 
+					+ "States: " + curRule.smartsStates[0] + "  " + curRule.smartsStates[1] + "\n";
+				}
+			}
+		}
+				
+		if ((nDiffIndexes == 0) && (curRule.type == TautomerConst.RT_RingChain))
+			errors += "This is a ring_chain rule, but no ring closures are found.\n";
+	
+		if ((nDiffIndexes == 1) && (curRule.type == TautomerConst.RT_RingChain))
+		{
+			curRule.ringClosureBondNum = closureBondIndex;
+			curRule.ringClosureState = closureState;
+		}
+		
+		
+	}
+	
+	boolean containsBondIndexes(int ind0, int ind1,  int a0[], int a1[])
+	{
+		for (int i = 0; i < a0.length; i++)
+		{	
+			if ((ind0 == a0[i]) && (ind1 == a1[i]))
+				return true;
+			if ((ind1 == a0[i]) && (ind0 == a1[i]))
+				return true;
+		}	
+		return false;
+	}
+	
+	
+	boolean checkStateAtomsTypes()
+	{
+		//So far this check is not so crucial.
+		//Nothing is done currently.
+		
+		//TODO
+		return true;
 	}
 	
 	
@@ -300,9 +404,9 @@ public class RuleParser
 			return false;
 		}
 		
-		
 		return true;
 	}
+	
 	
 	/*
 	 
