@@ -20,6 +20,7 @@ public class RuleStateBondDistribution
 	boolean hasRingClosure = false;	
 	int ringClosureFA, ringClosureSA, ringClosureBondType, ringClosureBondIndex;   
 	
+	//This function must be always called calcDistribution()
 	public void setRingClosure(int rcFA, int rcSA, int rcBondType, int rcBondIndex)
 	{
 		hasRingClosure = true;
@@ -37,6 +38,10 @@ public class RuleStateBondDistribution
 		Vector<Integer> v3 = new Vector<Integer>();
 		for (int i = 0; i < statePattern.getBondCount(); i++)
 		{	
+			if (hasRingClosure)
+				if (ringClosureBondIndex == i)
+					continue; //It is obligatory that closure bond is not registered in the distribution arrays.
+			
 			if (statePattern.getBond(i) instanceof DoubleNonAromaticBond)
 			{	
 				v2.add(new Integer(i));

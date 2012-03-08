@@ -74,8 +74,7 @@ public class RuleInstance implements IRuleInstance
 		if (curState == state)
 			return(state); //It is already at this state
 		
-		
-		
+				
 		//current state double bonds are made single
 		RuleStateBondDistribution bondDistr = rule.stateBonds[curState];
 		//double --> single
@@ -139,6 +138,15 @@ public class RuleInstance implements IRuleInstance
 				//TODO handle other types of mobiles groups 
 			}	
 		}
+		
+		//Handle ring closure if present
+		if (bondDistr.hasRingClosure)
+		{
+			//if (bondDistr.ringClosureBondIndex == -1);
+			
+			//TODO
+		}
+		
 		
 		curState = state;
 		return(state);
