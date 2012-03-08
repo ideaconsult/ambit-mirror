@@ -114,7 +114,6 @@ public class RuleParser
 		//Calculate bond distributions
 		for (int i = 0; i<curRule.smartsStates.length; i++)
 		{	
-			
 			RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
 			//bdistr.setRingClosure(rcFA, rcSA, rcBondType, rcBondIndex);
 			bdistr.calcDistribution(curRule.stateQueries[i]);
@@ -343,7 +342,7 @@ public class RuleParser
 				nDiffIndexes++;
 				if (nDiffIndexes > maxDiffIndexes)
 				{
-					errors += "The atom ndexes for bond " + (i+1) + " of state " + (closureState + 1)
+					errors += "The atom indexes for bond " + (i+1) + " of state " + (closureState + 1)
 					+ " does not match the indexes at the other state.\n"
 					+ "This means that this state has more closures than it is allowed for this rule.\n" 
 					+ "States: " + curRule.smartsStates[0] + "  " + curRule.smartsStates[1] + "\n";
@@ -360,6 +359,9 @@ public class RuleParser
 			curRule.ringClosureState = closureState;
 		}
 		
+		
+		//Reordering (if needed) the bonds in the second state
+		matchAtomIndexes(q, q_2);
 		
 	}
 	
@@ -386,6 +388,7 @@ public class RuleParser
 	}
 	
 	
+	/*
 	//This function is not used
 	boolean checkAtomIndexes(QueryAtomContainer q)
 	{
@@ -420,13 +423,11 @@ public class RuleParser
 	}
 	
 	
-	/*
-	 
-	 //Index fixing is not necessary 
-	 //Also this code does not work properly 
-	  
-	boolean fixAtomIndexes(QueryAtomContainer q)
+	boolean fixAtomIndexes_Linear(QueryAtomContainer q)
 	{
+		//Bond are reordered so that atom indexes are in the sequence (0,1) (1,2) ... (n-2, n-1)  
+		// plus (k1,k2) - ring closure at the end  
+		
 		atomIndexFixError = "";
 		Vector<IBond> v = new Vector<IBond>(); 
 		
@@ -446,12 +447,22 @@ public class RuleParser
 			q.addBond(b);
 		}
 		
-		//Handling the rest
+		//Handling the rest of the bonds
 		for (int i = 0; i < v.size(); i++)
-			q.addBond(q.getBond(i));
+			q.addBond(v.get(i));
 		
 		return true;
 	}
+	
+	*/
+	
+	
+	boolean matchAtomIndexes(QueryAtomContainer q, QueryAtomContainer q2)
+	{
+		//TODO
+		return true;
+	}
+	
 	
 	IBond getBondWithAtomIndexes(int ind0, int ind1, Vector<IBond> v, QueryAtomContainer q)
 	{
@@ -470,7 +481,7 @@ public class RuleParser
 		return null;
 	}
 	
-	*/
+	
 	
 	
 	//Helper function --------------------------------------------------
