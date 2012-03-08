@@ -115,7 +115,8 @@ public class RuleParser
 		for (int i = 0; i<curRule.smartsStates.length; i++)
 		{	
 			RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
-			//bdistr.setRingClosure(rcFA, rcSA, rcBondType, rcBondIndex);
+			
+			//TODO - bdistr.setRingClosure(rcFA, rcSA, rcBondType, rcBondIndex);
 			bdistr.calcDistribution(curRule.stateQueries[i]);
 			curRule.stateBonds[i] = bdistr;
 			//System.out.println("  BondDistribution:" + bdistr.toString());
@@ -360,8 +361,13 @@ public class RuleParser
 		}
 		
 		
+		
+		/*
 		//Reordering (if needed) the bonds in the second state
-		matchAtomIndexes(q, q_2);
+		boolean reorderOK = matchAtomIndexes(q, q_2);
+		if (!reorderOK)
+			errors += atomIndexFixError;
+		*/
 		
 	}
 	
@@ -425,7 +431,7 @@ public class RuleParser
 	
 	boolean fixAtomIndexes_Linear(QueryAtomContainer q)
 	{
-		//Bond are reordered so that atom indexes are in the sequence (0,1) (1,2) ... (n-2, n-1)  
+		//Bonds are reordered so that atom indexes are in the sequence (0,1) (1,2) ... (n-2, n-1)  
 		// plus (k1,k2) - ring closure at the end  
 		
 		atomIndexFixError = "";
@@ -459,7 +465,43 @@ public class RuleParser
 	
 	boolean matchAtomIndexes(QueryAtomContainer q, QueryAtomContainer q2)
 	{
-		//TODO
+		//The bonds in q2 are reordered so that the q and q2 has the 'same sequences' of atom indexes
+		//The only exception is the last bond (or maybe several bonds) 
+		//which corresponds to the ring closure
+		
+		atomIndexFixError = "";
+		Vector<IBond> v = new Vector<IBond>(); 
+		
+		for (int i = 0; i < q2.getBondCount(); i++)
+			v.add(q2.getBond(i));
+		
+		q2.removeAllBonds();
+		
+		//Handling the first groups of bond (linear part)
+		for (int i = 0; i < q.getBondCount(); i++)
+		{
+			IBond b0 = q.getBond(i);
+			int ind0 = q.getAtomNumber(b0.getAtom(0));
+			int ind1 = q.getAtomNumber(b0.getAtom(1));
+			
+			IBond b = getBondWithAtomIndexes(ind0, ind1, v, q2);
+			
+			//This should not occur
+			if (b == null)
+			{	
+				atomIndexFixError += "Bond reorder error: bond with indexes (" + ind0 + ","+ind1+
+					") could not be found in the second state\n";
+				return false;
+			}
+				
+			v.remove(b);
+			q2.addBond(b);
+		}
+		
+		//Handling the rest of the bonds
+		for (int i = 0; i < v.size(); i++)
+			q2.addBond(v.get(i));
+		
 		return true;
 	}
 	

@@ -135,7 +135,7 @@ public class RuleInstance implements IRuleInstance
 			}
 			else
 			{	
-				//TODO handle other types of mobiles groups 
+				//TODO handle other types of mobile groups 
 			}	
 		}
 		
