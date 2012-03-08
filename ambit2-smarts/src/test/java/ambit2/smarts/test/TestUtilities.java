@@ -1429,7 +1429,25 @@ public class TestUtilities
 			System.out.println("bond #" + i + "   --> " +ind0 + "  " + ind1);
 		}
 		
+		/*
+		boolean res = fixAtomIndexes(q);
+		System.out.println("Fixing res = " + res);
+		IAtomContainer mol1 =  smToChemObj.extractAtomContainer(q);
+		System.out.println(SmartsHelper.moleculeToSMILES(mol1));
+		for (int i = 0; i < q.getBondCount(); i++)
+		{
+			IBond b = q.getBond(i);
+			int ind0 = q.getAtomNumber(b.getAtom(0));
+			int ind1 = q.getAtomNumber(b.getAtom(1));
+			
+			System.out.println("bond #" + i + "   --> " +ind0 + "  " + ind1);
+		}
+		*/
+		
+		
 	}
+	
+	
 	
 	
 	
