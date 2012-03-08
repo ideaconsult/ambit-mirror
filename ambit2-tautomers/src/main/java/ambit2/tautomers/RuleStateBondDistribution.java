@@ -16,10 +16,20 @@ public class RuleStateBondDistribution
 	int DBPositions[]; //double bond positions
 	int TBPositions[]; //triple bond positions
 	
+	//ring closure info
 	boolean hasRingClosure = false;	
-	int ringClosureFA, ringClosureSA, ringClosureBO;  //ring closure info 
+	int ringClosureFA, ringClosureSA, ringClosureBondType, ringClosureBondIndex;   
 	
-	public void calcDistribution(QueryAtomContainer statePattern, int ringClosureBondIndex)
+	public void setRingClosure(int rcFA, int rcSA, int rcBondType, int rcBondIndex)
+	{
+		hasRingClosure = true;
+		ringClosureFA = rcFA;
+		ringClosureSA = rcSA;
+		ringClosureBondIndex = rcBondIndex;		
+		ringClosureBondType = rcBondType;
+	}
+	
+	public void calcDistribution(QueryAtomContainer statePattern)
 	{
 		int n = 0; 
 		SmartsToChemObject stco = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());

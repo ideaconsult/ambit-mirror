@@ -86,6 +86,7 @@ public class RuleParser
 			if (!errorMsg.equals(""))
 			{	
 				errors += "Incorrect state description: " + errorMsg + "\n";
+				curRule.stateQueries[i] = null;
 				FlagStateSmartsOK = false;
 			}
 			else
@@ -99,17 +100,28 @@ public class RuleParser
 				flags.mNeedRingData = sp.needRingData();
 				flags.mNeedRingData2 = sp.needRingData2();
 				flags.mNeedValenceData = sp.needValencyData();
-				RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
-				bdistr.calcDistribution(q, -1);
-				//System.out.println("  BondDistribution:" + bdistr.toString());				
+							
 				curRule.stateQueries[i] = q;
 				curRule.stateFlags[i] = flags;
-				curRule.stateBonds[i] = bdistr;
+				
 			}
 		}
 		
 		if (FlagStateSmartsOK)
 			checkStateAtomsBondIndexesAndRingClosure();
+		
+		
+		//Calculate bond distributions
+		for (int i = 0; i<curRule.smartsStates.length; i++)
+		{	
+			
+			RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
+			//bdistr.setRingClosure(rcFA, rcSA, rcBondType, rcBondIndex);
+			bdistr.calcDistribution(curRule.stateQueries[i]);
+			curRule.stateBonds[i] = bdistr;
+			//System.out.println("  BondDistribution:" + bdistr.toString());
+		}
+		
 	}
 	
 	void parseKeyWord(String keyWord)
