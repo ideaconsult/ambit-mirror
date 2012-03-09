@@ -1443,7 +1443,13 @@ public class TestUtilities
 			System.out.println("bond #" + i + "   --> " +ind0 + "  " + ind1);
 		}
 		*/
-		
+	}
+	
+	public void test_IBond_Order()
+	{
+		IBond.Order a[] = IBond.Order.values();
+		for (int i = 0; i < a.length; i ++)
+			System.out.println(a[i]);
 		
 	}
 	
@@ -1698,6 +1704,9 @@ public class TestUtilities
 		//tu.testAtomAttributes("Oc1ccc(O)cc1");
 		
 		tu.testBondIndexChange("C1CCC1CCN");
+		
+		//tu.test_IBond_Order();
+		
 		
 		//Vector<Integer> pos = SmartsHelper.getSmartsPositions("[*;r4,r5,r6,r7,r8](=*)=*", 
 		//		SmartsHelper.getMoleculeFromSmiles("N1=C=C=CNN1"));
