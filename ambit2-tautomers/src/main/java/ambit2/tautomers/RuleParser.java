@@ -122,12 +122,17 @@ public class RuleParser
 				bdistr.hasRingClosure = true;	
 				bdistr.ringClosureFA = curRule.ringClosureBondFA;
 				bdistr.ringClosureSA = curRule.ringClosureBondSA;
-				bdistr.ringClosureBondIndex = curRule.ringClosureBondNum;
 				
 				if (curRule.ringClosureState == i)
+				{	
 					bdistr.ringClosureBondOrder = curRule.ringClosureBondOrder;
+					bdistr.ringClosureBondIndex = curRule.ringClosureBondNum;
+				}
 				else
-					bdistr.ringClosureBondOrder = 0; //This is the state where 'ring is open'
+				{	
+					bdistr.ringClosureBondOrder = null;   //This is the state where 'ring is open'
+					bdistr.ringClosureBondIndex = -1;  //This bond does not exist in the molecule
+				}	
 			}
 			
 			

@@ -3,6 +3,7 @@ package ambit2.tautomers;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 
 import java.util.Vector;
 import java.util.List;
@@ -35,7 +36,7 @@ public class Rule
 	int ringClosureBondNum = -1;
 	int ringClosureBondFA = -1;
 	int ringClosureBondSA = -1;
-	int ringClosureBondOrder = 1;
+	IBond.Order  ringClosureBondOrder = IBond.Order.SINGLE;
 	
 	
 	public Vector<IRuleInstance>  applyRule(IAtomContainer mol)

@@ -139,12 +139,28 @@ public class RuleInstance implements IRuleInstance
 			}	
 		}
 		
-		//Handle ring closure if present
+		
+		//Handle ring closure (if present) for the new state
 		if (bondDistr.hasRingClosure)
 		{
-			//if (bondDistr.ringClosureBondIndex == -1);
-			
-			//TODO
+			if (curState == rule.ringClosureState)
+			{
+				//The closure bond must exist in the molecule. 
+				//And it is removed (ring --> chain)
+				IAtom a0 = molecule.getAtom(rule.ringClosureBondFA);
+				IAtom a1 = molecule.getAtom(rule.ringClosureBondSA);
+				IBond b = molecule.getBond(a0, a1);
+				if (b != null)
+					molecule.removeBond(b);
+			}
+			else 
+			{
+				//Molecule is in the chain state and the ring must be closed 
+				//chain --> ring
+				IAtom a0 = molecule.getAtom(rule.ringClosureBondFA);
+				IAtom a1 = molecule.getAtom(rule.ringClosureBondSA);
+				molecule.addBond(rule.ringClosureBondFA, rule.ringClosureBondSA, rule.ringClosureBondOrder);
+			}
 		}
 		
 		
