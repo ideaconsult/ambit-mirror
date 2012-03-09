@@ -29,8 +29,13 @@ public class Rule
 	String RuleInfo = "";
 	QueryAtomContainer stateQueries[] = null;
 	String OriginalRuleString = "";
+	
+	//ring closure info
 	int ringClosureState = -1;
 	int ringClosureBondNum = -1;
+	int ringClosureBondFA = -1;
+	int ringClosureBondSA = -1;
+	int ringClosureBondOrder = 1;
 	
 	
 	public Vector<IRuleInstance>  applyRule(IAtomContainer mol)

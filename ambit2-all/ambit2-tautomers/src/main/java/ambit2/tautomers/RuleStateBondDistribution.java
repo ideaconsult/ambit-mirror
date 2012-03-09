@@ -18,17 +18,11 @@ public class RuleStateBondDistribution
 	
 	//ring closure info
 	boolean hasRingClosure = false;	
-	int ringClosureFA, ringClosureSA, ringClosureBondType, ringClosureBondIndex;   
+	int ringClosureFA = -1;
+	int ringClosureSA = -1;
+	int ringClosureBondOrder = -1;
+	int ringClosureBondIndex = -1;   
 	
-	//This function must be always called calcDistribution()
-	public void setRingClosure(int rcFA, int rcSA, int rcBondType, int rcBondIndex)
-	{
-		hasRingClosure = true;
-		ringClosureFA = rcFA;
-		ringClosureSA = rcSA;
-		ringClosureBondIndex = rcBondIndex;		
-		ringClosureBondType = rcBondType;
-	}
 	
 	public void calcDistribution(QueryAtomContainer statePattern)
 	{
@@ -99,6 +93,13 @@ public class RuleStateBondDistribution
 		s+= "   TB: ";
 		for (int i = 0; i < TBPositions.length; i++)
 			s += TBPositions[i] + " ";
+		
+		if (hasRingClosure)
+		{
+			s+= "  RING_CLOSURE atoms = " + ringClosureFA + ", " + ringClosureSA + 
+			"   bond_order = " + ringClosureBondOrder + "   bond_index = " + ringClosureBondIndex; 
+		}
+		
 		return(s);
 	}
 }
