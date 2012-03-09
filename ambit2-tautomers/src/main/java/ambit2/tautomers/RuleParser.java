@@ -19,6 +19,7 @@ public class RuleParser
 		//System.out.println("rule: " + ruleString);
 		errors = "";
 		Rule rule = new Rule();
+		rule.OriginalRuleString = ruleString;
 		curRule = rule;
 		
 		int res = ruleString.indexOf(TautomerConst.KeyWordPrefix, 0);
@@ -41,7 +42,7 @@ public class RuleParser
 		
 		
 		postProcessing();
-		rule.OriginalRuleString = ruleString;
+		
 		
 		//System.out.println("errors: " + errors);		
 		if (errors.equals(""))
@@ -108,7 +109,7 @@ public class RuleParser
 		}
 		
 		if (FlagStateSmartsOK)
-			checkStateAtomsBondIndexesAndRingClosure();
+			handleStateAtomsBondIndexesAndRingClosure();
 		
 		
 		//Calculate bond distributions
@@ -116,10 +117,23 @@ public class RuleParser
 		{	
 			RuleStateBondDistribution bdistr = new RuleStateBondDistribution();
 			
-			//TODO - bdistr.setRingClosure(rcFA, rcSA, rcBondType, rcBondIndex);
+			if (curRule.type == TautomerConst.RT_RingChain)
+			{
+				bdistr.hasRingClosure = true;	
+				bdistr.ringClosureFA = curRule.ringClosureBondFA;
+				bdistr.ringClosureSA = curRule.ringClosureBondSA;
+				bdistr.ringClosureBondIndex = curRule.ringClosureBondNum;
+				
+				if (curRule.ringClosureState == i)
+					bdistr.ringClosureBondOrder = curRule.ringClosureBondOrder;
+				else
+					bdistr.ringClosureBondOrder = 0; //This is the state where 'ring is open'
+			}
+			
+			
 			bdistr.calcDistribution(curRule.stateQueries[i]);
 			curRule.stateBonds[i] = bdistr;
-			//System.out.println("  BondDistribution:" + bdistr.toString());
+			//System.out.println("  BondDistribution  " + bdistr.toString());
 		}
 		
 	}
@@ -249,7 +263,7 @@ public class RuleParser
 		curRule.RuleInfo = keyValue.trim();
 	}
 	
-	void checkStateAtomsBondIndexesAndRingClosure()
+	void handleStateAtomsBondIndexesAndRingClosure()
 	{
 		//This function checks whether all each bond with atom indexes (a1,a2)
 		//from one state is present in the other state 
@@ -328,7 +342,9 @@ public class RuleParser
 		}
 		
 			
-		int closureBondIndex = -1;
+		int closureBondFA = -1;
+		int closureBondSA = -1;
+		
 		
 		//Checking the atoms indexes of the other state query (q_2)		
 		for (int i = 0; i < q_2.getBondCount(); i++)
@@ -339,7 +355,9 @@ public class RuleParser
 			
 			if (! containsBondIndexes(ind0, ind1,  a0, a1))
 			{
-				closureBondIndex = i;
+				//closureBondIndex = i;
+				closureBondFA = ind0;
+				closureBondSA = ind1;
 				nDiffIndexes++;
 				if (nDiffIndexes > maxDiffIndexes)
 				{
@@ -355,19 +373,28 @@ public class RuleParser
 			errors += "This is a ring_chain rule, but no ring closures are found.\n";
 	
 		if ((nDiffIndexes == 1) && (curRule.type == TautomerConst.RT_RingChain))
-		{
-			curRule.ringClosureBondNum = closureBondIndex;
+		{	
+			curRule.ringClosureBondFA = closureBondFA;
+			curRule.ringClosureBondSA = closureBondSA;
 			curRule.ringClosureState = closureState;
+			//curRule.ringClosureBondNum is set later after  matchAtomIndexes(q, q_2) since the bonds will be reordered;
 		}
 		
 		
+		//Reordering the bonds in the 'second' state to match the atom indexes in the bonds from the 'first' state. 
+		//In some cases this is needed - typically in the ring_chain rules. 
+		//Generally for the other cases it should not be needed to reorder the bonds.
+		//The the correct reordering is impossible this means that the rule is incorrect!
 		
-		/*
-		//Reordering (if needed) the bonds in the second state
 		boolean reorderOK = matchAtomIndexes(q, q_2);
 		if (!reorderOK)
 			errors += atomIndexFixError;
-		*/
+		
+		//Finally setting the ring closure bond index 
+		if ((nDiffIndexes == 1) && (curRule.type == TautomerConst.RT_RingChain))
+		{	
+			curRule.ringClosureBondNum = q_2.getBondNumber(q_2.getAtom(closureBondFA), q_2.getAtom(closureBondSA));
+		}
 		
 	}
 	
@@ -389,7 +416,6 @@ public class RuleParser
 		//So far this check is not so crucial.
 		//Nothing is done currently.
 		
-		//TODO
 		return true;
 	}
 	
@@ -465,9 +491,9 @@ public class RuleParser
 	
 	boolean matchAtomIndexes(QueryAtomContainer q, QueryAtomContainer q2)
 	{
-		//The bonds in q2 are reordered so that the q and q2 has the 'same sequences' of atom indexes
+		//The bonds in q2 are reordered so that the q and q2 has the 'same sequences' of atom indexes.
 		//The only exception is the last bond (or maybe several bonds) 
-		//which corresponds to the ring closure
+		//which corresponds to the ring closure.
 		
 		atomIndexFixError = "";
 		Vector<IBond> v = new Vector<IBond>(); 
@@ -477,7 +503,7 @@ public class RuleParser
 		
 		q2.removeAllBonds();
 		
-		//Handling the first groups of bond (linear part)
+		//Handling the first (main) group of bonds (for the most of cases this is the 'linear' part without ring closure)
 		for (int i = 0; i < q.getBondCount(); i++)
 		{
 			IBond b0 = q.getBond(i);
@@ -486,7 +512,7 @@ public class RuleParser
 			
 			IBond b = getBondWithAtomIndexes(ind0, ind1, v, q2);
 			
-			//This should not occur
+			//This should not happen 
 			if (b == null)
 			{	
 				atomIndexFixError += "Bond reorder error: bond with indexes (" + ind0 + ","+ind1+
@@ -498,7 +524,7 @@ public class RuleParser
 			q2.addBond(b);
 		}
 		
-		//Handling the rest of the bonds
+		//Handling the rest of the bonds (this is the ring closure for example)
 		for (int i = 0; i < v.size(); i++)
 			q2.addBond(v.get(i));
 		
