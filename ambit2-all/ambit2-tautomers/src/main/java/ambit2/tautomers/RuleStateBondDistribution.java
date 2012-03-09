@@ -20,7 +20,7 @@ public class RuleStateBondDistribution
 	boolean hasRingClosure = false;	
 	int ringClosureFA = -1;
 	int ringClosureSA = -1;
-	int ringClosureBondOrder = -1;
+	IBond.Order ringClosureBondOrder = null;
 	int ringClosureBondIndex = -1;   
 	
 	
