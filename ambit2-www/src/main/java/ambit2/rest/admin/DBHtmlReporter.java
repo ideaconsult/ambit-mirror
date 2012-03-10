@@ -52,30 +52,33 @@ public class DBHtmlReporter extends QueryReporter<AmbitDBVersion,DBVersionQuery,
 		}
 	}
 	public Object processItem(AmbitDBVersion item) throws AmbitException {
+		StringBuilder content = new StringBuilder();
 		try {
 			if (isCreate()) {
-				output.write("<form method='post' action='?method=post'>");
-				output.write(String.format("<h4>The database %s does not exist. Please use the form below to create the database.</h4>",item.getDbname()));
-				output.write(String.format("<h5>Do not create the database via MySQL console.</h5>",item.getDbname()));
+				content.append("<form method='post' action='?method=post'>");
+				content.append(String.format("<h4>The database %s does not exist. Please use the form below to create the database.</h4>",item.getDbname()));
+				content.append(String.format("<h5>Do not create the database via MySQL console.</h5>",item.getDbname()));
 			}
-			getOutput().write("<table>");
+			content.append("<table>");
 			
 
 			if (isCreate()) {
 				
-				getOutput().write(String.format("<tr><th>DB name</th><td><input type='text' size='40' name='dbname' value='%s' title='The database name has to match with the \"Database\" property, defined in {servlet-home}/WEB-INF/classes/ambit2/rest/config/ambit.pref file'></td></tr>",item.getDbname()));
-				getOutput().write(String.format("<tr><th>Admin user name</th><td title='existing MySQL user with sufficient privileges to create a database'><input type='text' size='40' name='user' value='%s'></td></tr>",""));
-				getOutput().write(String.format("<tr><th>Password</th><td title='MySQL user password'><input type='password' size='40' name='pass' value='%s'></td></tr>",""));
-				getOutput().write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Create database\"></td></tr>");
+				content.append(String.format("<tr><th>DB name</th><td><input type='text' size='40' name='dbname' value='%s' title='The database name has to match with the \"Database\" property, defined in {servlet-home}/WEB-INF/classes/ambit2/rest/config/ambit.pref file'></td></tr>",item.getDbname()));
+				content.append(String.format("<tr><th>Admin user name</th><td title='existing MySQL user with sufficient privileges to create a database'><input type='text' size='40' name='user' value='%s'></td></tr>",""));
+				content.append(String.format("<tr><th>Password</th><td title='MySQL user password'><input type='password' size='40' name='pass' value='%s'></td></tr>",""));
+				content.append("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Create database\"></td></tr>");
 			} else {
-				getOutput().write(String.format("<tr><th>DB name</th><td>%s</td></tr>",item.getDbname()));
-				getOutput().write(String.format("<tr><th>Version</th><td>%d.%d</td></tr>",item.getMajor(),item.getMinor()));
-				getOutput().write(String.format("<tr><th>Created</th><td>%s</td></tr>",item.getCreated()));
-				getOutput().write(String.format("<tr><th>Note</th><td>%s</td></tr>",item.getComments()));
+				content.append(String.format("<tr><th>DB name</th><td>%s</td></tr>",item.getDbname()));
+				content.append(String.format("<tr><th>Version</th><td>%d.%d</td></tr>",item.getMajor(),item.getMinor()));
+				content.append(String.format("<tr><th>Created</th><td>%s</td></tr>",item.getCreated()));
+				content.append(String.format("<tr><th>Note</th><td>%s</td></tr>",item.getComments()));
 			}
-			getOutput().write("</table>");
+			content.append("</table>");
 			if (isCreate())
-				output.write("</form>");
+				content.append("</form>");
+			
+			output.write(AmbitResource.printWidget("Database configuration", content.toString()));
 			return item;
 	} catch (Exception x) { x.printStackTrace(); return null;}
 	}

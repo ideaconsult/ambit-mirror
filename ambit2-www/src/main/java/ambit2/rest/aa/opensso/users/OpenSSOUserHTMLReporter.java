@@ -43,48 +43,49 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 	}
 	public void processItem(OpenSSOUser item, Writer output) {
 		try {
-			output.write("<table width='80%' id='users' border='0' cellpadding='0' cellspacing='1'>");
-			output.write("<tbody>");
-			if (item.getToken()==null)  {
-
-			output.write("<tr><th align='right'>No OpenTox user?</th><td><a href='http://opentox.org/join_form' title='If you do not have an OpenTox user, please sign in at opentox.org' target='_blank'>Sign In</a></td></tr><tr><td colspan='2'></td></tr>");
-			}
+			StringBuilder content = new StringBuilder();
+			content.append("<table width='80%' id='users' border='0' cellpadding='0' cellspacing='1'>");
+			content.append("<tbody>");
 			
-			output.write(String.format("<tr><th align='right' title='OpenTox Authentication and Authorisation is managed by OpenAM http://forgerock.com/openam.html'><a href='http://forgerock.com/openam.html' target=_blank>OpenAM</a> service:&nbsp;</th><td>%s</td></tr>",
+			content.append(String.format("<tr><th align='right' title='OpenTox Authentication and Authorisation is managed by OpenAM http://forgerock.com/openam.html'><a href='http://forgerock.com/openam.html' target=_blank>OpenAM</a> service:&nbsp;</th><td>%s</td></tr>",
 						OpenSSOServicesConfig.getInstance().getOpenSSOService()));
 
 			if (item.getToken()==null)  {
-				output.write("<form method='post' action='?method=post'>");
+				content.append("<form method='post' action='?method=post'>");
 				
-				output.write(String.format("<tr><th align='right'>%s</th><td align='left'><input type='text' size='40' name='%s' value=''></td></tr>",
+				content.append(String.format("<tr><th align='right'>%s</th><td align='left'><input type='text' size='40' name='%s' value=''></td></tr>",
 						"OpenTox User name:&nbsp;","user"));
-				output.write(String.format("<tr><th align='right'>%s</th><td><input type='password' size='40' name='%s' value=''></td></tr>",
+				content.append(String.format("<tr><th align='right'>%s</th><td><input type='password' size='40' name='%s' value=''></td></tr>",
 						"Password:&nbsp;","password"));
-				output.write(String.format("<tr><td title=''></td><td><input type=CHECKBOX name='subjectid_secure' %s>Use secure cookie for the OpenSSO token</option></td></tr>",
+				content.append(String.format("<tr><td title=''></td><td><input type=CHECKBOX name='subjectid_secure' %s>Use secure cookie for the OpenSSO token</option></td></tr>",
 						item.isUseSecureCookie()?"SELECTED CHECKED":""));
-				output.write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log in\"></td></tr>");
+				content.append("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log in\"></td></tr>");
 				
-				output.write("</form>");
+				content.append("</form>");
 
-				output.write("</tbody></table>");
+				content.append("</tbody></table>");
 			} else {
-				output.write("<form method='post' action='?method=delete'>");
-				output.write(String.format("<tr><th align='right'>%s</th><td>%s</td></tr>","User name:&nbsp;",item.getUsername()));
-				output.write(String.format("<tr><th align='right'>%s</th><td>%s</td></tr>","Token:&nbsp;",item.getToken().toString()));
+				content.append("<form method='post' action='?method=delete'>");
+				content.append(String.format("<tr><th align='right'>%s</th><td>%s</td></tr>","User name:&nbsp;",item.getUsername()));
+				content.append(String.format("<tr><th align='right'>%s</th><td>%s</td></tr>","Token:&nbsp;",item.getToken().toString()));
 				
 
 				String warning = String.format("<h5><font color='red'>%s</font></h5>",item.isUseSecureCookie()?securecookie_warning:cookie_warning);
-				output.write(String.format("<tr><td></td><td>%s</td></tr>",warning));
+				content.append(String.format("<tr><td></td><td>%s</td></tr>",warning));
 
 				
-				output.write("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log out\"></td></tr>");
-				output.write("</form>");
+				content.append("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Log out\"></td></tr>");
+				content.append("</form>");
 				
-				output.write("</tbody></table><hr/>");
-				output.write(String.format("<a href='%s/bookmark/%s'>My workspace</a>",getRequest().getRootRef(),item.getUsername(),item.getUsername()));
-				output.write(String.format("&nbsp;&nbsp;<a href='%s/admin/policy'>View/Define access rights</a>",getRequest().getRootRef()));
-				output.write(String.format("&nbsp;&nbsp;<a href='%s/admin'>Admin</a>",getRequest().getRootRef()));
+				content.append("</tbody></table><hr/>");
+				content.append(String.format("<a href='%s/bookmark/%s'>My workspace</a>",getRequest().getRootRef(),item.getUsername(),item.getUsername()));
+				content.append(String.format("&nbsp;&nbsp;<a href='%s/admin/policy'>View/Define access rights</a>",getRequest().getRootRef()));
+				content.append(String.format("&nbsp;&nbsp;<a href='%s/admin'>Admin</a>",getRequest().getRootRef()));
 			}
+			
+			output.write(AmbitResource.printWidget(
+			"OpenTox login&nbsp;<a href='http://opentox.org/join_form' title='If you do not have an OpenTox user, please sign in at opentox.org' target='_blank'>Sign In</a>",
+			content.toString()));
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
