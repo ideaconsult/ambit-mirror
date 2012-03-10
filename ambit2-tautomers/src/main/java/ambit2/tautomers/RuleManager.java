@@ -59,7 +59,7 @@ public class RuleManager
 				
 				if (nOverlappedAtoms > 0)
 				{
-					//TODO - handle the case where one instance is entirely overlapped by the other one
+					//TO DO - handle the case where one instance is entirely overlapped by the other one
 					//Currently not needed hence not critical. 
 					//It depends from the rule definitions added in the future.
 					
@@ -217,7 +217,7 @@ public class RuleManager
 				r1.gotoState(i);
 			}			
 		
-		// TODO   see also for the generation of combined states 
+		// TO DO   see also for the generation of combined states 
 		//and eventually if needed new CombinedRule		
 		return(null);
 	}
@@ -273,7 +273,7 @@ public class RuleManager
 				System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct));
 			}
 			
-			expandIncremenStep(tStep);
+			expandIncrementStep(tStep);
 			
 			n++;
 			if (n > nMax)
@@ -282,7 +282,7 @@ public class RuleManager
 	}
 	
 	
-	void expandIncremenStep(TautomerIncrementStep incStep)
+	void expandIncrementStep(TautomerIncrementStep incStep)
 	{		
 		//Condition for reaching the bottom of the generation tree
 		//e.g. at this point real tautomers are obtained
@@ -291,10 +291,10 @@ public class RuleManager
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
 				
-				//TODO check for duplication 
+				//check for duplication (maybe) ???. Currently this is done after generation.  
 				
 				tman.resultTautomers.add(newTautomer);
-				
+				 
 				if (tman.FlagPrintIcrementalStepDebugInfo)
 					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
 							+ "    " + incStep.getTautomerCombination());
@@ -410,13 +410,13 @@ public class RuleManager
 		//Cloning the current active instance
 		RuleInstance newRI = cloneInstance(prevStruct,mol,ri);
 		incStep.usedRuleInstances.add(newRI);
+				
 		newRI.gotoState(state);
-		
 		
 		
 		//Revision of all unused instances
 		//This is very important since in guarantees that the left instances are still valid and correct
-		//e.g. double bonds and protons are OK
+		//e.g. double bonds and protons are OK (as well as some other bonds due to ring closures)
 		//Also new possibilities are searched.
 		
 		
@@ -439,7 +439,7 @@ public class RuleManager
 		//around the atoms from the current instance. This operation is performed in terms of the new atoms
 				
 		Vector<RuleInstance> newInstances = new Vector<RuleInstance>();
-		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		
+		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		//TODO 2 to be changes
 		//System.out.print("  fragment: " +SmartsHelper.moleculeToSMILES(fragment));
 		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
 		{	
@@ -511,6 +511,7 @@ public class RuleManager
 	{
 		
 		RuleInstance cloneRI = new RuleInstance(oldRI);
+		cloneRI.molecule = cloneStruct;        //This line was missing before 10.03.2012 and probably this caused subtle bugs
 		
 		for (int k = 0; k < oldRI.atoms.size(); k++)
 		{
@@ -535,6 +536,10 @@ public class RuleManager
 	}
 	
 	
+	/*
+	
+	//This function is replaced by setNewIncrementStep_FullClone 
+	//since the some odd side effects (actually hard to trace bugs :-)) appeared when working with no clones
 	
 	void setNewIncrementStep(IAtomContainer prevStruct, RuleInstance ri, int state, TautomerIncrementStep incStep)
 	{
@@ -554,7 +559,7 @@ public class RuleManager
 		IBond newRIBonds[] = new IBond[ri.bonds.size()];
 		
 		
-		//TODO		
+		//TO DO		
 		//Handle explicitH !!!
 		
 		//Transfer/clone atoms
@@ -668,7 +673,7 @@ public class RuleManager
 			int nOvAt = getNumOfOverlappedAtoms(ri,usedRI);
 			if (nOvAt > 0)
 			{
-				//TODO - handle excplicitH
+				//TO DO - handle excplicitH
 				
 				//Registering the old atoms which overlap with newRI
 				//into the helper 
@@ -804,6 +809,9 @@ public class RuleManager
 		
 	}
 	
+	*/
+	
+	
 	IAtomContainer generateFragmentShell(IAtomContainer mol, RuleInstance ri, int nLayers)
 	{
 		Molecule fragment = new Molecule();
@@ -829,6 +837,7 @@ public class RuleManager
 		//System.out.print("layered fragment: " + SmartsHelper.moleculeToSMILES(fragment));
 		return fragment;
 	}
+	
 	
 	Vector<IAtom> addLayerToFragment(IAtomContainer mol, Molecule fragment, Vector<IAtom> terminalAtoms)
 	{
