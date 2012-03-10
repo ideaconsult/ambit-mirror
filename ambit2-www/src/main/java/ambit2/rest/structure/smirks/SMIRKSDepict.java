@@ -33,7 +33,6 @@ public class SMIRKSDepict extends CDKDepict implements IAcceptable {
 			smrkMan.setSSMode(SmartsConst.SSM_NON_IDENTICAL_FIRST);
 			
 			SMIRKSReaction smr = smrkMan.parse(getSmirks());
-			System.out.println(smrkMan.getErrors());
 			SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 			IAtomContainer reactant = parser.parseSmiles(smiles);
 			reactant = AtomContainerManipulator.removeHydrogens(reactant);	

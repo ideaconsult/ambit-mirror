@@ -63,50 +63,54 @@ public class AbstractDepict extends ProtectedResource {
 	}
 	protected String getTitle(Reference ref, String smiles) {
 		StringBuilder b = new StringBuilder();
-		b.append(String.format("SMILES %s<br>",	smiles==null?"":smiles));
-		b.append("<table width='100%'><tr>");
-		b.append(String.format("<td><a href='%s/daylight?search=%s'>%s</a></td><td><a href='%s/cdk?search=%s&smarts=%s'>%s</a></td>",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				"Daylight depiction",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				smarts==null?"":Reference.encode(smarts),
-				"CDK depiction"));		
-		b.append("</tr><tr>");
+		b.append("<table width='100%'>");
+		b.append("<tr><td>");
+		b.append(AmbitResource.printWidget(
+				String.format("<a href='%s/daylight?search=%s'>%s</a>",
+						ref.getHierarchicalPart(),Reference.encode(smiles),"Daylight depiction"),
+				String.format("<img src='%s/daylight?search=%s' alt='%s' title='%s'>",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						smiles,smiles)
+					));
+		b.append("</td><td>");
+		b.append(AmbitResource.printWidget(
+				String.format("<a href='%s/cdk?search=%s&smarts=%s'>%s</a>",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						smarts==null?"":Reference.encode(smarts),"CDK depiction"),
+				String.format("<img src='%s/cdk?search=%s&smarts=%s' alt='%s' title='%s'>",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						smarts==null?"":Reference.encode(smarts),
+						smiles,smiles)
+					));
+		b.append("</td></tr><tr><td>");
 		
-		b.append(String.format("<td><img src='%s/daylight?search=%s' alt='%s' title='%s'></td><td><img src='%s/cdk?search=%s&smarts=%s' alt='%s' title='%s'></td>",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				smiles,smiles,
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				smarts==null?"":Reference.encode(smarts),
-				smiles,smiles));
+		b.append(AmbitResource.printWidget(
+				String.format("<a href='%s/cactvs?search=%s'>%s</a>",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						"Cactvs depiction"),
+				String.format("<img src='%s/cactvs?search=%s' alt='%s' title='%s'>",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						smiles,smiles)
+					));
+		b.append("</td><td>");
+		b.append(AmbitResource.printWidget(
+				String.format("<a href='%s/obabel?search=%s'>%s</a>",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						"Open Babel depiction"),
+				String.format("<img src='%s/obabel?search=%s' alt='%s' title='%s'>",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						smiles,smiles)
+					));
+		b.append("</td></tr>");
 		
-		b.append("</tr><tr>");
-		b.append(String.format("<td><a href='%s/cactvs?search=%s'>%s</a></td><td><a href='%s/obabel?search=%s'>%s</a></td>",
-		//b.append(String.format("<td><a href='%s/cactvs?search=%s'>%s</a></td><td></td>",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				"Cactvs depiction",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				"Open Babel depiction"
-				));		
-				
-		b.append("</tr><tr>");
-		
-		b.append(String.format("<td><img src='%s/cactvs?search=%s' alt='%s' title='%s'></td><td><img src='%s/obabel?search=%s' alt='%s' title='%s'></td>",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				smiles,smiles,
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				smiles,smiles				
-				));
-		
-		b.append("</tr></table>");
+		b.append("</table>");
 		return b.toString();
 	}
 	

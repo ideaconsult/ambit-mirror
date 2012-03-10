@@ -45,12 +45,67 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 				output.write(String.format("<a href='%s%s?search=%s&%s=%s'>%s</a>&nbsp;",
 						baseReference,SimpleTaskResource.resource,status,AbstractResource.max_hits,max,status));
 			output.write("</h4><p>");
-			output.write("<table>");
-			output.write("<tr><th>Start time</th><th>Elapsed time,ms</th><th>Task</th><th>Name</th><th colspan='2'>Status</th><th></th></tr>");
+			
 		} catch (Exception x) {
 			
 		}
 	}
+	
+	@Override
+	public void processItem(UUID name, Writer output) {
+		Task<TaskResult,USERID> item = storage.findTask(name);
+		String t = "";
+		String status = "Unknown";
+		try {
+			t = item.getUri()==null?"":item.getUri().toString();
+			status = item.getStatus().toString();
+		} catch (Exception x) {
+			x.printStackTrace();
+			status = "Error";
+			t = "";
+		} finally {
+
+			try {
+
+				output.write(
+				String.format(		
+				"<div class=\"ui-widget \" style=\"margin-top: 20px; padding: 0 .7em;\">\n"+
+				"<div class=\"ui-widget-header ui-corner-top\"><p><a href='%s%s/%s'>Job</a> started %s&nbsp;</p></div>\n"+
+				"<div class=\"ui-widget-content ui-corner-bottom %s\">\n"+
+				"<p>Name:&nbsp;<strong>%s</strong></p><p>Status:%s %s <img src=\"%s/images/%s\">&nbsp;<a href='%s'>%s</a>"+
+				//"<div class=\"%s ui-corner-all\" style=\"position:relative;width:50%%; right:-40%%; margin: 0; padding: 0 .7em;\">\n"+ 
+				"	<p><span class=\"ui-icon %s\" style=\"float: right; margin-right: .3em;\"></span>\n"+
+				"	%s:&nbsp;&nbsp;<strong>%s</strong>" +
+				"	%s:&nbsp;&nbsp;<strong>%s</strong>" +
+				"</p>\n"+
+			//	"</div>" +
+				"</div></div>\n",
+
+				baseReference.toString(),
+				SimpleTaskResource.resource,
+				item.getUuid(),
+				new Date(item.getStarted()),
+				item.isDone()?(item.getError()==null?"":"ui-state-highlight"):"",
+				item.getName(),
+				item.getError()!=null?"<strong>Error</strong>":item.getTimeCompleted()>0?"Completed":"",
+				item.getError()!=null?"":item.getTimeCompleted()>0?new Date(item.getTimeCompleted()):"",
+				baseReference.toString(),
+				item.isDone()?(item.getError()==null?"tick.png":"cross.png"):"24x24_ambit.gif",
+				(item.isDone()&&item.getError()==null)?t:"",(item.isDone()&&item.getError()==null)?"Results available":"",
+			
+				item.isDone()?(item.getError()==null?"ui-icon-check":"ui-icon-alert"):"ui-icon-info",
+				status,item.getError()==null?"":item.getError().getMessage(),
+				item.getPolicyError()==null?"":"Policy error",item.getPolicyError()==null?"":item.getPolicyError().getMessage()
+				));
+
+
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
+		}
+	};
+	
+	/*
 	@Override
 	public void processItem(UUID name, Writer output) {
 		Task<TaskResult,USERID> item = storage.findTask(name);
@@ -83,12 +138,11 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 			}
 		}
 	};
+	
+	*/
 	@Override
 	public void footer(Writer output, Iterator<UUID> query) {
 		try {
-			output.write("</table>");
-			//output.write("<form name=\"myForm\"><input type=BUTTON value=\"Stop polling\" onClick=\"stopPolling()\"></form>");
-						
 			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
 			
 

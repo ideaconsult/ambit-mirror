@@ -10,6 +10,7 @@ import org.restlet.data.Reference;
 
 import dk.smartcyp.smirks.SMARTCYPReaction;
 
+import ambit2.rest.AmbitResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
 
@@ -18,37 +19,32 @@ public class ReactionDepict extends AbstractDepict {
 	
 	protected String getTitle(Reference ref, String smiles) {
 		StringBuilder b = new StringBuilder();
-		b.append(String.format("SMILES %s",	smiles==null?"":smiles));
-		
-		b.append("<table width='100%'><tr>");
-		b.append(String.format("<td><a href='%s/reactant?search=%s'>%s</a></td><td><a href='%s/product?search=%s&smirks=%s'>%s</a></td>",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				"Reactant",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				smirks==null?"":Reference.encode(smirks),
-				"Product"));		
-		b.append("</tr><tr>");
-		
-		b.append("<tr><td></td>");
-		b.append(String.format("<td>Reaction SMIRKS %s</td>",	smirks==null?"":smirks));
-		b.append("</tr><tr>");
-		
-		
-		b.append(String.format("<td><img src='%s/reactant?search=%s' alt='%s' title='%s'></td><td><img src='%s/product?search=%s&smirks=%s' alt='%s' title='%s'></td>",
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				smiles,smiles,
-				ref.getHierarchicalPart(),
-				Reference.encode(smiles),
-				smirks==null?"":Reference.encode(smirks),
-				smirks,smirks));
-				
-		
-
-		b.append("</tr>");
-		b.append("</table>");
+		b.append("<table><tr>");
+		b.append("<td>");
+		b.append(AmbitResource.printWidget(
+				String.format("<a href='%s/reactant?search=%s'>%s</a>",
+						ref.getHierarchicalPart(),Reference.encode(smiles),"Reactant"),
+						
+				String.format("<strong>%s</strong><img src='%s/reactant?search=%s' alt='%s' title='%s'>",
+						smiles,
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						smiles,smiles)
+					));
+		b.append("</td><td>");
+		b.append(AmbitResource.printWidget(
+				String.format("<a href='%s/product?search=%s&smirks=%s'>%s</a>",
+						ref.getHierarchicalPart(),Reference.encode(smiles),Reference.encode(smirks),"Product"),
+						
+				String.format("<strong>Reaction SMIRKS %s</strong><img src='%s/product?search=%s&smirks=%s' alt='%s' title='%s'>",
+						smirks==null?"":smirks,
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						smirks==null?"":Reference.encode(smirks),
+						smirks,smirks)
+					));
+		b.append("</td>");
+		b.append("</tr></table>");
 		return b.toString();
 	}
 	
