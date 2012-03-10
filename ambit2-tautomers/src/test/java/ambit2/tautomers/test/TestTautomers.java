@@ -428,7 +428,40 @@ public class TestTautomers
 	}
 	
 	
+	public int testTautomerEquivalence(String smiles)
+	{
+		return 0;
+	}
 	
+	public int testTautomerEquivalence(IAtomContainer ac)
+	{
+		tman.setStructure(ac);
+		Vector<IAtomContainer> initialTautomers = tman.generateTautomersIncrementaly();
+		String expectedTautomers[] = new String[initialTautomers.size()];
+		
+		for (int i = 0; i < initialTautomers.size(); i++)		
+			expectedTautomers[i] = SmartsHelper.moleculeToSMILES(initialTautomers.get(i));
+		
+		int nErrors = 0;
+		
+		for (int i = 0; i < initialTautomers.size(); i++)
+		{
+			tman.setStructure(initialTautomers.get(i));
+			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			try
+			{
+				int res = checkResultTautomerSet(resultTautomers, expectedTautomers);
+				if (res != 0)
+					nErrors++;
+			}
+			catch(Exception e)
+			{
+				nErrors++;
+			}
+		}
+		
+		return (nErrors); //OK result = 0
+	}
 	
 	
 	
