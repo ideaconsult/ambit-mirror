@@ -45,11 +45,11 @@ public class TestTautomers
 		tt.tman.FlagRecurseBackResultTautomers = false;
 		
 		tt.tman.FlagPrintTargetMoleculeInfo = false;
-		tt.tman.FlagPrintExtendedRuleInstances = false;
+		tt.tman.FlagPrintExtendedRuleInstances = true;
 		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
 		
 		tt.tman.activateChlorineRules(false);
-		tt.tman.activateRingChainRules(false);
+		tt.tman.activateRingChainRules(true);
 		
 		
 		//tt.performTestCases();
@@ -88,7 +88,7 @@ public class TestTautomers
 		
 		//tt.visualTest("CS#CO");
 		//tt.visualTest("S=N1CC=CC=C1");
-		tt.visualTest("CCC=O");
+		tt.visualTest("C1CC1O");
 		
 		
 		//tt.visualTest("O1=CC=CN=C1");

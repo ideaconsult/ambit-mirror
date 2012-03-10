@@ -9,6 +9,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 
+import ambit2.smarts.SmartsHelper;
+
 public class RuleInstance implements IRuleInstance
 {
 	Rule rule;
@@ -143,23 +145,35 @@ public class RuleInstance implements IRuleInstance
 		//Handle ring closure (if present) for the new state
 		if (bondDistr.hasRingClosure)
 		{
+			System.out.println("*** rc rule instance");
 			if (curState == rule.ringClosureState)
 			{
+				System.out.println("**  ring --> chain");
 				//The closure bond must exist in the molecule. 
 				//And it is removed (ring --> chain)
 				IAtom a0 = molecule.getAtom(rule.ringClosureBondFA);
 				IAtom a1 = molecule.getAtom(rule.ringClosureBondSA);
 				IBond b = molecule.getBond(a0, a1);
 				if (b != null)
+				{	
+					bonds.remove(b); //Removing this bond from the bond list for this instance
 					molecule.removeBond(b);
+				}	
 			}
 			else 
 			{
+				System.out.println("**  chain --> ring");
+				//System.out.println(SmartsHelper.moleculeToSMILES(molecule));
+				
 				//Molecule is in the chain state and the ring must be closed 
 				//chain --> ring
+				
 				IAtom a0 = molecule.getAtom(rule.ringClosureBondFA);
 				IAtom a1 = molecule.getAtom(rule.ringClosureBondSA);
 				molecule.addBond(rule.ringClosureBondFA, rule.ringClosureBondSA, rule.ringClosureBondOrder);
+				bonds.add(molecule.getBond(a0, a1)); //Adding new bond to the bonds list of this instance
+				
+				//System.out.println(SmartsHelper.moleculeToSMILES(molecule));
 			}
 		}
 		

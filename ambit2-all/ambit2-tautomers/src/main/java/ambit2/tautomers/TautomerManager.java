@@ -281,7 +281,6 @@ public class TautomerManager
 	public static String getTautomerCodeString(IAtomContainer tautomer)
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append("bo");
 		
 		//All bonds are described in canonical numbering (i < j) 
 		for (int i = 0; i < tautomer.getAtomCount(); i++)
@@ -291,7 +290,6 @@ public class TautomerManager
 				IBond bo = tautomer.getBond(tautomer.getAtom(i), tautomer.getAtom(j));
 				if (bo != null)
 					sb.append(bo.getOrder().ordinal());
-					
 			}
 		}
 		
