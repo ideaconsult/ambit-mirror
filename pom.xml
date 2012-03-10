@@ -314,9 +314,14 @@
     <module>ambit2-taglibs</module>
      -->
     <module>ambit2-dragon</module>
+    <!-- 
     <module>ambit2-qmrf</module>
+     -->
+<!--
     <module>ambit2-discovery</module>
+
     <module>ambit2-swing</module>
+    -->
   </modules>
   <distributionManagement>
   <!-- 
