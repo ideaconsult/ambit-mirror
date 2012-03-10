@@ -515,8 +515,11 @@ window.setInterval(function() {
 		
 		w.write(String.format("<title>%s</title>",title));
 		
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.4.2.min.js\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.7.1.min.js\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-ui-1.8.18.custom.min.js\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.MultiFile.pack.js\"></script>\n",baseReference));
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
+		w.write(String.format("<link href=\"%s/style/jquery-ui-1.8.18.custom.css\" rel=\"stylesheet\" type=\"text/css\">\n",baseReference));
 		w.write(meta);
 				
 		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
@@ -525,8 +528,12 @@ window.setInterval(function() {
 		//w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/dojo.js.uncompressed\" djConfig=\"parseOnLoad:true, isDebug:true\"></script>\n",baseReference));
 
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
+		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jmol/Jmol.js\"></script>\n",baseReference));
 //		w.write("<script language=\"JavaScript\">\nvar smiles = \"\";\n var jme = \"0 0\"></script>\n");
-
+		w.write("<script>$(function() {$( \".accordion\" ).accordion({autoHeight: false,navigation: true});});</script>");
+		w.write("<script>$(function() {$( \".tabs\" ).tabs({event: \"mouseover\",cache: true});});</script>");
+		w.write("<script>$(function() {$( \"#selectable\" ).selectable();});</script>");
+		w.write("<script type='text/javascript'>function toggleDiv(divId) {$('#'+divId).toggle();}</script>\n");
 		w.write("<script>function changeImage(img,src)  {    document.getElementById(img).src=src;} </script>\n");
 
 		w.write("</head>\n");
@@ -702,4 +709,47 @@ window.setInterval(function() {
 	public static String jsTableSorter(String tableid,String pagerid) {
 		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
 	}
+	
+
+	public static String printWidgetHeader(String header) {
+		return	String.format(
+				"<div class=\"ui-widget \" style=\"margin-top: 20px; padding: 0 .7em;\">\n"+
+				"<div class=\"ui-widget-header ui-corner-top\"><p>%s</p></div>\n",header);
+	}
+	public static String printWidgetFooter() {
+		return	String.format("</div>\n");
+	}
+	public static String printWidgetContentHeader(String style) {
+		return	String.format("<div class=\"ui-widget-content ui-corner-bottom %s\">\n",style);
+	}
+	public static String printWidgetContentFooter() {
+		return	String.format("</div>\n");
+	}	
+	public static String printWidgetContentContent(String content) {
+		return
+		String.format("<p>%s</p>\n",content);
+	}	
+	public static String printWidgetContent(String content,String style) {
+		return String.format("%s\n%s\n%s",
+				printWidgetContentHeader(style),
+				printWidgetContentContent(content),
+				printWidgetContentFooter());
+	}
+	
+	
+	public static String printWidget(String header,String content,String style) {
+		return String.format("%s\n%s\n%s",
+				printWidgetHeader(header),
+				printWidgetContent(content,style),
+				printWidgetFooter());
+
+	}
+	
+	public static String printWidget(String header,String content) {
+		return String.format("%s\n%s\n%s",
+				printWidgetHeader(header),
+				printWidgetContent(content,""),
+				printWidgetFooter());
+
+	}		
 }
