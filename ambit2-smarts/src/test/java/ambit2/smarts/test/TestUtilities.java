@@ -1499,6 +1499,9 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[#G7]", "CCC");
 		//tu.testSmartsManagerBoolSearch("[#G7]", "CCCF");
 		//tu.testSmartsManagerBoolSearch("[#G7]", "ClCCC");
+		//tu.testSmartsManagerBoolSearch("[C;^3]", "C#CC=C");  //sp3
+		//tu.testSmartsManagerBoolSearch("[C;^2]", "CCC=C");  //sp2
+		//tu.testSmartsManagerBoolSearch("[C;^1]", "C#CCC");  //sp
 		
 		//Cheking [OH]AA!-*
 		//tu.testSmartsManagerBoolSearch("[OH]AA!-*", "COCC=N");
@@ -1526,6 +1529,8 @@ public class TestUtilities
 		tu.testIsomorphismTester("C(C)(C)(C)C","CC(C)(C)CC");
 		tu.testIsomorphismTester("C1CCC1C2CCCC2","CC1CCC1C2CCCC2");		
 		*/
+		
+		
 		
 		//tu.getCarbonSkelletonsFromString();		
 		//tu.testAtomIndexesForMapping(4, 5);
