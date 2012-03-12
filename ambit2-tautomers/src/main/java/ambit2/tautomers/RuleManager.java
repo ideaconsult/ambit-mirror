@@ -254,7 +254,7 @@ public class RuleManager
 	void iterateIncrementalSteps()
 	{	
 		//first depth search approach
-		int nMax = 10000000;
+		int nMax = tman.maxNumOfBackTracks;
 		int n = 0;
 		while (!stackIncSteps.isEmpty())
 		{	

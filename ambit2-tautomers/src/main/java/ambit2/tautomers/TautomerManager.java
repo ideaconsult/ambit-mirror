@@ -22,11 +22,14 @@ public class TautomerManager
 	public boolean FlagRecurseBackResultTautomers = false;
 	public boolean FlagUseRingChainRules = false;
 	public boolean FlagUseChlorineRules = false;
+	public boolean FlagUseOnly13Shifts = false;
+	
 	
 	//Some debug info flags
 	public boolean FlagPrintTargetMoleculeInfo = false;
 	public boolean FlagPrintExtendedRuleInstances = false;
 	public boolean FlagPrintIcrementalStepDebugInfo = false;
+	public int maxNumOfBackTracks = 100000;
 				
 	
 	public TautomerManager()
@@ -214,6 +217,21 @@ public class TautomerManager
 			if (rule.type == TautomerConst.RT_MobileGroup)
 				if (rule.mobileGroup.equals("Cl"))
 					rule.isRuleActive = FlagActivate;
+		}	
+	}
+	
+	public void use13ShiftRulesOnly(boolean FlagActivate)
+	{
+		FlagUseOnly13Shifts = FlagActivate;		
+		for (int i = 0; i < knowledgeBase.rules.size(); i++)
+		{	
+			Rule rule = knowledgeBase.rules.get(i);
+			if (rule.type == TautomerConst.RT_MobileGroup)
+			{
+				if (rule.stateQueries[0].getAtomCount() > 3)
+					rule.isRuleActive = !FlagActivate;  //since logical condition is use only 1-3 shift negation is applied
+			}
+				
 		}	
 	}
 	
