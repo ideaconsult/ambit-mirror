@@ -534,6 +534,7 @@ window.setInterval(function() {
 		w.write("<script>$(function() {$( \".tabs\" ).tabs({event: \"mouseover\",cache: true});});</script>");
 		w.write("<script>$(function() {$( \"#selectable\" ).selectable();});</script>");
 		w.write("<script type='text/javascript'>function toggleDiv(divId) {$('#'+divId).toggle();}</script>\n");
+		w.write("<script type='text/javascript'>function hideDiv(divId) {$('#'+divId).hide();}</script>\n");
 		w.write("<script>function changeImage(img,src)  {    document.getElementById(img).src=src;} </script>\n");
 
 		w.write("</head>\n");
