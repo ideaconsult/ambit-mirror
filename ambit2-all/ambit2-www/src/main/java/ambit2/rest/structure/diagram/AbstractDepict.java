@@ -62,16 +62,18 @@ public class AbstractDepict extends ProtectedResource {
 		return params;
 	}
 	protected String getTitle(Reference ref, String smiles) {
+		String style = "depictBox";
 		StringBuilder b = new StringBuilder();
 		b.append("<table width='100%'>");
 		b.append("<tr><td>");
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s/daylight?search=%s'>%s</a>",
 						ref.getHierarchicalPart(),Reference.encode(smiles),"Daylight depiction"),
-				String.format("<img src='%s/daylight?search=%s' alt='%s' title='%s'>",
+				String.format("<img id='daylihgt' src='%s/daylight?search=%s' alt='%s' title='%s' onError=\"hideDiv('daylight')\">",
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
-						smiles,smiles)
+						smiles,smiles),
+				style
 					));
 		b.append("</td><td>");
 		b.append(AmbitResource.printWidget(
@@ -79,12 +81,14 @@ public class AbstractDepict extends ProtectedResource {
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
 						smarts==null?"":Reference.encode(smarts),"CDK depiction"),
-				String.format("<img src='%s/cdk?search=%s&smarts=%s' alt='%s' title='%s'>",
+				String.format("<img id='cdk' src='%s/cdk?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
 						smarts==null?"":Reference.encode(smarts),
-						smiles,smiles)
-					));
+						smiles,smiles),
+				style
+					)
+				);
 		b.append("</td></tr><tr><td>");
 		
 		b.append(AmbitResource.printWidget(
@@ -92,10 +96,11 @@ public class AbstractDepict extends ProtectedResource {
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
 						"Cactvs depiction"),
-				String.format("<img src='%s/cactvs?search=%s' alt='%s' title='%s'>",
+				String.format("<img id='cactvs' src='%s/cactvs?search=%s' alt='%s' title='%s' onError=\"hideDiv('cactvs')\">",
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
-						smiles,smiles)
+						smiles,smiles),
+				style
 					));
 		b.append("</td><td>");
 		b.append(AmbitResource.printWidget(
@@ -103,10 +108,11 @@ public class AbstractDepict extends ProtectedResource {
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
 						"Open Babel depiction"),
-				String.format("<img src='%s/obabel?search=%s' alt='%s' title='%s'>",
+				String.format("<img id='obabel' src='%s/obabel?search=%s' alt='%s' title='%s' onError=\"hideDiv('obabel')\">",
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
-						smiles,smiles)
+						smiles,smiles),
+				style
 					));
 		b.append("</td></tr>");
 		

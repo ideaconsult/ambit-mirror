@@ -314,3 +314,7 @@ TD.results
      border-color:#F9FFE6;
      text-align:left;
   }
+  
+.depictBox { 
+	height: 250px; 
+}  
