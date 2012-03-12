@@ -50,6 +50,9 @@ public class TestTautomers
 		
 		tt.tman.activateChlorineRules(false);
 		tt.tman.activateRingChainRules(false);
+		tt.tman.use13ShiftRulesOnly(false);
+		//tt.tman.maxNumOfBackTracks = 100;
+		
 		
 		
 		//tt.performTestCases();
@@ -88,10 +91,11 @@ public class TestTautomers
 		
 		//tt.visualTest("CS#CO");
 		//tt.visualTest("S=N1CC=CC=C1");
-		tt.visualTest("CN(C)C1=C(O)C(C(N)=O)=C(O)C2(O)C1CC1C(=C2O)C(=O)C2=C(C=CC=C2O)C1(C)O");
+		
+		//tt.visualTest("CN(C)C1=C(O)C(C(N)=O)=C(O)C2(O)C1CC1C(=C2O)C(=O)C2=C(C=CC=C2O)C1(C)O");
 		
 		
-		//tt.visualTest("O1=CC=CN=C1");
+		tt.visualTest("O1=CC=CN=C1");
 		
 		
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
