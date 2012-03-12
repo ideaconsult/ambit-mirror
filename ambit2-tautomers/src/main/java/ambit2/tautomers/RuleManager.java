@@ -273,6 +273,8 @@ public class RuleManager
 				System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct));
 			}
 			
+			System.out.println("n=" + n + "  stack_size = " + stackIncSteps.size() + "  nResTautomers=" + tman.resultTautomers.size());
+			
 			expandIncrementStep(tStep);
 			
 			n++;
