@@ -27,9 +27,6 @@ public class RuleInstance implements IRuleInstance
 	Vector<IAtom> atoms = new  Vector<IAtom>();
 	Vector<IBond> bonds = new  Vector<IBond>();
 	
-	//Containers used in the case when this instance overlaps with other instances
-	//Vector<IAtom> overlappedAtoms = new  Vector<IAtom>(); 
-	//Vector<IBond> overlappedBonds = new  Vector<IBond>();
 	
 	public RuleInstance()
 	{
@@ -187,6 +184,23 @@ public class RuleInstance implements IRuleInstance
 		return rule.nStates;
 	}
 	
+	
+	/*
+	public int checkInstanceValidity()
+	{
+		//General idea for this check is the fact that
+		//at a particular point this instance could be no longer valid since
+		//other overlapping instance has shifted to another state hence changing the bonds in this instance
+		
+		//check current state
+		
+		//TODO
+		
+		//check the other state ??? not sure currently whether it is needed
+		
+		return 0; //every thing is OK
+	}
+	*/
 	
 	
 	/*

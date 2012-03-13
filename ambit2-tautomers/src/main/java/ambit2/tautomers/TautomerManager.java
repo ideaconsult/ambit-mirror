@@ -18,11 +18,16 @@ public class TautomerManager
 	Vector<IAtomContainer> resultTautomers;	
 	Vector<String> errors = new Vector<String>(); 
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
+	int originalValencySum;
 		
 	public boolean FlagRecurseBackResultTautomers = false;
 	public boolean FlagUseRingChainRules = false;
 	public boolean FlagUseChlorineRules = false;
 	public boolean FlagUseOnly13Shifts = false;
+	public boolean FlagUse15Shifts = true;
+	public boolean FlagUse17Shifts = true;
+	public boolean FlagUse19Shifts = false;
+	
 	
 	
 	//Some debug info flags
@@ -51,6 +56,8 @@ public class TautomerManager
 	{	
 		molecule = str;
 		originalMolecule = str;
+		originalValencySum = FilterTautomers.getValencySum(str); 
+		
 		try{
 			molecule = (IAtomContainer)originalMolecule.clone();
 		}

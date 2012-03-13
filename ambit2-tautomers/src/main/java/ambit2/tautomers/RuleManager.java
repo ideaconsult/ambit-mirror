@@ -273,7 +273,10 @@ public class RuleManager
 				System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct));
 			}
 			
-			System.out.println("n=" + n + "  stack_size = " + stackIncSteps.size() + "  nResTautomers=" + tman.resultTautomers.size());
+			
+			//System.out.println("n=" + n + "  stack_size = " + stackIncSteps.size() + "  nResTautomers=" + 
+			//		tman.resultTautomers.size() + "  nUsedInst = " + tStep.usedRuleInstances.size() +
+			//		"  nUnusedInst = " + tStep.unUsedRuleInstances.size());
 			
 			expandIncrementStep(tStep);
 			
@@ -294,6 +297,11 @@ public class RuleManager
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
 				
 				//check for duplication (maybe) ???. Currently this is done after generation.  
+				
+				
+				//int valSum = FilterTautomers.getValencySum(newTautomer);
+				//if (valSum != tman.originalValencySum)
+				//	System.out.println("********* diff valensy sum ");
 				
 				tman.resultTautomers.add(newTautomer);
 				 
@@ -326,7 +334,7 @@ public class RuleManager
 	
 	TautomerIncrementStep[] generateNextIncrementSteps(TautomerIncrementStep curIncStep)
 	{	
-		//incStep objects fields are not preserved since it will no longer be used in the 
+		//curIncStep objects fields are not preserved since it will no longer be used in the 
 		//depth-first search algorithm
 		RuleInstance ri = curIncStep.unUsedRuleInstances.lastElement();
 		curIncStep.unUsedRuleInstances.remove(ri);
@@ -441,7 +449,7 @@ public class RuleManager
 		//around the atoms from the current instance. This operation is performed in terms of the new atoms
 				
 		Vector<RuleInstance> newInstances = new Vector<RuleInstance>();
-		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		//TODO 2 to be changes
+		IAtomContainer fragment = generateFragmentShell(incStep.struct, newRI, 2);		//TODO 2 to be changed ????
 		//System.out.print("  fragment: " +SmartsHelper.moleculeToSMILES(fragment));
 		for (int i = 0; i < tman.knowledgeBase.rules.size(); i++)
 		{	
@@ -504,10 +512,15 @@ public class RuleManager
 				filteredNewInstances.add(testedRI);
 		}
 		
+		
+		//(d) Additional checks (conditions for higher order shifts 1.5, 1.7
+		//One idea is that such an instance must have at least one atom which is not overlapped
+		//with another unused rule instance 
+		//TODO
+		
 		incStep.unUsedRuleInstances.addAll(filteredNewInstances);
-		
-		
 	}
+	
 		
 	RuleInstance cloneInstance(IAtomContainer prevStruct,IAtomContainer cloneStruct, RuleInstance oldRI)
 	{
@@ -535,6 +548,13 @@ public class RuleManager
 		//TODO handle explicit H
 		
 		return(cloneRI);
+	}
+	
+	
+	boolean checkNewHihgOrderShiftInstance()
+	{
+		//TODO
+		return true;
 	}
 	
 	
