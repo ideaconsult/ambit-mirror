@@ -465,7 +465,7 @@ public class FilterTautomers
 		CDKHueckelAromaticityDetector.detectAromaticity(ac);		
 	}
 	
-	int getValencySum(IAtomContainer ac)
+	public static int getValencySum(IAtomContainer ac)
 	{
 		int sum = 0;
 		for (int i = 0; i < ac.getBondCount(); i++)
