@@ -50,8 +50,8 @@ public class TestTautomers
 		
 		tt.tman.activateChlorineRules(false);
 		tt.tman.activateRingChainRules(false);
-		tt.tman.use13ShiftRulesOnly(false);
-		tt.tman.maxNumOfBackTracks = 100;
+		tt.tman.use13ShiftRulesOnly(true);
+		//tt.tman.maxNumOfBackTracks = 100;
 		
 		
 		
