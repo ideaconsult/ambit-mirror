@@ -619,11 +619,13 @@ public class AmbitResource extends ProtectedResource {
 		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
 	}
 	
-
 	public static String printWidgetHeader(String header) {
+		return printWidgetHeader(header, null);
+	}
+	public static String printWidgetHeader(String header, String id) {
 		return	String.format(
-				"<div class=\"ui-widget \" style=\"margin-top: 20px; padding: 0 .7em;\">\n"+
-				"<div class=\"ui-widget-header ui-corner-top\"><p>%s</p></div>\n",header);
+				"<div %s%s class=\"ui-widget \" style=\"margin-top: 20px; padding: 0 .7em;\">\n"+
+				"<div class=\"ui-widget-header ui-corner-top\"><p>%s</p></div>\n",id==null?"":"id=",id==null?"":id,header);
 	}
 	public static String printWidgetFooter() {
 		return	String.format("</div>\n");

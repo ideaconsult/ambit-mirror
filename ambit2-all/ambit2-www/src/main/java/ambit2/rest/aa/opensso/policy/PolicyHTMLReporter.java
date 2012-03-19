@@ -38,6 +38,9 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 		
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),getResourceRef(),getDocumentation());
+			output.write(AmbitResource.printWidgetHeader("OpenSSO Policies"));
+			output.write(AmbitResource.printWidgetContentHeader(""));			
+			output.write("<p>");
 			if (collapsed) {
 			output.write("<h4>Create a new policy</h4>");
 			output.write("<form method='POST' action=''>");
@@ -120,6 +123,10 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 			output.write(String.format(records==0?"<h4>%sCreate a new policy for this resource.</h4>":"<h4>%d policies found.</h4>",records==0?"Not found! ":records));
 
 			output.write(String.format("<a href='%s/%s/%s'>Back</a>",getRequest().getRootRef(),AdminResource.resource,OpenSSOPoliciesResource.resource));
+			output.write("</p>");
+			output.write("</p>");
+			output.write(AmbitResource.printWidgetContentFooter());
+			output.write(AmbitResource.printWidgetFooter());			
 			AmbitResource.writeHTMLFooter(output, OpenSSOPoliciesResource.resource, getRequest());
 			output.flush();
 		} catch (Exception x) {

@@ -304,6 +304,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					uriReporter.getDocumentation()
 					);
 			
+;
+			
 			w.write("<table width='100%' bgcolor='#ffffff'>");
 		
 			w.write("<tr>");
@@ -432,7 +434,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 			if (hilightPredictions!= null) 
 				w.write(String.format("<div><span class=\"center\"><h4>Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",hilightPredictions,hilightPredictions));
+	
 			
+			//output.write(AmbitResource.printWidgetHeader("&nbsp;"));
+			//output.write(AmbitResource.printWidgetContentHeader(""));
+			output.write("<div class=\"ui-widget \" style=\"margin-top: 20px; padding: 0 .7em;\">")	;	
 			
 			if (table) {
 				
@@ -552,12 +558,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			else output.write("</div>");
 			output.write("</form>\n");
 			
-			/*
-			output.write(String.format("<form method='post' action='%s/compound'>",uriReporter.getBaseReference()));
-			output.write("<input type='text' name='identifier' title='Compound identifier'>&nbsp;");
-			output.write("<input type='submit' value='Find compound'>");
-			output.write("</form>");	
-			*/		
+	
+			output.write("</div>");
+			//output.write(AmbitResource.printWidgetContentFooter());
+			//output.write(AmbitResource.printWidgetFooter());			
 			AmbitResource.writeHTMLFooter(output,
 					"",
 					uriReporter.getRequest()

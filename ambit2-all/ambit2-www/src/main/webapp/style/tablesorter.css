@@ -1,7 +1,7 @@
 /* tables */
 table.tablesorter {
 	font-family:arial;
-	background-color: #CDCDCD;
+	background-color: #F4F2EB;
 	margin:10px 0pt 15px;
 	font-size: 8pt;
 	width: 100%;
@@ -26,7 +26,7 @@ table.tablesorter tbody td {
 	vertical-align: top;
 }
 table.tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
+	background-color:#F4F2EB;
 }
 table.tablesorter thead tr .headerSortUp {
 	background-image: url(asc.gif);
