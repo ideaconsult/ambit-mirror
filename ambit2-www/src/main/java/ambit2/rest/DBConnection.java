@@ -97,17 +97,7 @@ public class DBConnection {
 	protected String getConnectionURI() throws AmbitException {
 		return getConnectionURI(null,null);
 	}
-	protected String getConnectionURI(Request request) throws AmbitException {
-		if (request == null) return getConnectionURI(null,null);
-		else if (request.getChallengeResponse()==null)
-			return getConnectionURI(null,null);
-		else try {
-			return getConnectionURI(request.getChallengeResponse().getIdentifier(),
-					new String(request.getChallengeResponse().getSecret()));
-		} catch (Exception x) {
-			return getConnectionURI(null,null);
-		}
-	}
+
 	
 	protected String getConnectionURI(String user,String password) throws AmbitException {
 	
@@ -127,14 +117,9 @@ public class DBConnection {
 	public synchronized Connection getConnection() throws AmbitException , SQLException{
 		//if (connectionURI == null)
 		//	connectionURI = getConnectionURI();
-		return getConnection(getConnectionURI(null));
+		return getConnection(getConnectionURI());
 	}
 
-	public synchronized Connection getConnection(Request request) throws AmbitException , SQLException{
-		//if (connectionURI == null)
-		//	connectionURI = getConnectionURI();
-		return getConnection(getConnectionURI(request));
-	}
 	
 	public synchronized Connection getConnection(String connectionURI) throws AmbitException , SQLException{
 		SQLException error = null;
