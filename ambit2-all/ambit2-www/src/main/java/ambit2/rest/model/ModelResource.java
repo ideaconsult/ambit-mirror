@@ -166,7 +166,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		Connection connection = null;
 		try {
 			DBConnection dbc = new DBConnection(getContext());
-			connection = dbc.getConnection(getRequest());
+			connection = dbc.getConnection();
 			
 			query.setValue("dependent");
 			reporter = new QueryTemplateReporter<ModelTemplates>(model.getDependent());

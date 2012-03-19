@@ -138,7 +138,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			QueryExecutor ex = new QueryExecutor();
 			
 			DBConnection dbc = new DBConnection(getContext());
-			Connection conn = dbc.getConnection(getRequest());
+			Connection conn = dbc.getConnection();
 			
 			try {
 				ex.setConnection(conn);

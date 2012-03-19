@@ -160,7 +160,7 @@ Then, when the "get(Variant)" method calls you back,
 		        		if (convertor instanceof RepresentationConvertor)
 		        			((RepresentationConvertor)convertor).setLicenseURI(getLicenseURI());
 		        		
-		        		connection = dbc.getConnection(getRequest());
+		        		connection = dbc.getConnection();
 		        		Reporter reporter = ((RepresentationConvertor)convertor).getReporter();
 			        	if (reporter instanceof IDBProcessor)
 			        		((IDBProcessor)reporter).setConnection(connection);
@@ -238,7 +238,7 @@ Then, when the "get(Variant)" method calls you back,
 		UpdateExecutor executor = new UpdateExecutor();
 		try {
     		DBConnection dbc = new DBConnection(getContext());
-    		c = dbc.getConnection(getRequest());			
+    		c = dbc.getConnection();			
 
 			executor.setConnection(c);
 			executor.open();
@@ -449,7 +449,7 @@ Then, when the "get(Variant)" method calls you back,
 				};
 			
 				DBConnection dbc = new DBConnection(getApplication().getContext());
-				conn = dbc.getConnection(getRequest());	
+				conn = dbc.getConnection();	
 				
 				List<UUID> r = null;
 				try {
@@ -535,7 +535,7 @@ Then, when the "get(Variant)" method calls you back,
 			
 
 			DBConnection dbc = new DBConnection(getContext());
-			Connection conn = dbc.getConnection(getRequest());
+			Connection conn = dbc.getConnection();
 			try {
 				for (String featureURI:featuresURI) {
 					if (featureURI == null) continue;

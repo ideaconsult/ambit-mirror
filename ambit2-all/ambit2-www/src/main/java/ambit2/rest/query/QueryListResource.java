@@ -30,6 +30,8 @@ public class QueryListResource extends CatalogResource {
 		ArrayList<String> q = new ArrayList<String>();
 		
 		Restlet root = getApplication().getRoot();
+		while ((root instanceof Filter)) 
+			root = ((Filter)root).getNext();
 		RouteList list = ((Router)root).getRoutes();
  		 	for (Route r : list) 
  		 		if ("/query".equals(r.getTemplate().getPattern())) {

@@ -294,12 +294,16 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		media = getMediaParameter(request);
+		
 		try {
+			Form form = request.getResourceRef().getQueryAsForm();
+			DisplayMode defaultMode = null;
+			try { defaultMode = DisplayMode.valueOf(form.getFirstValue("mode")); } catch (Exception x) { }
+			_dmode = defaultMode==null?DisplayMode.singleitem:defaultMode;
 			
 			Object key = request.getAttributes().get(OpenTox.URI.compound.getKey());
 			if (key==null) {
 				boolean byAlias = true;
-				Form form = request.getResourceRef().getQueryAsForm();
 				String condition = form.getFirstValue(QueryResource.condition);
 				String casesens = form.getFirstValue(QueryResource.caseSensitive);
 				String[] keys = form.getValuesArray(QueryResource.search_param);
@@ -313,7 +317,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 
 				
 				if (keys != null) {
-					_dmode = DisplayMode.table;
+					_dmode = defaultMode==null?DisplayMode.table:defaultMode;
 					/*
 					QueryCombinedStructure qcombined = new QueryCombinedStructure();
 					qcombined.setCombine_as_and(true);
