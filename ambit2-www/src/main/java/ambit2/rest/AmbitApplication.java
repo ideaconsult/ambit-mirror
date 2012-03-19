@@ -2,6 +2,8 @@ package ambit2.rest;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.restlet.Component;
 import org.restlet.Context;
@@ -11,6 +13,7 @@ import org.restlet.Restlet;
 import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.ClientInfo;
+import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
@@ -20,12 +23,13 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.Enroler;
-import org.restlet.security.Verifier;
+import org.restlet.security.MapVerifier;
+import org.restlet.security.Role;
+import org.restlet.security.RoleAuthorizer;
 import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
 
 import ambit2.base.config.Preferences;
-import ambit2.rest.aa.DBVerifier;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
@@ -98,7 +102,7 @@ import ambit2.rest.task.TaskStorage;
  *
  */
 public class AmbitApplication extends TaskApplication<String> {
-
+	public static final Role UPDATE_ALLOWED = new Role("AUTHOR","Update (PUT,POST,DELETE) allowed");
 	public AmbitApplication() {
 		super();
 		setName("AMBIT REST services");
@@ -250,18 +254,54 @@ public class AmbitApplication extends TaskApplication<String> {
 		attachStaticResources(router);
 
 
-		 /**
-		  * login/logout for local users . TODO refactor to use cookies as in /opentoxuser
-		  */
-	   //  router.attach(SwitchUserResource.resource,createGuardGuest(SwitchUserResource.class));
-
 	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
 	     
+	     /*
 	     StringWriter w = new StringWriter();
 	     AmbitApplication.printRoutes(router,">",w);
 	     System.out.println(w.toString());
+		*/
+	     
+	     if (!isOpenToxAAEnabled()) 
+	    	 if (isSimpleSecretAAEnabled()) {
+	    		 System.out.println(String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
+	    		 ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC, "ambit2");
+	    		 //get from config file
+	    		 ConcurrentMap<String, char[]> localSecrets = null;
+	    		 try {
+	    			 localSecrets = getLocalSecrets();
+	    		 } catch (Exception x) {
+	    			 System.err.println(x.getMessage());
+	    			 localSecrets  = new ConcurrentHashMap<String, char[]>(); //empty
+	    		 }
+	    		 basicAuth.setVerifier(new MapVerifier(localSecrets) {
+	    			 @Override
+	    			public int verify(Request request, Response response) {
+	    				 int result = super.verify(request, response);
+	    				 return Method.GET.equals(request.getMethod())?RESULT_VALID:result; 
+	    			}
+	    		 });
+	    		 basicAuth.setEnroler(new Enroler() {
+					@Override
+					public void enrole(ClientInfo clientInfo) {
+						if (clientInfo.isAuthenticated()) 
+							clientInfo.getRoles().add(UPDATE_ALLOWED);
+					}
+				});
 
+	    		 UpdateAuthorizer authorizer = new UpdateAuthorizer();
+	    		 authorizer.getAuthorizedRoles().add(UPDATE_ALLOWED);
+	    		 authorizer.setNext(router);
+	    		 basicAuth.setNext(authorizer);
+	    		 return basicAuth;
+	    	 }
+	    	 else {
+	    		 System.err.println("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
+	    	 }
+	     else {
+    		//OK, AA is already there
+	     }
 		 return router;
 	}
 	
@@ -541,71 +581,6 @@ public class AmbitApplication extends TaskApplication<String> {
         System.out.println("Server stopped");
     }
     	
-    protected ChallengeAuthenticator createGuard(Verifier verifier,boolean optional) {
-    	
-    	Enroler enroler = new Enroler() {
-    		public void enrole(ClientInfo subject) {
-    			System.out.println(subject);
-    			
-    		}
-    	};
-	        // Create a Guard
-	     ChallengeAuthenticator guard = new ChallengeAuthenticator(getContext(),optional,ChallengeScheme.HTTP_BASIC, "ambit2") {
-	    	@Override
-	    	protected boolean authenticate(Request request, Response response) {
-	    		return super.authenticate(request, response);
-	    	} 
-	     };
-	     guard.setVerifier(verifier);
-	     guard.setEnroler(enroler);
-	     
-		 return guard;
-    }
-    
-   protected ChallengeAuthenticator createGuardGuest(Class clazz) {
-    	
-	     DBVerifier verifier = new DBVerifier(this) {
-	        	@Override
-	        	public int verify(Request request, Response response) {
-	                if (request.getChallengeResponse() != null) { 
-	                    String identifier = request.getChallengeResponse().getIdentifier();
-	                    Object name = request.getAttributes().get("name");
-	                    if ((identifier!=null) && (name != null) && (identifier.equals(name.toString())))
-	                    	return RESULT_MISSING;
-	                }
-	                return super.verify(request, response);
-	        	}
-	     };
-
-    	Enroler enroler = new Enroler() {
-    		public void enrole(ClientInfo subject) {
-    			System.out.println(subject);
-    			
-    		}
-    	};
-
-	        // Create a Guard
-    	ChallengeAuthenticator guard = new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC, "ambit2") {
-
-	    	@Override
-	    	protected boolean authenticate(Request request, Response response) {
-	    		/*
-                request.getClientInfo().getSubject().getPrincipals().add(
-                		new UserPrincipal("guest"));	
-
-                request.getClientInfo().setAuthenticated(true);
-                return true;
-   */            
-                return super.authenticate(request, response);
-	    	}; 
-	
-	     };
-	     guard.setVerifier(verifier);
-	     guard.setEnroler(enroler);
-		 guard.setNext(clazz);     
- 		 
-		 return guard;
-    }    
    
    public static String printRoutes(Restlet re,String delimiter,StringWriter b) {
 	   		
@@ -658,20 +633,75 @@ public class AmbitApplication extends TaskApplication<String> {
 	        return result;
     }
 */
+   public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
+   protected synchronized boolean isSimpleSecretAAEnabled()  {
+		try {
+			String aaadmin = getProperty(LOCAL_AA_ENABLED,configProperties);
+			return aaadmin==null?null:Boolean.parseBoolean(aaadmin);
+		} catch (Exception x) {return false; }
+	}	
    
-
+	protected synchronized boolean isOpenToxAAEnabled()  {
+		try {
+			String aaadmin = getProperty("aa.enabled",configProperties);
+			return aaadmin==null?null:Boolean.parseBoolean(aaadmin);
+		} catch (Exception x) {return false; }
+	}	
+	
 	protected synchronized boolean protectAdminResource()  {
 		try {
-			Properties properties = new Properties();
-			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
-			properties.load(in);
-			in.close();		
-			return Boolean.parseBoolean(properties.getProperty("aa.admin"));
-
-		} catch (Exception x) {
-			return false;
-		}
+			String aaadmin = getProperty("aa.admin","ambit2/rest/config/ambit2.pref");
+			return aaadmin==null?null:Boolean.parseBoolean(aaadmin);
+		} catch (Exception x) {return false; }
 	}	
 
+	protected synchronized String getProperty(String name,String config)  {
+		try {
+			Properties properties = new Properties();
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream(config);
+			properties.load(in);
+			in.close();		
+			return properties.getProperty(name);
+
+		} catch (Exception x) {
+			return null;
+		}
+	}	
+	
+	 static final String identifierKey = "aa.local.admin.name";
+	 static final String identifierPass = "aa.local.admin.pass";
+	 static final String configProperties = "ambit2/rest/config/config.prop";
+	 
+	 protected ConcurrentMap<String, char[]>  getLocalSecrets() throws Exception {
+
+		
+		 String identifier = getProperty(identifierKey,configProperties);
+		 String pass = getProperty(identifierPass,configProperties);
+		 if ((identifier==null)||"".equals(identifier)||identifier.indexOf("${")>-1) 
+			 			throw new Exception(String.format("Property %s not set. The web applicaiton will be READ ONLY!",identifierKey));
+		 if ((pass==null)||"".equals(pass)||pass.indexOf("${")>-1) 
+	 			throw new Exception(String.format("Property %s not set. The web applicaiton will be READ ONLY!",identifierKey));
+		 ConcurrentMap<String, char[]> localSecrets = new ConcurrentHashMap<String, char[]>(); 
+		 localSecrets.put(identifier,pass.toCharArray());
+		 return localSecrets;
+	 }
 }
 
+/**
+ * Modified to allow GET always
+ * @author nina
+ *
+ */
+class UpdateAuthorizer extends RoleAuthorizer {
+
+	public UpdateAuthorizer() {
+		super();
+	}
+
+	@Override
+	public boolean authorize(Request request, Response response) {
+		if (Method.GET.equals(request.getMethod())) return true;
+		else return super.authorize(request, response);
+	}
+	
+}
