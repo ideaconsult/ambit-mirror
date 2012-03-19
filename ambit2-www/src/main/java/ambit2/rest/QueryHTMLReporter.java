@@ -71,12 +71,18 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest(),
 					getUriReporter().getResourceRef(),
 					getUriReporter()==null?null:getUriReporter().getDocumentation());
+			output.write(AmbitResource.printWidgetHeader(query.toString()));
+			output.write(AmbitResource.printWidgetContentHeader(""));
+			output.write("<p>");			
 		} catch (IOException x) {}
 	}
 	
 	@Override
 	public void footer(Writer output, Q query) {
 		try {
+			output.write("</p>");
+			output.write(AmbitResource.printWidgetContentFooter());
+			output.write(AmbitResource.printWidgetFooter());			
 			AmbitResource.writeHTMLFooter(output,query.toString(),uriReporter.getRequest());
 			output.flush();
 		} catch (Exception x) {

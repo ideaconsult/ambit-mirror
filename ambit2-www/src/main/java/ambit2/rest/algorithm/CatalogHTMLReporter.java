@@ -29,6 +29,9 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),getResourceRef(),
 					getDocumentation());//,"<meta http-equiv=\"refresh\" content=\"10\">");
+			output.write(AmbitResource.printWidgetHeader("&nbsp;"));
+			output.write(AmbitResource.printWidgetContentHeader(""));
+			output.write("<p>");
 		} catch (Exception x) {
 			
 		}
@@ -44,6 +47,11 @@ public class CatalogHTMLReporter<T> extends CatalogURIReporter<T> {
 	@Override
 	public void footer(Writer output, Iterator<T> query) {
 		try {
+			output.write("</p>");
+			output.write(AmbitResource.printWidgetContentFooter());
+			output.write(AmbitResource.printWidgetFooter());
+			
+		
 			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {

@@ -16,6 +16,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.IStructureKey.Matcher;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
@@ -55,10 +56,19 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	}
 	@Override
 	public void header(Writer w, IQueryRetrieval<ISourceDataset> query) {
-		super.header(w, query);
+		try {
+			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest(),
+					getUriReporter().getResourceRef(),
+					getUriReporter()==null?null:getUriReporter().getDocumentation());
+	
+
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 		/**
 		 * /dataset
 		 */
+
 		if (_dmode.isCollapsed()) { 
 			uploadUI("",w, query);
 			try {
@@ -122,6 +132,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				search = "";
 			}			
 			try {
+
 				output.write("<div><span class=\"center\">");
 			output.write("<form method='GET' action=''>");
 			output.write(String.format("<b>Page:</b><input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
@@ -130,13 +141,19 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			output.write("<input type='submit' value='Refresh'>");			
 			output.write("</form>");
 			output.write("</span></div><p>");
+
 			} catch (Exception x) {
 				
 			} finally {
 				
 			}
 			
+
 		} 
+		
+		
+			
+
 		/**
 		 * else /dataset/{id}/metadata
 		 */
@@ -145,15 +162,28 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	}
 	@Override
 	public void footer(Writer output, IQueryRetrieval<ISourceDataset> query) {
-		super.footer(output, query);
+		try {
+			
+			AmbitResource.writeHTMLFooter(output,query.toString(),uriReporter.getRequest());
+			output.flush();
+		} catch (Exception x) {
+			
+		}
 	}
 	public void uploadUI(String uri, Writer output, IQueryRetrieval<ISourceDataset> query) {		
 		try {
+			output.write(String.format("<p><a href='#' onClick=\"javascript:toggleDiv('upload');\">Upload new dataset</a></p>"));
+			
+			output.write(String.format("<div id='%s' style='display: %s;''>","upload","none"));
+			
+			output.write(AmbitResource.printWidgetHeader("Upload"));
+			output.write(AmbitResource.printWidgetContentHeader(""));
+			output.write("<p>");
 			String[][] methods = new String[][] {
 					{"post","Add new dataset","Adds all compounds and data from the file, even empty structures."},
 					{"put","Import properties","Import properties only for compounds from the file, which could be found in the database"}
 			};
-			output.write("<table width='95%' border='1' border-style='solid' >");
+			output.write("<table width='95%' border='0' >");
 			output.write("<tr>");
 			for (int i=0; i < methods.length;i ++) {
 				String[] method = methods[i];
@@ -168,7 +198,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("<tbody>");
 				output.write(String.format("<form method=\"post\" action=\"%s?method=%s\" ENCTYPE=\"multipart/form-data\">",uri,method[0]));
 				//file
-				output.write("<tr>");
+				output.write("<tr bgcolor='#F4F2EB'>");
 				output.write("<th>File<label title='Mandatory'>*</label></th>");
 				output.write("<td>");
 				output.write(String.format("<input type=\"file\" name=\"%s\" accept=\"%s\" title='%s' size=\"60\">",
@@ -178,14 +208,14 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("</td>");
 				output.write("</tr>");
 				//title
-				output.write("<tr>");
+				output.write("<tr bgcolor='#F4F2EB'>");
 				output.write("<th>Dataset name</th>");
 				output.write("<td>");
 				output.write(String.format("<input type=\"text\" name='title' title='%s' size=\"60\">","Dataset name (dc:title)")); 
 				output.write("</td>");
 				output.write("</tr>");
 				//match
-				output.write("<tr>");
+				output.write("<tr bgcolor='#F4F2EB'>");
 				output.write("<th>Match</th>");
 				output.write("<td>");
 				output.write("<select name='match'>");
@@ -200,7 +230,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("</tr>");
 
 				//URL
-				output.write("<tr>");
+				output.write("<tr bgcolor='#F4F2EB'>");
 				output.write("<th>URL</th>");
 				output.write("<td>");
 				output.write(String.format("<input type=\"text\" name='seeAlso' title='%s' size=\"60\">","Related URL (rdfs:seeAlso)")); 
@@ -208,7 +238,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 				output.write("</tr>");
 				
-				output.write("<tr>");
+				output.write("<tr bgcolor='#F4F2EB'>");
 				output.write("<th>License</th>");
 				output.write("<td>");
 				output.write("<select name='license'>");
@@ -221,7 +251,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("</td>");
 				output.write("</tr>");
 
-				output.write("<tr><td align='right'><input type='submit' value='Submit'></td></tr>");
+				output.write("<tr bgcolor='#F4F2EB'><td align='right' colspan='2'><input type='submit' value='Submit'></td></tr>");
 				output.write("</form>");
 				output.write("</tbody>");
 				output.write("</table>");
@@ -230,32 +260,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			}
 			output.write("</tr>");
 			output.write("</table>");
-			output.write("<hr>");
-			//if (collapsed) {
-
-				
-				/*
-				output.write("<div class=\"actions\"><span class=\"center\">");
-				output.write("<form method=\"post\" action=\"?method=put\" ENCTYPE=\"multipart/form-data\">");
-
-				output.write(String.format("<label accesskey=F>%s&nbsp;<input type=\"file\" name=\"%s\" accept=\"%s\" size=\"80\"></label>",
-						"Import properties (SDF, MOL, SMI, CSV, TXT, ToxML (.xml) file)",
-						fileUploadField,
-						ChemicalMediaType.CHEMICAL_MDLSDF.toString())); 
-				
-				output.write("<select name='match'>");
-				for (Matcher matcher : IStructureKey.Matcher.values())
-					output.write(String.format("<option value='%s' %s>%s</option>",
-							matcher.toString(),
-							IStructureKey.Matcher.CAS.equals(matcher)?"selected":"",
-							matcher.getDescription()));
-				output.write("</select>");
-				
-				output.write("<br><input type='submit' value='Submit'>");
-				output.write("</form>");
-				output.write("</span></div>\n");	
-				*/					
-			//}
+			output.write("</p>");
+			output.write(AmbitResource.printWidgetContentFooter());
+			output.write(AmbitResource.printWidgetFooter());
+			output.write("</div>");
 		} catch (Exception x) {}
 		
 	}
@@ -346,38 +354,11 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	
 
 				output.write("&nbsp;");	
-				/*
-				output.write(String.format(
-						"&nbsp;<a href=\"%s%s%s\" title='Quality labels'>[Qlabels]</a>",
-						w.toString(),
-						"/query",
-						DatasetStructureQualityStatsResource.resource));	
-				
-				output.write(String.format(
-						"&nbsp;<a href=\"%s%s%s\" title='Consensus labels'>[Consensus]</a>",
-						w.toString(),
-						"/query",
-						DatasetChemicalsQualityStatsResource.resource));					
-				*/
+
 				output.write(String.format(
 						"&nbsp;<a href=\"%s%s\">[Metadata]</a>",
 						w.toString(),
 						"/metadata"));
-				
-			
-				/*
-				if (dataset.getLicenseURI()!= null)
-					output.write(String.format(
-							"&nbsp;<a href=\"%s\" target=_blank title='%s'>[License]</a>",
-							dataset.getLicenseURI(),
-							dataset.getLicenseURI()
-							));			
-				else 
-					output.write(String.format(
-							"&nbsp;<label title='%s'>[License]</label>",
-							ISourceDataset.license.Unknown
-							));		
-				*/
 				output.write(String.format(
 						"&nbsp;<a href=\"%s?%s\">%s</a>",
 						w.toString(),
@@ -388,13 +369,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				output.write("</div>");
 			}  else 
 				renderMetadata(dataset, w.toString(),null);
-
-			/*
-			output.write(String.format(
-					"<form method=POST action='%s?method=DELETE'><input type='submit' value='Delete'></form>",
-					w.toString()
-					));
-					*/			
+	
 
 		} catch (Exception x) {
 			Context.getCurrentLogger().severe(x.getMessage());
