@@ -95,6 +95,24 @@
       </properties>
     </profile>    
     
+    <!-- Simple local AA , GET is public, other methods require HTTP BASIC with preconfigured credentials 
+    Will be switched on only if OpenTox AA is not enabled by aa.enabled=true and aa.local.enabled is set to true
+    -->
+    <profile>
+      <id>aa-local</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <aa.local.enabled>true</aa.local.enabled>
+        <aa.local.admin.name>admin</aa.local.admin.name>
+        <aa.local.admin.pass>changeit</aa.local.admin.pass>
+        <dataset.members.prefix>false</dataset.members.prefix>
+        <!--  Not used so far -->
+        <aa.local.ipallowed>127.0.0.1</aa.local.ipallowed>
+      </properties>
+    </profile>   
+        
     <profile>
 	     <id>no-license-in-text-column</id>
 	      <activation>
