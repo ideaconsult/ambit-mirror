@@ -296,6 +296,16 @@ public class AmbitResource extends ProtectedResource {
 				StringWriter writer = new StringWriter();
 				writeHTMLHeader(writer, "AMBIT", getRequest(), getResourceRef(getRequest()), null);
 				
+				
+				writer.write(printWidgetHeader("Welcome"));
+				
+				writer.write(printWidgetContentHeader(""));
+				writer.write("<h5 align='center'>These pages offer minimalistic user interface to <a href='http://ambit.sf.net'>AMBIT</a> implementation of <a href='http://opentox.org'>OpenTox</a> REST services</h5><p> <br>Full featured user interface is available via external applications: <ul><li><a href='http://toxpredict.org' target='_blank'>ToxPredict</a></li><li><a href='http://http://toxcreate.org' target='_blank'>ToxCreate</a></li><li><a href='http://opentox.ntua.gr/blog/78-q-edit'>QPRF editor</a></li><li><a href='http://bioclipse.net/opentox'>BioClipse</a></li><li><a href='http://qsardb.jrc.it'>QMRF Inventory</a></li></ul></p><p>More applications are under development.</p>");
+				
+
+				writer.write(String.format("<p><a href='#' onClick=\"javascript:toggleDiv('help');\">REST API details</a></p>"));
+				
+				writer.write(String.format("<div id='%s' class='help' style='display: %s;''>","help","none"));
 				writer.write("<table border='0'>");
 				
 				writer.write(String.format("<tr align='center'><th colspan='4'>%s%s</th></tr>",
@@ -340,8 +350,10 @@ public class AmbitResource extends ProtectedResource {
 					*/
 				}
 				writer.write("</table>");
-				writer.write("<h6 align='center'>These pages offer minimalistic user interface to AMBIT implementation of OpenTox REST services. Full featured user interface is available via external applicaiton, like <a href='http://toxpredict.org' target='_blank'>ToxPredict</a>,&nbsp;<a href='http://http://toxcreate.org' target='_blank'>ToxCreate</a> and QPRF editor. More applications are under development.</h6>");
-				
+				writer.write("</div>");
+				writer.write(printWidgetContentFooter());
+				writer.write(printWidgetFooter());
+				/*
 				writer.write(String.format("<a href='%s/ontology' title='BlueObelisk, endpoints, algorithm types ontology'>Ontology</a>&nbsp;",getRequest().getRootRef()));
 				writer.write(String.format("<a href='%s/ontology/test' title='Reads RDF output from an URI and displays clickable statements. Enter URI in the search box.'>RDF playground</a>&nbsp;",getRequest().getRootRef()));
 				
@@ -350,7 +362,7 @@ public class AmbitResource extends ProtectedResource {
 				writer.write(String.format("<a href='%s' title='Original URI'>Original URI</a>&nbsp;",getRequest().getOriginalRef()));
 				writer.write(String.format("<a href='%s' title='Host'>Host</a>&nbsp;",getRequest().getHostRef()));
 				writer.write(String.format("<a href='%s' title='Client'>Client address</a>&nbsp;",getRequest().getClientInfo().getAddress()));
-
+			    */
 				writeHTMLFooter(writer, "AMBIT", getRequest());
 				return new StringRepresentation(writer.toString(),MediaType.TEXT_HTML);				
 			}
@@ -392,95 +404,7 @@ public class AmbitResource extends ProtectedResource {
 
 	public static String js(String url, Reference baseReference) {
 		return "";
-		//return String.format("<script type=\"text/javascript\" src=\"%s/jquery/call.js\"></script>",baseReference);
-		/**
-window.setInterval(function() {
- alert('test');
-}, 1000);
-		 */
-		/*
-		String s = 
-		"<script language=\"JavaScript1.2\" type=\"text/javascript\">\n"+
-		"<!--\n"+
-
-		"function poll(){\n"+
-		"   $(\"#targetDiv\").text('poll');\n"+
-		"   jQuery.ajaxSetup({ Accept: \"text/uri-list;charset=utf-8\" });\n"+
-		"	$.ajax({\n"+
-		"   xhr:  (window.ActiveXObject) ?\n"+  //this is a hack for IE8
-		"		function() {\n"+
-		"				try {\n"+
-		"					return new window.ActiveXObject(\"Microsoft.XMLHTTP\");\n"+
-		"				} catch(e) {}\n"+
-	    "				} :\n"+
-		"			function() {\n"+
-		"				return new window.XMLHttpRequest();\n"+
-		"			},\n"+
-		"   beforeSend: function(xhr){\n"+
-		"      xhr.setRequestHeader(\"Accept\",\"text/uri-list;q=1.0\");\n"+
-		"   },\n"+
-		"		type: \"GET\",\n"+
-		"		dataType: \"text\",\n"+
-		"       cache: false,\n"+
-		String.format("		url: \"%s%s\",\n",url,"?media=text/uri-list")+
-		"		success: callback,\n"+
-		"		error: err,\n"+
-		"       complete: done\n"+
-		"	});\n"+
-		"}\n"+
-		"function done(xhr) {\n"+
-	    "   $(\"#statusDiv\").text(xhr.status == 200);"+
-	    "   if (xhr.status == 200) { stopPolling();} \n"+
-	    "}\n"+		
-		"function callback(data, status) {\n"+
-	    "   $(\"#targetDiv\").text('[' + status + '] ' + data);"+
-	    "}\n"+
-		"function err(xhr, reason, ex) {"+
-	    "   $(\"#targetDiv\").text(reason);\n"+
-	    "   stopPolling()\n"+  //stop polling
-	    "}"+	    
-	    "function stopPolling(){     pollInterval=window.clearInterval(pollInterval);   }\n"+
-	    
-		"var pollInterval = window.setInterval(\"poll()\",2000);\n"+	    
-	    "-->\n"+
-	    "</script>";
-		return s;
-		*/
-		/*
-	String s = 
-		"<script type=\"text/javascript\">\n"+
-		
-		
-		"$(document).ready(function( ){\n"+
-		"   jQuery.ajaxSetup({ Accept: \"text/uri-list;charset=utf-8\" });\n"+
-		"	$.ajax({\n"+
-		"   beforeSend: function(xhr){\n"+
-		"      xhr.setRequestHeader(\"Accept\",\"text/uri-list;q=1.0\");\n"+
-		"   },\n"+
-		"		type: \"GET\",\n"+
-		"		dataType: \"text\",\n"+
-		"       cache: false,\n"+
-		String.format("		url: \"%s%s\",\n",url,"?media=text/uri-list")+
-		"		success: callback,\n"+
-		"		error: err,\n"+
-		"       complete: done\n"+
-		"	});\n"+
-		"});\n"+
-		"function done(xhr) {\n"+
-	    "   $(\"#statusDiv\").text(xhr.status);"+
-	    "}\n"+		
-		"function callback(data, status) {\n"+
-	    "   $(\"#targetDiv\").text('[' + status + '] ' + data);"+
-	    "}\n"+
-		"function err(xhr, reason, ex) {"+
-		" alert(reason);"+
-	    "   $(\"#targetDiv\").text(reason);"+
-	    "}"+	    
-	    
-	    "</script>";
-		return s;
-		
-		 */
+	
 	}
 	
 	public static void writeTopHeader(Writer w,String title,Request request,Reference resourceRef, String meta,ResourceDoc doc) throws IOException {
@@ -555,34 +479,18 @@ window.setInterval(function() {
 	
 		} else top = "";
 
+		/*
 		if(request != null) {
 			Reference r = resourceRef.hasQuery()?resourceRef.clone():resourceRef;
 			r.setQuery(null);
 			top += String.format("&nbsp;<a style=\"color:#99CC00\" href='%s/admin/policy?search=%s' target='_Policy' title='Click to view the access policies, assigned to this URI'>Access</a>", request.getRootRef(),Reference.encode(r.toString()));
 
 		}
+		*/
 		
 		w.write(String.format("<div class=\"row\"><span class=\"left\">&nbsp;%s",top));
 		w.write("</span>");
-		/*
-		Iterator<Principal> i = request.getClientInfo().getPrincipals().iterator();
-		Principal p = null;
-		while (i.hasNext()) { p = i.next(); break; }
-		
-		top = "";
-		
-		if (p==null) 
-		w.write(String.format("	<span class=\"right\">%s&nbsp;<a style=\"color:#99CC00\" href='%s/opentoxuser'>Login</a>",
-				top,
-				baseReference.toString(),
-				request.getClientInfo().getUser()==null?"Login":request.getClientInfo().getUser()));
-		else
-		w.write(String.format("	<span class=\"right\">%snbsp;%s&nbsp;<a style=\"color:#99CC00\" href='%s/protected/%s'>Switch user</a>",
-				top,
-				p.getName(),
-				baseReference.toString(),p.getName()));
-				*/
-		
+
 		w.write(String.format("	<span class=\"right\">%s&nbsp;<a style=\"color:#99CC00\" href='%s/opentoxuser'>%s</a>",
 				"",
 				baseReference.toString(),
