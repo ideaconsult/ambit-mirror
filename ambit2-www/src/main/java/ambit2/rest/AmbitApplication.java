@@ -148,15 +148,7 @@ public class AmbitApplication extends TaskApplication<String> {
 	public Restlet createInboundRoot() {
 		Router router = new MyRouter(this.getContext());
 		router.attach("/help", AmbitResource.class);
-		
-		Restlet login = createOpenSSOLoginRouter();
-		router.attach("/", login);
-		router.attach("", login);
-		/**
-		 * OpenSSO login / logout
-		 * Sets a cookie with OpenSSO token
-		 */
-		router.attach("/"+OpenSSOUserResource.resource,login );
+
 		
 		/**
 		 *  Points to the Ontology service
@@ -245,7 +237,8 @@ public class AmbitApplication extends TaskApplication<String> {
 		/**
 		 * Demos
 		 */
-		router.attach(AbstractDepict.resource,new DepictDemoRouter(getContext()));
+		Router depict = new DepictDemoRouter(getContext());
+		router.attach(AbstractDepict.resource,depict);
 		router.attach("/name2structure",Name2StructureResource.class);	
 	
 		/**
@@ -263,8 +256,14 @@ public class AmbitApplication extends TaskApplication<String> {
 	     System.out.println(w.toString());
 		*/
 	     
-	     if (!isOpenToxAAEnabled()) 
+	     if (!isOpenToxAAEnabled()) {
+
+				
 	    	 if (isSimpleSecretAAEnabled()) {
+		    	 
+				 router.attach("/", AmbitResource.class);
+				 router.attach("", AmbitResource.class);
+				 
 	    		 System.out.println(String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
 	    		 ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC, "ambit2");
 	    		 //get from config file
@@ -299,9 +298,22 @@ public class AmbitApplication extends TaskApplication<String> {
 	    	 else {
 	    		 System.err.println("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
 	    	 }
-	     else {
-    		//OK, AA is already there
-	     }
+	     
+	     
+		} else {} 		//OK, AA is already there
+	     
+	     // attach login
+	     
+	 		Restlet login = createOpenSSOLoginRouter();
+			router.attach("/", login);
+			router.attach("", login);
+			/**
+			 * OpenSSO login / logout
+			 * Sets a cookie with OpenSSO token
+			 */
+			router.attach("/"+OpenSSOUserResource.resource,login );
+
+
 		 return router;
 	}
 	

@@ -14,8 +14,6 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.StoredQuery;
-import ambit2.db.search.structure.QueryCombinedStructure;
-import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QueryStructureByQuality;
 import ambit2.rest.OpenTox;
 
