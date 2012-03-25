@@ -4,7 +4,7 @@
   <groupId>ambit</groupId>
   <artifactId>ambit2-all</artifactId>
   <packaging>pom</packaging>
-  <version>2.4.4-SNAPSHOT</version>
+  <version>2.4.5</version>
   <name>Ambit 2</name>
   <description>AmbitXT is a set of  flexible high  performance user-friendly  open  source
  applications,  which are  able to  store information  about  chemical compounds and efficiently  search large databases  of  chemicals by  various criteria.</description>
@@ -503,12 +503,13 @@
 			</configuration>
           </plugin>
            -->
-         <!-- needs svn executable  
- 	  <plugin>
+         <!-- needs svn executable  -->
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changelog-plugin</artifactId>
+        <version>2.2</version>
       </plugin>
- 	
+ 	<!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -560,7 +561,8 @@
    	<!-- cdk 1.3.6 is cdk 1.3.6 with jniinchi 0.7 (support for standard InChI), instead of jniinchi 0.5 package -->
 	<!-- cdk 1.3.8 is regular version, deployed to ambit repository -->
 	<!-- cdk 1.4.5 is regular version, deployed to ambit repository; used since ambit 2.4.4-SNAPSHOT -->
-	<cdk.version>1.4.5</cdk.version>
+	<!-- cdk 1.4.8 is regular version, deployed to ambit repository; used since ambit 2.4.5-SNAPSHOT -->
+    <cdk.version>1.4.8</cdk.version>
 	
 </properties>	
 

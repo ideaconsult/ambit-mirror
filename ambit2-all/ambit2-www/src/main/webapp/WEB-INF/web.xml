@@ -1,0 +1,105 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<!--  can't make working multople restlet applications in single war -->
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
+
+	<display-name>AMBIT2</display-name>
+	<description>	AMBIT2 	</description>
+	
+	
+	<context-param>
+		<param-name>org.restlet.application</param-name>
+		<param-value>ambit2.rest.AmbitApplication</param-value>
+		
+	</context-param>
+	
+
+	<context-param>
+		<param-name>org.restlet.component</param-name>
+		<param-value>ambit2.rest.AmbitComponent</param-value>
+	</context-param>	
+			
+		
+<!-- javamelody 
+       <filter>
+                <filter-name>monitoring</filter-name>
+                <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+        </filter>
+        <filter-mapping>
+                <filter-name>monitoring</filter-name>
+                <url-pattern>/*</url-pattern>
+        </filter-mapping>
+        <listener>
+                <listener-class>net.bull.javamelody.SessionListener</listener-class>
+        </listener>
+        -->
+		<!--
+    <servlet>  
+    <servlet-name>AmbitRestlet</servlet-name>
+
+     <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class> 
+     	<init-param> <param-name>org.restlet.application</param-name> 
+     	<param-value>ambit2.rest.AmbitApplication</param-value> 
+     </init-param> 
+     
+	     <init-param>
+	    <param-name>org.restlet.attribute.server</param-name> 
+	    <param-value>test.ServerServlet1</param-value> 
+	    </init-param> 
+    </servlet>
+
+     <servlet-mapping> 
+     <servlet-name>AmbitRestlet</servlet-name> <url-pattern>/*</url-pattern> 
+     </servlet-mapping>
+
+     <servlet> 
+     <servlet-name>LauncherRestlet</servlet-name>
+
+     <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class> 
+     <init-param> <param-name>org.restlet.application</param-name> 
+     <param-value>ambit2.rest.launcher.LauncherApplication</param-value> 
+     </init-param> 
+     
+     <init-param>
+     <param-name>org.restlet.attribute.server</param-name> <param-value>test.ServerServlet2</param-value> 
+     </init-param> 
+     </servlet>
+
+     <servlet-mapping> 
+     <servlet-name>LauncherRestlet</servlet-name> <url-pattern>/opentox/*</url-pattern> 
+     </servlet-mapping> 
+-->
+		
+	
+	<servlet>
+		<servlet-name>RestletServlet</servlet-name>
+		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+	</servlet>	
+	<servlet-mapping>
+		<servlet-name>RestletServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+	
+	<mime-mapping>
+        <extension>sdf</extension>
+        <mime-type>chemical/x-mdl-sdfile</mime-type>
+    </mime-mapping>
+	<mime-mapping>
+        <extension>mol</extension>
+        <mime-type>chemical/x-mdl-molfile</mime-type>
+    </mime-mapping>    
+	<mime-mapping>
+        <extension>smiles</extension>
+        <mime-type>chemical/x-daylight-smiles</mime-type>
+    </mime-mapping> 
+	<mime-mapping>
+        <extension>inchi</extension>
+        <mime-type>chemical/x-inchi</mime-type>
+    </mime-mapping>     
+	<mime-mapping>
+        <extension>arff</extension>
+        <mime-type>chemical/x-arff</mime-type>
+    </mime-mapping>       
+</web-app>
