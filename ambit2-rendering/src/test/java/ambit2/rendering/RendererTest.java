@@ -36,6 +36,7 @@ import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -205,42 +206,8 @@ public class RendererTest {
         rendererModel.set(BasicSceneGenerator.BackgroundColor.class, new Color(0,0,255,alpha));
 
         renderer.setup(mol,drawArea);
-        renderer.paint(mol,new FixedAWTDrawVisitor(g));
-        //renderer.paint(mol,new AWTDrawVisitor(g)); //still not fixed in cdk 1.4.5 my fault confirming otherwise
-        /*
-		renderer.paint(mol,new AWTDrawVisitor(g){
-			@Override
-			public void visit(ElementGroup elementGroup) {
-
-				super.visit(elementGroup);
-
-			}
-			@Override
-			public void visit(LineElement line) {
-				AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);
-				g.setComposite(ac);
-				g.setColor(new Color(255,255,255,255));
-				
-				//super.visit(arg0);
-				
-				Stroke savedStroke = g.getStroke();
-				
-				int w = (int) (line.width * rendererModel.getParameter(Scale.class).getValue());
-				System.out.println(w);
-				
-				BasicStroke stroke = new BasicStroke(0);
-				g.setStroke(stroke);
-				
-		        g.setColor(line.color);
-		        int[] a = this.transformPoint(line.x1, line.y1);
-		        int[] b = this.transformPoint(line.x2, line.y2);
-		        g.drawLine(a[0], a[1], b[0], b[1]);
-		        
-
-			}
-		},drawArea,false);
-		
-		*/
+        renderer.paint(mol,new AWTDrawVisitor(g));
+     
 		
 		return img;
 	}
