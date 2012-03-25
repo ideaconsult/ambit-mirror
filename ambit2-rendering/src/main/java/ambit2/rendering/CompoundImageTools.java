@@ -53,6 +53,7 @@ import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.generators.SelectBondGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
+import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -455,11 +456,11 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 
 	    	} 	  
 	    	try {
-	    		renderer.paint(all,new FixedAWTDrawVisitor(g),drawArea,false);
+	    		renderer.paint(all,new AWTDrawVisitor(g),drawArea,false);
 
 	    	} catch (Exception e) {
 	    		r2dm.setSelection(null);
-	    		renderer.paint(all,new FixedAWTDrawVisitor(g),drawArea,false);
+	    		renderer.paint(all,new AWTDrawVisitor(g),drawArea,false);
 	    	}
 		} else {
 			g.setBackground(Color.white);

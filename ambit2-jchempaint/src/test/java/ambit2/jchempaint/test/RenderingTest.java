@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
@@ -39,7 +39,7 @@ public class RenderingTest {
 			@Override
 			public IChemObjectSelection process(IAtomContainer target)
 					throws AmbitException {
-				IAtomContainer ac = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
+				IAtomContainer ac = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 				for (IAtom a : target.atoms()) {
 					
 					if ("N".equals(a.getSymbol())) {
