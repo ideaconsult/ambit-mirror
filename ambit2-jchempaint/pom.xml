@@ -17,7 +17,7 @@
   	</dependency>
   	<dependency>
   		<groupId>org.openscience.cdk</groupId>
-  		<artifactId>jchempaint</artifactId>
+  		<artifactId>jchempaint-nodeps</artifactId>
   		<version>3.3.0</version>
   	</dependency>
 

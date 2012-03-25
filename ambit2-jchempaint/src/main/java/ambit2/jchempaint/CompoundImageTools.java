@@ -33,7 +33,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -163,7 +162,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     				throw new CDKException(String.format("%s %s %s", c.getReturnStatus(),c.getMessage(),c.getLog()));
     			return getImage(c.getAtomContainer(),selector,build2d,atomNumbers);
     	}  else { 	
-	        if (parser == null) parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
+	        if (parser == null) parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 	        return getImage(parser.parseSmiles(value),selector,build2d,atomNumbers);
     	}
     }    
@@ -327,7 +326,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			
 				Rectangle2D box = new Rectangle2D.Double(0,0,0,0);
 				
-				all = MoleculeTools.newMolecule(NoNotificationChemObjectBuilder.getInstance());
+				all = MoleculeTools.newMolecule(SilentChemObjectBuilder.getInstance());
 				
 				//calculate box dimension, so that we can center vertically
 				for (IAtomContainer  m : molecules.molecules()) {
