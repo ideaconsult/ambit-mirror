@@ -3,6 +3,7 @@ package ambit2.rest.structure.dataset;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -40,7 +41,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 	String filenamePrefix = getRequest().getResourceRef().getPath();
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation(),headless),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
@@ -68,12 +69,15 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 		
 	} else //html 	
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation(),headless),MediaType.TEXT_HTML);
 	}
 	@Override
 	protected IQueryRetrieval<ISourceDataset> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
-
+		try { 
+			Form form = request.getResourceRef().getQueryAsForm();
+			headless = Boolean.parseBoolean(form.getFirstValue("headless")); 
+		} catch (Exception x) { headless=false;}
 		int idcompound = -1;
 		int idstructure = -1;
 		try {

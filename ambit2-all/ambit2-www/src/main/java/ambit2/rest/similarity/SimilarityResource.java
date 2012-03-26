@@ -1,5 +1,6 @@
 package ambit2.rest.similarity;
 
+import java.awt.Dimension;
 import java.util.BitSet;
 
 import org.openscience.cdk.interfaces.IMolecule;
@@ -17,6 +18,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
+import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
@@ -26,6 +28,8 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
+import ambit2.rest.structure.CompoundHTMLReporter;
+import ambit2.rest.structure.DisplayMode;
 
 /**
  *  Retrieve similar compounds, given a smiles
@@ -69,6 +73,11 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		CSVReporter csvReporter = super.createCSVReporter();
 		csvReporter.setSimilarityColumn(Property.getInstance("metric",queryObject==null?"":queryObject.toString(),"http://ambit.sourceforge.net"));
 		return csvReporter;
+	}
+	@Override
+	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
+		return new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
+						DisplayMode.singleitem,null,getTemplate(),getGroupProperties(),d,headless);
 	}
 
 	@Override

@@ -34,6 +34,7 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 	@Override
 	public String getURI(String ref, Property record) {
 		
+		if (record==null) return null;
 		boolean isDictionary= record.getClazz().equals(Dictionary.class);
 		
 		if (isDictionary) {

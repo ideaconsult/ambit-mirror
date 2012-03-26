@@ -3,6 +3,7 @@ package ambit2.rest.structure;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -74,7 +75,12 @@ public class ConformerResource extends CompoundResource {
 	protected QueryStructureByID createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		media = getMediaParameter(request);
+		try { 
+			Form form = request.getResourceRef().getQueryAsForm();
+			headless = Boolean.parseBoolean(form.getFirstValue("headless")); 
+		} catch (Exception x) { headless=false;}
 		try {
+			
 			setTemplate(createTemplate(context, request, response));
 			IStructureRecord record = new StructureRecord();
 			try {

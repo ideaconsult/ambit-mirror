@@ -31,8 +31,8 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	 * 
 	 */
 	private static final long serialVersionUID = 3196496706491834527L;
-	public PropertyHTMLReporter(Request ref,DisplayMode _dmode, ResourceDoc doc) {
-		super(ref,_dmode,doc);
+	public PropertyHTMLReporter(Request ref,DisplayMode _dmode, ResourceDoc doc,boolean headless) {
+		super(ref,_dmode,doc,headless);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
@@ -82,7 +82,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 			}	
 			w.write("</h3>");				
 			//--------
-			w.write("<hr>");
+
 			
 			w.write(AmbitResource.jsTableSorter("features","pager"));
 			w.write("<table width='80%' id='features' class=\"tablesorter\" border='0' cellpadding='0' cellspacing='1'><thead>");
@@ -94,6 +94,7 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 	@Override
 	public Object processItem(Property item) throws AmbitException  {
 		try {
+			if (item==null) return item;
 			String uri = uriReporter.getURI(item);
 			output.write("<tr>");
 			output.write("<td width='5%'>");

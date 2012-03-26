@@ -123,7 +123,7 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 					,variant.getMediaType(),filenamePrefix);		
 		} else 
 			return new OutputWriterConvertor(
-					new PropertyHTMLReporter(getRequest(),_dmode,getDocumentation())
+					new PropertyHTMLReporter(getRequest(),_dmode,getDocumentation(),headless)
 					,MediaType.TEXT_HTML);
 	}
 
@@ -146,11 +146,16 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 			chemicalsOnly = false;
 		} catch (Exception x) { }
 		
+		Form form = request.getResourceRef().getQueryAsForm();
+		try { 
+			
+			headless = Boolean.parseBoolean(form.getFirstValue("headless")); 
+		} catch (Exception x) { headless=false;}		
+		
 		Object o = request.getAttributes().get(idfeaturedef);
 		try {
 			_dmode = o==null?DisplayMode.table:DisplayMode.singleitem;
 			if (o==null) {
-				Form form = request.getResourceRef().getQueryAsForm();
 				IQueryRetrieval<Property> qf = getFreeTextQuery(getContext(), getRequest(), getResponse());
 				if (qf != null) return qf;
 				key = form.getFirstValue(OpenTox.params.sameas.toString());

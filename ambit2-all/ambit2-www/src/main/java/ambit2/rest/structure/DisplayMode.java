@@ -15,6 +15,12 @@ public enum DisplayMode {
 		public boolean isCollapsed() {
 			return false;
 		}
+	},
+	properties {
+		@Override
+		public boolean isCollapsed() {
+			return false;
+		}
 	};
 	//for compatibility
 	public boolean isCollapsed() {return true;}

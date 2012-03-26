@@ -42,13 +42,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	private static final long serialVersionUID = -7959033048710547839L;
 	public static String fileUploadField = "file";
 	public DatasetsHTMLReporter(ResourceDoc doc) {
-		this(null,DisplayMode.table,doc);
+		this(null,DisplayMode.table,doc,false);
 	}
-	public DatasetsHTMLReporter(Request baseRef,DisplayMode _dmode,ResourceDoc doc) {
-		this(baseRef,baseRef,_dmode,doc);
+	public DatasetsHTMLReporter(Request baseRef,DisplayMode _dmode,ResourceDoc doc,boolean headless) {
+		this(baseRef,baseRef,_dmode,doc,headless);
 	}
-	public DatasetsHTMLReporter(Request baseRef,Request originalRef,DisplayMode _dmode,ResourceDoc doc) {
-		super(baseRef,_dmode,doc);
+	public DatasetsHTMLReporter(Request baseRef,Request originalRef,DisplayMode _dmode,ResourceDoc doc,boolean headless) {
+		super(baseRef,_dmode,doc,headless);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
@@ -57,6 +57,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	@Override
 	public void header(Writer w, IQueryRetrieval<ISourceDataset> query) {
 		try {
+			if (!headless)
 			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest(),
 					getUriReporter().getResourceRef(),
 					getUriReporter()==null?null:getUriReporter().getDocumentation());
@@ -163,7 +164,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	@Override
 	public void footer(Writer output, IQueryRetrieval<ISourceDataset> query) {
 		try {
-			
+			if (!headless)
 			AmbitResource.writeHTMLFooter(output,query.toString(),uriReporter.getRequest());
 			output.flush();
 		} catch (Exception x) {
@@ -380,10 +381,18 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	protected Object renderMetadata(ISourceDataset dataset,String uri,IQueryRetrieval<ISourceDataset> query)  throws AmbitException  {
 		try {
 			//output.write("<h4>Dataset metadata</h4>");
-			output.write("<form method='post' action='?method=put'>");
-			output.write("<table width='90%'>");
-			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Dataset URI",uri));
-			output.write(String.format("<tr><th>%s</th><td><input type='text' size='60' name='title' value='%s'></td></tr>", "Dataset name",dataset.getName()));
+			
+			output.write(AmbitResource.printWidgetHeader(String.format("<a href='%s' target=_blank>%s</a>",uri,dataset.getName())));
+					//String.format("<a href='#' onClick=\"javascript:toggleDiv('dataset_%d');\">More</a>\n",dataset.getID())));
+
+			//	output.write(String.format("<div id='dataset_%d' style='float:right;display: %s;''>\n",dataset.getID(),"none"));		
+			output.write(AmbitResource.printWidgetContentHeader(""));
+			output.write("<p>");	
+			output.write("<form method='post' action='?method=put'>\n");
+			output.write("<table width='90%'>\n");
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>\n", "Dataset URI",uri));
+			output.write(String.format("<tr><th>%s</th><td><input type='text' size='60' name='title' value='%s' %s></td></tr>\n", 
+						"Dataset name",dataset.getName(),headless?"readonly":""));
 			
 			String licenseLabel = dataset.getLicenseURI();
 			try {
@@ -396,74 +405,78 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			} catch (Exception x) {}
 			
 			StringBuilder select = new StringBuilder();
-			select.append("<select name='licenseOptions'>");
+			select.append("<select name='licenseOptions'>\n");
 			ISourceDataset.license selected = null;
 			for (ISourceDataset.license l : ISourceDataset.license.values()) {
-				select.append(String.format("<option value='%s' %s>%s</option>",
+				select.append(String.format("<option value='%s' %s>%s</option>\n",
 						l.getURI(),
 						l.getURI().equals(dataset.getLicenseURI())?"selected='selected'":"",
 						l.getTitle()));
 				if ((selected==null) & l.getURI().equals(dataset.getLicenseURI())) 
 					selected = l;
 			}
-			select.append(String.format("<option value='Other' %s>Other</option>",selected==null?"selected='selected'":""));			
+			select.append(String.format("<option value='Other' %s>Other</option>\n",selected==null?"selected='selected'":""));			
 			select.append("</select>");
 			
 			if (dataset.getLicenseURI()!=null)
-				output.write(String.format("<tr><th>%s</th><td>%s<br><input type='text' size='60' name='license' title='%s' value='%s'></td></tr>", 
+				output.write(String.format("<tr><th>%s</th><td>%s<br><input type='text' size='60' name='license' title='%s' value='%s' %s></td></tr>\n", 
 							"License/Rights",
 							select.toString(),
 							licenseLabel==null?dataset.getLicenseURI():licenseLabel,
-							dataset.getLicenseURI()==null?"":dataset.getLicenseURI()
-							
+							dataset.getLicenseURI()==null?"":dataset.getLicenseURI(),
+							headless?"readonly":""
 								
 							));
 			else
-				output.write("<tr><th>License</th><td><input type='text' size='60' name='license' title='Enter license URI' value=''></td></tr>"); 
+				output.write(String.format("<tr><th>License</th><td><input type='text' size='60' name='license' title='Enter license URI' value='' %s ></td></tr>\n",
+						headless?"readonly":"")); 
 			
 			if (dataset.getrightsHolder()!=null)
-				output.write(String.format("<tr><th>%s</th><td><input type='text' size='60' title='Rights holder (URI)' name='rightsHolder' value='%s'></td></tr>", 
+				output.write(String.format("<tr><th>%s</th><td><input type='text' size='60' title='Rights holder (URI)' name='rightsHolder' value='%s' %s ></td></tr>\n", 
 							"Rights holder",
 							dataset.getrightsHolder(),
-							dataset.getrightsHolder()));
+							headless?"readonly":""));
 
 			else
-				output.write("<tr><th>Rights holder</th><td><input type='text' size='60' title='Rights holder (URI)' name='rightsHolder' value=''></td></tr>"); 			
+				output.write(String.format(
+						"<tr><th>Rights holder</th><td><input type='text' size='60' title='Rights holder (URI)' name='rightsHolder' value=' ' %s ></td></tr>\n",
+						headless?"readonly":"")); 			
 			
-
-			output.write(String.format("<tr><th>%s</th><td><input align='bottom' type=\"submit\" value=\"%s\"></td></tr>", "","Update"));								
-			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "Source",dataset.getSource()));
-			
-			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
-			
-			output.write(String.format("<tr><th>%s</th><td><a href='%s'>%s</a></td></tr>", "Browse the dataset",uri,uri));
-			output.write(String.format("<tr><th>%s</th><td><a href='%s/compounds'>%s/compounds</a></td></tr>", "Browse the compounds only",uri,uri));
-			output.write(String.format("<tr><th>%s</th><td><a href='%s/feature'>%s/feature</a></td></tr>", "Browse the dataset features",uri,uri));
-			
-			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
-			
-			output.write(String.format("<tr><th>%s</th><td><a href='%s%s%s'>%s%s%s</a></td></tr>", 
-					"Structure type statistics",uri,QueryResource.query_resource,DatasetStrucTypeStatsResource.resource,uri,QueryResource.query_resource,DatasetStrucTypeStatsResource.resource));
-			output.write(String.format("<tr><th>%s</th><td><a href='%s%s%s'>%s%s%s</a></td></tr>", 
-					"Consensus label statistics",uri,QueryResource.query_resource,DatasetChemicalsQualityStatsResource.resource,uri,QueryResource.query_resource,DatasetChemicalsQualityStatsResource.resource));
-			output.write(String.format("<tr><th>%s</th><td><a href='%s%s%s'>%s%s%s</a></td></tr>", 
-					"Structure quality label statistics",uri,QueryResource.query_resource,DatasetStructureQualityStatsResource.resource,uri,QueryResource.query_resource,DatasetStructureQualityStatsResource.resource));
-			
-			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "<p>",""));
-			output.write(String.format("<tr><th>%s</th><td><a href='%s/similarity?search=c1ccccc1'>%s/similarity</a></td></tr>", "Search for similar compounds within this dataset",uri,uri));
-			output.write(String.format("<tr><th>%s</th><td><a href='%s/smarts?search=c1ccccc1'>%s/smarts</a></td></tr>", "Search compounds by SMARTS",uri,uri));
-
+			if (!headless)
+			output.write(String.format("<tr><th>%s</th><td><input align='bottom' type=\"submit\" value=\"%s\"></td></tr>\n", "","Update"));								
+			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>\n", "Source",dataset.getSource()));
 			//don't write ip addresses
 			if ((dataset instanceof SourceDataset) && ((SourceDataset)dataset).getURL().startsWith("http"))
-				output.write(String.format("<tr><th>%s</th><td>%s</td></tr>", "See also",((SourceDataset)dataset).getURL()));
-
-			output.write(String.format("<tr><th></th><td colspan='2'><a href='%s/chart/bar?dataset_uri=%s&param=sk1024'  target='_blank'>%s</a></td></tr>", 
-					uriReporter.getBaseReference(),uri,"Structure fragments bar chart"));
-			output.write(String.format("<tr><th></th><td colspan='2'><a href='%s/chart/bar?dataset_uri=%s&param=fp1024' target='_blank'>%s</a></td></tr>", 
-					uriReporter.getBaseReference(),uri,"Hashed fingerprints bar chart"));			
+				output.write(String.format("<tr><th>%s</th><td>%s</td></tr>\n", "See also",((SourceDataset)dataset).getURL()));
+			
 			output.write("</table>");
-			output.write("</form>");			
-			output.write("<hr>");
+			output.write("</form>");
+		
+			output.write(String.format("<a href='%s'>%s</a>&nbsp;\n", uri, "Browse the dataset"));
+			output.write(String.format("<a href='%s/compounds'>%s</a>&nbsp;\n", uri, "Browse the compounds only"));
+			output.write(String.format("<a href='%s/feature'>%s</a>&nbsp;\n", uri, "Browse the dataset features"));
+			
+			
+			output.write(String.format("<a href='%s%s%s' target='_blank'>%s</a>&nbsp;\n", 
+					uri,QueryResource.query_resource,DatasetStrucTypeStatsResource.resource,"Structure type statistics"));
+			output.write(String.format("<a href='%s%s%s' target='_blank'>%s</a>&nbsp;\n", 
+					uri,QueryResource.query_resource,DatasetChemicalsQualityStatsResource.resource,"Consensus label statistics"));
+			output.write(String.format("<a href='%s%s%s' target='_blank'>%s</a>&nbsp;\n", 
+					uri,QueryResource.query_resource,DatasetStructureQualityStatsResource.resource,"Structure quality label statistics"));
+			
+
+			output.write(String.format("<a href='%s/similarity?search=c1ccccc1' target='_blank'>%s</a>&nbsp;\n", uri, "Search for similar compounds within this dataset"));
+			output.write(String.format("<a href='%s/smarts?search=c1ccccc1' target='_blank'>%s</a>&nbsp;\n", uri,"Search compounds by SMARTS"));
+
+
+			output.write(String.format("<a href='%s/chart/bar?dataset_uri=%s&param=sk1024'  target='_blank'>%s</a>&nbsp;\n", 
+					uriReporter.getBaseReference(),uri,"Structure fragments bar chart"));
+			output.write(String.format("<a href='%s/chart/bar?dataset_uri=%s&param=fp1024' target='_blank'>%s</a>&nbsp;\n", 
+					uriReporter.getBaseReference(),uri,"Hashed fingerprints bar chart"));			
+			//output.write("</div>\n");
+			output.write("</p>");
+			output.write(AmbitResource.printWidgetContentFooter());
+			output.write(AmbitResource.printWidgetFooter());
 			//output.write("<h4>Add more data to this dataset</h4>");
 			//uploadUI(uri,output, query);
 		} catch (Exception x) {

@@ -22,8 +22,14 @@ import ambit2.rest.structure.DisplayMode;
 public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>  extends QueryHeaderReporter<Q,Writer>  {
 	protected QueryURIReporter uriReporter;
 	protected String prefix ;
-
+	protected boolean headless=false;
 	
+	public boolean isHeadless() {
+		return headless;
+	}
+	public void setHeadless(boolean headless) {
+		this.headless = headless;
+	}
 	public QueryURIReporter getUriReporter() {
 		return uriReporter;
 	}
@@ -40,14 +46,15 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 	/**
 	 * 
 	 */
-	public QueryStructureHTMLReporter(ResourceDoc doc) {
-		this(null, DisplayMode.table,doc);
+	public QueryStructureHTMLReporter(ResourceDoc doc,boolean headless) {
+		this(null, DisplayMode.table,doc,headless);
 	}
-	public QueryStructureHTMLReporter(Request request,  DisplayMode _dmode,ResourceDoc doc) {
-		this("", request, _dmode, doc);
+	public QueryStructureHTMLReporter(Request request,  DisplayMode _dmode,ResourceDoc doc,boolean headless) {
+		this("", request, _dmode, doc,headless);
 	}
-	public QueryStructureHTMLReporter(String prefix,Request request, DisplayMode _dmode,ResourceDoc doc) {
+	public QueryStructureHTMLReporter(String prefix,Request request, DisplayMode _dmode,ResourceDoc doc,boolean headless) {
 		super();
+		this.headless = headless;
 		this.prefix = prefix;
 		uriReporter =  createURIReporter(request,doc);
 		this._dmode = _dmode;
@@ -72,6 +79,7 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 	@Override
 	public void header(Writer w, Q query) {
 		try {
+			if (headless) return;
 			AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest(),
 					uriReporter.getResourceRef(),uriReporter.getDocumentation());
 		} catch (IOException x) {}
@@ -80,6 +88,7 @@ public abstract class QueryStructureHTMLReporter<Q extends IQueryRetrieval<IStru
 	@Override
 	public void footer(Writer output, Q query) {
 		try {
+			if (headless) return;
 			AmbitResource.writeHTMLFooter(output,query.toString(),uriReporter.getRequest());
 			output.flush();
 		} catch (Exception x) {

@@ -455,7 +455,7 @@ public class AmbitResource extends ProtectedResource {
 		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jmol/Jmol.js\"></script>\n",baseReference));
 //		w.write("<script language=\"JavaScript\">\nvar smiles = \"\";\n var jme = \"0 0\"></script>\n");
 		w.write("<script>$(function() {$( \".accordion\" ).accordion({autoHeight: false,navigation: true});});</script>");
-		w.write("<script>$(function() {$( \".tabs\" ).tabs({event: \"mouseover\",cache: true});});</script>");
+		w.write("<script>$(function() {$( \".tabs\" ).tabs({cache: true});});</script>");
 		w.write("<script>$(function() {$( \"#selectable\" ).selectable();});</script>");
 		w.write("<script type='text/javascript'>function toggleDiv(divId) {$('#'+divId).toggle();}</script>\n");
 		w.write("<script type='text/javascript'>function hideDiv(divId) {$('#'+divId).hide();}</script>\n");

@@ -124,7 +124,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML,filenamePrefix);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),_dmode,getDocumentation()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),_dmode,getDocumentation(),headless),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
@@ -151,7 +151,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 		
 	} else //html 	
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),_dmode,getDocumentation()),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),_dmode,getDocumentation(),headless),MediaType.TEXT_HTML);
 	}
 	
 	@Override
@@ -163,6 +163,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 	protected IQueryRetrieval<ISourceDataset> getQuery(Context context,Request request, Response response, boolean IDcanBeEmpty) throws ResourceException {
 		
 		Form form = getResourceRef(request).getQueryAsForm();
+		try { headless = Boolean.parseBoolean(form.getFirstValue("headless")); } catch (Exception x) { headless=false;}
 		AbstractReadDataset query = null;
 		
 		structureParam = getStructureParameter();

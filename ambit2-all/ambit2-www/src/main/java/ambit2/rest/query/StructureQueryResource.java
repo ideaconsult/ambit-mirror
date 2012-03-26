@@ -38,6 +38,7 @@ import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
+import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.reporters.SDFReporter;
 import ambit2.db.reporters.SmilesReporter;
 import ambit2.db.reporters.SmilesReporter.Mode;
@@ -75,6 +76,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected String media;
 	protected Template template;
 	protected Profile groupProperties;
+	
 	
 	public StructureQueryResource() {
 		super();
@@ -267,8 +269,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				d.height = Integer.parseInt(form.getFirstValue("h").toString());
 			} catch (Exception x) {}			
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
-							DisplayMode.table,null,getTemplate(),getGroupProperties(),d),MediaType.TEXT_HTML);
+					createHTMLReporter(d),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
@@ -308,6 +309,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new SDFReporter<QueryStructureByID>(template,getGroupProperties()),ChemicalMediaType.CHEMICAL_MDLSDF,filenamePrefix);
 	}
 	
+	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
+		return new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
+						DisplayMode.table,null,getTemplate(),getGroupProperties(),d,headless);
+	}
 	protected String getMediaParameter(Request request) {
 		try {
 			Object m = request.getAttributes().get("media");
