@@ -1,5 +1,6 @@
 package ambit2.rest.structure;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryExactStructure;
@@ -103,6 +105,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		}
 		
 		Form form = getParams();
+		try { headless = Boolean.parseBoolean(form.getFirstValue("headless")); } catch (Exception x) { headless=false;}		
 		boolean casesens = "true".equals(form.getFirstValue(QueryResource.caseSensitive))?true:false;
 		boolean retrieveProperties = "true".equals(form.getFirstValue(QueryResource.returnProperties))?true:false;
 			
@@ -127,6 +130,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		else {
 			if (isSearchParam(text)) {
 				text = form.getFirstValue(search_param);
+				if (text !=null) text = text.trim();
 				text_multi = form.getValuesArray(search_param);
 			}
 
@@ -209,7 +213,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
     	q_by_name.setNameCondition(StringCondition.getInstance(StringCondition.C_EQ));
     	q_by_name.setCondition(StringCondition.getInstance(StringCondition.C_EQ));
     	q_by_name.setChemicalsOnly(true);
-    	q_by_name.setValue(value);
+    	q_by_name.setValue(value==null?null:value.toString());
 		return q_by_name;
 	}
 	
@@ -335,6 +339,11 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} catch (Exception x) { 
 			rdfwriter = RDF_WRITER.jena;
 		}
+	}
+	
+	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
+		return new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
+						DisplayMode.properties,null,getTemplate(),getGroupProperties(),d,headless);
 	}
 	/*
 	@Override

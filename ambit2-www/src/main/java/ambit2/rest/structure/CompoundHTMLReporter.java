@@ -1,12 +1,8 @@
 package ambit2.rest.structure;
 
 import java.awt.Dimension;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Writer;
-import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,7 +12,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -41,8 +36,6 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.dataset.MetadatasetResource;
-import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
@@ -60,7 +53,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	 */
 	private static final long serialVersionUID = -7776155843790521467L;
 	protected PropertyURIReporter pReporter;
-	protected boolean table = true;
+	protected DisplayMode _dmode  = DisplayMode.table;
 	protected int count = 0;
 	protected String hilightPredictions = null;
 	protected Dimension cellSize = new Dimension(150,150);
@@ -69,19 +62,19 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	boolean hierarchy = false;
 	//protected RetrieveFieldPropertyValue fieldQuery;
 
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter) {
-		this(request,doc,_dmode,urireporter,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter,boolean headless) {
+		this(request,doc,_dmode,urireporter,null,headless);
 	}
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter,Template template) {
-		this(request,doc,_dmode,urireporter,template,null,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter,Template template,boolean headless) {
+		this(request,doc,_dmode,urireporter,template,null,null,headless);
 	}
 	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter,
-			Template template,Profile groupedProperties,Dimension d) {
-		this("",request, doc, _dmode, urireporter, template,groupedProperties,d);
+			Template template,Profile groupedProperties,Dimension d,boolean headless) {
+		this("",request, doc, _dmode, urireporter, template,groupedProperties,d,headless);
 	}
 	public CompoundHTMLReporter(String prefix, Request request,ResourceDoc doc,DisplayMode _dmode,QueryURIReporter urireporter,
-				Template template,Profile groupedProperties,Dimension d) {
-		super(prefix,request,_dmode,doc);
+				Template template,Profile groupedProperties,Dimension d,boolean headless) {
+		super(prefix,request,_dmode,doc,headless);
 		
 		Reference f = request.getResourceRef().clone(); 
 		f.setQuery(null);
@@ -104,7 +97,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 			pReporter = new PropertyURIReporter(request,this.uriReporter==null?null:this.uriReporter.getDocumentation());
 			
-		table = isCollapsed();
+		//table = isCollapsed();
+		this._dmode = headless?DisplayMode.properties:isCollapsed()?DisplayMode.table:_dmode;
 		getProcessors().clear();
 		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
@@ -140,11 +134,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		uriReporter.setOutput(w);
 		return w;
 	}
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,Template template) {
-		this(request,doc,_dmode,null,template);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,Template template,boolean headless) {
+		this(request,doc,_dmode,null,template,headless);
 	}
-	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode) {
-		this(request,doc,_dmode,null,null);
+	public CompoundHTMLReporter(Request request,ResourceDoc doc,DisplayMode _dmode,boolean headless) {
+		this(request,doc,_dmode,null,null,headless);
 
 	}
 	@Override
@@ -156,16 +150,22 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	public Object processItem(IStructureRecord record) throws AmbitException  {
 		
 		try {
-
-			if (table) {
+			switch (_dmode) {
+			case table: {
 				//output.write("<tr>");
 				output.write(toURITable(record));
+				break;
 				//output.write("</tr>\n");		
-			} else {
-				output.write("<div id=\"div-1a\">");
+			} case properties: {
+				if (!headless) 
+					output.write(String.format("<a href='%s'><img src='%s'></a>",uriReporter.getURI(record),getImageUri(record)));
+				output.write(printProperties(record));
+				break;
+			} default: {
+				//output.write("<div>");
 				output.write(toURI(record));
-				output.write("</div>");		
-			}
+				//output.write("</div>");		
+			}}
 			count++;
 		} catch (Exception x) {
 			Context.getCurrentLogger().severe(x.getMessage());
@@ -173,60 +173,27 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		return null;
 		
 	}
+	
+	protected String printProperties(IStructureRecord record) throws IOException {
+		StringBuilder b = new StringBuilder();
+		List<Property> props = template2Header(getTemplate(),true);
+		b.append("<table width='100%'>");
+		for (Property p : props) {
+			Object value = record.getProperty(p);
+			if (value==null) continue;
+			b.append(String.format("<tr><th>%s</th><td>%s</td></tr>", 
+					p.getName().replace("http://www.opentox.org/api/1.1#",""),value.toString().replace("\n","<br>")));
+		}
+		b.append("</table>");
+		return b.toString();
+	}
 	protected String content(String left, String right) throws IOException {
 		return String.format(
 				"<div class=\"rowwhite\"><span class=\"left\">%s</span><span class=\"center\">%s</span></div>",
 				left,right);
 
 	}
-	/*
-	protected String templates(Reference baseReference) throws IOException {
-		StringBuilder w = new StringBuilder();
-		w.append("<input type='submit' value='Select table columns'>");
-		String[][] options= {
-				{"template/All/Identifiers/view/tree","Identifiers"},
-				{"template/All/Dataset/view/tree","Datasets"},
-				{"template/All/Models/view/tree","Models"},
-				//{"template/All/Endpoints/view/tree","Endpoints"},
-				{"template/All/Descriptors/view/tree","All descriptors"},				
-
-		};
-		
-		Form form = uriReporter.getRequest().getResourceRef().getQueryAsForm();
-		String[] values = OpenTox.params.feature_uris.getValuesArray(form);
-		w.append("<input type=CHECKBOX value=\"\">Default</option>\n");
-
-		for (String option[]:options) {
-			String checked = "";
-			for (String value:values)
-				if (value==null) continue;
-				else if (value.equals(String.format("%s/%s", baseReference,option[0]))) 
-			{ checked = "CHECKED"; break;}
-			w.append(String.format("<input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s/%s\" name=\"%s\">%s</option>\n",
-						checked,
-						baseReference,
-						option[0],
-						OpenTox.params.feature_uris.toString(),option[1]));
-		}
-		
-		for (String value:values) {
-			if (value==null) continue;
-			boolean add = true;
-			for (String option[]:options) 
-				if (value.equals(String.format("%s/%s", baseReference,option[0]))) { add = false; break;}
-			
-			if (add)
-				w.append(String.format("<input type=CHECKBOX %s STYLE=\"background-color: #516373;color: #99CC00;font-weight: bold;\" value=\"%s\" name=\"%s\"><a href='%s' target='_blank'>%s</a></option>\n",
-						"checked",
-						value,
-						OpenTox.params.feature_uris.toString(),value,value));				
-		}
-		w.append(String.format("<input type='TEXT' size='30'alt='Enter OpenTox Feature URL here, to be added as column table' name=\"%s\">\n",
-				OpenTox.params.feature_uris.toString()));		
 	
-		return w.toString();
-	}	
-	*/
 	
 	protected String downloadLinks() throws IOException {
 		StringBuilder w = new StringBuilder();
@@ -272,47 +239,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		return w.toString();
 	}
 	public String resultsForm(Q query) {
-		StringBuilder w = new StringBuilder();
-		w.append(String.format("<form method=\"post\" action=\"/query\">",""));
-		w.append(String.format("<input type=\"text\" name=\"name\" value=\"%s\" size=\"30\">&nbsp;",query.toString()));
-		w.append(String.format("<input type=\"hidden\" value='%s' name='queryURI'>\n",
-				uriReporter.getResourceRef()));
-		w.append("<input type=\"submit\" value='Save search results'>&nbsp;");
-		//output.write("</form>");
-		//output.write(String.format("<form method=\"post\" action=\"%s/model\">",uriReporter.getBaseReference()));
-		//output.write("<input type=\"submit\" value='Predict an endpoint'>&nbsp;");
-		
-		//output.write(String.format("<form method=\"post\" action=\"%s/algorithm\">",uriReporter.getBaseReference()));
-		//output.write("<input type=\"submit\" value='Build a model&nbsp;'>&nbsp;");
-		//output.write("<input type=\"submit\" value='Find similar compounds&nbsp;'>&nbsp;");
-		//output.write("<input type=\"submit\" value='Search within results&nbsp;'>&nbsp;");
-		
-		w.append("</form>");	
-		return w.toString();
+		return "";
 	}
 	public void header(Writer w, Q query) {
 		try {
-
-			Reference baseReference = uriReporter.getBaseReference();
-			
-			AmbitResource.writeTopHeader(w,
-					isCollapsed()?"Chemical compounds":"Chemical compound"
-					,
-					uriReporter.getRequest(),
-					uriReporter.getResourceRef(),
-					"",
-					uriReporter.getDocumentation()
-					);
-			
-;
-			
-			w.write("<table width='100%' bgcolor='#ffffff'>");
-		
-			w.write("<tr>");
-			w.write("<td align='left' width='256px'>");
-			w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
-			w.write("</td>");
-			w.write("<td align='center'>");
 			String query_smiles = "";
 			String query_text = "";
 			Form form = uriReporter.getResourceRef().getQueryAsForm();
@@ -370,7 +300,29 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				type = form.getFirstValue("type");
 			} catch (Exception x) {
 				type = "smiles";
-			}				
+			}		
+			
+			Reference baseReference = uriReporter.getBaseReference();
+			if (!headless) {
+			AmbitResource.writeTopHeader(w,
+					isCollapsed()?"Chemical compounds":"Chemical compound"
+					,
+					uriReporter.getRequest(),
+					uriReporter.getResourceRef(),
+					"",
+					uriReporter.getDocumentation()
+					);
+			
+;
+			
+			w.write("<table width='100%' bgcolor='#ffffff'>");
+		
+			w.write("<tr>");
+			w.write("<td align='left' width='256px'>");
+			w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+			w.write("</td>");
+			w.write("<td align='center'>");
+			
 			w.write("<form action='' name='form' method='get'>\n");
 			w.write(String.format("<input name='type' type='hidden' value='%s'>\n",type==null?"smiles":type));
 			
@@ -432,6 +384,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("</table>");		
 			w.write("<hr>");	
 			
+			}
 			if (hilightPredictions!= null) 
 				w.write(String.format("<div><span class=\"center\"><h4>Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",hilightPredictions,hilightPredictions));
 	
@@ -439,8 +392,11 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			//output.write(AmbitResource.printWidgetHeader("&nbsp;"));
 			//output.write(AmbitResource.printWidgetContentHeader(""));
 			output.write("<div class=\"ui-widget \" style=\"margin-top: 20px; padding: 0 .7em;\">")	;	
-			
-			if (table) {
+			switch (_dmode) {
+			case properties: {
+				break;
+			}
+			case table: {
 				
 				//output.write(String.format("<div><span class=\"left\">%s</span></div>",templates(baseReference)));
 				
@@ -530,20 +486,21 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					output.write("</tr>\n");
 				}
 
-
+				break;
 			
 				
 			}
-			else {
+			default:  {
 				w.write(downloadLinks());
 				w.append("<h4><div class=\"actions\"><span class=\"right\">");				
 				w.write(resultsForm(query));
 				w.append("</span></div></h4>\n");	
 
-				output.write("<div id=\"div-1\">");
+				w.write("<table>");
+				
 			}
 			
-			
+			} //switch
 
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -551,17 +508,27 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	};
 	public void footer(Writer output, Q query) {
 		try {
-			if (table) {
+			switch (_dmode) {
+			case properties: {
+				break;
+			}
+			case table: {
 				output.write("</tbody></table>");
 				output.write("</span></div>");
+				break;
 			}
-			else output.write("</div>");
+			default: {
+				output.write("</table>");
+			}
+			}
 			output.write("</form>\n");
 			
 	
 			output.write("</div>");
 			//output.write(AmbitResource.printWidgetContentFooter());
-			//output.write(AmbitResource.printWidgetFooter());			
+			//output.write(AmbitResource.printWidgetFooter());
+			
+			if (headless) return;
 			AmbitResource.writeHTMLFooter(output,
 					"",
 					uriReporter.getRequest()
@@ -593,13 +560,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 															
 						));
 		
-		String imguri;
-		
-		if (hilightPredictions!= null) {
-			imguri= String.format("%s?%s=%s&media=%s",hilightPredictions,OpenTox.params.dataset_uri.toString(),w,Reference.encode(imgMime));
-		}
-		
-		else imguri = String.format("%s?media=%s",w,Reference.encode(imgMime));		
+		String imguri = getImageUri(record);
 				
 		b.append(String.format(
 				"<td valign='top'><a href=\"%s?media=text/html%s\"><img src=\"%s&w=%d&h=%d\" width='%d' height='%d' alt=\"%s\" title=\"%d\"/></a></td>",
@@ -810,160 +771,132 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		
 		return h;
 	}
+	
+	protected String getImageUri(IStructureRecord record) {
+		String w = uriReporter.getURI(record);
+		if (hilightPredictions!= null)
+			return String.format("%s?%s=%s&media=%s",
+				hilightPredictions,
+				OpenTox.params.dataset_uri.toString(),w,
+				Reference.encode(imgMime));
+		else return String.format("%s?media=%s",w,Reference.encode(imgMime));	
+	}
 	public String toURI(IStructureRecord record) {
 		String w = uriReporter.getURI(record);
 		StringBuilder b = new StringBuilder();
 		
-		
-		String imguri;
-		if (hilightPredictions!= null)
-			imguri= String.format("%s?%s=%s&media=%s",
-				hilightPredictions,
-				OpenTox.params.dataset_uri.toString(),w,
-				Reference.encode(imgMime));
-		else imguri= String.format("%s?media=%s",w,Reference.encode(imgMime));		
-		
-		b.append(String.format("<div id=\"div-1b1\"><input type=checkbox name=\"compound[]\" checked value=\"%d\"></div>",record.getIdchemical()));
-		
-		b.append(String.format(
-				"<a href=\"%s\"><img src=\"%s&w=%d&h=%d\" width='%d' height='%d' alt=\"%s\" title=\"%d\"/></a>",
-				
-				w, imguri, 
-				cellSize.width,cellSize.height,
-				cellSize.width,cellSize.height,
-				w, record.getIdchemical()));
-		b.append("<div id=\"div-1d\">");
+		int p = w.indexOf("conformer");
 
-		b.append(String.format("<a href=\"%s%s%s/url/all?search=%s\">Identifiers</a><br>",
+		String imguri = getImageUri(record);
+		
+		//tabs
+		
+		String moleculeURI = String.format("<img src=\"%s&w=%d&h=%d\" width='%d' height='%d' alt=\"%s\" title=\"%d\"/>",
+						 imguri, 
+						 cellSize.width,cellSize.height,
+						 cellSize.width,cellSize.height,
+						 w, record.getIdchemical());
+
+		b.append("<tr>");
+		b.append("<td valign='top'>");
+		b.append(String.format("<a href='%s' alt='%s' title='%s'>%s</a>",w,w,w,moleculeURI));
+		b.append(String.format("<div id='structype_%d'></div>",record.getIdstructure()));
+		b.append(String.format("<div id='consensus_%d'></div>",record.getIdstructure()));
+		b.append(String.format("<script>$('#structype_%d').load('%s/comparison');$('#consensus_%d').load('%s/consensus');</script>",
+					record.getIdstructure(),w,record.getIdstructure(),w));		
+		b.append(String.format("<br><a href=\"%s%s\" title='All'>All structures</a><br>",
+				p>=0?w.substring(0,p):String.format("%s/",w),
+				OpenTox.URI.conformer
+			));			
+		b.append(String.format("<script type='text/javascript' src='http://chemapps.stolaf.edu/jmol/jmol.php?source=%s&link=3D'></script><br>",
+				Reference.encode(String.format("%s?media=chemical/x-mdl-sdfile", w))));
+	
+		b.append("</td>");
+		b.append("<td valign='top'>");
+	
+		
+		b.append("<div class='tabs'>\n<ul>");
+		b.append(String.format("<li><a href='%s%s%s/url/all?headless=true&search=%s&media=%s' title='Identifiers'>Identifiers</a></li>",
 				uriReporter.getBaseReference(),
 				QueryResource.query_resource,
 				CompoundLookup.resource,
-				Reference.encode(w)
+				Reference.encode(w),
+				Reference.encode("text/html")
 				));
-		
-		b.append(String.format("<script type='text/javascript' src='http://chemapps.stolaf.edu/jmol/jmol.php?source=%s&link=3D'></script><br>",
-				Reference.encode(String.format("%s?media=chemical/x-mdl-sdfile", w))));
-			
-
 	
+
 		
-		b.append(String.format("<a href=\"%s?%s=%s\">Feature values</a><br>",
-				w,
-				OpenTox.params.feature_uris,
-				Reference.encode(String.format("%s/%s",w,OpenTox.URI.feature))
-				));		
-		
-		b.append(String.format("<a href=\"%s/%s\">Datasets</a><br>",
-				w,
-				"datasets"
+		b.append(String.format("<li><a href='%s%s?headless=true&media=%s' title='Datasets'>Datasets</a></li>",
+				String.format("%s/",w),
+				"datasets",
+				Reference.encode("text/html")
 			));	
 
-		
-		b.append(String.format("<a href='%s/query%s?%s=%s&condition=startswith&%s=%s' title='List datasets by endpoints'>Datasets by endpoints</a><br>",
+		/*
+		b.append(String.format("<li><a href='%s/query%s?%s=%s&condition=startswith&%s=%s&headless=true&media=%s' title='Datasets_by_endpoints'>Datasets by endpoints</a></li>",
 				uriReporter.getBaseReference(),
 				DatasetsByEndpoint.resource,
 				MetadatasetResource.search_features.feature_sameas,
 				URLEncoder.encode("http://www.opentox.org/echaEndpoints.owl"),
 				OpenTox.params.compound_uri,
-				URLEncoder.encode(w)
+				URLEncoder.encode(w),
+				Reference.encode("text/html")
 			));	
+		*/
 		/*
 		b.append(String.format("<a href=\"%s%s\">Data entries</a><br>",
 				w,
 				DataEntryResource.resourceTag
 			));	
 		*/
-		int p = w.indexOf("conformer");
-		b.append(String.format("<a href=\"%s%s\">All structures</a><br>",
-				p>=0?w.substring(0,p):String.format("%s/",w),
-				OpenTox.URI.conformer
-			));			
-		b.append(String.format("<a href=\"%s/%s\">Features</a><br>",
-				w,
-				OpenTox.URI.feature
-				));	
-		
-		b.append(retrieveQALabel(w,"consensus","Consensus label over all available structures of this compound","Consensus Quality Label"));		
-		b.append(retrieveQALabel(w,"comparison","This structure quality label","Structure Quality Label"));		
-
 		/*
-		String[][] s = new String[][] {
-				{PropertyValueResource.featureKey,Property.opentox_CAS,"CAS RN"},
-				{PropertyValueResource.featureKey,Property.opentox_EC,"EINECS"},
-				{PropertyValueResource.featureKey,Property.opentox_Name,"Chemical name(s)"},
-				{PropertyValueResource.featureKey,null,"All available feature values"},
-		};
-		for (String[] n:s)
-				b.append(String.format("<a href=\"%s%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":Reference.encode(n[1]),n[2]));
 		
-		s = new String[][] {
-				{"/template",null,"Feature values by groups"},
-				{DataEntryResource.resourceTag,null,"Feature values by dataset"},
-				{PropertyResource.featuredef,null,"Features"},
-				{null,null,"Model predictions",String.format("%s/model/null/predicted",uriReporter.getBaseReference().toString())},
-		};		
-		
-		for (String[] n:s)
-			if (n[0]==null)
-				b.append(String.format("<a href=\"%s?%s=%s\">%s</a><br>",w,OpenTox.params.feature_uris.toString(),Reference.encode(n[3]),n[2]));
-			else
-				b.append(String.format("<a href=\"%s%s/%s\">%s</a><br>",w,n[0],n[1]==null?"":n[1],n[2]));
-		*/	
-			List<Property> props = template2Header(getTemplate(),true);
+		b.append(String.format("<li><a href='%s/%s?media=%s&headless=true' title='Features'>Features</a></li>",
+				w,
+				OpenTox.URI.feature,
+				Reference.encode("text/html")
+				));	
+		*/
 
-				for(int i=0; i < props.size();i++) { 
+		List<Property> props = template2Header(getTemplate(),true);
+		if (props.size()>0) {
+			b.append(String.format("<li><a href='#props_%d'>Properties</a></li>",
+					record.getIdstructure()));
+		} else {
+			String propertyUri = String.format("%s?%s=%s&headless=true",
+							//p>=0?w.substring(0,p):String.format("%s/",w),
+							w,		
+							OpenTox.params.feature_uris,
+							Reference.encode(String.format("%s%s",p>=0?w.substring(0,p):String.format("%s/",w),OpenTox.URI.feature)
+							));		
+			System.out.println(propertyUri);
+			b.append(String.format("<li><a href='%s&media=%s' title='Values'>Properties</a></li>",
+					propertyUri,
+					Reference.encode("text/html")
+					));					
+		}
+
+	
+		b.append("</ul>");
+		if (props.size()>0) {
+			b.append(String.format("<div id='props_%d'><p><table>",record.getIdstructure()));
+			for(int i=0; i < props.size();i++) { 
 					Property property = props.get(i);
 					if (property.getId()>0) {
 						Object value = record.getProperty(property);
 						if (value!=null)
-						b.append(String.format("<b>%s</b>&nbsp;%s<br>",
+						b.append(String.format("<tr><td>%s<td><td>%s</td></tr>",
 								property.getName(),value==null?"":
 									value.toString()));
 					}
 				}
-
-			b.append("</div>");		
+			b.append("</table></p></div>");
+		}		
+		b.append("</div>");
 	
+		b.append("</td></tr>");				
 		return b.toString();
 	}		
-	
-	protected String retrieveQALabel(String w, String type, String alt, String title) {
-		
-		String uri = String.format("%s/%s",w,type);
-		InputStream in = null;
-		HttpURLConnection uc = null;
-		try {		
-			uc =  ClientResourceWrapper.getHttpURLConnection(uri, "GET", MediaType.TEXT_PLAIN.toString());
-			if (HttpURLConnection.HTTP_OK== uc.getResponseCode()) {
-				in = uc.getInputStream();
-				StringBuilder b = new StringBuilder();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-				String line = null;
-				final String newline = System.getProperty("line.separator");
-				while ((line = reader.readLine())!=null) {
-					b.append(line);
-					b.append(newline);
-				}	
-				String value = b==null?"":b.toString().trim();
-				return String.format("<a href=\"%s/%s\" title='%s'>%s</a>&nbsp;<b><font color='%s'>%s</font></b><br>",
-						w,
-						type,
-						alt,
-						title,
-						value.indexOf("Consensus")>=0?"green":
-						value.indexOf("ERROR")>=0?"red":(value.equals("OK")?"green":"black"),
-						value
-						);
-			}
-		
-		} catch (Exception x) {
-			
-		} finally {
-			try {if (in != null) in.close();} catch (Exception x) {}
-			try {if (uc != null) uc.disconnect();} catch (Exception x) {}
-		}
-		return null;
-	}
 
 	@Override
 	public void close() throws SQLException {

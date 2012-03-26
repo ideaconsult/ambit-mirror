@@ -79,6 +79,7 @@ Then, when the "get(Variant)" method calls you back,
 	 */
 
 	protected int maxRetry = 3;
+	protected boolean headless = false;
 	
 	@Override
 	protected void doInit() throws ResourceException {

@@ -206,7 +206,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 							getURIReporter(),
 							getTemplate(),
 							getGroupProperties(),
-							d),
+							d,
+							headless),
 					MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter)getURIReporter();
@@ -300,6 +301,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			DisplayMode defaultMode = null;
 			try { defaultMode = DisplayMode.valueOf(form.getFirstValue("mode")); } catch (Exception x) { }
 			_dmode = defaultMode==null?DisplayMode.singleitem:defaultMode;
+			
+			try { headless = Boolean.parseBoolean(form.getFirstValue("headless")); } catch (Exception x) { headless=false;}
 			
 			Object key = request.getAttributes().get(OpenTox.URI.compound.getKey());
 			if (key==null) {
