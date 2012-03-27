@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 
@@ -18,6 +20,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -175,17 +178,69 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 	}
 	
 	protected String printProperties(IStructureRecord record) throws IOException {
-		StringBuilder b = new StringBuilder();
+		
 		List<Property> props = template2Header(getTemplate(),true);
-		b.append("<table width='100%'>");
+		Hashtable<_type, StringBuilder> map = new Hashtable<_type, StringBuilder>();
+		
 		for (Property p : props) {
 			Object value = record.getProperty(p);
 			if (value==null) continue;
-			b.append(String.format("<tr><th>%s</th><td>%s</td></tr>", 
-					p.getName().replace("http://www.opentox.org/api/1.1#",""),value.toString().replace("\n","<br>")));
+			StringBuilder b = map.get(p.getReference().getType());
+			if (b==null) {
+				b = new StringBuilder();
+				b.append(String.format("<h3>%s</h3>",p.getReference().getType()));
+				b.append("<div><table width='100%'>");
+				map.put(p.getReference().getType(),b);
+			}
+			String type = p.getReference().getName();
+			String name = p.getName().replace("http://www.opentox.org/api/1.1#","");
+			switch (p.getReference().getType()) {
+			case Algorithm: {
+				String uri = String.format("%s/%s/%s'",uriReporter.getBaseReference(),OpenTox.URI.algorithm,p.getReference().getName());
+				type = String.format("<a href='%s' title='Calculated by OpenTox algorithm \n%s' target=_blank>%s</a>",
+						uri,uri,name);
+				break;
+			}
+			case Model: {
+				String uri = String.format("%s/%s/%s'",uriReporter.getBaseReference(),OpenTox.URI.model,p.getReference().getName());
+				type = String.format("<a href='%s' title='Calculated by OpenTox model \n%s' target=_blank>%s</a>",
+						uri,uri,name);
+				break;
+			}
+			case Dataset: {
+				if (p.getReference().getURL().startsWith("http"))
+				type = String.format("<a href='%s' target='_blank' title='See also %s'>%s</a>",p.getReference().getURL(),p.getReference().getURL(),p.getReference().getName());
+				break;
+			}	
+			case BibtexEntry: {
+				if (p.getReference().getTitle().equals("Default")) {
+					type = "";
+					break;
+				}
+				if (p.getReference().getURL().startsWith("http"))
+				type = String.format("<a href='%s' target='_blank' title='See also %s'>%s</a>",p.getReference().getURL(),p.getReference().getURL(),p.getReference().getName());
+				break;
+			}					
+			default:{
+				break;
+			}
+			}
+			b.append(String.format("<tr><td>%s</td><th>%s <i>%s</i></th><td>%s</td></tr>",
+					type,
+					name,
+					p.getUnits(),
+					value.toString().replace("\n","<br>")
+					));
 		}
-		b.append("</table>");
-		return b.toString();
+		StringBuilder all = new StringBuilder();
+		all.append("<div class='accordion'>");
+		Enumeration types = map.keys();
+		while (types.hasMoreElements()) {
+			all.append(map.get(types.nextElement()).toString());
+			all.append("</table><div>");
+		}
+		all.append("</div>");
+		return all.toString();
 	}
 	protected String content(String left, String right) throws IOException {
 		return String.format(
@@ -804,13 +859,18 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		b.append(String.format("<div id='consensus_%d'></div>",record.getIdstructure()));
 		b.append(String.format("<script>$('#structype_%d').load('%s/comparison');$('#consensus_%d').load('%s/consensus');</script>",
 					record.getIdstructure(),w,record.getIdstructure(),w));		
-		b.append(String.format("<br><a href=\"%s%s\" title='All'>All structures</a><br>",
+		b.append(String.format("<br><a href=\"%s%s\" title='All'>All structures</a>&nbsp;",
 				p>=0?w.substring(0,p):String.format("%s/",w),
 				OpenTox.URI.conformer
 			));			
 		b.append(String.format("<script type='text/javascript' src='http://chemapps.stolaf.edu/jmol/jmol.php?source=%s&link=3D'></script><br>",
 				Reference.encode(String.format("%s?media=chemical/x-mdl-sdfile", w))));
+		b.append(String.format("<a href='%s/query/similarity?search=%s&type=url&threshold=0.75' title='Find similar compounds'>Find similar</a>&nbsp;",
+				uriReporter.getBaseReference(),Reference.encode(w)));
+		b.append(String.format("<a href='%s/query/smarts?search=%s&type=url&max=100' title='Find substructure'>Find substructure</a>",
+				uriReporter.getBaseReference(),Reference.encode(w)));
 	
+		
 		b.append("</td>");
 		b.append("<td valign='top'>");
 	
@@ -869,7 +929,6 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 							OpenTox.params.feature_uris,
 							Reference.encode(String.format("%s%s",p>=0?w.substring(0,p):String.format("%s/",w),OpenTox.URI.feature)
 							));		
-			System.out.println(propertyUri);
 			b.append(String.format("<li><a href='%s&media=%s' title='Values'>Properties</a></li>",
 					propertyUri,
 					Reference.encode("text/html")
