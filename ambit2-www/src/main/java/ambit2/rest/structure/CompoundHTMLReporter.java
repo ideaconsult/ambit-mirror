@@ -199,12 +199,14 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				String uri = String.format("%s/%s/%s'",uriReporter.getBaseReference(),OpenTox.URI.algorithm,p.getReference().getName());
 				type = String.format("<a href='%s' title='Calculated by OpenTox algorithm \n%s' target=_blank>%s</a>",
 						uri,uri,name);
+				name="";
 				break;
 			}
 			case Model: {
 				String uri = String.format("%s/%s/%s'",uriReporter.getBaseReference(),OpenTox.URI.model,p.getReference().getName());
 				type = String.format("<a href='%s' title='Calculated by OpenTox model \n%s' target=_blank>%s</a>",
 						uri,uri,name);
+				name="";
 				break;
 			}
 			case Dataset: {
@@ -225,11 +227,13 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				break;
 			}
 			}
-			b.append(String.format("<tr><td>%s</td><th>%s <i>%s</i></th><td>%s</td></tr>",
+			String v = value.toString().replace("\n","<br>");
+			b.append(String.format("<tr><td>%s</td><th>%s <i>%s</i></th><td title='%s'>%s</td></tr>",
 					type,
 					name,
 					p.getUnits(),
-					value.toString().replace("\n","<br>")
+					v,
+					v.length()>100?v.substring(0,100):v
 					));
 		}
 		StringBuilder all = new StringBuilder();
