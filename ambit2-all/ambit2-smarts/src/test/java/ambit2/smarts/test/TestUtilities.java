@@ -1712,7 +1712,9 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[O,o,OH,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]~[A,a]~[A,a]~[O,o,OH,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("[O,o,OH,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("C[H]","CC");
-		tu.testSmartsManagerBoolSearch("[O,o,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]~[A,a]~[A,a]~[O,o,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
+		
+		tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","[S-]C(=S)N");
+		tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","C(=S)N");
 		
 		//tu.testSmartsManagerBoolSearch("[A,a]~[A,a]~[A,a]~[A,a]","[S-]C(=S)N");
 		
