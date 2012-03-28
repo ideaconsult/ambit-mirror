@@ -32,6 +32,7 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.io.MyIteratingMDLReader;
@@ -64,6 +65,8 @@ public class TestUtilities
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles(); 
+	boolean FlagTargetPreprocessing = false;
+	boolean FlagExplicitHAtoms = false;
 	
 	public TestUtilities()
 	{	
@@ -72,6 +75,19 @@ public class TestUtilities
 	public void fakeTest() {
 		//there should be at least one test
 	}
+	
+	public void preProcess(IAtomContainer mol) throws Exception 
+	{
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+		adder.addImplicitHydrogens(mol);
+		if (FlagExplicitHAtoms)			
+			AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+		CDKHueckelAromaticityDetector.detectAromaticity(mol);
+	}
+	
+	
+	
 	public static void printSmartsTokens(String smarts)
 	{
 		System.out.println("Smarts " + smarts); 
@@ -95,6 +111,7 @@ public class TestUtilities
 	public static int boolSearch(String smarts, String smiles) throws Exception
 	{	
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		
 		man.setQuery(smarts);
 		if (!man.getErrors().equals(""))
 		{
@@ -110,7 +127,11 @@ public class TestUtilities
 	
 	public void testSmartsManagerBoolSearch(String smarts, String smiles) throws Exception
 	{	
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		
+		if (FlagTargetPreprocessing)
+			preProcess(mol);
+		
 		man.setQuery(smarts);
 		if (!man.getErrors().equals(""))
 		{
@@ -1672,7 +1693,7 @@ public class TestUtilities
 		
 		//System.out.println(man.isFlagUseCDKIsomorphismTester());
 		
-		man.setUseCDKIsomorphismTester(false);
+		man.setUseCDKIsomorphismTester(true);
 		//tu.testSmartsManagerBoolSearch("cccc","C1=CC=CC=C1");
 		//tu.testSmartsManagerBoolSearch("cccc","c1ccccc1");
 		//tu.testSmartsManagerBoolSearch("c1ccccc1c2ccccc2","C1=CC=CC=C1-C2=CC=CC=C2");
@@ -1684,6 +1705,21 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1C2=CC=CC=C2");		
 		//tu.testSmartsManagerBoolSearch("cc=c","C1=CC=CC=C1C2=CC=CC=C2");
 		//tu.testSmartsManagerBoolSearch("cc=c","c1ccccc1c2ccccc2");
+		//tu.testSmartsManagerBoolSearch("[C;$(C=O)]", "O=CCC");
+		
+		tu.FlagTargetPreprocessing = true;
+		tu.FlagExplicitHAtoms = true;
+		//tu.testSmartsManagerBoolSearch("[O,o,OH,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]~[A,a]~[A,a]~[O,o,OH,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
+		//tu.testSmartsManagerBoolSearch("[O,o,OH,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
+		//tu.testSmartsManagerBoolSearch("C[H]","CC");
+		tu.testSmartsManagerBoolSearch("[O,o,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]~[A,a]~[A,a]~[O,o,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
+		
+		//tu.testSmartsManagerBoolSearch("[A,a]~[A,a]~[A,a]~[A,a]","[S-]C(=S)N");
+		
+		
+		
+		
+		
 		
 		//tu.testSmartsManagerBoolSearchMDL("CC=C","D:/projects/nina/biphenyl.mol");
 		//tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
@@ -1708,7 +1744,7 @@ public class TestUtilities
 		
 		//tu.testAtomAttributes("Oc1ccc(O)cc1");
 		
-		tu.testBondIndexChange("C1CCC1CCN");
+		//tu.testBondIndexChange("C1CCC1CCN");
 		
 		//tu.test_IBond_Order();
 		
