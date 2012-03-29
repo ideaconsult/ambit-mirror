@@ -70,5 +70,13 @@ public class CallableFingerprintsModelCreator<USERID> extends CallableStructures
 		
 		return p1;
 	}
+	
+	@Override
+	protected ModelQueryResults createModel() throws Exception {
+		ModelQueryResults model = super.createModel();
+		if ((model != null) && (model.getTrainingInstances()==null) && (sourceReference!=null))
+			model.setTrainingInstances(sourceReference.toString());
+		return model;
+	}
 
 }
