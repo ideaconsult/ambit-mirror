@@ -246,7 +246,7 @@ public class TestUtilities
 		}
 	}
 	
-	public void showFullAtomMappings(String smarts, String smiles) throws Exception
+	public void showFullAtomMappingsCDKIsomorphism(String smarts, String smiles) throws Exception
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		
@@ -1678,9 +1678,9 @@ public class TestUtilities
 		man.useMOEvPrimitive(true);
 		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-&!:*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
 		//tu.testSmartsManagerBoolSearch("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
-		//tu.showFullAtomMappings("CCN", "CCCNCCC");
-		//tu.showFullAtomMappings("C1CC=C1", "C1CC=C1CCC");
-		//tu.showFullAtomMappings("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
+		//tu.showFullAtomMappingsCDKIsomorphism("CCN", "CCCNCCC");
+		//tu.showFullAtomMappingsCDKIsomorphism("C1CC=C1", "C1CC=C1CCC");
+		//tu.showFullAtomMappingsCDKIsomorphism("[#G6;H][i]~[i]~[i]~[i]~[i]-*","Brc1cc(C=O)c(O)c([N+](=O)[O-])c1");
 		//tu.testSmartsManagerBoolSearch("[X4]", "[H]C([H])([H])[H]");
 		
 		//tu.testHydrogenCount();
@@ -1814,18 +1814,22 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[C;$(C=O)]", "O=CCC");
 		
 		tu.FlagTargetPreprocessing = true;
-		tu.FlagExplicitHAtoms = true;
+		tu.FlagExplicitHAtoms = false;
 		//tu.testSmartsManagerBoolSearch("[O,o,OH,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]~[A,a]~[A,a]~[O,o,OH,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("[O,o,OH,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("C[H]","CC");
 		
+		
+		//These example with a great probability proof that there a bug in the CDK isomorphism algorithm
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","C(=S)N");	
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[*]~[*]~[N,$(C=S)]","C(=S)N");   //[*] matches [H]
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~*~*~[N,$(C=S)]","C(=S)N");       //false because * does not match [H]
 		//tu.showFullAtomMappings("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","[S-]C(=S)N");
-		tu.testSmartsManagerBoolSearch("[N,C]~[A,a]~[A,a]~[N,C]","[S-]C(=S)N");
-		tu.showFullAtomMappings("[N,C]~[A,a]~[A,a]~[N,C]","[S-]C(=S)N");
+		//tu.testSmartsManagerBoolSearch("[N,C]~[A,a]~[A,a]~[N,C]","[S-]C(=S)N");
+		
+		tu.testSmartsManagerBoolSearch("[N,C]~*~*~[N,C]","ClCNCl");
+		tu.showFullAtomMappingsCDKIsomorphism("[N,C]~*~*~[N,C]","ClCNCl");
 		
 		
 		//tu.showFullAtomMappings("CCN","CCNCCCC");
