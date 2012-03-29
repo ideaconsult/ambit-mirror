@@ -901,9 +901,9 @@ public class SmartsManager
 				recAtoms.get(i).recSmartsMatches.add(v);
 			}	
 			
-			//for (int j = 0; j < vRecCon.size(); j++)
-			//	System.out.println(recAtoms.get(i).recSmartsStrings.get(j) + "  "+
-			//			matchesToString(target,recAtoms.get(i).recSmartsMatches.get(j)));
+			for (int j = 0; j < vRecCon.size(); j++)
+				System.out.println("recusive match: " + recAtoms.get(i).recSmartsStrings.get(j) + "  "+
+						matchesToString(target,recAtoms.get(i).recSmartsMatches.get(j)));
 		}		
 	}
 	
@@ -1040,9 +1040,12 @@ public class SmartsManager
 	
 	
 	
-	/** This function returns a vector of all positions (IAtoms) at which
+	/** 
+	 * This function returns a vector of all positions (IAtoms) at which
 	 * The Query is matched (i.e. it first atom is matched)
-	 * The full atom mapping is not obtained from this function !!!*/
+	 * The full atom mapping is not obtained from this function !!!
+	 * This function is a helper utility for the CDK isomorphism algorithm
+	 **/
 	
 	Vector<IAtom> getAtomMapsFromBondMaps(List bondMapping, IAtomContainer target, IAtomContainer recQuery)
 	{
@@ -1113,8 +1116,9 @@ public class SmartsManager
 		return(atomMaps);
 	}
 	
-	/** This function generates full Atom Mapping from a Bond mapping
-	 * */
+	/** 
+	 * This function generates full Atom Mapping from a Bond mapping (result from the CDK isomorphism
+	 **/
 	public Vector<IAtom> generateFullAtomMapping(List bondMapList, IAtomContainer target, IAtomContainer queryStr)
 	{
 		//The query must contain  at least 3 atoms and 2 bonds.
