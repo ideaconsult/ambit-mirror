@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import org.junit.Test;
 import org.openscience.cdk.Atom;
+import org.openscience.cdk.Bond;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -36,6 +37,12 @@ import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticSymbolAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.CMLUtilities;
@@ -1581,6 +1588,67 @@ public class TestUtilities
 	}
 	
 	
+	public void testCDKStrangeIsomorphism() throws Exception
+	{
+		//Testing CDK isomorphism of C**C against SCCS --> it gives wrong result 
+				
+		//Setting search query  'C**C'
+		QueryAtomContainer q = new QueryAtomContainer();		
+		//setting atoms
+		IQueryAtom a0 = new AliphaticSymbolAtom("C"); 
+		q.addAtom(a0);		
+		IQueryAtom a1 = new AnyAtom();
+		q.addAtom(a1);		
+		IQueryAtom a2 = new AnyAtom();
+		q.addAtom(a2);		
+		IQueryAtom a3 = new AliphaticSymbolAtom("C"); 
+		q.addAtom(a3);		
+		//setting bonds		
+		OrderQueryBond b0 = new OrderQueryBond(IBond.Order.SINGLE);
+		b0.setAtoms(new IAtom[] {a0,a1});
+		q.addBond(b0);		
+		OrderQueryBond b1 = new OrderQueryBond(IBond.Order.SINGLE);
+		b1.setAtoms(new IAtom[] {a1,a2});
+		q.addBond(b1);		
+		OrderQueryBond b2 = new OrderQueryBond(IBond.Order.SINGLE);
+		b2.setAtoms(new IAtom[] {a2,a3});
+		q.addBond(b2);
+		
+		
+		//Creating 'SCCS' target molecule
+		AtomContainer target = new AtomContainer();
+		//atoms
+		IAtom ta0 = new Atom("S");
+		target.addAtom(ta0);
+		IAtom ta1 = new Atom("C");
+		target.addAtom(ta1);
+		IAtom ta2 = new Atom("C");
+		target.addAtom(ta2);
+		IAtom ta3 = new Atom("S");
+		target.addAtom(ta3);
+		//bonds
+		IBond tb0 = new Bond();
+		tb0.setAtoms(new IAtom[] {ta0,ta1});
+		tb0.setOrder(IBond.Order.SINGLE);
+		target.addBond(tb0);
+		
+		IBond tb1 = new Bond();
+		tb1.setAtoms(new IAtom[] {ta1,ta2});
+		tb1.setOrder(IBond.Order.SINGLE);
+		target.addBond(tb1);
+		
+		IBond tb2 = new Bond();
+		tb2.setAtoms(new IAtom[] {ta2,ta3});
+		tb2.setOrder(IBond.Order.SINGLE);
+		target.addBond(tb2);
+				
+				
+		//Isomorphism check
+		boolean res = UniversalIsomorphismTester.isSubgraph(target, q);
+		System.out.println("Mapping C**C against SCCS = " + res);
+	}
+	
+	
 	
 	
 	
@@ -1828,14 +1896,15 @@ public class TestUtilities
 		//tu.showFullAtomMappings("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("[N,C]~[A,a]~[A,a]~[N,C]","[S-]C(=S)N");
 		
-		tu.testSmartsManagerBoolSearch("[N,C]~*~*~[N,C]","ClCNCl");
-		tu.showFullAtomMappingsCDKIsomorphism("[N,C]~*~*~[N,C]","ClCNCl");
+		//tu.testSmartsManagerBoolSearch("[N,C]~*~*~[N,C]","ClCNCl");
+		//tu.showFullAtomMappingsCDKIsomorphism("[N,C]~*~*~[N,C]","ClCNCl");
 		
+		tu.testSmartsManagerBoolSearch("C**C","SCCS");
 		
 		//tu.showFullAtomMappings("CCN","CCNCCCC");
 		//tu.testSmartsManagerBoolSearch("[A,a]~[A,a]~[A,a]~[A,a]","[S-]C(=S)N");
 		
-				
+		tu.testCDKStrangeIsomorphism();		
 		
 		
 		
