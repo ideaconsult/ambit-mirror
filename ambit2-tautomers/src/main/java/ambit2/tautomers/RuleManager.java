@@ -296,19 +296,11 @@ public class RuleManager
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
 				
-				//check for duplication (maybe) ???. Currently this is done after generation.  
+				tman.registerTautomer(newTautomer); 
 				
-				
-				//int valSum = FilterTautomers.getValencySum(newTautomer);
-				//if (valSum != tman.originalValencySum)
-				//	System.out.println("********* diff valensy sum ");
-				
-				tman.resultTautomers.add(newTautomer);
-				 
 				if (tman.FlagPrintIcrementalStepDebugInfo)
 					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
 							+ "    " + incStep.getTautomerCombination());
-					
 			}
 			catch(Exception e)
 			{

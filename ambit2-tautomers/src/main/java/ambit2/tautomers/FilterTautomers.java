@@ -62,7 +62,12 @@ public class FilterTautomers
 		
 		//Remove duplications based on double bond positions
 		if (FlagApplyDuplicationFilter)
-			uniqueTautomers = dubplicationFilter(tautomers);
+		{	
+			if (tman.FlagCheckDuplicationOnRegistering)
+				uniqueTautomers = tautomers; //duplication check is already done on registration
+			else
+				uniqueTautomers = dubplicationFilter(tautomers);
+		}	
 		else
 			uniqueTautomers = tautomers;
 		

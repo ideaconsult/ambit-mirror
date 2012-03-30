@@ -16,6 +16,7 @@ public class TautomerManager
 	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
 	Vector<Rule> generatedRules = new Vector<Rule>(); 
 	Vector<IAtomContainer> resultTautomers;	
+	Vector<String> resultTatomerStringCodes = new Vector<String>(); 
 	Vector<String> errors = new Vector<String>(); 
 	public FilterTautomers tautomerFilter = new FilterTautomers(this);
 	int originalValencySum;
@@ -23,6 +24,7 @@ public class TautomerManager
 	public boolean FlagRecurseBackResultTautomers = false;
 	public boolean FlagUseRingChainRules = false;
 	public boolean FlagUseChlorineRules = false;
+	public boolean FlagCheckDuplicationOnRegistering = true;
 	public boolean FlagUse13Shifts = true;
 	public boolean FlagUse15Shifts = true;
 	public boolean FlagUse17Shifts = true;
@@ -34,7 +36,9 @@ public class TautomerManager
 	public boolean FlagPrintTargetMoleculeInfo = false;
 	public boolean FlagPrintExtendedRuleInstances = false;
 	public boolean FlagPrintIcrementalStepDebugInfo = false;
+	
 	public int maxNumOfBackTracks = 100000;
+	public int maxNumOfTautomerRegistrations = 100000;
 				
 	
 	public TautomerManager()
@@ -47,8 +51,6 @@ public class TautomerManager
 		
 		activateRingChainRules(FlagUseRingChainRules);
 		activateChlorineRules(FlagUseChlorineRules);
-		
-		
 	}
 	
 	
@@ -87,13 +89,15 @@ public class TautomerManager
 	//Approach 01 (basic one) based on first depth search algorithm
 	public Vector<IAtomContainer> generateTautomersIncrementaly()
 	{
-		//Another approach for generation of tautomers
+		//An approach for generation of tautomers
 		//based on incremental steps of analysis with first-depth approach
 		//In each Incremental steps one rule instance is added
 		//and the other rule instances are revised and accordingly 
 		//appropriate rule-instance sets are supported (derived from extendedRuleInstance)
 		
 		resultTautomers = new Vector<IAtomContainer>();	
+		resultTatomerStringCodes.clear();
+		
 		searchAllRulePositions();
 		
 		if (extendedRuleInstances.isEmpty())
@@ -117,6 +121,21 @@ public class TautomerManager
 			resultTautomers = tautomerFilter.filter(resultTautomers);
 		
 		return(resultTautomers);
+	}
+	
+	public void registerTautomer(IAtomContainer newTautomer)
+	{
+		if (FlagCheckDuplicationOnRegistering)
+		{
+			String newCode = getTautomerCodeString(newTautomer);
+			if (!resultTatomerStringCodes.contains(newCode))
+			{	
+				resultTatomerStringCodes.add(newCode);
+				resultTautomers.add(newTautomer);
+			}	
+		}
+		else
+			resultTautomers.add(newTautomer);
 	}
 	
 	
@@ -323,7 +342,7 @@ public class TautomerManager
 		int instNumber; 
 		
 		do 	{
-			registerTautomer();
+			registerTautomer00();
 			
 			n = ruleInstances.get(0).nextState();
 			instNumber = 0;
@@ -339,7 +358,7 @@ public class TautomerManager
 	}
 	
 	//This function is applied for approach 00 
-	void registerTautomer()
+	void registerTautomer00()
 	{	
 		try{
 			IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
