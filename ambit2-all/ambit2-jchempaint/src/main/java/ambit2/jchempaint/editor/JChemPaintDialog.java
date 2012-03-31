@@ -123,10 +123,14 @@ public class JChemPaintDialog extends JDialog {
 		
 		//jcpep = new JChemPaintPanel(jcpm, JChemPaint.GUI_APPLICATION, false,null);
 		jcpep = new JChemPaintPanel(jcpm);
+		//show aromatic ring circles
+		jcpep.getRenderPanel().getRenderer().getRenderer2DModel().setShowAromaticity(true);
+		
 		//new JChemPaintPanel(jcpm,JChemPaint.GUI_APPLICATION,true,null);
 		
 		Dimension dcp = new Dimension(400,400);
 		jcpep.setPreferredSize(dcp);
+
 		//jcpep.setEmbedded();
 		//jcpep.registerModel(jcpm);
 		//jcpep.setJChemPaintModel(jcpm,dcp);
