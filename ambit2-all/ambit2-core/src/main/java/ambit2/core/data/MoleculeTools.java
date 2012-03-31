@@ -12,6 +12,10 @@ import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.BitSet;
 
+import javax.vecmath.Point2d;
+
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -38,8 +42,10 @@ import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.core.config.AmbitCONSTANTS;
@@ -437,4 +443,86 @@ public class MoleculeTools {
     	return builder.newElement(element);
     }
         */
+    
+    /**
+     * Just copy atoms and bonds, discard all the flags, they will be recalculated later
+     */
+	public static IMolecule copyChangeBuilders(IMolecule molecule, IChemObjectBuilder newBuilder) {
+		final String no = "_NO";
+		//atoms
+		IMolecule newMol = newBuilder.newInstance(IMolecule.class);
+		boolean aromatic = false;
+		for (IAtom atom: molecule.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) { aromatic=true;break;}
+		/*
+		if (aromatic) {
+			try {
+				DeduceBondSystemTool dbt = new DeduceBondSystemTool();
+				molecule = dbt.fixAromaticBondOrders(molecule);
+				for (IBond bond: molecule.bonds())
+					System.out.println(bond.getOrder());
+			} catch (Exception x) {x.printStackTrace();}
+		}
+	*/
+		aromatic = false;
+		for (int i=0; i < molecule.getAtomCount(); i++) {
+			IAtom atom = molecule.getAtom(i);
+			molecule.getAtom(i).setProperty(no,i);
+			IAtom newAtom = newBuilder.newInstance(IAtom.class,molecule.getAtom(i).getSymbol());
+			newAtom.setCharge(atom.getCharge());
+			newAtom.setFormalCharge(atom.getFormalCharge());
+			newAtom.setStereoParity(atom.getStereoParity());
+			newAtom.setPoint2d((Point2d)atom.getPoint2d().clone());
+			aromatic |= atom.getFlag(CDKConstants.ISAROMATIC);
+			newAtom.setFlag(CDKConstants.ISAROMATIC,atom.getFlag(CDKConstants.ISAROMATIC));
+			newAtom.setAtomTypeName(atom.getAtomTypeName());
+			newMol.addAtom(newAtom);
+		}
+
+		//bonds
+		for (int i=0; i < molecule.getBondCount(); i++) {
+			IAtom[] newAtoms = new IAtom[molecule.getBond(i).getAtomCount()];  
+			for (int j=0; j<  molecule.getBond(i).getAtomCount(); j++) {
+				Integer index = (Integer) molecule.getBond(i).getAtom(j).getProperty(no);
+				newAtoms[j] = newMol.getAtom(index);
+			}
+			IBond newBond = newBuilder.newInstance(IBond.class);
+			newBond.setAtoms(newAtoms);
+			newBond.setOrder(molecule.getBond(i).getOrder());
+			newBond.setFlag(CDKConstants.ISAROMATIC,molecule.getBond(i).getFlag(CDKConstants.ISAROMATIC));
+			newMol.addBond(newBond);
+		}		
+
+			
+		//single electrons
+		for (int i=0; i < molecule.getSingleElectronCount(); i++) {
+			ISingleElectron singleElectron = newBuilder.newInstance(ISingleElectron.class);
+			singleElectron.setElectronCount(molecule.getSingleElectron(i).getElectronCount());
+			Integer index = (Integer) molecule.getSingleElectron(i).getAtom().getProperty(no);
+			singleElectron.setAtom(newMol.getAtom(index));
+			newMol.addSingleElectron(singleElectron);
+		}
+		//Lone pairs
+		for (int i=0; i < molecule.getLonePairCount(); i++) {
+			ILonePair lonePair = newBuilder.newInstance(ILonePair.class);
+			lonePair.setElectronCount(molecule.getLonePair(i).getElectronCount());
+			Integer index = (Integer) molecule.getLonePair(i).getAtom().getProperty(no);
+			lonePair.setAtom(newMol.getAtom(index));
+			newMol.addElectronContainer(lonePair);
+		}
+		/*
+		try { 
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(newMol); 
+			CDKHueckelAromaticityDetector.detectAromaticity(newMol);
+		} catch (Exception x) {}
+
+
+		for (IAtom atom: newMol.atoms()) atom.setValency(null); 
+		if (aromatic) 
+			try {
+				DeduceBondSystemTool dbt = new DeduceBondSystemTool();
+				newMol = dbt.fixAromaticBondOrders(newMol);
+			} catch (Exception x) {x.printStackTrace();}
+					*/		
+		return newMol;
+	}    
 }
