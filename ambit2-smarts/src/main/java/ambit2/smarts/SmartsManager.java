@@ -900,10 +900,11 @@ public class SmartsManager
 				
 				recAtoms.get(i).recSmartsMatches.add(v);
 			}	
-			
+			/*
 			for (int j = 0; j < vRecCon.size(); j++)
 				System.out.println("recusive match: " + recAtoms.get(i).recSmartsStrings.get(j) + "  "+
 						matchesToString(target,recAtoms.get(i).recSmartsMatches.get(j)));
+			*/
 		}		
 	}
 	
