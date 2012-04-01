@@ -7,7 +7,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.config.Preferences;
@@ -38,19 +37,38 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		//this is major source of memory leaks ... should be done in a different way
 		//Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
 	}
-	
 	public IMolecule parseSmiles(String smiles) throws InvalidSmilesException {
+		return parseSmiles(smiles,true);
+	}
+	public IMolecule parseSmiles(String smiles,boolean addHydrogens) throws InvalidSmilesException {
 		//System.out.println(smiles + " " + parser);
 		switch (parser) {
 		case OPENBABEL: {
 			try {
-				if (babel == null) babel = new OpenBabelShell();
+				if (babel == null) {
+					babel = new OpenBabelShell();
+					babel.setHydrogens(addHydrogens);
+				}
 				return babel.runShell(smiles);
 			} catch (ShellException x) {
 				setParser(SMILES_PARSER.CDK);
 				if (cdkParser == null) cdkParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 				IMolecule mol = cdkParser.parseSmiles(smiles);
-				
+				/*
+	            if (addHydrogens) 
+	                try {
+	                	//logger.debug("Adding explicit hydrogens");
+	                	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+	                    h.addImplicitHydrogens(mol);
+	                    AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+	          
+	                    //h.addExplicitHydrogensToSatisfyValency((IMolecule)mol);
+	                } catch (InvalidSmilesException x ) {
+	                    return null;
+	                } catch (CDKException x) {
+	                    return null;
+	                }
+	                */				
 				try {
 					return dbt.fixAromaticBondOrders(mol);
 				} catch (CDKException xx) {
