@@ -471,9 +471,12 @@ public class MoleculeTools {
 			newAtom.setCharge(atom.getCharge());
 			newAtom.setFormalCharge(atom.getFormalCharge());
 			newAtom.setStereoParity(atom.getStereoParity());
-			newAtom.setPoint2d((Point2d)atom.getPoint2d().clone());
-			aromatic |= atom.getFlag(CDKConstants.ISAROMATIC);
-			newAtom.setFlag(CDKConstants.ISAROMATIC,atom.getFlag(CDKConstants.ISAROMATIC));
+			if (atom.getPoint2d()!=null) {
+				newAtom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y));
+			}
+			for (int k=0; k <atom.getFlags().length; k++) newAtom.setFlag(k,atom.getFlag(k));
+			//aromati/c |= atom.getFlag(CDKConstants.ISAROMATIC);
+			///newAtom.setFlag(CDKConstants.ISAROMATIC,atom.getFlag(CDKConstants.ISAROMATIC));
 			newAtom.setAtomTypeName(atom.getAtomTypeName());
 			newMol.addAtom(newAtom);
 		}
@@ -488,7 +491,7 @@ public class MoleculeTools {
 			IBond newBond = newBuilder.newInstance(IBond.class);
 			newBond.setAtoms(newAtoms);
 			newBond.setOrder(molecule.getBond(i).getOrder());
-			newBond.setFlag(CDKConstants.ISAROMATIC,molecule.getBond(i).getFlag(CDKConstants.ISAROMATIC));
+			for (int k=0; k <molecule.getBond(i).getFlags().length; k++) newBond.setFlag(k,molecule.getBond(i).getFlag(k));
 			newMol.addBond(newBond);
 		}		
 
