@@ -15,7 +15,6 @@ import java.util.BitSet;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -42,7 +41,6 @@ import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -447,7 +445,7 @@ public class MoleculeTools {
     /**
      * Just copy atoms and bonds, discard all the flags, they will be recalculated later
      */
-	public static IMolecule copyChangeBuilders(IMolecule molecule, IChemObjectBuilder newBuilder) {
+	public static IAtomContainer copyChangeBuilders(IAtomContainer molecule, IChemObjectBuilder newBuilder) {
 		final String no = "_NO";
 		//atoms
 		IMolecule newMol = newBuilder.newInstance(IMolecule.class);
@@ -526,6 +524,7 @@ public class MoleculeTools {
 				newMol = dbt.fixAromaticBondOrders(newMol);
 			} catch (Exception x) {x.printStackTrace();}
 					*/		
-		return newMol;
+		return AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newMol);
+		//return newMol;
 	}    
 }
