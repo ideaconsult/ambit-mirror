@@ -1867,7 +1867,7 @@ public class TestUtilities
 		
 		//System.out.println(man.isFlagUseCDKIsomorphismTester());
 		
-		man.setUseCDKIsomorphismTester(true);
+		man.setUseCDKIsomorphismTester(false);
 		//tu.testSmartsManagerBoolSearch("cccc","C1=CC=CC=C1");
 		//tu.testSmartsManagerBoolSearch("cccc","c1ccccc1");
 		//tu.testSmartsManagerBoolSearch("c1ccccc1c2ccccc2","C1=CC=CC=C1-C2=CC=CC=C2");
@@ -1881,8 +1881,12 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("cc=c","c1ccccc1c2ccccc2");
 		//tu.testSmartsManagerBoolSearch("[C;$(C=O)]", "O=CCC");
 		
-		tu.FlagTargetPreprocessing = true;
-		tu.FlagExplicitHAtoms = false;
+		//This is not working since in has recursion inside recurstion
+		//tu.testSmartsManagerBoolSearch("[$([S;H0;D2])!$([S;H0;D2]([$([CX4]),$(C(=O)C)])[$([CX4]),$(C(=O)C)])]", "CCSC=NC");
+		tu.testSmartsManagerBoolSearch("[$([S;H0;D2])!$([S;H0;D2]([CX4])[CX4])!$([S;H0;D2]([CX4])C(=O)C)!$([S;H0;D2](C(=O)C)C(=O)C)]", "CCSC=NC");
+		
+		//tu.FlagTargetPreprocessing = true;
+		//tu.FlagExplicitHAtoms = false;
 		//tu.testSmartsManagerBoolSearch("[O,o,OH,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]~[A,a]~[A,a]~[O,o,OH,N,n,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("[O,o,OH,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("C[H]","CC");
@@ -1899,12 +1903,12 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[N,C]~*~*~[N,C]","ClCNCl");
 		//tu.showFullAtomMappingsCDKIsomorphism("[N,C]~*~*~[N,C]","ClCNCl");
 		
-		tu.testSmartsManagerBoolSearch("C**C","SCCS");
+		//tu.testSmartsManagerBoolSearch("C**C","SCCS");
 		
 		//tu.showFullAtomMappings("CCN","CCNCCCC");
 		//tu.testSmartsManagerBoolSearch("[A,a]~[A,a]~[A,a]~[A,a]","[S-]C(=S)N");
 		
-		tu.testCDKStrangeIsomorphism();		
+		//tu.testCDKStrangeIsomorphism();		
 		
 		
 		
