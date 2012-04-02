@@ -369,6 +369,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    		rings = false;
 	    		try {
 	    			ambit2.core.smiles.DeduceBondSystemTool dbt = new ambit2.core.smiles.DeduceBondSystemTool();
+					dbt.setTimeout(100);
 	    			molecule = dbt.fixAromaticBondOrders((IMolecule) molecule);
 	    		} catch (Exception x) {
 	    			x.printStackTrace();
