@@ -83,20 +83,32 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		kekule {
 			@Override
 			public String toString() {
-				return String.format("SMILES parser with %s\n%s",DefaultChemObjectBuilder.class.getName(),DeduceBondSystemTool.class.getName());
-			}						
+				return DeduceBondSystemTool.class.getName();
+			}			
+			@Override
+			public String getDescription() {
+				return String.format("SMILES parser with %s\n%s",DefaultChemObjectBuilder.class.getName(),toString());
+			}
 		},
 
 		saturationChecker {
 			@Override
 			public String toString() {
-				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),SaturationChecker.class.getName());
+				return SaturationChecker.class.getName();
 			}
+			@Override
+			public String getDescription() {
+				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),toString());
+			}			
 		},
 		smilesvalencychecker {
 			@Override
 			public String toString() {
-				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),SmilesValencyChecker.class.getName());
+				return SmilesValencyChecker.class.getName();
+			}
+			@Override
+			public String getDescription() {
+				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),toString());
 			}
 		},
 		aromatic {
@@ -112,7 +124,11 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		kekuleold {
 			@Override
 			public String toString() {
-				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName()," DeduceBondSystemTool (CDK < 1.4.8)");
+				return  "DeduceBondSystemTool (CDK < 1.4.8)";
+			}				
+			@Override
+			public String getDescription() {
+				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),toString());
 			}			
 		},		
 		any {
@@ -126,6 +142,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			}
 			@Override
 			public String getDescription() {
+				
 				return "SMILES parser only. No additional preprocessing.\nShows circles if there are only single bonds with aromatic flags. \nShows Kekule representation if there are single and double bonds with aromatic flags.";
 			}
 		};		
