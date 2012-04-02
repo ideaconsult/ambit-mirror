@@ -21,6 +21,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.base.processors.AbstractReporter;
+import ambit2.rendering.CompoundImageTools.Mode2D;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ProtectedResource;
 import ambit2.rest.StringConvertor;
@@ -37,6 +38,12 @@ public class AbstractDepict extends ProtectedResource {
 	protected String smiles ;
 	protected String smarts ;
 	protected String smirks ;
+
+	/**
+	 * Might be ignored, currently only CDK depict considers the flags
+	 */
+	protected Mode2D displayMode = null;
+
 
 	public String getSmirks() {
 		return smirks;
@@ -128,6 +135,9 @@ public class AbstractDepict extends ProtectedResource {
 			int w = 400; int h = 200;
 			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
+				try {
+					displayMode = Mode2D.valueOf(form.getFirstValue("mode"));
+				} catch (Exception x) {displayMode = null;}
 			smiles = form.getFirstValue(QueryResource.search_param);
 			setSmarts(form.getFirstValue("smarts"));
 			setSmirks(null);
