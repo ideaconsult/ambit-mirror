@@ -53,7 +53,7 @@ public class CreateReference extends AbstractObjectUpdate<ILiteratureEntry>{
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getId()>0?getObject().getId():null));
 		params1.add(new QueryParam<String>(String.class, getObject().getTitle()));
 		params1.add(new QueryParam<String>(String.class, getObject().getURL()));		
-		params1.add(new QueryParam<String>(String.class, getObject().getType().toString()));
+		params1.add(new QueryParam<String>(String.class, getObject().getType().name()));
 		return params1;
 		
 	}

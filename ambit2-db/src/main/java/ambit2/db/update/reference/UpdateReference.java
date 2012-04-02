@@ -51,7 +51,7 @@ public class UpdateReference extends AbstractObjectUpdate<ILiteratureEntry>{
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		params.add(new QueryParam<String>(String.class, getObject().getTitle()));
 		params.add(new QueryParam<String>(String.class, getObject().getURL()));
-		params.add(new QueryParam<String>(String.class, getObject().getType().toString()));
+		params.add(new QueryParam<String>(String.class, getObject().getType().name()));
 		params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
 		return params;
 		

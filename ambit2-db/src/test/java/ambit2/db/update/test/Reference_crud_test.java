@@ -58,7 +58,7 @@ public final class Reference_crud_test  extends CRUDTest<Object,ILiteratureEntry
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM catalog_references where title='newtitle' and url='newurl'");
 		
 		Assert.assertEquals(1,table.getRowCount());
-		Assert.assertEquals(_type.Model.toString(),table.getValue(0,"type"));
+		Assert.assertEquals(_type.Model.name(),table.getValue(0,"type"));
 		c.close();
 	}
 
@@ -94,7 +94,7 @@ public final class Reference_crud_test  extends CRUDTest<Object,ILiteratureEntry
 		Assert.assertEquals(0,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED_USER","SELECT idreference,title,url,type FROM catalog_references where title='New name'");
 		Assert.assertEquals(1,table.getRowCount());
-		Assert.assertEquals(_type.Algorithm.toString(),table.getValue(0,"type"));
+		Assert.assertEquals(_type.Algorithm.name(),table.getValue(0,"type"));
 		
 		c.close();
 		
