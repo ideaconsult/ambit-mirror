@@ -55,7 +55,11 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.IDeduceBondOrderTool;
+import org.openscience.cdk.tools.SaturationChecker;
+import org.openscience.cdk.tools.SmilesValencyChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitException;
@@ -74,7 +78,64 @@ import ambit2.core.processors.structure.StructureTypeProcessor;
  * <b>Modified</b> 2006-3-5
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
+	public enum Mode2D {
+	
+		kekule {
+			@Override
+			public String toString() {
+				return DeduceBondSystemTool.class.getName();
+			}						
+		},
 
+		saturationChecker {
+			@Override
+			public String toString() {
+				return SaturationChecker.class.getName();
+			}
+		},
+		smilesvalencychecker {
+			@Override
+			public String toString() {
+				return SmilesValencyChecker.class.getName();
+			}
+		},
+		aromatic {
+			@Override
+			public String toString() {
+				return "Aromatic";
+			}
+			@Override
+			public String getDescription() {
+				return "SMILES parser only. Always shows aromatic ring circles.";
+			}			
+		},
+		kekuleold {
+			@Override
+			public String toString() {
+				return String.format("DeduceBondSystemTool (CDK < 1.4.8)");
+			}			
+		},		
+		any {
+			@Override
+			public String getURIParameter() {
+				return "";
+			}
+			@Override
+			public String toString() {
+				return "Best guess";
+			}
+			@Override
+			public String getDescription() {
+				return "SMILES parser only. No additional preprocessing.\nShows circles if there are only single bonds with aromatic flags. \nShows Kekule representation if there are single and double bonds with aromatic flags.";
+			}
+		};		
+		public String getURIParameter() {
+			return name();
+		}
+		public String getDescription() {
+			return String.format("SMILES Parser and %s",toString());
+		}		
+	};	
 	public final static String SELECTED_ATOM_COLOR = "ambit2.color";
 	public final static String SELECTED_ATOM_SIZE = "ambit2.size";
 	public final static String ATOM_ANNOTATION = "ambit2.tooltip";
@@ -204,20 +265,31 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     public synchronized BufferedImage generateImage(String value) throws CDKException {
     	return generateImage(value, null,false,false);
     }
-
-    public synchronized BufferedImage generateImage(String value,IProcessor<IAtomContainer,IChemObjectSelection> selector, 
+    public synchronized BufferedImage generateImage(
+    		String value,
+    		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
     		boolean build2d,
-    		boolean atomNumbers) throws CDKException {
+    		boolean atomNumbers
+    		) throws CDKException {
+    	return generateImage(value, selector, build2d, atomNumbers,null);
+    }
+    public synchronized BufferedImage generateImage(
+    		String value,
+    		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
+    		boolean build2d,
+    		boolean atomNumbers,
+    		Mode2D mode2D
+    		) throws CDKException {
    		if (value.startsWith(AmbitCONSTANTS.INCHI)) {
     			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
     			InChIToStructure c =f.getInChIToStructure(value, SilentChemObjectBuilder.getInstance());
     			
     			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
     				throw new CDKException(String.format("%s %s %s", c.getReturnStatus(),c.getMessage(),c.getLog()));
-    			return getImage(c.getAtomContainer(),selector,build2d,atomNumbers);
+    			return getImage(c.getAtomContainer(),selector,build2d,atomNumbers,false,mode2D);
     	}  else { 	
 	        if (parser == null) parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-	        return getImage(parser.parseSmiles(value),selector,build2d,atomNumbers);
+	        return getImage(parser.parseSmiles(value),selector,build2d,atomNumbers,false,mode2D);
     	}
     }    
     public synchronized BufferedImage getImage(String smiles) {
@@ -245,15 +317,76 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
     		boolean build2d,
     		boolean atomNumbers,
-    		boolean explicitH) {    
+    		boolean explicitH) {  
+    	return getImage(molecule,selector,build2d,atomNumbers,explicitH,null);
+    }
+    public synchronized BufferedImage getImage(IAtomContainer molecule, 
+    		IProcessor<IAtomContainer,IChemObjectSelection> selector, 
+    		boolean build2d,
+    		boolean atomNumbers,
+    		boolean explicitH,
+    		Mode2D mode2d) { 
+    	
     	boolean rings = true;
-    	if (molecule!=null)
-        	for (int i=0; i < molecule.getBondCount();i++)
-        		if (molecule.getBond(i).getFlag(CDKConstants.ISAROMATIC)) 
-        			if (IBond.Order.DOUBLE.equals(molecule.getBond(i).getOrder())) {
-        				rings = false;
-        				break;
-        			}
+    	if (mode2d == null) {
+        	if (molecule!=null)
+            	for (int i=0; i < molecule.getBondCount();i++)
+            		if (molecule.getBond(i).getFlag(CDKConstants.ISAROMATIC)) 
+            			if (IBond.Order.DOUBLE.equals(molecule.getBond(i).getOrder())) {
+            				rings = false;
+            				break;
+            			}
+    	} else
+	    	switch (mode2d) {
+	    	case aromatic: {
+	    		rings = true;
+	    		break;
+	    	}
+	    	case kekuleold : {
+	    		rings = false;
+	    		try {
+	    			ambit2.core.smiles.DeduceBondSystemTool dbt = new ambit2.core.smiles.DeduceBondSystemTool();
+	    			molecule = dbt.fixAromaticBondOrders((IMolecule) molecule);
+	    		} catch (Exception x) {
+	    			x.printStackTrace();
+	    		}
+	    		break;
+	    	}    	
+	    	case kekule : {
+	    		rings = false;
+	    		try {
+	    			//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
+	    			DeduceBondSystemTool dbt = new DeduceBondSystemTool();
+	    			molecule = dbt.fixAromaticBondOrders((IMolecule) molecule);
+	    		} catch (Exception x) {
+	    			x.printStackTrace();
+	    		}
+	    		break;
+	    	}
+	    	case saturationChecker: {
+	    		rings = false;
+	    		try {
+	    			//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
+	    			SaturationChecker dbt = new SaturationChecker();
+	    			dbt.saturate(molecule);
+	    		} catch (Exception x) {
+	    			x.printStackTrace();
+	    		}
+	    		
+	    	}
+	    	case smilesvalencychecker: {
+	    		rings = false;
+	    		try {
+	    			//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
+	    			SmilesValencyChecker dbt = new SmilesValencyChecker();
+	    			dbt.saturate(molecule);
+	    		} catch (Exception x) {
+	    			x.printStackTrace();
+	    		}
+	    		
+	    	}	    	
+	    	}
+
     	
     	renderer = createRenderer(imageSize,background,rings,atomNumbers,explicitH);
     	r2dm = renderer.getRenderer2DModel();
