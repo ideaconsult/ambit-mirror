@@ -21,6 +21,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -57,7 +58,6 @@ import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.IDeduceBondOrderTool;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.SmilesValencyChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -83,20 +83,20 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		kekule {
 			@Override
 			public String toString() {
-				return DeduceBondSystemTool.class.getName();
+				return String.format("SMILES parser with %s\n%s",DefaultChemObjectBuilder.class.getName(),DeduceBondSystemTool.class.getName());
 			}						
 		},
 
 		saturationChecker {
 			@Override
 			public String toString() {
-				return SaturationChecker.class.getName();
+				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),SaturationChecker.class.getName());
 			}
 		},
 		smilesvalencychecker {
 			@Override
 			public String toString() {
-				return SmilesValencyChecker.class.getName();
+				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),SmilesValencyChecker.class.getName());
 			}
 		},
 		aromatic {
@@ -106,13 +106,13 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			}
 			@Override
 			public String getDescription() {
-				return "SMILES parser only. Always shows aromatic ring circles.";
+				return String.format("SMILES parser with %s %s",SilentChemObjectBuilder.class.getName(),"only.\n Always shows aromatic ring circles.");
 			}			
 		},
 		kekuleold {
 			@Override
 			public String toString() {
-				return String.format("DeduceBondSystemTool (CDK < 1.4.8)");
+				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName()," DeduceBondSystemTool (CDK < 1.4.8)");
 			}			
 		},		
 		any {
@@ -165,7 +165,13 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		this.borderColor = borderColor;
 	}
 	protected SmilesParser parser = null;
-    /**
+    public SmilesParser getParser() {
+		return parser;
+	}
+	public void setParser(SmilesParser parser) {
+		this.parser = parser;
+	}
+	/**
      * 
      */
     public CompoundImageTools() {

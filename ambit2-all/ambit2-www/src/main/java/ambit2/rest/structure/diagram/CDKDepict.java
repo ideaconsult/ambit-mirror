@@ -8,9 +8,12 @@ import java.io.Writer;
 
 import javax.imageio.ImageIO;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -54,6 +57,11 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	@Override
 	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
 		try {
+			if (depict.getParser()==null) depict.setParser(
+					new SmilesParser(
+							Mode2D.kekule.equals(displayMode)?DefaultChemObjectBuilder.getInstance():SilentChemObjectBuilder.getInstance()
+							)
+					);
 			depict.setImageSize(new Dimension(w,h));
 			
 			if (displayMode==null) {
@@ -133,22 +141,12 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 			b.append(AmbitResource.printWidget(
 					String.format("<a href='%s&mode=%s&media=image/png' target='%s' title='%s'>%s</a>",
 							ref,mode.name(),mode.name(),mode.getDescription(),mode.toString()), 
-					String.format("<img src='%s&mode=%s' alt='%s' title='%s'>", ref,mode.getURIParameter(),smiles==null?"":smiles,smiles==null?"":smiles)));
+					String.format("<img src='%s&mode=%s&media=image/png' alt='%s' title='%s'>", ref,mode.getURIParameter(),smiles==null?"":smiles,smiles==null?"":smiles)));
 			b.append("</td>");
 			if ((mode.ordinal() %2) == 1) b.append("</tr>");
 		}
 		b.append("</table>");
-		/*
-		b.append("<table><tr><td>");
-		b.append(AmbitResource.printWidget("As it is", String.format("<img src='%s' alt='%s' title='%s'>", ref,smiles==null?"":smiles,smiles==null?"":smiles)));
-		b.append("</td><td>");
-		b.append(AmbitResource.printWidget("Aromatic", String.format("<img src='%s&mode=aromatic' alt='%s' title='%s'>", ref,smiles==null?"":smiles,smiles==null?"":smiles)));
-		b.append("</td></tr><tr><td>");
-		b.append(AmbitResource.printWidget("Kekule (CDK 1.4.8)", String.format("<img src='%s&mode=kekule' alt='%s' title='%s'>", ref,smiles==null?"":smiles,smiles==null?"":smiles)));
-		b.append("</td><td>");
-		b.append(AmbitResource.printWidget("Kekule (CDK<1.4.8)", String.format("<img src='%s&mode=kekuleold' alt='%s' title='%s'>", ref,smiles==null?"":smiles,smiles==null?"":smiles)));
-		b.append("</td></tr></table>");
-		*/
+
 		return b.toString();
 		
 	}
