@@ -2,7 +2,7 @@
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
-    <version>2.4.6-SNAPSHOT</version>
+    <version>2.4.7-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
@@ -18,7 +18,7 @@
 
     	<dependency>
     		<groupId>org.openscience.cdk</groupId>
-    		<artifactId>jchempaint-nodeps-cdk-1.4.8</artifactId>
+    		<artifactId>jchempaint-nodeps-cdk-1.4.9</artifactId>
     		<version>3.3.0</version>
     		<scope>compile</scope>
     	</dependency>
