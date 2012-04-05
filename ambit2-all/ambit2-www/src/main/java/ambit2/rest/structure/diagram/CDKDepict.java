@@ -8,7 +8,6 @@ import java.io.Writer;
 
 import javax.imageio.ImageIO;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
@@ -58,9 +57,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
 		try {
 			if (depict.getParser()==null) depict.setParser(
-					new SmilesParser(
-							Mode2D.kekule.equals(displayMode)?DefaultChemObjectBuilder.getInstance():SilentChemObjectBuilder.getInstance()
-							)
+					new SmilesParser(SilentChemObjectBuilder.getInstance())
 					);
 			depict.setImageSize(new Dimension(w,h));
 			
