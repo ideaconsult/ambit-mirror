@@ -216,9 +216,10 @@ public class AbstractDepict extends ProtectedResource {
 		String query_smiles = "";
 		try {
 			Form form = getParams(params,request);
-			if ((form != null) && (form.size()>0))
+			if ((form != null) && (form.size()>0)) {
 				query_smiles = form.getFirstValue(QueryResource.search_param);
-			else query_smiles = null;
+				if (query_smiles!=null) query_smiles = query_smiles.trim();
+			} else query_smiles = null;
 		} catch (Exception x) {
 			query_smiles = "";
 		}
@@ -230,7 +231,7 @@ public class AbstractDepict extends ProtectedResource {
 		w.write(String.format("<th><label for='%s'>%s</label></th>",QueryResource.search_param,"SMILES or InChI"));
 		w.write("<td>");
 		w.write(String.format("<input name='%s' size='80' value='%s'>\n",
-				QueryResource.search_param,query_smiles==null?"":query_smiles));
+				QueryResource.search_param,query_smiles==null?"":query_smiles.trim()));
 		w.write("</td>");
 		w.write("<td><input type='submit' value='Display'></td>");
 		w.write("</tr>\n");
