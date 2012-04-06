@@ -6,10 +6,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
@@ -34,6 +37,7 @@ public class TautomersDepict extends AbstractDepict {
         	Name2StructureProcessor processor = new Name2StructureProcessor();
         	try {
 				mol = processor.process(smiles);
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
         	} catch (Exception xx) {
         		mol = null;
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
@@ -56,11 +60,16 @@ public class TautomersDepict extends AbstractDepict {
 						url,smiles==null?"":smiles,smiles==null?"":smiles)));
 		b.append("</td>");
 		
+		Vector<IAtomContainer> resultTautomers=null;
 		TautomerManager tman = new TautomerManager();
-		tman.setStructure(mol);
-		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
-		tman.printDebugInfo();
-	
+		try {
+			
+			tman.setStructure(mol);
+			resultTautomers = tman.generateTautomersIncrementaly();
+			
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+		}
 		SmilesGenerator gen = new SmilesGenerator(true);
 		
 		for (int i = 0; i < resultTautomers.size(); i++) {		
