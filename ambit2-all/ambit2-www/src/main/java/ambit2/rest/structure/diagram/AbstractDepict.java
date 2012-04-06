@@ -68,7 +68,7 @@ public class AbstractDepict extends ProtectedResource {
 				params = getRequest().getEntityAsForm();
 		return params;
 	}
-	protected String getTitle(Reference ref, String smiles) {
+	protected String getTitle(Reference ref, String smiles) throws ResourceException {
 
 		String style = "depictBox";
 		StringBuilder b = new StringBuilder();
