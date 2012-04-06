@@ -95,7 +95,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 				},MediaType.TEXT_HTML);
 				return convertor.process(getTitle(getResourceRef(getRequest()),smiles));
 			} else {
-				return getImageRepresentation(variant,Mode2D.any);
+				return process(variant);
 			}
 		} catch (Exception x) {
 			
@@ -103,29 +103,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
     	return null;
 
 	}
-	
-	public Representation getImageRepresentation(Variant variant, Mode2D displayMode) {
 
-			
-			Representation image = process(variant);
-			if (image !=null) return image;
-				
-        	return new OutputRepresentation(MediaType.IMAGE_PNG) {
-	    		@Override
-	    		public void write(OutputStream out) throws IOException {
-	    			try {
-	    				ImageIO.write( (BufferedImage)depict.getDefaultImage(), "PNG", out);
-	    			} catch (IOException x) {
-	    				throw x;
-	    			} catch (Exception x) {
-	    				x.printStackTrace();
-	    			} finally {
-	        			try { out.flush(); } catch (Exception x) {}
-	        			try { out.close(); } catch (Exception x) {}
-	    			}
-	    		}
-			};
-	}
 	@Override
 	protected String getTitle(Reference ref, String smiles) {
 		StringBuilder b = new StringBuilder();
@@ -137,8 +115,9 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 		for (Mode2D mode : Mode2D.values()) {
 			if ((mode.ordinal() %2) == 0) b.append("<tr>");
 			b.append("<td>");
-			String url = String.format("%s/%s?search=%s%s%s",
+			String url = String.format("%s%s%s?search=%s%s%s",
 						uri,
+						uri.toString().endsWith("/")?"":"/",
 						mode.name(),
 						Reference.encode(smiles),
 						smarts==null?"":"&smarts=",
@@ -148,8 +127,8 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 			b.append(AmbitResource.printWidget(
 					String.format("<a href='%s' target='%s' title='%s'>%s</a>",
 							url,mode.name(),mode.getDescription(),mode.toString()), 
-					String.format("<br><img src='%s' alt='%s' title='%s'>", 
-							url,smiles==null?"":smiles,smiles==null?"":smiles)));
+					String.format("<img id='%s' src='%s' alt='%s' title='%s' onError=\"hideDiv('%s')\">", 
+							mode.name(),url,smiles==null?"":smiles,smiles==null?"":smiles,mode.name())));
 							
 			b.append("</td>");
 			if ((mode.ordinal() %2) == 1) b.append("</tr>");
