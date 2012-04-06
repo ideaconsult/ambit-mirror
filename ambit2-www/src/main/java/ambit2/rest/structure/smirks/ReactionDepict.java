@@ -7,6 +7,7 @@ import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.resource.ResourceException;
 
 import dk.smartcyp.smirks.SMARTCYPReaction;
 
@@ -17,7 +18,7 @@ import ambit2.rest.structure.diagram.AbstractDepict;
 public class ReactionDepict extends AbstractDepict {
 	public static final String resource = "/reaction";
 	
-	protected String getTitle(Reference ref, String smiles) {
+	protected String getTitle(Reference ref, String smiles) throws ResourceException {
 		StringBuilder b = new StringBuilder();
 		b.append("<table><tr>");
 		b.append("<td>");

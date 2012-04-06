@@ -37,7 +37,7 @@ public class OpenBabelDepict extends AbstractDepict {
 			throw new ResourceException(x);
 		}
 	}
-	protected String getTitle(Reference ref, String smiles) {
+	protected String getTitle(Reference ref, String smiles) throws ResourceException {
 		return String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>", smiles,ref,smiles,smiles);
 	}
 	public synchronized String getOpenBabelHome()  {

@@ -3,10 +3,7 @@ package ambit2.rest.structure.diagram;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
-
-import javax.imageio.ImageIO;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
@@ -19,7 +16,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -105,7 +101,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	}
 
 	@Override
-	protected String getTitle(Reference ref, String smiles) {
+	protected String getTitle(Reference ref, String smiles) throws ResourceException {
 		StringBuilder b = new StringBuilder();
 		b.append("<table width='100%'>");
 		
