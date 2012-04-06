@@ -36,6 +36,7 @@ public class DepictDemoRouter extends MyRouter {
 		attach(SMIRKSDepict.resource,SMIRKSDepict.class);
 		attach("/reaction/reactant",CDKDepictVariants.class);
 		attach(TautomersDepict.resource,TautomersDepict.class);
+		attach(String.format("%s/{%s}",TautomersDepict.resource,TautomersDepict.resourceKey),TautomersDepict.class);
 		
 	}
 
