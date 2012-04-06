@@ -23,6 +23,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -68,6 +69,7 @@ import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.ICompoundImageTools;
 import ambit2.core.processors.structure.StructureTypeProcessor;
+import ambit2.namestructure.Name2StructureProcessor;
 
 
 
@@ -311,7 +313,16 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     			return getImage(c.getAtomContainer(),selector,build2d,atomNumbers,false,mode2D);
     	}  else { 	
 	        if (parser == null) parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-	        return getImage(parser.parseSmiles(value),selector,build2d,atomNumbers,false,mode2D);
+	        IAtomContainer molecule = null;
+	        try {
+	        	molecule = parser.parseSmiles(value);
+	        } catch (InvalidSmilesException x) {
+	        	Name2StructureProcessor processor = new Name2StructureProcessor();
+	        	try {
+					molecule = processor.process(value);
+	        	} catch (Exception xx) {molecule = null; throw x;}
+	        }
+	        return molecule==null?null:getImage(molecule,selector,build2d,atomNumbers,false,mode2D);
     	}
     }    
     public synchronized BufferedImage getImage(String smiles) {

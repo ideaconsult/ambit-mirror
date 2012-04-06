@@ -41,6 +41,12 @@
   		<artifactId>cdk-jchempaint</artifactId>
   		<version>25</version>
   	</dependency>
+  	<dependency>
+  		<groupId>ambit</groupId>
+  		<artifactId>ambit2-namestructure</artifactId>
+  		<version>${project.version}</version>
+  		<scope>compile</scope>
+  	</dependency>
   </dependencies>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
