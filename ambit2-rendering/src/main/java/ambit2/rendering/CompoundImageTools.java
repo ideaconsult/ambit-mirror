@@ -21,7 +21,6 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -87,7 +86,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			}			
 			@Override
 			public String getDescription() {
-				return String.format("SMILES parser with %s\n%s",DefaultChemObjectBuilder.class.getName(),toString());
+				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),toString());
 			}
 		},
 
@@ -405,7 +404,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    			SmilesValencyChecker dbt = new SmilesValencyChecker();
 	    			dbt.saturate(molecule);
 	    		} catch (Exception x) {
-	    			x.printStackTrace();
+	    			//x.printStackTrace();
 	    		}
 	    		
 	    	}	    	
