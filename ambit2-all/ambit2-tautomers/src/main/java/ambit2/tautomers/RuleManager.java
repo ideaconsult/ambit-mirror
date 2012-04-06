@@ -251,7 +251,7 @@ public class RuleManager
 	}
 	
 	
-	void iterateIncrementalSteps()
+	void iterateIncrementalSteps() throws Exception
 	{	
 		//first depth search approach
 		int nMax = tman.maxNumOfBackTracks;
@@ -287,7 +287,7 @@ public class RuleManager
 	}
 	
 	
-	void expandIncrementStep(TautomerIncrementStep incStep)
+	void expandIncrementStep(TautomerIncrementStep incStep) throws Exception
 	{		
 		//Condition for reaching the bottom of the generation tree
 		//e.g. at this point real tautomers are obtained
@@ -304,6 +304,7 @@ public class RuleManager
 			}
 			catch(Exception e)
 			{
+				//Please throw exceptions, don;t add them to the manager
 				tman.errors.add("Error clonning molecule to get tatutomer!");
 			}
 			
@@ -317,14 +318,15 @@ public class RuleManager
 		{
 			stackIncSteps.push(newIncSteps[i]);
 			
-			if (tman.FlagPrintIcrementalStepDebugInfo)			
+			if (tman.FlagPrintIcrementalStepDebugInfo)		
+
 				System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct));
 				
 		}	
 	}	
 		
 	
-	TautomerIncrementStep[] generateNextIncrementSteps(TautomerIncrementStep curIncStep)
+	TautomerIncrementStep[] generateNextIncrementSteps(TautomerIncrementStep curIncStep) throws Exception
 	{	
 		//curIncStep objects fields are not preserved since it will no longer be used in the 
 		//depth-first search algorithm
@@ -352,7 +354,7 @@ public class RuleManager
 	}
 	
 	
-	void setNewIncrementStep_FullClone(IAtomContainer prevStruct, RuleInstance ri, int state, TautomerIncrementStep incStep)
+	void setNewIncrementStep_FullClone(IAtomContainer prevStruct, RuleInstance ri, int state, TautomerIncrementStep incStep) throws Exception
 	{
 		//The structure is fully cloned as well as all used and unused rule instances
 		
@@ -938,7 +940,7 @@ public class RuleManager
 	
 		
 	
-	public String debugStack()
+	public String debugStack() throws Exception
 	{
 		String prompt = "              >";
 		StringBuffer sb = new StringBuffer();

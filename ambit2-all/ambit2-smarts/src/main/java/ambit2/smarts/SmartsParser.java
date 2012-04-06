@@ -1996,7 +1996,7 @@ public class SmartsParser
 	}
 	
 	
-	public void setSMARTSData(IAtomContainer container)
+	public void setSMARTSData(IAtomContainer container) throws Exception
 	{	
 		prepareTargetForSMARTSSearch(mNeedNeighbourData, mNeedValencyData, 
 							mNeedRingData, mNeedRingData2, mNeedExplicitHData, mNeedParentMoleculeData, 
@@ -2005,7 +2005,7 @@ public class SmartsParser
 	
 	static public void prepareTargetForSMARTSSearch(boolean neighbourData, boolean valenceData, 
 				boolean ringData, boolean ringData2, boolean explicitHData , boolean parentMoleculeData, 
-				IAtomContainer container)
+				IAtomContainer container) throws Exception
 	{
 		if (neighbourData)
 			setNeighbourData(container);

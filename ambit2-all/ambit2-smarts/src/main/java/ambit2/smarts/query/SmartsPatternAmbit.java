@@ -93,9 +93,13 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 	public IAtomContainer getObjectToVerify(IAtomContainer mol) {
 		return mol;
 	}
-	public IAtomContainer getMatchingStructure(IAtomContainer mol)
-			throws SMARTSException {
-		IAtomContainerSet set = sman.getAllIsomorphismMappings(mol);
+	public IAtomContainer getMatchingStructure(IAtomContainer mol) throws SMARTSException {
+		IAtomContainerSet set;
+		try {
+			set = sman.getAllIsomorphismMappings(mol);
+		} catch (Exception x) {
+			throw new SMARTSException(x);
+		}
 		if (set==null) return null;
 		if (set.getAtomContainerCount()==0) return null;
 		if (set.getAtomContainerCount()==1) return set.getAtomContainer(0);
@@ -104,6 +108,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		for (int i=0; i < set.getAtomContainerCount();i++)
 			match.add(set.getAtomContainer(i));
 		return match;
+
 	}
 
 	public int hasSMARTSPattern(IAtomContainer mol) throws SMARTSException {
@@ -122,11 +127,14 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		}
 		
 
-
-		if (sman.searchIn(mol)) {
-			return 1; 
-		} else {
-			return 0;
+		try {
+			if (sman.searchIn(mol)) {
+				return 1; 
+			} else {
+				return 0;
+			}
+		} catch (Exception x) {
+			throw new SMARTSException(x);
 		}
 		/*
 		Vector<IAtom> hits = sman.getAtomMappings(object);

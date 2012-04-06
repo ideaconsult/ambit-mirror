@@ -1,29 +1,28 @@
 package ambit2.tautomers.test;
 
-import java.util.Vector;
 import java.util.List;
-import ambit2.tautomers.*;
-
-import ambit2.smarts.IsomorphismTester;
-import ambit2.smarts.SmartsHelper;
-import ambit2.smarts.SmartsManager;
-import ambit2.smarts.SmartsParser;
+import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.inchi.InChIGenerator;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.exception.*;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.tautomers.*;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.inchi.*;
+import org.openscience.cdk.tautomers.InChITautomerGenerator;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsParser;
+import ambit2.tautomers.TautomerManager;
 
 
 public class TestTautomers 
@@ -439,7 +438,7 @@ public class TestTautomers
 		return 0;
 	}
 	
-	public int testTautomerEquivalence(IAtomContainer ac)
+	public int testTautomerEquivalence(IAtomContainer ac) throws Exception 
 	{
 		tman.setStructure(ac);
 		Vector<IAtomContainer> initialTautomers = tman.generateTautomersIncrementaly();

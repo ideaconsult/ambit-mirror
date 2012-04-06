@@ -577,7 +577,7 @@ public class TestUtilities
 		return(false);
 	}
 	
-	int testSMARTStoChemObj(String smarts)
+	int testSMARTStoChemObj(String smarts) throws Exception
 	{	
 		QueryAtomContainer query  = sp.parse(smarts);		
 		String errorMsg = sp.getErrorMessages();
@@ -1108,7 +1108,7 @@ public class TestUtilities
 			System.out.println("SeqEl " + i + " : "+cof.sequence.get(i).toString());
 	}
 	
-	void produceStructures() 
+	void produceStructures() throws Exception
 	{
 		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		Vector<StructInfo> vStr = new Vector<StructInfo>();
@@ -1117,7 +1117,7 @@ public class TestUtilities
 		
 	}
 	
-	void produceRandomStructures() 
+	void produceRandomStructures() throws Exception
 	{
 		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		Vector<StructInfo> vStr = new Vector<StructInfo>();
@@ -1125,7 +1125,7 @@ public class TestUtilities
 					30, 5, 50000, vStr, "/java_random_frags.txt");
 	}
 	
-	void makeStructureStatistics()
+	void makeStructureStatistics() throws Exception
 	{
 		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		cof.performStructureStatistics("/exhaustive-str-set-ambit-first-900str.txt", 
@@ -1177,7 +1177,7 @@ public class TestUtilities
 		}
 	}
 	
-	void testSmartsSreeningKeys()
+	void testSmartsSreeningKeys() throws Exception
 	{
 		SmartsScreeningKeys smKeys = new SmartsScreeningKeys();
 		Vector<String> keys = smKeys.getKeys();
@@ -1293,7 +1293,7 @@ public class TestUtilities
 	
 	
 	
-	void compareIsoTesterMulti()
+	void compareIsoTesterMulti() throws Exception
 	{
 		SmartsScreeningKeys smKeys = new SmartsScreeningKeys();
 		Vector<String> keys = smKeys.getKeys();
@@ -1410,7 +1410,7 @@ public class TestUtilities
 	}
 	
 	
-	public void testConvertKekuleSmartsToAromatic(String smarts)	
+	public void testConvertKekuleSmartsToAromatic(String smarts)	 throws Exception
 	{
 		System.out.println("testing Kekule to Aromatic: " + smarts);
 		QueryAtomContainer qac = sp.parse(smarts);
@@ -1542,7 +1542,7 @@ public class TestUtilities
 		
 	}
 	
-	public void testBondIndexChange(String smarts)
+	public void testBondIndexChange(String smarts) throws Exception
 	{
 		QueryAtomContainer q = sp.parse(smarts);
 		if (!sp.getErrorMessages().equals(""))
@@ -1587,7 +1587,7 @@ public class TestUtilities
 		
 	}
 	
-	
+	@Test
 	public void testCDKStrangeIsomorphism() throws Exception
 	{
 		//Testing CDK isomorphism of C**C against SCCS --> it gives wrong result 

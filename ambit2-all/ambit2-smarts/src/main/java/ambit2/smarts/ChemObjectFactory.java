@@ -368,7 +368,7 @@ public class ChemObjectFactory
 		
 	
 	public void produceStructuresExhaustively (IAtomContainer mol, Vector<StructInfo> vStr, 
-				int maxNumSeqSteps, int maxStrSize)
+				int maxNumSeqSteps, int maxStrSize) throws Exception
 	{	
 		ChemObjectToSmiles cots = new ChemObjectToSmiles();
 		for (int k = 0; k < mol.getAtomCount(); k++)
@@ -435,7 +435,7 @@ public class ChemObjectFactory
 	}
 	
 	
-	boolean checkForDuplication(String smarts, Vector<StructInfo> vStr)
+	boolean checkForDuplication(String smarts, Vector<StructInfo> vStr) throws Exception
 	{	
 		man.setQuery(smarts);
 		for (int i = 0; i < vStr.size(); i++)
@@ -461,10 +461,9 @@ public class ChemObjectFactory
 	}
 	
 	public void produceStructsFromMDL(String mdlFile, int maxNumSeqSteps, int maxNumRecord, int maxStrSize,
-				Vector<StructInfo> vStr, String outFile)
+				Vector<StructInfo> vStr, String outFile) throws Exception
 	{	
-		try
-		{
+
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
 			int record=0;
 
@@ -487,19 +486,15 @@ public class ChemObjectFactory
 					System.out.println("record " + record+ "  " + vStr.size());
 				}
 			}	
-		}
-		catch(Exception e){
-			System.out.println(e.toString());
-		}
+
 		
 		saveStructs(vStr,outFile);
 	}
 	
 	public void produceRandomStructsFromMDL(String mdlFile, int maxNumSeqSteps, int minGenStrSize,  int maxNumRecord,
-			Vector<StructInfo> vStr, String outFile)
+			Vector<StructInfo> vStr, String outFile) throws Exception
 	{	
-		try
-		{
+
 			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
 			int record=0;
 
@@ -523,56 +518,39 @@ public class ChemObjectFactory
 					System.out.println("record " + record+ "  " + vStr.size());
 				}
 			}	
-		}
-		catch(Exception e){
-			System.out.println(e.toString());
-		}
+
 
 		saveStructs(vStr,outFile);
 	}
 	
-	void saveStructs(Vector<StructInfo> vStr, String fName)
+	void saveStructs(Vector<StructInfo> vStr, String fName) throws Exception
 	{
-		try
-		{	
 			File file = new File(fName);
 			RandomAccessFile f = new RandomAccessFile(file,"rw");
 			f.setLength(0);
 			for (int i = 0; i<vStr.size(); i++)
 				f.write((vStr.get(i).smiles + "\r\n").getBytes());
 			f.close();
-		}
-		catch (Exception e)
-		{
-			System.out.println(e.toString());
-		}
+
 	}
 	
-	void saveStructStatistics(Vector<String> smiles, Vector<Integer> stat, String fName)
+	void saveStructStatistics(Vector<String> smiles, Vector<Integer> stat, String fName) throws Exception
 	{
-		try
-		{	
 			File file = new File(fName);
 			RandomAccessFile f = new RandomAccessFile(file,"rw");
 			f.setLength(0);
 			for (int i = 0; i<smiles.size(); i++)
 				f.write((stat.get(i).toString()+"  "+smiles.get(i) + "\r\n").getBytes());
 			f.close();
-		}
-		catch (Exception e)
-		{
-			System.out.println(e.toString());
-		}
+
 	}
 	
 	
 	public void performStructureStatistics(String smilesFile, String mdlFile, 
-				int portionSize, int nUsedStr, String outFile)
+				int portionSize, int nUsedStr, String outFile) throws Exception
 	{
 		//Each structure from smilesFile is searched against mdlFile
 		//The process is done in portions.
-		try
-		{	
 			File file = new File(smilesFile);
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
 			long length = f.length();
@@ -613,14 +591,10 @@ public class ChemObjectFactory
 				saveStructStatistics(allSmiles, allStat, outFile);
 			}
 			f.close();
-		}
-		catch (Exception e)
-		{
-			System.out.println(e.toString());
-		}
+
 	}
 	
-	Vector<Integer> doStatisticsForStructs(Vector<String> smiles, String mdlFile, int nUsedStr)
+	Vector<Integer> doStatisticsForStructs(Vector<String> smiles, String mdlFile, int nUsedStr) throws Exception
 	{	
 		System.out.print(" queries ..." );
 		Vector<QueryAtomContainer> queries = new Vector<QueryAtomContainer> ();
@@ -634,9 +608,10 @@ public class ChemObjectFactory
 		}
 		System.out.println(" done" );
 		
+		MyIteratingMDLReader reader = null;
 		try
 		{
-			MyIteratingMDLReader reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
+			reader = new MyIteratingMDLReader(new FileReader(mdlFile),builder);
 			int record=0;
 			boolean res;
 
@@ -672,8 +647,11 @@ public class ChemObjectFactory
 			}	
 		}
 		catch(Exception e){
-			System.out.println("**** " + e.toString());
-		}
+			throw e;
+			
+		} finally {
+			try { reader.close();} catch (Exception x) {}
+		}	
 		
 		
 		Vector<Integer> stat = new Vector<Integer>();

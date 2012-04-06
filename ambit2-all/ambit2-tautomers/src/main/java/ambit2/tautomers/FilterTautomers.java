@@ -51,7 +51,7 @@ public class FilterTautomers
 	}
 		
 	
-	public Vector<IAtomContainer> filter(Vector<IAtomContainer> tautomers)
+	public Vector<IAtomContainer> filter(Vector<IAtomContainer> tautomers) throws Exception 
 	{	
 		getOriginalPositions();
 		//System.out.println("generated " + tautomers.size() + " strctures");
@@ -87,7 +87,8 @@ public class FilterTautomers
 				preProcessStructures(uniqueTautomers.get(i));
 			}
 			catch(Exception e){
-				System.out.println(e.toString());
+				throw e;
+				//System.out.println(e.toString()); Please do not hide exceptions!
 			}
 		}
 		
@@ -151,7 +152,8 @@ public class FilterTautomers
 			}
 			catch(Exception e)
 			{	
-				System.out.println(e.toString());
+				throw e;
+				//System.out.println(e.toString());
 			}
 		}
 		
@@ -243,7 +245,7 @@ public class FilterTautomers
 		return uniqueTautomers;
 	}
 	
-	Vector<IAtomContainer> duplicationFilterBasedOnIsomorphism(Vector<IAtomContainer> tautomers)
+	Vector<IAtomContainer> duplicationFilterBasedOnIsomorphism(Vector<IAtomContainer> tautomers) throws Exception
 	{
 		
 		Vector<IAtomContainer> filtered = new Vector<IAtomContainer> ();
@@ -293,7 +295,7 @@ public class FilterTautomers
 		return(clone);
 	}
 	
-	public void getOriginalPositions()
+	public void getOriginalPositions() throws Exception
 	{
 		for (int i = 0; i < tman.knowledgeBase.warningFilters.size(); i++)
 		{
@@ -328,7 +330,7 @@ public class FilterTautomers
 		}
 	}
 	
-	public Vector<Integer> getWarnFilters(IAtomContainer tautomer)
+	public Vector<Integer> getWarnFilters(IAtomContainer tautomer) throws Exception
 	{	
 		Vector<Integer> v = new Vector<Integer>(); 
 		for (int i = 0; i < tman.knowledgeBase.warningFilters.size(); i++)
@@ -382,7 +384,7 @@ public class FilterTautomers
 	}
 	
 	
-	public Vector<Integer> getExcludeFilters(IAtomContainer tautomer)
+	public Vector<Integer> getExcludeFilters(IAtomContainer tautomer) throws Exception
 	{	
 		//System.out.print("tautomer target: " +  SmartsHelper.moleculeToSMILES(tautomer));
 		

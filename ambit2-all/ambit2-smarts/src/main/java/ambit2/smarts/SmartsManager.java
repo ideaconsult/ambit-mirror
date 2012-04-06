@@ -174,7 +174,7 @@ public class SmartsManager
 		FlagSetSmartsDataForTarget  = flag;
 	}
 	
-	public void calcSmartsDataForTarget(IAtomContainer mol)
+	public void calcSmartsDataForTarget(IAtomContainer mol) throws Exception
 	{	
 		parser.setSMARTSData(mol);
 	}
@@ -235,7 +235,7 @@ public class SmartsManager
 	}
 	
 	
-	public boolean searchIn(IAtomContainer target)
+	public boolean searchIn(IAtomContainer target) throws Exception
 	{
 		if (query == null)
 			return(false);		
@@ -256,19 +256,12 @@ public class SmartsManager
 		}	
 	}
 	
-	boolean mappingIn(IAtomContainer target)
+	boolean mappingIn(IAtomContainer target) throws Exception 
 	{
 		if (FlagUseCDKIsomorphismTester)
 		{	
-			try
-			{
-				boolean res = UniversalIsomorphismTester.isSubgraph(target, query);
-				return(res);
-			}
-			catch (CDKException e)
-			{
-				System.out.println(e.getMessage());
-			}
+			boolean res = UniversalIsomorphismTester.isSubgraph(target, query);				return(res);
+
 		}
 		else
 		{
@@ -277,10 +270,10 @@ public class SmartsManager
 			return(isoTester.hasIsomorphism(target));
 		}
 		
-		return(false);
+	
 	}
 		
-	boolean fragmentSearchIn(IAtomContainer target)
+	boolean fragmentSearchIn(IAtomContainer target) throws Exception
 	{
 		boolean noComponentsSpecified = true;
 		for (int i = 0; i < parser.fragmentComponents.size(); i++)
@@ -721,7 +714,7 @@ public class SmartsManager
 		}
 	}
 	
-	boolean recursiveSearchIn0(IAtomContainer target)
+	boolean recursiveSearchIn0(IAtomContainer target) throws Exception
 	{	
 		//Strategy 0:
 		//Implements the following strategy for SSS with recursive SMARTS
@@ -733,8 +726,6 @@ public class SmartsManager
 		//a list of ordinary smarts. 
 		//Success is always guaranteed when only OR operations (',') are used with the 
 		//recursive conditions.
-		try
-		{	
 			for (int i = 0; i < subQueryList.size(); i++)
 			{	
 				QueryAtomContainer subQuery = subQueryList.get(i);
@@ -742,16 +733,12 @@ public class SmartsManager
 				if(res)
 					return(true);
 			}	
-		}
-		catch (CDKException e)
-		{
-			System.out.println(e.getMessage());
-		}
+		
 		return(false);
 	}
 	
 	
-	public IAtomContainerSet getAllIsomorphismMappings(IAtomContainer target)
+	public IAtomContainerSet getAllIsomorphismMappings(IAtomContainer target) throws Exception
 	{
 		IAtomContainerSet s = MoleculeTools.newAtomContainerSet(SilentChemObjectBuilder.getInstance());
 		if (query == null)
@@ -823,7 +810,7 @@ public class SmartsManager
 	
 	
 	
-	boolean recursiveSearchIn1(IAtomContainer target)
+	boolean recursiveSearchIn1(IAtomContainer target) throws Exception
 	{
 		//Strategy 1:
 		//Each recursive SMARTS is mapped against the target
@@ -834,7 +821,7 @@ public class SmartsManager
 		return(mappingIn(target));		
 	}
 	
-	public Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target)
+	public Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target) throws Exception
 	{				
 		if (query == null)
 			return(null);		
@@ -851,7 +838,7 @@ public class SmartsManager
 	
 	
 	
-	public List getBondMappings(IAtomContainer target)
+	public List getBondMappings(IAtomContainer target) throws Exception
 	{				
 		if (query == null)
 			return(null);		
@@ -884,7 +871,7 @@ public class SmartsManager
 			recAtoms.get(i).recSmartsMatches = new Vector<Vector<IAtom>>();
 	}
 	
-	void getQueryRecMatches(IAtomContainer target)
+	void getQueryRecMatches(IAtomContainer target) throws Exception
 	{
 		Vector<QueryAtomContainer> vRecCon;				
 		for (int i = 0; i < recAtoms.size(); i++)
@@ -933,11 +920,10 @@ public class SmartsManager
 	
 	//The following functions are based on the CDK Isomorphism tester ----------------
 	
-	Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target, IAtomContainer recQuery)
+	Vector<IAtom> getFirstPosAtomMappings(IAtomContainer target, IAtomContainer recQuery) throws Exception
 	{
 		List bondMaps;		  
-		try
-		{	
+
 			if (recQuery.getAtomCount() == 1)
 				return(getAtomMappingsFor1AtomQuery(target, recQuery));
 			else				
@@ -948,15 +934,10 @@ public class SmartsManager
 					bondMaps = UniversalIsomorphismTester.getSubgraphMaps(target, recQuery);
 					return(getAtomMapsFromBondMaps(bondMaps, target, recQuery));
 				}
-		}
-		catch (CDKException e)
-		{
-			System.out.println(e.getMessage());
-		}		
-		return(new Vector<IAtom>());
+
 	}
 	
-	Vector<IAtom> getAtomMappingsFor1AtomQuery(IAtomContainer target, IAtomContainer recQuery)
+	Vector<IAtom> getAtomMappingsFor1AtomQuery(IAtomContainer target, IAtomContainer recQuery) 
 	{
 		SMARTSAtom qAtom = (SMARTSAtom)recQuery.getAtom(0);
 		Vector<IAtom> atomMaps  = new Vector<IAtom>();

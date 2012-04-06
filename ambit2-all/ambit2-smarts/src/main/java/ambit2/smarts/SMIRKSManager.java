@@ -168,11 +168,11 @@ public class SMIRKSManager
 		return (fragment);
 	}
 	
-	public boolean applyTransformation(IAtomContainer target,  SMIRKSReaction reaction) {
+	public boolean applyTransformation(IAtomContainer target,  SMIRKSReaction reaction) throws Exception  {
 		return applyTransformation(target, null, reaction);
 	}
 	
-	public boolean applyTransformation(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
+	public boolean applyTransformation(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction) throws Exception 
 	{
 		isoTester.setQuery(reaction.reactant);
 		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
@@ -208,7 +208,9 @@ public class SMIRKSManager
 			try {
 				cfg.process(target);
 			} 
-			catch (AmbitException e) { }
+			catch (AmbitException e) {
+				throw e;
+			}
 			
 			return applied;
 		}
@@ -231,7 +233,9 @@ public class SMIRKSManager
 						try {
 							cfg.process(target);
 						} 
-						catch (AmbitException e) { }
+						catch (AmbitException e) { 
+							throw e;
+						}
 						
 						return applied;
 				}
@@ -256,10 +260,7 @@ public class SMIRKSManager
 			}
 			
 			AtomConfigurator  cfg = new AtomConfigurator();
-			try {
-				cfg.process(target);
-			} 
-			catch (AmbitException e) { }
+			cfg.process(target);
 			
 			return applied;
 		}
@@ -271,7 +272,7 @@ public class SMIRKSManager
 	 *  This transformation is applied in SSM_NON_IDENTICAL mode where
 	 *  the overlapping mappings at particular site produce multiple copies of the molecule.
 	 */
-	public IAtomContainerSet applyTransformationWithCombinedOverlappedPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
+	public IAtomContainerSet applyTransformationWithCombinedOverlappedPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction) throws Exception
 	{
 		isoTester.setQuery(reaction.reactant);
 		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
@@ -376,7 +377,7 @@ public class SMIRKSManager
 	}
 	
 	
-	public IAtomContainerSet applyTransformationWithSingleCopyForEachPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction)
+	public IAtomContainerSet applyTransformationWithSingleCopyForEachPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction) throws Exception
 	{
 		isoTester.setQuery(reaction.reactant);
 		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
@@ -581,7 +582,7 @@ public class SMIRKSManager
 	
 		
 	public IAtomContainer applyTransformationsAtLocationsWithCloning(IAtomContainer target, 
-															Vector<Vector<IAtom>> rMaps, SMIRKSReaction reaction)
+															Vector<Vector<IAtom>> rMaps, SMIRKSReaction reaction) throws Exception
 	{	
 		//Create a target clone 
 		IAtomContainer clone =  getCloneStructure(target);
@@ -596,15 +597,12 @@ public class SMIRKSManager
 			this.applyTransformAtLocation(clone, cloneMaps.get(i), reaction);
 		
 		AtomConfigurator  cfg = new AtomConfigurator();
-		try {
-			cfg.process(clone);
-		} 
-		catch (AmbitException e) { }
+		cfg.process(clone);
 		
 		return clone;
 	}
 	
-	IAtomContainer getCloneStructure(IAtomContainer target)
+	IAtomContainer getCloneStructure(IAtomContainer target) throws Exception 
 	{
 		IAtomContainer mol = new AtomContainer();
 		
@@ -641,18 +639,10 @@ public class SMIRKSManager
 		return mol;
 	}
 	
-	IAtom cloneAtom(IAtom a)
+	IAtom cloneAtom(IAtom a) throws Exception 
 	{
-		try
-		{
 			IAtom a1 = (IAtom)a.clone();
-			return (a1);
-		}	
-		catch(Exception e)
-		{	
-		}
-		
-		return(null);
+			return a1;
 	}
 	
 	

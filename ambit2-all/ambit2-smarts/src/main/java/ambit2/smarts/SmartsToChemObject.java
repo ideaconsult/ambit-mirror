@@ -223,7 +223,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return(container);
 	}
 	
-	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query, IRingSet ringSet)
+	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query, IRingSet ringSet) throws Exception
 	{
 		Vector<IRingSet> rs = getMaxCondensedRingSystems(ringSet);
 		if (rs.size() == 0)
@@ -276,7 +276,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return(extractAtomContainerFullyConnected(query,ringSet));
 	}
 	
-	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query)
+	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query) throws Exception
 	{
 		SSSRFinder sssrf = new SSSRFinder(query);
 		IRingSet ringSet = sssrf.findSSSR();
