@@ -385,6 +385,13 @@
 		<version>1.0.1</version>
 	</dependency>
 
+	<dependency>
+		<groupId>ambit</groupId>
+		<artifactId>ambit2-tautomers</artifactId>
+		<version>${project.version}</version>
+		<type>jar</type>
+		<scope>compile</scope>
+	</dependency>
   </dependencies>
 	<repositories>
 	
