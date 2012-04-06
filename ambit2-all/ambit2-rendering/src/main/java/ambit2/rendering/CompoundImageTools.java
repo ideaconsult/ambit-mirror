@@ -419,6 +419,15 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    		}
 	    		
 	    	}	    	
+	    	case any: {
+	        	if (molecule!=null)
+	            	for (int i=0; i < molecule.getBondCount();i++)
+	            		if (molecule.getBond(i).getFlag(CDKConstants.ISAROMATIC)) 
+	            			if (IBond.Order.DOUBLE.equals(molecule.getBond(i).getOrder())) {
+	            				rings = false;
+	            				break;
+	            			}
+	    	}
 	    	}
 
     	
