@@ -317,4 +317,46 @@ TD.results
   
 .depictBox { 
 	height: 250px; 
-}  
+}
+
+.tabs {
+	background: transparent;
+	border: none;
+	padding: 0px;
+	margin: 0px;
+}
+.tabs .ui-widget-header {
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid #c0c0c0;
+	border-radius: 0px;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	padding: 0;
+	margin: 0;
+}
+.tabs .ui-state-default {
+	background: transparent;
+	border: none;
+}
+.tabs .ui-state-active {
+	background: transparent url(img/uiTabsArrow.png) no-repeat bottom center;
+	border: none;
+}
+.tabs .ui-state-default a {
+	color: #516473;	
+}
+.tabs .ui-state-active a {
+	color: #627a3f;
+	font-weight: bold;
+	border: 1px solid #bcf903; 
+}
+
+.ui-tabs .ui-tabs-nav 
+{ 
+	padding-left: 0px; 
+    padding-bottom: 0px; 
+    padding-top: 5px; 
+    margin-bottom: -5px; 
+    margin-left: -5px; 
+} 
