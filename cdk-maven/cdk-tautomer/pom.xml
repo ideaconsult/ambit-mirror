@@ -3,12 +3,12 @@
   <parent>
     <artifactId>cdk-all</artifactId>
     <groupId>org.openscience.cdk</groupId>
-    <version>1.4.8</version>
+    <version>1.4.9</version>
   </parent>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-tautomer</artifactId>
   <name>cdk-valencycheck</name>
-  <version>1.4.8</version>
+  <version>1.4.9</version>
 <dependencies>
 	<dependency>
     		<groupId>org.openscience.cdk</groupId>

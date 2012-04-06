@@ -3,11 +3,11 @@
   <parent>
     <artifactId>cdk-all</artifactId>
     <groupId>org.openscience.cdk</groupId>
-    <version>1.4.8</version>
+    <version>1.4.9</version>
   </parent>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-renderawt</artifactId>
-  <version>1.4.8</version>
+  <version>1.4.9</version>
   <name>cdk-renderawt</name>
 <build>
     <plugins>

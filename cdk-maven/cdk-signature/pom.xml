@@ -2,13 +2,13 @@
   <parent>
     <artifactId>cdk-all</artifactId>
     <groupId>org.openscience.cdk</groupId>
-    <version>1.4.8</version>
+    <version>1.4.9</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-signature</artifactId>
   <name>cdk-signature</name>
- <version>1.4.8</version>
+ <version>1.4.9</version>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
