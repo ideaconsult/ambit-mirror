@@ -177,14 +177,16 @@ public class AutomaticTestUtilities
 	{
 		AutomaticTestUtilities atu = new AutomaticTestUtilities();
 		//exhaustive
-		
-		atu.handleArguments(new String[] {
-				"-db","D:/nina/IdeaConsult/Projects/CADASTER/Data for 2011 models - TAZ&BTAZ/TAZ_BTAZ_FishToxicity/fragments/6.sdf",
-				"-c","exhaustive-str",
-				"-o","D:/nina/IdeaConsult/Projects/CADASTER/Data for 2011 models - TAZ&BTAZ/TAZ_BTAZ_FishToxicity/fragments/6strucs_big.txt",
-				//"-nDBStr","1"
-		});		
-		
+		try {
+			atu.handleArguments(new String[] {
+					"-db","D:/nina/IdeaConsult/Projects/CADASTER/Data for 2011 models - TAZ&BTAZ/TAZ_BTAZ_FishToxicity/fragments/6.sdf",
+					"-c","exhaustive-str",
+					"-o","D:/nina/IdeaConsult/Projects/CADASTER/Data for 2011 models - TAZ&BTAZ/TAZ_BTAZ_FishToxicity/fragments/6strucs_big.txt",
+					//"-nDBStr","1"
+			});		
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 					
 		//atu.handleArguments(new String[] {"-db","/gen-str-seq40-db-after-40000.txt", "-i","/keys-eff80.txt",	
 		/*
@@ -198,7 +200,7 @@ public class AutomaticTestUtilities
 	}
 	
 	
-	public int handleArguments(String[] args)
+	public int handleArguments(String[] args) throws Exception
 	{
 		if (args.length == 0)
 		{	
@@ -377,7 +379,7 @@ public class AutomaticTestUtilities
 		return(0);
 	}
 	
-	public int handleCommand()
+	public int handleCommand() throws Exception
 	{
 		if (command == null)
 			return(0);
@@ -1711,7 +1713,7 @@ public class AutomaticTestUtilities
 	
 	
 	
-	public int calcScreeningRatio()
+	public int calcScreeningRatio() throws Exception
 	{
 		//Input file interpretation
 		//-i queries-bits

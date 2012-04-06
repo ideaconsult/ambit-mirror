@@ -13,7 +13,7 @@ public class SmartsScreeningKeys
 	Vector<String> mSmartsKeys = new Vector<String>();
 	
 	
-	public Vector<String> getKeys()
+	public Vector<String> getKeys() throws Exception
 	{
 		if (!mKeysLoaded)
 			loadKeysFromResource();
@@ -21,12 +21,11 @@ public class SmartsScreeningKeys
 		return (mSmartsKeys);
 	}
 	
-	void loadKeysFromResource()
+	void loadKeysFromResource() throws Exception
 	{
 		InputStream inStream = getClass().getClassLoader().getResourceAsStream("smartskeys.txt");
 		BufferedReader inReader  = new BufferedReader(new InputStreamReader(inStream));
 		mSmartsKeys.clear();
-		
 		try {
 			String line = inReader.readLine();
 			int n = 0;
@@ -38,9 +37,10 @@ public class SmartsScreeningKeys
 					break;
 				line = inReader.readLine();
 			}
-			inReader.close();
-		} 
-		catch (Exception e){}
+			
+		} finally {
+			try { inReader.close(); } catch (Exception x) {}
+		}
 		mKeysLoaded = true;
 	}
 	

@@ -39,7 +39,7 @@ public class Rule
 	IBond.Order  ringClosureBondOrder = IBond.Order.SINGLE;
 	
 	
-	public Vector<IRuleInstance>  applyRule(IAtomContainer mol)
+	public Vector<IRuleInstance>  applyRule(IAtomContainer mol) throws Exception
 	{
 		IsomorphismTester isoTester = new IsomorphismTester(); 
 		Vector<IRuleInstance> instances = new Vector<IRuleInstance>();
@@ -86,7 +86,7 @@ public class Rule
 		return instances;
 	}
 	
-	int checkMobileGroup(int mobGroupNum, int curState, Vector<IAtom> amap, IAtomContainer mol)
+	int checkMobileGroup(int mobGroupNum, int curState, Vector<IAtom> amap, IAtomContainer mol) throws Exception
 	{
 		if (mobileGroup.equals("H"))
 		{

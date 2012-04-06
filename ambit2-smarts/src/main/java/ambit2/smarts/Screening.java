@@ -27,7 +27,7 @@ public class Screening
 	/**
 	 * Screening by fingerprints and structural keys
 	 */
-	public Screening(IChemObjectBuilder builder)	
+	public Screening(IChemObjectBuilder builder) throws Exception	 
 	{
 		FlagUseStrKeys = true;			
 		getStandardKeys();
@@ -39,7 +39,7 @@ public class Screening
 	 * Fingerprints screening is on always
 	 * @param useStrKeys whether to screen by structural keys 
 	 */
-	public Screening(boolean useStrKeys)	
+	public Screening(boolean useStrKeys) throws Exception
 	{
 		FlagUseStrKeys = useStrKeys;
 		if (FlagUseStrKeys)
@@ -65,7 +65,7 @@ public class Screening
 	 * obtained by {@link SmartsParser} - might not work by other QueryAtomContainer
 	 * @param query  search for this query
 	 */
-	public void setQuery(QueryAtomContainer query)
+	public void setQuery(QueryAtomContainer query) throws Exception
 	{	
 			extractedQueryAC = convertor.extractAtomContainer(query);			
 			querySD = getScreeningDataForTarget(extractedQueryAC);
@@ -129,18 +129,12 @@ public class Screening
 	 * @param ac
 	 * @return
 	 */
-	public ScreeningData getScreeningDataForTarget(IAtomContainer ac)
+	public ScreeningData getScreeningDataForTarget(IAtomContainer ac) throws Exception
 	{
 		ScreeningData sd = new ScreeningData();
-		try
-		{
 			sd.fingerprint = fp.getFingerprint(ac);
 			if (FlagUseStrKeys)
 				sd.structureKeys = getStructureKeyBits(ac);
-		}
-		catch (Exception e)
-		{	
-		}
 		return sd;
 	}
 	
@@ -159,7 +153,7 @@ public class Screening
 	}
 	
 	 
-	void getStandardKeys()
+	void getStandardKeys() throws Exception
 	{
 		SmartsScreeningKeys smartsScrKeys = new SmartsScreeningKeys(); 
 		smartsKeys = smartsScrKeys.getKeys();

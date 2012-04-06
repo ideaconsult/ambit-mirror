@@ -421,21 +421,15 @@ public class SmartsHelper
 		return(sb.toString());
 	}
 	
-	public static String moleculeToSMILES(IAtomContainer mol)
+	public static String moleculeToSMILES(IAtomContainer mol) throws Exception
 	{	 
+		//TODO use SmilesGenerator(true)
 		java.io.StringWriter result =  new java.io.StringWriter();
 		SMILESWriter writer = new SMILESWriter(result);
 		
-		try
-		{
-			writer.write(mol);
-			writer.close();
-		}
-		catch (Exception e)
-		{	
-			System.out.println(e.toString());
-		}
-		
+		writer.write(mol);
+		writer.close();
+
 		return(result.toString());
 	}
 	
@@ -543,7 +537,7 @@ public class SmartsHelper
 	
 	
 	static public Vector<Integer> getSmartsPositions(String smartsQuery, IAtomContainer target, 
-					boolean FlagSupportDoubleBondAromaticityNotSpecified)
+					boolean FlagSupportDoubleBondAromaticityNotSpecified) throws Exception
 	{	
 		SmartsParser sp = new SmartsParser();
 		sp.mSupportDoubleBondAromaticityNotSpecified = FlagSupportDoubleBondAromaticityNotSpecified;

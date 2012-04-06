@@ -84,7 +84,7 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 				sp.setSMARTSData(mol); 
 			}
 		} catch (Exception x) {
-			sp.setSMARTSData(mol);
+			try { sp.setSMARTSData(mol); } catch (Exception xx) { /*ok, what should we do here? */ }
 		}
 		return isoTester.hasIsomorphism(mol)?1:0;
 	}

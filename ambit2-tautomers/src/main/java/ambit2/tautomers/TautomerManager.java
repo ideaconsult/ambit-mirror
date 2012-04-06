@@ -54,22 +54,17 @@ public class TautomerManager
 	}
 	
 	
-	public void setStructure(IAtomContainer str)
-	{	
+	public void setStructure(IAtomContainer str) throws Exception {	
 		molecule = str;
 		originalMolecule = str;
 		originalValencySum = FilterTautomers.getValencySum(str); 
 		
-		try{
-			molecule = (IAtomContainer)originalMolecule.clone();
-		}
-		catch(Exception e)
-		{}
+		molecule = (IAtomContainer)originalMolecule.clone();
 	}
 	
 	
 	//Approach 00: this is the initial (pure combinatorial)  approach 
-	public Vector<IAtomContainer> generateTautomers()
+	public Vector<IAtomContainer> generateTautomers() throws Exception
 	{
 		searchAllRulePositions();
 		handleOverlapedInstances();
@@ -87,7 +82,7 @@ public class TautomerManager
 	}
 	
 	//Approach 01 (basic one) based on first depth search algorithm
-	public Vector<IAtomContainer> generateTautomersIncrementaly()
+	public Vector<IAtomContainer> generateTautomersIncrementaly() throws Exception
 	{
 		//An approach for generation of tautomers
 		//based on incremental steps of analysis with first-depth approach
@@ -139,7 +134,7 @@ public class TautomerManager
 	}
 	
 	
-	Vector<IAtomContainer> preRecursionFiltration(Vector<IAtomContainer> tautomers)
+	Vector<IAtomContainer> preRecursionFiltration(Vector<IAtomContainer> tautomers) throws Exception 
 	{
 		//Save original filtration flags
 		boolean F_ApplyDuplicationCheckInChI = tautomerFilter.FlagApplyDuplicationCheckInChI;
@@ -174,7 +169,7 @@ public class TautomerManager
 		return res;
 	}
 	
-	Vector<IAtomContainer> generateTautomersFromMultipleTargets(Vector<IAtomContainer> targets)
+	Vector<IAtomContainer> generateTautomersFromMultipleTargets(Vector<IAtomContainer> targets) throws Exception 
 	{
 		IAtomContainer tmpOrgMolecule = originalMolecule;
 		IAtomContainer tmpMolecule = molecule;
@@ -208,17 +203,22 @@ public class TautomerManager
 	}
 	
 	
-	void searchAllRulePositions()
+	void searchAllRulePositions() throws Exception
 	{
 		generatedRules.clear();
 		extendedRuleInstances.clear();
 		ruleInstances.clear();
 		
 		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-			if (knowledgeBase.rules.get(i).isRuleActive)
-			{	
-				Vector<IRuleInstance> instances = knowledgeBase.rules.get(i).applyRule(molecule); 
-				extendedRuleInstances.addAll(instances);
+			if (knowledgeBase.rules.get(i).isRuleActive) {
+				try {
+					Vector<IRuleInstance> instances = knowledgeBase.rules.get(i).applyRule(molecule); 
+					if ((instances!=null) && (instances.size()>0))
+						extendedRuleInstances.addAll(instances);
+				} catch (Exception x) {
+					x.printStackTrace();
+					System.out.println(knowledgeBase.rules.get(i).name);
+				}
 			}	
 	}
 	
@@ -333,7 +333,7 @@ public class TautomerManager
 	}
 	
 	//This function is applied for approach 00 
-	void generateRuleInstanceCombinations()
+	void generateRuleInstanceCombinations() throws Exception 
 	{
 		for (int i = 0; i < ruleInstances.size(); i++)
 			ruleInstances.get(i).firstState();
@@ -358,18 +358,14 @@ public class TautomerManager
 	}
 	
 	//This function is applied for approach 00 
-	void registerTautomer00()
+	void registerTautomer00() throws Exception 
 	{	
-		try{
 			IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
 			resultTautomers.add(newTautomer);
 			
 			//TODO search for hidden tautomers 
 			//i.e. overlapping of some rules occur only for specific states of both rules
-		}
-		catch(Exception e)
-		{}
-		
+
 		
 		System.out.print("  tautomer: " + getTautomerCombination()  
 				+  "    " + SmartsHelper.moleculeToSMILES(molecule));
