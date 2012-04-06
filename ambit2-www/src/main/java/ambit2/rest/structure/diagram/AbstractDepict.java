@@ -38,7 +38,7 @@ public class AbstractDepict extends ProtectedResource {
 	protected String smiles ;
 	protected String smarts ;
 	protected String smirks ;
-
+	protected boolean headless = false;
 	/**
 	 * Might be ignored, currently only CDK depict considers the flags
 	 */
@@ -66,6 +66,8 @@ public class AbstractDepict extends ProtectedResource {
 			//if POST, the form should be already initialized
 			else 
 				params = getRequest().getEntityAsForm();
+		try { headless = Boolean.parseBoolean(params.getFirstValue("headless")); } 
+		catch (Exception x) { headless = false;}
 		return params;
 	}
 	protected String getTitle(Reference ref, String smiles) throws ResourceException {
@@ -158,10 +160,13 @@ public class AbstractDepict extends ProtectedResource {
 	    				public void close() throws Exception {};
 	    				public Writer process(String target) throws AmbitException {
 	    					try {
-	    					AmbitResource.writeTopHeader(output, smiles, getRequest(),getResourceRef(getRequest()), "",null);
-	    					writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
-	    					output.write(target);
-	    					AmbitResource.writeHTMLFooter(output, smiles, getRequest());
+	    					if (headless) output.write(target);
+	    					else {
+		    					AmbitResource.writeTopHeader(output, smiles, getRequest(),getResourceRef(getRequest()), "",null);
+		    					writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
+		    					output.write(target);
+		    					AmbitResource.writeHTMLFooter(output, smiles, getRequest());
+	    					}
 	    					} catch (Exception x) {}
 	    					return output;
 	    				};
