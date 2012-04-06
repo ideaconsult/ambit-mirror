@@ -194,6 +194,9 @@ public class AbstractDepict extends ProtectedResource {
 	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, new EmptyMoleculeException());
 	        	return null;   	
 	        }
+		} catch (ResourceException x) {
+			getResponse().setStatus(x.getStatus(),x,x.getMessage());
+			return null;
 		} catch (Exception x) {
 			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,x,x.getMessage());
 			return null;
