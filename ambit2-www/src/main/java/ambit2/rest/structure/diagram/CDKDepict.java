@@ -44,15 +44,15 @@ import ambit2.smarts.query.SmartsPatternAmbit;
  */
 public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	protected CompoundImageTools depict = new CompoundImageTools();
+
 	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		depict.setImageSize(new Dimension(410,210));
-		this.getVariants().clear();
 		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));
-		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
-	}
+	}	
+	
 	@Override
 	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
 		try {
@@ -76,35 +76,41 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	@Override
 	public Representation get(Variant variant) {
 		try {
-		if(variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 			Form form = getParams();
-			int w = 400; int h = 200;
-			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
-			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
-				try {
-					displayMode = Mode2D.valueOf(form.getFirstValue("mode"));
-				} catch (Exception x) {displayMode = null;}
 			smiles = form.getFirstValue(QueryResource.search_param);
 			setSmarts(form.getFirstValue("smarts"));
-			StringConvertor convertor = new StringConvertor(new AbstractReporter<String,Writer>() {
-				public void close() throws Exception {};
-				public Writer process(String target) throws AmbitException {
-					try {
-					AmbitResource.writeTopHeader(output, smiles==null?"2D structure diagram":smiles, getRequest(),getResourceRef(getRequest()), "",null);
-					writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
-					output.write(target);
-					AmbitResource.writeHTMLFooter(output, smiles, getRequest());
-					} catch (Exception x) {}
-					return output;
-				};
-			},MediaType.TEXT_HTML);
-			return convertor.process(getTitle(getResourceRef(getRequest()),smiles));
-		} else {
-			Representation image = super.get(variant);
+			
+			if (MediaType.TEXT_HTML.equals(variant.getMediaType())) {
+				StringConvertor convertor = new StringConvertor(new AbstractReporter<String,Writer>() {
+					public void close() throws Exception {};
+					public Writer process(String target) throws AmbitException {
+						try {
+						AmbitResource.writeTopHeader(output, smiles==null?"2D structure diagram":smiles, getRequest(),getResourceRef(getRequest()), "",null);
+						writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
+						output.write(target);
+						AmbitResource.writeHTMLFooter(output, smiles, getRequest());
+						} catch (Exception x) {}
+						return output;
+					};
+				},MediaType.TEXT_HTML);
+				return convertor.process(getTitle(getResourceRef(getRequest()),smiles));
+			} else {
+				return getImageRepresentation(variant,Mode2D.any);
+			}
+		} catch (Exception x) {
+			
+		}
+    	return null;
+
+	}
+	
+	public Representation getImageRepresentation(Variant variant, Mode2D displayMode) {
+
+			
+			Representation image = process(variant);
 			if (image !=null) return image;
-			if (variant.getMediaType().equals(MediaType.IMAGE_PNG))  {
 				
-	        	return new OutputRepresentation(MediaType.IMAGE_PNG) {
+        	return new OutputRepresentation(MediaType.IMAGE_PNG) {
 	    		@Override
 	    		public void write(OutputStream out) throws IOException {
 	    			try {
@@ -112,33 +118,39 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	    			} catch (IOException x) {
 	    				throw x;
 	    			} catch (Exception x) {
-	    				
+	    				x.printStackTrace();
 	    			} finally {
 	        			try { out.flush(); } catch (Exception x) {}
 	        			try { out.close(); } catch (Exception x) {}
 	    			}
 	    		}
-	        	};
 			};
-	
-		}
-		} catch (Exception x) {
-			
-		}
-    	return null;
-
 	}
 	@Override
 	protected String getTitle(Reference ref, String smiles) {
 		StringBuilder b = new StringBuilder();
 		b.append("<table width='100%'>");
+		
+		Reference uri = ((Reference)ref).clone();
+		uri.setQuery(null);
+		
 		for (Mode2D mode : Mode2D.values()) {
 			if ((mode.ordinal() %2) == 0) b.append("<tr>");
 			b.append("<td>");
+			String url = String.format("%s/%s?search=%s%s%s",
+						uri,
+						mode.name(),
+						Reference.encode(smiles),
+						smarts==null?"":"&smarts=",
+						smarts==null?"":Reference.encode(smarts)
+						);
+			
 			b.append(AmbitResource.printWidget(
-					String.format("<a href='%s&mode=%s&media=image/png' target='%s' title='%s'>%s</a>",
-							ref,mode.name(),mode.name(),mode.getDescription(),mode.toString()), 
-					String.format("<img src='%s&mode=%s&media=image/png' alt='%s' title='%s'>", ref,mode.getURIParameter(),smiles==null?"":smiles,smiles==null?"":smiles)));
+					String.format("<a href='%s' target='%s' title='%s'>%s</a>",
+							url,mode.name(),mode.getDescription(),mode.toString()), 
+					String.format("<br><img src='%s' alt='%s' title='%s'>", 
+							url,smiles==null?"":smiles,smiles==null?"":smiles)));
+							
 			b.append("</td>");
 			if ((mode.ordinal() %2) == 1) b.append("</tr>");
 		}

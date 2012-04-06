@@ -5,6 +5,7 @@ import org.restlet.Context;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.diagram.CDKDepict;
+import ambit2.rest.structure.diagram.CDKDepictVariants;
 import ambit2.rest.structure.diagram.CSLSDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 import ambit2.rest.structure.diagram.OpenBabelDepict;
@@ -27,6 +28,7 @@ public class DepictDemoRouter extends MyRouter {
 		attachDefault(AbstractDepict.class);
 		attach("/daylight",DaylightDepict.class);
 		attach("/cdk",CDKDepict.class);
+		attach("/cdk/{mode}",CDKDepictVariants.class);
 		attach("/cactvs",CSLSDepict.class);
 		attach("/obabel",OpenBabelDepict.class);
 		attach(ReactionDepict.resource,ReactionDepict.class);

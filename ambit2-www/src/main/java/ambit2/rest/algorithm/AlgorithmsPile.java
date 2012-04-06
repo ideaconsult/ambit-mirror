@@ -294,6 +294,7 @@ public class AlgorithmsPile {
 			
 			{"ambit2.descriptors.AtomTypeVerifierDescriptor","AtomTypes verifier","ambit2.descriptors.AtomTypeVerifierDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#atomtypeverifier"},
 			{"ambit2.descriptors.KekulizationVerifier","Kekulization verifier","ambit2.descriptors.KekulizationVerifier",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#kekulizationverifier"},
+			{"ambit2.descriptors.SaturationCheckerVerifier","Saturation Checker verifier","ambit2.descriptors.SaturationCheckerVerifier",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#saturationcheckerverifier"},
 		
 			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
 			

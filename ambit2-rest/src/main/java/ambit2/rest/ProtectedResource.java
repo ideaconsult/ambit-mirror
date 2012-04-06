@@ -14,11 +14,11 @@ import org.restlet.data.Status;
 import org.restlet.ext.wadl.FaultInfo;
 import org.restlet.ext.wadl.MethodInfo;
 import org.restlet.ext.wadl.RepresentationInfo;
-import org.restlet.ext.wadl.WadlServerResource;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
+import org.restlet.resource.ServerResource;
 
-public abstract class ProtectedResource extends WadlServerResource implements IAuthToken {
+public abstract class ProtectedResource extends ServerResource implements IAuthToken {
 
 		
 	@Override
@@ -98,7 +98,7 @@ public abstract class ProtectedResource extends WadlServerResource implements IA
        
 	}	
 
-	@Override
+	/*
 	protected void describeGet(MethodInfo info) {
         info.setIdentifier("item");
         info.setDocumentation("To retrieve details of a specific item");
@@ -119,4 +119,5 @@ public abstract class ProtectedResource extends WadlServerResource implements IA
         info.getResponse().getFaults().add(faultInfo);
 
 	}
+	*/
 }
