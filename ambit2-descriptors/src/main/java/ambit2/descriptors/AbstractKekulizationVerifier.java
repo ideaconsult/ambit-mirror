@@ -4,6 +4,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -67,7 +68,10 @@ public abstract class AbstractKekulizationVerifier implements IMolecularDescript
 			}
 			
 			now = System.currentTimeMillis();
-			
+			//now clear the double bonds
+			for (IBond bond:mol.bonds()) 
+				if (bond.getFlag(CDKConstants.ISAROMATIC)) bond.setOrder(Order.SINGLE);
+					
 			IAtomContainer kekuleMol = transform2Kekule(mol);
 			results[names_index.time_ms.ordinal()] = System.currentTimeMillis()-now;
 
