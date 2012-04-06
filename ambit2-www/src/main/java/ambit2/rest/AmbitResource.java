@@ -26,6 +26,8 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
+import ambit2.rest.structure.smirks.ReactionDepict;
+import ambit2.rest.structure.tautomers.TautomersDepict;
 import ambit2.rest.template.OntologyResource;
 
 /**
@@ -522,7 +524,8 @@ public class AmbitResource extends ProtectedResource {
 		
 		w.write(String.format("&nbsp;<a href='http://toxpredict.org' title='Predict'>ToxPredict</a>&nbsp;"));
 		w.write(String.format("<a href='%s/depict?search=c1ccccc1' title='Structure diagram'>Depiction</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/depict/reaction?search=c1ccccc1' title='SMIRKS test'>Reactions</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/depict%s?search=c1ccccc1' title='SMIRKS test'>Reactions</a>&nbsp;",baseReference,ReactionDepict.resource));
+		w.write(String.format("<a href='%s/depict%s?search=c1ccccc1' title='Tautomer test'>Tautomers</a>&nbsp;",baseReference,TautomersDepict.resource));
 
 
 
