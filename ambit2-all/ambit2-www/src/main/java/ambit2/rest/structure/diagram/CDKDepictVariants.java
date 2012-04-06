@@ -22,7 +22,7 @@ public class CDKDepictVariants extends CDKDepict {
 			try {
 				displayMode = Mode2D.valueOf(mode.toString());
 			} catch (Exception x) {displayMode = Mode2D.any;}
-		return getImageRepresentation(variant,displayMode);
+		return process(variant);
 	}
 
 	
