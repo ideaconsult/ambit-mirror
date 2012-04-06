@@ -33,7 +33,7 @@ public class DepictDemoRouter extends MyRouter {
 		attach("/obabel",OpenBabelDepict.class);
 		attach(ReactionDepict.resource,ReactionDepict.class);
 		attach(SMIRKSDepict.resource,SMIRKSDepict.class);
-		attach("/reaction/reactant",CDKDepict.class);
+		attach("/reaction/reactant",CDKDepictVariants.class);
 	}
 
 }
