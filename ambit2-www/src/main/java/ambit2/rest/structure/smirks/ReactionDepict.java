@@ -25,7 +25,7 @@ public class ReactionDepict extends AbstractDepict {
 				String.format("<a href='%s/reactant?search=%s'>%s</a>",
 						ref.getHierarchicalPart(),Reference.encode(smiles),"Reactant"),
 						
-				String.format("<strong>%s</strong><img src='%s/reactant?search=%s' alt='%s' title='%s'>",
+				String.format("<strong>%s</strong><img id='reactant' src='%s/reactant?search=%s' alt='%s' title='%s' onError=\"hideDiv('reactant')\">",
 						smiles,
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
@@ -36,7 +36,7 @@ public class ReactionDepict extends AbstractDepict {
 				String.format("<a href='%s/product?search=%s&smirks=%s'>%s</a>",
 						ref.getHierarchicalPart(),Reference.encode(smiles),Reference.encode(smirks),"Product"),
 						
-				String.format("<strong>Reaction SMIRKS %s</strong><img src='%s/product?search=%s&smirks=%s' alt='%s' title='%s'>",
+				String.format("<strong>Reaction SMIRKS %s</strong><img id='product' src='%s/product?search=%s&smirks=%s' alt='%s' title='%s' onError=\"hideDiv('product')\">",
 						smirks==null?"":smirks,
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),

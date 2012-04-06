@@ -15,13 +15,13 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
-import ambit2.rest.structure.diagram.CDKDepict;
+import ambit2.rest.structure.diagram.CDKDepictVariants;
 import ambit2.smarts.IAcceptable;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.SmartsConst;
 
-public class SMIRKSDepict extends CDKDepict implements IAcceptable {
+public class SMIRKSDepict extends CDKDepictVariants implements IAcceptable {
 	public static final String resource = "/reaction/product";
 	protected ArrayList<String> list = new ArrayList<String>();
 	@Override
