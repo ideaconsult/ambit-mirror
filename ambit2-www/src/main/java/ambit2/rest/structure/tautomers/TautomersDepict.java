@@ -85,7 +85,7 @@ public class TautomersDepict extends AbstractDepict {
 					);
 			
 			b.append(AmbitResource.printWidget(
-					String.format("<a href='%s' title='Tautomer: %s'>%s</a>",url,tautomerSmiles,"Tautomer"), 
+					String.format("<a href='%s' title='Tautomer: %s'>%d. %s</a>",url,tautomerSmiles,(i+1),"Tautomer"), 
 					String.format("<img id='t%d' src='%s' alt='%s' title='%s' onError=\"hideDiv('t%d')\">", 
 							i+1,url,tautomerSmiles==null?"":tautomerSmiles,
 									tautomerSmiles==null?"":tautomerSmiles,i+1)));
@@ -97,3 +97,9 @@ public class TautomersDepict extends AbstractDepict {
 		return b.toString();
 	}
 }
+
+/**
+ * TODO 
+ * option to generate via cactvs  http://cactus.nci.nih.gov/chemical/structure/tautomers:warfarin/smiles
+ * and cdk-inchi
+*/
