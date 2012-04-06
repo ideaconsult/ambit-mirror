@@ -69,6 +69,7 @@ public class AbstractDepict extends ProtectedResource {
 		return params;
 	}
 	protected String getTitle(Reference ref, String smiles) {
+
 		String style = "depictBox";
 		StringBuilder b = new StringBuilder();
 		b.append("<table width='100%'>");
@@ -83,12 +84,14 @@ public class AbstractDepict extends ProtectedResource {
 				style
 					));
 		b.append("</td><td>");
+		
 		b.append(AmbitResource.printWidget(
-				String.format("<a href='%s/cdk?search=%s&smarts=%s'>%s</a>",
+				String.format("<a href='%s/cdk?search=%s%s%s'>%s</a>",
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
+						smarts==null?"":"&smarts=",
 						smarts==null?"":Reference.encode(smarts),"CDK depiction"),
-				String.format("<img id='cdk' src='%s/cdk?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
+				String.format("<img id='cdk' src='%s/cdk/any?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
 						smarts==null?"":Reference.encode(smarts),
@@ -125,23 +128,25 @@ public class AbstractDepict extends ProtectedResource {
 		
 		b.append("</table>");
 		return b.toString();
+		
 	}
 	
-	
+	@Override
 	public Representation get(Variant variant) {
+		return process(variant);
+	}
+	public Representation process(Variant variant) {
 
 		try {
 			Form form = getParams();
 			int w = 400; int h = 200;
 			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
-				try {
-					displayMode = Mode2D.valueOf(form.getFirstValue("mode"));
-				} catch (Exception x) {displayMode = null;}
+
 			smiles = form.getFirstValue(QueryResource.search_param);
 			setSmarts(form.getFirstValue("smarts"));
 			setSmirks(null);
-			String[] smirks_patterns = form.getValuesArray("smirks");
+			String[]  smirks_patterns = form.getValuesArray("smirks");
 			for (String sm: smirks_patterns)
 				if (sm!=null) {
 					setSmirks(sm);
@@ -165,7 +170,7 @@ public class AbstractDepict extends ProtectedResource {
 	    		}
 					    		
 	    	if (smiles != null) {
-	        	final BufferedImage image = getImage(smiles,w,h);
+	        	final BufferedImage image = getImage(smiles.trim(),w,h);
 	        	if (image ==  null) {
 		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid smiles %s",smiles));
 	        		return null;

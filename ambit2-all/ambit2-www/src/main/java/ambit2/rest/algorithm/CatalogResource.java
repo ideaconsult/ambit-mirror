@@ -188,15 +188,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			setPageSize(1000);
 		}			
 	}
-	@Override
-	protected Representation describe() {
-        setTitle(getClass().getName());
-		return super.describe();
-	}
-	@Override
-	protected void describeGet(MethodInfo info) {
-		super.describeGet(info);
-	}
+
 
 	/*
 	@Override

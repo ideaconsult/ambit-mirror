@@ -386,15 +386,5 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 
 			
 	}
-	
-	@Override
-	protected void describeGet(MethodInfo info) {
 
-		super.describeGet(info);
-	}
-	@Override
-	protected void describePost(MethodInfo info) {
-		super.describePost(info);
-
-	}
 }

@@ -8,8 +8,6 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.wadl.MethodInfo;
-import org.restlet.ext.wadl.ParameterStyle;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -103,10 +101,4 @@ public class Name2StructureResource extends ProtectedResource {
 		}
 	}	
 	
-	@Override
-	protected void describeGet(MethodInfo arg0) {
-		super.describeGet(arg0);
-		arg0.addRequestParameter("search", true, "string", ParameterStyle.QUERY, "chemical name to convert to structure");
-		arg0.setDocumentation("Converts chemical name to structure, based on OPSIN");
-	}
 }

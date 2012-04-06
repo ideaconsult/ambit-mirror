@@ -60,7 +60,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	}
 	public AbstractResource() {
 		super();
-		setAutoDescribed(true);
+		//setAutoDescribed(true);
 	}
 	public String[] URI_to_handle() {
 		return null;
@@ -99,13 +99,14 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 			setTokenCookies(variant, useSecureCookie(getRequest()));
 	        // SEND RESPONSE
 	        setStatus(Status.SUCCESS_OK);
-
+	        /*
 			if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) {
 				WadlRepresentation wadl =  new WadlRepresentation(describe());
 				//wadl.setApplication(((WadlApplication)getApplication()).getApplicationInfo(getRequest(), getResponse()));
 
 				return wadl;
 			} else	
+			*/
 	    	if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
 	    		if ((queryObject!=null) && (queryObject instanceof Serializable))
 	    		return new ObjectRepresentation((Serializable)queryObject,MediaType.APPLICATION_JAVA_OBJECT);
