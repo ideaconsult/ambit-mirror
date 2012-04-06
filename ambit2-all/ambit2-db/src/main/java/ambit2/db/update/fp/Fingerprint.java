@@ -40,7 +40,12 @@ public class Fingerprint<Type,Content> implements IFingerprint<Type,Content> {
 	public synchronized String getInterpretation(int bitindex) {
 		if (FPTable.sk1024.equals(type)) {
 			if (keys==null) keys = new SmartsScreeningKeys();
+			try {
 			return keys.getKeys().get(bitindex);
+			} catch (Exception x) {
+				x.printStackTrace();
+				return null;
+			}
 		} else
 			return null;
 	}
