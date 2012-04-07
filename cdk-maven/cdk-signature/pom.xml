@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>cdk-all</artifactId>
     <groupId>org.openscience.cdk</groupId>
@@ -23,6 +23,13 @@
     	<scope>compile</scope>
     </dependency>
     <!-- signatures.jar is a dependency - where to get it from ?? -->
+    <dependency>
+    	<groupId>signature</groupId>
+    	<artifactId>signature</artifactId>
+    	<version>1.0</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
