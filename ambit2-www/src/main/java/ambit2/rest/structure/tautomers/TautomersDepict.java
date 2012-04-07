@@ -197,7 +197,7 @@ public class TautomersDepict extends AbstractDepict {
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 		}
-		SmilesGenerator gen = new SmilesGenerator(true);
+		SmilesGenerator gen = new SmilesGenerator(false);
 		
 		for (int i = 0; i < resultTautomers.size(); i++) {		
 			if (((i+1) %3 ) == 0) b.append("<tr>");
