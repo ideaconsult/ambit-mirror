@@ -41,8 +41,8 @@ public class OntologyResource extends QueryResource<IQueryRetrieval<Property>, P
 	public static String resource = "/template";
 	public static String resourceParent = "subject";
 	public static String resourceKey = "object";
-	public static String resourceID = String.format("%s/{%s}/{%s}",resource,resourceParent,resourceKey);
-	public static String resourceTree = String.format("%s/{%s}/{%s}/view/{tree}",resource,resourceParent,resourceKey);
+	public static String resourceID = String.format("/{%s}/{%s}",resourceParent,resourceKey);
+	public static String resourceTree = String.format("/{%s}/{%s}/view/{tree}",resourceParent,resourceKey);
 	protected boolean isRecursive = false;
 	
 	public OntologyResource() {
