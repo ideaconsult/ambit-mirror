@@ -89,6 +89,7 @@ import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
+import ambit2.rest.template.OntologyResource;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in http://opentox.org/development/wiki/
@@ -241,6 +242,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		router.attach(AbstractDepict.resource,depict);
 		router.attach("/name2structure",Name2StructureResource.class);	
 	
+		router.attach(OntologyResource.resource,createRDFPlayground());
 		/**
 		 * Images, styles, favicons, applets
 		 */
@@ -250,11 +252,11 @@ public class AmbitApplication extends TaskApplication<String> {
 	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
 	     
-	     /*
+	    /*
 	     StringWriter w = new StringWriter();
 	     AmbitApplication.printRoutes(router,">",w);
 	     System.out.println(w.toString());
-		*/
+	    */
 	     
 	     if (!isOpenToxAAEnabled()) {
 
@@ -481,11 +483,11 @@ public class AmbitApplication extends TaskApplication<String> {
 		//test removed, there is ontology service
 		//router.attach(RDFGraphResource.resource,RDFGraphResource.class);
 		//router.attach(RDFGraphResource.resource+"/test",OntologyPlayground.class);
-
-		//router.attach(OntologyResource.resource, OntologyResource.class);
-		//router.attach(OntologyResource.resourceID, OntologyResource.class);
-		//router.attach(OntologyResource.resourceTree, OntologyResource.class);
-		return null;
+		Router router = new MyRouter(getContext());
+		router.attachDefault(OntologyResource.class);
+		router.attach(OntologyResource.resourceID, OntologyResource.class);
+		router.attach(OntologyResource.resourceTree, OntologyResource.class);
+		return router;
 	}
 	/**
 	 * An attempt to retrieve datasets by an optimized query
