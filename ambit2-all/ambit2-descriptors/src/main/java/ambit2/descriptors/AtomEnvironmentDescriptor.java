@@ -103,14 +103,11 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
 	 * @see org.openscience.cdk.qsar.IDescriptor#getParameterType(java.lang.String)
 	 */
     public Object getParameterType(String arg0) {
-        Object[] paramTypes = new Object[4];
+        Object[] paramTypes = new Object[3];
         paramTypes[0] = new Integer(1);
-        paramTypes[1] = new Integer(2);
-        paramTypes[2] = new Boolean(false);
-        paramTypes[3] = new Boolean(false);
         //TODO
-        paramTypes[4] = "AtomTypeFactory";
-        paramTypes[5] = "AtomTypeMatcher";
+        paramTypes[1] = "AtomTypeFactory";
+        paramTypes[2] = "AtomTypeMatcher";
 		return paramTypes;
     }
 
