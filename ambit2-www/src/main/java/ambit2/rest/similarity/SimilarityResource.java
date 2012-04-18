@@ -3,7 +3,7 @@ package ambit2.rest.similarity;
 import java.awt.Dimension;
 import java.util.BitSet;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -45,7 +45,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected double threshold = 0.9;
 	protected String dataset_id;
 
-	protected IMolecule mol ;
+	protected IAtomContainer mol ;
 
 	public SimilarityResource() {
 		super();
@@ -122,7 +122,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 
 	}
 
-	public BitSet getBitset(IMolecule molecule) throws AmbitException {
+	public BitSet getBitset(IAtomContainer molecule) throws AmbitException {
 		FingerprintGenerator gen = new FingerprintGenerator();
 		return gen.process(molecule);
 	}

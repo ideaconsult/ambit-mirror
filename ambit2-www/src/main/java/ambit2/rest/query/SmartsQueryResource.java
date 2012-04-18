@@ -2,6 +2,10 @@ package ambit2.rest.query;
 
 import java.util.ArrayList;
 
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -10,8 +14,11 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
+
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.structure.FreeTextQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
@@ -19,6 +26,7 @@ import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.descriptors.FunctionalGroup;
+import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
@@ -122,11 +130,18 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 				}	
 				
 			String smarts = getSMILES(form,true);
+			
 			QuerySMARTS query = new QuerySMARTS();
 			query.setFp1024_screening(fp1024_screenining);
 			query.setSk1024_screening(sk1024_screenining);
 			query.setUsePrecalculatedAtomProperties(read_atomprops);
 			query.setChemicalsOnly(true);
+			if (smarts.startsWith(AmbitCONSTANTS.INCHI)) 
+				smarts = inchi2smiles(smarts);
+			else {
+				String smiles = name2smiles(smarts);
+				if (smiles!=null) smarts = smiles;
+			}
 			query.setValue(new FunctionalGroup(smarts,smarts,smarts));
 			try {
 				if (smarts != null) query.prepareScreening();
@@ -200,7 +215,29 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 		}
 	}		
 
-
+	
+	protected String inchi2smiles(String inchi) {
+		try {
+			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+			InChIToStructure c = f.getInChIToStructure(inchi, SilentChemObjectBuilder.getInstance());
+			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) return null;
+			SmilesGenerator g = new SmilesGenerator();
+			g.setUseAromaticityFlag(true);
+			return g.createSMILES(c.getAtomContainer());
+		} catch (Exception x) {
+			return null;
+		}
+	}
+	
+	
+	protected String name2smiles(String name) {
+		try {
+			NameToStructure name2structure = NameToStructure.getInstance();
+			return name2structure.parseToSmiles(name);
+		} catch (Exception x) {
+			return null;
+		}
+	}
 }
 
 class MyQueryCombined extends QueryCombinedStructure { 
