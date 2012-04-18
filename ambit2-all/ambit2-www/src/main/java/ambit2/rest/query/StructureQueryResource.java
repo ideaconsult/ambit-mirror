@@ -8,8 +8,11 @@ import java.sql.ResultSet;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.restlet.Client;
 import org.restlet.Context;
@@ -31,6 +34,7 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.db.readers.IQueryRetrieval;
@@ -45,6 +49,7 @@ import ambit2.db.reporters.SmilesReporter.Mode;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.dataset.ReadDatasetLicense;
+import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
@@ -395,10 +400,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}		
 		if (form.getFirstValue(QueryResource.search_param)==null) return null;
 		switch (query_type) {
-		case smiles:
-
+		case smiles: {
 				return form.getFirstValue(QueryResource.search_param).trim();
-
+	
+		}		
 		case url: try {
 				query_smiles = form.getFirstValue(QueryResource.search_param).trim();
 				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty query");
@@ -421,7 +426,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 
 	}		
-	protected IMolecule getMolecule(Form form) throws ResourceException {
+	protected IAtomContainer getMolecule(Form form) throws ResourceException {
 		QueryType query_type;
 		String query_smiles="";
 		try {
@@ -435,14 +440,35 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			try {
 				query_smiles = form.getFirstValue(QueryResource.search_param);
 				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty smiles");
-				return MoleculeTools.getMolecule(query_smiles);			
-				
-			} catch (InvalidSmilesException x) {
-				throw new ResourceException(
-						Status.CLIENT_ERROR_BAD_REQUEST,
-						String.format("Invalid smiles %s",query_smiles),
-						x
-						);
+		   		if (query_smiles.startsWith(AmbitCONSTANTS.INCHI)) {
+	    			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+	    			InChIToStructure c = f.getInChIToStructure(query_smiles, SilentChemObjectBuilder.getInstance());
+	    			
+	    			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
+	    				 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty molecule");
+	    			else return c.getAtomContainer();
+	    			
+		    	}  else { 	
+			        
+			        IAtomContainer molecule = null;
+			        try {
+			        	return MoleculeTools.getMolecule(query_smiles);	
+			        } catch (InvalidSmilesException x) {
+			        	Name2StructureProcessor processor = new Name2StructureProcessor();
+			        	try {
+							molecule = processor.process(query_smiles);
+							return molecule;
+			        	} catch (Exception xx) {
+			        		molecule = null; 
+							throw new ResourceException(
+									Status.CLIENT_ERROR_BAD_REQUEST,
+									String.format("Invalid smiles %s",query_smiles),
+									x
+									);
+			        	}
+			        }
+			        
+		    	}			
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
