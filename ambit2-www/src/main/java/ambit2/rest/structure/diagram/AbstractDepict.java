@@ -1,5 +1,7 @@
 package ambit2.rest.structure.diagram;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -85,11 +87,11 @@ public class AbstractDepict extends ProtectedResource {
 		String uri = String.format("%s/daylight",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
-						uri,Reference.encode(smiles),"Daylight depiction",String.format(AmbitResource.gplus,uri)),
+						uri,smiles==null?"":Reference.encode(smiles),"Daylight depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='daylight' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('daylight')\">",
 						uri,
-						Reference.encode(smiles),
-						smiles,smiles
+						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":smiles,smiles==null?"":smiles
 						),
 				style
 					));
@@ -99,14 +101,14 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles),
 						smarts==null?"":"&smarts=",
 						smarts==null?"":Reference.encode(smarts),"CDK depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='cdk' src='%s/any?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
 						uri,
-						Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles),
 						smarts==null?"":Reference.encode(smarts),
-						smiles,smiles),
+						smiles==null?"":smiles,smiles==null?"":smiles),
 				style
 					)
 				);
@@ -116,12 +118,12 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles),
 						"Cactvs depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='cactvs' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('cactvs')\">",
 						uri,
-						Reference.encode(smiles),
-						smiles,smiles),
+						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":smiles,smiles==null?"":smiles),
 				style
 					));
 		b.append("</td><td>");
@@ -129,13 +131,13 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles),
 						"Open Babel depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='obabel' src='%s?search=%s&w=%d&h=%d' alt='%s' title='%s' onError=\"hideDiv('obabel')\" width='%d' heigth='%d'>",
 						uri,
-						Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles),
 						h,h,
-						smiles,smiles,
+						smiles==null?"":smiles,smiles==null?"":smiles,
 						h,h),
 				style
 					));
@@ -148,12 +150,12 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles),
 						recordTypeOption,
 						"PubChem depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='pubchem' src='%s?search=%s%s' alt='%s' title='%s' onError=\"hideDiv('pubchem')\">",
 						uri,
-						Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles),
 						recordTypeOption,
 						smiles,smiles),
 				style
@@ -192,7 +194,7 @@ public class AbstractDepict extends ProtectedResource {
 					break;
 				}
         	
-	    		if(variant.getMediaType().equals(MediaType.TEXT_HTML)) {
+	    		if(variant.getMediaType().equals(MediaType.TEXT_HTML) || (smiles == null)) {
 	    			StringConvertor convertor = new StringConvertor(new AbstractReporter<String,Writer>() {
 	    				public void close() throws Exception {};
 	    				public Writer process(String target) throws AmbitException {
@@ -200,10 +202,10 @@ public class AbstractDepict extends ProtectedResource {
 	    					if (headless) output.write(target);
 	    					else {
 	    						
-		    					AmbitResource.writeTopHeader(output, smiles, getRequest(),getResourceRef(getRequest()), AmbitResource.header_gplus,null);
-		    					writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
+		    					AmbitResource.writeTopHeader(output, smiles==null?"2D structural diagram":smiles, getRequest(),getResourceRef(getRequest()), AmbitResource.header_gplus,null);
+		    					writeSearchForm(output, smiles==null?"N/A":smiles, getRequest(), "",Method.GET,params);	    					
 		    					output.write(target);
-		    					AmbitResource.writeHTMLFooter(output, smiles, getRequest());
+		    					AmbitResource.writeHTMLFooter(output, smiles==null?"":smiles, getRequest());
 	    					}
 	    					} catch (Exception x) {}
 	    					return output;
@@ -211,13 +213,14 @@ public class AbstractDepict extends ProtectedResource {
 	    			},MediaType.TEXT_HTML);
 	    			return convertor.process(getTitle(getResourceRef(getRequest()),smiles));
 	    		}
-					    		
+	    	final BufferedImage image;
 	    	if (smiles != null) {
-	        	final BufferedImage image = getImage(smiles.trim(),w,h,recordType);
+	        	image = getImage(smiles.trim(),w,h,recordType);
 	        	if (image ==  null) {
 		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid smiles %s",smiles));
 	        		return null;
 	        	}
+	    	} else image = createDefaultImage(w, h);   		
 	        	return new OutputRepresentation(MediaType.IMAGE_PNG) {
 	        		@Override
 	        		public void write(OutputStream out) throws IOException {
@@ -233,10 +236,7 @@ public class AbstractDepict extends ProtectedResource {
 	        			}
 	        		}
 	        	};
-	        } else {
-	        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, new EmptyMoleculeException());
-	        	return null;   	
-	        }
+
 		} catch (ResourceException x) {
 			getResponse().setStatus(x.getStatus(),x,x.getMessage());
 			return null;
@@ -335,4 +335,13 @@ public class AbstractDepict extends ProtectedResource {
 		this.smarts = smarts;
 		
 	}
+	
+	protected BufferedImage createDefaultImage(int w, int h) {
+		BufferedImage buffer = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+        
+		Graphics2D g = buffer.createGraphics();
+		g.setColor(Color.white);
+		g.fillRect(0, 0, w,h);
+		return buffer;
+}
 }

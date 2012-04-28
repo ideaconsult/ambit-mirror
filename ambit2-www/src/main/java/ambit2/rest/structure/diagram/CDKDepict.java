@@ -103,6 +103,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 
 	@Override
 	protected String getTitle(Reference ref, String smiles) throws ResourceException {
+		if (smiles==null) return "";
 		StringBuilder b = new StringBuilder();
 		b.append("<table width='100%'>");
 		
