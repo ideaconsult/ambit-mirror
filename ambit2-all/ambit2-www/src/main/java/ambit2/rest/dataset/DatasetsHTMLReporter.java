@@ -136,12 +136,12 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 
 				output.write("<div><span class=\"center\">");
 			output.write("<form method='GET' action=''>");
-			output.write(String.format("<b>Page:</b><input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
+			output.write(String.format("Page:<input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
 			if (search !=null) output.write(String.format("<input name='search' type='hidden' value='%s'>\n",search));
 			output.write(String.format("<b>Page size:</b><input name='pagesize' type='text' title='Page size' size='10' value='%s'>\n",pageSize==null?"50":pageSize));
-			output.write("<input type='submit' value='Refresh'>");			
+			output.write(String.format("<input type='image' src='%s/images/page_go.png' onsubmit='submit-form();' value='Refresh'>",uriReporter.getBaseReference()));			
 			output.write("</form>");
-			output.write("</span></div><p>");
+			output.write("</p></span></div><p>");
 
 			} catch (Exception x) {
 				

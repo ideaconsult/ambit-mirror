@@ -172,17 +172,17 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 		w.write("<td>");
 			w.write(String.format("<input name='%s' size='80' value='%s' title='Highlights the substructure, specified by SMARTS'>",
 					"smarts",getSmarts()==null?"":getSmarts()));
-		w.write("</td>");			
-		w.write("<td>&nbsp;</td></tr>\n");
+		w.write("</td>");	
+		w.write("<td>");
+		w.write("&nbsp;</td></tr>\n");
 		w.write("</table>");
 		//w.write(baseReference.toString());
 
 		w.write("</form>\n");
-		w.write("<b title='These pages offer minimalistic user interface to AMBIT implementation of OpenTox REST services. Full featured user interface is available via external applicaiton, like ToxPredict (http://toxpredict.org), ToxCreate (http://toxcreate.org) and QPRF editor. More applications are under development.'><i>These pages and AMBIT REST services are under development!</i></b>");		
+			
 		w.write("</td>");
-		w.write("<td align='center' valign=='bottom' width='256px'>");
-//		w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
-		
+		w.write("<td align='left' valign='bottom' width='256px'>");
+		w.write(AmbitResource.disclaimer);
 		w.write("</td>");
 		w.write("</tr></table>");		
 		
@@ -191,6 +191,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 		w.write("<hr>");
 		
 	}	
+
 
 }
 

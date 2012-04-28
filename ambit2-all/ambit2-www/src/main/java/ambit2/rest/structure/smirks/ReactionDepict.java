@@ -30,7 +30,8 @@ public class ReactionDepict extends AbstractDepict {
 						smiles,
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
-						smiles,smiles)
+						smiles,smiles),
+				"depictBox"						
 					));
 		b.append("</td><td>");
 		b.append(AmbitResource.printWidget(
@@ -42,7 +43,8 @@ public class ReactionDepict extends AbstractDepict {
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
 						smirks==null?"":Reference.encode(smirks),
-						smirks,smirks)
+						smirks,smirks),
+				"depictBox"		
 					));
 		b.append("</td>");
 		b.append("</tr></table>");
@@ -71,9 +73,12 @@ public class ReactionDepict extends AbstractDepict {
 		w.write(String.format("<form action='' method='%s'>\n",method));
 		w.write("<table width='100%'>");
 		w.write("<tr>");
-		w.write(String.format("<th><label for='%s'>%s</label></th>",QueryResource.search_param,"SMILES or InChI"));
+		w.write(String.format("<th width='20%%'><label for='%s'>%s</label>",QueryResource.search_param,"SMILES or InChI"));
+		w.write(String.format("&nbsp;<input type='image' src=\"%s/images/edit.png\" title='Draw molecule' onClick='startEditor(\"%s\");'>",
+				request.getRootRef(),request.getRootRef()));
+		w.write("</th>");
 		w.write("<td>");
-		w.write(String.format("<input name='%s' size='80' value='%s'>\n",
+		w.write(String.format("<input name='%s' size='70' value='%s'>\n",
 				QueryResource.search_param,query_smiles==null?"":query_smiles));
 		w.write("</td>");
 		w.write("<td><input type='submit' value='Display'></td>");
@@ -82,14 +87,14 @@ public class ReactionDepict extends AbstractDepict {
 		w.write("<tr>");
 		w.write(String.format("<th><label for='%s'>%s</label></th>","smirks","Reaction (SMIRKS)"));
 		w.write("<td>");
-			w.write(String.format("<input name='%s' size='80' value='%s' title='Applies the reaction, specified by SMIRKS'>",
+			w.write(String.format("<input name='%s' size='70' value='%s' title='Applies the reaction, specified by SMIRKS'>",
 					"smirks",getSmirks()==null?"":getSmirks()));
 		w.write("</td>");			
 		w.write("<td>&nbsp;</td></tr>\n");
 		
 		w.write("</tr><tr>");
-		w.write(String.format("<th>%s</th>","Example reactions"));
-		w.write("<td colspan='2' bgcolor='#FDFDFD'>");
+		w.write(String.format("<th valign='top'>%s</th>","Example reactions"));
+		w.write("<td colspan='1' bgcolor='#FDFDFD'>");
 		//w.write("<select name='smirks'>");
 		//w.write("<option  value=\"\" %s selected='selected'></option>");
 		for (SMARTCYPReaction reaction : SMARTCYPReaction.values()) {
@@ -107,13 +112,11 @@ public class ReactionDepict extends AbstractDepict {
 		w.write("</td></tr>");
 		
 		w.write("</table>");
-		//w.write(baseReference.toString());
-
 		w.write("</form>\n");
-		//w.write("<b title='These pages offer minimalistic user interface to AMBIT implementation of OpenTox REST services. Full featured user interface is available via external applicaiton, like ToxPredict (http://toxpredict.org), ToxCreate (http://toxcreate.org) and QPRF editor. More applications are under development.'><i>These pages and AMBIT REST services are under development!</i></b>");		
+	
 		w.write("</td>");
-		w.write("<td align='right' width='256px'>");
-//		w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+		w.write("<td align='left' valign='bottom' width='256px'>");
+		w.write(AmbitResource.disclaimer);
 
 		w.write("</td>");
 		w.write("</tr></table>");		

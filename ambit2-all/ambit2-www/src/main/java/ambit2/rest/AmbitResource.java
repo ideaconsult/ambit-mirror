@@ -462,6 +462,7 @@ public class AmbitResource extends ProtectedResource {
 		w.write("<script>$(function() {$( \".accordion\" ).accordion({autoHeight: false,navigation: true});});</script>");
 		w.write("<script>$(function() {$( \".tabs\" ).tabs({cache: true});});</script>");
 		w.write("<script>$(function() {$( \"#selectable\" ).selectable();});</script>");
+		w.write("<script>$(function() {$( \"input:submit, button\" ).button();});</script>");
 		w.write("<script type='text/javascript'>function toggleDiv(divId) {$('#'+divId).toggle();}</script>\n");
 		w.write("<script type='text/javascript'>function hideDiv(divId) {$('#'+divId).hide();}</script>\n");
 		w.write("<script>function changeImage(img,src)  {    document.getElementById(img).src=src;} </script>\n");
@@ -583,11 +584,11 @@ public class AmbitResource extends ProtectedResource {
 		//w.write(baseReference.toString());
 
 		w.write("</form>\n");
-		w.write("<br><b title='These pages offer minimalistic user interface to AMBIT implementation of OpenTox REST services. Full featured user interface is available via external applicaiton, like ToxPredict (http://toxpredict.org), ToxCreate (http://toxcreate.org) and QPRF editor. More applications are under development.'><i>These pages and AMBIT REST services are under development!</i></b>");		
+	
 		w.write("</td>");
-		w.write("<td align='right' width='256px'>");
+		w.write("<td align='left' valign='bottom' width='256px'>");
 //		w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
-
+		w.write(AmbitResource.disclaimer);
 		w.write("</td>");
 		w.write("</tr></table>");		
 		
@@ -669,4 +670,5 @@ public class AmbitResource extends ProtectedResource {
 				printWidgetFooter());
 
 	}		
+	public static final String disclaimer = "<a href='#' onClick=\"javascript:toggleDiv('underdev');\">Disclaimer</a><div id='underdev'  style='display: none;'>These pages offer minimalistic user interface to <a href='http://ambit.sourceforge.net/download_ambitrest.html' target=blank>AMBIT</a>  implementation of <a href='http://opentox.org/dev/apis' target=blank>OpenTox</a> <a href='http://ambit.sourceforge.net/rest.html' target=blank>REST</a> services.<br> Full featured user interface is available via external applications, e.g. <a href='http://toxpredict.org' target=blank>ToxPredict</a>, <a href='http://toxcreate.org' target=blank>ToxCreate</a> , <a href='http://opentox.ntua.gr/blog/78-q-edit' target=blank>QPRF editor</a>, <a href='http://www.jcheminf.com/content/4/1/7' target=blank>CheS-Mapper</a>, <a href='http://www.bioclipse.net/opentox' target=blank>Bioclipse-OpenTox</a>.</div>";
 }
