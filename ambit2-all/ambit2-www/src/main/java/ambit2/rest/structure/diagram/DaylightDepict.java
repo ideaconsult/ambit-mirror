@@ -27,7 +27,9 @@ public class DaylightDepict extends AbstractDepict {
 		this.getVariants().add(new Variant(MediaType.IMAGE_PNG));		
 	}
 	@Override
-	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
+	protected BufferedImage getImage(String smiles, int width, int height,
+			String recordType) throws ResourceException {
+
 		try {
 			return depict.process(smiles);
 		} catch (HttpException x) {

@@ -25,7 +25,8 @@ public class SMIRKSDepict extends CDKDepictVariants implements IAcceptable {
 	public static final String resource = "/reaction/product";
 	protected ArrayList<String> list = new ArrayList<String>();
 	@Override
-	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
+	protected BufferedImage getImage(String smiles, int w, int h,
+			String recordType) throws ResourceException {
 		try {
 			depict.setImageSize(new Dimension(w,h));
 

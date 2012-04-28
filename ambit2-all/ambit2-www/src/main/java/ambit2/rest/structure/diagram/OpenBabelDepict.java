@@ -22,7 +22,9 @@ public class OpenBabelDepict extends AbstractDepict {
 	}
 	//obabel -:"CCC(=O)Cl" -O tmp.png -xp 1000
 	@Override
-	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
+	protected BufferedImage getImage(String smiles, int w, int h,
+			String recordType) throws ResourceException {
+
 		try {
 			OpenBabelDepiction ob = new OpenBabelDepiction() {
 				protected String getOBabelHome() {

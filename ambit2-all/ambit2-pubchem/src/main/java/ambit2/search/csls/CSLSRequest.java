@@ -5,7 +5,6 @@ import java.net.URL;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.pubchem.NCISearchProcessor;
-import ambit2.pubchem.NCISearchProcessor.METHODS;
 import ambit2.search.chemidplus.AbstractSearchRequest;
 
 public abstract class CSLSRequest<R> extends AbstractSearchRequest<R> {
