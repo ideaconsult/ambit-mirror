@@ -114,7 +114,7 @@ public class TautomersDepict extends AbstractDepict {
 			b.append(AmbitResource.printWidget(
 					String.format("<a href='%s' title='%s'>%s</a>",url,smiles,"SOURCE"), 
 					String.format("<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">", 
-							url,smiles==null?"":smiles,smiles==null?"":smiles)));
+							url,smiles==null?"":smiles,smiles==null?"":smiles),"depictBox"));
 			b.append("</td>");
 			b.append(generateTautomersAmbit(mol));
 			break;
@@ -131,7 +131,7 @@ public class TautomersDepict extends AbstractDepict {
 			b.append(AmbitResource.printWidget(
 					String.format("<a href='%s' title='%s'>%s</a>",url,smiles,"SOURCE"), 
 					String.format("<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">", 
-							url,smiles==null?"":smiles,smiles==null?"":smiles)));
+							url,smiles==null?"":smiles,smiles==null?"":smiles),"depictBox"));
 			b.append("</td>");			
 			List<String> resultTautomers = generateTautomersCactvs(smiles);
 			if (resultTautomers!=null)
@@ -161,7 +161,7 @@ public class TautomersDepict extends AbstractDepict {
 			b.append(AmbitResource.printWidget(
 					String.format("<a href='%s' title='%s'>%s</a>",url,smiles,"SOURCE"), 
 					String.format("<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">", 
-							url,smiles==null?"":smiles,smiles==null?"":smiles)));
+							url,smiles==null?"":smiles,smiles==null?"":smiles),"depictBox"));
 			b.append("</td>");			
 			mol = getAtomContainer(smiles);
 			b.append(generateTautomersInChI(mol));
@@ -183,7 +183,7 @@ public class TautomersDepict extends AbstractDepict {
 				String.format("<a href='%s' title='Tautomer: %s'>%d. %s</a>",url,tautomerSmiles,(index+1),"Tautomer"), 
 				String.format("<img id='t%d' src='%s' alt='%s' title='%s' onError=\"hideDiv('t%d')\">", 
 						index+1,url,tautomerSmiles==null?"":tautomerSmiles,
-								tautomerSmiles==null?"":tautomerSmiles,index+1));
+								tautomerSmiles==null?"":tautomerSmiles,index+1),"depictBox");
 	}
 	protected String generateTautomersAmbit(IAtomContainer mol) throws ResourceException {
 		StringBuilder b = new StringBuilder();
@@ -262,7 +262,7 @@ public class TautomersDepict extends AbstractDepict {
 				return b.toString();
 		 } catch (Exception x) {
 			 b.append("<td>");
-			 b.append(String.format("<label title='%s'>Error</label>",x.getMessage()));
+			 b.append(AmbitResource.printWidget("Error",x.getMessage(),"depictBox"));
 			 b.append("</td>");
 			 //throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 		 }
