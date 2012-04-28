@@ -389,9 +389,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			String hint= "";
 			if (uriReporter.getResourceRef().toString().indexOf("similarity")>0) {
 				w.write(String.format("<label for='%s'>SMILES</label>&nbsp;",QueryResource.search_param));
+				w.write(String.format("&nbsp;<input type='image' src=\"%s/images/edit.png\" title='Draw molecule' onClick='startEditor(\"%s\");'>",
+						uriReporter.getBaseReference(),uriReporter.getBaseReference()));					
 				w.write(String.format("<input name='%s' type='text' size='40' title='Enter SMILES' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
-				w.write(String.format("&nbsp;<input type='button' value='Draw molecule' onClick='startEditor(\"%s\");'>",
-						uriReporter.getBaseReference()));
+				
 				w.write("&nbsp;");
 				w.write(String.format("<label for='threshold'>Threshold</label>&nbsp;"));
 				w.write(String.format("<input name='threshold' type='text' title='Tanimoto coefficient threshold [0,1], default 0.9' size='20' value='%s'>\n",query_threshold==null?"0.9":query_threshold));
@@ -410,10 +411,12 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 
 				w.write("<tr><th>");
 				w.write(String.format("<label for='%s' title='Substructure pattern defined by SMARTS language. Enter manually, or use Draw button on the right'>SMARTS</label>&nbsp;",QueryResource.search_param));
-				w.write("</th><td>");
+				
+				w.write(String.format("&nbsp;<input type='image' src=\"%s/images/edit.png\" title='Draw substructure' onClick='startEditor(\"%s\");'>",
+						uriReporter.getBaseReference(),uriReporter.getBaseReference()));
+				w.write("</th>");
+				w.write("<td>");				
 				w.write(String.format("<input name='%s' type='text'   size='60' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
-				w.write(String.format("&nbsp;<input type='button' value='Draw substructure' onClick='startEditor(\"%s\");'>",
-						uriReporter.getBaseReference()));	
 
 				w.write("</td></tr>\n");
 				w.write("<tr><th>");
@@ -433,8 +436,10 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			//w.write(baseReference.toString());
 
 			//w.write("</form>\n"); moved in footer
-			w.write(hint);		
-			w.write("<br>\n<b><i>This site and AMBIT REST services are under development!</i></b>");		
+			//w.write(hint);		
+			w.write("<br>\n<b><i>");
+			w.write(hint);
+			w.write("</i></b>");		
 			w.write("</td>");
 			w.write("<td align='left' valign='center' width='256px'>");
 			//w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
