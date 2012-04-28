@@ -40,6 +40,7 @@ public class AbstractDepict extends ProtectedResource {
 	protected String smirks ;
 	protected String recordType = null;
 	protected boolean headless = false;
+	int w = 400; int h = 200;
 	/**
 	 * Might be ignored, currently only CDK depict considers the flags
 	 */
@@ -128,10 +129,12 @@ public class AbstractDepict extends ProtectedResource {
 						uri,
 						Reference.encode(smiles),
 						"Open Babel depiction",String.format(AmbitResource.gplus,uri)),
-				String.format("<img id='obabel' src='%s/obabel?search=%s' alt='%s' title='%s' onError=\"hideDiv('obabel')\">",
-						ref.getHierarchicalPart(),
+				String.format("<img id='obabel' src='%s?search=%s&w=%d&h=%d' alt='%s' title='%s' onError=\"hideDiv('obabel')\" width='%d' heigth='%d'>",
+						uri,
 						Reference.encode(smiles),
-						smiles,smiles),
+						h,h,
+						smiles,smiles,
+						h,h),
 				style
 					));
 		b.append("</td></tr>");
@@ -171,7 +174,7 @@ public class AbstractDepict extends ProtectedResource {
 
 		try {
 			Form form = getParams();
-			int w = 400; int h = 200;
+			w = 400; h = 200;
 			recordType = "2d";
 			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
@@ -275,21 +278,23 @@ public class AbstractDepict extends ProtectedResource {
 		w.write("<table width='100%'>");
 		w.write("<tr>");
 		w.write(String.format("<th><label for='%s'>%s</label>",QueryResource.search_param,"SMILES or InChI"));
-		w.write(String.format("&nbsp;<input type='image' src=\"%s/images/edit.png\" title='Draw molecule' onClick='startEditor(\"%s\");'>",
+		/*
+		w.write(String.format("&nbsp;<input type='image' src=\"%s/images/edit.png\" title='Draw molecule' onClick='startEditor(\"%s\");' tabindex='3'>",
 				request.getRootRef(),request.getRootRef()));
+				*/
 		w.write("</th>");		
 		w.write("<td>");
-		w.write(String.format("<input name='%s' size='70' value='%s'>\n",
+		w.write(String.format("<input name='%s' size='70' value='%s' tabindex='0'>\n",
 				QueryResource.search_param,query_smiles==null?"":query_smiles.trim()));
 
 		w.write("</td>");
-		w.write("<td><input type='submit' value='Display'></td>");
+		w.write("<td><input type='submit' value='Display' tabindex='2'></td>");
 		w.write("</tr>\n");
 
 		w.write("<tr>");
 		w.write(String.format("<th><label for='%s'>%s</label></th>","smarts","SMARTS (optional)"));
 		w.write("<td>");
-			w.write(String.format("<input name='%s' size='70' value='%s' title='Highlights the substructure, specified by SMARTS'>",
+			w.write(String.format("<input name='%s' size='70' value='%s' title='Highlights the substructure, specified by SMARTS' tabindex='1'>",
 					"smarts",getSmarts()==null?"":getSmarts()));
 		w.write("</td>");			
 		w.write("<td>&nbsp;</td></tr>\n");
