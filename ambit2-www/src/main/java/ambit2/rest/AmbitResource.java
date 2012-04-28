@@ -526,7 +526,7 @@ public class AmbitResource extends ProtectedResource {
 		w.write(String.format("<a href='%s' title='Ontology service, SPARQL endpoint'>Ontology service</a>&nbsp;",getSparql(request)));
 		
 		w.write(String.format("&nbsp;<a href='http://toxpredict.org' title='Predict'>ToxPredict</a>&nbsp;"));
-		w.write(String.format("<a href='%s/depict?search=c1ccccc1' title='Structure diagram'>Depiction</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/depict?search=%s' title='Structure diagram'>Depiction</a>&nbsp;",baseReference,Reference.encode("O=c2c1ccccc1c3ccccc23")));
 		w.write(String.format("<a href='%s/depict%s?search=c1ccccc1' title='SMIRKS test'>Reactions</a>&nbsp;",baseReference,ReactionDepict.resource));
 		w.write(String.format("<a href='%s/depict%s?search=%s' title='Tautomer test'>Tautomers</a>&nbsp;",baseReference,TautomersDepict.resource,Reference.encode("NC=1N=CN=C2N=CNC2=1")));
 
@@ -607,7 +607,7 @@ public class AmbitResource extends ProtectedResource {
 		output.write(String.format("<a href='http://www.cefic.be'><img src=%s/images/logocefic.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		output.write(String.format("<a href='http://www.cefic-lri.org'><img src=%s/images/logolri.png border='0' width='115' height='60'></a>&nbsp;",baseReference));
 		output.write(String.format("<a href='http://www.opentox.org'><img src=%s/images/logo.png border='0' width='115' height='60'></a>",baseReference));
-		output.write("<br>Developed by Ideaconsult Ltd. (2005-2011)"); 
+		output.write("<br>Developed by Ideaconsult Ltd. (2005-2012)"); 
 		output.write("  <A HREF=\"http://validator.w3.org/check?uri=referer\">");
 		output.write(String.format("    <IMG SRC=\"%s/images/valid-html401-blue-small.png\" ALT=\"Valid HTML 4.01 Transitional\" TITLE=\"Valid HTML 4.01 Transitional\" HEIGHT=\"16\" WIDTH=\"45\" border=\"0\">",baseReference));
 		output.write("  </A>&nbsp; ");
