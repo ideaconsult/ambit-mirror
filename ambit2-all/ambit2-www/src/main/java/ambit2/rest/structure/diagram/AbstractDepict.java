@@ -78,25 +78,29 @@ public class AbstractDepict extends ProtectedResource {
 		StringBuilder b = new StringBuilder();
 		b.append("<table width='100%'>");
 		b.append("<tr><td>");
+		
+		String uri = String.format("%s/daylight",ref.getHierarchicalPart());
 		b.append(AmbitResource.printWidget(
-				String.format("<a href='%s/daylight?search=%s'>%s</a>",
-						ref.getHierarchicalPart(),Reference.encode(smiles),"Daylight depiction"),
-				String.format("<img id='daylihgt' src='%s/daylight?search=%s' alt='%s' title='%s' onError=\"hideDiv('daylight')\">",
-						ref.getHierarchicalPart(),
+				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
+						uri,Reference.encode(smiles),"Daylight depiction",String.format(AmbitResource.gplus,uri)),
+				String.format("<img id='daylight' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('daylight')\">",
+						uri,
 						Reference.encode(smiles),
-						smiles,smiles),
+						smiles,smiles
+						),
 				style
 					));
 		b.append("</td><td>");
 		
+		uri = String.format("%s/cdk",ref.getHierarchicalPart());
 		b.append(AmbitResource.printWidget(
-				String.format("<a href='%s/cdk?search=%s%s%s'>%s</a>",
-						ref.getHierarchicalPart(),
+				String.format("<a href='%s?search=%s%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
+						uri,
 						Reference.encode(smiles),
 						smarts==null?"":"&smarts=",
-						smarts==null?"":Reference.encode(smarts),"CDK depiction"),
-				String.format("<img id='cdk' src='%s/cdk/any?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
-						ref.getHierarchicalPart(),
+						smarts==null?"":Reference.encode(smarts),"CDK depiction",String.format(AmbitResource.gplus,uri)),
+				String.format("<img id='cdk' src='%s/any?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
+						uri,
 						Reference.encode(smiles),
 						smarts==null?"":Reference.encode(smarts),
 						smiles,smiles),
@@ -105,24 +109,25 @@ public class AbstractDepict extends ProtectedResource {
 				);
 		b.append("</td></tr>");
 		b.append("<tr><td>");
-		
+		uri = String.format("%s/cactvs",ref.getHierarchicalPart());
 		b.append(AmbitResource.printWidget(
-				String.format("<a href='%s/cactvs?search=%s'>%s</a>",
-						ref.getHierarchicalPart(),
+				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
+						uri,
 						Reference.encode(smiles),
-						"Cactvs depiction"),
-				String.format("<img id='cactvs' src='%s/cactvs?search=%s' alt='%s' title='%s' onError=\"hideDiv('cactvs')\">",
-						ref.getHierarchicalPart(),
+						"Cactvs depiction",String.format(AmbitResource.gplus,uri)),
+				String.format("<img id='cactvs' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('cactvs')\">",
+						uri,
 						Reference.encode(smiles),
 						smiles,smiles),
 				style
 					));
 		b.append("</td><td>");
+		uri = String.format("%s/obabel",ref.getHierarchicalPart());
 		b.append(AmbitResource.printWidget(
-				String.format("<a href='%s/obabel?search=%s'>%s</a>",
-						ref.getHierarchicalPart(),
+				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
+						uri,
 						Reference.encode(smiles),
-						"Open Babel depiction"),
+						"Open Babel depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='obabel' src='%s/obabel?search=%s' alt='%s' title='%s' onError=\"hideDiv('obabel')\">",
 						ref.getHierarchicalPart(),
 						Reference.encode(smiles),
@@ -134,14 +139,15 @@ public class AbstractDepict extends ProtectedResource {
 		b.append("<tr><td>");
 
 		String recordTypeOption = recordType==null?"":String.format("&record_type=%s", recordType);
+		uri = String.format("%s/pubchem",ref.getHierarchicalPart());
 		b.append(AmbitResource.printWidget(
-				String.format("<a href='%s/pubchem?search=%s%s'>%s</a>",
-						ref.getHierarchicalPart(),
+				String.format("<a href='%s?search=%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
+						uri,
 						Reference.encode(smiles),
 						recordTypeOption,
-						"PubChem depiction"),
-				String.format("<img id='pubchem' src='%s/pubchem?search=%s%s' alt='%s' title='%s' onError=\"hideDiv('pubchem')\">",
-						ref.getHierarchicalPart(),
+						"PubChem depiction",String.format(AmbitResource.gplus,uri)),
+				String.format("<img id='pubchem' src='%s?search=%s%s' alt='%s' title='%s' onError=\"hideDiv('pubchem')\">",
+						uri,
 						Reference.encode(smiles),
 						recordTypeOption,
 						smiles,smiles),
@@ -160,6 +166,7 @@ public class AbstractDepict extends ProtectedResource {
 	public Representation get(Variant variant) {
 		return process(variant);
 	}
+
 	public Representation process(Variant variant) {
 
 		try {
@@ -187,7 +194,8 @@ public class AbstractDepict extends ProtectedResource {
 	    					try {
 	    					if (headless) output.write(target);
 	    					else {
-		    					AmbitResource.writeTopHeader(output, smiles, getRequest(),getResourceRef(getRequest()), "",null);
+	    						
+		    					AmbitResource.writeTopHeader(output, smiles, getRequest(),getResourceRef(getRequest()), AmbitResource.header_gplus,null);
 		    					writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
 		    					output.write(target);
 		    					AmbitResource.writeHTMLFooter(output, smiles, getRequest());
