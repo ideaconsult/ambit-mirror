@@ -80,7 +80,9 @@ public class AbstractDepict extends ProtectedResource {
 		b.append("<table width='100%'>");
 		b.append("<tr><td>");
 		
-		String uri = String.format("%s/daylight",ref.getHierarchicalPart());
+		Reference root = (Reference)ref.clone();
+		root.setQuery(null);
+		String uri = String.format("%s/daylight",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,Reference.encode(smiles),"Daylight depiction",String.format(AmbitResource.gplus,uri)),
@@ -93,7 +95,7 @@ public class AbstractDepict extends ProtectedResource {
 					));
 		b.append("</td><td>");
 		
-		uri = String.format("%s/cdk",ref.getHierarchicalPart());
+		uri = String.format("%s/cdk",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
@@ -110,7 +112,7 @@ public class AbstractDepict extends ProtectedResource {
 				);
 		b.append("</td></tr>");
 		b.append("<tr><td>");
-		uri = String.format("%s/cactvs",ref.getHierarchicalPart());
+		uri = String.format("%s/cactvs",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
@@ -123,7 +125,7 @@ public class AbstractDepict extends ProtectedResource {
 				style
 					));
 		b.append("</td><td>");
-		uri = String.format("%s/obabel",ref.getHierarchicalPart());
+		uri = String.format("%s/obabel",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
@@ -142,7 +144,7 @@ public class AbstractDepict extends ProtectedResource {
 		b.append("<tr><td>");
 
 		String recordTypeOption = recordType==null?"":String.format("&record_type=%s", recordType);
-		uri = String.format("%s/pubchem",ref.getHierarchicalPart());
+		uri = String.format("%s/pubchem",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
