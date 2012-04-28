@@ -415,10 +415,11 @@ public class AmbitResource extends ProtectedResource {
 				"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n"
 			);
 		
-		w.write(String.format("<html %s %s %s>",
+		w.write(String.format("<html %s %s %s %s>",
 				"xmlns=\"http://www.w3.org/1999/xhtml\"",
 				"xmlns:dc=\"http://purl.org/dc/elements/1.1/\"",
-				"xmlns:ot=\"http://opentox.org/api/1.1/\"")
+				"xmlns:ot=\"http://opentox.org/api/1.1/\"",
+				"itemscope itemtype=\"http://schema.org/Product\"")
 				);
 		
 		w.write(String.format("<head> <meta property=\"dc:creator\" content=\"%s\"/> <meta property=\"dc:title\" content=\"%s\"/>",
@@ -687,4 +688,8 @@ public class AmbitResource extends ProtectedResource {
 	public final static String gplus = "<g:plusone size='small' href='%s'></g:plusone>";
 	public final static String facebook = "<div class='fb-like' data-href='%s' data-send='false' data-layout='button_count' data-width='255' data-show-faces='true' data-font='trebuchet ms'></div>";
 
+	public final static String gplus_snippet = "<span style='display:none;' itemprop=\"name\">%s</span><span  style='display:none;' itemprop=\"description\">%s</span><img itemprop=\"image\" src=\"%s\">";
+	public static String printGPlusSnippet(String title,String description,String image) {
+		return String.format(gplus_snippet,title,description,image==null?"":image);
+	}	
 }
