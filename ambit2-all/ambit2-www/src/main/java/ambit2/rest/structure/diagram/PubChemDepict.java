@@ -49,6 +49,7 @@ public class PubChemDepict extends AbstractDepict {
 		}
 	}
 	protected String getTitle(Reference ref, String smiles) throws ResourceException {
-		return String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>", smiles,ref,smiles,smiles);
+		return smiles==null?"Empty SMILES":
+				String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>",smiles,ref,smiles,smiles);
 	}
 }
