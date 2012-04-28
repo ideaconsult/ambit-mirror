@@ -40,9 +40,9 @@ public class DaylightDepict extends AbstractDepict {
 		}
 	}
 	protected String getTitle(Reference ref, String smiles) throws ResourceException {
-		return smiles==null?getGPlusSnippet():String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>\n%s", 
-				smiles==null?"":smiles,ref,smiles,smiles,
-				getGPlusSnippet());
+		return smiles==null?getGPlusSnippet():
+				String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>\n%s", 
+				smiles==null?"":smiles,ref,smiles,smiles,getGPlusSnippet());
 	}
 	
 	@Override

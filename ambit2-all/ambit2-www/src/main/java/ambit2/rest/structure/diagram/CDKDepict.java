@@ -103,7 +103,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 
 	@Override
 	protected String getTitle(Reference ref, String smiles) throws ResourceException {
-		if (smiles==null) return "";
+		if (smiles==null) return getGPlusSnippet();
 		StringBuilder b = new StringBuilder();
 		b.append("<table width='100%'>");
 		
@@ -132,7 +132,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 			if ((mode.ordinal() %2) == 1) b.append("</tr>");
 		}
 		b.append("</table>");
-
+		b.append( getGPlusSnippet());
 		return b.toString();
 		
 	}
@@ -190,7 +190,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 		
 		
 		w.write("<hr>");
-		w.write( getGPlusSnippet());
+		
 	}	
 	
 	@Override

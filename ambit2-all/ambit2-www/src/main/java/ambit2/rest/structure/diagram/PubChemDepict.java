@@ -51,9 +51,8 @@ public class PubChemDepict extends AbstractDepict {
 	}
 	protected String getTitle(Reference ref, String smiles) throws ResourceException {
 		return smiles==null?getGPlusSnippet():
-				String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>\n%s",
-						smiles,ref,smiles,smiles,
-						getGPlusSnippet()
+				String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>\n",
+						smiles,ref,smiles,smiles,getGPlusSnippet()
 						);
 	}
 	

@@ -161,10 +161,9 @@ public class AbstractDepict extends ProtectedResource {
 				style
 					));
 		b.append("</td><td>");
-
 		b.append("</td></tr>");		
-		
 		b.append("</table>");
+		b.append(getGPlusSnippet());
 		return b.toString();
 		
 	}
@@ -205,7 +204,7 @@ public class AbstractDepict extends ProtectedResource {
 		    					AmbitResource.writeTopHeader(output, smiles==null?"2D structural diagram":smiles, getRequest(),getResourceRef(getRequest()), AmbitResource.header_gplus,null);
 		    					writeSearchForm(output, smiles==null?"N/A":smiles, getRequest(), "",Method.GET,params);	    					
 		    					output.write(target);
-		    					output.write(getGPlusSnippet());
+		    					
 		    					AmbitResource.writeHTMLFooter(output, smiles==null?"":smiles, getRequest());
 	    					}
 	    					} catch (Exception x) {}
@@ -262,7 +261,7 @@ public class AbstractDepict extends ProtectedResource {
 		w.write("<table width='100%' bgcolor='#ffffff'>");
 		w.write("<tr>");
 		w.write("<td align='left' width='256px'>");
-		w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+		w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img itemprop=\"image\" src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
 		w.write("</td>");
 		w.write("<td align='center'>");
 		String query_smiles = "";
@@ -358,6 +357,7 @@ public class AbstractDepict extends ProtectedResource {
 		g.fillRect(0, 0, w,h);
 		return buffer;
 	}
+	
 	protected String getGPlusSnippet() {
 	   return AmbitResource.printGPlusSnippet(
 			   "Chemical structure diagram comparison",
