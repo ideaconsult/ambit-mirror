@@ -316,7 +316,7 @@ TD.results
   }
   
 .depictBox { 
-	height: 250px; 
+	min-height: 250px; 
 }
 
 .tabs {

@@ -9,6 +9,7 @@ import ambit2.rest.structure.diagram.CDKDepictVariants;
 import ambit2.rest.structure.diagram.CSLSDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 import ambit2.rest.structure.diagram.OpenBabelDepict;
+import ambit2.rest.structure.diagram.PubChemDepict;
 import ambit2.rest.structure.smirks.ReactionDepict;
 import ambit2.rest.structure.smirks.SMIRKSDepict;
 import ambit2.rest.structure.tautomers.TautomersDepict;
@@ -32,6 +33,7 @@ public class DepictDemoRouter extends MyRouter {
 		attach("/cdk/{mode}",CDKDepictVariants.class);
 		attach("/cactvs",CSLSDepict.class);
 		attach("/obabel",OpenBabelDepict.class);
+		attach("/pubchem",PubChemDepict.class);
 		attach(ReactionDepict.resource,ReactionDepict.class);
 		attach(SMIRKSDepict.resource,SMIRKSDepict.class);
 		attach("/reaction/reactant",CDKDepictVariants.class);

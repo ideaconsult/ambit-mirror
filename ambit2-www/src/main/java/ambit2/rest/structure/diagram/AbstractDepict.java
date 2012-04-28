@@ -38,6 +38,7 @@ public class AbstractDepict extends ProtectedResource {
 	protected String smiles ;
 	protected String smarts ;
 	protected String smirks ;
+	protected String recordType = null;
 	protected boolean headless = false;
 	/**
 	 * Might be ignored, currently only CDK depict considers the flags
@@ -56,9 +57,10 @@ public class AbstractDepict extends ProtectedResource {
 		super.doInit();
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 	}
-	protected BufferedImage getImage(String smiles,int width,int height) throws ResourceException {
+	protected BufferedImage getImage(String smiles,int width,int height,String recordType) throws ResourceException {
 		return null;
 	}
+
 	protected Form getParams() {
 		if (params == null) 
 			if (Method.GET.equals(getRequest().getMethod()))
@@ -101,7 +103,8 @@ public class AbstractDepict extends ProtectedResource {
 				style
 					)
 				);
-		b.append("</td></tr><tr><td>");
+		b.append("</td></tr>");
+		b.append("<tr><td>");
 		
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s/cactvs?search=%s'>%s</a>",
@@ -128,6 +131,26 @@ public class AbstractDepict extends ProtectedResource {
 					));
 		b.append("</td></tr>");
 		
+		b.append("<tr><td>");
+
+		String recordTypeOption = recordType==null?"":String.format("&record_type=%s", recordType);
+		b.append(AmbitResource.printWidget(
+				String.format("<a href='%s/pubchem?search=%s%s'>%s</a>",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						recordTypeOption,
+						"PubChem depiction"),
+				String.format("<img id='pubchem' src='%s/pubchem?search=%s%s' alt='%s' title='%s' onError=\"hideDiv('pubchem')\">",
+						ref.getHierarchicalPart(),
+						Reference.encode(smiles),
+						recordTypeOption,
+						smiles,smiles),
+				style
+					));
+		b.append("</td><td>");
+
+		b.append("</td></tr>");		
+		
 		b.append("</table>");
 		return b.toString();
 		
@@ -142,8 +165,10 @@ public class AbstractDepict extends ProtectedResource {
 		try {
 			Form form = getParams();
 			int w = 400; int h = 200;
+			recordType = "2d";
 			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
+			try { recordType = form.getFirstValue("record_type");} catch (Exception x) {}
 
 			smiles = form.getFirstValue(QueryResource.search_param);
 			setSmarts(form.getFirstValue("smarts"));
@@ -175,7 +200,7 @@ public class AbstractDepict extends ProtectedResource {
 	    		}
 					    		
 	    	if (smiles != null) {
-	        	final BufferedImage image = getImage(smiles.trim(),w,h);
+	        	final BufferedImage image = getImage(smiles.trim(),w,h,recordType);
 	        	if (image ==  null) {
 		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid smiles %s",smiles));
 	        		return null;

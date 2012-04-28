@@ -50,7 +50,8 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	}	
 	
 	@Override
-	protected BufferedImage getImage(String smiles,int w, int h) throws ResourceException {
+	protected BufferedImage getImage(String smiles, int w, int h,
+			String recordType) throws ResourceException {
 		try {
 			if (depict.getParser()==null) depict.setParser(
 					new SmilesParser(SilentChemObjectBuilder.getInstance())

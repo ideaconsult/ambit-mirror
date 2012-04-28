@@ -6,7 +6,6 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import ambit2.pubchem.NCISearchProcessor;
-import ambit2.pubchem.NCISearchProcessor.METHODS;
 
 /**
  * http://cactus.nci.nih.gov/chemical/structure/c1ccccc1/image
