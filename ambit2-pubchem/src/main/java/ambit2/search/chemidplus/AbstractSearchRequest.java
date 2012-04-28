@@ -20,12 +20,17 @@ public abstract class AbstractSearchRequest<R> extends DefaultAmbitProcessor<Str
 	
 	public R get(URL url) throws AmbitException {
 
+		return send(url,"GET");
+	}
+	
+	public R send(URL url,String method) throws AmbitException {
+
 		InputStream in = null;
 		HttpURLConnection uc = null;
 		try {
 			uc =(HttpURLConnection) url.openConnection();
 			uc.setDoOutput(true);
-			uc.setRequestMethod("GET");
+			uc.setRequestMethod(method);
 			int code = uc.getResponseCode();
 			
 			if (code==200) {
