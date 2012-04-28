@@ -671,4 +671,20 @@ public class AmbitResource extends ProtectedResource {
 
 	}		
 	public static final String disclaimer = "<a href='#' onClick=\"javascript:toggleDiv('underdev');\">Disclaimer</a><div id='underdev'  style='display: none;'>These pages offer minimalistic user interface to <a href='http://ambit.sourceforge.net/download_ambitrest.html' target=blank>AMBIT</a>  implementation of <a href='http://opentox.org/dev/apis' target=blank>OpenTox</a> <a href='http://ambit.sourceforge.net/rest.html' target=blank>REST</a> services.<br> Full featured user interface is available via external applications, e.g. <a href='http://toxpredict.org' target=blank>ToxPredict</a>, <a href='http://toxcreate.org' target=blank>ToxCreate</a> , <a href='http://opentox.ntua.gr/blog/78-q-edit' target=blank>QPRF editor</a>, <a href='http://www.jcheminf.com/content/4/1/7' target=blank>CheS-Mapper</a>, <a href='http://www.bioclipse.net/opentox' target=blank>Bioclipse-OpenTox</a>.</div>";
+	
+	public static final String header_facebook = 
+		"<div id='fb-root'></div>\n"+
+		"<script>(function(d, s, id) {\n"+
+		" var js, fjs = d.getElementsByTagName(s)[0];\n"+
+		" if (d.getElementById(id)) return;\n"+
+		"  js = d.createElement(s); js.id = id;\n"+
+		"  js.src = '//connect.facebook.net/en_US/all.js#xfbml=1';\n"+
+		"  fjs.parentNode.insertBefore(js, fjs);\n"+
+		"}(document, 'script', 'facebook-jssdk'));</script>";
+	public static final String header_gplus = 
+		"<script type='text/javascript' src='https://apis.google.com/js/plusone.js'></script>";
+	public static final String header_social = String.format("%s\n%s", header_facebook,header_gplus); 
+	public final static String gplus = "<g:plusone size='small' href='%s'></g:plusone>";
+	public final static String facebook = "<div class='fb-like' data-href='%s' data-send='false' data-layout='button_count' data-width='255' data-show-faces='true' data-font='trebuchet ms'></div>";
+
 }
