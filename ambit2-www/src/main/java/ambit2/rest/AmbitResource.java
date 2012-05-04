@@ -121,7 +121,7 @@ public class AmbitResource extends ProtectedResource {
 
 			{"http://opentox.org/dev/apis/api-1.2/Feature","Features",formatHeader,null},
 			{String.format("%s?%s=LogP",PropertyResource.featuredef,QueryResource.search_param),"Search for a feature by name",format,"GET","Yes"},
-			{PropertyResource.featuredef,"Retrieve all features",format,"GET","Yes"},
+			{String.format("%s?page=0&pagesize=10",PropertyResource.featuredef),"Retrieve all features",format,"GET","Yes"},
 			{PropertyResource.featuredef+"/12142","Get description of a specific feature",format,"GET","Yes"},
 			{PropertyResource.featuredef+"?search=LogP&condition=regexp","Get description of feature where dc:title regexp 'LogP'",format,"GET","Yes"},
 			{String.format(PropertyResource.featuredef+"?sameas=%s",Reference.encode("http://www.opentox.org/api/1.1#CASRN")),
@@ -133,7 +133,7 @@ public class AmbitResource extends ProtectedResource {
 			
 
 			{"http://opentox.org/dev/apis/api-1.2/Algorithm","Algorithms",formatHeader,null},
-			{String.format("%s",AllAlgorithmsResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
+			{String.format("%s?page=0&pagesize=10",AllAlgorithmsResource.algorithm),"get a list of all available algorithms",format,"GET","Yes"},
 			{String.format("%s/pka",AllAlgorithmsResource.algorithm),"get the representation of an pKa algorthm",format,"GET","Yes"},
 			{String.format("%s/toxtreecramer",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Cramer rules\" algorthm",format,"GET","Yes"},
 			{String.format("%s/toxtreecramer2",AllAlgorithmsResource.algorithm),"get the representation of an \"ToxTree: Extended Cramer rules\" algorithm",format,"GET","Yes"},
@@ -148,7 +148,7 @@ public class AmbitResource extends ProtectedResource {
 			{String.format("%s/leverage",AllAlgorithmsResource.algorithm),"Applicability domain by leverage. Requires dataset_uri as parameter. Creates a model, which can be used for AD estimation of other datasets",format,"POST","Yes"},
 						
 			{"http://opentox.org/dev/apis/api-1.2/Model","Models",formatHeader,null},
-			{String.format("%s",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
+			{String.format("%s?page=0&pagesize=10",ModelResource.resource),"get a list of all available models",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"get the representation of a model",format,"GET","Yes"},
 			{String.format("%s/{id}",ModelResource.resource),"delete a model",format,"DELETE","No"},
 			{String.format("%s/{id}",ModelResource.resource),"apply a model to a dataset for prediction",format,"POST","Yes"},
@@ -512,13 +512,13 @@ public class AmbitResource extends ProtectedResource {
 		
 		//w.write(String.format("<a href='%s/ttc?text=50-00-0&search=%s' title='Threshold of toxicological concern prediction'>TTC</a>&nbsp;",baseReference,Reference.encode("C=O")));
 		w.write(String.format("<a href='%s/query/compound/search/all'>Query compounds</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/compound'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/compound/100'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
 
 		w.write(String.format("<a href='%s/dataset?max=25'>Datasets</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/algorithm' title='Predictive algorithms'>Algorithms</a>&nbsp;",baseReference));
-		w.write(String.format("<a href='%s/model' title='Models'>Models</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/model?page=0&pagesize=10' title='Models'>Models</a>&nbsp;",baseReference));
 		//w.write(String.format("<a href='%s%s'>References</a>&nbsp;",baseReference,ReferenceResource.reference));
-		w.write(String.format("<a href='%s%s' title='Compound properties'>Features</a>&nbsp;",baseReference,PropertyResource.featuredef));
+		w.write(String.format("<a href='%s%s?page=0&pagesize=10' title='Compound properties'>Features</a>&nbsp;",baseReference,PropertyResource.featuredef));
 		w.write(String.format("<a href='%s%s/Taxonomy' title='Features grouped in several categories'>Templates</a>&nbsp;",baseReference,OntologyResource.resource));
 
 		w.write(String.format("<a href='%s/query/similarity?search=c1ccccc1Oc2ccccc2&threshold=0.9' title='Search for similar structures'>Similarity</a>&nbsp;",baseReference));
