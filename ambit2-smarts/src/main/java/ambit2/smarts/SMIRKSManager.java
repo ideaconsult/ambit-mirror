@@ -2,9 +2,9 @@ package ambit2.smarts;
 
 import java.util.Vector;
 
-import org.openscience.cdk.Bond;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
+import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -14,6 +14,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.AtomConfigurator;
 
 
@@ -501,7 +502,8 @@ public class SMIRKSManager
 					//This happens when two atoms from the reactant are connected.
 					IAtom tAt1 = rMap.get(nrAt1);
 					IAtom tAt2 = rMap.get(nrAt2);
-					IBond tb = new Bond();
+					IBond tb = MoleculeTools.newBond(target.getBuilder());
+
 					tb.setAtoms(new IAtom[] {tAt1, tAt2});
 					tb.setOrder(reaction.prodBo.get(i));
 					target.addBond(tb);
@@ -566,7 +568,7 @@ public class SMIRKSManager
 						tAt2 = rMap.get(nrAt2);
 					}					
 					
-					IBond tb = new Bond();
+					IBond tb = MoleculeTools.newBond(target.getBuilder());
 					tb.setAtoms(new IAtom[] {tAt1, tAt2});
 					tb.setOrder(reaction.prodBo.get(i));
 					target.addBond(tb);
@@ -622,7 +624,7 @@ public class SMIRKSManager
 		for (int i = 0; i < target.getBondCount(); i++)
 		{
 			IBond b = target.getBond(i);
-			IBond b1 = new Bond();
+			IBond b1 = MoleculeTools.newBond(target.getBuilder());
 			IAtom a01[] = new IAtom[2];
 			int ind0 = target.getAtomNumber(b.getAtom(0));
 			int ind1 = target.getAtomNumber(b.getAtom(1));;

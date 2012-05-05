@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtom;
@@ -19,6 +18,7 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.hashcode.MoleculeAndAtomsHashing;
 
@@ -273,7 +273,7 @@ public class ChemObjectFactory
 		IAtom[] atoms = new IAtom[2];
 		atoms[0] = at1;
 		atoms[1] = at2;		
-		Bond b = new Bond();
+		IBond b = MoleculeTools.newBond(mol.getBuilder());
 		b.setAtoms(atoms);
 		b.setOrder(order);
 		if (isAromatic)
