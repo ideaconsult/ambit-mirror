@@ -28,7 +28,6 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -417,7 +416,7 @@ public class SmartsParser
 			}
 		}
 		
-		IAtom[] atoms = new Atom[2];
+		IAtom[] atoms = new IAtom[2];
 	    atoms[0] = (IAtom)atom0;
 	    atoms[1] = (IAtom)atom1;
 	    curBond.setAtoms(atoms);

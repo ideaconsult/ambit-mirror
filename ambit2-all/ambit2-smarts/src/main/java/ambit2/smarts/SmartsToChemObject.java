@@ -2,10 +2,7 @@ package ambit2.smarts;
 
 import java.util.Vector;
 
-import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.RingSet;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -23,6 +20,7 @@ import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.data.MoleculeTools;
 
 public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContainer, IAtomContainer>
 {
@@ -624,7 +622,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 				
 		if (b instanceof SingleOrAromaticBond)
 		{	
-			Bond bond = new Bond();
+			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder.getInstance());
 			bond.setOrder(IBond.Order.SINGLE);
 			mFlagConfirmAromaticBond = true;			
 			return(bond);
@@ -632,7 +630,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		if (b instanceof AromaticQueryBond)  //This case returns a bond with order null!! - Is this OK ???
 		{	
-			Bond bond = new Bond();
+			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder.getInstance());
 			bond.setOrder(b.getOrder());
 			bond.setFlag(CDKConstants.ISAROMATIC,true);
 			return(bond);
@@ -640,28 +638,28 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		if (b instanceof OrderQueryBond)
 		{	
-			Bond bond = new Bond();			
+			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder.getInstance());
 			bond.setOrder(b.getOrder());
 			return(bond);
 		}
 		
 		if (b instanceof SingleNonAromaticBond)
 		{	
-			Bond bond = new Bond();			
+			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder.getInstance());
 			bond.setOrder(IBond.Order.SINGLE);
 			return(bond);
 		}
 		
 		if (b instanceof DoubleNonAromaticBond)
 		{	
-			Bond bond = new Bond();			
+			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder.getInstance());
 			bond.setOrder(IBond.Order.DOUBLE);
 			return(bond);
 		}
 		
 		if (b instanceof DoubleBondAromaticityNotSpecified)
 		{	
-			Bond bond = new Bond();			
+			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder.getInstance());
 			bond.setOrder(IBond.Order.DOUBLE);
 			return(bond);
 		}	
@@ -963,7 +961,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		if (n == 0)
 			return(v);  //empty container is returned
 		
-		IRingSet workRS = new RingSet();
+		IRingSet workRS = MoleculeTools.newRingSet(SilentChemObjectBuilder.getInstance());
 		workRS.add(ringSet);
 		//workRS = filterAromaticSmartsRings(workRS);
 		

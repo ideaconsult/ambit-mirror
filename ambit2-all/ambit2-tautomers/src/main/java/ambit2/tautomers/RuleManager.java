@@ -6,13 +6,12 @@ import java.util.Vector;
 
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.SmartsHelper;
 
 
@@ -375,7 +374,7 @@ public class RuleManager
 		for (int i = 0; i < prevStruct.getBondCount(); i++)
 		{
 			IBond b = prevStruct.getBond(i);
-			IBond b1 = new Bond();
+			IBond b1 = MoleculeTools.newBond(prevStruct.getBuilder());
 			IAtom a01[] = new IAtom[2];
 			int ind0 = prevStruct.getAtomNumber(b.getAtom(0));
 			int ind1 = prevStruct.getAtomNumber(b.getAtom(1));;
@@ -830,7 +829,7 @@ public class RuleManager
 	
 	IAtomContainer generateFragmentShell(IAtomContainer mol, RuleInstance ri, int nLayers)
 	{
-		Molecule fragment = new Molecule();
+		IAtomContainer fragment = MoleculeTools.newAtomContainer(SilentChemObjectBuilder.getInstance());
 		
 		//Initial fragment
 		for (int i = 0; i < ri.atoms.size(); i++)
@@ -855,7 +854,7 @@ public class RuleManager
 	}
 	
 	
-	Vector<IAtom> addLayerToFragment(IAtomContainer mol, Molecule fragment, Vector<IAtom> terminalAtoms)
+	Vector<IAtom> addLayerToFragment(IAtomContainer mol, IAtomContainer fragment, Vector<IAtom> terminalAtoms)
 	{
 		
 		Vector<IAtom> termAtoms;		
