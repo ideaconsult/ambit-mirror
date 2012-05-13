@@ -406,8 +406,9 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    		} catch (Exception x) {
 	    			x.printStackTrace();
 	    		}
-	    		
+	    		break;
 	    	}
+ 	
 	    	case smilesvalencychecker: {
 	    		rings = false;
 	    		try {
@@ -417,7 +418,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    		} catch (Exception x) {
 	    			//x.printStackTrace();
 	    		}
-	    		
+	    		break;
 	    	}	    	
 	    	case any: {
 	        	if (molecule!=null)
