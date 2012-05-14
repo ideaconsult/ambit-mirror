@@ -93,6 +93,7 @@ public class DepictRequest extends DefaultAmbitProcessor<String,BufferedImage> {
 	public BufferedImage process(String target) throws AmbitException {
 		BufferedWriter bw = null;
 		try {
+			if (target==null) return null;
 			HttpURLConnection uc =(HttpURLConnection) new  URL(getServer()).openConnection();
 			uc.setDoOutput(true);
 			uc.setRequestMethod("POST");
