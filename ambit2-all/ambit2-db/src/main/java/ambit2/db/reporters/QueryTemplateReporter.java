@@ -23,8 +23,10 @@ public class QueryTemplateReporter<Q extends IQueryRetrieval<Property>> extends 
 	}
 	@Override
 	public Object processItem(Property item) throws AmbitException {
-		item.setEnabled(true);
-		return getOutput().add(item);
+		if (item!=null) {
+			item.setEnabled(true);
+			return getOutput().add(item);
+		} else return null;
 	}
 
 
