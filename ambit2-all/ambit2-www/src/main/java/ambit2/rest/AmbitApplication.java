@@ -581,18 +581,40 @@ public class AmbitApplication extends TaskApplication<String> {
     public static void main(String[] args) throws Exception {
         
         // Create a component
-        Component component = new AmbitComponent();
-        final Server server = component.getServers().add(Protocol.HTTP, 8080);
-        component.start();
-   
-        System.out.println("Server started on port " + server.getPort());
+        Component component = boot(null,null,8080);
         System.out.println("Press key to stop server");
         System.in.read();
         System.out.println("Stopping server");
+        shutdown(component);
+
+    }
+    
+    public static Component boot(String mysqluser, String mysqlpwd, int httpport) throws Exception {
+    	return boot(mysqluser,mysqlpwd,"ambit2","localhost","3306",httpport);
+    }
+    public static Component boot(String mysqluser, String mysqlpwd, 
+    							 String mysqlDatabase, String mysqlHost, String mysqlport,
+    							 int httpport) throws Exception {
+    	
+
+        Context context = new Context();
+        if (mysqlDatabase!= null) context.getParameters().add(Preferences.DATABASE, mysqlDatabase);
+        if (mysqluser!=null) context.getParameters().add(Preferences.USER, mysqluser);
+        if (mysqlpwd!=null) context.getParameters().add(Preferences.PASSWORD, mysqlpwd);
+        if (mysqlport!=null) context.getParameters().add(Preferences.PORT, mysqlport);
+        if (mysqlHost!=null) context.getParameters().add(Preferences.HOST, mysqlHost);
+            	
+        Component component = new AmbitComponent(context);
+        final Server server = component.getServers().add(Protocol.HTTP, httpport);
+        System.out.println("Server started on port " + server.getPort());
+        component.start();
+        return component;
+    }
+    
+    public static void shutdown(Component component) throws Exception {
         component.stop();
         System.out.println("Server stopped");
     }
-    	
    
    public static String printRoutes(Restlet re,String delimiter,StringWriter b) {
 	   		
