@@ -417,3 +417,23 @@ ENGINE = InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `property_values` MODIFY COLUMN `value_num` DOUBLE DEFAULT NULL, DROP INDEX `Index_2`;
 ALTER TABLE `property_values` ADD INDEX `Index_2`(`value_num`);
 insert into version (idmajor,idminor,comment) values (5,1,"AMBIT2 schema -num values format changed"); 
+
+-- -----------------------------------------------------
+-- Nano materials support schema 5.2
+-- -----------------------------------------------------  
+ALTER TABLE `structure` MODIFY COLUMN `format` ENUM('SDF','CML','MOL','INC','NANO') NOT NULL DEFAULT 'SDF',
+MODIFY COLUMN `type_structure` ENUM('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental','NANO') NOT NULL DEFAULT 'NA';
+insert into version (idmajor,idminor,comment) values (5,2,"AMBIT2 schema - Nano materials support added);
+
+----------------------------------- 
+-- Drop FK to users table ; Ambit schema 5.3
+-----------------------------------
+ALTER TABLE `structure` DROP INDEX `FK_structure_2`, DROP FOREIGN KEY `FK_structure_2`;
+ALTER TABLE `models` DROP FOREIGN KEY `FK_models_users`;
+ALTER TABLE `property_values` DROP FOREIGN KEY `FK_property_values_1`;
+ALTER TABLE `property_pairstruc` DROP FOREIGN KEY `FK_relationship_struc_4`;
+ALTER TABLE `src_dataset` DROP FOREIGN KEY `FK_src_dataset_1`;
+ALTER TABLE `funcgroups` DROP FOREIGN KEY `FK_funcgroups_1`;
+ALTER TABLE `quality_structure` DROP FOREIGN KEY `FK_quality_struc_2`;
+insert into version (idmajor,idminor,comment) values (5,3,"AMBIT2 schema - FK to users table dropped");
+ 

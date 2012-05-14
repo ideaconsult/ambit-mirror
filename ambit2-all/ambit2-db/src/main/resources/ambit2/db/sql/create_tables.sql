@@ -109,10 +109,10 @@ CREATE TABLE  `structure` (
   `idstructure` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `idchemical` int(11) unsigned NOT NULL,
   `structure` blob NOT NULL,
-  `format` enum('SDF','CML','MOL','INC') COLLATE utf8_bin NOT NULL DEFAULT 'SDF',
+  `format` enum('SDF','CML','MOL','INC','NANO') COLLATE utf8_bin NOT NULL DEFAULT 'SDF',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
-  `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental') COLLATE utf8_bin NOT NULL DEFAULT 'NA',
+  `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental','NANO') COLLATE utf8_bin NOT NULL DEFAULT 'NA',
   `label` enum('OK','UNKNOWN','ERROR') COLLATE utf8_bin NOT NULL DEFAULT 'UNKNOWN' COMMENT 'quality label',
   `atomproperties` blob,
   `preference` int(10) unsigned NOT NULL DEFAULT '9999',
@@ -123,8 +123,7 @@ CREATE TABLE  `structure` (
   KEY `Index_5` (`idstructure`,`user_name`),
   KEY `Index_6` (`idchemical`,`preference`,`idstructure`) USING BTREE,
   KEY `Index_pref` (`preference`,`idchemical`) USING BTREE,
-  CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON UPDATE CASCADE,
-  CONSTRAINT `FK_structure_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON UPDATE CASCADE
+  CONSTRAINT `fk_idchemical` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --DELIMITER $
@@ -135,6 +134,28 @@ CREATE TABLE  `structure` (
 --        WHERE structure.idstructure = OLD.idstructure;
 --  END $
 --DELIMITER ;
+
+-- -----------------------------------------------------
+-- Procedure to move structures from one chemical to another
+-- -----------------------------------------------------
+DELIMITER $
+CREATE PROCEDURE moveStructure(
+
+     IN chemical_from INTEGER,
+     IN chemical_to INTEGER
+)
+BEGIN
+--  update summary_property_chemicals set idchemical=chemical_to where idchemical=chemical_from;
+  insert ignore into summary_property_chemicals select chemical_to,id_ci,idproperty from summary_property_chemicals where idchemical=chemical_from;
+  delete from summary_property_chemicals where idchemical=chemical_from;
+  update property_values set idchemical=chemical_to where idchemical=chemical_from;
+  update structure set idchemical=chemical_to where idchemical=chemical_from;
+  update query_results set idchemical=chemical_to where idchemical=chemical_from;
+  delete from chemicals where idchemical=chemical_from;
+ 
+END $
+
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- Table `properties`
@@ -273,7 +294,6 @@ CREATE TABLE  `models` (
   KEY `Index_creator` (`creator`),
   KEY `Index_10` (`dataset`),
   KEY `FK_models_users` (`user_name`),
-  CONSTRAINT `FK_models_users` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`),
   CONSTRAINT `FK_models_dataset` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_dependent` FOREIGN KEY (`dependent`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predicted` FOREIGN KEY (`predicted`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
@@ -319,7 +339,6 @@ CREATE TABLE `property_values` (
   KEY `Index_3` (`idproperty`,`idtype`) USING BTREE,
   KEY `Index_8` (`idproperty`,`idvalue_string`),
   KEY `Index_12` (`idchemical`,`idproperty`),
-  CONSTRAINT `FK_property_values_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_2` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_property_values_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -348,7 +367,6 @@ CREATE TABLE  `property_pairstruc` (
   CONSTRAINT `FK_relationship_struc_1` FOREIGN KEY (`idstructure1`) REFERENCES `structure` (`idstructure`),
   CONSTRAINT `FK_relationship_struc_2` FOREIGN KEY (`idstructure2`) REFERENCES `structure` (`idstructure`),
   CONSTRAINT `FK_relationship_struc_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`),
-  CONSTRAINT `FK_relationship_struc_4` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`),
   CONSTRAINT `FK_relationship_struc_5` FOREIGN KEY (`idvalue_string`) REFERENCES `property_string` (`idvalue_string`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -358,16 +376,78 @@ CREATE TABLE  `property_pairstruc` (
 DROP TABLE IF EXISTS `quality_labels`;
 CREATE TABLE  `quality_labels` (
   `id` int(10) unsigned NOT NULL,
-  `user_name` varchar(16) collate utf8_bin NOT NULL,
-  `label` enum('OK','ProbablyOK','Unknown','ProbablyERROR','ERROR') collate utf8_bin NOT NULL default 'Unknown',
-  `text` text collate utf8_bin,
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,  
-  PRIMARY KEY  USING BTREE (`id`,`user_name`),
-  KEY `FK_quality_labels_2` (`user_name`),
+  `sameas` varchar(255) COLLATE utf8_bin NOT NULL,
+  `label` enum('OK','ProbablyOK','Unknown','ProbablyERROR','ERROR') COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
+  `text` text COLLATE utf8_bin,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`sameas`) USING BTREE,
+  KEY `FK_quality_labels_2` (`sameas`),
   KEY `FK_quality_labels_3` (`label`),
-  CONSTRAINT `FK_quality_labels_1` FOREIGN KEY (`id`) REFERENCES `property_values` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_quality_labels_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_quality_labels_1` FOREIGN KEY (`id`) REFERENCES `property_values` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Assign quality label for a set of properties, sameas "property"
+-- for chemicals given by "dataset"
+-- -----------------------------------------------------
+DELIMITER $$
+
+CREATE PROCEDURE qvalues(IN dataset INTEGER,IN property VARCHAR(255))
+LANGUAGE SQL
+READS SQL DATA 
+CONTAINS SQL
+
+BEGIN
+
+DECLARE no_more_rows BOOLEAN;
+DECLARE chemical INTEGER;
+
+DECLARE thedataset CURSOR FOR
+SELECT idchemical FROM struc_dataset join structure using(idstructure) where id_srcdataset=dataset group by idchemical;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND     SET no_more_rows = TRUE;  
+ 
+OPEN thedataset;
+
+delete from quality_labels where sameas =property;
+
+the_loop: LOOP
+
+	FETCH thedataset into chemical;
+	IF no_more_rows THEN
+		CLOSE thedataset;
+		LEAVE the_loop;
+	END IF;
+
+	insert into quality_labels
+	select id,property,
+	if(count(distinct(id))=k,"OK",IF(count(distinct(id))>(k-count(distinct(id))),"ProbablyOK","ProbablyERROR")),
+	concat(count(distinct(id)),"/",k),now() from property_values
+	join properties using (idproperty)
+	join struc_dataset using (idstructure)
+	left join property_string using(idvalue_string)
+	join
+	(
+	select count(distinct(id)) k from property_values
+	join properties using (idproperty)
+	join struc_dataset using (idstructure)
+	left join property_string using(idvalue_string)
+	where comments regexp concat("^",property)
+	and id_srcdataset=dataset
+	and idchemical=chemical
+	) a
+	where comments regexp concat("^",property)
+	and id_srcdataset=dataset
+	and idchemical=chemical
+	group by `value`;
+	
+
+END LOOP the_loop;   
+
+END $$
+
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- Table `quality_pair` 
@@ -385,7 +465,6 @@ CREATE TABLE  `quality_pair` (
   KEY `FK_qpair_3` (`idstructure`),
   KEY `Index_4` (`TEXT`(255)),
   KEY `Index_5` USING BTREE (`idchemical`,`rel`),
-  CONSTRAINT `FK_qpair_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_qpair_2` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_qpair_3` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -417,8 +496,7 @@ CREATE TABLE  `quality_structure` (
   PRIMARY KEY  USING BTREE (`idstructure`,`user_name`),
   KEY `FK_quality_struc_2` (`user_name`),
   KEY `FK_quality_struc_3` (`label`),
-  CONSTRAINT `FK_quality_struc_1` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_quality_struc_2` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_quality_struc_1` FOREIGN KEY (`idstructure`) REFERENCES `structure` (`idstructure`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -477,7 +555,6 @@ CREATE TABLE  `src_dataset` (
   KEY `FK_src_dataset_2` (`idreference`),
   KEY `FK_src_dataset_3` (`idtemplate`),
   KEY `Index_6` (`maintainer`),
-  CONSTRAINT `FK_src_dataset_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_src_dataset_2` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE,
   CONSTRAINT `FK_src_dataset_3` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -595,8 +672,7 @@ CREATE TABLE  `funcgroups` (
   `user_name` varchar(16) collate utf8_bin default NULL,
   PRIMARY KEY  (`idfuncgroup`),
   UNIQUE KEY `Index_2` (`name`),
-  KEY `FK_funcgroups_1` (`user_name`),
-  CONSTRAINT `FK_funcgroups_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE SET NULL ON UPDATE CASCADE
+  KEY `FK_funcgroups_1` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -955,7 +1031,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (5,1,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (5,3,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
