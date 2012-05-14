@@ -37,17 +37,17 @@ public class QualityStatisticsProcessor extends	ConnectionStatisticsProcessor<St
 		
 				"select '\n'",
 				
-				"SELECT group_concat(distinct(name)) as 'Datasets',q.user_name as 'Mode',label,count(distinct(idstructure)) as 'Number of compounds' from quality_labels q join property_values using(id) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
+				"SELECT group_concat(distinct(name)) as 'Datasets',q.sameas as 'Mode',label,count(distinct(idstructure)) as 'Number of compounds' from quality_labels q join property_values using(id) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
 				"group by id_srcdataset,q.user_name,label",
 				
 				"select '\n'",
 				
-				"SELECT name as 'Dataset',group_concat(distinct(q.user_name)) as 'Mode',label,count(distinct(idstructure)) as 'Number of compounds' from quality_labels q join property_values using(id) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
+				"SELECT name as 'Dataset',group_concat(distinct(q.sameas)) as 'Mode',label,count(distinct(idstructure)) as 'Number of compounds' from quality_labels q join property_values using(id) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
 				"group by id_srcdataset,label",
 				
 				"select '\n'",
 				
-				"SELECT group_concat(distinct(name)) as 'Datasets',group_concat(distinct(q.user_name)) as 'Mode',q.label,count(distinct(structure.idchemical)) as 'Number of compounds' from quality_labels q join property_values using(id) join structure using(idstructure) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
+				"SELECT group_concat(distinct(name)) as 'Datasets',group_concat(distinct(q.sameas)) as 'Mode',q.label,count(distinct(structure.idchemical)) as 'Number of compounds' from quality_labels q join property_values using(id) join structure using(idstructure) join struc_dataset using(idstructure) join src_dataset using(id_srcdataset)\n"+
 				"group by q.label",		
 				
 				
