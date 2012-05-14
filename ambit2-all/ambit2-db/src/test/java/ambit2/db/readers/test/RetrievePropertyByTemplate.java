@@ -64,7 +64,7 @@ public class RetrievePropertyByTemplate  extends RetrieveTest<Property> {
 		while (rows.next()) {
 			Property p = rows.getObject();
 			ITable table = 	c.createQueryTable("EXPECTED",
-					"SELECT idproperty,idreference,properties.name,properties.units,properties.comments,title,url,ptype,islocal,type from template join template_def using(idtemplate) "+
+					"SELECT idproperty,idreference,properties.name,properties.units,properties.comments,title,url,ptype,islocal,type,`order` from template join template_def using(idtemplate) "+
 					"join properties using(idproperty) join catalog_references using(idreference) " +
 					"where template.name='BCF' and properties.name='"+p.getName()+"'");		
 			Assert.assertEquals(1,table.getRowCount());			
