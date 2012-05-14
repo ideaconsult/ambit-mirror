@@ -22,7 +22,7 @@ public class QueryStructureByValueQuality extends AbstractStructureQuery<String,
 		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,cast(label as unsigned) as metric,label as text from structure\n"+
 		"where idstructure in\n"+
 		"(\n"+
-		"select idstructure from properties join property_values  using(idproperty) left join quality_labels using(id) where quality_labels.user_name=? %s\n"+
+		"select idstructure from properties join property_values  using(idproperty) left join quality_labels using(id) where sameas=? %s\n"+
 		")\n";
 	public final static String where = " and label %s ?";
 	public final static String where_null = " and label is null";

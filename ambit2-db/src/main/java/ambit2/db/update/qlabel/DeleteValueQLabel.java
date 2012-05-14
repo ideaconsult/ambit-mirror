@@ -13,10 +13,10 @@ public class DeleteValueQLabel extends AbstractUpdate<Integer, QLabel> {
 
 	protected String sql = "delete FROM quality_labels where ";
 	
-	protected String sql_defaultuser = "delete FROM quality_labels where user_name = SUBSTRING_INDEX(user(),'@',1) and ";
+	protected String sql_defaultuser = "delete FROM quality_labels where sameas = SUBSTRING_INDEX(user(),'@',1) and ";
 	
 	protected String whereValue = "id=?";
-	protected String whereUser = "user_name=?";
+	protected String whereUser = "sameas=?";
 	protected String whereLabel = "label=?";
 	
 	public DeleteValueQLabel(Integer record, QLabel label) {
