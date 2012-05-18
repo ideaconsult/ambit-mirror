@@ -93,8 +93,9 @@ public class TestTautomers
 		
 		
 		//tetracyclin
-		tt.visualTest("CN(C)C1=C(O)C(C(N)=O)=C(O)C2(O)C1CC1C(=C2O)C(=O)C2=C(C=CC=C2O)C1(C)O");
+		//tt.visualTest("CN(C)C1=C(O)C(C(N)=O)=C(O)C2(O)C1CC1C(=C2O)C(=O)C2=C(C=CC=C2O)C1(C)O");
 		
+		//tt.visualTest("S=N1CC=CC=C1");
 		
 		//tt.visualTest("O1=CC=CN=C1");
 		
@@ -105,7 +106,7 @@ public class TestTautomers
 		
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
-		//tt.visualTest("C=CN");
+		tt.visualTest("O=CCCC=O");
 		
 		
 		//tt.testAdenine();
@@ -176,7 +177,9 @@ public class TestTautomers
 		v.add(null);
 		for (int i = 0; i < resultTautomers.size(); i++)		
 		{	
-			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+			Double rank = (Double)resultTautomers.get(i).getProperty("TAUTOMER_RANK");
+			System.out.print("   " + rank.toString() + "   " +
+					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 			v.add(resultTautomers.get(i));
 		}
 		System.out.println();

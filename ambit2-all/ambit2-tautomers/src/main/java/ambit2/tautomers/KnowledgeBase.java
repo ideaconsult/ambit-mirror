@@ -9,6 +9,7 @@ import ambit2.smarts.SmartsParser;
 public class KnowledgeBase 
 {
 	public Vector<Rule> rules = new Vector<Rule>();
+	public Vector<RankingRule> rankingRules = new Vector<RankingRule>();
 	public Vector<Filter> warningFilters = new Vector<Filter>();
 	public Vector<Filter> excludeFilters = new Vector<Filter>();
 	
@@ -34,14 +35,11 @@ public class KnowledgeBase
 		
 		for (int i = 0; i < PredefinedKnowledgeBase.excludeFragments.length; i++)
 			addFilterRule(PredefinedKnowledgeBase.excludeFragments[i], Filter.FT_EXCLUDE);
+				
+		for (int i = 0; i < PredefinedKnowledgeBase.rankingRules.length; i++)
+			addRankingRule(PredefinedKnowledgeBase.rankingRules[i], i);
 		
-		if (errors.size() > 0)
-		{
-			System.out.println("There are errors in the knowledge base:");
-			for (int i = 0; i < errors.size(); i++)
-				System.out.println(errors.get(i));
-		}
-		
+		synchronizeRankingRules();
 	}
 	
 	
@@ -57,7 +55,7 @@ public class KnowledgeBase
 		}
 	}
 	
-	public void addFilterRule(String fRule, int filterType )
+	public void addFilterRule(String fRule, int filterType)
 	{
 		QueryAtomContainer q = sp.parse(fRule);			
 		String errorMsg = sp.getErrorMessages();
@@ -94,12 +92,60 @@ public class KnowledgeBase
 		}
 	}
 	
+	public void addRankingRule(String rRule, int ruleNum)
+	{
+		RankingRule rule = ruleParser.parseRankingRule(rRule);
+		if (rule == null)
+			errors.add("Ranking Rule " + (ruleNum+1) + ":  " + ruleParser.errors);
+		else
+		{
+			rankingRules.add(rule);
+			//System.out.println(rule.toString());
+		}
+	}
+	
+	public void synchronizeRankingRules()
+	{
+		for (int i = 0; i < rankingRules.size(); i++)
+		{
+			RankingRule rankRule = rankingRules.get(i);
+			Rule rule = getRuleByName(rankRule.name);
+			if (rule == null)
+			{
+				errors.add("Ranking Rule " + rankRule.name + " is not synchronized with a master rule!");
+			}
+			else
+			{
+				rule.rankingRule = rankRule;
+				rankRule.masterRule = rule;
+			}
+		}
+		
+		//TODO - check for rules which are not linked with a ranking rule
+	}
+	
+	
+	Rule getRuleByName(String name)
+	{
+		for (int i = 0; i < rules.size(); i++)
+		{
+			Rule r = rules.get(i);
+			if (r.name.equals(name))
+				return (r);
+		}
+		
+		return null;
+	}
 	
 	
 	public String getAllErrors()
 	{
-		//TODO
-		return("");
+		StringBuffer sb = new StringBuffer();
+		
+		for (int i = 0; i < errors.size(); i++)
+			sb.append(errors.get(i) + "\n");
+		
+		return(sb.toString());		
 	}
 	
 }

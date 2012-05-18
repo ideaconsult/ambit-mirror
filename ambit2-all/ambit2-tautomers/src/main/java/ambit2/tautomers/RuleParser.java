@@ -13,6 +13,7 @@ public class RuleParser
 	String atomIndexCheckError = "";
 	String atomIndexFixError = "";
 	Rule curRule = null;
+	RankingRule curRankingRule = null;
 	
 	public Rule parse(String ruleString)
 	{	
@@ -54,6 +55,44 @@ public class RuleParser
 				errors = "'" + rule.name + "'\n" + errors;
 			return(null);
 		}	
+	}
+	
+	public RankingRule parseRankingRule(String ruleString)
+	{
+		errors = "";
+		RankingRule rule = new RankingRule();
+		rule.OriginalRuleString = ruleString;
+		curRankingRule = rule;
+		
+		
+		int res = ruleString.indexOf(TautomerConst.KeyWordPrefix, 0);
+		int curPos = res;
+		
+		while (res != -1)
+		{	
+			res = ruleString.indexOf(TautomerConst.KeyWordPrefix, curPos+TautomerConst.KeyWordPrefix.length());
+			String keyword;
+			if (res == -1)
+				keyword = ruleString.substring(curPos);
+			else
+			{	
+				keyword = ruleString.substring(curPos,res);
+				curPos = res;	
+			}
+			
+			parseRankingKeyWord(keyword);
+		}		
+		
+		
+		if (errors.equals(""))
+			return(rule);
+		else
+		{	
+			//adding rule name as a prefix
+			if (rule.name != null)
+				errors = "'" + rule.name + "'\n" + errors;
+			return(null);
+		}
 	}
 	
 	
@@ -196,6 +235,44 @@ public class RuleParser
 		errors += "Unknow key word: " + key + "\n";
 		
 	}
+
+	
+	void parseRankingKeyWord(String keyWord)
+	{		
+		//System.out.println("   keyword: " + keyWord);
+		int sepPos = keyWord.indexOf(TautomerConst.KeyWordSeparator);		
+		if (sepPos == -1)
+		{	
+			errors += "Incorrect key word syntax: " + keyWord + "\n";
+			return;
+		}
+		
+		String key = keyWord.substring(TautomerConst.KeyWordPrefix.length(), sepPos).trim();		
+		String keyValue = keyWord.substring(sepPos+1).trim();
+		
+		
+		if (key.equals("NAME"))	
+		{	
+			curRankingRule.name = keyValue;
+			return;
+		}
+		
+		if (key.equals("STATE_ENERGY"))	
+		{	
+			parseRankingRuleStateEnergies(keyValue);
+			return;
+		}
+		
+		if (key.equals("INFO"))	
+		{	
+			curRankingRule.RuleInfo = keyValue;
+			return;
+		}
+		
+		errors += "Unknow key word: " + key + "\n";
+	}
+	
+
 	
 	void parseName(String keyValue)
 	{
@@ -267,6 +344,34 @@ public class RuleParser
 	{
 		curRule.RuleInfo = keyValue.trim();
 	}
+	
+	void parseRankingRuleStateEnergies(String keyValue)
+	{	
+		String elements [] = keyValue.split(",");
+		Vector<String> vs = new Vector<String>(); 
+		 
+		for (int i = 0; i < elements.length; i++)
+		{	
+			String s = elements[i].trim();
+			if(!s.equals(""))
+				vs.add(s);
+		}
+		
+		
+		curRankingRule.stateEnergies = new double[vs.size()];
+		for (int i = 0; i < vs.size(); i++)
+		{	
+			try
+			{	
+				curRankingRule.stateEnergies[i] = Double.parseDouble(vs.get(i));
+			}
+			catch(Exception e)
+			{
+				errors += "Incorrect value for state energy: " + e.getMessage();
+			}
+		}	
+	}
+	
 	
 	void handleStateAtomsBondIndexesAndRingClosure()
 	{

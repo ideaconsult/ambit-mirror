@@ -61,4 +61,21 @@ public class PredefinedKnowledgeBase
 		"[*;r4,r5,r6,r7,r8](=*)=*"  //allene atom in a cycle (up to 8 atoms)
 	};
 	
+	
+	//Rules used for tautomer ranking
+	public static final String rankingRules[] = 
+	{
+		"$$NAME=keto/enol    $$STATE_ENERGY=  0, 0.315   $$INFO= O=CC",
+		"$$NAME=amin/imin    $$STATE_ENERGY=  0, 0.037   $$INFO= N=CC",
+		"$$NAME=amide/imid   $$STATE_ENERGY=   0, 0.673  $$INFO= O=CN",
+		"$$NAME=nitroso/oxime   $$STATE_ENERGY=   0.025, 0  $$INFO= O=NC",
+		"$$NAME=azo/hydrazone   $$STATE_ENERGY=   0, 0.137  $$INFO= N=NC",
+		"$$NAME=thioketo/thioenol   $$STATE_ENERGY=   0.246, 0  $$INFO= S=CC",
+		"$$NAME=thionitroso/thiooxime  $$STATE_ENERGY=   0.983, 0  $$INFO= S=NC",
+		"$$NAME=amidine/imidine    $$STATE_ENERGY=  0, 0.137  $$INFO= N=CN",
+		"$$NAME=diazoamino/diazoamino  $$STATE_ENERGY=  0, 0.173  $$INFO= N=NN",
+		"$$NAME=thioamide/iminothiol   $$STATE_ENERGY=  0, 0.068  $$INFO= S=CN",
+		"$$NAME=nitrosamine/diazohydroxide $$STATE_ENERGY=  0, 0.639  $$INFO= O=NN",
+	};
+	
 }
