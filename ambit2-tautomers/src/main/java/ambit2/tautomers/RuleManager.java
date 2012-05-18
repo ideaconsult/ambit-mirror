@@ -294,6 +294,8 @@ public class RuleManager
 		{
 			try{
 				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
+				double rank = calculateRank(incStep);
+				newTautomer.setProperty("TAUTOMER_RANK", new Double(rank));
 				
 				tman.registerTautomer(newTautomer); 
 				
@@ -961,6 +963,28 @@ public class RuleManager
 			
 		}
 		return(sb.toString());
+	}
+	
+	
+	double calculateRank(TautomerIncrementStep incStep)
+	{
+		//This is a simple approach for ranking
+		//It is to be improved further
+		
+		double e_rank = 0.0;  //energy based rank
+		for (int i = 0; i < incStep.usedRuleInstances.size(); i++)
+		{
+			RuleInstance ri = incStep.usedRuleInstances.get(i);
+			RankingRule rankRule = ri.rule.rankingRule; 
+			if (rankRule == null)
+				continue;
+			
+			e_rank += rankRule.stateEnergies[ri.getCurrentState()];
+			
+			//TODO - handle aromaticity to correct the rank
+		}
+		
+		return (e_rank);
 	}
 		
 	

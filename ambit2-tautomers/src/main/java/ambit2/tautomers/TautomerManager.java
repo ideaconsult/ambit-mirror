@@ -46,6 +46,7 @@ public class TautomerManager
 		knowledgeBase = new KnowledgeBase();
 		if (knowledgeBase.errors.size() > 0)
 		{	
+			System.out.println("There are errors in the knowledge base:");
 			System.out.println(knowledgeBase.getAllErrors());
 		}
 		

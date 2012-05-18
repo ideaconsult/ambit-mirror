@@ -30,6 +30,7 @@ public class Rule
 	String RuleInfo = "";
 	QueryAtomContainer stateQueries[] = null;
 	String OriginalRuleString = "";
+	RankingRule rankingRule = null;
 	
 	//ring closure info
 	int ringClosureState = -1;
