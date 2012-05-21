@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-all</artifactId>
-<version>1.4.9</version>
+<version>1.4.10</version>
   <packaging>pom</packaging>
-  <name>cdk</name>
+  <name>cdk-maven</name>
    <url>http://cdk.sourceforge.net</url>
    <distributionManagement>
 	<!-- 
@@ -21,7 +21,10 @@
     
 
   </distributionManagement>
-  <inceptionYear>2006</inceptionYear>
+   <issueManagement>
+   	<url>http://sourceforge.net/tracker/?group_id=20024&amp;atid=120024</url>
+   </issueManagement>
+   <inceptionYear>2006</inceptionYear>
  
  <modules>
     <module>cdk-annotation</module>
@@ -47,6 +50,7 @@
     <module>cdk-ionpot</module>
     <module>cdk-iordf</module>
     <module>cdk-isomorphism</module>
+    <module>cdk-jchempaint</module>
     <module>cdk-libiocml</module>
     <module>cdk-libiomd</module>
     <module>cdk-log4j</module>
@@ -77,10 +81,15 @@
     <module>cdk-renderbasic</module>
     <module>cdk-renderawt</module>
     <module>cdk-tautomer</module>
+<!-- not changed , 1.0 already in the repo
     <module>signature</module>
+-->
  </modules>
   
-  <repositories>
+ <scm>
+ 	<url>https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/cdk-maven</url>
+ </scm>
+ <repositories>
   <!-- 
     <repository>
       <id>maven2-repository.dev.java.net</id>

@@ -3,15 +3,34 @@ This is a hack to upload cdk-*.jar (The Chemistry Development Kit) into Maven re
 The CDK site where all credits should go is http://cdk.sourceforge.net/
 
 CHANGE LOG
+
+May 21, 2012
+Updated to cdk 1.4.10 and cdk-jchempaint-26
+http://sourceforge.net/projects/cdk/files/cdk/1.4.10/
+http://sourceforge.net/projects/cdk/files/CDK-JChemPaint/26/
+
+------
+
+Apr 5, 2012
+Updated to cdk 1.4.9
+http://sourceforge.net/projects/cdk/files/cdk/1.4.9/
+http://sourceforge.net/projects/cdk/files/CDK-JChemPaint/25/
+------
+Mar 25, 2012
+Updated to cdk 1.4.8 & cdk-jchempaint-25
+http://sourceforge.net/projects/cdk/files/cdk/1.4.8/
+http://sourceforge.net/projects/cdk/files/CDK-JChemPaint/25/
+
 ------
 Oct 31, 2011
-Updated to cdk 1.4.4
-
-
-
-
+Updated to cdk 1.4.5 
+http://sourceforge.net/projects/cdk/files/cdk/1.4.5/
+http://sourceforge.net/projects/cdk/files/CDK-JChemPaint/18/
 ------
 Feb 21, 2011  - updated to use cdk 1.3.8.jar as separate jars.  
+Includes cdk-jchempaint 18.
+http://sourceforge.net/projects/cdk/files/cdk%20%28development%29/1.3.8/
+
 The project was converted to multimodule maven project, each module is for one cdk jar.
 The jars are expected in dist subfolders of each module project, in the form of cdk-{module}-{version}.jar
 
@@ -30,7 +49,7 @@ and repository:
         <id>ambit-plovdiv</id>
         <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty</url>
         <snapshots>
-  			<enabled>false</enabled>
+  	        <enabled>false</enabled>
   		</snapshots>
         </repository>
 

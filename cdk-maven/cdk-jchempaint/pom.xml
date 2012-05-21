@@ -2,7 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-jchempaint</artifactId>
-  <version>25</version>
+  <name>cdk-JChempaint</name>
+  <version>26</version>
   
     <distributionManagement>
 	<!-- 
@@ -18,7 +19,13 @@
     
 
   </distributionManagement>
-  <inceptionYear>2001</inceptionYear>
+    <description>CDK-JChemPaint is the new rendering/controller stack used and
+originating from JChemPaint</description>
+    <url>http://sourceforge.net/projects/cdk/files/CDK-JChemPaint</url>
+    <issueManagement>
+    	<url>http://sourceforge.net/tracker/?group_id=20024&amp;atid=120024</url>
+    </issueManagement>
+    <inceptionYear>2001</inceptionYear>
  
   
   <repositories>
@@ -37,7 +44,10 @@
     </pluginRepository>
   </pluginRepositories>
   
- <build>
+  <organization>
+  	<name>The Chemistry Development Kit</name>
+  </organization>
+  <build>
     <plugins>
       <!-- fake out maven and install the binary artifact -->
       <plugin>
