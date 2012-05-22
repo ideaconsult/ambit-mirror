@@ -18,30 +18,31 @@ import ambit2.rest.structure.diagram.AbstractDepict;
 public class ReactionDepict extends AbstractDepict {
 	public static final String resource = "/reaction";
 	
-	protected String getTitle(Reference ref, String smiles) throws ResourceException {
+	@Override
+	protected String getTitle(Reference ref, String... smiles) throws ResourceException {
 		StringBuilder b = new StringBuilder();
 		b.append("<table><tr>");
 		b.append("<td>");
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s/reactant?search=%s'>%s</a>",
-						ref.getHierarchicalPart(),Reference.encode(smiles),"Reactant"),
+						ref.getHierarchicalPart(),Reference.encode(smiles[0]),"Reactant"),
 						
 				String.format("<strong>%s</strong><img id='reactant' src='%s/reactant?search=%s' alt='%s' title='%s' onError=\"hideDiv('reactant')\">",
 						smiles,
 						ref.getHierarchicalPart(),
-						Reference.encode(smiles),
+						Reference.encode(smiles[0]),
 						smiles,smiles),
 				"depictBox"						
 					));
 		b.append("</td><td>");
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s/product?search=%s&smirks=%s'>%s</a>",
-						ref.getHierarchicalPart(),Reference.encode(smiles),Reference.encode(smirks),"Product"),
+						ref.getHierarchicalPart(),Reference.encode(smiles[0]),Reference.encode(smirks),"Product"),
 						
 				String.format("<strong>Reaction SMIRKS %s</strong><img id='product' src='%s/product?search=%s&smirks=%s' alt='%s' title='%s' onError=\"hideDiv('product')\">",
 						smirks==null?"":smirks,
 						ref.getHierarchicalPart(),
-						Reference.encode(smiles),
+						Reference.encode(smiles[0]),
 						smirks==null?"":Reference.encode(smirks),
 						smirks,smirks),
 				"depictBox"		
@@ -100,7 +101,7 @@ public class ReactionDepict extends AbstractDepict {
 		for (SMARTCYPReaction reaction : SMARTCYPReaction.values()) {
 			boolean selected = reaction.getSMIRKS().equals(smirks);
 			w.write(String.format("<i><a href='?search=%s&smirks=%s' title='%s'>%s%s%s</a></i>&nbsp;&nbsp;", 
-					Reference.encode(smiles),
+					Reference.encode(smiles[0]),
 					Reference.encode(reaction.getSMIRKS()),
 					reaction.getSMIRKS(),
 					selected?"[":"",

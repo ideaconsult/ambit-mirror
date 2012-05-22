@@ -40,7 +40,7 @@ public class OpenBabelDepict extends AbstractDepict {
 			throw new ResourceException(x);
 		}
 	}
-	protected String getTitle(Reference ref, String smiles) throws ResourceException {
+	protected String getTitle(Reference ref, String... smiles) throws ResourceException {
 		return smiles==null?getGPlusSnippet():
 			   String.format("SMILES: %s<br><img src='%s' alt='%s' title='%s'>\n%s", 
 					   smiles,ref,smiles,smiles,

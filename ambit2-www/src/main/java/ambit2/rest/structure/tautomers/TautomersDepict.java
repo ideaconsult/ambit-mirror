@@ -68,14 +68,16 @@ public class TautomersDepict extends AbstractDepict {
 		}
 		return mol;
 	}
-	protected String getTitle(Reference ref, String smiles) throws ResourceException {
-		if ((smiles==null) || "".equals(smiles)) smiles = "warfarin"; //demo
+	
+	@Override
+	protected String getTitle(Reference ref, String... smiles) throws ResourceException {
+		if ((smiles==null) || smiles.length<1 || "".equals(smiles[0])) smiles = new String[] {"warfarin"}; //demo
 		StringBuilder b = new StringBuilder();
 		if (method== null ) {
 			b.append("<div class='tabs' style='padding-left:0;margin-left:0px;border-width:0px'><ul style='padding-left:0;margin-left:0px'>");
 			for (_method m : _method.values()) {
 				b.append(String.format("<li  style='padding-left:0;margin-left:0px'><a href='%s/depict%s/%s?search=%s&headless=true'>%s tautomers</a></li>",
-						getRequest().getRootRef(),TautomersDepict.resource,m,Reference.encode(smiles),m));
+						getRequest().getRootRef(),TautomersDepict.resource,m,Reference.encode(smiles[0]),m));
 			}
 			b.append("</ul></div>");
 
@@ -101,12 +103,12 @@ public class TautomersDepict extends AbstractDepict {
 		switch (method) {
 		case ambit : { 
 			//ok, this is for a demo
-			if ("warfarin".equals(smiles)) smiles = "C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3";
-			mol = getAtomContainer(smiles);
+			if ("warfarin".equals(smiles[0])) smiles[0] = "C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3";
+			mol = getAtomContainer(smiles[0]);
 			b.append("<td>");
 			String url = String.format("%s/depict/cdk/any?search=%s",
 					getRequest().getRootRef(),
-					Reference.encode(smiles),
+					Reference.encode(smiles[0]),
 					smarts==null?"":"&smarts=",
 					smarts==null?"":Reference.encode(smarts)
 					);
@@ -123,7 +125,7 @@ public class TautomersDepict extends AbstractDepict {
 			b.append("<td>");
 			String url = String.format("%s/depict/cactvs?search=%s",
 					getRequest().getRootRef(),
-					Reference.encode(smiles),
+					Reference.encode(smiles[0]),
 					smarts==null?"":"&smarts=",
 					smarts==null?"":Reference.encode(smarts)
 					);
@@ -133,7 +135,7 @@ public class TautomersDepict extends AbstractDepict {
 					String.format("<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">", 
 							url,smiles==null?"":smiles,smiles==null?"":smiles),"depictBox"));
 			b.append("</td>");			
-			List<String> resultTautomers = generateTautomersCactvs(smiles);
+			List<String> resultTautomers = generateTautomersCactvs(smiles[0]);
 			if (resultTautomers!=null)
 				for (int i = 0; i < resultTautomers.size(); i++) {		
 					if (((i+1) %3 ) == 0) b.append("<tr>");
@@ -149,11 +151,11 @@ public class TautomersDepict extends AbstractDepict {
 			break;
 		}
 		case inchi: {
-			if ("warfarin".equals(smiles)) smiles = "C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3";
+			if ("warfarin".equals(smiles)) smiles[0] = "C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3";
 			b.append("<td>");
 			String url = String.format("%s/depict/cdk/any?search=%s",
 					getRequest().getRootRef(),
-					Reference.encode(smiles),
+					Reference.encode(smiles[0]),
 					smarts==null?"":"&smarts=",
 					smarts==null?"":Reference.encode(smarts)
 					);
@@ -163,7 +165,7 @@ public class TautomersDepict extends AbstractDepict {
 					String.format("<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">", 
 							url,smiles==null?"":smiles,smiles==null?"":smiles),"depictBox"));
 			b.append("</td>");			
-			mol = getAtomContainer(smiles);
+			mol = getAtomContainer(smiles[0]);
 			b.append(generateTautomersInChI(mol));
 		}
 		}
