@@ -2,16 +2,22 @@ package ambit2.descriptors.processors;
 
 import java.util.BitSet;
 
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.processors.structure.AbstractPropertyGenerator;
+import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.smarts.CMLUtilities;
+import ambit2.smarts.processors.SMARTSPropertiesReader;
 import ambit2.smarts.processors.StructureKeysBitSetGenerator;
 
 /**
@@ -20,6 +26,9 @@ import ambit2.smarts.processors.StructureKeysBitSetGenerator;
  *
  */
 public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
+	protected transient SMARTSPropertiesReader bondPropertiesReader;
+	protected transient AtomConfigurator configurator;
+	protected Property smartsProperty = Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	public enum FPTable {
 		fp1024 {
 			@Override
@@ -221,5 +230,43 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 	protected BitSet generateProperty(IAtomContainer atomContainer)
 			throws AmbitException {
 		return processor.process(atomContainer);
+	}
+	@Override
+	protected IAtomContainer getAtomContainer(IStructureRecord target)
+			throws AmbitException {
+		// TODO Auto-generated method stub
+		System.out.println(target);
+		IAtomContainer mol = super.getAtomContainer(target);
+		try {
+			
+			if ("true".equals(Preferences
+					.getProperty(Preferences.FASTSMARTS))) {
+				Object smartsdata = target.getProperty(smartsProperty);
+	
+				if (smartsdata != null) {
+					mol.setProperty(smartsProperty, smartsdata);
+					if (bondPropertiesReader == null) bondPropertiesReader = new SMARTSPropertiesReader();
+					mol = bondPropertiesReader.process(mol);
+				} else {
+					mol.removeProperty(smartsProperty);
+					if (configurator==null) configurator = new AtomConfigurator();
+					mol = configurator.process(mol);
+					
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+	
+				}
+			} else {
+				mol.removeProperty(smartsProperty);
+				if (configurator==null) configurator = new AtomConfigurator();
+				mol = configurator.process(mol);
+				CDKHueckelAromaticityDetector.detectAromaticity(mol);
+	
+			}
+  			
+
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		return mol;
 	}
 }
