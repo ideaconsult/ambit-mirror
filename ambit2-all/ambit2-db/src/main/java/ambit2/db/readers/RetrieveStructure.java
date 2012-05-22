@@ -34,10 +34,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.search.QueryParam;
+import ambit2.smarts.CMLUtilities;
 
 public class RetrieveStructure extends AbstractStructureRetrieval<IStructureRecord> {
     /**
@@ -121,13 +123,14 @@ public class RetrieveStructure extends AbstractStructureRetrieval<IStructureReco
             } catch (Exception x) {
             	r.setType(STRUC_TYPE.NA);
             }
-            /*
-            Object ts = rs.getString(_sqlids.atomproperties.name());
-            if ((ts==null) || "".equals(ts.toString().trim()))
-            	r.removeProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));
-            else
-            r.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), ts);
-            */
+            try {
+	            Object ts = rs.getString(_sqlids.atomproperties.name());
+	            if ((ts==null) || "".equals(ts.toString().trim()))
+	            	r.removeProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));
+	            else
+	            r.setProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp), ts);
+            } catch (Exception x) { r.removeProperty(Property.getInstance(CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp));}
+
             return r;
         } catch (SQLException x){
             throw new AmbitException(x);
