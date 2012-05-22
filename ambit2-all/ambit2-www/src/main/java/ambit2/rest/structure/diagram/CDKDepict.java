@@ -74,7 +74,8 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	public Representation get(Variant variant) {
 		try {
 			Form form = getParams();
-			smiles = form.getFirstValue(QueryResource.search_param);
+			smiles = form.getValuesArray(QueryResource.search_param);
+			if ((smiles==null) || (smiles.length<1)) smiles = new String[] {null};
 			setSmarts(form.getFirstValue("smarts"));
 			
 			if (MediaType.TEXT_HTML.equals(variant.getMediaType())) {
@@ -82,10 +83,10 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 					public void close() throws Exception {};
 					public Writer process(String target) throws AmbitException {
 						try {
-						AmbitResource.writeTopHeader(output, smiles==null?"2D structure diagram":smiles, getRequest(),getResourceRef(getRequest()), "",null);
-						writeSearchForm(output, smiles, getRequest(), "",Method.GET,params);	    					
+						AmbitResource.writeTopHeader(output, smiles[0]==null?"2D structure diagram":smiles[0], getRequest(),getResourceRef(getRequest()), "",null);
+						writeSearchForm(output, smiles[0], getRequest(), "",Method.GET,params);	    					
 						output.write(target);
-						AmbitResource.writeHTMLFooter(output, smiles, getRequest());
+						AmbitResource.writeHTMLFooter(output, smiles[0], getRequest());
 						} catch (Exception x) {}
 						return output;
 					};
@@ -102,7 +103,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	}
 
 	@Override
-	protected String getTitle(Reference ref, String smiles) throws ResourceException {
+	protected String getTitle(Reference ref, String... smiles) throws ResourceException {
 		if (smiles==null) return getGPlusSnippet();
 		StringBuilder b = new StringBuilder();
 		b.append("<table width='100%'>");
@@ -117,7 +118,7 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 						uri,
 						uri.toString().endsWith("/")?"":"/",
 						mode.name(),
-						Reference.encode(smiles),
+						Reference.encode(smiles[0]),
 						smarts==null?"":"&smarts=",
 						smarts==null?"":Reference.encode(smarts)
 						);

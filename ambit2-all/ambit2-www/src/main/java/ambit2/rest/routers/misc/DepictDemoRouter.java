@@ -10,6 +10,7 @@ import ambit2.rest.structure.diagram.CSLSDepict;
 import ambit2.rest.structure.diagram.DaylightDepict;
 import ambit2.rest.structure.diagram.OpenBabelDepict;
 import ambit2.rest.structure.diagram.PubChemDepict;
+import ambit2.rest.structure.diagram.SimilarityDepict;
 import ambit2.rest.structure.smirks.ReactionDepict;
 import ambit2.rest.structure.smirks.SMIRKSDepict;
 import ambit2.rest.structure.tautomers.TautomersDepict;
@@ -39,6 +40,7 @@ public class DepictDemoRouter extends MyRouter {
 		attach("/reaction/reactant",CDKDepictVariants.class);
 		attach(TautomersDepict.resource,TautomersDepict.class);
 		attach(String.format("%s/{%s}",TautomersDepict.resource,TautomersDepict.resourceKey),TautomersDepict.class);
+		attach(SimilarityDepict.resource,SimilarityDepict.class);
 		
 	}
 

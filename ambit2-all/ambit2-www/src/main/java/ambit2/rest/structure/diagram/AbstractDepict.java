@@ -37,7 +37,7 @@ import ambit2.rest.query.QueryResource;
 public class AbstractDepict extends ProtectedResource {
 	public static final String resource = "/depict";
 	protected Form params;
-	protected String smiles ;
+	protected String[] smiles ;
 	protected String smarts ;
 	protected String smirks ;
 	protected String recordType = null;
@@ -75,7 +75,8 @@ public class AbstractDepict extends ProtectedResource {
 		catch (Exception x) { headless = false;}
 		return params;
 	}
-	protected String getTitle(Reference ref, String smiles) throws ResourceException {
+	
+	protected String getTitle(Reference ref, String... smiles) throws ResourceException {
 
 		String style = "depictBox";
 		StringBuilder b = new StringBuilder();
@@ -87,10 +88,10 @@ public class AbstractDepict extends ProtectedResource {
 		String uri = String.format("%s/daylight",root);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
-						uri,smiles==null?"":Reference.encode(smiles),"Daylight depiction",String.format(AmbitResource.gplus,uri)),
+						uri,smiles==null?"":Reference.encode(smiles[0]),"Daylight depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='daylight' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('daylight')\">",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						smiles==null?"":smiles,smiles==null?"":smiles
 						),
 				style
@@ -101,12 +102,12 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						smarts==null?"":"&smarts=",
 						smarts==null?"":Reference.encode(smarts),"CDK depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='cdk' src='%s/any?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						smarts==null?"":Reference.encode(smarts),
 						smiles==null?"":smiles,smiles==null?"":smiles),
 				style
@@ -118,11 +119,11 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						"Cactvs depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='cactvs' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('cactvs')\">",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						smiles==null?"":smiles,smiles==null?"":smiles),
 				style
 					));
@@ -131,11 +132,11 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						"Open Babel depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='obabel' src='%s?search=%s&w=%d&h=%d' alt='%s' title='%s' onError=\"hideDiv('obabel')\" width='%d' heigth='%d'>",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						h,h,
 						smiles==null?"":smiles,smiles==null?"":smiles,
 						h,h),
@@ -150,12 +151,12 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						recordTypeOption,
 						"PubChem depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='pubchem' src='%s?search=%s%s' alt='%s' title='%s' onError=\"hideDiv('pubchem')\">",
 						uri,
-						smiles==null?"":Reference.encode(smiles),
+						smiles==null?"":Reference.encode(smiles[0]),
 						recordTypeOption,
 						smiles,smiles),
 				style
@@ -183,7 +184,8 @@ public class AbstractDepict extends ProtectedResource {
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
 			try { recordType = form.getFirstValue("record_type");} catch (Exception x) {}
 
-			smiles = form.getFirstValue(QueryResource.search_param);
+			smiles = form.getValuesArray(QueryResource.search_param);
+			if ((smiles==null) || (smiles.length<1)) smiles = new String[] {null};
 			setSmarts(form.getFirstValue("smarts"));
 			setSmirks(null);
 			String[]  smirks_patterns = form.getValuesArray("smirks");
@@ -201,11 +203,11 @@ public class AbstractDepict extends ProtectedResource {
 	    					if (headless) output.write(target);
 	    					else {
 	    						
-		    					AmbitResource.writeTopHeader(output, smiles==null?"2D structural diagram":smiles, getRequest(),getResourceRef(getRequest()), AmbitResource.header_gplus,null);
-		    					writeSearchForm(output, smiles==null?"N/A":smiles, getRequest(), "",Method.GET,params);	    					
+		    					AmbitResource.writeTopHeader(output, smiles[0]==null?"2D structural diagram":smiles[0], getRequest(),getResourceRef(getRequest()), AmbitResource.header_gplus,null);
+		    					writeSearchForm(output, smiles[0]==null?"N/A":smiles[0], getRequest(), "",Method.GET,params);	    					
 		    					output.write(target);
 		    					
-		    					AmbitResource.writeHTMLFooter(output, smiles==null?"":smiles, getRequest());
+		    					AmbitResource.writeHTMLFooter(output, smiles[0]==null?"":smiles[0], getRequest());
 	    					}
 	    					} catch (Exception x) {}
 	    					return output;
@@ -214,8 +216,8 @@ public class AbstractDepict extends ProtectedResource {
 	    			return convertor.process(getTitle(getResourceRef(getRequest()),smiles));
 	    		}
 	    	final BufferedImage image;
-	    	if (smiles != null) {
-	        	image = getImage(smiles.trim(),w,h,recordType);
+	    	if (smiles[0] != null) {
+	        	image = getImage(smiles[0].trim(),w,h,recordType);
 	        	if (image ==  null) {
 		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid smiles %s",smiles));
 	        		return null;
