@@ -3,6 +3,7 @@ package ambit2.rest.property;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -15,6 +16,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ModelTemplates;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.model.ModelResource;
+import ambit2.rest.structure.DisplayMode;
 
 
 /**
@@ -30,10 +32,17 @@ public class PropertyModelResource extends PropertyResource {
 	public PropertyModelResource() {
 		super();
 		setDocumentation(new ResourceDoc("Model","Model"));
+		_dmode = DisplayMode.table;
 	}
 	@Override
 	protected IQueryRetrieval<Property> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		Form form = request.getResourceRef().getQueryAsForm();
+		try { 
+			
+			headless = Boolean.parseBoolean(form.getFirstValue("headless")); 
+		} catch (Exception x) { headless=false;}		
+		
 		ModelQueryResults model = new ModelQueryResults();
 		try {
 			model.setId(Integer.parseInt(getRequest().getAttributes().get(ModelResource.resourceKey).toString()));
