@@ -979,10 +979,18 @@ public class RuleManager
 			if (rankRule == null)
 				continue;
 			
+			/*
+			int stateCheck  = ri.checkCurStateInstanceValidity();
+			System.out.println("stateCheck = " + stateCheck);
+			if (stateCheck != 0)
+				continue;
+			*/
 			e_rank += rankRule.stateEnergies[ri.getCurrentState()];
-			
-			//TODO - handle aromaticity to correct the rank
 		}
+		
+		//TODO - handle aromaticity to correct the rank
+		
+		//System.out.println("rank = " + e_rank);
 		
 		return (e_rank);
 	}
