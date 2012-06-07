@@ -185,22 +185,58 @@ public class RuleInstance implements IRuleInstance
 	}
 	
 	
-	/*
-	public int checkInstanceValidity()
+	public int checkCurStateInstanceValidity()
 	{
 		//General idea for this check is the fact that
-		//at a particular point this instance could be no longer valid since
-		//other overlapping instance has shifted to another state hence changing the bonds in this instance
+		//at a particular point this instance could be no longer valid since.
+		//When other overlapping instances are shifted to another state 
+		//the bonds in this instance may have changed as well
 		
-		//check current state
+		System.out.println("*** checkCurStateInstanceValidity");
 		
-		//TODO
+		boolean isSingleBond[] = new boolean[bonds.size()]; 
+		for (int i = 0; i < isSingleBond.length; i++)
+			isSingleBond[i] = true;
 		
-		//check the other state ??? not sure currently whether it is needed
+		RuleStateBondDistribution rsbd = rule.stateBonds[curState];
 		
-		return 0; //every thing is OK
+		//check of the double bonds
+		for (int i = 0; i < rsbd.DBPositions.length; i++)
+		{	
+			int pos = rsbd.DBPositions[i];
+			System.out.println("  >> db pos = " + pos);
+			isSingleBond[pos] = false;
+			if (bonds.get(pos).getOrder() != IBond.Order.DOUBLE)
+				return -2;
+		}
+		
+		
+		
+		
+		//check of the triple bonds
+		if (rsbd.TBPositions != null)
+			for (int i = 0; i < rsbd.TBPositions.length; i++)
+			{	
+				int pos = rsbd.TBPositions[i];
+				isSingleBond[pos] = false;
+				if (bonds.get(pos).getOrder() != IBond.Order.TRIPLE)
+					return -3;
+			}
+		
+		//check of the single bonds 
+		for (int i = 0; i <= isSingleBond.length; i++)
+			if (isSingleBond[i])
+			{	
+				System.out.println("  >> sb pos = " + i);
+				if (bonds.get(i).getOrder() != IBond.Order.SINGLE)
+					return -1;
+			}	
+		
+		return 0; //The state is OK
 	}
-	*/
+	
+	
+	
 	
 	
 	/*
