@@ -192,7 +192,6 @@ public class RuleInstance implements IRuleInstance
 		//When other overlapping instances are shifted to another state 
 		//the bonds in this instance may have changed as well
 		
-		System.out.println("*** checkCurStateInstanceValidity");
 		
 		boolean isSingleBond[] = new boolean[bonds.size()]; 
 		for (int i = 0; i < isSingleBond.length; i++)
@@ -204,12 +203,10 @@ public class RuleInstance implements IRuleInstance
 		for (int i = 0; i < rsbd.DBPositions.length; i++)
 		{	
 			int pos = rsbd.DBPositions[i];
-			System.out.println("  >> db pos = " + pos);
 			isSingleBond[pos] = false;
 			if (bonds.get(pos).getOrder() != IBond.Order.DOUBLE)
 				return -2;
 		}
-		
 		
 		
 		
@@ -224,10 +221,9 @@ public class RuleInstance implements IRuleInstance
 			}
 		
 		//check of the single bonds 
-		for (int i = 0; i <= isSingleBond.length; i++)
+		for (int i = 0; i < isSingleBond.length; i++)
 			if (isSingleBond[i])
 			{	
-				System.out.println("  >> sb pos = " + i);
 				if (bonds.get(i).getOrder() != IBond.Order.SINGLE)
 					return -1;
 			}	
