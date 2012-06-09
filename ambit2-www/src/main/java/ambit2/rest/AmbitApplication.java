@@ -1,14 +1,13 @@
 package ambit2.rest;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -21,7 +20,9 @@ import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.ClientInfo;
 import org.restlet.data.Method;
+import org.restlet.data.Parameter;
 import org.restlet.data.Protocol;
+import org.restlet.engine.security.SslContextFactory;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
 import org.restlet.routing.Filter;
@@ -35,6 +36,7 @@ import org.restlet.security.Role;
 import org.restlet.security.RoleAuthorizer;
 import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
+import org.restlet.util.Series;
 
 import ambit2.base.config.Preferences;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
@@ -112,7 +114,10 @@ import ambit2.rest.template.OntologyResource;
 public class AmbitApplication extends TaskApplication<String> {
 	public static final Role UPDATE_ALLOWED = new Role("AUTHOR","Update (PUT,POST,DELETE) allowed");
 	protected boolean insecure = true;
+	 
 	
+
+
 	public AmbitApplication() {
 		super();
 		setName("AMBIT REST services");
@@ -325,7 +330,33 @@ public class AmbitApplication extends TaskApplication<String> {
 			router.attach("/"+OpenSSOUserResource.resource,login );
 		 try {	
 			 //TODO use config file
-			 insecureConfig();
+			 final TrustManager tm ;
+			
+				tm = new X509TrustManager() {
+				    public void checkClientTrusted(X509Certificate[] chain,
+				                    String authType)
+				                    throws CertificateException {
+				    }
+
+				    public X509Certificate[] getAcceptedIssuers() {
+				        return new X509Certificate[0];
+				    }
+
+				    public void checkServerTrusted(X509Certificate[] chain,
+				                    String authType)
+				                    throws CertificateException {
+				        // This will never throw an exception.
+				        // This doesn't check anything at all: it's insecure.
+				    }
+				};
+
+				final SSLContext sslContext = SSLContext.getInstance("TLS");
+				sslContext.init(null, new TrustManager[] { tm }, null);
+				
+				getContext().getAttributes().put("sslContextFactory", new SslContextFactory() {
+				    public void init(Series<Parameter> parameters) { }
+				    public SSLContext createSslContext() { return sslContext; }
+				});
 		 } catch (Exception x) {
 			 x.printStackTrace();
 		 }
@@ -732,39 +763,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		 localSecrets.put(identifier,pass.toCharArray());
 		 return localSecrets;
 	 }
-	 
-
-		protected void insecureConfig() throws Exception {
-			if (!insecure)  return;
-			// Create a trust manager that does not validate certificate chains
-			TrustManager[] trustAllCerts = new TrustManager[]{
-			    new X509TrustManager() {
-			        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-			            return null;
-			        }
-			        public void checkClientTrusted(
-			            java.security.cert.X509Certificate[] certs, String authType) {
-			        }
-			        public void checkServerTrusted(
-			            java.security.cert.X509Certificate[] certs, String authType) {
-			        }
-			    }
-			};
-
-			// Install the all-trusting trust manager
-			try {
-			    SSLContext sc = SSLContext.getInstance("SSL");
-			    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-			    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-			} catch (Exception e) {
-			}
-			HttpsURLConnection.setDefaultHostnameVerifier( 
-					new HostnameVerifier(){
-						public boolean verify(String string,SSLSession ssls) {
-							return true;
-						}
-					});
-		}
+	
 }
 
 /**
