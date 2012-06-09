@@ -5,6 +5,13 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -104,6 +111,8 @@ import ambit2.rest.template.OntologyResource;
  */
 public class AmbitApplication extends TaskApplication<String> {
 	public static final Role UPDATE_ALLOWED = new Role("AUTHOR","Update (PUT,POST,DELETE) allowed");
+	protected boolean insecure = true;
+	
 	public AmbitApplication() {
 		super();
 		setName("AMBIT REST services");
@@ -314,8 +323,12 @@ public class AmbitApplication extends TaskApplication<String> {
 			 * Sets a cookie with OpenSSO token
 			 */
 			router.attach("/"+OpenSSOUserResource.resource,login );
-
-
+		 try {	
+			 //TODO use config file
+			 insecureConfig();
+		 } catch (Exception x) {
+			 x.printStackTrace();
+		 }
 		 return router;
 	}
 	
@@ -719,6 +732,39 @@ public class AmbitApplication extends TaskApplication<String> {
 		 localSecrets.put(identifier,pass.toCharArray());
 		 return localSecrets;
 	 }
+	 
+
+		protected void insecureConfig() throws Exception {
+			if (!insecure)  return;
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[]{
+			    new X509TrustManager() {
+			        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			            return null;
+			        }
+			        public void checkClientTrusted(
+			            java.security.cert.X509Certificate[] certs, String authType) {
+			        }
+			        public void checkServerTrusted(
+			            java.security.cert.X509Certificate[] certs, String authType) {
+			        }
+			    }
+			};
+
+			// Install the all-trusting trust manager
+			try {
+			    SSLContext sc = SSLContext.getInstance("SSL");
+			    sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			} catch (Exception e) {
+			}
+			HttpsURLConnection.setDefaultHostnameVerifier( 
+					new HostnameVerifier(){
+						public boolean verify(String string,SSLSession ssls) {
+							return true;
+						}
+					});
+		}
 }
 
 /**
