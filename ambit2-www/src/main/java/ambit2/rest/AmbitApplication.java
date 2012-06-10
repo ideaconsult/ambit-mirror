@@ -7,7 +7,10 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -283,7 +286,7 @@ public class AmbitApplication extends TaskApplication<String> {
 				    }
 
 				    public X509Certificate[] getAcceptedIssuers() {
-				        return new X509Certificate[0];
+				        return null;
 				    }
 
 				    public void checkServerTrusted(X509Certificate[] chain,
@@ -294,13 +297,21 @@ public class AmbitApplication extends TaskApplication<String> {
 				    }
 				};
 
-				final SSLContext sslContext = SSLContext.getInstance("TLS");
-				sslContext.init(null, new TrustManager[] { tm }, null);
-				
-				getContext().getAttributes().put("sslContextFactory", new SslContextFactory() {
+				final SSLContext sslContext = SSLContext.getInstance("SSL");
+				sslContext.init(null, new TrustManager[] { tm },  new java.security.SecureRandom());
+
+				SslContextFactory factory = new SslContextFactory() {
 				    public void init(Series<Parameter> parameters) { }
 				    public SSLContext createSslContext() { return sslContext; }
-				});
+				};
+				getContext().getAttributes().put("sslContextFactory",factory);
+				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+
+
+				HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() { 
+				    public boolean verify(String urlHostName, SSLSession session) {return true;} 
+				}); 
+				
 		 } catch (Exception x) {
 			 x.printStackTrace();
 		 }	     
