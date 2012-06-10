@@ -137,7 +137,7 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 	
 
 	
-	public static Object getQueryObject(Reference reference, Reference applicationRootReference) throws Exception {
+	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context) throws Exception {
 		
 		if (!applicationRootReference.isParent(reference)) throw 
 			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
@@ -145,6 +145,10 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 		ClientResourceWrapper resource = null;
 		try {
 			resource  = new ClientResourceWrapper(reference);
+			if (context !=null) {
+				resource.getContext().getAttributes().put("sslContextFactory", context.getAttributes().get("sslContextFactory"));
+				System.out.println(resource.getContext().getAttributes().get("sslContextFactory"));
+			}
 			resource.setMethod(Method.GET);
 			resource.get(MediaType.APPLICATION_JAVA_OBJECT);
 			if (resource.getStatus().isSuccess()) {
