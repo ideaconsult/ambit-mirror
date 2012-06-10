@@ -74,7 +74,7 @@ public class CallableStructurePairsModelCreator<USERID> extends
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		Object query = getQueryObject(reference, applicationRootReference);
+		Object query = getQueryObject(reference, applicationRootReference,context);
 		
 		if (query instanceof QueryDatasetByID) {
 			SourceDataset dataset = new SourceDataset();

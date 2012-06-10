@@ -3,6 +3,7 @@ package ambit2.rest.property;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.restlet.Context;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Property;
@@ -24,13 +25,15 @@ public class ProfileReader extends AbstractDBProcessor<Reference, Template> {
 	protected Template profile;
 	protected Reference applicationReference;
 	protected QueryTemplateReporter<IQueryRetrieval<Property>> reporter;
+	protected Context context;
 	
-	public ProfileReader(Reference applicationReference, Template profile) throws AmbitException {
+	public ProfileReader(Reference applicationReference, Template profile,Context context) throws AmbitException {
 		super();
 		setApplicationReference(applicationReference);
 		setProfile(profile==null?new Template():profile);
 		reporter = new QueryTemplateReporter<IQueryRetrieval<Property>>(getProfile());
 		reporter.setCloseConnection(false);
+		this.context = context;
 	}
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
@@ -78,7 +81,7 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 		if (uri==null) return profile;
 		Object q;
 		try {
-			q = CallableQueryProcessor.getQueryObject(uri, applicationReference);
+			q = CallableQueryProcessor.getQueryObject(uri, applicationReference,context);
 			if ((q!=null) && (q instanceof AbstractPropertyRetrieval)) {
 				
 				try {

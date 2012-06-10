@@ -85,7 +85,7 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
     		connection = dbc.getConnection();    		
     		
     		
-    		ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile);
+    		ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile,getApplication().getContext());
     		reader.setCloseConnection(false);
     		reader.setConnection(connection);
     		for (int i=0; i < propertyURI.length;i++) {

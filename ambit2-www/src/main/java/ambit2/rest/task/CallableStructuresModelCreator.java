@@ -34,7 +34,7 @@ public abstract class CallableStructuresModelCreator<DATA,Builder extends ModelB
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		return getQueryObject(reference, applicationRootReference);
+		return getQueryObject(reference, applicationRootReference,context);
 	}
 
 	

@@ -106,7 +106,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 		final String msg = "Error when trying to copy the dataset at %s. Is this OpenTox dataset URI?";
 		Object query = null;
 		try {
-			query = getQueryObject(uri, applicationRootReference);
+			query = getQueryObject(uri, applicationRootReference,context);
 		} catch (ResourceException x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format(msg,uri),x);
 		} catch (Exception x) {
@@ -185,7 +185,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		return getQueryObject(reference, applicationRootReference);
+		return getQueryObject(reference, applicationRootReference,context);
 	}
 
 }

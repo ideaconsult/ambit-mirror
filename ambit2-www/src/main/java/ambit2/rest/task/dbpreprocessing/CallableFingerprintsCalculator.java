@@ -120,7 +120,7 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableDBProcessing
 		if (reference!= null)
 			if (applicationRootReference.isParent(reference)) {
 				try {
-					Object q = getQueryObject(reference, applicationRootReference);
+					Object q = getQueryObject(reference, applicationRootReference,context);
 					return q==null?reference:q;
 				} catch (Exception x) {
 					return reference;
