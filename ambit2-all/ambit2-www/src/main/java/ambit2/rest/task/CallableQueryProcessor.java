@@ -1,7 +1,8 @@
 package ambit2.rest.task;
 
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
-import java.io.Serializable;
+import java.net.HttpURLConnection;
 import java.sql.Connection;
 
 import org.opentox.dsl.OTDataset;
@@ -10,9 +11,7 @@ import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Reference;
-import org.restlet.representation.ObjectRepresentation;
 
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -136,33 +135,28 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 	//protected abstract QueryURIReporter createURIReporter(Request request); 
 	
 
-	
 	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context) throws Exception {
 		
 		if (!applicationRootReference.isParent(reference)) throw 
 			new Exception(String.format("Remote reference %s %s",applicationRootReference,reference));
-		ObjectRepresentation<Serializable> repObject = null;
-		ClientResourceWrapper resource = null;
+		ObjectInputStream in = null;
+		HttpURLConnection connection = null;
 		try {
-			resource  = new ClientResourceWrapper(reference);
-			if (context !=null) {
-				resource.getContext().getAttributes().put("sslContextFactory", context.getAttributes().get("sslContextFactory"));
-				System.out.println(resource.getContext().getAttributes().get("sslContextFactory"));
-			}
-			resource.setMethod(Method.GET);
-			resource.get(MediaType.APPLICATION_JAVA_OBJECT);
-			if (resource.getStatus().isSuccess()) {
-				repObject = new ObjectRepresentation<Serializable>(resource.getResponseEntity());
-				Serializable object = repObject.getObject();
-				repObject.setObject(null);
+			connection = 
+ClientResourceWrapper.getHttpURLConnection(reference.toString(),"GET",MediaType.APPLICATION_JAVA_OBJECT.toString());
+			connection.setFollowRedirects(true);
+			if (HttpURLConnection.HTTP_OK== connection.getResponseCode()) {
+				in = new ObjectInputStream(connection.getInputStream());
+				Object object = in.readObject();
 				return object;
 			}
 			return reference;
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			try { if (repObject!=null) repObject.release();} catch (Exception x) {}
-			try { if (resource!=null) resource.release();} catch (Exception x) {}
+			try { if (in!=null) in.close();} catch (Exception x) {}
+			try { if (connection!=null) connection.disconnect();} catch (Exception x) {}
 		}
 	}		
+
 }

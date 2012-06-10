@@ -295,6 +295,11 @@
   		<version>1.2.1</version>
   		
   	</dependency>
+  	 <dependency>
+  		<groupId>org.restlet.jee</groupId>
+  		<artifactId>org.restlet.ext.ssl</artifactId>
+  		<version>${restlet.version}</version>
+  	</dependency>
   	<dependency>
   		<groupId>org.apache.commons</groupId>
   		<artifactId>commons-io</artifactId>
