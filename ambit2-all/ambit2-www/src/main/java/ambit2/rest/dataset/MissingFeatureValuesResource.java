@@ -56,7 +56,10 @@ public class MissingFeatureValuesResource extends DatasetStructuresResource<Quer
 
 		Object dataset = form.getFirstValue(OpenTox.params.dataset_uri.toString());
 		if (dataset!=null) try {
-			Object q = CallableQueryProcessor.getQueryObject(new Reference(dataset.toString()), getRequest().getRootRef());
+			Object q = CallableQueryProcessor.getQueryObject(
+						new Reference(dataset.toString()), 
+						getRequest().getRootRef(),
+						getApplication().getContext());
 			if ((q!=null) && (q instanceof AbstractStructureQuery))
 				query.setScope((AbstractStructureQuery)q);
 			else 

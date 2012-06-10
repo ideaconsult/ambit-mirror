@@ -167,7 +167,7 @@ public class ChartResource extends ProtectedResource {
     		connection = dbc.getConnection();    		
     		
     		ambit2.base.data.Template profile = new ambit2.base.data.Template();
-    		ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile);
+    		ProfileReader reader = new ProfileReader(getRequest().getRootRef(),profile,getApplication().getContext());
     		reader.setCloseConnection(false);
     		reader.setConnection(connection);
     		for (String p : property) reader.process(new Reference(p));

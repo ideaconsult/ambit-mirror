@@ -81,7 +81,7 @@ public class CallableUpdateDataset<USERID> extends	CallableQueryProcessor<Object
 
 	protected Object createTarget(Reference reference) throws Exception {
 		
-		return reference==null?compounds:getQueryObject(reference, applicationRootReference);
+		return reference==null?compounds:getQueryObject(reference, applicationRootReference,context);
 	}
 	@Override
 	protected AbstractBatchProcessor createBatch(Object target)
