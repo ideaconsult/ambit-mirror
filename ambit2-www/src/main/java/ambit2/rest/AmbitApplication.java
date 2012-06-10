@@ -272,6 +272,38 @@ public class AmbitApplication extends TaskApplication<String> {
 	     System.out.println(w.toString());
 	    */
 	     
+		 try {	
+			 //TODO use config file
+			 final TrustManager tm ;
+			
+				tm = new X509TrustManager() {
+				    public void checkClientTrusted(X509Certificate[] chain,
+				                    String authType)
+				                    throws CertificateException {
+				    }
+
+				    public X509Certificate[] getAcceptedIssuers() {
+				        return new X509Certificate[0];
+				    }
+
+				    public void checkServerTrusted(X509Certificate[] chain,
+				                    String authType)
+				                    throws CertificateException {
+				        // This will never throw an exception.
+				        // This doesn't check anything at all: it's insecure.
+				    }
+				};
+
+				final SSLContext sslContext = SSLContext.getInstance("TLS");
+				sslContext.init(null, new TrustManager[] { tm }, null);
+				
+				getContext().getAttributes().put("sslContextFactory", new SslContextFactory() {
+				    public void init(Series<Parameter> parameters) { }
+				    public SSLContext createSslContext() { return sslContext; }
+				});
+		 } catch (Exception x) {
+			 x.printStackTrace();
+		 }	     
 	     if (!isOpenToxAAEnabled()) {
 
 				
@@ -328,38 +360,7 @@ public class AmbitApplication extends TaskApplication<String> {
 			 * Sets a cookie with OpenSSO token
 			 */
 			router.attach("/"+OpenSSOUserResource.resource,login );
-		 try {	
-			 //TODO use config file
-			 final TrustManager tm ;
-			
-				tm = new X509TrustManager() {
-				    public void checkClientTrusted(X509Certificate[] chain,
-				                    String authType)
-				                    throws CertificateException {
-				    }
 
-				    public X509Certificate[] getAcceptedIssuers() {
-				        return new X509Certificate[0];
-				    }
-
-				    public void checkServerTrusted(X509Certificate[] chain,
-				                    String authType)
-				                    throws CertificateException {
-				        // This will never throw an exception.
-				        // This doesn't check anything at all: it's insecure.
-				    }
-				};
-
-				final SSLContext sslContext = SSLContext.getInstance("TLS");
-				sslContext.init(null, new TrustManager[] { tm }, null);
-				
-				getContext().getAttributes().put("sslContextFactory", new SslContextFactory() {
-				    public void init(Series<Parameter> parameters) { }
-				    public SSLContext createSslContext() { return sslContext; }
-				});
-		 } catch (Exception x) {
-			 x.printStackTrace();
-		 }
 		 return router;
 	}
 	
