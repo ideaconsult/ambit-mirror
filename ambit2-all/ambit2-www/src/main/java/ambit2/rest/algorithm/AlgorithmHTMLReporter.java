@@ -43,43 +43,44 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 			//output.write(AmbitResource.printWidgetContentHeader(""));
 			output.write("<p>");
 
-			output.write(String.format("<table %s id='algorithms' border='0' cellpadding='1' cellspacing='2'>",collapsed?"class='datatable'":""));
+			output.write(String.format("<table %s id='algorithms' border='0' cellpadding='1' cellspacing='2'>","class='datatable'"));
 			if (collapsed) {
 				output.write("<caption>");
 				int c = 0;
 				for (AlgorithmType type: AlgorithmType.values()) {
-					output.write(String.format("&nbsp;<a href=?type=%s>%s</a>%s",
+					output.write(String.format("&nbsp;<a href=?type=%s>%s</a>%s|",
 							Reference.encode(type.name()),
 							type.getTitle(),
 							(c % 12)==11?"<br>":""));
 					c++;
 				}
 				
-				String alphabet = "abcdefghijklmnopqrstuvwxyz";  
+				final String alphabet = "abcdefghijklmnopqrstuvwxyz";  
+				final String nbsp ="|&nbsp;";
 				try {
 					output.write(String.format("<a href='?search=' title='List all algorithms'>%s</a>&nbsp","All"));
 
-					output.write("|&nbsp;");
+					output.write(nbsp);
 					for (int i=0; i < alphabet.length(); i++) {
 						String search = alphabet.substring(i,i+1);
 						output.write(String.format("<a href='?search=%s' title='Search for algorithms with name staring with %s'>%s</a>&nbsp",
 									search.toUpperCase(),search.toUpperCase(),search.toUpperCase()));
 					}
-					output.write("|&nbsp;");
+					output.write(nbsp);
 					for (int i=0; i < alphabet.length(); i++) {
 						String search = alphabet.substring(i,i+1);
 						output.write(String.format("<a href='?search=%s' title='Search for algorithms with name staring with %s'>%s</a>&nbsp",
 									search.toLowerCase(),search.toLowerCase(),search.toLowerCase()));
 					}
-					output.write("|&nbsp;");
-					output.write(String.format("<a href='' title='Refresh this page'>%s</a>&nbsp","Refresh"));
+					output.write(nbsp);
+					output.write(String.format("<a href='' title='Refresh this page'>%s</a>","Refresh"));
 				} catch (Exception x) {
 					
 				}
 				output.write("</caption>\n");
 
 				output.write("<thead>");
-				output.write("<tr><th align=\"left\">Name</th><th>Description</th><th>Type</th><th>Implementation of</th></tr>"); 
+				output.write("<tr><th align=\"left\">Name</th><th>Endpoint</th><th>Description</th><th>Type</th><th>Implementation of</th></tr>"); 
 				output.write("</thead>");
 			}
 			output.write("<tbody>");
@@ -94,11 +95,12 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 				String query = item.getImplementationOf()==null?"":
 					String.format("<a href='%s?uri=%s' target='ontology'>%s</a>",sparql,Reference.encode(item.getImplementationOf()),item.getImplementationOf());
 				
-				output.write(String.format("<tr><td align=\"left\"><a href='%s'>%s</a></td><td>%s</td><td  align='right'><a href=?type=%s>%s</a></td><td>%s</td></tr>", 
+				output.write(String.format("<tr><td align=\"left\"><a href='%s'>%s</a></td><td>%s</td><td>%s</td><td align='right'><a href=?type=%s>%s</a></td><td>%s</td></tr>", 
 						t,item.getName(),
+						item.getEndpoint()==null?"":item.getEndpoint().replace("http://www.opentox.org/echaEndpoints.owl#",""),
 						item.isDataProcessing()?"Processes a dataset":"Generates a model"
 						,Reference.encode(item.getType()[0])
-						,item.getType()[0],
+						,item.getType()[0].replace("http://www.opentox.org/algorithmTypes.owl#",""),
 						query
 						               ));
 			} else {
@@ -180,17 +182,30 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 					output.write("</form>");		
 
 				} else	if (item.isDataProcessing()) {
+						output.write(String.format("<tr><th>Algorithm</th><th><a href='%s'>%s</a></th></tr>",t,item.getName()));
+						
+						if (item.getDescription()!=null) output.write(String.format("<tr><td></td><td>%s</td></tr>",item.getDescription()));
+						if (item.getEndpoint()!=null) output.write(String.format("<tr><th>Endpoint</th><th>%s</th></tr>",item.getEndpoint()));
+						if (item.getImplementationOf()!=null) output.write(String.format("<tr><th>Implementation of</th><th>%s</th></tr>",item.getImplementationOf()));
+						if (item.getRequirement()!=null) output.write(String.format("<tr><th>Requires</th><th>%s</th></tr>",item.getRequirement()));
+						if (item.getType()!=null) output.write(String.format("<tr><th>Type:</th><th>%s<br>[%s]</th></tr>",item.isDataProcessing()?"Processes a dataset":"Generates a model",item.getType()[0]));
 						String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";
 						output.write(String.format(
-								"<tr><form action=\"\" method=\"POST\"><tr><td>Algorithm:&nbsp;<a href='%s'>%s</a></td><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input align='bottom' type=\"submit\" value=\"Run\"></td></form></tr>",
-								t,item.getName(),
+								"<tr><form action=\"\" method=\"POST\"><tr><td><table><tr>%s</tr><tr>%s</tr></table></td><td><input align='bottom' type=\"submit\" value=\"Run\"></td></form></tr>",
 								dataset,
 								target));
 				} else {//create a model
+					output.write(String.format("<tr><th>Algorithm</th><th><a href='%s'>%s</a></th></tr>",t,item.getName()));
+					
+					if (item.getDescription()!=null) output.write(String.format("<tr><td></td><td>%s</td></tr>",item.getDescription()));
+					if (item.getEndpoint()!=null) output.write(String.format("<tr><th>Endpoint</th><th>%s</th></tr>",item.getEndpoint()));
+					if (item.getImplementationOf()!=null) output.write(String.format("<tr><th>Implementation of</th><th>%s</th></tr>",item.getImplementationOf()));
+					if (item.getRequirement()!=null) output.write(String.format("<tr><th>Requires</th><th>%s</th></tr>",item.getRequirement()));
+					if (item.getType()!=null) output.write(String.format("<tr><th>Type:</th><th>%s<br>[%s]</th></tr>",item.isDataProcessing()?"Processes a dataset":"Generates a model",item.getType()[0]));
+
 					String dataset = item.isRequiresDataset()?"<td><label for='dataset_uri'>Training dataset&nbsp;</label></td><td><input type='text' name='dataset_uri' size='60' value='Enter dataset URL'></td>":"";					
 					output.write(String.format(
-						"<tr><form action=\"\" method=\"POST\"><tr><td>Algorithm:&nbsp;<a href='%s'>%s</a></td><td><table><tr>%s</tr><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
-						t,item.getName(),
+						"<tr><form action=\"\" method=\"POST\"><tr><td><table><tr>%s</tr><tr>%s</tr><tr>%s</tr></table></td><td><input type=\"submit\" value=\"Create model\"></td></form></tr>",
 						dataset,
 						features,
 						target
