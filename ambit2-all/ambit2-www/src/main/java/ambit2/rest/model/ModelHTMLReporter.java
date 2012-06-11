@@ -43,10 +43,10 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	public void header(Writer w, IQueryRetrieval<ModelQueryResults> query) {
 		super.header(w, query);
 		try { 
-			output.write(AmbitResource.jsTableSorter("models","pager"));
-			output.write("<table width='90%' class='tablesorter' id='models' border='0' cellpadding='0' cellspacing='1' ><thead>");
+			output.write("<table class='datatable' id='models' border='0' cellpadding='0' cellspacing='1' >");
+			output.write("<thead>\n");
 			output.write("<tr align=\"left\">\n");
-			output.write("<th width='30%'>Model name</th>\n");
+			output.write("<th >Model name</th>\n");
 			output.write("<th width='30%'>Algorithm</th>\n");
 			output.write("<th width='10%'>Dataset</th>\n");
 			output.write("<th width='10%'>Independent variables</th>\n");

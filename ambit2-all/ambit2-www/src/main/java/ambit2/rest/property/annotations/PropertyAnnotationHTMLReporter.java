@@ -80,7 +80,7 @@ public class PropertyAnnotationHTMLReporter extends QueryHTMLReporter<PropertyAn
 			}			
 			w.write("</h3>");
 			w.write(AmbitResource.jsTableSorter("features","pager"));
-			w.write("<table width='80%' id='features' class=\"tablesorter\" border='0' cellpadding='0' cellspacing='1'><thead>");
+			w.write("<table width='80%' id='features' class=\"datatable\" border='0' cellpadding='0' cellspacing='1'><thead>");
 			w.write(String.format("<thead><tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr></thead>",
 					"Feature",
 					"Type",

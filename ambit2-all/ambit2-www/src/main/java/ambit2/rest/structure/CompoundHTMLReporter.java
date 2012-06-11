@@ -467,7 +467,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				output.write("<div class=\"rowwhite\"><span class=\"center\">");
 					
 				//output.write(AmbitResource.jsTableSorter("results","pager"));
-				output.write("<table id='results' class='tablesorter' border='0' cellpadding='0' cellspacing='1'>"); 
+				output.write("<table id='results' class='datatable' border='0' cellpadding='0' cellspacing='1'>"); 
 				
 				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Page:%s&nbsp;%s</CAPTION>",
 						query.toString(),

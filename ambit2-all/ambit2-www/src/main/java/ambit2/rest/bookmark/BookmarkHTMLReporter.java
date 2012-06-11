@@ -49,7 +49,7 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 			//rdfa
 			output.write("<div xmlns:dc=\"http://purl.org/dc/elements/1.1/\">");
 			output.write("<div xmlns:a=\"http://www.w3.org/2000/10/annotation-ns#\">");
-			w.write("<table class='tablesorter' width='99%'>");
+			w.write("<table class='datatable' width='99%'>");
 			w.write("<caption><h3>Bookmarks</h3></caption>");
 			w.write("<tr ><form action='' method='get'>");
 			w.write("<th>");

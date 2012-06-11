@@ -43,6 +43,33 @@ public class AmbitResource extends ProtectedResource {
 	protected static String jsGoogleAnalytics = null;
 	String format = "<tr ><td>%s</td><td><a href=\"%s%s\">%s</a></td><td>%s</td><td>%s</td></tr>";
 	String formatHeader = "<tr bgcolor=\"#EEEEEE\" align=\"left\"><th>%s</th><th %s>API <a href=\"%s\" target=\"_blank\">%s</a></th><th>%s</th><th>%s</th></tr>";
+	
+	//meta
+	private final static String[] metaTag = new String[] {
+		"<meta name=\"robots\" content=\"index,follow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,noFOLLOW\">\n",
+		"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n",
+		"<meta http-equiv='content-type' content='text/html; charset=iso-8859-1' />\n"
+	};
+	
+	private final static String[] css = new String[] {
+		"<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">\n",
+		"<!--[if IE 7]><link rel='stylesheet' type='text/css' media='all' href='%s/style/ambit-msie7.css'><![endif]-->",
+		"<link href=\"%s/style/jquery-ui-1.8.18.custom.css\" rel=\"stylesheet\" type=\"text/css\">\n",
+		"<link href=\"%s/style/jquery.dataTables.css\" rel=\"stylesheet\" type=\"text/css\">\n",
+		"<link href=\"%s/images/favicon.ico\" rel=\"shortcut icon\" type=\"image/ico\">\n"
+	};
+
+	private final static String[] js = new String[] {
+		"<script type='text/javascript' src='%s/jquery/jquery-1.7.1.min.js'></script>\n",
+		"<script type='text/javascript' src='%s/jquery/jquery-ui-1.8.18.custom.min.js'></script>\n",
+		"<script type='text/javascript' charset='utf8' src='%s/jquery/jquery.dataTables-1.9.0.min.js'></script>\n",
+		"<script type='text/javascript' src='%s/scripts/jopentox.js'></script>\n",
+		//"<script type='text/javascript' src='%s/scripts/jendpoints.js'></script>\n",
+		//"<script type=\"text/javascript\" src=\"%s/jquery/jquery.MultiFile.pack.js\"></script>\n",
+		"<script type='text/javascript' src='%s/jme/jme.js'></script>\n",
+		"<script type='text/javascript' src='%s/jmol/Jmol.js'></script>\n",
+	};
+
 	protected String[][] uri = {
 			
 			{"http://opentox.org/dev/apis/api-1.2/structure","Chemical compounds",formatHeader,null,"Implemented"},
@@ -442,23 +469,18 @@ public class AmbitResource extends ProtectedResource {
 		
 		w.write(String.format("<title>%s</title>",title));
 		
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-1.7.1.min.js\"></script>\n",baseReference));
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery-ui-1.8.18.custom.min.js\"></script>\n",baseReference));
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.MultiFile.pack.js\"></script>\n",baseReference));
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jquery/jquery.tablesorter.min.js\"></script>\n",baseReference));
 		w.write("<script type='text/javascript'>function hideDiv(divId) {\n$('#'+divId).hide();}</script>\n");
 
-		w.write(String.format("<link href=\"%s/style/jquery-ui-1.8.18.custom.css\" rel=\"stylesheet\" type=\"text/css\">\n",baseReference));
+		//meta		
+		for (String tag : metaTag ) w.write(String.format(tag,baseReference));
+		//css			
+		for (String style : css ) w.write(String.format(style,baseReference));
+		//js
+		for (String script : js ) w.write(String.format(script,baseReference));
 		w.write(meta);
 				
-		w.write(String.format("<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">",baseReference));
-		w.write(String.format("<link href=\"%s/images/favicon.ico\" rel=\"shortcut icon\" type=\"image/ico\">\n",baseReference));
-		w.write("<meta name=\"robots\" content=\"index,nofollow\"><META NAME=\"GOOGLEBOT\" CONTENT=\"index,noFOLLOW\">");
-		w.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
 		//w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/dojo.js.uncompressed\" djConfig=\"parseOnLoad:true, isDebug:true\"></script>\n",baseReference));
 
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jme/jme.js\"></script>\n",baseReference));
-		w.write(String.format("<script type=\"text/javascript\" src=\"%s/jmol/Jmol.js\"></script>\n",baseReference));
 //		w.write("<script language=\"JavaScript\">\nvar smiles = \"\";\n var jme = \"0 0\"></script>\n");
 		w.write("<script>$(function() {$( \".accordion\" ).accordion({autoHeight: false,navigation: true});});</script>");
 		w.write("<script>$(function() {$( \".tabs\" ).tabs({cache: true});});</script>");
@@ -468,9 +490,15 @@ public class AmbitResource extends ProtectedResource {
 		w.write("<script type='text/javascript'>function hideDiv(divId) {$('#'+divId).hide();}</script>\n");
 		w.write("<script>function changeImage(img,src)  {    document.getElementById(img).src=src;} </script>\n");
 
+		final String dtableOptions = "'bJQueryUI': true, "+
+		//"'sPaginationType': 'full_numbers',"+
+		"'bPaginate'      : true,"+
+		"\"sDom\": 'T<\"clear\"><\"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix\"lfr>t<\"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix\"ip>'";
+
+		w.write(String.format("<script>$(function() {$( \".datatable\" ).dataTable({%s });});</script>",dtableOptions));
+
 		w.write("</head>\n");
 		w.write("<body>");
-		w.write(String.format("<link rel=\"stylesheet\" href=\"%s/style/tablesorter.css\" type=\"text/css\" media=\"screen\" title=\"Flora (Default)\">",baseReference));
 		w.write("\n");
 		w.write("<div style= \"width: 100%; background-color: #516373;");
 		w.write("border: 1px solid #333; padding: 0px; margin: 0px auto;\">");
@@ -624,7 +652,7 @@ public class AmbitResource extends ProtectedResource {
 
 	}	
 	public static String jsTableSorter(String tableid,String pagerid) {
-		return String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
+		return "";//String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
 	}
 	
 	public static String printWidgetHeader(String header) {
