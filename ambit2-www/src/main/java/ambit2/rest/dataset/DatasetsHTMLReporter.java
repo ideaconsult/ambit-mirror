@@ -89,9 +89,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			
 			String alphabet = "abcdefghijklmnopqrstuvwxyz";  
 			try {
-				w.write(String.format("<a href='?search=' title='List all datasets'>%s</a>&nbsp","All"));
-				w.write(String.format("<a href='' title='Refresh this page'>%s</a>&nbsp","Refresh"));
-				w.write("|&nbsp;");
+				w.write(String.format("<a href='?search=' title='List all datasets'>%s</a>|&nbsp","All"));
 				for (int i=0; i < alphabet.length(); i++) {
 					String search = alphabet.substring(i,i+1);
 					w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
@@ -108,6 +106,9 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 					w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
 								i,i,i));
 				}			
+				w.write("|&nbsp;");
+				w.write(String.format("<a href='' title='Refresh this page'>%s</a>","Refresh"));
+
 			} catch (Exception x) {
 				
 			}
