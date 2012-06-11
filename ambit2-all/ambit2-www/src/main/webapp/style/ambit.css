@@ -253,7 +253,7 @@ TH.results_odd
   {
   	 font-family: Trebuchet MS, Verdana, Arial;
      font-size:10pt;
-     background-color:#93C400;
+     background-color:#white;
      color:#344049;
      border-color:#FFFFFF;
      text-align:center;
@@ -273,7 +273,7 @@ TR.results_even
   	 border-collapse:collapse;
      vertical-align:middle;
      font-size:10pt;
-    background-color:#FFFFFF;
+    background-color:#ECE8DA;
      color:#344049;
      border-width:0px;
      border-color:#FFFFFF;
@@ -285,7 +285,7 @@ TR.results_odd
   	 border-collapse:collapse;
      vertical-align:middle;
      font-size:10pt;
-      background-color:#E8EBEE;
+      background-color:#F5F2EB;
      color:#344049;
      border-width:0px;
      

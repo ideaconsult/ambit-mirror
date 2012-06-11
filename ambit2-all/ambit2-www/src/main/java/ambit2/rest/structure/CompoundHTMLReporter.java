@@ -189,7 +189,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			if (b==null) {
 				b = new StringBuilder();
 				b.append(String.format("<h3>%s</h3>",p.getReference().getType()));
-				b.append("<div><table width='100%'>");
+				b.append("<div><table>");
 				map.put(p.getReference().getType(),b);
 			}
 			String type = p.getReference().getName();
@@ -374,7 +374,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			
 ;
 			
-			w.write("<table width='100%' bgcolor='#ffffff'>");
+			w.write("<table bgcolor='#ffffff'>");
 		
 			w.write("<tr>");
 			w.write("<td align='left' width='256px'>");
@@ -407,7 +407,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				hint = "Search by property or identifier name (optional) and value";
 				//w.write("<input type='submit' value='Search'><br>");
 			} else {
-				w.write("<table cellpadding=0  border='0'>");
+				w.write("<table>");
 
 				w.write("<tr><th>");
 				w.write(String.format("<label for='%s' title='Substructure pattern defined by SMARTS language. Enter manually, or use Draw button on the right'>SMARTS</label>&nbsp;",QueryResource.search_param));
@@ -467,7 +467,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				output.write("<div class=\"rowwhite\"><span class=\"center\">");
 					
 				//output.write(AmbitResource.jsTableSorter("results","pager"));
-				output.write("<table id='results' class='datatable' border='0' cellpadding='0' cellspacing='1'>"); 
+				output.write("<table id='results' class='datatable'>"); 
 				
 				output.write(String.format("<CAPTION CLASS=\"results\">Search results <input type='text' value='%s' readonly> &nbsp;Download as %s&nbsp;Page:%s&nbsp;%s</CAPTION>",
 						query.toString(),
@@ -481,7 +481,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 										));//resultsForm(query)
 						//,resultsForm(query)
 				output.write("<thead><tr>");
-				output.write(String.format("<th width='20'>#</th><th width='%d' bgcolor='#99CC00'>Compound</th>",cellSize.width)); //ECB42C
+				output.write(String.format("<th width='20'>#</th><th width='%d'>Compound</th>",cellSize.width)); //ECB42C
 				
 				List<Property> props = template2Header(getTemplate(),true);
 				int hc = 0;
@@ -510,7 +510,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 									p.getUrl(),p.getTitle(),p.getTitle().substring(dot,end)
 									));
 					}
-					output.write("</tr>\n</thead><tbody><tr class=\"results\">");
+					output.write("</tr>\n</thead><tbody><tr>");
 					output.write("<th ></th><th ></th>");
 					
 					hc = 0;
@@ -611,7 +611,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		StringBuilder b = new StringBuilder();
 		
 		
-		b.append(String.format("<tr class=\"results_%s\">",((count % 2)==0)?"even":"odd"));
+		b.append("<tr>");
 		
 		b.append(String.format("<td >%d<br>%s<br>%s<br>%s</td>\n",
 				count+1,
@@ -642,7 +642,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			int col = 0;
 			
 			if (hierarchy) { 
-				b.append("<td width='100%'>");
+				b.append("<td>");
 				//b.append("<table border='1' width='90%'>"); //style='border:1px dotted blue;' 
 			}	
 			
@@ -665,12 +665,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 					if (hierarchy) {
 						if (value==null) continue; //don't write non existing values
 					} else
-					b.append(String.format("<td %s width='%s'>",
-							//"class='results_col'",
-							((count%2)==0)?
-								((col % 2)==0)?"class='results'":"":
-								((col % 2)==0)?"":"class='results_col'",
-							isLong?"100":"100")) ; //"#EBEEF1"
+					b.append("<td>");
 
 					value = value==null?"":value.toString();
 					
