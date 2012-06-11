@@ -26,7 +26,6 @@ import ambit2.rest.facet.DatasetStrucTypeStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.query.QLabelQueryResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.DisplayMode;
@@ -72,8 +71,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 
 		if (_dmode.isCollapsed()) { 
 			uploadUI("",w, query);
+			
 			try {
-				w.write(String.format("<a href='%s/query%s?%s=%s&condition=startswith' title='List datasets by endpoints'>%s</a><br>",
+				w.write("<table  class='datatable' id='metadataset'>");
+				w.write("<caption align='left'>");
+			} catch (Exception x) {}
+			try {
+				w.write(String.format("<a href='%s/query%s?%s=%s&condition=startswith' title='List datasets by endpoints'>%s</a>|&nbsp;",
 						uriReporter.getBaseReference(),
 						DatasetsByEndpoint.resource,
 						MetadatasetResource.search_features.feature_sameas,
@@ -104,7 +108,6 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 					w.write(String.format("<a href='?search=^%s' title='Search for datasets with name staring with %s'>%s</a>&nbsp",
 								i,i,i));
 				}			
-				w.write("<hr>");
 			} catch (Exception x) {
 				
 			}
@@ -149,7 +152,16 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 			}
 			
-
+			try {
+				w.write("</caption>");
+				w.write("<thead>");
+				w.write("<th>Name</th>");
+				w.write("<th>Metadata</th>");
+				w.write("<th>Browse</th>");
+				w.write("<th>Download</th>");
+				w.write("</thead>");
+				w.write("<tbody>");
+			} catch (Exception x) {}
 		} 
 		
 		
@@ -164,6 +176,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	@Override
 	public void footer(Writer output, IQueryRetrieval<ISourceDataset> query) {
 		try {
+			if (_dmode.isCollapsed()) output.write("</tbody></table>");
 			if (!headless)
 			AmbitResource.writeHTMLFooter(output,query.toString(),uriReporter.getRequest());
 			output.flush();
@@ -278,11 +291,20 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 
 			String paging = "page=0&pagesize=10";
 			if (_dmode.isCollapsed()) {
-				
-				output.write("<div id=\"div-1b\">");
-
-				output.write("<div class=\"rowwhite\"><span class=\"left\">");
-				output.write("&nbsp;");
+	
+				output.write("<tr>");
+				output.write(String.format(
+						"<td><a href=\"%s?%s\">%s</a></td>",
+						w.toString(),
+						paging,
+						(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getID()):dataset.getName()
+						));
+				output.write(String.format(
+						"<td><a href=\"%s%s\">[Metadata]</a></td>",
+						w.toString(),
+						"/metadata"));	
+				//search / browse links
+				output.write("<td>");
 				output.write(String.format(
 						"<a href=\"%s%s?%s\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
 						w.toString(),
@@ -313,9 +335,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						"/similarity",
 						paging,
 						uriReporter.getBaseReference().toString()));
-				output.write("&nbsp;");				
-				
-				output.write("</span><span class=\"center\">");
+				output.write("&nbsp;");		
+				output.write("</td>");
+				//download links
+				output.write("<td>");
 				MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
 
 						ChemicalMediaType.CHEMICAL_CML,
@@ -351,23 +374,9 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 							image[i],
 							mime,
 							mime));	
-				}				
-	
-
-				output.write("&nbsp;");	
-
-				output.write(String.format(
-						"&nbsp;<a href=\"%s%s\">[Metadata]</a>",
-						w.toString(),
-						"/metadata"));
-				output.write(String.format(
-						"&nbsp;<a href=\"%s?%s\">%s</a>",
-						w.toString(),
-						paging,
-						(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getID()):dataset.getName()
-						));
-				output.write("</span></div>");
-				output.write("</div>");
+				}	
+				output.write("</td>");
+				output.write("</tr>");
 			}  else 
 				renderMetadata(dataset, w.toString(),null);
 	
