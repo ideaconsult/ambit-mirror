@@ -25,6 +25,7 @@ import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
 import ambit2.rest.facet.DatasetStrucTypeStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
+import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.DisplayMode;
@@ -164,7 +165,6 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				w.write("<thead>");
 				w.write("<th>Name</th>");
 				w.write("<th>License, Rights holder, Maintainer</th>");
-				w.write("<th>Download</th>");
 				w.write("</thead>");
 				w.write("<tbody>");
 			} catch (Exception x) {}
@@ -314,8 +314,10 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						dataset.getID()
 						));	
 				
-				if ((dataset instanceof SourceDataset) && ((SourceDataset)dataset).getURL().startsWith("http")) 
-					output.write(String.format("<br>&nbsp;Source: <a href='%s' target='_blank'>%s</a>",((SourceDataset)dataset).getURL(), ((SourceDataset)dataset).getURL()));
+				if ((dataset instanceof SourceDataset) && ((SourceDataset)dataset).getURL().startsWith("http")) {
+					final String url = ((SourceDataset)dataset).getURL();
+					output.write(String.format("<br>&nbsp;Source: <a href='%s' target='_blank'>%s</a>",url,url.length()>100?url.substring(url.lastIndexOf("/")+1):url));
+				}
 				
 				output.write(String.format(
 						"<br>&nbsp;Metadata: <a href=\"%s%s?%s\">/dataset/%d/metadata</a>",
@@ -352,16 +354,24 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						"/similarity"
 						));				
 				
+				output.write(String.format(
+						"<br>&nbsp;Model search: <a href='%s%s?dataset=%s' title='Find models where this dataset is used as a training dataset'>%s?search=/dataset/%d</a>",
+						uriReporter.getBaseReference(),
+						ModelResource.resource,
+						Reference.encode(w.toString()),
+						ModelResource.resource,
+						dataset.getID()
+						));		
+				
+				http://localhost:8080/ambit2/model?dataset=http%3A%2F%2Fapps.ideaconsult.net%3A8080%2Fambit2%2Fdataset%2F9026
 				output.write("</td>");
 				output.write("<td>");
 				output.write(String.format(
-						"<b>%s</b><br>%s<br>%s",
+						"<b>%s</b><br>&nbsp;%s<br>&nbsp;%s",
 						getLicenseLabel(dataset.getLicenseURI()),
 						dataset.getrightsHolder()==null?"":"Rights holder: "+dataset.getrightsHolder(),
 						dataset.getMaintainer()==null?"":"Maintainer: "+dataset.getMaintainer()));	
 
-				//download links
-				output.write("<td>");
 				MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
 
 						ChemicalMediaType.CHEMICAL_CML,
@@ -382,12 +392,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						"weka.jpg",
 						"rdf.gif"
 						
-				};		
+				};
+				output.write("<br><b>Download:</b>&nbsp;");
 				for (int i=0;i<mimes.length;i++) {
 					MediaType mime = mimes[i];
-					output.write("&nbsp;");
+
 					output.write(String.format(
-							"<a href=\"%s%s?media=%s&%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+							"<a href=\"%s%s?media=%s&%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a> ",
 							w.toString(),
 							"",
 							//CompoundResource.compound,
@@ -433,6 +444,17 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			output.write("<form method='post' action='?method=put'>\n");
 			output.write("<table width='90%'>\n");
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>\n", "Dataset URI",uri));
+			
+			output.write(String.format("<tr><th>%s</th><td>", "Number of structures"));
+			output.write(String.format("<span id='D%d'></span><script>$('#D%d').load('%s/admin/stats/chemicals_in_dataset?dataset_uri=%s');</script>", 
+					dataset.getID(),dataset.getID(),
+					uriReporter.getBaseReference(),
+					Reference.encode(uri)
+					));
+			output.write("</td></tr>\n");
+			//output.write(String.format("<tr><th>%s</th><td>%s</td></tr>\n", "Number of structures",uri));
+			
+			http://localhost:8080/ambit2/admin/stats/chemicals_in_dataset?dataset_uri=http://localhost:8080/ambit2/dataset/5
 			output.write(String.format("<tr><th>%s</th><td><input type='text' size='60' name='title' value='%s' %s></td></tr>\n", 
 						"Dataset name",dataset.getName(),headless?"readonly":""));
 			
