@@ -39,13 +39,11 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 	public void header(Writer output, Iterator<Algorithm> query) {
 		try {
 			AmbitResource.writeHTMLHeader(output, "AMBIT", getRequest(),getResourceRef(),getDocumentation());
-			output.write(AmbitResource.printWidgetHeader("Algorithms"));
-			output.write(AmbitResource.printWidgetContentHeader(""));
+			//output.write(AmbitResource.printWidgetHeader("Algorithms"));
+			//output.write(AmbitResource.printWidgetContentHeader(""));
 			output.write("<p>");
 
-			
-			output.write(AmbitResource.jsTableSorter("algorithms","pager"));
-			output.write(String.format("<table %s id='algorithms' border='0' cellpadding='1' cellspacing='2'>",collapsed?"class='tablesorter'":""));
+			output.write(String.format("<table %s id='algorithms' border='0' cellpadding='1' cellspacing='2'>",collapsed?"class='datatable'":""));
 			if (collapsed) {
 				output.write("<caption>");
 				int c = 0;
@@ -207,8 +205,8 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 		try {
 			output.write("</tbody></table>");
 			output.write("</p>");
-			output.write(AmbitResource.printWidgetContentFooter());
-			output.write(AmbitResource.printWidgetFooter());			
+			//output.write(AmbitResource.printWidgetContentFooter());
+			//output.write(AmbitResource.printWidgetFooter());			
 			AmbitResource.writeHTMLFooter(output, AllAlgorithmsResource.algorithm, getRequest());
 			output.flush();
 		} catch (Exception x) {
