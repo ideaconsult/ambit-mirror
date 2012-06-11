@@ -50,44 +50,34 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 			output.write("<div xmlns:dc=\"http://purl.org/dc/elements/1.1/\">");
 			output.write("<div xmlns:a=\"http://www.w3.org/2000/10/annotation-ns#\">");
 			w.write("<table class='datatable' width='99%'>");
-			w.write("<caption><h3>Bookmarks</h3></caption>");
+			w.write("<caption><h3>Bookmarks</h3>");
+			w.write(String.format("<a href='%s/topics'>Topics</a> | ",ref));
+			w.write(String.format("<a href='?media=%s'>RDF/XML</a> |",URLEncoder.encode(MediaType.APPLICATION_RDF_XML.toString())));
+			w.write(String.format("<a href='?media=%s'>RDF N3</a> |",URLEncoder.encode(MediaType.TEXT_RDF_N3.toString())));
+			w.write(String.format("<a href='?media=%s'>CSV</a>",URLEncoder.encode(MediaType.TEXT_CSV.toString())));
+			w.write("</caption>");
+			w.write("<thead>");
 			w.write("<tr ><form action='' method='get'>");
-			w.write("<th>");
-			w.write(String.format("<a href='%s/topics'>Topics</a><br>",ref));
-			
-			w.write(String.format("<a href='?media=%s'>RDF/XML</a>&nbsp;",URLEncoder.encode(MediaType.APPLICATION_RDF_XML.toString())));
-			w.write(String.format("<a href='?media=%s'>RDF N3</a>&nbsp;",URLEncoder.encode(MediaType.TEXT_RDF_N3.toString())));
-			w.write(String.format("<a href='?media=%s'>CSV</a><br>",URLEncoder.encode(MediaType.TEXT_CSV.toString())));			
-					
-			w.write("</th>");
-			w.write(String.format("<th><input type='text' name='hasTopic' value='%s' type='text'/></th>",
-					bm==null?"":bm.getHasTopic()==null?"":bm.getHasTopic()));
-			w.write(String.format("<th><input type='text' name='search' value='%s' type='text'/></th>",
-					bm==null?"":bm.getTitle()==null?"":bm.getTitle()));
-			w.write(String.format("<th><input type='text' name='recalls' value='%s' type='text'/></th>",
-					bm==null?"":bm.getRecalls()==null?"":bm.getRecalls()));
-			w.write("<th><input type='text' name='creator' type='text'/></th>");
-			w.write("<th><input type='submit' value='search'/></th>");
-			w.write("<th></th>");
-
-			w.write("</form></tr>");
-			w.write("<tr>");
 			w.write("<th>Bookmark URI</th>");
-			w.write("<th>Topic</th>");
-			w.write("<th>Title</th>");
-			w.write("<th>URI</th>");
-			w.write("<th>Creator</th>");
-			w.write("<th>Description</th>");
+			w.write(String.format("<th>Topic <input type='text' name='hasTopic' value='%s' type='text'/></th>",
+					bm==null?"":bm.getHasTopic()==null?"":bm.getHasTopic()));
+			w.write(String.format("<th>Title <input type='text' name='search' value='%s' type='text'/></th>",
+					bm==null?"":bm.getTitle()==null?"":bm.getTitle()));
+			w.write(String.format("<th>URI <input type='text' name='recalls' value='%s' type='text'/></th>",
+					bm==null?"":bm.getRecalls()==null?"":bm.getRecalls()));
+			w.write("<th>Creator <input type='text' name='creator' type='text'/></th>");
+			w.write("<th>Description <input type='submit' value='search'/></th>");
 			w.write("<th>Created</th>");
-
-			w.write("</tr>");			
+			w.write("</form>");
+			w.write("</tr></thead>");
+			w.write("<tbody>");
 
 		} catch (Exception x) {}
 	}
 	@Override
 	public void footer(Writer output, IQueryRetrieval<Bookmark> query) {
 		try {
-			output.write("</table>");
+			output.write("</tbody></table>");
 		} catch (Exception x) {}
 		super.footer(output, query);
 	}

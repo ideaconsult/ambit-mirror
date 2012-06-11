@@ -74,18 +74,20 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 		try {
 			mode = StatsMode.valueOf(getRequest().getAttributes().get(resourceKey).toString());
 		} catch (Exception x) {
-			mode = StatsMode.dataset_intersection;
+			mode = StatsMode.dataset;
 		}
 		switch (mode) {
 		case dataset_intersection: {
-			QueryCountDatasetIntersection q = new QueryCountDatasetIntersection();
+			QueryCountDatasetIntersection q = null;
 			for (int i=0; i < datasetsURI.length;i++ ) {
+				if (q==null) q = new QueryCountDatasetIntersection();
 				String datasetURI = datasetsURI[i];
 				Map<String, Object> vars = new HashMap<String, Object>();
 				t.parse(datasetURI, vars);
 				if (i==0) q.setFieldname(vars.get(DatasetStructuresResource.datasetKey).toString());
 				else q.setValue(vars.get(DatasetStructuresResource.datasetKey).toString());
 			}	
+			if (q==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Missing dataset_uri parameters!");
 			return q;
 		}
 		case structures: {
@@ -104,13 +106,15 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 			return new QueryCountModels();
 		}
 		case chemicals_in_dataset: {
-			QueryCountChemicalInDataset q = new QueryCountChemicalInDataset();
+			QueryCountChemicalInDataset q = null;
 			for (int i=0; i < datasetsURI.length;i++ ) {
+				if (q==null) q = new QueryCountChemicalInDataset();
 				String datasetURI = datasetsURI[i];
 				Map<String, Object> vars = new HashMap<String, Object>();
 				t.parse(datasetURI, vars);
 				q.setFieldname(vars.get(DatasetStructuresResource.datasetKey).toString());
 			}	
+			if (q==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Missing dataset_uri parameters!");
 			return q;
 		}
 		default: {
