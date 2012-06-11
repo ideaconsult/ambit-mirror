@@ -55,11 +55,10 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 					c++;
 				}
 				
-				output.write("<hr>");
 				String alphabet = "abcdefghijklmnopqrstuvwxyz";  
 				try {
 					output.write(String.format("<a href='?search=' title='List all algorithms'>%s</a>&nbsp","All"));
-					output.write(String.format("<a href='' title='Refresh this page'>%s</a>&nbsp","Refresh"));
+
 					output.write("|&nbsp;");
 					for (int i=0; i < alphabet.length(); i++) {
 						String search = alphabet.substring(i,i+1);
@@ -72,6 +71,8 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 						output.write(String.format("<a href='?search=%s' title='Search for algorithms with name staring with %s'>%s</a>&nbsp",
 									search.toLowerCase(),search.toLowerCase(),search.toLowerCase()));
 					}
+					output.write("|&nbsp;");
+					output.write(String.format("<a href='' title='Refresh this page'>%s</a>&nbsp","Refresh"));
 				} catch (Exception x) {
 					
 				}
