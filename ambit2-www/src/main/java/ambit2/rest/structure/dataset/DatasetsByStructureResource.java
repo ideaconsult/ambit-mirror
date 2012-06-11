@@ -41,7 +41,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 	String filenamePrefix = getRequest().getResourceRef().getPath();
 	if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation(),headless),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,getDocumentation(),headless),MediaType.TEXT_HTML);
 	} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 		return new StringConvertor(	new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),getDocumentation()) {
 			@Override
@@ -69,7 +69,7 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 		
 	} else //html 	
 		return new OutputWriterConvertor(
-				new DatasetsHTMLReporter(getRequest(),DisplayMode.singleitem,getDocumentation(),headless),MediaType.TEXT_HTML);
+				new DatasetsHTMLReporter(getRequest(),DisplayMode.table,getDocumentation(),headless),MediaType.TEXT_HTML);
 	}
 	@Override
 	protected IQueryRetrieval<ISourceDataset> createQuery(Context context, Request request,

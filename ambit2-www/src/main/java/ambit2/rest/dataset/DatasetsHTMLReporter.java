@@ -27,7 +27,6 @@ import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.DisplayMode;
 
 /**Generates html page for {@link QueryDatasetResource}
@@ -70,12 +69,15 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 		 */
 
 		if (_dmode.isCollapsed()) { 
+			
+			if (!headless) 
 			uploadUI("",w, query);
 			
 			try {
 				w.write("<table  class='datatable' id='metadataset'>");
 				w.write("<caption align='left'>");
 			} catch (Exception x) {}
+			if (!headless) 
 			try {
 				w.write(String.format("<a href='%s/query%s?%s=%s&condition=startswith' title='List datasets by endpoints'>%s</a>|&nbsp;",
 						uriReporter.getBaseReference(),
@@ -87,7 +89,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 			}
 			
-			String alphabet = "abcdefghijklmnopqrstuvwxyz";  
+			final String alphabet = "abcdefghijklmnopqrstuvwxyz";
+			if (!headless) 
 			try {
 				w.write(String.format("<a href='?search=' title='List all datasets'>%s</a>|&nbsp","All"));
 				for (int i=0; i < alphabet.length(); i++) {
@@ -113,52 +116,54 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 			}
 			
-			String page = Long.toString(query.getPage());
-			Form form = uriReporter.getResourceRef().getQueryAsForm();
-			try {
+			if (!headless)  {
+				String page = Long.toString(query.getPage());
+				final Form form = uriReporter.getResourceRef().getQueryAsForm();
+				try {
+					
+					page = form.getFirstValue("page")==null?page:form.getFirstValue("page");
+				} catch (Exception x) {
+					page = Long.toString(query.getPage());
+				}			
+				String pageSize =  Long.toString(query.getPageSize());
+			
+				try {
+					
+					pageSize = form.getFirstValue("pagesize")==null? Long.toString(query.getPageSize()):form.getFirstValue("pagesize");
+				} catch (Exception x) {
+					pageSize = Long.toString(query.getPageSize());
+				}	
+				String search = "";
+				try {
+					
+					search = form.getFirstValue("search");
+				} catch (Exception x) {
+					search = "";
+				}			
 				
-				page = form.getFirstValue("page")==null?page:form.getFirstValue("page");
-			} catch (Exception x) {
-				page = Long.toString(query.getPage());
-			}			
-			String pageSize =  Long.toString(query.getPageSize());
-		
-			try {
-				
-				pageSize = form.getFirstValue("pagesize")==null? Long.toString(query.getPageSize()):form.getFirstValue("pagesize");
-			} catch (Exception x) {
-				pageSize = Long.toString(query.getPageSize());
-			}	
-			String search = "";
-			try {
-				
-				search = form.getFirstValue("search");
-			} catch (Exception x) {
-				search = "";
-			}			
-			try {
-
-				output.write("<div><span class=\"center\">");
-			output.write("<form method='GET' action=''>");
-			output.write(String.format("Page:<input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
-			if (search !=null) output.write(String.format("<input name='search' type='hidden' value='%s'>\n",search));
-			output.write(String.format("<b>Page size:</b><input name='pagesize' type='text' title='Page size' size='10' value='%s'>\n",pageSize==null?"50":pageSize));
-			output.write(String.format("<input type='image' src='%s/images/page_go.png' onsubmit='submit-form();' value='Refresh'>",uriReporter.getBaseReference()));			
-			output.write("</form>");
-			output.write("</p></span></div><p>");
-
-			} catch (Exception x) {
-				
-			} finally {
-				
+				try {
+	
+					output.write("<div><span class=\"center\">");
+				output.write("<form method='GET' action=''>");
+				output.write(String.format("Page:<input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
+				if (search !=null) output.write(String.format("<input name='search' type='hidden' value='%s'>\n",search));
+				output.write(String.format("<b>Page size:</b><input name='pagesize' type='text' title='Page size' size='10' value='%s'>\n",pageSize==null?"50":pageSize));
+				output.write(String.format("<input type='image' src='%s/images/page_go.png' onsubmit='submit-form();' value='Refresh'>",uriReporter.getBaseReference()));			
+				output.write("</form>");
+				output.write("</p></span></div><p>");
+	
+				} catch (Exception x) {
+					
+				} finally {
+					
+				}
 			}
 			
 			try {
 				w.write("</caption>");
 				w.write("<thead>");
 				w.write("<th>Name</th>");
-				w.write("<th>Metadata</th>");
-				w.write("<th>Browse</th>");
+				w.write("<th>License, Rights holder, Maintainer</th>");
 				w.write("<th>Download</th>");
 				w.write("</thead>");
 				w.write("<tbody>");
@@ -293,51 +298,68 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			String paging = "page=0&pagesize=10";
 			if (_dmode.isCollapsed()) {
 	
-				output.write("<tr>");
-				output.write(String.format(
-						"<td><a href=\"%s?%s\">%s</a></td>",
-						w.toString(),
-						paging,
-						(dataset.getName()==null)||(dataset.getName().equals(""))?Integer.toString(dataset.getID()):dataset.getName()
-						));
-				output.write(String.format(
-						"<td><a href=\"%s%s\">[Metadata]</a></td>",
-						w.toString(),
-						"/metadata"));	
-				//search / browse links
-				output.write("<td>");
-				output.write(String.format(
-						"<a href=\"%s%s?%s\"><img src=\"%s/images/table.png\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
-						w.toString(),
-						CompoundResource.compound,
-						paging,
-						uriReporter.getBaseReference().toString()));	
 				
-				output.write("&nbsp;");
+				output.write("<tr>");
+				String datasetName = dataset.getName();
 				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/feature.png\" alt=\"features\" title=\"Retrieve feature definitions\" border=\"0\"/></a>",
+						"<td><h4>%s</h4>",
+						(datasetName==null)||(datasetName.equals(""))?Integer.toString(dataset.getID()):datasetName.replace("\\", " ")
+						));
+			
+				
+				output.write(String.format(
+						"&nbsp;Browse : <a href=\"%s?%s\">/dataset/%d</a>",
+						w.toString(),
+						paging,
+						dataset.getID()
+						));	
+				
+				if ((dataset instanceof SourceDataset) && ((SourceDataset)dataset).getURL().startsWith("http")) 
+					output.write(String.format("<br>&nbsp;Source: <a href='%s' target='_blank'>%s</a>",((SourceDataset)dataset).getURL(), ((SourceDataset)dataset).getURL()));
+				
+				output.write(String.format(
+						"<br>&nbsp;Metadata: <a href=\"%s%s?%s\">/dataset/%d/metadata</a>",
+						w.toString(),
+						"/metadata",
+						paging,
+						dataset.getID()
+						));	
+				
+				output.write(String.format(
+						"<br>&nbsp;Columns: <a href=\"%s%s\" title='Retrieve feature list (columns)'>/dataset/%d%s</a>",
 						w.toString(),
 						PropertyResource.featuredef,
-						uriReporter.getBaseReference().toString()));	
-
+						dataset.getID(),
+						PropertyResource.featuredef
+						));		
+		
+	
 				
-				output.write("&nbsp;");
 				output.write(String.format(
-						"<a href=\"%s%s?%s\"><img src=\"%s/images/search.png\" alt=\"/smarts\" title=\"Search compounds by SMARTS\" border=\"0\"/></a>",
+						"<br>&nbsp;Substructure search: <a href=\"%s%s?search=CCCCCCO\">/dataset/%d%s</a>",
 						w.toString(),
 						"/smarts",
-						paging,
-						uriReporter.getBaseReference().toString()));
+						dataset.getID(),
+						"/smarts"
+						));
 				output.write("&nbsp;");
 				
 				output.write(String.format(
-						"<a href=\"%s%s?%s\"><img src=\"%s/images/search.png\" alt=\"/similarity\" title=\"Search for similar compounds within this dataset\" border=\"0\"/></a>",
+						"<br>&nbsp;Similarity search: <a href=\"%s%s?search=CCCCCCO\">/dataset/%d%s</a>",
 						w.toString(),
 						"/similarity",
-						paging,
-						uriReporter.getBaseReference().toString()));
-				output.write("&nbsp;");		
+						dataset.getID(),
+						"/similarity"
+						));				
+				
 				output.write("</td>");
+				output.write("<td>");
+				output.write(String.format(
+						"<b>%s</b><br>%s<br>%s",
+						getLicenseLabel(dataset.getLicenseURI()),
+						dataset.getrightsHolder()==null?"":"Rights holder: "+dataset.getrightsHolder(),
+						dataset.getMaintainer()==null?"":"Maintainer: "+dataset.getMaintainer()));	
+
 				//download links
 				output.write("<td>");
 				MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
@@ -388,6 +410,16 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 		return null;
 	}
 
+	protected String getLicenseLabel(String licenseURI) {
+		try {
+			if (licenseURI!=null)
+			for (ISourceDataset.license license : ISourceDataset.license.values()) 
+				if (license.getURI().equals(licenseURI)) {
+					return license.getTitle();
+				}
+		} catch (Exception x) {}
+		return licenseURI;
+	}
 	protected Object renderMetadata(ISourceDataset dataset,String uri,IQueryRetrieval<ISourceDataset> query)  throws AmbitException  {
 		try {
 			//output.write("<h4>Dataset metadata</h4>");
@@ -404,15 +436,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			output.write(String.format("<tr><th>%s</th><td><input type='text' size='60' name='title' value='%s' %s></td></tr>\n", 
 						"Dataset name",dataset.getName(),headless?"readonly":""));
 			
-			String licenseLabel = dataset.getLicenseURI();
-			try {
-				if (dataset.getLicenseURI()!=null)
-				for (ISourceDataset.license license : ISourceDataset.license.values()) 
-					if (license.getURI().equals(dataset.getLicenseURI())) {
-						licenseLabel = license.getTitle();
-					}
-				
-			} catch (Exception x) {}
+			String licenseLabel = getLicenseLabel(dataset.getLicenseURI());
 			
 			StringBuilder select = new StringBuilder();
 			select.append("<select name='licenseOptions'>\n");
