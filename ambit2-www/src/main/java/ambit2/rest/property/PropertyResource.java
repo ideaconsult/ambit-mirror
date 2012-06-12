@@ -34,6 +34,7 @@ import ambit2.db.update.property.DeleteProperty;
 import ambit2.db.update.property.ReadProperty;
 import ambit2.db.update.property.UpdateProperty;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -47,7 +48,6 @@ import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
-import ambit2.rest.structure.DisplayMode;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 

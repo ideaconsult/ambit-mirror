@@ -18,6 +18,7 @@ import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.reference.CreateReference;
 import ambit2.db.update.reference.ReadReference;
 import ambit2.db.update.reference.UpdateReference;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -28,7 +29,6 @@ import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFReferenceIterator;
-import ambit2.rest.structure.DisplayMode;
 
 /**
  * Reference resource, inOpenTox API coressponds to feature.hasSource

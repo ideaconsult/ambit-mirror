@@ -618,7 +618,7 @@ public class AmbitApplication extends TaskApplication<String> {
 		 Directory jmeDir = new Directory(getContext(), "war:///jme");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
 		 Directory jquery = new Directory(getContext(), "war:///jquery");
-
+		 Directory scriptsDir = new Directory(getContext(), "war:///scripts");
 		 
 		 router.attach("/meta/", metaDir);
 		 router.attach("/images/", imgDir);
@@ -626,6 +626,8 @@ public class AmbitApplication extends TaskApplication<String> {
 		 router.attach("/jme/", jmeDir);
 		 router.attach("/jquery/", jquery);
 		 router.attach("/style/", styleDir);
+ 		 router.attach("/scripts/", scriptsDir);
+
 	}
 
 

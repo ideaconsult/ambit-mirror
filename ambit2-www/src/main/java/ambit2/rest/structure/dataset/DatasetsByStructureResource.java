@@ -17,6 +17,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RDFJenaConvertor;
@@ -25,7 +26,6 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.DatasetsHTMLReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.DisplayMode;
 
 public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
 

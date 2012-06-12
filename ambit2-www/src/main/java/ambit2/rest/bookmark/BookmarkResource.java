@@ -20,6 +20,7 @@ import ambit2.db.update.bookmark.CreateBookmark;
 import ambit2.db.update.bookmark.DeleteBookmark;
 import ambit2.db.update.bookmark.ReadBookmark;
 import ambit2.db.update.bookmark.UpdateBookmark;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -30,7 +31,6 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.Annotea;
 import ambit2.rest.rdf.RDFBookmarkIterator;
 import ambit2.rest.rdf.RDFObjectIterator;
-import ambit2.rest.structure.DisplayMode;
 
 import com.hp.hpl.jena.vocabulary.DC;
 

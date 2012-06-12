@@ -15,6 +15,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.reporters.TaskRDFReporter;
@@ -29,12 +30,12 @@ public class FactoryTaskConvertor<USERID> {
 	}
 	
 	public synchronized IProcessor<Iterator<UUID>, Representation> createTaskConvertor(
-			Variant variant, Request request,ResourceDoc doc) throws AmbitException, ResourceException {
+			Variant variant, Request request,ResourceDoc doc,DisplayMode _dmode) throws AmbitException, ResourceException {
 		String filenamePrefix = request.getResourceRef().getPath();
-		return new StringConvertor(createTaskReporter(variant, request,doc),variant.getMediaType(),filenamePrefix);
+		return new StringConvertor(createTaskReporter(variant, request,doc,_dmode),variant.getMediaType(),filenamePrefix);
 	}
 	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporter(
-			Variant variant, Request request,ResourceDoc doc) throws AmbitException, ResourceException {
+			Variant variant, Request request,ResourceDoc doc,DisplayMode _dmode) throws AmbitException, ResourceException {
 
 		
 		Reporter<Iterator<UUID>,Writer> reporter = null;
@@ -49,7 +50,7 @@ public class FactoryTaskConvertor<USERID> {
 		else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) 
 			reporter = createTaskReporterURI(request,doc);		
 		else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) 
-			reporter = createTaskReporterHTML( request,doc);	
+			reporter = createTaskReporterHTML( request,doc,_dmode);	
 		else  //MediaType.TEXT_URI_LIST
 			reporter = createTaskReporterURI(request,doc);
 		return reporter;
@@ -69,7 +70,7 @@ public class FactoryTaskConvertor<USERID> {
 			Variant variant, Request request,ResourceDoc doc) throws AmbitException, ResourceException {
 		return new TaskRDFReporter<USERID>(storage,request,variant.getMediaType(),doc);
 	}		
-	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporterHTML(Request request,ResourceDoc doc) throws AmbitException, ResourceException {
+	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporterHTML(Request request,ResourceDoc doc,DisplayMode _dmode) throws AmbitException, ResourceException {
 		return new TaskURIReporter<USERID>(storage,request,doc);
 	}	
 	
@@ -77,7 +78,7 @@ public class FactoryTaskConvertor<USERID> {
 			Variant variant, Request request, Response response,ResourceDoc doc) throws ResourceException {
 		try {
 			if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc);
+			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc,DisplayMode.singleitem);
 			//task.update();
 			//System.out.println("convertor" + task.getUri() + " " + task.getStatus());
 			//response.setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
@@ -94,7 +95,7 @@ public class FactoryTaskConvertor<USERID> {
 		try {
 			//System.out.println("convertor" );
 			if (tasks==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc);
+			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc,DisplayMode.table);
 			return p.process(tasks);
 		} catch (AmbitException x) {
 			x.printStackTrace();

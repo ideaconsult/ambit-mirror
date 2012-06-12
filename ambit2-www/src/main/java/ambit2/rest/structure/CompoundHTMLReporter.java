@@ -35,6 +35,7 @@ import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
@@ -446,8 +447,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 			w.write("<input type='submit' value='Search'>");
 			w.write("</td></tr>\n");
 			w.write("</table>");		
-			w.write("<hr>");	
-			
+
+				
 			}
 			if (hilightPredictions!= null) 
 				w.write(String.format("<div><span class=\"center\"><h4>Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",hilightPredictions,hilightPredictions));

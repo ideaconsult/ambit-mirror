@@ -14,6 +14,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.update.propertyannotations.ReadPropertyAnnotations;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.ResourceDoc;
@@ -21,7 +22,6 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.DisplayMode;
 
 public class PropertyAnnotationResource  extends QueryResource<IQueryRetrieval<PropertyAnnotation>, PropertyAnnotation> {
 	public final static String annotation = "/annotation";

@@ -45,7 +45,8 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 
 			output.write(String.format("<table %s id='algorithms' border='0' cellpadding='1' cellspacing='2'>","class='datatable'"));
 			if (collapsed) {
-				output.write("<caption>");
+				output.write("<caption CLASS='results'>");
+				output.write("Algorithms: ");
 				int c = 0;
 				for (AlgorithmType type: AlgorithmType.values()) {
 					output.write(String.format("&nbsp;<a href=?type=%s>%s</a>%s|",

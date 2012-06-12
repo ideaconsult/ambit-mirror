@@ -16,10 +16,10 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveDatasets;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.search.StringCondition;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.DisplayMode;
 
 /**
  * Dataset resource - A set of chemical compounds and assigned features

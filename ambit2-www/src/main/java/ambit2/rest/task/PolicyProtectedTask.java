@@ -2,7 +2,6 @@ package ambit2.rest.task;
 
 import java.util.Hashtable;
 
-import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.data.Reference;
@@ -76,5 +75,9 @@ public class PolicyProtectedTask extends Task<TaskResult, String> {
 			}
 		} 
 		
+	}
+	@Override
+	public synchronized float getPercentCompleted() {
+		return getUri()==null?0:getUri().getPercentCompleted();
 	}
 }

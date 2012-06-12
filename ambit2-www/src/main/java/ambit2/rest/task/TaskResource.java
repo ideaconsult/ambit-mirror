@@ -9,6 +9,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.TaskApplication;
 
@@ -42,7 +43,7 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 		ITaskStorage<USERID> storage = ((TaskApplication)getApplication()).getTaskStorage();
 		FactoryTaskConvertor<USERID> tc = new AmbitFactoryTaskConvertor<USERID>(storage);
 	
-		return tc.createTaskConvertor(variant, getRequest(),getDocumentation());
+		return tc.createTaskConvertor(variant, getRequest(),getDocumentation(),DisplayMode.table);
 
 	}
 

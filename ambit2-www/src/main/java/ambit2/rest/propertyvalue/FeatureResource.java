@@ -25,6 +25,7 @@ import ambit2.db.update.value.UpdateCompoundPropertyValueString;
 import ambit2.db.update.value.UpdateStructurePropertyIDNumber;
 import ambit2.db.update.value.UpdateStructurePropertyIDString;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
@@ -34,7 +35,6 @@ import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
-import ambit2.rest.structure.DisplayMode;
 
 /**
 

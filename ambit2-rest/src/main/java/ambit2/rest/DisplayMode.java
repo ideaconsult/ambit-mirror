@@ -1,4 +1,4 @@
-package ambit2.rest.structure;
+package ambit2.rest;
 
 public enum DisplayMode {
 	
