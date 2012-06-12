@@ -5,6 +5,7 @@ import org.restlet.data.Reference;
 
 
 public class TaskResult {
+	protected float percentCompleted = 0;
 	protected String uri;
 	protected boolean newResource = true;
 
@@ -30,6 +31,12 @@ public class TaskResult {
 	public TaskResult(String uri,boolean newResource) {
 		setUri(uri);
 		setNewResource(newResource);
+	}
+	public float getPercentCompleted() {
+		return percentCompleted;
+	}
+	public void setPercentCompleted(float percentCompleted) {
+		this.percentCompleted = percentCompleted;
 	}
 
 	@Override

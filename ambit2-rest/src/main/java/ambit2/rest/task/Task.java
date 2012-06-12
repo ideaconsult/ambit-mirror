@@ -6,15 +6,17 @@ import java.util.UUID;
 
 import org.restlet.resource.ResourceException;
 
-public class Task<REFERENCE,USERID> implements Serializable /*, PropertyChangeListener */ {
-	
+public abstract class Task<REFERENCE,USERID> implements Serializable /*, PropertyChangeListener */ {
+
 	public enum TaskProperty {
+		//this is not really used, to be removed
 		PROPERTY_NAME {
 			@Override
 			public void update(Task task,Object value) {
 				if (value!=null) task.setName(value.toString());
 			}
-		},
+		};
+		/*
 		PROPERTY_PERCENT {
 			@Override
 			public void update(Task task,Object value) {
@@ -23,6 +25,7 @@ public class Task<REFERENCE,USERID> implements Serializable /*, PropertyChangeLi
 				} catch (Exception x) {}
 			}			
 		};
+		*/
 		public abstract void update(Task task,Object value);
 	}
  
@@ -93,12 +96,10 @@ public class Task<REFERENCE,USERID> implements Serializable /*, PropertyChangeLi
 		return status;
 
 	}
-	public float getPercentCompleted() {
-		return percentCompleted;
-	}
-	public void setPercentCompleted(float percentCompleted) {
-		this.percentCompleted = percentCompleted;
-	}
+	public abstract float getPercentCompleted();
+	
+	//public abstract void setPercentCompleted(float percentCompleted);
+	
 	public long getStarted() {
 		return started;
 	}
