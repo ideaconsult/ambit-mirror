@@ -192,7 +192,13 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	}
 	
 	protected Task<TaskResult,USERID> createTask(USERID user,ICallableTask callable) {
-		return new Task<TaskResult,USERID>(user);
+		return new Task<TaskResult,USERID>(user) {
+			@Override
+			public synchronized float getPercentCompleted() {
+				return getUri()==null?0:getUri().getPercentCompleted();
+			}
+			
+		};
 	}
 	
 	
