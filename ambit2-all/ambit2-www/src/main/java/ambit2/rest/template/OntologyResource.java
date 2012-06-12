@@ -21,6 +21,7 @@ import ambit2.db.search.DictionaryQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.property.QueryOntology;
 import ambit2.db.update.dictionary.DeleteDictionary;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RDFJenaConvertor;
@@ -28,7 +29,6 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.DisplayMode;
 
 /**
  * 

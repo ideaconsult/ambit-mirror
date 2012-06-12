@@ -6,10 +6,10 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.update.fp.IFingerprint;
 import ambit2.db.update.fp.QueryFingerprints;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.structure.DisplayMode;
 
 public class FingerprintsHTMLReporter extends QueryHTMLReporter<IFingerprint<FPTable, String>, QueryFingerprints> {
 

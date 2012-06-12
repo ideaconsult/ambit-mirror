@@ -52,6 +52,7 @@ import ambit2.db.update.dataset.ReadDatasetLicense;
 import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -66,7 +67,6 @@ import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
 import ambit2.rest.structure.CompoundHTMLReporter;
 import ambit2.rest.structure.ConformerURIReporter;
-import ambit2.rest.structure.DisplayMode;
 
 
 /**

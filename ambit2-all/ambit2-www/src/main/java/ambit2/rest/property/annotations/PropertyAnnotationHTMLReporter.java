@@ -11,12 +11,12 @@ import org.restlet.data.Reference;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.AmbitResource;
+import ambit2.db.update.propertyannotations.ReadPropertyAnnotations;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.property.PropertyResource;
-import ambit2.rest.structure.DisplayMode;
 
 /**
  * HTML for {@link PropertyResource}
@@ -59,9 +59,13 @@ public class PropertyAnnotationHTMLReporter extends QueryHTMLReporter<PropertyAn
 		};		
 			
 		try {
-			w.write("<h3>Additional information of a feature");
+		
+			w.write("<table id='features' class=\"datatable\">");
+			final String furi = String.format("%s%s/%d",uriReporter.getBaseReference(),PropertyResource.featuredef,
+					((ReadPropertyAnnotations)query).getFieldname().getId());
+			w.write(String.format("<caption>Additional information of a feature <a href='%s'>%s</a> | Download as ",furi,furi));
 			String q=uriReporter.getResourceRef().getQuery();
-
+			
 			for (int i=0;i<mimes.length;i++) {
 				MediaType mime = mimes[i];
 				w.write("&nbsp;");
@@ -78,10 +82,8 @@ public class PropertyAnnotationHTMLReporter extends QueryHTMLReporter<PropertyAn
 						mime
 						));	
 			}			
-			w.write("</h3>");
-			w.write(AmbitResource.jsTableSorter("features","pager"));
-			w.write("<table width='80%' id='features' class=\"datatable\" border='0' cellpadding='0' cellspacing='1'><thead>");
-			w.write(String.format("<thead><tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr></thead>",
+			w.write("</caption>");
+			w.write(String.format("<thead> <th>%s</th> <th>%s</th> <th>%s</th> <th>%s</th> </tr></thead>",
 					"Feature",
 					"Type",
 					"Predicate",

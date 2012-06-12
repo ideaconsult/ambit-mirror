@@ -17,13 +17,13 @@ import ambit2.base.data.AmbitUser;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.search.QueryUser;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.propertyvalue.PropertyValueReporter;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.DisplayMode;
 
 
 public class UserResource extends QueryResource<QueryUser, AmbitUser> {

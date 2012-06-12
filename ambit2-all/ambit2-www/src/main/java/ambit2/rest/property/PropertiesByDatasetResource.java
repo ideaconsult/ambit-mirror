@@ -16,11 +16,11 @@ import ambit2.db.search.StoredQuery;
 import ambit2.db.search.property.PropertiesByDataset;
 import ambit2.db.search.property.PropertiesByQuery;
 import ambit2.db.update.AbstractUpdate;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetStructuresResource;
-import ambit2.rest.structure.DisplayMode;
 
 /**
  * Retrieves feature definitions by dataset 

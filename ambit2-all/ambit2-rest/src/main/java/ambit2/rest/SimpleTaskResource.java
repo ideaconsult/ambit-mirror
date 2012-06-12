@@ -219,7 +219,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 		ITaskStorage<USERID> storage = ((TaskApplication)getApplication()).getTaskStorage();
 		FactoryTaskConvertor<USERID> tc = new FactoryTaskConvertor<USERID>(storage);
 	
-		return tc.createTaskConvertor(variant, getRequest(),getDocumentation());
+		return tc.createTaskConvertor(variant, getRequest(),getDocumentation(),DisplayMode.table);
 
 	}
 	

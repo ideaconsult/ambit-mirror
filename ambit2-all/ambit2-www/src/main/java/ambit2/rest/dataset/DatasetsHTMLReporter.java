@@ -18,6 +18,7 @@ import ambit2.core.processors.structure.key.IStructureKey.Matcher;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
@@ -28,7 +29,7 @@ import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.DisplayMode;
+
 
 /**Generates html page for {@link QueryDatasetResource}
  * @author nina
@@ -143,15 +144,15 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				}			
 				
 				try {
-	
+		
 					output.write("<div><span class=\"center\">");
-				output.write("<form method='GET' action=''>");
-				output.write(String.format("Page:<input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
-				if (search !=null) output.write(String.format("<input name='search' type='hidden' value='%s'>\n",search));
-				output.write(String.format("<b>Page size:</b><input name='pagesize' type='text' title='Page size' size='10' value='%s'>\n",pageSize==null?"50":pageSize));
-				output.write(String.format("<input type='image' src='%s/images/page_go.png' onsubmit='submit-form();' value='Refresh'>",uriReporter.getBaseReference()));			
-				output.write("</form>");
-				output.write("</p></span></div><p>");
+					output.write("<form method='GET' action=''>");
+					output.write(String.format("Page:<input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
+					if (search !=null) output.write(String.format("<input name='search' type='hidden' value='%s'>\n",search));
+					output.write(String.format("<b>Page size:</b><input name='pagesize' type='text' title='Page size' size='10' value='%s'>\n",pageSize==null?"50":pageSize));
+					output.write(String.format("<input type='image' src='%s/images/page_go.png' onsubmit='submit-form();' value='Refresh'>",uriReporter.getBaseReference()));			
+					output.write("</form>");
+					output.write("</p></span></div><p>");
 	
 				} catch (Exception x) {
 					

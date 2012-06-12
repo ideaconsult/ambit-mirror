@@ -46,6 +46,7 @@ import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.DeleteChemical;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;

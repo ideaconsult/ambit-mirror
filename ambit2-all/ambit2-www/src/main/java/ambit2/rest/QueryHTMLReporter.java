@@ -10,7 +10,6 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
-import ambit2.rest.structure.DisplayMode;
 
 /**
  * Generates HTML representation of a resource

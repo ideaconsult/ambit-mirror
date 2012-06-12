@@ -27,6 +27,7 @@ import ambit2.db.update.model.AbstractModelQuery;
 import ambit2.db.update.model.QueryModel;
 import ambit2.db.update.model.ReadModel;
 import ambit2.rest.DBConnection;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -35,7 +36,6 @@ import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.model.predictor.AbstractStructureProcessor;
 import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.ExpertModelpredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
@@ -43,7 +43,6 @@ import ambit2.rest.model.predictor.ModelPredictor;
 import ambit2.rest.model.predictor.StructureProcessor;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.structure.DisplayMode;
 import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableModelPredictor;
 import ambit2.rest.task.CallableQueryProcessor;
@@ -83,6 +82,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			return new Integer(id.toString());
 			
 		} catch (NumberFormatException x) {
+			_dmode = DisplayMode.table;
 			return id;
 		} catch (Exception x) {
 			return null;
@@ -348,9 +348,9 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			String condition = form.getFirstValue(QueryResource.condition);
 			if (condition!=null) query.setCondition(StringCondition.getInstance(condition));
 			
-			if (idmodel == null) { return new ReadModel(); }
+			if (idmodel == null) { _dmode = DisplayMode.table; return new ReadModel(); }
 			else if (idmodel instanceof Integer) {
-				_dmode = DisplayMode.table;
+				_dmode = DisplayMode.singleitem;
 				return new ReadModel((Integer)idmodel);
 			} else {
 				_dmode = DisplayMode.table;

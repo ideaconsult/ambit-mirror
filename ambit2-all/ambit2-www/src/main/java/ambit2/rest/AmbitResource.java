@@ -623,7 +623,7 @@ public class AmbitResource extends ProtectedResource {
 		
 		
 		
-		w.write("<hr>");
+		//w.write("<hr>");
 		
 	}	
 	public static void writeHTMLFooter(Writer output,String title,Request request) throws IOException {

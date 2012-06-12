@@ -11,7 +11,6 @@ import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryHeaderReporter;
-import ambit2.rest.structure.DisplayMode;
 
 /**
  * HTML generation for structure queries

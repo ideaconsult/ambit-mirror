@@ -23,13 +23,13 @@ import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.update.structure.ChemicalByDataset;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.structure.CompoundHTMLReporter;
-import ambit2.rest.structure.DisplayMode;
 
 /**
  *  Retrieve similar compounds, given a smiles

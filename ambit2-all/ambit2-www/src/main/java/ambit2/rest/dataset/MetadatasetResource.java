@@ -29,6 +29,7 @@ import ambit2.db.update.dataset.ReadDataset;
 import ambit2.db.update.dataset.UpdateDataset;
 import ambit2.db.update.storedquery.ReadStoredQuery;
 import ambit2.rest.ChemicalMediaType;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -40,7 +41,6 @@ import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.rdf.RDFMetaDatasetIterator;
 import ambit2.rest.rdf.RDFObjectIterator;
-import ambit2.rest.structure.DisplayMode;
 
 public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
 	protected SourceDataset dataset;

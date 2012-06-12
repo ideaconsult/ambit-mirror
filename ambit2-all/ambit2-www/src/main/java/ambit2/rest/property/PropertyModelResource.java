@@ -14,9 +14,9 @@ import ambit2.base.data.Property;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ModelTemplates;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.model.ModelResource;
-import ambit2.rest.structure.DisplayMode;
 
 
 /**

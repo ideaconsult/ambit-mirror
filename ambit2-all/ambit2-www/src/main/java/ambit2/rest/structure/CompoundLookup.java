@@ -39,6 +39,7 @@ import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
+import ambit2.rest.DisplayMode;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.task.CallableQueryProcessor;
