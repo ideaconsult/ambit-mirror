@@ -64,6 +64,8 @@ public class AmbitResource extends ProtectedResource {
 		"<script type='text/javascript' src='%s/jquery/jquery-ui-1.8.18.custom.min.js'></script>\n",
 		"<script type='text/javascript' charset='utf8' src='%s/jquery/jquery.dataTables-1.9.0.min.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox.js'></script>\n",
+		"<script type='text/javascript' src='%s/scripts/jopentox_table.js'></script>\n",
+		"<script type='text/javascript' src='%s/scripts/jopentox_misc.js'></script>\n",
 		//"<script type='text/javascript' src='%s/scripts/jendpoints.js'></script>\n",
 		//"<script type=\"text/javascript\" src=\"%s/jquery/jquery.MultiFile.pack.js\"></script>\n",
 		"<script type='text/javascript' src='%s/jme/jme.js'></script>\n",
@@ -469,8 +471,6 @@ public class AmbitResource extends ProtectedResource {
 		
 		w.write(String.format("<title>%s</title>",title));
 		
-		w.write("<script type='text/javascript'>function hideDiv(divId) {\n$('#'+divId).hide();}</script>\n");
-
 		//meta		
 		for (String tag : metaTag ) w.write(String.format(tag,baseReference));
 		//css			
@@ -478,24 +478,6 @@ public class AmbitResource extends ProtectedResource {
 		//js
 		for (String script : js ) w.write(String.format(script,baseReference));
 		w.write(meta);
-				
-		//w.write(String.format("<script type=\"text/javascript\" src=\"%s/js/dojo.js.uncompressed\" djConfig=\"parseOnLoad:true, isDebug:true\"></script>\n",baseReference));
-
-//		w.write("<script language=\"JavaScript\">\nvar smiles = \"\";\n var jme = \"0 0\"></script>\n");
-		w.write("<script>$(function() {$( \".accordion\" ).accordion({autoHeight: false,navigation: true});});</script>");
-		w.write("<script>$(function() {$( \".tabs\" ).tabs({cache: true});});</script>");
-		w.write("<script>$(function() {$( \"#selectable\" ).selectable();});</script>");
-		w.write("<script>$(function() {$( \"input:submit, button\" ).button();});</script>");
-		w.write("<script type='text/javascript'>function toggleDiv(divId) {$('#'+divId).toggle();}</script>\n");
-		w.write("<script type='text/javascript'>function hideDiv(divId) {$('#'+divId).hide();}</script>\n");
-		w.write("<script>function changeImage(img,src)  {    document.getElementById(img).src=src;} </script>\n");
-
-		final String dtableOptions = "'bJQueryUI': true, "+
-		//"'sPaginationType': 'full_numbers',"+
-		"'bPaginate'      : true,"+
-		"\"sDom\": 'T<\"clear\"><\"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix\"lfr>t<\"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix\"ip>'";
-
-		w.write(String.format("<script>$(function() {$( \".datatable\" ).dataTable({%s });});</script>",dtableOptions));
 
 		w.write("</head>\n");
 		w.write("<body>");
