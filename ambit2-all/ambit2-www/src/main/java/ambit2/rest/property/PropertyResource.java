@@ -112,11 +112,14 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 				PropertyURIReporter r = new PropertyURIReporter(getRequest(),getDocumentation());
 				r.setDelimiter("\n");
 				return new StringConvertor(r,MediaType.TEXT_URI_LIST,filenamePrefix);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+					PropertyURIReporter r = new PropertyURIReporter(getRequest(),getDocumentation());
+					r.setDelimiter("\n");
+					return new OutputWriterConvertor(new PropertyJSONReporter(getRequest()),MediaType.APPLICATION_JSON);					
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
-				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) || 
-				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) 
 				) {
 			return new RDFJenaConvertor<Property, IQueryRetrieval<Property>>(
 					new PropertyRDFReporter<IQueryRetrieval<Property>>(getRequest(),variant.getMediaType(),getDocumentation())

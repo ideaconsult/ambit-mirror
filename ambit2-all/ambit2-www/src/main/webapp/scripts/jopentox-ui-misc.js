@@ -7,6 +7,13 @@
  * TODO: Licence.
  */
 
+$(function() {$( ".datatable" ).dataTable({
+	'bJQueryUI': true, 
+	'bPaginate': true,
+	"sDom": 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>' 
+	});
+});
+
 $(function() {$( ".accordion" ).accordion({autoHeight: false,navigation: true});});
 
 $(function() {$( ".tabs" ).tabs({cache: true});});
