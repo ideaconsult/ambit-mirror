@@ -1,17 +1,14 @@
 package ambit2.rest.model;
 
-import java.io.StringWriter;
 import java.io.Writer;
 
 import org.restlet.Request;
-import org.restlet.data.Form;
-import org.restlet.data.Reference;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.DisplayMode;
-import ambit2.rest.OpenTox;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
@@ -24,6 +21,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	private static final long serialVersionUID = -7959033048710547839L;
 	//only necessary if applying the model
 	protected CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
+	protected ModelJSONReporter modelJson_reporter;
 	
 	public ModelHTMLReporter(ResourceDoc doc) {
 		this(null,DisplayMode.table,doc);
@@ -34,16 +32,28 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	public ModelHTMLReporter(Request request,Request originalRef,DisplayMode _dmode,ResourceDoc doc) {
 		super(request,_dmode,doc);
 		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,doc,_dmode,true);
+		modelJson_reporter = new ModelJSONReporter(request);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
 		return new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request,doc);
 	}
 	@Override
+	public void setOutput(Writer output) throws AmbitException {
+		super.setOutput(output);
+		modelJson_reporter.setOutput(output);
+	}
+	@Override
 	public void header(Writer w, IQueryRetrieval<ModelQueryResults> query) {
 		super.header(w, query);
 		try { 
-			output.write("<table class='datatable' id='models'>");
+			output.write("<table class='modeltable' id='model' width='100%'></table>");
+			output.write("\n<script type=\"text/javascript\">modelArray = \n");
+			modelJson_reporter.header(w, query);
+		} catch (Exception x) {} 
+		/*
+		try { 
+			output.write("<table class='modeltable' id='models'>");
 			output.write("<caption CLASS='results'>");
 			
 			if (!headless && _dmode.isCollapsed())  {
@@ -81,7 +91,8 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 					
 				}
 		    }
-			output.write("</caption>");				
+			output.write("</caption>");	
+
 			switch (_dmode) {
 			case table: {
 				output.write("<thead>\n");
@@ -102,14 +113,32 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			output.write("<tbody>\n");
 			cmp_reporter.setOutput(w);
 			uriReporter.setOutput(w);
+
 		} catch (Exception x) {}		
+		*/
 	}
+	
 	@Override
 	public void footer(Writer output, IQueryRetrieval<ModelQueryResults> query) {
-		try { output.write("</tbody></table>");} catch (Exception x) {}
+		try { 
+			modelJson_reporter.footer(output, query);
+			output.write(";</script>\n");
+		
+		} catch (Exception x) {
+			x.printStackTrace();
+		} 
 		super.footer(output, query);
 	}
 	
+	@Override
+	public Object processItem(ModelQueryResults item) throws AmbitException {
+		try { 
+			modelJson_reporter.processItem(item);
+			
+		} catch (Exception x) {}
+		return item;
+	}
+	/*
 	@Override
 	public Object processItem(ModelQueryResults model) {
 		try {
@@ -197,23 +226,6 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 				
 			}
 			}
-			/*
-			if (!collapsed) {
-				output.write("&nbsp;");
-				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/structures.gif\" alt=\"compounds\" title=\"Browse compounds\" border=\"0\"/></a>",
-						w.toString(),
-						CompoundResource.compound,
-						uriReporter.getBaseReference().toString()));	
-				
-				output.write("&nbsp;");
-				output.write(String.format(
-						"<a href=\"%s%s\"><img src=\"%s/images/search.png\" alt=\"query\" title=\"Search compounds\" border=\"0\"/></a>",
-						w.toString(),
-						QueryResource.query_resource,
-						uriReporter.getBaseReference().toString()));	
-			}
-			*/
 
 
 		} catch (Exception x) {
@@ -221,6 +233,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 		}
 		return null;
 	}
+	*/
 	protected void writeMoreColumns(ModelQueryResults model, Writer output) {
 	}
 
