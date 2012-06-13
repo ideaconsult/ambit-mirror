@@ -33,8 +33,7 @@ public class ModelURIReporter<Q extends IQueryRetrieval<ModelQueryResults>> exte
 				ref,
 				ModelResource.resource,model==null?"":Reference.encode(model.getQueryID().toString()));
 	}
-	public void footer(Writer output, Q query) {};
-	public void header(Writer output, Q query) {};
+
 	
 	public void open() throws DbAmbitException {
 		// TODO Auto-generated method stub
