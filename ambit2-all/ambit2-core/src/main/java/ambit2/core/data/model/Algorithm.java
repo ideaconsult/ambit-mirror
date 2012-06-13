@@ -28,11 +28,19 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			public String getMediaType() {
 				return "application/java";
 			}
+			@Override
+			public String getImage() {
+				return "images/java-icon.png";
+			}
 		},
 		PMML {
 			@Override
 			public String getMediaType() {
 				return "application/pmml+xml";
+			}
+			@Override
+			public String getImage() {
+				return "images/xml.png";
 			}
 		},
 		WEKA {
@@ -40,11 +48,19 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			public String getMediaType() {
 				return "application/x-java-serialized-object";
 			}
+			@Override
+			public String getImage() {
+				return "images/weka.jpg";
+			}
 		},
 		MOPAC {
 			@Override
 			public String getMediaType() {
 				return "mopac/java";
+			}
+			@Override
+			public String getImage() {
+				return "images/benzene_16.jpg";
 			}
 		},		
 		WWW_FORM {
@@ -57,6 +73,9 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			@Override
 			public String getMediaType() {
 				return "text/plain";
+			}
+			public String getImage() {
+				return "search.png";
 			}
 		},			
 		COVERAGE_SERIALIZED {
@@ -72,6 +91,9 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			}
 		};			
 		public abstract String getMediaType();
+		public String getImage() {
+			return "images/ambit.png";
+		}
 		};
 	protected String id;
 	protected String name;

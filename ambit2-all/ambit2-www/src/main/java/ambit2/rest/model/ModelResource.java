@@ -118,6 +118,9 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 		return new StringConvertor(	new ModelTextReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
 				MediaType.TEXT_PLAIN);	
+	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+		return new StringConvertor(	new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+				MediaType.APPLICATION_JSON);	
 		
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||

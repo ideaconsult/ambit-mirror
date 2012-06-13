@@ -633,9 +633,7 @@ public class AmbitResource extends ProtectedResource {
 		output.write("</html>");
 
 	}	
-	public static String jsTableSorter(String tableid,String pagerid) {
-		return "";//String.format("<script type=\"text/javascript\">$(document).ready(function() {  $(\"#%s\").tablesorter({widgets: ['zebra'] }).tablesorterPager({container: $(\"#%s\")}); } );</script>",tableid,pagerid);
-	}
+
 	
 	public static String printWidgetHeader(String header) {
 		return printWidgetHeader(header, null);
