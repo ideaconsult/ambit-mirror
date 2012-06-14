@@ -15,6 +15,8 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.property.PropertyJSONReporter;
 
+import com.lowagie.text.html.HtmlEncoder;
+
 /**
  * JSON
  * @author nina
@@ -86,43 +88,33 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			builder.append(String.format("\t\t\"%s\":\"%s\"","type","Compound"));
 			builder.append("\n\t\t},\n");
 			
-			builder.append(String.format("\t\"%s\":[",jsonCompound.values.jsonname()));
+			builder.append(String.format("\t\"%s\":{",jsonCompound.values.jsonname()));
+			//builder.append(String.format("\t\"%s\":[",jsonCompound.values.jsonname()));
 			for (int j=0; j < header.size(); j++) {
 				if (j>0) builder.append(",");
 				Property p = header.get(j);
-				builder.append("\n\t\t{\n");
+				//builder.append("\n\t\t{\n");
+				builder.append("\n");
 				Object value = item.getProperty(p);
-				builder.append(String.format("\t\t\"%s\":\"%s\",\n","feature",reporter.getURI(p)));
-				
+				//builder.append(String.format("\t\t\"%s\":\"%s\",\n","feature",reporter.getURI(p)));
+				//String key = "value";
+				String key = reporter.getURI(p);
 				if (value==null) {
-					builder.append(String.format("\t\t\"%s\":null\n","value"));
+					builder.append(String.format("\t\t\"%s\":null",key));
 				} else if (p.getClazz().equals(String.class))
-					builder.append(String.format("\t\t\"%s\":\"%s\"\n","value",value));
+					builder.append(String.format("\t\t\"%s\":\"%s\"",key,HtmlEncoder.encode(value.toString())));
 				else if (value instanceof Double) 
-					builder.append(String.format("\t\t\"%s\":%6.3f\n","value",(Double)value));
+					builder.append(String.format("\t\t\"%s\":%6.3f",key,(Double)value));
 				else if (value instanceof Integer) 
-					builder.append(String.format("\t\t\"%s\":%d\n","value",(Integer)value));
+					builder.append(String.format("\t\t\"%s\":%d",key,(Integer)value));
 				else if (value instanceof Long) 
-					builder.append(String.format("\t\t\"%s\":%l\n","value",(Long)value));
+					builder.append(String.format("\t\t\"%s\":%l",key,(Long)value));
 				else 
-					builder.append(String.format("\t\t\"%s\":\"%s\"\n","value",value));				
-				/*
-				if (p.getClazz()==Number.class) { 
-					writer.write(String.format(",%s",
-							(value==null)||(IQueryRetrieval.NaN.equals(value.toString()))?"?":value
-							));
-				} else
-					writer.write(String.format(",%s%s%s",
-							value==null?"":"\"",
-							value==null?"?":
-							value.toString().replace("\n", "").replace("\r",""),
-							value==null?"":"\""
-							));		
-				*/		
-				builder.append("\t\t}");
+					builder.append(String.format("\t\t\"%s\":\"%s\"",key,HtmlEncoder.encode(value.toString())));				
 				i++;
 			}
-			builder.append("\n\t\t]");
+			builder.append("\n\t\t}");
+			//builder.append("\n\t\t]");
 			
 			builder.append("\n\t}");
 			writer.write(builder.toString());
