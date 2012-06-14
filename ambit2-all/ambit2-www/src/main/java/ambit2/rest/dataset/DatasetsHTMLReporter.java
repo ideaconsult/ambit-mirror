@@ -381,7 +381,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						MediaType.APPLICATION_PDF,
 						MediaType.TEXT_CSV,
 						ChemicalMediaType.WEKA_ARFF,
-						MediaType.APPLICATION_RDF_XML
+						MediaType.APPLICATION_RDF_XML,
+						MediaType.APPLICATION_JSON
 						};
 				String[] image = {
 						"sdf.jpg",
@@ -391,7 +392,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						"pdf.png",
 						"excel.png",
 						"weka.jpg",
-						"rdf.gif"
+						"rdf.gif",
+						"json.png"
 						
 				};
 				output.write("<br><b>Download:</b>&nbsp;");

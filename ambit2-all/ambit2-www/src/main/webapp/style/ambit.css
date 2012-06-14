@@ -360,4 +360,27 @@ TD.results
     padding-top: 5px; 
     margin-bottom: -5px; 
     margin-left: -5px; 
-} 
+}
+
+.structureright {
+	float: right;
+	width: 153px;
+	margin: 0 0 10px 10px;
+	background-color: #fff;
+	padding: 10px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+}
+
+.summary {
+	margin: 0;
+	padding: 0px;
+	height: 100%;
+	background-color: #ffffff;
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial;
+	COLOR: #99CC00;
+	FONT-SIZE: 9pt;
+}
