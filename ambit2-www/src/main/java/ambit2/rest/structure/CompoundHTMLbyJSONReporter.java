@@ -53,7 +53,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 	public void footer(Writer output, Q query) {
 		try { 
 			cmp_reporter.footer(output, query);
-			output.write(";</script>\n");
+			output.write("</script>\n");
 		
 		} catch (Exception x) {
 			x.printStackTrace();

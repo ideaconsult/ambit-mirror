@@ -100,8 +100,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 			}	
 			if (comma!=null) getOutput().write(comma);
 			getOutput().write(String.format(
-					"\n{"+
-					"\n\t\"%s\":\"%s\"," + //uri
+					"\n\"%s\":{\n" + //uri
 					"\n\t\"type\":\"Feature\"," + //uri
 					"\n\t\"%s\":\"%s\"," + //title
 					"\n\t\"%s\":\"%s\"," + //units
@@ -112,7 +111,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					"\n\t\"%s\":\"%s\"," + //creator
 					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
-					jsonFeature.URI.jsonname(),uri,
+					uri,
 					jsonFeature.title.jsonname(),feature.getName(),
 					jsonFeature.units.jsonname(),feature.getUnits()==null?"":feature.getUnits(),
 					jsonFeature.isNominal.jsonname(),feature.isNominal(),
