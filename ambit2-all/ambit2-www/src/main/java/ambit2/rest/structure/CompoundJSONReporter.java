@@ -49,6 +49,11 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		propertyJSONReporter = new PropertyJSONReporter(request);
 	}
 
+	@Override
+	public void setOutput(Writer output) throws AmbitException {
+		super.setOutput(output);
+		propertyJSONReporter.setOutput(output);
+	}
 	protected void writeHeader(Writer writer) throws IOException {
 		if (header == null) {
 			header = template2Header(template,true);
@@ -88,13 +93,19 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				builder.append("\n\t\t{\n");
 				Object value = item.getProperty(p);
 				builder.append(String.format("\t\t\"%s\":\"%s\",\n","feature",reporter.getURI(p)));
+				
 				if (value==null) {
 					builder.append(String.format("\t\t\"%s\":null\n","value"));
 				} else if (p.getClazz().equals(String.class))
 					builder.append(String.format("\t\t\"%s\":\"%s\"\n","value",value));
-				else {
-					builder.append(String.format("\t\t\"%s\":%s\n","value",value));
-				}
+				else if (value instanceof Double) 
+					builder.append(String.format("\t\t\"%s\":%6.3f\n","value",(Double)value));
+				else if (value instanceof Integer) 
+					builder.append(String.format("\t\t\"%s\":%d\n","value",(Integer)value));
+				else if (value instanceof Long) 
+					builder.append(String.format("\t\t\"%s\":%l\n","value",(Long)value));
+				else 
+					builder.append(String.format("\t\t\"%s\":\"%s\"\n","value",value));				
 				/*
 				if (p.getClazz()==Number.class) { 
 					writer.write(String.format(",%s",
@@ -165,11 +176,20 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			
 		} catch (Exception x) {}
 	};
+	/**
+	 * "{"f1":"feature1","f2":{"uri":"feature2","smth":"smb"}}"
+	 */
 	@Override
 	public void footer(java.io.Writer output, Q query) {
 		try {
-			output.write("\n]");
-			output.write("\n}");
+			output.write("\n]\n");
+			output.write(",\nfeature:");
+			output.write("{\n");
+			for (int j=0; j < header.size(); j++) 
+				propertyJSONReporter.processItem(header.get(j));
+			output.write("}\n");
+
+			output.write("}\n");
 		} catch (Exception x) {}
 	};
 	

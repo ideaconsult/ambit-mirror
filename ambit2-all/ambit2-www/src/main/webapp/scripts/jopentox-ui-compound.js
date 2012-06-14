@@ -6,8 +6,10 @@
  * TODO: Licence.
  */
 
+
 var cmpArray = {
-	"dataEntry" : []
+	"dataEntry" : [],
+	"feature":[]
 };
 
 /**
@@ -72,9 +74,27 @@ $(document)
 								       $('#'+ id).dataTable({
 								    		'bJQueryUI': false, 
 								    		'bPaginate': true,
-								    		"sDom": 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>',
-											"aaSorting" : [ [ 1, 'asc' ] ]						    		
-								      });
+								    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"lfr>t<"fg-toolbar ui-helper-clearfix"ip>',
+								    		"aaSorting" : [ [ 0, 'desc' ] ],
+								    		fnDrawCallback: function(){
+								    			  var wrapper = this.parent();
+								    			  var rowsPerPage = this.fnSettings()._iDisplayLength;
+								    			  var rowsToShow = this.fnSettings().fnRecordsDisplay();
+								    			  var minRowsPerPage = this.fnSettings().aLengthMenu[0][0];
+								    			  if ( rowsToShow <= rowsPerPage || rowsPerPage == -1 ) {
+								    			    $('.dataTables_paginate', wrapper).css('visibility', 'hidden');
+								    			  }
+								    			  else {
+								    			    $('.dataTables_paginate', wrapper).css('visibility', 'visible');
+								    			  }
+								    			  if ( rowsToShow <= minRowsPerPage ) {
+								    			    $('.dataTables_length', wrapper).css('visibility', 'hidden');
+								    			  }
+								    			  else {
+								    			    $('.dataTables_length', wrapper).css('visibility', 'visible');
+								    			  }
+								    		}							    		
+								    	});								       
 								}
 							});
 
@@ -84,28 +104,58 @@ $(document)
 					/* Formating function for row details */
 					function fnFormatDetails(nTr, id) {
 						var dataEntry = oTable.fnGetData(nTr);
-						var sOut = '<div class="ui-widget" style="margin-top: 5x; padding: 0 .1em;" >';
-						sOut += '<div class="ui-widget-header ui-corner-top"><p><b>Compound: </b>' 
-							          + dataEntry.compound.URI + '</p></div>';
-						sOut += '<div class="ui-widget-content ui-corner-bottom " style="min-height:200px">';
+						var sOut = '<div class="ui-widget" style="margin-top: 5x;" >';
+						sOut += '<div style="min-height:200px">';
 						
-						sOut += '<table width="100%"  style="min-height:200px"><tbody><tr>';//outer table
+						sOut += '<table width="100%"  style="min-height:200px"><tbody><tr>';//outer table, can't get the style right with divs
 
 						//structure
-						sOut += '<td>';
+						sOut += '<td class="ui-widget-content ui-corner-top ui-corner-bottom"  style="min-height:200px;min-width:200px" >';
 						sOut += '<img src="' + dataEntry.compound.URI + '?media=image/png">';
 						sOut += '</td>';
 						
 						//properties
 						sOut += '<td>';
 						sOut += '<table id="'+ id +'" class="values" >';
-						sOut += '<thead><th>Property</th><th>Value</th></thead>';
+						sOut += '<thead><th>Type</th><th>Calculated</th><th>Property</th><th>Value</th></thead>';
 						sOut += '<tbody>';
 						for (i in dataEntry.values) 
 							if (dataEntry.values[i].value) {
 								sOut += '<tr>';
-								sOut += '<td>' + dataEntry.values[i].feature + '</td>';
-								sOut += '<td>' + dataEntry.values[i].value + '</td>';
+								//type (sameas)
+								var sameAs = cmpArray.feature[dataEntry.values[i].feature]["sameAs"]; 	
+								sOut += '<td title="Same as the OpenTox ontology entry defined by '+sameAs+'">';
+								if (sameAs.indexOf("http")>=0) {
+									var hash = sameAs.lastIndexOf("#");
+									if (hash>0) sOut += sameAs.substring(hash+1).replace("_"," ");
+									else sOut += sameAs;
+								}
+								sOut += '</td>';
+								//calculated
+								var source = cmpArray.feature[dataEntry.values[i].feature]["source"]["type"];
+								var hint = "Imported from a dataset";
+								if (source=="Algorithm" || source=="Model") {
+									hint = "Calculated by " + source;
+									source = '<a href="'+cmpArray.feature[dataEntry.values[i].feature]["source"]["URI"]+'">Yes</a>';
+							    } else source="";
+								sOut += '<td title="'+hint+'">';					
+								sOut += source;
+								sOut += '</td>';
+								//name, units
+								sOut += '<td title="OpenTox Feature URI: '+dataEntry.values[i].feature+'">';
+								sOut += '<a href="' + dataEntry.values[i].feature + '">';
+								sOut += cmpArray.feature[dataEntry.values[i].feature]["title"];
+								sOut += '</a>';
+								sOut += cmpArray.feature[dataEntry.values[i].feature]["units"];
+								sOut += '</td>';
+								
+								hint = 'Numeric:&nbsp;'+cmpArray.feature[dataEntry.values[i].feature]["isNumeric"];
+								hint += '\nNominal:&nbsp;'+cmpArray.feature[dataEntry.values[i].feature]["isNominal"];
+								hint += '\nSource:&nbsp;'+cmpArray.feature[dataEntry.values[i].feature]["source"]["URI"];
+								hint += '\nSource type:&nbsp;'+cmpArray.feature[dataEntry.values[i].feature]["source"]["type"];
+								sOut += '<td title="' + hint + '">';
+								sOut += dataEntry.values[i].value;
+								sOut += '</td>';
 								sOut += '</tr>\n';
 							}
 						sOut += '</tbody></table>\n';							
@@ -114,7 +164,8 @@ $(document)
 
 						//outer table
 						sOut += '</tr></tbody></table>';
-						sOut += '</div></div>\n';
+						//sOut += '</div>\n';//widget header
+						sOut += '</div>\n';
 						
 						return sOut;
 					}
