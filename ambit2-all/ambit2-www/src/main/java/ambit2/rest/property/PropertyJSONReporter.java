@@ -114,10 +114,12 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					jsonFeature.units.jsonname(),feature.getUnits()==null?"":feature.getUnits(),
 					jsonFeature.isNominal.jsonname(),feature.isNominal(),
 					jsonFeature.isNumeric.jsonname(),numeric,
-					jsonFeature.sameAs.jsonname(),uriSameAs,
+					jsonFeature.sameAs.jsonname(),uriSameAs==null?null:uriSameAs.replace("\"","'").replace("\n"," "),
 					jsonFeature.isModelPredictionFeature.jsonname(),isModelPredictionFeature,
 					jsonFeature.creator.jsonname(),feature.getReference().getURL(),
-					jsonFeature.source.jsonname(),uriSource,typeSource
+					jsonFeature.source.jsonname(),
+						uriSource==null?null:uriSource.replace("\"","'"),
+						typeSource==null?null:typeSource.replace("\"","'").replace("\n"," ")
 					
 					));
 			comma = ",";

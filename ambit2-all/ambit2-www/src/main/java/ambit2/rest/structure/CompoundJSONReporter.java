@@ -89,9 +89,9 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			builder.append("\n\t\t},\n");
 			
 			builder.append(String.format("\t\"%s\":{",jsonCompound.values.jsonname()));
-			//builder.append(String.format("\t\"%s\":[",jsonCompound.values.jsonname()));
+			String comma1 = null;
 			for (int j=0; j < header.size(); j++) {
-				if (j>0) builder.append(",");
+				if (comma1!=null) builder.append(comma1);
 				Property p = header.get(j);
 				//builder.append("\n\t\t{\n");
 				builder.append("\n");
@@ -100,18 +100,18 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				//String key = "value";
 				String key = reporter.getURI(p);
 				if (value==null) {
-					builder.append(String.format("\t\t\"%s\":null",key));
-				} else if (p.getClazz().equals(String.class))
-					builder.append(String.format("\t\t\"%s\":\"%s\"",key,HtmlEncoder.encode(value.toString().replace("\"","'"))));
-				else if (value instanceof Double) 
+					comma1 = null;
+					continue; //builder.append(String.format("\t\t\"%s\":null",key));
+				} else if (value instanceof Double) 
 					builder.append(String.format("\t\t\"%s\":%6.3f",key,(Double)value));
 				else if (value instanceof Integer) 
 					builder.append(String.format("\t\t\"%s\":%d",key,(Integer)value));
 				else if (value instanceof Long) 
 					builder.append(String.format("\t\t\"%s\":%l",key,(Long)value));
 				else 
-					builder.append(String.format("\t\t\"%s\":\"%s\"",key,HtmlEncoder.encode(value.toString().replace("\"","'"))));				
+					builder.append(String.format("\t\t\"%s\":\"%s\"",key,value.toString().replace("\"","'").replace("\n"," ")));				
 				i++;
+				comma1 = ",";
 			}
 			builder.append("\n\t\t}");
 			//builder.append("\n\t\t]");
