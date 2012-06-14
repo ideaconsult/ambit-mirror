@@ -102,7 +102,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				if (value==null) {
 					builder.append(String.format("\t\t\"%s\":null",key));
 				} else if (p.getClazz().equals(String.class))
-					builder.append(String.format("\t\t\"%s\":\"%s\"",key,HtmlEncoder.encode(value.toString())));
+					builder.append(String.format("\t\t\"%s\":\"%s\"",key,HtmlEncoder.encode(value.toString().replace("\"","'"))));
 				else if (value instanceof Double) 
 					builder.append(String.format("\t\t\"%s\":%6.3f",key,(Double)value));
 				else if (value instanceof Integer) 
@@ -110,7 +110,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				else if (value instanceof Long) 
 					builder.append(String.format("\t\t\"%s\":%l",key,(Long)value));
 				else 
-					builder.append(String.format("\t\t\"%s\":\"%s\"",key,HtmlEncoder.encode(value.toString())));				
+					builder.append(String.format("\t\t\"%s\":\"%s\"",key,HtmlEncoder.encode(value.toString().replace("\"","'"))));				
 				i++;
 			}
 			builder.append("\n\t\t}");
