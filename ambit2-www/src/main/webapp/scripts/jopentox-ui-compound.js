@@ -110,8 +110,11 @@ $(document)
 						sOut += '<table width="100%"  style="min-height:200px"><tbody><tr>';//outer table, can't get the style right with divs
 
 						//structure
-						sOut += '<td class="ui-widget-content ui-corner-top ui-corner-bottom"  style="min-height:200px;min-width:200px" >';
-						sOut += '<img src="' + dataEntry.compound.URI + '?media=image/png">';
+						sOut += '<td  valign="top" >';
+						sOut += '<img class="ui-widget-content ui-corner-top ui-corner-bottom" style="min-height:200px;min-width:200px" src="' 
+									+ dataEntry.compound.URI + '?media=image/png">';
+						sOut += '<br>';
+						sOut += "TODO";
 						sOut += '</td>';
 						
 						//properties
@@ -119,11 +122,11 @@ $(document)
 						sOut += '<table id="'+ id +'" class="values" >';
 						sOut += '<thead><th>Type</th><th>Calculated</th><th>Property</th><th>Value</th></thead>';
 						sOut += '<tbody>';
-						for (i in dataEntry.values) 
-							if (dataEntry.values[i].value) {
+						for (key in dataEntry.values) {
 								sOut += '<tr>';
+
 								//type (sameas)
-								var sameAs = cmpArray.feature[dataEntry.values[i].feature]["sameAs"]; 	
+								var sameAs = cmpArray.feature[key]["sameAs"]; 	
 								sOut += '<td title="Same as the OpenTox ontology entry defined by '+sameAs+'">';
 								if (sameAs.indexOf("http")>=0) {
 									var hash = sameAs.lastIndexOf("#");
@@ -132,32 +135,36 @@ $(document)
 								}
 								sOut += '</td>';
 								//calculated
-								var source = cmpArray.feature[dataEntry.values[i].feature]["source"]["type"];
+								var source = cmpArray.feature[key]["source"]["type"];
 								var hint = "Imported from a dataset";
 								if (source=="Algorithm" || source=="Model") {
 									hint = "Calculated by " + source;
-									source = '<a href="'+cmpArray.feature[dataEntry.values[i].feature]["source"]["URI"]+'">Yes</a>';
+									source = '<a href="'+cmpArray.feature[key]["source"]["URI"]+'">Yes</a>';
 							    } else source="";
+			
 								sOut += '<td title="'+hint+'">';					
 								sOut += source;
 								sOut += '</td>';
+			
 								//name, units
-								sOut += '<td title="OpenTox Feature URI: '+dataEntry.values[i].feature+'">';
-								sOut += '<a href="' + dataEntry.values[i].feature + '">';
-								sOut += cmpArray.feature[dataEntry.values[i].feature]["title"];
+								sOut += '<td title="OpenTox Feature URI: '+key+'">';
+								sOut += '<a href="' + key + '">';
+								sOut += cmpArray.feature[key]["title"];
 								sOut += '</a>';
-								sOut += cmpArray.feature[dataEntry.values[i].feature]["units"];
+								sOut += cmpArray.feature[key]["units"];
 								sOut += '</td>';
 								
-								hint = 'Numeric:&nbsp;'+cmpArray.feature[dataEntry.values[i].feature]["isNumeric"];
-								hint += '\nNominal:&nbsp;'+cmpArray.feature[dataEntry.values[i].feature]["isNominal"];
-								hint += '\nSource:&nbsp;'+cmpArray.feature[dataEntry.values[i].feature]["source"]["URI"];
-								hint += '\nSource type:&nbsp;'+cmpArray.feature[dataEntry.values[i].feature]["source"]["type"];
+								hint = 'Numeric:&nbsp;'+cmpArray.feature[key]["isNumeric"];
+								hint += '\nNominal:&nbsp;'+cmpArray.feature[key]["isNominal"];
+								hint += '\nSource:&nbsp;'+cmpArray.feature[key]["source"]["URI"];
+								hint += '\nSource type:&nbsp;'+cmpArray.feature[key]["source"]["type"];
 								sOut += '<td title="' + hint + '">';
-								sOut += dataEntry.values[i].value;
+								//for handling the broken Toxtree html output...
+								sOut += decodeEntities(dataEntry.values[key]);
+								
 								sOut += '</td>';
 								sOut += '</tr>\n';
-							}
+						}
 						sOut += '</tbody></table>\n';							
 						sOut += '</td>';
 						
@@ -175,3 +182,10 @@ $(document)
 						}
 					
 				});
+
+
+	function decodeEntities(input) {
+	  var y = document.createElement('textarea');
+	  y.innerHTML = input;
+	  return y.value;
+	}
