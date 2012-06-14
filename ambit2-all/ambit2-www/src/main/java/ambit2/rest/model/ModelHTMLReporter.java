@@ -1,17 +1,23 @@
 package ambit2.rest.model;
 
+import java.io.IOException;
 import java.io.Writer;
 
 import org.restlet.Request;
+import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.structure.CompoundHTMLReporter;
 
 public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQueryRetrieval<ModelQueryResults>> {
@@ -47,7 +53,41 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	public void header(Writer w, IQueryRetrieval<ModelQueryResults> query) {
 		super.header(w, query);
 		try { 
-			output.write("<table class='modeltable' id='model' width='100%'></table>");
+			String page = "";
+			Form form = uriReporter.getResourceRef().getQueryAsForm();
+			try {
+
+				page = form.getFirstValue("page");
+			} catch (Exception x) {
+				page = "0";
+			}	
+			String maxhits = "";
+			try {
+
+				maxhits = form.getFirstValue(QueryResource.max_hits);
+			} catch (Exception x) {
+				maxhits = "1000";
+			}					
+			String pagesize = "";
+			try {
+
+				pagesize = form.getFirstValue("pagesize");
+			} catch (Exception x) {
+				pagesize = maxhits; 
+			}				
+			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This model</a> | %s&nbsp; | Download as %s&nbsp;</div>%s",
+					uriReporter.getResourceRef(),
+					query.toString(),
+					String.format("<a href='%s' title='%s'>License</a>",getLicenseURI(),getLicenseURI()),
+					downloadLinks(),
+					String.format("<form method='GET' action=''>Page&nbsp;<input name='page' type='text' title='Page' size='10' value='%s'>&nbsp;"+
+							"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'><input type='image' src='%s/images/search.png' value='Refresh'></form>",
+							page==null?"0":page,
+							pagesize==null?"100":pagesize,
+							uriReporter.getBaseReference())			
+									));
+						
+			output.write("<table class='modeltable' id='models' width='100%'></table>");
 			output.write("\n<script type=\"text/javascript\">modelArray = \n");
 			modelJson_reporter.header(w, query);
 		} catch (Exception x) {} 
@@ -235,6 +275,36 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	}
 	*/
 	protected void writeMoreColumns(ModelQueryResults model, Writer output) {
+	}
+	
+	protected String downloadLinks() throws IOException {
+		StringBuilder w = new StringBuilder();
+		MediaType[] mimes = {
+				MediaType.TEXT_URI_LIST,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_JSON
+				};
+		String[] image = {
+				"link.png",
+				"rdf.gif",
+				"json.png"
+		};
+		String q=uriReporter.getResourceRef().getQuery();
+		for (int i=0;i<mimes.length;i++) {
+			MediaType mime = mimes[i];
+			w.append("&nbsp;");
+			w.append(String.format(
+					"<a href=\"?%s%smedia=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+					q==null?"":q,
+					q==null?"":"&",
+					Reference.encode(mime.toString()),
+					uriReporter.getBaseReference().toString(),
+					image[i],
+					mime,
+					mime));	
+
+		}			
+		return w.toString();
 	}
 
 }

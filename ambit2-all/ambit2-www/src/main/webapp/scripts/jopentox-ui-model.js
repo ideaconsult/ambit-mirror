@@ -15,14 +15,14 @@ var modelArray;
 $(document).ready(function() {
 	    
 	/* Initialize */
-	oTable = $( ".modeltable" ).dataTable({
+	mTable = $( ".modeltable" ).dataTable({
 		'bProcessing': true,
 		'bJQueryUI': true, 
 		'bPaginate': true,
 		"sDom": 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>' ,
 		"aaData": modelArray,
 		"aoColumns": [
-		            { "sClass": "center", "bSortable": false, "mDataProp":null, sWidth: "5%", "bUseRendered" : "true",	
+		            { "sClass": "center zoom", "bSortable": false, "mDataProp":null, sWidth: "5%", "bUseRendered" : "true",	
 				          "fnRender": function ( o, val ) {
 				                  return "<img src='/ambit2/images/zoom_in.png'>";
 				          }
@@ -38,7 +38,7 @@ $(document).ready(function() {
 			              "fnRender": function ( o, val ) {
 			                  return "<img src='"+o.aData.algorithm.img +"'>";
 			                }
-			  		},		  			
+			  		},		
 		  			{ "sTitle": "Algorithm", "mDataProp":"algorithm.URI" , sWidth: "40%",
 		  	          "bUseRendered" : "false",	
 			          "fnRender": function ( o, val ) {
@@ -62,28 +62,30 @@ $(document).ready(function() {
 	
 	/* event listener  */
 	   $('.modeltable tbody td img').live( 'click', function () {
-	        var nTr = $(this).parents('tr')[0];
-	        if ( oTable.fnIsOpen(nTr) )
-	        {
-	            /* This row is already open - close it */
-	            this.src = "/ambit2/images/zoom_in.png";
-	            oTable.fnClose( nTr );
-	        }
-	        else
-	        {
-	            /* Open this row */
-	        	this.src = "/ambit2/images/zoom_out.png";
-	            oTable.fnOpen( nTr, fnFormatDetails(nTr), 'details' );
-	        }
+		   try {
+		        var nTr = $(this).parents('tr')[0];
+		        if ( mTable.fnIsOpen(nTr) ) {
+		            /* This row is already open - close it */
+		            this.src = "/ambit2/images/zoom_in.png";
+		            mTable.fnClose( nTr );
+		        } else  {
+		            /* Open this row */
+		        	this.src = "/ambit2/images/zoom_out.png";
+		            mTable.fnOpen( nTr, fnFormatDetails(nTr), 'details' );
+		        }
+		   } catch (err) {
+			   err;
+		   }
 	    } );
 	
 	/* Formating function for row details */
 	function fnFormatDetails ( nTr )
 	{
-	    var model = oTable.fnGetData( nTr );
+	    var model = mTable.fnGetData( nTr );
 	    var sOut = '<div class="ui-widget" style="margin-top: 20px; padding: 0 .7em;" >';
 	    sOut += '<div class="ui-widget-header ui-corner-top"><p><b>Model: </b>' + model.title + '</p></div>';
 	    sOut += '<div class="ui-widget-content ui-corner-bottom ">';
+	    
 	    sOut += '<table cellpadding="5" cellspacing="0" width="100%" style="padding-left:50px;">';
 	    
 	    sOut += '<tr><th>Model URI</th><td><a href=\"' + model.URI + '\">' + model.URI + '</a></td><td rowspan="7">';
@@ -91,6 +93,8 @@ $(document).ready(function() {
 	    	sOut += '<img src="'+model.ambitprop.legend+'">';
 		}
 	    sOut += '</td></tr>\n';
+	    
+
 	    //form to apply the model
 	    sOut += '<tr><form action="'+ model.URI + '" method="POST">';
 	    sOut += '<th colspan="2">Enter dataset or compound URI to apply the model</th></tr><tr>';
@@ -109,6 +113,7 @@ $(document).ready(function() {
 	    sOut += '<a href="' + model.predicted + '">Predicted</a>&nbsp;';
 	    sOut += '</td></tr>\n';
 	    sOut += '<tr><td>Model content</td><td>'+model.ambitprop.content+' ['+model.ambitprop.mimetype+']</td></tr>';	    
+
 
 	    sOut += '</table>';
 	    sOut += '</div></div>\n';

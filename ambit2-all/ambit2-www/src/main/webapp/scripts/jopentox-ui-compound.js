@@ -7,7 +7,7 @@
  */
 
 
-var cmpArray = {
+var opentox = {
 	"dataEntry" : [],
 	"feature":[]
 };
@@ -18,7 +18,7 @@ var cmpArray = {
 $(document)
 		.ready(
 				function() {
-
+					identifiers(opentox);
 					/* Initialize */
 					oTable = $(".compoundtable")
 							.dataTable(
@@ -27,13 +27,13 @@ $(document)
 										'bJQueryUI' : true,
 										'bPaginate' : true,
 										"sDom" : 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>',
-										"aaData" : cmpArray.dataEntry,
+										"aaData" : opentox.dataEntry,
 										"aoColumns" : [
 												{
 													"sClass" : "center",
 													"bSortable" : false,
 													"mDataProp" : null,
-													sWidth : "5%",
+													sWidth : "1%",
 													"bUseRendered" : "true",
 													"fnRender" : function(o,
 															val) {
@@ -41,31 +41,81 @@ $(document)
 													}
 												},
 												{
-													"sTitle" : "URI",
-													"mDataProp" : "compound.URI",
-													sWidth : "50%",
-													"bUseRendered" : "false",
+													"sClass" : "left",
+													"bSortable" : true,
+													"mDataProp" : null,
+													sWidth : "1%",
+													"bUseRendered" : "true",
 													"fnRender" : function(o,
 															val) {
-														return val;
+														return (o.iDataRow+1)+"." ;
 													}
-												}
+												},	
+												{
+													"sTitle" : "CAS",
+													"mDataProp" : null,
+													sWidth : "5%",
+													"bUseRendered" : "true",
+													"bSortable" : true,
+													"bVisible": opentox.cas.length>0,
+													"fnRender" : function(o,val) {
+														if (opentox.cas.length>0)
+															return opentox.dataEntry[o.iDataRow].values[opentox.cas[0]] ;
+														else return null;
+													}
+												},	
+												{
+													"sTitle" : "EINECS",
+													"mDataProp" : null,
+													sWidth : "5%",
+													"bUseRendered" : "true",
+													"bVisible": opentox.einecs.length>0,
+													"bSortable" : true,
+													"fnRender" : function(o,val) {
+														if (opentox.einecs.length>0)
+															return opentox.dataEntry[o.iDataRow].values[opentox.einecs[0]] ;
+														else return null;
+													}
+												},													
+												{
+													"sTitle" : "Name",
+													"mDataProp" : "compound.type",
+													sWidth : "50%",
+													"bUseRendered" : "true",
+													"bVisible": opentox.names.length>0,
+													"bSortable" : true,
+													"fnRender" : function(o,val) {
+														if (opentox.names.length>0)
+															return opentox.dataEntry[o.iDataRow].values[opentox.names[0]] ;
+														else return null;
+													}
+												},
+												{
+													"sTitle" : "REACH registration date",
+													"mDataProp" : null,
+													sWidth : "50%",
+													"bUseRendered" : "false",
+													"bVisible": opentox.reachdate.length>0,
+													"bSortable" : true,
+													"fnRender" : function(o,val) {
+														if (opentox.reachdate.length>0)
+															return opentox.dataEntry[o.iDataRow].values[opentox.reachdate[0]] ;
+														else return null;
+													}
+												}												
 
 										],
 										"aaSorting" : [ [ 1, 'asc' ] ]
 									});
 
-					/* event listener */
 					$('.compoundtable tbody td img').live(
 							'click',
 							function() {
 								var nTr = $(this).parents('tr')[0];
 								if (oTable.fnIsOpen(nTr)) {
-									/* This row is already open - close it */
 									this.src = "/ambit2/images/zoom_in.png";
 									oTable.fnClose(nTr);
 								} else {
-									/* Open this row */
 									this.src = "/ambit2/images/zoom_out.png";
 									var id = 'values'+getID();
 									oTable.fnOpen(nTr, fnFormatDetails(nTr,id),
@@ -98,23 +148,67 @@ $(document)
 								}
 							});
 
-
-
 				       
 					/* Formating function for row details */
 					function fnFormatDetails(nTr, id) {
 						var dataEntry = oTable.fnGetData(nTr);
 						var sOut = '<div class="ui-widget" style="margin-top: 5x;" >';
-						sOut += '<div style="min-height:200px">';
+						sOut += '<div style="min-height:250px">';
 						
-						sOut += '<table width="100%"  style="min-height:200px"><tbody><tr>';//outer table, can't get the style right with divs
+						sOut += '<table width="100%"  style="min-height:250px"><tbody><tr>';//outer table, can't get the style right with divs
 
 						//structure
-						sOut += '<td  valign="top" >';
-						sOut += '<img class="ui-widget-content ui-corner-top ui-corner-bottom" style="min-height:200px;min-width:200px" src="' 
+						sOut += '<td  valign="top" style="min-height:250px;max-width:260px">';
+						sOut += '<img class="ui-widget-content ui-corner-top ui-corner-bottom" style="min-height:250px;min-width:250px" src="' 
 									+ dataEntry.compound.URI + '?media=image/png">';
 						sOut += '<br>';
-						sOut += "TODO";
+						
+						var identifier = false;
+						//names
+					    $.each(opentox.feature, function(k, value) {
+						        if (value.sameAs == "http://www.opentox.org/api/1.1#ChemicalName") {
+						        	if (dataEntry.values[k]) {
+						        		sOut += '<strong>' + dataEntry.values[k] + '</strong>';
+						        		sOut += '<br>';
+						        		identifier=true;
+						        	}
+						        };   
+						    });
+						//cas
+					    if (!identifier)
+					    $.each(opentox.feature, function(k, value) {
+						        if (value.sameAs == "http://www.opentox.org/api/1.1#CASRN") {
+						        	if (dataEntry.values[k]) {
+						        		sOut += '<strong>CAS RN</strong> ' + dataEntry.values[k];
+						        		sOut += '<br>';
+						        		identifier=true;
+						        	}
+						        };   
+						    });
+						//einecs
+					    if (!identifier)
+					    $.each(opentox.feature, function(k, value) {
+						        if (value.sameAs == "http://www.opentox.org/api/1.1#EINECS") {
+						        	if (dataEntry.values[k]) {
+						        		sOut += '<strong>EINECS</strong> ' + dataEntry.values[k];
+						        		sOut += '<br>';
+						        		identifier=true;
+						        	}
+						        };   
+						    });
+					    
+						//reach
+					    if (!identifier)
+					    $.each(opentox.feature, function(k, value) {
+						        if (value.sameAs == "http://www.opentox.org/api/1.1#REACHRegistrationDate") {
+						        	if (dataEntry.values[k]) {
+						        		sOut += '<strong>REACH registration date:</strong> ' + dataEntry.values[k];
+						        		sOut += '<br>';
+						        		identifier=true;
+						        	}
+						        };   
+						    });
+					    
 						sOut += '</td>';
 						
 						//properties
@@ -122,11 +216,12 @@ $(document)
 						sOut += '<table id="'+ id +'" class="values" >';
 						sOut += '<thead><th>Type</th><th>Calculated</th><th>Property</th><th>Value</th></thead>';
 						sOut += '<tbody>';
-						for (key in dataEntry.values) {
+						for (key in dataEntry.values) 
+							if (dataEntry.values[key]) {
 								sOut += '<tr>';
 
 								//type (sameas)
-								var sameAs = cmpArray.feature[key]["sameAs"]; 	
+								var sameAs = opentox.feature[key]["sameAs"]; 	
 								sOut += '<td title="Same as the OpenTox ontology entry defined by '+sameAs+'">';
 								if (sameAs.indexOf("http")>=0) {
 									var hash = sameAs.lastIndexOf("#");
@@ -135,11 +230,11 @@ $(document)
 								}
 								sOut += '</td>';
 								//calculated
-								var source = cmpArray.feature[key]["source"]["type"];
+								var source = opentox.feature[key]["source"]["type"];
 								var hint = "Imported from a dataset";
 								if (source=="Algorithm" || source=="Model") {
 									hint = "Calculated by " + source;
-									source = '<a href="'+cmpArray.feature[key]["source"]["URI"]+'">Yes</a>';
+									source = '<a href="'+opentox.feature[key]["source"]["URI"]+'">Yes</a>';
 							    } else source="";
 			
 								sOut += '<td title="'+hint+'">';					
@@ -149,15 +244,15 @@ $(document)
 								//name, units
 								sOut += '<td title="OpenTox Feature URI: '+key+'">';
 								sOut += '<a href="' + key + '">';
-								sOut += cmpArray.feature[key]["title"];
+								sOut += opentox.feature[key]["title"];
 								sOut += '</a>';
-								sOut += cmpArray.feature[key]["units"];
+								sOut += opentox.feature[key]["units"];
 								sOut += '</td>';
 								
-								hint = 'Numeric:&nbsp;'+cmpArray.feature[key]["isNumeric"];
-								hint += '\nNominal:&nbsp;'+cmpArray.feature[key]["isNominal"];
-								hint += '\nSource:&nbsp;'+cmpArray.feature[key]["source"]["URI"];
-								hint += '\nSource type:&nbsp;'+cmpArray.feature[key]["source"]["type"];
+								hint = 'Numeric:&nbsp;'+opentox.feature[key]["isNumeric"];
+								hint += '\nNominal:&nbsp;'+opentox.feature[key]["isNominal"];
+								hint += '\nSource:&nbsp;'+opentox.feature[key]["source"]["URI"];
+								hint += '\nSource type:&nbsp;'+opentox.feature[key]["source"]["type"];
 								sOut += '<td title="' + hint + '">';
 								//for handling the broken Toxtree html output...
 								sOut += decodeEntities(dataEntry.values[key]);
@@ -182,10 +277,38 @@ $(document)
 						}
 					
 				});
-
-
-	function decodeEntities(input) {
+/**
+ *  Input: 
+ *  opentox object, with opentox.feature array nonempty
+ */
+function identifiers(opentox) {
+	if (opentox.cas==null) opentox.cas = [];
+	if (opentox.names==null) opentox.names = [];
+	if (opentox.einecs==null) opentox.einecs = [];
+	if (opentox.reachdate==null) opentox.reachdate = [];
+	//names
+	var count = [0,0,0,0];
+    $.each(opentox.feature, function(k, value) {
+	        if (value.sameAs == "http://www.opentox.org/api/1.1#ChemicalName") 
+	        	if (opentox.feature[k]) { opentox.names.push(k); count[0]++; }
+	        if (value.sameAs == "http://www.opentox.org/api/1.1#CASRN") 
+	        	if (opentox.feature[k]) { opentox.cas.push(k); count[1]++; }
+	        if (value.sameAs == "http://www.opentox.org/api/1.1#EINECS") 
+	        	if (opentox.feature[k]) {opentox.einecs.push(k); count[2]++; }	        
+	        if (value.sameAs == "http://www.opentox.org/api/1.1#REACHRegistrationDate") 
+	        	if (opentox.feature[k]) {opentox.reachdate.push(k); count[3]++}
+	        //be quick, we only need something to display in the table, detailed info will be on expand
+	        if (count[0]>0 && count[1]>0 && count[2]>0 && count[3]>0) 
+	        	return;
+	    });
+}
+/**
+ * HTML decode
+ * @param input
+ * @returns
+ */
+function decodeEntities(input) {
 	  var y = document.createElement('textarea');
 	  y.innerHTML = input;
 	  return y.value;
-	}
+}

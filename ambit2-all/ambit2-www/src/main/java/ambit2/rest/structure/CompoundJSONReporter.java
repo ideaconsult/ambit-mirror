@@ -83,9 +83,9 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			if (comma!=null) builder.append(comma);
 			
 			builder.append("\n\t{\n");
-			builder.append(String.format("\t\"%s\":{\n",jsonCompound.compound.jsonname()));
-			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.URI.jsonname(),uri));
-			builder.append(String.format("\t\t\"%s\":\"%s\"","type","Compound"));
+			builder.append(String.format("\t%s:{\n",jsonCompound.compound.jsonname()));
+			builder.append(String.format("\t\t%s:\"%s\",\n",jsonCompound.URI.jsonname(),uri));
+			builder.append(String.format("\t\t%s:\"%s\"","type","Compound"));
 			builder.append("\n\t\t},\n");
 			
 			builder.append(String.format("\t\"%s\":{",jsonCompound.values.jsonname()));
@@ -125,41 +125,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		return item;
 		
 	}
-	/*
-	public Object zprocessItem(IStructureRecord item) throws AmbitException {
-
-		try {
-			String uri = cmpReporter.getURI(item);
-			
-			if (comma!=null) getOutput().write(comma);
-			getOutput().write(String.format(
-					"\n{"+
-					"\n\"%s\":\"%s\"," + //uri
-					"\n\"%s\":\"%s\"," + //title
-					"\n\"%s\":{\n\t\"URI\":\"%s\",\n\t\"%s\":\"%s\",\n\t\"img\":\"%s\"\n}," + 					//algorithm
-					"\n\"%s\":\"%s\"," + //dataset
-					"\n\"%s\":\"%s\"," + //vars
-					"\n\"%s\":\"%s\"," + //vars
-					"\n\"%s\":\"%s\"," + //vars
-					"\n\"%s\":{" + 	
-					"\n\t\"%s\":\"%s\"," +
-					"\n\t\"%s\":\"%s\"," +
-					"\n\t\"%s\":\"%s\"," +
-					"\n\t\"%s\":\"%s\" " +
-					"\n\n}}",
-					
-					jsonModel.URI.jsonname(),uri,
-					jsonModel.title.jsonname(),item.getName()
-
-					));
-			comma = ",";
-
-		} catch (Exception x) {
-			
-		}
-		return item;
-	}
-	*/
+	
 	@Override
 	public void header(java.io.Writer output, Q query) {
 		try {
@@ -174,9 +140,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	@Override
 	public void footer(java.io.Writer output, Q query) {
 		try {
-			output.write("\n]\n");
-			output.write(",\nfeature:");
-			output.write("{\n");
+			output.write("\n],");
+			output.write("\nfeature:{\n");
 			for (int j=0; j < header.size(); j++) 
 				propertyJSONReporter.processItem(header.get(j));
 			output.write("}\n");
