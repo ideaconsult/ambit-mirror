@@ -121,7 +121,9 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 			throws AmbitException, ResourceException {
 	String filenamePrefix = getRequest().getResourceRef().getPath();
 	if (variant.getMediaType().equals(ChemicalMediaType.TEXT_YAML)) {
-			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML,filenamePrefix);			
+			return new YAMLConvertor(new DatasetYamlReporter(getRequest(),getDocumentation()),ChemicalMediaType.TEXT_YAML,filenamePrefix);
+	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			return new OutputWriterConvertor(new MetadatasetJSONReporter<IQueryRetrieval<ISourceDataset>>(getRequest()),MediaType.APPLICATION_JSON);			
 	} else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
 		return new OutputWriterConvertor(
 				new DatasetsHTMLReporter(getRequest(),_dmode,getDocumentation(),headless),MediaType.TEXT_HTML);
@@ -141,8 +143,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
-			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) ||
-			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
+			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) 
 			) {
 		return new RDFJenaConvertor<ISourceDataset, IQueryRetrieval<ISourceDataset>>(
 				new MetadataRDFReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),

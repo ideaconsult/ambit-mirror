@@ -67,6 +67,7 @@ public class AmbitResource extends ProtectedResource {
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-model.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-feature.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-misc.js'></script>\n",
+		"<script type='text/javascript' src='%s/scripts/jopentox-ui-compound.js'></script>\n",
 		//"<script type='text/javascript' src='%s/scripts/jendpoints.js'></script>\n",
 		//"<script type=\"text/javascript\" src=\"%s/jquery/jquery.MultiFile.pack.js\"></script>\n",
 		"<script type='text/javascript' src='%s/jme/jme.js'></script>\n",
