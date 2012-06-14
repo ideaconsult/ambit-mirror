@@ -65,7 +65,8 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
-import ambit2.rest.structure.CompoundHTMLReporter;
+import ambit2.rest.structure.CompoundHTMLbyJSONReporter;
+import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.structure.ConformerURIReporter;
 
 
@@ -189,13 +190,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				ChemicalMediaType.TEXT_YAML,
 				MediaType.APPLICATION_JSON,
 				ChemicalMediaType.WEKA_ARFF,
+				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_CSV,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.APPLICATION_RDF_TRIG,
 				MediaType.APPLICATION_RDF_TRIX,
 				MediaType.TEXT_RDF_N3,
-				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_WADL
@@ -275,6 +276,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			} catch (Exception x) {}			
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					createHTMLReporter(d),MediaType.TEXT_HTML);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),
+							getDocumentation(),
+							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
+					MediaType.APPLICATION_JSON,filenamePrefix);			
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
@@ -304,8 +311,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
-				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) ||
-				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) 
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
 					new DatasetRDFReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType(),filenamePrefix);			
@@ -315,8 +321,14 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}
 	
 	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
+		return new CompoundHTMLbyJSONReporter(
+				getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
+				DisplayMode.table,null,getTemplate(),getGroupProperties(),d,
+				getRequest().getRootRef().toString()+getCompoundInDatasetPrefix());
+		/*
 		return new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
 						DisplayMode.table,null,getTemplate(),getGroupProperties(),d,headless);
+						*/
 	}
 	protected String getMediaParameter(Request request) {
 		try {

@@ -1,6 +1,7 @@
 package ambit2.rest.property;
 
 import java.io.Writer;
+import java.util.Hashtable;
 
 import org.opentox.rdf.OT;
 import org.restlet.Request;
@@ -8,11 +9,8 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
-import ambit2.base.data.PropertyAnnotation;
-import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.property.annotations.PropertyAnnotationRDFReporter;
 
 /**
  * JSON
@@ -26,7 +24,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 	 */
 	private static final long serialVersionUID = 410930501401847402L;
 	protected String comma = null;
-	
+
 	enum jsonFeature {
 		URI,
 		title,
@@ -101,15 +99,15 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 			if (comma!=null) getOutput().write(comma);
 			getOutput().write(String.format(
 					"\n\"%s\":{\n" + //uri
-					"\n\t\"type\":\"Feature\"," + //uri
-					"\n\t\"%s\":\"%s\"," + //title
-					"\n\t\"%s\":\"%s\"," + //units
-					"\n\t\"%s\":\"%s\"," + //nominal
-					"\n\t\"%s\":\"%s\"," + //numeric
-					"\n\t\"%s\":\"%s\"," + //sameAs
-					"\n\t\"%s\":\"%s\"," + //isModelPredictionFeature
-					"\n\t\"%s\":\"%s\"," + //creator
-					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
+					"\n\ttype:\"Feature\"," + //uri
+					"\n\t%s:\"%s\"," + //title
+					"\n\t%s:\"%s\"," + //units
+					"\n\t%s:\"%s\"," + //nominal
+					"\n\t%s:\"%s\"," + //numeric
+					"\n\t%s:\"%s\"," + //sameAs
+					"\n\t%s:\"%s\"," + //isModelPredictionFeature
+					"\n\t%s:\"%s\"," + //creator
+					"\n\t%s:{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					uri,
 					jsonFeature.title.jsonname(),feature.getName(),
@@ -137,16 +135,19 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 			else return null;
 	}
 	*/
+	public void header(java.io.Writer output, IQueryRetrieval<Property> query) {
+		try {
+			output.write("{");
+			output.write("\nfeature:{\n");
+		} catch (Exception x) {}
+	};
 	@Override
 	public void footer(Writer output, IQueryRetrieval<Property> query) {
 		try {
-			output.write("\n]");
+			output.write("\t\n}");
+			output.write("\n}");
 		} catch (Exception x) {}
 	};
 	
-	public void header(java.io.Writer output, IQueryRetrieval<Property> query) {
-		try {
-			output.write("[");
-		} catch (Exception x) {}
-	};
+
 }

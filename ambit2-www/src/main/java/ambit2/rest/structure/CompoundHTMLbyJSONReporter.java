@@ -1,26 +1,39 @@
 package ambit2.rest.structure;
 
 import java.awt.Dimension;
+import java.io.IOException;
 import java.io.Writer;
+import java.net.URLEncoder;
+import java.util.List;
 
 import org.restlet.Request;
+import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 
 import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.AmbitResource;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.QueryStructureHTMLReporter;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.query.QueryResource;
 
 public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryStructureHTMLReporter<Q> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
-
+	protected String hilightPredictions = null;
+	boolean hierarchy = false;
+	protected Dimension cellSize = new Dimension(150,150);
+	
 	protected CompoundJSONReporter<IQueryRetrieval<IStructureRecord>> cmp_reporter;
 	
 	public CompoundHTMLbyJSONReporter(String prefix, Request request,ResourceDoc doc,DisplayMode _dmode,
@@ -41,10 +54,44 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 	}
 	@Override
 	public void header(Writer w, Q query) {
-		super.header(w, query);
+		oldHeader(w, query);
 		try { 
-			output.write("<table class='compoundtable' id='model' width='100%'></table>");
-			output.write("\n<script type=\"text/javascript\">cmpArray = \n");
+			String page = "";
+			Form form = uriReporter.getResourceRef().getQueryAsForm();
+			try {
+
+				page = form.getFirstValue("page");
+			} catch (Exception x) {
+				page = "0";
+			}	
+			String maxhits = "";
+			try {
+
+				maxhits = form.getFirstValue(QueryResource.max_hits);
+			} catch (Exception x) {
+				maxhits = "1000";
+			}					
+			String pagesize = "";
+			try {
+
+				pagesize = form.getFirstValue("pagesize");
+			} catch (Exception x) {
+				pagesize = maxhits; 
+			}	
+			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This dataset</a> | %s&nbsp; | Download as %s&nbsp;</div>%s",
+					uriReporter.getResourceRef(),
+					query.toString(),
+					String.format("<a href='%s' title='%s'>License</a>",getLicenseURI(),getLicenseURI()),
+					downloadLinks(),
+					String.format("<form method='GET' action=''>Page&nbsp;<input name='page' type='text' title='Page' size='10' value='%s'>&nbsp;"+
+							"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'><input type='image' src='%s/images/search.png' value='Refresh'></form>",
+							page==null?"0":page,
+							pagesize==null?"100":pagesize,
+							uriReporter.getBaseReference())			
+									));
+			
+			output.write("<table class='compoundtable' id='dataset' width='100%'></table>");
+			output.write("\n<script type=\"text/javascript\">opentox = \n");
 			cmp_reporter.header(w, query);
 		} catch (Exception x) {} 
 	
@@ -69,4 +116,207 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 		return item;
 	}
 	
+	
+
+	protected String downloadLinks() throws IOException {
+		StringBuilder w = new StringBuilder();
+		MediaType[] mimes = {ChemicalMediaType.CHEMICAL_MDLSDF,
+				ChemicalMediaType.CHEMICAL_CML,
+				ChemicalMediaType.CHEMICAL_SMILES,
+				ChemicalMediaType.CHEMICAL_INCHI,
+				MediaType.TEXT_URI_LIST,
+				MediaType.APPLICATION_PDF,
+				MediaType.TEXT_CSV,
+				MediaType.TEXT_PLAIN,
+				ChemicalMediaType.WEKA_ARFF,
+				MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_JSON
+				};
+		String[] image = {
+				"sdf.jpg",
+				"cml.jpg",
+				"smi.png",
+				"inchi.png",		
+				"link.png",
+				"pdf.png",
+				"excel.png",
+				"excel.png",
+				"weka.jpg",
+				"rdf.gif",
+				"json.png"
+				
+		};
+		String q=uriReporter.getResourceRef().getQuery();
+		for (int i=0;i<mimes.length;i++) {
+			MediaType mime = mimes[i];
+			w.append("&nbsp;");
+			w.append(String.format(
+					"<a href=\"?%s%smedia=%s\"  ><img src=\"%s/images/%s\" alt=\"%s\" title=\"%s\" border=\"0\"/></a>",
+					q==null?"":q,
+					q==null?"":"&",
+					Reference.encode(mime.toString()),
+					uriReporter.getBaseReference().toString(),
+					image[i],
+					mime,
+					mime));	
+
+		}			
+		return w.toString();
+	}
+	
+	public void oldHeader(Writer w, Q query) {
+		try {
+			String query_smiles = "";
+			String query_text = "";
+			Form form = uriReporter.getResourceRef().getQueryAsForm();
+			try {
+				
+				query_text = form.getFirstValue("text");
+			} catch (Exception x) {
+				query_text = "";
+			}			
+			try {
+				
+				query_smiles = form.getFirstValue(QueryResource.search_param);
+			} catch (Exception x) {
+				query_smiles = "";
+			}
+			String query_property = "";
+			try {
+
+				query_property = form.getFirstValue("property");
+			} catch (Exception x) {
+				query_property = "";
+			}
+			String query_threshold = "";
+			try {
+
+				query_threshold = form.getFirstValue("threshold");
+			} catch (Exception x) {
+				query_threshold = "0.9";
+			}
+			String maxhits = "";
+			try {
+
+				maxhits = form.getFirstValue(QueryResource.max_hits);
+			} catch (Exception x) {
+				maxhits = "1000";
+			}		
+			String page = "";
+			try {
+
+				page = form.getFirstValue("page");
+			} catch (Exception x) {
+				page = "0";
+			}	
+			String pagesize = "";
+			try {
+
+				pagesize = form.getFirstValue("pagesize");
+			} catch (Exception x) {
+				pagesize = maxhits; 
+			}				
+			/** This determines if similarity searching will be done via smiles or via URL **/
+			String type = "";
+			try {
+
+				type = form.getFirstValue("type");
+			} catch (Exception x) {
+				type = "smiles";
+			}		
+			
+			Reference baseReference = uriReporter.getBaseReference();
+			if (!headless) {
+			AmbitResource.writeTopHeader(w,
+					isCollapsed()?"Chemical compounds":"Chemical compound"
+					,
+					uriReporter.getRequest(),
+					uriReporter.getResourceRef(),
+					"",
+					uriReporter.getDocumentation()
+					);
+			
+;
+			
+			w.write("<table bgcolor='#ffffff'>");
+		
+			w.write("<tr>");
+			w.write("<td align='left' width='256px'>");
+			w.write(String.format("<a href=\"http://ambit.sourceforge.net/intro.html\"><img src='%s/images/ambit-logo.png' width='256px' alt='%s' title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+			w.write("</td>");
+			w.write("<td align='center'>");
+			
+			w.write("<form action='' name='form' method='get'>\n");
+			w.write(String.format("<input name='type' type='hidden' value='%s'>\n",type==null?"smiles":type));
+			
+			
+			String hint= "";
+			if (uriReporter.getResourceRef().toString().indexOf("similarity")>0) {
+				w.write(String.format("<label for='%s'>SMILES</label>&nbsp;",QueryResource.search_param));
+				w.write(String.format("&nbsp;<input type='image' src=\"%s/images/edit.png\" title='Draw molecule' onClick='startEditor(\"%s\");'>",
+						uriReporter.getBaseReference(),uriReporter.getBaseReference()));					
+				w.write(String.format("<input name='%s' type='text' size='40' title='Enter SMILES' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
+				
+				w.write("&nbsp;");
+				w.write(String.format("<label for='threshold'>Threshold</label>&nbsp;"));
+				w.write(String.format("<input name='threshold' type='text' title='Tanimoto coefficient threshold [0,1], default 0.9' size='20' value='%s'>\n",query_threshold==null?"0.9":query_threshold));
+				
+				hint = "Draw structure and search for similar compounds";
+				//w.write("<input type='submit' value='Search'><br>");
+
+			} else if (uriReporter.getResourceRef().toString().indexOf("compound")>0) {
+				w.write(String.format("<input name='property' type='text' title='Enter property name (optional)'  size='20' value='%s'>\n",query_property==null?"":query_property));
+				w.write("&nbsp;");
+				w.write(String.format("<input name='%s' type='text' title='Enter molecule identifier, name or property value (e.g. benzene)'  size='40' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
+				hint = "Search by property or identifier name (optional) and value";
+				//w.write("<input type='submit' value='Search'><br>");
+			} else {
+				w.write("<table>");
+
+				w.write("<tr><th>");
+				w.write(String.format("<label for='%s' title='Substructure pattern defined by SMARTS language. Enter manually, or use Draw button on the right'>SMARTS</label>&nbsp;",QueryResource.search_param));
+				
+				w.write(String.format("&nbsp;<input type='image' src=\"%s/images/edit.png\" title='Draw substructure' onClick='startEditor(\"%s\");'>",
+						uriReporter.getBaseReference(),uriReporter.getBaseReference()));
+				w.write("</th>");
+				w.write("<td>");				
+				w.write(String.format("<input name='%s' type='text'   size='60' value='%s'>\n",QueryResource.search_param,query_smiles==null?"":query_smiles));
+
+				w.write("</td></tr>\n");
+				w.write("<tr><th>");
+				w.write(String.format("<label for='text' title='Any text, compound identifiers, property names and values, test names and values'>Keywords</label>"));
+				w.write("</th><td>");
+				
+				w.write(String.format("<input name='text' type='text' title='Enter text to search for'  size='60' value='%s'><br>\n",query_text==null?"":query_text));
+				w.write("</td></tr>\n");				
+				hint = "Search for substructure and properties";				
+				w.write("</table>");
+			}
+			
+			
+			
+			//w.write(templates(baseReference));
+			
+			//w.write(baseReference.toString());
+
+			//w.write("</form>\n"); moved in footer
+			//w.write(hint);		
+			w.write("<br>\n<b><i>");
+			w.write(hint);
+			w.write("</i></b>");		
+			w.write("</td>");
+			w.write("<td align='left' valign='center' width='256px'>");
+			//w.write(String.format("<a href=\"http://opentox.org\"><img src=\"%s/images/logo.png\" width=\"256\" alt=\"%s\" title='%s' border='0'></a>\n",baseReference,"AMBIT",baseReference));
+			w.write("<input type='submit' value='Search'>");
+			w.write("</td></tr>\n");
+			w.write("</table>");		
+			}
+			if (hilightPredictions!= null) 
+				w.write(String.format("<div><span class=\"center\"><h4>Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",hilightPredictions,hilightPredictions));
+	
+			
+		} catch (Exception x) {
+			x.printStackTrace();
+		}		
+	};
 }

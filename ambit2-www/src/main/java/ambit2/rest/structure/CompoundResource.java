@@ -218,7 +218,12 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
-					ChemicalMediaType.WEKA_ARFF,filenamePrefix);	
+					ChemicalMediaType.WEKA_ARFF,filenamePrefix);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
+					MediaType.APPLICATION_JSON,filenamePrefix);
+			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CSVReporter(getTemplate(),getGroupProperties(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),MediaType.TEXT_CSV,filenamePrefix);				
@@ -227,8 +232,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
-				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)  ||
-				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
+				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) 
 				) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
 					new DatasetRDFReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
