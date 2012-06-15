@@ -78,12 +78,11 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 			} catch (Exception x) {
 				pagesize = maxhits; 
 			}	
-			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This dataset</a> | %s&nbsp; | Download as %s&nbsp; | "+
-					"<span class='results'>%s&nbsp; | %s | %s | %s | %s | %s | %s | %s </span></div>%s",
+			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This dataset</a> | %s&nbsp; "+
+					"<span class='results'>| <b>Show:</b>  %s | %s | %s | %s | %s | %s | %s | %s | %s |</span><br>Download as %s</div>%s",
 					uriReporter.getResourceRef(),
 					query.toString(),
 					String.format("<a href='%s' title='%s'>License</a>",getLicenseURI(),getLicenseURI()),
-					downloadLinks(),
 					/*
 						showRegistry,registry
 						showSMILES,smiles
@@ -101,7 +100,8 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 					"<input type='checkbox' id='visEndpoints' title='Show/Hide endpoint values' onchange='showEndpoints(event)' checked/>Endpoints&nbsp;",
 					"<input type='checkbox' id='visCalculated' title='Show/Hide calculated values' onchange='showCalculated(event)' checked/>Calculated&nbsp;",
 					"<input type='checkbox' id='visProperties' title='Show/Hide all properties' onchange='showProperties(event)' />Properties&nbsp;",
-					
+					"<input type='checkbox' id='visSimilarity' title='Show/Hide the similaritymetric' onchange='showSimilarity(event)' />Similarity&nbsp;",
+					downloadLinks(),
 					String.format("<form method='GET' action=''>Page&nbsp;<input name='page' type='text' title='Page' size='10' value='%s'>&nbsp;"+
 							"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'><input type='image' src='%s/images/search.png' value='Refresh'></form>",
 							page==null?"0":page,

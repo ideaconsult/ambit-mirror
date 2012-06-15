@@ -19,6 +19,7 @@ var opentox = {
 	"showEndpoints" : true,
 	"showCalculated" : true,
 	"showNames" : true,
+	"showSimilarity" : false,
 	/*
 showRegistry,registry
 showSMILES,smiles
@@ -389,8 +390,8 @@ function identifiers(opentox, columnDefs) {
 	        	if (count[4]<=200) { //TODO check how it works with many columns
 		        	var thclass = "property";
 		        	var visible = false;
-		        	if (value.sameAs == "http://www.opentox.org/api/1.1#SMILES") { thclass = " smiles"; visible = opentox.showSMILES; }
-		        	else if (value.sameAs == "http://www.opentox.org/api/1.1#InChI") { thclass = " inchi"; visible = opentox.showInChI; }
+		        	if (value.sameAs == "http://www.opentox.org/api/1.1#SMILES") { thclass = " smiles"; visible = false; }
+		        	else if (value.sameAs == "http://www.opentox.org/api/1.1#InChI") { thclass = " inchi"; visible = false; }
 		        	else if (value.sameAs.indexOf("http://www.opentox.org/echaEndpoints.owl")>=0) { thclass += " endpoint"; visible = opentox.showEndpoints; }	
 					var source = opentox.feature[k]["source"]["type"];
 					if (source=="Algorithm" || source=="Model") { thclass += " calculated"; visible |= opentox.showCalculated; }	
@@ -443,6 +444,16 @@ function identifiers(opentox, columnDefs) {
 	        //be quick, we only need something to display in the table, detailed info will be on expand
 	        //if (count[0]>0 && count[1]>0 && count[2]>0 && count[3]>0) 	return;
 	    });
+    //finally column for the similarity metric
+    columnDefs.push(
+		{ //last
+			"sTitle" : "Similarity",
+			"aTargets": [  count[4]+1 ],	
+			"sClass" : "similarity",
+			"bSortable" : true,
+			"bVisible" : false,
+			"mDataProp" : "compound.metric"
+		});
 }
 
 function toggleImagesInTable(e) {
@@ -526,6 +537,18 @@ function showCalculated(e) {
     
     $.each(opentox.oTable.fnSettings().aoColumns, function(k, value) {
     	if (value["sClass"].indexOf("calculated")>=0) {
+    		 opentox.oTable.fnSetColumnVis( k, el.checked);
+    	}
+    });
+}
+
+
+function showSimilarity(e) {
+    var el = e.srcElement;
+    opentox["showSimilarity"] = el.checked;
+    
+    $.each(opentox.oTable.fnSettings().aoColumns, function(k, value) {
+    	if (value["sClass"].indexOf("similarity")>=0) {
     		 opentox.oTable.fnSetColumnVis( k, el.checked);
     	}
     });
