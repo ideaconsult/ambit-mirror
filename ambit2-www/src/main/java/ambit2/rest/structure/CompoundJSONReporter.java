@@ -85,9 +85,20 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			builder.append("\n\t{\n");
 			builder.append(String.format("\t%s:{\n",jsonCompound.compound.jsonname()));
 			builder.append(String.format("\t\t%s:\"%s\",\n",jsonCompound.URI.jsonname(),uri));
+			//similarity
+			Object similarityValue = null;
+			for (Property p : item.getProperties()) 
+				if ("metric".equals(p.getName())) {
+					similarityValue = item.getProperty(p);
+					break;
+				}
+			builder.append(String.format("\t\tmetric:%s,",similarityValue));
+			
 			builder.append(String.format("\t\t%s:\"\",","name")); //placeholders
 			builder.append(String.format("\t\t%s:\"\",","cas"));
 			builder.append(String.format("\t\t%s:\"\"","einecs"));
+			
+
 			builder.append("\n\t\t},\n");
 			
 			builder.append(String.format("\t\"%s\":{\n",jsonCompound.values.jsonname()));

@@ -74,12 +74,13 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		csvReporter.setSimilarityColumn(Property.getInstance("metric",queryObject==null?"":queryObject.toString(),"http://ambit.sourceforge.net"));
 		return csvReporter;
 	}
+	/*
 	@Override
 	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
 		return new CompoundHTMLReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),
 						DisplayMode.singleitem,null,getTemplate(),getGroupProperties(),d,headless);
 	}
-
+	*/
 	@Override
 	protected Q createQuery(Context context,
 			Request request, Response response) throws ResourceException {

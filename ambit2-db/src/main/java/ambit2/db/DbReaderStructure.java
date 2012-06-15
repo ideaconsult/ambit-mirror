@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.AmbitUser;
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.cache.QueryCachedResultsBoolean;
@@ -84,11 +85,22 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 			retriever.getQuery().setPage(0);
 			retriever.getQuery().setPageSize(1);
 		}
+		//looks like the metric is lost after retrieval!
+		Property metric = null;
+		Object metricValue = null;
+		for (Property property : object.getProperties())
+			if ("metric".equals(property.getName())) {
+				metric = property; 
+				metricValue = object.getProperty(metric);
+				break;
+			}
+
 		IStructureRecord record = retriever.process(object);
 		object.setIdchemical(record.getIdchemical());
 		object.setIdstructure(record.getIdstructure());
 		object.setContent(record.getContent());
 		object.setFormat(record.getFormat());
+		if ((metric !=null) && (metricValue!=null)) object.setProperty(metric,metricValue);
 		return super.prescreen(query, record);
 	}
 	@Override
