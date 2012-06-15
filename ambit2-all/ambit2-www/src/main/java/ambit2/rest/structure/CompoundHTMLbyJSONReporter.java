@@ -78,11 +78,12 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 			} catch (Exception x) {
 				pagesize = maxhits; 
 			}	
-			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This dataset</a> | %s&nbsp; | Download as %s&nbsp;</div>%s",
+			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This dataset</a> | %s&nbsp; | Download as %s&nbsp; | %s</div>%s",
 					uriReporter.getResourceRef(),
 					query.toString(),
 					String.format("<a href='%s' title='%s'>License</a>",getLicenseURI(),getLicenseURI()),
 					downloadLinks(),
+					"<span class='results'>Show structure diagrams&nbsp;<input type='checkbox' id='imagesInTable' title='Show/Hide structure diagrams in table' onchange='toggleImagesInTable(event)' checked/></span>",
 					String.format("<form method='GET' action=''>Page&nbsp;<input name='page' type='text' title='Page' size='10' value='%s'>&nbsp;"+
 							"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'><input type='image' src='%s/images/search.png' value='Refresh'></form>",
 							page==null?"0":page,

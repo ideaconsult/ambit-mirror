@@ -85,24 +85,28 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			builder.append("\n\t{\n");
 			builder.append(String.format("\t%s:{\n",jsonCompound.compound.jsonname()));
 			builder.append(String.format("\t\t%s:\"%s\",\n",jsonCompound.URI.jsonname(),uri));
-			builder.append(String.format("\t\t%s:\"%s\"","type","Compound"));
+			builder.append(String.format("\t\t%s:\"\",","name")); //placeholders
+			builder.append(String.format("\t\t%s:\"\",","cas"));
+			builder.append(String.format("\t\t%s:\"\"","einecs"));
 			builder.append("\n\t\t},\n");
 			
-			builder.append(String.format("\t\"%s\":{",jsonCompound.values.jsonname()));
+			builder.append(String.format("\t\"%s\":{\n",jsonCompound.values.jsonname()));
 			String comma1 = null;
 			for (int j=0; j < header.size(); j++) {
-				if (comma1!=null) builder.append(comma1);
+
 				Property p = header.get(j);
-				//builder.append("\n\t\t{\n");
-				builder.append("\n");
 				Object value = item.getProperty(p);
-				//builder.append(String.format("\t\t\"%s\":\"%s\",\n","feature",reporter.getURI(p)));
-				//String key = "value";
 				String key = reporter.getURI(p);
+				if (key.contains("cdk:Title") || key.contains("cdk:Formula")) continue;
+				if (key.contains("SMARTSProp")) continue;
 				if (value==null) {
-					comma1 = null;
 					continue; //builder.append(String.format("\t\t\"%s\":null",key));
-				} else if (value instanceof Double) 
+				} 
+				if (comma1!=null) {
+					builder.append(comma1);
+					builder.append("\n");
+				}
+				if (value instanceof Double) 
 					builder.append(String.format("\t\t\"%s\":%6.3f",key,(Double)value));
 				else if (value instanceof Integer) 
 					builder.append(String.format("\t\t\"%s\":%d",key,(Integer)value));
