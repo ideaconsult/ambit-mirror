@@ -128,7 +128,16 @@ $(document)
 											"fnRender" : function(o,val) {
 												if (opentox.names.length>0) {
 													var name = opentox.dataEntry[o.iDataRow].values[opentox.names[0]] ;
-													if (name !== undefined) return name;
+													if (name !== undefined) {
+														if (name.length>30) {
+															var id = "r"+o.iDataRow + "c5";
+															return '<a href="#" title="'
+																	+ name
+																	+'" onClick="javascript:toggleDiv(\''+id+'\');">' 
+																	+ name.substring(0,30) + 
+																	'</a><span id="' + id + '"  style="display: none;">'+name.substring(30)+'</span>';
+														} else return name;
+													}
 												}
 												return null;
 											}
@@ -168,7 +177,7 @@ $(document)
 										"bPaginate": true,
 										//"sScrollXInner": "110%",
 										"bScrollCollapse": true,
-										"sDom" : 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>',
+										"sDom" : 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ipz>',
 										"aaData" : opentox.dataEntry,
 										"aoColumnDefs" : columnDefs,
 										"aaSorting" : [ [ 1, 'asc' ] ]
@@ -390,7 +399,7 @@ function identifiers(opentox, columnDefs) {
 							{
 								"sClass" : k + thclass,
 								"aTargets": [ count[4] ],	
-								"sTitle" : value.title + " " + value.units,
+								"sTitle" : value.title.replace("_"," ") + " " + value.units,
 								"mDataProp" : null, //TODO upgrade to 1.9 and use function here
 								"bUseRendered" : "true",
 								"bVisible": visible,
@@ -400,15 +409,25 @@ function identifiers(opentox, columnDefs) {
 										if (opentox.dataEntry[o.iDataRow].values[k] !== undefined) {
 											var cellClass = "";
 											if (isNaN(opentox.dataEntry[o.iDataRow].values[k])) {
-												var val = opentox.dataEntry[o.iDataRow].values[k].toLowerCase();
-												if (val == "no") cellClass= " tag_no";
-												else if (val == "yes") cellClass= " tag_yes";
-												else if (val == "active") cellClass= " tag_active";
-												else if (val == "inactive") cellClass= " tag_inactive";
-												if (opentox.dataEntry[o.iDataRow].values[k].length>50)
-													return '<span class="'+ cellClass +'" title="'+opentox.dataEntry[o.iDataRow].values[k]+'">'+opentox.dataEntry[o.iDataRow].values[k].substring(0,50)+'</span>'; //
-												else
+												if (opentox.dataEntry[o.iDataRow].values[k].length>30) {
+													var id = "r"+o.iDataRow + "c"+ count[4];
+													return '<a href="#" title="'
+															+ opentox.dataEntry[o.iDataRow].values[k]
+															+'" onClick="javascript:toggleDiv(\''+id+'\');">' 
+															+ opentox.dataEntry[o.iDataRow].values[k].substring(0,30) + 
+															'</a><span id="' + id + '"  style="display: none;">'+opentox.dataEntry[o.iDataRow].values[k].substring(30)+'</span>';
+												} else {
+													var val = opentox.dataEntry[o.iDataRow].values[k].toLowerCase();
+													if (val == "no") cellClass= " tag_no";
+													else if (val == "yes") cellClass= " tag_yes";
+													else if (val == "active") cellClass= " tag_active";
+													else if (val == "mutagen") cellClass= " tag_active";
+													else if (val == "carcinogen") cellClass= " tag_active";
+													else if (val == "noncarcinogen") cellClass= " tag_inactive";
+													else if (val == "nonmutagen") cellClass= " tag_inactive";
+													else if (val == "inactive") cellClass= " tag_inactive";													
 													return '<span class="'+ cellClass +'" title="'+opentox.dataEntry[o.iDataRow].values[k]+'">'+opentox.dataEntry[o.iDataRow].values[k]+'</span>'; //
+												}
 											} else
 												return opentox.dataEntry[o.iDataRow].values[k];
 										}
