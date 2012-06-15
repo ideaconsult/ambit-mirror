@@ -78,12 +78,30 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 			} catch (Exception x) {
 				pagesize = maxhits; 
 			}	
-			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This dataset</a> | %s&nbsp; | Download as %s&nbsp; | %s</div>%s",
+			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This dataset</a> | %s&nbsp; | Download as %s&nbsp; | "+
+					"<span class='results'>%s&nbsp; | %s | %s | %s | %s | %s | %s | %s </span></div>%s",
 					uriReporter.getResourceRef(),
 					query.toString(),
 					String.format("<a href='%s' title='%s'>License</a>",getLicenseURI(),getLicenseURI()),
 					downloadLinks(),
-					"<span class='results'>Show structure diagrams&nbsp;<input type='checkbox' id='imagesInTable' title='Show/Hide structure diagrams in table' onchange='toggleImagesInTable(event)' checked/></span>",
+					/*
+						showRegistry,registry
+						showSMILES,smiles
+						showInChI,inchi
+						showProperties,property
+						showEndpoints,endpoint
+						showCalculated,calculated
+						showNames,name
+					 */
+					"<input type='checkbox' id='imagesInTable' title='Show/Hide structure diagrams in table' onchange='toggleImagesInTable(event)' checked/>Structure diagrams&nbsp;",
+					"<input type='checkbox' id='visShowRegistry' title='Show/Hide registry numbers' onchange='showRegistry(event)' checked/>Identifiers&nbsp;",
+					"<input type='checkbox' id='visNames' title='Show/Hide chemical names' onchange='showNames(event)' checked/>Names&nbsp;",
+					"<input type='checkbox' id='visSMILES' title='Show/Hide SMILES' onchange='showSMILES(event)' />SMILES&nbsp;",
+					"<input type='checkbox' id='visInChI' title='Show/Hide InChI' onchange='showInChI(event)'/>InChI&nbsp;",
+					"<input type='checkbox' id='visEndpoints' title='Show/Hide endpoint values' onchange='showEndpoints(event)' checked/>Endpoints&nbsp;",
+					"<input type='checkbox' id='visCalculated' title='Show/Hide calculated values' onchange='showCalculated(event)' checked/>Calculated&nbsp;",
+					"<input type='checkbox' id='visProperties' title='Show/Hide all properties' onchange='showProperties(event)' />Properties&nbsp;",
+					
 					String.format("<form method='GET' action=''>Page&nbsp;<input name='page' type='text' title='Page' size='10' value='%s'>&nbsp;"+
 							"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'><input type='image' src='%s/images/search.png' value='Refresh'></form>",
 							page==null?"0":page,

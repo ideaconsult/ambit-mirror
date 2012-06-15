@@ -384,3 +384,22 @@ TD.results
 	COLOR: #99CC00;
 	FONT-SIZE: 9pt;
 }
+
+.tag_no {
+	COLOR: blue;
+	font-weight: bold;
+}
+
+.tag_yes {
+	font-weight: bold;
+}
+
+.tag_active {
+	COLOR: red;
+	font-weight: bold;
+}
+
+.tag_inactive {
+	COLOR: green;
+	font-weight: bold;
+}
