@@ -31,9 +31,13 @@ $(document)
 									{
 										'bProcessing' : true,
 										'bJQueryUI' : true,
-										'bPaginate' : true,
 										'bAutoWidth': true,
 										"bSaveState": true,    // Save viewstate in cookie
+										"sCookiePrefix":"OTDATA_",
+										"sScrollX": "100%",
+										"bPaginate": true,
+										//"sScrollXInner": "110%",
+										"bScrollCollapse": true,
 										"sDom" : 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>',
 										"aaData" : opentox.dataEntry,
 										"aoColumns" : [
@@ -166,7 +170,12 @@ $(document)
 									
 								       $('#'+ id).dataTable({
 								    		'bJQueryUI': false, 
-								    		'bPaginate': true,
+								    		'bPaginate': false,
+								    		'bAutoWidth': true,
+											"sScrollY": "200px",
+											//"sScrollXInner": "110%",
+											"bScrollCollapse": true,
+											"sWidth": "90%",
 								    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"lfr>t<"fg-toolbar ui-helper-clearfix"ip>',
 								    		"aaSorting" : [ [ 0, 'desc' ] ],
 								    		fnDrawCallback: function(){
@@ -186,7 +195,8 @@ $(document)
 								    			  else {
 								    			    $('.dataTables_length', wrapper).css('visibility', 'visible');
 								    			  }
-								    		}							    		
+								    		}		
+				    		
 								    	});								       
 								}
 							});
@@ -270,8 +280,8 @@ $(document)
 								sOut += '<td title="Same as the OpenTox ontology entry defined by '+sameAs+'">';
 								if (sameAs.indexOf("http")>=0) {
 									var hash = sameAs.lastIndexOf("#");
-									if (hash>0) sOut += sameAs.substring(hash+1).replace("_"," ");
-									else sOut += sameAs;
+									if (hash>0) sOut += sameAs.substring(hash+1).replace("_"," ").substring(0,30);
+									else sOut += sameAs.substring(0,30);
 								}
 								sOut += '</td>';
 								//calculated
