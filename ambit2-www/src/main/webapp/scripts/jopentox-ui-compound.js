@@ -8,8 +8,11 @@
 
 
 var opentox = {
+	"URI": null,
 	"dataEntry" : [],
-	"feature":[]
+	"feature":{},
+	"imageInTable": true,
+	"oTable":null
 };
 
 /**
@@ -18,107 +21,147 @@ var opentox = {
 $(document)
 		.ready(
 				function() {
+					//$.fn.dataTableExt.sErrMode = 'throw';
 					identifiers(opentox);
+					//images
+					opentox["imageInTable"] = true;
 					/* Initialize */
-					oTable = $(".compoundtable")
+					opentox["oTable"] = $(".compoundtable")
 							.dataTable(
 									{
 										'bProcessing' : true,
 										'bJQueryUI' : true,
 										'bPaginate' : true,
+										'bAutoWidth': true,
+										"bSaveState": true,    // Save viewstate in cookie
 										"sDom" : 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>',
 										"aaData" : opentox.dataEntry,
 										"aoColumns" : [
-												{
+												{ //0
 													"sClass" : "center",
 													"bSortable" : false,
 													"mDataProp" : null,
-													sWidth : "1%",
+													sWidth : "16px",
 													"bUseRendered" : "true",
 													"fnRender" : function(o,
 															val) {
 														return "<img src='/ambit2/images/zoom_in.png'>";
 													}
 												},
-												{
+												{ //1
 													"sClass" : "left",
 													"bSortable" : true,
 													"mDataProp" : null,
-													sWidth : "1%",
+													sWidth : "24px",
 													"bUseRendered" : "true",
 													"fnRender" : function(o,
 															val) {
 														return (o.iDataRow+1)+"." ;
 													}
 												},	
-												{
+												{ //2
+													"sClass" : "left",
+													"bSortable" : true,
+													"bSearchable" : true,
+													"mDataProp" : "compound.URI",
+													"bVisible": opentox.imageInTable,
+													sWidth : "150px",
+													
+													"bUseRendered" : false,
+													"fnRender" : function(o,
+															val) {
+														return '<a href="'+val+'" title="'+val+'"><img src="'+val+'?media=image/png&w=150&h=150"></a>';
+													}
+												},													
+												{ //3
 													"sTitle" : "CAS",
-													"mDataProp" : null,
-													sWidth : "5%",
+													"mDataProp" : "compound.cas",
 													"bUseRendered" : "true",
 													"bSortable" : true,
+													"bSearchable" : true,
 													"bVisible": opentox.cas.length>0,
 													"fnRender" : function(o,val) {
-														if (opentox.cas.length>0)
-															return opentox.dataEntry[o.iDataRow].values[opentox.cas[0]] ;
-														else return null;
+														if (opentox.cas.length>0) {
+															var name = opentox.dataEntry[o.iDataRow].values[opentox.cas[0]] ;
+															if (name !== undefined) return name;
+														}
+														return null;
 													}
 												},	
-												{
+												{//4
 													"sTitle" : "EINECS",
-													"mDataProp" : null,
-													sWidth : "5%",
+													"mDataProp" :  "compound.einecs",
 													"bUseRendered" : "true",
 													"bVisible": opentox.einecs.length>0,
 													"bSortable" : true,
+													"bSearchable" : true,
 													"fnRender" : function(o,val) {
-														if (opentox.einecs.length>0)
-															return opentox.dataEntry[o.iDataRow].values[opentox.einecs[0]] ;
-														else return null;
+														if (opentox.einecs.length>0) {
+															var name = opentox.dataEntry[o.iDataRow].values[opentox.einecs[0]] ;
+															if (name !== undefined) return name;
+														}
+														return null;
 													}
 												},													
-												{
+												{//5
 													"sTitle" : "Name",
-													"mDataProp" : "compound.type",
-													sWidth : "50%",
+													"mDataProp" : "compound.name",
 													"bUseRendered" : "true",
 													"bVisible": opentox.names.length>0,
 													"bSortable" : true,
+													"bSearchable" : true,
 													"fnRender" : function(o,val) {
-														if (opentox.names.length>0)
-															return opentox.dataEntry[o.iDataRow].values[opentox.names[0]] ;
-														else return null;
+														if (opentox.names.length>0) {
+															var name = opentox.dataEntry[o.iDataRow].values[opentox.names[0]] ;
+															if (name !== undefined) return name;
+														}
+														return null;
 													}
 												},
-												{
+												{//6
 													"sTitle" : "REACH registration date",
 													"mDataProp" : null,
-													sWidth : "50%",
 													"bUseRendered" : "false",
 													"bVisible": opentox.reachdate.length>0,
 													"bSortable" : true,
 													"fnRender" : function(o,val) {
-														if (opentox.reachdate.length>0)
-															return opentox.dataEntry[o.iDataRow].values[opentox.reachdate[0]] ;
-														else return null;
+														if (opentox.reachdate.length>0) {
+															var name = opentox.dataEntry[o.iDataRow].values[opentox.reachdate[0]] ;
+															if (name !== undefined) return name;
+														}
+														return null;
 													}
-												}												
+												},
+												{//7
+													"sTitle" : "Property",
+													"mDataProp" : null,
+													"bUseRendered" : "false",
+													"bVisible": false,
+													"bSortable" : true,
+													"fnRender" : function(o,val) {
+														if (opentox.reachdate.length>0) {
+															var name = opentox.dataEntry[o.iDataRow].values[val] ;
+															if (name !== undefined) return name;
+														}
+														return null;
+													}
+												}													
 
 										],
 										"aaSorting" : [ [ 1, 'asc' ] ]
 									});
-
+					
 					$('.compoundtable tbody td img').live(
 							'click',
 							function() {
 								var nTr = $(this).parents('tr')[0];
-								if (oTable.fnIsOpen(nTr)) {
+								if (opentox.oTable.fnIsOpen(nTr)) {
 									this.src = "/ambit2/images/zoom_in.png";
-									oTable.fnClose(nTr);
+									opentox.oTable.fnClose(nTr);
 								} else {
 									this.src = "/ambit2/images/zoom_out.png";
 									var id = 'values'+getID();
-									oTable.fnOpen(nTr, fnFormatDetails(nTr,id),
+									opentox.oTable.fnOpen(nTr, fnFormatDetails(nTr,id),
 											'details');
 									
 								       $('#'+ id).dataTable({
@@ -151,7 +194,7 @@ $(document)
 				       
 					/* Formating function for row details */
 					function fnFormatDetails(nTr, id) {
-						var dataEntry = oTable.fnGetData(nTr);
+						var dataEntry = opentox.oTable.fnGetData(nTr);
 						var sOut = '<div class="ui-widget" style="margin-top: 5x;" >';
 						sOut += '<div style="min-height:250px">';
 						
@@ -159,9 +202,10 @@ $(document)
 
 						//structure
 						sOut += '<td  valign="top" style="min-height:250px;max-width:260px">';
+						sOut += '<a href="'+dataEntry.compound.URI+'">';
 						sOut += '<img class="ui-widget-content ui-corner-top ui-corner-bottom" style="min-height:250px;min-width:250px" src="' 
 									+ dataEntry.compound.URI + '?media=image/png">';
-						sOut += '<br>';
+						sOut += '</a><br>';
 						
 						var identifier = false;
 						//names
@@ -196,6 +240,7 @@ $(document)
 						        	}
 						        };   
 						    });
+					    
 					    
 						//reach
 					    if (!identifier)
@@ -301,6 +346,13 @@ function identifiers(opentox) {
 	        if (count[0]>0 && count[1]>0 && count[2]>0 && count[3]>0) 
 	        	return;
 	    });
+}
+
+function toggleImagesInTable(e) {
+    var el = e.srcElement;
+    opentox["imageInTable"] = el.checked;
+   	opentox.oTable.fnSetColumnVis( 2, el.checked);
+
 }
 /**
  * HTML decode
