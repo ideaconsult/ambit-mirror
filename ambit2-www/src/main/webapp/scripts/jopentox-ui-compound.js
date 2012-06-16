@@ -421,8 +421,12 @@ function identifiers(opentox, columnDefs) {
 													var val = opentox.dataEntry[o.iDataRow].values[k].toLowerCase();
 													if (val == "no") cellClass= " tag_no";
 													else if (val == "yes") cellClass= " tag_yes";
+													else if (val == "a") cellClass= " tag_green";
 													else if (val == "active") cellClass= " tag_active";
 													else if (val == "mutagen") cellClass= " tag_active";
+													else if (val == "tumour") cellClass= " tag_active";
+													else if (val.indexOf("increased")>=0) cellClass= " tag_yes";
+													else if (val.indexOf("decreased")>=0) cellClass= " tag_no";
 													else if (val == "carcinogen") cellClass= " tag_active";
 													else if (val == "noncarcinogen") cellClass= " tag_inactive";
 													else if (val == "nonmutagen") cellClass= " tag_inactive";
