@@ -15,7 +15,6 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
-
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -26,7 +25,6 @@ import ambit2.db.search.structure.QueryDatasetByID;
 import ambit2.db.search.structure.QuerySMARTS;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.descriptors.FunctionalGroup;
-import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
@@ -73,8 +71,10 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 		ArrayList<String> s = new ArrayList<String>();
 		for (String key : keys) {
 			if (key==null)continue;
-			String[] k = key.split(" ");
-			for (String kk:k) s.add(kk);
+			String[] k = key.replace("\""," ").split(" ");
+			for (String kk:k) 
+				if (!"".equals(kk.trim())) 
+					s.add(kk);
 		}
 		if (s.size()==0) return null;
 		keys = s.toArray(keys);
