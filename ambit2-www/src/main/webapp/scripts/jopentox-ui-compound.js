@@ -52,7 +52,7 @@ $(document)
 											"bUseRendered" : "true",
 											"fnRender" : function(o,
 													val) {
-												return "<img src='/ambit2/images/zoom_in.png' title='Click to show compound details'>";
+												return "<img src='/ambit2/images/zoom_in.png' alt='zoom in' title='Click to show compound details'>";
 											},
 											
 										},
@@ -190,9 +190,11 @@ $(document)
 								var nTr = $(this).parents('tr')[0];
 								if (opentox.oTable.fnIsOpen(nTr)) {
 									this.src = "/ambit2/images/zoom_in.png";
+									this.alt = "Zoom in";
 									this.title='Click to show compound details';
 									opentox.oTable.fnClose(nTr);
 								} else {
+								    this.alt = "Zoom out";
 									this.src = "/ambit2/images/zoom_out.png";
 									this.title='Click to close compound details panel';
 									var id = 'values'+getID();
