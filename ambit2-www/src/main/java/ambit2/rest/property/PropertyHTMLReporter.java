@@ -116,9 +116,11 @@ public class PropertyHTMLReporter extends QueryHTMLReporter<Property, IQueryRetr
 						item.getLabel()));
 			output.write("</td>");
 			output.write("<td>");			
+
 			String hasSource = PropertyRDFReporter.hasSourceURI(item, uriReporter);
+			int index = hasSource.lastIndexOf("/");
 			output.write(String.format("<a href='%s'>%s</a>",
-					hasSource,hasSource
+					hasSource,index>0?hasSource.substring(index):hasSource
 					));	
 			output.write("</td>");
 			output.write("<td>");			
