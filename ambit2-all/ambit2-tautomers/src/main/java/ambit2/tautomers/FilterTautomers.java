@@ -462,6 +462,7 @@ public class FilterTautomers
 	{
 		if (ac == null)
 			return;
+		
 		clearAromaticityFlags(ac);
 
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
@@ -469,7 +470,21 @@ public class FilterTautomers
 		adder.addImplicitHydrogens(ac);
 		//AtomContainerManipulator.convertImplicitToExplicitHydrogens(ac);
 
-		CDKHueckelAromaticityDetector.detectAromaticity(ac);		
+		CDKHueckelAromaticityDetector.detectAromaticity(ac);
+		
+		
+		//Fix rank according to the aromaticity info
+		double aromRank = RuleManager.getAdditionalAromaticityRank(ac);		
+		if (aromRank != 0.0)
+		{
+			Double rank = (Double)ac.getProperty("TAUTOMER_RANK");
+			if (rank == null)
+				return;
+			double newRank = rank.doubleValue();
+			newRank += aromRank;
+			ac.setProperty("TAUTOMER_RANK", new Double(newRank));
+		}
+		
 	}
 	
 	public static int getValencySum(IAtomContainer ac)
