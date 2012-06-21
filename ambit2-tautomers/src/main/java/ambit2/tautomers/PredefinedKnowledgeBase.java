@@ -78,4 +78,6 @@ public class PredefinedKnowledgeBase
 		"$$NAME=nitrosamine/diazohydroxide $$STATE_ENERGY=  0, 0.639  $$INFO= O=NN",
 	};
 	
+	public static final double aromaticAtomEnergy = -0.1;
+	
 }

@@ -992,6 +992,17 @@ public class RuleManager
 		
 		return (e_rank);
 	}
+	
+	public static double getAdditionalAromaticityRank(IAtomContainer ac)
+	{
+		double aromRank = 0.0;
+		
+		for (int i=0; i < ac.getAtomCount(); i++)
+			if (ac.getAtom(i).getFlag(CDKConstants.ISAROMATIC))
+				aromRank += PredefinedKnowledgeBase.aromaticAtomEnergy;
+		
+		return aromRank;
+	}
 		
 	
 }

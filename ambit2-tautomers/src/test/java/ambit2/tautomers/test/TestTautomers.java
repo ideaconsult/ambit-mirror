@@ -104,11 +104,11 @@ public class TestTautomers
 		
 		//tt.visualTest("O=C1N=C(N=CC1)N");
 		
-		//tt.visualTest("C1=CN=C(N)NC1(=O)");
+		tt.visualTest("C1=CN=C(N)NC1(=O)");
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
 		//tt.visualTest("O=CCCCC=N");
-		tt.visualTest("O=C(N)C");
+		//tt.visualTest("O=C(N)C");
 		
 		
 		
