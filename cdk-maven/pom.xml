@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-all</artifactId>
-<version>1.4.10</version>
+<version>1.4.11</version>
   <packaging>pom</packaging>
   <name>cdk-maven</name>
    <url>http://cdk.sourceforge.net</url>
@@ -50,7 +50,9 @@
     <module>cdk-ionpot</module>
     <module>cdk-iordf</module>
     <module>cdk-isomorphism</module>
+<!--
     <module>cdk-jchempaint</module>
+-->
     <module>cdk-libiocml</module>
     <module>cdk-libiomd</module>
     <module>cdk-log4j</module>
