@@ -51,7 +51,7 @@ import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -171,11 +171,13 @@ public class SmilesTest {
 		IMolecule mol = parser.parseSmiles("c1cccccc1");
 		//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 		//for (IAtom atom : mol.atoms())	Assert.assertTrue(atom.getFlag(CDKConstants.HYBRIDIZATION_SP2));		
-		DeduceBondSystemTool d = new DeduceBondSystemTool();
-		System.out.println(d.isOK(mol));
-
+		FixBondOrdersTool d = new FixBondOrdersTool();
+		mol = d.kekuliseAromaticRings(mol);
+		int doubleBonds = 0;
 		for (IBond bond: mol.bonds())
-			System.out.println(bond.getOrder());
+			if (IBond.Order.DOUBLE.equals(bond.getOrder())) doubleBonds++;
+		
+		Assert.assertTrue(doubleBonds>0);
 	}	
 	
 	@Test
@@ -185,10 +187,12 @@ public class SmilesTest {
 		for (IAtom atom : mol.atoms())
 			Assert.assertTrue(atom.getFlag(CDKConstants.ISAROMATIC));
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-		DeduceBondSystemTool d = new DeduceBondSystemTool();
-		d.fixAromaticBondOrders(mol);
+		FixBondOrdersTool d = new FixBondOrdersTool();
+		mol = d.kekuliseAromaticRings(mol);
+		int doubleBonds = 0;
 		for (IBond bond: mol.bonds())
-			System.out.println(bond.getOrder());		
+			if (IBond.Order.DOUBLE.equals(bond.getOrder())) doubleBonds++;
+		Assert.assertTrue(doubleBonds>0);
 	}	
 	
 	
@@ -227,10 +231,10 @@ public class SmilesTest {
 
                 //AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 //fails with Cannot percieve atom type for the 17th atom: N
-                DeduceBondSystemTool d = new DeduceBondSystemTool();
+                FixBondOrdersTool d = new FixBondOrdersTool();
                 
                 //d.setTimeout(60*60*1000); //3 min
-                d.fixAromaticBondOrders(mol);
+                d.kekuliseAromaticRings(mol);
                 for (IBond bond: mol.bonds())
                         System.out.println(bond.getOrder());
         } catch (Exception x) {
@@ -301,9 +305,9 @@ public class SmilesTest {
 				File file = new File("kekuletest.png");
 				ImageIO.write(image,"png",file);				
 				*/
-				DeduceBondSystemTool d = new DeduceBondSystemTool();
+				FixBondOrdersTool d = new FixBondOrdersTool();
 				//d.setTimeout(100000000*1000); //100 sec
-				d.fixAromaticBondOrders(mol);
+				d.kekuliseAromaticRings(mol);
 				for (IBond bond: mol.bonds())
 					System.out.println(bond.getOrder());
 			}

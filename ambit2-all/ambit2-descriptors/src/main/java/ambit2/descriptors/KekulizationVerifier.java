@@ -3,11 +3,11 @@ package ambit2.descriptors;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 
 public class KekulizationVerifier extends AbstractKekulizationVerifier {
 	
-	protected DeduceBondSystemTool typer = new DeduceBondSystemTool();
+	protected FixBondOrdersTool typer = new FixBondOrdersTool();
 	
 	public KekulizationVerifier() {
 		super();
@@ -15,11 +15,11 @@ public class KekulizationVerifier extends AbstractKekulizationVerifier {
 	}
 	@Override
 	public String getTyperClass() {
-		return DeduceBondSystemTool.class.getName();
+		return FixBondOrdersTool.class.getName();
 	}
 	@Override
 	protected IAtomContainer transform2Kekule(IAtomContainer mol) throws CDKException {
-		return typer.fixAromaticBondOrders((IMolecule)mol);
+		return typer.kekuliseAromaticRings((IMolecule)mol);
 	}
 
 }
