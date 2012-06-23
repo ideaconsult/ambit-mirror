@@ -129,7 +129,8 @@ public class RuleInstance implements IRuleInstance
 				{	
 					//handling explicit H atom
 					IBond b = molecule.getBond(curAt,explicitH);
-					b.setAtoms(new IAtom[]{newAt, explicitH});
+					if (b!=null)
+						b.setAtoms(new IAtom[]{newAt, explicitH});
 				}
 			}
 			else

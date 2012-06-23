@@ -95,7 +95,7 @@ public class Rule
 			IAtom atom = amap.get(pos-1);  //position in the rule is 1-base indexed
 			
 			//Check for implicit hydrogens
-			if (atom.getImplicitHydrogenCount().intValue() > 0)
+			if ((atom.getImplicitHydrogenCount()!=null) && atom.getImplicitHydrogenCount().intValue() > 0)
 				return (TautomerConst.IHA_INDEX);
 			
 			//Check for explicit hydrogens
