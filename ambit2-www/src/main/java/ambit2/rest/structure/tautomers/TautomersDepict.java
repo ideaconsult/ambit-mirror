@@ -7,8 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tautomers.InChITautomerGenerator;
@@ -55,17 +59,39 @@ public class TautomersDepict extends AbstractDepict {
 			smiles = smiles.trim();
 			mol = parser.parseSmiles(smiles);
 			
+			boolean aromatic = false;
+			if (mol!=null) 
+				for (IAtom atom:mol.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) {
+					aromatic=true;
+					break;
+				}
+			if (aromatic) try {
+				FixBondOrdersTool fbt = new FixBondOrdersTool();
+				mol = fbt.kekuliseAromaticRings((IMolecule)mol);
+				if (mol!=null) 
+					for (IAtom atom:mol.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) {
+						atom.setFlag(CDKConstants.ISAROMATIC,false);
+					}
+			} catch (Exception x) {
+				//keep old mol
+			}
 
 		} catch (Exception x) {
         	Name2StructureProcessor processor = new Name2StructureProcessor();
         	try {
 				mol = processor.process(smiles);
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+				//CDKHydrogenAdder.getInstance(mol.getBuilder()).addImplicitHydrogens(mol);
+				AtomContainerManipulator.removeHydrogens(mol);
+				SmilesGenerator g = new SmilesGenerator(false);
+				System.out.println(g.createSMILES(mol));
+				
         	} catch (Exception xx) {
         		mol = null;
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
         	}
 		}
+
 		return mol;
 	}
 	
@@ -248,7 +274,7 @@ public class TautomersDepict extends AbstractDepict {
 			StringBuilder b = new StringBuilder();
 		 try {
 			 List<IAtomContainer> resultTautomers = itg.getTautomers(mol);
-			 SmilesGenerator gen = new SmilesGenerator(true);
+			 SmilesGenerator gen = new SmilesGenerator(false);
 				for (int i = 0; i < resultTautomers.size(); i++) {		
 					if (((i+1) %3 ) == 0) b.append("<tr>");
 					b.append("<td>");

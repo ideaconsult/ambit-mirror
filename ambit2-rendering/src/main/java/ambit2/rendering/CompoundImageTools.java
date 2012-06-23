@@ -56,7 +56,7 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.SmilesValencyChecker;
@@ -84,7 +84,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		kekule {
 			@Override
 			public String toString() {
-				return DeduceBondSystemTool.class.getName();
+				return FixBondOrdersTool.class.getName();
 			}			
 			@Override
 			public String getDescription() {
@@ -122,16 +122,6 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 				return String.format("SMILES parser with %s %s",SilentChemObjectBuilder.class.getName(),"only.\n Always shows aromatic ring circles.");
 			}			
 		},
-		kekuleold {
-			@Override
-			public String toString() {
-				return  "DeduceBondSystemTool (CDK < 1.4.8)";
-			}				
-			@Override
-			public String getDescription() {
-				return String.format("SMILES parser with %s\n%s",SilentChemObjectBuilder.class.getName(),toString());
-			}			
-		},		
 		any {
 			@Override
 			public String getURIParameter() {
@@ -375,23 +365,13 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    		rings = true;
 	    		break;
 	    	}
-	    	case kekuleold : {
-	    		rings = false;
-	    		try {
-	    			ambit2.core.smiles.DeduceBondSystemTool dbt = new ambit2.core.smiles.DeduceBondSystemTool();
-					dbt.setTimeout(100);
-	    			molecule = dbt.fixAromaticBondOrders((IMolecule) molecule);
-	    		} catch (Exception x) {
-	    			x.printStackTrace();
-	    		}
-	    		break;
-	    	}    	
+	 
 	    	case kekule : {
 	    		rings = false;
 	    		try {
 	    			//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
-	    			DeduceBondSystemTool dbt = new DeduceBondSystemTool();
-	    			molecule = dbt.fixAromaticBondOrders((IMolecule) molecule);
+	    			FixBondOrdersTool dbt = new FixBondOrdersTool();
+	    			molecule = dbt.kekuliseAromaticRings((IMolecule) molecule);
 	    		} catch (Exception x) {
 	    			x.printStackTrace();
 	    		}

@@ -7,6 +7,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.config.Preferences;
@@ -17,8 +18,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	
 	protected OpenBabelShell babel = null;
 	protected SmilesParser cdkParser = null;
-	protected DeduceBondSystemTool  dbt;
-	//protected org.openscience.cdk.smiles.DeduceBondSystemTool dbt;
+	protected FixBondOrdersTool  dbt;
 	public enum SMILES_PARSER {
 	    CDK, OPENBABEL 
 	}
@@ -32,8 +32,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	protected SmilesParserWrapper(SMILES_PARSER mode) {
 		super();
 		setParser(mode);
-		//dbt = new org.openscience.cdk.smiles.DeduceBondSystemTool();
-		dbt = new DeduceBondSystemTool();
+		dbt = new FixBondOrdersTool();
 		//this is major source of memory leaks ... should be done in a different way
 		//Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
 	}
@@ -70,7 +69,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 	                }
 	                */				
 				try {
-					return dbt.fixAromaticBondOrders(mol);
+					return dbt.kekuliseAromaticRings(mol);
 				} catch (CDKException xx) {
 					xx.printStackTrace();
 					return mol;
@@ -84,7 +83,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 			if (cdkParser == null) cdkParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 			IMolecule mol = cdkParser.parseSmiles(smiles);
 			try {
-				return dbt.fixAromaticBondOrders(mol);
+				return dbt.kekuliseAromaticRings(mol);
 				//return mol;
 			} catch (Exception xx) {
 				xx.printStackTrace();
