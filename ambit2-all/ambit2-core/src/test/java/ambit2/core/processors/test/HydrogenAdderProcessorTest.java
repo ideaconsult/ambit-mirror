@@ -54,7 +54,10 @@ public class HydrogenAdderProcessorTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	//CDK bug submitted
+	/**
+	 * CDK bug and a fix https://sourceforge.net/tracker/index.php?func=detail&aid=2983334&group_id=20024&atid=120024#
+	 * @throws Exception
+	 */
 	@Test
 	public void testImplicitH_processorFormula() throws Exception {
 		HydrogenAdderProcessor p = new HydrogenAdderProcessor();

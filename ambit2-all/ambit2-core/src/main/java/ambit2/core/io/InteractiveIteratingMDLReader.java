@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
@@ -42,9 +43,9 @@ public class InteractiveIteratingMDLReader extends MyIteratingMDLReader {
     /* (non-Javadoc)
      * @see org.openscience.cdk.io.iterator.IteratingMDLReader#next()
      */
-    public Object next() {
+    public IAtomContainer next() {
         Object o =  super.next();
-        if (o instanceof IChemObject) {
+        if (o instanceof IAtomContainer) {
             
             Map properties = ((IChemObject)o).getProperties();
             if (properties.size()>0) {
@@ -56,8 +57,9 @@ public class InteractiveIteratingMDLReader extends MyIteratingMDLReader {
 		        }
             	fireIOSettingQuestion(new StringIOSetting("",IOSetting.MEDIUM,Property.IO_QUESTION.IO_STOP.toString(),""));	            
             }
+            return (IAtomContainer)o;
         }
-        return o;
+        return null;
     }
 
     public String toString() {

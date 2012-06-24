@@ -106,7 +106,7 @@ public class TestCML
             
     }       
     /**
-     * CDK bug closed, atom aromatic flag still not survice roundtrip
+     * CDK bug closed, atom aromatic flag still not survive roundtrip
      * https://sourceforge.net/tracker/?func=detail&aid=1709130&group_id=20024&atid=120024
      * @throws Exception
      */
