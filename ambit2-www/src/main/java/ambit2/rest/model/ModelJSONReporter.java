@@ -75,7 +75,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					jsonModel.algorithm.jsonname(),model.getAlgorithm()==null?"":model.getAlgorithm(),
 					jsonModel.algFormat.jsonname(),algFormat.name(),
 					String.format("/ambit2/%s",model.getAlgorithm().indexOf("org.openscience.cdk")>=0?"images/cdk.png":
-									model.getAlgorithm().indexOf("toxtree")>=0?"images/toxtree.gif":
+									model.getAlgorithm().indexOf("toxtree")>=0?"images/toxtree.png":
 									algFormat.getImage()),
 					
 					jsonModel.trainingDataset.jsonname(),model.getTrainingInstances()==null?"":model.getTrainingInstances(),
