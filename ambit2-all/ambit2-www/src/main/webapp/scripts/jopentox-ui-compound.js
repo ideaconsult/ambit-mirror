@@ -378,7 +378,9 @@ function identifiers(opentox, columnDefs) {
 	var count = [0,0,0,0,6];
 	
     $.each(opentox.feature, function(k, value) {
-	        if (value.sameAs == "http://www.opentox.org/api/1.1#ChemicalName") {
+    		if (value.sameAs == "http://www.opentox.org/api/1.1#IUPACName") {
+    			if (opentox.feature[k]) { opentox.names.push(k); count[0]++; columnDefs[5].bVisible=true;}
+    		} else if (value.sameAs == "http://www.opentox.org/api/1.1#ChemicalName") {
 	        	if (opentox.feature[k]) { opentox.names.push(k); count[0]++; columnDefs[5].bVisible=true;}
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#CASRN") { 
 	        	if (opentox.feature[k]) { opentox.cas.push(k); count[1]++;  columnDefs[3].bVisible=true; }
