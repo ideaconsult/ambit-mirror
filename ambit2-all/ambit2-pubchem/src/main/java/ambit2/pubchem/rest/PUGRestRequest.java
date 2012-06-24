@@ -114,6 +114,7 @@ public abstract class PUGRestRequest<R> extends AbstractSearchRequest<R> {
 
 	
 	protected String getOptions() { return "";}
+	
 	public R process(String query) throws AmbitException {
 		try {
 

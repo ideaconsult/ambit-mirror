@@ -38,13 +38,13 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.dataset.ReadDataset;
 import ambit2.namestructure.Name2StructureFinder;
-import ambit2.pubchem.EntrezSearchProcessor;
-import ambit2.pubchem.PubchemFinder;
+import ambit2.pubchem.rest.PUGRestRequest;
+import ambit2.pubchem.rest.PUGRestRequest.COMPOUND_DOMAIN_INPUT;
+import ambit2.pubchem.rest.PubChemRestFinder;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
 import ambit2.rest.rdf.RDFPropertyIterator;
-import ambit2.rest.task.TaskResult;
 import ambit2.search.AllSourcesFinder;
 import ambit2.search.chemidplus.ChemIdPlusRequest;
 import ambit2.search.csls.CSLSStringRequest;
@@ -136,11 +136,30 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 		LiteratureEntry le;
 
 		switch (searchSite) {
+		case PUBCHEM_CID: {
+			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.cid));
+			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
+			break;
+		}
+		case PUBCHEM_NAME: {
+			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.name));
+			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
+			break;
+			
+		}
+		case PUBCHEM_INCHIKEY: {
+			p.add(new PubChemRestFinder(profile,mode,COMPOUND_DOMAIN_INPUT.inchikey));
+			le =  new LiteratureEntry(PUGRestRequest.PUGREST_URL,PUGRestRequest.PUGREST_COMPOUND_URL);
+			break;
+			
+		}
+		/*
 		case PUBCHEM: {
 			p.add(new PubchemFinder(profile,mode));
 			le =  new LiteratureEntry("PubChem",EntrezSearchProcessor.entrezURL);
 			break;
 		}
+		*/
 		case OPENTOX: {
 			request = new OpenToxRequest(searchSite.getURI());
 			p.add(new AllSourcesFinder(profile,request,mode));
