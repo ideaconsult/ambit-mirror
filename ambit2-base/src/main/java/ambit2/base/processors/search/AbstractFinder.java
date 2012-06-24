@@ -76,16 +76,36 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 				return "http://chem.sis.nlm.nih.gov/chemidplus";
 			}
 		},
-		PUBCHEM {
+		PUBCHEM_NAME {
 			@Override
 			public String getTitle() {
-				return "PubChem";
+				return "Search PubChem by name";
 			}
 			@Override
 			public String getURI() {
-				return "http://www.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&maxret=1&term=";
+				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/%s/SDF";
 			}
 		},
+		PUBCHEM_CID {
+			@Override
+			public String getTitle() {
+				return "Search PubChem by CID";
+			}
+			@Override
+			public String getURI() {
+				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/%s/SDF";
+			}
+		},		
+		PUBCHEM_INCHIKEY {
+			@Override
+			public String getTitle() {
+				return "Search PubChem by InChIKey";
+			}
+			@Override
+			public String getURI() {
+				return "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/inchikey/%s/SDF";
+			}
+		},		
 		NAME2STRUCTURE {
 			@Override
 			public String getTitle() {
@@ -184,6 +204,11 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 		if (result instanceof IStructureRecord) return transformResult(record, (IStructureRecord) result);
 		else return transformResult(record, result.toString());
 	}
+	
+	protected Object retrieveValue(IStructureRecord target, Property key) throws AmbitException {
+		 return target.getProperty(key);
+	}
+	
 	@Override
 	public IStructureRecord process(IStructureRecord target) throws AmbitException {
 		try {
@@ -196,7 +221,7 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			while (keys.hasNext()) {
 				Property key = keys.next();
 				try {
-					value = target.getProperty(key);
+					value = retrieveValue(target, key);
 					if ((value==null) || "".equals(value.toString().trim())) continue;
 					RESULT content = query(value.toString());
 					if (content!= null) { 
