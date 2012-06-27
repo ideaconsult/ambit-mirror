@@ -188,7 +188,6 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.TEXT_YAML,
-				MediaType.APPLICATION_JSON,
 				ChemicalMediaType.WEKA_ARFF,
 				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_CSV,
