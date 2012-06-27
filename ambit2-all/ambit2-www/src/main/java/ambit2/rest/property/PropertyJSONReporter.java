@@ -34,6 +34,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 		sameAs,
 		isModelPredictionFeature,
 		source,
+		order,
 		creator,
 		annotation
 		;
@@ -107,6 +108,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					"\n\t%s:\"%s\"," + //sameAs
 					"\n\t%s:\"%s\"," + //isModelPredictionFeature
 					"\n\t%s:\"%s\"," + //creator
+					"\n\t%s:%d," + //order
 					"\n\t%s:{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					uri,
@@ -117,6 +119,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					jsonFeature.sameAs.jsonname(),uriSameAs==null?null:uriSameAs.replace("\"","'").replace("\n"," "),
 					jsonFeature.isModelPredictionFeature.jsonname(),isModelPredictionFeature,
 					jsonFeature.creator.jsonname(),feature.getReference().getURL(),
+					jsonFeature.order.jsonname(),feature.getOrder(),
 					jsonFeature.source.jsonname(),
 						uriSource==null?null:uriSource.replace("\"","'"),
 						typeSource==null?null:typeSource.replace("\"","'").replace("\n"," ")

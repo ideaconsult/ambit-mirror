@@ -148,6 +148,7 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 				p.setName(rs.getString(2));
 				//!!!!!!!!!!!!!!!!!! update the rest 
 			}
+			try { p.setOrder(rs.getInt("order"));} catch (Exception x) {}
 			p.setId(rs.getInt(1));
 			p.setUnits(rs.getString(3));
 			p.setLabel(rs.getString(7));
