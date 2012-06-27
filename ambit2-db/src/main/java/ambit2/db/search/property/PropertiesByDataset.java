@@ -15,7 +15,6 @@ import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
-import ambit2.db.search.property.AbstractPropertyRetrieval.ANNOTATIONS_TABLE;
 
 /**
  * Retrieves Property-es used by particular dataset
@@ -144,6 +143,7 @@ public class PropertiesByDataset extends AbstractPropertyRetrieval<Template, Sou
 		return SourceDataset.class;
 	}
 	
+	@Override
 	public Property getObject(ResultSet rs) throws AmbitException {
 		try {
 			Property p = Property.getInstance(rs.getString(2),rs.getString(4),rs.getString(5));
