@@ -52,6 +52,7 @@ $(document)
 											"bUseRendered" : "true",
 											"fnRender" : function(o,
 													val) {
+
 												return "<img src='/ambit2/images/zoom_in.png' alt='zoom in' title='Click to show compound details'>";
 											},
 											
@@ -80,7 +81,11 @@ $(document)
 											"bUseRendered" : false,
 											"fnRender" : function(o,
 													val) {
-												return '<a href="'+val+'" title="'+val+'"><img src="'+val+'?media=image/png&w=150&h=150"></a>';
+												var cmpURI = val;
+												if (val.indexOf("/conformer")>=0) {
+													cmpURI = val.substring(0,val.indexOf("/conformer"));
+												}												
+												return '<a href="'+val+'" title="'+cmpURI+'"><img src="'+cmpURI+'?media=image/png&w=150&h=150"></a>';
 											}
 										},													
 										{ //3
@@ -178,7 +183,7 @@ $(document)
 										"bPaginate": true,
 										//"sScrollXInner": "110%",
 										"bScrollCollapse": true,
-										"sDom" : 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ipz>',
+										"sDom" : 'R<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>',
 										"aaData" : opentox.dataEntry,
 										"aoColumnDefs" : columnDefs,
 										"aaSorting" : [ [ 1, 'asc' ] ]
@@ -246,8 +251,13 @@ $(document)
 						//structure
 						sOut += '<td  valign="top" style="min-height:250px;max-width:260px">';
 						sOut += '<a href="'+dataEntry.compound.URI+'">';
+						
+						var cmpURI = dataEntry.compound.URI;
+						if (dataEntry.compound.URI.indexOf("/conformer")>=0) {
+							cmpURI = dataEntry.compound.URI.substring(0,dataEntry.compound.URI.indexOf("/conformer"));
+						}	
 						sOut += '<img class="ui-widget-content ui-corner-top ui-corner-bottom" style="min-height:250px;min-width:250px" src="' 
-									+ dataEntry.compound.URI + '?media=image/png">';
+									+ cmpURI + '?media=image/png" title="'+cmpURI+'">';
 						sOut += '</a><br>';
 						
 						var identifier = false;
@@ -376,6 +386,7 @@ function identifiers(opentox, columnDefs) {
 	if (opentox.reachdate==null) opentox.reachdate = [];
 	//names
 	var count = [0,0,0,0,6];
+	//opentox['feature'].sort(function(a,b){return a['order'] -b['order']});
 	
     $.each(opentox.feature, function(k, value) {
     		if (value.sameAs == "http://www.opentox.org/api/1.1#IUPACName") {
