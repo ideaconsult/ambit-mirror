@@ -25,6 +25,7 @@ public class FilterTautomers
 	public boolean FlagApplyExcludeFilter = true;
 	public boolean FlagApplyDuplicationFilter = true;	
 	public boolean FlagApplyDuplicationCheckIsomorphism = true;
+	public boolean FlagApplySimpleAromaticityRankCorrection = true;
 	
 	//This duplication check is suitable for any case 
 	//since equal InChI keys are given to the resonance Kekeule stuctures
@@ -448,7 +449,7 @@ public class FilterTautomers
 	{
 		for (int i = 0; i < ac.getAtomCount(); i++)
 		{
-			ac.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);
+			ac.getAtom(i).setFlag(CDKConstants.ISAROMATIC, false);			
 		}
 		
 		for (int i = 0; i < ac.getBondCount(); i++)
@@ -464,25 +465,28 @@ public class FilterTautomers
 			return;
 		
 		clearAromaticityFlags(ac);
-
+		AtomContainerManipulator.clearAtomConfigurations(ac);
+		
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
 		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(ac);
 		//AtomContainerManipulator.convertImplicitToExplicitHydrogens(ac);
 
 		CDKHueckelAromaticityDetector.detectAromaticity(ac);
-		
-		
-		//Fix rank according to the aromaticity info
-		double aromRank = RuleManager.getAdditionalAromaticityRank(ac);		
-		if (aromRank != 0.0)
-		{
-			Double rank = (Double)ac.getProperty("TAUTOMER_RANK");
-			if (rank == null)
-				return;
-			double newRank = rank.doubleValue();
-			newRank += aromRank;
-			ac.setProperty("TAUTOMER_RANK", new Double(newRank));
+				
+		if (FlagApplySimpleAromaticityRankCorrection)
+		{	
+			//Fix rank according to the aromaticity info
+			double aromRank = RuleManager.getAdditionalAromaticityRank(ac);		
+			if (aromRank != 0.0)
+			{
+				Double rank = (Double)ac.getProperty("TAUTOMER_RANK");
+				if (rank == null)
+					return;
+				double newRank = rank.doubleValue();
+				newRank += aromRank;
+				ac.setProperty("TAUTOMER_RANK", new Double(newRank));
+			}
 		}
 		
 	}
