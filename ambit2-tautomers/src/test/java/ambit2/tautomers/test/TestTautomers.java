@@ -40,6 +40,7 @@ public class TestTautomers
 		tt.tman.tautomerFilter.FlagApplyDuplicationCheckIsomorphism = true;
 		tt.tman.tautomerFilter.FlagApplyDuplicationCheckInChI = false;
 		tt.tman.tautomerFilter.FlagFilterIncorrectValencySumStructures = true;
+		tt.tman.tautomerFilter.FlagApplySimpleAromaticityRankCorrection = true;
 		
 		tt.tman.FlagRecurseBackResultTautomers = false;
 		
@@ -104,7 +105,16 @@ public class TestTautomers
 		
 		//tt.visualTest("O=C1N=C(N=CC1)N");
 		
-		tt.visualTest("C1=CN=C(N)NC1(=O)");
+		//tt.visualTest("C1=CN=C(N)NC1(=O)");
+		
+		
+		//tt.visualTest("O=C1CC=CC=C1");		
+		tt.visualTest("OC1=CC=CC=C1");
+		
+		//tt.visualTest("NC1=CC=CC=C1");
+		//tt.visualTest("N=C1C=CC=CC1");
+		
+		
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
 		//tt.visualTest("O=CCCCC=N");
