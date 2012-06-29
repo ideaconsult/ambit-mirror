@@ -2,6 +2,7 @@ package ambit2.tautomers;
 
 import java.util.Vector;
 
+import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.inchi.InChIGenerator;
@@ -465,7 +466,11 @@ public class FilterTautomers
 			return;
 		
 		clearAromaticityFlags(ac);
-		AtomContainerManipulator.clearAtomConfigurations(ac);
+		//AtomContainerManipulator.clearAtomConfigurations(ac);
+		for (IAtom atom : ac.atoms()) {
+            atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
+
+        }
 		
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
 		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
