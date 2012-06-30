@@ -15,11 +15,25 @@
   		<artifactId>ambit2-core</artifactId>
   		<version>${project.version}</version>
   	</dependency>
-
+  	<!-- 
+  	  	<dependency>
+        	<groupId>org.openscience.cdk</groupId>
+        	<artifactId>cdk-render</artifactId>
+        	<version>${cdk.version}</version>
+        	<scope>compile</scope>
+       </dependency>
+  	<dependency>
+        	<groupId>org.openscience.cdk</groupId>
+        	<artifactId>cdk-renderawt</artifactId>
+        	<version>${cdk.version}</version>
+        	<scope>compile</scope>
+       </dependency> 
+ -->
     	<dependency>
     		<groupId>org.openscience.cdk</groupId>
-    		<artifactId>jchempaint-nodeps-cdk-1.4.10</artifactId>
-    		<version>3.3.0</version>
+    		<artifactId>jchempaint-nodeps</artifactId>
+    		<version>3.3-1206</version>
+    		<type>jar</type>
     		<scope>compile</scope>
     	</dependency>
   </dependencies>
