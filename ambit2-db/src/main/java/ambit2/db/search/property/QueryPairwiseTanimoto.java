@@ -30,7 +30,7 @@ public class QueryPairwiseTanimoto extends AbstractQuery<IStoredQuery, IStoredQu
 		"bit_count(f1.fp1 & f2.fp1) + bit_count(f1.fp2 & f2.fp2) + bit_count(f1.fp3 & f2.fp3) + bit_count(f1.fp4 & f2.fp4) +\n"+
 		"bit_count(f1.fp5 & f2.fp5) + bit_count(f1.fp6 & f2.fp6) + bit_count(f1.fp7 & f2.fp7) + bit_count(f1.fp8 & f2.fp8) +\n"+
 		"bit_count(f1.fp9 & f2.fp9) + bit_count(f1.fp10 & f2.fp10) + bit_count(f1.fp11 & f2.fp11) + bit_count(f1.fp12 & f2.fp12) +\n"+
-		"bit_count(f1.fp13 & f2.fp3) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16) as Nab\n"+
+		"bit_count(f1.fp13 & f2.fp13) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16) as Nab\n"+
 		"FROM fp1024 as f1\n"+
 		"join fp1024 as f2\n"+
 		"where f1.idchemical != f2.idchemical\n"+
