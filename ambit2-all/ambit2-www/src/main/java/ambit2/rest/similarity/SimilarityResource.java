@@ -1,6 +1,5 @@
 package ambit2.rest.similarity;
 
-import java.awt.Dimension;
 import java.util.BitSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -18,18 +17,15 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.update.structure.ChemicalByDataset;
-import ambit2.rest.DisplayMode;
 import ambit2.rest.OpenTox;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.StructureQueryResource;
-import ambit2.rest.structure.CompoundHTMLReporter;
 
 /**
  *  Retrieve similar compounds, given a smiles
