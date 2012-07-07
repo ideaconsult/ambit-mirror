@@ -26,6 +26,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRelation;
 import ambit2.db.processors.QueryStatisticsProcessor;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryExecutor;
@@ -150,10 +151,10 @@ public class StatisticsPanel extends WorkflowContextListenerPanel {
 	        int[] histogram = new int[max+1]; 
 	        for (int i=0; i < max+1; i++) histogram[i] = 0;
 	        while (rs.next()) {
-	        	Double d = tanimoto.getObject(rs);
+	        	IStructureRelation<Double> relation = tanimoto.getObject(rs);
 	        	//System.out.print(d);
 	        	//System.out.print(" ->");
-	        	histogram[(int)(d*max)] ++;
+	        	histogram[(int)(relation.getRelation()*max)] ++;
 	        	//System.out.println((int)(d*max));
 	        }
 	        dataset.clear();
