@@ -100,16 +100,16 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 			if (comma!=null) getOutput().write(comma);
 			getOutput().write(String.format(
 					"\n\"%s\":{\n" + //uri
-					"\n\ttype:\"Feature\"," + //uri
-					"\n\t%s:\"%s\"," + //title
-					"\n\t%s:\"%s\"," + //units
-					"\n\t%s:\"%s\"," + //nominal
-					"\n\t%s:\"%s\"," + //numeric
-					"\n\t%s:\"%s\"," + //sameAs
-					"\n\t%s:\"%s\"," + //isModelPredictionFeature
-					"\n\t%s:\"%s\"," + //creator
-					"\n\t%s:%d," + //order
-					"\n\t%s:{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
+					"\n\t\"type\":\"Feature\"," + //uri
+					"\n\t\"%s\":\"%s\"," + //title
+					"\n\t\"%s\":\"%s\"," + //units
+					"\n\t\"%s\":\"%s\"," + //nominal
+					"\n\t\"%s\":\"%s\"," + //numeric
+					"\n\t\"%s\":\"%s\"," + //sameAs
+					"\n\t\"%s\":\"%s\"," + //isModelPredictionFeature
+					"\n\t\"%s\":\"%s\"," + //creator
+					"\n\t\"%s\":%d," + //order
+					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					uri,
 					jsonFeature.title.jsonname(),feature.getName(),
@@ -143,7 +143,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 	public void header(java.io.Writer output, IQueryRetrieval<Property> query) {
 		try {
 			output.write("{");
-			output.write("\nfeature:{\n");
+			output.write("\n\"feature\":{\n");
 		} catch (Exception x) {}
 	};
 	@Override

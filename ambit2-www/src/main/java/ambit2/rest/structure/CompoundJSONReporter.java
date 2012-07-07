@@ -83,8 +83,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			if (comma!=null) builder.append(comma);
 			
 			builder.append("\n\t{\n");
-			builder.append(String.format("\t%s:{\n",jsonCompound.compound.jsonname()));
-			builder.append(String.format("\t\t%s:\"%s\",\n",jsonCompound.URI.jsonname(),uri));
+			builder.append(String.format("\t\"%s\":{\n",jsonCompound.compound.jsonname()));
+			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.URI.jsonname(),uri));
 			//similarity
 			Object similarityValue = null;
 			for (Property p : item.getProperties()) 
@@ -92,11 +92,11 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					similarityValue = item.getProperty(p);
 					break;
 				}
-			builder.append(String.format("\t\tmetric:%s,",similarityValue));
+			builder.append(String.format("\t\t\"metric\":%s,",similarityValue));
 			
-			builder.append(String.format("\t\t%s:\"\",","name")); //placeholders
-			builder.append(String.format("\t\t%s:\"\",","cas"));
-			builder.append(String.format("\t\t%s:\"\"","einecs"));
+			builder.append(String.format("\t\t\"%s\":\"\",","name")); //placeholders
+			builder.append(String.format("\t\t\"%s\":\"\",","cas"));
+			builder.append(String.format("\t\t\"%s\":\"\"","einecs"));
 			
 
 			builder.append("\n\t\t},\n");
@@ -156,7 +156,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	public void footer(java.io.Writer output, Q query) {
 		try {
 			output.write("\n],");
-			output.write("\nfeature:{\n");
+			output.write("\n\"feature\":{\n");
 			for (int j=0; j < header.size(); j++) 
 				propertyJSONReporter.processItem(header.get(j));
 			output.write("}\n");
