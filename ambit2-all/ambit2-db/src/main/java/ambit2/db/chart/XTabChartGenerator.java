@@ -125,7 +125,7 @@ public class XTabChartGenerator extends ChartGenerator<ISourceDataset> {
 		"where name='%s' and idquery=%d and value_num is not null\n"+
 		"group by value_num-mod(value_num,20)\n"	;
 		*/
-	"select sql_dataset_xtab('%s','%s',%d,%f)";
+	"select sql_dataset_xtab(%d,%d,%d,%f)";
 	
 	
 	public BufferedImage process(ISourceDataset target) throws AmbitException {
@@ -135,7 +135,7 @@ public class XTabChartGenerator extends ChartGenerator<ISourceDataset> {
 	      {
 	    	  String statement= "";
 	    	  Statement st = getConnection().createStatement();
-	    	  ResultSet rs = st.executeQuery(String.format(sql,propertyX.getName(),propertyY.getName(),target.getID(),getBinWidth()));
+	    	  ResultSet rs = st.executeQuery(String.format(sql,propertyX.getId(),propertyY.getId(),target.getID(),getBinWidth()));
 	    	  while (rs.next()) {
 	    		  statement = rs.getString(1);
 	    	  }
