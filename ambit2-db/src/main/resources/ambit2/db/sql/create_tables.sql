@@ -1031,7 +1031,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (5,3,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (5,4,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -1083,13 +1083,13 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `sql_xtab`;
 DELIMITER $$
 
-CREATE FUNCTION sql_xtab(property_num VARCHAR(128),property_nom VARCHAR(128), query INT,bins DOUBLE) RETURNS TEXT READS SQL 
+CREATE FUNCTION sql_xtab(property_num INT,property_nom INT, query INT,bins DOUBLE) RETURNS TEXT READS SQL 
 DATA 
 begin
    set @x="";
    set @@group_concat_max_len=100000;
    select   concat(
-                 'select  a-mod(a,',bins,') \"',property_num,'\"\n'
+                 'select  a-mod(a,',bins,') as \"bins',property_num,'\"\n'
              ,   group_concat(distinct
                      concat(
                          ', sum(','\n'
@@ -1108,15 +1108,15 @@ begin
 ,'		select a,b from','\n'
 ,'		(','\n'
 ,'		select value_num as a,idchemical from query_results','\n'
-,'		join property_values using(idstructure) join properties using(idproperty)','\n'
-,'		where name = "',property_num,'" and idquery=',query,' and value_num is not null\n'
+,'		join property_values using(idstructure) \n'
+,'		where idproperty = ',property_num,' and idquery=',query,' and value_num is not null\n'
 ,'		group by idchemical,value_num','\n'
 ,'		) as X','\n'
 ,'		left join','\n'
 ,'		(','\n'
 ,'		select value as b,idchemical from query_results','\n'
-,'		join property_values using(idstructure) join property_string using(idvalue_string) join properties using(idproperty)','\n'
-,'		where name = "',property_nom,'" and idquery=',query,'\n'
+,'		join property_values using(idstructure) join property_string using(idvalue_string) \n'
+,'		where idproperty = ',property_nom,' and idquery=',query,'\n'
 ,'		group by idchemical,value_num','\n'
 ,'		) as Y','\n'
 ,'		using(idchemical)','\n'
@@ -1124,8 +1124,8 @@ begin
 ,'group by a-mod(a,',bins,')','\n'
              ) s
        into @x
-    from query_results join property_values using(idstructure) left join property_string using(idvalue_string) join properties using(idproperty)
-    where name = property_nom and idquery=query;
+    from query_results join property_values using(idstructure) left join property_string using(idvalue_string) 
+    where idproperty = property_nom and idquery=query;
 
     return @x;
 end $$
@@ -1138,13 +1138,13 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `sql_dataset_xtab`;
 DELIMITER $$
 
-CREATE FUNCTION sql_dataset_xtab(property_num VARCHAR(128),property_nom VARCHAR(128), dataset INT,bins DOUBLE) RETURNS TEXT 
+CREATE FUNCTION sql_dataset_xtab(property_num INT,property_nom INT, dataset INT,bins DOUBLE) RETURNS TEXT 
 READS SQL DATA 
 begin
    DECLARE x TEXT;
    set @@group_concat_max_len=100000;
    select   concat(
-                 'select  a-mod(a,',bins,') \"',property_num,'\"\n'
+                 'select  a-mod(a,',bins,') as \"bins',property_num,'\"\n'
              ,   group_concat(distinct
                      concat(
                          ', sum(','\n'
@@ -1163,15 +1163,15 @@ begin
 ,'		select a,b from','\n'
 ,'		(','\n'
 ,'		select value_num as a,idchemical from struc_dataset \n'
-,'		join property_values using(idstructure) join properties using(idproperty)','\n'
-,'		where name = "',property_num,'" and id_srcdataset=',dataset,' and value_num is not null\n'
+,'		join property_values using(idstructure) \n'
+,'		where idproperty = ',property_num,' and id_srcdataset=',dataset,' and value_num is not null\n'
 ,'		group by idchemical,value_num','\n'
 ,'		) as X','\n'
 ,'		left join','\n'
 ,'		(','\n'
-,'		select ifnull(text,value) as b,idchemical from struc_dataset ','\n'
-,'		join property_values using(idstructure) join property_string using(idvalue_string) join properties using(idproperty)','\n'
-,'		where name = "',property_nom,'" and id_srcdataset=',dataset,'\n'
+,'		select ifnull(text,value) as b,idchemical from struc_dataset \n'
+,'		join property_values using(idstructure) join property_string using(idvalue_string) \n'
+,'		where idproperty = ',property_nom,' and id_srcdataset=',dataset,'\n'
 ,'		group by idchemical,value_num','\n'
 ,'		) as Y','\n'
 ,'		using(idchemical)','\n'
@@ -1179,8 +1179,8 @@ begin
 ,'group by a-mod(a,',bins,')','\n'
              ) s
        into @x
-    from struc_dataset join property_values using(idstructure) left join property_string using(idvalue_string) join properties using(idproperty)
-    where name = property_nom and id_srcdataset=dataset;
+    from struc_dataset join property_values using(idstructure) left join property_string using(idvalue_string)
+    where idproperty = property_nom and id_srcdataset=dataset;
 
     return @x;
 end $$
@@ -1193,7 +1193,7 @@ DELIMITER $$
 -- -----------------------------------------------------
 -- Generates sql given numerical and nominal property for a histogram of a numerical property 
 -- -----------------------------------------------------
-CREATE PROCEDURE p_dataset_xtab(IN property_num VARCHAR(128),property_nom VARCHAR(128),q INT,bins DOUBLE)
+CREATE PROCEDURE p_dataset_xtab(IN property_num INT,property_nom INT,q INT,bins DOUBLE)
 LANGUAGE SQL
 READS SQL DATA 
 CONTAINS SQL
@@ -1213,7 +1213,7 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `p_xtab`;
 DELIMITER $$
 
-CREATE PROCEDURE p_xtab(IN property_num VARCHAR(128),property_nom VARCHAR(128),q INT,bins DOUBLE)
+CREATE PROCEDURE p_xtab(IN property_num INT,property_nom INT,q INT,bins DOUBLE)
 LANGUAGE SQL
 READS SQL DATA 
 CONTAINS SQL
