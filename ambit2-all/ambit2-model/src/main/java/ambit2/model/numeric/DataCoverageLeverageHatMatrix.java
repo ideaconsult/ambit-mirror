@@ -38,7 +38,7 @@ public class DataCoverageLeverageHatMatrix extends DataCoverage<Matrix> {
 		if (data ==null) return false;
 		if (data.getRowDimension() == 0) return false;
 		if (data.getColumnDimension() == 0) return false;
-		threshold = 3* data.getRowDimension() * (data.getColumnDimension()+1);
+		threshold = 3.0 * data.getRowDimension() * (data.getColumnDimension()+1);
 		X = data;
 		
 		Matrix XT = X.transpose();
