@@ -32,7 +32,7 @@ public class DataCoverageLeverage extends DataCoverage<Matrix> {
 		if (data.getRowDimension() == 0) return false;
 		if (data.getColumnDimension() == 0) return false;
 
-		threshold = 3* (data.getColumnDimension()+1)/ (data.getRowDimension());
+		threshold = 3.0 * (data.getColumnDimension()+1)/ (data.getRowDimension());
 
 		X = data;
 		
