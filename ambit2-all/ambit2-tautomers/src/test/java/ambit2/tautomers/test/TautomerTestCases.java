@@ -120,15 +120,7 @@ public class TautomerTestCases extends TestCase
 
 		assertEquals(0, res);
 	}
-
-	public void test_Rule_NitrosoOxime_02() throws Exception      
-	{	
-		int res = tt.testCase("O=N1CC=CC=C1", 
-				new String[]{"O=N1CC=CC=C1", "ON1=CC=CC=C1"}, 
-				FlagPrintTautomers);
-
-		assertEquals(0, res);
-	}
+	
 
 	public void test_Rule_AzoHydrazone_01() throws Exception      
 	{	
@@ -166,15 +158,7 @@ public class TautomerTestCases extends TestCase
 		assertEquals(0, res);
 	}
 
-	public void test_Rule_ThionitrosoThiooxime_02() throws Exception      
-	{	
-		int res = tt.testCase("S=N1CC=CC=C1", 
-				new String[]{"S=N1CC=CC=C1", "SN1=CC=CC=C1"}, 
-				FlagPrintTautomers);
-
-		assertEquals(0, res);
-	}
-
+	
 
 	public void test_Rule_AmidineImidine_01() throws Exception      
 	{	
@@ -252,7 +236,7 @@ public class TautomerTestCases extends TestCase
 	public void test_Rule_ThioamideIminothiol_02 () throws Exception      
 	{	
 		int res = tt.testCase("N1=CCC=CC1=S",
-				new String[]{"N=1C=CC=CC=1S", "C=1C=CC(NC=1)=S", "N1=CC=CC=C1S","N1=CC=CCC1=S","N1=CCC=CC1=S"}, 
+				new String[]{"n1ccccc1S", "C=1C=CC(NC=1)=S", "n1ccccc1S","N1=CC=CCC1=S","N1=CCC=CC1=S"}, 
 				FlagPrintTautomers);
 
 		assertEquals(0, res);
@@ -332,6 +316,7 @@ public class TautomerTestCases extends TestCase
 		assertEquals(0, res);
 	}
 
+	/*
 	public void test_Rule_KetoEnol_AminImin_AzoHydrazone_01()  throws Exception
 	{	
 		int res = tt.testCase("O=C1N(=N)CN=CC1", 
@@ -340,6 +325,7 @@ public class TautomerTestCases extends TestCase
 
 		assertEquals(0, res);
 	}
+	*/
 
 	public void test_Rule_AminImin_AmidineImidine_01()  throws Exception
 	{	
@@ -400,7 +386,7 @@ public class TautomerTestCases extends TestCase
 	public void test_Rule_CombinationOfRules_04()  throws Exception  
 	{	
 		int res = tt.testCase("O=C1C=CNC=C1", 
-				new String[]{"O=C1C=CNC=C1", "OC=1C=CN=CC=1", "OC1=CC=NC=C1"}, 
+				new String[]{"Oc1ccncc1", "O=C1C=CN=CC1", "O=C1C=CNC=C1"},  
 				FlagPrintTautomers);
 
 		assertEquals(0, res);
@@ -408,8 +394,8 @@ public class TautomerTestCases extends TestCase
 
 	public void test_Rule_CombinationOfRules_05()  throws Exception 
 	{	
-		int res = tt.testCase("S=C1C=CNC=C1", 
-				new String[]{"S=C1C=CNC=C1", "SC=1C=CN=CC=1", "SC1=CC=NC=C1"}, 
+		int res = tt.testCase("S=C1C=CNC=C1",				 
+				new String[]{"Sc1ccncc1", "C1=CC(C=CN1)=S", "N=1C=CC(CC=1)=S"},
 				FlagPrintTautomers);
 
 		assertEquals(0, res);
@@ -417,8 +403,8 @@ public class TautomerTestCases extends TestCase
 
 	public void test_Rule_CombinationOfRules_06()  throws Exception  
 	{	
-		int res = tt.testCase("N=C1C=CNC=C1", 
-				new String[]{"N=C1C=CNC=C1", "N=1C=CC(N)=CC=1", "N1=CC=C(N)C=C1"}, 
+		int res = tt.testCase("N=C1C=CNC=C1",  
+				new String[]{"n1ccc(N)cc1", "N=C1C=CN=CC1", "N=C1C=CNC=C1"},
 				FlagPrintTautomers);
 
 		assertEquals(0, res);

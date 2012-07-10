@@ -108,7 +108,7 @@ public class TestTautomers
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
 		
 		
-		tt.visualTest("O=C1CC=CC=C1");		
+		tt.visualTest("O=C1[N+](=N)CN=CC1");		
 		//tt.visualTest("OC1=CC=CC=C1");
 		
 		//tt.visualTest("NC1=CC=CC=C1");
