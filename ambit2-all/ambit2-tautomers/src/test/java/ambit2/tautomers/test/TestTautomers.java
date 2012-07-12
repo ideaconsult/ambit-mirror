@@ -22,6 +22,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
+import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 
 
@@ -108,7 +109,7 @@ public class TestTautomers
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
 		
 		
-		tt.visualTest("O=C1[N+](=N)CN=CC1");		
+		//tt.visualTest("O=C1[N+](=N)CN=CC1");		
 		//tt.visualTest("OC1=CC=CC=C1");
 		
 		//tt.visualTest("NC1=CC=CC=C1");
@@ -118,7 +119,7 @@ public class TestTautomers
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
 		//tt.visualTest("O=CCCCC=N");
-		//tt.visualTest("O=C(N)C");
+		tt.visualTest("O=C(N)C",0);
 		
 		
 		
@@ -191,6 +192,60 @@ public class TestTautomers
 		for (int i = 0; i < resultTautomers.size(); i++)		
 		{	
 			Double rank = (Double)resultTautomers.get(i).getProperty("TAUTOMER_RANK");
+			if (rank == null)
+				rank = new Double(999999);
+						
+			System.out.print("   " + rank.toString() + "   " +
+					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+			v.add(resultTautomers.get(i));
+		}
+		System.out.println();
+		
+		System.out.println("Generated: " + resultTautomers.size() + " tautomers.");
+		
+		//preProcessStructures(v);
+		TestStrVisualizer tsv = new TestStrVisualizer(v);
+		
+	} 
+	
+	public void visualTest(String smi, int algorithmType) throws Exception
+	{
+		System.out.println("Algorithm " + algorithmType	+ "Visual Testing: " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+						
+		tman.setStructure(mol);
+		Vector<IAtomContainer> resultTautomers;
+		
+		switch (algorithmType)
+		{
+		case TautomerConst.GAT_Comb_Pure:
+			resultTautomers = tman.generateTautomers();	
+			break;
+		
+		case TautomerConst.GAT_Incremental:
+			resultTautomers = tman.generateTautomersIncrementaly();
+			break;
+			
+		
+		default:
+			System.out.println("Unsupported algorithm type!");
+			return;
+		}
+						
+		
+		
+		tman.printDebugInfo();
+		
+		System.out.println("\n  Result tautomers: ");
+		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		v.add(mol);
+		v.add(null);
+		for (int i = 0; i < resultTautomers.size(); i++)		
+		{	
+			Double rank = (Double)resultTautomers.get(i).getProperty("TAUTOMER_RANK");
+			if (rank == null)
+				rank = new Double(999999);
+			
 			System.out.print("   " + rank.toString() + "   " +
 					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
 			v.add(resultTautomers.get(i));

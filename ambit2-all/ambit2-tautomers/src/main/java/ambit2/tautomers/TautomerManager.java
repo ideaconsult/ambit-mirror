@@ -79,6 +79,8 @@ public class TautomerManager
 		
 		generateRuleInstanceCombinations();
 		
+		resultTautomers = tautomerFilter.filter(resultTautomers);
+		
 		return(resultTautomers);
 	}
 	
