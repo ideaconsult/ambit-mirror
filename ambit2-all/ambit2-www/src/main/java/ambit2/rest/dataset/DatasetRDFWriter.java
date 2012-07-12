@@ -226,9 +226,14 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 				//	feature.addProperty(OTProperty.acceptValue.createProperty(getJenaModel()), value.toString());
 					
 			}
-
-
-			getOutput().flush();
+			//getOutput().flush();
+/*
+ * Commented - not sure will have effect on the error, but whould be safe otherwise
+Caused by: javax.xml.stream.XMLStreamException: ClientAbortException:  java.io.IOException
+         at com.sun.xml.stream.writers.XMLStreamWriterImpl.flush(XMLStreamWriterImpl.java:404)
+         at com.sun.xml.txw2.output.DelegatingXMLStreamWriter.flush(DelegatingXMLStreamWriter.java:56)
+         at ambit2.rest.dataset.DatasetRDFWriter.process(DatasetRDFWriter.java:231)
+ */
 			return item;
 		} catch (Exception x) {
 			throw new AmbitException(x);
