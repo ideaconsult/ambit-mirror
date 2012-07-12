@@ -31,8 +31,8 @@ public class Fingerprint2DescriptorWrapper implements IMolecularDescriptor {
 		String ref = String.format("http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#%s", fingerprinter.getClass().getName());
         return new DescriptorSpecification(
                 ref,
-                fingerprinter.getClass().getName(),
-                fingerprinter.getClass().getName(),
+                getClass().getName(),
+                getClass().getName(),
                 "The Chemistry Development Kit");
 	}
 
