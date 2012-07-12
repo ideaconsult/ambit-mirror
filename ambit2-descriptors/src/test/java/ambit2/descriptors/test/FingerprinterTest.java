@@ -86,7 +86,7 @@ public class FingerprinterTest {
 		DescriptorValue result = wrapper.calculate(mol);
 		Assert.assertEquals(bs.toString(),((StringDescriptorResultType)result.getValue()).getValue());
 		Assert.assertEquals(fp.getClass().getName(),result.getNames()[0]);
-		Assert.assertEquals(fp.getClass().getName(),result.getSpecification().getImplementationIdentifier());
+		Assert.assertEquals(wrapper.getClass().getName(),result.getSpecification().getImplementationIdentifier());
 
 	}
 }
