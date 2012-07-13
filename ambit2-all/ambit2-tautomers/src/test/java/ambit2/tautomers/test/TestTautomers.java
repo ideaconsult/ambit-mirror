@@ -50,8 +50,11 @@ public class TestTautomers
 		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
 		
 		tt.tman.activateChlorineRules(false);
-		tt.tman.activateRingChainRules(false);
-		tt.tman.use13ShiftRulesOnly(false);
+		tt.tman.activateRingChainRules(false);		
+		//tt.tman.use13ShiftRulesOnly(true);
+		tt.tman.use15ShiftRules(true);
+		tt.tman.use17ShiftRules(false);
+		
 		tt.tman.maxNumOfBackTracks = 10000;
 		
 		
@@ -119,7 +122,10 @@ public class TestTautomers
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
 		//tt.visualTest("O=CCCCC=N");
-		tt.visualTest("O=C(N)C",0);
+		
+		tt.visualTest("NC1=CC=CC2=C(O)N=NC(O)=C12", 1);
+		
+		//tt.visualTest("O=C(N)C",0);
 		
 		
 		
@@ -210,7 +216,7 @@ public class TestTautomers
 	
 	public void visualTest(String smi, int algorithmType) throws Exception
 	{
-		System.out.println("Algorithm " + algorithmType	+ "Visual Testing: " + smi);
+		System.out.println("Algorithm type " + algorithmType	+ "   Visual Testing: " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 						
 		tman.setStructure(mol);
