@@ -24,15 +24,8 @@ http://www.mchange.com/projects/c3p0/index.html#using_c3p0
 		cpds.setMaxPoolSize(20); 
     	 */
      	datasource.setMaxPoolSize(512); 
+      
 
-     	//https://forum.hibernate.org/viewtopic.php?t=947246&highlight=apparent+deadlock+c3p0
-     	datasource.setMaxStatements(1000); 
-     	datasource.setMaxStatementsPerConnection(100);
-
-     	System.out.println(datasource.getNumHelperThreads());
-     	//numHelperThreads 
-     	//maxAdministrativeTaskTime 
-     	  	
 	}
 	public void close() throws Exception {
 		
