@@ -18,6 +18,7 @@
   		<url>http://jolbox.com/bonecp/downloads/maven</url>
   	</repository>
   	 -->
+
   </repositories>
   <dependencies>
     <dependency>
@@ -77,6 +78,7 @@
     	<version>1.5.6</version>
     	<scope>test</scope>
     </dependency>
+    
     <dependency>
     	<groupId>commons-pool</groupId>
     	<artifactId>commons-pool</artifactId>
@@ -100,12 +102,21 @@
     	<version>0.7.0</version>
     </dependency>
      -->
+     <!--  
 	<dependency>
 	    <groupId>c3p0</groupId>
 	    <artifactId>c3p0</artifactId>
 	    <version>0.9.1.2</version>
 	</dependency>
+	-->
+  	 <!-- Tomcat 7 connection pool -->
 
+	<dependency>
+	    <groupId>org.apache.tomcat</groupId>
+	    <artifactId>tomcat-jdbc</artifactId>
+	    <version>7.0.21</version>
+	    <scope>provided</scope>
+	</dependency>
   </dependencies>
 <licenses>
   <license>
