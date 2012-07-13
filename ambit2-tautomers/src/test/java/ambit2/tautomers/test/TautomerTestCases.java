@@ -10,13 +10,19 @@ import org.openscience.cdk.tools.LoggingTool;
 
 public class TautomerTestCases extends TestCase
 {
-	TestTautomers tt = new TestTautomers();
+	TestTautomers tt;
 	boolean FlagPrintTautomers = false;
 	public LoggingTool logger;
 
 	public TautomerTestCases() 
 	{   
 		logger = new LoggingTool(this);
+		
+		//Initialization
+		tt = new TestTautomers();
+		tt.tman.use15ShiftRules(true);
+		tt.tman.use17ShiftRules(false);
+		
 	}
 
 	public static Test suite() {
