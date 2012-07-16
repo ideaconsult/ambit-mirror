@@ -464,12 +464,12 @@ public class TautomerTestCases extends TestCase
 
 	public void test_Rule_06 ()  throws Exception  
 	{	
-
+		tt.tman.use17ShiftRules(true);
 		int res = tt.testCase("O=CC=CC=CCCC", 
 				new String[]{"O=CC=CC=CCCC", "OC=CC=CC=CCC", "O=CCC=CC=CCC", "O=CC=CCC=CCC"}, 
 				FlagPrintTautomers);
-
-
+		tt.tman.use17ShiftRules(false);
+		
 		assertEquals(0, res);
 	}
 	
@@ -477,10 +477,12 @@ public class TautomerTestCases extends TestCase
 	public void test_Rule_06_NoWarningFilter ()  throws Exception  
 	{	
 		tt.tman.tautomerFilter.FlagApplyWarningFilter = false;
+		tt.tman.use17ShiftRules(true);
 		int res = tt.testCase("O=CC=CC=CCCC", 
 				new String[]{"OC=CC=C=CCCC", "O=CCC=C=CCCC", "OC=C=CC=CCCC", "O=CC=CC=CCCC", "OC=CC=CC=CCC", "O=CCC=CC=CCC", "OC=C=CCC=CCC", "O=CC=CCC=CCC"}, 
 				FlagPrintTautomers);
 		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
+		tt.tman.use17ShiftRules(false);
 
 		assertEquals(0, res);
 	}
