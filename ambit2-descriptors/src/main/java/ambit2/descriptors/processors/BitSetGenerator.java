@@ -248,7 +248,7 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 					if (bondPropertiesReader == null) bondPropertiesReader = new SMARTSPropertiesReader();
 					mol = bondPropertiesReader.process(mol);
 				} else {
-					mol.removeProperty(smartsProperty);
+					if ((smartsProperty!=null)&&(mol!=null)) mol.removeProperty(smartsProperty);
 					if (configurator==null) configurator = new AtomConfigurator();
 					mol = configurator.process(mol);
 					

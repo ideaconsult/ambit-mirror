@@ -172,11 +172,7 @@ public class SizeDescriptorTest  {
 			
 			DoubleArrayResult a = (DoubleArrayResult) result;
 			Assert.assertEquals(3,a.length());
-			/*
-			System.out.println(a.get(0));
-			System.out.println(a.get(1));
-			System.out.println(a.get(2));
-		*/
+
 			IMolecularDescriptor p = new PlanarityDescriptor();
 			value = p.calculate(molecule);
 			Assert.assertEquals(a.get(2),((DoubleResult) (value.getValue())).doubleValue(),0.00001);
@@ -188,8 +184,6 @@ public class SizeDescriptorTest  {
 			p = new CrossSectionalDiameterDescriptor();
 			value = p.calculate(molecule);
 			Assert.assertEquals(a.get(1),((DoubleResult) (value.getValue())).doubleValue(),0.00001);
-			
-			//System.out.println(molecule.getProperties());
 
 	}
 	

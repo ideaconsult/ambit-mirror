@@ -185,17 +185,9 @@ public class PKASmartsDescriptorTest {
      //System.out.println("sequnce check  -- > " + res);  
     }
     
-    public static  IMolecule getMoleculeFromSmiles(String smi) 
-    { 
-     IMolecule mol = null;
-     try {
-      SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());   
-      mol = sp.parseSmiles(smi);
-     }
-     catch (InvalidSmilesException e) {
-      System.out.println(e.toString());
-      }
-     return (mol);
+    public static  IMolecule getMoleculeFromSmiles(String smi)  throws Exception { 
+     SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());   
+     return sp.parseSmiles(smi);
     }
     
     //
@@ -232,23 +224,14 @@ public class PKASmartsDescriptorTest {
 	
 		for (int i=0; i < a.getAtomCount();i++) {
 			Assert.assertNotNull(a.getAtom(i).getValency());
-			System.out.print(a.getAtom(i).getSymbol());
-			System.out.print('\t');
-			System.out.print(a.getAtom(i).getFlag(CDKConstants.ISAROMATIC));
-			System.out.print('\t');
-			System.out.println(a.getAtom(i).getAtomTypeName());
 		}
 
 		for (int i=0; i < a.getBondCount();i++) {
 			Assert.assertNotNull(a.getBond(i).getOrder());
-			System.out.println(a.getBond(i).getOrder());
 		}		
- 	
- 	
- 
 		DescriptorValue value = pka.calculate(a);
-		System.out.println(value.getValue());
-		System.out.println(((VerboseDescriptorResult)value.getValue()).getExplanation());
+		Assert.assertNotNull(value.getValue());
+		Assert.assertNotNull(((VerboseDescriptorResult)value.getValue()).getExplanation());
     }    
     @Test
     public void testOne() throws Exception {
@@ -269,7 +252,7 @@ public class PKASmartsDescriptorTest {
 		}		
 //        CDKHueckelAromaticityDetector.detectAromaticity(a);    		
 		DescriptorValue value = pka.calculate(a);
-		//System.out.println(value.getValue());
+		Assert.assertNotNull(value.getValue());
     }
     @Test
     public void testPredictions() throws Exception {
@@ -298,19 +281,11 @@ public class PKASmartsDescriptorTest {
 	    		
 	    		Double d = Double.valueOf(a.getProperty("pKa-SMARTS").toString());
 	    		if (!d.equals(result.getResult().doubleValue())) {
-	    			/*
-	        		System.out.print(result.getResult().doubleValue());
-	        		System.out.print('\t');
-	        		System.out.print(a.getProperty("pKa-SMARTS"));
-	        		System.out.print('\t');
-	        		System.out.println(a.getProperty("SMILES"));
-	        		*/
 	    			
 	    		}
 	
 	    		writer.write(a);
     		} catch (CDKException x) {
-    			//System.err.println(a.getProperty("SMILES"));
     			continue;
     		} catch (AmbitException x) {
     			continue;
