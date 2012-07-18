@@ -235,8 +235,8 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
 	protected IAtomContainer getAtomContainer(IStructureRecord target)
 			throws AmbitException {
 		// TODO Auto-generated method stub
-		System.out.println(target);
 		IAtomContainer mol = super.getAtomContainer(target);
+		if (mol==null) return null;
 		try {
 			
 			if ("true".equals(Preferences
