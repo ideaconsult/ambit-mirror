@@ -121,16 +121,18 @@ public class AtomEnvironmentDescriptorTest {
 				    AtomTypeFactory factory = (AtomTypeFactory)parameters[AtomEnvironmentDescriptor._param.atomTypeFactory.ordinal()];
 	
 					IAtomType[] at = factory.getAllAtomTypes();
+					/*
 			    	System.out.print("Sum\tAtomType\t");
 					for (int j=0; j < factory.getSize(); j++) {
 						System.out.print(j);
 						System.out.print(".");
 				    	System.out.print(at[j].getAtomTypeName());
 				    	System.out.print("\t");
-				    }			    
-				    System.out.println("");
+				    }			  
+				    */  
+				   // System.out.println("");
 				    Assert.assertTrue(factory.getSize()>0);
-				    System.out.println(r.toString());
+				   // System.out.println(r.toString());
 
 				    Assert.assertEquals(mol.getAtomCount() * (maxLevel * (factory.getSize()+1)+2),r.length());
 				}    
