@@ -61,6 +61,7 @@ public class FP1024WriterTest extends DbUnitTest {
 			ResultSet rs = exec.process(molReader);
 			while (rs.next()) {
 				IStructureRecord record = molReader.getObject(rs);
+				if (record==null) { errors++; continue;}
 				long mark = System.currentTimeMillis();
 				try {
 					record = generator.process(record);
