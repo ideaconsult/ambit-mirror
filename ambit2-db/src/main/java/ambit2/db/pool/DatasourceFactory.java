@@ -108,8 +108,7 @@ public class DatasourceFactory {
         try {
         	//IDataSourcePool dataSource = new DataSourceAndPool(connectURI);
         	//IDataSourcePool dataSource = new DataSourceBoneCP(connectURI);
-        	//IDataSourcePool dataSource = new DataSourceC3P0(connectURI);
-        	IDataSourcePool dataSource = new DataSourceTomcatJDBCPool(connectURI);
+        	IDataSourcePool dataSource = new DataSourceC3P0(connectURI);
             
             return dataSource;
         } catch (Exception x) {
