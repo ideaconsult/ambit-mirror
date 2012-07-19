@@ -36,6 +36,12 @@
     	<artifactId>ambit2-db</artifactId>
     	<version>${project.version}</version>
     </dependency>
+    
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-dbext</artifactId>
+    	<version>${project.version}</version>
+    </dependency>    
     <dependency>
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-dbui</artifactId>

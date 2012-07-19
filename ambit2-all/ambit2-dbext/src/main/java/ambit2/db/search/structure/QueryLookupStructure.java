@@ -34,6 +34,7 @@ import java.util.List;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.search.EQCondition;
@@ -45,13 +46,20 @@ import ambit2.db.search.QueryParam;
  *
  */
 public class QueryLookupStructure extends AbstractStructureQuery<IStructureKey,IStructureRecord, EQCondition> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 960145706994951798L;
 	protected QueryStructure query;
 	protected MoleculeReader reader = new MoleculeReader();
 	protected SmilesKey smiles = new SmilesKey();
 	
 	public QueryLookupStructure() {
+		this(ExactStructureSearchMode.smiles);
+	}
+	public QueryLookupStructure(ExactStructureSearchMode structureSearchMode) {
 		query = new QueryStructure();
-		query.setFieldname("smiles");
+		query.setFieldname(structureSearchMode);
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		return query.getParameters();

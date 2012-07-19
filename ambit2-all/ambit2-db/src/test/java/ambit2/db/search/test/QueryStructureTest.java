@@ -7,6 +7,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryStructure;
@@ -15,7 +16,7 @@ public class QueryStructureTest extends QueryTest<QueryStructure>{
 	@Test
 	public void test() throws Exception {
 		QueryStructure qf = new QueryStructure();
-		qf.setFieldname("smiles");
+		qf.setFieldname(ExactStructureSearchMode.smiles);
 		qf.setValue("CC");
 		qf.setCondition(StringCondition.getInstance("="));
 		qf.setId(1);
@@ -33,7 +34,7 @@ public class QueryStructureTest extends QueryTest<QueryStructure>{
 	@Override
 	protected QueryStructure createQuery() throws Exception {
 		QueryStructure qf = new QueryStructure();
-		qf.setFieldname("smiles");
+		qf.setFieldname(ExactStructureSearchMode.smiles);
 		qf.setValue("F.[F-].[Na+]");
 		//qf.setValue("[F-].F.[Na+]");
 		qf.setCondition(StringCondition.getInstance("="));

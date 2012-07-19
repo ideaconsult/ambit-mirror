@@ -44,6 +44,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.CASKey;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.InchiKey;
 import ambit2.core.processors.structure.key.PropertyKey;
@@ -139,11 +140,16 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer,Li
 		ResultSet rs = null;
 		try {
 				Object value = getValue(molecule);
-				if (value == null) throw new AmbitException("No value to match "+getPropertyKey());			
+				if (value == null) throw new AmbitException("No value to match "+getPropertyKey());		
+				
 				query_property.setValue(value);
-				if (queryKey.getQueryKey()!=null)
-					query_property.setFieldname(queryKey.getQueryKey());
-				else 
+				
+				if (queryKey.getQueryKey()!=null) {
+					if (query_property instanceof QueryStructure) 
+						query_property.setFieldname(ExactStructureSearchMode.valueOf(queryKey.getQueryKey().toString()));
+					else 
+						query_property.setFieldname(queryKey.getQueryKey());
+				} else 
 					query_property.setFieldname(null);
 				rs = queryexec.process(query_property);
 				

@@ -39,6 +39,7 @@ import org.dbunit.dataset.ITable;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.search.structure.QueryStructure;
@@ -65,7 +66,7 @@ public class Structure_crud_test extends CRUDTest<Object,IStructureRecord>{
 			throws Exception {
         IDatabaseConnection c = getConnection();	
         QueryStructure q = new QueryStructure();
-        q.setFieldname("idchemical");
+        q.setFieldname(ExactStructureSearchMode.idchemical);
         q.setValue("10");
         
         RetrieveStructure r = new RetrieveStructure();

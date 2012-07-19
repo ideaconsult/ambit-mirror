@@ -6,12 +6,14 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryCombined;
 import ambit2.db.search.QueryParam;
@@ -51,7 +53,7 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		QueryCombined qc = new QueryCombinedStructure();
 		qc.setId(55);
 		QueryStructure qs = new QueryStructure();
-		qs.setFieldname("idchemical");
+		qs.setFieldname(ExactStructureSearchMode.idchemical);
 		qs.setValue("10");
 		QueryDataset dataset = new QueryDataset();
 		dataset.setValue(new SourceDataset("Dataset 1"));
@@ -117,6 +119,9 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 	}
 	@Override
 	protected QueryCombined createQuery() throws Exception {
+		return this.createQuery(ExactStructureSearchMode.inchi,"InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1");
+	}
+	protected QueryCombined createQuery(ExactStructureSearchMode mode, String value) throws Exception {		
 		QueryCombined q = new QueryCombinedStructure();
 		QueryFieldNumeric d = new QueryFieldNumeric();
 		d.setCondition(NumberCondition.getInstance(NumberCondition.between));
@@ -125,8 +130,9 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		d.setFieldname(Property.getInstance("Property 1","ref"));
 		
 		QueryStructure qf = new QueryStructure();
-		qf.setFieldname("smiles");
-		qf.setValue("[Br-].c1ccc(cc1)[P+](c2ccccc2)(c3ccccc3)CC");
+		qf.setFieldname(mode);
+		qf.setValue(value);
+		
 		qf.setCondition(StringCondition.getInstance("="));
 		
 		q.setScope(null);
@@ -149,5 +155,24 @@ public class QueryCombinedTest extends QueryTest<QueryCombined> {
 		}
 		Assert.assertEquals(1,records);
 		
+	}
+	
+	@Test
+	public void testSelectBySmiles() throws Exception {
+		QueryCombined q = createQuery(ExactStructureSearchMode.smiles,"[Br-].c1ccc(cc1)[P+](c2ccccc2)(c3ccccc3)CC");
+		q.setId(-1);
+		setUpDatabase(getDbFile());
+		IDatabaseConnection c = getConnection();
+		ResultSet rs = null;
+		try {
+			executor.setConnection(c.getConnection());
+			executor.open();
+			rs = executor.process(q); 
+			Assert.assertNotNull(rs);
+			verify(q,rs);
+		} finally {
+			if (rs != null) rs.close();
+			c.close();
+		}
 	}
 }

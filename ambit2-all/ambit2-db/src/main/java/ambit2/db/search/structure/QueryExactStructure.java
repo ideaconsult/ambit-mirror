@@ -55,7 +55,7 @@ import ambit2.smarts.processors.StructureKeysBitSetGenerator;
 /**
  * This is a hack to cope with the failure of SmilesGenerator to produce canonical SMILES.
  * @author nina
- *
+ * @deprecated  Convert to InChI and use {@link QueryStructure}
  */
 public class QueryExactStructure extends AbstractStructureQuery<String, IAtomContainer, BooleanCondition> {
 	/**

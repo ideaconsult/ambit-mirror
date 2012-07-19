@@ -78,7 +78,7 @@ public class SmilesKey extends DefaultAmbitProcessor<IAtomContainer,String> impl
 		}
 	}
 	public Object getQueryKey() {
-		return "smiles";
+		return ExactStructureSearchMode.smiles.name();
 	}
 	public Class getType() {
 		return String.class;

@@ -37,6 +37,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.processors.structure.key.CASKey;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.InchiKey;
 import ambit2.core.processors.structure.key.NoneKey;
@@ -45,10 +46,10 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.structure.AbstractStructureQuery.FIELD_NAMES;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldNumeric;
 import ambit2.db.search.structure.QueryStructure;
-import ambit2.db.search.structure.AbstractStructureQuery.FIELD_NAMES;
 
 /**
 <pre>
@@ -67,7 +68,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected InchiKey inchiKey;
 	protected SmilesKey smilesKey;
 	protected IStructureKey propertyKey;
-	protected AbstractStructureQuery<String,String,StringCondition> query_chemicals;
+	protected AbstractStructureQuery<ExactStructureSearchMode,String,StringCondition> query_chemicals;
 	protected RetrieveStructure query_prefered_structure;
 	protected AbstractStructureQuery query_property;
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
@@ -98,7 +99,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		query_chemicals = new QueryStructure();
 		query_chemicals.setId(-1);
 		
-		query_chemicals.setFieldname(inchiKey==null?smilesKey.getQueryKey().toString():inchiKey.getQueryKey().toString());
+		query_chemicals.setFieldname(ExactStructureSearchMode.valueOf(inchiKey==null?smilesKey.getQueryKey().toString():inchiKey.getQueryKey().toString()));
 		queryexec.setCache(true);
 		query_prefered_structure = new RetrieveStructure();
 		query_prefered_structure.setPreferedStructure(true);
@@ -238,9 +239,9 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	
 	private void findByStructure(IStructureRecord structure) {
 		try {
-			query_chemicals.setFieldname(structure.getInchi()==null?
+			query_chemicals.setFieldname(ExactStructureSearchMode.valueOf(structure.getInchi()==null?
 						smilesKey.getQueryKey().toString():
-						inchiKey.getQueryKey().toString());
+						inchiKey.getQueryKey().toString()));
 			findChemical(query_chemicals,null,structure.getInchi()==null?
 					   structure.getSmiles():
 					   structure.getInchi(),structure);

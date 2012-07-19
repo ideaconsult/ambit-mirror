@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import org.junit.Test;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.SDFReporter;
@@ -23,7 +24,7 @@ public class QueryReporterTest extends DbUnitTest {
 		*/
 		AbstractStructureQuery query_property = new QueryStructure();
 		query_property.setValue("F.[F-].[Na+]");
-		query_property.setFieldname("smiles");
+		query_property.setFieldname(ExactStructureSearchMode.smiles);
 		/*
 		if (queryKey.getQueryKey()!=null)
 			query_property.setFieldname(queryKey.getQueryKey());

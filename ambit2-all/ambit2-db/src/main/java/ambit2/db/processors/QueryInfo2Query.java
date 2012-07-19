@@ -7,6 +7,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.FingerprintGenerator;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.EQCondition;
@@ -68,11 +69,11 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 		
 		//formula, smiles, inchi
 		QueryStructure 
-			s = createQueryStructure("formula",target.getFormula());
+			s = createQueryStructure(ExactStructureSearchMode.formula,target.getFormula());
 		if (s != null) combined.add(f);
-			s = createQueryStructure("smiles",target.getSmiles());
+			s = createQueryStructure(ExactStructureSearchMode.smiles,target.getSmiles());
 		if (s != null) combined.add(f);
-			s = createQueryStructure("inchi",target.getInchi());
+			s = createQueryStructure(ExactStructureSearchMode.inchi,target.getInchi());
 		if (s != null) combined.add(f);			
 		
 		//similarity
@@ -108,7 +109,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 		if (QueryInfo.METHOD_EXACT.equals(target.getMethod())) {
 			if (target.getMolecule() == null) return null;
 			SmilesGenerator g = new SmilesGenerator(true);
-			return createQueryStructure("smiles", g.createSMILES(target.getMolecule()));
+			return createQueryStructure(ExactStructureSearchMode.smiles, g.createSMILES(target.getMolecule()));
 		} else return null;		
 	}
 	
@@ -133,11 +134,10 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 			return qs;
 		} else return null;		
 	}
-	protected QueryStructure createQueryStructure(String field, String value) {
+	protected QueryStructure createQueryStructure(ExactStructureSearchMode field, String value) {
 		if (value == null) return null;
 		if ("".equals(value.trim())) return null;
 		if (field == null) return null;
-		if ("".equals(field.trim())) return null;
 		
 		QueryStructure f = new QueryStructure();
 		f.setFieldname(field);
