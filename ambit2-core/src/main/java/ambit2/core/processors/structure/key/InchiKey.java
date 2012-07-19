@@ -74,7 +74,7 @@ public class InchiKey extends DefaultAmbitProcessor<IAtomContainer,String> imple
 		return null;
 	}
 	public Object getQueryKey() {
-		return "inchi";
+		return ExactStructureSearchMode.inchi.name();
 	}
 	public Class getType() {
 		return String.class;

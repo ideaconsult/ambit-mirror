@@ -1,0 +1,11 @@
+Package: ambit2.dbext
+Manifest-version: 1.0
+Specification-Title: ambit2.dbext
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.dbext
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.dbext
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

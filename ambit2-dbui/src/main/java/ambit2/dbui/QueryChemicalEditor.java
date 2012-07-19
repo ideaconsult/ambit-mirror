@@ -35,6 +35,7 @@ import javax.swing.JComponent;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.QueryStructure;
@@ -43,7 +44,7 @@ import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
 
 
-public class QueryChemicalEditor  extends QueryEditor<String,String,StringCondition,IStructureRecord,QueryStructure>  {
+public class QueryChemicalEditor  extends QueryEditor<ExactStructureSearchMode,String,StringCondition,IStructureRecord,QueryStructure>  {
 
 	/**
 	 * 
@@ -71,9 +72,9 @@ public class QueryChemicalEditor  extends QueryEditor<String,String,StringCondit
 		JComboBox box = BasicComponentFactory.createComboBox(
                 new SelectionInList<String>(
                 		new String[] {
-                			"inchi",
-                			"smiles",
-                			"formula",
+                			ExactStructureSearchMode.inchi.name(),
+                			ExactStructureSearchMode.smiles.name(),
+                			ExactStructureSearchMode.formula.name(),
                 		},
                 		presentationModel.getModel("fieldname")));
 		AutoCompleteDecorator.decorate(box);

@@ -28,6 +28,16 @@ public class CompoundLookupTest extends ResourceTest {
 	}
 	
 	@Test
+	public void testSingleInChI() throws Exception {
+		String q = String.format("http://localhost:%d/query%s/search/all?search=%s", port,
+				CompoundLookup.resource,
+				//"/smarts",
+				Reference.encode("InChI=1/C20H20P.BrH/c1-2-21(18-12-6-3-7-13-18,19-14-8-4-9-15-19)20-16-10-5-11-17-20;/h3-17H,2H2,1H3;1H/q+1;/p-1")
+				);
+		testGet(q,MediaType.TEXT_URI_LIST);
+	}
+	
+	@Test
 	public void testSingleCAS() throws Exception {
 		String q = String.format("http://localhost:%d/query%s/search/all?search=%s", port,
 				CompoundLookup.resource,

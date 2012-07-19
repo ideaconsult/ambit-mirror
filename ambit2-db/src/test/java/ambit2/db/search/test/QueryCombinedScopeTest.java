@@ -32,6 +32,7 @@ package ambit2.db.search.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.processors.ProcessorSetQueryScope;
 import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
@@ -54,7 +55,7 @@ public class QueryCombinedScopeTest extends QueryTest<QueryCombinedStructure> {
 		 * = gen.process(MoleculeFactory.makeAlkane(10)); q.setValue(bitset);
 		 */
 		QueryStructure q = new QueryStructure();
-		q.setFieldname("smiles");
+		q.setFieldname(ExactStructureSearchMode.smiles);
 		q.setValue("CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]");
 
 		ProcessorSetQueryScope p = new ProcessorSetQueryScope();
