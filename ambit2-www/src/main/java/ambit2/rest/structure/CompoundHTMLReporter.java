@@ -242,7 +242,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 		Enumeration types = map.keys();
 		while (types.hasMoreElements()) {
 			all.append(map.get(types.nextElement()).toString());
-			all.append("</table><div>");
+			all.append("</table></div>");
 		}
 		all.append("</div>");
 		return all.toString();
