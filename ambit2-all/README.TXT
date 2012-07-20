@@ -104,6 +104,57 @@ normal user and password are guest/guest by default and are used in database que
 
 ----------------------------------------------------------------------
 CHANGELOG
+AMBIT2 2.4.8
+Database schema 6.0
+Exact structure lookup via InChI 
+Import uses stored procedure findByProperty. If upgrading the database, run 
+grant execute on procedure findByProperty to "guest"@"localhost"
+(replace with the proper mysql user name)
+Support for stored procedures in QueryExecutor
+
+AMBIT2 2.4.7
+.r4267
+cdk 1.4.11
+jchempaint 3.3-1206
+Improved procedure for kekulisation.
+Experimental tautomer generation, /depict/tautomer
+Improved HTML rendering with Javascript
+JSON serialisation for most services.
+Fixed bug preventing reading features if running under HTTPS
+Simple pairwise similarity calculation at /depict/pairwise
+Dropped foreign keys to table users.  Now user names are not necessary related to mysql users. 
+G+ buttons at the depiction page
+Added PubChem image generation via http://pubchem.ncbi.nlm.nih.gov/pug_rest/
+Smarts & similarity queries now accept names and InChI in addition to smarts & smiles
+
+AMBIT2 2.4.6-SNAPSHOT 
+Added optional simple local aa, activated via aa-local Profile. Edit WEB-INF/classes/ambit2/rest/config/config.prop to customize
+Removed QMRF code, it is moved to a separate project http://qmrf.sf.net
+JQuery UI for HTML rendering
+Updated binaries smi23d svn rev 420
+Set "optimized" type upon successful mopac optimisation
+MopacShell modified to handle disconnected structures
+Updated JChemPaint dependency to 3.3.0
+Fixed Mopacreader to read charges
+Fixed atom environment code
+Added QMRF editor code from Ambit 1 https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit1/src/ambit/data/qmrf
+Added algorithm for replacing the structure with the preferred one
+Consensus labels query resource
+New resource for consensus stats 
+New resource for qlabel stats  /query/struc_label summary 
+Better support for folders inside zip file, and support for uploading zip to /dataset
+Finder algorithm: another lookup option  "Lookup only empty structures and add the result as additional structure representation" 
+Added dnabinding and proteinbinding toxtree algorithms
+Wrapped several IFingerprint classes as descriptor, added to /algorithm REST services
+cdk 1.4.5
+
+AMBIT2 2.4.4-SNAPSHOT
+.r3856
+site update
+fixeded NPE in facet resource to handle prefixed compound uris , e.g. /dataset/id/compound 
+added subclass to handle dragon descriptors, when dragon home is set via maven config
+profiles to enable/disable AA on /admin resources
+
 
 AMBIT2 2.4.3
 .r3853
@@ -134,3 +185,11 @@ AMBIT 2.1.4
 
 Changelog: cdk 1.3.6 and jchempaint 3.1.3
 
+-------------------------------------------------------
+Database
+
+If not using the automatic DB create via REST services , grant the following privileges
+grant select,insert,update,delete on  `ambit2`.* to `guest`@`127.0.0.1`;
+grant select,insert,update,delete on  `ambit2`.* to `guest`@`localhost`;
+grant execute on procedure `findByProperty` to `guest`@`127.0.0.1`;
+grant execute on procedure `findByProperty` to `guest`@`localhost`;
