@@ -38,7 +38,7 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
 public class UpdateChemical<C extends IChemical> extends AbstractUpdate<C,C>  {
-	public static final String update_sql =	"update chemicals set %s where idchemical=?";
+	public static final String update_sql =	"update chemicals set %s,label=?,lastmodified=now() where idchemical=?";
 	
 	enum keys {
 		smiles {
@@ -85,11 +85,15 @@ public class UpdateChemical<C extends IChemical> extends AbstractUpdate<C,C>  {
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		if (getObject().getIdchemical()<=0) throw new AmbitException("Chemical not defined");
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
+		int nulls = 0;
 		for (keys key:keys.values()) {
 			QueryParam<String> param = key.getParam(getObject());
-			if (param != null) params1.add(param);
+			if (param == null) nulls++; 
+			params1.add(param==null?new QueryParam<String>(String.class,null):param);
 		}
-		if (params1.size()==0) throw new AmbitException("No smiles, inchi or formula!");
+	//f	if (nulls == keys.values().length) throw new AmbitException("No smiles, inchi or formula!");
+		
+		params1.add(new QueryParam<String>(String.class, getObject().getInchi()==null?"UNKNOWN":"OK"));
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 		
 		return params1;
@@ -100,8 +104,8 @@ public class UpdateChemical<C extends IChemical> extends AbstractUpdate<C,C>  {
 		StringBuilder b = new StringBuilder();
 		String delimiter = "";
 		for (keys key:keys.values()) {
-			String field = key.getField(getObject());
-			if (field==null) continue;
+		//	String field = key.getField(getObject());
+		//	if (field==null) continue;
 			b.append(delimiter);
 			b.append(key.getSQL());
 			delimiter = ",";

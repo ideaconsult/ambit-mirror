@@ -81,9 +81,12 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		if ((molecule != null) && (molecule.getProperties()!=null))
 			structure.addProperties(molecule.getProperties());
 
+		
 		try {
-			structure.setSmiles(smilesKey.process(molecule));
-			if ("".equals(structure.getSmiles())) structure.setSmiles(null);
+			if ((molecule != null) && (molecule.getAtomCount()>0)) {
+				structure.setSmiles(smilesKey.process(molecule));
+				if ("".equals(structure.getSmiles())) structure.setSmiles(null);
+			}
 		} catch (Exception x) {
 			structure.setSmiles(null);
 		}		
@@ -92,7 +95,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 			if (structure.getInchi()== null) {
 				String inchi = null; 
 				String key = null; 
-				if (molecule.getAtomCount()==0){
+				if ((molecule==null) || (molecule.getAtomCount()==0)) {
 					inchi = inchiKey.process(structure);
 				} else
 				try {
@@ -128,10 +131,9 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 			structure.setInchi(null);
 			structure.setInchiKey("ERROR:"+x.getMessage());
 		}				
-
+		if ((molecule != null) && (molecule.getAtomCount()>0)) 
 		try {
 			IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(molecule);
-
 			structure.setFormula(formula==null?null:MolecularFormulaManipulator.getString(formula));
 		} catch (Exception x) {
 			structure.setFormula(null);
