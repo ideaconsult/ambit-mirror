@@ -4,7 +4,11 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jniinchi.INCHI_RET;
+
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.index.CASNumber;
@@ -30,6 +34,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.StringCondition;
@@ -37,6 +42,7 @@ import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryExactStructure;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
+import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.pubchem.NCISearchProcessor;
 import ambit2.rest.DisplayMode;
@@ -159,32 +165,25 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 				q.setValue(record);
 				query = q;
 			} else {
-				IAtomContainer structure = null;
 				//if inchi
-				boolean isinchi = false;
-				try { 
-					structure = isInChI(text);
-					isinchi = structure!= null;
-				} catch (Exception x) {
-					structure = null;
-					isinchi = true; 
-					//lookup as text, in case JNI-Inchi fails to load
-					//throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
-				}
-				//if smiles
-				if (!isinchi && (structure==null))
-					try { structure = isSMILES(text);
-					} catch (Exception x) { structure = null;}
-				//exact structure
-				if (structure != null) try {
-					
-					QueryExactStructure q = new QueryExactStructure();
+				if (isInChI(text)) {
+					QueryStructure q = new QueryStructure();
 					q.setChemicalsOnly(true);
-					q.setValue(structure);
-					
+					q.setFieldname(ExactStructureSearchMode.inchi);
+					q.setValue(text);
+					query = q;
+				} else try {
+					//inchi, inchikey
+					String[] inchi = smiles2inchi(text);
+					QueryStructure q = new QueryStructure();
+					q.setChemicalsOnly(true);
+					q.setFieldname(ExactStructureSearchMode.inchi);
+					//eventually search by inchikey?
+					q.setValue(inchi[0]); 
 					query = q;
 				} catch (Exception x) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Error when processing query %s", text),x);
+					x.printStackTrace();
+					query= null;
 				}
 			}
 		}
@@ -286,6 +285,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		return super.createTemplate(context, request, response);
 	}
 	
+	public boolean isInChI(String inchi)  {
+		return ((inchi!= null) && inchi.startsWith(AmbitCONSTANTS.INCHI)); 
+	}	
+	/*
 	public IAtomContainer isInChI(String inchi) throws Exception {
 		if ((inchi!= null) && inchi.startsWith(AmbitCONSTANTS.INCHI)) {
 			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
@@ -296,13 +299,33 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			return c.getAtomContainer();
 		} else return null;
 	}
-	public IAtomContainer isSMILES(String smiles) throws Exception {
+	*/
+	public String[] smiles2inchi(String smiles) throws ResourceException {
 		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
-		IAtomContainer c = p.parseSmiles(smiles);
-		searchType = _searchtype.smiles;
-		if ((c==null) || (c.getAtomCount()==0)) throw new InvalidSmilesException(smiles);
-		return c;
-	}	
+		try {
+			IAtomContainer c = p.parseSmiles(smiles);
+			if ((c==null) || (c.getAtomCount()==0)) 
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,smiles);
+			//now generate unique inchi, as SMILES are not
+			searchType = _searchtype.inchi;
+			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+			InChIGenerator gen = f.getInChIGenerator(c);
+			INCHI_RET status = gen.getReturnStatus();
+			if (INCHI_RET.OKAY.equals(status) || INCHI_RET.WARNING.equals(status))
+				return new String[] {gen.getInchi(),gen.getInchiKey()};
+			else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+					String.format("Error converting smiles to InChI: %s %s %s %s",status,gen.getMessage(),gen.getLog(),smiles));
+			
+		} catch (ResourceException x)	 {
+			throw x;
+		} catch (InvalidSmilesException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		} catch (CDKException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		}
+		
+	}
+	
 	public boolean isURL(String text) {
 		return URL_as_id.equals(text.toLowerCase());
 	}

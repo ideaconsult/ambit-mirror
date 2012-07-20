@@ -37,19 +37,10 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.processors.structure.key.CASKey;
-import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.core.processors.structure.key.IStructureKey;
-import ambit2.core.processors.structure.key.InchiKey;
-import ambit2.core.processors.structure.key.NoneKey;
-import ambit2.core.processors.structure.key.SmilesKey;
 import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.readers.RetrieveStructure;
-import ambit2.db.search.StringCondition;
-import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.AbstractStructureQuery.FIELD_NAMES;
-import ambit2.db.search.structure.QueryField;
-import ambit2.db.search.structure.QueryFieldNumeric;
-import ambit2.db.search.structure.QueryStructure;
+import ambit2.db.search.structure.QueryByIdentifierWithStructureFallback;
 
 /**
 <pre>
@@ -65,15 +56,12 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
      */
     private static final long serialVersionUID = 6530309499663693100L;
 	protected DbStructureWriter structureWriter;
-	protected InchiKey inchiKey;
-	protected SmilesKey smilesKey;
+	protected QueryByIdentifierWithStructureFallback query;
 	protected IStructureKey propertyKey;
-	protected AbstractStructureQuery<ExactStructureSearchMode,String,StringCondition> query_chemicals;
-	protected RetrieveStructure query_prefered_structure;
-	protected AbstractStructureQuery query_property;
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
 	protected PreparedStatement ps_seekdataset;		
 	protected StructureNormalizer normalizer = new StructureNormalizer(); 
+	
 	protected boolean propertiesOnly = false;
 	
 	public boolean isPropertiesOnly() {
@@ -87,23 +75,11 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected final String idchemical_tag="idchemical";
 	
 	public RepositoryWriter() {
+		super();
 		structureWriter = new DbStructureWriter();
-		
-		try {
-			inchiKey = new InchiKey();
-		} catch (Exception x) {
-			inchiKey=null;
-		}
-		smilesKey = new SmilesKey(); //last resort use smiles - not canonical!		
+		query = new QueryByIdentifierWithStructureFallback();
 		setPropertyKey(new CASKey());
-		query_chemicals = new QueryStructure();
-		query_chemicals.setId(-1);
-		
-		query_chemicals.setFieldname(ExactStructureSearchMode.valueOf(inchiKey==null?smilesKey.getQueryKey().toString():inchiKey.getQueryKey().toString()));
 		queryexec.setCache(true);
-		query_prefered_structure = new RetrieveStructure();
-		query_prefered_structure.setPreferedStructure(true);
-		query_prefered_structure.setFieldname(true);
 	}
 	
 	
@@ -111,16 +87,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		return propertyKey;
 	}
 	public void setPropertyKey(IStructureKey propertyKey) {
-		this.propertyKey = propertyKey==null?new CASKey():propertyKey;
-		if ((this.propertyKey.getType() == Number.class) || (this.propertyKey.getType() == Integer.class) ||(this.propertyKey.getType() == Double.class))
-			query_property = new QueryFieldNumeric();
-		else {
-			query_property = new QueryField();
-			((QueryField)query_property).setNameCondition(StringCondition.getInstance("="));
-		}	
-		
-		query_property.setId(-1);
-
+		query.setFieldname(propertyKey);
 	}
 	
 	@Override
@@ -141,13 +108,12 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	public void setDataset(SourceDataset dataset) {
 		structureWriter.setDataset(dataset);
 	}
-	protected void findChemical(AbstractStructureQuery query, Object key,Object value, IStructureRecord record) throws SQLException, AmbitException {
-		if (value == null) return;
+	protected void findChemical(IStructureRecord record) throws SQLException, AmbitException {
+		if (record == null) return;
 		ResultSet rs = null;
 		try {
-			query.setValue(value);
-			if (key != null)
-				query.setFieldname(key);
+			query.setValue(record);
+			query.setPageSize(1);
 			rs = queryexec.process(query);
 			while (rs.next()) {
 				record.setIdchemical(rs.getInt(FIELD_NAMES.idchemical.ordinal()+1));
@@ -180,39 +146,21 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			structure.setFormat(null);
 			cantreadstructure = true;
 		}
-
-		//find if a structure with specified idchemical exists
-        if (structure.getIdchemical() > 0) {
-        	if (structure.getIdstructure()>0) {
-        		//don't search for anything
-
-        	} else {
-        		if (structure.usePreferedStructure()) {
-	        		ResultSet rs = null;
-	        		try {
-	        			query_prefered_structure.setValue(structure);
-	        			query_prefered_structure.setPreferedStructure(true);
-	        			query_prefered_structure.setFieldname(true);
-	        			rs = queryexec.process(query_prefered_structure);
-	        			while (rs.next()) {
-	        				structure.setIdstructure(rs.getInt("idstructure"));
-	        				break;
-	        			}
-	        		} catch (Exception x) {
-	        			logger.warn(x);
-	        			structure.setIdchemical(-1);
-	        		} finally {
-	        			try { rs.close(); } catch (Exception x) {}
-	        		}
-        		}
-        	}
-        } else {
-        	//find by a property
-        	Object property = null;
-        	try {
-        		property = propertyKey.process(structure);
-        		if (property!=null) {
-        			findChemical(query_property,propertyKey.getQueryKey(),property,structure);
+		
+		if (propertiesOnly && (structure.getIdchemical()>0) && (structure.getIdstructure()>0) ) { //all set
+			
+		} else {
+		//find the chemical
+			findChemical(structure);
+			if (!structure.usePreferedStructure()) structure.setIdstructure(-1);
+		}
+		
+	/*
+        Object property = null;
+        try {
+        	property = propertyKey.process(structure);
+        	if (property!=null) {
+        		findChemical(query_property,propertyKey.getQueryKey(),property,structure);
 					 // if still not found, and not empty struc, fallback to structure match
         			if (!(propertyKey instanceof NoneKey) && (structure.getType()!=STRUC_TYPE.NA)) 
         					if (structure.getIdchemical() <= 0) findByStructure(structure);
@@ -231,25 +179,13 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         	}
 
         }
+        */
         //add a new idchemical if idchemical <=0
 
         return structureWriter.writeStructure(structure,OP.UPDATE==getOperation());
         
 	}
 	
-	private void findByStructure(IStructureRecord structure) {
-		try {
-			query_chemicals.setFieldname(ExactStructureSearchMode.valueOf(structure.getInchi()==null?
-						smilesKey.getQueryKey().toString():
-						inchiKey.getQueryKey().toString()));
-			findChemical(query_chemicals,null,structure.getInchi()==null?
-					   structure.getSmiles():
-					   structure.getInchi(),structure);
-		} catch (Exception ex) {
-    		//x.printStackTrace();
-    		logger.warn(ex);
-		}
-	}
 	protected void prepareStatement(Connection connection) throws SQLException {
         ps_seekdataset = connection.prepareStatement(seek_dataset);
 

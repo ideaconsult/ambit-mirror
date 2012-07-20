@@ -43,48 +43,6 @@ import ambit2.base.data.StringBean;
 import ambit2.db.LoginInfo;
 import ambit2.db.update.user.CreateUser;
 
-/*
- cant' execute it via jdbc ...
-DROP FUNCTION IF EXISTS `sortstring`;
-
-DELIMITER $
-CREATE FUNCTION `sortstring`(inString TEXT) RETURNS TEXT deterministic
-BEGIN
-  DECLARE delim CHAR(1) DEFAULT ','; -- delimiter 
-  DECLARE strings INT DEFAULT 0;     -- number of substrings
-  DECLARE forward INT DEFAULT 1;     -- index for traverse forward thru substrings
-  DECLARE backward INT;   -- index for traverse backward thru substrings, position in calc. substrings
-  DECLARE remain TEXT;               -- work area for calc. no of substrings
-  DECLARE swap1 TEXT;                 -- left substring to swap
-  DECLARE swap2 TEXT;                 -- right substring to swap
-  SET remain = inString;
-  SET backward = LOCATE(delim, remain);
-  WHILE backward != 0 DO
-    SET strings = strings + 1;
-    SET backward = LOCATE(delim, remain);
-    SET remain = SUBSTRING(remain, backward+1);
-  END WHILE;
-  IF strings < 2 THEN RETURN inString; END IF;
-  REPEAT
-    SET backward = strings;
-    REPEAT
-      SET swap1 = SUBSTRING_INDEX(SUBSTRING_INDEX(inString,delim,backward-1),delim,-1);
-      SET swap2 = SUBSTRING_INDEX(SUBSTRING_INDEX(inString,delim,backward),delim,-1);
-      IF  swap1 > swap2 THEN
-        SET inString = TRIM(BOTH delim FROM CONCAT_WS(delim
-        ,SUBSTRING_INDEX(inString,delim,backward-2)
-        ,swap2,swap1
-        ,SUBSTRING_INDEX(inString,delim,(backward-strings))));
-      END IF;
-      SET backward = backward - 1;
-    UNTIL backward < 2 END REPEAT;
-    SET forward = forward +1;
-  UNTIL forward + 1 > strings
-  END REPEAT;
-RETURN inString;
-END $
-DELIMITER ;
- */
 
 public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String> {
 	protected String adminPass = null;
@@ -238,6 +196,8 @@ skip-name-resolve
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE p_xtab TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE setAtomEnvironment TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT SELECT ON `mysql`.`proc` TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE findByProperty TO 'guest'@'%s';",localAddr));
+		        
 	        }
 	         
         } catch (Exception x) {
