@@ -72,6 +72,7 @@ CREATE TABLE  `chemicals` (
   `formula` varchar(64) DEFAULT NULL,
   `inchikey` varchar(27) DEFAULT NULL,
   `label` enum('OK','UNKNOWN','ERROR') NOT NULL DEFAULT 'UNKNOWN',
+  `lastmodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idchemical`),
   KEY `index_smiles` (`smiles`(760)) USING BTREE,
   KEY `index_idchemical` (`idchemical`) USING BTREE,

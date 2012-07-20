@@ -26,6 +26,7 @@ import ambit2.db.processors.quality.FPStructureWriter;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.MissingFingerprintsQuery;
+import ambit2.db.search.structure.MissingInChIsQuery;
 import ambit2.db.update.chemical.InChIChemicalsWriter;
 import ambit2.db.update.fpae.AtomEnvironmentWriter;
 import ambit2.db.update.qlabel.CreateQLabelPair;
@@ -127,11 +128,21 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableDBProcessing
 				}
 			} else throw new Exception("Remote URI not supported, this is for housekeeping the database only!");
 		else { 	
-			//can have combined query with a dataset query if dataset_uri is present
-			MissingFingerprintsQuery q =  new MissingFingerprintsQuery(getFingerprintsType());
-			q.setPageSize(batchSize);
-			q.setPage(0);
-			return q;
+			switch (getFingerprintsType()) {
+			case inchi: {
+				MissingInChIsQuery q = new MissingInChIsQuery();
+				q.setPageSize(batchSize);
+				q.setPage(0);
+				return q;
+			}
+			default: {
+				//can have combined query with a dataset query if dataset_uri is present
+				MissingFingerprintsQuery q =  new MissingFingerprintsQuery(getFingerprintsType());
+				q.setPageSize(batchSize);
+				q.setPage(0);
+				return q;
+			}
+			}
 		}
 	}
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{

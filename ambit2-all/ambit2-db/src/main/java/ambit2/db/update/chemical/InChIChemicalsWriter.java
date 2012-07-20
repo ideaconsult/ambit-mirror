@@ -26,7 +26,7 @@ public class InChIChemicalsWriter  extends AbstractUpdateProcessor<IStructureRec
 			throws AmbitException {
 		try {
 			getQueryUpdate().setObject(target);
-			if (target.getInchi()==null && (target.getInchiKey()==null)) return target;
+			//if (target.getInchi()==null && (target.getInchiKey()==null)) return target;
 			return update(target);
         } catch (OperationNotSupportedException x) {
             throw new ProcessorException(this,x);
