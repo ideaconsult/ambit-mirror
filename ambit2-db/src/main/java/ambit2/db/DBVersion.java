@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db;
 
 public interface DBVersion {
-	int AMBITDB_VERSION_MAJOR = 2;
+	int AMBITDB_VERSION_MAJOR = 6;
 	int AMBITDB_VERSION_MINOR = 0;
 	int getMajor();
 	int getMinor();

@@ -51,7 +51,7 @@ public class QueryStructureTest extends QueryTest<QueryStructure>{
 				Assert.assertEquals(10,rs.getInt(2));
 				Assert.assertEquals(100214,rs.getInt(3));
 				Assert.assertEquals(1,rs.getInt(4));
-				Assert.assertEquals(1,rs.getInt(5));			
+				Assert.assertEquals(9999,rs.getInt(5));			
 
 			}
 			Assert.assertEquals(1,records);

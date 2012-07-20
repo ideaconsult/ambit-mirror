@@ -29,6 +29,8 @@
 
 package ambit2.db.processors;
 
+import net.sf.jniinchi.INCHI_RET;
+
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecularFormula;
@@ -91,9 +93,13 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 				try {
 					if (inchiProcessor==null) inchiProcessor = new InchiProcessor();
 					InChIGenerator gen  = inchiProcessor.process(molecule);
-					inchi = gen.getInchi();
-
-					key =  gen.getInchiKey(); 
+					if (INCHI_RET.OKAY.equals(gen.getReturnStatus()) || INCHI_RET.WARNING.equals(gen.getReturnStatus())) {
+						inchi = gen.getInchi();
+						key =  gen.getInchiKey(); 
+					} else {
+						inchi=null;
+						key = String.format("ERROR:%s:%s", gen.getReturnStatus(),gen.getMessage());
+					}
 				} catch (Exception x) {
 					inchi=null;
 					key = null;
@@ -104,7 +110,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 			}
 		} catch (Exception x) {
 			structure.setInchi(null);
-			structure.setInchiKey("ERROR");
+			structure.setInchiKey("ERROR:"+x.getMessage());
 		}				
 
 		try {

@@ -650,7 +650,7 @@ delete from struc_dataset where idstructure>3
         
         c = getConnection();
 		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
-		Assert.assertEquals(1,chemicals.getRowCount());
+		Assert.assertEquals(2,chemicals.getRowCount());
 		//there are two empty file without $$$$ sign, which are skipped
 		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(2,strucs.getRowCount());

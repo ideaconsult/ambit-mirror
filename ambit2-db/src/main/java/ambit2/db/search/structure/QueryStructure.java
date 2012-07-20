@@ -37,32 +37,26 @@ public class QueryStructure extends AbstractStructureQuery<ExactStructureSearchM
 	protected AtomConfigurator configurator = new AtomConfigurator();
 	
 	public QueryStructure() {
+		setChemicalsOnly(false);
 		setCondition(StringCondition.getInstance("="));
 	}
 
-	
-	public final static String sqlSMILES = 
-		"select ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected,1 as metric,inchi as text from structure join chemicals using(idchemical) %s where %s ((%s %s ?) or (%s %s ?))";
-
-	public final static String sqlInChI = 
-		"select ? as idquery,structure.idchemical,idstructure,if(type_structure='NA',0,1) as selected,1 as metric,inchi as text from structure join chemicals using(idchemical) %s where %s (%s %s ?)";
-
+	protected final static String sql_chemical = "select ? as idquery,idchemical,-1 as idstructure,0 as selected,1 as metric,inchi as text from chemicals where (%s %s ?) %s";
+	//protected final static String sql_structure = "select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,preference as metric,inchi as text from chemicals join structure using(idchemical) where (%s %s ?)";
+	protected final static  String sql_prefered = 
+		"select ? as idquery,idchemical,idstructure,if(type_structure='NA',0,1) as selected,preference as metric,null as text\n"+
+		"from structure where idchemical = "+
+		"(select idchemical from chemicals where (%s %s ?) %s limit 1)\n"+
+		"order by idchemical,preference,idstructure";
 	
 	public String getSQL() throws AmbitException {
+		String sql = isChemicalsOnly()?sql_chemical:sql_prefered;
 		switch (getFieldname()) {
 		case smiles: {
-			return String.format(sqlSMILES,
-					isChemicalsOnly()?group:"",
-					isChemicalsOnly()?where_group:"",
-					getFieldname(),getCondition().getSQL(),
-					getFieldname(),getCondition().getSQL());
+			return String.format(sql,getFieldname(),getCondition(),String.format(" or (%s %s ?) ",getFieldname(),getCondition()));
 		}
-		default: {
-			return String.format(sqlInChI,
-					isChemicalsOnly()?group:"",
-					isChemicalsOnly()?where_group:"",
-					getFieldname(),getCondition().getSQL());			
-		}
+		default:
+			return String.format(sql,getFieldname(),getCondition(),"");
 		}
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
@@ -105,7 +99,6 @@ public class QueryStructure extends AbstractStructureQuery<ExactStructureSearchM
 		}
 
 	}
-
 	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
 		try {
 			IStructureRecord record = new StructureRecord();

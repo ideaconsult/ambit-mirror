@@ -223,7 +223,7 @@ public class CompoundResourceTest extends ResourceTest {
 		String line = null;
 		int count=0;
 		while ((line = reader.readLine())!=null) {
-			Assert.assertEquals("InChI=1/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2",line);
+			Assert.assertEquals("InChI=1S/2C8H16O2.Sn/c2*1-3-5-6-7(4-2)8(9)10;/h2*7H,3-6H2,1-2H3,(H,9,10);/q;;+2/p-2",line);
 			count++;
 		}
 		return count ==1;
