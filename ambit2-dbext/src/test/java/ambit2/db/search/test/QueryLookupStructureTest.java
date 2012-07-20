@@ -27,7 +27,7 @@
  * 
  */
 
-package db.search.test;
+package ambit2.db.search.test;
 
 import java.sql.ResultSet;
 
