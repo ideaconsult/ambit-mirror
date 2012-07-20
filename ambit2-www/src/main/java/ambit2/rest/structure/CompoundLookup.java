@@ -6,14 +6,17 @@ import java.util.List;
 
 import net.sf.jniinchi.INCHI_RET;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
-import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.index.CASNumber;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -39,7 +42,6 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryAbstractReporter;
 import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
-import ambit2.db.search.structure.QueryExactStructure;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldMultiple;
 import ambit2.db.search.structure.QueryStructure;
@@ -306,6 +308,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			IAtomContainer c = p.parseSmiles(smiles);
 			if ((c==null) || (c.getAtomCount()==0)) 
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,smiles);
+			FixBondOrdersTool fbt = new FixBondOrdersTool();
+			c = fbt.kekuliseAromaticRings((IMolecule)c);
+			//inchi can't process aromatic bonds...
+			for (IBond bond:c.bonds()) bond.setFlag(CDKConstants.ISAROMATIC, false); 
 			//now generate unique inchi, as SMILES are not
 			searchType = _searchtype.inchi;
 			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
