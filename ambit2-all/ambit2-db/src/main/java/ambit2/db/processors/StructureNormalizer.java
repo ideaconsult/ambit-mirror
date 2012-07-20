@@ -31,9 +31,13 @@ package ambit2.db.processors;
 
 import net.sf.jniinchi.INCHI_RET;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.base.exceptions.AmbitException;
@@ -51,11 +55,12 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	 * 
 	 */
 	private static final long serialVersionUID = -218665330663424435L;
-	protected MoleculeReader molReader;
-	protected SmilesKey smilesKey;
-	protected InchiPropertyKey inchiKey;
-	protected StructureTypeProcessor strucType;
-	protected InchiProcessor inchiProcessor;
+	protected transient MoleculeReader molReader;
+	protected transient SmilesKey smilesKey;
+	protected transient InchiPropertyKey inchiKey;
+	protected transient StructureTypeProcessor strucType;
+	protected transient InchiProcessor inchiProcessor;
+	protected transient FixBondOrdersTool fbt = new FixBondOrdersTool();
 
 	
 	public StructureNormalizer() {
@@ -92,7 +97,18 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 				} else
 				try {
 					if (inchiProcessor==null) inchiProcessor = new InchiProcessor();
-					InChIGenerator gen  = inchiProcessor.process(molecule);
+					boolean kekulize = false;
+					for (IBond bond:molecule.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC)) {
+						kekulize = true; break;
+					}
+					IAtomContainer kekulized = (IAtomContainer) molecule;
+					if (kekulize) try {
+						//inchi can't process aromatic bonds...
+						kekulized = (IMolecule) molecule.clone();
+						kekulized = fbt.kekuliseAromaticRings((IMolecule)kekulized);
+						for (IBond bond:kekulized.bonds()) bond.setFlag(CDKConstants.ISAROMATIC, false); 	
+					} catch (Exception x) { x.printStackTrace(); }
+					InChIGenerator gen  = inchiProcessor.process(kekulized);
 					if (INCHI_RET.OKAY.equals(gen.getReturnStatus()) || INCHI_RET.WARNING.equals(gen.getReturnStatus())) {
 						inchi = gen.getInchi();
 						key =  gen.getInchiKey(); 

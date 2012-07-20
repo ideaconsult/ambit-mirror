@@ -29,10 +29,7 @@
 
 package ambit2.core.processors.structure.key;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-
 import ambit2.base.data.Property;
-import ambit2.base.exceptions.AmbitException;
 import ambit2.core.processors.structure.InchiProcessor;
 
 public class InchiPropertyKey extends PropertyKey<String> {
