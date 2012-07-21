@@ -101,6 +101,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			id = getRequest().getAttributes().get(resourceKey);
 			if (id == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No structure identifier");
 			text = Reference.decode(id.toString().trim());
+			if ("".equals(text)) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty query");
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid structure identifier",id));
 		}
@@ -167,8 +168,9 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 				q.setValue(record);
 				query = q;
 			} else {
+				if ("".equals(text))  {
 				//if inchi
-				if (isInChI(text)) {
+				} else if (isInChI(text)) {
 					QueryStructure q = new QueryStructure();
 					q.setChemicalsOnly(true);
 					q.setFieldname(ExactStructureSearchMode.inchi);
@@ -184,7 +186,6 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 					q.setValue(inchi[0]); 
 					query = q;
 				} catch (Exception x) {
-					x.printStackTrace();
 					query= null;
 				}
 			}
