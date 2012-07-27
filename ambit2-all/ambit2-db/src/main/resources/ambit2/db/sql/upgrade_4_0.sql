@@ -423,7 +423,7 @@ insert into version (idmajor,idminor,comment) values (5,1,"AMBIT2 schema -num va
 -- -----------------------------------------------------  
 ALTER TABLE `structure` MODIFY COLUMN `format` ENUM('SDF','CML','MOL','INC','NANO') NOT NULL DEFAULT 'SDF',
 MODIFY COLUMN `type_structure` ENUM('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental','NANO') NOT NULL DEFAULT 'NA';
-insert into version (idmajor,idminor,comment) values (5,2,"AMBIT2 schema - Nano materials support added);
+insert into version (idmajor,idminor,comment) values (5,2,"AMBIT2 schema - Nano materials support added");
 
 ----------------------------------- 
 -- Drop FK to users table ; Ambit schema 5.3
