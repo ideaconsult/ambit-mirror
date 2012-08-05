@@ -303,7 +303,6 @@
     <module>ambit2-model</module>
     <module>ambit2-namestructure</module>
     <module>ambit2-pubchem</module>
-    <module>ambit2-usmiles</module>
     <module>ambit2-tautomers</module>
     <module>ambit2-ui</module>
     <module>ambit2-dbui</module>
@@ -330,6 +329,7 @@
     <module>ambit2-swing</module>
     -->
     <module>ambit2-dbext</module>
+    <module>ambit2-waffles</module>
   </modules>
   <distributionManagement>
   <!-- 
