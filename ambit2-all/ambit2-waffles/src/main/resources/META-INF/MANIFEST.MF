@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.waffles
+
+Name: ambit2/waffles/
+Specification-Title: Wrapper for http://waffles.sourceforge.net/
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.waffles
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.waffles
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

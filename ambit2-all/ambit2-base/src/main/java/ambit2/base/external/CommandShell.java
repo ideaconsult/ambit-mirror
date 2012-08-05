@@ -249,17 +249,8 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
                     long now=System.currentTimeMillis();    
                     final Process process = builder.start();
                     InputStream is = process.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(is);
-                    BufferedReader br = new BufferedReader(isr);
-                    String line;
-                    logger.info("<stdout>");
-                    while ((line = br.readLine()) != null) {
-                    	logger.info(line);
-                    }
-	                br.close();                    
-                    logger.info("</stdout>");
-                	
-	                logger.info("<wait process=\""+execString+"\">");
+                    processStdOut(is);
+                    logger.info("<wait process=\""+execString+"\">");
 	
 	                setExitCode(process.waitFor());
 	                logger.info("</wait>");
@@ -272,7 +263,10 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	                	logger.info("<parse>");
 	                	newmol = parseOutput(path, mol);
 	                	logger.info("</parse>");
-	                	
+	                } else {
+	                  	logger.info("<error>");
+	                	System.out.println(getExitCode());
+	                	logger.info("</error>");	
 	                }
 	                return newmol;	                
                 } else {
@@ -286,6 +280,19 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
                 throw new ShellException(this,x);
             }
     }
+    
+    protected void processStdOut(InputStream is) throws IOException {
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        String line;
+        logger.info("<stdout>");
+        while ((line = br.readLine()) != null) {
+        	logger.info(line);
+        }
+        br.close();                    
+        logger.info("</stdout>");
+    }
+    
     protected synchronized OUTPUT transform(Process process,INPUT cmd) {
     	return transform(cmd);
     }
