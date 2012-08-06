@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.Vector;
 
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.SMILESWriter;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
+
 
 
 public class AutomaticTautomerTests 
@@ -32,7 +37,10 @@ public class AutomaticTautomerTests
 	
 	RandomAccessFile outFile = null;
 	
+	int curLine = 0;	
 	int nInputStr = 0;
+	int traceFrequency = 100;
+	
 	
 	
 	public static void main(String[] args)
@@ -42,7 +50,7 @@ public class AutomaticTautomerTests
 		try {
 			att.handleArguments(new String[] {
 					"-i","D:/Projects/data012-tautomers/NCISMA99.sdz",
-					"-nInpStr","10",
+					"-nInpStr","0",
 					//"-db","D:/Projects/data012-tautomers/nci.smi",
 					"-c","process-nci",
 					"-o","D:/Projects/data012-tautomers/nci.smi",
@@ -313,15 +321,18 @@ public class AutomaticTautomerTests
 			while (f.getFilePointer() < length)
 			{	
 				n++;
-				
+				curLine = n;
 				if (nInputStr > 0)
 					if (n > nInputStr) 
 						break;
 				
 				String line = f.readLine();
-				System.out.println("line " + n + "  " + line);
+				//System.out.println("line " + n + "  " + line);
 				
 				processLine(line.trim());
+				
+				if (n % this.traceFrequency == 0)
+					System.out.println(n);
 			}
 			
 			f.close();
@@ -344,15 +355,50 @@ public class AutomaticTautomerTests
 	}
 	
 	
-	//------------- process line functions ------------------
+	//------------- process line functions (implementation of different commands) ------------------
 	
 	int processNCILine(String line)
 	{
 		//System.out.println(line);
 		Vector<String> tokens = filterTokens(line.split(" "));
-		//TODO
 		
-		output(line + endLine);
+		if (tokens.size() < 2)
+		{	
+			System.out.println("Line " + curLine + "  has less than 2 tokens.");
+			return (-1);
+		}
+		
+		if (tokens.size() > 2)
+		{	
+			System.out.println("Line " + curLine + "  has more than 2 tokens.");
+		}	
+		
+		
+		try
+		{
+			//Create molecule from SMILES
+			IMolecule mol = null;
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(tokens.get(1));
+			
+			//Generate new SMILES
+			java.io.StringWriter result =  new java.io.StringWriter();
+			SMILESWriter writer = new SMILESWriter(result);			
+			writer.write(mol);
+			writer.close();
+			
+			//System.out.println(tokens.get(1) + "  -->  " + result.toString());
+			String smiles = result.toString();
+			int dot_index = smiles.indexOf(".");
+			if (dot_index == -1)
+				output(smiles);
+			else
+				output(smiles.substring(0, dot_index));
+			
+		}
+		catch(Exception e){			
+		}
+		
 		return (0);
 	}
 	
