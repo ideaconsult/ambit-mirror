@@ -5,6 +5,8 @@ import java.io.RandomAccessFile;
 import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -21,6 +23,7 @@ public class AutomaticTautomerTests
 	
 	
 	public static final int LPM_PROCESS_NCI = 1;
+	public static final int LPM_FILTER = 2;
 	
 	int lineProcessMode = 0;
 		
@@ -41,6 +44,13 @@ public class AutomaticTautomerTests
 	int nInputStr = 0;
 	int traceFrequency = 100;
 	
+	//Filters
+	int fMinNA = -1;
+	int fMaxNA = -1;
+	int fMinNDB = -1;
+	int fMaxNDB = -1;
+	int fMinCyclo = -1;
+	int fMaxCyclo = -1;
 	
 	
 	public static void main(String[] args)
@@ -49,13 +59,14 @@ public class AutomaticTautomerTests
 				
 		try {
 			att.handleArguments(new String[] {
-					"-i","D:/Projects/data012-tautomers/NCISMA99.sdz",
+					"-i","D:/Projects/data012-tautomers/nci-basic.smi",
 					"-nInpStr","0",
-					//"-db","D:/Projects/data012-tautomers/nci.smi",
-					"-c","process-nci",
-					"-o","D:/Projects/data012-tautomers/nci.smi",
-					"-nDBStr","1"
-			});		
+					"-c","filter",
+					"-o","D:/Projects/data012-tautomers/nci-filtered.smi",
+					"-fNALess", "30"
+			});
+			
+			att.handleCommand();
 		} 
 		catch (Exception x) {
 			x.printStackTrace();
@@ -148,14 +159,126 @@ public class AutomaticTautomerTests
 				catch(Exception e)
 				{
 					System.out.println("Incorrect nInpStr value: "+ e.toString());
+					return -1;
 				}
 			}	
 		}
 		
-		handleCommand();
+		//filters
+		opt = getOption("fMinNA", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					fMinNA = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect fMinNA value: "+ e.toString());
+					return -1;
+				}
+			}	
+		}
+		
+		opt = getOption("fMaxNA", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					fMaxNA = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect fMaxNA value: "+ e.toString());
+					return -1;
+				}
+			}	
+		}
+		
+		opt = getOption("fMinNDB", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					fMinNDB = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect fMinNDB value: "+ e.toString());
+					return -1;
+				}
+			}	
+		}
+		
+		opt = getOption("fMaxNDB", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					fMaxNDB = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect fMaxNDB value: "+ e.toString());
+					return -1;
+				}
+			}	
+		}
+		
+		opt = getOption("fMinCyclo", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					fMinCyclo = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect fMinCyclo value: "+ e.toString());
+					return -1;
+				}
+			}	
+		}
+		
+		
+		opt = getOption("fMaxCyclo", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					fMaxCyclo = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect fMaxCyclo value: "+ e.toString());
+					return -1;
+				}
+			}	
+		}
+		
 		
 		return (0);
 	}
+	
+	
 	
 	public int handleCommand() throws Exception
 	{
@@ -165,9 +288,19 @@ public class AutomaticTautomerTests
 		
 		if (command.equals("process-nci"))
 		{
-			System.out.println("Processing nci file:");
+			System.out.println("Processing nci file: " + inFileName);
 			openOutputFile();
 			lineProcessMode = LPM_PROCESS_NCI;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("filter"))
+		{
+			System.out.println("Processing nci file: " + inFileName);
+			openOutputFile();
+			lineProcessMode = LPM_FILTER;
 			iterateInputFile();
 			closeOutputFile();
 			return(0);
@@ -190,7 +323,10 @@ public class AutomaticTautomerTests
 		System.out.println("-nInpStr      the number of used input structures");
 		
 		System.out.println("-c            command: ");
-		System.out.println("                 process-nci           nci row file is processed");
+		System.out.println("                 process-nci           nci file is processed");
+		System.out.println("                 filter                input file is filtered");
+		
+		
 	}	
 	
 	
@@ -351,6 +487,12 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (lineProcessMode == LPM_FILTER)
+		{
+			filterLine(line);
+			return(0);
+		}
+		
 		return 0;
 	}
 	
@@ -402,7 +544,88 @@ public class AutomaticTautomerTests
 		return (0);
 	}
 	
+	int filterLine(String line)
+	{
+		try
+		{
+			IMolecule mol = null;
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(line.trim());
+			
+			if (isFilterOK(mol))
+				output(line);
+		}	
+		catch(Exception e){
+			return (-1);
+		}
+		
+		return (0);
+	}
 	
+	
+	boolean isFilterOK(IAtomContainer mol)
+	{
+		if (fMinNA != -1)
+		{
+			if (mol.getAtomCount() < fMinNA)
+				return(false);
+		}
+		
+		if (fMaxNA != -1)
+		{
+			if (mol.getAtomCount() > fMaxNA)
+				return(false);
+		}
+		
+		
+		int NDB = -1; //this value means that NDB has not been evaluated yet
+		
+		if (fMinNDB != -1)
+		{
+			//calculation of NDB
+			NDB = 0;
+			for (IBond bond: mol.bonds())
+			{
+				if (bond.getOrder() == IBond.Order.DOUBLE)
+					NDB++;
+			}
+			
+			if (NDB < fMinNDB)
+				return(false);
+		}
+		
+		if (fMaxNDB != -1)
+		{
+			if (NDB == -1)
+			{
+				//calculation of NDB
+				NDB = 0;
+				for (IBond bond: mol.bonds())
+				{
+					if (bond.getOrder() == IBond.Order.DOUBLE)
+						NDB++;
+				}
+			}
+			
+			if (NDB > fMaxNDB)
+				return(false);
+		}
+		
+		
+		if (fMinCyclo != -1)
+		{
+			if ((mol.getBondCount() - mol.getAtomCount() + 1) < fMinCyclo)
+				return(false);
+		}
+		
+		if (fMaxCyclo != -1)
+		{
+			if ((mol.getBondCount() - mol.getAtomCount() + 1) > fMaxCyclo)
+				return(false);
+		}
+		
+		return true;
+	}
 	
 	//--------------------------------------------------------
 	
