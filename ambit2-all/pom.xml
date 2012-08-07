@@ -330,6 +330,8 @@
     -->
     <module>ambit2-dbext</module>
     <module>ambit2-waffles</module>
+    <module>ambit2-reactions</module>
+    <module>ambit2-markush</module>
   </modules>
   <distributionManagement>
   <!-- 
