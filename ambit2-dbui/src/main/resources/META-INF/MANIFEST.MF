@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.dbui
-Manifest-version: ${project.version}
+
+Name: ambit2/dbui/
+Specification-Title: ambit2.dbui
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.dbui
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.dbui
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

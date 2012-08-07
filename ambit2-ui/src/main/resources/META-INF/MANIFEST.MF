@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.ui
-Manifest-version: ${project.version}
+
+Name: ambit2/ui/
+Specification-Title: Java Swing User Interface
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.ui
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.ui
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

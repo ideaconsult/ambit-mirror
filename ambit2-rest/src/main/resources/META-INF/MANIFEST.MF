@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.rest
-Manifest-version: ${project.version}
+
+Name: ambit2/rest/
+Specification-Title: REST services generic classes
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.rest
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.rest
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

@@ -1,5 +1,7 @@
-Package: ambit2.dbext
 Manifest-version: 1.0
+Package: ambit2.dbext
+
+Name: ambit2/dbext/
 Specification-Title: ambit2.dbext
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD

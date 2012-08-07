@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.some
-Manifest-version: ${project.version}
+
+Name: ambit2/some/
+Specification-Title: Wrapper for Site Of Metabolism Estimator (SOME) doi: 10.1093/bioinformatics/btp140
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.some
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.some
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

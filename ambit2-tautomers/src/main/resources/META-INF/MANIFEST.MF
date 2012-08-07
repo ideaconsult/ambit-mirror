@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.tautomers
-Manifest-version: ${project.version}
+
+Name: ambit2/tautomers/
+Specification-Title: Tautomer generation
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.tautomers
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.tautomers
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

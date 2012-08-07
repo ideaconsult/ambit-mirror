@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.smi23d
-Manifest-version: ${project.version}
+
+Name: ambit2/smi23d/
+Specification-Title: SMI23D wrapper (3D structure builder)
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.smi23d
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.smi23d
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

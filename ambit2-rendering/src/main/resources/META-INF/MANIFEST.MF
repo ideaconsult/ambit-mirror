@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.rendering
-Manifest-version: ${project.version}
+
+Name: ambit2/rendering/
+Specification-Title: 2D structure rendering 
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.rendering
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.rendering
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

@@ -1,5 +1,7 @@
+Manifest-version: 1.0
 Package: ambit2.db
-Manifest-version: ${project.version}
+
+Name: ambit2/db/
 Specification-Title: ambit2.db
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD

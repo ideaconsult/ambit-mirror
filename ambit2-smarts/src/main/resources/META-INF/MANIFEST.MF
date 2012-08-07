@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.smarts
-Manifest-version: ${project.version}
+
+Name: ambit2/smarts/
+Specification-Title: SMARTS & SMIRKS
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.smarts
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.smarts
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.dragon
-Manifest-version: ${project.version}
+
+Name: ambit2/dragon/
+Specification-Title: Dragon descriptors wrapper
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.dragon
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.dragon
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.
