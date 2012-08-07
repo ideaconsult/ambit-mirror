@@ -1,6 +1,8 @@
+Manifest-version: 1.0
 Package: ambit2.chebi
-Manifest-version: ${project.version}
-Specification-Title: ambit2.chebi
+
+Name: ambit2/chebi/
+Specification-Title: CHEBI services client wrapper
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD
 Implementation-Title: ambit2.chebi

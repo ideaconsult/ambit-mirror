@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.descriptors
-Manifest-version: ${project.version}
+
+Name: ambit2/descriptors/
+Specification-Title: Descriptors
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.descriptors
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.descriptors
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

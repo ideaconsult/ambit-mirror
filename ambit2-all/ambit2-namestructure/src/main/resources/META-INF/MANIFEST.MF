@@ -1,4 +1,13 @@
-Package: ambit2.name-structure
-Manifest-version: ${project.version}
+Manifest-version: 1.0
+Package: ambit2.namestructure
+
+Name: ambit2/namestructure/
+Specification-Title: OPSIN wrapper
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.namestructure
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.namestructure
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

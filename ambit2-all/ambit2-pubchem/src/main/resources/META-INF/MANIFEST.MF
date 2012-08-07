@@ -1,5 +1,14 @@
+Manifest-version: 1.0
 Package: ambit2.pubchem
 Main-Class: ambit2.pubchem.SearchApplication
-Manifest-version: ${project.version}
+
+Name: ambit2/pubchem/
+Specification-Title: PubChem (PUG & REST), CIR and OpenTox client code
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.pubchem
+Implementation-Version: ${project.version}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.pubchem
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.
