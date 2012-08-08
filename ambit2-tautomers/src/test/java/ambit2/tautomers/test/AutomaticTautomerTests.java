@@ -11,6 +11,8 @@ import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
+import ambit2.tautomers.TautomerManager;
+
 
 
 public class AutomaticTautomerTests 
@@ -24,6 +26,10 @@ public class AutomaticTautomerTests
 	
 	public static final int LPM_PROCESS_NCI = 1;
 	public static final int LPM_FILTER = 2;
+	public static final int LPM_TAUTOMER_COUNT = 3;
+	public static final int LPM_TAUTOMER_EQUIVALENCE = 4;
+	public static final int LPM_TAUTOMER_COMPARISON = 5;
+	
 	
 	int lineProcessMode = 0;
 		
@@ -39,10 +45,11 @@ public class AutomaticTautomerTests
 	String dbFileName = "";
 	
 	RandomAccessFile outFile = null;
+	TautomerManager tman;
 	
 	int curLine = 0;	
 	int nInputStr = 0;
-	int traceFrequency = 100;
+	int traceFrequency = 10;
 	
 	//Filters
 	int fMinNA = -1;
@@ -59,11 +66,12 @@ public class AutomaticTautomerTests
 				
 		try {
 			att.handleArguments(new String[] {
-					"-i","D:/Projects/data012-tautomers/nci-basic.smi",
+					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					"-nInpStr","0",
-					"-c","filter",
-					"-o","D:/Projects/data012-tautomers/nci-filtered.smi",
-					"-fNALess", "30"
+					"-c","tautomer-count",
+					"-o","D:/Projects/data012-tautomers/tautomer-count.txt",
+					"-fMinNDB", "1",
+					"-fMaxCyclo", "4",
 			});
 			
 			att.handleCommand();
@@ -298,9 +306,20 @@ public class AutomaticTautomerTests
 		
 		if (command.equals("filter"))
 		{
-			System.out.println("Processing nci file: " + inFileName);
+			System.out.println("Filtering file: " + inFileName);
 			openOutputFile();
 			lineProcessMode = LPM_FILTER;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("tautomer-count"))
+		{
+			System.out.println("tautomer counting: " + inFileName);
+			openOutputFile();
+			setTautomerManager();
+			lineProcessMode = LPM_TAUTOMER_COUNT;
 			iterateInputFile();
 			closeOutputFile();
 			return(0);
@@ -493,6 +512,12 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (lineProcessMode == this.LPM_TAUTOMER_COUNT)
+		{
+			tautomerCount(line);
+			return(0);
+		}
+		
 		return 0;
 	}
 	
@@ -553,7 +578,7 @@ public class AutomaticTautomerTests
 			mol = sp.parseSmiles(line.trim());
 			
 			if (isFilterOK(mol))
-				output(line);
+				output(line + endLine);
 		}	
 		catch(Exception e){
 			return (-1);
@@ -627,6 +652,27 @@ public class AutomaticTautomerTests
 		return true;
 	}
 	
+	int tautomerCount(String line)
+	{
+		try
+		{
+			IMolecule mol = null;
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(line.trim());
+			
+			tman.setStructure(mol);
+			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			
+			output(line + "  " + resultTautomers.size() +  endLine);
+		}	
+		catch(Exception e){
+			return (-1);
+		}
+		
+		return (0);
+	}
+	
+	
 	//--------------------------------------------------------
 	
 	public Vector<String> filterTokens(String tokens[])
@@ -636,5 +682,13 @@ public class AutomaticTautomerTests
 			if (!tokens[i].equals(""))
 				v.add(tokens[i]);
 		return v;
+	}
+	
+	void setTautomerManager()
+	{
+		tman = new TautomerManager();
+		tman.use15ShiftRules(true);
+		tman.use17ShiftRules(false);
+		tman.maxNumOfBackTracks = 10000;
 	}
 }
