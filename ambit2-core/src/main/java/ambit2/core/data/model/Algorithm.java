@@ -89,7 +89,13 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			public String getMediaType() {
 				return "text/plain";
 			}
-		};			
+		},
+		WAFFLES_JSON {
+			@Override
+			public String getMediaType() {
+				return "application/json";
+			}
+		};
 		public abstract String getMediaType();
 		public String getImage() {
 			return "images/ambit.png";

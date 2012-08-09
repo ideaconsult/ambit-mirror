@@ -1,4 +1,4 @@
-package ambit2.rest.model.builder;
+package ambit2.rest.task.weka;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,6 +35,7 @@ import ambit2.db.model.ModelQueryResults;
 import ambit2.rest.OpenTox;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.model.builder.ModelBuilder;
 
 /**
  * Builds WEKA model from ModelQueryResults. Input variables and (optionally) target variables are required.

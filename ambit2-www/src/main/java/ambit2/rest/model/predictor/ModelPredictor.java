@@ -38,6 +38,8 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.task.waffles.WafflesPredictor;
+import ambit2.rest.task.weka.WekaPredictor;
 
 /**
  * Abstract class for all predictive models 
@@ -312,7 +314,11 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request));
-
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.WAFFLES_JSON.getMediaType())) {
+					return new WafflesPredictor(
+							request.getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request));
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 				if (model.getPredictors().size()== 0) { //hack for structure based AD
 					return new FingerprintsPredictor(

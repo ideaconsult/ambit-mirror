@@ -200,8 +200,13 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
     /**
      * Does nothing, override with smth meaningfull
      */
-    protected abstract OUTPUT parseOutput(String path, INPUT mol) throws ShellException ;
+    protected abstract OUTPUT parseOutput(String path, INPUT mol) throws ShellException;
     
+    
+    protected OUTPUT parseOutput(String path, INPUT mol, int exitVal) throws ShellException {
+    	if (exitCodeOK(exitVal)) return parseOutput(path, mol);
+    	else return null;
+    }
 
     protected String getPath(File file) {
         String path = file.getAbsolutePath();
@@ -266,7 +271,8 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	                } else {
 	                  	logger.info("<error>");
 	                	System.out.println(getExitCode());
-	                	logger.info("</error>");	
+	                	logger.info("</error>");
+	                	newmol = parseOutput(path, mol,getExitCode());
 	                }
 	                return newmol;	                
                 } else {

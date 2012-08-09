@@ -69,6 +69,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
+				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_HTML,
 				MediaType.APPLICATION_WADL
 				});

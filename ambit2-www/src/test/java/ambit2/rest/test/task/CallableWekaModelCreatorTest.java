@@ -8,8 +8,8 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
-import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.TaskResult;
+import ambit2.rest.task.weka.CallableWekaModelCreator;
 import ambit2.rest.test.ResourceTest;
 import ambit2.rest.test.dataset.DatasetReporterTest;
 

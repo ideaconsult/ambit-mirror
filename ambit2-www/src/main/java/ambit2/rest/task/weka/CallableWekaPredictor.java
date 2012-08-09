@@ -1,4 +1,4 @@
-package ambit2.rest.task;
+package ambit2.rest.task.weka;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -8,6 +8,7 @@ import weka.core.Instance;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.rest.dataset.RDFInstancesParser;
 import ambit2.rest.model.predictor.ModelPredictor;
+import ambit2.rest.task.CallableModelPredictor;
 
 public class CallableWekaPredictor<T,USERID> extends CallableModelPredictor<Instance,ModelPredictor<T,Instance>,USERID> {
 	//protected String[] targetURI;

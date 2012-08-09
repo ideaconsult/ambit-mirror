@@ -75,7 +75,7 @@ public class CommandShellTest {
 		 */
 		outputFile = File.createTempFile("waffles_", ".arff");
 		outputFile.deleteOnExit();
-		File results = learn.predict(file, model, outputFile);
+		File results = learn.predict(file, model, outputFile,"-ignore 0");
 		Assert.assertNotNull(results);
 	}
 

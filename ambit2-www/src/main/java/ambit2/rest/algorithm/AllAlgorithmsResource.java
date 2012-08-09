@@ -19,6 +19,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.model.Algorithm;
+import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.AlgorithmType;
 import ambit2.core.data.model.Parameter;
 import ambit2.db.model.ModelQueryResults;
@@ -39,13 +40,14 @@ import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableStructurePairsModelCreator;
-import ambit2.rest.task.CallableWekaModelCreator;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.OptimizerModelBuilder;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.dbpreprocessing.CallableFinder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 import ambit2.rest.task.dbpreprocessing.CallableFixPreferredStructure;
+import ambit2.rest.task.waffles.CallableWafflesModelCreator;
+import ambit2.rest.task.weka.CallableWekaModelCreator;
 
 public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public final static String algorithm = OpenTox.URI.algorithm.getURI();
@@ -360,7 +362,16 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 							getRequest().getRootRef(),
 							getContext(),
 							algorithm,
-							token);						
+							token);		
+			} else if (AlgorithmFormat.WAFFLES_JSON.equals(algorithm.getFormat())) {				
+				return new CallableWafflesModelCreator(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						algorithm,
+						modelReporter,
+						algReporter,
+						token);					
 			} else {
 					
 				return new CallableWekaModelCreator(
