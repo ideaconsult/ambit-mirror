@@ -47,7 +47,9 @@ import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableModelPredictor;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableStructureOptimizer;
-import ambit2.rest.task.CallableWekaPredictor;
+import ambit2.rest.task.waffles.CallableWafflesPredictor;
+import ambit2.rest.task.waffles.WafflesPredictor;
+import ambit2.rest.task.weka.CallableWekaPredictor;
 
 /**
  * Model as in http://opentox.org/development/wiki/Model
@@ -125,8 +127,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
-			variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
-			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
+			variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) 
 			) {
 		return new RDFJenaConvertor<ModelQueryResults,IQueryRetrieval<ModelQueryResults>>(
 				new ModelRDFReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),variant.getMediaType(),getDocumentation())
@@ -243,8 +244,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						((ExpertModelpredictor)thepredictor).setValue(form.getFirstValue("value"));
 					};
 				}	;
-			} else 
-			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
 				return //reads Instances, instead of IStructureRecord
 				new CallableWekaPredictor<Object,String>(
 						form,
@@ -253,6 +253,15 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						thepredictor,
 						token)
 						;
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.WAFFLES_JSON.getMediaType())) {
+				return 
+				new CallableWafflesPredictor(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						(WafflesPredictor)thepredictor,
+						token)
+						;				
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.COVERAGE_SERIALIZED.getMediaType())) {
 
 				if (model.getPredictors().size()== 0) { //hack for structure based AD

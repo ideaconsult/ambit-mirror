@@ -20,6 +20,16 @@ public class ShellWafflesLearn extends ShellWaffles {
 	protected WafflesLearnCommand command;
 	protected WafflesLearnAlgorithm algorithm;
 	
+	public WafflesLearnAlgorithm getAlgorithm() {
+		return algorithm;
+	}
+
+
+	public void setAlgorithm(WafflesLearnAlgorithm algorithm) {
+		this.algorithm = algorithm;
+	}
+
+
 	public ShellWafflesLearn() throws ShellException {
 		super();
 	}
@@ -95,7 +105,18 @@ public class ShellWafflesLearn extends ShellWaffles {
 		out.clear();
 		return super.runShell(in);
 	}
-
+	/**
+	 * Uses the default algorithm
+	 * @param dataset
+	 * @param model
+	 * @param alg_opts
+	 * @return
+	 * @throws ShellException
+	 */
+	public File train(File dataset,File model,String alg_opts) throws ShellException  {
+		if (algorithm==null) throw new ShellException(this,"Undefined learing algorithm");
+		return this.train(dataset, model, algorithm, alg_opts);
+	}
 	/**
 	 * 
 	 * @param dataset
@@ -112,9 +133,10 @@ public class ShellWafflesLearn extends ShellWaffles {
 		in.put(WafflesLearnOption.dataset.name(), dataset.getAbsolutePath());
 		in.put(WafflesLearnOption.data_opts.name(), "-ignore 0");
 		Properties out = runShell(in);
-		System.out.println(out.getProperty(getOutProperty()));
 		return new File(out.getProperty(getOutProperty()));
 	}
+	
+
 	/**
 	 * 
 	 * @param dataset
@@ -123,14 +145,14 @@ public class ShellWafflesLearn extends ShellWaffles {
 	 * @return results
 	 * @throws ShellException
 	 */
-	public File predict(File dataset, File model, File results) throws ShellException  {
+	public File predict(File dataset, File model, File results,String dataOptions) throws ShellException  {
 		setOutputFile(results.getAbsolutePath());
 		setOutProperty(WafflesLearnOption.dataset.name());
 		Properties in = new Properties();
 		in.put(WafflesLearnOption.command.name(), WafflesLearnCommand.predict.name());
 		in.put(WafflesLearnOption.model_file.name(),model.getAbsolutePath());
 		in.put(WafflesLearnOption.dataset.name(), dataset.getAbsolutePath());
-		in.put(WafflesLearnOption.data_opts.name(), "-ignore 0");
+		in.put(WafflesLearnOption.data_opts.name(), dataOptions);
 		Properties out = runShell(in);
 		return new File(out.getProperty(getOutProperty()));
 	}

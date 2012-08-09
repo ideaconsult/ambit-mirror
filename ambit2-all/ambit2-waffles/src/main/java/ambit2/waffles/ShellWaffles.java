@@ -17,6 +17,12 @@ public abstract class ShellWaffles extends CommandShell<Properties, Properties> 
 	 * 
 	 */
 	private static final long serialVersionUID = 872475206438753370L;
+	protected static final String exitCodeProperty = "exitCode";
+
+	public static String getExitcodeProperty() {
+		return exitCodeProperty;
+	}
+
 
 	private final static String path = "bin/waffles";  
 
@@ -72,6 +78,15 @@ public abstract class ShellWaffles extends CommandShell<Properties, Properties> 
 	@Override
 	protected Properties parseOutput(String path, Properties in)
 			throws ShellException {
+		this.out.put(exitCodeProperty, "0");
+		return this.out;
+	}
+
+
+	@Override
+	protected Properties parseOutput(String path, Properties mol, int exitVal)
+			throws ShellException {
+		this.out.put(exitCodeProperty, Integer.toString(exitVal));
 		return this.out;
 	}
 

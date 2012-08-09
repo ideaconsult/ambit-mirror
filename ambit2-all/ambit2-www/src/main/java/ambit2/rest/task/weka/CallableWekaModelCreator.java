@@ -1,4 +1,4 @@
-package ambit2.rest.task;
+package ambit2.rest.task.weka;
 
 import java.sql.Connection;
 
@@ -21,7 +21,8 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.dataset.RDFInstancesParser;
 import ambit2.rest.model.ModelURIReporter;
-import ambit2.rest.model.builder.WekaModelBuilder;
+import ambit2.rest.task.CallableModelCreator;
+import ambit2.rest.task.TaskResult;
 
 
 /** Creates a model, given an algorithm
@@ -55,6 +56,7 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 			token);
 	}
 
+	@Override
 	protected AbstractBatchProcessor createBatch(Object target) throws Exception{
 		if (target == null) throw new Exception("");
 		return new RDFInstancesParser(builder.getApplicationRootReference().toString());

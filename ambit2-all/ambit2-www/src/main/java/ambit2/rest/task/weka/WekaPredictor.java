@@ -1,4 +1,4 @@
-package ambit2.rest.model.predictor;
+package ambit2.rest.task.weka;
 
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -20,6 +20,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.rest.model.ModelURIReporter;
+import ambit2.rest.model.predictor.ModelPredictor;
 
 
 

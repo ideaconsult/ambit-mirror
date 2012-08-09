@@ -356,10 +356,13 @@ public class AlgorithmsPile {
 			{"superbuilder","Builds a model with all dependencies",null,null,new String[] {AlgorithmType.SuperBuilder.toString()},null,null,"http://ambit.sourceforge.net/descriptors.owl#superbuilder"},
 			{"mockup","Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",null,null,new String[] {AlgorithmType.Mockup.toString()},null,null,"http://ambit.sourceforge.net/descriptors.owl#mockup"},
 			
-			{"expert","Human experts input","expert",null,new String[] {AlgorithmType.Expert.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#expert_input"}
+			{"expert","Human experts input","expert",null,new String[] {AlgorithmType.Expert.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#expert_input"},
 			
-			
-			
+			/**
+			 * Waffles machine learning library
+			 */
+			{"WafflesDecisionTree","Decision tree for regression and classification","ambit2.waffles.learn.WafflesLearnDecisionTree",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.Classification.toString(),AlgorithmType.Regression.toString(),AlgorithmType.Supervised.toString(),AlgorithmType.EagerLearning.toString()},null,Algorithm.requires.property},
+			{"WafflesRandomForest","Random forest for regression and classification","ambit2.waffles.learn.WafflesLearnRandomForest",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.Classification.toString(),AlgorithmType.Regression.toString(),AlgorithmType.Supervised.toString(),AlgorithmType.EagerLearning.toString()},null,Algorithm.requires.property}
 	};
 	
 	public static synchronized List<Algorithm<String>> createList() {
@@ -374,7 +377,9 @@ public class AlgorithmsPile {
 					alg.hasType(AlgorithmType.Structure.toString())?AlgorithmFormat.MOPAC:
 					alg.hasType(AlgorithmType.Rules.toString())||alg.hasType(AlgorithmType.Fingerprints.toString())?AlgorithmFormat.JAVA_CLASS:
 					alg.hasType(AlgorithmType.AppDomain.toString())?AlgorithmFormat.COVERAGE_SERIALIZED:
+					(d[2]!=null) && d[2].toString().startsWith("ambit2.waffles.")?AlgorithmFormat.WAFFLES_JSON:
 					AlgorithmFormat.WEKA);
+			
 			alg.setId(d[0].toString());
 			alg.setName(d[1].toString());
 			alg.setContent(d[2]==null?null:d[2].toString());
