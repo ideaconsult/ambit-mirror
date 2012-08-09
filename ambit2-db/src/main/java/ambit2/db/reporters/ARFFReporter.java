@@ -1,5 +1,10 @@
 package ambit2.db.reporters;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -21,8 +26,12 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	 * 
 	 */
 	private static final long serialVersionUID = 2931123688036795689L;
-
+	protected File tempFile;
+	protected Writer tmpWriter;
+	
 	protected String urlPrefix = "";
+	protected String delimiter = "";
+	
 	public String getUrlPrefix() {
 		return urlPrefix;
 	}
@@ -30,7 +39,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		this.urlPrefix = urlPrefix;
 	}
 	
-	public ARFFReporter() {
+	public ARFFReporter() throws IOException  {
 		this(null,null);
 	}
 	public ARFFReporter(Template template) {
@@ -66,14 +75,62 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 				return target;
 			};
 		});	
+
 	}
+	
+	@Override
+	public void setOutput(Writer output) throws AmbitException {
+		super.setOutput(output);
+		try {
+			tmpWriter = createTempWriter();
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+	}
+	protected Writer createTempWriter() throws IOException {
+		tempFile = File.createTempFile("temp_", ".arff");
+		tempFile.deleteOnExit();
+		return new BufferedWriter(new FileWriter(tempFile));
+	}
+	@Override
 	public void footer(Writer output, Q query) {
 	
 		try { 
-			if (header == null) {
-				writeHeader(output);
-			}				
-			output.flush(); } catch (Exception x) {};
+			tmpWriter.flush(); 
+		} catch (Exception x) {
+			
+		} finally {
+			try {tmpWriter.close();} catch (Exception x) {}
+		}
+		//now the header
+		try { 
+			//complete the URI attribute
+			output.write("}\n");
+			for (Property p : header) {
+				output.write(getPropertyHeader(p));
+			}
+			
+			output.write("\n@data\n");
+		} catch (Exception x) {
+			x.printStackTrace();
+		} finally {
+		}
+		
+		BufferedReader in=null;
+		try {
+			String line;
+			in = new BufferedReader(new FileReader(tempFile));
+			while ((line = in.readLine()) != null) { 
+				output.write(line);
+				output.write("\n");
+			}
+
+		} catch (Exception x) {
+			
+		} finally {
+			try { if (in!=null) in.close(); } catch (Exception x) {}
+			try { if (tempFile!=null) tempFile.delete(); } catch (Exception x) {}
+		}
 	};
 	
 	protected void writeHeader(Writer writer) throws IOException {
@@ -93,23 +150,36 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		if (header == null) {
 			header = template2Header(template,true);
 		
-			writer.write("@attribute URI string\n");
-			for (Property p : header) {
-				writer.write(getPropertyHeader(p));
-			}
-			
-			writer.write("\n@data\n");
+			//in order to handle nominal attributes, will write the header at the end. 
 		}
 	}	
 	protected String getPropertyHeader(Property p) {
+		StringBuilder allowedValues = null; 
+		if (p.isNominal()) {
+			if (p.getAllowedValues()==null) {
+				
+			} else {
+				for (Comparable value: p.getAllowedValues()) {
+					if (allowedValues==null) {
+						allowedValues = new StringBuilder();
+						allowedValues.append("{");
+					}
+					else allowedValues.append(","); 
+					allowedValues.append(value);
+				}
+				allowedValues.append("}");
+			}
+		}
+				
 		String d = p.getName().indexOf(" ")>=0?"\"":"";
 		return 
 		String.format("@attribute %s%s%s %s\n", 
 				d,
 				p.getName(),
 				d,
-				p.getClazz()==Number.class?"numeric":"string");
+				p.isNominal()?allowedValues:p.getClazz()==Number.class?"numeric":"string");
 	}
+	@Override
 	public void header(Writer writer, Q query) {
 		try {
 			if (getLicenseURI()==null)
@@ -118,6 +188,9 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 				writer.write(String.format("@relation %s_License:_%s\n\n", 
 						getRelationName().trim().replace(" ", "_").replace("?", "_").replace("&", "_"), 
 						getLicenseURI().trim().replace(" ", "_")));
+			
+			output.write("@attribute URI {");
+			
 		} catch (IOException x) {
 			x.printStackTrace();
 			//TODO throw exception
@@ -129,18 +202,32 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
-			Writer writer = getOutput();
+			Writer writer = tmpWriter;
 			writeHeader(writer);
 			int i = 0;
-			writer.write(String.format("%s/compound/%d",urlPrefix,item.getIdchemical()));
+			String uri = String.format("%s/compound/%d",urlPrefix,item.getIdchemical());
 			if (item.getIdstructure()>0)
-				writer.write(String.format("/conformer/%d",item.getIdstructure()));
+				uri = String.format("%s/conformer/%d",uri,item.getIdstructure());
+
+			output.append(delimiter);
+			output.append(uri);
+			delimiter = ",";
+			writer.write(uri);		
+			
 			for (Property p : header) {
 				Object value = item.getProperty(p);
-				if (p.getClazz()==Number.class) { 
+				if ((value!=null) && p.isNominal()) {
+					p.addAllowedValue(value.toString());
+				}
+				if (p.isNominal()) 
+					writer.write(String.format(",%s",
+								(value==null)||(IQueryRetrieval.NaN.equals(value.toString()))?"?":value
+								));
+				else if (p.getClazz()==Number.class) { 
 					writer.write(String.format(",%s",
 							(value==null)||(IQueryRetrieval.NaN.equals(value.toString()))?"?":value
 							));
+					
 				} else
 					writer.write(String.format(",%s%s%s",
 							value==null?"":"\"",
@@ -167,4 +254,5 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	public String getFileExtension() {
 		return "arff";
 	}
+
 }

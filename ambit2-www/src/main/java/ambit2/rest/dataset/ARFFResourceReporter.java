@@ -40,10 +40,27 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	
 	@Override
 	protected String getPropertyHeader(Property p) {
+		StringBuilder allowedValues = null; 
+		if (p.isNominal()) {
+			if (p.getAllowedValues()==null) {
+				//allowedValues = new StringBuilder();
+				//allowedValues.append("{P1,P2}");
+			} else {
+				for (Comparable value: p.getAllowedValues()) {
+					if (allowedValues==null) {
+						allowedValues = new StringBuilder();
+						allowedValues.append("{");
+					}
+					else allowedValues.append(","); 
+					allowedValues.append(value);
+				}
+				allowedValues.append("}");
+			}
+		}
 		
 		return 
 		String.format("@attribute %s %s\n", 
 				reporter.getURI(p),
-				p.getClazz()==Number.class?"numeric":"string");
+				allowedValues!=null?allowedValues:p.getClazz()==Number.class?"numeric":"string");
 	}
 }
