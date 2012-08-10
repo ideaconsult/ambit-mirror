@@ -157,9 +157,9 @@ public class Chemical_crud_test extends CRUDTest<Object,IChemical>{
 		Assert.assertEquals(0,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where idchemical=10");
 		Assert.assertEquals(1,table.getRowCount());
-		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles='F.[F-].[Na+]' and inchi='InChI=UPDATEDINCHI' and formula is null and inchikey='UPDATEDKEY' and idchemical=10");
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals  where smiles is null and formula is null and inchi='InChI=UPDATEDINCHI' and inchikey='UPDATEDKEY' and idchemical=10");
 		Assert.assertEquals(1,table.getRowCount());
-	
+
 		c.close();		
 		
 	}	
