@@ -1,6 +1,7 @@
 package ambit2.rest.task.waffles;
 
 import java.io.File;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -9,10 +10,13 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import weka.core.Attribute;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
@@ -38,33 +42,33 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 	protected String[] parameters = null;	
 	protected String dataOptions ;
 	
-	protected List<String> predictors_URI;
-	public List<String> getPredictors_URI() {
+	protected List<Attribute> predictors_URI;
+	public List<Attribute> getPredictors_URI() {
 		return predictors_URI;
 	}
 
-	public void setPredictors_URI(List<String> predictors_URI) {
+	public void setPredictors_URI(List<Attribute> predictors_URI) {
 		this.predictors_URI = predictors_URI;
 	}
 
-	public List<String> getDependent_URI() {
+	public List<Attribute> getDependent_URI() {
 		return dependent_URI;
 	}
 
-	public void setDependent_URI(List<String> dependent_URI) {
+	public void setDependent_URI(List<Attribute> dependent_URI) {
 		this.dependent_URI = dependent_URI;
 	}
 
-	public List<String> getPredicted_URI() {
+	public List<Attribute> getPredicted_URI() {
 		return predicted_URI;
 	}
 
-	public void setPredicted_URI(List<String> predicted_URI) {
+	public void setPredicted_URI(List<Attribute> predicted_URI) {
 		this.predicted_URI = predicted_URI;
 	}
 
-	protected List<String> dependent_URI;
-	protected List<String> predicted_URI;
+	protected List<Attribute> dependent_URI;
+	protected List<Attribute> predicted_URI;
 	
 	public String getDataOptions() {
 		return dataOptions;
@@ -109,7 +113,8 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 				in.put(WafflesLearnOption.alg_opts.name(), parameters[0]);
 		in.put(WafflesLearnOption.dataset.name(), dataset.getAbsolutePath());
 		in.put(WafflesLearnOption.algorithm.name(), waffles.getAlgorithm().name());
-		in.put(WafflesLearnOption.data_opts.name(), dataOptions);
+		if (dataOptions!=null)
+			in.put(WafflesLearnOption.data_opts.name(), dataOptions);
 		try {
 			Properties out = waffles.runShell(in);
 			if ((out==null) || (out.getProperty(waffles.getOutProperty())==null))
@@ -146,7 +151,7 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 			predicted = new PredictedVarsTemplate(name+"#Predicted");
 			for (int i=0; i < dependent_URI.size(); i++) {
 				//dependent var
-				Property property = createPropertyFromReference(new Reference(dependent_URI.get(i)), entry);
+				Property property = createPropertyFromReference(new Reference(dependent_URI.get(i).name()), entry);
 				property.setOrder(i+1);
 				dependent.add(property);
 				//and predicted
@@ -158,11 +163,26 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 				predictedProperty.setNominal(property.isNominal());
 				predictedProperty.setEnabled(true);
 				predicted.add(predictedProperty);
+				
+				if (dependent_URI.get(i).isNominal()) {
+					Enumeration e = dependent_URI.get(i).enumerateValues();
+					PropertyAnnotations annotations = new PropertyAnnotations();
+					while (e.hasMoreElements()) {
+						String value = e.nextElement().toString();
+						predictedProperty.addAllowedValue(value);
+						PropertyAnnotation annotation = new PropertyAnnotation();
+						annotation.setObject(value);
+						annotation.setPredicate("acceptValue");
+						annotation.setType("Feature");
+						annotations.add(annotation);
+					}
+					predictedProperty.setAnnotations(annotations);
+				}
 			}	
 			
 			predictors = new Template(name+"#Independent");
 			for (int i=0; i < predictors_URI.size(); i++) {
-				Property property = createPropertyFromReference(new Reference(predictors_URI.get(i)), entry);
+				Property property = createPropertyFromReference(new Reference(predictors_URI.get(i).name()), entry);
 				property.setOrder(i+1);
 				predictors.add(property);
 			}	
