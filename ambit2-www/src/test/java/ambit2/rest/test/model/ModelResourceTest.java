@@ -207,9 +207,8 @@ public class ModelResourceTest extends ResourceTest {
 		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/4&feature_uris[]=http://localhost:%d/feature/2",port,port,port,port),
 				String.format("http://localhost:%d/feature/4",port),
 				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/7",port,port,port,port),
-				String.format("http://localhost:%d/algorithm/WafflesDecisionTree", port)
-				);
-				//"10"); //10 trees in the random forest
+				String.format("http://localhost:%d/algorithm/WafflesRandomForest", port)
+				,"10"); //10 trees in the random forest
 	
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
@@ -222,14 +221,17 @@ public class ModelResourceTest extends ResourceTest {
 		"SELECT dependent,idproperty from models join template_def t on t.idtemplate=models.dependent where models.name regexp 'RandomForest'");
 		Assert.assertEquals(1,table.getRowCount());
 		
-		table = 	c.createQueryTable("EXPECTED",
-		String.format("SELECT * from properties where comments='%s'",Property.opentox_ConfidenceFeature));
-		Assert.assertEquals(1,table.getRowCount());
-		
+		//table = 	c.createQueryTable("EXPECTED",
+		//String.format("SELECT * from properties where comments='%s'",Property.opentox_ConfidenceFeature));
+		//Assert.assertEquals(1,table.getRowCount());
+		/*
 		table = 	c.createQueryTable("EXPECTED",
 				String.format("SELECT * from property_values join properties using(idproperty) where comments='%s' and value_num is not null",Property.opentox_ConfidenceFeature));
 				Assert.assertEquals(4,table.getRowCount());
-				
+				*/
+		table = c.createQueryTable("EXPECTED",
+				String.format("SELECT * from property_values join properties using(idproperty) where comments='%s'","http://www.opentox.org/api/1.1#Test+endpoint"));
+				Assert.assertEquals(4,table.getRowCount());				
 		c.close();		
 		
 	}	

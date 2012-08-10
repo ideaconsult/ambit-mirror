@@ -11,6 +11,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.WekaException;
 import weka.core.converters.ArffSaver;
@@ -95,8 +96,8 @@ public class CallableWafflesModelCreator<USERID> extends CallableModelCreator<Fi
 		/**
 		 * Variables
 		 */
-		List<String> dependent_URI = new ArrayList<String>();
-		List<String> predictors_URI = new ArrayList<String>();
+		List<Attribute> dependent_URI = new ArrayList<Attribute>();
+		List<Attribute> predictors_URI = new ArrayList<Attribute>();
 		StringBuilder dataOptions = null;
 		 
 		for (int i = 0; i< newInstances.numAttributes(); i++) {
@@ -106,12 +107,12 @@ public class CallableWafflesModelCreator<USERID> extends CallableModelCreator<Fi
 					if (dataOptions==null) dataOptions = new StringBuilder();
 					else dataOptions.append(",");
 					dataOptions.append(i);
-					dependent_URI.add(t);
+					dependent_URI.add(newInstances.attribute(i));
 					isTarget = true;
 					break;
 				}
 			if (!isTarget) 
-				predictors_URI.add(newInstances.attribute(i).name());
+				predictors_URI.add(newInstances.attribute(i));
 		}
 		builder.setDependent_URI(dependent_URI);
 		builder.setPredictors_URI(predictors_URI);

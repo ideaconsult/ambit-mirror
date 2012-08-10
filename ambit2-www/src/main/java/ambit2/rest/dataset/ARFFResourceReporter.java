@@ -1,5 +1,7 @@
 package ambit2.rest.dataset;
 
+import java.util.Collections;
+
 import org.restlet.Request;
 
 import ambit2.base.data.Profile;
@@ -42,10 +44,11 @@ public class ARFFResourceReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	protected String getPropertyHeader(Property p) {
 		StringBuilder allowedValues = null; 
 		if (p.isNominal()) {
+			
 			if (p.getAllowedValues()==null) {
-				//allowedValues = new StringBuilder();
-				//allowedValues.append("{P1,P2}");
+				//smth wrong
 			} else {
+				try { Collections.sort(p.getAllowedValues()); } catch (Exception x) {}
 				for (Comparable value: p.getAllowedValues()) {
 					if (allowedValues==null) {
 						allowedValues = new StringBuilder();

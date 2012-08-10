@@ -85,7 +85,10 @@ public abstract class ModelBuilder<DATA,A extends Algorithm,Model extends ModelQ
 		this.model_reporter = model_reporter;
 	}		
 	
-	protected Property createPropertyFromReference(Reference attribute, LiteratureEntry le) {
+	public Property createPropertyFromReference(Reference attribute, LiteratureEntry le) {
+		return createPropertyFromReference(attribute, le, applicationRootReference);
+	}
+	public static Property createPropertyFromReference(Reference attribute, LiteratureEntry le, Reference applicationRootReference) {
 		RDFPropertyIterator reader = null;
 		try {
 			reader = new RDFPropertyIterator(attribute);
