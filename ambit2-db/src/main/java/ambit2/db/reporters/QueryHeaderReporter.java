@@ -1,6 +1,8 @@
 package ambit2.db.reporters;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,6 +63,13 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
 				h.add(t);
 		}
+		
+		Collections.sort(h,new Comparator<Property>() {
+			public int compare(Property o1, Property o2) {
+				return Integer.toString(o1.getId()).compareTo(Integer.toString(o2.getId()));
+				//mimic URI comparison as strings
+			}
+		});			
 		
 	
 		/*

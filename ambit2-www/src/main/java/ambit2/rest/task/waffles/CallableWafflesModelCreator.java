@@ -3,6 +3,8 @@ package ambit2.rest.task.waffles;
 import java.io.File;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.restlet.Context;
@@ -16,6 +18,7 @@ import weka.core.Instances;
 import weka.core.WekaException;
 import weka.core.converters.ArffSaver;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Reorder;
 import weka.filters.unsupervised.instance.SparseToNonSparse;
 import ambit2.core.data.model.Algorithm;
 import ambit2.db.UpdateExecutor;
@@ -86,6 +89,30 @@ public class CallableWafflesModelCreator<USERID> extends CallableModelCreator<Fi
 		trainingData.deleteOnExit();
 		Instances instances = ((RDFInstancesParser)batch).getInstances();
 		instances.deleteAttributeAt(0);
+		//sort attributes by name (i.e. attribute URI). 
+		List<Attribute> sorted = new ArrayList<Attribute>();
+		for (int i=0; i < instances.numAttributes(); i++)
+			sorted.add(instances.attribute(i));
+		Collections.sort(sorted,new Comparator<Attribute>() {
+			@Override
+			public int compare(Attribute o1, Attribute o2) {
+				return o1.name().compareTo(o2.toString());
+			}
+		});
+		StringBuilder order = null;
+		for (int i=0; i < sorted.size(); i++) {
+			if (order == null) order = new StringBuilder();
+			else order.append(",");
+			order.append(sorted.get(i).index()+1);
+		}
+		Reorder reorder = new Reorder();
+		String[] options = new String[2];
+		options[0] = "-R";                                   
+		options[1] = order.toString();   
+		reorder.setOptions(options);
+		reorder.setInputFormat(instances);
+		instances = Filter.useFilter(instances,reorder);
+		
 	    SparseToNonSparse sp = new SparseToNonSparse();
 	    sp.setInputFormat(instances);
 	    Instances newInstances = Filter.useFilter(instances, sp);
@@ -93,30 +120,10 @@ public class CallableWafflesModelCreator<USERID> extends CallableModelCreator<Fi
 		saver.setInstances(newInstances);
 		saver.setFile(trainingData);
 		saver.writeBatch();
-		/**
-		 * Variables
-		 */
-		List<Attribute> dependent_URI = new ArrayList<Attribute>();
-		List<Attribute> predictors_URI = new ArrayList<Attribute>();
-		StringBuilder dataOptions = null;
-		 
-		for (int i = 0; i< newInstances.numAttributes(); i++) {
-			boolean isTarget = false;
-			for (String t : builder.getTargetURI()) 
-				if (newInstances.attribute(i).name().equals(t)) {
-					if (dataOptions==null) dataOptions = new StringBuilder();
-					else dataOptions.append(",");
-					dataOptions.append(i);
-					dependent_URI.add(newInstances.attribute(i));
-					isTarget = true;
-					break;
-				}
-			if (!isTarget) 
-				predictors_URI.add(newInstances.attribute(i));
-		}
-		builder.setDependent_URI(dependent_URI);
-		builder.setPredictors_URI(predictors_URI);
-		if (dataOptions!=null) builder.setDataOptions(String.format("-labels %s", dataOptions));
+		// Leave the header only
+		newInstances.delete(); 
+		builder.setHeader(newInstances);
+	
 		builder.setTrainingData(trainingData);
 		
 		

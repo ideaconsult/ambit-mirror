@@ -4,8 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.engine.util.Base64;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
@@ -32,8 +34,9 @@ public class WafflesPredictor extends ModelPredictor<File,File> {
 	public Object predict(File dataset) throws AmbitException {
 		try {
 			File results = File.createTempFile("waffles_results_",".arff");
-			waffles.predict(dataset,predictor, results,"-ignore 0");
-			System.out.println(results);
+			//TODO multi labels
+			String labels = classIndex>=0?String.format("-labels %d", classIndex+1):""; //hm, ignoring 0 seems to keep numbering anyway
+			waffles.predict(dataset,predictor, results,String.format("-ignore 0 %s",labels));
 			
 			return results;
 		} catch (Exception x) {
@@ -51,6 +54,13 @@ public class WafflesPredictor extends ModelPredictor<File,File> {
 	public File createPredictor(ModelQueryResults model) throws ResourceException {
 		 try {
 			 waffles = new ShellWafflesLearn();
+			 Form form = new Form(model.getContent());
+			 header = getHeader(form);
+			 classIndex = getClassIndex(form);
+			 if ((header != null) &&  (classIndex>=0) && (classIndex<header.numAttributes()))	
+		 			header.setClassIndex(classIndex);			 
+ 			 String model_json = new String(Base64.decode(form.getFirstValue("wafflesmodel")));
+ 			 model.setContent(model_json);
 		 } catch (Exception x) {
 			 throw new ResourceException(Status.SERVER_ERROR_INTERNAL,model.getName(),x);
 		 }
