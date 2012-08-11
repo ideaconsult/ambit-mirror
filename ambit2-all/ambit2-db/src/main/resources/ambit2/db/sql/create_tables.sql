@@ -1032,7 +1032,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (6,0,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (6,1,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -1307,10 +1307,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `findByProperty`(
                 IN query_value_num DOUBLE,
                 IN query_inchi TEXT,
                 IN maxrows INT)
-READS SQL DATA                
+    READS SQL DATA
 BEGIN
     DECLARE property_id INT DEFAULT -1;
-
     SET @found = null;
     IF (chemical_id<=0) THEN
       SET chemical_id = 0;
@@ -1330,9 +1329,9 @@ BEGIN
             select idchemical,idproperty,value_ci into chemical_id,property_id,@found  from summary_property_chemicals
             join property_ci using(id_ci)  where value_ci = query_value limit 1;
           WHEN 5 THEN
-            select idchemical,null,inchi into chemical_id,property_id,@found from chemicals where inchikey = query_inchi;
+            select idchemical,null,inchi into chemical_id,property_id,@found from chemicals where inchikey = query_inchi limit 1;
           ELSE BEGIN
-            select idchemical,null,inchi into chemical_id,property_id,@found from chemicals where inchi = query_inchi;
+            select idchemical,null,inchi into chemical_id,property_id,@found from chemicals where inchi = query_inchi limit 1;
           END;
           END CASE;
       ELSE
@@ -1353,12 +1352,10 @@ BEGIN
           END CASE;
       END IF;
     END IF;
-
     -- fallback
     if ((chemical_id<=0) and !isnull(query_inchi)) THEN
-      select idchemical,null,inchi into chemical_id,property_id,@found from chemicals where inchi = query_inchi;
+      select idchemical,null,inchi into chemical_id,property_id,@found from chemicals where inchi = query_inchi limit 1;
     END IF;
-
     -- get the preferred structure
     IF (maxrows<=0) THEN
   	  	select 1,idchemical,idstructure,if(type_structure='NA',0,1) as selected, preference as metric,@found as text,property_id
@@ -1367,11 +1364,9 @@ BEGIN
       	select 1,idchemical,idstructure,if(type_structure='NA',0,1) as selected, preference as metric,@found as text,property_id
         from structure where idchemical = chemical_id order by idchemical,preference,idstructure limit maxrows;
     END IF;
-
 END $$
 
 DELIMITER ;
-
 -- -----------------------------------------------------
 -- numeric property values
 -- -----------------------------------------------------
