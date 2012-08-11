@@ -47,9 +47,13 @@ public class AutomaticTautomerTests
 	RandomAccessFile outFile = null;
 	TautomerManager tman;
 	
+	//Tracing variables
 	int curLine = 0;	
+	int curProcessedStr = 0;
 	int nInputStr = 0;
+	int nStartStr = 0;
 	int traceFrequency = 10;
+	
 	
 	//Filters
 	int fMinNA = -1;
@@ -67,7 +71,8 @@ public class AutomaticTautomerTests
 		try {
 			att.handleArguments(new String[] {
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
-					"-nInpStr","0",
+					"-nInpStr","50",
+					"-nStartStr","200",
 					"-c","tautomer-count",
 					"-o","D:/Projects/data012-tautomers/tautomer-count.txt",
 					"-fMinNDB", "1",
@@ -167,6 +172,24 @@ public class AutomaticTautomerTests
 				catch(Exception e)
 				{
 					System.out.println("Incorrect nInpStr value: "+ e.toString());
+					return -1;
+				}
+			}	
+		}
+		
+		opt = getOption("nStartStr", options);
+		if (opt != null)
+		{
+			if (opt.value != null)
+			{	
+				try
+				{
+					Integer intObj = new Integer(0);
+					nStartStr = Integer.parseInt(opt.value);
+				}
+				catch(Exception e)
+				{
+					System.out.println("Incorrect nStartStr value: "+ e.toString());
 					return -1;
 				}
 			}	
@@ -340,6 +363,7 @@ public class AutomaticTautomerTests
 		System.out.println("-i<n>         additional input files n = 2,3,4,5");
 		System.out.println("-o            output file");
 		System.out.println("-nInpStr      the number of used input structures");
+		System.out.println("-nStartStr    the number of starting structure");
 		
 		System.out.println("-c            command: ");
 		System.out.println("                 process-nci           nci file is processed");
@@ -473,16 +497,25 @@ public class AutomaticTautomerTests
 			long length = f.length();
 			
 			int n = 0;
+			curProcessedStr = 0;
 			while (f.getFilePointer() < length)
 			{	
 				n++;
 				curLine = n;
-				if (nInputStr > 0)
-					if (n > nInputStr) 
-						break;
 				
 				String line = f.readLine();
 				//System.out.println("line " + n + "  " + line);
+				
+				if (n < nStartStr)
+					continue;
+				
+				curProcessedStr++;
+				
+				if (nInputStr > 0)
+					if (curProcessedStr > nInputStr) 
+						break;
+				
+								
 				
 				processLine(line.trim());
 				

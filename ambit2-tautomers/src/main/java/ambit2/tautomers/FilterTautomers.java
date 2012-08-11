@@ -299,6 +299,8 @@ public class FilterTautomers
 	
 	public void getOriginalPositions() throws Exception
 	{
+		warnFiltersOriginalPos.clear();
+		
 		for (int i = 0; i < tman.knowledgeBase.warningFilters.size(); i++)
 		{
 			Filter f = tman.knowledgeBase.warningFilters.get(i);
@@ -314,6 +316,9 @@ public class FilterTautomers
 			isoTester.setQuery(f.fragmentQuery);			
 			warnFiltersOriginalPos.add(isoTester.getIsomorphismPositions(tman.molecule));
 		}
+		
+		
+		excludeFiltersOriginalPos.clear();
 		
 		for (int i = 0; i < tman.knowledgeBase.excludeFilters.size(); i++)
 		{
