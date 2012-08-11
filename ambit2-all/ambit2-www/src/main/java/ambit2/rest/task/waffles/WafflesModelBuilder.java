@@ -1,16 +1,18 @@
 package ambit2.rest.task.waffles;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.apache.xerces.impl.dv.util.Base64;
+import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
-import weka.core.Attribute;
+import weka.core.Instances;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.PredictedVarsTemplate;
@@ -39,37 +41,17 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 	 * 
 	 */
 	private static final long serialVersionUID = -2430059881213107595L;
-	protected String[] parameters = null;	
 	protected String dataOptions ;
+	protected Instances header;
 	
-	protected List<Attribute> predictors_URI;
-	public List<Attribute> getPredictors_URI() {
-		return predictors_URI;
+	public Instances getHeader() {
+		return header;
 	}
 
-	public void setPredictors_URI(List<Attribute> predictors_URI) {
-		this.predictors_URI = predictors_URI;
+	public void setHeader(Instances header) {
+		this.header = header;
 	}
 
-	public List<Attribute> getDependent_URI() {
-		return dependent_URI;
-	}
-
-	public void setDependent_URI(List<Attribute> dependent_URI) {
-		this.dependent_URI = dependent_URI;
-	}
-
-	public List<Attribute> getPredicted_URI() {
-		return predicted_URI;
-	}
-
-	public void setPredicted_URI(List<Attribute> predicted_URI) {
-		this.predicted_URI = predicted_URI;
-	}
-
-	protected List<Attribute> dependent_URI;
-	protected List<Attribute> predicted_URI;
-	
 	public String getDataOptions() {
 		return dataOptions;
 	}
@@ -124,7 +106,7 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 			
 			String name= String.format("%s.%s.%s",waffles.getAlgorithm().name(),UUID.randomUUID().toString(),waffles.getClass().getName());
 			
-			model.setContent(out.getProperty(waffles.getOutProperty()));
+			
 			model.setContentMediaType(algorithm.getFormat().getMediaType());
 			model.setParameters(parameters);
 			model.setId(null);
@@ -149,50 +131,62 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 			
 			dependent = new Template(name+"#Dependent");
 			predicted = new PredictedVarsTemplate(name+"#Predicted");
-			for (int i=0; i < dependent_URI.size(); i++) {
-				//dependent var
-				Property property = createPropertyFromReference(new Reference(dependent_URI.get(i).name()), entry);
-				property.setOrder(i+1);
-				dependent.add(property);
-				//and predicted
-				Property predictedProperty = new Property(property.getName(),prediction); 
-				predictedProperty.setOrder(i+1);
-				predictedProperty.setLabel(property.getLabel());
-				predictedProperty.setUnits(property.getUnits());
-				predictedProperty.setClazz(property.getClazz());
-				predictedProperty.setNominal(property.isNominal());
-				predictedProperty.setEnabled(true);
-				predicted.add(predictedProperty);
-				
-				if (dependent_URI.get(i).isNominal()) {
-					Enumeration e = dependent_URI.get(i).enumerateValues();
-					PropertyAnnotations annotations = new PropertyAnnotations();
-					while (e.hasMoreElements()) {
-						String value = e.nextElement().toString();
-						predictedProperty.addAllowedValue(value);
-						PropertyAnnotation annotation = new PropertyAnnotation();
-						annotation.setObject(value);
-						annotation.setPredicate("acceptValue");
-						annotation.setType("Feature");
-						annotations.add(annotation);
-					}
-					predictedProperty.setAnnotations(annotations);
-				}
-			}	
-			
 			predictors = new Template(name+"#Independent");
-			for (int i=0; i < predictors_URI.size(); i++) {
-				Property property = createPropertyFromReference(new Reference(predictors_URI.get(i).name()), entry);
-				property.setOrder(i+1);
-				predictors.add(property);
-			}	
 
-			//if (supportsDistribution(classifier)) {}
-				
+			StringBuilder labels = null;
+			for (int i = 0; i< header.numAttributes(); i++) {
+				boolean isTarget = false;
+				for (String t : getTargetURI()) 
+					if (header.attribute(i).name().equals(t)) {
+						header.setClassIndex(i); //but could be multiple targets
+						if (labels==null) labels = new StringBuilder();
+						else labels.append(",");
+						labels.append(i);
+						//dependent property
+						Property property = createPropertyFromReference(new Reference(header.attribute(i).name()), entry);
+						property.setOrder(i+1);
+						dependent.add(property);
+						//predicted property
+						Property predictedProperty = new Property(property.getName(),prediction); 
+						predictedProperty.setOrder(i+1);
+						predictedProperty.setLabel(property.getLabel());
+						predictedProperty.setUnits(property.getUnits());
+						predictedProperty.setClazz(property.getClazz());
+						predictedProperty.setNominal(property.isNominal());
+						predictedProperty.setEnabled(true);
+						predicted.add(predictedProperty);
+						
+						if (header.attribute(i).isNominal()) {
+							Enumeration e = header.attribute(i).enumerateValues();
+							PropertyAnnotations annotations = new PropertyAnnotations();
+							while (e.hasMoreElements()) {
+								String value = e.nextElement().toString();
+								predictedProperty.addAllowedValue(value);
+								PropertyAnnotation annotation = new PropertyAnnotation();
+								annotation.setObject(value);
+								annotation.setPredicate("acceptValue");
+								annotation.setType("Feature");
+								annotations.add(annotation);
+							}
+							predictedProperty.setAnnotations(annotations);							
+						}
+						isTarget = true;
+						break;
+					}
+				if (!isTarget) { 
+					Property property = createPropertyFromReference(new Reference(header.attribute(i).name()), entry);
+					property.setOrder(i+1);
+					predictors.add(property);
+				}
+			}
 			
+			model.setContent(serializeModel(out.getProperty(waffles.getOutProperty()), header));
+			//if (supportsDistribution(classifier)) {}
+			if (labels!=null) setDataOptions(String.format("-labels %s", labels));				
 			model.setPredictors(predictors);
 			model.setDependent(dependent);
 			model.setPredicted(predicted);
+			//model.setParameters(new String[] {"-labels",labels.toString()});
 			return model;
 			
 		} catch (AmbitException x) {
@@ -200,5 +194,18 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}
+	}
+	
+	protected String serializeModel(String json, Instances newInstances) throws IOException {
+		 // serialize model
+		Form form = new Form();
+		
+		form.add("wafflesmodel", Base64.encode(json.getBytes()));
+		newInstances.delete();
+		if (newInstances.classIndex()>=0)
+			form.add("classIndex",Integer.toString(newInstances.classIndex()));		
+		newInstances.delete();
+		form.add("header", newInstances.toString());
+		return form.getWebRepresentation().getText();
 	}
 }
