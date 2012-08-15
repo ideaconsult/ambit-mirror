@@ -319,10 +319,8 @@ public class RuleManager
 		{
 			stackIncSteps.push(newIncSteps[i]);
 			
-			if (tman.FlagPrintIcrementalStepDebugInfo)		
-
+			if (tman.FlagPrintIcrementalStepDebugInfo)
 				System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct));
-				
 		}	
 	}	
 		

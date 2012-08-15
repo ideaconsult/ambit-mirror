@@ -47,7 +47,7 @@ public class TestTautomers
 		
 		tt.tman.FlagPrintTargetMoleculeInfo = false;
 		tt.tman.FlagPrintExtendedRuleInstances = true;
-		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
+		tt.tman.FlagPrintIcrementalStepDebugInfo = true;
 		
 		tt.tman.activateChlorineRules(false);
 		tt.tman.activateRingChainRules(false);		
@@ -121,7 +121,8 @@ public class TestTautomers
 		
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
-		tt.visualTest("CNC#N");
+		tt.visualTest("O=C(O)C=1C=CC=CC=1C3=C4C=CC(=O)C=C4(OC2=C(C(=O)C=CC23)Br)");
+		              
 		
 		//tt.visualTest("NC1=CC=CC2=C(O)N=NC(O)=C12", 1);
 		 
