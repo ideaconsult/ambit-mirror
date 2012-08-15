@@ -8,9 +8,13 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.SMILESWriter;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.TautomerManager;
 
 
@@ -46,6 +50,8 @@ public class AutomaticTautomerTests
 	
 	RandomAccessFile outFile = null;
 	TautomerManager tman;
+	IsomorphismTester isoTester = new IsomorphismTester();
+	//SmartsParser sp = new SmartsParser();
 	
 	//Tracing variables
 	int curLine = 0;	
@@ -53,6 +59,12 @@ public class AutomaticTautomerTests
 	int nInputStr = 0;
 	int nStartStr = 0;
 	int traceFrequency = 10;
+	
+	int minNumOfTautomerForChecking = 2;
+	int maxNumOfTautomerForChecking = 20;
+	int maxNumOfTautomerForFullCheck = 10;
+	int nEquivalenceErrors = 0;
+	int nEquivalenceTests = 0;
 	
 	
 	//Filters
@@ -71,10 +83,10 @@ public class AutomaticTautomerTests
 		try {
 			att.handleArguments(new String[] {
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
-					"-nInpStr","50",
-					"-nStartStr","200",
-					"-c","tautomer-count",
-					"-o","D:/Projects/data012-tautomers/tautomer-count.txt",
+					"-nInpStr","0",
+					"-nStartStr","0",
+					"-c","tautomer-equivalence",
+					"-o","D:/Projects/data012-tautomers/tautomer-equivalence.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -348,6 +360,16 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (command.equals("tautomer-equivalence"))
+		{
+			System.out.println("Checking tautomer equivalence: " + inFileName);
+			openOutputFile();			
+			lineProcessMode = LPM_TAUTOMER_EQUIVALENCE;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
 		
 		System.out.println("Unknown command: " + command);
 		
@@ -368,7 +390,8 @@ public class AutomaticTautomerTests
 		System.out.println("-c            command: ");
 		System.out.println("                 process-nci           nci file is processed");
 		System.out.println("                 filter                input file is filtered");
-		
+		System.out.println("                 tautomer-count        counts the number of tautomers");
+		System.out.println("                 tautomer-equivalence  check the equivalence of each tautomer");
 		
 	}	
 	
@@ -545,9 +568,15 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
-		if (lineProcessMode == this.LPM_TAUTOMER_COUNT)
+		if (lineProcessMode == LPM_TAUTOMER_COUNT)
 		{
 			tautomerCount(line);
+			return(0);
+		}
+		
+		if (lineProcessMode == LPM_TAUTOMER_EQUIVALENCE)
+		{
+			tautomerEquivalence(line);
 			return(0);
 		}
 		
@@ -687,6 +716,7 @@ public class AutomaticTautomerTests
 	
 	int tautomerCount(String line)
 	{
+		System.out.println(line);
 		try
 		{
 			IMolecule mol = null;
@@ -705,6 +735,124 @@ public class AutomaticTautomerTests
 		return (0);
 	}
 	
+	int tautomerEquivalence(String line)
+	{
+		System.out.println(line);
+		try
+		{
+			IMolecule mol = null;
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(line.trim());
+			
+			setTautomerManager();
+			tman.setStructure(mol);
+			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			
+			if (resultTautomers.size() < minNumOfTautomerForChecking)
+				return 0;
+			
+			if (resultTautomers.size() > maxNumOfTautomerForChecking)
+				return 0;
+			
+			int checkRes = checkTautomerEquivalence(resultTautomers);
+			nEquivalenceTests++;
+			output(line + "  " + resultTautomers.size() +  "   " + checkRes + endLine);
+			
+			if (checkRes > 0)
+				nEquivalenceErrors++;
+			
+			System.out.println("n = " + curLine + "   nTests = " + nEquivalenceTests + 
+					"   nErrors = " + nEquivalenceErrors);
+		}	
+		catch(Exception e){
+			return (-1);
+		}
+		
+		return (0);
+	}
+	
+	int checkTautomerEquivalence(Vector<IAtomContainer> tautomers) throws Exception
+	{
+		//Vector<String> codes = new Vector<String>();
+		//for (int i = 0; i < tautomers.size(); i++)
+		//	codes.add(TautomerManager.getTautomerCodeString(tautomers.get(i)));
+		
+		int numErr = 0;
+		
+		for (int i = 0; i < tautomers.size(); i++)
+		{
+			if (i > this.maxNumOfTautomerForFullCheck)
+				break;
+			
+			tman.setStructure(tautomers.get(i));
+			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+					
+			//boolean FlagOK = compareTautomerSets(codes, resultTautomers);
+			boolean FlagOK = compareTautomerSetsIsomorphismCheck(tautomers, resultTautomers);
+			
+			if (!FlagOK)
+				numErr++;
+		}
+		
+		return numErr;
+	}
+	
+	boolean compareTautomerSets(Vector<String> codes, Vector<IAtomContainer> tautomers)
+	{
+		//This check is very simple and give wrong results when there are 
+		//isomorphic tautomers (typically filtered in the results) 
+		
+		if (codes.size() != tautomers.size())
+			return false;
+		
+		int CheckedTautomers = 0;
+		for (int i = 0; i < tautomers.size(); i++)
+		{
+			String code = TautomerManager.getTautomerCodeString(tautomers.get(i));
+			for (int k = 0; k < codes.size(); k++)
+				if (code.equals(codes.get(k)))
+				{
+					CheckedTautomers++;
+					break;
+				}
+		}
+		
+		if (CheckedTautomers < codes.size() )
+			return false;
+		else
+			return true;
+	}
+	
+	
+	boolean compareTautomerSetsIsomorphismCheck(Vector<IAtomContainer> tautomers0, Vector<IAtomContainer> tautomers)
+	{
+		if (tautomers0.size() != tautomers.size())
+			return false;
+		
+		for (int i = 0; i < tautomers0.size(); i++)
+		{
+			QueryAtomContainer query = SmartsHelper.getQueryAtomContainer(tautomers0.get(i), false);
+			isoTester.setQuery(query);
+			
+			boolean FlagFound = false;
+			for (int k = 0; k < tautomers.size(); k++)
+			{
+				//sp.setSMARTSData() is not needed for this isomorphism
+				boolean res = isoTester.hasIsomorphism(tautomers.get(k));
+				if (res)
+				{
+					FlagFound = true;
+					tautomers.remove(k);
+					break;
+				}
+			}
+			
+			if (!FlagFound)
+				return(false);
+		}
+		
+		return true;
+	}
 	
 	//--------------------------------------------------------
 	
