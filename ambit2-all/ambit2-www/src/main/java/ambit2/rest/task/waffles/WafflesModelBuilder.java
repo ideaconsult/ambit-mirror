@@ -138,7 +138,8 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 				boolean isTarget = false;
 				for (String t : getTargetURI()) 
 					if (header.attribute(i).name().equals(t)) {
-						header.setClassIndex(i); //but could be multiple targets
+						header.setClassIndex(header.attribute(i).index()); 
+						//but could be multiple targets
 						if (labels==null) labels = new StringBuilder();
 						else labels.append(",");
 						labels.append(i);
@@ -155,14 +156,23 @@ public class WafflesModelBuilder  extends ModelBuilder<File,Algorithm, ModelQuer
 						predictedProperty.setNominal(property.isNominal());
 						predictedProperty.setEnabled(true);
 						predicted.add(predictedProperty);
+						//link to dependent - necessary for multilabel
+
+						PropertyAnnotations annotations = new PropertyAnnotations();
+						PropertyAnnotation annotation = new PropertyAnnotation();
+						annotation.setObject(header.attribute(i).name());
+						annotation.setPredicate("predictionOf");
+						annotation.setType("Feature");
+						annotations.add(annotation);
+						predictedProperty.setAnnotations(annotations);
+
 						
 						if (header.attribute(i).isNominal()) {
 							Enumeration e = header.attribute(i).enumerateValues();
-							PropertyAnnotations annotations = new PropertyAnnotations();
 							while (e.hasMoreElements()) {
 								String value = e.nextElement().toString();
 								predictedProperty.addAllowedValue(value);
-								PropertyAnnotation annotation = new PropertyAnnotation();
+								annotation = new PropertyAnnotation();
 								annotation.setObject(value);
 								annotation.setPredicate("acceptValue");
 								annotation.setType("Feature");
