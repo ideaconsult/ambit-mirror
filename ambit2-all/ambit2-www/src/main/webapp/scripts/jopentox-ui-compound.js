@@ -85,7 +85,12 @@ $(document)
 												if (val.indexOf("/conformer")>=0) {
 													cmpURI = val.substring(0,val.indexOf("/conformer"));
 												}												
-												return '<a href="'+val+'" title="'+cmpURI+'"><img src="'+cmpURI+'?media=image/png&w=150&h=150"></a>';
+												if (opentox["model_uri"] !== undefined) {
+													cmpURI = opentox["model_uri"] + "?dataset_uri=" + cmpURI + "&media=image/png";
+												} else {
+													cmpURI = cmpURI + "?media=image/png";
+												}
+												return '<a href="'+val+'" title="'+cmpURI+'"><img src="'+cmpURI+'&w=150&h=150"></a>';
 											}
 										},													
 										{ //3
