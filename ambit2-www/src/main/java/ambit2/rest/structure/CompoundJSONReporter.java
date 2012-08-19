@@ -30,6 +30,18 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	private static final long serialVersionUID = 410930501401847402L;
 	protected String comma = null;
 	protected PropertyJSONReporter propertyJSONReporter;
+	protected String hilightPredictions = null;
+	
+	public String getHilightPredictions() {
+		return hilightPredictions;
+	}
+
+	public void setHilightPredictions(String hilightPredictions) {
+		this.hilightPredictions = hilightPredictions;
+	}
+
+
+
 	enum jsonCompound {
 		URI,
 		compound,
@@ -49,6 +61,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	public CompoundJSONReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix) {
 		super(template,groupedProperties,request,doc,urlPrefix);
 		propertyJSONReporter = new PropertyJSONReporter(request);
+		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 	}
 
 	@Override
@@ -156,6 +169,10 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	public void footer(java.io.Writer output, Q query) {
 		try {
 			output.write("\n],");
+			if (hilightPredictions==null)
+				output.write(String.format("\n\"%s\":null,","model_uri"));
+			else
+				output.write(String.format("\n\"%s\":\"%s\",","model_uri",hilightPredictions));
 			output.write("\n\"feature\":{\n");
 			for (int j=0; j < header.size(); j++) 
 				propertyJSONReporter.processItem(header.get(j));

@@ -30,7 +30,6 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 	 * 
 	 */
 	private static final long serialVersionUID = -7959033048710547839L;
-	protected String hilightPredictions = null;
 	boolean hierarchy = false;
 	protected Dimension cellSize = new Dimension(150,150);
 	
@@ -79,7 +78,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 				pagesize = maxhits; 
 			}	
 			output.write(String.format("<hr><div class='results'><a href='%s' title='%s'>This dataset</a> | %s&nbsp; "+
-					"<span class='results'>| <b>Show:</b>  %s | %s | %s | %s | %s | %s | %s | %s | %s |</span><br>Download as %s</div>%s",
+					"<span class='results'>| <b>Show:</b>  %s | %s | %s | %s | %s | %s | %s | %s | %s |</span><br>Download as %s | %s</div>%s",
 					uriReporter.getResourceRef(),
 					query.toString(),
 					String.format("<a href='%s' title='%s'>License</a>",getLicenseURI(),getLicenseURI()),
@@ -102,6 +101,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 					"<input type='checkbox' id='visProperties' title='Show/Hide all properties' onchange='showProperties(event)' />Properties&nbsp;",
 					"<input type='checkbox' id='visSimilarity' title='Show/Hide the similaritymetric' onchange='showSimilarity(event)' />Similarity&nbsp;",
 					downloadLinks(),
+					cmp_reporter.getHilightPredictions()==null?"":String.format("Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",cmp_reporter.getHilightPredictions(),cmp_reporter.getHilightPredictions()),
 					String.format("<form method='GET' action=''>Page&nbsp;<input name='page' type='text' title='Page' size='10' value='%s'>&nbsp;"+
 							"Page size<input name='pagesize' type='text' title='Page size' size='10' value='%s'><input type='image' src='%s/images/search.png' value='Refresh'></form>",
 							page==null?"0":page,
@@ -330,10 +330,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 			w.write("</td></tr>\n");
 			w.write("</table>");		
 			}
-			if (hilightPredictions!= null) 
-				w.write(String.format("<div><span class=\"center\"><h4>Atoms highlighted by the model <a href=%s target=_blank>%s</a></h4></span></div>",hilightPredictions,hilightPredictions));
-	
-			
+				
 		} catch (Exception x) {
 			x.printStackTrace();
 		}		
