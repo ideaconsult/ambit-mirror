@@ -1,5 +1,6 @@
 package ambit2.db.chart;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 
@@ -64,6 +65,7 @@ public abstract class PieChartGenerator<T extends ISourceDataset> extends ChartG
 	                                         true,      // tooltips displayed
 	                                         true );   // no URLs
 
+	         ((PiePlot) pieChart.getPlot()).setBackgroundPaint(Color.white);
 	         ((PiePlot) pieChart.getPlot()).setToolTipGenerator(new StandardPieToolTipGenerator() {
 	        	 @Override
 	        	public String generateToolTip(PieDataset dataset, Comparable key) {
