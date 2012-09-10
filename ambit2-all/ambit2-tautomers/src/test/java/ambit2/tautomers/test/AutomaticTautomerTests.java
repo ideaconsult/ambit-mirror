@@ -85,8 +85,8 @@ public class AutomaticTautomerTests
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					"-nInpStr","0",
 					"-nStartStr","0",
-					"-c","tautomer-equivalence",
-					"-o","D:/Projects/data012-tautomers/tautomer-equivalence.txt",
+					"-c","tautomer-count",
+					"-o","D:/Projects/data012-tautomers/test-000.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -542,6 +542,8 @@ public class AutomaticTautomerTests
 				
 				processLine(line.trim());
 				
+				checkMemory();
+				
 				if (n % this.traceFrequency == 0)
 					System.out.println(n);
 			}
@@ -871,5 +873,17 @@ public class AutomaticTautomerTests
 		tman.use15ShiftRules(true);
 		tman.use17ShiftRules(false);
 		tman.maxNumOfBackTracks = 10000;
+	}
+	
+	void checkMemory()
+	{
+		long totalMem = Runtime.getRuntime().totalMemory() / 1000000;
+		long freeMem = Runtime.getRuntime().freeMemory() / 1000000;
+		long maxMem = Runtime.getRuntime().maxMemory() / 1000000;
+		
+		long usedMem = totalMem - freeMem;
+		
+		System.out.println("usedMem = " + usedMem + "   freeMem = " + freeMem + "  totalMem = " + totalMem 
+				+ "    maxMem = " + maxMem);
 	}
 }
