@@ -43,11 +43,13 @@ public class TestTautomers
 		tt.tman.tautomerFilter.FlagFilterIncorrectValencySumStructures = true;
 		tt.tman.tautomerFilter.FlagApplySimpleAromaticityRankCorrection = true;
 		
+		tt.tman.FlagCheckDuplicationOnRegistering = true;
+		
 		tt.tman.FlagRecurseBackResultTautomers = false;
 		
 		tt.tman.FlagPrintTargetMoleculeInfo = false;
 		tt.tman.FlagPrintExtendedRuleInstances = true;
-		tt.tman.FlagPrintIcrementalStepDebugInfo = true;
+		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
 		
 		tt.tman.activateChlorineRules(false);
 		tt.tman.activateRingChainRules(false);		
@@ -121,7 +123,7 @@ public class TestTautomers
 		
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
-		tt.visualTest("O=C(O)C=1C=CC=CC=1C3=C4C=CC(=O)C=C4(OC2=C(C(=O)C=CC23)Br)");
+		tt.visualTest("COC1=CC=C(C=C1)C=NC=2C=CC=CC=2(O)");
 		              
 		
 		//tt.visualTest("NC1=CC=CC2=C(O)N=NC(O)=C12", 1);
@@ -203,8 +205,10 @@ public class TestTautomers
 			if (rank == null)
 				rank = new Double(999999);
 						
-			System.out.print("   " + rank.toString() + "   " +
-					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+			System.out.print(
+					TautomerManager.getTautomerCodeString(resultTautomers.get(i), false) +   
+					"   " + rank.toString() + "   " +
+					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)) );
 			v.add(resultTautomers.get(i));
 		}
 		System.out.println();

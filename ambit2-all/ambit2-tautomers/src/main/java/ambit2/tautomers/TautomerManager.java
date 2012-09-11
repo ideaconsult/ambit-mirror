@@ -1,5 +1,6 @@
 package ambit2.tautomers;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
@@ -24,7 +25,12 @@ public class TautomerManager
 	public boolean FlagRecurseBackResultTautomers = false;
 	public boolean FlagUseRingChainRules = false;
 	public boolean FlagUseChlorineRules = false;
+	
 	public boolean FlagCheckDuplicationOnRegistering = true;
+	public boolean FlagCheckValencyOnRegistering = false;       //it is not used yet
+	public boolean FlagExcludeWarnFiltersOnRegistering = false; //it is not used yet
+	
+	
 	public boolean FlagUse13Shifts = true;
 	public boolean FlagUse15Shifts = true;
 	public boolean FlagUse17Shifts = true;
@@ -125,7 +131,13 @@ public class TautomerManager
 	{
 		if (FlagCheckDuplicationOnRegistering)
 		{
-			String newCode = getTautomerCodeString(newTautomer);
+			//FlagTreatAromaticBondsAsEquivalent should always be false here  
+			//since aromaticity is not correct during the tautomer generation
+			
+			String newCode = getTautomerCodeString(newTautomer, false);   
+			
+			//System.out.println("---> " + newCode);
+			
 			if (!resultTatomerStringCodes.contains(newCode))
 			{	
 				resultTatomerStringCodes.add(newCode);
@@ -382,7 +394,7 @@ public class TautomerManager
 	}
 	
 	
-	public static String getTautomerCodeString(IAtomContainer tautomer)
+	public static String getTautomerCodeString(IAtomContainer tautomer, boolean treatAromBondsAsEquivalent)
 	{
 		StringBuffer sb = new StringBuffer();
 		
@@ -393,7 +405,17 @@ public class TautomerManager
 			{
 				IBond bo = tautomer.getBond(tautomer.getAtom(i), tautomer.getAtom(j));
 				if (bo != null)
-					sb.append(bo.getOrder().ordinal());
+				{	
+					if (bo.getFlag(CDKConstants.ISAROMATIC))
+					{	
+						if (treatAromBondsAsEquivalent)
+							sb.append("a");
+						else
+							sb.append(bo.getOrder().ordinal());
+					}		
+					else							
+						sb.append(bo.getOrder().ordinal());
+				}	
 			}
 		}
 		
