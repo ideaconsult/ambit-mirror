@@ -25,6 +25,7 @@ public class FilterTautomers
 	public boolean FlagApplyWarningFilter = true;
 	public boolean FlagApplyExcludeFilter = true;
 	public boolean FlagApplyDuplicationFilter = true;	
+	public boolean FlagTreatAromaticBondsAsEquivalentFilter = false;
 	public boolean FlagApplyDuplicationCheckIsomorphism = true;
 	public boolean FlagApplySimpleAromaticityRankCorrection = true;
 	
@@ -62,7 +63,7 @@ public class FilterTautomers
 		Vector<IAtomContainer> uniqueTautomers;
 		
 		
-		//Remove duplications based on double bond positions
+		//Remove duplications based on double bond positions as expressed in the tautomer string code 
 		if (FlagApplyDuplicationFilter)
 		{	
 			if (tman.FlagCheckDuplicationOnRegistering)
@@ -74,6 +75,7 @@ public class FilterTautomers
 			uniqueTautomers = tautomers;
 		
 		
+		
 		if (FlagFilterIncorrectValencySumStructures)
 		{
 			Vector<IAtomContainer> tempTautomers = filterIncorrectValencySumStructs(uniqueTautomers);
@@ -81,7 +83,7 @@ public class FilterTautomers
 		}
 		
 		
-		//Pre-processing is n
+		//Pre-processing is done here 
 		for (int i = 0; i < uniqueTautomers.size(); i++)
 		{	
 			try{
@@ -136,6 +138,18 @@ public class FilterTautomers
 		}
 		
 		
+		if (FlagTreatAromaticBondsAsEquivalentFilter)
+		{
+			//Filtration based on tautomer string code where aromatic bonds are managed
+			//
+			//This filtration should not be applied before the allene atom filters 
+			//since some side effect are observed 
+			
+			
+			//TODO
+		}
+		
+		
 		if (FlagApplyDuplicationCheckIsomorphism)
 		{
 			Vector<IAtomContainer> filteredTautomers2 = duplicationFilterBasedOnIsomorphism(filteredTautomers);
@@ -157,8 +171,7 @@ public class FilterTautomers
 				throw e;
 				//System.out.println(e.toString());
 			}
-		}
-		
+		}		
 		
 		return filteredTautomers;
 	}
@@ -171,7 +184,7 @@ public class FilterTautomers
 		
 		for (int i = 0; i < tautomers.size(); i++)
 		{
-			String tcode = TautomerManager.getTautomerCodeString(tautomers.get(i));
+			String tcode = TautomerManager.getTautomerCodeString(tautomers.get(i), false);
 			//System.out.println("#" + i + "  tcode = " + tcode);
 			boolean FlagDuplication = false;
 

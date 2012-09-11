@@ -542,7 +542,7 @@ public class AutomaticTautomerTests
 				
 				processLine(line.trim());
 				
-				checkMemory();
+				//checkMemory();
 				
 				if (n % this.traceFrequency == 0)
 					System.out.println(n);
@@ -810,7 +810,7 @@ public class AutomaticTautomerTests
 		int CheckedTautomers = 0;
 		for (int i = 0; i < tautomers.size(); i++)
 		{
-			String code = TautomerManager.getTautomerCodeString(tautomers.get(i));
+			String code = TautomerManager.getTautomerCodeString(tautomers.get(i), false);
 			for (int k = 0; k < codes.size(); k++)
 				if (code.equals(codes.get(k)))
 				{
