@@ -77,7 +77,7 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 		};
 		public abstract void setValue(PropertyAnnotation<String>  a,String value);
 	}		
-	public static String base_sql = "select properties.idproperty,properties.name,units,title,url,idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object from properties join catalog_references using(idreference)\n"+
+	public static String base_sql = "select properties.idproperty,properties.name,units,title,url,idreference,comments,ptype as idtype,islocal,type,rdf_type,predicate,object,properties.idproperty as `order` from properties join catalog_references using(idreference)\n"+
 			"left join (select idproperty,rdf_type,predicate,object from property_annotation where predicate regexp \"confidenceOf$\") a using(idproperty)\n";
 	/**
 	 * 
