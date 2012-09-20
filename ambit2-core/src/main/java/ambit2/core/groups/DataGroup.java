@@ -33,9 +33,9 @@ import java.util.ArrayList;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 
 /**
  * Corresponds to DAT group found in MOL files
@@ -164,8 +164,8 @@ public class DataGroup extends AbstractGroup {
 
     public synchronized void setMulticenter(IAtom atom) {
         this.multicenter = atom;
-        if (atom instanceof PseudoAtom)
-            ((PseudoAtom)atom).setLabel("X");        
+        if (atom instanceof IPseudoAtom)
+            ((IPseudoAtom)atom).setLabel("X");        
     }
     
 }
