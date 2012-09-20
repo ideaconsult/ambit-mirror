@@ -28,8 +28,8 @@ package ambit2.core.io;
 
 import java.util.Hashtable;
 
-import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 
 import ambit2.core.groups.ComponentGroup;
 import ambit2.core.groups.ContainerGroup;
@@ -117,9 +117,9 @@ public class SGroupMDL2000Helper {
 				  for (int i=1; i < params.length; i+=2) {
                       int atomno = Integer.parseInt(params[i])-1;
                       IAtom atom = atomcontainer.getAtom(atomno);
-                      if (atom instanceof PseudoAtom) {
-                          ((PseudoAtom)atom).setLabel("R"+params[i+1]);
-                      } else throw new GroupException("Expected PseudoAtom but found "+atom.getSymbol());
+                      if (atom instanceof IPseudoAtom) {
+                          ((IPseudoAtom)atom).setLabel("R"+params[i+1]);
+                      } else throw new GroupException("Expected IPseudoAtom but found "+atom.getSymbol());
                   }
 			  }			  
 		  },
