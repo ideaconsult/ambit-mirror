@@ -33,6 +33,7 @@ public class AutomaticTautomerTests
 	public static final int LPM_TAUTOMER_COUNT = 3;
 	public static final int LPM_TAUTOMER_EQUIVALENCE = 4;
 	public static final int LPM_TAUTOMER_COMPARISON = 5;
+	public static final int LPM_CACTVS_COUNT = 6;
 	
 	
 	int lineProcessMode = 0;
@@ -47,6 +48,10 @@ public class AutomaticTautomerTests
 	
 	String command = "";
 	String dbFileName = "";
+	
+	String cactvsExecPath = "C:/Program Files/cactvs/lib/tclcactvs.exe";
+	String cactvsOutPath = "D:/Projects/data012-tautomers/cactvs";
+	
 	
 	RandomAccessFile outFile = null;
 	TautomerManager tman;
@@ -83,8 +88,8 @@ public class AutomaticTautomerTests
 		try {
 			att.handleArguments(new String[] {
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
-					"-nInpStr","0",
-					"-nStartStr","0",
+					"-nInpStr","100",
+					"-nStartStr","1",
 					"-c","tautomer-count",
 					"-o","D:/Projects/data012-tautomers/test-000.txt",
 					"-fMinNDB", "1",
@@ -371,6 +376,17 @@ public class AutomaticTautomerTests
 		}
 		
 		
+		if (command.equals("cactvs-count"))
+		{
+			System.out.println("Counting cactvs tautomers: " + inFileName);
+			openOutputFile();			
+			lineProcessMode = LPM_CACTVS_COUNT;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		
 		System.out.println("Unknown command: " + command);
 		
 		return(-1);
@@ -392,6 +408,7 @@ public class AutomaticTautomerTests
 		System.out.println("                 filter                input file is filtered");
 		System.out.println("                 tautomer-count        counts the number of tautomers");
 		System.out.println("                 tautomer-equivalence  check the equivalence of each tautomer");
+		System.out.println("                 cactvs-count          counts the number of cactvs tautomers");
 		
 	}	
 	
@@ -579,6 +596,12 @@ public class AutomaticTautomerTests
 		if (lineProcessMode == LPM_TAUTOMER_EQUIVALENCE)
 		{
 			tautomerEquivalence(line);
+			return(0);
+		}
+		
+		if (lineProcessMode == LPM_CACTVS_COUNT)
+		{
+			cactvsCount(line);
 			return(0);
 		}
 		
@@ -855,6 +878,90 @@ public class AutomaticTautomerTests
 		
 		return true;
 	}
+	
+	
+	int cactvsCount(String line)
+	{
+		System.out.println(line);
+		
+		try
+		{	
+			//Prepare cactvs tcl script
+			String tclFile = cactvsOutPath + "/cactvs-work-temp" + curLine + ".tcl";
+			String cactvsOutFile = cactvsOutPath + "/cactvs-work-temp" + curLine + ".smi";			
+			createCactvsTclScript(line, tclFile, cactvsOutFile);
+			
+			//Execute cactvs command			
+			Runtime rt = Runtime.getRuntime();
+			
+			String command = "cmd /c start \"" + "122"  + "\" /wait " + "\"" + cactvsExecPath + "\" -f " + tclFile;
+			
+			System.out.println(command);
+			
+			Process cactvs = rt.exec(command);
+			
+			//Handle cactvs out
+			//int nTautomers = handleCactvsOut(cactvsOutFile);			
+			//System.out.println("nTautomers = " + nTautomers);
+			
+		}	
+		catch(Exception e){
+			return (-1);
+		}
+		
+		return (0);
+	}
+	
+	int createCactvsTclScript(String smiles, String fileName, String cactvsOutFile)
+	{
+		try
+		{
+			File file = new File(fileName);
+			RandomAccessFile f = new RandomAccessFile(fileName,"rw");
+			f.setLength(0);
+			String data = "molfile write [molfile create " 
+				+ cactvsOutFile + " a] [ens get [ens create {" 
+				+ smiles + "}] E_TAUTOSET]";
+			f.write(data.getBytes());
+			f.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+			return(-1);
+		}
+		
+		return (0);
+	}
+	
+	int handleCactvsOut(String fileName) 
+	{
+		int nT = 0;
+		try
+		{
+			File file = new File(fileName);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+			
+			curProcessedStr = 0;
+
+			while (f.getFilePointer() < length)
+			{	
+				String line = f.readLine();
+				//System.out.println(">>> " + line);
+				nT++;
+			}
+
+			f.close();
+		}
+		catch(Exception e)
+		{	
+		}
+		
+		return (nT);
+	}
+	
+	
 	
 	//--------------------------------------------------------
 	
