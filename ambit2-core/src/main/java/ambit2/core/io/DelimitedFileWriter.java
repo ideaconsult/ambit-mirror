@@ -33,6 +33,8 @@ import java.io.Writer;
 import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -79,10 +81,10 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 	 */
 	public void write(IChemObject object) throws CDKException {
 		
-		if (object instanceof IMoleculeSet) {
-		    writeSetOfMolecules((IMoleculeSet)object);
-		} else if (object instanceof IMolecule) {
-		    writeMolecule((IMolecule)object);
+		if (object instanceof IAtomContainerSet) {
+		    writeSetOfMolecules((IAtomContainerSet)object);
+		} else if (object instanceof IAtomContainer) {
+		    writeMolecule((IAtomContainer)object);
 		} else {
 		    throw new CDKException("Only supported is writing of ChemFile and Molecule objects.");
 		}
@@ -109,11 +111,11 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
         writer.close();
 
 	}
-	public void  writeSetOfMolecules(IMoleculeSet som)
+	public void  writeSetOfMolecules(IAtomContainerSet som)
 	{
-		for (int i = 0; i < som.getMoleculeCount(); i++) {
+		for (int i = 0; i < som.getAtomContainerCount(); i++) {
 			try {
-				writeMolecule(som.getMolecule(i));
+				writeMolecule(som.getAtomContainer(i));
 			} catch (Exception exc) {
 			}
 		}
@@ -133,7 +135,7 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 		writer.newLine();
 		logger.debug(format.getFormatName(),"\tHeader written\t",header);
 	}
-    public void writeMolecule(IMolecule molecule) {
+    public void writeMolecule(IAtomContainer molecule) {
         
     	String fieldDelimiter =  format.getFieldDelimiter().substring(0,1);
         char textDelimiter = format.getTextDelimiter();
