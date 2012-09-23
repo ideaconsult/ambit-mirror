@@ -228,6 +228,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 						
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
+			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),jsonpcallback),
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
