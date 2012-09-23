@@ -215,14 +215,22 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			r.setDelimiter("\n");
 			return new StringConvertor(
 					r,MediaType.TEXT_URI_LIST,filenamePrefix);
+			
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
 					ChemicalMediaType.WEKA_ARFF,filenamePrefix);
+			
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),null),
 					MediaType.APPLICATION_JSON,filenamePrefix);
+						
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+			String jsonpcallback = getParams().getFirstValue("jsonp");
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),jsonpcallback),
+					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(

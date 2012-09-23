@@ -15,8 +15,6 @@ import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.property.PropertyJSONReporter;
 
-import com.lowagie.text.html.HtmlEncoder;
-
 /**
  * JSON
  * @author nina
@@ -29,6 +27,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	 */
 	private static final long serialVersionUID = 410930501401847402L;
 	protected String comma = null;
+	protected String jsonpCallback = null;
 	protected PropertyJSONReporter propertyJSONReporter;
 	protected String hilightPredictions = null;
 	
@@ -54,12 +53,13 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		}
 	}
 	
-	public CompoundJSONReporter(Template template, Request request,ResourceDoc doc, String urlPrefix) {
-		this(template,null,request,doc,urlPrefix);
+	public CompoundJSONReporter(Template template, Request request,ResourceDoc doc, String urlPrefix,String jsonpCallback) {
+		this(template,null,request,doc,urlPrefix,jsonpCallback);
 	}
 	
-	public CompoundJSONReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix) {
+	public CompoundJSONReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix,String jsonpCallback) {
 		super(template,groupedProperties,request,doc,urlPrefix);
+		this.jsonpCallback = jsonpCallback;
 		propertyJSONReporter = new PropertyJSONReporter(request);
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 	}
@@ -157,6 +157,10 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	@Override
 	public void header(java.io.Writer output, Q query) {
 		try {
+			if (jsonpCallback!=null) {
+				output.write(jsonpCallback);
+				output.write("(");
+			}
 			output.write("{\n");
 			output.write("\"dataEntry\":[");
 			
@@ -169,6 +173,9 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	public void footer(java.io.Writer output, Q query) {
 		try {
 			output.write("\n],");
+		} catch (Exception x) {}
+		
+		try {
 			if (hilightPredictions==null)
 				output.write(String.format("\n\"%s\":null,","model_uri"));
 			else
@@ -177,9 +184,16 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			for (int j=0; j < header.size(); j++) 
 				propertyJSONReporter.processItem(header.get(j));
 			output.write("}\n");
-
-			output.write("}\n");
 		} catch (Exception x) {}
+		
+		try {
+			output.write("}\n");
+			
+			if (jsonpCallback!=null) {
+				output.write(");");
+			}
+		} catch (Exception x) {}
+
 	};
 	
 

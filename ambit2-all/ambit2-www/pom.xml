@@ -45,6 +45,7 @@
       <properties>
         <google.analytics>UA-8771500-5</google.analytics>
         <rdf.writer>stax</rdf.writer>
+        <jsonp>true</jsonp>
         <ambit.db>ambit2</ambit.db>
         <ambit.db.user.test>guest</ambit.db.user.test>
         <ambit.db.user.test.password>guest</ambit.db.user.test.password>
