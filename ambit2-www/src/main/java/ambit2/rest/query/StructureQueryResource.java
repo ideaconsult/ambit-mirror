@@ -285,6 +285,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					MediaType.APPLICATION_JSON,filenamePrefix);	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
+			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),
 							getDocumentation(),
