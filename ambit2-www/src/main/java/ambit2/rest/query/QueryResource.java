@@ -1,11 +1,13 @@
 package ambit2.rest.query;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import org.restlet.Context;
@@ -65,6 +67,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		stax
 	}
 	protected RDF_WRITER rdfwriter = RDF_WRITER.jena;
+	protected boolean enableJSONP = false;
 	protected boolean dataset_prefixed_compound_uri = false;
 	public final static String query_resource = "/query";
 	
@@ -94,6 +97,7 @@ Then, when the "get(Variant)" method calls you back,
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JSON,
+				MediaType.APPLICATION_JAVASCRIPT,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_WADL
 				
@@ -131,6 +135,8 @@ Then, when the "get(Variant)" method calls you back,
 			rdfwriter = RDF_WRITER.jena;
 		}
 	}
+	
+
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
 		try {
@@ -147,6 +153,9 @@ Then, when the "get(Variant)" method calls you back,
         		return new ObjectRepresentation((Serializable)returnQueryObject(),MediaType.APPLICATION_JAVA_OBJECT);
         		else throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE);        		
         	}				
+			if (MediaType.APPLICATION_JAVASCRIPT.equals(variant.getMediaType())) {
+				if (!isJSONPEnabled()) throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+			}
 	        if (queryObject != null) {
         	
 	        	IProcessor<Q, Representation>  convertor = null;
@@ -155,6 +164,7 @@ Then, when the "get(Variant)" method calls you back,
 	        	while (retry <maxRetry) {
 		        	try {
 		        		DBConnection dbc = new DBConnection(getContext());
+		        		
 		        		configureRDFWriterOption(dbc.rdfWriter());
 		        		configureDatasetMembersPrefixOption(dbc.dataset_prefixed_compound_uri());
 		        		convertor = createConvertor(variant);
@@ -574,5 +584,16 @@ Then, when the "get(Variant)" method calls you back,
 	
 	protected String getLicenseURI() {
 		return null;
+	}
+	
+	public boolean isJSONPEnabled() {
+		Properties properties =   new Properties();
+		try {
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/ambit2.pref");
+			properties.load(in);
+			in.close();		
+			String jsonp = properties.getProperty("jsonp");
+			return jsonp==null?false:Boolean.parseBoolean(jsonp);
+		} catch (Exception x) { return false;}
 	}
 }

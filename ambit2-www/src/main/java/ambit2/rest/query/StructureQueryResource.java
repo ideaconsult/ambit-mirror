@@ -88,6 +88,8 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		super();
 		setDocumentation(new ResourceDoc("dataset","Dataset"));
 	}
+	
+	
 	public Profile getGroupProperties() {
 		return groupProperties;
 	}
@@ -279,8 +281,15 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),
 							getDocumentation(),
-							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
-					MediaType.APPLICATION_JSON,filenamePrefix);			
+							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),null),
+					MediaType.APPLICATION_JSON,filenamePrefix);	
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+			String jsonpcallback = getParams().getFirstValue("jsonp");
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),
+							getDocumentation(),
+							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),jsonpcallback),
+					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);				
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
