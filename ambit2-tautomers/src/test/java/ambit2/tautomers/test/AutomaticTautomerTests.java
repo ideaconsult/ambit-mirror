@@ -3,6 +3,7 @@ package ambit2.tautomers.test;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.Vector;
+import java.text.DecimalFormat;
 
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IBond;
@@ -71,6 +72,7 @@ public class AutomaticTautomerTests
 	int nEquivalenceErrors = 0;
 	int nEquivalenceTests = 0;
 	
+	double meanTautomerErrorSum = 0;
 	
 	//Filters
 	int fMinNA = -1;
@@ -88,10 +90,10 @@ public class AutomaticTautomerTests
 		try {
 			att.handleArguments(new String[] {
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
-					"-nInpStr","100",
+					"-nInpStr","0",
 					"-nStartStr","1",
-					"-c","tautomer-count",
-					"-o","D:/Projects/data012-tautomers/test-000.txt",
+					"-c","tautomer-equivalence",
+					"-o","D:/Projects/data012-tautomers/tautomer-equivalence.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -559,7 +561,7 @@ public class AutomaticTautomerTests
 				
 				processLine(line.trim());
 				
-				//checkMemory();
+				checkMemory();
 				
 				if (n % this.traceFrequency == 0)
 					System.out.println(n);
@@ -781,7 +783,12 @@ public class AutomaticTautomerTests
 			
 			int checkRes = checkTautomerEquivalence(resultTautomers);
 			nEquivalenceTests++;
-			output(line + "  " + resultTautomers.size() +  "   " + checkRes + endLine);
+			
+			DecimalFormat df = new DecimalFormat("##0.0");
+			String meanTES_fs = df.format(meanTautomerErrorSum);
+			
+			
+			output(line + "  " + resultTautomers.size() +  "   " + checkRes + "   " + meanTES_fs + endLine);
 			
 			if (checkRes > 0)
 				nEquivalenceErrors++;
@@ -803,6 +810,7 @@ public class AutomaticTautomerTests
 		//	codes.add(TautomerManager.getTautomerCodeString(tautomers.get(i)));
 		
 		int numErr = 0;
+		meanTautomerErrorSum = 0;
 		
 		for (int i = 0; i < tautomers.size(); i++)
 		{
@@ -813,11 +821,19 @@ public class AutomaticTautomerTests
 			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 					
 			//boolean FlagOK = compareTautomerSets(codes, resultTautomers);
-			boolean FlagOK = compareTautomerSetsIsomorphismCheck(tautomers, resultTautomers);
+			int numOfDiffTautomers = compareTautomerSetsIsomorphismCheck(tautomers, resultTautomers);
 			
-			if (!FlagOK)
+			
+			if (numOfDiffTautomers > 1)
+			{
 				numErr++;
+				meanTautomerErrorSum += numOfDiffTautomers;
+			}
+				
 		}
+		
+		if (numErr > 0)
+			meanTautomerErrorSum = meanTautomerErrorSum /  tautomers.size();
 		
 		return numErr;
 	}
@@ -849,10 +865,12 @@ public class AutomaticTautomerTests
 	}
 	
 	
-	boolean compareTautomerSetsIsomorphismCheck(Vector<IAtomContainer> tautomers0, Vector<IAtomContainer> tautomers)
+	int compareTautomerSetsIsomorphismCheck(Vector<IAtomContainer> tautomers0, Vector<IAtomContainer> tautomers)
 	{
-		if (tautomers0.size() != tautomers.size())
-			return false;
+		//if (tautomers0.size() != tautomers.size())
+		//	return false;
+		
+		int numberOfDiff = 0;
 		
 		for (int i = 0; i < tautomers0.size(); i++)
 		{
@@ -872,11 +890,13 @@ public class AutomaticTautomerTests
 				}
 			}
 			
+			//if (!FlagFound)
+			//	return(false);
 			if (!FlagFound)
-				return(false);
+				numberOfDiff++;
 		}
 		
-		return true;
+		return numberOfDiff;
 	}
 	
 	
