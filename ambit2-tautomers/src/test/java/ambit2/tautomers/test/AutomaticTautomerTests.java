@@ -72,7 +72,7 @@ public class AutomaticTautomerTests
 	int nEquivalenceErrors = 0;
 	int nEquivalenceTests = 0;
 	
-	double meanTautomerErrorSum = 0;
+	int tutomerErrorSum = 0;
 	
 	//Filters
 	int fMinNA = -1;
@@ -785,10 +785,14 @@ public class AutomaticTautomerTests
 			nEquivalenceTests++;
 			
 			DecimalFormat df = new DecimalFormat("##0.0");
-			String meanTES_fs = df.format(meanTautomerErrorSum);
+			
+			double meanTErr = 0;
+			if (checkRes > 0 )
+				meanTErr = (1.0*tutomerErrorSum / checkRes);
+			String meanTErr_fs = df.format(meanTErr);
 			
 			
-			output(line + "  " + resultTautomers.size() +  "   " + checkRes + "   " + meanTES_fs + endLine);
+			output(line + "  " + resultTautomers.size() +  "   " + checkRes + "   "  + meanTErr_fs + endLine);
 			
 			if (checkRes > 0)
 				nEquivalenceErrors++;
@@ -810,7 +814,7 @@ public class AutomaticTautomerTests
 		//	codes.add(TautomerManager.getTautomerCodeString(tautomers.get(i)));
 		
 		int numErr = 0;
-		meanTautomerErrorSum = 0;
+		tutomerErrorSum = 0;
 		
 		for (int i = 0; i < tautomers.size(); i++)
 		{
@@ -827,13 +831,11 @@ public class AutomaticTautomerTests
 			if (numOfDiffTautomers > 1)
 			{
 				numErr++;
-				meanTautomerErrorSum += numOfDiffTautomers;
+				tutomerErrorSum += numOfDiffTautomers;
 			}
 				
 		}
 		
-		if (numErr > 0)
-			meanTautomerErrorSum = meanTautomerErrorSum /  tautomers.size();
 		
 		return numErr;
 	}
