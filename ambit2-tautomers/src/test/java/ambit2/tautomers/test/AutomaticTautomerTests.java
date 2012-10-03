@@ -92,8 +92,8 @@ public class AutomaticTautomerTests
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					"-nInpStr","0",
 					"-nStartStr","1",
-					"-c","tautomer-equivalence",
-					"-o","D:/Projects/data012-tautomers/tautomer-equivalence.txt",
+					"-c","tautomer-count",
+					"-o","D:/Projects/data012-tautomers/tautomer-count.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -743,7 +743,7 @@ public class AutomaticTautomerTests
 	
 	int tautomerCount(String line)
 	{
-		System.out.println(line);
+		System.out.println("" + curLine + "   " + line);
 		try
 		{
 			IMolecule mol = null;
@@ -752,11 +752,13 @@ public class AutomaticTautomerTests
 			
 			tman.setStructure(mol);
 			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			IAtomContainer can_t = TautomerManager.getCanonicTautomer(resultTautomers);
 			
-			output(line + "  " + resultTautomers.size() +  endLine);
+			output("" + curLine + "   " + line + "  " + resultTautomers.size() + "  " +  
+					SmartsHelper.moleculeToSMILES(can_t)  /* +  endLine */);
 		}	
 		catch(Exception e){
-			return (-1);
+			System.out.println(e.toString());
 		}
 		
 		return (0);

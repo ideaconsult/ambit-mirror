@@ -456,4 +456,25 @@ public class TautomerManager
 			
 	}
 	
+	public static IAtomContainer getCanonicTautomer(Vector<IAtomContainer> tautomers)
+	{	
+		if (tautomers.size() == 1)
+			return tautomers.firstElement();
+		
+		IAtomContainer can_t = tautomers.firstElement();
+		double rank = ((Double)can_t.getProperty("TAUTOMER_RANK")).doubleValue();
+		
+		for (IAtomContainer t : tautomers)
+		{
+			double newRank = ((Double)t.getProperty("TAUTOMER_RANK")).doubleValue();
+			if (newRank < rank)
+			{
+				rank = newRank;
+				can_t = t;
+			}
+		}
+		
+		return can_t;
+	}
+	
 }
