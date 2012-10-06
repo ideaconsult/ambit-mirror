@@ -19,6 +19,8 @@ database.user.test=${ambit.db.user.test}
 database.create=${ambit.db.create.allow}
 #How to serialize RDF/XML - by Jena (standard, prettier, slower) or StAX (faster)
 rdf.writer=${rdf.writer}
+#Enable JSONP support true|false
+jsonp=${jsonp}
 #URI of the ontology service , e.g. http://localhost:8080/ontology
 service.ontology=${service.ontology}
 #Add dataset prefix for compound URI, e.g.  /dataset/1/compound/1 , instead of /compound/1
