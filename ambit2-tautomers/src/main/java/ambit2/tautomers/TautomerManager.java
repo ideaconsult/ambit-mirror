@@ -15,6 +15,7 @@ public class TautomerManager
 	IAtomContainer molecule;
 	Vector<IRuleInstance> extendedRuleInstances = new Vector<IRuleInstance>(); 
 	Vector<IRuleInstance> ruleInstances = new Vector<IRuleInstance>();
+	Vector<Vector<IRuleInstance>> subCombinationsRI = new Vector<Vector<IRuleInstance>>();
 	Vector<Rule> generatedRules = new Vector<Rule>(); 
 	Vector<IAtomContainer> resultTautomers;	
 	Vector<String> resultTatomerStringCodes = new Vector<String>(); 
@@ -90,7 +91,32 @@ public class TautomerManager
 		return(resultTautomers);
 	}
 	
-	//Approach 01 (basic one) based on first depth search algorithm
+	//Approach 01: improved combinatorial approach 
+	public Vector<IAtomContainer> generateTautomers_ImprovedCombApproach() throws Exception
+	{
+		searchAllRulePositions();				
+		subCombinationsRI =  generateSubCombinations();
+		
+		resultTautomers = new Vector<IAtomContainer>();
+		if (ruleInstances.isEmpty())
+		{	
+			resultTautomers.add(molecule);
+			return(resultTautomers);
+		}	
+		
+		//iterating all sub combinations
+		for (int i = 0; i < subCombinationsRI.size(); i++)
+		{
+			ruleInstances = subCombinationsRI.get(i);
+			generateRuleInstanceCombinations();
+		}
+		
+		resultTautomers = tautomerFilter.filter(resultTautomers);
+		
+		return(resultTautomers);
+	}
+	
+	//Approach 02 (basic one) based on first depth search algorithm
 	public Vector<IAtomContainer> generateTautomersIncrementaly() throws Exception
 	{
 		//An approach for generation of tautomers
@@ -341,7 +367,9 @@ public class TautomerManager
 	//This function is applied for approach 00 
 	void handleOverlapedInstances()
 	{			
+		//Just all initial rules are added
 		ruleInstances.addAll(extendedRuleInstances);
+		
 		
 		//RuleManager rman = new RuleManager(this);
 		//rman.handleOverlappingRuleInstances();
@@ -372,25 +400,28 @@ public class TautomerManager
 		} while (instNumber < ruleInstances.size()); 
 	}
 	
-	//This function is applied for approach 00 
+	//This function is applied for approach 00 and 01
 	void registerTautomer00() throws Exception 
 	{	
-			IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
-			resultTautomers.add(newTautomer);
-			
-			//TODO search for hidden tautomers 
-			//i.e. overlapping of some rules occur only for specific states of both rules
+		IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
+		resultTautomers.add(newTautomer);
 
+		//TODO search for hidden tautomers 
+		//i.e. overlapping of some rules occur only for specific states of both rules
 		
-		System.out.print("  tautomer: " + getTautomerCombination()  
-				+  "    " + SmartsHelper.moleculeToSMILES(molecule));
+		//System.out.print("  tautomer: " + getTautomerCombination() +  "    " + SmartsHelper.moleculeToSMILES(molecule));
 		
 		//Print H Atoms info
 		//for (int i = 0; i < molecule.getAtomCount(); i++)
 		//	System.out.print(" " + molecule.getAtom(i).getImplicitHydrogenCount());
 		//System.out.println();		
-		//System.out.println();
 		
+	}
+	
+	
+	Vector<Vector<IRuleInstance>> generateSubCombinations()
+	{
+		return null;
 	}
 	
 	

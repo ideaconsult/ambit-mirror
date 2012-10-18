@@ -35,6 +35,8 @@ public class AutomaticTautomerTests
 	public static final int LPM_TAUTOMER_EQUIVALENCE = 4;
 	public static final int LPM_TAUTOMER_COMPARISON = 5;
 	public static final int LPM_CACTVS_COUNT = 6;
+	public static final int LPM_TAUTOMER_COUNT_COMBINATORIAL = 7;
+	public static final int LPM_TAUTOMER_COUNT_COMBINATORIAL_IMPROVED = 8;
 	
 	
 	int lineProcessMode = 0;
@@ -90,10 +92,10 @@ public class AutomaticTautomerTests
 		try {
 			att.handleArguments(new String[] {
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
-					"-nInpStr","0",
+					"-nInpStr","100",
 					"-nStartStr","1",
-					"-c","tautomer-count",
-					"-o","D:/Projects/data012-tautomers/tautomer-count.txt",
+					"-c","tautomer-count-comb",
+					"-o","D:/Projects/data012-tautomers/tautomer-count-comb.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -367,6 +369,28 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (command.equals("tautomer-count-comb"))
+		{
+			System.out.println("tautomer counting: " + inFileName);
+			openOutputFile();
+			setTautomerManager();
+			lineProcessMode = LPM_TAUTOMER_COUNT_COMBINATORIAL;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("tautomer-count-comb-improved"))
+		{
+			System.out.println("tautomer counting: " + inFileName);
+			openOutputFile();
+			setTautomerManager();
+			lineProcessMode = LPM_TAUTOMER_COUNT_COMBINATORIAL_IMPROVED;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
 		if (command.equals("tautomer-equivalence"))
 		{
 			System.out.println("Checking tautomer equivalence: " + inFileName);
@@ -595,6 +619,12 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (lineProcessMode == LPM_TAUTOMER_COUNT_COMBINATORIAL)
+		{
+			tautomerCountCombinatorial(line);
+			return(0);
+		}
+		
 		if (lineProcessMode == LPM_TAUTOMER_EQUIVALENCE)
 		{
 			tautomerEquivalence(line);
@@ -756,6 +786,29 @@ public class AutomaticTautomerTests
 			
 			output("" + curLine + "   " + line + "  " + resultTautomers.size() + "  " +  
 					SmartsHelper.moleculeToSMILES(can_t)  /* +  endLine */);
+		}	
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return (0);
+	}
+	
+	int tautomerCountCombinatorial(String line)
+	{
+		System.out.println("" + curLine + "   " + line);
+		try
+		{
+			IMolecule mol = null;
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(line.trim());
+			
+			tman.setStructure(mol);
+			Vector<IAtomContainer> resultTautomers = tman.generateTautomers();
+			//IAtomContainer can_t = TautomerManager.getCanonicTautomer(resultTautomers);
+			
+			output("" + curLine + "   " + line + "  " + resultTautomers.size() + endLine);   
+				//	+ "  " + SmartsHelper.moleculeToSMILES(can_t)  /* +  endLine */);
 		}	
 		catch(Exception e){
 			System.out.println(e.toString());
