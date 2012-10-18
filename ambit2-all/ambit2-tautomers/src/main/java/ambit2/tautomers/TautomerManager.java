@@ -421,8 +421,25 @@ public class TautomerManager
 	
 	Vector<Vector<IRuleInstance>> generateSubCombinations()
 	{
-		return null;
+		//Determination of  groups (clusters) of overlapping rule instances; 
+		Vector<Vector<IRuleInstance>> riGroups = new Vector<Vector<IRuleInstance>>(); 
+		for (IRuleInstance ri : extendedRuleInstances)
+		{
+			for (Vector<IRuleInstance> group: riGroups)
+			{
+				if (RuleManager.overlaps((RuleInstance)ri, group))
+					group.add(ri);
+			}
+		}
+		
+		//Generation of all sub-combinations from clusters 
+		Vector<Vector<IRuleInstance>> subCombs = new Vector<Vector<IRuleInstance>>();
+		//TODO
+		return subCombs;
 	}
+	
+	
+	
 	
 	
 	public static String getTautomerCodeString(IAtomContainer tautomer, boolean treatAromBondsAsEquivalent)
