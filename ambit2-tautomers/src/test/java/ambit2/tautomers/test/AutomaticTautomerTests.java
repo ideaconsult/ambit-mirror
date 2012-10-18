@@ -627,6 +627,12 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (lineProcessMode == LPM_TAUTOMER_COUNT_COMBINATORIAL_IMPROVED)
+		{
+			tautomerCountCombinatorialImproved(line);
+			return(0);
+		}
+		
 		if (lineProcessMode == LPM_TAUTOMER_EQUIVALENCE)
 		{
 			tautomerEquivalence(line);
@@ -818,6 +824,30 @@ public class AutomaticTautomerTests
 		
 		return (0);
 	}
+	
+	int tautomerCountCombinatorialImproved(String line)
+	{
+		System.out.println("" + curLine + "   " + line);
+		try
+		{
+			IMolecule mol = null;
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(line.trim());
+			
+			tman.setStructure(mol);
+			Vector<IAtomContainer> resultTautomers = tman.generateTautomers_ImprovedCombApproach();
+			//IAtomContainer can_t = TautomerManager.getCanonicTautomer(resultTautomers);
+			
+			output("" + curLine + "   " + line + "  " + resultTautomers.size() + endLine);   
+				//	+ "  " + SmartsHelper.moleculeToSMILES(can_t)  /* +  endLine */);
+		}	
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return (0);
+	}
+	
 	
 	int tautomerEquivalence(String line)
 	{

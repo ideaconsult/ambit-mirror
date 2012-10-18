@@ -113,9 +113,30 @@ public class RuleManager
 		return(n);
 	}
 	
+	public static boolean overlaps(RuleInstance r1, RuleInstance r2)
+	{	
+		for (IAtom a: r1.atoms)
+			if (r2.atoms.contains(a))
+				return true;
+		
+		return (false);
+	}
+	
+	
+	public static boolean overlaps(RuleInstance r, Vector<IRuleInstance> group)
+	{	
+		for (IRuleInstance ri : group)
+			if (overlaps(r, (RuleInstance)ri))
+				return true;
+		
+		return (false);
+	}
+	
+	
+	
 	public static int getNumOfOverlappedAtoms(RuleInstance r1, RuleInstance r2)
 	{
-		//TODO - to check explicitH atoms if needed
+		//TODO - to check explicitH atoms if needed ??
 		int n = 0;
 		for (int i = 0; i < r1.atoms.size(); i++)
 			if (r2.atoms.contains(r1.atoms.get(i)))
