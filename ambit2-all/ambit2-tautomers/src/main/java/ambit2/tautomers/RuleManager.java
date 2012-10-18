@@ -113,7 +113,7 @@ public class RuleManager
 		return(n);
 	}
 	
-	int getNumOfOverlappedAtoms(RuleInstance r1, RuleInstance r2)
+	public static int getNumOfOverlappedAtoms(RuleInstance r1, RuleInstance r2)
 	{
 		//TODO - to check explicitH atoms if needed
 		int n = 0;
