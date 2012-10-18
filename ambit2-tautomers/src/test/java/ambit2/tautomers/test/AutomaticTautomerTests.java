@@ -92,7 +92,7 @@ public class AutomaticTautomerTests
 		try {
 			att.handleArguments(new String[] {
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
-					"-nInpStr","100",
+					"-nInpStr","0",
 					"-nStartStr","1",
 					"-c","tautomer-count-comb",
 					"-o","D:/Projects/data012-tautomers/tautomer-count-comb.txt",
@@ -586,6 +586,8 @@ public class AutomaticTautomerTests
 				processLine(line.trim());
 				
 				checkMemory();
+				
+				Runtime.getRuntime().gc();
 				
 				if (n % this.traceFrequency == 0)
 					System.out.println(n);
