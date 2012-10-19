@@ -19,7 +19,7 @@ public class TautomerConst
 	//Generation Algorithm Types
 	public static final int GAT_Comb_Pure = 0;
 	public static final int GAT_Incremental = 1;
-	//public static final int GAT_Comb_Set = 2; //improved combinatorial approach (a set of combinations)
+	public static final int GAT_Comb_Improved = 2; //improved combinatorial approach (a set of combinations)
 	
 	public static final int IHA_INDEX = 1000000;
 	
