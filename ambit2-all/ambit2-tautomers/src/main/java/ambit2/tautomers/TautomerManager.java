@@ -2,6 +2,7 @@ package ambit2.tautomers;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 
 import java.util.Vector;
@@ -110,6 +111,9 @@ public class TautomerManager
 		for (Vector<IRuleInstance> subComb : subCombinationsRI)
 		{
 			//printRIGroup(subComb, "working with combination");
+			
+			//initialize molecule
+			restoreMolecule(molecule, originalMolecule);
 			ruleInstances = subComb;
 			generateRuleInstanceCombinations();
 		}
@@ -411,6 +415,7 @@ public class TautomerManager
 		resultTautomers.add(newTautomer);
 		
 		//System.out.print("  tautomer: " + getTautomerCombination() +  "    " + SmartsHelper.moleculeToSMILES(molecule));		
+		
 		//Print H Atoms info
 		//for (int i = 0; i < molecule.getAtomCount(); i++)
 		//	System.out.print(" " + molecule.getAtom(i).getImplicitHydrogenCount());
@@ -425,7 +430,7 @@ public class TautomerManager
 		for (IRuleInstance ri : extendedRuleInstances)
 		{
 			boolean FlagRIOverlaps = false;
-			for (Vector<IRuleInstance> group: riGroups)
+			for (Vector<IRuleInstance> group : riGroups)
 			{
 				if (RuleManager.overlaps((RuleInstance)ri, group))
 				{	
@@ -593,6 +598,24 @@ public class TautomerManager
 		}
 		
 		return can_t;
+	}
+	
+	void restoreMolecule(IAtomContainer mol, IAtomContainer origMol)
+	{
+		//restoring bond orders
+		for (int i = 0; i < mol.getBondCount(); i++)
+		{
+			IBond b = mol.getBond(i);
+			b.setOrder(origMol.getBond(i).getOrder());
+		}
+		
+		//restoring implicit H atoms
+		for (int i = 0; i < mol.getAtomCount(); i++)
+		{	
+			int nH = origMol.getAtom(i).getImplicitHydrogenCount();
+			mol.getAtom(i).setImplicitHydrogenCount(nH);
+		}	
+			
 	}
 	
 }
