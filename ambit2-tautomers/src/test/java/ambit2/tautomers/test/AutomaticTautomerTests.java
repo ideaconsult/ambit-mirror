@@ -94,8 +94,8 @@ public class AutomaticTautomerTests
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					"-nInpStr","0",
 					"-nStartStr","1",
-					"-c","tautomer-count-comb",
-					"-o","D:/Projects/data012-tautomers/tautomer-count-comb.txt",
+					"-c","tautomer-count-comb-improved",
+					"-o","D:/Projects/data012-tautomers/tautomer-count-comb-improved.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});

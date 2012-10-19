@@ -94,20 +94,23 @@ public class TautomerManager
 	//Approach 01: improved combinatorial approach 
 	public Vector<IAtomContainer> generateTautomers_ImprovedCombApproach() throws Exception
 	{
-		searchAllRulePositions();				
-		subCombinationsRI =  generateSubCombinations();
-		
-		resultTautomers = new Vector<IAtomContainer>();
-		if (ruleInstances.isEmpty())
+		searchAllRulePositions();
+		resultTautomers = new Vector<IAtomContainer>();		
+		if (extendedRuleInstances.isEmpty())
 		{	
 			resultTautomers.add(molecule);
 			return(resultTautomers);
-		}	
+		}
+		
+		//Generating sub combinations
+		subCombinationsRI =  generateSubCombinations();
+		
 		
 		//iterating all sub combinations
-		for (int i = 0; i < subCombinationsRI.size(); i++)
+		for (Vector<IRuleInstance> subComb : subCombinationsRI)
 		{
-			ruleInstances = subCombinationsRI.get(i);
+			//printRIGroup(subComb, "working with combination");
+			ruleInstances = subComb;
 			generateRuleInstanceCombinations();
 		}
 		
@@ -367,15 +370,15 @@ public class TautomerManager
 	//This function is applied for approach 00 
 	void handleOverlapedInstances()
 	{			
-		//Just all initial rules are added
+		//Nothing special is done currently
+		//Just all initial rules are added. 
 		ruleInstances.addAll(extendedRuleInstances);
-		
-		
+				
 		//RuleManager rman = new RuleManager(this);
 		//rman.handleOverlappingRuleInstances();
 	}
 	
-	//This function is applied for approach 00 
+	//This function is applied for approach 00 and as helper for approach 01
 	void generateRuleInstanceCombinations() throws Exception 
 	{
 		for (int i = 0; i < ruleInstances.size(); i++)
@@ -400,45 +403,112 @@ public class TautomerManager
 		} while (instNumber < ruleInstances.size()); 
 	}
 	
+	
 	//This function is applied for approach 00 and 01
 	void registerTautomer00() throws Exception 
 	{	
 		IAtomContainer newTautomer = (IAtomContainer)molecule.clone();
 		resultTautomers.add(newTautomer);
-
-		//TODO search for hidden tautomers 
-		//i.e. overlapping of some rules occur only for specific states of both rules
 		
-		//System.out.print("  tautomer: " + getTautomerCombination() +  "    " + SmartsHelper.moleculeToSMILES(molecule));
-		
+		//System.out.print("  tautomer: " + getTautomerCombination() +  "    " + SmartsHelper.moleculeToSMILES(molecule));		
 		//Print H Atoms info
 		//for (int i = 0; i < molecule.getAtomCount(); i++)
 		//	System.out.print(" " + molecule.getAtom(i).getImplicitHydrogenCount());
-		//System.out.println();		
-		
+		//System.out.println();
 	}
 	
 	
 	Vector<Vector<IRuleInstance>> generateSubCombinations()
 	{
-		//Determination of  groups (clusters) of overlapping rule instances; 
+		//Determination of  groups (clusters) of overlapping rule instances 
 		Vector<Vector<IRuleInstance>> riGroups = new Vector<Vector<IRuleInstance>>(); 
 		for (IRuleInstance ri : extendedRuleInstances)
 		{
+			boolean FlagRIOverlaps = false;
 			for (Vector<IRuleInstance> group: riGroups)
 			{
 				if (RuleManager.overlaps((RuleInstance)ri, group))
+				{	
 					group.add(ri);
+					FlagRIOverlaps = true;
+					break;
+				}
+			}
+			
+			if (!FlagRIOverlaps)
+			{
+				//a new group is created
+				Vector<IRuleInstance> group = new Vector<IRuleInstance>();
+				group.add(ri);
+				riGroups.add(group);
 			}
 		}
 		
-		//Generation of all sub-combinations from clusters 
-		Vector<Vector<IRuleInstance>> subCombs = new Vector<Vector<IRuleInstance>>();
-		//TODO
+		 
+		//The groups are sorted 
+		Vector<IRuleInstance> defaultGroup = new Vector<IRuleInstance>();
+		Vector<Vector<IRuleInstance>> bigGroups = new Vector<Vector<IRuleInstance>>();
+		
+		for (Vector<IRuleInstance> group: riGroups)
+		{			
+			//printRIGroup(group,"group"); System.out.println();
+			if (group.size() == 1)
+				defaultGroup.add(group.firstElement());
+			else
+				bigGroups.add(group);
+		}		
+			
+		
+		//helper array contains the positions in each group
+		int gpos[] = new int[bigGroups.size()]; 
+		int gmax[] = new int[bigGroups.size()];
+		long numOfCombinations = 1;
+		
+		//Initialization of the positions for each bigGroup 
+		//plus calculation of the total number of the number of combinations 
+		for (int i = 0; i < gpos.length; i++)
+		{	
+			gpos[i] = 0;
+			gmax[i] = bigGroups.get(i).size();
+			numOfCombinations = numOfCombinations * gmax[i]; 
+		}
+		
+		//Generation of all sub-combinations from clusters
+		Vector<Vector<IRuleInstance>> subCombs = new Vector<Vector<IRuleInstance>>();	
+		 
+		long curComb = 0;
+		while (curComb < numOfCombinations)
+		{	
+			//Create a combination
+			Vector<IRuleInstance> combination  = new Vector<IRuleInstance>();
+			combination.addAll(defaultGroup);
+			for (int i = 0; i < gpos.length; i++)
+				combination.add(bigGroups.get(i).get(gpos[i]));
+			
+			subCombs.add(combination);
+						
+			//iterate to next combination
+			for (int i = 0; i < gpos.length; i++)
+			{
+				gpos[i]++;
+				if (gpos[i] < gmax[i])
+					break; //algorithm will not go to the next group
+				else
+					gpos[i] = 0; //group position is set to zero and next group position is iterated
+			}
+			curComb++;
+		}
+		
 		return subCombs;
 	}
 	
-	
+	//small helper
+	void printRIGroup(Vector<IRuleInstance> group, String info)
+	{
+		System.out.println(info);
+		for (IRuleInstance ri : group)
+			System.out.println(((RuleInstance)ri).debugInfo(molecule));
+	}
 	
 	
 	
