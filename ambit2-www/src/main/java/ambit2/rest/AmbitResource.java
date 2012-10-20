@@ -333,7 +333,7 @@ public class AmbitResource extends ProtectedResource {
 				writer.write(printWidgetHeader("Welcome"));
 				
 				writer.write(printWidgetContentHeader(""));
-				writer.write("<h5 align='center'>These pages offer minimalistic user interface to <a href='http://ambit.sf.net'>AMBIT</a> implementation of <a href='http://opentox.org'>OpenTox</a> REST services</h5><p> <br>Full featured user interface is available via external applications: <ul><li><a href='http://toxpredict.org' target='_blank'>ToxPredict</a></li><li><a href='http://http://toxcreate.org' target='_blank'>ToxCreate</a></li><li><a href='http://opentox.ntua.gr/blog/78-q-edit'>QPRF editor</a></li><li><a href='http://bioclipse.net/opentox'>BioClipse</a></li><li><a href='http://qsardb.jrc.it'>QMRF Inventory</a></li></ul></p><p>More applications are under development.</p>");
+				writer.write("<h5 align='center'>These pages offer minimalistic user interface to <a href='http://ambit.sf.net'>AMBIT</a> implementation of <a href='http://opentox.org'>OpenTox</a> REST services</h5><p> <br>Full featured user interface is available via external applications: <ul><li><a href='http://toxpredict.org' target='_blank'>ToxPredict</a></li><li><a href='http://http://toxcreate.org' target='_blank'>ToxCreate</a></li><li><a href='http://opentox.ntua.gr/blog/78-q-edit'>QPRF editor</a></li><li><a href='http://bioclipse.net/opentox'>Bioclipse</a></li><li><a href='http://qsardb.jrc.it'>QMRF Inventory</a></li></ul></p><p>More applications are under development.</p>");
 				
 
 				writer.write(String.format("<p><a href='#' onClick=\"javascript:toggleDiv('help');\">REST API details</a></p>"));
