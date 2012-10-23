@@ -137,7 +137,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				else if (value instanceof Long) 
 					builder.append(String.format("\t\t\"%s\":%l",key,(Long)value));
 				else 
-					builder.append(String.format("\t\t\"%s\":\"%s\"",key,value.toString().replace("\"","'").replace("\n"," ")));				
+					builder.append(String.format("\t\t\"%s\":\"%s\"",key,value.toString().replace("\"","'").replace("\n","|")));				
 				i++;
 				comma1 = ",";
 			}
