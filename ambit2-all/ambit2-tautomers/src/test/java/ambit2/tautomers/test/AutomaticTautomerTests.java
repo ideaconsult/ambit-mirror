@@ -93,9 +93,9 @@ public class AutomaticTautomerTests
 			att.handleArguments(new String[] {
 					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					"-nInpStr","0",
-					"-nStartStr","1",
+					"-nStartStr","50428",
 					"-c","tautomer-count-comb-improved",
-					"-o","D:/Projects/data012-tautomers/tautomer-count-comb-improved.txt",
+					"-o","D:/Projects/data012-tautomers/tautomer-count-comb-improved_50428_XXXX.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
