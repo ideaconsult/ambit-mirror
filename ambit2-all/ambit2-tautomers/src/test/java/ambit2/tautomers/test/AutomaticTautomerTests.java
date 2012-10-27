@@ -37,6 +37,13 @@ public class AutomaticTautomerTests
 	public static final int LPM_CACTVS_COUNT = 6;
 	public static final int LPM_TAUTOMER_COUNT_COMBINATORIAL = 7;
 	public static final int LPM_TAUTOMER_COUNT_COMBINATORIAL_IMPROVED = 8;
+	public static final int LPM_STRUCTURE_STAT = 9;
+	public static final int LPM_EQUIVALENCE_STAT = 10;
+	
+	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
+	//public static final int LPM_COMPARE_AMBIT_EXTERNAL = 12;
+	
+	
 	
 	
 	int lineProcessMode = 0;
@@ -85,17 +92,40 @@ public class AutomaticTautomerTests
 	int fMaxCyclo = -1;
 	
 	
+	//Structure statistics helpers
+	int StrSizeBins[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100};
+	int NumRingBins[] = {0,1,2,3,4,5,6,7,8,9,10};
+	int freqStrSizeBins[];
+	int freqNumRingBins[];
+	
+	//Equivalnece statistics helpers
+	double RelNumUneqBins[] = {0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,40,50,60,70,80,90,100};  //in percent
+	int AbsNumUneqBins[] = {0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,40,50,60,70,80,90,100};
+	double UneqDiffBins [] = {0,1, 2, 3, 4, 5, 6 , 7, 8, 9, 10, 15, 20, 30};
+	
+	int freqRelNumUneqBins[];
+	int freqAbsNumUneqBins[];
+	int freqUneqDiffBins [];
+	
+	
+	
+	public static boolean FlagCheckMemory = false;
+	
 	public static void main(String[] args)
 	{
 		AutomaticTautomerTests att = new AutomaticTautomerTests();
 				
 		try {
 			att.handleArguments(new String[] {
-					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
+					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
+					
+					"-i","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
+					"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
+					
 					"-nInpStr","0",
-					"-nStartStr","50428",
-					"-c","tautomer-count-comb-improved",
-					"-o","D:/Projects/data012-tautomers/tautomer-count-comb-improved_50428_XXXX.txt",
+					"-nStartStr","1",
+					"-c","compare-algorithms",
+					"-o","D:/Projects/data012-tautomers/test.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -412,6 +442,46 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (command.equals("structure-stat"))
+		{
+			System.out.println("Making structure statistics: " + inFileName);
+			openOutputFile();
+			initStructureStatistics();
+			lineProcessMode = LPM_STRUCTURE_STAT;
+			iterateInputFile();
+			printStructureStatistics();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("equivalence-stat"))
+		{
+			System.out.println("Making equivalence statistics: " + inFileName);
+			openOutputFile();
+			initEquivalenceStatistics();
+			lineProcessMode = LPM_EQUIVALENCE_STAT;
+			iterateInputFile();
+			printEquivalenceStatistics();
+			closeOutputFile();
+			return(0);
+		}
+		
+		
+		if (command.equals("compare-algorithms"))
+		{
+			System.out.println("compare + \n first input file: " + inFileName);
+			System.out.println("second input file: " + inFileName2);
+			
+			openOutputFile();			
+			//lineProcessMode = LPM_COMPARE_AMBIT_INTERNAL;
+			
+			compareAlgorithms();
+			
+			closeOutputFile();
+			return(0);
+		}
+		
+		
 		
 		System.out.println("Unknown command: " + command);
 		
@@ -580,14 +650,15 @@ public class AutomaticTautomerTests
 				if (nInputStr > 0)
 					if (curProcessedStr > nInputStr) 
 						break;
-				
-								
+												
 				
 				processLine(line.trim());
 				
-				checkMemory();
-				
-				Runtime.getRuntime().gc();
+				if (FlagCheckMemory)
+				{
+					checkMemory();				
+					Runtime.getRuntime().gc();
+				}	
 				
 				if (n % this.traceFrequency == 0)
 					System.out.println(n);
@@ -642,6 +713,18 @@ public class AutomaticTautomerTests
 		if (lineProcessMode == LPM_CACTVS_COUNT)
 		{
 			cactvsCount(line);
+			return(0);
+		}
+		
+		if (lineProcessMode == LPM_STRUCTURE_STAT)
+		{
+			structureStatistics(line);
+			return(0);
+		}
+		
+		if (lineProcessMode == LPM_EQUIVALENCE_STAT)
+		{
+			equivalenceStatistics(line);
 			return(0);
 		}
 		
@@ -1071,6 +1154,189 @@ public class AutomaticTautomerTests
 	}
 	
 	
+	//---------------- statistics and comparison methods ----------------------
+	
+	
+	int getBinIndex(int value, int bins[])
+	{
+		for (int i = 0; i < bins.length; i++)
+		{
+			if (value <= bins[i])
+				return i;
+		}
+		return (bins.length-1); //last bin by default - it means the the value is larger the last bin value
+	}
+	
+	int getBinIndex(double value, double bins[])
+	{
+		for (int i = 0; i < bins.length; i++)
+		{
+			if (value <= bins[i])
+				return i;
+		}
+		return (bins.length-1); //last bin by default - it means the the value is larger the last bin value
+	}
+	
+	
+	//---------------
+	
+	void initStructureStatistics()
+	{
+		freqNumRingBins = new int [NumRingBins.length];
+		freqStrSizeBins = new int [StrSizeBins.length];
+		
+		for (int  i = 0; i < freqNumRingBins.length; i++)
+			freqNumRingBins[i] = 0;
+		
+		for (int  i = 0; i < freqStrSizeBins.length; i++)
+			freqStrSizeBins[i] = 0;
+	}
+	
+	int structureStatistics(String line)
+	{	
+		try
+		{
+			IMolecule mol = null;
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(line.trim());
+			
+			int nAt = mol.getAtomCount();
+			int nRing = mol.getBondCount() - mol.getAtomCount() + 1;
+			
+			int nAtBinIndex = getBinIndex(nAt, StrSizeBins);
+			freqStrSizeBins[nAtBinIndex]++;
+			
+			int nRingBinIndex = getBinIndex(nRing,NumRingBins);
+			freqNumRingBins[nRingBinIndex]++;
+						
+			output(line + "  " + nAt + "   " + nRing + endLine);
+			
+			//System.out.println(mol.getAtomCount());
+		}	
+		catch(Exception e){
+			System.out.println("Exception at structut " + line );
+			return (-1);
+		}
+		return 0;
+	}
+	
+	void printStructureStatistics()
+	{
+		System.out.println("Structure Size Histogram:  bin   frequency");
+		for (int i = 0; i < StrSizeBins.length; i++)
+			System.out.println("  " + StrSizeBins[i] + "  " + freqStrSizeBins[i]);
+		
+		System.out.println("Number of Rings Histogram:  bin   frequency");
+		for (int i = 0; i < NumRingBins.length; i++)
+			System.out.println("  " + NumRingBins[i] + "  " + freqNumRingBins[i]);
+	}
+	
+	//---------------
+	
+	void initEquivalenceStatistics()
+	{	
+		freqAbsNumUneqBins = new int [AbsNumUneqBins.length];
+		freqRelNumUneqBins = new int [RelNumUneqBins.length];
+		freqUneqDiffBins = new int [UneqDiffBins.length];
+		
+		
+		for (int  i = 0; i < freqAbsNumUneqBins.length; i++)
+			freqAbsNumUneqBins[i] = 0;
+		
+		for (int  i = 0; i < freqRelNumUneqBins.length; i++)
+			freqRelNumUneqBins[i] = 0;
+		
+		for (int  i = 0; i < freqUneqDiffBins.length; i++)
+			freqUneqDiffBins[i] = 0;
+	}
+	
+	int equivalenceStatistics(String line)
+	{	
+		try
+		{
+			Vector<String> tokens = filterTokens(line.split(" "));
+			int n = tokens.size();
+			
+			if (n != 4)
+			{	
+				System.out.println("Error at " + line);
+				return -1;
+			
+			}
+
+			int nTaut = Integer.parseInt(tokens.get(1));
+			int nUneq = Integer.parseInt(tokens.get(2));
+			double relNUneq = (100.0*nUneq)/nTaut;  //in percent
+			double meanDiff = Double.parseDouble(tokens.get(3));
+			
+			//Updating the bins frequencies 
+			int ANUBinIndex = getBinIndex(nUneq, AbsNumUneqBins);
+			freqAbsNumUneqBins[ANUBinIndex]++;
+			
+			int RNUBinIndex = getBinIndex(relNUneq, RelNumUneqBins);
+			freqRelNumUneqBins[RNUBinIndex]++;
+			
+			int diffBinIndex = getBinIndex(meanDiff, UneqDiffBins);
+			freqUneqDiffBins[diffBinIndex]++;
+			
+
+		}	
+		catch(Exception e){
+			System.out.println("Exception at struct " + line + endLine + e.toString());
+			return (-1);
+		}
+		
+		return 0;
+	}
+	
+	void printEquivalenceStatistics()
+	{	
+		System.out.println("Histogram(Absolute Number of Unequivalent Tautomers):  bin   frequency");
+		for (int i = 0; i < AbsNumUneqBins.length; i++)
+			System.out.println("  " + AbsNumUneqBins[i] + "  " + freqAbsNumUneqBins[i]);
+		
+		System.out.println("Histogram(Relative Number of Unequivalent Tautomers):  bin   frequency");
+		for (int i = 0; i < RelNumUneqBins.length; i++)
+			System.out.println("  " + RelNumUneqBins[i] + "  " + freqRelNumUneqBins[i]);
+		
+		System.out.println("Histogram(Unequivalent Mean Difference):  bin   frequency");
+		for (int i = 0; i < UneqDiffBins.length; i++)
+			System.out.println("  " + UneqDiffBins[i] + "  " + freqUneqDiffBins[i]);
+		
+	}
+	
+	
+	int compareAlgorithms()
+	{
+		//Creating bins
+		int n = 20;
+		int DiffBins[] = new int[2*n+1];
+		int freqDiffBins[] = new int [2*n+1];
+		
+		int bNum = 0;
+		for (int i = -n; i<=n; i++)
+		{	
+			DiffBins[bNum] = i;
+			freqDiffBins[bNum] = 0;
+			bNum++;
+		}
+		
+		
+		//TODO
+		
+		
+		
+		return 0;
+	}
+	
+	
+	/*
+	int compareAmbitToOtherSoftwareTools()
+	{
+		//TODO
+		return 0;
+	}
+	*/
 	
 	//--------------------------------------------------------
 	
@@ -1102,4 +1368,5 @@ public class AutomaticTautomerTests
 		System.out.println("usedMem = " + usedMem + "   freeMem = " + freeMem + "  totalMem = " + totalMem 
 				+ "    maxMem = " + maxMem);
 	}
+	
 }
