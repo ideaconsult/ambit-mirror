@@ -124,8 +124,10 @@ public class TestTautomers
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
 		//tt.visualTest("OC=C(N)CCC(N)=CN",TautomerConst.GAT_Comb_Pure);
-		//tt.visualTest("C1=CC=C2C(=C1)N=C(S2)SSC4=NC3=CC=CC=C3S4",TautomerConst.GAT_Comb_Improved);
-		tt.visualTest("OC(O)=C(N)",2);
+		//tt.visualTest("OC=1C=CC(=CC=1(NCS(=O)(=O)O))[As]=[Bi][As](C=2C=CC(O)=C(C=2)NCS(=O)(=O)O)[Bi]=[As]C=3C=CC(O)=C(C=3)NCS(=O)(=O)O",TautomerConst.GAT_Comb_Improved);
+		
+		
+		tt.visualTest("O=C(SO)N",TautomerConst.GAT_Incremental);
 		        
 		
 		//tt.visualTest("NC1=CC=CC2=C(O)N=NC(O)=C12", 1);
