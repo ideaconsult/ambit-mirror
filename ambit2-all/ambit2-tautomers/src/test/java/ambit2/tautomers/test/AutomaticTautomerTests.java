@@ -117,6 +117,8 @@ public class AutomaticTautomerTests
 	int numTokenAtFile2 = 2;
 	int numErrorToken = 1;
 	String errSubStr = "XXX";
+	String separator1 = "\t";
+	String separator2 = "\t";
 	
 	
 	public static void main(String[] args)
@@ -128,7 +130,8 @@ public class AutomaticTautomerTests
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					
 					"-i","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
-					"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
+					//"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
+					"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
 					
 					"-nInpStr","0",
 					"-nStartStr","1",
@@ -1317,14 +1320,17 @@ public class AutomaticTautomerTests
 	int compareAlgorithms()
 	{	
 		//Creating bins
-		double RelDiffBins[] = {-100, -90, -80, -70, -60, -50, -40, -30, -20, -10, 0, 
-								10, 20, 30, 40, 50, 60, 70, 80, 90, 100}; 
+		//double RelDiffBins[] = {-50, -40, -30, -20,-15, -10, -9, -8, -7, -6,-5,-4,-3,-2,-1,0, 
+		//						1,2,3,4, 5,6,7,8,9, 10, 15,  20, 30, 40, 50}; 
+		
+		double RelDiffBins[] = {-10, -9, -8, -7, -6,-5,-4,-3,-2,-1, - 0.8, -0.6 , -0.4, -0.2, 0, 
+										0.2, 0.4, 0.6, 0.8, 1 , 2 , 3 , 4, 5, 6, 7, 8, 9 , 10};
 		int freqRelDiffBins [] = new int [RelDiffBins.length];
 		for (int i = 0; i < freqRelDiffBins.length; i++)
 			freqRelDiffBins[i] = 0;
 		
 		
-		int n = 20;
+		int n = 30;
 		int DiffBins[] = new int[2*n+1];
 		int freqDiffBins[] = new int [2*n+1];
 				
@@ -1378,6 +1384,9 @@ public class AutomaticTautomerTests
 				if (res == 0)
 					numStructsInStat++;
 				
+				//if (res == -3 || res == -4)
+				//	System.out.println("XXXXXXXXXXXXXXXXXXXX");
+				
 				if (FlagCheckMemory)
 				{
 					checkMemory();				
@@ -1410,16 +1419,28 @@ public class AutomaticTautomerTests
 	}
 	
 	int processLines_CompareAlgorithms(String line, String line2, 
-			int absBins[], int freqAbs[], double relBins[], int freqRel[] )
-	{
-		Vector<String> tokens = filterTokens(line.split(" "));
-		Vector<String> tokens2 = filterTokens(line2.split(" "));
+			int diffBins[], int freqDiff[], double relBins[], int freqRel[] )
+	{		
+		Vector<String> tokens = filterTokens(line.split(separator1));
+		Vector<String> tokens2 = filterTokens(line2.split(separator2));
+		
+		//System.out.println(line);System.out.println(line2);
+		//System.out.println(" #### " + tokens.size() + "  " + tokens2.size());
 		
 		if (tokens.size() < numTokenAtFile1+1)
+		{	
+			if (tokens.get(numErrorToken).startsWith(errSubStr))
+				System.out.println("XXXXXX");
 			return -1;
-		if (tokens2.size() < numTokenAtFile2+1)
-			return -2;
+		}
 		
+		
+		if (tokens2.size() < numTokenAtFile2+1)
+		{	
+			if (tokens2.get(numErrorToken).startsWith(errSubStr))
+				System.out.println("XXXXXX");
+			return -2;
+		}
 		if (!tokens.get(0).equals(tokens2.get(0)))
 		{
 			System.out.println("Line paier with different structure numbers");
@@ -1430,10 +1451,23 @@ public class AutomaticTautomerTests
 		
 		if (tokens.get(numErrorToken).startsWith(errSubStr))
 			return -3;
-		
+		if (tokens2.get(numErrorToken).startsWith(errSubStr))
+			return -4;
+				
 		
 		try{
+			String tok = tokens.get(numTokenAtFile1).trim();
+			String tok2 = tokens2.get(numTokenAtFile2).trim();
+			int val = Integer.parseInt(tok);
+			int val2 = Integer.parseInt(tok2);
 			
+			int diff = val - val2;
+			double relDiff = (0.5*diff)/(val+val2);
+			
+			int diffB = getBinIndex(diff, diffBins);
+			freqDiff[diffB]++;
+			int relB = getBinIndex(relDiff, relBins);
+			freqRel[relB]++;
 		}
 		catch(Exception e)
 		{
@@ -1455,7 +1489,7 @@ public class AutomaticTautomerTests
 	//--------------------------------------------------------
 	
 	public Vector<String> filterTokens(String tokens[])
-	{
+	{	
 		Vector<String> v = new Vector<String>();
 		for (int i = 0; i < tokens.length; i++)
 			if (!tokens[i].equals(""))
