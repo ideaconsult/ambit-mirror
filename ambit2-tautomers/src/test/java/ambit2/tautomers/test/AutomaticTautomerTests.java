@@ -110,6 +110,14 @@ public class AutomaticTautomerTests
 	
 	
 	public static boolean FlagCheckMemory = false;
+	public static boolean FlagCheckNumAndSMILESinComparison = true;
+	
+	//Token numbers to be compared (zero - based indexing)
+	int numTokenAtFile1 = 2;  
+	int numTokenAtFile2 = 2;
+	int numErrorToken = 1;
+	String errSubStr = "XXX";
+	
 	
 	public static void main(String[] args)
 	{
@@ -120,7 +128,7 @@ public class AutomaticTautomerTests
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					
 					"-i","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
-					"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
+					"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
 					
 					"-nInpStr","0",
 					"-nStartStr","1",
@@ -1307,12 +1315,19 @@ public class AutomaticTautomerTests
 	
 	
 	int compareAlgorithms()
-	{
+	{	
 		//Creating bins
+		double RelDiffBins[] = {-100, -90, -80, -70, -60, -50, -40, -30, -20, -10, 0, 
+								10, 20, 30, 40, 50, 60, 70, 80, 90, 100}; 
+		int freqRelDiffBins [] = new int [RelDiffBins.length];
+		for (int i = 0; i < freqRelDiffBins.length; i++)
+			freqRelDiffBins[i] = 0;
+		
+		
 		int n = 20;
 		int DiffBins[] = new int[2*n+1];
 		int freqDiffBins[] = new int [2*n+1];
-		
+				
 		int bNum = 0;
 		for (int i = -n; i<=n; i++)
 		{	
@@ -1322,9 +1337,108 @@ public class AutomaticTautomerTests
 		}
 		
 		
-		//TODO
+		try
+		{	
+			File file = new File(inFileName);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+			
+			File file2 = new File(inFileName2);
+			RandomAccessFile f2 = new RandomAccessFile(file2,"r");			
+			long length2 = f2.length();
+			
+			n = 0;
+			curProcessedStr = 0;
+			int numStructsInStat = 0;
+			while ((f.getFilePointer() < length) && (f2.getFilePointer() < length2) )
+			{	
+				n++;
+				curLine = n;
+				
+				
+				String line = f.readLine();
+				String line2 = f2.readLine();				
+				//System.out.println("line " + n + "\n" + line + "\n" + line2);
+				
+				
+				if (n < nStartStr)
+					continue;
+				
+				curProcessedStr++;
+				
+				if (nInputStr > 0)
+					if (curProcessedStr > nInputStr) 
+						break;
+												
+				
+				
+				int res = processLines_CompareAlgorithms(line, line2, 
+								DiffBins,freqDiffBins, 
+								RelDiffBins, freqRelDiffBins);
+				if (res == 0)
+					numStructsInStat++;
+				
+				if (FlagCheckMemory)
+				{
+					checkMemory();				
+					Runtime.getRuntime().gc();
+				}	
+				
+				if (n % traceFrequency == 0)
+					System.out.println(n);
+			}
+			
+			f.close();
+			f2.close();
+		}
+		catch (Exception e)
+		{	
+			System.out.println(e.getMessage());
+		}
+		
+		//Print bins and frequenecies
+		
+		System.out.println("Histogram(Diff of Number of  Tautomers):  bin   frequency");
+		for (int i = 0; i < DiffBins.length; i++)
+			System.out.println("  " + DiffBins[i] + "  " + freqDiffBins[i]);
+		
+		System.out.println("Histogram(Relative Diff of Number of  Tautomers):  bin   frequency");
+		for (int i = 0; i < RelDiffBins.length; i++)
+			System.out.println("  " + RelDiffBins[i] + "  " + freqRelDiffBins[i]);
+		
+		return 0;
+	}
+	
+	int processLines_CompareAlgorithms(String line, String line2, 
+			int absBins[], int freqAbs[], double relBins[], int freqRel[] )
+	{
+		Vector<String> tokens = filterTokens(line.split(" "));
+		Vector<String> tokens2 = filterTokens(line2.split(" "));
+		
+		if (tokens.size() < numTokenAtFile1+1)
+			return -1;
+		if (tokens2.size() < numTokenAtFile2+1)
+			return -2;
+		
+		if (!tokens.get(0).equals(tokens2.get(0)))
+		{
+			System.out.println("Line paier with different structure numbers");
+			System.out.println(line);
+			System.out.println(line2);
+			return -200;			
+		}
+		
+		if (tokens.get(numErrorToken).startsWith(errSubStr))
+			return -3;
 		
 		
+		try{
+			
+		}
+		catch(Exception e)
+		{
+			return -100;
+		}
 		
 		return 0;
 	}
