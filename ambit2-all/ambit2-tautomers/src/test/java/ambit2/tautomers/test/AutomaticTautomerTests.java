@@ -118,8 +118,8 @@ public class AutomaticTautomerTests
 	int numErrorToken = 1;
 	String errSubStr = "XXX";
 	String separator1 = "\t";
-	String separator2 = "\t";
-	boolean FlagUseOnlyFirstAlgorithm = true;  //essentially if true this makes distribution of the tautomer count for the first algorithm
+	String separator2 = " ";
+	boolean FlagUseOnlyFirstAlgorithm = false;  //essentially if true this makes distribution of the tautomer count for the first algorithm
 	
 	
 	
@@ -133,9 +133,9 @@ public class AutomaticTautomerTests
 					
 					"-i","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
 					//"-i2","D:/Projects/data012-tautomers/results-final/AMBIT-Tautomer-Count-Comb-Improved-FULL.txt",
-					"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
+					//"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
 					//"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
-					//"-i2","D:/Projects/data012-tautomers/results-final/marvin-tautomer-count.txt",
+					"-i2","D:/Projects/data012-tautomers/results-final/marvin-tautomer-count.txt",
 					
 					"-nInpStr","0",
 					"-nStartStr","1",
@@ -1328,15 +1328,15 @@ public class AutomaticTautomerTests
 		//double RelDiffBins[] = {-50, -40, -30, -20,-15, -10, -9, -8, -7, -6,-5,-4,-3,-2,-1,0, 
 		//						1,2,3,4, 5,6,7,8,9, 10, 15,  20, 30, 40, 50}; 
 		
-		double RelDiffBins[] = {-5, -4, -3, -2, -1, - 0.8, -0.6, -0.4, -0.2,-0.1, -0.05, -0.0001, 0, 
-										0.0001, 0.05, 0.1, 0.2, 0.4, 0.6, 0.8, 1 , 2 , 3 , 4, 5};
+		double RelDiffBins[] = {-1, - 0.8, -0.6, -0.4, -0.2, -0.1, -0.05, -0.0001, 0, 
+										0.0001, 0.05, 0.1, 0.2, 0.4, 0.6, 0.8, 1};
 		int freqRelDiffBins [] = new int [RelDiffBins.length];
 		for (int i = 0; i < freqRelDiffBins.length; i++)
 			freqRelDiffBins[i] = 0;
 		
 		
 		int n = 30;
-		/*
+		
 		int DiffBins[] = new int[2*n+1];
 		int freqDiffBins[] = new int [2*n+1];
 				
@@ -1347,10 +1347,11 @@ public class AutomaticTautomerTests
 			freqDiffBins[bNum] = 0;
 			bNum++;
 		}
-		*/
 		
-		int DiffBins[] = {0,1,2,5,10,20,50,100,200};
-		int freqDiffBins[] = new int [DiffBins.length];
+		
+		//Bins used for tautomer distribution (single file test)
+		//int DiffBins[] = {0,1,2,5,10,20,50,100,200};
+		//int freqDiffBins[] = new int [DiffBins.length];
 		
 		try
 		{	
@@ -1475,11 +1476,12 @@ public class AutomaticTautomerTests
 			String tok2 = tokens2.get(numTokenAtFile2).trim();
 			int val = Integer.parseInt(tok);
 			int val2 = Integer.parseInt(tok2);
+			
 			if (FlagUseOnlyFirstAlgorithm)
 				val2 = 0;
 			
 			int diff = val - val2;
-			double relDiff = (0.5*diff)/(val+val2);
+			double relDiff = (1.0*diff)/((val+val2)/2.0);
 			
 			int diffB = getBinIndex(diff, diffBins);
 			freqDiff[diffB]++;
