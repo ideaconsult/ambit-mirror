@@ -130,8 +130,10 @@ public class AutomaticTautomerTests
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					
 					"-i","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
-					//"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
-					"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
+					//"-i2","D:/Projects/data012-tautomers/results-final/AMBIT-Tautomer-Count-Comb-Improved-FULL.txt",
+					"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
+					//"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
+					//"-i2","D:/Projects/data012-tautomers/results-final/marvin-tautomer-count.txt",
 					
 					"-nInpStr","0",
 					"-nStartStr","1",
@@ -1319,12 +1321,13 @@ public class AutomaticTautomerTests
 	
 	int compareAlgorithms()
 	{	
+		int numStructsInStat = 0;
 		//Creating bins
 		//double RelDiffBins[] = {-50, -40, -30, -20,-15, -10, -9, -8, -7, -6,-5,-4,-3,-2,-1,0, 
 		//						1,2,3,4, 5,6,7,8,9, 10, 15,  20, 30, 40, 50}; 
 		
-		double RelDiffBins[] = {-10, -9, -8, -7, -6,-5,-4,-3,-2,-1, - 0.8, -0.6 , -0.4, -0.2, 0, 
-										0.2, 0.4, 0.6, 0.8, 1 , 2 , 3 , 4, 5, 6, 7, 8, 9 , 10};
+		double RelDiffBins[] = {-5, -4, -3, -2, -1, - 0.8, -0.6, -0.4, -0.2,-0.1, -0.05, -0.0001, 0, 
+										0.0001, 0.05, 0.1, 0.2, 0.4, 0.6, 0.8, 1 , 2 , 3 , 4, 5};
 		int freqRelDiffBins [] = new int [RelDiffBins.length];
 		for (int i = 0; i < freqRelDiffBins.length; i++)
 			freqRelDiffBins[i] = 0;
@@ -1355,7 +1358,7 @@ public class AutomaticTautomerTests
 			
 			n = 0;
 			curProcessedStr = 0;
-			int numStructsInStat = 0;
+			
 			while ((f.getFilePointer() < length) && (f2.getFilePointer() < length2) )
 			{	
 				n++;
@@ -1407,14 +1410,20 @@ public class AutomaticTautomerTests
 		
 		//Print bins and frequenecies
 		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
 		System.out.println("Histogram(Diff of Number of  Tautomers):  bin   frequency");
 		for (int i = 0; i < DiffBins.length; i++)
 			System.out.println("  " + DiffBins[i] + "  " + freqDiffBins[i]);
 		
+		System.out.println();
 		System.out.println("Histogram(Relative Diff of Number of  Tautomers):  bin   frequency");
 		for (int i = 0; i < RelDiffBins.length; i++)
 			System.out.println("  " + RelDiffBins[i] + "  " + freqRelDiffBins[i]);
 		
+		System.out.println("\n Tested " + numStructsInStat + "  structs.");
 		return 0;
 	}
 	
