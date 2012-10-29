@@ -119,6 +119,8 @@ public class AutomaticTautomerTests
 	String errSubStr = "XXX";
 	String separator1 = "\t";
 	String separator2 = "\t";
+	boolean FlagUseOnlyFirstAlgorithm = true;  //essentially if true this makes distribution of the tautomer count for the first algorithm
+	
 	
 	
 	public static void main(String[] args)
@@ -1334,6 +1336,7 @@ public class AutomaticTautomerTests
 		
 		
 		int n = 30;
+		/*
 		int DiffBins[] = new int[2*n+1];
 		int freqDiffBins[] = new int [2*n+1];
 				
@@ -1344,7 +1347,10 @@ public class AutomaticTautomerTests
 			freqDiffBins[bNum] = 0;
 			bNum++;
 		}
+		*/
 		
+		int DiffBins[] = {0,1,2,5,10,20,50,100,200};
+		int freqDiffBins[] = new int [DiffBins.length];
 		
 		try
 		{	
@@ -1469,6 +1475,8 @@ public class AutomaticTautomerTests
 			String tok2 = tokens2.get(numTokenAtFile2).trim();
 			int val = Integer.parseInt(tok);
 			int val2 = Integer.parseInt(tok2);
+			if (FlagUseOnlyFirstAlgorithm)
+				val2 = 0;
 			
 			int diff = val - val2;
 			double relDiff = (0.5*diff)/(val+val2);
