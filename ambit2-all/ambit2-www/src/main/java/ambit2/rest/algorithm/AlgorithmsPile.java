@@ -331,7 +331,7 @@ public class AlgorithmsPile {
 										
 			//
 			{"finder","Find","finder",null,new String[] {AlgorithmType.Finder.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#finder"},
-			{"selectstructure","Replaces the current structure with the preferred one",null,null,new String[] {AlgorithmType.PrefferedStructure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#StructureSelector"},
+			{"selectstructure","Replaces the current structure with the preferred one",null,null,new String[] {AlgorithmType.PreferredStructure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#StructureSelector"},
 
 
 			{"pcaRanges","Applicability domain: PCA ranges","ambit2.model.numeric.DataCoverageDescriptors",null,new String[] {AlgorithmType.AppDomain.toString()},null,Algorithm.requires.property,"http://ambit.sourceforge.net/descriptors.owl#ad_pcaRanges"},

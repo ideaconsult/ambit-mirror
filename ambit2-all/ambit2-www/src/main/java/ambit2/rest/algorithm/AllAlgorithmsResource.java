@@ -270,7 +270,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						token
 						);
 			}
-			else if (algorithm.hasType(AlgorithmType.PrefferedStructure)) {
+			else if (algorithm.hasType(AlgorithmType.PreferredStructure)) {
 				return
 				new CallableFixPreferredStructure(
 						form,

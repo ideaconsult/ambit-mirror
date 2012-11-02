@@ -149,7 +149,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 					output.write(String.format("<tr><td><input type='submit' name='launch' value='%s'></td></tr>","Find"));
 					output.write("</form>");
 					
-				} else if (item.hasType(AlgorithmType.PrefferedStructure)) {
+				} else if (item.hasType(AlgorithmType.PreferredStructure)) {
 						output.write("<caption>Set the preferred structure, as identified by quality labels workflow</caption>");
 						output.write(String.format("<form action='' method='%s' name='form'>","POST"));
 						output.write(String.format("<tr><th>Dataset URI</td><td><input type='text'  size='120'  name='%s' value='%s' title='URI of the dataset, e.g. http://host/ambit2/dataset/1'></th></tr>",OpenTox.params.dataset_uri,_dataset==null?"":_dataset));
