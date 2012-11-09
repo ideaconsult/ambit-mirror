@@ -19,7 +19,8 @@ public class MissingInChIsQuery extends AbstractStructureQuery<String, String, E
 	
 	/**
 	 * TODO identify potential errors
-update chemicals,(SELECT inchi,count(*) c  FROM chemicals where inchi is not null group by inchi ) a set label='ERROR' where chemicals.inchi=a.inchi 	and a.c>1
+update chemicals,(SELECT inchi,count(*) c  FROM chemicals where inchi is not null group by inchi ) a set label='ERROR' where chemicals.inchi=a.inchi 	and a.c>1;
+update chemicals set label="ERROR" where inchi is null;
 	 */
 	
 	public MissingInChIsQuery(String label) {
