@@ -104,11 +104,19 @@ normal user and password are guest/guest by default and are used in database que
 
 ----------------------------------------------------------------------
 CHANGELOG
+AMBIT2 2.4.9
+JSON & JSONP (optional) support
+Tautomers package 
+Bug fix when importing structures (regression from 2.4.8) 
+More machine learning algorithms
+
+CHANGELOG
 AMBIT2 2.4.8
 Database schema 6.0
 Exact structure lookup via InChI 
 Import uses stored procedure findByProperty. If upgrading the database, run 
-grant execute on procedure findByProperty to "guest"@"localhost"
+grant execute on procedure findByProperty to "guest"@"localhost";
+grant execute on procedure findByProperty to "guest"@"127.0.0.1";
 (replace with the proper mysql user name)
 Support for stored procedures in QueryExecutor
 
