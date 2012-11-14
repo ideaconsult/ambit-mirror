@@ -24,9 +24,17 @@ function defineStructuresTable(url, query_service, similarity) {
 									}
 								},
 								{
+									"mDataProp" :null,
+									"aTargets" : [ 1 ],
+									"bSortable" : false,
+									"bSearchable" : false,
+									sWidth : "5%",
+									"bVisible" : true
+								},
+								{
 									"mDataProp" : "compound.cas",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 1 ],
+									"aTargets" : [ 2 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
@@ -43,7 +51,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.URI",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 2 ],
+									"aTargets" : [ 3 ],
 									"bSearchable" : true,
 									"bUseRendered" : false,
 									"bSortable" : true,
@@ -76,7 +84,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.name",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 3 ],
+									"aTargets" : [ 4 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
@@ -93,7 +101,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.metric",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 4 ],
+									"aTargets" : [ 5 ],
 									"sTitle" : "Similarity",
 									"sClass" : "similarity",
 									"bSearchable" : true,
@@ -104,7 +112,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 5 ],
+									"aTargets" : [ 6 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -115,12 +123,12 @@ function defineStructuresTable(url, query_service, similarity) {
 										else
 											return val;
 									},
-									"bVisible" : false
+									"bVisible" : true
 								},
 								{
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 6 ],
+									"aTargets" : [ 7 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -137,7 +145,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
 									"sClass" : "inchikey",
-									"aTargets" : [ 7 ],
+									"aTargets" : [ 8 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -199,7 +207,9 @@ function defineStructuresTable(url, query_service, similarity) {
 							"sLoadingRecords" : "No records found."
 						},
 						"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
-							// retrieve identifiers
+			                $('td:eq(1)', nRow).html(iDisplayIndex +1);
+
+			                // retrieve identifiers
 							id_uri = query_service
 									+ "/query/compound/url/all?search="
 									+ encodeURIComponent(aData.compound.URI)
@@ -224,30 +234,30 @@ function defineStructuresTable(url, query_service, similarity) {
 																aData.compound.name = formatValues(
 																		entry,
 																		"names");																
-																$('td:eq(3)',
+																$('td:eq(4)',
 																		nRow)
 																		.html(aData.compound.name);
-																$('td:eq(1)',
+																$('td:eq(2)',
 																		nRow)
 																		.html(aData.compound.cas);
 																aData.compound['smiles'] = formatValues(
 																		entry,
 																		"smiles");
-																$('td:eq(6)',
+																$('td:eq(5)',
 																		nRow)
 																		.html(
 																				aData.compound['smiles']);
 																aData.compound['inchi'] = formatValues(
 																		entry,
 																		"inchi");
-																$('td:eq(7)',
+																$('td:eq(6)',
 																		nRow)
 																		.html(
 																				aData.compound['inchi']);
 																aData.compound['inchikey'] = formatValues(
 																		entry,
 																		"inchikey");
-																$('td:eq(8)',
+																$('td:eq(7)',
 																		nRow)
 																		.html(
 																				aData.compound['inchikey']);
