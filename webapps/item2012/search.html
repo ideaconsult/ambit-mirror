@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>
+<head>
+<link href="./styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css">
+<link href="./styles/item.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta name="description" content="REPDOSE database">
+<meta name="keywords" content="ambit,qsar,repdose,structure search">
+<meta name="robots" content="index,follow">
+<META NAME="GOOGLEBOT" CONTENT="index,FOLLOW">
+<meta name="copyright" content="Copyright 2008-2012. Ideaconsult Ltd. www.ideaconsult.net">
+<meta name="author" content="jeliazkova.nina@gmail.com">
+<meta name="language" content="English">
+<meta name="revisit-after" content="7">
+<link rel="SHORTCUT ICON" href="favicon.ico">
+<title>REPDOSE Structure search</title>
+<script type='text/javascript' src='./jquery/jquery-1.8.2.js'></script>
+<script type='text/javascript' src='./jquery/jquery-ui-1.9.1.custom.min.js'></script>
+<script type='text/javascript' charset='utf8' src='./jquery/jquery.dataTables-1.9.0.min.js'></script>
+<script type='text/javascript' src='./jquery/purl.js'></script>
+<script type='text/javascript' src='./applets/jme/jme.js'></script>
+<script type='text/javascript'>
+	var purl = $.url();
+	var option = purl.param('option')===undefined?'auto':purl.param('option');
+	var params = {
+			'threshold'	:purl.param('threshold')===undefined?'0.8':purl.param('threshold'),
+			'media'		:'application/x-javascript', 
+			'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search')
+			};
+	$(document)
+			.ready(
+					function() {
+						
+					});
+	$(function() {
+		$(".repdose").button();
+	});
+
+</script>
+<script language="JavaScript">
+
+function submitSmiles() {
+  var smiles = document.JME.smiles();
+  var jme = document.JME.jmeFile();
+  if (smiles == "") {
+    alert("Nothing to submit");
+  }
+  else {
+    fromEditor(smiles,jme);
+    window.close();
+  }
+}
+
+function openHelpWindow() {
+  window.open("jme/jme_help.html","","toolbar=no,menubar=no,scroolbars=no,resizable=yes,width=500,height=600")
+}
+
+</SCRIPT>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+			<div class='search ui-widget'>
+				<form method='GET' name='form'  method='get' action='query.html'>
+				<input type='hidden' name='type' value='smiles'>
+				<table width='100%'>
+		   		<tr>
+		   		<td colspan='2' align='center'><h3>REPDOSE Structure search</h3></td>
+		   		<td width='50%' rowspan='8'>
+					<applet code="JME.class" name="JME" archive="applets/jme/JME.jar" width="90%" height="85%">
+					<param name="options" value="query,nohydrogens,polarnitro,nocanonize">
+					You have to enable Java and JavaScritpt on your machine ! 
+					</applet>		   	
+					<form name="form_editor">
+					<input type="button" value=" Submit Molecule " onClick = "submitSmiles()">
+					&nbsp;&nbsp;
+					<input type="button" value="  Close  " onClick = "window.close()">
+					&nbsp;&nbsp;
+					<input type="button" value="  Help  " onClick = "openHelpWindow()">
+					</form>	
+		   		</td>	
+		   		</tr>
+		  		<tr>
+		   		<td colspan='2' align='center'><h4>Enter any chemical compound identifier (CAS, Name, EINECS, SMILES or InChI). The the input type is guessed automatically.</h4></td>
+		   		</tr>
+		   		<tr>
+		   		<td colspan='2' align='left'><input type='text' id='search' name='search' size='40' value='' tabindex='1'></td>
+		   		</tr>
+				<tr><td colspan='2'><input input type='radio' checked value='auto' name='option' title='Exact structure or search by identifier' size='20'>Auto</td></tr>
+		   		<tr><td><input input type='radio' name='option' value='similarity' title='Enter SMILES or draw structure'>Similarity</td>
+				<td align='left'>
+		   		<select title ='Tanimoto similarity threshold' id='threshold' name='threshold'>
+		   		<option value='0.9' selected>0.9</option>
+		   		<option value='0.8' selected>0.8</option>
+		   		<option value='0.7' selected>0.7</option>
+		   		<option value='0.6' selected>0.6</option>
+		   		<option value='0.5' selected>0.5</option>
+		   		<option value='0.4' selected>0.4</option>
+		   		<option value='0.3' selected>0.3</option>
+		   		<option value='0.2' selected>0.2</option>
+		   		<option value='0.1' selected>0.1</option>
+		   		</select>
+		   		</td></tr>
+		   		<tr><td colspan='2'><input type='radio' name='option' value='smarts' title='Enter or draw a SMARTS query' size='20'>Substructure</td></tr>
+		   		<tr><td>Max number of hits</td><td align='left'><input type='text' size='3' name='pagesize' value=''></td></tr>
+		   		<tr><td colspan='2' align='center'><input tabindex='2' class='repdose' id='submit' type='submit' value='Search'/></td></tr>	   
+				<input type='text' name='structure' value=''>
+				</table>
+				
+
+				</form> 
+				
+				
+				</div>		
+				
+</body>
+</html>

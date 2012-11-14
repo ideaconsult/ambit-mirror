@@ -159,13 +159,32 @@ function defineStructuresTable(url, query_service, similarity) {
 						"sAjaxDataProp" : "dataEntry",
 						"fnServerData" : function(sSource, aoData, fnCallback,
 								oSettings) {
+							
 							oSettings.jqXHR = $.ajax({
 								"type" : "GET",
 								"url" : sSource,
 								"data" : aoData,
 								"dataType" : "jsonp",
+								/*
+								 * useless - with datatype jsonp no custom headers are sent!
+						        'beforeSend': function(xhrObj){
+					                xhrObj.setRequestHeader("Content-Type","application/x-javascript");
+					                xhrObj.setRequestHeader("Accept","application/x-javascript");
+						        },								
+								"headers": { 
+								        "Accepts" : "application/x-javascript",
+								        "Content-Type": "application/x-javascript"
+								},						
+								"accepts" : {
+									jsonp: "application/x-javascript",
+									json : "application/json"
+								},
+								*/
 								"contentType" : "application/x-javascript",
 								"success" : function(json) {
+									try {
+										$('#description').text(json['query']['summary']);
+									} catch (err) { $('#description').text('');}
 									identifiers(json);
 									fnCallback(json);
 								},
