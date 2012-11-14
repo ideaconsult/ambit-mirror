@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>
 <head>
 <link href="./styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css">
+<link href="./styles/item.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <meta name="description" content="REPDOSE database">
 <meta name="keywords" content="ambit,qsar,repdose,structure search">
@@ -58,22 +59,17 @@
 </head>
 
 <body>
-
-	<form action="/repdose/index.php" method="post">
-			<div style="float:right;">
-			<input type='submit' class='repdose' value=' Take selected results to Repdose '>
-			<a href="search.html" class='repdose'>New structure search</a>
-			</div>
-			
+<!-- uncomment to link to repdose
+	<form action="/repdose/index.php" method="post"> 
+			 -->
+	<form action="repdose.html" method="get">  <!--  This is just for testing ! -->			 
 		<h3>REPDOSE Structure search</h3>
 		<span id='description'></span>
 
 		<div>
 
 			<div style="width='80%';margin-left: 10px; margin-right: 10px;float:clear;">
-				<table class='compoundtable' id='structures' cellpadding='2'
-					border='1' width='100%' cellspacing='0'>
-
+				<table class='compoundtable' id='structures'  cellpadding='2' cellspacing='0'  border='1' width='100%'>
 					<thead>
 						<th>
 						<a href="#" id='selectall' title='Click to select all records' onClick='selectcas(true);'><u>Select</u></a><br>
@@ -92,12 +88,14 @@
 			</div>
 
 			<div style="float:right;">
-			<input class='repdose' type='submit' value=' Take selected results to Repdose '>
-			<a href="search.html" class='repdose'>New structure search</a>
+			<input class='repdose' type='submit' value='Take selected results to Repdose'>
+			</form>
+			<form method='get' action='search.html'>
+				<input class='repdose' type='submit' value='New structure search'>
+			</form>
 			</div>
 		</div>
 
-	</form>
 
 </body>
 
