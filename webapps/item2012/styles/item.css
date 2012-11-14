@@ -1,8 +1,12 @@
-table {
+.compoundstable table {
 	border-style: none;
 }
 
-td {
+.compoundstable td {
 	border-color: gray;	
 	border-style: dotted;
-}	
+}
+
+.css_right {
+	float: right;
+}

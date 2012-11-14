@@ -150,9 +150,8 @@ function defineStructuresTable(url, query_service, similarity) {
 									},
 									"bVisible" : false
 								} ],
-						"bJQueryUI" : true,
-						"bPaginate" : true,
-						"sPaginationType": "full_numbers",
+						"bJQueryUI" : false,
+						"bPaginate" : false,
 						"bDeferRender" : true,
 						"bSearchable" : true,
 						"sAjaxSource" : url,

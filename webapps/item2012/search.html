@@ -15,6 +15,7 @@
 <title>REPDOSE Structure search</title>
 <script type='text/javascript' src='./jquery/jquery-1.8.2.js'></script>
 <script type='text/javascript' src='./jquery/jquery-ui-1.9.1.custom.min.js'></script>
+<script type='text/javascript' src='./jquery/jquery.validate.min.js'></script>
 <script type='text/javascript' charset='utf8' src='./jquery/jquery.dataTables-1.9.0.min.js'></script>
 <script type='text/javascript' src='./jquery/purl.js'></script>
 <script type='text/javascript'>
@@ -50,7 +51,7 @@ function submitSmiles() {
 }
 
 function openHelpWindow() {
-  window.open("jme/jme_help.html","","toolbar=no,menubar=no,scroolbars=no,resizable=yes,width=500,height=600")
+  window.open("./applets/jme/jme_help.html","","toolbar=no,menubar=no,scroolbars=no,resizable=yes,width=500,height=600")
 }
 
 </SCRIPT>
@@ -81,7 +82,7 @@ function openHelpWindow() {
 		   		<td colspan='2' align='center'><h4>Enter any chemical compound identifier (CAS, Name, EINECS, SMILES or InChI). The the input type is guessed automatically.</h4></td>
 		   		</tr>
 		   		<tr>
-		   		<td colspan='2' align='left'><input type='text' id='search' name='search' size='40' value='' tabindex='1'></td>
+		   		<td colspan='2' align='left'><input type='text' id='search' name='search' size='40' value='' tabindex='1' required></td>
 		   		</tr>
 				<tr><td colspan='2'><input input type='radio' checked value='auto' name='option' title='Exact structure or search by identifier' size='20'>Auto</td></tr>
 		   		<tr><td><input input type='radio' name='option' value='similarity' title='Enter SMILES or draw structure'>Similarity</td>
