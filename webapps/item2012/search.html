@@ -17,7 +17,6 @@
 <script type='text/javascript' src='./jquery/jquery-ui-1.9.1.custom.min.js'></script>
 <script type='text/javascript' charset='utf8' src='./jquery/jquery.dataTables-1.9.0.min.js'></script>
 <script type='text/javascript' src='./jquery/purl.js'></script>
-<script type='text/javascript' src='./applets/jme/jme.js'></script>
 <script type='text/javascript'>
 	var purl = $.url();
 	var option = purl.param('option')===undefined?'auto':purl.param('option');
@@ -45,8 +44,8 @@ function submitSmiles() {
     alert("Nothing to submit");
   }
   else {
-    fromEditor(smiles,jme);
-    window.close();
+	document.form.type.value = "smiles"; 
+	document.form.search.value = smiles; 	
   }
 }
 
@@ -61,7 +60,7 @@ function openHelpWindow() {
 
 			<div class='search ui-widget'>
 				<form method='GET' name='form'  method='get' action='query.html'>
-				<input type='hidden' name='type' value='smiles'>
+			
 				<table width='100%'>
 		   		<tr>
 		   		<td colspan='2' align='center'><h3>REPDOSE Structure search</h3></td>
@@ -72,8 +71,7 @@ function openHelpWindow() {
 					</applet>		   	
 					<form name="form_editor">
 					<input type="button" value=" Submit Molecule " onClick = "submitSmiles()">
-					&nbsp;&nbsp;
-					<input type="button" value="  Close  " onClick = "window.close()">
+
 					&nbsp;&nbsp;
 					<input type="button" value="  Help  " onClick = "openHelpWindow()">
 					</form>	
@@ -102,8 +100,10 @@ function openHelpWindow() {
 		   		</td></tr>
 		   		<tr><td colspan='2'><input type='radio' name='option' value='smarts' title='Enter or draw a SMARTS query' size='20'>Substructure</td></tr>
 		   		<tr><td>Max number of hits</td><td align='left'><input type='text' size='3' name='pagesize' value=''></td></tr>
-		   		<tr><td colspan='2' align='center'><input tabindex='2' class='repdose' id='submit' type='submit' value='Search'/></td></tr>	   
-				<input type='text' name='structure' value=''>
+		   		<tr><td colspan='2' align='center'><input tabindex='2' class='repdose' id='submit' type='submit' value='Search'/>
+		   			<input type='hidden' name='type' value='smiles'>
+		   		</td></tr>	   
+				
 				</table>
 				
 
