@@ -243,21 +243,19 @@ function defineStructuresTable(url, query_service, similarity) {
 																aData.compound['smiles'] = formatValues(
 																		entry,
 																		"smiles");
-																$('td:eq(5)',
-																		nRow)
-																		.html(
-																				aData.compound['smiles']);
+																var offset = similarity?1:0;
+																$('td:eq(' + (5 + offset) + ')',nRow)
+																		.html(aData.compound['smiles']);
 																aData.compound['inchi'] = formatValues(
 																		entry,
 																		"inchi");
-																$('td:eq(6)',
-																		nRow)
+																$('td:eq(' + (6 + offset) + ')',nRow)
 																		.html(
 																				aData.compound['inchi']);
 																aData.compound['inchikey'] = formatValues(
 																		entry,
 																		"inchikey");
-																$('td:eq(7)',
+																$('td:eq(' + (7 + offset) + ')',
 																		nRow)
 																		.html(
 																				aData.compound['inchikey']);
