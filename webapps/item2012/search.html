@@ -66,16 +66,14 @@ function openHelpWindow() {
 		   		<tr>
 		   		<td colspan='2' align='center'><h3>REPDOSE Structure search</h3></td>
 		   		<td width='50%' rowspan='8'>
-					<applet code="JME.class" name="JME" archive="applets/jme/JME.jar" width="90%" height="85%">
+					<applet code="JME.class" name="JME" archive="applets/jme/JME.jar" width="450" height="350">
 					<param name="options" value="query,nohydrogens,polarnitro,nocanonize">
 					You have to enable Java and JavaScritpt on your machine ! 
 					</applet>		   	
-					<form name="form_editor">
-					<input type="button" value=" Submit Molecule " onClick = "submitSmiles()">
+					<br>
+					<a href='#' onClick = "submitSmiles()" title='This will transfer the molecule into the search field as SMILES'>Submit Molecule</a>
+					<a href="http://www.molinspiration.com/jme/index.html" target=_blank title='JME Editor courtesy of Peter Ertl, Novartis'><img src='./images/help.png'></a></a>
 
-					&nbsp;&nbsp;
-					<input type="button" value="  Help  " onClick = "openHelpWindow()">
-					</form>	
 		   		</td>	
 		   		</tr>
 		  		<tr>
