@@ -214,15 +214,12 @@ function defineStructuresTable(url, query_service, similarity) {
 									+ "/query/compound/url/all?search="
 									+ encodeURIComponent(aData.compound.URI)
 									+ "?max=1&media=application%2Fx-javascript";
-							$
-									.ajax({
+							$.ajax({
 										dataType : "jsonp",
 										url : id_uri,
 										success : function(data, status, xhr) {
 											identifiers(data);
-											$
-													.each(
-															data.dataEntry,
+											$.each(data.dataEntry,
 															function(index,
 																	entry) {
 								
