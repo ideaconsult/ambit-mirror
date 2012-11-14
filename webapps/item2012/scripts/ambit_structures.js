@@ -18,7 +18,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"fnRender" : function(o, val) {
 										var cas = formatValues(o.aData, "cas");
 										if ((val === undefined) || (val == ""))
-											return "<input class='selectcas' type='checkbox' name='cas[]' title='Select "+ cas +"' value='"+cas+"'>\n";
+											return "<input class='selectcas' type='checkbox' checked name='cas[]' title='Select "+ cas +"' value='"+cas+"'>\n";
 										else
 											return val;											
 									}
@@ -221,7 +221,7 @@ function defineStructuresTable(url, query_service, similarity) {
 																		entry,"cas");																
 																$('td:eq(0)',
 																		nRow)
-																		.html("<input class='selectcas' type='checkbox' name='cas[]' title='Select "+aData.compound.cas+"' value='"+aData.compound.cas+"'>\n");
+																		.html("<input class='selectcas' type='checkbox' checked name='cas[]' title='Select "+aData.compound.cas+"' value='"+aData.compound.cas+"'>\n");
 																aData.compound.name = formatValues(
 																		entry,
 																		"names");																
