@@ -150,7 +150,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									},
 									"bVisible" : false
 								} ],
-						"bJQueryUI" : false,
+						"bJQueryUI" : true,
 						"bPaginate" : false,
 						"bDeferRender" : true,
 						"bSearchable" : true,
