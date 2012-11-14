@@ -41,26 +41,9 @@ function defineStructuresTable(url, query_service, similarity) {
 									"bVisible" : true
 								},			
 								{
-									"mDataProp" : "compound.name",
-									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 2 ],
-									"bSearchable" : true,
-									"bSortable" : true,
-									"bUseRendered" : false,
-									"sClass" : "names",
-									"fnRender" : function(o, val) {
-										if ((val === undefined) || (val == ""))
-											return formatValues(o.aData,
-													"names");
-										else
-											return val;
-									},
-									"bVisible" : true
-								},								
-								{
 									"mDataProp" : "compound.URI",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 3 ],
+									"aTargets" : [ 2 ],
 									"bSearchable" : true,
 									"bUseRendered" : false,
 									"bSortable" : true,
@@ -86,12 +69,27 @@ function defineStructuresTable(url, query_service, similarity) {
 										 * href=\"%s%s/%d?headless=true&details=false&media=text/html\"
 										 * title=\"Molecule\">Molecule</a>",
 										 */
-										return '<img class="ui-widget-content" title="'
-												+ val
-												+ '" border="0" src="'
+										return '<img class="ui-widget-content" title="Structure diagram" border="0" src="'
 												+ cmpURI + '&w=200&h=200">';
 									}
 								},
+								{
+									"mDataProp" : "compound.name",
+									"asSorting" : [ "asc", "desc" ],
+									"aTargets" : [ 3 ],
+									"bSearchable" : true,
+									"bSortable" : true,
+									"bUseRendered" : false,
+									"sClass" : "names",
+									"fnRender" : function(o, val) {
+										if ((val === undefined) || (val == ""))
+											return formatValues(o.aData,
+													"names");
+										else
+											return val;
+									},
+									"bVisible" : true
+								},									
 								{
 									"mDataProp" : "compound.metric",
 									"asSorting" : [ "asc", "desc" ],
@@ -208,7 +206,7 @@ function defineStructuresTable(url, query_service, similarity) {
 																aData.compound.name = formatValues(
 																		entry,
 																		"names");																
-																$('td:eq(2)',
+																$('td:eq(3)',
 																		nRow)
 																		.html(aData.compound.name);
 																$('td:eq(1)',

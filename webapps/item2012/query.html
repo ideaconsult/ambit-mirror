@@ -1,6 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>
 <head>
 <link href="./styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -16,26 +14,41 @@
 <link rel="SHORTCUT ICON" href="favicon.ico">
 <title>REPDOSE Structure search</title>
 <script type='text/javascript' src='./jquery/jquery-1.8.2.js'></script>
-<script type='text/javascript'
-	src='./jquery/jquery-ui-1.9.1.custom.min.js'></script>
-<script type='text/javascript' charset='utf8'
-	src='./jquery/jquery.dataTables-1.9.0.min.js'></script>
+<script type='text/javascript' src='./jquery/jquery-ui-1.9.1.custom.min.js'></script>
+<script type='text/javascript' charset='utf8' src='./jquery/jquery.dataTables-1.9.0.min.js'></script>
+<script type='text/javascript' src='./jquery/purl.js'></script>
 <script type='text/javascript' src='./scripts/jcompound.js'></script>
 <script type='text/javascript' src='./scripts/ambit_structures.js'></script>
 <script type='text/javascript'>
+	var purl = $.url();
+	var params = {
+			'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search'),
+			'option'	:purl.param('option')===undefined?'auto':purl.param('option'),
+			'threshold'	:purl.param('threshold')===undefined?'0.8':purl.param('threshold')
+			};
+
 	$(document)
 			.ready(
 					function() {
 						$.ajaxSetup({
 							cache : false
 						});//while dev
+						var url;
 						var queryService = 'http://localhost:8080/ambit2';
-						//var url = queryService + '/query/compound/search/all?search=50-00-0&media=application/x-javascript';
-						var url = queryService
-								+ "/query/similarity?search=c1ccccc1O&threshold=0.8&media=application/x-javascript";
-						var query_option = 'auto';
-						var oTable = defineStructuresTable(url, queryService,
-								false);
+						switch(params.option)
+						{
+						case 'similarity':
+							url = queryService	+ "/query/similarity?search=" + params.search + 
+									"&threshold="+ params.threshold+"&media=application/x-javascript";
+						  break;
+						case 'smarts':
+							url = queryService	+ "/query/smarts?search=" + params.search + 
+										"&media=application/x-javascript";
+						  break;
+						default: //auto
+						  url = queryService + '/query/compound/search/all?search='+ params.search +'&media=application/x-javascript';
+						}
+						var oTable = defineStructuresTable(url, queryService,purl.param('option')=='similarity');
 
 					});
 	$(function() {
@@ -68,8 +81,8 @@
 						<a href="#" id='unselect' title='Click to unselect all records'  onClick='selectcas(false);'><u>Unselect</u></a>						
 						</th>
 						<th>CAS</th>
-						<th>Name</th>
 						<th>Structure</th>
+						<th>Name</th>
 						<th>Similarity</th>
 						<th>SMILES</th>
 						<th>InChI</th>
