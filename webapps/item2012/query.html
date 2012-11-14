@@ -21,33 +21,33 @@
 <script type='text/javascript' src='./scripts/ambit_structures.js'></script>
 <script type='text/javascript'>
 	var purl = $.url();
+	var option = purl.param('option')===undefined?'auto':purl.param('option');
 	var params = {
-			'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search'),
-			'option'	:purl.param('option')===undefined?'auto':purl.param('option'),
-			'threshold'	:purl.param('threshold')===undefined?'0.8':purl.param('threshold')
+			'threshold'	:purl.param('threshold')===undefined?'0.8':purl.param('threshold'),
+			'media'		:'application/x-javascript',  //jsonp datatype does not allow sending headers !!!!!
+			'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search')
 			};
-
 	$(document)
 			.ready(
+
 					function() {
 						$.ajaxSetup({
 							cache : false
 						});//while dev
 						var url;
 						var queryService = 'http://localhost:8080/ambit2';
-						switch(params.option)
+						switch(option)
 						{
 						case 'similarity':
-							url = queryService	+ "/query/similarity?search=" + params.search + 
-									"&threshold="+ params.threshold+"&media=application/x-javascript";
+						  url = queryService	+ "/query/similarity?" + $.param(params,false);
 						  break;
 						case 'smarts':
-							url = queryService	+ "/query/smarts?search=" + params.search + 
-										"&media=application/x-javascript";
+  						  url = queryService	+ "/query/smarts?" + $.param(params,false);
 						  break;
 						default: //auto
-						  url = queryService + '/query/compound/search/all?search='+ params.search +'&media=application/x-javascript';
+						  url = queryService + "/query/compound/search/all?"+ $.param(params,false);
 						}
+						//console.log(url);
 						var oTable = defineStructuresTable(url, queryService,purl.param('option')=='similarity');
 
 					});
@@ -67,7 +67,7 @@
 			</div>
 			
 		<h3>REPDOSE Structure search</h3>
-		
+		<span id='description'></span>
 
 		<div>
 
