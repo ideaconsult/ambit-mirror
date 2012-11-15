@@ -151,8 +151,18 @@
     	<properties>
     	<aa.admin>false</aa.admin>
     	</properties>
-    </profile>     
-    </profiles>
+    </profile>
+    <profile>
+    <!-- Remove JNI classes from the war; they should be copied into {tomcat}/shared/lib folder -->
+	     <id>no-jni</id>
+	      <activation>
+	        <activeByDefault>false</activeByDefault>
+	      </activation>
+	      <properties>
+    		<exclude.jni>WEB-INF/lib/jni-inchi*.jar,WEB-INF/lib/jnati*.jar</exclude.jni>
+    	  </properties>
+    </profile>          
+  </profiles>
       
   <build>
     <finalName>ambit2</finalName>
@@ -223,6 +233,7 @@
             <Implementation-Build>${build.version}</Implementation-Build>
             </manifestEntries>
         </archive>
+        <packagingExcludes>${exclude.jni}</packagingExcludes>
       </configuration>
     </plugin>
     <!-- 
