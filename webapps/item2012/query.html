@@ -2,6 +2,7 @@
 <head>
 <link href="./styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css">
 <link href="./styles/jquery.dataTables.css" rel="stylesheet" type="text/css">
+<link href="./styles/layout-default-latest.css" rel="stylesheet" type="text/css">
 <link href="./styles/item.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <meta name="description" content="REPDOSE database">
@@ -19,8 +20,10 @@
 <script type='text/javascript' charset='utf8' src='./jquery/jquery.dataTables-1.9.0.min.js'></script>
 <script type='text/javascript' src='./jquery/purl.js'></script>
 <script type='text/javascript' src='./jquery/jquery.base64.min.js'></script>
+<script type="text/javascript" src="./jquery/jquery.layout-latest.min.js"></script>
 <script type='text/javascript' src='./scripts/jcompound.js'></script>
 <script type='text/javascript' src='./scripts/ambit_structures.js'></script>
+<script type='text/javascript' src='./scripts/jlayout.js'></script>
 <script type='text/javascript'>
 	var purl = $.url();
 	var option = purl.param('option')===undefined?'auto':purl.param('option');
@@ -33,14 +36,17 @@
 			};
 	$(document)
 			.ready(
-
 					function() {
+						
+						initLayout();
+												
+						//ajax
 						$.ajaxSetup({
-							cache : false
-						});//while dev
+							cache : false  //while dev
+						});
 						var url;
-						//var queryService = 'http://localhost:8080/ambit2';
-						var queryService = 'http://ambit.uni-plovdiv.bg:8080/qmrfdata';
+						var queryService = 'http://localhost:8080/ambit2';
+						//var queryService = 'http://ambit.uni-plovdiv.bg:8080/qmrfdata';
 						switch(option)
 						{
 						case 'similarity': 
@@ -66,16 +72,25 @@
 </head>
 
 <body>
+
+<div class="ui-layout-north" style="padding: 0 0 0 0;">
+		<b>REPDOSE Structure search</b>
+		<div style='position:relative;float:right;'>
+		<form method='get' action='search.html'>
+		<input class='repdose' type='submit' value='New structure search'>
+		</form>
+		</div>
+</div>
+
+		
 <!-- uncomment to link to repdose
-	<form action="/repdose/index.php" method="post"> 
-			 -->
-	<form action="repdose.html" method="get">  <!--  This is just for testing ! -->			 
-		<h3>REPDOSE Structure search</h3>
-		<span id='description'></span>
-
+<form action="/repdose/index.php" method="post"> 
+-->
+<form action="repdose.html" method="get">  <!--  This is just for testing ! -->			 
+	
+<div class="ui-layout-center" style="padding: 0 0 0 0;">
 		<div>
-
-			<div style="width='80%';margin-left: 10px; margin-right: 10px;float:clear;">
+			<div style="width='100%';margin-left: 0px; margin-right: 0px;float:clear;">
 				<table class='compoundtable' id='structures'  cellpadding='2' cellspacing='0'  border='1' width='100%'>
 					<thead>
 						<th>
@@ -95,15 +110,23 @@
 				</table>
 			</div>
 
-			<div style="float:right;">
-			<input class='repdose' type='submit' value='Take selected results to Repdose'>
-			</form>
-			<form method='get' action='search.html'>
-				<input class='repdose' type='submit' value='New structure search'>
-			</form>
-			</div>
+
 		</div>
 
+
+</div>
+
+<div class="ui-layout-south" style="padding: 0 0 0 0;" >
+	<span style="float:right;valign:top">
+			<input  class='repdose' type='submit' value='Take selected results to Repdose'>
+	</span>			
+</div>
+</form>
+
+
+<div class="ui-layout-west">
+	<span id='description'></span>
+</div>
 
 </body>
 
