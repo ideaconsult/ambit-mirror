@@ -26,6 +26,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.engine.util.Base64;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -87,7 +88,21 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	/**
 	 * SMILES, InChI, InChI key (lookup) , identifiers, names
 	 */
-
+	protected String getFirstParam(Form form) {
+		String search = form.getFirstValue(b64search_param);
+		if (search!=null) {
+			search = new String(Base64.decode(search));
+		} else search = form.getFirstValue(search_param);
+		return search;
+	}
+	protected String[] getValuesArray(Form form) {
+		String[] search = form.getValuesArray(b64search_param);
+		if (search!=null) {
+			for (int i=0; i < search.length; i++)
+				search[i] = search[i]==null?null:new String(Base64.decode(search[i]));
+		} else search = form.getValuesArray(search_param);
+		return search;
+	}
 	/*
 	 */
 	@Override
@@ -124,7 +139,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		IQueryRetrieval<IStructureRecord>  query = null;
 		if (isURL(text)) try {
 			
-			url = form.getFirstValue(search_param);
+			url = getFirstParam(form);
 			if (url==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No search parameter!");
 			Object q = CallableQueryProcessor.getQueryObject(new Reference(url), getRequest().getRootRef(),getApplication().getContext());
 			if (q==null) {
@@ -139,9 +154,9 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} 
 		else {
 			if (isSearchParam(text)) {
-				text = form.getFirstValue(search_param);
+				text = getFirstParam(form);
 				if (text !=null) text = text.trim();
-				text_multi = form.getValuesArray(search_param);
+				text_multi = getValuesArray(form);
 			}
 
 			int idcompound = isAmbitID(text);

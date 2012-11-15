@@ -25,6 +25,7 @@ import org.restlet.data.Preference;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.engine.util.Base64;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -200,7 +201,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.TEXT_RDF_N3,
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
-				MediaType.APPLICATION_WADL
+				MediaType.APPLICATION_JAVASCRIPT
 
 				});
 				
@@ -419,13 +420,19 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		} catch (Exception x) {
 			query_type = QueryType.smiles;
 		}		
-		if (form.getFirstValue(QueryResource.search_param)==null) return null;
 		switch (query_type) {
 		case smiles: {
-				return form.getFirstValue(QueryResource.search_param).trim();
+			query_smiles = form.getFirstValue(QueryResource.b64search_param);
+			if (query_smiles!= null) {
+				query_smiles = new String(Base64.decode(query_smiles));
+			} else
+				query_smiles = form.getFirstValue(QueryResource.search_param);
+
+			return query_smiles==null?null:query_smiles.trim();
 	
 		}		
 		case url: try {
+				if (form.getFirstValue(QueryResource.search_param)==null) return null;
 				query_smiles = form.getFirstValue(QueryResource.search_param).trim();
 				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty query");
 				IAtomContainer mol = getFromURI(query_smiles.trim());
@@ -459,7 +466,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		switch (query_type) {
 		case smiles:
 			try {
-				query_smiles = form.getFirstValue(QueryResource.search_param);
+				query_smiles = form.getFirstValue(QueryResource.b64search_param);
+				if(query_smiles!= null) {
+					query_smiles = new String(Base64.decode(query_smiles));
+				} else
+					query_smiles = form.getFirstValue(QueryResource.search_param);
+				
 				if (query_smiles==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty smiles");
 		   		if (query_smiles.startsWith(AmbitCONSTANTS.INCHI)) {
 	    			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
