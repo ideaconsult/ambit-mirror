@@ -18,6 +18,7 @@
 <script type='text/javascript' src='./jquery/jquery-ui-1.9.1.custom.min.js'></script>
 <script type='text/javascript' charset='utf8' src='./jquery/jquery.dataTables-1.9.0.min.js'></script>
 <script type='text/javascript' src='./jquery/purl.js'></script>
+<script type='text/javascript' src='./jquery/jquery.base64.min.js'></script>
 <script type='text/javascript' src='./scripts/jcompound.js'></script>
 <script type='text/javascript' src='./scripts/ambit_structures.js'></script>
 <script type='text/javascript'>
@@ -26,7 +27,9 @@
 	var params = {
 			'threshold'	:purl.param('threshold')===undefined?'0.8':purl.param('threshold'),
 			'media'		:'application/x-javascript',  //jsonp datatype does not allow sending headers !!!!!
-			'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search')
+			//'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search'),
+			'b64search'	:purl.param('search')===undefined?$.base64.encode('50-00-0'):$.base64.encode(purl.param('search')),
+			'pagesize'	:purl.param('pagesize')===undefined?'10':purl.param('pagesize')					
 			};
 	$(document)
 			.ready(
@@ -40,7 +43,8 @@
 						var queryService = 'http://ambit.uni-plovdiv.bg:8080/qmrfdata';
 						switch(option)
 						{
-						case 'similarity':
+						case 'similarity': 
+						  	
 						  url = queryService	+ "/query/similarity?" + $.param(params,false);
 						  break;
 						case 'smarts':
