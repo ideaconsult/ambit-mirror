@@ -21,9 +21,11 @@
 <script type='text/javascript' src='./jquery/purl.js'></script>
 <script type='text/javascript' src='./jquery/jquery.base64.min.js'></script>
 <script type="text/javascript" src="./jquery/jquery.layout-latest.min.js"></script>
+<script type='text/javascript' src='./scripts/jlayout.js'></script>
 <script type='text/javascript' src='./scripts/jcompound.js'></script>
 <script type='text/javascript' src='./scripts/ambit_structures.js'></script>
-<script type='text/javascript' src='./scripts/jlayout.js'></script>
+
+
 <script type='text/javascript'>
 	var purl = $.url();
 	var option = purl.param('option')===undefined?'auto':purl.param('option');
@@ -45,8 +47,8 @@
 							cache : false  //while dev
 						});
 						var url;
-						var queryService = 'http://localhost:8080/ambit2';
-						//var queryService = 'http://ambit.uni-plovdiv.bg:8080/qmrfdata';
+						//var queryService = 'http://localhost:8080/ambit2';
+						var queryService = 'http://ambit.uni-plovdiv.bg:8080/qmrfdata';
 						switch(option)
 						{
 						case 'similarity': 
@@ -59,7 +61,7 @@
 						default: //auto
 						  url = queryService + "/query/compound/search/all?"+ $.param(params,false);
 						}
-						//console.log(url);
+						console.log(url);
 						var oTable = defineStructuresTable(url, queryService,purl.param('option')=='similarity');
 
 					});
@@ -73,13 +75,16 @@
 
 <body>
 
-<div class="ui-layout-north" style="padding: 0 0 0 0;">
+<div class="ui-layout-north pane" style="padding: 0 0 0 0;">
+<!-- style="padding: 0 0 0 0;background-color:#6791d5;color:#FFF;" >  -->
 		<b>REPDOSE Structure search</b>
-		<div style='position:relative;float:right;'>
-		<form method='get' action='search.html'>
-		<input class='repdose' type='submit' value='New structure search'>
-		</form>
-		</div>
+		<br>
+		<span  id='description'></span>
+		<span style='float:right;'>
+		<a href='http://www.fraunhofer-repdose.de/repdose/'>Back to RepDose</a>&nbsp;
+		<a href='search.html'>New structure search</a>
+		</span>
+		
 </div>
 
 		
@@ -88,7 +93,7 @@
 -->
 <form action="repdose.html" method="get">  <!--  This is just for testing ! -->			 
 	
-<div class="ui-layout-center" style="padding: 0 0 0 0;">
+<div class="ui-layout-center search" style="padding: 1 1 1 1;">
 		<div>
 			<div style="width='100%';margin-left: 0px; margin-right: 0px;float:clear;">
 				<table class='compoundtable' id='structures'  cellpadding='2' cellspacing='0'  border='1' width='100%'>
@@ -115,18 +120,13 @@
 
 
 </div>
-
-<div class="ui-layout-south" style="padding: 0 0 0 0;" >
+<!-- style="padding: 0 0 0 0;background-color:#6791d5;color:#FFF;"  -->
+<div class="ui-layout-south pane" >
 	<span style="float:right;valign:top">
 			<input  class='repdose' type='submit' value='Take selected results to Repdose'>
 	</span>			
 </div>
 </form>
-
-
-<div class="ui-layout-west">
-	<span id='description'></span>
-</div>
 
 </body>
 

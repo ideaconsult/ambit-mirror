@@ -15,22 +15,12 @@
  */
 
 /*
- *	DEFAULT FONT
- *	Just to make demo-pages look better - not actually relevant to Layout!
- */
-body {
-	font-family: Geneva, Arial, Helvetica, sans-serif;
-	font-size:   100%;
-	*font-size:  80%;
-}
-
-/*
  *	PANES & CONTENT-DIVs
  */
 .ui-layout-pane { /* all 'panes' */
-	background:	#FFF; 
-	border:		1px solid #BBB;
-	padding:	10px; 
+	background:	#eee; 
+	border:		1px solid #eee;
+	padding:	0px; 
 	overflow:	auto;
 	/* DO NOT add scrolling (or padding) to 'panes' that have a content-div,
 	   otherwise you may get double-scrollbars - on the pane AND on the content-div
@@ -81,7 +71,7 @@ body {
 		otherwise color shifts while dragging when bar can't keep up with mouse */
 	.ui-layout-resizer-open-hover ,	/* hover-color to 'resize' */
 	.ui-layout-resizer-dragging {	/* resizer beging 'dragging' */
-		background: #C4E1A4;
+		background: #6791d5;
 	}
 	.ui-layout-resizer-dragging {	/* CLONED resizer being dragged */
 		border: 	 1px solid #BBB;

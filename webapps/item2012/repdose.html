@@ -2,6 +2,7 @@
 <head>
 <link href="./styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css">
 <link href="./styles/item.css" rel="stylesheet" type="text/css">
+<link href="./styles/layout-default-latest.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <meta name="description" content="REPDOSE database">
 <meta name="keywords" content="ambit,qsar,repdose,structure search">
@@ -16,6 +17,8 @@
 <script type='text/javascript' src='./jquery/jquery-1.8.2.js'></script>
 <script type='text/javascript' src='./jquery/jquery-ui-1.9.1.custom.min.js'></script>
 <script type='text/javascript' src='./jquery/purl.js'></script>
+<script type="text/javascript" src="./jquery/jquery.layout-latest.min.js"></script>
+<script type='text/javascript' src='./scripts/jlayout.js'></script>
 
 <script type='text/javascript'>
 	
@@ -24,6 +27,7 @@
 			.ready(
 
 					function() {
+						initLayout();
 						
 						var cas = purl.param('cas');
 						if (cas === undefined) {
@@ -41,8 +45,13 @@
 
 <body>
 
-This is a test!
-<select id='cas' name='cas' />
-<br>
-<span id='error'></span>
+<div class="ui-layout-north" style="padding: 0 0 0 0;">
+	This is a test!
+</div>
+<div class="ui-layout-center" style="padding: 1 1 1 1;">
+
+	<select id='cas' name='cas' />
+	<br>
+	<span id='error'></span>
+</div>
 </body>

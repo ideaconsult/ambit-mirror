@@ -2,6 +2,8 @@
 <head>
 <link href="./styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css">
 <link href="./styles/item.css" rel="stylesheet" type="text/css">
+<link href="./styles/layout-default-latest.css" rel="stylesheet" type="text/css">
+<link href="./styles/item.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <meta name="description" content="REPDOSE database">
 <meta name="keywords" content="ambit,qsar,repdose,structure search">
@@ -17,6 +19,8 @@
 <script type='text/javascript' src='./jquery/jquery-ui-1.9.1.custom.min.js'></script>
 <script type='text/javascript' src='./jquery/jquery.validate.min.js'></script>
 <script type='text/javascript' charset='utf8' src='./jquery/jquery.dataTables-1.9.0.min.js'></script>
+<script type="text/javascript" src="./jquery/jquery.layout-latest.min.js"></script>
+<script type='text/javascript' src='./scripts/jlayout.js'></script>
 <script type='text/javascript' src='./jquery/purl.js'></script>
 <script type='text/javascript' src='./scripts/funcgroups.js'></script>
 <script type='text/javascript'>
@@ -30,6 +34,7 @@
 	$(document)
 			.ready(
 					function() {
+						initLayout();
 						var s= document.getElementById('funcgroups');
 						$.each(funcgroups,function(index,val) {
 							//s.options[s.options.length]= new Option(val["name"], val["smarts"]);
@@ -76,6 +81,17 @@ function openHelpWindow() {
 
 <body bgcolor="#FFFFFF">
 
+<div class="ui-layout-north pane" style="padding: 0 0 0 0;">
+		<b>REPDOSE Structure search</b>
+		<br>
+		<span  id='description'></span>
+		<span style='float:right;'>
+		<a href='http://www.fraunhofer-repdose.de/repdose/'>Back to RepDose</a>&nbsp;
+		<a href='search.html'>New structure search</a>
+		</span>
+</div>
+
+<div class="ui-layout-center search" style="padding: 1 1 1 1;">
 			<div class='search ui-widget'>
 				<form method='GET' name='form'  method='get' action='query.html'>
 			
@@ -136,5 +152,10 @@ function openHelpWindow() {
 				
 				</div>		
 				
+</div>
+<div class="ui-layout-south pane" >
+		
+</div>
+		
 </body>
 </html>
