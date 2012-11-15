@@ -69,6 +69,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		super.setOutput(output);
 		propertyJSONReporter.setOutput(output);
 	}
+	@Override
 	protected void writeHeader(Writer writer) throws IOException {
 		if (header == null) {
 			header = template2Header(template,true);
@@ -162,9 +163,17 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				output.write("(");
 			}
 			output.write("{\n");
-			output.write("\"dataEntry\":[");
+			output.write("\"query\": {");
+			output.write("\n\t\"summary\":");
+			output.write("\"");
+			output.write(query==null?"":query.toString().replace("\n"," ").replace("\r", " "));
+			output.write("\"");
+			output.write("\n},");
+			output.write("\n\"dataEntry\":[");
 			
-		} catch (Exception x) {}
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 	};
 	/**
 	 * "{"f1":"feature1","f2":{"uri":"feature2","smth":"smb"}}"
@@ -181,10 +190,16 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			else
 				output.write(String.format("\n\"%s\":\"%s\",","model_uri",hilightPredictions));
 			output.write("\n\"feature\":{\n");
+			if (header!=null)
 			for (int j=0; j < header.size(); j++) 
 				propertyJSONReporter.processItem(header.get(j));
-			output.write("}\n");
-		} catch (Exception x) {}
+			
+		} catch (Exception x) {
+			//x.printStackTrace();
+		} finally {
+			try {output.write("}\n");} catch (Exception x) {}
+		}
+		
 		
 		try {
 			output.write("}\n");

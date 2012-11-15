@@ -3,8 +3,6 @@ package ambit2.rest.structure;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.Writer;
-import java.net.URLEncoder;
-import java.util.List;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -12,7 +10,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.data.Profile;
-import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
