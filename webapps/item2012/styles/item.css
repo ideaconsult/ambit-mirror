@@ -31,4 +31,36 @@ a {
 .search {
 	background:#fff;
 	color:#222;
-}	
+}
+
+
+#container2 {
+	clear:left;
+	float:left;
+	width:100%;
+	overflow:hidden;
+}
+#container1 {
+	float:left;
+	width:100%;
+	position:relative;
+	right:50%;
+	padding: 10px 0 0 0;
+}
+#col1 {
+	float:left;
+	width:46%;
+	position:relative;
+	left:52%;
+	overflow:hidden;
+	text-align:left;
+}
+#col2 {
+	float:left;
+	width:46%;
+	position:relative;
+	left:56%;
+	overflow:hidden;
+	text-align:right;
+	
+}

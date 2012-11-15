@@ -1,8 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>
 <head>
 <link href="./styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css">
-<link href="./styles/item.css" rel="stylesheet" type="text/css">
 <link href="./styles/layout-default-latest.css" rel="stylesheet" type="text/css">
+<link href="./styles/item.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <meta name="description" content="REPDOSE database">
 <meta name="keywords" content="ambit,qsar,repdose,structure search">
@@ -45,13 +45,29 @@
 
 <body>
 
-<div class="ui-layout-north" style="padding: 0 0 0 0;">
-	This is a test!
+<div class="ui-layout-north pane">
+	<div id="container2">
+	<div id="container1">
+		<div id="col1">REPDOSE Structure search&nbsp;<span id='description'></span></div>
+		<div id="col2">
+		<a href='http://www.fraunhofer-repdose.de/repdose/'>Back to RepDose</a>&nbsp;
+		<a href='search.html'>New structure search</a>			
+		</div>
+	</div>
+	</div>
 </div>
-<div class="ui-layout-center" style="padding: 1 1 1 1;">
 
-	<select id='cas' name='cas' />
+<div class="ui-layout-center search" style="padding: 10px 10px 10px 10px;text-align:center;">
+	<h3>This is a test!</h3>
+	CAS numbers, transferred from the query page.
 	<br>
-	<span id='error'></span>
+	<select id='cas' name='cas' />
+
+</div>
+
+<div class="ui-layout-south pane" >
+	<span style="float:right;valign:top">
+			This is a test
+	</span>			
 </div>
 </body>
