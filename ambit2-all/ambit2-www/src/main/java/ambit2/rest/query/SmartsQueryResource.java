@@ -95,7 +95,8 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			
 			Form form = request.getResourceRef().getQueryAsForm();
 			Object key = form.getFirstValue(QueryResource.search_param);
-			if (key ==null) {
+			Object b64key = form.getFirstValue(QueryResource.b64search_param);
+			if ((key ==null) && (b64key ==null)) {
 				key = request.getAttributes().get(smartsKey);
 				if (key==null) {
 					if (freetextQuery == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty smarts");
