@@ -22,14 +22,11 @@
 <script type='text/javascript' src='./scripts/jlayout.js'></script>
 <script type='text/javascript' src='./jquery/purl.js'></script>
 <script type='text/javascript' src='./scripts/funcgroups.js'></script>
+<script type="text/javascript" src="./jquery/jquery.cookies.2.2.0.min.js"></script>
+
 <script type='text/javascript'>
-	var purl = $.url();
-	var option = purl.param('option')===undefined?'auto':purl.param('option');
-	var params = {
-			'threshold'	:purl.param('threshold')===undefined?'0.8':purl.param('threshold'),
-			'media'		:'application/x-javascript', 
-			'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search')
-			};
+
+	
 	$(document)
 			.ready(
 					function() {
@@ -50,6 +47,9 @@
 							$('#search').attr("value",$(this).val());
 							$('input:radio[name=option][value=smarts]').click();
 						});						
+						
+						document.form.search.value = $.cookie('repdose.search');
+						
 					});
 	$(function() {
 		$(".repdose").button();
