@@ -64,3 +64,20 @@ a {
 	text-align:right;
 	
 }
+
+#searchform label { 
+	color : #6791d5;font-weight: bold;
+	width: 10em; float: left; 
+}
+#searchform label.error { 
+	float: none; color: red; padding-left: .5em; vertical-align: top; 
+}
+#searchform p { 
+	clear: both; 
+}
+#searchform .submit { 
+	margin-left: 12em; 
+}
+#searchform em { 
+	font-weight: bold; padding-right: .75em; vertical-align: top; 
+}
