@@ -11,17 +11,6 @@
 	float: right;
 }
 
-h3 {
-	color : #6791d5
-}
-h4 {
-	color : #6791d5
-}
-
-a {
-	color : #6791d5;
-	font-weight:	bold;
-}
 
 .pane {
 	background:#eee url(images/ui-bg_inset-hard_100_eeeeee_1x100.png) 50% bottom repeat-x;
@@ -41,6 +30,7 @@ a {
 	overflow:hidden;
 }
 #container1 {
+	font-family:Arial,sans-serif;
 	float:left;
 	width:100%;
 	position:relative;
@@ -80,4 +70,34 @@ a {
 }
 #searchform em { 
 	font-weight: bold; padding-right: .75em; vertical-align: top; 
+}
+
+h3 {
+	color : #6791d5
+}
+h4 {
+	color : #6791d5
+}
+
+#searchform a {
+	color : #6791d5;
+	font-weight:	bold;
+}
+
+.pane a:link           { 
+	font-family: Arial; font-size: 14px; font-weight:	bold; color: #6791d5; text-decoration: none; 
+}
+.pane a:visited        { 
+	font-family: Arial; font-size: 14px; font-weight:	bold; color: #6791d5; text-decoration: none; 
+}
+.pane a:active         { 
+	font-family: Arial; font-size: 14px; font-weight:	bold; color: #FFFFFF; text-decoration: none; 
+}
+.pane a:hover          { 
+	font-family: Arial; font-size: 14px; font-weight:	bold; color: black; 
+}
+.pane label { 
+	font-family: Arial; 
+	color : #6791d5;font-weight: bold;
+	float: left; 
 }
