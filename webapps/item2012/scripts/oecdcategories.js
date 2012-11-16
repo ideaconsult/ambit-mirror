@@ -1,4 +1,5 @@
 var funcgroups = [
+{ "family" :"" , "name":"Custom SMARTS" , "smarts" : "",  "hint" :"Enter the SMARTS in the text box, or draw in JME, using the QRY option"},
 {"family" : "Acid Chlorides" , "name":"Acid Chlorides" , "smarts": "C(=O)Cl" },
 {"family" : "Acid Chlorides" , "name":"Acid Chlorides (sulfonyl chlorides, sulfochlorides)" , "smarts": "S(=O)Cl" },
 /* 
