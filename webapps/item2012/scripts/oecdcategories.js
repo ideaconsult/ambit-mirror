@@ -95,7 +95,6 @@ var funcgroups = [
 {"family" : "Persistent, Bioaccumulative, and Toxic (PBT) Chemicals" , "name":"Persistent, Bioaccumulative, and Toxic (PBT) Chemicals" , "smarts": "" },
 */
 {"family" : "Phenolphthaleins" , "name":"Phenolphthaleins" , "smarts": "O=C1OC(c2ccccc12)(c3ccc(O)cc3)c4ccc(O)cc4", "hint":"This is example SMILES!" },
- -->
 {"family" : "Phenols" , "name":"Phenols" , "smarts": "[OX2H1][$(c:c)]" },
 {"family" : "Phosphates, Inorganic" , "name":"Phosphates, Inorganic" , "smarts": "[O][P](=O)(O)[O]" },
 {"family" : "pyrophosphates, polyphosphates" , "name":"Pyrophosphates, polyphosphates" , "smarts": "[O][P](=O)(O)[O][P](=O)(O)[O]" },

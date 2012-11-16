@@ -33,17 +33,18 @@
 					function() {
 						initLayout();
 						searchFormValidation('#searchform');
-						var s= document.getElementById('funcgroups');
+					//	var s= document.getElementById('funcgroups');
 						$.each(funcgroups,function(index,val) {
-							//s.options[s.options.length]= new Option(val["name"], val["smarts"]);
-							$('<option>',
-									{
-									    value: val["smarts"],
-									    title: val["hint"]===undefined?
-									    		val["family"] + " SMARTS: " + val["smarts"]:
-									    		val["family"]+" " + val["hint"] + " SMARTS: " + val["smarts"],
-									    text: val["name"]
-									}).appendTo("#funcgroups");
+								$('<option>',
+										{
+										    value: val["smarts"],
+										    title: val["hint"]===undefined?
+										    		val["family"] + " SMARTS: " + val["smarts"]:
+										    		val["family"]+" " + 
+										    		val["hint"]===undefined?"":val["hint"] + 
+										    		" SMARTS: " + val["smarts"],
+										    text: val["name"]
+										}).appendTo("#funcgroups");
 						});
 						$('#funcgroups').change(function(){ 
 							$('#search').attr("value",$(this).val());
