@@ -38,6 +38,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.IStructureKey;
+import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.search.structure.AbstractStructureQuery.FIELD_NAMES;
 import ambit2.db.search.structure.QueryByIdentifierWithStructureFallback;
@@ -57,7 +58,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
     private static final long serialVersionUID = 6530309499663693100L;
 	protected DbStructureWriter structureWriter;
 	protected QueryByIdentifierWithStructureFallback query;
-	protected IStructureKey propertyKey;
+	//protected IStructureKey propertyKey;
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
 	protected PreparedStatement ps_seekdataset;		
 	protected StructureNormalizer normalizer = new StructureNormalizer(); 
@@ -84,7 +85,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	
 	
 	public IStructureKey getPropertyKey() {
-		return propertyKey;
+		return query==null?null:query.getFieldname();
 	}
 	public void setPropertyKey(IStructureKey propertyKey) {
 		query.setFieldname(propertyKey);
@@ -151,7 +152,9 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			
 		} else {
 		//find the chemical
-			findChemical(structure);
+			if (getPropertyKey() instanceof NoneKey) ; //do nothing 
+			else	
+				findChemical(structure);
 			if (!structure.usePreferedStructure()) structure.setIdstructure(-1);
 		}
 		
