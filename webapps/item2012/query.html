@@ -55,15 +55,25 @@
 						switch(option)
 						{
 						case 'similarity': 
-						  	
+						  $('#qtype').text('Similarity search');	
+						  $('#qthreshold').text('Tanimoto >= '+purl.param('threshold'));
 						  url = queryService	+ "/query/similarity?" + $.param(params,false);
 						  break;
 						case 'smarts':
+						  $('#qtype').text('Substructure search');
+						  $('#qthreshold').text('');
   						  url = queryService	+ "/query/smarts?" + $.param(params,false);
 						  break;
 						default: //auto
+						  $('#qtype').text('Search by identifier');
+						  $('#qthreshold').text('');
 						  url = queryService + "/query/compound/search/all?"+ $.param(params,false);
 						}
+						
+						if (purl.param('search').length>60) $('#qvalue').text(purl.param('search').substring(0,60)+" ...");
+						else  $('#qvalue').text(purl.param('search'));
+						$('#qvalue').attr('title',purl.param('search'));
+						
 						var oTable = defineStructuresTable(url, queryService,purl.param('option')=='similarity');
 
 					});
@@ -88,16 +98,19 @@
 <div class="ui-layout-north pane">
 	<div id="container2">
 	<div id="container1">
-		<div id="col1"><label title='Repeated Dose Toxicity database structure search results'>RepDose structure search results</label>&nbsp;&nbsp;<span id='description'></span></div>
-		<div id="col2">
-		<a href='http://www.fraunhofer-repdose.de/repdose/'>Back to RepDose</a>
-		&nbsp;
-		<a href='search.html'>New structure search</a>
-		</div>			
+		<div id="col1">
+			<label title='Repeated Dose Toxicity database structure search results'>RepDose structure search results</label>
+			&nbsp;&nbsp;
 		</div>
+		<div id="col2">
+			<a href='http://www.fraunhofer-repdose.de/repdose/'>Back to RepDose</a>
+			&nbsp;
+			<a href='search.html'>New structure search</a>
+		</div>			
 	</div>
 	</div>
 </div>
+
 
 		
 <!-- uncomment to link to repdose
@@ -134,9 +147,19 @@
 </div>
 
 <div class="ui-layout-south pane" >
-	<span style="float:right;valign:top">
+	<div id="container2">
+	<div id="container1">
+		<div id="col1" class='q'>
+			Query:  <span id='qtype'></span>&nbsp;<span id='qthreshold'></span>
+			<br>
+			<b><span id='qvalue'></span></b>
+			<span id='description' style='display:none;'></span>
+		</div>
+		<div id="col2">
 			<input  class='repdose' type='submit' value='Take selected results to RepDose'>
-	</span>			
+		</div>			
+	</div>
+	</div>	
 </div>
 </form>
 

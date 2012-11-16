@@ -1,5 +1,5 @@
 function defineStructuresTable(url, query_service, similarity) {
-
+	var imgSize = 150;
 	var oTable = $('#structures')
 			.dataTable(
 					{
@@ -55,8 +55,8 @@ function defineStructuresTable(url, query_service, similarity) {
 									"bSearchable" : true,
 									"bUseRendered" : false,
 									"bSortable" : true,
-									"sHeight" : "205px",
-									"sWidth" : "205px",
+									"sHeight" : imgSize+"px",
+									"sWidth" : imgSize+"px",
 									"fnRender" : function(o, val) {
 										var cmpURI = val;
 										if (val.indexOf("/conformer") >= 0) {
@@ -78,7 +78,7 @@ function defineStructuresTable(url, query_service, similarity) {
 										 * title=\"Molecule\">Molecule</a>",
 										 */
 										return '<img class="ui-widget-content" title="Structure diagram" border="0" src="'
-												+ cmpURI + '&w=200&h=200">';
+												+ cmpURI + '&w='+imgSize+'&h='+imgSize+'">';
 									}
 								},
 								{

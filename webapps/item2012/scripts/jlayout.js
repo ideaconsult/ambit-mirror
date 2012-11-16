@@ -16,9 +16,9 @@ function initLayout() {
 			south__spacing_closed	:0,
 			east__spacing_open		:0,
 			east__spacing_closed	:0,
-			south__size				:48,
-			south__minSize			:48,
-			south__maxSize			:48,
+			south__size				:52,
+			south__minSize			:52,
+			south__maxSize			:52,
 			north__size				:48,
 			west__size				:200,
 			east__size				:200
@@ -48,7 +48,7 @@ function searchFormValidation(formName) {
 		},
 		messages : {
 			'search'  : {
-				required: "Please enter a search query (CAS, name, SMILES, InChI or SMARTS in case of <i>Substructure</i> search), or click the 'Submit molecule' link to transfer the structure from JME."
+				required: "Please enter a search query (CAS, Chemical Name, SMILES, InChI or SMARTS in case of <i>Substructure</i> search), or click the 'Submit molecule' link to transfer the structure from JME."
 			},
 			'option' : "Please select an option",
 			'threshold'  : {

@@ -95,6 +95,10 @@ h4 {
 	font-weight:	bold;
 }
 
+.pane .q {
+	font-size: 0.9em;
+}
+
 .pane a {
 	font-family: Arial; font-size: 14px; font-weight:	bold; text-decoration: none; color: #6791d5;
 }
