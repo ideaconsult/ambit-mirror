@@ -49,14 +49,33 @@
 							$('input:radio[name=option][value=smarts]').click();
 						});						
 						
-						document.form.search.value = $.cookie('repdose.search');
-						
+						document.form.search.value = $.cookie('repdose.search')==null?"50-00-0":$.cookie('repdose.search');
+						document.form.pagesize.value = $.cookie('repdose.pagesize')==null?"10":$.cookie('repdose.pagesize');
+						//option
+						try {
+							var $radios = $('input:radio[name=option]');
+					        $radios.filter('[value='+$.cookie('repdose.option')+']').attr('checked', true);
+						} catch (err) {
+							$radios.filter('[value=auto]').attr('checked', true);
+						}
+						//select
+						try {
+							$('#threshold').val($.cookie('repdose.threshold'));
+						} catch (err) {
+							$('#threshold').val(0.9);
+						}
+						//func groups
+						try {
+							$('#funcgroups').val($.cookie('repdose.search')==null?"":$.cookie('repdose.search'));
+						} catch (err) {
+							$('#funcgroups').val("");
+						}						
 					});
 	$(function() {
 		$(".repdose").button();
-//		 $( document ).tooltip();
+		$("#searchform").validate();
+		//$( document ).tooltip(); this is broken in IE
 	});
-
 </script>
 <script language="JavaScript">
 
@@ -64,7 +83,7 @@ function submitSmiles() {
   var smiles = document.JME.smiles();
   var jme = document.JME.jmeFile();
   if (smiles == "") {
-    alert("Please use the JME Molecular Editor to draw the structure and then click submit molecule!");
+    alert("Please use the JME Molecular Editor to draw the structure and then click the 'Submit molecule' link! It will copy the molecule SMILES to the search field.");
   }
   else {
 	document.form.type.value = "smiles"; 
