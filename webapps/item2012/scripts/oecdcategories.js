@@ -96,8 +96,8 @@ var funcgroups = [
 */
 {"family" : "Phenolphthaleins" , "name":"Phenolphthaleins" , "smarts": "O=C1OC(c2ccccc12)(c3ccc(O)cc3)c4ccc(O)cc4", "hint":"This is example SMILES!" },
 {"family" : "Phenols" , "name":"Phenols" , "smarts": "[OX2H1][$(c:c)]" },
-{"family" : "Phosphates, Inorganic" , "name":"Phosphates, Inorganic" , "smarts": "[O][P](=O)(O)[O]" },
-{"family" : "pyrophosphates, polyphosphates" , "name":"Pyrophosphates, polyphosphates" , "smarts": "[O][P](=O)(O)[O][P](=O)(O)[O]" },
+{"family" : "Phosphates" , "name":"Phosphates" , "smarts": "[O][P](=O)(O)[O]" },
+{"family" : "Pyrophosphates, polyphosphates" , "name":"Pyrophosphates, polyphosphates" , "smarts": "[O][P](=O)(O)[O][P](=O)(O)[O]" },
 {"family" : "Phosphinate Esters" , "name":"Phosphinate Esters" , "smarts": "[C,c][P](=O)([C,c])[OX2][C,c]" },
 /*
 {"family" : "Polyanionic Polymers (and Monomers)" , "name":"Polyanionic Polymers (and Monomers)" , "smarts": "" },
