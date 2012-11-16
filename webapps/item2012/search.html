@@ -53,8 +53,12 @@
 						document.form.pagesize.value = $.cookie('repdose.pagesize')==null?"10":$.cookie('repdose.pagesize');
 						//option
 						try {
-							var $radios = $('input:radio[name=option]');
-					        $radios.filter('[value='+$.cookie('repdose.option')+']').attr('checked', true);
+							if ($.cookie('repdose.option')==null) 
+								$radios.filter('[value=auto]').attr('checked', true);
+							else {
+								var $radios = $('input:radio[name=option]');
+					        	$radios.filter('[value='+$.cookie('repdose.option')+']').attr('checked', true);
+							}
 						} catch (err) {
 							$radios.filter('[value=auto]').attr('checked', true);
 						}
@@ -143,12 +147,12 @@ function openHelpWindow() {
 			<p>
 			<label>&nbsp;</label>
 			<input type='radio' name='option' value='smarts' title='Enter or draw a SMARTS query' size='20'>Substructure&nbsp;
+
 			</p>
 			<p>
-			<label>Predefined functional groups</label>
+			<label>&nbsp;</label>
 			 <select size='1' title ='Predefined functional groups' id='funcgroups' name='funcgroups'>
-			 </select>
-			 <input type='hidden' name='type' value='smiles'>
+			  </select>
 			</p>
 			<p>
 			<label>Max number of hits</label>
@@ -156,6 +160,7 @@ function openHelpWindow() {
 			</p>
 			<p>
 			<label>&nbsp;</label>
+			 <input type='hidden' name='type' value='smiles'>
 			<input tabindex='2' class='repdose' id='submit' type='submit' value='Search'/>
 			</p>		
 					
