@@ -1362,7 +1362,7 @@ BEGIN
         from structure where idchemical = chemical_id order by idchemical,preference,idstructure;
     ELSE
       	select 1,idchemical,idstructure,if(type_structure='NA',0,1) as selected, preference as metric,@found as text,property_id
-        from structure where idchemical = chemical_id order by idchemical,preference,idstructure limit maxrows;
+        from structure where idchemical = chemical_id order by idchemical,preference,idstructure limit 1;
     END IF;
 END $$
 
