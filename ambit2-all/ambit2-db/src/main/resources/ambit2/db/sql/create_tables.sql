@@ -1297,7 +1297,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `findByProperty`;
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findByProperty`(
+CREATE PROCEDURE `findByProperty`(
                 IN chemical_id INT,
                 IN search_mode INT,  -- 0 : name ; 1 : alias; 2: idproperty ; 3: any ; 4: inchi ; 5: inchikey
                 IN property_name VARCHAR(255),
