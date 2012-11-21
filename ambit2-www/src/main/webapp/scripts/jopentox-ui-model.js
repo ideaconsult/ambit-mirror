@@ -24,7 +24,7 @@ $(document).ready(function() {
 		"aoColumns": [
 		            { "sClass": "center zoom", "bSortable": false, "mDataProp":null, sWidth: "5%", "bUseRendered" : "true",	
 				          "fnRender": function ( o, val ) {
-				                  return "<img src='/ambit2/images/zoom_in.png'>";
+				                  return "<span class='zoommodel'><img src='/ambit2/images/zoom_in.png'></span>";
 				          }
 		            },		              
 		  			{ "sTitle": "Title", "mDataProp":"title", sWidth: "50%",
@@ -61,7 +61,7 @@ $(document).ready(function() {
 		});
 	
 	/* event listener  */
-	   $('.modeltable tbody td img').live( 'click', function () {
+	   $('.modeltable tbody td .zoommodel img').live( 'click', function () {
 		   try {
 		        var nTr = $(this).parents('tr')[0];
 		        if ( mTable.fnIsOpen(nTr) ) {
