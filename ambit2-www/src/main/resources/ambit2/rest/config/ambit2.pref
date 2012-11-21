@@ -42,5 +42,5 @@ generate2D=true
 smi2sdf.smiles.generate=true
 smilesParser=true
 defaultDir=
-MAXRECORDS=0
+MAXRECORDS=${ambit.query.maxrecords}
 atomtypes.stop=false
