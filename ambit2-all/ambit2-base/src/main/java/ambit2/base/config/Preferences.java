@@ -63,7 +63,13 @@ public class Preferences {
 	public static String REMOTELOOKUP="remotelookup";
 	public static String REMOTELOOKUP_URI="remotelookup_uri";
 	
-	protected final static String filename="ambit2.pref";
+	protected static String filename="ambit2.pref";
+	public static String getFilename() {
+		return filename;
+	}
+	public static void setFilename(String filename) {
+		Preferences.filename = filename;
+	}
 	protected static Properties props = null;
 	public enum VTAGS { General, Structure,Conversion3D,Database,RemoteQuery};
 	public enum VINDEX { NAME,TITLE,VALUE,CLASS,HINT,HIDDEN,TAG };
@@ -78,8 +84,6 @@ public class Preferences {
 		{START_MYSQL,"Start MySQL automatically","true",Boolean.class,"If checked, the embedded MySQL server will be automatically started upon application launch",false,VTAGS.Database},
 		{MAXRECORDS,"Maximum number of records",2000,String.class,"Maximum number of records to be returned by a search query",false,VTAGS.Database},
 		{TIMEOUT,"Timeout for search results, ms",60000,String.class,"Timeout of search queries, in milliseconds ",false,VTAGS.Database},
-
-		
 		{FASTSMARTS,"Use SMARTS accelerator","true",Boolean.class,"Accelerate SMARTS search",false,VTAGS.Structure},
 		{SHOW_AROMATICITY,"Show circle in an aromatic ring","true",Boolean.class,"Toggles displaying aromatic rings",true,VTAGS.Structure},
 		{REMOTELOOKUP,"Remote lookup enabled","false",Boolean.class,"Enable remote lookup for CAS and EINECS",false,VTAGS.RemoteQuery},
@@ -112,11 +116,14 @@ public class Preferences {
 		}
 		return p;
 	}
+	
 	protected static Properties loadProperties() throws IOException {
+		return initProperties(new FileInputStream(new File(filename)));
+	}
+	
+	public static Properties initProperties(InputStream in) throws IOException{
 		Properties p = new Properties();
-		InputStream in = new FileInputStream(new File(filename));
-		p.load(in);
-		in.close();
+		try { p.load(in);} finally { in.close(); }
 		return p;
 	}
 	public static Properties getProperties() {

@@ -64,7 +64,7 @@ public class DBHtmlReporter extends QueryReporter<AmbitDBVersion,DBVersionQuery,
 
 			if (isCreate()) {
 				
-				content.append(String.format("<tr><th>DB name</th><td><input type='text' size='40' name='dbname' value='%s' title='The database name has to match with the \"Database\" property, defined in {servlet-home}/WEB-INF/classes/ambit2/rest/config/ambit.pref file'></td></tr>",item.getDbname()));
+				content.append(String.format("<tr><th>DB name</th><td><input type='text' size='40' name='dbname' value='%s' title='The database name has to match with the \"Database\" property, defined in {servlet-home}/WEB-INF/classes/ambit2/rest/config/ambit2.pref file'></td></tr>",item.getDbname()));
 				content.append(String.format("<tr><th>Admin user name</th><td title='existing MySQL user with sufficient privileges to create a database'><input type='text' size='40' name='user' value='%s'></td></tr>",""));
 				content.append(String.format("<tr><th>Password</th><td title='MySQL user password'><input type='password' size='40' name='pass' value='%s'></td></tr>",""));
 				content.append("<tr><td></td><td><input align='bottom' type=\"submit\" value=\"Create database\"></td></tr>");
