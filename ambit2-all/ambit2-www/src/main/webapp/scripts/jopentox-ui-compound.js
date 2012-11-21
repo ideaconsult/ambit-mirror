@@ -53,7 +53,7 @@ $(document)
 											"fnRender" : function(o,
 													val) {
 
-												return "<img src='/ambit2/images/zoom_in.png' alt='zoom in' title='Click to show compound details'>";
+												return "<span class='zoomstruc'><img src='/ambit2/images/zoom_in.png' alt='zoom in' title='Click to show compound details'></span>";
 											},
 											
 										},
@@ -194,7 +194,7 @@ $(document)
 										"aaSorting" : [ [ 1, 'asc' ] ]
 									});
 					
-					$('.compoundtable tbody td img').live(
+					$('.compoundtable tbody td .zoomstruc img').live(
 							'click',
 							function() {
 								var nTr = $(this).parents('tr')[0];
