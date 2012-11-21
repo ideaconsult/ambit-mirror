@@ -107,7 +107,8 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 									));
 			
 			output.write("<table class='compoundtable' id='dataset' width='100%'></table>");
-			output.write("\n<script type=\"text/javascript\">opentox = \n");
+			output.write(String.format("\n<script type=\"text/javascript\">var baseref='%s';\nopentox = \n",
+							uriReporter.getBaseReference()));			
 			cmp_reporter.header(w, query);
 		} catch (Exception x) {} 
 	

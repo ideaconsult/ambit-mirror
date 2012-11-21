@@ -13,7 +13,9 @@ var modelArray;
  *  Models rendering
  */
 $(document).ready(function() {
-	    
+	try {
+		if (baseref===undefined) baseref = "/ambit2";
+	} catch (err) { baseref="/ambit2"; }
 	/* Initialize */
 	mTable = $( ".modeltable" ).dataTable({
 		'bProcessing': true,
@@ -24,7 +26,7 @@ $(document).ready(function() {
 		"aoColumns": [
 		            { "sClass": "center zoom", "bSortable": false, "mDataProp":null, sWidth: "5%", "bUseRendered" : "true",	
 				          "fnRender": function ( o, val ) {
-				                  return "<span class='zoommodel'><img src='/ambit2/images/zoom_in.png'></span>";
+				                  return "<span class='zoommodel'><img src='"+ baseref +"/images/zoom_in.png'></span>";
 				          }
 		            },		              
 		  			{ "sTitle": "Title", "mDataProp":"title", sWidth: "50%",
@@ -66,11 +68,11 @@ $(document).ready(function() {
 		        var nTr = $(this).parents('tr')[0];
 		        if ( mTable.fnIsOpen(nTr) ) {
 		            /* This row is already open - close it */
-		            this.src = "/ambit2/images/zoom_in.png";
+		            this.src = baseref + "/images/zoom_in.png";
 		            mTable.fnClose( nTr );
 		        } else  {
 		            /* Open this row */
-		        	this.src = "/ambit2/images/zoom_out.png";
+		        	this.src = baseref + "/images/zoom_out.png";
 		            mTable.fnOpen( nTr, fnFormatDetails(nTr), 'details' );
 		        }
 		   } catch (err) {
