@@ -88,74 +88,11 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 									));
 						
 			output.write("<table class='modeltable' id='models' width='100%'></table>");
-			output.write("\n<script type=\"text/javascript\">modelArray = \n");
+			output.write(String.format("\n<script type=\"text/javascript\">var baseref='%s';\nmodelArray = \n",
+					uriReporter.getBaseReference()));
 			modelJson_reporter.header(w, query);
 		} catch (Exception x) {} 
-		/*
-		try { 
-			output.write("<table class='modeltable' id='models'>");
-			output.write("<caption CLASS='results'>");
-			
-			if (!headless && _dmode.isCollapsed())  {
-				String page = Long.toString(query.getPage());
-				final Form form = uriReporter.getResourceRef().getQueryAsForm();
-				try {
-					page = form.getFirstValue("page")==null?page:form.getFirstValue("page");
-				} catch (Exception x) {
-					page = Long.toString(query.getPage());
-				}			
-				String pageSize =  Long.toString(query.getPageSize());
-			
-				try {
-					pageSize = form.getFirstValue("pagesize")==null? Long.toString(query.getPageSize()):form.getFirstValue("pagesize");
-				} catch (Exception x) {
-					pageSize = "100";
-				}	
-				String search = "";
-				try {
-					search = form.getFirstValue("search");
-				} catch (Exception x) {	search = ""; }	
-				
-				try {
-				output.write("<form method='GET' action=''>");
-				output.write("<b>Models </b>");
-				output.write(String.format("Page:<input name='page' type='text' title='Page' size='10' value='%s'>\n",page==null?"0":page));
-				if (search !=null) output.write(String.format("<input name='search' type='hidden' value='%s'>\n",search));
-				output.write(String.format("<b>Page size:</b><input name='pagesize' type='text' title='Page size' size='10' value='%s'>\n",pageSize==null?"50":pageSize));
-				output.write(String.format("<input type='image' src='%s/images/page_go.png' onsubmit='submit-form();' value='Refresh' title='Refresh'>",uriReporter.getBaseReference()));			
-				output.write("</form>");
-	
-				} catch (Exception x) {
-					
-				} finally {
-					
-				}
-		    }
-			output.write("</caption>");	
-
-			switch (_dmode) {
-			case table: {
-				output.write("<thead>\n");
-				output.write("<tr align=\"left\">\n");
-				output.write("<th >Model name</th>\n");
-				output.write("<th width='30%'>Algorithm</th>\n");
-				output.write("<th width='10%'>Dataset</th>\n");
-				output.write("<th width='10%'>Independent variables</th>\n");
-				output.write("<th width='10%'>Dependent</th>\n");
-				output.write("<th width='10%'>Predicted</th>\n");
-				output.write("</tr></thead>\n");
-				break;
-			}
-			default : {
-			}
-			}
-
-			output.write("<tbody>\n");
-			cmp_reporter.setOutput(w);
-			uriReporter.setOutput(w);
-
-		} catch (Exception x) {}		
-		*/
+		
 	}
 	
 	@Override

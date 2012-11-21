@@ -38,6 +38,9 @@ showNames,name
 $(document)
 		.ready(
 				function() {
+					try {
+						if (baseref===undefined) baseref = "/ambit2";
+					} catch (err) { baseref="/ambit2"; }
 					//$.fn.dataTableExt.sErrMode = 'throw';
 					//images
 					opentox["imageInTable"] = true;
@@ -53,7 +56,7 @@ $(document)
 											"fnRender" : function(o,
 													val) {
 
-												return "<span class='zoomstruc'><img src='/ambit2/images/zoom_in.png' alt='zoom in' title='Click to show compound details'></span>";
+												return "<span class='zoomstruc'><img  src='"+ baseref +"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'></span>";
 											},
 											
 										},
@@ -199,13 +202,13 @@ $(document)
 							function() {
 								var nTr = $(this).parents('tr')[0];
 								if (opentox.oTable.fnIsOpen(nTr)) {
-									this.src = "/ambit2/images/zoom_in.png";
+									this.src = baseref + "/images/zoom_in.png";
 									this.alt = "Zoom in";
 									this.title='Click to show compound details';
 									opentox.oTable.fnClose(nTr);
 								} else {
 								    this.alt = "Zoom out";
-									this.src = "/ambit2/images/zoom_out.png";
+									this.src = baseref + "/images/zoom_out.png";
 									this.title='Click to close compound details panel';
 									var id = 'values'+getID();
 									opentox.oTable.fnOpen(nTr, fnFormatDetails(nTr,id),
