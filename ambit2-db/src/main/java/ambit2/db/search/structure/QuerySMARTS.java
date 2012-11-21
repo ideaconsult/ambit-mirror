@@ -8,6 +8,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
@@ -45,6 +46,7 @@ public class QuerySMARTS extends
 	protected QueryPrescreenBitSet screening;
 	protected transient MoleculeReader reader = new MoleculeReader();
 	protected transient AtomConfigurator configurator = new AtomConfigurator();
+	protected transient CDKHydrogenAdder hAdder;
 	protected Property smartsProperty = Property.getInstance(
 			CMLUtilities.SMARTSProp, CMLUtilities.SMARTSProp);
 	protected static final String SMARTS = "SMARTS";
@@ -187,24 +189,40 @@ public class QuerySMARTS extends
 				if ((mol == null) || (mol.getAtomCount() == 0)
 						|| (mol instanceof SuppleAtomContainer))
 					return 0;
-
+		
+				if (hAdder==null) hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+				boolean detectAromaticity = true;
 				if ("true".equals(Preferences.getProperty(Preferences.FASTSMARTS)) && isUsePrecalculatedAtomProperties()) {
 					Object smartsdata = object.getProperty(smartsProperty);
 
 					if (smartsdata != null) {
 						mol.setProperty(smartsProperty, smartsdata);
-
+						detectAromaticity = false;
 					} else {
 						mol.removeProperty(smartsProperty);
-						mol = configurator.process(mol);
-						CDKHueckelAromaticityDetector.detectAromaticity(mol);
-
 					}
 				} else {
 					mol.removeProperty(smartsProperty);
-					mol = configurator.process(mol);
-					CDKHueckelAromaticityDetector.detectAromaticity(mol);
+				}
 
+				mol = configurator.process(mol);
+				switch (object.getType()) {
+				case D1: {
+					hAdder.addImplicitHydrogens(mol);
+					break;
+				}
+				case D2noH: {
+					hAdder.addImplicitHydrogens(mol);
+					break;
+				}
+				case D3noH: {
+					hAdder.addImplicitHydrogens(mol);
+					break;
+				}
+				}
+				if (detectAromaticity) {
+					//System.out.println(mol.getProperty(smartsProperty));
+					CDKHueckelAromaticityDetector.detectAromaticity(mol);
 				}
 				int aromatic = 0;
 				VerboseDescriptorResult<String, IntegerResult> result = getValue()
