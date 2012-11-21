@@ -12,12 +12,16 @@ var funcgroups = [
 {"family" : "Aldehydes" , "name":"Aldehydes (polyaldehydes)" , "smarts": "([CX3H1](=O)[C,c].[CX3H1](=O)[C,c])" },
  */
 {"family" : "Aldehydes" , "name":"Aldehydes (vinyl)" , "smarts": "[CX3H2]=[CX3][CX3H1]=[O]" },
+/*
 {"family" : "Aldehydes" , "name":"Aldehydes (allylic)" , "smarts": "[CX3]=[CX3][CH2][CX3H1]=[O]" },
+*/
 {"family" : "Aliphatic Amines" , "name":"Aliphatic Amines (primary amines or monoalkyl amines)" , "smarts": "[C][NX3H2,NX4H3;!$(NC=[!#6])]" },
 {"family" : "Aliphatic Amines" , "name":"Aliphatic Amines (secondary amines or dialkyl amines)" , "smarts": "[C][NX3H1,NX4H2;!$(NC=[!#6])][C]" },
 {"family" : "Aliphatic Amines" , "name":"Aliphatic Amines (tertiary amines or trialkyl amines)" , "smarts": "[C][NX3H0,NX4H1;!$(NC=[!#6])](C)[C]" },
+/*Not in Repdose
 {"family" : "Aliphatic Amines" , "name":"Aliphatic Amines (amine oxides)" , "smarts": "[NX4;H0;+1][OX1;-1]" },
 {"family" : "Aliphatic Amines" , "name":"Aliphatic Amines (fatty polyamines)" , "smarts": "[NX3,NX4;!$(NC=[!#6])].[NX3,NX4;!$(NC=[!#6])]" },
+*/
 {"family" : "Alkoxysilanes" , "name":"Alkoxysilanes" , "smarts": "CO[Si]" },
 {"family" : "Alkoxysilanes" , "name":"Alkoxysilanes (trialkoxysilyl)" , "smarts": "CO[Si](C)(OC)OC" },
 /* Not in RepDose
@@ -41,9 +45,7 @@ var funcgroups = [
 */
 /*Not in RepDose
 {"family" : "Azides" , "name":"Azides" , "smarts": "N=N=N" },
-*/
 {"family" : "Benzotriazoles" , "name":"Benzotriazoles" , "smarts": "C12=CC=CC=C1NN=N2" },
-/*
 {"family" : "Benzotriazoles" , "name":"Benzotriazole-hindered phenols" , "smarts": "" },
  */
 /*Not in RepDose 
@@ -71,8 +73,10 @@ var funcgroups = [
 {"family" : "Ethylene glycol wthers" , "name":"Ethylene Glycol Ethers" , "smarts": "[OX2H0;!$(OC=O)][CX4H2R0][CX4H2R0][OX2H0;!$(OC=O)]" },
 {"family" : "Hydrazines and related compounds " , "name":"Hydrazines and related compounds (hydrazine)" , "smarts": "[NX3][NX3]" },
 {"family" : "Hydrazines and related compounds " , "name":"Hydrazines and related compounds (hydrazones)" , "smarts": "[C]=[NX2][NX3]" },
+/* Not in RepDose
 {"family" : "Hydrazines and related compounds " , "name":"Hydrazines and related compounds (hydrazide)" , "smarts": "[C](=O)[NX3H1][NX3]" },
 {"family" : "Hydrazines and related compounds " , "name":"Hydrazines and related compounds (semicarbazide)" , "smarts": "[#6][NX3H1][C](=O)[NX3H1][NX3]" },
+*/
 /* 
 {"family" : "Hindered Amines" , "name":"Hindered Amines" , "smarts": "" },
 */
@@ -86,7 +90,6 @@ var funcgroups = [
 /*
 {"family" : "beta-Naphthylamines, Sulfonated" , "name":"beta-Naphthylamines, Sulfonated" , "smarts": "" },
  */
-{"family" : "Imides" , "name":"Imides" , "smarts": "[CX3](=[OX1])[NX3]([H,#6])[CX3]=[OX1]" },
 /* Not in RepDose
 {"family" : "Lanthanides or Rare Earth Metals" , "name":"Lanthanides or Rare Earth Metals" , "smarts": "[La],[Ce],[Pr],[Nd],[Sm],[Eu],[Gd],[Tb],[Dy],[Ho],[Er],[Tm],[Yb],[Lu]" },
 */
