@@ -38,6 +38,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.base.exceptions.AmbitException;
@@ -108,6 +109,8 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 					if (kekulize) try {
 						//inchi can't process aromatic bonds...
 						kekulized = (IMolecule) molecule.clone();
+						//and kekulizer needs atom typing
+						AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(kekulized); 
 						kekulized = fbt.kekuliseAromaticRings((IMolecule)kekulized);
 						for (IBond bond:kekulized.bonds()) bond.setFlag(CDKConstants.ISAROMATIC, false); 	
 					} catch (Exception x) { x.printStackTrace(); }
