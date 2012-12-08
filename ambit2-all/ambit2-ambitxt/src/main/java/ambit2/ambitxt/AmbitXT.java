@@ -39,7 +39,7 @@ import nplugins.shell.application.Utils;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jdesktop.swingx.border.DropShadowBorder;
-import org.jdesktop.swingx.painter.MattePainter;
+import org.jdesktop.swingx.painter.GlossPainter;
 import org.jdesktop.swingx.plaf.PainterUIResource;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneContainerUI;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
@@ -196,8 +196,7 @@ public class AmbitXT extends NPluginsApplication {
   	    UIManager.put(JXTaskPaneContainer.uiClassID, "ambit2.ambitxt.AmbitTaskPaneContainerUI");	
   	    JXTaskPaneContainer container = new JXTaskPaneContainer();
 		  UIManager.put("TaskPaneContainer.backgroundPainter", new PainterUIResource(
-	              new MattePainter<JXTaskPaneContainer>(new GradientPaint(0f, 0f,
-	                      Color.white, 0f, 1f, getBackground()), true)));	  	    
+				  new GlossPainter(new GradientPaint(0f, 0f,Color.white, 0f, 1f, getBackground()))));	  	    
 		container.setUI(new AmbitTaskPaneContainerUI());
 		restoreSettings(oldValues);
 		return container;
