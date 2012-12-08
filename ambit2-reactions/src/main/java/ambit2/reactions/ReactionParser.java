@@ -7,19 +7,34 @@ import java.util.ArrayList;
 public class ReactionParser 
 {	
 	ArrayList<String> errors = new ArrayList<String>(); 
+	
 	RetroSynthRule curRule = null;
 	
+	
+	
+	ArrayList<String> getErrors()
+	{
+		return errors;
+	}
 	
 	//------------ parsing parseRetroSynthRule -------------------
 	
 	public IRetroSynthRule parseRetroSynthRule(String ruleString)
 	{	
+		errors.clear();
+		
 		RetroSynthRule rule = new RetroSynthRule();
 		rule.originalRuleString = ruleString;
 		curRule = rule;
 		
 		int res = ruleString.indexOf(ReactionConst.KeyWordPrefix, 0);
 		int curPos = res;
+		
+		if (res == -1)
+		{
+			errors.add("No key words found in the rule");
+			return(null);
+		}
 		
 		while (res != -1)
 		{	
@@ -36,7 +51,15 @@ public class ReactionParser
 			parseRetroSynthKeyWord(keyword);
 		}	
 		
-		return rule;
+		
+		if (errors.isEmpty())
+			return(rule);
+		else
+		{	
+			return(null);
+		}
+		
+		
 	}
 	
 	void parseRetroSynthKeyWord(String keyWord)
@@ -58,6 +81,12 @@ public class ReactionParser
 			return;
 		}
 		
+		if (key.equals("INFO"))	
+		{	
+			parseRSRInfo(keyValue);
+			return;
+		}
+		
 		errors.add("Unknown key word: " + key);
 		
 	}
@@ -66,6 +95,13 @@ public class ReactionParser
 	{
 		curRule.name = keyValue;
 	}
+	
+	void parseRSRInfo(String keyValue)
+	{
+		curRule.info = keyValue;
+	}
+	
+	
 	
 	
 }
