@@ -10,6 +10,11 @@
   <name>ambit2-reactions</name>
   <version>2.4.10-SNAPSHOT</version>
    <dependencies>
+    <dependency>
+  		<groupId>ambit</groupId>
+  		<artifactId>ambit2-smarts</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-core</artifactId>
