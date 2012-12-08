@@ -5,7 +5,10 @@ public class RetroSynthRule implements IRetroSynthRule
 {
 	String originalRuleString = "";
 	String name = "";
+	String info = "";
+	int id = 0;
 	boolean FlagRuleActive = true;
+	
 	
 	public String getName()
 	{
@@ -15,6 +18,16 @@ public class RetroSynthRule implements IRetroSynthRule
 	public void setName(String newName)
 	{
 		name = newName;
+	}
+	
+	public String getInfo()
+	{
+		return info;
+	}
+	
+	public void setInfo(String newInfo)
+	{
+		info = newInfo;
 	}
 	
 	public String getOriginalRuleString()
@@ -32,6 +45,14 @@ public class RetroSynthRule implements IRetroSynthRule
 		FlagRuleActive = isActive;
 	}
 	
+	public int getID()
+	{
+		return id;
+	}
 	
+	public void setID(int newID)
+	{
+		id = newID;
+	}
 
 }
