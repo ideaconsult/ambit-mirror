@@ -106,7 +106,7 @@ public class AutomaticTautomerTests
 	int freqRelNumUneqBins[];
 	int freqAbsNumUneqBins[];
 	int freqUneqDiffBins [];
-	
+	int numOfIdenticalCanonicalTautomers = 0;
 	
 	
 	public static boolean FlagCheckMemory = false;
@@ -118,9 +118,9 @@ public class AutomaticTautomerTests
 	int numErrorToken = 1;
 	String errSubStr = "XXX";
 	String separator1 = "\t";
-	String separator2 = " ";
+	String separator2 = "\t";
 	boolean FlagUseOnlyFirstAlgorithm = false;  //essentially if true this makes distribution of the tautomer count for the first algorithm
-	
+	boolean FlagCompareCanonicalTautomer = true;
 	
 	
 	public static void main(String[] args)
@@ -134,11 +134,11 @@ public class AutomaticTautomerTests
 					"-i","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
 					//"-i2","D:/Projects/data012-tautomers/results-final/AMBIT-Tautomer-Count-Comb-Improved-FULL.txt",
 					//"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
-					//"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
-					"-i2","D:/Projects/data012-tautomers/results-final/marvin-tautomer-count.txt",
+					"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
+					//"-i2","D:/Projects/data012-tautomers/results-final/marvin-tautomer-count.txt",
 					
 					"-nInpStr","0",
-					"-nStartStr","1",
+					"-nStartStr","135265",
 					"-c","compare-algorithms",
 					"-o","D:/Projects/data012-tautomers/test.txt",
 					"-fMinNDB", "1",
@@ -1404,7 +1404,11 @@ public class AutomaticTautomerTests
 				}	
 				
 				if (n % traceFrequency == 0)
+				{	
 					System.out.println(n);
+					if (FlagCompareCanonicalTautomer)
+						System.out.println("  nICT = " + numOfIdenticalCanonicalTautomers);
+				}	
 			}
 			
 			f.close();
@@ -1431,6 +1435,8 @@ public class AutomaticTautomerTests
 			System.out.println("  " + RelDiffBins[i] + "  " + freqRelDiffBins[i]);
 		
 		System.out.println("\n Tested " + numStructsInStat + "  structs.");
+		if (FlagCompareCanonicalTautomer)
+			System.out.println("\n numOfIdenticalCanonicalTautomers = " + numOfIdenticalCanonicalTautomers);
 		return 0;
 	}
 	
@@ -1469,7 +1475,8 @@ public class AutomaticTautomerTests
 			return -3;
 		if (tokens2.get(numErrorToken).startsWith(errSubStr))
 			return -4;
-				
+		
+		
 		
 		try{
 			String tok = tokens.get(numTokenAtFile1).trim();
@@ -1487,6 +1494,30 @@ public class AutomaticTautomerTests
 			freqDiff[diffB]++;
 			int relB = getBinIndex(relDiff, relBins);
 			freqRel[relB]++;
+			
+			if (FlagCompareCanonicalTautomer)
+			{
+				tok = tokens.get(numTokenAtFile1+1).trim();
+				tok2 = tokens2.get(numTokenAtFile2+1).trim();
+				
+				IMolecule mol = null;
+				SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+				mol = sp.parseSmiles(tok);
+				
+				IMolecule mol2 = null;
+				sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+				mol2 = sp.parseSmiles(tok2);
+				
+				QueryAtomContainer query = SmartsHelper.getQueryAtomContainer(mol2, false);
+				isoTester.setQuery(query);
+				if (isoTester.hasIsomorphism(mol))
+				{
+					//System.out.println(tok);
+					numOfIdenticalCanonicalTautomers++;
+					//System.out.println("  nICT = " + numOfIdenticalCanonicalTautomers);
+				}
+				
+			}
 		}
 		catch(Exception e)
 		{
