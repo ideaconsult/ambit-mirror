@@ -34,6 +34,7 @@ function identifiers(opentox, targetEntry) {
 	});	
 
     $.each(opentox.feature, function(k, value) {
+
     		if (value.sameAs == "http://www.opentox.org/api/1.1#IUPACName") {
     			if (opentox.feature[k]) { if (lookup.names.indexOf(k)<0) lookup.names.push(k); }
     		} else if (value.sameAs == "http://www.opentox.org/api/1.1#ChemicalName") {
@@ -49,9 +50,9 @@ function identifiers(opentox, targetEntry) {
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChI") { 
 	        	if (opentox.feature[k]) {if (lookup.inchi.indexOf(k)<0) lookup.inchi.push(k);   }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChIKey") { 
-	        	if (opentox.feature[k]) {if (lookup.inchikey.indexOf(k)<0) lookup.inchikey.push(k);   
+	        	if (opentox.feature[k]) {if (lookup.inchikey.indexOf(k)<0) lookup.inchikey.push(k);  }
 	        } else  {
-	        	if (opentox.feature[k]) if (lookup.misc.indexOf(k)<0) lookup.misc.push(k);   
+	        	if (lookup.misc.indexOf(k)<0) lookup.misc.push(k);   
 	        }	        
         	/*
 	        } else {
@@ -67,7 +68,6 @@ function identifiers(opentox, targetEntry) {
 					if (source=="Algorithm" || source=="Model") { thclass += " calculated"; visible |= opentox["showCalculated"]; }	
 	        	}
 	        	*/
-	        }
 	    });
     
 
