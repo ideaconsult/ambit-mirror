@@ -27,28 +27,28 @@
 							$('input:radio[name=option][value=smarts]').click();
 						});						
 						
-						document.form.search.value = $.cookie('repdose.search')==null?"50-00-0":$.cookie('repdose.search');
-						document.form.pagesize.value = $.cookie('repdose.pagesize')==null?"10":$.cookie('repdose.pagesize');
+						document.form.search.value = $.cookie('ambit2.search')==null?"50-00-0":$.cookie('ambit2.search');
+						document.form.pagesize.value = $.cookie('ambit2.pagesize')==null?"10":$.cookie('ambit2.pagesize');
 						//option
 						try {
-							if ($.cookie('repdose.option')==null) 
+							if ($.cookie('ambit2.option')==null) 
 								$radios.filter('[value=auto]').attr('checked', true);
 							else {
 								var $radios = $('input:radio[name=option]');
-					        	$radios.filter('[value='+$.cookie('repdose.option')+']').attr('checked', true);
+					        	$radios.filter('[value='+$.cookie('ambit2.option')+']').attr('checked', true);
 							}
 						} catch (err) {
 							$radios.filter('[value=auto]').attr('checked', true);
 						}
 						//select
 						try {
-							$('#threshold').val($.cookie('repdose.threshold'));
+							$('#threshold').val($.cookie('ambit2.threshold'));
 						} catch (err) {
 							$('#threshold').val(0.9);
 						}
 						//func groups
 						try {
-							$('#funcgroups').val($.cookie('repdose.search')==null?"":$.cookie('repdose.search'));
+							$('#funcgroups').val($.cookie('ambit2.search')==null?"":$.cookie('ambit2.search'));
 						} catch (err) {
 							$('#funcgroups').val("");
 						}						
