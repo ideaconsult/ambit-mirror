@@ -284,9 +284,11 @@ function formatValues(dataEntry, tag) {
 		if (dataEntry.values[value] != undefined) {
 			$.each(dataEntry.values[value].split("|"), function(index, v) {
 				if (v.indexOf(".mol") == -1) {
-					sOut += delimiter;
-					sOut += v;
-					delimiter = "<br>";
+					if ("" != v) {
+						sOut += delimiter;
+						sOut += v;
+						delimiter = "<br>";
+					}
 				}
 			});
 			// sOut += dataEntry.values[value];
