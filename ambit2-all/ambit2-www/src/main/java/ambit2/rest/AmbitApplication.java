@@ -64,6 +64,7 @@ import ambit2.rest.facet.DatasetStrucTypeStatsResource;
 import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.facet.DatasetsByNamePrefixResource;
+import ambit2.rest.freemarker.FreeMarkerApplication;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.pubchem.CSLSResource;
@@ -114,7 +115,7 @@ import ambit2.rest.template.OntologyResource;
  * http://stackoverflow.com/questions/810171/how-to-read-context-parameters-from-a-restlet
  *
  */
-public class AmbitApplication extends TaskApplication<String> {
+public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final Role UPDATE_ALLOWED = new Role("AUTHOR","Update (PUT,POST,DELETE) allowed");
 	protected boolean insecure = true;
 	 
@@ -164,6 +165,8 @@ public class AmbitApplication extends TaskApplication<String> {
 
 	@Override
 	public Restlet createInboundRoot() {
+        initFreeMarkerConfiguration();
+        
 		Router router = new MyRouter(this.getContext());
 		router.attach("/help", AmbitResource.class);
 

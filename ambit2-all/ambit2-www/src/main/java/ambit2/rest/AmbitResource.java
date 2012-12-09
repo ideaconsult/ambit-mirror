@@ -20,6 +20,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
+import ambit2.rest.freemarker.FreeMarkerResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.query.QueryResource;
@@ -38,7 +39,7 @@ import ambit2.rest.template.OntologyResource;
  * @author nina
  *
  */
-public class AmbitResource extends ProtectedResource {
+public class AmbitResource extends FreeMarkerResource {
 	protected static String sparqlEndpoint = null;
 	protected static String jsGoogleAnalytics = null;
 	String format = "<tr ><td>%s</td><td><a href=\"%s%s\">%s</a></td><td>%s</td><td>%s</td></tr>";
@@ -269,6 +270,14 @@ public class AmbitResource extends ProtectedResource {
 			
 	};
 
+	public AmbitResource() {
+		super();
+		setHtmlbyTemplate(false);
+	}
+	@Override
+	public String getTemplateName() {
+		return "query.ftl";
+	}
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -293,7 +302,8 @@ public class AmbitResource extends ProtectedResource {
 	}
 	
 	@Override
-	public Representation get(Variant variant) {
+	protected Representation getRepresentation(Variant variant)
+			throws ResourceException {
 		//System.out.println(getRequest().getClientInfo().isAuthenticated());
 		//System.out.println(getRequest().getClientInfo().getSubject().getPrincipals());
 		/*

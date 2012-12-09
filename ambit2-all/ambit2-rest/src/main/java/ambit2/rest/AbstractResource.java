@@ -1,22 +1,14 @@
 package ambit2.rest;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
-import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Cookie;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.ext.wadl.FaultInfo;
-import org.restlet.ext.wadl.MethodInfo;
-import org.restlet.ext.wadl.RepresentationInfo;
-import org.restlet.ext.wadl.WadlRepresentation;
 import org.restlet.representation.ObjectRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -26,6 +18,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.exception.RResourceException;
+import ambit2.rest.freemarker.FreeMarkerResource;
 
 /**
  * Abstract class for resources
@@ -36,7 +29,7 @@ import ambit2.rest.exception.RResourceException;
  * @param <P>
  */
 public abstract class AbstractResource<Q,T extends Serializable,P extends IProcessor<Q, Representation>> 
-																	extends ProtectedResource {
+																	extends FreeMarkerResource {
 	protected Q queryObject;
 	protected Exception error = null;	
 	protected Status response_status = Status.SUCCESS_OK;
