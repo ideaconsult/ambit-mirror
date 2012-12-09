@@ -1,0 +1,149 @@
+body {
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial;
+	background:#fff;
+	color:#344049
+}
+.compoundtable table {
+	border-style: none;
+	font-size: 0.9em;
+}
+
+.compoundtable td {
+	border-color: gray;	
+	border-style: dotted;
+	font-size: 0.9em;
+}
+
+.compoundtable th {
+	font-size: 0.9em;
+}
+
+.css_right {
+	float: right;
+}
+
+
+.pane {
+	background:#344049;
+	color:#ffffff;
+}
+
+.search {
+	background:#fff;
+	color:#344049;
+}
+
+
+#container2 {
+	clear:left;
+	float:left;
+	width:100%;
+	overflow:hidden;
+}
+#container1 {
+	font-family:Arial,sans-serif;
+	float:left;
+	width:100%;
+	position:relative;
+	right:50%;
+	padding: 10px 0 0 0;
+}
+#col1 {
+	float:left;
+	width:46%;
+	position:relative;
+	left:52%;
+	overflow:hidden;
+	text-align:left;
+}
+#col2 {
+	float:left;
+	width:46%;
+	position:relative;
+	left:56%;
+	overflow:hidden;
+	text-align:right;
+	
+}
+#searchform    { 
+	font-size: 1.0em; 
+}
+#searchform label { 
+	color : #344049;font-weight: bold;
+	width: 10em; float: left; 
+}
+#searchform label.error { 
+	float: none; color: red; padding-left: .5em; vertical-align: top; 
+}
+#searchform p { 
+	clear: both; 
+}
+#searchform .submit { 
+	margin-left: 12em; 
+}
+#searchform em { 
+	font-weight: bold; padding-right: .75em; vertical-align: top; 
+}
+
+
+#searchform a {
+	color : #344049;
+	font-weight:	bold;
+}
+
+.pane .q {
+	font-size: 0.9em;
+}
+
+.pane a {
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial; 
+	font-size: 1.1em; font-weight:	bold; text-decoration: none; color: #6791d5;
+}
+.pane a:link         { 
+	color: white; 
+}
+.pane a:visited         { 
+	color: white; 
+}
+.pane a:active         { 
+	color: #344049; 
+}
+.pane a:hover          { 
+	color: #729203;
+}
+.pane label { 
+	font-family: Arial; 
+	color : white ;font-weight: bold;
+	float: left; 
+}
+div#header {
+	height: 1.5em;
+	text-align: left;
+}
+
+#header_bottom {
+	height: 1.5em;
+	background: url("../../images/header-background.png") repeat-x scroll left top;
+}
+ul.topLinks {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: auto;
+	margin: 0;
+	padding: 0.5em 1em 0 0;
+	text-align: right;
+}
+
+li.topLinks {
+	display: inline;
+}
+
+a.topLinks {
+	font-weight: normal !important;
+}
+
+.logo_top-left {
+	border: 0;
+}
+
