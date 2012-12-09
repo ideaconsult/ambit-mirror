@@ -36,7 +36,7 @@ function searchFormValidation(formName) {
 }
 
 function initSearchForm() {
-		searchFormValidation('#searchform');
+	
 		$.each(funcgroups,function(index,val) {
 			$('<option>',
 					{
@@ -58,14 +58,16 @@ function initSearchForm() {
 		document.searchform.pagesize.value = $.cookie('ambit2.pagesize')==null?"10":$.cookie('ambit2.pagesize');
 		//option
 		try {
-			if ($.cookie('ambit2.option')==null) 
+			if ($.cookie('ambit2.option')==null) {
 				$radios.filter('[value=auto]').attr('checked', true);
-			else {
+				clickAuto();
+			} else {
 				var $radios = $('input:radio[name=option]');
 		       	$radios.filter('[value='+$.cookie('ambit2.option')+']').attr('checked', true);
 			}
 		} catch (err) {
 			$radios.filter('[value=auto]').attr('checked', true);
+			clickAuto();
 		}
 		//select
 		try {
@@ -79,6 +81,7 @@ function initSearchForm() {
 		} catch (err) {
 			$('#funcgroups').val("");
 		}						
+		searchFormValidation('#searchform');
 }
 
 function clickSimilarity() {

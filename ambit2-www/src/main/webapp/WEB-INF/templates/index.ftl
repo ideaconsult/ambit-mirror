@@ -3,7 +3,6 @@
 <#include "/header.ftl" >
 
 <script type='text/javascript'>
-
 	
 	$(document)
 			.ready(
@@ -54,7 +53,7 @@
 						}						
 					});
 	$(function() {
-		$(".repdose").button();
+		$(".ambit_search").button();
 		$("#searchform").validate();
 		//$( document ).tooltip(); this is broken in IE
 	});
@@ -91,7 +90,7 @@ menu
 </div>
 <div class="thirteen columns" style="padding:0;" >
 	<div class='search ui-widget'>
-	<form method='GET' name='form' id='searchform' method='get' action='${ambit_root}/query'>
+	<form method='GET' name='searchform' id='searchform' method='get' action='${ambit_root}/query'>
 	<!--  two columns  -->		
 	<div id="container2">
 	<div id="container1">
@@ -135,7 +134,7 @@ menu
 			<p>
 			<label>&nbsp;</label>
 			 <input type='hidden' name='type' value='smiles'>
-			<input tabindex='2' class='repdose' id='submit' type='submit' value='Search'/>
+			<input tabindex='2' class='ambit_search' id='submit' type='submit' value='Search'/>
 			</p>		
 					
 		</div>

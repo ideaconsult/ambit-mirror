@@ -27,7 +27,7 @@ var funcgroups = [
 /* SMARTS is wrong
 {"family" : "Anilines" , "name":"Anilines, Dianilines " , "smarts": "[NX3H2]-!:[cccc]-!:[C,O,N,S]" },
 */
-/*Not in RepDose
+/*smarts incomplete
 {"family" : "Anionic Surfactants " , "name":"Anionic Surfactants (alkyl sulfonate)" , "smarts": "[SX4](=O)(=O)([OX2H1,OX1-])[CX4H2][CX4H2][CX4H2][CX4H2][CX4H2][CX4H2]" },
 {"family" : "Anionic Surfactants " , "name":"Anionic Surfactants (alkyl benzene sulfonate)" , "smarts": "[SX4](=O)(=O)([OX2H1,OX1-])[cccccc][CX4H2][CX4H2][CX4H2][CX4H2][CX4H2][CX4H2]" },
 {"family" : "Anionic Surfactants " , "name":"Anionic Surfactants (alkyl phosphate)" , "smarts": "[PX4](=O)([OX2H1,OX1-])([OX2H1,OX1-])[OX2][CX4H2]" },
@@ -62,7 +62,7 @@ var funcgroups = [
 */
 {"family" : "Imides" , "name":"Imides" , "smarts": "[CX3](=[OX1])[NX3]([H,#6])[CX3]=[OX1]" },
 {"family" : "Imides" , "name":"(N-halogenated imides)" , "smarts": "[CX3](=[OX1])[NX3]([F,Cl,Br,I])[CX3]=[OX1]" },
-/*Not in repdose or SMARTS wrong
+/*SMARTS wrong
 {"family" : "Diisocyanates" , "name":"Diisocyanates" , "smarts": "([#6][NX2]=[CX2]=[OX1]).([#6][NX2]=[CX2]=[OX1])" },
 */
 /*
