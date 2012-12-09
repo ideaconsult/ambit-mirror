@@ -82,7 +82,7 @@ left menu
 
 <form action="${ambit_root}/ui" method="get">  
 	
-		<table class='compoundtable' id='structures'  cellpadding='2' cellspacing='0'  border='1' width='100%'>
+		<table id='structures' class='structable' style='margin:0;' width='100%'>
 					<thead>
 						<th>
 						<a href="#" id='selectall' title='Click to select all records' onClick='selecturi(true);'><u>Select</u></a><br>

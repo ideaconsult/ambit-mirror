@@ -1,0 +1,145 @@
+/*
+ * Colour dictionary:
+ *
+ * Table control elements:   #719ba7
+ * Header cells:             #66A9BD
+ * Body header cells:        #91c5d4
+ * Body content cells:       #d5eaf0
+ * Body content cells (alt): #bcd9e1
+ * Footer header:            #b0cc7f
+ * Footer content:           #d7e1c5
+ */
+
+/*
+ * DataTables framework
+ */
+div.dataTables_wrapper {
+}
+
+div.dataTables_length {
+	margin:0;
+	padding:0;
+	float: left;
+}
+
+div.dataTables_filter {
+	float: right;
+}
+
+div.dataTables_info {
+	padding: 9px 6px 6px 6px;
+	float: left;
+}
+
+div.dataTables_paginate {
+	float: right;
+}
+
+div.dataTables_length,
+div.dataTables_filter,
+div.dataTables_paginate {
+	padding: 6px;
+}
+
+/* Self clearing - http://www.webtoolkit.info/css-clearfix.html */
+.dataTables_wrapper:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+html[xmlns] .dataTables_wrapper {
+	display: block;
+}
+ 
+* html .dataTables_wrapper {
+	height: 1%;
+}
+
+
+/*
+ * Table styles
+ */
+table.structable {
+	width: 100%;
+	clear: both;
+}
+
+table.structable td,
+table.structable th {
+	padding: 5px;
+}
+
+/* Header cells */
+table.structable thead th {
+	text-align: center;
+}
+
+/* Body cells */
+table.structable tbody th {
+	text-align: left;
+}
+	
+table.structable tbody td {
+	text-align: center;
+}
+		
+table.structable tbody tr.odd td { 
+}
+
+/* Footer cells */	
+table.structable tfoot th {
+	text-align: left;
+}
+	
+table.structable tfoot td {
+	text-align: center;
+	font-weight: bold;
+}
+
+
+/*
+ * Pagination
+ */
+a.paginate_button,
+a.paginate_active {
+	display: inline-block;
+	padding: 2px 6px;
+	margin-left: 2px;
+	cursor: pointer;
+	*cursor: hand;
+}
+
+a.paginate_active {
+	background-color: transparent;
+}
+
+a.paginate_button_disabled {
+}
+.paging_full_numbers a:active {
+	outline: none
+}
+.paging_full_numbers a:hover {
+	text-decoration: none;
+}
+
+div.dataTables_paginate span>a {
+	width: 15px;
+	text-align: center;
+}
+
+
+/*
+ * Sorting
+ */
+table.structable thead th.sorting_asc {
+}
+
+table.structable thead th.sorting_desc {
+}
+
+table.structable thead th.sorting {
+}

@@ -23,6 +23,7 @@
 	<link rel="stylesheet" href="${ambit_root}/style/jquery-ui-1.8.18.custom.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/jquery.dataTables.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/skeleton/ambit2.css" type="text/css">
+	<link rel="stylesheet" href="${ambit_root}/style/skeleton/table.css" type="text/css">
 		
 	<!-- Favicons
 	================================================== -->
