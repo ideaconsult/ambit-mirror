@@ -20,6 +20,14 @@
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 	
+	<!-- JQuery
+	================================================== -->
+	<script type='text/javascript' src='${ambit_root}/jquery/jquery-1.7.1.min.js'></script>
+	<script type="text/javascript" src="${ambit_root}/jquery/jquery.cookie.js"></script>
+	<script type='text/javascript' src='${ambit_root}/jquery/jquery-ui-1.8.18.custom.min.js'></script>
+	<script type='text/javascript' src='${ambit_root}/jquery/jquery.validate.min.js'></script>
+	<script type='text/javascript' charset='utf8' src='${ambit_root}/jquery/jquery.dataTables-1.9.0.min.js'></script>
+	
 	<link rel="stylesheet" href="${ambit_root}/style/jquery-ui-1.8.18.custom.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/jquery.dataTables.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/skeleton/ambit2.css" type="text/css">
@@ -33,32 +41,14 @@
 	<link rel="apple-touch-icon" sizes="114x114" href="${ambit_root}/style/images/apple-touch-icon-114x114.png">
 
 
-		<!-- JQuery
-	================================================== -->
-	<script type='text/javascript' src='${ambit_root}/jquery/jquery-1.7.1.min.js'></script>
-	<script type='text/javascript' src='${ambit_root}/jquery/jquery-ui-1.8.18.custom.min.js'></script>
-	<script type='text/javascript' src='${ambit_root}/jquery/jquery.validate.min.js'></script>
-	<script type='text/javascript' charset='utf8' src='${ambit_root}/jquery/jquery.dataTables-1.9.0.min.js'></script>
-	<script type="text/javascript" src="${ambit_root}/jquery/jquery.cookies.2.2.0.min.js"></script>
-	<script type='text/javascript' src='${ambit_root}/jquery/jquery.base64.min.js'></script>
-	<script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
-		
+	
 	<!-- AMBIT JS
 	================================================== -->
-	<script type='text/javascript' src='${ambit_root}/scripts/oecdcategories.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/jlayout.js'></script>
-	
-	<!-- Footer
-	================================================== -->
-<script type="text/javascript">
-<!-- show the footer when the mouse is near -->
-	$(document).ready( function () {
-    	$('div#footer-in').mouseenter( function () {
-    		$('div#footer').stop().animate({bottom: '15px'}, 'fast');
-    	});
-    	$('div#footer-out').mouseleave( function () {
-    		$('div#footer').stop().animate({bottom: '-17px'}, 'slow');
-    	});
-    });
-</script>
+	<script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
+	<script type='text/javascript' src='${ambit_root}/scripts/oecdcategories.js'></script>
+	<script type='text/javascript' src='${ambit_root}/jquery/jquery.base64.min.js'></script>
 
+			
+
+	

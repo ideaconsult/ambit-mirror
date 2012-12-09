@@ -6,6 +6,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/ambit_structures.js'></script>
 
 <script type='text/javascript'>
+	console.log($);
 	var purl = $.url();
 	var option = purl.param('option')===undefined?'auto':purl.param('option');
 	var params = {
@@ -18,6 +19,7 @@
 
 	$(function() {
 		initSearchForm();
+		$("#searchform").validate();
 	});	
 	
 	$(document)
@@ -57,7 +59,7 @@
 					});
 
 	$(function() {
-		$(".repdose").button();
+		$(".ambit_search").button();
 	});
 	$('#structures').css('class','remove-bottom');
 
@@ -114,7 +116,7 @@ left menu
 	<b><span id='qvalue'></span></b>
 	<span id='description' style='display:none;'></span>
 	<br>
-	<input  class='repdose' type='submit' value='Do XXX'>
+	<input  class='ambit_search' type='submit' value='Do XXX'>
 </div>
 
 
