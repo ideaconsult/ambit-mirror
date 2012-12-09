@@ -6,7 +6,7 @@
 			Structure search	
 	</h3>
 	<h6 class="remove-bottom">
-	<input type='radio' checked value='auto' name='option' title='Exact structure or search by an identifier. CAS, Chemical name, SMILES or InChI. The input type is guessed automatically.' size='20' onClick='clickAuto();'>Exact structure or identifier
+	<input type='radio' checked value='auto' name='option' title='Exact structure or search by an identifier. CAS, Chemical name, SMILES or InChI. The input type is guessed automatically.' size='20' onClick='clickAuto();'>Exact structure
 	<input type='radio' name='option' value='similarity' title='Enter SMILES or draw structure' onClick='clickSimilarity();'>Similarity&nbsp;
 	<input type='radio' name='option' value='smarts' title='Enter or draw a SMARTS query' size='20' onClick='clickSmarts();'>Substructure&nbsp;
 	<input type='hidden' name='type' value='smiles'>	
@@ -15,35 +15,42 @@
 	</h6>
 </div>
 <div class="four columns omega">
-	<h3 class="remove-bottom">
-		&nbsp;
-	</h3>
-	<h6 class="remove-bottom">	
-	<span id='thresholdSpan' style='display:none;' class="remove-bottom">Threshold:
-	<select title ='Tanimoto similarity threshold' id='threshold' name='threshold' style='width:6em;' class="remove-bottom" >
-			<option value='0.9' selected>0.9</option>
-	   		<option value='0.8' >0.8</option>
-	   		<option value='0.7' >0.7</option>
-	   		<option value='0.6' >0.6</option>
-	   		<option value='0.5' >0.5</option>
-	   		<option value='0.4' >0.4</option>
-	   		<option value='0.3' >0.3</option>
-	   		<option value='0.2' >0.2</option>
-	   		<option value='0.1' >0.1</option>
-	</select>	
+	<span id='thresholdSpan' style='display:none;' class="remove-bottom">
+		<h3 class="remove-bottom help">
+			&nbsp;
+		</h3>
+		<h6 class="remove-bottom">	
+			<select title ='Tanimoto similarity threshold' id='threshold' name='threshold' style='width:6em;' class="remove-bottom" >
+					<option value='0.9' selected>0.9</option>
+			   		<option value='0.8' >0.8</option>
+			   		<option value='0.7' >0.7</option>
+			   		<option value='0.6' >0.6</option>
+			   		<option value='0.5' >0.5</option>
+			   		<option value='0.4' >0.4</option>
+			   		<option value='0.3' >0.3</option>
+			   		<option value='0.2' >0.2</option>
+			   		<option value='0.1' >0.1</option>
+			</select>	
+			<span class='help'>Similarity threshold</span>
+		</h6>
 	</span>
-	<span id='funcgroupsSpan' style='display:none;' class="remove-bottom">Functional groups:
-    <select size='1' title ='Predefined functional groups' id='funcgroups' name='funcgroups'>
-	</select>
+	<span id='funcgroupsSpan' style='display:none;' class="remove-bottom">
+		<h3 class="remove-bottom">
+			&nbsp;
+		</h3>
+		<h6 class="remove-bottom">	
+		    <select size='1' title ='Predefined functional groups' id='funcgroups' name='funcgroups' class="remove-bottom" >
+			</select>
+			<span class='help'>Functional groups</span>
+		</h6>
 	</span>
-	</h6>
 </div>
 <div class="three columns omega">
 	<h3 class="remove-bottom">
 		&nbsp;
 	</h3>
 	<h6 class="remove-bottom">
-		<input type='text' id='search' name='search' size='40' value='' tabindex='1'>
+		<input type='text' id='search' name='search' value='' tabindex='1' style='width: 40em;height:1em;'>
 		<input type='hidden' size='3' name='pagesize' value='10'>
 	</h6>	
 </div>

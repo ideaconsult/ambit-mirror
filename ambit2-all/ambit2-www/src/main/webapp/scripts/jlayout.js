@@ -64,6 +64,11 @@ function initSearchForm() {
 			} else {
 				var $radios = $('input:radio[name=option]');
 		       	$radios.filter('[value='+$.cookie('ambit2.option')+']').attr('checked', true);
+		       	switch ($.cookie('ambit2.option')) {
+		       	case 'smarts' : {clickSmarts(); break;}
+		       	case 'similarity' : {clickSimilarity(); break;}
+		       	default: clickAuto();
+		       	}
 			}
 		} catch (err) {
 			$radios.filter('[value=auto]').attr('checked', true);
@@ -85,16 +90,19 @@ function initSearchForm() {
 }
 
 function clickSimilarity() {
+	$('#search').attr("title","Tanimoto similarity");
 	$('#thresholdSpan').show();
 	$('#funcgroupsSpan').hide();
 	$('.help#strucSearch').text("Enter Chemical name, SMILES or InChI or draw a compound.");
 }
 function clickSmarts() {
+	$('#search').attr("title","Substructure search");
 	$('#thresholdSpan').hide();
 	$('#funcgroupsSpan').show();
 	$('.help#strucSearch').text("Enter SMARTS or draw a structure.");
 }
 function clickAuto() {
+	$('#search').attr("title","Exact structure or search by an identifier. CAS, Chemical name, SMILES or InChI. The input type is guessed automatically.");
 	$('#thresholdSpan').hide();
 	$('#funcgroupsSpan').hide();
 	$('.help#strucSearch').text("Enter CAS,EINECS, Chemical name, SMILES or InChI.");

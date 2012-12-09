@@ -6,7 +6,6 @@
 <script type='text/javascript' src='${ambit_root}/scripts/ambit_structures.js'></script>
 
 <script type='text/javascript'>
-	console.log($);
 	var purl = $.url();
 	var option = purl.param('option')===undefined?'auto':purl.param('option');
 	var params = {
