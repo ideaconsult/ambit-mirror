@@ -120,6 +120,7 @@
 	
 		<table id='structures' class='structable' style='margin:0;' width='100%'>
 					<thead>
+						<th></th>
 						<th>
 						<a href="#" id='selectall' title='Click to select all records' onClick='selecturi(true);'><u>Select</u></a><br>
 						<a href="#" id='unselect' title='Click to unselect all records'  onClick='selecturi(false);'><u>Unselect</u></a>						
