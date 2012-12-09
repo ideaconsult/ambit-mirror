@@ -234,7 +234,6 @@ function defineStructuresTable(url, query_service, similarity) {
 										success : function(data, status, xhr) {
 											identifiers(data,aData);
 											$.each(data.dataEntry,function(index,entry) {
-												
 														aData.compound.cas = formatValues(entry,"cas");																
 														aData.compound.name = formatValues(entry,"names");																
 														$('td:eq(5)',nRow).html(aData.compound.name);
@@ -252,7 +251,19 @@ function defineStructuresTable(url, query_service, similarity) {
 																.html(aData.compound['inchikey']);
 													});
 											
-
+											//dataset
+											dataset_uri = aData.compound.URI 
+													+ "?feature_uris[]="
+													+ encodeURIComponent(query_service+"/dataset/25/feature")
+													+ "&media=application%2Fjson";		
+											$.ajax({
+												dataType : "json",
+												url : dataset_uri,
+												success : function(data1, status, xhr) {
+													identifiers(data1,aData);
+												},
+												error : function(xhr, status, err) {},complete : function(xhr, status) {}
+											});
 										},
 										error : function(xhr, status, err) {
 										},
@@ -315,7 +326,7 @@ function defineStructuresTable(url, query_service, similarity) {
 	
 	function fnFormatDetails(nTr, id) {
 		var dataEntry = oTable.fnGetData(nTr);
-		var sOut = '<div class="ui-widget" style="margin-top: 5x;" >';
+		var sOut = '<div class="ui-widget help" style="margin-top: 5x;" >';
 		sOut += '<div">';
 		sOut += '<table width="100%"><tbody>';//outer table, can't get the style right with divs
 		$.each(dataEntry.lookup.cas, function(k, value) {
