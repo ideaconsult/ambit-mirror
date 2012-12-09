@@ -85,37 +85,11 @@ body {
 	font-weight: bold; padding-right: .75em; vertical-align: top; 
 }
 
-
 #searchform a {
 	color : #344049;
 	font-weight:	bold;
 }
 
-.pane .q {
-	font-size: 0.9em;
-}
-
-.pane a {
-	FONT-FAMILY: Trebuchet MS, Verdana, Arial; 
-	font-size: 1.1em; font-weight:	bold; text-decoration: none; color: #6791d5;
-}
-.pane a:link         { 
-	color: white; 
-}
-.pane a:visited         { 
-	color: white; 
-}
-.pane a:active         { 
-	color: #344049; 
-}
-.pane a:hover          { 
-	color: #729203;
-}
-.pane label { 
-	font-family: Arial; 
-	color : white ;font-weight: bold;
-	float: left; 
-}
 div#header {
 	height: 1.5em;
 	text-align: left;
@@ -146,4 +120,5 @@ a.topLinks {
 .logo_top-left {
 	border: 0;
 }
+
 

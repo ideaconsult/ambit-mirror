@@ -162,6 +162,7 @@ function defineStructuresTable(url, query_service, similarity) {
 						"bPaginate" : true,
 						"bDeferRender": true,
 						"bSearchable": true,
+						"sDom" : 'R<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix remove-bottom"ip>',
 						"sAjaxSource": url,
 						"sAjaxDataProp" : "dataEntry",
 						"fnServerData" : function(sSource, aoData, fnCallback,
