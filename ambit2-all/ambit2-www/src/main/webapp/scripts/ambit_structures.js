@@ -4,11 +4,22 @@ function defineStructuresTable(url, query_service, similarity) {
 			.dataTable(
 					{
 						"aoColumnDefs" : [
-								{ // 0
-									"mDataProp" : "compound.URI",
-									"aTargets" : [ 0 ],
+								{ //0
+									"aTargets": [ 0 ],	
 									"sClass" : "center",
-									"bSortable" : true,
+									"bSortable" : false,
+									"mDataProp" : null,
+									sWidth : "16px",
+									"bUseRendered" : "true",
+									"fnRender" : function(o,val) {
+										return "<span class='zoomstruc'><img  src='"+query_service+"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'></span>";
+									}
+								},						                  
+								{ // 1
+									"mDataProp" : "compound.URI",
+									"aTargets" : [ 1 ],
+									"sClass" : "center",
+									"bSortable" : false,
 									"bSearchable" : true,
 									"bUseRendered" : false,
 									sWidth : "32px",
@@ -21,7 +32,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								},
 								{
 									"mDataProp" :null,
-									"aTargets" : [ 1 ],
+									"aTargets" : [ 2 ],
 									"bSortable" : false,
 									"bSearchable" : false,
 									sWidth : "5%",
@@ -30,7 +41,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.cas",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 2 ],
+									"aTargets" : [ 3 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
@@ -47,7 +58,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.URI",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 3 ],
+									"aTargets" : [ 4 ],
 									"bSearchable" : true,
 									"bUseRendered" : false,
 									"bSortable" : true,
@@ -80,7 +91,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.name",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 4 ],
+									"aTargets" : [ 5 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
@@ -97,7 +108,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.metric",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 5 ],
+									"aTargets" : [ 6 ],
 									"sTitle" : "Similarity",
 									"sClass" : "similarity",
 									"bSearchable" : true,
@@ -108,7 +119,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 6 ],
+									"aTargets" : [ 7 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -124,7 +135,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 7 ],
+									"aTargets" : [ 8 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -141,7 +152,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
 									"sClass" : "inchikey",
-									"aTargets" : [ 8 ],
+									"aTargets" : [ 9 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -210,7 +221,7 @@ function defineStructuresTable(url, query_service, similarity) {
 							"sInfo": "Query results"  
 						},
 						"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
-			                $('td:eq(1)', nRow).html(iDisplayIndex +1);
+			                $('td:eq(2)', nRow).html(iDisplayIndex +1);
 
 			                // retrieve identifiers
 							id_uri = query_service
@@ -221,42 +232,26 @@ function defineStructuresTable(url, query_service, similarity) {
 										dataType : "json",
 										url : id_uri,
 										success : function(data, status, xhr) {
-											identifiers(data);
-											$.each(data.dataEntry,
-															function(index,
-																	entry) {
-								
-																aData.compound.cas = formatValues(
-																		entry,"cas");																
-																aData.compound.name = formatValues(
-																		entry,
-																		"names");																
-																$('td:eq(4)',
-																		nRow)
-																		.html(aData.compound.name);
-																$('td:eq(2)',
-																		nRow)
-																		.html(aData.compound.cas);
-																aData.compound['smiles'] = formatValues(
-																		entry,
-																		"smiles");
-																var offset = similarity?1:0;
-																$('td:eq(' + (5 + offset) + ')',nRow)
-																		.html(aData.compound['smiles']);
-																aData.compound['inchi'] = formatValues(
-																		entry,
-																		"inchi");
-																$('td:eq(' + (6 + offset) + ')',nRow)
-																		.html(
-																				aData.compound['inchi']);
-																aData.compound['inchikey'] = formatValues(
-																		entry,
-																		"inchikey");
-																$('td:eq(' + (7 + offset) + ')',
-																		nRow)
-																		.html(
-																				aData.compound['inchikey']);
-															});
+											identifiers(data,aData);
+											$.each(data.dataEntry,function(index,entry) {
+												
+														aData.compound.cas = formatValues(entry,"cas");																
+														aData.compound.name = formatValues(entry,"names");																
+														$('td:eq(5)',nRow).html(aData.compound.name);
+														$('td:eq(3)',nRow).html(aData.compound.cas);
+														aData.compound['smiles'] = formatValues(entry,"smiles");
+														var offset = similarity?1:0;
+														$('td:eq(' + (6 + offset) + ')',nRow)
+																.html(aData.compound['smiles']);
+														aData.compound['inchi'] = formatValues(entry,"inchi");
+														$('td:eq(' + (7 + offset) + ')',nRow)
+																.html(aData.compound['inchi']);
+														aData.compound['inchikey'] = formatValues(
+																entry,"inchikey");
+														$('td:eq(' + (8 + offset) + ')',nRow)
+																.html(aData.compound['inchikey']);
+													});
+											
 
 										},
 										error : function(xhr, status, err) {
@@ -267,8 +262,101 @@ function defineStructuresTable(url, query_service, similarity) {
 
 						}
 					});
+	
+	$('#structures tbody td .zoomstruc img').live(
+			'click',
+			function() {
+				var nTr = $(this).parents('tr')[0];
+				if (oTable.fnIsOpen(nTr)) {
+					this.src = query_service + "/images/zoom_in.png";
+					this.alt = "Zoom in";
+					this.title='Click to show compound details';
+					oTable.fnClose(nTr);
+				} else {
+				    this.alt = "Zoom out";
+					this.src = query_service + "/images/zoom_out.png";
+					this.title='Click to close compound details panel';
+					var id = 'values'+getID();
+					oTable.fnOpen(nTr, fnFormatDetails(nTr,id),
+							'details');
+					
+				       $('#'+ id).dataTable({
+				    		'bJQueryUI': false, 
+				    		'bPaginate': false,
+				    		'bAutoWidth': true,
+							"sScrollY": "200px",
+							//"sScrollXInner": "110%",
+							"bScrollCollapse": true,
+							"sWidth": "90%",
+				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"lfr>t<"fg-toolbar ui-helper-clearfix"ip>',
+				    		"aaSorting" : [ [ 0, 'desc' ] ],
+				    		fnDrawCallback: function(){
+				    			  var wrapper = this.parent();
+				    			  var rowsPerPage = this.fnSettings()._iDisplayLength;
+				    			  var rowsToShow = this.fnSettings().fnRecordsDisplay();
+				    			  var minRowsPerPage = this.fnSettings().aLengthMenu[0][0];
+				    			  if ( rowsToShow <= rowsPerPage || rowsPerPage == -1 ) {
+				    			    $('.dataTables_paginate', wrapper).css('visibility', 'hidden');
+				    			  }
+				    			  else {
+				    			    $('.dataTables_paginate', wrapper).css('visibility', 'visible');
+				    			  }
+				    			  if ( rowsToShow <= minRowsPerPage ) {
+				    			    $('.dataTables_length', wrapper).css('visibility', 'hidden');
+				    			  }
+				    			  else {
+				    			    $('.dataTables_length', wrapper).css('visibility', 'visible');
+				    			  }
+				    		}		
+    		
+				    	});								       
+				}
+			});
+	
+	function fnFormatDetails(nTr, id) {
+		var dataEntry = oTable.fnGetData(nTr);
+		var sOut = '<div class="ui-widget" style="margin-top: 5x;" >';
+		sOut += '<div">';
+		sOut += '<table width="100%"><tbody>';//outer table, can't get the style right with divs
+		$.each(dataEntry.lookup.cas, function(k, value) {
+			sOut += renderValue("CAS RN",dataEntry.values[value]);
+		});
+		$.each(dataEntry.lookup.einecs, function(k, value) {
+			sOut += renderValue("EC",dataEntry.values[value]);
+		});	
+		$.each(dataEntry.lookup.inchi, function(k, value) {
+			sOut += renderValue("InChI",dataEntry.values[value]);
+		});		
+		$.each(dataEntry.lookup.inchikey, function(k, value) {
+			sOut += renderValue("InChIKey",dataEntry.values[value]);
+		});
+		$.each(dataEntry.lookup.names, function(k, value) {
+			sOut += renderValue("Name",dataEntry.values[value]);
+		});
+		$.each(dataEntry.lookup.reachdate, function(k, value) {
+			sOut += renderValue("REACH date",dataEntry.values[value]);
+		});
+		$.each(dataEntry.lookup.smiles, function(k, value) {
+			sOut += renderValue("SMILES",dataEntry.values[value]);
+		});
+		$.each(dataEntry.lookup.misc, function(k, value) {
+			sOut += renderValue(value,dataEntry.values[value]);
+		});
+		sOut += '</tbody></table></div></div>\n';		
+		return sOut;
+	}
+	
+	function renderValue(feature, value) {
+		if (value != undefined) {
+			var sOut = "<tr><th>" + feature + "</th><td>" + value + "</td></tr>";
+			return sOut;
+		} else return "";
+	}
 	return oTable;
 }
+
+
+
 
 function getID() {
 	return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
