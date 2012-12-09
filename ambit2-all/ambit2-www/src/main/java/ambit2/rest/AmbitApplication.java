@@ -103,6 +103,7 @@ import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
 import ambit2.rest.template.OntologyResource;
+import ambit2.rest.ui.UIResource;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in http://opentox.org/development/wiki/
@@ -169,6 +170,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
         
 		Router router = new MyRouter(this.getContext());
 		router.attach("/help", AmbitResource.class);
+		router.attach("/ui", UIResource.class);
 
 		
 		/**
