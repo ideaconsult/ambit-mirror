@@ -24,14 +24,9 @@
 			<a href='http://ambit.sf.net/'>
 				<img class='scale-with-grid' border='0' src='${ambit_root}/images/ambit-logo.png' title='http://ambit.sf.net/' alt='AMBIT logo'>
 			</a>
-			<h5>v2.4.10</h5>
+			<h5 style='color:#729203;'>v2.4.10</h5>
 		</div>
-		<div class="thirteen columns">
-			<h2 class="remove-bottom">
-			Structure search	
-			</h2>
-			<h5>help</h5>
-		</div>
+		<#include "/banner_search.ftl">
 		<div class="sixteen columns" >
 			<div id="header_bottom" class="remove-bottom">&nbsp;</div>
 		</div>
