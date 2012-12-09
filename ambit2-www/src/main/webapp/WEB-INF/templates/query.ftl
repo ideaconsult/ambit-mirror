@@ -16,6 +16,10 @@
 			'pagesize'	:purl.param('pagesize')===undefined?'10':purl.param('pagesize')					
 			};
 
+	$(function() {
+		initSearchForm();
+	});	
+	
 	$(document)
 			.ready(
 					function() {
@@ -51,6 +55,7 @@
 						var oTable = defineStructuresTable(url, queryService,purl.param('option')=='similarity');
 
 					});
+
 	$(function() {
 		$(".repdose").button();
 	});
