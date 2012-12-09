@@ -13,7 +13,6 @@ function defineStructuresTable(url, query_service, similarity) {
 									"bUseRendered" : false,
 									sWidth : "32px",
 									"fnRender" : function(o, val) {
-										console.log(val);
 										if ((val === undefined) || (val == ""))
 											return "";
 										else
