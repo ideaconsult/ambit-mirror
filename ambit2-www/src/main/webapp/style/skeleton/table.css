@@ -86,7 +86,7 @@ table.structable {
 
 table.structable td,
 table.structable th {
-	padding: 5px;
+	padding: 2px;
 }
 
 /* Header cells */
@@ -97,10 +97,12 @@ table.structable thead th {
 /* Body cells */
 table.structable tbody th {
 	text-align: left;
+	vertical-align:top;
 }
 	
 table.structable tbody td {
-	text-align: center;
+	text-align: left;
+	vertical-align:top;
 }
 		
 table.structable tbody tr.odd td { 

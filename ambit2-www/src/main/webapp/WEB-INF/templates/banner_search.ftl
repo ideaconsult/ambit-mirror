@@ -1,6 +1,5 @@
 <!-- thirteen-->
 <div class="thirteen columns" id="query">
-<form method='GET' name='searchform' id='searchform' method='get' action='${ambit_root}/ui'>
 <div class="seven columns alpha">
 	<h3 class="remove-bottom">
 			Structure search	
@@ -51,7 +50,6 @@
 	</h3>
 	<h6 class="remove-bottom">
 		<input type='text' id='search' name='search' value='' tabindex='1' style='width: 40em;height:1em;'>
-		<input type='hidden' size='3' name='pagesize' value='10'>
 	</h6>	
 </div>
 <div class="one column omega">
@@ -62,5 +60,5 @@
 		<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'/>
 	</h6>
 </div>		
-</form>
+
 </div>	

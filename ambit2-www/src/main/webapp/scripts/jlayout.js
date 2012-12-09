@@ -14,7 +14,7 @@ function searchFormValidation(formName) {
 			'pagesize': {
 				required : true,
 				number	 : true,
-				range: [1, 100]
+				range: [1, 5000]
 			}
 		},
 		messages : {

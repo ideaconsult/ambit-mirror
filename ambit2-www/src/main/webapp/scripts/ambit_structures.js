@@ -5,18 +5,19 @@ function defineStructuresTable(url, query_service, similarity) {
 					{
 						"aoColumnDefs" : [
 								{ // 0
-									"mDataProp" : "compound.uri",
+									"mDataProp" : "compound.URI",
 									"aTargets" : [ 0 ],
 									"sClass" : "center",
-									"bSortable" : false,
-									"bSearchable" : false,
-									"mDataProp" : null,
+									"bSortable" : true,
+									"bSearchable" : true,
+									"bUseRendered" : false,
 									sWidth : "32px",
 									"fnRender" : function(o, val) {
+										console.log(val);
 										if ((val === undefined) || (val == ""))
-											return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ val +"' value='"+val+"'>\n";
+											return "";
 										else
-											return val;											
+											return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ val +"' value='"+val+"'>\n";
 									}
 								},
 								{
@@ -228,9 +229,6 @@ function defineStructuresTable(url, query_service, similarity) {
 								
 																aData.compound.cas = formatValues(
 																		entry,"cas");																
-																$('td:eq(0)',
-																		nRow)
-																		.html("<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+aData.compound.uri+"' value='"+aData.compound.uri+"'>\n");
 																aData.compound.name = formatValues(
 																		entry,
 																		"names");																

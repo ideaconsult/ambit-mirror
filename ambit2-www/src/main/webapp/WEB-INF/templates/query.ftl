@@ -75,14 +75,38 @@
 
 <body>
 
+<form method='GET' name='searchform' id='searchform' method='get' action='${ambit_root}/ui'>
 <div class="container columns" style="margin:0;padding:0;">
 
 <#include "/banner.ftl">
 
-<div class="two columns" style="padding:0;" >
-left menu
+<div class="two columns remove-bottom" style="padding:2px;margin-right:0;" >
+	<div class='ui-widget help' style='fill:auto;'>
+		<div class='ui-widget-header ui-corner-top'>Query</div>
+		<div class='ui-widget-content ui-corner-bottom'>
+			<span id='qtype' ></span>
+			<br/>
+			<span id='qthreshold'></span>
+			<br/>
+			<b><span id='qvalue'></span></b>
+			<span id='description' style='display:none;'></span>
+		</div>
+	</div>
+	<br/>
+	<div class='ui-widget help remove-bottom' style='fill:auto;'>
+		<div class='ui-widget-header ui-corner-top'>More options</div>
+		<div class='ui-widget-content ui-corner-bottom'>
+			<span>Max number of hits</span>
+			<input type='text' size='3' name='pagesize' value='10' style='width:3em;height:1em;'>
+			<br>
+		</div>
+	</div>
+	<br/>
+	<input class='ambit_search' id='submit2' type='submit' value='Refresh' tabindex='3'/>
+	
 </div>
 
+</form>
 <div class="twelve columns remove-bottom" style="padding:0;" >
 
 
@@ -110,17 +134,14 @@ left menu
 </div>
 
 <div class="two columns" style="margin:0;padding:0;" >
-	Query:  <span id='qtype'></span>&nbsp;<span id='qthreshold'></span>
-	<br>
-	<b><span id='qvalue'></span></b>
-	<span id='description' style='display:none;'></span>
-	<br>
 	<input  class='ambit_search' type='submit' value='Do XXX'>
 </div>
 
 
-</div> <!-- container -->
+
 </form>
 
 <#include "/footer.ftl" >
-
+</div> <!-- container -->
+</body>
+</html>
