@@ -7,6 +7,9 @@
 
 <script type='text/javascript'>
 	var purl = $.url();
+	
+	_ambit.selectedModels = purl.param('model_uri');
+	_ambit.selectedDatasets = purl.param('dataset_uri');
 	var option = purl.param('option')===undefined?'auto':purl.param('option');
 	var params = {
 			'threshold'	:purl.param('threshold')===undefined?'0.8':purl.param('threshold'),
@@ -18,9 +21,13 @@
 
 	$(function() {
 		initSearchForm();
+		initTable('#models',_ambit.models,"model_uri[]",_ambit.selectedModels,"selectModel");
+		initTable('#datasets',_ambit.datasets,"dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
 		$("#searchform").validate();
+		$("#accordion" ).accordion();
 	});	
 	
+
 	$(document)
 			.ready(
 					function() {
@@ -83,7 +90,7 @@
 
 <#include "/banner.ftl">
 
-<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 	<div class='ui-widget help half-bottom' style='fill:auto;'>
 		<div class='ui-widget-header ui-corner-top'>Query</div>
 		<div class='ui-widget-content ui-corner-bottom remove-bottom' style='margin:0;padding: 2px;'>
@@ -99,6 +106,7 @@
 		</div>
 	</div>
 	<input class='ambit_search' id='submit2' type='submit' value='Refresh' tabindex='3'/>
+	<#include "/select_features.ftl">
 	<br/>
 	<span id='download' class='help'>Download:<br/>
 	<a href='' id='json'><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'/></a>
@@ -106,19 +114,17 @@
 </div>
 
 </form>
-<div class="twelve columns remove-bottom" style="padding:0;" >
+<div class="eleven columns remove-bottom" style="padding:0;" >
 
 
 <form action="${ambit_root}/ui" method="get">  
 	
 		<table id='structures' class='structable' style='margin:0;' width='100%'>
 					<thead>
-						<th></th>
 						<th>
 						<a href="#" id='selectall' title='Click to select all records' onClick='selecturi(true);'><u>Select</u></a><br>
 						<a href="#" id='unselect' title='Click to unselect all records'  onClick='selecturi(false);'><u>Unselect</u></a>						
 						</th>
-						<th>#</th>
 						<th>CAS</th>
 						<th>Structure</th>
 						<th>Name</th>

@@ -4,12 +4,12 @@ body {
 	color:#344049
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, {
 	color: #729203;
 	FONT-FAMILY: Trebuchet MS, Verdana, Arial;
 font-weight: bold; }
 		
-h4, h5, h6 {
+h3, h4, h5, h6 {
 	color: #344049;
 	FONT-FAMILY: Trebuchet MS, Verdana, Arial;
 font-weight: normal; }
@@ -147,4 +147,16 @@ a.topLinks {
 
 #footer {
 	background :#fff;
+}
+
+.dataTables_info {
+    width: 40%;
+}
+
+
+.dataTables_paginate .fg-button {
+	 background :#fff;
+	 min-width:3.5em;
+	 border:0;
 }	
+ 
