@@ -21,8 +21,8 @@
 
 	$(function() {
 		initSearchForm();
-		initTable('#models',_ambit.models,"model_uri[]",_ambit.selectedModels,"selectModel");
-		initTable('#datasets',_ambit.datasets,"dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
+		_ambit.models = initTable('${ambit_root}/model?max=10','#models',_ambit.models,"model_uri[]",_ambit.selectedModels,"selectModel");
+		_ambit.datasets = initTable('${ambit_root}/dataset?max=10','#datasets',_ambit.datasets,"dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
 		$("#searchform").validate();
 		$("#accordion" ).accordion();
 	});	
