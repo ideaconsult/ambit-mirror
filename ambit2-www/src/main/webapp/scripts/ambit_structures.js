@@ -163,7 +163,7 @@ function defineStructuresTable(url, query_service, similarity) {
 										else
 											return val;
 									},
-									"bVisible" : false
+									"bVisible" : true
 								} ],
 
 						"bProcessing" : true,
@@ -205,6 +205,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									try {
 										$('#description').text(json['query']['summary']);
 									} catch (err) { $('#description').text('');}
+									_ambit['search']['result']=json;
 									identifiers(json);
 									fnCallback(json);
 								},
@@ -247,15 +248,31 @@ function defineStructuresTable(url, query_service, similarity) {
 																.html(aData.compound['inchi']);
 														aData.compound['inchikey'] = formatValues(
 																entry,"inchikey");
-														$('td:eq(' + (8 + offset) + ')',nRow)
+														$('td:eq(' + (7 + offset) + ')',nRow)
 																.html(aData.compound['inchikey']);
 													});
 											
-											//dataset
-											dataset_uri = aData.compound.URI 
-													+ "?feature_uris[]="
-													+ encodeURIComponent(query_service+"/dataset/25/feature")
-													+ "&media=application%2Fjson";		
+											//datasets
+											var features_uri = "";
+											$.each(_ambit.datasets,function(index,dataset) {
+												var dataset_uri = dataset.URI + '/feature';
+												var feature_uri =
+															'&feature_uris[]=' + 
+															((dataset_uri.indexOf('http')==0)?
+															encodeURIComponent(dataset_uri):
+															encodeURIComponent(query_service+dataset_uri));	
+												features_uri += feature_uri;
+											});
+											$.each(_ambit.models,function(index,model) {
+												var feature_uri =
+															'&feature_uris[]=' + 
+															((model.predicted.indexOf('http')==0)?
+															encodeURIComponent(model.predicted):
+															encodeURIComponent(query_service+model.predicted));	
+												features_uri += feature_uri;
+											});
+											
+											var dataset_uri = aData.compound.URI + "?media=application%2Fjson" + features_uri;
 											$.ajax({
 												dataType : "json",
 												url : dataset_uri,
@@ -263,7 +280,7 @@ function defineStructuresTable(url, query_service, similarity) {
 													identifiers(data1,aData);
 												},
 												error : function(xhr, status, err) {},complete : function(xhr, status) {}
-											});
+											});											
 										},
 										error : function(xhr, status, err) {
 										},
@@ -292,15 +309,15 @@ function defineStructuresTable(url, query_service, similarity) {
 							'details');
 					
 				       $('#'+ id).dataTable({
-				    		'bJQueryUI': false, 
+				    		'bJQueryUI': true, 
 				    		'bPaginate': false,
 				    		'bAutoWidth': true,
 							"sScrollY": "200px",
 							//"sScrollXInner": "110%",
-							"bScrollCollapse": true,
+							"bScrollCollapse": false,
 							"sWidth": "90%",
 				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"lfr>t<"fg-toolbar ui-helper-clearfix"ip>',
-				    		"aaSorting" : [ [ 0, 'desc' ] ],
+				    		"aaSorting" : [ [ 0, 'desc' ], [ 1, 'asc' ] ],
 				    		fnDrawCallback: function(){
 				    			  var wrapper = this.parent();
 				    			  var rowsPerPage = this.fnSettings()._iDisplayLength;
@@ -326,40 +343,51 @@ function defineStructuresTable(url, query_service, similarity) {
 	
 	function fnFormatDetails(nTr, id) {
 		var dataEntry = oTable.fnGetData(nTr);
-		var sOut = '<div class="ui-widget help" style="margin-top: 5x;" >';
+		var sOut = '<div class="ui-widget details" style="margin-top: 5x;" >';
 		sOut += '<div">';
-		sOut += '<table width="100%"><tbody>';//outer table, can't get the style right with divs
+		sOut += '<table width="100%" bgcolor="#fafafa" border="2"><thead><th>Type</th><th>Name</th><th>Value</th><th>Endpoint</th></thead><tbody>';//outer table, can't get the style right with divs
+		/*
 		$.each(dataEntry.lookup.cas, function(k, value) {
-			sOut += renderValue("CAS RN",dataEntry.values[value]);
+			sOut += renderValue(null,"[RN]","CAS RN","",dataEntry.values[value],"");
 		});
+		*/
 		$.each(dataEntry.lookup.einecs, function(k, value) {
-			sOut += renderValue("EC",dataEntry.values[value]);
+			sOut += renderValue(null,"[RN]","EC","",dataEntry.values[value],"");
 		});	
 		$.each(dataEntry.lookup.inchi, function(k, value) {
-			sOut += renderValue("InChI",dataEntry.values[value]);
+			sOut += renderValue(null,"[Struc]","InChI","",dataEntry.values[value],"");
 		});		
+		/*
 		$.each(dataEntry.lookup.inchikey, function(k, value) {
-			sOut += renderValue("InChIKey",dataEntry.values[value]);
+			sOut += renderValue(null,"[Struc]","InChIKey","",dataEntry.values[value],"");
 		});
 		$.each(dataEntry.lookup.names, function(k, value) {
-			sOut += renderValue("Name",dataEntry.values[value]);
+			sOut += renderValue(null,"[Name]","Name","",dataEntry.values[value],"");
 		});
+		*/
 		$.each(dataEntry.lookup.reachdate, function(k, value) {
-			sOut += renderValue("REACH date",dataEntry.values[value]);
+			sOut += renderValue(null,"[Data]","REACH date","",dataEntry.values[value],"");
 		});
 		$.each(dataEntry.lookup.smiles, function(k, value) {
-			sOut += renderValue("SMILES",dataEntry.values[value]);
+			sOut += renderValue(null,"[Struc]","SMILES","",dataEntry.values[value],"");
 		});
 		$.each(dataEntry.lookup.misc, function(k, value) {
-			sOut += renderValue(value,dataEntry.values[value]);
+			var feature = _ambit.search.result.feature[value];
+			sOut += renderValue(value,(feature.source.type=='Dataset')?"[Data]":"<a href='" + feature.source.URI +"' target=_blank>[Calc]</a>",
+								feature.title,feature.units,dataEntry.values[value],feature.sameAs);
 		});
 		sOut += '</tbody></table></div></div>\n';		
 		return sOut;
 	}
 	
-	function renderValue(feature, value) {
+	function renderValue(url, type, title, units, value, sameas) {
 		if (value != undefined) {
-			var sOut = "<tr><th>" + feature + "</th><td>" + value + "</td></tr>";
+			var endpoint = sameas.indexOf("http://www.opentox.org/echaEndpoints.owl#")>=0?sameas.replace("http://www.opentox.org/echaEndpoints.owl#",""):"";
+			var sOut = "<tr bgcolor='#fff'><th>"+ (type==null?"":type) +"</th><th bgcolor='#fafafa'>" +
+					(url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'>?</a>" )) +
+					"</th><td>" + value + "</td><td bgcolor='#fafafa'>"+
+							endpoint 
+							+ "</td></tr>";
 			return sOut;
 		} else return "";
 	}
