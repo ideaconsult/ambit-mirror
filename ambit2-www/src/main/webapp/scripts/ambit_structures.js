@@ -258,8 +258,11 @@ function defineStructuresTable(url, query_service, similarity) {
 													features_uri += feature_uri;
 												}
 											});
-											
-											var dataset_uri = aData.compound.URI + "?media=application%2Fjson" + features_uri;
+											var cmpURI = aData.compound.URI;
+											if (cmpURI.indexOf("/conformer") >= 0) {
+												cmpURI = aData.compound.URI.substring(0, aData.compound.URI.indexOf("/conformer"));
+											}
+											var dataset_uri = cmpURI + "?media=application%2Fjson" + features_uri;
 											$.ajax({
 												dataType : "json",
 												url : dataset_uri,
@@ -292,8 +295,7 @@ function defineStructuresTable(url, query_service, similarity) {
 					this.src = query_service + "/images/zoom_out.png";
 					this.title='Click to close compound details panel';
 					var id = 'values'+getID();
-					oTable.fnOpen(nTr, fnFormatDetails(nTr,id),
-							'details');
+					oTable.fnOpen(nTr, fnFormatDetails(nTr,id),	'details');
 					
 				       $('#'+ id).dataTable({
 				    		'bJQueryUI': true, 
@@ -303,10 +305,10 @@ function defineStructuresTable(url, query_service, similarity) {
 							//"sScrollXInner": "110%",
 							"bScrollCollapse": true,
 							"sWidth": "90%",
-							"sHeight": "10em",
-				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"lfr>t<"fg-toolbar ui-helper-clearfix"ip>',
-				    		"aaSorting" : [ [ 0, 'desc' ], [ 1, 'asc' ] ],
-				    		fnDrawCallback: function(){
+							//"sHeight": "10em"
+				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"r>t<"fg-toolbar ui-helper-clearfix"ip>',
+				    		"aaSorting" : [ [ 0, 'desc' ], [ 3, 'asc' ] ],
+				    		fnDrawCallback: function() {
 				    			  var wrapper = this.parent();
 				    			  var rowsPerPage = this.fnSettings()._iDisplayLength;
 				    			  var rowsToShow = this.fnSettings().fnRecordsDisplay();
@@ -323,7 +325,7 @@ function defineStructuresTable(url, query_service, similarity) {
 				    			  else {
 				    			    $('.dataTables_length', wrapper).css('visibility', 'visible');
 				    			  }
-				    		}		
+				    		}	
     		
 				    	});								       
 				}
@@ -333,17 +335,17 @@ function defineStructuresTable(url, query_service, similarity) {
 		var dataEntry = oTable.fnGetData(nTr);
 		var sOut = '<div class="ui-widget details" style="margin-top: 5x;" >';
 		sOut += '<div">';
-		sOut += '<table width="100%" bgcolor="#fafafa" border="2"><thead><th>Type</th><th>Name</th><th>Value</th><th>Endpoint</th></thead><tbody>';//outer table, can't get the style right with divs
+		sOut += '<table id="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><th>Type</th><th>Name</th><th>Value</th><th>Endpoint</th><th>&nbsp;</th></thead><tbody>';//outer table, can't get the style right with divs
 		/*
 		$.each(dataEntry.lookup.cas, function(k, value) {
 			sOut += renderValue(null,"[RN]","CAS RN","",dataEntry.values[value],"");
 		});
 		*/
 		$.each(dataEntry.lookup.einecs, function(k, value) {
-			sOut += renderValue(null,"[RN]","EC","",dataEntry.values[value],"");
+			sOut += renderValue(null,"[RN]","EC","",dataEntry.values[value],"",null);
 		});	
 		$.each(dataEntry.lookup.inchi, function(k, value) {
-			sOut += renderValue(null,"[Struc]","InChI","",dataEntry.values[value],"");
+			sOut += renderValue(null,"[Struc]","InChI","",dataEntry.values[value],"",null);
 		});		
 		/*
 		$.each(dataEntry.lookup.inchikey, function(k, value) {
@@ -354,27 +356,28 @@ function defineStructuresTable(url, query_service, similarity) {
 		});
 		*/
 		$.each(dataEntry.lookup.reachdate, function(k, value) {
-			sOut += renderValue(null,"[Data]","REACH date","",dataEntry.values[value],"");
+			sOut += renderValue(null,"[Data]","REACH date","",dataEntry.values[value],"",null);
 		});
 		$.each(dataEntry.lookup.smiles, function(k, value) {
-			sOut += renderValue(null,"[Struc]","SMILES","",dataEntry.values[value],"");
+			sOut += renderValue(null,"[Struc]","SMILES","",dataEntry.values[value],"",null);
 		});
 		$.each(dataEntry.lookup.misc, function(k, value) {
 			var feature = _ambit.search.result.feature[value];
 			sOut += renderValue(value,(feature.source.type=='Dataset')?"[Data]":"<a href='" + feature.source.URI +"' target=_blank>[Calc]</a>",
-								feature.title,feature.units,dataEntry.values[value],feature.sameAs);
+								feature.title,feature.units,dataEntry.values[value],feature.sameAs,feature.source);
 		});
 		sOut += '</tbody></table></div></div>\n';		
 		return sOut;
 	}
 	
-	function renderValue(url, type, title, units, value, sameas) {
+	function renderValue(url, type, title, units, value, sameas, source) {
 		if (value != undefined) {
 			var endpoint = sameas.indexOf("http://www.opentox.org/echaEndpoints.owl#")>=0?sameas.replace("http://www.opentox.org/echaEndpoints.owl#",""):"";
 			var sOut = "<tr bgcolor='#ffffff'><th>"+ (type==null?"":type) +"</th><th bgcolor='#fafafa'>" +
 					(url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'>?</a>" )) +
 					"</th><td>" + value + "</td><td bgcolor='#fafafa'>"+
-							endpoint 
+							endpoint + "</td><td>" 
+							+ (source==null?"":"<a href='"+source.URI+"' target=_blank title='"+source.URI+"'>" + source.type +"</a>") 
 							+ "</td></tr>";
 			return sOut;
 		} else return "";

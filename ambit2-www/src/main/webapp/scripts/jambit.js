@@ -95,7 +95,21 @@ var _ambit = {
 	'selectedModels' : []
 };
 
-function initTable(tableSelector, anArray, checkbox, checked, clickHandler) {
+function initTable(query_service, tableSelector, anArray, checkbox, checked, clickHandler) {
+	var uri = query_service + "&media=application%2Fjson";
+	$.ajax({
+		async: false,
+		dataType : "json",
+		url : uri,
+		success : function(data1, status, xhr) {
+			anArray = data1;
+		},
+		error : function(xhr, status, err) {
+			anArray = [];
+		},
+		complete : function(xhr, status) {}
+	});	
+	
 	$(tableSelector).dataTable({
 			"aaData" : anArray,
 			"aoColumnDefs" : [
@@ -154,11 +168,14 @@ function initTable(tableSelector, anArray, checkbox, checked, clickHandler) {
 				  }
 			}		
 	
-		});			
+		});	
+	
+	return anArray;
 }
 
 function selectDataset(event) {
 	event = event || window.event;
+	if (_ambit.selectedDatasets===undefined) _ambit.selectedDatasets = [];
 	if (event.srcElement.checked) {
 		if (jQuery.inArray(event.srcElement.value,_ambit.selectedDatasets)<0)
 			_ambit.selectedDatasets.push(event.srcElement.value);
@@ -168,6 +185,7 @@ function selectDataset(event) {
 
 function selectModel(event) {
 	event = event || window.event;
+	if (_ambit.selectedModels===undefined) _ambit.selectedModels = [];
 	if (event.srcElement.checked) {
 		if (jQuery.inArray(event.srcElement.value,_ambit.selectedModels)<0)
 			_ambit.selectedModels.push(event.srcElement.value);
