@@ -196,6 +196,9 @@
 				<url>http://apps.ideaconsult.net:8180/manager</url>
 				<server>eos</server>
 				<path>/ambit2</path>
+				 <systemProperties>
+            		<JAVA_OPTS>XX:-UseSplitVerifier -Djava.util.Arrays.useLegacyMergeSort</JAVA_OPTS>
+          		</systemProperties>
 			</configuration>
                 </plugin>
                 <!-- 
