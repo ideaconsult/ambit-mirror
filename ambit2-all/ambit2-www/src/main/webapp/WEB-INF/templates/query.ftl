@@ -83,28 +83,21 @@
 
 <#include "/banner.ftl">
 
-<div class="two columns remove-bottom" style="padding:2px;margin-right:0;" >
-	<div class='ui-widget help' style='fill:auto;'>
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+	<div class='ui-widget help half-bottom' style='fill:auto;'>
 		<div class='ui-widget-header ui-corner-top'>Query</div>
-		<div class='ui-widget-content ui-corner-bottom'>
+		<div class='ui-widget-content ui-corner-bottom remove-bottom' style='margin:0;padding: 2px;'>
 			<span id='qtype' ></span>
 			<br/>
 			<span id='qthreshold'></span>
 			<br/>
 			<b><span id='qvalue'></span></b>
 			<span id='description' style='display:none;'></span>
-		</div>
-	</div>
-	<br/>
-	<div class='ui-widget help remove-bottom' style='fill:auto;'>
-		<div class='ui-widget-header ui-corner-top'>More options</div>
-		<div class='ui-widget-content ui-corner-bottom'>
+			<br/>
 			<span>Max number of hits</span>
-			<input type='text' size='3' name='pagesize' value='10' style='width:3em;height:1em;'>
-			<br>
+			<input type='text' size='3' name='pagesize' value='10' style='width:5em;height:1.5em;margin-bottom:0;padding: 2px;'>
 		</div>
 	</div>
-	<br/>
 	<input class='ambit_search' id='submit2' type='submit' value='Refresh' tabindex='3'/>
 	<br/>
 	<span id='download' class='help'>Download:<br/>
