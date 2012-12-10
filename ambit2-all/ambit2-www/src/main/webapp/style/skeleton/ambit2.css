@@ -139,6 +139,10 @@ a.topLinks {
 	color: #729203;
 }
 
+.help  a {
+	color: #729203;
+}
+
 .details {
 	font-size: 0.9em;
 	font-weight: !important;
