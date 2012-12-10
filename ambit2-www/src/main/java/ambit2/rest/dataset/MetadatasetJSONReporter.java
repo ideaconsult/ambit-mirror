@@ -16,7 +16,7 @@ import ambit2.db.readers.IQueryRetrieval;
  *
  * @param <Q>
  */
-public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> extends MetadatasetURIReporter<Q> {
+public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> extends DatasetURIReporter<Q> {
 	/**
 	 * 
 	 */
@@ -74,9 +74,8 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 					jsonFeature.rights.jsonname(),item.getLicenseURI()==null?"":item.getLicenseURI(),rights
 					));
 			comma = ",";
-
 		} catch (Exception x) {
-			
+			x.printStackTrace();
 		}
 		return item;
 	}
@@ -106,6 +105,6 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 	
 	@Override
 	public String getFileExtension() {
-		return "json";
+		return null;
 	}
 }
