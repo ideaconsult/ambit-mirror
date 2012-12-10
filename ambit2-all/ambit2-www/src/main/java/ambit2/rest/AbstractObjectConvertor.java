@@ -32,13 +32,13 @@ public abstract  class AbstractObjectConvertor<T,Q extends IQueryRetrieval<T>,Ou
 	 */
 	private static final long serialVersionUID = 6126693410309179856L;
 	
-	public abstract Representation process(Output doc) throws AmbitException; 
+	public abstract Representation processDoc(Output doc) throws AmbitException; 
 	protected abstract Output createOutput(Q query) throws AmbitException;
 	
 	@Override
 	public Representation process(Q query) throws AmbitException {
 		reporter.setOutput(createOutput(query));
-		Representation r =  process(reporter.process(query));
+		Representation r =  processDoc(reporter.process(query));
 		try { reporter.close(); } catch (Exception x) {}
 		return r;
 	};
