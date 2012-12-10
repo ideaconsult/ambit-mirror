@@ -36,23 +36,23 @@ function identifiers(opentox, targetEntry) {
     $.each(opentox.feature, function(k, value) {
 
     		if (value.sameAs == "http://www.opentox.org/api/1.1#IUPACName") {
-    			if (opentox.feature[k]) { if (lookup.names.indexOf(k)<0) lookup.names.push(k); }
+    			if (opentox.feature[k]) { if (jQuery.inArray(k,lookup.names)<0) lookup.names.push(k); }
     		} else if (value.sameAs == "http://www.opentox.org/api/1.1#ChemicalName") {
-	        	if (opentox.feature[k]) { if (lookup.names.indexOf(k)<0) lookup.names.push(k); }
+	        	if (opentox.feature[k]) { if (jQuery.inArray(k,lookup.names)<0) lookup.names.push(k); }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#CASRN") { 
-	        	if (opentox.feature[k]) { if (lookup.cas.indexOf(k)<0) lookup.cas.push(k);   }
+	        	if (opentox.feature[k]) { if (jQuery.inArray(k,lookup.cas)<0) lookup.cas.push(k);   }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#EINECS") { 
-	        	if (opentox.feature[k]) {if (lookup.einecs.indexOf(k)<0) lookup.einecs.push(k);   }	        
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.einecs)<0) lookup.einecs.push(k);   }	        
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#REACHRegistrationDate") { 
-	        	if (opentox.feature[k]) {if (lookup.reachdate.indexOf(k)<0) lookup.reachdate.push(k);   }
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.reachdate)<0) lookup.reachdate.push(k);   }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#SMILES") { 
-	        	if (opentox.feature[k]) {if (lookup.smiles.indexOf(k)<0) lookup.smiles.push(k);   }
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.smiles)<0) lookup.smiles.push(k);   }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChI") { 
-	        	if (opentox.feature[k]) {if (lookup.inchi.indexOf(k)<0) lookup.inchi.push(k);   }
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchi)<0) lookup.inchi.push(k);   }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChIKey") { 
-	        	if (opentox.feature[k]) {if (lookup.inchikey.indexOf(k)<0) lookup.inchikey.push(k);  }
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchikey)<0) lookup.inchikey.push(k);  }
 	        } else  {
-	        	if (lookup.misc.indexOf(k)<0) lookup.misc.push(k);   
+	        	if (jQuery.inArray(k,lookup.misc)<0) lookup.misc.push(k);   
 	        }	        
         	/*
 	        } else {
