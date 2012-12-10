@@ -49,7 +49,8 @@
 		&nbsp;
 	</h3>
 	<h6 class="remove-bottom">
-		<input type='text' id='search' name='search' value='' tabindex='1' style='width: 40em;height:1em;'>
+		<input type='text' style='margin:0;padding-bottom:0;'  id='search' name='search' value='' tabindex='1' style='width: 40em;height:1em;'>
+		<a href='#' class='help' style='margin:0;padding:0;' onClick='startEditor("${ambit_root}");'>Draw substructure</a>
 	</h6>	
 </div>
 <div class="one column omega">
