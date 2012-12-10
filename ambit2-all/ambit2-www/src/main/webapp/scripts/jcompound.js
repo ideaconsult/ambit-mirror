@@ -16,7 +16,9 @@ function identifiers(opentox, targetEntry) {
 
 	if (targetEntry != undefined) {
 		lookup = targetEntry["lookup"];
+		$.extend(_ambit.search.result["feature"],opentox["feature"]);
 	}
+
 	//names
 	$.each(opentox.dataEntry, function(k, value) {
 		value["lookup"] = lookup;
@@ -49,8 +51,12 @@ function identifiers(opentox, targetEntry) {
 	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.smiles)<0) lookup.smiles.push(k);   }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChI") { 
 	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchi)<0) lookup.inchi.push(k);   }
+	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChI_std") { 
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchi)<0) lookup.inchi.push(k);   }	        	
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChIKey") { 
 	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchikey)<0) lookup.inchikey.push(k);  }
+	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChIKey_std") { 
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchikey)<0) lookup.inchikey.push(k);  }	        	
 	        } else  {
 	        	if (jQuery.inArray(k,lookup.misc)<0) lookup.misc.push(k);   
 	        }	        

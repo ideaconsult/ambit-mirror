@@ -139,6 +139,12 @@ a.topLinks {
 	color: #729203;
 }
 
+.details {
+	font-size: 0.9em;
+	font-weight: !important;
+	color: #344049;
+}
+
 #footer {
 	background :#fff;
 }	

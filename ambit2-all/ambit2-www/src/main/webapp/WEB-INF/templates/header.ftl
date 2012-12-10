@@ -44,6 +44,7 @@
 	
 	<!-- AMBIT JS
 	================================================== -->
+	<script type='text/javascript' src='${ambit_root}/scripts/jambit.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/jlayout.js'></script>
 	<script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/oecdcategories.js'></script>
