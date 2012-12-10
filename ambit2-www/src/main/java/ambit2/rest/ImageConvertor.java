@@ -34,7 +34,7 @@ public class ImageConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractObj
 	}
 
 	@Override
-	public Representation process(final BufferedImage image) throws AmbitException {
+	public Representation processDoc(final BufferedImage image) throws AmbitException {
 		 return new OutputRepresentation(mediaType) {
 	            @Override
 	            public void write(OutputStream stream) throws IOException {

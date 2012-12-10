@@ -65,7 +65,7 @@ public class RDFJenaConvertor<T,Q extends IQueryRetrieval<T>>  extends AbstractO
 	}
 
 	@Override
-	public Representation process(final OntModel jenaModel) throws AmbitException {
+	public Representation processDoc(final OntModel jenaModel) throws AmbitException {
 		/*
 		To optimise the speed of writing RDF/XML it is suggested that all URI processing is turned off. 
 		Also do not use RDF/XML-ABBREV. 

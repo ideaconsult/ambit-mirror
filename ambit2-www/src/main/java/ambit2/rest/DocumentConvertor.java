@@ -49,7 +49,7 @@ public class DocumentConvertor<T,Q extends IQueryRetrieval<T>>
 			throw new AmbitException(x);
 		}
 	};
-	public Representation process(final Document doc) throws AmbitException {
+	public Representation processDoc(final Document doc) throws AmbitException {
 		 return new OutputRepresentation(MediaType.TEXT_XML) {
 			 @Override
 			public void write(OutputStream out) throws IOException {
