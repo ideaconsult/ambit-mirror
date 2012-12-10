@@ -12,36 +12,18 @@ function defineStructuresTable(url, query_service, similarity) {
 									sWidth : "16px",
 									"bUseRendered" : "true",
 									"fnRender" : function(o,val) {
-										return "<span class='zoomstruc'><img  src='"+query_service+"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'></span>";
+										var uri = o.aData["compound"]["URI"];
+										return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ 
+													uri +"' value='"+uri+"'><br/>" + 
+													"<span class='zoomstruc'>"+
+													"<img src='"+query_service+"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'>"+
+													"</span>";
 									}
 								},						                  
-								{ // 1
-									"mDataProp" : "compound.URI",
-									"aTargets" : [ 1 ],
-									"sClass" : "center",
-									"bSortable" : false,
-									"bSearchable" : true,
-									"bUseRendered" : false,
-									sWidth : "32px",
-									"fnRender" : function(o, val) {
-										if ((val === undefined) || (val == ""))
-											return "";
-										else
-											return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ val +"' value='"+val+"'>\n";
-									}
-								},
-								{
-									"mDataProp" :null,
-									"aTargets" : [ 2 ],
-									"bSortable" : false,
-									"bSearchable" : false,
-									sWidth : "5%",
-									"bVisible" : true
-								},
 								{
 									"mDataProp" : "compound.cas",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 3 ],
+									"aTargets" : [ 1 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
@@ -58,7 +40,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.URI",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 4 ],
+									"aTargets" : [ 2 ],
 									"bSearchable" : true,
 									"bUseRendered" : false,
 									"bSortable" : true,
@@ -91,7 +73,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.name",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 5 ],
+									"aTargets" : [ 3 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
@@ -108,7 +90,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : "compound.metric",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 6 ],
+									"aTargets" : [ 4 ],
 									"sTitle" : "Similarity",
 									"sClass" : "similarity",
 									"bSearchable" : true,
@@ -119,7 +101,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 7 ],
+									"aTargets" : [ 5 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -135,7 +117,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								{
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 8 ],
+									"aTargets" : [ 6 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -152,7 +134,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
 									"sClass" : "inchikey",
-									"aTargets" : [ 9 ],
+									"aTargets" : [ 7 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : true,
@@ -171,10 +153,12 @@ function defineStructuresTable(url, query_service, similarity) {
 						"bStateSave" : false,
 						"bJQueryUI" : true,
 						"bPaginate" : true,
-						"sPaginate" : "dataTables_paginate paging_",
+						"sPaginationType": "full_numbers",
+						"sPaginate" : ".dataTables_paginate _paging",
 						"bDeferRender": true,
 						"bSearchable": true,
 						//"sDom" : 'R<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix remove-bottom"ip>',
+						"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
 						"sAjaxSource": url,
 						"sAjaxDataProp" : "dataEntry",
 						"fnServerData" : function(sSource, aoData, fnCallback,
@@ -218,11 +202,10 @@ function defineStructuresTable(url, query_service, similarity) {
 						},
 						"oLanguage" : {
 							"sProcessing" : "<img src='images/24x24_ambit.gif' border='0'>",
-							"sLoadingRecords" : "No records found.",
-							"sInfo": "Query results"  
+							"sLoadingRecords" : "No records found."  
 						},
 						"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
-			                $('td:eq(2)', nRow).html(iDisplayIndex +1);
+			              //  $('td:eq(2)', nRow).html(iDisplayIndex +1);
 
 			                // retrieve identifiers
 							id_uri = query_service
@@ -237,39 +220,43 @@ function defineStructuresTable(url, query_service, similarity) {
 											$.each(data.dataEntry,function(index,entry) {
 														aData.compound.cas = formatValues(entry,"cas");																
 														aData.compound.name = formatValues(entry,"names");																
-														$('td:eq(5)',nRow).html(aData.compound.name);
-														$('td:eq(3)',nRow).html(aData.compound.cas);
+														$('td:eq(3)',nRow).html(aData.compound.name);
+														$('td:eq(1)',nRow).html(aData.compound.cas);
 														aData.compound['smiles'] = formatValues(entry,"smiles");
 														var offset = similarity?1:0;
-														$('td:eq(' + (6 + offset) + ')',nRow)
+														$('td:eq(' + (4 + offset) + ')',nRow)
 																.html(aData.compound['smiles']);
 														aData.compound['inchi'] = formatValues(entry,"inchi");
-														$('td:eq(' + (7 + offset) + ')',nRow)
+														$('td:eq(' + (5 + offset) + ')',nRow)
 																.html(aData.compound['inchi']);
 														aData.compound['inchikey'] = formatValues(
 																entry,"inchikey");
-														$('td:eq(' + (7 + offset) + ')',nRow)
+														$('td:eq(' + (5 + offset) + ')',nRow)
 																.html(aData.compound['inchikey']);
 													});
 											
 											//datasets
 											var features_uri = "";
 											$.each(_ambit.datasets,function(index,dataset) {
-												var dataset_uri = dataset.URI + '/feature';
-												var feature_uri =
-															'&feature_uris[]=' + 
-															((dataset_uri.indexOf('http')==0)?
-															encodeURIComponent(dataset_uri):
-															encodeURIComponent(query_service+dataset_uri));	
-												features_uri += feature_uri;
+												if (jQuery.inArray(dataset.URI,_ambit.selectedDatasets)>=0) {
+													var dataset_uri = dataset.URI + '/feature';
+													var feature_uri =
+																'&feature_uris[]=' + 
+																((dataset_uri.indexOf('http')==0)?
+																encodeURIComponent(dataset_uri):
+																encodeURIComponent(query_service+dataset_uri));	
+													features_uri += feature_uri;
+												}
 											});
 											$.each(_ambit.models,function(index,model) {
-												var feature_uri =
-															'&feature_uris[]=' + 
-															((model.predicted.indexOf('http')==0)?
-															encodeURIComponent(model.predicted):
-															encodeURIComponent(query_service+model.predicted));	
-												features_uri += feature_uri;
+												if (jQuery.inArray(model.URI,_ambit.selectedModels)>=0) {													
+													var feature_uri =
+																'&feature_uris[]=' + 
+																((model.predicted.indexOf('http')==0)?
+																encodeURIComponent(model.predicted):
+																encodeURIComponent(query_service+model.predicted));	
+													features_uri += feature_uri;
+												}
 											});
 											
 											var dataset_uri = aData.compound.URI + "?media=application%2Fjson" + features_uri;
@@ -314,8 +301,9 @@ function defineStructuresTable(url, query_service, similarity) {
 				    		'bAutoWidth': true,
 							"sScrollY": "200px",
 							//"sScrollXInner": "110%",
-							"bScrollCollapse": false,
+							"bScrollCollapse": true,
 							"sWidth": "90%",
+							"sHeight": "10em",
 				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"lfr>t<"fg-toolbar ui-helper-clearfix"ip>',
 				    		"aaSorting" : [ [ 0, 'desc' ], [ 1, 'asc' ] ],
 				    		fnDrawCallback: function(){
@@ -383,7 +371,7 @@ function defineStructuresTable(url, query_service, similarity) {
 	function renderValue(url, type, title, units, value, sameas) {
 		if (value != undefined) {
 			var endpoint = sameas.indexOf("http://www.opentox.org/echaEndpoints.owl#")>=0?sameas.replace("http://www.opentox.org/echaEndpoints.owl#",""):"";
-			var sOut = "<tr bgcolor='#fff'><th>"+ (type==null?"":type) +"</th><th bgcolor='#fafafa'>" +
+			var sOut = "<tr bgcolor='#ffffff'><th>"+ (type==null?"":type) +"</th><th bgcolor='#fafafa'>" +
 					(url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'>?</a>" )) +
 					"</th><td>" + value + "</td><td bgcolor='#fafafa'>"+
 							endpoint 
