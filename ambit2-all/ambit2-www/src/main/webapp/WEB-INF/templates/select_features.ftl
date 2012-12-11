@@ -2,7 +2,7 @@
     <h5>Datasets</h5>
     <div style="margin:0;padding:2px;">
         <table id='datasets' style="margin:0;padding:0px;">
-        <thead>
+        <thead style='display:none;'>
         <th></th>
         <th>Dataset</th>
         </thead>
@@ -13,7 +13,7 @@
     <h5>Predictions</h5>
     <div style="margin:0;padding:2px;">
         <table id='models' style="margin:0;padding:0px;">
-        <thead>
+        <thead style='display:none;'>
         <th></th>
         <th>Model</th>
         </thead>

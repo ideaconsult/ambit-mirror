@@ -1,4 +1,6 @@
 var _ambit = {
+	'query_service' : null,	
+	'cache' : false,	
 	'search' : { 
 		'uri': null, 
 		'result': null,
@@ -95,7 +97,7 @@ var _ambit = {
 	'selectedModels' : []
 };
 
-function initTable(query_service, tableSelector, anArray, checkbox, checked, clickHandler) {
+function initTable(root, query_service, tableSelector, anArray, checkbox, checked, clickHandler) {
 	var uri = query_service + "&media=application%2Fjson";
 	$.ajax({
 		async: false,
@@ -122,10 +124,18 @@ function initTable(query_service, tableSelector, anArray, checkbox, checked, cli
 			  		"fnRender" : function(o,val) {
 	  						var uri = o.aData["URI"];
 	  						var isChecked = jQuery.inArray(uri,checked)>=0?"checked":"";
+	  						
+	  						var prm = {'option': 'auto', 'type':'url', 'search':uri, 'pagesize' : 10};
+	  						
+							var browseURI =  "";
+							if (root != null) {
+								browseURI = root + "/ui?" + $.param(prm,false);
+								browseURI = "<br/><a href='"+browseURI+"' style='margin-left:2px;'><img src='"+
+											root+"/images/table.png' title='Browse the dataset'></a>";
+							}
 		  					return "<input class='selecturi' type='checkbox' "+ isChecked +" name='"+checkbox+"' onClick='"+
 		  						clickHandler+"(event);' title='Select "+ 
-		  						o.aData.URI +"' value='"+o.aData.URI+"'>";
-		  									
+		  						o.aData.URI +"' value='"+o.aData.URI+"'>"+browseURI;
 		  			}
 			  	},			                  
 				{ //1
@@ -146,7 +156,7 @@ function initTable(query_service, tableSelector, anArray, checkbox, checked, cli
 			"aaSorting" : [[ 1, 'asc' ] ],
 			"sWidth": "100%",
 			"sDom": 'Trtp',
-			'bJQueryUI': true, 
+			'bJQueryUI': false, 
 			'bPaginate': true,
 			'bAutoWidth': true,
 			fnDrawCallback: function(){
