@@ -13,8 +13,14 @@ function defineStructuresTable(url, query_service, similarity) {
 									"bUseRendered" : "true",
 									"fnRender" : function(o,val) {
 										var uri = o.aData["compound"]["URI"];
+										
+										var prm = {'option': 'similarity', 'type':'url', 'search':uri};
+										var searchURI = query_service + "/ui?" + $.param(prm,false);
+										
 										return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ 
-													uri +"' value='"+uri+"'><br/>" + 
+													uri +"' value='"+uri+"'><br/>" +
+													"<a href='"+searchURI+"' class='help' title='Find similar'>Find</a>" +
+													"<br/>"+
 													"<span class='zoomstruc'>"+
 													"<img src='"+query_service+"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'>"+
 													"</span>";
@@ -27,7 +33,6 @@ function defineStructuresTable(url, query_service, similarity) {
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
-									"sWidth" : "10%",
 									"sClass" : "cas",
 									"fnRender" : function(o, val) {
 										if ((val === undefined) || (val == ""))
@@ -55,19 +60,15 @@ function defineStructuresTable(url, query_service, similarity) {
 										// if ((opentox["model_uri"]==null) ||
 										// (opentox["model_uri"] == undefined))
 										// {
+										
+										var prm = {'option': 'auto', 'type':'url', 'search':cmpURI, 'pagesize': 1};
+										var searchURI = query_service + "/ui?" + $.param(prm,false);
+										
 										cmpURI = cmpURI + "?media=image/png";
-										// } else {
-										// cmpURI = opentox["model_uri"] +
-										// "?dataset_uri=" + cmpURI +
-										// "&media=image/png";
-										// }
-										/*
-										 * "<a
-										 * href=\"%s%s/%d?headless=true&details=false&media=text/html\"
-										 * title=\"Molecule\">Molecule</a>",
-										 */
-										return '<img class="ui-widget-content" title="Structure diagram" border="0" src="'
-												+ cmpURI + '&w='+imgSize+'&h='+imgSize+'">';
+										return '<a href="'+searchURI+'" >' +
+											   '<img class="ui-widget-content" title="Click to display this compound only" border="0" src="'
+												+ cmpURI + '&w='+imgSize+'&h='+imgSize+'">' 
+												+ "</a>";
 									}
 								},
 								{
@@ -76,6 +77,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"aTargets" : [ 3 ],
 									"bSearchable" : true,
 									"bSortable" : true,
+									"sWidth" : "20%",
 									"bUseRendered" : false,
 									"sClass" : "names",
 									"fnRender" : function(o, val) {
@@ -103,14 +105,15 @@ function defineStructuresTable(url, query_service, similarity) {
 									"asSorting" : [ "asc", "desc" ],
 									"aTargets" : [ 5 ],
 									"bSearchable" : true,
+									"sWidth" : "15%",
 									"bSortable" : true,
 									"bUseRendered" : true,
 									"fnRender" : function(o, val) {
-										if ((val === undefined) || (val == ""))
-											return formatValues(o.aData,
-													"smiles");
-										else
-											return val;
+										var smiles = val;
+										if ((val === undefined) || (val == "")) {
+											smiles = formatValues(o.aData,"smiles");
+										} 
+										return smiles;
 									},
 									"bVisible" : true
 								},
@@ -273,6 +276,7 @@ function defineStructuresTable(url, query_service, similarity) {
 											});											
 										},
 										error : function(xhr, status, err) {
+											//console.log(status + err);
 										},
 										complete : function(xhr, status) {
 										}
@@ -297,8 +301,8 @@ function defineStructuresTable(url, query_service, similarity) {
 					var id = 'values'+getID();
 					oTable.fnOpen(nTr, fnFormatDetails(nTr,id),	'details');
 					
-				       $('#'+ id).dataTable({
-				    		'bJQueryUI': true, 
+				       $('.'+ id).dataTable({
+				    		'bJQueryUI': false, 
 				    		'bPaginate': false,
 				    		'bAutoWidth': true,
 							"sScrollY": "200px",
@@ -306,7 +310,7 @@ function defineStructuresTable(url, query_service, similarity) {
 							"bScrollCollapse": true,
 							"sWidth": "90%",
 							//"sHeight": "10em"
-				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"r>t<"fg-toolbar ui-helper-clearfix"ip>',
+				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"r>t<"fg-toolbar ui-helper-clearfix"p>',
 				    		"aaSorting" : [ [ 0, 'desc' ], [ 3, 'asc' ] ],
 				    		fnDrawCallback: function() {
 				    			  var wrapper = this.parent();
@@ -328,24 +332,32 @@ function defineStructuresTable(url, query_service, similarity) {
 				    		}	
     		
 				    	});								       
+				       $('#_tabs'+ id).tabs();
 				}
 			});
 	
 	function fnFormatDetails(nTr, id) {
 		var dataEntry = oTable.fnGetData(nTr);
-		var sOut = '<div class="ui-widget details" style="margin-top: 5x;" >';
-		sOut += '<div">';
-		sOut += '<table id="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><th>Type</th><th>Name</th><th>Value</th><th>Endpoint</th><th>&nbsp;</th></thead><tbody>';//outer table, can't get the style right with divs
+		var sOut = ""; //'<div class="ui-widget details" style="margin-top: 5x;" >';
+		sOut += '<div id="_tabs'+id+'" class="details" style="margin-top: 5x;" >';
+		sOut += '<ul>';
+		sOut += '<li><a href="#tabs-id">Identifiers</a></li>'+
+	        	'<li><a href="#tabs-data">Data</a></li>'+	
+	        	'<li><a href="#tabs-predictions">Predictions</a></li>'+
+	        	'</ul>\n';
+		
+		sOut += '<div id="tabs-id">';
+		sOut += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><th>Name</th><th>Value</th></thead><tbody>';
 		/*
 		$.each(dataEntry.lookup.cas, function(k, value) {
 			sOut += renderValue(null,"[RN]","CAS RN","",dataEntry.values[value],"");
 		});
 		*/
 		$.each(dataEntry.lookup.einecs, function(k, value) {
-			sOut += renderValue(null,"[RN]","EC","",dataEntry.values[value],"",null);
+			sOut += renderValue(null,"EC","",dataEntry.values[value],"",null);
 		});	
 		$.each(dataEntry.lookup.inchi, function(k, value) {
-			sOut += renderValue(null,"[Struc]","InChI","",dataEntry.values[value],"",null);
+			sOut += renderValue(null,"InChI","",dataEntry.values[value],"",null);
 		});		
 		/*
 		$.each(dataEntry.lookup.inchikey, function(k, value) {
@@ -355,30 +367,68 @@ function defineStructuresTable(url, query_service, similarity) {
 			sOut += renderValue(null,"[Name]","Name","",dataEntry.values[value],"");
 		});
 		*/
+		
 		$.each(dataEntry.lookup.reachdate, function(k, value) {
-			sOut += renderValue(null,"[Data]","REACH date","",dataEntry.values[value],"",null);
+			sOut += renderValue(null,"REACH date","",dataEntry.values[value],"",null);
 		});
 		$.each(dataEntry.lookup.smiles, function(k, value) {
-			sOut += renderValue(null,"[Struc]","SMILES","",dataEntry.values[value],"",null);
+			sOut += renderValue(null,"SMILES","",dataEntry.values[value],"",null);
 		});
+		sOut += '</tbody></table></div>\n';
+		
+		var sOutData = '<div id="tabs-data">';
+		sOutData += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><th>Dataset</th><th>Property</th><th>Value</th><th>Endpoint</th></thead><tbody>';
+
+		var sOutCalc = '<div id="tabs-predictions">';
+		sOutCalc += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></thead><tbody>';
+
 		$.each(dataEntry.lookup.misc, function(k, value) {
 			var feature = _ambit.search.result.feature[value];
-			sOut += renderValue(value,(feature.source.type=='Dataset')?"[Data]":"<a href='" + feature.source.URI +"' target=_blank>[Calc]</a>",
-								feature.title,feature.units,dataEntry.values[value],feature.sameAs,feature.source);
+			switch (feature.source.type) {
+			case 'Dataset': {
+				sOutData += renderValue(value,feature.title,feature.units,dataEntry.values[value],feature.sameAs,feature.source);
+				break;
+			}
+			default: {
+				sOutCalc += renderValue(value,feature.title,feature.units,dataEntry.values[value],feature.sameAs,feature.source);
+				break;
+			}	
+			}
 		});
-		sOut += '</tbody></table></div></div>\n';		
+		sOutData += '</tbody></table></div>\n';
+		sOutCalc += '</tbody></table></div>\n';
+		sOut += sOutData + sOutCalc + '</div>\n';
+		//sOut += '</div>\n';	
 		return sOut;
 	}
 	
-	function renderValue(url, type, title, units, value, sameas, source) {
+	function renderValue(url, title, units, value, sameas, source) {
 		if (value != undefined) {
-			var endpoint = sameas.indexOf("http://www.opentox.org/echaEndpoints.owl#")>=0?sameas.replace("http://www.opentox.org/echaEndpoints.owl#",""):"";
-			var sOut = "<tr bgcolor='#ffffff'><th>"+ (type==null?"":type) +"</th><th bgcolor='#fafafa'>" +
-					(url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'>?</a>" )) +
-					"</th><td>" + value + "</td><td bgcolor='#fafafa'>"+
-							endpoint + "</td><td>" 
-							+ (source==null?"":"<a href='"+source.URI+"' target=_blank title='"+source.URI+"'>" + source.type +"</a>") 
-							+ "</td></tr>";
+			
+			if (url==null) {  //name & value only
+				return "<tr bgcolor='#ffffff'><th bgcolor='#fafafa'>" +
+						(title + " " + units) +
+						"</th><td>" + value + "</td></tr>";
+			}
+			
+			var src = source != null?source.type:"";
+			if ((source != null) && (source.type=='Dataset')){ 
+				src = source.type;
+				var p1 = source.URI.lastIndexOf("/");
+				var p2 = source.URI.lastIndexOf(".");
+				if (p1>=0) src = source.URI.substring(p1+1,p2>=0?p2:undefined).replace('+',' ');
+			}
+
+			var endpoint = sameas==null?"": 
+				sameas.indexOf("http://www.opentox.org/echaEndpoints.owl#")>=0?sameas.replace("http://www.opentox.org/echaEndpoints.owl#",""):"";
+			var sOut = "<tr bgcolor='#ffffff'>" 
+					+ "<td>" 
+					+ (source==null?"":"<a href='"+source.URI+"' target=_blank class='help' title='"+source.URI+"'>" + src +"</a>") 
+					+ "</td>" 
+					+ "<th bgcolor='#fafafa'>" 
+					+ (url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'>?</a>" )) 
+					+ "</th><td>" + value + "</td><td bgcolor='#fafafa'>"
+					+ endpoint + "</td></tr>";
 			return sOut;
 		} else return "";
 	}
@@ -409,7 +459,20 @@ function formatValues(dataEntry, tag) {
 			// sOut += dataEntry.values[value];
 		}
 	});
+	switch (tag) {
+	case 'smiles': {
+		if (sOut.length>20) 
+			return "<span title='"+sOut+"'>" + sOut.substring(0,20)+ " ...</span>";
+		break;
+	}
+	case 'inchikey' : {
+		if (sOut!="" )
+			sOut = "<a class='help' href='http://www.google.com/search?q="+sOut + "' target=_blank>"+sOut+"</a>";
+		break;
+	}
+	}
 	return sOut;
+	
 }
 
 function selecturi(value) {

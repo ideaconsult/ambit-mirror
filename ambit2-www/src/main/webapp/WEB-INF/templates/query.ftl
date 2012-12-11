@@ -6,6 +6,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/ambit_structures.js'></script>
 
 <script type='text/javascript'>
+    _ambit.query_service = '${ambit_root}';
 	var purl = $.url();
 	
 	_ambit.selectedModels = purl.param('model_uri');
@@ -16,13 +17,14 @@
 			'media'		:'application/json',
 			//'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search'),
 			'b64search'	:purl.param('search')===undefined?$.base64.encode('50-00-0'):$.base64.encode(purl.param('search')),
-			'pagesize'	:purl.param('pagesize')===undefined?'10':purl.param('pagesize')					
+			'pagesize'	:purl.param('pagesize')===undefined?'10':purl.param('pagesize'),
+			'type' : 'smiles'	
 			};
 
 	$(function() {
 		initSearchForm();
-		_ambit.models = initTable('${ambit_root}/model?max=10','#models',_ambit.models,"model_uri[]",_ambit.selectedModels,"selectModel");
-		_ambit.datasets = initTable('${ambit_root}/dataset?max=10','#datasets',_ambit.datasets,"dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
+		_ambit.models = initTable(null,'${ambit_root}/model?max=10','#models',_ambit.models,"model_uri[]",_ambit.selectedModels,"selectModel");
+		_ambit.datasets = initTable('${ambit_root}','${ambit_root}/dataset?max=10','#datasets',_ambit.datasets,"dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
 		$("#searchform").validate();
 		$("#accordion" ).accordion();
 	});	
@@ -34,30 +36,62 @@
 												
 						//ajax
 						$.ajaxSetup({
-							cache : false  //while dev
+							cache : _ambit.cache  //while dev
 						});
 						var url;
 						var queryService = '${ambit_root}';
+						var description = null;
 						switch(option)
 						{
-						case 'similarity': 
+						case 'similarity':
+						  if ((purl.param('search')!= undefined) && (purl.param('search').indexOf('http')>=0)) {
+						  	params['type'] = 'url';
+						  	params['search']  = purl.param('search');
+						  	delete params.b64search;
+						  	description = "URI";	
+						  }
 						  $('#qtype').text('Similarity search');	
-						  $('#qthreshold').text('Tanimoto >= '+purl.param('threshold'));
+						  $('#qthreshold').text('Tanimoto >= '+ purl.param('threshold'));
 						  url = queryService	+ "/query/similarity?" + $.param(params,false);
 						  break;
 						case 'smarts':
+						  delete params.threshold;
+						  if ((purl.param('search')!= undefined) && (purl.param('search').indexOf('http')>=0)) {
+						  	params['type'] = 'url';
+						  	params['search']  = purl.param('search');
+						  	delete params.b64search;
+						  	description = "URI";	
+						  }
 						  $('#qtype').text('Substructure search');
 						  $('#qthreshold').text('');
   						  url = queryService	+ "/query/smarts?" + $.param(params,false);
 						  break;
 						default: //auto
-						  $('#qtype').text('Search by identifier');
+						  delete params.threshold;
+						  if ((purl.param('search')!= undefined) && (purl.param('search').indexOf(queryService)>=0)) {
+							url = purl.param('search');
+						  	delete params.b64search;
+						  	delete params.threshold;
+						  	delete params.type;
+						  	delete params.search;
+						  	url = url + "?" +  $.param(params,false);
+						  	$('#qtype').text('Search by URI');
+						  	description = "URI";	
+						  } else {						
+						  	$('#qtype').text('Search by identifier');
+						  	$('#qvalue').text("");
+						  	url = queryService + "/query/compound/search/all?"+ $.param(params,false);
+						  }
 						  $('#qthreshold').text('');
-						  url = queryService + "/query/compound/search/all?"+ $.param(params,false);
 						}
 						
-						if (purl.param('search').length>60) $('#qvalue').text(purl.param('search').substring(0,60)+" ...");
-						else  $('#qvalue').text(purl.param('search'));
+						if ((description==null) && (purl.param('search')!= undefined)) {
+							if (purl.param('search').length>60) description = purl.param('search').substring(0,60)+" ...";
+							else  description = purl.param('search');
+						} else description="";
+							
+						$('#qvalue').text(description);
+						
 						$('#qvalue').attr('title',purl.param('search'));
 						
 						$('#download #json').attr('href',url);
@@ -122,8 +156,8 @@
 		<table id='structures' class='structable' style='margin:0;' width='100%'>
 					<thead>
 						<th>
-						<a href="#" id='selectall' title='Click to select all records' onClick='selecturi(true);'><u>Select</u></a><br>
-						<a href="#" id='unselect' title='Click to unselect all records'  onClick='selecturi(false);'><u>Unselect</u></a>						
+						<a href="#" id='selectall' class='help' title='Click to select all records' onClick='selecturi(true);'><u>Select</u></a><br>
+						<a href="#" id='unselect' class='help' title='Click to unselect all records'  onClick='selecturi(false);'><u>Unselect</u></a>						
 						</th>
 						<th>CAS</th>
 						<th>Structure</th>
