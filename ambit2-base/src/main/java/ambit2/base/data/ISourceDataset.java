@@ -118,4 +118,6 @@ public interface ISourceDataset extends Serializable {
     public void setrightsHolder(String uri);
     public String getMaintainer();
     public void setMaintainer(String uri);    
+    public int getStars();
+    public void setStars(int rating);
 }

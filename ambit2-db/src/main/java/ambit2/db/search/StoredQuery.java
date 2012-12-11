@@ -44,7 +44,7 @@ public class StoredQuery implements IStoredQuery {
 	protected String licenseURI;
 	protected String  rightsHolder;
 	protected String  maintainer;
-	
+	protected int stars = 0;
 	public String getMaintainer() {
 		return maintainer;
 	}
@@ -187,6 +187,12 @@ public class StoredQuery implements IStoredQuery {
 	public boolean supportsPaging() {
 		return true;
 	}
+    public int getStars() {
+    	return stars;
+    }
+    public void setStars(int rating) {
+    	this.stars = rating;
+    }
 }
 
 

@@ -17,11 +17,11 @@ public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, Strin
 	 */
 	private static final long serialVersionUID = -5670785871072092628L;
 	protected static String sql = 
-		"select idmodel,m.name,dataset,t1.idtemplate,t1.name,t2.idtemplate,t2.name,t3.idtemplate,t3.name,content,mediatype,algorithm,parameters,hidden,creator,null\n"+
-		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors join template t3 on t3.idtemplate = m.predicted %s";
+		"select idmodel,m.name,dataset,t1.idtemplate,t1.name,t2.idtemplate,t2.name,t3.idtemplate,t3.name,content,mediatype,algorithm,parameters,hidden,creator,null,stars\n"+
+		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors join template t3 on t3.idtemplate = m.predicted %s order by stars desc\n";
 
 	protected static String sql_predicted = 
-		"select idmodel,m.name,dataset,t1.idtemplate,t1.name,t2.idtemplate,t2.name,t3.idtemplate,t3.name,content,mediatype,algorithm,parameters,hidden,creator,group_concat(distinct(properties.comments))\n"+
+		"select idmodel,m.name,dataset,t1.idtemplate,t1.name,t2.idtemplate,t2.name,t3.idtemplate,t3.name,content,mediatype,algorithm,parameters,hidden,creator,group_concat(distinct(properties.comments)),stars\n"+
 		"from models m join template t2 on t2.idtemplate=m.dependent left join template t1 on t1.idtemplate = m.predictors join template t3 on t3.idtemplate = m.predicted \n"+
 		"join template_def t on t.idtemplate=t3.idtemplate\n"+
 		"join properties on t.idproperty=properties.idproperty\n"+
@@ -124,6 +124,25 @@ public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, Strin
 			public int getIndex() {
 				return 16;
 			}
+		},		
+		stars {
+			@Override
+			public boolean isEnabled(ModelQueryResults model, String arg1) {
+				return (model.getStars()>=0);
+			}
+			@Override
+			public String getSQL() {
+				return " stars >= ? ";
+			}
+			@Override
+			public QueryParam getParam(ModelQueryResults model,String endpoint) {
+				return new QueryParam<Integer>(Integer.class,model.getStars());
+			}			
+
+			@Override
+			public int getIndex() {
+				return 17;
+			}
 		};
 		public abstract boolean isEnabled(ModelQueryResults model,String endpoint);
 		public abstract String getSQL();
@@ -136,8 +155,9 @@ public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, Strin
 	}
 	
 	public ModelQueryResults getObject(ResultSet rs) throws AmbitException {
+		ModelQueryResults q = new ModelQueryResults();
 		try {
-			ModelQueryResults q = new ModelQueryResults();
+			
 			q.setId(rs.getInt(1));
 			q.setName(rs.getString(2));
 			q.setTrainingInstances(rs.getString(3));
@@ -175,10 +195,16 @@ public abstract class AbstractModelQuery<F,V>  extends AbstractQuery<F, V, Strin
 			
 			q.setCreator(rs.getString(_models_criteria.creator.getIndex()));
 			q.setEndpoint(rs.getString(_models_criteria.endpoint.getIndex()));
-			return q;
+		
 		} catch (Exception x) {
 			return null;
 		}
+		try {
+			q.setStars(rs.getInt(_models_criteria.stars.name()));
+		} catch (Exception x) {
+			q.setStars(-1);
+		}
+		return q;
 	}
 	
 	@Override

@@ -19,7 +19,8 @@ public abstract class AbstractReadDataset<T> extends AbstractQuery<T,SourceDatas
 		title,
 		url,
 		licenseURI,
-		rightsHolder;
+		rightsHolder,
+		stars;
 		public int getIndex() {
 			return ordinal()+1;
 		}
@@ -30,19 +31,25 @@ public abstract class AbstractReadDataset<T> extends AbstractQuery<T,SourceDatas
 	private static final long serialVersionUID = -6358006970038485516L;
 
 	public SourceDataset getObject(ResultSet rs) throws AmbitException {
+		SourceDataset d = null;
 		try {
 			
 	        LiteratureEntry le = LiteratureEntry.getInstance(rs.getString(_fields.title.getIndex()),rs.getString(_fields.url.getIndex()));
 	        le.setId(rs.getInt(_fields.idreference.getIndex()));
-	        SourceDataset d = new SourceDataset(rs.getString(_fields.name.getIndex()),le);
+	        d = new SourceDataset(rs.getString(_fields.name.getIndex()),le);
 	        d.setUsername(rs.getString(_fields.user_name.getIndex()));
 	        d.setId(rs.getInt(_fields.id_srcdataset.getIndex()));
 	        d.setLicenseURI(rs.getString(_fields.licenseURI.getIndex()));
 	        d.setrightsHolder(rs.getString(_fields.rightsHolder.getIndex()));
-	        return d;
         } catch (SQLException x) {
         	throw new AmbitException(x);
         }
+        try {
+	        d.setStars(rs.getInt(_fields.stars.getIndex()));        	
+        } catch (SQLException x) {
+        	d.setStars(-1);
+        }
+        return d;
     }
 	
 

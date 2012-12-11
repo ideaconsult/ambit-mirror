@@ -22,7 +22,16 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	protected Template dependent;
 	protected PredictedVarsTemplate predicted;
 	protected String[] parameters;
+	protected int stars = 0;
 	
+	public int getStars() {
+		return stars;
+	}
+
+	public void setStars(int stars) {
+		this.stars = stars;
+	}
+
 	public String[] getParameters() {
 		return parameters;
 	}
