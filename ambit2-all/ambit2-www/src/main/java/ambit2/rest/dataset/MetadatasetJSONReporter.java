@@ -26,6 +26,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 	enum jsonFeature {
 		URI,
 		title,
+		stars,
 		source,
 		rights,
 		rightsHolder,
@@ -63,12 +64,14 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 					"\n\t\"%s\":\"%s\"," + //uri
 					"\n\t\"type\":\"Dataset\"," + //uri
 					"\n\t\"%s\":\"%s\"," + //title
+					"\n\t\"%s\":%d," + //stars
 					"\n\t\"%s\":\"%s\"," + //rightsHolder
 					"\n\t\"%s\":\"%s\"," + //seeAlso
 					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					jsonFeature.URI.jsonname(),uri,
 					jsonFeature.title.jsonname(),item.getName(),
+					jsonFeature.stars.jsonname(),item.getStars(),
 					jsonFeature.rightsHolder.jsonname(),item.getrightsHolder()==null?"":item.getrightsHolder(),
 					jsonFeature.seeAlso.jsonname(),item instanceof SourceDataset?((SourceDataset) item).getURL():"",
 					jsonFeature.rights.jsonname(),item.getLicenseURI()==null?"":item.getLicenseURI(),rights

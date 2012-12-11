@@ -284,6 +284,7 @@ CREATE TABLE  `models` (
   `creator` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'guest',
   `dataset` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT 'dataset uri',
   `user_name` varchar(16) COLLATE utf8_bin NOT NULL DEFAULT 'guest',
+  `stars` int(10) unsigned NOT NULL DEFAULT '5' COMMENT 'stars rating',
   PRIMARY KEY (`idmodel`),
   UNIQUE KEY `Index_5` (`name`) USING BTREE,
   KEY `FK_models_predictors` (`predictors`),
@@ -295,6 +296,7 @@ CREATE TABLE  `models` (
   KEY `Index_creator` (`creator`),
   KEY `Index_10` (`dataset`),
   KEY `FK_models_users` (`user_name`),
+  KEY `Index_12` (`stars`),
   CONSTRAINT `FK_models_dataset` FOREIGN KEY (`idquery`) REFERENCES `query` (`idquery`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_dependent` FOREIGN KEY (`dependent`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
   CONSTRAINT `FK_models_predicted` FOREIGN KEY (`predicted`) REFERENCES `template` (`idtemplate`) ON UPDATE CASCADE,
@@ -550,12 +552,14 @@ CREATE TABLE  `src_dataset` (
   `licenseURI` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `rightsHolder` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
   `maintainer` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
+  `stars` int(10) unsigned NOT NULL DEFAULT '5',
   PRIMARY KEY (`id_srcdataset`),
   UNIQUE KEY `src_dataset_name` (`name`),
   KEY `FK_src_dataset_1` (`user_name`),
   KEY `FK_src_dataset_2` (`idreference`),
   KEY `FK_src_dataset_3` (`idtemplate`),
   KEY `Index_6` (`maintainer`),
+  KEY `Index_7` (`stars`),
   CONSTRAINT `FK_src_dataset_2` FOREIGN KEY (`idreference`) REFERENCES `catalog_references` (`idreference`) ON UPDATE CASCADE,
   CONSTRAINT `FK_src_dataset_3` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -1032,7 +1036,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (6,2,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (6,3,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

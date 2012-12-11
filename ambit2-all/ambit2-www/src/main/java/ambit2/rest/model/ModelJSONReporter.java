@@ -32,7 +32,8 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 		creator,
 		mimetype,
 		content,
-		algFormat;
+		algFormat,
+		stars;
 		
 		public String jsonname() {
 			return name();
@@ -66,7 +67,8 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," +
-					"\n\t\"%s\":\"%s\" " +
+					"\n\t\"%s\":\"%s\"," +
+					"\n\t\"%s\":%d " +
 					"\n\n}}",
 					
 					jsonModel.URI.jsonname(),uri,
@@ -87,7 +89,8 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					jsonModel.legend.jsonname(),String.format("%s?media=image/png",uri),
 					jsonModel.creator.jsonname(),model.getCreator(),
 					jsonModel.mimetype.jsonname(),model.getContentMediaType(),
-					jsonModel.content.jsonname(),"application/java".equals(model.getContentMediaType())?model.getContent():""
+					jsonModel.content.jsonname(),"application/java".equals(model.getContentMediaType())?model.getContent():"",
+					jsonModel.stars.jsonname(),model.getStars()
 					));
 			comma = ",";
 

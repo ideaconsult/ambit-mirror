@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 public class AbstractDataset implements ISourceDataset {
 	protected int ID = -1;
+	protected int stars = 0;
 	protected Hashtable<String, String> properties = new Hashtable<String, String>();
 	public enum _props {
 		name,
@@ -83,4 +84,10 @@ public class AbstractDataset implements ISourceDataset {
 		properties.put(_props.maintainer.name(), uri);
 		
 	}
+    public int getStars() {
+    	return stars;
+    }
+    public void setStars(int rating) {
+    	this.stars = rating;
+    }
 }
