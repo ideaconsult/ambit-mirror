@@ -303,7 +303,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 				output.write("<tr>");
 				String datasetName = dataset.getName();
-				output.write(String.format("<td>%d</td>",dataset.getStars()));
+				output.write(String.format("<td>%s</td>",dataset.getStars()<0?"":dataset.getStars()));
 				output.write(String.format(
 						"<td><h4>%s</h4>",
 						(datasetName==null)||(datasetName.equals(""))?Integer.toString(dataset.getID()):datasetName.replace("\\", " ")
