@@ -200,6 +200,7 @@ function defineStructuresTable(url, query_service, similarity) {
 								"error" : function(xhr, textStatus, error) {
 									oSettings.oApi._fnProcessingDisplay(
 											oSettings, false);
+								//	console.log(error);
 								}
 							});
 						},
@@ -416,7 +417,7 @@ function defineStructuresTable(url, query_service, similarity) {
 				src = source.type;
 				var p1 = source.URI.lastIndexOf("/");
 				var p2 = source.URI.lastIndexOf(".");
-				if (p1>=0) src = source.URI.substring(p1+1,p2>=0?p2:undefined).replace('+',' ');
+				if (p1>=0) src = unescape(source.URI.substring(p1+1,p2>=0?p2:undefined)).replace('+',' ');
 			}
 
 			var endpoint = sameas==null?"": 
