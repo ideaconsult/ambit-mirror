@@ -9,7 +9,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"sClass" : "center",
 									"bSortable" : false,
 									"mDataProp" : null,
-									sWidth : "16px",
+									sWidth : "24px",
 									"bUseRendered" : "true",
 									"fnRender" : function(o,val) {
 										var uri = o.aData["compound"]["URI"];
@@ -25,7 +25,7 @@ function defineStructuresTable(url, query_service, similarity) {
 													"<br/>"+
 													"<a href='"+searchURI+"' class='help' title='Find similar'>Similar</a>" +
 													"<br/>"+
-													"<a href='"+smartsURI+"' class='help' title='Find substructure'>Substructure</a>" +
+													"<a href='"+smartsURI+"' class='help' title='Find substructure'>Substruct.</a>" +
 													"<br/>"+													
 													"<span class='zoomstruc'>"+
 													"<img src='"+query_service+"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'>"+
@@ -38,6 +38,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"aTargets" : [ 1 ],
 									"bSearchable" : true,
 									"bSortable" : true,
+									"sWidth" : "10%",
 									"bUseRendered" : false,
 									"sClass" : "cas",
 									"fnRender" : function(o, val) {
@@ -83,7 +84,6 @@ function defineStructuresTable(url, query_service, similarity) {
 									"aTargets" : [ 3 ],
 									"bSearchable" : true,
 									"bSortable" : true,
-									"sWidth" : "20%",
 									"bUseRendered" : false,
 									"sClass" : "names",
 									"fnRender" : function(o, val) {
@@ -129,6 +129,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"aTargets" : [ 6 ],
 									"bSearchable" : true,
 									"bSortable" : true,
+									"sWidth" : "15%",
 									"bUseRendered" : true,
 									"fnRender" : function(o, val) {
 										if ((val === undefined) || (val == ""))
@@ -145,6 +146,7 @@ function defineStructuresTable(url, query_service, similarity) {
 									"sClass" : "inchikey",
 									"aTargets" : [ 7 ],
 									"bSearchable" : true,
+									"sWidth" : "15%",
 									"bSortable" : true,
 									"bUseRendered" : true,
 									"fnRender" : function(o, val) {
