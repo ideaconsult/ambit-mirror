@@ -274,6 +274,11 @@ function defineStructuresTable(url, query_service, similarity) {
 											if (cmpURI.indexOf("/conformer") >= 0) {
 												cmpURI = aData.compound.URI.substring(0, aData.compound.URI.indexOf("/conformer"));
 											}
+											if ((_ambit["data_uri"] == null) || (_ambit["data_uri"]===undefined)) 
+												downloadFormUpdate(features_uri);
+											
+											_ambit["data_uri"] = features_uri;
+											
 											var dataset_uri = cmpURI + "?media=application%2Fjson" + features_uri;
 											$.ajax({
 												dataType : "json",

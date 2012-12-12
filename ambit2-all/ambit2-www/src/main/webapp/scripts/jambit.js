@@ -1,5 +1,8 @@
 var _ambit = {
 	'query_service' : null,	
+	'query_uri' : null,
+	'query_params' : null,
+	'data_uri' : null,
 	'cache' : false,	
 	'search' : { 
 		'uri': null, 
@@ -21,7 +24,16 @@ var _ambit = {
 	'models' : [
 	],
 	'selectedDatasets' : [],
-	'selectedModels' : []
+	'selectedModels' : [],
+	'downloads' : [
+	           	  {id:"sdf",img:"sdf.jpg",alt:"SDF",title:'Download as SDF',mime:'chemical/x-mdl-sdfile'},
+	           	  {id:"csv",img:"excel.png",alt:"CSV",title:'Download as CSV (Comma delimited file)',mime:'text/csv'},
+	           	  {id:"cml",img:"cml.jpg",alt:"CML",title:'Download as CML (Chemical Markup Language)',mime:'chemical/x-cml'},
+	           	  {id:"arff",img:"weka.jpg",alt:"SDF",title:'Download as SDF',mime:'text/x-arff'},
+	           	  {id:"rdfxml",img:"rdf.gif",alt:"RDF/XML",title:'Download as RDF XML',mime:'application/rdf+xml'},
+	           	  {id:"rdfn3",img:"rdf.gif",alt:"RDF N3",title:'Download as RDF N3',mime:'text/n3'},
+	           	  {id:"json",img:"json.png",alt:"JSON",title:'Download as JSON',mime:'application/json'}
+	           	 ]
 };
 
 function initTable(root, query_service, tableSelector, anArray, checkbox, checked, clickHandler) {
@@ -129,4 +141,15 @@ function selectModel(event) {
 	} else 
 		_ambit.selectedModels.splice(jQuery.inArray(event.srcElement.value,_ambit.selectedModels),1);
 
+}
+
+function downloadFormUpdate(features_uri) {
+	$.each(_ambit.downloads,function(index,value) {
+		_ambit.query_params['media'] = value.mime;
+		var durl = _ambit.query_uri +  $.param(_ambit.query_params,false) + 
+				(((features_uri===undefined)|| (features_uri==null))?"":("&" + features_uri));
+		
+		$('#download #'+value.id).attr('href',durl);
+	});
+	delete _ambit.query_params.media;
 }
