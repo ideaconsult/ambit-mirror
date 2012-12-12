@@ -58,6 +58,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					"\n{"+
 					"\n\"%s\":\"%s\"," + //uri
 					"\n\"%s\":\"%s\"," + //title
+					"\n\"%s\":%d," + //stars
 					"\n\"%s\":{\n\t\"URI\":\"%s\",\n\t\"%s\":\"%s\",\n\t\"img\":\"%s\"\n}," + 					//algorithm
 					"\n\"%s\":\"%s\"," + //dataset
 					"\n\"%s\":\"%s\"," + //vars
@@ -73,7 +74,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					
 					jsonModel.URI.jsonname(),uri,
 					jsonModel.title.jsonname(),model.getName(),
-					
+					jsonModel.stars.jsonname(),model.getStars(),
 					jsonModel.algorithm.jsonname(),model.getAlgorithm()==null?"":model.getAlgorithm(),
 					jsonModel.algFormat.jsonname(),algFormat.name(),
 					String.format("/ambit2/%s",model.getAlgorithm().indexOf("org.openscience.cdk")>=0?"images/cdk.png":

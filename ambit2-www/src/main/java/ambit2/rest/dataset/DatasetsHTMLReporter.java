@@ -164,6 +164,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			try {
 				w.write("</caption>");
 				w.write("<thead>");
+				w.write("<th>Stars</th>");
 				w.write("<th>Name</th>");
 				w.write("<th>License, Rights holder, Maintainer</th>");
 				w.write("</thead>");
@@ -302,6 +303,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 				
 				output.write("<tr>");
 				String datasetName = dataset.getName();
+				output.write(String.format("<td>%d</td>",dataset.getStars()));
 				output.write(String.format(
 						"<td><h4>%s</h4>",
 						(datasetName==null)||(datasetName.equals(""))?Integer.toString(dataset.getID()):datasetName.replace("\\", " ")
