@@ -28,7 +28,9 @@ $(document).ready(function() {
 				          "fnRender": function ( o, val ) {
 				                  return "<span class='zoommodel'><img src='"+ baseref +"/images/zoom_in.png'></span>";
 				          }
-		            },		              
+		            },		     
+		  			{ "sTitle": "Stars", "mDataProp":"stars",
+		  			},		            
 		  			{ "sTitle": "Title", "mDataProp":"title", sWidth: "50%",
 		              "bUseRendered" : "false",	
 		              "fnRender": function ( o, val ) {
