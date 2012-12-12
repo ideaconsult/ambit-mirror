@@ -95,7 +95,8 @@
 						$('#qvalue').attr('title',purl.param('search'));
 						
 						$('#download #json').attr('href',url);
-						
+						$('#quri').attr('href',url);
+						$('#quri').attr('title','AMBIT Search URI: ' + url);
 						var oTable = defineStructuresTable(url, queryService,purl.param('option')=='similarity');
 						
 						
@@ -134,6 +135,7 @@
 			<br/>
 			<b><span id='qvalue'></span></b>
 			<span id='description' style='display:none;'></span>
+			<a href='#' id='quri' title='#'>@</a>
 			<br/>
 			<span>Max number of hits</span>
 			<input type='text' size='3' name='pagesize' value='10' style='width:5em;height:1.5em;margin-bottom:0;padding: 2px;'>

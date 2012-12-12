@@ -16,11 +16,17 @@ function defineStructuresTable(url, query_service, similarity) {
 										
 										var prm = {'option': 'similarity', 'type':'url', 'search':uri};
 										var searchURI = query_service + "/ui?" + $.param(prm,false);
+										prm = {'option': 'smarts', 'type':'url', 'search':uri, 'pagesize' : 10};
+										var smartsURI = query_service + "/ui?" + $.param(prm,false);
 										
 										return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ 
 													uri +"' value='"+uri+"'><br/>" +
-													"<a href='"+searchURI+"' class='help' title='Find similar'>Find</a>" +
+													"<a href='"+uri+"' class='help' title='AMBIT Compound URI' target=_blank>@</a>" +
 													"<br/>"+
+													"<a href='"+searchURI+"' class='help' title='Find similar'>Similar</a>" +
+													"<br/>"+
+													"<a href='"+smartsURI+"' class='help' title='Find substructure'>Substructure</a>" +
+													"<br/>"+													
 													"<span class='zoomstruc'>"+
 													"<img src='"+query_service+"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'>"+
 													"</span>";
@@ -419,17 +425,24 @@ function defineStructuresTable(url, query_service, similarity) {
 				var p2 = source.URI.lastIndexOf(".");
 				if (p1>=0) src = unescape(source.URI.substring(p1+1,p2>=0?p2:undefined)).replace('+',' ');
 			}
-
-			var endpoint = sameas==null?"": 
-				sameas.indexOf("http://www.opentox.org/echaEndpoints.owl#")>=0?sameas.replace("http://www.opentox.org/echaEndpoints.owl#",""):"";
+			var prefix = "http://www.opentox.org/echaEndpoints.owl#";
+			var searchURI = "";
+			var endpoint =  sameas==null?"":sameas;
+			if (sameas.indexOf(prefix)>=0) {
+				searchURI = " <a href='http://apps.ideaconsult.net:8080/ontology/query?uri="+
+				encodeURIComponent(sameas) +
+				"' target=_blank>@</a>";
+				endpoint = sameas.replace(prefix,"");
+			} 
+				
 			var sOut = "<tr bgcolor='#ffffff'>" 
 					+ "<td>" 
 					+ (source==null?"":"<a href='"+source.URI+"' target=_blank class='help' title='"+source.URI+"'>" + src +"</a>") 
 					+ "</td>" 
 					+ "<th bgcolor='#fafafa'>" 
-					+ (url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'>?</a>" )) 
+					+ (url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'>@</a>" )) 
 					+ "</th><td>" + value + "</td><td bgcolor='#fafafa'>"
-					+ endpoint + "</td></tr>";
+					+ endpoint + searchURI + "</td></tr>";
 			return sOut;
 		} else return "";
 	}
@@ -446,20 +459,26 @@ function getID() {
 function formatValues(dataEntry, tag) {
 	var sOut = "";
 	var delimiter = "";
+	var cache = {};
 	$.each(dataEntry.lookup[tag], function(index, value) {
 		if (dataEntry.values[value] != undefined) {
 			$.each(dataEntry.values[value].split("|"), function(index, v) {
 				if (v.indexOf(".mol") == -1) {
 					if ("" != v) {
-						sOut += delimiter;
-						sOut += v;
-						delimiter = "<br>";
+						var lv = v.toLowerCase();
+						if (cache[lv]==null) {
+							sOut += delimiter;
+							sOut += v;
+							delimiter = "<br>";
+							cache[lv] = true;
+						}
 					}
 				}
 			});
 			// sOut += dataEntry.values[value];
 		}
 	});
+	cache = null;
 	switch (tag) {
 	case 'smiles': {
 		if (sOut.length>20) 
