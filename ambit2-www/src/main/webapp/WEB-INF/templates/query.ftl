@@ -52,7 +52,7 @@
 						  }
 						  $('#qtype').text('Similarity search');	
 						  $('#qthreshold').text('Tanimoto >= '+ purl.param('threshold'));
-						  url = queryService	+ "/query/similarity?" + $.param(params,false);
+						  url = queryService	+ "/query/similarity?";
 						  break;
 						case 'smarts':
 						  delete params.threshold;
@@ -64,7 +64,7 @@
 						  }
 						  $('#qtype').text('Substructure search');
 						  $('#qthreshold').text('');
-  						  url = queryService	+ "/query/smarts?" + $.param(params,false);
+  						  url = queryService	+ "/query/smarts?";
 						  break;
 						default: //auto
 						  delete params.threshold;
@@ -74,13 +74,13 @@
 						  	delete params.threshold;
 						  	delete params.type;
 						  	delete params.search;
-						  	url = url + "?" +  $.param(params,false);
+						  	url = url + "?" ;
 						  	$('#qtype').text('Search by URI');
 						  	description = "URI";	
 						  } else {						
 						  	$('#qtype').text('Search by identifier');
 						  	$('#qvalue').text("");
-						  	url = queryService + "/query/compound/search/all?"+ $.param(params,false);
+						  	url = queryService + "/query/compound/search/all?";
 						  }
 						  $('#qthreshold').text('');
 						}
@@ -94,11 +94,16 @@
 						
 						$('#qvalue').attr('title',purl.param('search'));
 						
-						$('#download #json').attr('href',url);
 						$('#quri').attr('href',url);
 						$('#quri').attr('title','AMBIT Search URI: ' + url);
-						var oTable = defineStructuresTable(url, queryService,purl.param('option')=='similarity');
 						
+						_ambit['query_uri'] = url;
+						_ambit['data_uri'] = null; 
+						_ambit['query_params'] = params;
+						var qurl = url +  $.param(params,false);
+						downloadFormUpdate(null);
+
+						var oTable = defineStructuresTable(qurl, queryService,purl.param('option')=='similarity');
 						
 					});
 
@@ -144,12 +149,21 @@
 	<input class='ambit_search' id='submit2' type='submit' value='Refresh' tabindex='3'/>
 	<#include "/select_features.ftl">
 	<br/>
+
+	</form>
+	
 	<span id='download' class='help'>Download:<br/>
-	<a href='' id='json'><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'/></a>
+	<a href='#' id='sdf'><img src='${ambit_root}/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a>
+	<a href='#' id='csv'><img src='${ambit_root}/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a>
+	<a href='#' id='cml'><img src='${ambit_root}/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'/></a>
+	<a href='#' id='arff'><img src='${ambit_root}/images/weka.jpg' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'/></a>
+	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'/></a>
+	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'/></a>
+	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'/></a>
 	</span>
+
 </div>
 
-</form>
 <div class="eleven columns remove-bottom" style="padding:0;" >
 
 
