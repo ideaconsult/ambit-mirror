@@ -14,6 +14,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.descriptors.fingerprints.EStateFingerprinterWrapper;
@@ -61,12 +62,15 @@ public class FingerprinterTest {
 		testDescriptor(new MACCSFingerprinterWrapper());
 	}
 	
-	
+	@Test
 	public void testPubChem() throws Exception {
 		IMolecule mol = MoleculeFactory.make123Triazole();
 		IFingerprinter fp = new PubchemFingerprinter();
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		CDKHueckelAromaticityDetector.detectAromaticity(mol);
 		BitSet bs1 = fp.getFingerprint(mol);
 		BitSet bs2 = fp.getFingerprint(mol);
+		//fails if aromaticity was not detected!
 		Assert.assertEquals(bs1,bs2);
 		
 	}
