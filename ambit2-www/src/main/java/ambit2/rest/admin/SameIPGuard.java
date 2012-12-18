@@ -35,6 +35,7 @@ public class SameIPGuard extends Authorizer {
 			String accept = headers.getFirstValue("accept");
 			if (accept != null) {
 				logger.log(Level.INFO,accept);
+				if (accept.indexOf("image")>=0) return true;
 				if (accept.indexOf("javascript")>=0) return true;
 				if (accept.indexOf("uri-list")>=0) return true;
 				if (accept.indexOf("text/n3")>=0) return true;
