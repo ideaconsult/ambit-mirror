@@ -1,6 +1,9 @@
 package ambit2.rest.admin;
 
 import java.net.InetAddress;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.restlet.Request;
 import org.restlet.Response;
@@ -13,34 +16,41 @@ import org.xbill.DNS.Address;
  *
  */
 public class SameIPGuard extends Authorizer {
-
+	String[] ipAllowed = null;
+	protected Logger logger;
+	public SameIPGuard(String[] ipAllowed, Logger logger) {
+		super();
+		if (ipAllowed==null)
+			this.ipAllowed = new String[] {"127.0.0.1","/0:0:0:0:0:0:0:1"};
+		else
+			this.ipAllowed = ipAllowed;
+		Arrays.sort(ipAllowed);
+		this.logger = logger;
+	}
 	@Override
 	protected boolean authorize(Request request, Response response) {
 		try {
-			
 			InetAddress[] ipclient;
-			InetAddress[] ipserver;
 			String client = request.getClientInfo().getAddress();
-			String server = request.getHostRef().getHostDomain();
-			if (!Address.isDottedQuad(client)) {
+			if (client.contains(":")) {
+				ipclient = new InetAddress[] {Address.getByAddress(client,Address.IPv6)};
+			} else if (Address.isDottedQuad(client)) {
+				ipclient = new InetAddress[] {Address.getByAddress(client,Address.IPv4)};				
+			} else {
 				ipclient = Address.getAllByName(client);
-			} else ipclient = new InetAddress[] {Address.getByAddress(client)};
-			if (!Address.isDottedQuad(server)) {
-				ipserver = Address.getAllByName(server);
-			} else ipserver = new InetAddress[] {Address.getByAddress(server)};
-
-			for (InetAddress cl : ipclient)
-				for (InetAddress s : ipserver) {
-					boolean ok = cl.equals(s);
-					System.out.println(String.format("Comparing %s %s : %s",cl.getHostAddress(),s.getHostAddress(),Boolean.toString(ok)));
-					if (ok) return true;
+			}
+			
+			for (InetAddress cl : ipclient) {
+				logger.log(Level.FINE,cl.toString());
+				if (Arrays.binarySearch(ipAllowed,cl.toString()) >=0) {
+					
+					return true;
 				}
-				
-			return true;
+			}
 		} catch (Exception x) {
 			x.printStackTrace();
-			return false;
 		}
+		return false;
 	}
 
 }
