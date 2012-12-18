@@ -6,6 +6,8 @@ import java.security.cert.X509Certificate;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -50,6 +52,7 @@ import ambit2.rest.aa.opensso.policy.CallablePolicyCreator;
 import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.PolicyResource;
+import ambit2.rest.admin.SameIPGuard;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
@@ -119,7 +122,7 @@ import ambit2.rest.ui.UIResource;
 public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final Role UPDATE_ALLOWED = new Role("AUTHOR","Update (PUT,POST,DELETE) allowed");
 	protected boolean insecure = true;
-	 
+	protected Logger logger = Logger.getLogger(AmbitApplication.class.getName());	 
 	
 
 
@@ -163,9 +166,23 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	}
 
 
-
 	@Override
 	public Restlet createInboundRoot() {
+		Restlet root = initInboundRoot();
+		if (isIPGuardEnabled()) {
+			logger.log(Level.INFO,String.format("Property %s set, IP guard enabled.", IPGUARD_ENABLED));
+			String[] ipAllowed = getIPListAllowed();
+			StringBuilder b = new StringBuilder();
+			for (String ip : ipAllowed) { b.append(ip); b.append(" "); }
+			logger.log(Level.INFO,String.format("Property %s set, IP list allowed %s", IPGUARD_LIST, b.toString()));
+			SameIPGuard ipguard = new SameIPGuard(ipAllowed,logger);
+			ipguard.setNext(root);
+			return ipguard;
+		} else
+			return root;
+	}
+
+	public Restlet initInboundRoot() {
         initFreeMarkerConfiguration();
         
 		Router router = new MyRouter(this.getContext());
@@ -328,7 +345,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				 router.attach("/", AmbitResource.class);
 				 router.attach("", AmbitResource.class);
 				 
-	    		 System.out.println(String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
+				 logger.log(Level.INFO,String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
 	    		 ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC, "ambit2");
 	    		 //get from config file
 	    		 ConcurrentMap<String, char[]> localSecrets = null;
@@ -669,14 +686,17 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
             	
         Component component = new AmbitComponent(context);
         final Server server = component.getServers().add(Protocol.HTTP, httpport);
-        System.out.println("Server started on port " + server.getPort());
+        Logger logger = Logger.getLogger(AmbitApplication.class.getName());	
+        logger.log(Level.INFO,String.format("Server started on port %d",server.getPort()));
+
         component.start();
         return component;
     }
     
     public static void shutdown(Component component) throws Exception {
         component.stop();
-        System.out.println("Server stopped");
+        Logger logger = Logger.getLogger(AmbitApplication.class.getName());	
+        logger.log(Level.INFO,"Server stopped");
     }
    
    public static String printRoutes(Restlet re,String delimiter,StringWriter b) {
@@ -730,7 +750,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	        return result;
     }
 */
+   public static final String OPENTOX_AA_ENABLED = "aa.enabled";
    public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
+   public static final String IPGUARD_ENABLED = "ipguard.enabled";
+   public static final String IPGUARD_LIST = "ipguard.list";
+   
    protected synchronized boolean isSimpleSecretAAEnabled()  {
 		try {
 			String aaadmin = getProperty(LOCAL_AA_ENABLED,configProperties);
@@ -738,9 +762,23 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		} catch (Exception x) {return false; }
 	}	
    
+	protected synchronized boolean isIPGuardEnabled()  {
+		try {
+			String ipguard = getProperty(IPGUARD_ENABLED,configProperties);
+			return ipguard==null?null:Boolean.parseBoolean(ipguard);
+		} catch (Exception x) {return false; }
+	}	
+	
+	protected String[] getIPListAllowed()  {
+		try {
+			String iplist = getProperty(IPGUARD_LIST,configProperties);
+			return iplist.split(" ");
+		} catch (Exception x) {return null; }
+	}	
+	
 	protected synchronized boolean isOpenToxAAEnabled()  {
 		try {
-			String aaadmin = getProperty("aa.enabled",configProperties);
+			String aaadmin = getProperty(OPENTOX_AA_ENABLED,configProperties);
 			return aaadmin==null?null:Boolean.parseBoolean(aaadmin);
 		} catch (Exception x) {return false; }
 	}	
