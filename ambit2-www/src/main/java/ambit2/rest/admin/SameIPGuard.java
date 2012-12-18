@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.security.Authorizer;
 import org.xbill.DNS.Address;
 
@@ -30,6 +31,16 @@ public class SameIPGuard extends Authorizer {
 	@Override
 	protected boolean authorize(Request request, Response response) {
 		try {
+			Form headers = (Form) request.getAttributes().get("org.restlet.http.headers");  
+			String accept = headers.getFirstValue("accept");
+			if (accept != null) {
+				logger.log(Level.INFO,accept);
+				if (accept.indexOf("javascript")>=0) return true;
+				if (accept.indexOf("uri-list")>=0) return true;
+				if (accept.indexOf("text/n3")>=0) return true;
+				if (accept.indexOf("application/rdf+xml")>=0) return true;
+			}
+			
 			InetAddress[] ipclient;
 			String client = request.getClientInfo().getAddress();
 			if (client.contains(":")) {
@@ -41,7 +52,7 @@ public class SameIPGuard extends Authorizer {
 			}
 			
 			for (InetAddress cl : ipclient) {
-				logger.log(Level.FINE,cl.toString());
+				logger.log(Level.INFO,cl.toString());
 				if (Arrays.binarySearch(ipAllowed,cl.toString()) >=0) {
 					
 					return true;

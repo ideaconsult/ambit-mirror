@@ -31,7 +31,9 @@ public class AmbitStatusService extends StatusService {
 		try {
 			boolean wrapInHTML = true;
 			
-			if ((status.getThrowable() !=null) && (status.getThrowable() instanceof RResourceException)) 
+			if (status.equals(Status.CLIENT_ERROR_FORBIDDEN)) 
+				wrapInHTML = false;
+			else if ((status.getThrowable() !=null) && (status.getThrowable() instanceof RResourceException)) 
 				wrapInHTML = ((RResourceException)status.getThrowable()).getVariant().equals(MediaType.TEXT_HTML);
 			else {
 				Form headers = (Form) request.getAttributes().get("org.restlet.http.headers"); 
