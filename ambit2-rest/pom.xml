@@ -84,7 +84,7 @@
     <dependency>
     	<groupId>net.ideaconsult</groupId>
     	<artifactId>opentox-dsl</artifactId>
-    	<version>1.0.2</version>
+    	<version>1.0.4-SNAPSHOT</version>
     </dependency>
    <!--  Freemarker  -->
     <dependency>
