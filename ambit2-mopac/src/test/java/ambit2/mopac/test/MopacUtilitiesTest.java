@@ -11,6 +11,7 @@ public class MopacUtilitiesTest
 		utils = new MopacUtilities();
 		
 		test("C=C");
+		test("CCCC=C");
 		
 	}
 	
