@@ -52,7 +52,8 @@ import ambit2.rest.aa.opensso.policy.CallablePolicyCreator;
 import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
 import ambit2.rest.admin.AdminResource;
 import ambit2.rest.admin.PolicyResource;
-import ambit2.rest.admin.SameIPGuard;
+import ambit2.rest.admin.SimpleGuard;
+import ambit2.rest.admin.SimpleGuard.SimpleGuards;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
@@ -169,15 +170,16 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	@Override
 	public Restlet createInboundRoot() {
 		Restlet root = initInboundRoot();
-		if (isIPGuardEnabled()) {
-			logger.log(Level.INFO,String.format("Property %s set, IP guard enabled.", IPGUARD_ENABLED));
-			String[] ipAllowed = getIPListAllowed();
+		SimpleGuards guard = isSimpleGuardEnabled();
+		if (guard != null) {
+			logger.log(Level.INFO,String.format("Property %s set, %s guard enabled.", GUARD_ENABLED, guard));
+			String[] allowed = getGuardListAllowed();
 			StringBuilder b = new StringBuilder();
-			for (String ip : ipAllowed) { b.append(ip); b.append(" "); }
-			logger.log(Level.INFO,String.format("Property %s set, IP list allowed %s", IPGUARD_LIST, b.toString()));
-			SameIPGuard ipguard = new SameIPGuard(ipAllowed,logger);
-			ipguard.setNext(root);
-			return ipguard;
+			for (String ip : allowed) { b.append(ip); b.append(" "); }
+			logger.log(Level.INFO,String.format("Property %s set, %s list allowed %s", GUARD_LIST, guard, b.toString()));
+			SimpleGuard theguard = guard.getGuard(allowed,logger);
+			theguard.setNext(root);
+			return theguard;
 		} else
 			return root;
 	}
@@ -752,8 +754,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 */
    public static final String OPENTOX_AA_ENABLED = "aa.enabled";
    public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
-   public static final String IPGUARD_ENABLED = "ipguard.enabled";
-   public static final String IPGUARD_LIST = "ipguard.list";
+   public static final String GUARD_ENABLED = "guard.enabled";
+   public static final String GUARD_LIST = "guard.list";
    
    protected synchronized boolean isSimpleSecretAAEnabled()  {
 		try {
@@ -762,17 +764,17 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		} catch (Exception x) {return false; }
 	}	
    
-	protected synchronized boolean isIPGuardEnabled()  {
+	protected synchronized SimpleGuards isSimpleGuardEnabled()  {
 		try {
-			String ipguard = getProperty(IPGUARD_ENABLED,configProperties);
-			return ipguard==null?null:Boolean.parseBoolean(ipguard);
-		} catch (Exception x) {return false; }
+			String guard = getProperty(GUARD_ENABLED,configProperties);
+			return guard==null?null:SimpleGuards.valueOf(guard);
+		} catch (Exception x) {return null; }
 	}	
 	
-	protected String[] getIPListAllowed()  {
+	protected String[] getGuardListAllowed()  {
 		try {
-			String iplist = getProperty(IPGUARD_LIST,configProperties);
-			return iplist.split(" ");
+			String list = getProperty(GUARD_LIST,configProperties);
+			return list.split(" ");
 		} catch (Exception x) {return null; }
 	}	
 	
