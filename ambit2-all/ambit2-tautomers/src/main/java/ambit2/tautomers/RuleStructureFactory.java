@@ -2,6 +2,9 @@ package ambit2.tautomers;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
 
 
 /**
@@ -11,14 +14,28 @@ import org.openscience.cdk.interfaces.IBond;
 
 public class RuleStructureFactory 
 {
-	public static IAtomContainer connectStructures(IAtomContainer str1,int numAt1, 
-												   IAtomContainer str2, int numAt2, IBond.Order order)
+	SmilesParser smilesParser;
+	
+	public void setUp()
 	{
+		smilesParser  = new SmilesParser(SilentChemObjectBuilder.getInstance());
+	}
+	
+	
+	
+	
+	public IAtomContainer connectStructures(IAtomContainer str1,int numAt1, 
+												   IAtomContainer str2, int numAt2, IBond.Order order) throws Exception
+	{
+		//TODO
 		return null;
 	}
 	
-	public static IAtomContainer connectStructures(String smi1, String smi2)
+	public IAtomContainer connectStructures(String smiles1, int numAt1, String smiles2, int numAt2, IBond.Order order) throws Exception 
 	{
-		return null;
+		IAtomContainer mol1 = smilesParser.parseSmiles(smiles1);
+		IAtomContainer mol2 = smilesParser.parseSmiles(smiles2);
+		
+		return connectStructures(mol1, numAt1, mol2, numAt2, order);
 	}
 }
