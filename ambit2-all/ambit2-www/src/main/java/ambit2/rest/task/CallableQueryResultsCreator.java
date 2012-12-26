@@ -35,6 +35,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 	protected Reference applicationRootReference;
 	protected String[] datasets;
 	protected String[] features;
+	protected String folder;
 	
 	public boolean isClearPreviousContent() {
 		return clearPreviousContent;
@@ -62,6 +63,12 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 		this.template = null;
 	}
 	
+	@Override
+	protected void processForm(Reference applicationRootReference, Form form) {
+		super.processForm(applicationRootReference, form);
+		folder = form.getFirstValue("folder");
+		if (folder==null) folder = "temp";
+	}
 	/**
 	 * This is a hack to retrieve features only, 
 	 * so we tell the dataset service to return only the first structure
@@ -139,7 +146,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			DBConnection dbc = new DBConnection(context);
 			connection = dbc.getConnection();
 			SessionID session = new SessionID();
-			session.setName("temp");
+			session.setName(folder);
 			
 			CreateAssessment assessment = new CreateAssessment();
 			assessment.setObject(session);
