@@ -622,8 +622,7 @@ CREATE TABLE  `sessions` (
   `title` varchar(45) collate utf8_bin NOT NULL default 'temp',
   PRIMARY KEY  (`idsessions`),
   UNIQUE KEY `Index_3` USING BTREE (`title`,`user_name`),
-  KEY `FK_sessions_1` (`user_name`),
-  CONSTRAINT `FK_sessions_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK_sessions_1` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
@@ -636,6 +635,7 @@ CREATE TABLE  `query` (
   `name` text collate utf8_bin NOT NULL,
   `content` text collate utf8_bin NOT NULL,
   `idtemplate` int(10) unsigned default NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY  (`idquery`),
   UNIQUE KEY `Index_3` USING BTREE (`name`(255),`idsessions`),
   KEY `FK_query_1` (`idsessions`),
@@ -1036,7 +1036,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (6,3,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (6,4,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
