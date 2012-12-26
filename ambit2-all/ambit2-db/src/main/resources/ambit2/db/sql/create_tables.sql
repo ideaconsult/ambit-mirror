@@ -621,8 +621,7 @@ CREATE TABLE  `sessions` (
   `completed` timestamp NOT NULL DEFAULT '2010-01-01 01:01:01',
   `title` varchar(45) collate utf8_bin NOT NULL default 'temp',
   PRIMARY KEY  (`idsessions`),
-  UNIQUE KEY `Index_3` USING BTREE (`title`,`user_name`),
-  KEY `FK_sessions_1` (`user_name`)
+  UNIQUE KEY `Index_3` USING BTREE (`title`,`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- -----------------------------------------------------
