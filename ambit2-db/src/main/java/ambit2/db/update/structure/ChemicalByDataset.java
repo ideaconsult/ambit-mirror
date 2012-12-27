@@ -54,7 +54,7 @@ public class ChemicalByDataset extends AbstractStructureQuery<String,Integer,Num
 		try {
 			IStructureRecord record = new StructureRecord();
 			record.setIdchemical(rs.getInt(1));
-			record.setIdstructure(01);
+			record.setIdstructure(-1);
 			return record;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

@@ -19,6 +19,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.structure.ChemicalByAssessment;
 import ambit2.db.search.structure.FreeTextQuery;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryDatasetByID;
@@ -184,7 +185,16 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					combined.setScope(scope);
 					return combined;
 				} 
-				
+				String[] folder = form.getValuesArray("folder");
+				if ((folder!=null) && (folder.length>0)) {
+					ChemicalByAssessment qa = new ChemicalByAssessment(folder);
+					QueryCombinedStructure qc = new QueryCombinedStructure();
+					qc.add(query);
+					qc.setChemicalsOnly(true);
+					qc.setScope(qa);
+					setTemplate(createTemplate(context, request, response));
+					return qc;
+				}	
 				if (freetextQuery != null) {
 					QueryCombinedStructure combined = new MyQueryCombined();
 					combined.setChemicalsOnly(true);
