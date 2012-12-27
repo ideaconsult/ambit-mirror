@@ -36,6 +36,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 	protected String[] datasets;
 	protected String[] features;
 	protected String folder;
+	protected String queryName;
 	
 	public boolean isClearPreviousContent() {
 		return clearPreviousContent;
@@ -66,8 +67,8 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
 		super.processForm(applicationRootReference, form);
-		folder = form.getFirstValue("folder");
-		if (folder==null) folder = "temp";
+		folder = form.getFirstValue("folder");	if (folder==null) folder = "temp";
+		queryName = form.getFirstValue("title"); if ("".equals(queryName)) queryName= null;
 	}
 	/**
 	 * This is a hack to retrieve features only, 
@@ -155,6 +156,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			xx.process(assessment);
 			 
 			ProcessorCreateQuery p = new ProcessorCreateQuery();
+			p.setQueryName(queryName);
 			p.setProfile(template);
 			p.setDelete(clearPreviousContent);
 			p.setCopy(true);
