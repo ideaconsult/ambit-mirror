@@ -18,6 +18,7 @@ import ambit2.core.processors.structure.FingerprintGenerator;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.search.NumberCondition;
+import ambit2.db.search.structure.ChemicalByAssessment;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QuerySimilarityBitset;
 import ambit2.db.update.structure.ChemicalByDataset;
@@ -81,6 +82,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected Q createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		String[] folder = form.getValuesArray("folder"); 
 		mol = getMolecule(form);
 		if ((mol==null)||(mol.getAtomCount()==0)) 
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,"Empty molecule");
@@ -98,21 +100,30 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		q.setName("Similarity");
 		try {
 			q.setValue(getBitset(mol));
-			
-			QueryCombinedStructure qc= null;
-			try {
-				qc = new QueryCombinedStructure();
+			if ((folder!=null) && (folder.length>0)) {
+				ChemicalByAssessment qa = new ChemicalByAssessment(folder);
+				QueryCombinedStructure qc = new QueryCombinedStructure();
 				qc.add(q);
 				qc.setChemicalsOnly(true);
-				this.dataset_id = Reference.decode(getRequest().getAttributes().get(DatasetResource.datasetKey).toString());
-				ChemicalByDataset  cd = new ChemicalByDataset(new Integer(dataset_id));
-				qc.setScope(cd);
+				qc.setScope(qa);
 				setTemplate(createTemplate(context, request, response));
 				return (Q)qc;
-			} catch (Exception x) {
-				setTemplate(createTemplate(context, request, response));
-				return (Q)q;
-			}	
+			} else {
+				QueryCombinedStructure qc= null;
+				try {
+					qc = new QueryCombinedStructure();
+					qc.add(q);
+					qc.setChemicalsOnly(true);
+					this.dataset_id = Reference.decode(getRequest().getAttributes().get(DatasetResource.datasetKey).toString());
+					ChemicalByDataset  cd = new ChemicalByDataset(new Integer(dataset_id));
+					qc.setScope(cd);
+					setTemplate(createTemplate(context, request, response));
+					return (Q)qc;
+				} catch (Exception x) {
+					setTemplate(createTemplate(context, request, response));
+					return (Q)q;
+				}	
+			}
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
