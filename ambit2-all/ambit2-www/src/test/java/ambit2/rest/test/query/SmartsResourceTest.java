@@ -3,18 +3,25 @@ package ambit2.rest.test.query;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.templates.MoleculeFactory;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.engine.util.Base64;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
+import ambit2.rest.AbstractResource;
 import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ResourceTest;
 
@@ -28,6 +35,21 @@ public class SmartsResourceTest extends ResourceTest {
 	public String getTestURIKekuleSMILES() {
 		return String.format("http://localhost:%d/query/smarts?search=%s", port,
 				Reference.encode("C1=CC=CC=C1"));
+	}	
+	
+	@Test
+	public void testSearchByMol() throws Exception {
+		
+		IAtomContainer ac = MoleculeFactory.makeBenzene();
+		StringWriter w = new StringWriter();
+		MDLV2000Writer writer = new MDLV2000Writer(w);
+		writer.write(ac);
+		writer.close();
+
+		String query = String.format("http://localhost:%d/query/smarts?type=mol&%s=%s", port,
+				AbstractResource.b64search_param,
+				Base64.encode(w.getBuffer().toString().getBytes("UTF-8"),false));
+		testGet(query,ChemicalMediaType.CHEMICAL_MDLSDF);
 	}	
 	
 	@Test

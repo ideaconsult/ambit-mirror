@@ -38,6 +38,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryAbstractReporter;
@@ -86,13 +87,16 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	protected Form params;
 
 	/**
-	 * SMILES, InChI, InChI key (lookup) , identifiers, names
+	 * SMILES, InChI, InChI key (lookup) , identifiers, names , MOL file
 	 */
 	protected String getFirstParam(Form form) {
 		String search = form.getFirstValue(b64search_param);
 		if (search!=null) {
 			search = new String(Base64.decode(search));
-		} else search = form.getFirstValue(search_param);
+		} else {
+			search = form.getFirstValue(search_param);
+			if (search!=null) search = search.trim();
+		}
 		return search;
 	}
 	protected String[] getValuesArray(Form form) {
@@ -100,7 +104,9 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		if (search!=null) {
 			for (int i=0; i < search.length; i++)
 				search[i] = search[i]==null?null:new String(Base64.decode(search[i]));
-		} else search = form.getValuesArray(search_param);
+		} else {
+			search = form.getValuesArray(search_param);
+		}
 		return search;
 	}
 	/*
@@ -155,7 +161,6 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		else {
 			if (isSearchParam(text)) {
 				text = getFirstParam(form);
-				if (text !=null) text = text.trim();
 				text_multi = getValuesArray(form);
 			}
 
@@ -164,13 +169,13 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			if ((text_multi!= null) && (text_multi.length>1)) {
 				query =  getMultiTextQuery(null,casesens,retrieveProperties, text_multi);
 			} else	if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
-				if (CASNumber.isValid(text)) {
+				if (CASNumber.isValid(text.trim())) {
 					searchType = _searchtype.cas;
 					query =  getTextQuery(Property.getCASInstance(),casesens,retrieveProperties,text);
 				}
 			} else if (EINECS.isValidFormat(text)) { //this is EINECS
 				//we'd better not search for invalid numbers
-				if (EINECS.isValid(text)) {
+				if (EINECS.isValid(text.trim())) {
 					searchType = _searchtype.einecs;
 					query =  getTextQuery(Property.getEINECSInstance(),casesens,retrieveProperties,text);
 				}
@@ -191,9 +196,17 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 					q.setFieldname(ExactStructureSearchMode.inchi);
 					q.setValue(text);
 					query = q;
+				} else if (isMol(text)) {	
+					String[] inchi = mol2inchi(text);
+					QueryStructure q = new QueryStructure();
+					q.setChemicalsOnly(true);
+					q.setFieldname(ExactStructureSearchMode.inchi);
+					//eventually search by inchikey?
+					q.setValue(inchi[0]); 
+					query = q;					
 				} else try {
 					//inchi, inchikey
-					String[] inchi = smiles2inchi(text);
+					String[] inchi = smiles2inchi(text.trim());
 					QueryStructure q = new QueryStructure();
 					q.setChemicalsOnly(true);
 					q.setFieldname(ExactStructureSearchMode.inchi);
@@ -304,7 +317,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	}
 	
 	public boolean isInChI(String inchi)  {
-		return ((inchi!= null) && inchi.startsWith(AmbitCONSTANTS.INCHI)); 
+		return ((inchi!= null) && inchi.trim().startsWith(AmbitCONSTANTS.INCHI)); 
+	}	
+	public boolean isMol(String mol)  {
+		return ((mol!= null) && mol.indexOf("M  END")>0); 
 	}	
 	/*
 	public IAtomContainer isInChI(String inchi) throws Exception {
@@ -324,6 +340,17 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			IAtomContainer c = p.parseSmiles(smiles);
 			if ((c==null) || (c.getAtomCount()==0)) 
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,smiles);
+			return atomcontainer2inchi(c, smiles);
+		} catch (InvalidSmilesException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		} catch (CDKException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		}
+		
+	}
+	
+	public String[] atomcontainer2inchi(IAtomContainer c, String origin) throws ResourceException {
+		try {
 			FixBondOrdersTool fbt = new FixBondOrdersTool();
 			c = fbt.kekuliseAromaticRings((IMolecule)c);
 			//inchi can't process aromatic bonds...
@@ -336,7 +363,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			if (INCHI_RET.OKAY.equals(status) || INCHI_RET.WARNING.equals(status))
 				return new String[] {gen.getInchi(),gen.getInchiKey()};
 			else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Error converting smiles to InChI: %s %s %s %s",status,gen.getMessage(),gen.getLog(),smiles));
+					String.format("Error converting to InChI: %s %s %s %s",status,gen.getMessage(),gen.getLog(),origin));
 			
 		} catch (ResourceException x)	 {
 			throw x;
@@ -347,6 +374,23 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		}
 		
 	}
+	
+	public String[] mol2inchi(String mol) throws ResourceException {
+		try {
+			IAtomContainer c =  MoleculeTools.readMolfile(mol);
+			if ((c==null) || (c.getAtomCount()==0)) 
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"mol file");
+			return atomcontainer2inchi(c, "mol file");
+		} catch (ResourceException x)	 {
+			throw x;
+		} catch (InvalidSmilesException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		} catch (CDKException x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		} catch (Exception x)	 {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);		
+		}
+	}	
 	
 	public boolean isURL(String text) {
 		return URL_as_id.equals(text.toLowerCase());

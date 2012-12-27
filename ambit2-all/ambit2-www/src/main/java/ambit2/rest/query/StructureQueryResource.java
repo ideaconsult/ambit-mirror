@@ -97,7 +97,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	public void setGroupProperties(Profile groupProperties) {
 		this.groupProperties = groupProperties;
 	}
-	protected enum QueryType  {smiles,url};
+	protected enum QueryType  {smiles,url,mol};
 	public Template getTemplate() {
 		return template;
 	}
@@ -421,6 +421,24 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			query_type = QueryType.smiles;
 		}		
 		switch (query_type) {
+		case mol: {
+			query_smiles = form.getFirstValue(QueryResource.b64search_param);
+			if (query_smiles!= null) {
+				query_smiles = new String(Base64.decode(query_smiles));
+			} else
+				query_smiles = form.getFirstValue(QueryResource.search_param);
+			try {
+				IAtomContainer ac = MoleculeTools.readMolfile(query_smiles);
+				SmilesGenerator g = new SmilesGenerator();
+				return g.createSMILES(ac);	
+			} catch (Exception x) {
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						x.getMessage(),
+						x
+						);
+			}				
+		}
 		case smiles: {
 			query_smiles = form.getFirstValue(QueryResource.b64search_param);
 			if (query_smiles!= null) {
@@ -464,6 +482,22 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			query_type = QueryType.smiles;
 		}		
 		switch (query_type) {
+		case mol: {
+			try {
+				query_smiles = form.getFirstValue(QueryResource.b64search_param);
+				if(query_smiles!= null) {
+					query_smiles = new String(Base64.decode(query_smiles));
+				} else
+					query_smiles = form.getFirstValue(QueryResource.search_param);
+				return MoleculeTools.readMolfile(query_smiles);
+			} catch (Exception x) {
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						x.getMessage(),
+						x
+						);
+			}
+		}
 		case smiles:
 			try {
 				query_smiles = form.getFirstValue(QueryResource.b64search_param);
