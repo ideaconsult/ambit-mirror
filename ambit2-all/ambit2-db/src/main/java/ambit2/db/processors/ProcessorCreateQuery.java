@@ -74,7 +74,14 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	protected Template profile;
 	protected UpdateExecutor<IQueryUpdate> exec;
 	protected QueryExecutor qexec = new QueryExecutor();	
-    public Template getProfile() {
+	protected String queryName = null;
+    public String getQueryName() {
+		return queryName;
+	}
+	public void setQueryName(String queryName) {
+		this.queryName = queryName;
+	}
+	public Template getProfile() {
 		return profile;
 	}
 	public void setProfile(Template profile) {
@@ -112,7 +119,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 					return ((QueryStoredResults) target).getFieldname();
 				
 				result = new StoredQuery(-1);
-				result.setName(UUID.randomUUID().toString());
+				result.setName(queryName==null?UUID.randomUUID().toString():queryName);
 			}  else {
 				if (target instanceof QueryStoredResults) {
 					if ((((QueryStoredResults) target).getId()==result.getId()) && (result.getId()>0))
