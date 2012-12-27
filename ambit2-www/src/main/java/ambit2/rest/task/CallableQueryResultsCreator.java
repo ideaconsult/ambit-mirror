@@ -2,6 +2,7 @@ package ambit2.rest.task;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.UUID;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -156,7 +157,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			xx.process(assessment);
 			 
 			ProcessorCreateQuery p = new ProcessorCreateQuery();
-			p.setQueryName(queryName);
+			p.setQueryName(queryName==null?UUID.randomUUID().toString():queryName);
 			p.setProfile(template);
 			p.setDelete(clearPreviousContent);
 			p.setCopy(true);
