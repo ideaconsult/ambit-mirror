@@ -40,6 +40,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -387,4 +388,14 @@ public class SmilesTest {
 	System.out.println(System.currentTimeMillis()-now);
 	}
 	
+	@Test
+	public void test1() throws Exception {
+		String s_in =
+			"CC(C)(C)C1=CC(=C(OP2OCC3(COP(OC4=CC=C(C=C4C(C)(C)C)C(C)(C)C)OC3)CO2)C=C1)C(C)(C)C";
+			SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+			IMolecule m = sp.parseSmiles(s_in);
+			SmilesGenerator sg = new SmilesGenerator();
+			String s_out = sg.createSMILES(m);
+			System.out.println(s_out);
+	}
 }
