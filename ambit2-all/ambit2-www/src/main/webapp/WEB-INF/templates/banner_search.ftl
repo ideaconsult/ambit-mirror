@@ -15,9 +15,9 @@
 </div>
 <div class="four columns omega">
 	<span id='thresholdSpan' style='display:none;' class="remove-bottom">
-		<h3 class="remove-bottom help">
+		<span class="remove-bottom help">
 			&nbsp;
-		</h3>
+		</span>
 		<h6 class="remove-bottom">	
 			<select title ='Tanimoto similarity threshold' id='threshold' name='threshold' style='width:6em;' class="remove-bottom" >
 					<option value='0.9' selected>0.9</option>
@@ -49,7 +49,7 @@
 		&nbsp;
 	</h3>
 	<h6 class="remove-bottom">
-		<input type='text' style='margin:0;padding-bottom:0;'  id='search' name='search' value='' tabindex='1' style='width: 40em;height:1em;'>
+		<input type='text' style='margin:0;padding-bottom:0;width: 40em;height:1em;'  id='search' name='search' value='' tabindex='1' >
 		<a href='#' class='help' style='margin:0;padding:0;' onClick='startEditor("${ambit_root}","searchform");'>Draw (sub)structure</a>
 	</h6>	
 </div>
@@ -58,7 +58,7 @@
 		&nbsp;
 	</h3>
 	<h6 class="remove-bottom">
-		<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'/>
+		<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
 	</h6>
 </div>		
 

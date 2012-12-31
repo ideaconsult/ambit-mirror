@@ -1,4 +1,4 @@
-<div id="accordion" style='fill:auto;' class='details' "margin:5;padding:0px;">
+<div id="accordion" style='fill:auto;' class='details' style='margin:5;padding:0px;'>
     <h5>Datasets</h5>
     <div style="margin:0;padding:2px;">
         <table id='datasets' style="margin:0;padding:0px;">
