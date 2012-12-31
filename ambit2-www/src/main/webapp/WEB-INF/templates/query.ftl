@@ -125,8 +125,11 @@
 
 <body>
 
+
+
+<div class="container" style="margin:0;padding:0;">
+
 <form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui'>
-<div class="container columns" style="margin:0;padding:0;">
 
 <#include "/banner.ftl">
 
@@ -147,11 +150,11 @@
 		</div>
 	</div>
 	<input class='ambit_search' id='submit2' type='submit' value='Refresh' tabindex='3'/>
-	<#include "/select_features.ftl">
-	<br>
 
-	</form>
+	<#include "/select_features.ftl">
 	
+
+	<br>
 	<span id='download' class='help'>Download:<br>
 	<a href='#' id='sdf'><img src='${ambit_root}/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a>
 	<a href='#' id='csv'><img src='${ambit_root}/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a>
@@ -164,10 +167,12 @@
 
 </div>
 
-<div class="eleven columns remove-bottom" style="padding:0;" >
+</form>
 
 
 <form action="${ambit_root}/ui" method="get">  
+<div class="ten columns remove-bottom" style="padding:0;" >
+
 	
 		<table id='structures' class='structable' style='margin:0;' width='100%'>
 					<thead>
@@ -184,17 +189,17 @@
 						<th>InChI Key</th>
 					</thead>
 					<tbody></tbody>
-				</table>
+		</table>
 
 
 </div>
 
 <div class="two columns" style="margin:0;padding:0;" >
 <!--
-	<input  class='ambit_search' type='submit' value='Do XXX'/>
+	<input  class='ambit_search' type='submit' value='Do XXX'>
 -->
-	</form>
-	<div class='help'>OpenTox API<br>
+
+	<span class='help'>OpenTox API<br>
 		<a href='${ambit_root}/dataset' target='_blank'>Datasets</a>
 		<a href='${ambit_root}/feature' target='_blank'>Features</a>
 		<a href='${ambit_root}/compound' target='_blank'>Chemicals</a>
@@ -205,18 +210,18 @@
 		<a href='${ambit_root}/query/compound/search/all' target='_blank'>Exact search</a>
 		<a href='${ambit_root}/query/similarity?search=c1ccccc1' target='_blank'>Similarity</a>
 		<a href='${ambit_root}/query/smarts?search=c1ccccc1' target='_blank'>Substructure</a>
-	</div>
-	<div class='help'>Demos<br>
+	</span>
+	<span class='help'>Demos<br>
 		<a href='${ambit_root}/depict?search=c1ccccc1' target='_blank'>2D depiction</a>
 		<a href='${ambit_root}/depict/reaction?search=c1ccccc1' target='_blank'>Reactions (SMIRKS)</a>
 		<a href='${ambit_root}/depict/tautomer?search=NC%3D1N%3DCN%3DC2N%3DCNC2%3D1' target='_blank'>Tautomers</a>		
-	</div>
-	<div class='help'>Applications<br>
+	</span>
+	<span class='help'>Applications<br>
 		<a href='http://toxpredict.org' target='_blank'>ToxPredict</a>
-	</div>	
+	</span>	
 </div>
 
-
+</form>
 
 
 <#include "/footer.ftl" >
