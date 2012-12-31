@@ -10,6 +10,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.DSSToxCID;
+import ambit2.core.processors.structure.key.DSSToxGenericSID;
 import ambit2.core.processors.structure.key.DSSToxRID;
 import ambit2.core.processors.structure.key.EINECSKey;
 import ambit2.core.processors.structure.key.IStructureKey;
@@ -84,6 +85,8 @@ public class QueryByIdentifierWithStructureFallback  extends AbstractStructureQu
 			return storedproc_search_mode.name;		
 		} else if (key instanceof DSSToxRID) {
 			return storedproc_search_mode.name;		
+		} else if (key instanceof DSSToxGenericSID) {
+			return storedproc_search_mode.name;					
 		} else if (key instanceof PubchemCID) {
 			return storedproc_search_mode.name;		
 		} else if (key instanceof PropertyNameKey) {
