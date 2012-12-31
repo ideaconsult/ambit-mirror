@@ -89,7 +89,7 @@ public class Preferences {
 		{REMOTELOOKUP,"Remote lookup enabled","false",Boolean.class,"Enable remote lookup for CAS and EINECS",false,VTAGS.RemoteQuery},
 		{REMOTELOOKUP_URI,"Remote lookup URI","http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?search=%s&max=1&media=chemical%%2Fx-mdl-sdfile",String.class,"OpenTox web service address for compound lookup",false,VTAGS.RemoteQuery},
 		{GENERATE2D,"Generate 2d coordinates if none exist","true",Boolean.class,"Generate 2D coordinates of the structures, entered as SMILES",false,VTAGS.Structure},
-        {SMILESPARSER,"Use Openbabel SMILES parser","true",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false,VTAGS.Structure},
+        {SMILESPARSER,"Use Openbabel SMILES parser","false",Boolean.class,"Toggles usage of Openbabel vs. CDK SMILES parser. Openbabel available at http://openbabel.org/",false,VTAGS.Structure},
         {STOP_AT_UNKNOWNATOMTYPES,"Stop at unknown atom types","false",Boolean.class,"If checked, will report an error when an unknown atom type is encountered.",false,VTAGS.Structure},
 		{DEFAULT_DIR,"Default directory","",String.class,"This folder will appear as a default in the file open or file save dialogs",false,VTAGS.General},		
 
