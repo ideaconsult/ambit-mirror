@@ -114,7 +114,7 @@
 
 </script>
 
-<script>
+<script type="text/javascript" >
 		$.cookie('ambit2.search', purl.param('search')===undefined?'50-00-0':purl.param('search'), { expires: 1 });
 		$.cookie('ambit2.threshold', purl.param('threshold')===undefined?'0.8':purl.param('threshold'), { expires: 1 });
 		$.cookie('ambit2.option', purl.param('option')===undefined?'auto':purl.param('option'), { expires: 1 });
@@ -125,7 +125,7 @@
 
 <body>
 
-<form method='GET' name='searchform' id='searchform' method='get' action='${ambit_root}/ui'>
+<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui'>
 <div class="container columns" style="margin:0;padding:0;">
 
 <#include "/banner.ftl">
@@ -135,24 +135,24 @@
 		<div class='ui-widget-header ui-corner-top'>Query</div>
 		<div class='ui-widget-content ui-corner-bottom remove-bottom' style='margin:0;padding: 2px;'>
 			<span id='qtype' ></span>
-			<br/>
+			<br>
 			<span id='qthreshold'></span>
-			<br/>
+			<br>
 			<b><span id='qvalue'></span></b>
 			<span id='description' style='display:none;'></span>
 			<a href='#' id='quri' title='#'>@</a>
-			<br/>
+			<br>
 			<span>Max number of hits</span>
 			<input type='text' size='3' name='pagesize' value='10' style='width:5em;height:1.5em;margin-bottom:0;padding: 2px;'>
 		</div>
 	</div>
 	<input class='ambit_search' id='submit2' type='submit' value='Refresh' tabindex='3'/>
 	<#include "/select_features.ftl">
-	<br/>
+	<br>
 
 	</form>
 	
-	<span id='download' class='help'>Download:<br/>
+	<span id='download' class='help'>Download:<br>
 	<a href='#' id='sdf'><img src='${ambit_root}/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a>
 	<a href='#' id='csv'><img src='${ambit_root}/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a>
 	<a href='#' id='cml'><img src='${ambit_root}/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'/></a>
@@ -191,10 +191,10 @@
 
 <div class="two columns" style="margin:0;padding:0;" >
 <!--
-	<input  class='ambit_search' type='submit' value='Do XXX'>
+	<input  class='ambit_search' type='submit' value='Do XXX'/>
 -->
 	</form>
-	<div class='help'>OpenTox API<br/>
+	<div class='help'>OpenTox API<br>
 		<a href='${ambit_root}/dataset' target='_blank'>Datasets</a>
 		<a href='${ambit_root}/feature' target='_blank'>Features</a>
 		<a href='${ambit_root}/compound' target='_blank'>Chemicals</a>
@@ -206,12 +206,12 @@
 		<a href='${ambit_root}/query/similarity?search=c1ccccc1' target='_blank'>Similarity</a>
 		<a href='${ambit_root}/query/smarts?search=c1ccccc1' target='_blank'>Substructure</a>
 	</div>
-	<div class='help'>Demos<br/>
+	<div class='help'>Demos<br>
 		<a href='${ambit_root}/depict?search=c1ccccc1' target='_blank'>2D depiction</a>
 		<a href='${ambit_root}/depict/reaction?search=c1ccccc1' target='_blank'>Reactions (SMIRKS)</a>
 		<a href='${ambit_root}/depict/tautomer?search=NC%3D1N%3DCN%3DC2N%3DCNC2%3D1' target='_blank'>Tautomers</a>		
 	</div>
-	<div class='help'>Applications<br/>
+	<div class='help'>Applications<br>
 		<a href='http://toxpredict.org' target='_blank'>ToxPredict</a>
 	</div>	
 </div>

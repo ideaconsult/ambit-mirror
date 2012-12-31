@@ -3,7 +3,7 @@
 		<div class="two columns alpha"></div>
 		<div class="eight columns omega">
 			<span style='vertical-align:bottom;'>
-			Developed by <br/>
+			Developed by <br>
 			<a class='footerLink' href='http://www.ideaconsult.net/'>IdeaConsult Ltd.</a> 
 			(2005 - 2012)
 			</span>
