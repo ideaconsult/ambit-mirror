@@ -12,7 +12,6 @@ import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.DSSToxCID;
 import ambit2.core.processors.structure.key.DSSToxRID;
 import ambit2.core.processors.structure.key.EINECSKey;
-import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.InchiKey;
 import ambit2.core.processors.structure.key.PropertyKey;
@@ -119,7 +118,7 @@ public class QueryByIdentifierWithStructureFallback  extends AbstractStructureQu
 		params.add(new QueryParam<Integer>(Integer.class, getSearchPropertyID()));
 		
 		params.add(new QueryParam<String>(String.class, identifier instanceof String?(String)identifier:null));
-		params.add(new QueryParam<Double>(Double.class, identifier instanceof Double?(Double)identifier:null));
+		params.add(new QueryParam<Double>(Double.class, identifier instanceof Number?((Number)identifier).doubleValue():null));
 		params.add(new QueryParam<String>(String.class, getValue().getInchi()));
 		params.add(new QueryParam<Integer>(Integer.class, (int)getPageSize()));
 		
