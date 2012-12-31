@@ -88,6 +88,16 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 				return "Match by DSSTox Record ID (DSSTox_RID) is number uniquely assigned to each DSSTox record across all DSSTox files";
 			}			
 		},
+		DSSToxGenericSID {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.DSSGenericSID";
+			}
+			@Override
+			public String getDescription() {
+				return "Records with the same DSSTox_Generic_SID (Generic Substance ID) will share all DSSTox Standard Chemical Fields, including STRUCTURE. Field distinguishes at the level of \"Test Substance\" across all DSSTox data files, most often corresponding to the level of CASRN distinction, but not always.";
+			}			
+		},		
 		InChI {
 			@Override
 			public String getClassName() {
