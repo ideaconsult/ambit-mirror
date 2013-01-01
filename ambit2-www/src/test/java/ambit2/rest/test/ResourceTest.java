@@ -315,7 +315,11 @@ public abstract class ResourceTest extends DbUnitTest {
 	}		
 	public Instances verifyResponseARFF(String uri, MediaType media,InputStream in) throws Exception {
 		return  new Instances(new InputStreamReader(in));
-	}			
+	}
+	public Instances verifyResponseARFF3Col(String uri, MediaType media,InputStream in) throws Exception {
+		throw new Exception("Not implemented");
+	}				
+	
 	public boolean verifyResponseWADL(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}	
@@ -365,6 +369,8 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseCML(uri, media, in);
 		else if (ChemicalMediaType.WEKA_ARFF.equals(media))
 			return verifyResponseARFF(uri, media, in)!=null;
+		else if (ChemicalMediaType.THREECOL_ARFF.equals(media))
+			return verifyResponseARFF3Col(uri, media, in)!=null;		
 		else if (MediaType.TEXT_CSV.equals(media))
 			return verifyResponseCSV(uri, media, in);
 		else if (MediaType.APPLICATION_RDF_XML.equals(media))

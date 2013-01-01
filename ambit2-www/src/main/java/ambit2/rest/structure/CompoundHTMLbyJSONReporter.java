@@ -146,6 +146,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 				MediaType.TEXT_CSV,
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.WEKA_ARFF,
+				ChemicalMediaType.THREECOL_ARFF,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_JSON
 				};
@@ -158,6 +159,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 				"pdf.png",
 				"excel.png",
 				"excel.png",
+				"weka.jpg",
 				"weka.jpg",
 				"rdf.gif",
 				"json.png"

@@ -266,6 +266,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				MediaType.TEXT_CSV,
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.WEKA_ARFF,
+				ChemicalMediaType.THREECOL_ARFF,
 				MediaType.APPLICATION_RDF_XML
 				};
 		String[] image = {
@@ -277,6 +278,7 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				"pdf.png",
 				"excel.png",
 				"excel.png",
+				"weka.jpg",
 				"weka.jpg",
 				"rdf.gif"
 				

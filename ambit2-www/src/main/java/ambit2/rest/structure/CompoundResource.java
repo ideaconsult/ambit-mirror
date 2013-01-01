@@ -56,6 +56,7 @@ import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.FileUpload;
@@ -220,7 +221,10 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
 					ChemicalMediaType.WEKA_ARFF,filenamePrefix);
-			
+		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
+					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),null),

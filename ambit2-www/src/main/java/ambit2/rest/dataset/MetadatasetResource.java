@@ -106,6 +106,7 @@ public class MetadatasetResource extends QueryResource<IQueryRetrieval<ISourceDa
 				ChemicalMediaType.CHEMICAL_MDLSDF,
 				ChemicalMediaType.CHEMICAL_MDLMOL,
 				ChemicalMediaType.WEKA_ARFF,
+				ChemicalMediaType.THREECOL_ARFF,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,
 				MediaType.TEXT_RDF_N3,

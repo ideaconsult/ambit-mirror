@@ -19,7 +19,7 @@ public class ChemicalMediaType  {
 	public static final MediaType WEKA_ARFF = new MediaType("text/x-arff");
 	public static final MediaType TEXT_YAML = new MediaType("text/x-yaml");
 	public static final MediaType APPLICATION_YAML = new MediaType("application/x-yaml");
-	
+	public static final MediaType THREECOL_ARFF = new MediaType("text/x-arff-3col");
 	
 	protected ChemicalMediaType() {
 		
