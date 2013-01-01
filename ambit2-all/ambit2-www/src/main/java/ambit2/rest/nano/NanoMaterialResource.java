@@ -35,6 +35,7 @@ public class NanoMaterialResource extends CompoundResource {
 				MediaType.TEXT_URI_LIST,
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.WEKA_ARFF,
+				ChemicalMediaType.THREECOL_ARFF,
 				MediaType.TEXT_CSV,
 				MediaType.APPLICATION_RDF_XML,
 				MediaType.APPLICATION_RDF_TURTLE,

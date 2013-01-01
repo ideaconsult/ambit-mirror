@@ -63,6 +63,7 @@ import ambit2.rest.RDFStaXConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.DatasetRDFStaxReporter;
@@ -192,6 +193,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.TEXT_PLAIN,
 				ChemicalMediaType.TEXT_YAML,
 				ChemicalMediaType.WEKA_ARFF,
+				ChemicalMediaType.THREECOL_ARFF,
 				MediaType.APPLICATION_JSON,
 				MediaType.TEXT_CSV,
 				MediaType.APPLICATION_RDF_XML,
@@ -297,7 +299,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
 								String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
 							),
-					ChemicalMediaType.WEKA_ARFF,filenamePrefix);			
+					ChemicalMediaType.WEKA_ARFF,filenamePrefix);	
+		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+								String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
+							),
+					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);				
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					createCSVReporter()

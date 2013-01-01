@@ -92,17 +92,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 		tempFile.deleteOnExit();
 		return new BufferedWriter(new FileWriter(tempFile));
 	}
-	@Override
-	public void footer(Writer output, Q query) {
-	
-		try { 
-			tmpWriter.flush(); 
-		} catch (Exception x) {
-			
-		} finally {
-			try {tmpWriter.close();} catch (Exception x) {}
-		}
-		//now the header
+	protected void completeTheHeader() {
 		try { 
 			//complete the URI attribute
 			output.write("}\n");
@@ -115,6 +105,19 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			x.printStackTrace();
 		} finally {
 		}
+	}
+	@Override
+	public void footer(Writer output, Q query) {
+	
+		try { 
+			tmpWriter.flush(); 
+		} catch (Exception x) {
+			
+		} finally {
+			try {tmpWriter.close();} catch (Exception x) {}
+		}
+		//now the header
+		completeTheHeader();
 		
 		BufferedReader in=null;
 		try {
@@ -134,19 +137,6 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	};
 	
 	protected void writeHeader(Writer writer) throws IOException {
-		/*
-		@relation steroids_10mols_AlogP2
-
-		@attribute MolName {aldosterone,androstanediol,19-nortestosterone,epicorticosterone,cortisolacetat,prednisolone,testosterone,17a-hydroxyprogesterone,progesterone,pregnenolone,etiocholanolone}
-		@attribute MW numeric
-		@attribute naAromAtom numeric
-		@attribute topoShape numeric
-		@attribute nHBDon numeric
-		@attribute nHBAcc numeric
-		@attribute Alogp2 numeric
-
-		@data
-		*/
 		if (header == null) {
 			header = template2Header(template,true);
 		
