@@ -8,8 +8,6 @@ import java.io.StringWriter;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openscience.cdk.inchi.InChIGeneratorFactory;
-import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
@@ -50,6 +48,23 @@ public class SmartsResourceTest extends ResourceTest {
 				AbstractResource.b64search_param,
 				Base64.encode(w.getBuffer().toString().getBytes("UTF-8"),false));
 		testGet(query,ChemicalMediaType.CHEMICAL_MDLSDF);
+	}	
+	
+	
+
+	public void testDepictByMol() throws Exception {
+		
+		IAtomContainer ac = MoleculeFactory.makeBenzene();
+		StringWriter w = new StringWriter();
+		MDLV2000Writer writer = new MDLV2000Writer(w);
+		writer.write(ac);
+		writer.close();
+		System.out.println(Base64.encode(w.getBuffer().toString().getBytes("UTF-8"),false));
+		//DQogIENESyAgICAgMDEwNjEzMjA0Mg0KDQogIDYgIDYgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDA5OTkgVjIwMDANCiAgICAwLjAwMDAgICAgMC4wMDAwICAgIDAuMDAwMCBDICAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMA0KICAgIDAuMDAwMCAgICAwLjAwMDAgICAgMC4wMDAwIEMgICAwICAwICAwICAwICAwICAwICAwICAwICAwICAwICAwICAwDQogICAgMC4wMDAwICAgIDAuMDAwMCAgICAwLjAwMDAgQyAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDANCiAgICAwLjAwMDAgICAgMC4wMDAwICAgIDAuMDAwMCBDICAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMCAgMA0KICAgIDAuMDAwMCAgICAwLjAwMDAgICAgMC4wMDAwIEMgICAwICAwICAwICAwICAwICAwICAwICAwICAwICAwICAwICAwDQogICAgMC4wMDAwICAgIDAuMDAwMCAgICAwLjAwMDAgQyAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDAgIDANCiAgMSAgMiAgMSAgMCAgMCAgMCAgMCANCiAgMiAgMyAgMiAgMCAgMCAgMCAgMCANCiAgMyAgNCAgMSAgMCAgMCAgMCAgMCANCiAgNCAgNSAgMiAgMCAgMCAgMCAgMCANCiAgNSAgNiAgMSAgMCAgMCAgMCAgMCANCiAgNiAgMSAgMiAgMCAgMCAgMCAgMCANCk0gIEVORA0K
+		String query = String.format("http://localhost:%d/depict/cdk?type=mol&%s=%s", port,
+				AbstractResource.b64search_param,
+				Base64.encode(w.getBuffer().toString().getBytes("UTF-8"),false));
+		testGet(query,MediaType.IMAGE_PNG);
 	}	
 	
 	@Test

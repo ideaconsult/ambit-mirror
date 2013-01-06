@@ -14,6 +14,7 @@ import ambit2.pubchem.rest.PUGRestImageRequest.IMAGE_SIZE;
 import ambit2.pubchem.rest.PUGRestImageRequest.RECORD_TYPE;
 import ambit2.pubchem.rest.PUGRestRequest.COMPOUND_DOMAIN_INPUT;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.query.StructureQueryResource.QueryType;
 
 public class PubChemDepict extends AbstractDepict {
 	protected PUGRestImageRequest depict = new PUGRestImageRequest();
@@ -27,7 +28,7 @@ public class PubChemDepict extends AbstractDepict {
 	
 	@Override
 	protected BufferedImage getImage(String smiles, int w, int h,
-			String recordType) throws ResourceException {
+			String recordType, QueryType type) throws ResourceException {
 		depict.setWidth(w);
 		depict.setHeight(h);
 		depict.setImageSize(IMAGE_SIZE.dimension);

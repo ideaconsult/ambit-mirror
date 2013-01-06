@@ -15,19 +15,20 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.engine.util.Base64;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.base.processors.AbstractReporter;
 import ambit2.rendering.CompoundImageTools.Mode2D;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.ProtectedResource;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.query.StructureQueryResource.QueryType;
 
 /**
  * Returns PNG given a smiles
@@ -41,6 +42,7 @@ public class AbstractDepict extends ProtectedResource {
 	protected String smarts ;
 	protected String smirks ;
 	protected String recordType = null;
+	protected QueryType qType = QueryType.smiles;
 	protected boolean headless = false;
 	int w = 400; int h = 200;
 	/**
@@ -60,7 +62,7 @@ public class AbstractDepict extends ProtectedResource {
 		super.doInit();
 		this.getVariants().add(new Variant(MediaType.TEXT_HTML));
 	}
-	protected BufferedImage getImage(String smiles,int width,int height,String recordType) throws ResourceException {
+	protected BufferedImage getImage(String smiles,int width,int height,String recordType, QueryType type) throws ResourceException {
 		return null;
 	}
 
@@ -177,15 +179,29 @@ public class AbstractDepict extends ProtectedResource {
 	public Representation process(Variant variant) {
 
 		try {
+			
 			Form form = getParams();
 			w = 400; h = 200;
 			recordType = "2d";
 			try { w = Integer.parseInt(form.getFirstValue("w"));} catch (Exception x) {w =400;}
 			try { h = Integer.parseInt(form.getFirstValue("h"));} catch (Exception x) {h =200;}
 			try { recordType = form.getFirstValue("record_type");} catch (Exception x) {}
+			try { qType = QueryType.valueOf(form.getFirstValue("type"));} catch (Exception x) { qType = QueryType.smiles; }
+			switch (qType) {
+			case mol: { //base64 encoded mol files 
+				smiles = form.getValuesArray(QueryResource.b64search_param);
+				if (smiles!= null) 
+					for (int i=0; i < smiles.length; i++)
+						smiles[i] = new String(Base64.decode(smiles[i]));
+				break;
+			}
+			default: {
+				smiles = form.getValuesArray(QueryResource.search_param);
+				if ((smiles==null) || (smiles.length<1)) smiles = new String[] {null};
+				else smiles[0] = smiles[0].trim();
+			}
+			}
 
-			smiles = form.getValuesArray(QueryResource.search_param);
-			if ((smiles==null) || (smiles.length<1)) smiles = new String[] {null};
 			setSmarts(form.getFirstValue("smarts"));
 			setSmirks(null);
 			String[]  smirks_patterns = form.getValuesArray("smirks");
@@ -217,7 +233,7 @@ public class AbstractDepict extends ProtectedResource {
 	    		}
 	    	final BufferedImage image;
 	    	if (smiles[0] != null) {
-	        	image = getImage(smiles[0].trim(),w,h,recordType);
+	        	image = getImage(smiles[0],w,h,recordType, qType);
 	        	if (image ==  null) {
 		        	getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Invalid smiles %s",smiles));
 	        		return null;

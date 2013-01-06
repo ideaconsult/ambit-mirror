@@ -98,7 +98,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	public void setGroupProperties(Profile groupProperties) {
 		this.groupProperties = groupProperties;
 	}
-	protected enum QueryType  {smiles,url,mol};
+	public enum QueryType  {smiles,url,mol};
 	public Template getTemplate() {
 		return template;
 	}

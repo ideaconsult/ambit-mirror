@@ -11,6 +11,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.core.smiles.OpenBabelDepiction;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.query.StructureQueryResource.QueryType;
 
 public class OpenBabelDepict extends AbstractDepict {
 	protected static String obabel_home;
@@ -24,7 +25,7 @@ public class OpenBabelDepict extends AbstractDepict {
 	//obabel -:"CCC(=O)Cl" -O tmp.png -xp 1000
 	@Override
 	protected BufferedImage getImage(String smiles, int w, int h,
-			String recordType) throws ResourceException {
+			String recordType, QueryType type) throws ResourceException {
 
 		try {
 			OpenBabelDepiction ob = new OpenBabelDepiction() {

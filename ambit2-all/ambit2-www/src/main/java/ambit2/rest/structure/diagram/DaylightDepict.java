@@ -12,6 +12,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.HttpException;
 import ambit2.pubchem.DepictRequest;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.query.StructureQueryResource.QueryType;
 
 /**
  * 2D depiction based on daylight depict service
@@ -29,7 +30,7 @@ public class DaylightDepict extends AbstractDepict {
 	}
 	@Override
 	protected BufferedImage getImage(String smiles, int width, int height,
-			String recordType) throws ResourceException {
+			String recordType, QueryType type) throws ResourceException {
 
 		try {
 			return depict.process(smiles);

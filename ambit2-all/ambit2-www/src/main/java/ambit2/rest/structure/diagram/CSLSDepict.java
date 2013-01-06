@@ -10,6 +10,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.HttpException;
 import ambit2.rest.AmbitResource;
+import ambit2.rest.query.StructureQueryResource.QueryType;
 import ambit2.search.csls.CSLSImageRequest;
 
 /**
@@ -27,7 +28,7 @@ public class CSLSDepict extends AbstractDepict {
 	}
 	@Override
 	protected BufferedImage getImage(String smiles, int w, int h,
-			String recordType) throws ResourceException {
+			String recordType, QueryType type) throws ResourceException {
 
 		depict.setWidth(w);
 		depict.setHeight(h);
