@@ -23,11 +23,13 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.AbstractReporter;
+import ambit2.core.data.MoleculeTools;
 import ambit2.rendering.CompoundImageTools;
 import ambit2.rendering.CompoundImageTools.Mode2D;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.query.StructureQueryResource.QueryType;
 import ambit2.smarts.query.ISmartsPattern;
 import ambit2.smarts.query.SmartsPatternAmbit;
 
@@ -51,20 +53,27 @@ public class CDKDepict extends AbstractDepict implements ISmartsDepiction {
 	
 	@Override
 	protected BufferedImage getImage(String smiles, int w, int h,
-			String recordType) throws ResourceException {
+			String recordType, QueryType type) throws ResourceException {
 		try {
-			if (depict.getParser()==null) depict.setParser(
-					new SmilesParser(SilentChemObjectBuilder.getInstance())
-					);
 			depict.setImageSize(new Dimension(w,h));
-			
-			if (displayMode==null) {
-				return depict.generateImage(smiles,
-						(smarts == null)||("".equals(smarts.trim()))?null:new SmartsPatternSelector(smarts),false,false,null);
-			} else 
-				return depict.generateImage(smiles,
-							(smarts == null)||("".equals(smarts.trim()))?null:new SmartsPatternSelector(smarts),false,false,displayMode);
+			if (type!=null && QueryType.mol.equals(type)) {
+				IAtomContainer mol = MoleculeTools.readMolfile(smiles);
+				return depict.getImage(mol,
+						(smarts == null)||("".equals(smarts.trim()))?null:
+						new SmartsPatternSelector(smarts),true,false,false);
 
+			} else { 
+				if (depict.getParser()==null) depict.setParser(
+						new SmilesParser(SilentChemObjectBuilder.getInstance())
+						);
+				
+				if (displayMode==null) {
+					return depict.generateImage(smiles,
+							(smarts == null)||("".equals(smarts.trim()))?null:new SmartsPatternSelector(smarts),false,false,null);
+				} else 
+					return depict.generateImage(smiles,
+								(smarts == null)||("".equals(smarts.trim()))?null:new SmartsPatternSelector(smarts),false,false,displayMode);
+			}
 		} catch (ResourceException x) {throw x; 
 		} catch (Exception x) { 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x); 

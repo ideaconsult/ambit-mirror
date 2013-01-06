@@ -15,6 +15,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.rest.query.StructureQueryResource.QueryType;
 import ambit2.rest.structure.diagram.CDKDepictVariants;
 import ambit2.smarts.IAcceptable;
 import ambit2.smarts.SMIRKSManager;
@@ -26,7 +27,7 @@ public class SMIRKSDepict extends CDKDepictVariants implements IAcceptable {
 	protected ArrayList<String> list = new ArrayList<String>();
 	@Override
 	protected BufferedImage getImage(String smiles, int w, int h,
-			String recordType) throws ResourceException {
+			String recordType, QueryType type) throws ResourceException {
 		try {
 			depict.setImageSize(new Dimension(w,h));
 
