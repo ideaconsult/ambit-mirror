@@ -28,33 +28,24 @@
         	<groupId>org.openscience.cdk</groupId>
         	<artifactId>cdk-render</artifactId>
         	<version>${cdk.version}</version>
+        	<scope>compile</scope>
        </dependency>
   	<dependency>
         	<groupId>org.openscience.cdk</groupId>
         	<artifactId>cdk-renderawt</artifactId>
         	<version>${cdk.version}</version>
-       </dependency>            
-             <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-renderbasic</artifactId>
-        	<version>${cdk.version}</version>
-       </dependency>
-  	<dependency>
-	  <groupId>org.openscience.cdk</groupId>
-	  <artifactId>cdk-renderextra</artifactId>
-	  <version>${cdk.version}</version>
-	</dependency>	
-       <!-- 
+        	<scope>compile</scope>
+       </dependency>       
   	<dependency>
   		<groupId>org.openscience.cdk</groupId>
   		<artifactId>cdk-jchempaint</artifactId>
   		<version>26</version>
   	</dependency>
-  	 -->
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-namestructure</artifactId>
   		<version>${project.version}</version>
+  		<scope>compile</scope>
   	</dependency>
   </dependencies>
   <properties>
