@@ -71,22 +71,23 @@
     <module>cdk-qsarprotein</module>
     <module>cdk-reaction</module>
     <module>cdk-render</module>
+    <module>cdk-renderbasic</module>
+    <module>cdk-renderawt</module>
+    <module>cdk-renderextra</module>
     <module>cdk-sdg</module>
     <module>cdk-signature</module>
     <module>cdk-standard</module>
     <module>cdk-smarts</module>
     <module>cdk-smiles</module>
     <module>cdk-smsd</module>
-        <module>cdk-structgen</module>
+    <module>cdk-structgen</module>
     <module>cdk-valencycheck</module>
     <module>cdk-silent</module>
-    <module>cdk-renderbasic</module>
-    <module>cdk-renderawt</module>
     <module>cdk-tautomer</module>
 <!-- not changed , 1.0 already in the repo
     <module>signature</module>
 -->
-    <module>cdk-renderextra</module>
+
  </modules>
   
  <scm>
