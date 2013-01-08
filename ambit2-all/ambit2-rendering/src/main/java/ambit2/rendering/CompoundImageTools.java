@@ -50,10 +50,7 @@ import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.renderer.generators.RingGenerator;
-import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
-import org.openscience.cdk.renderer.generators.SelectBondGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.cdk.renderer.selection.IncrementalSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
@@ -69,6 +66,9 @@ import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.ICompoundImageTools;
 import ambit2.core.processors.structure.StructureTypeProcessor;
+import ambit2.jchempaint.renderer.generators.SelectAtomGenerator;
+import ambit2.jchempaint.renderer.generators.SelectBondGenerator;
+import ambit2.jchempaint.renderer.selection.IncrementalSelection;
 import ambit2.namestructure.Name2StructureProcessor;
 
 
@@ -605,8 +605,9 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
             	}
             	
 	    	if (highlighted != null) {
-	    		RendererModelWrapper.setSelectedPartColor(r2dm,new Color(0,183,239,128));
-	    		RendererModelWrapper.setSelectionShape(r2dm,BasicAtomGenerator.Shape.OVAL);
+	    		//!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    		//RendererModelWrapper.setSelectedPartColor(r2dm,new Color(0,183,239,128));
+	    		//RendererModelWrapper.setSelectionShape(r2dm,BasicAtomGenerator.Shape.OVAL);
 	    		r2dm.setSelection(highlighted);
 	    		RendererModelWrapper.setColorAtomsByType(r2dm,true);
 	    		RendererModelWrapper.setShowAtomTypeNames(r2dm,true);
@@ -752,7 +753,7 @@ class MySelectAtomGenerator extends SelectAtomGenerator  {
 
 	    	ElementGroup selectionElements = new ElementGroup();
 	    	
-
+	    	//!!!!!!!!!!
 	        Color selectionColor = RendererModelWrapper.getSelectedPartColor(model);
 	        BasicAtomGenerator.Shape shape = RendererModelWrapper.getSelectionShape(model);
 	        IChemObjectSelection selection = model.getSelection();
@@ -762,7 +763,6 @@ class MySelectAtomGenerator extends SelectAtomGenerator  {
 	        	return selectionElements;
 	        if (this.autoUpdateSelection || selection.isFilled()) {
 	            double r = RendererModelWrapper.getSelectionRadius(model) / RendererModelWrapper.getScale(model);
-
 	            double d = 4 * r;
 	            IAtomContainer selectedAC = selection.getConnectedAtomContainer();
 	            if (selectedAC != null) {

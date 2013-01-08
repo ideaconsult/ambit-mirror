@@ -3,13 +3,14 @@ package ambit2.rendering;
 import java.awt.Color;
 
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.color.CDK2DAtomColors;
 import org.openscience.cdk.renderer.color.IAtomColorer;
 import org.openscience.cdk.renderer.generators.AtomNumberGenerator;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator.AtomColor;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator.AtomRadius;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator.CompactShape;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator.Shape;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
-import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 
 
 public class RendererModelWrapper {
@@ -109,7 +110,7 @@ public class RendererModelWrapper {
 	 * @param value
 	 */
 	public static void setSelectionShape(RendererModel r2dm, Shape value) {
-		r2dm.set(SelectAtomGenerator.SelectionShape.class, value);
+		r2dm.set(CompactShape.class, value);
 	}
 	
 	/**
@@ -118,7 +119,7 @@ public class RendererModelWrapper {
 	 * @return
 	 */
 	public static Shape getSelectionShape(RendererModel r2dm) {
-		return r2dm.get(SelectAtomGenerator.SelectionShape.class);
+		return r2dm.get(CompactShape.class);
 	}	
 	
 	/**
@@ -127,7 +128,7 @@ public class RendererModelWrapper {
 	 * @param value
 	 */
 	public static void setSelectedPartColor(RendererModel r2dm, Color value) {
-		r2dm.set(SelectAtomGenerator.SelectionAtomColor.class, value);
+		r2dm.set(AtomColor.class, value);
 	}
 	
 	/**
@@ -136,15 +137,15 @@ public class RendererModelWrapper {
 	 * @return
 	 */
 	public static Color getSelectedPartColor(RendererModel r2dm) {
-		return r2dm.get(SelectAtomGenerator.SelectionAtomColor.class);
+		return r2dm.get(AtomColor.class);
 	}	
 	
 	public static Double getSelectionRadius(RendererModel r2dm) {
-		return r2dm.get(SelectAtomGenerator.SelectionRadius.class);
+		return r2dm.get(AtomRadius.class);
 	}	
 	
 	public static void setSelectionRadius(RendererModel r2dm,Double value) {
-		r2dm.set(SelectAtomGenerator.SelectionRadius.class,value);
+		r2dm.set(AtomRadius.class,value);
 	}	
 	/**
 	 * r2dm.setColorAtomsByType()

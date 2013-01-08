@@ -33,9 +33,7 @@ import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
-import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
@@ -44,6 +42,8 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.data.MoleculeTools;
+import ambit2.jchempaint.renderer.generators.SelectAtomGenerator;
+import ambit2.jchempaint.renderer.selection.SingleSelection;
 
 /**
  * 
