@@ -6,27 +6,28 @@ import org.openscience.cdk.io.IChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import java.io.InputStream;
+import java.io.FileInputStream;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MDLV2000ReaderExtended;
+import ambit2.core.groups.*;
+
+import ambit2.markush.*;
 
 public class TestUtils 
 {
-	static String path = "/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/mdl/";
+	static String path = "/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/";
 	
 	public static void main(String[] args) throws Exception
 	{
-		testSuppleAtomFromMLD("/temp2/A.mol");
+		//testSuppleAtomFromMLD(path + "mdl/rgroup.mol");
+		testSuppleAtomFromMLD(path + "M__RGP/marvin_sketch.mol");
 	}
 	
 
 	static protected IChemObject readMDLV2000Extended(String file) throws Exception 
-	{
-		InputStream in = MDLV2000ReaderExtended.class.getClassLoader().getResourceAsStream(file);
-		if (in == null)
-		{
-			System.out.println("********* null");
-		}
+	{	
+		InputStream in = new FileInputStream(file);
 		
 		MDLV2000ReaderExtended reader = new MDLV2000ReaderExtended(in, IChemObjectReader.Mode.RELAXED);
 		
@@ -38,8 +39,16 @@ public class TestUtils
 	
 	static void testSuppleAtomFromMLD(String mdlFile) throws Exception
 	{
-		readMDLV2000Extended(mdlFile);
+		IChemObject o = readMDLV2000Extended(mdlFile);
+		SuppleAtomContainer sac = (SuppleAtomContainer) o;
 		
+		if (sac == null)
+		{
+			System.out.println("null object read from file");
+			return;
+		}
+		
+		System.out.println(MarkushHelpers.toStringExhaustive(sac));
 	}
 	
 
