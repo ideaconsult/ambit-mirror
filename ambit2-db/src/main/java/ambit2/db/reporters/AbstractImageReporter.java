@@ -14,6 +14,9 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
@@ -35,6 +38,10 @@ import ambit2.db.update.storedquery.CreateStoredQuery;
 import ambit2.rendering.CompoundImageTools;
 
 public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructureRecord>,OUTPUT> extends QueryReporter<IStructureRecord, Q,OUTPUT > {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8546489672452997303L;
 	protected CompoundImageTools depict = new CompoundImageTools();
 	protected MoleculeReader reader = new MoleculeReader();
 	protected CreateStoredQuery cache ;
@@ -43,6 +50,7 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 	protected String mainType;
 	protected String subType;
 	protected Property img ;
+	protected CachedImage<OUTPUT> imageWrapper;
 
 	public AbstractImageReporter(String mainType,String subType) {
 		this(mainType,subType,new Dimension(250,250));
@@ -79,6 +87,10 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 		qs.setQuery(strucQuery);
 		cache.setObject(qs);		
 	
+		imageWrapper = createImageWrapper(null);
+	}
+	protected CachedImage<OUTPUT> createImageWrapper(BufferedImage image) {
+		return new CachedImage<OUTPUT>(image, null);
 	}
 	protected String getQueryName() {
 		 return String.format("w=%d&h=%d",depict.getImageSize().width,depict.getImageSize().height);
@@ -143,7 +155,7 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 	        
 			if (depict.getImageMap()!=null) {
 				//System.out.println(depict.getImageMap().toString());
-				file = new File(tmpDir,String.format("%s/%s/%d_%d.html",
+				file = new File(tmpDir,String.format("%s/%s/%d_%d.map",
 			        		getConnection().getCatalog(),
 			        		dimensions,
 			        		item.getIdchemical(),item.getIdstructure()
@@ -162,7 +174,51 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 
 	}
 	
-	protected abstract OUTPUT getCached(IStructureRecord item);
+	protected CachedImage<OUTPUT> createImage(IStructureRecord item) throws AmbitException  {
+		imageWrapper.setImage(null);
+		imageWrapper.setProperty(null);
+		IAtomContainer ac = reader.process(item);
+		try {
+			switch (item.getType()) {
+				case D2withH: {
+					ac = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(ac);
+					break;
+				}
+				case D3withH: {
+					ac = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(ac);
+					break;
+				}
+				case NA: { 
+					return imageWrapper;
+				}
+			}
+		} catch (Exception x) {}
+		depict.setImageMap(new StringBuilder());
+		imageWrapper.setImage(depict.getImage(ac));
+		imageWrapper.setImageMap(depict.getImageMap().toString());
+		return imageWrapper;
+	}
+
+	@Override
+	public Object processItem(IStructureRecord item) throws AmbitException {
+		try {
+			CachedImage<OUTPUT> result = getCached(item);
+			if (result.getImage() == null) {
+				result = createImage(item);
+				if (result.getImage()!=null) {
+					cache(item,result.getImage());
+				}
+			}
+			if (result.getImage()==null) 
+				result.setImage((BufferedImage) depict.getDefaultImage());
+			setOutput(result.getProperty());
+			return result;
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+	
+	}
+	protected abstract CachedImage<OUTPUT> getCached(IStructureRecord item);
 }
 
 
@@ -219,4 +275,32 @@ class MyQuery extends AbstractStructureQuery<String,IStructureRecord,NumberCondi
 		this.category = category;
 	}
 
+}
+
+class CachedImage<MORE> {
+	BufferedImage image;
+	String imageMap = null;
+	public String getImageMap() {
+		return imageMap;
+	}
+	public void setImageMap(String imageMap) {
+		this.imageMap = imageMap;
+	}
+	MORE property;
+	public CachedImage(BufferedImage image, String path) {
+		this.image = image;
+	}
+	public BufferedImage getImage() {
+		return image;
+	}
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+	public MORE getProperty() {
+		return property;
+	}
+	public void setProperty(MORE property) {
+		this.property = property;
+	}
+	
 }

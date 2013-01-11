@@ -6,10 +6,6 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-
-import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -44,23 +40,31 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		super(mainType,subType,dimension);
 
 	}
+	@Override
+	protected CachedImage<BufferedImage> createImageWrapper(BufferedImage image) {
+		return new JustTheImage(image, null);
+	}
 
 	@Override
-	protected BufferedImage getCached(IStructureRecord item)  {
+	protected CachedImage<BufferedImage> getCached(IStructureRecord item) {
 		try {
+			imageWrapper.setImage(null);
+			imageWrapper.setProperty(null);
 			Object path = item.getProperty(img);
 			if (path != null) {
 				File file = new File(path.toString());
 				if (file.exists()) {
-					return ImageIO.read(file);
+					imageWrapper.setImage(ImageIO.read(file));
+					return imageWrapper;
 				}
 			} 
-			return null;
+			return imageWrapper;
 		} catch (Exception x) {
 			logger.warn(x);
 			return null;
 		}
 	}
+	/*
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
@@ -78,28 +82,8 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		}
 	
 	}
-	protected BufferedImage createImage(IStructureRecord item) throws AmbitException  {
-		IAtomContainer ac = reader.process(item);
-		try {
-			switch (item.getType()) {
-				case D2withH: {
-					ac = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(ac);
-					break;
-				}
-				case D3withH: {
-					ac = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(ac);
-					break;
-				}
-				case NA: { 
-					return null;
-				}
-			}
-		} catch (Exception x) {}
-		depict.setImageMap(new StringBuilder());
-		BufferedImage image = depict.getImage(ac);
-		return image;
-	}
-	
+
+	*/
 	public void open() throws DbAmbitException {
 	}
 	@Override
@@ -111,3 +95,15 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	}
 
 }
+
+class JustTheImage extends CachedImage<BufferedImage> {
+	public JustTheImage(BufferedImage image, String path) {
+		super(image,path);
+	}
+	@Override
+	public BufferedImage getProperty() {
+		return image;
+	}
+}
+
+

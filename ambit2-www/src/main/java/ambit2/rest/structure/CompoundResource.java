@@ -33,6 +33,7 @@ import ambit2.core.data.EINECS;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
+import ambit2.db.reporters.ImageAreaReporter;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.PDFReporter;
 import ambit2.db.reporters.SDFReporter;
@@ -184,7 +185,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.IMAGE_GIF) 
 				) {
 			return createImageConvertor(variant);
-			
+		} else if (variant.getMediaType().equals(ChemicalMediaType.ATOM_AREA_MAP)) 	 {
+			return createImageStringConvertor(variant);			
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(
 					new PDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()));				
@@ -271,6 +273,22 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				new ImageReporter<QueryStructureByID>(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d),
 				variant.getMediaType());
 	}
+	
+	protected StringConvertor createImageStringConvertor(Variant variant) throws ResourceException {
+
+		Dimension d = new Dimension(250,250);
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		try {
+			
+			d.width = Integer.parseInt(form.getFirstValue("w").toString());
+		} catch (Exception x) {}
+		try {
+			d.height = Integer.parseInt(form.getFirstValue("h").toString());
+		} catch (Exception x) {}			
+		return new StringConvertor(
+				new ImageAreaReporter<QueryStructureByID>(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d),
+				variant.getMediaType());
+	}	
 	protected QueryURIReporter getURIReporter() {
 		return new CompoundURIReporter<QueryStructureByID>(getCompoundInDatasetPrefix(),getRequest(),getDocumentation());
 	}

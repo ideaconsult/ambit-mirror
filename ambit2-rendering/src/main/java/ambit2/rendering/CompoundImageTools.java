@@ -54,7 +54,6 @@ import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.generators.SelectBondGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
-import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -79,6 +78,13 @@ import ambit2.namestructure.Name2StructureProcessor;
  * <b>Modified</b> 2006-3-5
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
+	protected StringBuilder imageMap;
+	public StringBuilder getImageMap() {
+		return imageMap;
+	}
+	public void setImageMap(StringBuilder imageMap) {
+		this.imageMap = imageMap;
+	}
 	public enum Mode2D {
 	
 		kekule {
@@ -205,7 +211,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         generators.add(new BasicAtomGenerator());
         if (atomNumbers)
             generators.add(new AtomNumberGenerator());
-
+        generators.add(new ImageMapGenerator());
         generators.add(new MySelectAtomGenerator());
 
 
@@ -613,11 +619,45 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 
 	    	} 	  
 	    	try {
-	    		renderer.paint(all,new AWTDrawVisitor(g),drawArea,false);
+	    		renderer.paint(all,new AWTDrawVisitorWithImageMap(g) {
+	    			@Override
+	    			protected void imageMap(ImageMapAreaElement atomSymbol,
+	    					Rectangle2D textBounds) {
+	    				if ((imageMap!=null)) {
+	    					int x = (int) textBounds.getCenterX();
+	    					int y = (int) textBounds.getCenterY();
+	    					int w = (int) textBounds.getWidth();
+	    					int h = (int) textBounds.getHeight();
+	    					imageMap.append(String.format("<area shape='circle' coords='%d,%d,%d' href='#' title='%s' atomnumber='%s' onClick='atomNumber(%s)'>\n",
+	    							x,y,w,
+	    							atomSymbol.text,
+	    							atomSymbol.text,
+	    							atomSymbol.text
+	    							));
+	    				}
+	    			}
+	    			
+	    		},drawArea,false);
 
 	    	} catch (Exception e) {
 	    		r2dm.setSelection(null);
-	    		renderer.paint(all,new AWTDrawVisitor(g),drawArea,false);
+	    		renderer.paint(all,new AWTDrawVisitorWithImageMap(g) {
+	    			protected void imageMap(ImageMapAreaElement atomSymbol,
+	    					Rectangle2D textBounds) {
+	    				if ((imageMap!=null)) {
+	    					int x = (int) textBounds.getCenterX();
+	    					int y = (int) textBounds.getCenterY();
+	    					int w = (int) textBounds.getWidth();
+	    					int h = (int) textBounds.getHeight();
+	    					imageMap.append(String.format("<area shape='circle' coords='%d,%d,%d' href='#' title='%s' atomnumber='%s' onClick='atomNumber(%s)'>\n",
+	    							x,y,w,
+	    							atomSymbol.text,
+	    							atomSymbol.text,
+	    							atomSymbol.text
+	    							));
+	    				}
+	    			}
+	    		},drawArea,false);
 	    	}
 		} else {
 			g.setBackground(Color.white);
