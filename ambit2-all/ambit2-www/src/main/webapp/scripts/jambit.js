@@ -85,7 +85,7 @@ function initTable(root, query_service, tableSelector, anArray, checkbox, checke
 				"bUseRendered" : "false",
 				"fnRender" : function(o,val) {
 					return val + 
-					" <a href='"+o.aData.URI+"?max=10' class='help' title='AMBIT URI: "+o.aData.URI+"' target=_blank title='"+o.aData.URI+"'>@</a>";
+					" <a href='"+o.aData.URI+"?max=10' class='help' title='AMBIT URI: "+o.aData.URI+"' target=_blank title='"+o.aData.URI+"'><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a>";
 				}
 					
 				}

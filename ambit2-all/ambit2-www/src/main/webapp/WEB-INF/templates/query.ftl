@@ -143,7 +143,7 @@
 			<br>
 			<b><span id='qvalue'></span></b>
 			<span id='description' style='display:none;'></span>
-			<a href='#' id='quri' title='#'>@</a>
+			<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="float: left; margin-right: .3em;"></a>
 			<br>
 			<span>Max number of hits</span>
 			<input type='text' size='3' name='pagesize' value='10' style='width:5em;height:1.5em;margin-bottom:0;padding: 2px;'>
