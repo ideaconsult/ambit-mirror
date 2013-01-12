@@ -164,3 +164,13 @@ a.topLinks {
 	 border:0;
 }	
  
+.ui-menu {
+	width: 100%;
+	text-align: left;
+}
+
+  #selectable .ui-selectee { background: #F2F0E6; color: white; }
+  #selectable .ui-selecting { background: #F2F0E6; color: white; opacity: 0.75;}
+  #selectable .ui-selected { background: white; color: white;  }
+  #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+  #selectable li { margin: 3px; padding: 0.4em; font-size: 1em; height: 18px; }

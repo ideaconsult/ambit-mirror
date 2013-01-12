@@ -1,32 +1,8 @@
 <div class="row remove-bottom" id="header">
-		
-	<ul class='topLinks remove-bottom'>
-	<li class='topLinks'>
-		<a class='topLinks' href='http://ambit.sf.net/'>Help</a>
-	</li>
-	<li class='topLinks'>|</li>
-	<#if username??>
-		<li class='topLinks'>
-		<a class='topLinks login' title='You are currently logged in as "${username}". Click here to log out.' href='#' onClick='document.forms["logoutForm"].submit(); return false;'>Log out [<b>${username}</b>]</a>			   
-		<form id='logoutForm' action='${ambit_root}/protected/signout?targetUri=.' method='POST'></form>
-		</li>
-	<#else>
-		<li class='topLinks'>
-			<a class='topLinks login' title='Log in' href='${ambit_root}/opentoxuser'>Log in</a>
-		</li>						
-		<li class='topLinks'>|</li>
-		<li class='topLinks'>
-		<a class='topLinks register' title='Register' href='http://opentox.org/join_form'>Register</a></li>				
-		</#if>			
-	</ul>
+	<#include "/toplinks.ftl">
 </div>
 <div class="row remove-bottom">
-		<div class="three columns">
-			<a href='http://ambit.sf.net/'>
-				<img class='scale-with-grid' border='0' src='${ambit_root}/images/ambit-logo.png' title='http://ambit.sf.net/' alt='AMBIT logo'>
-			</a>
-			<h6 style='color:#729203;'>v2.4.10</h6>
-		</div>
+		<#include "/logo.ftl">
 		<#include "/banner_search.ftl">
 </div>		
 <div class="row remove-bottom" >

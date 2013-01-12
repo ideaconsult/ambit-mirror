@@ -190,7 +190,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		Router router = new MyRouter(this.getContext());
 		router.attach("/help", AmbitResource.class);
 		router.attach("/ui", UIResource.class);
-
+		router.attach("/ui/{key}", UIResource.class);
 		
 		/**
 		 *  Points to the Ontology service
