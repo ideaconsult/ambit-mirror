@@ -68,7 +68,7 @@ function initTable(root, query_service, tableSelector, anArray, checkbox, checke
 	  						
 							var browseURI =  "";
 							if (root != null) {
-								browseURI = root + "/ui?" + $.param(prm,false);
+								browseURI = root + "/ui/query?" + $.param(prm,false);
 								browseURI = "<br/><a href='"+browseURI+"' style='margin-left:2px;'><img src='"+
 											root+"/images/table.png' title='Browse the dataset'></a>";
 							}

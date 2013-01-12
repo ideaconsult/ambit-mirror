@@ -129,14 +129,34 @@
 
 <div class="container" style="margin:0;padding:0;">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui' style='padding:0;margin:0;'>
+<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui/query' style='padding:0;margin:0;'>
 
 <#include "/banner.ftl">
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+
+	<ul id="selectable">
+	<li class="ui-selectee">
+	<a href="${ambit_root}/ui"><span class="ui-icon ui-icon-home" style="float: left; margin-right: .3em;"></span>Home</a>
+	</li>
+	</ul>
+	<div style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+		<span id='qtype' ></span>
+		<br>
+		<span id='qthreshold'></span>
+		<br>
+		<b><span id='qvalue'></span></b>
+		<span id='description' style='display:none;'></span>
+		<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="float: left; margin-right: .3em;"></a>
+		<br>
+		<span>Max number of hits</span>
+		<input type='text' size='3' name='pagesize' value='10' style='width:5em;height:1.5em;margin-bottom:0;padding: 2px;'>
+		<input class='ambit_search remove-bottom' id='submit2' type='submit' value='Refresh' tabindex='3'/>
+	</div>
+	<!--
 	<div class='ui-widget help half-bottom' style='fill:auto;'>
 		<div class='ui-widget-header ui-corner-top'>Query</div>
-		<div class='ui-widget-content ui-corner-bottom remove-bottom' style='margin:0;padding: 2px;'>
+		<div class='ui-widget-content ui-corner-bottom remove-bottom' style='margin:3px;padding: 0.4em; font-size: 1em;'>
 			<span id='qtype' ></span>
 			<br>
 			<span id='qthreshold'></span>
@@ -150,7 +170,7 @@
 		</div>
 	</div>
 	<input class='ambit_search' id='submit2' type='submit' value='Refresh' tabindex='3'/>
-
+	-->
 	<#include "/select_features.ftl">
 	
 
@@ -170,7 +190,7 @@
 </form>
 
 
-<form action="${ambit_root}/ui" method="get">  
+<form action="${ambit_root}/ui/query" method="get">  
 <div class="eleven columns remove-bottom" style="padding:0;" >
 
 	

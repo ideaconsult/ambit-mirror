@@ -15,9 +15,9 @@ function defineStructuresTable(url, query_service, similarity) {
 										var uri = o.aData["compound"]["URI"];
 										
 										var prm = {'option': 'similarity', 'type':'url', 'search':uri};
-										var searchURI = query_service + "/ui?" + $.param(prm,false);
+										var searchURI = query_service + "/ui/query?" + $.param(prm,false);
 										prm = {'option': 'smarts', 'type':'url', 'search':uri, 'pagesize' : 10};
-										var smartsURI = query_service + "/ui?" + $.param(prm,false);
+										var smartsURI = query_service + "/ui/query?" + $.param(prm,false);
 										
 										return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ 
 													uri +"' value='"+uri+"'><br/>" +
@@ -69,7 +69,7 @@ function defineStructuresTable(url, query_service, similarity) {
 										// {
 										
 										var prm = {'option': 'auto', 'type':'url', 'search':cmpURI, 'pagesize': 1};
-										var searchURI = query_service + "/ui?" + $.param(prm,false);
+										var searchURI = query_service + "/ui/query?" + $.param(prm,false);
 										
 										cmpURI = cmpURI + "?media=image/png";
 										return '<a href="'+searchURI+'" >' +
