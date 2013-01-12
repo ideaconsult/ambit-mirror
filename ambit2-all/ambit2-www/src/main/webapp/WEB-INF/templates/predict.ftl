@@ -26,9 +26,9 @@ $(document)
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="seven columns alpha">
 			<h3 class="remove-bottom">
-					Welcome
+					Predictions
 			</h3>
-		    <h6>?????</h6>			
+		    <h6>??????</h6>			
 		</div>
 		</div>
 </div>		
@@ -42,17 +42,18 @@ $(document)
 
 <div class="eleven columns remove-bottom" style="padding:0;" >
 
-<div class='ui-widget-header ui-corner-top'>&nbsp;Welcome</div>
+<div class='ui-widget-header ui-corner-top'>&nbsp;Predictions</div>
 <div class='ui-widget-content ui-corner-bottom'>	
 		
 	<div style="margin:5px;padding:5px;">	
-	Welcome
-   </div>			
+	 
+		todo
+	</div>			
 </div>
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 <div class="two columns" style="margin:0;padding:0;" >
-right
+<#include "/help.ftl" >
 </div>
 
 </form>
