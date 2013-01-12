@@ -21,7 +21,7 @@ function defineStructuresTable(url, query_service, similarity) {
 										
 										return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ 
 													uri +"' value='"+uri+"'><br/>" +
-													"<a href='"+uri+"' class='help' title='AMBIT Compound URI' target=_blank>@</a>" +
+													"<a href='"+uri+"' class='help' title='AMBIT Compound URI' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a>" +
 													"<br/>"+
 													"<a href='"+searchURI+"' class='help' title='Find similar'>Similar</a>" +
 													"<br/>"+
@@ -438,7 +438,7 @@ function defineStructuresTable(url, query_service, similarity) {
 			if (sameas.indexOf(prefix)>=0) {
 				searchURI = " <a href='http://apps.ideaconsult.net:8080/ontology/query?uri="+
 				encodeURIComponent(sameas) +
-				"' target=_blank>@</a>";
+				"' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a>";
 				endpoint = sameas.replace(prefix,"");
 			} 
 				
@@ -447,7 +447,7 @@ function defineStructuresTable(url, query_service, similarity) {
 					+ (source==null?"":"<a href='"+source.URI+"' target=_blank class='help' title='"+source.URI+"'>" + src +"</a>") 
 					+ "</td>" 
 					+ "<th bgcolor='#fafafa'>" 
-					+ (url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'>@</a>" )) 
+					+ (url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a>" )) 
 					+ "</th><td>" + value + "</td><td bgcolor='#fafafa'>"
 					+ endpoint + searchURI + "</td></tr>";
 			return sOut;
