@@ -15,9 +15,9 @@
 </div>
 <div class="four columns omega">
 	<span id='thresholdSpan' style='display:none;' class="remove-bottom">
-		<span class="remove-bottom help">
+		<h3 class="remove-bottom">
 			&nbsp;
-		</span>
+		</h3>
 		<h6 class="remove-bottom">	
 			<select title ='Tanimoto similarity threshold' id='threshold' name='threshold' style='width:6em;' class="remove-bottom" >
 					<option value='0.9' selected>0.9</option>
