@@ -67,9 +67,6 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		setDocumentation(new ResourceDoc("Algorithm","Algorithm"));
 	}
 	
-	public Representation getRepresentation(Variant variant) throws ResourceException {
-		return get(variant);
-	}
 	
 	protected synchronized void initList() {
 		if (algorithmList==null) {

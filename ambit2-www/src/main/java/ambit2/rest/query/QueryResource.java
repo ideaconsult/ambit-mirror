@@ -136,17 +136,7 @@ Then, when the "get(Variant)" method calls you back,
 		}
 	}
 	
-	@Override
-	protected Representation get(Variant variant) throws ResourceException {
-		CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
-		cS.setPath("/");
-        this.getResponse().getCookieSettings().add(cS);
-		if (isHtmlbyTemplate() && MediaType.TEXT_HTML.equals(variant.getMediaType())) {
-	        return getHTMLByTemplate(variant);
-    	} else				
-    		return getRepresentation(variant);
-	}
-	
+
 	protected Representation getRepresentation(Variant variant) throws ResourceException {
 		try {
 			if (variant.getMediaType().equals(MediaType.APPLICATION_WADL)) {
