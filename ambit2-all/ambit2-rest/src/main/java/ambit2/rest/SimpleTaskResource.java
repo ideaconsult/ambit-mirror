@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -247,6 +248,9 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 			setPageSize(1000);
 		}			
 	}
+	
+
+	
 }
 
 
