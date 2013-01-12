@@ -1,5 +1,5 @@
 <!-- thirteen-->
-<div class="thirteen columns" id="query">
+<div class="thirteen columns remove-bottom" id="query">
 <div class="seven columns alpha">
 	<h3 class="remove-bottom">
 			Structure search	

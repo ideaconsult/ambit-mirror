@@ -129,7 +129,7 @@
 
 <div class="container" style="margin:0;padding:0;">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui'>
+<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui' style='padding:0;margin:0;'>
 
 <#include "/banner.ftl">
 
@@ -171,7 +171,7 @@
 
 
 <form action="${ambit_root}/ui" method="get">  
-<div class="ten columns remove-bottom" style="padding:0;" >
+<div class="eleven columns remove-bottom" style="padding:0;" >
 
 	
 		<table id='structures' class='structable' style='margin:0;' width='100%'>
