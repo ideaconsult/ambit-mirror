@@ -24,11 +24,11 @@ $(document)
 <div class="row remove-bottom">
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
-		<div class="seven columns alpha">
+		<div class="alpha">
 			<h3 class="remove-bottom">
-					Welcome
+					Welcome to AMBIT 
 			</h3>
-		    <h6>?????</h6>			
+		    <h6>Chemical structures database,properties prediction & machine learning with OpenTox REST web services API</h6>			
 		</div>
 		</div>
 </div>		
@@ -52,7 +52,7 @@ $(document)
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 <div class="two columns" style="margin:0;padding:0;" >
-right
+<#include "/help.ftl" >
 </div>
 
 </form>
