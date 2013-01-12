@@ -43,10 +43,13 @@ public class FactoryTaskConvertor<USERID> {
 		if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
-				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
-				variant.getMediaType().equals(MediaType.APPLICATION_JSON)
+				variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				) 
 			reporter =  createTaskReporterRDF(variant, request,doc);	
+		else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT))
+			reporter = createTaskReporterJSON(variant, request,doc);
+		else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON))
+			reporter = createTaskReporterJSON(variant, request,doc);		
 		else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) 
 			reporter = createTaskReporterURI(request,doc);		
 		else if (variant.getMediaType().equals(MediaType.TEXT_HTML)) 
@@ -65,6 +68,10 @@ public class FactoryTaskConvertor<USERID> {
 				try {output.write('\n'); } catch (Exception x) {}
 			}
 		};
+	}	
+	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporterJSON(
+			Variant variant, Request request,ResourceDoc doc) throws AmbitException, ResourceException {
+		return	new TaskJSONReporter(storage,request,doc);
 	}	
 	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporterRDF(
 			Variant variant, Request request,ResourceDoc doc) throws AmbitException, ResourceException {
