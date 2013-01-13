@@ -70,7 +70,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					jsonFeature.URI.jsonname(),uri,
-					jsonFeature.title.jsonname(),item.getName(),
+					jsonFeature.title.jsonname(),item.getName().replace("\\", "/"),
 					jsonFeature.stars.jsonname(),item.getStars(),
 					jsonFeature.rightsHolder.jsonname(),item.getrightsHolder()==null?"":item.getrightsHolder(),
 					jsonFeature.seeAlso.jsonname(),item instanceof SourceDataset?((SourceDataset) item).getURL():"",
@@ -94,7 +94,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 	@Override
 	public void footer(Writer output, Q query) {
 		try {
-			output.write("\n]");
+			output.write("\n]\n}");
 		} catch (Exception x) {}
 	};
 	
@@ -102,10 +102,10 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 	@Override
 	public void header(Writer output, Q query) {
 		try {
-			output.write("[");
+			output.write("{\"dataset\": [");
 		} catch (Exception x) {}
 	};
-	
+
 	@Override
 	public String getFileExtension() {
 		return null;

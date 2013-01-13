@@ -209,7 +209,15 @@ function defineStructuresTable(url, query_service, similarity,root) {
 						},
 						"oLanguage" : {
 							"sProcessing" : "<img src='" + root + "/images/24x24_ambit.gif' border='0'>",
-							"sLoadingRecords" : "No records found."  
+							"sLoadingRecords" : "No structures found.",
+				            "sInfo": "Showing _TOTAL_ structures (_START_ to _END_)",
+				            "sLengthMenu": 'Display <select>' +
+				              '<option value="10">10</option>' +
+				              '<option value="20">20</option>' +
+				              '<option value="50">50</option>' +
+				              '<option value="100">100</option>' +
+				              '<option value="-1">all</option>' +
+				              '</select> structures.'	   				            
 						},
 						"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
 			              //  $('td:eq(2)', nRow).html(iDisplayIndex +1);

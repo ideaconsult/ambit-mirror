@@ -87,6 +87,7 @@ function defineAlgorithmTable(root,url) {
 		"oLanguage": {
 	            "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
 	            "sLoadingRecords": "No algorithms found.",
+	            "sInfo": "Showing _TOTAL_ algorithms (_START_ to _END_)",
 	            "sLengthMenu": 'Display <select>' +
               '<option value="10">10</option>' +
               '<option value="20">20</option>' +
@@ -201,6 +202,7 @@ function defineModelTable(root,url) {
 	"sSearch": "Filter:",
 	"bJQueryUI" : true,
 	"bSearchable": true,
+	"bProcessing" : true,
 	"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
 	"sSearch": "Filter:",
 	"bPaginate" : true,
@@ -208,6 +210,8 @@ function defineModelTable(root,url) {
 	"sPaginate" : ".dataTables_paginate _paging",
 	"oLanguage": {
             "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+            "sZeroRecords": "No models found.",
+            "sInfo": "Showing _TOTAL_ models (_START_ to _END_)",
             "sLoadingRecords": "No models found.",
             "sLengthMenu": 'Display <select>' +
           '<option value="10">10</option>' +
@@ -251,7 +255,9 @@ function defineModelTable(root,url) {
     			        	    uri = val;
     			        		pos = val.lastIndexOf("/");
     			        		if (pos>=0) val = val.substring(pos+1); 
-    			                return "<a href='"+ uri +"'>"+val+"</a>";
+        			      	  	var shortURI = val;
+        			      	  	if (val.length > 20) shortURI = val.substring(val,20) + "..."; 	
+    			                return "<a href='"+ uri +"' title='"+uri+"'>"+shortURI+"</a>";
     			      }
     		  		},    	  			
     	  			{ "sTitle": "Training Dataset", 
@@ -261,8 +267,8 @@ function defineModelTable(root,url) {
     			      "bUseRendered" : "false",	
     			      "fnRender": function ( o, val ) {
     			      	  	shortURI = val;
-    			      	  	if (val.length > 60) shortURI = val.substring(val,60) + "..."; 	
-    			                 return "<a href='"+ val +"'>"+shortURI+"</a>";
+    			      	  	if (val.length > 20) shortURI = val.substring(val,20) + "..."; 	
+    			                 return "<a href='"+ val +"' title='"+val+"'>"+shortURI+"</a>";
     			       }
     		  		},
     	  			{ "sClass": "center", 
@@ -383,4 +389,106 @@ function renderModel(entry,root,err) {
 		"The result is a dataset, identified by a <a href='"  + root + "/dataset' target='dataset'>dataset URI</a>.");
 
 	
+}
+
+function defineDatasetsTable(root,url) {
+	var oTable = $('.datasetstable').dataTable( {
+	"sAjaxDataProp" : "dataset",
+	"sAjaxSource": url,	
+	"sSearch": "Filter:",
+	"bJQueryUI" : true,
+	"bSearchable": true,
+	"bProcessing" : true,
+	"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+	"sSearch": "Filter:",
+	"bPaginate" : true,
+	"sPaginationType": "full_numbers",
+	"sPaginate" : ".dataTables_paginate _paging",
+	"oLanguage": {
+            "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+            "sLoadingRecords": "No datasets found.",
+            "sZeroRecords": "No datasets found.",
+            "sEmptyTable": "No datasets available.",
+            "sInfo": "Showing _TOTAL_ datasets (_START_ to _END_)",
+            "sLengthMenu": 'Display <select>' +
+          '<option value="10">10</option>' +
+          '<option value="20">20</option>' +
+          '<option value="50">50</option>' +
+          '<option value="100">100</option>' +
+          '<option value="-1">all</option>' +
+          '</select> datasets.'	            
+    },	
+    "aoColumnDefs": [
+    				{ //0
+    					"aTargets": [ 0 ],	
+    					"sClass" : "center",
+    					"bSortable" : false,
+    					"bSearchable" : false,
+    					"mDataProp" : null,
+    					sWidth : "48px",
+    					"fnRender" : function(o,val) {
+     		               	var sOut = "<a href='"+o.aData.URI +"?page=0&pagesize=100'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' title='Click to browse the dataset'></span></a>&nbsp;";
+     		                sOut += "<a href='"+root + "/model?dataset=" + encodeURIComponent(o.aData.URI) +"'><span class='ui-icon ui-icon-calculator' style='float: left; margin: .1em;' title='Retrieve models using this dataset as a training dataset'></span></a>&nbsp;";
+     		                sOut += "<a href='"+o.aData.URI +"/similarity?search=c1ccccc1'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Similarity search within the dataset'></span></a>&nbsp;";
+     		                sOut += "<a href='"+o.aData.URI +"/smarts?search=c1ccccc1'><span class='ui-icon ui-icon-search' style='float: left; margin: .1em;' title='Substructure search within the dataset'></span></a> ";
+    						//sOut += "<br/><span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show datasets details'></span>";
+    						return sOut;
+    					}
+    				},	     	            
+    	  			{ "sTitle": "Stars", 
+    				  "bSortable" : true,
+     	              "mDataProp":"stars",
+     	              "aTargets": [ 1 ],
+     	              sWidth : "1em"
+    	  			},     	 
+    	  			{ "sTitle": "Title", 
+    	  			  "mDataProp":"title", 
+    	  			  "aTargets": [ 2 ],	
+    		          "bUseRendered" : "false",	
+    		          "fnRender": function ( o, val ) {
+    		        	   var sOut = val;
+    		               var seeAlso =  o.aData["seeAlso"];
+    		               if ((seeAlso != undefined) && (seeAlso != null)) {
+    		            	   if (seeAlso.indexOf('http')==0)
+    		            		   sOut += ("<br/>Source: <a href='" + seeAlso + "' target=_blank>"+seeAlso+"</a>");
+    		               }
+    		               var rights =  o.aData["rights"];
+    		               if ((rights != undefined) && (rights != null)) {
+    		            	   if (rights["URI"].indexOf('http')==0)
+    		            		   sOut += ("<br/>" + rights["type"]+ ": <a href='" + rights["URI"] + "' target=_blank>"+rights["URI"]+"</a>");
+    		            	   else sOut += "<br/>" + rights["URI"];
+    		               }    		           
+   		                   sOut += "<br/><a href='"+o.aData.URI +"?page=0&pagesize=100'>Browse structures and properties</a>";
+   		                   sOut += " | <a href='"+o.aData.URI +"/compounds'>Compounds only</a>";
+   		                   sOut += " | <a href='"+o.aData.URI +"/feature'>Columns</a>";
+   		                   sOut += " | <a href='"+o.aData.URI +"/metadata'>Metadata</a>";
+    		               return sOut;
+    		          }
+    		  		},   
+    	  			{ "sTitle": "Download", 
+    	  			  "mDataProp":null , 
+    	  			  "aTargets": [ 3 ],	
+    	  			  sWidth: "15%",
+    		  	      "bUseRendered" : "false",	
+    			       "fnRender": function ( o, val ) {
+    			    	   val = o.aData["URI"];
+    			    	   var sOut = "<a href='"+getMediaLink(val,"chemical/x-mdl-sdfile")+"' id='sdf'><img src='"+root+"/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"chemical/text/csv")+"' id='csv'><img src='"+root+"/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-cml")+"' id='cml'><img src='"+root+"/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'/></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-daylight-smiles")+"' id='smiles'><img src='"+root+"/images/smi.png' alt='SMILES' title='Download as SMILES'/></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/x-arff")+"' id='arff'><img src='"+root+"/images/weka.jpg' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'/></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"application/rdf+xml")+"' id='rdfxml'><img src='"+root+"/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'/></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/n3")+"' id='rdfn3'><img src='"+root+"/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'/></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"application/json")+"' id='json' target=_blank><img src='"+root+"/images/json.png' alt='json' title='Download as JSON'/></a>";
+    			    	   return sOut;
+    			      }
+    		  		}	  		
+     				],
+ 	  "aaSorting": [[1, 'desc']]		  
+	});
+	return oTable;
+}
+
+function getMediaLink(uri, media) {
+	return uri + "?media=" + encodeURIComponent(media);
 }

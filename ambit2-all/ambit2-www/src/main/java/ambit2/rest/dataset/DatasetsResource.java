@@ -44,14 +44,16 @@ public class DatasetsResource extends MetadatasetResource {
 	protected FileUpload upload;
 	protected IStructureKey matcher;
 	
-
-
-	//public final static String datasetID =  String.format("%s/{%s}",DatasetsResource.datasets,datasetKey);
-	
 	public DatasetsResource() {
 		super();
 		setDocumentation(new ResourceDoc("dataset","Dataset"));
-		_dmode = DisplayMode.table;		
+		_dmode = DisplayMode.table;
+		setHtmlbyTemplate(true);
+	}
+	
+	@Override
+	public String getTemplateName() {
+		return "datasets.ftl";
 	}
 	@Override
 	protected void doInit() throws ResourceException {
