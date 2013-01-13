@@ -1071,6 +1071,21 @@ public class AlgorithmResourceTest extends ResourceTest {
 	}
 	
 	@Test
+	public void testToxtreeBenigniBossa() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreecarc", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
+		System.out.println(dataset);
+		
+	}
+	
+	@Test
 	public void testToxtreeSmartCypModel() throws Exception {
 		Form headers = new Form();  
 

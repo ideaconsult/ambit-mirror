@@ -103,7 +103,7 @@
 						var qurl = url +  $.param(params,false);
 						downloadFormUpdate(null);
 
-						var oTable = defineStructuresTable(qurl, queryService,purl.param('option')=='similarity');
+						var oTable = defineStructuresTable(qurl, queryService,purl.param('option')=='similarity',"${ambit_root}");
 						
 					});
 
@@ -192,8 +192,7 @@
 
 <form action="${ambit_root}/ui/query" method="get">  
 <div class="eleven columns remove-bottom" style="padding:0;" >
-
-	
+	<div class="row ui-widget-content ui-corner-all" style="padding:0;" >
 		<table id='structures' class='structable' style='margin:0;' width='100%'>
 					<thead>
 						<th>
@@ -210,7 +209,7 @@
 					</thead>
 					<tbody></tbody>
 		</table>
-
+		</div>
 
 </div>
 
