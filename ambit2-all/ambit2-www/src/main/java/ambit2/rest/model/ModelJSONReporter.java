@@ -1,8 +1,12 @@
 package ambit2.rest.model;
 
+import java.io.Writer;
+import java.util.Iterator;
+
 import org.restlet.Request;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
@@ -77,7 +81,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					jsonModel.stars.jsonname(),model.getStars(),
 					jsonModel.algorithm.jsonname(),model.getAlgorithm()==null?"":model.getAlgorithm(),
 					jsonModel.algFormat.jsonname(),algFormat.name(),
-					String.format("/ambit2/%s",model.getAlgorithm().indexOf("org.openscience.cdk")>=0?"images/cdk.png":
+					String.format("/%s",model.getAlgorithm().indexOf("org.openscience.cdk")>=0?"images/cdk.png":
 									model.getAlgorithm().indexOf("toxtree")>=0?"images/toxtree.png":
 									algFormat.getImage()),
 					
@@ -102,13 +106,14 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 	}
 	public void footer(java.io.Writer output, Q query) {
 		try {
-			output.write("\n]");
+			output.write("\n]\n}");
 		} catch (Exception x) {}
 	};
 	
 	public void header(java.io.Writer output, Q query) {
 		try {
-			output.write("[");
+			output.write("{\"model\": [");
 		} catch (Exception x) {}
 	};
+	
 }

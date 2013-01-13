@@ -2,6 +2,7 @@ package ambit2.rest.model;
 
 import java.awt.Dimension;
 import java.sql.Connection;
+import java.util.Map;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -74,7 +75,12 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		super();
 		getVariants().add(new Variant(MediaType.IMAGE_PNG));
 		setDocumentation(new ResourceDoc("Model","Model"));
-
+		setHtmlbyTemplate(true);
+	}
+	
+	@Override
+	public String getTemplateName() {
+		return "model.ftl";
 	}
 	protected Object getModelID(Object id) throws ResourceException {
 		
@@ -388,6 +394,15 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		return super.post(entity, variant);
 	}
 	
+
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+        super.configureTemplateMap(map);
+        
+        Object modelid = getRequest().getAttributes().get(resourceKey);
+        if (modelid!=null)
+        	map.put("modelid",modelid.toString());
+	}
 	
 }
 

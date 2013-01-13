@@ -7,6 +7,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.CookieSetting;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.ext.freemarker.TemplateRepresentation;
@@ -54,17 +55,33 @@ public class FreeMarkerResource extends ProtectedResource {
 	 * @param map
 	 */
 	protected void configureTemplateMap(Map<String, Object> map) {
-		Reference query = getSearchReference(getContext(),getRequest(),getResponse());
-		Reference ambit_request = query.clone();
-		ambit_request.addQueryParameter("media",MediaType.TEXT_CSV.toString());
-		map.put("ambit_request_csv",ambit_request.toString());
-		
-		ambit_request = query.clone();
-		ambit_request.addQueryParameter("media",ChemicalMediaType.CHEMICAL_MDLSDF.toString());
-		map.put("ambit_request_sdf",ambit_request.toString());		
-		
-		query.addQueryParameter("media",MediaType.APPLICATION_JAVASCRIPT.toString());
-		map.put("ambit_request_jsonp",query.toString());
+	
+        Form query = getRequest().getResourceRef().getQueryAsForm();
+        //query.removeAll("page");query.removeAll("pagesize");query.removeAll("max");
+        query.removeAll("media");
+        
+		Reference r = getRequest().getResourceRef().clone();
+        r.setQuery(query.getQueryString());
+        map.put("ambit_request",r.toString()) ;
+        if (query.size()>0)	map.put("ambit_query",query.getQueryString()) ;
+        
+        //json
+        query.removeAll("media");query.add("media", MediaType.APPLICATION_JSON.toString());
+        r.setQuery(query.getQueryString());
+        map.put("ambit_request_json",r.toString());
+        //jsonp
+        query.removeAll("media");query.add("media", MediaType.APPLICATION_JAVASCRIPT.toString());
+        r.setQuery(query.getQueryString());
+        map.put("ambit_request_jsonp",r.toString());      
+        //sdf
+        query.removeAll("media");query.add("media", ChemicalMediaType.CHEMICAL_MDLSDF.toString());
+        r.setQuery(query.getQueryString());
+        map.put("ambit_request_sdf",r.toString());   
+        //csv
+        query.removeAll("media");query.add("media", MediaType.TEXT_CSV.toString());
+        r.setQuery(query.getQueryString());
+        map.put("ambit_request_csv",r.toString());
+        
 
 		map.put("creator","Ideaconsult Ltd.");
 	    map.put("ambit_root",getRequest().getRootRef());
