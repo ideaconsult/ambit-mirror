@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 import org.restlet.data.Form;
@@ -69,6 +70,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_JSON,
+				MediaType.APPLICATION_JAVASCRIPT,
 				MediaType.TEXT_HTML,
 				MediaType.APPLICATION_WADL
 				});
@@ -189,6 +191,32 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 		}			
 	}
 
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+        if (getClientInfo().getUser()!=null) 
+        	map.put("username", getClientInfo().getUser().getIdentifier());
+        map.put("creator","IdeaConsult Ltd.");
+        map.put("ambit_root",getRequest().getRootRef().toString());
+
+        //remove paging
+        Form query = getRequest().getResourceRef().getQueryAsForm();
+        //query.removeAll("page");query.removeAll("pagesize");query.removeAll("max");
+        query.removeAll("media");
+        Reference r = getRequest().getResourceRef().clone();
+        r.setQuery(query.getQueryString());
+        map.put("ambit_request",r.toString()) ;
+        if (query.size()>0)
+        	map.put("ambit_query",query.getQueryString()) ;
+        //json
+        query.removeAll("media");query.add("media", MediaType.APPLICATION_JSON.toString());
+        r.setQuery(query.getQueryString());
+        map.put("ambit_request_json",r.toString());
+        //csv
+        query.removeAll("media");query.add("media", MediaType.TEXT_CSV.toString());
+        r.setQuery(query.getQueryString());
+        map.put("ambit_request_csv",r.toString());
+ 
+	}
 
 	/*
 	@Override

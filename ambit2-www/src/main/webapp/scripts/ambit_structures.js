@@ -1,4 +1,4 @@
-function defineStructuresTable(url, query_service, similarity) {
+function defineStructuresTable(url, query_service, similarity,root) {
 	var imgSize = 150;
 	var oTable = $('#structures')
 			.dataTable(
@@ -213,7 +213,7 @@ function defineStructuresTable(url, query_service, similarity) {
 							});
 						},
 						"oLanguage" : {
-							"sProcessing" : "<img src='images/24x24_ambit.gif' border='0'>",
+							"sProcessing" : "<img src=" + root + "'/images/24x24_ambit.gif' border='0'>",
 							"sLoadingRecords" : "No records found."  
 						},
 						"fnRowCallback" : function(nRow, aData, iDisplayIndex) {

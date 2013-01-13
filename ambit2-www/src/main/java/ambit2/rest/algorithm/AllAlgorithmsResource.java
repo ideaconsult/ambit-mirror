@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -65,8 +66,13 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 	public AllAlgorithmsResource() {
 		super();
 		setDocumentation(new ResourceDoc("Algorithm","Algorithm"));
+		setHtmlbyTemplate(true);
 	}
 	
+	@Override
+	public String getTemplateName() {
+		return "algorithm.ftl";
+	}
 	
 	protected synchronized void initList() {
 		if (algorithmList==null) {
@@ -142,6 +148,9 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				}
 			};
 			return new StringConvertor(	r,MediaType.TEXT_URI_LIST);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest(),getDocumentation());
+			return new StringConvertor(	r,MediaType.APPLICATION_JSON);			
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
@@ -392,4 +401,12 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			
 	}
 
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+        super.configureTemplateMap(map);
+        
+        Object taskid = getRequest().getAttributes().get(algorithmKey);
+        if (taskid!=null)
+        	map.put("algid",taskid.toString());
+	}
 }

@@ -9,6 +9,7 @@ import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -81,10 +82,18 @@ public class FactoryTaskConvertor<USERID> {
 		return new TaskURIReporter<USERID>(storage,request,doc);
 	}	
 	
+	private static String refresh = "<html><head><meta http-equiv='refresh' content='2;url=%s'></head><body><a href='%s'>Go</a></body></html>";
+	
 	public synchronized Representation createTaskRepresentation(UUID task, 
 			Variant variant, Request request, Response response,ResourceDoc doc) throws ResourceException {
 		try {
 			if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+			if (MediaType.TEXT_HTML.equals(variant.getMediaType())) {
+				String locationRef = String.format("%s/task/%s", request.getRootRef(),task);
+				Representation r = new StringRepresentation(String.format(refresh,locationRef,locationRef),MediaType.TEXT_HTML);				
+				response.redirectSeeOther(locationRef);
+				return r;
+			}
 			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc,DisplayMode.singleitem);
 			//task.update();
 			//System.out.println("convertor" + task.getUri() + " " + task.getStatus());
