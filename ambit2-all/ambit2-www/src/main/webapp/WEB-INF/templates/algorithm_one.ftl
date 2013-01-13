@@ -31,7 +31,7 @@
 	<div class='row remove-bottom'>
 		<label class='five columns alpha' for="alg_dataset">Action</label>
 		<span class='eight columns alpha half-bottom' id='alg_dataset'></span>
-		<div class='three columns omega'></div>
+		<div class='three columns omega help' id='help_action'></div>
 	</div>		
 	
 	
@@ -179,6 +179,138 @@
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>		
     <#break>
+  <#case 'toxtreecarc'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/carc.html' target=_blank class='eight columns alpha half-bottom'>
+		Benigni/ Bossa rulebase (for mutagenicity and cancerogenicity)</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>
+  <#case 'toxtreecramer'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/cramer.html' target=_blank class='eight columns alpha half-bottom'>
+		Cramer rules</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>
+  <#case 'toxtreecramer2'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/cramer2.html' target=_blank class='eight columns alpha half-bottom'>
+		Extended Cramer rules</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>		
+	  <#break>
+  <#case 'toxtreemic'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/mic.html' target=_blank class='eight columns alpha half-bottom'>
+		Structure Alerts for the in vivo micronucleus assay in rodents
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>	 
+  <#case 'toxtreeissfunc'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/issfunc.html' target=_blank class='eight columns alpha half-bottom'>
+		Structural Alerts for Functional Group Identification (ISSFUNC)
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>		
+	  <#break>
+  <#case 'toxtreeverhaar'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/verhaar.html' target=_blank class='eight columns alpha half-bottom'>
+		Verhaar scheme for predicting toxicity mode of action
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>		
+	  <#break>
+  <#case 'toxtreeverhaar2'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/verhaar2.html' target=_blank class='eight columns alpha half-bottom'>
+		Verhaar scheme for predicting toxicity mode of action (modified)
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>
+	 <#case 'toxtreesmartcyp'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/smartcyp.html' target=_blank class='eight columns alpha half-bottom'>
+		SMARTCyp - Cytochrome P450-Mediated Drug Metabolism
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>		
+	  <#break>
+	 <#case 'toxtreebiodeg'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/start.html' target=_blank class='eight columns alpha half-bottom'>
+		START biodegradation and persistence
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>
+	<#case 'toxtreeskinsens'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/skinsensitisation.html' target=_blank class='eight columns alpha half-bottom'>
+		Skin sensitisation alerts
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>
+	<#case 'toxtreeskinirritation'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/skin.html' target=_blank class='eight columns alpha half-bottom'>
+		A decision tree for estimating skin irritation and corrosion potential
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>
+	<#case 'toxtreeeye'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/eye.html' target=_blank class='eight columns alpha half-bottom'>
+		A decision tree for estimating eye irritation and corrosion potential
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>	
+	<#case 'toxtreeproteinbinding'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/skinsensitisation.html' target=_blank class='eight columns alpha half-bottom'>
+		Protein binding
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>
+	<#case 'toxtreednabinding'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/skinsensitisation.html' target=_blank class='eight columns alpha half-bottom'>
+		Protein binding
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>	
+	<#case 'toxtreeames'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/carc.html' target=_blank class='eight columns alpha half-bottom'>
+		Ames mutagenicity
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>	
+	  <#break>	
   <#default>
 	
 	<div class='row remove-bottom' id='requiresDataset'>

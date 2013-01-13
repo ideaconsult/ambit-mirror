@@ -277,7 +277,7 @@ function defineAlgorithmTable(root,url) {
 				  "fnRender" : function(o,val) {
 					  
 					  var icon = '<span class="ui-icon ui-icon-pin-s" style="float: left; margin-right: .1em;"></span>';
-					  var sOut = icon + (val?"Processes a dataset":"Builds a model");
+					  var sOut = icon + (val?"Processes a dataset":"Builds a model.");
 					  sOut += o.aData["requiresDataset"]?("<br>"+icon+"Requires input dataset"):"";
 					  sOut += o.aData["requires"]==""?"":"<br>"+icon+"Requires " + o.aData["requires"];
 					  sOut += o.aData["isSupevised"]?("<br>"+icon+"Requires target variable"):"";
@@ -375,6 +375,12 @@ function renderAlgorithm(entry,root,err) {
 	
 	$("#alg_requires").text(entry["requires"]=="structure"?"Chemical structure":entry["requires"]);
 	$("#alg_dataset").text(entry["isDataProcessing"]?"Processes a dataset":"Builds a model");
+	$("#help_action").html(entry["isDataProcessing"]?
+		"The result is a dataset, identified by a <a href='"  + root + "/dataset' target='dataset'>dataset URI</a>.":
+		"Once a model is built, it is assigned a <a href='" + 
+		root + "/model' target='model'>model URI</a> and can be applied to <a href='" + 
+		root + "/dataset' target='dataset'>datasets</a> and <a href='" +
+		root + "/compound' target='compound'>compounds</a>.");
 	if (entry["requiresDataset"]) $("#requiresDataset").show(); else $("#requiresDataset").hide();
 	if (entry["isSupevised"]) $("#requiresTarget").show(); else $("#requiresTarget").hide();
 	var sOut = "";
