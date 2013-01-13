@@ -74,7 +74,7 @@ $(document)
 <#include "/algorithm_menu.ftl">
 </div>
 
-<div class="twelve columns remove-bottom" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
@@ -90,7 +90,7 @@ $(document)
 				</div>
 			</div>
 		<#else>
-		<div class="row ui-widget-content ui-corner-all" style="padding:0;" >
+		<div class="row" style="padding:0;" >
 			<table id='algorithm'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<th>Name</th>
@@ -109,8 +109,6 @@ $(document)
 
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
-</div>
-<div class="one column" style="margin:0;padding:0;" >
 </div>
 
 </form>

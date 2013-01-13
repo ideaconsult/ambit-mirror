@@ -36,23 +36,12 @@ var _ambit = {
 	           	 ]
 };
 
-function initTable(root, query_service, tableSelector, anArray, checkbox, checked, clickHandler) {
+function initTable(object,root, query_service, tableSelector, anArray, checkbox, checked, clickHandler) {
 	var uri = query_service + "&media=application%2Fjson";
-	$.ajax({
-		async: false,
-		dataType : "json",
-		url : uri,
-		success : function(data1, status, xhr) {
-			anArray = data1;
-		},
-		error : function(xhr, status, err) {
-			anArray = [];
-		},
-		complete : function(xhr, status) {}
-	});	
-	
 	$(tableSelector).dataTable({
-			"aaData" : anArray,
+		dataType : "json",
+		"sAjaxDataProp" : object,
+		"sAjaxSource": uri,	
 			"aoColumnDefs" : [
 			  	{ //0
 			  		"aTargets": [ 0 ],	
@@ -153,3 +142,14 @@ function downloadFormUpdate(features_uri) {
 	});
 	delete _ambit.query_params.media;
 }
+
+function toggleSelectionDiv(id,control) {
+	$(id).toggle();
+	if( $(id).is(':visible') ) {
+		$(control).removeClass("ui-icon-folder-collapsed").addClass("ui-icon-folder-open");
+	}
+	else {
+		$(control).removeClass("ui-icon-folder-open").addClass("ui-icon-folder-collapsed");
+	}
+}
+

@@ -75,7 +75,7 @@ $(document)
 			</p>
 			</div>
 		<#else>
-		<div class="row ui-widget-content ui-corner-all" style="padding:0;" >
+		<div class="row " style="padding:0;" >
 			<table id='task'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<th>Job status</th>

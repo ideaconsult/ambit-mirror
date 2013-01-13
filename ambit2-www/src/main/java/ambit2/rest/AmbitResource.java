@@ -249,13 +249,13 @@ public class AmbitResource extends FreeMarkerResource {
 			//{"/build3d?search=c1ccccc1","Generate 3D structure given a smiles",format,"GET","Under development"},
 
 			{"[ambit - stats]","Statistics",formatHeader,null},
-			{"/stats/dataset","Number of datasets",format,"GET"},
-			{"/stats/structures","Number of structures",format,"GET"},
-			{"/stats/chemicals_in_dataset?dataset_uri=","Number of chemicals in a dataset",format,"GET"},
-			{"/stats/dataset_intersection?dataset_uri=..&dataset_uri=..","Number of common chemicals in two datasets",format,"GET"},
-			{"/stats/properties","Number of properties",format,"GET"},
-			{"/stats/values","Number of values",format,"GET"},
-			{"/stats/models","Number of models",format,"GET"},
+			{"/admin/stats/dataset","Number of datasets",format,"GET"},
+			{"/admin/stats/structures","Number of structures",format,"GET"},
+			{"/admin/stats/chemicals_in_dataset?dataset_uri=","Number of chemicals in a dataset",format,"GET"},
+			{"/admin/stats/dataset_intersection?dataset_uri=..&dataset_uri=..","Number of common chemicals in two datasets",format,"GET"},
+			{"/admin/stats/properties","Number of properties",format,"GET"},
+			{"/admin/stats/values","Number of values",format,"GET"},
+			{"/admin/stats/models","Number of models",format,"GET"},
 
 
 			{"[ambit - chart]","Charts",formatHeader,null},

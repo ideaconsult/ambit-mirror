@@ -23,8 +23,8 @@
 
 	$(function() {
 		initSearchForm();
-		_ambit.models = initTable(null,'${ambit_root}/model?max=10','#models',_ambit.models,"model_uri[]",_ambit.selectedModels,"selectModel");
-		_ambit.datasets = initTable('${ambit_root}','${ambit_root}/dataset?max=10','#datasets',_ambit.datasets,"dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
+		_ambit.models = initTable("model",null,'${ambit_root}/model?max=10','#models',_ambit.models,"model_uri[]",_ambit.selectedModels,"selectModel");
+		_ambit.datasets = initTable("dataset",'${ambit_root}','${ambit_root}/dataset?max=10','#datasets',_ambit.datasets,"dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
 		$("#searchform").validate();
 		$("#accordion" ).accordion();
 	});	
@@ -50,8 +50,9 @@
 						  	delete params.b64search;
 						  	description = "URI";	
 						  }
-						  $('#qtype').text('Similarity search');	
-						  $('#qthreshold').text('Tanimoto >= '+ purl.param('threshold'));
+						  $('#qtype').text('Similarity search');
+						  var t = purl.param('threshold');
+						  $('#qthreshold').text('Tanimoto >= '+ (t===undefined?'0.8':t));
 						  url = queryService	+ "/query/similarity?";
 						  break;
 						case 'smarts':
@@ -139,43 +140,32 @@
 	<li class="ui-selectee">
 	<a href="${ambit_root}/ui"><span class="ui-icon ui-icon-home" style="float: left; margin-right: .3em;"></span>Home</a>
 	</li>
+	<li class="ui-selected">
+	<a href=""><span class="ui-icon ui-icon-search" style="float: left; margin-right: .3em;"></span>
+	Query</a>
+	</li>	
 	</ul>
 	<div style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-		<span id='qtype' ></span>
+		<span id='qtype' ></span>	<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="float: right; margin-right: .3em;"></a>
 		<br>
 		<span id='qthreshold'></span>
 		<br>
 		<b><span id='qvalue'></span></b>
 		<span id='description' style='display:none;'></span>
-		<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="float: left; margin-right: .3em;"></a>
-		<br>
 		<span>Max number of hits</span>
 		<input type='text' size='3' name='pagesize' value='10' style='width:5em;height:1.5em;margin-bottom:0;padding: 2px;'>
 		<input class='ambit_search remove-bottom' id='submit2' type='submit' value='Refresh' tabindex='3'/>
 	</div>
-	<!--
-	<div class='ui-widget help half-bottom' style='fill:auto;'>
-		<div class='ui-widget-header ui-corner-top'>Query</div>
-		<div class='ui-widget-content ui-corner-bottom remove-bottom' style='margin:3px;padding: 0.4em; font-size: 1em;'>
-			<span id='qtype' ></span>
-			<br>
-			<span id='qthreshold'></span>
-			<br>
-			<b><span id='qvalue'></span></b>
-			<span id='description' style='display:none;'></span>
-			<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="float: left; margin-right: .3em;"></a>
-			<br>
-			<span>Max number of hits</span>
-			<input type='text' size='3' name='pagesize' value='10' style='width:5em;height:1.5em;margin-bottom:0;padding: 2px;'>
-		</div>
-	</div>
-	<input class='ambit_search' id='submit2' type='submit' value='Refresh' tabindex='3'/>
-	-->
+
 	<#include "/select_features.ftl">
 	
 
-	<br>
-	<span id='download' class='help'>Download:<br>
+	<ul id="selectable">
+	<li class="ui-selectee" >
+	<span class="ui-icon ui-icon-disk" style="float: left; margin-right: .3em;" ></span>
+	Download
+	</li>
+	<li class="ui-selectee" >
 	<a href='#' id='sdf'><img src='${ambit_root}/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a>
 	<a href='#' id='csv'><img src='${ambit_root}/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a>
 	<a href='#' id='cml'><img src='${ambit_root}/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'/></a>
@@ -183,7 +173,9 @@
 	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'/></a>
 	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'/></a>
 	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'/></a>
-	</span>
+	</li>
+	</ul>
+
 
 </div>
 
@@ -191,8 +183,8 @@
 
 
 <form action="${ambit_root}/ui/query" method="get">  
-<div class="eleven columns remove-bottom" style="padding:0;" >
-	<div class="row ui-widget-content ui-corner-all" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:0;" >
+	<div class="row " style="padding:0;" >
 		<table id='structures' class='structable' style='margin:0;' width='100%'>
 					<thead>
 						<th>
@@ -213,32 +205,15 @@
 
 </div>
 
-<div class="two columns" style="margin:0;padding:0;" >
 <!--
-	<input  class='ambit_search' type='submit' value='Do XXX'>
--->
+<div class="one column" style="margin:0;padding:0;" >
 
-	<span class='help'>OpenTox API<br>
-		<a href='${ambit_root}/dataset' target='_blank'>Datasets</a>
-		<a href='${ambit_root}/feature' target='_blank'>Features</a>
-		<a href='${ambit_root}/compound' target='_blank'>Chemicals</a>
-		<a href='${ambit_root}/algorithm' target='_blank'>Algorithms</a>
-		<a href='${ambit_root}/model' target='_blank'>Models</a>
-		<a href='${ambit_root}/task' target='_blank'>Tasks</a>
-		<a href='${ambit_root}/query' target='_blank'>Query</a>
-		<a href='${ambit_root}/query/compound/search/all' target='_blank'>Exact search</a>
-		<a href='${ambit_root}/query/similarity?search=c1ccccc1' target='_blank'>Similarity</a>
-		<a href='${ambit_root}/query/smarts?search=c1ccccc1' target='_blank'>Substructure</a>
-	</span>
-	<span class='help'>Demos<br>
-		<a href='${ambit_root}/depict?search=c1ccccc1' target='_blank'>2D depiction</a>
-		<a href='${ambit_root}/depict/reaction?search=c1ccccc1' target='_blank'>Reactions (SMIRKS)</a>
-		<a href='${ambit_root}/depict/tautomer?search=NC%3D1N%3DCN%3DC2N%3DCNC2%3D1' target='_blank'>Tautomers</a>		
-	</span>
-	<span class='help'>Applications<br>
-		<a href='http://toxpredict.org' target='_blank'>ToxPredict</a>
-	</span>	
+	<input  class='ambit_search' type='submit' value='Do XXX'>
+<#include "/help.ftl">
+
+	
 </div>
+-->
 
 </form>
 
