@@ -5,15 +5,34 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
-<#if algid??>
+<#if modelid??>
 	<script type='text/javascript'>
-		var algorithm = readAlgorithm("${ambit_root}","${ambit_request_json}");
+		var model = readModel("${ambit_root}","${ambit_request_json}");
 	</script>
 <#else>
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = defineAlgorithmTable("${ambit_root}","${ambit_request_json}");
+	  	var oTable = defineModelTable("${ambit_root}","${ambit_request_json}");
+	  		/* event listener  */
+	    <!-- Details panel -->	
+		$('.modeltable tbody td .zoomstruc').live('click',function() {
+					var nTr = $(this).parents('tr')[0];
+					if (oTable.fnIsOpen(nTr)) {
+						$(this).removeClass("ui-icon-folder-open");
+						$(this).addClass("ui-icon-folder-collapsed");
+						this.title='Click to show model details';
+						oTable.fnClose(nTr);
+					} else {
+						$(this).removeClass("ui-icon-folder-collapsed");
+						$(this).addClass("ui-icon-folder-open");
+						this.title='Click to close model details';
+						var id = 'v'+getID();
+						oTable.fnOpen(nTr, modelFormatDetails(oTable,nTr,"${ambit_root}"),	'details');
+												       
+					}
+			});
+
 	});
 	</script>
 </#if>
@@ -33,7 +52,7 @@ $(document)
 
 <div class="container" style="margin:0;padding:0;">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/algorithm' style='padding:0;margin:0;'>
+<form method='GET' name='searchform' id='searchform' action='${ambit_root}/model' style='padding:0;margin:0;'>
 <!-- banner -->
 <div class="row remove-bottom" id="header">
 	<#include "/toplinks.ftl">
@@ -43,9 +62,9 @@ $(document)
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="ten columns alpha">
 			<h3 class="remove-bottom">
-					Algorithms
+					Models
 			</h3>
-		    <h6>Descriptor calculations, model building and data processing algorithms</h6>			
+		    <h6>Regression, classification, clustering, structural alerts, applicability domain, structure optimisation.</h6>			
 		</div>
 		<div class="four columns omega">
 			<h3 class="remove-bottom">
@@ -71,7 +90,7 @@ $(document)
 
 </form>
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/algorithm_menu.ftl">
+<#include "/model_menu.ftl">
 </div>
 
 <div class="twelve columns remove-bottom" style="padding:0;" >
@@ -79,25 +98,26 @@ $(document)
 
 		<!-- Page Content
 		================================================== -->
-		<#if algid??>
+		<#if modelid??>
 		<div class="row" style="padding:0;" >			
-			<div class="ui-widget-header ui-corner-top">Algorithm at <a href='${ambit_root}/algorithm/${algid}'>${ambit_root}/algorithm/${algid}</a></div>
+			<div class="ui-widget-header ui-corner-top">Model at <a href='${ambit_root}/model/${modelid}'>${ambit_root}/model/${modelid}</a></div>
 			<div class="ui-widget-content ui-corner-bottom">
 				<div style="margin:5px;padding:5px;">	
-				<form action="${ambit_root}/algorithm/${algid}" id="runAlgorithm"  method="POST">	
-					<#include "/algorithm_one.ftl">
+				<form action="${ambit_root}/model/${modelid}" id="runModel"  method="POST">	
+					<#include "/model_one.ftl">
 				</form>
 				</div>
 			</div>
 		<#else>
 		<div class="row ui-widget-content ui-corner-all" style="padding:0;" >
-			<table id='algorithm'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<table id='model' class='modeltable'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
-			<th>Name</th>
-			<th>Endpoint</th>
-			<th>Description</th>
-			<th>Type</th>
-			<th>Implementation of</th>
+			<th></th>
+			<th>Stars</th>
+			<th>Title</th>
+			<th>Algorithm</th>
+			<th>Training dataset</th>
+			<th>Logo</th>
 			</thead>
 			<tbody></tbody>
 			</table>
