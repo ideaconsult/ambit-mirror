@@ -21,15 +21,10 @@ function defineStructuresTable(url, query_service, similarity,root) {
 										
 										return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ 
 													uri +"' value='"+uri+"'><br/>" +
-													"<a href='"+uri+"' class='help' title='AMBIT Compound URI' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a>" +
-													"<br/>"+
-													"<a href='"+searchURI+"' class='help' title='Find similar'>Similar</a>" +
-													"<br/>"+
-													"<a href='"+smartsURI+"' class='help' title='Find substructure'>Substruct.</a>" +
-													"<br/>"+													
-													"<span class='zoomstruc'>"+
-													"<img src='"+query_service+"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'>"+
-													"</span>";
+													"<a href='"+uri+"' class='help' title='AMBIT Compound URI' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a> " +
+													"<a href='"+searchURI+"' class='help' title='Find similar'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Find similar chemical structures'></span></a> " +
+													"<a href='"+smartsURI+"' class='help' title='Find substructure'><span class='ui-icon ui-icon-search' style='float: left; margin: .1em;' title='Substructure search with this chemical structure'></span></a> " +
+													"<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show compound details'></span>";
 									}
 								},						                  
 								{
@@ -213,7 +208,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 							});
 						},
 						"oLanguage" : {
-							"sProcessing" : "<img src=" + root + "'/images/24x24_ambit.gif' border='0'>",
+							"sProcessing" : "<img src='" + root + "/images/24x24_ambit.gif' border='0'>",
 							"sLoadingRecords" : "No records found."  
 						},
 						"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
@@ -299,18 +294,17 @@ function defineStructuresTable(url, query_service, similarity,root) {
 						}
 					});
 	
-	$('#structures tbody td .zoomstruc img').live(
-			'click',
+	$('#structures tbody td .zoomstruc').live('click',
 			function() {
 				var nTr = $(this).parents('tr')[0];
 				if (oTable.fnIsOpen(nTr)) {
-					this.src = query_service + "/images/zoom_in.png";
-					this.alt = "Zoom in";
+					$(this).removeClass("ui-icon-folder-open");
+					$(this).addClass("ui-icon-folder-collapsed");
 					this.title='Click to show compound details';
-					oTable.fnClose(nTr);
+					oTable.fnClose(nTr);					
 				} else {
-				    this.alt = "Zoom out";
-					this.src = query_service + "/images/zoom_out.png";
+					$(this).removeClass("ui-icon-folder-collapsed");
+					$(this).addClass("ui-icon-folder-open");
 					this.title='Click to close compound details panel';
 					var id = 'values'+getID();
 					oTable.fnOpen(nTr, fnFormatDetails(nTr,id),	'details');
