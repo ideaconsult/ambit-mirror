@@ -49,6 +49,24 @@ function getResponseTitle(request, description) {
 	return '<span title=\"' + request.status + ' ' + request.statusText + '\">'+description+'</span>';
 }
 
+/**
+ * Wrap the dataset URI with the new /ui/query 
+ * To be removed when /datset/id is updated to the new look and feel
+ * @param uri
+ * @returns
+ */
+
+function wrapDatasetURI(uri) {
+	if (uri==null) return uri;
+	uri = uri.trim();
+	var p = uri.indexOf("/dataset/");
+	if (p>0) {
+		var wrapped = uri.substring(0,p)+
+		"/ui/query?option=auto&type=url&page=0&pagesize=10&search="+
+		encodeURIComponent(uri);
+		return wrapped;
+	} else return uri;
+}
 
 function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 	
@@ -64,7 +82,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 		switch (request.status) {
 			case 200:
 				document.getElementById(resultDOM).innerHTML = getResponseTitle(request,"Ready. Results available.");
-				document.getElementById(resultDOM).href = request.responseText;
+				document.getElementById(resultDOM).href = wrapDatasetURI(request.responseText);
 				document.getElementById(statusDOM).src = imgReady;
 				document.getElementById(resultDOM).style.display = 'inline';
 				document.getElementById(statusDOM).style.display = 'inline';
