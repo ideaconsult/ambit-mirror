@@ -239,3 +239,33 @@ function defineTaskTable(root,url) {
 function getID() {
 	   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
 }			
+
+function runAlgorithms(root,statusSelector) {
+	var algs = [
+    "toxtreecramer","toxtreecramer2","toxtreeverhaar","toxtreeverhaar2",
+	"toxtreeeye","toxtreeskinirritation","toxtreemic",
+	"toxtreeskinsens","toxtreednabinding","toxtreeproteinbinding",
+	"toxtreecarc","toxtreebiodeg","toxtreesmartcyp","pka","ambit2.descriptors.MolecularWeight",
+	"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"     ];
+	$.each(algs,function(index,alg) {
+		$.ajax({
+			contentType :'application/x-www-form-urlencoded; charset=UTF-8',
+		    headers: { 
+		        Accept : "text/uri-list; charset=utf-8"
+		    },
+			data : "dataset_uri="+root+"/compound/1", 
+			type: "POST",
+			url : root + "/algorithm/" + alg,
+			success : function(data1, status, xhr) {
+				$(statusSelector).text('Completed');
+			},
+			error : function(xhr, status, err) {
+				$(statusSelector).text(err);
+			},
+			complete : function(xhr, status) {
+				$(statusSelector).text(status);
+			}
+		});	
+	});
+
+}
