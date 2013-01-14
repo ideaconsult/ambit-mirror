@@ -1,12 +1,8 @@
 package ambit2.rest.model;
 
-import java.io.Writer;
-import java.util.Iterator;
-
 import org.restlet.Request;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.core.data.model.Algorithm;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
@@ -61,6 +57,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 			getOutput().write(String.format(
 					"\n{"+
 					"\n\"%s\":\"%s\"," + //uri
+					"\n\"%s\":%d," + //id
 					"\n\"%s\":\"%s\"," + //title
 					"\n\"%s\":%d," + //stars
 					"\n\"%s\":{\n\t\"URI\":\"%s\",\n\t\"%s\":\"%s\",\n\t\"img\":\"%s\"\n}," + 					//algorithm
@@ -77,6 +74,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					"\n\n}}",
 					
 					jsonModel.URI.jsonname(),uri,
+					"id",model.getId(),
 					jsonModel.title.jsonname(),model.getName(),
 					jsonModel.stars.jsonname(),model.getStars(),
 					jsonModel.algorithm.jsonname(),model.getAlgorithm()==null?"":model.getAlgorithm(),

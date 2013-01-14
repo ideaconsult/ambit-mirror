@@ -33,7 +33,37 @@ var _ambit = {
 	           	  {id:"rdfxml",img:"rdf.gif",alt:"RDF/XML",title:'Download as RDF XML',mime:'application/rdf+xml'},
 	           	  {id:"rdfn3",img:"rdf.gif",alt:"RDF N3",title:'Download as RDF N3',mime:'text/n3'},
 	           	  {id:"json",img:"json.png",alt:"JSON",title:'Download as JSON',mime:'application/json'}
-	           	 ]
+	           	 ],
+	'runModel' : function(modelURI,statusSelector) {
+		if ((this.search.result==null) || (this.search.result.dataEntry===undefined) || (this.search.result.dataEntry==null)) 
+			alert('The results list is empty. No compounds to apply the model!');
+		else {
+			$.each(this.search.result.dataEntry,function(index,entry) {
+				$(statusSelector).show();
+				$(statusSelector).text('running');
+				$.ajax({
+					contentType :'application/x-www-form-urlencoded; charset=UTF-8',
+				    headers: { 
+				        Accept : "text/uri-list; charset=utf-8"
+				    },
+					data : "dataset_uri="+entry.compound.URI, 
+					type: "POST",
+					url : modelURI,
+					success : function(data1, status, xhr) {
+						$(statusSelector).text('Completed');
+					},
+					error : function(xhr, status, err) {
+						$(statusSelector).text(err);
+					},
+					complete : function(xhr, status) {
+						$(statusSelector).text(status);
+					}
+				});	
+			});
+			
+		}
+	}           	 
+	
 };
 
 function initTable(object,root, query_service, tableSelector, arrayName, checkbox, checked, clickHandler) {
@@ -59,12 +89,16 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 						var browseURI =  "";
 						if (root != null) {
 							browseURI = root + "/ui/query?" + $.param(prm,false);
-							browseURI = "<br/><a href='"+browseURI+"' style='margin-left:2px;'><img src='"+
-										root+"/images/table.png' title='Browse the dataset'></a>";
+							browseURI = "<a href='"+browseURI+"' style='margin-left:2px;'><img src='"+
+										root+"/images/table.png' border='0' title='Browse the dataset'></a>";
+						} else {
+							browseURI = "<a href='#' style='margin-left:2px;'><img src='"+
+										_ambit["query_service"]+
+										"/images/run.png' border='0' title='Run predictions for all structures in the result list' onClick='_ambit.runModel(\""+o.aData.URI+"\",\"#m"+o.aData["id"]+"\");'></a>";
 						}
 		 					return "<input class='selecturi' type='checkbox' "+ isChecked +" name='"+checkbox+"' onClick='"+
 		 						clickHandler+"(event);' title='Select "+ 
-		 						o.aData.URI +"' value='"+o.aData.URI+"'>"+ browseURI + link;
+		 						o.aData.URI +"' value='"+o.aData.URI+"'>"+ link + browseURI;
 		 			}
 		  	},			                  
 			{ //1
@@ -74,7 +108,7 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 				"mDataProp" : "title",
 				"bUseRendered" : "false",
 				"fnRender" : function(o,val) {
-					return "<div class='long'>" + val + "</div>";
+					return "<div class='long'>" + val + "</div><span class='help' style='display:none;' title='Check the model and do not forget to refresh the page to view the results!'  id='m"+o.aData["id"]+"'></span>";
 				}
 					
 				}
