@@ -344,8 +344,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				
 	    	 if (isSimpleSecretAAEnabled()) {
 		    	 
-				 router.attach("/", AmbitResource.class);
-				 router.attach("", AmbitResource.class);
+				 router.attach("/", UIResource.class);
+				 router.attach("", UIResource.class);
 				 
 				 logger.log(Level.INFO,String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
 	    		 ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC, "ambit2");
