@@ -81,6 +81,7 @@ Page:<input name='page' type='text' title='Page' size='10' value='0'>
 </form>
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/menu.ftl">
+
 </div>
 
 <div class="thirteen columns remove-bottom" style="padding:0;" >

@@ -533,7 +533,8 @@ public class AmbitResource extends FreeMarkerResource {
 		w.write("<div>");		
 		
 		//w.write(String.format("<a href='%s/ttc?text=50-00-0&search=%s' title='Threshold of toxicological concern prediction'>TTC</a>&nbsp;",baseReference,Reference.encode("C=O")));
-		w.write(String.format("<a href='%s/query/compound/search/all'>Query compounds</a>&nbsp;",baseReference));
+		w.write(String.format("&nbsp;<a href='%s/ui'>Home</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='%s/ui/query'>Query compounds</a>&nbsp;",baseReference));
 		w.write(String.format("<a href='%s/compound/100'>Chemical&nbsp;compounds</a>&nbsp;",baseReference));
 
 		w.write(String.format("<a href='%s/dataset?max=25'>Datasets</a>&nbsp;",baseReference));
@@ -555,6 +556,7 @@ public class AmbitResource extends FreeMarkerResource {
 
 
 		w.write(String.format("&nbsp;<a href='%s/help'>Help</a>&nbsp;",baseReference));
+
 
 		w.write("</div>");
 

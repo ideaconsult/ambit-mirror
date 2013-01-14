@@ -30,7 +30,12 @@ public class AdminResource  extends CatalogResource<String> {
 			topics.add(String.format("%s%s/%s",resource,StatisticsResource.resource,mode.name()));
 		
 		topics.add(String.format("%s%s/%s",resource,FingerprintResource.resource,FPTable.fp1024.name()));
-		topics.add(String.format("%s%s/%s",resource,FingerprintResource.resource,FPTable.sk1024.name()));		
+		topics.add(String.format("%s%s/%s",resource,FingerprintResource.resource,FPTable.sk1024.name()));	
+		setHtmlbyTemplate(true);
+	}
+	@Override
+	public String getTemplateName() {
+		return "admin.ftl";
 	}
 	@Override
 	protected Iterator<String> createQuery(Context context, Request request,
