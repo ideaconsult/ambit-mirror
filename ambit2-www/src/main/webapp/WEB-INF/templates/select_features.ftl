@@ -6,7 +6,7 @@ Datasets
 <span class="ui-icon ui-icon-link" style="float:right;margin-right: .3em;"></span></a>
 </li>
 </ul>
-<div style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' id='select_datasets' class='remove-bottom'>
+<div style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' id='select_datasets' class='row remove-bottom'>
         <table id='datasets' style="margin:0;padding:0px;">
         <thead style='display:none;'>
         <th></th>

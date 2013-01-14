@@ -174,3 +174,12 @@ a.topLinks {
   #selectable .ui-selected { background: #F2F0E6; color: #729203;  }
   #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
   #selectable li { margin: 3px; padding: 0.4em; font-size: 1em; height: 18px; }
+  
+.long {
+   border: solid 0px #F2F0E6 ;
+    text-overflow: ellipsis;
+    width: 120px;
+    display: block;
+    overflow: hidden;
+    padding: 0px;
+}  

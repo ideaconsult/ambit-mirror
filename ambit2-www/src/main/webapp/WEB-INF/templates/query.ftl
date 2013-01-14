@@ -26,7 +26,6 @@
 		initTable("model",null,'${ambit_root}/model?max=10','#models',"models","model_uri[]",_ambit.selectedModels,"selectModel");
 		initTable("dataset",'${ambit_root}','${ambit_root}/dataset?max=10','#datasets',"datasets","dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
 		$("#searchform").validate();
-		$("#accordion" ).accordion();
 	});	
 	
 
@@ -123,10 +122,7 @@
 </script>
 
 </head>
-
 <body>
-
-
 
 <div class="container" style="margin:0;padding:0;">
 

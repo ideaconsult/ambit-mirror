@@ -55,6 +55,7 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 	  					
 	  					var prm = {'option': 'auto', 'type':'url', 'search':uri, 'pagesize' : 10};
 	  					
+	  					var link = " <a href='"+o.aData.URI+"?max=10' title='AMBIT URI: "+o.aData.URI+"' target=_blank title='"+o.aData.URI+"'><span class='ui-icon ui-icon-link'></a>";
 						var browseURI =  "";
 						if (root != null) {
 							browseURI = root + "/ui/query?" + $.param(prm,false);
@@ -63,7 +64,7 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 						}
 		 					return "<input class='selecturi' type='checkbox' "+ isChecked +" name='"+checkbox+"' onClick='"+
 		 						clickHandler+"(event);' title='Select "+ 
-		 						o.aData.URI +"' value='"+o.aData.URI+"'>"+browseURI;
+		 						o.aData.URI +"' value='"+o.aData.URI+"'>"+ browseURI + link;
 		 			}
 		  	},			                  
 			{ //1
@@ -73,8 +74,7 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 				"mDataProp" : "title",
 				"bUseRendered" : "false",
 				"fnRender" : function(o,val) {
-					return val + 
-					" <a href='"+o.aData.URI+"?max=10' class='help' title='AMBIT URI: "+o.aData.URI+"' target=_blank title='"+o.aData.URI+"'><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a>";
+					return "<div class='long'>" + val + "</div>";
 				}
 					
 				}
