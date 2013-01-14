@@ -269,3 +269,30 @@ function runAlgorithms(root,statusSelector) {
 	});
 
 }
+
+
+function runStructureIndexing(root,statusSelector) {
+	var algs = [
+    "fingerprints","smartsprop","struckeys" ];
+	$.each(algs,function(index,alg) {
+		$.ajax({
+			contentType :'application/x-www-form-urlencoded; charset=UTF-8',
+		    headers: { 
+		        Accept : "text/uri-list; charset=utf-8"
+		    },
+			data : "dataset_uri=", 
+			type: "POST",
+			url : root + "/algorithm/" + alg,
+			success : function(data1, status, xhr) {
+				$(statusSelector).text('Completed');
+			},
+			error : function(xhr, status, err) {
+				$(statusSelector).text(err);
+			},
+			complete : function(xhr, status) {
+				$(statusSelector).text(status);
+			}
+		});	
+	});
+
+}
