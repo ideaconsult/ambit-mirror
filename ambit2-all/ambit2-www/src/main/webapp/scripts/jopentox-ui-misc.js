@@ -14,8 +14,6 @@ $(function() {$( ".datatable" ).dataTable({
 	});
 });
 
-$(function() {$( ".accordion" ).accordion({autoHeight: false,navigation: true});});
-
 $(function() {$( ".tabs" ).tabs({cache: true});});
 
 $(function() {$( "#selectable" ).selectable();});
