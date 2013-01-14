@@ -175,21 +175,6 @@ function defineStructuresTable(url, query_service, similarity,root) {
 								"url" : sSource,
 								"data" : aoData,
 								"dataType" : "json",
-								/*
-								 * useless - with datatype jsonp no custom headers are sent!
-						        'beforeSend': function(xhrObj){
-					                xhrObj.setRequestHeader("Content-Type","application/x-javascript");
-					                xhrObj.setRequestHeader("Accept","application/x-javascript");
-						        },								
-								"headers": { 
-								        "Accepts" : "application/x-javascript",
-								        "Content-Type": "application/x-javascript"
-								},						
-								"accepts" : {
-									jsonp: "application/x-javascript",
-									json : "application/json"
-								},
-								*/
 								"contentType" : "application/json",
 								"success" : function(json) {
 									try {
@@ -199,11 +184,9 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									identifiers(json);
 									fnCallback(json);
 								},
-								"cache" : false,
+								"cache" : true,
 								"error" : function(xhr, textStatus, error) {
-									oSettings.oApi._fnProcessingDisplay(
-											oSettings, false);
-								//	console.log(error);
+									oSettings.oApi._fnProcessingDisplay(oSettings, false);
 								}
 							});
 						},
@@ -221,7 +204,6 @@ function defineStructuresTable(url, query_service, similarity,root) {
 						},
 						"fnRowCallback" : function(nRow, aData, iDisplayIndex) {
 			              //  $('td:eq(2)', nRow).html(iDisplayIndex +1);
-
 			                // retrieve identifiers
 							id_uri = query_service
 									+ "/query/compound/url/all?search="
