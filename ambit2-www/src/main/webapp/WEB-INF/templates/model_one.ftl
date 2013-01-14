@@ -21,8 +21,8 @@
 	<div class='row remove-bottom'>
 		<label class='three columns alpha'>Variables</label>
 		<a class='three columns alpha half-bottom' href='${ambit_root}/model/${modelid}/independent'>Independent</a>
-		<a class='three columns alpha half-bottom'  href='${ambit_root}/model/${modelid}/independent'>Dependent</a>
-		<a class='three columns alpha half-bottom' href='${ambit_root}/model/${modelid}/independent'>Predicted</a>
+		<a class='three columns alpha half-bottom'  href='${ambit_root}/model/${modelid}/dependent'>Dependent</a>
+		<a class='three columns alpha half-bottom' href='${ambit_root}/model/${modelid}/predicted'>Predicted</a>
 		<div class='five columns omega'></div>
 	</div>	
 
