@@ -80,10 +80,10 @@ public class CompoundsByPropertyValueInDatasetResource extends FacetResource<Pro
 			public void footer(Writer w, IQueryRetrieval query) {
 				try {
 					String chart = String.format("%s/chart/pie?%s",
-							getResourceRef(getRequest()),
-							getResourceRef(getRequest()).getQuery()
+							getRequest().getRootRef(),
+							getRequest().getResourceRef().getQuery()
 							);
-					
+					System.out.println(chart);
 					w.write(String.format("<tr><td colspan='2'><a href='%s&w=600&h=500' alt='%s' title='%s'><img src='%s&w=600&h=500' title='%s'></a></td></tr>",
 							chart,
 							query.toString(),
