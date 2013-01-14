@@ -61,6 +61,10 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 				return new OutputWriterConvertor(
 						new FacetCSVReporter(getRequest()),
 						MediaType.TEXT_CSV);
+			} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+				return new OutputWriterConvertor(
+						new FacetJSONReporter(getRequest()),
+						MediaType.APPLICATION_JSON,filenamePrefix);				
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 					return new OutputWriterConvertor(
 							new FacetURIReporter(getRequest()),
