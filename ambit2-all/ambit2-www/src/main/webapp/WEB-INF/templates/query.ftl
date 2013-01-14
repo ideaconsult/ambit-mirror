@@ -23,8 +23,8 @@
 
 	$(function() {
 		initSearchForm();
-		_ambit.models = initTable("model",null,'${ambit_root}/model?max=10','#models',_ambit.models,"model_uri[]",_ambit.selectedModels,"selectModel");
-		_ambit.datasets = initTable("dataset",'${ambit_root}','${ambit_root}/dataset?max=10','#datasets',_ambit.datasets,"dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
+		initTable("model",null,'${ambit_root}/model?max=10','#models',"models","model_uri[]",_ambit.selectedModels,"selectModel");
+		initTable("dataset",'${ambit_root}','${ambit_root}/dataset?max=10','#datasets',"datasets","dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
 		$("#searchform").validate();
 		$("#accordion" ).accordion();
 	});	
@@ -145,8 +145,9 @@
 	Query</a>
 	</li>	
 	</ul>
-	<div style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-		<span id='qtype' ></span>	<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="float: right; margin-right: .3em;"></a>
+	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+		<span id='qtype' ></span>	
+		<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="margin-right: .3em;"></a>
 		<br>
 		<span id='qthreshold'></span>
 		<br>

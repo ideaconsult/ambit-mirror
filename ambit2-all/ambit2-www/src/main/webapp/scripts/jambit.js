@@ -3,7 +3,7 @@ var _ambit = {
 	'query_uri' : null,
 	'query_params' : null,
 	'data_uri' : null,
-	'cache' : false,	
+	'cache' : true,	
 	'search' : { 
 		'uri': null, 
 		'result': null,
@@ -36,38 +36,38 @@ var _ambit = {
 	           	 ]
 };
 
-function initTable(object,root, query_service, tableSelector, anArray, checkbox, checked, clickHandler) {
+function initTable(object,root, query_service, tableSelector, arrayName, checkbox, checked, clickHandler) {
 	var uri = query_service + "&media=application%2Fjson";
 	$(tableSelector).dataTable({
 		dataType : "json",
 		"sAjaxDataProp" : object,
 		"sAjaxSource": uri,	
-			"aoColumnDefs" : [
-			  	{ //0
-			  		"aTargets": [ 0 ],	
-			  		"bSortable" : false,
-			  		"mDataProp" : null,
-			  		sWidth : "1em",
-			  		"bUseRendered" : "false",
-			  		"fnRender" : function(o,val) {
-	  						var uri = o.aData["URI"];
-	  						var isChecked = jQuery.inArray(uri,checked)>=0?"checked":"";
-	  						
-	  						var prm = {'option': 'auto', 'type':'url', 'search':uri, 'pagesize' : 10};
-	  						
-							var browseURI =  "";
-							if (root != null) {
-								browseURI = root + "/ui/query?" + $.param(prm,false);
-								browseURI = "<br/><a href='"+browseURI+"' style='margin-left:2px;'><img src='"+
-											root+"/images/table.png' title='Browse the dataset'></a>";
-							}
-		  					return "<input class='selecturi' type='checkbox' "+ isChecked +" name='"+checkbox+"' onClick='"+
-		  						clickHandler+"(event);' title='Select "+ 
-		  						o.aData.URI +"' value='"+o.aData.URI+"'>"+browseURI;
-		  			}
-			  	},			                  
-				{ //1
-				"aTargets": [ 1 ],	
+		"aoColumnDefs" : [
+		  	{ //0
+		  		"aTargets": [ 0 ],	
+		  		"bSortable" : false,
+		  		"mDataProp" : null,
+		  		sWidth : "1em",
+		  		"bUseRendered" : "false",
+		  		"fnRender" : function(o,val) {
+	  					var uri = o.aData["URI"];
+	  					var isChecked = jQuery.inArray(uri,checked)>=0?"checked":"";
+	  					
+	  					var prm = {'option': 'auto', 'type':'url', 'search':uri, 'pagesize' : 10};
+	  					
+						var browseURI =  "";
+						if (root != null) {
+							browseURI = root + "/ui/query?" + $.param(prm,false);
+							browseURI = "<br/><a href='"+browseURI+"' style='margin-left:2px;'><img src='"+
+										root+"/images/table.png' title='Browse the dataset'></a>";
+						}
+		 					return "<input class='selecturi' type='checkbox' "+ isChecked +" name='"+checkbox+"' onClick='"+
+		 						clickHandler+"(event);' title='Select "+ 
+		 						o.aData.URI +"' value='"+o.aData.URI+"'>"+browseURI;
+		 			}
+		  	},			                  
+			{ //1
+		  		"aTargets": [ 1 ],	
 				"sClass" : "left",
 				"bSortable" : true,
 				"mDataProp" : "title",
@@ -104,11 +104,17 @@ function initTable(object,root, query_service, tableSelector, anArray, checkbox,
 				  else {
 				    $('.dataTables_length', wrapper).css('visibility', 'visible');
 				  }
-			}		
+			},
+			"fnServerData" : function(sSource, aoData, fnCallback,
+					oSettings) {
+			     $.getJSON( sSource, aoData, function (json) {
+			         fnCallback(json);
+			         try { _ambit[arrayName] = json[object]; } catch (err) { _ambit[arrayName] = [];}
+			     });
+			}			
 	
 		});	
-	
-	return anArray;
+
 }
 
 function selectDataset(event) {
