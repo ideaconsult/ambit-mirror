@@ -178,7 +178,7 @@ a.topLinks {
 .long {
    border: solid 0px #F2F0E6 ;
     text-overflow: ellipsis;
-    width: 120px;
+    width: 100px;
     display: block;
     overflow: hidden;
     padding: 0px;
