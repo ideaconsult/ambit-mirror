@@ -57,8 +57,9 @@ function getResponseTitle(request, description) {
  */
 
 function wrapDatasetURI(uri) {
+	if (uri===undefined) return "";
 	if (uri==null) return uri;
-	uri = uri.trim();
+	uri = $.trim(uri);
 	var p = uri.indexOf("/dataset/");
 	if (p>0) {
 		var wrapped = uri.substring(0,p)+
@@ -73,7 +74,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 	var request = new XMLHttpRequest();
 	
 	// 'true' is for async
-	request.open('GET', taskURI, true);
+	request.open('GET', taskURI+'?media=text%2Furi-list', true);
 	//replace with json to get more detailed error message
 	request.setRequestHeader('Accept', 'text/uri-list');
 	
