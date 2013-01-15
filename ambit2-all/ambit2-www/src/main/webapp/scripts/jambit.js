@@ -115,12 +115,14 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 			],
 			//"sScrollXInner": "110%",
 			"bScrollCollapse": true,
+			"bScrollInfinite": true,
+			"sScrollY": "200px",
 			"aaSorting" : [[ 1, 'asc' ] ],
-			"sWidth": "100%",
+			//"sWidth": "100%",
 			"sDom": 'Trtp',
 			'bJQueryUI': false, 
-			'bPaginate': true,
-			'bAutoWidth': true,
+			'bPaginate': false,
+			//'bAutoWidth': true,
 			fnDrawCallback: function(){
 				  var wrapper = this.parent();
 				  var rowsPerPage = this.fnSettings()._iDisplayLength;
