@@ -5,7 +5,7 @@
 			<span style='vertical-align:bottom;'>
 			Developed by <br>
 			<a class='footerLink' href='http://www.ideaconsult.net/'>IdeaConsult Ltd.</a> 
-			(2005 - 2012)
+			(2005 - 2013)
 			</span>
 		</div>
 		<div class='six columns omega'>
