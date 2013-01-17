@@ -28,7 +28,7 @@ $(document)
 			<h3 class="remove-bottom">
 					Welcome to AMBIT 
 			</h3>
-		    <h6>Chemical structures database,properties prediction & machine learning with OpenTox REST web services API</h6>			
+		    <h6>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</h6>			
 		</div>
 		</div>
 </div>		
