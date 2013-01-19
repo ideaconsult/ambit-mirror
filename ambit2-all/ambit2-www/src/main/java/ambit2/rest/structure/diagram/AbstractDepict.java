@@ -88,13 +88,14 @@ public class AbstractDepict extends ProtectedResource {
 		Reference root = (Reference)ref.clone();
 		root.setQuery(null);
 		String uri = String.format("%s/daylight",root);
+		String displaySmiles = smiles!=null && (smiles.length>0)?smiles[0]:"";
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,smiles==null?"":Reference.encode(smiles[0]),"Daylight depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='daylight' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('daylight')\">",
 						uri,
-						smiles==null?"":Reference.encode(smiles[0]),
-						smiles==null?"":smiles,smiles==null?"":smiles
+						Reference.encode(displaySmiles),
+						displaySmiles,displaySmiles
 						),
 				style
 					));
@@ -109,9 +110,9 @@ public class AbstractDepict extends ProtectedResource {
 						smarts==null?"":Reference.encode(smarts),"CDK depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='cdk' src='%s/any?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
 						uri,
-						smiles==null?"":Reference.encode(smiles[0]),
+						Reference.encode(displaySmiles),
 						smarts==null?"":Reference.encode(smarts),
-						smiles==null?"":smiles,smiles==null?"":smiles),
+						displaySmiles,displaySmiles),
 				style
 					)
 				);
@@ -121,12 +122,12 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						smiles==null?"":Reference.encode(smiles[0]),
+						Reference.encode(displaySmiles),
 						"Cactvs depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='cactvs' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('cactvs')\">",
 						uri,
-						smiles==null?"":Reference.encode(smiles[0]),
-						smiles==null?"":smiles,smiles==null?"":smiles),
+						Reference.encode(displaySmiles),
+						displaySmiles,displaySmiles),
 				style
 					));
 		b.append("</td><td>");
@@ -134,13 +135,13 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						smiles==null?"":Reference.encode(smiles[0]),
+						Reference.encode(displaySmiles),
 						"Open Babel depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='obabel' src='%s?search=%s&w=%d&h=%d' alt='%s' title='%s' onError=\"hideDiv('obabel')\" width='%d' heigth='%d'>",
 						uri,
-						smiles==null?"":Reference.encode(smiles[0]),
+						Reference.encode(displaySmiles),
 						h,h,
-						smiles==null?"":smiles,smiles==null?"":smiles,
+						displaySmiles,displaySmiles,
 						h,h),
 				style
 					));
@@ -153,14 +154,14 @@ public class AbstractDepict extends ProtectedResource {
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
-						smiles==null?"":Reference.encode(smiles[0]),
+						Reference.encode(displaySmiles),
 						recordTypeOption,
 						"PubChem depiction",String.format(AmbitResource.gplus,uri)),
 				String.format("<img id='pubchem' src='%s?search=%s%s' alt='%s' title='%s' onError=\"hideDiv('pubchem')\">",
 						uri,
-						smiles==null?"":Reference.encode(smiles[0]),
+						Reference.encode(displaySmiles),
 						recordTypeOption,
-						smiles,smiles),
+						displaySmiles,displaySmiles),
 				style
 					));
 		b.append("</td><td>");
