@@ -24,7 +24,7 @@ $(document)
 <div class="row remove-bottom">
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
-		<div class="seven columns alpha">
+		<div class="alpha">
 			<h3 class="remove-bottom">
 					Properties import	
 			</h3>
