@@ -8,8 +8,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.cache.RetrieveStructureImagePath;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 
@@ -24,7 +26,16 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 	}
 	public ImageAreaReporter(String mainType,String subType,Dimension dimension) {
 		super(mainType,subType,dimension);
-
+	}
+	@Override
+	protected RetrieveStructureImagePath initQuery(String mainType,String subType) {
+		String mimeType = "image/png";
+		img = Property.getInstance(mimeType,mimeType);
+		RetrieveStructureImagePath q = new RetrieveStructureImagePath(mimeType);
+		q.setQueryName(getQueryName());
+		q.setPageSize(1);
+		q.setPage(0);
+		return q;
 	}
 	@Override
 	protected CachedImage<StringWriter> createImageWrapper(BufferedImage image) {
@@ -76,7 +87,7 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 				File file = new File(path.toString());
 				if (file.exists()) {
 					imageWrapper.setImage(null);
-					imageWrapper.setImageMap(readImageMapFile(path.toString()));
+					imageWrapper.setImageMap(readImageMapFile(path.toString().replace(".png", ".json")));
 					return imageWrapper;
 				}
 			} 
@@ -93,6 +104,12 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 
 	public void footer(StringWriter output, Q query) {};
 	public void header(StringWriter output, Q query) {};
+	
+	@Override
+	public String getFileExtension() {
+		return null;//"json";
+	}
+	
 }
 
 class TheImageMap extends CachedImage<StringWriter> {

@@ -185,7 +185,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 				variant.getMediaType().equals(MediaType.IMAGE_GIF) 
 				) {
 			return createImageConvertor(variant);
-		} else if (variant.getMediaType().equals(ChemicalMediaType.ATOM_AREA_MAP)) 	 {
+		} else if (variant.getMediaType().equals(ChemicalMediaType.IMAGE_JSON)) 	 {
 			return createImageStringConvertor(variant);			
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID,PDFReporter<QueryStructureByID>>(

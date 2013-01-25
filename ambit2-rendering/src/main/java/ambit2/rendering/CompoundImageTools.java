@@ -79,6 +79,8 @@ import ambit2.namestructure.Name2StructureProcessor;
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
 	protected StringBuilder imageMap;
+	protected String comma = "";
+	private static final String formatJson = "\n\t\t{ \"i\": \"%s\",\"l\": \"%s\", \"x\": %d, \"y\": %d, \"w\": %d, \"h\": %d }";
 	public StringBuilder getImageMap() {
 		return imageMap;
 	}
@@ -619,6 +621,8 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 
 	    	} 	  
 	    	try {
+	    		if (imageMap!= null) imageMap.append("{\n\t\"a\": [");
+	    		comma = "";
 	    		renderer.paint(all,new AWTDrawVisitorWithImageMap(g) {
 	    			@Override
 	    			protected void imageMap(ImageMapAreaElement atomSymbol,
@@ -628,12 +632,14 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    					int y = (int) textBounds.getCenterY();
 	    					int w = (int) textBounds.getWidth();
 	    					int h = (int) textBounds.getHeight();
-	    					imageMap.append(String.format("<area shape='circle' coords='%d,%d,%d' href='#' title='%s' atomnumber='%s' onClick='atomNumber(%s)'>\n",
-	    							x,y,w,
+	    					imageMap.append(comma);
+	    					imageMap.append(String.format(formatJson,
 	    							atomSymbol.text,
 	    							atomSymbol.text,
-	    							atomSymbol.text
+	    							x,y,
+	    							w,h
 	    							));
+	    					comma =",";
 	    				}
 	    			}
 	    			
@@ -649,12 +655,14 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    					int y = (int) textBounds.getCenterY();
 	    					int w = (int) textBounds.getWidth();
 	    					int h = (int) textBounds.getHeight();
-	    					imageMap.append(String.format("<area shape='circle' coords='%d,%d,%d' href='#' title='%s' atomnumber='%s' onClick='atomNumber(%s)'>\n",
-	    							x,y,w,
+	    					imageMap.append(comma);
+	    					imageMap.append(String.format(formatJson,
 	    							atomSymbol.text,
 	    							atomSymbol.text,
-	    							atomSymbol.text
+	    							x,y,
+	    							w,h
 	    							));
+	    					comma =",";
 	    				}
 	    			}
 	    		},drawArea,false);
@@ -663,6 +671,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			g.setBackground(Color.white);
 			g.clearRect(0,0,imageSize.width,imageSize.height);
 		}
+		if (imageMap!= null) imageMap.append("\n\t]\n}");
 	}
            
     public synchronized BufferedImage getImage(ArrayList<?> list) {

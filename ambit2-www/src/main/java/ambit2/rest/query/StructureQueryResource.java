@@ -204,7 +204,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				MediaType.TEXT_RDF_NTRIPLES,
 				MediaType.APPLICATION_JAVA_OBJECT,
 				MediaType.APPLICATION_JAVASCRIPT,
-				ChemicalMediaType.ATOM_AREA_MAP
+				ChemicalMediaType.IMAGE_JSON
 
 				});
 				
