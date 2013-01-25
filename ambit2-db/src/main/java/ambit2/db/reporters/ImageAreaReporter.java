@@ -20,12 +20,14 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 	 * 
 	 */
 	private static final long serialVersionUID = 6323248045172976921L;
-
-	public ImageAreaReporter(String mainType,String subType) {
-		this(mainType,subType,new Dimension(250,250));
+	String jsonpcallback = null;
+	
+	public ImageAreaReporter(String mainType,String subType,String jsonpcallback) {
+		this(mainType,subType,new Dimension(250,250),jsonpcallback);
 	}
-	public ImageAreaReporter(String mainType,String subType,Dimension dimension) {
+	public ImageAreaReporter(String mainType,String subType,Dimension dimension,String jsonpcallback) {
 		super(mainType,subType,dimension);
+		this.jsonpcallback = jsonpcallback;
 	}
 	@Override
 	protected RetrieveStructureImagePath initQuery(String mainType,String subType) {
@@ -68,9 +70,7 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 					cache(item,result.getImage());
 				}
 			}
-			StringWriter w = new StringWriter();
-			w.write(result.getImageMap()==null?"":result.getImageMap());
-			setOutput(w);
+			getOutput().write(result.getImageMap()==null?"":result.getImageMap());
 			return result;
 		} catch (Exception x) {
 			throw new AmbitException(x);
@@ -102,8 +102,22 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 	public void open() throws DbAmbitException {
 	}
 
-	public void footer(StringWriter output, Q query) {};
-	public void header(StringWriter output, Q query) {};
+	@Override
+	public void footer(StringWriter output, Q query) {
+		if (jsonpcallback!=null) try {
+			getOutput().write(");");
+		} catch (Exception x) {}
+	};
+	@Override
+	public void header(StringWriter output, Q query) {
+		if (jsonpcallback!=null) try {
+			getOutput().write(jsonpcallback);
+			getOutput().write("(");
+			getOutput().flush();
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+	};
 	
 	@Override
 	public String getFileExtension() {
