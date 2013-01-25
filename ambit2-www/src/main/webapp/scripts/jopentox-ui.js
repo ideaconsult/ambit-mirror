@@ -233,15 +233,19 @@ function defineModelTable(root,url) {
     						 return  "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";			
     					}
     				},	     	            
-    	  			{ "sTitle": "Stars", 
+    	  			{ 
      	              "mDataProp":"stars",
-     	              "aTargets": [ 1 ]
+     	              "aTargets": [ 1 ],
+     	              "bUseRendered" : false,
+	  					"fnRender" : function(o,val) {
+							 return  "<span class='ui-icon ui-icon-star' style='display:inline-block' title='Click to show model details'></span>" + val;			
+						}
     	  			},     	 
     	  			{ "sTitle": "Title", 
     	  			  "mDataProp":"title", 
     	  			  "aTargets": [ 2 ],	
     	  			  sWidth: "50%",
-    		          "bUseRendered" : "false",	
+    		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
     		                return "<a href='"+o.aData.URI +"'>" +val + "</a>";
     		          }
@@ -250,7 +254,7 @@ function defineModelTable(root,url) {
     	  			  "mDataProp":"algorithm.URI" , 
     	  			  "aTargets": [ 3 ],	
     	  			  sWidth: "40%",
-    		  	      "bUseRendered" : "false",	
+    		  	      "bUseRendered" : false,	
     			       "fnRender": function ( o, val ) {
     			        	    uri = val;
     			        		pos = val.lastIndexOf("/");
@@ -264,7 +268,7 @@ function defineModelTable(root,url) {
     		  		  "mDataProp":"trainingDataset",
     		  		  "aTargets": [ 4 ],	
     		  		  sWidth: "40%",
-    			      "bUseRendered" : "false",	
+    			      "bUseRendered" : false,	
     			      "fnRender": function ( o, val ) {
     			      	  	shortURI = val;
     			      	  	if (val.length > 20) shortURI = val.substring(val,20) + "..."; 	
@@ -275,7 +279,7 @@ function defineModelTable(root,url) {
       		  		  "mDataProp":"algorithm.algFormat", 
       		  		  "aTargets": [ 5 ],	
       		  		  sWidth: "5%",
-    		              "bUseRendered" : "false",	"bSortable": true,
+    		              "bUseRendered" : false,	"bSortable": true,
     		              "fnRender": function ( o, val ) {
     		                  return "<img src='"+root + o.aData.algorithm.img +"'>";
     		                }
@@ -425,6 +429,7 @@ function defineDatasetsTable(root,url) {
     					"bSortable" : false,
     					"bSearchable" : false,
     					"mDataProp" : null,
+    					"bUseRendered" : false,	
     					sWidth : "48px",
     					"fnRender" : function(o,val) {
      		               	var sOut = "<a href='"+o.aData.URI +"?page=0&pagesize=100'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' title='Click to browse the dataset'></span></a>&nbsp;";
@@ -435,16 +440,19 @@ function defineDatasetsTable(root,url) {
     						return sOut;
     					}
     				},	     	            
-    	  			{ "sTitle": "Stars", 
+    	  			{  
     				  "bSortable" : true,
      	              "mDataProp":"stars",
      	              "aTargets": [ 1 ],
-     	              sWidth : "1em"
+     	              sWidth : "2em",
+	  					"fnRender" : function(o,val) {
+							 return  "<span class='ui-icon ui-icon-star' style='display:inline-block' title='Click to show model details'></span>"+val;			
+						}     	              
     	  			},     	 
     	  			{ "sTitle": "Title", 
     	  			  "mDataProp":"title", 
     	  			  "aTargets": [ 2 ],	
-    		          "bUseRendered" : "false",	
+    		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
     		        	   var sOut = val;
     		               var seeAlso =  o.aData["seeAlso"];
@@ -469,7 +477,7 @@ function defineDatasetsTable(root,url) {
     	  			  "mDataProp":null , 
     	  			  "aTargets": [ 3 ],	
     	  			  sWidth: "15%",
-    		  	      "bUseRendered" : "false",	
+    		  	      "bUseRendered" : false,	
     			       "fnRender": function ( o, val ) {
     			    	   val = o.aData["URI"];
     			    	   var sOut = "<a href='"+getMediaLink(val,"chemical/x-mdl-sdfile")+"' id='sdf'><img src='"+root+"/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a> ";
