@@ -1,6 +1,7 @@
 package ambit2.rest.structure;
 
 import java.awt.Dimension;
+import java.util.Map;
 
 import org.openscience.cdk.index.CASNumber;
 import org.opentox.dsl.OTContainers;
@@ -98,6 +99,14 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public CompoundResource() {
 		super();
 		setDocumentation(new ResourceDoc("structure","Compound"));
+		setHtmlbyTemplate(false);
+//		setHtmlbyTemplate(DisplayMode.singleitem.equals(_dmode));
+	}
+	 
+	@Override
+	public String getTemplateName() {
+		// TODO Auto-generated method stub
+		return DisplayMode.singleitem.equals(_dmode)?"compound.ftl":super.getTemplateName();
 	}
 	@Override
 	protected void doInit() throws ResourceException {
@@ -275,7 +284,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	}
 	
 	protected StringConvertor createImageStringConvertor(Variant variant) throws ResourceException {
-
+		String jsonpcallback = getParams().getFirstValue("jsonp");
+		if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");		
 		Dimension d = new Dimension(250,250);
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		try {
@@ -286,7 +296,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			d.height = Integer.parseInt(form.getFirstValue("h").toString());
 		} catch (Exception x) {}			
 		return new StringConvertor(
-				new ImageAreaReporter<QueryStructureByID>(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d),
+				new ImageAreaReporter<QueryStructureByID>(variant.getMediaType().getMainType(),variant.getMediaType().getSubType(),d,jsonpcallback),
 				variant.getMediaType());
 	}	
 	protected QueryURIReporter getURIReporter() {
@@ -589,5 +599,14 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		upload.setContext(getContext());
 		upload.setApplication(getApplication());
 		return upload;
+	}
+	
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+        super.configureTemplateMap(map);
+        
+        Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
+        if (key!=null)
+        	map.put("cmpid",key.toString());
 	}
 }
