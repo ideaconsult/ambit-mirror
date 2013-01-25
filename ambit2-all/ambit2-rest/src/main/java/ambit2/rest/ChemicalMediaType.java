@@ -20,7 +20,7 @@ public class ChemicalMediaType  {
 	public static final MediaType TEXT_YAML = new MediaType("text/x-yaml");
 	public static final MediaType APPLICATION_YAML = new MediaType("application/x-yaml");
 	public static final MediaType THREECOL_ARFF = new MediaType("text/x-arff-3col");
-	public static final MediaType ATOM_AREA_MAP = new MediaType("text/map");
+	public static final MediaType IMAGE_JSON = new MediaType("image/json");
 	
 	protected ChemicalMediaType() {
 		

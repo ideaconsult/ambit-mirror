@@ -10,6 +10,7 @@ import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.query.SmartsQueryResource;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.routers.misc.DataEntryRouter;
+import ambit2.rest.structure.CompoundImageJSONResource;
 import ambit2.rest.structure.CompoundImageResource;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.ConformerResource;
@@ -67,6 +68,8 @@ public class CompoundRouter extends MyRouter {
 		*  Image  /image
 		*/
 		attach(String.format("%s",CompoundImageResource.resource),CompoundImageResource.class);
+		attach(String.format("%s",CompoundImageJSONResource.resource),CompoundImageJSONResource.class);
+		
 		/**
 		*  /compound/{id}/conformer
 		*/

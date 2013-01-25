@@ -58,15 +58,15 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 	public AbstractImageReporter(String mainType,String subType,Dimension dimension) {
 		this.mainType = mainType;
 		this.subType = subType;
-		String mimeType = String.format("%s/%s",mainType,subType);
-		img = Property.getInstance(mimeType,mimeType);
+	
 		strucQuery.setPageSize(1);
 		strucQuery.setPage(0);
 		
 		strucQuery.setChemicalsOnly(false);
 		depict.setImageSize(dimension);
 		getProcessors().clear();
-		RetrieveStructureImagePath q = new RetrieveStructureImagePath(mimeType);
+		
+		RetrieveStructureImagePath q = initQuery(mainType,subType);
 		q.setQueryName(getQueryName());
 		q.setPageSize(1);
 		q.setPage(0);
@@ -88,6 +88,16 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 		cache.setObject(qs);		
 	
 		imageWrapper = createImageWrapper(null);
+	}
+	
+	protected RetrieveStructureImagePath initQuery(String mainType,String subType) {
+		String mimeType = String.format("%s/%s",mainType,subType);
+		img = Property.getInstance(mimeType,mimeType);
+		RetrieveStructureImagePath q = new RetrieveStructureImagePath(mimeType);
+		q.setQueryName(getQueryName());
+		q.setPageSize(1);
+		q.setPage(0);
+		return q;
 	}
 	protected CachedImage<OUTPUT> createImageWrapper(BufferedImage image) {
 		return new CachedImage<OUTPUT>(image, null);
@@ -155,10 +165,11 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 	        
 			if (depict.getImageMap()!=null) {
 				//System.out.println(depict.getImageMap().toString());
-				file = new File(tmpDir,String.format("%s/%s/%d_%d.map",
+				file = new File(tmpDir,String.format("%s/%s/%d_%d.%s",
 			        		getConnection().getCatalog(),
 			        		dimensions,
-			        		item.getIdchemical(),item.getIdstructure()
+			        		item.getIdchemical(),item.getIdstructure(),
+			        		"json"
 			        		));
 				FileWriter writer = new FileWriter(file);
 				try {

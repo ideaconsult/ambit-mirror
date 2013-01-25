@@ -9,6 +9,7 @@ import ambit2.rest.property.PropertyResource;
 import ambit2.rest.propertyvalue.PropertyTemplateResource;
 import ambit2.rest.routers.MyRouter;
 import ambit2.rest.routers.misc.DataEntryRouter;
+import ambit2.rest.structure.CompoundImageJSONResource;
 import ambit2.rest.structure.CompoundImageResource;
 import ambit2.rest.structure.ConformerResource;
 import ambit2.rest.structure.dataset.DatasetsByStructureResource;
@@ -24,6 +25,7 @@ public class ConformerRouter extends MyRouter {
 		attach(String.format("%s",QualityLabelResource.resource),QualityLabelResource.class);
 		attach(String.format("%s",DatasetsResource.datasets),DatasetsByStructureResource.class);
 		attach(String.format("%s",CompoundImageResource.resource),CompoundImageResource.class);
+		attach(String.format("%s",CompoundImageJSONResource.resource),CompoundImageJSONResource.class);
 		
 		/**
 		 *  /compound/{id}/conformer/{id}/feature
