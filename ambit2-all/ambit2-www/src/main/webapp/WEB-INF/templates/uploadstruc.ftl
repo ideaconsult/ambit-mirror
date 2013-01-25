@@ -24,11 +24,11 @@ $(document)
 <div class="row remove-bottom">
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
-		<div class="ten columns alpha">
+		<div class="alpha">
 			<h3 class="remove-bottom">
 					Structure and properties import	
 			</h3>
-		    <h6>Add a new dataset (SDF, MOL, SMI, CSV, TXT, ToxML (.xml) file)</h6>			
+		    <h6>Upload a dataset of chemical structures and properties. Supported formats are SDF, MOL, SMI, CSV, TXT, XLS, ToxML (.xml)</h6>
 		</div>
 		</div>
 </div>		
