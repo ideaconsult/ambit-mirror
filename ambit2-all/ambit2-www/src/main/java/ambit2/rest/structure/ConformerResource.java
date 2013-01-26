@@ -51,6 +51,11 @@ public class ConformerResource extends CompoundResource {
 	public ConformerResource() {
 		super();
 		setDocumentation(new ResourceDoc("structure","Conformer"));
+		
+	}
+	@Override
+	public boolean isHtmlbyTemplate() {
+		return getRequest().getAttributes().get(ConformerResource.idconformer)!=null;
 	}
 	@Override
 	protected String getDefaultTemplateURI(Context context, Request request,
@@ -157,4 +162,5 @@ public class ConformerResource extends CompoundResource {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,x.getMessage(),x);
 		}
 	}		
+
 }
