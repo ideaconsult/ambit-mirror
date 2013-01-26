@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rendering.CachedImage;
 
 /**
 SELECT idchemical,idstructure,text,title FROM structure
