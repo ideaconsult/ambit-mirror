@@ -503,3 +503,97 @@ function defineDatasetsTable(root,url) {
 function getMediaLink(uri, media) {
 	return uri + "?media=" + encodeURIComponent(media);
 }
+
+function getDownloadLinksCompound(root,uri) {
+	   val = uri;
+	   var sOut = "<a href='"+getMediaLink(val,"chemical/x-mdl-sdfile")+"' id='sdf'><img src='"+root+"/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"chemical/text/csv")+"' id='csv'><img src='"+root+"/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"text/plain")+"' id='txt'><img src='"+root+"/images/excel.png' alt='TXT' title='Download as TXT'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"chemical/x-cml")+"' id='cml'><img src='"+root+"/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"chemical/x-daylight-smiles")+"' id='smiles'><img src='"+root+"/images/smi.png' alt='SMILES' title='Download as SMILES'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"chemical/x-inchi")+"' id='inchi'><img src='"+root+"/images/inchi.png' alt='InChI' title='Download as InChI'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"text/x-arff")+"' id='arff'><img src='"+root+"/images/weka.jpg' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"text/x-arff-3col")+"' id='arff3col'><img src='"+root+"/images/weka.jpg' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"application/rdf+xml")+"' id='rdfxml'><img src='"+root+"/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"text/n3")+"' id='rdfn3'><img src='"+root+"/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"application/json")+"' id='json' target=_blank><img src='"+root+"/images/json.png' alt='json' title='Download as JSON'/></a>";
+	   return sOut;
+}
+
+function definePropertyValuesTable(root,url,tableSelector) {
+	var oTable = $(tableSelector).dataTable( {
+		"sAjaxSource": url,		
+		"sAjaxDataProp" : "",
+		"bProcessing" : true,
+		"bServerSide" : false,
+		"bStateSave" : false,
+		"bJQueryUI" : true,
+		"bPaginate" : true,
+		"sPaginationType": "full_numbers",
+		"sPaginate" : ".dataTables_paginate _paging",
+		"bDeferRender": true,
+		"bSearchable": true,
+		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+		"aoColumnDefs" : [
+		     {
+		    	 "aTargets": [ 0 ],	
+		    	 "mDataProp" : "name",
+				 "fnRender" : function(o,val) {
+				     return  "<span class='ui-icon ui-icon-link' style='display:inline-block' title='Click to show property details'></span><a href='"+o.aData["uri"]+"' target=_blank>"+val+"</a>";			
+				 }   		    	 
+		     },
+		     {
+		    	 "aTargets": [ 1 ],	
+		    	 "mDataProp" : "units"
+		     },		     
+		     {
+		    	 "aTargets": [ 2 ],	
+		    	 "mDataProp" : "value"
+		     },		     
+		     {
+		    	 "aTargets": [ 3 ],	
+		    	 "mDataProp" : "sameAs"
+		     },		     
+		     {
+		    	 "aTargets": [ 4 ],	
+		    	 "mDataProp" : "source",
+				 "fnRender" : function(o,val) {
+				     return  "<span class='ui-icon ui-icon-link' style='display:inline-block' title='Click to show property details'></span><a href='"+val+"'>"+o.aData["sourceType"]+"</a>";			
+				 }   
+		     }
+		],                  
+		"fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+			oSettings.jqXHR = $.ajax({
+				"type" : "GET",
+				"url" : sSource,
+				"data" : aoData,
+				"dataType" : "json",
+				"contentType" : "application/json",
+				"success" : function(json) {
+					identifiers(json);
+					$.each(json.dataEntry[0].lookup.misc, function(index, object) {
+						if (object==undefined) return;
+						var feature = json.feature[object];
+						var value = json.dataEntry[0].values==null?"":json.dataEntry[0].values[object];
+						if (value == null) value="";
+		                aoData.push({
+		                	"uri":object,
+		                	"name":feature.title,
+		                	"units":feature.units,
+		                	"sameAs":feature.sameAs.replace("http://www.opentox.org/echaEndpoints.owl#","Endpoint:"),
+		                	"source":feature.source==null?"":feature.source["URI"],
+		                	"sourceType":feature.source==null?"":feature.source["type"],
+		                	"value":value
+		                });
+		            });			
+					fnCallback(aoData);
+				},
+				"cache" : true,
+				"error" : function(xhr, textStatus, error) {
+					oSettings.oApi._fnProcessingDisplay(oSettings, false);
+				}
+			});
+		}
+	});
+	return oTable;
+}
