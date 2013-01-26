@@ -4,6 +4,11 @@ function createImageMap(cmpURI, cmpid, imgselector, mapselector) {
 	 	
 	   	  var map = $(mapselector);
 	   	  var r = 0; var c = 0;
+	   	  if ((data==undefined) || (data["a"]===undefined)) {
+	   		  map.text('');
+	   		  return;
+	   	  }
+	   	  
 	   	  $.each(data["a"], function(key, val) {
 	   		 r += val["w"];
 	   		 c++;
