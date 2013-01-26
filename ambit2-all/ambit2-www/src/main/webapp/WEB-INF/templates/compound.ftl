@@ -6,6 +6,8 @@
 <#assign h=250/>
 <script src="${ambit_root}/jquery/jquery.imagemapster.min.js" type="text/javascript"></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-atoms.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
 <#if cmpid??>
 <script type='text/javascript'>
@@ -16,8 +18,23 @@ function atomNumber(num) {
 	 
 $(document)
 	.ready(function() {
-			var cmpURI = "${ambit_root}/compound/${cmpid}/imagejson";
-			createImageMap(cmpURI, '${cmpid}', '#i${cmpid}', '#m${cmpid}');
+			$( "#tabs" ).tabs();
+			var cmpURI = "${ambit_root}/compound/${cmpid}";
+			var cmpURI_json = "${ambit_root}/compound/${cmpid}/imagejson";
+			createImageMap(cmpURI_json, '${cmpid}', '#i${cmpid}', '#m${cmpid}');
+			$.ajax({
+				  url: "${ambit_root}/query/compound/url/all?headless=true&media=text/html&search=" + encodeURIComponent(cmpURI),
+				  dataType:"html",
+			      success: function(data, status, xhr) {
+			    	  $('#identifiers').html(data);
+			      }
+				});
+			
+			var pTable = definePropertyValuesTable("${ambit_root}","${ambit_request_json}","#properties");
+			
+			var cmpURI_datasets = cmpURI + "/datasets?media=application/json";
+			var oTable = defineDatasetsTable("${ambit_root}",cmpURI_datasets);
+			$('#download').html(getDownloadLinksCompound("${ambit_root}",cmpURI));
 	 });
 </script>
 </#if>
@@ -48,7 +65,7 @@ $(document)
 			<h3 class="remove-bottom">
 					Chemical compound
 			</h3>
-		    <h6>Chemical compound</h6>			
+		    <h6><a href='${ambit_root}/compound/${cmpid}'>${ambit_root}/compound/${cmpid}</a></h6>			
 		</div>
 		<div class="four columns omega">
 			<h3 class="remove-bottom">
@@ -74,7 +91,7 @@ $(document)
 
 </form>
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<#include "/compound_menu.ftl">
 </div>
 
 <div class="thirteen columns remove-bottom" style="padding:0;" >
@@ -83,18 +100,48 @@ $(document)
 		<!-- Page Content
 		================================================== -->
 
-		<div class="row" style="padding:0;" >			
-			<div class="ui-widget-header ui-corner-top">Chemical compound at <a href='${ambit_root}/compound/${cmpid}'>${ambit_root}/compound/${cmpid}</a></div>
-			<div class="ui-widget-content ui-corner-bottom">
-				<div style="margin:5px;padding:5px;">	
-				
-				<img id="i${cmpid}" src='${ambit_root}/compound/${cmpid}/image?w=${w}&h=${h}' width='${w}' height='${h}' title='${cmpid}'  usemap="#m${cmpid}" />
-				<map id="m${cmpid}" name="m${cmpid}"/>
+		<div class="ui-widget-header ui-corner-top">&nbsp;Chemical compound</div>
+		<div class="ui-widget-content ui-corner-bottom" >
+			<div class='row' style="margin:5px;padding:5px;">	
+			
+			<span class='six columns alpha'>
+			<img id="i${cmpid}" src='${ambit_root}/compound/${cmpid}/image?w=${w}&h=${h}' width='${w}' height='${h}' title='${cmpid}'  usemap="#m${cmpid}" >
+			<map id="m${cmpid}" name="m${cmpid}"/>
+			</span>
+			
+			<span class='ten columns omega help' id='identifiers'>${ambit_request}</span>
+			</div>
+			<div id='tabs' class='row' style="margin:5px;padding:5px;">
+			<ul>
+		    <li><a href="#tabs-properties">Properties</a></li>
+		    <li><a href="#tabs-datasets">Datasets</a></li>
+		    </ul>
+		    	<div id='tabs-properties'>
+					<table id='properties' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+					<thead>
+					<th>Name</th>
+					<th>Units</th>
+					<th>Value</th>
+					<th>SameAs</th>
+					<th>Source</th>
+					</thead>
+					<tbody></tbody>
+					</table>
+		    	</div>
+		    	<div id='tabs-datasets'>
+					<table id='datasets' class='datasetstable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+					<thead>
+					<th></th>
+					<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
+					<th>Name</th>
+					<th>Download</th>
+					</thead>
+					<tbody></tbody>
+					</table>
 				</div>
 			</div>
-		</div>	
-		
-
+			
+		</div>
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
