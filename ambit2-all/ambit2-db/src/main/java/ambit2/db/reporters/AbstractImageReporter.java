@@ -35,6 +35,7 @@ import ambit2.db.search.StoredQuery;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.storedquery.CreateStoredQuery;
+import ambit2.rendering.CachedImage;
 import ambit2.rendering.CompoundImageTools;
 
 public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructureRecord>,OUTPUT> extends QueryReporter<IStructureRecord, Q,OUTPUT > {
@@ -288,30 +289,3 @@ class MyQuery extends AbstractStructureQuery<String,IStructureRecord,NumberCondi
 
 }
 
-class CachedImage<MORE> {
-	BufferedImage image;
-	String imageMap = null;
-	public String getImageMap() {
-		return imageMap;
-	}
-	public void setImageMap(String imageMap) {
-		this.imageMap = imageMap;
-	}
-	MORE property;
-	public CachedImage(BufferedImage image, String path) {
-		this.image = image;
-	}
-	public BufferedImage getImage() {
-		return image;
-	}
-	public void setImage(BufferedImage image) {
-		this.image = image;
-	}
-	public MORE getProperty() {
-		return property;
-	}
-	public void setProperty(MORE property) {
-		this.property = property;
-	}
-	
-}
