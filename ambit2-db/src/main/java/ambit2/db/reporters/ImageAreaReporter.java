@@ -14,6 +14,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.cache.RetrieveStructureImagePath;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rendering.CachedImage;
 
 public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> extends AbstractImageReporter<Q,StringWriter> {
 	/**
