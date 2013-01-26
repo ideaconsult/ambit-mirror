@@ -99,8 +99,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	public CompoundResource() {
 		super();
 		setDocumentation(new ResourceDoc("structure","Compound"));
-		setHtmlbyTemplate(false);
-//		setHtmlbyTemplate(DisplayMode.singleitem.equals(_dmode));
+		setHtmlbyTemplate(DisplayMode.singleitem.equals(_dmode));
+	//	setHtmlbyTemplate(false);
 	}
 	 
 	@Override
@@ -600,13 +600,14 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		upload.setApplication(getApplication());
 		return upload;
 	}
-	
+
 	@Override
 	public void configureTemplateMap(Map<String, Object> map) {
         super.configureTemplateMap(map);
         
         Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
-        if (key!=null)
-        	map.put("cmpid",key.toString());
-	}
+        if (key!=null)    	map.put("cmpid",key.toString());
+        Object idconformer = getRequest().getAttributes().get(ConformerResource.idconformer);
+        if (idconformer!=null)    	map.put("strucid",idconformer.toString());
+	}	
 }

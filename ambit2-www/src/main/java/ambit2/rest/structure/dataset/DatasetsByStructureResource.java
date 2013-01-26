@@ -25,6 +25,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.dataset.DatasetsHTMLReporter;
 import ambit2.rest.dataset.MetadataRDFReporter;
+import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.query.QueryResource;
 
 public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<ISourceDataset>, ISourceDataset> {
@@ -53,13 +54,15 @@ public class DatasetsByStructureResource extends QueryResource<IQueryRetrieval<I
 				return null;
 			}
 		},MediaType.TEXT_URI_LIST,filenamePrefix);
+	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+		return new OutputWriterConvertor(new MetadatasetJSONReporter<IQueryRetrieval<ISourceDataset>>(getRequest()),MediaType.APPLICATION_JSON);			
+		
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG) ||
-			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX) ||
-			variant.getMediaType().equals(MediaType.APPLICATION_JSON)
+			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
 			) {
 		return new RDFJenaConvertor<ISourceDataset, IQueryRetrieval<ISourceDataset>>(
 				new MetadataRDFReporter<IQueryRetrieval<ISourceDataset>>(getRequest(),

@@ -20,7 +20,10 @@ $(document)
 	.ready(function() {
 			$( "#tabs" ).tabs();
 			var cmpURI = "${ambit_root}/compound/${cmpid}";
-			var cmpURI_json = "${ambit_root}/compound/${cmpid}/imagejson";
+			<#if strucid??>
+				cmpURI = "${ambit_root}/compound/${cmpid}/conformer/${strucid}";
+			</#if>
+			var cmpURI_json = cmpURI + "/imagejson";
 			createImageMap(cmpURI_json, '${cmpid}', '#i${cmpid}', '#m${cmpid}');
 			$.ajax({
 				  url: "${ambit_root}/query/compound/url/all?headless=true&media=text/html&search=" + encodeURIComponent(cmpURI),
@@ -35,6 +38,10 @@ $(document)
 			var cmpURI_datasets = cmpURI + "/datasets?media=application/json";
 			var oTable = defineDatasetsTable("${ambit_root}",cmpURI_datasets);
 			$('#download').html(getDownloadLinksCompound("${ambit_root}",cmpURI));
+			
+			$('#structype_${cmpid}').load(cmpURI + '/comparison');
+			$('#consensus_${cmpid}').load(cmpURI + '/consensus');	
+
 	 });
 </script>
 </#if>
@@ -53,7 +60,7 @@ $(document)
 
 <div class="container" style="margin:0;padding:0;">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/algorithm' style='padding:0;margin:0;'>
+<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui/query' style='padding:0;margin:0;'>
 <!-- banner -->
 <div class="row remove-bottom" id="header">
 	<#include "/toplinks.ftl">
@@ -111,7 +118,7 @@ $(document)
 			
 			<span class='ten columns omega help' id='identifiers'>${ambit_request}</span>
 			</div>
-			<div id='tabs' class='row' style="margin:5px;padding:5px;">
+			<div id='tabs' class='row' style="margin:5px;padding:5px;font-size: 0.9em;">
 			<ul>
 		    <li><a href="#tabs-properties">Properties</a></li>
 		    <li><a href="#tabs-datasets">Datasets</a></li>
