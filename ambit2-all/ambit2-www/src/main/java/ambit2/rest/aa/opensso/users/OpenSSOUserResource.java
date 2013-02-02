@@ -2,12 +2,12 @@ package ambit2.rest.aa.opensso.users;
 
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Cookie;
 import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -27,6 +27,14 @@ import ambit2.rest.algorithm.CatalogResource;
 public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 	public static final String resource = "opentoxuser";
 	
+	public OpenSSOUserResource() {
+		super();
+		setHtmlbyTemplate(true);
+	}
+	@Override
+	public String getTemplateName() {
+		return "login_opensso.ftl";
+	}
 	@Override
 	protected Iterator<OpenSSOUser> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
@@ -165,5 +173,25 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 				return yes;
 			}
 		else return false;
+	}
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+        if (getClientInfo().getUser()!=null) {
+        //	map.put("username", getClientInfo().getUser().getIdentifier());
+        	try {
+        		map.put("openam_token",((OpenSSOUser) getClientInfo().getUser()).getToken());  
+        		System.out.println(((OpenSSOUser) getClientInfo().getUser()).getFirstName());
+        	} catch (Exception x) {
+        		map.remove("openam_token");
+        	}
+        }
+        try {
+        	map.put("openam_service", OpenSSOServicesConfig.getInstance().getOpenSSOService());
+        } catch (Exception x) {
+        	map.remove("openam_service");
+        }
+        map.put("creator","IdeaConsult Ltd.");
+        map.put("ambit_root",getRequest().getRootRef().toString());		
 	}
 }

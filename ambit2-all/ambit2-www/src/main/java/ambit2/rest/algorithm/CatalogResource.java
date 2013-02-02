@@ -3,6 +3,7 @@ package ambit2.rest.algorithm;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +24,7 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
@@ -256,4 +258,18 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
         info.getResponse().getRepresentations().add(repInfo);
 	}
 	*/
+	
+	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (getClientInfo().getUser()!=null) 
+        	map.put("username", getClientInfo().getUser().getIdentifier());
+        else {
+			OpenSSOUser ou = new OpenSSOUser();
+			ou.setUseSecureCookie(useSecureCookie(getRequest()));
+			getClientInfo().setUser(ou);
+		}
+        setTokenCookies(variant, useSecureCookie(getRequest()));
+        configureTemplateMap(map);
+        return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
+	}
 }

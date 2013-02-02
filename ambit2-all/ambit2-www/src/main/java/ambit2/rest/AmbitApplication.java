@@ -88,6 +88,7 @@ import ambit2.rest.routers.misc.BookmarksRouter;
 import ambit2.rest.routers.misc.ChartRouter;
 import ambit2.rest.routers.misc.DataEntryRouter;
 import ambit2.rest.routers.misc.DepictDemoRouter;
+import ambit2.rest.routers.misc.UIRouter;
 import ambit2.rest.routers.opentox.AlgorithmRouter;
 import ambit2.rest.routers.opentox.CompoundInDatasetRouter;
 import ambit2.rest.routers.opentox.CompoundsRouter;
@@ -189,8 +190,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
         
 		Router router = new MyRouter(this.getContext());
 		router.attach("/help", AmbitResource.class);
-		router.attach("/ui", UIResource.class);
-		router.attach("/ui/{key}", UIResource.class);
 		
 		/**
 		 *  Points to the Ontology service
@@ -249,6 +248,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		/**  /task  */
 		router.attach(TaskResource.resource, new TaskRouter(getContext()));
 		
+		router.attach("/ui",createAuthenticatedOpenResource(new UIRouter(getContext())));		
+
 		/**
 		 * Queries
 		 *  /query

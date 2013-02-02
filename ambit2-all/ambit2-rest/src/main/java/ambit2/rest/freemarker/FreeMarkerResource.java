@@ -96,6 +96,8 @@ public class FreeMarkerResource extends ProtectedResource {
 		        Map<String, Object> map = new HashMap<String, Object>();
 		        if (getClientInfo().getUser()!=null) 
 		        	map.put("username", getClientInfo().getUser().getIdentifier());
+		        
+		        setTokenCookies(variant, useSecureCookie(getRequest()));
 		        configureTemplateMap(map);
 		        return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 		}

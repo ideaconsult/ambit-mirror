@@ -1,5 +1,6 @@
 package ambit2.rest.task;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import ambit2.core.config.Resources;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.aa.opensso.OpenSSOUser;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs
@@ -59,6 +61,20 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 		return tc.createTaskConvertor(variant, getRequest(),getDocumentation(),DisplayMode.table);
 
 	}
+	@Override
+	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (getClientInfo().getUser()!=null) 
+        	map.put("username", getClientInfo().getUser().getIdentifier());
+        else {
+			OpenSSOUser ou = new OpenSSOUser();
+			ou.setUseSecureCookie(useSecureCookie(getRequest()));
+			getClientInfo().setUser(ou);
+		}
+        setTokenCookies(variant, useSecureCookie(getRequest()));
+        configureTemplateMap(map);
+        return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
+	}	
 	
 	@Override
 	public void configureTemplateMap(Map<String, Object> map) {

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -17,6 +19,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
@@ -716,4 +719,18 @@ public class AmbitResource extends FreeMarkerResource {
 	public static String printGPlusSnippet(String title,String description,String image) {
 		return String.format(gplus_snippet,title,description,image==null?"":image);
 	}	
+	
+	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (getClientInfo().getUser()!=null) 
+        	map.put("username", getClientInfo().getUser().getIdentifier());
+		if (getClientInfo().getUser() == null) {
+			OpenSSOUser ou = new OpenSSOUser();
+			ou.setUseSecureCookie(useSecureCookie(getRequest()));
+			getClientInfo().setUser(ou);
+		}
+        setTokenCookies(variant, useSecureCookie(getRequest()));
+        configureTemplateMap(map);
+        return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
+	}
 }
