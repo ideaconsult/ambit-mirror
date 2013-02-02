@@ -32,4 +32,20 @@
 <li class="ui-selectee">
 <a href="${ambit_root}/model"><span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>Models</a>
 </li>
+
+<#if openam_token??>
+
+<#if username??>
+<li class="ui-selectee">
+<a href="${ambit_root}/bookmark/${username}"><span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>My workspace</a>
+</li>
+</#if>
+<li class="ui-selectee">
+<a href="${ambit_root}/admin"><span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Admin</a>
+</li>
+<li class="ui-selectee">
+<a href="${ambit_root}/admin/policy"><span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>View/Define access rights</a>
+</li>
+</#if>
+
 </ul>
