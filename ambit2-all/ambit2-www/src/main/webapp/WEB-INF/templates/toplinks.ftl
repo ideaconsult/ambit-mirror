@@ -9,8 +9,8 @@
 	<li class='topLinks'>|</li>
 	<#if username??>
 		<li class='topLinks'>
-		<a class='topLinks login' title='You are currently logged in as "${username}". Click here to log out.' href='#' onClick='document.forms["logoutForm"].submit(); return false;'>Log out</a>
-		[<b>${username}</b>]
+		<a class='topLinks login' title='You are currently logged in as "${username}". Click here to log out.' href='#' onClick='document.forms["logoutForm"].submit(); return false;'>Log out</a>&nbsp;
+		<a class='topLinks login' title='My profile' href='${ambit_root}/opentoxuser'>[<b>${username}</b>]</a>
 		</li>
 	<#else>
 		<li class='topLinks'>
