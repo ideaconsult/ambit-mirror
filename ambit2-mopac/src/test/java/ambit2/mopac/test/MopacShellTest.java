@@ -55,7 +55,7 @@ public class MopacShellTest {
 
 	@Test
 	public void getExecutableWin()  throws Exception {
-		String exec = shell.getExecutable(CommandShell.os_WINDOWS);
+		String exec = shell.getExecutable(CommandShell.os_WINDOWS, null);
 		//Assert.assertEquals(name,exec);
 		File file = new File(exec);
 //		System.out.println(file.getAbsolutePath());

@@ -165,6 +165,7 @@ public class DragonShell extends CommandShell<IAtomContainer, IAtomContainer> {
 		addExecutable(CommandShell.os_WINDOWSVISTA, winexe.getAbsolutePath(),null);
 		addExecutable(CommandShell.os_FreeBSD, exe.getAbsolutePath(),null);
 		addExecutable(CommandShell.os_LINUX, exe.getAbsolutePath(),null);
+		addExecutable(CommandShell.os_LINUX64, exe.getAbsolutePath(),null);
 		setInputFile("allblocks.drs");
 		setOutputFile("dragon_output.txt");		
 	}	

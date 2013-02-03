@@ -46,7 +46,7 @@ import ambit2.base.log.AmbitLogger;
  * The executable and supporting files should be available as a resource in a jar file. 
  * When requested, the files are copied under user home directory and executed from there.
  * <br>
- * To change this behaviour, override {@link #getExecutable(String)}.
+ * To change this behaviour, override {@link #getExecutable(String, String)}.
  * <br>
  * OS names expected: "Mac OS","Windows","AIX","Linux","HP-UX","Solaris" 
  * @author nina
@@ -63,6 +63,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public static final String os_WINDOWSVISTA = "Windows Vista";
 	public static final String os_WINDOWS7 = "Windows 7";
 	public static final String os_LINUX = "Linux";
+	public static final String os_LINUX64 = "Linux64";
 	public static final String os_FreeBSD = "FreeBSD";
 	
 	
@@ -117,13 +118,23 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public String addExecutableLinux(String executable, String[] morefiles) throws ShellException  {
 		return addExecutable(os_LINUX,executable,morefiles);
 	}			
+	public String addExecutableLinux64(String executable, String[] morefiles) throws ShellException  {
+		return addExecutable(os_LINUX64,executable,morefiles);
+	}	
 	public String addExecutableFreeBSD(String executable, String[] morefiles) throws ShellException  {
 		return addExecutable(os_FreeBSD,executable,morefiles);
 	}		
-	public synchronized String getExecutable(String osname) throws Exception {
+	public synchronized String getExecutable(String osname, String osarch) throws Exception {
 		
 		//ambit2/
+		boolean runChmod = osname.startsWith(os_LINUX);
 		Command command = executables.get(osname);
+		if (osarch!=null) {
+			if (os_LINUX.equals(osname) && osarch.endsWith("64")) {
+				Command newCommand = executables.get(os_LINUX64);
+				if (newCommand!=null) { command = newCommand; osname= os_LINUX64;}
+			}
+ 		}
 		String exe = command.getExe();
 		File file = new File(exe);
 		
@@ -134,7 +145,8 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 				logger.info("Writing "+exe + " to "+ file);
 				DownloadTool.download(prefix+exe, file);
 				command.setExe(file.getAbsolutePath());
-				//trying chmod +x 
+				//trying chmod +x
+				if (runChmod)
 				try {
 					Runtime.getRuntime().exec(String.format("chmod +x %s",file.getAbsolutePath()));
 				} catch (Exception x) {
@@ -154,18 +166,21 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 		return executables.get(osname).getExe();
 	}
 	/**
-	 * invokes {@link #getExecutable(String)} with System.getProperty("os.name") as argument
+	 * invokes {@link #getExecutable(String, String)} with System.getProperty("os.name") as argument
 	 * @return absolute path to the executable
 	 * @throws ShellException
 	 */
 	public String getExecutable() throws ShellException {
         String osName = System.getProperty("os.name");
+        String osArch = System.getProperty("os.arch");  
+        //32bit: x86 i386 sparc
+        //64bit: amd64 x86_64 ppc sparcv9 
         Enumeration<String> oss = executables.keys();
         while (oss.hasMoreElements()) {
         	String os = oss.nextElement();
         	if (osName.startsWith(os)) 
         	try {
-        		String exeString = getExecutable(os);
+        		String exeString = getExecutable(os, osArch);
         		if (exeString != null) 
         			return exeString;
         	} catch (IOException x) {

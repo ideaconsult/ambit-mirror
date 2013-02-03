@@ -31,7 +31,7 @@ public class CommandShellTest {
 
 	@Test
 	public void testAddExecutableFreeBSD() throws Exception {
-		String exec = shell.getExecutable(CommandShell.os_FreeBSD);
+		String exec = shell.getExecutable(CommandShell.os_FreeBSD, null);
 		File file = new File(exec);
 		Assert.assertTrue(file.exists());
 	}	
@@ -39,14 +39,14 @@ public class CommandShellTest {
 
 	@Test
 	public void testAddExecutableWin()  throws Exception {
-		String exec = shell.getExecutable(CommandShell.os_WINDOWS);
+		String exec = shell.getExecutable(CommandShell.os_WINDOWS, null);
 		File file = new File(exec);
 		Assert.assertTrue(file.exists());
 	}
 
 	@Test
 	public void testAddExecutableLinux() throws Exception {
-		String exec = shell.getExecutable(CommandShell.os_LINUX);
+		String exec = shell.getExecutable(CommandShell.os_LINUX, null);
 		File file = new File(exec);
 		Assert.assertTrue(file.exists());
 	}
