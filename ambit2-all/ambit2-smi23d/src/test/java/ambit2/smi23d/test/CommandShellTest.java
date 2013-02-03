@@ -49,7 +49,7 @@ public class CommandShellTest {
 
 		String name= "bin/smi23d/win/smi2sdf.exe";
 		shell.addExecutable("nt",name,null);
-		Assert.assertTrue(shell.getExecutable("nt").endsWith("smi2sdf.exe"));
+		Assert.assertTrue(shell.getExecutable("nt", null).endsWith("smi2sdf.exe"));
 	}
 
 
@@ -57,19 +57,19 @@ public class CommandShellTest {
 	public void testAddExecutableFreeBSD() throws Exception {
 		String name= "bin/smi23d/freebsd/smi2sdf";
 		shell.addExecutableFreeBSD(name,null);
-		Assert.assertEquals(name,shell.getExecutable(CommandShell.os_FreeBSD));
+		Assert.assertEquals(name,shell.getExecutable(CommandShell.os_FreeBSD, null));
 	}	
 	public void testAddExecutableMac() throws Exception {
 		String name= "bin/smi23d/mac/smi2sdf";
 		shell.addExecutableMac(name,null);
-		Assert.assertEquals(name,shell.getExecutable(CommandShell.os_MAC));
+		Assert.assertEquals(name,shell.getExecutable(CommandShell.os_MAC, null));
 	}
 
 	@Test
 	public void testAddExecutableWin()  throws Exception {
 		String name= "bin/smi23d/win/smi2sdf.exe";
 		shell.addExecutableWin(name,null);
-		String exec = shell.getExecutable(CommandShell.os_WINDOWS);
+		String exec = shell.getExecutable(CommandShell.os_WINDOWS, null);
 		//Assert.assertEquals(name,exec);
 		File file = new File(exec);
 		//System.out.println(file.getAbsolutePath());
@@ -80,12 +80,21 @@ public class CommandShellTest {
 	public void testAddExecutableLinux() throws Exception {
 		String name= "bin/smi23d/linux/smi2sdf";
 		shell.addExecutableLinux(name,null);
-		String exec = shell.getExecutable(CommandShell.os_LINUX);
+		String exec = shell.getExecutable(CommandShell.os_LINUX, "x86");
 		File file = new File(exec);
 		//System.out.println(file.getAbsolutePath());
 		Assert.assertTrue(file.exists());
 	}
 
+	@Test
+	public void testAddExecutableLinux64() throws Exception {
+		String name= "bin/smi23d/linux64/smi2sdf";
+		shell.addExecutableLinux64(name,null);
+		String exec = shell.getExecutable(CommandShell.os_LINUX, "amd64");
+		File file = new File(exec);
+
+		Assert.assertTrue(file.exists());
+	}
 	@Test
 	public void testRunSMI2SDF() throws Exception {
 		ShellSmi2SDF smi2sdf = new ShellSmi2SDF();
