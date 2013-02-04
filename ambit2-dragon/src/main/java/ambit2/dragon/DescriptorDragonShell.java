@@ -28,6 +28,8 @@
  */
 package ambit2.dragon;
 
+import java.util.logging.Logger;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
@@ -38,7 +40,6 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import ambit2.base.data.Property;
 import ambit2.base.external.ShellException;
-import ambit2.base.log.AmbitLogger;
 import ambit2.core.data.StringDescriptorResultType;
 
 
@@ -50,7 +51,7 @@ import ambit2.core.data.StringDescriptorResultType;
  * <b>Created</b> 2011-07-01
  */
 public class DescriptorDragonShell implements IMolecularDescriptor  {
-    protected static AmbitLogger logger = new  AmbitLogger(DescriptorDragonShell.class);
+    protected Logger logger = Logger.getLogger(getClass().getName());
     protected DragonShell shell;
     protected String[] descriptorNames;
     /**
@@ -110,7 +111,7 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     	
     	try {
     		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
-    		logger.info(toString());
+    		logger.fine(toString());
 	        IAtomContainer newmol = shell.runShell(arg0);
 	        
 	        if (descriptorNames==null) descriptorNames = shell.getDescriptorNames();
@@ -149,7 +150,7 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
     	return new StringDescriptorResultType();
     }
     protected void debug(String message) {
-    	logger.info(message);
+    	logger.fine(message);
     }
    
 }
