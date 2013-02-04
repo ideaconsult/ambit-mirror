@@ -41,5 +41,9 @@ public class QSARModelException extends Exception {
     public QSARModelException(String message) {
         super( message );
     }
+
+    public QSARModelException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
 
