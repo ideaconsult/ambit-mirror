@@ -1,5 +1,7 @@
 package ambit2.rest;
 
+import java.util.logging.Logger;
+
 import org.opentox.dsl.aa.IAuthToken;
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Request;
@@ -12,7 +14,6 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 public abstract class ProtectedResource extends ServerResource implements IAuthToken {
-
 		
 	@Override
 	protected void doInit() throws ResourceException {

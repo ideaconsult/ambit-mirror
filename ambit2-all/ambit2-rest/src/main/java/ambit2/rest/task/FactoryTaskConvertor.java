@@ -95,11 +95,7 @@ public class FactoryTaskConvertor<USERID> {
 				return r;
 			}
 			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc,DisplayMode.singleitem);
-			//task.update();
-			//System.out.println("convertor" + task.getUri() + " " + task.getStatus());
-			//response.setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
-			//task.update();
-			//System.out.println("convertor" + response.getStatus());
+
 			return p.process(new SingleTaskIterator<USERID>(task));
 		} catch (AmbitException x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
@@ -109,7 +105,7 @@ public class FactoryTaskConvertor<USERID> {
 	public synchronized Representation createTaskRepresentation(Iterator<UUID> tasks, 
 			Variant variant, Request request, Response response,ResourceDoc doc) throws ResourceException {
 		try {
-			//System.out.println("convertor" );
+
 			if (tasks==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			IProcessor<Iterator<UUID>,Representation> p = createTaskConvertor(variant,request,doc,DisplayMode.table);
 			return p.process(tasks);

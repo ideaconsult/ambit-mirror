@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import org.opentox.dsl.task.RemoteTask;
 import org.opentox.dsl.task.RemoteTaskPool;
@@ -56,6 +57,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  *
  */
 public class CallableDatasetCreator  implements Callable<Reference>  {
+	static Logger logger = Logger.getLogger(CallableDatasetCreator.class.getName());
 	protected PropertyChangeSupport support;
 	protected Reference applicationRoot;
 	protected String modelURI;
@@ -89,26 +91,11 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;  
  
 	}
-	/*
-	public Reference call() throws Exception {
-		Reference ref=   new Reference(modelURI[0]);
-
-		//input.add("prediction_feature","http://ambit.uni-plovdiv.bg:8080/ambit2/feature/106946");
-		send(new Reference(modelURI[0]),MediaType.TEXT_URI_LIST,
-				input.getWebRepresentation(),Method.POST,authentication);
-
-		waitForResults();
-		System.out.println(errors);
-		System.out.println(completed);
-		System.out.println(subtasks);
-
-		return ref;
-	}
-	*/
+	
 	public Reference call() throws Exception {
 		try {
 			Reference result =  callInternal();
-			System.out.println("------" +result);
+			logger.fine(result.toString());
 			return result;
 		} catch (Exception x) {
 			throw x;
@@ -143,7 +130,7 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 		}
 		
 		jobs.run();
-		//for (RemoteTask task : jobs.pool) System.out.println(task); 		
+ 		
 		//here we should have everything calculated 
 		jobs.clear();
 		algorithms.clear();
@@ -178,7 +165,6 @@ public class CallableDatasetCreator  implements Callable<Reference>  {
 			currentJob = new RemoteTask(new Reference(modelURI),MediaType.TEXT_URI_LIST,input.getWebRepresentation(),Method.POST);
 			jobs.add(currentJob);
 			jobs.run();		
-			//for (RemoteTask task : jobs.pool) System.out.println(task); 		
 			
 			jobs.clear();
 			if (Status.SUCCESS_OK.equals(currentJob.getStatus()))
