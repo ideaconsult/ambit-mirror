@@ -160,8 +160,6 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
                 
                  while(st.hasMoreTokens()){
                      String s = st.nextToken();
-                     //System.out.print(s);
-                     //System.out.print(':');
 
                      //#node,#parent,children,FP,SMARTS,Y/N,pKa_cal,pKa_range
                      //1,0,1,0,,100,5.9131093,17.32

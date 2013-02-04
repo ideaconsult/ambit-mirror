@@ -4,9 +4,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.log.AmbitLogger;
 import ambit2.base.processors.IAmbitResult;
 import ambit2.descriptors.AtomEnvironment;
 
@@ -20,7 +20,8 @@ public class AtomEnvironmentList extends ArrayList<AtomEnvironment> implements I
 	 * 
 	 */
 	private static final long serialVersionUID = -8190211422146555342L;
-	protected static AmbitLogger logger = new AmbitLogger(AtomEnvironmentList.class);
+	protected static Logger logger = Logger.getLogger(AtomEnvironmentList.class.getName());
+
 	protected String title = "";
 	protected boolean noDuplicates = true;
 	public AtomEnvironmentList() {
@@ -105,7 +106,7 @@ public class AtomEnvironmentList extends ArrayList<AtomEnvironment> implements I
         if (cq == 0) return 0;
         int cp = hist.frequency();
         if (cp == 0) { 
-            logger.error("The histogram to compare with is empty!");
+            logger.warning("The histogram to compare with is empty!");
             throw new Exception("The histogram to compare with is empty!");        
         }
 
@@ -127,7 +128,6 @@ public class AtomEnvironmentList extends ArrayList<AtomEnvironment> implements I
                     if (found >=0) {
                     	
                         prob[count][1] = hist.get(found).getFrequency();
-                        //System.out.println(prob[count][1]);
                         count ++;
                     };
                 }

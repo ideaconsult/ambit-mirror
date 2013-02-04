@@ -76,7 +76,6 @@ public class SpherosityDescriptor implements IMolecularDescriptor {
 	        for (int i=1; i < 3; i++ ) if (min >  eval.get(0)) min =  eval.get(0);
 	        
 	        double spherosity = 3*min/( eval.get(0)+ eval.get(0)+ eval.get(0)); 
-	        //System.out.println(spherosity);
 	        return new DescriptorValue(getSpecification(), getParameterNames(), 
 	                getParameters(), new DoubleResult(spherosity),getDescriptorNames());       
     	} catch (Exception x) {
