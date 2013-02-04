@@ -74,7 +74,7 @@ public class AtomConfigurator extends DefaultAmbitProcessor<IAtomContainer,IAtom
     	if (mol.getAtomCount()==0) throw new AmbitException("No atoms!");
     	
 
-    		logger.debug("Configuring atom types ...");
+    		logger.fine("Configuring atom types ...");
         	//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
     		CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
     		Iterator<IAtom> atoms = mol.atoms().iterator();

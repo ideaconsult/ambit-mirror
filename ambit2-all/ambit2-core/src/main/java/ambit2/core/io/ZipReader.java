@@ -66,8 +66,6 @@ public class ZipReader extends RawIteratingFolderReader {
 	        			//UUID.randomUUID().toString(),entry.getName().substring(ext)));
 	        	file.deleteOnExit();
 	        	files.add(file);
-	        	// System.out.println("Extracting: " +entry);
-	        	// System.out.println("Writing: " +file.getAbsolutePath());
 	            FileOutputStream fos = new FileOutputStream(file);
 	            dest = new BufferedOutputStream(fos, BUFFER);
 	            while ((count = zis.read(data, 0, BUFFER)) != -1) {

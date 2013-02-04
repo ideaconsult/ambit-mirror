@@ -10,7 +10,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.EmptyMoleculeException;
-import ambit2.base.log.AmbitLogger;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 
@@ -28,7 +27,7 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
 	 * 
 	 */
 	private static final long serialVersionUID = 3905797414723139887L;
-	protected static AmbitLogger logger = new AmbitLogger(FingerprintGenerator.class);
+
 	protected int FPLength = 1024;
 	protected Fingerprinter fingerprinter;
     protected boolean hydrogens = false;

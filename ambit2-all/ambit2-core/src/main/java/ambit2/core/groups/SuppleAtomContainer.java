@@ -549,7 +549,6 @@ public class SuppleAtomContainer extends ChemObject implements
     public void removeAtom(IAtom atom) {
         atom.removeListener(this);
         boolean ok = atoms.remove(atom);
-        //System.out.println(ok);
     }
 
     public void removeAtomAndConnectedElectronContainers(IAtom atom) {
@@ -751,7 +750,6 @@ public class SuppleAtomContainer extends ChemObject implements
     }
     public void addToFilter(IBond bond) {
         bonds.addToFilter(bond);
-        //System.out.println("add "+bond);
     }
     
     public void clearFilter() {
@@ -773,7 +771,6 @@ public class SuppleAtomContainer extends ChemObject implements
     }
     public void removeFromFilter(IBond bond) {
         bonds.removeFromFilter(bond);
-        //System.out.println("remove "+bond);
     }    
     public boolean isFiltered() {
         return atoms.isFiltered();

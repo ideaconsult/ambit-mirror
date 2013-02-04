@@ -5,16 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 
 import ambit2.base.data.LiteratureEntry;
-import ambit2.base.log.AmbitLogger;
 
 public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectReader implements IRawReader<T>{
-	protected static AmbitLogger logger = new AmbitLogger(RawIteratingReader.class);
+	protected static Logger logger = Logger.getLogger(RawIteratingReader.class.getName());
 	protected BufferedReader input;
 	protected StringBuilder recordBuffer = null;
 	protected LiteratureEntry reference;
@@ -60,7 +61,7 @@ public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectRe
 			//return recordBuffer!=null;
 			return acceptLastRecord();
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(Level.SEVERE,x.getMessage(),x);
 		}
 		return false;
 	}

@@ -184,7 +184,6 @@ public class SGroupMDL2000Helper {
 			  public void updateSGroups(String line, SuppleAtomContainer atomcontainer, Hashtable<Integer,ISGroup> sgroups) throws GroupException {
 				  String[] params = parse(line);
 				  throw new UnsupportedGroupOperation(this.toString());
-                  //System.out.println("TODO SLB");
 			  }			  
 
 		  },
