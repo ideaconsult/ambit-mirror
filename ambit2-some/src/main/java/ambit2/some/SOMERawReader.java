@@ -2,6 +2,7 @@ package ambit2.some;
 
 import java.awt.Color;
 import java.io.Reader;
+import java.util.logging.Level;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -135,7 +136,7 @@ public class SOMERawReader extends RawIteratingReader<String> {
 			//return recordBuffer!=null;
 			return acceptLastRecord();
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(Level.SEVERE,x.getMessage(),x);
 		}
 		return false;
 	}	

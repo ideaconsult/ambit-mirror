@@ -30,6 +30,7 @@ package ambit2.some;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -41,7 +42,6 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.external.ShellException;
-import ambit2.base.log.AmbitLogger;
 import ambit2.core.data.ArrayResult;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.StringDescriptorResultType;
@@ -56,7 +56,8 @@ import ambit2.some.SOMERawReader.someindex;
  * <b>Modified</b> 2010-9-4
  */
 public class DescriptorSOMEShell implements IMolecularDescriptor , IStructureDiagramHighlights {
-    protected static AmbitLogger logger = new  AmbitLogger(DescriptorSOMEShell.class);
+
+    protected static Logger logger = Logger.getLogger(DescriptorSOMEShell.class.getName());
     protected SOMEShell some_shell;
     protected SOMEVisualizer visualizer;
     
