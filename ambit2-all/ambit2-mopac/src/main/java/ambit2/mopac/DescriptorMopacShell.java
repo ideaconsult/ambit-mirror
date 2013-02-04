@@ -29,6 +29,8 @@
 package ambit2.mopac;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -40,7 +42,6 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import ambit2.base.data.Property;
 import ambit2.base.external.ShellException;
-import ambit2.base.log.AmbitLogger;
 
 
 /**
@@ -51,7 +52,8 @@ import ambit2.base.log.AmbitLogger;
  * <b>Modified</b> 2006-4-8
  */
 public class DescriptorMopacShell implements IMolecularDescriptor {
-    protected static AmbitLogger logger = new  AmbitLogger(DescriptorMopacShell.class);
+	static Logger logger = Logger.getLogger(DescriptorMopacShell.class.getName());
+
     protected String[] params = new String[] {"mopac_commands","mopac_executable","force_field"};
 
 	public static final String EHOMO = "EHOMO";
@@ -111,23 +113,23 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
 	        if (!file.exists()) 
 	        	mopac_shell.addExecutable(MopacShell.defaultparams[1],null);
         } catch (Exception x) {
-        	logger.error(x);
+        	logger.log(Level.SEVERE,x.getMessage(),x);
         }
     }
     public DescriptorValue calculate(IAtomContainer arg0) {
     	DoubleArrayResult r = null;
     	try {
     		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
-    		logger.info(toString());
+    		logger.fine(toString());
 	        IAtomContainer newmol = mopac_shell.runShell(arg0);
 	        r = new DoubleArrayResult(Mopac7Reader.parameters.length);
 	        for (int i=0; i< Mopac7Reader.parameters.length;i++) 
 	        try {
                 String result = newmol.getProperty(Mopac7Reader.parameters[i]).toString();
-                logger.debug(Mopac7Reader.parameters[i]+" = "+result);
+                logger.fine(Mopac7Reader.parameters[i]+" = "+result);
 	            r.add(Double.parseDouble(result));
 	        } catch (Exception x) {
-                logger.warn(x.getMessage());
+	        	logger.log(Level.WARNING,x.getMessage(),x);
 	            r.add(Double.NaN);
 	        }
 	       
@@ -153,7 +155,7 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
     	return new DoubleArrayResult();
     }
     protected void debug(String message) {
-    	logger.info(message);
+    	logger.fine(message);
     }
 	public boolean isErrorIfDisconnected() {
 		return mopac_shell.isErrorIfDisconnected();
