@@ -31,9 +31,9 @@ package ambit2.base.processors;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.logging.Logger;
 
 import ambit2.base.interfaces.IProcessor;
-import ambit2.base.log.AmbitLogger;
 
 /**
  * Default (empty) implementation of {@link IProcessor}
@@ -46,7 +46,7 @@ public abstract  class DefaultAmbitProcessor<Target,Result> implements IProcesso
 	 */
 	private static final long serialVersionUID = -4959472085664049891L;
 	protected PropertyChangeSupport propertyChangeSupport = null;
-	protected static AmbitLogger logger = new AmbitLogger(DefaultAmbitProcessor.class);
+	protected Logger logger = Logger.getLogger(getClass().getName());
     protected boolean enabled=true;
     
     /**

@@ -52,7 +52,6 @@ public class CASProcessor extends DefaultAmbitProcessor<String, String> {
 					Integer.parseInt(d);
 				ok = true;
 			}
-			//System.out.println(target);
 			return ok;
 		} catch (Exception x) {
 			return false;

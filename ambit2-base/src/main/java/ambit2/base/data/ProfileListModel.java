@@ -36,6 +36,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractListModel;
 import javax.swing.event.ListDataEvent;
@@ -43,6 +44,7 @@ import javax.swing.event.ListDataListener;
 
 
 public class ProfileListModel extends AbstractListModel implements	TypedListModel<Property> , ListDataListener{
+	static Logger logger = Logger.getLogger(ProfileListModel.class.getName());
 	protected TypedListModel<Property> fields;
 	protected List<Integer> visibleIndex = new ArrayList<Integer>();
 	protected Boolean visibility = null;
@@ -70,13 +72,14 @@ public class ProfileListModel extends AbstractListModel implements	TypedListMode
 		while (e.hasMoreElements()) {
 			String key = e.nextElement();
 			Profile<Property> profile = profiles.get(key);
-			System.out.println(key);
+			logger.finest(key);
 			Iterator<Property> i = profile.iterator();
 			while (i.hasNext()) {
 				Property p = i.next();
 				if (p.isEnabled()) {
 					model.addElement(p);
-					System.out.println(p);
+					logger.finest(p.toString());
+
 				}
 			}
 		}

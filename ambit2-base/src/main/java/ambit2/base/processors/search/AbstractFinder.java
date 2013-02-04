@@ -1,6 +1,7 @@
 package ambit2.base.processors.search;
 
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
@@ -253,7 +254,8 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 						return target;
 					}
 				} catch (HttpException x) {
-					if (x.getCode()==404) System.out.println(value + x.getMessage());
+					if (x.getCode()==404) 
+						logger.log(Level.WARNING,value==null?x.getMessage():value.toString(),x);
 				} catch (Exception x) {
 					x.printStackTrace();
 				}

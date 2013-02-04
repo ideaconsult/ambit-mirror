@@ -587,7 +587,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 							r.getHeight()> b.getHeight()?r.getHeight():b.getHeight()
 									);
 					
-					//System.out.println(String.format("%d R %s\nAll %s\n",c,r,b));
+
 					all.add(m);
 				}
 				b.setRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());

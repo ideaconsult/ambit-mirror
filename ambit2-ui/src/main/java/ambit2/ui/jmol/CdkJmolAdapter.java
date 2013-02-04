@@ -30,6 +30,8 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jmol.api.JmolAdapter;
 import org.openscience.cdk.CDKConstants;
@@ -50,7 +52,6 @@ import org.openscience.cdk.protein.data.PDBStructure;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 
-import ambit2.base.log.AmbitLogger;
 import ambit2.core.io.ReaderFactoryExtended;
 
 /**
@@ -64,7 +65,8 @@ public class CdkJmolAdapter extends JmolAdapter {
 
 	//public final static String ATOM_SET_INDEX = "org.jmol.adapter.cdk.ATOM_SET_INDEX";
 
-	private static final AmbitLogger bcLogger = new AmbitLogger(CdkJmolAdapter.class);
+	static Logger bcLogger = Logger.getLogger(CdkJmolAdapter.class.getName());
+	
 
 	public CdkJmolAdapter(String s) {
 		super(s);
@@ -113,8 +115,8 @@ public class CdkJmolAdapter extends JmolAdapter {
 							try {
 								factory.configure(atom);
 							} catch (CDKException exception) {
-								bcLogger.error("Could not configure atom: " + atom);
-								bcLogger.error("  because: " + exception.getMessage(),
+								bcLogger.severe("Could not configure atom: " + atom);
+								bcLogger.log(Level.SEVERE,"  because: " + exception.getMessage(),
 										exception);
 							}
 						}						
@@ -142,12 +144,12 @@ public class CdkJmolAdapter extends JmolAdapter {
 	}
 
 	public String getAtomSetCollectionName(Object clientFile) {
-		bcLogger.debug("Getting atom set collection name...");
+		bcLogger.fine("Getting atom set collection name...");
 		if (clientFile instanceof IChemObject) {
 			Object title = ((IChemObject) clientFile)
 					.getProperty(CDKConstants.TITLE);
 			if (title != null) {
-				bcLogger.debug("Setting model name to title");
+				bcLogger.fine("Setting model name to title");
 				return title.toString();
 			}
 		}
@@ -159,26 +161,26 @@ public class CdkJmolAdapter extends JmolAdapter {
 	 * **************************************************************/
 
 	public int getAtomSetCount(Object clientFile) {
-		bcLogger.debug("Getting atom set count...");
+		bcLogger.fine("Getting atom set count...");
 		if (clientFile instanceof IAtomContainer) {
-			bcLogger.debug("Found a IAtomContainer... NOT good");
+			bcLogger.fine("Found a IAtomContainer... NOT good");
 			return 1;
 		} else if (clientFile instanceof IChemFile) {
 			List models = ChemFileManipulator.getAllChemModels((IChemFile)clientFile);
-			bcLogger.debug("Found a IChemFile... good");
-			bcLogger.debug("Found #sets: " + models.size());
+			bcLogger.fine("Found a IChemFile... good");
+			bcLogger.fine("Found #sets: " + models.size());
 			return models.size();
 		} else {
-			bcLogger.error("Don't know what type this clientFile is... ");
+			bcLogger.severe("Don't know what type this clientFile is... ");
 			return 0;
 		}
 	}
 
 	public int getEstimatedAtomCount(Object clientFile) {
-		bcLogger.debug("Estimating atom count...");
+		bcLogger.fine("Estimating atom count...");
 		if (clientFile instanceof IAtomContainer) return ((IAtomContainer)clientFile).getAtomCount();
 		if (clientFile instanceof IChemFile) return ChemFileManipulator.getAtomCount((IChemFile)clientFile);
-		bcLogger.error("Don't know what kind of clientFile this is: " + clientFile.getClass().getName());
+		bcLogger.fine("Don't know what kind of clientFile this is: " + clientFile.getClass().getName());
 		return 0;
 	}
 
@@ -220,12 +222,12 @@ public class CdkJmolAdapter extends JmolAdapter {
 	}
 
 	public JmolAdapter.AtomIterator getAtomIterator(Object clientFile) {
-		bcLogger.debug("Jmol requested an AtomIterator...");
+		bcLogger.fine("Jmol requested an AtomIterator...");
 		return new AtomIterator((IChemFile) clientFile);
 	}
 
 	public JmolAdapter.BondIterator getBondIterator(Object clientFile) {
-		bcLogger.debug("Jmol requested an BondIterator...");
+		bcLogger.fine("Jmol requested an BondIterator...");
 		return new BondIterator((IChemFile) clientFile);
 	}
 
@@ -414,7 +416,7 @@ public class CdkJmolAdapter extends JmolAdapter {
 			bond = containers.get(icontainer).getBond(ibond++);
 			boolean isOK = bond.getAtomCount() == 2 && (bond.getAtom(0) != null && bond.getAtom(1) != null);
 			if (!isOK) {
-				bcLogger.error("Something wrong with the bonds CDK created!");
+				bcLogger.severe("Something wrong with the bonds CDK created!");
 				return hasNext();
 			}
 			// end work around
@@ -437,7 +439,7 @@ public class CdkJmolAdapter extends JmolAdapter {
 	}
 
 	public JmolAdapter.StructureIterator getStructureIterator(Object clientFile) {
-		bcLogger.debug("Jmol requested a stucture iterator for a "
+		bcLogger.fine("Jmol requested a stucture iterator for a "
 				+ clientFile.getClass().getName());
 		if (clientFile instanceof IChemFile)
 			return new StructureIterator((IChemFile)clientFile);

@@ -35,11 +35,12 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.io.DownloadTool;
-import ambit2.base.log.AmbitLogger;
 
 /**
  * A wrapper for an external executable (OS dependent). 
@@ -66,8 +67,8 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public static final String os_LINUX64 = "Linux64";
 	public static final String os_FreeBSD = "FreeBSD";
 	
+	protected static Logger logger = Logger.getLogger(CommandShell.class.getName());
 	
-    protected static AmbitLogger logger = new  AmbitLogger(CommandShell.class);	
 	protected Hashtable<String, Command> executables; //<os.name, executable>
 	protected String inputFile = null;
 	protected String outputFile = null;
@@ -142,7 +143,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 			String homeDir = getHomeDir(file);
 			file = new File(homeDir,exe);
 			if (!file.exists()) {
-				logger.info("Writing "+exe + " to "+ file);
+				logger.fine("Writing "+exe + " to "+ file);
 				DownloadTool.download(prefix+exe, file);
 				command.setExe(file.getAbsolutePath());
 				//trying chmod +x
@@ -262,31 +263,31 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
                 
                 if (!runAsync) {
                     builder.redirectErrorStream(true);
-                    logger.info("<" + toString() + " filename=\""+execString+"\">");
-                    logger.debug("<environ>");
-                    logger.debug(environ);
-                    logger.debug("</environ>");                        
+                    logger.fine("<" + toString() + " filename=\""+execString+"\">");
+                    logger.fine("<environ>");
+                    logger.fine(environ.toString());
+                    logger.fine("</environ>");                        
                     long now=System.currentTimeMillis();    
                     final Process process = builder.start();
                     InputStream is = process.getInputStream();
                     processStdOut(is);
-                    logger.info("<wait process=\""+execString+"\">");
+                    logger.fine("<wait process=\""+execString+"\">");
 	
 	                setExitCode(process.waitFor());
-	                logger.info("</wait>");
-	                logger.info("<exitcode value=\""+Integer.toString(getExitCode())+"\">");
-	                logger.info("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");                
-	                logger.info("</" + toString() + ">");
+	                logger.fine("</wait>");
+	                logger.fine("<exitcode value=\""+Integer.toString(getExitCode())+"\">");
+	                logger.fine("<elapsed_time units=\"ms\">"+Long.toString(System.currentTimeMillis()-now)+ "</elapsed_time>");                
+	                logger.fine("</" + toString() + ">");
 	                
 	                OUTPUT newmol = null;
 	                if (exitCodeOK(getExitCode())) {
-	                	logger.info("<parse>");
+	                	logger.fine("<parse>");
 	                	newmol = parseOutput(path, mol);
-	                	logger.info("</parse>");
+	                	logger.fine("</parse>");
 	                } else {
-	                  	logger.info("<error>");
-	                	System.out.println(getExitCode());
-	                	logger.info("</error>");
+	                  	logger.fine("<error>");
+	                  	logger.fine(Integer.toString(getExitCode()));
+	                	logger.fine("</error>");
 	                	newmol = parseOutput(path, mol,getExitCode());
 	                }
 	                return newmol;	                
@@ -297,7 +298,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 
                 
             } catch (Throwable x) {
-            	logger.debug(x.getMessage());
+            	logger.log(Level.SEVERE,x.getMessage(),x);
                 throw new ShellException(this,x);
             }
     }
@@ -306,12 +307,12 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);
         String line;
-        logger.info("<stdout>");
+        logger.fine("<stdout>");
         while ((line = br.readLine()) != null) {
-        	logger.info(line);
+        	logger.fine(line);
         }
         br.close();                    
-        logger.info("</stdout>");
+        logger.fine("</stdout>");
     }
     
     protected synchronized OUTPUT transform(Process process,INPUT cmd) {
@@ -395,33 +396,4 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 
 
 
-/*
-Since 1.5, the ProcessBuilder class provides more controls overs the process to be started. It's possible to set a starting directory. 
-
-public class CmdProcessBuilder {
-  public static void main(String args[]) 
-     throws InterruptedException,IOException 
-  {
-    List<String> command = new ArrayList<String>();
-    command.add(System.getenv("windir") +"\\system32\\"+"tree.com");
-    command.add("/A");
-
-    ProcessBuilder builder = new ProcessBuilder(command);
-    Map<String, String> environ = builder.environment();
-    builder.directory(new File(System.getenv("temp")));
-
-    System.out.println("Directory : " + System.getenv("temp") );
-    final Process process = builder.start();
-    InputStream is = process.getInputStream();
-    InputStreamReader isr = new InputStreamReader(is);
-    BufferedReader br = new BufferedReader(isr);
-    String line;
-    while ((line = br.readLine()) != null) {
-      System.out.println(line);
-    }
-    System.out.println("Program terminated!");
-  }
-}
-
-*/
 
