@@ -30,7 +30,7 @@ public class SMARTSPropertiesReader extends DefaultAmbitProcessor<IAtomContainer
 		String[] atomprops =prop[0].split(",");
 		for (int i=0; i < atomprops.length;i++)
 			mol.getAtom(i).setProperty(CMLUtilities.SMARTSProp,atomprops[i]);
-		if (prop.length == 1) logger.warn("Bond properties missing!");
+		if (prop.length == 1) logger.warning("Bond properties missing!");
 		else {
 			String[] bondprop =prop[1].split(",");
 			
