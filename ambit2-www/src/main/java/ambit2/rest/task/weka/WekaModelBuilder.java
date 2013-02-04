@@ -158,7 +158,6 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 		Template predictors = null;
 		Template dependent = null;
 		PredictedVarsTemplate predicted = null;
-		//System.out.println("Build");
 		
 		if (clusterer!= null) {
 			try {
@@ -260,7 +259,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 				predicted.add(property);
 			}			
 		}
-		//System.out.println("Done");
+
 
 		m.setPredictors(predictors);
 		m.setDependent(dependent);

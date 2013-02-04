@@ -368,7 +368,6 @@ public class AlgorithmsPile {
 	public static synchronized List<Algorithm<String>> createList() {
 		List<Algorithm<String>> algorithmList = new ArrayList<Algorithm<String>>();
 		for (Object[] d : algorithms) {
-			System.out.println(d);
 			Algorithm<String> alg = new Algorithm<String>(d[1].toString());
 			alg.setType((String[])d[4]);
 			alg.setFormat(

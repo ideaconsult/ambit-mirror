@@ -103,7 +103,6 @@ public class PolicyParser {
 				org.w3c.dom.NodeList attrs = rule.getElementsByTagName(tags.AttributeValuePair.toString());
 				for (int k=0; k < attrs.getLength(); k++) {
 					Element attr = ((Element) attrs.item(k));
-					//System.out.println(">>>AttributeValuePair "+attr.getAttribute("name"));
 					processAttrValuePair(attr,b);
 				}				
 				b.append("</table>");
@@ -112,8 +111,6 @@ public class PolicyParser {
 			org.w3c.dom.NodeList subjects = policy.getElementsByTagName(tags.Subjects.toString());
 			for (int j=0; j < subjects.getLength(); j++) {
 				Element subject = ((Element) subjects.item(j));
-				//System.out.println(">>Subjects "+subject.getAttribute("name"));
-				//System.out.println(">>Subjects "+subject.getAttribute("description"));
 				
 				org.w3c.dom.NodeList ss = subject.getElementsByTagName(tags.Subject.toString());
 				/**
@@ -144,18 +141,7 @@ Values	uid=nina, ou=people, dc=opentox,dc=org
 							name,
 							s.getAttribute("includeType")));
 					
-					
-					/*
-					b.append("<table>");
-					
-					org.w3c.dom.NodeList attrs = s.getElementsByTagName(tags.AttributeValuePair.toString());
-					for (int k=0; k < attrs.getLength(); k++) {
-						Element attr = ((Element) attrs.item(j));
-						//System.out.println(">>>AttributeValuePair "+attr.getAttribute("name"));
-						processAttrValuePair(attr,b);
-					}					
-					b.append("</table>");
-					*/
+				
 				}
 
 			}

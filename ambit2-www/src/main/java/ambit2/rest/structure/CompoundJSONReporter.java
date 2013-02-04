@@ -149,7 +149,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			writer.write(builder.toString());
 			comma = ",";
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		}
 		return item;
 		

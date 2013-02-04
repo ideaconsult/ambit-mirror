@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -560,8 +561,7 @@ Then, when the "get(Variant)" method calls you back,
 					reader.setProfile(profile);
 				}
 			} catch (Exception x) {
-				System.out.println(getResourceRef(getRequest()));
-				//x.printStackTrace();
+				getLogger().log(Level.SEVERE,x.getMessage(),x);
 			} finally {
 				//the reader closes the connection
 				reader.setCloseConnection(true);
@@ -570,7 +570,7 @@ Then, when the "get(Variant)" method calls you back,
 			}
 			return profile;
 		} catch (Exception x) {
-			getLogger().info(x.getMessage());
+			getLogger().log(Level.SEVERE,x.getMessage(),x);
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
 		

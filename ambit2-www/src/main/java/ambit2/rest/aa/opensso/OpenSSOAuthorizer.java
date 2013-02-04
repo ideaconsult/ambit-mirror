@@ -107,13 +107,7 @@ public class OpenSSOAuthorizer extends Authorizer {
 		for (Cookie cookie : request.getCookies()) {
 			if ("subjectid".equals(cookie.getName()))
 				return cookie.getValue();
-				/*	
-		    System.out.println("name = " + cookie.getName());
-		    System.out.println("value = " + cookie.getValue());
-		    System.out.println("domain = " + cookie.getDomain());
-		    System.out.println("path = " + cookie.getPath());
-		    System.out.println("version = " + cookie.getVersion());
-		    */
+
 		}
 		return null;
 	}

@@ -94,12 +94,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			for (String feature : features)
 				RDFPropertyIterator.readFeaturesRDF(feature, template, applicationRootReference);
 		}
-		/*
-		Iterator<Property> properties = template.getProperties(true);
-		while (properties.hasNext()) {
-			System.out.println(properties.next());
-		}
-		*/
+
 		return template;
 	}
 	
@@ -175,7 +170,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			Context.getCurrentLogger().severe(stackTraceWriter.toString());
 			throw x;
 		} finally {
-			Context.getCurrentLogger().info("Done");
+			Context.getCurrentLogger().fine("Done");
 			try { xx.close(); } catch (Exception x) {}
 			try { connection.close(); } catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
 		}			

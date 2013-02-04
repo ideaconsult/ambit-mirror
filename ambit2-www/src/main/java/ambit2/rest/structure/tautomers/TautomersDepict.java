@@ -83,8 +83,8 @@ public class TautomersDepict extends AbstractDepict {
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 				//CDKHydrogenAdder.getInstance(mol.getBuilder()).addImplicitHydrogens(mol);
 				AtomContainerManipulator.removeHydrogens(mol);
-				SmilesGenerator g = new SmilesGenerator(false);
-				System.out.println(g.createSMILES(mol));
+				//SmilesGenerator g = new SmilesGenerator(false);
+				//(g.createSMILES(mol));
 				
         	} catch (Exception xx) {
         		mol = null;
