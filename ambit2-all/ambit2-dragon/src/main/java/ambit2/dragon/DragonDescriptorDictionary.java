@@ -52,7 +52,6 @@ public class DragonDescriptorDictionary {
 		return n;
 	}
 	protected void initialize() {
-		System.out.println("init");
 	       InputStream in =null;
 	  		try {
 	  			in = DragonDescriptorDictionary.class.getClassLoader().getResourceAsStream("ambit2/dragon/descriptors.txt");
