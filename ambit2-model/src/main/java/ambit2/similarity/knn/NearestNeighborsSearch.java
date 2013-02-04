@@ -33,8 +33,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ambit2.base.log.AmbitLogger;
 import ambit2.similarity.measure.DistanceComparable;
 import ambit2.similarity.measure.IDistanceFunction;
 
@@ -46,7 +47,8 @@ import ambit2.similarity.measure.IDistanceFunction;
 public class NearestNeighborsSearch<T> extends ArrayList<DistanceComparable<T>> implements INearestNeighborsSearch<T> {
     protected IDistanceFunction<T> distanceFunction;
     protected boolean lowestDistanceIsClosest = true;
-    protected static AmbitLogger logger = new AmbitLogger(NearestNeighborsSearch.class);
+    protected static Logger logger = Logger.getLogger(NearestNeighborsSearch.class.getName());
+
     public NearestNeighborsSearch() {
         this(null);
     }
@@ -102,8 +104,7 @@ public class NearestNeighborsSearch<T> extends ArrayList<DistanceComparable<T>> 
                 }
 
             } catch (Exception x) {
-                //x.printStackTrace();
-                logger.error(x);
+                logger.log(Level.SEVERE,x.getMessage(),x);
             }
         }
         Collections.sort(kNN);

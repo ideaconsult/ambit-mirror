@@ -65,7 +65,6 @@ public class OrthogonalTransform extends TransformFilter{
     FIndices = null;
     for (int i=0; i < m.getRowDimension(); i++ )
     	for (int j=0; j < m.getColumnDimension(); j++ ) {
-    		System.out.println(m.get(i,j));
     		if (Double.isNaN(m.get(i,j)))
     			throw new Exception(String.format("NaN found at [%d,%d]",i,j));
     	}

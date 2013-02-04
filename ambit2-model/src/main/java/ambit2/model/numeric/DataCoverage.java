@@ -4,6 +4,8 @@
  */
 package ambit2.model.numeric;
 
+import java.util.logging.Logger;
+
 import ambit2.base.exceptions.QSARModelException;
 
 
@@ -17,7 +19,7 @@ public abstract class DataCoverage<DATA>  implements  IDataCoverage<DATA> /*, IM
 	 * 
 	 */
 	private static final long serialVersionUID = 5355137220284907331L;
-
+	protected static Logger logger = Logger.getLogger(DataCoverage.class.getName());
 	protected transient Object object = null;
 	protected ADomainMethodType appDomainMethodType  = null;
 	
@@ -145,37 +147,5 @@ public abstract class DataCoverage<DATA>  implements  IDataCoverage<DATA> /*, IM
     public void setParameters(Object points) throws QSARModelException {
     	this.object = points;
     }	
-    /*TODO
-    //IMolecularDescriptorinterface
-    public DescriptorValue calculate(IAtomContainer atomcontainer) throws CDKException {
-    	// TODO Auto-generated method stub
-        //System.out.println(spherosity);
-        return new DescriptorValue(getSpecification(), getParameterNames(), 
-                getParameters(), new DoubleResult(metric,domain),new String[] {"metric","domain"});  
-    }
-    public IDescriptorResult getDescriptorResultType() {
-    	return new DoubleArrayResult(2);
-    }
-    public String[] getParameterNames() {
-    	return null;
-    }
-    public Object[] getParameters() {
-    	return null;
-    }
-	public DescriptorSpecification getSpecification() {
-        return new DescriptorSpecification(
-        	String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,getName()),
-		    this.getClass().getName(),
-		    String.format("$Id: %s,v 0.2 %s Nina Jeliazkova Exp $",getClass().getName(),new Date()),
-            "http:///ambit.sourceforge.net");
-    };
-    public Object getParameterType(String arg0) {
-    	// TODO Auto-generated method stub
-    	return null;
-    }
-    public void setParameters(Object[] arg0) throws CDKException {
-    	// TODO Auto-generated method stub
-    	
-    }
-    */
+  
 }

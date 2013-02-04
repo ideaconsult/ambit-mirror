@@ -8,10 +8,9 @@ package ambit2.similarity.stats;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
-
-import ambit2.base.log.AmbitLogger;
+import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  * A histogram.
@@ -19,7 +18,7 @@ import ambit2.base.log.AmbitLogger;
  * <b>Modified</b> 2005-6-20
  */
 public class Histogram<T extends Comparable> extends TreeMap<T,MutableInt>{
-    protected static AmbitLogger logger = new AmbitLogger(Histogram.class.getName());
+	protected static Logger logger = Logger.getLogger(Histogram.class.getName());
     public static final double ln2_1 = 1/ Math.log(2);
     /**
      * 
@@ -115,7 +114,7 @@ public class Histogram<T extends Comparable> extends TreeMap<T,MutableInt>{
      * @return d = sum(pi * logger(pi))
      */
     public double entropy() {
-        logger.debug("entropy()");
+        logger.fine("entropy()");
         
         int c = count();
         if (c == 0) return 0;
@@ -208,7 +207,7 @@ public class Histogram<T extends Comparable> extends TreeMap<T,MutableInt>{
         if (cq == 0) return 0;
         int cp = hist.count();
         if (cp == 0) { 
-            logger.error("The histogram to compare with is empty!");
+            logger.severe("The histogram to compare with is empty!");
             throw new Exception("The histogram to compare with is empty!");        
         }
 

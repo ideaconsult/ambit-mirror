@@ -2,9 +2,9 @@ package ambit2.model;
 
 import java.beans.PropertyChangeSupport;
 import java.util.Hashtable;
+import java.util.logging.Logger;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.log.AmbitLogger;
 import ambit2.featureselection.IAttributeSelection;
 
 public abstract class AbstractModel<ID,Features,ResultType extends Comparable<?>> implements 
@@ -12,8 +12,7 @@ public abstract class AbstractModel<ID,Features,ResultType extends Comparable<?>
 	
 	protected final String p_model = IModelDefinition.class.getName();
 	protected final String p_stats = IModelStatistics.class.getName();
-	
-	protected final static AmbitLogger logger = new AmbitLogger(AbstractModel.class);
+	protected Logger logger = Logger.getLogger(getClass().getName());
 	protected Hashtable<Object,Object> parameters = new Hashtable<Object, Object>();
 	protected PropertyChangeSupport ps = new PropertyChangeSupport(this);
 	protected IModelStatistics<ResultType> stats = null;

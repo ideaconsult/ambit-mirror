@@ -26,6 +26,7 @@ package ambit2.similarity.knn;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.apache.poi.hssf.record.formula.functions.T;
 
@@ -88,7 +89,6 @@ public abstract class NearestNeighborsSimilarity<ID, Features> extends
             if (p != null) h.addObject(p.toString());
             
         }
-        //System.out.println(h);
         return h.getMaxFrequency();
     }    
     /**
@@ -128,8 +128,7 @@ public abstract class NearestNeighborsSimilarity<ID, Features> extends
                     
                 }
             } catch (Exception x) {
-                
-                logger.error(p.toString()+x);
+            	logger.log(Level.SEVERE,p.toString(),x);
             }
         }
         if (normalize != 0) property = property/normalize;
@@ -192,7 +191,7 @@ public abstract class NearestNeighborsSimilarity<ID, Features> extends
             int n = Integer.parseInt(value.toString());
             setKNN(n);
         } catch (Exception x) {
-            logger.error(x);
+            logger.log(Level.SEVERE,x.getMessage(),x);
         }
 
     }
