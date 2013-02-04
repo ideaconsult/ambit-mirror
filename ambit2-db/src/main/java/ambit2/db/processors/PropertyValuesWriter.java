@@ -70,7 +70,6 @@ public class PropertyValuesWriter extends ValueWriter<IStructureRecord,IStructur
 			try {
 				return Double.parseDouble(o.toString());
 			} catch (Exception xx) {
-				logger.log(java.util.logging.Level.WARNING,xx.getMessage(),xx);
 				return o;
 			}
 		}
