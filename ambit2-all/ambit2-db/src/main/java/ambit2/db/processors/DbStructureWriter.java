@@ -115,7 +115,7 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
         		writeDataset(structure);
         		writeProperties(structure);
         	} catch (AmbitException x) {
-        		logger.warn(x);
+        		logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
         	}        	
         }
 		return sr;
@@ -129,7 +129,7 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
         	propertyWriter.close();
      
          } catch (SQLException x) {
-            logger.error(x);
+             logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
         }
         super.close();
 	}

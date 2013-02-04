@@ -221,7 +221,6 @@ public class QuerySMARTS extends
 				}
 				}
 				if (detectAromaticity) {
-					//System.out.println(mol.getProperty(smartsProperty));
 					CDKHueckelAromaticityDetector.detectAromaticity(mol);
 				}
 				int aromatic = 0;

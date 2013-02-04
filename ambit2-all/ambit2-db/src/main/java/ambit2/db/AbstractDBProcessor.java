@@ -27,8 +27,8 @@ package ambit2.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
-import ambit2.base.log.AmbitLogger;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.IRepositoryAccess;
@@ -38,7 +38,7 @@ public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitPro
 	 * 
 	 */
 	private static final long serialVersionUID = 735962863075840837L;
-	protected static final AmbitLogger logger = new AmbitLogger(AbstractDBProcessor.class);
+	
 	protected SessionID sessionID = null;
 	protected Connection connection; 
 	protected boolean closeConnection = true;
@@ -64,7 +64,7 @@ public abstract class AbstractDBProcessor<Target,Result> extends DefaultAmbitPro
 		if ((this.connection != null) && (this.connection != connection) && isCloseConnection()) try {
 			close();
 		} catch (SQLException x) {
-		    logger.error(x);      
+		    logger.log(Level.SEVERE,x.getMessage(),x);      
         }
 		this.connection = connection;
 	}

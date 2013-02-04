@@ -78,7 +78,7 @@ public class UpdateExecutor<Q extends IQueryUpdate> extends StatementExecutor<Q,
 					statement.clearParameters();
 				}
 				setParameters(statement, params);
-					logger.debug(statement);
+
 					count += statement.executeUpdate();
 					if (target.returnKeys(i)) {
 						//TODO if on duplicate is used two generated keys are returned!  http://bugs.mysql.com/bug.php?id=42309

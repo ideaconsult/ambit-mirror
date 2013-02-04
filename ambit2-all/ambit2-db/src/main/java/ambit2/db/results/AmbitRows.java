@@ -52,6 +52,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.sql.RowSet;
 import javax.sql.RowSetEvent;
@@ -1083,10 +1084,10 @@ public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> impleme
 				
 				setQuery(((QueryChangeEvent)evt).getNewQuery());
 			} catch (Exception x) {
-				System.out.println(getPropertyname() + x);
+				logger.log(Level.SEVERE,getPropertyname(),x);
 			}
 		else {
-			System.out.println(getPropertyname() + ":"+evt.getNewValue());
+			logger.log(Level.FINE,getPropertyname() + ":"+evt.getNewValue());
 		}
 		
 	}

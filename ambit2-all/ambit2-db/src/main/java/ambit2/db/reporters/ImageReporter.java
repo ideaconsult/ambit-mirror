@@ -61,7 +61,7 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 			} 
 			return imageWrapper;
 		} catch (Exception x) {
-			logger.warn(x);
+			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
 			return null;
 		}
 	}

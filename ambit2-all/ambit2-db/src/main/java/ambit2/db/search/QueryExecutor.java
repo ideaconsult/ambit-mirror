@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
@@ -110,22 +111,20 @@ public class QueryExecutor<Q extends IQueryObject> extends
 				}
 
 				QueryExecutor.setParameters(sresults, params);
-				logger.debug(sresults);
+				logger.log(Level.FINEST,sresults.toString());
 
 				rs = sresults.executeQuery();
 
 			}
 		} catch (Exception x) {
 			try {
-				System.err.println(x.getMessage() + " " + sresults);
+				logger.log(Level.SEVERE,x.getMessage() + " " + sresults);
 			} catch (Exception xx) {
 			}
 			throw new ProcessorException(this, x);
 		} catch (Throwable x) {
 			throw new ProcessorException(this, x.getMessage());
 		} finally {
-			// System.out.println(System.currentTimeMillis()-now + "\t"+
-			// (sresults==null?statement:sresults));
 		}
 		return rs;
 	}
@@ -142,7 +141,6 @@ public class QueryExecutor<Q extends IQueryObject> extends
 		} else {
 			sresults = c.prepareStatement(sql);
 			setParameters(sresults, params);
-			logger.debug(sresults);
 			ResultSet rs = sresults.executeQuery();
 			return rs;
 		}

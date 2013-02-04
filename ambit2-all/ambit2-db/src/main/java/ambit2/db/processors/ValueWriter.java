@@ -111,7 +111,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	
     	String longText = null;
     	if ((value != null) && (value.length()>255)) {
-    		logger.warn("Value truncated to 255 symbols "+value);
+    		logger.warning("Value truncated to 255 symbols "+value);
     		longText = value;    		
     		value = value.substring(0,255);
     		error = mode.TRUNCATED;
@@ -160,7 +160,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	        	//ps_inserttuplestring.setString(4,value);
 	        	//ps_inserttuplestring.setInt(5,0);
 	        	if (ps_inserttuplestring.executeUpdate()<=0)
-	        		logger.warn("Tuple not inserted "+property.getId()+ " "+value);
+	        		logger.warning("Tuple not inserted "+property.getId()+ " "+value);
 
     		} 
     	} else return false;
@@ -197,15 +197,15 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	        	ps_inserttuplenumber.setInt(3,structure.getIdstructure());
     	        	int ok = ps_inserttuplenumber.executeUpdate();
     	        	if (ok<=0) {
-    	        		logger.warn("Tuple not inserted "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
+    	        		logger.warning("Tuple not inserted "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
 
     	        	}
 
         	} else {
-        		logger.warn("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
+        		logger.warning("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
         	}
        	} else {
-       		logger.warn("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
+       		logger.warning("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
        		return false;
        	}
        	return true;
@@ -259,7 +259,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	Object value = getValue(target,property,propertyIndex);
     	if (value instanceof Number) {
     		if (Double.isNaN( ((Number)value).doubleValue())) {
-    			logger.warn(property.getName() + value);
+    			logger.warning(property.getName() + value);
     			insertValueNaN(property,idtuple,mode.ERROR);
     		} else
     			insertValue(((Number)value).doubleValue(),property,idtuple,mode.UNKNOWN);

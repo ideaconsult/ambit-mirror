@@ -160,7 +160,6 @@ using(idstructure)
 			if (p!=null)
 			for (int j=0; j < p.size(); j++) {
 				QueryParam qp = p.get(j);
-				//System.out.println(qp);
 				param.add(qp);
 			}			
 		}
@@ -169,7 +168,6 @@ using(idstructure)
 			List<QueryParam> p = q.getParameters();
 			for (int j=0; j < p.size(); j++) {
 				QueryParam qp = p.get(j);
-				//System.out.println(qp);
 				param.add(qp);
 			}
 		}

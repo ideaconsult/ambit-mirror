@@ -2,6 +2,7 @@ package ambit2.db.chart;
 
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -59,12 +60,8 @@ public class Nominal2SimilarityChartGenerator extends ChartGenerator<IStoredQuer
 	         return pieChart.createBufferedImage(width,height);
 
 	      }
-	      catch (SQLException sqlEx)    // checked exception
-	      {
-	         System.err.println("Error trying to acquire JDBCPieDataset.");
-	         System.err.println("Error Code: " + sqlEx.getErrorCode());
-	         System.err.println("SQLSTATE:   " + sqlEx.getSQLState());
-	         sqlEx.printStackTrace();
+	      catch (SQLException sqlEx)  {
+	    	 logger.log(Level.SEVERE,sqlEx.getSQLState(),sqlEx);
 	         return null;
 	      }
 

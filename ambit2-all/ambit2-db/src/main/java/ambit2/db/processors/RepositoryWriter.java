@@ -128,12 +128,14 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		} catch (AmbitException x) {
 			throw x;
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 			throw new AmbitException(x);
 		} finally {
 			try {
 			 queryexec.closeResults(rs);
-			} catch (Exception x) {logger.error(x);}
+			} catch (Exception x) {
+				logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
+			}
 		}
 		
 	}
@@ -202,7 +204,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         if (exec != null)
         	exec.close();
         } catch (SQLException x) {
-            logger.error(x);
+        	logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
         }
         super.close();
 	}

@@ -165,7 +165,6 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 			
 	        
 			if (depict.getImageMap()!=null) {
-				//System.out.println(depict.getImageMap().toString());
 				file = new File(tmpDir,String.format("%s/%s/%d_%d.%s",
 			        		getConnection().getCatalog(),
 			        		dimensions,

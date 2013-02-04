@@ -173,7 +173,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			
 			
 		} catch (Exception x) {
-			logger.error(x);
+            logger.log(java.util.logging.Level.FINE,x.getMessage(),x);
 		}
 		return null;
 		
@@ -225,9 +225,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
             table.addCell(cell);            
 
         } catch(Exception x) {
-            logger.error("ERROR while writing Molecule: " + x.getMessage());
-            logger.debug(x);
-            x.printStackTrace();
+            logger.log(java.util.logging.Level.FINE,x.getMessage(),x);
         }
         
 	}

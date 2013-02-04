@@ -34,7 +34,7 @@ public class RTFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			//TODO generate PDFcontent
 			getOutput().add(new Paragraph(item.getContent()));			
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		}
 		return null;
 	}
