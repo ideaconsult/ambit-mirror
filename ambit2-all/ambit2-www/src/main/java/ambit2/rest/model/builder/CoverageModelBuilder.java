@@ -107,7 +107,6 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 		Template predictors = null;
 		Template dependent = null;
 		PredictedVarsTemplate predicted = null;
-		//System.out.println("Build");
 		
 		if (coverage!= null) {
 			coverage.build(matrix);
@@ -143,7 +142,6 @@ public class CoverageModelBuilder extends ModelBuilder<Instances,Algorithm,Model
 				predictors.add(property);
 			}				
 		} 
-		//System.out.println("Done");
 
 		m.setPredictors(predictors);
 		m.setDependent(dependent);

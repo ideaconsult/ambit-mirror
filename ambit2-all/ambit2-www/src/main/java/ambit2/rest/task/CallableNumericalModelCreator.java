@@ -48,7 +48,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 
 	@Override
 	public TaskResult doCall() throws Exception {
-		Context.getCurrentLogger().info("Start()");
+		Context.getCurrentLogger().fine("Start()");
 		Connection connection = null;
 		try {
 
@@ -68,7 +68,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 			Context.getCurrentLogger().severe(stackTraceWriter.toString());
 			throw x;
 		} finally {
-			Context.getCurrentLogger().info("Done");
+			Context.getCurrentLogger().fine("Done");
 			try { connection.close(); } catch (Exception x) {Context.getCurrentLogger().warning(x.getMessage());}
 		}
 		

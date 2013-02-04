@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.logging.Level;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -160,8 +161,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					break;
 				}
 			} catch (Exception x) {
-				System.out.println(getResourceRef(getRequest()));
-				//x.printStackTrace();
+				getLogger().log(Level.SEVERE,x.getMessage(),x);
 			} finally {
 				//the reader closes the connection
 				try { if (rs !=null) rs.close();} catch (Exception x) {}
@@ -171,7 +171,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			}
 			
 		} catch (Exception x) {
-			getLogger().info(x.getMessage());
+			getLogger().log(Level.SEVERE,x.getMessage(),x);
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x);
 		}
 		return licenseURI;

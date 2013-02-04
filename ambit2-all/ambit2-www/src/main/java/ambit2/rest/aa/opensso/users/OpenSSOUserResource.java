@@ -181,7 +181,6 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
         //	map.put("username", getClientInfo().getUser().getIdentifier());
         	try {
         		map.put("openam_token",((OpenSSOUser) getClientInfo().getUser()).getToken());  
-        		System.out.println(((OpenSSOUser) getClientInfo().getUser()).getFirstName());
         	} catch (Exception x) {
         		map.remove("openam_token");
         	}

@@ -27,6 +27,7 @@ import ambit2.db.search.property.ModelTemplates;
 import ambit2.db.update.model.AbstractModelQuery;
 import ambit2.db.update.model.QueryModel;
 import ambit2.db.update.model.ReadModel;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.DBConnection;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.ImageConvertor;
@@ -74,6 +75,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	public ModelResource() {
 		super();
 		getVariants().add(new Variant(MediaType.IMAGE_PNG));
+		getVariants().add(new Variant(ChemicalMediaType.IMAGE_JSON));
 		setDocumentation(new ResourceDoc("Model","Model"));
 		setHtmlbyTemplate(true);
 	}
@@ -142,7 +144,8 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			variant.getMediaType().equals(MediaType.IMAGE_BMP) ||
 			variant.getMediaType().equals(MediaType.IMAGE_JPEG) ||
 			variant.getMediaType().equals(MediaType.IMAGE_TIFF) ||
-			variant.getMediaType().equals(MediaType.IMAGE_GIF) 
+			variant.getMediaType().equals(MediaType.IMAGE_GIF) ||
+			variant.getMediaType().equals(ChemicalMediaType.IMAGE_JSON)
 			) {
 		Dimension d = new Dimension(250,250);
 		Form form = getRequest().getResourceRef().getQueryAsForm();

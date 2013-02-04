@@ -87,15 +87,5 @@ public abstract class CallableFileUpload implements Callable<Reference> {
 	public abstract Reference createReference() ;
 	
 
-	/*
-FileRepresentation rep = new FileRepresentation(
-        "d:\\temp\\test.txt", MediaType.TEXT_ALL, 0);
-EncodeRepresentation encodedRep = new EncodeRepresentation(Encoding.GZIP,
-        rep);
-Client client = new Client(Protocol.HTTP);
-Response response = client.put("http://localhost:8182/essai/";, encodedRep);
-System.out.println("******" + response.getStatus());
 
-
-	 */
 }

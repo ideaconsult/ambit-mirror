@@ -193,8 +193,7 @@ class ChunkedCSVReporter extends QueryPacketReporter<IQueryRetrieval<IStructureR
 			}
 			
 		} catch (Exception x) {
-			logger.error(x);
-			x.printStackTrace();
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		} finally {
 			try { writer.write('\n'); } catch (Exception x) {}
 		}

@@ -83,7 +83,6 @@ public class FingerprintsModelBuilder extends ModelBuilder<List<BitSet>,Algorith
 		Template predictors = null;
 		Template dependent = null;
 		PredictedVarsTemplate predicted = null;
-		//System.out.println("Build");
 		
 		if (coverage!= null) {
 			coverage.build(instances);
@@ -115,7 +114,6 @@ public class FingerprintsModelBuilder extends ModelBuilder<List<BitSet>,Algorith
 			predictors = new Template("Empty");
 			
 		} 
-		//System.out.println("Done");
 
 		m.setPredictors(predictors);
 		m.setDependent(dependent);

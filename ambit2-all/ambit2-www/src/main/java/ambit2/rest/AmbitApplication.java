@@ -355,7 +355,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	    		 try {
 	    			 localSecrets = getLocalSecrets();
 	    		 } catch (Exception x) {
-	    			 System.err.println(x.getMessage());
+	    			 getLogger().log(Level.SEVERE,x.getMessage(),x);
 	    			 localSecrets  = new ConcurrentHashMap<String, char[]>(); //empty
 	    		 }
 	    		 basicAuth.setVerifier(new MapVerifier(localSecrets) {
@@ -380,7 +380,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	    		 return basicAuth;
 	    	 }
 	    	 else {
-	    		 System.err.println("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
+	    		 getLogger().warning("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
 	    	 }
 	     
 	     
@@ -663,7 +663,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	 */
     public static void main(String[] args) throws Exception {
         
-        // Create a component
         Component component = boot(null,null,8080);
         System.out.println("Press key to stop server");
         System.in.read();
