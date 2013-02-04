@@ -126,12 +126,5 @@ public class Name2StructureProcessor extends
 			throw new AmbitException(x);
 		}
 	}	
-    /*
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			System.out.println("Usage: "+Name2StructureProcessor.class.getName() + " chemical_name");
-			return;
-		}
-	}
-	*/
+
 }
