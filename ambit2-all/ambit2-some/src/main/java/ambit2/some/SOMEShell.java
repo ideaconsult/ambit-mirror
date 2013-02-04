@@ -1,6 +1,5 @@
 package ambit2.some;
 
-import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -104,7 +103,7 @@ public class SOMEShell extends CommandShell<IAtomContainer, IAtomContainer> {
             String fname = mopac_path+"/" + outFile[i]; 
             File f = new File(fname);
             if (!f.exists()) continue;
-            logger.debug("<outfile name=\""+ fname + "\">");
+            logger.fine("<outfile name=\""+ fname + "\">");
             try {
                 SOMERawReader re = new SOMERawReader(new InputStreamReader(new FileInputStream(f)));
                 while (re.hasNext()) {
@@ -114,11 +113,11 @@ public class SOMEShell extends CommandShell<IAtomContainer, IAtomContainer> {
                 re.close();
                 f.delete();
             } catch (Exception x) {
-                logger.debug("<error name=\""+ x.getMessage() + "\"/>");
-                logger.debug("</outfile>");
+                logger.fine("<error name=\""+ x.getMessage() + "\"/>");
+                logger.fine("</outfile>");
                 throw new ShellException(this,x);
             }
-            logger.debug("</outfile>");
+            logger.fine("</outfile>");
         }
 		return mol;
 	}
