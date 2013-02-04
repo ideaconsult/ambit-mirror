@@ -18,18 +18,22 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tautomers.InChITautomerGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.Molecule;
+
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
+import ambit2.tautomers.RuleStructureFactory;
 
 
 public class TestTautomers 
 {
 	public TautomerManager tman = new TautomerManager();
 	public InChITautomerGenerator itg = new InChITautomerGenerator(); 
+	public RuleStructureFactory rsf = new RuleStructureFactory(); 
 	
 	
 	public static void main(String[] args) throws Exception 
@@ -127,7 +131,7 @@ public class TestTautomers
 		//tt.visualTest("OC=1C=CC(=CC=1(NCS(=O)(=O)O))[As]=[Bi][As](C=2C=CC(O)=C(C=2)NCS(=O)(=O)O)[Bi]=[As]C=3C=CC(O)=C(C=3)NCS(=O)(=O)O",TautomerConst.GAT_Comb_Improved);
 		
 		
-		tt.visualTest("O=C(SO)N",TautomerConst.GAT_Incremental);
+		//tt.visualTest("O=C(SO)N",TautomerConst.GAT_Incremental);
 		        
 		
 		//tt.visualTest("NC1=CC=CC2=C(O)N=NC(O)=C12", 1);
@@ -149,6 +153,8 @@ public class TestTautomers
 		//tt.testInChIGenerator("N1=CO=CC=C1");
 		
 		
+		//tt.testConnectStructures("C1CN1",2,"CCl",0, IBond.Order.SINGLE);
+		tt.testCondenseStructures("C1CN1",0,1,"BrCCCl",1,2);
 	}
 	
 	public void performTestCases() throws Exception
@@ -558,6 +564,39 @@ public class TestTautomers
 		return (nErrors); //OK result = 0
 	}
 	
+	public void testConnectStructures(String smi1, int numAt1, String smi2, int numAt2, IBond.Order order) throws Exception
+	{
+		System.out.println("Connecting Structures: " + smi1 + "   " + smi2);
+		IAtomContainer mol1 = SmartsHelper.getMoleculeFromSmiles(smi1);
+		IAtomContainer mol2 = SmartsHelper.getMoleculeFromSmiles(smi2);
+		
+		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		v.add(mol1);
+		v.add(mol2);
+		IAtomContainer newStr = rsf.connectStructures(smi1, numAt1, smi2, numAt2, order);
+		v.add(newStr);
+		
+		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr)));
+		
+		TestStrVisualizer tsv = new TestStrVisualizer(v);
+	}
+	
+	public void testCondenseStructures(String smi1, int str1At0, int str1At1, String smi2, int str2At0, int str2At1) throws Exception
+	{
+		System.out.println("Condensing Structures: " + smi1 + "   " + smi2);
+		IAtomContainer mol1 = SmartsHelper.getMoleculeFromSmiles(smi1);
+		IAtomContainer mol2 = SmartsHelper.getMoleculeFromSmiles(smi2);
+		
+		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		v.add(mol1);
+		v.add(mol2);
+		IAtomContainer newStr = rsf.condenseStructures(smi1, str1At0, str1At1, smi2, str2At0, str2At1);
+		v.add(newStr);
+		
+		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr)));
+		
+		TestStrVisualizer tsv = new TestStrVisualizer(v);
+	}
 	
 	
 }

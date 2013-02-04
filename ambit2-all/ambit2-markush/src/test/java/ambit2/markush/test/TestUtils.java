@@ -20,8 +20,8 @@ public class TestUtils
 	
 	public static void main(String[] args) throws Exception
 	{
-		//testSuppleAtomFromMLD(path + "mdl/rgroup.mol");
-		testSuppleAtomFromMLD(path + "M__RGP/marvin_sketch.mol");
+		testSuppleAtomFromMLD(path + "mdl/rgroup.mol");
+		//testSuppleAtomFromMLD(path + "M__RGP/marvin_sketch.mol");
 	}
 	
 
