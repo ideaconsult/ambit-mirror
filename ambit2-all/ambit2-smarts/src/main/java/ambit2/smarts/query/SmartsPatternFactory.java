@@ -50,7 +50,7 @@ public class SmartsPatternFactory implements ISmartsPatternFactory {
 	}
 
 	public static ISmartsPattern createSmartsPattern(SmartsParser parser, String smarts,boolean negate) throws SMARTSException {
-		//System.out.println("createSmartsPattern "+parser);
+
 		switch (parser) {
 		case smarts_cdk: return new SmartsPatternCDK(smarts,negate);
 		case smarts_fast: return new FastSmartsMatcher(smarts,negate);

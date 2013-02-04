@@ -86,7 +86,7 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 		}
 	}
 	public int hasSMARTSPattern(IAtomContainer mol) throws SMARTSException {
-		//System.out.println(getClass().getName() + " hasSMARTSPattern");
+
     	if (sqt == null) {
     		throw new SMARTSException("Undefined SMARTS pattern");
     	}
