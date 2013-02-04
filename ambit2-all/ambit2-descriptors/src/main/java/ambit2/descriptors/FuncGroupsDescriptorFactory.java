@@ -31,6 +31,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,6 +55,7 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 	 * 
 	 */
 	private static final long serialVersionUID = -3836212586696127104L;
+	protected static Logger slogger = Logger.getLogger(FuncGroupsDescriptorFactory.class.getName());
 	public transient static final String[] extensions = {".xml"};
 	public transient static final String[] extensionDescription = 
 		{"Functional groups with SMARTS notation (*.xml)"
@@ -65,7 +68,7 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 		return getDocument(new File(filename));
 	}
 	public static synchronized Document getDocument(File file) throws Exception {
-		logger.debug("Trying to load from file "+file.getAbsolutePath());		
+		slogger.fine("Trying to load from file "+file.getAbsolutePath());		
 		FileReader filereader = new FileReader(file);
 		try {
 			return getDocument(new InputSource(filereader));
@@ -77,7 +80,7 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 		
 	}	
 	public static synchronized Document getDocument(InputStream stream) throws Exception {
-		logger.debug("Trying to load from as a resource stream ");		
+		slogger.fine("Trying to load from as a resource stream ");		
 		try {
 			return  getDocument(new InputSource(stream));
 		} catch (Exception x) {
@@ -87,10 +90,10 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 		}		
 	}	
 	public static Document getDocument() throws Exception {
-		logger.debug("Trying to load the default ambit2/data/descriptors/funcgroups.xml");		
+		slogger.fine("Trying to load the default ambit2/data/descriptors/funcgroups.xml");		
 		ClassLoader c = FuncGroupsDescriptorFactory.class.getClassLoader();
 		java.net.URL url = c.getResource("ambit2/descriptors/funcgroups.xml");
-		logger.debug("PATH: resolved name = " + url);
+		slogger.fine("PATH: resolved name = " + url);
 		InputStream is = url.openStream();
 		return  getDocument(is);
 
@@ -155,7 +158,7 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 			try {
 				top.appendChild(group.toXML(doc));
 			} catch (Exception x) {
-				logger.error(x);
+				slogger.log(Level.SEVERE,x.getMessage(),x);
 			}
 		
 		
