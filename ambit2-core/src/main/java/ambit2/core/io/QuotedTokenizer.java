@@ -125,18 +125,13 @@ public class QuotedTokenizer extends SimpleTokenizer
 	{
 		QuotedTokenizer ss = new QuotedTokenizer(args[1], args[0].charAt(0));
 
-/*
-		List list = ss.getAllTokens();
-		for(java.util.Iterator it = list.iterator(); it.hasNext();)
-			System.out.println(it.next());
-*/
 		ss.setText(args[1]);
 		while (ss.hasMoreTokens())
 		{
 	     	System.out.print(":");
      		System.out.print(ss.nextToken());
     	 	System.out.println(":");
-//     		System.out.println(ss.getRemainder());
+
 		}
 
 	}

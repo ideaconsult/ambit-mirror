@@ -29,6 +29,8 @@
 
 package ambit2.core.processors.structure;
 
+import java.util.logging.Level;
+
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -66,14 +68,14 @@ public class HydrogenAdderProcessor extends	AtomConfigurator {
 	       	if ((mol instanceof IMolecule) || (mol instanceof IAtomContainer))  {
                 try {
     	            adder.addImplicitHydrogens(mol);
-    	            logger.debug("Adding implicit hydrogens; atom count "+mol.getAtomCount());
+    	            logger.fine("Adding implicit hydrogens; atom count "+mol.getAtomCount());
     	            if (isAddEexplicitHydrogens()) {
 	    	            AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
-	    	            logger.debug("Convert explicit hydrogens; atom count "+mol.getAtomCount());
+	    	            logger.fine("Convert explicit hydrogens; atom count "+mol.getAtomCount());
     	            }
 
                 } catch (Exception x) {
-                    logger.error(x);
+                    logger.log(Level.SEVERE,x.getMessage(),x);
                     if ("true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
                         throw new AmbitException(x);
                     }
@@ -84,10 +86,10 @@ public class HydrogenAdderProcessor extends	AtomConfigurator {
         	      for (int k = 0; k < moleculeSet.getMoleculeCount(); k++) {
         	    	  IMolecule molPart = moleculeSet.getMolecule(k);
       		          adder.addImplicitHydrogens(molPart);
-      		          logger.debug("Adding implicit hydrogens; atom count "+molPart.getAtomCount());
+      		          logger.fine("Adding implicit hydrogens; atom count "+molPart.getAtomCount());
       		          if (isAddEexplicitHydrogens()) {
 	    		          AtomContainerManipulator.convertImplicitToExplicitHydrogens(molPart);
-	    		          logger.debug("Convert explicit hydrogens; atom count "+molPart.getAtomCount());
+	    		          logger.fine("Convert explicit hydrogens; atom count "+molPart.getAtomCount());
       		          }
         	      }
         	}

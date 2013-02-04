@@ -59,17 +59,13 @@ public class InchiProcessor extends DefaultAmbitProcessor<IAtomContainer, InChIG
 			INCHI_RET ret = gen.getReturnStatus();
 			if (ret == INCHI_RET.WARNING) {
 				// InChI generated, but with warning message
-				logger.warn("InChI warning: " + gen.getMessage());
+				logger.warning("InChI warning: " + gen.getMessage());
 			} else if (ret != INCHI_RET.OKAY) {
 				// InChI generation failed
 				throw new AmbitException("InChI failed: " + ret.toString()
 				+ " [" + gen.getMessage() + "]");
 			}
-/*			
-			System.out.println(gen.getInchi());
-			System.out.println(gen.getMessage());
-			System.out.println(gen.getAuxInfo());
-*/
+
 			return gen;
 			
 		} catch (CDKException x) {

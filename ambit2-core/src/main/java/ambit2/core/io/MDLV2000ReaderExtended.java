@@ -901,15 +901,7 @@ public class MDLV2000ReaderExtended extends DefaultChemObjectReader {
                             if (sgroups == null) sgroups = new Hashtable<Integer,ISGroup>();
                             type.updateSGroups(line,(SuppleAtomContainer)molecule, sgroups);    
                         }
-                             
-                    	/*
-                    	System.out.print(type);
-                    	for (String param: params) {
-                    		System.out.print(',');
-                    		System.out.print(param);
-                    	}
-                    	System.out.println();
-                    	*/
+
                 	} catch (Exception notdefined) {
                         if (mode == Mode.STRICT) 
                         	throw new CDKException(notdefined.getMessage());

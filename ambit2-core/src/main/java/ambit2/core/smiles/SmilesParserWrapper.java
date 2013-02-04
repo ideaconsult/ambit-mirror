@@ -40,7 +40,6 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		return parseSmiles(smiles,true);
 	}
 	public IMolecule parseSmiles(String smiles,boolean addHydrogens) throws InvalidSmilesException {
-		//System.out.println(smiles + " " + parser);
 		switch (parser) {
 		case OPENBABEL: {
 			try {

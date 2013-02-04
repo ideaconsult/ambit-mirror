@@ -176,7 +176,7 @@ public abstract class AbstractGroup extends PseudoAtom implements ISGroup {
     }
     public static void setGroupVisible(IChemObject c, boolean visible) {
     	c.setProperty(ISGroup.SGROUP_VISIBLE,new Boolean(visible));
-        //System.out.println(c.getClass().getName() + " add " + visible + " "+c);
+
     }
     public static boolean isGroupVisible(IChemObject c) {
     	Object p = c.getProperty(ISGroup.SGROUP_VISIBLE);
@@ -192,7 +192,6 @@ public abstract class AbstractGroup extends PseudoAtom implements ISGroup {
                 IAtom otherAtom = bond.getConnectedAtom(atom);
                 if (atoms.contains(otherAtom) && !bonds.contains(bond)) {
                     bonds.add(bond);
-                    //System.out.println("Add bond");
                 }
             }
         }

@@ -11,6 +11,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.BitSet;
+import java.util.logging.Logger;
 
 import javax.vecmath.Point2d;
 
@@ -60,6 +61,7 @@ import ambit2.core.smiles.SmilesParserWrapper;
  * <b>Modified</b> 2005-4-7
  */
 public class MoleculeTools {
+	protected static Logger logger = Logger.getLogger(MoleculeTools.class.getName());
 	public final static int _FPLength = 1024;
 	protected static CDKHydrogenAdder adder = null;
 	protected static Fingerprinter fingerprinter = null;
@@ -269,17 +271,17 @@ public class MoleculeTools {
             obj = (IChemFile) reader.read(newChemFile(SilentChemObjectBuilder.getInstance()));
             int n = obj.getChemSequenceCount();
             if (n > 1)
-                System.out.println("> 1 sequence in a record");      
+                logger.finest("> 1 sequence in a record");      
             for (int j=0; j < n; j++) {
                 IChemSequence seq = obj.getChemSequence(j);
                 int m = seq.getChemModelCount();
                 if (m > 1) 
-                    System.out.println("> 1 model in a record");            
+                	logger.finest("> 1 model in a record");            
                 for (int k = 0; k < m; k++) {
                     IChemModel mod = seq.getChemModel(k);
                     IMoleculeSet som = mod.getMoleculeSet();
                     if (som.getMoleculeCount() > 1)
-                        System.out.println("> 1 molecule in a record");
+                    	logger.finest("> 1 molecule in a record");
                     for (int l=0; l < som.getMoleculeCount(); l++) {
                         mol = som.getMolecule(l);
                     
@@ -451,16 +453,7 @@ public class MoleculeTools {
 		IMolecule newMol = newBuilder.newInstance(IMolecule.class);
 		boolean aromatic = false;
 		for (IAtom atom: molecule.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) { aromatic=true;break;}
-		/*
-		if (aromatic) {
-			try {
-				DeduceBondSystemTool dbt = new DeduceBondSystemTool();
-				molecule = dbt.fixAromaticBondOrders(molecule);
-				for (IBond bond: molecule.bonds())
-					System.out.println(bond.getOrder());
-			} catch (Exception x) {x.printStackTrace();}
-		}
-	*/
+		
 		aromatic = false;
 		for (int i=0; i < molecule.getAtomCount(); i++) {
 			IAtom atom = molecule.getAtom(i);
