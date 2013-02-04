@@ -81,16 +81,15 @@ public class LauncherResource extends ProtectedResource {
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {
 		try {
-			//System.out.println(getClass().getName());
+
 			Form form = new Form(entity);
-			//System.out.println(form);
 			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 					getRequest().getRootRef().toString(),
 					createCallable(form),
 					getRequest().getRootRef(),false, 
 					getUserToken("subjectid"));		
 			task.update();
-			//System.out.println(task);
+
 			setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 			ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
 			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);

@@ -67,7 +67,6 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 	@Override
 	public TaskResult doCall() throws Exception {
 
-		//System.out.println(getClass().getName());
 		long now = System.currentTimeMillis();
 		Form form = new Form(input);
 		String dataset_service = getDatasetService(form);
@@ -81,8 +80,7 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 		
 		try { 
 			if (modelURI != null) {
-				//System.out.println(modelURI);
-				//System.out.println(datasetURI);
+
 				results = OTSuperModel.model(modelURI)
 						.withDatasetService(dataset_service)
 						.withParams(form)
@@ -101,10 +99,10 @@ public class CallablePOST<USERID> extends CallableProtectedTask<USERID> {
 			return new TaskResult(results.getUri().toString());
 			
 		} catch (Exception x) {
-			//x.printStackTrace();
+
 			throw x;
 		} finally {
-			//System.out.println(String.format("Elapsed %s", System.currentTimeMillis()-now));
+
 		}
 	}
 
