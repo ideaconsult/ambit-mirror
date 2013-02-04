@@ -29,6 +29,8 @@
 
 package ambit2.smi23d.test;
 
+import java.util.logging.Logger;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -42,7 +44,6 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.config.Preferences;
-import ambit2.base.log.AmbitLogger;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
@@ -55,7 +56,8 @@ import ambit2.smi23d.ShellSmi2SDF;
  *
  */
 public class MengineCrashTest {
-	protected static AmbitLogger logger = new AmbitLogger(MengineCrashTest.class); 
+ 
+	protected static Logger logger = Logger.getLogger(MengineCrashTest.class.getName());
     protected ShellSmi2SDF smi2sdf;
     protected ShellMengine mengine;
     
@@ -65,7 +67,6 @@ public class MengineCrashTest {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);
         mengine = new ShellMengine();   
-        AmbitLogger.configureLog4j(true);
     }
 
     @Test

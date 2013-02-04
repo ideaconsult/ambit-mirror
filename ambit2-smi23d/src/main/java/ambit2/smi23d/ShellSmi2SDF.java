@@ -83,7 +83,7 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 			//if (smiles == null) 
 			Object smiles = mol.getProperty(Preferences.getProperty(Preferences.SMILES_FIELD)); 
 			if (isGenerateSmiles() || (smiles == null)) {
-                logger.debug("Generate smiles\t");
+                logger.fine("Generate smiles\t");
                 IAtomContainer c = mol;
                 if (dropHydrogens) {
                     c = (IMolecule) mol.clone();
@@ -92,7 +92,7 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
                 }
                 gen.setUseAromaticityFlag(true);
 			    smiles = gen.createSMILES((IMolecule)c);
-            } else logger.debug("Use smiles from file\t"+smiles);
+            } else logger.fine("Use smiles from file\t"+smiles);
 			
 			FileWriter writer = new FileWriter(path + File.separator + getInputFile());
 			writer.write(smiles.toString());

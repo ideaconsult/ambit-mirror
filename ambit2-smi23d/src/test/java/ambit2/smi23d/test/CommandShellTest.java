@@ -10,14 +10,12 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.external.CommandShell;
-import ambit2.base.log.AmbitLogger;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
@@ -29,7 +27,7 @@ public class CommandShellTest {
 	@Before
 	public void setUp() throws Exception {
 		shell = new ShellSmi2SDF();
-		AmbitLogger.configureLog4j(true);
+
 		File homeDir = new File(System.getProperty("user.home") +"/.ambit2/*");
 		homeDir.delete();
 		
