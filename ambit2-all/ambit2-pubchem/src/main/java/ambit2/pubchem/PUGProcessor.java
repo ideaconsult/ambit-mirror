@@ -249,10 +249,7 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
     			
     		}
     		public void result(List<IStructureRecord> data) {
-    			/*
-    			for (StructureRecord datum : data)
-    				System.out.println(datum.getFormat());
-					*/
+
     		}
     	};
     	HTTPRequest<List<IStructureRecord>, List<IStructureRecord>> downloadRequest = createDownloadHTTPRequest(target);    	
@@ -524,7 +521,6 @@ You would parse out the URL from the <PCT-Download-URL_url> tag, and then use a 
 	        	Object o = reader.next();
 	        	if (o instanceof IStructureRecord) {
 	        		result.add((IStructureRecord)o);
-	        		//System.out.println(((IStructureRecord)o).getContent());
 	        	} else
 	        		result.add(new StructureRecord(-1,-1,o.toString(),PCT_download_format[PCT_download_format_sdf]));
 	        }

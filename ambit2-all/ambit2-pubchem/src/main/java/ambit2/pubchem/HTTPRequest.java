@@ -75,8 +75,6 @@ public abstract class HTTPRequest<Target, Result> extends DefaultAmbitProcessor<
 	            URLConnection connection= url.openConnection();
 	            if (connection instanceof HttpURLConnection) {
 	                HttpURLConnection hc = ((HttpURLConnection)connection);
-	                //System.out.println(hc.getConnectTimeout());
-	                //System.out.println(hc.getReadTimeout());
 	                hc.setReadTimeout(timeout);
 	                hc.setConnectTimeout(timeout);
 	                hc.setRequestMethod(httpMethod);

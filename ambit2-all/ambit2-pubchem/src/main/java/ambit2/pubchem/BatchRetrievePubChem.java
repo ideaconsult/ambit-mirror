@@ -121,7 +121,7 @@ public class BatchRetrievePubChem extends DefaultAmbitProcessor<String,Integer> 
 					    		}
 					    	writer.flush();
 					    	writer.close();
-					    	System.out.println(file.getName());	    	
+					    	logger.fine(file.getName());	    	
 					    	
 					    	logwriter.write(getMessage(file.getName(),sdffile.getName(),"success",System.currentTimeMillis() - now));
 					    	logwriter.flush();
