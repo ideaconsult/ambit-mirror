@@ -24,7 +24,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.base.data.Property;
 import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
-import ambit2.base.log.AmbitLogger;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
@@ -37,7 +36,6 @@ public class MopacShellTest {
 	@Before
 	public void setUp() throws Exception {
 		shell = new MopacShell();
-		AmbitLogger.configureLog4j(true);
 		File homeDir = new File(System.getProperty("user.home") +"/.ambit2/*");
 		homeDir.delete();
 		

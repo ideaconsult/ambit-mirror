@@ -156,7 +156,7 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 				newmol = mengine.runShell((IMolecule)mol);
 				if ((newmol==null) || (newmol.getAtomCount()==0)) throw new ShellException(mengine,String.format(msg, mengine.toString()));
 		    } else newmol=mol;
-	    	logger.debug("Writing MOPAC input");
+	    	logger.fine("Writing MOPAC input");
 	    	String exe = getExecutable();
 	    	//String mopac_path = new File(exe).getParent();
 	    	String homeDir = getHomeDir(null); // getPath(new File(exe));
@@ -203,18 +203,18 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
             String fname = mopac_path+"/" + getOutFile(i, os); 
             File f = new File(fname);
             if (!f.exists()) continue;
-            logger.debug("<outfile name=\""+ fname + "\">");
+            logger.fine("<outfile name=\""+ fname + "\">");
             try {
                 Mopac7Reader re = new Mopac7Reader(new FileInputStream(f));
                 re.read(mol);
                 re.close();
                 f.delete();
             } catch (Exception x) {
-                logger.debug("<error name=\""+ x.getMessage() + "\"/>");
-                logger.debug("</outfile>");
+                logger.fine("<error name=\""+ x.getMessage() + "\"/>");
+                logger.fine("</outfile>");
                 throw new ShellException(this,x);
             }
-            logger.debug("</outfile>");
+            logger.fine("</outfile>");
         }
 		return mol;
 	}
