@@ -38,11 +38,11 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.base.log.AmbitLogger;
 import ambit2.db.processors.ICommand.COMMAND;
 
 /**
@@ -59,7 +59,8 @@ public class MySQLShell  implements IProcessor<MySQLCommand,MySQLCommand> {
 	private static final long serialVersionUID = -8839094043823680323L;
 	protected StreamGobbler gin;
     protected StreamGobbler gerr;
-    protected static AmbitLogger logger = new AmbitLogger(MySQLShell.class);
+
+	protected static Logger logger = Logger.getLogger(MySQLShell.class.getName());
     /**
      * 
      */

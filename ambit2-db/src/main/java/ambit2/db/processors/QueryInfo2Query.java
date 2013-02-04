@@ -41,7 +41,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 				d.setValue(target.getDataset());
 				combined.setScope(d);
 			} else {
-				logger.warn("Dataset not defined!");
+				logger.warning("Dataset not defined!");
 				combined.setScope(null);
 			}
 		} else if (QueryInfo.SCOPE_QUERY.equals(target.getScope())) {
@@ -51,7 +51,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 				d.setFieldname(target.getStoredQuery());
 				combined.setScope(d);
 			} else {
-				logger.warn("Stored query not defined!");
+				logger.warning("Stored query not defined!");
 				combined.setScope(null);
 			}
 		}
@@ -82,7 +82,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 			if (similarity != null)
 				combined.add(similarity);
 		} catch (AmbitException x) {
-			logger.warn(x);
+			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
 		}
 		
 		//substructure
@@ -91,7 +91,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 			if (substructure != null)
 				combined.add(substructure);
 		} catch (AmbitException x) {
-			logger.warn(x);
+			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
 		}	
 		
 		//substructure
@@ -100,7 +100,7 @@ public class QueryInfo2Query extends AbstractDBProcessor<QueryInfo,IQueryObject>
 			if (exact != null)
 				combined.add(exact);
 		} catch (AmbitException x) {
-			logger.warn(x);
+			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
 		}				
 		combined.setId(-1);
 		return combined;

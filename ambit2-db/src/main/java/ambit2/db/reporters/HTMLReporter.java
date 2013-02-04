@@ -40,7 +40,7 @@ public class HTMLReporter <Q extends IQueryRetrieval<IStructureRecord>> extends 
 			getOutput().write("<p>");
 			getOutput().write(item.getContent());		
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		}
 		return null;
 	}

@@ -156,7 +156,6 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 	}
 
 	public String[] getSQL() throws AmbitException {
-		//for (String s: sql) System.out.println(s);
 		return sql;
 	}
 

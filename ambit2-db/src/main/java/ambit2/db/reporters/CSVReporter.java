@@ -242,8 +242,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				writer.write(String.format("%s%s",separator,getLicenseURI()));
 			
 		} catch (Exception x) {
-			logger.error(x);
-			x.printStackTrace();
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		} finally {
 
 			try { writer.write(lineseparator); } catch (Exception x) {}

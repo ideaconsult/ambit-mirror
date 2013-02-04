@@ -101,7 +101,7 @@ public class ARFF3ColReporter<Q extends IQueryRetrieval<IStructureRecord>> exten
 				}			
 			}
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		}
 		return item;
 		

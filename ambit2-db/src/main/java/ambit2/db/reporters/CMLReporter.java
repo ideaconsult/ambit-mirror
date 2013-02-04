@@ -86,7 +86,7 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			else output.write(b);
 			
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		}
 		return null;
 	}
@@ -104,7 +104,7 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			}
 			output.write("</list>");
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		}		
 	}
 

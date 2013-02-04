@@ -176,7 +176,7 @@ skip-name-resolve
 	        for (String user : users) try {
 	        	st.executeUpdate(user);
 	        } catch (Exception x) {
-	        	logger.warn(x);
+	        	logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
 	        }
 	        	
 	        
@@ -201,8 +201,7 @@ skip-name-resolve
 	        }
 	         
         } catch (Exception x) {
-        	x.printStackTrace();
-        	logger.warn(x);
+        	logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
         }
         return database.toString();
     }
@@ -253,7 +252,6 @@ skip-name-resolve
                         if (line == null) break;
                         if (line.toUpperCase().startsWith("DELIMITER")) {
                             delimiter = line.substring(line.indexOf("DELIMITER")+10).trim();
-                            logger.debug(table.toString());
                             //t.execute(table.toString());
                             table = new StringBuffer();                             
                             continue;
@@ -262,7 +260,6 @@ skip-name-resolve
                         if (line.trim().toUpperCase().startsWith("END "+delimiter)) {
                             table.append("END");
                             int ok = t.executeUpdate(table.toString());
-                            logger.debug(table.toString());
                             table = new StringBuffer();                            
                             continue;
                         }                        
@@ -273,10 +270,7 @@ skip-name-resolve
                         table.append("\n");
                         if (line.indexOf(delimiter) >= 0) {
                             //t.addBatch(table.toString());
-                            logger.debug(table.toString());
                             t.executeUpdate(table.toString());
-                            
-                            logger.debug(table.toString());
                             table = new StringBuffer();
                         }
 

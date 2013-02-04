@@ -112,7 +112,7 @@ public class PropertyImporter extends AbstractRepositoryWriter<IAtomContainer,Li
         	propertyWriter.close();
      
          } catch (SQLException x) {
-            logger.error(x);
+        	 logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
         }
         super.close();
 	}	

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -185,12 +186,8 @@ public class XTabChartGenerator extends ChartGenerator<ISourceDataset> {
 	         return chart.createBufferedImage(width,height);
 
 	      }
-	      catch (SQLException sqlEx)    // checked exception
-	      {
-	         System.err.println("Error trying to acquire JDBCCategoryDataset.");
-	         System.err.println("Error Code: " + sqlEx.getErrorCode());
-	         System.err.println("SQLSTATE:   " + sqlEx.getSQLState());
-	         sqlEx.printStackTrace();
+	      catch (SQLException sqlEx)   {
+		     logger.log(Level.SEVERE,sqlEx.getSQLState(),sqlEx);
 	         return null;
 	      }
 

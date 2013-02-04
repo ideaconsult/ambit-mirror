@@ -94,7 +94,7 @@ public class DbAddUser extends AbstractRepositoryWriter<AmbitUser,AmbitUser> {
             Statement st = getConnection().createStatement();
             st.addBatch("REVOKE ALL PRIVILEGES ON "+ connection.getCatalog() + ".* FROM '"+user.getName()+"'@'%'");
             } catch (Exception xx) {
-                logger.warn(xx);
+            	logger.log(java.util.logging.Level.WARNING,xx.getMessage(),xx);
             }
             Statement st = getConnection().createStatement();
             if (user.getType().equals(USER_TYPE.Admin)) {

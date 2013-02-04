@@ -172,7 +172,6 @@ public class CreateModel extends AbstractObjectUpdate<ModelQueryResults>{
 	 		}			
 		
 		sqls.add(create_sql);
-		//for (String s:sqls) System.out.println(s);
 		sql_size = sqls.size();
 		return sqls.toArray(new String[sqls.size()]);
 	}

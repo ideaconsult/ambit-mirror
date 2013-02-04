@@ -229,7 +229,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			}
 			writer.write('\n');
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		}
 		return null;
 		
