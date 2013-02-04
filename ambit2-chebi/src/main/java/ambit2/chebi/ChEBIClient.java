@@ -2,6 +2,7 @@ package ambit2.chebi;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
@@ -25,6 +26,7 @@ import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
  *
  */
 public class ChEBIClient implements Iterator<IStructureRecord>{
+	protected static Logger logger = Logger.getLogger(ChEBIClient.class.getName());
 	 protected IStructureRecord structure;
 	 protected ChebiWebServiceClient client = new ChebiWebServiceClient();
 	 protected  LiteEntityList entities ;
@@ -42,59 +44,14 @@ public class ChEBIClient implements Iterator<IStructureRecord>{
 		 entities = client.getLiteEntity(search, searchCategory, 50, StarsCategory.ALL);
 
 	}
-		/*examples
-	  public static void getLiteEntity(){
-
-		    try {
-		      // Create client
-		      ChebiWebServiceClient client = new ChebiWebServiceClient();
-		      System.out.println("Invoking getLiteEntity");
-		      LiteEntityList entities = client.getLiteEntity("50-00-0", SearchCategory.ALL, 50, StarsCategory.ALL);
-		      List<LiteEntity> resultList = entities.getListElement();
-		      for ( LiteEntity liteEntity : resultList ) {
-		        System.out.println("CHEBI ID: " + liteEntity.getChebiId());
-		        getCompleteEntity(liteEntity.getChebiId());
-		      }
-
-		    } catch ( ChebiWebServiceFault_Exception e ) {
-		      System.err.println(e.getMessage());
-		    }
-		  }
-	
-	public static void getCompleteEntity(String chebi){
-
-	    try {
-
-	      // Create client
-	      ChebiWebServiceClient client = new ChebiWebServiceClient();
-	      System.out.println("Invoking getCompleteEntity");
-	      Entity entity = client.getCompleteEntity(chebi);
-	      List<StructureDataItem> list = entity.getChemicalStructures();
-	      for (StructureDataItem item: list) {
-	    	  if (item.isDefaultStructure())
-	    		  System.out.println(item.getStructure());
-	      }
-	       	  
-	      System.out.println("GetName: " + entity.getChebiAsciiName());
-	      List<DataItem> synonyms = entity.getSynonyms();
-	      // List all synonyms
-	      for ( DataItem dataItem : synonyms ) {
-	        System.out.println("synonyms: " + dataItem.getData());
-	      }
-
-	    } catch ( ChebiWebServiceFault_Exception e ) {
-	      System.err.println(e.getMessage());
-	    }
-	  }
-*/
-	 
+		 
 	  public static void getStructureSearchExample (){ //fails
 
 		    try {
 
 		      // Create client
 		      ChebiWebServiceClient client = new ChebiWebServiceClient();
-		      System.out.println("Invoking getStructureSearch");
+		      logger.info("Invoking getStructureSearch");
 		      String water =
 		      " Marvin 02220718252D " +
 		      " " +
@@ -107,11 +64,11 @@ public class ChEBIClient implements Iterator<IStructureRecord>{
 		      " M END ";
 		      LiteEntityList entities = client.getStructureSearch(water, StructureType.MOLFILE, StructureSearchCategory.SIMILARITY, 50, 0.70F);
 		      for ( LiteEntity liteEntity : entities.getListElement()) {
-		        System.out.println("CHEBI ID: " + liteEntity.getChebiId());
+		    	  logger.info("CHEBI ID: " + liteEntity.getChebiId());
 		      }
 
 		    } catch ( ChebiWebServiceFault_Exception e ) {
-		      System.err.println(e.getMessage());
+		    	logger.severe(e.getMessage());
 		    }
 		  }
 	  
