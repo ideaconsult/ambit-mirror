@@ -43,7 +43,6 @@ public class DataCoverageFingerprintsTanimoto extends DataCoverageFingerprints {
 		int b1 = 0, bc = 0, b2=  bs2.cardinality();
 		double t = 0;
 		if (bs1 != null) {
-			//System.out.println(bs.toString());
 			b1 = bs1.cardinality();
 			bs1.and(bs2);
 			bc = bs1.cardinality();
@@ -93,7 +92,7 @@ public class DataCoverageFingerprintsTanimoto extends DataCoverageFingerprints {
 		    if (tIndex > npoints) tIndex = npoints;
 			t = values[tIndex-1];
 		}
-		System.err.println("Percent\t"+pThreshold*100+"\tThreshold\t"+t+"\tIndex\t"+tIndex);
+		logger.fine("Percent\t"+pThreshold*100+"\tThreshold\t"+t+"\tIndex\t"+tIndex);
 		return t;
 		
 	}	

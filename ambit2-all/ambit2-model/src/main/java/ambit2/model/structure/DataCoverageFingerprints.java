@@ -81,10 +81,10 @@ public abstract class DataCoverageFingerprints extends DataCoverage<List<BitSet>
 	protected void estimateConsensusFP(double[] profile, double athreshold) {
 		if (consensusFingerprint == null) consensusFingerprint = new BitSet();
 		else consensusFingerprint.clear();
-		System.out.println("\nBits set to one by less than " + Math.floor(athreshold) + " compounds are set to zero");
+		logger.fine("\nBits set to one by less than " + Math.floor(athreshold) + " compounds are set to zero");
 		for (int i=0; i < fingerPrintLength; i++) 
 			if (profile[i] > athreshold) consensusFingerprint.set(i);
-		System.out.println("Consensus Fingerprint cardinality\t"+consensusFingerprint.cardinality()
+		logger.fine("Consensus Fingerprint cardinality\t"+consensusFingerprint.cardinality()
 		        	+"\n"+consensusFingerprint.toString());
 		        
 	}
