@@ -29,10 +29,11 @@
 
 package ambit2.base.io;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
-
-import ambit2.base.log.AmbitLogger;
 
 public class SimpleErrorHandler implements ErrorHandler {
     protected String title;
@@ -40,7 +41,8 @@ public class SimpleErrorHandler implements ErrorHandler {
         super();
         this.title = title;
     }
-    protected static AmbitLogger logger = new AmbitLogger(SimpleErrorHandler.class);    
+    protected static Logger logger = Logger.getLogger(SimpleErrorHandler.class.getName());
+    
     public void error(SAXParseException exception) {
     	process(getClass().getName(),exception);
     }
@@ -53,7 +55,9 @@ public class SimpleErrorHandler implements ErrorHandler {
         process("Warning",exception);
     }
     protected  void process(String message,SAXParseException exception) {
-    	logger.error(message + ":" + title + '\t'+exception.getMessage()+ "\tat line "+exception.getLineNumber());
+    	logger.log(Level.SEVERE,
+    			message + ":" + title + '\t'+exception.getMessage()+ "\tat line "+exception.getLineNumber(),
+    			exception);
     }
 
 }

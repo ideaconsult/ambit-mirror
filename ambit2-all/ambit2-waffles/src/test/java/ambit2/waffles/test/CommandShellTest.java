@@ -2,7 +2,6 @@ package ambit2.waffles.test;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Properties;
 
 import junit.framework.Assert;
 
@@ -10,18 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ambit2.base.external.CommandShell;
-import ambit2.base.log.AmbitLogger;
 import ambit2.waffles.ShellWafflesLearn;
-import ambit2.waffles.ShellWafflesLearn.WafflesLearnOption;
 import ambit2.waffles.learn.options.WafflesLearnAlgorithm;
-import ambit2.waffles.learn.options.WafflesLearnCommand;
 
 public class CommandShellTest {
 	protected ShellWafflesLearn shell;
 	@Before
 	public void setUp() throws Exception {
 		shell = new ShellWafflesLearn();
-		AmbitLogger.configureLog4j(true);
 		File homeDir = new File(System.getProperty("user.home") +"/.ambit2/*");
 		homeDir.delete();
 		

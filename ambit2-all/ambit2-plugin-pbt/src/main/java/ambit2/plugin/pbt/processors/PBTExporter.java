@@ -2,6 +2,7 @@ package ambit2.plugin.pbt.processors;
 
 import java.io.OutputStream;
 
+import org.apache.log4j.Level;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectWriter;
 
@@ -55,7 +56,7 @@ public class PBTExporter extends ProcessorFileExport<PBTWorkBook> {
 		try {
 			content.save(out);
 		} catch (Exception x) {
-			logger.warn(x);
+			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
 		} finally {
 			try {out.close();} catch (Exception x) {}
 		}
@@ -73,7 +74,7 @@ public class PBTExporter extends ProcessorFileExport<PBTWorkBook> {
     		writer.write(a);
     		writer.close();
 		} catch (Exception x) {
-			logger.warn(x);
+			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
 		}
 	}
 	public void close() throws Exception {
