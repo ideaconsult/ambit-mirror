@@ -9,7 +9,7 @@ import ambit2.db.search.BooleanCondition;
 import ambit2.db.search.QueryParam;
 
 /**
- * reads structures, for each there are / or there are not (depending on getCondition) descriptors with given name and reference title.
+ * reads structures, for each there are / or there are not (depending on getCondition) descriptors with given idname and reference title.
  * @author Nina Jeliazkova nina@acad.bg
  *
  */
