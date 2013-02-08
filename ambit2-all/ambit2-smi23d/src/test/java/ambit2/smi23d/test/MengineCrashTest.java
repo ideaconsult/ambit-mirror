@@ -29,6 +29,8 @@
 
 package ambit2.smi23d.test;
 
+import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junit.framework.Assert;
@@ -67,6 +69,14 @@ public class MengineCrashTest {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);
         mengine = new ShellMengine();   
+        Logger tempLogger = logger;
+        Level level = Level.ALL;
+        while(tempLogger != null) {
+           tempLogger.setLevel(level);
+           for(Handler handler : tempLogger.getHandlers())
+              handler.setLevel(level);
+           tempLogger = tempLogger.getParent();
+        }
     }
 
     @Test
