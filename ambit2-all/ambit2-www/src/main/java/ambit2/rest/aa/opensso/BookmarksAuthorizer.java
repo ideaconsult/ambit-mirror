@@ -2,6 +2,7 @@ package ambit2.rest.aa.opensso;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
@@ -39,7 +40,7 @@ public class BookmarksAuthorizer extends OpenSSOAuthorizer {
 		template3.parse(ref.toString(),vars);
 		template4.parse(ref.toString(),vars);
 		
-		try {retrieveUserAttributes(ssoToken, request);} catch (Exception x) { x.printStackTrace();}
+		try {retrieveUserAttributes(ssoToken, request);} catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x);}
 		return request.getClientInfo().getUser().getIdentifier().equals(vars.get(BookmarkResource.creator));
 	}
 	@Override

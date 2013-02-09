@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -333,7 +334,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
-					x.printStackTrace();
+					getLogger().log(Level.WARNING,x.getMessage(),x);
 					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 				}
 			} else if (algorithm.hasType(AlgorithmType.AppDomain)) {				

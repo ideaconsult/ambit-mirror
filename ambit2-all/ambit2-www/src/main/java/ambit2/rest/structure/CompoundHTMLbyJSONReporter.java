@@ -3,6 +3,7 @@ package ambit2.rest.structure;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -120,7 +121,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 			output.write("</script>\n");
 		
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} 
 		super.footer(output, query);
 	}
@@ -332,7 +333,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 			}
 				
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}		
 	};
 }

@@ -338,7 +338,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				}); 
 				
 		 } catch (Exception x) {
-			 x.printStackTrace();
+			 logger.log(Level.WARNING,x.getMessage(),x);
 		 }	     
 	     if (!isOpenToxAAEnabled()) {
 

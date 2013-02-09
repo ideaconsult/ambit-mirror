@@ -1,6 +1,7 @@
 package ambit2.rest.facet;
 
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 
@@ -73,7 +74,7 @@ public class FacetJSONReporter<Q extends IQueryRetrieval<IFacet>> extends QueryR
 					));
 			comma = ",";
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return item;
 	}

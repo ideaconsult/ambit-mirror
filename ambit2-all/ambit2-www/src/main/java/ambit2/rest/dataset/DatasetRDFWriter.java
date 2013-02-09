@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.opentox.rdf.OT;
 import org.opentox.rdf.OT.DataProperty;
@@ -141,7 +142,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 			    getOutput().writeEndElement();
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 
 	
@@ -213,7 +214,7 @@ public class DatasetRDFWriter extends AbstractStaxRDFWriter<IStructureRecord, IS
 					if (p.isNominal() && (value instanceof Comparable)) 
 						p.addAllowedValue((Comparable)value);
 				} catch (Exception x) {
-						x.printStackTrace();
+					logger.log(Level.WARNING,x.getMessage(),x);
 				} finally {
 
 					
@@ -294,7 +295,7 @@ Caused by: javax.xml.stream.XMLStreamException: ClientAbortException:  java.io.I
 
 
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	};
 	public void footer(javax.xml.stream.XMLStreamWriter writer) {
@@ -302,7 +303,7 @@ Caused by: javax.xml.stream.XMLStreamException: ClientAbortException:  java.io.I
 		try {
 			writer.writeEndElement();
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	
 			//write properties

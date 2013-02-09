@@ -2,6 +2,7 @@ package ambit2.rest.algorithm.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.restlet.data.Form;
@@ -83,7 +84,7 @@ public class Name2StructureResource extends ProtectedResource {
 		        			writer.setWriter(out);
 		        			writer.write(mol);
 	        			} catch (Exception x) {
-	        				x.printStackTrace();
+	        				getLogger().log(Level.WARNING,x.getMessage(),x);
 	        			} finally {
 		        			out.flush();
 		        			out.close();	        				

@@ -2,6 +2,7 @@ package ambit2.rest.aa.opensso.policy;
 
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -112,7 +113,8 @@ PolicyParser parser = new PolicyParser(policies.get(input));
 			}
 			output.write("<br>");
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
+			
 		}
 	};
 	@Override

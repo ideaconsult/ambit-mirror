@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -126,7 +127,7 @@ public class BookmarkHTMLReporter extends QueryHTMLReporter<Bookmark, IQueryRetr
 				
 				output.write("</div><tr>");
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} finally {
 			
 		}

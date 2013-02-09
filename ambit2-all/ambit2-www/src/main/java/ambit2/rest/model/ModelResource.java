@@ -3,6 +3,7 @@ package ambit2.rest.model;
 import java.awt.Dimension;
 import java.sql.Connection;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -212,14 +213,14 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 			}			
 			
 		} catch (Exception x) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 		}
 		
 		try {
 			reporter.setCloseConnection(true);
 			reporter.close();
 		} catch (Exception x) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 		}
 		try {	connection.close(); 	} catch (Exception x) {}
 

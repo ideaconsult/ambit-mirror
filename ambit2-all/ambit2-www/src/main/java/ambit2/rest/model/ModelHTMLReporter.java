@@ -2,6 +2,7 @@ package ambit2.rest.model;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -102,7 +103,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 			output.write(";</script>\n");
 		
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} 
 		super.footer(output, query);
 	}

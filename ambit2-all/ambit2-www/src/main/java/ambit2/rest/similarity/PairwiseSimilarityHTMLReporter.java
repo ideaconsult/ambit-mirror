@@ -2,6 +2,7 @@ package ambit2.rest.similarity;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -103,7 +104,7 @@ public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<IStructur
 			output.write("<script type='text/javascript'>drawMatrix(oSimilarityMatrix,200);</script>");
 		
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} 
 		super.footer(output, query);
 	}

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.logging.Level;
 
 import org.opentox.dsl.task.ClientResourceWrapper;
 import org.restlet.Context;
@@ -62,10 +63,7 @@ public class CallableNumericalModelCreator<USERID> extends CallableModelCreator<
 			connection = dbc.getConnection();			
 			return createReference(connection);
 		} catch (Exception x) {
-
-            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-            x.printStackTrace(new PrintWriter(stackTraceWriter));
-			Context.getCurrentLogger().severe(stackTraceWriter.toString());
+			Context.getCurrentLogger().log(Level.SEVERE,x.getMessage(),x);
 			throw x;
 		} finally {
 			Context.getCurrentLogger().fine("Done");

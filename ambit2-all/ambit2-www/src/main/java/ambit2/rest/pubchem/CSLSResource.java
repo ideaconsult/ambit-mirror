@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.util.logging.Level;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -95,7 +96,7 @@ public class CSLSResource extends ProtectedResource {
 			            		throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 			            		//throw new IOException(x.getMessage());
 			            	} finally {
-			            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}
+			            		try {if (stream !=null) stream.flush(); } catch (Exception x) {getLogger().log(Level.WARNING,x.getMessage(),x);}
 			            	}
 			            }
 			        };	

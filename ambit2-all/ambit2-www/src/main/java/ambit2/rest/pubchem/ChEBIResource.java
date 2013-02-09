@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.util.logging.Level;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -76,7 +77,7 @@ public class ChEBIResource extends ProtectedResource {
 			            	} catch (Exception x) {
 			            		throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,x.getMessage(),x);
 			            	} finally {
-			            		try {if (stream !=null) stream.flush(); } catch (Exception x) { x.printStackTrace();}
+			            		try {if (stream !=null) stream.flush(); } catch (Exception x) { getLogger().log(Level.WARNING,x.getMessage(),x);}
 			            	}
 			            }
 			        };	

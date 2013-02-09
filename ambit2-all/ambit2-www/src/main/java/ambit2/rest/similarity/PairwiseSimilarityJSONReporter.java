@@ -1,6 +1,7 @@
 package ambit2.rest.similarity;
 
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -81,7 +82,7 @@ public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<IStructure
 					));
 			comma = ",";
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return item;
 	}

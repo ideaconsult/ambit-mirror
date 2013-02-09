@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -182,13 +183,13 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 		try {
 			setPage(Integer.parseInt(page));
 		} catch (Exception x) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 			setPage(0);
 		}
 		try {
 			setPageSize(Long.parseLong(pageSize));
 		} catch (Exception x) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 			setPageSize(1000);
 		}			
 	}

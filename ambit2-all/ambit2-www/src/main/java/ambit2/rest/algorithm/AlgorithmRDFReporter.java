@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.opentox.rdf.OT;
 import org.restlet.Request;
@@ -99,7 +100,7 @@ public class AlgorithmRDFReporter extends CatalogRDFReporter<Algorithm> {
 			getJenaModel().setNsPrefix("bo","http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#");
 			getJenaModel().setNsPrefix("bo1","http://ambit.sourceforge.net/descriptors.owl#");
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		OT.OTClass.Algorithm.createOntClass(getJenaModel());
 		OT.OTClass.Parameter.createOntClass(getJenaModel());

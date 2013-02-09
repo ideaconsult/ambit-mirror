@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.OpenSSOPolicy;
@@ -47,7 +48,7 @@ public class PolicyResource extends CatalogResource<String>{
 		ssoToken = new OpenSSOToken(config.getOpenSSOService());
 		policy = new OpenSSOPolicy(config.getPolicyService());
 		} catch (Exception x) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 		}
 	}
 	@Override

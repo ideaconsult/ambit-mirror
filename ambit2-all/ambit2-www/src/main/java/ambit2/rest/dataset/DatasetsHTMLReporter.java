@@ -3,6 +3,7 @@ package ambit2.rest.dataset;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -64,7 +65,7 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 	
 
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		/**
 		 * /dataset

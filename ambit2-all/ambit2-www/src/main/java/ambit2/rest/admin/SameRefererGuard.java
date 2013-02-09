@@ -1,5 +1,6 @@
 package ambit2.rest.admin;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.restlet.Request;
@@ -29,7 +30,7 @@ public class SameRefererGuard  extends SimpleGuard {
 				for (String r : allowed) 
 					if (referer.startsWith(r)) return true;
 		} catch (Exception x) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 		}
 		return false;
 	}

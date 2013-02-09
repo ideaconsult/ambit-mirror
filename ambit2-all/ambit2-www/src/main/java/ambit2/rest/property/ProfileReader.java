@@ -2,6 +2,7 @@ package ambit2.rest.property;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.data.Reference;
@@ -90,7 +91,7 @@ security.provider.certpath.SunCertPathBuilderException: unable to find valid cer
 				} catch (NotFoundException x) {
 					//this is ok
 				} catch(Exception x) {
-					x.printStackTrace();
+					logger.log(Level.WARNING,x.getMessage(),x);
 				} finally {
 					//the reporter closes the connection as well
 					try {

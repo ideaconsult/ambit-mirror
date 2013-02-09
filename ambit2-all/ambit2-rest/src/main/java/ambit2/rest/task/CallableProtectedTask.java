@@ -1,12 +1,13 @@
 package ambit2.rest.task;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.opentox.dsl.aa.IAuthToken;
 import org.opentox.dsl.task.ClientResourceWrapper;
 
 public abstract class CallableProtectedTask<USERID> implements ICallableTask, IAuthToken {
-
+	protected static Logger logger = Logger.getLogger(CallableProtectedTask.class.getName());
 	protected UUID uuid;
 	private USERID token;
 	

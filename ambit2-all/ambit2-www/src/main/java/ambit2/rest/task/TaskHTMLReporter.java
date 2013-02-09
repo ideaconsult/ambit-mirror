@@ -6,7 +6,9 @@ import java.io.Writer;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
 
+import org.restlet.Context;
 import org.restlet.Request;
 
 import ambit2.base.exceptions.AmbitException;
@@ -116,7 +118,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 			t = item.getUri()==null?"":item.getUri().toString();
 			status = item.getStatus().toString();
 		} catch (Exception x) {
-			x.printStackTrace();
+			Context.getCurrentLogger().log(Level.WARNING,x.getMessage(),x);
 			status = "Error";
 			t = "";
 		} finally {
@@ -169,7 +171,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 			t = item.getUri()==null?"":item.getUri().toString();
 			status = item.getStatus().toString();
 		} catch (Exception x) {
-			x.printStackTrace();
+			Context.getCurrentLogger().log(Level.WARNING,x.getMessage(),x);
 			status = "Error";
 			t = "";
 		} finally {
@@ -204,7 +206,7 @@ public class TaskHTMLReporter<USERID> extends CatalogURIReporter<UUID> {
 
 
 			} catch (Exception x) {
-				x.printStackTrace();
+				Context.getCurrentLogger().log(Level.WARNING,x.getMessage(),x);
 			}
 		}
 	};

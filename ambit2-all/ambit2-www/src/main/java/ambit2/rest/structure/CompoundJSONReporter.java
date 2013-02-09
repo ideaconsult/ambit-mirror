@@ -2,6 +2,7 @@ package ambit2.rest.structure;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 
@@ -172,7 +173,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			output.write("\n\"dataEntry\":[");
 			
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	};
 	/**

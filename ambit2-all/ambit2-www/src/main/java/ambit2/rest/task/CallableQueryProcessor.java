@@ -1,9 +1,9 @@
 package ambit2.rest.task;
 
 import java.io.ObjectInputStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.sql.Connection;
+import java.util.logging.Level;
 
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTFeature;
@@ -93,10 +93,8 @@ public abstract class CallableQueryProcessor<Target,Result,USERID> extends Calla
 			}
 			return createReference(connection);
 		} catch (Exception x) {
+			Context.getCurrentLogger().log(Level.SEVERE,x.getMessage(),x);
 
-            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-            x.printStackTrace(new PrintWriter(stackTraceWriter));
-			Context.getCurrentLogger().severe(stackTraceWriter.toString());
 			throw x;
 		} finally {
 			Context.getCurrentLogger().fine("Done");

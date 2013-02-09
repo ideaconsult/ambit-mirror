@@ -1,6 +1,7 @@
 package ambit2.rest;
 
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -60,7 +61,7 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 			output.setNsPrefix("ag",uriReporter.getBaseReference().toString()+"/algorithm/");
 
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		
 	}

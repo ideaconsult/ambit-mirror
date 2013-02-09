@@ -3,6 +3,7 @@ package ambit2.rest.task;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -164,10 +165,7 @@ public class CallableQueryResultsCreator< Result,USERID> extends CallableQueryPr
 			return new TaskResult(String.format("%s/dataset/%s%d",
 					applicationRootReference,DatasetStructuresResource.QR_PREFIX,q.getId()));
 		} catch (Exception x) {
-
-            java.io.StringWriter stackTraceWriter = new java.io.StringWriter();
-            x.printStackTrace(new PrintWriter(stackTraceWriter));
-			Context.getCurrentLogger().severe(stackTraceWriter.toString());
+			Context.getCurrentLogger().log(Level.SEVERE,x.getMessage(),x);
 			throw x;
 		} finally {
 			Context.getCurrentLogger().fine("Done");

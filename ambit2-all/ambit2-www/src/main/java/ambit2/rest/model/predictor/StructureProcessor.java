@@ -1,6 +1,7 @@
 package ambit2.rest.model.predictor;
 
 import java.io.StringWriter;
+import java.util.logging.Level;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -79,7 +80,7 @@ public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> 
 				}
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return target;
 	}

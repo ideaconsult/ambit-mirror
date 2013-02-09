@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.opentox.rdf.OT;
 import org.opentox.rdf.OT.OTProperty;
@@ -103,7 +104,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			dataEntryReporter = new DataEntryURIReporter<IQueryRetrieval<IStructureRecord>>(req,doc);
 			return new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(compoundInDatasetPrefix,req,doc);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 			return null;
 		}
 	}
@@ -158,7 +159,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		try {
 			propertyReporter.setOutput(getJenaModel());
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		
 		if (header == null) 
