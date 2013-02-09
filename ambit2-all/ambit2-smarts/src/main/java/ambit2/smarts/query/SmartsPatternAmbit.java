@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts.query;
 
+import java.util.logging.Level;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -122,7 +124,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 			
 			sman.setSmartsDataForTarget(reader.process((IAtomContainer)mol) == null);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 			sman.setSmartsDataForTarget(true);
 		}
 		

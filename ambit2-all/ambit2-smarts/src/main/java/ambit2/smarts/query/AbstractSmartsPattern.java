@@ -26,10 +26,12 @@ package ambit2.smarts.query;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 public abstract class AbstractSmartsPattern<T> implements Serializable, ISmartsPattern<T> {
+	protected static Logger logger = Logger.getLogger(AbstractSmartsPattern.class.getName());
     protected boolean negate = false;
     protected String smarts = "";
     protected String name;
