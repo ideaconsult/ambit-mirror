@@ -16,6 +16,8 @@ import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.test.ProtectedResourceTest;
 
 public class ProtectedModelBuilder extends ProtectedResourceTest {
+
+	
 	@Override
 	protected void setDatabase() throws Exception {
 		setUpDatabase("src/test/resources/num-datasets.xml");
@@ -45,7 +47,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 		if (OpenSSOServicesConfig.getInstance().isEnabled()) try {
 			OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
 			int resultcode = policy.deletePolicy(ssoToken, "httplocalhost8181model3GETPUTPOSTDELETE");
-			System.out.println(resultcode);
+			logger.info("Polict delete result code "+Integer.toString(resultcode));
 		} catch (Exception x) {}
 		Form headers = new Form();  
 		headers.add(OpenTox.params.dataset_uri.toString(), 
@@ -55,6 +57,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 
+		Assert.assertNotNull("OpenSSO token should not be null",ssoToken);
 		Assert.assertTrue(ssoToken.authorize(String.format("http://localhost:%d/model/3", port), "GET"));
 		Assert.assertTrue(ssoToken.authorize(String.format("http://localhost:%d/model/3", port), "POST"));
 		
@@ -72,7 +75,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 		if (OpenSSOServicesConfig.getInstance().isEnabled()) try {
 			OpenSSOPolicy policy = new OpenSSOPolicy(OpenSSOServicesConfig.getInstance().getPolicyService());
 			int resultcode = policy.deletePolicy(ssoToken, "httplocalhost8181model3GETPUTPOSTDELETE");
-			System.out.println(resultcode);
+			logger.info("Policy delete result code "+resultcode);
 		} catch (Exception x) {}
 		
 		
@@ -112,7 +115,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 				form, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"4"));
 				*/
-		
+		Assert.assertNotNull("OpenSSO token should not be null",ssoToken);
 		Assert.assertTrue(ssoToken.authorize(String.format("http://localhost:%d/model/3", port), "GET"));
 		Assert.assertTrue(ssoToken.authorize(String.format("http://localhost:%d/model/3", port), "POST"));
 		
@@ -135,7 +138,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 		OTAlgorithm algorithm = OTAlgorithm.algorithm("https://ambit.uni-plovdiv.bg:8443/ambit2/algorithm/J48");
 		OTModel model = algorithm.process(OTDataset.dataset("https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/R401577?feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/dataset/R401577/feature&feature_uris[]=https://ambit.uni-plovdiv.bg:8443/ambit2/feature/26221&max=5000"), 
 					          OTFeature.feature("https://ambit.uni-plovdiv.bg:8443/ambit2/feature/26221"));
-		System.out.println(model);
+		logger.info("Model built: " + model);
 	}	
 	
 }

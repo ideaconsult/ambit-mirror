@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -47,6 +48,7 @@ import ambit2.db.processors.DbCreateDatabase;
 
 
 public abstract class DbUnitTest {
+	protected static Logger logger = Logger.getLogger(DbUnitTest.class.getName());
 	protected Properties properties;
 	
 	protected void loadProperties()  {
