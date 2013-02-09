@@ -359,6 +359,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		c.close();			
 		Form headers = new Form();  
+		headers.add("label","UNKNOWN");
 		//headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/inchi", port),
@@ -369,7 +370,7 @@ public class AlgorithmResourceTest extends ResourceTest {
         c = getConnection();	
 		table = 	c.createQueryTable("EXPECTED","SELECT * from chemicals where inchi is not null");
 		Assert.assertEquals(3,table.getRowCount());
-		table = 	c.createQueryTable("EXPECTED","SELECT idchemical from chemicals where inchi is null and inchikey='ERROR'");
+		table = 	c.createQueryTable("EXPECTED","SELECT idchemical from chemicals where inchi is null and inchikey is null");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals(11,table.getValue(0,"idchemical"));	
 		c.close();			
