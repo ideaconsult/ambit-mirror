@@ -75,10 +75,10 @@ public class HydrogenAdderProcessor extends	AtomConfigurator {
     	            }
 
                 } catch (Exception x) {
-                    logger.log(Level.SEVERE,x.getMessage(),x);
                     if ("true".equals(Preferences.getProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES))) {
+                        logger.log(Level.SEVERE,x.getMessage(),x);
                         throw new AmbitException(x);
-                    }
+                    } else logger.log(Level.WARNING,x.getMessage());
                 }
         	} else {
         		IMoleculeSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(mol);

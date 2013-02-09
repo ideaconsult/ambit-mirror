@@ -80,7 +80,7 @@ public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> 
 				}
 			}
 		} catch (Exception x) {
-			logger.log(Level.WARNING,x.getMessage(),x);
+			logger.log(Level.SEVERE,x.getMessage(),x);
 		}
 		return target;
 	}

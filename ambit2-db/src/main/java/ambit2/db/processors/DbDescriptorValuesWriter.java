@@ -68,15 +68,6 @@ public class DbDescriptorValuesWriter extends ValueWriter<DescriptorValue,Descri
 	@Override
 	protected Iterable<Property> getPropertyNames(DescriptorValue descriptor) {
 		return helper.getPropertyNames(descriptor);
-		/*
-		List<Property> p = new ArrayList<Property>();
-		for (String name: descriptor.getNames()) {
-			p.add(Property.getInstance(name,
-					LiteratureEntry.getInstance(descriptor.getSpecification().getImplementationTitle(),descriptor.getSpecification().getSpecificationReference())
-					));
-		}
-		return p;
-		*/
 	}
 
 

@@ -96,7 +96,7 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
     		"mopac.dat.log",
     		"mopac.dat.temp",
     		"mopac.dat.end"};
-	protected boolean errorIfDisconnected = true;
+	protected boolean errorIfDisconnected = false;
 	public int getMaxHeavyAtoms() {
 		return maxHeavyAtoms;
 	}
@@ -144,17 +144,18 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 	 */
 	@Override
 	protected synchronized IAtomContainer transform_input(IAtomContainer mol) throws ShellException {
-			final String msg="Empty molecule after %s processing"; 
+
 		    if ((mol==null) || (mol.getAtomCount()==0)) throw new ShellException(this,"Empty molecule");
 		    IAtomContainer newmol=null;
 		    if (!useOriginalStructure) {
 				smi2sdf.setOutputFile("test.sdf");
 				smi2sdf.runShell((IMolecule)mol);
-				if ((mol==null) || (mol.getAtomCount()==0)) throw new ShellException(smi2sdf,String.format(msg, smi2sdf.toString()));
+				if ((mol==null) || (mol.getAtomCount()==0)) throw new ShellException(smi2sdf,String.format(getMsgemptymolecule(), smi2sdf.toString()));
 				mengine.setInputFile("test.sdf");
 				mengine.setOutputFile("good.sdf");
 				newmol = mengine.runShell((IMolecule)mol);
-				if ((newmol==null) || (newmol.getAtomCount()==0)) throw new ShellException(mengine,String.format(msg, mengine.toString()));
+				if ((newmol==null) || (newmol.getAtomCount()==0)) 
+					throw new ShellException(mengine,String.format(getMsgemptymolecule(), mengine.toString()));
 		    } else newmol=mol;
 	    	logger.fine("Writing MOPAC input");
 	    	String exe = getExecutable();

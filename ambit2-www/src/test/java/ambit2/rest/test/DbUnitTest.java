@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
+import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.dbunit.database.DatabaseConnection;
@@ -63,6 +65,15 @@ public abstract class DbUnitTest {
 			properties = null;
 		}
 	}
+    public static void setLogLevel(Level level) throws Exception {
+        Logger tempLogger = logger;
+        while(tempLogger != null) {
+           tempLogger.setLevel(level);
+           for(Handler handler : tempLogger.getHandlers())
+              handler.setLevel(level);
+           tempLogger = tempLogger.getParent();
+        }
+    }
 	protected String getHost() {
 		loadProperties();
 		String p = properties.getProperty("Host");
