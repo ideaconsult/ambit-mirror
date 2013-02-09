@@ -136,7 +136,7 @@ public class FuncGroupsDescriptorFactory extends DefaultAmbitProcessor<String,Li
 								e.getAttribute("example")
 								));
 					} catch (Exception x) {
-						x.printStackTrace();
+						logger.log(Level.WARNING,x.getMessage(),x);
 					}
 				}
 		} catch (Exception x) {

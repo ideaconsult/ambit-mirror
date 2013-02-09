@@ -33,6 +33,7 @@ package ambit2.descriptors.processors;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 
@@ -87,7 +88,7 @@ public class PropertyCalculationProcessor extends  DescriptorCalculationProcesso
 		try {
 			setDescriptor(getCachedDescriptor(property.getClazz()));
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 			setDescriptor(null);
 		}
 	}

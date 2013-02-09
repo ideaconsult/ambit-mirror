@@ -1,6 +1,7 @@
 package ambit2.descriptors.processors;
 
 import java.util.BitSet;
+import java.util.logging.Level;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -265,7 +266,7 @@ public class BitSetGenerator extends AbstractPropertyGenerator<BitSet> {
   			
 
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return mol;
 	}

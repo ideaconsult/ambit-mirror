@@ -1,5 +1,7 @@
 package ambit2.descriptors.processors;
 
+import java.util.logging.Level;
+
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -105,7 +107,7 @@ public class AtomEnvironmentGenerator extends AbstractPropertyGenerator<AtomEnvi
 	
 				return aeList;
 			} catch (Exception x) {
-				x.printStackTrace();
+				logger.log(Level.WARNING,x.getMessage(),x);
 			}
 		return null;
 	}
