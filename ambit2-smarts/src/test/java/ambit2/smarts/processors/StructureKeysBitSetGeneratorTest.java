@@ -2,6 +2,7 @@ package ambit2.smarts.processors;
 
 import java.io.InputStreamReader;
 import java.util.BitSet;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -32,6 +33,8 @@ import ambit2.smarts.query.SmartsPatternFactory;
 import ambit2.smarts.query.SmartsPatternFactory.SmartsParser;
 
 public class StructureKeysBitSetGeneratorTest {
+	protected static Logger logger = Logger.getLogger(StructureKeysBitSetGeneratorTest.class.getName());
+	
 	@Test
 	public void test() throws Exception {
 		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
@@ -259,30 +262,30 @@ public class StructureKeysBitSetGeneratorTest {
 			IAtomContainer c = config.process(mr.process(record));
 			//CDKHueckelAromaticityDetector.detectAromaticity(c);
 			bitsetKekule = bitsetGenerator.process(c);
-			System.out.println(bitsetKekule);
+			logger.fine(bitsetKekule.toString());
 		}
 		reader.close();
 		
 		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer mol = parser.parseSmiles("c1cnn[nH]1");
-		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		for (IBond b: mol.bonds()) logger.fine(Boolean.toString(b.getFlag(CDKConstants.ISAROMATIC)));
 		mol = config.process(mol);
 		//CDKHueckelAromaticityDetector.detectAromaticity(mol);
-		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		for (IBond b: mol.bonds()) logger.fine(Boolean.toString(b.getFlag(CDKConstants.ISAROMATIC)));
 		BitSet bitsetAromatic = bitsetGenerator.process(mol);
 		
-		System.out.println(bitsetAromatic);
+		logger.fine(bitsetAromatic.toString());
 		Assert.assertEquals(bitsetKekule,bitsetAromatic);
 		
 		parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		mol = parser.parseSmiles("C1=CN=NN1");
-		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		for (IBond b: mol.bonds()) logger.fine(Boolean.toString(b.getFlag(CDKConstants.ISAROMATIC)));
 		mol = config.process(mol);
 		//CDKHueckelAromaticityDetector.detectAromaticity(mol);
-		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
+		for (IBond b: mol.bonds()) logger.fine(Boolean.toString(b.getFlag(CDKConstants.ISAROMATIC)));
 		BitSet bitsetKekuleSMILES = bitsetGenerator.process(mol);
 		
-		System.out.println(bitsetKekuleSMILES);
+		logger.fine(bitsetKekuleSMILES.toString());
 		Assert.assertEquals(bitsetKekule,bitsetKekuleSMILES);
 		
 	}
@@ -291,7 +294,7 @@ public class StructureKeysBitSetGeneratorTest {
 		SmilesParser parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer mol = parser.parseSmiles("c1cnn[nH]1"); //C1=CN=NN1
 		CDKHueckelAromaticityDetector.detectAromaticity(mol);
-		for (IBond b: mol.bonds()) System.out.println(b.getFlag(CDKConstants.ISAROMATIC));
-		for (IAtom a: mol.atoms()) System.out.println(a.getFlag(CDKConstants.ISAROMATIC));
+		for (IBond b: mol.bonds()) logger.fine(Boolean.toString(b.getFlag(CDKConstants.ISAROMATIC)));
+		for (IAtom a: mol.atoms()) logger.fine(Boolean.toString(a.getFlag(CDKConstants.ISAROMATIC)));
 	}
 }
