@@ -41,7 +41,7 @@ public class CallableWafflesPredictor<USERID> extends CallableModelPredictor<Fil
 		try {
 			uc = ClientResourceWrapper.getHttpURLConnection(reference.toString(), "GET", ChemicalMediaType.WEKA_ARFF.toString());
 			DownloadTool.download(uc.getInputStream(), files[0]);
-			System.out.println(files[0]);
+			logger.fine(files[0].getAbsolutePath());
 
 		} catch (Exception x) {
 			throw x;
@@ -53,7 +53,7 @@ public class CallableWafflesPredictor<USERID> extends CallableModelPredictor<Fil
 		try {
 			//TODO set labels
 			files[1] = (File) predictor.predict(files[0]);
-			System.out.println(files[1]);
+			logger.fine(files[1].getAbsolutePath());
 			//TODO handle errors
 		} catch (Exception x) {
 			throw x;
