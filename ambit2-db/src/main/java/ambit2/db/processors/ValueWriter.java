@@ -112,7 +112,8 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	
     	String longText = null;
     	if ((value != null) && (value.length()>255)) {
-    		logger.warning("Value truncated to 255 symbols "+value);
+    		if (logger.isLoggable(Level.FINE))
+    			logger.finer("Value truncated to 255 symbols "+value);
     		longText = value;    		
     		value = value.substring(0,255);
     		error = mode.TRUNCATED;
@@ -260,7 +261,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	Object value = getValue(target,property,propertyIndex);
     	if (value instanceof Number) {
     		if (Double.isNaN( ((Number)value).doubleValue())) {
-    			logger.warning(property.getName() + value);
+    			logger.finer(property.getName() + value);
     			insertValueNaN(property,idtuple,mode.ERROR);
     		} else
     			insertValue(((Number)value).doubleValue(),property,idtuple,mode.UNKNOWN);
