@@ -43,11 +43,7 @@ public class CommandShellTest {
 		IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newmol);
 		
 		IMolecule mol = MoleculeFactory.makeBenzene();
-		/*
-		for (int i=0; i < newmol.getBondCount(); i++) {
-			System.out.println(newmol.getBond(i).getOrder());
-		}
-		*/	
+
 		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,c));
 		new File(babel.getOutputFile()).delete();
 	}	

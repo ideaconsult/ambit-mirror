@@ -31,6 +31,7 @@ package ambit2.core.test.io;
 
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -42,7 +43,7 @@ import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.ZipReader;
 
 public class RawIteratingFolderReaderTest {
-
+	protected static Logger logger = Logger.getLogger(RawIteratingFolderReaderTest.class.getName());
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -65,7 +66,7 @@ public class RawIteratingFolderReaderTest {
 		int count = 0;
 		RawIteratingFolderReader reader = new RawIteratingFolderReader(files);
 		while (reader.hasNext()) {
-			System.out.println(reader.next());
+			logger.info(reader.next().toString());
 			count++;
 		}
 		reader.close();
@@ -78,7 +79,7 @@ public class RawIteratingFolderReaderTest {
 		int count = 0;
 		ZipReader reader = new ZipReader(zfile);
 		while (reader.hasNext()) {
-			System.out.println(reader.next());
+			logger.info(reader.next().toString());
 			count++;
 		}
 		reader.close();

@@ -3,6 +3,7 @@ package ambit2.core.test.io;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -18,8 +19,9 @@ import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
-public class TestCML 
-{   protected SmilesParser parser;
+public class TestCML {   
+	protected static Logger logger = Logger.getLogger(TestCML.class.getName());
+	protected SmilesParser parser;
 
     @Before
         public void setUp() throws Exception {
@@ -56,11 +58,11 @@ public class TestCML
         }
         
         String cmlcode = writeCML(mol);
-        System.out.println(cmlcode);
+        logger.info(cmlcode);
             
         IChemFile chemFile = parseCMLString(cmlcode);           
         IMolecule mol2 = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
-        System.out.println(writeCML(mol2));
+        logger.info(writeCML(mol2));
         
         for (int i=0; i < mol2.getAtomCount(); i++) {
             String id = mol2.getAtom(i).getID();
@@ -91,7 +93,7 @@ public class TestCML
         }
         
         String cmlcode = writeCML(mol);
-        System.out.println(cmlcode);
+        logger.info(cmlcode);
             
         IChemFile chemFile = parseCMLString(cmlcode);           
         IMolecule mol2 = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
@@ -102,7 +104,7 @@ public class TestCML
             Assert.assertEquals(1,mol2.getAtom(i).getProperties().size());
         }
         
-        System.out.println(writeCML(mol2));
+        logger.info(writeCML(mol2));
             
     }       
     /**
@@ -125,7 +127,7 @@ public class TestCML
 		IChemFile chemFile = parseCMLString(cmlcode);			
 		IMolecule mol2 = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
 		printAromaticity(mol2);
-		System.out.println(cmlcode);
+		logger.info(cmlcode);
 		for (IBond bond : mol2.bonds())
 	        Assert.assertTrue(bond.getFlag(CDKConstants.ISAROMATIC));		
 		for (IAtom atom : mol2.atoms())
@@ -146,7 +148,7 @@ public class TestCML
 	    Iterator keys = atom.getProperties().keySet().iterator();
 	    while (keys.hasNext()) {
 	        Object key = keys.next();
-			System.out.println(atom.getID() + " " + key.toString()+" = "+ atom.getProperties().get(key));
+	        logger.info(atom.getID() + " " + key.toString()+" = "+ atom.getProperties().get(key));
 	    }
 	}
 	
@@ -155,13 +157,13 @@ public class TestCML
 		for (int i = 0; i < mol.getAtomCount(); i++)
 		{
 			IAtom atom = mol.getAtom(i);
-			System.out.println("Atom " + i + "  aromatic = " +atom.getFlag(CDKConstants.ISAROMATIC));
+			logger.info("Atom " + i + "  aromatic = " +atom.getFlag(CDKConstants.ISAROMATIC));
 		}
 		
 		for (int i = 0; i < mol.getBondCount(); i++)
 		{
 			IBond bond = mol.getBond(i);
-			System.out.println("Bond " + i + "  aromatic = " +bond.getFlag(CDKConstants.ISAROMATIC));
+			logger.info("Bond " + i + "  aromatic = " +bond.getFlag(CDKConstants.ISAROMATIC));
 		}
 	}
 	

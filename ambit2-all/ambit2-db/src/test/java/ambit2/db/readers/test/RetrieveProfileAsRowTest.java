@@ -41,10 +41,10 @@ public class RetrieveProfileAsRowTest extends RetrieveTest<IStructureRecord> {
 		//Assert.assertEquals(4,rows.size());
 		while (rows.next()) {
 			IStructureRecord r = rows.getObject();
-			System.out.println(r);
+			logger.fine(r.toString());
 			for (Property p:r.getProperties()) {
-				System.out.println(p);
-				System.out.println(r.getProperty(p));
+				logger.fine(p.toString());
+				logger.fine(r.getProperty(p).toString());
 			}
 		
 		}

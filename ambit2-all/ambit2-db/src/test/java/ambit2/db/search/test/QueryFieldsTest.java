@@ -70,7 +70,7 @@ public class QueryFieldsTest extends  QueryTest<QueryField>  {
 		qf.setValue("value");
 		qf.setCondition(StringCondition.getInstance("regexp"));
 		qf.setId(1);
-		System.out.println(qf.getSQL());
+		logger.fine(qf.getSQL());
 		List<QueryParam> params = qf.getParameters();
 		Assert.assertNotNull(params);
 		Assert.assertEquals(3,params.size());

@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -57,7 +58,7 @@ import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.core.io.SGroupMDL2000Helper.SGROUP_CONNECTIVITY;
 
 public class MDLV2000ReaderExtendedTest  {
-
+	protected static Logger logger = Logger.getLogger(MDLV2000ReaderExtendedTest.class.getName());
 	protected IChemObject readSGroup(String file) throws Exception {
 		return readSGroup("ambit2/core/data/mdl/", file);
 	}	
@@ -324,7 +325,7 @@ public class MDLV2000ReaderExtendedTest  {
         Assert.assertNotNull(superatom.get(0));
         sca.setFiltered(true);
         Assert.assertEquals(SGROUP_CONNECTIVITY.HT,((IChemObject)superatom.get(0)).getProperty(ISGroup.SGROUP_CONNECTIVITY));
-        System.out.println(superatom.get(0).getSubscript());        
+        logger.fine(superatom.get(0).getSubscript());        
         verify((IAtomContainer)mol, superatom, false,47,49,false);
         verify((IAtomContainer)mol, superatom, true,47,49,false);
         int sru = 0;
