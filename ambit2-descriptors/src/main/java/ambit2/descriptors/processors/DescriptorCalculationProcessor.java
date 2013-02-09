@@ -58,10 +58,11 @@ public class DescriptorCalculationProcessor extends
 		} catch (Exception x) {
 				return new DescriptorValue(
 						descriptor.getSpecification(),
-						new String[]{},
-						new Object[]{},
-						new AbstractDescriptorResultType<Exception>(x),
-						new String[] {descriptor.getClass().getName()}
+						descriptor.getParameterNames(),
+						descriptor.getParameters(),
+						null,
+						descriptor.getDescriptorNames(),
+						x
 						);
 				//throw new AmbitException(getDescriptor().toString(),x);
 		
