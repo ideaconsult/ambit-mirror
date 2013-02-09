@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -59,6 +61,7 @@ import ambit2.smarts.query.SMARTSException;
  *
  */
 public class PKASmartsDescriptor implements IMolecularDescriptor {
+	protected static Logger logger = Logger.getLogger(PKASmartsDescriptor.class.getName());
     public static String[] title= {"pKa-SMARTS"};
     protected Hashtable<Integer, PKANode> tree;
     protected PKANode root;
@@ -69,7 +72,7 @@ public class PKASmartsDescriptor implements IMolecularDescriptor {
             root = initialize();
         } catch (Exception x) {
             root = null;
-            x.printStackTrace();
+            logger.log(Level.WARNING,x.getMessage(),x);
         }
     }
     public DescriptorValue calculate(IAtomContainer arg0)  {

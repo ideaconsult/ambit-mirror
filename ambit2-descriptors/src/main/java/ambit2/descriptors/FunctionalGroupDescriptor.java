@@ -26,6 +26,8 @@ package ambit2.descriptors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -46,6 +48,7 @@ import ambit2.core.processors.structure.HydrogenAdderProcessor;
  *
  */
 public class FunctionalGroupDescriptor implements IMolecularDescriptor {
+	protected static Logger logger = Logger.getLogger(FunctionalGroupDescriptor.class.getName());
     public final String[] paramNames = {"funcgroups","verbose"};
 	protected List<FunctionalGroup> groups;
 	protected String[] names;
@@ -110,7 +113,7 @@ public class FunctionalGroupDescriptor implements IMolecularDescriptor {
 	                result,
 	                realNames.toArray(n));
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 	        return new DescriptorValue(getSpecification(), getParameterNames(), 
 	                getParameters(), 
 	                null,

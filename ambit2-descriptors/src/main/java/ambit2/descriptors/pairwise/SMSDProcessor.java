@@ -1,6 +1,7 @@
 package ambit2.descriptors.pairwise;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -78,7 +79,7 @@ public class SMSDProcessor extends MoleculePairProcessor {
 	                 }
 	        	 }
              } catch (Exception ex) {
-                 ex.printStackTrace();
+            	 logger.log(Level.WARNING,ex.getMessage(),ex);
              }
 
 		} catch (Exception x) {

@@ -8,6 +8,7 @@ package ambit2.descriptors;
 
 import java.io.InputStream;
 import java.util.TreeMap;
+import java.util.logging.Level;
 
 import org.openscience.cdk.atomtype.IAtomTypeMatcher;
 import org.openscience.cdk.atomtype.SybylAtomTypeMatcher;
@@ -254,7 +255,6 @@ public class AtomEnvironmentDescriptor implements IMolecularDescriptor {
 		            } else //atom type not found 
 		             atomIndex[i] = -1;
 		    } catch (Exception x) {
-		            x.printStackTrace();
 		            throw new CDKException(x.getMessage() + "\ninitConnectionMatrix");
 		    }                
 	    //compute bond distances between all atoms
