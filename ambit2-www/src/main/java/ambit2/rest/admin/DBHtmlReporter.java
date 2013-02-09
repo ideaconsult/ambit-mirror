@@ -1,6 +1,7 @@
 package ambit2.rest.admin;
 
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 
@@ -80,7 +81,7 @@ public class DBHtmlReporter extends QueryReporter<AmbitDBVersion,DBVersionQuery,
 			
 			output.write(AmbitResource.printWidget("Database configuration", content.toString()));
 			return item;
-	} catch (Exception x) { x.printStackTrace(); return null;}
+	} catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x); return null;}
 	}
 	
 	@Override

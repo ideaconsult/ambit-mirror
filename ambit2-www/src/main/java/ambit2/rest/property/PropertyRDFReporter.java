@@ -1,5 +1,7 @@
 package ambit2.rest.property;
 
+import java.util.logging.Level;
+
 import org.opentox.rdf.OT;
 import org.opentox.rdf.OT.OTClass;
 import org.restlet.Request;

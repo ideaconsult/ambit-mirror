@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -245,7 +246,7 @@ public class DatabaseResource  extends QueryResource<DBVersionQuery,AmbitDBVersi
 			dbc = null;
 			return generateRepresentation(db, true);
 		} catch (Exception xx) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 			return null;
 		} finally {
 			

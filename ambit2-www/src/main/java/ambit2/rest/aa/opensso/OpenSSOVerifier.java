@@ -1,5 +1,8 @@
 package ambit2.rest.aa.opensso;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.opentox.aa.OTAAParams;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
@@ -16,6 +19,7 @@ import org.restlet.security.Verifier;
  *
  */
 public class OpenSSOVerifier implements Verifier {
+	protected static Logger logger = Logger.getLogger(OpenSSOVerifier.class.getName());
 	protected boolean enabled = false;
 	
 	public OpenSSOVerifier() {
@@ -59,7 +63,7 @@ public class OpenSSOVerifier implements Verifier {
 					return enabled?Verifier.RESULT_INVALID:Verifier.RESULT_VALID;
 				}
 			} catch (Exception x) {
-				x.printStackTrace(); //TODO
+				logger.log(Level.WARNING,x.getMessage(),x);
 				return enabled?Verifier.RESULT_MISSING:Verifier.RESULT_VALID;
 			}
 		} else {

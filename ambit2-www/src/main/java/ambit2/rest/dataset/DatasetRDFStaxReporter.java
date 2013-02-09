@@ -1,6 +1,7 @@
 package ambit2.rest.dataset;
 
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import javax.xml.stream.XMLStreamWriter;
 
@@ -148,7 +149,7 @@ public class DatasetRDFStaxReporter <Q extends IQueryRetrieval<IStructureRecord>
 				try {
 					processItem(target);
 				} catch (Exception x) {
-					x.printStackTrace();
+					logger.log(Level.WARNING,x.getMessage(),x);
 				}
 				return target;
 			};

@@ -1,6 +1,7 @@
 package ambit2.rest.facet;
 
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 
@@ -42,7 +43,7 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 			w.write("<tbody>");
 			
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	}
 	public void headerBeforeTable(Writer w, IQueryRetrieval<Facet> query) {
@@ -85,7 +86,7 @@ public class FacetHTMLReporter<Facet extends IFacet> extends QueryHTMLReporter<F
 			output.write("</tr>");
 			
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return item;
 	}

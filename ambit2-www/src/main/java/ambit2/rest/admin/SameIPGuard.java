@@ -57,7 +57,7 @@ public class SameIPGuard extends SimpleGuard {
 				}
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 		}
 		return false;
 	}

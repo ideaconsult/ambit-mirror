@@ -10,6 +10,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.exception.CDKException;
@@ -243,7 +244,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		} catch (Exception x) {
 			throw x;
 		} finally {
-			try { if (file.exists()) file.delete(); } catch (Exception x) { x.printStackTrace();}
+			try { if (file.exists()) file.delete(); } catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x);}
 		}
 	}
 

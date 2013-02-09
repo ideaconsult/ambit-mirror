@@ -1,6 +1,7 @@
 package ambit2.rest.aa.opensso;
 
 import java.util.Hashtable;
+import java.util.logging.Level;
 
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Request;
@@ -26,7 +27,7 @@ public class OpenSSOVerifierSetUser extends OpenSSOVerifier {
 
 			user.setIdentifier(results.get("uid"));} 
 		catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return user;
 	}

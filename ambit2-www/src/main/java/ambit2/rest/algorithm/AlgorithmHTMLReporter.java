@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -214,7 +215,7 @@ public class AlgorithmHTMLReporter extends AlgorithmURIReporter {
 				}
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	};
 	@Override

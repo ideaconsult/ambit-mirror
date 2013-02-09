@@ -3,6 +3,7 @@ package ambit2.rest.algorithm.quantumchemical;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -46,7 +47,7 @@ public class Build3DResource extends CatalogResource {
 		try {
 			shell = new MopacShell();
 		} catch (Exception x) {
-			x.printStackTrace();
+			getLogger().log(Level.WARNING,x.getMessage(),x);
 			shell = null;
 		}
 		customizeVariants(new MediaType[] {ChemicalMediaType.CHEMICAL_MDLSDF});
@@ -88,7 +89,7 @@ public class Build3DResource extends CatalogResource {
 	        				writer.setSdFields(newmol.getProperties());
 	        				writer.write(newmol);
 	        			} catch (CDKException x) {
-	        				x.printStackTrace();
+	        				getLogger().log(Level.WARNING,x.getMessage(),x);
 	        			} finally {
 		        			out.flush();
 		        			out.close();

@@ -2,6 +2,7 @@ package ambit2.rest.aa.opensso.users;
 
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 
@@ -87,7 +88,7 @@ public class OpenSSOUserHTMLReporter extends OpenSSOUsersURIReporter {
 			"OpenTox login&nbsp;<a href='http://opentox.org/join_form' title='If you do not have an OpenTox user, please sign in at opentox.org' target='_blank'>Sign In</a>",
 			content.toString()));
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	};
 	@Override

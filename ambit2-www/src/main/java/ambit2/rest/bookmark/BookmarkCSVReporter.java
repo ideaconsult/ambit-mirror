@@ -1,6 +1,7 @@
 package ambit2.rest.bookmark;
 
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 
@@ -49,7 +50,7 @@ public class BookmarkCSVReporter<Q extends IQueryRetrieval<Bookmark>> extends Qu
 					item.getCreator()
 					));
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return item;
 	}

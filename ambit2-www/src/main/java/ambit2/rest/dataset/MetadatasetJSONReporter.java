@@ -1,6 +1,7 @@
 package ambit2.rest.dataset;
 
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -78,7 +79,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 					));
 			comma = ",";
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return item;
 	}

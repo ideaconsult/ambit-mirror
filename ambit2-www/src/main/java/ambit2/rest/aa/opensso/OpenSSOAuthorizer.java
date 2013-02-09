@@ -1,6 +1,8 @@
 package ambit2.rest.aa.opensso;
 
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.opentox.aa.OTAAParams;
 import org.opentox.aa.opensso.OpenSSOToken;
@@ -13,6 +15,7 @@ import org.restlet.data.Reference;
 import org.restlet.security.Authorizer;
 
 public class OpenSSOAuthorizer extends Authorizer {
+	protected static Logger logger = Logger.getLogger(OpenSSOAuthorizer.class.getName());
 	protected String prefix = null;
 	
 	public String getPrefix() {
@@ -41,7 +44,7 @@ public class OpenSSOAuthorizer extends Authorizer {
 
 				return authorize(ssoToken,request);
 			} catch (Exception x) {
-				x.printStackTrace(); //TODO
+				logger.log(Level.WARNING,x.getMessage(),x);
 				return false;
 			}
 		} else return false;		

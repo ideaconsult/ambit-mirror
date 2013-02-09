@@ -2,6 +2,7 @@ package ambit2.rest.model.predictor;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import org.restlet.data.Reference;
 import org.restlet.resource.ResourceException;
@@ -61,7 +62,7 @@ public abstract class AbstractStructureProcessor<Predictor>  extends	ModelPredic
 					exec.process(updateStructure);
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return target;
 	}	

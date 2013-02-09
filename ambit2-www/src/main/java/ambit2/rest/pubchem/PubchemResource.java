@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -83,7 +84,7 @@ public class PubchemResource extends ProtectedResource {
 			            		writer.flush();
 			            		stream.flush();
 			            	} catch (AmbitException x) {
-			            		x.printStackTrace();
+			            		getLogger().log(Level.WARNING,x.getMessage(),x);
 			            		//throw new IOException(x.getMessage());
 			            	} finally {
 			            		try {if (writer !=null) writer.flush(); } catch (Exception x) { x.printStackTrace();}

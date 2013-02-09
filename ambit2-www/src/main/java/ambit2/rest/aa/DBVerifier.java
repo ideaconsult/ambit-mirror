@@ -2,6 +2,8 @@ package ambit2.rest.aa;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.restlet.security.SecretVerifier;
 
@@ -13,6 +15,7 @@ import ambit2.rest.DBConnection;
 
 
 public class DBVerifier extends SecretVerifier {
+	protected static Logger logger = Logger.getLogger(DBVerifier.class.getName());
 	protected AmbitApplication application;
 	protected QueryExecutor<VerifyUser> executor = new QueryExecutor<VerifyUser>();
 	protected VerifyUser query = new VerifyUser();
@@ -41,7 +44,7 @@ public class DBVerifier extends SecretVerifier {
 			}
 			return ok;
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} finally {
 			try {rs.close();} catch (Exception x) {};
 			try {c.close();} catch (Exception x) {};

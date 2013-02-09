@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -118,7 +119,7 @@ class ChunkedCSVReporter extends QueryPacketReporter<IQueryRetrieval<IStructureR
 			if (header == null) {
 				writeHeader(output);
 			}				
-			output.flush(); } catch (Exception x) { x.printStackTrace();};
+			output.flush(); } catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x);};
 	};
 	
 	protected void writeHeader(Writer writer) throws IOException {

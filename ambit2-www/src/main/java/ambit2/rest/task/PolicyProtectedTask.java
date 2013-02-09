@@ -1,9 +1,11 @@
 package ambit2.rest.task;
 
 import java.util.Hashtable;
+import java.util.logging.Level;
 
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
+import org.restlet.Context;
 import org.restlet.data.Reference;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
@@ -44,7 +46,7 @@ public class PolicyProtectedTask extends Task<TaskResult, String> {
 								new String[] {"GET","PUT","POST","DELETE"});
 					}
 				} catch (Exception x) {
-					x.printStackTrace();
+					Context.getCurrentLogger().log(Level.SEVERE,x.getMessage(),x);
 				} finally {
 					try {ssoToken.logout(); } catch (Exception x) {}
 				}
