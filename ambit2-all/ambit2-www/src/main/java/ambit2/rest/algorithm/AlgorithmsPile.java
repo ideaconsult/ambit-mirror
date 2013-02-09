@@ -144,6 +144,10 @@ public class AlgorithmsPile {
 			{"toxtreecarc","ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity","mutant.BB_CarcMutRules",null,new String[] {AlgorithmType.Rules.toString()},
 				"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",Algorithm.requires.structure,
 				"http://ambit.sourceforge.net/descriptors.owl#toxtreecarc"},
+				
+			{"toxtreeames","ToxTree: In vitro mutagenicity (Ames test) alerts by ISS","toxtree.plugins.ames.AmesMutagenicityRules",null,new String[] {AlgorithmType.Rules.toString()},
+					"http://www.opentox.org/echaEndpoints.owl#Mutagenicity",Algorithm.requires.structure,
+					"http://ambit.sourceforge.net/descriptors.owl#toxtreeames"},				
 			//{"ToxTree: START biodegradation and persistence plug-in","mutant.BB_CarcMutRules",null},
 			{"toxtreebiodeg","START biodegradation and persistence plug-in","com.molecularnetworks.start.BiodgeradationRules",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
 					Algorithm.requires.structure,
