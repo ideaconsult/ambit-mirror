@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -50,6 +53,9 @@ public abstract class ResourceTest extends DbUnitTest {
 	protected OpenSSOToken ssoToken = null;
 
 	protected int port = 8181;
+	
+
+    
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();

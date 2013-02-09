@@ -3,13 +3,16 @@ package ambit2.rest.test.algorithm;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.logging.Level;
 
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTModel;
@@ -21,14 +24,18 @@ import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
+import ambit2.base.config.Preferences;
 import ambit2.base.data.Property;
 import ambit2.rest.OpenTox;
 import ambit2.rest.rdf.RDFPropertyIterator;
 import ambit2.rest.test.ResourceTest;
 
 public class AlgorithmResourceTest extends ResourceTest {
+    @BeforeClass
+    public static void prepare() throws Exception {
+        setLogLevel(Level.FINEST);
+    }
 	@Override
 	protected void setDatabase() throws Exception {
 		setUpDatabase("src/test/resources/num-datasets.xml");
@@ -54,7 +61,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		int count=0;
 		while ((line = reader.readLine())!=null) {
 			count++;
-			System.out.println(line);
+			logger.info(line);
 		}
 		return false;
 	}
@@ -75,7 +82,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 124;
+		return count == 130;
 	}	
 	
 	@Test
@@ -466,7 +473,21 @@ public class AlgorithmResourceTest extends ResourceTest {
 			count++;
 		}
 		i.close();
-		Assert.assertEquals(1,count);
+		Assert.assertEquals(20,count);
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT count(*) c,group_concat(distinct(status)) s FROM	properties\n"+
+				"join property_values v using(idproperty)\n"+
+				"left join property_string using(idvalue_string)\n"+
+				"join template_def t using(idproperty) join models on t.idtemplate=models.predicted and\n"+
+				"models.name='Number of each amino acid in an atom container'\n"
+				);
+		Assert.assertEquals(new BigInteger("80"),table.getValue(0,"c"));
+		Assert.assertEquals("OK",table.getValue(0,"s"));
+		c.close();	
+		
+		
 	}	
 	
 	
@@ -550,7 +571,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		ClientResourceWrapper client = new ClientResourceWrapper(new Reference(String.format("http://localhost:%d/model/3", port)));
 
 		Representation r = client.get(MediaType.TEXT_PLAIN);
-		System.out.println(r.getText());
+		logger.info(r.getText());
 		r.release();
 		client.release();
 		
@@ -648,7 +669,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		ClientResourceWrapper client = new ClientResourceWrapper(new Reference(String.format("http://localhost:%d/model/3", port)));
 
 		Representation r = client.get(MediaType.TEXT_PLAIN);
-		System.out.println(r.getText());
+		logger.info(r.getText());
 		r.release();
 		client.release();
 		
@@ -792,7 +813,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(4,table.getRowCount());
 		
 		table = 	c.createQueryTable("EXPECTED",
-		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Tbnimoto'");
+		"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='AppDomain_Tanimoto'");
 		Assert.assertEquals(4,table.getRowCount());		
 	}		
 	
@@ -960,7 +981,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 					form.getWebRepresentation(),
 					Method.POST);
 		while (taskTrain.poll()) {
-			System.out.println(taskTrain.getStatus());
+			logger.info(taskTrain.getStatus().toString());
 		}
 
 		Form testData = new Form();  
@@ -974,10 +995,10 @@ public class AlgorithmResourceTest extends ResourceTest {
 				form.getWebRepresentation(),
 				Method.POST);
 		while (taskEstimate.poll()) {
-			System.out.println(taskTrain.getStatus());
+			logger.info(taskTrain.getStatus().toString());
 		}
-		System.out.println(taskTrain.getResult());
-		System.out.println(taskTrain.getStatus());	
+		logger.info(taskTrain.getResult().toString());
+		logger.info(taskTrain.getStatus().toString());	
 	
 		
 	}			
@@ -1036,7 +1057,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
-		System.out.println(dataset);
+		logger.info(dataset.toString());
 		
 	}
 	
@@ -1066,12 +1087,12 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
-		System.out.println(dataset);
+		logger.info(dataset.toString());
 		
 	}
 	
 	@Test
-	public void testToxtreeBenigniBossa() throws Exception {
+	public void testToxtreeCarcinogenicityISS() throws Exception {
 		Form headers = new Form();  
 
 		testAsyncTask(
@@ -1081,9 +1102,53 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
-		System.out.println(dataset);
+		logger.info(dataset.toString());
+		
+		IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+			"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: Carcinogenicity (genotox and nongenotox) and mutagenicity rulebase by ISS' group by `status` order by `status`");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("OK",table.getValue(0,"s"));
+		Assert.assertEquals(new BigInteger("40"),table.getValue(0,"c"));
+			//the explanation field
+		Assert.assertEquals("TRUNCATED",table.getValue(1,"s"));
+		Assert.assertEquals(new BigInteger("4"),table.getValue(1,"c"));
+		c.close();
+	}
+	
+	@Test
+	public void testToxtreeAmesMutagenicity() throws Exception {
+		//exception will be thrown on unknown atom type will, and error value stored in the db 
+		Preferences.setProperty(Preferences.STOP_AT_UNKNOWNATOMTYPES,Boolean.TRUE.toString());
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreeames", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
+		logger.info(dataset.toString());
+		
+	    IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+					"SELECT count(*) c,group_concat(distinct(status)) s FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure=100211 group by idstructure,`status`");
+		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals("ERROR",table.getValue(0,"s"));
+		Assert.assertEquals(new BigInteger("6") /*WTF*/,table.getValue(0,"c"));
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure!=100211 group by `status` order by `status`");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("OK",table.getValue(0,"s"));
+		Assert.assertEquals(new BigInteger("18"),table.getValue(0,"c"));
+		//the explanation field
+		Assert.assertEquals("TRUNCATED",table.getValue(1,"s"));
+		Assert.assertEquals(new BigInteger("3"),table.getValue(1,"c"));
+		c.close();
 		
 	}
+	
 	
 	@Test
 	public void testToxtreeSmartCypModel() throws Exception {
@@ -1099,7 +1164,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 	
 	@Test
-	public void testBiodegModel() throws Exception {
+	public void testToxtreeBiodegModel() throws Exception {
 		Form headers = new Form();  
 
 		testAsyncTask(

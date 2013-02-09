@@ -31,6 +31,7 @@ package ambit2.descriptors.processors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.BooleanResult;
@@ -80,11 +81,18 @@ public class DescriptorValue2Property extends DefaultAmbitProcessor<DescriptorVa
 			Property property = DescriptorsFactory.descriptorValue2Property(null, name, value);
 			p.add(property);				
 
-		} catch (Exception x) {}
+		} catch (Exception x) {
+			logger.log(Level.WARNING,x.getMessage(),x);
+		}
 		return p;
 	}	
 	
 	public Object getValue(DescriptorValue descriptor,Property property, int propertyIndex) {
+		if (descriptor.getException()!=null) {
+			Throwable x = descriptor.getException();
+			while (x.getCause()!=null)	x = x.getCause();
+			return x;
+		}	
         IDescriptorResult result = descriptor.getValue();
         Object value = Double.NaN;
         if (result instanceof VerboseDescriptorResult)

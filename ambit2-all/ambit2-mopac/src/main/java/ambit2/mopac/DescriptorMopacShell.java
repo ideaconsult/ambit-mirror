@@ -116,33 +116,36 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
         	logger.log(Level.SEVERE,x.getMessage(),x);
         }
     }
-    public DescriptorValue calculate(IAtomContainer arg0) {
+
+    public DescriptorValue calculate(IAtomContainer mol) {
     	DoubleArrayResult r = null;
     	try {
-    		if ((arg0==null) || (arg0.getAtomCount()==0)) throw new CDKException("Empty molecule!");
-    		logger.fine(toString());
-	        IAtomContainer newmol = mopac_shell.runShell(arg0);
+    		if ((mol==null) || (mol.getAtomCount()==0)) throw new CDKException("Empty molecule!");
+    		logger.finer(toString());
+	        IAtomContainer newmol = mopac_shell.runShell(mol);
+	        if ((newmol==null) || (newmol.getAtomCount()==0)) {
+	        	throw new ShellException(mopac_shell,String.format(mopac_shell.getMsgemptymolecule(), mopac_shell.toString()));
+	        }
 	        r = new DoubleArrayResult(Mopac7Reader.parameters.length);
+	        Object value = null;
 	        for (int i=0; i< Mopac7Reader.parameters.length;i++) 
 	        try {
-                String result = newmol.getProperty(Mopac7Reader.parameters[i]).toString();
-                logger.fine(Mopac7Reader.parameters[i]+" = "+result);
-	            r.add(Double.parseDouble(result));
+	        	value = newmol.getProperty(Mopac7Reader.parameters[i]);
+	        	if (value==null) {
+	        		logger.warning(Mopac7Reader.parameters[i]+" = "+value);
+	        		r.add(Double.NaN);
+	        	} else {
+	                logger.finer(Mopac7Reader.parameters[i]+" = "+value);
+		            r.add(Double.parseDouble(value.toString()));
+	        	}
 	        } catch (Exception x) {
-	        	logger.log(Level.WARNING,x.getMessage(),x);
+	        	logger.warning(Mopac7Reader.parameters[i]+" = "+value);
 	            r.add(Double.NaN);
 	        }
 	       
 	        return new DescriptorValue(getSpecification(),
 	                getParameterNames(),getParameters(),r,Mopac7Reader.parameters);
     	} catch (Exception x) {
-    		/*
-    		Throwable cause = x;
-    		while (cause != null) {
-    			if (cause.getCause()==null) throw new CDKException(cause.getMessage());
-    			cause = cause.getCause();
-    		}
-    		*/  
 	        return new DescriptorValue(getSpecification(),
 	                getParameterNames(),getParameters(),r,Mopac7Reader.parameters,x);    		
     	}

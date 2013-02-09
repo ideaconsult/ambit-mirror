@@ -1,6 +1,5 @@
 package ambit2.db.search;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -111,7 +110,7 @@ public class QueryExecutor<Q extends IQueryObject> extends
 				}
 
 				QueryExecutor.setParameters(sresults, params);
-				logger.log(Level.FINEST,sresults.toString());
+				//logger.log(Level.FINEST,sql);
 
 				rs = sresults.executeQuery();
 

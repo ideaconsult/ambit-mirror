@@ -66,7 +66,10 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public static final String os_LINUX = "Linux";
 	public static final String os_LINUX64 = "Linux64";
 	public static final String os_FreeBSD = "FreeBSD";
-	
+    private final static String msgEmptyMolecule="Empty molecule after %s processing";
+	public static String getMsgemptymolecule() {
+		return msgEmptyMolecule;
+	}
 	protected static Logger logger = Logger.getLogger(CommandShell.class.getName());
 	
 	protected Hashtable<String, Command> executables; //<os.name, executable>
@@ -296,9 +299,9 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
                 	return transform(process,mol);
                 }
 
-                
+    		} catch (ShellException x) {
+    			throw x;
             } catch (Throwable x) {
-            	logger.log(Level.SEVERE,x.getMessage(),x);
                 throw new ShellException(this,x);
             }
     }
