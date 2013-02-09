@@ -31,6 +31,7 @@ package ambit2.db.processors;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -160,7 +161,7 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 		    		}
 		    		
 		    	} catch (Exception x) {
-		    		x.printStackTrace();
+		    		logger.log(Level.WARNING,x.getMessage(),x);
 		    	}
     		}
 

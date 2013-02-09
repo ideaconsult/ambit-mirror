@@ -34,6 +34,7 @@ import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -142,7 +143,7 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     					writer.write(value);
     				}
    			} catch (Exception x) {
-   				x.printStackTrace();
+   				logger.log(Level.WARNING,x.getMessage(),x);
     		}
     	}    	    		
       	
@@ -181,7 +182,7 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
 	    			if (p.isEnabled()) 
 	    				b.append(p.getClazz().getName());
 	   			} catch (Exception x) {
-	   				x.printStackTrace();
+	   				logger.log(Level.WARNING,x.getMessage(),x);
 	    		}
 	    	} 
 		} catch (Exception x) {b.append(x.getMessage());};

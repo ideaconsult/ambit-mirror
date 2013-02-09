@@ -29,6 +29,8 @@
 
 package ambit2.db.processors;
 
+import java.util.logging.Level;
+
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.CDKConstants;
@@ -113,7 +115,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 						AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(kekulized); 
 						kekulized = fbt.kekuliseAromaticRings((IMolecule)kekulized);
 						for (IBond bond:kekulized.bonds()) bond.setFlag(CDKConstants.ISAROMATIC, false); 	
-					} catch (Exception x) { x.printStackTrace(); }
+					} catch (Exception x) { logger.log(Level.FINE,x.getMessage(),x);; }
 					InChIGenerator gen  = inchiProcessor.process(kekulized);
 					if (INCHI_RET.OKAY.equals(gen.getReturnStatus()) || INCHI_RET.WARNING.equals(gen.getReturnStatus())) {
 						inchi = gen.getInchi();

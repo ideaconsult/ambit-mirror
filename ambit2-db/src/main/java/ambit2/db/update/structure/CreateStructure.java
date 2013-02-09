@@ -31,6 +31,7 @@ package ambit2.db.update.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -91,7 +92,7 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 			else
 				getObject().setIdstructure(id);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 
 	}

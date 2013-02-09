@@ -2,6 +2,7 @@ package ambit2.db.facets.datasets;
 
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
@@ -92,7 +93,7 @@ public class DatasetByPrefixNameFacetQuery extends PrefixFacetQuery<IStructureRe
 		if (record != null)
 			record.setStructure(getFieldname());
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	}
 }

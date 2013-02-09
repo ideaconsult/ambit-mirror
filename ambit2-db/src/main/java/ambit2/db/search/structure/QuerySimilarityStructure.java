@@ -32,6 +32,7 @@ package ambit2.db.search.structure;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
@@ -92,7 +93,7 @@ public class QuerySimilarityStructure extends QuerySimilarity<ClassHolder,IMolec
 				super.setFieldname(method);						
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	}
 	@Override

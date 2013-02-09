@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -180,7 +181,7 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 			}
 			
 		} catch (Throwable x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 
 	}

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
@@ -70,7 +71,7 @@ public class PreparedStatementBatchExecutor<Q extends IQueryUpdate> extends Stat
 			if (ps!=null) try {
 				results = ps.executeBatch();
 				//no meaningfull way to use generated keys in batch mode :(
-			} catch (Exception x) {x.printStackTrace();}
+			} catch (Exception x) {logger.log(Level.WARNING,x.getMessage(),x);}
 		}
 		return results;
 	}

@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -58,7 +59,7 @@ public class DbCompoundImageTools extends CompoundImageTools {
         try {
             exec.closeResults(rs);
         } catch (SQLException x) {
-            x.printStackTrace();
+        	logger.log(Level.WARNING,x.getMessage(),x);
         }
         return image;
 	}

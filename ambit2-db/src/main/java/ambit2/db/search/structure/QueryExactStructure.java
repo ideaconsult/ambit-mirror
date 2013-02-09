@@ -30,6 +30,7 @@
 package ambit2.db.search.structure;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -145,7 +146,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 	            	value = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(value);
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} finally {
 			super.setValue(value);
 		}
@@ -219,7 +220,7 @@ public class QueryExactStructure extends AbstractStructureQuery<String, IAtomCon
 			} else
 				return 0;
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 			return -1;
 		}
 

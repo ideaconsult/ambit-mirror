@@ -16,6 +16,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -78,6 +79,7 @@ import ambit2.namestructure.Name2StructureProcessor;
  * <b>Modified</b> 2006-3-5
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
+	protected static Logger logger = Logger.getLogger(CompoundImageTools.class.getName());
 	protected StringBuilder imageMap;
 	protected String comma = "";
 	private static final String formatJson = "\n\t\t{ \"i\": \"%s\",\"l\": \"%s\", \"x\": %d, \"y\": %d, \"w\": %d, \"h\": %d }";

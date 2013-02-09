@@ -132,7 +132,7 @@ public class AmbitRows<T> extends AbstractDBProcessor<T,IQueryRetrieval> impleme
     	try {
     		close();
     		//rowset.close();
-    	} catch (Exception x) { x.printStackTrace();}
+    	} catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x);}
 
     	if (getConnection() != null)
     		executor.setConnection(connection);

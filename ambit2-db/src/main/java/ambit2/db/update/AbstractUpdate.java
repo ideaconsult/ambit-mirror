@@ -29,7 +29,10 @@
 
 package ambit2.db.update;
 
+import java.util.logging.Logger;
+
 public abstract class AbstractUpdate<Group,Target>  implements IQueryUpdate<Group,Target> {
+	protected static Logger logger = Logger.getLogger(AbstractUpdate.class.getName());
 	protected Target object;
 	protected Group group;
 	public Group getGroup() {

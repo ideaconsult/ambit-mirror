@@ -3,6 +3,7 @@ package ambit2.db.processors;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.AbstractDBProcessor;
@@ -66,7 +67,7 @@ public abstract class MasterDetailsProcessor<Master,Detail,C extends IQueryCondi
 	        try {
 	            exec.closeResults(rs);
 	        } catch (SQLException x) {
-	            x.printStackTrace();
+	        	logger.log(Level.WARNING,x.getMessage(),x);
 	        } 
         }
 

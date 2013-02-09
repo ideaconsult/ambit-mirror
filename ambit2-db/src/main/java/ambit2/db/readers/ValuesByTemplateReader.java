@@ -3,6 +3,7 @@ package ambit2.db.readers;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
@@ -70,7 +71,7 @@ public abstract class ValuesByTemplateReader<Result> extends AbstractDBProcessor
 					}
 					
 				} catch (Exception x) {
-					x.printStackTrace();
+					logger.log(Level.WARNING,x.getMessage(),x);
 				} finally {
 					try {executorn.closeResults(values);} catch (Exception x) {}
 				}

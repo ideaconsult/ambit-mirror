@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -66,7 +67,7 @@ public class ARFF3ColReporter<Q extends IQueryRetrieval<IStructureRecord>> exten
 			output.write("@ATTRIBUTE Value real\r\n");
 			output.write("@DATA\r\n");
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} finally {
 		}
 	}

@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.logging.Level;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
@@ -116,7 +117,7 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 			getOutput().write("(");
 			getOutput().flush();
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	};
 	

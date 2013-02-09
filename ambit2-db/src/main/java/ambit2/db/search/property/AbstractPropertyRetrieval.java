@@ -31,6 +31,7 @@ package ambit2.db.search.property;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
@@ -163,7 +164,7 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 						p.setClazz(_PROPERTY_TYPE.valueOf(t).getClazz());
 				}
 			} catch (Exception x) {
-				//x.printStackTrace();
+				logger.log(Level.WARNING,x.getMessage(),x);
 			}
 			try {
 				p.setNominal(rs.getBoolean(9));

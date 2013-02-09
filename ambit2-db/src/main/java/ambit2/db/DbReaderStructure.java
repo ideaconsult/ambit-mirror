@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.data.AmbitUser;
 import ambit2.base.data.Property;
@@ -137,7 +138,7 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 				cacheUpdater.process(cache);
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		super.cache(category,key, object, ok);
 	}

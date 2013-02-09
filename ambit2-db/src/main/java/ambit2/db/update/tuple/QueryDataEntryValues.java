@@ -2,6 +2,7 @@ package ambit2.db.update.tuple;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -53,7 +54,7 @@ public class QueryDataEntryValues extends QueryDataEntry {
 				rs.next();
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return record;
 	}
