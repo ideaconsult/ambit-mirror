@@ -95,7 +95,7 @@ public class ShellWafflesLearn extends ShellWaffles {
 				
 			}
 		}
-		System.out.println(list);
+		logger.info(list.toString());
 		return list;	
 	}
 
