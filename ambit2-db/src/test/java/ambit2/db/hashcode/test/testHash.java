@@ -187,6 +187,7 @@ public static void testGetHashFomDB() throws Exception {
 				}
 			}
 			if (values.size()>1 && array2.length > 1 ) {
+				/*
 				System.out.print(key);
 				System.out.print('\t');
 				System.out.print(values.size());
@@ -203,21 +204,11 @@ public static void testGetHashFomDB() throws Exception {
 					
 					
 				}
-				
-				System.out.println();
+				*/
 				doubles++;
 			}
 		}
-		System.out.print("Records\t");
-		System.out.print(record);
-		System.out.print("Hashes\t");
-		System.out.println(histogram.size());
-		System.out.print("Errors\t");
-		System.out.println(errors);	
-		System.out.print("Doubles\t");
-		System.out.println(doubles);
-		System.out.print("Cis_trns\t");
-		System.out.println(cis_trns);
+		logger.fine("Records\t"+record+"Hashes\t"+histogram.size()+"Errors\t"+errors+"Doubles\t"+doubles+"Cis_trns\t"+cis_trns);
 	}	
 	
 	public static void main(String[] args) {

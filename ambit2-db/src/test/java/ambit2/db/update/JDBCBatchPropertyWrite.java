@@ -47,7 +47,7 @@ public class JDBCBatchPropertyWrite extends DbUnitTest {
 				IStructureRecord recordToStore = getStructure(idchemical,idstructure,nprops);
 				long now = System.currentTimeMillis();
 				recordToStore = writer.process(recordToStore);
-				System.out.println(String.format("Elapsed: %s ms",System.currentTimeMillis()-now));
+				logger.fine(String.format("Elapsed: %s ms",System.currentTimeMillis()-now));
 				for (Property p : recordToStore.getProperties()) Assert.assertTrue(p.getId()>0);
 				
 			}

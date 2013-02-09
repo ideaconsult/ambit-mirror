@@ -1,6 +1,8 @@
 package ambit2.core.test.io;
 
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -17,6 +19,7 @@ import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 
 public class HinReaderTest {
+	protected static Logger logger = Logger.getLogger(HinReaderTest.class.getName());
 	/**
 	 * CDK bug https://sourceforge.net/tracker/?func=detail&aid=2984581&group_id=20024&atid=120024
 	 * @throws Exception
@@ -30,7 +33,7 @@ public class HinReaderTest {
 		int count = 0;
 		while (reader.hasNext()) {
 			Object o = reader.next();
-			System.out.println(o);
+			logger.fine(o.toString());
 			/*
 			Assert.assertTrue(o instanceof IAtomContainer);
 			Assert.assertEquals(23,((IAtomContainer)o).getAtomCount());
@@ -54,11 +57,12 @@ public class HinReaderTest {
 		int count = 0;
 		while (reader.hasNext()) {
 			Object o = reader.next();
-			System.out.println(o);
+			logger.fine(o.toString());
 			Assert.assertTrue(o instanceof IAtomContainer);
 			Assert.assertEquals(target.getAtomCount(),((IAtomContainer)o).getAtomCount());
 			SmilesGenerator g = new SmilesGenerator(true);
-			System.out.println(g.createSMILES((IMolecule)o));			
+			if (logger.isLoggable(Level.FINE))
+				logger.fine(g.createSMILES((IMolecule)o));			
 			Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(target,((IAtomContainer)o)));
 			count++;
 
