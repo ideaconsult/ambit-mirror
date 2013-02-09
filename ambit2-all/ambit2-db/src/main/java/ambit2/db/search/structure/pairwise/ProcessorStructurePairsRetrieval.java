@@ -32,6 +32,7 @@ package ambit2.db.search.structure.pairwise;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -96,7 +97,7 @@ public class ProcessorStructurePairsRetrieval extends AbstractDBProcessor<IStruc
 	        try {
 	            exec.closeResults(rs);
 	        } catch (SQLException x) {
-	            x.printStackTrace();
+	        	logger.log(Level.WARNING,x.getMessage(),x);
 	        } 
         }
 

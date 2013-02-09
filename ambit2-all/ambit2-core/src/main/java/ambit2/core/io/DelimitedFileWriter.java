@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.MoleculeSet;
@@ -37,7 +38,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -133,7 +133,7 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
 			writer.write(fieldDelimiter);			
 		}
 		writer.newLine();
-		logger.debug(format.getFormatName(),"\tHeader written\t",header);
+		logger.fine(format.getFormatName()+"\tHeader written\t"+header);
 	}
     public void writeMolecule(IAtomContainer molecule) {
         
@@ -157,7 +157,7 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
         			try {
         				value = sg.createSMILES(molecule);
         			} catch (Exception x) {
-        				logger.error("Error while createSMILES\t",x.getMessage());
+        				logger.log(Level.WARNING,"Error while createSMILES\t",x);
         				value = "";
         			}
         		} 
@@ -181,10 +181,9 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
         	}
             writer.newLine();
             writer.flush();
-            logger.debug("file flushed...");
+            logger.finer("file flushed...");
         } catch(Exception x) {
-            logger.error("ERROR while writing Molecule: ", x.getMessage());
-            logger.debug(x);
+            logger.log(Level.SEVERE,"ERROR while writing Molecule: ", x);
         }
     }
 
@@ -221,7 +220,7 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
             try {
             this.writer.close();
             } catch (IOException x) {
-                logger.error(x);
+            	logger.log(Level.SEVERE,x.getMessage(),x);
             }
             this.writer = null;
         }

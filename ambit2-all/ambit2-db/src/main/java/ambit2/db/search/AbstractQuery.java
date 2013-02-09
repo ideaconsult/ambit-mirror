@@ -1,5 +1,7 @@
 package ambit2.db.search;
 
+import java.util.logging.Logger;
+
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
 
@@ -20,6 +22,7 @@ public abstract class AbstractQuery<F,T,C extends IQueryCondition,ResultType> ex
 	/**
 	 * 
 	 */
+	protected static Logger logger = Logger.getLogger(AbstractQuery.class.getName());
 	private static final long serialVersionUID = 3120118597644963365L;
 	protected F fieldname;
 	protected T value;

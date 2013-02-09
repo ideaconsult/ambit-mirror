@@ -31,6 +31,7 @@ package ambit2.db.search;
 
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class BooleanCondition implements IQueryCondition {
 	private static Map<String,BooleanCondition> instances = null;
@@ -97,7 +98,7 @@ public class BooleanCondition implements IQueryCondition {
 			BooleanCondition c = getAlowedValues().get(condition);
 			if (c != null) return c;
 		} catch (Exception x) {
-			x.printStackTrace();
+			
 
 		}
 		return getAlowedValues().get(BOOLEAN_CONDITION.B_YES.toString());

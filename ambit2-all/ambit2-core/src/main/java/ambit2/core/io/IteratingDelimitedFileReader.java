@@ -33,6 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
@@ -173,7 +174,7 @@ public class IteratingDelimitedFileReader extends
 						    nextMolecule = sp.parseSmiles(values[smilesIndex].toString());
 						} catch (InvalidSmilesException x) {
 								// do not want to break if a record is faulty
-								logger.warn("Empty molecule!");
+								logger.fine("Empty molecule!");
 								nextMolecule = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class); // just create
 								nextMolecule.setProperty("SMILES", "Invalid SMILES");
 						}
@@ -206,11 +207,7 @@ public class IteratingDelimitedFileReader extends
 					hasNext = false;
 				}
 			} catch (Exception exception) {
-				exception.printStackTrace();
-				logger.error("Error while reading next molecule: "
-						+ exception.getMessage());
-				logger.error(values);
-				logger.debug(exception);
+	            logger.log(Level.SEVERE,"Error while reading next molecule: ", exception);
 				hasNext = true;
 			}
 			if (!hasNext)
@@ -292,7 +289,7 @@ public class IteratingDelimitedFileReader extends
 			
 			
 		} catch (IOException x) {
-			logger.error(x);
+			logger.log(Level.SEVERE,x.getMessage(),x); 
 		}
 	}
 

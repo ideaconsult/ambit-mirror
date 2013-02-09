@@ -1,6 +1,7 @@
 package ambit2.db.update.fpae;
 
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -28,7 +29,7 @@ public class AtomEnvironmentWriter<S> extends AbstractUpdateProcessor<IStructure
 			getQueryCreate().setGroup(record);
 		
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 			getQueryCreate().setObject(null);
 		}
 		return super.create(record);

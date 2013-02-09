@@ -31,6 +31,7 @@ package ambit2.db.update.dictionary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.data.Dictionary;
 import ambit2.base.data.Property;
@@ -93,7 +94,7 @@ public class TemplateAddProperty extends AbstractUpdate<Dictionary,Property> {
 		else if (index < (dict + createProperty.getSQL().length)) 
 			createProperty.setID(index-dict, id);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 	}
 

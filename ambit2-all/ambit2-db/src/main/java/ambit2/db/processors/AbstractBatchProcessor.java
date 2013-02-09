@@ -32,6 +32,7 @@ package ambit2.db.processors;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchProcessor;
@@ -119,7 +120,7 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 					}
 				} 
 			} catch (Exception x) {
-				x.printStackTrace();
+				logger.log(Level.WARNING,x.getMessage(),x);
 				onError(input, null, result, x);			
 				continue;
 			}				

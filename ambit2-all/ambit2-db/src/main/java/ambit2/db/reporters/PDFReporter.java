@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -117,7 +118,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
     public void close() throws SQLException {
     	try {
     		getOutput().close();
-    	} catch (Exception x) {x.printStackTrace(); }
+    	} catch (Exception x) {logger.log(Level.FINEST,x.getMessage(),x); }
     	super.close();
     	
     }
@@ -156,7 +157,7 @@ public class PDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
         try {
         	output.add(table);
         } catch (Exception x) {
-        	x.printStackTrace();
+        	logger.log(Level.WARNING,x.getMessage(),x);
         }	
     };
 	

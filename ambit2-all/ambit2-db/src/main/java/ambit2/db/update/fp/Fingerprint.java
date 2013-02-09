@@ -37,14 +37,13 @@ public class Fingerprint<Type,Content> implements IFingerprint<Type,Content> {
 		return frequency;
 	}
 	@Override
-	public synchronized String getInterpretation(int bitindex) {
+	public synchronized String getInterpretation(int bitindex) throws Exception {
 		if (FPTable.sk1024.equals(type)) {
 			if (keys==null) keys = new SmartsScreeningKeys();
 			try {
-			return keys.getKeys().get(bitindex);
+				return keys.getKeys().get(bitindex);
 			} catch (Exception x) {
-				x.printStackTrace();
-				return null;
+				throw x;
 			}
 		} else
 			return null;

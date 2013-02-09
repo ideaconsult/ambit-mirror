@@ -26,6 +26,7 @@ package ambit2.db.processors;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.db.IDBProcessor;
@@ -55,7 +56,7 @@ public class DBProcessorsChain<Target,Result,P extends IDBProcessor> extends Pro
 			element.setConnection(getConnection());
 			element.setSession(getSession());
 			} catch (DbAmbitException x) {
-				x.printStackTrace();
+				logger.log(Level.WARNING,x.getMessage(),x);
 			}
 		super.add(index, element);
 	}
@@ -65,7 +66,7 @@ public class DBProcessorsChain<Target,Result,P extends IDBProcessor> extends Pro
 		o.setConnection(getConnection());
 		o.setSession(getSession());
 		} catch (DbAmbitException x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		return super.add(o);
 	}
@@ -84,7 +85,7 @@ public class DBProcessorsChain<Target,Result,P extends IDBProcessor> extends Pro
 			try {
 			get(i).close();
 			} catch (SQLException x) {
-				x.printStackTrace();
+				logger.log(Level.WARNING,x.getMessage(),x);
 			}
 		super.close();
 	}

@@ -2,6 +2,7 @@ package ambit2.db.update.property;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
@@ -42,7 +43,7 @@ public class CreatePropertyReferenceID  extends AbstractObjectUpdate<Property> {
 		try {
 			getObject().setId(id);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		
 	}

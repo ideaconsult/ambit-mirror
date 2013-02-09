@@ -32,6 +32,7 @@ package ambit2.db.processors;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.logging.Level;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
@@ -100,7 +101,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	    	exec.process(tuple);
 	    	return tuple.getObject();
     	} catch (AmbitException x) {
-    		x.printStackTrace();
+    		logger.log(Level.WARNING,x.getMessage(),x);
     		return -1;
     	} finally {
     		

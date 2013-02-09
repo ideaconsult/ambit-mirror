@@ -1,6 +1,7 @@
 package ambit2.db.search.structure;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -133,8 +134,9 @@ public class QuerySMARTS extends
 				try {
 					AtomConfigurator cfg = new AtomConfigurator();
 					cfg.process(atomContainer);
-				} catch (Exception x) { x.printStackTrace();}
-				try { CDKHueckelAromaticityDetector.detectAromaticity(atomContainer); } catch (Exception x) { x.printStackTrace();}
+				} catch (Exception x) { logger.log(Level.FINE,x.getMessage(),x);}
+				try { CDKHueckelAromaticityDetector.detectAromaticity(atomContainer); } catch (Exception x) { 
+					logger.log(Level.FINE,x.getMessage(),x);}
 
 				if ((atomContainer == null) || (atomContainer.getAtomCount()==0)) {
 					screening.setValue(null);

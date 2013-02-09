@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -209,7 +210,7 @@ public class RetrieveProfileValuesAsRow extends AbstractQuery<Profile<Property>,
 					}
 					record.setProperty(p,value);
 				} catch (Exception x) {
-					x.printStackTrace();
+					logger.log(Level.WARNING,x.getMessage(),x);
 				}
 				
 			}

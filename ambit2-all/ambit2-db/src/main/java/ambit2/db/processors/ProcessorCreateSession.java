@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.logging.Level;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.ProcessorException;
@@ -78,7 +79,7 @@ public class ProcessorCreateSession extends AbstractDBProcessor<SessionID, Sessi
 				try {
 					connection.rollback();
 				} catch (SQLException xx) {
-					xx.printStackTrace();
+					logger.log(Level.WARNING,x.getMessage(),x);
 				}
 				throw new ProcessorException(this,x);
 			}

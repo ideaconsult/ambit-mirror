@@ -32,6 +32,7 @@ import java.sql.Types;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.Dictionary;
@@ -278,10 +279,10 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			reporter.setConnection(connection);
 			reporter.process(query);
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} finally {
-			try {insertGoodResults.close(); } catch (Exception x) { x.printStackTrace();}
-			try {reporter.close();} catch (Exception x) { x.printStackTrace();}
+			try {insertGoodResults.close(); } catch (Exception x) { logger.log(Level.FINEST,x.getMessage(),x);}
+			try {reporter.close();} catch (Exception x) { logger.log(Level.FINEST,x.getMessage(),x);}
 		}
 		return 1;
 

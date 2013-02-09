@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.logging.Level;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -102,7 +103,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			
 			output.write("\n@data\n");
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 		} finally {
 		}
 	}
@@ -182,7 +183,7 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			output.write("@attribute URI {");
 			
 		} catch (IOException x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 			//TODO throw exception
 		}
 	};
