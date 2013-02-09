@@ -39,11 +39,13 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
 
 
 public class SmartsHelper 
@@ -471,7 +473,7 @@ public class SmartsHelper
 		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
 		if (FlagExplicitHatoms)
-			AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+			HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(mol);
 		
 		return mol;
 	}

@@ -55,7 +55,7 @@ public class FingerprintGenerator extends DefaultAmbitProcessor<IAtomContainer,B
                     if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
                     c = (IAtomContainer) ((IAtomContainer) object).clone(); 
                     hAdder.addImplicitHydrogens(c);
-                    AtomContainerManipulator.convertImplicitToExplicitHydrogens(c);
+                    HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(c);
 
                 } else {
                     if (((IAtomContainer) object).getBondCount()>1)

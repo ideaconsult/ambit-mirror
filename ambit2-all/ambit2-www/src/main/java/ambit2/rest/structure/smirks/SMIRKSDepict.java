@@ -15,6 +15,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.rest.query.StructureQueryResource.QueryType;
 import ambit2.rest.structure.diagram.CDKDepictVariants;
 import ambit2.smarts.IAcceptable;
@@ -42,7 +43,7 @@ public class SMIRKSDepict extends CDKDepictVariants implements IAcceptable {
 			CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 			CDKHueckelAromaticityDetector.detectAromaticity(reactant); 
 			adder.addImplicitHydrogens(reactant);
-			AtomContainerManipulator.convertImplicitToExplicitHydrogens(reactant);
+			HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(reactant);
 			BufferedImage image = null;
 			if (smrkMan.applyTransformation(reactant, this, smr))
 			    image = depict.getImage(reactant,null,true,false);
