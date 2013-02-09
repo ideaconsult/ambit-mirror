@@ -6,9 +6,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DragonDescriptorDictionary {
-
+	protected static Logger logger = Logger.getLogger(DragonDescriptorDictionary.class.getName());
 	protected List<DragonDescriptor> descriptors = new ArrayList<DragonDescriptor>();
 	protected List<Block> blocks = new ArrayList<Block>();
 	protected List<Block> subBlocks = new ArrayList<Block>();
@@ -75,7 +77,7 @@ public class DragonDescriptorDictionary {
 	  	        }
 	  	        reader.close();
 	  		} catch (Exception x) {
-	  			x.printStackTrace();
+	  			logger.log(Level.WARNING,"initialize()",x);
 	  		} finally {
 	  			try {
 	  				in.close();

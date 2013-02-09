@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.opentox.rdf.OT;
 import org.restlet.Request;
@@ -99,7 +100,7 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<UUID> {
 			task.addLiteral(OT.DataProperty.resultURI.createProperty(getJenaModel()),
 				 getJenaModel().createTypedLiteral(item.getUri().toString(),XSDDatatype.XSDanyURI));
 		} catch (Exception x) {
-			x.printStackTrace(); //TODO error handling
+			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 		
 	}

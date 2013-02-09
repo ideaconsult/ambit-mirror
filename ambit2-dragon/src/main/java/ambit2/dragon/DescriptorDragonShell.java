@@ -28,6 +28,7 @@
  */
 package ambit2.dragon;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
@@ -128,7 +129,7 @@ public class DescriptorDragonShell implements IMolecularDescriptor  {
 	        		else 
 	        			r.add(Double.parseDouble(value.toString()));
 	        	} catch (Exception x) {
-	        		x.printStackTrace();
+	        		logger.log(Level.WARNING,value.toString(),x);
 	        		r.add(Double.NaN);
 	        	}	        	
 	        }

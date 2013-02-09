@@ -16,6 +16,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.vecmath.Point2d;
@@ -383,7 +384,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    			FixBondOrdersTool dbt = new FixBondOrdersTool();
 	    			molecule = dbt.kekuliseAromaticRings((IMolecule) molecule);
 	    		} catch (Exception x) {
-	    			x.printStackTrace();
+	    			logger.log(Level.WARNING,mode2d.name(),x);
 	    		}
 	    		break;
 	    	}
@@ -394,7 +395,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    			SaturationChecker dbt = new SaturationChecker();
 	    			dbt.saturate(molecule);
 	    		} catch (Exception x) {
-	    			x.printStackTrace();
+	    			logger.log(Level.WARNING,mode2d.name(),x);
 	    		}
 	    		break;
 	    	}
@@ -406,7 +407,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    			SmilesValencyChecker dbt = new SmilesValencyChecker();
 	    			dbt.saturate(molecule);
 	    		} catch (Exception x) {
-	    			//x.printStackTrace();
+	    			logger.log(Level.WARNING,mode2d.name(),x);
 	    		}
 	    		break;
 	    	}	    	

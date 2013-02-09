@@ -1,16 +1,19 @@
 package ambit2.tautomers;
 
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 
-import java.util.Vector;
 import ambit2.smarts.SmartsHelper;
 
 
 public class TautomerManager 
 {
+	protected static Logger logger = Logger.getLogger(TautomerManager.class.getName());
 	KnowledgeBase knowledgeBase; 
 	IAtomContainer originalMolecule;
 	IAtomContainer molecule;
@@ -54,8 +57,8 @@ public class TautomerManager
 		knowledgeBase = new KnowledgeBase();
 		if (knowledgeBase.errors.size() > 0)
 		{	
-			System.out.println("There are errors in the knowledge base:");
-			System.out.println(knowledgeBase.getAllErrors());
+			logger.warning("There are errors in the knowledge base:");
+			logger.info(knowledgeBase.getAllErrors());
 		}
 		
 		activateRingChainRules(FlagUseRingChainRules);
@@ -264,8 +267,7 @@ public class TautomerManager
 					if ((instances!=null) && (instances.size()>0))
 						extendedRuleInstances.addAll(instances);
 				} catch (Exception x) {
-					x.printStackTrace();
-					System.out.println(knowledgeBase.rules.get(i).name);
+					logger.log(Level.WARNING,knowledgeBase.rules.get(i).name,x);
 				}
 			}	
 	}
@@ -510,9 +512,9 @@ public class TautomerManager
 	//small helper
 	void printRIGroup(Vector<IRuleInstance> group, String info)
 	{
-		System.out.println(info);
+		logger.info(info);
 		for (IRuleInstance ri : group)
-			System.out.println(((RuleInstance)ri).debugInfo(molecule));
+			logger.info(((RuleInstance)ri).debugInfo(molecule));
 	}
 	
 	
@@ -554,7 +556,9 @@ public class TautomerManager
 		return (sb.toString());
 	}
 	
-	
+	/**
+	 * TODO: Rewrite with logger and proper logger levels
+	 */
 	public void printDebugInfo()
 	{
 		if (FlagPrintTargetMoleculeInfo)

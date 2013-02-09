@@ -1,5 +1,7 @@
 package ambit2.smarts.processors;
 
+import java.util.logging.Level;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -29,7 +31,7 @@ public class SMARTSPropertiesGenerator extends AbstractPropertyGenerator<String>
 			IAtomContainer c = config.process(atomContainer);
 			try {
 				CDKHueckelAromaticityDetector.detectAromaticity(c);
-			} catch (Exception x) { x.printStackTrace(); }
+			} catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x); }
 			StringBuilder b = new StringBuilder();
 			utils.setCMLSMARTSProperties((IMolecule)atomContainer);
 			for (int i=0; i < atomContainer.getAtomCount();i++) {
