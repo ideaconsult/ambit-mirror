@@ -185,7 +185,6 @@ public class DelimitedFileWriter extends FilesWithHeaderWriter {
         } catch(Exception x) {
             logger.error("ERROR while writing Molecule: ", x.getMessage());
             logger.debug(x);
-            x.printStackTrace();
         }
     }
 

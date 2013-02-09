@@ -11,6 +11,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.BitSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.vecmath.Point2d;
@@ -196,8 +197,7 @@ public class MoleculeTools {
 				int atomCount = molecule.getAtomCount();
 				formula = MolecularFormulaManipulator.getMolecularFormula(molecule);
 			} catch (CDKException x) {
-				x.printStackTrace();
-				//TODO exception
+				logger.log(Level.SEVERE,x.getMessage(),x);
 				formula = null;
 			}
 			

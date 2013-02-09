@@ -27,6 +27,7 @@ package ambit2.core.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -66,7 +67,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
 			row.createCell((short)(i+1)).setCellValue(header.list.get(i).toString()); 
 		}
 
-		logger.debug("\tHeader written\t",header);
+		logger.fine("\tHeader written\t"+header);
 	}
     public void writeMolecule(IMolecule molecule) {
         
@@ -89,7 +90,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
         			try {
         				value = sg.createSMILES(molecule);
         			} catch (Exception x) {
-        				logger.error("Error while createSMILES\t",x.getMessage());
+        				logger.log(Level.WARNING,"Error while createSMILES\t",x);
         				value = "";
         			}
         		} 
@@ -116,9 +117,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
         		}
         	}
         } catch(Exception x) {
-            logger.error("ERROR while writing Molecule: ", x.getMessage());
-            logger.debug(x);
-            x.printStackTrace();
+            logger.log(Level.WARNING,"ERROR while writing Molecule: ", x);
         }
     }
 	public void setWriter(Writer arg0) throws CDKException {
@@ -129,7 +128,7 @@ public class XLSFileWriter extends FileWithHeaderWriter {
 		try {
 			if (this.out != null) out.close();
 		} catch (IOException x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,"Error while writing molecule",x);
 		}
 		this.out = arg0;
 	}

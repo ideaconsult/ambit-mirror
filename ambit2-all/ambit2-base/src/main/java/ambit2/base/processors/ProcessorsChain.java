@@ -2,6 +2,8 @@ package ambit2.base.processors;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -20,6 +22,7 @@ public class ProcessorsChain<Target, Result, P extends IProcessor> extends Array
 	 */
 	private static final long serialVersionUID = 1289381455884215893L;
 	protected boolean abortOnError = false;
+	protected static Logger logger = Logger.getLogger(ProcessorsChain.class.getName());
 	public boolean isAbortOnError() {
 		return abortOnError;
 	}
@@ -45,9 +48,10 @@ public class ProcessorsChain<Target, Result, P extends IProcessor> extends Array
 		        postprocess(get(i),o);
 		    }    
 			} catch (Exception x) {
-				x.printStackTrace();
 				if (abortOnError)
 					throw new AmbitException(x);
+				else
+					logger.log(Level.SEVERE,x.getMessage(),x);
 			}
 		}
 		try {

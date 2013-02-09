@@ -28,12 +28,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package ambit2.core.io;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.io.setting.StringIOSetting;
-import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -45,9 +45,9 @@ import ambit2.core.smiles.SmilesParserWrapper;
  */
 public abstract class IteratingFilesWithHeaderReader<COLUMN> extends
 		DefaultIteratingChemObjectReader {
+	protected static Logger logger = Logger.getLogger(DelimitedFileWriter.class.getName());
 	protected SmilesParserWrapper sp = null;
 	protected InChIGeneratorFactory inchiFactory = null;
-	protected static LoggingTool logger = new LoggingTool(DelimitedFileWriter.class);	
 	public static String defaultSMILESHeader = "SMILES";
 	
 	private ArrayList<COLUMN> header;

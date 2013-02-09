@@ -2,6 +2,8 @@ package ambit2.core.smiles;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
@@ -15,7 +17,7 @@ import ambit2.base.external.ShellException;
 
 
 public class SmilesParserWrapper implements PropertyChangeListener {
-	
+	protected static Logger logger = Logger.getLogger(SmilesParserWrapper.class.getName());
 	protected OpenBabelShell babel = null;
 	protected SmilesParser cdkParser = null;
 	protected FixBondOrdersTool  dbt;
@@ -70,7 +72,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 				try {
 					return dbt.kekuliseAromaticRings(mol);
 				} catch (CDKException xx) {
-					xx.printStackTrace();
+					logger.log(Level.WARNING,smiles,xx);
 					return mol;
 					//throw new InvalidSmilesException(xx.getMessage());	
 				}
@@ -85,7 +87,7 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 				return dbt.kekuliseAromaticRings(mol);
 				//return mol;
 			} catch (Exception xx) {
-				xx.printStackTrace();
+				logger.log(Level.WARNING,smiles,xx);
 				return mol;
 				//throw new InvalidSmilesException(xx.getMessage());	
 			}

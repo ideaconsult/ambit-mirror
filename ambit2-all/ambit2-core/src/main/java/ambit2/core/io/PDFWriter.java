@@ -35,6 +35,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.logging.Level;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemFile;
@@ -220,7 +221,7 @@ public class PDFWriter extends FilesWithHeaderWriter {
                     try {
                         value = ""; //sg.createSMILES(molecule);
                     } catch (Exception x) {
-                        logger.error("Error while createSMILES\t",x.getMessage());
+                        logger.log(Level.WARNING,"Error while createSMILES\t",x);
                         value = "";
                     }
                 } 
@@ -254,9 +255,7 @@ public class PDFWriter extends FilesWithHeaderWriter {
             table.addCell(cell);            
 
         } catch(Exception x) {
-            logger.error("ERROR while writing Molecule: ", x.getMessage());
-            logger.debug(x);
-            x.printStackTrace();
+        	logger.log(Level.SEVERE,"Error while writing molecule",x);
         }
         
     }    

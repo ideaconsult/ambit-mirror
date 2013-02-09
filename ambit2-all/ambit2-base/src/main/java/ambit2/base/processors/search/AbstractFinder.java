@@ -257,12 +257,12 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 					if (x.getCode()==404) 
 						logger.log(Level.WARNING,value==null?x.getMessage():value.toString(),x);
 				} catch (Exception x) {
-					x.printStackTrace();
+					logger.log(Level.SEVERE,value==null?x.getMessage():value.toString(),x);
 				}
 			}
 			
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.SEVERE,x.getMessage(),x);
 		}
 		return null;
 	}

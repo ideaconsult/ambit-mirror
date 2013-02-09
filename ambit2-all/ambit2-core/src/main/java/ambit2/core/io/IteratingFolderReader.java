@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
@@ -43,6 +44,7 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
  * reader for multiple files in a folder
  */
 public abstract class IteratingFolderReader<T, ItemReader extends IIteratingChemObjectReader> extends DefaultIteratingChemObjectReader  {
+	protected static Logger logger = Logger.getLogger(IteratingFolderReader.class.getName());
 	protected File[] files;
 	protected int index = -1;
 	protected ItemReader reader;		

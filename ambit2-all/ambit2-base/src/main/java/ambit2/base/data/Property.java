@@ -247,7 +247,6 @@ public class Property extends Model implements Serializable, Comparable<Property
 		
 	    	return hash;
     	} catch (Exception x) {
-    		x.printStackTrace();
     		return 0;
     	}
     }	

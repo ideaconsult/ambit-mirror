@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -29,6 +31,7 @@ import ambit2.core.config.AmbitCONSTANTS;
  */
 public class ECHAPreregistrationListReader extends
 		DefaultIteratingChemObjectReader implements IRawReader<IStructureRecord> {
+	protected static Logger logger = Logger.getLogger(ECHAPreregistrationListReader.class.getName());
 	protected XMLStreamReader reader ;
 	protected static String ECHA_URL="http://apps.echa.europa.eu/preregistered/prsDownload.aspx";
 	protected static String ECHA_REFERENCE="ECHA";
@@ -202,7 +205,7 @@ public class ECHAPreregistrationListReader extends
 		    	
 		    }
 		} catch (XMLStreamException x) {
-			x.printStackTrace();
+			logger.log(Level.SEVERE,x.getMessage(),x);
 
 		}
 		return false;

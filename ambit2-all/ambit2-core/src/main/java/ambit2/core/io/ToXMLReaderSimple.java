@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -26,6 +28,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 
 public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader implements IRawReader<IStructureRecord>  {
+	protected static Logger logger = Logger.getLogger(ToXMLReaderSimple.class.getName());
 	protected int compounds = 0;
 	protected final String URI = "http://opentox.org/toxml.owl#";
 	protected int study = 0;
@@ -589,7 +592,7 @@ public class ToXMLReaderSimple  extends DefaultIteratingChemObjectReader impleme
 		    }
 		    return false;
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,x.getMessage(),x);
 			return false;
 		}
 	}
