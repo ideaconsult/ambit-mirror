@@ -34,7 +34,7 @@ import ambit2.rest.test.ResourceTest;
 public class AlgorithmResourceTest extends ResourceTest {
     @BeforeClass
     public static void prepare() throws Exception {
-        setLogLevel(Level.FINEST);
+        setLogLevel(Level.INFO);
     }
 	@Override
 	protected void setDatabase() throws Exception {
@@ -84,7 +84,10 @@ public class AlgorithmResourceTest extends ResourceTest {
 		}
 		return count == 130;
 	}	
-	
+	/**
+	 * fails because of not finding the Freemarker templates.
+	 * @throws Exception
+	 */
 	@Test
 	public void testHTML() throws Exception {
 		testGet(getTestURI(),MediaType.TEXT_HTML);
@@ -100,6 +103,23 @@ public class AlgorithmResourceTest extends ResourceTest {
 		}
 		return count > 0;
 	}	
+	
+	@Test
+	public void testJSON() throws Exception {
+		testGet(getTestURI(),MediaType.APPLICATION_JSON);
+	}
+	@Override
+	public boolean verifyResponseJSON(String uri, MediaType media, InputStream in)
+			throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		int count=0;
+		while ((line = reader.readLine())!=null) {
+			count++;
+		}
+		return count > 0;
+	}		
+	
 
 	@Test
 	public void testCalculateCPSA() throws Exception {

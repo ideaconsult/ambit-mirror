@@ -4,9 +4,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -284,6 +281,9 @@ public abstract class ResourceTest extends DbUnitTest {
 	public boolean verifyResponseHTML(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
 	}	
+	public boolean verifyResponseJSON(String uri, MediaType media,InputStream in) throws Exception {
+		throw new Exception("Not implemented");
+	}
 	/*
 	public boolean verifyResponseXML(String uri, MediaType media,InputStream in) throws Exception {
 		throw new Exception("Not implemented");
@@ -353,6 +353,8 @@ public abstract class ResourceTest extends DbUnitTest {
 			return verifyResponseWADL(uri, media, in);
 		else if (MediaType.TEXT_HTML.equals(media))
 			return verifyResponseHTML(uri, media, in);
+		else if (MediaType.APPLICATION_JSON.equals(media))
+			return verifyResponseJSON(uri, media, in);		
 		/*
 		else if (MediaType.TEXT_XML.equals(media))
 			return verifyResponseXML(uri, media, in);
