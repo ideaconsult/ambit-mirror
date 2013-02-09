@@ -3,6 +3,7 @@ package ambit2.smarts.test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -28,33 +29,16 @@ import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.SmartsParser;
 
-public class TestSMIRKS 
-{
+public class TestSMIRKS {
+	protected static Logger logger = Logger.getLogger(TestSMIRKS.class.getName());
 	//All tests fail , if hydrogens are explicit!
 	boolean explicitH = true;
 	
-	public static LoggingTool logger;
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	SmartsParser smartsParser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	SmilesGenerator smigen = new SmilesGenerator();
 	
-	@BeforeClass
-	public static void  init() {
-		logger = new LoggingTool(TestSMIRKS.class);
-	}
-	
-	/*
-	public TestSMIRKS() 
-	{   
-		
-	}
-	
-	public static Test suite() {
-		return new TestSuite(TestSMIRKS.class);
-	}
-	
-	*/
 	/**
 	 * Throws exception if anything is wrong
 	 * @param result
@@ -286,7 +270,7 @@ public class TestSMIRKS
 
 		//AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(result);
 		for (IAtom a : result.atoms()) {
-			System.out.println(String.format("%s valency %d hydrogens %d bond order sum %f neighbors %d",
+			logger.info(String.format("%s valency %d hydrogens %d bond order sum %f neighbors %d",
 					a.getSymbol(),
 					a.getValency(),
 					a.getImplicitHydrogenCount(),
@@ -296,7 +280,7 @@ public class TestSMIRKS
 			if ("C".equals(a.getSymbol()) && result.getBondOrderSum(a)==5){
 				List<IAtom> neighbors = result.getConnectedAtomsList(a);
 				for (IAtom neighbor : neighbors) {
-					System.out.println(neighbor.getSymbol());
+					logger.info(neighbor.getSymbol());
 					if ("H".equals(neighbor.getSymbol())) { 
 						result.removeAtom(neighbor);
 
