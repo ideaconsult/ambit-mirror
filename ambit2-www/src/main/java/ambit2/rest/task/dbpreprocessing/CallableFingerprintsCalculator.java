@@ -34,7 +34,6 @@ import ambit2.db.update.qlabel.smarts.SMARTSAcceleratorWriter;
 import ambit2.descriptors.processors.AtomEnvironmentGenerator;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.BitSetGenerator.FPTable;
-import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.TaskResult;
 import ambit2.smarts.processors.SMARTSPropertiesGenerator;
 
@@ -45,7 +44,7 @@ import ambit2.smarts.processors.SMARTSPropertiesGenerator;
  */
 public class CallableFingerprintsCalculator<USERID> extends	CallableDBProcessing<USERID> {
 	protected FPTable fingerprintsType = FPTable.fp1024;
-	
+	protected String label ;
 	
 	public FPTable getFingerprintsType() {
 		return fingerprintsType;
@@ -65,6 +64,11 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableDBProcessing
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,algorithm.getContent().toString(),x);
 		}
 
+	}
+	@Override
+	protected void processForm(Reference applicationRootReference, Form form) {
+		super.processForm(applicationRootReference, form);
+		label = form.getFirstValue("label");
 	}
 	protected long batchSize = 10000;
 	@Override
@@ -130,7 +134,7 @@ public class CallableFingerprintsCalculator<USERID> extends	CallableDBProcessing
 		else { 	
 			switch (getFingerprintsType()) {
 			case inchi: {
-				MissingInChIsQuery q = new MissingInChIsQuery();
+				MissingInChIsQuery q = new MissingInChIsQuery(label==null?"ERROR":label);
 				q.setPageSize(batchSize);
 				q.setPage(0);
 				return q;
