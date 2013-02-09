@@ -27,6 +27,8 @@ package ambit2.core.io;
 
 
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IPseudoAtom;
@@ -51,7 +53,7 @@ import ambit2.core.groups.UnsupportedGroupOperation;
  *
  */
 public class SGroupMDL2000Helper {
-
+	protected static Logger logger = Logger.getLogger(SGroupMDL2000Helper.class.getName());
 	public enum SGROUP_LINE {
 		  /**
 		   * Atom List [Query]
@@ -159,7 +161,7 @@ public class SGroupMDL2000Helper {
 					if (group != null)
                         sgroups.put(group.getNumber(),group);
 				  }	catch (Exception x) {
-					  x.printStackTrace();
+					  logger.log(Level.WARNING,name(),x);
 				  }
 			  }
 		  },

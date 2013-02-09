@@ -33,12 +33,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.io.DefaultChemObjectWriter;
-import org.openscience.cdk.tools.LoggingTool;
 
 public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
-    protected static LoggingTool logger = new LoggingTool(FilesWithHeaderWriter.class);    
+    protected static Logger logger = Logger.getLogger(FilesWithHeaderWriter.class.getName());
     public static String defaultSMILESHeader = "SMILES";    
     protected ArrayList header = null;
     protected boolean writingStarted = false;    
@@ -57,7 +57,7 @@ public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
      */
     public void setHeader(Map properties) {
         if (writingStarted) {
-            logger.error("Can't change header while writing !!!!");
+            logger.warning("Can't change header while writing !!!!");
             return; //cant' change header !
         }       
         header = new ArrayList();
@@ -69,7 +69,7 @@ public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
             i++;
         }
         if (smilesIndex == -1) { header.add(0,defaultSMILESHeader); smilesIndex = 0; }
-        logger.info("Header created from hashtable\t",header);
+        logger.fine("Header created from hashtable\t"+header);
     }    
     abstract protected void writeHeader() throws IOException;
     /**
@@ -77,7 +77,7 @@ public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
      */
     public synchronized void setHeader(ArrayList header) {
         if (writingStarted) {
-            logger.error("Can't change header while writing !!!!");
+            logger.warning("Can't change header while writing !!!!");
             return; //cant' change header !
         }
         this.header = header;
@@ -85,6 +85,6 @@ public abstract class FilesWithHeaderWriter extends DefaultChemObjectWriter {
         for (int i=0; i < header.size(); i++) 
             if (header.get(i).equals(defaultSMILESHeader)) smilesIndex = i;
         if (smilesIndex == -1) { header.add(0,defaultSMILESHeader); smilesIndex = 0; }
-        logger.info("Header created\t",header);
+        logger.fine("Header created\t"+header);
     }    
 }

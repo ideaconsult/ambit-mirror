@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.MoleculeSet;
@@ -39,12 +40,11 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.DefaultChemObjectWriter;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.core.config.AmbitCONSTANTS;
 
 public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
-	protected static LoggingTool logger = new LoggingTool(DelimitedFileWriter.class);
+	protected static Logger logger = Logger.getLogger(DelimitedFileWriter.class.getName());
 	protected Header header = null;
 	protected int smilesIndex = -1;
 	protected SmilesGenerator sg = new SmilesGenerator(true);
@@ -82,7 +82,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 	 */
 	public synchronized void setHeader(ArrayList header) {
 		if (writingStarted) {
-			logger.error("Can't change header while writing !!!!");
+			logger.warning("Can't change header while writing !!!!");
 			return; //cant' change header !
 		}
 		if (this.header == null) this.header = new Header();
@@ -91,7 +91,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 		for (int i=0; i < header.size(); i++) 
 			if (this.header.list.get(i).equals(defaultSMILESHeader)) smilesIndex = i;
 		if (smilesIndex == -1) { this.header.list.add(0,defaultSMILESHeader); smilesIndex = 0; }
-		logger.info("Header created\t",header);
+		logger.fine("Header created\t"+header);
 	}
 	/**
 	 * Creates header from Hashtable keys
@@ -100,7 +100,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 	 */
 	public void setHeader(Map properties) {
 		if (writingStarted) {
-			logger.error("Can't change header while writing !!!!");
+			logger.warning("Can't change header while writing !!!!");
 			return; //cant' change header !
 		}		
 		header = new Header();
@@ -121,7 +121,7 @@ public abstract class FileWithHeaderWriter extends DefaultChemObjectWriter {
 		    }
 		}
 		if (smilesIndex == -1) { header.list.add(0,defaultSMILESHeader); smilesIndex = 0; }
-		logger.info("Header created from hashtable\t",header);
+		logger.fine("Header created from hashtable\t"+header);
 	}
 	public abstract void writeMolecule(IMolecule molecule) ;
 	public void  writeSetOfMolecules(IMoleculeSet som)

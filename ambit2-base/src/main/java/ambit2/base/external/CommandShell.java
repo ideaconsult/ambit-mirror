@@ -151,7 +151,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 				try {
 					Runtime.getRuntime().exec(String.format("chmod +x %s",file.getAbsolutePath()));
 				} catch (Exception x) {
-					x.printStackTrace();
+					logger.log(Level.WARNING,"Error when executing chmod on "+file.getAbsolutePath(),x);
 				}
 			}
 			if (command.getAdditionalFiles()!=null)

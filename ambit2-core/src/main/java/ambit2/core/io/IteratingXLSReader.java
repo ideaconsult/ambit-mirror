@@ -32,12 +32,12 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -124,7 +124,7 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 		try {
 			return iterator.hasNext();
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(Level.SEVERE,x.getMessage(),x);
 			return false;
 		}
 	}
@@ -165,7 +165,7 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 							try {
 								value = cell.getNumericCellValue();
 							} catch (Exception z) {	
-								x.printStackTrace(); 
+								logger.log(Level.WARNING,x.getMessage(),x); 
 							}
 						}
 					}
@@ -177,7 +177,7 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 							mol = sp.parseSmiles(value.toString());
 							properties.put(AmbitCONSTANTS.SMILES, value.toString());
 						} catch (InvalidSmilesException x) {
-							logger.warn("Invalid SMILES!\t"+value);
+							logger.warning("Invalid SMILES!\t"+value);
 							properties.put(AmbitCONSTANTS.SMILES, "Invalid SMILES");
 						}						
 					} 
@@ -185,7 +185,7 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 						if (col< getNumberOfColumns())
 							properties.put(getHeaderColumn(col), value);
 				} catch (Exception x) {
-					x.printStackTrace();
+					logger.log(Level.WARNING,x.getMessage(),x);
 				}
 	
 			}
@@ -193,7 +193,7 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 			mol.setProperties(properties);
 			processRow(mol);
 		} catch (Exception x) {
-			logger.error(x);
+			logger.log(Level.SEVERE,x.getMessage(),x);
 		}
 		return mol;
 		
