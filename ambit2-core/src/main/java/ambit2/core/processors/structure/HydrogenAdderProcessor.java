@@ -29,11 +29,16 @@
 
 package ambit2.core.processors.structure;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -70,7 +75,7 @@ public class HydrogenAdderProcessor extends	AtomConfigurator {
     	            adder.addImplicitHydrogens(mol);
     	            logger.fine("Adding implicit hydrogens; atom count "+mol.getAtomCount());
     	            if (isAddEexplicitHydrogens()) {
-	    	            AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
+    	            	HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(mol);
 	    	            logger.fine("Convert explicit hydrogens; atom count "+mol.getAtomCount());
     	            }
 
@@ -88,7 +93,7 @@ public class HydrogenAdderProcessor extends	AtomConfigurator {
       		          adder.addImplicitHydrogens(molPart);
       		          logger.fine("Adding implicit hydrogens; atom count "+molPart.getAtomCount());
       		          if (isAddEexplicitHydrogens()) {
-	    		          AtomContainerManipulator.convertImplicitToExplicitHydrogens(molPart);
+      		        	HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(molPart);
 	    		          logger.fine("Convert explicit hydrogens; atom count "+molPart.getAtomCount());
       		          }
         	      }
@@ -100,4 +105,31 @@ public class HydrogenAdderProcessor extends	AtomConfigurator {
 		}
 	}
 
+	   public static void convertImplicitToExplicitHydrogens(IAtomContainer atomContainer) {
+	        List<IAtom> hydrogens = new ArrayList<IAtom>();
+	        List<IBond> newBonds = new ArrayList<IBond>();
+	        List<Integer> atomIndex = new ArrayList<Integer>();
+
+	        for (int a=0; a < atomContainer.getAtomCount();a++) {
+	        	IAtom atom = atomContainer.getAtom(a);
+	            if (!atom.getSymbol().equals("H")) {
+	                Integer hCount = atom.getImplicitHydrogenCount();
+	                if (hCount != null) {
+	                    for (int i = 0; i < hCount; i++) {
+
+	                        IAtom hydrogen = atom.getBuilder().newInstance(IAtom.class, "H");
+	                        hydrogen.setAtomTypeName("H");
+	                        hydrogens.add(hydrogen);
+	                        newBonds.add(atom.getBuilder().newInstance(IBond.class,
+	                                atom, hydrogen, CDKConstants.BONDORDER_SINGLE
+	                        ));
+	                    }
+	                    atomIndex.add(atomContainer.getAtomNumber(atom));
+	                }
+	            }
+	        }
+	        for (Integer index : atomIndex) atomContainer.getAtom(index).setImplicitHydrogenCount(0);
+	        for (IAtom atom : hydrogens) atomContainer.addAtom(atom);
+	        for (IBond bond : newBonds) atomContainer.addBond(bond);
+	    }
 }

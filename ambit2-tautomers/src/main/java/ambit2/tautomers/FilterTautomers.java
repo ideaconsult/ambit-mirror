@@ -2,19 +2,19 @@ package ambit2.tautomers;
 
 import java.util.Vector;
 
-import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomType;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
@@ -306,7 +306,7 @@ public class FilterTautomers
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(clone);
 		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(clone);
-		AtomContainerManipulator.convertImplicitToExplicitHydrogens(clone);
+		HydrogenAdderProcessor.convertImplicitToExplicitHydrogens(clone);
 		return(clone);
 	}
 	
