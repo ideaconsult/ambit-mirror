@@ -1,12 +1,16 @@
 package ambit2.rest;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.net.ssl.HostnameVerifier;
@@ -135,17 +139,19 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");		
 
-		/*
-		String tmpDir = System.getProperty("java.io.tmpdir");
-        File logFile = new File(tmpDir,"ambit2-www.log");		
-		System.setProperty("java.util.logging.config.file",logFile.getAbsolutePath());
-		*/
-
-		//connectionURI = null;
+		InputStream in = null;
+		try {
+			URL url = getClass().getClassLoader().getResource("ambit2/rest/config/logging.prop");
+			System.setProperty("java.util.logging.config.file", url.getFile());
+			in = new FileInputStream(new File(url.getFile()));
+			LogManager.getLogManager().readConfiguration(in);
+			logger.log(Level.INFO,String.format("Logging configuration loaded from %s",url.getFile()));
+		} catch (Exception x) {
+			System.err.println("logging configuration failed "+ x.getMessage());
+		} finally {
+			try { if (in!=null) in.close(); } catch (Exception x) {}
+		}
 		setStatusService(new AmbitStatusService());
-
-		//getTaskService().setEnabled(true);
-		
 		setTunnelService(new TunnelService(true,true) {
 			@Override
 			public Filter createInboundFilter(Context context) {
