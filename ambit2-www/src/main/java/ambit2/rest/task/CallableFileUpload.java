@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.fileupload.FileItem;
@@ -56,15 +57,24 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                         		 throw new ResourceException(new Status(Status.CLIENT_ERROR_BAD_REQUEST,"Empty file!"));	
                             found = true;
                             File file = null;
+                            String description;
                             if (fi.getName()==null)
                             	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"File name can't be empty!");
-                            else
+                            else {
+            		        	//stupid File class ... 
+            		        	int lastIndex = fi.getName().lastIndexOf("\\");
+            		        	if (lastIndex < 0) lastIndex = fi.getName().lastIndexOf("/");
+            		        	int extIndex = fi.getName().lastIndexOf(".");
+            		        	description = extIndex<=0?fi.getName():fi.getName().substring(0,extIndex);
+            		        	description  = stripFileName(description);
+            		        	String ext = extIndex>0?fi.getName().substring(extIndex):"";
                             	file = new File(
-                            		String.format("%s/%s",
-                            				System.getProperty("java.io.tmpdir"),
-                            				fi.getName()));
+                            		String.format("%s/www_%s%s",System.getProperty("java.io.tmpdir"),
+                            				UUID.randomUUID().toString(),ext));
+                            	file.deleteOnExit();
+                            }	
                             fi.write(file);
-                            processFile(file);
+                            processFile(file,description);
                         }
                     }    
                     processProperties(properties);
@@ -82,7 +92,13 @@ public abstract class CallableFileUpload implements Callable<Reference> {
                  }
 
 	}
-	protected void processFile(File file) throws Exception { };
+	public static String stripFileName(String fileName) {
+    	int lastIndex = fileName.lastIndexOf("\\");
+    	if (lastIndex < 0) lastIndex = fileName.lastIndexOf("/");
+    	return lastIndex>0?fileName.substring(lastIndex+1):fileName;
+    	
+	}
+	protected void processFile(File file,String description) throws Exception { };
 	protected void processProperties(Hashtable<String, String> properties) throws Exception { };
 	public abstract Reference createReference() ;
 	
