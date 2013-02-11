@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -138,6 +139,7 @@ public class MopacShell extends CommandShell<IAtomContainer, IAtomContainer> {
 		addExecutable(CommandShell.os_LINUX, "/usr/local/mopac/mopac",null);
 		setInputFile("mol.smi");
 		setOutputFile("rough.sdf");		
+		if (logger!=null) logger.setLevel(Level.FINER);
 	}	
 	/**
 	 * This is not thread safe!
