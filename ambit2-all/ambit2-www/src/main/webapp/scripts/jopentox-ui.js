@@ -481,7 +481,7 @@ function defineDatasetsTable(root,url) {
     			       "fnRender": function ( o, val ) {
     			    	   val = o.aData["URI"];
     			    	   var sOut = "<a href='"+getMediaLink(val,"chemical/x-mdl-sdfile")+"' id='sdf'><img src='"+root+"/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a> ";
-    			    	   sOut += "<a href='"+getMediaLink(val,"chemical/text/csv")+"' id='csv'><img src='"+root+"/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/csv")+"' id='csv'><img src='"+root+"/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
     			    	   sOut += "<a href='"+getMediaLink(val,"text/plain")+"' id='txt'><img src='"+root+"/images/excel.png' alt='TXT' title='Download as TXT'/></a> ";
     			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-cml")+"' id='cml'><img src='"+root+"/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'/></a> ";
     			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-daylight-smiles")+"' id='smiles'><img src='"+root+"/images/smi.png' alt='SMILES' title='Download as SMILES'/></a> ";
@@ -507,7 +507,7 @@ function getMediaLink(uri, media) {
 function getDownloadLinksCompound(root,uri) {
 	   val = uri;
 	   var sOut = "<a href='"+getMediaLink(val,"chemical/x-mdl-sdfile")+"' id='sdf'><img src='"+root+"/images/sdf.jpg' alt='SDF' title='Download as SDF' /></a> ";
-	   sOut += "<a href='"+getMediaLink(val,"chemical/text/csv")+"' id='csv'><img src='"+root+"/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"text/csv")+"' id='csv'><img src='"+root+"/images/excel.png' alt='CSV' title='Download as CSV (Comma delimited file)'/></a> ";
 	   sOut += "<a href='"+getMediaLink(val,"text/plain")+"' id='txt'><img src='"+root+"/images/excel.png' alt='TXT' title='Download as TXT'/></a> ";
 	   sOut += "<a href='"+getMediaLink(val,"chemical/x-cml")+"' id='cml'><img src='"+root+"/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'/></a> ";
 	   sOut += "<a href='"+getMediaLink(val,"chemical/x-daylight-smiles")+"' id='smiles'><img src='"+root+"/images/smi.png' alt='SMILES' title='Download as SMILES'/></a> ";
