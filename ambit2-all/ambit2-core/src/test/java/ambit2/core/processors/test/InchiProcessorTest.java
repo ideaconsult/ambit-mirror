@@ -29,6 +29,8 @@
 
 package ambit2.core.processors.test;
 
+import java.io.InputStream;
+
 import junit.framework.Assert;
 import net.sf.jniinchi.INCHI_RET;
 
@@ -43,12 +45,15 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.config.AmbitCONSTANTS;
+import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.processors.structure.InchiProcessor;
@@ -161,5 +166,52 @@ public class InchiProcessorTest {
 
 		generate(a,"InChI=1S/C5H12O/c1-3-4-5-6-2/h3-5H2,1-2H3");
 		// InChI=1/C5O/c1-3-4-5-6-2
+	}
+
+	
+	public IAtomContainer isInChI(String inchi) throws Exception {
+		if ((inchi!= null) && inchi.startsWith(AmbitCONSTANTS.INCHI)) {
+			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+			InChIToStructure c =f.getInChIToStructure(inchi, SilentChemObjectBuilder.getInstance());
+			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
+				throw new Exception("Invalid InChI");
+			return c.getAtomContainer();
+		} else return null;
+	}
+	
+	@Test
+	public void testProcessStereo() throws Exception {
+		InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();  
+		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
+		
+		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/stereo/stereo.sdf");
+		IIteratingChemObjectReader<IMolecule> reader =  FileInputState.getReader(in, "stereo.sdf");
+		int count = 0;
+		while (reader.hasNext()) {
+			IMolecule o = reader.next();
+			InChIGenerator gen = factory.getInChIGenerator(o);
+		    INCHI_RET ret = gen.getReturnStatus();
+		    if (ret != INCHI_RET.OKAY) {
+		    	System.err.println(String.format("InChI failed: %s [%s]",ret.toString(),gen.getMessage()));
+		    }
+		    String inchi = gen.getInchi();
+		    System.out.println(inchi);
+		    Assert.assertEquals(o.getProperty("InChI"),inchi);
+		    
+			Object smiles = o.getProperty("SMILES");
+			Assert.assertNotNull(smiles);
+			 System.out.println(smiles);
+			IMolecule smilesMol = p.parseSmiles(smiles.toString());
+			gen = factory.getInChIGenerator(smilesMol);
+			System.out.println(gen.getReturnStatus() + " " + gen.getMessage());
+			System.out.println("from SMILES " + gen.getInchi());
+			count++;
+			if (!gen.getInchi().equals(inchi)) {
+				System.out.println("Mismatch");
+			}
+		}
+		reader.close();
+		Assert.assertEquals(4,count);
+
 	}
 }
