@@ -80,6 +80,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		this.propertyKey = matchByProperty;
 	}
 
+	protected String fileDescription;
 	protected File file;
 	protected Hashtable<String, String> properties;
 	
@@ -87,8 +88,9 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		return file;
 	}
 
-	protected void setFile(File file) {
+	protected void setFile(File file,String description) {
 		this.file = file;
+		this.fileDescription = description;
 	}
 	protected void setProperties(Hashtable<String, String> properties) {
 		this.properties = properties;
@@ -158,8 +160,8 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			}
 
 			@Override
-			protected void processFile(File file) throws Exception {
-				setFile(file);
+			protected void processFile(File file,String description) throws Exception {
+				setFile(file,description);
 			}
 			@Override
 			protected void processProperties(
@@ -212,20 +214,24 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		try {
 			String extension = getExtension(input.getMediaType());
 			File file = null;
+			String description = null;
 			if (input.getDownloadName() == null) {
-				file = File.createTempFile(String.format("_ambit2_%s",UUID.randomUUID()), extension);
+				description = UUID.randomUUID().toString();
+				file = File.createTempFile(String.format("_ambit2_%s",description), extension);
 				file.deleteOnExit();
-			} else
-				file = new File(String
-						.format("%s/%s", System.getProperty("java.io.tmpdir"),
-								input.getDownloadName()));
+			} else {
+				description = input.getDownloadName();
+				file = new File(String.format("%s/%s", System.getProperty("java.io.tmpdir"),
+								UUID.randomUUID()));
+				file.deleteOnExit();
+			}	
 			FileOutputStream out = new FileOutputStream(file);
 			input.write(out);
 			out.flush();
 			out.close();
-			setFile(file);
+			setFile(file,description);
 		} catch (Exception x) {
-			setFile(null);
+			setFile(null,null);
 		}
 
 	}
@@ -271,14 +277,11 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	
 	protected SourceDataset datasetMeta(File file) {
 		
-		int ext_index = file.getName().lastIndexOf(".");
-		String filename = ext_index<=0?file.getName():file.getName().substring(0,ext_index);
-		
 		String title = properties==null?null:properties.get("title");
-		title = title==null?filename:("".equals(title.trim())?filename:title.trim());
+		title = title==null?fileDescription:("".equals(title.trim())?fileDescription:title.trim());
 		
 		String source = properties==null?null:properties.get(AbstractDataset._props.source.name());
-		source = source==null?file.getName():source;
+		source = source==null?fileDescription:source;
 		
 		String license = properties==null?null:properties.get(AbstractDataset._props.license.name());
 		license = license==null?ISourceDataset.license.Unknown.getURI():license;
@@ -397,7 +400,8 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 					reporter = new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>();
 				return new TaskResult(reporter.getURI(newDataset));
 			}
-
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new ResourceException(new Status(
 					Status.SERVER_ERROR_INTERNAL, x.getMessage()));
