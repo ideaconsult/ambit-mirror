@@ -70,7 +70,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	public static String getMsgemptymolecule() {
 		return msgEmptyMolecule;
 	}
-	protected static Logger logger = Logger.getLogger(CommandShell.class.getName());
+	protected Logger logger = Logger.getLogger(getClass().getName());
 	
 	protected Hashtable<String, Command> executables; //<os.name, executable>
 	protected String inputFile = null;

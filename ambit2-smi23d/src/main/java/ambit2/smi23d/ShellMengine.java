@@ -26,6 +26,7 @@ package ambit2.smi23d;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.openscience.cdk.interfaces.IMolecule;
 
@@ -62,6 +63,7 @@ public class ShellMengine extends ShellSDFoutput<IMolecule> {
 		setInputFile("rough.sdf");
 		setOutputFile("opt.sdf");
 		setReadOutput(true);
+		if (logger!=null) logger.setLevel(Level.FINER);
 	}
 	protected synchronized List<String> prepareInput(String path, IMolecule mol) throws ShellException {
 		List<String> list = new ArrayList<String>();

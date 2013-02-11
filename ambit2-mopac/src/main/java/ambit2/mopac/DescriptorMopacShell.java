@@ -67,7 +67,7 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
     public DescriptorMopacShell() throws ShellException {
         super();
         mopac_shell = new MopacShell();
-        
+        if (logger!=null) logger.setLevel(Level.FINER);
     }
  
     public String toString() {
