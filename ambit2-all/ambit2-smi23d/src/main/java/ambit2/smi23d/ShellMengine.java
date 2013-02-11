@@ -63,7 +63,6 @@ public class ShellMengine extends ShellSDFoutput<IMolecule> {
 		setInputFile("rough.sdf");
 		setOutputFile("opt.sdf");
 		setReadOutput(true);
-		if (logger!=null) logger.setLevel(Level.FINER);
 	}
 	protected synchronized List<String> prepareInput(String path, IMolecule mol) throws ShellException {
 		List<String> list = new ArrayList<String>();

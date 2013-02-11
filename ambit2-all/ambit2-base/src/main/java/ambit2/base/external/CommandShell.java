@@ -267,9 +267,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
                 if (!runAsync) {
                     builder.redirectErrorStream(true);
                     logger.fine("<" + toString() + " filename=\""+execString+"\">");
-                    logger.fine("<environ>");
-                    logger.fine(environ.toString());
-                    logger.fine("</environ>");                        
+                    logger.log(Level.FINE,"<environ>"+environ.toString()+"</environ>");                        
                     long now=System.currentTimeMillis();    
                     final Process process = builder.start();
                     InputStream is = process.getInputStream();
@@ -288,9 +286,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	                	newmol = parseOutput(path, mol);
 	                	logger.fine("</parse>");
 	                } else {
-	                  	logger.fine("<error>");
-	                  	logger.fine(Integer.toString(getExitCode()));
-	                	logger.fine("</error>");
+	                  	logger.fine("<error>"+Integer.toString(getExitCode())+"</error>");
 	                	newmol = parseOutput(path, mol,getExitCode());
 	                }
 	                return newmol;	                
