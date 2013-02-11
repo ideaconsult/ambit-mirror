@@ -1,7 +1,6 @@
 package ambit2.rest.property;
 
 import java.io.Writer;
-import java.util.Hashtable;
 
 import org.opentox.rdf.OT;
 import org.restlet.Request;
@@ -11,6 +10,7 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.dataset.MetadatasetJSONReporter;
 
 /**
  * JSON
@@ -112,17 +112,17 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					uri,
-					jsonFeature.title.jsonname(),feature.getName(),
+					jsonFeature.title.jsonname(),MetadatasetJSONReporter.jsonEscape(feature.getName()),
 					jsonFeature.units.jsonname(),feature.getUnits()==null?"":feature.getUnits(),
 					jsonFeature.isNominal.jsonname(),feature.isNominal(),
 					jsonFeature.isNumeric.jsonname(),numeric,
-					jsonFeature.sameAs.jsonname(),uriSameAs==null?null:uriSameAs.replace("\"","'").replace("\n"," "),
+					jsonFeature.sameAs.jsonname(),uriSameAs==null?null:MetadatasetJSONReporter.jsonEscape(uriSameAs),
 					jsonFeature.isModelPredictionFeature.jsonname(),isModelPredictionFeature,
-					jsonFeature.creator.jsonname(),feature.getReference().getURL(),
+					jsonFeature.creator.jsonname(),MetadatasetJSONReporter.jsonEscape(feature.getReference().getURL()),
 					jsonFeature.order.jsonname(),feature.getOrder(),
 					jsonFeature.source.jsonname(),
-						uriSource==null?null:uriSource.replace("\"","'"),
-						typeSource==null?null:typeSource.replace("\"","'").replace("\n"," ")
+						uriSource==null?null:MetadatasetJSONReporter.jsonEscape(uriSource),
+						typeSource==null?null:MetadatasetJSONReporter.jsonEscape(typeSource)
 					
 					));
 			comma = ",";

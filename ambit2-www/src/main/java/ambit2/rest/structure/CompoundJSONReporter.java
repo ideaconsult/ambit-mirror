@@ -14,6 +14,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.dataset.ARFFResourceReporter;
+import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.property.PropertyJSONReporter;
 
 /**
@@ -139,7 +140,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				else if (value instanceof Long) 
 					builder.append(String.format("\t\t\"%s\":%l",key,(Long)value));
 				else 
-					builder.append(String.format("\t\t\"%s\":\"%s\"",key,value.toString().replace("\"","'").replace("\\","").replace("\n","|")));				
+					builder.append(String.format("\t\t\"%s\":\"%s\"",key,MetadatasetJSONReporter.jsonEscape(value.toString().replace("\n","|"))));				
 				i++;
 				comma1 = ",";
 			}
@@ -167,7 +168,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			output.write("\"query\": {");
 			output.write("\n\t\"summary\":");
 			output.write("\"");
-			output.write(query==null?"":query.toString().replace("\n"," ").replace("\r", " "));
+			output.write(query==null?"":MetadatasetJSONReporter.jsonEscape(query.toString()));
 			output.write("\"");
 			output.write("\n},");
 			output.write("\n\"dataEntry\":[");

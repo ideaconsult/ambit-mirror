@@ -6,6 +6,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.dataset.MetadatasetJSONReporter;
 
 /**
  * JSON
@@ -75,24 +76,24 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					
 					jsonModel.URI.jsonname(),uri,
 					"id",model.getId(),
-					jsonModel.title.jsonname(),model.getName(),
+					jsonModel.title.jsonname(),MetadatasetJSONReporter.jsonEscape(model.getName()),
 					jsonModel.stars.jsonname(),model.getStars(),
-					jsonModel.algorithm.jsonname(),model.getAlgorithm()==null?"":model.getAlgorithm(),
-					jsonModel.algFormat.jsonname(),algFormat.name(),
+					jsonModel.algorithm.jsonname(),model.getAlgorithm()==null?"":MetadatasetJSONReporter.jsonEscape(model.getAlgorithm()),
+					jsonModel.algFormat.jsonname(),MetadatasetJSONReporter.jsonEscape(algFormat.name()),
 					String.format("/%s",model.getAlgorithm().indexOf("org.openscience.cdk")>=0?"images/cdk.png":
 									model.getAlgorithm().indexOf("toxtree")>=0?"images/toxtree.png":
 									algFormat.getImage()),
 					
-					jsonModel.trainingDataset.jsonname(),model.getTrainingInstances()==null?"":model.getTrainingInstances(),
+					jsonModel.trainingDataset.jsonname(),model.getTrainingInstances()==null?"":MetadatasetJSONReporter.jsonEscape(model.getTrainingInstances()),
 					jsonModel.independent.jsonname(),String.format("%s/independent",uri),
 					jsonModel.dependent.jsonname(),String.format("%s/dependent",uri),
 					jsonModel.predicted.jsonname(),String.format("%s/predicted",uri),
 					
 					"ambitprop",
 					jsonModel.legend.jsonname(),String.format("%s?media=image/png",uri),
-					jsonModel.creator.jsonname(),model.getCreator(),
+					jsonModel.creator.jsonname(),MetadatasetJSONReporter.jsonEscape(model.getCreator()),
 					jsonModel.mimetype.jsonname(),model.getContentMediaType(),
-					jsonModel.content.jsonname(),"application/java".equals(model.getContentMediaType())?model.getContent():"",
+					jsonModel.content.jsonname(),"application/java".equals(model.getContentMediaType())?MetadatasetJSONReporter.jsonEscape(model.getContent()):"",
 					jsonModel.stars.jsonname(),model.getStars()
 					));
 			comma = ",";
