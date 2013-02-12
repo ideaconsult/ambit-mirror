@@ -32,6 +32,7 @@ import java.util.Iterator;
 
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.AmbitIOException;
@@ -52,13 +53,20 @@ import ambit2.db.IDBProcessor;
  *
  * @param <ItemOutput>
  */
-public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String> 
-						{
+public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String> 	{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5659435501205598414L;
+	protected ILiteratureEntry reference;
+	
+	public ILiteratureEntry getReference() {
+		return reference;
+	}
+	public void setReference(ILiteratureEntry reference) {
+		this.reference = reference;
+	}
 	public BatchDBProcessor() {
 	}
 	public BatchDBProcessor(ProcessorsChain<String,IBatchStatistics,IProcessor> processor) {
@@ -81,18 +89,24 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 					if (file.getName().endsWith(FileInputState.extensions[FileInputState.SDF_INDEX])) {
 						RawIteratingSDFReader reader = new RawIteratingSDFReader(
 								new FileReader(file));
-						reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+						if (getReference()==null)
+							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+						else reader.setReference(getReference());
 						return reader;
 					} else if (file.getName().endsWith(FileInputState.extensions[FileInputState.MOL_INDEX])) {
 						RawIteratingMOLReader reader = new RawIteratingMOLReader(new FileReader(file));
-						reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+						if (getReference()==null)
+							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+						else reader.setReference(getReference());
 						return reader;
 					} else {
 						IIteratingChemObjectReader ir = FileInputState.getReader(new FileInputStream(file), file.getName(),((FileInputState)target).getFileFormat());
 						if (ir == null) throw new AmbitException("Unsupported format "+file.getName());
 						else {
 							RawIteratingWrapper reader = new RawIteratingWrapper(ir);
-							reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+							if (getReference()==null)
+								reader.setReference(LiteratureEntry.getInstance(file.getName(),file.getAbsolutePath()));
+							else reader.setReference(getReference());
 							return reader;
 						}
 					} 

@@ -12,17 +12,20 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.interfaces.ICiteable;
 
-public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectReader implements IRawReader<T>{
+public abstract class RawIteratingReader<T> extends DefaultIteratingChemObjectReader implements IRawReader<T>, ICiteable {
 	protected static Logger logger = Logger.getLogger(RawIteratingReader.class.getName());
 	protected BufferedReader input;
 	protected StringBuilder recordBuffer = null;
-	protected LiteratureEntry reference;
-	public LiteratureEntry getReference() {
+	protected ILiteratureEntry reference;
+	
+	public ILiteratureEntry getReference() {
 		return reference;
 	}
-	public void setReference(LiteratureEntry reference) {
+
+	public void setReference(ILiteratureEntry reference) {
 		this.reference = reference;
 	}
 	public RawIteratingReader(Reader in) throws CDKException {

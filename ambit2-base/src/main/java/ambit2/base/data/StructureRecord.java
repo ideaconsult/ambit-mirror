@@ -54,7 +54,7 @@ public class StructureRecord implements IStructureRecord {
 	protected int idstructure;
 	protected String content;
 	protected String format;
-	protected LiteratureEntry reference = null;
+	protected ILiteratureEntry reference = null;
 	protected Map<Property,Object> properties;
 	protected STRUC_TYPE type = STRUC_TYPE.NA;
 	protected boolean selected = true;
@@ -244,10 +244,10 @@ public class StructureRecord implements IStructureRecord {
 				setProperty(Property.getInstance(key.toString(),getReference()),newProperties.get(key));
 		}
 	}
-	public LiteratureEntry getReference() {
+	public ILiteratureEntry getReference() {
 		return reference;
 	}
-	public void setReference(LiteratureEntry reference) {
+	public void setReference(ILiteratureEntry reference) {
 		this.reference = reference;
 	}
 	@Override

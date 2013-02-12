@@ -23,6 +23,8 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.AbstractDataset;
+import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
@@ -118,7 +120,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			boolean firstCompoundOnly,
 			USERID token) {
 		super(token);
-		this.file = file;
+		setFile(file, file==null?null:file.getName());
 		this.connection = connection;
 		upload = null;
 		this.reporter = reporter;
@@ -297,7 +299,9 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 								client.getUser().getIdentifier()==null?client.getAddress():client.getUser().getIdentifier())
 				:seeAlso;
 		
-		SourceDataset dataset = new SourceDataset(title,LiteratureEntry.getInstance(source,publisher));
+		ILiteratureEntry reference = LiteratureEntry.getInstance(source,publisher);
+		reference.setType(_type.Dataset);
+		SourceDataset dataset = new SourceDataset(title,reference);
 		dataset.setLicenseURI(license);
 		dataset.setrightsHolder(rightsHolder);
 		return dataset;
@@ -306,19 +310,17 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	public TaskResult importFile(File file) throws Exception {
 		try {
 			// if target dataset is not defined, create new dataset
-			final SourceDataset dataset = targetDataset != null ? targetDataset
-					:datasetMeta(file);
+			final SourceDataset dataset = targetDataset != null ? targetDataset	:datasetMeta(file);
 
-			if (targetDataset == null)
-				dataset.setId(-1);
+			if (targetDataset == null)	dataset.setId(-1);
+			
 			final BatchDBProcessor batch = new BatchDBProcessor() {
 				@Override
 				public Iterator<String> getIterator(IInputState target)
 						throws AmbitException {
 					try {
 						File file = ((FileInputState) target).getFile();
-						RDFIteratingReader i = getRDFIterator(file,
-								getReporter().getBaseReference().toString());
+						RDFIteratingReader i = getRDFIterator(file,	getReporter().getBaseReference().toString());
 						if (i == null)
 							return super.getIterator(target);
 						else {
@@ -363,7 +365,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 					}
 				}
 			};
-
+			batch.setReference(dataset.getReference());
 			batch.setConnection(connection);
 			final RepositoryWriter writer = new RepositoryWriter();
 			writer.setPropertiesOnly(isPropertyOnly());
