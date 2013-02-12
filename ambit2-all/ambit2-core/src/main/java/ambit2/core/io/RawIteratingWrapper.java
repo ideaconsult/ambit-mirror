@@ -13,15 +13,17 @@ import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.listener.IChemObjectIOListener;
 import org.openscience.cdk.io.setting.IOSetting;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.ICiteable;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.MoleculeWriter;
 
-public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implements IRawReader<IStructureRecord>{
+public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implements IRawReader<IStructureRecord>, ICiteable{
 	protected R reader;
 	protected MoleculeWriter writer ;
-	protected LiteratureEntry reference;	
+	protected ILiteratureEntry reference;	
 	protected final IStructureRecord r = new StructureRecord();
    // protected IChemObjectReader.Mode mode = IChemObjectReader.Mode.RELAXED;
    // protected IChemObjectReaderErrorHandler errorHandler = null;
@@ -32,10 +34,10 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 	}
 	
 
-	public LiteratureEntry getReference() {
+	public ILiteratureEntry getReference() {
 		return reference;
 	}
-	public void setReference(LiteratureEntry reference) {
+	public void setReference(ILiteratureEntry reference) {
 		this.reference = reference;
 	}	
 	public void setReader(InputStream reader) throws CDKException {

@@ -31,7 +31,7 @@ package ambit2.base.interfaces;
 
 import java.util.Map;
 
-import ambit2.base.data.LiteratureEntry;
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
 
 
@@ -124,8 +124,8 @@ public interface IStructureRecord extends IChemical{
     void addProperties(Map newProperties);
     void clear();
     String getWritableContent();
-    LiteratureEntry getReference();
-    void setReference(LiteratureEntry reference);
+    ILiteratureEntry getReference();
+    void setReference(ILiteratureEntry reference);
     Object clone() throws CloneNotSupportedException ;
     STRUC_TYPE getType();
     void setType(STRUC_TYPE type);

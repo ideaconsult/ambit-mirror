@@ -348,6 +348,10 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 		Assert.assertEquals("junit test on input.sdf",table.getValue(0,"title"));
 		Assert.assertEquals("http://ambit.sourceforge.net",table.getValue(0,"url"));
 		Assert.assertEquals(ISourceDataset.license.CC0_1_0.getURI(),table.getValue(0,"licenseURI"));
+		table = 	c.createQueryTable("EXPECTED",
+				"SELECT d.name,title,url,licenseURI FROM src_dataset d join template_def using(idtemplate) join properties p using(idproperty)" +
+				"join catalog_references r on p.idreference=r.idreference where d.name='new-file-name' and id_srcdataset=4");
+		Assert.assertEquals(72,table.getRowCount());
 		c.close();
 	}	
 	protected Representation getMultipartWebFormRepresentation(File file) throws Exception {

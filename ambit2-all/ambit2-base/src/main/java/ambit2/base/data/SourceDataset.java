@@ -17,7 +17,7 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
 	 * 
 	 */
 	private static final long serialVersionUID = 6881106188176017447L;
-	protected LiteratureEntry reference = null;
+	protected ILiteratureEntry reference = null;
 	protected int stars = 0;
 	protected String licenseURI;
 	public String getLicenseURI() {
@@ -62,16 +62,16 @@ public class SourceDataset extends AmbitBean implements Comparable<SourceDataset
 	/**
 	 * @param name
 	 */
-	public SourceDataset(String name, LiteratureEntry reference) {
+	public SourceDataset(String name, ILiteratureEntry reference) {
 		super();
 		setName(name);
 		setReference(reference);
 	}
 
-	public LiteratureEntry getReference() {
+	public ILiteratureEntry getReference() {
 		return reference;
 	}
-	public void setReference(LiteratureEntry reference) {
+	public void setReference(ILiteratureEntry reference) {
 		this.reference = reference;
 	}
 	public void setName(String name) {

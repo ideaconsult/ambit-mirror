@@ -93,7 +93,8 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					uriSource = String.format("%s/dataset/%s",getBaseReference(),Reference.encode(uriSource));
 					typeSource = "Dataset";	
 				} else {
-
+					uriSource = String.format("%s/dataset/%s",getBaseReference(),Reference.encode(uriSource));
+					typeSource = "Dataset";	
 				}
 			//	feature.addProperty(DC.creator, item.getReference().getURL());
 			}	
