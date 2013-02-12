@@ -114,7 +114,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 	}
 	public static String jsonEscape(String value) {
         return value.replace("\\", "\\\\")
-        .replace("/", "\\/")
+        //.replace("/", "\\/")
         .replace("\b", "\\b")
         .replace("\f", "\\f")
         .replace("\n", "\\n")
