@@ -101,7 +101,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	    	exec.process(tuple);
 	    	return tuple.getObject();
     	} catch (AmbitException x) {
-    		logger.log(Level.WARNING,x.getMessage(),x);
+    		logger.log(Level.FINE,x.getMessage(),x);
     		return -1;
     	} finally {
     		
@@ -162,7 +162,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	        	//ps_inserttuplestring.setString(4,value);
 	        	//ps_inserttuplestring.setInt(5,0);
 	        	if (ps_inserttuplestring.executeUpdate()<=0)
-	        		logger.warning("Tuple not inserted "+property.getId()+ " "+value);
+	        		logger.fine("Tuple not inserted "+property.getId()+ " "+value);
 
     		} 
     	} else return false;
@@ -199,7 +199,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	        	ps_inserttuplenumber.setInt(3,structure.getIdstructure());
     	        	int ok = ps_inserttuplenumber.executeUpdate();
     	        	if (ok<=0) {
-    	        		logger.warning("Tuple not inserted "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
+    	        		logger.fine("Tuple not inserted "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
 
     	        	}
 
@@ -207,7 +207,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
         		logger.warning("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
         	}
        	} else {
-       		logger.warning("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
+       		logger.fine("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
        		return false;
        	}
        	return true;
