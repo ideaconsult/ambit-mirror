@@ -112,7 +112,7 @@ $(document)
 			<div class='row' style="margin:5px;padding:5px;">	
 			
 			<span class='six columns alpha'>
-			<img id="i${cmpid}" src='${ambit_root}/compound/${cmpid}/image?w=${w}&h=${h}' width='${w}' height='${h}' title='${cmpid}'  usemap="#m${cmpid}" >
+			<img id="i${cmpid}" src='${ambit_root}/compound/${cmpid}/image?w=${w}&h=${h}' width='${w}' height='${h}' title='${cmpid}'  usemap="#m${cmpid}" onError="this.style.display='none'">
 			<map id="m${cmpid}" name="m${cmpid}"/>
 			</span>
 			
