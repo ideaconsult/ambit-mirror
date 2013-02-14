@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -51,6 +52,7 @@ import ambit2.base.config.Preferences;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
+import ambit2.rest.aa.opensso.OpenSSOMethodAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
 import ambit2.rest.aa.opensso.policy.CallablePolicyCreator;
 import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
@@ -120,17 +122,24 @@ import ambit2.rest.ui.UIResource;
  * @author nina
  */
 
- /* 
- * http://www.slideshare.net/guest7d0e11/creating-a-web-of-data-with-restlet-presentation
- * http://stackoverflow.com/questions/810171/how-to-read-context-parameters-from-a-restlet
- *
- */
 public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final Role UPDATE_ALLOWED = new Role("AUTHOR","Update (PUT,POST,DELETE) allowed");
 	protected boolean insecure = true;
 	protected Logger logger = Logger.getLogger(AmbitApplication.class.getName());	 
+	protected Hashtable<String,Properties> properties = new Hashtable<String, Properties>();
+	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
+	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
+	public static final String GUARD_ENABLED = "guard.enabled";
+	public static final String GUARD_LIST = "guard.list";
+	static final String identifierKey = "aa.local.admin.name";
+	static final String identifierPass = "aa.local.admin.pass";
+	static final String adminAAEnabled = "aa.admin";
+	static final String compoundAAEnabled = "aa.compound";
+	static final String modelAAEnabled = "aa.model"; //ignored
+	static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
+	static final String configProperties = "ambit2/rest/config/config.prop";
+	static final String loggingProperties = "ambit2/rest/config/logging.prop";
 	
-
 
 	public AmbitApplication() {
 		super();
@@ -141,7 +150,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 		InputStream in = null;
 		try {
-			URL url = getClass().getClassLoader().getResource("ambit2/rest/config/logging.prop");
+			URL url = getClass().getClassLoader().getResource(loggingProperties);
 			System.setProperty("java.util.logging.config.file", url.getFile());
 			in = new FileInputStream(new File(url.getFile()));
 			LogManager.getLogManager().readConfiguration(in);
@@ -229,8 +238,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		Router smartsRouter = createSMARTSSearchRouter();
 		/**  /compound  */
 		CompoundsRouter compoundRouter = new CompoundsRouter(getContext(),featuresRouter,tupleRouter,smartsRouter);
-		router.attach(CompoundResource.compound,createProtectedResource(compoundRouter,"compound"));
-		
+		if (protectCompoundResource())
+			router.attach(CompoundResource.compound,createProtectedResource(compoundRouter,"compound"));
+		else {
+			Filter cauthN = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
+			OpenSSOMethodAuthorizer cauthZ = new OpenSSOMethodAuthorizer();
+			cauthN.setNext(cauthZ);
+			cauthZ.setNext(compoundRouter);		
+			router.attach(CompoundResource.compound,cauthN);
+		}	
 		/**
 		 *  List of datasets 
 		 *  /dataset , /datasets
@@ -641,8 +657,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	 * @return
 	 */
 	protected void attachStaticResources(Router router) {
-		/*  router.attach("/images",new Directory(getContext(), LocalReference.createFileReference("/webapps/images")));   */
-
 		 Directory metaDir = new Directory(getContext(), "war:///META-INF");
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
@@ -758,11 +772,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	        return result;
     }
 */
-   public static final String OPENTOX_AA_ENABLED = "aa.enabled";
-   public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
-   public static final String GUARD_ENABLED = "guard.enabled";
-   public static final String GUARD_LIST = "guard.list";
-   
    protected synchronized boolean isSimpleSecretAAEnabled()  {
 		try {
 			String aaadmin = getProperty(LOCAL_AA_ENABLED,configProperties);
@@ -793,28 +802,34 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	
 	protected synchronized boolean protectAdminResource()  {
 		try {
-			String aaadmin = getProperty("aa.admin","ambit2/rest/config/ambit2.pref");
+			String aaadmin = getProperty(adminAAEnabled,ambitProperties);
 			return aaadmin==null?null:Boolean.parseBoolean(aaadmin);
 		} catch (Exception x) {return false; }
 	}	
 
+	protected synchronized boolean protectCompoundResource()  {
+		try {
+			String aacompound = getProperty(compoundAAEnabled,ambitProperties);
+			return aacompound==null?null:Boolean.parseBoolean(aacompound);
+		} catch (Exception x) {return false; }
+	}	
 	protected synchronized String getProperty(String name,String config)  {
 		try {
-			Properties properties = new Properties();
-			InputStream in = this.getClass().getClassLoader().getResourceAsStream(config);
-			properties.load(in);
-			in.close();		
-			return properties.getProperty(name);
+			Properties p = properties.get(config);
+			if (p==null) {
+				p = new Properties();
+				InputStream in = this.getClass().getClassLoader().getResourceAsStream(config);
+				p.load(in);
+				in.close();
+				properties.put(config,p);
+			}
+			return p.getProperty(name);
 
 		} catch (Exception x) {
 			return null;
 		}
 	}	
 	
-	 static final String identifierKey = "aa.local.admin.name";
-	 static final String identifierPass = "aa.local.admin.pass";
-	 static final String configProperties = "ambit2/rest/config/config.prop";
-	 
 	 protected ConcurrentMap<String, char[]>  getLocalSecrets() throws Exception {
 
 		
