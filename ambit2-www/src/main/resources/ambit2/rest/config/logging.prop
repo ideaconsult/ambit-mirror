@@ -1,6 +1,9 @@
+#This is AMBIT ${project.version} web services Java logging configuration file
+#For AMBIT ${project.version} web services configuration please see ambit2.pref
+#For Authentication and authorization config please see config.prop file
 #See http://docs.oracle.com/javase/1.5.0/docs/api/index.html?java/util/logging/LogManager.html
 # This defines a whitespace separated list of class names for handler classes to load and register as handlers on the root Logger (the Logger named "").
-#Console logging will end up in e.g. TomCat logs, if executed in a servlet environment  
+#Console logging will end up in e.g. Apache TomCat logs, if executed in a servlet environment  
 handlers=java.util.logging.ConsoleHandler
 # Set the default global logging level for the root logger
 #Loggers and Handlers can override this logging level (!)
@@ -12,8 +15,8 @@ java.util.logging.ConsoleHandler.level = FINE
 # Set the default formatter for new ConsoleHandler instances
 #java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
 # Specify the logging level for a specific package.
-ambit2.mopac.level = FINE
-ambit2.smi23d.level = FINE
+ambit2.mopac.level = INFO
+ambit2.smi23d.level = INFO
 #Toxtree
 toxtree.level = INFO
 mutant.level = INFO

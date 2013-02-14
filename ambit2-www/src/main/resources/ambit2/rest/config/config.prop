@@ -1,6 +1,8 @@
-#OpenTox Authentication and Authorization configuration
+#OpenTox Authentication and Authorization configuration for AMBIT ${project.version} web services
+#For AMBIT ${project.version} web services configuration please see ambit2.pref 
+#For fine tuning logging please see logging.prop file
 #If true, Ambit REST services are protected by OpenTox AA 
-#If false, Ambit REST services are not protected, besides the /bookmark service
+#If false, Ambit REST services are not protected by OpenSSO, besides the /bookmark service
 aa.enabled=${aa.enabled}
 #OpenTox OpenSSO server
 aa.opensso=${aa.opensso}

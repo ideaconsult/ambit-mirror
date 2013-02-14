@@ -1,17 +1,20 @@
-#MySQL Database config
+#This is AMBIT ${project.version} web services configuration. 
+#For Authentication and authorization configuration please see config.prop file
+#For fine tuning logging please see logging.prop file 
+#MySQL Database configuration
 Host=${ambit.db.host}
 Scheme=jdbc\:mysql
 Port=3306
 Database=${ambit.db}
 User=${ambit.db.user.test}
 Password=${ambit.db.user.test.password}
-#Only for running tests, the web application does not use it
-database.user.root.password=${ambit.db.user.root.password}
-database.user.test.password=${ambit.db.user.test.password}
+#Only for running JUnit tests on compile, the web application does not use it
 #MySQL test db, user and pass
 database.test=ambit-test
 database.test.port=3306
 database.user.test=${ambit.db.user.test}
+database.user.root.password=${ambit.db.user.root.password}
+database.user.test.password=${ambit.db.user.test.password}
 #AMBIT REST services config
 #Allow to create the database via curl -X POST /admin/database -d "user=root" -d "pass=thepass" -d "dbname=thedbname"
 #The database will be created only if it does not exist. 
@@ -24,16 +27,21 @@ jsonp=${jsonp}
 #URI of the ontology service , e.g. http://localhost:8080/ontology
 service.ontology=${service.ontology}
 #Add dataset prefix for compound URI, e.g.  /dataset/1/compound/1 , instead of /compound/1
-#Experimental. Should be used if AA is on, see config.prop file
+#Experimental true|false. Should be used if AA is on, see config.prop file
 dataset.members.prefix=${dataset.members.prefix}
-#Where to find OpenBabel executable
+#Path to OpenBabel executable
 OBABEL_HOME=${OBABEL_HOME}
-#Where to find Dragon6 executable
+#Path to Dragon6 executable
 DRAGON_HOME=${DRAGON_HOME}
 #Add a column with the license in CSV and TXT files
 license.intextfiles=${license.intextfiles}
-#Protect /admin resources via OpenTox AA
+#Protect /admin resources via OpenTox AA.  true | false 
+#If true, you have to define an OpenSSO policy for http://host:port/ambit2/admin to be able to use it! 
 aa.admin=${aa.admin}
+#aa.compound true| false defines if the /compound/{id} URIs are protected by OpenSSO
+aa.compound=${aa.compound}
+#aa.model is ignored
+#aa.model=${aa.model}
 #Ambit XT (standalone) properties only
 startMySQL=true
 showAromaticity=true
