@@ -15,8 +15,11 @@ java.util.logging.ConsoleHandler.level = FINE
 # Set the default formatter for new ConsoleHandler instances
 #java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
 # Specify the logging level for a specific package.
+#Ambit modules http://ambit.sourceforge.net/AMBIT2-LIBS/
 ambit2.mopac.level = INFO
 ambit2.smi23d.level = INFO
-#Toxtree
+#Toxtree http://toxtree.sourceforge.net/
 toxtree.level = INFO
 mutant.level = INFO
+#Restlet http://www.restlet.org/
+#org.restlet.engine.level = WARNING
