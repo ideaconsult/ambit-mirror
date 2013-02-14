@@ -3,13 +3,16 @@ http://ambit.sourceforge.net
 
 This is multi module maven project.
 
+
 Prerequisites for building AMBIT2
-JDK 1.6 or higher
-MySQL 5.0 or higher
+JDK 1.6  
+MySQL 5.1 or higher (tested with MySQL 5.5 and 5.6 )
 Maven
 
 1) to build ambit2 libraries:  
 
+Retrieve sources from SVN
+https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all
 
 ambit2-all>mvn package
 
@@ -104,6 +107,25 @@ normal user and password are guest/guest by default and are used in database que
 
 ----------------------------------------------------------------------
 CHANGELOG
+AMBIT2 2.4.10-SNAPSHOT
+Freemarker support. HTML pages refactored to use Freemarker templates and Javascript
+JSON support extended to more resources (tasks, facets, models, algorithms, admin)
+Improved logging. Configurable logging via WEB-INF/classes/ambit/rest/config/logging.props
+Improved HTML rendering, using skeleton.css.
+New /ui resources allowing flexible querying and data collation within web browser
+Ambit DB schema 6.4 
+Image map support for compounds, allowing atom highlighting
+Support for exact , substructure and similarity search by (base64 encoded) mol file
+Added "folder" option to  application/x-www-form-urlencoded POST /dataset  
+openTox client 1.0.4-SNAPSHOT
+Conditional inclusion of JNI related jars into the war. Enable -P no-jni profile to obtain war without those jars.
+Further work on tautomer package.
+Various bug fixes.
+Dependencies upgraded:
+Toxtree 2.5.8-SNAPSHOT (with new Ames mutagenicity plugin)
+OPSIN 1.4.0 
+MySQL Connector/J 5.1.22
+
 AMBIT2 2.4.9
 JSON & JSONP (optional) support
 Tautomers package 
@@ -197,7 +219,23 @@ Changelog: cdk 1.3.6 and jchempaint 3.1.3
 Database
 
 If not using the automatic DB create via REST services , grant the following privileges
-grant select,insert,update,delete on  `ambit2`.* to `guest`@`127.0.0.1`;
-grant select,insert,update,delete on  `ambit2`.* to `guest`@`localhost`;
-grant execute on procedure `findByProperty` to `guest`@`127.0.0.1`;
-grant execute on procedure `findByProperty` to `guest`@`localhost`;
+GRANT ALL ON `ambit2`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
+GRANT ALL ON `ambit2`.* TO 'guest'@'127.0.0.1' IDENTIFIED BY 'guest';
+GRANT ALL ON `ambit2`.* TO 'guest'@'::1' IDENTIFIED BY 'guest';
+GRANT TRIGGER ON `ambit2`.* TO 'guest'@'localhost';
+GRANT TRIGGER ON `ambit2`.* TO 'guest'@'127.0.0.1';
+GRANT TRIGGER ON `ambit2`.* TO 'guest'@'::1';
+GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'localhost';
+GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'127.0.0.1';
+GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'::1';
+
+test database ambit-test
+GRANT ALL ON `ambit-test`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
+GRANT ALL ON `ambit-test`.* TO 'guest'@'127.0.0.1' IDENTIFIED BY 'guest';
+GRANT ALL ON `ambit-test`.* TO 'guest'@'::1' IDENTIFIED BY 'guest';
+GRANT TRIGGER ON `ambit-test`.* TO 'guest'@'localhost';
+GRANT TRIGGER ON `ambit-test`.* TO 'guest'@'127.0.0.1';
+GRANT TRIGGER ON `ambit-test`.* TO 'guest'@'::1';
+GRANT EXECUTE ON PROCEDURE `ambit-test`.findByProperty TO 'guest'@'localhost';
+GRANT EXECUTE ON PROCEDURE `ambit-test`.findByProperty TO 'guest'@'127.0.0.1';
+GRANT EXECUTE ON PROCEDURE `ambit-test`.findByProperty TO 'guest'@'::1';
