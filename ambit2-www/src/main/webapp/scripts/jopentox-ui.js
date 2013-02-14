@@ -590,6 +590,20 @@ function definePropertyValuesTable(root,url,tableSelector) {
 				},
 				"cache" : true,
 				"error" : function(xhr, textStatus, error) {
+					switch (xhr.status) {
+					case 403: {
+			        	alert("Restricted data access. You are not authorized to access the requested data.");
+						break;
+					}
+					case 404: {
+						//not found
+						break;
+					}
+					default: {
+						//console.log(xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+			        	alert("Error loading data " + xhr.status + " " + error);
+					}
+					}
 					oSettings.oApi._fnProcessingDisplay(oSettings, false);
 				}
 			});

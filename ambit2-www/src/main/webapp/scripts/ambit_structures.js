@@ -69,7 +69,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 										cmpURI = cmpURI + "?media=image/png";
 										return '<a href="'+searchURI+'" >' +
 											   '<img class="ui-widget-content" title="Click to display this compound only" border="0" src="'
-												+ cmpURI + '&w='+imgSize+'&h='+imgSize+'">' 
+												+ cmpURI + '&w='+imgSize+'&h='+imgSize+'" onError="this.style.display=\'none\'">' 
 												+ "</a>";
 									}
 								},
@@ -186,6 +186,20 @@ function defineStructuresTable(url, query_service, similarity,root) {
 								},
 								"cache" : true,
 								"error" : function(xhr, textStatus, error) {
+									switch (xhr.status) {
+									case 403: {
+							        	alert("Restricted data access. You are not authorized to access the requested data.");
+										break;
+									}
+									case 404: {
+										//not found
+										break;
+									}
+									default: {
+										//console.log(xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+							        	alert("Error loading data " + xhr.status + " " + error);
+									}
+									}
 									oSettings.oApi._fnProcessingDisplay(oSettings, false);
 								}
 							});
@@ -193,6 +207,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 						"oLanguage" : {
 							"sProcessing" : "<img src='" + root + "/images/24x24_ambit.gif' border='0'>",
 							"sLoadingRecords" : "No structures found.",
+							"sEmptyTable" : "No structures found.",
 				            "sInfo": "Showing _TOTAL_ structures (_START_ to _END_)",
 				            "sLengthMenu": 'Display <select>' +
 				              '<option value="10">10</option>' +
