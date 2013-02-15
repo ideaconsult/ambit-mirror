@@ -20,8 +20,8 @@ public class TautomerTestCases extends TestCase
 		
 		//Initialization
 		tt = new TestTautomers();
-		tt.tman.use15ShiftRules(true);
-		tt.tman.use17ShiftRules(false);
+		tt.tman.getKnowledgeBase().use15ShiftRules(true);
+		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 		
 	}
 
@@ -464,11 +464,11 @@ public class TautomerTestCases extends TestCase
 
 	public void test_Rule_06 ()  throws Exception  
 	{	
-		tt.tman.use17ShiftRules(true);
+		tt.tman.getKnowledgeBase().use17ShiftRules(true);
 		int res = tt.testCase("O=CC=CC=CCCC", 
 				new String[]{"O=CC=CC=CCCC", "OC=CC=CC=CCC", "O=CCC=CC=CCC", "O=CC=CCC=CCC"}, 
 				FlagPrintTautomers);
-		tt.tman.use17ShiftRules(false);
+		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 		
 		assertEquals(0, res);
 	}
@@ -477,12 +477,12 @@ public class TautomerTestCases extends TestCase
 	public void test_Rule_06_NoWarningFilter ()  throws Exception  
 	{	
 		tt.tman.tautomerFilter.FlagApplyWarningFilter = false;
-		tt.tman.use17ShiftRules(true);
+		tt.tman.getKnowledgeBase().use17ShiftRules(true);
 		int res = tt.testCase("O=CC=CC=CCCC", 
 				new String[]{"OC=CC=C=CCCC", "O=CCC=C=CCCC", "OC=C=CC=CCCC", "O=CC=CC=CCCC", "OC=CC=CC=CCC", "O=CCC=CC=CCC", "OC=C=CCC=CCC", "O=CC=CCC=CCC"}, 
 				FlagPrintTautomers);
 		tt.tman.tautomerFilter.FlagApplyWarningFilter = true;
-		tt.tman.use17ShiftRules(false);
+		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 
 		assertEquals(0, res);
 	}
@@ -801,13 +801,13 @@ public class TautomerTestCases extends TestCase
 
 	public void test_ciclipirox()  throws Exception
 	{	
-		tt.tman.use17ShiftRules(true);
+		tt.tman.getKnowledgeBase().use17ShiftRules(true);
 
 		int res = tt.testCase("CC1=CC(=O)N(O)C(=C1)C1CCCCC1", 
 				new String[]{"OC1=CC(=C)C=C(N1(O))C2CCCCC2", "O=C1N(O)C(=CC(=C)C1)C2CCCCC2", "O=C1C=C(C=C(N1(O))C2CCCCC2)C", "OC2=CC(=CC(=C1CCCCC1)N2(O))C", "O=C1N(O)C(C=C(C)C1)=C2CCCCC2", "OC2=CC(=C)CC(=C1CCCCC1)N2(O)", "O=C2N(O)C(=C1CCCCC1)CC(=C)C2", "O=C2C=C(C)CC(=C1CCCCC1)N2(O)"}, 
 				FlagPrintTautomers);
 
-		tt.tman.use17ShiftRules(false);
+		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 
 		assertEquals(0, res);
 	}	
@@ -892,7 +892,7 @@ public class TautomerTestCases extends TestCase
 
 	public void test_2pyridine()  throws Exception
 	{	
-		tt.tman.use17ShiftRules(true);
+		tt.tman.getKnowledgeBase().use17ShiftRules(true);
 
 		int res = tt.testCase("NCC1=CC=CC=N1", 
 				new String[]{"N=CC1=CC=CCN1", "NC=C1C=CC=CN1", "N=CC1C=CC=CN1",
@@ -902,7 +902,7 @@ public class TautomerTestCases extends TestCase
 				"N=CC1N=CC=CC1", "N=CC=1N=CCCC=1"}, 
 				FlagPrintTautomers);
 
-		tt.tman.use17ShiftRules(false);
+		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 
 		assertEquals(0, res);
 	}
@@ -1104,7 +1104,7 @@ public class TautomerTestCases extends TestCase
 
 	public void test_pemoline()  throws Exception
 	{	
-		tt.tman.use17ShiftRules(true);
+		tt.tman.getKnowledgeBase().use17ShiftRules(true);
 
 		int res = tt.testCase("N=C1NC(=O)C(O1)C1=CC=CC=C1", 
 				new String[]{"N=C1N=C(O)C(O1)=C2C=CCC=C2", "OC=2NC(=N)OC=2c1ccccc1", "N=C1NC(=O)C(O1)c2ccccc2",
@@ -1113,7 +1113,7 @@ public class TautomerTestCases extends TestCase
 				"O=C1N=C(OC1=C2C=CC=CC2)N", "NC1=NC(=O)C(O1)c2ccccc2"}, 
 				FlagPrintTautomers);
 
-		tt.tman.use17ShiftRules(false);
+		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 
 		assertEquals(0, res);
 	}

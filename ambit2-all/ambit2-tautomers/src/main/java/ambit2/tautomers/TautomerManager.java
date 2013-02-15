@@ -28,18 +28,14 @@ public class TautomerManager
 	int originalValencySum;
 		
 	public boolean FlagRecurseBackResultTautomers = false;
-	public boolean FlagUseRingChainRules = false;
-	public boolean FlagUseChlorineRules = false;
+	
 	
 	public boolean FlagCheckDuplicationOnRegistering = true;
 	public boolean FlagCheckValencyOnRegistering = false;       //it is not used yet
 	public boolean FlagExcludeWarnFiltersOnRegistering = false; //it is not used yet
 	
 	
-	public boolean FlagUse13Shifts = true;
-	public boolean FlagUse15Shifts = true;
-	public boolean FlagUse17Shifts = true;
-	public boolean FlagUse19Shifts = false;
+	
 	
 	
 	
@@ -61,8 +57,8 @@ public class TautomerManager
 			logger.info(knowledgeBase.getAllErrors());
 		}
 		
-		activateRingChainRules(FlagUseRingChainRules);
-		activateChlorineRules(FlagUseChlorineRules);
+		knowledgeBase.activateRingChainRules(knowledgeBase.FlagUseRingChainRules);
+		knowledgeBase.activateChlorineRules(knowledgeBase.FlagUseChlorineRules);
 	}
 	
 	
@@ -72,6 +68,11 @@ public class TautomerManager
 		originalValencySum = FilterTautomers.getValencySum(str); 
 		
 		molecule = (IAtomContainer)originalMolecule.clone();
+	}
+	
+	public KnowledgeBase getKnowledgeBase()
+	{
+		return knowledgeBase;
 	}
 	
 	
@@ -272,106 +273,10 @@ public class TautomerManager
 			}	
 	}
 	
-	public void activateRingChainRules(boolean FlagActivate)
-	{
-		FlagUseRingChainRules = FlagActivate;
+	
+	
+	
 		
-		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-		{	
-			Rule rule = knowledgeBase.rules.get(i);
-			if (rule.type == TautomerConst.RT_RingChain)
-				rule.isRuleActive = FlagActivate;
-		}	
-	}
-	
-	public void activateChlorineRules(boolean FlagActivate)
-	{
-		FlagUseChlorineRules = FlagActivate;		
-		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-		{	
-			Rule rule = knowledgeBase.rules.get(i);
-			if (rule.type == TautomerConst.RT_MobileGroup)
-				if (rule.mobileGroup.equals("Cl"))
-					rule.isRuleActive = FlagActivate;
-		}	
-	}
-	
-	public void use13ShiftRulesOnly(boolean FlagUseOnly13)
-	{
-		if (FlagUseOnly13)
-		{
-			FlagUse15Shifts = false;
-			FlagUse17Shifts = false;
-			FlagUse19Shifts = false;
-		}
-		else
-		{
-			FlagUse15Shifts = true;
-			FlagUse17Shifts = true;
-			FlagUse19Shifts = true;
-		}
-		
-				
-		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-		{	
-			Rule rule = knowledgeBase.rules.get(i);
-			if (rule.type == TautomerConst.RT_MobileGroup)
-			{
-				if (rule.stateQueries[0].getAtomCount() > 3)
-					rule.isRuleActive = !FlagUseOnly13;  //since logical condition is use only 1-3 shift negation is applied
-			}
-				
-		}	
-	}
-	
-	public void use15ShiftRules(boolean Fl_Use)
-	{
-		FlagUse15Shifts = Fl_Use;
-		
-		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-		{	
-			Rule rule = knowledgeBase.rules.get(i);
-			if (rule.type == TautomerConst.RT_MobileGroup)
-			{
-				if (rule.stateQueries[0].getAtomCount() == 5)
-					rule.isRuleActive = Fl_Use; 
-			}	
-		}	
-	}
-	
-	
-	public void use17ShiftRules(boolean Fl_Use)
-	{
-		FlagUse17Shifts = Fl_Use;
-		
-		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-		{	
-			Rule rule = knowledgeBase.rules.get(i);
-			if (rule.type == TautomerConst.RT_MobileGroup)
-			{
-				if (rule.stateQueries[0].getAtomCount() == 7)
-					rule.isRuleActive = Fl_Use; 
-			}	
-		}	
-	}
-	
-	
-	public void use19ShiftRules(boolean Fl_Use)
-	{
-		FlagUse19Shifts = Fl_Use;
-		
-		for (int i = 0; i < knowledgeBase.rules.size(); i++)
-		{	
-			Rule rule = knowledgeBase.rules.get(i);
-			if (rule.type == TautomerConst.RT_MobileGroup)
-			{
-				if (rule.stateQueries[0].getAtomCount() == 9)
-					rule.isRuleActive = Fl_Use; 
-			}	
-		}	
-	}
-	
-	
 	
 	//This function is applied for approach 00 
 	void handleOverlapedInstances()

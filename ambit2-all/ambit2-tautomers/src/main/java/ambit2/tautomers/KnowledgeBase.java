@@ -1,5 +1,6 @@
 package ambit2.tautomers;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
@@ -12,6 +13,14 @@ public class KnowledgeBase
 	public Vector<RankingRule> rankingRules = new Vector<RankingRule>();
 	public Vector<Filter> warningFilters = new Vector<Filter>();
 	public Vector<Filter> excludeFilters = new Vector<Filter>();
+	
+	public boolean FlagUse13Shifts = true;
+	public boolean FlagUse15Shifts = true;
+	public boolean FlagUse17Shifts = true;
+	public boolean FlagUse19Shifts = false;
+	
+	public boolean FlagUseRingChainRules = false;
+	public boolean FlagUseChlorineRules = false;
 	
 	Vector<String> errors = new Vector<String>(); 
 	RuleParser ruleParser = new RuleParser();
@@ -137,6 +146,152 @@ public class KnowledgeBase
 		return null;
 	}
 	
+	public void activateRule(String ruleName, boolean Fl_Active)
+	{
+		Rule rule = getRuleByName(ruleName);
+		if (rule!= null)
+			rule.isRuleActive = Fl_Active;
+	}
+	
+	public void setActiveRules(ArrayList<String> ruleNames)
+	{
+		setAllRulesActive(false);
+		for(String name:ruleNames)
+		{
+			Rule rule = getRuleByName(name);
+			if (rule!= null)
+				rule.isRuleActive = true;
+		}
+	}
+	
+	void setAllRulesActive(boolean Fl_Active)
+	{
+		for (int i = 0; i < rules.size(); i++)		
+			rules.get(i).isRuleActive = Fl_Active;
+	}
+	
+	public ArrayList<String> getAllRuleNames()
+	{
+		ArrayList<String> rnames = new ArrayList<String>();
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			Rule rule = rules.get(i);
+			rnames.add(rule.name);
+		}	
+		return rnames;
+	}
+	
+	public ArrayList<String> getActiveRuleNames()
+	{
+		ArrayList<String> activeRules = new ArrayList<String>();
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			Rule rule = rules.get(i);
+			if (rule.isRuleActive)
+				activeRules.add(rule.name);
+		}	
+		return activeRules;
+	}
+	
+	public void activateRingChainRules(boolean FlagActivate)
+	{
+		FlagUseRingChainRules = FlagActivate;
+		
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			Rule rule = rules.get(i);
+			if (rule.type == TautomerConst.RT_RingChain)
+				rule.isRuleActive = FlagActivate;
+		}	
+	}
+	
+	public void activateChlorineRules(boolean FlagActivate)
+	{
+		FlagUseChlorineRules = FlagActivate;		
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			Rule rule = rules.get(i);
+			if (rule.type == TautomerConst.RT_MobileGroup)
+				if (rule.mobileGroup.equals("Cl"))
+					rule.isRuleActive = FlagActivate;
+		}	
+	}
+	
+	public void use13ShiftRulesOnly(boolean FlagUseOnly13)
+	{
+		if (FlagUseOnly13)
+		{
+			FlagUse15Shifts = false;
+			FlagUse17Shifts = false;
+			FlagUse19Shifts = false;
+		}
+		else
+		{
+			FlagUse15Shifts = true;
+			FlagUse17Shifts = true;
+			FlagUse19Shifts = true;
+		}
+		
+				
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			Rule rule = rules.get(i);
+			if (rule.type == TautomerConst.RT_MobileGroup)
+			{
+				if (rule.stateQueries[0].getAtomCount() > 3)
+					rule.isRuleActive = !FlagUseOnly13;  //since logical condition is use only 1-3 shift negation is applied
+			}
+				
+		}	
+	}
+	
+	public void use15ShiftRules(boolean Fl_Use)
+	{
+		FlagUse15Shifts = Fl_Use;
+		
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			Rule rule = rules.get(i);
+			if (rule.type == TautomerConst.RT_MobileGroup)
+			{
+				if (rule.stateQueries[0].getAtomCount() == 5)
+					rule.isRuleActive = Fl_Use; 
+			}	
+		}	
+	}
+	
+	
+	public void use17ShiftRules(boolean Fl_Use)
+	{
+		FlagUse17Shifts = Fl_Use;
+		
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			Rule rule = rules.get(i);
+			if (rule.type == TautomerConst.RT_MobileGroup)
+			{
+				if (rule.stateQueries[0].getAtomCount() == 7)
+					rule.isRuleActive = Fl_Use; 
+			}	
+		}	
+	}
+	
+	
+	public void use19ShiftRules(boolean Fl_Use)
+	{
+		FlagUse19Shifts = Fl_Use;
+		
+		for (int i = 0; i < rules.size(); i++)
+		{	
+			Rule rule = rules.get(i);
+			if (rule.type == TautomerConst.RT_MobileGroup)
+			{
+				if (rule.stateQueries[0].getAtomCount() == 9)
+					rule.isRuleActive = Fl_Use; 
+			}	
+		}	
+	}
+	
 	
 	public String getAllErrors()
 	{
@@ -147,6 +302,8 @@ public class KnowledgeBase
 		
 		return(sb.toString());		
 	}
+	
+	
 	
 }
 
