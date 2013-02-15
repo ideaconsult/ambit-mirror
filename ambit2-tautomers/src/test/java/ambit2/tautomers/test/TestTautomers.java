@@ -2,6 +2,7 @@ package ambit2.tautomers.test;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.ArrayList;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -27,6 +28,7 @@ import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.RuleStructureFactory;
+import ambit2.tautomers.KnowledgeBase;
 
 
 public class TestTautomers 
@@ -55,11 +57,11 @@ public class TestTautomers
 		tt.tman.FlagPrintExtendedRuleInstances = true;
 		tt.tman.FlagPrintIcrementalStepDebugInfo = false;
 		
-		tt.tman.activateChlorineRules(false);
-		tt.tman.activateRingChainRules(false);		
-		//tt.tman.use13ShiftRulesOnly(true);
-		tt.tman.use15ShiftRules(true);
-		tt.tman.use17ShiftRules(false);
+		tt.tman.getKnowledgeBase().activateChlorineRules(false);
+		tt.tman.getKnowledgeBase().activateRingChainRules(false);		
+		//tt.tman.getKnowledgeBase().use13ShiftRulesOnly(true);
+		tt.tman.getKnowledgeBase().use15ShiftRules(true);
+		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 		
 		tt.tman.maxNumOfBackTracks = 10000;
 		
@@ -154,7 +156,9 @@ public class TestTautomers
 		
 		
 		//tt.testConnectStructures("C1CN1",2,"CCl",0, IBond.Order.SINGLE);
-		tt.testCondenseStructures("C1CN1",0,1,"BrCCCl",1,2);
+		//tt.testCondenseStructures("C1CN1",0,1,"BrCCCl",1,2);
+		
+		tt.testRuleActivation(new String[] {"keto/enol","amin/imin"});
 	}
 	
 	public void performTestCases() throws Exception
@@ -562,6 +566,47 @@ public class TestTautomers
 		}
 		
 		return (nErrors); //OK result = 0
+	}
+	
+	public void testRuleActivation(String actRules[])
+	{
+		System.out.println("All  Rule List");
+		System.out.println("-----------------------------");
+		
+		KnowledgeBase kb = tman.getKnowledgeBase();
+		
+		ArrayList<String> allRules = kb.getAllRuleNames();
+		for (String rname: allRules)
+			System.out.println(rname);
+		
+		System.out.println();
+		System.out.println("Initial Active Rules");
+		System.out.println("-----------------------------");
+		ArrayList<String> activeRules = kb.getActiveRuleNames();
+		for (String rname: activeRules)
+			System.out.println(rname);
+		
+		if (actRules == null)
+			return;
+				
+		System.out.println();
+		System.out.println("Activating rules:");
+		ArrayList<String> ar = new ArrayList<String>();
+		for (int i = 0; i < actRules.length; i++)
+		{
+			ar.add(actRules[i]);
+			System.out.println(actRules[i]);
+		}
+		kb.setActiveRules(ar);
+		
+		System.out.println();
+		System.out.println("FinalActive Rules");
+		System.out.println("-----------------------------");
+		activeRules = kb.getActiveRuleNames();
+		for (String rname: activeRules)
+			System.out.println(rname);
+		
+		
 	}
 	
 	public void testConnectStructures(String smi1, int numAt1, String smi2, int numAt2, IBond.Order order) throws Exception

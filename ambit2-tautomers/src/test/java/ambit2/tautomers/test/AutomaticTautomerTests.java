@@ -1550,8 +1550,8 @@ public class AutomaticTautomerTests
 	void setTautomerManager()
 	{
 		tman = new TautomerManager();
-		tman.use15ShiftRules(true);
-		tman.use17ShiftRules(false);
+		tman.getKnowledgeBase().use15ShiftRules(true);
+		tman.getKnowledgeBase().use17ShiftRules(false);
 		tman.maxNumOfBackTracks = 10000;
 	}
 	

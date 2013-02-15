@@ -27,9 +27,9 @@ public class PredefinedKnowledgeBase
 		"$$NAME=N=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#7]=[#16][#6] [#7][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= N=SC",
 		"$$NAME=O=SC                   $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8]=[#16][#6] [#8][#16]=[#6]   $$GROUP_POS=3,1 $$INFO= O=SC",
 		
-		"$$NAME=1.5 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#7,#16]=[#6][#6]=[#6][#6] [#8,#7,#16][#6]=[#6][#6]=[#6]  " +
+		"$$NAME=1.5_shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#7,#16]=[#6][#6]=[#6][#6] [#8,#7,#16][#6]=[#6][#6]=[#6]  " +
 																												 "$$GROUP_POS=5,1  $$INFO=",
-		"$$NAME=1.7 shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#6]=[#6][#6]=[#6][#6]=[#6][#8,#7,#16] [#6][#6]=[#6][#6]=[#6][#6]=[#8,#7,#16]  " +
+		"$$NAME=1.7_shift              $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#6]=[#6][#6]=[#6][#6]=[#6][#8,#7,#16] [#6][#6]=[#6][#6]=[#6][#6]=[#8,#7,#16]  " +
 																												"$$GROUP_POS=7,1  $$INFO=",
 		
 		"$$NAME=[O,S,N][C,S]#[C,S]     $$TYPE=MOBILE_GROUP $$GROUP=H   $$STATES= [#8,#16,#7][#6,#16;!R]#[#6,#16] [#8,#16,#7]=[#6,#16;!R]=[#6,#16]    $$GROUP_POS=1,3  $$INFO= ",
