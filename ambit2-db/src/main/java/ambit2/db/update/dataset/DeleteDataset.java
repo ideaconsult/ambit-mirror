@@ -1,4 +1,5 @@
-/* DeleteDataset.java
+/*
+* DeleteDataset.java
  * Author: nina
  * Date: Mar 28, 2009
  * Revision: 0.1 
@@ -29,18 +30,24 @@
 
 package ambit2.db.update.dataset;
 
+import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.db.IStoredProcStatement;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
-public class DeleteDataset extends AbstractObjectUpdate<SourceDataset> {
+public class DeleteDataset extends AbstractObjectUpdate<SourceDataset> implements IStoredProcStatement { 
 
-	public static final String[] delete_sql_by_name = {"delete from src_dataset where name=? and user_name=(SUBSTRING_INDEX(user(),'@',1))"};
-	public static final String[] delete_sql_by_id = {"delete from src_dataset where id_srcdataset=? and user_name=(SUBSTRING_INDEX(user(),'@',1))"};
+//"delete p,t from properties p, src_dataset d,template_def t where p.idproperty=t.idproperty and t.idtemplate=d.idtemplate and d.id_srcdataset=? and user_name=(SUBSTRING_INDEX(user(),'@',1))",
+
+	public static final String[] delete_sql_by_id = {
+		"{call deleteDataset(?,5)}"
+	};
 
 	public DeleteDataset(SourceDataset dataset) {
 		super(dataset);
@@ -53,15 +60,26 @@ public class DeleteDataset extends AbstractObjectUpdate<SourceDataset> {
 		if (getObject().getId()>0)
 			params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
 		else
-			params.add(new QueryParam<String>(String.class, getObject().getName()));
+			throw new AmbitException("No dataset id");
 		return params;
 		
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return (getObject().getId()>0)?delete_sql_by_id:delete_sql_by_name;
+		if (getObject().getId()>0)
+			return delete_sql_by_id;
+		else
+			throw new AmbitException("No dataset id");
 	}
+	
 	public void setID(int index, int id) {
 		
 	}
+	@Override
+	public void getStoredProcedureOutVars(CallableStatement statement)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
 }
+
