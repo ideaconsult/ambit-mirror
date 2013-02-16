@@ -7,19 +7,19 @@
 handlers=java.util.logging.ConsoleHandler
 # Set the default global logging level for the root logger
 #Loggers and Handlers can override this logging level (!)
-.level = INFO
+.level = WARNING
 # Set the default logging level for new ConsoleHandler instances
-java.util.logging.ConsoleHandler.level = FINE
+java.util.logging.ConsoleHandler.level = WARNING
 # Set the default logging level for new FileHandler instances
-#java.util.logging.FileHandler.level = ALL
+#java.util.logging.FileHandler.level = INFO
 # Set the default formatter for new ConsoleHandler instances
 #java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
 # Specify the logging level for a specific package.
 #Ambit modules http://ambit.sourceforge.net/AMBIT2-LIBS/
-ambit2.mopac.level = INFO
-ambit2.smi23d.level = INFO
+ambit2.mopac.level = WARNING
+ambit2.smi23d.level = WARNING
 #Toxtree http://toxtree.sourceforge.net/
-toxtree.level = INFO
-mutant.level = INFO
+toxtree.level = WARNING
+mutant.level = WARNING
 #Restlet http://www.restlet.org/
 #org.restlet.engine.level = WARNING
