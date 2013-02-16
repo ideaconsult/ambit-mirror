@@ -76,6 +76,7 @@
 	<servlet>
 		<servlet-name>RestletServlet</servlet-name>
 		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>	
 	<servlet-mapping>
 		<servlet-name>RestletServlet</servlet-name>
