@@ -436,7 +436,6 @@ function defineDatasetsTable(root,url) {
      		                sOut += "<a href='"+root + "/model?dataset=" + encodeURIComponent(o.aData.URI) +"'><span class='ui-icon ui-icon-calculator' style='float: left; margin: .1em;' title='Retrieve models using this dataset as a training dataset'></span></a>&nbsp;";
      		                sOut += "<a href='"+o.aData.URI +"/similarity?search=c1ccccc1'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Similarity search within the dataset'></span></a>&nbsp;";
      		                sOut += "<a href='"+o.aData.URI +"/smarts?search=c1ccccc1'><span class='ui-icon ui-icon-search' style='float: left; margin: .1em;' title='Substructure search within the dataset'></span></a> ";
-    						//sOut += "<br/><span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show datasets details'></span>";
     						return sOut;
     					}
     				},	     	            
@@ -444,6 +443,7 @@ function defineDatasetsTable(root,url) {
     				  "bSortable" : true,
      	              "mDataProp":"stars",
      	              "aTargets": [ 1 ],
+     	              "bUseRendered" : false,	
      	              sWidth : "2em",
 	  					"fnRender" : function(o,val) {
 							 return  "<span class='ui-icon ui-icon-star' style='display:inline-block' title='Click to show model details'></span>"+val;			
@@ -476,6 +476,8 @@ function defineDatasetsTable(root,url) {
     	  			{ "sTitle": "Download", 
     	  			  "mDataProp":null , 
     	  			  "aTargets": [ 3 ],	
+    	  			  "bSortable" : false,
+    	  			  "bSearchable" : false,
     	  			  sWidth: "15%",
     		  	      "bUseRendered" : false,	
     			       "fnRender": function ( o, val ) {
@@ -493,7 +495,25 @@ function defineDatasetsTable(root,url) {
     			    	   sOut += "<a href='"+getMediaLink(val,"application/json")+"' id='json' target=_blank><img src='"+root+"/images/json.png' alt='json' title='Download as JSON'/></a>";
     			    	   return sOut;
     			      }
-    		  		}	  		
+    		  		},
+    	  			{  
+      	  			  "mDataProp":"stars" , 
+      	  			  "aTargets": [ 4 ],	
+      	  			  "sWidth" : "32px",
+      		  	      "bUseRendered" : false,	
+      			       "fnRender": function ( o, val ) {
+      			    	   val = o.aData["URI"];
+      			    	   var statusSelector= 's'+ o['iDataRow'] ;
+      			    	   var sOut = "";
+    		               if (o.aData.stars<=5) {
+     		                	sOut = "<a href='#' onClick='deleteDataset(\""+o.aData.URI +
+     		                		"\",\"#" + statusSelector+  "\");'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title='Remove dataset "+ 
+     		                		o.aData.URI + "'></span></a><br/><span class='msg' id='" + statusSelector + "'></span>";
+     		                		
+     		               }
+      			    	   return sOut;
+      			      }
+      		  		}	    		  		
      				],
  	  "aaSorting": [[1, 'desc']]		  
 	});

@@ -133,6 +133,12 @@ a.topLinks {
 	border: 0;
 }
 
+.msg {
+	font-size: 0.75em;
+	font-weight: bold italic !important;
+	color: #ff0000;
+}
+
 .help {
 	font-size: 0.75em;
 	font-weight: bold italic !important;

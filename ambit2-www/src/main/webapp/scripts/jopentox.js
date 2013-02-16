@@ -315,3 +315,30 @@ function runStructureIndexing(root,statusSelector) {
 	});
 
 }
+
+/**
+ * Deletes an Opentox dataset
+ * @param uri
+ */
+function deleteDataset(uri,statusSelector) {
+	$.ajax({
+		contentType :'application/x-www-form-urlencoded; charset=UTF-8',
+	    headers: { 
+	        Accept : "text/uri-list; charset=utf-8"
+	    },
+		data : "dataset_uri=" + encodeURIComponent(uri), 
+		type: "POST",
+		url : uri + "?method=delete",
+		success : function(data1, status, xhr) {
+			var sOut = "Deleted.<br/><a href='#' onClick='document.location.reload(true);'>Click to refresh the page.</a>";
+			$(statusSelector).html(sOut);
+			
+		},
+		error : function(xhr, status, err) {
+			$(statusSelector).text(status + " " + err);
+		},
+		complete : function(xhr, status) {
+			
+		}
+	});	
+}
