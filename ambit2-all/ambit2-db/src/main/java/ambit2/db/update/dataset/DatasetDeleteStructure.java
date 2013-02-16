@@ -42,7 +42,7 @@ public class DatasetDeleteStructure extends AbstractUpdate<SourceDataset,IStruct
 	
 	
 	public static final String[] delete_sql = {
-		"delete d from struc_dataset d, src_dataset s where d.idstructure=? and s.id_srcdataset=d.id_srcdataset and d.id_srcdataset=? and s.user_name=(SUBSTRING_INDEX(user(),'@',1))"
+		"delete d from struc_dataset d, src_dataset s where d.idstructure=? and s.id_srcdataset=d.id_srcdataset and d.id_srcdataset=? and stars<=5"
 	};
 	public static final String[] delete_sql_chemical = {
 		"delete d from struc_dataset d , structure t where idchemical=? and id_srcdataset=? and d.idstructure=t.idstructure"

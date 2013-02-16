@@ -66,7 +66,8 @@ public class CreateUser extends AbstractObjectUpdate<AmbitUser> {
 		"GRANT USAGE ON *.* TO ?@? IDENTIFIED BY ?;",
 		"GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON *.* TO ?@? IDENTIFIED BY ?;",
 		"GRANT EXECUTE ON FUNCTION sortstring TO ?@?;",
-		"GRANT EXECUTE ON PROCEDURE findByProperty TO ?@?;"
+		"GRANT EXECUTE ON PROCEDURE findByProperty TO ?@?;",
+		"GRANT EXECUTE ON PROCEDURE deleteDataset TO ?@?;"
 		//	        st.executeQuery("GRANT EXECUTE ON FUNCTION sql_xtab TO 'guest'@'localhost';");
         //st.close();    	        
         //st.executeQuery("GRANT EXECUTE ON PROCEDURE p_xtab TO 'guest'@'localhost';");

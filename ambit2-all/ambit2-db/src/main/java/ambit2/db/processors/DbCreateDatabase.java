@@ -136,7 +136,8 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
 # in the grant tables must be IP addresses or localhost.
 skip-name-resolve
          */
-        
+        //TODO move this to the SQL script
+        //TODO refactor to use existing empty db with rights assigned; not create it on the fly
         	String[] users = {
         	"insert into roles (role_name) values (\"ambit_guest\");",
         	"insert into roles (role_name) values (\"ambit_admin\");",
@@ -148,28 +149,10 @@ skip-name-resolve
         	"insert into user_roles (user_name,role_name) values (\"admin\",\"ambit_admin\");",
         	"insert into user_roles (user_name,role_name) values (\"quality\",\"ambit_quality\");",
         	
-        	
-        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'admin'@'%s';",database,"localhost"),
-        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'guest'@'%s';",database,"localhost"),
-
-        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'admin'@'%s';",database,"127.0.0.1"),
-        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'guest'@'%s';",database,"127.0.0.1"),
-
-        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'admin'@'%s';",database,"::1"),
-        	String.format("REVOKE ALL PRIVILEGES ON `%s`.* FROM 'guest'@'%s';",database,"::1"),
-        	
-        	String.format("GRANT USAGE ON `%s`.* TO 'admin'@'%s' IDENTIFIED BY '%s';",database,"localhost",adminPass),
-        	String.format("GRANT USAGE ON `%s`.* TO 'admin'@'%s' IDENTIFIED BY '%s';",database,"127.0.0.1",adminPass),
-        	
-        	String.format("GRANT ALL PRIVILEGES ON `%s`.* TO 'admin'@'%s' WITH GRANT OPTION;",database,"localhost"),
-        	String.format("GRANT ALL PRIVILEGES ON `%s`.* TO 'admin'@'%s' WITH GRANT OPTION;",database,"127.0.0.1"),
-        	
         	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY '%s';",database,"localhost",userPass),
-        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY '%s';",database,"127.0.0.1",userPass),
-        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY '%s';",database,"::1",userPass),
+        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' ;",database,"127.0.0.1"),
+        	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' ;",database,"::1"),
         	
-        	//"GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'localhost';"
-
         	};
 	        Statement st = connection.createStatement();
 	        
@@ -197,7 +180,7 @@ skip-name-resolve
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE setAtomEnvironment TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT SELECT ON `mysql`.`proc` TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE findByProperty TO 'guest'@'%s';",localAddr));
-		        
+		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE deleteDataset TO 'guest'@'%s';",localAddr));
 	        }
 	         
         } catch (Exception x) {

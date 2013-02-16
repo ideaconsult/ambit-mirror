@@ -45,7 +45,7 @@ public class Dataset_crud_test extends CRUDTest<Object,SourceDataset> {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		dbFile = "src/test/resources/ambit2/db/processors/test/dataset-properties.xml";			
+		dbFile = "src/test/resources/ambit2/db/processors/test/dataset-properties1.xml";			
 	}
 	@Override
 	protected IQueryUpdate<Object,SourceDataset> createQuery() throws Exception {
@@ -79,16 +79,23 @@ public class Dataset_crud_test extends CRUDTest<Object,SourceDataset> {
 	@Override
 	protected IQueryUpdate<Object,SourceDataset> deleteQuery() throws Exception {
 		SourceDataset adataset = new SourceDataset();
-		adataset.setName("Dataset 1");		
+		adataset.setId(1);
 		return new DeleteDataset(adataset);
 	}
 
 	@Override
 	protected void deleteVerify(IQueryUpdate<Object,SourceDataset> query) throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where user_name='Dataset 1'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where id_srcdataset=1");
 		Assert.assertEquals(0,table.getRowCount());
-		/* shouldn't structures be deleted as well?
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM template where name='Dataset 1'");
+		Assert.assertEquals(0,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties where name='TO BE DELETED'");
+		Assert.assertEquals(0,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215 and idproperty=5");
+		Assert.assertEquals(0,table.getRowCount());
+		/* Deleting structures is tricky, there may be datasets which refer to the same structures
+		 * e.g. when properties are imported as separate datasets; example ToxCast
 		table = c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(2,table.getRowCount());
 		*/		

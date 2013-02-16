@@ -104,6 +104,7 @@ public class DbAddUser extends AbstractRepositoryWriter<AmbitUser,AmbitUser> {
                 st.addBatch("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON "+ connection.getCatalog() + ".* TO  '"+user.getName()+"'@'%' IDENTIFIED BY '"+user.getPassword()+"'");
                 st.addBatch(String.format("GRANT EXECUTE ON FUNCTION sortstring TO '%s'@'%';",user.getName()));
                 st.addBatch(String.format("GRANT EXECUTE ON PROCEDURE findByProperty TO '%s'@'%';",user.getName()));
+                st.addBatch(String.format("GRANT EXECUTE ON PROCEDURE deleteDataset TO '%s'@'%';",user.getName()));
                 
             }
             st.addBatch("flush privileges");
