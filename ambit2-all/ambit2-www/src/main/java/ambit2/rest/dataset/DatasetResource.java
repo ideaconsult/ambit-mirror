@@ -373,7 +373,8 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 				executeUpdate(getRequestEntity(), 
 						null,
 						createDeleteObject(null));
-				return getResponseEntity();
+				getResponse().setStatus(Status.SUCCESS_OK);
+				return new StringRepresentation(String.format("%s/dataset", getRequest().getRootRef()),MediaType.TEXT_URI_LIST);
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
