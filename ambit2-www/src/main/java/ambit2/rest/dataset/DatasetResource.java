@@ -1,5 +1,6 @@
 package ambit2.rest.dataset;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.HashMap;
@@ -314,12 +315,26 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 			c.setObject(new StoredQuery(queryResultsID));
 			return c;
 		} else if ((datasetID!=null) && (datasetID>0)) {
-			DeleteDataset c =  new DeleteDataset();
 			SourceDataset d = new SourceDataset();
 			d.setId(datasetID);
-			c.setObject(d);
-			return c;
+			//no threshold if we use OpenSSO policies
+			return new DeleteDataset(d,getToken()!=null?5:11);
 		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+	}
+	
+	@Override
+	protected void deletePolicy(URL url, String token) throws Exception {
+		if (token==null) {
+			getLogger().fine("Deleting a dataset, but OpenSSO token is not set.");
+			return;
+		}
+		String datasetURL = null;
+		if ((queryResultsID!=null) && (queryResultsID>0)) {
+			datasetURL = String.format("%s/dataset/R%d", getRequest().getRootRef(), queryResultsID);
+		} else if ((datasetID!=null) && (datasetID>0)) {
+			datasetURL = String.format("%s/dataset/%d", getRequest().getRootRef(), datasetID);
+		} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);		
+		super.deletePolicy(new URL(datasetURL),token);
 	}
 	
 	
@@ -380,6 +395,10 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
+	}
+	@Override
+	public void onUpdateSuccess() throws Exception {
+		deletePolicy(null,getToken());
 	}
 	@Override
 	protected QueryURIReporter<IStructureRecord, Q> getURUReporter(

@@ -80,7 +80,9 @@ public class Dataset_crud_test extends CRUDTest<Object,SourceDataset> {
 	protected IQueryUpdate<Object,SourceDataset> deleteQuery() throws Exception {
 		SourceDataset adataset = new SourceDataset();
 		adataset.setId(1);
-		return new DeleteDataset(adataset);
+		DeleteDataset q = new DeleteDataset(adataset);
+		q.setGroup(new Integer(5));
+		return  (IQueryUpdate<Object,SourceDataset>) q;
 	}
 
 	@Override
