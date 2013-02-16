@@ -39,18 +39,21 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.IStoredProcStatement;
 import ambit2.db.search.QueryParam;
-import ambit2.db.update.AbstractObjectUpdate;
+import ambit2.db.update.AbstractUpdate;
 
-public class DeleteDataset extends AbstractObjectUpdate<SourceDataset> implements IStoredProcStatement { 
+public class DeleteDataset extends AbstractUpdate<Object,SourceDataset> implements IStoredProcStatement { 
 
 //"delete p,t from properties p, src_dataset d,template_def t where p.idproperty=t.idproperty and t.idtemplate=d.idtemplate and d.id_srcdataset=? and user_name=(SUBSTRING_INDEX(user(),'@',1))",
 
 	public static final String[] delete_sql_by_id = {
-		"{call deleteDataset(?,5)}"
+		"{call deleteDataset(?,?)}"
 	};
-
-	public DeleteDataset(SourceDataset dataset) {
+	public DeleteDataset(SourceDataset dataset,int stars) {
 		super(dataset);
+		setGroup(stars);
+	}
+	public DeleteDataset(SourceDataset dataset) {
+		this(dataset,5);
 	}
 	public DeleteDataset() {
 		this(null);
@@ -61,6 +64,7 @@ public class DeleteDataset extends AbstractObjectUpdate<SourceDataset> implement
 			params.add(new QueryParam<Integer>(Integer.class, getObject().getId()));
 		else
 			throw new AmbitException("No dataset id");
+		params.add(new QueryParam<Integer>(Integer.class, (Integer)getGroup()));
 		return params;
 		
 	}

@@ -4,20 +4,26 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.opentox.aa.IOpenToxUser;
+import org.opentox.aa.OpenToxUser;
+import org.opentox.aa.opensso.OpenSSOPolicy;
+import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.CharacterSet;
-import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -46,6 +52,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.exception.RResourceException;
 import ambit2.rest.property.ProfileReader;
@@ -261,7 +268,7 @@ Then, when the "get(Variant)" method calls you back,
 				getResponse().setEntity(uriReporter.getURI(entry),MediaType.TEXT_HTML);
 			}
 			getResponse().setStatus(Status.SUCCESS_OK);
-			
+			onUpdateSuccess();
 		} catch (SQLException x) {
 			Context.getCurrentLogger().severe(x.getMessage());
 			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN,x,x.getMessage());			
@@ -280,6 +287,9 @@ Then, when the "get(Variant)" method calls you back,
 			try {if(c != null) c.close();} catch (Exception x) {}
 		}
 	}	
+	public void onUpdateSuccess() throws Exception {
+		
+	}
 	/**
 	 * POST - create entity based on parameters in the query, creates a new entry in the databaseand returns an url to it
 	 * TODO Refactor to allow multiple objects 
@@ -606,5 +616,34 @@ Then, when the "get(Variant)" method calls you back,
         setTokenCookies(variant, useSecureCookie(getRequest()));
         configureTemplateMap(map);
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
-	}	
+	}
+	
+	
+	protected void deletePolicy(URL url,String token) throws Exception {
+		if (token==null) return;
+		try {
+			OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
+			OpenSSOPolicy policyTools = new OpenSSOPolicy(config.getPolicyService());
+			OpenSSOToken ssoToken = new OpenSSOToken(config.getOpenSSOService());
+			ssoToken.setToken(token);
+			deleteAllPolicies(policyTools,ssoToken,url);
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Error deleting policies for %s",url),x);
+		}
+	}
+	
+	public void deleteAllPolicies(OpenSSOPolicy policyTools,OpenSSOToken ssoToken,URL url) throws Exception {
+		IOpenToxUser user = new OpenToxUser();
+		getLogger().fine("Deleting policies for "+url.toString());
+		Hashtable<String, String> policies = new Hashtable<String, String>();
+		int status = policyTools.getURIOwner(ssoToken, url.toExternalForm(), user, policies);
+		if (200 == status) {
+			Enumeration<String> e = policies.keys();
+			while (e.hasMoreElements()) {
+				String policyID = e.nextElement();
+				policyTools.deletePolicy(ssoToken,policyID);
+				getLogger().fine("Policy "+policyID + "deleted");
+			}
+		} //else throw new RestException(status);
+	}
 }
