@@ -218,16 +218,22 @@ Changelog: cdk 1.3.6 and jchempaint 3.1.3
 -------------------------------------------------------
 Database
 
-If not using the automatic DB create via REST services , grant the following privileges
+If not using the automatic DB create via REST services , grant the following privileges (change the user if necessary)
+
 GRANT ALL ON `ambit2`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
 GRANT ALL ON `ambit2`.* TO 'guest'@'127.0.0.1' IDENTIFIED BY 'guest';
 GRANT ALL ON `ambit2`.* TO 'guest'@'::1' IDENTIFIED BY 'guest';
 GRANT TRIGGER ON `ambit2`.* TO 'guest'@'localhost';
 GRANT TRIGGER ON `ambit2`.* TO 'guest'@'127.0.0.1';
 GRANT TRIGGER ON `ambit2`.* TO 'guest'@'::1';
+-- To be able to import datasets
 GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'localhost';
 GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'127.0.0.1';
 GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'::1';
+-- To be able to remove datasets
+GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'localhost';
+GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'127.0.0.1';
+GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'::1';
 
 test database ambit-test
 GRANT ALL ON `ambit-test`.* TO 'guest'@'localhost' IDENTIFIED BY 'guest';
@@ -239,3 +245,7 @@ GRANT TRIGGER ON `ambit-test`.* TO 'guest'@'::1';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.findByProperty TO 'guest'@'localhost';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.findByProperty TO 'guest'@'127.0.0.1';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.findByProperty TO 'guest'@'::1';
+
+GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'localhost';
+GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'127.0.0.1';
+GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'::1';
