@@ -701,7 +701,30 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 
 		}
 	}	
-	
+
+	protected Reference delete(Reference datasetURI,Representation entity,Variant variant) throws ResourceException {
+		try {
+              //factory.setSizeThreshold(100);
+			RemoteTask task = new RemoteTask(datasetURI,variant.getMediaType(),entity,Method.DELETE);
+			//task.poll() returns true if completed
+			while (!task.poll()) {
+				Thread.sleep(1500);
+				System.out.println(task);
+			}
+			if (Status.SUCCESS_OK.equals(task.getStatus())) {
+				return task.getResult();
+			} else if (Status.CLIENT_ERROR_NOT_FOUND.equals(task.getStatus())) {
+				 throw new ResourceException(task.getStatus());
+			} else throw new ResourceException(task.getStatus(),task.getResult()==null?task.getStatus().getDescription():task.getResult().toString());
+			
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(x);
+		} finally {
+
+		}
+	}	
 
 	public void testCreateEntryBBRCRDFLocal() throws Exception {
 	    IDatabaseConnection c = getConnection();	
@@ -718,8 +741,34 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 	
 	}	
 	
+	@Test
 	public void testDeleteStructuresFromDataset() throws Exception {
-		Assert.fail("add test");
+        IDatabaseConnection c = getConnection();	
+		String dataset = String.format("http://localhost:%d/dataset/2", port);
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=2");
+		Assert.assertEquals(2,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT idproperty,idtemplate FROM src_dataset join template_def using(idtemplate) join properties using(idproperty) where id_srcdataset=2");
+		Assert.assertEquals(1,table.getRowCount());
+		Object idproperty = table.getValue(0,"idproperty");
+		Assert.assertEquals("3",idproperty.toString());
+		Object idtemplate = table.getValue(0,"idtemplate");
+		Assert.assertEquals("103",idtemplate.toString());
+		
+		try {
+			Reference reference = delete(new Reference(dataset),null,new Variant(MediaType.TEXT_URI_LIST));
+			Assert.assertEquals(String.format("http://localhost:%d/dataset",port),reference.toString());
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		table = c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where id_srcdataset=2");
+		Assert.assertEquals(0,table.getRowCount());
+		table = c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset where id_srcdataset=2");
+		Assert.assertEquals(0,table.getRowCount());
+		table = c.createQueryTable("EXPECTED","SELECT * FROM template where idtemplate=103");
+		Assert.assertEquals(0,table.getRowCount());
+		table = c.createQueryTable("EXPECTED","SELECT * FROM properties where idproperty=3");
+		Assert.assertEquals(0,table.getRowCount());
+		c.close();
 	}
 	
 	public void testDeleteStructuresFromRDataset() throws Exception {
