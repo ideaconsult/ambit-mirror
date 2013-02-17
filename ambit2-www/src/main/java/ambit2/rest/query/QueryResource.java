@@ -603,6 +603,18 @@ Then, when the "get(Variant)" method calls you back,
 			return jsonp==null?false:Boolean.parseBoolean(jsonp);
 		} catch (Exception x) { return false;}
 	}
+	
+	public boolean isAAEnabled() {
+		Properties properties =   new Properties();
+		try {
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/rest/config/config.prop");
+			properties.load(in);
+			in.close();		
+			String jsonp = properties.getProperty("aa.enabled");
+			return jsonp==null?false:Boolean.parseBoolean(jsonp);
+		} catch (Exception x) { return false;}
+	}
+
 
 	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
         Map<String, Object> map = new HashMap<String, Object>();
