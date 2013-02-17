@@ -15,6 +15,8 @@ http://www.mchange.com/projects/c3p0/index.html#using_c3p0
          */
         datasource = new ComboPooledDataSource();  // create a new datasource object
      	datasource.setJdbcUrl(connectURI);
+     	//datasource.setDebugUnreturnedConnectionStackTraces(true);
+     	//datasource.setUnreturnedConnectionTimeout(50);
     	//datasource.setUser("guest");				// set the username
     	//datasource.setPassword("guest");	
        
@@ -35,7 +37,8 @@ http://www.mchange.com/projects/c3p0/index.html#using_c3p0
 	@Override
 	protected void finalize() throws Throwable {
 		try {
-		close();
+			close();
+			
 		} catch (Exception x) {
 			
 		}
