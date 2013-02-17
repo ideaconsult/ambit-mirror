@@ -217,7 +217,10 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		
 		
 		TaskResult ref =	new TaskResult(
-				String.format("%s%s/%s", baseReference.toString(),SimpleTaskResource.resource,Reference.encode(task.getUuid().toString())));
+				String.format("%s%s/%s", 
+						baseReference==null?"":baseReference.toString(),
+						SimpleTaskResource.resource,
+						Reference.encode(task.getUuid().toString())));
 		task.setUri(ref);
 
 		if (tasks.get(task.getUuid())==null) {
