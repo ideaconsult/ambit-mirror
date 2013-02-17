@@ -143,12 +143,16 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String configProperties = "ambit2/rest/config/config.prop";
 	static final String loggingProperties = "ambit2/rest/config/logging.prop";
 	
-
+	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
 	
 	public AmbitApplication() {
+		this(false);
+	}
+	public AmbitApplication(boolean standalone) {
 		super();
+		this.standalone = standalone;
 		openToxAAEnabled = isOpenToxAAEnabled();
 		localAAEnabled = isSimpleSecretAAEnabled();
 		
@@ -197,6 +201,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		Restlet root = initInboundRoot();
 		SimpleGuards guard = isSimpleGuardEnabled();
 		
+		if (!standalone) //only servlets are lazy
 		addTask("warmup",new WarmupTask("warmup",openToxAAEnabled), new Reference("riap://component"),"guest");
 
 		
@@ -730,7 +735,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
         if (mysqlport!=null) context.getParameters().add(Preferences.PORT, mysqlport);
         if (mysqlHost!=null) context.getParameters().add(Preferences.HOST, mysqlHost);
             	
-        Component component = new AmbitComponent(context);
+        Component component = new AmbitComponent(context,true);
         final Server server = component.getServers().add(Protocol.HTTP, httpport);
         Logger logger = Logger.getLogger(AmbitApplication.class.getName());	
         logger.log(Level.INFO,String.format("Server started on port %d",server.getPort()));

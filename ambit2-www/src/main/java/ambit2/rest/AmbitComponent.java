@@ -9,6 +9,8 @@ import org.restlet.Context;
  *
  */
 public class AmbitComponent extends RESTComponent {
+
+
 		public AmbitComponent() {
 			this(null);
 		}
@@ -16,6 +18,9 @@ public class AmbitComponent extends RESTComponent {
 			super(context,applications);
 			
 		
+		}
+		public AmbitComponent(Context context,boolean standalone) {
+			this(context,new Application[]{new AmbitApplication(true)});
 		}
 		public AmbitComponent(Context context) {
 			this(context,new Application[]{new AmbitApplication()});
