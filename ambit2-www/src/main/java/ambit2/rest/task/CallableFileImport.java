@@ -252,6 +252,8 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		} catch (Exception x) {
 			throw x;
 		} finally {
+			try {if (connection!=null)connection.close();} catch (Exception x) {}
+			connection = null;			
 			try { if (file.exists()) file.delete(); } catch (Exception x) { logger.log(Level.WARNING,x.getMessage(),x);}
 		}
 	}
@@ -381,6 +383,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 				if (recordImported == null) throw new Exception("No compound imported");
 				if (compoundReporter == null)
 					compoundReporter = new ConformerURIReporter(null);
+				try { batch.close();	} catch (Exception xx) {}
 				return new TaskResult(compoundReporter.getURI(recordImported));				
 			} else {
 				ReadDataset q = new ReadDataset();
@@ -400,18 +403,17 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 					throw new ResourceException(Status.SUCCESS_NO_CONTENT);
 				if (reporter == null)
 					reporter = new DatasetURIReporter<IQueryRetrieval<ISourceDataset>>();
+				try { batch.close();	} catch (Exception xx) {}
 				return new TaskResult(reporter.getURI(newDataset));
 			}
+
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
 			throw new ResourceException(new Status(
 					Status.SERVER_ERROR_INTERNAL, x.getMessage()));
 		} finally {
-			try {
-				connection.close();
-			} catch (Exception x) {
-			}
+			try {connection.close();} catch (Exception x) {}
 			connection = null;
 		}
 	}

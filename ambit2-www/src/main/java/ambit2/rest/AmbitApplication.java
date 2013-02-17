@@ -32,6 +32,7 @@ import org.restlet.data.ClientInfo;
 import org.restlet.data.Method;
 import org.restlet.data.Parameter;
 import org.restlet.data.Protocol;
+import org.restlet.data.Reference;
 import org.restlet.engine.security.SslContextFactory;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
@@ -113,6 +114,7 @@ import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
+import ambit2.rest.task.WarmupTask;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.ui.UIResource;
 
@@ -123,6 +125,7 @@ import ambit2.rest.ui.UIResource;
  */
 
 public class AmbitApplication extends FreeMarkerApplication<String> {
+	public static final String BASE_URL = "BASE_URL";
 	public static final Role UPDATE_ALLOWED = new Role("AUTHOR","Update (PUT,POST,DELETE) allowed");
 	protected boolean insecure = true;
 	protected Logger logger = Logger.getLogger(AmbitApplication.class.getName());	 
@@ -141,8 +144,14 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String loggingProperties = "ambit2/rest/config/logging.prop";
 	
 
+	protected boolean openToxAAEnabled = false;
+	protected boolean localAAEnabled = false;
+	
 	public AmbitApplication() {
 		super();
+		openToxAAEnabled = isOpenToxAAEnabled();
+		localAAEnabled = isSimpleSecretAAEnabled();
+		
 		setName("AMBIT REST services");
 		setDescription("AMBIT implementation of OpenTox framework");
 		setOwner("Ideaconsult Ltd.");
@@ -187,6 +196,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	public Restlet createInboundRoot() {
 		Restlet root = initInboundRoot();
 		SimpleGuards guard = isSimpleGuardEnabled();
+		
+		addTask("warmup",new WarmupTask("warmup",openToxAAEnabled), new Reference("riap://component"),"guest");
+
+		
 		if (guard != null) {
 			logger.log(Level.INFO,String.format("Property %s set, %s guard enabled.", GUARD_ENABLED, guard));
 			String[] allowed = getGuardListAllowed();
@@ -198,12 +211,23 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return theguard;
 		} else
 			return root;
+	
 	}
 
 	public Restlet initInboundRoot() {
         initFreeMarkerConfiguration();
         
-		Router router = new MyRouter(this.getContext());
+		Router router = new MyRouter(this.getContext()) {
+			public void handle(Request request, Response response) {
+				//to use within riap calls
+				String rootUrl = getContext().getParameters().getFirstValue(BASE_URL); 
+				if ((rootUrl == null) && request.getRootRef().toString().startsWith("http")) { 
+                    rootUrl = request.getRootRef().toString(); 
+                    getContext().getParameters().set(BASE_URL,rootUrl,true);
+				}
+				super.handle(request, response);
+			};
+		};		
 		router.attach("/help", AmbitResource.class);
 		
 		/**

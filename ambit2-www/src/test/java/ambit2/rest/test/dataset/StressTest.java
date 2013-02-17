@@ -1,6 +1,5 @@
 package ambit2.rest.test.dataset;
 
-import java.awt.SystemColor;
 import java.net.URL;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -24,7 +23,7 @@ import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.test.ProtectedResourceTest;
 
 public class StressTest extends ProtectedResourceTest {
-
+	static long timeout = 500000;
     @Before
     public void setUp() throws Exception {
     	super.setUp();
@@ -45,7 +44,7 @@ public class StressTest extends ProtectedResourceTest {
 	
 	@Test
 	public void test() throws Exception {
-		int nt = 10;
+		int nt = 99;
 		MyThread[] threads = new MyThread[nt];
 		for (int i= 0; i < nt; i++) try {
 			threads[i] = new MyThread(String.format("thread-%d",i),1000);
@@ -70,6 +69,9 @@ public class StressTest extends ProtectedResourceTest {
 		for (int i= 0; i < nt; i++) {
 				time += threads[i].time;
 				s += "\n" + threads[i].time;
+				Assert.assertNull(threads[i].getName(),threads[i].error);
+				Assert.assertNotNull(threads[i].getName(),threads[i].dataset);
+				Assert.assertNotNull(threads[i].getName(),threads[i].calculated);
 		}
 	    logger.log(Level.INFO,s);
 		logger.log(Level.INFO,"Average time per thread "+Long.toString(time/nt)+ " ms.");
@@ -100,6 +102,7 @@ public class StressTest extends ProtectedResourceTest {
 			time = System.currentTimeMillis();
 			try {
 				dataset = createEntryFromFile();
+				if (dataset!=null)
 				threadLogger.info(dataset.toString());
 				
 				Form form = new Form();
@@ -111,7 +114,7 @@ public class StressTest extends ProtectedResourceTest {
 				while (!task.poll()) {
 					Thread.yield();
 					Thread.sleep(sleep);
-					if ((System.currentTimeMillis() - time)>50000) {
+					if ((System.currentTimeMillis() - time)>timeout) {
 						threadLogger.log(Level.INFO,"50s timeout expired",task);
 						calculated = null;
 						return;
@@ -146,7 +149,7 @@ public class StressTest extends ProtectedResourceTest {
 				Thread.yield();
 				Thread.sleep(sleep);
 
-				if ((System.currentTimeMillis() - t)>50000) {
+				if ((System.currentTimeMillis() - t)>timeout) {
 					threadLogger.log(Level.INFO,"50s timeout expired (dataset poll)",task);
 					return dataset;
 				} else
