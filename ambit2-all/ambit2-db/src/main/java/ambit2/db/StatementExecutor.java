@@ -58,7 +58,13 @@ public abstract class StatementExecutor<Q extends IStatement,Results> extends Ab
 	/**
 	 * 
 	 */
-
+	protected boolean useCache = false;
+	public boolean isUseCache() {
+		return useCache;
+	}
+	public void setUseCache(boolean useCache) {
+		this.useCache = useCache;
+	}
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
 		Iterator<PreparedStatement> p = cache.values().iterator();
