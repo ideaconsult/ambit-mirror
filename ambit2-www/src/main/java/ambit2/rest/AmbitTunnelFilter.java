@@ -468,7 +468,8 @@ public class AmbitTunnelFilter extends Filter {
                         : null;
 
                 // Check each replacer
-                for (AcceptReplacer acceptReplacer : this.acceptReplacers) {
+                for (int i=0; i < this.acceptReplacers.size(); i++) {
+                	AcceptReplacer acceptReplacer = this.acceptReplacers.get(i);
                     // Check the conditions
                     boolean checked = true;
                     for (String key : acceptReplacer.getAgentAttributes()
