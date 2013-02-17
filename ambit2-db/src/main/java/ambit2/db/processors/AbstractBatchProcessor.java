@@ -209,7 +209,10 @@ public abstract class AbstractBatchProcessor<Target, ItemInput> extends
 			try {setConnection(null);} catch (Exception x) {}
 		}
 		else {
-			if (processor != null) 	processor.close();
+			if (processor != null) 	
+				for (IProcessor p : getProcessorChain())
+					if (p instanceof IDBProcessor)
+						try {((IDBProcessor)p).close();} catch (Exception x) {}
 			super.close();
 		}
 	}	

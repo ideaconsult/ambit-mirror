@@ -39,7 +39,6 @@ import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IMultiRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.IQueryObject;
@@ -47,7 +46,7 @@ import ambit2.db.search.QueryExecutor;
 
 public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureRecord, IStructureRecord> {
 	protected IQueryRetrieval<IStructureRecord> query;
-
+	protected QueryExecutor<IQueryObject<IStructureRecord>> exec = null;
 	public ProcessorStructureRetrieval() {
 		this(new RetrieveStructure());
 	}
@@ -70,8 +69,13 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
 
 	public IStructureRecord process(IStructureRecord target)
 			throws AmbitException {
-		QueryExecutor<IQueryObject<IStructureRecord>> exec = new QueryExecutor<IQueryObject<IStructureRecord>>();
-		exec.setConnection(getConnection());
+		if (exec ==null) {
+			exec = new QueryExecutor<IQueryObject<IStructureRecord>>();
+			exec.setConnection(getConnection());
+			exec.setCloseConnection(false);
+			exec.setCache(true);
+		}
+		
 		if (query instanceof AbstractQuery) {
 	        ((AbstractQuery)query).setValue(target);
 	        //((AbstractQuery)query).setCondition(NumberCondition.getInstance());
@@ -108,4 +112,12 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
 		
 	}
 
+	@Override
+	public void close() throws SQLException {
+		try {
+			if (exec != null) exec.close();
+		} catch (Exception x) {}
+		finally {exec=null;}
+		super.close();
+	}
 }

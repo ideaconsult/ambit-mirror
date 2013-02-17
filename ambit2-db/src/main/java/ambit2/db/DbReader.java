@@ -108,9 +108,12 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 	}
 	public Iterator<ResultType> getIterator(final IQueryRetrieval<ResultType> query)
 			throws AmbitException {
-		executor = new QueryExecutor<IQueryObject<ResultType>>();
-
-		executor.setConnection(connection);
+		if (executor==null) {
+			executor = new QueryExecutor<IQueryObject<ResultType>>();
+			executor.setCloseConnection(false);
+			executor.setCache(true);
+			executor.setConnection(connection);
+		}
 		setResultSet(executor.process(query));
 		return new Iterator<ResultType>() {
 			protected long counter= 0;
@@ -189,6 +192,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 	@Override
 	public void close() throws SQLException {
 		try { if (resultSet!=null) {resultSet.close(); resultSet=null; }} catch (Exception x) {}
+		try { if (executor!=null) {executor.close(); executor=null; }} catch (Exception x) {}
 		super.close();
 	}
 	protected ResultSet getResultSet() {

@@ -195,16 +195,23 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
         ps_seekdataset = connection.prepareStatement(seek_dataset);
 
 	}
+	@Override
 	public void close() throws SQLException {
         try {
-
-        if (ps_seekdataset != null)
-            ps_seekdataset.close();        
-  
-        if (exec != null)
-        	exec.close();
-        } catch (SQLException x) {
-        	logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
+        	if (ps_seekdataset != null) {
+        		ps_seekdataset.close();
+        		ps_seekdataset = null;
+        	}
+        } catch (Exception x) {
+        	logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
+        }
+        try {
+        	if (structureWriter!=null) {
+        		structureWriter.close();
+            	structureWriter = null;
+        	}
+        } catch (Exception x) {
+        	logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
         }
         super.close();
 	}

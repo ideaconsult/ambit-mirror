@@ -26,6 +26,7 @@ package ambit2.db.processors;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -46,12 +47,15 @@ public abstract class AbstractRepositoryWriter<Target,Result> extends AbstractDB
     
 	public AbstractRepositoryWriter() {
 		exec = new UpdateExecutor<IQueryUpdate>();
+		exec.setUseCache(true);
 		queryexec = new QueryExecutor<IQueryObject>();
+		queryexec.setCache(true);
 	}
 	@Override
 	public void close() throws SQLException {
+		try {exec.close(); } catch (Exception x) { logger.log(Level.FINEST,x.getMessage(),x);}
+		try {queryexec.close(); } catch (Exception x) { logger.log(Level.FINEST,x.getMessage(),x);}
 		super.close();
-		exec.close();
 	}
 	
     public OP getOperation() {
