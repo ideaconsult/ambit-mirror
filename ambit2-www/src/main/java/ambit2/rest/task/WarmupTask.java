@@ -144,7 +144,7 @@ public class WarmupTask<USERID> extends CallableProtectedTask<USERID> implements
 		warmupLogger.info("Models warmup ...");
 		ClientResourceWrapper client = null;
 		Representation r = null;
-		String warmup = "http://localhost:8080/ambit2/model?max=25&media=text/uri-list";
+		String warmup = "http://localhost:8080/ambit2/model?max=50&media=text/uri-list";
 		try {
 			ClientResourceWrapper.setTokenFactory(this);
 			client = new ClientResourceWrapper(warmup);

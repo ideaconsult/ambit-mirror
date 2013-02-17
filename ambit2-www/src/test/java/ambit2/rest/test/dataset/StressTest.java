@@ -44,7 +44,7 @@ public class StressTest extends ProtectedResourceTest {
 	
 	@Test
 	public void test() throws Exception {
-		int nt = 99;
+		int nt = 1;
 		MyThread[] threads = new MyThread[nt];
 		for (int i= 0; i < nt; i++) try {
 			threads[i] = new MyThread(String.format("thread-%d",i),1000);
