@@ -1,14 +1,20 @@
 package ambit2.rest.test.dataset;
 
+import java.awt.SystemColor;
 import java.net.URL;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
+import org.junit.Before;
 import org.junit.Test;
 import org.opentox.dsl.task.RemoteTask;
+import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -19,6 +25,19 @@ import ambit2.rest.test.ProtectedResourceTest;
 
 public class StressTest extends ProtectedResourceTest {
 
+    @Before
+    public void setUp() throws Exception {
+    	super.setUp();
+        Logger tempLogger = logger;
+        Level level = Level.INFO;
+        while(tempLogger != null) {
+           tempLogger.setLevel(level);
+           for(Handler handler : tempLogger.getHandlers())
+              handler.setLevel(level);
+           tempLogger = tempLogger.getParent();
+        }
+    }
+    
 	@Override
 	public String getTestURI() {
 		return String.format("http://localhost:%d/dataset", port);
@@ -29,11 +48,12 @@ public class StressTest extends ProtectedResourceTest {
 		int nt = 10;
 		MyThread[] threads = new MyThread[nt];
 		for (int i= 0; i < nt; i++) try {
-			threads[i] = new MyThread(String.format("thread-%d",i));
+			threads[i] = new MyThread(String.format("thread-%d",i),1000);
 			threads[i].start();
 		} catch (Exception x) {
 			logger.log(Level.SEVERE,"loop",x);
 		}
+		logger.log(Level.INFO,"Waiting threads to join");
 		for (int i= 0; i < nt; i++) try {
 			 try {
 			       threads[i].join();
@@ -45,63 +65,100 @@ public class StressTest extends ProtectedResourceTest {
 			logger.log(Level.SEVERE,"join loop",x);
 		}
 		logger.log(Level.INFO,"completed");
+		long time = 0;
+		String s = "";
+		for (int i= 0; i < nt; i++) {
+				time += threads[i].time;
+				s += "\n" + threads[i].time;
+		}
+	    logger.log(Level.INFO,s);
+		logger.log(Level.INFO,"Average time per thread "+Long.toString(time/nt)+ " ms.");
+		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset FROM src_dataset");
 		Assert.assertEquals(nt+3,table.getRowCount());
 		c.close();
-		long time = 0;
-		for (int i= 0; i < nt; i++) {
-				time += threads[i].time;
-		       logger.log(Level.INFO,threads[i].toString());
-		}
-		logger.log(Level.INFO,"Average time per thread "+Long.toString(time/nt)+ " ms.");
 		
 	}
-	public Reference createEntryFromFile() throws Exception {
-		
-        IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
-		Assert.assertEquals(5,table.getRowCount());
-		c.close();
-		
-		URL url = getClass().getClassLoader().getResource("input.sdf");
-		FileRepresentation rep = new FileRepresentation(
-				url.getFile(),
-				ChemicalMediaType.CHEMICAL_MDLSDF, 0);
-		RemoteTask task = new RemoteTask(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, rep,Method.POST);
 
-		while (!task.poll()) {
-			Thread.yield();
-			Thread.sleep(3000);
-			logger.log(Level.INFO,"poll",task);
-		}
-		if (task.isERROR()) throw task.getError();
-		Assert.assertEquals(Status.SUCCESS_OK, task.getStatus());
-		return task.getResult();
-		
-	}	
 	
 	class MyThread extends Thread {
+		public long sleep;
 		public long time;
 		public Reference dataset;
-
-		public MyThread(String name) {
+		public Reference calculated;
+		public Exception error = null;
+		protected Logger threadLogger;
+		public MyThread(String name, long sleep) {
 			super(name);
+			threadLogger = Logger.getLogger(name);
+			this.sleep = sleep;
 		}
+		
 		@Override
 		public void run() {
 			time = System.currentTimeMillis();
 			try {
 				dataset = createEntryFromFile();
-				logger.info(dataset.toString());
+				threadLogger.info(dataset.toString());
+				
+				Form form = new Form();
+				form.add("dataset_uri", dataset.toString());
+				RemoteTask task = new RemoteTask(
+						new Reference(String.format("http://localhost:%d/model/%d", port, Math.random()>0.5?1:2)),
+						MediaType.TEXT_URI_LIST, form.getWebRepresentation(),Method.POST);
+				threadLogger.info("Model " + task.getUrl());
+				while (!task.poll()) {
+					Thread.yield();
+					Thread.sleep(sleep);
+					if ((System.currentTimeMillis() - time)>50000) {
+						threadLogger.log(Level.INFO,"50s timeout expired",task);
+						calculated = null;
+						return;
+					} else
+						threadLogger.log(Level.INFO,"poll model task",task);
+				}
+				if (task.isERROR()) throw task.getError();
+				Assert.assertEquals(Status.SUCCESS_OK, task.getStatus());
+				calculated = task.getResult();
 			} catch (Exception x) {
-				logger.log(Level.SEVERE,this.getName(),x);
+				error = x;
+				threadLogger.log(Level.SEVERE,this.getName(),x);
 			} finally {
 				time = System.currentTimeMillis() - time;
 			}
 		}
+		public Reference createEntryFromFile() throws Exception {
+			
+	        IDatabaseConnection c = getConnection();	
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+			Assert.assertEquals(5,table.getRowCount());
+			c.close();
+			
+			URL url = getClass().getClassLoader().getResource("test.sdf");
+			FileRepresentation rep = new FileRepresentation(
+					url.getFile(),
+					ChemicalMediaType.CHEMICAL_MDLSDF, 0);
+			RemoteTask task = new RemoteTask(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, rep,Method.POST);
+
+			long t = System.currentTimeMillis();
+			while (!task.poll()) {
+				Thread.yield();
+				Thread.sleep(sleep);
+
+				if ((System.currentTimeMillis() - t)>50000) {
+					threadLogger.log(Level.INFO,"50s timeout expired (dataset poll)",task);
+					return dataset;
+				} else
+					threadLogger.log(Level.INFO,"poll dataset task ",task);
+			}
+			if (task.isERROR()) throw task.getError();
+			Assert.assertEquals(Status.SUCCESS_OK, task.getStatus());
+			return task.getResult();
+			
+		}			
 		public String toString() {
-			return String.format("%d ms\t%s",time,dataset);
+			return String.format("%s\t%d ms\t%s\t%s",getName(),time,dataset,calculated);
 		};
 
 		
