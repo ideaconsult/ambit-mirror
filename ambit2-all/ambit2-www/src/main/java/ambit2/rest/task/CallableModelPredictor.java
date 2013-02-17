@@ -79,7 +79,8 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 		foreignInputDataset = !applicationRootReference.isParent(reference);
 		//foreignInputDataset = true; 
 		int pos = reference.toString().lastIndexOf("/dataset/");
-		dataset_service = reference.toString().substring(0,pos+9);
+		if (pos>0)
+			dataset_service = reference.toString().substring(0,pos+9);
 	}
 	
 	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors() throws Exception {
@@ -170,12 +171,14 @@ public class CallableModelPredictor<ModelItem,Predictor extends ModelPredictor,U
 			} else {
 				String predicted = predictor.createResultReference();
 				String q = sourceReference.toString().indexOf("?")>0?"&":"?";
-				return new TaskResult(
+				TaskResult task = new TaskResult(
 						String.format("%s%s%s",
 						sourceReference.toString(),
 						q,
 						predicted)
 						);
+				task.setNewResource(false);
+				return task;
 			}
 	}
 
