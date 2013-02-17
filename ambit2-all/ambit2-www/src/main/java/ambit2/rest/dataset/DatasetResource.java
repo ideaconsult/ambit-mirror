@@ -398,7 +398,8 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	}
 	@Override
 	public void onUpdateSuccess() throws Exception {
-		deletePolicy(null,getToken());
+		if (isAAEnabled())
+			deletePolicy(null,getToken());
 	}
 	@Override
 	protected QueryURIReporter<IStructureRecord, Q> getURUReporter(
