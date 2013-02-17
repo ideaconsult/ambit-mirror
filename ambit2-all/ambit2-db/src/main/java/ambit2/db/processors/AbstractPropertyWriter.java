@@ -98,13 +98,18 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 	            selectField.setValue(property);
 
 	            ResultSet rs1 = queryexec.process(selectField);
-	            while (rs1.next()) {
-	            	property = selectField.getObject(rs1);
-	            	propertyEntry(property);	  
-	                descriptorEntry(target, property,i,idtuple);
-	                found = true;
+	            try {
+		            while (rs1.next()) {
+		            	property = selectField.getObject(rs1);
+		            	propertyEntry(property);	  
+		                descriptorEntry(target, property,i,idtuple);
+		                found = true;
+		            }
+	            } catch (Exception x) {
+	            	logger.log(Level.WARNING,target.toString(),x);
+	            } finally {
+	            	try {queryexec.closeResults(rs1);} catch (Exception x) {}
 	            }
-	            queryexec.closeResults(rs1);
         	//}
             if (!found) {
             	

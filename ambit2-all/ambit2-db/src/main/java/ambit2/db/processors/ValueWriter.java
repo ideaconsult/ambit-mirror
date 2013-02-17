@@ -74,14 +74,11 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
 	//protected static final String insert_tuple  = "insert into tuples select null,id_srcdataset from src_dataset where name=?";
     protected PreparedStatement ps_descriptorvalue_string;
     protected PreparedStatement ps_descriptorvalue_number;    
-    protected PreparedStatement ps_descriptorvalue_int;
     
     protected PreparedStatement ps_insertstring;
     
     protected PreparedStatement ps_inserttuplestring = null;
     protected PreparedStatement ps_inserttuplenumber = null;
-    
-    protected PreparedStatement ps_inserttuple = null;
     
     protected IStructureRecord structure;
     protected DatasetAddTuple tuple = new DatasetAddTuple();
@@ -112,7 +109,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	
     	String longText = null;
     	if ((value != null) && (value.length()>255)) {
-    		if (logger.isLoggable(Level.FINE))
+    		if (logger.isLoggable(Level.FINER))
     			logger.finer("Value truncated to 255 symbols "+value);
     		longText = value;    		
     		value = value.substring(0,255);
@@ -147,25 +144,25 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	if (value == null) ps_descriptorvalue_string.setNull(n_value,Types.VARCHAR);
     	else ps_descriptorvalue_string.setString(n_value, value);
     	
-    	//ps_descriptorvalue_string.setString(6, error.toString());
     	
-    	//if (longText == null) ps_descriptorvalue_string.setNull(7,Types.VARCHAR);
-    	//else ps_descriptorvalue_string.setString(7, longText);
-    	
-    	if (ps_descriptorvalue_string.executeUpdate()>0) { 
-    		if (idtuple >0 ) {
-	        	if (ps_inserttuplestring == null) ps_inserttuplestring = connection.prepareStatement(insert_tuple);
-	        	ps_inserttuplestring.clearParameters();
-	        	ps_inserttuplestring.setInt(1,idtuple);
-	        	ps_inserttuplestring.setInt(2,property.getId());
-	        	ps_inserttuplestring.setInt(3,structure.getIdstructure());
-	        	//ps_inserttuplestring.setString(4,value);
-	        	//ps_inserttuplestring.setInt(5,0);
-	        	if (ps_inserttuplestring.executeUpdate()<=0)
-	        		logger.fine("Tuple not inserted "+property.getId()+ " "+value);
-
-    		} 
-    	} else return false;
+    	try {
+	    	if (ps_descriptorvalue_string.executeUpdate()>0) { 
+	    		if (idtuple >0 ) {
+		        	if (ps_inserttuplestring == null) ps_inserttuplestring = connection.prepareStatement(insert_tuple);
+		        	ps_inserttuplestring.clearParameters();
+		        	ps_inserttuplestring.setInt(1,idtuple);
+		        	ps_inserttuplestring.setInt(2,property.getId());
+		        	ps_inserttuplestring.setInt(3,structure.getIdstructure());
+		        	//ps_inserttuplestring.setString(4,value);
+		        	//ps_inserttuplestring.setInt(5,0);
+		        	if (ps_inserttuplestring.executeUpdate()<=0)
+		        		logger.fine("Tuple not inserted "+property.getId()+ " "+value);
+	
+	    		} 
+	    	} else return false;
+    	} catch (Exception x) {
+    		logger.log(Level.WARNING,property.toString(),x);
+    	}
     	return true;
     }
   
@@ -204,7 +201,7 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     	        	}
 
         	} else {
-        		logger.warning("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
+        		logger.fine("Tuple < 0 "+property.getId()+ " "+value + " " +ps_inserttuplenumber);
         	}
        	} else {
        		logger.fine("idtuple="+idtuple+" idproperty="+property.getId()+" value "+value);
@@ -279,22 +276,19 @@ public abstract class ValueWriter<Target, Result> extends AbstractPropertyWriter
     protected abstract Object getValue(Target target, Property propertyName, int index);
     
     public void close() throws SQLException {
-    	super.close();
-        if (ps_descriptorvalue_number != null)
-        	ps_descriptorvalue_number.close();
+        if (ps_descriptorvalue_number != null)ps_descriptorvalue_number.close();
         ps_descriptorvalue_number = null;
-        
-        if (ps_descriptorvalue_string != null)
-        	ps_descriptorvalue_string.close();
+        if (ps_descriptorvalue_string != null)	ps_descriptorvalue_string.close();
         ps_descriptorvalue_string = null;       
-        
-        if (ps_insertstring != null)
-        	ps_insertstring.close();
+        if (ps_insertstring != null)	ps_insertstring.close();
         ps_insertstring = null;  
-        
-   
+       
+        if (ps_inserttuplestring != null)	ps_inserttuplestring.close();
+        ps_inserttuplestring = null;  
+        if (ps_inserttuplenumber != null)	ps_inserttuplenumber.close();
+        ps_inserttuplenumber = null;  
         super.close();
-    }        
+    }
 }
 
 
