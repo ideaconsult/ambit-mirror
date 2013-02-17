@@ -42,6 +42,7 @@ public class WarmupTask<USERID> extends CallableProtectedTask<USERID> implements
 		long time = System.currentTimeMillis();
 		try {
 			 ssoToken = login();
+			 warmUpOntology(ssoToken);
 			 String compoundURI = getCompoundAndWarmUpInChI(ssoToken);
 			 warmupLogger.info(compoundURI);
 			 String[] models = getModelsWarmup(ssoToken);
@@ -82,6 +83,39 @@ public class WarmupTask<USERID> extends CallableProtectedTask<USERID> implements
 		*/
 		return new TaskResult("http://localhost:8080/ambit2");
 	}
+	protected String warmUpOntology(OpenSSOToken token) throws Exception {
+		warmupLogger.info("Ontology server warmup ...");
+		ClientResourceWrapper client = null;
+		Representation r = null;
+		String warmup = "http://localhost:8080/ambit2/sparqlendpoint";
+		try {
+			ClientResourceWrapper.setTokenFactory(this);
+			client = new ClientResourceWrapper(warmup);
+			r = client.get();
+			warmupLogger.info(client.getStatus().toString());
+			if (Status.SUCCESS_OK.equals(client.getStatus()) && (r!=null)) {
+				warmup = r.getText().trim();
+				warmupLogger.info("Ontology service retrieved "+warmup);
+				try {r.release();} catch (Exception x) {r = null;}
+				
+				client.setReference(warmup);
+				r = client.get();
+				if (Status.SUCCESS_OK.equals(client.getStatus()) && (r!=null)) {
+					String results = r.getText();
+					warmupLogger.info(results);
+				}
+
+			} 
+		} catch (Exception x) {
+			warmupLogger.log(Level.WARNING,warmup,x);
+		} finally {
+			try {if (r!=null)r.release();} catch (Exception x) {r = null;}
+			try {client.release();} catch (Exception x) {client = null;}
+			ClientResourceWrapper.setTokenFactory(null);
+		}		
+		return null;
+	}
+	
 	protected String getCompoundAndWarmUpInChI(OpenSSOToken token) throws Exception {
 		warmupLogger.info("InChI & DB lookup warmup ...");
 		ClientResourceWrapper client = null;
