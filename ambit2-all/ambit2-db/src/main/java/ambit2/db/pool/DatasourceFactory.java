@@ -146,9 +146,13 @@ public class DatasourceFactory {
             b.append(q); q = amark;            
             b.append("password").append(eqmark).append(password);
         }
-        b.append(amark);
         b.append("&useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&noAccessToProcedureBodies=true");
-       // b.append("[validationQuery]=[SELECT 1]");
+       // [validationQuery]=[SELECT 1]");
+        //useUsageAdvisor=true 
+        //profileSQL=true
+        //&dontTrackOpenResources=true
+
+        
         return b.toString();
     }
     /**
