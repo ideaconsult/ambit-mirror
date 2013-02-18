@@ -28,6 +28,7 @@ import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.RuleStructureFactory;
+import ambit2.smarts.ChemObjectFactory;
 import ambit2.tautomers.KnowledgeBase;
 
 
@@ -35,7 +36,8 @@ public class TestTautomers
 {
 	public TautomerManager tman = new TautomerManager();
 	public InChITautomerGenerator itg = new InChITautomerGenerator(); 
-	public RuleStructureFactory rsf = new RuleStructureFactory(); 
+	//public RuleStructureFactory rsf = new RuleStructureFactory();
+	public ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 	public boolean FlagExplicitHydrogens = false;
 	
 	
@@ -157,7 +159,7 @@ public class TestTautomers
 		
 		
 		//tt.testConnectStructures("C1CN1",2,"CCl",0, IBond.Order.SINGLE);
-		//tt.testCondenseStructures("C1CN1",0,1,"BrCCCl",1,2);
+		tt.testCondenseStructures("C1CN1",0,1,"BrCCCl",1,2);
 		
 		//tt.testRuleActivation(new String[] {"keto/enol","amin/imin"});
 		
@@ -165,7 +167,7 @@ public class TestTautomers
 		//tt.tman.getKnowledgeBase().activateRule("keto/enol", true);	
 		//tt.FlagExplicitHydrogens = true;
 		//tt.tman.getKnowledgeBase().activateChlorineRules(true);
-		tt.visualTest("O=CC(C)(C)Cl");
+		//tt.visualTest("O=CC(C)(C)Cl");
 				
 		//tt.FlagExplicitHydrogens = false;
 		//tt.visualTest("O=CC");
@@ -629,7 +631,7 @@ public class TestTautomers
 		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
 		v.add(mol1);
 		v.add(mol2);
-		IAtomContainer newStr = rsf.connectStructures(smi1, numAt1, smi2, numAt2, order);
+		IAtomContainer newStr = cof.connectStructures(smi1, numAt1, smi2, numAt2, order);
 		v.add(newStr);
 		
 		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr)));
@@ -646,7 +648,7 @@ public class TestTautomers
 		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
 		v.add(mol1);
 		v.add(mol2);
-		IAtomContainer newStr = rsf.condenseStructures(smi1, str1At0, str1At1, smi2, str2At0, str2At1);
+		IAtomContainer newStr = cof.condenseStructures(smi1, str1At0, str1At1, smi2, str2At0, str2At1);
 		v.add(newStr);
 		
 		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr)));
