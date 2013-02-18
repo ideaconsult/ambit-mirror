@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.ArrayList;
 
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
@@ -832,5 +833,45 @@ public class ChemObjectFactory
 
 		return mol;
 	}
+	
+	//----------------- Some File Utilities  ------------------------------
+	
+	
+	public ArrayList<String> loadSmilesStringsFromFile(String smilesFile) throws Exception
+	{
+		ArrayList<String> smiles = new ArrayList<String>();
+		
+		File file = new File(smilesFile);
+		RandomAccessFile f = new RandomAccessFile(file,"r");			
+		long length = f.length();
+		int n = 0;
+		
+		while (f.getFilePointer() < length)
+		{	
+			n++;
+			String line = f.readLine();
+			String sm = line.trim();
+			if (!sm.isEmpty())
+				smiles.add(line);
+		}
+		
+		return smiles;
+	}
+	
+	public ArrayList<String> attachGroupToAllStructures(String groupSmiles, int groupAttachPos, 
+					ArrayList<String> inputSmiles, int strDefaultPos) throws Exception
+	{
+		ArrayList<String> outSmiles = new ArrayList<String>();
+		for (int i = 0; i < inputSmiles.size(); i++)
+		{
+			IAtomContainer ac = this.connectStructures(groupSmiles, groupAttachPos, inputSmiles.get(i), strDefaultPos, IBond.Order.SINGLE);
+			String resSmiles = SmartsHelper.moleculeToSMILES(ac);
+			outSmiles.add(resSmiles);
+		}
+		
+		return outSmiles;
+	}
+	
+	
 	
 }
