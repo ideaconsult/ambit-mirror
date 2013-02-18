@@ -21,6 +21,7 @@ public class RuleInstance implements IRuleInstance
 	int beginState = 0;
 	boolean FlagImplicitH = true;   //This flag is true when mobile h group is implicitly described
 	IAtom explicitH = null;
+	IAtom mobileAtom = null;
 	boolean FlagOverlapMode = false; //This is true when this instance overlaps with another one i.e. it is a part from combination
 	boolean FlagGoToStateSpecialOK = true;
 	
@@ -42,6 +43,7 @@ public class RuleInstance implements IRuleInstance
 		beginState = prevRI.beginState;
 		FlagImplicitH = prevRI.FlagImplicitH; 
 		explicitH = prevRI.explicitH;
+		mobileAtom = prevRI.mobileAtom;
 		//FlagOverlapMode = prevRI.FlagOverlapMode; 
 		//FlagGoToStateSpecialOK = prevRI.FlagGoToStateSpecialOK;
 	}
@@ -113,13 +115,13 @@ public class RuleInstance implements IRuleInstance
 		//mobile groups are moved
 		for (int i = 0; i < rule.nMobileGroups; i++)
 		{	
-			if (rule.isMobileH[i] == true)
+			int curHPos = rule.mobileGroupPos[i][curState];
+			int newHPos = rule.mobileGroupPos[i][state];
+			IAtom curAt = atoms.get(curHPos-1);
+			IAtom newAt = atoms.get(newHPos-1);
+			
+			if (rule.isMobileH[i] == true)  
 			{	
-				int curHPos = rule.mobileGroupPos[i][curState];
-				int newHPos = rule.mobileGroupPos[i][state];
-				IAtom curAt = atoms.get(curHPos-1);
-				IAtom newAt = atoms.get(newHPos-1);
-
 				if (FlagImplicitH)
 				{	
 					curAt.setImplicitHydrogenCount(curAt.getImplicitHydrogenCount()-1);				
@@ -133,9 +135,12 @@ public class RuleInstance implements IRuleInstance
 						b.setAtoms(new IAtom[]{newAt, explicitH});
 				}
 			}
-			else
+			else  //handling other types of mobile groups (non-H atoms)
 			{	
-				//TODO handle other types of mobile groups 
+								
+				IBond b = molecule.getBond(curAt, mobileAtom);
+				if (b!=null)
+					b.setAtoms(new IAtom[]{newAt, mobileAtom});
 			}	
 		}
 		

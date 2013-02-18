@@ -559,7 +559,21 @@ public class RuleManager
 			cloneRI.bonds.add(cloneStruct.getBond(a0, a1));
 		}
 		
-		//TODO handle explicit H
+				
+		//Handle explicit H
+		if (oldRI.explicitH != null)
+		{
+			int atNum = prevStruct.getAtomNumber(oldRI.explicitH);
+			cloneRI.explicitH = cloneStruct.getAtom(atNum);
+		}
+		
+		//Handle non-H mobile group
+		if (oldRI.mobileAtom != null)
+		{
+			int atNum = prevStruct.getAtomNumber(oldRI.mobileAtom);
+			cloneRI.mobileAtom = cloneStruct.getAtom(atNum);
+		}
+		
 		
 		return(cloneRI);
 	}
@@ -1005,7 +1019,6 @@ public class RuleManager
 			e_rank += rankRule.stateEnergies[ri.getCurrentState()];
 		}
 		
-		//TODO - handle aromaticity to correct the rank
 		
 		//System.out.println("rank = " + e_rank);
 		

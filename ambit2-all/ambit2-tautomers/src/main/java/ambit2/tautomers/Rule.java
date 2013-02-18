@@ -71,8 +71,15 @@ public class Rule
 					rinst.FlagImplicitH = true;
 				else
 				{	
-					rinst.FlagImplicitH = false;
-					rinst.explicitH = mol.getAtom(mobCheck);
+					if (mobileGroup.equals("H"))
+					{	
+						rinst.FlagImplicitH = false;
+						rinst.explicitH = mol.getAtom(mobCheck);
+					}
+					else
+					{
+						rinst.mobileAtom = mol.getAtom(mobCheck);
+					}
 				}	
 				
 				rinst.atoms = amap;
@@ -89,15 +96,16 @@ public class Rule
 	
 	int checkMobileGroup(int mobGroupNum, int curState, Vector<IAtom> amap, IAtomContainer mol) throws Exception
 	{
+
+		int pos = mobileGroupPos[mobGroupNum][curState];
+		IAtom atom = amap.get(pos-1);  //position in the rule is 1-base indexed
+		
 		if (mobileGroup.equals("H"))
-		{
-			int pos = mobileGroupPos[mobGroupNum][curState];
-			IAtom atom = amap.get(pos-1);  //position in the rule is 1-base indexed
-			
+		{	
 			//Check for implicit hydrogens
 			if ((atom.getImplicitHydrogenCount()!=null) && atom.getImplicitHydrogenCount().intValue() > 0)
 				return (TautomerConst.IHA_INDEX);
-			
+
 			//Check for explicit hydrogens
 			List<IAtom> conAtoms = mol.getConnectedAtomsList(atom);
 			for (int i = 0; i < conAtoms.size(); i++)
@@ -106,6 +114,17 @@ public class Rule
 					return(mol.getAtomNumber(conAtoms.get(i)));
 			}
 		}
+		else
+		{
+			//Handling other types of mobile groups
+			List<IAtom> conAtoms = mol.getConnectedAtomsList(atom);
+			for (int i = 0; i < conAtoms.size(); i++)
+			{
+				if (conAtoms.get(i).getSymbol().equals(mobileGroup))
+					return(mol.getAtomNumber(conAtoms.get(i)));
+			}
+		}		
+		
 		return -1;
 	}
 	
