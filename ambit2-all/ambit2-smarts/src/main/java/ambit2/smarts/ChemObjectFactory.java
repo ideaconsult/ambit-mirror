@@ -872,6 +872,16 @@ public class ChemObjectFactory
 		return outSmiles;
 	}
 	
+	void saveSmilesToFile(ArrayList<String> smiles, String fName) throws Exception
+	{
+			File file = new File(fName);
+			RandomAccessFile f = new RandomAccessFile(file,"rw");
+			f.setLength(0);
+			for (int i = 0; i < smiles.size(); i++)
+				f.write((smiles.get(i) + "\r\n").getBytes());
+			f.close();
+	}
+	
 	
 	
 }
