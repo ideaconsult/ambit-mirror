@@ -36,6 +36,7 @@ public class TestTautomers
 	public TautomerManager tman = new TautomerManager();
 	public InChITautomerGenerator itg = new InChITautomerGenerator(); 
 	public RuleStructureFactory rsf = new RuleStructureFactory(); 
+	public boolean FlagExplicitHydrogens = false;
 	
 	
 	public static void main(String[] args) throws Exception 
@@ -158,7 +159,17 @@ public class TestTautomers
 		//tt.testConnectStructures("C1CN1",2,"CCl",0, IBond.Order.SINGLE);
 		//tt.testCondenseStructures("C1CN1",0,1,"BrCCCl",1,2);
 		
-		tt.testRuleActivation(new String[] {"keto/enol","amin/imin"});
+		//tt.testRuleActivation(new String[] {"keto/enol","amin/imin"});
+		
+		
+		//tt.tman.getKnowledgeBase().activateRule("keto/enol", true);	
+		//tt.FlagExplicitHydrogens = true;
+		//tt.tman.getKnowledgeBase().activateChlorineRules(true);
+		tt.visualTest("O=CC(C)(C)Cl");
+				
+		//tt.FlagExplicitHydrogens = false;
+		//tt.visualTest("O=CC");
+		
 	}
 	
 	public void performTestCases() throws Exception
@@ -199,7 +210,7 @@ public class TestTautomers
 	public void visualTest(String smi) throws Exception
 	{
 		System.out.println("Visual Testing: " + smi);
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi, FlagExplicitHydrogens);
 		
 		
 		tman.setStructure(mol);
@@ -237,7 +248,7 @@ public class TestTautomers
 	public void visualTest(String smi, int algorithmType) throws Exception
 	{
 		System.out.println("Algorithm type " + algorithmType	+ "   Visual Testing: " + smi);
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi,FlagExplicitHydrogens);
 						
 		tman.setStructure(mol);
 		Vector<IAtomContainer> resultTautomers;
