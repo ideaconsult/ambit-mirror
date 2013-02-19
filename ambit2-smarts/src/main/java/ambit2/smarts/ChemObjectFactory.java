@@ -942,7 +942,7 @@ public class ChemObjectFactory
 		ArrayList<String> outSmiles = new ArrayList<String>();
 		for (int i = 0; i < inputSmiles.size(); i++)
 		{
-			IAtomContainer ac = this.connectStructures(groupSmiles, groupAttachPos, inputSmiles.get(i), strDefaultPos, IBond.Order.SINGLE);
+			IAtomContainer ac = connectStructures(groupSmiles, groupAttachPos, inputSmiles.get(i), strDefaultPos, IBond.Order.SINGLE);
 			String resSmiles = SmartsHelper.moleculeToSMILES(ac);
 			outSmiles.add(resSmiles);
 		}

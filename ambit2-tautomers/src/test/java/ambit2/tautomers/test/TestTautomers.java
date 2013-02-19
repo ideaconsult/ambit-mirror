@@ -159,7 +159,7 @@ public class TestTautomers
 		
 		
 		//tt.testConnectStructures("C1CN1",2,"CCl",0, IBond.Order.SINGLE);
-		tt.testCondenseStructures("C1CN1",0,1,"BrCCCl",1,2);
+		//tt.testCondenseStructures("C1CN1",0,1,"BrCCCl",1,2);
 		
 		//tt.testRuleActivation(new String[] {"keto/enol","amin/imin"});
 		
@@ -171,6 +171,9 @@ public class TestTautomers
 				
 		//tt.FlagExplicitHydrogens = false;
 		//tt.visualTest("O=CC");
+		
+		RuleStructureFactory rsf = new RuleStructureFactory();
+		rsf.makeRuleStrcutures("CC=O", 0, "C=CO", 0, "/test.smi", "/gen-test.txt");
 		
 	}
 	
@@ -655,6 +658,10 @@ public class TestTautomers
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(v);
 	}
+	
+	
+		
+	
 	
 	
 }
