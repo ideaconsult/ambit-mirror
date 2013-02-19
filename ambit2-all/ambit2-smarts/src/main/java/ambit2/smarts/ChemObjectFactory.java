@@ -9,6 +9,7 @@ import java.util.Stack;
 import java.util.Vector;
 import java.util.ArrayList;
 
+
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
@@ -855,8 +856,85 @@ public class ChemObjectFactory
 				smiles.add(line);
 		}
 		
+		f.close();
+		
 		return smiles;
 	}
+	
+	public void saveSmilesToFile(ArrayList<String> smiles, String fName) throws Exception
+	{
+			File file = new File(fName);
+			RandomAccessFile f = new RandomAccessFile(file,"rw");
+			f.setLength(0);
+			for (int i = 0; i < smiles.size(); i++)
+				f.write((smiles.get(i) + "\r\n").getBytes());
+			f.close();
+	}
+	
+	
+	
+	public ArrayList<ArrayList<String>> loadSmilesTuplesFromFile(String smilesFile) throws Exception
+	{
+		//Each line gives a smiles set
+		ArrayList<ArrayList<String>> smilesSets = new ArrayList<ArrayList<String>>();
+		
+		File file = new File(smilesFile);
+		RandomAccessFile f = new RandomAccessFile(file,"r");			
+		long length = f.length();
+		int n = 0;
+		
+		while (f.getFilePointer() < length)
+		{	
+			n++;
+			String line = f.readLine();
+			String line1 = line.trim();
+			ArrayList<String> tupels = getTuples(line1, " ");
+			ArrayList<String> smiSet = new ArrayList<String>(); 
+			
+			for (int i = 0; i < tupels.size(); i++)
+				smiSet.add(tupels.get(i));
+			
+			smilesSets.add(smiSet);
+		}
+		
+		f.close();
+		
+		return smilesSets;
+	}
+	
+	public void saveSmilesTuplesToFile(ArrayList<ArrayList<String>> smilesTuples, String fName) throws Exception
+	{
+			File file = new File(fName);
+			RandomAccessFile f = new RandomAccessFile(file,"rw");
+			f.setLength(0);
+			
+			for (int i = 0; i < smilesTuples.size(); i++)
+			{
+				ArrayList<String> tuple = smilesTuples.get(i);
+				for (int k = 0; k < tuple.size(); k++)
+				{
+					f.write(tuple.get(k).getBytes());
+					if (k < tuple.size()-1)
+						f.write(" ".getBytes());
+				}
+				
+				if (i < smilesTuples.size()-1)
+					f.write("\r\n".getBytes());
+			}	
+			
+			f.close();
+	}
+	
+	ArrayList<String> getTuples(String line, String splitter)
+	{
+		ArrayList<String> tuples = new ArrayList<String>();
+		String tokens[] = line.split(" ");
+		for (int i = 0; i < tokens.length; i++)
+			if(!tokens[i].isEmpty())
+				tuples.add(tokens[i]);
+		return tuples;
+	}
+	
 	
 	public ArrayList<String> attachGroupToAllStructures(String groupSmiles, int groupAttachPos, 
 					ArrayList<String> inputSmiles, int strDefaultPos) throws Exception
@@ -871,17 +949,5 @@ public class ChemObjectFactory
 		
 		return outSmiles;
 	}
-	
-	void saveSmilesToFile(ArrayList<String> smiles, String fName) throws Exception
-	{
-			File file = new File(fName);
-			RandomAccessFile f = new RandomAccessFile(file,"rw");
-			f.setLength(0);
-			for (int i = 0; i < smiles.size(); i++)
-				f.write((smiles.get(i) + "\r\n").getBytes());
-			f.close();
-	}
-	
-	
 	
 }

@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class RuleStructureFactory 
 {
 	SmilesParser smilesParser;
-
+	
 	
 	public RuleStructureFactory()
 	{
@@ -29,6 +29,11 @@ public class RuleStructureFactory
 	public void setUp()
 	{
 		smilesParser  = new SmilesParser(SilentChemObjectBuilder.getInstance());
+	}
+	
+	public void makeRuleStrcutureFileFor(String smi1, String smi2, int atachPoint, String outFile)
+	{
+		
 	}
 	
 	
