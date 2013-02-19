@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.junit.Test;
 import org.openscience.cdk.Atom;
@@ -1648,6 +1649,24 @@ public class TestUtilities
 		System.out.println("Mapping C**C against SCCS = " + res);
 	}
 	
+	public void testCOF_FileOperations(String inFile, String outFile) throws Exception
+	{
+		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+		ArrayList<ArrayList<String>> smiSets = cof.loadSmilesTuplesFromFile(inFile);
+		
+		for (int i = 0; i < smiSets.size(); i++)
+		{	
+			ArrayList<String> ss = smiSets.get(i);
+			for (int k = 0; k < ss.size(); k++ )
+				System.out.print(ss.get(k) + "  ");
+			System.out.println();
+		}
+		
+		cof.saveSmilesTuplesToFile(smiSets, outFile);
+	}
+	
+	
+	
 	
 	
 	
@@ -1883,7 +1902,7 @@ public class TestUtilities
 		
 		//This is not working since in has recursion inside recurstion
 		//tu.testSmartsManagerBoolSearch("[$([S;H0;D2])!$([S;H0;D2]([$([CX4]),$(C(=O)C)])[$([CX4]),$(C(=O)C)])]", "CCSC=NC");
-		tu.testSmartsManagerBoolSearch("[$([S;H0;D2])!$([S;H0;D2]([CX4])[CX4])!$([S;H0;D2]([CX4])C(=O)C)!$([S;H0;D2](C(=O)C)C(=O)C)]", "CCSC=NC");
+		//tu.testSmartsManagerBoolSearch("[$([S;H0;D2])!$([S;H0;D2]([CX4])[CX4])!$([S;H0;D2]([CX4])C(=O)C)!$([S;H0;D2](C(=O)C)C(=O)C)]", "CCSC=NC");
 		
 		//tu.FlagTargetPreprocessing = true;
 		//tu.FlagExplicitHAtoms = false;
@@ -1944,6 +1963,7 @@ public class TestUtilities
 		//		SmartsHelper.getMoleculeFromSmiles("N1=C=C=CNN1"));
 		//System.out.println(pos.size());
 		
+		tu.testCOF_FileOperations("/test.smi", "/test2.smi");
 		
 	}
 	
