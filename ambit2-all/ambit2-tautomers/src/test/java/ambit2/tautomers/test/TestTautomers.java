@@ -30,6 +30,7 @@ import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.RuleStructureFactory;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.tautomers.KnowledgeBase;
+import ambit2.mopac.MopacUtilities;
 
 
 public class TestTautomers 
@@ -173,7 +174,8 @@ public class TestTautomers
 		//tt.visualTest("O=CC");
 		
 		RuleStructureFactory rsf = new RuleStructureFactory();
-		rsf.makeRuleStrcutures("CC=O", 0, "C=CO", 0, "/test.smi", "/gen-test.txt");
+		//rsf.makeRuleStrcutures("CC=O", 0, "C=CO", 0, "/test.smi", "/gen-test.txt");
+		rsf.calculateEnergyDifferences("/gen-test.txt", "/energies-diff-test.txt");
 		
 	}
 	
