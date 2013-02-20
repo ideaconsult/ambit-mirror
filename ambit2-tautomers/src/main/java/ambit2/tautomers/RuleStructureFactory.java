@@ -9,10 +9,13 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.Bond;
 
+import java.io.File;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.ArrayList;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.SmartsHelper;
+import ambit2.mopac.MopacUtilities;
 
 
 /**
@@ -65,6 +68,38 @@ public class RuleStructureFactory
 		ArrayList<String> smiles = cof.loadSmilesStringsFromFile(inputSmilesFile);		
 		makeRuleStrcutures(smi1, pos1, smi2, pos2, smiles, outFile);
 	}
+	
+	public void calculateEnergyDifferences(String fName, String outFile) throws Exception
+	{
+		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
+		ArrayList<ArrayList<String>> smilesTuples = cof.loadSmilesTuplesFromFile(fName);
+		
+		File file = new File(fName);
+		RandomAccessFile f = new RandomAccessFile(file,"rw");
+		f.setLength(0);
+		
+		MopacUtilities mopacUtils = new MopacUtilities(); 
+		
+		
+		
+		for (int i = 0; i < smilesTuples.size(); i++)
+		{
+			ArrayList<String> smiles  = smilesTuples.get(i);
+			if (smiles.size() < 2)
+				continue;
+			
+			double e0 = mopacUtils.getTotalEnergy(smiles.get(0));
+			double e1 = mopacUtils.getTotalEnergy(smiles.get(1));
+			
+			String resLine = "" + smiles.get(0) + "  " + smiles.get(1)+ "   " + e0 + "   " + e1  + "   " + (e1-e0) + "\r\n";
+			f.write(resLine.getBytes());
+			System.out.println(resLine);
+		}
+		
+		f.close();
+		
+	}
+	
 
 
 	
