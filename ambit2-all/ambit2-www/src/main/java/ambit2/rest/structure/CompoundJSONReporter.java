@@ -2,6 +2,7 @@ package ambit2.rest.structure;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Locale;
 import java.util.logging.Level;
 
 import org.restlet.Request;
@@ -134,7 +135,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					builder.append("\n");
 				}
 				if (value instanceof Double) 
-					builder.append(String.format("\t\t\"%s\":%6.3f",key,(Double)value));
+					builder.append(String.format(Locale.ENGLISH,"\t\t\"%s\":%6.3f",key,(Double)value));
 				else if (value instanceof Integer) 
 					builder.append(String.format("\t\t\"%s\":%d",key,(Integer)value));
 				else if (value instanceof Long) 
