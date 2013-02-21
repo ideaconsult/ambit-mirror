@@ -201,9 +201,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		Restlet root = initInboundRoot();
 		SimpleGuards guard = isSimpleGuardEnabled();
 		
+
 		if (!standalone) //only servlets are lazy
 		addTask("warmup",new WarmupTask("warmup",openToxAAEnabled), new Reference("riap://component"),"guest");
-
 		
 		if (guard != null) {
 			logger.log(Level.INFO,String.format("Property %s set, %s guard enabled.", GUARD_ENABLED, guard));
@@ -267,15 +267,15 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		Router smartsRouter = createSMARTSSearchRouter();
 		/**  /compound  */
 		CompoundsRouter compoundRouter = new CompoundsRouter(getContext(),featuresRouter,tupleRouter,smartsRouter);
-		if (protectCompoundResource())
-			router.attach(CompoundResource.compound,createProtectedResource(compoundRouter,"compound"));
-		else {
-			Filter cauthN = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
-			OpenSSOMethodAuthorizer cauthZ = new OpenSSOMethodAuthorizer();
-			cauthN.setNext(cauthZ);
-			cauthZ.setNext(compoundRouter);		
-			router.attach(CompoundResource.compound,cauthN);
-		}	
+		if (openToxAAEnabled) {
+			if (protectCompoundResource())
+				router.attach(CompoundResource.compound,createProtectedResource(compoundRouter,"compound"));
+			else {
+				Filter cauthN = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
+				cauthN.setNext(compoundRouter);		
+				router.attach(CompoundResource.compound,cauthN);
+			}
+		} else 	router.attach(CompoundResource.compound,compoundRouter);
 		/**
 		 *  List of datasets 
 		 *  /dataset , /datasets
