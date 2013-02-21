@@ -27,7 +27,6 @@ import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
-import ambit2.tautomers.RuleStructureFactory;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.tautomers.KnowledgeBase;
 import ambit2.mopac.MopacUtilities;

@@ -1,4 +1,4 @@
-package ambit2.tautomers;
+package ambit2.tautomers.test;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
