@@ -1,10 +1,14 @@
 package ambit2.rest.task;
 
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
+import org.opentox.aa.IOpenToxUser;
+import org.opentox.aa.OpenToxUser;
+import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.opentox.dsl.aa.IAuthToken;
 import org.opentox.dsl.task.ClientResourceWrapper;
@@ -15,6 +19,7 @@ import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.resource.ResourceException;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 
@@ -83,6 +88,7 @@ public class WarmupTask<USERID> extends CallableProtectedTask<USERID> implements
 		*/
 		return new TaskResult("http://localhost:8080/ambit2");
 	}
+
 	protected String warmUpOntology(OpenSSOToken token) throws Exception {
 		warmupLogger.info("Ontology server warmup ...");
 		ClientResourceWrapper client = null;
@@ -209,11 +215,62 @@ public class WarmupTask<USERID> extends CallableProtectedTask<USERID> implements
 		String pass = config.getTestUserPass();
 		if (ssoToken.login(username,pass)) {
 			warmupLogger.info("Login to "+ ssoToken.getAuthService() + " successfull "+ssoToken.getToken());
+			
+			warmUpPolicy(ssoToken,config);
 			return ssoToken;
 		} else {
 			warmupLogger.info("Login failed "+ssoToken.getAuthService());
 			return null;
 		}
+		
+		
+	}
+	
+	protected void warmUpPolicy(OpenSSOToken ssoToken,OpenSSOServicesConfig config) throws Exception {
+		warmupLogger.info("Policy server "+config.getPolicyService()+"warmup ...");
+		OpenSSOPolicy policy = new OpenSSOPolicy(config.getPolicyService());
+		String uri = "http://example.org";
+		try {
+			policy.createUserPolicy("guest", ssoToken, uri, new String[]{"GET"});
+			warmupLogger.warning("Policy created");	
+		} catch (Exception x) {
+			warmupLogger.warning(x.getMessage());	
+		}
+		try {
+			deleteAllPolicies(policy,ssoToken, new URL(uri));
+			warmupLogger.warning("Policies deleted");
+		} catch (Exception x) {
+			warmupLogger.warning(x.getMessage());	
+		}
+	}
+	
+
+	protected void deletePolicy(URL url,String token) throws Exception {
+		if (token==null) return;
+		try {
+			OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
+			OpenSSOPolicy policyTools = new OpenSSOPolicy(config.getPolicyService());
+			OpenSSOToken ssoToken = new OpenSSOToken(config.getOpenSSOService());
+			ssoToken.setToken(token);
+			deleteAllPolicies(policyTools,ssoToken,url);
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("Error deleting policies for %s",url),x);
+		}
+	}
+	
+	public void deleteAllPolicies(OpenSSOPolicy policyTools,OpenSSOToken ssoToken,URL url) throws Exception {
+		IOpenToxUser user = new OpenToxUser();
+		warmupLogger.fine("Deleting policies for "+url.toString());
+		Hashtable<String, String> policies = new Hashtable<String, String>();
+		int status = policyTools.getURIOwner(ssoToken, url.toExternalForm(), user, policies);
+		if (200 == status) {
+			Enumeration<String> e = policies.keys();
+			while (e.hasMoreElements()) {
+				String policyID = e.nextElement();
+				policyTools.deletePolicy(ssoToken,policyID);
+				warmupLogger.fine("Policy "+policyID + "deleted");
+			}
+		} //else throw new RestException(status);
 	}
 	
 	@Override
