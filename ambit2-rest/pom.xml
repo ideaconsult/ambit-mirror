@@ -22,23 +22,7 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-    	<groupId>org.restlet.jee</groupId>
-    	<artifactId>org.restlet</artifactId>
-    	<version>${restlet.version}</version>
-    	<scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.restlet.jee</groupId>
-    	<artifactId>org.restlet.ext.xml</artifactId>
-    	<version>${restlet.version}</version>
-    	<scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.restlet.jee</groupId>
-    	<artifactId>org.restlet.ext.servlet</artifactId>
-    	<version>${restlet.version}</version>
-    </dependency>
+
     <dependency>
     	<groupId>com.hp.hpl.jena</groupId>
     	<artifactId>jena</artifactId>
@@ -75,6 +59,23 @@
     	<groupId>weka</groupId>
     	<artifactId>weka</artifactId>
     	<version>3.6.2</version>
+    </dependency>
+        <dependency>
+    	<groupId>org.restlet.jee</groupId>
+    	<artifactId>org.restlet</artifactId>
+    	<version>${restlet.version}</version>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.restlet.jee</groupId>
+    	<artifactId>org.restlet.ext.xml</artifactId>
+    	<version>${restlet.version}</version>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.restlet.jee</groupId>
+    	<artifactId>org.restlet.ext.servlet</artifactId>
+    	<version>${restlet.version}</version>
     </dependency>
     <dependency>
     	<groupId>org.restlet.jee</groupId>
