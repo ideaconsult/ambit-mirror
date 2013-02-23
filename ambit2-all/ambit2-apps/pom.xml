@@ -304,6 +304,7 @@
     <module>../ambit2-ambitxt</module>
     <module>../ambit2-www</module>
     <module>../ambit2-taglibs</module>
+    <module>../ambit2-i5rest</module>
  
   </modules>
   <dependencies>
