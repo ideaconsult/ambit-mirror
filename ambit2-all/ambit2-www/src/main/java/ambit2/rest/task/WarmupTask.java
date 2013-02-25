@@ -330,7 +330,6 @@ class MyThread extends Thread {
 			else calculated = task.getResult();
 			
 		} catch (Exception x) {
-			x.printStackTrace();
 			error = x;
 			threadLogger.log(Level.SEVERE,this.getName(),x);
 		} finally {
