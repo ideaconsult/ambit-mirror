@@ -2,6 +2,8 @@
 -- Ambit schema 6.5
 -- Adjustments in the foreign key setup for structures
 -- -------------------------
+SELECT 'Update foreign keys in table struc_dataset' as 'Status';
+
 ALTER TABLE `struc_dataset` DROP FOREIGN KEY `struc_dataset_ibfk_1` ;
 ALTER TABLE `struc_dataset` 
   ADD CONSTRAINT `struc_dataset_ibfk_1`
@@ -9,6 +11,8 @@ ALTER TABLE `struc_dataset`
   REFERENCES `structure` (`idstructure` )
   ON DELETE RESTRICT
   ON UPDATE CASCADE;
+
+SELECT 'Update foreign keys in table template_def'  as 'Status';
   
 ALTER TABLE `template_def` DROP FOREIGN KEY `FK_template_def_2` ;
 ALTER TABLE `template_def` 
@@ -22,6 +26,8 @@ ALTER TABLE `template_def`
 -- Deletes a dataset and associated structures, if the structures are not in any other dataset
 -- Delete is allowed only if the star field is <= maxstars!
 -- -----------------------------------------------------
+
+SELECT 'Create deleteDataset stored procedure'  as 'Status';
 
 DROP PROCEDURE IF EXISTS `deleteDataset`;
 DELIMITER $$
@@ -98,3 +104,10 @@ DELIMITER ;
 -- GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'::1';
   
 insert into version (idmajor,idminor,comment) values (6,5,"AMBIT2 schema");   
+
+SELECT 'DONE. Please run the following statements: '  as 'Status';
+
+SELECT "GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'localhost'" as "TODO";
+SELECT "GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'127.0.0.1'"  as "TODO";
+SELECT "GRANT EXECUTE ON PROCEDURE `ambit2`.deleteDataset TO 'guest'@'::1'"  as "TODO";
+
