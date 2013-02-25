@@ -54,8 +54,16 @@ function initSearchForm() {
 			$('input:radio[name=option][value=smarts]').click();
 		});						
 			
-		document.searchform.search.value = $.cookie('ambit2.search')==null?"50-00-0":$.cookie('ambit2.search');
-		document.searchform.pagesize.value = $.cookie('ambit2.pagesize')==null?"10":$.cookie('ambit2.pagesize');
+		try {
+			document.searchform.search.value = $.cookie('ambit2.search')==null?"50-00-0":$.cookie('ambit2.search');
+		} catch (err) {
+			document.searchform.search.value="";
+		}
+		try {
+			document.searchform.pagesize.value = $.cookie('ambit2.pagesize')==null?"10":$.cookie('ambit2.pagesize');
+		} catch (err) {
+			document.searchform.pagesize.value = "10";
+		}
 		//option
 		try {
 			if ($.cookie('ambit2.option')==null) {
