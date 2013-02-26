@@ -60,41 +60,10 @@
 
    <menu name="AMBIT">
 
-      <item name="Introduction" href="./index.html"/>
-      
-      <item name="Download" href="./downloads.html" collapse="true" >
-          <description>AMBIT downloads</description>
-          <item name="Desktop applications" href="./downloads.html#desktop"/>
-          <item name="Web services" href="http://ambit.sf.net/downloads.html#services"/>
+      <item name="Home" href="http://ambit.sourceforge.net"/>
+      <item name="How to cite AMBIT" href="http://ambit.sf.net/pubs_citeambit.html" />      
+	  <item name="How to use AMBIT from Java" href="https://github.com/ideaconsult/examples-ambit" />
 
-          <item name="Web applications" href="http://ambit.sf.net/downloads.html#applications"/>
-
-		  <item name="Libraries" href="http://ambit.sf.net/downloads.html#Libraries">          
-            <item name="OpenTox client library" href="http://ambit.sf.net/download_otclient.html"/>
-            <item name="OpenTox AA client library" href="http://ambit.sf.net/download_aaclient.html"/>
-             <item name="AMBIT modules" href="http://ambit.sf.net/download_ambitlibs.html"/>
- 		</item>             
-      </item>
-	</menu>
-	
-
-	 <menu name="AMBIT REST web services">
-		
-    <item name="OpenTox API (with examples)"   href="http://ambit.sf.net/api.html"/>
-    <item name="AMBIT OpenTox API implementation"  collapse="true" href="http://ambit.sf.net/ambit_services.html" />
-	
-	</menu>
-	<menu name="Support">      
-	
-	  <item name="Support and feedback" href="./support.html" />
-  	  <item name="Forum" href="http://sourceforge.net/projects/ambit/forums" />
-	  <item name="Mailing lists" href="./mail-lists.html" />
-	  <item name="Bug reports" href="./issue-tracking.html" />
-    </menu>
-  
-    <menu name="AMBIT publications">
-    
-    	<item name="How to cite AMBIT" href="http://ambit.sf.net/pubs_citeambit.html" />
     </menu> 
     <menu ref="reports"/>
     <menu ref="modules" />

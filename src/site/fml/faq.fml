@@ -5,7 +5,7 @@
       <question>Q1. Latest AMBIT version?</question>
       <answer>
         <p>
-          Ambit XT v.2.1.0 is the latest release.
+          Ambit REST Web services 2.4.9 is the latest release.
         </p>
       </answer>
     </faq>
@@ -17,6 +17,15 @@
         </p>
       </answer>
     </faq>
+    <faq id="A4">
+      <question>Q3. How to use AMBIT from Java code ?</question>
+      <answer>
+        <p>
+           Examples are available and being added at https://github.com/ideaconsult/examples-ambit  
+        </p>
+      </answer>
+    </faq>
+     
     <faq id="A3">
       <question>Q3. How are the substructure and similarity search performed?</question>
       <answer>
