@@ -3,7 +3,7 @@
  -----
  Nina Jeliazkova
  -----
- 2011/08/19
+ 2013/02/26
  -----
 
 {AMBIT Discovery} 
@@ -18,6 +18,8 @@
 	
 	[Zip archive (platform independent)] {{{http://sourceforge.net/projects/ambit/files/AmbitDiscovery/AmbitDiscovery-v0.04.zip/download}AmbitDiscovery-v0.04.zip}}
 	 
+    [Guide] {{{http://ambit.sourceforge.net/manuals/AmbitDiscoveryApplication.pdf}AmbitDiscoveryApplication.pdf}}
+    
     []
     
     <<AMBIT Discovery>> is an user-friendly open source application, which estimates <<applicability domain>> of QSAR models 

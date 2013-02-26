@@ -3,7 +3,7 @@
  -----
  Nina Jeliazkova
  -----
- 2011/08/20
+ 2013/02/26
  -----
 
 {AMBIT REST Web services} 
@@ -12,6 +12,24 @@
 	
 	Try {{{http://toxpredict.org/}ToxPredict}} - demo application, consuming OpenTox REST services.
 
+*Download AMBIT REST Web services 2.4.9
+
+	[Web application archive] {{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.4.9/ambit2-www-2.4.9.war/download}ambit2.war}}, A&A disabled, configured to run under <<http://>> 
+	
+	[{Database content}] None. Create an empty database as described in {{{./install_ambitrest.html}Install your own service}} guide. Import chemical compounds and data by navigating to {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}}
+	and using the web form for upload. Alternatively,use HTTP POST to {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}} via  {{{./api_dataset.html}OpenTox API}}.  
+	
+    []
+    
+*Download AMBIT REST Web services 2.4.5
+
+	[Web application archive] {{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-2.4.5/ambit2-2.4.5.war/download}ambit2.war}}, A&A disabled, configured to run under <<http://>> 
+	
+	[{Database content}] None. Create an empty database as described in {{{./install_ambitrest.html}Install your own service}} guide. Import chemical compounds and data by navigating to {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}}
+	and using the web form for upload. Alternatively,use HTTP POST to {{{http://localhost:8080/ambit2/dataset}http://yourhost:8080/ambit2/dataset}} via  {{{./api_dataset.html}OpenTox API}}.  
+	
+    []
+        
 *Download AMBIT REST Web services 2.4.3
 
 	[Web application archive] {{{http://ambit.uni-plovdiv.bg/downloads/ambit2/2.4.3/http/aa/ambit2.war}ambit2.war}}, A&A enabled {{{./install_ambitrest.html#Protected AMBIT web services}?}}, configured to run under <<http://>> 
@@ -88,6 +106,7 @@
 	To modify, editing <<ambit.pref>> configuration file and restart the service.
 
 ***Authentication and authorisation:
+
 +---------------------------------         
     WEB-INF/classes/ambit2/rest/config/config.prop.
 +---------------------------------     
