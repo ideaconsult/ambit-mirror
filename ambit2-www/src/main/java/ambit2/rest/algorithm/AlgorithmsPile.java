@@ -74,6 +74,11 @@ public class AlgorithmsPile {
 */						
 			{"pka","pKa","ambit2.descriptors.PKASmartsDescriptor",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Dissociation_constant_pKa",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#pkaSMARTS"},
 			
+			{"CrossSectionalDiameter","CrossSectionalDiameter","ambit2.descriptors.CrossSectionalDiameterDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Size",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#CrossSectionalDiameter"},
+			{"MaximumDiameter","MaximumDiameter","ambit2.descriptors.MaximumDiameterDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Size",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MaximumDiameter"},
+			{"SizeDiameter","SizeDiameter","ambit2.descriptors.SizeDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Size",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#Size"},
+			
+			
 			{"categories","OECD Categories","ambit2.descriptors.FunctionalGroupDescriptor",null,new String[] {AlgorithmType.Rules.toString()},"http://www.opentox.org/echaEndpoints.owl#Endpoints",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#categories"},
 			
 			
