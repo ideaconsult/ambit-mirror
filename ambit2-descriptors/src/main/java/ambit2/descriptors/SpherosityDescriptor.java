@@ -61,9 +61,6 @@ public class SpherosityDescriptor implements IMolecularDescriptor {
             "http:///ambit.sourceforge.net");
     };
     
-    /**
-     * TODO this is quick and dirty - have to think how to store array results into ambit database 
-     */
     public DescriptorValue calculate(IAtomContainer container) {
     	try {
 	        DescriptorValue value = getSizeDescriptorResult(container);
