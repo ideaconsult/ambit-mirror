@@ -24,7 +24,7 @@ public abstract class CallableFileUpload implements Callable<Reference> {
 	protected List<FileItem> items;
 	protected String fileUploadField;
 
-	protected long maxSize = 3000000000L;
+	protected long maxSize = 5000000000L;
 
 	
 	public CallableFileUpload(List<FileItem> items, String fileUploadField) {
