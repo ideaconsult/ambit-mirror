@@ -134,6 +134,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
 	public static final String GUARD_ENABLED = "guard.enabled";
 	public static final String GUARD_LIST = "guard.list";
+	public static final String WARMUP_ENABLED = "warmup.enabled";
+	
 	static final String identifierKey = "aa.local.admin.name";
 	static final String identifierPass = "aa.local.admin.pass";
 	static final String adminAAEnabled = "aa.admin";
@@ -142,10 +144,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
 	static final String configProperties = "ambit2/rest/config/config.prop";
 	static final String loggingProperties = "ambit2/rest/config/logging.prop";
+ 
 	
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
+	protected boolean warmupEnabled = false;
 	
 	public AmbitApplication() {
 		this(false);
@@ -155,6 +159,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		this.standalone = standalone;
 		openToxAAEnabled = isOpenToxAAEnabled();
 		localAAEnabled = isSimpleSecretAAEnabled();
+		warmupEnabled = isWarmupEnabled();
 		
 		setName("AMBIT REST services");
 		setDescription("AMBIT implementation of OpenTox framework");
@@ -202,7 +207,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		SimpleGuards guard = isSimpleGuardEnabled();
 		
 
-		if (!standalone) //only servlets are lazy
+		if (!standalone && warmupEnabled) //only servlets are lazy
 		addTask("warmup",new WarmupTask("warmup",openToxAAEnabled), new Reference("riap://component"),"guest");
 		
 		if (guard != null) {
@@ -805,6 +810,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		try {
 			String aaadmin = getProperty(LOCAL_AA_ENABLED,configProperties);
 			return aaadmin==null?null:Boolean.parseBoolean(aaadmin);
+		} catch (Exception x) {return false; }
+	}
+   
+   protected synchronized boolean isWarmupEnabled()  {
+		try {
+			String warmup = getProperty(WARMUP_ENABLED,configProperties);
+			return warmup==null?null:Boolean.parseBoolean(warmup);
 		} catch (Exception x) {return false; }
 	}	
    

@@ -40,6 +40,7 @@ import org.xml.sax.InputSource;
 
 import weka.core.Instances;
 import ambit2.base.config.Preferences;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.ChemicalMediaType;
 
@@ -64,6 +65,7 @@ public abstract class ResourceTest extends DbUnitTest {
         context.getParameters().add(Preferences.PASSWORD, getPWD());
         context.getParameters().add(Preferences.PORT, getPort());
         context.getParameters().add(Preferences.HOST, getHost());
+        context.getParameters().add(AmbitApplication.WARMUP_ENABLED, "false");
         
         // Create a component
         component = new AmbitComponent(context);

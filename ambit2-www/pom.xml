@@ -57,10 +57,13 @@
         <!-- Ontology service , assumed on the same host-->
         <service.ontology>http://localhost:8080/ontology</service.ontology>
         <!-- AA -->
+        
         <aa.opensso>http://opensso.in-silico.ch/opensso/identity</aa.opensso>
         <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
         <aa.user>guest</aa.user>
         <aa.pass>guest</aa.pass>
+        
+        <warmup.enabled>false</warmup.enabled>
         
        <!-- The folder, containing Dragon6 executable. Could be changed after deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref --> 
 		<DRAGON_HOME>/usr/local/dragon</DRAGON_HOME>
@@ -109,8 +112,9 @@
         <aa.local.admin.name>admin</aa.local.admin.name>
         <aa.local.admin.pass>changeit</aa.local.admin.pass>
         <dataset.members.prefix>false</dataset.members.prefix>
-        <!--  Not used so far -->
-        <aa.local.ipallowed>127.0.0.1</aa.local.ipallowed>
+        <!--  Optional  -->
+        <guard.enabled></guard.enabled>
+        <guard.list>http://localhost</guard.list>
       </properties>
     </profile>   
         
