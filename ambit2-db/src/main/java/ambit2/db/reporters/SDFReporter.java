@@ -109,6 +109,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			String content = getSDFContent(item);
+			if (content==null) return null;
 			int pi = content.indexOf("$$$$");
 			content = pi>=0?content.substring(0,pi-1):content;
 			if ("".equals(content.trim())) content = emptySDF;
