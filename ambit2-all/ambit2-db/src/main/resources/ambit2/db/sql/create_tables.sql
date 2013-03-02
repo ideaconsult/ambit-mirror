@@ -574,7 +574,7 @@ DELIMITER $
 -- -----------------------------------------------------
 -- Trigger to create template entry for a dataset
 -- -----------------------------------------------------
-CREATE TRIGGER insert_dataset_template BEFORE INSERT ON src_dataset
+CREATE DEFINER = CURRENT_USER TRIGGER insert_dataset_template BEFORE INSERT ON src_dataset
  FOR EACH ROW BEGIN
     INSERT IGNORE INTO template (name) values (NEW.name);
     SET NEW.idtemplate = (SELECT idtemplate FROM template where template.name=NEW.name);
@@ -583,7 +583,7 @@ END $
 -- -----------------------------------------------------
 -- Trigger to add property entry to template_def 
 -- -----------------------------------------------------
-CREATE TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
+CREATE DEFINER = CURRENT_USER TRIGGER insert_property_tuple AFTER INSERT ON property_tuples
  FOR EACH ROW BEGIN
     INSERT IGNORE INTO template_def (idtemplate,idproperty,`order`) (
     SELECT idtemplate,idproperty,idproperty FROM
@@ -983,18 +983,24 @@ CREATE TABLE  `summary_property_chemicals` (
   CONSTRAINT `FK_ppci_3` FOREIGN KEY (`idproperty`) REFERENCES `properties` (`idproperty`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+DROP trigger IF EXISTS insert_string_ci;
+DROP trigger IF EXISTS update_string_ci;
+DROP trigger IF EXISTS summary_chemical_prop_insert;
+DROP trigger IF EXISTS summary_chemical_prop_update;
+
 DELIMITER $
-CREATE TRIGGER insert_string_ci AFTER INSERT ON property_string
+
+CREATE DEFINER = CURRENT_USER TRIGGER insert_string_ci AFTER INSERT ON property_string
  FOR EACH ROW BEGIN
     INSERT IGNORE INTO property_ci (value_ci) values (NEW.value);
  END $
  
-CREATE TRIGGER update_string_ci AFTER UPDATE ON property_string
+CREATE DEFINER = CURRENT_USER TRIGGER update_string_ci AFTER UPDATE ON property_string
  FOR EACH ROW BEGIN
     UPDATE property_ci set value_ci=NEW.value where value_ci=OLD.value;
  END $
  
- CREATE TRIGGER summary_chemical_prop_insert AFTER INSERT ON property_values
+ CREATE DEFINER = CURRENT_USER TRIGGER summary_chemical_prop_insert AFTER INSERT ON property_values
  FOR EACH ROW BEGIN
     UPDATE properties set ptype=CONCAT_WS(',',ptype,NEW.idtype)  where idproperty=NEW.idproperty;
     
@@ -1009,7 +1015,7 @@ CREATE TRIGGER update_string_ci AFTER UPDATE ON property_string
 		and idproperty=NEW.idproperty;   
  END $
 
- CREATE TRIGGER summary_chemical_prop_update AFTER UPDATE ON property_values
+ CREATE DEFINER = CURRENT_USER TRIGGER summary_chemical_prop_update AFTER UPDATE ON property_values
  FOR EACH ROW BEGIN
  	UPDATE properties set ptype=CONCAT_WS(',',ptype,NEW.idtype)  where idproperty=NEW.idproperty;
  
