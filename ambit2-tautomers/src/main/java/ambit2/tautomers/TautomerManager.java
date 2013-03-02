@@ -35,10 +35,6 @@ public class TautomerManager
 	public boolean FlagExcludeWarnFiltersOnRegistering = false; //it is not used yet
 	
 	
-	
-	
-	
-	
 	//Some debug info flags
 	public boolean FlagPrintTargetMoleculeInfo = false;
 	public boolean FlagPrintExtendedRuleInstances = false;
@@ -162,6 +158,17 @@ public class TautomerManager
 			resultTautomers = tautomerFilter.filter(resultTautomers);
 		
 		return(resultTautomers);
+	}
+	
+	//Combined approach (00, 01, 02)
+	public Vector<IAtomContainer> generateTautomersCombinedApproach() throws Exception
+	{
+		resultTautomers = new Vector<IAtomContainer>();	
+		resultTatomerStringCodes.clear();
+		//TODO
+		
+		return(resultTautomers);
+		
 	}
 	
 	public void registerTautomer(IAtomContainer newTautomer)
