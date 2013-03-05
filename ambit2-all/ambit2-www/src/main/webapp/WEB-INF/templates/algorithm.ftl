@@ -21,10 +21,12 @@
 <script type='text/javascript'>
 
 $(document)
-		.ready(
-				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
-				});
+	.ready(function() {
+		$( "#selectable" ).selectable( "option", "distance", 18);
+		datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
+		featureAutocomplete(".featureuri",".dataseturi","${ambit_root}/feature",10);
+	}
+);
 </script>
 
 </head>

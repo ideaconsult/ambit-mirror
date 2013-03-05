@@ -45,11 +45,11 @@
 	</div>	    	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_uris[]">Dataset column, containing the identifier (OpenTox Feature URI)</label>
-		<input class='eight columns alpha half-bottom' type='text' title='URI of the dataset feature (e.g. http://host/ambit2/feature/2), containing the identifier (e.g. CAS)' name='feature_uris[]' value=''>
+		<input class='eight columns alpha half-bottom featureuri' type='text' title='URI of the dataset feature (e.g. http://host/ambit2/feature/2), containing the identifier (e.g. CAS)' name='feature_uris[]' value=''>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/feature?max=25' target=_blank>Features</a></div>
 	</div>		
 	<div class='row remove-bottom' >
-		<label class='five columns alpha' for="feature_uri">Web site</label>
+		<label class='five columns alpha' >Web site</label>
 		<select class='eight columns alpha half-bottom'  name='search'>
 		<option value='CIR' selected  title='http://cactus.nci.nih.gov/chemical/structure'>Chemical Identifier Resolver</option>
 		<option value='CHEMIDPLUS'   title='http://chem.sis.nlm.nih.gov/chemidplus'>ChemIDplus</option>
@@ -64,7 +64,7 @@
 		<div class='three columns omega'></div>
 	</div>		
 	<div class='row remove-bottom' >
-		<label class='five columns alpha' for="feature_uri">How to process and store the results</label>
+		<label class='five columns alpha' >How to process and store the results</label>
 		<select class='eight columns alpha half-bottom'  name='mode'>
 		<option value='emptyonly' >Lookup only empty structures and replace the current structure representation</option>
 		<option value='replace' >Lookup all structures and replace the current structure representation</option>
@@ -79,12 +79,12 @@
   	<div id='superBuilder'>
      <div class='row remove-bottom' >
 		<label class='five columns alpha' for="dataset_uri">Dataset URI<em>*</em></label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_uri' value='' name='dataset_uri' title='Enter dataset URI'>
+		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset URI'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>	  
     <div class='row remove-bottom' >
 		<label class='five columns alpha' for="prediction_feature">Prediction feature URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='prediction_feature' value='' name='prediction_feature' title='Enter feature uri'>
+		<input class='eight columns alpha half-bottom featureuri' type="text" id='prediction_feature' value='' name='prediction_feature' title='Enter feature uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/feature?max=25' target=_blank>Features</a></div>
 	</div>	
     <div class='row remove-bottom' >
@@ -142,7 +142,7 @@
   	<div  id='superService'>
     <div class='row remove-bottom' >
 		<label class='five columns alpha' for="dataset_uri">Dataset URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_uri' value='' name='dataset_uri' title='Enter dataset URI'>
+		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset URI'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>	  
     <div class='row remove-bottom' >
@@ -175,7 +175,7 @@
   <#case 'selectstructure'>
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="dataset_uri">Enter a dataset URI</label>
-		<input class='eight columns alpha half-bottom' type="text" value='' name='dataset_uri' title='Enter dataset uri'>
+		<input class='eight columns alpha half-bottom dataseturi' type="text" value='' name='dataset_uri' title='Enter dataset uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>		
     <#break>
@@ -315,13 +315,13 @@
 	
 	<div class='row remove-bottom' id='requiresDataset'>
 		<label class='five columns alpha' for="dataset_uri">Enter a dataset URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset uri'>
+		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>		
 	
 	<div class='row remove-bottom' id='requiresTarget'>
 		<label class='five columns alpha' for="feature_uri">Enter URI of the target variable</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_uri' value='' name='feature_uri' title='Enter feature uri'>
+		<input class='eight columns alpha half-bottom featureuri' type="text" id='feature_uri' value='' name='feature_uri' title='Enter feature uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/feature?max=25' target=_blank>Features</a></div>
 	</div>		
 </#switch>

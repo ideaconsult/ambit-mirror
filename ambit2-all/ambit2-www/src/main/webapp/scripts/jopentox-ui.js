@@ -631,3 +631,85 @@ function definePropertyValuesTable(root,url,tableSelector) {
 	});
 	return oTable;
 }
+
+/**
+ * Autocomplete for dataset URI field
+ * @param id
+ */
+function datasetAutocomplete(id,datasetroot,maxhits) {
+	$( id ).autocomplete({
+	      source: function( request, response ) {
+	          $.ajax({
+	            url: datasetroot,
+	            dataType: "json",
+	            data: {
+	              max: maxhits,
+	              search: "^"+request.term
+	            },
+	            success: function( data ) {
+	              response( $.map( data.dataset, function( item ) {
+	                return {
+	                  label: item.title,
+	                  value: item.URI
+	                }
+	              }));
+	            }
+	          });
+	        },
+	        minLength: 2,
+	        /*
+	        select: function( event, ui ) {
+	          console.log( ui.item ?
+	            "Selected: " + ui.item.label :
+	            "Nothing selected, input was " + this.value);
+	        },
+	        open: function() {
+	          $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+	        },
+	        close: function() {
+	          $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+	        }	
+	        */		        		
+	});
+}
+
+/**
+ * Autocomplete for feature URI field
+ * @param id
+ */
+function featureAutocomplete(id,iddataset,featureroot,maxhits) {
+	$( id ).autocomplete({
+	      source: function( request, response ) {
+	          $.ajax({
+	            url: featureroot,
+	            dataType: "json",
+	            data: {
+	              max: maxhits,
+	              search: "^"+request.term
+	            },
+	            success: function( data ) {
+	              response( $.map( data.feature, function( item , index) {
+	                return {
+	                  label: item.title,
+	                  value: index
+	                }
+	              }));
+	            }
+	          });
+	        },
+	        minLength: 2,
+	        /*
+	        select: function( event, ui ) {
+	          console.log( ui.item ?
+	            "Selected: " + ui.item.label :
+	            "Nothing selected, input was " + this.value);
+	        },
+	        open: function() {
+	          $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+	        },
+	        close: function() {
+	          $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+	        }	
+	        */		        		
+	});
+}
