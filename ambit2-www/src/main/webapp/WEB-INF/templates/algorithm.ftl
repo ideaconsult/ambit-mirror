@@ -15,6 +15,11 @@
 * html .ui-autocomplete {
   height: 200px;
 }
+.ui-autocomplete-category {
+    font-weight: bold;
+    padding: .2em .4em;
+    margin: .8em 0 .2em;
+    line-height: 1.5;
 </style>
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
@@ -42,6 +47,7 @@ $(document)
 		featureAutocomplete(".featureuri",".dataseturi","${ambit_root}/feature",10);
 		algorithmAutocomplete(".alguri","${ambit_root}/algorithm","Regression",100);
 		algorithmAutocomplete(".descuri","${ambit_root}/algorithm","DescriptorCalculation",100);
+		modelAutocomplete(".modeluri","${ambit_root}/model",100);
 	}
 );
 </script>

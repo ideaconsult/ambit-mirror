@@ -147,22 +147,22 @@
 	</div>	  
     <div class='row remove-bottom' >
 		<label class='five columns alpha' for="model_uri">Model URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='model_uri' value='' name='model_uri' title='Enter model uri'>
+		<input class='eight columns alpha half-bottom modeluri' type="text" id='model_uri' value='' name='model_uri' title='Enter model uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/model' target=_blank>Models</a></div>
 	</div>		
     <div class='row remove-bottom' >
 		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm' target=_blank>Algorithms</a></div>
 	</div>		
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm' target=_blank>Algorithms</a></div>
 	</div>
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
 				<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm' target=_blank>Algorithms</a></div>
 	</div>	
 	<div class='row remove-bottom' >
@@ -230,6 +230,15 @@
 		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
 	</div>		
 	  <#break>
+  <#case 'toxtreeames'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/carc.html' target=_blank class='eight columns alpha half-bottom'>
+		ToxTree: In vitro mutagenicity (Ames test) alerts by ISS
+		</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net'>Toxtree</a> module</div>
+	</div>		
+	  <#break>	  
   <#case 'toxtreeverhaar2'>
 	<div class='row remove-bottom'>
 		<label class='five columns alpha' for="doc">Documentation and references</label>

@@ -747,3 +747,48 @@ function algorithmAutocomplete(id,algroot,algtype,maxhits) {
 		    }       
 	});
 }
+
+/**
+ * Autocomplete for learning algorithm URI field
+ * @param id
+ */
+function modelAutocomplete(id,modelroot,algtype,maxhits) {
+	$.widget( "custom.catcomplete", $.ui.autocomplete, {
+		_renderMenu: function(ul, items){
+	        var self = this;
+	        var currentCategory = "";
+	        $.each(items, function(index, item){
+	            if(item.category != currentCategory){
+	                ul.append(" <li class='ui-autocomplete-category'>" + item.category + "</li>");
+	                currentCategory = item.category;
+	            }
+	            self._renderItem(ul, item);
+	        });
+	    }
+	  });	
+	$( id ).catcomplete({
+	      source: function( request, response ) {
+	          $.ajax({
+	            url: modelroot,
+	            dataType: "json",
+	            data: {
+	              max: maxhits,
+	              search: "^"+request.term
+	            },
+	            success: function( data ) {
+	            	response( $.map( data.model, function( item ) {
+		                return {
+		                  label: item.title,
+		                  value: item.URI,
+		                  category: (item.title.indexOf("ToxTree")>=0)?"ToxTree":item.algorithm.URI
+		                }
+		              }));
+	            }
+	          });
+	        },
+	        minLength: 1,
+	        open: function() {
+	        	  $('.ui-autocomplete').css('width', '450px');
+		    }       
+	});
+}

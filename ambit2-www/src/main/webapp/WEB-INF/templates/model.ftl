@@ -43,6 +43,7 @@ $(document)
 		.ready(
 				function() {
 					$( "#selectable" ).selectable( "option", "distance", 18);
+					datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 				});
 </script>
 
