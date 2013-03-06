@@ -928,7 +928,7 @@ public class ChemObjectFactory
 	ArrayList<String> getTuples(String line, String splitter)
 	{
 		ArrayList<String> tuples = new ArrayList<String>();
-		String tokens[] = line.split(" ");
+		String tokens[] = line.split(splitter);
 		for (int i = 0; i < tokens.length; i++)
 			if(!tokens[i].isEmpty())
 				tuples.add(tokens[i]);
