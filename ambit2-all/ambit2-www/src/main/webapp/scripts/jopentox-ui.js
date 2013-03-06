@@ -657,6 +657,9 @@ function datasetAutocomplete(id,datasetroot,maxhits) {
 	          });
 	        },
 	        minLength: 2,
+	        open: function() {
+		        $('.ui-autocomplete').css('width', '300px');
+		    } 	        
 	        /*
 	        select: function( event, ui ) {
 	          console.log( ui.item ?
@@ -680,8 +683,17 @@ function datasetAutocomplete(id,datasetroot,maxhits) {
 function featureAutocomplete(id,iddataset,featureroot,maxhits) {
 	$( id ).autocomplete({
 	      source: function( request, response ) {
+	    	  var featureLookup = featureroot;
+	    	  $(iddataset).each(function(a,b) {
+	    		 try {  
+	    			 var datauri = $(b).attr('value');
+	    			 if ((datauri != undefined) && ("" != datauri)) { 
+	    				 featureLookup=$(b).attr('value')+"/feature"; maxhits=0;
+	    			 }
+	    		 } catch (err) {featureLookup = featureroot;} 
+	    	  });
 	          $.ajax({
-	            url: featureroot,
+	            url: featureLookup,
 	            dataType: "json",
 	            data: {
 	              max: maxhits,
@@ -690,26 +702,48 @@ function featureAutocomplete(id,iddataset,featureroot,maxhits) {
 	            success: function( data ) {
 	              response( $.map( data.feature, function( item , index) {
 	                return {
-	                  label: item.title,
+	                  label: item.title + " " + item.units,
 	                  value: index
 	                }
 	              }));
 	            }
 	          });
 	        },
-	        minLength: 2,
-	        /*
-	        select: function( event, ui ) {
-	          console.log( ui.item ?
-	            "Selected: " + ui.item.label :
-	            "Nothing selected, input was " + this.value);
-	        },
+	        minLength: 1,
 	        open: function() {
-	          $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+	        	  $('.ui-autocomplete').css('width', '300px');
+		    }       
+	});
+}
+
+/**
+ * Autocomplete for learning algorithm URI field
+ * @param id
+ */
+function algorithmAutocomplete(id,algroot,algtype,maxhits) {
+	$( id ).autocomplete({
+	      source: function( request, response ) {
+	          $.ajax({
+	            url: algroot,
+	            dataType: "json",
+	            data: {
+	              max: maxhits,
+	              //search: "^"+request.term,
+	              type: algtype
+	            },
+	            success: function( data ) {
+	            	response( $.map( data.algorithm, function( item ) {
+		                return {
+		                  label: item.name,
+		                  value: item.uri
+		                }
+		              }));
+	            }
+	          });
 	        },
-	        close: function() {
-	          $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-	        }	
-	        */		        		
+	        minLength: 1,
+	        open: function() {
+	        	  $('.ui-autocomplete').css('width', '300px');
+		    }       
 	});
 }

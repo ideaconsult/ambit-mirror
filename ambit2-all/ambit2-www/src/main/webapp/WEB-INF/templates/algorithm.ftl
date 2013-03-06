@@ -2,6 +2,21 @@
 <head>
 <#include "/header.ftl" >
 
+<style>
+.ui-autocomplete {
+  max-height: 200px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: auto;
+}
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+ */
+* html .ui-autocomplete {
+  height: 200px;
+}
+</style>
+
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
@@ -25,6 +40,8 @@ $(document)
 		$( "#selectable" ).selectable( "option", "distance", 18);
 		datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 		featureAutocomplete(".featureuri",".dataseturi","${ambit_root}/feature",10);
+		algorithmAutocomplete(".alguri","${ambit_root}/algorithm","Regression",100);
+		algorithmAutocomplete(".descuri","${ambit_root}/algorithm","DescriptorCalculation",100);
 	}
 );
 </script>
