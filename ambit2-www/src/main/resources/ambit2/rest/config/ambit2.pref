@@ -42,6 +42,7 @@ aa.admin=${aa.admin}
 aa.compound=${aa.compound}
 #aa.model is ignored
 #aa.model=${aa.model}
+warmup.enabled=${warmup.enabled}
 #Ambit XT (standalone) properties only
 startMySQL=true
 showAromaticity=true
