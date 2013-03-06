@@ -79,55 +79,55 @@
   	<div id='superBuilder'>
      <div class='row remove-bottom' >
 		<label class='five columns alpha' for="dataset_uri">Dataset URI<em>*</em></label>
-		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset URI'>
+		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset URI' size='100'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>	  
     <div class='row remove-bottom' >
 		<label class='five columns alpha' for="prediction_feature">Prediction feature URI</label>
-		<input class='eight columns alpha half-bottom featureuri' type="text" id='prediction_feature' value='' name='prediction_feature' title='Enter feature uri'>
+		<input class='eight columns alpha half-bottom featureuri' type="text" id='prediction_feature' value='' name='prediction_feature' title='Enter feature uri' size='100'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/feature?max=25' target=_blank>Features</a></div>
 	</div>	
     <div class='row remove-bottom' >
-		<label class='five columns alpha' for="model_learning">Learning algorithm URI (e.g. regression)
+		<label class='five columns alpha' for="model_learning">Learning algorithm URI (e.g. regression or classification)
 		</label>
-		<input class='eight columns alpha half-bottom' type="text" id='model_learning' value='' name='model_learning' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom alguri' type="text" id='model_learning' value='' name='model_learning' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=Regression' target=_blank>Regression</a>,
 		<a href='${ambit_root}/algorithm?type=Classification' target=_blank>Classification</a>.
 		If no learning algorithm specified, it will only build a dataset with all features</div>
 	</div>		
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
 				<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
 	</div>	
 	<div class='row remove-bottom' >
