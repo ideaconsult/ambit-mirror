@@ -100,7 +100,7 @@ public class FunctionalGroupDescriptorTest {
 		FunctionalGroupDescriptor d = new FunctionalGroupDescriptor();
 		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
 		IAtomContainer mol =  p.parseSmiles("C(=O)Cl");
-		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,82);
+		calculate((List<FunctionalGroup> )d.getParameters()[0], false,mol ,84);
 		//Alkyl C [CX4]
 		//Alanine side chain [CH3X4]
 	}			
