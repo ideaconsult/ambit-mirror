@@ -47,7 +47,7 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 	protected static Property struc_typeProperty = Property.getInstance(AmbitCONSTANTS.STRUCTURETYPE, LiteratureEntry.getInstance(AmbitCONSTANTS.STRUCTURETYPE));
 	
 	public static final String create_sql = 
-		"INSERT INTO structure (idstructure,idchemical,structure,format,updated,user_name,type_structure) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1),?)"
+		"INSERT INTO structure (idstructure,idchemical,structure,format,updated,user_name,type_structure,preference) values (null,?,compress(?),?,CURRENT_TIMESTAMP,SUBSTRING_INDEX(user(),'@',1),?,?)"
 	;
 
 	public CreateStructure(IStructureRecord structure) {
@@ -73,8 +73,11 @@ public class CreateStructure extends AbstractObjectUpdate<IStructureRecord> {
 			//struc type
 			//Property
 			//getObject().getProperty(struc_typeProperty)
-			params1.add(new QueryParam<String>(String.class, (content==null)||("".equals(content.trim()))?
-					IStructureRecord.STRUC_TYPE.NA.toString():getObject().getType().toString()));
+			IStructureRecord.STRUC_TYPE structype = (content==null)||("".equals(content.trim()))?
+							IStructureRecord.STRUC_TYPE.NA:getObject().getType();
+					
+			params1.add(new QueryParam<String>(String.class, structype.toString()));
+			params1.add(new QueryParam<Integer>(Integer.class, 1000+(10-structype.ordinal())));
 			return params1;
 		}
 		
