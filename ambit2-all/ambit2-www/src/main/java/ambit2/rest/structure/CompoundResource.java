@@ -58,6 +58,7 @@ import ambit2.rest.RDFJenaConvertor;
 import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.TaskApplication;
 import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
@@ -67,6 +68,11 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
+import ambit2.rest.task.AmbitFactoryTaskConvertor;
+import ambit2.rest.task.CallableStructureEntry;
+import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.ITaskStorage;
+import ambit2.rest.task.Task;
 import ambit2.search.csls.CSLSRequest;
 
 /**
@@ -506,6 +512,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		return null;
 	}
 	
+
 	/**
 	 * POST as in the dataset resource
 	 */
@@ -516,7 +523,21 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			
+			String token = getToken();
+			CallableStructureEntry callable = new CallableStructureEntry<String>(new Form(entity), getRootRef(), getContext(), null, token);
+			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+						"New structure from web form",
+						callable,
+						getRequest().getRootRef(),
+						token);
+						
+			  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+			  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+			  task.update();
+			  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+           return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
+
+			/*
 			Form form = new Form(entity);
 			String cmpname = form.getFirstValue("identifier");
 			String uri = form.getFirstValue(OpenTox.params.compound_uri.toString());
@@ -580,6 +601,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			return r;
 			//return copyDatasetToQueryResultsTable(new Form(entity),true);
 			//throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,entity.getMediaType().toString());
+			 * 
+			 */
 		} else {
 			if(upload == null) upload = createFileUpload();
 			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", 

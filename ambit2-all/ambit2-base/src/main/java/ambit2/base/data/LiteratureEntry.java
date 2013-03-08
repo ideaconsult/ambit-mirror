@@ -39,6 +39,7 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	protected static String EINECS_name = "EINECS";
     protected static String IUPAC_name = "IUPAC name";
     protected static String CAS_num = "CAS Registry Number";
+    protected static String IUCLID5_UUID = "IUCLID5 UUID";
     protected static String Default_name = "Default";
     protected static String AMBIT_uri = "http://ambit.sourceforge.net";
     protected static String EINECS_uri = "http://ec.europa.eu/environment/chemicals/exist_subst/einecs.htm";
@@ -58,6 +59,9 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	}
 	public static synchronized LiteratureEntry getIUPACReference() {
 		return getInstance(IUPAC_name,AMBIT_uri);
+	}
+	public static synchronized LiteratureEntry getI5UUIDReference() {
+		return getInstance(IUCLID5_UUID,AMBIT_uri);
 	}	
 	
 	public static synchronized LiteratureEntry getEINECSReference() {
