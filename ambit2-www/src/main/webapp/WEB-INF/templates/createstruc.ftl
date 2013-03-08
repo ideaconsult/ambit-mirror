@@ -71,24 +71,30 @@ function useMol() {
 	<div style="margin:5px;padding:5px;">	
 	<form action="${ambit_root}/compound" id="uploadForm"  method="POST">		
 	<div class="iframe row remove-bottom"><iframe style="width:1px; height:1px; background:none; border:none"> </iframe></div>	
-	<div class='row half-bottom'>
+	<div class='row remove-bottom'>
 		<div class='ten columns alpha'>
-			<applet code="JME.class" id="JME" name="JME" archive="../jme/JME.jar" width="500" height="400">
+			<applet class='remove-bottom' code="JME.class" id="JME" name="JME" archive="../jme/JME.jar" width="500" height="400">
 			<param name="options" value="nohydrogens,polarnitro,nocanonize">
 			You have to enable Java and JavaScript on your machine ! 
 			</applet>
+			
 		</div>
 		<div class='six columns omega'>
-		<label for="cas">CAS</label>
-		<input class='half-bottom' type="text" id="cas" name='cas' title='CASRN' size="15">
-		<label for="ec">EINECS</label>
-		<input class='half-bottom' type="text" name='ec' title='EINECS' size="15">		
-		<label for="name">Chemical name</label>
-		<input class='half-bottom' type="text" name='name' title='Chemical name' size="80">
-		<label for="i5uuid">IUCLID5 UUID</label>
-		<input class='half-bottom' type="text" name='i5uuid' title='IUCLID5 UUID' size="80">	
+		<label for="CASRN">CAS</label>
+		<input class='half-bottom' type="text" id="CASRN" name='CASRN' title='CASRN' size="15">
+		<label for="EINECS">EINECS</label>
+		<input class='half-bottom' type="text" name='EINECS' title='EINECS' size="15">		
+		<label for="IUPACName">IUPAC name</label>
+		<input class='half-bottom' type="text" name='IUPACName' id='IUPACName' title='IUPAC name' size="80">
+		<label for="ChemicalName">Chemical name</label>
+		<input class='half-bottom' type="text" name='ChemicalName' id='ChemicalName' title='Chemical name' size="80">
+		<label for="TradeName">Trade name</label>
+		<input class='half-bottom' type="text" name='TradeName' id='TradeName' title='Trade name' size="80">
+		<label for="IUCLID5_UUID">IUCLID5 UUID</label>
+		<input class='half-bottom' type="text" name='IUCLID5_UUID' title='IUCLID5 UUID' size="80">	
 		<input class='half-bottom' type="text" name='customidname' value='Custom identifier' title='Custom Identifier' size="30">	
 		<input class='half-bottom' type="text" name='customid' title='Custom identifier' size="80">
+		<input class='remove-bottom' type='submit' class='submit' value='Submit'>	
 		</div>
 	</div>
 	<div class='row remove-bottom'>
@@ -96,7 +102,7 @@ function useMol() {
 		<a href='#' onClick="getSmiles()" title='Get SMILES from the editor'>Get SMILES</a>
 	</div>	
 	<div class='row remove-bottom'>
-		<input class='eight columns alpha half-bottom' type="text" id='smiles' value='' name='smiles' title='smiles' size="60">
+		<input class='eight columns alpha half-bottom' type="text" id='SMILES' value='' name='SMILES' title='SMILES' size="60">
 		<div class='eight columns omega'></div>
 	</div>
 	<div class='row remove-bottom'>
@@ -108,17 +114,16 @@ function useMol() {
 		<textarea class='eight columns alpha half-bottom' id='molfile' name='molfile' title='MOL file'></textarea>
 		<div class='eight columns omega'></div>
 	</div>
-	<label class='row remove-bottom' for="molfile">InChI</label>	
+	<label class='row remove-bottom' for="InChI_std">InChI</label>	
 	<div class='row remove-bottom'>
-		<input class='eight columns alpha half-bottom' type="text" id='inchi' value='' name='inchi' title='InChI' size="60">
+		<input class='eight columns alpha half-bottom' type="text" id='InChI_std' value='' name='InChI_std' title='Standard InChI' size="60">
 		<div class='eight columns omega'></div>
 	</div>	
+	<label class='row remove-bottom' for="InChIKey_std">InChI Key</label>	
 	<div class='row remove-bottom'>
-		<div class='ten columns alpha half-bottom' >&nbsp;</div>
-		<div class='six columns omega half-bottom'>
-				<input type='submit' class='submit' value='Submit'>	
-		</div>
-	</div>		
+		<input class='eight columns alpha half-bottom' type="text" id='InChIKey_std' value='' name='InChIKey_std' title='Standard InChI Key' size="60">
+		<div class='eight columns omega'></div>
+	</div>	
 	</form>	
 </div>			
 </div>

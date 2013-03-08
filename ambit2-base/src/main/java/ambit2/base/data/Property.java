@@ -64,6 +64,8 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static final String opentox_InChIAuxInfo_std = "http://www.opentox.org/api/1.1#InChI_AuxInfo_std";
 	public static final String opentox_InChIKey_std = "http://www.opentox.org/api/1.1#InChIKey_std";
 	
+	public static final String opentox_IUCLID5_UUID = "http://www.opentox.org/api/1.1#IUCLID5_UUID";
+	
 	public static final String opentox_InChI = "http://www.opentox.org/api/1.1#InChI";
 	public static final String opentox_InChIAuxInfo = "http://www.opentox.org/api/1.1#InChI_AuxInfo";
 	public static final String opentox_InChIKey = "http://www.opentox.org/api/1.1#InChIKey";
@@ -90,7 +92,10 @@ public class Property extends Model implements Serializable, Comparable<Property
 	}
 	public static synchronized Property getNameInstance() {
 		return getInstance(Names, LiteratureEntry.getIUPACReference());
-	}	
+	}
+	public static synchronized Property getI5UUIDInstance() {
+		return getInstance(Names, LiteratureEntry.getI5UUIDReference());
+	}
 	public static synchronized Property getCASInstance() {
 		Property p = getInstance(CAS, LiteratureEntry.getCASReference());
 		p.setLabel(opentox_CAS);
