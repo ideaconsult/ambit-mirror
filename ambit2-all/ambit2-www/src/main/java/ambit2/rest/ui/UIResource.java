@@ -18,7 +18,8 @@ public class UIResource extends FreeMarkerResource {
 			uploadstruc, uploadprops, 
 			predict, 
 			login, register, myprofile, 
-			uploadstruc_register,uploadprops_batch,uploadprops_biodata
+			uploadstruc_register,uploadprops_batch,uploadprops_biodata,
+			createstruc
 		}
 	public UIResource() {
 		super();
