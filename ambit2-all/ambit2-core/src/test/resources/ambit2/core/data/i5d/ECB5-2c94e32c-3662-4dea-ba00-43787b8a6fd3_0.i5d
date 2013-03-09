@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReferenceSubstance xmlns="http://echa.europa.eu/schemas/iuclid5/20070330" documentReferencePK="ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3/0" version="2007-03-19T14:13:29Z">
+	<modificationHistory>
+		<modification date="2007-05-10T09:00:00Z">
+			<comment>Created</comment>
+			<modificationBy>European Commision/Joint Research Centre/European Chemicals Bureau</modificationBy>
+		</modification>
+	</modificationHistory>
+	<ownershipProtection copyProtection="false" fractionalDocument="false" sealed="false"/>
+	<name>nitrofural</name>
+	<ecSubstanceInventoryEntryRef>
+		<number>200-443-1</number>
+	</ecSubstanceInventoryEntryRef>
+	<referenceSubstanceInformation>
+		<casInformation>
+			<casNumber>59-87-0</casNumber>
+		</casInformation>
+		<synonyms>
+			<synonym>
+				<name>2-Furaldehyde, 5-nitro-, semicarbazone</name>
+			</synonym>
+			<synonym>
+				<name>Hydrazinecarboxamide, 2-[(5-nitro-2-furanyl)methylene]-</name>
+			</synonym>
+			<synonym>
+				<name>Hydrazinecarboxamide, 2-[(5-nitro-2-furanyl)methylene]-</name>
+			</synonym>
+		</synonyms>
+		<iupacName>5-nitro-2-furaldehyde semicarbazone</iupacName>
+		<groupCatInfo>DSL Category: Organics
+USEPA Category: Hydrazines and Related Compounds</groupCatInfo>
+	</referenceSubstanceInformation>
+	<referenceSubstanceStructure>
+		<molecularFormula>C6H6N4O4</molecularFormula>
+		<smilesNotation>O=[N+]([O-])c1ccc(C=NNC(N)=O)o1</smilesNotation>
+		<inChI>InChI=1/C6H6N4O4/c7-6(11)9-8-3-4-1-2-5(14-4)10(12)13/h1-3H,(H3,7,9,11)</inChI>
+		<structureFormula fileSize="6244" lastModificationDate="2007-04-17T12:45:10Z" type="AttachmentDocument" uniqueKey="ECB5-33282513-122f-4fab-8c55-328af8160732/0">
+			<description>59-87-0-V2.jpeg / 6.1 KB</description>
+			<fileMimeType>image/jpeg</fileMimeType>
+		</structureFormula>
+		<molecularWeightRange lowerValue="198.1362"/>
+	</referenceSubstanceStructure>
+</ReferenceSubstance>
