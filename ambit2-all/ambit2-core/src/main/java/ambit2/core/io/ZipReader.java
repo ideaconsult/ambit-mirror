@@ -50,20 +50,16 @@ public class ZipReader extends RawIteratingFolderReader {
     	  
 	         BufferedOutputStream dest = null;
 	         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(zipstream));
-	         ZipEntry entry;
+
+	         ZipEntry entry  = zis.getNextEntry();
 	        
-	         while((entry = zis.getNextEntry()) != null) {
-	 	    	
+	         while(entry != null) {
 		        if (entry.isDirectory()) continue;
 	            int count;
 	            byte data[] = new byte[BUFFER];
-	            // write the files to the disk
 
-	            //int ext = entry.getName().lastIndexOf(".");
-	            
 	        	File file = new File(directory,entry.getName());
 	        	try { file.getParentFile().mkdirs(); } catch (Exception x) {}
-	        			//UUID.randomUUID().toString(),entry.getName().substring(ext)));
 	        	file.deleteOnExit();
 	        	files.add(file);
 	            FileOutputStream fos = new FileOutputStream(file);
@@ -73,6 +69,8 @@ public class ZipReader extends RawIteratingFolderReader {
 	            }
 	            dest.flush();
 	            dest.close();
+	            zis.closeEntry();
+	            entry  = zis.getNextEntry();
 	         }
 	         zis.close();
 	      } catch(Exception e) {

@@ -30,6 +30,7 @@
 package ambit2.core.io;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 
 import org.openscience.cdk.index.CASNumber;
@@ -167,6 +168,10 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 			return (IRawReader<IStructureRecord>) r;
 		} else if (name.endsWith(FileInputState.extensions[FileInputState.MOL_INDEX])) {
 			RawIteratingMOLReader r = new RawIteratingMOLReader(new FileReader(files[index]));
+			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
+			return (IRawReader<IStructureRecord>) r;
+		} else if (name.endsWith(FileInputState.extensions[FileInputState.I5D_INDEX])) {
+			I5ReaderSimple r = new I5ReaderSimple(new FileInputStream(files[index]));
 			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
 			return (IRawReader<IStructureRecord>) r;
 		}
