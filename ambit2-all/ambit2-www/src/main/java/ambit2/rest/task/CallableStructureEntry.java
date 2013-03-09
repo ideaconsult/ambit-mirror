@@ -9,6 +9,7 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IBatchStatistics;
@@ -32,7 +33,8 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 		super(form, applicationRootReference, context, algorithm, token);
 		cmpreporter = new CompoundURIReporter(applicationRootReference,null);
 	}
-	
+	private static String customidname = "customidname";
+	private static String customid = "customid";
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
 		record = new StructureRecord();
@@ -71,6 +73,13 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 		} else if (record.getInchi()!=null) {
 			record.setContent(record.getInchi());
 			record.setFormat(MOL_TYPE.INC.name());
+		}
+		String id = form.getFirstValue(customidname);
+		if ((id!=null) && !"".equals(id.trim())) {
+			String value = form.getFirstValue(customid);
+			if ((value!=null) && !"".equals(value.trim())) {
+				record.setProperty(Property.getInstance(id, LiteratureEntry.getInstance()), value);
+			}
 		}
 	}
 
