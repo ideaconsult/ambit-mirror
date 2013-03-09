@@ -115,3 +115,96 @@ function clickAuto() {
 	$('#funcgroupsSpan').hide();
 	$('.help#strucSearch').text("Enter CAS,EINECS, Chemical name, SMILES or InChI.");
 }
+
+function createStrucFormValidation(formName) {
+	$(formName).validate({
+		rules : {
+			'CASRN': {
+				required : false
+			},		
+			'EINECS': {
+				required : false
+			},
+			'IUPACName': {
+			},
+			'ChemicalName': {
+				required : true
+			},
+			'TradeName': {
+			},
+			'IUCLID5_UUID': {
+			},
+			'customidname': {
+			},
+			'customid': {
+			},
+			'SMILES': {
+				required : function() {
+					var molFile = getMolFile();
+					return ((molFile == null) || ("" == molFile)); //if no structures drawn, the smiles field should not be empty
+				}
+			},			
+			'molfile': {
+				required : function() {
+					var smiles = getSmiles();
+					return (smiles == null) || ( "" == smiles);
+				}
+			},			
+			'InChI_std': {
+			},			
+			'InChIKey_std': {
+			}
+		},
+		messages : {
+			'CASRN': {
+				required : "Please enter CAS Registry number (e.g. 50-00-0)"
+			},		
+			'EINECS': {
+				required : "Please enter EC Registry number (e.g. 200-001-8)"
+			},
+			'IUPACName': {
+				required : "Please enter a chemical name according to the IUPAC nomenclature"
+			},
+			'ChemicalName': {
+				required : "Please enter a chemical name"
+			},
+			'TradeName': {
+				required : "Please enter a trivial name"
+			},
+			'IUCLID5_UUID': {
+				required : "Please enter a IUCLID5 unique identifier (UUID)"
+			},
+			'customidname': {
+			},
+			'customid': {
+			},
+			'SMILES': {
+				required : "Please enter SMILES. Alternatively, draw the structure and click 'Get SMILES'"
+			},			
+			'molfile': {
+				required : "MOL file expected. Draw the structure and click 'Get Mol file'"
+			},			
+			'InChI_std': {
+				required : "Standard InChI expected"
+			},			
+			'InChIKey_std': {
+				required : "Standard InChI key expected"
+			}
+		},
+		submitHandler: function(form) {
+			var molFile = getMolFile();
+			if (molFile != null) {
+				form.molfile.text = molFile;
+			}
+			var smiles = getSmiles();
+			if (smiles != null) {
+				form.smiles.value = smiles;
+			}			
+			form.submit();
+		}		
+	});
+	
+	$.validator.addMethod('isCASvalid', function (value) { 
+        return /^[A-Z]{2}\d{1,2}\s\d{1}[A-Z]{2}$/.test(value); 
+        }, 'Please enter a valid CAS RN'); 
+}

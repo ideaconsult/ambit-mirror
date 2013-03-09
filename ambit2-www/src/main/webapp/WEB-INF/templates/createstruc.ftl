@@ -1,22 +1,32 @@
 <#include "/html.ftl" >
 <head>
 <#include "/header.ftl" >
-<style>
+<style type="text/css">
 .applet {width:500px; height:400px; margin:0 auto; text-align:center; border:1px solid #000;  position:absolute }
+
+#uploadForm label.error {
+	margin-left: 10px;
+	width: auto;
+	display: inline;
+	color: #FF0000;
+}
 </style>
 <script type='text/javascript'>
 
 $(document)
 	.ready(function() {
 			$("#selectable" ).selectable( "option", "distance", 18);
-			$("#cas").blur(function () {
+			$("#appletdiv").blur(function () {
 			      getSmiles();
+			      getMolFile();
 			});
+			createStrucFormValidation("#uploadForm");
+			$("#uploadForm").validate();
 });
 
 function getSmiles() {
   var drawing = document.JME.smiles();
-   $("#smiles").attr("value",drawing);
+   $("#SMILES").attr("value",drawing);
 }
 		
 function getMolFile() {
@@ -72,7 +82,7 @@ function useMol() {
 	<form action="${ambit_root}/compound" id="uploadForm"  method="POST">		
 	<div class="iframe row remove-bottom"><iframe style="width:1px; height:1px; background:none; border:none"> </iframe></div>	
 	<div class='row remove-bottom'>
-		<div class='ten columns alpha'>
+		<div class='ten columns alpha' id='appletdiv'>
 			<applet class='remove-bottom' code="JME.class" id="JME" name="JME" archive="../jme/JME.jar" width="500" height="400">
 			<param name="options" value="nohydrogens,polarnitro,nocanonize">
 			You have to enable Java and JavaScript on your machine ! 
@@ -88,8 +98,8 @@ function useMol() {
 		<input class='half-bottom' type="text" name='IUPACName' id='IUPACName' title='IUPAC name' size="80">
 		<label for="ChemicalName">Chemical name</label>
 		<input class='half-bottom' type="text" name='ChemicalName' id='ChemicalName' title='Chemical name' size="80">
-		<label for="TradeName">Trade name</label>
-		<input class='half-bottom' type="text" name='TradeName' id='TradeName' title='Trade name' size="80">
+		<label for="TradeName">Trivial name</label>
+		<input class='half-bottom' type="text" name='TradeName' id='TradeName' title='Trivial name' size="80">
 		<label for="IUCLID5_UUID">IUCLID5 UUID</label>
 		<input class='half-bottom' type="text" name='IUCLID5_UUID' title='IUCLID5 UUID' size="80">	
 		<input class='half-bottom' type="text" name='customidname' value='Custom identifier' title='Custom Identifier' size="30">	
@@ -114,12 +124,12 @@ function useMol() {
 		<textarea class='eight columns alpha half-bottom' id='molfile' name='molfile' title='MOL file'></textarea>
 		<div class='eight columns omega'></div>
 	</div>
-	<label class='row remove-bottom' for="InChI_std">InChI</label>	
+	<label class='row remove-bottom' for="InChI_std">Standard InChI</label>	
 	<div class='row remove-bottom'>
 		<input class='eight columns alpha half-bottom' type="text" id='InChI_std' value='' name='InChI_std' title='Standard InChI' size="60">
 		<div class='eight columns omega'></div>
 	</div>	
-	<label class='row remove-bottom' for="InChIKey_std">InChI Key</label>	
+	<label class='row remove-bottom' for="InChIKey_std">Standard InChI Key</label>	
 	<div class='row remove-bottom'>
 		<input class='eight columns alpha half-bottom' type="text" id='InChIKey_std' value='' name='InChIKey_std' title='Standard InChI Key' size="60">
 		<div class='eight columns omega'></div>
