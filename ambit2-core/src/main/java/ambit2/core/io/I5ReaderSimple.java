@@ -16,6 +16,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
@@ -45,6 +46,16 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 								LiteratureEntry.getInstance(I5_REFERENCE, I5_URL));
 	protected Property registrationProperty = Property.getInstance(echa_tags.REGISTRATION_DATE.toString(),
 								LiteratureEntry.getInstance(I5_REFERENCE, I5_URL));
+	protected ILiteratureEntry reference;
+	
+	public ILiteratureEntry getReference() {
+		return reference;
+	}
+
+	public void setReference(ILiteratureEntry reference) {
+		this.reference = reference;
+	}
+
 	protected enum i5_tags {
 		ReferenceSubstance,
 		modificationHistory,
