@@ -47,6 +47,7 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	protected Property registrationProperty = Property.getInstance(echa_tags.REGISTRATION_DATE.toString(),
 								LiteratureEntry.getInstance(I5_REFERENCE, I5_URL));
 	protected ILiteratureEntry reference;
+	protected boolean attachment = false;
 	
 	public ILiteratureEntry getReference() {
 		return reference;
@@ -57,6 +58,7 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	}
 
 	protected enum i5_tags {
+		AttachmentDocument,
 		ReferenceSubstance,
 		modificationHistory,
 		ownershipProtection,
@@ -84,9 +86,7 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 		version
 	}
     public I5ReaderSimple(InputStream in) throws CDKException {
-    	record = new StructureRecord();
-    	record.setFormat(MOL_TYPE.SDF.toString());
-    	record.setContent("");
+    	record = new StructureRecord(-1,-1,null,null);
     	setReader(in);
 
     }	
@@ -140,15 +140,25 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	    				tag = i5_tags.valueOf(reader.getName().getLocalPart());
 		    			tmpValue = "";
 		    			switch (tag) {
-		    			case ReferenceSubstance: { 
+		    			case AttachmentDocument: {
+		    				attachment = true;
+		    		    	return  false;
+		    			}
+		    			case ReferenceSubstance: {
+		    				attachment = false;
 		    				record.clear();
 		    				synonyms.clear();
+		    		    	record.setFormat(null);
+		    		    	record.setContent(null);
 		    				for (int i=0; i < reader.getAttributeCount(); i++) 
 		    					try {
 		    						if (i5_refs_attr.documentReferencePK.name().equals(reader.getAttributeLocalName(i)))
 		    							record.setProperty(Property.getI5UUIDInstance(),reader.getAttributeValue(i));
 		    					} catch (Exception x) { }		    				
 		    				break;
+		    			}
+		    			default: {
+		    				attachment = false;
 		    			}
 		    			}            	
 	    			} catch (Exception x) { }	
@@ -158,6 +168,7 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	            	return false;
 	            }
 	            case XMLStreamConstants.END_ELEMENT: {
+	            	if (attachment) return false;
 	            	i5_tags tag = null;
 	            	try {
 	            		tag = i5_tags.valueOf(reader.getName().getLocalPart());
@@ -207,7 +218,11 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	        			break;			
 	        		}	  
 	        		case inChI: {
-	        			record.setInchi(tmpValue);
+	        			String smi = record.getSmiles();
+	        			record.setFormat(MOL_TYPE.INC.name());
+	        			record.setContent(tmpValue);
+	        			record.setInchi(null);
+	        			record.setSmiles(smi);
 	        			break;			
 	        		}	        
 	        		default: {
@@ -234,11 +249,11 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 		}
 		return false;
 	}
-
+	@Override
 	public Object next() {
 		return record;
 	}
-
+	@Override
 	public IStructureRecord nextRecord() {
 		return record;
 	}
