@@ -25,7 +25,6 @@ import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.io.ECHAPreregistrationListReader.echa_tags;
-import ambit2.core.io.ToXMLReaderSimple.toxml_attributes;
 
 
 

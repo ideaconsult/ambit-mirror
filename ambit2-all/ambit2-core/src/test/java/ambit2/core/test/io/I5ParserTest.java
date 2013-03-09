@@ -37,7 +37,7 @@ public class I5ParserTest {
 				System.out.println(p.getName() + " = " + record.getProperty(p));
 			}
 			Assert.assertNotNull(record.getSmiles());
-			Assert.assertNotNull(record.getInchi());
+			Assert.assertNotNull(record.getContent());
 			Assert.assertNotNull(record.getProperty(Property.getI5UUIDInstance()));
 		}
 		reader.close();
@@ -49,7 +49,7 @@ public class I5ParserTest {
 	
 	@Test
 	public void testi5z() throws Exception {
-		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/i5z/RefSub_030913110311.i5z");
+		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/core/data/i5z/RefSub_030913110311.zip");
 		ZipReader reader = new ZipReader(in);
 		int count = 0;
 		int foundCas=0;
@@ -72,7 +72,7 @@ public class I5ParserTest {
 			//Assert.assertNotNull(record.getProperty(Property.getI5UUIDInstance()));
 		}
 		reader.close();
-		Assert.assertEquals(1,count);
+		Assert.assertEquals(10,count);
 		Assert.assertEquals(1,foundCas);
 		Assert.assertEquals(1,foundName);
 	}		
@@ -80,7 +80,9 @@ public class I5ParserTest {
 	@Test
 	public void testi5dFolder() throws Exception {
 		URL url  = getClass().getClassLoader().getResource("ambit2/core/data/i5z/RefSub_030913110311");
+		
 		File dir = new File(url.getFile());
+		
 		File[] files = dir.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
@@ -90,6 +92,7 @@ public class I5ParserTest {
 		Assert.assertEquals(20,files.length);
 		RawIteratingFolderReader reader = new RawIteratingFolderReader(files);
 		int count = 0;
+		int foundInChI=0;
 		int foundCas=0;
 		int foundName=0;
 		while (reader.hasNext()) {
@@ -100,6 +103,10 @@ public class I5ParserTest {
 			System.out.println();
 			*/
 			count++;
+			if (record.getContent()!=null && "INC".equals(record.getFormat())) {
+				foundInChI++;
+				System.out.println(record.getContent());
+			}
 			for (Property p :record.getProperties()) {
 				foundCas += record.getProperty(p).equals("59-87-0")?1:0;
 				foundName += record.getProperty(p).equals("5-nitro-2-furaldehyde semicarbazone")?1:0;
@@ -111,5 +118,6 @@ public class I5ParserTest {
 		}
 		reader.close();
 		Assert.assertEquals(10,count);
+		Assert.assertEquals(10,foundInChI);
 	}	
 }

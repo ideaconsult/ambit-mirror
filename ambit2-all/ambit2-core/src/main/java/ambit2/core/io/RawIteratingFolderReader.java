@@ -172,7 +172,7 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 			return (IRawReader<IStructureRecord>) r;
 		} else if (name.endsWith(FileInputState.extensions[FileInputState.I5D_INDEX])) {
 			I5ReaderSimple r = new I5ReaderSimple(new FileInputStream(files[index]));
-			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
+			r.setReference(LiteratureEntry.getI5UUIDReference());
 			return (IRawReader<IStructureRecord>) r;
 		}
 			
