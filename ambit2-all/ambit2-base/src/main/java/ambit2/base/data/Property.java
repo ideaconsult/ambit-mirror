@@ -54,6 +54,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static String AMBIT_DESCRIPTORS_ONTOLOGY = "http://ambit.sourceforge.net/descriptors.owl#%s";
 	public static final String Names = "Names";
 	public static final String CAS = "CasRN";
+	public static final String IUCLID5_UUID = "I5UUID";
 	public static final String opentox_REACHDATE = "http://www.opentox.org/api/1.1#REACHRegistrationDate";
 	public static final String opentox_CAS = "http://www.opentox.org/api/1.1#CASRN";
 	public static final String opentox_Name = "http://www.opentox.org/api/1.1#ChemicalName";
@@ -94,7 +95,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 		return getInstance(Names, LiteratureEntry.getIUPACReference());
 	}
 	public static synchronized Property getI5UUIDInstance() {
-		return getInstance(Names, LiteratureEntry.getI5UUIDReference());
+		return getInstance(IUCLID5_UUID, LiteratureEntry.getI5UUIDReference());
 	}
 	public static synchronized Property getCASInstance() {
 		Property p = getInstance(CAS, LiteratureEntry.getCASReference());

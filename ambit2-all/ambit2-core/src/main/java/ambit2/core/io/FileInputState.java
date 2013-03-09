@@ -43,12 +43,13 @@ public class FileInputState extends FileState implements IInputState {
 	public transient static final int TOXML_INDEX = 13;
 	public transient static final int MALARIA_HTS_SHEETS = 14;
 	public transient static final int ZIP_INDEX = 15;
+	public transient static final int I5D_INDEX = 16;
 	
 	//TODO support for .xlsx 
 	public transient static final String[] extensions = {
 		".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",
 		".cml",".hin",".pdb",".xls",".xls",".echaxml",".xml",
-		".sht",".zip"};
+		".sht",".zip",".i5d"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
 		"CSV files (Comma delimited) *.csv)",
@@ -66,6 +67,7 @@ public class FileInputState extends FileState implements IInputState {
 		"Leadscope ToXML 3.08 (*.xml)",
 		"Malaria HTS data sheets (*.sht)",
 		"ZIP archive (*.zip)",
+		"IUCLID5 xml (*.i5d)"
 		};	
 	public FileInputState() {
 		super();
@@ -148,7 +150,9 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[MALARIA_HTS_SHEETS])) {
 			return new MalariaHTSDataDelimitedReader(stream);	
 		} else if (ext.endsWith(extensions[ZIP_INDEX])) {
-			return new ZipReader(stream);					
+			return new ZipReader(stream);
+		} else if (ext.endsWith(extensions[I5D_INDEX])) {
+			return new I5ReaderSimple(stream);								
 		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
 	}
 	
