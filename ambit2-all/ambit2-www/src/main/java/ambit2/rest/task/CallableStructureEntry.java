@@ -14,6 +14,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
 import ambit2.db.processors.AbstractBatchProcessor;
@@ -35,9 +36,16 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
 		record = new StructureRecord();
+		record.setFormat(null);
+		record.setContent(null);
 		String[] tags = new String[] {
-				Property.opentox_CAS,Property.opentox_Name,Property.opentox_TradeName,Property.opentox_IupacName,
-				Property.opentox_EC,Property.opentox_InChI_std,Property.opentox_InChIKey_std,Property.opentox_IUCLID5_UUID};
+				Property.opentox_CAS,Property.opentox_EC,
+				Property.opentox_Name,Property.opentox_TradeName,Property.opentox_IupacName,
+				Property.opentox_SMILES,
+				Property.opentox_InChI,Property.opentox_InChIKey,
+				Property.opentox_InChI_std,Property.opentox_InChIKey_std,
+				Property.opentox_IUCLID5_UUID
+				};
 		for (String tag : tags) {
 			String localtag = tag.replace("http://www.opentox.org/api/1.1#","");
 			String value = form.getFirstValue(localtag);
@@ -50,7 +58,7 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 			else if (Property.opentox_TradeName.equals(tag)) record.setProperty(Property.getNameInstance(), value);
 			else if (Property.opentox_IupacName.equals(tag)) record.setProperty(Property.getNameInstance(), value);
 			else if (Property.opentox_IUCLID5_UUID.equals(tag)) record.setProperty(Property.getI5UUIDInstance(), value);
-			else if (Property.opentox_SMILES.equals(tag)) record.setSmiles(value);
+			else if (Property.opentox_SMILES.equals(tag)) {record.setSmiles(value);}
 			else if (Property.opentox_InChI_std.equals(tag)) record.setInchi(value);
 			else if (Property.opentox_InChI.equals(tag)) record.setInchi(value);
 			else if (Property.opentox_InChIKey.equals(tag)) record.setInchiKey(value);
@@ -60,6 +68,9 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 		if (molfile!=null) {
 			record.setFormat("SDF");
 			record.setContent(molfile);
+		} else if (record.getInchi()!=null) {
+			record.setContent(record.getInchi());
+			record.setFormat(MOL_TYPE.INC.name());
 		}
 	}
 
