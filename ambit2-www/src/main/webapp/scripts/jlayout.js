@@ -126,11 +126,31 @@ function createStrucFormValidation(formName) {
 				required : false
 			},
 			'IUPACName': {
+				required : function() {
+					var name1 = $("#ChemicalName").attr("value");
+					var name2 = $("#TradeName").attr("value");
+					console.log(name1);
+					console.log(name2);
+					return ((name1==null) || ($.trim(name1)=='')) && ((name2==null) || ($.trim(name2)=='')); 
+				}
 			},
 			'ChemicalName': {
-				required : true
+				required : function() {
+					var name1 = $("#IUPACName").attr("value");
+					var name2 = $("#TradeName").attr("value");
+					console.log(name1);
+					console.log(name2);
+					return ((name1==null) || ($.trim(name1)=='')) && ((name2==null) || ($.trim(name2)=='')); 
+				}
 			},
 			'TradeName': {
+				required : function() {
+					var name1 = $("#ChemicalName").attr("value");
+					var name2 = $("#IUPACName").attr("value");
+					console.log(name1);
+					console.log(name2);
+					return ((name1==null) || ($.trim(name1)=='')) && ((name2==null) || ($.trim(name2)=='')); 
+				}				
 			},
 			'IUCLID5_UUID': {
 			},
