@@ -38,9 +38,9 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 		String[] tags = new String[] {
 				Property.opentox_CAS,Property.opentox_Name,Property.opentox_TradeName,Property.opentox_IupacName,
 				Property.opentox_EC,Property.opentox_InChI_std,Property.opentox_InChIKey_std,Property.opentox_IUCLID5_UUID};
-		for (String namespacetag : tags) {
-			String tag = namespacetag.replace("http://www.opentox.org/api/1.1#","");
-			String value = form.getFirstValue(namespacetag);
+		for (String tag : tags) {
+			String localtag = tag.replace("http://www.opentox.org/api/1.1#","");
+			String value = form.getFirstValue(localtag);
 			if (value==null) continue;
 			value = value.trim();
 			if ("".equals(value)) continue;
