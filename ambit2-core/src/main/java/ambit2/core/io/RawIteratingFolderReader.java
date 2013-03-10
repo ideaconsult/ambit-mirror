@@ -47,11 +47,18 @@ import ambit2.core.data.EINECS;
  */
 public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRecord,IRawReader<IStructureRecord>> implements IRawReader<IStructureRecord> {
 	protected enum FileNameMode {
+		NONE,
 		CAS,
 		EC,
 		Name
 	}
 	protected FileNameMode mode;
+	public FileNameMode getMode() {
+		return mode;
+	}
+	public void setMode(FileNameMode mode) {
+		this.mode = mode;
+	}
 	protected CASProcessor casTransformer = new CASProcessor();
 	protected Property einecsProperty = Property.getEINECSInstance();
 	protected Property casProperty = Property.getInstance(AmbitCONSTANTS.CASRN,LiteratureEntry.getCASReference());
@@ -68,6 +75,11 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 		int[] count = new int[FileNameMode.values().length];
 		for (File file: files) {
 			String name = file.getName().toLowerCase();
+			int i5d = name.indexOf(".i5d");
+			if (i5d>0) {
+				mode = FileNameMode.NONE;
+				return;
+			}
 			int dot = name.indexOf('.');
 			if (dot >= 0) {
 				String id = name.substring(0,dot);
@@ -84,10 +96,13 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 						continue;
 					}
 				} catch (Exception x) {}	
-				count[FileNameMode.Name.ordinal()]++;
+				if ((mode==null) || FileNameMode.NONE.equals(mode))
+					count[FileNameMode.NONE.ordinal()]++;
+				else 
+					count[FileNameMode.Name.ordinal()]++;
 			}
 		}
-		mode = FileNameMode.CAS;
+		mode = FileNameMode.NONE;
 		for (FileNameMode m : FileNameMode.values()) 
 			if (count[m.ordinal()]>count[mode.ordinal()])
 				mode = m;
@@ -99,8 +114,9 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 			switch (mode) {
 			case CAS: {assignCASRN((IStructureRecord)o);break;}
 			case EC: {assignEINECS((IStructureRecord)o);break;}
+			case Name: {assignName((IStructureRecord)o); break;}
 			default: {
-				assignName((IStructureRecord)o); break;
+				
 			}
 			}		
 		return o;
@@ -111,8 +127,8 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 		switch (mode) {
 		case CAS: {assignCASRN(record);break;}
 		case EC: {assignEINECS(record);break;}
+		case Name:{assignName(record); break;} 
 		default: {
-			assignName(record); break;
 		}
 		}
 		return record;
