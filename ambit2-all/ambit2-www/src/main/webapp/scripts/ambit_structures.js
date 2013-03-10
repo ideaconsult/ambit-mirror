@@ -387,6 +387,9 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		$.each(dataEntry.lookup.smiles, function(k, value) {
 			sOut += renderValue(null,"SMILES","",dataEntry.values[value],"",null);
 		});
+		$.each(dataEntry.lookup.i5uuid, function(k, value) {
+			sOut += renderValue(null,"IUCLID5 UUID","",dataEntry.values[value],"",null);
+		});		
 		sOut += '</tbody></table></div>\n';
 		
 		var sOutData = '<div id="tabs-data">';
