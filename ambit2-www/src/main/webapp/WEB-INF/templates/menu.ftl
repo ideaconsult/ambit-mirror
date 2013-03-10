@@ -14,6 +14,10 @@
 </li> 
 
 <li class="ui-selectee"><span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>
+<a href="${ambit_root}/ui/createstruc">Add new structure</a>
+</li>
+
+<li class="ui-selectee"><span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>
 <a href="${ambit_root}/ui/uploadstruc">Import a new dataset</a>
 </li>
 
