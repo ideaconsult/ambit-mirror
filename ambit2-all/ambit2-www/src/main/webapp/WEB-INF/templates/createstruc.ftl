@@ -95,13 +95,13 @@ function useMol() {
 		<input class='half-bottom' type="text" id="CASRN" name='CASRN' title='CASRN' size="15"  style="width:100%;">
 		<label for="EINECS">EINECS<em></em><a href='#' class='chelp heinecs'>?</a></label>
 		<input class='half-bottom' type="text" name='EINECS' title='EINECS' size="15" style="width:100%;">		
-		<label for="IUPACName">IUPAC name<a href='#' class='chelp hname'>?</a></label>
+		<label for="IUPACName">IUPAC name<em></em><a href='#' class='chelp hname'>?</a></label>
 		<input class='half-bottom' type="text" name='IUPACName' id='IUPACName' title='IUPAC name' style="width:100%;">
-		<label for="ChemicalName">Chemical name<a href='#' class='chelp hname'>?</a></label>
+		<label for="ChemicalName">Chemical name<em></em><a href='#' class='chelp hname'>?</a></label>
 		<input class='half-bottom' type="text" name='ChemicalName' id='ChemicalName' title='Chemical name' style="width:100%;">
-		<label for="TradeName">Trivial name<a href='#' class='chelp hname'>?</a></label>
+		<label for="TradeName">Trivial name<em></em><a href='#' class='chelp hname'>?</a></label>
 		<input class='half-bottom' type="text" name='TradeName' id='TradeName' title='Trivial name' style="width:100%;">
-		<label for="IUCLID5_UUID">IUCLID5 UUID<a href='#' class='chelp hi5uuid'>?</a></label>
+		<label for="IUCLID5_UUID">IUCLID5 UUID<em></em><a href='#' class='chelp hi5uuid'>?</a></label>
 		<input class='half-bottom' type="text" name='IUCLID5_UUID' title='IUCLID5 UUID' style="width:100%">
 		<label for="IUCLID5_UUID">Custom Identifier Title<a href='#' class='chelp hcustomidname'>?</a></label>	
 		<input type="text" name='customidname' value='ID' title='Enter custom identifier name (e.g. MyID)' style="width:50%;">
@@ -113,7 +113,7 @@ function useMol() {
 		</div>
 	</div>
 	<div class='row remove-bottom'>
-		<b>SMILES<a href='#' class='chelp hsmiles'>?</a>&nbsp;</b> 
+		<b>SMILES <em></em><a href='#' class='chelp hsmiles'>?</a>&nbsp;</b> 
 		<a href='#' onClick="getSmiles()" title='Get SMILES from the editor'>Get SMILES</a>
 	</div>	
 	<div class='row remove-bottom'>
@@ -121,7 +121,7 @@ function useMol() {
 		<div class='eight columns omega'></div>
 	</div>
 	<div class='row remove-bottom'>
-		<b>MOL file<a href='#' class='chelp hmolfile'>?</a>&nbsp;</b> 
+		<b>MOL file <em></em><a href='#' class='chelp hmolfile'>?</a>&nbsp;</b> 
 		<a href='#' onClick="getMolFile()" title='Get Mol file from the editor'>Get MOL file</a> 
 		<a href='#' onClick="useMol()" title='Use Mol file in the editor'>Use Mol file</a>  
 	</div>

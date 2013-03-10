@@ -20,7 +20,8 @@ import ambit2.rest.algorithm.CatalogResource;
 public class HelpResource extends CatalogResource<String>  {
 	protected List<String> topics = new ArrayList<String>();
 	protected enum categories {
-		createstruc
+		createstruc,
+		uploadstruc
 	}
 	public HelpResource() {
 		super();
