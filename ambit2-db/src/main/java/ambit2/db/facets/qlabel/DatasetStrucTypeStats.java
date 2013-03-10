@@ -82,12 +82,12 @@ public class DatasetStrucTypeStats  extends AbstractFacetQuery<IStructureRecord.
 			
 			record.setCount(rs.getInt(4));
 			String ts = rs.getString("type_structure");
+			record.setProperty(null);
 			for (IStructureRecord.STRUC_TYPE t : IStructureRecord.STRUC_TYPE.values())
 				if (t.toString().equals(ts)) {
 					record.setProperty(label==null?null:t);
 					break;
 				}
-			
 			return record;
 		} catch (Exception x) {
 			record.setValue(x.getMessage());
