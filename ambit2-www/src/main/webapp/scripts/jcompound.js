@@ -11,6 +11,7 @@ function identifiers(opentox, targetEntry) {
 		smiles : [],
 		inchi : [],
 		inchikey : [],
+		i5uuid: [],
 		misc : []
 	};
 
@@ -56,7 +57,9 @@ function identifiers(opentox, targetEntry) {
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChIKey") { 
 	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchikey)<0) lookup.inchikey.push(k);  }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#InChIKey_std") { 
-	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchikey)<0) lookup.inchikey.push(k);  }	        	
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.inchikey)<0) lookup.inchikey.push(k);  }
+	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#IUCLID5_UUID") { 
+	        	if (opentox.feature[k]) {if (jQuery.inArray(k,lookup.i5uuid)<0) lookup.i5uuid.push(k);  }	        	
 	        } else  {
 	        	if (jQuery.inArray(k,lookup.misc)<0) lookup.misc.push(k);   
 	        }	        

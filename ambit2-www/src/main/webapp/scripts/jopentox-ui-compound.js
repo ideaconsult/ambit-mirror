@@ -392,8 +392,9 @@ function identifiers(opentox, columnDefs) {
 	if (opentox.names==null) opentox.names = [];
 	if (opentox.einecs==null) opentox.einecs = [];
 	if (opentox.reachdate==null) opentox.reachdate = [];
+	if (opentox.i5uuid==null) opentox.i5uuid = [];
 	//names
-	var count = [0,0,0,0,6];
+	var count = [0,0,0,0,6,0];
 	//opentox['feature'].sort(function(a,b){return a['order'] -b['order']});
 	
     $.each(opentox.feature, function(k, value) {
@@ -407,6 +408,8 @@ function identifiers(opentox, columnDefs) {
 	        	if (opentox.feature[k]) {opentox.einecs.push(k); count[2]++; columnDefs[4].bVisible=true; }	        
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#REACHRegistrationDate") { 
 	        	if (opentox.feature[k]) {opentox.reachdate.push(k); count[3]++;  columnDefs[6].bVisible=true;}
+	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#IUCLID5_UUID") { 
+	        	if (opentox.feature[k]) {opentox.i5uuid.push(k);  count[5]++; }	        	
 	        } else {
 	        	//console.log(k);
 	        	count[4]++;
