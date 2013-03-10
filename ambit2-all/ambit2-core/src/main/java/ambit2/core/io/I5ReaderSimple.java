@@ -47,6 +47,7 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 								LiteratureEntry.getInstance(I5_REFERENCE, I5_URL));
 	protected ILiteratureEntry reference;
 	protected boolean attachment = false;
+	protected i5_tags parentTag = null;
 	
 	public ILiteratureEntry getReference() {
 		return reference;
@@ -151,11 +152,26 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 		    		    	record.setContent(null);
 		    				for (int i=0; i < reader.getAttributeCount(); i++) 
 		    					try {
-		    						if (i5_refs_attr.documentReferencePK.name().equals(reader.getAttributeLocalName(i)))
-		    							record.setProperty(Property.getI5UUIDInstance(),reader.getAttributeValue(i));
-		    					} catch (Exception x) { }		    				
+		    						if (i5_refs_attr.documentReferencePK.name().equals(reader.getAttributeLocalName(i))) {
+		    							String value = reader.getAttributeValue(i);
+		    							int slashpos = value.indexOf("/");
+		    							if (slashpos>0)
+		    								record.setProperty(Property.getI5UUIDInstance(),value.substring(0,slashpos));
+		    							else
+		    								record.setProperty(Property.getI5UUIDInstance(),value);
+		    						}	
+		    					} catch (Exception x) { }
+		    				parentTag = i5_tags.ReferenceSubstance;		    					
 		    				break;
 		    			}
+		    			case referenceSubstanceInformation: {
+		    				parentTag = i5_tags.referenceSubstanceInformation;
+		    				break;
+		    			}
+		    			case referenceSubstanceStructure: {
+		    				parentTag = i5_tags.referenceSubstanceStructure;
+		    				break;
+		    			}		    			
 		    			default: {
 		    				attachment = false;
 		    			}
@@ -174,6 +190,7 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	            	} catch (Exception x) { continue;}	
 	        		switch (tag) {
 	        		case ReferenceSubstance: { 
+	        			parentTag = null;
 	        			for (int i=0;i < synonyms.size();i++)
 	        				record.setProperty(
 	        						Property.getInstance(AmbitCONSTANTS.NAMES,
@@ -185,7 +202,8 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	        			return true;
 	        		}
 	        		case name : {
-	        			record.setProperty(nameProperty,tmpValue);
+	        			if ((parentTag==null) || (i5_tags.ReferenceSubstance.equals(parentTag)))
+	        				record.setProperty(nameProperty,tmpValue);
 	        			break;				
 	        		}
 	        		case iupacName : {
@@ -209,7 +227,8 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	        			break;
 	        		}
 	        		case synonym: {
-	        			synonyms.add(tmpValue);
+	        			if (synonyms.indexOf(tmpValue)<0)
+	        				synonyms.add(tmpValue);
 	        			break;			
 	        		}
 	        		case smilesNotation: {
@@ -224,6 +243,12 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 	        			record.setSmiles(smi);
 	        			break;			
 	        		}	        
+	        		case referenceSubstanceInformation: {
+	        			parentTag = null;
+	        		}
+	        		case referenceSubstanceStructure: {
+	        			parentTag = null;
+	        		}
 	        		default: {
 	        			tmpValue = null;
 	        		}
