@@ -189,6 +189,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 		if (n==null) return null;
 		n = n.toLowerCase();
 		if (n.startsWith("cas")) return opentox_CAS;
+		if (n.startsWith("casrn")) return opentox_CAS;
 		else if (n.contains("testsubstance_casrn")) 
 			return opentox_CAS;
 		else if (n.contains("species")) return "Species";
@@ -202,9 +203,10 @@ public class Property extends Model implements Serializable, Comparable<Property
 		else if (n.equals("ec_number")) return opentox_EC;
 		else if (n.equals("ec")) return opentox_EC;
 		else if (n.equals("einecs")) return opentox_EC;
-		else if (n.equals("einecs")) return opentox_EC;
 		else if (n.equals("substance number")) return opentox_EC;
 		else if (n.contains("synonym")) return opentox_Name;
+		else if (n.contains("i5uuid")) return opentox_IUCLID5_UUID;
+		else if (n.contains("uuid")) return opentox_IUCLID5_UUID;
 		return null;
 	}
 	public Property(String name) {
@@ -355,5 +357,9 @@ public class Property extends Model implements Serializable, Comparable<Property
 		return opentox_EC.equals(label);
 	}
 	
-	
+	public boolean isI5UUID() {
+		String label = getLabel();
+		if (getName().equals(label)) label = guessLabel(getName());
+		return opentox_IUCLID5_UUID.equals(label);
+	}
 }
