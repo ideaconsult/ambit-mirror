@@ -129,8 +129,6 @@ function createStrucFormValidation(formName) {
 				required : function() {
 					var name1 = $("#ChemicalName").attr("value");
 					var name2 = $("#TradeName").attr("value");
-					console.log(name1);
-					console.log(name2);
 					return ((name1==null) || ($.trim(name1)=='')) && ((name2==null) || ($.trim(name2)=='')); 
 				}
 			},
@@ -138,8 +136,6 @@ function createStrucFormValidation(formName) {
 				required : function() {
 					var name1 = $("#IUPACName").attr("value");
 					var name2 = $("#TradeName").attr("value");
-					console.log(name1);
-					console.log(name2);
 					return ((name1==null) || ($.trim(name1)=='')) && ((name2==null) || ($.trim(name2)=='')); 
 				}
 			},
@@ -147,8 +143,6 @@ function createStrucFormValidation(formName) {
 				required : function() {
 					var name1 = $("#ChemicalName").attr("value");
 					var name2 = $("#IUPACName").attr("value");
-					console.log(name1);
-					console.log(name2);
 					return ((name1==null) || ($.trim(name1)=='')) && ((name2==null) || ($.trim(name2)=='')); 
 				}				
 			},
@@ -227,4 +221,8 @@ function createStrucFormValidation(formName) {
 	$.validator.addMethod('isCASvalid', function (value) { 
         return /^[A-Z]{2}\d{1,2}\s\d{1}[A-Z]{2}$/.test(value); 
         }, 'Please enter a valid CAS RN'); 
+}
+
+function copyToClipboard (text) {
+	  window.prompt ("Copy to clipboard: Ctrl+C, Enter", text);
 }
