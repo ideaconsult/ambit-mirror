@@ -342,3 +342,77 @@ function deleteDataset(uri,statusSelector) {
 		}
 	});	
 }
+
+function lookup(root,title,selector,callback,errorcallback) {
+	$("#error").text("");
+	var value = $(selector).attr('value');
+	if (value===undefined) return;
+	if (value==null) return;
+	if (value=="") return;
+	runSearchURI(root + "/query/compound/search/all?media="+
+					encodeURIComponent("application/json")+
+					"&max=1&search="+encodeURIComponent(value),
+					null,callback,errorcallback);
+}
+
+function lookup64(root,title,selector,callback,errorcallback) {
+	$("#error").text("");
+	var value = $(selector).attr('value');
+	if (value===undefined) return;
+	if (value==null) return;
+	if (value=="") return;
+	runSearchURI(root + "/query/compound/search/all?media="+
+				encodeURIComponent("application/json")+"&max=1&b64search="+
+				encodeURIComponent($.base64.encode(value)),null,callback,errorcallback);
+}
+
+function runSearchURI(sSource,results,callback, errorcallback) {
+	$(results).empty(); 
+	$.ajax( {
+	        "type": "GET",
+	        "url": sSource ,
+	        "dataType": "json", 
+	        "crossDomain": false,  //bloody IE
+	        "contentType" : "application/x-javascript",
+	        "success": function(json) {
+	        	callback(json);
+	        },
+	        "cache": false,
+	        "statusCode" : {
+	            400: function() {
+	              alert("Not found");
+	            },
+	            404: function() {
+		              alert("Not found");
+		        }
+	        },
+	        "error" : function( xhr, textStatus, error ) {
+	        	if (errorcallback!=undefined) errorcalback(xhr, textStatus, error );
+	        }
+	      } );
+}
+
+function runSearchMOL(sSource,results,callback, errorcallback) {
+	$(results).empty(); 
+	$.ajax( {
+	        "type": "GET",
+	        "url": sSource ,
+	        "crossDomain": false,  //bloody IE
+	        "contentType" : "chemical/x-mdl-molfile",
+	        "success": function(mol) {
+	        	callback(mol);
+	        },
+	        "cache": false,
+	        "statusCode" : {
+	            400: function() {
+	              alert("Not found");
+	            },
+	            404: function() {
+		              alert("Not found");
+		        }
+	        },
+	        "error" : function( xhr, textStatus, error ) {
+	        	if (errorcallback!=undefined) errorcalback(xhr, textStatus, error );
+	        }
+	      } );
+}

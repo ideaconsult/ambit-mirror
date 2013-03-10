@@ -22,19 +22,29 @@ To upload a file with chemical structures and properties instead, use <a href="$
   </ul>
   <div id="hcas">
     <p>Enter <a href="http://en.wikipedia.org/wiki/CAS_registry" target=_blank>CAS registry</a> number</p>
-    <a href="${ambit_root}/ui/query?option=auto&search=50-00-0" target="search">Search by CAS 50-00-0</a>
+    Click on <b>Lookup</b> link to retrieve all data available.
+    <br/> 
+    <a href="${ambit_root}/ui/query?option=auto&search=50-00-0" target=_blank>Search by CAS 50-00-0</a>
   </div>
   <div id="heinecs">
     <p>Enter <a href="http://en.wikipedia.org/wiki/European_Commission_number" target=_blank>EC registry number</a></p>
     The European Commission number, or EC number, also known as EC No., EINECS No., and EC#, is a unique seven-digit identifier that is assigned to chemical substances for regulatory purposes within the European Union by the regulatory authorities.
+    <br/>
+        Click on <b>Lookup</b> link to retrieve all data available.
+    <br/> 
     <a href="${ambit_root}/ui/query?option=auto&search=200-001-8" target=_blank>Search by EC 200-001-8</a>
   </div>
   <div id="hiupac">
     <p>Enter IUPAC name</p>
+    Click on <b>Lookup</b> link to retrieve all data available.
+    <br/>
   </div>
   <div id="hinchi">
     <p>Enter <a href="http://en.wikipedia.org/wiki/International_Chemical_Identifier" target=_blank>InChI</a></p>
    	  The IUPAC International Chemical Identifier (InChI) is a textual identifier for chemical substances, designed to provide a standard and human-readable way to encode molecular information and to facilitate the search for such information in databases and on the web.
+   	  <br/>
+   	  Click on <b>Lookup</b> link to retrieve all data available.
+    <br/>
   </div>
   <div id="hinchikey">
     <p>
@@ -45,12 +55,16 @@ To upload a file with chemical structures and properties instead, use <a href="$
   
   <div id="hname">
     <p>Enter Chemical name</p>
+    Click on <b>Lookup</b> link to retrieve all data available.
+    <br/>
     <a href="${ambit_root}/ui/query?option=auto&search=formaldehyde" target=_blank>Search by name "formaldehyde"</a>
   </div>
   <div id="hi5uuid">
     Enter <a href="http://iuclid.eu/" target=_blank>IUCLID5</a> <a href="http://iuclid.eu/index.php?fuseaction=home.downloadsubstances" target=_blank>Reference substance</a> unique identifier (UUID).
     For example ECB5-053aa8c4-d29b-4aa5-b457-5cc3b47f7d8b is the UUID for formaldehyde.
     <br>
+    Click on <b>Lookup</b> link to retrieve all data available.
+    <br/>
     <a href="${ambit_root}/ui/query?option=auto&search=ECB5-053aa8c4-d29b-4aa5-b457-5cc3b47f7d8b" target=_blank>Search by UUID</a>
   </div>
   <div id="hcustomidname">
@@ -58,6 +72,9 @@ To upload a file with chemical structures and properties instead, use <a href="$
   </div>
   <div id="hcustomid">
     Enter Custom identifier value. If a custom identifier is required, please enter the identifier value (e.g. 123456)
+    <br/>
+    Click on <b>Lookup</b> link to retrieve all data available.
+    <br/>
   </div>
   <div id="hsearch">
     Draw
