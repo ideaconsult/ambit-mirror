@@ -9,8 +9,10 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -18,6 +20,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.data.model.Algorithm;
+import ambit2.core.processors.structure.key.CASKey;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.RepositoryWriter;
 import ambit2.rest.structure.CompoundURIReporter;
@@ -100,8 +103,10 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 	protected TaskResult createReference(Connection connection)	throws Exception {
 		final RepositoryWriter writer = new RepositoryWriter();
 		//writer.setPropertiesOnly(isPropertyOnly());
-		//writer.setPropertyKey(getMatcher());
-		//writer.setDataset(dataset);
+		writer.setPropertyKey(new CASKey());
+		SourceDataset dataset = new SourceDataset("Chemical structure registration",LiteratureEntry.getInstance());
+		dataset.setStars(6);
+		writer.setDataset(dataset);
 		writer.setConnection(connection);
 		writer.setCloseConnection(true);
 		try {
