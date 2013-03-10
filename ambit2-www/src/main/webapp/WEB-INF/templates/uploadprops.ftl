@@ -8,6 +8,7 @@ $(document)
 		.ready(
 				function() {
 					$( "#selectable" ).selectable( "option", "distance", 18);
+					loadHelp("${ambit_root}","uploadprops");
 				});
 </script>
 
@@ -54,22 +55,22 @@ $(document)
 	<form action="${ambit_root}/dataset?method=put" id="uploadForm"  method="POST"   ENCTYPE="multipart/form-data">		
 	
 	<div class='row remove-bottom'>
-		<label class='three columns alpha' for="file">File <em>*</em></label>
+		<label class='three columns alpha' for="file">File <a href='#' class='chelp hfile'>?</a><em>*</em></label>
 		<input class='eight columns alpha half-bottom'  type="file" name="file" accept="chemical/x-mdl-sdfile" title='Add new dataset (SDF, MOL, SMI, CSV, TXT, ToxML (.xml) file)' size="60">
 		<div class='five columns omega'></div>
 	</div>
 	<div class='row remove-bottom'>
-		<label class='three columns alpha' for="title">Dataset name</label>
+		<label class='three columns alpha' for="title">Dataset name <a href='#' class='chelp hname'>?</a></label>
 		<input class='eight columns alpha half-bottom' type="text" id='title' value='' name='title' title='Dataset name (dc:title)' size="60">
 		<div class='five columns omega'></div>
 	</div>
 	<div class='row remove-bottom'>
-		<label class='three columns alpha' for="seeAlso">URL</label>
+		<label class='three columns alpha' for="seeAlso">URL <a href='#' class='chelp hurl'>?</a></label>
 		<input class='eight columns alpha half-bottom' type="text" name='seeAlso' title='Related URL (rdfs:seeAlso)' size="60">
 		<div class='five columns omega'></div>
 	</div>		
 	<div class='row remove-bottom'>
-		<label class='three columns alpha' for="match">Match</label>
+		<label class='three columns alpha' for="match">Match <a href='#' class='chelp hmatch'>?</a></label>
 		<select  class='eight columns alpha half-bottom'  name='match'>
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "Match by CAS registry number"' value='CAS' selected>Match by CAS registry number</option>
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "Match by EINECS registry number"' value='EINECS' >Match by EINECS registry number</option>
@@ -88,7 +89,7 @@ $(document)
 	</div>
 			
 	<div class='row remove-bottom'>
-		<label class='three columns alpha'  for="license">License</label>
+		<label class='three columns alpha'  for="license">License <a href='#' class='chelp hlicense'>?</a></label>
 		<select  class='eight columns alpha half-bottom'  name='license'>
 			<option title='License not defined' value='Unknown'>Unknown</option>
 			<option title="Public Domain Dedication and License (PDDL) - 'Public Domain for data/databases'" value='http://www.opendatacommons.org/licenses/pddl/'> http://www.opendatacommons.org/licenses/pddl/ </option>
@@ -111,9 +112,9 @@ $(document)
 </div>
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
-<div class="two columns" style="margin:0;padding:0;" >
-<#include "/help.ftl" >
-</div>
+
+<#include "/chelp.ftl" >
+
 
 </form>
 

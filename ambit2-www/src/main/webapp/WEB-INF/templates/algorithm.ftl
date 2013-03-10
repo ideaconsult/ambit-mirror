@@ -48,6 +48,7 @@ $(document)
 		algorithmAutocomplete(".alguri","${ambit_root}/algorithm","Regression",100);
 		algorithmAutocomplete(".descuri","${ambit_root}/algorithm","DescriptorCalculation",100);
 		modelAutocomplete(".modeluri","${ambit_root}/model",100);
+		loadHelp("${ambit_root}","algorithm");
 	}
 );
 </script>
@@ -99,7 +100,7 @@ $(document)
 <#include "/algorithm_menu.ftl">
 </div>
 
-<div class="thirteen columns remove-bottom" style="padding:0;" >
+<div class="eleven columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
@@ -135,6 +136,8 @@ $(document)
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
+
+<#include "/chelp.ftl" >
 
 </form>
 

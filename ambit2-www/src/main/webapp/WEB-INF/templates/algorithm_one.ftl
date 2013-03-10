@@ -39,7 +39,7 @@
   <#case 'finder'>
     <div id='finder'>
 	<div class='row remove-bottom' id='requiresDataset'>
-		<label class='five columns alpha' for="dataset_uri">Dataset URI</label>
+		<label class='five columns alpha' for="dataset_uri">Dataset URI <a href='#' class='chelp hdataset'>?</a></label>
 		<input class='eight columns alpha half-bottom' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>	    	
@@ -78,7 +78,7 @@
   <#case 'superbuilder'>
   	<div id='superBuilder'>
      <div class='row remove-bottom' >
-		<label class='five columns alpha' for="dataset_uri">Dataset URI<em>*</em></label>
+		<label class='five columns alpha' for="dataset_uri">Dataset URI <em>*</em><a href='#' class='chelp hdataset'>?</a> </label>
 		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset URI' size='100'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>	  
@@ -141,7 +141,7 @@
   <#case 'superservice'>
   	<div  id='superService'>
     <div class='row remove-bottom' >
-		<label class='five columns alpha' for="dataset_uri">Dataset URI</label>
+		<label class='five columns alpha' for="dataset_uri">Dataset URI <a href='#' class='chelp hdataset'>?</a></label>
 		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset URI'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>	  
@@ -174,7 +174,7 @@
     <#break>
   <#case 'selectstructure'>
 	<div class='row remove-bottom' >
-		<label class='five columns alpha' for="dataset_uri">Enter a dataset URI</label>
+		<label class='five columns alpha' for="dataset_uri">Enter a dataset URI <a href='#' class='chelp hdataset'>?</a></label>
 		<input class='eight columns alpha half-bottom dataseturi' type="text" value='' name='dataset_uri' title='Enter dataset uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>		
@@ -323,7 +323,7 @@
   <#default>
 	
 	<div class='row remove-bottom' id='requiresDataset'>
-		<label class='five columns alpha' for="dataset_uri">Enter a dataset URI</label>
+		<label class='five columns alpha' for="dataset_uri">Enter a dataset URI <a href='#' class='chelp hdataset'>?</a></label>
 		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset uri'>
 		<div class='three columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
 	</div>		
