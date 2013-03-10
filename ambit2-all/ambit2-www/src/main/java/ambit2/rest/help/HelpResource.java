@@ -21,7 +21,13 @@ public class HelpResource extends CatalogResource<String>  {
 	protected List<String> topics = new ArrayList<String>();
 	protected enum categories {
 		createstruc,
-		uploadstruc
+		uploadstruc,
+		uploadprops,
+		predict,
+		query,
+		compound,
+		algorithm,
+		model
 	}
 	public HelpResource() {
 		super();
