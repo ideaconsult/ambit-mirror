@@ -88,7 +88,7 @@ function useMol() {
 			<param name="options" value="nohydrogens,polarnitro,nocanonize">
 			You have to enable Java and JavaScript on your machine ! 
 			</applet>
-			
+			<a href='#' class='chelp hdraw'>?</a>
 		</div>
 		<div class='six columns omega'>
 		<label for="CASRN">CAS<em></em><a href='#' class='chelp hcas'>?</a></label>
@@ -103,8 +103,9 @@ function useMol() {
 		<input class='half-bottom' type="text" name='TradeName' id='TradeName' title='Trivial name' style="width:100%;">
 		<label for="IUCLID5_UUID">IUCLID5 UUID<a href='#' class='chelp hi5uuid'>?</a></label>
 		<input class='half-bottom' type="text" name='IUCLID5_UUID' title='IUCLID5 UUID' style="width:100%">
-		<label for="IUCLID5_UUID">Custom Identifier <a href='#' class='chelp hcustomid'>?</a></label>	
-		<input type="text" name='customidname' value='ID' title='Enter custom identifier name (e.g. MyID)' style="width:50%;">	
+		<label for="IUCLID5_UUID">Custom Identifier Title<a href='#' class='chelp hcustomidname'>?</a></label>	
+		<input type="text" name='customidname' value='ID' title='Enter custom identifier name (e.g. MyID)' style="width:50%;">
+		<label for="IUCLID5_UUID">Custom Identifier Value <a href='#' class='chelp hcustomid'>?</a></label>	
 		<input type="text" name='customid' title='Enter custom identifier value' size="80"  style="width:50%;">
 		<br/>
 		<input class='remove-bottom' type='submit' class='submit' value='Submit'>	
@@ -133,7 +134,7 @@ function useMol() {
 		<input class='eight columns alpha half-bottom' type="text" id='InChI_std' value='' name='InChI_std' title='Standard InChI' size="60">
 		<div class='eight columns omega'></div>
 	</div>	
-	<label class='row remove-bottom' for="InChIKey_std">Standard InChI Key<a href='#' class='chelp hinchi'>?</a>&nbsp;</label>	
+	<label class='row remove-bottom' for="InChIKey_std">Standard InChI Key <a href='#' class='chelp hinchikey'>?</a>&nbsp;</label>	
 	<div class='row remove-bottom'>
 		<input class='eight columns alpha half-bottom' type="text" id='InChIKey_std' value='' name='InChIKey_std' title='Standard InChI Key' size="60">
 		<div class='eight columns omega'></div>

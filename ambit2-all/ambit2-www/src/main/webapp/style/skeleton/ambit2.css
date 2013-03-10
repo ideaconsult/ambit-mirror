@@ -145,6 +145,11 @@ a.topLinks {
 	color: #729203;
 }
 
+.chelp {
+	font-size: 0.75em;
+	font-weight: bold italic !important;
+}
+
 .help  a {
 	color: #729203;
 }
