@@ -392,8 +392,7 @@ function runSearchURI(sSource,results,callback, errorcallback) {
 	      } );
 }
 
-function runSearchMOL(sSource,results,callback, errorcallback) {
-	$(results).empty(); 
+function runSearchMOL(sSource,callback, errorcallback) {
 	$.ajax( {
 	        "type": "GET",
 	        "url": sSource ,
