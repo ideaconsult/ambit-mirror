@@ -53,6 +53,24 @@ function searchCallback(json) {
 	var dataEntry = json.dataEntry[0];
 	$("#uri").attr("value",dataEntry.compound.URI);
 	
+	$.each(dataEntry.lookup.smiles, function(index, object) {
+		var val = dataEntry.values[object];
+		if (val!=undefined) $("#SMILES").attr("value",val);
+	});	
+	
+	try {
+		runSearchMOL(dataEntry.compound.URI+"?media="+encodeURIComponent("chemical/x-mdl-molfile"),
+		function(mol) {
+			$("#molfile").text(mol);
+			useMol();
+			getSmiles();
+		},
+		function(xhr, textStatus, error) {
+			$("error").text(error);
+		}
+		);
+	} catch (err) { $("error").text(err); }
+	
     $.each(dataEntry.lookup.cas, function(index, object) {
 		var val = dataEntry.values[object];
 		if (val!=undefined) $("#CASRN").attr("value",val);
@@ -75,14 +93,12 @@ function searchCallback(json) {
 		var val = dataEntry.values[object];
 		if (val!=undefined) $("#IUCLID5_UUID").attr("value",val);
 	});	
+	
     $.each(dataEntry.lookup.inchi, function(index, object) {
 		var val = dataEntry.values[object];
 		if (val!=undefined) $("#InChI_std").attr("value",val);
 	});	
-    $.each(dataEntry.lookup.smiles, function(index, object) {
-		var val = dataEntry.values[object];
-		if (val!=undefined) $("#SMILES").attr("value",val);
-	});	
+
 }
 
 function resetform() {
