@@ -32,7 +32,6 @@ import org.restlet.data.ClientInfo;
 import org.restlet.data.Method;
 import org.restlet.data.Parameter;
 import org.restlet.data.Protocol;
-import org.restlet.data.Reference;
 import org.restlet.engine.security.SslContextFactory;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
@@ -50,10 +49,10 @@ import org.restlet.util.RouteList;
 import org.restlet.util.Series;
 
 import ambit2.base.config.Preferences;
+import ambit2.core.config.Resources;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
-import ambit2.rest.aa.opensso.OpenSSOMethodAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
 import ambit2.rest.aa.opensso.policy.CallablePolicyCreator;
 import ambit2.rest.aa.opensso.users.OpenSSOUserResource;
@@ -76,6 +75,7 @@ import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.facet.DatasetsByNamePrefixResource;
 import ambit2.rest.freemarker.FreeMarkerApplication;
+import ambit2.rest.help.HelpResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.pubchem.CSLSResource;
@@ -114,7 +114,6 @@ import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
-import ambit2.rest.task.WarmupTask;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.ui.UIResource;
 
@@ -346,6 +345,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 */
 		attachStaticResources(router);
 
+		router.attach("/chelp", HelpResource.class);
+		router.attach("/chelp/{key}", HelpResource.class);
 
 	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
