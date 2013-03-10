@@ -22,6 +22,7 @@ $(document)
 			});
 			createStrucFormValidation("#uploadForm");
 			$("#uploadForm").validate();
+			loadHelp("${ambit_root}","createstruc");
 });
 
 function getSmiles() {
@@ -73,7 +74,7 @@ function useMol() {
 </ul>
 </div>
 
-<div class="thirteen columns remove-bottom" style="padding:0;" >
+<div class="eleven columns remove-bottom" style="padding:0;" >
 
 <div class='ui-widget-header ui-corner-top'>&nbsp;Create a new structure</div>
 <div class='ui-widget-content ui-corner-bottom'>	
@@ -90,25 +91,28 @@ function useMol() {
 			
 		</div>
 		<div class='six columns omega'>
-		<label for="CASRN">CAS</label>
-		<input class='half-bottom' type="text" id="CASRN" name='CASRN' title='CASRN' size="15">
-		<label for="EINECS">EINECS</label>
-		<input class='half-bottom' type="text" name='EINECS' title='EINECS' size="15">		
-		<label for="IUPACName">IUPAC name</label>
-		<input class='half-bottom' type="text" name='IUPACName' id='IUPACName' title='IUPAC name' size="80">
-		<label for="ChemicalName">Chemical name</label>
-		<input class='half-bottom' type="text" name='ChemicalName' id='ChemicalName' title='Chemical name' size="80">
-		<label for="TradeName">Trivial name</label>
-		<input class='half-bottom' type="text" name='TradeName' id='TradeName' title='Trivial name' size="80">
-		<label for="IUCLID5_UUID">IUCLID5 UUID</label>
-		<input class='half-bottom' type="text" name='IUCLID5_UUID' title='IUCLID5 UUID' size="80">	
-		<input class='half-bottom' type="text" name='customidname' value='Custom identifier' title='Custom Identifier' size="30">	
-		<input class='half-bottom' type="text" name='customid' title='Custom identifier' size="80">
+		<label for="CASRN">CAS<em></em><a href='#' class='chelp hcas'>?</a></label>
+		<input class='half-bottom' type="text" id="CASRN" name='CASRN' title='CASRN' size="15"  style="width:100%;">
+		<label for="EINECS">EINECS<em></em><a href='#' class='chelp heinecs'>?</a></label>
+		<input class='half-bottom' type="text" name='EINECS' title='EINECS' size="15" style="width:100%;">		
+		<label for="IUPACName">IUPAC name<a href='#' class='chelp hname'>?</a></label>
+		<input class='half-bottom' type="text" name='IUPACName' id='IUPACName' title='IUPAC name' style="width:100%;">
+		<label for="ChemicalName">Chemical name<a href='#' class='chelp hname'>?</a></label>
+		<input class='half-bottom' type="text" name='ChemicalName' id='ChemicalName' title='Chemical name' style="width:100%;">
+		<label for="TradeName">Trivial name<a href='#' class='chelp hname'>?</a></label>
+		<input class='half-bottom' type="text" name='TradeName' id='TradeName' title='Trivial name' style="width:100%;">
+		<label for="IUCLID5_UUID">IUCLID5 UUID<a href='#' class='chelp hi5uuid'>?</a></label>
+		<input class='half-bottom' type="text" name='IUCLID5_UUID' title='IUCLID5 UUID' style="width:100%">
+		<label for="IUCLID5_UUID">Custom Identifier <a href='#' class='chelp hcustomid'>?</a></label>	
+		<input type="text" name='customidname' value='ID' title='Enter custom identifier name (e.g. MyID)' style="width:50%;">	
+		<input type="text" name='customid' title='Enter custom identifier value' size="80"  style="width:50%;">
+		<br/>
 		<input class='remove-bottom' type='submit' class='submit' value='Submit'>	
+		<a href='#' class='chelp hsubmit'>?</a>
 		</div>
 	</div>
 	<div class='row remove-bottom'>
-		<b>SMILES </b> 
+		<b>SMILES<a href='#' class='chelp hsmiles'>?</a>&nbsp;</b> 
 		<a href='#' onClick="getSmiles()" title='Get SMILES from the editor'>Get SMILES</a>
 	</div>	
 	<div class='row remove-bottom'>
@@ -116,7 +120,7 @@ function useMol() {
 		<div class='eight columns omega'></div>
 	</div>
 	<div class='row remove-bottom'>
-		<b>MOL file </b> 
+		<b>MOL file<a href='#' class='chelp hmolfile'>?</a>&nbsp;</b> 
 		<a href='#' onClick="getMolFile()" title='Get Mol file from the editor'>Get MOL file</a> 
 		<a href='#' onClick="useMol()" title='Use Mol file in the editor'>Use Mol file</a>  
 	</div>
@@ -124,12 +128,12 @@ function useMol() {
 		<textarea class='eight columns alpha half-bottom' id='molfile' name='molfile' title='MOL file'></textarea>
 		<div class='eight columns omega'></div>
 	</div>
-	<label class='row remove-bottom' for="InChI_std">Standard InChI</label>	
+	<label class='row remove-bottom' for="InChI_std">Standard InChI<a href='#' class='chelp hinchi'>?</a>&nbsp;</label>	
 	<div class='row remove-bottom'>
 		<input class='eight columns alpha half-bottom' type="text" id='InChI_std' value='' name='InChI_std' title='Standard InChI' size="60">
 		<div class='eight columns omega'></div>
 	</div>	
-	<label class='row remove-bottom' for="InChIKey_std">Standard InChI Key</label>	
+	<label class='row remove-bottom' for="InChIKey_std">Standard InChI Key<a href='#' class='chelp hinchi'>?</a>&nbsp;</label>	
 	<div class='row remove-bottom'>
 		<input class='eight columns alpha half-bottom' type="text" id='InChIKey_std' value='' name='InChIKey_std' title='Standard InChI Key' size="60">
 		<div class='eight columns omega'></div>
@@ -139,6 +143,9 @@ function useMol() {
 </div>
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
+
+<#include "/chelp.ftl" >
+
 
 </form>
 
