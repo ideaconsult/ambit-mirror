@@ -73,6 +73,7 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 		super.setFiles(files);
 		casTransformer = new CASProcessor();
 		int[] count = new int[FileNameMode.values().length];
+		mode = FileNameMode.Name;
 		for (File file: files) {
 			String name = file.getName().toLowerCase();
 			int i5d = name.indexOf(".i5d");
@@ -96,7 +97,7 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 						continue;
 					}
 				} catch (Exception x) {}	
-				if ((mode==null) || FileNameMode.NONE.equals(mode))
+				if (FileNameMode.NONE.equals(mode))
 					count[FileNameMode.NONE.ordinal()]++;
 				else 
 					count[FileNameMode.Name.ordinal()]++;
