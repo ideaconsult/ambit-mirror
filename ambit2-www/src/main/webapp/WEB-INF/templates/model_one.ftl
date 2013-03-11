@@ -36,7 +36,7 @@
 	<div class='row remove-bottom' id='requiresDataset'>
 		<label class='three columns alpha' for="dataset_uri">Dataset URI</label>
 		<input class='eight columns alpha half-bottom dataseturi' type="text" id='dataset_uri' value='' name='dataset_uri' title='Enter dataset uri'>
-		<div class='five columns omega help'>e.g. <a href='${ambit_root}/dataset?max=25' target=_blank>Datasets</a></div>
+		<div class='five columns omega'><a href='#' class='chelp hdataset'>?</a></div>
 	</div>	
 	
 	<div class='row'>
