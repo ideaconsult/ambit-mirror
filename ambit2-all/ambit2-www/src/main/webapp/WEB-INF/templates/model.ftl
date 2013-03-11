@@ -44,6 +44,8 @@ $(document)
 				function() {
 					$( "#selectable" ).selectable( "option", "distance", 18);
 					datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
+					loadHelp("${ambit_root}","model");
+					
 				});
 </script>
 
@@ -94,7 +96,7 @@ $(document)
 <#include "/menu.ftl">
 </div>
 
-<div class="thirteen columns remove-bottom" style="padding:0;" >
+<div class="eleven columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
@@ -132,6 +134,7 @@ $(document)
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 
+<#include "/chelp.ftl" >
 
 </form>
 
