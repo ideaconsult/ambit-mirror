@@ -97,42 +97,42 @@
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
+		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
-				<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
+		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
+		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
+		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
+		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
+		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation algorithms</a></div>
+		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="dataset_service">Dataset service URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='dataset_service' value='' name='dataset_service' title='Enter datset service uri'>
-		<div class='three columns omega help'>Optional, will use <a href='${ambit_root}/dataset' target=_blank>the default</a> if not specified.</div> 
+		<input class='eight columns alpha half-bottom' type="text" id='dataset_service' value='' name='dataset_service' title='Enter dataset service uri'>
+		<div class='three columns omega'><a href='#' class='chelp hdatasetservice'>?</a></div> 
 	</div>			
 	</div>
 	
