@@ -9,6 +9,8 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
 <div id="keys" style="display:none;">
   <ul>
     <li><a href="#hdataset">Dataset</a></li>
+    <li><a href="#hdatasetservice">Dataset service</a></li>
+    <li><a href="#hdescriptor">Descriptors</a></li>
     <li><a href="#hfeature">Features</a></li>
     <li><a href="#htarget">Dependent variable</a></li>
     <li><a href="#halgtypes">Algorithm types</a></li>
@@ -19,6 +21,13 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
     Dataset or compound URI as in <a href="${ambit_root}/dataset?max=100" target=_blank>Datasets list</a>.
     Either enter/paste the URI, or search for dataset by name, by entering first few letters. The field supports autocomplete
     and will show a list of dataset names, if there is a match. The dataset names are case sensitive! 
+  </div>
+  <div id="hdatasetservice">
+  	Dataset service (<a href="http://ambit.sourceforge.net/api_dataset.html" target=_blank>API</a>) determines where the results will be written.
+  	Optional, will use the default <a href='${ambit_root}/dataset' target=_blank>${ambit_root}/dataset</a> if not specified.
+  </div>
+  <div id="hdescriptor">
+  	URI of a <a href='${ambit_root}/algorithm?type=DescriptorCalculation' target=_blank>Descriptor calculation</a>  algorithm.
   </div>
   <div id="hfeature">
     Feature URI as in <a href="${ambit_root}/feature?max=100" target=_blank>Features list</a>.
