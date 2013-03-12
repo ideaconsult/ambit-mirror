@@ -12,7 +12,9 @@
 Query API<a href='#' class='chelp queryapi'>?</a> 
 Demos<a href='#' class='chelp demos'>?</a> 
 Statistics<a href='#' class='chelp stats'>?</a>   
-Applications<a href='#' class='chelp apps'>?</a>     
+Applications<a href='#' class='chelp apps'>?</a>
+Security<a href='#' class='chelp aa'>?</a>
+Admin<a href='#' class='chelp admin'>?</a>
 </div>
 
 <div id="keys" style="display:none;">
@@ -23,6 +25,8 @@ Applications<a href='#' class='chelp apps'>?</a>
     <li><a href="#demos">Demos</a></li>
     <li><a href="#stats">Statistics</a></li>
     <li><a href="#apps">Applications</a></li>
+    <li><a href='#aa' title='Authentication and authorization'>AA</a></li>
+    <li><a href="#admin">Admin</a></li>
   </ul>
   <div id="api">
     	<a href='${ambit_root}/dataset' target='_blank'>Datasets</a> | 
@@ -53,5 +57,15 @@ Applications<a href='#' class='chelp apps'>?</a>
 	<div id='apps'>
 		<a href='http://toxpredict.org' target='_blank'>ToxPredict</a>
    </div>	
+	<div id='aa'>
+		Access to AMBIT web services can be controlled via OpenTox Authentication and Authorization infrastructure. 
+		Security tokens are obtained after log in into a preconfigured OpenAM service.
+		<a href='http://forgerock.com/what-we-offer/open-identity-stack/openam/' target='_blank'>OpenAM</a> |
+		<a href='http://opentox.org/dev/apis/api-1.2/AA' target='_blank'>API</a> |
+		<a href='${ambit_root}/admin/policy' target='_blank'>Manage policies</a> 
+   </div>
+   <div id='admin'>
+   		<a href='${ambit_root}/admin' target='_blank'>Admin tasks</a> 
+   </div>   
 </div>      
 

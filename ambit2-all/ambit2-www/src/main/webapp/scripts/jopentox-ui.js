@@ -470,6 +470,7 @@ function defineDatasetsTable(root,url) {
    		                   sOut += " | <a href='"+o.aData.URI +"/compounds'>Compounds only</a>";
    		                   sOut += " | <a href='"+o.aData.URI +"/feature'>Columns</a>";
    		                   sOut += " | <a href='"+o.aData.URI +"/metadata'>Metadata</a>";
+   		                   sOut += " | <a href='"+root +"/admin/policy?search="+ o.aData.URI  + "' target='policy'>OpenAM access rights</a>";
     		               return sOut;
     		          }
     		  		},   
