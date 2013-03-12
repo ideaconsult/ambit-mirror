@@ -24,6 +24,7 @@
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
+<script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
 
 <#if algid??>
 	<script type='text/javascript'>
@@ -45,10 +46,15 @@ $(document)
 		$( "#selectable" ).selectable( "option", "distance", 18);
 		datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 		featureAutocomplete(".featureuri",".dataseturi","${ambit_root}/feature",10);
-		algorithmAutocomplete(".alguri","${ambit_root}/algorithm","Regression",100);
+		algorithmAutocomplete(".alguri","${ambit_root}/algorithm","Supervised",100);
 		algorithmAutocomplete(".descuri","${ambit_root}/algorithm","DescriptorCalculation",100);
 		modelAutocomplete(".modeluri","${ambit_root}/model",100);
 		loadHelp("${ambit_root}","algorithm");
+		
+				
+		var purl = $.url();
+		$('#dataset_uri').attr('value',purl.param('dataset_uri')===undefined?'':purl.param('dataset_uri'));
+		$('#model_uri').attr('value',purl.param('model_uri')===undefined?'':purl.param('model_uri'));
 	}
 );
 </script>

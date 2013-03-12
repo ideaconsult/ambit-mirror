@@ -15,6 +15,7 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
     <li><a href="#htarget">Dependent variable</a></li>
     <li><a href="#halgtypes">Algorithm types</a></li>
     <li><a href="#hlearning">Learning algorithm</a></li>
+    <li><a href="#hmodel">Models</a></li>
     <li><a href="#hwhat"></a></li>
   </ul>
   <div id="hdataset">
