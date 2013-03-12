@@ -140,6 +140,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String identifierPass = "aa.local.admin.pass";
 	static final String adminAAEnabled = "aa.admin";
 	static final String compoundAAEnabled = "aa.compound";
+	static final String featureAAEnabled = "aa.feature";
 	static final String modelAAEnabled = "aa.model"; //ignored
 	static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
 	static final String configProperties = "ambit2/rest/config/config.prop";
@@ -258,7 +259,18 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		
 		/** /feature */
 		FeaturesRouter featuresRouter = new FeaturesRouter(getContext());
-		router.attach(PropertyResource.featuredef,createProtectedResource(featuresRouter,"feature"));		
+		
+		
+		if (openToxAAEnabled) {
+			if (protectFeatureResource())
+				router.attach(PropertyResource.featuredef,createProtectedResource(featuresRouter,"feature"));
+			else {
+				Filter cauthN = new OpenSSOAuthenticator(getContext(),false,"opentox.org",new OpenSSOVerifierSetUser(false));
+				cauthN.setNext(featuresRouter);		
+				router.attach(PropertyResource.featuredef,cauthN);
+			}
+		} else 	router.attach(PropertyResource.featuredef,featuresRouter);
+		
 
 		//Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
 		//Filter openssoAuthz = new OpenSSOAuthorizer();
@@ -854,6 +866,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		try {
 			String aacompound = getProperty(compoundAAEnabled,ambitProperties);
 			return aacompound==null?null:Boolean.parseBoolean(aacompound);
+		} catch (Exception x) {return false; }
+	}
+	
+	protected synchronized boolean protectFeatureResource()  {
+		try {
+			String aafeature = getProperty(featureAAEnabled,ambitProperties);
+			return aafeature==null?null:Boolean.parseBoolean(aafeature);
 		} catch (Exception x) {return false; }
 	}	
 	protected synchronized String getProperty(String name,String config)  {
