@@ -28,7 +28,6 @@ import ambit2.db.chart.BarChartGeneratorDataset;
 import ambit2.db.chart.FingerprintHistogramDataset;
 import ambit2.db.chart.HistogramChartGenerator;
 import ambit2.db.chart.PieChartGenerator;
-import ambit2.db.chart.PieChartGeneratorDataset;
 import ambit2.db.chart.PropertiesChartGenerator;
 import ambit2.db.search.StoredQuery;
 import ambit2.rest.DBConnection;
@@ -176,7 +175,7 @@ public class ChartResource extends ProtectedResource {
     		case pie: {
     			Iterator<Property> i = profile.getProperties(true);
     			while (i.hasNext()) {
-	    			PieChartGenerator chart = new PieChartGeneratorDataset();
+	    			PieChartGenerator<ISourceDataset> chart = new PieChartGenerator<ISourceDataset>();
 	    			chart.setProperty(i.next());    
 	    			chart.setConnection(connection);
 	    			chart.setLegend(legend);
