@@ -87,6 +87,7 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 				document.getElementById(statusDOM).src = imgReady;
 				document.getElementById(resultDOM).style.display = 'inline';
 				document.getElementById(statusDOM).style.display = 'inline';
+				document.getElementById(resultDOM).target = null;
 				if (request.responseText.indexOf("register/notify")>=0) {
 					//ok, redundant, but just in case 
 					window.location.href = request.responseText; 
@@ -99,7 +100,9 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 				break;
 			case 201:
 				taskURI = request.responseText; // and then fall down
+				document.getElementById(resultDOM).target = null;
 			case 202:
+				document.getElementById(resultDOM).target = null;
 				document.getElementById(resultDOM).innerHTML =  getResponseTitle(request,"Waiting ...");
 				document.getElementById(resultDOM).href = request.responseText;
 				var taskTimer = window.setTimeout(function() {
@@ -111,13 +114,25 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 				break;
 			case 500: 
 				document.getElementById(resultDOM).innerHTML = getResponseTitle(request,request.status + " " + request.statusText );
-				document.getElementById(resultDOM).href = request.responseText;
+				document.getElementById(resultDOM).href = taskURI+"?media=text/n3";
+				document.getElementById(resultDOM).target = "error";
 				document.getElementById(statusDOM).src = imgError;
 				document.getElementById(resultDOM).style.display = 'inline';
 				document.getElementById(statusDOM).style.display = 'inline';				
 				break;
+			case 502: 
+				console.log(request.responseText);
+				document.getElementById(resultDOM).innerHTML = getResponseTitle(request,request.status + " " + request.statusText );
+				document.getElementById(resultDOM).href = taskURI+"?media=text/n3";
+				document.getElementById(resultDOM).target = "error";
+				document.getElementById(statusDOM).src = imgError;
+				document.getElementById(resultDOM).style.display = 'inline';
+				document.getElementById(statusDOM).style.display = 'inline';				
+				break;				
 			default:
 				document.getElementById(resultDOM).innerHTML = getResponseTitle(request,request.status + " " + request.statusText);
+				document.getElementById(resultDOM).href = taskURI+"?media=text/n3";
+				document.getElementById(resultDOM).target = "error";
 				document.getElementById(statusDOM).src = imgError;
 				document.getElementById(resultDOM).style.display = 'inline';
 				document.getElementById(statusDOM).style.display = 'inline';

@@ -68,7 +68,7 @@ public class AmbitStatusService extends StatusService {
 						"<div class=\"ui-widget-header ui-corner-top\"><p>Error code <a href='%s' target='help'>%d</a>&nbsp;%s</p></div>\n"+
 						"<div class=\"ui-widget-content ui-corner-bottom \">\n"+
 						"<p>%s</p><p>"+
-						"<a href=\"javascript:toggleDiv('%s');\" style=\"background-color: #fff; padding: 5px 10px;\">Details</a>\n"+	
+						"<a href=\"$('#%s').toggle();\" style=\"background-color: #fff; padding: 5px 10px;\">Details</a>\n"+	
 						"</p>\n"+
 						"<div class=\"ui-widget\" style='display: none;' id='details'><p>%s</p></div>\n"+
 						"</div></div>\n",
