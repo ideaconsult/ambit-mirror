@@ -1,6 +1,14 @@
 <#include "/html.ftl">
 <head>
   <#include "/header.ftl">
+  <script type='text/javascript'>
+
+$(document)
+		.ready(
+				function() {
+						loadHelp("${ambit_root}","about");
+				});
+</script>
 </head>
 <body>
 
@@ -110,12 +118,8 @@
 		</div>
 		<!-- Right column and footer
 		================================================== -->
-<div class="two columns" style="margin:0;padding:0;" >
-<div class='help'>
-<a href='${ambit_root}/help'>Help</a><br>
-<a href='http://ambit.sf.net' title='AMBIT @ sourceforge.net' target='_blank'>ambit.sf.net</a>
-</div>
-</div>
+
+<#include "/chelp.ftl" >
 
 <div class='row add-bottom'>&nbsp;</div>
 <#include "/footer.ftl" >
