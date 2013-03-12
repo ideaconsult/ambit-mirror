@@ -15,6 +15,7 @@ import org.jfree.data.jdbc.JDBCPieDataset;
 
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.exceptions.DbAmbitException;
 
@@ -23,7 +24,7 @@ import ambit2.db.exceptions.DbAmbitException;
  * @author nina
  *
  */
-public abstract class PieChartGenerator<T extends ISourceDataset> extends ChartGenerator<T> {
+public class PieChartGenerator<T extends ISourceDataset> extends ChartGenerator<T> {
 	protected Property property;
 	public Property getProperty() {
 		return property;
@@ -46,9 +47,28 @@ public abstract class PieChartGenerator<T extends ISourceDataset> extends ChartG
 	 */
 	private static final long serialVersionUID = -4301713904733096802L;
 	
-	protected abstract int getID(T target);
-	protected abstract String getSQL();
+	protected int getID(ISourceDataset target) {
+		return target.getID();
+	}
 	
+	
+	protected static final String sql_query = 
+		"SELECT ifnull(value_num,value) as v,count(distinct(property_values.idchemical)) as num_chemicals\n"+
+		"FROM query_results join property_values using(idstructure) " +
+		"left join property_string using(idvalue_string) join properties using(idproperty)\n"+
+		"where idproperty=%d and idquery=%d\n"+
+		"group by v\n";	
+	
+	protected static final String sql_dataset = 
+		"SELECT ifnull(value_num,value) as v,count(distinct(property_values.idchemical)) as num_chemicals\n"+
+		"FROM struc_dataset join property_values using(idstructure) " +
+		"left join property_string using(idvalue_string) join properties using(idproperty)\n"+
+		"where idproperty=%d and id_srcdataset=%d\n"+
+		"group by v\n";		
+	
+	protected String getSQL(ISourceDataset target) {
+		return target instanceof SourceDataset?sql_dataset:sql_query;
+	}
 	public BufferedImage process(T target) throws AmbitException {
 		  if (property == null) throw new AmbitException("Property not defined");
 		  JFreeChart pieChart = null;
@@ -56,7 +76,7 @@ public abstract class PieChartGenerator<T extends ISourceDataset> extends ChartG
 	      try
 	      {
 	         PieDataset pieDataset =  new JDBCPieDataset(getConnection(),
-	        		 String.format(getSQL(),property.getId(),getID(target))); 
+	        		 String.format(getSQL(target),property.getId(),getID(target))); 
 	         
 	         
 	         pieChart =

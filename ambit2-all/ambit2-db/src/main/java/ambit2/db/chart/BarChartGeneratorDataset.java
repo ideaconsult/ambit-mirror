@@ -42,7 +42,7 @@ public class BarChartGeneratorDataset extends BarChartGenerator<ISourceDataset> 
 	}
 
 	protected String getChartTitle(ISourceDataset target) {
-		return String.format("Dataset %s",target.getName()==null?target.getID():target.getName());
+		return "";//String.format("Dataset %s",target.getName()==null?target.getID():target.getName());
 	}
 	
 	public BufferedImage process(ISourceDataset target) throws AmbitException {
@@ -105,4 +105,5 @@ public class BarChartGeneratorDataset extends BarChartGenerator<ISourceDataset> 
 		return String.format(sql,propertyX.getId(),getID(target)); 
 	}
 
+	
 }
