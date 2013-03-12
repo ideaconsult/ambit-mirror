@@ -15,10 +15,10 @@
 
 	<div class='row remove-bottom'>
 		<label class='four columns alpha' for="model_training">Training dataset <a href='#' class='chelp hdataset'>?</a></label>
-		<a class='eight columns alpha half-bottom' target=_blank href='#' id='model_training'>N/A</a>
+		<a class='eight columns alpha half-bottom' title='Click to browse the dataset' target=_blank href='#' id='model_training'>N/A</a>
 		<div class='four columns omega'>
-			<a href="#" onClick="self.location='${ambit_root}/algorithm/superbuilder?dataset_uri='+$(model_training).text();">
-			Build another model with this dataset</a>
+			<a href="#" title='Build another model with this dataset' onClick="self.location='${ambit_root}/algorithm/superbuilder?dataset_uri='+$(model_training).text();">
+			Build another model</a>
 		</div>
 	</div>	
 	
@@ -69,3 +69,30 @@
 			</#if>
 		</div>
 	</div>
+
+	<div class='row remove-bottom' >
+		<label class='four columns alpha' for="dataset_uri">
+		Scatter plots <a href='#' class='chelp hchart'>?</a>
+		<br>
+		<a href='#' onClick="loadChart('${ambit_root}','#dataset_uri','#vdependent','#vpredicted','#chart');">Observed / Predicted </a> |
+		<a href='#' onClick="loadChart('${ambit_root}','#dataset_uri','#vindependent','#vdependent','#chart');">X / Observed </a> |
+		<a href='#' onClick="loadChart('${ambit_root}','#dataset_uri','#vindependent','#vpredicted','#chart');">X / Predicted </a>		
+		<hr class='remove-bottom'/>
+		Histograms <a href='#' class='chelp hchart'>?</a>
+		<br/>
+		<a href='#' onClick="loadHistogramChart('${ambit_root}','#dataset_uri','#vindependent','#chart');">X </a> | 
+		<a href='#' onClick="loadHistogramChart('${ambit_root}','#dataset_uri','#vdependent','#chart');">Observed </a> |
+		<a href='#' onClick="loadHistogramChart('${ambit_root}','#dataset_uri','#vpredicted','#chart');">Predicted </a>		
+		<hr class='remove-bottom'/>
+		Pie chart <a href='#' class='chelp hchart'>?</a>
+		<br/>
+		<a href='#' onClick="loadPieChart('${ambit_root}','#dataset_uri','#vindependent','#chart');">X </a>
+		<br/>
+		<a href='#' onClick="loadPieChart('${ambit_root}','#dataset_uri','#vdependent','#chart');">Observed </a>
+		<br/>
+		<a href='#' onClick="loadPieChart('${ambit_root}','#dataset_uri','#vpredicted','#chart');">Predicted </a>
+		</label>
+		<div class='twelve columns alpha half-bottom' >
+		<img src='' id='chart'>		
+		</div>
+	</div>		

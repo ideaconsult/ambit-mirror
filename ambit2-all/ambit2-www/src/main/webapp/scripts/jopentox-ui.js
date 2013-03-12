@@ -474,7 +474,7 @@ function defineDatasetsTable(root,url) {
    		                   sOut += " | <a href='"+o.aData.URI +"/feature'>Columns</a>";
    		                   sOut += " | <a href='"+o.aData.URI +"/metadata'>Metadata</a>";
    		                   sOut += " | <a href='"+root +"/admin/policy?search="+ o.aData.URI  + "' target='policy'>OpenAM access rights</a>";
-   		                   sOut += " | <a href='"+root +"/algorithm/superservice?dataset_uri="+ o.aData.URI  + "' target='predict'>Predict</a>";
+   		                   //sOut += " | <a href='"+root +"/algorithm/toxtreecramer?dataset_uri="+ o.aData.URI  + "' target='predict'>Predict</a>";
    		                   sOut += " | <a href='"+root +"/algorithm/superbuilder?dataset_uri="+ o.aData.URI  + "' target='build'>Build model</a>";
     		               return sOut;
     		          }
@@ -829,3 +829,27 @@ function loadFeatureList(featureLookup,selectTag,maxhits) {
     });
   
 }	
+
+function loadChart(root,datasetselector,xselector,yselector,chartselector) {
+	if ($(datasetselector).attr("value")=="") alert("No dataset defined!");
+	else {
+	var uri = root + "/chart/xy?dataset_uri="+encodeURIComponent($(datasetselector).attr("value"))+"&feature_uris[]="+encodeURIComponent($(xselector).val())+"&feature_uris[]="+encodeURIComponent($(yselector).val());
+	$(chartselector).attr('src',uri);
+	}
+}
+
+function loadPieChart(root,datasetselector,xselector,chartselector) {
+	if ($(datasetselector).attr("value")=="") alert("No dataset defined!");
+	else {	
+	var uri = root + "/chart/pie?dataset_uri="+encodeURIComponent($(datasetselector).attr("value"))+"&feature_uris[]="+encodeURIComponent($(xselector).val());
+	$(chartselector).attr('src',uri);
+	}
+}
+
+function loadHistogramChart(root,datasetselector,xselector,chartselector) {
+	if ($(datasetselector).attr("value")=="") alert("No dataset defined!");
+	else {
+	var uri = root + "/chart/histogram?w=650&h=250&dataset_uri="+encodeURIComponent($(datasetselector).attr("value"))+"&feature_uris[]="+encodeURIComponent($(xselector).val());
+	$(chartselector).attr('src',uri);
+	}
+}
