@@ -16,7 +16,7 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
     <li><a href="#halgtypes">Algorithm types</a></li>
     <li><a href="#hlearning">Learning algorithm</a></li>
     <li><a href="#hmodel">Models</a></li>
-    <li><a href="#hwhat"></a></li>
+    <li><a href="#hwhat"> </a></li>
   </ul>
   <div id="hdataset">
     Dataset or compound URI as in <a href="${ambit_root}/dataset?max=100" target=_blank>Datasets list</a>.
@@ -42,18 +42,23 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
     in this page means selecting a variable to predict.
   </div>    
   <div id="halgtypes">
-  	<ul>
-	<li>Data processing algorithms</li>
-	<li>Algorithms generating certain values, based on chemical structure (e.g. descriptor calculation)</li>
-	<li>Data preprocessing (e.g. Principal component analysis, feature selection)</li>
-	<li>Structure processing (e.g. structure optimization)</li>
-	<li>Algorithms, relating set of structures to another set of structures (e.g. similarity search or metabolite generation)</li>
-	<li>Machine learning algorithms</li>
-	<li>Supervised (e.g. Regression, Classification)</li>
-	<li>Unsupervised (e.g. Clustering )</li>
-	<li>Prediction algorithms, defined by experts (e.g. series of structural alerts, defined by human experts , not derived by learning algorithms)</li>
-	<li>Applicability domain algorithms</li>
-	</ul>
+	Algorithms generating certain values, based on chemical structure (Descriptor calculation)
+	<br/><br/>
+	Data preprocessing (e.g. Principal component analysis, feature selection)
+	<br/><br/>
+	Structure processing (e.g. structure optimization)
+	<br/><br/>
+	Algorithms, relating set of structures to another set of structures (e.g. similarity search or metabolite generation)
+	<br/><br/>
+	Machine learning algorithms
+	<br/><br/>
+	Supervised (e.g. Regression, Classification)
+	<br/><br/>
+	Unsupervised (e.g. Clustering )
+	<br/><br/>
+	Prediction algorithms, defined by experts (e.g. series of structural alerts, defined by human experts , not derived by learning algorithms)
+	<br/><br/>
+	Applicability domain algorithms
   </div>
   <div id="hwhat">
     Algorithm services accept a dataset URI in order to build a model or to process the dataset (e.g.  descriptor values).

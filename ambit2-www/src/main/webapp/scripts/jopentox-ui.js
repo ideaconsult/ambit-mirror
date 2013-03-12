@@ -392,6 +392,9 @@ function renderModel(entry,root,err) {
 		root + "/compound' target='compound'>compounds</a>." +
 		"The result is a dataset, identified by a <a href='"  + root + "/dataset' target='dataset'>dataset URI</a>.");
 
+	loadFeatureList(entry.URI+"/predicted","#vpredicted",100);
+	loadFeatureList(entry.URI+"/independent","#vindependent",100);
+	loadFeatureList(entry.URI+"/dependent","#vdependent",100);
 	
 }
 
@@ -699,6 +702,7 @@ function featureAutocomplete(id,iddataset,featureroot,maxhits) {
 	            url: featureLookup,
 	            dataType: "json",
 	            data: {
+	              media:"application/json",
 	              max: maxhits,
 	              search: "^"+request.term
 	            },
@@ -730,6 +734,7 @@ function algorithmAutocomplete(id,algroot,algtype,maxhits) {
 	            url: algroot,
 	            dataType: "json",
 	            data: {
+	              media:"application/json",
 	              max: maxhits,
 	              //search: "^"+request.term,
 	              type: algtype
@@ -775,6 +780,7 @@ function modelAutocomplete(id,modelroot,algtype,maxhits) {
 	            url: modelroot,
 	            dataType: "json",
 	            data: {
+	              media:"application/json",
 	              max: maxhits,
 	              search: "^"+request.term
 	            },
@@ -795,3 +801,31 @@ function modelAutocomplete(id,modelroot,algtype,maxhits) {
 		    }       
 	});
 }
+/**
+ * Features list box
+ * @param root
+ * @param selectTag
+ * @param allelesTag
+ */
+function loadFeatureList(featureLookup,selectTag,maxhits) {
+	  //clear the list	
+  //$(selectTag).html("");
+	  //get all features
+  
+  $.ajax({
+      url: featureLookup,
+      dataType: "json",
+      data: {
+        media:"application/json",
+        max: maxhits
+      },
+      success: function( data ) {
+    	  $.map( data.feature, function( item , index) {
+    		  $("<option value='" + index + "'>" + item.title + "&nbsp;" +item.units + "</option>").appendTo(selectTag);
+        	  return item.title;
+          }
+        );
+      }
+    });
+  
+}	
