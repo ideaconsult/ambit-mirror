@@ -8,6 +8,13 @@
 <#if modelid??>
 	<script type='text/javascript'>
 		var model = readModel("${ambit_root}","${ambit_request_json}");
+		$(document)
+		.ready(
+				function() {
+					//featureAutocomplete(".featureuri",null,"${ambit_root}/model/${modelid}/independent",100);
+					//featureAutocomplete(".featureuri",null,"${ambit_root}/model/${modelid}/dependent",10);
+					featureAutocomplete(".predicteduri",null,"${ambit_root}/model/${modelid}/predicted",10);
+				});
 	</script>
 <#else>
 	<script type='text/javascript'>

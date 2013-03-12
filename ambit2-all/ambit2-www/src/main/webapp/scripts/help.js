@@ -11,7 +11,7 @@ function loadHelp(root,topic) {
 			var key = $(value.innerHTML).attr('href');
 		    var content = $(key).html();
 		    var title = $(value).text();
-		    key = key.replace('#','');
+		    try {key = key.replace('#','');} catch (err) {}
 		    $('a.chelp.'+key)
 			 .attr('title','Help: '+key)
 			 .html('<span id="info-link" class="ui-icon ui-icon-help" style="display: inline-block;"></span>')

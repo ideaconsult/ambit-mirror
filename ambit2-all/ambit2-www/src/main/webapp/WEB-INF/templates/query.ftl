@@ -23,8 +23,8 @@
 
 	$(function() {
 		initSearchForm();
-		initTable("model",null,'${ambit_root}/model?max=20','#models',"models","model_uri[]",_ambit.selectedModels,"selectModel");
-		initTable("dataset",'${ambit_root}','${ambit_root}/dataset?max=20','#datasets',"datasets","dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
+		initTable("model",null,'${ambit_root}/model?max=50','#models',"models","model_uri[]",_ambit.selectedModels,"selectModel");
+		initTable("dataset",'${ambit_root}','${ambit_root}/dataset?max=50','#datasets',"datasets","dataset_uri[]",_ambit.selectedDatasets,"selectDataset");
 		$("#searchform").validate();
 	});	
 	
