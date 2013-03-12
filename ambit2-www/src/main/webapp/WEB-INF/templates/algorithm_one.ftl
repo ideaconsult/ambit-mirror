@@ -147,27 +147,27 @@
     <div class='row remove-bottom' >
 		<label class='five columns alpha' for="model_uri">Model URI</label>
 		<input class='eight columns alpha half-bottom modeluri' type="text" id='model_uri' value='' name='model_uri' title='Enter model uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/model' target=_blank>Models</a></div>
+		<div class='three columns omega'><a href='#' class='chelp hmodel'>?</a></div>
 	</div>		
     <div class='row remove-bottom' >
 		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm' target=_blank>Algorithms</a></div>
+		<div class='three columns omega'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>		
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
-		<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm' target=_blank>Algorithms</a></div>
+		<div class='three columns omega'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri' value='' name='algorithm_uri' title='Enter algorithm uri'>
-				<div class='three columns omega help'>e.g. <a href='${ambit_root}/algorithm' target=_blank>Algorithms</a></div>
+		<div class='three columns omega'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="dataset_service">Dataset service URI</label>
-		<input class='eight columns alpha half-bottom' type="text" id='dataset_service' value='' name='dataset_service' title='Enter datset service uri'>
-		<div class='three columns omega help'>Optional, will use <a href='${ambit_root}/dataset' target=_blank>the default</a> if not specified.</div>
+		<input class='eight columns alpha half-bottom' type="text" id='dataset_service' value='' name='dataset_service' title='Enter dataset service uri'>
+		<div class='three columns omega'><a href='#' class='chelp hdatasetservice'>?</a></div>
 	</div>		
 	</div>
     <#break>

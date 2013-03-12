@@ -471,6 +471,8 @@ function defineDatasetsTable(root,url) {
    		                   sOut += " | <a href='"+o.aData.URI +"/feature'>Columns</a>";
    		                   sOut += " | <a href='"+o.aData.URI +"/metadata'>Metadata</a>";
    		                   sOut += " | <a href='"+root +"/admin/policy?search="+ o.aData.URI  + "' target='policy'>OpenAM access rights</a>";
+   		                   sOut += " | <a href='"+root +"/algorithm/superservice?dataset_uri="+ o.aData.URI  + "' target='predict'>Predict</a>";
+   		                   sOut += " | <a href='"+root +"/algorithm/superbuilder?dataset_uri="+ o.aData.URI  + "' target='build'>Build model</a>";
     		               return sOut;
     		          }
     		  		},   
@@ -659,7 +661,7 @@ function datasetAutocomplete(id,datasetroot,maxhits) {
 	        },
 	        minLength: 2,
 	        open: function() {
-		        $('.ui-autocomplete').css('width', '300px');
+		        $('.ui-autocomplete').css('width', '450px');
 		    } 	        
 	        /*
 	        select: function( event, ui ) {
@@ -712,7 +714,7 @@ function featureAutocomplete(id,iddataset,featureroot,maxhits) {
 	        },
 	        minLength: 1,
 	        open: function() {
-	        	  $('.ui-autocomplete').css('width', '300px');
+	        	  $('.ui-autocomplete').css('width', '450px');
 		    }       
 	});
 }
@@ -744,7 +746,7 @@ function algorithmAutocomplete(id,algroot,algtype,maxhits) {
 	        },
 	        minLength: 1,
 	        open: function() {
-	        	  $('.ui-autocomplete').css('width', '300px');
+	        	  $('.ui-autocomplete').css('width', '450px');
 		    }       
 	});
 }
