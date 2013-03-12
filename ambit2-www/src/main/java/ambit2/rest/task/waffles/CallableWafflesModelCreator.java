@@ -85,7 +85,7 @@ public class CallableWafflesModelCreator<USERID> extends CallableModelCreator<Fi
 	
 	@Override
 	protected TaskResult createReference(Connection connection) throws Exception {
-		File trainingData = File.createTempFile("waffles_train_", ".arff");
+		File trainingData = File.createTempFile("wfltrain_", ".arff");
 		trainingData.deleteOnExit();
 		Instances instances = ((RDFInstancesParser)batch).getInstances();
 		instances.deleteAttributeAt(0);
@@ -131,7 +131,7 @@ public class CallableWafflesModelCreator<USERID> extends CallableModelCreator<Fi
 		UpdateExecutor<CreateModel> x = new UpdateExecutor<CreateModel>();
 		try {
 			model = createModel();
-			trainingData.delete();
+			//trainingData.delete();
 			CreateModel update = new CreateModel(model);
 			
 			x.setConnection(connection);

@@ -133,7 +133,10 @@ public class ShellWafflesLearn extends ShellWaffles {
 		in.put(WafflesLearnOption.dataset.name(), dataset.getAbsolutePath());
 		in.put(WafflesLearnOption.data_opts.name(), "-ignore 0");
 		Properties out = runShell(in);
-		return new File(out.getProperty(getOutProperty()));
+		File file = new File(out.getProperty(getOutProperty()));
+		file.deleteOnExit();
+		return file;		
+
 	}
 	
 
@@ -154,6 +157,8 @@ public class ShellWafflesLearn extends ShellWaffles {
 		in.put(WafflesLearnOption.dataset.name(), dataset.getAbsolutePath());
 		in.put(WafflesLearnOption.data_opts.name(), dataOptions);
 		Properties out = runShell(in);
-		return new File(out.getProperty(getOutProperty()));
+		File file = new File(out.getProperty(getOutProperty()));
+		file.deleteOnExit();
+		return file;
 	}
 }

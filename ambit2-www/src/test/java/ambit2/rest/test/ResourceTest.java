@@ -66,6 +66,8 @@ public abstract class ResourceTest extends DbUnitTest {
         context.getParameters().add(Preferences.PORT, getPort());
         context.getParameters().add(Preferences.HOST, getHost());
         context.getParameters().add(AmbitApplication.WARMUP_ENABLED, "false");
+        context.getParameters().add(AmbitApplication.LOCAL_AA_ENABLED, "false");
+        context.getParameters().add(AmbitApplication.OPENTOX_AA_ENABLED, "false");
         
         // Create a component
         component = new AmbitComponent(context);
