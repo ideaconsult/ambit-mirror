@@ -27,7 +27,8 @@ public class HelpResource extends CatalogResource<String>  {
 		query,
 		compound,
 		algorithm,
-		model
+		model,
+		task
 	}
 	public HelpResource() {
 		super();

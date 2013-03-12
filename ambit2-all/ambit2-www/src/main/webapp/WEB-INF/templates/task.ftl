@@ -23,6 +23,7 @@ $(document)
 		.ready(
 				function() {
 					$( "#selectable" ).selectable( "option", "distance", 18);
+					loadHelp("${ambit_root}","task");
 				});
 </script>
 
@@ -94,9 +95,8 @@ $(document)
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
-<div class="two columns" style="margin:0;padding:0;" >
-<#include "/help.ftl" >
-</div>
+<#include "/chelp.ftl" >
+
 
 </form>
 
