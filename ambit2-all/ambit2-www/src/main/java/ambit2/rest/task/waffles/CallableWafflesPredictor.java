@@ -35,7 +35,7 @@ public class CallableWafflesPredictor<USERID> extends CallableModelPredictor<Fil
 		dataset_service = reference.toString().substring(0,pos+9);
 		
 		//todo fallback to RDF if arff is not available
-		files[0] = File.createTempFile("waffles_input_",".arff");
+		files[0] = File.createTempFile("wflinput_",".arff");
 		files[0].deleteOnExit();
 		HttpURLConnection uc=null;
 		try {
@@ -46,6 +46,7 @@ public class CallableWafflesPredictor<USERID> extends CallableModelPredictor<Fil
 		} catch (Exception x) {
 			throw x;
 		} finally {
+			try { if (uc != null) uc.getInputStream().close(); } catch (Exception x) {}
 			try { if (uc != null) uc.disconnect(); } catch (Exception x) {}
 		}
 		

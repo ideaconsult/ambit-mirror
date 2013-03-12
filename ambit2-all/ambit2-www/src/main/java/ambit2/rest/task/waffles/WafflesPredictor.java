@@ -33,7 +33,8 @@ public class WafflesPredictor extends ModelPredictor<File,File> {
 	@Override
 	public Object predict(File dataset) throws AmbitException {
 		try {
-			File results = File.createTempFile("waffles_results_",".arff");
+			File results = File.createTempFile("wflprdct_",".arff");
+			results.deleteOnExit();
 			//TODO multi labels
 			String labels = classIndex>=0?String.format("-labels %d", classIndex+1):""; //hm, ignoring 0 seems to keep numbering anyway
 			waffles.predict(dataset,predictor, results,String.format("-ignore 0 %s",labels));
@@ -67,7 +68,8 @@ public class WafflesPredictor extends ModelPredictor<File,File> {
 		 this.model = model;
 		 BufferedWriter writer = null;
 		 try {
-			 File file = File.createTempFile("waffles_model_",".json");
+			 File file = File.createTempFile("wflmodel_",".json");
+			 file.deleteOnExit();
 			 writer = new BufferedWriter(new FileWriter(file));
 			 writer.write(model.getContent());
 			 writer.flush();
