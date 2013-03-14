@@ -329,7 +329,7 @@
 	
 	<div class='row remove-bottom' id='requiresTarget'>
 		<label class='five columns alpha' for="feature_uri">Enter URI of the target variable</label>
-		<input class='eight columns alpha half-bottom featureuri' type="text" id='feature_uri' value='' name='feature_uri' title='Enter feature uri'>
+		<input class='eight columns alpha half-bottom featureuri' type="text" id='prediction_feature' value='' name='prediction_feature' title='Enter feature uri'>
 		<div class='three columns omega'><a href='#' class='chelp htarget'>?</a></div>
 	</div>		
 </#switch>
