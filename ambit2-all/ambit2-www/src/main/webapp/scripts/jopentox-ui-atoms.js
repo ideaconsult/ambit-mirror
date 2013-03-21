@@ -1,3 +1,10 @@
+/**
+ * jOpenTox JavaScript Library v0.0.1 (alpha)
+ * 
+ * Copyright 2012-2013, IDEAconsult Ltd.
+ * http://www.ideaconsult.net/
+ * 
+ */
 function createImageMap(cmpURI, cmpid, imgselector, mapselector) {
 	$.getJSON(cmpURI, function(data) {
 	   	  //var items = [];
