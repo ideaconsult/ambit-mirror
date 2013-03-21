@@ -360,7 +360,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 	        	'</ul>\n';
 		
 		sOut += '<div id="tabs-id">';
-		sOut += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><th>Name</th><th>Value</th></thead><tbody>';
+		sOut += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody>';
 		/*
 		$.each(dataEntry.lookup.cas, function(k, value) {
 			sOut += renderValue(null,"[RN]","CAS RN","",dataEntry.values[value],"");
@@ -393,10 +393,10 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		sOut += '</tbody></table></div>\n';
 		
 		var sOutData = '<div id="tabs-data">';
-		sOutData += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><th>Dataset</th><th>Property</th><th>Value</th><th>Endpoint</th></thead><tbody>';
+		sOutData += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Dataset</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
 		var sOutCalc = '<div id="tabs-predictions">';
-		sOutCalc += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></thead><tbody>';
+		sOutCalc += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
 		$.each(dataEntry.lookup.misc, function(k, value) {
 			var feature = _ambit.search.result.feature[value];

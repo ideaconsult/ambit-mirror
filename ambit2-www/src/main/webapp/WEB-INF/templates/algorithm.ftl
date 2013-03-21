@@ -125,11 +125,13 @@ $(document)
 		<div class="row" style="padding:0;" >
 			<table id='algorithm'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
+			<tr>
 			<th>Name</th>
 			<th>Endpoint</th>
 			<th>Description</th>
 			<th>Type</th>
 			<th>Implementation of</th>
+			</tr>
 			</thead>
 			<tbody></tbody>
 			</table>
