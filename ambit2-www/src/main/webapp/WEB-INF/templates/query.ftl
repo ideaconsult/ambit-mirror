@@ -143,7 +143,7 @@
 	</ul>
 	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 		<span id='qtype' ></span>	
-		<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="margin-right: .3em;"></a>
+		<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="margin-right: .3em;"></span></a>
 		<br>
 		<span id='qthreshold'></span>
 		<br>
