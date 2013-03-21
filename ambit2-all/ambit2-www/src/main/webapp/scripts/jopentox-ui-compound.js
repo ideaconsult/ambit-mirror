@@ -93,7 +93,7 @@ $(document)
 												} else {
 													cmpURI = opentox["model_uri"] + "?dataset_uri=" + cmpURI + "&media=image/png";
 												}
-												return '<a href="'+val+'" title="'+cmpURI+'"><img src="'+cmpURI+'&w=150&h=150"></a>';
+												return '<a href="'+val+'" title="'+cmpURI+'"><img src="'+cmpURI+'&w=150&h=150" border="0"></a>';
 											}
 										},													
 										{ //3
@@ -265,7 +265,7 @@ $(document)
 							cmpURI = dataEntry.compound.URI.substring(0,dataEntry.compound.URI.indexOf("/conformer"));
 						}	
 						sOut += '<img class="ui-widget-content ui-corner-top ui-corner-bottom" style="min-height:250px;min-width:250px" src="' 
-									+ cmpURI + '?media=image/png" title="'+cmpURI+'">';
+									+ cmpURI + '?media=image/png" title="'+cmpURI+'" border="0">';
 						sOut += '</a><br>';
 						
 						var identifier = false;
