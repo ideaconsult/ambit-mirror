@@ -10,7 +10,7 @@ import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.dataset.MetadatasetJSONReporter;
+import ambit2.rest.json.JSONUtils;
 
 /**
  * JSON
@@ -113,17 +113,17 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					uri,
-					jsonFeature.title.jsonname(),MetadatasetJSONReporter.jsonEscape(feature.getName()),
+					jsonFeature.title.jsonname(),JSONUtils.jsonEscape(feature.getName()),
 					jsonFeature.units.jsonname(),feature.getUnits()==null?"":feature.getUnits(),
 					jsonFeature.isNominal.jsonname(),feature.isNominal(),
 					jsonFeature.isNumeric.jsonname(),numeric,
-					jsonFeature.sameAs.jsonname(),uriSameAs==null?null:MetadatasetJSONReporter.jsonEscape(uriSameAs),
+					jsonFeature.sameAs.jsonname(),uriSameAs==null?null:JSONUtils.jsonEscape(uriSameAs),
 					jsonFeature.isModelPredictionFeature.jsonname(),isModelPredictionFeature,
-					jsonFeature.creator.jsonname(),MetadatasetJSONReporter.jsonEscape(feature.getReference().getURL()),
+					jsonFeature.creator.jsonname(),JSONUtils.jsonEscape(feature.getReference().getURL()),
 					jsonFeature.order.jsonname(),feature.getOrder(),
 					jsonFeature.source.jsonname(),
-						uriSource==null?null:MetadatasetJSONReporter.jsonEscape(uriSource),
-						typeSource==null?null:MetadatasetJSONReporter.jsonEscape(typeSource)
+						uriSource==null?null:JSONUtils.jsonEscape(uriSource),
+						typeSource==null?null:JSONUtils.jsonEscape(typeSource)
 					
 					));
 			comma = ",";

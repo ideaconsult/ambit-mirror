@@ -10,6 +10,7 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.rest.json.JSONUtils;
 
 /**
  * JSON
@@ -71,12 +72,12 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					jsonFeature.URI.jsonname(),uri,
-					jsonFeature.title.jsonname(),MetadatasetJSONReporter.jsonEscape(item.getName()),
+					jsonFeature.title.jsonname(),JSONUtils.jsonEscape(item.getName()),
 					jsonFeature.stars.jsonname(),item.getStars(),
-					jsonFeature.rightsHolder.jsonname(),item.getrightsHolder()==null?"":MetadatasetJSONReporter.jsonEscape(item.getrightsHolder()),
-					jsonFeature.seeAlso.jsonname(),item instanceof SourceDataset?MetadatasetJSONReporter.jsonEscape(((SourceDataset) item).getURL()):"",
-					jsonFeature.rights.jsonname(),item.getLicenseURI()==null?"":MetadatasetJSONReporter.jsonEscape(item.getLicenseURI()),
-					MetadatasetJSONReporter.jsonEscape(rights)
+					jsonFeature.rightsHolder.jsonname(),item.getrightsHolder()==null?"":JSONUtils.jsonEscape(item.getrightsHolder()),
+					jsonFeature.seeAlso.jsonname(),item instanceof SourceDataset?JSONUtils.jsonEscape(((SourceDataset) item).getURL()):"",
+					jsonFeature.rights.jsonname(),item.getLicenseURI()==null?"":JSONUtils.jsonEscape(item.getLicenseURI()),
+							JSONUtils.jsonEscape(rights)
 					));
 			comma = ",";
 		} catch (Exception x) {
@@ -112,14 +113,5 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 	public String getFileExtension() {
 		return null;
 	}
-	public static String jsonEscape(String value) {
-        return value.replace("\\", "\\\\")
-        //.replace("/", "\\/")
-        .replace("\b", "\\b")
-        .replace("\f", "\\f")
-        .replace("\n", "\\n")
-        .replace("\r", "\\r")
-        .replace("\t", "\\t")
-        .replace("\"", "\\\"");
-	}
+
 }

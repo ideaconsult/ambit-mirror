@@ -10,6 +10,7 @@ import org.restlet.Request;
 import org.restlet.data.Reference;
 
 import ambit2.rest.ResourceDoc;
+import ambit2.rest.json.JSONUtils;
 import ambit2.rest.reporters.TaskURIReporter;
 
 public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
@@ -41,9 +42,9 @@ public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
 			output.write(String.format(format,
 					uri,
 					item.toString(),
-					task.getName()==null?"":task.getName(),
-					task.getError()==null?"":task.getError(),
-					task.getPolicyError()==null?"":task.getPolicyError(),
+					task.getName()==null?"":JSONUtils.jsonEscape(task.getName()),
+					task.getError()==null?"":JSONUtils.jsonEscape(task.getError().toString()),
+					task.getPolicyError()==null?"":JSONUtils.jsonEscape(task.getPolicyError().toString()),
 					task.getStatus()==null?"":task.getStatus(),
 					task.getStarted(),
 					task.getTimeCompleted(),
