@@ -85,7 +85,7 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 	  					
 	  					var prm = {'option': 'auto', 'type':'url', 'search':uri, 'pagesize' : 10};
 	  					
-	  					var link = " <a href='"+o.aData.URI+"?max=10' title='AMBIT URI: "+o.aData.URI+"' target=_blank title='"+o.aData.URI+"'><span class='ui-icon ui-icon-link'></a>";
+	  					var link = " <a href='"+o.aData.URI+"?max=10' title='AMBIT URI: "+o.aData.URI+"' target=_blank title='"+o.aData.URI+"'><span class='ui-icon ui-icon-link'></span></a>";
 						var browseURI =  "";
 						if (root != null) {
 							browseURI = root + "/ui/query?" + $.param(prm,false);
