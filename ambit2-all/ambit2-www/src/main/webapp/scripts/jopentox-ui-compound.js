@@ -320,7 +320,7 @@ $(document)
 						//properties
 						sOut += '<td>';
 						sOut += '<table id="'+ id +'" class="values" >';
-						sOut += '<thead><th>Type</th><th>Calculated</th><th>Property</th><th>Value</th></thead>';
+						sOut += '<thead><tr><th>Type</th><th>Calculated</th><th>Property</th><th>Value</th></tr></thead>';
 						sOut += '<tbody>';
 						for (key in dataEntry.values) 
 							if (dataEntry.values[key]) {

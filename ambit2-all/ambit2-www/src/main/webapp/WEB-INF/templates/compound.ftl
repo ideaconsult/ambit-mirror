@@ -126,11 +126,13 @@ $(document)
 		    	<div id='tabs-properties'>
 					<table id='properties' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 					<thead>
+					<tr>
 					<th>Name</th>
 					<th>Units</th>
 					<th>Value</th>
 					<th>SameAs</th>
 					<th>Source</th>
+					</tr>
 					</thead>
 					<tbody></tbody>
 					</table>
@@ -138,10 +140,12 @@ $(document)
 		    	<div id='tabs-datasets'>
 					<table id='datasets' class='datasetstable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 					<thead>
+					<tr>
 					<th></th>
 					<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 					<th>Name</th>
 					<th>Download</th>
+					</tr>
 					</thead>
 					<tbody></tbody>
 					</table>

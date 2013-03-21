@@ -8,9 +8,11 @@ Datasets
 </ul>
 <div style='background: #F2F0E6;margin: 3px; padding: 0em; font-size: 0.85em; ' id='select_datasets' class='row remove-bottom'>
         <table id='datasets' style="margin:0;padding:0px;">
-        <thead style='display:none;'>
+        <thead style="display:none;">
+        <tr>
         <th></th>
         <th>Dataset</th>
+        </tr>
         </thead>
         <tbody>
         </tbody>
@@ -30,9 +32,11 @@ Predictions
 </ul>
 <div style='background: #F2F0E6;margin: 3px; padding: 0em; font-size: 0.85em; ' id='select_models'>
         <table id='models' style="margin:0;padding:0px;">
-        <thead style='display:none;'>
+        <thead style="display:none;">
+        <tr>
         <th></th>
         <th>Model</th>
+        </tr>
         </thead>
         <tbody>
         </tbody>

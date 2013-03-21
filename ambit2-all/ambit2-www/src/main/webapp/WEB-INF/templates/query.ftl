@@ -184,6 +184,7 @@
 	<div class="row " style="padding:0;" >
 		<table id='structures' class='structable' style='margin:0;' width='100%'>
 					<thead>
+					<tr>
 						<th>
 						<a href="#" id='selectall' class='help' title='Click to select all records' onClick='selecturi(true);'><u>Select</u></a><br>
 						<a href="#" id='unselect' class='help' title='Click to unselect all records'  onClick='selecturi(false);'><u>Unselect</u></a>						
@@ -195,6 +196,7 @@
 						<th>SMILES</th>
 						<th>InChI</th>
 						<th>InChI Key</th>
+					</tr>	
 					</thead>
 					<tbody></tbody>
 		</table>

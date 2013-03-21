@@ -101,11 +101,13 @@ Page:<input name='page' type='text' title='Page' size='10' value='0'>
 		<div class="row" style="padding:0;" >
 			<table id='datasets' class='datasetstable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
+			<tr>
 			<th></th>
 			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 			<th>Name</th>
 			<th>Download</th>
 			<th title='Remove the dataset. Only datasets with star rating <= 5 can be deleted!'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
+			</tr>
 			</thead>
 			<tbody></tbody>
 			</table>

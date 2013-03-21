@@ -122,12 +122,14 @@ $(document)
 		<div class="row " style="padding:0;" >
 			<table id='model' class='modeltable'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
+			<tr>
 			<th></th>
 			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 			<th>Title</th>
 			<th>Algorithm</th>
 			<th>Training dataset</th>
 			<th>Logo</th>
+			</tr>
 			</thead>
 			<tbody></tbody>
 			</table>
