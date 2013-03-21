@@ -21,7 +21,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 										
 										return "<input class='selecturi' type='checkbox' checked name='uri[]' title='Select "+ 
 													uri +"' value='"+uri+"'><br/>" +
-													"<a href='"+uri+"' class='help' title='AMBIT Compound URI' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a> " +
+													"<a href='"+uri+"' class='help' title='AMBIT Compound URI' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .1em;'></span></a> " +
 													"<a href='"+searchURI+"' class='help' title='Find similar'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Find similar chemical structures'></span></a> " +
 													"<a href='"+smartsURI+"' class='help' title='Find substructure'><span class='ui-icon ui-icon-search' style='float: left; margin: .1em;' title='Substructure search with this chemical structure'></span></a> " +
 													"<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show compound details'></span>";
