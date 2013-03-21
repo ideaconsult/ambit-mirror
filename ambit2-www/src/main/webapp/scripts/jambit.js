@@ -1,3 +1,10 @@
+/**
+ * jOpenTox JavaScript Library v0.0.1 (alpha)
+ * 
+ * Copyright 2012-2013, IDEAconsult Ltd.
+ * http://www.ideaconsult.net/
+ * 
+ */
 var _ambit = {
 	'query_service' : null,	
 	'query_uri' : null,

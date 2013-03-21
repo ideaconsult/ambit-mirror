@@ -1,12 +1,10 @@
 /**
- * jOpenToxUI JavaScript Library v0.0.1 (alpha)
+ * jOpenTox JavaScript Library v0.0.1 (alpha)
  * 
- * Copyright 2012, IDEAconsult Ltd.
+ * Copyright 2012-2013, IDEAconsult Ltd.
  * http://www.ideaconsult.net/
  * 
- * TODO: Licence.
  */
-
 var modelArray;
 
 /**

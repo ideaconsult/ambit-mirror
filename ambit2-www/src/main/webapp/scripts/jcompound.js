@@ -1,4 +1,12 @@
 /**
+ * jOpenTox JavaScript Library v0.0.1 (alpha)
+ * 
+ * Copyright 2012-2013, IDEAconsult Ltd.
+ * http://www.ideaconsult.net/
+ * 
+ */
+/**
+
  *  Input: 
  *  opentox object, with opentox.feature array nonempty
  */

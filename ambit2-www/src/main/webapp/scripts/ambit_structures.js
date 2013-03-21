@@ -1,3 +1,10 @@
+/**
+ * jOpenTox JavaScript Library v0.0.1 (alpha)
+ * 
+ * Copyright 2012-2013, IDEAconsult Ltd.
+ * http://www.ideaconsult.net/
+ * 
+ */
 function defineStructuresTable(url, query_service, similarity,root) {
 	var imgSize = 150;
 	var oTable = $('#structures')
@@ -440,7 +447,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 			if (sameas.indexOf(prefix)>=0) {
 				searchURI = " <a href='http://apps.ideaconsult.net:8080/ontology/query?uri="+
 				encodeURIComponent(sameas) +
-				"' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a>";
+				"' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></span></a>";
 				endpoint = sameas.replace(prefix,"");
 			} 
 				
@@ -449,7 +456,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 					+ (source==null?"":"<a href='"+source.URI+"' target=_blank class='help' title='"+source.URI+"'>" + src +"</a>") 
 					+ "</td>" 
 					+ "<th bgcolor='#fafafa'>" 
-					+ (url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></a>" )) 
+					+ (url==null?(title + " " + units):(title + " <i>" + units + "</i>  <a href='"+url+"' target='_blank'><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></span></a>" )) 
 					+ "</th><td>" + value + "</td><td bgcolor='#fafafa'>"
 					+ endpoint + searchURI + "</td></tr>";
 			return sOut;
