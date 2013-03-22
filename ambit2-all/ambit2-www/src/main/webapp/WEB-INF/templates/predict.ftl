@@ -89,7 +89,7 @@ $(document)
 <#include "/help.ftl" >
 </div>
 
-</form>
+
 
 <#include "/footer.ftl" >
 </div> <!-- container -->

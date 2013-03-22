@@ -83,7 +83,7 @@ $(document)
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "http://rdf.farmbio.uu.se/chembl/onto/#forMolecule"' value='ChEMBL' >http://rdf.farmbio.uu.se/chembl/onto/#forMolecule</option>
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "Match by column "SAMPLE""' value='SAMPLE' >Match by column "SAMPLE"</option>
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "Match by chemical name"' value='NAME' >Match by chemical name</option>
-			<option title='On import, finds the same compound in the database by matching with the selected criteria "Don't match, add as a new structure"' value='None' >Don't match, add as a new structure</option>
+			<option title='On import, finds the same compound in the database by matching with the selected criteria "Do not match, add as a new structure"' value='None' >Don't match, add as a new structure</option>
 		</select>
 		<div class='ten columns omega'></div>
 	</div>
@@ -94,7 +94,8 @@ $(document)
 			<option title='License not defined' value='Unknown'>Unknown</option>
 			<option title="Public Domain Dedication and License (PDDL) - 'Public Domain for data/databases'" value='http://www.opendatacommons.org/licenses/pddl/'> http://www.opendatacommons.org/licenses/pddl/ </option>
 			<option title="Open Data Commons Attribution (ODC-By) - 'Attribution for data/databases'" value='http://www.opendatacommons.org/licenses/by/'>http://www.opendatacommons.org/licenses/by/</option>
-			<option title="Open Database License (ODC-ODbL) - 'Attribution Share-Alike for data/databases'" value='http://www.opendatacommons.org/licenses/odbl/'>http://www.opendatacommons.org/licenses/odbl/</option><option title='CC0 1.0 Universal - 'Creative Commons public domain waiver'' value='http://creativecommons.org/publicdomain/zero/1.0/'>http://creativecommons.org/publicdomain/zero/1.0/</option>
+			<option title="Open Database License (ODC-ODbL) - 'Attribution Share-Alike for data/databases'" value='http://www.opendatacommons.org/licenses/odbl/'>http://www.opendatacommons.org/licenses/odbl/</option>
+			<option title="CC0 1.0 Universal - 'Creative Commons public domain waiver'" value='http://creativecommons.org/publicdomain/zero/1.0/'>http://creativecommons.org/publicdomain/zero/1.0/</option>
 			<option title="Creative Commons Attribution-ShareAlike (CC-BY-SA)" value='http://creativecommons.org/licenses/by-sa/3.0/'>http://creativecommons.org/licenses/by-sa/3.0/</option>
 			<option title="GNU Free Documentation License (GFDL)" value='http://www.gnu.org/copyleft/fdl.html'>http://www.gnu.org/copyleft/fdl.html</option>
 			<option title="Open Database License v1.0" value='http://opendatacommons.org/licenses/odbl/1.0/'>http://opendatacommons.org/licenses/odbl/1.0/</option>
@@ -116,7 +117,6 @@ $(document)
 <#include "/chelp.ftl" >
 
 
-</form>
 
 <#include "/footer.ftl" >
 </div> <!-- container -->

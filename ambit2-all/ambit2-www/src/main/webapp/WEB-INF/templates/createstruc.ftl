@@ -254,8 +254,6 @@ function errorCallback(xhr, textStatus, error ) {
 <#include "/chelp.ftl" >
 
 
-</form>
-
 <#include "/footer.ftl" >
 </div> <!-- container -->
 </body>

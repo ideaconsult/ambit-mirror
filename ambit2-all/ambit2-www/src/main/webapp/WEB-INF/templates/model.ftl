@@ -145,7 +145,6 @@ $(document)
 
 <#include "/chelp.ftl" >
 
-</form>
 
 <#include "/footer.ftl" >
 </div> <!-- container -->
