@@ -499,7 +499,7 @@ function defineDatasetsTable(root,url,deleteVisible) {
     					"bSearchable" : false,
     					"mDataProp" : null,
     					"bUseRendered" : false,	
-    					sWidth : "48px",
+    					sWidth : "24px",
     					"fnRender" : function(o,val) {
      		               	var sOut = "<a href='"+o.aData.URI +"?page=0&pagesize=100'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' title='Click to browse the dataset'></span></a>&nbsp;";
      		                sOut += "<a href='"+o.aData.URI +"/similarity?search=c1ccccc1'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Similarity search within the dataset'></span></a>&nbsp;";
@@ -536,7 +536,7 @@ function defineDatasetsTable(root,url,deleteVisible) {
     		               }
     		               sOut += " | <a href='"+o.aData.URI +"/metadata'>Metadata</a>";
    		                   sOut += "<br/><a href='"+root + "/ui/query?option=auto&type=url&search=" + encodeURIComponent(o.aData.URI) +"&page=0&pagesize=100'>Browse structures and properties</a>";
-   		                   sOut += " | <a href='"+o.aData.URI +"/compounds'>Structures only</a>";
+   		                   sOut += " | <a href='"+o.aData.URI +"/compounds?page=0&pagesize=100'>Structures only</a>";
    		                   sOut += " | <a href='"+o.aData.URI +"/feature'>Properties list</a>";
    		                   sOut += " | <a href='"+root +"/admin/policy?search="+ o.aData.URI  + "' target='policy'>OpenAM access rights</a>";
    		                   //sOut += " | <a href='"+root +"/algorithm/toxtreecramer?dataset_uri="+ o.aData.URI  + "' target='predict'>Predict</a>";
