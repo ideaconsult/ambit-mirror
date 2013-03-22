@@ -79,15 +79,21 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 	request.setRequestHeader('Accept', 'text/uri-list');
 	
 	request.onreadystatechange = function() {
+		var dResult = document.getElementById(resultDOM);
+		var sResult = document.getElementById(statusDOM);
 		if (request.readyState != 4) { return false; }
 		switch (request.status) {
 			case 200:
-				document.getElementById(resultDOM).innerHTML = getResponseTitle(request,"Ready. Results available.");
-				document.getElementById(resultDOM).href = wrapDatasetURI(request.responseText);
-				document.getElementById(statusDOM).src = imgReady;
-				document.getElementById(resultDOM).style.display = 'inline';
-				document.getElementById(statusDOM).style.display = 'inline';
-				document.getElementById(resultDOM).target = null;
+				if (dResult!=null) {
+					dResult.innerHTML = getResponseTitle(request,"Ready. Results available. ");
+					dResult.href = wrapDatasetURI(request.responseText);
+					dResult.style.display = 'inline';
+					dResult.target = null;
+				}
+				if (sResult !=null) {
+					sResult.style.display = 'inline';
+					sResult.src = imgReady;
+				}
 				if (request.responseText.indexOf("register/notify")>=0) {
 					//ok, redundant, but just in case 
 					window.location.href = request.responseText; 
@@ -100,11 +106,14 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 				break;
 			case 201:
 				taskURI = request.responseText; // and then fall down
-				document.getElementById(resultDOM).target = null;
+				if (dResult!=null) 
+					dResult.target = null;
 			case 202:
-				document.getElementById(resultDOM).target = null;
-				document.getElementById(resultDOM).innerHTML =  getResponseTitle(request,"Waiting ...");
-				document.getElementById(resultDOM).href = request.responseText;
+				if (dResult!=null) {
+					dResult.target = null;
+					dResult.innerHTML =  getResponseTitle(request,"Waiting for results ...");
+					dResult.href = request.responseText;
+				}
 				var taskTimer = window.setTimeout(function() {
 					checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError);
 				}, 1000);
@@ -112,30 +121,42 @@ function checkTask(taskURI, resultDOM, statusDOM, imgReady, imgError) {
 			case 303:
 				window.location.href = request.responseText; 
 				break;
+			
 			case 500: 
-				document.getElementById(resultDOM).innerHTML = getResponseTitle(request,request.status + " " + request.statusText );
-				document.getElementById(resultDOM).href = taskURI+"?media=text/n3";
-				document.getElementById(resultDOM).target = "error";
-				document.getElementById(statusDOM).src = imgError;
-				document.getElementById(resultDOM).style.display = 'inline';
-				document.getElementById(statusDOM).style.display = 'inline';				
+				if (dResult!=null) {
+					dResult.innerHTML = getResponseTitle(request,request.status + " " + request.statusText );
+					dResult.href = taskURI+"?media=text/n3";
+					dResult.target = "error";
+					dResult.style.display = 'inline';
+				}
+				if (sResult != null) {
+					sResult.src = imgError;
+					sResult.style.display = 'inline';
+				}
 				break;
-			case 502: 
-				console.log(request.responseText);
-				document.getElementById(resultDOM).innerHTML = getResponseTitle(request,request.status + " " + request.statusText );
-				document.getElementById(resultDOM).href = taskURI+"?media=text/n3";
-				document.getElementById(resultDOM).target = "error";
-				document.getElementById(statusDOM).src = imgError;
-				document.getElementById(resultDOM).style.display = 'inline';
-				document.getElementById(statusDOM).style.display = 'inline';				
+			case 502:
+				if (dResult!=null) {
+					dResult.innerHTML = getResponseTitle(request,request.status + " " + request.statusText );
+					dResult.href = taskURI+"?media=text/n3";
+					dResult.target = "error";
+					dResult.style.display = 'inline';
+				}
+				if (sResult != null) {
+					sResult.src = imgError;
+					sResult.style.display = 'inline';
+				}
 				break;				
 			default:
-				document.getElementById(resultDOM).innerHTML = getResponseTitle(request,request.status + " " + request.statusText);
-				document.getElementById(resultDOM).href = taskURI+"?media=text/n3";
-				document.getElementById(resultDOM).target = "error";
-				document.getElementById(statusDOM).src = imgError;
-				document.getElementById(resultDOM).style.display = 'inline';
-				document.getElementById(statusDOM).style.display = 'inline';
+				if (dResult!=null) {
+					dResult.innerHTML = getResponseTitle(request,request.status + " " + request.statusText);
+					dResult.href = taskURI+"?media=text/n3";
+					dResult.target = "error";
+					dResult.style.display = 'inline';
+				}
+				if (sResult!=null) {
+					sResult.style.display = 'inline';
+					sResult.src = imgError;
+				}
 				break;
 		}
 	};
@@ -221,11 +242,15 @@ function defineTaskTable(root,url) {
 					  	} else if (o.aData["status"]=='Error') {
 					  		return val + o.aData["error"];
 
-					  	} else
-						  	return checkTask(root + "/task/" + o.aData["id"],
-						  			'result', 'status',  
+					  	} else {
+					  		var id = getID();
+					  		var sOut=val +"<br/><a href='#' id='r"+id+"'></a>&nbsp; <img src='"+root+"/images/24x24_ambit.gif' id='s"+id+"'>";
+						  	checkTask(root + "/task/" + o.aData["id"],
+						  			"r"+id, "s"+id,  
 						  			root + "/images/tick.png",
 						  			root + "/images/cross.png");
+						  	return sOut;
+					  	}  	
 				  }
 				},
 				{ "mDataProp": "started" , "asSorting": [ "asc", "desc" ],
