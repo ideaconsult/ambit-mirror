@@ -26,10 +26,10 @@ $(document)
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="alpha">
-			<h3 class="remove-bottom">
+			<div class="remove-bottom h3">
 					Properties import	
-			</h3>
-		    <h6>Import properties for compounds already in the database</h6>			
+			</div>
+		    <div class='h6'>Import properties for compounds already in the database</div>			
 		</div>
 		</div>
 </div>		

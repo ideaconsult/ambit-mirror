@@ -41,10 +41,10 @@ $(document)
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="seven columns alpha">
-			<h3 class="remove-bottom">
+			<div class="remove-bottom h3">
 					Tasks status
-			</h3>
-		    <h6>Long running computing or data import procedures</h6>			
+			</div>
+		    <div class='h6'>Long running computing or data import procedures</div>			
 		</div>
 		</div>
 </div>		

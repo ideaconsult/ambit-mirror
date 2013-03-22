@@ -14,13 +14,12 @@ h4, h5, h6 {
 	FONT-FAMILY: Trebuchet MS, Verdana, Arial;
 font-weight: normal; }
 
-.h3 {
-	font-size: 28px; line-height: 34px; margin-bottom: 8px;
-}	
-
-.h6 {
-	font-size: 17px; line-height: 24px; 
-}
+.h1 { font-size: 46px; line-height: 50px; margin-bottom: 14px;}
+.h2 { font-size: 35px; line-height: 40px; margin-bottom: 10px; }
+.h3 { font-size: 28px; line-height: 34px; margin-bottom: 8px; }
+.h4 { font-size: 21px; line-height: 30px; margin-bottom: 4px; }
+.h5 { font-size: 17px; line-height: 24px; }
+.h6 { font-size: 14px; line-height: 21px; }
 
 .h1, .h2, .h3 {
 	color: #729203;

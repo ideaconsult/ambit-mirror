@@ -135,10 +135,10 @@ function errorCallback(xhr, textStatus, error ) {
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="alpha">
-			<h3 class="remove-bottom">
+			<div class="remove-bottom h3">
 					Add a new chemical structure
-			</h3>
-		    <h6>Add a new chemical structure with CAS, EC, Name, IUCLID UUID</h6>
+			</div>
+		    <div class='h6'>Add a new chemical structure with CAS, EC, Name, IUCLID UUID</div>
 		</div>
 		</div>
 </div>		
