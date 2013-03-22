@@ -105,6 +105,7 @@ Page:<input name='page' type='text' title='Page' size='10' value='0'>
 			<th></th>
 			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 			<th>Name</th>
+			<th>Models</th>
 			<th>Download</th>
 			<th title='Remove the dataset. Only datasets with star rating <= 5 can be deleted!'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
 			</tr>
