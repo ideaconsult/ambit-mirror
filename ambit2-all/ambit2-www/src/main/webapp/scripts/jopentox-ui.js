@@ -96,6 +96,7 @@ function defineAlgorithmTable(root,url) {
 		"oLanguage": {
 	            "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
 	            "sLoadingRecords": "No algorithms found.",
+	            "sZeroRecords": "No algorithms found.",
 	            "sInfo": "Showing _TOTAL_ algorithms (_START_ to _END_)",
 	            "sLengthMenu": 'Display <select>' +
               '<option value="10">10</option>' +
@@ -104,7 +105,35 @@ function defineAlgorithmTable(root,url) {
               '<option value="100">100</option>' +
               '<option value="-1">all</option>' +
               '</select> algorithms.'	            
-	    }
+	    },
+	    "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+			oSettings.jqXHR = $.ajax({
+				"type" : "GET",
+				"url" : sSource,
+				"data" : aoData,
+				"dataType" : "json",
+				"contentType" : "application/json",
+				"cache" : true,
+				"success": function(result){fnCallback(result);},
+				"error" : function(xhr, textStatus, error) {
+					switch (xhr.status) {
+					case 403: {
+			        	alert("Restricted access. You are not authorized to access the requested algorithms.");
+						break;
+					}
+					case 404: {
+						//not found
+						break;
+					}
+					default: {
+						//console.log(xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+			        	alert("Error loading algorithms " + xhr.status + " " + error);
+					}
+					}
+					oSettings.oApi._fnProcessingDisplay(oSettings, false);
+				}
+			});
+		}	    
 	} );
 	return oTable;
 }
@@ -294,7 +323,35 @@ function defineModelTable(root,url) {
     		                }
       	  			}    		  		
      				],
- 	  "aaSorting": [[1, 'asc']]		  
+ 	  "aaSorting": [[1, 'asc']],
+ 	  "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+			oSettings.jqXHR = $.ajax({
+				"type" : "GET",
+				"url" : sSource,
+				"data" : aoData,
+				"dataType" : "json",
+				"contentType" : "application/json",
+				"cache" : true,
+				"success": function(result){fnCallback(result);},
+				"error" : function(xhr, textStatus, error) {
+					switch (xhr.status) {
+					case 403: {
+			        	alert("Restricted access. You are not authorized to access the requested models.");
+						break;
+					}
+					case 404: {
+						//not found
+						break;
+					}
+					default: {
+						//console.log(xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+			        	alert("Error loading models " + xhr.status + " " + error);
+					}
+					}
+					oSettings.oApi._fnProcessingDisplay(oSettings, false);
+				}
+			});
+		}
 	});
 	return oTable;
 }
