@@ -9,7 +9,7 @@
 	<input type='radio' class='h6' name='option' value='similarity' title='Enter SMILES or draw structure' onClick='clickSimilarity();'>Similarity&nbsp;
 	<input type='radio' class='h6' name='option' value='smarts' title='Enter or draw a SMARTS query' size='20' onClick='clickSmarts();'>Substructure&nbsp;
 	<input type='hidden' class='h6' name='type' value='smiles'>	
-	<br class='h6'></br>
+	<br class='h6'>
 	<span class='help' id='strucSearch'></span>
 	</div>
 </div>

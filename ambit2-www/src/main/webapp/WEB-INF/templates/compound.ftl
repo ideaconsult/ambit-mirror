@@ -74,26 +74,26 @@ $(document)
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="ten columns alpha">
-			<h3 class="remove-bottom">
+			<div class="remove-bottom h3">
 					Chemical compound
-			</h3>
-		    <h6><a href='${ambit_root}/compound/${cmpid}'>${ambit_root}/compound/${cmpid}</a></h6>			
+			</div>
+		    <div class='h6'><a href='${ambit_root}/compound/${cmpid}'>${ambit_root}/compound/${cmpid}</a></div>			
 		</div>
 		<div class="four columns omega">
-			<h3 class="remove-bottom">
+			<div class="remove-bottom h3">
 				&nbsp;
-			</h3>
-		    <h6>
+			</div>
+		    <div class='h6'>
 		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
-		    </h6>			
+		    </div>			
 		</div>		
 		<div class="two columns omega">
-			<h3 class="remove-bottom">
+			<div class="remove-bottom h3">
 				&nbsp;
-			</h3>
-		    <h6>
+			</div>
+		    <div class='h6'>
 		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-		    </h6>			
+		    </div>			
 		</div>	
 		</div>
 </div>		

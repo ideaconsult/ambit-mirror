@@ -22,10 +22,10 @@ $(document)
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="alpha">
-		<h3 class="remove-bottom">
+		<div class="remove-bottom h3">
 				OpenTox log in
-		</h3>
-	    <h6>via OpenAM identity service at ${openam_service}</h6>			
+		</div>
+	    <div class='h6'>via OpenAM identity service at ${openam_service}</div>			
 	    </div>
 		</div>
 </div>		

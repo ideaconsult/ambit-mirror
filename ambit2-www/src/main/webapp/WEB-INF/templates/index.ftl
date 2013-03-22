@@ -26,10 +26,10 @@ $(document)
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="alpha">
-			<h3 class="remove-bottom">
+			<div class="remove-bottom h3">
 					Welcome to AMBIT 
-			</h3>
-		    <h6>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</h6>			
+			</div>
+		    <div class='h6'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
 		</div>
 		</div>
 </div>		

@@ -26,10 +26,10 @@ $(document)
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="seven columns alpha">
-			<h3 class="remove-bottom">
+			<div class="remove-bottom h3">
 					Administration
-			</h3>
-		    <h6>Various admin tasks</h6>			
+			</div>
+		    <div class='h6'>Various admin tasks</div>			
 		</div>
 		</div>
 </div>		
