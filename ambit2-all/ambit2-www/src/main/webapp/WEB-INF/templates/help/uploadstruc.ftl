@@ -18,7 +18,7 @@ In order to add a single chemical structure instead, use <a href="${ambit_root}/
 		<ul>
 		<li>Structure Data Format <a href="http://en.wikipedia.org/wiki/Chemical_table_file" target=_blank>SDF (.sdf)</a></li>
 		<li>Mol file <a href="http://en.wikipedia.org/wiki/Chemical_table_file" target=_blank>MOL (.mol)</a></li>
-		<li>SMILES (.smi)</li>
+		<li>SMILES <a href="http://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system" target=_blank>(.smi)</a></li>
 		<li>Chemical Markup Language <a href="http://en.wikipedia.org/wiki/Chemical_Markup_Language" target=_blank>CML</a>(.cml)</li>
 		<li>Comma separated text file (.csv)</li>
 		<li>TAB separated text file (.txt)</li>
