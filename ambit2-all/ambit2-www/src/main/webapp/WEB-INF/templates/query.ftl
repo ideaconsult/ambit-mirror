@@ -151,7 +151,7 @@
 		<span id='description' style='display:none;'></span>
 		<span>Max number of hits</span>
 		<input type='text' size='3' name='pagesize' value='10' style='width:5em;height:1.5em;margin-bottom:0;padding: 2px;'>
-		<input class='ambit_search remove-bottom' id='submit2' type='submit' value='Refresh' tabindex='3'/>
+		<input class='ambit_search remove-bottom' id='submit2' type='submit' value='Refresh' tabindex='3'>
 	</div>
 
 	<#include "/select_features.ftl">
