@@ -407,7 +407,7 @@ function renderModel(entry,root,err) {
 	
 }
 
-function defineDatasetsTable(root,url) {
+function defineDatasetsTable(root,url,deleteVisible) {
 	var oTable = $('.datasetstable').dataTable( {
 	"sAjaxDataProp" : "dataset",
 	"sAjaxSource": url,	
@@ -515,6 +515,7 @@ function defineDatasetsTable(root,url) {
       	  			  "mDataProp":"stars" , 
       	  			  "aTargets": [ 4 ],	
       	  			  "sWidth" : "32px",
+      	  			  "bVisible" : deleteVisible,
       		  	      "bUseRendered" : false,	
       			       "fnRender": function ( o, val ) {
       			    	   val = o.aData["URI"];

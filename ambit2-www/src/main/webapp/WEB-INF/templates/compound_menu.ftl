@@ -37,9 +37,9 @@
 </li>
 
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-	<div id='structype_${cmpid}' title='Comparison label'/>
+	<div id='structype_${cmpid}' title='Comparison label'></div>
 </div>
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-	<div id='consensus_${cmpid}' title='Consensus label'/>
+	<div id='consensus_${cmpid}' title='Consensus label'></div>
 </div>
 </ul>

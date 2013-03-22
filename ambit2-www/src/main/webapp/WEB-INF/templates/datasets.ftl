@@ -13,7 +13,7 @@
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = defineDatasetsTable("${ambit_root}","${ambit_request_json}");
+	  	var oTable = defineDatasetsTable("${ambit_root}","${ambit_request_json}",true);
 	});
 	</script>
 </#if>
