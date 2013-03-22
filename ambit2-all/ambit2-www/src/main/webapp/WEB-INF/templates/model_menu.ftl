@@ -10,12 +10,12 @@
 </li>
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/model?page=0&pagesize=100">
+	<a href="${ambit_root}/model?page=0&amp;pagesize=100">
 	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>All models</a>
 </li> 
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/dataset?page=0&pagesize=100">
+	<a href="${ambit_root}/dataset?page=0&amp;pagesize=100">
 	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>All datasets</a>
 </li> 
 

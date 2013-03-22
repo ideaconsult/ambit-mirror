@@ -9,7 +9,7 @@
 </li>
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/dataset?page=0&pagesize=100">
+	<a href="${ambit_root}/dataset?page=0&amp;pagesize=100">
 	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>All datasets</a>
 </li> 
 
