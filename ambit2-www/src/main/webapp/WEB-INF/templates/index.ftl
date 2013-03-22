@@ -51,7 +51,7 @@ $(document)
 	<div class='row remove-bottom'>
 		<label class='three columns alpha' for="search">&nbsp;</label>
 		<input class='eight columns omega half-bottom' type="text" id='search' value='' name='search'>
-		<input class='three columns omega' type='submit' class='submit' value='Search'>
+		<input class='three columns omega submit' type='submit' value='Search'>
 	</div>
 	</form>	
 	
