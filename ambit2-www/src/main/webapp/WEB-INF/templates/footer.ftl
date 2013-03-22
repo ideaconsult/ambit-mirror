@@ -9,11 +9,11 @@
 			</span>
 		</div>
 		<div class='six columns omega'>
-			<a href='http://www.cefic.be'><img src=${ambit_root}/images/logocefic.png border='0' width='115' height='60'></a>&nbsp;
+			<a href='http://www.cefic.be' title='CEFIC' target=_blank><img src='${ambit_root}/images/logocefic.png' border='0' width='115' height='60' alt='Logo CEFIC'></a>&nbsp;
 		
-			<a href='http://www.cefic-lri.org'><img src=${ambit_root}/images/logolri.png border='0' width='115' height='60'></a>&nbsp;
+			<a href='http://www.cefic-lri.org' title='CEFIC LRI' target=_blank><img src='${ambit_root}/images/logolri.png' border='0' width='115' height='60' alt='Logo CEFIC-LRI'></a>&nbsp;
 		
-			<a href='http://www.opentox.org'><img src=${ambit_root}/images/logo.png border='0' width='115' height='60'></a>
+			<a href='http://www.opentox.org' title='OpenTox' target=_blank><img src='${ambit_root}/images/logo.png' border='0' width='115' height='60' alt='Logo OpenTox'></a>
 		</div>
 </div>
 		
