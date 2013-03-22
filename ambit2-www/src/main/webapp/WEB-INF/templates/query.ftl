@@ -1,3 +1,4 @@
+<#include "/html.ftl" >
 <head>
 <#include "/header.ftl" >
 
