@@ -9,12 +9,12 @@
 	<input type='radio' class='h6' name='option' value='similarity' title='Enter SMILES or draw structure' onClick='clickSimilarity();'>Similarity&nbsp;
 	<input type='radio' class='h6' name='option' value='smarts' title='Enter or draw a SMARTS query' size='20' onClick='clickSmarts();'>Substructure&nbsp;
 	<input type='hidden' class='h6' name='type' value='smiles'>	
-	<br class='h6'/>
+	<br class='h6'></br>
 	<span class='help' id='strucSearch'></span>
 	</div>
 </div>
 <div class="four columns omega">
-	<span id='thresholdSpan' style='display:none;' class="remove-bottom">
+	<div id='thresholdSpan' style='display:none;' class="remove-bottom">
 		<div class="remove-bottom h3">
 			&nbsp;
 		</div>
@@ -32,8 +32,8 @@
 			</select>	
 			<span class='help'>Similarity threshold</span>
 		</div>
-	</span>
-	<span id='funcgroupsSpan' style='display:none;' class="remove-bottom">
+	</div>
+	<div id='funcgroupsSpan' style='display:none;' class="remove-bottom">
 		<div class="remove-bottom h3">
 			&nbsp;
 		</div>
@@ -42,7 +42,7 @@
 			</select>
 			<span class='help'>Functional groups</span>
 		</div>
-	</span>
+	</div>
 </div>
 <div class="three columns omega">
 	<div class="remove-bottom h3">
