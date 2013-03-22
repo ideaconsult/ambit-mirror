@@ -121,7 +121,6 @@ Page:<input name='page' type='text' title='Page' size='10' value='0'>
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 
-</form>
 
 <#include "/footer.ftl" >
 </div> <!-- container -->

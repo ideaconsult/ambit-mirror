@@ -97,7 +97,6 @@ admin/fingerprint/sk1024
 
 <#include "/chelp.ftl" >
 
-</form>
 
 <#include "/footer.ftl" >
 </div> <!-- container -->

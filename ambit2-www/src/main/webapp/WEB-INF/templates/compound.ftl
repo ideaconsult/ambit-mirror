@@ -157,7 +157,6 @@ $(document)
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 
-</form>
 
 <#include "/footer.ftl" >
 </div> <!-- container -->
