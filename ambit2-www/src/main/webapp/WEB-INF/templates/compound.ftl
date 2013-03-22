@@ -7,6 +7,7 @@
 <script src="${ambit_root}/jquery/jquery.imagemapster.min.js" type="text/javascript"></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-atoms.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
 <#if cmpid??>
@@ -148,6 +149,7 @@ $(document)
 					<th></th>
 					<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 					<th>Name</th>
+					<th>Models</th>
 					<th>Download</th>
 					<th style='display:none;'></th>
 					</tr>
