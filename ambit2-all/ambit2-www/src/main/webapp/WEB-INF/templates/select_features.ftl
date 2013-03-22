@@ -1,4 +1,4 @@
-<ul id="selectable">
+<ul id="dselectable">
 <li class="ui-selectee" onClick="toggleSelectionDiv('#select_datasets','#ctrl_dataset');" title='Click to show/hide the datasets available'>
 <span class="ui-icon ui-icon-folder-open" style="float: left; margin-right: .3em;" id='ctrl_dataset'></span>
 Datasets 
@@ -19,7 +19,7 @@ Datasets
         </table>
 </div>
 
-<ul id="selectable">
+<ul id="mselectable">
 <li class="ui-selectee" onClick="toggleSelectionDiv('#select_models','#ctrl_model');" title='Click to show/hide the models available'>
 <span class="ui-icon ui-icon-folder-open" style="float: left; margin-right: .3em;" id='ctrl_model'></span>
 Predictions

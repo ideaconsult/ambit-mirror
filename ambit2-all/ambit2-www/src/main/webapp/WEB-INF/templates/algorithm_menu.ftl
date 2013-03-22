@@ -1,5 +1,5 @@
 
-<ul id="selectable">
+<ul>
 <li class="ui-selectee">
 <a href="${ambit_root}/ui"><span class="ui-icon ui-icon-home" style="float: left; margin-right: .3em;"></span>Home</a>
 </li>
