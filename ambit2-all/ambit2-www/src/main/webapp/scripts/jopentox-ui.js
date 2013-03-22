@@ -730,6 +730,7 @@ function datasetAutocomplete(id,datasetroot,maxhits) {
 	            url: datasetroot,
 	            dataType: "json",
 	            data: {
+	              media:"application/json",	            	
 	              max: maxhits,
 	              search: "^"+request.term
 	            },
