@@ -36,11 +36,15 @@ $(document)
 			var pTable = definePropertyValuesTable("${ambit_root}","${ambit_request_json}","#properties");
 			
 			var cmpURI_datasets = cmpURI + "/datasets?media=application/json";
-			var oTable = defineDatasetsTable("${ambit_root}",cmpURI_datasets);
+			try {
+				var oTable = defineDatasetsTable("${ambit_root}",cmpURI_datasets,false);
+			} catch (err) {
+
+			}
 			$('#download').html(getDownloadLinksCompound("${ambit_root}",cmpURI));
 			
 			$('#structype_${cmpid}').load(cmpURI + '/comparison');
-			$('#consensus_${cmpid}').load(cmpURI + '/consensus');	
+			$('#consensus_${cmpid}').load(cmpURI + '/consensus');
 
 	 });
 </script>
@@ -113,7 +117,7 @@ $(document)
 			
 			<span class='six columns alpha'>
 			<img id="i${cmpid}" src='${ambit_root}/compound/${cmpid}/image?w=${w}&h=${h}' width='${w}' height='${h}' title='${cmpid}'  usemap="#m${cmpid}" onError="this.style.display='none'">
-			<map id="m${cmpid}" name="m${cmpid}"/>
+			<map id="m${cmpid}" name="m${cmpid}"></map>
 			</span>
 			
 			<span class='ten columns omega help' id='identifiers'>${ambit_request}</span>
@@ -145,7 +149,9 @@ $(document)
 					<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 					<th>Name</th>
 					<th>Download</th>
+					<th style='display:none;'></th>
 					</tr>
+					
 					</thead>
 					<tbody></tbody>
 					</table>
