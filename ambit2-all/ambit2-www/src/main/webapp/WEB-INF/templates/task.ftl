@@ -72,7 +72,7 @@ $(document)
 			</span>
 			<p>Name:&nbsp;<strong id=task_name></strong></p>
 			<p>Status:&nbsp;<a href='#' id='result'></a>&nbsp;<img src='${ambit_root}/images/24x24_ambit.gif' id='status'>
-			<span id=task_errorreport></span>
+			<span id="task_errorreport"></span>
 			</p>
 			</div>
 		<#else>
