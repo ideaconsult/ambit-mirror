@@ -3,6 +3,8 @@ package ambit2.rest.model;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.restlet.Request;
 import org.restlet.data.Form;
@@ -12,8 +14,12 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.IEvaluation;
+import ambit2.core.data.model.IEvaluation.EVStatsType;
+import ambit2.core.data.model.IEvaluation.EVType;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.model.evaluation.EvaluationStats;
 import ambit2.rest.json.JSONUtils;
 
 /**
@@ -41,7 +47,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 		creator,
 		mimetype,
 		content,
-		evaluation,
+		evaluations,
 		algFormat,
 		stars;
 		
@@ -61,7 +67,25 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 			ois =  new ObjectInputStream(in);
 		 	Object o = ois.readObject();
 		 	if (o==null)  throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Error when reading model %s",model.getName()));
-		 	model.setEvaluation(form.getFirstValue("evaluation"));
+		 	
+	 		List<IEvaluation<String>> e = new ArrayList<IEvaluation<String>>();
+	 		for (EVType evt : EVType.values()) {
+	 			String[] evals = form.getValuesArray(evt.name());
+		 		for (int i=0; i < evals.length; i++) {
+		 			EvaluationStats<String> stats = new EvaluationStats<String>(evt,evals[i]);
+		 			for (EVStatsType evst : EVStatsType.values()) {
+		 				Object value = form.getFirstValue(evt.name() + "_" + evst.name());
+		 				if (value==null) continue;
+		 				try {
+		 					stats.getStats().put(evst,Double.parseDouble(value.toString()));
+		 				} catch (Exception x) {}
+		 			}
+		 			e.add(stats);
+		 		}
+	 		}
+	 		if (e.size()==0) model.setEvaluation(null);
+	 		else model.setEvaluation(e);
+	 		
 		} catch (Exception x) {
 			
 		} finally {
@@ -81,6 +105,24 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 				}
 			
 			if (comma!=null) getOutput().write(comma);
+			StringBuilder evals = new StringBuilder();
+			evals.append("[\n");
+			if (model.getEvaluation()!=null)
+			for (int i=0; i < model.getEvaluation().size(); i++) {
+				IEvaluation ev = model.getEvaluation().get(i);
+				if (i>0) evals.append(",");
+				evals.append(String.format("\t{\"%s\":\n\t\t{\"content\":\"%s\"",
+							ev.getType().name(),
+							JSONUtils.jsonEscape(ev.getContent().toString())));
+				if (ev instanceof EvaluationStats)
+					for (EVStatsType evst : EVStatsType.values()) {
+						Object value = ((EvaluationStats)ev).getStats().get(evst);
+						if (value==null) continue;
+						evals.append(String.format(",\n\t\t\"%s\":%s",evst.name(),value));	
+					}
+				evals.append("\n\t}\n\t}\n");
+			}
+			evals.append("\t]");
 			getOutput().write(String.format(
 					"\n{"+
 					"\n\"%s\":\"%s\"," + //uri
@@ -97,8 +139,8 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," +
-					"\n\t\"%s\":\"%s\"," +
-					"\n\t\"%s\":%d " +
+					"\n\t\"%s\":%s," +
+					"\n\t\"%s\":%s " +
 					"\n\n}}",
 					
 					jsonModel.URI.jsonname(),uri,
@@ -123,13 +165,13 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					jsonModel.content.jsonname(),"application/java".equals(model.getContentMediaType())
 												?JSONUtils.jsonEscape(model.getContent())
 												:(uri+"?media=text/plain"),
-					jsonModel.evaluation.jsonname(),model.getEvaluation()==null?"N/A":JSONUtils.jsonEscape(model.getEvaluation()),
+					jsonModel.evaluations.jsonname(),evals.toString(),
 					jsonModel.stars.jsonname(),model.getStars()
 					));
 			comma = ",";
 
 		} catch (Exception x) {
-			
+			x.printStackTrace();
 		}
 		return model;
 	}

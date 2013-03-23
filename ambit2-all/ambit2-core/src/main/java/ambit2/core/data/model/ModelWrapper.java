@@ -1,6 +1,8 @@
 package ambit2.core.data.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import ambit2.base.data.PredictedVarsTemplate;
 import ambit2.base.data.Template;
@@ -12,7 +14,7 @@ import ambit2.base.data.Template;
  * @author nina
  *
  */
-public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances extends T,Content> implements Serializable {
+public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances extends T,Content,EVCONTENT> implements Serializable {
 
 	/**
 	 * 
@@ -22,6 +24,18 @@ public abstract class ModelWrapper<T,TrainingInstances extends T,TestInstances e
 	protected Template dependent;
 	protected PredictedVarsTemplate predicted;
 	protected String[] parameters;
+	protected List<IEvaluation<EVCONTENT>> evaluations;
+	public List<IEvaluation<EVCONTENT>> getEvaluation() {
+		return evaluations;
+	}
+
+	public void setEvaluation(List<IEvaluation<EVCONTENT>> evaluation) {
+		this.evaluations = evaluation;
+	}
+	public void addEvaluation(IEvaluation<EVCONTENT> evaluation) {
+		if (evaluations==null) evaluations = new ArrayList<IEvaluation<EVCONTENT>>();
+		evaluations.add(evaluation);
+	}
 	protected int stars = 0;
 	
 	public int getStars() {

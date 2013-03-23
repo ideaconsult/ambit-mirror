@@ -31,10 +31,12 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
+import ambit2.core.data.model.IEvaluation.EVType;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.model.evaluation.EvaluationStats;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
@@ -135,9 +137,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 
 	}
 	
-	protected String getEvaluation(Form form) throws IOException {
-		return form.getFirstValue("evaluation");
-	}
+
 	protected Instances getHeader(Form form) throws IOException {
 		String header = form.getFirstValue("header");
 		return header ==null?null: new Instances(new StringReader(header));
@@ -179,7 +179,12 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		 	if (!isSupported(o))  
 		 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Wrong model type %s %s",model.getName(),o.getClass().getName()));
 		 	
-		 	model.setEvaluation(getEvaluation(form));
+		 	for (EVType evt : EVType.values()) {
+		 		String[] evals = form.getValuesArray(evt.name());
+		 		if (evals==null) continue;
+		 		for (String eval : evals)
+		 			model.addEvaluation(new EvaluationStats<String>(evt, eval));
+		 	}
 		 	header = getHeader(form);
 		 	classIndex = getClassIndex(form);
 		 	if ((header != null) &&  (classIndex>=0) && (classIndex<header.numAttributes()))	

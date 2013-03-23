@@ -128,6 +128,10 @@ $(document)
 			<th>Title</th>
 			<th>Algorithm</th>
 			<th>Training dataset</th>
+			<th>RMSE (TR)</th>
+			<th>RMSE (CV)</th>
+			<th>% Correct (TR)</th>
+			<th>% Correct (CV)</th>
 			<th>Logo</th>
 			</tr>
 			</thead>

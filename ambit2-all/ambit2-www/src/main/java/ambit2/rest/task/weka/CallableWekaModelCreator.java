@@ -11,6 +11,7 @@ import org.restlet.resource.ResourceException;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.WekaException;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.model.ModelQueryResults;
@@ -79,6 +80,12 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 			return new TaskResult(builder.getModelReporter().getURI(model));
 		} catch (WekaException e) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,e.getMessage(),e);
+		} catch (AmbitException e) {
+			Context.getCurrentLogger().severe(e.getMessage());
+			if ((e.getCause()!=null) && (e.getCause() instanceof WekaException)) 
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,e.getCause().getMessage(),e.getCause());
+			else 
+				throw e;
 		} catch (Exception e) {
 			Context.getCurrentLogger().severe(e.getMessage());
 			throw e;
