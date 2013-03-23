@@ -31,7 +31,7 @@ import ambit2.rest.task.TaskResult;
  * @author nina
  *
  */
-public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Instances,Instance,WekaModelBuilder,USERID> {
+public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Instances,Instance,FilteredWekaModelBuilder,USERID> {
 	
 
 	/**
@@ -49,7 +49,7 @@ public class CallableWekaModelCreator<USERID> extends CallableModelCreator<Insta
 			AlgorithmURIReporter alg_reporter,
 			USERID token) {
 		super(form, context,algorithm,
-				new WekaModelBuilder(applicationRootReference,
+				new FilteredWekaModelBuilder(applicationRootReference,
 						reporter,
 						alg_reporter,
 						OpenTox.params.target.getValuesArray(form),

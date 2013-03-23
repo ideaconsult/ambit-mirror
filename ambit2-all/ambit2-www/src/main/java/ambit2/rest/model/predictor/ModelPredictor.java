@@ -41,7 +41,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.task.waffles.WafflesPredictor;
-import ambit2.rest.task.weka.WekaPredictor;
+import ambit2.rest.task.weka.FilteredWekaPredictor;
 
 /**
  * Abstract class for all predictive models 
@@ -319,7 +319,7 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		try {
 		
 			if (model.getContentMediaType().equals(AlgorithmFormat.WEKA.getMediaType())) {
-				return new WekaPredictor(
+				return new FilteredWekaPredictor(
 						request.getRootRef(),
 						model,
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request));
