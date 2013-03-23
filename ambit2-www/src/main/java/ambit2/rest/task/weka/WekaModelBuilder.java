@@ -3,6 +3,7 @@ package ambit2.rest.task.weka;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Random;
 import java.util.UUID;
 
 import org.apache.xerces.impl.dv.util.Base64;
@@ -15,6 +16,7 @@ import org.restlet.resource.ResourceException;
 
 import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
 import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.trees.J48;
 import weka.clusterers.Clusterer;
@@ -145,7 +147,8 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 		m.setContentMediaType(AlgorithmFormat.WEKA.getMediaType());
 		m.setName(name);
 		m.setAlgorithm(alg_reporter.getURI(algorithm));
-		
+
+		StringBuilder evaluationString = new StringBuilder();
 		AlgorithmURIReporter r = new AlgorithmURIReporter();
 		LiteratureEntry entry = new LiteratureEntry(name,
 					algorithm==null?weka.getClass().getName():
@@ -189,10 +192,46 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			try {
 				if (classifier instanceof LinearRegression) //don't do feature selection!
 					classifier.setOptions(new String[] {"-S","1"});
+				
+				Evaluation eval = new Evaluation(newInstances);
+				if (newInstances.numInstances()>20) {
+					eval.crossValidateModel(classifier, newInstances, 10, new Random(1));
+					evaluationString.append("Crossvalidation 10 folds\n");
+				} else {
+					eval.crossValidateModel(classifier, newInstances, 2, new Random(1));
+					evaluationString.append("Crossvalidation 2 folds\n");
+				}	
+				try {
+					evaluationString.append(eval.toSummaryString());
+					evaluationString.append("\n");
+				} catch (Exception x) {}
+				try {
+					evaluationString.append(eval.toClassDetailsString());
+					evaluationString.append("\n");
+					evaluationString.append(eval.toMatrixString());
+					evaluationString.append("\n");
+				} catch (Exception x) {}
+				try {
+					evaluationString.append(eval.weightedAreaUnderROC());
+				} catch (Exception x) {}
+				
 				classifier.buildClassifier(newInstances);
+				eval = new Evaluation(newInstances);
+				eval.evaluateModel(classifier,newInstances);
+				try {
+					evaluationString.append("\nAll dataset model\n");
+					evaluationString.append(eval.toSummaryString());
+					evaluationString.append("\n");
+				} catch (Exception x) {}				
+				try {
+					evaluationString.append(eval.toMatrixString());
+					evaluationString.append("\n");
+				} catch (Exception x) {	}
 			} catch (Exception x) {
 				throw new AmbitException(x);
 			}			
+			
+			m.setEvaluation(evaluationString.toString());
 			dependent = new Template(name+"#Dependent");
 			Property property = createPropertyFromReference(new Reference(newInstances.attribute(newInstances.classIndex()).name()), entry); 
 			dependent.add(property);
@@ -299,6 +338,7 @@ public class WekaModelBuilder extends ModelBuilder<Instances,Algorithm, ModelQue
 			form.add("classIndex",Integer.toString(newInstances.classIndex()));		
 		newInstances.delete();
 		form.add("header", newInstances.toString());
+		form.add("evaluation", m.getEvaluation()==null?"":m.getEvaluation().toString());
 		m.setContent(form.getWebRepresentation().getText());
 	}
 	

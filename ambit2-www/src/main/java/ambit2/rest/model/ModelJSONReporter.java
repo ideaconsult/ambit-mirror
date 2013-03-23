@@ -1,6 +1,14 @@
 package ambit2.rest.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+
 import org.restlet.Request;
+import org.restlet.data.Form;
+import org.restlet.data.Status;
+import org.restlet.engine.util.Base64;
+import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
@@ -33,6 +41,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 		creator,
 		mimetype,
 		content,
+		evaluation,
 		algFormat,
 		stars;
 		
@@ -43,10 +52,27 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 	public ModelJSONReporter(Request baseRef) {
 		super(baseRef);
 	}
+	
+	protected void parseContent(ModelQueryResults model) {
+		 ObjectInputStream ois = null;
+		try {
+			Form form = new Form(model.getContent());
+			InputStream in = new ByteArrayInputStream(Base64.decode(form.getFirstValue("model")));
+			ois =  new ObjectInputStream(in);
+		 	Object o = ois.readObject();
+		 	if (o==null)  throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Error when reading model %s",model.getName()));
+		 	model.setEvaluation(form.getFirstValue("evaluation"));
+		} catch (Exception x) {
+			
+		} finally {
+			try { ois.close();} catch (Exception x) {}
+		}
+	}
 	@Override
 	public Object processItem(ModelQueryResults model) throws AmbitException {
 		try {
 			String uri = getURI(model);
+			parseContent(model);
 			AlgorithmFormat algFormat = AlgorithmFormat.JAVA_CLASS;
 			for (AlgorithmFormat af : AlgorithmFormat.values()) 
 				if (af.getMediaType().equals(model.getContentMediaType())) {
@@ -67,6 +93,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					"\n\"%s\":\"%s\"," + //vars
 					"\n\"%s\":\"%s\"," + //vars
 					"\n\"%s\":{" + 	
+					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," +
@@ -93,7 +120,10 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					jsonModel.legend.jsonname(),String.format("%s?media=image/png",uri),
 					jsonModel.creator.jsonname(),JSONUtils.jsonEscape(model.getCreator()),
 					jsonModel.mimetype.jsonname(),model.getContentMediaType(),
-					jsonModel.content.jsonname(),"application/java".equals(model.getContentMediaType())?JSONUtils.jsonEscape(model.getContent()):"",
+					jsonModel.content.jsonname(),"application/java".equals(model.getContentMediaType())
+												?JSONUtils.jsonEscape(model.getContent())
+												:(uri+"?media=text/plain"),
+					jsonModel.evaluation.jsonname(),model.getEvaluation()==null?"N/A":JSONUtils.jsonEscape(model.getEvaluation()),
 					jsonModel.stars.jsonname(),model.getStars()
 					));
 			comma = ",";

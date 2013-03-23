@@ -135,6 +135,9 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 
 	}
 	
+	protected String getEvaluation(Form form) throws IOException {
+		return form.getFirstValue("evaluation");
+	}
 	protected Instances getHeader(Form form) throws IOException {
 		String header = form.getFirstValue("header");
 		return header ==null?null: new Instances(new StringReader(header));
@@ -175,7 +178,8 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		 	if (o==null)  throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,String.format("Error when reading model %s",model.getName()));
 		 	if (!isSupported(o))  
 		 		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("Wrong model type %s %s",model.getName(),o.getClass().getName()));
-	 	
+		 	
+		 	model.setEvaluation(getEvaluation(form));
 		 	header = getHeader(form);
 		 	classIndex = getClassIndex(form);
 		 	if ((header != null) &&  (classIndex>=0) && (classIndex<header.numAttributes()))	
@@ -407,6 +411,9 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 		if (predictor != null) {
 			b.append(predictor.toString());
 		}
+		b.append("\n-- Evaluation --\n");
+		b.append(model.getEvaluation()==null?"N/A\n":model.getEvaluation().toString());
+		
 		return b.toString();
 				
 	}	

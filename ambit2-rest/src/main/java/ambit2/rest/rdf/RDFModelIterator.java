@@ -25,7 +25,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
  *
  */
 public abstract class RDFModelIterator<T,TrainingInstances extends T,TestInstances extends T,Content> 
-								extends RDFObjectIterator<ModelWrapper<T,TrainingInstances,TestInstances,Content>> {
+								extends RDFObjectIterator<ModelWrapper<T,TrainingInstances,TestInstances,Content,String>> {
 
 	public RDFModelIterator(Representation representation,MediaType mediaType) throws ResourceException,MalformedURLException,IOException {
 		super(representation,mediaType,OT.OTClass.Model.toString());
@@ -52,7 +52,7 @@ public abstract class RDFModelIterator<T,TrainingInstances extends T,TestInstanc
 	}
 
 	@Override
-	protected void parseObjectURI(RDFNode uri, ModelWrapper<T,TrainingInstances,TestInstances,Content> record) {
+	protected void parseObjectURI(RDFNode uri, ModelWrapper<T,TrainingInstances,TestInstances,Content,String> record) {
 		Map<String, Object> vars = new HashMap<String, Object>();
 		
 		try {
@@ -63,8 +63,8 @@ public abstract class RDFModelIterator<T,TrainingInstances extends T,TestInstanc
 	}
 
 	@Override
-	protected ModelWrapper<T,TrainingInstances,TestInstances,Content> parseRecord(RDFNode newEntry,
-			ModelWrapper<T,TrainingInstances,TestInstances,Content> record) {
+	protected ModelWrapper<T,TrainingInstances,TestInstances,Content,String> parseRecord(RDFNode newEntry,
+			ModelWrapper<T,TrainingInstances,TestInstances,Content,String> record) {
 		//TODO
 		return null;
 	}
