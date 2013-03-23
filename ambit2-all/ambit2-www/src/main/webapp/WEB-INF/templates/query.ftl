@@ -132,7 +132,7 @@
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 
-	<ul>
+	<ul id='selectable'>
 	<li class="ui-selectee">
 	<a href="${ambit_root}/ui"><span class="ui-icon ui-icon-home" style="float: left; margin-right: .3em;"></span>Home</a>
 	</li>
