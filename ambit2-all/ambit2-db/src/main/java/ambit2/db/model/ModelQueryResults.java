@@ -13,6 +13,7 @@ public class ModelQueryResults extends ModelWrapper<
 			String, 
 			String, //training dataset uri
 			String, //test dataset uri
+			String,
 			String> {
 	/**
 	 * 
