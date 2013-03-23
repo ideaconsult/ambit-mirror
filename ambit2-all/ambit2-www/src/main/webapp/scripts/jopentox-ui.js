@@ -268,7 +268,8 @@ function defineModelTable(root,url) {
     					"mDataProp" : null,
     					sWidth : "32px",
     					"fnRender" : function(o,val) {
-    						 return  "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";			
+    						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"'><br/>" + 
+    						 "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";			
     					}
     				},	     	            
     	  			{ 
@@ -298,7 +299,9 @@ function defineModelTable(root,url) {
     			        		pos = val.lastIndexOf("/");
     			        		if (pos>=0) val = val.substring(pos+1); 
         			      	  	var shortURI = val;
-        			      	  	if (val.length > 20) shortURI = val.substring(val,20) + "..."; 	
+        			      	  	pos = shortURI.lastIndexOf(".");
+    			        		if (pos>=0) shortURI = shortURI.substring(pos+1); 
+        			      	  	if (shortURI.length > 20) shortURI = shortURI.substring(val,20) + "..."; 	
     			                return "<a href='"+ uri +"' title='Click to view the algorithm at "+uri+"' target='algorithm'>"+shortURI+"</a>";
     			      }
     		  		},    	  			
@@ -317,51 +320,79 @@ function defineModelTable(root,url) {
     	  			{ "sTitle": "RMSE (TR)", 
       		  		  "mDataProp":null,
       		  		  "aTargets": [ 5 ],	
-      			      "bUseRendered" : false,	
+      		  		  "bSortable" : true,
+      			      "bUseRendered" : true,	
       			      "fnRender": function ( o, val ) {
       			    	  try {
-      			    		  console.log(o.aData["ambitprop"]["evaluations"]);
-      			    		  return o.aData["ambitprop"]["evaluations"]["evaluation_training"]["rmse"];
+      			    		  var val = o.aData["ambitprop"]["evaluations"]["evaluation_training"]["rmse"];
+      			    		  return val===undefined?"":val;
       			    	  } catch (err) {return "";}	  
       			       }
       		  		},
     	  			{ "sTitle": "RMSE (CV)", 
         		  		  "mDataProp":null,
         		  		  "aTargets": [ 6 ],	
-        			      "bUseRendered" : false,	
+        		  		  "bSortable" : true,
+        			      "bUseRendered" : true,	
         			      "fnRender": function ( o, val ) {
         			    	  try {
-        			    		  return o.aData["ambitprop"]["evaluations"]["crossvalidation"]["rmse"];
+        			    		  var val = o.aData["ambitprop"]["evaluations"]["crossvalidation"]["rmse"];
+        			    		  return val===undefined?"":val;
         			    	  } catch (err) {return "";}	  
         			       }
         		  	},
     	  			{ "sTitle": "Correct % (TR)", 
       		  		  "mDataProp":null,
       		  		  "aTargets": [ 7 ],	
-      			      "bUseRendered" : false,	
+      		  		  "bSortable" : true,
+      			      "bUseRendered" : true,	
       			      "fnRender": function ( o, val ) {
       			    	  try {
-      			    		  return o.aData["ambitprop"]["evaluations"]["evaluation_training"]["pctcorrect"];
+      			    		  var val = o.aData["ambitprop"]["evaluations"]["evaluation_training"]["pctcorrect"];
+      			    		  return val===undefined?"":val;
       			    	  } catch (err) {return "";}	  
       			       }
     	  			},
     	  			{ "sTitle": "Correct % (CV)", 
         		  		  "mDataProp":null,
         		  		  "aTargets": [8 ],	
-        			      "bUseRendered" : false,	
+        		  		  "bSortable" : true,
+        			      "bUseRendered" : true,	
         			      "fnRender": function ( o, val ) {
         			    	  try {
-        			    		  return o.aData["ambitprop"]["evaluations"]["crossvalidation"]["pctcorrect"];
+        			    		  var val = o.aData["ambitprop"]["evaluations"]["crossvalidation"]["pctcorrect"];
+        			    		  return val===undefined?"":val;
         			    	  } catch (err) {return "";}	  
         			       }
       	  			},     	  			
     	  			{ "sClass": "center", 
-      		  		  "mDataProp":"algorithm.algFormat", 
+      		  		  "mDataProp":null, 
       		  		  "aTargets": [ 9 ],	
       		  		  sWidth: "5%",
     		              "bUseRendered" : false,	"bSortable": true,
     		              "fnRender": function ( o, val ) {
-    		                  return "<img src='"+root + o.aData.algorithm.img +"'>";
+		            		  var id = getID();
+		            		  var sOut = "";
+    		            	  try {
+    		            		  var val = o.aData["ambitprop"]["evaluations"]["crossvalidation"]["content"];
+    		            		  if (val != undefined)
+    		            			  sOut += "<a href='#' title='Crossvalidation' onClick='$(\"#t"+id+"\").toggle();'>CV</a><textarea style='display:none;' id='t"+id+"'>"+
+    		            		  		   val +"</textarea> ";
+    		            	  } catch (err) { }
+    		            	  try {
+    		            		  var val = o.aData["ambitprop"]["evaluations"]["evaluation_training"]["content"];
+    		            		  if (val != undefined)
+    		            			  sOut += "<a href='#' title='Training' onClick='$(\"#c"+id+"\").toggle();'>Training</a><textarea style='display:none;' id='c"+id+"'>"+
+    		            			  val + "</textarea>";
+    		              	  } catch (err) { }
+    		              	  try {
+    		            		  var val = o.aData["ambitprop"]["evaluations"]["evaluation"]["content"];
+    		            		  if (val != undefined)
+    		            			  sOut += "<a href='#' title='Stats' onClick='$(\"#e"+id+"\").toggle();'>Stats</a><textarea style='display:none;' id='e"+id+"'>"+
+    		            			  val + "</textarea>";
+    		            	  } catch (err) { }
+		            		  return sOut;
+
     		                }
       	  			}    		  		
      				],
@@ -398,6 +429,9 @@ function defineModelTable(root,url) {
 	return oTable;
 }
 
+function statsDialog(content) {
+	$("#dialog").text(content); 
+}
 /**
  * Models row detais
  * @param oTable

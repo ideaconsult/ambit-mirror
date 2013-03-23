@@ -106,12 +106,12 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 			
 			if (comma!=null) getOutput().write(comma);
 			StringBuilder evals = new StringBuilder();
-			evals.append("[\n");
+			evals.append("{\n");
 			if (model.getEvaluation()!=null)
 			for (int i=0; i < model.getEvaluation().size(); i++) {
 				IEvaluation ev = model.getEvaluation().get(i);
 				if (i>0) evals.append(",");
-				evals.append(String.format("\t{\"%s\":\n\t\t{\"content\":\"%s\"",
+				evals.append(String.format("\t\"%s\":\n\t\t{\"content\":\"%s\"",
 							ev.getType().name(),
 							JSONUtils.jsonEscape(ev.getContent().toString())));
 				if (ev instanceof EvaluationStats)
@@ -120,9 +120,9 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 						if (value==null) continue;
 						evals.append(String.format(",\n\t\t\"%s\":%s",evst.name(),value));	
 					}
-				evals.append("\n\t}\n\t}\n");
+				evals.append("\t\n}");
 			}
-			evals.append("\t]");
+			evals.append("\t}");
 			getOutput().write(String.format(
 					"\n{"+
 					"\n\"%s\":\"%s\"," + //uri

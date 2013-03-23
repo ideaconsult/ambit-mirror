@@ -59,7 +59,6 @@ $(document)
 </head>
 <body>
 
-
 <div class="container" style="margin:0;padding:0;">
 
 <form method='GET' name='searchform' id='searchform' action='${ambit_root}/model' style='padding:0;margin:0;'>
@@ -123,7 +122,7 @@ $(document)
 			<table id='model' class='modeltable'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
-			<th></th>
+			<th>Logo</th>
 			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 			<th>Title</th>
 			<th>Algorithm</th>
@@ -132,7 +131,7 @@ $(document)
 			<th>RMSE (CV)</th>
 			<th>% Correct (TR)</th>
 			<th>% Correct (CV)</th>
-			<th>Logo</th>
+			<th>Stats</th>
 			</tr>
 			</thead>
 			<tbody></tbody>
@@ -152,5 +151,8 @@ $(document)
 
 <#include "/footer.ftl" >
 </div> <!-- container -->
+
+
+
 </body>
 </html>
