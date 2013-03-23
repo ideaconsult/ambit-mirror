@@ -28,6 +28,7 @@ import weka.filters.Filter;
 import weka.filters.MultiFilter;
 import weka.filters.unsupervised.attribute.Remove;
 import weka.filters.unsupervised.attribute.ReplaceMissingValues;
+import weka.filters.unsupervised.attribute.Standardize;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.PredictedVarsTemplate;
@@ -119,7 +120,7 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 		
 
 		
-		Filter filters[] = new Filter[2];
+		Filter filters[] = new Filter[3];
 		MultiFilter filter = new MultiFilter();
 		filter.setFilters(filters);
 		
@@ -130,6 +131,11 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 			Remove remove = new Remove();     
 			remove.setOptions(options);                          
 			filters[0] = remove;
+		} catch (Exception x) {throw new AmbitException(x);}
+
+		try { //all besides the class (if set!)
+			Standardize replace = new Standardize();
+			filters[2] = replace;
 		} catch (Exception x) {throw new AmbitException(x);}
 		
 		try { //remove missing values
