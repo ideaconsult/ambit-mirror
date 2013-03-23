@@ -285,7 +285,7 @@ function defineModelTable(root,url) {
     	  			  sWidth: "50%",
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
-    		                return "<a href='"+o.aData.URI +"'>" +val + "</a>";
+    		                return "<a href='"+o.aData.URI +"' title='Click to view models details and run predictions'>" +val + "</a>";
     		          }
     		  		},   
     	  			{ "sTitle": "Algorithm", 
@@ -299,7 +299,7 @@ function defineModelTable(root,url) {
     			        		if (pos>=0) val = val.substring(pos+1); 
         			      	  	var shortURI = val;
         			      	  	if (val.length > 20) shortURI = val.substring(val,20) + "..."; 	
-    			                return "<a href='"+ uri +"' title='"+uri+"'>"+shortURI+"</a>";
+    			                return "<a href='"+ uri +"' title='Click to view the algorithm at "+uri+"' target='algorithm'>"+shortURI+"</a>";
     			      }
     		  		},    	  			
     	  			{ "sTitle": "Training Dataset", 
@@ -309,13 +309,55 @@ function defineModelTable(root,url) {
     			      "bUseRendered" : false,	
     			      "fnRender": function ( o, val ) {
     			      	  	shortURI = val;
-    			      	  	if (val.length > 20) shortURI = val.substring(val,20) + "..."; 	
-    			                 return "<a href='"+ val +"' title='"+val+"'>"+shortURI+"</a>";
+			        		pos = shortURI.lastIndexOf("/");
+			        		if (pos>=0) shortURI = val.substring(pos+1); 
+  			                return "<a href='"+ val +"?max=100' title='Click to browse the training dataset "+val+"' target='dataset'>"+shortURI+"</a>";
     			       }
     		  		},
+    	  			{ "sTitle": "RMSE (TR)", 
+      		  		  "mDataProp":null,
+      		  		  "aTargets": [ 5 ],	
+      			      "bUseRendered" : false,	
+      			      "fnRender": function ( o, val ) {
+      			    	  try {
+      			    		  console.log(o.aData["ambitprop"]["evaluations"]);
+      			    		  return o.aData["ambitprop"]["evaluations"]["evaluation_training"]["rmse"];
+      			    	  } catch (err) {return "";}	  
+      			       }
+      		  		},
+    	  			{ "sTitle": "RMSE (CV)", 
+        		  		  "mDataProp":null,
+        		  		  "aTargets": [ 6 ],	
+        			      "bUseRendered" : false,	
+        			      "fnRender": function ( o, val ) {
+        			    	  try {
+        			    		  return o.aData["ambitprop"]["evaluations"]["crossvalidation"]["rmse"];
+        			    	  } catch (err) {return "";}	  
+        			       }
+        		  	},
+    	  			{ "sTitle": "Correct % (TR)", 
+      		  		  "mDataProp":null,
+      		  		  "aTargets": [ 7 ],	
+      			      "bUseRendered" : false,	
+      			      "fnRender": function ( o, val ) {
+      			    	  try {
+      			    		  return o.aData["ambitprop"]["evaluations"]["evaluation_training"]["pctcorrect"];
+      			    	  } catch (err) {return "";}	  
+      			       }
+    	  			},
+    	  			{ "sTitle": "Correct % (CV)", 
+        		  		  "mDataProp":null,
+        		  		  "aTargets": [8 ],	
+        			      "bUseRendered" : false,	
+        			      "fnRender": function ( o, val ) {
+        			    	  try {
+        			    		  return o.aData["ambitprop"]["evaluations"]["crossvalidation"]["pctcorrect"];
+        			    	  } catch (err) {return "";}	  
+        			       }
+      	  			},     	  			
     	  			{ "sClass": "center", 
       		  		  "mDataProp":"algorithm.algFormat", 
-      		  		  "aTargets": [ 5 ],	
+      		  		  "aTargets": [ 9 ],	
       		  		  sWidth: "5%",
     		              "bUseRendered" : false,	"bSortable": true,
     		              "fnRender": function ( o, val ) {
