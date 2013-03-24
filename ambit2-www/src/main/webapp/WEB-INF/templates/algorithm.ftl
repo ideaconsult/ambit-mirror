@@ -2,7 +2,7 @@
 <head>
 <#include "/header.ftl" >
 
-<style>
+<style  type="text/css">
 .ui-autocomplete {
   max-height: 200px;
   overflow-y: auto;
