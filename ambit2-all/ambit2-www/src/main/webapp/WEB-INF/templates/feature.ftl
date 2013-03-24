@@ -69,12 +69,12 @@ $(document)
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/menu.ftl">
 
+
 <div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
 <div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
 </div>
 <div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
 </div>	
-
 </div>
 
 <div class="thirteen columns remove-bottom" style="padding:0;" >
@@ -90,9 +90,9 @@ $(document)
 			<th>Units</th>
 			<th>Same As <a href='#' class='chelp hsameas'>?</a></th>
 			<th>Origin <a href='#' class='chelp horigin'>?</a></th>
-			<th>Values Type</th>
-			<th>Nominal values</th>
-			<th>More</th>			
+			<th>Values Type <a href='#' class='chelp hvaluestype'>?</a></th>
+			<th>Nominal values <a href='#' class='chelp hnominal'>?</a></th>
+			<th>More <a href='#' class='chelp hannotation'>?</a></th>			
 			</tr>
 			</thead>
 			<tbody></tbody>
