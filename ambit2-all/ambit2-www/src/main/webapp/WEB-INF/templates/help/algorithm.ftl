@@ -1,6 +1,7 @@
 <div class='helptitle' style='font-weight:bold;'>Help: Algorithm service</div>
 <div class='helpcontent'>
 What is Algorithm service<a href='#' class='chelp hwhat'>?</a> |
+What is SuperBuilder <a href='#' class='chelp hsuperbuilder'>?</a> |
 Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
 <a href="http://ambit.sourceforge.net/api_algorithm.html" target=_blank title='Application Programming interface'>API</a>
 
@@ -17,6 +18,7 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
     <li><a href="#hlearning">Learning algorithm</a></li>
     <li><a href="#hmodel">Models</a></li>
     <li><a href="#hwhat"> </a></li>
+    <li><a href="#hsuperbuilder"> </a></li>
   </ul>
   <div id="hdataset">
     Dataset or compound URI as in <a href="${ambit_root}/dataset?max=100" target=_blank>Datasets list</a>.
@@ -72,4 +74,13 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
   Once a model is built, it is assigned a model URI (as in <a href='${ambit_root}/model?max=100' target=_blank>Models</a>) 
   and can be applied to <a href='${ambit_root}/dataset?max=100' target=_blank>datasets</a> and <a href='${ambit_root}/compound?max=100' target=_blank>compounds</a>.
   </div>
+  <div id="hsuperbuilder" >
+ The SuperBuilder is a specific instance of an OpenTox algorithm service, that uses other OpenTox services to create a model or a dataset.
+The SuperBuilder uses descriptor calculation service, feature selection service and a modelling algorithm service to create prediction models. In general,  OpenTox 
+Model services execute only learning algorithms (e.g. regression or classification) and assume the input dataset contains all necessary descriptors.
+The SuperBuilder accepts URI of descriptor calculation algorithms via "feature_calculation" parameters, runs all the calculation, prepares a dataset with all descriptors and the endpoint (URI specified by "prediction_feature" parameter), and submits the final dataset to the learning algorithm (URI specified by "model_learning" parameter).
+More <a href='http://www.ideaconsult.net/web/ngn/blogs/-/blogs/opentox-model-superbuilder' target='help'>details</a>.
+  
+  </div>
+ 
 </div>      

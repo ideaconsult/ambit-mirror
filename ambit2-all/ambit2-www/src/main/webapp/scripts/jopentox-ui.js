@@ -150,9 +150,16 @@ function readAlgorithm(root,url) {
 	  $.ajax({
 	        dataType: "json",
 	        url: url,
+	        cache: false, //otherwise stupid broken IE8 clears the page on refresh...
+            data: {
+	              media:"application/json"
+	        },	        
 	        success: function(data, status, xhr) {
 	        	$.each(data["algorithm"],function(index, entry) {
-	        		renderAlgorithm(entry,root,null);
+	        		try {
+	        			renderAlgorithm(entry,root,null);
+	        		} catch (err) {
+	        		}
 	        	});
 	        },
 	        error: function(xhr, status, err) {
@@ -177,7 +184,7 @@ function renderAlgorithm(entry,root,err) {
 	var icon = '<span class="ui-icon ui-icon-pin-s" style="float: left; margin-right: .1em;"></span>';
 	$("#alg_title").text(entry["name"]);
 	$("#alg_title").prop("title",entry["content"]);
-	if ((entry["endpoint"]===undefined) ||(entry["endpoint"]=="")) {
+	if ((entry["endpoint"]===undefined) || (entry["endpoint"]==null) ||(entry["endpoint"]=="")) {
 		$("#predictsEndpoint").hide();
 	} else {
 		var val = entry["endpoint"];
@@ -186,7 +193,9 @@ function renderAlgorithm(entry,root,err) {
 		$("#alg_endpoint").text(val);
 		$("#predictsEndpoint").show();
 	}
+	
 	$("#alg_implementation").html(entry["implementationOf"]);
+		
 	$("#alg_implementation").prop('href','http://apps.ideaconsult.net:8080/ontology?uri='+encodeURIComponent(entry["implementationOf"]));
 	
 	$("#alg_requires").text(entry["requires"]=="structure"?"Chemical structure":entry["requires"]);
@@ -228,6 +237,7 @@ function renderAlgorithm(entry,root,err) {
 		$("#alg_dataset").text("Calculate descriptors, prepares a dataset and runs the model");
 		$("#superService").show(); 
 	} else $("#superService").hide();
+
 }
 
 /**
@@ -507,6 +517,10 @@ function readModel(root,url) {
 	  $.ajax({
 	        dataType: "json",
 	        url: url,
+	        cache: false, //to cope with IE8
+            data: {
+	              media:"application/json"
+	        },	       	        
 	        success: function(data, status, xhr) {
 	        	$.each(data["model"],function(index, entry) {
 	        		renderModel(entry,root,null);
