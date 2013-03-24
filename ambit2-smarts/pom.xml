@@ -24,14 +24,6 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
-<!--
-  	    <dependency>
-    	<groupId>weka</groupId>
-    	<artifactId>weka</artifactId>
-    	<version>3.6.2</version>
-    	<scope>test</scope>
-    </dependency>
--->
   </dependencies>
   <developers>
   	<developer>

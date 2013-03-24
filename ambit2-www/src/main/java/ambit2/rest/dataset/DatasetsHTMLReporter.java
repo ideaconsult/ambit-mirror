@@ -395,8 +395,8 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 						"link.png",
 						"pdf.png",
 						"excel.png",
-						"weka.jpg",
-						"weka.jpg",
+						"weka.png",
+						"weka.png",
 						"rdf.gif",
 						"json.png"
 						

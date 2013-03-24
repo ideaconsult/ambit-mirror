@@ -160,8 +160,8 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 				"pdf.png",
 				"excel.png",
 				"excel.png",
-				"weka.jpg",
-				"weka.jpg",
+				"weka.png",
+				"weka.png",
 				"rdf.gif",
 				"json.png"
 				

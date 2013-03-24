@@ -303,6 +303,38 @@ public class ModelResourceTest extends ResourceTest {
 		c.close();		
 		
 	}
+	@Test
+	public void testRandomForest() throws Exception {
+		
+		setUpDatabase("src/test/resources/src-datasets_model.xml");
+		predict(String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/4",port,port,port,port),
+				String.format("http://localhost:%d/feature/4",port),
+				String.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",port,port,port,port),
+				String.format("http://localhost:%d/algorithm/RandomForest", port));
+	
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED",
+				"SELECT id_srcdataset,idstructure,idproperty,properties.name,value_string,value_number FROM values_all join struc_dataset using(idstructure) " +
+				"	join properties using(idproperty) join catalog_references r on properties.idreference=r.idreference " +
+				" where id_srcdataset=1 and properties.name='Complex Endpoint' and type='Model' order by idstructure");
+		Assert.assertEquals(4,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		"SELECT dependent,idproperty,content from models join template_def t on t.idtemplate=models.dependent where models.name regexp 'RandomForest'");
+		Assert.assertEquals(1,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+		String.format("SELECT * from properties where comments='%s'",Property.opentox_ConfidenceFeature));
+		Assert.assertEquals(1,table.getRowCount());
+		
+		table = 	c.createQueryTable("EXPECTED",
+				String.format("SELECT * from property_values join properties using(idproperty) where comments='%s' and value_num is not null",Property.opentox_ConfidenceFeature));
+				Assert.assertEquals(4,table.getRowCount());
+				
+		c.close();		
+		
+	}
 	public void predict(String dataset, String target, String datasetTest, String algorithmURI) throws Exception {
 		predict(dataset,target,datasetTest,algorithmURI,null);
 	}
