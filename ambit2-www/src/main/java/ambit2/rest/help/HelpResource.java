@@ -28,6 +28,7 @@ public class HelpResource extends CatalogResource<String>  {
 		compound,
 		algorithm,
 		model,
+		feature,
 		task
 	}
 	public HelpResource() {

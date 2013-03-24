@@ -280,7 +280,6 @@ function defineModelTable(root,url) {
     					"bSearchable" : false,
     					"mDataProp" : null,
     					"bUseRendered" : true,
-    					sWidth : "32px",
     					"fnRender" : function(o,val) {
     						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"' title='"+o.aData.algorithm.algFormat+"'><br/>" + 
     						 "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";			
@@ -301,6 +300,7 @@ function defineModelTable(root,url) {
     	  			  "aTargets": [ 2 ],
     	  			  "bSortable" : true,
     	  			  "bSearchable" : true,
+    	  			  sWidth : "25%",
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
     		        	    var shortURI = o.aData.URI;
@@ -635,7 +635,7 @@ function defineDatasetsTable(root,url,deleteVisible) {
   		        	    	pos =  shortURI.lastIndexOf("/");
   		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
     		        	    var sOut = "<a target='table' href='"+o.aData.URI +
-    		        	   		"?page=0&pagesize=100'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' title='Click to browse the dataset'></span>D"+
+    		        	   		"?page=0&pagesize=100'title='Click to view the dataset at "+ o.aData.URI+" as atable'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>D"+
     		        	   		shortURI+"</a><br/>"+val;
     		               var seeAlso =  o.aData["seeAlso"];
     		               if ((seeAlso != undefined) && (seeAlso != null)) {
@@ -1008,8 +1008,166 @@ function modelAutocomplete(id,modelroot,algtype,maxhits) {
 	        minLength: 1,
 	        open: function() {
 	        	  $('.ui-autocomplete').css('width', '450px');
-		    }       
+		    }
 	});
+}
+
+/**
+ * Lists OpenTox Features, as in /feature
+ * @param root
+ * @param url
+ * @returns
+ */
+function defineFeatureTable(root,url) {
+
+	var oTable = $('#feature').dataTable( {
+		"sAjaxDataProp" : "feature",
+		"bProcessing": true,
+		"bServerSide": false,
+		"bStateSave": false,
+		"aoColumnDefs": [
+				{ "mDataProp": "feature.title" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 0 ],	
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "sWidth" : "25%",
+					  "fnRender" : function(o,val) {
+  		        	    var shortURI = o.aData.URI;
+		        	    pos =  shortURI.lastIndexOf("/");
+		        	    if (pos>=0) shortURI = shortURI.substring(pos+1); 
+		                return "<a href='"+o.aData.URI +"' title='Click to view the feature at " + 
+		                		o.aData.URI+" '><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>F" +
+		                		shortURI + "</a><br>" + val;
+					  }
+				},
+				{ "mDataProp": "feature.units" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 1 ],	
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "sWidth" : "5%",
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return val;
+					  }
+				},
+				{ "mDataProp": "feature.sameAs" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 2 ],	
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "sWidth" : "20%",
+					  "fnRender" : function(o,val) {
+						  var ont = "<a href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank title='"+val+"'>owl:sameAs</a>";
+						  return	(val.replace("http://www.opentox.org/echaEndpoints.owl#","Endpoint: ")
+						  			.replace("http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#","Algorithm: ")
+						  			.replace("http://www.opentox.org/api/1.1#","OpenTox: ")) + "<br>" + ont;;
+					  }
+				},
+				{ "mDataProp": "feature.source.URI" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 3 ],	
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "sWidth" : "20%",
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return "<a href='"+val+"' title='"+val+"' target='origin'>"+o.aData.feature.source.type+"</a>";
+					  }
+				},
+				{ "mDataProp": "feature.isNumeric" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 4 ],	
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "sWidth" : "10%",
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return boolean2checkbox(val,"Numeric","String");
+					  }
+				},
+				{ "mDataProp": "feature.isNominal" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 5 ],	
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "sWidth" : "10%",
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return boolean2checkbox(val,"Yes","No");
+					  }
+				},
+				{ "mDataProp": "URI" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [6 ],	
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+						  return "<a href='"+val+"/annotation' target='annotation'>More</a>";
+					  }
+				}					
+			],
+		"sSearch": "Filter:",
+		"bJQueryUI" : true,
+		"bSearchable": true,
+		"sAjaxSource": url,
+		"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+		"bPaginate" : true,
+		"sPaginationType": "full_numbers",
+		"sPaginate" : ".dataTables_paginate _paging",
+		"oLanguage": {
+	            "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+	            "sLoadingRecords": "No properties found.",
+	            "sZeroRecords": "No properties found.",
+	            "sInfo": "Showing _TOTAL_ properties (_START_ to _END_)",
+	            "sLengthMenu": 'Display <select>' +
+              '<option value="10">10</option>' +
+              '<option value="20">20</option>' +
+              '<option value="50">50</option>' +
+              '<option value="100">100</option>' +
+              '<option value="-1">all</option>' +
+              '</select> properties.'	            
+	    },
+	    "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+			oSettings.jqXHR = $.ajax({
+				"type" : "GET",
+				"url" : sSource,
+				"data" : aoData,
+				"dataType" : "json",
+				"contentType" : "application/json",
+				"cache" : true,
+				"success": function(result){
+		              var mapped = $.map( result.feature, function( item , index) {
+			                return {
+			                  URI : index,
+			                  feature : item
+			                }
+			              });
+					  fnCallback({"feature":mapped});
+				},
+				"error" : function(xhr, textStatus, error) {
+					switch (xhr.status) {
+					case 403: {
+			        	alert("Restricted access. You are not authorized to access the requested properties.");
+						break;
+					}
+					case 404: {
+						//not found
+						break;
+					}
+					default: {
+						//console.log(xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+			        	alert("Error loading properties " + xhr.status + " " + error);
+					}
+					}
+					oSettings.oApi._fnProcessingDisplay(oSettings, false);
+				}
+			});
+		}	    
+	} );
+	return oTable;
+}
+
+function boolean2checkbox(val,yes,no) {
+	var istrue = (val.toLowerCase() === 'true');
+	return "<input type='checkbox' "+ (istrue?"checked":"") + " title="  + (istrue?yes:no) + " disabled> " + (istrue?yes:no) ;
 }
 /**
  * Features list box
