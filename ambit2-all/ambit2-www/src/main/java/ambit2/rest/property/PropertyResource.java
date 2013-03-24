@@ -85,9 +85,14 @@ public class PropertyResource extends QueryResource<IQueryRetrieval<Property>, P
 	
 	public PropertyResource() {
 		super();
-
 		setDocumentation(new ResourceDoc("Feature","Feature"));
+		setHtmlbyTemplate(true);
 	}
+	@Override
+	public String getTemplateName() {
+		return "feature.ftl";
+	}
+	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
