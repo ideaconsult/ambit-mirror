@@ -55,10 +55,16 @@
     	<artifactId>arq-extra</artifactId>
     	<version>2.7.0</version>
     </dependency>
+    
     <dependency>
+		<groupId>nz.ac.waikato.cms.weka</groupId>
+		<artifactId>weka-stable</artifactId>
+		<version>3.6.9</version>
+		<!--     
     	<groupId>weka</groupId>
     	<artifactId>weka</artifactId>
     	<version>3.6.2</version>
+    	 -->
     </dependency>
         <dependency>
     	<groupId>org.restlet.jee</groupId>

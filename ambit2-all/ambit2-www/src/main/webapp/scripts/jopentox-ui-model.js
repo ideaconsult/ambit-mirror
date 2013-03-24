@@ -110,12 +110,20 @@ $(document).ready(function() {
 		
 	    sOut += '<tr><td>Training algorithm</td><td><a href="' + model.algorithm.URI + '">' + model.algorithm.URI + '</a></td></tr>';
 	    sOut += '<tr><td>Variables</td><td>';
-	    sOut += '<a href="' + model.independent + '">Independent</a>|&nbsp;';
-	    sOut += '<a href="' + model.dependent + '">Dependent</a>|&nbsp;';
-	    sOut += '<a href="' + model.predicted + '">Predicted</a>&nbsp;';
+	    sOut += '<a href="' + model.independent + '" target="vars">Independent</a>|&nbsp;';
+	    sOut += '<a href="' + model.dependent + '" target="vars">Dependent</a>|&nbsp;';
+	    sOut += '<a href="' + model.predicted + '" target="vars">Predicted</a>&nbsp;';
 	    sOut += '</td></tr>\n';
-	    sOut += '<tr><td>Model content</td><td>'+model.ambitprop.content+' ['+model.ambitprop.mimetype+']</td></tr>';	    
-
+	    
+	    if (model.ambitprop.content.lastIndexOf("http", 0) == 0) { //starts with http
+	    	sOut += '<tr><td>Model content</td><td><a href="'+model.ambitprop.content+'">'+model.ambitprop.mimetype+'</a></td></tr>';	
+	    } else {
+	    	sOut += '<tr><td>Model content</td><td>'+model.ambitprop.content+' ['+model.ambitprop.mimetype+']</td></tr>';
+	    }
+/*	    	    
+		  sOut += "<a href='#' title='Stats' onClick='$(\"#e"+id+"\").toggle();'>Stats</a><textarea style='display:none;' id='e"+id+"'>"+
+		  val + "</textarea>";
+*/		  
 
 	    sOut += '</table>';
 	    sOut += '</div></div>\n';

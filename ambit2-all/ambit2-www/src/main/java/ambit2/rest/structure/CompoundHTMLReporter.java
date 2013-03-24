@@ -279,8 +279,8 @@ public class CompoundHTMLReporter<Q extends IQueryRetrieval<IStructureRecord>>
 				"pdf.png",
 				"excel.png",
 				"excel.png",
-				"weka.jpg",
-				"weka.jpg",
+				"weka.png",
+				"weka.png",
 				"rdf.gif"
 				
 		};

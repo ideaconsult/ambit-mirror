@@ -50,7 +50,7 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			}
 			@Override
 			public String getImage() {
-				return "images/weka.jpg";
+				return "images/weka.png";
 			}
 		},
 		MOPAC {

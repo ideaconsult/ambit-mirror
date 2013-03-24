@@ -36,7 +36,7 @@ var _ambit = {
 	           	  {id:"sdf",img:"sdf.jpg",alt:"SDF",title:'Download as SDF',mime:'chemical/x-mdl-sdfile'},
 	           	  {id:"csv",img:"excel.png",alt:"CSV",title:'Download as CSV (Comma delimited file)',mime:'text/csv'},
 	           	  {id:"cml",img:"cml.jpg",alt:"CML",title:'Download as CML (Chemical Markup Language)',mime:'chemical/x-cml'},
-	           	  {id:"arff",img:"weka.jpg",alt:"SDF",title:'Download as SDF',mime:'text/x-arff'},
+	           	  {id:"arff",img:"weka.png",alt:"SDF",title:'Download as SDF',mime:'text/x-arff'},
 	           	  {id:"rdfxml",img:"rdf.gif",alt:"RDF/XML",title:'Download as RDF XML',mime:'application/rdf+xml'},
 	           	  {id:"rdfn3",img:"rdf.gif",alt:"RDF N3",title:'Download as RDF N3',mime:'text/n3'},
 	           	  {id:"json",img:"json.png",alt:"JSON",title:'Download as JSON',mime:'application/json'}

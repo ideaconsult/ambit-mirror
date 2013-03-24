@@ -26,34 +26,72 @@
 </li>
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Regression">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Regression</a>
+	<a href="${ambit_root}/algorithm?type=Learning">
+	<span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Machine learning</a>
 </li>
 
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Classification">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Classification</a>
-</li>
 
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Clustering">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Clustering</a>
-</li>
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=FeatureSelection">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>FeatureSelection</a>
-</li>
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=Regression">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em;  margin-right: .3em;"></span>Regression</a>
+	</li>
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=Classification">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em;  margin-right: .3em;"></span>Classification</a>
+	</li>
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=Clustering">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em;  margin-right: .3em;"></span>Clustering</a>
+	</li>
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=FeatureSelection">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em;  margin-right: .3em;"></span>FeatureSelection</a>
+	</li>
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=Supervised">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
+		Supervised</a>
+	</li>
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=UnSupervised">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
+		UnSupervised</a>
+	</li>
+	
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=SingleTarget">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
+		Single Target</a>
+	</li>
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=MultipleTarget">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
+		Multiple Targets</a>
+	</li>
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=EagerLearning">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
+		Eager Learning</a>
+	</li>
+	
+	<li class="ui-selectee">
+		<a href="${ambit_root}/algorithm?type=LazyLearning">
+		<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
+		Instance (lazy) learning</a>
+	</li>
 
 
 <li class="ui-selectee">
 	<a href="${ambit_root}/algorithm?type=AppDomain">
 	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>Applicability domain</a>
-</li>
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Structure">
-	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>Structure optimisation</a>
 </li>
 
 <li class="ui-selectee">
@@ -67,69 +105,15 @@
 </li>
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Fingerprints">
-	<span class="ui-icon ui-icon-gear" style="float: left; margin-right: .3em;"></span>Fingerprints</a>
+	<a href="${ambit_root}/algorithm?type=Structure">
+	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>Structure optimisation</a>
 </li>
-
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Finder">
-	<span class="ui-icon ui-icon-gear" style="float: left; margin-right: .3em;"></span>Remote lookup</a>
-</li>
-
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=PreferredStructure" title='Assignes preferred structure'>
-	<span class="ui-icon ui-icon-gear" style="float: left; margin-right: .3em;"></span>Preferred Structure</a>
-</li>
-
 
 <li class="ui-selectee">
 	<a href="${ambit_root}/algorithm?type=SMSD" title='Pairwise similarity by Small Molecule Subgraph Detector'>
 	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>SMSD</a>
 </li>
 
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Learning">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Machine learning</a>
-</li>
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Supervised">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
-	Supervised</a>
-</li>
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=UnSupervised">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
-	UnSupervised</a>
-</li>
-
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=SingleTarget">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
-	Single Target</a>
-</li>
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=MultipleTarget">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
-	Multiple Targets</a>
-</li>
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=EagerLearning">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
-	Eager Learning</a>
-</li>
-
-<li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=LazyLearning">
-	<span class="ui-icon ui-icon-wrench" style="float: left; margin-left: 1em; margin-right: .3em;"></span>
-	Instance learning</a>
-</li>
 
 
 <li class="ui-selectee">
@@ -138,9 +122,33 @@
 </li>
 
 
+
+<li class="ui-selectee">
+	<a href="${ambit_root}/algorithm?type=Fingerprints">
+	<span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Housekeeping</a>
+</li>
+
+
+<li class="ui-selectee">
+	<a href="${ambit_root}/algorithm?type=Fingerprints">
+	<span class="ui-icon ui-icon-gear" style="float: left; margin-left: 1em;  margin-right: .3em;"></span>Structure Indexing</a>
+</li>
+
+<li class="ui-selectee">
+	<a href="${ambit_root}/algorithm?type=Finder">
+	<span class="ui-icon ui-icon-gear" style="float: left; margin-left: 1em;  margin-right: .3em;"></span>Remote lookup</a>
+</li>
+
+
+<li class="ui-selectee">
+	<a href="${ambit_root}/algorithm?type=PreferredStructure" title='Assignes preferred structure'>
+	<span class="ui-icon ui-icon-gear" style="float: left; margin-left: 1em;  margin-right: .3em;"></span>Preferred Structure</a>
+</li>
+
+
 <li class="ui-selectee">
 	<a href="${ambit_root}/algorithm?type=Mockup">
-	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>Mockup</a>
+	<span class="ui-icon ui-icon-calculator" style="float: left;margin-left: 1em;  margin-right: .3em;"></span>Mockup</a>
 </li>
 
 

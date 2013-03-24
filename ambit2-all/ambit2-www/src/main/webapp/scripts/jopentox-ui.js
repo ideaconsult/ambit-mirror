@@ -268,7 +268,7 @@ function defineModelTable(root,url) {
     					"mDataProp" : null,
     					sWidth : "32px",
     					"fnRender" : function(o,val) {
-    						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"'><br/>" + 
+    						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"' title='"+o.aData.algorithm.algFormat+"'><br/>" + 
     						 "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";			
     					}
     				},	     	            
@@ -283,16 +283,28 @@ function defineModelTable(root,url) {
     	  			{ "sTitle": "Title", 
     	  			  "mDataProp":"title", 
     	  			  "aTargets": [ 2 ],	
-    	  			  sWidth: "50%",
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
-    		                return "<a href='"+o.aData.URI +"' title='Click to view models details and run predictions'>" +val + "</a>";
+    		        	    var shortURI = o.aData.URI;
+    		        	    pos =  shortURI.lastIndexOf("/");
+    		        	    if (pos>=0) shortURI = shortURI.substring(pos+1); 
+    		                return "<a href='"+o.aData.URI +"' title='Click to view model at " + o.aData.URI+" and optinally run predictions'>M" +shortURI + "</a><br>" + val;
     		          }
-    		  		},   
+    		  		},
+    	  			{ "sTitle": "Training Dataset", 
+      		  		  "mDataProp":"trainingDataset",
+      		  		  "aTargets": [ 3 ],	
+      			      "bUseRendered" : false,	
+      			      "fnRender": function ( o, val ) {
+      			      	  	shortURI = val;
+  			        		pos = shortURI.lastIndexOf("/");
+  			        		if (pos>=0) shortURI = val.substring(pos+1); 
+    			                return "<a href='"+ val +"?max=100' title='Click to browse the training dataset "+val+"' target='dataset'>"+shortURI+"</a>";
+      			       }
+      		  		},    		  		
     	  			{ "sTitle": "Algorithm", 
     	  			  "mDataProp":"algorithm.URI" , 
-    	  			  "aTargets": [ 3 ],	
-    	  			  sWidth: "40%",
+    	  			  "aTargets": [ 4 ],	
     		  	      "bUseRendered" : false,	
     			       "fnRender": function ( o, val ) {
     			        	    uri = val;
@@ -305,18 +317,6 @@ function defineModelTable(root,url) {
     			                return "<a href='"+ uri +"' title='Click to view the algorithm at "+uri+"' target='algorithm'>"+shortURI+"</a>";
     			      }
     		  		},    	  			
-    	  			{ "sTitle": "Training Dataset", 
-    		  		  "mDataProp":"trainingDataset",
-    		  		  "aTargets": [ 4 ],	
-    		  		  sWidth: "40%",
-    			      "bUseRendered" : false,	
-    			      "fnRender": function ( o, val ) {
-    			      	  	shortURI = val;
-			        		pos = shortURI.lastIndexOf("/");
-			        		if (pos>=0) shortURI = val.substring(pos+1); 
-  			                return "<a href='"+ val +"?max=100' title='Click to browse the training dataset "+val+"' target='dataset'>"+shortURI+"</a>";
-    			       }
-    		  		},
     	  			{ "sTitle": "RMSE (TR)", 
       		  		  "mDataProp":null,
       		  		  "aTargets": [ 5 ],	
@@ -462,11 +462,17 @@ function modelFormatDetails( oTable, nTr ,root ) {
 	
     sOut += '<tr><td>Training algorithm</td><td><a href="' + model.algorithm.URI + '">' + model.algorithm.URI + '</a></td></tr>';
     sOut += '<tr><td>Variables</td><td>';
-    sOut += '<a href="' + model.independent + '">Independent</a>|&nbsp;';
-    sOut += '<a href="' + model.dependent + '">Dependent</a>|&nbsp;';
-    sOut += '<a href="' + model.predicted + '">Predicted</a>&nbsp;';
+    sOut += '<a href="' + model.independent + '" target="vars">Independent</a>|&nbsp;';
+    sOut += '<a href="' + model.dependent + '" target="vars">Dependent</a>|&nbsp;';
+    sOut += '<a href="' + model.predicted + '" target="vars">Predicted</a>&nbsp;';
     sOut += '</td></tr>\n';
-    sOut += '<tr><td>Model content</td><td>'+model.ambitprop.content+' ['+model.ambitprop.mimetype+']</td></tr>';
+    
+    if (model.ambitprop.content.lastIndexOf("http", 0) == 0) { //starts with http
+    	sOut += '<tr><td>Model content</td><td><a href="'+model.ambitprop.content+'" target="content">Text</a></td></tr>';	
+    } else {
+    	sOut += '<tr><td>Model content</td><td>'+model.ambitprop.content+' ['+model.ambitprop.mimetype+']</td></tr>';
+    }
+    
     sOut += '<tr><td>Model URI</td><td><a href=\"' + model.URI + '\">' + model.URI + '</a></td></tr>';
     sOut += '</tbody></table>';
     //form to apply the model
@@ -648,8 +654,8 @@ function defineDatasetsTable(root,url,deleteVisible) {
     			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-cml")+"' id='cml'><img src='"+root+"/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
     			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-daylight-smiles")+"' id='smiles'><img src='"+root+"/images/smi.png' alt='SMILES' title='Download as SMILES'></a> ";
     			    	   sOut += "<a href='"+getMediaLink(val,"chemical/x-inchi")+"' id='inchi'><img src='"+root+"/images/inchi.png' alt='InChI' title='Download as InChI'></a> ";
-    			    	   sOut += "<a href='"+getMediaLink(val,"text/x-arff")+"' id='arff'><img src='"+root+"/images/weka.jpg' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
-    			    	   sOut += "<a href='"+getMediaLink(val,"text/x-arff-3col")+"' id='arff3col'><img src='"+root+"/images/weka.jpg' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/x-arff")+"' id='arff'><img src='"+root+"/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+    			    	   sOut += "<a href='"+getMediaLink(val,"text/x-arff-3col")+"' id='arff3col'><img src='"+root+"/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
     			    	   sOut += "<a href='"+getMediaLink(val,"application/rdf+xml")+"' id='rdfxml'><img src='"+root+"/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
     			    	   sOut += "<a href='"+getMediaLink(val,"text/n3")+"' id='rdfn3'><img src='"+root+"/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
     			    	   sOut += "<a href='"+getMediaLink(val,"application/json")+"' id='json' target=_blank><img src='"+root+"/images/json.png' alt='json' title='Download as JSON'></a>";
@@ -695,8 +701,8 @@ function getDownloadLinksCompound(root,uri) {
 	   sOut += "<a href='"+getMediaLink(val,"chemical/x-cml")+"' id='cml'><img src='"+root+"/images/cml.jpg' alt='CML' title='Download as CML (Chemical Markup Language)'></a> ";
 	   sOut += "<a href='"+getMediaLink(val,"chemical/x-daylight-smiles")+"' id='smiles'><img src='"+root+"/images/smi.png' alt='SMILES' title='Download as SMILES'></a> ";
 	   sOut += "<a href='"+getMediaLink(val,"chemical/x-inchi")+"' id='inchi'><img src='"+root+"/images/inchi.png' alt='InChI' title='Download as InChI'></a> ";
-	   sOut += "<a href='"+getMediaLink(val,"text/x-arff")+"' id='arff'><img src='"+root+"/images/weka.jpg' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
-	   sOut += "<a href='"+getMediaLink(val,"text/x-arff-3col")+"' id='arff3col'><img src='"+root+"/images/weka.jpg' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"text/x-arff")+"' id='arff'><img src='"+root+"/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
+	   sOut += "<a href='"+getMediaLink(val,"text/x-arff-3col")+"' id='arff3col'><img src='"+root+"/images/weka.png' alt='ARFF' title='Download as ARFF (Weka machine learning library I/O format)'></a> ";
 	   sOut += "<a href='"+getMediaLink(val,"application/rdf+xml")+"' id='rdfxml'><img src='"+root+"/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a> ";
 	   sOut += "<a href='"+getMediaLink(val,"text/n3")+"' id='rdfn3'><img src='"+root+"/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a> ";
 	   sOut += "<a href='"+getMediaLink(val,"application/json")+"' id='json' target=_blank><img src='"+root+"/images/json.png' alt='json' title='Download as JSON'></a>";
@@ -1007,7 +1013,7 @@ function loadPieChart(root,datasetselector,xselector,chartselector) {
 function loadHistogramChart(root,datasetselector,xselector,chartselector) {
 	if ($(datasetselector).attr("value")=="") alert("No dataset defined!");
 	else {
-	var uri = root + "/chart/histogram?w=650&h=250&dataset_uri="+encodeURIComponent($(datasetselector).attr("value"))+"&feature_uris[]="+encodeURIComponent($(xselector).val());
+	var uri = root + "/chart/histogram?w=800&h=250&dataset_uri="+encodeURIComponent($(datasetselector).attr("value"))+"&feature_uris[]="+encodeURIComponent($(xselector).val());
 	$(chartselector).attr('src',uri);
 	}
 }

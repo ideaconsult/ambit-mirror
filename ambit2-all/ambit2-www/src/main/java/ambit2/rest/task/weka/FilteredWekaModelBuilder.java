@@ -3,6 +3,10 @@ package ambit2.rest.task.weka;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
@@ -18,17 +22,23 @@ import org.restlet.resource.ResourceException;
 import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.lazy.IBk;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.J48;
 import weka.clusterers.Clusterer;
 import weka.clusterers.FilteredClusterer;
+import weka.core.Capabilities.Capability;
 import weka.core.Instances;
 import weka.core.WekaException;
 import weka.filters.Filter;
 import weka.filters.MultiFilter;
+import weka.filters.unsupervised.attribute.Discretize;
+import weka.filters.unsupervised.attribute.NominalToBinary;
 import weka.filters.unsupervised.attribute.Remove;
 import weka.filters.unsupervised.attribute.ReplaceMissingValues;
 import weka.filters.unsupervised.attribute.Standardize;
+import weka.filters.unsupervised.attribute.StringToNominal;
+import weka.filters.unsupervised.instance.RemoveWithValues;
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.PredictedVarsTemplate;
@@ -74,7 +84,7 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 
 	}
 	public ModelQueryResults process(Algorithm algorithm) throws AmbitException {
-		
+		List<Filter> filters = new ArrayList<Filter>();
 		Instances instances = trainingData;
 		if ((instances==null) || (instances.numInstances()==0) || (instances.numAttributes()==0)) 
 						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty dataset!");
@@ -86,6 +96,13 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
+		if (targetURI!=null)
+		for (String t : targetURI) 
+			for (int i = 0; i< instances.numAttributes(); i++)
+				if (instances.attribute(i).name().equals(t)) {
+					instances.setClassIndex(i);
+					break;
+				}
 		
 		fclusterer = null; fclassifier = null; pca = null;
 		if (weka instanceof Clusterer) {
@@ -96,6 +113,16 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 			fclassifier = new FilteredClassifier();
 			fclassifier.setClassifier((Classifier) weka);
 			if (targetURI == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No target variable! "+OpenTox.params.target);
+			if (instances.classIndex()<0)
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No target variable! "+OpenTox.params.target);
+			
+			if (weka instanceof IBk) {
+				String[] options = new String[3];
+				options[0] = "-K";
+				options[1] = "-20";
+				options[2] = "-X";
+				try {((IBk)weka).setOptions(options);} catch (Exception x) {}
+			}
 		} else if (weka instanceof PrincipalComponents) {
 			pca = (PrincipalComponents) weka;
 		}
@@ -117,55 +144,105 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 			Context.getCurrentLogger().warning("Error setting algorithm parameters, assuming defaults" + x.getMessage());
 		}	
 		
-		
-
-		
-		Filter filters[] = new Filter[3];
-		MultiFilter filter = new MultiFilter();
-		filter.setFilters(filters);
-		
-		//remove firstCompoundID attribute
-		try {
+		try { 		//remove firstCompoundID attribute
 			String[] options = new String[2];
 			options[0] = "-R";options[1] = "1";      
 			Remove remove = new Remove();     
 			remove.setOptions(options);                          
-			filters[0] = remove;
+			filters.add(remove);
 		} catch (Exception x) {throw new AmbitException(x);}
 
-		try { //all besides the class (if set!)
-			Standardize replace = new Standardize();
-			filters[2] = replace;
-		} catch (Exception x) {throw new AmbitException(x);}
-		
 		try { //remove missing values
-			ReplaceMissingValues replace = new ReplaceMissingValues();
-			String[] options = new String[1];
-			options[0] = "-M";
-			replace.setOptions(options);                          
-//			remove.setInputFormat(instances);
-			filters[1] = replace;
+			if (!hasCapability(Capability.MISSING_VALUES)) {
+				ReplaceMissingValues missing = new ReplaceMissingValues();
+				//can't make it working with RemoveWithValues...
+				String[] options = new String[1];
+				options[0] = "-M";
+				missing.setOptions(options);                          
+				filters.add(missing);
+			}
 		} catch (Exception x) {throw new AmbitException(x);}
 		
+		if (instances.classIndex()>=0)
+		try { //num/nom support
+			if (instances.attribute(instances.classIndex()).isNominal()) {
+				if (!hasCapability(Capability.NOMINAL_CLASS)) {
+					if (hasCapability(Capability.BINARY_CLASS)) { //nominal 2 binary 
+						NominalToBinary nom2bin = new NominalToBinary();
+						String[] options = new String[2];
+						options[0] = "-R";
+						options[1] = Integer.toString(instances.classIndex());
+						nom2bin.setOptions(options);                          
+						filters.add(nom2bin);
+					}
+				}
+			} else if (instances.attribute(instances.classIndex()).isNumeric()) {
+				if (!hasCapability(Capability.NUMERIC_CLASS)) {
+					if (hasCapability(Capability.NOMINAL_CLASS)) { //numeric to nominal, i.e. Discretize
+						Discretize num2nom = new Discretize();
+						String[] options = new String[2];
+						options[0] = "-R";
+						options[1] = Integer.toString(instances.classIndex());
+						num2nom.setOptions(options);                          
+						filters.add(num2nom);
+					}
+				} //else all is well
+			} else if (instances.attribute(instances.classIndex()).isString()) {
+				if (hasCapability(Capability.NOMINAL_CLASS)) {
+					StringToNominal str2nom = new StringToNominal();
+					String[] options = new String[2];
+					options[0] = "-R";
+					options[1] = Integer.toString(instances.classIndex());
+					str2nom.setOptions(options);                          
+					filters.add(str2nom);
+				}
+			}
+			
+			if (!hasCapability(Capability.MISSING_CLASS_VALUES)) {
+				RemoveWithValues missing = new RemoveWithValues();
+				String[] options = new String[3];
+				options[0] = "-M";
+				options[1] = "-C";
+				options[2] = Integer.toString(instances.classIndex());
+				missing.setOptions(options);                          
+				filters.add(missing);
+			}		
+			
+			if (fclassifier==null) { //clusterer, ignore the class attr
+				try { 		//remove firstCompoundID attribute
+					String[] options = new String[2];
+					options[0] = "-R";
+					options[1] = Integer.toString(instances.classIndex());      
+					Remove remove = new Remove();     
+					remove.setOptions(options);                          
+					filters.add(remove);
+				} catch (Exception x) {throw new AmbitException(x);}				
+			}
+		} catch (Exception x) {throw new AmbitException(x);}
 		
+		try { //all besides the class (if set!)
+			filters.add(new Standardize());
+		} catch (Exception x) {throw new AmbitException(x);}
+
+		//now set the filters
+		MultiFilter filter = new MultiFilter();
+		filter.setFilters(filters.toArray(new Filter[filters.size()]));
 		Instances newInstances = instances;
 		if (fclassifier!=null) fclassifier.setFilter(filter);
 		else if (fclusterer!=null) fclusterer.setFilter(filter);
 		else {
 			try {
+				filter.setInputFormat(instances);
 		        newInstances = Filter.useFilter(instances, filter);
-		        //Filter filter = new RemoveUseless();
-		        //filter.setInputFormat(newInstances);
-		       // newInstances = Filter.useFilter(newInstances, filter);
-		       // filter = new ReplaceMissingValues();
-		       // filter.setInputFormat(newInstances);
-		       // newInstances = Filter.useFilter(newInstances, filter);    
 			} catch (Exception x) {
 				throw new AmbitException(x);
 			}
 		}
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMddhhmmss");
+		Date timestamp = new Date(System.currentTimeMillis());
+		
         
-		String name = String.format("%s.%s",UUID.randomUUID().toString(),weka.getClass().getName());
+		String name = String.format("%s.%s.%s",simpleDateFormat.format(new Date(System.currentTimeMillis())),UUID.randomUUID().toString(),weka.getClass().getName());
 		ModelQueryResults m = new ModelQueryResults();
 		m.setParameters(parameters);
 		m.setId(null);
@@ -208,12 +285,17 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 			}				
 		} else if (fclassifier != null) {
 			
-			for (String t : targetURI) 
-				for (int i = 0; i< newInstances.numAttributes(); i++)
-					if (newInstances.attribute(i).name().equals(t)) {
-						newInstances.setClassIndex(i);
-						break;
-					}
+
+			try {
+				System.out.println(fclassifier.getClassifier().getCapabilities());
+				fclassifier.getCapabilities().testWithFail(newInstances);
+			} catch (Exception x) {
+				throw new AmbitException(x);
+			}
+			
+			
+			
+			
 			try {
 				//if (classifier instanceof LinearRegression) //don't do feature selection!
 					//classifier.setOptions(new String[] {"-S","1"});
@@ -299,6 +381,7 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 			predicted.add(predictedProperty);
 			predictedProperty.setEnabled(true);
 			
+
 			if (supportsDistribution(fclassifier)) {
 				Property confidenceProperty = new Property(String.format("%s Confidence",property.getName()),prediction); 
 				confidenceProperty.setLabel(Property.opentox_ConfidenceFeature);
@@ -366,6 +449,13 @@ public class FilteredWekaModelBuilder extends ModelBuilder<Instances,Algorithm, 
 			throw new AmbitException(x);
 		}
 		return m;
+	}
+	
+	
+	protected boolean hasCapability(Capability cpb) {
+		if (fclassifier!=null) return fclassifier.getClassifier().getCapabilities().handles(cpb);
+		else if (fclusterer!=null) return fclusterer.getClusterer().getCapabilities().handles(cpb);
+		else return pca.getCapabilities().handles(cpb);
 	}
 	/**
 	 * TODO - verify via reflection, not fixed check
