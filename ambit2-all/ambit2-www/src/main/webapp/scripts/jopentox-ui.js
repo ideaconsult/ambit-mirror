@@ -23,7 +23,10 @@ function defineAlgorithmTable(root,url) {
 				  "sWidth" : "25%",
 				  "fnRender" : function(o,val) {
 					  if (o.aData["id"]==null) return "Algorithm";
-					  return "<a href='"+val+"' title='"+o.aData["id"]+"'>"+o.aData["name"]+"</a>";
+					  return "<a href='"+val+"' title='Click to view the algorithm at "+
+					  		val+
+					  		" and (optionally) launch the processing'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>"+
+					  		o.aData["id"]+"</a><br/>" +o.aData["name"];
 				  }
 				},
 				{ "mDataProp": "endpoint" , "asSorting": [ "asc", "desc" ],
@@ -263,9 +266,10 @@ function defineModelTable(root,url) {
     				{ //0
     					"aTargets": [ 0 ],	
     					"sClass" : "center",
-    					"bSortable" : false,
+    					"bSortable" : true,
     					"bSearchable" : false,
     					"mDataProp" : null,
+    					"bUseRendered" : true,
     					sWidth : "32px",
     					"fnRender" : function(o,val) {
     						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"' title='"+o.aData.algorithm.algFormat+"'><br/>" + 
@@ -275,26 +279,34 @@ function defineModelTable(root,url) {
     	  			{ 
      	              "mDataProp":"stars",
      	              "aTargets": [ 1 ],
+     	              "bSortable" : true,
+     	              "bUseRendered" : false,
      	              "bUseRendered" : false,
 	  					"fnRender" : function(o,val) {
-							 return  "<span class='ui-icon ui-icon-star' style='display:inline-block' title='Click to show model details'></span>" + val;			
+							 return  "<span class='ui-icon ui-icon-star' style='display:inline-block' title='Models star rating'></span>" + val;			
 						}
     	  			},     	 
     	  			{ "sTitle": "Title", 
     	  			  "mDataProp":"title", 
-    	  			  "aTargets": [ 2 ],	
+    	  			  "aTargets": [ 2 ],
+    	  			  "bSortable" : true,
+    	  			  "bSearchable" : true,
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
     		        	    var shortURI = o.aData.URI;
     		        	    pos =  shortURI.lastIndexOf("/");
     		        	    if (pos>=0) shortURI = shortURI.substring(pos+1); 
-    		                return "<a href='"+o.aData.URI +"' title='Click to view model at " + o.aData.URI+" and optinally run predictions'>M" +shortURI + "</a><br>" + val;
+    		                return "<a href='"+o.aData.URI +"' title='Click to view the model at " + 
+    		                		o.aData.URI+" and (optionally) run predictions'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>M" +
+    		                		shortURI + "</a><br>" + val;
     		          }
     		  		},
     	  			{ "sTitle": "Training Dataset", 
       		  		  "mDataProp":"trainingDataset",
       		  		  "aTargets": [ 3 ],	
       			      "bUseRendered" : false,	
+    	  			  "bSortable" : true,
+    	  			  "bSearchable" : true,
       			      "fnRender": function ( o, val ) {
       			      	  	shortURI = val;
   			        		pos = shortURI.lastIndexOf("/");
@@ -305,6 +317,8 @@ function defineModelTable(root,url) {
     	  			{ "sTitle": "Algorithm", 
     	  			  "mDataProp":"algorithm.URI" , 
     	  			  "aTargets": [ 4 ],	
+    	  			  "bSortable" : true,
+    	  			  "bSearchable" : true,
     		  	      "bUseRendered" : false,	
     			       "fnRender": function ( o, val ) {
     			        	    uri = val;
@@ -583,8 +597,7 @@ function defineDatasetsTable(root,url,deleteVisible) {
     					"bUseRendered" : false,	
     					sWidth : "24px",
     					"fnRender" : function(o,val) {
-     		               	var sOut = "<a href='"+o.aData.URI +"?page=0&pagesize=100'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' title='Click to browse the dataset'></span></a>&nbsp;";
-     		                sOut += "<a href='"+o.aData.URI +"/similarity?search=c1ccccc1'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Similarity search within the dataset'></span></a>&nbsp;";
+     		               	var sOut = "<a href='"+o.aData.URI +"/similarity?search=c1ccccc1'><span class='ui-icon ui-icon-heart' style='float: left; margin: .1em;' title='Similarity search within the dataset'></span></a>&nbsp;";
      		                sOut += "<a href='"+o.aData.URI +"/smarts?search=c1ccccc1'><span class='ui-icon ui-icon-search' style='float: left; margin: .1em;' title='Substructure search within the dataset'></span></a> ";
     						return sOut;
     					}
@@ -604,7 +617,12 @@ function defineDatasetsTable(root,url,deleteVisible) {
     	  			  "aTargets": [ 2 ],	
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
-    		        	   var sOut = val;
+  		        	    	var shortURI = o.aData.URI;
+  		        	    	pos =  shortURI.lastIndexOf("/");
+  		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
+    		        	    var sOut = "<a target='table' href='"+o.aData.URI +
+    		        	   		"?page=0&pagesize=100'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' title='Click to browse the dataset'></span>D"+
+    		        	   		shortURI+"</a><br/>"+val;
     		               var seeAlso =  o.aData["seeAlso"];
     		               if ((seeAlso != undefined) && (seeAlso != null)) {
     		            	   if (seeAlso.indexOf('http')==0)
@@ -818,8 +836,12 @@ function datasetAutocomplete(id,datasetroot,maxhits) {
 	            },
 	            success: function( data ) {
 	              response( $.map( data.dataset, function( item ) {
+		        	var shortURI = item.URI;
+		        	pos =  shortURI.lastIndexOf("/");
+		        	if (pos>=0) shortURI = "D" + shortURI.substring(pos+1) + ": "; 
+		        	else shortURI = "";
 	                return {
-	                  label: item.title,
+	                  label: shortURI + item.title,
 	                  value: item.URI
 	                }
 	              }));
@@ -872,8 +894,13 @@ function featureAutocomplete(id,iddataset,featureroot,maxhits) {
 	            },
 	            success: function( data ) {
 	              response( $.map( data.feature, function( item , index) {
+			        var shortURI = index;
+			        pos =  shortURI.lastIndexOf("/");
+			        if (pos>=0) shortURI = "F" + shortURI.substring(pos+1) + ": "; 
+			        else shortURI = "";
+			        
 	                return {
-	                  label: item.title + " " + item.units,
+	                  label: shortURI + item.title + " " + item.units,
 	                  value: index
 	                }
 	              }));
@@ -905,8 +932,13 @@ function algorithmAutocomplete(id,algroot,algtype,maxhits) {
 	            },
 	            success: function( data ) {
 	            	response( $.map( data.algorithm, function( item ) {
+				        var shortURI = item.uri;
+				        pos =  shortURI.lastIndexOf("/");
+				        if (pos>=0) shortURI = "["+ shortURI.substring(pos+1) + "] "; 
+				        else shortURI = "";
+				        
 		                return {
-		                  label: item.name,
+		                  label: shortURI + item.name,
 		                  value: item.uri
 		                }
 		              }));

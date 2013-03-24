@@ -151,6 +151,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 					jsonModel.algFormat.jsonname(),JSONUtils.jsonEscape(algFormat.name()),
 					String.format("/%s",model.getAlgorithm().indexOf("org.openscience.cdk")>=0?"images/cdk.png":
 									model.getAlgorithm().indexOf("toxtree")>=0?"images/toxtree.png":
+									model.getAlgorithm().indexOf("ambit2.descriptors")>=0?"images/ambit.png":
 									algFormat.getImage()),
 					
 					jsonModel.trainingDataset.jsonname(),model.getTrainingInstances()==null?"":JSONUtils.jsonEscape(model.getTrainingInstances()),

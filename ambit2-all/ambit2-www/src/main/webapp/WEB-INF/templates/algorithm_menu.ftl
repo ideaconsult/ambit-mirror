@@ -26,7 +26,7 @@
 </li>
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/algorithm?type=Learning">
+	<a href="${ambit_root}/algorithm?type=Supervised">
 	<span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Machine learning</a>
 </li>
 

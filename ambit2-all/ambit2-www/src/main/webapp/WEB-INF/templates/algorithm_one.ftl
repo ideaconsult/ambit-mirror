@@ -1,7 +1,7 @@
 	
 
 	<div class='row remove-bottom'>
-		<label class='five columns alpha' for="title">Name</label>
+		<label class='five columns alpha' for="alg_title">Name</label>
 		<span class='eight columns alpha half-bottom' id='alg_title'></span>
 		<div class='three columns omega'></div>
 	</div>
@@ -96,37 +96,37 @@
 	</div>		
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation1' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation2' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation3' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation4' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation5' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation6' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 			<div class='row remove-bottom' >
 		<label class='five columns alpha' for="feature_calculation">Descriptor calculation algorithm URI</label>
-		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation' value='' name='feature_calculation' title='Enter algorithm uri'>
+		<input class='eight columns alpha half-bottom descuri' type="text" id='feature_calculation7' value='' name='feature_calculation' title='Enter algorithm uri'>
 		<div class='three columns omega help'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	
 	<div class='row remove-bottom' >
@@ -337,6 +337,6 @@
 	
 	<div class='row'>
 		<label class='five columns alpha'>&nbsp;</label>
-		<input class='three columns alpha' type='submit' class='submit' value='Run'>
+		<input class='three columns alpha submit' type='submit' value='Run'>
 		<div class='eight columns omega'></div>
 	</div>
