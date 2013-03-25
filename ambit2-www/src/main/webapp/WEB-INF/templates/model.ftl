@@ -135,7 +135,7 @@ $(document)
 			<table id='model' class='modeltable'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
-			<th>Logo</th>
+			<th>ID</th>
 			<th><span class='ui-icon ui-icon-star' style='float: left;' title='Star rating'></span></th>
 			<th>Title</th>
 			<th>Training dataset</th>
