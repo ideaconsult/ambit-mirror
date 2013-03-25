@@ -275,13 +275,14 @@ function defineModelTable(root,url) {
     "aoColumnDefs": [
     				{ //0
     					"aTargets": [ 0 ],	
+    					"mDataProp":"algorithm.img",
     					"sClass" : "center",
     					"bSortable" : true,
     					"bSearchable" : false,
     					"mDataProp" : null,
-    					"bUseRendered" : true,
+    					"bUseRendered" : false,
     					"fnRender" : function(o,val) {
-    						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"' title='"+o.aData.algorithm.algFormat+"'><br/>" + 
+    						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"' title='"+o.aData.algorithm.img+"'><br/>" + 
     						 "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";			
     					}
     				},	     	            
@@ -1220,4 +1221,11 @@ function loadHistogramChart(root,datasetselector,xselector,chartselector) {
 	var uri = root + "/chart/histogram?w=800&h=250&dataset_uri="+encodeURIComponent($(datasetselector).attr("value"))+"&feature_uris[]="+encodeURIComponent($(xselector).val());
 	$(chartselector).attr('src',uri);
 	}
+}
+
+function downloadForm(query_uri) {
+	$.each(_ambit.downloads,function(index,value) {
+		var durl = query_uri +  ((query_uri.indexOf("?")<0)?"?":"&") + "media="+ encodeURIComponent(value.mime);
+		$('#download #'+value.id).attr('href',durl);
+	});
 }
