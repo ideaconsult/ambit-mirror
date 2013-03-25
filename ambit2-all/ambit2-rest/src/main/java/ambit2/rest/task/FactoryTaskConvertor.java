@@ -32,7 +32,7 @@ public class FactoryTaskConvertor<USERID> {
 	
 	public synchronized IProcessor<Iterator<UUID>, Representation> createTaskConvertor(
 			Variant variant, Request request,ResourceDoc doc,DisplayMode _dmode) throws AmbitException, ResourceException {
-		String filenamePrefix = request.getResourceRef().getPath();
+		String filenamePrefix = "task";
 		return new StringConvertor(createTaskReporter(variant, request,doc,_dmode),variant.getMediaType(),filenamePrefix);
 	}
 	public synchronized Reporter<Iterator<UUID>,Writer> createTaskReporter(
@@ -114,6 +114,6 @@ public class FactoryTaskConvertor<USERID> {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 		}
 	}	
-	
+
 }
 

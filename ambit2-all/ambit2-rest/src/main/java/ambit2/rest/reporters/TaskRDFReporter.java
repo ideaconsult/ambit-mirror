@@ -104,5 +104,10 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<UUID> {
 		}
 		
 	}
-
+	@Override
+	public String getFileExtension() {
+		if (MediaType.APPLICATION_RDF_XML.equals(mediaType)) return "rdf";
+		else if (MediaType.TEXT_RDF_N3.equals(mediaType)) return "n3";
+		return "rdf";
+	}
 }

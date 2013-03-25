@@ -85,7 +85,6 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 		  		"aTargets": [ 0 ],	
 		  		"bSortable" : false,
 		  		"mDataProp" : null,
-		  		sWidth : "1em",
 		  		"bUseRendered" : "false",
 		  		"fnRender" : function(o,val) {
 	  					var uri = o.aData["URI"];
@@ -93,20 +92,29 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 	  					
 	  					var prm = {'option': 'auto', 'type':'url', 'search':uri, 'pagesize' : 10};
 	  					
-	  					var link = " <a href='"+o.aData.URI+"?max=10' title='AMBIT URI: "+o.aData.URI+"' target=_blank title='"+o.aData.URI+"'><span class='ui-icon ui-icon-link'></span></a>";
+  		        	    var shortURI = o.aData.URI;
+  		        	    var pos =  shortURI.lastIndexOf("/");
+  		        	    if (pos>=0) shortURI = shortURI.substring(pos+1); 
+
+	  					
 						var browseURI =  "";
 						if (root != null) {
 							browseURI = root + "/ui/query?" + $.param(prm,false);
 							browseURI = "<a href='"+browseURI+"' style='margin-left:2px;'><img src='"+
 										root+"/images/table.png' border='0' title='Browse the dataset'></a>";
+							shortURI = "D"+shortURI;
 						} else {
 							browseURI = "<a href='#' style='margin-left:2px;'><img src='"+
 										_ambit["query_service"]+
 										"/images/run.png' border='0' title='Run predictions for all structures in the result list' onClick='_ambit.runModel(\""+o.aData.URI+"\",\"#m"+o.aData["id"]+"\");'></a>";
+							shortURI = "M"+shortURI;
 						}
-		 					return "<input class='selecturi' type='checkbox' "+ isChecked +" name='"+checkbox+"' onClick='"+
-		 						clickHandler+"(event);' title='Select "+ 
-		 						o.aData.URI +"' value='"+o.aData.URI+"'>"+ link + browseURI;
+	  					
+	  					var link = "<a href='"+o.aData.URI+"?max=10' title='AMBIT URI: "+o.aData.URI+"' target=_blank title='"+o.aData.URI+"'><span class='ui-icon ui-icon-link' style='float:left;margin:0;'></span>"+shortURI+"</a><br/>";
+	  					
+	 					return link + "<input class='selecturi' type='checkbox' "+ isChecked +" name='"+checkbox+"' onClick='"+
+	 						clickHandler+"(event);' title='Select "+ 
+	 						o.aData.URI +"' value='"+o.aData.URI+"'>"+ browseURI;
 		 			}
 		  	},			                  
 			{ //1
