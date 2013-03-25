@@ -153,8 +153,8 @@ $(document)
 			<th>Endpoint <a href='#' class='chelp hendpoint'>?</a></th>
 			<th>Description</th>
 			<th>Type<a href='#' class='chelp halgtypes'>?</a></th>
+			<th>Models <a href='#' class='chelp hmodel'>?</a></th>			
 			<th>Implementation of <a href='#' class='chelp himpl'>?</a></th>
-			<th>Models <a href='#' class='chelp hmodel'>?</a></th>
 			</tr>
 			</thead>
 			<tbody></tbody>

@@ -94,6 +94,7 @@ $(document)
 			<table id='feature'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
+			<th>ID</th>
 			<th>Name <a href='#' class='chelp hwhat'>?</a></th>
 			<th>Units</th>
 			<th>Same As <a href='#' class='chelp hsameas'>?</a></th>

@@ -48,7 +48,7 @@ function defineAlgorithmTable(root,url) {
 				  "aTargets": [ 2 ],
 				  "bSearchable" : true,
 				  "bSortable" : true,
-				  "sWidth" : "25%",
+				  "sWidth" : "22%",
 				  "bUseRendered" : false,
 				  "fnRender" : function(o,val) {
 					  
@@ -65,7 +65,7 @@ function defineAlgorithmTable(root,url) {
 					  "bSearchable" : true,
 					  "bSortable" : true,
 					  "bUseRendered" : false,
-					  "sWidth" : "15%",
+					  "sWidth" : "12%",
 					  "fnRender" : function(o,val) {
 						  var sOut = "";
 						  $.each(val, function(index, value) {
@@ -77,20 +77,8 @@ function defineAlgorithmTable(root,url) {
 						  return sOut;
 					  }
 				},
-				{ "mDataProp": "implementationOf" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 4 ],
-					  "bSearchable" : true,
-					  "bSortable" : true,
-					  "sWidth" : "15%",
-					  "bUseRendered" : false,
-					  "fnRender" : function(o,val) {
-						  var p = val.indexOf("#");
-						  var name = val;  if (p>0) name =  val.substring(p+1);
-						  return "<a href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank>" +name +"</a>";
-					  }
-				},
 				{ "mDataProp": "uri" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 5 ],
+					  "aTargets": [ 4 ],
 					  "bSearchable" : true,
 					  "bSortable" : true,
 					  "bUseRendered" : false,
@@ -99,7 +87,20 @@ function defineAlgorithmTable(root,url) {
 						  return  " <a href='"+root+"/model?algorithm="+ val +"&max=100' title='Click to view models using "
 		            		+uri+" algorithm'><span class='ui-icon ui-icon-calculator' style='float: left; margin-right: .3em;'></span>View</a>";
 					  }
-				}					
+				},				
+				{ "mDataProp": "implementationOf" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 5 ],
+					  "bSearchable" : true,
+					  "bSortable" : true,
+					  "sWidth" : "12%",
+					  "bUseRendered" : false,
+					  "fnRender" : function(o,val) {
+						  var p = val.indexOf("#");
+						  var name = val;  if (p>0) name =  val.substring(p+1);
+						  return "<a href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank>" +name +"</a>";
+					  }
+				}
+					
 			],
 		"sSearch": "Filter:",
 		"bJQueryUI" : true,
@@ -286,6 +287,24 @@ function defineModelTable(root,url) {
           '</select> models.'	            
     },	
     "aoColumnDefs": [
+     	  			{ 
+      	  			  "mDataProp":"URI", 
+      	  			  "aTargets": [ 0 ],
+      	  			  "bSortable" : true,
+      	  			  "bSearchable" : true,
+      		          "bUseRendered" : false,	
+      		          "fnRender": function ( o, val ) {
+      		        	    var shortURI = o.aData.URI;
+      		        	    pos =  shortURI.lastIndexOf("/");
+      		        	    if (pos>=0) shortURI = shortURI.substring(pos+1); 
+      		                var sOut = "<a href='"+o.aData.URI +"' title='Click to view the model at " + 
+      		                		o.aData.URI+" and (optionally) run predictions'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>M" +
+      		                		shortURI + "</a>;" 
+      		                sOut += "<br><span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";
+      		                return sOut;
+      		          }
+      		  		},                
+      		  		/*
     				{ //0
     					"aTargets": [ 0 ],	
     					"mDataProp":"algorithm.img",
@@ -298,7 +317,8 @@ function defineModelTable(root,url) {
     						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"' title='"+o.aData.algorithm.img+"'><br/>" + 
     						 "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";			
     					}
-    				},	     	            
+    				},	   
+    				*/  	            
     	  			{ 
      	              "mDataProp":"stars",
      	              "aTargets": [ 1 ],
@@ -317,12 +337,7 @@ function defineModelTable(root,url) {
     	  			  sWidth : "25%",
     		          "bUseRendered" : false,	
     		          "fnRender": function ( o, val ) {
-    		        	    var shortURI = o.aData.URI;
-    		        	    pos =  shortURI.lastIndexOf("/");
-    		        	    if (pos>=0) shortURI = shortURI.substring(pos+1); 
-    		                return "<a href='"+o.aData.URI +"' title='Click to view the model at " + 
-    		                		o.aData.URI+" and (optionally) run predictions'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>M" +
-    		                		shortURI + "</a><br>" + val;
+    		        	    return val; 
     		          }
     		  		},
     	  			{ "sTitle": "Training Dataset", 
@@ -337,7 +352,7 @@ function defineModelTable(root,url) {
   			        		if (pos>=0) shortURI = val.substring(pos+1);
   			        		var sOut = "<a href='"+ val +"?max=100' title='Click to browse the training dataset "+val+"' target='dataset'>"+shortURI+"</a> ";
     			            sOut += "<a href='"+root+"/model?dataset="+ val +"&max=100' title='Click to view models using this training dataset "
-    			            		+val+"'><span class='ui-icon ui-icon-calculator' style='float: left; margin: .1em;' ></span></a>";
+    			            		+val+"'><span class='ui-icon ui-icon-calculator' style='float: right; margin: .1em;' ></span></a>";
     			            return sOut;
       			       }
       		  		},    		  		
@@ -355,9 +370,10 @@ function defineModelTable(root,url) {
         			      	  	pos = shortURI.lastIndexOf(".");
     			        		if (pos>=0) shortURI = shortURI.substring(pos+1); 
         			      	  	if (shortURI.length > 20) shortURI = shortURI.substring(val,20) + "..."; 	
-        			      	  	var sOut = "<a href='"+ uri +"' title='Click to view the algorithm at "+uri+"' target='algorithm'>"+shortURI+"</a> ";
+        			      	  	var sOut = "<a href='"+ uri +"' title='Click to view the algorithm at "+uri+"' target='algorithm'>"+shortURI;
+        			      	  	sOut += "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"'> </a> ";
         			            sOut += "<a href='"+root+"/model?algorithm="+ uri +"&max=100' title='Click to view models using "
-			            		+uri+" algorithm'><span class='ui-icon ui-icon-calculator' style='float: left; margin: .1em;' ></span></a>";
+			            		+uri+" algorithm'><span class='ui-icon ui-icon-calculator' style='float: right; margin: .1em;' ></span></a>";
         			            return sOut;
     			      }
     		  		},    	  			
@@ -1046,23 +1062,35 @@ function defineFeatureTable(root,url) {
 		"bServerSide": false,
 		"bStateSave": false,
 		"aoColumnDefs": [
-				{ "mDataProp": "feature.title" , "asSorting": [ "asc", "desc" ],
+				{ "mDataProp": "URI" , "asSorting": [ "asc", "desc" ],
 					  "aTargets": [ 0 ],	
 					  "bSearchable" : true,
 					  "bUseRendered" : false,
 					  "bSortable" : true,
-					  "sWidth" : "25%",
 					  "fnRender" : function(o,val) {
   		        	    var shortURI = o.aData.URI;
 		        	    pos =  shortURI.lastIndexOf("/");
 		        	    if (pos>=0) shortURI = shortURI.substring(pos+1); 
 		                return "<a href='"+o.aData.URI +"' title='Click to view the feature at " + 
 		                		o.aData.URI+" '><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>F" +
-		                		shortURI + "</a><br>" + val;
+		                		shortURI + "</a>";
 					  }
 				},
-				{ "mDataProp": "feature.units" , "asSorting": [ "asc", "desc" ],
+				{ "mDataProp": "feature.title" , "asSorting": [ "asc", "desc" ],
 					  "aTargets": [ 1 ],	
+					  "sWidth" : "25%",
+					  "bSearchable" : true,
+					  "bUseRendered" : false,
+					  "bSortable" : true,
+					  "fnRender" : function(o,val) {
+			                var sOut = val;
+			                sOut += " <a href='"+root+"/feature?search="+encodeURIComponent(val)+
+			                	"' title='Click to view the features with the same name'><span class='ui-icon ui-icon-search' style='float: left; margin: .1em;' ></span></a>";
+			                return sOut;
+					  }
+				},				
+				{ "mDataProp": "feature.units" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 2 ],	
 					  "bSearchable" : true,
 					  "bUseRendered" : false,
 					  "sWidth" : "5%",
@@ -1072,11 +1100,11 @@ function defineFeatureTable(root,url) {
 					  }
 				},
 				{ "mDataProp": "feature.sameAs" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 2 ],	
+					  "aTargets": [ 3 ],	
 					  "bSearchable" : true,
 					  "bUseRendered" : false,
 					  "bSortable" : true,
-					  "sWidth" : "20%",
+					  "sWidth" : "15%",
 					  "fnRender" : function(o,val) {
 						  var ont = "<a href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank title='"+val+"'>owl:sameAs</a>";
 						  return	(val.replace("http://www.opentox.org/echaEndpoints.owl#","Endpoint: ")
@@ -1085,7 +1113,7 @@ function defineFeatureTable(root,url) {
 					  }
 				},
 				{ "mDataProp": "feature.source.URI" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 3 ],	
+					  "aTargets": [ 4 ],	
 					  "bSearchable" : true,
 					  "bUseRendered" : false,
 					  "sWidth" : "20%",
@@ -1095,7 +1123,7 @@ function defineFeatureTable(root,url) {
 					  }
 				},
 				{ "mDataProp": "feature.isNumeric" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 4 ],	
+					  "aTargets": [ 5 ],	
 					  "bSearchable" : true,
 					  "bUseRendered" : false,
 					  "sWidth" : "10%",
@@ -1105,7 +1133,7 @@ function defineFeatureTable(root,url) {
 					  }
 				},
 				{ "mDataProp": "feature.isNominal" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 5 ],	
+					  "aTargets": [ 6 ],	
 					  "bSearchable" : true,
 					  "bUseRendered" : false,
 					  "sWidth" : "10%",
@@ -1115,7 +1143,7 @@ function defineFeatureTable(root,url) {
 					  }
 				},
 				{ "mDataProp": "URI" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [6 ],	
+					  "aTargets": [7 ],	
 					  "bSearchable" : true,
 					  "bUseRendered" : false,
 					  "bSortable" : true,
