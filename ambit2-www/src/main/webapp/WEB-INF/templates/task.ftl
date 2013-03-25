@@ -3,6 +3,7 @@
 <#include "/header.ftl" >
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
 <#if taskid??>
 	<script type='text/javascript'>
@@ -24,6 +25,7 @@ $(document)
 				function() {
 					$( "#selectable" ).selectable( "option", "distance", 18);
 					loadHelp("${ambit_root}","task");
+					downloadForm("${ambit_request}");
 				});
 </script>
 
@@ -54,6 +56,13 @@ $(document)
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/menu.ftl">
+	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
+	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
+	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
+	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
+	</div>
+	
 </div>
 
 <div class="eleven columns remove-bottom" style="padding:0;" >

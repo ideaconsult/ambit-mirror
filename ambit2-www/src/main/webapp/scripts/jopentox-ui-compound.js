@@ -413,7 +413,7 @@ function identifiers(opentox, columnDefs) {
 	        } else {
 	        	//console.log(k);
 	        	count[4]++;
-	        	if (count[4]<=200) { //TODO check how it works with many columns
+	        	if (count[4]<=500) { //TODO check how it works with many columns
 		        	var thclass = "property";
 		        	var visible = false;
 		        	if (value.sameAs == "http://www.opentox.org/api/1.1#SMILES") { thclass = " smiles"; visible = false; }

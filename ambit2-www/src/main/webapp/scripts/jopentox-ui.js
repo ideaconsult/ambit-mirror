@@ -299,7 +299,7 @@ function defineModelTable(root,url) {
       		        	    if (pos>=0) shortURI = shortURI.substring(pos+1); 
       		                var sOut = "<a href='"+o.aData.URI +"' title='Click to view the model at " + 
       		                		o.aData.URI+" and (optionally) run predictions'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>M" +
-      		                		shortURI + "</a>;" 
+      		                		shortURI + "</a>" 
       		                sOut += "<br><span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show model details'></span>";
       		                return sOut;
       		          }
@@ -351,7 +351,7 @@ function defineModelTable(root,url) {
   			        		pos = shortURI.lastIndexOf("/");
   			        		if (pos>=0) shortURI = val.substring(pos+1);
   			        		var sOut = "<a href='"+ val +"?max=100' title='Click to browse the training dataset "+val+"' target='dataset'>"+shortURI+"</a> ";
-    			            sOut += "<a href='"+root+"/model?dataset="+ val +"&max=100' title='Click to view models using this training dataset "
+    			            sOut += "<a href='"+root+"/model?dataset="+ encodeURIComponent(val) +"&max=100' title='Click to view models using this training dataset "
     			            		+val+"'><span class='ui-icon ui-icon-calculator' style='float: right; margin: .1em;' ></span></a>";
     			            return sOut;
       			       }
@@ -372,7 +372,7 @@ function defineModelTable(root,url) {
         			      	  	if (shortURI.length > 20) shortURI = shortURI.substring(val,20) + "..."; 	
         			      	  	var sOut = "<a href='"+ uri +"' title='Click to view the algorithm at "+uri+"' target='algorithm'>"+shortURI;
         			      	  	sOut += "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"'> </a> ";
-        			            sOut += "<a href='"+root+"/model?algorithm="+ uri +"&max=100' title='Click to view models using "
+        			            sOut += "<a href='"+root+"/model?algorithm="+ encodeURIComponent(uri) +"&max=100' title='Click to view models using "
 			            		+uri+" algorithm'><span class='ui-icon ui-icon-calculator' style='float: right; margin: .1em;' ></span></a>";
         			            return sOut;
     			      }
@@ -464,7 +464,7 @@ function defineModelTable(root,url) {
 				"data" : aoData,
 				"dataType" : "json",
 				"contentType" : "application/json",
-				"cache" : true,
+				"cache" : false,
 				"success": function(result){fnCallback(result);},
 				"error" : function(xhr, textStatus, error) {
 					switch (xhr.status) {
@@ -845,7 +845,7 @@ function definePropertyValuesTable(root,url,tableSelector) {
 		            });			
 					fnCallback(aoData);
 				},
-				"cache" : true,
+				"cache" : false,
 				"error" : function(xhr, textStatus, error) {
 					switch (xhr.status) {
 					case 403: {
