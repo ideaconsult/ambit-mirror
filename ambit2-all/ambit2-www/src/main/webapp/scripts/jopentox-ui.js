@@ -23,10 +23,12 @@ function defineAlgorithmTable(root,url) {
 				  "sWidth" : "25%",
 				  "fnRender" : function(o,val) {
 					  if (o.aData["id"]==null) return "Algorithm";
-					  return "<a href='"+val+"' title='Click to view the algorithm at "+
+					  var sOut = "<a href='"+val+"' title='Click to view the algorithm at "+
 					  		val+
 					  		" and (optionally) launch the processing'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;' ></span>"+
 					  		o.aData["id"]+"</a><br/>" +o.aData["name"];
+					  return sOut;
+					  
 				  }
 				},
 				{ "mDataProp": "endpoint" , "asSorting": [ "asc", "desc" ],
@@ -86,7 +88,18 @@ function defineAlgorithmTable(root,url) {
 						  var name = val;  if (p>0) name =  val.substring(p+1);
 						  return "<a href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank>" +name +"</a>";
 					  }
-				}	
+				},
+				{ "mDataProp": "uri" , "asSorting": [ "asc", "desc" ],
+					  "aTargets": [ 5 ],
+					  "bSearchable" : true,
+					  "bSortable" : true,
+					  "bUseRendered" : false,
+					  "fnRender" : function(o,val) {
+						  
+						  return  " <a href='"+root+"/model?algorithm="+ val +"&max=100' title='Click to view models using "
+		            		+uri+" algorithm'><span class='ui-icon ui-icon-calculator' style='float: left; margin-right: .3em;'></span>View</a>";
+					  }
+				}					
 			],
 		"sSearch": "Filter:",
 		"bJQueryUI" : true,
@@ -321,8 +334,11 @@ function defineModelTable(root,url) {
       			      "fnRender": function ( o, val ) {
       			      	  	shortURI = val;
   			        		pos = shortURI.lastIndexOf("/");
-  			        		if (pos>=0) shortURI = val.substring(pos+1); 
-    			                return "<a href='"+ val +"?max=100' title='Click to browse the training dataset "+val+"' target='dataset'>"+shortURI+"</a>";
+  			        		if (pos>=0) shortURI = val.substring(pos+1);
+  			        		var sOut = "<a href='"+ val +"?max=100' title='Click to browse the training dataset "+val+"' target='dataset'>"+shortURI+"</a> ";
+    			            sOut += "<a href='"+root+"/model?dataset="+ val +"&max=100' title='Click to view models using this training dataset "
+    			            		+val+"'><span class='ui-icon ui-icon-calculator' style='float: left; margin: .1em;' ></span></a>";
+    			            return sOut;
       			       }
       		  		},    		  		
     	  			{ "sTitle": "Algorithm", 
@@ -339,7 +355,10 @@ function defineModelTable(root,url) {
         			      	  	pos = shortURI.lastIndexOf(".");
     			        		if (pos>=0) shortURI = shortURI.substring(pos+1); 
         			      	  	if (shortURI.length > 20) shortURI = shortURI.substring(val,20) + "..."; 	
-    			                return "<a href='"+ uri +"' title='Click to view the algorithm at "+uri+"' target='algorithm'>"+shortURI+"</a>";
+        			      	  	var sOut = "<a href='"+ uri +"' title='Click to view the algorithm at "+uri+"' target='algorithm'>"+shortURI+"</a> ";
+        			            sOut += "<a href='"+root+"/model?algorithm="+ uri +"&max=100' title='Click to view models using "
+			            		+uri+" algorithm'><span class='ui-icon ui-icon-calculator' style='float: left; margin: .1em;' ></span></a>";
+        			            return sOut;
     			      }
     		  		},    	  			
     	  			{ "sTitle": "RMSE (TR)", 

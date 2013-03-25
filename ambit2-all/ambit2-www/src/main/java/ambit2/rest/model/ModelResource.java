@@ -357,7 +357,7 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 	
 		String endpoint = form.getFirstValue(AbstractModelQuery._models_criteria.endpoint.name());
 		if (endpoint!=null) {
-			if (model_query == null) { model_query = new ModelQueryResults(); model_query.setCreator(null); }
+			if (model_query == null) { model_query = new ModelQueryResults(); model_query.setEndpoint(null); }
 			
 			model_query.setEndpoint(endpoint);
 		}

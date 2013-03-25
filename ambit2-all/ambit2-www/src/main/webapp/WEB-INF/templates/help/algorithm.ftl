@@ -19,6 +19,8 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
     <li><a href="#hmodel">Models</a></li>
     <li><a href="#hwhat"> </a></li>
     <li><a href="#hsuperbuilder"> </a></li>
+    <li><a href="#hendpoint"> </a></li>
+    <li><a href="#himpl"> </a></li>
   </ul>
   <div id="hdataset">
     Dataset or compound URI as in <a href="${ambit_root}/dataset?max=100" target=_blank>Datasets list</a>.
@@ -80,7 +82,13 @@ The SuperBuilder uses descriptor calculation service, feature selection service 
 Model services execute only learning algorithms (e.g. regression or classification) and assume the input dataset contains all necessary descriptors.
 The SuperBuilder accepts URI of descriptor calculation algorithms via "feature_calculation" parameters, runs all the calculation, prepares a dataset with all descriptors and the endpoint (URI specified by "prediction_feature" parameter), and submits the final dataset to the learning algorithm (URI specified by "model_learning" parameter).
 More <a href='http://www.ideaconsult.net/web/ngn/blogs/-/blogs/opentox-model-superbuilder' target='help'>details</a>.
-  
+  </div>
+  <div id="hendpoint">
+	Endpoint is taken from the owl:sameAs , assigned to the dependent variable of the model. If the corresponding feature does not have assigned endpoint
+	ontology entry, this field will be empty. 
+  </div>
+  <div id="himpl">
+  Implementation of - as defined in Blueobelisk ontology 
   </div>
  
 </div>      

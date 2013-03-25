@@ -150,10 +150,11 @@ $(document)
 			<thead>
 			<tr>
 			<th>Name</th>
-			<th>Endpoint</th>
+			<th>Endpoint <a href='#' class='chelp hendpoint'>?</a></th>
 			<th>Description</th>
-			<th>Type</th>
-			<th>Implementation of</th>
+			<th>Type<a href='#' class='chelp halgtypes'>?</a></th>
+			<th>Implementation of <a href='#' class='chelp himpl'>?</a></th>
+			<th>Models <a href='#' class='chelp hmodel'>?</a></th>
 			</tr>
 			</thead>
 			<tbody></tbody>
