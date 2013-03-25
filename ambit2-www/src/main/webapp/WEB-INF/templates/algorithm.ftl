@@ -50,7 +50,7 @@ $(document)
 		algorithmAutocomplete(".descuri","${ambit_root}/algorithm","DescriptorCalculation",100);
 		modelAutocomplete(".modeluri","${ambit_root}/model",100);
 		loadHelp("${ambit_root}","algorithm");
-		
+		downloadForm("${ambit_request}");
 				
 		var purl = $.url();
 		$('#dataset_uri').attr('value',purl.param('dataset_uri')===undefined?'':purl.param('dataset_uri'));
@@ -105,15 +105,32 @@ $(document)
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/algorithm_menu.ftl">
 
+	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
+	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
+	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
+	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
+	</div>
+	
+<#if algid??>
+<#else>
+
 <div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
 <div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
 </div>
 <div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
 </div>	
+
+</#if>
+
+
 </div>
 
+<#if algid??>
+<div class="eleven columns remove-bottom" style="padding:0;" >
+<#else>
 <div class="thirteen columns remove-bottom" style="padding:0;" >
-
+</#if>
 
 		<!-- Page Content
 		================================================== -->
@@ -150,6 +167,12 @@ $(document)
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
+
+<#if algid??>
+<#include "/chelp.ftl" >
+</#if>
+
+	
 
 <#include "/footer.ftl" >
 </div> <!-- container -->
