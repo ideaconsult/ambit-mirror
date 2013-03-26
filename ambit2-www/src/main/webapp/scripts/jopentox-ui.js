@@ -7,16 +7,27 @@
  * 
  */
 
-function defineAlgorithmTable(root,url) {
-
+function defineAlgorithmTable(root,url,viscols) {
 	var oTable = $('#algorithm').dataTable( {
 		"sAjaxDataProp" : "algorithm",
 		"bProcessing": true,
 		"bServerSide": false,
 		"bStateSave": false,
 		"aoColumnDefs": [
+		 		{ "mDataProp": null , "asSorting": [ "asc", "desc" ],
+	 			  "aTargets": [ 0 ],	
+	 			  "sWidth" : "1em",
+	 			  "bSearchable" : false,
+	 			  "bUseRendered" : false,
+	 			  "bVisible" : (viscols==null) || viscols[0],
+ 				  "bSortable" : false,
+				  "fnRender" : function(o,val) {
+					  var sOut='<input type="checkbox" checked="" name="alg_uri[]" title="Select '+val+'" value="'+val+'">';
+					  return sOut;
+				  }	  
+				},		                 
 				{ "mDataProp": "uri" , "asSorting": [ "asc", "desc" ],
-				  "aTargets": [ 0 ],	
+				  "aTargets": [ 1 ],	
 				  "bSearchable" : true,
 				  "bUseRendered" : false,
 				  "bSortable" : true,
@@ -32,9 +43,10 @@ function defineAlgorithmTable(root,url) {
 				  }
 				},
 				{ "mDataProp": "endpoint" , "asSorting": [ "asc", "desc" ],
-				  "aTargets": [ 1 ],	
+				  "aTargets": [ 2 ],	
 				  "bSearchable" : true,
 				  "bUseRendered" : false,
+				  "bVisible" : (viscols==null) || viscols[2],
 				  "bSortable" : true,
 				  "sWidth" : "20%",
 				  "fnRender" : function(o,val) {
@@ -45,8 +57,9 @@ function defineAlgorithmTable(root,url) {
 				  }
 				},
 				{ "mDataProp": "isDataProcessing" , "asSorting": [ "asc", "desc" ],
-				  "aTargets": [ 2 ],
+				  "aTargets": [ 3 ],
 				  "bSearchable" : true,
+				  "bVisible" : (viscols==null) || viscols[3],
 				  "bSortable" : true,
 				  "sWidth" : "22%",
 				  "bUseRendered" : false,
@@ -61,8 +74,9 @@ function defineAlgorithmTable(root,url) {
 				  }
 				},
 				{ "mDataProp": "type" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 3 ],
+					  "aTargets": [ 4 ],
 					  "bSearchable" : true,
+					  "bVisible" : (viscols==null) || viscols[4],
 					  "bSortable" : true,
 					  "bUseRendered" : false,
 					  "sWidth" : "12%",
@@ -78,19 +92,21 @@ function defineAlgorithmTable(root,url) {
 					  }
 				},
 				{ "mDataProp": "uri" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 4 ],
+					  "aTargets": [ 5 ],
 					  "bSearchable" : true,
+					  "bVisible" : (viscols==null) || viscols[5],
 					  "bSortable" : true,
 					  "bUseRendered" : false,
 					  "fnRender" : function(o,val) {
 						  
-						  return  " <a href='"+root+"/model?algorithm="+ val +"&max=100' title='Click to view models using "
-		            		+uri+" algorithm'><span class='ui-icon ui-icon-calculator' style='float: left; margin-right: .3em;'></span>View</a>";
+						  return  " <a href='"+root+"/model?algorithm="+ encodeURIComponent(val) +"&max=100' title='Click to view models using "
+		            		+val+" algorithm'><span class='ui-icon ui-icon-calculator' style='float: left; margin-right: .3em;'></span>View</a>";
 					  }
 				},				
 				{ "mDataProp": "implementationOf" , "asSorting": [ "asc", "desc" ],
-					  "aTargets": [ 5 ],
+					  "aTargets": [ 6],
 					  "bSearchable" : true,
+					  "bVisible" : (viscols==null) || viscols[6],
 					  "bSortable" : true,
 					  "sWidth" : "12%",
 					  "bUseRendered" : false,
@@ -1032,9 +1048,65 @@ function modelAutocomplete(id,modelroot,algtype,maxhits) {
 	            },
 	            success: function( data ) {
 	            	response( $.map( data.model, function( item ) {
+				        var shortURI = item.URI;
+				        pos =  shortURI.lastIndexOf("/");
+				        if (pos>=0) shortURI = "[M"+ shortURI.substring(pos+1) + "] "; 
+				        else shortURI = "";
+				        
 		                return {
-		                  label: item.title,
+		                  label: shortURI + item.title,
 		                  value: item.URI,
+		                  category: (item.title.indexOf("ToxTree")>=0)?"ToxTree":item.algorithm.URI
+		                }
+		              }));
+	            }
+	          });
+	        },
+	        minLength: 1,
+	        open: function() {
+	        	  $('.ui-autocomplete').css('width', '450px');
+		    }
+	});
+}
+
+/**
+ * Autocomplete for learning algorithm URI field
+ * @param id
+ */
+function modelVarsAutocomplete(id,modelroot,maxhits) {
+	$.widget( "custom.catcomplete", $.ui.autocomplete, {
+		_renderMenu: function(ul, items){
+	        var self = this;
+	        var currentCategory = "";
+	        $.each(items, function(index, item){
+	            if(item.category != currentCategory){
+	                ul.append(" <li class='ui-autocomplete-category'>" + item.category + "</li>");
+	                currentCategory = item.category;
+	            }
+	            self._renderItem(ul, item);
+	        });
+	    }
+	  });	
+	$( id ).catcomplete({
+	      source: function( request, response ) {
+	          $.ajax({
+	            url: modelroot,
+	            dataType: "json",
+	            data: {
+	              media:"application/json",
+	              max: maxhits,
+	              search: "^"+request.term
+	            },
+	            success: function( data ) {
+	            	response( $.map( data.model, function( item ) {
+				        var shortURI = item.URI;
+				        pos =  shortURI.lastIndexOf("/");
+				        if (pos>=0) shortURI = "["+ shortURI.substring(pos+1) + "] "; 
+				        else shortURI = "";
+				        
+		                return {
+		                  label: shortURI + item.title,
+		                  value: item.URI + "/predicted",
 		                  category: (item.title.indexOf("ToxTree")>=0)?"ToxTree":item.algorithm.URI
 		                }
 		              }));

@@ -36,8 +36,13 @@
 		<label class='four columns alpha'>Predicted (Ypred) <a href='#' class='chelp hfeature'>?</a></label>
 		<select class='eight columns alpha half-bottom' type="text" id='vpredicted'></select>
 		<div class='four columns omega '><a href='${ambit_root}/model/${modelid}/predicted' target=_blank>Browse</a></div>
-	</div>		
-
+	</div>
+	<div class='row remove-bottom'>
+		<label class='four columns alpha'>Representation and Statistics</label>
+		<div class='eight columns omega '><a href='${ambit_root}/model/${modelid}?media=text/plain' target=_blank>View text</a></div>
+		<div class='four columns omega '></div>
+	</div>				
+	
 			
 	<div class='row remove-bottom'>
 		<label class='four columns alpha' for="alg_dataset">Action <a href='#' class='chelp haction'>?</a></label>
