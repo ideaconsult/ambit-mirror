@@ -150,17 +150,17 @@
 		<div class='three columns omega'><a href='#' class='chelp hmodel'>?</a></div>
 	</div>		
     <div class='row remove-bottom' >
-		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
+		<label class='five columns alpha' for="algorithm_uri1">Algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri1' value='' name='algorithm_uri' title='Enter algorithm uri'>
 		<div class='three columns omega'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>		
 	<div class='row remove-bottom' >
-		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
+		<label class='five columns alpha' for="algorithm_uri2">Algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri2' value='' name='algorithm_uri' title='Enter algorithm uri'>
 		<div class='three columns omega'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>
 	<div class='row remove-bottom' >
-		<label class='five columns alpha' for="algorithm_uri">Algorithm URI</label>
+		<label class='five columns alpha' for="algorithm_uri3">Algorithm URI</label>
 		<input class='eight columns alpha half-bottom descuri' type="text" id='algorithm_uri3' value='' name='algorithm_uri' title='Enter algorithm uri'>
 		<div class='three columns omega'><a href='#' class='chelp hdescriptor'>?</a></div>
 	</div>	

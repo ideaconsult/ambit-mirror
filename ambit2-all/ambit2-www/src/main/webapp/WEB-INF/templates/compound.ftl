@@ -46,6 +46,8 @@ $(document)
 			
 			$('#structype_${cmpid}').load(cmpURI + '/comparison');
 			$('#consensus_${cmpid}').load(cmpURI + '/consensus');
+			loadHelp("${ambit_root}","algorithm");
+			modelVarsAutocomplete(".modeluri","${ambit_root}/model",100);
 
 	 });
 </script>
@@ -127,6 +129,7 @@ $(document)
 			<ul>
 		    <li><a href="#tabs-properties">Properties</a></li>
 		    <li><a href="#tabs-datasets">Datasets</a></li>
+		    <li><a href="#tabs-models">Select models to display</a></li>
 		    </ul>
 		    	<div id='tabs-properties'>
 					<table id='properties' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
@@ -158,9 +161,43 @@ $(document)
 					<tbody></tbody>
 					</table>
 				</div>
+				<div id='tabs-models'>
+					<form class='remove-bottom'  id='view' name='view' action='${ambit_root}/compound/${cmpid}' method='GET'>
+					<br/>
+				<div class='row remove-bottom ' >
+					<label class='five columns alpha' for="model1">Model 1</label>
+					<input class='eight columns alpha half-bottom modeluri' type="text" id='model1' value='' name='feature_uris[]' title='Enter model uri'>
+					<div class='three columns omega help'><a href='#' class='chelp hmodel'>?</a></div>
+				</div>	
+				<div class='row  remove-bottom ' >
+					<label class='five columns alpha' for="model2">Model 2</label>
+					<input class='eight columns alpha half-bottom modeluri' type="text" id='model2' value='' name='feature_uris[]' title='Enter model uri'>
+					<div class='three columns omega help'><a href='#' class='chelp hmodel'>?</a></div>
+				</div>	
+				<div class='row  remove-bottom ' >
+					<label class='five columns alpha' for="model3">Model 3</label>
+					<input class='eight columns alpha half-bottom modeluri' type="text" id='model2' value='' name='feature_uris[]' title='Enter model uri'>
+					<div class='three columns omega help'><a href='#' class='chelp hmodel'>?</a></div>
+				</div>	
+				<div class='row remove bottom'>
+					<label class='five columns alpha'>&nbsp;</label>
+					<input class='three columns alpha' type='submit' class='submit' value='Submit'>
+					<div class='eight columns omega'></div>
+				</div>
+				<div class='row remove bottom'>
+					<div class='sixteen columns alpha'>
+						Alternatively, use the 
+						<a href="${ambit_root}/algorithm/superservice?dataset_uri=${ambit_root}/compound/${cmpid}">Superservice</a>
+					 <a href='#' class='chelp hsuperservice'>?</a> to run predictions.
+					</div>
+				</div>				
+				</form>
+
+				</div>
+							
 			</div>
-			
 		</div>
+
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>

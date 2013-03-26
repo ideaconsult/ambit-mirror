@@ -34,7 +34,7 @@
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = defineAlgorithmTable("${ambit_root}","${ambit_request_json}");
+	  	var oTable = defineAlgorithmTable("${ambit_root}","${ambit_request_json}",[false,true,true,true,true,true,true]);
 	});
 	</script>
 </#if>
@@ -149,6 +149,7 @@ $(document)
 			<table id='algorithm'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
+			<th></th>
 			<th>Name</th>
 			<th>Endpoint <a href='#' class='chelp hendpoint'>?</a></th>
 			<th>Description</th>
