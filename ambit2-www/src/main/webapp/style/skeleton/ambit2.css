@@ -33,18 +33,19 @@ font-weight: normal; }
 
 
 .compoundtable table {
-	border-style: none;
-	font-size: 0.9em;
+	border:1px;
+	border-color: gray;	
+	border-collapse: collapse;
+	border-style: dotted;
+	font-size: 1em;
 }
 
 .compoundtable td {
-	border-color: gray;	
-	border-style: dotted;
 	font-size: 0.9em;
 }
 
 .compoundtable th {
-	font-size: 0.9em;
+	font-size: 1em;
 }
 
 .css_right {
