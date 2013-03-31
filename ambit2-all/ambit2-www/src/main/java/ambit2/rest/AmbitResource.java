@@ -56,10 +56,11 @@ public class AmbitResource extends FreeMarkerResource {
 	};
 	
 	private final static String[] css = new String[] {
-		"<link href=\"%s/style/ambit.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		"<!--[if IE 7]><link rel='stylesheet' type='text/css' media='all' href='%s/style/ambit-msie7.css'><![endif]-->",
 		"<link href=\"%s/style/jquery-ui-1.8.18.custom.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		"<link href=\"%s/style/jquery.dataTables.css\" rel=\"stylesheet\" type=\"text/css\">\n",
+		"<link href=\"%s/style/skeleton/table.css\" rel=\"stylesheet\" type=\"text/css\">\n",
+		"<link href=\"%s/style/skeleton/ambit2.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		"<link href=\"%s/images/favicon.ico\" rel=\"shortcut icon\" type=\"image/ico\">\n"
 	};
 

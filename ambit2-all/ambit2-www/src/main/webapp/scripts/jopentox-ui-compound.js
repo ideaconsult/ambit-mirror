@@ -55,10 +55,8 @@ $(document)
 											"bUseRendered" : "true",
 											"fnRender" : function(o,
 													val) {
-
 												return "<span class='zoomstruc'><img  src='"+ baseref +"/images/zoom_in.png' alt='zoom in' title='Click to show compound details'></span>";
-											},
-											
+											}
 										},
 										{ //1
 											"aTargets": [ 1 ],	
@@ -140,16 +138,17 @@ $(document)
 											"bSortable" : true,
 											"bSearchable" : true,
 											"fnRender" : function(o,val) {
+												var maxlen = 300;
 												if (opentox.names.length>0) {
 													var name = opentox.dataEntry[o.iDataRow].values[opentox.names[0]] ;
 													if (name !== undefined) {
-														if (name.length>30) {
+														if (name.length>maxlen) {
 															var id = "r"+o.iDataRow + "c5";
 															return '<a href="#" title="'
 																	+ name
 																	+'" onClick="javascript:toggleDiv(\''+id+'\');">' 
-																	+ name.substring(0,30) + 
-																	'</a><span id="' + id + '"  style="display: none;">'+name.substring(30)+'</span>';
+																	+ name.substring(0,maxlen) + 
+																	'</a><span id="' + id + '"  style="display: none;">'+name.substring(maxlen)+'</span>';
 														} else return name;
 													}
 												}
@@ -185,16 +184,32 @@ $(document)
 										'bProcessing' : true,
 										'bJQueryUI' : true,
 										'bAutoWidth': true,
-										"bSaveState": true,    // Save viewstate in cookie
+										"bSaveState": false,    // Save viewstate in cookie
 										"sCookiePrefix":"OTDATA_",
 										"sScrollX": "100%",
-										"bPaginate": true,
 										//"sScrollXInner": "110%",
 										"bScrollCollapse": true,
-										"sDom" : 'R<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>',
 										"aaData" : opentox.dataEntry,
 										"aoColumnDefs" : columnDefs,
-										"aaSorting" : [ [ 1, 'asc' ] ]
+										"aaSorting" : [ [ 1, 'asc' ] ],
+										"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+										"sSearch": "Filter:",
+										"bSearchable": true,
+										"bPaginate" : true,
+										"sPaginationType": "full_numbers",
+										"sPaginate" : ".dataTables_paginate _paging",										
+										"oLanguage": {
+								            "sLoadingRecords": "No structures found.",
+								            "sZeroRecords": "No structures found.",
+								            "sInfo": "Showing _TOTAL_ structures (_START_ to _END_)",
+								            "sLengthMenu": 'Display <select>' +
+							              '<option value="10">10</option>' +
+							              '<option value="20">20</option>' +
+							              '<option value="50">50</option>' +
+							              '<option value="100">100</option>' +
+							              '<option value="-1">all</option>' +
+							              '</select> entries.'	            
+								    }
 									});
 					
 					$('.compoundtable tbody td .zoomstruc img').live(
