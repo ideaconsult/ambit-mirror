@@ -3,7 +3,7 @@
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
-    <version>2.4.10-SNAPSHOT</version>
+    <version>2.4.10</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
@@ -91,7 +91,7 @@
     <dependency>
     	<groupId>net.ideaconsult</groupId>
     	<artifactId>opentox-dsl</artifactId>
-    	<version>1.0.4-SNAPSHOT</version>
+    	<version>1.0.4</version>
     </dependency>
    <!--  Freemarker  -->
     <dependency>

@@ -249,3 +249,6 @@ GRANT EXECUTE ON PROCEDURE `ambit-test`.findByProperty TO 'guest'@'::1';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'localhost';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'127.0.0.1';
 GRANT EXECUTE ON PROCEDURE `ambit-test`.deleteDataset TO 'guest'@'::1';
+
+UPDATE mysql.proc SET definer = 'guest@localhost' WHERE db = 'ambit2';
+UPDATE mysql.proc SET definer = 'guest@localhost' WHERE db = 'ambit-test';
