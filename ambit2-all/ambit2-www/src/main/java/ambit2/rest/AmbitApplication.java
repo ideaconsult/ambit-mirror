@@ -866,7 +866,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			String v1 = getProperty(version,ambitProperties);
 			String v2 = getProperty(version_build,ambitProperties);
 			String v3 = getProperty(version_timestamp,ambitProperties);
-			return String.format("%s %s %s",v1,v2,new Date(Long.parseLong(v3)));
+			return String.format("%s r%s built %s",v1,v2,new Date(Long.parseLong(v3)));
 		} catch (Exception x) {return "Unknown"; }
 	}
 	protected synchronized boolean isOpenToxAAEnabled()  {
