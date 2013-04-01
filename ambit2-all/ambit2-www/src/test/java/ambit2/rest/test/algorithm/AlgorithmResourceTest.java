@@ -1052,19 +1052,32 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Form headers = new Form();  
 		for (int i=0; i < 2;i++) {
 
-			//there is Cramer rules model already in the test database
-		testAsyncTask(
-				String.format("http://localhost:%d/algorithm/toxtreecramer", port),
-				headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/model/%s", port,"1"));
+				//there is Cramer rules model already in the test database
+			testAsyncTask(
+					String.format("http://localhost:%d/algorithm/toxtreecramer", port),
+					headers, Status.SUCCESS_OK,
+					String.format("http://localhost:%d/model/%s", port,"1"));
+			
+			//for some reason models table has autoincrement=4 
 		
-		//for some reason models table has autoincrement=4 
-	
-		testAsyncTask(
-				String.format("http://localhost:%d/algorithm/toxtreecramer2", port),
-				headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/model/4", port));
+			testAsyncTask(
+					String.format("http://localhost:%d/algorithm/toxtreecramer2", port),
+					headers, Status.SUCCESS_OK,
+					String.format("http://localhost:%d/model/4", port));
+			
+			
+			IDatabaseConnection c = getConnection();
+			ITable table = 	c.createQueryTable("p",
+				"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+			Assert.assertEquals(3,table.getRowCount());
+			Assert.assertEquals("High (Class III)",table.getValue(0,"object"));
+			Assert.assertEquals("Intermediate (Class II)",table.getValue(1,"object"));
+			Assert.assertEquals("Low (Class I)",table.getValue(2,"object"));
+			for (int j=0; j< 2;j++)
+				Assert.assertEquals(new BigInteger("2"),table.getValue(j,"c"));
+			c.close();			
 		}
+
 	}
 	
 	@Test
@@ -1078,7 +1091,16 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
-		logger.info(dataset.toString());
+		
+		IDatabaseConnection c = getConnection();
+		ITable table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("NO",table.getValue(0,"object"));
+		Assert.assertEquals("YES",table.getValue(1,"object"));
+		Assert.assertEquals(new BigInteger("6"),table.getValue(0,"c"));
+		Assert.assertEquals(new BigInteger("6"),table.getValue(1,"c"));		
+		c.close();	
 		
 	}
 	
@@ -1093,7 +1115,17 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
-		System.out.println(dataset);
+		
+		IDatabaseConnection c = getConnection();
+		ITable table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("NO",table.getValue(0,"object"));
+		Assert.assertEquals("YES",table.getValue(1,"object"));
+		Assert.assertEquals(new BigInteger("6"),table.getValue(0,"c"));
+		Assert.assertEquals(new BigInteger("6"),table.getValue(1,"c"));		
+		c.close();	
+		
 		
 	}
 	
@@ -1108,7 +1140,15 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
 		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
-		logger.info(dataset.toString());
+		IDatabaseConnection c = getConnection();
+		ITable table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("NO",table.getValue(0,"object"));
+		Assert.assertEquals("YES",table.getValue(1,"object"));
+		Assert.assertEquals(new BigInteger("6"),table.getValue(0,"c"));
+		Assert.assertEquals(new BigInteger("6"),table.getValue(1,"c"));		
+		c.close();	
 		
 	}
 	
@@ -1127,7 +1167,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-			"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: Carcinogenicity (genotox and nongenotox) and mutagenicity rulebase by ISS' group by `status` order by `status`");
+			"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity' group by `status` order by `status`");
 		Assert.assertEquals(2,table.getRowCount());
 		Assert.assertEquals("OK",table.getValue(0,"s"));
 		Assert.assertEquals(new BigInteger("40"),table.getValue(0,"c"));
@@ -1166,6 +1206,15 @@ public class AlgorithmResourceTest extends ResourceTest {
 		//the explanation field
 		Assert.assertEquals("TRUNCATED",table.getValue(1,"s"));
 		Assert.assertEquals(new BigInteger("3"),table.getValue(1,"c"));
+		
+		table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("NO",table.getValue(0,"object"));
+		Assert.assertEquals("YES",table.getValue(1,"object"));
+		Assert.assertEquals(new BigInteger("6"),table.getValue(0,"c"));
+		Assert.assertEquals(new BigInteger("6"),table.getValue(1,"c"));		
+		
 		c.close();
 		
 	}
@@ -1193,6 +1242,98 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
 		
-	}		
+		IDatabaseConnection c = getConnection();
+		ITable table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(3,table.getRowCount());
+		Assert.assertEquals("Class 1 (easily biodegradable chemical)",table.getValue(0,"object"));
+		Assert.assertEquals("Class 2 (persistent chemical)",table.getValue(1,"object"));
+		Assert.assertEquals("Class 3 (unknown biodegradability)",table.getValue(2,"object"));
+		Assert.assertEquals(new BigInteger("1"),table.getValue(0,"c"));
+		Assert.assertEquals(new BigInteger("1"),table.getValue(1,"c"));
+		Assert.assertEquals(new BigInteger("1"),table.getValue(2,"c"));
+		c.close();	
 		
+	}		
+
+	@Test
+	public void testToxtreeVerhaarModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreeverhaar", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+	}
+	
+	@Test
+	public void testToxtreeISSMICModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreemic", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		
+		IDatabaseConnection c = getConnection();
+		ITable table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("At least one positive structural alerts for the  micronucleus assay (Class I)",table.getValue(0,"object"));
+		Assert.assertEquals("No alerts for the  micronucleus assay (Class II)",table.getValue(1,"object"));
+		for (int i=0; i< 2;i++)
+			Assert.assertEquals(new BigInteger("1"),table.getValue(i,"c"));
+		c.close();	
+	}
+	@Test
+	public void testToxtreeEyeModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreeeye", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		IDatabaseConnection c = getConnection();
+		ITable table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(11,table.getRowCount());
+		Assert.assertEquals("Moderate reversable irritation to the eye",table.getValue(0,"object"));
+		Assert.assertEquals("NOT corrosion R34, R35 or R41",table.getValue(1,"object"));
+		Assert.assertEquals("NOT eye irritation R36",table.getValue(2,"object"));
+		for (int i=0; i< 11;i++)
+			Assert.assertEquals(new BigInteger("1"),table.getValue(i,"c"));
+		c.close();	
+	}
+	@Test
+	public void testToxtreeSkinIrritationModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreeskinirritation", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+	}
+	@Test
+	public void testToxtreeMichaelAcceptorsModel() throws Exception {
+		Form headers = new Form();  
+
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/toxtreemichaelacceptors", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		IDatabaseConnection c = getConnection();
+		ITable table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("Michael acceptor",table.getValue(0,"object"));
+		Assert.assertEquals("Not reactive via Michael addition",table.getValue(1,"object"));
+		for (int i=0; i< 2;i++)
+			Assert.assertEquals(new BigInteger("1"),table.getValue(i,"c"));
+		c.close();
+	}		
 }

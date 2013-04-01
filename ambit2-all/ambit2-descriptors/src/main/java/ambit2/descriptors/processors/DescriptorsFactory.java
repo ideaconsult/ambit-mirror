@@ -3,9 +3,9 @@
  * Date: Feb 7, 2009
  * Revision: 0.1 
  * 
- * Copyright (C) 2005-2009  Ideaconsult Ltd.
+ * Copyright (C) 2005-2013  Ideaconsult Ltd.
  * 
- * Contact: nina
+ * Contact: jeliazkova.nina@gmail.com
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -41,6 +41,7 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.core.data.IObject2Properties;
 
 public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Property>> {
 
@@ -66,26 +67,27 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 
 	public static synchronized List<Property> createDescriptor2Properties(String className) throws Exception  {
 		Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
-		//if (o instanceof IMolecularDescriptor) {verify for interface
-			Object o = clazz.newInstance();
-			if (o instanceof IMolecularDescriptor) {
-				IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
-				List<Property> p = new ArrayList<Property>();
-				//this is to remove swing listeners from toxtree rules
-				try {
-					o.getClass().getMethod(
-			                "removeListener",
-			                new Class[] {}).
-			        invoke(o, new Object[] { });					
-				} catch (Exception x) {
-					//x.printStackTrace();
-				}				
-				DescriptorValue value = ((IMolecularDescriptor) o).calculate(MoleculeFactory.makeAlkane(2));
-				for (String name : value.getNames()) {
-					p.add(descriptorValue2Property(descriptor,name,value));
-				}
-				return p;				
-			} else return null;
+		Object o = clazz.newInstance();
+		if (o instanceof IObject2Properties) {
+			return ((IObject2Properties)o).process(o);
+		} else if (o instanceof IMolecularDescriptor) {
+			IMolecularDescriptor descriptor = (IMolecularDescriptor) o;
+			List<Property> p = new ArrayList<Property>();
+			//this is to remove swing listeners from toxtree rules
+			try {
+				o.getClass().getMethod(
+			               "removeListener",
+			               new Class[] {}).
+			       invoke(o, new Object[] { });					
+			} catch (Exception x) {
+				//x.printStackTrace();
+			}				
+			DescriptorValue value = ((IMolecularDescriptor) o).calculate(MoleculeFactory.makeAlkane(2));
+			for (String name : value.getNames()) {
+				p.add(descriptorValue2Property(descriptor,name,value));
+			}
+			return p;				
+		} else return null;
 	}
 	
 	public static synchronized Property descriptorValue2Property(IMolecularDescriptor descriptor, String name, DescriptorValue value) throws Exception  {

@@ -213,10 +213,10 @@ public class Property extends Model implements Serializable, Comparable<Property
 		this(name,Property.guessLabel(name));
 	}
 	
-	public Property(String name, LiteratureEntry reference) {
+	public Property(String name, ILiteratureEntry reference) {
 		this(name,"",reference);
 	}	
-	public Property(String name, String units, LiteratureEntry reference) {
+	public Property(String name, String units, ILiteratureEntry reference) {
 		this(name,Property.guessLabel(name));
 		setUnits(units);
 		this.reference = reference;
