@@ -6,7 +6,7 @@ Specification-Title: Markush structures
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD
 Implementation-Title: ambit2.markush
-Implementation-Version: ${project.version}
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
 Implementation-Vendor: Ideaconsult Ltd.
 Package-Title: ambit2.markush
 Package-Version: ${project.version}

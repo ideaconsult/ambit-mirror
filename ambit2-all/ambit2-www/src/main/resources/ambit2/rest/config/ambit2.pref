@@ -1,4 +1,8 @@
-#This is AMBIT ${project.version} web services configuration. 
+#This is AMBIT ${project.version} web services configuration.
+ambit.version=${ambit.version}
+toxtree.version=${toxtree.version}
+ambit.build=${buildNumber}
+ambit.build.timestamp=${timestamp}
 #For Authentication and authorization configuration please see config.prop file
 #For fine tuning logging please see logging.prop file 
 #MySQL Database configuration

@@ -3,13 +3,13 @@ Package: ambit2.plugin.usermgr
 Name: ambit2/plugin/usermgr/UserManagerPlugin.class
 Specification-Title: Administrative tools for Ambit XT
 Specification-Version: ${project.version}
-Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Specification-Vendor: Ideaconsult Ltd. Sofia, BG
 Package-Title: ambit2.plugin.usermgr
 Package-Version: ${project.version}
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: Admin
-Implementation-Version: ${project.version}
-Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd. Sofia, BG
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net
 Image-icon: ambit2/plugin/usermgr/images/user_16.png

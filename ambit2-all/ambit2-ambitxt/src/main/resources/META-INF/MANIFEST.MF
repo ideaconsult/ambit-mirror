@@ -1,14 +1,14 @@
-Manifest-Version: 2.0
+Manifest-Version: 1.0
 Package: ambit2.ambitxt
 Main-Class: ambit2.ambitxt.Splasher
 Specification-Title: Ambit XT
-Specification-Version: 2.2.0
+Specification-Version: ${project.version}
 Specification-Vendor: CEFIC LRI
 Package-Title: ambit2.ambitxt
-Package-Version: 2.2.0
+Package-Version: ${project.version}
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: Ambit XT
-Implementation-Version: 2.2.0
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
 Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net

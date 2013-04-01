@@ -8,8 +8,8 @@ Package-Title: ambit2.plugin.pbt
 Package-Version: ${project.version}
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: REACH PBT Assessment
-Implementation-Version: ${project.version}
-Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd. Sofia, BG
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net
 Image-icon: ambit2/plugin/pbt/images/pill_16.png

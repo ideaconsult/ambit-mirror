@@ -205,27 +205,8 @@
           		</systemProperties>
 			</configuration>
                 </plugin>
-                <!-- 
-                     <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>1.0-beta-3</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <revisionOnScmFailure>3.14</revisionOnScmFailure>
-          <doCheck>true</doCheck>
-          <doUpdate>true</doUpdate>
-        </configuration>
-      </plugin>
- -->
-    <plugin>
+
+     <plugin>
       <artifactId>maven-war-plugin</artifactId>
       <version>2.1.1</version>
       <configuration>
