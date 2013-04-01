@@ -1,1 +1,13 @@
-ambit2.i5rest
+Manifest-version: 1.0
+Package: ambit2.i5rest
+
+Name: ambit2/i5rest/
+Specification-Title: IUCLID5 REST wrapper
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.i5rest
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.i5rest
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

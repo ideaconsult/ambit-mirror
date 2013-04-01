@@ -6,7 +6,7 @@ Specification-Title: Java Server Pages tags (obsolete)
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD
 Implementation-Title: ambit2.taglibs
-Implementation-Version: ${project.version}
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
 Implementation-Vendor: Ideaconsult Ltd.
 Package-Title: ambit2.taglibs
 Package-Version: ${project.version}

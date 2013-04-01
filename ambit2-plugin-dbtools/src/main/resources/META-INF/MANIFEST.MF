@@ -3,13 +3,13 @@ Package: ambit2.plugin.dbtools
 Name: ambit2/plugin/dbtools/DBUtilityPlugin.class
 Specification-Title: Database utilities plugin for Ambit XT
 Specification-Version: ${project.version}
-Specification-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Specification-Vendor: Ideaconsult Ltd. Sofia, BG
 Package-Title: ambit2.plugin.dbtools
 Package-Version: ${project.version}
 Package-Vendor: http://ambit.sourceforge.net
 Implementation-Title: Database utilities
-Implementation-Version: ${project.version}
-Implementation-Vendor: Ideaconsult Ltd. Sofia, Bulgaria nina@acad.bg
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd. Sofia, BG
 Implementation-Vendor-Id: Ideaconsult
 Implementation-URL:  http://ambit.sourceforge.net
 Image-icon: ambit2/plugin/dbtools/images/database_16.png

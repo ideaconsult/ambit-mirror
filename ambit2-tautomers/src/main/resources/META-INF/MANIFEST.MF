@@ -2,11 +2,11 @@ Manifest-version: 1.0
 Package: ambit2.tautomers
 
 Name: ambit2/tautomers/
-Specification-Title: Tautomer generation
+Specification-Title: Kochev N., Paskaleva V., Jeliazkova N., Ambit-Tautomer: An open source tool for tautomer generation, Mol. Informatics, 2013
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD
-Implementation-Title: ambit2.tautomers
-Implementation-Version: ${project.version}
+Implementation-Title: Tautomers generation
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
 Implementation-Vendor: Ideaconsult Ltd.
 Package-Title: ambit2.tautomers
 Package-Version: ${project.version}

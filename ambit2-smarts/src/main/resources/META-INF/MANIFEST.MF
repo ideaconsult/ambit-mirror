@@ -2,11 +2,11 @@ Manifest-version: 1.0
 Package: ambit2.smarts
 
 Name: ambit2/smarts/
-Specification-Title: SMARTS & SMIRKS
+Specification-Title: Jeliazkova N., Kochev N. Ambit-SMARTS: Efficient Searching Of Chemical Structures And Fragments, Molecular Informatics, 2011;30(8):707-720.
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD
-Implementation-Title: ambit2.smarts
-Implementation-Version: ${project.version}
+Implementation-Title: SMARTS & SMIRKS support
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
 Implementation-Vendor: Ideaconsult Ltd.
 Package-Title: ambit2.smarts
 Package-Version: ${project.version}

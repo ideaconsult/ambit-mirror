@@ -1,4 +1,13 @@
+Manifest-version: 1.0
 Package: ambit2.swing
-Manifest-version: ${project.version}
+
+Name: ambit2/swing/
+Specification-Title: Swing classes, used in Ambit Discovery
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.swing
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.swing
 Package-Version: ${project.version}
 Package-Vendor: Ideaconsult Ltd.

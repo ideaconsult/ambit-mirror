@@ -6,7 +6,7 @@ Specification-Title: SMI23D wrapper (3D structure builder)
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD
 Implementation-Title: ambit2.smi23d
-Implementation-Version: ${project.version}
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
 Implementation-Vendor: Ideaconsult Ltd.
 Package-Title: ambit2.smi23d
 Package-Version: ${project.version}

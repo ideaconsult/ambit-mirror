@@ -6,7 +6,7 @@ Specification-Title: Wrapper for Site Of Metabolism Estimator (SOME) doi: 10.109
 Specification-Version: ${project.version}
 Specification-Vendor: Ideaconsult LTD
 Implementation-Title: ambit2.some
-Implementation-Version: ${project.version}
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
 Implementation-Vendor: Ideaconsult Ltd.
 Package-Title: ambit2.some
 Package-Version: ${project.version}
