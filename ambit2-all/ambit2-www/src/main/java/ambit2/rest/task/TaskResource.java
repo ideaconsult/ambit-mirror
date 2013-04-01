@@ -19,6 +19,7 @@ import ambit2.rest.DisplayMode;
 import ambit2.rest.SimpleTaskResource;
 import ambit2.rest.TaskApplication;
 import ambit2.rest.aa.opensso.OpenSSOUser;
+import ambit2.rest.freemarker.FreeMarkerApplication;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs
@@ -82,6 +83,8 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
         	map.put("username", getClientInfo().getUser().getIdentifier());
         map.put("creator","IdeaConsult Ltd.");
         map.put("ambit_root",getRequest().getRootRef().toString());
+	    map.put("ambit_version_short",((FreeMarkerApplication)getApplication()).getVersionShort());
+	    map.put("ambit_version_long",((FreeMarkerApplication)getApplication()).getVersionLong());
 
         //remove paging
         Form query = getRequest().getResourceRef().getQueryAsForm();

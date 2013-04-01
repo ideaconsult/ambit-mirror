@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -142,6 +143,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String compoundAAEnabled = "aa.compound";
 	static final String featureAAEnabled = "aa.feature";
 	static final String modelAAEnabled = "aa.model"; //ignored
+	static final String version = "ambit.version";
+	static final String version_build = "ambit.build";
+	static final String version_timestamp = "ambit.build.timestamp";
 	static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
 	static final String configProperties = "ambit2/rest/config/config.prop";
 	static final String loggingProperties = "ambit2/rest/config/logging.prop";
@@ -151,6 +155,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
 	protected boolean warmupEnabled = false;
+
 	
 	public AmbitApplication() {
 		this(false);
@@ -161,6 +166,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		openToxAAEnabled = isOpenToxAAEnabled();
 		localAAEnabled = isSimpleSecretAAEnabled();
 		warmupEnabled = isWarmupEnabled();
+		versionShort = readVersionShort();
+		versionLong = readVersionLong();
 		
 		setName("AMBIT REST services");
 		setDescription("AMBIT implementation of OpenTox framework");
@@ -847,7 +854,21 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return list.split(" ");
 		} catch (Exception x) {return null; }
 	}	
-	
+
+	public synchronized String readVersionShort()  {
+		try {
+			return getProperty(version,ambitProperties);
+		} catch (Exception x) {return "Unknown"; }
+	}
+
+	public synchronized String readVersionLong()  {
+		try {
+			String v1 = getProperty(version,ambitProperties);
+			String v2 = getProperty(version_build,ambitProperties);
+			String v3 = getProperty(version_timestamp,ambitProperties);
+			return String.format("%s %s %s",v1,v2,new Date(Long.parseLong(v3)));
+		} catch (Exception x) {return "Unknown"; }
+	}
 	protected synchronized boolean isOpenToxAAEnabled()  {
 		try {
 			String aaadmin = getProperty(OPENTOX_AA_ENABLED,configProperties);

@@ -26,6 +26,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.TaskApplication;
 import ambit2.rest.aa.opensso.OpenSSOUser;
+import ambit2.rest.freemarker.FreeMarkerApplication;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
@@ -200,6 +201,8 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
         	map.put("username", getClientInfo().getUser().getIdentifier());
         map.put("creator","IdeaConsult Ltd.");
         map.put("ambit_root",getRequest().getRootRef().toString());
+	    map.put("ambit_version_short",((FreeMarkerApplication)getApplication()).getVersionShort());
+	    map.put("ambit_version_long",((FreeMarkerApplication)getApplication()).getVersionLong());
 
         //remove paging
         Form query = getRequest().getResourceRef().getQueryAsForm();
