@@ -11,10 +11,10 @@ import ambit2.db.update.AbstractUpdate;
 
 public class CreatePropertyAnnotation extends AbstractUpdate<Property,PropertyAnnotation> {
 	protected final String[] sql = {
-			"INSERT into property_annotation (idproperty,rdf_type,predicate,object) values (?,?,?,?)"
+			"INSERT ignore into property_annotation (idproperty,rdf_type,predicate,object) values (?,?,?,?)"
 	};
 	protected final String[] sql_bypropertyname = {
-			"INSERT into property_annotation (idproperty,rdf_type,predicate,object) " +
+			"INSERT ignore into property_annotation (idproperty,rdf_type,predicate,object) " +
 			"SELECT idproperty,?,?,? FROM properties join catalog_references using(idreference) WHERE name=? and title=?"
 	};	
 	
