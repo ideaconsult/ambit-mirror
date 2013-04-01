@@ -1053,13 +1053,14 @@ public class AlgorithmResourceTest extends ResourceTest {
 		for (int i=0; i < 2;i++) {
 
 				//there is Cramer rules model already in the test database
-			testAsyncTask(
+			Reference model = testAsyncTask(
 					String.format("http://localhost:%d/algorithm/toxtreecramer", port),
 					headers, Status.SUCCESS_OK,
 					String.format("http://localhost:%d/model/%s", port,"1"));
-			
 			//for some reason models table has autoincrement=4 
-		
+			OTModel otmodel = OTModel.model(model.toString());
+			OTDataset dataset = otmodel.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
+			
 			testAsyncTask(
 					String.format("http://localhost:%d/algorithm/toxtreecramer2", port),
 					headers, Status.SUCCESS_OK,
@@ -1228,6 +1229,21 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/algorithm/toxtreesmartcyp", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/model/%s", port,"3"));
+		
+		OTModel model = OTModel.model(String.format("http://localhost:%d/model/%s", port,"3"));
+		OTDataset dataset = model.predict(OTDataset.dataset(String.format("http://localhost:%d/dataset/%s", port,"1")));
+		
+		
+		IDatabaseConnection c = getConnection();
+		ITable table = 	c.createQueryTable("p",
+			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("NO",table.getValue(0,"object"));
+		Assert.assertEquals("YES",table.getValue(1,"object"));
+		Assert.assertEquals(new BigInteger("4"),table.getValue(0,"c"));
+		Assert.assertEquals(new BigInteger("4"),table.getValue(1,"c"));
+		c.close();
+		
 		
 	}	
 	
