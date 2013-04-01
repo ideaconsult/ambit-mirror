@@ -23,6 +23,7 @@ import ambit2.rest.StringConvertor;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.algorithm.CatalogResource;
+import ambit2.rest.freemarker.FreeMarkerApplication;
 
 public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 	public static final String resource = "opentoxuser";
@@ -192,5 +193,8 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
         }
         map.put("creator","IdeaConsult Ltd.");
         map.put("ambit_root",getRequest().getRootRef().toString());		
+	    map.put("ambit_version_short",((FreeMarkerApplication)getApplication()).getVersionShort());
+	    map.put("ambit_version_long",((FreeMarkerApplication)getApplication()).getVersionLong());
+
 	}
 }

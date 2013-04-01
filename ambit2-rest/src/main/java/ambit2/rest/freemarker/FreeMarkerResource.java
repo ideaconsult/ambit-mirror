@@ -85,6 +85,9 @@ public class FreeMarkerResource extends ProtectedResource {
 
 		map.put("creator","Ideaconsult Ltd.");
 	    map.put("ambit_root",getRequest().getRootRef());
+
+	    map.put("ambit_version_short",((FreeMarkerApplication)getApplication()).getVersionShort());
+	    map.put("ambit_version_long",((FreeMarkerApplication)getApplication()).getVersionLong());
 	}
 	
 	/**
