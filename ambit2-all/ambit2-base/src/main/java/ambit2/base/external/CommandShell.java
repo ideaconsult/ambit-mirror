@@ -236,7 +236,8 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
     }
     
     protected String getHomeDir(File file) {
-    	return System.getProperty("user.home") +"/.ambit2";
+    	//return System.getProperty("user.home") +"/.ambit2";
+    	return System.getProperty("java.io.tmpdir") + "/.ambit2/" + System.getProperty("user.name");
     }
     
     protected synchronized INPUT transform_input(INPUT input) throws ShellException {
