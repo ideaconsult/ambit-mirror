@@ -331,6 +331,7 @@
     <module>ambit2-waffles</module>
     <module>ambit2-reactions</module>
     <module>ambit2-markush</module>
+    <module>ambit2-balloon</module>
   </modules>
   <distributionManagement>
     <!-- 
