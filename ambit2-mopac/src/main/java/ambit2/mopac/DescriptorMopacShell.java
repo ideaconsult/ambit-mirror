@@ -58,8 +58,8 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
 
 	public static final String EHOMO = "EHOMO";
 	public static final String ELUMO = "ELUMO";
-    protected String force_field = MopacShell.defaultparams[2]; 
-    protected MopacShell mopac_shell;
+    protected String force_field = AbstractMopacShell.defaultparams[2]; 
+    protected AbstractMopacShell mopac_shell;
     /**
      * 
      */
@@ -83,7 +83,7 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
         try {
         	params[1] = mopac_shell.getExecutable();
         } catch (Exception x) {
-        	params[1] = MopacShell.defaultparams[1];
+        	params[1] = AbstractMopacShell.defaultparams[1];
         }
         params[2] = force_field;
         return (params);
@@ -111,7 +111,7 @@ public class DescriptorMopacShell implements IMolecularDescriptor {
 	        	mopac_shell.addExecutable(arg0[1].toString(), null) ;
 	        File file = new File(mopac_shell.getExecutable());
 	        if (!file.exists()) 
-	        	mopac_shell.addExecutable(MopacShell.defaultparams[1],null);
+	        	mopac_shell.addExecutable(AbstractMopacShell.defaultparams[1],null);
         } catch (Exception x) {
         	logger.log(Level.SEVERE,x.getMessage(),x);
         }

@@ -24,9 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.base.external;
 
+import ambit2.base.exceptions.AmbitException;
 
 
-public class ShellException extends Exception {
+
+public class ShellException extends AmbitException {
 	protected CommandShell shell;
 
 	/**

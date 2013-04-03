@@ -26,8 +26,8 @@ package ambit2.smi23d;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.base.external.CommandShell;
@@ -39,7 +39,7 @@ import ambit2.core.external.ShellSDFoutput;
  * @author nina
  *
  */
-public class ShellMengine extends ShellSDFoutput<IMolecule> {
+public class ShellMengine extends ShellSDFoutput<IAtomContainer> {
 	/**
 	 * 
 	 */
@@ -64,7 +64,8 @@ public class ShellMengine extends ShellSDFoutput<IMolecule> {
 		setOutputFile("opt.sdf");
 		setReadOutput(true);
 	}
-	protected synchronized List<String> prepareInput(String path, IMolecule mol) throws ShellException {
+	@Override
+	protected synchronized List<String> prepareInput(String path, IAtomContainer mol) throws ShellException {
 		List<String> list = new ArrayList<String>();
 		list.add("-p");
 		list.add("mmff94.prm");
@@ -80,7 +81,7 @@ public class ShellMengine extends ShellSDFoutput<IMolecule> {
 		return "mengine";
 	}
 	@Override
-	protected IMolecule transform(IMolecule mol) {
+	protected IAtomContainer transform(IAtomContainer mol) {
 		return mol;
 	}
 

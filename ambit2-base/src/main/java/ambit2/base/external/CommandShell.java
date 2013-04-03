@@ -204,7 +204,9 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
     	try {
     		return runShell(target);
     	} catch (ShellException x) {
-    		throw new AmbitException(x);
+    		throw x;
+    	} catch (Exception x) {
+    		throw new ShellException(this,x);
     	}
     };
     /**
@@ -240,7 +242,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
     	return System.getProperty("java.io.tmpdir") + "/.ambit2/" + System.getProperty("user.name");
     }
     
-    protected synchronized INPUT transform_input(INPUT input) throws ShellException {
+    protected synchronized INPUT transform_input(INPUT input) throws AmbitException {
     	return input;
     }
 

@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -18,16 +17,17 @@ import ambit2.core.io.MDLWriter;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.db.model.ModelQueryResults;
+import ambit2.mopac.AbstractMopacShell;
 import ambit2.mopac.MopacShell;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 
-public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> {
+public class StructureProcessor  extends	AbstractStructureProcessor<AbstractMopacShell> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8106073411946010587L;
-	protected transient MopacShell mopacshell;
+	protected transient AbstractMopacShell mopacshell;
 	protected transient StructureTypeProcessor stype = new StructureTypeProcessor();
 	protected transient MoleculeReader reader = new MoleculeReader();
 	
@@ -44,7 +44,7 @@ public class StructureProcessor  extends	AbstractStructureProcessor<MopacShell> 
 	
 
 	@Override
-	public synchronized MopacShell createPredictor(ModelQueryResults model)
+	public synchronized AbstractMopacShell createPredictor(ModelQueryResults model)
 			throws ResourceException {
 			try {
 				mopacshell = new MopacShell();

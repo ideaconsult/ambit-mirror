@@ -20,7 +20,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
-*/
+ */
 
 package ambit2.balloon;
 
@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.SDFWriter;
 
@@ -41,10 +42,11 @@ import ambit2.core.external.ShellSDFoutput;
 
 /**
  * A wrapper for Balloon http://users.abo.fi/mivainio/balloon
+ * 
  * @author nina
- *
+ * 
  */
-public class ShellBalloon extends ShellSDFoutput<IMolecule> {
+public class ShellBalloon extends ShellSDFoutput<IAtomContainer> {
 
 	/**
 	 * 
@@ -53,6 +55,8 @@ public class ShellBalloon extends ShellSDFoutput<IMolecule> {
 	public static final String BALLOON_EXE = "balloon";
 	public static final String BALLOON_HOME = "BALLOON_HOME";
 	protected boolean hydrogens = true;
+	private String uuid = null;
+
 	public boolean isHydrogens() {
 		return hydrogens;
 	}
@@ -65,8 +69,8 @@ public class ShellBalloon extends ShellSDFoutput<IMolecule> {
 		super();
 		prefix = "";
 	}
-	
-	protected String getBalloonHome() {
+
+	protected String getBalloonHome() throws ShellException {
 		return System.getenv(BALLOON_HOME);
 	}
 
@@ -74,66 +78,91 @@ public class ShellBalloon extends ShellSDFoutput<IMolecule> {
 	protected void initialize() throws ShellException {
 		super.initialize();
 		String balloon_home = getBalloonHome();
-		File exe = new File(String.format("%s%s%s", balloon_home,File.separator,BALLOON_EXE));
-		File winexe = new File(String.format("%s%s%s.exe", balloon_home,File.separator,BALLOON_EXE));
-		
+		File exe = new File(String.format("%s%s%s", balloon_home,
+				File.separator, BALLOON_EXE));
+		File winexe = new File(String.format("%s%s%s.exe", balloon_home,
+				File.separator, BALLOON_EXE));
+
 		if (!exe.exists() && !winexe.exists()) {
-			throw new ShellException(this,
-				String.format("%s does not exist! Have you set %s environment variable?",
-						exe.getAbsolutePath(),BALLOON_HOME));
+			throw new ShellException(this, String.format(
+					"%s does not exist! Have you set %s environment variable?",
+					exe.getAbsolutePath(), BALLOON_HOME));
 		}
-		addExecutable(CommandShell.os_WINDOWS, winexe.getAbsolutePath(),null);
-		addExecutable(CommandShell.os_WINDOWSVISTA, winexe.getAbsolutePath(),null);
-		addExecutable(CommandShell.os_WINDOWS7, winexe.getAbsolutePath(),null);
-		addExecutable(CommandShell.os_FreeBSD, exe.getAbsolutePath(),null);
-		addExecutable(CommandShell.os_LINUX, exe.getAbsolutePath(),null);
-		setInputFile("i_bln"+UUID.randomUUID().toString()+".sdf");
-		setOutputFile(getOutputFileName());		
+		addExecutable(CommandShell.os_WINDOWS, winexe.getAbsolutePath(), null);
+		addExecutable(CommandShell.os_WINDOWSVISTA, winexe.getAbsolutePath(),
+				null);
+		addExecutable(CommandShell.os_WINDOWS7, winexe.getAbsolutePath(), null);
+		addExecutable(CommandShell.os_FreeBSD, exe.getAbsolutePath(), null);
+		addExecutable(CommandShell.os_LINUX, exe.getAbsolutePath(), null);
+
+		setOutputFile(getOutputFileName());
+		setInputFile(outputFile.replace("o_bln", "i_bln"));
 		setReadOutput(true);
 	}
-	
+
 	protected String getOutputFileName() {
-		return "o_bln"+UUID.randomUUID().toString()+".sdf";
+		return "o_bln" + UUID.randomUUID().toString() + ".sdf";
 	}
+
 	protected String getOutputOption() {
 		return "--output-file";
 	}
+
 	@Override
-	protected IMolecule transform(IMolecule mol) {
+	protected IMolecule transform(IAtomContainer mol) {
 		return null;
-	}	
+	}
+
 	@Override
 	public String toString() {
 		return "Balloon";
 	}
+
 	@Override
 	protected String getPath(File file) {
-		return String.format("%s",getHomeDir(null));
+		return String.format("%s", getHomeDir(null));
 	}
+
 	@Override
-    protected String getHomeDir(File file) {
-    	return String.format("%s%s.ambit2%s%s%sballoon",
-    				System.getProperty("java.io.tmpdir"),File.separator,
-    				File.separator,
-    				System.getProperty("user.name"),File.separator);
-    }	
+	protected String getHomeDir(File file) {
+		return String
+				.format("%s%s.ambit2%s%s%sballoon",
+						System.getProperty("java.io.tmpdir"), File.separator,
+						File.separator, System.getProperty("user.name"),
+						File.separator);
+	}
+
 	@Override
-	protected synchronized java.util.List<String> prepareInput(String path, IMolecule mol) throws ShellException {
+	protected synchronized java.util.List<String> prepareInput(String path, IAtomContainer mol) throws ShellException {
 
 		try {
 	    	String homeDir = getHomeDir(null); // getPath(new File(exe));
 	    	File dir = new File(homeDir);
 	    	if (!dir.exists()) dir.mkdirs();
 	    	
-	    	inputFile = writeInputSDF(path,mol);
+	    	String inFile = writeInputSDF(path,mol);
 	    	
 	    	String outFile = String.format("%s%s%s",homeDir,File.separator,getOutputFile());
 	    	
 			List<String> list = new ArrayList<String>();
 			//if (hydrogens)	list.add("-h");
+			list.add("-f");
+			list.add(getBalloonHome()+"/MMFF94.mff");
+			//list.add("--allowcrowded");
+			//list.add("--useSimplex");
 			list.add("--singleconf");
+			list.add("--energyConstant");
+			list.add("40");
+			//list.add("--nosymmetry");
+			//list.add("--rebuildGeometry");
+			//list.add("-t");
+			//list.add("0.5");
+			//list.add("--nGenerations");
+			//list.add("200");
+			//list.add("--fullforce");
+			//list.add("--noGA");
 			list.add("--input-file");
-			list.add(inputFile);
+			list.add(inFile);
 			list.add(getOutputOption());
 			list.add(outFile);
 			return list;
@@ -142,7 +171,8 @@ public class ShellBalloon extends ShellSDFoutput<IMolecule> {
 		}
 	}
 
-	protected String writeInputSDF(String path, IMolecule mol) throws IOException, CDKException {
+	protected String writeInputSDF(String path, IAtomContainer mol)
+			throws IOException, CDKException {
 		SDFWriter writer = null;
 		try {
 			String input = path + File.separator + getInputFile();
@@ -151,22 +181,34 @@ public class ShellBalloon extends ShellSDFoutput<IMolecule> {
 			writer.write(mol);
 			return input;
 		} catch (CDKException x) {
-			throw x;			
+			throw x;
 		} catch (IOException x) {
 			throw x;
 		} finally {
-			try {writer.close();} catch (Exception x) {}
+			try {
+				writer.close();
+			} catch (Exception x) {
+			}
 		}
 	}
 
 	@Override
-	protected synchronized IMolecule parseOutput(String path, IMolecule mol)
-			throws ShellException {
-		IMolecule newmol = super.parseOutput(path, mol);
-		try { File file = new File(inputFile); file.delete();} catch (Exception x) {}
-		try { File file = new File(String.format("%s%s%s",path,File.separator,getOutputFile())); file.delete();} catch (Exception x) {}
+	protected synchronized IAtomContainer parseOutput(String path,
+			IAtomContainer mol) throws ShellException {
+		File out = new File(String.format("%s%s%s", path, File.separator,
+				getOutputFile()));
+		if (!out.exists()) { // Balloon writes _bad. files on failure. But it's
+								// ok for a starting point structure
+			out = new File(out.getAbsolutePath().replace(".sdf", "_bad.sdf"));
+			setOutputFile(out.getName());
+		}
+		IAtomContainer newmol = super.parseOutput(path, mol);
+		try {
+			File file = new File(String.format("%s%s%s", path, File.separator,	getInputFile()));
+			file.delete();
+		} catch (Exception x) {	}
+		try {	File file = out; file.delete();	} catch (Exception x) {}
+		setOutputFile(out.getName().replace("_bad", ""));
 		return newmol;
 	}
 }
-
-

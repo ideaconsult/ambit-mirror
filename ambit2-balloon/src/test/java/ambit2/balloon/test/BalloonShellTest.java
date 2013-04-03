@@ -10,7 +10,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -40,8 +39,8 @@ public class BalloonShellTest {
 
 	@Test	
 	public void testRunBalloon() throws Exception {
-		IMolecule mol = MoleculeFactory.makeAlkane(3);
-		IMolecule newmol = shell.runShell(mol);
+		IAtomContainer mol = MoleculeFactory.makeAlkane(3);
+		IAtomContainer newmol = shell.runShell(mol);
 		Assert.assertNotNull(newmol);
 		IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newmol);
 		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,c));

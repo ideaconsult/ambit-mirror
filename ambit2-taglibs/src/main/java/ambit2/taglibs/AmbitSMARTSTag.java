@@ -29,7 +29,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.smarts.query.SMARTSException;
@@ -43,7 +43,7 @@ public class AmbitSMARTSTag extends AmbitMolTag {
 	public void doTag() throws JspException, IOException {
         if ((smarts != null) && (!"".equals(smarts))) {
         	
-        	IMolecule mol = null;
+        	IAtomContainer mol = null;
         	try {
         		mol = getMolecule(getMol());
         	} catch (Exception x) {

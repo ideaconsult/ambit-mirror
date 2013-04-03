@@ -1,3 +1,7 @@
+body {
+	background:#fff;
+	color:#344049
+}
 #navcolumn h5 {
   font-size: smaller;
   border: 1px solid #aaaaaa;
@@ -7,6 +11,20 @@
   padding-top: 2px;
   padding-left: 2px;
   color: #000;
+}
+
+h1, h2, h3 {
+	color: #344049;
+	font-weight: bold; }
+		
+h4, h5, h6 {
+	color: #344049;
+	font-weight: normal; 
+}
+
+a {
+	color: #344049;
+	hover: #729203; 
 }
 
 li.collapsed, li.expanded, a:link {

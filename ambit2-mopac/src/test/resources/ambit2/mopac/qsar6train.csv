@@ -86,7 +86,7 @@ aniline,Aniline,142-04-1,C1=CC=C(C=C1)N,"InChI=1/C6H7N/c7-6-4-2-1-3-5-6/h1-5H,7H
 4-[(4-amino-3-ethyl-5-methyl-phenyl)methyl]-2-ethyl-6-methyl-aniline,"4,4'methylenebis(2-methyl-6-ethylaniline)",19900-72-2,CCC1=CC(=CC(=C1N)C)CC2=CC(=C(C(=C2)CC)N)C,"InChI=1/C19H26N2/c1-5-16-10-14(7-12(3)18(16)20)9-15-8-13(4)19(21)17(6-2)11-15/h7-8,10-11H,5-6,9,20-21H2,1-4H3",,C19H26N2,1,-8.113,0.636,1.03,0.1,0.056,0
 "4-[(4-amino-3,5-dimethyl-phenyl)methyl]-2,6-dimethyl-aniline","4,4'methylenebis(2,6-dimethylaniline)",4073-98-7,CC1=CC(=CC(=C1N)C)CC2=CC(=C(C(=C2)C)N)C,"InChI=1/C17H22N2/c1-10-5-14(6-11(2)16(10)18)9-15-7-12(3)17(19)13(4)8-15/h5-8H,9,18-19H2,1-4H3",,C17H22N2,1,-8.12,0.624,0.56,0.1,0.056,0
 3-phenylaniline,3-aminobiphenyl,2243-47-2,C1=CC=C(C=C1)C2=CC(=CC=C2)N,"InChI=1/C12H11N/c13-12-8-4-7-11(9-12)10-5-2-1-3-6-10/h1-9H,13H2",,C12H11N,1,-8.498,-0.003,0.1,2.54,0.1,0
-,"2,3-diaminobiphenyl",,,,,C12H12N2,1,-8.305,0.167,0.54,2.54,0.1,0
+,"2,3-diaminobiphenyl",,C1=CC=CC=C1C2=C(N)C(N)=CC=C2,"InChI=1S/C12H12N2/c13-11-8-4-7-10(12(11)14)9-5-2-1-3-6-9/h1-8H,13-14H2",,C12H12N2,1,-8.305,0.167,0.54,2.54,0.1,0
 2-methoxyaniline,2-methoxyaniline,134-29-0,COC1=CC=CC=C1N,"InChI=1/C7H9NO/c1-9-7-5-3-2-4-6(7)8/h2-5H,8H2,1H3",,C7H9NO,1,-8.331,0.525,0.79,0.1,0.1,0
 2-aminophenol,2-aminophenol,95-55-6,C1=CC=C(C(=C1)N)O,"InChI=1/C6H7NO/c7-5-3-1-2-4-6(5)8/h1-4,8H,7H2",,C6H7NO,1,-8.356,0.448,0.28,0.1,0.1,0
 "2,4,6-trimethylaniline","2,4,6-trimethylaniline",11/8/6334,CC1=CC(=C(C(=C1)C)N)C,"InChI=1/C9H13N/c1-6-4-7(2)9(10)8(3)5-6/h4-5H,10H2,1-3H3",,C9H13N,1,-8.222,0.616,0.56,0.1,0.56,0
@@ -106,7 +106,7 @@ aniline,Aniline,142-04-1,C1=CC=C(C=C1)N,"InChI=1/C6H7N/c7-6-4-2-1-3-5-6/h1-5H,7H
 4-methylaniline,4-methylaniline,540-23-8,CC1=CC=C(C=C1)N,"InChI=1/C7H9N/c1-6-2-4-7(8)5-3-6/h2-5H,8H2,1H3",,C7H9N,1,-8.362,0.606,0.1,0.1,0.1,0
 3-methylaniline,3-methylaniline,638-03-9,CC1=CC(=CC=C1)N,"InChI=1/C7H9N/c1-6-3-2-4-7(8)5-6/h2-5H,8H2,1H3",,C7H9N,1,-8.486,0.589,0.1,0.56,0.1,0
 2-methylaniline,2-methylaniline,636-21-5,CC1=CC=CC=C1N,"InChI=1/C7H9N/c1-6-4-2-3-5-7(6)8/h2-5H,8H2,1H3",,C7H9N,1,-8.443,0.585,0.6,0.1,0.1,0
-4'-butylbiphenyl-4-amine,4'-nButyl-4-aminobiphenyl,,Nc1ccc(cc1)c2ccc(CCCC)cc2,,,C16H19N,1,-8.217,0.041,0.1,0.1,0.1,1
-4'-tert-butylbiphenyl-4-amine,4'-tButyl-4-aminobiphenyl,,Nc1ccc(cc1)c2ccc(cc2)C(C)(C)C,,,C16H19N,1,-8.205,0.059,0.1,0.1,0.1,1
-4'-(trifluoromethyl)biphenyl-4-amine,4'-Trifluoromethyl-4-aminobiphenyl,,Nc1ccc(cc1)c2ccc(cc2)C(F)(F)F,,,C13H10F3N,1,-8.584,-0.549,0.1,0.1,0.1,1
+4'-butylbiphenyl-4-amine,4'-nButyl-4-aminobiphenyl,,Nc1ccc(cc1)c2ccc(CCCC)cc2,"InChI=1S/C16H19N/c1-2-3-4-13-5-7-14(8-6-13)15-9-11-16(17)12-10-15/h5-12H,2-4,17H2,1H3",,C16H19N,1,-8.217,0.041,0.1,0.1,0.1,1
+4'-tert-butylbiphenyl-4-amine,4'-tButyl-4-aminobiphenyl,,Nc1ccc(cc1)c2ccc(cc2)C(C)(C)C,"InChI=1S/C16H19N/c1-16(2,3)14-8-4-12(5-9-14)13-6-10-15(17)11-7-13/h4-11H,17H2,1-3H3",,C16H19N,1,-8.205,0.059,0.1,0.1,0.1,1
+4'-(trifluoromethyl)biphenyl-4-amine,4'-Trifluoromethyl-4-aminobiphenyl,,Nc1ccc(cc1)c2ccc(cc2)C(F)(F)F,"InChI=1S/C13H10F3N/c14-13(15,16)11-5-1-9(2-6-11)10-3-7-12(17)8-4-10/h1-8H,17H2",,C13H10F3N,1,-8.584,-0.549,0.1,0.1,0.1,1
 4-[3-(trifluoromethyl)phenyl]aniline,3'-Trifluoromethyl-4-aminobiphenyl,397-28-4,C1=CC(=CC(=C1)C(F)(F)F)C2=CC=C(C=C2)N,"InChI=1/C13H10F3N/c14-13(15,16)11-3-1-2-10(8-11)9-4-6-12(17)7-5-9/h1-8H,17H2",,C13H10F3N,1,-8.535,-0.401,0.1,0.1,0.1,1

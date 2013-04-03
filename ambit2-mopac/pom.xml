@@ -12,7 +12,11 @@
   <description>A wrapper for OpenMopac http://openmopac.net/</description>
   <packaging>jar</packaging>  
   <url />
- <build>
+  <organization>
+  	<name>Ideaconsult Ltd.</name>
+  	<url>http://www.ideaconsult.net</url>
+  </organization>
+  <build>
   	<pluginManagement>
   		<plugins>
 			<plugin>
@@ -58,6 +62,13 @@
     	<groupId>ambit</groupId>
     	<artifactId>ambit2-smi23d</artifactId>
     	<version>${project.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-balloon</artifactId>
+    	<version>${project.version}</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
     </dependency>
   </dependencies>
   <properties>

@@ -132,7 +132,7 @@ public class IteratingXLSReader extends IteratingFilesWithHeaderReader<Property>
 		
 	}
 	public Object next() {
-		IMolecule mol = null;
+		IAtomContainer mol = null;
 		Map properties = new Hashtable();
 		try {
 			HSSFRow row = (HSSFRow) iterator.next();

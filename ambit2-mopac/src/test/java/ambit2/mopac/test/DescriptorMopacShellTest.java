@@ -12,7 +12,7 @@ import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.mopac.DescriptorMopacShell;
 import ambit2.mopac.Mopac7Reader;
-import ambit2.mopac.MopacShell;
+import ambit2.mopac.AbstractMopacShell;
 
 public class DescriptorMopacShellTest {
 	protected SmilesParserWrapper parser;
@@ -79,7 +79,7 @@ public class DescriptorMopacShellTest {
 		IAtomContainer ac = parser.parseSmiles("C[Si]");
 		DescriptorValue value = d.calculate(ac);
 		Assert.assertNotNull(value.getException());
-		Assert.assertEquals(MopacShell.MESSAGE_UNSUPPORTED_TYPE + "Si",value.getException().getMessage());
+		Assert.assertEquals(AbstractMopacShell.MESSAGE_UNSUPPORTED_TYPE + "Si",value.getException().getMessage());
 		
 	}
 	@Test
