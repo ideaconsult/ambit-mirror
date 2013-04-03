@@ -322,6 +322,7 @@ public class AlgorithmsPile {
 			{"ambit2.descriptors.SaturationCheckerVerifier","Saturation Checker verifier","ambit2.descriptors.SaturationCheckerVerifier",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#saturationcheckerverifier"},
 		
 			{"ambit2.mopac.MopacShell","MOPAC: optimizes 3D structure","ambit2.mopac.MopacShell",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
+			{"ambit2.mopac.MopacShellBalloon","MOPAC: optimizes 3D structure (starting structure by Balloon)","ambit2.mopac.MopacShellBalloon",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
 			
 			//fingerprints
 			{"ambit2.descriptors.fingerprints.EStateFingerprinterWrapper","EState Fingerprints","ambit2.descriptors.fingerprints.EStateFingerprinterWrapper",null,

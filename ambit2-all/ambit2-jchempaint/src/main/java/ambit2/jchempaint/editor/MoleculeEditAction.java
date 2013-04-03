@@ -164,7 +164,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
     
 	 */
 	@Override
-	public void setMolecule(IMolecule molecule) {
+	public void setMolecule(IAtomContainer molecule) {
 		super.setMolecule(molecule);
 		try {
 			molecules = getMoleculeForEdit(molecule);
@@ -240,7 +240,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
 */
                         dispose();
                         jcpDialog = null;
-                        return molecule;
+                        return (IMolecule)molecule;
                     };
                     
                     @Override
@@ -290,7 +290,7 @@ public class MoleculeEditAction extends AbstractMoleculeAction {
         }
     }
 
-    protected void updateMolecule(IMolecule mol) {
+    protected void updateMolecule(IAtomContainer mol) {
         molecule = mol;
         try {
 	        AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);

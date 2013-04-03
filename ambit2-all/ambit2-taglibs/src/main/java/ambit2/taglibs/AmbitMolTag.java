@@ -4,7 +4,7 @@ import java.net.URLDecoder;
 
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.smiles.SmilesParserWrapper;
@@ -32,7 +32,7 @@ public abstract class AmbitMolTag extends SimpleTagSupport {
 		this.molType = molType;
 	}
 	
-	protected IMolecule getMolecule(String mol) throws Exception {
+	protected IAtomContainer getMolecule(String mol) throws Exception {
 		if (type_cml.equals(molType)) {
 			return MoleculeTools.readCMLMolecule(mol);
 		} else if (type_mol.equals(molType)) { 

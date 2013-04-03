@@ -216,7 +216,43 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(1,count);
 	}	
 	
+	@Test
+	public void testMOPACBalloon() throws Exception {
+		Form headers = new Form();  
+		Reference model = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacShellBalloon", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,
+						"3"
+						));
 		
+		
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		Reference ref = testAsyncTask(
+				model.toString(),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						));
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+		
+		ref = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacOriginalStructure", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F4%2Fpredicted"
+						));
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+			
+		int count = 0;
+		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		i.setCloseModel(true);
+		while (i.hasNext()) {
+			count++;
+		}
+		i.close();
+		Assert.assertEquals(9,count);
+	}		
 	
 	
 	@Test

@@ -38,7 +38,7 @@ public class CommandShellTest {
 		String testfile = "babel_test.sdf";
 		OpenBabelShell babel = new OpenBabelShell();
 		babel.setOutputFile(testfile);
-		IMolecule newmol = babel.runShell("c1ccccc1");
+		IAtomContainer newmol = babel.runShell("c1ccccc1");
 
 		IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newmol);
 		

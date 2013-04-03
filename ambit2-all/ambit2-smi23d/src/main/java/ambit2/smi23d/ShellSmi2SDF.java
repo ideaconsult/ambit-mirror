@@ -39,7 +39,7 @@ import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.external.ShellSDFoutput;
 
-public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
+public class ShellSmi2SDF extends ShellSDFoutput<IAtomContainer> {
 	/**
 	 * 
 	 */
@@ -76,8 +76,8 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
 		setReadOutput(false);
 	}
 	
-
-	protected  synchronized List<String> prepareInput(String path, IMolecule mol) throws ShellException {
+	@Override
+	protected  synchronized List<String> prepareInput(String path, IAtomContainer mol) throws ShellException {
 		try {
 			//Object smiles = mol.getProperty("SMILES"); 
 			//if (smiles == null) 
@@ -86,12 +86,12 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
                 logger.fine("Generate smiles\t");
                 IAtomContainer c = mol;
                 if (dropHydrogens) {
-                    c = (IMolecule) mol.clone();
+                    c = (IAtomContainer) mol.clone();
 
                     c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(c);
                 }
                 gen.setUseAromaticityFlag(true);
-			    smiles = gen.createSMILES((IMolecule)c);
+			    smiles = gen.createSMILES(c);
             } else logger.fine("Use smiles from file\t"+smiles);
 			
 			FileWriter writer = new FileWriter(path + File.separator + getInputFile());
@@ -126,7 +126,7 @@ public class ShellSmi2SDF extends ShellSDFoutput<IMolecule> {
     	return exitVal != 0;
     }	
 	@Override
-	protected  synchronized IMolecule transform(IMolecule mol) {
+	protected  synchronized IAtomContainer transform(IAtomContainer mol) {
 		return mol;
 	}
     public synchronized boolean isGenerateSmiles() {

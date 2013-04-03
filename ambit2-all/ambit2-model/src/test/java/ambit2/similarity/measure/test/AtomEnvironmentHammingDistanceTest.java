@@ -32,6 +32,7 @@ package ambit2.similarity.measure.test;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
 
@@ -58,7 +59,7 @@ public class AtomEnvironmentHammingDistanceTest {
             
             SmilesParserWrapper p =  SmilesParserWrapper.getInstance();
             
-            IMolecule mol2 = p.parseSmiles("CCCC");
+            IAtomContainer mol2 = p.parseSmiles("CCCC");
            
             AtomEnvironmentGenerator g = new AtomEnvironmentGenerator();
             g.setUseHydrogens(true);

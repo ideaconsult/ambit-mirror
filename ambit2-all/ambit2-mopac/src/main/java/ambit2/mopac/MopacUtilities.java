@@ -2,7 +2,6 @@ package ambit2.mopac;
 
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
@@ -13,7 +12,7 @@ import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 
 public class MopacUtilities 
 {
-	protected MopacShell shell;
+	protected AbstractMopacShell shell;
 	protected SmilesParserWrapper parser;
 	
 	
@@ -30,7 +29,7 @@ public class MopacUtilities
 
 	public double getTotalEnergy(String smiles) throws Exception
 	{
-		IMolecule mol = parser.parseSmiles(smiles); 
+		IAtomContainer mol = parser.parseSmiles(smiles); 
 		mol.setProperty("SMILES",smiles);
 		mol.setProperty("TITLE",smiles);
 		return getTotalEnergy(mol);
@@ -38,7 +37,7 @@ public class MopacUtilities
 	
 	public double getTotalEnergy(IAtomContainer mol) throws Exception
 	{	
-		IMolecule newmol = (IMolecule)shell.runShell(mol);
+		IAtomContainer newmol = shell.runShell(mol);
 		Double energy = Double.parseDouble((String)newmol.getProperty("TOTAL ENERGY"));
 		return energy;
 	}

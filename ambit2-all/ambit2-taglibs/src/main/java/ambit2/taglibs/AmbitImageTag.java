@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.rendering.CompoundImageTools;
 
@@ -33,7 +33,7 @@ public class AmbitImageTag extends AmbitMolTag {
 		
 		try {
 			PageContext pageContext = (PageContext) getJspContext();
-			IMolecule m = getMolecule(getMol());
+			IAtomContainer m = getMolecule(getMol());
 		
 			pageContext.getResponse().setContentType("image/png");
 	   		OutputStream os = pageContext.getResponse().getOutputStream();

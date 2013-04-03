@@ -38,7 +38,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -81,20 +81,20 @@ public class MengineCrashTest {
 
     @Test
     public void test1() throws  Exception {
-        IMolecule a = getChemical("ambit2/data/mengine/problem-001.sdf");
-        IMolecule b = getChemical("ambit2/data/mengine/problem-001-chemidplus.sdf");        
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-001.sdf");
+        IAtomContainer b = getChemical("ambit2/data/mengine/problem-001-chemidplus.sdf");        
         isIsomorph(a,b);   
     }
     @Test
     public void test1_1() throws  Exception {
-        IMolecule a = getChemical("ambit2/data/mengine/problem-001.sdf");
-        IMolecule b = getChemical("ambit2/data/mengine/smi2sdf_generated.sdf");        
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-001.sdf");
+        IAtomContainer b = getChemical("ambit2/data/mengine/smi2sdf_generated.sdf");        
         isIsomorph(a,b);   
     }    
     @Test
     public void test2() throws  Exception {
-        IMolecule a = getChemical("ambit2/data/mengine/problem-002.sdf");
-        IMolecule b = getChemical("ambit2/data/mengine/problem-002-chemidplus.sdf");        
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-002.sdf");
+        IAtomContainer b = getChemical("ambit2/data/mengine/problem-002-chemidplus.sdf");        
         isIsomorph(a,b);   
     }    
     /*
@@ -102,18 +102,18 @@ public class MengineCrashTest {
      * @throws Exception
      */
     public void test3() throws  Exception {
-        IMolecule a = getChemical("ambit2/data/mengine/problem-003.sdf");
-        IMolecule b = getChemical("ambit2/data/mengine/problem-003-chemidplus.sdf");        
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-003.sdf");
+        IAtomContainer b = getChemical("ambit2/data/mengine/problem-003-chemidplus.sdf");        
         isIsomorph(a,b);   
     }  
     @Test
     public void test4() throws  Exception {
-        IMolecule a = getChemical("ambit2/data/mengine/problem-004.sdf");
-        IMolecule b = getChemical("ambit2/data/mengine/problem-004-chemidplus.sdf");        
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-004.sdf");
+        IAtomContainer b = getChemical("ambit2/data/mengine/problem-004-chemidplus.sdf");        
         isIsomorph(a,b);   
     }   
 
-    public void isIsomorph(IMolecule a,IMolecule b) throws  Exception {
+    public void isIsomorph(IAtomContainer a,IAtomContainer b) throws  Exception {
         
         SmilesGenerator g = new SmilesGenerator(true);
         AtomConfigurator c= new AtomConfigurator();
@@ -128,8 +128,8 @@ public class MengineCrashTest {
         String s2= g.createSMILES(b);
         
         SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
-        IMolecule a1 = p.parseSmiles(s1);
-        IMolecule b1 = p.parseSmiles(s2);
+        IAtomContainer a1 = p.parseSmiles(s1);
+        IAtomContainer b1 = p.parseSmiles(s2);
         Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(a1,b1));
         Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(a,a1));
         Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(b,b1));
@@ -144,100 +144,110 @@ public class MengineCrashTest {
     public void testCrash1() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);        
-        IMolecule a = getChemical("ambit2/data/mengine/problem-001.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-001.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }    
     @Test    
     public void testCrash2() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);        
-        IMolecule a = getChemical("ambit2/data/mengine/problem-002.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-002.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }
     @Test    
     public void testCrash3() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);        
-        IMolecule a = getChemical("ambit2/data/mengine/problem-003.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-003.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }
     @Test
     public void testCrash4() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);        
-        IMolecule a = getChemical("ambit2/data/mengine/problem-004.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-004.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }   
     @Test
     public void testCrash5() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-005.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-005.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     } 
     @Test
     public void testCrash6() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-006.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-006.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     } 
     @Test
     public void testCrash7() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(false);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-007.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-007.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }    
     @Test
     public void testCrashNoH1() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-001.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-001.sdf");
         Assert.assertEquals(0,goCrash(a,"SMILES"));
     }  
     @Test
     public void testCrashNoH2() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-002.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-002.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }
     @Test
     public void testCrashNoH3() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-003.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-003.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }
     @Test
     public void testCrashNoH4() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-004.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-004.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }
     @Test
     public void testCrashNoH5() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-005.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-005.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }
     @Test
     public void testCrashNoH6() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-006.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-006.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }
     @Test
     public void testCrashNoH7() throws  Exception {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
-        IMolecule a = getChemical("ambit2/data/mengine/problem-007.sdf");
+        IAtomContainer a = getChemical("ambit2/data/mengine/problem-007.sdf");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     }         
+    
+    @Test
+    public void testCrash8() throws  Exception {
+        smi2sdf.setGenerateSmiles(true);
+        smi2sdf.setDropHydrogens(true);
+        SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
+        IAtomContainer a = p.parseSmiles("N#N=CC(=O)NCC(=O)NN");
+        Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
+    }         
+    
     /**
      * https://sourceforge.net/tracker/?func=detail&aid=3138563&group_id=152702&atid=785126
      */
@@ -246,12 +256,12 @@ public class MengineCrashTest {
         smi2sdf.setGenerateSmiles(true);
         smi2sdf.setDropHydrogens(true);
         SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
-        IMolecule a = p.parseSmiles("Cc2c(NS(=O)(=O)c1ccc(N)cc1)onc2C");
+        IAtomContainer a = p.parseSmiles("Cc2c(NS(=O)(=O)c1ccc(N)cc1)onc2C");
         Assert.assertEquals(0,goCrash(a,"GENERATED_SMILES"));
     } 
     
     
-    public int goCrash(IMolecule a, String smilesfield) throws  Exception {
+    public int goCrash(IAtomContainer a, String smilesfield) throws  Exception {
         AtomConfigurator c= new AtomConfigurator();
         HydrogenAdderProcessor h = new HydrogenAdderProcessor();
         CDKHueckelAromaticityDetector.detectAromaticity(h.process(c.process(a)));
@@ -260,18 +270,18 @@ public class MengineCrashTest {
         smi2sdf.runShell(a);
         mengine.setInputFile("test.sdf");
         mengine.setOutputFile("good.sdf");
-        IMolecule newmol = mengine.runShell(a);
+        IAtomContainer newmol = mengine.runShell(a);
         return mengine.getExitCode();
     }    
     
-    public IMolecule getChemical(String file) throws Exception {
-        IMolecule a = null;
+    public IAtomContainer getChemical(String file) throws Exception {
+    	IAtomContainer a = null;
         IIteratingChemObjectReader reader = new MyIteratingMDLReader(
         		getClass().getClassLoader().getResourceAsStream(file),SilentChemObjectBuilder.getInstance());
         while (reader.hasNext()) {
             Object o = reader.next();
-            if (o instanceof IMolecule) {
-                a = (IMolecule) o;
+            if (o instanceof IAtomContainer) {
+                a = (IAtomContainer) o;
                 break;
             }
         }
@@ -309,7 +319,7 @@ public class MengineCrashTest {
 	        //adding hydrogens
 	        CDKHydrogenAdder h = CDKHydrogenAdder.getInstance(mol.getBuilder());
 	        
-        	if (mol instanceof IMolecule) {
+        	if (mol instanceof IAtomContainer) {
                 try {
     	            h.addImplicitHydrogens(mol);
     	            logger.debug("Adding implicit hydrogens; atom count "+mol.getAtomCount());
@@ -322,10 +332,10 @@ public class MengineCrashTest {
                     }
                 }
         	} else {
-        		IMoleculeSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(mol);
+        		IAtomContainerSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(mol);
         	      
         	      for (int k = 0; k < moleculeSet.getMoleculeCount(); k++) {
-        	    	  IMolecule molPart = moleculeSet.getMolecule(k);
+        	    	  IAtomContainer molPart = moleculeSet.getMolecule(k);
       		          h.addImplicitHydrogens(molPart);
       		          logger.debug("Adding implicit hydrogens; atom count "+molPart.getAtomCount());
     		          AtomContainerManipulator.convertImplicitToExplicitHydrogens(molPart);

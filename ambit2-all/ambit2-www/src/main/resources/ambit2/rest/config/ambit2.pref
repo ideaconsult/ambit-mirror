@@ -33,10 +33,12 @@ service.ontology=${service.ontology}
 #Add dataset prefix for compound URI, e.g.  /dataset/1/compound/1 , instead of /compound/1
 #Experimental true|false. Should be used if AA is on, see config.prop file
 dataset.members.prefix=${dataset.members.prefix}
-#Path to OpenBabel executable
+#Path to OpenBabel executable http://openbabel.org
 OBABEL_HOME=${OBABEL_HOME}
-#Path to Dragon6 executable
+#Path to Dragon6 executable http://www.talete.mi.it/products/dragon_description.htm 
 DRAGON_HOME=${DRAGON_HOME}
+#Path to balloon executable http://users.abo.fi/mivainio/balloon/ 
+BALLOON_HOME=${BALLOON_HOME}
 #Add a column with the license in CSV and TXT files
 license.intextfiles=${license.intextfiles}
 #Protect /admin resources via OpenTox AA.  true | false 

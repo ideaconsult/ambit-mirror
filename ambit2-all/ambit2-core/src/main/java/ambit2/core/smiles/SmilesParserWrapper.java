@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
@@ -38,10 +39,10 @@ public class SmilesParserWrapper implements PropertyChangeListener {
 		//this is major source of memory leaks ... should be done in a different way
 		//Preferences.getPropertyChangeSupport().addPropertyChangeListener(Preferences.SMILESPARSER, this);
 	}
-	public IMolecule parseSmiles(String smiles) throws InvalidSmilesException {
+	public IAtomContainer parseSmiles(String smiles) throws InvalidSmilesException {
 		return parseSmiles(smiles,true);
 	}
-	public IMolecule parseSmiles(String smiles,boolean addHydrogens) throws InvalidSmilesException {
+	public IAtomContainer parseSmiles(String smiles,boolean addHydrogens) throws InvalidSmilesException {
 		switch (parser) {
 		case OPENBABEL: {
 			try {

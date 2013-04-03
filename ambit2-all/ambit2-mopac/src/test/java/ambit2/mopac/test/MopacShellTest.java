@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Iterator;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -12,7 +15,6 @@ import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.silent.Atom;
 import org.openscience.cdk.silent.Molecule;
@@ -27,29 +29,31 @@ import ambit2.base.external.ShellException;
 import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
+import ambit2.mopac.AbstractMopacShell;
 import ambit2.mopac.Mopac7Writer;
 import ambit2.mopac.MopacShell;
 
-public class MopacShellTest {
+public abstract class MopacShellTest {
 	protected SmilesParserWrapper parser;
-	protected MopacShell shell;
+	protected AbstractMopacShell shell;
+	protected static Logger logger = Logger.getLogger(MopacShellTest.class.getName());
+	
 	@Before
 	public void setUp() throws Exception {
 		shell = new MopacShell();
-		File homeDir = new File(System.getProperty("user.home") +"/.ambit2/*");
+		File homeDir = new File(System.getProperty("java.io.tmpdir") +"/.ambit2/" + System.getProperty("user.name") + "/mopac/*");
 		homeDir.delete();
 		
-		parser =  SmilesParserWrapper.getInstance(SMILES_PARSER.CDK);		
+		parser =  SmilesParserWrapper.getInstance(SMILES_PARSER.CDK);
+        Logger tempLogger = logger;
+        Level level = Level.ALL;
+        while(tempLogger != null) {
+           tempLogger.setLevel(level);
+           for(Handler handler : tempLogger.getHandlers())
+              handler.setLevel(level);
+           tempLogger = tempLogger.getParent();
+        }
 	}
-/*
-	public void testGetInstance() throws Exception {
-		shell = CommandShell.getInstance();
-		assertNotNull(shell);
-		CommandShell shell1 = CommandShell.getInstance();
-		assertNotNull(shell1);
-		assertEquals(shell,shell1);
-	}
-*/
 
 	@Test
 	public void getExecutableWin()  throws Exception {
@@ -75,16 +79,16 @@ public class MopacShellTest {
 	}	
 	public void runShell(String smiles) throws Exception {
 		//"[H]C1=C([H])C([H])=C([H])C([H])=C1([H])";
-		IMolecule mol = parser.parseSmiles(smiles); 
+		IAtomContainer mol = parser.parseSmiles(smiles); 
 		mol.setProperty("SMILES",smiles);
 		mol.setProperty("TITLE",smiles);
 
-		IMolecule newmol = (IMolecule)shell.runShell(mol);
+		IAtomContainer newmol = (IAtomContainer)shell.runShell(mol);
 		//Assert.assertEquals(mol.getAtomCount(),newmol.getAtomCount());
 		//Assert.assertEquals(mol.getBondCount(),newmol.getBondCount());
-		Assert.assertNotNull(newmol.getProperty("ELUMO"));
-		Assert.assertNotNull(newmol.getProperty("EHOMO"));
-		Assert.assertNotNull(newmol.getProperty("ELECTRONIC ENERGY"));
+		Assert.assertNotNull("ELUMO not found",newmol.getProperty("ELUMO"));
+		Assert.assertNotNull("EHOMO not found",newmol.getProperty("EHOMO"));
+		Assert.assertNotNull("ELECTRONIC ENERGY not found", newmol.getProperty("ELECTRONIC ENERGY"));
 		
 		for (int i=0; i < newmol.getAtomCount(); i++) {
 			Assert.assertNotNull(newmol.getAtom(i).getPoint3d());
@@ -103,7 +107,7 @@ public class MopacShellTest {
         
 
         
-		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,newmol));			
+		Assert.assertTrue("Isomorphism check",UniversalIsomorphismTester.isIsomorph(mol,newmol));			
 	}
 
 	@Test
@@ -113,14 +117,15 @@ public class MopacShellTest {
 			runShell("C[Si]");
 			Assert.fail("Shouldn't get here");
 		} catch (ShellException x) {
-			Assert.assertEquals(MopacShell.MESSAGE_UNSUPPORTED_TYPE + "Si",x.getMessage());
+			Assert.assertEquals(AbstractMopacShell.MESSAGE_UNSUPPORTED_TYPE + "Si",x.getMessage());
 		}
 	}
 
 	@Test
 	   public void testPredictions() throws Exception {
+		long now = System.currentTimeMillis();
 		shell.setMopac_commands("AM1 NOINTER NOMM BONDS MULLIK PRECISE GNORM=0.0");
-    	InputStream in = MopacShell.class.getClassLoader().getResourceAsStream("ambit2/mopac/qsar6train.csv");
+    	InputStream in = AbstractMopacShell.class.getClassLoader().getResourceAsStream("ambit2/mopac/qsar6train.csv");
     	//DelimitedFileWriter writer = new DelimitedFileWriter(new FileOutputStream(file));
     	IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(in);
     	double r2 = 0;
@@ -131,6 +136,8 @@ public class MopacShellTest {
     	double sy = 0;
     	double sx2 = 0;
     	double sy2 = 0;
+    	int record = 0;
+    	try {
     	while (reader.hasNext()) {
     		Object o = reader.next();
     		Assert.assertTrue(o instanceof IAtomContainer);
@@ -138,14 +145,23 @@ public class MopacShellTest {
     		IAtomContainer a = (IAtomContainer)o;
         	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
             CDKHueckelAromaticityDetector.detectAromaticity(a); 
-
-            
-            IAtomContainer mol = shell.runShell(a);
+            IAtomContainer mol = null;
+            try {
+            	mol = shell.runShell(a);
+            } catch (Exception x) {
+            	logger.log(Level.SEVERE,a.getProperty("Chemical Name (IUPAC)")+" " + x.getMessage());
+            	continue;
+            }
+            if (mol==null) continue;
+            if (mol.getProperty("ELUMO")==null) continue;
             double x = Double.parseDouble(mol.getProperty("ELUMO").toString());
             Iterator i = a.getProperties().keySet().iterator();
             while (i.hasNext()) {
-            	Property oo = (Property)i.next();
-            	if ("LUMO (eV) AM1_MOPAC 4.10".equals(oo.getName())) {
+            	String name = null;
+            	Object oo = i.next();
+            	if (oo instanceof Property) name = ((Property)oo).getName();
+            	else name = oo.toString();
+            	if ("LUMO (eV) AM1_MOPAC 4.10".equals(name)) {
                     double y = Double.parseDouble(a.getProperty(oo).toString());
                     double error = x - y;
                     r2 += error*error;
@@ -160,29 +176,18 @@ public class MopacShellTest {
             	}
             }
             
-            
-           /*
-            System.out.print(a.getAtomCount());
-            System.out.print(',');
-            System.out.print(mol.getAtomCount());
-            System.out.print(',');
-            System.out.print(x);
-            System.out.print(',');
-            System.out.print(y);
-           System.out.print(',');
-            System.out.print(error);
-            System.out.println();
-            */
-                     
-
-
+            record++;
+            System.out.print('.');
+    	}
+    	} catch (Exception x) {
+    		x.printStackTrace();
     	}
     	in.close();
     	
     	//calculate Pearson correlation coefficient
     	double r= (n*sxy-sx*sy)/(Math.sqrt(n*sx2-sx*sx)*Math.sqrt(n*sy2-sy*sy));
-    	//System.out.println(r);
-    	//System.out.println(r*r);
+
+    	System.out.println(String.format("%s records %d Correlation %f elapsed time %d", shell.getClass().getName(),record, r,(System.currentTimeMillis()-now)));
     	Assert.assertTrue(Math.abs(r) > 0.96);
     	/*
     	 * ehomo
@@ -193,7 +198,19 @@ r=0.9974458630252169
 r^2=0.9948982496661197
 
     	 */
-    	
+    	//ambit2.mopac.MopacShellBaloon records 98 Correlation 0.978940 elapsed time 294659  200 gen
+    	//ambit2.mopac.MopacShellBaloon records 96 Correlation 0.977451 elapsed time 379380 usesimplex
+    	//ambit2.mopac.MopacShell records 104 Correlation 0.994702 elapsed time 181566
+    	//.ambit2.mopac.MopacShellBaloon records 96 Correlation 0.983883 elapsed time 275302 energy constant 20
+    	//>>>//ambit2.mopac.MopacShellBaloon records 100 Correlation 0.959101 elapsed time 281125 energy constant 40
+    	//ambit2.mopac.MopacShellBalloon records 99 Correlation 0.977806 elapsed time 282409energy constant 40 nosymmetry
+    	//ambit2.mopac.MopacShellBaloon records 97 Correlation 0.996873 elapsed time 265643  energy constant 20 fullforce
+    	//ambit2.mopac.MopacShellBaloon records 97 Correlation 0.995814 elapsed time 290206 NoGA 40
+    	//ambit2.mopac.MopacShellBaloon records 96 Correlation 0.966070 elapsed time 248328 GA fullforce 40 energy
+    	//ambit2.mopac.MopacShellBaloon records 97 Correlation 0.951499 elapsed time 366438  1 conf NoGA
+    	//ambit2.mopac.MopacShellBalloon records 98 Correlation 0.972936 elapsed time 286993 -t 0.1 e40 nosymmetry
+    	//ambit2.mopac.MopacShell records 111 Correlation 0.994930 elapsed time 190709
+    	//
     }
 	
     @Test 

@@ -3,6 +3,7 @@ package ambit2.core.external;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -11,7 +12,7 @@ import ambit2.base.external.CommandShell;
 import ambit2.base.external.ShellException;
 import ambit2.core.data.MoleculeTools;
 
-public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IMolecule> {
+public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IAtomContainer> {
 	/**
 	 * 
 	 */
@@ -28,7 +29,7 @@ public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IMolecule
 	}
 	
 	@Override
-	protected synchronized IMolecule parseOutput(String path, INPUT mol) throws ShellException {
+	protected synchronized IAtomContainer parseOutput(String path, INPUT mol) throws ShellException {
 		try {
 			if (isReadOutput()) {
 				MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(path + File.separator + getOutputFile()));

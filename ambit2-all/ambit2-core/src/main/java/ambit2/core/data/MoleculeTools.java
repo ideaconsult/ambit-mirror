@@ -130,7 +130,7 @@ public class MoleculeTools {
 //CMLReader(java.lang.String url)  
 	public static BitSet getFingerPrint(String smiles, int fpLength) throws Exception  {
 	    SmilesParserWrapper sp = SmilesParserWrapper.getInstance();
-	    IMolecule mol = sp.parseSmiles(smiles);
+	    IAtomContainer mol = sp.parseSmiles(smiles);
 	    if (fingerprinter == null) fingerprinter = new Fingerprinter(fpLength);
 	    return fingerprinter.getFingerprint(mol);
 		    

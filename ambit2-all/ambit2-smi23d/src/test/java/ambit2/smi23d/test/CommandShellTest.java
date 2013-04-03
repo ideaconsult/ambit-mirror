@@ -99,13 +99,13 @@ public class CommandShellTest {
 		SmilesParserWrapper p =  SmilesParserWrapper.getInstance(SMILES_PARSER.CDK);
 		String smiles = "Nc3ccc2c(ccc1ccccc12)c3";
 		//"[H]C1=C([H])C([H])=C([H])C([H])=C1([H])";
-		IMolecule mol = p.parseSmiles(smiles); 
+		IAtomContainer mol = p.parseSmiles(smiles); 
 		mol.setProperty("SMILES",smiles);
 		mol.setProperty("TITLE",smiles);
 		smi2sdf.setReadOutput(true);
 		smi2sdf.setInputFile("smi2sdf_test.smi");		
 		smi2sdf.setOutputFile("smi2sdf_test.sdf");
-		IMolecule newmol = smi2sdf.runShell(mol);
+		IAtomContainer newmol = smi2sdf.runShell(mol);
 		Assert.assertEquals(mol.getAtomCount(),newmol.getAtomCount());
 		Assert.assertEquals(mol.getBondCount(),newmol.getBondCount());
 		for (int i=0; i < newmol.getAtomCount(); i++) {
@@ -138,8 +138,8 @@ public class CommandShellTest {
 		ShellMengine mengine = new ShellMengine();
 		mengine.setInputFile("test.sdf");
 		mengine.setOutputFile("opt.sdf");
-		IMolecule newmol = mengine.runShell(mol);
-
+		IAtomContainer newmol = mengine.runShell(mol);
+		Assert.assertNotNull(newmol);
 		IAtomContainer c = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(newmol);
 		Assert.assertTrue(UniversalIsomorphismTester.isIsomorph(mol,c));
 		for (int i=0; i < newmol.getAtomCount(); i++) {

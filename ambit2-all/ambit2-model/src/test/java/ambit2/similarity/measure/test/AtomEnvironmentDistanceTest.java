@@ -49,7 +49,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
@@ -90,7 +89,7 @@ public class AtomEnvironmentDistanceTest {
      */
    
     
-    protected AtomEnvironmentList getAE(AtomEnvironmentGenerator g,IMolecule mol) throws Exception {
+    protected AtomEnvironmentList getAE(AtomEnvironmentGenerator g,IAtomContainer mol) throws Exception {
     	return g.generateProperty(mol);
     	
     }
@@ -126,7 +125,7 @@ public class AtomEnvironmentDistanceTest {
         
             SmilesParserWrapper p =  SmilesParserWrapper.getInstance();
             
-            IMolecule mol = p.parseSmiles("CCCCCCBr");
+            IAtomContainer mol = p.parseSmiles("CCCCCCBr");
 
             AtomEnvironmentList ae = getAE(g,mol);
             Assert.assertEquals(2.0f,ae.hellinger(ae));
@@ -147,9 +146,9 @@ public class AtomEnvironmentDistanceTest {
 		    //Amino-2nitro-3.4-5 hydroxy-methyl benzene (ANMB) 
 		    //IMolecule mol1 = sp.parseSmiles("Cc1c(C)c(cc(N)c1(O))N(=O)=O");
 		    
-		    IMolecule molecule1 = sp.parseSmiles("Nc1c(C)cccc1");
+		    IAtomContainer molecule1 = sp.parseSmiles("Nc1c(C)cccc1");
 		    //Amino-2nitro-3.4-5 hydroxy-methyl benzene (ANMB) 
-		    IMolecule molecule2 = sp.parseSmiles("Nc1c(O)cccc1");
+		    IAtomContainer molecule2 = sp.parseSmiles("Nc1c(O)cccc1");
 
 		    
 		    //Amino-2nitro-3.4-5 hydroxy-methyl benzene (ANMB) 
@@ -196,7 +195,7 @@ public class AtomEnvironmentDistanceTest {
 
     }
     
-    public void  displayAE(final IMolecule mol1, AtomEnvironmentList aelist1,final IMolecule mol2, AtomEnvironmentList aelist2) {
+    public void  displayAE(final IAtomContainer mol1, AtomEnvironmentList aelist1,final IAtomContainer mol2, AtomEnvironmentList aelist2) {
     	
     	AEComparator aec = new AEComparator();
     	Collections.sort(aelist1,aec);
