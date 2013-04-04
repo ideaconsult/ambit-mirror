@@ -8,6 +8,8 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.ICategory;
+import ambit2.base.interfaces.ICategory.CategoryType;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.QueryRDFReporter;
@@ -15,9 +17,12 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.reference.ReferenceURIReporter;
 
-import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
+import com.hp.hpl.jena.vocabulary.XSD;
 
 /**
  * Feature reporter
@@ -73,8 +78,19 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
 		String object = item.getObject().toString();
 		if (item.getType().startsWith("^^")) { // xsd:ToxicCategory a rdfs:Datatype; rdfs:subClassOf xsd:string.
 			try {
-
-				feature.addProperty(predicate,jenaModel.createTypedLiteral(object, OT.NS + item.getType().replace("^^", "")));
+				//ot:ToxicCategory a rdfs:Datatype; rdfs:subClassOf xsd:string.
+				String ctype = item.getType().replace("^^", "");
+				Resource rdfDataType = jenaModel.createResource(OT.NS + ctype);
+				jenaModel.add(rdfDataType, RDF.type, RDFS.Datatype);
+				feature.addProperty(predicate,jenaModel.createTypedLiteral(object, rdfDataType.getURI()));
+				
+				try {
+					ICategory.CategoryType.valueOf(ctype);
+					jenaModel.add(rdfDataType, RDFS.subClassOf,jenaModel.getResource(OT.NS + "ToxicityCategory"));
+				} catch (Exception x) {
+					//x.printStackTrace();
+					jenaModel.add(rdfDataType, RDFS.subClassOf, XSD.xstring);	
+				}
 				return;
 			} catch (Exception x) {x.printStackTrace(); }//fallback to string 
 		} else if (item.getType().equals(OT.OTClass.ModelConfidenceFeature)) {
