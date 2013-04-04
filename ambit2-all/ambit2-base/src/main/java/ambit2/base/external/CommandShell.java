@@ -288,7 +288,7 @@ public abstract class CommandShell<INPUT,OUTPUT> implements IProcessor<INPUT,OUT
 	                	newmol = parseOutput(path, mol);
 	                	logger.fine("</parse>");
 	                } else {
-	                  	logger.fine("<error>"+Integer.toString(getExitCode())+"</error>");
+	                  	logger.severe("<error>"+Integer.toString(getExitCode())+"</error>");
 	                	newmol = parseOutput(path, mol,getExitCode());
 	                }
 	                return newmol;	                
