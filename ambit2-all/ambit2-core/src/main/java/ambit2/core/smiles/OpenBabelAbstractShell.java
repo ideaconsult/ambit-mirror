@@ -18,6 +18,7 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 	private static final long serialVersionUID = -8439060274752318591L;
 	public static final String OBABEL_EXE = "obabel";
 	public static final String OBABEL_HOME = "OBABEL_HOME";
+
 	protected boolean hydrogens = true;
 	public boolean isHydrogens() {
 		return hydrogens;
@@ -32,7 +33,7 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 		prefix = "";
 	}
 	
-	protected String getOBabelHome() {
+	protected String getOBabelHome() throws ShellException {
 		return System.getenv(OBABEL_HOME);
 	}
 
@@ -78,7 +79,11 @@ public class OpenBabelAbstractShell<X> extends ShellSDFoutput<X> {
 	}
 	@Override
     protected String getHomeDir(File file) {
-    	return String.format("%s%s.ambit2%sobabel",System.getProperty("user.home"),File.separator,File.separator);
+		return String
+		.format("%s%s.ambit2%s%s%sobabel",
+				System.getProperty("java.io.tmpdir"), File.separator,
+				File.separator, System.getProperty("user.name"),
+				File.separator);    	
     }	
 	@Override
 	protected synchronized java.util.List<String> prepareInput(String path, X mol) throws ShellException {

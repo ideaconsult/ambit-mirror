@@ -28,7 +28,7 @@ public class CommandShellTest {
 	public void setUp() throws Exception {
 		shell = new ShellSmi2SDF();
 
-		File homeDir = new File(System.getProperty("user.home") +"/.ambit2/*");
+		File homeDir = new File(System.getProperty("java.io.tmpdir") +"/.ambit2/" + System.getProperty("user.name") + "/smi23d/*");
 		homeDir.delete();
 		
 
