@@ -39,20 +39,20 @@ public interface ICategory {
 	 *
 	 */
 	public enum CategoryType  {
-		hasToxicCategory {
+		ToxicCategory {
 			@Override
 			public CategoryType getNegative() {
-				return hasNontoxicCategory;
+				return NontoxicCategory;
 			}
 		},
-		hasNontoxicCategory {
+		NontoxicCategory {
 			@Override
 			public CategoryType getNegative() {
-				return hasToxicCategory;
+				return ToxicCategory;
 			}
 		},
-		hasInconclusiveCategory;
-		public CategoryType getNegative() {return hasInconclusiveCategory; };
+		InconclusiveCategory;
+		public CategoryType getNegative() {return InconclusiveCategory; };
 	};
 	String getName();
 	void setName(String name);

@@ -15,6 +15,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.reference.ReferenceURIReporter;
 
+import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 
@@ -70,7 +71,13 @@ public class PropertyAnnotationRDFReporter<Q extends IQueryRetrieval<PropertyAnn
 					Reference.encode(item.getPredicate())));
 		}
 		String object = item.getObject().toString();
-		if (item.getType().equals(OT.OTClass.ModelConfidenceFeature)) {
+		if (item.getType().startsWith("^^")) { // xsd:ToxicCategory a rdfs:Datatype; rdfs:subClassOf xsd:string.
+			try {
+
+				feature.addProperty(predicate,jenaModel.createTypedLiteral(object, OT.NS + item.getType().replace("^^", "")));
+				return;
+			} catch (Exception x) {x.printStackTrace(); }//fallback to string 
+		} else if (item.getType().equals(OT.OTClass.ModelConfidenceFeature)) {
 			feature.addOntClass(OT.OTClass.ModelConfidenceFeature.getOntClass(jenaModel));
 			if (!object.startsWith("http")) object = String.format("%s%s",rootReference,object);
 		} 	
