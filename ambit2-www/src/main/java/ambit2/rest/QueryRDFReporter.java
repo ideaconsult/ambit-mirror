@@ -3,6 +3,7 @@ package ambit2.rest;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
+import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 
@@ -11,6 +12,10 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
+import com.hp.hpl.jena.vocabulary.XSD;
 
 /**
  * Parent class for RDF reporters
@@ -59,10 +64,14 @@ public abstract class QueryRDFReporter<T,Q extends IQueryRetrieval<T>> extends Q
 						String.format("%s%s/compound/",uriReporter.getBaseReference().toString(),compoundInDatasetPrefix) );
 			
 			output.setNsPrefix("ag",uriReporter.getBaseReference().toString()+"/algorithm/");
-
+			
 		} catch (Exception x) {
 			logger.log(Level.WARNING,x.getMessage(),x);
 		}
+		try {
+			Resource rdfDataType = output.createResource(OT.NS + "ToxicityCategory");
+			output.add(rdfDataType, RDFS.subClassOf, XSD.xstring);
+		} catch (Exception x) {	}
 		
 	}
 	public void header(OntModel output, Q query) {};
