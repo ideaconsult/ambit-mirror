@@ -17,7 +17,7 @@ public class CommandShellTest {
 	@Before
 	public void setUp() throws Exception {
 		shell = new ShellWafflesLearn();
-		File homeDir = new File(System.getProperty("user.home") +"/.ambit2/*");
+		File homeDir = new File(System.getProperty("java.io.tmpdir") +"/.ambit2/" + System.getProperty("user.name") + "/waffles/*");
 		homeDir.delete();
 		
 

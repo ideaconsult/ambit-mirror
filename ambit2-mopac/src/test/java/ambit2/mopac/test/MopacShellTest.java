@@ -210,9 +210,48 @@ r^2=0.9948982496661197
     	//ambit2.mopac.MopacShellBaloon records 97 Correlation 0.951499 elapsed time 366438  1 conf NoGA
     	//ambit2.mopac.MopacShellBalloon records 98 Correlation 0.972936 elapsed time 286993 -t 0.1 e40 nosymmetry
     	//ambit2.mopac.MopacShell records 111 Correlation 0.994930 elapsed time 190709
+    	//ambit2.mopac.MopacShellOB records 111 Correlation 0.997760 elapsed time 535000
     	//
     }
 	
+	@Test
+	public void testBenchmarkAmesFailures() throws Exception {
+		long now = System.currentTimeMillis();
+		shell.setMopac_commands("AM1 NOINTER NOMM BONDS MULLIK PRECISE GNORM=0.0");
+ 	InputStream in = AbstractMopacShell.class.getClassLoader().getResourceAsStream("ambit2/mopac/BenchmarkAmes3DFailures.csv");
+ 	//DelimitedFileWriter writer = new DelimitedFileWriter(new FileOutputStream(file));
+ 	IteratingDelimitedFileReader reader = new IteratingDelimitedFileReader(in);
+ 	
+ 	int record = 0;
+ 	try {
+ 	while (reader.hasNext()) {
+ 		Object o = reader.next();
+ 		Assert.assertTrue(o instanceof IAtomContainer);
+ 		
+ 		IAtomContainer a = (IAtomContainer)o;
+     	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(a);
+         CDKHueckelAromaticityDetector.detectAromaticity(a); 
+         IAtomContainer mol = null;
+         try {
+         	mol = shell.runShell(a);
+         } catch (Exception x) {
+         	logger.log(Level.SEVERE,a.getProperty("Compound")+" " + x.getMessage());
+         	continue;
+         }
+         if (mol==null) continue;
+         if (mol.getAtomCount()==0) continue;
+         
+         record++;
+         System.out.println(record);
+ 	}
+ 	} catch (Exception x) {
+ 		x.printStackTrace();
+ 	}
+ 	in.close();
+ 	//calculate Pearson correlation coefficient
+ 	System.out.println(String.format("%s records %d elapsed time %d", shell.getClass().getName(),record, (System.currentTimeMillis()-now)));
+
+ }	
     @Test 
     public void testChargedCompounds() throws Exception {
     	IAtomContainer mol = new Molecule();

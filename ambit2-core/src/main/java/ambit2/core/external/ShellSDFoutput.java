@@ -2,10 +2,14 @@ package ambit2.core.external;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.external.CommandShell;
@@ -50,4 +54,26 @@ public abstract class ShellSDFoutput<INPUT> extends CommandShell<INPUT,IAtomCont
 		this.readOutput = readOutput;
 	}    	
 
+	
+	
+	protected String writeInputSDF(String path, IAtomContainer mol)
+	throws IOException, CDKException {
+		SDFWriter writer = null;
+		try {
+			String input = path + File.separator + getInputFile();
+			FileOutputStream out = new FileOutputStream(input);
+			writer = new SDFWriter(out);
+			writer.write(mol);
+			return input;
+		} catch (CDKException x) {
+			throw x;
+		} catch (IOException x) {
+			throw x;
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception x) {
+			}
+		}
+	}
 }
