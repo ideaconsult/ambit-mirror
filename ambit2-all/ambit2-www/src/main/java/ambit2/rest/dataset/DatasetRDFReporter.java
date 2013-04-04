@@ -42,7 +42,12 @@ import ambit2.rest.structure.ConformerURIReporter;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
@@ -62,6 +67,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected CompoundURIReporter<IQueryRetrieval<IStructureRecord>> compoundReporter;
 	protected DataEntryURIReporter<IQueryRetrieval<IStructureRecord>> dataEntryReporter;
 	protected Comparator<Property> comp;
+	protected com.hp.hpl.jena.rdf.model.Property acceptValue;
 	
 	protected Profile groupProperties;
 	public Profile getGroupProperties() {
@@ -89,6 +95,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		setTemplate(template==null?new Template(null):template);
 		initProcessors();
 		propertyReporter = new PropertyRDFReporter(request,mediaType,doc);
+		
 		comp = new Comparator<Property>() {
 			public int compare(Property o1, Property o2) {
 				return o1.getId()-o2.getId();
@@ -154,7 +161,7 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 		output.createAnnotationProperty(DC.type.getURI());
 		
 		dataset = null;
-		
+		acceptValue = OTProperty.acceptValue.createProperty(getJenaModel());
 
 		try {
 			propertyReporter.setOutput(getJenaModel());
@@ -254,15 +261,33 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 				Individual featureValue = getJenaModel().createIndividual(OT.OTClass.FeatureValue.getOntClass(getJenaModel()));
 				featureValue.addProperty(OT.OTProperty.feature.createProperty(getJenaModel()),feature);
 
-				featureValue.addLiteral(OT.DataProperty.value.createProperty(getJenaModel()),
-							getJenaModel().createTypedLiteral(value, 
-							(value instanceof Number)?XSDDatatype.XSDdouble: XSDDatatype.XSDstring));
-				
+
+				Literal lValue = null;
 				i++;
 				dataEntry.addProperty(OT.OTProperty.values.createProperty(getJenaModel()),featureValue);
+				//TODO this is way too inefficient
+				if (p.isNominal()) {
+					boolean add = true;
+					StmtIterator values =  getJenaModel().listStatements(new SimpleSelector(feature,acceptValue,(RDFNode)null));
+					while (values.hasNext()) {
+						Statement st = values.next();
+						if (st.getObject().isLiteral() && value.toString().equals(((Literal) st.getObject()).getString())) {
+							add = false;
+							lValue = (Literal)st.getObject();
+							break;
+						}
+					}	
+					values.close();
+					if (add) {
+						lValue = getJenaModel().createTypedLiteral(value, (value instanceof Number)?XSDDatatype.XSDdouble: XSDDatatype.XSDstring);
+						feature.addProperty(acceptValue, value.toString());
+					}	
+				} else {
+					lValue = getJenaModel().createTypedLiteral(value, (value instanceof Number)?XSDDatatype.XSDdouble: XSDDatatype.XSDstring);
+				}
 				
-				if (p.isNominal())
-					feature.addProperty(OTProperty.acceptValue.createProperty(getJenaModel()), value.toString());
+				featureValue.addLiteral(OT.DataProperty.value.createProperty(getJenaModel()),lValue);
+
 			}
 			return dataEntry;
 		} catch (Exception x) {
