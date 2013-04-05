@@ -58,7 +58,8 @@ public abstract class AbstractMopacShell extends CommandShell<IAtomContainer, IA
 
 	protected int maxHeavyAtoms = 60;
 	protected int maxAllAtoms = 120;
-	public static String[] defaultparams = {"PM3 NOINTER NOMM BONDS MULLIK PRECISE GNORM=0.0","bin/mopac/MOPAC_7.1.exe",""}; //mmff94
+	//30 minutes max, sorry
+	public static String[] defaultparams = {"PM3 NOINTER MMOK BONDS MULLIK GNORM=1.0 T=30.00M","bin/mopac/MOPAC_7.1.exe",""}; //mmff94
 	protected String mopac_commands = defaultparams[0];
 	protected boolean useOriginalStructure = false;
 	public boolean isUseOriginalStructure() {
