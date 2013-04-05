@@ -18,7 +18,6 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.mopac.AbstractMopacShell;
-import ambit2.mopac.MopacShell;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
 
@@ -47,9 +46,16 @@ public class StructureProcessor  extends	AbstractStructureProcessor<AbstractMopa
 	public synchronized AbstractMopacShell createPredictor(ModelQueryResults model)
 			throws ResourceException {
 			try {
-				mopacshell = new MopacShell();
+				Class clazz = this.getClass().getClassLoader().loadClass( model.getContent().toString());
+				mopacshell = (AbstractMopacShell) clazz.newInstance();
 				mopacshell.setErrorIfDisconnected(false);
 				return mopacshell;
+			} catch (ClassNotFoundException x) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+			} catch (InstantiationException x) {
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+			} catch (IllegalAccessException x) {
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);				
 			} catch (Exception x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 			}
