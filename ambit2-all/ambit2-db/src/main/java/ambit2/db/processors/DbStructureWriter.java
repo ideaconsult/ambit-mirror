@@ -105,7 +105,6 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
        		writeProperties(structure);
             sr.add(structure);
         } else {
-        	
         	try {
         		if (update) {
         			if (updateStructure==null) updateStructure = new UpdateStructure();
@@ -114,6 +113,7 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
         		}
         		writeDataset(structure);
         		writeProperties(structure);
+        		sr.add(structure);
         	} catch (AmbitException x) {
         		logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
         	}        	

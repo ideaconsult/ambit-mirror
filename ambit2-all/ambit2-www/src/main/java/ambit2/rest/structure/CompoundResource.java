@@ -525,6 +525,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			String token = getToken();
 			CallableStructureEntry callable = new CallableStructureEntry<String>(new Form(entity), getRootRef(), getContext(), null, token);
+			callable.setPropertyOnly(false);
 			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 						"New structure from web form",
 						callable,
@@ -613,6 +614,42 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					);
 		}
 	}
+	
+	/**
+	 * POST as in the dataset resource
+	 */
+	@Override
+	protected Representation put(Representation entity, Variant variant)
+			throws ResourceException {
+		
+		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+		
+		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
+			String token = getToken();
+			CallableStructureEntry callable = new CallableStructureEntry<String>(new Form(entity), getRootRef(), getContext(), null, token);
+			callable.setPropertyOnly(true);
+			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+						"Properties from web form",
+						callable,
+						getRequest().getRootRef(),
+						token);
+						
+			  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+			  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+			  task.update();
+			  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+           return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
+
+		} else {
+			if(upload == null) upload = createFileUpload();
+			upload.setDataset(new SourceDataset("User uploaded",LiteratureEntry.getInstance("User uploaded", 
+					getResourceRef(getRequest()).toString())));
+
+			return  upload.upload(entity,variant,true,true,
+					getToken()
+					);
+		}
+	}	
 	
 	protected FileUpload createFileUpload() {
 		FileUpload upload = new FileUpload();

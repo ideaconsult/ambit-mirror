@@ -8,12 +8,13 @@ import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
+import org.restlet.routing.Template;
 
-import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
@@ -23,23 +24,39 @@ import ambit2.core.data.model.Algorithm;
 import ambit2.core.processors.structure.key.CASKey;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.RepositoryWriter;
+import ambit2.rest.OpenTox;
 import ambit2.rest.structure.CompoundURIReporter;
 import ambit2.rest.task.dbpreprocessing.CallableDBProcessing;
 
 public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID> {
 	protected IStructureRecord record;
 	protected CompoundURIReporter cmpreporter;
+	protected boolean propertyOnly = false;
+	private Template compoundURITemplate;
+	private Template conformerURITemplate;
+	
+	public boolean isPropertyOnly() {
+		return propertyOnly;
+	}
+
+	public void setPropertyOnly(boolean propertyOnly) {
+		this.propertyOnly = propertyOnly;
+	}
 	
 	public CallableStructureEntry(Form form,
 			Reference applicationRootReference, Context context,
 			Algorithm algorithm, USERID token) {
 		super(form, applicationRootReference, context, algorithm, token);
 		cmpreporter = new CompoundURIReporter(applicationRootReference,null);
+
+
 	}
 	private static String customidname = "customidname";
 	private static String customid = "customid";
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
+		compoundURITemplate = OpenTox.URI.compound.getTemplate(applicationRootReference);
+		conformerURITemplate = OpenTox.URI.conformer.getTemplate(applicationRootReference);
 		record = new StructureRecord();
 		record.setFormat(null);
 		record.setContent(null);
@@ -49,7 +66,8 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 				Property.opentox_SMILES,
 				Property.opentox_InChI,Property.opentox_InChIKey,
 				Property.opentox_InChI_std,Property.opentox_InChIKey_std,
-				Property.opentox_IUCLID5_UUID
+				Property.opentox_IUCLID5_UUID,
+				"compound_uri"
 				};
 		for (String tag : tags) {
 			String localtag = tag.replace("http://www.opentox.org/api/1.1#","");
@@ -68,6 +86,9 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 			else if (Property.opentox_InChI.equals(tag)) record.setInchi(value);
 			else if (Property.opentox_InChIKey.equals(tag)) record.setInchiKey(value);
 			else if (Property.opentox_InChIKey_std.equals(tag)) record.setInchiKey(value);
+			else if ("compound_uri".equals(tag)) try {
+				extractRecordID(value,record);
+			} catch (Exception x) {logger.warning(tag + x.getMessage());}
 		}
 		String molfile = form.getFirstValue("molfile");
 		if (molfile!=null) {
@@ -77,6 +98,8 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 			record.setContent(record.getInchi());
 			record.setFormat(MOL_TYPE.INC.name());
 		}
+		
+		
 		String id = form.getFirstValue(customidname);
 		if ((id!=null) && !"".equals(id.trim())) {
 			String value = form.getFirstValue(customid);
@@ -85,6 +108,17 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 			}
 		}
 	}
+	
+	protected void extractRecordID(String url,IStructureRecord record) throws AmbitException {
+		String cleanURI = org.opentox.rdf.OpenTox.removeDatasetFragment(url);
+		Object id = OpenTox.URI.compound.getId(cleanURI, compoundURITemplate);
+		if (id != null) record.setIdchemical((Integer)id);
+		else {
+			Object[] ids = OpenTox.URI.conformer.getIds(cleanURI, conformerURITemplate);
+			if (ids[0]!=null) record.setIdchemical((Integer)ids[0]);
+			if (ids[1]!=null) record.setIdstructure((Integer)ids[1]);
+		}
+	}	
 
 	@Override
 	protected AbstractBatchProcessor createBatch(Object target)
@@ -102,9 +136,14 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 	@Override
 	protected TaskResult createReference(Connection connection)	throws Exception {
 		final RepositoryWriter writer = new RepositoryWriter();
-		//writer.setPropertiesOnly(isPropertyOnly());
+		writer.setPropertiesOnly(isPropertyOnly());
 		writer.setPropertyKey(new CASKey());
-		SourceDataset dataset = new SourceDataset("Chemical structure registration",LiteratureEntry.getInstance());
+		SourceDataset dataset;
+		if (isPropertyOnly()) {
+			dataset = new SourceDataset("Properties registration",LiteratureEntry.getInstance());	
+		} else
+			dataset = new SourceDataset("Chemical structure registration",LiteratureEntry.getInstance());
+		
 		dataset.setStars(6);
 		writer.setDataset(dataset);
 		writer.setConnection(connection);
