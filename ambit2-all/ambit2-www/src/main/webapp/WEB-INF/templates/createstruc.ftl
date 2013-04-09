@@ -51,7 +51,7 @@ function searchCallback(json) {
 	$("#error").text("");
 	identifiers(json);
 	var dataEntry = json.dataEntry[0];
-	$("#uri").attr("value",dataEntry.compound.URI);
+	$("#compound_uri").attr("value",dataEntry.compound.URI);
 	
 	$.each(dataEntry.lookup.smiles, function(index, object) {
 		var val = dataEntry.values[object];
@@ -206,7 +206,7 @@ function errorCallback(xhr, textStatus, error ) {
 		<a href='#' onClick="lookup('${ambit_root}','customid','#customid',searchCallback,null);">Lookup</a></label>	
 		<input type="text" name='customid' id='customid' title='Enter custom identifier value' size="80"  style="width:50%;">
 		
-		<input type="hidden" name='uri' id='uri' title='URI' value='' size="80"  style="width:50%;">
+		<input type="hidden" name='compound_uri' id='compound_uri' title='URI' value='' size="80"  style="width:50%;">
 		<br/>
 		<input class='remove-bottom' type='submit' class='submit' value='Submit'>	
 		<a href='#' class='chelp hsubmit'>?</a>
