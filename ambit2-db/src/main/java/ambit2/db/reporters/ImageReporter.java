@@ -51,13 +51,16 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 		try {
 			imageWrapper.setImage(null);
 			imageWrapper.setProperty(null);
-			Object path = item.getProperty(img);
-			if (path != null) {
-				File file = new File(path.toString());
-				if (file.exists()) {
-					imageWrapper.setImage(ImageIO.read(file));
-					return imageWrapper;
-				}
+			//Object path = item.getProperty(img);
+			//path=null;//test
+			String tmpDir = System.getProperty("java.io.tmpdir");
+			String dimensions = getQueryName();
+			File path = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, subType);
+			File jsonpath = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, "json");
+			//check if both png & json exists, otherwise generate
+			if ((path != null) && path.exists() && (jsonpath!=null) && (jsonpath.exists())) {
+				imageWrapper.setImage(ImageIO.read(path));
+				return imageWrapper;
 			} 
 			return imageWrapper;
 		} catch (Exception x) {

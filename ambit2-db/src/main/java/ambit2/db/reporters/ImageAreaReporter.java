@@ -41,15 +41,16 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 		q.setPage(0);
 		return q;
 	}
+	
 	@Override
 	protected CachedImage<StringWriter> createImageWrapper(BufferedImage image) {
 		return new TheImageMap(image, "");
 	}
-	protected String readImageMapFile(String imgPath) {
+	protected String readImageMapFile(File imgPath) {
 		StringBuilder b = new StringBuilder();
 	     BufferedReader reader = null;
 	        try {
-	            reader = new BufferedReader(new FileReader(new File(imgPath)));
+	            reader = new BufferedReader(new FileReader(imgPath));
 	            String line = null;
 	            while ((line = reader.readLine()) != null) {
 	                b.append(line).append(System.getProperty("line.separator"));
@@ -65,15 +66,12 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
-			CachedImage result = getCached(item);
-			if (result.getImageMap() == null) {
-				result = createImage(item);
-				if (result.getImage()!=null) {
-					cache(item,result.getImage());
-				}
-			}
-			getOutput().write(result.getImageMap()==null?"":result.getImageMap());
-			return result;
+			String dimensions = getQueryName();
+			String tmpDir = System.getProperty("java.io.tmpdir");
+			File file = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, "json");
+			String json = ((file!=null) && file.exists())?readImageMapFile(file):"{\"a\": []}";// item.getProperty(img);
+			getOutput().write(json);
+			return null;
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}
@@ -81,23 +79,7 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 	}	
 	@Override
 	protected CachedImage<StringWriter> getCached(IStructureRecord item) {
-		try {
-			imageWrapper.setImage(null);
-			imageWrapper.setProperty(null);
-			Object path = item.getProperty(img);
-			if (path != null) {
-				File file = new File(path.toString());
-				if (file.exists()) {
-					imageWrapper.setImage(null);
-					imageWrapper.setImageMap(readImageMapFile(path.toString().replace(".png", ".json")));
-					return imageWrapper;
-				}
-			} 
-			return imageWrapper;
-		} catch (Exception x) {
-			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
-			return null;
-		}
+		return null;
 	}
 	
 	@Override

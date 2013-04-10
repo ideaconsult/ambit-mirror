@@ -127,34 +127,41 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 		try {
 			String dimensions = getQueryName();
 			String tmpDir = System.getProperty("java.io.tmpdir");
-			
-	        File file = new File(tmpDir,String.format("%s/%s/%d_%d.%s",
-	        		getConnection().getCatalog(),
-	        		dimensions,
-	        		item.getIdchemical(),item.getIdstructure(),
-	        		subType));
-	        
+			File file = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, subType);
+			File jsonfile = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, "json");
+			jsonfile.delete();
         	//give up, perhaps another thread started writing it
-        	if (file.exists()) return;
+        	//if (file.exists()) return;
 
 			File dir = file.getParentFile();
-			//synchronized (this) {
+			synchronized (this) {
 				if ((dir!=null) && !dir.exists())	dir.mkdirs();		 
-		        
 				Iterator<ImageWriter> writers = ImageIO.getImageWritersBySuffix(subType);
-
-				while (writers.hasNext()) {
+				ImageOutputStream ios = null;
+				while (writers.hasNext()) try {
 					ImageWriter writer = (ImageWriter) writers.next();
-					ImageOutputStream ios = ImageIO.createImageOutputStream(file);
+					ios = ImageIO.createImageOutputStream(file);
 					writer.setOutput(ios);
 					writer.write(image);
 					break;
-
+				} catch (Exception x) {
+					logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
+				} finally {
+					try {ios.close(); } catch (Exception x) {}
 				}
-			//}
-	        
+			//imagemap
+				if (depict.getImageMap()==null) depict.setImageMap(new StringBuilder());
+				
+				file = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, "json");
+				FileWriter writer = new FileWriter(file);
+				try {
+					writer.write(depict.getImageMap().toString());
+				} finally {
+					try {writer.close();} catch (Exception x) {}
+				}
+			}	
 	        strucQuery.setValue(item);
-	        strucQuery.setText(file.getAbsolutePath());
+	        strucQuery.setText(depict.getImageMap()==null?"":depict.getImageMap().toString());
 	        strucQuery.setFieldname(dimensions);
 	        String mimeType = String.format("%s/%s",mainType,subType);
 	        strucQuery.setCategory(mimeType);
@@ -164,32 +171,29 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 			//
 			cacheUpdater.process(cache);
 			
-	        
-			if (depict.getImageMap()!=null) {
-				file = new File(tmpDir,String.format("%s/%s/%d_%d.%s",
-			        		getConnection().getCatalog(),
-			        		dimensions,
-			        		item.getIdchemical(),item.getIdstructure(),
-			        		"json"
-			        		));
-				FileWriter writer = new FileWriter(file);
-				try {
-					writer.write(depict.getImageMap().toString());
-				} finally {
-					try {writer.close();} catch (Exception x) {}
-				}
-			}
-			
 		} catch (Throwable x) {
 			logger.log(Level.WARNING,x.getMessage(),x);
 		}
 
 	}
 	
+	protected File getFilePath(String tmpDir,String dbName, String dimensions,IStructureRecord item,String ext) {
+		return new File(tmpDir,String.format("%s/%s/%d_%d.%s",
+        		dbName,
+        		dimensions,
+        		item.getIdchemical(),item.getIdstructure(),
+        		ext
+        		));
+	}
 	protected CachedImage<OUTPUT> createImage(IStructureRecord item) throws AmbitException  {
 		imageWrapper.setImage(null);
 		imageWrapper.setProperty(null);
 		IAtomContainer ac = reader.process(item);
+		if (ac!=null)
+		for (int i=0; i < ac.getAtomCount();i++) 
+			if (ac.getAtom(i)!=null)
+			ac.getAtom(i).setProperty("LABEL", i+1);
+		
 		try {
 			switch (item.getType()) {
 				case D2withH: {
@@ -204,8 +208,10 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 					return imageWrapper;
 				}
 			}
-		} catch (Exception x) {}
-		depict.setImageMap(new StringBuilder());
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		//depict.setImageMap(new StringBuilder());
 		imageWrapper.setImage(depict.getImage(ac));
 		imageWrapper.setImageMap(depict.getImageMap().toString());
 		return imageWrapper;
