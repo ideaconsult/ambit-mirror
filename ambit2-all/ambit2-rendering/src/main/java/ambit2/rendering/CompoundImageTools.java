@@ -45,7 +45,6 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
 import org.openscience.cdk.renderer.font.AWTFontManager;
-import org.openscience.cdk.renderer.generators.AtomNumberGenerator;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
@@ -81,15 +80,19 @@ import ambit2.namestructure.Name2StructureProcessor;
  */
 public class CompoundImageTools implements IStructureDiagramHighlights , ICompoundImageTools {
 	protected static Logger logger = Logger.getLogger(CompoundImageTools.class.getName());
-	protected StringBuilder imageMap;
+	protected StringBuilder imageMap = null;
 	protected String comma = "";
+	int offset = 6;
 	private static final String formatJson = "\n\t\t{ \"i\": \"%s\",\"l\": \"%s\", \"x\": %d, \"y\": %d, \"w\": %d, \"h\": %d }";
 	public StringBuilder getImageMap() {
 		return imageMap;
 	}
+	
 	public void setImageMap(StringBuilder imageMap) {
 		this.imageMap = imageMap;
 	}
+	
+
 	public enum Mode2D {
 	
 		kekule {
@@ -215,7 +218,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         //generators.add(new MyBasicAtomGenerator()); //this was to clean the background behind the labels
         generators.add(new BasicAtomGenerator());
         if (atomNumbers)
-            generators.add(new AtomNumberGenerator());
+            generators.add(new AtomLabelGenerator());
         generators.add(new ImageMapGenerator());
         generators.add(new MySelectAtomGenerator());
 
@@ -361,6 +364,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     		boolean explicitH,
     		Mode2D mode2d) { 
     	
+    	imageMap = new StringBuilder();
     	boolean rings = true;
     	if (mode2d == null) {
         	if (molecule!=null)
@@ -436,7 +440,8 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 		
 		IMoleculeSet molecules = new MoleculeSet();
         generate2D(molecule, build2d, molecules);
-        paint(renderer,molecules, false, g, selector,imageSize,atomNumbers);
+        Dimension shrinked = new Dimension(imageSize.width-2*offset,imageSize.height-2*offset);
+        paint(renderer,molecules, false, g, selector,shrinked,atomNumbers);
         
         
         if (borderColor != background)
@@ -598,7 +603,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			} else all = molecules.getMolecule(0);
 			
 			
-			Rectangle drawArea = new Rectangle(imageSize.width,imageSize.height);
+			Rectangle drawArea = new Rectangle(offset,offset,imageSize.width,imageSize.height);
 			renderer.setup(all,drawArea);
 			//renderer.getRenderer2DModel().setZoomFactor(0.8);
 			

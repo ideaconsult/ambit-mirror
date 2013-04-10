@@ -24,8 +24,7 @@ $(document)
 			<#if strucid??>
 				cmpURI = "${ambit_root}/compound/${cmpid}/conformer/${strucid}";
 			</#if>
-			var cmpURI_json = cmpURI + "/imagejson";
-			createImageMap(cmpURI_json, '${cmpid}', '#i${cmpid}', '#m${cmpid}');
+
 			$.ajax({
 				  url: "${ambit_root}/query/compound/url/all?headless=true&media=text/html&search=" + encodeURIComponent(cmpURI),
 				  dataType:"html",
@@ -59,6 +58,12 @@ $(document)
 	.ready(function() {
 			$( "#selectable" ).selectable( "option", "distance", 18);
 	 });
+	 
+$(window).load(function() {
+	//get image/json only after the images are loaded; otherwise json may not have been generated!
+	var cmpURI_json = "${ambit_root}/compound/${cmpid}/imagejson";
+	createImageMap(cmpURI_json, '${cmpid}', '#i${cmpid}', '#m${cmpid}');
+});	 
 </script>
 
 </head>
