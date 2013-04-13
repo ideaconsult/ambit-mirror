@@ -136,6 +136,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		}
 		
 		Form form = getParams();
+		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		try { headless = Boolean.parseBoolean(form.getFirstValue("headless")); } catch (Exception x) { headless=false;}		
 		boolean casesens = "true".equals(form.getFirstValue(QueryResource.caseSensitive))?true:false;
 		boolean retrieveProperties = "true".equals(form.getFirstValue(QueryResource.returnProperties))?true:false;
