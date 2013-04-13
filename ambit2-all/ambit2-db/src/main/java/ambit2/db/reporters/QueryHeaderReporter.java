@@ -26,6 +26,13 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 	 * 
 	 */
 	private static final long serialVersionUID = 4653171215072211975L;
+	protected boolean includeMol;
+	
+	public boolean isIncludeMol() {
+		return includeMol;
+	}
+
+	
 	protected Profile groupProperties;
 	public Profile getGroupProperties() {
 		return groupProperties;

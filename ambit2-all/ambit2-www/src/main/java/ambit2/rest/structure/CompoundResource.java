@@ -3,10 +3,6 @@ package ambit2.rest.structure;
 import java.awt.Dimension;
 import java.util.Map;
 
-import org.openscience.cdk.index.CASNumber;
-import org.opentox.dsl.OTContainers;
-import org.opentox.dsl.OTDataset;
-import org.opentox.dsl.OTDatasets;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -15,7 +11,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
@@ -63,7 +58,6 @@ import ambit2.rest.dataset.ARFF3ColResourceReporter;
 import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.dataset.DatasetRDFReporter;
 import ambit2.rest.dataset.FileUpload;
-import ambit2.rest.pubchem.CSLSResource;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
@@ -73,7 +67,6 @@ import ambit2.rest.task.CallableStructureEntry;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
-import ambit2.search.csls.CSLSRequest;
 
 /**
  * Chemical compound resource as in http://opentox.org/development/wiki/structure
@@ -243,15 +236,21 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
 					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),
+								getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),
+								includeMol,null);
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),null),
+					cmpreporter,
 					MediaType.APPLICATION_JSON,filenamePrefix);
 						
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),
+							getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),
+							includeMol,jsonpcallback);
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),jsonpcallback),
+					cmpreporter,
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
@@ -350,6 +349,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 		try {
 			Form form = request.getResourceRef().getQueryAsForm();
+			try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
+			
 			DisplayMode defaultMode = null;
 			try { defaultMode = DisplayMode.valueOf(form.getFirstValue("mode")); } catch (Exception x) { }
 			_dmode = defaultMode==null?DisplayMode.singleitem:defaultMode;

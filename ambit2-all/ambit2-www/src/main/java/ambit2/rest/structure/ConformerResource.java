@@ -80,10 +80,11 @@ public class ConformerResource extends CompoundResource {
 	protected QueryStructureByID createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		media = getMediaParameter(request);
+		Form form = request.getResourceRef().getQueryAsForm();
 		try { 
-			Form form = request.getResourceRef().getQueryAsForm();
 			headless = Boolean.parseBoolean(form.getFirstValue("headless")); 
 		} catch (Exception x) { headless=false;}
+		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		try {
 			
 			setTemplate(createTemplate(context, request, response));

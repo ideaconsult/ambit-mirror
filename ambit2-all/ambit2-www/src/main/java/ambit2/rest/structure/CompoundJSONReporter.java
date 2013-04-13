@@ -2,6 +2,11 @@ package ambit2.rest.structure;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
@@ -12,10 +17,12 @@ import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveStructure;
+import ambit2.db.reporters.CSVReporter;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.dataset.ARFFResourceReporter;
-import ambit2.rest.dataset.MetadatasetJSONReporter;
 import ambit2.rest.json.JSONUtils;
 import ambit2.rest.property.PropertyJSONReporter;
 
@@ -25,7 +32,7 @@ import ambit2.rest.property.PropertyJSONReporter;
  *
  * @param <Q>
  */
-public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> extends ARFFResourceReporter<Q> {
+public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> extends CSVReporter<Q> {
 	/**
 	 * 
 	 */
@@ -34,7 +41,6 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	protected String jsonpCallback = null;
 	protected PropertyJSONReporter propertyJSONReporter;
 	protected String hilightPredictions = null;
-	
 	public String getHilightPredictions() {
 		return hilightPredictions;
 	}
@@ -47,6 +53,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 
 	enum jsonCompound {
 		URI,
+		mol,
+		structype,
 		compound,
 		dataset,
 		dataEntry,
@@ -57,17 +65,32 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		}
 	}
 	
-	public CompoundJSONReporter(Template template, Request request,ResourceDoc doc, String urlPrefix,String jsonpCallback) {
-		this(template,null,request,doc,urlPrefix,jsonpCallback);
+	public CompoundJSONReporter(Template template, Request request,ResourceDoc doc, String urlPrefix,Boolean includeMol, String jsonpCallback) {
+		this(template,null,request,doc,urlPrefix,includeMol,jsonpCallback);
 	}
 	
-	public CompoundJSONReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix,String jsonpCallback) {
-		super(template,groupedProperties,request,doc,urlPrefix);
+	public CompoundJSONReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix,Boolean includeMol,String jsonpCallback) {
+		super(template,groupedProperties,urlPrefix,includeMol);
 		this.jsonpCallback = jsonpCallback;
 		propertyJSONReporter = new PropertyJSONReporter(request);
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 	}
-
+	@Override
+	protected void configureProcessors(boolean includeMol) {
+		if (includeMol) {
+			RetrieveStructure r = new RetrieveStructure();
+			r.setPage(0);
+			r.setPageSize(1);
+			getProcessors().add(new ProcessorStructureRetrieval(r));
+		}
+		configurePropertyProcessors();
+		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+			public IStructureRecord process(IStructureRecord target) throws AmbitException {
+				processItem(target);
+				return target;
+			};
+		});	
+	};
 	@Override
 	public void setOutput(Writer output) throws AmbitException {
 		super.setOutput(output);
@@ -87,22 +110,59 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			*/
 		}
 	}	
+	
+	protected List<Property> template2Header(Template template, boolean propertiesOnly) {
+		List<Property> h = new ArrayList<Property>();
+		Iterator<Property> it;
+		if (groupProperties!=null) {
+			it = groupProperties.getProperties(true);
+			while (it.hasNext()) {
+				Property t = it.next();
+				h.add(t);
+			}
+		}			
+		it = template.getProperties(true);
+		while (it.hasNext()) {
+			Property t = it.next();
+			if (!propertiesOnly || (propertiesOnly && (t.getId()>0)))
+				h.add(t);
+		}
+		
+		Collections.sort(h,new Comparator<Property>() {
+			public int compare(Property o1, Property o2) {
+				return Integer.toString(o1.getId()).compareTo(Integer.toString(o2.getId()));
+				//mimic URI comparison as strings
+			}
+		});			
+		
+	
+		/*
+		Collections.sort(h,new Comparator<Property>() {
+			public int compare(Property o1, Property o2) {
+				return o1.getOrder()-o2.getOrder();
+			}
+		});	
+		*/
+		return h;
+	}	
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			Writer writer = getOutput();
 			writeHeader(writer);
 			int i = 0;
-			String uri = String.format("%s/compound/%d",urlPrefix,item.getIdchemical());
-			if (item.getIdstructure()>0)
-				uri = String.format("%s/conformer/%d",uri,item.getIdstructure());
-			
+			String uri = getURI(item);
+						
 			StringBuilder builder = new StringBuilder();
 			if (comma!=null) builder.append(comma);
 			
 			builder.append("\n\t{\n");
 			builder.append(String.format("\t\"%s\":{\n",jsonCompound.compound.jsonname()));
 			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.URI.jsonname(),uri));
+			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.structype.jsonname(),item.getType().name()));
+			if (includeMol)
+				builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.mol.jsonname(),
+						item.getContent()==null?"":JSONUtils.jsonEscape(item.getContent())));
 			//similarity
 			Object similarityValue = null;
 			for (Property p : item.getProperties()) 
@@ -125,7 +185,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 
 				Property p = header.get(j);
 				Object value = item.getProperty(p);
-				String key = reporter.getURI(p);
+				
+				String key = propertyJSONReporter.getURI(p);
 				if (key.contains("cdk:Title") || key.contains("cdk:Formula")) continue;
 				if (key.contains("SMARTSProp")) continue;
 				if (value==null) {
