@@ -85,7 +85,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected String media;
 	protected Template template;
 	protected Profile groupProperties;
-	
+	protected boolean includeMol = false;
 	
 	public StructureQueryResource() {
 		super();
@@ -285,7 +285,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),
 							getDocumentation(),
-							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),null),
+							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),includeMol,null),
 					MediaType.APPLICATION_JSON,filenamePrefix);	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
@@ -293,7 +293,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),
 							getDocumentation(),
-							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),jsonpcallback),
+							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),includeMol,jsonpcallback),
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);				
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(

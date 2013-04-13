@@ -95,6 +95,7 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 			IQueryRetrieval<IStructureRecord> freetextQuery = getScopeQuery(context, request, response);
 			
 			Form form = request.getResourceRef().getQueryAsForm();
+			try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 			Object key = form.getFirstValue(QueryResource.search_param);
 			Object b64key = form.getFirstValue(QueryResource.b64search_param);
 			if ((key ==null) && (b64key ==null)) {

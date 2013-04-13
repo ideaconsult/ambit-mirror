@@ -77,13 +77,18 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		this(template,null,"");
 	}
 	public CSVReporter(Template template, Profile groupedProperties, String urlPrefix) {
-
+		this(template,groupedProperties,urlPrefix,false);	
+	}
+	public CSVReporter(Template template, Profile groupedProperties, String urlPrefix, boolean includeMol) {
+		this.includeMol = includeMol;
 		setUrlPrefix(urlPrefix);
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		getProcessors().clear();
-
-
+		configureProcessors(includeMol);
+	}
+	
+	protected void configurePropertyProcessors() {
 		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
 			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
 				@Override
@@ -102,6 +107,9 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});		
+	}
+	protected void configureProcessors(boolean includeMol) {
+		configurePropertyProcessors();
 		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));		
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
@@ -193,6 +201,14 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public void header(Writer writer, Q query) {
 
 	};
+	
+	protected String getURI(IStructureRecord item) {
+		StringBuilder b = new StringBuilder();
+		b.append(String.format("%s/compound/%d",urlPrefix,item.getIdchemical()));
+		if (item.getIdstructure()>0)
+			b.append(String.format("/conformer/%d",item.getIdstructure()));
+		return b.toString();
+	}
 
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
@@ -202,11 +218,8 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			writeHeader(writer);
 			int i = 0;
 			
-			if (writeCompoundURI) {
-				writer.write(String.format("%s/compound/%d",urlPrefix,item.getIdchemical()));
-				if (item.getIdstructure()>0)
-					writer.write(String.format("/conformer/%d",item.getIdstructure()));
-			}
+			if (writeCompoundURI) writer.write(getURI(item));
+			
 			String delimiter = writeCompoundURI?separator:"";
 			for (Property p : header) {
 				

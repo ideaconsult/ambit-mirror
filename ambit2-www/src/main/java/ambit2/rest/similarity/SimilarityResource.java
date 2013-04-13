@@ -82,6 +82,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 	protected Q createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		String[] folder = form.getValuesArray("folder"); 
 		mol = getMolecule(form);
 		if ((mol==null)||(mol.getAtomCount()==0)) 
