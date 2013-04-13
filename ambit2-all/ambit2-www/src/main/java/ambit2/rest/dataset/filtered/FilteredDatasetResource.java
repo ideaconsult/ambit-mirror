@@ -34,6 +34,7 @@ public class FilteredDatasetResource<Q extends IQueryRetrieval<IStructureRecord>
 			throws ResourceException {
 		Template filter= null;
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		Object dataset = form.getFirstValue(OpenTox.params.dataset_uri.toString());
 		String[] filteruris =  OpenTox.params.filter.getValuesArray(form);
 		Object condition = form.getFirstValue(OpenTox.params.condition.toString());

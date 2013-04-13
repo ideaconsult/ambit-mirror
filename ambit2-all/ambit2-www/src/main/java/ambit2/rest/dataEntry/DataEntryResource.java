@@ -44,6 +44,7 @@ public class DataEntryResource extends StructureQueryResource<IQueryRetrieval<IS
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		
 		setGroupProperties(context, request, response);
 		setTemplate(createTemplate(context, request, response));
 		QueryDataEntry query = new QueryDataEntry();
@@ -51,6 +52,7 @@ public class DataEntryResource extends StructureQueryResource<IQueryRetrieval<IS
 		query.setFieldname(getRecord());
 		
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		setPaging(form, query);
 		return query;
 	}

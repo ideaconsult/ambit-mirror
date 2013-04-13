@@ -49,6 +49,12 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 	protected int property;
 	protected String cond;
 
+
+
+	public void setIncludeMol(boolean includeMol) {
+		this.includeMol = includeMol;
+	}
+
 	
 	@Override
 	public String getCompoundInDatasetPrefix() {
@@ -66,6 +72,7 @@ public class DatasetStructuresResource<Q extends IQueryRetrieval<IStructureRecor
 			setTemplate(createTemplate(context, request, response));
 			
 			Form form = getResourceRef(getRequest()).getQueryAsForm();
+			try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 			/**
 			 * ?search=<value>
 			 */

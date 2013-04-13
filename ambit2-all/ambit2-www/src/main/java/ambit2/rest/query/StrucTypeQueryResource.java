@@ -33,6 +33,7 @@ public class StrucTypeQueryResource  extends StructureQueryResource<IQueryRetrie
 			Request request, Response response) throws ResourceException {
 		QueryStructureType q = new QueryStructureType();
 		Form form = request.getResourceRef().getQueryAsForm();
+		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		Object key = form.getFirstValue(QueryResource.search_param);
 		if (key != null) {
 	        try {
