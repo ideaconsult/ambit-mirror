@@ -3,6 +3,7 @@ package ambit2.rest.admin.fingerprints;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
@@ -21,6 +22,8 @@ public class StructuresByFingerprintResource extends StructureQueryResource<Read
 	@Override
 	protected ReadStructuresByFingerprint createQuery(Context context, Request request, Response response)
 			throws ResourceException {
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 		Object fptype = request.getAttributes().get(FingerprintResource.resourceKey);
 		ReadStructuresByFingerprint q = new ReadStructuresByFingerprint();
 		IFingerprint<FPTable,String> fp = new Fingerprint<FPTable, String>();

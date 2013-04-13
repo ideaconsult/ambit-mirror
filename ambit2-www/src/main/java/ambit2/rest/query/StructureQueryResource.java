@@ -87,6 +87,11 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected Profile groupProperties;
 	protected boolean includeMol = false;
 	
+	public boolean isIncludeMol() {
+		return includeMol;
+	}
+
+
 	public StructureQueryResource() {
 		super();
 		setDocumentation(new ResourceDoc("dataset","Dataset"));

@@ -71,10 +71,12 @@ public class DatasetCompoundResource extends CompoundResource {
 		IQueryRetrieval<IStructureRecord> q = super.createQuery(context, request, response);
 		if (q == null) return null;
 		
+		
 		DatasetStructuresResource ds = new DatasetStructuresResource();
-
 		ds.init(context, request, response);
 		ds.configureDatasetMembersPrefixOption(dataset_prefixed_compound_uri);
+		ds.setIncludeMol(includeMol);
+		
 		IQueryRetrieval<IStructureRecord> datasetQuery = ds.createQuery(context, request, response);
 		if (datasetQuery == null) return null;
 		

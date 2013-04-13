@@ -6,6 +6,7 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
@@ -38,7 +39,11 @@ public class ExactStructureQueryResource extends StructureQueryResource<QueryExa
 	@Override
 	protected QueryExactStructure createQuery(Context context, Request request,
 			Response response) throws ResourceException {
-		smiles = getSMILES(getResourceRef(getRequest()).getQueryAsForm(),true);
+		
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
+		
+		smiles = getSMILES(form,true);
 		if (smiles == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty SMILES");
 		try {
 			SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
