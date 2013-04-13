@@ -1,6 +1,7 @@
 package ambit2.rest.structure;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.SDFWriter;
 import org.restlet.Request;
 
 import ambit2.base.data.Profile;
@@ -17,7 +20,9 @@ import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
@@ -41,6 +46,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	protected String jsonpCallback = null;
 	protected PropertyJSONReporter propertyJSONReporter;
 	protected String hilightPredictions = null;
+	protected MoleculeReader reader = null;
+	
 	public String getHilightPredictions() {
 		return hilightPredictions;
 	}
@@ -161,8 +168,10 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.URI.jsonname(),uri));
 			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.structype.jsonname(),item.getType().name()));
 			if (includeMol)
-				builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.mol.jsonname(),
-						item.getContent()==null?"":JSONUtils.jsonEscape(item.getContent())));
+				if (item.getContent()==null)
+					builder.append(String.format("\t\t\"%s\":null,\n",jsonCompound.mol.jsonname()));
+				else	
+				builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonCompound.mol.jsonname(),JSONUtils.jsonEscape(getSDFContent(item))));
 			//similarity
 			Object similarityValue = null;
 			for (Property p : item.getProperties()) 
@@ -282,6 +291,25 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	public String getFileExtension() {
 		return null;//"json";
 	}
+	
+	protected String getSDFContent(IStructureRecord item) throws AmbitException {
+		//most common case
+		if (MOL_TYPE.SDF.toString().equals(item.getFormat())) return item.getContent();
+		//otherwise
+		if (reader==null) reader = new MoleculeReader();
+		try {
+			StringWriter w = new StringWriter();
+			SDFWriter sdfwriter = new SDFWriter(w); 
+			IAtomContainer ac = reader.process(item);
+			ac.getProperties().clear();
+			sdfwriter.write(ac);
+			sdfwriter.close();
+			return w.toString();
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+	}
+
 	
 
 	
