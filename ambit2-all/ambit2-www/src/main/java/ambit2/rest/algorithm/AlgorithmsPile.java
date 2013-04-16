@@ -184,6 +184,8 @@ public class AlgorithmsPile {
 				},
 			
 			/** Descriptors */
+			{"ambit2.descriptors.AtomEnvironmentMatrixDescriptor","AtomEnvironmentMatrix","ambit2.descriptors.AtomEnvironmentMatrixDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#AtomEnvironmentMatrix",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl/#AtomEnvironmentMatrix"},
+					
 			{"org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor","XLogP","org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#xlogP"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor","ALogP","org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#ALOGP"},
 			{"org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor","Prediction of logP based on the number of carbon and hetero atoms","org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor",null,new String[] {AlgorithmType.DescriptorCalculation.toString()},"http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",Algorithm.requires.structure,"http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#mannholdLogP"},
