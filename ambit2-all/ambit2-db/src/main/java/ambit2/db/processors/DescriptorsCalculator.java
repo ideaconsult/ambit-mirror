@@ -100,15 +100,15 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
     	
     	if ((a != null) && (a.getAtomCount()>0))  {
         	try {
-        		ha.process(a);
-          	} catch (Exception x) {
-          		//logger.warn(x);
-        	}   
-        	try {
         		cfg.process(a);
           	} catch (Exception x) {
           		//logger.warn(x);
-        	}    	          	
+        	}    	
+        	try {
+        		ha.process(a);
+          	} catch (Exception x) {
+          		//logger.warn(x);
+        	}           	
           	try {
           		CDKHueckelAromaticityDetector.detectAromaticity(a);
           	} catch (Exception x) {
