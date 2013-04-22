@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * An atom environment. Used by  {@link ambit2.AtomEnvironmentGeneratorTest.structure.AtomEnvironmentGenerator} 
+ * An atom environment. Used by  {@link ambit2.descriptors.test.AtomEnvironmentGeneratorTest.structure.AtomEnvironmentGenerator} 
  * and {@link ambit2.database.writers.AtomEnvironmentWriter}.
  * @author Nina Jeliazkova nina@acad.bg
  * <b>Modified</b> Aug 31, 2006
