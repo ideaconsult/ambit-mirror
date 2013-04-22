@@ -8,7 +8,6 @@ package ambit2.descriptors;
 
 import java.io.InputStream;
 import java.util.TreeMap;
-import java.util.logging.Level;
 
 import org.openscience.cdk.atomtype.IAtomTypeMatcher;
 import org.openscience.cdk.atomtype.SybylAtomTypeMatcher;

@@ -33,7 +33,7 @@ import ambit2.base.data.Property;
 
 /**
  * @author Nina Jeliazkova <br>
- * <b>Modified</b> 2013-4-16
+ * <b>Modified</b> 2013-4-22
  */
 public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
     //parameters
@@ -234,9 +234,29 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
     private String getKeyLevel(IAtomType atomType1,IAtomType atomType2, int level) {
     	String key1 = atomType1==null?"X":atomType1.getAtomTypeName();
     	String key2 = atomType2==null?"X":atomType2.getAtomTypeName();
+    	return getKeyLevel(key1,key2,level);
+    }
+    private String getKeyLevel(String key1,String key2, int level) {
    	    if (key1.compareTo(key2)>0)
 		   return String.format("L%d_%s_%s",level,key2,key1);
     	else return String.format("L%d_%s_%s",level,key1,key2);
+    }
+    
+    private boolean isHet(IAtomType atomType) {
+    	String symbol = atomType==null?null:atomType.getSymbol();  if (symbol==null) return false;
+    	return !"C".equals(symbol) && !"H".equals(symbol);
+    }
+    private boolean isHev(IAtomType atomType) {
+    	String symbol = atomType==null?null:atomType.getSymbol(); if (symbol==null) return false;
+    	return !"H".equals(symbol);
+    }
+    private boolean isHal(IAtomType atomType) {
+    	String symbol = atomType==null?null:atomType.getSymbol();  if (symbol==null) return false;
+    	return "Cl".equals(symbol) || "Br".equals(symbol) || "I".equals(symbol) || "F".equals(symbol);
+    }
+    private void add(Hashtable<String,Integer> sparseMatrix ,String key) {
+    	Integer value = sparseMatrix.get(key);
+    	if (value==null) sparseMatrix.put(key, 1); else sparseMatrix.put(key, value + 1);
     }
     /**
      * 
@@ -252,11 +272,11 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
 		 int natoms = atomContainer.getAtomCount();
 		 //do atom type matching
 		 atomTypes = factory.getAllAtomTypes();
-		 /*
+		 
 		 System.out.println("AtomTypes");
 		 for (IAtomType at :atomTypes) { System.out.print(at.getAtomTypeName());System.out.print("\t");}
 		 System.out.println("End AtomTypes");
-		 */
+		 
 		 int[] atomIndex = new int[natoms]; //array of atom type integers
 		 for (int i = 0; i < natoms; i++) 
 		    try {
@@ -272,8 +292,11 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
 		            	atomIndex[i] = -1;
 		            }
 		            String key = getKeyLevel0(atomIndex[i]>=0?atomTypes[atomIndex[i]]:null);
-		            Integer value = sparseMatrix.get(key);
-		            if (value==null) sparseMatrix.put(key, 1); else sparseMatrix.put(key, value + 1);
+		            add(sparseMatrix,key);
+		            if (isHal(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Hal");	
+		            if (isHet(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Het");
+		            if (isHev(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Hev");
+		            add(sparseMatrix,"L0_Any");
 		            
 		    } catch (Exception x) {
 		            throw new CDKException(x.getMessage() + "\ninitConnectionMatrix");
@@ -282,22 +305,42 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
 	    int[][] aMatrix = PathTools.computeFloydAPSP(AdjacencyMatrix.getMatrix(atomContainer));
 	    //assign values to the results arrays for all atoms
 
+	    
 	    for (int i = 0; i < natoms; i++) {
 	    	IAtomType key1 = atomIndex[i]>=0?atomTypes[atomIndex[i]]:null;
+	    	String[] generic1 = new String[] {
+	    			key1==null?"X":key1.getAtomTypeName(),
+	    			"Any",
+	    			isHal(atomTypes[atomIndex[i]])?"Hal":null,
+	    			isHet(atomTypes[atomIndex[i]])?"Het":null,
+	    			isHev(atomTypes[atomIndex[i]])?"Hev":null
+	    			}; 
+	            
 	    	for (int j=i; j < natoms; j++) {
 	    		IAtomType key2 = atomIndex[j]>=0?atomTypes[atomIndex[j]]:null;
+		    	String[] generic2 = new String[] {
+		    			key2==null?"X":key2.getAtomTypeName(),
+		    			"Any",
+		    			isHal(atomTypes[atomIndex[i]])?"Hal":null,
+		    			isHet(atomTypes[atomIndex[i]])?"Het":null,
+		    			isHev(atomTypes[atomIndex[i]])?"Hev":null}; 
+	    		
 	    	   if (aMatrix[i][j] > 0) { //j is not atom i and bonds less or equal to maxlevel
-	    		   for (int level = 1; level <= 8; level++) {
-	    			   String key = getKeyLevel(key1, key2, level);
-	    			   if (level==8) {
-	    				   if (aMatrix[i][j] > 7) {
-	    					   Integer value = sparseMatrix.get(key);
-			           	   	   if (value==null) sparseMatrix.put(key, 1); else sparseMatrix.put(key, value + 1);
-	    				   } else {}
-	    			   } else if (aMatrix[i][j] == level) {
-	    				   Integer value = sparseMatrix.get(key);
-		           	   	   if (value==null) sparseMatrix.put(key, 1); else sparseMatrix.put(key, value + 1);
-	    			   }
+	    		   for (int level = 1; level <= (maxLevel+1); level++) {
+	    			   
+	    			   for (String g1:generic1) if (g1!=null) {
+    					   for (String g2:generic2)
+    					   if (g2!=null) { 
+    						   String key = getKeyLevel(g1, g2, level);
+    		    			   if (level==(maxLevel+1)) {
+    		    				   if (aMatrix[i][j] > maxLevel) {
+    		    					   add(sparseMatrix,key);
+    		    				   } else {}
+    		    			   } else if (aMatrix[i][j] == level) {
+    		    				   add(sparseMatrix,key);
+    		    			   }
+    					}
+    			   	  }
 	    		   }
 			   }	    	    
 	    	}
@@ -341,17 +384,23 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
         }
         //descriptorNames
         List<String> dNames = new ArrayList<String>();
-    	dNames.add(getKeyLevel0(null));
+        String key = getKeyLevel0(null);
+        if (dNames.indexOf(key)<0) dNames.add(key);
         for (int x1 = 0; x1 < atomTypes.length;x1++) {
         	IAtomType key1  = atomTypes[x1];
-        	dNames.add(getKeyLevel0(key1));
+        	key = getKeyLevel0(key1);
+        	if (dNames.indexOf(key)<0) dNames.add(key);
         	for (int x2 = x1; x2 < atomTypes.length;x2++) {
         		IAtomType key2  = atomTypes[x2];
-        		for (int l=1; l <= 8; l++)
-        			dNames.add(getKeyLevel(key1,key2,l));
+        		for (int l=1; l <= 8; l++) {
+        			key = getKeyLevel(key1,key2,l);
+        			if (dNames.indexOf(key)<0) dNames.add(key);
+        		}	
         	}
-        	for (int l=1; l <= 8; l++)
-        		dNames.add(getKeyLevel(key1,null,l));
+        	for (int l=1; l <= 8; l++) {
+        		key = getKeyLevel(key1,null,l);
+        		if (dNames.indexOf(key)<0) dNames.add(key);
+        	}	
         }
         //dNames.add(getClass().getName());
         Collections.sort(dNames);
