@@ -65,6 +65,7 @@ import ambit2.rest.algorithm.AllAlgorithmsResource;
 import ambit2.rest.algorithm.chart.ChartResource;
 import ambit2.rest.algorithm.util.Name2StructureResource;
 import ambit2.rest.bookmark.BookmarkResource;
+import ambit2.rest.dataset.CollectionStructureResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
@@ -313,7 +314,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter, tupleRouter, smartsRouter);
 		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, tupleRouter, smartsRouter, similarityRouter);
 		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
-	
+
+		MyRouter collectionRouter = new MyRouter(getContext());
+		collectionRouter.attach(String.format("/{%s}/{%s}",CollectionStructureResource.folderKey,CollectionStructureResource.datasetKey),CollectionStructureResource.class);
+		router.attach(CollectionStructureResource.collection,createProtectedResource(collectionRouter,"collection"));
 
 		/**  /algorithm  */
 		//router.attach(AllAlgorithmsResource.algorithm,createProtectedResource(new AlgorithmRouter(getContext())));
