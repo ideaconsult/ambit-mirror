@@ -17,7 +17,7 @@ public class PropertiesByQuery  extends AbstractPropertyRetrieval<Template, ISto
 		name {
 			@Override
 			public String getSQL(PropertiesByQuery q) {
-				return " name %s ?";
+				return " query.name %s ?";
 			}
 		},
 		id {
