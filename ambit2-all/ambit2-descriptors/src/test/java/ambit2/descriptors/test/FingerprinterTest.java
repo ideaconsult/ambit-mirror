@@ -14,13 +14,13 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import ambit2.core.data.StringDescriptorResultType;
 import ambit2.descriptors.fingerprints.EStateFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.ExtendedFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.Fingerprint2DescriptorWrapper;
 import ambit2.descriptors.fingerprints.HybridizationFingerprinterWrapper;
+import ambit2.descriptors.fingerprints.KlekotaRothFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.MACCSFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.PubChemFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.SubstructureFingerprinterWrapper;
@@ -60,6 +60,12 @@ public class FingerprinterTest {
 	public void testMACCSFP() throws Exception {
 		
 		testDescriptor(new MACCSFingerprinterWrapper());
+	}
+	
+	@Test
+	public void testKlekotaRothFP() throws Exception {
+		
+		testDescriptor(new KlekotaRothFingerprinterWrapper());
 	}
 	
 	@Test
