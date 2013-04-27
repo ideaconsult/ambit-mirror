@@ -1,7 +1,7 @@
 /*
-Copyright (C) 2005-2008  
+Copyright (C) 2005-2013  
 
-Contact: nina@acad.bg
+Contact: www.ideaconsult.net
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public License
@@ -56,6 +56,7 @@ import ambit2.db.update.IQueryUpdate;
 import ambit2.db.update.dictionary.TemplateAddProperty;
 import ambit2.db.update.storedquery.CreateStoredQuery;
 import ambit2.db.update.storedquery.QueryAddTemplate;
+import ambit2.db.update.storedquery.ReadStoredQuery;
 
 /**
  * Inserts into query table idstructure numbers from a query identified by {@link StoredQuery}. Example:
@@ -113,6 +114,8 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	public IStoredQuery process(IQueryObject<IStructureRecord> target) throws AmbitException {
 		if (target == null) throw new AmbitException("Undefined query!");
 
+		if (qexec == null) { qexec = new QueryExecutor();qexec.setCloseConnection(false);}
+		qexec.setConnection(connection);
 
 		try {
 			if (result == null) {
@@ -132,30 +135,58 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 			connection.setAutoCommit(false);	
 			//create entry in the query table
 			if (result.getId()<=0) {
-				PreparedStatement s = connection.prepareStatement(CreateStoredQuery.sql_byname,Statement.RETURN_GENERATED_KEYS);
-				s.setNull(1,Types.INTEGER);
-				if (result.getName().length()>255)
-					s.setString(2,result.getName().substring(0,255));
-				else
-					s.setString(2,result.getName());
+				//read by name and folder title
+				ReadStoredQuery findIfExists = new ReadStoredQuery();
+				findIfExists.setValue(result);
+				findIfExists.setFieldname(getSession().getName());
+				ResultSet found = null;
 				try {
-					s.setString(3,result.getQuery().toString()==null?"Results":result.getQuery().toString());
-				} catch (Exception x) {s.setString(3,"Results");}	
-				s.setString(4,getSession().getName());
-	
-				//execute
-				if (s.executeUpdate()>0) {
-					ResultSet rss = s.getGeneratedKeys();
-					while (rss.next())
-						result.setId(new Integer(rss.getInt(1)));
-					rss.close();
+					found = qexec.process(findIfExists);
+					while (found.next()) {
+						IStoredQuery q = findIfExists.getObject(found);
+						result.setID(q.getID());
+						break;
+					}
+				} catch (Exception x) {
+					logger.warning(x.getMessage());
+				} finally {
+					try {found.close();} catch (Exception x) {}
 				}
-				s.close();
-			} else if (delete) {
-				PreparedStatement s = connection.prepareStatement("Delete from query_results where idquery=?");
-				s.setInt(1,result.getId());
-				s.executeUpdate();
-				s.close();
+				//if still not found, add it! TODO refactor it to use UpdateExecutor
+				if (result.getId()<=0) { 
+					PreparedStatement s = connection.prepareStatement(CreateStoredQuery.sql_byname,Statement.RETURN_GENERATED_KEYS);
+					s.setNull(1,Types.INTEGER);
+					if (result.getName().length()>255)
+						s.setString(2,result.getName().substring(0,255));
+					else
+						s.setString(2,result.getName());
+					try {
+						s.setString(3,result.getQuery().toString()==null?"Results":result.getQuery().toString());
+					} catch (Exception x) {s.setString(3,"Results");}	
+					s.setString(4,getSession().getName());
+		
+					//execute
+					if (s.executeUpdate()>0) {
+						ResultSet rss = s.getGeneratedKeys();
+						while (rss.next())
+							result.setId(new Integer(rss.getInt(1)));
+						rss.close();
+					}
+					s.close();
+				}
+			} 
+			//sometimes we want to remove the old content
+			if (delete && (result.getId()>0)) {
+				PreparedStatement s=null;
+				try {
+					s = connection.prepareStatement("Delete from query_results where idquery=?");
+					s.setInt(1,result.getId());
+					s.executeUpdate();
+				} catch (Exception x) {
+					
+				} finally {
+					try {if (s!=null) s.close();} catch (Exception x) {}
+				}
 			}
 			
 			if (result.getId()>0) {
@@ -220,6 +251,7 @@ public class ProcessorCreateQuery  extends AbstractDBProcessor<IQueryObject<IStr
 	public void close() throws SQLException {
 		super.close();
 		try { if (exec != null) exec.close(); } catch (Exception x) {}
+		try { if (qexec != null) qexec.close(); } catch (Exception x) {}
 	}
 	protected int insertScreenedResults(IStoredQuery result, final IQueryRetrieval<IStructureRecord> query) throws SQLException , AmbitException {
 		final PreparedStatement insertGoodResults = 

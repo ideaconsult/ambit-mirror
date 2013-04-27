@@ -1,6 +1,5 @@
 package ambit2.rest.task;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.UUID;
 import java.util.logging.Level;
