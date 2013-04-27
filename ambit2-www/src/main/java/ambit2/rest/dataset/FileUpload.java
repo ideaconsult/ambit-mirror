@@ -97,7 +97,7 @@ public class FileUpload<USERID> {
 	/**
 	 * Creates new entry in query table and adds structures into query_results
 	 */
-	protected Representation copyDatasetToQueryResultsTable(Form form,USERID token)
+	protected Representation copyDatasetToQueryResultsTable(Form form,USERID token,boolean clearPreviousContent)
 			throws ResourceException {
 		CallableQueryResultsCreator callable = new CallableQueryResultsCreator(
 				form,
@@ -106,6 +106,7 @@ public class FileUpload<USERID> {
 				null,
 				token
 				);
+		callable.setClearPreviousContent(clearPreviousContent);
 		try {
 			getResponse().setLocationRef(callable.call().getReference());
 			if (token!=null) {
@@ -134,7 +135,8 @@ public class FileUpload<USERID> {
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
-			return copyDatasetToQueryResultsTable(new Form(entity),token);
+			boolean clearPreviousContent = !propertyOnly; //propertyOnly  POST: false, PUT : true 
+			return copyDatasetToQueryResultsTable(new Form(entity),token,clearPreviousContent);
 		} else if (MediaType.MULTIPART_FORM_DATA.equals(entity.getMediaType(),true)) {
 			  DiskFileItemFactory factory = new DiskFileItemFactory();
               //factory.setSizeThreshold(100);

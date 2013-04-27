@@ -31,7 +31,7 @@ public class ReadStoredQuery extends  AbstractQuery<String, IStoredQuery, String
 			}
 			@Override
 			public boolean isEnabled(ReadStoredQuery q) {
-				return (q.getValue()!=null) && (q.getValue().getId() != null);
+				return (q.getValue()!=null) && (q.getValue().getId() != null) && (q.getValue().getId() >0 );
 			}
 			@Override
 			public QueryParam getParam(ReadStoredQuery q) {
