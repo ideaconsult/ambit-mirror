@@ -29,10 +29,12 @@
 
 package ambit2.base.interfaces;
 
+import java.util.List;
 import java.util.Map;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.facet.IFacet;
 
 
 public interface IStructureRecord extends IChemical{
@@ -141,4 +143,9 @@ public interface IStructureRecord extends IChemical{
     
     boolean usePreferedStructure();
     void setUsePreferedStructure(boolean value);
+    
+    Iterable<IFacet> getFacets();
+    void addFacet(IFacet facet);
+    void removeFacet(IFacet facet);
+    void clearFacets();
 }

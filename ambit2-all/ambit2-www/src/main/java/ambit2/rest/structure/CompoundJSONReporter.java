@@ -19,14 +19,18 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.db.facets.compounds.CollectionsByChemical;
+import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.reporters.CSVReporter;
+import ambit2.db.search.IQueryCondition;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.json.JSONUtils;
 import ambit2.rest.property.PropertyJSONReporter;
@@ -47,7 +51,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	protected PropertyJSONReporter propertyJSONReporter;
 	protected String hilightPredictions = null;
 	protected MoleculeReader reader = null;
-	
+
+
 	public String getHilightPredictions() {
 		return hilightPredictions;
 	}
@@ -65,7 +70,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		compound,
 		dataset,
 		dataEntry,
-		values;
+		values,
+		facets;
 		
 		public String jsonname() {
 			return name();
@@ -73,12 +79,19 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	}
 	
 	public CompoundJSONReporter(Template template, Request request,ResourceDoc doc, String urlPrefix,Boolean includeMol, String jsonpCallback) {
-		this(template,null,request,doc,urlPrefix,includeMol,jsonpCallback);
+		this(template,null,null,request,doc,urlPrefix,includeMol,jsonpCallback);
 	}
 	
-	public CompoundJSONReporter(Template template,Profile groupedProperties, Request request,ResourceDoc doc, String urlPrefix,Boolean includeMol,String jsonpCallback) {
-		super(template,groupedProperties,urlPrefix,includeMol);
+	public CompoundJSONReporter(Template template,
+					Profile groupedProperties,
+					String[] folders,
+					Request request,ResourceDoc doc, 
+					String urlPrefix,
+					Boolean includeMol,
+					String jsonpCallback) {
+		super(template,groupedProperties,folders,urlPrefix,includeMol);
 		this.jsonpCallback = jsonpCallback;
+		
 		propertyJSONReporter = new PropertyJSONReporter(request);
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");
 	}
@@ -91,6 +104,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			getProcessors().add(new ProcessorStructureRetrieval(r));
 		}
 		configurePropertyProcessors();
+		configureCollectionProcessors();
 		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
 			public IStructureRecord process(IStructureRecord target) throws AmbitException {
 				processItem(target);
@@ -98,6 +112,23 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			};
 		});	
 	};
+	@Override
+	protected void configureCollectionProcessors() {
+		if (folders==null || folders.length==0) return;
+		CollectionsByChemical collections = new CollectionsByChemical(null);
+		collections.setValue(folders);
+		MasterDetailsProcessor<IStructureRecord,IFacet<String>,IQueryCondition> facetReader = new MasterDetailsProcessor<IStructureRecord,IFacet<String>,IQueryCondition>(collections) {
+			@Override
+			protected IStructureRecord processDetail(IStructureRecord master,
+					IFacet<String> detail) throws Exception {
+				master.clearFacets();
+				master.addFacet(detail);
+				return master;
+			}
+		};
+		facetReader.setCloseConnection(false);
+		getProcessors().add(facetReader);
+	}
 	@Override
 	public void setOutput(Writer output) throws AmbitException {
 		super.setOutput(output);
@@ -216,8 +247,18 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 				i++;
 				comma1 = ",";
 			}
-			builder.append("\n\t\t}");
-			//builder.append("\n\t\t]");
+			builder.append("\n\t\t},\n");
+			
+			builder.append(String.format("\t\"%s\":[\n",jsonCompound.facets.jsonname()));
+			Iterable<IFacet> facets = item.getFacets();
+			String delimiter = "";
+			if (facets!=null) for (IFacet facet : facets) {
+				if (facet.getValue()==null) continue;
+				builder.append(delimiter);
+				builder.append(String.format("\t\t{\"%s\":%d}",facet.getValue()==null?"":facet.getValue(),facet.getCount()));
+				delimiter=",";
+			}
+			builder.append("\n\t\t]");
 			
 			builder.append("\n\t}");
 			writer.write(builder.toString());

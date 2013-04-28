@@ -83,7 +83,7 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 			Request request, Response response) throws ResourceException {
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
-		String[] folder = form.getValuesArray("folder"); 
+		folders = form.getValuesArray("folder"); 
 		mol = getMolecule(form);
 		if ((mol==null)||(mol.getAtomCount()==0)) 
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,"Empty molecule");
@@ -101,8 +101,8 @@ public class SimilarityResource<Q extends IQueryRetrieval<IStructureRecord>> ext
 		q.setName("Similarity");
 		try {
 			q.setValue(getBitset(mol));
-			if ((folder!=null) && (folder.length>0)) {
-				ChemicalByAssessment qa = new ChemicalByAssessment(folder);
+			if ((folders!=null) && (folders.length>0)) {
+				ChemicalByAssessment qa = new ChemicalByAssessment(folders);
 				QueryCombinedStructure qc = new QueryCombinedStructure();
 				qc.add(q);
 				qc.setChemicalsOnly(true);

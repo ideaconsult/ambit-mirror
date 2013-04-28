@@ -86,6 +86,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	protected Template template;
 	protected Profile groupProperties;
 	protected boolean includeMol = false;
+	protected String[] folders;
 	
 	public boolean isIncludeMol() {
 		return includeMol;
@@ -288,7 +289,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					createHTMLReporter(d),MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getRequest(),
 							getDocumentation(),
 							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),includeMol,null),
 					MediaType.APPLICATION_JSON,filenamePrefix);	
@@ -296,7 +297,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),getGroupProperties(),getRequest(),
+					new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,getRequest(),
 							getDocumentation(),
 							getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),includeMol,jsonpcallback),
 					MediaType.APPLICATION_JAVASCRIPT,filenamePrefix);				

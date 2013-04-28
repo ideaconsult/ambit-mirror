@@ -236,7 +236,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),
 					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,
 								getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),
 								includeMol,null);
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
@@ -246,7 +246,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
-			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),
+			CompoundJSONReporter cmpreporter = new CompoundJSONReporter(getTemplate(),getGroupProperties(),folders,
 							getRequest(),getDocumentation(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix(),
 							includeMol,jsonpcallback);
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(

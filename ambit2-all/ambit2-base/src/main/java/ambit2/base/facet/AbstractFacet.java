@@ -46,4 +46,8 @@ public abstract class AbstractFacet<T> implements IFacet<T> {
 	public String getTitle() {
 		return "Category";
 	}
+	@Override
+	public String toString() {
+		return String.format("%s (%d)",value==null?"":value.toString(),count);
+	}
 }
