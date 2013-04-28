@@ -33,6 +33,15 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected boolean writeCompoundURI = true;
 	protected Property similarityColumn;
 	protected String licenseColumn = null;
+	protected String[] folders;
+	
+	public String[] getFolders() {
+		return folders;
+	}
+
+	public void setFolders(String[] folders) {
+		this.folders = folders;
+	}
 			
 	public Property getSimilarityColumn() {
 		return similarityColumn;
@@ -77,13 +86,14 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		this(template,null,"");
 	}
 	public CSVReporter(Template template, Profile groupedProperties, String urlPrefix) {
-		this(template,groupedProperties,urlPrefix,false);	
+		this(template,groupedProperties,null,urlPrefix,false);	
 	}
-	public CSVReporter(Template template, Profile groupedProperties, String urlPrefix, boolean includeMol) {
+	public CSVReporter(Template template, Profile groupedProperties,String[] folders, String urlPrefix, boolean includeMol) {
 		this.includeMol = includeMol;
 		setUrlPrefix(urlPrefix);
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
+		this.folders = folders;
 		getProcessors().clear();
 		configureProcessors(includeMol);
 	}
@@ -117,6 +127,9 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				return target;
 			};
 		});	
+	}
+	
+	protected void configureCollectionProcessors() {
 	}
 	@Override
 	public void setLicenseURI(String licenseURI) {

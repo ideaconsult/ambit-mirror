@@ -186,9 +186,9 @@ public class SmartsQueryResource  extends StructureQueryResource<IQueryRetrieval
 					combined.setScope(scope);
 					return combined;
 				} 
-				String[] folder = form.getValuesArray("folder");
-				if ((folder!=null) && (folder.length>0)) {
-					ChemicalByAssessment qa = new ChemicalByAssessment(folder);
+				folders = form.getValuesArray("folder");
+				if ((folders!=null) && (folders.length>0)) {
+					ChemicalByAssessment qa = new ChemicalByAssessment(folders);
 					QueryCombinedStructure qc = new QueryCombinedStructure();
 					qc.add(query);
 					qc.setChemicalsOnly(true);

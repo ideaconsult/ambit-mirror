@@ -24,10 +24,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.base.data;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 
 
@@ -58,6 +61,7 @@ public class StructureRecord implements IStructureRecord {
 	protected Map<Property,Object> properties;
 	protected STRUC_TYPE type = STRUC_TYPE.NA;
 	protected boolean selected = true;
+	protected List<IFacet> facets;
 	
 	public STRUC_TYPE getType() {
 		return type;
@@ -287,5 +291,23 @@ public class StructureRecord implements IStructureRecord {
 	@Override
 	public void setDatasetID(int id) {
 		id_srcdataset = id;
+	}
+	@Override
+	public void addFacet(IFacet facet) {
+		if (facets == null) facets = new ArrayList<IFacet>();
+		facets.add(facet);
+	}
+	@Override
+	public void clearFacets() {
+		if (facets!=null) facets.clear();
+		
+	}
+	@Override
+	public Iterable<IFacet> getFacets() {
+		return facets;
+	}
+	@Override
+	public void removeFacet(IFacet facet) {
+		if (facets!=null) facets.remove(facet);
 	}
 }	

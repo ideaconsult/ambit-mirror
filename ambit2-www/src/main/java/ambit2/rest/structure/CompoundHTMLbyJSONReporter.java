@@ -37,7 +37,7 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 			QueryURIReporter urireporter,
 			Template template,Profile groupedProperties,Dimension d,String urlPrefix) {
 		super(request,_dmode,doc,false);
-		cmp_reporter = new CompoundJSONReporter<IQueryRetrieval<IStructureRecord>>(template,groupedProperties,request,doc,urlPrefix,false,null);
+		cmp_reporter = new CompoundJSONReporter<IQueryRetrieval<IStructureRecord>>(template,groupedProperties,null,request,doc,urlPrefix,false,null);
 		processors = cmp_reporter.getProcessors();
 	}
 	@Override
