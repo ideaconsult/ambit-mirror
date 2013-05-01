@@ -16,6 +16,7 @@ public class EndpointCompoundFacet extends PropertyDatasetFacet<Property,IStruct
 	public EndpointCompoundFacet(String url) {
 		super(url);
 	}
+	private static String endpoint = "http://www.opentox.org/echaEndpoints.owl#";
 	/**
 	 * params[0] root URL 
 	 * params[1] full compound URL
@@ -25,7 +26,7 @@ public class EndpointCompoundFacet extends PropertyDatasetFacet<Property,IStruct
 		return String.format("%s/dataset?%s=%s%s",
 				(params.length>0)?params[0]:"",
 				"feature_sameas",
-				URLEncoder.encode(getValue().toString()),
+				URLEncoder.encode(getValue().toString().replace(endpoint,"")),
 				(params.length>1)?params[1]:"");
 	}
 

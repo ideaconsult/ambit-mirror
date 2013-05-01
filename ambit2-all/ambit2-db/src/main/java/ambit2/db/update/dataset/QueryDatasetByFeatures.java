@@ -112,7 +112,11 @@ public class QueryDatasetByFeatures extends AbstractReadDataset<Property> {
 			@Override
 			public QueryParam getParameter(QueryDatasetByFeatures q) {
 				Property p = q.getFieldname();
-				return new QueryParam<String>(String.class,p.getLabel());
+				if (p.getLabel().startsWith("http"))
+					return new QueryParam<String>(String.class,p.getLabel());
+				else
+					return new QueryParam<String>(String.class,String.format("http://www.opentox.org/echaEndpoints.owl#%s",p.getLabel()));
+						
 			}
 			@Override
 			public String explain(QueryDatasetByFeatures q) {
