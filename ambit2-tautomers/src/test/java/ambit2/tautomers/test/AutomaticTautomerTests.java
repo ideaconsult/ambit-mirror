@@ -39,6 +39,7 @@ public class AutomaticTautomerTests
 	public static final int LPM_TAUTOMER_COUNT_COMBINATORIAL_IMPROVED = 8;
 	public static final int LPM_STRUCTURE_STAT = 9;
 	public static final int LPM_EQUIVALENCE_STAT = 10;
+	public static final int LPM_TAUTOMER_FULL_INFO = 11;
 	
 	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
 	//public static final int LPM_COMPARE_AMBIT_EXTERNAL = 12;
@@ -481,6 +482,18 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (command.equals("tautomer-full-info"))
+		{
+			System.out.println("Calculating tatomer full info: " + inFileName);
+			openOutputFile();			
+			lineProcessMode = LPM_TAUTOMER_FULL_INFO;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		
+		
 		
 		if (command.equals("compare-algorithms"))
 		{
@@ -740,6 +753,12 @@ public class AutomaticTautomerTests
 		if (lineProcessMode == LPM_EQUIVALENCE_STAT)
 		{
 			equivalenceStatistics(line);
+			return(0);
+		}
+		
+		if (lineProcessMode == LPM_TAUTOMER_FULL_INFO)
+		{
+			tautomerFullInfo(line);
 			return(0);
 		}
 		
@@ -1166,6 +1185,36 @@ public class AutomaticTautomerTests
 		}
 		
 		return (nT);
+	}
+	
+	int tautomerFullInfo(String line)
+	{
+		System.out.println("" + curLine + "   " + line);
+		try
+		{
+			IMolecule mol = null;
+			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
+			mol = sp.parseSmiles(line.trim());
+			
+			tman.setStructure(mol);
+			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			
+			output("" + curLine + "   " + line + "  " + resultTautomers.size() + "  "  +  endLine);
+			
+			for (int i = 0; i < resultTautomers.size(); i++)
+			{
+				IAtomContainer tautomer = resultTautomers.get(i);
+				double rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
+				String smiles = SmartsHelper.moleculeToSMILES(tautomer).trim();
+				output("" + curLine + "   " + smiles + "  " + rank  +  endLine);
+			}
+			
+		}	
+		catch(Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return 0;
 	}
 	
 	
