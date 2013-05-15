@@ -132,15 +132,15 @@ public class AutomaticTautomerTests
 			att.handleArguments(new String[] {
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					
-					"-i","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Canonical-Incremental-FULL.txt",
+					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					//"-i2","D:/Projects/data012-tautomers/results-final/AMBIT-Tautomer-Count-Comb-Improved-FULL.txt",
 					//"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
-					"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
+					//"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
 					//"-i2","D:/Projects/data012-tautomers/results-final/marvin-tautomer-count.txt",
 					
 					"-nInpStr","0",
-					"-nStartStr","135265",
-					"-c","compare-algorithms",
+					"-nStartStr","0",
+					"-c","tautomer-full-info",
 					"-o","D:/Projects/data012-tautomers/test.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
@@ -485,7 +485,8 @@ public class AutomaticTautomerTests
 		if (command.equals("tautomer-full-info"))
 		{
 			System.out.println("Calculating tatomer full info: " + inFileName);
-			openOutputFile();			
+			openOutputFile();
+			setTautomerManager();
 			lineProcessMode = LPM_TAUTOMER_FULL_INFO;
 			iterateInputFile();
 			closeOutputFile();
@@ -1187,9 +1188,10 @@ public class AutomaticTautomerTests
 		return (nT);
 	}
 	
+	
 	int tautomerFullInfo(String line)
 	{
-		System.out.println("" + curLine + "   " + line);
+		System.out.print("" + curLine + "   " + line);
 		try
 		{
 			IMolecule mol = null;
@@ -1200,14 +1202,17 @@ public class AutomaticTautomerTests
 			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 			
 			output("" + curLine + "   " + line + "  " + resultTautomers.size() + "  "  +  endLine);
+			System.out.println("    -->  " + resultTautomers.size() + " tautomers");
 			
-			for (int i = 0; i < resultTautomers.size(); i++)
-			{
-				IAtomContainer tautomer = resultTautomers.get(i);
-				double rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
-				String smiles = SmartsHelper.moleculeToSMILES(tautomer).trim();
-				output("" + curLine + "   " + smiles + "  " + rank  +  endLine);
-			}
+			
+			if (resultTautomers.size() > 1)  
+				for (int i = 0; i < resultTautomers.size(); i++)
+				{
+					IAtomContainer tautomer = resultTautomers.get(i);
+					double rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
+					String smiles = SmartsHelper.moleculeToSMILES(tautomer).trim();
+					output("" + curLine + "   " + smiles + "  " + rank  +  endLine);
+				}
 			
 		}	
 		catch(Exception e){
