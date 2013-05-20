@@ -19,6 +19,20 @@ public class ReactionParser
 	
 	//------------ parsing parseRetroSynthRule -------------------
 	
+	
+	public GenericRuleMetaInfo getRetroSynthRuleMetaInfo()
+	{
+		GenericRuleMetaInfo mi = new GenericRuleMetaInfo();
+		mi.keyWord.add("NAME");
+		mi.objectFieldName.add("name");
+		
+		mi.keyWord.add("INFO");
+		mi.objectFieldName.add("info");
+		
+		return(mi);
+	}
+	
+	
 	public IRetroSynthRule parseRetroSynthRule(String ruleString)
 	{	
 		errors.clear();
@@ -57,8 +71,7 @@ public class ReactionParser
 		else
 		{	
 			return(null);
-		}
-		
+		}		
 		
 	}
 	
