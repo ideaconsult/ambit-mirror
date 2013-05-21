@@ -7,24 +7,25 @@ import java.util.ArrayList;
 public class ReactionParser 
 {	
 	ArrayList<String> errors = new ArrayList<String>(); 
-	
 	RetroSynthRule curRule = null;
-	
-	
+	GenericParserUtils genericParserUtils = new GenericParserUtils(); 
 	
 	ArrayList<String> getErrors()
 	{
 		return errors;
 	}
 	
-	//------------ parsing parseRetroSynthRule -------------------
-	
-	
-	public GenericRuleMetaInfo getRetroSynthRuleMetaInfo()
+	/*
+	 * Defining the meta-info for the RetroSynthRule
+	 */
+	public static GenericRuleMetaInfo getRetroSynthRuleMetaInfo()
 	{
 		GenericRuleMetaInfo mi = new GenericRuleMetaInfo();
 		mi.keyWord.add("NAME");
 		mi.objectFieldName.add("name");
+		
+		mi.keyWord.add("SMIRKS");
+		mi.objectFieldName.add("smirks");
 		
 		mi.keyWord.add("INFO");
 		mi.objectFieldName.add("info");
@@ -32,8 +33,12 @@ public class ReactionParser
 		return(mi);
 	}
 	
+	public void setParserMetaInfoForRetroSynthRule()
+	{
+		genericParserUtils.metaInfo = ReactionParser.getRetroSynthRuleMetaInfo();
+	}
 	
-	public IRetroSynthRule parseRetroSynthRule(String ruleString)
+	public IRetroSynthRule parseRetroSynthRule(String ruleString) 
 	{	
 		errors.clear();
 		
@@ -41,30 +46,14 @@ public class ReactionParser
 		rule.originalRuleString = ruleString;
 		curRule = rule;
 		
-		int res = ruleString.indexOf(ReactionConst.KeyWordPrefix, 0);
-		int curPos = res;
-		
-		if (res == -1)
+		try
 		{
-			errors.add("No key words found in the rule");
-			return(null);
+			genericParserUtils.parseRule(ruleString, rule);
 		}
-		
-		while (res != -1)
-		{	
-			res = ruleString.indexOf(ReactionConst.KeyWordPrefix, curPos+ReactionConst.KeyWordPrefix.length());
-			String keyword;
-			if (res == -1)
-				keyword = ruleString.substring(curPos);
-			else
-			{	
-				keyword = ruleString.substring(curPos,res);
-				curPos = res;	
-			}
-			
-			parseRetroSynthKeyWord(keyword);
-		}	
-		
+		catch (Exception e)
+		{
+			errors.add(e.toString());
+		}
 		
 		if (errors.isEmpty())
 			return(rule);
@@ -72,46 +61,6 @@ public class ReactionParser
 		{	
 			return(null);
 		}		
-		
-	}
-	
-	void parseRetroSynthKeyWord(String keyWord)
-	{	
-		int sepPos = keyWord.indexOf(ReactionConst.KeyWordSeparator);		
-		if (sepPos == -1)
-		{	
-			errors.add("Incorrect key word syntax: " + keyWord );
-			return;
-		}
-		
-		String key = keyWord.substring(ReactionConst.KeyWordPrefix.length(), sepPos).trim();		
-		String keyValue = keyWord.substring(sepPos+1).trim();
-		
-		
-		if (key.equals("NAME"))	
-		{	
-			parseRSRName(keyValue);
-			return;
-		}
-		
-		if (key.equals("INFO"))	
-		{	
-			parseRSRInfo(keyValue);
-			return;
-		}
-		
-		errors.add("Unknown key word: " + key);
-		
-	}
-	
-	void parseRSRName(String keyValue)
-	{
-		curRule.name = keyValue;
-	}
-	
-	void parseRSRInfo(String keyValue)
-	{
-		curRule.info = keyValue;
 	}
 	
 	

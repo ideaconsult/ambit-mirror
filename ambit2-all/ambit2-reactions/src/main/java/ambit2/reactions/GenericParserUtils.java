@@ -85,7 +85,7 @@ public class GenericParserUtils
 	{
 		Class cls = targetObj.getClass();
 		Field f = cls.getDeclaredField(metaInfo.objectFieldName.get(keyIndex));
-		//Current approach is applied only for String fields
+		//This approach is applied only for String fields
 		f.set(targetObj, keyValue);
 	}
 	

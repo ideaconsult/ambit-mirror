@@ -5,10 +5,16 @@ public class RetroSynthRule implements IRetroSynthRule
 {
 	String originalRuleString = "";
 	String name = "";
+	String smirks = "";
 	String info = "";
+	
 	int id = 0;
 	boolean FlagRuleActive = true;
 	
+	public void postProcessRule()
+	{
+		
+	}
 	
 	public String getName()
 	{
@@ -16,6 +22,16 @@ public class RetroSynthRule implements IRetroSynthRule
 	}
 	
 	public void setName(String newName)
+	{
+		name = newName;
+	}
+	
+	public String getSmirks()
+	{
+		return name;
+	}
+	
+	public void setSmirks(String newName)
 	{
 		name = newName;
 	}
@@ -53,6 +69,15 @@ public class RetroSynthRule implements IRetroSynthRule
 	public void setID(int newID)
 	{
 		id = newID;
+	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append(ReactionConst.KeyWordPrefix + "NAME = " + name + "\n");
+		sb.append(ReactionConst.KeyWordPrefix + "SMIRKS = " + smirks + "\n");
+		sb.append(ReactionConst.KeyWordPrefix + "INFO = " + info + "\n");
+		return sb.toString();
 	}
 
 }
