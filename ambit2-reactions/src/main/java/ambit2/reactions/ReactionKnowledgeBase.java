@@ -22,6 +22,9 @@ public class ReactionKnowledgeBase
 	{
 		errors.clear();
 		
+		//Loading RetroSynthRules
+		reactionParser.setParserMetaInfoForRetroSynthRule();
+		
 		for (int i = 0; i < PredefinedReactionKnowledgeBase.retroSynthRules.length; i++)
 		{	
 			System.out.println("Loading rule:  " + PredefinedReactionKnowledgeBase.retroSynthRules[i]);
@@ -34,7 +37,7 @@ public class ReactionKnowledgeBase
 	}
 	
 	public void addRule(String newRule, int ruleNum)
-	{	
+	{	 
 		IRetroSynthRule rule = reactionParser.parseRetroSynthRule(newRule);
 		if (rule == null)
 		{	
@@ -45,13 +48,13 @@ public class ReactionKnowledgeBase
 		else
 		{
 			retroSynthRules.add(rule);
-			//System.out.println(rule.toString());
+			System.out.println(rule.toString());
 		}
 	}
 	
 	String errorsToString()
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer();		
 		for (int i = 0; i < errors.size(); i++)
 			sb.append(errors.get(i) + "\n");
 		return (sb.toString());

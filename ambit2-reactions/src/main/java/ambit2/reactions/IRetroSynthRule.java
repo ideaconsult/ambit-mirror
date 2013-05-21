@@ -6,6 +6,10 @@ public interface IRetroSynthRule
 	
 	public void setName(String newName);
 	
+	public String getSmirks();
+	
+	public void setSmirks(String newName);
+	
 	public String getInfo();
 	
 	public void setInfo(String newInfo);
