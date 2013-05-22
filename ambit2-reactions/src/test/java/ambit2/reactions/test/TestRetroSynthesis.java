@@ -1,7 +1,9 @@
 package ambit2.reactions.test;
 
-import ambit2.reactions.RetroSynthesis;
+import org.openscience.cdk.interfaces.IMolecule;
 
+import ambit2.reactions.*;
+import ambit2.smarts.SmartsHelper;
 public class TestRetroSynthesis 
 {
 	RetroSynthesis retroSyn;
@@ -15,13 +17,20 @@ public class TestRetroSynthesis
 		System.out.println("Retro Synthesis Knowledge base:");
 		System.out.println(trs.retroSyn.getReactionKnowledgeBase().toString());
 		
-		trs.test0();
+		trs.test("C1CCCCC1");
 		
 	}
 	
 	
-	public void test0() throws Exception
+	public void test(String smi) throws Exception
 	{	
+		System.out.println("Testing Retro Synthesis for " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		
+		retroSyn.setStructure(mol);
+		RetroSynthesisResult result = retroSyn.run(); 
+		
+		System.out.println(result.toString());
 	}
 	
 }
