@@ -7,6 +7,7 @@ public class RetroSynthesis
 {
 	ReactionKnowledgeBase knowledgeBase; 
 	IAtomContainer molecule;
+	RetroSynthesisResult rsResult;
 	
 	
 	public RetroSynthesis() throws Exception 
@@ -23,6 +24,15 @@ public class RetroSynthesis
 	{	
 		molecule = str;
 	}
+	
+	
+	public RetroSynthesisResult run()
+	{
+		RetroSynthesisResult rsResult = new RetroSynthesisResult();
+		//TODO
+		return rsResult;
+	}
+	
 	
 	
 }

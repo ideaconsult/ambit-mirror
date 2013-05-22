@@ -23,12 +23,19 @@ public class ReactionParser
 		GenericRuleMetaInfo mi = new GenericRuleMetaInfo();
 		mi.keyWord.add("NAME");
 		mi.objectFieldName.add("name");
+		mi.keyWordRequired.add(new Boolean(true));
 		
+		mi.keyWord.add("TYPE");
+		mi.objectFieldName.add("stringRuleType");
+		mi.keyWordRequired.add(new Boolean(true));
+				
 		mi.keyWord.add("SMIRKS");
 		mi.objectFieldName.add("smirks");
+		mi.keyWordRequired.add(new Boolean(false));		
 		
 		mi.keyWord.add("INFO");
 		mi.objectFieldName.add("info");
+		mi.keyWordRequired.add(new Boolean(false));		
 		
 		return(mi);
 	}

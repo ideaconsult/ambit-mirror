@@ -1,19 +1,30 @@
 package ambit2.reactions;
 
+import java.util.ArrayList;
 
 public class RetroSynthRule implements IRetroSynthRule
 {
+	//String info
 	String originalRuleString = "";
 	String name = "";
 	String smirks = "";
 	String info = "";
+	String stringRuleType = "";
+	int ruleType = 0;
+			
 	
 	int id = 0;
 	boolean FlagRuleActive = true;
+	ArrayList<String> postErrors = new ArrayList<String>(); 
 	
-	public void postProcessRule()
-	{
-		
+	//---------- interface implementation -------------
+	
+	public ArrayList<String>  postProcessRule()
+	{	
+		postErrors.clear();
+		processTypeInfo();
+		processSmirksInfo();
+		return postErrors;
 	}
 	
 	public String getName()
@@ -22,16 +33,6 @@ public class RetroSynthRule implements IRetroSynthRule
 	}
 	
 	public void setName(String newName)
-	{
-		name = newName;
-	}
-	
-	public String getSmirks()
-	{
-		return name;
-	}
-	
-	public void setSmirks(String newName)
 	{
 		name = newName;
 	}
@@ -71,10 +72,46 @@ public class RetroSynthRule implements IRetroSynthRule
 		id = newID;
 	}
 	
+	public int getType()
+	{
+		return ruleType;
+	}
+	
+	public void setType(int newType)
+	{
+		id = newType;
+	}
+	
+	public String getSmirks()
+	{
+		return name;
+	}
+	
+	public void setSmirks(String newName)
+	{
+		name = newName;
+	}
+	
+	
+	//---------- specific function implementation -------------
+	
+	
+	void processTypeInfo()
+	{
+		//TODO
+	}
+	
+	void processSmirksInfo()
+	{
+		//TODO	
+	}
+	
+	
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append(ReactionConst.KeyWordPrefix + "NAME = " + name + "\n");
+		sb.append(ReactionConst.KeyWordPrefix + "TYPE = " + ruleType + "\n");
 		sb.append(ReactionConst.KeyWordPrefix + "SMIRKS = " + smirks + "\n");
 		sb.append(ReactionConst.KeyWordPrefix + "INFO = " + info + "\n");
 		return sb.toString();

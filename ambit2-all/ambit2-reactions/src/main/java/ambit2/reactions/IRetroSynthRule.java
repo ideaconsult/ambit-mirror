@@ -1,14 +1,14 @@
 package ambit2.reactions;
 
+import java.util.ArrayList;
+
 public interface IRetroSynthRule 
 {
+	public ArrayList<String>  postProcessRule();
+	
 	public String getName();
 	
 	public void setName(String newName);
-	
-	public String getSmirks();
-	
-	public void setSmirks(String newName);
 	
 	public String getInfo();
 	
@@ -23,5 +23,9 @@ public interface IRetroSynthRule
 	public int getID();
 	
 	public void setID(int newID);
+	
+	public int getType();
+	
+	public void setType(int newType);	
 	
 }

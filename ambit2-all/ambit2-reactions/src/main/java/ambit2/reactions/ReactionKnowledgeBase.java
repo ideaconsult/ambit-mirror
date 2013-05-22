@@ -3,12 +3,13 @@ package ambit2.reactions;
 import java.util.ArrayList;
 
 
-
 public class ReactionKnowledgeBase 
 {
+	public boolean FlagSkipRuleParsingErrors = false;
+	
 	ArrayList<String> errors = new ArrayList<String>();
 	ArrayList<IRetroSynthRule> retroSynthRules = new ArrayList<IRetroSynthRule> (); 
-		
+	
 	ReactionParser reactionParser = new ReactionParser();
 	
 	
@@ -24,18 +25,14 @@ public class ReactionKnowledgeBase
 		
 		//Loading RetroSynthRules
 		reactionParser.setParserMetaInfoForRetroSynthRule();
-		
 		for (int i = 0; i < PredefinedReactionKnowledgeBase.retroSynthRules.length; i++)
-		{	
-			//System.out.println("Loading rule:  " + PredefinedReactionKnowledgeBase.retroSynthRules[i]);
 			addRule(PredefinedReactionKnowledgeBase.retroSynthRules[i], i);
-		}
-		
-		
-		if (!errors.isEmpty())
-			throw new Exception(errorsToString());
+				
+		if (!FlagSkipRuleParsingErrors)
+			if (!errors.isEmpty())
+				throw new Exception(errorsToString());
 	}
-	
+		
 	public void addRule(String newRule, int ruleNum)
 	{	 
 		IRetroSynthRule rule = reactionParser.parseRetroSynthRule(newRule);
@@ -47,8 +44,21 @@ public class ReactionKnowledgeBase
 		}	
 		else
 		{
-			rule.setID(ruleNum);
-			retroSynthRules.add(rule);
+			boolean FlagOK = true;
+			ArrayList<String> postErrors = rule.postProcessRule();
+			if (postErrors != null)
+				if (!postErrors.isEmpty())
+				{
+					FlagOK = false;
+					for (int i = 0; i < postErrors.size(); i++)
+						errors.add("Rule " + (ruleNum+1) + ":  " + postErrors.get(i));
+				}
+			
+			if (FlagOK)
+			{
+				rule.setID(ruleNum);
+				retroSynthRules.add(rule);
+			}	
 		}
 	}
 	
