@@ -1,6 +1,7 @@
 package ambit2.reactions;
 
 import java.util.ArrayList;
+import ambit2.reactions.ReactionConst.RetroSynthRuleType;
 
 public class RetroSynthRule implements IRetroSynthRule
 {
@@ -10,7 +11,7 @@ public class RetroSynthRule implements IRetroSynthRule
 	String smirks = "";
 	String info = "";
 	String stringRuleType = "";
-	int ruleType = 0;
+	RetroSynthRuleType ruleType;
 			
 	
 	int id = 0;
@@ -72,14 +73,14 @@ public class RetroSynthRule implements IRetroSynthRule
 		id = newID;
 	}
 	
-	public int getType()
+	public RetroSynthRuleType getType()
 	{
 		return ruleType;
 	}
 	
-	public void setType(int newType)
+	public void setType(RetroSynthRuleType newType)
 	{
-		id = newType;
+		ruleType = newType;
 	}
 	
 	public String getSmirks()
