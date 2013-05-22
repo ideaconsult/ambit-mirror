@@ -6,6 +6,7 @@ public class RetroSynthesisResult
 {
 	public ArrayList<RetroSynthPath> paths = new ArrayList<RetroSynthPath>();
 	public ArrayList<String> explanations = new ArrayList<String>();
+	public ArrayList<String> log = new ArrayList<String>();
 	
 	
 	public String toString()

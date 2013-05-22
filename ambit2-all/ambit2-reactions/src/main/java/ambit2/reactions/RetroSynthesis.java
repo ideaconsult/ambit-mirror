@@ -29,9 +29,17 @@ public class RetroSynthesis
 	public RetroSynthesisResult run()
 	{
 		RetroSynthesisResult rsResult = new RetroSynthesisResult();
-		//TODO
+		searchPaths();
 		return rsResult;
 	}
+	
+	//First strategy
+	void searchPaths()
+	{
+		//TODO
+	}
+	
+	
 	
 	
 	
