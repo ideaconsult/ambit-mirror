@@ -27,7 +27,7 @@ public class ReactionKnowledgeBase
 		
 		for (int i = 0; i < PredefinedReactionKnowledgeBase.retroSynthRules.length; i++)
 		{	
-			System.out.println("Loading rule:  " + PredefinedReactionKnowledgeBase.retroSynthRules[i]);
+			//System.out.println("Loading rule:  " + PredefinedReactionKnowledgeBase.retroSynthRules[i]);
 			addRule(PredefinedReactionKnowledgeBase.retroSynthRules[i], i);
 		}
 		
@@ -47,16 +47,27 @@ public class ReactionKnowledgeBase
 		}	
 		else
 		{
+			rule.setID(ruleNum);
 			retroSynthRules.add(rule);
-			System.out.println(rule.toString());
 		}
 	}
 	
 	String errorsToString()
 	{
-		StringBuffer sb = new StringBuffer();		
+		StringBuffer sb = new StringBuffer();
+		sb.append("\n");
 		for (int i = 0; i < errors.size(); i++)
 			sb.append(errors.get(i) + "\n");
+		return (sb.toString());
+	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < retroSynthRules.size(); i++)
+			sb.append("RetroSynthRule \n" + "ID = " + retroSynthRules.get(i).getID() + "\n" + 
+					retroSynthRules.get(i).toString() + "\n");
+		
 		return (sb.toString());
 	}
 }
