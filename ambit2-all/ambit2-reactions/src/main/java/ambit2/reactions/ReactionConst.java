@@ -6,28 +6,42 @@ public class ReactionConst
 	public static final String KeyWordSeparator = "=";
 	public static final String KeyWordElementSeparator = ",";
 	
-	//Synthetic Accessibility Evaluation Strategies	
-	public static final int SA_STRATEGY_DESCRIPTORS = 0;
-	public static final int SA_STRATEGY_START_MATERIALS = 1;
-	public static final int SA_STRATEGY_RETRO_SYNTHESIS = 2;
+	//Synthetic Accessibility Evaluation Strategies		
+	public enum SynthAccessStrategy {
+		DESCRIPTORS, 
+		START_MATERIALS,
+		RETRO_SYNTHESIS,
+		UNKNOWN,
+	}
+	
 	
 	//Retro Synthesis Rule Types 
-	public static final int RS_TYPE_TRANSFORMATION = 0;
+	public enum RetroSynthRuleType {
+		TRANSFORMATION, 
+		UNKNOWN,
+	}
+	
+	
+	//some const-to-enum conversion utilities ------------------------------
+	
+	public static String RetroSynthRuleTypeToString(RetroSynthRuleType type)
+	{	
+		if (type == RetroSynthRuleType.TRANSFORMATION)
+			return ("TRANSFORMATION");
 		
-	
-	//some const-to-string conversion utilities
-	
-	public static String RetroSynthRuleTypeToString(int type)
-	{
-		//TODO
-		return("");
+		
+		return("UNKNOWN");
 	}
 	
-	public static int getRetroSynthRuleTypeFromString(String stringType)
+	public static RetroSynthRuleType getRetroSynthRuleTypeFromString(String stringType)
 	{
-		//TODO
-		return -1;
+		if (stringType.equals("TRANSFORMATION"))
+			return RetroSynthRuleType.TRANSFORMATION;
+		
+		return RetroSynthRuleType.UNKNOWN;
 	}
+	
+	
 	
 	
 		

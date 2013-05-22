@@ -1,16 +1,17 @@
 package ambit2.reactions;
 
+import ambit2.reactions.ReactionConst.SynthAccessStrategy;
 
 public class SyntheticAccessibilityManager 
 {
-	private int strategy = ReactionConst.SA_STRATEGY_DESCRIPTORS;
+	private SynthAccessStrategy strategy = SynthAccessStrategy.DESCRIPTORS;
 
-	public int getStrategy()
+	public SynthAccessStrategy getStrategy()
 	{
 		return strategy;
 	}
 
-	public void setStrategy(int newStrategy)
+	public void setStrategy(SynthAccessStrategy newStrategy)
 	{
 		strategy = newStrategy;
 	}

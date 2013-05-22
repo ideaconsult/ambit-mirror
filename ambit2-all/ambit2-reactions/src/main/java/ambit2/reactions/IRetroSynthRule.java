@@ -1,6 +1,7 @@
 package ambit2.reactions;
 
 import java.util.ArrayList;
+import ambit2.reactions.ReactionConst.RetroSynthRuleType;
 
 public interface IRetroSynthRule 
 {
@@ -24,8 +25,8 @@ public interface IRetroSynthRule
 	
 	public void setID(int newID);
 	
-	public int getType();
+	public RetroSynthRuleType getType();
 	
-	public void setType(int newType);	
+	public void setType(RetroSynthRuleType newType);	
 	
 }
