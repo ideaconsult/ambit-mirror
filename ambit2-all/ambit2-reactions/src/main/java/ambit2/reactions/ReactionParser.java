@@ -49,6 +49,11 @@ public class ReactionParser
 		try
 		{
 			genericParserUtils.parseRule(ruleString, rule);
+			if (genericParserUtils.getErrors().size() > 0)
+			{	
+				errors.addAll(genericParserUtils.getErrors());
+				return null;
+			}	
 		}
 		catch (Exception e)
 		{
@@ -62,8 +67,5 @@ public class ReactionParser
 			return(null);
 		}		
 	}
-	
-	
-	
 	
 }

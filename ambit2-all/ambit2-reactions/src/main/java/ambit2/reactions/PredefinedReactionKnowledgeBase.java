@@ -5,7 +5,8 @@ public class PredefinedReactionKnowledgeBase
 	
 	public static final String retroSynthRules[] = 
 	{
-		"$$NAME = test rule   $$SMIRKS = smirks1   $$pH = 0.0   $$INFO = info ",
+		"$$NAME = rule1   $$SMIRKS = smirks1   $$INFO = info1 ",
+		"$$NAME = rule1   $$SMIRKS = smirks2   $$INFO = info2 ",
 		
 	};
 	

@@ -9,8 +9,11 @@ public class TestRetroSynthesis
 	
 	public static void main(String[] args) throws Exception 
 	{
+		
 		TestRetroSynthesis trs = new TestRetroSynthesis();
-		trs.retroSyn = new RetroSynthesis(); 
+		trs.retroSyn = new RetroSynthesis();
+		System.out.println("Retro Synthesis Knowledge base:");
+		System.out.println(trs.retroSyn.getReactionKnowledgeBase().toString());
 		
 		trs.test0();
 		

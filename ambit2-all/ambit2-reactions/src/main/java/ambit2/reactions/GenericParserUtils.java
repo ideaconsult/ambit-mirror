@@ -5,9 +5,9 @@ import java.lang.reflect.Field;
 
 public class GenericParserUtils 
 {
-	public String KeyWordPrefix = "$$";
-	public String KeyWordSeparator = "=";
-	public String KeyWordElementSeparator = ",";
+	public String KeyWordPrefix = ReactionConst.KeyWordPrefix;
+	public String KeyWordSeparator = ReactionConst.KeyWordSeparator;
+	public String KeyWordElementSeparator = ReactionConst.KeyWordElementSeparator;
 	
 	ArrayList<String> errors = new ArrayList<String>();
 	
@@ -74,7 +74,7 @@ public class GenericParserUtils
 			if (metaInfo.keyWord.get(i).equals(key))
 			{
 				setKeyValue(keyValue, i);
-				break;
+				return;
 			}
 		}
 		
@@ -88,7 +88,6 @@ public class GenericParserUtils
 		//This approach is applied only for String fields
 		f.set(targetObj, keyValue);
 	}
-	
 	
 	
 }
