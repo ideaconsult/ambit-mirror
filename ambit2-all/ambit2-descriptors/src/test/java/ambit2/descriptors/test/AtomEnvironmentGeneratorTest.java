@@ -167,19 +167,20 @@ public class AtomEnvironmentGeneratorTest {
 			while (reader.hasNext()) {
 				
 				IAtomContainer mol = reader.next();
-				String set = mol.getProperty("Set").toString();
+				String set = mol.getProperty("Set")==null?"":mol.getProperty("Set").toString();
 				FileWriter writer = writers.get("ALL");
-
+				System.out.print(".");
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);				
               //if (useHydrogens) { //always, otherwise atom types are not recognised correctly
               	//for some reason H atoms are added as bond references, but not in atom list - bug?
+    		    mol = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(mol);
 				try {
 	    			if (hAdder == null) hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 	    		    hAdder.addImplicitHydrogens(mol);
 				} catch (Exception x) {
 					
 				}
-	  			CDKHueckelAromaticityDetector.detectAromaticity(mol);        
+	  			CDKHueckelAromaticityDetector.detectAromaticity(mol);
 	  			DescriptorValue value = gen.calculate(mol);
 	  			if (!header) {
 	  				for (int i=0; i < value.getNames().length; i++) {
@@ -203,8 +204,13 @@ public class AtomEnvironmentGeneratorTest {
 				   	writer.write(Integer.toString(count));
 				   	writer.write(",");
 				}
-				double activity = Double.parseDouble(mol.getProperty("Activity").toString());
-	  			writer.write(activity==1.0?"Yes":"No");
+				Object activityValue = mol.getProperty("Activity");
+				if (activityValue==null)
+					writer.write("Unknown");
+				else {	
+					double activity = Double.parseDouble(activityValue.toString());
+					writer.write(activity==1.0?"Yes":"No");
+				}
 	  			writer.write(",");
 	  			writer.write(set);
 				writer.write('\n');
@@ -245,7 +251,8 @@ public class AtomEnvironmentGeneratorTest {
 			}
 			
 			
-		}	 	  
+		}
+		 		
 	   
 	   public static void main(String[] args) {
 		   AtomEnvironmentGeneratorTest test = new  AtomEnvironmentGeneratorTest();

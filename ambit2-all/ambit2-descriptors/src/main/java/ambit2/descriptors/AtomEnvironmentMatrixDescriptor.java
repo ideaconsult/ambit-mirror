@@ -272,11 +272,11 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
 		 int natoms = atomContainer.getAtomCount();
 		 //do atom type matching
 		 atomTypes = factory.getAllAtomTypes();
-		 
+		 /*
 		 System.out.println("AtomTypes");
 		 for (IAtomType at :atomTypes) { System.out.print(at.getAtomTypeName());System.out.print("\t");}
 		 System.out.println("End AtomTypes");
-		 
+		 */
 		 int[] atomIndex = new int[natoms]; //array of atom type integers
 		 for (int i = 0; i < natoms; i++) 
 		    try {
@@ -293,12 +293,15 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
 		            }
 		            String key = getKeyLevel0(atomIndex[i]>=0?atomTypes[atomIndex[i]]:null);
 		            add(sparseMatrix,key);
-		            if (isHal(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Hal");	
-		            if (isHet(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Het");
-		            if (isHev(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Hev");
+		            if ((atomIndex[i]>0) && atomTypes[atomIndex[i]]!=null) {
+			            if (isHal(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Hal");	
+			            if (isHet(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Het");
+			            if (isHev(atomTypes[atomIndex[i]])) add(sparseMatrix,"L0_Hev");
+		            }
 		            add(sparseMatrix,"L0_Any");
 		            
 		    } catch (Exception x) {
+		    	//x.printStackTrace();
 		            throw new CDKException(x.getMessage() + "\ninitConnectionMatrix");
 		    }                
 	    //compute bond distances between all atoms
@@ -311,9 +314,9 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
 	    	String[] generic1 = new String[] {
 	    			key1==null?"X":key1.getAtomTypeName(),
 	    			"Any",
-	    			isHal(atomTypes[atomIndex[i]])?"Hal":null,
-	    			isHet(atomTypes[atomIndex[i]])?"Het":null,
-	    			isHev(atomTypes[atomIndex[i]])?"Hev":null
+	    			atomIndex[i]>=0?isHal(atomTypes[atomIndex[i]])?"Hal":null:null,
+	    			atomIndex[i]>=0?isHet(atomTypes[atomIndex[i]])?"Het":null:null,
+	    			atomIndex[i]>=0?isHev(atomTypes[atomIndex[i]])?"Hev":null:null
 	    			}; 
 	            
 	    	for (int j=i; j < natoms; j++) {
@@ -321,9 +324,10 @@ public class AtomEnvironmentMatrixDescriptor implements IMolecularDescriptor {
 		    	String[] generic2 = new String[] {
 		    			key2==null?"X":key2.getAtomTypeName(),
 		    			"Any",
-		    			isHal(atomTypes[atomIndex[i]])?"Hal":null,
-		    			isHet(atomTypes[atomIndex[i]])?"Het":null,
-		    			isHev(atomTypes[atomIndex[i]])?"Hev":null}; 
+		    			atomIndex[i]>=0?isHal(atomTypes[atomIndex[i]])?"Hal":null:null,
+		    	    	atomIndex[i]>=0?isHet(atomTypes[atomIndex[i]])?"Het":null:null,
+		    	    	atomIndex[i]>=0?isHev(atomTypes[atomIndex[i]])?"Hev":null:null
+		    			}; 
 	    		
 	    	   if (aMatrix[i][j] > 0) { //j is not atom i and bonds less or equal to maxlevel
 	    		   for (int level = 1; level <= (maxLevel+1); level++) {
