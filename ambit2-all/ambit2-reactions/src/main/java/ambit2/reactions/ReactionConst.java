@@ -18,28 +18,23 @@ public class ReactionConst
 	//Retro Synthesis Rule Types 
 	public enum RetroSynthRuleType {
 		TRANSFORMATION, 
-		UNKNOWN,
+		UNKNOWN;
+		
+		public static RetroSynthRuleType getFromString(String stringType)
+		{
+			if (stringType.equals("TRANSFORMATION"))
+				return RetroSynthRuleType.TRANSFORMATION;
+			
+			return RetroSynthRuleType.UNKNOWN;
+		}
 	}
 	
 	
 	//some const-to-enum conversion utilities ------------------------------
 	
-	public static String RetroSynthRuleTypeToString(RetroSynthRuleType type)
-	{	
-		if (type == RetroSynthRuleType.TRANSFORMATION)
-			return ("TRANSFORMATION");
-		
-		
-		return("UNKNOWN");
-	}
 	
-	public static RetroSynthRuleType getRetroSynthRuleTypeFromString(String stringType)
-	{
-		if (stringType.equals("TRANSFORMATION"))
-			return RetroSynthRuleType.TRANSFORMATION;
-		
-		return RetroSynthRuleType.UNKNOWN;
-	}
+	
+	
 	
 	
 	

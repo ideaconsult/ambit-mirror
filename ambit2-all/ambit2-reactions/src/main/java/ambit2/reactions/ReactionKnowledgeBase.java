@@ -32,6 +32,18 @@ public class ReactionKnowledgeBase
 			if (!errors.isEmpty())
 				throw new Exception(errorsToString());
 	}
+	
+	public void loadKnowledgeBaseFromTextFile() throws Exception 
+	{
+		errors.clear();
+		
+		//TODO
+		
+				
+		if (!FlagSkipRuleParsingErrors)
+			if (!errors.isEmpty())
+				throw new Exception(errorsToString());
+	}
 		
 	public void addRule(String newRule, int ruleNum)
 	{	 
