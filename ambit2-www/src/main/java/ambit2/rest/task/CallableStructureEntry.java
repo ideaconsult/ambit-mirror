@@ -2,6 +2,7 @@ package ambit2.rest.task;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.restlet.Context;
 import org.restlet.data.Form;
@@ -44,12 +45,17 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 	}
 	
 	public CallableStructureEntry(Form form,
-			Reference applicationRootReference, Context context,
+			Reference applicationRootReference,
+			IStructureRecord record,
+			 Context context,
 			Algorithm algorithm, USERID token) {
 		super(form, applicationRootReference, context, algorithm, token);
 		cmpreporter = new CompoundURIReporter(applicationRootReference,null);
-
-
+		//overwrite the compound_uri parameter
+		if (record.getIdchemical()>0) {
+			this.record.setIdchemical(record.getIdchemical());
+			this.record.setIdstructure(record.getIdstructure());
+		}
 	}
 	private static String customidname = "customidname";
 	private static String customid = "customid";

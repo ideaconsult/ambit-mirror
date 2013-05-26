@@ -162,6 +162,14 @@ public class ConformerResource extends CompoundResource {
 		} catch (Exception x) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,x.getMessage(),x);
 		}
-	}		
+	}
+	@Override
+	protected IStructureRecord getRecord() {
+		IStructureRecord record = super.getRecord();
+		Object idconformer = getRequest().getAttributes().get(ConformerResource.idconformer);
+		if (idconformer!=null)
+			try {record.setIdstructure(Integer.parseInt(Reference.decode(idconformer.toString())));} catch (Exception x) {}
+		return record;
+	}
 
 }
