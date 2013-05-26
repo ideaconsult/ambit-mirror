@@ -1,6 +1,9 @@
 package ambit2.reactions;
 
 import java.util.ArrayList;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 import ambit2.reactions.ReactionConst.RetroSynthRuleType;
 
 public class RetroSynthRule implements IRetroSynthRule
@@ -91,6 +94,12 @@ public class RetroSynthRule implements IRetroSynthRule
 	public void setSmirks(String newName)
 	{
 		name = newName;
+	}
+	
+	public ArrayList<IRetroSynthRuleInstance> getInstances(IAtomContainer str)
+	{
+		//TODO
+		return null;
 	}
 	
 	

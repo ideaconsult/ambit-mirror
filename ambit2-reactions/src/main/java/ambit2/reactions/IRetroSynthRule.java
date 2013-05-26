@@ -1,7 +1,9 @@
 package ambit2.reactions;
 
 import java.util.ArrayList;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import ambit2.reactions.ReactionConst.RetroSynthRuleType;
+
 
 public interface IRetroSynthRule 
 {
@@ -28,5 +30,7 @@ public interface IRetroSynthRule
 	public RetroSynthRuleType getType();
 	
 	public void setType(RetroSynthRuleType newType);	
+	
+	public ArrayList<IRetroSynthRuleInstance> getInstances(IAtomContainer str);
 	
 }
