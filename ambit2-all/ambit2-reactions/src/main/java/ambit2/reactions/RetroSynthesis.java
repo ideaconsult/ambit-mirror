@@ -1,13 +1,16 @@
 package ambit2.reactions;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-
+import java.util.Stack;
+import java.util.ArrayList;
 
 public class RetroSynthesis 
 {
 	ReactionKnowledgeBase knowledgeBase; 
 	IAtomContainer molecule;
-	RetroSynthesisResult rsResult;
+	RetroSynthesisResult retroSynthResult;
+	Stack<RetroSynthNode> nodes = new Stack<RetroSynthNode>(); 
+	ArrayList<IRetroSynthRuleInstance>  ruleInstances = new ArrayList<IRetroSynthRuleInstance>(); 
 	
 	
 	public RetroSynthesis() throws Exception 
@@ -28,15 +31,40 @@ public class RetroSynthesis
 	
 	public RetroSynthesisResult run()
 	{
-		RetroSynthesisResult rsResult = new RetroSynthesisResult();
+		retroSynthResult = new RetroSynthesisResult();
+		
+		ruleInstances = findRuleInstances(molecule);		
 		searchPaths();
-		return rsResult;
+		
+		return retroSynthResult;
 	}
 	
-	//First strategy
-	void searchPaths()
+	
+	public static ArrayList<IRetroSynthRuleInstance> findRuleInstances(IAtomContainer mol)
 	{
 		//TODO
+		return null;
+	}
+	
+	
+	//Strategy 1 - based on depth first search algorithm
+	//There can be various criteria for stopping
+	// (1)impossible to apply more rules (transformations)
+	// (2)some of the products are starting materials
+	
+	
+	void searchPaths()
+	{	
+		nodes.clear();
+		//First step
+		
+		//TODO
+		
+		//Iterate stack
+		while (!nodes.isEmpty())
+		{
+			//TODO
+		}
 	}
 	
 	
