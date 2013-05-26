@@ -525,7 +525,12 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			String token = getToken();
-			CallableStructureEntry callable = new CallableStructureEntry<String>(new Form(entity), getRootRef(), getContext(), null, token);
+			CallableStructureEntry callable = new CallableStructureEntry<String>(
+						new Form(entity), 
+						getRootRef(),
+						getRecord(),
+						getContext(), 
+						null, token);
 			callable.setPropertyOnly(false);
 			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 						"New structure from web form",
@@ -616,6 +621,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		}
 	}
 	
+	protected IStructureRecord getRecord() {
+		Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
+		IStructureRecord record = new StructureRecord();
+		if (key!= null)
+			record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
+		return record;
+	}
 	/**
 	 * POST as in the dataset resource
 	 */
@@ -627,7 +639,10 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 		
 		if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
 			String token = getToken();
-			CallableStructureEntry callable = new CallableStructureEntry<String>(new Form(entity), getRootRef(), getContext(), null, token);
+			CallableStructureEntry callable = new CallableStructureEntry<String>(new Form(entity), 
+					getRootRef(),
+					getRecord(),
+					getContext(), null, token);
 			callable.setPropertyOnly(true);
 			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 						"Properties from web form",
