@@ -369,10 +369,10 @@ public class AbstractDepict extends ProtectedResource {
 	}
 	
 	protected BufferedImage createDefaultImage(int w, int h) {
-		BufferedImage buffer = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+		BufferedImage buffer = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
         
 		Graphics2D g = buffer.createGraphics();
-		g.setColor(Color.white);
+		g.setColor(new Color(0x00ffffff,true));//white transparent);
 		g.fillRect(0, 0, w,h);
 		return buffer;
 	}

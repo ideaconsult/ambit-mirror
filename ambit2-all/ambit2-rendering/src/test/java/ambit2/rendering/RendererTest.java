@@ -173,7 +173,7 @@ public class RendererTest {
 	
 	protected BufferedImage paint(IAtomContainer mol) throws Exception {
 		Rectangle drawArea = new Rectangle(0,0,200,200);
-		BufferedImage img = new BufferedImage(drawArea.width,drawArea.height,BufferedImage.TYPE_INT_RGB);
+		BufferedImage img = new BufferedImage(drawArea.width,drawArea.height,BufferedImage.TYPE_INT_ARGB);
 		int alpha = 128;
 		final Graphics2D g = img.createGraphics();
 		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC,1.0f);

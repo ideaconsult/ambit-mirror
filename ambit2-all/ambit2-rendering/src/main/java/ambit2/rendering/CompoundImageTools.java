@@ -161,13 +161,14 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	public final static String SELECTED_ATOM_COLOR = "ambit2.color";
 	public final static String SELECTED_ATOM_SIZE = "ambit2.size";
 	public final static String ATOM_ANNOTATION = "ambit2.tooltip";
+	public final static Color whiteTransparent = new Color(0x00ffffff,true);
     RendererModel r2dm;
     IRenderer renderer;
     protected Dimension imageSize = new Dimension(200,200);
-    protected Color background = Color.white;
+    protected Color background = whiteTransparent;
     protected BufferedImage defaultImage = null;
     BufferedImage buffer = null;
-    protected Color borderColor = Color.white;
+    protected Color borderColor = whiteTransparent;
     protected int borderWidth = 5;
 
 	public int getBorderWidth() {
@@ -432,7 +433,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     	
         if (buffer == null)
             buffer = new BufferedImage(imageSize.width, imageSize.height,
-				BufferedImage.TYPE_INT_RGB);
+				BufferedImage.TYPE_INT_ARGB);
         
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(background);
@@ -551,7 +552,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 			Dimension imageSize,
 			boolean atomNumbers)
 	{
-    	renderer = renderer==null?createRenderer(imageSize,Color.white,false,atomNumbers,explicitH):renderer;
+    	renderer = renderer==null?createRenderer(imageSize,whiteTransparent,false,atomNumbers,explicitH):renderer;
     	RendererModel r2dm = renderer.getRenderer2DModel();
 
 		if ((molecules != null) && (molecules.getAtomContainerCount()>0)) {
@@ -676,7 +677,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	    		},drawArea,false);
 	    	}
 		} else {
-			g.setBackground(Color.white);
+			g.setBackground(whiteTransparent);
 			g.clearRect(0,0,imageSize.width,imageSize.height);
 		}
 		if (imageMap!= null) imageMap.append("\n\t]\n}");
@@ -685,7 +686,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     public synchronized BufferedImage getImage(ArrayList<?> list) {
         if (buffer == null)
             buffer = new BufferedImage(imageSize.width, imageSize.height,
-				BufferedImage.TYPE_INT_RGB);
+				BufferedImage.TYPE_INT_ARGB);
         
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(background);
@@ -724,7 +725,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	
 	protected BufferedImage createDefaultImage() {
 			BufferedImage buffer = new BufferedImage(imageSize.width, imageSize.height,
-					BufferedImage.TYPE_INT_RGB);
+					BufferedImage.TYPE_INT_ARGB);
 	        
 			Graphics2D g = buffer.createGraphics();
 			g.setColor(background);
@@ -771,10 +772,10 @@ class MyBasicAtomGenerator extends BasicAtomGenerator {
     	    double d = 2 * r;
     	    if (RendererModelWrapper.getCompactShape(model) == Shape.SQUARE) {
     	    	elementGroup.add(new RectangleElement(
-        	            p.x - r, p.y - r, d, d, true, Color.white));
+        	            p.x - r, p.y - r, d, d, true, CompoundImageTools.whiteTransparent));
     	    } else {
     	    	elementGroup.add(new OvalElement(
-    	                p.x, p.y, r, true, Color.white));
+    	                p.x, p.y, r, true, CompoundImageTools.whiteTransparent));
     	    }
 		}
 		return elementGroup;

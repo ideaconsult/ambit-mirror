@@ -153,7 +153,7 @@ public class SOMEVisualizer extends SOMEResultsParser implements IStructureDiagr
 	}
 	@Override
 	public BufferedImage getLegend(int width, int height) throws AmbitException {
-		BufferedImage buffer = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+		BufferedImage buffer = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(Color.white);
 		g.fillRect(0, 0, width,height);

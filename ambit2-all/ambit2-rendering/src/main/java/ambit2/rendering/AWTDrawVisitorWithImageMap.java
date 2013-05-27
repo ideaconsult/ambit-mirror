@@ -19,6 +19,7 @@ package ambit2.rendering;
 *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -223,8 +224,10 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
         if (textElement instanceof ImageMapAreaElement)
         	imageMap((ImageMapAreaElement)textElement,textBounds);
         else {
+        	this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN , 0f ));
 	        this.graphics.setColor(getBackgroundColor());
 	        this.graphics.fill(textBounds);
+	        this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER , 1f ));
 	        this.graphics.setColor(textElement.color);
 	        this.graphics.drawString(textElement.text, point.x, point.y);
         }
@@ -302,8 +305,10 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
                     atomSymbol.text, atomSymbol.xCoord, atomSymbol.yCoord, graphics);
         Rectangle2D textBounds = 
             this.getTextBounds(atomSymbol.text, atomSymbol.xCoord, atomSymbol.yCoord, graphics);
-        this.graphics.setColor(getBackgroundColor());
+        //this.graphics.setColor(getBackgroundColor());
+        this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN , 0f ));
         this.graphics.fill(textBounds);
+        this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER , 1f ));
         this.graphics.setColor(atomSymbol.color);
         this.graphics.drawString(atomSymbol.text, point.x, point.y);
         
@@ -462,7 +467,9 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
         Rectangle2D textBounds = 
             this.getTextBounds(textGroup.text, textGroup.xCoord, textGroup.yCoord, graphics);
         this.graphics.setColor(getBackgroundColor());
+        this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN , 0f ));
         this.graphics.fill(textBounds);
+        this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER , 1f ));
         this.graphics.setColor(textGroup.color);
         this.graphics.drawString(textGroup.text, point.x, point.y);
         

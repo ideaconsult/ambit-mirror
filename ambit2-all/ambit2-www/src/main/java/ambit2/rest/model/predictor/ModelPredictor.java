@@ -37,6 +37,7 @@ import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.model.evaluation.EvaluationStats;
+import ambit2.rendering.CompoundImageTools;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
@@ -429,9 +430,9 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 	}
 	
 	protected BufferedImage writeMessages(String[] msg,int width, int height) throws AmbitException {
-		BufferedImage buffer = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+		BufferedImage buffer = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = buffer.createGraphics();
-		g.setColor(Color.white);
+		g.setColor(CompoundImageTools.whiteTransparent);
 		g.fillRect(0, 0, width,height);
 		RenderingHints rh = g.getRenderingHints ();
 		rh.put (RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
