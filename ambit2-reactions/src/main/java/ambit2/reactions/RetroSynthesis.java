@@ -56,9 +56,8 @@ public class RetroSynthesis
 	void searchPaths()
 	{	
 		nodes.clear();
-		//First step
+		generateInitialNodes();
 		
-		//TODO
 		
 		//Iterate stack
 		while (!nodes.isEmpty())
@@ -66,6 +65,13 @@ public class RetroSynthesis
 			//TODO
 		}
 	}
+	
+	void generateInitialNodes()
+	{
+		//TODO
+	}
+	
+	
 	
 	
 	
