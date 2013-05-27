@@ -1,7 +1,9 @@
 package ambit2.rendering;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -31,22 +33,33 @@ public class TransparencyTest {
 		g.setRenderingHint(
 		        RenderingHints.KEY_TEXT_ANTIALIASING,
 		        RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+		//fill in the entire rectangle with transparent background
 		g.setColor(background);
 		g.fillRect(0, 0, imageSize.width, imageSize.height);
+
+		//draw diagonal line
 		g.setStroke(new BasicStroke(2));
 		g.setColor(color);
 		g.drawLine(0,0,200,200);
-		g.setColor(background);
+		
+		/**
+		 * http://docs.oracle.com/javase/tutorial/2d/advanced/compositing.html 
+		 */
+		
+		//draw an ellipse with transparent inside 
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN , 0f ));
 		Ellipse2D atom = new Ellipse2D.Double(50,50,20,20);
 		g.fill(atom);
-		g.setColor(color);
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER , 1f ));
 		g.draw(atom);
 
+		//draw labels with transparent bounding boxes
 		String label = "Msg";
-		drawLabel(g, Color.green, color,label, 20,20);
-		drawLabel(g, background, color, label, 100,100);
+		drawLabel(g, color,label, 20,20);
+		drawLabel(g, color, label, 100,100);
 		
 
+		//draw labels with transparent bounding boxes (another way)
 		FontRenderContext frc = g.getFontRenderContext();
 		TextLayout layout = new TextLayout("This is a string", g.getFont(), frc);
 		Rectangle2D bounds = layout.getBounds();
@@ -55,8 +68,11 @@ public class TransparencyTest {
 		                  bounds.getY()+loc.getY(),
 		                  bounds.getWidth(),
 		                  bounds.getHeight());
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN , 0f ));
 		g.setColor(background);
 		g.fill(bounds);
+
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f ));
 		g.setBackground(background);
 		g.setColor(color);
 		layout.draw(g, (float)loc.getX()-1, (float)loc.getY()+1);
@@ -64,10 +80,14 @@ public class TransparencyTest {
 		ImageIO.write(buffer,"png",new File("test.png"));
 	}
 	
-	public void drawLabel(Graphics2D g, Color bgColor, Color color, String label, int x, int y) {
+	public void drawLabel(Graphics2D g,  Color color, String label, int x, int y) {
+		//transparent bounding box 
 		Dimension bbox = getBoundingBox(g,label);
-		g.setColor(bgColor);
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN , 0f ));
 		g.fill(new Rectangle2D.Double(Math.round(x - bbox.width/2.0)-1,Math.round(y - bbox.height/2.0)+1,bbox.width+2,bbox.height+2));
+		
+		//opaque pixels
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f ));
 		g.setColor(color);
 		g.drawString(label,Math.round(x - bbox.width/2.0)-1,Math.round(y + bbox.height/2.0)-2);
 	}
