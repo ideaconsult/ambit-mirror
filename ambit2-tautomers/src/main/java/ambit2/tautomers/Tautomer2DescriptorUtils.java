@@ -15,12 +15,17 @@ import ambit2.smarts.SmartsHelper;
 public class Tautomer2DescriptorUtils 
 {
 	TautomerManager tman = new TautomerManager();	
-	String endLine = System.getProperty("line.separator");
+	String endLineSymb = System.getProperty("line.separator");
+	RandomAccessFile outFile = null;
 	
+	public int startLineNum = 0;
+	public int endLineNum = 1000000000;
+	
+	int curLine; 
+		
 	public void generateFulltautomerInfo(String smilesFile, String outFileName) throws Exception
 	{	
-		RandomAccessFile outFile = new RandomAccessFile(outFileName,"rw");
-		outFile.setLength(0);
+		openOutputFile(outFileName);
 		
 		RandomAccessFile inFile = new RandomAccessFile(smilesFile,"r");			
 		long length = inFile.length();
@@ -29,18 +34,26 @@ public class Tautomer2DescriptorUtils
 		while (inFile.getFilePointer() < length)
 		{	
 			n++;
+			curLine = n;
 			String line = inFile.readLine();
-			tautomerFullInfo(n, line.trim(), outFile);
+			
+			if (n < startLineNum)
+				continue;
+			
+			if (n > endLineNum)
+				break;
+			
+			tautomerFullInfo(n, line.trim());
 		}
 		
-		outFile.close();
+		closeOutputFile();
 		inFile.close();
 	}
 	
-	public int tautomerFullInfo(int strNum, String targetSmiles, RandomAccessFile outFile)
+	public int tautomerFullInfo(int strNum, String targetSmiles)
 	{	
 		try
-		{
+		{	
 			IMolecule mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(targetSmiles);
@@ -48,7 +61,7 @@ public class Tautomer2DescriptorUtils
 			tman.setStructure(mol);
 			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 			
-			outFile.write(("" + strNum + "   " + targetSmiles + "  " + resultTautomers.size() + "  "  +  endLine).getBytes());
+			output("" + strNum + "   " + targetSmiles + "  " + resultTautomers.size() + "  "  +  endLineSymb);
 			System.out.println("    -->  " + resultTautomers.size() + " tautomers");
 			
 			if (resultTautomers.size() > 1)  
@@ -57,9 +70,8 @@ public class Tautomer2DescriptorUtils
 					IAtomContainer tautomer = resultTautomers.get(i);
 					double rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
 					String smiles = SmartsHelper.moleculeToSMILES(tautomer).trim();
-					outFile.write(("" + strNum + "   " + smiles + "  " + rank  +  endLine).getBytes());
+					output("" + strNum + "   " + smiles + "  " + rank  +  endLineSymb);
 				}
-			
 		}	
 		catch(Exception e){
 			System.out.println(e.toString());
@@ -69,7 +81,7 @@ public class Tautomer2DescriptorUtils
 	}
 	
 	
-	public void analyseTautomerDescriptors(String descrFile) throws Exception
+	public void analyseTautomerDescriptors(String descrFile, String outFileName, int descrStartColumn) throws Exception
 	{
 		RandomAccessFile inFile = new RandomAccessFile(descrFile,"r");			
 		long length = inFile.length();
@@ -88,6 +100,37 @@ public class Tautomer2DescriptorUtils
 	void processLine(String line, int lineNum)
 	{
 		//TODO
+	}
+	
+	
+	//----------- some file utilities ------------------------------
+	
+	
+	void openOutputFile(String outFileName) throws Exception
+	{
+		File file = new File(outFileName);
+		outFile = new RandomAccessFile(file,"rw");
+		outFile.setLength(0);
+	}
+	
+	void closeOutputFile() throws Exception 
+	{	
+		if (outFile != null)
+			outFile.close();
+	}
+	
+	int output(String data)
+	{
+		try
+		{
+			outFile.write(data.getBytes());
+		}
+		catch (Exception e)
+		{
+			System.out.println("output error: " + e.toString());
+			return(-1);
+		}
+		return(0);
 	}
 	
 }
