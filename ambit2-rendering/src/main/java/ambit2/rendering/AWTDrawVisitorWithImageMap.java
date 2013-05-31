@@ -336,11 +336,11 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
         this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER , 1f ));
         this.graphics.setColor(atomSymbol.color);
         
-        FontRenderContext frc = graphics.getFontRenderContext();
-        TextLayout t = new TextLayout(as.getIterator(), frc);
-        t.draw(this.graphics, point.x, point.y);
+        //FontRenderContext frc = graphics.getFontRenderContext();
+        //TextLayout t = new TextLayout(as.getIterator(), frc);
+        //t.draw(this.graphics, point.x, point.y);
         
-        //this.graphics.drawString(as.getIterator(), point.x, point.y);
+        this.graphics.drawString(as.getIterator(), point.x, point.y);
         
     }
     
