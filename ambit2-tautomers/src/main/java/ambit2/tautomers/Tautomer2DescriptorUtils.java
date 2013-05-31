@@ -18,8 +18,13 @@ public class Tautomer2DescriptorUtils
 	String endLineSymb = System.getProperty("line.separator");
 	RandomAccessFile outFile = null;
 	
+	//work variables
 	public int startLineNum = 0;
 	public int endLineNum = 1000000000;
+	public String splitter = ",";  
+	int descrStartColumn = -1;
+	int strNumColumn = -1;
+	
 	
 	int curLine; 
 		
@@ -81,8 +86,12 @@ public class Tautomer2DescriptorUtils
 	}
 	
 	
-	public void analyseTautomerDescriptors(String descrFile, String outFileName, int descrStartColumn) throws Exception
+	public void analyseTautomerDescriptors(String descrFile, String outFileName, 
+					int descrStartColumn, int strNumColumn) throws Exception
 	{
+		this.descrStartColumn = descrStartColumn; 
+		this.strNumColumn = strNumColumn;  
+		
 		RandomAccessFile inFile = new RandomAccessFile(descrFile,"r");			
 		long length = inFile.length();
 		
@@ -99,7 +108,7 @@ public class Tautomer2DescriptorUtils
 	
 	void processLine(String line, int lineNum)
 	{
-		//TODO
+		String tokens[] = line.split(splitter);
 	}
 	
 	
