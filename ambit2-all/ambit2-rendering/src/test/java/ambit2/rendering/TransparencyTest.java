@@ -3,12 +3,13 @@ package ambit2.rendering;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
+import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -16,10 +17,26 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.AttributedString;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor;
+import org.openscience.cdk.renderer.AtomContainerRenderer;
+import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.ZoomFactor;
+import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
 
 public class TransparencyTest {
 
@@ -55,8 +72,8 @@ public class TransparencyTest {
 
 		//draw labels with transparent bounding boxes
 		String label = "Msg";
-		drawLabel(g, color,label, 20,20);
-		drawLabel(g, color, label, 100,100);
+		drawLabel(g, color,label+"+", 20,20);
+		drawLabel(g, color, label+"2", 100,100);
 		
 
 		//draw labels with transparent bounding boxes (another way)
@@ -81,15 +98,18 @@ public class TransparencyTest {
 	}
 	
 	public void drawLabel(Graphics2D g,  Color color, String label, int x, int y) {
+		int p = label.length();
 		//transparent bounding box 
+		AttributedString as = new AttributedString(label);
+		as.addAttribute(TextAttribute.SUPERSCRIPT,TextAttribute.SUPERSCRIPT_SUPER,p-1,p);
 		Dimension bbox = getBoundingBox(g,label);
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN , 0f ));
-		g.fill(new Rectangle2D.Double(Math.round(x - bbox.width/2.0)-1,Math.round(y - bbox.height/2.0)+1,bbox.width+2,bbox.height+2));
+		g.fill(new Rectangle2D.Double(Math.round(x - bbox.getWidth()/2.0)-1,Math.round(y - bbox.getHeight()/2.0)+1,bbox.getWidth()+2,bbox.getHeight()+2));
 		
 		//opaque pixels
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f ));
 		g.setColor(color);
-		g.drawString(label,Math.round(x - bbox.width/2.0)-1,Math.round(y + bbox.height/2.0)-2);
+		g.drawString(as.getIterator(),Math.round(x - bbox.getWidth()/2.0)-1,Math.round(y + bbox.getHeight()/2.0)-2);
 	}
 	public Dimension getBoundingBox(Graphics2D g,String msg) {
 		// get metrics from the graphics
@@ -101,5 +121,37 @@ public class TransparencyTest {
 		// and render context
 		int adv = metrics.stringWidth(msg);
 		return new Dimension(adv,hgt);
+		//return new Dimension(adv,hgt);
 	}
+	
+
+
+		@Test
+		public void testDepict() throws Exception {
+			String smiles = "CN1C=NC2=C1C(=O)N(C(=O)N2C)C";
+			int WIDTH = 200;
+			int HEIGHT = 250;
+			Rectangle drawArea = new Rectangle(WIDTH, HEIGHT);
+			BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+			SmilesParser smilesParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
+			IMolecule molecule = smilesParser.parseSmiles(smiles);
+			StructureDiagramGenerator sdg =  new StructureDiagramGenerator();
+			sdg.setMolecule(molecule);
+			sdg.generateCoordinates();
+			molecule = sdg.getMolecule();
+			List generators =  new ArrayList();
+			generators.add(new BasicSceneGenerator());
+			generators.add(new BasicBondGenerator());
+			generators.add(new BasicAtomGenerator());
+			AtomContainerRenderer renderer = new AtomContainerRenderer(generators, new AWTFontManager());
+			renderer.setup(molecule, drawArea);
+			RendererModel model = renderer.getRenderer2DModel();
+			model.set(ZoomFactor.class, (double)0.9);
+			Graphics2D g2 = (Graphics2D)image.getGraphics();
+			g2.setColor(Color.WHITE);
+			g2.fillRect(0, 0, WIDTH, HEIGHT);
+			renderer.paint(molecule, new AWTDrawVisitor(g2));
+			ImageIO.write( image, "PNG", new File("depict.png"));
+		}
+	
 }
