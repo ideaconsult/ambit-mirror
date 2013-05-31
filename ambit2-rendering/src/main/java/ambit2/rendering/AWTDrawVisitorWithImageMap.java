@@ -319,6 +319,7 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
         }
         
         AttributedString as = new AttributedString(label);
+        as.addAttribute(TextAttribute.FOREGROUND, atomSymbol.color);
         as.addAttribute(TextAttribute.SIZE, this.graphics.getFont().getSize());
         as.addAttribute(TextAttribute.FAMILY, this.graphics.getFont().getFamily());
         if (graphics.getFont().isBold())
