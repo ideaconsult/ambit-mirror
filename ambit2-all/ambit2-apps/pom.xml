@@ -34,7 +34,7 @@
     <inceptionYear>2008</inceptionYear>
     <url>http://ambit.sf.net</url>
     <issueManagement>
-    	<url>http://sourceforge.net/tracker/?group_id=191756</url>
+    	<url>http://sourceforge.net/p/ambit/bugs/?source=navbar</url>
     </issueManagement>
   <developers>
   	<developer>
@@ -80,11 +80,12 @@
   		</roles>    	  		
   	</developer> 
   </developers>    
-    <scm>
-    	<connection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-apps</connection>
-    	<developerConnection>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all/ambit2-apps</developerConnection>
-    	<url>http://ambit.svn.sourceforge.net/viewvc/ambit/trunk/ambit2-all/ambit2-apps</url>
-    </scm>
+	<scm>
+	    <connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</connection>
+	    <developerConnection>scm:svn+ssh://vedina@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</developerConnection>
+	    <tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
+	    <url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-apps</url>
+	  </scm>    
     <organization>
     	<name>Ideaconsult Ltd.</name>
     	<url>http://www.ideaconsult.net</url>
