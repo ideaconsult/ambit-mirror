@@ -8,14 +8,6 @@
 
 {AMBIT and OpenTox Downloads}
 
-*Stand alone ({desktop}) applications
-~~~~~~~~~~~~~
-
-   * {{{./download_ambitxt.html}AMBIT XT}}
-   
-   * {{{./download_ambitdiscovery.html}AMBIT Discovery}}
-   
-   * {{{./download_qmrfeditor.html}(Q)MRF Editor and XML schema}} (Java WebStart application)
 
 *Web {services}
 ~~~~~~~~~~~~~
@@ -39,3 +31,12 @@
    * {{{./download_aaclient.html} OpenTox Authentication and Authorization client library}}
    
    * {{{./download_ambitlibs.html} AMBIT modules}}
+
+*Stand alone ({desktop}) applications
+~~~~~~~~~~~~~
+
+   * {{{./download_ambitxt.html}AMBIT XT}}
+   
+   * {{{./download_ambitdiscovery.html}AMBIT Discovery}}
+
+   * Note: The (Q)MRF Editor and XML schema moved to {{{http://qmrf.sf.net}qmrf.sf.net}}   

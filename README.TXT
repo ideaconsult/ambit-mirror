@@ -107,6 +107,29 @@ normal user and password are guest/guest by default and are used in database que
 
 ----------------------------------------------------------------------
 CHANGELOG
+AMBIT2 2.4.11-SNAPSHOT
+
+SVN URLs changed due to SourceForge platform upgrade
+ambit2-rendering: Atom labels rendered using alpha transparency channel 
+ambit2-www: Extended /compound REST reosurce to allow adding and setting property values by HTTP PUT
+ambit2-www: Fix for json breaking url encoded URI parameter if it contains #
+ambit2-www: Support to return statistics per compound when searching by structure (no of of collections). JSON support only
+ambit2-www: Fixed the procedure of adding (POST) entries to an existing /dataset/R{id}
+ambit2-www: Added another view on /dataset/RNo  - read only  /collection/{folder}/{datasetname}
+ambit2-www: ?mol=true option supported by all structure retrieval resources (returns MOL inside JSON)
+ambit2-www: compound json generator refactored
+ambit2-www: Modified to return compound uri with features upon /compound POST/PUT
+ambit2-www: New algorithms - Mopac with OBabel and Balloon(to generate starting structure)
+ambit2-www: Added support for custom RDF data types to represent ToxicityCategories
+ambit2-www: Version tooltip in the HTML rendering
+ambit2-descriptors: Klekota-Roth fingerprinter wrapper
+ambit2-descriptors: Added atom environment support for atom types Het, Hev, Hal (Sybyl atom types)
+ambit2-descriptors: Atom environment matrix descriptor
+ambit2-mopac: less strict default settings for MOPAC and 30 min timeout
+ambit2-mopac: Wrapper for Mopac with OBabel and Balloon(to generate starting structure)
+
+Toxtree 2.5.9-SNAPSHOT
+
 AMBIT2 2.4.10-SNAPSHOT
 Freemarker support. HTML pages refactored to use Freemarker templates and Javascript
 JSON support extended to more resources (tasks, facets, models, algorithms, admin)
@@ -226,6 +249,10 @@ GRANT ALL ON `ambit2`.* TO 'guest'@'::1' IDENTIFIED BY 'guest';
 GRANT TRIGGER ON `ambit2`.* TO 'guest'@'localhost';
 GRANT TRIGGER ON `ambit2`.* TO 'guest'@'127.0.0.1';
 GRANT TRIGGER ON `ambit2`.* TO 'guest'@'::1';
+-- 
+GRANT CREATE ROUTINE ON `ambit2`.* TO 'guest'@'localhost';
+GRANT CREATE ROUTINE ON `ambit2`.* TO 'guest'@'127.0.0.1';
+GRANT CREATE ROUTINE ON `ambit2`.* TO 'guest'@'::1';
 -- To be able to import datasets
 GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'localhost';
 GRANT EXECUTE ON PROCEDURE `ambit2`.findByProperty TO 'guest'@'127.0.0.1';

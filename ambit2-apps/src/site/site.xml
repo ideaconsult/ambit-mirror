@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="iso-8859-1"?>
 <project name="AMBIT2">
-<!-- 
   <bannerLeft>
     <name>Ambit</name>
     <src>http://ambit.sourceforge.net/images/ambit-logo.png</src>
@@ -9,11 +8,10 @@
   <bannerRight>
     <src>http://ambit.sourceforge.net/images/ambit-version.png</src>
   </bannerRight>
- -->  
-  <body>  
-  <head>
-     <!-- Google Analytics - Start -->
-  <script type="text/javascript">
+  <body>
+    <head>
+      <!-- Google Analytics - Start -->
+      <script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-25223944-1']);
@@ -26,11 +24,8 @@
   })();
 
 </script>
-
-  <!-- Google Analytics - End -->
-
-
- <script type="text/javascript">
+      <!-- Google Analytics - End -->
+      <script type="text/javascript">
       function expand( item ) {
         var expandIt = document.getElementById( item );
         if( expandIt.style.display == "block" ) {
@@ -52,86 +47,69 @@
       #end
     #end  
   </head>
-
     <links>
-      <item name="Toxtree" href="http://toxtree.sf.net"/>
-      <item name="Toxmatch" href="http://ihcp.jrc.ec.europa.eu/our_labs/computational_toxicology/qsar_tools/toxmatch"/>
-      <item name="ToxPredict" href="http://toxpredict.org"/>
-      <item name="AMBIT 2.0" href="http://ambit.sourceforge.net"/>
-      <item name="AMBIT REST web services" href="http://apps.ideaconsult.net:8080/ambit2"/>
+      <item name="Toxtree" href="http://toxtree.sf.net" />
+      <item name="Toxmatch" href="http://ihcp.jrc.ec.europa.eu/our_labs/computational_toxicology/qsar_tools/toxmatch" />
+      <item name="ToxPredict" href="http://toxpredict.org" />
+      <item name="AMBIT 2.0" href="http://ambit.sourceforge.net" />
+      <item name="AMBIT REST web services" href="http://apps.ideaconsult.net:8080/ambit2" />
     </links>
-    
-    
-   <menu name="AMBIT">
-
-      <item name="Introduction" href="/index.html"/>
-      
-      <item name="Download" href="./downloads.html" collapse="true" >
-          <description>AMBIT downloads</description>
-          <item name="Desktop applications" href="./downloads.html#desktop">
-      		<item name="AMBIT XT" href="./download_ambitxt.html"/>
-            <item name="AMBIT Discovery" href="./download_ambitdiscovery.html"/>
-            <item name="(Q)MRF Editor and XML schema" href="./download_qmrfeditor.html"/>
-          </item>
-          <item name="Web services" href="./downloads.html#services">
-            <item name="AMBIT REST web services" href="./download_ambitrest.html"/>
-            <item name="OpenTox ontology service" href="./download_ontologyservice.html"/>
-            <item name="OpenTox Policy service" href="./download_otpolicy.html"/>
-          </item>  
-          <item name="Web applications" href="./downloads.html#applications">
-            <item name="ToxPredict" href="./download_toxpredict.html"/>
-          </item>            
-		  <item name="Libraries" href="./downloads.html#Libraries">          
-            <item name="OpenTox client library" href="./download_otclient.html"/>
-            <item name="OpenTox AA client library" href="./download_aaclient.html"/>
-             <item name="AMBIT modules" href="./download_ambitlibs.html"/>
- 		</item>             
+    <menu name="AMBIT">
+      <item name="Introduction" href="/index.html" />
+      <item name="Download" href="./downloads.html" collapse="true">
+        <description>AMBIT downloads</description>
+        <item name="Desktop applications" href="./downloads.html#desktop">
+          <item name="AMBIT XT" href="./download_ambitxt.html" />
+          <item name="AMBIT Discovery" href="./download_ambitdiscovery.html" />
+          <item name="(Q)MRF Editor and XML schema" href="./download_qmrfeditor.html" />
+        </item>
+        <item name="Web services" href="./downloads.html#services">
+          <item name="AMBIT REST web services" href="./download_ambitrest.html" />
+          <item name="OpenTox ontology service" href="./download_ontologyservice.html" />
+          <item name="OpenTox Policy service" href="./download_otpolicy.html" />
+        </item>
+        <item name="Web applications" href="./downloads.html#applications">
+          <item name="ToxPredict" href="./download_toxpredict.html" />
+        </item>
+        <item name="Libraries" href="./downloads.html#Libraries">
+          <item name="OpenTox client library" href="./download_otclient.html" />
+          <item name="OpenTox AA client library" href="./download_aaclient.html" />
+          <item name="AMBIT modules" href="./download_ambitlibs.html" />
+        </item>
       </item>
       <!--
       <item name="Search" href="/search.html"/>
       -->
-	</menu>
-	
-
-	 <menu name="AMBIT REST web services">
-		
-
-    <item name="OpenTox API (with examples)"   href="/api.html" collapse="true">
-    <description>OpenTox Application Programming Interface description</description>
-      <item name="Data model" href="./api_datamodel.html" />
-
-      	<item name="Compound" href="./api_compound.html"/>
-      	<item name="Feature" href="./api_feature.html"/>
-      	<item name="Datasets" href="./api_dataset.html">
-      		<item name="Datasets comparison demo" href="./demo_datacomparison.html"/> 
-      	</item>
-      	<item name="Algorithm" href="./api_algorithm.html" />
-      	<item name="Model" href="./api_model.html" />
-      	<item name="Task" href="./api_task.html" />
-      	<item name="Ontology" href="./api_ontology.html" />
-     </item>    
-     <item name="AMBIT OpenTox API implementation"  collapse="true" href="/ambit_services.html" >
-
-       	<item name="Download" href="/download_ambitrest.html"/>
-       	  
-	</item>    
-	
-	</menu>
-	<menu name="Support">      
-	
-	  <item name="Support and feedback" href="/support.html" />
-  	  <item name="Forum" href="http://sourceforge.net/projects/ambit/forums" />
-	  <item name="Mailing lists" href="/mail-lists.html" />
-	  <item name="Bug reports" href="/issue-tracking.html" />
     </menu>
-  
+    <menu name="AMBIT REST web services">
+      <item name="OpenTox API (with examples)" href="/api.html" collapse="true">
+        <description>OpenTox Application Programming Interface description</description>
+        <item name="Data model" href="./api_datamodel.html" />
+        <item name="Compound" href="./api_compound.html" />
+        <item name="Feature" href="./api_feature.html" />
+        <item name="Datasets" href="./api_dataset.html">
+          <item name="Datasets comparison demo" href="./demo_datacomparison.html" />
+        </item>
+        <item name="Algorithm" href="./api_algorithm.html" />
+        <item name="Model" href="./api_model.html" />
+        <item name="Task" href="./api_task.html" />
+        <item name="Ontology" href="./api_ontology.html" />
+      </item>
+      <item name="AMBIT OpenTox API implementation" collapse="true" href="/ambit_services.html">
+        <item name="Download" href="/download_ambitrest.html" />
+      </item>
+    </menu>
+    <menu name="Support">
+      <item name="Support and feedback" href="/support.html" />
+      <item name="Forum" href="http://sourceforge.net/projects/ambit/forums" />
+      <item name="Mailing lists" href="/mail-lists.html" />
+      <item name="Bug reports" href="/issue-tracking.html" />
+    </menu>
     <menu name="AMBIT publications">
-    
-    	<item name="How to cite AMBIT" href="/pubs_citeambit.html" />
-    </menu> 
-    <menu ref="reports"/>
-
-<!--
+      <item name="How to cite AMBIT" href="/pubs_citeambit.html" />
+    </menu>
+    <menu ref="reports" />
+    <!--
     <menu name="AMBIT 2.0">
       <item name="Introduction" href="/intro.html"/>
       <item name="Download" href="/downloads.html"/>
@@ -145,47 +123,14 @@
     <menu ref="parent"/>
 
 -->
-
   </body>
   <poweredBy>
-    <logo name="SourceForge" href="http://sourceforge.net/projects/ambit"
-          img="http://sflogo.sourceforge.net/sflogo.php?group_id=191756&amp;type=12"/>
+    <logo name="SourceForge" href="http://sourceforge.net/projects/ambit" img="http://sflogo.sourceforge.net/sflogo.php?group_id=191756&amp;type=12" />
   </poweredBy>
-
-
-    <skin>
-        <groupId>org.apache.maven.skins</groupId>
-    	<artifactId>maven-fluido-skin</artifactId>
-    	<version>1.3.0</version>
-    </skin>
-
-  <custom>
-    <fluidoSkin>
-      <topBarEnabled>true</topBarEnabled>
-       <topBarContainerStyle>width: 90%;</topBarContainerStyle>
-      <sideBarEnabled>false</sideBarEnabled>
-      <topBarIcon>
-        <name>AMBIT</name>
-        <alt>AMBIT</alt>
-        <src>/images/ambit-logo.png</src>
-        <href>/index.html</href>
-      </topBarIcon>
-      <googleSearch>
-        <sitesearch>http://ambit.sourceforge.net</sitesearch>
-      </googleSearch>
-      <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
-      <twitter>
-        <user>10705013</user>
-        <showUser>false</showUser>
-        <showFollowers>false</showFollowers>
-      </twitter>
-       <ohloh>
-        <projectId>ambit</projectId>
-        <widget>stats</widget>
-      </ohloh>
-    </fluidoSkin>
-  </custom>    
-  <publishDate position="navigation-bottom" format="MM-dd-yy"/>
-
-
+  <skin>
+    <groupId>com.googlecode.fluido-skin</groupId>
+    <artifactId>fluido-skin</artifactId>
+    <version>1.3</version>
+  </skin>
+  <publishDate position="navigation-bottom" format="MM-dd-yy" />
 </project>
