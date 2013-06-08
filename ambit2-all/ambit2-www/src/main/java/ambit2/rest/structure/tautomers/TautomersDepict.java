@@ -8,14 +8,18 @@ import java.util.List;
 import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tautomers.InChITautomerGenerator;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.opentox.rest.HTTPClient;
 import org.restlet.data.Reference;
@@ -24,6 +28,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.namestructure.Name2StructureProcessor;
 import ambit2.rest.AmbitResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
@@ -55,37 +60,50 @@ public class TautomersDepict extends AbstractDepict {
 	protected IAtomContainer getAtomContainer(String smiles) throws ResourceException {
 		IAtomContainer mol = null;
 		try {
-			if (parser == null) parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
-			smiles = smiles.trim();
-			mol = parser.parseSmiles(smiles);
-			
-			boolean aromatic = false;
-			if (mol!=null) 
-				for (IAtom atom:mol.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) {
-					aromatic=true;
-					break;
-				}
-			if (aromatic) try {
-				FixBondOrdersTool fbt = new FixBondOrdersTool();
-				mol = fbt.kekuliseAromaticRings((IMolecule)mol);
+	   		if (smiles.startsWith(AmbitCONSTANTS.INCHI)) {
+    			InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+    			InChIToStructure c =f.getInChIToStructure(smiles, SilentChemObjectBuilder.getInstance());
+    			
+    			if ((c==null) || (c.getAtomContainer()==null) || (c.getAtomContainer().getAtomCount()==0)) 
+    				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,String.format("%s %s %s", c.getReturnStatus(),c.getMessage(),c.getLog()));
+    			
+    			mol = c.getAtomContainer();
+    			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+    			mol = AtomContainerManipulator.removeHydrogens(mol);
+				CDKHydrogenAdder.getInstance(mol.getBuilder()).addImplicitHydrogens(mol);
+    			
+	   		} else {	
+				if (parser == null) parser = new SmilesParser(SilentChemObjectBuilder.getInstance());
+				smiles = smiles.trim();
+				mol = parser.parseSmiles(smiles);
+				boolean aromatic = false;
 				if (mol!=null) 
 					for (IAtom atom:mol.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) {
-						atom.setFlag(CDKConstants.ISAROMATIC,false);
+						aromatic=true;
+						break;
 					}
-			} catch (Exception x) {
-				//keep old mol
-			}
+				if (aromatic) try {
+					FixBondOrdersTool fbt = new FixBondOrdersTool();
+					mol = fbt.kekuliseAromaticRings((IMolecule)mol);
+					if (mol!=null) {
+						for (IAtom atom:mol.atoms()) if (atom.getFlag(CDKConstants.ISAROMATIC)) 
+							atom.setFlag(CDKConstants.ISAROMATIC,false);
+						for (IBond bond: mol.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC))
+							bond.setFlag(CDKConstants.ISAROMATIC,false);
+					}
+				} catch (Exception x) {
+					//keep old mol
+				}
+	   		}
 
 		} catch (Exception x) {
         	Name2StructureProcessor processor = new Name2StructureProcessor();
         	try {
 				mol = processor.process(smiles);
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-				//CDKHydrogenAdder.getInstance(mol.getBuilder()).addImplicitHydrogens(mol);
 				AtomContainerManipulator.removeHydrogens(mol);
-				//SmilesGenerator g = new SmilesGenerator(false);
-				//(g.createSMILES(mol));
-				
+				CDKHydrogenAdder.getInstance(mol.getBuilder()).addImplicitHydrogens(mol);
+
         	} catch (Exception xx) {
         		mol = null;
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
@@ -273,6 +291,7 @@ public class TautomersDepict extends AbstractDepict {
 		 InChITautomerGenerator itg = new InChITautomerGenerator(); 
 			StringBuilder b = new StringBuilder();
 		 try {
+			 
 			 List<IAtomContainer> resultTautomers = itg.getTautomers(mol);
 			 SmilesGenerator gen = new SmilesGenerator(false);
 				for (int i = 0; i < resultTautomers.size(); i++) {		
