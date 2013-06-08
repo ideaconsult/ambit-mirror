@@ -40,7 +40,7 @@
 
 
 <li class="ui-selectee">
-<a href="${ambit_root}/model"><span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>Models</a>
+<a href="${ambit_root}/model?max=1000"><span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>Models</a>
 </li>
 
 <#if openam_token??>
