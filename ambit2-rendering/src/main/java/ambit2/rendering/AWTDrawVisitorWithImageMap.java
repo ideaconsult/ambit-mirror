@@ -23,18 +23,14 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.font.FontRenderContext;
 import java.awt.font.TextAttribute;
-import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
-import java.text.AttributedString;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -304,56 +300,51 @@ public class AWTDrawVisitorWithImageMap extends AbstractAWTDrawVisitor {
 
     private void visit(AtomSymbolElement atomSymbol) {
         this.graphics.setFont(this.fontManager.getFont());
-        
-        String label = atomSymbol.text;
-        int start = label.length();
-        if (atomSymbol.formalCharge == 1) {
-        	label += "+";
-        } else if (atomSymbol.formalCharge > 1) {
-            label += atomSymbol.formalCharge + "+";
-        } else if (atomSymbol.formalCharge == -1) {
-            label += "-";
-        } else if (atomSymbol.formalCharge < -1) {
-            int absCharge = Math.abs(atomSymbol.formalCharge);
-            label += absCharge + "-";
-        }
-        
-        AttributedString as = new AttributedString(label);
-        as.addAttribute(TextAttribute.FOREGROUND, atomSymbol.color);
-        as.addAttribute(TextAttribute.SIZE, this.graphics.getFont().getSize());
-        as.addAttribute(TextAttribute.FAMILY, this.graphics.getFont().getFamily());
-        if (graphics.getFont().isBold())
-        	as.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-        if (atomSymbol.formalCharge != 0) {
-        	as.addAttribute(TextAttribute.SUPERSCRIPT,TextAttribute.SUPERSCRIPT_SUPER,start,label.length());
-        }	
-   
-        
-        Point point =  super.getTextBasePoint(label, atomSymbol.xCoord, atomSymbol.yCoord, graphics);
-        Rectangle2D textBounds = this.getTextBounds(label, atomSymbol.xCoord, atomSymbol.yCoord, graphics);
+        Point point = 
+            super.getTextBasePoint(
+                    atomSymbol.text, atomSymbol.xCoord, atomSymbol.yCoord, graphics);
+        Rectangle2D textBounds = 
+            this.getTextBounds(atomSymbol.text, atomSymbol.xCoord, atomSymbol.yCoord, graphics);
+        //this.graphics.setColor(getBackgroundColor());
         this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_IN , 0f ));
         this.graphics.fill(textBounds);
         this.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER , 1f ));
         this.graphics.setColor(atomSymbol.color);
+        this.graphics.drawString(atomSymbol.text, point.x, point.y);
         
-        //FontRenderContext frc = graphics.getFontRenderContext();
-        //TextLayout t = new TextLayout(as.getIterator(), frc);
-        //t.draw(this.graphics, point.x, point.y);
+        int offset = 10;    // XXX
+        String chargeString;
+        if (atomSymbol.formalCharge == 0) {
+            return;
+        } else if (atomSymbol.formalCharge == 1) {
+            chargeString = "+";
+        } else if (atomSymbol.formalCharge > 1) {
+            chargeString = atomSymbol.formalCharge + "+";
+        } else if (atomSymbol.formalCharge == -1) {
+            chargeString = "-";
+        } else if (atomSymbol.formalCharge < -1) {
+            int absCharge = Math.abs(atomSymbol.formalCharge);
+            chargeString = absCharge + "-";
+        } else {
+            return;
+        }
+       
+        int xCoord = (int) textBounds.getCenterX();
+        int yCoord = (int) textBounds.getCenterY();
+        if (atomSymbol.alignment == 1) {           // RIGHT
+            this.graphics.drawString(
+                    chargeString, xCoord + offset, (int)textBounds.getMinY());
+        } else if (atomSymbol.alignment == -1) {   // LEFT
+            this.graphics.drawString(
+                    chargeString, xCoord - offset, (int)textBounds.getMinY());
+        } else if (atomSymbol.alignment == 2) {    // TOP
+            this.graphics.drawString(
+                    chargeString, xCoord, yCoord - offset);
+        } else if (atomSymbol.alignment == -2) {   // BOT
+            this.graphics.drawString(
+                    chargeString, xCoord, yCoord + offset);
+        }
         
-        this.graphics.drawString(as.getIterator(), point.x, point.y);
-        
-    }
-    
-	@TestMethod("testGetTextBounds")
-    protected Rectangle2D getTextBounds(String text, double xCoord, double yCoord,
-            Graphics2D graphics) {
-        FontMetrics fontMetrics = graphics.getFontMetrics();
-        Rectangle2D bounds = fontMetrics.getStringBounds(text, graphics);
-                
-        double width = bounds.getWidth();
-        double height = bounds.getHeight();
-        int[] point = this.transformPoint(xCoord, yCoord);
-        return new Rectangle2D.Double(point[0] - Math.round(width / 2.0), point[1] -  Math.round(height / 2.0), width, height);
     }
     
     private void visit(RectangleElement rectangle) {
