@@ -211,4 +211,61 @@ a.topLinks {
     display: block;
     overflow: hidden;
     padding: 0px;
-}  
+}
+
+
+svg {
+  font: 10px sans-serif;
+  FONT-FAMILY: Trebuchet MS, Verdana, Arial;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+  
+}
+
+.x.axis line {
+  stroke: #fff;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
+}
+
+sup, sub {
+  line-height: 0;
+}
+
+text.active {
+  fill: red;
+}
+
+
+.background {
+  fill: #eee;
+}
+
+line {
+  stroke: #fff;
+}
+
+code {
+  line-height: 1em;
+}
+
+.bar rect {
+  fill: #344049;
+  shape-rendering: crispEdges;
+  stroke: gray;
+}
