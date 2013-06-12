@@ -23,6 +23,7 @@ public abstract class AbstractRepresentationConvertor<Item,Content,Output,R,Medi
 	protected ItemReporter reporter;
 	protected final String fileNamePrefix;
 	protected Media mediaType;
+	protected long startTime;
 	
 	public Media getMediaType() {
 		return mediaType;
@@ -34,6 +35,12 @@ public abstract class AbstractRepresentationConvertor<Item,Content,Output,R,Medi
 
 	public ItemReporter getReporter() {
 		return reporter;
+	}
+	public long getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 	public void setReporter(ItemReporter reporter) {
 		this.reporter = reporter;

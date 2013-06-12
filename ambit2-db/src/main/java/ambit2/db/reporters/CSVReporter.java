@@ -239,7 +239,9 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 				Object value = item.getProperty(p);
 				
 				boolean tdelimiter = false;
-				try { tdelimiter = (value!=null) && (value.toString().indexOf(delimiter)>=0);} catch (Exception x) {}
+				try { 
+					tdelimiter = (value!=null) && ((value.toString().indexOf(delimiter)>=0) || Property.opentox_CAS.equals(p.getLabel()));
+				} catch (Exception x) {}
 			
 				if (!tdelimiter && (p.getClazz()==Number.class)) 
 					writer.write(String.format("%s%s",

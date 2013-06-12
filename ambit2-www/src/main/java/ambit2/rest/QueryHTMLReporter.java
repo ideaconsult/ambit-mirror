@@ -72,7 +72,7 @@ public abstract class QueryHTMLReporter<T,Q extends IQueryRetrieval<T>>  extends
 	public void header(Writer w, Q query) {
 		try {
 			if (!headless) {
-				AmbitResource.writeHTMLHeader(w,query.toString(),uriReporter.getRequest(),
+				AmbitResource.writeHTMLHeader(w,query==null?"":query.toString(),uriReporter.getRequest(),
 						getUriReporter().getResourceRef(),
 						getUriReporter()==null?null:getUriReporter().getDocumentation());
 				//output.write(AmbitResource.printWidgetHeader(query.toString()));
