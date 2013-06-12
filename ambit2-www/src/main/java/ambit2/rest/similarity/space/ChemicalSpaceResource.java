@@ -22,7 +22,15 @@ import ambit2.rest.similarity.AbstractPairwiseResource;
 
 public class ChemicalSpaceResource<Q extends IQueryRetrieval<ChemSpaceCell>> extends AbstractPairwiseResource<ChemSpaceCell,Q> { 
 	public final static String resource =  "/space";
-	
+
+	public ChemicalSpaceResource() {
+		super();
+		setHtmlbyTemplate(true);
+	}
+	@Override
+	public String getTemplateName() {
+		return "chemspace.ftl";
+	}
 	@Override
 	protected QueryAbstractReporter createHTMLReporter(Dimension d) {
 		return new ChemicalSpaceHTMLReporter(getRequest(),DisplayMode.table,null,(ChemicalSpaceJSONReporter)createJSONReporter());
