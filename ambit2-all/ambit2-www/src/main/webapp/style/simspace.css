@@ -1,0 +1,27 @@
+.spacegrid .ui-selecting { 
+	background: #FECA40; 
+}
+.spacegrid .ui-selected { 
+	background: #F39814; color: white; 
+}
+.spacegrid 
+{ 
+	list-style-type: none; margin: 1; padding: 1; 
+}
+.spacegrid li 
+{ 
+	margin: 3px; padding: 1px; float: left; width: 202px; height: 230px; font-size: 1em; text-align: center; 
+}
+
+.spacelist .ui-selecting { 
+	background: #FECA40; 
+}
+.spacelist .ui-selected { 
+	background: #F39814; color: white; 
+}
+.spacelist { 
+	list-style-type: none; margin: 0; padding: 0; width: 60%; 
+}
+.spacelist li { 
+	margin: 3px; padding: 0.4em; font-size: 1em; width: 152px;  height: 180px; 
+}

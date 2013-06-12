@@ -25,7 +25,14 @@ public abstract class QueryAbstractReporter<T,Q extends IQueryRetrieval<T>,Outpu
 	protected long timeout = 0;
 	protected AbstractBatchProcessor batch;
 	protected String licenseURI;
+	protected long startTime;
 	
+	public long getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
 	public String getLicenseURI() {
 		return licenseURI;
 	}
@@ -94,6 +101,7 @@ public abstract class QueryAbstractReporter<T,Q extends IQueryRetrieval<T>,Outpu
 		if (batch!=null) batch.setCloseConnection(closeConnection);
 	}
 	public Output process(Q query) throws AmbitException {
+		startTime = System.currentTimeMillis();
 		output = getOutput();
 		if (isShowHeader()) header(output,query);
 

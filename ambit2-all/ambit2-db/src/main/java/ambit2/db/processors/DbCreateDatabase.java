@@ -177,6 +177,14 @@ skip-name-resolve
 		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION sortstring TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION sql_xtab TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE p_xtab TO 'guest'@'%s';",localAddr));
+		        //chem space vis
+		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE tanimotoBinnedSpace TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION tanimotoCell TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION tanimotoChemicals TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION getBinnedRange TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION getPropertyMax TO 'guest'@'%s';",localAddr));
+		        st.executeQuery(String.format("GRANT EXECUTE ON FUNCTION getPropertyMin TO 'guest'@'%s';",localAddr));
+		        
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE setAtomEnvironment TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT SELECT ON `mysql`.`proc` TO 'guest'@'%s';",localAddr));
 		        st.executeQuery(String.format("GRANT EXECUTE ON PROCEDURE findByProperty TO 'guest'@'%s';",localAddr));

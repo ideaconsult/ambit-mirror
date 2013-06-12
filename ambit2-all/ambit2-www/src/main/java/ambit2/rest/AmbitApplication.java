@@ -105,7 +105,9 @@ import ambit2.rest.routers.opentox.DatasetsRouter;
 import ambit2.rest.routers.opentox.FeaturesRouter;
 import ambit2.rest.routers.opentox.ModelRouter;
 import ambit2.rest.routers.opentox.TaskRouter;
+import ambit2.rest.similarity.SimilarityMatrixResource;
 import ambit2.rest.similarity.SimilarityResource;
+import ambit2.rest.similarity.space.ChemicalSpaceResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
@@ -504,6 +506,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected Router createSimilaritySearchRouter() {
 		Router similarity = new MyRouter(getContext());
 		similarity.attachDefault(SimilarityResource.class);
+		similarity.attach(SimilarityMatrixResource.resource,SimilarityMatrixResource.class);
+		similarity.attach(ChemicalSpaceResource.resource,ChemicalSpaceResource.class);
 		return similarity;
 	}
 	protected Router createSMARTSSearchRouter() {
