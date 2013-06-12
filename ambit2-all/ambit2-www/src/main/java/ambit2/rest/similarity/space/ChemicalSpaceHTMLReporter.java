@@ -33,6 +33,8 @@ public class ChemicalSpaceHTMLReporter  extends QueryHTMLReporter<ChemSpaceCell,
 		this.similarityJSONReporter = reporter;
 		setUriReporter(similarityJSONReporter.getCmpReporter());
 	}
+	
+	
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
 		return null;

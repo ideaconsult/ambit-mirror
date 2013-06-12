@@ -62,7 +62,6 @@ public class AmbitResource extends FreeMarkerResource {
 		"<link href=\"%s/style/skeleton/table.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		"<link href=\"%s/style/skeleton/ambit2.css\" rel=\"stylesheet\" type=\"text/css\">\n",
 		"<link href=\"%s/images/favicon.ico\" rel=\"shortcut icon\" type=\"image/ico\">\n",
-		"<link href=\"%s/style/simspace.css\" rel=\"stylesheet\" type=\"text/css\">\n"
 	};
 
 	private final static String[] js = new String[] {
@@ -74,16 +73,6 @@ public class AmbitResource extends FreeMarkerResource {
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-feature.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-misc.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-compound.js'></script>\n",
-		//don't include it always
-		"<script type='text/javascript' src='%s/scripts/d3.v2.min.js'></script>\n",
-		"<script type='text/javascript' src='%s/scripts/pairwisesimilarity.js'></script>\n",
-		"<script type='text/javascript' src='%s/scripts/spacesimilarity.js'></script>\n",
-		
-		//don't include it always
-		"<script type='text/javascript' src='%s/scripts/d3.v2.min.js'></script>\n",
-		"<script type='text/javascript' src='%s/scripts/pairwisesimilarity.js'></script>\n",
-		"<script type='text/javascript' src='%s/scripts/spacesimilarity.js'></script>\n",
-			
 		//"<script type='text/javascript' src='%s/scripts/jendpoints.js'></script>\n",
 		//"<script type=\"text/javascript\" src=\"%s/jquery/jquery.MultiFile.pack.js\"></script>\n",
 		"<script type='text/javascript' src='%s/jme/jme.js'></script>\n",
