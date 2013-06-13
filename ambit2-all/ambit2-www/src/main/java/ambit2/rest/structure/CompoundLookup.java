@@ -214,7 +214,14 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 					//eventually search by inchikey?
 					q.setValue(inchi[0]); 
 					query = q;
+				} catch (InvalidSmilesException x) {
+					query= null;
+					//otherwise this was valid smiles, but inchi failed!
+				} catch (CDKException x) {
+					casesens = true; 
+					query= null;
 				} catch (Exception x) {
+					casesens = true; 
 					query= null;
 				}
 			}
@@ -335,19 +342,12 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		} else return null;
 	}
 	*/
-	public String[] smiles2inchi(String smiles) throws ResourceException {
+	public String[] smiles2inchi(String smiles) throws InvalidSmilesException, CDKException {
 		SmilesParser p = new SmilesParser(SilentChemObjectBuilder.getInstance());
-		try {
-			IAtomContainer c = p.parseSmiles(smiles);
-			if ((c==null) || (c.getAtomCount()==0)) 
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,smiles);
-			return atomcontainer2inchi(c, smiles);
-		} catch (InvalidSmilesException x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
-		} catch (CDKException x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
-		}
-		
+		IAtomContainer c = p.parseSmiles(smiles);
+		if ((c==null) || (c.getAtomCount()==0)) 
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,smiles);
+		return atomcontainer2inchi(c, smiles);
 	}
 	
 	public String[] atomcontainer2inchi(IAtomContainer c, String origin) throws ResourceException {
