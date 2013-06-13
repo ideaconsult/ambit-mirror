@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.CMLReader;
+import org.openscience.cdk.io.DefaultChemObjectReader;
 import org.openscience.cdk.io.HINReader;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.MDLReader;
@@ -24,9 +26,13 @@ import ambit2.core.io.sj.MalariaHTSDataDelimitedReader;
  * Use {@link #getReader(InputStream, String)} to get a reader of the right type.
  * 
  * @author Nina Jeliazkova nina@acad.bg
- * <b>Modified</b> Aug 31, 2006
+ * <b>Modified</b> June 13, 2013
  */
 public class FileInputState extends FileState implements IInputState {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4293026709920994430L;
 	public transient static final int SDF_INDEX = 0;
 	public transient static final int CSV_INDEX = 1;
 	public transient static final int SMI_INDEX = 2;
@@ -44,12 +50,15 @@ public class FileInputState extends FileState implements IInputState {
 	public transient static final int MALARIA_HTS_SHEETS = 14;
 	public transient static final int ZIP_INDEX = 15;
 	public transient static final int I5D_INDEX = 16;
+	public transient static final int I5Z_INDEX = 17;
+	public transient static final int NANOCMLx_INDEX = 18;
+	public transient static final int NANOCMLd_INDEX = 19;
 	
 	//TODO support for .xlsx 
 	public transient static final String[] extensions = {
 		".sdf",".csv",".smi",".txt",".mol",".ichi",".inchi",
 		".cml",".hin",".pdb",".xls",".xls",".echaxml",".xml",
-		".sht",".zip",".i5d"};
+		".sht",".zip",".i5d",".i5z",".nmx",".nmd"};
 	public transient static final String[] extensionDescription = 
 		{"SDF files with chemical compounds (*.sdf)",
 		"CSV files (Comma delimited) *.csv)",
@@ -67,7 +76,10 @@ public class FileInputState extends FileState implements IInputState {
 		"Leadscope ToXML 3.08 (*.xml)",
 		"Malaria HTS data sheets (*.sht)",
 		"ZIP archive (*.zip)",
-		"IUCLID5 xml (*.i5d)"
+		"IUCLID5 xml (*.i5d)",
+		"IUCLID5 archive (*.i5z)",
+		"Nano CML (*.nmx)",
+		"Nano CML (*.nmd)"
 		};	
 	public FileInputState() {
 		super();
@@ -152,8 +164,16 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[ZIP_INDEX])) {
 			return new ZipReader(stream);
 		} else if (ext.endsWith(extensions[I5D_INDEX])) {
-			return new I5ReaderSimple(stream);								
-		} else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
+			return new I5ReaderSimple(stream);			
+		} else if (ext.endsWith(extensions[NANOCMLx_INDEX]) || ext.endsWith(extensions[NANOCMLd_INDEX])) try {
+			Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.NanoCMLIteratingReader");
+			Constructor<? extends Runnable> constructor = clazz.getConstructor();
+			Object o = constructor.newInstance(stream);
+			return new IteratingChemObjectReaderWrapper((DefaultChemObjectReader)o);							
+		} catch (Exception x) {
+			throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext,x);
+		}
+		else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
 	}
 	
 }

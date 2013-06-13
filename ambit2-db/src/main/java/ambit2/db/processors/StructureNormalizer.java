@@ -29,9 +29,12 @@
 
 package ambit2.db.processors;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.logging.Level;
 
 import net.sf.jniinchi.INCHI_RET;
+import nu.xom.ParsingException;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.inchi.InChIGenerator;
@@ -45,8 +48,10 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
@@ -72,8 +77,18 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		inchiKey = new InchiPropertyKey();
 		strucType = new StructureTypeProcessor();
 	}
-	public IStructureRecord process(IStructureRecord structure)
-			throws AmbitException {
+	public IStructureRecord process(IStructureRecord structure)	throws AmbitException {
+		if ((structure.getFormat()!=null) && MOL_TYPE.NANO.name().equals(structure.getFormat())) {
+			try { //nanomaterial
+				Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.NanoStructureNormalizer");
+				Method method = clazz.getMethod("normalizeNano", IStructureRecord.class);
+				return (IStructureRecord) method.invoke(null, structure);
+			} catch (Exception x) {
+	  		   if (x instanceof AmbitException) throw (AmbitException)x;
+	  		   else throw new AmbitException(x);
+			}
+		} //else process as chemical	
+		
 		IAtomContainer molecule = molReader.process(structure);
 		
 		if ((molecule == null) || (molecule.getAtomCount()==0)) structure.setType(STRUC_TYPE.NA);

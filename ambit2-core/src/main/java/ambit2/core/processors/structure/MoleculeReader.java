@@ -29,6 +29,8 @@
 
 package ambit2.core.processors.structure;
 
+import java.lang.reflect.Method;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -42,6 +44,7 @@ import ambit2.base.processors.CASProcessor;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.MoleculeTools;
+import ambit2.core.io.FileInputState;
 
 public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtomContainer> {
 	
@@ -63,59 +66,69 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
     		} catch (Exception x) {
     			throw new AmbitException(x);
     		}
-            switch (format) {
-            case SDF: {
-            	try {
-            		IAtomContainer ac =  MoleculeTools.readMolfile(target.getContent());
-            		if ((ac!=null) && (ac.getProperties()!=null)) {
-            			Object title = ac.getProperty(CDKConstants.TITLE);
-            			if (title != null) {
-            				if (CASProcessor.isValidFormat(title.toString())) try {
-            					if (casTransformer==null) casTransformer = new CASProcessor();
-            					ac.setProperty(AmbitCONSTANTS.CASRN,casTransformer.process(title.toString()));
+           return handleFormat(format, target);
+    }
+
+    protected IAtomContainer handleFormat(MOL_TYPE format,IStructureRecord target) throws AmbitException{
+    	 switch (format) {
+         case SDF: {
+         	try {
+         		IAtomContainer ac =  MoleculeTools.readMolfile(target.getContent());
+         		if ((ac!=null) && (ac.getProperties()!=null)) {
+         			Object title = ac.getProperty(CDKConstants.TITLE);
+         			if (title != null) {
+         				if (CASProcessor.isValidFormat(title.toString())) try {
+         					if (casTransformer==null) casTransformer = new CASProcessor();
+         					ac.setProperty(AmbitCONSTANTS.CASRN,casTransformer.process(title.toString()));
 	            			} catch (Exception x) {}
 	            			ac.removeProperty(CDKConstants.TITLE);
 	            		}
 	        	   		ac.removeProperty(CDKConstants.REMARK);          	
-            		}
-            		return ac;
-                } catch (Exception x) {
-                    throw new AmbitException(x);
-                }
-                
-            }
-           case CML:     
-        	   	try {
-        	   		IAtomContainer ac =  MoleculeTools.readCMLMolecule(target.getContent());
-            		if ((ac!=null) && (ac.getProperties()!=null)) {
-            			Object title = ac.getProperty(CDKConstants.TITLE);
-            			if (title != null) {
-            				if (CASProcessor.isValidFormat(title.toString())) try {
-            					if (casTransformer==null) casTransformer = new CASProcessor();
-            					ac.setProperty(AmbitCONSTANTS.CASRN,casTransformer.process(title.toString()));
+         		}
+         		return ac;
+             } catch (Exception x) {
+                 throw new AmbitException(x);
+             }
+             
+         }
+        case CML:     
+     	   	try {
+     	   		IAtomContainer ac =  MoleculeTools.readCMLMolecule(target.getContent());
+         		if ((ac!=null) && (ac.getProperties()!=null)) {
+         			Object title = ac.getProperty(CDKConstants.TITLE);
+         			if (title != null) {
+         				if (CASProcessor.isValidFormat(title.toString())) try {
+         					if (casTransformer==null) casTransformer = new CASProcessor();
+         					ac.setProperty(AmbitCONSTANTS.CASRN,casTransformer.process(title.toString()));
 	            			} catch (Exception x) {}
 	            			ac.removeProperty(CDKConstants.TITLE);
 	            		}
 	        	   		ac.removeProperty(CDKConstants.REMARK);            	
-            		}
-        	   		return ac;
-                } catch (Exception x) {
-                    throw new AmbitException(x);
-                }
-           case INC: 
-        	   try {
-        		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
-    		
-        		   InChIToStructure c =inchiFactory.getInChIToStructure(target.getContent(), SilentChemObjectBuilder.getInstance());
-        		   return c.getAtomContainer();
-        	   } catch (Exception x) {
-        		   throw new AmbitException(x);
-        	   }
-        	   
-            default: {
-            	 throw new AmbitException("Unknown format "+target.getFormat());
-            }
-            }
+         		}
+     	   		return ac;
+             } catch (Exception x) {
+                 throw new AmbitException(x);
+             }
+        case INC: 
+     	   try {
+     		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
+ 		
+     		   InChIToStructure c =inchiFactory.getInChIToStructure(target.getContent(), SilentChemObjectBuilder.getInstance());
+     		   return c.getAtomContainer();
+     	   } catch (Exception x) {
+     		   throw new AmbitException(x);
+     	   }
+        case NANO: try {
+				Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.MoleculeNanoReader");
+				Method method = clazz.getMethod("nm2atomcontainer", IStructureRecord.class);
+				return (IAtomContainer) method.invoke(null, target);
+	  	   } catch (Exception x) {
+	  		   if (x instanceof AmbitException) throw (AmbitException)x;
+	  		   else throw new AmbitException(x);
+	 	   }			
+         default: {
+         	 throw new AmbitException("Unknown format "+target.getFormat());
+         }
+         }
     }
-
 }

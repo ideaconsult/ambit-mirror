@@ -3,6 +3,7 @@ package ambit2.rest.task;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.lang.reflect.Constructor;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.restlet.data.ClientInfo;
 import org.restlet.data.MediaType;
@@ -180,7 +182,9 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		if (ChemicalMediaType.CHEMICAL_MDLMOL.equals(mediaType))
 			return ".mol";		
 		if (ChemicalMediaType.CHEMICAL_CML.equals(mediaType))
-			return ".cml";				
+			return ".cml";	
+		if (ChemicalMediaType.NANO_CML.equals(mediaType))
+			return ".nmd";				
 		if (ChemicalMediaType.CHEMICAL_SMILES.equals(mediaType))
 			return ".smi";	
 		if (ChemicalMediaType.CHEMICAL_INCHI.equals(mediaType))
@@ -200,7 +204,8 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		else if (MediaType.APPLICATION_EXCEL.equals(mediaType))
 			return ".xls";		
 		else if (MediaType.APPLICATION_ZIP.equals(mediaType))
-			return ".zip";				
+			return ".zip";		
+
 		else
 			return null;
 	}
@@ -278,7 +283,19 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			throw new AmbitException(String.format("Error reading %s %s",file.toString(),x.getMessage()),x);
 		}
 	}
-	
+	protected IIteratingChemObjectReader getNanoCMLIterator(File file, String baseReference) throws Exception {
+		String format = ChemicalMediaType.NANO_CML.getName();
+		if (file.getName().endsWith(".nmx") || file.getName().endsWith(".nmd")) try {
+			Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.NanoCMLIteratingReader");
+			Constructor<? extends Runnable> constructor = clazz.getConstructor();
+			Object o = constructor.newInstance(new FileInputStream(file));
+			return (IIteratingChemObjectReader)o;							
+		} catch (Exception x) {
+			throw new AmbitException(String.format("Error reading %s %s",file.toString(),x.getMessage()),x);
+		}
+		return null;
+	}	
+
 	protected SourceDataset datasetMeta(File file) {
 		
 		String title = properties==null?null:properties.get("title");
@@ -323,9 +340,12 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 					try {
 						File file = ((FileInputState) target).getFile();
 						RDFIteratingReader i = getRDFIterator(file,	getReporter().getBaseReference().toString());
-						if (i == null)
-							return super.getIterator(target);
-						else {
+						if (i == null) {
+							IIteratingChemObjectReader ni = getNanoCMLIterator(file,getReporter().getBaseReference().toString());
+							if (ni==null) return super.getIterator(target);
+							else return ni;
+
+						} else {
 							/*
 							 * RDFMetaDatasetIterator datasets = null; try {
 							 * datasets = new

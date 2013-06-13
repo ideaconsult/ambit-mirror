@@ -16,6 +16,7 @@ import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
+import ambit2.db.processors.AbstractDescriptorCalculator;
 import ambit2.db.processors.DescriptorsCalculator;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.rest.model.ModelURIReporter;
@@ -54,7 +55,7 @@ public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,
 				property.setEnabled(true);
 				p.add(property);
 				
-				DescriptorsCalculator c = new DescriptorsCalculator();
+				AbstractDescriptorCalculator c = new DescriptorsCalculator();
 				c.setDescriptors(p);
 				calculator = (C) c;
 				return calculator;
@@ -62,6 +63,10 @@ public class DescriptorPredictor<C extends AbstractDBProcessor<IStructureRecord,
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
 			}
 		else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE,model.getContentMediaType());
+	}
+	
+	public AbstractDescriptorCalculator createCalculator() {
+		return new DescriptorsCalculator();
 	}
 	@Override
 	public String getCompoundURL(IStructureRecord target) throws AmbitException {
