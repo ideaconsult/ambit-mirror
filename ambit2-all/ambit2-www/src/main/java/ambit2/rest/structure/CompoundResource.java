@@ -255,7 +255,12 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CSVReporter(getTemplate(),getGroupProperties(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),MediaType.TEXT_CSV,filenamePrefix);				
+					new CSVReporter(getTemplate(),getGroupProperties(),getRequest().getRootRef().toString()+getCompoundInDatasetPrefix()),MediaType.TEXT_CSV,filenamePrefix);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.NANO_CML)) { 
+				//return new DocumentConvertor<IStructureRecord, QueryStructureByID>(new StructureReporter((getRequest()==null)?null:getRequest().getRootRef()));
+				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+						new CMLReporter<QueryStructureByID>(),ChemicalMediaType.NANO_CML,filenamePrefix);
+			
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||

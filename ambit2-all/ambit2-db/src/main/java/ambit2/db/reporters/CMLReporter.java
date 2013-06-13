@@ -7,6 +7,7 @@ import org.openscience.cdk.io.CMLWriter;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.exceptions.DbAmbitException;
@@ -74,16 +75,21 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			StringWriter w = new StringWriter();
-			CMLWriter cmlwriter = new CMLWriter(w); 
-			cmlwriter.write(reader.process(item));
-			cmlwriter.close();
+			if (STRUC_TYPE.NANO.name().equals(item.getFormat())) { //this is CML already
+				output.write(item.getContent());
+				output.write("\n");
+			} else {
+				CMLWriter cmlwriter = new CMLWriter(w); 
+				cmlwriter.write(reader.process(item));
+				cmlwriter.close();
+				String b = w.toString();
+				int  p1 = b.indexOf("<?xml");
+				int p2 = b.indexOf("?>");
+				if ((p1>=0) && (p2>p1))
+					output.write(b.substring(p2+2));
+				else output.write(b);
+			}
 			
-			String b = w.toString();
-			int  p1 = b.indexOf("<?xml");
-			int p2 = b.indexOf("?>");
-			if ((p1>=0) && (p2>p1))
-				output.write(b.substring(p2+2));
-			else output.write(b);
 			
 		} catch (Exception x) {
 			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
@@ -100,9 +106,9 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		try {
 			if (getLicenseURI()!=null) {
 				//Not specified by CML, but XML parsers should be forgiving :)
-				output.write(String.format("<license>%s</license>",getLicenseURI()));
+				output.write(String.format("\n<license>%s</license>\n",getLicenseURI()));
 			}
-			output.write("</list>");
+			output.write("\n</list>");
 		} catch (Exception x) {
 			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
 		}		
@@ -113,7 +119,7 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		try {
 			output.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
 			//output.write("<list dictRef=\"cdk:moleculeSet\" xmlns=\"http://www.xml-cml.org/schema\">");
-			output.write("<list xmlns=\"http://www.xml-cml.org/schema\">");
+			output.write("<list xmlns=\"http://www.xml-cml.org/schema\">\n");
 		} catch (Exception x) {}
 
 

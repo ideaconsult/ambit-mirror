@@ -50,6 +50,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * RDF/XML
@@ -241,10 +242,14 @@ public class DatasetRDFReporter<Q extends IQueryRetrieval<IStructureRecord>> ext
 			dataset.addProperty(OT.OTProperty.dataEntry.createProperty(getJenaModel()),dataEntry);
 			int i = 0;
 			
-			String uri = item.getType().equals(STRUC_TYPE.NA)?
+			String uri = item.getType().equals(STRUC_TYPE.NA) || item.getType().equals(STRUC_TYPE.NANO)?
 					compoundReporter.getURI(item):uriReporter.getURI(item);
 			Individual compound = getJenaModel().createIndividual(
 					uri,OT.OTClass.Compound.getOntClass(getJenaModel()));
+			
+			if (item.getType().equals(STRUC_TYPE.NANO)) {
+				compound.addOntClass(OT.OTClass.OTMaterial.getOntClass(getJenaModel()));
+			}
 			//compound.addProperty(DC.identifier, uriReporter.getURI(item));			
 			dataEntry.addProperty(OT.OTProperty.compound.createProperty(getJenaModel()), compound);
 			

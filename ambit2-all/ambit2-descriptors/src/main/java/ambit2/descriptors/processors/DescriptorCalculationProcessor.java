@@ -14,13 +14,10 @@ import org.openscience.cdk.qsar.IMolecularDescriptor;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.EmptyMoleculeException;
-import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.data.AbstractDescriptorResultType;
 import ambit2.core.data.IStructureDiagramHighlights;
 
-public class DescriptorCalculationProcessor extends
-		DefaultAmbitProcessor<IAtomContainer, DescriptorValue> implements IStructureDiagramHighlights {
-	protected IMolecularDescriptor descriptor;
+public class DescriptorCalculationProcessor extends AbstractDescriptorCalculationProcessor<IAtomContainer,IMolecularDescriptor> implements IStructureDiagramHighlights {
+	
 	protected Dimension imageSize = new Dimension(150,150);
 	public Dimension getImageSize() {
 		return imageSize;
@@ -47,8 +44,8 @@ public class DescriptorCalculationProcessor extends
 	 * 
 	 */
 	private static final long serialVersionUID = -3399104328409649302L;
-
-	public DescriptorValue process(IAtomContainer target) throws AmbitException {
+	@Override
+	public DescriptorValue calculate(IAtomContainer target) throws AmbitException {
 		if (descriptor == null) 
 			throw new AmbitException("Undefined descriptor");
 		

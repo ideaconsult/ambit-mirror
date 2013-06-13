@@ -36,7 +36,6 @@ import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 
-import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -44,28 +43,26 @@ import ambit2.core.data.IStructureDiagramHighlights;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
-import ambit2.db.AbstractDBProcessor;
 import ambit2.db.SessionID;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.descriptors.processors.DescriptorValue2Property;
 import ambit2.descriptors.processors.DescriptorsFactory;
 import ambit2.descriptors.processors.PropertyCalculationProcessor;
 
-public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,IStructureRecord> implements IStructureDiagramHighlights {
+public class DescriptorsCalculator extends AbstractDescriptorCalculator<IAtomContainer> implements IStructureDiagramHighlights {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2912324506031402660L;
     protected DescriptorsFactory d = new DescriptorsFactory();
-    protected Profile<Property> descriptors = null;
+
 	protected DbDescriptorValuesWriter writer = new DbDescriptorValuesWriter();
 	protected DescriptorValue2Property selfwriter = new DescriptorValue2Property();
 	protected MoleculeReader reader = new MoleculeReader();
 	protected HydrogenAdderProcessor ha = new HydrogenAdderProcessor();
 	protected AtomConfigurator cfg = new AtomConfigurator();
     protected PropertyCalculationProcessor calc = new PropertyCalculationProcessor();
-    protected boolean assignProperties = false;
     
 
 	public Dimension getImageSize() {
@@ -74,19 +71,8 @@ public class DescriptorsCalculator extends AbstractDBProcessor<IStructureRecord,
 	public void setImageSize(Dimension imageSize) {
 		calc.setImageSize(imageSize);
 	}
-    public boolean isAssignProperties() {
-		return assignProperties;
-	}
-	public void setAssignProperties(boolean assignProperties) {
-		this.assignProperties = assignProperties;
-	}
-	public Profile<Property> getDescriptors() {
-		return descriptors;
-	}
-	public void setDescriptors(Profile<Property> descriptors) {
-		this.descriptors = descriptors;
-	}
 
+	@Override
 	public IAtomContainer preprocess(IStructureRecord target) throws AmbitException {
     	IAtomContainer a = reader.process(target);
     	//necessary for some calculations
