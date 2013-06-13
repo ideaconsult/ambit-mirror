@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: net.idea.ambit2.nano
+
+Name: net/idea/ambit2/nano/
+Specification-Title: Nanomaterials support
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: net.idea.ambit2.nano
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: net.idea.ambit2.nano
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.
