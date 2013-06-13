@@ -6,6 +6,7 @@ public class ReactionConst
 	public static final String KeyWordSeparator = "=";
 	public static final String KeyWordElementSeparator = ",";
 	
+		
 	//Synthetic Accessibility Evaluation Strategies		
 	public enum SynthAccessStrategy {
 		DESCRIPTORS, 

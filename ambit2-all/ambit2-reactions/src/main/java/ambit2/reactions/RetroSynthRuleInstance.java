@@ -7,7 +7,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class RetroSynthRuleInstance implements IRetroSynthRuleInstance 
 {	
-	public ArrayList<IAtom> atoms = new ArrayList<IAtom>();
+	RetroSynthRule rule;	
+	public ArrayList<IAtom> atoms = new ArrayList<IAtom>();	
 	
 	
 	public ArrayList<IAtomContainer> apply(IAtomContainer mol)

@@ -10,7 +10,7 @@ public class RetroSynthesis
 	IAtomContainer molecule;
 	RetroSynthesisResult retroSynthResult;
 	Stack<RetroSynthNode> nodes = new Stack<RetroSynthNode>(); 
-	ArrayList<IRetroSynthRuleInstance>  ruleInstances = new ArrayList<IRetroSynthRuleInstance>(); 
+	//ArrayList<IRetroSynthRuleInstance>  ruleInstances = new ArrayList<IRetroSynthRuleInstance>(); 
 	
 	
 	public RetroSynthesis() throws Exception 
@@ -32,10 +32,7 @@ public class RetroSynthesis
 	public RetroSynthesisResult run()
 	{
 		retroSynthResult = new RetroSynthesisResult();
-		
-		ruleInstances = findRuleInstances(molecule);		
 		searchPaths();
-		
 		return retroSynthResult;
 	}
 	
@@ -68,6 +65,7 @@ public class RetroSynthesis
 	
 	void generateInitialNodes()
 	{
+		ArrayList<IRetroSynthRuleInstance> ruleInstances = findRuleInstances(molecule);
 		//TODO
 	}
 	
