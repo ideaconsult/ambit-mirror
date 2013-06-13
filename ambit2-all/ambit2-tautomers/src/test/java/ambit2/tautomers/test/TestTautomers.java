@@ -3,6 +3,10 @@ package ambit2.tautomers.test;
 import java.util.List;
 import java.util.Vector;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -21,7 +25,12 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.Molecule;
 
+import org.openscience.cdk.io.IChemObjectWriter;
+import org.openscience.cdk.io.SDFWriter;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.base.exceptions.AmbitIOException;
+import ambit2.core.io.FileInputState;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
@@ -170,12 +179,13 @@ public class TestTautomers
 		//tt.visualTest("O=CC(C)(C)Cl");
 				
 		//tt.FlagExplicitHydrogens = false;
-		//tt.visualTest("O=CC");
+		tt.visualTest("O=CC");
 		
-		RuleStructureFactory rsf = new RuleStructureFactory();
+		//RuleStructureFactory rsf = new RuleStructureFactory();
 		//rsf.makeRuleStrcutures("CC=O", 0, "C=CO", 0, "/test.smi", "/gen-test.txt");
-		rsf.calculateEnergyDifferences("/gen-test.txt", "/energies-diff-test.txt");
+		//rsf.calculateEnergyDifferences("/gen-test.txt", "/energies-diff-test.txt");
 		
+		//tt.visualTestFromFile("/work/tempAmbitIn.sdf");
 	}
 	
 	public void performTestCases() throws Exception
@@ -294,6 +304,46 @@ public class TestTautomers
 			
 			System.out.print("   " + rank.toString() + "   " +
 					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+			v.add(resultTautomers.get(i));
+		}
+		System.out.println();
+		
+		System.out.println("Generated: " + resultTautomers.size() + " tautomers.");
+		
+		//preProcessStructures(v);
+		TestStrVisualizer tsv = new TestStrVisualizer(v);
+		
+	} 
+	
+	public void visualTestFromFile(String sdfFile) throws Exception
+	{
+		System.out.println("Visual Testing with file " + sdfFile);
+		IAtomContainer mol = getMoleculeFromFile(sdfFile);
+		
+		String smiles = SmartsHelper.moleculeToSMILES(mol);
+		System.out.println("Loaded molecule " + smiles);
+		
+		tman.setStructure(mol);
+		
+		
+		
+		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		tman.printDebugInfo();
+		
+		System.out.println("\n  Result tautomers: ");
+		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		v.add(mol);
+		v.add(null);
+		for (int i = 0; i < resultTautomers.size(); i++)		
+		{	
+			Double rank = (Double)resultTautomers.get(i).getProperty("TAUTOMER_RANK");
+			if (rank == null)
+				rank = new Double(999999);
+						
+			System.out.print(
+					TautomerManager.getTautomerCodeString(resultTautomers.get(i), false) +   
+					"   " + rank.toString() + "   " +
+					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)) );
 			v.add(resultTautomers.get(i));
 		}
 		System.out.println();
@@ -658,6 +708,29 @@ public class TestTautomers
 		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr)));
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(v);
+	}
+	
+	
+	IAtomContainer getMoleculeFromFile(String fname) throws Exception
+	{
+		File file = new File(fname);
+		InputStream in = new FileInputStream(file);		
+		IIteratingChemObjectReader<IAtomContainer> reader = null;
+		
+		reader = getReader(in,file.getName());
+		IAtomContainer molecule  = reader.next();
+		
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
+		CDKHueckelAromaticityDetector.detectAromaticity(molecule);
+		
+		molecule = AtomContainerManipulator.removeHydrogens(molecule);
+		
+		return molecule;
+	}
+	
+	protected IIteratingChemObjectReader<IAtomContainer> getReader(InputStream in, String extension) throws CDKException, AmbitIOException {
+		FileInputState instate = new FileInputState();
+		return instate.getReader(in,extension);
 	}
 	
 	
