@@ -8,12 +8,12 @@ import java.lang.reflect.Constructor;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.CMLReader;
-import org.openscience.cdk.io.DefaultChemObjectReader;
 import org.openscience.cdk.io.HINReader;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.PDBReader;
 import org.openscience.cdk.io.formats.IChemFormat;
+import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.io.iterator.IteratingSMILESReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -167,11 +167,11 @@ public class FileInputState extends FileState implements IInputState {
 			return new I5ReaderSimple(stream);			
 		} else if (ext.endsWith(extensions[NANOCMLx_INDEX]) || ext.endsWith(extensions[NANOCMLd_INDEX])) try {
 			Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.NanoCMLIteratingReader");
-			Constructor<? extends Runnable> constructor = clazz.getConstructor();
+			Constructor<? extends Runnable> constructor = clazz.getConstructor(InputStream.class);
 			Object o = constructor.newInstance(stream);
-			return new IteratingChemObjectReaderWrapper((DefaultChemObjectReader)o);							
+			return (DefaultIteratingChemObjectReader)o;							
 		} catch (Exception x) {
-			throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext,x);
+			throw new AmbitIOException(x);
 		}
 		else throw new AmbitIOException(MSG_UNSUPPORTEDFORMAT+ext);	    
 	}

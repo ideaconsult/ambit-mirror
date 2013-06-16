@@ -83,9 +83,9 @@ public class NanoCMLIteratingReader  extends DefaultIteratingChemObjectReader im
 		else record.clear(); return record;
 	}
 	public Object next() {
-		return  record;
+		return  nanomaterials.get(index);
 	}
 	
 
-	
+
 }
