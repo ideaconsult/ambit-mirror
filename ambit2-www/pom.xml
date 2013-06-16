@@ -165,7 +165,20 @@
 	      <properties>
     		<exclude.jni>WEB-INF/lib/jni-inchi*.jar,WEB-INF/lib/jnati*.jar</exclude.jni>
     	  </properties>
-    </profile>          
+    </profile>
+    <profile>
+        <id>nano</id>
+        <activation>
+	        <activeByDefault>false</activeByDefault>
+	      </activation>
+        <dependencies>
+		<dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-nano</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+        </dependencies>
+    </profile>
   </profiles>
       
   <build>
