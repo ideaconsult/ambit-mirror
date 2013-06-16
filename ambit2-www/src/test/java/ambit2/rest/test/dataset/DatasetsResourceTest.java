@@ -155,6 +155,37 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 		c.close();
 		
 	}		
+	
+	
+	public void testCreateEntryCMLNano() throws Exception {
+		
+		InputStream in  = getClass().getClassLoader().getResourceAsStream("nano.nmx");
+
+		StringBuilder b = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		while ((line=reader.readLine())!=null) {
+			b.append(line);
+			b.append('\n');
+		}
+
+		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_CML, 
+				new StringRepresentation(b.toString(),ChemicalMediaType.NANO_CML),Method.POST,
+				new Reference(String.format("http://localhost:%d/dataset/4",port)));
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,formula FROM structure join chemicals using(idchemical) where type_structure='NANO' order by idchemical");
+		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertNotNull(table.getValue(1, "formula"));
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='Size' and units='nm' and title='NanoMaterialMeasurement'");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='MaterialType' and title='NanoMaterialMeasurement'");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='Name' and title regexp '^NanoMaterialLabel'");
+		Assert.assertEquals(2,table.getRowCount());
+		c.close();
+	}	
+	
 	@Test
 	public void testCreateEntry_TUM500() throws Exception {
         IDatabaseConnection c = getConnection();	

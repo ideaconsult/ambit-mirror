@@ -23,9 +23,8 @@ import org.xmlcml.cml.element.CMLList;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
-import ambit2.core.io.IRawReader;
 
-public class NanoCMLIteratingReader  extends DefaultIteratingChemObjectReader implements IRawReader<IStructureRecord> {
+public class NanoCMLIteratingReader  extends DefaultIteratingChemObjectReader {
 	protected List<Nanomaterial> nanomaterials;
 	protected IStructureRecord record = new StructureRecord();
 	protected int index = -1;
