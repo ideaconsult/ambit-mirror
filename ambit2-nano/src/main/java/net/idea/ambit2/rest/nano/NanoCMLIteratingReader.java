@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
 
+import net.idea.ambit2.nano.NanoStructureNormalizer;
 import nu.xom.Element;
 
 import org.bitbucket.nanojava.data.Nanomaterial;
@@ -73,7 +74,10 @@ public class NanoCMLIteratingReader  extends DefaultIteratingChemObjectReader im
 			return false; 
 		}
 		record.clear();
+		Nanomaterial nm = nanomaterials.get(index);
+		record = NanoStructureNormalizer.nm2structure(nm, record);
 		record.setContent(org.bitbucket.nanojava.io.Serializer.toCML(nanomaterials.get(index)).toXML());
+		
 		record.setFormat(MOL_TYPE.NANO.name());
 		return true;
 	}

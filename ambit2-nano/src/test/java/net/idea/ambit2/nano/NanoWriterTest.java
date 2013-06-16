@@ -82,7 +82,9 @@ public class NanoWriterTest extends DbUnitTest {
 		Assert.assertEquals(2,chemicals.getRowCount());
 		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where smiles is not null and inchi is not null and formula is not null");
 		Assert.assertEquals(0,chemicals.getRowCount());		
-		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		strucs = 	c.createQueryTable("EXPECTED","SELECT idstructure,format,type_structure FROM structure");
+		Assert.assertEquals("NANO", strucs.getValue(0,"format"));
+		Assert.assertEquals("NANO", strucs.getValue(0,"type_structure"));
 		Assert.assertEquals(2,strucs.getRowCount());
 		srcdataset = 	c.createQueryTable("EXPECTED","SELECT id_srcdataset,idtemplate FROM src_dataset where name='TEST INPUT'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
@@ -94,18 +96,18 @@ public class NanoWriterTest extends DbUnitTest {
 		Assert.assertEquals(2,struc_src.getRowCount());
 		
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
-		Assert.assertEquals(5,property.getRowCount());
+		Assert.assertEquals(4,property.getRowCount());
 		
 		//verifies if insert_property_tuple works ok
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM template_def join src_dataset using(idtemplate) where name='TEST INPUT'");
-		Assert.assertEquals(5,property.getRowCount());
+		Assert.assertEquals(4,property.getRowCount());
 		
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(45,property_values.getRowCount());		
+		Assert.assertEquals(5,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
-		Assert.assertEquals(9,tuples.getRowCount());			
+		Assert.assertEquals(2,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
-		Assert.assertEquals(45,p_tuples.getRowCount());				
+		Assert.assertEquals(5,p_tuples.getRowCount());				
 		c.close();
 	}
 	public int write(IRawReader<IStructureRecord> reader,Connection connection) throws Exception  {
@@ -117,7 +119,7 @@ public class NanoWriterTest extends DbUnitTest {
 		RepositoryWriter writer = new RepositoryWriter();
 		if (key != null)
 			writer.setPropertyKey(key);
-		writer.setDataset(new SourceDataset("TEST INPUT",LiteratureEntry.getInstance("File","file:input.sdf")));
+		writer.setDataset(new SourceDataset("TEST INPUT",LiteratureEntry.getInstance("File","file:input.nmx")));
 		writer.setConnection(connection);
         writer.open();
 		int records = 0;
