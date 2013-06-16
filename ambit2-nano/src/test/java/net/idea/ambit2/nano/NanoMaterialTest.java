@@ -1,5 +1,6 @@
 package net.idea.ambit2.nano;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.bitbucket.nanojava.data.measurement.Unit;
 import org.bitbucket.nanojava.io.Serializer;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.xmlcml.cml.element.CMLList;
 import org.xmlcml.cml.element.CMLMolecule;
@@ -18,6 +20,8 @@ import org.xmlcml.cml.element.CMLMolecule;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.io.FileInputState;
+import ambit2.core.io.IRawReader;
 
 public class NanoMaterialTest {
 	@Test
@@ -53,7 +57,22 @@ public class NanoMaterialTest {
 	}
 	@Test
 	public void testNanoCMLReader() throws Exception {
-		
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("net/idea/ambit2/nano/test/nano.nmx");
+		Assert.assertNotNull(in);
+		IIteratingChemObjectReader reader = FileInputState.getReader(in, ".nmx");
+		Assert.assertTrue(reader instanceof IRawReader);
+		int records = 0;
+		while (reader.hasNext()) {
+			Nanomaterial nm = (Nanomaterial)reader.next();
+			Assert.assertNotNull(nm);
+			IStructureRecord ac = ((IRawReader<IStructureRecord>)reader).nextRecord();
+			System.out.println(ac);
+			System.out.println(ac.getContent());
+			Assert.assertEquals("NANO",ac.getFormat());
+			records ++;
+		}
+		Assert.assertEquals(2,records);
+		in.close();
 	}
 	protected Nanomaterial createNM() {
 		Nanomaterial material = new Nanomaterial("METALOXIDE");

@@ -3,6 +3,7 @@ package ambit2.rest.task;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -287,7 +288,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 		String format = ChemicalMediaType.NANO_CML.getName();
 		if (file.getName().endsWith(".nmx") || file.getName().endsWith(".nmd")) try {
 			Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.NanoCMLIteratingReader");
-			Constructor<? extends Runnable> constructor = clazz.getConstructor();
+			Constructor<? extends Runnable> constructor = clazz.getConstructor(InputStream.class);
 			Object o = constructor.newInstance(new FileInputStream(file));
 			return (IIteratingChemObjectReader)o;							
 		} catch (Exception x) {
