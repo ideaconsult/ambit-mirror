@@ -98,7 +98,7 @@ public interface IStructureRecord extends IChemical{
 		NANO {
 			@Override
 			public String toString() {
-				return "nanomaterial";
+				return "NANO";
 			}
 		}
 	};

@@ -1,2 +1,13 @@
 <?xml version="1.0"?>
-<list xmlns="http://www.xml-cml.org/schema"><molecule xmlns:nano="http://example.org/nano#" xmlns:qudt="http://example.org/qudt#" convention="nano:material"><scalar dictRef="nano:type" dataType="xsd:string">GRAPHENE</scalar></molecule><molecule xmlns:nano="http://example.org/nano#" xmlns:qudt="http://example.org/qudt#" convention="nano:material"><formula inline="OZn" /><name>NM1</name><name>ZnO</name><scalar dictRef="nano:type" dataType="xsd:string">METALOXIDE</scalar><property dictRef="nano:dimension"><scalar units="qudt:nm" dataType="xsd:double">20.0</scalar></property></molecule></list>
+<list xmlns="http://www.xml-cml.org/schema">
+<molecule xmlns:nano="http://example.org/nano#" xmlns:qudt="http://example.org/qudt#" convention="nano:material">
+<scalar dictRef="nano:type" dataType="xsd:string">GRAPHENE</scalar>
+</molecule>
+<molecule xmlns:nano="http://example.org/nano#" xmlns:qudt="http://example.org/qudt#" convention="nano:material">
+<formula inline="OZn" /><name>NM1</name>
+<name>ZnO</name>
+<scalar dictRef="nano:type" dataType="xsd:string">METALOXIDE</scalar>
+<property dictRef="nano:dimension"><scalar units="qudt:nm" dataType="xsd:double">20.0</scalar>
+</property>
+</molecule>
+</list>

@@ -80,9 +80,13 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	public IStructureRecord process(IStructureRecord structure)	throws AmbitException {
 		if ((structure.getFormat()!=null) && MOL_TYPE.NANO.name().equals(structure.getFormat())) {
 			try { //nanomaterial
-				Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.NanoStructureNormalizer");
+				//NanoCMLReader already have set all the IStructureRecord fields
+				return structure;
+				/*
+				Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.nano.NanoStructureNormalizer");
 				Method method = clazz.getMethod("normalizeNano", IStructureRecord.class);
 				return (IStructureRecord) method.invoke(null, structure);
+				*/
 			} catch (Exception x) {
 	  		   if (x instanceof AmbitException) throw (AmbitException)x;
 	  		   else throw new AmbitException(x);

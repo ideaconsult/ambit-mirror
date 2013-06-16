@@ -34,11 +34,17 @@ import java.io.IOException;
 import nu.xom.ParsingException;
 
 import org.bitbucket.nanojava.data.Nanomaterial;
+import org.bitbucket.nanojava.data.measurement.ICondition;
+import org.bitbucket.nanojava.data.measurement.IMeasurement;
+import org.bitbucket.nanojava.data.measurement.MeasurementValue;
 import org.bitbucket.nanojava.io.Deserializer;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.StructureRecord;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
@@ -84,26 +90,33 @@ public class NanoStructureNormalizer extends StructureNormalizer {
 	 */
 	public static IStructureRecord normalizeNano(IStructureRecord structure)	throws IOException, ParsingException {
 		Nanomaterial nanomaterial = Deserializer.fromCMLString(structure.getContent()); 
+		return nm2structure(nanomaterial);
+	}
+	public static IStructureRecord nm2structure(Nanomaterial nanomaterial) {
+		return nm2structure(nanomaterial,new StructureRecord());
+	}
+	public static IStructureRecord nm2structure(Nanomaterial nanomaterial,IStructureRecord structure)  {
 		structure.setFormula(nanomaterial.getChemicalComposition()==null?null:  MolecularFormulaManipulator.getHillString(nanomaterial.getChemicalComposition()));
 		LiteratureEntry ref = new LiteratureEntry("NanoMaterialMeasurement", "nano");
-
+		ref.setType(_type.Dataset);
 		if (nanomaterial.getType()!=null) {
 			Property property = new Property("MaterialType",ref);
-			property.setLabel("http://example.com/nano#Material");
+			property.setLabel("http://www.opentox.org/nano#Material");
 			structure.setProperty(property, nanomaterial.getType());
 		}
 		if (nanomaterial.getSize()!=null) {
 			Property property = new Property("Size", nanomaterial.getSize().getUnit().toString(),ref);
-			property.setLabel("http://example.com/nano#Size");
-			structure.setProperty(property, nanomaterial.getSize().getString());
+			property.setLabel("http://www.opentox.org/nano#Size");
+			nmm2property(nanomaterial.getSize(),property,structure);
 		}
 		if (nanomaterial.getZetaPotential()!=null) {
 			Property property = new Property("zetaPotential", nanomaterial.getZetaPotential().getUnit().toString(),ref);
-			property.setLabel("http://example.com/nano#zetaPotential");
-			structure.setProperty(property,nanomaterial.getZetaPotential().getString());
+			property.setLabel("http://www.opentox.org/nano#zetaPotential");
+			nmm2property(nanomaterial.getZetaPotential(),property,structure);
 		}
 		for (int i=0;i< nanomaterial.getLabels().size();i++) {
 			ref = new LiteratureEntry(String.format("NanoMaterialLabel%d",i+1), "nano");
+			ref.setType(_type.Dataset);
 			Property property = new Property("Name", ref);
 			property.setLabel(Property.opentox_Name);
 			structure.setProperty(property,nanomaterial.getLabels().get(i));	
@@ -115,5 +128,21 @@ public class NanoStructureNormalizer extends StructureNormalizer {
 		structure.setInchiKey(null);
 		structure.setSmiles(null);
 		return structure;
+	}
+	
+	public static void nmm2property(IMeasurement measurement, Property property, IStructureRecord structure) {
+		if (measurement instanceof MeasurementValue) {
+			structure.setProperty(property,((MeasurementValue)measurement).getValue());
+			//structure.setProperty(property,((MeasurementValue)measurement).getError()); ?
+		} else {
+			structure.setProperty(property,((MeasurementValue)measurement).toString());
+		}
+		//Ideally, add conditions as property annotations
+		if (measurement.getConditions()!=null) 
+			for (ICondition condition : measurement.getConditions()) {
+				PropertyAnnotation pa = new PropertyAnnotation();
+				pa.setType("condition");
+				pa.setObject(condition.toString());
+			}
 	}
 }
