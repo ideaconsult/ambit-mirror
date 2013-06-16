@@ -204,6 +204,9 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 					ac = AtomContainerManipulator.removeHydrogensPreserveMultiplyBonded(ac);
 					break;
 				}
+				case NANO: {
+					return imageWrapper;
+				}
 				case NA: { 
 					return imageWrapper;
 				}
