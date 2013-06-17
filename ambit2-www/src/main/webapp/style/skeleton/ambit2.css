@@ -213,6 +213,9 @@ a.topLinks {
     padding: 0px;
 }
 
+.wrap {
+	 word-wrap:break-word;
+}	
 
 svg {
   font: 10px sans-serif;

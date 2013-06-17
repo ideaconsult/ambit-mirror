@@ -104,7 +104,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
-									"sClass" : "names",
+									"sClass" : "names wrap",
 									"fnRender" : function(o, val) {
 										if ((val === undefined) || (val == ""))
 											return formatValues(o.aData,
@@ -405,7 +405,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		sOut += '</tbody></table></div>\n';
 		
 		var sOutData = '<div id="tabs-data">';
-		sOutData += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Dataset</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
+		sOutData += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Data source</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
 		var sOutCalc = '<div id="tabs-predictions">';
 		sOutCalc += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
@@ -434,7 +434,10 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		var sOut = "";
 		var cache = {};
 		$.each(lookup, function(k, value) {
-			if ((dataEntry.values[value]===undefined)||(dataEntry.values[value]==null)) return;
+			if ((dataEntry.values[value]===undefined)||
+				(dataEntry.values[value]==null)||
+				(dataEntry.values[value]=='')||
+				(dataEntry.values[value]=='.')) return;
 			var lv = dataEntry.values[value].toLowerCase();
 			if (cache[lv]==null) {
 				sOut += renderValue(url,title,"",dataEntry.values[value],"",null);
@@ -450,7 +453,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 			if (url==null) {  //name & value only
 				return "<tr bgcolor='#ffffff'><th bgcolor='#fafafa'>" +
 						(title + " " + units) +
-						"</th><td>" + value + "</td></tr>";
+						"</th><td><span class='wrap'>" + value + "</span></td></tr>";
 			}
 			
 			var src = source != null?source.type:"";
