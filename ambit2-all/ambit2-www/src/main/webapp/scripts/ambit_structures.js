@@ -383,6 +383,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		sOut += '<li><a href="#tabs-id">Identifiers</a></li>'+
 	        	'<li><a href="#tabs-data">Data</a></li>'+	
 	        	'<li><a href="#tabs-predictions">Predictions</a></li>'+
+	        	'<li><a href="#tabs-composition">Composition</a></li>'+
 	        	'</ul>\n';
 		
 		sOut += '<div id="tabs-id">';
@@ -410,6 +411,9 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		var sOutCalc = '<div id="tabs-predictions">';
 		sOutCalc += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
+		var sOutComposition = '<div id="tabs-composition">';
+		sOutComposition += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Other related substances</th></tr></thead><tbody></tbody></table></div>';
+		
 		$.each(dataEntry.lookup.misc, function(k, value) {
 			var feature = _ambit.search.result.feature[value];
 			switch (feature.source.type) {
@@ -425,7 +429,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		});
 		sOutData += '</tbody></table></div>\n';
 		sOutCalc += '</tbody></table></div>\n';
-		sOut += sOutData + sOutCalc + '</div>\n';
+		sOut += sOutData + sOutCalc + sOutComposition + '</div>\n';
 		//sOut += '</div>\n';	
 		return sOut;
 	}
