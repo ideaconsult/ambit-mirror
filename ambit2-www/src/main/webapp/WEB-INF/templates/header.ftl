@@ -27,6 +27,7 @@
 	<script type='text/javascript' src='${ambit_root}/jquery/jquery-ui-1.8.18.custom.min.js'></script>
 	<script type='text/javascript' src='${ambit_root}/jquery/jquery.validate.min.js'></script>
 	<script type='text/javascript' charset='utf8' src='${ambit_root}/jquery/jquery.dataTables-1.9.0.min.js'></script>
+	<script type='text/javascript' charset='utf8' src='${ambit_root}/jquery/jquery.FastEllipsis.js'></script>
 	
 	<link rel="stylesheet" href="${ambit_root}/style/jquery-ui-1.8.18.custom.css" type="text/css">
 	<link rel="stylesheet" href="${ambit_root}/style/jquery.dataTables.css" type="text/css">
