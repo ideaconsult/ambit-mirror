@@ -40,7 +40,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									"aTargets" : [ 1 ],
 									"bSearchable" : true,
 									"bSortable" : true,
-									"sWidth" : "10%",
+									"sWidth" : "8%",
 									"bUseRendered" : false,
 									"sClass" : "cas",
 									"fnRender" : function(o, val) {
@@ -52,9 +52,26 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									"bVisible" : true
 								},			
 								{
-									"mDataProp" : "compound.URI",
+									"mDataProp" : "compound.einecs",
 									"asSorting" : [ "asc", "desc" ],
 									"aTargets" : [ 2 ],
+									"bSearchable" : true,
+									"bSortable" : true,
+									"sWidth" : "7%",
+									"bUseRendered" : false,
+									"sClass" : "cas",
+									"fnRender" : function(o, val) {
+										if ((val === undefined) || (val == ""))
+											return formatValues(o.aData, "einecs");
+										else
+											return val;
+									},
+									"bVisible" : true
+								},								
+								{
+									"mDataProp" : "compound.URI",
+									"asSorting" : [ "asc", "desc" ],
+									"aTargets" : [ 3 ],
 									"bSearchable" : true,
 									"bUseRendered" : false,
 									"bSortable" : true,
@@ -83,7 +100,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 								{
 									"mDataProp" : "compound.name",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 3 ],
+									"aTargets" : [ 4 ],
 									"bSearchable" : true,
 									"bSortable" : true,
 									"bUseRendered" : false,
@@ -100,7 +117,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 								{
 									"mDataProp" : "compound.metric",
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 4 ],
+									"aTargets" : [ 5 ],
 									"sTitle" : "Similarity",
 									"sClass" : "similarity",
 									"bSearchable" : true,
@@ -111,9 +128,9 @@ function defineStructuresTable(url, query_service, similarity,root) {
 								{
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 5 ],
+									"aTargets" : [6 ],
 									"bSearchable" : true,
-									"sWidth" : "15%",
+									"sWidth" : "10%",
 									"bSortable" : true,
 									"bUseRendered" : true,
 									"fnRender" : function(o, val) {
@@ -128,10 +145,10 @@ function defineStructuresTable(url, query_service, similarity,root) {
 								{
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
-									"aTargets" : [ 6 ],
+									"aTargets" : [ 7 ],
 									"bSearchable" : true,
 									"bSortable" : true,
-									"sWidth" : "15%",
+									"sWidth" : "10%",
 									"bUseRendered" : true,
 									"fnRender" : function(o, val) {
 										if ((val === undefined) || (val == ""))
@@ -146,9 +163,9 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									"mDataProp" : null,
 									"asSorting" : [ "asc", "desc" ],
 									"sClass" : "inchikey",
-									"aTargets" : [ 7 ],
+									"aTargets" : [ 8 ],
 									"bSearchable" : true,
-									"sWidth" : "15%",
+									"sWidth" : "10%",
 									"bSortable" : true,
 									"bUseRendered" : true,
 									"fnRender" : function(o, val) {
@@ -237,20 +254,22 @@ function defineStructuresTable(url, query_service, similarity,root) {
 										success : function(data, status, xhr) {
 											identifiers(data,aData);
 											$.each(data.dataEntry,function(index,entry) {
-														aData.compound.cas = formatValues(entry,"cas");																
+														aData.compound.cas = formatValues(entry,"cas");
+														aData.compound.einecs = formatValues(entry,"einecs");	
 														aData.compound.name = formatValues(entry,"names");																
-														$('td:eq(3)',nRow).html(aData.compound.name);
+														$('td:eq(4)',nRow).html(aData.compound.name);
 														$('td:eq(1)',nRow).html(aData.compound.cas);
+														$('td:eq(2)',nRow).html(aData.compound.einecs);
 														aData.compound['smiles'] = formatValues(entry,"smiles");
 														var offset = similarity?1:0;
-														$('td:eq(' + (4 + offset) + ')',nRow)
+														$('td:eq(' + (5 + offset) + ')',nRow)
 																.html(aData.compound['smiles']);
 														aData.compound['inchi'] = formatValues(entry,"inchi");
-														$('td:eq(' + (5 + offset) + ')',nRow)
+														$('td:eq(' + (6 + offset) + ')',nRow)
 																.html(aData.compound['inchi']);
 														aData.compound['inchikey'] = formatValues(
 																entry,"inchikey");
-														$('td:eq(' + (5 + offset) + ')',nRow)
+														$('td:eq(' + (6 + offset) + ')',nRow)
 																.html(aData.compound['inchikey']);
 													});
 											
@@ -331,7 +350,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 							"sWidth": "90%",
 							//"sHeight": "10em"
 				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"r>t<"fg-toolbar ui-helper-clearfix"p>',
-				    		"aaSorting" : [ [ 0, 'desc' ], [ 3, 'asc' ] ],
+				    		"aaSorting" : [ [ 0, 'desc' ], [ 4, 'asc' ] ],
 				    		fnDrawCallback: function() {
 				    			  var wrapper = this.parent();
 				    			  var rowsPerPage = this.fnSettings()._iDisplayLength;
