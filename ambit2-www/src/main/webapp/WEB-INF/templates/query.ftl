@@ -190,6 +190,7 @@
 						<a href="#" id='unselect' class='help' title='Click to unselect all records'  onClick='selecturi(false);'><u>Unselect</u></a>						
 						</th>
 						<th>CAS</th>
+						<th>EC</th>
 						<th>Structure</th>
 						<th>Name</th>
 						<th>Similarity</th>
