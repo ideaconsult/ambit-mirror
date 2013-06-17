@@ -350,7 +350,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 							"sWidth": "90%",
 							//"sHeight": "10em"
 				    		"sDom": 'T<"clear"><"fg-toolbar ui-helper-clearfix"r>t<"fg-toolbar ui-helper-clearfix"p>',
-				    		"aaSorting" : [ [ 0, 'desc' ], [ 4, 'asc' ] ],
+				    		"aaSorting" : [ [ 0, 'asc' ], [ 4, 'asc' ] ],
 				    		fnDrawCallback: function() {
 				    			  var wrapper = this.parent();
 				    			  var rowsPerPage = this.fnSettings()._iDisplayLength;
@@ -387,35 +387,21 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		
 		sOut += '<div id="tabs-id">';
 		sOut += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody>';
-		/*
-		$.each(dataEntry.lookup.cas, function(k, value) {
-			sOut += renderValue(null,"[RN]","CAS RN","",dataEntry.values[value],"");
-		});
-		*/
-		$.each(dataEntry.lookup.einecs, function(k, value) {
-			sOut += renderValue(null,"EC","",dataEntry.values[value],"",null);
-		});	
-		$.each(dataEntry.lookup.inchi, function(k, value) {
-			sOut += renderValue(null,"InChI","",dataEntry.values[value],"",null);
-		});		
+
 		/*
 		$.each(dataEntry.lookup.inchikey, function(k, value) {
 			sOut += renderValue(null,"[Struc]","InChIKey","",dataEntry.values[value],"");
 		});
-		$.each(dataEntry.lookup.names, function(k, value) {
-			sOut += renderValue(null,"[Name]","Name","",dataEntry.values[value],"");
-		});
 		*/
-		
-		$.each(dataEntry.lookup.reachdate, function(k, value) {
-			sOut += renderValue(null,"REACH date","",dataEntry.values[value],"",null);
-		});
-		$.each(dataEntry.lookup.smiles, function(k, value) {
-			sOut += renderValue(null,"SMILES","",dataEntry.values[value],"",null);
-		});
-		$.each(dataEntry.lookup.i5uuid, function(k, value) {
-			sOut += renderValue(null,"IUCLID5 UUID","",dataEntry.values[value],"",null);
-		});		
+		sOut += renderIdentifiers(null,"CAS",dataEntry.lookup.cas,dataEntry);
+		sOut += renderIdentifiers(null,"EC",dataEntry.lookup.einecs,dataEntry);
+		sOut += renderIdentifiers(null,"Name",dataEntry.lookup.names,dataEntry);
+		sOut += renderIdentifiers(null,"REACH date",dataEntry.lookup.reachdate,dataEntry);
+		sOut += renderIdentifiers(null,"SMILES",dataEntry.lookup.smiles,dataEntry);
+		sOut += renderIdentifiers(null,"IUCLID5 UUID",dataEntry.lookup.i5uuid,dataEntry);
+		sOut += renderIdentifiers(null,"InChI",dataEntry.lookup.inchi,dataEntry);
+		//sOut += renderIdentifiers(null,"InChI key",dataEntry.lookup.inchikey,dataEntry);
+
 		sOut += '</tbody></table></div>\n';
 		
 		var sOutData = '<div id="tabs-data">';
@@ -441,6 +427,20 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		sOutCalc += '</tbody></table></div>\n';
 		sOut += sOutData + sOutCalc + '</div>\n';
 		//sOut += '</div>\n';	
+		return sOut;
+	}
+	
+	function renderIdentifiers(url,title,lookup,dataEntry) {
+		var sOut = "";
+		var cache = {};
+		$.each(lookup, function(k, value) {
+			if ((dataEntry.values[value]===undefined)||(dataEntry.values[value]==null)) return;
+			var lv = dataEntry.values[value].toLowerCase();
+			if (cache[lv]==null) {
+				sOut += renderValue(url,title,"",dataEntry.values[value],"",null);
+				cache[lv] = true;
+			} 
+		});		
 		return sOut;
 	}
 	
