@@ -78,11 +78,13 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		text,
 		smiles,
 		inchi,
+		inchikey,
 		url,
 		ambitid
 	}
 	protected static String URL_as_id = "url";
 	protected static String SEARCH_as_id = "search";
+	protected static String INCHIKEY_as_id = "inchikey";
 	protected _searchtype searchType = null;
 	protected Form params;
 
@@ -144,7 +146,22 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 		
 		String url = null;
 		IQueryRetrieval<IStructureRecord>  query = null;
-		if (isURL(text)) try {
+		if (isInchiKey(text)) try {
+			String inchikey = getFirstParam(form);
+			if ((inchikey==null) || (inchikey.trim().length()!=27)) 
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid InChI Key");
+			QueryStructure q = new QueryStructure();
+			q.setChemicalsOnly(true);
+			q.setFieldname(ExactStructureSearchMode.inchikey);
+			q.setValue(inchikey.trim());
+			searchType = _searchtype.inchikey;
+			query = q;
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,String.format("%s %s",url,x.getMessage()),x);
+		} 			
+		else if (isURL(text)) try {
 			
 			url = getFirstParam(form);
 			if (url==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No search parameter!");
@@ -392,6 +409,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);		
 		}
 	}	
+	
+	public boolean isInchiKey(String text) {
+		return INCHIKEY_as_id.equals(text.toLowerCase());
+	}
 	
 	public boolean isURL(String text) {
 		return URL_as_id.equals(text.toLowerCase());
