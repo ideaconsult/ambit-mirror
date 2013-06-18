@@ -26,6 +26,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.data.EINECS;
+import ambit2.core.processors.structure.key.ExactStructureSearchMode;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CMLReporter;
 import ambit2.db.reporters.CSVReporter;
@@ -39,6 +40,7 @@ import ambit2.db.search.StringCondition;
 import ambit2.db.search.structure.AbstractStructureQuery;
 import ambit2.db.search.structure.QueryField;
 import ambit2.db.search.structure.QueryFieldNumeric;
+import ambit2.db.search.structure.QueryStructure;
 import ambit2.db.search.structure.QueryStructureByID;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.db.update.chemical.DeleteChemical;
@@ -62,6 +64,7 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
+import ambit2.rest.structure.CompoundLookup._searchtype;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableStructureEntry;
 import ambit2.rest.task.FactoryTaskConvertor;
@@ -351,7 +354,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context, Request request,
 			Response response) throws ResourceException {
 		media = getMediaParameter(request);
-		
+		Object key = null;
 		try {
 			Form form = request.getResourceRef().getQueryAsForm();
 			try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
@@ -362,7 +365,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			
 			try { headless = Boolean.parseBoolean(form.getFirstValue("headless")); } catch (Exception x) { headless=false;}
 			
-			Object key = request.getAttributes().get(OpenTox.URI.compound.getKey());
+			key = request.getAttributes().get(OpenTox.URI.compound.getKey());
 			if (key==null) {
 				boolean byAlias = true;
 				String condition = form.getFirstValue(QueryResource.condition);
@@ -420,21 +423,30 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 			        return query;
 				} else return null;			
 			} else {
+				try {
 				IStructureRecord record = new StructureRecord();
 				record.setIdchemical(Integer.parseInt(Reference.decode(key.toString())));
 				return createQueryByID(record);
+				} catch (NumberFormatException x) {
+					String inchikey = key.toString().trim();
+					if (inchikey.length()==27) { //assume InChIKey
+						QueryStructure q = new QueryStructure();
+						q.setChemicalsOnly(true);
+						q.setFieldname(ExactStructureSearchMode.inchikey);
+						q.setValue(inchikey.trim());
+						return q;
+					}
+					throw new ResourceException(
+							Status.CLIENT_ERROR_BAD_REQUEST,
+							String.format("Invalid resource id %s",
+									request.getAttributes().get(OpenTox.URI.compound.getKey())==null?"":request.getAttributes().get(OpenTox.URI.compound.getKey())),
+							x
+							);
+				}	
 			}
-		} catch (NumberFormatException x) {
-			throw new ResourceException(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Invalid resource id %s",
-							request.getAttributes().get(OpenTox.URI.compound.getKey())==null?"":request.getAttributes().get(OpenTox.URI.compound.getKey())),
-					x
-					);
+
 		} catch (Exception x) {
-			throw new ResourceException(
-					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x)
-					;
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
 		}
 		
 
