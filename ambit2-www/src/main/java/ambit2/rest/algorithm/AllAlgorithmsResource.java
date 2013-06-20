@@ -151,7 +151,13 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 			return new StringConvertor(	r,MediaType.TEXT_URI_LIST);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest(),getDocumentation());
-			return new StringConvertor(	r,MediaType.APPLICATION_JSON);			
+			return new StringConvertor(	r,MediaType.APPLICATION_JSON);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+			Form params = getResourceRef(getRequest()).getQueryAsForm();
+			String jsonpcallback = params.getFirstValue("jsonp");
+			if (jsonpcallback==null) jsonpcallback = params.getFirstValue("callback");
+			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest(),getDocumentation(),jsonpcallback);
+			return new StringConvertor(	r,MediaType.APPLICATION_JAVASCRIPT);		
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 				variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 				variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||

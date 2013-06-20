@@ -17,9 +17,13 @@ public class AlgorithmJSONReporter extends AlgorithmURIReporter {
 	 */
 	private static final long serialVersionUID = 207326039207770977L;
 	protected String comma = null;
-	
+	protected String jsonpCallback = null;
 	public AlgorithmJSONReporter(Request request,ResourceDoc doc) {
+		this(request,doc,null);
+	}
+	public AlgorithmJSONReporter(Request request,ResourceDoc doc,String jsonpcallback) {
 		super(request,doc);
+		this.jsonpCallback = jsonpcallback;
 	}
 	
 	private static String format = "\n{\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"content\": \"%s\",\n\t\"endpoint\": \"%s\",\n\t\"description\": \"%s\",\n\t\"format\": \"%s\",\n\t\"implementationOf\": \"%s\",\n\t\"isDataProcessing\": %s,\n\t\"requiresDataset\": %s,\n\t\"isSupevised\": %s,\n\t\"requires\": \"%s\",\n\t\"type\": [\n%s]\n}";
@@ -62,9 +66,21 @@ public class AlgorithmJSONReporter extends AlgorithmURIReporter {
 		try {
 			output.write("\n]\n}");
 		} catch (Exception x) {}
+		
+		try {
+			if (jsonpCallback!=null) {
+				output.write(");");
+			}
+		} catch (Exception x) {}		
 	};
 	@Override
 	public void header(Writer output, Iterator<Algorithm> query) {
+		try {
+			if (jsonpCallback!=null) {
+				output.write(jsonpCallback);
+				output.write("(");
+			}
+		} catch (Exception x) {	}
 		try {
 			output.write("{\"algorithm\": [");
 		} catch (Exception x) {}
