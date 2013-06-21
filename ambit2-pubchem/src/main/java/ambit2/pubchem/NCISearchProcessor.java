@@ -98,10 +98,23 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 				return "chemical/x-mdl-sdfile";
 			}
 		},
-		hashisy;
+		hashisy,
+		dblinks {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_ChEBI,Property.opentox_Pubchem, Property.opentox_ChEMBL, Property.opentox_ChemSpider,Property.opentox_CMS,Property.opentox_ToxbankWiki};
+			}
+		},
+		allnlinks {
+			@Override
+			public String[] getOpenToxEntry() {
+				return new String[] {Property.opentox_CAS,Property.opentox_EC,Property.opentox_IupacName, Property.opentox_Name,Property.opentox_SMILES,Property.opentox_InChI_std,Property.opentox_InChIKey_std,Property.opentox_REACHDATE,Property.opentox_IUCLID5_UUID,Property.opentox_ChEBI,Property.opentox_Pubchem, Property.opentox_ChEMBL,Property.opentox_ChemSpider,Property.opentox_CMS,Property.opentox_ToxbankWiki};
+			}			
+		};
 		public String getMediaType() {
 			return "text/plain";
 		}
+		
 		public String[] getOpenToxEntry() {return null; }
 		
 		};

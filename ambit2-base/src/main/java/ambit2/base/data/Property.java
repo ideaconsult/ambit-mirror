@@ -74,6 +74,12 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static final String opentox_TupleFeature = "http://www.opentox.org/api/1.1#TupleFeature";
 	public static final String opentox_ConfidenceFeature = "http://www.opentox.org/api/1.1#ConfidenceFeature";
 	
+	public static final String opentox_ChEBI = "http://www.opentox.org/api/dblinks#ChEBI";
+	public static final String opentox_Pubchem = "http://www.opentox.org/api/dblinks#Pubchem";
+	public static final String opentox_ChemSpider = "http://www.opentox.org/api/dblinks#ChemSpider";
+	public static final String opentox_ChEMBL = "http://www.opentox.org/api/dblinks#ChEMBL";
+	public static final String opentox_ToxbankWiki = "http://www.opentox.org/api/dblinks#ToxbankWiki";
+	public static final String opentox_CMS = "http://www.opentox.org/api/dblinks#CMS";
 	
 	public static final String EC = "EC";
 	
