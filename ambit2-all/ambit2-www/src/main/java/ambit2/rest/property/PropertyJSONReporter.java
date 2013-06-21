@@ -8,7 +8,9 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.ICategory;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.json.JSONUtils;
 
@@ -98,6 +100,11 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 				}
 			//	feature.addProperty(DC.creator, item.getReference().getURL());
 			}	
+			
+			String annotation = null;
+			if (feature.getAnnotations()!=null) annotation = annotation2JSON(feature);
+
+
 			if (comma!=null) getOutput().write(comma);
 			getOutput().write(String.format(
 					"\n\"%s\":{\n" + //uri
@@ -111,7 +118,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					"\n\t\"%s\":\"%s\"," + //creator
 					"\n\t\"%s\":%d," + //order
 					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
-					"\n}",
+					"%s\n\n}",
 					uri,
 					jsonFeature.title.jsonname(),JSONUtils.jsonEscape(feature.getName()),
 					jsonFeature.units.jsonname(),feature.getUnits()==null?"":feature.getUnits(),
@@ -123,24 +130,59 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					jsonFeature.order.jsonname(),feature.getOrder(),
 					jsonFeature.source.jsonname(),
 						uriSource==null?null:JSONUtils.jsonEscape(uriSource),
-						typeSource==null?null:JSONUtils.jsonEscape(typeSource)
+						typeSource==null?null:JSONUtils.jsonEscape(typeSource),
+					annotation==null?"":(","+annotation)
 					
 					));
 			comma = ",";
 
 		} catch (Exception x) {
-			
+			x.printStackTrace();
 		}
 		return feature;
 	}
-	/*
-	protected String annotation2json(PropertyAnnotation annotation) {
-		if (annotation!=null)
+
+	public static String annotation2JSON(Property feature) {
+		StringBuilder b = new StringBuilder();
+		for (PropertyAnnotation annotation : feature.getAnnotations()) try {
+	
+			b.append("\"");
+			b.append(JSONUtils.jsonEscape(annotation.getPredicate()));
+			b.append("\" : {\n");
 			
-				PropertyAnnotationRDFReporter.annotation2RDF(a, jenaModel, feature,uriReporter.getBaseReference().toString());
-			else return null;
+			String object = annotation.getObject().toString();
+			if (annotation.getType().startsWith("^^")) { // xsd:ToxicCategory a rdfs:Datatype; rdfs:subClassOf xsd:string.
+				try {
+					String category = "category";
+					String ctype = annotation.getType().replace("^^", "");
+					try {
+						ICategory.CategoryType.valueOf(ctype);
+						category = "toxcategory";
+					} catch (Exception x) {
+					}
+					
+					b.append("\"");
+					b.append(JSONUtils.jsonEscape(object));
+					b.append("\" : {\n\t\"");
+					b.append(JSONUtils.jsonEscape(category));
+					b.append("\" :");
+					b.append(JSONUtils.jsonEscape(ctype));
+					b.append("}\n");
+					
+				} catch (Exception x) {x.printStackTrace(); }//fallback to string 
+			} else if (annotation.getType().equals(OT.OTClass.ModelConfidenceFeature)) {
+				//TODO
+				//feature.addOntClass(OT.OTClass.ModelConfidenceFeature.getOntClass(jenaModel));
+				//if (!object.startsWith("http")) object = String.format("%s%s",rootReference,object);
+				//feature.addProperty(predicate,object);
+			} 	
+			b.append("}");
+		} catch (Exception x) {
+			
+			return null;
+		}
+		return b.toString();
 	}
-	*/
 	public void header(java.io.Writer output, IQueryRetrieval<Property> query) {
 		try {
 			output.write("{");
