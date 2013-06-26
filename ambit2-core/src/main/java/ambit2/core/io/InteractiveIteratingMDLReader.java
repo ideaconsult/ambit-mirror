@@ -27,8 +27,11 @@ public class InteractiveIteratingMDLReader extends MyIteratingMDLReader {
     /**
      * @param in
      */
-    public InteractiveIteratingMDLReader(Reader in,IChemObjectBuilder builder) {
-        super(in,builder);
+	public InteractiveIteratingMDLReader(Reader in,IChemObjectBuilder builder) {
+		this(in,builder,false);
+	}
+    public InteractiveIteratingMDLReader(Reader in,IChemObjectBuilder builder,boolean skip) {
+        super(in,builder,skip);
 
     }
 
@@ -36,7 +39,10 @@ public class InteractiveIteratingMDLReader extends MyIteratingMDLReader {
      * @param in
      */
     public InteractiveIteratingMDLReader(InputStream in, IChemObjectBuilder builder) {
-        super(in,builder);
+    	this(in,builder,false);
+    }
+    public InteractiveIteratingMDLReader(InputStream in, IChemObjectBuilder builder,boolean skip) {
+        super(in,builder,skip);
 
     }
 
