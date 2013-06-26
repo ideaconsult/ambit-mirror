@@ -17,6 +17,7 @@ import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.ReadChemicalIds;
 import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.readers.RetrieveProfileValues;
 import ambit2.db.readers.RetrieveProfileValues.SearchMode;
@@ -117,6 +118,15 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					return super.process(target);
 				}
 			});		
+		
+		getProcessors().add(new ProcessorStructureRetrieval(new ReadChemicalIds()) {
+			@Override
+			public IStructureRecord process(IStructureRecord target)
+					throws AmbitException {
+				((ReadChemicalIds)getQuery()).setValue(target);
+				return super.process(target);
+			}
+		});				
 	}
 	protected void configureProcessors(boolean includeMol) {
 		configurePropertyProcessors();

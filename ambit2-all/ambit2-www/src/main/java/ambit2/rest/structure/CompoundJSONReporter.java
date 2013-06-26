@@ -210,12 +210,17 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					similarityValue = item.getProperty(p);
 					break;
 				}
-			builder.append(String.format("\t\t\"metric\":%s,",similarityValue));
+			builder.append(String.format("\t\t\"metric\":%s,\n",similarityValue));
 			
-			builder.append(String.format("\t\t\"%s\":\"\",","name")); //placeholders
-			builder.append(String.format("\t\t\"%s\":\"\",","cas"));
-			builder.append(String.format("\t\t\"%s\":\"\"","einecs"));
-			
+			builder.append(String.format("\t\t\"%s\":\"\",\n","name")); //placeholders
+			builder.append(String.format("\t\t\"%s\":\"\",\n","cas"));
+			builder.append(String.format("\t\t\"%s\":\"\",\n","einecs"));
+			if (item.getInchiKey()!=null)
+				builder.append(String.format("\t\t\"%s\":\"%s\",\n","inchikey",item.getInchiKey()));
+			if (item.getInchi()!=null)
+				builder.append(String.format("\t\t\"%s\":\"%s\",\n","inchi",JSONUtils.jsonEscape(item.getInchi())));
+			if (item.getFormula()!=null)
+				builder.append(String.format("\t\t\"%s\":\"%s\"","formula",JSONUtils.jsonEscape(item.getFormula())));
 
 			builder.append("\n\t\t},\n");
 			
