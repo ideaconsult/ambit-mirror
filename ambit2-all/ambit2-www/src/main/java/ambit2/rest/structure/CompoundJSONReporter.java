@@ -214,13 +214,13 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			
 			builder.append(String.format("\t\t\"%s\":\"\",\n","name")); //placeholders
 			builder.append(String.format("\t\t\"%s\":\"\",\n","cas"));
-			builder.append(String.format("\t\t\"%s\":\"\",\n","einecs"));
+			builder.append(String.format("\t\t\"%s\":\"\"\n","einecs"));
 			if (item.getInchiKey()!=null)
-				builder.append(String.format("\t\t\"%s\":\"%s\",\n","inchikey",item.getInchiKey()));
+				builder.append(String.format(",\t\t\"%s\":\"%s\"\n","inchikey",item.getInchiKey()));
 			if (item.getInchi()!=null)
-				builder.append(String.format("\t\t\"%s\":\"%s\",\n","inchi",JSONUtils.jsonEscape(item.getInchi())));
+				builder.append(String.format(",\t\t\"%s\":\"%s\"\n","inchi",JSONUtils.jsonEscape(item.getInchi())));
 			if (item.getFormula()!=null)
-				builder.append(String.format("\t\t\"%s\":\"%s\"","formula",JSONUtils.jsonEscape(item.getFormula())));
+				builder.append(String.format(",\t\t\"%s\":\"%s\"","formula",JSONUtils.jsonEscape(item.getFormula())));
 
 			builder.append("\n\t\t},\n");
 			
