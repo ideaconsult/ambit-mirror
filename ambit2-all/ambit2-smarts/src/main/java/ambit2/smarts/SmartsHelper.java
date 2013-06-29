@@ -117,6 +117,11 @@ public class SmartsHelper
 			sb.append(" NumH=" + (at.getImplicitHydrogenCount() + explHAt));
 			if (at.getFlag(CDKConstants.ISAROMATIC)) 
 				sb.append(" aromatic");
+			
+			Integer stereo = at.getStereoParity();			
+			sb.append(" stereo = " + stereo);
+						
+			
 			sb.append("\n");
 		}	
 		return(sb.toString());
