@@ -179,7 +179,8 @@ public class TestTautomers
 		//tt.visualTest("O=CC(C)(C)Cl");
 				
 		//tt.FlagExplicitHydrogens = false;
-		tt.visualTest("O=CC");
+		tt.testStereoInfo("O=C[C@](C)(Cl)Br");
+		
 		
 		//RuleStructureFactory rsf = new RuleStructureFactory();
 		//rsf.makeRuleStrcutures("CC=O", 0, "C=CO", 0, "/test.smi", "/gen-test.txt");
@@ -709,6 +710,23 @@ public class TestTautomers
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(v);
 	}
+	
+	public void testStereoInfo(String smi) throws Exception
+	{
+		System.out.println("Visual Testing: " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi, FlagExplicitHydrogens);
+		
+		System.out.println(SmartsHelper.getAtomsAttributes(mol));
+		
+		String smiles2 = SmartsHelper.moleculeToSMILES(mol);
+		System.out.println(smiles2);
+		
+		Vector<IAtomContainer> v = new Vector<IAtomContainer>();
+		v.add(mol);
+		
+		//TestStrVisualizer tsv = new TestStrVisualizer(v);
+		
+	} 
 	
 	
 	IAtomContainer getMoleculeFromFile(String fname) throws Exception
