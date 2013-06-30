@@ -685,15 +685,12 @@ DELIMITER ;
 -- -----------------------------------------------------
 DROP PROCEDURE IF EXISTS `g2order`;
 DELIMITER $$
-CREATE PROCEDURE `g2order`(IN laplacek DOUBLE)
+CREATE PROCEDURE `g2order`(IN dataset INT, IN property INT, IN laplacek DOUBLE)
 BEGIN
-
   set laplacek = ifnull(laplacek,1E-7);
-
   select idchemical,ifnull(a.count,0),ifnull(b.count,0),ifnull(c.count,0),ifnull(d.count,0),
   (ifnull(a.count,0)+ifnull(c.count,0))/(ifnull(a.count,0)+ifnull(b.count,0)+ifnull(c.count,0)+ifnull(d.count,0)) as fisher,
-
-   -- if(a.count is null,0,
+  if (a.count is null,0,
   if(a.count is null,laplacek,a.count+laplacek)*ln(
   if(a.count is null,laplacek,a.count+laplacek)*(if(c.count is null,laplacek,c.count+laplacek)+if(d.count is null,laplacek,d.count+laplacek))/
   (
@@ -705,27 +702,28 @@ BEGIN
   (
   if(d.count is null,laplacek,d.count+laplacek)*(if(a.count is null,laplacek,a.count+laplacek)+if(b.count is null,laplacek,b.count+laplacek))
   )
+  )
   ) g2
   from chemstats
   left join (
-  SELECT idchemical,count FROM chemstats  where dactivity=1 and similarity = 1
+  SELECT idchemical,count FROM chemstats  where dactivity=1 and similarity = 1 and idproperty=property and id_srcdataset=dataset
   ) a using(idchemical)
   left join
   (
-  SELECT idchemical,count FROM chemstats  where dactivity=1 and similarity = 0
+  SELECT idchemical,count FROM chemstats  where dactivity=1 and similarity = 0 and idproperty=property and id_srcdataset=dataset
   ) b using(idchemical)
   left join
   (
-  SELECT idchemical,count FROM chemstats  where dactivity=0 and similarity = 1
+  SELECT idchemical,count FROM chemstats  where dactivity=0 and similarity = 1 and idproperty=property and id_srcdataset=dataset
   ) c using(idchemical)
   left join
   (
-  SELECT idchemical,count FROM chemstats  where dactivity=0 and similarity = 0
+  SELECT idchemical,count FROM chemstats  where dactivity=0 and similarity = 0 and idproperty=property and id_srcdataset=dataset
   ) d using(idchemical)
+  where idproperty=property and id_srcdataset=dataset
   group by idchemical
   order by g2 desc;
-
-END $$
+END$$
 
 DELIMITER ;
 
@@ -987,5 +985,8 @@ DELIMITER ;
 -- GRANT EXECUTE ON PROCEDURE g2chemstats TO 'guest'@'localhost';
 -- GRANT EXECUTE ON PROCEDURE g2order TO 'guest'@'localhost';
 -- GRANT EXECUTE ON PROCEDURE g2stats TO 'guest'@'localhost';
+
+-- GRANT EXECUTE ON PROCEDURE g2counts TO 'guest'@'localhost';
+-- GRANT EXECUTE ON PROCEDURE g2profile TO 'guest'@'localhost';
 
 insert into version (idmajor,idminor,comment) values (6,6,"AMBIT Schema: chemical landscape support");
