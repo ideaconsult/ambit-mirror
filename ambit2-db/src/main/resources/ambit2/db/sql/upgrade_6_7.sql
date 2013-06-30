@@ -138,3 +138,6 @@ END $$
 
 DELIMITER ;
 insert into version (idmajor,idminor,comment) values (6,7,"AMBIT Schema: chemical landscape support");
+
+-- GRANT EXECUTE ON PROCEDURE g2counts TO 'guest'@'localhost';
+-- GRANT EXECUTE ON PROCEDURE g2profile TO 'guest'@'localhost';
