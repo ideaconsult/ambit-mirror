@@ -108,6 +108,7 @@ import ambit2.rest.routers.opentox.TaskRouter;
 import ambit2.rest.similarity.SimilarityMatrixResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.similarity.space.ChemicalSpaceResource;
+import ambit2.rest.similarity.space.QMapDatasetResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
@@ -316,7 +317,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter, tupleRouter, smartsRouter);
 		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, tupleRouter, smartsRouter, similarityRouter);
 		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
+		
+		//qmap
+		router.attach(String.format("%s/{%s}",QMapDatasetResource.qmap,QMapDatasetResource.qmapKey),
+							QMapDatasetResource.class);
 
+		//collections
 		MyRouter collectionRouter = new MyRouter(getContext());
 		collectionRouter.attach(String.format("/{%s}/{%s}",CollectionStructureResource.folderKey,CollectionStructureResource.datasetKey),CollectionStructureResource.class);
 		router.attach(CollectionStructureResource.collection,createProtectedResource(collectionRouter,"collection"));
