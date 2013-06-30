@@ -137,4 +137,4 @@ BEGIN
 END $$
 
 DELIMITER ;
-insert into version (idmajor,idminor,comment) values (6,7,"AMBIT Schema: qsasmap tables for chemical landscape support");
+insert into version (idmajor,idminor,comment) values (6,7,"AMBIT Schema: chemical landscape support");
