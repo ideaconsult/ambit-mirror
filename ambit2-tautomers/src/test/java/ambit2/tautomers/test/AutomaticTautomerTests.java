@@ -40,6 +40,9 @@ public class AutomaticTautomerTests
 	public static final int LPM_STRUCTURE_STAT = 9;
 	public static final int LPM_EQUIVALENCE_STAT = 10;
 	public static final int LPM_TAUTOMER_FULL_INFO = 11;
+	public static final int LPM_TAUTOMER_DESCR_STAT = 12;
+	public static final int LPM_TAUTOMER_FP_STAT = 13;
+	
 	
 	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
 	//public static final int LPM_COMPARE_AMBIT_EXTERNAL = 12;
@@ -122,6 +125,11 @@ public class AutomaticTautomerTests
 	String separator2 = "\t";
 	boolean FlagUseOnlyFirstAlgorithm = false;  //essentially if true this makes distribution of the tautomer count for the first algorithm
 	boolean FlagCompareCanonicalTautomer = true;
+	
+	//helpers for tautomer descr/fp stat
+	String descrNames[];
+	int curStruct = -1;
+	int curTautomer = -1;
 	
 	
 	public static void main(String[] args)
@@ -493,6 +501,27 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (command.equals("tautomer-descr-stat"))
+		{
+			System.out.println("Calculating tatomer descriptor statistics: " + inFileName);
+			openOutputFile();
+			//setTautomerManager();
+			lineProcessMode = LPM_TAUTOMER_DESCR_STAT;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("tautomer-fp-stat"))
+		{
+			System.out.println("Calculating tatomer descriptor statistics: " + inFileName);
+			openOutputFile();
+			//setTautomerManager();
+			lineProcessMode = LPM_TAUTOMER_FP_STAT;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
 		
 		
 		
@@ -760,6 +789,19 @@ public class AutomaticTautomerTests
 		if (lineProcessMode == LPM_TAUTOMER_FULL_INFO)
 		{
 			tautomerFullInfo(line);
+			return(0);
+		}
+		
+		
+		if (lineProcessMode == LPM_TAUTOMER_DESCR_STAT)
+		{
+			tautomerDescrStat(line);
+			return(0);
+		}
+		
+		if (lineProcessMode == LPM_TAUTOMER_FP_STAT)
+		{
+			tautomerFPStat(line);
 			return(0);
 		}
 		
@@ -1222,6 +1264,19 @@ public class AutomaticTautomerTests
 		return 0;
 	}
 	
+	
+	int tautomerDescrStat(String line)
+	{
+		//TODO
+		return 0;
+	}
+	
+	
+	int tautomerFPStat(String line)
+	{
+		//TODO
+		return 0;
+	}
 	
 	//---------------- statistics and comparison methods ----------------------
 	
