@@ -26,7 +26,15 @@ public class AutomaticTautomerTests
 	{	
 		String option = null;
 		String value = null;		
-	};	
+	};
+	
+	public class DescriptorStatInfo
+	{
+		public String name;
+		public double valueSum = 0;
+		public double valueSDSum = 0;
+		
+	}
 	
 	
 	public static final int LPM_PROCESS_NCI = 1;
@@ -65,7 +73,7 @@ public class AutomaticTautomerTests
 	
 	String cactvsExecPath = "C:/Program Files/cactvs/lib/tclcactvs.exe";
 	String cactvsOutPath = "D:/Projects/data012-tautomers/cactvs";
-	
+	String descrTestSepareator = ",";
 	
 	RandomAccessFile outFile = null;
 	TautomerManager tman;
@@ -127,9 +135,11 @@ public class AutomaticTautomerTests
 	boolean FlagCompareCanonicalTautomer = true;
 	
 	//helpers for tautomer descr/fp stat
-	String descrNames[];
+	DescriptorStatInfo descrStat[];
 	int curStruct = -1;
 	int curTautomer = -1;
+	RandomAccessFile tempOutFile = null;
+	
 	
 	
 	public static void main(String[] args)
@@ -668,6 +678,40 @@ public class AutomaticTautomerTests
 		return(0);
 	}
 	
+	int openTempOutputFile()
+	{
+		try
+		{
+			File file = new File("temporal-out-file-123456789.txt");
+			tempOutFile = new RandomAccessFile(file,"rw");
+			tempOutFile.setLength(0);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Problem opening the temporal out file");
+			System.out.println(e.toString());
+		}	
+		
+		return(0);
+	}
+	
+	
+	int closeTempOutputFile() 
+	{
+		try
+		{
+			if (tempOutFile != null)
+				tempOutFile.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Problem closing the temporal out file");
+			System.out.println(e.toString());
+		}
+		
+		return(0);
+	}
+	
 	int output(String data)
 	{
 		try
@@ -677,6 +721,20 @@ public class AutomaticTautomerTests
 		catch (Exception e)
 		{
 			System.out.println("output error: " + e.toString());
+			return(-1);
+		}
+		return(0);
+	}
+	
+	int tempOutput(String data)
+	{
+		try
+		{
+			tempOutFile.write(data.getBytes());
+		}
+		catch (Exception e)
+		{
+			System.out.println("temporam output error: " + e.toString());
 			return(-1);
 		}
 		return(0);
@@ -1267,10 +1325,75 @@ public class AutomaticTautomerTests
 	
 	int tautomerDescrStat(String line)
 	{
-		//TODO
+		if (curLine == 1)
+		{
+			initDescriptorStatistics(line);
+			return 0;
+		}
+		
+		String tokens[] = line.split(descrTestSepareator);
+		try
+		{
+			int tautoNum = Integer.parseInt(tokens[0]);
+			if (tautoNum != curTautomer)
+			{
+				performSecondDescriptorScan();
+				startNewTautomer(tokens);
+			}
+			else
+				processDescrLineFirstScan(tokens);
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error on line " + curLine);
+			System.out.println(e.toString());
+		}
+		
 		return 0;
 	}
+		
+	void initDescriptorStatistics(String firstLine)
+	{
+		String tokens[] = firstLine.split(descrTestSepareator);
+		int nDescr = tokens.length - 3;
+		descrStat = new DescriptorStatInfo[nDescr];
+		for (int i = 0; i < nDescr; i++)
+		{	
+			descrStat[i] = new DescriptorStatInfo();
+			descrStat[i].name = tokens[i+3];
+		}
+	}
 	
+	void initTautomerStatistics()
+	{
+		for (int i = 0; i < descrStat.length; i++)
+		{
+			descrStat[i].valueSum = 0;
+			descrStat[i].valueSDSum = 0;
+		}
+	}
+	
+	void performSecondDescriptorScan()
+	{
+		closeTempOutputFile();
+		//TODO
+	}
+	
+	void startNewTautomer(String tokens[])
+	{	
+		//TODO
+	}
+	
+	void processDescrLineFirstScan(String tokens[])
+	{
+		//TODO
+	}
+	
+	void processDescrLineSecondScan(String tokens[])
+	{
+		//TODO
+	}
 	
 	int tautomerFPStat(String line)
 	{
@@ -1637,6 +1760,11 @@ public class AutomaticTautomerTests
 	}
 	
 	
+	
+	
+	
+	
+	
 	/*
 	int compareAmbitToOtherSoftwareTools()
 	{
@@ -1675,5 +1803,7 @@ public class AutomaticTautomerTests
 		System.out.println("usedMem = " + usedMem + "   freeMem = " + freeMem + "  totalMem = " + totalMem 
 				+ "    maxMem = " + maxMem);
 	}
+	
+	
 	
 }
