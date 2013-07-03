@@ -50,13 +50,15 @@ public class AutomaticTautomerTests
 	public static final int LPM_TAUTOMER_FULL_INFO = 11;
 	public static final int LPM_TAUTOMER_DESCR_STAT = 12;
 	public static final int LPM_TAUTOMER_FP_STAT = 13;
+	public static final int LPM_TAUTOMER_CALC_DESCR_AVERAGE = 14;
+	public static final int LPM_TAUTOMER_DESCR_STAT2 = 15;
 	
 	
 	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
 	//public static final int LPM_COMPARE_AMBIT_EXTERNAL = 12;
 	
 	
-	
+	public boolean FlagHandleCommand = true;
 	
 	int lineProcessMode = 0;
 		
@@ -147,6 +149,11 @@ public class AutomaticTautomerTests
 		AutomaticTautomerTests att = new AutomaticTautomerTests();
 				
 		try {
+			
+			//att.handleArguments(args);
+			//if (att.FlagHandleCommand) att.handleCommand();
+			//if (true) return;
+			
 			att.handleArguments(new String[] {
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					
@@ -164,7 +171,8 @@ public class AutomaticTautomerTests
 					"-fMaxCyclo", "4",
 			});
 			
-			att.handleCommand();
+			if (att.FlagHandleCommand)
+				att.handleCommand();
 		} 
 		catch (Exception x) {
 			x.printStackTrace();
@@ -177,6 +185,7 @@ public class AutomaticTautomerTests
 		if (args.length == 0)
 		{	
 			printHelp();
+			FlagHandleCommand = false;
 			return(0);
 		}	
 		
@@ -187,6 +196,14 @@ public class AutomaticTautomerTests
 			System.out.println("  " + options.get(i).option + "  " + options.get(i).value);
 		
 		CmdOption opt;
+		
+		opt = getOption("h", options);
+		if (opt != null)
+		{
+			printHelp();
+			FlagHandleCommand = false;
+			return(0); 
+		}
 		
 		opt = getOption("i", options);
 		if (opt != null)
@@ -521,7 +538,7 @@ public class AutomaticTautomerTests
 			closeOutputFile();
 			return(0);
 		}
-		
+						
 		if (command.equals("tautomer-fp-stat"))
 		{
 			System.out.println("Calculating tatomer descriptor statistics: " + inFileName);
@@ -532,6 +549,29 @@ public class AutomaticTautomerTests
 			closeOutputFile();
 			return(0);
 		}
+		
+		if (command.equals("tautomer-descr-stat2"))
+		{
+			System.out.println("Calculating tatomer descriptor statistics seocnf order: " + inFileName);
+			openOutputFile();
+			//setTautomerManager();
+			lineProcessMode = LPM_TAUTOMER_DESCR_STAT2;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
+		if (command.equals("tautomer-calc-descr-average"))
+		{
+			System.out.println("Calculating tatomer descriptor statistics seocnf order: " + inFileName);
+			openOutputFile();
+			//setTautomerManager();
+			lineProcessMode = LPM_TAUTOMER_CALC_DESCR_AVERAGE;
+			iterateInputFile();
+			closeOutputFile();
+			return(0);
+		}
+		
 		
 		
 		
@@ -549,8 +589,7 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
-		
-		
+				
 		System.out.println("Unknown command: " + command);
 		
 		return(-1);
@@ -564,15 +603,24 @@ public class AutomaticTautomerTests
 		System.out.println("-i            input file");
 		System.out.println("-i<n>         additional input files n = 2,3,4,5");
 		System.out.println("-o            output file");
-		System.out.println("-nInpStr      the number of used input structures");
-		System.out.println("-nStartStr    the number of starting structure");
+		System.out.println("-nInpStr      the number of used input structures /or processed lines/");
+		System.out.println("-nStartStr    the number of starting structure /or line to be processed/");
 		
 		System.out.println("-c            command: ");
 		System.out.println("                 process-nci           nci file is processed");
 		System.out.println("                 filter                input file is filtered");
 		System.out.println("                 tautomer-count        counts the number of tautomers");
+		System.out.println("                 tautomer-count-comb   counts the number of tautomers /combinatorial algorithm/");
+		System.out.println("                 tautomer-count-comb-improved   counts the number of tautomers /improved comb. algorithm/");
 		System.out.println("                 tautomer-equivalence  check the equivalence of each tautomer");
 		System.out.println("                 cactvs-count          counts the number of cactvs tautomers");
+		System.out.println("                 structure-stat        calculates structure statistics");		
+		System.out.println("                 equivalence-stat      calculates tautomer equivaence statistics");
+		System.out.println("                 tautomer-full-info    generates and stores all tautomers and ranks");
+		System.out.println("                 tautomer-descr-stat   calculates descirptor statisics as function of the tautomers");
+		System.out.println("                 tautomer-fp-stat      calculates fingerprint statisics as function of the tautomers");
+		System.out.println("                 tautomer-descr-stat2  calculates 2nd order descirptor statisics");
+		System.out.println("                 tautomer-calc-descr-average  calculates descirptors' average values");
 		
 	}	
 	
@@ -860,6 +908,18 @@ public class AutomaticTautomerTests
 		if (lineProcessMode == LPM_TAUTOMER_FP_STAT)
 		{
 			tautomerFPStat(line);
+			return(0);
+		}
+		
+		if (lineProcessMode == LPM_TAUTOMER_DESCR_STAT2)
+		{
+			tautomerDescrStat2Order(line);
+			return(0);
+		}
+		
+		if (lineProcessMode == LPM_TAUTOMER_CALC_DESCR_AVERAGE)
+		{
+			tautomerCalcDescrAverage(line);
 			return(0);
 		}
 		
@@ -1396,6 +1456,18 @@ public class AutomaticTautomerTests
 	}
 	
 	int tautomerFPStat(String line)
+	{
+		//TODO
+		return 0;
+	}
+	
+	int tautomerDescrStat2Order(String line)
+	{
+		//TODO
+		return 0;
+	}
+	
+	int tautomerCalcDescrAverage(String line)
 	{
 		//TODO
 		return 0;
