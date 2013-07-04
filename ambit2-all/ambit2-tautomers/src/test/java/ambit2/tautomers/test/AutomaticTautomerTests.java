@@ -28,15 +28,6 @@ public class AutomaticTautomerTests
 		String value = null;		
 	};
 	
-	public class DescriptorStatInfo
-	{
-		public String name;
-		public double valueSum = 0;
-		public double valueSDSum = 0;
-		
-	}
-	
-	
 	public static final int LPM_PROCESS_NCI = 1;
 	public static final int LPM_FILTER = 2;
 	public static final int LPM_TAUTOMER_COUNT = 3;
@@ -57,6 +48,11 @@ public class AutomaticTautomerTests
 	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
 	//public static final int LPM_COMPARE_AMBIT_EXTERNAL = 12;
 	
+	public double T = 300; //K
+	public static final double kB = 1.3806488E-23; //  [J/K]	
+	public static final double KeVtoJ = 1.602176565E-19;    //1eV = 1.602176565e-19 J = 1.602176565·10-19 J
+	public double energyConst = KeVtoJ/(T*kB);
+	public double eShift = -100; //eV;
 	
 	public boolean FlagHandleCommand = true;
 	
@@ -1469,8 +1465,41 @@ public class AutomaticTautomerTests
 	
 	int tautomerCalcDescrAverage(String line)
 	{
-		//TODO
+		if (curLine == 1)
+		{
+			initDescriptorStatistics(line);
+			return 0;
+		}
+		
+		String tokens[] = line.split(descrTestSepareator);
+		try
+		{
+			int tautoNum = Integer.parseInt(tokens[0]);
+			if (tautoNum != curTautomer)
+			{	
+				startNewTautomerAverageCalculation(tokens);
+			}
+			else
+				addDescriptorValuesToAverage(tokens);
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error on line " + curLine);
+			System.out.println(e.toString());
+		}
+		
 		return 0;
+	}
+	
+	void startNewTautomerAverageCalculation(String tokens[])
+	{	
+		//TODO
+	}
+	
+	void addDescriptorValuesToAverage(String tokens[])
+	{
+		//TODO
 	}
 	
 	//---------------- statistics and comparison methods ----------------------
@@ -1876,6 +1905,130 @@ public class AutomaticTautomerTests
 				+ "    maxMem = " + maxMem);
 	}
 	
+	
+	
+	//Helper classes
+	
+	
+	public class DescriptorStatInfo
+	{	
+		public String name;
+		public double originalValue;
+		public double valueSum = 0;
+		public double valueSDSum = 0;
+		
+		//variables for the 
+		public double valueSumProbWeighted = 0;
+		public double sumProbWeights = 0;
+		public double topValues[];
+		public double topRanks[];
+		int nUsedTopRanks;
+		int maxRankIndex;	
+		int nTautomers;
+		
+		public void initWeightedAverageCalculation(int maxNumRanks)
+		{
+			nTautomers = 0;
+			valueSum = 0.0;
+			valueSumProbWeighted = 0.0;
+			sumProbWeights = 0.0;
+			topValues = new double[maxNumRanks];
+			topRanks = new double[maxNumRanks];
+			nUsedTopRanks = 0;
+			maxRankIndex = -1;
+		}
+		
+		public void calcAverageAddNewValue(double value, double rank)
+		{
+			nTautomers++;
+			valueSum += value;
+			double p = Math.exp(-(rank-eShift)*energyConst);
+			valueSumProbWeighted += p*value;
+			sumProbWeights += p;
+			
+			addNewRankValue(value, rank);
+		}
+		
+		public void addNewRankValue(double value, double rank)
+		{
+			int n = topRanks.length;
+			if (nUsedTopRanks < n)
+			{				
+				//add new rank and value
+				topRanks[nUsedTopRanks] = rank;
+				topValues[nUsedTopRanks] = value;
+				
+				//determine the new index for the maximal rank
+				if (maxRankIndex == -1)
+					maxRankIndex = nUsedTopRanks;  //which should be zero in this case
+				else
+				{	
+					if (topRanks[maxRankIndex] < rank)
+						maxRankIndex = nUsedTopRanks;
+				}	
+				
+				nUsedTopRanks++;
+				return;
+			}
+			
+			if (topRanks[maxRankIndex] < rank)
+			{	
+				topRanks[maxRankIndex] = rank;
+				topValues[maxRankIndex] = value;
+				
+				//find new maximal rank index
+				maxRankIndex = 0;				
+				for (int i = 1; i < n; i++)
+					if (topRanks[maxRankIndex] < topRanks[i])
+						maxRankIndex = i;
+			}
+			
+		}
+		
+		public void sortRanks()
+		{
+			if (nUsedTopRanks <= 1)
+				return;
+			
+			double tmp;
+			for (int k = nUsedTopRanks-1; k>=0; k--)
+				for (int j = 0; j < k; j++)
+					if (topRanks[j] >  topRanks[j+1])
+					{
+						tmp = topRanks[j];
+						topRanks[j] = topRanks[j+1];
+						topRanks[j+1] = tmp;
+						
+						tmp = topValues[j];
+						topValues[j] = topValues[j+1];
+						topValues[j+1] = tmp;
+					}
+		}
+		
+		public double getAverageAll()
+		{
+			return valueSum / nTautomers; 
+		}
+		
+		public double getWeightedAverageAll()
+		{
+			return valueSumProbWeighted / sumProbWeights;
+		}
+		
+		
+		public double getAverageTop(int n)
+		{	
+			//TODO
+			return 0; 
+		}
+		
+		public double getWeightedAverageTop(int n)
+		{	
+			//TODO
+			return 0; 
+		}
+	
+	}
 	
 	
 }
