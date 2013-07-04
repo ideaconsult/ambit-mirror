@@ -107,7 +107,10 @@ normal user and password are guest/guest by default and are used in database que
 
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.4.11-SNAPSHOT
+AMBIT2 2.4.12-SNAPSHOT
+
+
+AMBIT2 2.4.11
 
 SVN URLs changed due to SourceForge platform upgrade
 ambit2-rendering: Atom labels rendered using alpha transparency channel 
