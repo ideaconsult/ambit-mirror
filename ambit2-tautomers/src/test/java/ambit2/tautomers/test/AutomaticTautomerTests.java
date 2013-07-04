@@ -1942,7 +1942,7 @@ public class AutomaticTautomerTests
 		{
 			nTautomers++;
 			valueSum += value;
-			double p = Math.exp(-(rank-eShift)*energyConst);
+			double p = getProbability(rank);
 			valueSumProbWeighted += p*value;
 			sumProbWeights += p;
 			
@@ -2018,16 +2018,45 @@ public class AutomaticTautomerTests
 		
 		public double getAverageTop(int n)
 		{	
-			//TODO
-			return 0; 
+			int n1;
+			if (n < nUsedTopRanks)
+				n1 = n;
+			else
+				n1 = nUsedTopRanks;
+			
+			double sum = 0;
+			for (int i = 0; i < n1; i++)
+				sum+= topRanks[i];
+								
+			return sum / n1; 
 		}
 		
 		public double getWeightedAverageTop(int n)
 		{	
-			//TODO
-			return 0; 
+			int n1;
+			if (n < nUsedTopRanks)
+				n1 = n;
+			else
+				n1 = nUsedTopRanks;
+			
+			double sum = 0;
+			double weightSum = 0;
+			double p;
+			for (int i = 0; i < n1; i++)
+			{	
+				p = getProbability(topRanks[i]);
+				sum+= topValues[i] * p;
+				weightSum += p;
+			}					
+			return sum / weightSum;
+			 
 		}
-	
+		
+		public double getProbability(double rank)
+		{
+			double p = Math.exp(-(rank-eShift)*energyConst);
+			return p;
+		}	
 	}
 	
 	
