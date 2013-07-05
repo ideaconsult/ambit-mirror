@@ -135,9 +135,10 @@ public class AutomaticTautomerTests
 	//helpers for tautomer descr/fp stat
 	DescriptorStatInfo descrStat[];
 	int curStruct = -1;
-	int curTautomer = -1;
+	int numTautomers = 0;
+	String curTautomerSmiles = "";
 	RandomAccessFile tempOutFile = null;
-	
+	String extractError = "";
 	
 	
 	public static void main(String[] args)
@@ -1345,6 +1346,8 @@ public class AutomaticTautomerTests
 	}
 	
 	
+	//-------
+	
 	int tautomerFullInfo(String line)
 	{
 		System.out.print("" + curLine + "   " + line);
@@ -1378,6 +1381,7 @@ public class AutomaticTautomerTests
 		return 0;
 	}
 	
+	//-------
 	
 	int tautomerDescrStat(String line)
 	{
@@ -1390,10 +1394,12 @@ public class AutomaticTautomerTests
 		String tokens[] = line.split(descrTestSepareator);
 		try
 		{
-			int tautoNum = Integer.parseInt(tokens[0]);
-			if (tautoNum != curTautomer)
+			int strNum = Integer.parseInt(tokens[0]);
+			if (strNum != curStruct)
 			{
-				performSecondDescriptorScan();
+				if (curStruct != -1)
+					performSecondDescriptorScan();
+				
 				startNewTautomer(tokens);
 			}
 			else
@@ -1463,6 +1469,8 @@ public class AutomaticTautomerTests
 		return 0;
 	}
 	
+	//-------
+	
 	int tautomerCalcDescrAverage(String line)
 	{
 		if (curLine == 1)
@@ -1471,35 +1479,66 @@ public class AutomaticTautomerTests
 			return 0;
 		}
 		
-		String tokens[] = line.split(descrTestSepareator);
-		try
-		{
-			int tautoNum = Integer.parseInt(tokens[0]);
-			if (tautoNum != curTautomer)
-			{	
-				startNewTautomerAverageCalculation(tokens);
-			}
-			else
-				addDescriptorValuesToAverage(tokens);
-			
-		}
-		catch(Exception e)
+		String tokens[] = line.split(descrTestSepareator);			
+		int strNum = Integer.parseInt(tokens[0]);
+		if (!extractError.equals(""))
 		{
 			System.out.println("Error on line " + curLine);
-			System.out.println(e.toString());
+			System.out.println(extractError);
+			return -1;
 		}
 		
+		if (strNum != curStruct)
+		{	
+			if (curStruct != -1)
+				finalizeTautomerAverageCalculation();
+
+			curStruct = strNum;
+			startNewTautomerAverageCalculation(tokens);
+		}
+		else
+			addDescriptorValuesToAverage(tokens);			
+	
 		return 0;
 	}
 	
 	void startNewTautomerAverageCalculation(String tokens[])
 	{	
+		if (tokens.length != (descrStat.length + 3))
+		{
+			System.out.println("Error on line " + curLine);
+			System.out.println("Incorrect number of tokens!");
+			return;
+		}
+		
 		//TODO
+		
+		
 	}
 	
 	void addDescriptorValuesToAverage(String tokens[])
 	{
 		//TODO
+	}
+	
+	void finalizeTautomerAverageCalculation()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append(curStruct);
+		sb.append("," + curTautomerSmiles + "," + numTautomers);
+		for (int i = 0; i < descrStat.length; i++)
+		{
+			sb.append("," + descrStat[i].getAverageAll());
+			sb.append("," + descrStat[i].getWeightedAverageAll());
+			
+			sb.append("," + descrStat[i].getAverageTop(5));
+			sb.append("," + descrStat[i].getWeightedAverageTop(5));
+			
+			sb.append("," + descrStat[i].getAverageTop(10));
+			sb.append("," + descrStat[i].getWeightedAverageTop(10));
+		}
+		sb.append("\n");
+		output(sb.toString());
 	}
 	
 	//---------------- statistics and comparison methods ----------------------
@@ -1905,6 +1944,38 @@ public class AutomaticTautomerTests
 				+ "    maxMem = " + maxMem);
 	}
 	
+	int extractInt(String token)
+	{
+		try
+		{
+			int value = Integer.parseInt(token);
+			extractError = "";
+			return value;			
+		}
+		catch(Exception e)
+		{
+			extractError = e.toString();
+		}
+		
+		return 0;
+	}
+	
+	double extractDouble(String token)
+	{
+		try
+		{
+			double value = Double.parseDouble(token);
+			extractError = "";
+			return value;			
+		}
+		catch(Exception e)
+		{
+			extractError = e.toString();
+		}
+		
+		return 0.0;
+	}
+	
 	
 	
 	//Helper classes
@@ -1923,7 +1994,7 @@ public class AutomaticTautomerTests
 		public double topValues[];
 		public double topRanks[];
 		int nUsedTopRanks;
-		int maxRankIndex;	
+		int maxRankIndex;	//this is the worst rank
 		int nTautomers;
 		
 		public void initWeightedAverageCalculation(int maxNumRanks)
@@ -1963,11 +2034,12 @@ public class AutomaticTautomerTests
 					maxRankIndex = nUsedTopRanks;  //which should be zero in this case
 				else
 				{	
-					if (topRanks[maxRankIndex] < rank)
+					if (topRanks[maxRankIndex] < rank)  
 						maxRankIndex = nUsedTopRanks;
 				}	
 				
 				nUsedTopRanks++;
+				
 				return;
 			}
 			
@@ -1993,7 +2065,7 @@ public class AutomaticTautomerTests
 			double tmp;
 			for (int k = nUsedTopRanks-1; k>=0; k--)
 				for (int j = 0; j < k; j++)
-					if (topRanks[j] >  topRanks[j+1])
+					if (topRanks[j] >  topRanks[j+1])  //the maximal is put at the end
 					{
 						tmp = topRanks[j];
 						topRanks[j] = topRanks[j+1];
@@ -2019,14 +2091,14 @@ public class AutomaticTautomerTests
 		public double getAverageTop(int n)
 		{	
 			int n1;
-			if (n < nUsedTopRanks)
+			if (n < nUsedTopRanks)  //This is possible when there are fewer tautomers
 				n1 = n;
 			else
 				n1 = nUsedTopRanks;
 			
 			double sum = 0;
 			for (int i = 0; i < n1; i++)
-				sum+= topRanks[i];
+				sum+= topValues[i];
 								
 			return sum / n1; 
 		}
@@ -2048,8 +2120,7 @@ public class AutomaticTautomerTests
 				sum+= topValues[i] * p;
 				weightSum += p;
 			}					
-			return sum / weightSum;
-			 
+			return sum / weightSum;			 
 		}
 		
 		public double getProbability(double rank)
@@ -2058,6 +2129,5 @@ public class AutomaticTautomerTests
 			return p;
 		}	
 	}
-	
 	
 }
