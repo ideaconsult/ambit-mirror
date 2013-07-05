@@ -50,7 +50,7 @@ public class AutomaticTautomerTests
 	
 	public double T = 300; //K
 	public static final double kB = 1.3806488E-23; //  [J/K]	
-	public static final double KeVtoJ = 1.602176565E-19;    //1eV = 1.602176565e-19 J = 1.602176565·10-19 J
+	public static final double KeVtoJ = 1.602176565E-19;    //1eV = 1.602176565e-19 J = 1.602176565 10-19 J
 	public double energyConst = KeVtoJ/(T*kB);
 	public double eShift = -100; //eV;
 	
