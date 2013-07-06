@@ -36,6 +36,7 @@ import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
+import ambit2.tautomers.TautomerRanking;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.tautomers.KnowledgeBase;
 import ambit2.mopac.MopacUtilities;
@@ -44,6 +45,7 @@ import ambit2.mopac.MopacUtilities;
 public class TestTautomers 
 {
 	public TautomerManager tman = new TautomerManager();
+	public TautomerRanking tautomerRanking = new TautomerRanking(); 
 	public InChITautomerGenerator itg = new InChITautomerGenerator(); 
 	//public RuleStructureFactory rsf = new RuleStructureFactory();
 	public ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
@@ -127,7 +129,7 @@ public class TestTautomers
 		
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
 		
-		//tt.visualTest("O=C1N=C(N=CC1)N");
+		tt.visualTest("O=C1N=C(N=CC1)N");
 		
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
 		
@@ -179,7 +181,8 @@ public class TestTautomers
 		//tt.visualTest("O=CC(C)(C)Cl");
 				
 		//tt.FlagExplicitHydrogens = false;
-		tt.testStereoInfo("O=C[C@](C)(Cl)Br");
+		
+		//tt.testStereoInfo("O=C[C@](C)(Cl)Br");
 		
 		
 		//RuleStructureFactory rsf = new RuleStructureFactory();
@@ -235,6 +238,7 @@ public class TestTautomers
 		
 		
 		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+		double distr[] = tautomerRanking.getProbabilityDistribution(resultTautomers);
 		tman.printDebugInfo();
 		
 		System.out.println("\n  Result tautomers: ");
@@ -249,7 +253,7 @@ public class TestTautomers
 						
 			System.out.print(
 					TautomerManager.getTautomerCodeString(resultTautomers.get(i), false) +   
-					"   " + rank.toString() + "   " +
+					"   " + rank.toString() + "    " + (100.0*distr[i]) + "%    " + 
 					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)) );
 			v.add(resultTautomers.get(i));
 		}
