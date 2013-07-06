@@ -151,7 +151,8 @@ public class AutomaticTautomerTests
 			
 			att.handleArguments(new String[] {
 					
-					"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
+					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
+					"-i","D:/Projects/data015/XLogP/XLogP.csv",
 					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
@@ -163,7 +164,7 @@ public class AutomaticTautomerTests
 					"-nInpStr","0",
 					"-nStartStr","0",
 					"-c","tautomer-calc-descr-average",
-					"-o","D:/Projects/data015/test.csv",
+					"-o","D:/Projects/data015/XLogP/xlogp-average-descr.csv",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -1474,6 +1475,8 @@ public class AutomaticTautomerTests
 	
 	int tautomerCalcDescrAverage(String line)
 	{
+		//System.out.println("" + curLine + "   " + line);
+		
 		if (curLine == 1)
 		{
 			initDescriptorStatistics(line);
@@ -1481,7 +1484,9 @@ public class AutomaticTautomerTests
 			return 0;
 		}
 		
-		String tokens[] = line.split(descrTestSepareator);			
+		String tokens[] = line.split(descrTestSepareator);
+		
+		
 		int strNum = extractInt(tokens[0]);
 		if (!extractError.equals(""))
 		{
@@ -1493,6 +1498,7 @@ public class AutomaticTautomerTests
 		if (strNum != curStruct)
 		{	
 			if (curStruct != -1)
+				if (numTautomers > 1)
 				finalizeTautomerAverageCalculation();
 
 			curStruct = strNum;
@@ -1544,6 +1550,14 @@ public class AutomaticTautomerTests
 	
 	void addDescriptorValuesToAverage(String tokens[])
 	{
+		if (tokens.length != (descrStat.length + 3))
+		{
+			System.out.println("Error on line " + curLine);
+			System.out.println("Incorrect number of tokens!");
+			return;
+		}
+		
+		
 		double rank = extractDouble(tokens[2]);
 		if (!extractError.equals(""))
 		{
