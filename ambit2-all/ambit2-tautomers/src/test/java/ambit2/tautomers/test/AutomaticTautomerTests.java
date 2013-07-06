@@ -17,6 +17,7 @@ import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.TautomerManager;
+import ambit2.tautomers.TautomerRanking;
 
 
 
@@ -48,11 +49,8 @@ public class AutomaticTautomerTests
 	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
 	//public static final int LPM_COMPARE_AMBIT_EXTERNAL = 12;
 	
-	public double T = 300; //K
-	public static final double kB = 1.3806488E-23; //  [J/K]	
-	public static final double KeVtoJ = 1.602176565E-19;    //1eV = 1.602176565e-19 J = 1.602176565 10-19 J
-	public double energyConst = KeVtoJ/(T*kB);
-	public double eShift = -100; //eV;
+	
+	TautomerRanking tautomerRanking = new TautomerRanking(); 
 	
 	public boolean FlagHandleCommand = true;
 	
@@ -152,9 +150,11 @@ public class AutomaticTautomerTests
 			//if (true) return;
 			
 			att.handleArguments(new String[] {
-					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					
-					"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
+					"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
+					
+					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",					
+					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
 					//"-i2","D:/Projects/data012-tautomers/results-final/AMBIT-Tautomer-Count-Comb-Improved-FULL.txt",
 					//"-i2","D:/Projects/data012-tautomers/results-final/Ambit-Tautomer-Count-Comb-FULL.txt",
 					//"-i2","D:/Projects/data012-tautomers/results-final/cactvs-tautomer-count-canonical-FULL.txt",
@@ -162,8 +162,8 @@ public class AutomaticTautomerTests
 					
 					"-nInpStr","0",
 					"-nStartStr","0",
-					"-c","tautomer-full-info",
-					"-o","D:/Projects/data012-tautomers/test.txt",
+					"-c","tautomer-calc-descr-average",
+					"-o","D:/Projects/data015/test.csv",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -1381,7 +1381,7 @@ public class AutomaticTautomerTests
 		return 0;
 	}
 	
-	//-------
+	//------- commands: tautomer-descr-stat   and  tautomer-fp-stat--------------------
 	
 	int tautomerDescrStat(String line)
 	{
@@ -1469,21 +1469,23 @@ public class AutomaticTautomerTests
 		return 0;
 	}
 	
-	//-------
+	//------- command: tautomer-calc-descr-average --------------------
+	
 	
 	int tautomerCalcDescrAverage(String line)
 	{
 		if (curLine == 1)
 		{
 			initDescriptorStatistics(line);
+			output(getFirstOutputLine_CalcAverageDescr() + "\n");
 			return 0;
 		}
 		
 		String tokens[] = line.split(descrTestSepareator);			
-		int strNum = Integer.parseInt(tokens[0]);
+		int strNum = extractInt(tokens[0]);
 		if (!extractError.equals(""))
 		{
-			System.out.println("Error on line " + curLine);
+			System.out.println("Error on line " + curLine + "  token " + 1);
 			System.out.println(extractError);
 			return -1;
 		}
@@ -1494,7 +1496,19 @@ public class AutomaticTautomerTests
 				finalizeTautomerAverageCalculation();
 
 			curStruct = strNum;
-			startNewTautomerAverageCalculation(tokens);
+			
+			numTautomers = extractInt(tokens[2]);
+			if (!extractError.equals(""))
+			{
+				System.out.println("Error on line " + curLine + "  token " + 3);
+				System.out.println(extractError);
+				return -1;
+			}
+			
+			if (numTautomers <= 1)
+				outputAverageValuesForSingleTautomer(tokens);
+			else	
+				startNewTautomerAverageCalculation(tokens);
 		}
 		else
 			addDescriptorValuesToAverage(tokens);			
@@ -1511,14 +1525,44 @@ public class AutomaticTautomerTests
 			return;
 		}
 		
-		//TODO
+		curTautomerSmiles = tokens[1];		
 		
+		for (int i = 0; i < descrStat.length; i++)
+		{
+			double value = extractDouble(tokens[i+3]);
+			if (!extractError.equals(""))
+			{
+				System.out.println("Error on line " + curLine + "  token " + (i+4));  //error message is 1-base indexed 
+				System.out.println(extractError);
+				return;
+			}
+			descrStat[i].initWeightedAverageCalculation(10); //maxNumRanks = 10
+			descrStat[i].originalValue = value;
+		}		
 		
 	}
 	
 	void addDescriptorValuesToAverage(String tokens[])
 	{
-		//TODO
+		double rank = extractDouble(tokens[2]);
+		if (!extractError.equals(""))
+		{
+			System.out.println("Error on line " + curLine + "  token 3");
+			System.out.println(extractError);
+			return;
+		}
+		
+		for (int i = 0; i < descrStat.length; i++)
+		{
+			double value = extractDouble(tokens[i+3]);
+			if (!extractError.equals(""))
+			{
+				System.out.println("Error on line " + curLine + "  token " + (i+3));  //error message is 1-base indexed
+				System.out.println(extractError);
+				return;
+			}
+			descrStat[i].calcAverageAddNewValue(value, rank);
+		}	
 	}
 	
 	void finalizeTautomerAverageCalculation()
@@ -1528,6 +1572,7 @@ public class AutomaticTautomerTests
 		sb.append("," + curTautomerSmiles + "," + numTautomers);
 		for (int i = 0; i < descrStat.length; i++)
 		{
+			sb.append("," + descrStat[i].originalValue);
 			sb.append("," + descrStat[i].getAverageAll());
 			sb.append("," + descrStat[i].getWeightedAverageAll());
 			
@@ -1539,6 +1584,45 @@ public class AutomaticTautomerTests
 		}
 		sb.append("\n");
 		output(sb.toString());
+	}
+	
+	void outputAverageValuesForSingleTautomer(String tokens[])
+	{
+		
+		if (tokens.length != (descrStat.length + 3))
+		{
+			System.out.println("Error on line " + curLine);
+			System.out.println("Incorrect number of tokens!");
+			return;
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append(tokens[0]+"," +tokens[1]+"," +tokens[2]);
+		for (int i = 0; i < descrStat.length; i++)
+		{
+			for(int k = 0; k < 7; k++)
+				sb.append(","+tokens[i+3]);
+		}
+		sb.append("\n");
+		output(sb.toString());
+	}
+	
+	String getFirstOutputLine_CalcAverageDescr()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("strNum,SMILES,numOfTaut");
+		
+		for (int i = 0; i < descrStat.length; i++)
+		{
+			sb.append("," + descrStat[i].name);
+			sb.append("," + descrStat[i].name+"-AV");
+			sb.append("," + descrStat[i].name+"-WAV");
+			sb.append("," + descrStat[i].name+"-AV5");
+			sb.append("," + descrStat[i].name+"-WAV5");
+			sb.append("," + descrStat[i].name+"-AV10");
+			sb.append("," + descrStat[i].name+"-WAV10");
+		}
+		return sb.toString();
 	}
 	
 	//---------------- statistics and comparison methods ----------------------
@@ -2013,14 +2097,14 @@ public class AutomaticTautomerTests
 		{
 			nTautomers++;
 			valueSum += value;
-			double p = getProbability(rank);
+			double p = tautomerRanking.getProbability(rank);
 			valueSumProbWeighted += p*value;
 			sumProbWeights += p;
 			
 			addNewRankValue(value, rank);
 		}
 		
-		public void addNewRankValue(double value, double rank)
+		void addNewRankValue(double value, double rank)
 		{
 			int n = topRanks.length;
 			if (nUsedTopRanks < n)
@@ -2116,18 +2200,13 @@ public class AutomaticTautomerTests
 			double p;
 			for (int i = 0; i < n1; i++)
 			{	
-				p = getProbability(topRanks[i]);
+				p = tautomerRanking.getProbability(topRanks[i]);
 				sum+= topValues[i] * p;
 				weightSum += p;
 			}					
 			return sum / weightSum;			 
 		}
 		
-		public double getProbability(double rank)
-		{
-			double p = Math.exp(-(rank-eShift)*energyConst);
-			return p;
-		}	
 	}
 	
 }
