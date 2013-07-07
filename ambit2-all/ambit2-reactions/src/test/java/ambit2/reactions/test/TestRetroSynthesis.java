@@ -18,7 +18,6 @@ public class TestRetroSynthesis
 		System.out.println(trs.retroSyn.getReactionKnowledgeBase().toString());
 		
 		trs.test("C1CCCCC1");
-		
 	}
 	
 	
@@ -30,7 +29,7 @@ public class TestRetroSynthesis
 		retroSyn.setStructure(mol);
 		RetroSynthesisResult result = retroSyn.run(); 
 		
-		System.out.println(result.toString());
+		System.out.println("Retro Synthesis result:\n" + result.toString());
 	}
 	
 }

@@ -18,6 +18,11 @@ public class RetroSynthesis
 		knowledgeBase = new ReactionKnowledgeBase();
 	}
 	
+	public RetroSynthesis(String knowledgeBaseFile) throws Exception 
+	{	
+		knowledgeBase = new ReactionKnowledgeBase(knowledgeBaseFile);
+	}
+	
 	public ReactionKnowledgeBase getReactionKnowledgeBase()
 	{
 		return knowledgeBase;
@@ -37,19 +42,19 @@ public class RetroSynthesis
 	}
 	
 	
-	public static ArrayList<IRetroSynthRuleInstance> findRuleInstances(IAtomContainer mol)
+	public static ArrayList<RetroSynthRuleInstance> findRuleInstances(IAtomContainer mol)
 	{
 		//TODO
 		return null;
 	}
 	
 	
-	//Strategy 1 - based on depth first search algorithm
-	//There can be various criteria for stopping
-	// (1)impossible to apply more rules (transformations)
-	// (2)some of the products are starting materials
-	
-	
+	/*
+	 * Principle Strategy is based on depth first search algorithm
+	 * There can be various criteria for stopping
+	 * (1)impossible to apply more rules (transformations)
+	 * (2)some of the products are starting materials
+	 */
 	void searchPaths()
 	{	
 		nodes.clear();
@@ -65,9 +70,11 @@ public class RetroSynthesis
 	
 	void generateInitialNodes()
 	{
-		ArrayList<IRetroSynthRuleInstance> ruleInstances = findRuleInstances(molecule);
+		ArrayList<RetroSynthRuleInstance> ruleInstances = findRuleInstances(molecule);
 		//TODO
 	}
+	
+	
 	
 	
 	

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.reactions.ReactionConst.RetroSynthRuleType;
+import ambit2.smarts.SMIRKSManager;
+import ambit2.smarts.SMIRKSReaction;
 
 public class RetroSynthRule implements IRetroSynthRule
 {
@@ -27,7 +29,7 @@ public class RetroSynthRule implements IRetroSynthRule
 	{	
 		postErrors.clear();
 		processTypeInfo();
-		processSmirksInfo();
+		processSmirksInfo(SMIRKSManager.getDefaultSMIRKSManager());
 		return postErrors;
 	}
 	
@@ -96,11 +98,13 @@ public class RetroSynthRule implements IRetroSynthRule
 		name = newName;
 	}
 	
+	/*
 	public ArrayList<IRetroSynthRuleInstance> getInstances(IAtomContainer str)
 	{
 		//TODO
 		return null;
 	}
+	*/
 	
 	
 	//---------- specific function implementation -------------
@@ -108,12 +112,16 @@ public class RetroSynthRule implements IRetroSynthRule
 	
 	void processTypeInfo()
 	{
-		//TODO
+		ruleType =  RetroSynthRuleType.getFromString(stringRuleType);
+		if (ruleType == RetroSynthRuleType.UNKNOWN)
+			postErrors.add("Incorrect rule type: " + stringRuleType);
 	}
 	
-	void processSmirksInfo()
+	void processSmirksInfo(SMIRKSManager smrkMan)
 	{
-		//TODO	
+		SMIRKSReaction reaction = smrkMan.parse(smirks);
+		if (!smrkMan.getErrors().equals(""))		
+			postErrors.add("There are errors in SMIRKS: " + smirks + "  " + smrkMan.getErrors());
 	}
 	
 	
