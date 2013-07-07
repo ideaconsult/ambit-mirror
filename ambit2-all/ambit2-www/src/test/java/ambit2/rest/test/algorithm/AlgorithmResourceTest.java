@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.List;
 import java.util.logging.Level;
 
 import junit.framework.Assert;
@@ -311,7 +312,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		URL serviceRoot = new URL(String.format("http://localhost:%d/",port));
 		net.idea.opentox.cli.task.RemoteTask task =  cli.registerSubstanceAsync(serviceRoot, substance, null, null);
 		task.waitUntilCompleted(500);
-		otclient.close();
+
 		Assert.assertNotNull(task.getResult());
 		Assert.assertEquals(HttpStatus.SC_OK,task.getStatus());
 		Assert.assertNull(task.getError());
@@ -329,26 +330,29 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		
 		headers.add("dataset_uri",String.format(task.getResult().toExternalForm(), port));
-		Reference ref = testAsyncTask(
-				model.toString(),
-				headers, Status.SUCCESS_OK,
-				String.format("http://localhost:%d/query/tautomer?dataset_uri=%s", port,
-						Reference.encode(task.getResult().toExternalForm())
-						));
+		String expected = String.format("http://localhost:%d/query/tautomer?dataset_uri=%s", port,
+									Reference.encode(task.getResult().toExternalForm()));
+		Reference ref = testAsyncTask(model.toString(),headers, Status.SUCCESS_OK,expected);
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM chem_relation");
 		Assert.assertEquals(8,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset join struc_dataset using(id_srcdataset) where name='TAUTOMERS'");
+		Assert.assertEquals(9,table.getRowCount());
 		c.close();
 		
-		int count = 0;
-		RDFPropertyIterator i = new RDFPropertyIterator(ref);
-		i.setCloseModel(true);
-		while (i.hasNext()) {
-			count++;
-		}
-		i.close();
-		Assert.assertEquals(9,count);
+		List list = cli.listURI(new URL(expected));
+		Assert.assertEquals(8,list.size());
+
+		//now try it again
+		ref = testAsyncTask(model.toString(),headers, Status.SUCCESS_OK,expected);
+		c = getConnection();	
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chem_relation");
+		Assert.assertEquals(8,table.getRowCount());
+		c.close();
+		
+		
+		otclient.close();
 	}	
 	@Test
 	public void testCalculateFingerprints() throws Exception {
