@@ -1,0 +1,73 @@
+package ambit2.db.chemrelation;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.search.NumberCondition;
+import ambit2.db.search.QueryParam;
+import ambit2.db.search.structure.AbstractStructureQuery;
+
+public class ReadStructureRelation extends AbstractStructureQuery<String,Integer,NumberCondition> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8329798753353233477L;
+	public final static String sql = 
+		"select idchemical1,idchemical2,-1,1,1,relation as text from chem_relation where idchemical1=? and relation=?";
+	
+	public ReadStructureRelation(IStructureRecord structure) {
+		this(AbstractUpdateStructureRelation.STRUCTURE_RELATION.HAS_TAUTOMER.name(),
+				structure==null?null:structure.getIdchemical());
+	}
+	public ReadStructureRelation() {
+		this((IStructureRecord)null);
+	}
+	public ReadStructureRelation(String relation, Integer id) {
+		super();
+		setFieldname(relation);
+		setValue(id);
+		setCondition(NumberCondition.getInstance("="));
+	}	
+	public String getSQL() throws AmbitException {
+		return 	String.format(sql,getCondition().getSQL(),getValue()==null?"":"?");
+	}
+	public List<QueryParam> getParameters() throws AmbitException {
+		List<QueryParam> params = new ArrayList<QueryParam>();
+		if (getValue()!=null)
+			params.add(new QueryParam<Integer>(Integer.class,getValue()));
+		else throw new AmbitException("Empty ID");
+		if (getFieldname()!=null)
+			params.add(new QueryParam<String>(String.class,getFieldname()));
+		else throw new AmbitException("Relation not specified");		
+		return params;
+	}
+	@Override
+	public String toString() {
+		return String.format("%s of /compound/%d",getFieldname()==null?"":getFieldname(),getValue());
+	}
+
+	@Override
+	public boolean isPrescreen() {
+		return false;
+	}
+	@Override
+	public double calculateMetric(IStructureRecord object) {
+
+		return 1;
+	}
+	@Override
+	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
+		/*
+		record.setProperty(Property.getInstance("metric",toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
+		record.setProperty(Property.getInstance("a",toString(),"http://ambit.sourceforge.net"), rs.getFloat(7));
+		record.setProperty(Property.getInstance("b",toString(),"http://ambit.sourceforge.net"), rs.getFloat(8));
+		record.setProperty(Property.getInstance("c",toString(),"http://ambit.sourceforge.net"), rs.getFloat(9));
+		record.setProperty(Property.getInstance("d",toString(),"http://ambit.sourceforge.net"), rs.getFloat(10));
+		record.setProperty(Property.getInstance("fisher",toString(),"http://ambit.sourceforge.net"), rs.getFloat(11));
+		*/
+	}	
+}
