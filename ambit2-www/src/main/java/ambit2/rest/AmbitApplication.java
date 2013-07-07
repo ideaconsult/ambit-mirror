@@ -113,6 +113,7 @@ import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
+import ambit2.rest.structure.tautomers.QueryTautomersResource;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
@@ -347,7 +348,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		queryRouter.attach(SmartsQueryResource.resource,smartsRouter);
 		queryRouter.attach(SimilarityResource.resource,similarityRouter);
 		queryRouter.attach(ExactStructureQueryResource.resource,ExactStructureQueryResource.class);
-		
+		queryRouter.attach(QueryTautomersResource.resource,QueryTautomersResource.class);
 		/**
 		 *  API extensions from this point on
 		 */

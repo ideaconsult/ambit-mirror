@@ -5,11 +5,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
+import net.idea.opentox.cli.OTClient;
+import net.idea.opentox.cli.structure.Substance;
+import net.idea.opentox.cli.structure.SubstanceClient;
+import net.idea.opentox.cli.task.RemoteTask;
 
+import org.apache.http.HttpStatus;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
@@ -367,6 +373,33 @@ public class CompoundResourceTest extends ResourceTest {
 	}		
 	
 	@Test
+	public void testCreateEntrySDF() throws Exception {
+        StringBuilder sdf = new StringBuilder();		
+		InputStream in = getClass().getClassLoader().getResourceAsStream("test.sdf");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+	    try {
+	        String line = reader.readLine();
+	        while (line != null) {
+	            sdf.append(line);
+	            sdf.append("\n");
+	            line = reader.readLine();
+	        }
+	    } finally {
+	        reader.close();
+	    }
+		
+		testAsyncPoll(new Reference(getTestURI()),ChemicalMediaType.CHEMICAL_MDLSDF, 
+				new StringRepresentation(sdf,ChemicalMediaType.CHEMICAL_MDLSDF),Method.POST,
+				new Reference(String.format("http://localhost:%d/compound/29142/conformer/129346",port)));
+
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,table.getRowCount());
+		c.close();
+		
+	}	
+	
+	@Test
 	public void testCreateEntryFromName() throws Exception {
 		
 		String name = "benzene";
@@ -386,17 +419,33 @@ public class CompoundResourceTest extends ResourceTest {
 	
 	@Test
 	public void testCreateEntryFromSmilesWebForm() throws Exception {
+		OTClient otclient = new OTClient();
+		SubstanceClient cli = otclient.getSubstanceClient();
+		Substance substance = new Substance();
+		substance.setName("warfarin");
+		String inchi = "InChI=1S/C19H16O4/c1-12(20)11-15(13-7-3-2-4-8-13)17-18(21)14-9-5-6-10-16(14)23-19(17)22/h2-10,15,21H,11H2,1H3";
+		String smiles = "CC(=O)CC(c1ccccc1)c2c(c3ccccc3oc2=O)O";
+		substance.setInChI(inchi);
+		substance.setSMILES(smiles);
+		URL serviceRoot = new URL(String.format("http://localhost:%d/",port));
+		RemoteTask task = cli.registerSubstanceAsync(serviceRoot, substance, null, null);
+		task.waitUntilCompleted(500);
+		otclient.close();
 		
-		String name = "c1ccccc1O";
+		Assert.assertEquals(HttpStatus.SC_OK,task.getStatus());
+		Assert.assertNull(task.getError());
+		System.out.println(task.getResult());
+		
 		IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM property_string where value = 'c1ccccc1O'");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM property_string where value = 'CC(=O)CC(c1ccccc1)c2c(c3ccccc3oc2=O)O'");
 		Assert.assertEquals(0,table.getRowCount());
 		
-		OTCompound compound = OTCompound.createFromName(name, String.format("http://localhost:%d/compound",port));
         
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(6,table.getRowCount());
-		table = 	c.createQueryTable("EXPECTED","SELECT * FROM property_string where value = 'c1ccccc1O'");
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where inchikey = 'PJVWKTKQMONHTI-UHFFFAOYSA-N'");
+		Assert.assertEquals(1,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals where inchi = '" + inchi + "'");
 		Assert.assertEquals(1,table.getRowCount());
 		c.close();
 		

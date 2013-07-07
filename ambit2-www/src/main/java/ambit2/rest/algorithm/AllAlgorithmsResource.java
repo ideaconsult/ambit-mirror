@@ -48,6 +48,7 @@ import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.dbpreprocessing.CallableFinder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
 import ambit2.rest.task.dbpreprocessing.CallableFixPreferredStructure;
+import ambit2.rest.task.tautomers.TautomersModelBuilder;
 import ambit2.rest.task.waffles.CallableWafflesModelCreator;
 import ambit2.rest.task.weka.CallableWekaModelCreator;
 
@@ -190,6 +191,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		if (model.hasType(AlgorithmType.SuperService)) return null;
 		if (model.hasType(AlgorithmType.SuperBuilder)) return null;
 		if (model.hasType(AlgorithmType.Structure)) return null;
+		if (model.hasType(AlgorithmType.TautomerGenerator)) return null;
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) 
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
@@ -282,8 +284,18 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 								algReporter,false),
 						token
 						);
-			}
-			else if (algorithm.hasType(AlgorithmType.PreferredStructure)) {
+			} else if (algorithm.hasType(AlgorithmType.TautomerGenerator))  {
+				return new CallableSimpleModelCreator(
+						form,
+						getContext(),
+						algorithm,
+						false,
+						new TautomersModelBuilder(getRequest().getRootRef(),
+								modelReporter,
+								algReporter,false),
+						token
+						);
+			} else if (algorithm.hasType(AlgorithmType.PreferredStructure)) {
 				return
 				new CallableFixPreferredStructure(
 						form,

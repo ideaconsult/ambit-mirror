@@ -40,7 +40,8 @@ public enum AlgorithmType {
 		Finder,
 		SMSD,
 		Mockup,
-		PreferredStructure;
+		PreferredStructure,
+		TautomerGenerator;
 		public String toString() {
 			return String.format("http://www.opentox.org/algorithmTypes.owl#%s",name());
 		}

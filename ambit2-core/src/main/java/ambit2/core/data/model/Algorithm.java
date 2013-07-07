@@ -95,6 +95,16 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 			public String getMediaType() {
 				return "application/json";
 			}
+		},
+		TAUTOMERS {
+			@Override
+			public String getMediaType() {
+				return "tautomers/java";
+			}
+			@Override
+			public String getImage() {
+				return "images/benzene_16.jpg";
+			}
 		};
 		public abstract String getMediaType();
 		public String getImage() {

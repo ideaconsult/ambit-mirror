@@ -41,6 +41,7 @@ import ambit2.rendering.CompoundImageTools;
 import ambit2.rest.OpenTox;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.property.PropertyURIReporter;
+import ambit2.rest.task.tautomers.TautomersGenerator;
 import ambit2.rest.task.waffles.WafflesPredictor;
 import ambit2.rest.task.weka.FilteredWekaPredictor;
 
@@ -366,7 +367,16 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
 						new PropertyURIReporter(request,null),
 						null
-						);				
+						);	
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.TAUTOMERS.getMediaType())) {
+				
+				return new TautomersGenerator(
+						request.getRootRef(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request,null),
+						null
+						);						
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				
 				return new DescriptorPredictor(

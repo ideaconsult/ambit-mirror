@@ -50,6 +50,8 @@ import ambit2.rest.task.CallableDescriptorCalculator;
 import ambit2.rest.task.CallableModelPredictor;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.CallableStructureOptimizer;
+import ambit2.rest.task.tautomers.CallableTautomersGenerator;
+import ambit2.rest.task.tautomers.TautomersGenerator;
 import ambit2.rest.task.waffles.CallableWafflesPredictor;
 import ambit2.rest.task.waffles.WafflesPredictor;
 import ambit2.rest.task.weka.CallableWekaPredictor;
@@ -314,7 +316,16 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 						(StructureProcessor) thepredictor,
 						token
 						);		
-		
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.TAUTOMERS.getMediaType())) {
+				return
+				new CallableTautomersGenerator(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						(TautomersGenerator) thepredictor,
+						token
+						);		
+				
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.JAVA_CLASS.getMediaType())) {
 				return
 				new CallableDescriptorCalculator(

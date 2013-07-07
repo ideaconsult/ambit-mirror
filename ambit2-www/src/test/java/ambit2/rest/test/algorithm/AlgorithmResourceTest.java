@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.logging.Level;
 
 import junit.framework.Assert;
+import net.idea.opentox.cli.OTClient;
+import net.idea.opentox.cli.structure.Substance;
+import net.idea.opentox.cli.structure.SubstanceClient;
 
+import org.apache.http.HttpStatus;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.BeforeClass;
@@ -293,6 +298,59 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(9,count);
 	}		
 	@Test
+	public void testTautomers() throws Exception {
+
+		OTClient otclient = new OTClient();
+		SubstanceClient cli = otclient.getSubstanceClient();
+		Substance substance = new Substance();
+		substance.setName("warfarin");
+		String inchi = "InChI=1S/C19H16O4/c1-12(20)11-15(13-7-3-2-4-8-13)17-18(21)14-9-5-6-10-16(14)23-19(17)22/h2-10,15,21H,11H2,1H3";
+		String smiles = "CC(=O)CC(c1ccccc1)c2c(c3ccccc3oc2=O)O";
+		substance.setInChI(inchi);
+		substance.setSMILES(smiles);
+		URL serviceRoot = new URL(String.format("http://localhost:%d/",port));
+		net.idea.opentox.cli.task.RemoteTask task =  cli.registerSubstanceAsync(serviceRoot, substance, null, null);
+		task.waitUntilCompleted(500);
+		otclient.close();
+		Assert.assertNotNull(task.getResult());
+		Assert.assertEquals(HttpStatus.SC_OK,task.getStatus());
+		Assert.assertNull(task.getError());
+		Assert.assertTrue(task.getResult().toExternalForm().startsWith(String.format("http://localhost:%d/compound/",port)));
+		
+
+		
+		Form headers = new Form();
+		Reference model = testAsyncTask(
+				String.format("http://localhost:%d/algorithm/tautomers", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/model/%s", port,
+						"3"
+						));
+		
+		
+		headers.add("dataset_uri",String.format(task.getResult().toExternalForm(), port));
+		Reference ref = testAsyncTask(
+				model.toString(),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/query/tautomer?dataset_uri=%s", port,
+						Reference.encode(task.getResult().toExternalForm())
+						));
+		
+        IDatabaseConnection c = getConnection();	
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM chem_relation");
+		Assert.assertEquals(8,table.getRowCount());
+		c.close();
+		
+		int count = 0;
+		RDFPropertyIterator i = new RDFPropertyIterator(ref);
+		i.setCloseModel(true);
+		while (i.hasNext()) {
+			count++;
+		}
+		i.close();
+		Assert.assertEquals(9,count);
+	}	
+	@Test
 	public void testCalculateFingerprints() throws Exception {
 		
         IDatabaseConnection c = getConnection();	
@@ -495,6 +553,23 @@ public class AlgorithmResourceTest extends ResourceTest {
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(
 				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor", port),
+				headers, Status.SUCCESS_OK,
+				String.format("http://localhost:%d/dataset/%s", port,
+						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor"
+						));		
+				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+	}	
+	
+	@Test
+	/**
+	 * https://sourceforge.net/tracker/?func=detail&aid=3434335&group_id=191756&atid=938657
+	 */
+	public void testCalculateIP() throws Exception {
+		Form headers = new Form();  
+		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
+		testAsyncTask(
+				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.IPMolecularLearningDescriptor", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/%s", port,
 						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
@@ -1245,8 +1320,10 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(new BigInteger("3"),table.getValue(1,"c"));
 		
 		table = 	c.createQueryTable("p",
-			"SELECT count(*) c,object FROM property_annotation join properties using(idproperty) group by object order by object");
+			"SELECT count(*) c,predicate,object FROM property_annotation join properties using(idproperty) group by object order by object");
 		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals("acceptValue",table.getValue(0,"predicate"));
+		Assert.assertEquals("acceptValue",table.getValue(1,"predicate"));
 		Assert.assertEquals("NO",table.getValue(0,"object"));
 		Assert.assertEquals("YES",table.getValue(1,"object"));
 		Assert.assertEquals(new BigInteger("6"),table.getValue(0,"c"));
