@@ -72,4 +72,5 @@
   <query_results idquery="2" idchemical="29141" idstructure="129345" selected="1" metric="0"/>  
   
   <quality_structure idstructure="100214" label="OK" user_name="guest" />
+  <chem_relation idchemical1="7" idchemical2="11" relation="test"/>
 </dataset>
