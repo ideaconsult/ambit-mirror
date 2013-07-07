@@ -1937,9 +1937,10 @@ public class TestUtilities
 		//tu.testIsomorphismTester("[]C", "CC"); - fix []
 		
 		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
-		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); ---> Exception to fix !!!!!
+		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Exception to fix !!!!!		
+		//tu.testSMIRKS("[N;:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]"); //--> Exception to fix !!!!!
 		
-		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[C:2]=[O]", "NC[H]");
+		tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]");
 		
 		//tu.testSMARTSBondToIBond("C=,@C");
 		
@@ -1963,7 +1964,7 @@ public class TestUtilities
 		//		SmartsHelper.getMoleculeFromSmiles("N1=C=C=CNN1"));
 		//System.out.println(pos.size());
 		
-		tu.testCOF_FileOperations("/test.smi", "/test2.smi");
+		//tu.testCOF_FileOperations("/test.smi", "/test2.smi");
 		
 	}
 	

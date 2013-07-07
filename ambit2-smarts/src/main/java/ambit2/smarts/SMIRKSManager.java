@@ -12,6 +12,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.MoleculeTools;
@@ -20,6 +21,9 @@ import ambit2.core.processors.structure.AtomConfigurator;
 
 public class SMIRKSManager 
 {
+	
+	private static SMIRKSManager defaultSMIRKSManager = null;
+	
 	SmartsParser parser = new SmartsParser();
 	IsomorphismTester isoTester = new IsomorphismTester();
 	SmartsToChemObject stco ;
@@ -38,6 +42,15 @@ public class SMIRKSManager
 		parser.mSupportSmirksSyntax = true;
 		stco = new SmartsToChemObject(builder);
 	}
+	
+	public static SMIRKSManager getDefaultSMIRKSManager()
+	{
+		if (defaultSMIRKSManager == null)
+			defaultSMIRKSManager = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		
+		return defaultSMIRKSManager;
+	}
+	
 	
 	public void setSSMode(int mode)
 	{
