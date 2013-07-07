@@ -57,7 +57,7 @@ public class GenericParserUtils
 		}
 	}
 	
-	void parseKeyWord(String keyWord) throws Exception
+	void parseKeyWord(String keyWord) 
 	{	
 		int sepPos = keyWord.indexOf(KeyWordSeparator);		
 		if (sepPos == -1)
@@ -73,7 +73,14 @@ public class GenericParserUtils
 		{
 			if (metaInfo.keyWord.get(i).equals(key))
 			{
-				setKeyValue(keyValue, i);
+				try
+				{
+					setKeyValue(keyValue, i);
+				}
+				catch (Exception e)
+				{	
+					errors.add("Error setting keyword " + key + "\n" + e.toString()); 
+				}
 				return;
 			}
 		}
@@ -84,9 +91,34 @@ public class GenericParserUtils
 	void setKeyValue(String keyValue, int keyIndex) throws Exception
 	{
 		Class cls = targetObj.getClass();
-		Field f = cls.getDeclaredField(metaInfo.objectFieldName.get(keyIndex));
-		//This approach is applied only for String fields
-		f.set(targetObj, keyValue);
+		Field field = cls.getDeclaredField(metaInfo.objectFieldName.get(keyIndex));
+		String fType = field.getType().getName();	
+		//System.out.println("field " + metaInfo.objectFieldName.get(keyIndex) + " is of type " + fType);
+		
+		if (fType.equals("java.lang.String"))
+		{	
+			field.set(targetObj, keyValue);
+			return;
+		}	
+		
+		if (fType.equals("int"))
+		{	
+			int intValue = Integer.parseInt(keyValue);
+			field.set(targetObj, intValue);
+			return;
+		}
+		
+		if (fType.equals("double"))
+		{	
+			double doubleValue = Double.parseDouble(keyValue);
+			field.set(targetObj, doubleValue);
+			return;
+		}
+		
+		errors.add("Unsupported field type: " + fType + " for the field: " + field.getName());
+		
+		//... may be add some other field types 
+		
 	}
 	
 	

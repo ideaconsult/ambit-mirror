@@ -1,5 +1,7 @@
 package ambit2.reactions;
 
+import java.io.File;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 
@@ -18,6 +20,11 @@ public class ReactionKnowledgeBase
 		loadPredefinedBase();
 	}
 	
+	public ReactionKnowledgeBase(String fileName) throws Exception
+	{
+		loadKnowledgeBaseFromTextFile(fileName);
+	}
+	
 	
 	public void loadPredefinedBase() throws Exception 
 	{
@@ -33,13 +40,29 @@ public class ReactionKnowledgeBase
 				throw new Exception(errorsToString());
 	}
 	
-	public void loadKnowledgeBaseFromTextFile() throws Exception 
+	public void loadKnowledgeBaseFromTextFile(String fileName) throws Exception 
 	{
 		errors.clear();
+
+		File file = new File(fileName);
+		RandomAccessFile f = new RandomAccessFile(file,"r");			
+		long length = f.length();
+
+		int lineNum = 0;
+		int ruleNum = 1;
+		while (f.getFilePointer() < length)
+		{	
+			lineNum++;
+			String line = f.readLine();
+			String ruleString = line.trim();
+			if (!ruleString.isEmpty())
+			{	
+				addRule(ruleString, ruleNum);
+				ruleNum++;
+			}	
+		}
+		f.close();
 		
-		//TODO
-		
-				
 		if (!FlagSkipRuleParsingErrors)
 			if (!errors.isEmpty())
 				throw new Exception(errorsToString());
