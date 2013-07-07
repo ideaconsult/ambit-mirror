@@ -387,6 +387,8 @@ public class AlgorithmsPile {
 			
 			{"expert","Human experts input","expert",null,new String[] {AlgorithmType.Expert.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#expert_input"},
 			
+			{"tautomers","Tautomers generator","tautomers",null,new String[] {AlgorithmType.TautomerGenerator.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#tautomergen"}
+			
 			/**
 			 * Waffles machine learning library
 			//wrapper is not yet bug free

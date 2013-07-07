@@ -18,7 +18,7 @@ import ambit2.rest.property.PropertyURIReporter;
 
 public abstract class AbstractStructureProcessor<Predictor>  extends	ModelPredictor<Predictor,IStructureRecord>  {
 	protected UpdateStructure updateStructure = new UpdateStructure();
-	protected UpdateExecutor<UpdateStructure> exec = new UpdateExecutor<UpdateStructure>();
+	protected UpdateExecutor exec = new UpdateExecutor();
 	/**
 	 * 
 	 */
