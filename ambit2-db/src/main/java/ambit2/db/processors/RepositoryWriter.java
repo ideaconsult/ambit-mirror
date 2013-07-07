@@ -63,7 +63,15 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
 	protected PreparedStatement ps_seekdataset;		
 	protected StructureNormalizer normalizer = new StructureNormalizer(); 
-	
+	protected boolean usePreferredStructure = false;
+	public boolean isUsePreferredStructure() {
+		return usePreferredStructure;
+	}
+
+
+	public void setUsePreferredStructure(boolean usePreferredStructure) {
+		this.usePreferredStructure = usePreferredStructure;
+	}
 	protected boolean propertiesOnly = false;
 	
 	public boolean isPropertiesOnly() {
@@ -118,9 +126,9 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			query.setPageSize(1);
 			rs = queryexec.process(query);
 			while (rs.next()) {
-				record.setIdchemical(rs.getInt(FIELD_NAMES.idchemical.ordinal()+1));
-				if (propertiesOnly && (record.getType().equals(STRUC_TYPE.NA))) 
-					record.setIdstructure(rs.getInt(FIELD_NAMES.idstructure.ordinal()+1));
+				record.setIdchemical(rs.getInt(FIELD_NAMES.idchemical.name()));
+				if (usePreferredStructure || (propertiesOnly && (record.getType().equals(STRUC_TYPE.NA)))) 
+					record.setIdstructure(rs.getInt(FIELD_NAMES.idstructure.name()));
 				break;
 			}
 		
