@@ -51,6 +51,11 @@ public class SMIRKSManager
 		return defaultSMIRKSManager;
 	}
 	
+	public IsomorphismTester getIsomorphismTester()
+	{
+		return isoTester;
+	}
+	
 	
 	public void setSSMode(int mode)
 	{
