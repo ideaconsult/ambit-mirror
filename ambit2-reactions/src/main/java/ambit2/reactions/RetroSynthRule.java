@@ -111,7 +111,7 @@ public class RetroSynthRule
 	
 	void processSmirksInfo(SMIRKSManager smrkMan)
 	{
-		SMIRKSReaction reaction = smrkMan.parse(smirks);
+		reaction = smrkMan.parse(smirks);
 		if (!smrkMan.getErrors().equals(""))		
 			postErrors.add("There are errors in SMIRKS: " + smirks + "  " + smrkMan.getErrors());
 	}

@@ -17,7 +17,7 @@ public class TestRetroSynthesis
 		System.out.println("Retro Synthesis Knowledge base:");
 		System.out.println(trs.retroSyn.getReactionKnowledgeBase().toString());
 		
-		trs.test("C1CCCCC1");
+		trs.test("CCNS");
 	}
 	
 	
@@ -25,7 +25,9 @@ public class TestRetroSynthesis
 	{	
 		System.out.println("Testing Retro Synthesis for " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		System.out.println("Atom attributes: \n" + SmartsHelper.getAtomsAttributes(mol));
 		
+		System.out.println();
 		retroSyn.setStructure(mol);
 		RetroSynthesisResult result = retroSyn.run(); 
 		
