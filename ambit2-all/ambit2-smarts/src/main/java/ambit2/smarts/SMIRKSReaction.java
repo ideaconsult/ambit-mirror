@@ -17,9 +17,9 @@ public class SMIRKSReaction
 	public SmartsFlags productFlags = new SmartsFlags();
 	
 	//Single container representation 
-	QueryAtomContainer reactant = new QueryAtomContainer();
-	QueryAtomContainer agent = new QueryAtomContainer();
-	QueryAtomContainer product = new QueryAtomContainer();
+	public QueryAtomContainer reactant = new QueryAtomContainer();
+	public QueryAtomContainer agent = new QueryAtomContainer();
+	public QueryAtomContainer product = new QueryAtomContainer();
 	
 		
 	
