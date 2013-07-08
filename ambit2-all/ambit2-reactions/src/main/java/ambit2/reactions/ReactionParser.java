@@ -45,7 +45,7 @@ public class ReactionParser
 		genericParserUtils.metaInfo = ReactionParser.getRetroSynthRuleMetaInfo();
 	}
 	
-	public IRetroSynthRule parseRetroSynthRule(String ruleString) 
+	public RetroSynthRule parseRetroSynthRule(String ruleString) 
 	{	
 		errors.clear();
 		

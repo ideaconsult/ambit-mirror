@@ -7,10 +7,9 @@ import java.util.ArrayList;
 
 public class ReactionKnowledgeBase 
 {
-	public boolean FlagSkipRuleParsingErrors = false;
-	
-	ArrayList<String> errors = new ArrayList<String>();
-	ArrayList<IRetroSynthRule> retroSynthRules = new ArrayList<IRetroSynthRule> (); 
+	public boolean FlagSkipRuleParsingErrors = false;	
+	public ArrayList<String> errors = new ArrayList<String>();
+	public ArrayList<RetroSynthRule> retroSynthRules = new ArrayList<RetroSynthRule>(); 	
 	
 	ReactionParser reactionParser = new ReactionParser();
 	
@@ -70,7 +69,7 @@ public class ReactionKnowledgeBase
 		
 	public void addRule(String newRule, int ruleNum)
 	{	 
-		IRetroSynthRule rule = reactionParser.parseRetroSynthRule(newRule);
+		RetroSynthRule rule = reactionParser.parseRetroSynthRule(newRule);
 		if (rule == null)
 		{	
 			ArrayList<String> newErrors = reactionParser.getErrors(); 
@@ -97,7 +96,7 @@ public class ReactionKnowledgeBase
 		}
 	}
 	
-	String errorsToString()
+	public String errorsToString()
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("\n");
