@@ -154,7 +154,7 @@ public class RetroSynthesis
 			rInstance.atoms = rMaps.get(i);
 			rInstance.rule = rule;
 			instances.add(rInstance);			
-			//System.out.print("rule: " + rule.smirks+"  "); smrkMan.printSSMap(str, rInstance.atoms);			
+			System.out.print("rule: " + rule.smirks+"  "); smrkMan.printSSMap(str, rInstance.atoms);			
 		}
 		
 		//TODO - Filtration eventually may be done here			

@@ -1940,7 +1940,14 @@ public class TestUtilities
 		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Exception to fix !!!!!		
 		//tu.testSMIRKS("[N;:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]"); //--> Exception to fix !!!!!
 		
-		tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]");
+		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]");
+		
+		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[$(C),$(Cl),$(OC),$(CC):9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[$(C),$(Cl),$(OC),$(CC):9].[H:10][H:11]", "[H]Oc1([H])c([H])(C)c([H])c([H])(O[H])c([H])c1([H])");
+		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C:9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C:9].[H:10][H:11]", "[H]Oc1c(C)cc(O[H])cc1");
+		tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C].[H:10][H:11]",
+				"[H]Oc1c(C)cc(O[H])cc1");
+		
+		//tu.testSMIRKS("[N:1][C:2]>>[N:1].[C:2]=[O]", "NNC");
 		
 		//tu.testSMARTSBondToIBond("C=,@C");
 		
