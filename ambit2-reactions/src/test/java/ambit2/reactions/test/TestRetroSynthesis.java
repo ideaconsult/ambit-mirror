@@ -17,7 +17,8 @@ public class TestRetroSynthesis
 		System.out.println("Retro Synthesis Knowledge base:");
 		System.out.println(trs.retroSyn.getReactionKnowledgeBase().toString());
 		
-		trs.test("CCNS");
+		//trs.test("CCNS");
+		trs.test("c1[n+](S)ccn1O");
 	}
 	
 	
