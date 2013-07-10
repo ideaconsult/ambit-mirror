@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 package ambit2.ui;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -159,8 +160,7 @@ public class Panel2D<A extends IMoleculeEditAction> extends JPanel implements IC
 			g.fillRect(0, 0, tools.getImageSize().width, tools.getImageSize().width);
 			return;
 		}
-		
-		g.drawImage(image,0,0,this);
+		g.drawImage(image,0,0,Color.white,this);
 	}
 	
 	public void setAtomContainer(IAtomContainer mol, boolean generate2d) {

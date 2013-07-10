@@ -4,6 +4,7 @@
  */
 package ambit2.rendering;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -431,13 +432,13 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
     	renderer = createRenderer(imageSize,background,rings,atomNumbers,explicitH);
     	r2dm = renderer.getRenderer2DModel();
     	
-        if (buffer == null)
-            buffer = new BufferedImage(imageSize.width, imageSize.height,
-				BufferedImage.TYPE_INT_ARGB);
+        if (buffer == null) buffer = createBuffer();
         
 		Graphics2D g = buffer.createGraphics();
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC , 1.0f ));
 		g.setColor(background);
 		g.fillRect(0, 0, imageSize.width, imageSize.height);
+		
 		
 		IMoleculeSet molecules = new MoleculeSet();
         generate2D(molecule, build2d, molecules);
@@ -449,6 +450,9 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         	paintBorderShadow(g,getBorderWidth(),new Rectangle(imageSize));
         g.dispose();
 		return buffer;
+    }
+    protected BufferedImage createBuffer() {
+    	 return new BufferedImage(imageSize.width, imageSize.height,BufferedImage.TYPE_INT_ARGB);
     }
     private void paintBorderShadow(Graphics2D g2, int shadowWidth, Shape shape) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -684,9 +688,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	}
            
     public synchronized BufferedImage getImage(ArrayList<?> list) {
-        if (buffer == null)
-            buffer = new BufferedImage(imageSize.width, imageSize.height,
-				BufferedImage.TYPE_INT_ARGB);
+        if (buffer == null)  buffer = createBuffer();
         
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(background);
@@ -724,9 +726,7 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	}
 	
 	protected BufferedImage createDefaultImage() {
-			BufferedImage buffer = new BufferedImage(imageSize.width, imageSize.height,
-					BufferedImage.TYPE_INT_ARGB);
-	        
+			BufferedImage buffer = createBuffer();
 			Graphics2D g = buffer.createGraphics();
 			g.setColor(background);
 			g.fillRect(0, 0, imageSize.width, imageSize.height);
