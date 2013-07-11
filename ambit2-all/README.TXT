@@ -5,14 +5,14 @@ This is multi module maven project.
 
 
 Prerequisites for building AMBIT2
-JDK 1.6  
-MySQL 5.1 or higher (tested with MySQL 5.5 and 5.6 )
-Maven
+JDK 1.6 or higher 
+MySQL 5.5 or higher (also compatible with MySQL 5.1 )
+Maven 2.x
 
 1) to build ambit2 libraries:  
 
 Retrieve sources from SVN
-https://ambit.svn.sourceforge.net/svnroot/ambit/trunk/ambit2-all
+svn checkout svn://svn.code.sf.net/p/ambit/code/trunk/ambit2-all ambit-all
 
 ambit2-all>mvn package
 
@@ -29,14 +29,14 @@ All ambit and Toxtree artifacts are available at
 http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty
 
 Optionally, to build Toxtree version on your own, get the source 
-from https://toxtree.svn.sourceforge.net/svnroot/toxtree/trunk and run mvn install.
+svn checkout http://svn.code.sf.net/p/toxtree/svn/trunk/toxtree toxtree and run mvn install.
 
 
 NOTE 2: The build process includes mandatory database tests and may take a while. 
 To be able to access mysql database, there should be "settings.xml" file in your ".m2" directory with the following configuration:
 
 Root DB password is used only for creating a new database via dbunit tests , and if a web request to create a new database succeeds.
-normal user and password are guest/guest by default and are used in database queries/writes.
+Regular user and password are guest/guest by default and are used in database queries/writes.
 
 
 
@@ -105,9 +105,35 @@ normal user and password are guest/guest by default and are used in database que
   </profiles>
 </settings>
 
+To skip the tests, use -DskipTests=true option
+
+>mvn install [other options] -DskipTests=true
+
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.4.12-SNAPSHOT
+AMBIT2 2.4.13-SNAPSHOT
+
+Current version at trunk
+
+AMBIT2 2.4.12
+
+ambit2-rendering, ambit2-ui: Fixes a regression where the 2D depiction in swing UI is written on top of the previous molecule
+ambit2-db: support for relations between structures (to be used for tautomers, metabolites, additives, impurities, etc.)
+ambit2-db: Flag to reuse existing structure record on import
+ambit2-db: New tables for fast activity cliffs calculations 
+ambit2-tautomers: Added code for calculation of average descriptor values based on the tautomer information
+ambit2-www: SMILES, InChI, InChI key and formula included in the compound json serialization
+ambit2-www: Json serialization for property annotations
+ambit2-www: Jsonp support for the /algorithm resource
+ambit2-www: Support for /compound/{inchikey} in addition to /compound/{id}
+ambit2-www: InChI Key query option /query/compound/inchikey/all?search=INCHIKEY
+ambit2-www: Tautomers generation via /algorithm and /model services.
+ambit2-www: The tautomers are stored in the DB and can be retrieved via /query/tautomer?dataset_uri=COMPOUNDURI
+ambit2-www: Tautomers depict fixed to accept InChI in addition to SMILES
+ambit2-db, ambit2-www: Merged ambit-chemspace branch implementing http://www.ncbi.nlm.nih.gov/pubmed/23110534
+ambit2-www: Activity cliffs: precomputed g2 counts and activity cliffs ordering by /qmap/{id} 
+ambit2-db, ambit2-nano: Merged ambit-nano branch implementing support for nano materials via conditional dependency
+ambit2-reactions: Initial functionality for retro synthesis
 
 
 AMBIT2 2.4.11
