@@ -14,6 +14,13 @@ public abstract class AbstractUpdateStructureRelation  extends AbstractUpdate<IS
 		HAS_METABOLITE
 	}
 	protected String relation;
+	protected Double metric;
+	public Double getMetric() {
+		return metric;
+	}
+	public void setMetric(Double metric) {
+		this.metric = metric;
+	}
 	public String getRelation() {
 		return relation;
 	}
@@ -21,15 +28,18 @@ public abstract class AbstractUpdateStructureRelation  extends AbstractUpdate<IS
 		this.relation = relation;
 	}
 	public AbstractUpdateStructureRelation() {
-		this(null,null,null);
+		this(null,null,null,null);
 	}
-	public AbstractUpdateStructureRelation(IStructureRecord structure1,IStructureRecord structure2,String relation) {
+	public AbstractUpdateStructureRelation(IStructureRecord structure1,IStructureRecord structure2,
+										   String relation, Double metric) {
 		super();
 		setGroup(structure1);
 		setObject(structure2);
 		setRelation(relation);
+		setMetric(metric);
 	}
 
+	@Override
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
 		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdchemical()));

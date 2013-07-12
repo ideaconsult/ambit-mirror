@@ -29,8 +29,12 @@
 
 package ambit2.db.chemrelation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.search.QueryParam;
 
 public class DeleteStructureRelation extends AbstractUpdateStructureRelation {
 
@@ -41,7 +45,7 @@ public class DeleteStructureRelation extends AbstractUpdateStructureRelation {
 		this(null,null,null);
 	}
 	public DeleteStructureRelation(IStructureRecord structure1,IStructureRecord structure2,String relation) {
-		super(structure1,structure2,relation);
+		super(structure1,structure2,relation,null);
 	}
 	
 	public String[] getSQL() throws AmbitException {
@@ -50,6 +54,5 @@ public class DeleteStructureRelation extends AbstractUpdateStructureRelation {
 	public void setID(int index, int id) {
 		
 	}
-
 
 }
