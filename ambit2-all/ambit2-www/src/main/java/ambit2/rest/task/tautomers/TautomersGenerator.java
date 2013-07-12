@@ -125,11 +125,12 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 				for (IAtomContainer tautomer: resultTautomers) {
 					try {
 						Object rank_property = tautomer.getProperty("TAUTOMER_RANK");
+						double rank;
 						if (rank_property == null) {
 							logger.log(Level.INFO, String.format("No tautomer rank, probably this is the original structure"));
 							continue;
 						} else {
-							double rank = Double.parseDouble(rank_property.toString());
+							rank = Double.parseDouble(rank_property.toString());
 							/**
 							 * The rank is energy based, lower rank is better
 							 */
@@ -158,8 +159,9 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 						molwriter.close();
 						List<IStructureRecord> strucWritten = writer.write(newrecord);
 						for (IStructureRecord struc : strucWritten) {
-							if (target.getIdchemical()==struc.getIdchemical()) continue;
+							//if (target.getIdchemical()==struc.getIdchemical()) continue;
 							updateStrucRelationQuery.setObject(struc);
+							updateStrucRelationQuery.setMetric(rank);
 							exec.process(updateStrucRelationQuery);
 							
 						}
