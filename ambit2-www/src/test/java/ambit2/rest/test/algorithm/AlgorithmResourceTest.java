@@ -336,19 +336,20 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT * FROM chem_relation");
-		Assert.assertEquals(8,table.getRowCount());
+		Assert.assertEquals(9,table.getRowCount());
 		table = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset join struc_dataset using(id_srcdataset) where name='TAUTOMERS'");
 		Assert.assertEquals(9,table.getRowCount());
 		c.close();
 		
 		List list = cli.listURI(new URL(expected));
-		Assert.assertEquals(8,list.size());
+		Assert.assertEquals(9,list.size());
 
 		//now try it again
 		ref = testAsyncTask(model.toString(),headers, Status.SUCCESS_OK,expected);
 		c = getConnection();	
-		table = 	c.createQueryTable("EXPECTED","SELECT * FROM chem_relation");
-		Assert.assertEquals(8,table.getRowCount());
+		table = 	c.createQueryTable("EXPECTED","SELECT idchemical1,idchemical2,relation,metric FROM chem_relation");
+		Assert.assertEquals(9,table.getRowCount());
+		Assert.assertNotNull(table.getValue(0,"metric"));
 		c.close();
 		
 		
