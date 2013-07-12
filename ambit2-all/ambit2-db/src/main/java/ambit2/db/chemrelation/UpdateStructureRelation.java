@@ -29,19 +29,25 @@
 
 package ambit2.db.chemrelation;
 
+import java.util.List;
+
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.db.search.QueryParam;
 
 public class UpdateStructureRelation extends AbstractUpdateStructureRelation {
 
 	public static final String[] create_sql = {
-		"INSERT IGNORE INTO chem_relation values(?,?,?)"
+		"INSERT INTO chem_relation values(?,?,?,?) on duplicate key update metric=values(metric)"
 	};
 	public UpdateStructureRelation() {
-		this(null,null,null);
+		this(null,null,null,null);
 	}
 	public UpdateStructureRelation(IStructureRecord structure1,IStructureRecord structure2,String relation) {
-		super(structure1,structure2,relation);
+		this(structure1,structure2,relation,null);
+	}
+	public UpdateStructureRelation(IStructureRecord structure1,IStructureRecord structure2,String relation,Double metric) {
+		super(structure1,structure2,relation,metric);
 	}
 
 	public void setID(int index, int id) {
@@ -49,5 +55,11 @@ public class UpdateStructureRelation extends AbstractUpdateStructureRelation {
 
 	public String[] getSQL() throws AmbitException {
 		return create_sql;
+	}
+	@Override
+	public List<QueryParam> getParameters(int index) throws AmbitException {
+		List<QueryParam> params1 = super.getParameters(index);
+		params1.add(new QueryParam<Double>(Double.class, getMetric()));
+		return params1;
 	}
 }

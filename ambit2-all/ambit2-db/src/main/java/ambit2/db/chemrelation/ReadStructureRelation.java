@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.NumberCondition;
@@ -17,7 +18,7 @@ public class ReadStructureRelation extends AbstractStructureQuery<String,Integer
 	 */
 	private static final long serialVersionUID = -8329798753353233477L;
 	public final static String sql = 
-		"select idchemical1,idchemical2,-1,1,1,relation as text from chem_relation where idchemical1=? and relation=?";
+		"select idchemical1,idchemical2,-1,1,metric,relation as text from chem_relation where idchemical1=? and relation=?";
 	
 	public ReadStructureRelation(IStructureRecord structure) {
 		this(AbstractUpdateStructureRelation.STRUCTURE_RELATION.HAS_TAUTOMER.name(),
@@ -56,18 +57,10 @@ public class ReadStructureRelation extends AbstractStructureQuery<String,Integer
 	}
 	@Override
 	public double calculateMetric(IStructureRecord object) {
-
 		return 1;
 	}
 	@Override
 	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
-		/*
 		record.setProperty(Property.getInstance("metric",toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
-		record.setProperty(Property.getInstance("a",toString(),"http://ambit.sourceforge.net"), rs.getFloat(7));
-		record.setProperty(Property.getInstance("b",toString(),"http://ambit.sourceforge.net"), rs.getFloat(8));
-		record.setProperty(Property.getInstance("c",toString(),"http://ambit.sourceforge.net"), rs.getFloat(9));
-		record.setProperty(Property.getInstance("d",toString(),"http://ambit.sourceforge.net"), rs.getFloat(10));
-		record.setProperty(Property.getInstance("fisher",toString(),"http://ambit.sourceforge.net"), rs.getFloat(11));
-		*/
 	}	
 }

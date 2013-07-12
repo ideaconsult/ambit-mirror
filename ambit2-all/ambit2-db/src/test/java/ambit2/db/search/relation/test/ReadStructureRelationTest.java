@@ -3,6 +3,7 @@ package ambit2.db.search.relation.test;
 import java.sql.ResultSet;
 
 import junit.framework.Assert;
+import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.chemrelation.ReadStructureRelation;
 import ambit2.db.search.test.QueryTest;
@@ -33,6 +34,10 @@ public class ReadStructureRelationTest extends QueryTest<ReadStructureRelation> 
 		while (rs.next()) {
 			IStructureRecord record = query.getObject(rs);
 			Assert.assertEquals(11,record.getIdchemical());
+			for (Property p : record.getProperties()) {
+				Assert.assertEquals("metric",p.getName());
+				Assert.assertEquals(new Float(999.0),record.getProperty(p));
+			}
 			count++;
 		}
 		Assert.assertEquals(1,count);

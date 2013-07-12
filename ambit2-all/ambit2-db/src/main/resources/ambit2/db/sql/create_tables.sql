@@ -86,21 +86,16 @@ CREATE TABLE  `chemicals` (
 -- Table `chem_relation` 
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `chem_relation`;
-CREATE TABLE `chem_relation` (
-  `idchemical1` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `idchemical2` INTEGER UNSIGNED NOT NULL,
-  `relation` VARCHAR(64) NOT NULL,
-  PRIMARY KEY (`idchemical1`, `idchemical2`, `relation`),
-  CONSTRAINT `FK_chem_relation_1` FOREIGN KEY `FK_chem_relation_1` (`idchemical1`)
-    REFERENCES `chemicals` (`idchemical`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `FK_chem_relation_2` FOREIGN KEY `FK_chem_relation_2` (`idchemical2`)
-    REFERENCES `chemicals` (`idchemical`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-)
-ENGINE = InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE  `chem_relation` (
+  `idchemical1` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idchemical2` int(10) unsigned NOT NULL,
+  `relation` varchar(64) NOT NULL,
+  `metric` double DEFAULT NULL,
+  PRIMARY KEY (`idchemical1`,`idchemical2`,`relation`),
+  KEY `FK_chem_relation_2` (`idchemical2`),
+  CONSTRAINT `FK_chem_relation_1` FOREIGN KEY (`idchemical1`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_chem_relation_2` FOREIGN KEY (`idchemical2`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `structure`
@@ -1042,7 +1037,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (6,7,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (6,8,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
