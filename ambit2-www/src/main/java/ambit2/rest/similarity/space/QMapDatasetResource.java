@@ -12,14 +12,13 @@ import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
-import ambit2.db.simiparity.space.QueryQMap;
+import ambit2.db.simiparity.space.QueryQMapStructures;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
 
 public class QMapDatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
-	
-	public final static String qmap = "/qmap";
-	public final static String qmapKey = "qmapid";
+
+
 	
 	@Override
 	protected Q createQuery(Context context, Request request,
@@ -32,7 +31,7 @@ public class QMapDatasetResource<Q extends IQueryRetrieval<IStructureRecord>> ex
 			try { includeMol = "true".equals(form.getFirstValue("mol")); } catch (Exception x) { includeMol=false;}
 
 			
-			Object id = request.getAttributes().get(qmapKey);
+			Object id = request.getAttributes().get(QMapResource.qmapKey);
 			if (id != null)  try {
 				
 				id = Reference.decode(id.toString());
@@ -65,8 +64,8 @@ public class QMapDatasetResource<Q extends IQueryRetrieval<IStructureRecord>> ex
 	
 	protected Q getQueryById(Integer key) throws ResourceException {
 		Q query = null;
-		QueryQMap q = new QueryQMap();
-		((QueryQMap)q).setValue(key);
+		QueryQMapStructures q = new QueryQMapStructures();
+		((QueryQMapStructures)q).setValue(key);
 		Form form = getResourceRef(getRequest()).getQueryAsForm();
 		setPaging(form, q);
 		return (Q)q;
