@@ -8,11 +8,11 @@
 		<a href='${ambit_root}/model' target='_blank'>Models</a> |
 		<a href='${ambit_root}/task' target='_blank'>Tasks</a> |
 		<a href='${ambit_root}/help' target=_blank>More API Help</a><br>
-<div style='font-weight:bold;'>Demos</div> 
+<div style='font-weight:bold;'>Demos:</div> 
 <a href='${ambit_root}/depict?search=c1ccccc1' target='_blank'>2D depiction</a> |
 <a href='${ambit_root}/depict/reaction?search=c1ccccc1' target='_blank'>Reactions (SMIRKS)</a> |
 <a href='${ambit_root}/depict/tautomer?search=NC%3D1N%3DCN%3DC2N%3DCNC2%3D1' target='_blank'>Tautomers</a>
-<div style='font-weight:bold;'>More</div>		
+<div style='font-weight:bold;'>More:</div>		
 Query API<a href='#' class='chelp queryapi'>?</a> 
 Statistics<a href='#' class='chelp stats'>?</a>   
 Applications<a href='#' class='chelp apps'>?</a>

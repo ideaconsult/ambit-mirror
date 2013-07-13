@@ -29,7 +29,9 @@ public class HelpResource extends CatalogResource<String>  {
 		algorithm,
 		model,
 		feature,
-		task
+		task,
+		dataprep,
+		qmap
 	}
 	public HelpResource() {
 		super();

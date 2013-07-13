@@ -109,6 +109,7 @@ import ambit2.rest.similarity.SimilarityMatrixResource;
 import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.similarity.space.ChemicalSpaceResource;
 import ambit2.rest.similarity.space.QMapDatasetResource;
+import ambit2.rest.similarity.space.QMapResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
@@ -320,8 +321,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
 		
 		//qmap
-		router.attach(String.format("%s/{%s}",QMapDatasetResource.qmap,QMapDatasetResource.qmapKey),
-							QMapDatasetResource.class);
+		router.attach(QMapResource.qmap,QMapResource.class);
+		router.attach(String.format("%s/{%s}/metadata",QMapResource.qmap,QMapResource.qmapKey),QMapResource.class);
+		router.attach(String.format("%s/{%s}",QMapResource.qmap,QMapResource.qmapKey),QMapDatasetResource.class);
 
 		//collections
 		MyRouter collectionRouter = new MyRouter(getContext());
