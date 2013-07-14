@@ -3,14 +3,15 @@
 <#include "/header.ftl" >
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/d3.v3.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/qmap.js'></script>
 
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
 	  	//var oTable = qmap.defineMetadataTable("${ambit_root}","${ambit_request_json}",true);
-	  	var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(result) {
-	  		qmap.data = result;
+	  	var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result){
+	  		qmap.defineChart(root,result);
 	  	});
 	});
 	</script>
@@ -77,22 +78,6 @@ $(document)
 
 <div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 	<div class="eight columns">
-
-			<table id='qmap' class='qmaptable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
-			<thead>
-			<tr>
-			<th>Dataset <a href='#' class='chelp dataset'>?</a></th>
-			<th>Property <a href='#' class='chelp feature'>?</a></th>
-			<th>Activity threshold</th>
-			<th>Similarity threshold</th>
-			<th>Activity cliffs <a href='#' class='chelp activity_cliff'>?</a></th>
-			</tr>
-			</thead>
-			<tbody></tbody>
-			</table>
-
-	</div>
-	<div class="eight columns">
 			<table id='nodes' class='qnodestable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
@@ -105,11 +90,28 @@ $(document)
 			<tbody></tbody>
 			</table>
 	</div>
+	<div class="eight columns">
+	<div id='qchart'></div>
+</div>	
 </div>
 
 <!-- Bottom -->
 <div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
 	<div class="eight columns">
+
+	<table id='qmap' class='qmaptable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+	<thead>
+	<tr>
+	<th>Dataset <a href='#' class='chelp dataset'>?</a></th>
+	<th>Property <a href='#' class='chelp feature'>?</a></th>
+	<th>Activity threshold</th>
+	<th>Similarity threshold</th>
+	<th>Activity cliffs <a href='#' class='chelp activity_cliff'>?</a></th>
+	</tr>
+	</thead>
+	<tbody></tbody>
+	</table>
+	
 		<!-- Downloads -->
 		<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 			<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
