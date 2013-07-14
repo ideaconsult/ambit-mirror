@@ -36,7 +36,7 @@ var qmap = {
 		    					"bUseRendered" : false,	
 		    					"sWidth" : "33%",
 		    					"fnRender" : function(o,val) {
-		    						var sOut = "<a href='"+ val.URI+"' target=_blank>"+ val.title +"</a>";
+		    						var sOut = "<a href='"+ val.URI+"' target=_blank>"+ (val.title==""?val.URI:val.title) +"</a>";
 		    						return sOut;
 		    					}
 		    				},	    
@@ -82,7 +82,8 @@ var qmap = {
 		    					"mDataProp" : "URI",
 		    					"bUseRendered" : false,	
 		    					"fnRender" : function(o,val) {
-		    						var sOut = "<a href='"+ val+"' target=_blank>Explore</a>";
+		    						var sOut =  "<a href='"+root+"/toxmatch?qmap_uri="+ val+"' target=_blank>Explore</a>"; 
+		    						sOut += "| <a href='"+ val+"' target=_blank>Compounds</a>";
 		    						return sOut;
 		    					}
 		    				}			    				

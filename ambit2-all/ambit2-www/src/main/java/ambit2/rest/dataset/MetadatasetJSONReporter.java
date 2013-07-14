@@ -72,7 +72,7 @@ public class MetadatasetJSONReporter<Q extends IQueryRetrieval<ISourceDataset>> 
 					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
 					"\n}",
 					jsonFeature.URI.jsonname(),uri,
-					jsonFeature.title.jsonname(),JSONUtils.jsonEscape(item.getName()),
+					jsonFeature.title.jsonname(),item.getName()==null?"":JSONUtils.jsonEscape(item.getName()),
 					jsonFeature.stars.jsonname(),item.getStars(),
 					jsonFeature.rightsHolder.jsonname(),item.getrightsHolder()==null?"":JSONUtils.jsonEscape(item.getrightsHolder()),
 					jsonFeature.seeAlso.jsonname(),item instanceof SourceDataset?JSONUtils.jsonEscape(((SourceDataset) item).getURL()):"",
