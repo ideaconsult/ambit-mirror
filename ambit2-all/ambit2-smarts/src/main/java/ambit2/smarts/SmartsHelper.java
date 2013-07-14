@@ -113,19 +113,25 @@ public class SmartsHelper
         	/*
         	https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
 			sb.append(" NumH=" + (at.getHydrogenCount() + explHAt));
-			*/			
-			sb.append(" NumH=" + (at.getImplicitHydrogenCount() + explHAt));
+			*/
+			Integer implH = at.getImplicitHydrogenCount();
+			if (implH == null)
+				implH = new Integer(0);
+			
+			sb.append(" NumH=" + ( implH.intValue() + explHAt));
 			if (at.getFlag(CDKConstants.ISAROMATIC)) 
 				sb.append(" aromatic");
 			
-			Integer stereo = at.getStereoParity();			
-			sb.append(" stereo = " + stereo);
+			//Integer stereo = at.getStereoParity();			
+			//sb.append(" stereo = " + stereo);
 						
 			
 			sb.append("\n");
 		}	
 		return(sb.toString());
 	}
+	
+	
 	
 	static public String getBondAttributes(IAtomContainer container)
 	{
@@ -137,7 +143,7 @@ public class SmartsHelper
 			IAtom at1 = bo.getAtom(1);
 			int at0_num = container.getAtomNumber(at0);
 			int at1_num = container.getAtomNumber(at1);
-			sb.append("  #" + i + "  (" + at0_num + "," + at1_num + ")");
+			sb.append("  #" + i + " Atoms (" + at0_num + "," + at1_num + ")   Order = " + bondOrderToIntValue(bo));
 			
 			if (bo.getFlag(CDKConstants.ISAROMATIC)) 
 				sb.append(" aromatic");
@@ -563,6 +569,16 @@ public class SmartsHelper
 		sp.setSMARTSData(target);
 		
 		return isoTester.getIsomorphismPositions(target);
+	}
+	
+	public static void setAromaticAtomsFromBondFlagInfo(IAtomContainer mol)
+	{
+		for (IBond bond : mol.bonds()) 
+			if (bond.getFlag(CDKConstants.ISAROMATIC))
+			{
+				bond.getAtom(0).setFlag(CDKConstants.ISAROMATIC, true);
+				bond.getAtom(1).setFlag(CDKConstants.ISAROMATIC, true);
+			}
 	}
 	
 	
