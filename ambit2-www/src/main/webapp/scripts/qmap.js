@@ -27,32 +27,21 @@ var qmap = {
 		          '</select> qmaps.'	            
 		    },	
 		    "aoColumnDefs": [
-		    				{ //0
-		    					"aTargets": [ 0 ],	
-		    					"sClass" : "center",
-		    					"bSortable" : true,
-		    					"bSearchable" : true,
-		    					"mDataProp" : "URI",
-		    					"bUseRendered" : false,	
-		    					"fnRender" : function(o,val) {
-		    						var sOut = "<a href='"+ val+"' target=_blank>"+ val + "</a>";
-		    						return sOut;
-		    					}
-		    				},	     	            
 		    				{ //1
-		    					"aTargets": [ 1 ],	
+		    					"aTargets": [ 0 ],	
 		    					"sClass" : "center",
 		    					"bSortable" : true,
 		    					"bSearchable" : true,
 		    					"mDataProp" : "dataset",
 		    					"bUseRendered" : false,	
+		    					"sWidth" : "33%",
 		    					"fnRender" : function(o,val) {
 		    						var sOut = "<a href='"+ val.URI+"' target=_blank>"+ val.title +"</a>";
 		    						return sOut;
 		    					}
 		    				},	    
 		    				{ //2
-		    					"aTargets": [ 2 ],	
+		    					"aTargets": [ 1 ],	
 		    					"sClass" : "center",
 		    					"bSortable" : true,
 		    					"bSearchable" : true,
@@ -64,7 +53,7 @@ var qmap = {
 		    					}
 		    				},	    	
 		    				{ //3
-		    					"aTargets": [ 3 ],	
+		    					"aTargets": [ 2 ],	
 		    					"sClass" : "center",
 		    					"bSortable" : true,
 		    					"bSearchable" : true,
@@ -75,7 +64,7 @@ var qmap = {
 		    					}
 		    				},
 		    				{ //4
-		    					"aTargets": [ 4 ],	
+		    					"aTargets": [ 3 ],	
 		    					"sClass" : "center",
 		    					"bSortable" : true,
 		    					"bSearchable" : true,
@@ -84,7 +73,19 @@ var qmap = {
 		    					"fnRender" : function(o,val) {
 		    						return val;
 		    					}
-		    				}		    				
+		    				},		    	
+		    				{ //0
+		    					"aTargets": [ 4 ],	
+		    					"sClass" : "center",
+		    					"bSortable" : true,
+		    					"bSearchable" : true,
+		    					"mDataProp" : "URI",
+		    					"bUseRendered" : false,	
+		    					"fnRender" : function(o,val) {
+		    						var sOut = "<a href='"+ val+"' target=_blank>Explore</a>";
+		    						return sOut;
+		    					}
+		    				}			    				
 		     				],
 		 	  "aaSorting": [[1, 'desc']],
 			   "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
@@ -120,7 +121,7 @@ var qmap = {
 								break;
 							}
 							default: {
-					        	alert("Error loading algorithms " + xhr.status + " " + error);
+					        	alert("Error loading qmaps " + xhr.status + " " + error);
 							}
 							}
 							oSettings.oApi._fnProcessingDisplay(oSettings, false);

@@ -3,19 +3,25 @@ package ambit2.rest.similarity.space;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Property;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.simiparity.space.QMap;
 import ambit2.db.simiparity.space.QueryQMap;
+import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.query.QueryResource;
 
@@ -51,6 +57,33 @@ public class QMapResource extends QueryResource<IQueryRetrieval<QMap>, QMap> {
 	protected IQueryRetrieval<QMap> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		QueryQMap query = new QueryQMap();
+		Object qid = request.getAttributes().get(QMapResource.qmapKey);
+		if (qid != null)  try {
+			query.setValue(new QMap(Integer.parseInt(qid.toString())));
+			return query;
+		} catch (Exception x) {}
+		
+		//filter by dataset
+		Form form = request.getResourceRef().getQueryAsForm();
+		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
+		if (datasetURI!=null) try {
+			int id = (Integer)OpenTox.URI.dataset.getId(Reference.decode(datasetURI.toString().trim()),request.getRootRef());
+			QMap map = new QMap();
+			map.setDataset(new SourceDataset());
+			map.getDataset().setID(id);
+			query.setValue(map);
+		} catch (Exception x) { /* ignore the filter	*/}
+
+		Object propertyURI = OpenTox.params.feature_uris.getFirstValue(form);
+		if (propertyURI!=null) try {
+			int id = (Integer)OpenTox.URI.feature.getId(Reference.decode(propertyURI.toString().trim()),request.getRootRef());
+			if (query.getValue()==null) query.setValue(new QMap());
+			Property p = new Property(null);
+			p.setId(id);
+			query.getValue().setProperty(p);
+		} catch (Exception x) { /* ignore the filter	*/}
+
+		
 		return query;
 	}
 

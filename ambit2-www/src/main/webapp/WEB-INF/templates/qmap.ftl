@@ -97,11 +97,11 @@ $(document)
 			<table id='qmap' class='qmaptable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
-			<th>Browse activity cliffs <a href='#' class='chelp activity_cliff'>?</a></th>
 			<th>Dataset <a href='#' class='chelp dataset'>?</a></th>
 			<th>Property <a href='#' class='chelp feature'>?</a></th>
 			<th>Activity threshold</th>
 			<th>Similarity threshold</th>
+			<th>Activity cliffs <a href='#' class='chelp activity_cliff'>?</a></th>
 			</tr>
 			</thead>
 			<tbody></tbody>

@@ -1,69 +1,112 @@
 package ambit2.db.simiparity.space;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.search.NumberCondition;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.QueryParam;
-import ambit2.db.search.structure.AbstractStructureQuery;
+import ambit2.db.search.StringCondition;
 
-public class QueryQMap extends AbstractStructureQuery<String,Integer,NumberCondition> {
+/**
+ * Reads {@link QMap}
+ * @author nina
+ *
+ */
+public class QueryQMap extends AbstractQuery<IStructureRecord,QMap,StringCondition,QMap>  implements IQueryRetrieval<QMap>{
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8329798753353233477L;
-	public final static String sql = 
-		"select idsasmap,idchemical,-1,1,g2 as metric,null as text,a,b,c,d,fisher from qsasmap4 where idsasmap=? order by g2 desc ";
-	public QueryQMap(SourceDataset dataset) {
-		this(dataset==null?null:dataset.getId());
-	}
-	public QueryQMap() {
-		this((SourceDataset)null);
-	}
-	public QueryQMap(Integer id) {
-		super();
-		setFieldname("metric");
-		setValue(id);
-		setCondition(NumberCondition.getInstance("="));
-	}	
+	private static final long serialVersionUID = -5648740520878436166L;
+	private static String sql = 
+		"SELECT idsasmap,id_srcdataset,idproperty,threshold_dact,threshold_sim," +
+		"d.name datasetname,d.idreference,d.created,d.idtemplate,d.licenseURI,d.rightsHolder,d.maintainer,d.stars,\n" +
+		"p.name propertyname,p.units,p.comments\n"+
+		"FROM qsar.qsasheader\n" +
+		"join src_dataset d using(id_srcdataset) join properties p using(idproperty)\n" +
+		"%s\n"+
+		"order by id_srcdataset,idproperty";
+
+	protected StringBuilder condition=null;
+
+	@Override
 	public String getSQL() throws AmbitException {
-		return 	String.format(sql,getCondition().getSQL(),getValue()==null?"":"?");
+		if (getValue()!=null) {
+			if ((getValue().getId()>0)) {
+				initCondition();
+				condition.append("idsasmap=?");			
+			} else {
+				if ((getValue().getDataset()!=null) && (getValue().getDataset().getID()>0)) {
+					if (!initCondition()) condition.append(" and ");
+					condition.append("id_srcdataset=?");			
+				}
+				if ((getValue().getProperty()!=null) && (getValue().getProperty().getId()>0)) {
+					if (!initCondition()) condition.append(" and ");
+					condition.append("idproperty=?");					
+				}		
+			}
+		}
+		return String.format(sql,condition);
 	}
+	protected boolean initCondition() {
+		if (condition==null) {condition = new StringBuilder();condition.append(" where "); return true;}
+		else return false;
+	}
+
+	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		if (getValue()!=null)
-			params.add(new QueryParam<Integer>(Integer.class,getValue()));
-		else throw new AmbitException("Empty ID");
+		if (getValue()!=null) {
+			if ((getValue().getId()>0)) {
+				params.add(new QueryParam<Integer>(Integer.class,getValue().getId()));
+				return params;
+			}	
+			if ((getValue().getDataset()!=null) && (getValue().getDataset().getID()>0)) {
+				params.add(new QueryParam<Integer>(Integer.class,getValue().getDataset().getID()));
+			}
+			if ((getValue().getProperty()!=null) && (getValue().getProperty().getId()>0)) {
+				params.add(new QueryParam<Integer>(Integer.class,getValue().getProperty().getId()));
+			}			
+		}
 		return params;
 	}
+
 	@Override
-	public String toString() {
-		if (getValue()==null) return "QSASMap";
-		return String.format("QSASMap %d",getValue());
+	public QMap getObject(ResultSet rs) throws AmbitException {
+		QMap qmap = new QMap();
+		try {
+			qmap.setId(rs.getInt(1));
+			qmap.setDataset(new SourceDataset(rs.getString("datasetname")));
+			qmap.getDataset().setID(rs.getInt(2));
+			qmap.getDataset().setStars(rs.getInt("stars"));
+			qmap.setProperty(new Property(rs.getString("propertyname")));
+			qmap.getProperty().setId(rs.getInt(3));
+			qmap.setActivityThreshold(rs.getDouble(4));
+			qmap.setSimilarityThreshold(rs.getDouble(5));
+			return qmap;
+		} catch (Exception x) {
+			throw new AmbitException(x);
+		}
+		
 	}
 
 	@Override
 	public boolean isPrescreen() {
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
-	@Override
-	public double calculateMetric(IStructureRecord object) {
 
-		return 1;
-	}
 	@Override
-	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
-		record.setProperty(Property.getInstance("metric",toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
-		record.setProperty(Property.getInstance("a",toString(),"http://ambit.sourceforge.net"), rs.getFloat(7));
-		record.setProperty(Property.getInstance("b",toString(),"http://ambit.sourceforge.net"), rs.getFloat(8));
-		record.setProperty(Property.getInstance("c",toString(),"http://ambit.sourceforge.net"), rs.getFloat(9));
-		record.setProperty(Property.getInstance("d",toString(),"http://ambit.sourceforge.net"), rs.getFloat(10));
-		record.setProperty(Property.getInstance("fisher",toString(),"http://ambit.sourceforge.net"), rs.getFloat(11));
-	}	
+	public double calculateMetric(QMap object) {
+		// TODO Auto-generated method stub
+		return 0;
+	} 
+
 }
