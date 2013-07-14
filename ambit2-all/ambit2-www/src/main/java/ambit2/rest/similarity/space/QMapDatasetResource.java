@@ -9,10 +9,12 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
+import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.simiparity.space.QueryQMapStructures;
+import ambit2.rest.OpenTox;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.StructureQueryResource;
 
@@ -44,8 +46,7 @@ public class QMapDatasetResource<Q extends IQueryRetrieval<IStructureRecord>> ex
 				throw x;
 			} catch (Exception x) {
 				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
-			}
-			else throw new InvalidResourceIDException("");
+			}  else throw new InvalidResourceIDException("");
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
@@ -53,6 +54,11 @@ public class QMapDatasetResource<Q extends IQueryRetrieval<IStructureRecord>> ex
 					Status.SERVER_ERROR_INTERNAL,x.getMessage(),x
 					);
 		}		
+	}
+	@Override
+	protected Template createTemplate(Form form) throws ResourceException {
+		String[] featuresURI =  OpenTox.params.feature_uris.getValuesArray(form);
+		return createTemplate(getContext(),getRequest(),getResponse(), featuresURI);
 	}
 	
 	@Override
