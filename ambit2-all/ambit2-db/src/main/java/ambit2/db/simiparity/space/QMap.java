@@ -60,4 +60,11 @@ public class QMap implements Serializable {
 		this.similarityThreshold = similarityThreshold;
 	}
 
+	public void clear() {
+		setId(-1);
+		if (dataset!=null) dataset.setID(-1);
+		if (property!=null) property.setId(-1);
+		setSimilarityThreshold(Double.NaN);
+		setActivityThreshold(Double.NaN);
+	}
 }

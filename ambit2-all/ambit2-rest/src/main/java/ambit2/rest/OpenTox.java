@@ -54,7 +54,8 @@ public class OpenTox {
 				} catch (Exception x) {};
 				return ids;
 			}			
-		};
+		},
+		qmap;
 		public String getURI() {
 			return String.format("/%s",toString());
 		}
@@ -276,6 +277,14 @@ public class OpenTox {
 			public String getDescription() {
 				return "Page size";
 			}
+		},
+		qmap_uri {
+			public boolean isMandatory() {
+				return true;
+			}
+			public String getDescription() {
+				return "QMap URI";
+			}			
 		};
 		public boolean isMandatory() {
 			return true;
