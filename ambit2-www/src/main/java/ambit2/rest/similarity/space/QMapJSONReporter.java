@@ -25,14 +25,18 @@ public class QMapJSONReporter<Q extends IQueryRetrieval<QMap>> extends QueryRepo
 	protected List<Integer> cacheProperty = new ArrayList<Integer>();
 	protected List<Integer> cacheDataset = new ArrayList<Integer>();
 	
-	enum jsonFeature {
+	public enum qmapJSON {
+		qmap,
 		URI,
 		metadata,
 		dataset,
 		featureURI,
 		activity,
 		similarity,
-		threshold
+		threshold,
+		fisher,
+		g2,
+		a,b,c,d
 		;
 		
 		public String jsonname() {
@@ -77,13 +81,13 @@ public class QMapJSONReporter<Q extends IQueryRetrieval<QMap>> extends QueryRepo
 					"\n\t\"activity\":{\n\t\t\"%s\":\"%s\",\n\t\t\"%s\":%f\n\t}," + 					
 					"\n\t\"similarity\":{\n\t\t\"%s\":%f\n\t}" + 					
 					"\n}",
-					jsonFeature.URI.jsonname(),uri,
-					jsonFeature.metadata.jsonname(),uri,
-					jsonFeature.dataset.jsonname(),jsonFeature.URI.jsonname(),dataseturi,
-					jsonFeature.featureURI.jsonname(),propertyuri,
-					jsonFeature.threshold,
+					qmapJSON.URI.jsonname(),uri,
+					qmapJSON.metadata.jsonname(),uri,
+					qmapJSON.dataset.jsonname(),qmapJSON.URI.jsonname(),dataseturi,
+					qmapJSON.featureURI.jsonname(),propertyuri,
+					qmapJSON.threshold,
 					item.getActivityThreshold(),
-					jsonFeature.threshold,
+					qmapJSON.threshold,
 					item.getSimilarityThreshold()
 					));
 			comma = ",";
@@ -101,18 +105,13 @@ public class QMapJSONReporter<Q extends IQueryRetrieval<QMap>> extends QueryRepo
 	}
 	*/
 	
-	
-	@Override
-	public void header(Writer output, Q query) {
+	public void qmapheader(Writer output, Q query) {
 		try {
-			output.write("{\n");
 			output.write("\"qmap\": [\n");
 		} catch (Exception x) {}
 	};
 	
-	
-	@Override
-	public void footer(Writer output, Q query) {
+	public void qmapfooter(Writer output, Q query) {
 		try {
 			output.write("\t\n],");
 			output.write("\"dataset\": [\n");
@@ -121,6 +120,24 @@ public class QMapJSONReporter<Q extends IQueryRetrieval<QMap>> extends QueryRepo
 			output.write("\n\"feature\":{\n");
 			output.write(propertyWriter.toString());
 			output.write("\t\n}");
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+	};
+	
+	@Override
+	public void header(Writer output, Q query) {
+		try {
+			output.write("{\n");
+			qmapheader(output, query);
+		} catch (Exception x) {}
+	};
+	
+	
+	@Override
+	public void footer(Writer output, Q query) {
+		try {
+			qmapfooter(output, query);
 			output.write("\n}");
 		} catch (Exception x) {
 			x.printStackTrace();
@@ -134,5 +151,9 @@ public class QMapJSONReporter<Q extends IQueryRetrieval<QMap>> extends QueryRepo
 	@Override
 	public void open() throws DbAmbitException {
 		
+	}
+	
+	public String getURI(QMap item) {
+		return qmapReporter.getURI(item);
 	}
 }

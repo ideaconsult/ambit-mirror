@@ -110,6 +110,7 @@ import ambit2.rest.similarity.SimilarityResource;
 import ambit2.rest.similarity.space.ChemicalSpaceResource;
 import ambit2.rest.similarity.space.QMapDatasetResource;
 import ambit2.rest.similarity.space.QMapResource;
+import ambit2.rest.similarity.space.QMapSpaceResource;
 import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
@@ -293,6 +294,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		DataEntryRouter tupleRouter = new DataEntryRouter(getContext());
 		/** Similarity search TODO: move it under /algorithm  */
 		Router similarityRouter = createSimilaritySearchRouter();
+		
 		/**  SMARTS search.  TODO: move it under /algorithm  */
 		Router smartsRouter = createSMARTSSearchRouter();
 		/**  /compound  */
@@ -351,6 +353,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		queryRouter.attach(SimilarityResource.resource,similarityRouter);
 		queryRouter.attach(ExactStructureQueryResource.resource,ExactStructureQueryResource.class);
 		queryRouter.attach(QueryTautomersResource.resource,QueryTautomersResource.class);
+		
+		router.attach(QMapSpaceResource.resource,QMapSpaceResource.class);
 		/**
 		 *  API extensions from this point on
 		 */
