@@ -261,17 +261,19 @@ var qmap = {
 		//end
 		"defineChart" : function (root,results) {
 			var qmaps = {};
+			var property = null;
 			results.qmap.forEach(function(map) {
 				
 				 map['name'] = "Activity difference " + map.activity.threshold + " Similarity " + map.similarity.threshold; 
 				 qmaps[map.URI] = map;
+				 property = map.activity.featureURI;
 			});
 			
 			var margin = {top: 20, right: 20, bottom: 30, left: 40},
 		    width = 640 - margin.left - margin.right,
 		    height = 480 - margin.top - margin.bottom;
 
-			var x = d3.scale.log()
+			var x = d3.scale.linear()
 			    .range([0, width]);
 	
 			var y = d3.scale.linear()
@@ -294,7 +296,8 @@ var qmap = {
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
 			var data = results.nodes.filter(function(element, index, array) {
-				return element.g2>0;
+				//no sense to draw different properties at the same chart!
+				return (element.g2>0) && (qmaps[element.qmap].activity.featureURI = property);
 			});	
 
 			
@@ -319,7 +322,7 @@ var qmap = {
 			      .attr("x", width)
 			      .attr("y", -6)
 			      .style("text-anchor", "end")
-			      .text("Activity");
+			      .text(results.feature[property].title);
 	
 			  svg.append("g")
 			      .attr("class", "y axis")
