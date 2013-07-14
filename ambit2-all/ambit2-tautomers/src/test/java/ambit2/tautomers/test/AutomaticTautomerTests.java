@@ -132,6 +132,7 @@ public class AutomaticTautomerTests
 	
 	//helpers for tautomer descr/fp stat
 	DescriptorStatInfo descrStat[];
+	int Temperatures[] = {300, 500, 1000, 2000} ;
 	int curStruct = -1;
 	int numTautomers = 0;
 	String curTautomerSmiles = "";
@@ -152,7 +153,7 @@ public class AutomaticTautomerTests
 			att.handleArguments(new String[] {
 					
 					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
-					"-i","D:/Projects/data015/XLogP/XLogP.csv",
+					"-i","D:/Projects/data015/LogP/XlogP-PaDEL.csv",
 					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
@@ -164,7 +165,7 @@ public class AutomaticTautomerTests
 					"-nInpStr","0",
 					"-nStartStr","0",
 					"-c","tautomer-calc-descr-average",
-					"-o","D:/Projects/data015/XLogP/xlogp-average-descr.csv",
+					"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -1588,13 +1589,16 @@ public class AutomaticTautomerTests
 		{
 			sb.append("," + descrStat[i].originalValue);
 			sb.append("," + descrStat[i].getAverageAll());
-			sb.append("," + descrStat[i].getWeightedAverageAll());
+			for (int k = 0; k < Temperatures.length; k++)
+				sb.append("," + descrStat[i].getWeightedAverageAll(k));
 			
 			sb.append("," + descrStat[i].getAverageTop(5));
-			sb.append("," + descrStat[i].getWeightedAverageTop(5));
+			for (int k = 0; k < Temperatures.length; k++)
+				sb.append("," + descrStat[i].getWeightedAverageTop(5,k));
 			
 			sb.append("," + descrStat[i].getAverageTop(10));
-			sb.append("," + descrStat[i].getWeightedAverageTop(10));
+			for (int k = 0; k < Temperatures.length; k++)
+				sb.append("," + descrStat[i].getWeightedAverageTop(10,k));
 		}
 		sb.append("\n");
 		output(sb.toString());
@@ -1610,11 +1614,13 @@ public class AutomaticTautomerTests
 			return;
 		}
 		
+		int numAverageValues = 3*(1 + Temperatures.length);
+		
 		StringBuffer sb = new StringBuffer();
 		sb.append(tokens[0]+"," +tokens[1]+"," +tokens[2]);
 		for (int i = 0; i < descrStat.length; i++)
 		{
-			for(int k = 0; k < 7; k++)
+			for(int k = 0; k < (numAverageValues+1); k++)  //+1 for the original descr value
 				sb.append(","+tokens[i+3]);
 		}
 		sb.append("\n");
@@ -1630,11 +1636,16 @@ public class AutomaticTautomerTests
 		{
 			sb.append("," + descrStat[i].name);
 			sb.append("," + descrStat[i].name+"-AV");
-			sb.append("," + descrStat[i].name+"-WAV");
+			for (int k = 0; k < Temperatures.length; k++)
+				sb.append("," + descrStat[i].name+"-WAV-" +Temperatures[k]+"K");
+			
 			sb.append("," + descrStat[i].name+"-AV5");
-			sb.append("," + descrStat[i].name+"-WAV5");
+			for (int k = 0; k < Temperatures.length; k++)
+				sb.append("," + descrStat[i].name+"-WAV5-"+Temperatures[k]+"K");
+			
 			sb.append("," + descrStat[i].name+"-AV10");
-			sb.append("," + descrStat[i].name+"-WAV10");
+			for (int k = 0; k < Temperatures.length; k++)
+				sb.append("," + descrStat[i].name+"-WAV10-"+Temperatures[k]+"K");
 		}
 		return sb.toString();
 	}
@@ -2087,8 +2098,8 @@ public class AutomaticTautomerTests
 		public double valueSDSum = 0;
 		
 		//variables for the 
-		public double valueSumProbWeighted = 0;
-		public double sumProbWeights = 0;
+		public double valueSumProbWeighted[] = new double[Temperatures.length];
+		public double sumProbWeights[] = new double[Temperatures.length];
 		public double topValues[];
 		public double topRanks[];
 		int nUsedTopRanks;
@@ -2099,8 +2110,11 @@ public class AutomaticTautomerTests
 		{
 			nTautomers = 0;
 			valueSum = 0.0;
-			valueSumProbWeighted = 0.0;
-			sumProbWeights = 0.0;
+			for (int i = 0; i < valueSumProbWeighted.length;  i++)
+			{	
+				valueSumProbWeighted[i] = 0.0;
+				sumProbWeights[i] = 0.0;
+			}	
 			topValues = new double[maxNumRanks];
 			topRanks = new double[maxNumRanks];
 			nUsedTopRanks = 0;
@@ -2111,10 +2125,14 @@ public class AutomaticTautomerTests
 		{
 			nTautomers++;
 			valueSum += value;
-			double p = tautomerRanking.getProbability(rank);
-			valueSumProbWeighted += p*value;
-			sumProbWeights += p;
 			
+			for (int i = 0; i < valueSumProbWeighted.length;  i++)
+			{	
+				tautomerRanking.T = Temperatures[i];
+				double p = tautomerRanking.getProbability(rank);
+				valueSumProbWeighted[i] += p*value;
+				sumProbWeights[i] += p;
+			}
 			addNewRankValue(value, rank);
 		}
 		
@@ -2180,9 +2198,9 @@ public class AutomaticTautomerTests
 			return valueSum / nTautomers; 
 		}
 		
-		public double getWeightedAverageAll()
+		public double getWeightedAverageAll(int tIndex)
 		{
-			return valueSumProbWeighted / sumProbWeights;
+			return valueSumProbWeighted[tIndex] / sumProbWeights[tIndex];
 		}
 		
 		
@@ -2201,13 +2219,15 @@ public class AutomaticTautomerTests
 			return sum / n1; 
 		}
 		
-		public double getWeightedAverageTop(int n)
+		public double getWeightedAverageTop(int n, int tIndex)
 		{	
 			int n1;
 			if (n < nUsedTopRanks)
 				n1 = n;
 			else
 				n1 = nUsedTopRanks;
+			
+			tautomerRanking.T = Temperatures[tIndex]; //currently
 			
 			double sum = 0;
 			double weightSum = 0;
