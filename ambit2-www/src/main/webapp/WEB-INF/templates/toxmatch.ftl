@@ -4,6 +4,7 @@
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/d3.v3.min.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/qmap.js'></script>
 
 <script type='text/javascript'>
@@ -108,6 +109,14 @@
 	</div>
 	
 	</div>	
+</div>
+<!-- Similarity results -->
+<div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
+
+	<div class="sixteen columns ui-widget-header ui-corner-top">Similar compounds <span id='simtitle'></span></div>
+	<div class="sixteen columns ui-widget-content ui-corner-bottom">
+		<ul class='structresults' id="similar" style='height:150px;'></ul>
+	</div>
 </div>
 
 <!-- Bottom -->
