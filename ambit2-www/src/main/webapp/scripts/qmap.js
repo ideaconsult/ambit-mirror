@@ -145,7 +145,8 @@ var qmap = {
 			"bJQueryUI" : true,
 			"bSearchable": true,
 			"bProcessing" : true,
-			"sDom" : '<"help remove-bottom"l><"help remove-bottom"f>Trt<"help"ip>',
+			//"sDom" : '<"help remove-bottom"l><"help remove-bottom"f>Trt<"help"ip>',
+			"sDom" : '<"help remove-bottom"><"help"p>Trt<"help"ilf>',
 			"sSearch": "Filter:",
 			"bPaginate" : true,
 			"sPaginationType": "full_numbers",
@@ -289,6 +290,13 @@ var qmap = {
 			}
 			return results['cmpindex'];
 		},		
+		/** Links between the nodes, qmap specific */
+		"getLinks" : function (root,results,qmapuri) {
+			if (results['links']===undefined) results['links'] = {};
+			
+			if (results['links'][qmapuri]===undefined) results['links'][qmapuri] = [];
+			return results['links'][qmapuri];
+		},			
 		"getQmapIndex" : function (root,results) {
 			if (results['qmapsindex']===undefined) {
 				var qmaps = {};
@@ -462,14 +470,14 @@ var qmap = {
 			
 		},
 //end defineBubbleChart		
-		"condenseNodes"  : function (root,results) {
-			
-		},
 		"getSimilar" : function (root,results,qmapuri,cmpuri,cliffs,notcliffs) {
 
 			var targetSelector = notcliffs;
 			$(cliffs).empty();
 			$(notcliffs).empty();
+			$(cliffs).append('<li>Retrieving activity cliffs...</li>');
+			$(notcliffs).append('<li>Retrieving the smooth landscape part ...</li>');
+
 			var qmaps = this.getQmapIndex(root,results);
 			var map = qmaps[qmapuri];
 			var feature = results.feature[map.activity.featureURI];
@@ -488,11 +496,16 @@ var qmap = {
 			var cmpx = qmap.getCompoundIndex(root,results);
 			var myid = qmap.getCompoundID(root,cmpuri);
 			var myactivity = results.nodes[cmpx[qmapuri][myid]].activity;
+			
+			var links = qmap.getLinks(root,results,qmapuri);
+
 			$.ajax( {
 				url: query,
 		        "dataType": "json", 
 		        "contentType" : "application/json",
 		        "success": function(json) {
+	    			$(cliffs).empty();
+	    			$(notcliffs).empty();
 					json.dataEntry.forEach(function img(element, index, array) {
 						var id = qmap.getCompoundID(root,element.compound.URI);
 						var node = results.nodes[cmpx[qmapuri][id]];
@@ -504,13 +517,15 @@ var qmap = {
 							var nameid = qmap.getID();
 							var style = "";
 							
-							//now these are the cliffs
+
 							if (id==myid) {
 								targetSelector = cliffs;
 								style = "color:red;";
 							} else if (Math.abs(myactivity-activity)>= map.activity.threshold) {
+								//now these are the cliffs
 								targetSelector = cliffs;
 								style = "color:blue;";
+								links.push({"source":cmpx[qmapuri][myid],"target":cmpx[qmapuri][id],"value": element.compound.metric});
 							} else {
 								targetSelector = notcliffs;
 							}	
@@ -528,13 +543,19 @@ var qmap = {
 		        "cache": false,
 		        "statusCode" : {
 		            400: function() {
+		    			$(cliffs).empty();
+		    			$(notcliffs).empty();
 		            	$(targetselector).append('<li class="ui-state-default" >Not found</li>');
 		            },
 		            404: function() {
+		    			$(cliffs).empty();
+		    			$(notcliffs).empty();
 		            	$(targetselector).append('<li class="ui-state-default" >Not found</li>');
 			        }
 		        },
 		        "error" : function( xhr, textStatus, error ) {
+					$(cliffs).empty();
+					$(notcliffs).empty();
 		        	$(targetselector).append('<li class="ui-state-default" >'+error + '</li>');
 		        }
 		      } );			
@@ -591,7 +612,10 @@ var qmap = {
 			}								
 			cmpURI = cmpURI + "?media=image/png";
 			var id= cmpURI.replace(/:/g,"").replace(/\//g,"").replace(/\./g,"");
-			return '<img border="0" style="background-color:#ffffff" alt="'+val+'" src="'+cmpURI+'&w=150&h=150" usemap="#m'+id+'" id="i'+id+'">\n<map id="m'+id+'" name="m'+id+'"></map>';
+			return '<a href="'+val+'" target="cmp">' + 
+			'<img border="0" style="background-color:#ffffff" alt="'+val+'" src="'+cmpURI+'&w=150&h=150" >'+
+			'</a>';
+			
 	  },
 	  "formatValues" : function (dataEntry,tag) {
 			var sOut = "";
@@ -637,7 +661,115 @@ var qmap = {
 			   sOut += " <a href='#' onClick='$(\"#"+id+"\").toggle();' title='Click here for more synonyms'>&raquo;</a> ";
 			}
 			return sOut;
-		}
+		},
+		<!-- network graph -->
+		"drawGraph":function (root,data,qmapuri,chartselector,width,height) {
+
+			  var nodes = data.nodes; //data.nodes.filter(function(node) { return node.qmap==qmapuri;  }); indexes will be different...
+			  
+			  var color = d3.scale.category10();
+
+			  var fisheye = d3.fisheye.circular().radius(120);
+
+			  var force = d3.layout.force()
+			      .charge(-120)
+			      .linkDistance(30)
+			      .size([width, height]);
+
+			  $(chartselector).empty();
+			  var svg = d3.select(chartselector).append("svg")
+			      .attr("width", width)
+			      .attr("height", height);
+
+			  svg.append("rect")
+			      .attr("class", "background")
+			      .attr("width", width)
+			      .attr("height", height);
+
+			    var n = nodes.length;
+
+			    force.nodes(nodes).links(data.links[qmapuri]);
+
+			    // Initialize the positions deterministically, for better results.
+			    nodes.forEach(function(d, i) { d.x = d.y = width / n * i; });
+
+			    // Run the layout a fixed number of times.
+			    // The ideal number of times scales with graph complexity.
+			    // Of course, don't run too long—you'll hang the page!
+			    force.start();
+			    for (var i = n; i > 0; --i) force.tick();
+			    force.stop();
+
+			    // Center the nodes in the middle.
+			    var ox = 0, oy = 0;
+			    data.nodes.forEach(function(d) { ox += d.x, oy += d.y; });
+			    ox = ox / n - width / 2, oy = oy / n - height / 2;
+			    data.nodes.forEach(function(d) { d.x -= ox, d.y -= oy; });
+
+			    var link = svg.selectAll(".link")
+			        .data(data.links[qmapuri])
+			      .enter().append("line")
+			        .attr("class", "link")
+			        .attr("x1", function(d) { return d.source.x; })
+			        .attr("y1", function(d) { return d.source.y; })
+			        .attr("x2", function(d) { return d.target.x; })
+			        .attr("y2", function(d) { return d.target.y; })
+			        .style("stroke-width", function(d) { return Math.sqrt(d.value*20); });
+
+			/*
+			    var node = svg.selectAll(".node")
+			        .data(data.nodes)
+			      .enter().append("circle")
+			        .attr("class", "node")
+			        .attr("cx", function(d) { return d.x; })
+			        .attr("cy", function(d) { return d.y; })
+			        .attr("r", 10)
+			        .style("fill", function(d) { return color(d.group); })
+			        .call(force.drag);
+			*/
+
+			  var node = svg.selectAll(".node")
+			      .data(data.nodes)
+			      .enter().append("g")
+			        .attr("cx", function(d) { return d.x; })
+			        .attr("cy", function(d) { return d.y; })
+			        .call(force.drag);
+
+			var circle =  node.append("circle")
+				   .attr("class", "node")
+			        .attr("cx", function(d) { return d.x; })
+			        .attr("cy", function(d) { return d.y; })
+			        .attr("r", 10)
+			        .style("fill", function(d) { return color(d.qmap); })        .call(force.drag);
+
+
+			var text = node.append("text")
+			      .attr("x", function(d) { return d.x; })
+			      .attr("y", function(d) { return d.y; })
+			      .style("color","red")
+			      .attr("text-anchor", "end")
+			      .text(function(d) { 
+			    	  return qmap.getCompoundID(root,d.URI);
+			      });
+
+			    svg.on("mousemove", function() {
+			      fisheye.focus(d3.mouse(this));
+			      circle.each(function(d) { d.fisheye = fisheye(d); })
+			          .attr("cx", function(d) { return d.fisheye.x; })
+			          .attr("cy", function(d) { return d.fisheye.y; })
+			          .attr("r", function(d) { return d.fisheye.z * 10;});
+
+			      text.each(function(d) { d.fisheye = fisheye(d); })
+			          .attr("x", function(d) { return d.fisheye.x; })
+			          .attr("y", function(d) { return d.fisheye.y; });
+
+			      link.attr("x1", function(d) { return d.source.fisheye.x; })
+			          .attr("y1", function(d) { return d.source.fisheye.y; })
+			          .attr("x2", function(d) { return d.target.fisheye.x; })
+			          .attr("y2", function(d) { return d.target.fisheye.y; });
+			    });
+			  
+			}
 
 }
 
