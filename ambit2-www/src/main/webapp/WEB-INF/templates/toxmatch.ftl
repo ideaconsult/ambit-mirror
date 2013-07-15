@@ -26,7 +26,7 @@
 	  			
 	  			$("#networkbutton").click(function() {
 	  				$.each(result.links, function(index, link) {
-	  					qmap.drawGraph(root,result,index,"#chart1",640,480);
+	  					qmap.drawGraph(root,result,index,"#netchart",640,480,nodesTable);
 					 });
 	  			});
 	  		});
@@ -117,7 +117,7 @@
 	  </div>
 	  -->
 	  <div id="tabs-3">
-	  	<div id='chart1'></div>
+	  	<div id='netchart'></div>
 	  	<a href='#' id="networkbutton" >Draw graph</a>
 	  </div>
 	  <div id="tabs-4">

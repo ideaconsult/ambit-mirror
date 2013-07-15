@@ -1,0 +1,36 @@
+#netchart {
+  width: 960px;
+  height: 500px;
+  border: solid 1px #ccc;
+}
+
+text {
+  font: 10px sans-serif;
+}
+
+.background {
+  fill: #fff;
+  pointer-events: all;
+}
+
+#netchart .node {
+  stroke: #fff;
+  stroke-width: .6 px;
+}
+
+#netchart .node .text {
+  stroke: #000;
+}
+
+
+#netchart .link {
+  stroke: #999;
+  stroke-opacity: .6;
+  stroke-width: 1.5px;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
