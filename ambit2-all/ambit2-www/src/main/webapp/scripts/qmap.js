@@ -157,6 +157,7 @@ var qmap = {
 		            "sEmptyTable": "No structures available.",
 		            "sInfo": "Showing _TOTAL_ structures (_START_ to _END_)",
 		            "sLengthMenu": 'Display <select>' +
+		          '<option value="3">3</option>' +		            
 		          '<option value="10">10</option>' +
 		          '<option value="20">20</option>' +
 		          '<option value="50">50</option>' +
@@ -164,6 +165,7 @@ var qmap = {
 		          '<option value="-1">all</option>' +
 		          '</select> structures.'	            
 		    },	
+		    "iDisplayLength": 3,
 		    "aoColumnDefs": [
 		    				{ //1
 		    					"aTargets": [ 0 ],	
@@ -197,7 +199,7 @@ var qmap = {
 		    					"bUseRendered" : false,	
 		    					"fnRender" : function(o,val) {
 		    						var id = qmap.getCompoundID(root,val);
-		    						return id;
+		    						return "<span style='font-weight:bold;'>" + id + "</span>";
 		    									    						
 		    					}
 		    				},			    				
@@ -419,29 +421,27 @@ var qmap = {
 			  node.append("circle")
 			      .attr("r", function(d) { return d.r; })
 			      .attr("uri", function(d) { return d.URI; })
+			      .attr("qmap", function(d) { return d.qmap; })
 			      .style("fill", function(d) { return color(qmaps[d.qmap].name); })
 			      .on("click", function(){
 			    	  //Filter the nodes table to show only the selected compound (by URI)
 			    	  nodesTable.fnFilter(d3.select(this).attr("uri"));
+			    	  qmap.getSimilar(root,results,d3.select(this).attr("qmap"),d3.select(this).attr("uri"),"#similar");
 			      }
 			      );
 
 	
 			  node.append("text")
 			      .attr("dy", ".3em")
+			      .attr("uri", function(d) { return d.URI; })
+			      .attr("qmap", function(d) { return d.qmap; })
 			      .style("text-anchor", "middle")
 			      .text(function(d) { 
 			    	  return qmap.getCompoundID(root,d.URI).substring(0, d.r / 3);
-			    	  /*
-			    	  var i = d.URI.indexOf("/compound/");
-			    	  if (i >= 0) 
-			    		  return d.URI.substring(i+10, d.URI.length).substring(0, d.r / 3); 
-			    	  else
-			    		  return d.qmap.substring(0, d.r / 3);
-			    		  */ 
 			       })
 			      .on("click", function(){  
-			    	  //console.log(this);
+			    	  nodesTable.fnFilter(d3.select(this).attr("uri"));
+			    	  qmap.getSimilar(root,results,d3.select(this).attr("qmap"),d3.select(this).attr("uri"),"#similar");
 			      }
 			      );
 	
@@ -453,18 +453,152 @@ var qmap = {
 		"condenseNodes"  : function (root,results) {
 			
 		},
-		"getSimilar" : function (root) {
+		"getSimilar" : function (root,results,qmapuri,cmpuri,targetselector) {
+			$(targetselector).empty(); 
+			var qmaps = this.getQmapIndex(root,results);
+			var map = qmaps[qmapuri];
+			var feature = results.feature[map.activity.featureURI];
+			$("#simtitle").html(
+					"<a href='" + qmapuri + "' title='" +qmapuri + "' target=_blank>QMap</a> : " +
+					"[" + map.name + "] " +
+					"Property: <a href='" + map.activity.featureURI + "' title='" + map.activity.featureURI + "' target=_blank>"+ feature.title + " " + feature.units +"</a> " + 
+					"Dataset: <a href='" + map.dataset.URI + "' title='" + map.dataset.URI + "' target=_blank>"+map.dataset.URI +"</a> " 					
+					
+					);
+			if ((map===undefined) || (map==null)) return;
+			var query = map.dataset.URI + "/similarity?type=url&threshold="+map.similarity.threshold+"&search=" + cmpuri + "&media=application/json";
 			/**
 			http://localhost:8080/ambit2/dataset/112/similarity?type=url&threshold=0.59&search=http://localhost:8080/ambit2/compound/12466/conformer/17513&feature_uris[]=http://localhost:8080/ambit2/feature/274
 			*/
+			$.ajax( {
+				url: query,
+		        "dataType": "json", 
+		        "contentType" : "application/json",
+		        "success": function(json) {
+					json.dataEntry.forEach(function img(element, index, array) {
+						var nameid = qmap.getID();
+						var id = qmap.getCompoundID(root,element.compound.URI);
+						$(targetselector).append('<li>'+qmap.cmp2image(element.compound.URI)+
+										  '<div style="margin-top:5px;font-weight:bold;">ID ='+id+'</div>'+
+										  '<div style="margin-top:5px;">Tanimoto='+element.compound.metric+'</div>'+
+										  '<div style="margin-top:5px;" id="'+nameid+'"></div></li>');
+						qmap.loadStructureIds("",root,element.compound.URI,qmap.renderStructureIds,'#'+nameid);
+       				});
+		        },
+		        "cache": false,
+		        "statusCode" : {
+		            400: function() {
+		            	$(targetselector).append('<li class="ui-state-default" >Not found</li>');
+		            },
+		            404: function() {
+		            	$(targetselector).append('<li class="ui-state-default" >Not found</li>');
+			        }
+		        },
+		        "error" : function( xhr, textStatus, error ) {
+		        	$(targetselector).append('<li class="ui-state-default" >'+error + '</li>');
+		        }
+		      } );			
+			
+		},
+		"renderStructureIds" : function (nameSelector,names,cas,smiles,inchi,inchikey) {
+			try {
+				$(nameSelector).html(names.toLowerCase());
+			} catch (err) {
+				$(nameSelector).html(names);
+			}
+		},		
+		"loadStructureIds" : function (prefix,query_service,compoundURI,callback,nameSelector) {
+
+			var id_uri = query_service + "/query/compound/url/all?search=" + encodeURIComponent(compoundURI) + "&max=1&media=application%2Fx-javascript";
+			$.ajax({
+			         dataType: "jsonp",
+			         "crossDomain": true, 
+			         url: id_uri,
+			         success: function(data, status, xhr) {
+			        	identifiers(data);
+			        	$(nameSelector).html("&nbsp;");
+			        	$.each(data.dataEntry,function(index, entry) {
+			        		callback(nameSelector,
+			        				qmap.formatValues(entry,"names"),
+			        				qmap.formatValues(entry,"cas"),
+			        				qmap.formatValues(entry,"smiles"),
+			        				qmap.formatValues(entry,"inchi"),
+			        				qmap.formatValues(entry,"inchikey"));
+			        	});
+			         },
+			         error: function(xhr, status, err) {
+			        	 $(nameSelector).html("&nbsp;");
+			         },
+			         complete: function(xhr, status) { }
+			});	
 		},
 		"getCompoundID" : function (root,cmpURI) {
 			 var i = cmpURI.indexOf("/compound/");
+			 var j = cmpURI.indexOf("/conformer/");
+			 if (j<=0) j = cmpURI.length; 
 	    	  if (i >= 0) 
-	    		  return cmpURI.substring(i+10, cmpURI.length); 
+	    		  return cmpURI.substring(i+10, j); 
 	    	  else
 	    		  return cmpURI; 
+		},
+		"getID" : function() {
+			   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+		},
+		"cmp2image" : function(val) {
+			var cmpURI = val;
+			if (val.indexOf("/conformer")>=0) {
+				cmpURI = val.substring(0,val.indexOf("/conformer"));
+			}								
+			cmpURI = cmpURI + "?media=image/png";
+			var id= cmpURI.replace(/:/g,"").replace(/\//g,"").replace(/\./g,"");
+			return '<img border="0" style="background-color:#ffffff" alt="'+val+'" src="'+cmpURI+'&w=150&h=150" usemap="#m'+id+'" id="i'+id+'">\n<map id="m'+id+'" name="m'+id+'"></map>';
+	  },
+	  "formatValues" : function (dataEntry,tag) {
+			var sOut = "";
+			var line = 0;
+			var id = "n" + qmap.getID();
+			var cache = {};
+			$.each(dataEntry.lookup[tag], function(index, value) { 
+			  if (dataEntry.values[value] != undefined) {
+				  $.each(dataEntry.values[value].split("|"), function (index, v) {
+					  if (v.indexOf(".mol")==-1) {
+						if ("" != v) {  
+							var lv = v.toLowerCase();
+							if (cache[lv]==null) {
+								switch(line) {
+								case 0:
+									sOut += "<span class='long' title='"+v+"'>"+v+"</span>";
+								    break;
+								case 1:
+									sOut += "<span style='display:none;' id='"+id+"'>";
+									sOut += v;
+								    break;
+								default:
+								  	sOut += "<br/>";
+									sOut += v;
+								}
+							  	line++;
+							  	cache[lv] = true;
+							}
+						}
+				  	  }
+				  });
+			  }
+			});
+			
+			switch(line) {
+			case 0: 
+				sOut += "&nbsp;";
+				break;
+			case 1: 
+				break;
+			default:  
+			   sOut += "</span>";
+			   sOut += " <a href='#' onClick='$(\"#"+id+"\").toggle();' title='Click here for more synonyms'>&raquo;</a> ";
+			}
+			return sOut;
 		}
+
 }
 
 

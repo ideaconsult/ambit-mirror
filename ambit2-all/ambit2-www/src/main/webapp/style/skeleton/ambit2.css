@@ -272,3 +272,8 @@ code {
   shape-rendering: crispEdges;
   stroke: gray;
 }
+.structresults .ui-selecting { background: #FECA40; border-color: #FECA40; }
+.structresults .ui-selected { background: #F39814; border-color: #F39814; }
+.structresults { list-style-type: none; margin: 0; padding: 0;  }
+.structresults li { margin: 3px; padding: 1px; float: left; width: 155px; min-height: 155px; font-size: 1em; text-align: center; }
+ 
