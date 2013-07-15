@@ -153,7 +153,7 @@ public class AutomaticTautomerTests
 			att.handleArguments(new String[] {
 					
 					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
-					"-i","D:/Projects/data015/LogP/XlogP-PaDEL.csv",
+					"-i","D:/Projects/data015/LogP/XlogP.csv",
 					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
@@ -567,6 +567,7 @@ public class AutomaticTautomerTests
 			//setTautomerManager();
 			lineProcessMode = LPM_TAUTOMER_CALC_DESCR_AVERAGE;
 			iterateInputFile();
+			finalizeTautomerAverageCalculation();
 			closeOutputFile();
 			return(0);
 		}
