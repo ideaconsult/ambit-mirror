@@ -4,8 +4,11 @@
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/d3.v3.min.js'></script>
+<script type="text/javascript" src='${ambit_root}/scripts/fisheye.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/qmap.js'></script>
+
+<link rel="stylesheet" href="${ambit_root}/style/skeleton/graph.css" type="text/css">
 
 <script type='text/javascript'>
 	
@@ -15,12 +18,17 @@
 			$( "#selectable" ).selectable( "option", "distance", 18);
 			loadHelp("${ambit_root}","qmap");
 			downloadForm("${ambit_request}");
-
 			
 	  	//	var oTable = qmap.defineMetadataTable("${ambit_root}","${ambit_request_json}",true);
 	  		var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result,nodesTable){
-	  			qmap.defineChart(root,result,"#qchart",640,480);
+	  			//qmap.defineChart(root,result,"#qchart",640,480);
 	  			qmap.defineBubbleChart(root,result,"#bchart",640,480,nodesTable);
+	  			
+	  			$("#networkbutton").click(function() {
+	  				$.each(result.links, function(index, link) {
+	  					qmap.drawGraph(root,result,index,"#chart1",640,480);
+					 });
+	  			});
 	  		});
 	});
 </script>
@@ -82,7 +90,7 @@
 			<tr>
 			<th>Structure <a href='#' class='chelp dataset'>?</a></th>
 			<th>ID</th>
-			<th>G2</th>
+			<th>G2 <a href='#' class='chelp activity_cliff'>?</a></th>
 			<th>Activity</th>
 			<th>QMap</th>
 			</tr>
@@ -94,18 +102,30 @@
 	<div id="tabs">
 	  <ul>
 	    <li><a href="#tabs-2">Bubble chart</a></li>
+	    <!--
 	    <li><a href="#tabs-1">Chart: Activity vs G2</a></li>
+	    -->
 	    <li><a href="#tabs-3">Network</a></li>
+	    <li><a href="#tabs-4">Help</a></li>
 	  </ul>
 	  <div id="tabs-2">
 	  	<div id='bchart'></div>
 	  </div>
+	  <!--
 	  <div id="tabs-1">
 	  	<div id='qchart'></div>
 	  </div>
+	  -->
 	  <div id="tabs-3">
-	  	<div id='nchart'></div>
+	  	<div id='chart1'></div>
+	  	<a href='#' id="networkbutton" >Draw graph</a>
 	  </div>
+	  <div id="tabs-4">
+		<!-- Help -->
+		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+		<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'></div>
+		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'></div>	  	
+	  </div>	  
 	</div>
 	
 	</div>	
@@ -152,12 +172,7 @@
 	</div>
 
 	<div class="eight columns">
-		<!-- Help -->
-		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
-		<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
-		</div>
-		<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
-		</div>
+
 	</div>
 </div>
 	
