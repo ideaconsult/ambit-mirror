@@ -525,7 +525,16 @@ var qmap = {
 								//now these are the cliffs
 								targetSelector = cliffs;
 								style = "color:blue;";
-								links.push({"source":cmpx[qmapuri][myid],"target":cmpx[qmapuri][id],"value": element.compound.metric});
+
+								var id1,id2;
+								if (myid<id) {id1 = myid; id2 = id;	} else { id1 = id; id2 = myid;}
+								
+								var thislink = links.filter(function(element, index, array) {
+									return (element.source == cmpx[qmapuri][id1]) && (element.target == cmpx[qmapuri][id2]);
+								});
+								if (thislink.length==0) {
+									links.push({"source":cmpx[qmapuri][id1],"target":cmpx[qmapuri][id2],"value": element.compound.metric});
+								}	
 							} else {
 								targetSelector = notcliffs;
 							}	
@@ -663,10 +672,9 @@ var qmap = {
 			return sOut;
 		},
 		<!-- network graph -->
-		"drawGraph":function (root,data,qmapuri,chartselector,width,height) {
-
+		"drawGraph":function (root,data,qmapuri,chartselector,width,height,nodesTable) {
+			  var qmaps = this.getQmapIndex(root,data);
 			  var nodes = data.nodes; //data.nodes.filter(function(node) { return node.qmap==qmapuri;  }); indexes will be different...
-			  
 			  var color = d3.scale.category10();
 
 			  var fisheye = d3.fisheye.circular().radius(120);
@@ -735,22 +743,40 @@ var qmap = {
 			        .attr("cy", function(d) { return d.y; })
 			        .call(force.drag);
 
+			  
 			var circle =  node.append("circle")
 				   .attr("class", "node")
 			        .attr("cx", function(d) { return d.x; })
 			        .attr("cy", function(d) { return d.y; })
 			        .attr("r", 10)
-			        .style("fill", function(d) { return color(d.qmap); })        .call(force.drag);
+			        .attr("uri", function(d) { return d.URI; })
+			        .style("fill", function(d) { return color(d.qmap); })
+				    .on("click", function(){
+				    	  //Filter the nodes table to show only the selected compound (by URI)
+				    	nodesTable.fnFilter(d3.select(this).attr("uri"));
+				    })			        
+			        .call(force.drag);
 
+			  node.append("title")
+		      .text(function(d) {
+		    	  var property = qmaps[d.qmap].activity.featureURI;
+		    	  return qmaps[d.qmap].name + " [g2=" + d.g2 + "] [ "+ data.feature[property].title + " = "+d.activity+"] " + d.URI; }
+		      );
+			  
 
 			var text = node.append("text")
 			      .attr("x", function(d) { return d.x; })
 			      .attr("y", function(d) { return d.y; })
+			      .attr("uri", function(d) { return d.URI; })
 			      .style("color","red")
 			      .attr("text-anchor", "end")
 			      .text(function(d) { 
 			    	  return qmap.getCompoundID(root,d.URI);
-			      });
+			      })
+			      .on("click", function(){
+				   	  //Filter the nodes table to show only the selected compound (by URI)
+				   	nodesTable.fnFilter(d3.select(this).attr("uri"));
+				  });	
 
 			    svg.on("mousemove", function() {
 			      fisheye.focus(d3.mouse(this));
