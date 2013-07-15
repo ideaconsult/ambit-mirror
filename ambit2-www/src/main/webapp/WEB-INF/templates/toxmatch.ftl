@@ -113,10 +113,18 @@
 <!-- Similarity results -->
 <div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
 
-	<div class="sixteen columns ui-widget-header ui-corner-top">Similar compounds <span id='simtitle'></span></div>
+	<div class="sixteen columns ui-widget-header ui-corner-top">Similar compounds (Activity cliffs) <span id='simtitle'></span></div>
 	<div class="sixteen columns ui-widget-content ui-corner-bottom">
-		<ul class='structresults' id="similar" style='height:150px;'></ul>
+		<ul class='structresults' id="cliffs" style='height:150px;'></ul>
 	</div>
+</div>
+
+<div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
+
+<div class="sixteen columns ui-widget-header ui-corner-top">Similar compounds (Smooth landscape)<span id='simtitle'></span></div>
+<div class="sixteen columns ui-widget-content ui-corner-bottom">
+	<ul class='structresults' id="notcliffs" style='height:150px;'></ul>
+</div>
 </div>
 
 <!-- Bottom -->

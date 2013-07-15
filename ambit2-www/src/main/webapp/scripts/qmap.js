@@ -277,11 +277,23 @@ var qmap = {
 			});
 			return oTable;
 		},
+		"getCompoundIndex" : function (root,results) {
+			if (results['cmpindex']===undefined) {
+				var cmpx = {};
+				results.nodes.forEach(function(cmp,index,array) {
+					if (cmpx[cmp.qmap]===undefined) cmpx[cmp.qmap] = {};
+					var id = qmap.getCompoundID(root,cmp.URI);
+					cmpx[cmp.qmap][id] = index;
+				});
+				results['cmpindex'] = cmpx;
+			}
+			return results['cmpindex'];
+		},		
 		"getQmapIndex" : function (root,results) {
 			if (results['qmapsindex']===undefined) {
 				var qmaps = {};
 				results.qmap.forEach(function(map) {
-					 map['name'] = "Activity difference " + map.activity.threshold + " Similarity " + map.similarity.threshold; 
+					 map['name'] = "Activity difference >=" + map.activity.threshold + " Similarity >=" + map.similarity.threshold; 
 					 qmaps[map.URI] = map;
 				});
 				results['qmapsindex'] = qmaps;
@@ -426,7 +438,7 @@ var qmap = {
 			      .on("click", function(){
 			    	  //Filter the nodes table to show only the selected compound (by URI)
 			    	  nodesTable.fnFilter(d3.select(this).attr("uri"));
-			    	  qmap.getSimilar(root,results,d3.select(this).attr("qmap"),d3.select(this).attr("uri"),"#similar");
+			    	  qmap.getSimilar(root,results,d3.select(this).attr("qmap"),d3.select(this).attr("uri"),"#cliffs","#notcliffs");
 			      }
 			      );
 
@@ -441,7 +453,7 @@ var qmap = {
 			       })
 			      .on("click", function(){  
 			    	  nodesTable.fnFilter(d3.select(this).attr("uri"));
-			    	  qmap.getSimilar(root,results,d3.select(this).attr("qmap"),d3.select(this).attr("uri"),"#similar");
+			    	  qmap.getSimilar(root,results,d3.select(this).attr("qmap"),d3.select(this).attr("uri"),"#cliffs","#notcliffs");
 			      }
 			      );
 	
@@ -453,15 +465,18 @@ var qmap = {
 		"condenseNodes"  : function (root,results) {
 			
 		},
-		"getSimilar" : function (root,results,qmapuri,cmpuri,targetselector) {
-			$(targetselector).empty(); 
+		"getSimilar" : function (root,results,qmapuri,cmpuri,cliffs,notcliffs) {
+
+			var targetSelector = notcliffs;
+			$(cliffs).empty();
+			$(notcliffs).empty();
 			var qmaps = this.getQmapIndex(root,results);
 			var map = qmaps[qmapuri];
 			var feature = results.feature[map.activity.featureURI];
 			$("#simtitle").html(
-					"<a href='" + qmapuri + "' title='" +qmapuri + "' target=_blank>QMap</a> : " +
+					"<a href='"+root+"/toxmatch?qmap_uri=" + qmapuri + "' title='" +qmapuri + "' target=_blank>QMap</a> : " +
 					"[" + map.name + "] " +
-					"Property: <a href='" + map.activity.featureURI + "' title='" + map.activity.featureURI + "' target=_blank>"+ feature.title + " " + feature.units +"</a> " + 
+					"Activity: <a href='" + map.activity.featureURI + "' title='" + map.activity.featureURI + "' target=_blank>"+ feature.title + " " + feature.units +"</a> " + 
 					"Dataset: <a href='" + map.dataset.URI + "' title='" + map.dataset.URI + "' target=_blank>"+map.dataset.URI +"</a> " 					
 					
 					);
@@ -470,19 +485,44 @@ var qmap = {
 			/**
 			http://localhost:8080/ambit2/dataset/112/similarity?type=url&threshold=0.59&search=http://localhost:8080/ambit2/compound/12466/conformer/17513&feature_uris[]=http://localhost:8080/ambit2/feature/274
 			*/
+			var cmpx = qmap.getCompoundIndex(root,results);
+			var myid = qmap.getCompoundID(root,cmpuri);
+			var myactivity = results.nodes[cmpx[qmapuri][myid]].activity;
 			$.ajax( {
 				url: query,
 		        "dataType": "json", 
 		        "contentType" : "application/json",
 		        "success": function(json) {
 					json.dataEntry.forEach(function img(element, index, array) {
-						var nameid = qmap.getID();
 						var id = qmap.getCompoundID(root,element.compound.URI);
-						$(targetselector).append('<li>'+qmap.cmp2image(element.compound.URI)+
-										  '<div style="margin-top:5px;font-weight:bold;">ID ='+id+'</div>'+
-										  '<div style="margin-top:5px;">Tanimoto='+element.compound.metric+'</div>'+
-										  '<div style="margin-top:5px;" id="'+nameid+'"></div></li>');
+						var node = results.nodes[cmpx[qmapuri][id]];
+						if (node === undefined) {
+							//means these are not within the cliffs
+							targetSelector = notcliffs;
+						} else {
+							var activity = node.activity;
+							var nameid = qmap.getID();
+							var style = "";
+							
+							//now these are the cliffs
+							if (id==myid) {
+								targetSelector = cliffs;
+								style = "color:red;";
+							} else if (Math.abs(myactivity-activity)>= map.activity.threshold) {
+								targetSelector = cliffs;
+								style = "color:blue;";
+							} else {
+								targetSelector = notcliffs;
+							}	
+							
+						}		
+						$(targetSelector).append('<li>'+qmap.cmp2image(element.compound.URI)+
+							  		  '<div style="margin-top:5px;">Tanimoto='+element.compound.metric+'</div>'+
+							  		  '<div style="margin-top:5px;'+style+'">Activity='+activity+'</div>'+
+									  '<div style="margin-top:5px;font-weight:bold;'+style+'">ID ='+id+'</div>'+
+									  '<div style="margin-top:5px;" id="'+nameid+'"></div></li>');
 						qmap.loadStructureIds("",root,element.compound.URI,qmap.renderStructureIds,'#'+nameid);
+						
        				});
 		        },
 		        "cache": false,
