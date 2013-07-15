@@ -252,7 +252,7 @@ var qmap = {
 						"success": function(result){
 							results = result;
 							fnCallback(result);
-							dataCallback(root,result);
+							dataCallback(root,result,oTable);
 						},
 						"error" : function(xhr, textStatus, error) {
 							switch (xhr.status) {
@@ -358,6 +358,7 @@ var qmap = {
 			      .attr("cx", function(d) { return x(d.activity); })
 			      .attr("cy", function(d) { return y(d.g2); })
 			      .style("fill", function(d) { return color(qmaps[d.qmap].name); });
+
 	
 			  var legend = svg.selectAll(".legend")
 			      .data(color.domain())
@@ -380,7 +381,7 @@ var qmap = {
 	
 			
 		},
-		"defineBubbleChart" : function (root,results,selector,w,h) {
+		"defineBubbleChart" : function (root,results,selector,w,h,nodesTable) {
 			var qmaps = this.getQmapIndex(root,results);
 			var diameter = w,
 		    format = d3.format(",d"),
@@ -417,7 +418,14 @@ var qmap = {
 	
 			  node.append("circle")
 			      .attr("r", function(d) { return d.r; })
-			      .style("fill", function(d) { return color(qmaps[d.qmap].name); });
+			      .attr("uri", function(d) { return d.URI; })
+			      .style("fill", function(d) { return color(qmaps[d.qmap].name); })
+			      .on("click", function(){
+			    	  //Filter the nodes table to show only the selected compound (by URI)
+			    	  nodesTable.fnFilter(d3.select(this).attr("uri"));
+			      }
+			      );
+
 	
 			  node.append("text")
 			      .attr("dy", ".3em")
@@ -431,8 +439,11 @@ var qmap = {
 			    	  else
 			    		  return d.qmap.substring(0, d.r / 3);
 			    		  */ 
-			       });
-
+			       })
+			      .on("click", function(){  
+			    	  //console.log(this);
+			      }
+			      );
 	
 			d3.select(self.frameElement).style("height", diameter + "px");
 

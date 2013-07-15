@@ -17,9 +17,9 @@
 
 			
 	  	//	var oTable = qmap.defineMetadataTable("${ambit_root}","${ambit_request_json}",true);
-	  		var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result){
+	  		var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result,nodesTable){
 	  			qmap.defineChart(root,result,"#qchart",640,480);
-	  			qmap.defineBubbleChart(root,result,"#bchart",640,480);
+	  			qmap.defineBubbleChart(root,result,"#bchart",640,480,nodesTable);
 	  		});
 	});
 </script>
