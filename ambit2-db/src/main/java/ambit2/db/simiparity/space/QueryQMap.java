@@ -52,7 +52,7 @@ public class QueryQMap extends AbstractQuery<IStructureRecord,QMap,StringConditi
 				}		
 			}
 		}
-		return String.format(sql,condition);
+		return String.format(sql,condition==null?"":condition);
 	}
 	protected boolean initCondition() {
 		if (condition==null) {condition = new StringBuilder();condition.append(" where "); return true;}
