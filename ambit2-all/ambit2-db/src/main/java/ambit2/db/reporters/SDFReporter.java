@@ -111,7 +111,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			String content = getSDFContent(item);
 			if (content==null) return null;
 			int pi = content.indexOf("$$$$");
-			content = pi>=0?content.substring(0,pi-1):content;
+			content = pi>0?content.substring(0,pi-1):content;
 			if ("".equals(content.trim())) content = emptySDF;
 
 			String licenseURI = getLicenseURI();
