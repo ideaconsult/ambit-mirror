@@ -23,6 +23,14 @@ import ambit2.db.search.StringCondition;
 public class QueryQMapSpace extends AbstractQuery<IStructureRecord,QMap,StringCondition,QMapSpace>  implements IQueryRetrieval<QMapSpace>{
 	private QMap qmap;
 	private QMapSpace qspace;
+	private int threshold_a=0; //set to -1 to view all
+	public int getThreshold_a() {
+		return threshold_a;
+	}
+
+	public void setThreshold_a(int threshold_a) {
+		this.threshold_a = threshold_a;
+	}
 	/**
 	 * 
 	 */
@@ -35,7 +43,8 @@ public class QueryQMapSpace extends AbstractQuery<IStructureRecord,QMap,StringCo
 		"join qsasmap4 using(idsasmap)\n"+
 		"join property_values v using(idchemical)\n"+
 		"join properties p on v.idproperty=p.idproperty\n"+
-		"where v.idproperty=q.idproperty and p.idproperty=q.idproperty\n"+
+		//"where v.idproperty=q.idproperty and p.idproperty=q.idproperty and g2>0 and a>0\n"+
+		"where v.idproperty=q.idproperty and p.idproperty=q.idproperty and g2>0 and a>?\n"+
 		"%s\n"+
 		"order by q.id_srcdataset,q.idproperty\n";	
 
@@ -77,6 +86,7 @@ public class QueryQMapSpace extends AbstractQuery<IStructureRecord,QMap,StringCo
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
+		params.add(new QueryParam<Integer>(Integer.class,threshold_a));
 		if (getValue()!=null) {
 			if ((getValue().getId()>0)) {
 				params.add(new QueryParam<Integer>(Integer.class,getValue().getId()));

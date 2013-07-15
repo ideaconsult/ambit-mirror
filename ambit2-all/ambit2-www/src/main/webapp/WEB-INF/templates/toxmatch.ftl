@@ -6,26 +6,24 @@
 <script type='text/javascript' src='${ambit_root}/scripts/d3.v3.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/qmap.js'></script>
 
-	<script type='text/javascript'>
+<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	//var oTable = qmap.defineMetadataTable("${ambit_root}","${ambit_request_json}",true);
-	  	var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result){
-	  		qmap.defineChart(root,result);
-	  	});
+		 $( "#tabs" ).tabs();
+	  		//help, menu
+			$( "#selectable" ).selectable( "option", "distance", 18);
+			loadHelp("${ambit_root}","qmap");
+			downloadForm("${ambit_request}");
+
+			
+	  	//	var oTable = qmap.defineMetadataTable("${ambit_root}","${ambit_request_json}",true);
+	  		var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result){
+	  			qmap.defineChart(root,result,"#qchart",640,480);
+	  			qmap.defineBubbleChart(root,result,"#bchart",640,480);
+	  		});
 	});
-	</script>
-
-<script type='text/javascript'>
-
-$(document)
-		.ready(
-				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
-						loadHelp("${ambit_root}","qmap");
-						downloadForm("${ambit_request}");
-				});
 </script>
+
 
 </head>
 <body>
@@ -82,8 +80,9 @@ $(document)
 			<thead>
 			<tr>
 			<th>Structure <a href='#' class='chelp dataset'>?</a></th>
-			<th>Activity</th>
+			<th>ID</th>
 			<th>G2</th>
+			<th>Activity</th>
 			<th>QMap</th>
 			</tr>
 			</thead>
@@ -91,8 +90,24 @@ $(document)
 			</table>
 	</div>
 	<div class="eight columns">
-	<div id='qchart'></div>
-</div>	
+	<div id="tabs">
+	  <ul>
+	    <li><a href="#tabs-2">Bubble chart</a></li>
+	    <li><a href="#tabs-1">Chart: Activity vs G2</a></li>
+	    <li><a href="#tabs-3">Network</a></li>
+	  </ul>
+	  <div id="tabs-2">
+	  	<div id='bchart'></div>
+	  </div>
+	  <div id="tabs-1">
+	  	<div id='qchart'></div>
+	  </div>
+	  <div id="tabs-3">
+	  	<div id='nchart'></div>
+	  </div>
+	</div>
+	
+	</div>	
 </div>
 
 <!-- Bottom -->
