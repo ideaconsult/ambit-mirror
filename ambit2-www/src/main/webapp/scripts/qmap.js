@@ -379,7 +379,7 @@ var qmap = {
 			      .attr("r", 3.5)
 			      .attr("cx", function(d) { return x(d.activity); })
 			      .attr("cy", function(d) { return y(d.g2); })
-			      .style("fill", function(d) { return color(qmaps[d.qmap].name); });
+			      .style("fill", function(d) { return (d.a==0.0)?"gray":color(qmaps[d.qmap].name); });
 
 	
 			  var legend = svg.selectAll(".legend")
@@ -452,7 +452,7 @@ var qmap = {
 			      .attr("r", function(d) { return d.r; })
 			      .attr("uri", function(d) { return d.URI; })
 			      .attr("qmap", function(d) { return d.qmap; })
-			      .style("fill", function(d) { return color(qmaps[d.qmap].name); })
+			      .style("fill", function(d) { return (d.a==0.0)?"gray":color(qmaps[d.qmap].name); })
 /*
 			      .style("fill", function(d) {
 			    	  var id = qmap.getCompoundID(root,d.URI);
@@ -812,7 +812,9 @@ var qmap = {
 			var color = d3.scale.category10();
 			d3.selectAll("circle")
 			.transition()
-            .style("fill", function(d) { return color(qmaps[d.qmap].name); });	  	
+            .style("fill", function(d) {
+            	return (d.a==0.0)?"gray":color(qmaps[d.qmap].name); 
+            });	  	
 		},
 		"colorByTautomer" : function(root,result) {
 				if (result["tautomers"] === undefined) return;
@@ -825,6 +827,7 @@ var qmap = {
 				d3.selectAll("circle")
 					.transition()
                     .style("fill", function(d) {
+                     if (d.a==0.0) return "gray";
 			    	  if ((d.tautomerOf === undefined) || (d.tautomerOf.URI === undefined) || (d.URI == d.tautomerOf.URI)) {
 			    		  var id = qmap.getCompoundID(root,d.URI);
 				    	  return color(result.tautomers[id]);

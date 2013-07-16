@@ -13,7 +13,32 @@ public class QMapSpace implements Serializable {
 	protected QMap qmap;
 	protected IStructureRecord record;
 	protected double g2;
+	protected double a,b,c,d;
 
+	public double getA() {
+		return a;
+	}
+	public void setA(double a) {
+		this.a = a;
+	}
+	public double getB() {
+		return b;
+	}
+	public void setB(double b) {
+		this.b = b;
+	}
+	public double getC() {
+		return c;
+	}
+	public void setC(double c) {
+		this.c = c;
+	}
+	public double getD() {
+		return d;
+	}
+	public void setD(double d) {
+		this.d = d;
+	}
 	protected double fisher;
 
 	public QMapSpace() {

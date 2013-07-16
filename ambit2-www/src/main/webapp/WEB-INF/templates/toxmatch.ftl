@@ -72,8 +72,10 @@
 		    </div>			
 		</div>
 		<div class="six columns omega">
-			<span>&nbsp;</span>
+			<div class="remove-bottom h3">&nbsp;</div>
+			<div>
 		    	<a href="${ambit_root}/qmap">Browse the available QMaps</a>
+		    </div>	
 		</div>	
 		</div>
 </div>		
