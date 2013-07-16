@@ -46,11 +46,8 @@ public class ChemicalSpaceResource<Q extends IQueryRetrieval<ChemSpaceCell>> ext
 	}
 	
 	@Override
-	protected QueryAbstractReporter createJSONReporter() {
-	
+	protected QueryAbstractReporter createJSONReporter(String callback) {
 		return new ChemicalSpaceJSONReporter<IQueryRetrieval<ChemSpaceCell>>(getRequest(),getProperty());
-		
-
 	}
 	
 	@Override

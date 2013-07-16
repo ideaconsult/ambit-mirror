@@ -6,25 +6,20 @@ import java.util.logging.Level;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
+import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.relation.SimilarityRelation;
+import ambit2.base.relation.AbstractRelation;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
+import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.property.QueryPairwiseTanimoto;
 import ambit2.rest.OpenTox;
 import ambit2.rest.structure.ConformerURIReporter;
 
-/**
- * JSON
- * @author nina
- *
- * TODO - refactor as {@link StructureRelationJSONReporter}
- * @param <Q>
- */
-public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<SimilarityRelation>> extends QueryReporter<SimilarityRelation,Q,Writer> {
+public class StructureRelationJSONReporter<Q extends IQueryRetrieval<AbstractRelation<String, Double>>> extends QueryReporter<AbstractRelation<String, Double>,Q,Writer> {
 	/**
 	 * 
 	 */
@@ -36,8 +31,21 @@ public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<Similarity
 	public Reference getBaseReference() {
 		return baseReference;
 	}
-
-	public PairwiseSimilarityJSONReporter(Request request) {
+	
+	enum jsonFeature {
+		datasetURI,
+		source,
+		target,
+		relation,
+		value,
+		value2
+		;
+		
+		public String jsonname() {
+			return name();
+		}
+	}
+	public StructureRelationJSONReporter(Request request) {
 		super();
 		this.request = request;
 		this.baseReference = request.getRootRef();
@@ -54,7 +62,7 @@ public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<Similarity
 	 * </pre>	
 	 */
 	@Override
-	public Object processItem(SimilarityRelation item) throws AmbitException {
+	public Object processItem(AbstractRelation<String,Double> item) throws AmbitException {
 		try {
 			if (item==null) return null;
 			if (item.getStructures()==null) return null;
@@ -62,12 +70,14 @@ public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<Similarity
 			getOutput().write(String.format(
 					"\n{"+
 					"\n\t\"%s\":\"%s\"," + 
+					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," + 
-					"\n\t\"%s\":%6.4f" + //similarity
+					"\n\t\"%s\":%6.4f" + //metric
 					"\n}",
-					StructureRelationJSONReporter.jsonFeature.source.jsonname(),cmpReporter.getURI(item.getStructures()[0]),
-					StructureRelationJSONReporter.jsonFeature.target.jsonname(),cmpReporter.getURI(item.getStructures()[1]),
-					StructureRelationJSONReporter.jsonFeature.value.jsonname(),item.getRelation()
+					jsonFeature.source.jsonname(),cmpReporter.getURI(item.getStructures()[0]),
+					jsonFeature.target.jsonname(),cmpReporter.getURI(item.getStructures()[1]),
+					jsonFeature.relation.jsonname(),item.getRelationType(),
+					jsonFeature.value.jsonname(),item.getRelation()
 					));
 			comma = ",";
 		} catch (Exception x) {
@@ -96,19 +106,21 @@ public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<Similarity
 	public void header(Writer output, Q query) {
 		try {
 			output.write("{\n");
-			if (query instanceof QueryPairwiseTanimoto) {
-				((QueryPairwiseTanimoto)query).getFieldname();
-				((QueryPairwiseTanimoto)query).getValue();
-				Reference datasetURI = baseReference.clone();
-				datasetURI.addSegment(OpenTox.URI.dataset.name());
-				if (((QueryPairwiseTanimoto)query).getFieldname() instanceof IStoredQuery)
-					datasetURI.addSegment(String.format("R%d",((QueryPairwiseTanimoto)query).getFieldname().getID()));
-				else
-					datasetURI.addSegment(Integer.toString(((QueryPairwiseTanimoto)query).getFieldname().getID()));
-				output.write(String.format("\"%s\":\"%s\",\n",StructureRelationJSONReporter.jsonFeature.datasetURI.jsonname(),datasetURI));
-			}
+			Reference datasetURI = baseReference.clone();
+			datasetURI.addSegment(OpenTox.URI.dataset.name());
+			
+			Object dataset = (query instanceof AbstractQuery)?((AbstractQuery)query).getValue():null;
+			if (dataset instanceof IStoredQuery)
+				datasetURI.addSegment(String.format("R%d",((IStoredQuery)dataset).getID()));
+			else if (dataset instanceof SourceDataset)
+				datasetURI.addSegment(Integer.toString(((ISourceDataset)dataset).getID()));
+			
+			output.write(String.format("\"%s\":\"%s\",\n",jsonFeature.datasetURI.jsonname(),datasetURI));
+
 			output.write("\"links\":[");
-		} catch (Exception x) {}
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 	};
 	
 	@Override

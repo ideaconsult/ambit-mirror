@@ -20,6 +20,16 @@ public class OpenTox {
 			public String getKey() {
 				return "dataset_id";
 			}
+			@Override
+			public Object getId(String uri, Template template) {
+				Map<String, Object> vars = new HashMap<String, Object>();
+				try {
+					template.parse(uri, vars);
+					return Integer.parseInt(vars.get(getKey()).toString()); 
+				} catch (Exception x) { 
+					return vars.get(getKey()).toString(); 
+				}
+			}
 		},
 		feature,
 		bookmark {

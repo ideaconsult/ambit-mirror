@@ -9,7 +9,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
+import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.db.chemrelation.ReadStructureRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
@@ -17,8 +17,6 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.query.StructureQueryResource;
 
 public class QueryTautomersResource <Q extends IQueryRetrieval<IStructureRecord>> extends StructureQueryResource<IQueryRetrieval<IStructureRecord>> {
-	
-	public final static String resource = "/tautomer";
 	
 	@Override
 	protected Q createQuery(Context context, Request request,Response response) throws ResourceException {
@@ -36,18 +34,24 @@ public class QueryTautomersResource <Q extends IQueryRetrieval<IStructureRecord>
 					if (dataset.indexOf("/conformer/")>0) {
 						Object[] ids = OpenTox.URI.conformer.getIds(dataset, getRequest().getRootRef());
 						if ((ids!=null) && (ids.length>0) && (((Integer)ids[0])>0)) {
-							ReadStructureRelation q =  new ReadStructureRelation(AbstractUpdateStructureRelation.STRUCTURE_RELATION.HAS_TAUTOMER.name(),(Integer)ids[0]);
+							ReadStructureRelation q =  new ReadStructureRelation(STRUCTURE_RELATION.HAS_TAUTOMER.name(),(Integer)ids[0]);
 							return ((Q)q);
 						}
 					} else if (dataset.indexOf("/compound/")>0) {
 						Object id = OpenTox.URI.compound.getId(dataset, getRequest().getRootRef());
 						if (id!=null ) {
-							ReadStructureRelation q =  new ReadStructureRelation(AbstractUpdateStructureRelation.STRUCTURE_RELATION.HAS_TAUTOMER.name(),(Integer)id);
+							ReadStructureRelation q =  new ReadStructureRelation(STRUCTURE_RELATION.HAS_TAUTOMER.name(),(Integer)id);
 							return ((Q)q);
 						}
-
-					} else {
-						//TODO all tautomers within a dataset
+					} else if (dataset.indexOf("/dataset/")>0) {
+						/*
+						Object id = OpenTox.URI.dataset.getId(dataset, getRequest().getRootRef());
+						if (id!=null ) {
+							ISourceDataset d = new SourceDataset(); d.setID((Integer)id);
+							ReadDatasetRelation q =  new ReadDatasetRelation(STRUCTURE_RELATION.HAS_TAUTOMER.name(),d);
+							return ((Q)q);
+						}
+						*/
 					}
 				}  
 				throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,String.format("Dataset '%s' not supported",datasetURI));
