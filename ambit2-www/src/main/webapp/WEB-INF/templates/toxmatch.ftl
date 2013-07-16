@@ -34,6 +34,9 @@
 	  			$("#tautomersbutton").click(function() {
 	  				qmap.colorByTautomer(root,result);
 	  			});
+	  			$("#mapbutton").click(function() {
+	  				qmap.colorByMap(root,result);
+	  			});	  			
 	  			
 	  			$("#networkbutton").click(function() {
 	  				$.each(result.links, function(index, link) {
@@ -68,15 +71,8 @@
  
 		    </div>			
 		</div>
-		<div class="four columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-
-		    </div>			
-		</div>		
-		<div class="two columns omega">
+		<div class="six columns omega">
+			<span>&nbsp;</span>
 		    	<a href="${ambit_root}/qmap">Browse the available QMaps</a>
 		</div>	
 		</div>
@@ -116,7 +112,8 @@
 	  </ul>
 	  <div id="tabs-2">
 	  	<div id='bchart'></div>
-	  	<a href='#' id="tautomersbutton"  style="display:none;">Show tautomers</a>
+	  	<a href='#' id="tautomersbutton"  style="display:none;">Color by tautomers</a>  
+	  	<a href='#' id="mapbutton" >Color by QMap</a>
 	  </div>
 	  <!--
 	  <div id="tabs-1">
@@ -140,9 +137,12 @@
 
 <!-- Download -->
 <div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
-	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
+	<div class='four columns alpha' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
+	</div>
+	<div class='four columns omega'>&nbsp;</div>
+	<div class='eight columns omega'>
+		<span id='simtitle'></span>
 	</div>
 </div>
 
@@ -151,7 +151,7 @@
 <!-- Similarity results -->
 <div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
 
-	<div class="sixteen columns ui-widget-header ui-corner-top">Similar compounds (Activity cliffs) <span id='simtitle'></span></div>
+	<div class="sixteen columns ui-widget-header ui-corner-top">Similar compounds (Activity cliffs) </div>
 	<div class="sixteen columns ui-widget-content ui-corner-bottom">
 		<ul class='structresults' id="cliffs" style='height:150px;'></ul>
 	</div>
@@ -159,7 +159,7 @@
 
 <div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
 
-<div class="sixteen columns ui-widget-header ui-corner-top">Similar compounds (Smooth landscape)<span id='simtitle'></span></div>
+<div class="sixteen columns ui-widget-header ui-corner-top">Similar compounds (Smooth landscape)</div>
 <div class="sixteen columns ui-widget-content ui-corner-bottom">
 	<ul class='structresults' id="notcliffs" style='height:150px;'></ul>
 </div>
