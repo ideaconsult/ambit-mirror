@@ -403,6 +403,7 @@ var qmap = {
 	
 			
 		},
+
 		"defineBubbleChart" : function (root,results,selector,w,h,nodesTable) {
 			var qmaps = this.getQmapIndex(root,results);
 			var diameter = w,
@@ -805,6 +806,13 @@ var qmap = {
 			   sOut += " <a href='#' onClick='$(\"#"+id+"\").toggle();' title='Click here for more synonyms'>&raquo;</a> ";
 			}
 			return sOut;
+		},
+		"colorByMap" : function (root,results) {
+			var qmaps = this.getQmapIndex(root,results);
+			var color = d3.scale.category10();
+			d3.selectAll("circle")
+			.transition()
+            .style("fill", function(d) { return color(qmaps[d.qmap].name); });	  	
 		},
 		"colorByTautomer" : function(root,result) {
 				if (result["tautomers"] === undefined) return;
