@@ -406,10 +406,18 @@ var qmap = {
 		"defineBubbleChart" : function (root,results,selector,w,h,nodesTable) {
 			var qmaps = this.getQmapIndex(root,results);
 			var diameter = w,
-		    format = d3.format(",d"),
+		    format = d3.format(",d");
 		    //color = d3.scale.category20c();
-			color = d3.scale.category10();
-			
+			var color = d3.scale.category10();
+/*
+			//color = d3.scale.linear().domain([1,10]).range(['red', 'blue']);
+			var cmpx = qmap.getCompoundIndex(root,results);
+			//var color = d3.scale.linear().domain([0,results.nodes.length]).range(['red', 'blue']).interpolate(d3.interpolateHcl);
+
+			//this will make an unique color for every node
+			var hue = d3.scale.linear().domain([0,results.nodes.length]).range([0,360]);
+			var color = function(index) {return d3.hsl(hue(index),0.5,0.5);	};
+*/			
 			var bubble = d3.layout.pack()
 			    .sort(null)
 			    .size([diameter, diameter])
@@ -438,15 +446,23 @@ var qmap = {
 			    	  return qmaps[d.qmap].name + " [g2=" + d.g2 + "] [ "+ results.feature[property].title + " = "+d.activity+"] " + d.URI; }
 			      );
 	
+			  
 			  node.append("circle")
 			      .attr("r", function(d) { return d.r; })
 			      .attr("uri", function(d) { return d.URI; })
 			      .attr("qmap", function(d) { return d.qmap; })
 			      .style("fill", function(d) { return color(qmaps[d.qmap].name); })
+/*
+			      .style("fill", function(d) {
+			    	  var id = qmap.getCompoundID(root,d.URI);
+			    	  return color(cmpx[qmaps[d.qmap].URI][id]);
+			      })
+*/
 			      .on("click", function(){
 			    	  //Filter the nodes table to show only the selected compound (by URI)
 			    	  nodesTable.fnFilter(d3.select(this).attr("uri"));
 			    	  qmap.getSimilar(root,results,d3.select(this).attr("qmap"),d3.select(this).attr("uri"),"#cliffs","#notcliffs");
+			    	  qmap.getTautomersByCompound(root,results,d3.select(this).attr("qmap"),d3.select(this).attr("uri"),"#tautomers");
 			      }
 			      );
 
@@ -509,11 +525,12 @@ var qmap = {
 					json.dataEntry.forEach(function img(element, index, array) {
 						var id = qmap.getCompoundID(root,element.compound.URI);
 						var node = results.nodes[cmpx[qmapuri][id]];
+						var activity = "";
 						if (node === undefined) {
 							//means these are not within the cliffs
 							targetSelector = notcliffs;
 						} else {
-							var activity = node.activity;
+							activity = node.activity;
 							var nameid = qmap.getID();
 							var style = "";
 							
@@ -554,22 +571,140 @@ var qmap = {
 		            400: function() {
 		    			$(cliffs).empty();
 		    			$(notcliffs).empty();
-		            	$(targetselector).append('<li class="ui-state-default" >Not found</li>');
+		            	$(targetSelector).append('<li class="ui-state-default" >Not found</li>');
 		            },
 		            404: function() {
 		    			$(cliffs).empty();
 		    			$(notcliffs).empty();
-		            	$(targetselector).append('<li class="ui-state-default" >Not found</li>');
+		            	$(targetSelector).append('<li class="ui-state-default" >Not found</li>');
 			        }
 		        },
 		        "error" : function( xhr, textStatus, error ) {
 					$(cliffs).empty();
 					$(notcliffs).empty();
-		        	$(targetselector).append('<li class="ui-state-default" >'+error + '</li>');
+		        	$(targetSelector).append('<li class="ui-state-default" >'+error + '</li>');
 		        }
 		      } );			
 			
 		},
+		"getTautomersByCompound" : function (root,results,qmapuri,cmpuri,targetSelector) {
+			
+			var cmpx = qmap.getCompoundIndex(root,results);
+			var myid = qmap.getCompoundID(root,cmpuri);
+			var node = results.nodes[cmpx[qmapuri][myid]];
+			if (node.tautomerOf === undefined) return;
+			
+			$(targetSelector).empty();
+			$(targetSelector).show();
+			$(targetSelector).append('<li>Retrieving tautomers ...</li>');
+
+			var qmaps = this.getQmapIndex(root,results);
+			var map = qmaps[qmapuri];
+			if ((map===undefined) || (map==null)) return;
+
+
+			var myactivity = results.nodes[cmpx[qmapuri][myid]].activity;
+			
+			var query = root + "/query/relation/compound/has_tautomer?dataset_uri="+node.tautomerOf.URI + "&media=application/json"; 
+			$.ajax( {
+				url: query,
+		        "dataType": "json", 
+		        "contentType" : "application/json",
+		        "success": function(json) {
+	    			$(targetSelector).empty();
+					json.dataEntry.forEach(function img(element, index, array) {
+						var id = qmap.getCompoundID(root,element.compound.URI);
+						var node = results.nodes[cmpx[qmapuri][id]];
+						var activity = "";
+						if (node === undefined) {
+							//means these are not within the cliffs
+						} else {
+							activity = node.activity;
+							var nameid = qmap.getID();
+							var style = "";
+							
+
+							if (id==myid) {
+								style = "color:red;";
+							} else if (Math.abs(myactivity-activity)>= map.activity.threshold) {
+								//now these are the cliffs
+								style = "color:blue;";
+							}  
+								
+							
+						}		
+						$(targetSelector).append('<li>'+qmap.cmp2image(element.compound.URI)+
+							  		  '<div style="margin-top:5px;">Tautomer rank='+element.compound.metric+'</div>'+
+							  		  '<div style="margin-top:5px;'+style+'">Activity='+activity+'</div>'+
+									  '<div style="margin-top:5px;font-weight:bold;'+style+'">ID ='+id+'</div>'+
+									  '<div style="margin-top:5px;" id="'+nameid+'"></div></li>');
+						qmap.loadStructureIds("",root,element.compound.URI,qmap.renderStructureIds,'#'+nameid);
+						
+       				});
+		        },
+		        "cache": false,
+		        "statusCode" : {
+		            400: function() {
+		            	$(targetSelector).append('<li class="ui-state-default" >Not found</li>');
+		            },
+		            404: function() {
+		            	$(targetSelector).append('<li class="ui-state-default" >Not found</li>');
+			        }
+		        },
+		        "error" : function( xhr, textStatus, error ) {
+		        	$(targetSelector).append('<li class="ui-state-default" >'+error + '</li>');
+		        }
+		      } );			
+			
+		},		
+		"getTautomers" : function (root,results,dataseturi,targetselector,callback) {
+			var query = root + "/query/relation/dataset/has_tautomer?dataset_uri="+dataseturi + "&media=application/json";
+			$(targetselector).empty();
+
+			
+			$.ajax( {
+				url: query,
+		        "dataType": "json", 
+		        "contentType" : "application/json",
+		        "success": function(json) {
+	    			$(targetselector).empty();
+	    			var cmpx = qmap.getCompoundIndex(root,results);
+    				var tautomers = {};
+    				var tkeys = [];
+	    			json.links.forEach(function img(element, index, array) {
+		    			var source = qmap.getCompoundID(root,element.source);
+		    			var target = qmap.getCompoundID(root,element.target);
+						 $.each(results['qmap'], function(index, value) {
+							 var qmapuri = value.URI;
+							 if ((cmpx[qmapuri][source] != undefined) && (cmpx[qmapuri][target] != undefined)) {
+								 //this is a bit inefficient TODO: get only tautomers of g2  > 0 & a > 0
+								 var tautomerOf = {};
+								 tautomerOf["URI"] = element.source;
+								 tautomerOf["rank"] = element.value;
+								 results.nodes[cmpx[qmapuri][target]]["tautomerOf"] = tautomerOf;
+								 if (tautomers[source] === undefined) {
+									 tautomers[source] = tkeys.length;
+									 tkeys.push(source);
+								 }
+							 }	 
+						});
+	    			});
+	    			callback(tautomers,tkeys.length);
+		        },
+		        "cache": false,
+		        "statusCode" : {
+		            400: function() {
+		            	$(targetselector).append('<li class="ui-state-default" >Not found</li>');
+		            },
+		            404: function() {
+		            	$(targetselector).append('<li class="ui-state-default" >Not found</li>');
+			        }
+		        },
+		        "error" : function( xhr, textStatus, error ) {
+		        	$(targetselector).append('<li class="ui-state-default" >'+error + '</li>');
+		        }
+		      });	
+		},	
 		"renderStructureIds" : function (nameSelector,names,cas,smiles,inchi,inchikey) {
 			try {
 				$(nameSelector).html(names.toLowerCase());
@@ -670,6 +805,26 @@ var qmap = {
 			   sOut += " <a href='#' onClick='$(\"#"+id+"\").toggle();' title='Click here for more synonyms'>&raquo;</a> ";
 			}
 			return sOut;
+		},
+		"colorByTautomer" : function(root,result) {
+				if (result["tautomers"] === undefined) return;
+  				
+  				var cmpx = qmap.getCompoundIndex(root,result);
+  				var qmaps = qmap.getQmapIndex(root,result);
+  				var hue = d3.scale.linear().domain([0,result.ntautomers]).range([0,360]);
+  				var color = function(index) {return d3.hsl(hue(index),0.5,0.5);	};
+
+				d3.selectAll("circle")
+					.transition()
+                    .style("fill", function(d) {
+			    	  if ((d.tautomerOf === undefined) || (d.tautomerOf.URI === undefined) || (d.URI == d.tautomerOf.URI)) {
+			    		  var id = qmap.getCompoundID(root,d.URI);
+				    	  return color(result.tautomers[id]);
+			    	  } else {
+			    		  var id = qmap.getCompoundID(root,d.tautomerOf.URI);
+				    	  return color(result.tautomers[id]);		    		  
+			    	  }
+                    });	  	
 		},
 		<!-- network graph -->
 		"drawGraph":function (root,data,qmapuri,chartselector,width,height,nodesTable) {
