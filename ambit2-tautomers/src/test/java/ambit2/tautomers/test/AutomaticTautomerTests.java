@@ -2098,7 +2098,7 @@ public class AutomaticTautomerTests
 		public double valueSum = 0;
 		public double valueSDSum = 0;
 		
-		//variables for the 
+		//variables for the weighting scheme based on probabilities calculated for different temperatures
 		public double valueSumProbWeighted[] = new double[Temperatures.length];
 		public double sumProbWeights[] = new double[Temperatures.length];
 		public double topValues[];
@@ -2129,7 +2129,7 @@ public class AutomaticTautomerTests
 			
 			for (int i = 0; i < valueSumProbWeighted.length;  i++)
 			{	
-				tautomerRanking.T = Temperatures[i];
+				tautomerRanking.setT(Temperatures[i]);
 				double p = tautomerRanking.getProbability(rank);
 				valueSumProbWeighted[i] += p*value;
 				sumProbWeights[i] += p;
@@ -2228,7 +2228,7 @@ public class AutomaticTautomerTests
 			else
 				n1 = nUsedTopRanks;
 			
-			tautomerRanking.T = Temperatures[tIndex]; //currently
+			tautomerRanking.setT(Temperatures[tIndex]); //currently
 			
 			double sum = 0;
 			double weightSum = 0;
