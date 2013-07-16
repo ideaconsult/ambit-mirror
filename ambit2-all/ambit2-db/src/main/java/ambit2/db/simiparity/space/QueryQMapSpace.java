@@ -57,6 +57,7 @@ public class QueryQMapSpace extends AbstractQuery<IStructureRecord,QMap,StringCo
 		qmap.setProperty(new Property(null));
 		qspace = new QMapSpace(qmap);
 		qspace.setRecord(new StructureRecord());
+		setPageSize(100000);
 	}
 
 	@Override
@@ -122,6 +123,10 @@ public class QueryQMapSpace extends AbstractQuery<IStructureRecord,QMap,StringCo
 			qspace.getRecord().setIdstructure(-1);
 			qspace.getRecord().setProperty(qmap.getProperty(),rs.getDouble("value_num"));
 			qspace.setG2(rs.getDouble("g2"));
+			qspace.setA(rs.getDouble("a"));
+			qspace.setB(rs.getDouble("b"));
+			qspace.setC(rs.getDouble("c"));
+			qspace.setD(rs.getDouble("d"));
 			qspace.setFisher(rs.getDouble("fisher"));
 			return qspace;
 		} catch (Exception x) {
