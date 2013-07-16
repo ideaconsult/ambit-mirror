@@ -22,7 +22,18 @@
 	  	//	var oTable = qmap.defineMetadataTable("${ambit_root}","${ambit_request_json}",true);
 	  		var oTable = qmap.defineNodesTable("${ambit_root}","${ambit_request_json}",function(root,result,nodesTable){
 	  			//qmap.defineChart(root,result,"#qchart",640,480);
-	  			qmap.defineBubbleChart(root,result,"#bchart",640,480,nodesTable);
+  				if ((result.qmap!=null) && (result.qmap.length>0)) {
+  					qmap.getTautomers(root,result,result.qmap[0].dataset.URI,null,function(tautomers,ntautomers) {
+  						result["tautomers"] = tautomers;
+  						result["ntautomers"] = ntautomers;
+  						$("#tautomersbutton").show();
+  					});
+  				}
+  				qmap.defineBubbleChart(root,result,"#bchart",640,480,nodesTable);
+
+	  			$("#tautomersbutton").click(function() {
+	  				qmap.colorByTautomer(root,result);
+	  			});
 	  			
 	  			$("#networkbutton").click(function() {
 	  				$.each(result.links, function(index, link) {
@@ -62,16 +73,11 @@
 				&nbsp;
 			</div>
 		    <div class='h6'>
-		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
+
 		    </div>			
 		</div>		
 		<div class="two columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-		    </div>			
+		    	<a href="${ambit_root}/qmap">Browse the available QMaps</a>
 		</div>	
 		</div>
 </div>		
@@ -110,6 +116,7 @@
 	  </ul>
 	  <div id="tabs-2">
 	  	<div id='bchart'></div>
+	  	<a href='#' id="tautomersbutton"  style="display:none;">Show tautomers</a>
 	  </div>
 	  <!--
 	  <div id="tabs-1">
@@ -130,6 +137,17 @@
 	
 	</div>	
 </div>
+
+<!-- Download -->
+<div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
+	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
+	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
+	</div>
+</div>
+
+
+
 <!-- Similarity results -->
 <div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
 
@@ -147,34 +165,12 @@
 </div>
 </div>
 
-<!-- Bottom -->
-<div class="row" style="padding:0 2px 2px 2px 0;margin-right:0;"  >
-	<div class="eight columns">
-
-	<table id='qmap' class='qmaptable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
-	<thead>
-	<tr>
-	<th>Dataset <a href='#' class='chelp dataset'>?</a></th>
-	<th>Property <a href='#' class='chelp feature'>?</a></th>
-	<th>Activity threshold</th>
-	<th>Similarity threshold</th>
-	<th>Activity cliffs <a href='#' class='chelp activity_cliff'>?</a></th>
-	</tr>
-	</thead>
-	<tbody></tbody>
-	</table>
-	
-		<!-- Downloads -->
-		<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-			<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
-			<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
-		</div>
-	</div>
-
-	<div class="eight columns">
-
-	</div>
+<div class="sixteen columns ui-widget-header ui-corner-top">Tautomers</div>
+<div class="sixteen columns ui-widget-content ui-corner-bottom">
+	<ul class='structresults' id="tautomers" style='height:150px;'></ul>
 </div>
+</div>
+
 	
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>	
 
