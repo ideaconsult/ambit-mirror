@@ -8,6 +8,7 @@ import java.util.List;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.db.search.NumberCondition;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.structure.AbstractStructureQuery;
@@ -21,7 +22,7 @@ public class ReadStructureRelation extends AbstractStructureQuery<String,Integer
 		"select idchemical1,idchemical2,-1,1,metric,relation as text from chem_relation where idchemical1=? and relation=?";
 	
 	public ReadStructureRelation(IStructureRecord structure) {
-		this(AbstractUpdateStructureRelation.STRUCTURE_RELATION.HAS_TAUTOMER.name(),
+		this(STRUCTURE_RELATION.HAS_TAUTOMER.name(),
 				structure==null?null:structure.getIdchemical());
 	}
 	public ReadStructureRelation() {
@@ -34,7 +35,7 @@ public class ReadStructureRelation extends AbstractStructureQuery<String,Integer
 		setCondition(NumberCondition.getInstance("="));
 	}	
 	public String getSQL() throws AmbitException {
-		return 	String.format(sql,getCondition().getSQL(),getValue()==null?"":"?");
+		return 	sql;
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();

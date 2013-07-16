@@ -10,7 +10,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRelation;
+import ambit2.base.relation.SimilarityRelation;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.DisplayMode;
@@ -19,7 +19,7 @@ import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.query.QueryResource;
 
-public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<IStructureRelation<Double>, IQueryRetrieval<IStructureRelation<Double>>> {
+public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<SimilarityRelation, IQueryRetrieval<SimilarityRelation>> {
 	/**
 	 * 
 	 */
@@ -47,7 +47,7 @@ public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<IStructur
 		similarityJSONReporter.setOutput(output);
 	}
 	@Override
-	public void header(Writer w, IQueryRetrieval<IStructureRelation<Double>> query) {
+	public void header(Writer w, IQueryRetrieval<SimilarityRelation> query) {
 
 		super.header(w, query);
 		try { 
@@ -96,7 +96,7 @@ public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<IStructur
 	}
 		
 	@Override
-	public void footer(Writer output, IQueryRetrieval<IStructureRelation<Double>> query) {
+	public void footer(Writer output, IQueryRetrieval<SimilarityRelation> query) {
 		try { 
 			similarityJSONReporter.footer(output, query);
 			output.write(";</script>\n");
@@ -109,7 +109,7 @@ public class PairwiseSimilarityHTMLReporter  extends QueryHTMLReporter<IStructur
 		super.footer(output, query);
 	}
 	@Override
-	public Object processItem(IStructureRelation<Double> item)
+	public Object processItem(SimilarityRelation item)
 			throws AmbitException {
 		try { 
 			similarityJSONReporter.processItem(item);

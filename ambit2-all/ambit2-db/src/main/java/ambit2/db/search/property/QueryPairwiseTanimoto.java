@@ -9,7 +9,6 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.interfaces.IStructureRelation;
 import ambit2.base.relation.SimilarityRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
@@ -22,24 +21,39 @@ import ambit2.db.search.QueryParam;
  * @author nina
  *
  */
-public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISourceDataset, BooleanCondition, IStructureRelation<Double>> implements IQueryRetrieval<IStructureRelation<Double>> {
+public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISourceDataset, BooleanCondition, SimilarityRelation> implements IQueryRetrieval<SimilarityRelation> {
 	protected SimilarityRelation relation = 
 		new SimilarityRelation(new StructureRecord(),new StructureRecord());
 	/**
 	 * 
 	 */
+	protected double threshold = 0.8;
+	public double getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
+	}
+
 	private static final long serialVersionUID = -5148418049120426363L;
 	private static final String sql_tanimoto = 
-		"bit_count(f1.fp1 & f2.fp1) + bit_count(f1.fp2 & f2.fp2) + bit_count(f1.fp3 & f2.fp3) + bit_count(f1.fp4 & f2.fp4) +\n"+
-		"bit_count(f1.fp5 & f2.fp5) + bit_count(f1.fp6 & f2.fp6) + bit_count(f1.fp7 & f2.fp7) + bit_count(f1.fp8 & f2.fp8) +\n"+
-		"bit_count(f1.fp9 & f2.fp9) + bit_count(f1.fp10 & f2.fp10) + bit_count(f1.fp11 & f2.fp11) + bit_count(f1.fp12 & f2.fp12) +\n"+
-		"bit_count(f1.fp13 & f2.fp13) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16) as Nab\n";
+	    "(bit_count(f1.fp1 & f2.fp1) + bit_count(f1.fp2 & f2.fp2) + bit_count(f1.fp3 & f2.fp3) + bit_count(f1.fp4 & f2.fp4) +\n"+
+	    "bit_count(f1.fp5 & f2.fp5) + bit_count(f1.fp6 & f2.fp6) + bit_count(f1.fp7 & f2.fp7) + bit_count(f1.fp8 & f2.fp8) +\n"+
+	    "bit_count(f1.fp9 & f2.fp9) + bit_count(f1.fp10 & f2.fp10) + bit_count(f1.fp11 & f2.fp11) + bit_count(f1.fp12 & f2.fp12) +\n"+
+	    "bit_count(f1.fp13 & f2.fp13) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16))\n"+
+	    "/(f1.bc + f2.bc -\n"+
+	    "(bit_count(f1.fp1 & f2.fp1) + bit_count(f1.fp2 & f2.fp2) + bit_count(f1.fp3 & f2.fp3) + bit_count(f1.fp4 & f2.fp4) +\n"+
+	    "bit_count(f1.fp5 & f2.fp5) + bit_count(f1.fp6 & f2.fp6) + bit_count(f1.fp7 & f2.fp7) + bit_count(f1.fp8 & f2.fp8) +\n"+
+	    "bit_count(f1.fp9 & f2.fp9) + bit_count(f1.fp10 & f2.fp10) + bit_count(f1.fp11 & f2.fp11) + bit_count(f1.fp12 & f2.fp12) +\n"+
+	    "bit_count(f1.fp13 & f2.fp13) + bit_count(f1.fp14 & f2.fp14) + bit_count(f1.fp15 & f2.fp15) + bit_count(f1.fp16 & f2.fp16))\n"+
+	    ") Tanimoto\n";
 
 	private static final String sql_header = 
 		String.format(
-		"select idchemical1,idstructure1,idchemical2,idstructure2,Nab/(Na+Nb-Nab) as Tanimoto from\n"+
+		"select idchemical1,idstructure1,idchemical2,idstructure2,Tanimoto from\n"+
 		"(\n"+
-		"SELECT s1.idchemical as idchemical1,s1.idstructure as idstructure1,s2.idchemical as idchemical2,s2.idstructure as idstructure2,f1.bc as Na,f2.bc as Nb,\n"+
+		"SELECT s1.idchemical as idchemical1,s1.idstructure as idstructure1,s2.idchemical as idchemical2,s2.idstructure as idstructure2,\n"+
 		"%s FROM ",sql_tanimoto);
 
 	private static final String sql_dataset = 
@@ -52,7 +66,7 @@ public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISource
 		"join fp1024 as f2 on s2.idchemical=f2.idchemical\n"+
 		"where d1.id_srcdataset=? and d2.id_srcdataset=?\n"+
 		"and f1.idchemical < f2.idchemical\n"+ 
-		") as c\n",sql_header);	
+		") as c where Tanimoto>?\n",sql_header);	
 	
 	private static final String sql_rdataset = 
 		String.format(
@@ -62,7 +76,7 @@ public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISource
 		"join fp1024 as f2 on s2.idchemical=f2.idchemical\n"+
 		"where s1.idquery=? and s2.idquery=?\n"+
 		"and f1.idchemical < f2.idchemical\n"+ 
-		") as c\n",sql_header);	
+		") as c where Tanimoto>?\n",sql_header);	
 	
 	private static final String sql_dataset_rdataset = 
 		String.format(
@@ -73,7 +87,7 @@ public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISource
 		"join fp1024 as f2 on s2.idchemical=f2.idchemical\n"+
 		"where d1.id_srcdataset=? and s2.idquery=?\n"+
 		"and f1.idchemical < f2.idchemical\n"+ 
-		") as c\n",sql_tanimoto);	
+		") as c where Tanimoto>?\n",sql_tanimoto);	
 	
 	public List<QueryParam> getParameters() throws AmbitException {
 		ISourceDataset q1 = (getFieldname()!=null)?getFieldname():getValue();
@@ -91,6 +105,7 @@ public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISource
 		//otherwise the order doesn't matter
 		params.add(new QueryParam<Integer>(Integer.class, q1.getID()));
 		params.add(new QueryParam<Integer>(Integer.class, q2.getID()));
+		params.add(new QueryParam<Double>(Double.class, getThreshold()));
 		return params;	
 	}
 
@@ -105,7 +120,7 @@ public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISource
 	}
 	
 	@Override
-	public IStructureRelation<Double> getObject(ResultSet rs)
+	public SimilarityRelation getObject(ResultSet rs)
 			throws AmbitException {
 		try {
 			IStructureRecord [] records = relation.getStructures();
@@ -125,7 +140,7 @@ public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISource
 	}
 
 	@Override
-	public double calculateMetric(IStructureRelation<Double> object) {
+	public double calculateMetric(SimilarityRelation object) {
 		return 1;
 	}
 

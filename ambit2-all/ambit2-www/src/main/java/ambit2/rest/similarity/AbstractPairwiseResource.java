@@ -30,12 +30,13 @@ import ambit2.rest.RepresentationConvertor;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.structure.CompoundJSONReporter;
 
 public abstract class AbstractPairwiseResource <T extends Serializable,Q extends IQueryRetrieval<T>> extends QueryResource<Q,T> { 
 	protected Integer datasetID;
 	protected Integer queryResultsID;
 	protected Template template;
-
+	protected double threshold = 0;
 	public String getCompoundInDatasetPrefix() {
 		if (dataset_prefixed_compound_uri)
 		return
@@ -48,6 +49,7 @@ public abstract class AbstractPairwiseResource <T extends Serializable,Q extends
 		Q query = null;
 		datasetID = key;
 		QueryPairwiseTanimoto q = new QueryPairwiseTanimoto();
+		q.setThreshold(threshold);
 		SourceDataset dataset = new SourceDataset();
 		dataset.setID(key);
 		q.setFieldname(dataset);
@@ -67,6 +69,7 @@ public abstract class AbstractPairwiseResource <T extends Serializable,Q extends
 				throw new InvalidResourceIDException(key);
 			}
 			QueryPairwiseTanimoto q = new QueryPairwiseTanimoto();
+			q.setThreshold(threshold);
 			StoredQuery dataset = new StoredQuery();
 			dataset.setID(queryResultsID);
 			q.setFieldname(dataset);
@@ -88,6 +91,10 @@ public abstract class AbstractPairwiseResource <T extends Serializable,Q extends
 	@Override
 	protected Q createQuery(Context context, Request request, Response response)
 			throws ResourceException {
+		Form form = getResourceRef(getRequest()).getQueryAsForm();
+		try {
+			threshold = Double.parseDouble(form.getFirstValue("threshold").toString());
+		} catch (Exception x) {}
 		setTemplate(createTemplate(request.getResourceRef().getQueryAsForm()));
 		Object id = request.getAttributes().get(DatasetStructuresResource.datasetKey);
 		if (id != null)  try {
@@ -133,33 +140,24 @@ public abstract class AbstractPairwiseResource <T extends Serializable,Q extends
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 					createHTMLReporter(d),MediaType.TEXT_HTML);
 	
-		} 
-	 /*
-		else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+				String jsonpcallback = getParams().getFirstValue("jsonp");
+				if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
+				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+						createJSONReporter(jsonpcallback),MediaType.APPLICATION_JSON,filenamePrefix);
+		}		
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
-								String.format("%s%s",getRequest().getRootRef(),getCompoundInDatasetPrefix())
-							),
-					ChemicalMediaType.WEKA_ARFF,filenamePrefix);			
-		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					createCSVReporter()
-					,MediaType.TEXT_CSV,filenamePrefix);
-		} 
-		//else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-		//otherwise return json
-		 * */
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					createJSONReporter(),
-							//getTemplate(),getGroupProperties(),getRequest(),
-					MediaType.APPLICATION_JSON,filenamePrefix);	
+					createJSONReporter(),MediaType.APPLICATION_JSON,filenamePrefix);	
 	}
 
 	
 	
 	protected abstract QueryAbstractReporter createHTMLReporter(Dimension d);
 
-	protected abstract QueryAbstractReporter createJSONReporter();
+	protected QueryAbstractReporter createJSONReporter() {
+		return createJSONReporter(null);
+	}
+	protected abstract QueryAbstractReporter createJSONReporter(String callback);
 	
 	protected abstract CSVReporter createCSVReporter();
 

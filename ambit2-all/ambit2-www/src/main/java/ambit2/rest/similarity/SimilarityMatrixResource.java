@@ -10,7 +10,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
-import ambit2.base.interfaces.IStructureRelation;
+import ambit2.base.relation.SimilarityRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.reporters.QueryAbstractReporter;
@@ -22,7 +22,7 @@ import ambit2.rest.DisplayMode;
  *
  * @param <Q>
  */
-public class SimilarityMatrixResource<Q extends IQueryRetrieval<IStructureRelation<Double>>> extends AbstractPairwiseResource<IStructureRelation<Double>,Q> { 
+public class SimilarityMatrixResource<Q extends IQueryRetrieval<SimilarityRelation>> extends AbstractPairwiseResource<SimilarityRelation,Q> { 
 	public final static String resource =  "/matrix";
 
 	@Override
@@ -31,7 +31,7 @@ public class SimilarityMatrixResource<Q extends IQueryRetrieval<IStructureRelati
 	}
 
 	@Override
-	protected QueryAbstractReporter createJSONReporter() {
+	protected QueryAbstractReporter createJSONReporter(String callback) {
 		return new PairwiseSimilarityJSONReporter(getRequest());
 	}
 	

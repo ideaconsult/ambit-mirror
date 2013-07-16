@@ -25,9 +25,9 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
-import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
 import ambit2.db.chemrelation.UpdateStructureRelation;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.ModelQueryResults;
@@ -97,7 +97,7 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 		
 		IAtomContainer best = null;
 		updateStrucRelationQuery.setGroup(target);
-		updateStrucRelationQuery.setRelation(AbstractUpdateStructureRelation.STRUCTURE_RELATION.HAS_TAUTOMER.name());
+		updateStrucRelationQuery.setRelation(STRUCTURE_RELATION.HAS_TAUTOMER.name());
 		
 		try {
 			IAtomContainer mol = reader.process(target);

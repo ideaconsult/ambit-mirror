@@ -9,10 +9,8 @@ import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
 public abstract class AbstractUpdateStructureRelation  extends AbstractUpdate<IStructureRecord,IStructureRecord> {
-	public enum STRUCTURE_RELATION {
-		HAS_TAUTOMER,
-		HAS_METABOLITE
-	}
+	
+	
 	protected String relation;
 	protected Double metric;
 	public Double getMetric() {

@@ -9,7 +9,6 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.interfaces.IStructureRelation;
 import ambit2.base.relation.SimilarityRelation;
 import ambit2.db.search.IStoredQuery;
 import ambit2.db.search.QueryParam;
@@ -91,7 +90,7 @@ public class QueryPairwiseTanimotoAndProperty extends QueryPairwiseTanimoto {
 		") as c\n",sql_tanimoto);	
 	
 	@Override
-	public IStructureRelation<Double> getObject(ResultSet rs)
+	public SimilarityRelation getObject(ResultSet rs)
 			throws AmbitException {
 		if ((property==null)|| (property.getId()<=0)) return super.getObject(rs);
 		try {

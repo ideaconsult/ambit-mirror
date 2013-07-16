@@ -115,6 +115,7 @@ import ambit2.rest.sparqlendpoint.SPARQLPointerResource;
 import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
+import ambit2.rest.structure.tautomers.QueryStructureRelationResource;
 import ambit2.rest.structure.tautomers.QueryTautomersResource;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.PolicyProtectedTask;
@@ -352,8 +353,16 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		queryRouter.attach(SmartsQueryResource.resource,smartsRouter);
 		queryRouter.attach(SimilarityResource.resource,similarityRouter);
 		queryRouter.attach(ExactStructureQueryResource.resource,ExactStructureQueryResource.class);
-		queryRouter.attach(QueryTautomersResource.resource,QueryTautomersResource.class);
 		
+		/**
+		 *  /query/relation/dataset/has_tautomer?dataset_uri=
+		 *  /query/relation/compound/has_tautomer?dataset_uri=
+		 */
+		queryRouter.attach(QueryStructureRelationResource.resource,createRelationsRouter());
+
+		/**
+		 *  /qmap
+		 */
 		router.attach(QMapSpaceResource.resource,QMapSpaceResource.class);
 		/**
 		 *  API extensions from this point on
@@ -528,6 +537,14 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		smartsRouter.attachDefault(SmartsQueryResource.class);
 		smartsRouter.attach(SmartsQueryResource.resourceID,SmartsQueryResource.class);
 		return smartsRouter;
+	}
+	
+	protected Router createRelationsRouter() {
+		Router relationsRouter = new MyRouter(getContext());
+		relationsRouter.attachDefault(QueryStructureRelationResource.class);
+		relationsRouter.attach(String.format("%s%s",OpenTox.URI.dataset.getURI(),QueryStructureRelationResource.resourceID),QueryStructureRelationResource.class);
+		relationsRouter.attach(String.format("%s%s",OpenTox.URI.compound.getURI(),QueryStructureRelationResource.resourceID),QueryTautomersResource.class);
+		return relationsRouter;
 	}
 	/**
 	 * Everything under /query
