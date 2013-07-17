@@ -28,7 +28,7 @@ public class QueryQMap extends AbstractQuery<IStructureRecord,QMap,StringConditi
 		"SELECT idsasmap,id_srcdataset,idproperty,threshold_dact,threshold_sim," +
 		"d.name datasetname,d.idreference,d.created,d.idtemplate,d.licenseURI,d.rightsHolder,d.maintainer,d.stars,\n" +
 		"p.name propertyname,p.units,p.comments\n"+
-		"FROM qsar.qsasheader\n" +
+		"FROM qsasheader\n" +
 		"join src_dataset d using(id_srcdataset) join properties p using(idproperty)\n" +
 		"%s\n"+
 		"order by id_srcdataset,idproperty";
