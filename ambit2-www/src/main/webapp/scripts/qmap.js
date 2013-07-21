@@ -30,14 +30,16 @@ var qmap = {
 		    "aoColumnDefs": [
 		    				{ //1
 		    					"aTargets": [ 0 ],	
-		    					"sClass" : "center",
+		    					"sClass" : "left",
 		    					"bSortable" : true,
 		    					"bSearchable" : true,
 		    					"mDataProp" : "dataset",
 		    					"bUseRendered" : false,	
-		    					"sWidth" : "33%",
+		    					"sWidth" : "50%",
 		    					"fnRender" : function(o,val) {
-		    						var sOut = "<a href='"+ val.URI+"' target=_blank>"+ (val.title==""?val.URI:val.title) +"</a>";
+		    						var sOut = (val.title==""?val.URI:val.title);
+		    						sOut += " <a href='"+ val.URI+"/metadata' target=_blank title='Dataset metadata' >Metadata</a>";
+		    						sOut += "| <a href='"+ val.URI+"?max=1000' target=_blank title='Browse the dataset' >Browse</a>";
 		    						return sOut;
 		    					}
 		    				},	    
@@ -49,7 +51,7 @@ var qmap = {
 		    					"mDataProp" : "activity",
 		    					"bUseRendered" : false,	
 		    					"fnRender" : function(o,val) {
-		    						var sOut = "<a href='"+ val.featureURI+"' target='feature'>"+ val.feature.title+"</a> " + val.feature.units ;
+		    						var sOut = "<a href='"+ val.featureURI+"' title='Browse this feature' target='feature'>"+ val.feature.title+"</a> " + val.feature.units ;
 		    						return sOut;
 		    					}
 		    				},	    	
@@ -60,6 +62,7 @@ var qmap = {
 		    					"bSearchable" : true,
 		    					"mDataProp" : "activity.threshold",
 		    					"bUseRendered" : false,	
+		    					"sWidth" : "5%",
 		    					"fnRender" : function(o,val) {
 		    						return val;
 		    					}
@@ -70,6 +73,7 @@ var qmap = {
 		    					"bSortable" : true,
 		    					"bSearchable" : true,
 		    					"mDataProp" : "similarity.threshold",
+		    					"sWidth" : "5%",
 		    					"bUseRendered" : false,	
 		    					"fnRender" : function(o,val) {
 		    						return val;
@@ -83,11 +87,24 @@ var qmap = {
 		    					"mDataProp" : "URI",
 		    					"bUseRendered" : false,	
 		    					"fnRender" : function(o,val) {
-		    						var sOut =  "<a href='"+root+"/toxmatch?qmap_uri="+ val+"' target=_blank>Explore</a>"; 
-		    						sOut += "| <a href='"+ val+"' target=_blank>Compounds</a>";
+		    						var sOut =  "<a href='"+root+"/toxmatch?qmap_uri="+ val+"' target=_blank title='Interactive visualisation'>This QMap</a>"; 
+		    						sOut += "| <a href='"+ val+"' target=_blank title='Ranked compounds'>Compounds</a>";
 		    						return sOut;
 		    					}
-		    				}			    				
+		    				},
+		    				{ //0
+		    					"aTargets": [ 5 ],	
+		    					"sClass" : "center",
+		    					"bSortable" : true,
+		    					"bSearchable" : true,
+		    					"mDataProp" : "dataset",
+		    					"bUseRendered" : false,	
+		    					"fnRender" : function(o,val) {
+		    						var sOut =  "<a href='"+root+"/toxmatch?dataset_uri="+ val.URI+"' target=_blank title='All QMaps for this dataset'>All QMaps</a>";
+		    						sOut +=  " | <a href='"+root+"/toxmatch?dataset_uri="+ val.URI+"&feature_uris[]="+o.aData.activity.featureURI+"' target=_blank title='QMaps for this dataset and this activity'>This activity QMaps</a>";
+		    						return sOut;
+		    					}
+		    				}				    				
 		     				],
 		 	  "aaSorting": [[1, 'desc']],
 			   "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
