@@ -32,7 +32,7 @@ public enum STRUCTURE_RELATION {
 		public STRUCTURE_RELATION inverseOf() {
 			return IMPURITY_OF;
 		}
-	}	
+	},	
 	TAUTOMER_OF {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
