@@ -15,6 +15,24 @@ public enum STRUCTURE_RELATION {
 			return METABOLITE_OF;
 		}
 	},
+	HAS_CONSTITUENT {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return CONSTITUENT_OF;
+		}
+	},
+	HAS_ADDITIVE {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return ADDITIVE_OF;
+		}
+	},	
+	HAS_IMPURITY {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return IMPURITY_OF;
+		}
+	}	
 	TAUTOMER_OF {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
@@ -26,7 +44,25 @@ public enum STRUCTURE_RELATION {
 		public STRUCTURE_RELATION inverseOf() {
 			return HAS_METABOLITE;
 		}
-	};
+	},
+	CONSTITUENT_OF {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return HAS_CONSTITUENT;
+		}
+	},	
+	ADDITIVE_OF {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return HAS_ADDITIVE;
+		}
+	},
+	IMPURITY_OF {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return HAS_IMPURITY;
+		}
+	};			
 	public STRUCTURE_RELATION inverseOf() {
 		return null;
 	}
