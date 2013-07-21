@@ -39,11 +39,12 @@ $(document)
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="ten columns alpha">
 			<div class="remove-bottom h3">
-					Chemical landscape: activity cliffs
+					Quantitative Structure-Activity-Similarity Maps (QMaps)
 			</div>
 		    <div class='help'>
-		    
- 
+		    	Chemical Landscape Analysis with OpenTox. 
+		    	<br/>
+		    	Background and more information at <a href="http://toxmatch.sf.net" target=_blank title="Click for more information">http://toxmatch.sf.net</a>
 		    </div>			
 		</div>
 		<div class="four columns omega">
@@ -51,7 +52,9 @@ $(document)
 				&nbsp;
 			</div>
 		    <div class='h6'>
+		    <!--
 		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
+		    	-->
 		    </div>			
 		</div>		
 		<div class="two columns omega">
@@ -59,7 +62,9 @@ $(document)
 				&nbsp;
 			</div>
 		    <div class='h6'>
+		    <!--
 		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
+		    	-->
 		    </div>			
 		</div>	
 		</div>
@@ -99,9 +104,10 @@ $(document)
 			<tr>
 			<th>Dataset <a href='#' class='chelp dataset'>?</a></th>
 			<th>Property <a href='#' class='chelp feature'>?</a></th>
-			<th>Activity threshold</th>
-			<th>Similarity threshold</th>
+			<th>Activity threshold<a href='#' class='chelp athreshold'>?</a> </th>
+			<th>Similarity threshold<a href='#' class='chelp sthreshold'>?</a> </th>
 			<th>Activity cliffs <a href='#' class='chelp activity_cliff'>?</a></th>
+			<th>All QMaps for the dataset<a href='#' class='chelp qmap'>?</a></th>
 			</tr>
 			</thead>
 			<tbody></tbody>

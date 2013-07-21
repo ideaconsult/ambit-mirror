@@ -64,11 +64,12 @@
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="ten columns alpha">
 			<div class="remove-bottom h3">
-					Toxmatch 2
+				ToxMatch 2
 			</div>
 		    <div class='help'>
-		    
- 
+		    	Interactive visualisation of Quantitative Structure-Activity-Similarity Maps (QMaps) 
+	    		<br/>
+	    		Background and more information at <a href="http://toxmatch.sf.net" target=_blank title="Click for more information">http://toxmatch.sf.net</a>
 		    </div>			
 		</div>
 		<div class="six columns omega">
@@ -94,9 +95,9 @@
 			<tr>
 			<th>Structure <a href='#' class='chelp dataset'>?</a></th>
 			<th>ID</th>
-			<th>G2 <a href='#' class='chelp activity_cliff'>?</a></th>
+			<th>G2 <a href='#' class='chelp g2'>?</a></th>
 			<th>Activity</th>
-			<th>QMap</th>
+			<th>QMap <a href='#' class='chelp qmap'>?</a></th>
 			</tr>
 			</thead>
 			<tbody></tbody>
@@ -105,7 +106,7 @@
 	<div class="eight columns">
 	<div id="tabs">
 	  <ul>
-	    <li><a href="#tabs-2">Bubble chart</a></li>
+	    <li><a href="#tabs-2">Bubble chart</a><a href='#' class='chelp bubble'>?</a></li>
 	    <!--
 	    <li><a href="#tabs-1">Chart: Activity vs G2</a></li>
 	    -->
