@@ -134,6 +134,11 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					annotation==null?"":(","+annotation)
 					
 					));
+			if (annotation!=null) {
+				System.out.println("--");
+				System.out.println(annotation);
+				System.out.println("--");
+			}
 			comma = ",";
 
 		} catch (Exception x) {
@@ -144,11 +149,12 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 
 	public static String annotation2JSON(Property feature) {
 		StringBuilder b = new StringBuilder();
+		String acomma = "";
 		for (PropertyAnnotation annotation : feature.getAnnotations()) try {
-	
-			b.append("\"");
+			b.append(acomma);
+			b.append("\t\"");
 			b.append(JSONUtils.jsonEscape(annotation.getPredicate()));
-			b.append("\" : {\n");
+			b.append("\" : {");
 			
 			String object = annotation.getObject().toString();
 			if (annotation.getType().startsWith("^^")) { // xsd:ToxicCategory a rdfs:Datatype; rdfs:subClassOf xsd:string.
@@ -161,13 +167,13 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					} catch (Exception x) {
 					}
 					
-					b.append("\"");
+					b.append("\n\t\"");
 					b.append(JSONUtils.jsonEscape(object));
-					b.append("\" : {\n\t\"");
+					b.append("\" : {\n\t\t\"");
 					b.append(JSONUtils.jsonEscape(category));
-					b.append("\" :");
+					b.append("\" :\"");
 					b.append(JSONUtils.jsonEscape(ctype));
-					b.append("}\n");
+					b.append("\"}\n");
 					
 				} catch (Exception x) {x.printStackTrace(); }//fallback to string 
 			} else if (annotation.getType().equals(OT.OTClass.ModelConfidenceFeature)) {
@@ -177,6 +183,7 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 				//feature.addProperty(predicate,object);
 			} 	
 			b.append("}");
+			acomma = ",";
 		} catch (Exception x) {
 			
 			return null;
