@@ -27,7 +27,7 @@
  * 
  */
 
-package ambit2.db.processors;
+package ambit2.core.processors;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
