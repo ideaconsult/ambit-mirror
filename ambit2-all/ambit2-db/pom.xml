@@ -31,6 +31,13 @@
     	<artifactId>ambit2-core</artifactId>
     	<version>${project.version}</version>
     </dependency>
+	<dependency>
+    	<groupId>ambit</groupId>
+    	<artifactId>ambit2-core</artifactId>
+    	<version>${project.version}</version>
+	    <classifier>tests</classifier>
+	    <scope>test</scope>
+	</dependency>    
     <!-- 
     <dependency>
     	<groupId>commons-dbcp</groupId>

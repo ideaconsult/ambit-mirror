@@ -1,0 +1,411 @@
+Structure
+  ABCDE   07061317142D                              
+
+  6  6  0  0  0  0  0  0  0  0999 V2000
+    1.5500   -3.0801    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6840   -3.5801    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.4161   -3.5801    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6840   -4.5802    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.4161   -4.5802    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.5500   -5.0802    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  2  0  0  0  0
+  1  3  1  0  0  0  0
+  2  4  1  0  0  0  0
+  3  5  2  0  0  0  0
+  4  6  2  0  0  0  0
+  5  6  1  0  0  0  0
+M  END
+> <TEST>
+Non-DX-property-1
+
+> <Date.Created>
+01/01/2013
+
+> <Program.Version>
+Derek Nexus: x.y.z, Nexus: a.b.c
+
+> <Testing.A.Single.Alert>
+Off
+
+> <Perceive.Tautomers>
+On
+
+> <Compound.Name>
+Structure
+
+> <LogKp>
+-1.68
+
+> <LogKp.Data.Source.Name>
+User Supplied
+
+> <LogP>
+2.14
+
+> <LogP.Data.Source.Name>
+User Supplied
+
+> <Exact.Molecular.Mass>
+78.047
+
+> <Relative.Molecular.Mass>
+78.11
+
+> <DX.ALERTS.MATCHED.COUNT>
+1
+
+> <Knowledge.Name>
+Derek KB 2012 1.0
+
+> <Knowledge.Base.Version>
+1.0
+
+> <Knowledge.Base.Last.Modified.Date>
+29 November  2012 11:56:30
+
+> <Knowledge.Certified.By>
+ABCDE, XYZ, ZZ
+
+> <Species>
+mammal
+primate
+human
+rodent
+guinea pig
+mouse
+unspecified
+various
+bacterium
+Salmonella typhimurium
+rat
+hamster
+dog
+Escherichia coli
+monkey
+rabbit
+chicken
+
+> <Superendpoints>
+Carcinogenicity (SUPER)
+Chromosome damage (SUPER)
+Genotoxicity (SUPER)
+HERG channel inhibition (SUPER)
+Hepatotoxicity (SUPER)
+Irritation (SUPER)
+Miscellaneous endpoints (SUPER)
+Mutagenicity (SUPER)
+Ocular toxicity (SUPER)
+Rapid prototypes: adrenal gland toxicity (SUPER)
+Rapid prototypes: bladder disorders (SUPER)
+Rapid prototypes: blood in urine (SUPER)
+Rapid prototypes: bone marrow toxicity (SUPER)
+Rapid prototypes: bradycardia (SUPER)
+Rapid prototypes: cardiotoxicity (SUPER)
+Rapid prototypes: chromosome damage in vitro (SUPER)
+Rapid prototypes: hepatotoxicity (SUPER)
+Rapid prototypes: kidney disorders (SUPER)
+Rapid prototypes: mitochondrial dysfunction (SUPER)
+Rapid prototypes: nephrotoxicity (SUPER)
+Rapid prototypes: splenotoxicity (SUPER)
+Rapid prototypes: testicular toxicity (SUPER)
+Rapid prototypes: thyroid toxicity (SUPER)
+Reproductive toxicity (SUPER)
+Respiratory sensitisation (SUPER)
+Skin sensitisation (SUPER)
+Thyroid toxicity (SUPER)
+
+> <DX.Carcinogenicity.Escherichia coli>
+IMPOSSIBLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.Salmonella typhimurium>
+IMPOSSIBLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.bacterium>
+IMPOSSIBLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.dog>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.guinea pig>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.hamster>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.human>
+CERTAIN
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.mammal>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.monkey>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.mouse>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.primate>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.rabbit>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.rat>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Carcinogenicity.rodent>
+PROBABLE
+
+> <DX.Carcinogenicity.Alert.1.Number>
+059
+
+> <DX.Carcinogenicity.Alert.1.Name>
+Benzene
+
+> <DX.Oestrogenicity.Escherichia coli>
+IMPOSSIBLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is Escherichia coli (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Salmonella typhimurium>
+IMPOSSIBLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of Species which is Salmonella typhimurium (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.bacterium>
+IMPOSSIBLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of Species which is bacterium (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.dog>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is dog (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.guinea pig>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is guinea pig (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.hamster>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is hamster (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.human>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is human (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.mammal>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of Species which is mammal (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.monkey>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is monkey (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.mouse>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is mouse (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.primate>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is primate (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.rabbit>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is rabbit (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.rat>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is rat (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.rodent>
+IMPROBABLE
+
+> <DX.Oestrogenicity.Alert>
+No alerts found
+
+> <DX.Oestrogenicity.Reasoning.1>
+the value of Species which is rodent (User Supplied, version n/a)
+
+> <DX.Oestrogenicity.Reasoning.2>
+the value of MolWeight which is 78.11 (User Supplied, version n/a)
+
+$$$$

@@ -112,13 +112,13 @@ public abstract class AbstractPropertyWriter<Target,Result> extends
 	            }
         	//}
             if (!found) {
-            	
-                String comments = getComments(property.getName(),target);
-                if (comments == null)
-                	property.setLabel(property.getName());
-                else
-                	property.setLabel(comments);
-
+            	if ((property.getLabel()==null) || property.getLabel().equals(property.getName())) {
+	                String comments = getComments(property.getName(),target);
+	                if (comments == null)
+	                	property.setLabel(property.getName());
+	                else
+	                	property.setLabel(comments);
+            	} //otherwise it is already set
             	propertyEntry(property);	                	
                 descriptorEntry(target,property,i,idtuple);
                 

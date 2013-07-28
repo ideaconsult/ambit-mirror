@@ -1,0 +1,486 @@
+{
+    "likelihood": {
+        "CERTAIN": {
+            "title": "The level of likelihood indicating there is proof that the proposition is true.",
+            "category": "ToxicCategory"
+        },
+        "PROBABLE": {
+            "title": "The level of likelihood indicating there is at least one strong argument that the proposition is true and there are no arguments against it.",
+            "category": "ToxicCategory"
+        },
+        "PLAUSIBLE": {
+            "title": "The level of likelihood indicating the weight of evidence supports the proposition.",
+            "category": "InconclusiveCategory"
+        },
+        "EQUIVOCAL": {
+            "title": "The level of likelihood indicating there is an equal weight of evidence for and against the proposition.",
+            "category": "InconclusiveCategory"
+        },
+        "DOUBTED": {
+            "title": "The level of likelihood indicating the weight of evidence opposes the proposition.",
+            "category": "InconclusiveCategory"
+        },
+        "IMPROBABLE": {
+            "title": "The level of likelihood indicating there is at least one strong argument that the proposition is false and there are no arguments that it is true.",
+            "category": "NontoxicCategory"
+        },
+        "IMPOSSIBLE": {
+            "title": "The level of likelihood indicating there is proof that the proposition is false.",
+            "category": "NontoxicCategory"
+        }
+    },
+    "Report": {
+        "Date.Created": {
+            "import": false
+        },
+        "Program.Version": {
+            "import": true,
+            "importas": "reference"
+        },
+        "Testing.A.Single.Alert": {
+            "import": false
+        },
+        "Perceive.Tautomers": {
+            "import": false
+        },
+        "Compound.Name": {
+            "import": false
+        },
+        "DX.ALERTS.MATCHED.COUNT": {
+            "import": false
+        },
+        "Knowledge.Name": {
+            "import": true,
+            "importas": "annotation"
+        },
+        "Knowledge.Base.Version": {
+            "import": true,
+            "importas": "annotation"
+        },
+        "Knowledge.Base.Last.Modified.Date": {
+            "import": true,
+            "importas": "annotation"
+        },
+        "Knowledge.Certified.By": {
+            "import": true,
+            "importas": "annotation"
+        },
+        "Species": {
+            "import": false
+        },
+        "Superendpoints": {
+            "import": false
+        }
+    },
+    "ChemicalPerception": {
+        "Perceive tautomers": "The results will include predictions related to tautomers (recommended). If you clear this check box, tautomeric structures will not be considered.",
+        "Perceive mixtures": "The results will include predictions for each structural fragment in the submitted structure file. If you clear this option a prediction is made for the whole mixture.",
+        "Match alerts without rules": "If you have existing alerts in your own knowledge base that do not have rules, you can include these alerts in the prediction by selecting this option."
+    },
+    "StructureProperties": {
+        "LogP": {
+            "title": "The partition coefficient between octanol and water.",
+            "ot" : "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
+            "reference" : null
+        },
+        "LogKp.Data.Source.Name": {
+            "referenceFor": "LogKp"
+        },
+        "LogKp": {
+            "title": "An estimate of skin permeability derived from the logP value of a compound.",
+            "ot" : "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "reference" : null
+        },
+        "LogP.Data.Source.Name": {
+            "referenceFor": "LogP"
+        },
+        "Exact.Molecular.Mass": {
+            "title": "Exact Molecular Mass"
+        },
+        "Relative.Molecular.Mass": {
+            "title": "Relative Molecular Mass"
+        },
+        "Average.Molecular.Mass": {
+            "title": "Average Molecular mass"
+        }
+    },
+    "species": {
+        "bacterium": {},
+        "Escherichia coli": {
+            "domain": "bacterium"
+        },
+        "Salmonella typhimirium": {
+            "domain": "bacterium"
+        },
+        "chicken": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "aves"
+        },
+        "mammal": {
+            "domain": "eukaryote",
+            "kingdom": "animals"
+        },
+        "dog": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal"
+        },
+        "primate": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal"
+        },
+        "human": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal",
+            "order": "primate"
+        },
+        "monkey": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal",
+            "order": "primate"
+        },
+        "rabbit": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal"
+        },
+        "rodent": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal"
+        },
+        "guineapig": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal",
+            "order": "rodent"
+        },
+        "guinea": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal",
+            "order": "rodent"
+        },
+        "mouse": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal",
+            "order": "rodent"
+        },
+        "rat": {
+            "domain": "eukaryote",
+            "kingdom": "animals",
+            "class": "mammal",
+            "order": "rodent"
+        },
+        "unspecified": {},
+        "various": {}
+    },
+    "endpoints": {
+        "Carcinogenicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity"
+        },
+        "Carcinogenicity": {
+            "super": "Carcinogenicity (SUPER)"
+        },
+        "Photocarcinogenicity": {
+            "super": "Carcinogenicity (SUPER)",
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Photocarcinogenicity"
+        },
+        "Chromosome damage (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints"
+        },
+        "Chromosome damage": {
+            "super": "Chromosome damage (SUPER)"
+        },
+        "Chromosome damage in vitro": {
+            "super": "Chromosome damage (SUPER)"
+        },
+        "Chromosome damage in vivo": {
+            "super": "Chromosome damage (SUPER)"
+        },
+        "Photo-induced chromosome damage in vitro": {
+            "super": "Chromosome damage (SUPER)"
+        },
+        "Genotoxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Genotoxicity"
+        },
+        "Genotoxicity in vitro": {
+            "super": "Genotoxicity (SUPER)"
+        },
+        "Genotoxicity in vivo": {
+            "super": "Genotoxicity (SUPER)"
+        },
+        "Photogenotoxicity in vitro": {
+            "super": "Genotoxicity (SUPER)"
+        },
+        "Photogenotoxicity in vivo": {
+            "super": "Genotoxicity (SUPER)"
+        },
+        "Hepatotoxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Hepatotoxicity",
+            "organ": "liver"
+        },
+        "Hepatotoxicity": {
+            "super": "Hepatotoxicity (SUPER)"
+        },
+        "HERG channel inhibition (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints"
+        },
+        "HERG channel inhibition in vitro": {
+            "super": "HERG channel inhibition (SUPER)"
+        },
+        "Irritation (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Irritation"
+        },
+        "Irritation (of the eye)": {
+            "super": "Irritation (SUPER)",
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Eye_irritation_corrosion",
+            "organ": "eye"
+        },
+        "Irritation (of the gastrointestinal tract)": {
+            "super": "Irritation (SUPER)",
+            "organ": "gastrointestinal tract"
+        },
+        "Irritation (of the respiratory tract)": {
+            "super": "Irritation (SUPER)",
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Respiratory_sensitisation",
+            "organ": "respiratory tract"
+        },
+        "Irritation (of the skin)": {
+            "super": "Irritation (SUPER)",
+            "ot": "http://www.opentox.org/echaEndpoints.owl#SkinIrritationCorrosion",
+            "organ": "skin"
+        },
+        "Lachrymation": {
+            "super": "Irritation (SUPER)",
+            "organ": "eye"
+        },
+        "Miscellaneous endpoints (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints"
+        },
+        "alpha-2-mu-Globulin nephropathy": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Anaphylaxis": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Bladder urothelial hyperplasia": {
+            "super": "Miscellaneous endpoints (SUPER)",
+            "organ": "bladder"
+        },
+        "Cardiotoxicity": {
+            "super": "Miscellaneous endpoints (SUPER)",
+            "organ": "heart"
+        },
+        "Cerebral oedema": {
+            "super": "Miscellaneous endpoints (SUPER)",
+            "organ": "brain"
+        },
+        "Chloracne": {
+            "super": "Miscellaneous endpoints (SUPER)",
+            "organ": "skin"
+        },
+        "Cholinesterase inhibition": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Cumulative effect on white cell count and immunology": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Cyanide-type effects": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "High acute toxicity": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Methaemoglobinaemia": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Nephrotoxicity": {
+            "super": "Miscellaneous endpoints (SUPER)",
+            "organ": "kidney"
+        },
+        "Neurotoxicity": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Oestrogenicity": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Peroxisome proliferation": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Phospholipidosis": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Phototoxicity": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Pulmonary toxicity": {
+            "super": "Miscellaneous endpoints (SUPER)",
+            "organ": "lung"
+        },
+        "Uncoupler of oxidative phosphorylation": {
+            "super": "Miscellaneous endpoints (SUPER)"
+        },
+        "Mutagenicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Mutagenicity"
+        },
+        "Mutagenicity in vitro": {
+            "super": "Mutagenicity (SUPER)"
+        },
+        "Mutagenicity in vivo": {
+            "super": "Mutagenicity (SUPER)"
+        },
+        "Photomutagenicity in vitro": {
+            "super": "Mutagenicity (SUPER)",
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Photomutagenicity"
+        },
+        "Ocular toxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "eye"
+        },
+        "Ocular toxicity": {
+            "super": "Ocular toxicity (SUPER)",
+            "organ": "eye"
+        },
+        "Rapid prototypes: adrenal gland toxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints"
+        },
+        "Rapid prototypes: adrenal gland toxicity": {
+            "super": "Rapid prototypes: adrenal gland toxicity (SUPER)"
+        },
+        "Rapid prototypes: bladder disorders (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "bladder"
+        },
+        "Rapid prototypes: bladder disorders": {
+            "super": "Rapid prototypes: bladder disorders (SUPER)"
+        },
+        "Rapid prototypes: blood in urine (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints"
+        },
+        "Rapid prototypes: blood in urine": {
+            "super": "Rapid prototypes: blood in urine (SUPER)"
+        },
+        "Rapid prototypes: bone marrow toxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "bone marrow"
+        },
+        "Rapid prototypes: bone marrow toxicity": {
+            "super": "Rapid prototypes: bone marrow toxicity (SUPER)"
+        },
+        "Rapid prototypes: bradycardia (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "heart"
+        },
+        "Rapid prototypes: bradycardia": {
+            "super": "Rapid prototypes: bradycardia (SUPER)"
+        },
+        "Rapid prototypes: cardiotoxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "heart"
+        },
+        "Rapid prototypes: cardiotoxicity": {
+            "super": "Rapid prototypes: cardiotoxicity (SUPER)"
+        },
+        "Rapid prototypes: chromosome damage in vitro (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints"
+        },
+        "Rapid prototypes: chromosome damage in vitro": {
+            "super": "Rapid prototypes: chromosome damage in vitro (SUPER)"
+        },
+        "Rapid prototypes: hepatotoxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints"
+        },
+        "Rapid prototypes: hepatotoxicity": {
+            "super": "Rapid prototypes: hepatotoxicity (SUPER)",
+            "organ": "liver"
+        },
+        "Rapid prototypes: kidney disorders (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "kidney"
+        },
+        "Rapid prototypes: kidney disorders": {
+            "super": "Rapid prototypes: kidney disorders (SUPER)"
+        },
+        "Rapid prototypes: mitochondrial dysfunction (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "mitochondria"
+        },
+        "Rapid prototypes: mitochondrial dysfunction": {
+            "super": "Rapid prototypes: mitochondrial dysfunction (SUPER)"
+        },
+        "Rapid prototypes: nephrotoxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "kidney"
+        },
+        "Rapid prototypes: nephrotoxicity": {
+            "super": "Rapid prototypes: nephrotoxicity (SUPER)"
+        },
+        "Rapid prototypes: splenotoxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "spleen"
+        },
+        "Rapid prototypes: splenotoxicity": {
+            "super": "Rapid prototypes: splenotoxicity (SUPER)"
+        },
+        "Rapid prototypes: testicular toxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "testicle"
+        },
+        "Rapid prototypes: testicular toxicity": {
+            "super": "Rapid prototypes: testicular toxicity (SUPER)"
+        },
+        "Rapid prototypes: thyroid toxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "thyroid gland"
+        },
+        "Rapid prototypes: thyroid toxicity": {
+            "super": "Rapid prototypes: thyroid toxicity (SUPER)"
+        },
+        "Reproductive toxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#ReproductiveToxicity"
+        },
+        "Developmental toxicity": {
+            "super": "Reproductive Toxicity (SUPER)",
+            "ot": "http://www.opentox.org/echaEndpoints.owl#DevelopmentalToxicity"
+        },
+        "Teratogenicity": {
+            "super": "Reproductive Toxicity (SUPER)"
+        },
+        "Testicular toxicity": {
+            "super": "Reproductive Toxicity (SUPER)",
+            "organ": "testicle"
+        },
+        "Respiratory sensitisation (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Sensitisation",
+            "organ": "respiratory tract"
+        },
+        "Occupational asthma": {
+            "super": "Respiratory Sensitisation (SUPER)"
+        },
+        "Respiratory sensitisation": {
+            "super": "Respiratory Sensitisation (SUPER)"
+        },
+        "Skin sensitisation (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#SkinSensitisation"
+        },
+        "Photoallergenicity": {
+            "super": "Skin Sensitisation (SUPER)"
+        },
+        "Skin sensitisation": {
+            "super": "Skin Sensitisation (SUPER)"
+        },
+        "Thyroid toxicity (SUPER)": {
+            "ot": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+            "organ": "thyroid gland"
+        },
+        "Thyroid toxicity": {
+            "super": "Thyroid toxicity (SUPER)"
+        }
+    }
+}
