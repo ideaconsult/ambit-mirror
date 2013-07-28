@@ -40,9 +40,11 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
     protected static String IUPAC_name = "IUPAC name";
     protected static String CAS_num = "CAS Registry Number";
     protected static String IUCLID5_UUID = "IUCLID5 UUID";
+    protected static String DX = "DX";
     protected static String Default_name = "Default";
     protected static String AMBIT_uri = "http://ambit.sourceforge.net";
     protected static String EINECS_uri = "http://ec.europa.eu/environment/chemicals/exist_subst/einecs.htm";
+    protected static String PROPERTIES_DX_uri = String.format("%s//descriptors.owl#%s",AMBIT_uri,DX);
 /*
 	private static java.util.concurrent.CopyOnWriteArrayList<LiteratureEntry> references = 
 		new CopyOnWriteArrayList<LiteratureEntry>();
@@ -62,6 +64,14 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	}
 	public static synchronized LiteratureEntry getI5UUIDReference() {
 		return getInstance(IUCLID5_UUID,AMBIT_uri);
+	}	
+	public static synchronized LiteratureEntry getDXReference() {
+		return getDXReference(DX);
+	}
+	public static synchronized LiteratureEntry getDXReference(String dx) {
+		LiteratureEntry entry = getInstance(dx,PROPERTIES_DX_uri);
+		entry.setType(_type.Dataset);
+		return entry;
 	}	
 	
 	public static synchronized LiteratureEntry getEINECSReference() {

@@ -58,6 +58,7 @@ import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
 import ambit2.core.io.bcf.EurasBCFReader;
 import ambit2.core.processors.structure.MoleculeWriter;
+import ambit2.core.processors.structure.key.CASKey;
 import ambit2.core.processors.structure.key.EINECSKey;
 import ambit2.core.processors.structure.key.IStructureKey;
 import ambit2.core.processors.structure.key.InchiKey;
@@ -1211,4 +1212,70 @@ delete from struc_dataset where idstructure>3
 		c.close();
 
 	}
+	
+	@Test
+	public void testImportDX() throws Exception {
+		
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/dataset-properties.xml");
+        IDatabaseConnection c = getConnection();
+        
+		ITable chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(5,chemicals.getRowCount());
+		ITable strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(5,strucs.getRowCount());
+		ITable srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset");
+		Assert.assertEquals(1,srcdataset.getRowCount());
+		ITable struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
+		Assert.assertEquals(2,struc_src.getRowCount());
+		ITable property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(4,property.getRowCount());
+		ITable property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(4,property_values.getRowCount());
+		
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/core/data/dx/predictions.sdf");
+		Assert.assertNotNull(in);
+		RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		//reader.setReference("predictions.sdf");
+		write(reader,c.getConnection(),new CASKey());
+		reader.close();
+        c.close();		
+
+        
+        c = getConnection();
+		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
+		Assert.assertEquals(6,chemicals.getRowCount());
+		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
+		Assert.assertEquals(6,strucs.getRowCount());
+		//srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='Imported properties'");
+		//Assert.assertEquals(1,srcdataset.getRowCount());
+		//struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset join src_dataset using(id_srcdataset) where name='Imported properties'");
+		//Assert.assertEquals(1,struc_src.getRowCount());
+		
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(31,property.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(31,property_values.getRowCount());		
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values where idstructure=100215");
+		Assert.assertEquals(2,property_values.getRowCount());			
+
+//		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples join tuples using(idtuple) join src_dataset using(id_srcdataset) where name='Imported properties'");
+	//	Assert.assertEquals(66,p_tuples.getRowCount());				
+		c.close();
+		
+		c = getConnection();
+		in = this.getClass().getClassLoader().getResourceAsStream("ambit2/core/data/dx/predictions1.sdf");
+		Assert.assertNotNull(in);
+		reader = new RawIteratingSDFReader(new InputStreamReader(in));
+		//reader.setReference(LiteratureEntry.getDXReference());
+		write(reader,c.getConnection(),new CASKey());
+		reader.close();
+		
+		c = getConnection();
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		Assert.assertEquals(31,property.getRowCount());
+		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
+		Assert.assertEquals(47,property_values.getRowCount());	
+        c.close();		
+
+	}				
 }
