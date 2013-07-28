@@ -117,8 +117,8 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					"\n\t\"%s\":\"%s\"," + //isModelPredictionFeature
 					"\n\t\"%s\":\"%s\"," + //creator
 					"\n\t\"%s\":%d," + //order
-					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}" + 					//source
-					"%s\n\n}",
+					"\n\t\"%s\":{\n\t\t\"URI\":\"%s\",\n\t\t\"type\":\"%s\"\n\t}," + 					//source
+					"\n\t\"%s\":[%s]\n\n}",
 					uri,
 					jsonFeature.title.jsonname(),JSONUtils.jsonEscape(feature.getName()),
 					jsonFeature.units.jsonname(),feature.getUnits()==null?"":feature.getUnits(),
@@ -131,14 +131,11 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					jsonFeature.source.jsonname(),
 						uriSource==null?null:JSONUtils.jsonEscape(uriSource),
 						typeSource==null?null:JSONUtils.jsonEscape(typeSource),
-					annotation==null?"":(","+annotation)
+					jsonFeature.annotation.jsonname(),
+					annotation==null?"":annotation
 					
 					));
-			if (annotation!=null) {
-				System.out.println("--");
-				System.out.println(annotation);
-				System.out.println("--");
-			}
+
 			comma = ",";
 
 		} catch (Exception x) {
@@ -152,36 +149,23 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 		String acomma = "";
 		for (PropertyAnnotation annotation : feature.getAnnotations()) try {
 			b.append(acomma);
-			b.append("\t\"");
-			b.append(JSONUtils.jsonEscape(annotation.getPredicate()));
-			b.append("\" : {");
 			
-			String object = annotation.getObject().toString();
-			if (annotation.getType().startsWith("^^")) { // xsd:ToxicCategory a rdfs:Datatype; rdfs:subClassOf xsd:string.
-				try {
-					String category = "category";
-					String ctype = annotation.getType().replace("^^", "");
-					try {
-						ICategory.CategoryType.valueOf(ctype);
-						category = "toxcategory";
-					} catch (Exception x) {
-					}
-					
-					b.append("\n\t\"");
-					b.append(JSONUtils.jsonEscape(object));
-					b.append("\" : {\n\t\t\"");
-					b.append(JSONUtils.jsonEscape(category));
-					b.append("\" :\"");
-					b.append(JSONUtils.jsonEscape(ctype));
-					b.append("\"}\n");
-					
-				} catch (Exception x) {x.printStackTrace(); }//fallback to string 
-			} else if (annotation.getType().equals(OT.OTClass.ModelConfidenceFeature)) {
-				//TODO
-				//feature.addOntClass(OT.OTClass.ModelConfidenceFeature.getOntClass(jenaModel));
-				//if (!object.startsWith("http")) object = String.format("%s%s",rootReference,object);
-				//feature.addProperty(predicate,object);
-			} 	
+			b.append("\n\t{");
+			
+			if (annotation.getType()!=null && !"".equals(annotation.getType())) {
+				b.append("\t\"type\" : \"");
+				b.append(JSONUtils.jsonEscape(annotation.getType()));
+				b.append("\",");
+			}
+			
+			b.append("\t\"p\" : \"");
+			b.append(JSONUtils.jsonEscape(annotation.getPredicate()));
+			b.append("\",");
+			
+			b.append("\t\"o\" : \"");
+			b.append(JSONUtils.jsonEscape(annotation.getObject().toString()));
+			b.append("\"");
+			
 			b.append("}");
 			acomma = ",";
 		} catch (Exception x) {
