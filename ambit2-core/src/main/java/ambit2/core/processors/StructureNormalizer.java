@@ -29,12 +29,9 @@
 
 package ambit2.core.processors;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.logging.Level;
 
 import net.sf.jniinchi.INCHI_RET;
-import nu.xom.ParsingException;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.inchi.InChIGenerator;
@@ -51,7 +48,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
-import ambit2.core.io.FileInputState;
+import ambit2.core.io.dx.DXParser;
 import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.StructureTypeProcessor;
@@ -69,7 +66,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	protected transient StructureTypeProcessor strucType;
 	protected transient InchiProcessor inchiProcessor;
 	protected transient FixBondOrdersTool fbt = new FixBondOrdersTool();
-
+	protected DXParser dxParser = null;
 	
 	public StructureNormalizer() {
 		molReader = new MoleculeReader();
@@ -163,6 +160,10 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 			structure.setFormula(null);
 		}		
 		
+		if (DXParser.hasDxProperties(structure)) {
+			if (dxParser==null) dxParser = new DXParser();
+			structure = dxParser.process(structure);
+		}
 		return structure;
 	}
 
