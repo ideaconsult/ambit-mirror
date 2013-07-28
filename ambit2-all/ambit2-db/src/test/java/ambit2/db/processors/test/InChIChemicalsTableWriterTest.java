@@ -10,8 +10,8 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.processors.StructureNormalizer;
 import ambit2.db.RepositoryReader;
-import ambit2.db.processors.StructureNormalizer;
 import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.search.QueryExecutor;
 import ambit2.db.update.chemical.InChIChemicalsWriter;
