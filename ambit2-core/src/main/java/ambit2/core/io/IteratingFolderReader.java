@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openscience.cdk.exception.CDKException;
@@ -89,11 +90,15 @@ public abstract class IteratingFolderReader<T, ItemReader extends IIteratingChem
 				if (reader == null) return false;
 				else if (reader.hasNext()) return true;
 			} catch (Exception x) {
-				x.printStackTrace();
+				try {handleError(x.getMessage(), x);} catch (CDKException xx) {
+					logger.log(Level.SEVERE,xx.getMessage(),xx);
+				} 
 			}
 			
 		} else return false;
 	}
+	
+	
 	protected ItemReader getNextReader() throws Exception {
 		index++;
 		if (index < files.length) 
