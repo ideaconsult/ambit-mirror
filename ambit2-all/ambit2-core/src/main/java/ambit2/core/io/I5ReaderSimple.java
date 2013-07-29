@@ -2,6 +2,7 @@ package ambit2.core.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -85,10 +86,14 @@ public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implement
 		documentReferencePK,
 		version
 	}
-    public I5ReaderSimple(InputStream in) throws CDKException {
+    public I5ReaderSimple(InputStreamReader in) throws CDKException {
+    	super();
     	record = new StructureRecord(-1,-1,null,null);
     	setReader(in);
-
+    }	
+		
+    public I5ReaderSimple(InputStream in) throws CDKException {
+    	this(new InputStreamReader(in));
     }	
 	
     public void setReader(InputStream in) throws CDKException {
