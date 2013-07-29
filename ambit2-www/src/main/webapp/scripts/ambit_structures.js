@@ -465,7 +465,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 				src = source.type;
 				var p1 = source.URI.lastIndexOf("/");
 				var p2 = source.URI.lastIndexOf(".");
-				if (p1>=0) src = unescape(source.URI.substring(p1+1,p2>=0?p2:undefined)).replace('+',' ');
+				if (p1>=0) src =  unescape(source.URI.substring(p1+1,p2>=0?p2:undefined)).replace(/\+/g,' ');
 			}
 			var prefix = "http://www.opentox.org/echaEndpoints.owl#";
 			var searchURI = "";
