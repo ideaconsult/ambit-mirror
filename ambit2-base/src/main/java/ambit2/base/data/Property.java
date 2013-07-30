@@ -100,6 +100,12 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static synchronized Property getNameInstance() {
 		return getInstance(Names, LiteratureEntry.getIUPACReference());
 	}
+	public static synchronized Property getTradeNameInstance() {
+		return getInstance(Names, LiteratureEntry.getTradeNameReference());
+	}
+	public static synchronized Property getPublicNameInstance() {
+		return getInstance(Names, LiteratureEntry.getPublicNameReference());
+	}
 	public static synchronized Property getI5UUIDInstance() {
 		return getInstance(IUCLID5_UUID, LiteratureEntry.getI5UUIDReference());
 	}
