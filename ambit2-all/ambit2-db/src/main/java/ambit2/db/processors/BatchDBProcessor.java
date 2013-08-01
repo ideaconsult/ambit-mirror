@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db.processors;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -100,7 +99,7 @@ public class BatchDBProcessor extends AbstractBatchProcessor<IInputState,String>
 						else reader.setReference(getReference());
 						return reader;
 					} else {
-						IIteratingChemObjectReader ir = FileInputState.getReader(new FileInputStream(file), file.getName(),((FileInputState)target).getFileFormat());
+						IIteratingChemObjectReader ir = FileInputState.getReader(file,((FileInputState)target).getFileFormat());
 						if (ir == null) throw new AmbitException("Unsupported format "+file.getName());
 						else {
 							RawIteratingWrapper reader = new RawIteratingWrapper(ir);
