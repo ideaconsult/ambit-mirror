@@ -110,8 +110,14 @@ public class FileInputState extends FileState implements IInputState {
 			throw new AmbitIOException(x);
 		}
 	}
+	public static IIteratingChemObjectReader getReader(File file) throws FileNotFoundException, AmbitIOException, CDKException {
+		return getReader(new FileInputStream(file),file.getName(),null);
+	}
 	public static IIteratingChemObjectReader getReader(InputStream stream, String ext) throws AmbitIOException, CDKException {
 		return getReader(stream, ext,null);
+	}
+	public static IIteratingChemObjectReader getReader(File file,  IChemFormat format) throws AmbitIOException, CDKException, FileNotFoundException {
+		return getReader(new FileInputStream(file),file.getName(),format);
 	}
 	public static IIteratingChemObjectReader getReader(InputStream stream, String ext, IChemFormat format) throws AmbitIOException, CDKException {
 		if (ext.endsWith(extensions[SDF_INDEX])) {

@@ -1,7 +1,6 @@
 package ambit2.core.io;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -21,7 +20,7 @@ public class IteratingMolFolderReader extends IteratingFolderReader<IAtomContain
 	}	
 
 	protected IIteratingChemObjectReader getItemReader(int index) throws Exception {
-		return FileInputState.getReader(new FileInputStream(files[index]), files[index].getName());		
+		return FileInputState.getReader(files[index]);		
 	}
 	public Object next() {
 		Object o = super.next();
