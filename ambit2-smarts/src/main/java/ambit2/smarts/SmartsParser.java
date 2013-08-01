@@ -27,6 +27,7 @@ package ambit2.smarts;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -62,6 +63,7 @@ public class SmartsParser
 	Vector<SMARTSBond> processedDoubleBonds = new Vector<SMARTSBond>();
 	Vector<SMARTSBond> newStereoDoubleBonds = new Vector<SMARTSBond>();
 	TreeMap<Integer,RingClosure> indexes = new TreeMap<Integer,RingClosure>();
+		
 	boolean mNeedNeighbourData;
 	boolean mNeedValencyData;
 	boolean mNeedRingData;    //data with ring sizes for each atom
@@ -145,7 +147,7 @@ public class SmartsParser
 			}
 			else 
 			{
-				parseSpecialSymbol();
+				parseSpecialSymbol();   // symbol '%' is handled by  parseAtomIndex() as well
 			}
 		}
 		
@@ -155,8 +157,12 @@ public class SmartsParser
 		
 		//Treat incorrectly used indexes
 		if (indexes.size() != 0)
-		{	
-			newError("There are unused atom indexes",-1, "");
+		{				
+			newError("There are unclosed ring indices",-1, "");
+			Set<Integer> keys = indexes.keySet();
+			
+			for (Integer key : keys)
+				newError("Ring index " + key + " is unclosed",-1, "");
 		}
 		
 		if (directionalBonds.size() > 0)
@@ -327,6 +333,11 @@ public class SmartsParser
 			sb.append(errors.get(i).getError() + "\n");
 		}	
 		return (sb.toString());
+	}
+	
+	public Vector<SmartsParserError> getErrors()
+	{	
+		return (errors);
 	}
 	
 	void newFragment()
@@ -549,20 +560,29 @@ public class SmartsParser
 	{
 		Integer i = new Integer(n);
 		RingClosure rc = indexes.get(i);
+		
 		if (rc == null)
 		{
-			//Currently this index is not associated with any atom
+			//Currently this index is not associated with any atom 
+			//i.e. it is a new index, or if was used previously the ring has been closed yet and this index can be used again
+			
 			RingClosure rc1 =  new RingClosure();
 			rc1.firstAtom = prevAtom;
+			
 			if (curBond == null)					
 				rc1.firstBond = curBondType;				
 			else
-				newError("Use of a bond expression for the first appearence of atom index",curChar+1,"");
-				
+			{	
+				//This is no longer treated as an error as it was previously (since 30.07.2013)
+				//newError("Use of a bond expression for the first appearance of atom index",curChar+1,"");
+				SmartsBondExpression sbe = (SmartsBondExpression)curBond;
+				rc1.firstBond = curBondType;
+				rc1.firstBondExpression = sbe;
+			}
 			indexes.put(i,rc1);
 			
 			//After first index appearance current bond data must be reset 
-			//If not a bug is caused when ring closure is with a double bond 
+			//For example: without reseting, a bug is caused when ring closure is with a double bond 
 			//e.g. CC=1CC=1 is parsed like it is CC1=CC=1
 			curBond = null; 
 			curBondType = SmartsConst.BT_UNDEFINED;
@@ -573,53 +593,92 @@ public class SmartsParser
 			//Therefore this is the second appearance of this index i.e. it defines a ring closure 
 			
 			
-			//First index position is with UNDEFINED bond type
-			if (rc.firstBond == SmartsConst.BT_UNDEFINED)
-			{	
-				addBond(rc.firstAtom, prevAtom);
-				//Reseting the "current" bond data
-				curBond = null; 
-				curBondType = SmartsConst.BT_UNDEFINED;				
-			}	
-			else 
+			if (rc.firstBondExpression != null)  //treating an opened ring closure with a bond expression
 			{
-				//First index position is with DEFINED bond type				
 				if (curBond == null)
-				{	
-					if (curBondType == SmartsConst.BT_UNDEFINED)	
+				{
+					if (curBondType == SmartsConst.BT_UNDEFINED)
 					{
-						//It is allowed to have bond definition at the first index position
-						//when the second position is with undefined bond type
-						curBondType = rc.firstBond;
+						curBond = rc.firstBondExpression;
 						addBond(rc.firstAtom, prevAtom);
-						//Reseting the "current" bond data
-						curBond = null; 
-						curBondType = SmartsConst.BT_UNDEFINED;
 					}
 					else
 					{	
-						//Both index positions have bond types - they must be equal 
-						if (rc.firstBond != curBondType)
-							newError("Atom index "+n+" is associated with two different bond types",-1,"");
-						else
-						{	
-							addBond(rc.firstAtom, prevAtom);
-							//Reseting the "current" bond data
-							curBond = null;
-							curBondType = SmartsConst.BT_UNDEFINED;						
-						}
-					}
+						//The closing bond type is not a bond expression
+						newError("Ring closure index "+n+" is associated with a bond expression and a bond type",-1,"");
+					}	
 				}
 				else
 				{	
-					//Closing the ring at the second index position with a bond expression
-					//Then error is reported
-					newError("Atom index "+n+" is associated with two different bond types",-1,"");
-				}	
+					//compare the opening and closing bond expressions --> they must be identical
+					if (rc.firstBondExpression.isIdenticalTo((SmartsBondExpression)curBond))
+					{
+						addBond(rc.firstAtom, prevAtom);
+					}
+					else
+					{
+						//The closing and opening bond expressions are not identical
+						newError("Ring closure index "+n+" is associated with two different bond expressions",-1,"");
+					}
+				}
+				
+				//Reseting the "current" bond data
+				curBond = null;
+				curBondType = SmartsConst.BT_UNDEFINED;	
 			}
+			else
+			{	
+				if (rc.firstBond == SmartsConst.BT_UNDEFINED) //First index position is with UNDEFINED bond type
+				{
+					addBond(rc.firstAtom, prevAtom);
+					//Reseting the "current" bond data
+					curBond = null; 
+					curBondType = SmartsConst.BT_UNDEFINED;				
+				}	
+				else 
+				{
+					//First index position is with a DEFINED bond type (but not a bond expression)
+					
+					if (curBond == null)
+					{	
+						if (curBondType == SmartsConst.BT_UNDEFINED)	
+						{
+							//It is allowed to have bond definition at the first index position
+							//when the second position is with undefined bond type
+							curBondType = rc.firstBond;
+							addBond(rc.firstAtom, prevAtom);
+							//Reseting the "current" bond data
+							curBond = null; 
+							curBondType = SmartsConst.BT_UNDEFINED;
+						}
+						else
+						{	
+							//Both index positions have bond types - they must be equal 
+							if (rc.firstBond != curBondType)
+							{	
+								newError("Ring closure index "+n+" is associated with two different bond types",-1,"");
+							}	
+							else
+							{	
+								addBond(rc.firstAtom, prevAtom);
+								//Reseting the "current" bond data
+								curBond = null;
+								curBondType = SmartsConst.BT_UNDEFINED;						
+							}
+						}
+					}
+					else
+					{	
+						//Closing the ring at the second index position with a bond expression
+						//Then error is reported
+						newError("Ring closure index "+n+" is associated with a bond type and a bond expression",-1,"");
+					}	
+				}
+				
+			}//if (rc.firstBondExpression != null)
 			
-			//This index is made available for another usage for ring closure
-			//This is allowed by SMARTS standard but it is not recommended
+			//This index is made available for another usage for ring closure definitions
+			//This is allowed by SMARTS standard but it makes some SMARTS more difficult to read.
 			indexes.remove(i);	
 		}
 	}
@@ -711,7 +770,7 @@ public class SmartsParser
 				curBondType = SmartsConst.BT_UNDEFINED;
 			}
 			else
-				newError("Zero bond order (disclosure) is not allowed", curChar+1,"");
+				newError("Zero bond order (disclosure) is not allowed. Component Level Grouping is off.", curChar+1,"");
 			break;
 			
 		default:
