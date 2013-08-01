@@ -106,6 +106,22 @@ public class SmartsBondExpression extends SMARTSBond
     	
     	return(false);
     }
+    
+    public boolean isIdenticalTo(SmartsBondExpression bondExpression)
+    {
+    	int nTokens = tokens.size();
+    	
+    	if (nTokens != bondExpression.tokens.size())
+    		return false;
+    	
+    	for (int i = 0; i < nTokens; i++)
+    	{
+    		if (tokens.get(i).intValue() != bondExpression.tokens.get(i).intValue())
+    			return false;
+    	}
+    	
+    	return true;
+    }
         
 
     public String toString() {

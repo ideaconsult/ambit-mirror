@@ -35,4 +35,5 @@ public class RingClosure
 	IQueryAtom firstAtom;
 	IQueryAtom secondAtom;	
 	int firstBond;
+	SmartsBondExpression firstBondExpression = null;
 }

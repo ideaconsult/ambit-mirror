@@ -1919,6 +1919,12 @@ public class TestUtilities
 		//tu.showFullAtomMappings("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("[N,C]~[A,a]~[A,a]~[N,C]","[S-]C(=S)N");
 		
+		//tu.testSmartsManagerBoolSearch("[#6]-c1cccc2-[#7]3C-,:4(=[#7]-[#6]-5-[#7][C]3(=O)[#6]-3-[#6]-[#6]C(=O)[#7]-3-#6-c~3cc-,:44ccccc4~[#7]~3[#6]-5~[#8]-c12)c1ccccc1","CCCC");
+		//tu.testSmartsManagerBoolSearch("[#6]-c1cccc2-[#7]3C-,:4(=[#7]-[#6]-5-[#7][C]3(=O)[#6]-3-[#6]-[#6]C(=O)[#7]-3-[#6]-c~3cc-,:44ccccc4~[#7]~3[#6]-5~[#8]-c12)c1ccccc1","CCCC");
+		tu.testSmartsManagerBoolSearch("C=,-1CCCCC1","C1CCCCC1");
+		tu.testSmartsManagerBoolSearch("C%001CCCCC%0001","C1CCCCC1");
+		tu.testSmartsManagerBoolSearch("C-,=3CCC=3","C1CCCCC1");
+		
 		//tu.testSmartsManagerBoolSearch("[N,C]~*~*~[N,C]","ClCNCl");
 		//tu.showFullAtomMappingsCDKIsomorphism("[N,C]~*~*~[N,C]","ClCNCl");
 		
@@ -1944,8 +1950,8 @@ public class TestUtilities
 		
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[$(C),$(Cl),$(OC),$(CC):9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[$(C),$(Cl),$(OC),$(CC):9].[H:10][H:11]", "[H]Oc1([H])c([H])(C)c([H])c([H])(O[H])c([H])c1([H])");
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C:9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C:9].[H:10][H:11]", "[H]Oc1c(C)cc(O[H])cc1");
-		tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C].[H:10][H:11]",
-				"[H]Oc1c(C)cc(O[H])cc1");
+		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C].[H:10][H:11]",
+		//		"[H]Oc1c(C)cc(O[H])cc1");
 		
 		//tu.testSMIRKS("[N:1][C:2]>>[N:1].[C:2]=[O]", "NNC");
 		
