@@ -404,7 +404,10 @@ public class SmartsHelper
 			firstSphere.get(at1).bonds.add(bond);			
 		}
 	}
-	
+	/**
+	 * @param query
+	 * @return SMARTS string 
+	 */
 	public String toSmarts(QueryAtomContainer query)
 	{
 		determineFirstSheres(query);
