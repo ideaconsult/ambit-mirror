@@ -21,28 +21,36 @@ import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.ICiteable;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
 import ambit2.core.io.ECHAPreregistrationListReader.echa_tags;
 
+/**
+ * IUCLID5  .i5d files support http://iuclid.eu/ 
+ * Reads  ReferenceSubstances only. 
+ * For a better support for .i5d and .i5z files use https://github.com/ideaconsult/i5
+ * or compile ambit with Maven profile -P i5
+ * @author nina
+ *
+ */
 
-
-public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implements IRawReader<IStructureRecord> {
+public class I5ReaderSimple   extends DefaultIteratingChemObjectReader implements IRawReader<IStructureRecord>, ICiteable {
 	protected static Logger logger = Logger.getLogger(I5ReaderSimple.class.getName());
 	protected IStructureRecord record;
 	protected XMLStreamReader reader ;
 	protected ArrayList<String> synonyms = new ArrayList<String>();
 	protected String tmpValue="";	
 	protected CASProcessor casProcessor = new CASProcessor();
-	protected static String I5_URL="http://iuclid.eu";
-	protected static String I5_REFERENCE="IUCLID5";
-	protected Property casProperty = Property.getInstance(AmbitCONSTANTS.CASRN,
+	public static String I5_URL="http://iuclid.eu";
+	public static String I5_REFERENCE="IUCLID5";
+	public static Property casProperty = Property.getInstance(AmbitCONSTANTS.CASRN,
 								LiteratureEntry.getInstance(I5_REFERENCE, I5_URL)); 
-	protected Property ecProperty = Property.getInstance("EC",
+	public static Property ecProperty = Property.getInstance("EC",
 								LiteratureEntry.getInstance(I5_REFERENCE, I5_URL));
-	protected Property nameProperty = Property.getInstance(AmbitCONSTANTS.NAMES,
+	public static Property nameProperty = Property.getInstance(AmbitCONSTANTS.NAMES,
 								LiteratureEntry.getInstance(I5_REFERENCE, I5_URL));
 	protected Property registrationProperty = Property.getInstance(echa_tags.REGISTRATION_DATE.toString(),
 								LiteratureEntry.getInstance(I5_REFERENCE, I5_URL));
