@@ -34,9 +34,11 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 
 import org.openscience.cdk.index.CASNumber;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
+import ambit2.base.interfaces.ICiteable;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.CASProcessor;
 import ambit2.core.config.AmbitCONSTANTS;
@@ -188,8 +190,10 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 			r.setReference(LiteratureEntry.getInstance(files[index].getName(),"file:///"+files[index].getAbsolutePath()));
 			return (IRawReader<IStructureRecord>) r;
 		} else if (name.endsWith(FileInputState.extensions[FileInputState.I5D_INDEX])) {
-			I5ReaderSimple r = new I5ReaderSimple(new FileInputStream(files[index]));
-			r.setReference(LiteratureEntry.getI5UUIDReference());
+			IIteratingChemObjectReader r = FileInputState.getI5DReader(files[index]);
+			if (r instanceof ICiteable) {
+				((ICiteable)r).setReference(LiteratureEntry.getI5UUIDReference());
+			}
 			return (IRawReader<IStructureRecord>) r;
 		}
 			

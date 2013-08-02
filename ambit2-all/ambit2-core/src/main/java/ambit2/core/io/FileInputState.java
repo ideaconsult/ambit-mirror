@@ -3,7 +3,9 @@ package ambit2.core.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 
 import org.openscience.cdk.exception.CDKException;
@@ -111,13 +113,63 @@ public class FileInputState extends FileState implements IInputState {
 		}
 	}
 	public static IIteratingChemObjectReader getReader(File file) throws FileNotFoundException, AmbitIOException, CDKException {
-		return getReader(new FileInputStream(file),file.getName(),null);
+		return getReader(file,null);
 	}
 	public static IIteratingChemObjectReader getReader(InputStream stream, String ext) throws AmbitIOException, CDKException {
 		return getReader(stream, ext,null);
 	}
 	public static IIteratingChemObjectReader getReader(File file,  IChemFormat format) throws AmbitIOException, CDKException, FileNotFoundException {
+		if (file.getName().endsWith(extensions[I5Z_INDEX])) {
+			return getI5ZReader(file);
+		} else if (file.getName().endsWith(extensions[I5D_INDEX])) {
+			return getI5DReader(file);
+		} else if (file.getName().endsWith(extensions[ZIP_INDEX])) {
+			return new ZipReader(file);
+		}
 		return getReader(new FileInputStream(file),file.getName(),format);
+	}
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws AmbitIOException
+	 * @throws CDKException
+	 */
+	public static IIteratingChemObjectReader getI5ZReader(File file) throws FileNotFoundException, AmbitIOException, CDKException {
+		try { 
+			Class clazz = Class.forName("net.idea.i5.io.I5ZReader");
+			Constructor constructor  =clazz.getConstructor(File.class);
+			return (IIteratingChemObjectReader) constructor.newInstance(file);
+		} catch (Exception x) {	
+			return new ZipReader(file);
+		}
+	}
+	/**
+	 * 
+	 * @param in
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws AmbitIOException
+	 * @throws CDKException
+	 */
+	public static IIteratingChemObjectReader getI5DReader(InputStream in) throws AmbitIOException, CDKException {
+		try { 
+			Class clazz = Class.forName("net.idea.i5.io.I5DReader");
+			Constructor constructor  =clazz.getConstructor(InputStream.class);
+			return (IIteratingChemObjectReader) constructor.newInstance(in);
+		} catch (Exception x) {	
+			return new I5ReaderSimple(new InputStreamReader(in));	
+		}
+	}
+	public static IIteratingChemObjectReader getI5DReader(File file) throws FileNotFoundException, AmbitIOException, CDKException {
+		try { 
+			Class clazz = Class.forName("net.idea.i5.io.I5DReader");
+			Constructor constructor  =clazz.getConstructor(File.class);
+			return (IIteratingChemObjectReader) constructor.newInstance(file);
+		} catch (Exception x) {	
+			return new I5ReaderSimple(new FileReader(file));	
+		}
 	}
 	public static IIteratingChemObjectReader getReader(InputStream stream, String ext, IChemFormat format) throws AmbitIOException, CDKException {
 		if (ext.endsWith(extensions[SDF_INDEX])) {
@@ -170,7 +222,9 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (ext.endsWith(extensions[ZIP_INDEX])) {
 			return new ZipReader(stream);
 		} else if (ext.endsWith(extensions[I5D_INDEX])) {
-			return new I5ReaderSimple(stream);			
+			return getI5DReader(stream);			
+		} else if (ext.endsWith(extensions[I5D_INDEX])) {
+			return new ZipReader(stream);
 		} else if (ext.endsWith(extensions[NANOCMLx_INDEX]) || ext.endsWith(extensions[NANOCMLd_INDEX])) try {
 			Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.NanoCMLIteratingReader");
 			Constructor<? extends Runnable> constructor = clazz.getConstructor(InputStream.class);
