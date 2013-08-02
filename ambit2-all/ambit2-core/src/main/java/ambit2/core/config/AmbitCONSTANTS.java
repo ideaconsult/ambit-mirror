@@ -6,7 +6,7 @@ package ambit2.core.config;
 
 /**
  * Constants
- * 
+ * TODO : move to ambit2-base
  * @author Nina Jeliazkova <br>
  * <b>Modified</b> 2005-4-7
  */

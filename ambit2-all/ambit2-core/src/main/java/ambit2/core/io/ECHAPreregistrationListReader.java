@@ -47,7 +47,7 @@ public class ECHAPreregistrationListReader extends
 								LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL));
 	protected Property registrationProperty = Property.getInstance(echa_tags.REGISTRATION_DATE.toString(),
 								LiteratureEntry.getInstance(ECHA_REFERENCE, ECHA_URL));
-	protected enum echa_tags {
+	public enum echa_tags {
 		dataroot,
 		PRE_REGISTERED_SUBSTANCE,
 		EC_NUMBER,
