@@ -40,6 +40,12 @@ import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -274,33 +280,82 @@ public class SmartsHelper
 	}
 
 	static public String atomToString(IAtom a)
-	{
+	{	
+		//System.out.println(b.getClass().getSimpleName());
+		
 		if (a instanceof SmartsAtomExpression)
-			return(a.toString());		
+			return(a.toString());	
+		
 		if (a instanceof AliphaticSymbolQueryAtom)
 			return(a.getSymbol());
-		if (a instanceof AromaticSymbolQueryAtom)
-			return("Ar-"+a.getSymbol());
 		
+		if (a instanceof AromaticSymbolQueryAtom)
+			return(a.getSymbol().toLowerCase());
+		
+		if (a instanceof AliphaticAtom)
+			return("A");
+		
+		if (a instanceof AromaticAtom)
+			return("a");
+		
+		if (a instanceof AnyAtom)
+			return("*");
+		
+		
+		//This is a default exit. Generally it should not happen. 
+		//Class SymbolQueryAtomAromaticityNotSpecified would be process here as well
 		return(a.getSymbol());		
 	}
 	
 	static public String bondToString(IBond b)
 	{
-		//TODO - to improve it ???
+		
+		//TODO handle the cis/trans information
 		
 		if (b instanceof SmartsBondExpression)
-			return(b.toString());		
+			return(b.toString());
+		
 		if (b instanceof SingleOrAromaticBond)
 			return("");
-				
-		if (b.getOrder() == IBond.Order.SINGLE)
+		
+		if (b instanceof SingleNonAromaticBond)
 			return("-");
-		if (b.getOrder() == IBond.Order.DOUBLE)
+		
+		if (b instanceof DoubleNonAromaticBond)
 			return("=");
-		if (b.getOrder() == IBond.Order.TRIPLE)
+		
+		if (b instanceof DoubleStereoBond)
+			return("=");
+		
+		if (b instanceof RingQueryBond)
+			return("@");
+		
+		if (b instanceof AnyOrderQueryBond)
+			return("~");
+		
+		if (b instanceof AromaticQueryBond)
+			return(":");
+		
+		if (b instanceof OrderQueryBond)
+		{	
+			if (b.getOrder() == IBond.Order.SINGLE)
+				return("-");
+			if (b.getOrder() == IBond.Order.DOUBLE)
+				return("=");
+			if (b.getOrder() == IBond.Order.TRIPLE)
+				return("#");
+		}
+		
+		//These are quite specific cases which are due to Ambit specific flags 
+		//such as mSupportDoubleBondAromaticityNotSpecified flag		
+		if (b instanceof DoubleBondAromaticityNotSpecified)  
+			return("=");
+		if (b instanceof SingleBondAromaticityNotSpecified)
+			return("-");
+		if (b instanceof TripleBondAromaticityNotSpecified)
 			return("#");
 		
+		//These is a default exit. Generally this should not happen.
 		return("-");
 	}
 	
