@@ -2001,10 +2001,12 @@ public class TestUtilities
 		//tu.testSmartsToQueryToSmarts("[C,$(CO),Br][n+++;R5]n[A--]ACCa*Cl");
 		
 		
-		//tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");
-		//tu.testSmartsToQueryToSmarts("C!-C:C=C#C@C!@C~C");
-		//tu.testSmartsToQueryToSmarts("C!:1CCCCC!:1%1CCCC1");
+		tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");
+		tu.testSmartsToQueryToSmarts("C!-C:C=C#C@C!@C~C");
+		tu.testSmartsToQueryToSmarts("C!:1CCCCC!:1%1CCCC1");
+		tu.testSmartsToQueryToSmarts("[#6]-c1cccc2-[#7]3C-,:4(=[#7]-[#6]-5-[#7][C]3(=O)[#6]-3-[#6]-[#6]C(=O)[#7]-3-[#6]-c~3cc-,:44ccccc4~[#7]~3[#6]-5~[#8]-c12)c1ccccc1");
 		
+		tu.testSmartsToQueryToSmarts("C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1");
 		
 		
 	}
