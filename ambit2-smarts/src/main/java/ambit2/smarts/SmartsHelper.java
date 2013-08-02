@@ -468,7 +468,7 @@ public class SmartsHelper
 				if (!ringClosures.contains(neighborBo))
 				{	
 					ringClosures.add(neighborBo);
-					String ind = (curIndex>9)?"%":"" + curIndex;
+					String ind = ((curIndex>9)?"%":"") + curIndex;
 					addIndexToAtom(bondToString(neighborBo) + ind, atom);	
 					addIndexToAtom(ind, neighborAt);
 					curIndex++;
