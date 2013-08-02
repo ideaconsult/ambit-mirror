@@ -69,6 +69,7 @@ import ambit2.smarts.StructureSetAnalyzer;
 
 public class TestUtilities 
 {	
+	static SmartsHelper smartsHelper = new SmartsHelper(SilentChemObjectBuilder.getInstance()); 
 	static SmartsParser sp = new SmartsParser();
 	//static SmilesParser smilesparser = new SmilesParser(SilentChemObjectBuilder.getInstance());
 	static SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
@@ -116,6 +117,23 @@ public class TestUtilities
 		*/		
 		
 		System.out.println("Bonds:\n" + SmartsHelper.getBondsString(qac));
+	}
+	
+	public void testSmartsToQueryToSmarts(String smarts)
+	{
+		 
+		QueryAtomContainer qac = sp.parse(smarts);
+		if (!sp.getErrorMessages().equals(""))
+		{
+			System.out.println("Original smarts: " + smarts); 
+			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());			
+			return;
+		}
+		
+		String smarts2 =  smartsHelper.toSmarts(qac);
+		System.out.println("Original  smarts: " + smarts /*+ "  -->  " + smarts2*/); 
+		System.out.println("Generated smarts: " + smarts2); 
+		
 	}
 	
 	public static int boolSearch(String smarts, String smiles) throws Exception
@@ -1921,9 +1939,10 @@ public class TestUtilities
 		
 		//tu.testSmartsManagerBoolSearch("[#6]-c1cccc2-[#7]3C-,:4(=[#7]-[#6]-5-[#7][C]3(=O)[#6]-3-[#6]-[#6]C(=O)[#7]-3-#6-c~3cc-,:44ccccc4~[#7]~3[#6]-5~[#8]-c12)c1ccccc1","CCCC");
 		//tu.testSmartsManagerBoolSearch("[#6]-c1cccc2-[#7]3C-,:4(=[#7]-[#6]-5-[#7][C]3(=O)[#6]-3-[#6]-[#6]C(=O)[#7]-3-[#6]-c~3cc-,:44ccccc4~[#7]~3[#6]-5~[#8]-c12)c1ccccc1","CCCC");
-		tu.testSmartsManagerBoolSearch("C=,-1CCCCC1","C1CCCCC1");
-		tu.testSmartsManagerBoolSearch("C%001CCCCC%0001","C1CCCCC1");
-		tu.testSmartsManagerBoolSearch("C-,=3CCC=3","C1CCCCC1");
+		
+		//tu.testSmartsManagerBoolSearch("C=,-1CCCCC1","C1CCCCC1");
+		//tu.testSmartsManagerBoolSearch("C%001CCCCC%0001","C1CCCCC1");
+		//tu.testSmartsManagerBoolSearch("C-,=3CCC=3","C1CCCCC1");
 		
 		//tu.testSmartsManagerBoolSearch("[N,C]~*~*~[N,C]","ClCNCl");
 		//tu.showFullAtomMappingsCDKIsomorphism("[N,C]~*~*~[N,C]","ClCNCl");
@@ -1978,6 +1997,15 @@ public class TestUtilities
 		//System.out.println(pos.size());
 		
 		//tu.testCOF_FileOperations("/test.smi", "/test2.smi");
+				
+		//tu.testSmartsToQueryToSmarts("[C,$(CO),Br][n+++;R5]n[A--]ACCa*Cl");
+		
+		
+		//tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");
+		//tu.testSmartsToQueryToSmarts("C!-C:C=C#C@C!@C~C");
+		//tu.testSmartsToQueryToSmarts("C!:1CCCCC!:1%1CCCC1");
+		
+		
 		
 	}
 	
