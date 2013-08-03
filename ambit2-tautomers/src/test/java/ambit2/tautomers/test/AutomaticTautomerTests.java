@@ -53,6 +53,8 @@ public class AutomaticTautomerTests
 	TautomerRanking tautomerRanking = new TautomerRanking(); 
 	
 	public boolean FlagHandleCommand = true;
+	public boolean FlagFiltrateSmilesToLargestFragment = false;   //currently used only for structure-stat command
+	
 	
 	int lineProcessMode = 0;
 		
@@ -153,7 +155,8 @@ public class AutomaticTautomerTests
 			att.handleArguments(new String[] {
 					
 					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
-					"-i","D:/Projects/data015/LogP/XlogP.csv",
+					//"-i","D:/Projects/data015/LogP/XlogP.csv",
+					"-i","D:/Projects/XXXX/frag-data/ncidb.smi",
 					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
@@ -164,8 +167,10 @@ public class AutomaticTautomerTests
 					
 					"-nInpStr","0",
 					"-nStartStr","0",
-					"-c","tautomer-calc-descr-average",
-					"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
+					//"-c","tautomer-calc-descr-average",
+					"-c","structure-stat",
+					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
+					"-o","D:/Projects/XXXX/frag-data/ncidb-stat__.txt",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -1695,7 +1700,14 @@ public class AutomaticTautomerTests
 		{
 			IMolecule mol = null;
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
-			mol = sp.parseSmiles(line.trim());
+			
+			String smiles = line.trim();
+			if (FlagFiltrateSmilesToLargestFragment)
+			{
+				smiles = this.getLargestFragment(smiles);
+			}
+			
+			mol = sp.parseSmiles(smiles);
 			
 			int nAt = mol.getAtomCount();
 			int nRing = mol.getBondCount() - mol.getAtomCount() + 1;
@@ -2242,6 +2254,27 @@ public class AutomaticTautomerTests
 			return sum / weightSum;			 
 		}
 		
+	}
+	
+	
+	public String getLargestFragment(String smiles)
+	{
+		String tok1[] = smiles.split("\\.");    //"." is a special symbol in java
+		
+					
+		//Take the longest token is used as a main fragment (component)		
+		String smi;
+		if (tok1.length > 0)
+		{	
+			smi = tok1[0];
+			for (int i = 1; i < tok1.length; i++)
+				if (smi.length() < tok1[i].length())
+					smi = tok1[i];
+		}
+		else
+			smi = smiles;
+		
+		return smi;
 	}
 	
 }
