@@ -158,7 +158,7 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 			try {
 				String type = rs.getString(8);
 				String[] types = null;
-				if (type != null) {
+				if (type != null && !"".equals(type)) {
 					types = type.split(",");
 					for (String t:types)
 						p.setClazz(_PROPERTY_TYPE.valueOf(t).getClazz());
