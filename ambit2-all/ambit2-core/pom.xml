@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<description>AMBIT 2 core functionality</description>
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <description>AMBIT 2 core functionality</description>
   <parent>
     <artifactId>ambit2-all</artifactId>
     <groupId>ambit</groupId>
@@ -8,59 +9,55 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-core</artifactId>
-  <packaging>jar</packaging>    
+  <packaging>jar</packaging>
   <name>ambit2-core</name>
   <dependencies>
     <dependency>
-    	<groupId>org.apache.poi</groupId>
-    	<artifactId>poi-scratchpad</artifactId>
-    	<version>3.5-beta4</version>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-scratchpad</artifactId>
+      <version>3.5-beta4</version>
     </dependency>
     <dependency>
-    	<groupId>org.apache.poi</groupId>
-    	<artifactId>poi</artifactId>
-    	<version>3.5-beta4</version>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>3.5-beta4</version>
     </dependency>
     <dependency>
-    	<groupId>com.lowagie</groupId>
-    	<artifactId>itext</artifactId>
-    	<version>1.4.8</version>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <version>1.4.8</version>
     </dependency>
     <dependency>
-    	<groupId>junit</groupId>
-    	<artifactId>junit</artifactId>
-    	<version>${junit.version}</version>
-    	<scope>test</scope>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>ambit</groupId>
-    	<artifactId>ambit2-base</artifactId>
-    	<version>${project.version}</version>
-    	<type>jar</type>
-
+      <groupId>ambit</groupId>
+      <artifactId>ambit2-base</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
     </dependency>
     <dependency>
-    	<groupId>com.sun.xml.stream</groupId>
-    	<artifactId>sjsxp</artifactId>
-    	<version>1.0.1</version>
-    </dependency>
-    
-    <dependency>
-    	<groupId>org.openscience.cdk</groupId>
-    	<artifactId>cdk-core</artifactId>
-    	<version>${cdk.version}</version>
-    	
-    
+      <groupId>com.sun.xml.stream</groupId>
+      <artifactId>sjsxp</artifactId>
+      <version>1.0.1</version>
     </dependency>
     <dependency>
-    	<groupId>org.openscience.cdk</groupId>
-    	<artifactId>cdk-isomorphism</artifactId>
-    	<version>${cdk.version}</version>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-core</artifactId>
+      <version>${cdk.version}</version>
     </dependency>
     <dependency>
-    	<groupId>org.openscience.cdk</groupId>
-    	<artifactId>cdk-atomtype</artifactId>
-    	<version>${cdk.version}</version>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-isomorphism</artifactId>
+      <version>${cdk.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-atomtype</artifactId>
+      <version>${cdk.version}</version>
     </dependency>
     <!-- 
         <dependency>
@@ -69,158 +66,156 @@
     	<version>${cdk.version}</version>
     </dependency>
      -->
-        <dependency>
-    	<groupId>org.openscience.cdk</groupId>
-    	<artifactId>cdk-smsd</artifactId>
-    	<version>${cdk.version}</version>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-smsd</artifactId>
+      <version>${cdk.version}</version>
     </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-extra</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-qsar</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-      	<dependency>
-    		<groupId>org.openscience.cdk</groupId>
-    		<artifactId>cdk-ionpot</artifactId>
-    		<version>${cdk.version}</version>
-    	</dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-qsarmolecular</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        
-      	<dependency>
-    	<groupId>org.openscience.cdk</groupId>
-    	<artifactId>cdk-ionpot</artifactId>
-    	<version>${cdk.version}</version>
-    	</dependency>
-    	 <dependency>
-    	<groupId>org.openscience.cdk</groupId>
-    	<artifactId>cdk-qsarionpot</artifactId>
-    	<version>${cdk.version}</version>
-    	</dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-interfaces</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-standard</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-isomorphism</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-io</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-ioformats</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-silent</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-pdb</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-log4j</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-inchi</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-data</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-interfaces</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-dict</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.openscience.cdk</groupId>
-        	<artifactId>cdk-structgen</artifactId>
-        	<version>${cdk.version}</version>
-        	<scope>compile</scope>
-        </dependency>
-       <dependency>
-  		<groupId>org.openscience.cdk</groupId>
-  		<artifactId>cdk-qsarprotein</artifactId>
-  		<version>${cdk.version}</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	       <dependency>
-  		<groupId>org.openscience.cdk</groupId>
-  		<artifactId>cdk-pdb</artifactId>
-  		<version>${cdk.version}</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	       <dependency>
-  		<groupId>org.openscience.cdk</groupId>
-  		<artifactId>cdk-pdbcml</artifactId>
-  		<version>${cdk.version}</version>
-  		<scope>compile</scope>
-  	</dependency>  	
-  	  	<dependency>
-  		<groupId>org.openscience.cdk</groupId>
-  		<artifactId>cdk-fingerprint</artifactId>
-  		<version>${cdk.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.codehaus.jackson</groupId>
-		<artifactId>jackson-core-lgpl</artifactId>
-		<version>1.9.12</version>
-	</dependency>
-	<dependency>
-		<groupId>org.codehaus.jackson</groupId>
-		<artifactId>jackson-mapper-asl</artifactId>
-		<version>1.9.12</version>
-	</dependency> 
-	
-  	<!-- 7zip
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-extra</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-qsar</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-ionpot</artifactId>
+      <version>${cdk.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-qsarmolecular</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-ionpot</artifactId>
+      <version>${cdk.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-qsarionpot</artifactId>
+      <version>${cdk.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-interfaces</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-standard</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-isomorphism</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-io</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-ioformats</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-silent</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-pdb</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-log4j</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-inchi</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-data</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-interfaces</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-dict</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-structgen</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-qsarprotein</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-pdb</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-pdbcml</artifactId>
+      <version>${cdk.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-fingerprint</artifactId>
+      <version>${cdk.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-lgpl</artifactId>
+      <version>1.9.12</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>1.9.12</version>
+    </dependency>
+    <!-- 7zip
   	<dependency>
     <groupId>com.github.jponge</groupId>
     <artifactId>lzma-java</artifactId>
@@ -236,32 +231,30 @@
   	</dependency>
 -->
   </dependencies>
-<licenses>
-  <license>
-    <name>LGPL</name>
-    <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
-    <distribution>repo</distribution>
-    <comments>LGPL 2</comments>
-  </license>
-</licenses>
-
-<build>
-	<plugins>
-        <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-				<skip>true</skip>
-				</configuration>
-		</plugin>
-	</plugins>
-</build>
-<dependencyManagement>
-	<dependencies>
-	</dependencies>
-</dependencyManagement>
-<properties>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-</properties>
+  <licenses>
+    <license>
+      <name>LGPL</name>
+      <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+      <distribution>repo</distribution>
+      <comments>LGPL 2</comments>
+    </license>
+  </licenses>
+ 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencyManagement>
+    <dependencies></dependencies>
+  </dependencyManagement>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 </project>
