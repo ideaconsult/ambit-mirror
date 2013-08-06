@@ -1,0 +1,85 @@
+/* CreateSubstance
+ * Author: nina
+ * Date: Aug 06, 2013
+ * 
+ * Copyright (C) 2005-2013  Ideaconsult Ltd.
+ * 
+ * Contact: www.ideaconsult.net
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * All we ask is that proper credit is given for our work, which includes
+ * - but is not limited to - adding the above copyright notice to the beginning
+ * of your source code files, and to any copyright notice that you may distribute
+ * with programs based on this work.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ */
+
+package ambit2.db.substance;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ambit2.base.data.Property;
+import ambit2.base.data.SubstanceRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IChemical;
+import ambit2.db.search.QueryParam;
+import ambit2.db.update.AbstractUpdate;
+
+public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C,C>  {
+	public static final String[] update_sql = {	
+		"update substance set prefix=?,uuid=?,documentType=?,format=?,name=?,publicname=?,content=? where idsubstance=?"
+	};
+	
+	
+	public UpdateSubstance(C chemical) {
+		super(chemical);
+	}
+	public UpdateSubstance() {
+		this(null);
+	}	
+	
+	public List<QueryParam> getParameters(int index) throws AmbitException {
+		if (getObject()==null || getObject().getIdsubstance()<=0) throw new AmbitException("Substance not defined");
+		List<QueryParam> params1 = new ArrayList<QueryParam>();
+		Object o_uuid = getObject().getProperty(Property.getI5UUIDInstance());
+		String uuid = o_uuid==null?null:o_uuid.toString();
+		String prefix = null;
+		if (uuid!=null) {
+		int pos = uuid.indexOf("-");
+			prefix = uuid.substring(0,pos);
+			uuid = uuid.substring(pos+1,uuid.length());
+		}
+		Object name = getObject().getProperty(Property.getNameInstance());
+		Object publicname = getObject().getProperty(Property.getPublicNameInstance());
+		params1.add(new QueryParam<String>(String.class, prefix));
+		params1.add(new QueryParam<String>(String.class, uuid));
+		params1.add(new QueryParam<String>(String.class, "Substance"));
+		params1.add(new QueryParam<String>(String.class, getObject().getFormat()));		
+		params1.add(new QueryParam<String>(String.class, name==null?null:name.toString()));
+		params1.add(new QueryParam<String>(String.class, publicname==null?null:publicname.toString()));
+		params1.add(new QueryParam<String>(String.class, getObject().getContent()));	
+		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
+		return params1;
+		
+	}
+
+	public String[] getSQL() throws AmbitException {
+		return update_sql;
+	}
+	public void setID(int index, int id) {
+		
+	}
+}

@@ -1,4 +1,4 @@
-/* DeleteSubstanceRelation
+/* DeleteSubstance
  * Author: nina
  * Date: Aug 06, 2013
  * 
@@ -26,48 +26,41 @@
  * 
  */
 
-package ambit2.db.substance.relation;
+package ambit2.db.substance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.relation.STRUCTURE_RELATION;
-import ambit2.base.relation.composition.Proportion;
-import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
 import ambit2.db.search.QueryParam;
+import ambit2.db.update.AbstractObjectUpdate;
 
-/**
- * Deletes row from substance_relation table
- * @author nina
- *
- */
-public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<SubstanceRecord,StructureRecord,STRUCTURE_RELATION,Proportion> {
-
-
-	public static final String[] delete_sql = {"delete from substance_relation where idsubstance=? and idchemical=? and relation=?"};
-
-	public DeleteSubstanceRelation() {
-		this(null,null,null);
-	}
-	public DeleteSubstanceRelation(SubstanceRecord structure1,StructureRecord structure2,STRUCTURE_RELATION relation) {
-		super(structure1,structure2,relation,null);
-	}
+public class DeleteSubstance extends AbstractObjectUpdate<SubstanceRecord>  {
 	
+	
+	public static final String[] delete_sql = {
+		"delete from substance where idsubstance=?"
+	};
+
+	public DeleteSubstance(SubstanceRecord substance) {
+		super(substance);
+	}
+	public DeleteSubstance() {
+		this(null);
+	}		
+	public List<QueryParam> getParameters(int index) throws AmbitException {
+		if (getObject()==null || getObject().getIdsubstance()<=0) throw new AmbitException("Substance id not defined");
+		List<QueryParam> params = new ArrayList<QueryParam>();
+		params.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
+		return params;
+		
+	}
+
 	public String[] getSQL() throws AmbitException {
 		return delete_sql;
 	}
 	public void setID(int index, int id) {
 		
-	}
-	@Override
-	public List<QueryParam> getParameters(int index) throws AmbitException {
-		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdsubstance()));
-		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
-		params1.add(new QueryParam<String>(String.class, getRelation().name()));
-		return params1;
 	}
 }

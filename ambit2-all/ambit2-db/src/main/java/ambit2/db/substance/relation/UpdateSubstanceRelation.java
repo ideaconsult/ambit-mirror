@@ -1,11 +1,10 @@
-/* UpdateStructure.java
+/* UpdateSubstanceRelation
  * Author: nina
- * Date: Mar 31, 2009
- * Revision: 0.1 
+ * Date: Aug 06, 2013
  * 
- * Copyright (C) 2005-2009  Ideaconsult Ltd.
+ * Copyright (C) 2005-2013  Ideaconsult Ltd.
  * 
- * Contact: nina
+ * Contact: www.ideaconsult.net
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License

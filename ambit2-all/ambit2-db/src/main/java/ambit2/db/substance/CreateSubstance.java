@@ -1,0 +1,104 @@
+/* CreateSubstance
+ * Author: nina
+ * Date: Aug 06, 2013
+ * 
+ * Copyright (C) 2005-2013  Ideaconsult Ltd.
+ * 
+ * Contact: www.ideaconsult.net
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * All we ask is that proper credit is given for our work, which includes
+ * - but is not limited to - adding the above copyright notice to the beginning
+ * of your source code files, and to any copyright notice that you may distribute
+ * with programs based on this work.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ */
+
+package ambit2.db.substance;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ambit2.base.data.Property;
+import ambit2.base.data.SubstanceRecord;
+import ambit2.base.exceptions.AmbitException;
+import ambit2.db.search.QueryParam;
+import ambit2.db.update.AbstractObjectUpdate;
+
+/**
+ * 
+ * @author nina
+ *
+ */
+public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
+	
+	
+	public static final String[] create_sql = {
+		"INSERT INTO substance (idsubstance,prefix,uuid,documentType,format,name,publicname,content)\n" +
+		"values (?,?,unhex(replace(?,'-','')),?,?,?,?,?) " +
+		"on duplicate key update documentType=ifnull(documentType,values(documentType))," +
+		"format=ifnull(format,values(format))," +
+		"formatversion=ifnull(formatversion,values(formatversion))," +
+		"name=ifnull(name,values(name))," +
+		"publicname=ifnull(publicname,values(publicname))," +
+		"content=ifnull(content,values(content))"
+	};
+
+	public CreateSubstance(SubstanceRecord substance) {
+		super(substance);
+	}
+	public CreateSubstance() {
+		this(null);
+	}		
+	public List<QueryParam> getParameters(int index) throws AmbitException {
+		List<QueryParam> params1 = new ArrayList<QueryParam>();
+		if (getObject().getIdchemical()<=0)
+			params1.add(new QueryParam<Integer>(Integer.class, null));
+		else
+			params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
+		
+		Object o_uuid = getObject().getProperty(Property.getI5UUIDInstance());
+		String uuid = o_uuid==null?null:o_uuid.toString();
+		String prefix = null;
+		if (uuid!=null) {
+		int pos = uuid.indexOf("-");
+			prefix = uuid.substring(0,pos);
+			uuid = uuid.substring(pos+1,uuid.length());
+		}
+		Object name = getObject().getProperty(Property.getNameInstance());
+		Object publicname = getObject().getProperty(Property.getPublicNameInstance());
+		params1.add(new QueryParam<String>(String.class, prefix));
+		params1.add(new QueryParam<String>(String.class, uuid==null?null:uuid.toString()));
+		params1.add(new QueryParam<String>(String.class, "Substance"));
+		params1.add(new QueryParam<String>(String.class, getObject().getFormat()));		
+		params1.add(new QueryParam<String>(String.class, name==null?null:name.toString()));
+		params1.add(new QueryParam<String>(String.class, publicname==null?null:publicname.toString()));
+		params1.add(new QueryParam<String>(String.class, getObject().getContent()));	
+		return params1;
+		
+	}
+	public void setID(int index, int id) {
+		getObject().setIdchemical(id);
+
+	}
+
+	public String[] getSQL() throws AmbitException {
+		return create_sql;
+	}
+	@Override
+	public boolean returnKeys(int index) {
+		return true;
+	}
+}
