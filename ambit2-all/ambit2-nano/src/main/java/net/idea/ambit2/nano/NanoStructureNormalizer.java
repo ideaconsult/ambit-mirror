@@ -40,16 +40,17 @@ import org.bitbucket.nanojava.data.measurement.MeasurementValue;
 import org.bitbucket.nanojava.io.Deserializer;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.data.StructureRecord;
-import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
-import ambit2.db.processors.StructureNormalizer;
+import ambit2.core.processors.StructureNormalizer;
+
 
 /**
  * As {@link StructureNormalizer} but supports nanomaterials
