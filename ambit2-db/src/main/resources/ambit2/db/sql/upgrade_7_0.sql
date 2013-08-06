@@ -1,8 +1,9 @@
 -- -----------------------------------------------------
 -- Table `substance` 
 -- -----------------------------------------------------
-CREATE TABLE `substance` (
-  `idsubstance` int(11) NOT NULL,
+DROP TABLE IF EXISTS `substance`;
+CREATE TABLE  `substance` (
+  `idsubstance` int(11) NOT NULL AUTO_INCREMENT,
   `prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL COMMENT 'ECB5 in UUIDS like ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3',
   `uuid` varbinary(16) DEFAULT NULL COMMENT 'The UUID part of  ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3 in binary format',
   `documentType` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'documentTypeType from I5 XSD schema ',
@@ -22,10 +23,11 @@ CREATE TABLE `substance` (
 -- Table `substance_relation` 
 -- -----------------------------------------------------
 
-CREATE TABLE `substance_relation` (
+DROP TABLE IF EXISTS `substance_relation`;
+CREATE TABLE  `substance_relation` (
   `idsubstance` int(11) NOT NULL,
   `idchemical` int(11) unsigned NOT NULL,
-  `relation` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `relation` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT '',
   `function` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `proportion_real_lower` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `proportion_real_lower_value` double DEFAULT NULL,
@@ -35,7 +37,7 @@ CREATE TABLE `substance_relation` (
   `proportion_typical` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `proportion_typical_value` double DEFAULT NULL,
   `proportion_typical_unit` varchar(16) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`idsubstance`),
+  PRIMARY KEY (`idsubstance`,`idchemical`,`relation`) USING BTREE,
   KEY `chemicalkey` (`idchemical`),
   KEY `relation-x` (`relation`),
   CONSTRAINT `chemicalkey` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE

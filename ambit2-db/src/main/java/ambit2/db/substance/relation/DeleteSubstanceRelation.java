@@ -27,20 +27,33 @@
  * 
  */
 
-package ambit2.db.chemrelation;
+package ambit2.db.substance.relation;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ambit2.base.data.StructureRecord;
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.relation.STRUCTURE_RELATION;
+import ambit2.base.relation.composition.Proportion;
+import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
+import ambit2.db.search.QueryParam;
 
-public class DeleteStructureRelation extends AbstractUpdateStructureRelation<IStructureRecord,IStructureRecord,String,Double> {
+/**
+ * Deletes row from substance_relation table
+ * @author nina
+ *
+ */
+public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<SubstanceRecord,StructureRecord,STRUCTURE_RELATION,Proportion> {
 
 
-	public static final String[] delete_sql = {"delete from chem_relation where idchemical1=? and idchemical2=? and relation=?"};
+	public static final String[] delete_sql = {"delete from substance_relation where idsubstance=? and idchemical=? and relation=?"};
 
-	public DeleteStructureRelation() {
+	public DeleteSubstanceRelation() {
 		this(null,null,null);
 	}
-	public DeleteStructureRelation(IStructureRecord structure1,IStructureRecord structure2,String relation) {
+	public DeleteSubstanceRelation(SubstanceRecord structure1,StructureRecord structure2,STRUCTURE_RELATION relation) {
 		super(structure1,structure2,relation,null);
 	}
 	
@@ -50,5 +63,12 @@ public class DeleteStructureRelation extends AbstractUpdateStructureRelation<ISt
 	public void setID(int index, int id) {
 		
 	}
-
+	@Override
+	public List<QueryParam> getParameters(int index) throws AmbitException {
+		List<QueryParam> params1 = new ArrayList<QueryParam>();
+		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdsubstance()));
+		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
+		params1.add(new QueryParam<String>(String.class, getRelation().name()));
+		return params1;
+	}
 }

@@ -15,11 +15,20 @@ import ambit2.base.relation.composition.Proportion;
  *
  */
 public class SubstanceRecord extends StructureRecord {
+	protected int idsubstance;
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6844893699492741683L;
+	
+	public SubstanceRecord() {
+		super();
+	}
+	public SubstanceRecord(int idsubstance) {
+		super();
+		setIdsubstance(idsubstance);
+	}
 	protected List<IStructureRelation> relatedStructures;
 	
 	public List<IStructureRelation> getRelatedStructures() {
@@ -38,4 +47,11 @@ public class SubstanceRecord extends StructureRecord {
 		r.setRelationType(relation);
 		relatedStructures.add(r);
 	}	
+	
+	public int getIdsubstance() {
+		return idsubstance;
+	}
+	public void setIdsubstance(int idsubstance) {
+		this.idsubstance = idsubstance;
+	}
 }
