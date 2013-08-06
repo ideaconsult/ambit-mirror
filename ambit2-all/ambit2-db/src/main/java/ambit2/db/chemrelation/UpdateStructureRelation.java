@@ -35,7 +35,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 
-public class UpdateStructureRelation extends AbstractUpdateStructureRelation {
+public class UpdateStructureRelation extends AbstractUpdateStructureRelation<IStructureRecord,IStructureRecord,String,Double> {
 
 	public static final String[] create_sql = {
 		"INSERT INTO chem_relation values(?,?,?,?) on duplicate key update metric=values(metric)"

@@ -8,28 +8,28 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
-public abstract class AbstractUpdateStructureRelation  extends AbstractUpdate<IStructureRecord,IStructureRecord> {
+public abstract class AbstractUpdateStructureRelation<S extends IStructureRecord,O extends IStructureRecord,RELATION,METRIC>  extends AbstractUpdate<S,O> {
 	
 	
-	protected String relation;
-	protected Double metric;
-	public Double getMetric() {
+	protected RELATION relation;
+	protected METRIC metric;
+	public METRIC getMetric() {
 		return metric;
 	}
-	public void setMetric(Double metric) {
+	public void setMetric(METRIC metric) {
 		this.metric = metric;
 	}
-	public String getRelation() {
+	public RELATION getRelation() {
 		return relation;
 	}
-	public void setRelation(String relation) {
+	public void setRelation(RELATION relation) {
 		this.relation = relation;
 	}
 	public AbstractUpdateStructureRelation() {
 		this(null,null,null,null);
 	}
-	public AbstractUpdateStructureRelation(IStructureRecord structure1,IStructureRecord structure2,
-										   String relation, Double metric) {
+	public AbstractUpdateStructureRelation(S structure1,O structure2,
+			RELATION relation, METRIC metric) {
 		super();
 		setGroup(structure1);
 		setObject(structure2);
@@ -42,7 +42,7 @@ public abstract class AbstractUpdateStructureRelation  extends AbstractUpdate<IS
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
 		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdchemical()));
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
-		params1.add(new QueryParam<String>(String.class, getRelation()));
+		params1.add(new QueryParam<String>(String.class, getRelation().toString()));
 		return params1;
 	}
 }

@@ -5,6 +5,7 @@
     catalog_references*,
     chemicals*,
     structure*,
+    substance*,
     properties*,
     template*,
     template_def*,
@@ -59,8 +60,9 @@
     inchi CDATA #IMPLIED
     smiles CDATA #IMPLIED
     formula CDATA #IMPLIED
-    hashcode CDATA #REQUIRED
+    inchikey CDATA #IMPLIED
     label CDATA #REQUIRED
+    lastmodified CDATA #REQUIRED
 >
 
 <!ELEMENT structure EMPTY>
@@ -74,6 +76,19 @@
     atomproperties CDATA #IMPLIED
 >
 
+<!ELEMENT substance EMPTY>
+<!ATTLIST substance
+    idsubstance CDATA #REQUIRED
+    prefix CDATA #IMPLIED
+    uuid CDATA #IMPLIED
+    documentType CDATA #IMPLIED
+    format CDATA #IMPLIED
+    formatversion CDATA #IMPLIED
+    name CDATA #IMPLIED
+    publicname CDATA #IMPLIED
+    content CDATA #IMPLIED
+>
+
 <!ELEMENT properties EMPTY>
 <!ATTLIST properties
     idproperty CDATA #REQUIRED
@@ -82,6 +97,7 @@
     units CDATA #REQUIRED
     comments CDATA #REQUIRED
     islocal CDATA #REQUIRED
+    ptype CDATA #IMPLIED
 >
 
 <!ELEMENT template EMPTY>

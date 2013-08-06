@@ -6,7 +6,12 @@
 <catalog_references/>
 <chemicals/>
 <structure/>
+<substance/>
+<substance_relation/>
+<chem_relation/>
 <properties/>
+<qsasheader/>
+<qsasmap4/>
 
 <property_string/>
 <template/>

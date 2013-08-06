@@ -33,7 +33,8 @@ public class ExtractData {
    
         partialDataSet.addTable("chemicals", "SELECT * FROM chemicals WHERE idchemical in "+ids);
         partialDataSet.addTable("structure", "SELECT idstructure,idchemical,structure,format,user_name,type_structure,atomproperties FROM structure join chemicals using(idchemical) WHERE idchemical in "+ids);
-
+        partialDataSet.addTable("substance", "SELECT * FROM substance ");
+        
         partialDataSet.addTable("properties", "SELECT * FROM properties");         
   
         partialDataSet.addTable("template","select * from template");
