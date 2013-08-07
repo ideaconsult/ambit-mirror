@@ -12,6 +12,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.AbstractRelation;
 import ambit2.base.relation.STRUCTURE_RELATION;
+import ambit2.base.relation.StructureRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.BooleanCondition;
@@ -22,7 +23,7 @@ import ambit2.db.search.QueryParam;
  * @author nina
  *
  */
-public class ReadDatasetRelation  extends AbstractQuery<String, ISourceDataset, BooleanCondition, AbstractRelation<String,Double>> implements IQueryRetrieval<AbstractRelation<String,Double>> {
+public class ReadDatasetRelation  extends AbstractQuery<String, ISourceDataset, BooleanCondition, StructureRelation> implements IQueryRetrieval<StructureRelation> {
 	/**
 	 * 
 	 */
@@ -41,7 +42,7 @@ public class ReadDatasetRelation  extends AbstractQuery<String, ISourceDataset, 
 		"join struc_dataset using(idstructure)\n"+
 		"where id_srcdataset=? and relation=? " +
 		"group by idchemical1,idchemical2,relation order by idchemical1,idchemical2,relation" ;
-	protected AbstractRelation<String, Double> result = new AbstractRelation<String, Double>();
+	protected StructureRelation result = new StructureRelation();
 	
 	public ReadDatasetRelation() {
 		this(STRUCTURE_RELATION.HAS_TAUTOMER.name(),null);
@@ -50,7 +51,8 @@ public class ReadDatasetRelation  extends AbstractQuery<String, ISourceDataset, 
 		super();
 		setFieldname(relation);
 		setValue(dataset);
-		result.setStructures(new IStructureRecord[] {new StructureRecord(),new StructureRecord()});
+		result.setFirstStructure(new StructureRecord());
+		result.setSecondStructure(new StructureRecord());
 	}	
 	@Override
 	public String getSQL() throws AmbitException {
@@ -77,21 +79,21 @@ public class ReadDatasetRelation  extends AbstractQuery<String, ISourceDataset, 
 	public boolean isPrescreen() {
 		return false;
 	}
-	@Override
-	public double calculateMetric(AbstractRelation<String, Double> object) {
-		return 1;
-	}
 
 	@Override
-	public AbstractRelation<String, Double> getObject(ResultSet rs)
+	public double calculateMetric(StructureRelation object) {
+		return 1;
+	}
+	@Override
+	public StructureRelation getObject(ResultSet rs)
 			throws AmbitException {
 		try {
-			IStructureRecord [] records = result.getStructures();
-			for (int i=0; i < records.length; i++) records[i].clear();
-			records[0].setIdchemical(rs.getInt(1));
-			records[1].setIdchemical(rs.getInt(2));
+			result.getFirstStructure().clear();
+			result.getSecondStructure().clear();
+			result.getFirstStructure().setIdchemical(rs.getInt(1));
+			result.getSecondStructure().setIdchemical(rs.getInt(2));
 			result.setRelation(rs.getDouble(3));
-			result.setRelationType(rs.getString(4));
+			result.setRelationType(STRUCTURE_RELATION.valueOf(rs.getString(4)));
 			return result;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

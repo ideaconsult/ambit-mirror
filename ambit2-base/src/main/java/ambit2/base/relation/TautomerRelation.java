@@ -2,7 +2,7 @@ package ambit2.base.relation;
 
 import ambit2.base.interfaces.IStructureRecord;
 
-public class TautomerRelation extends AbstractRelation<STRUCTURE_RELATION,Double> {
+public class TautomerRelation extends StructureRelation {
 
 	/**
 	 * 
@@ -14,10 +14,6 @@ public class TautomerRelation extends AbstractRelation<STRUCTURE_RELATION,Double
 	}
 	public TautomerRelation(IStructureRecord structure1,IStructureRecord structure2, Double relation) {
 		super(structure1,structure2,relation);
-		setRelationType(STRUCTURE_RELATION.HAS_TAUTOMER);
-	}
-	public TautomerRelation(IStructureRecord[] structures, Double relation) {
-		super(structures,relation);
 		setRelationType(STRUCTURE_RELATION.HAS_TAUTOMER);
 	}
 }

@@ -57,7 +57,8 @@ public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<Similarity
 	public Object processItem(SimilarityRelation item) throws AmbitException {
 		try {
 			if (item==null) return null;
-			if (item.getStructures()==null) return null;
+			if (item.getFirstStructure()==null) return null;
+			if (item.getSecondStructure()==null) return null;
 			if (comma!=null) getOutput().write(comma);
 			getOutput().write(String.format(
 					"\n{"+
@@ -65,8 +66,8 @@ public class PairwiseSimilarityJSONReporter<Q extends IQueryRetrieval<Similarity
 					"\n\t\"%s\":\"%s\"," + 
 					"\n\t\"%s\":%6.4f" + //similarity
 					"\n}",
-					StructureRelationJSONReporter.jsonFeature.source.jsonname(),cmpReporter.getURI(item.getStructures()[0]),
-					StructureRelationJSONReporter.jsonFeature.target.jsonname(),cmpReporter.getURI(item.getStructures()[1]),
+					StructureRelationJSONReporter.jsonFeature.source.jsonname(),cmpReporter.getURI(item.getFirstStructure()),
+					StructureRelationJSONReporter.jsonFeature.target.jsonname(),cmpReporter.getURI(item.getSecondStructure()),
 					StructureRelationJSONReporter.jsonFeature.value.jsonname(),item.getRelation()
 					));
 			comma = ",";

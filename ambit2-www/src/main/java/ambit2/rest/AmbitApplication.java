@@ -119,6 +119,7 @@ import ambit2.rest.structure.tautomers.QueryStructureRelationResource;
 import ambit2.rest.structure.tautomers.QueryTautomersResource;
 import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.composition.SubstanceCompositionResource;
+import ambit2.rest.substance.composition.SubstanceStructuresResource;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
@@ -327,8 +328,18 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 
 		router.attach(SubstanceResource.substance,SubstanceResource.class);
 		router.attach(SubstanceResource.substanceID,SubstanceResource.class);
+		/**
+		 *  /substance/{id}/structure
+		 */
+		router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceStructuresResource.structure),SubstanceStructuresResource.class);
+		router.attach(String.format("%s%s/{%s}",
+				SubstanceResource.substanceID,SubstanceStructuresResource.structure,SubstanceStructuresResource.compositionType),
+				SubstanceStructuresResource.class);
+		/**
+		 * /substance/{id}/composition/{type}
+		 */
 		router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceCompositionResource.composition),SubstanceCompositionResource.class);
-		router.attach(String.format("%s/%s",SubstanceResource.substanceID,SubstanceCompositionResource.compositionID),SubstanceCompositionResource.class);
+		router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceCompositionResource.compositionID),SubstanceCompositionResource.class);
 		
 		//qmap
 		router.attach(QMapResource.qmap,QMapResource.class);

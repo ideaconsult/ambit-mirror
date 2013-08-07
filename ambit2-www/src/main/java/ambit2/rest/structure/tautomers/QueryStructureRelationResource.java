@@ -11,8 +11,8 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
-import ambit2.base.relation.AbstractRelation;
 import ambit2.base.relation.STRUCTURE_RELATION;
+import ambit2.base.relation.StructureRelation;
 import ambit2.db.chemrelation.ReadDatasetRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.CSVReporter;
@@ -24,7 +24,7 @@ import ambit2.rest.error.InvalidResourceIDException;
 import ambit2.rest.similarity.AbstractPairwiseResource;
 import ambit2.rest.similarity.StructureRelationJSONReporter;
 
-public class QueryStructureRelationResource<Q extends IQueryRetrieval<AbstractRelation<String, Double>>> extends AbstractPairwiseResource<AbstractRelation<String, Double>,Q> { 
+public class QueryStructureRelationResource<Q extends IQueryRetrieval<StructureRelation>> extends AbstractPairwiseResource<StructureRelation,Q> { 
 	public final static String resource = "/relation";
 	public final static String relationKey =  "relation";
 	public final static String resourceID =  String.format("/{%s}",relationKey);

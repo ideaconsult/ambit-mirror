@@ -11,27 +11,24 @@ import ambit2.base.interfaces.IStructureRelation;
  *
  * @param <RELATION>
  */
-public class AbstractRelation<RELATION_TYPE,RELATION_METRIC extends Serializable> implements IStructureRelation<RELATION_TYPE,RELATION_METRIC> {
+public class AbstractRelation<RELATION_TYPE,RELATION_METRIC extends Serializable,FIRSTSTRUC extends IStructureRecord,SECONDSTRUC extends IStructureRecord> 
+			implements IStructureRelation<RELATION_TYPE,RELATION_METRIC,FIRSTSTRUC,SECONDSTRUC> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6592354650015575251L;
-	private IStructureRecord[] structures;
+	private FIRSTSTRUC structure1;
+	private SECONDSTRUC structure2;
 	private RELATION_METRIC relation;
 	private RELATION_TYPE relationType;
 	
-	public AbstractRelation() {
-		this(null,null);
-	}
-	
-	public AbstractRelation(IStructureRecord structure1,IStructureRecord structure2, RELATION_METRIC relation) {
-		this(new IStructureRecord[] {structure1,structure2},relation);
-	}
-	
-	public AbstractRelation(IStructureRecord[] structures, RELATION_METRIC relation) {
-		setStructures(structures);
+	public AbstractRelation(FIRSTSTRUC structure1,SECONDSTRUC structure2, RELATION_METRIC relation) {
+		super();
+		setFirstStructure(structure1);
+		setSecondStructure(structure2);
 		setRelation(relation);
 	}
+	
 	@Override
 	public RELATION_METRIC getRelation() {
 		return relation;
@@ -48,15 +45,26 @@ public class AbstractRelation<RELATION_TYPE,RELATION_METRIC extends Serializable
 	public void setRelationType(RELATION_TYPE relationtype) {
 		this.relationType = relationtype;
 	}
-	
+
 	@Override
-	public IStructureRecord[] getStructures() {
-		return structures;
+	public FIRSTSTRUC getFirstStructure() {
+		return structure1;
 	}
 
 	@Override
-	public void setStructures(IStructureRecord[] structures) {
-		this.structures = structures;
+	public SECONDSTRUC getSecondStructure() {
+		return structure2;
 	}
+
+	@Override
+	public void setFirstStructure(FIRSTSTRUC struc) {
+		structure1 = struc;
+	}
+
+	@Override
+	public void setSecondStructure(SECONDSTRUC struc) {
+		structure2 = struc;
+	}
+	
 
 }

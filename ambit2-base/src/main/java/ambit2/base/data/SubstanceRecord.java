@@ -29,20 +29,20 @@ public class SubstanceRecord extends StructureRecord {
 		super();
 		setIdsubstance(idsubstance);
 	}
-	protected List<IStructureRelation> relatedStructures;
+	protected List<CompositionRelation> relatedStructures;
 	
-	public List<IStructureRelation> getRelatedStructures() {
+	public List<CompositionRelation> getRelatedStructures() {
 		return relatedStructures;
 	}
-	public void setRelatedStructures(List<IStructureRelation> relatedStructures) {
+	public void setRelatedStructures(List<CompositionRelation> relatedStructures) {
 		this.relatedStructures = relatedStructures;
 	}
-	public void addStructureRelation(IStructureRelation relation) {
-		if (relatedStructures==null) relatedStructures = new ArrayList<IStructureRelation>();
+	public void addStructureRelation(CompositionRelation relation) {
+		if (relatedStructures==null) relatedStructures = new ArrayList<CompositionRelation>();
 		relatedStructures.add(relation);
 	}
 	public void addStructureRelation(IStructureRecord record, STRUCTURE_RELATION relation, Proportion value) {
-		if (relatedStructures==null) relatedStructures = new ArrayList<IStructureRelation>();
+		if (relatedStructures==null) relatedStructures = new ArrayList<CompositionRelation>();
 		CompositionRelation r = new CompositionRelation(this,record,value);
 		r.setRelationType(relation);
 		relatedStructures.add(r);
