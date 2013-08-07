@@ -31,7 +31,7 @@ package ambit2.db.substance;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.Property;
+import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
@@ -48,12 +48,14 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 	public static final String[] create_sql = {
 		"INSERT INTO substance (idsubstance,prefix,uuid,documentType,format,name,publicname,content)\n" +
 		"values (?,?,unhex(replace(?,'-','')),?,?,?,?,?) " +
-		"on duplicate key update documentType=ifnull(documentType,values(documentType))," +
-		"format=ifnull(format,values(format))," +
-		"formatversion=ifnull(formatversion,values(formatversion))," +
-		"name=ifnull(name,values(name))," +
-		"publicname=ifnull(publicname,values(publicname))," +
-		"content=ifnull(content,values(content))"
+		"on duplicate key update " +
+		"prefix=values(prefix)," +
+		"uuid=values(uuid)," +
+		"documentType=values(documentType)," +
+		"format=values(format)," +
+		"name=values(name)," +
+		"publicname=values(publicname)," +
+		"content=values(content)"
 	};
 
 	public CreateSubstance(SubstanceRecord substance) {
@@ -64,27 +66,21 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		if (getObject().getIdchemical()<=0)
+		if (getObject().getIdsubstance()<=0)
 			params1.add(new QueryParam<Integer>(Integer.class, null));
 		else
 			params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
 		
-		Object o_uuid = getObject().getProperty(Property.getI5UUIDInstance());
-		String uuid = o_uuid==null?null:o_uuid.toString();
-		String prefix = null;
-		if (uuid!=null) {
-		int pos = uuid.indexOf("-");
-			prefix = uuid.substring(0,pos);
-			uuid = uuid.substring(pos+1,uuid.length());
-		}
-		Object name = getObject().getProperty(Property.getNameInstance());
-		Object publicname = getObject().getProperty(Property.getPublicNameInstance());
-		params1.add(new QueryParam<String>(String.class, prefix));
-		params1.add(new QueryParam<String>(String.class, uuid==null?null:uuid.toString()));
+		String o_uuid = getObject().getI5UUID();
+		String[] uuid = {null,o_uuid};
+		if (o_uuid!=null) 
+			uuid = I5Utils.splitI5UUID(o_uuid.toString());
+		params1.add(new QueryParam<String>(String.class, uuid[0]));
+		params1.add(new QueryParam<String>(String.class, uuid[1]));
 		params1.add(new QueryParam<String>(String.class, "Substance"));
 		params1.add(new QueryParam<String>(String.class, getObject().getFormat()));		
-		params1.add(new QueryParam<String>(String.class, name==null?null:name.toString()));
-		params1.add(new QueryParam<String>(String.class, publicname==null?null:publicname.toString()));
+		params1.add(new QueryParam<String>(String.class, getObject().getName()));
+		params1.add(new QueryParam<String>(String.class, getObject().getPublicName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getContent()));	
 		return params1;
 		

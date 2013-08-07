@@ -54,4 +54,32 @@ public class SubstanceRecord extends StructureRecord {
 	public void setIdsubstance(int idsubstance) {
 		this.idsubstance = idsubstance;
 	}
+	public void setPublicName(String name) {
+		if (name==null)
+			removeProperty(Property.getPublicNameInstance());
+		else setProperty(Property.getPublicNameInstance(),name);
+	}
+	public String getPublicName() {
+		Object name = getProperty(Property.getPublicNameInstance());
+		return name==null?null:name.toString();
+	}
+	public void setName(String name) {
+		if (name==null)
+			removeProperty(Property.getNameInstance());
+		else setProperty(Property.getNameInstance(),name);
+	}
+	public String getName() {
+		Object name = getProperty(Property.getNameInstance());
+		return name==null?null:name.toString();
+	}
+	public void setI5UUID(String uuid) {
+		if (uuid==null)
+			removeProperty(Property.getI5UUIDInstance());
+		else setProperty(Property.getI5UUIDInstance(),uuid);
+	}
+	public String getI5UUID() {
+		Object name = getProperty(Property.getI5UUIDInstance());
+		return name==null?null:name.toString();
+	}
+
 }
