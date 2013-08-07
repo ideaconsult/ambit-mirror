@@ -5,17 +5,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
-import java.util.HashMap;
-import java.util.ArrayList;
 
 import org.junit.Test;
 import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
@@ -32,18 +32,17 @@ import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticSymbolAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-
-import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
-import org.openscience.cdk.isomorphism.matchers.IQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticSymbolAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.CMLUtilities;
@@ -102,7 +101,7 @@ public class TestUtilities
 	public static void printSmartsTokens(String smarts)
 	{
 		System.out.println("Smarts " + smarts); 
-		QueryAtomContainer qac = sp.parse(smarts);
+		IQueryAtomContainer qac = sp.parse(smarts);
 		if (!sp.getErrorMessages().equals(""))
 		{
 			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());			
@@ -122,7 +121,7 @@ public class TestUtilities
 	public void testSmartsToQueryToSmarts(String smarts)
 	{
 		 
-		QueryAtomContainer qac = sp.parse(smarts);
+		IQueryAtomContainer qac = sp.parse(smarts);
 		if (!sp.getErrorMessages().equals(""))
 		{
 			System.out.println("Original smarts: " + smarts); 
@@ -390,7 +389,7 @@ public class TestUtilities
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 		
-		QueryAtomContainer query  = sp.parse(smarts);
+		IQueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))
@@ -416,7 +415,7 @@ public class TestUtilities
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 		
-		QueryAtomContainer query  = sp.parse(smarts);
+		IQueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))
@@ -451,7 +450,7 @@ public class TestUtilities
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 		
-		QueryAtomContainer query  = sp.parse(smarts);
+		IQueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))
@@ -480,7 +479,7 @@ public class TestUtilities
 		if (FlagTargetPreprocessing)
 			preProcess(mol);
 		
-		QueryAtomContainer query  = sp.parse(smarts);
+		IQueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))
@@ -524,7 +523,7 @@ public class TestUtilities
 				{
 					//System.out.println("frag="+frags[k]);
 					
-					QueryAtomContainer query  = sp.parse(frags[k].trim());
+					IQueryAtomContainer query  = sp.parse(frags[k].trim());
 					sp.setNeededDataFlags();
 					String errorMsg = sp.getErrorMessages();
 					if (!errorMsg.equals(""))
@@ -560,7 +559,7 @@ public class TestUtilities
 		int nError = 0;		
 		for (int i = 0; i < smarts.length; i++)
 		{
-			QueryAtomContainer query  = sp.parse(smarts[i]);
+			IQueryAtomContainer query  = sp.parse(smarts[i]);
 			sp.setNeededDataFlags();
 			String errorMsg = sp.getErrorMessages();
 			if (!errorMsg.equals(""))
@@ -579,7 +578,7 @@ public class TestUtilities
 	}
 		
 	
-	public boolean checkSequence(QueryAtomContainer query, Vector<QuerySequenceElement> sequence)
+	public boolean checkSequence(IQueryAtomContainer query, Vector<QuerySequenceElement> sequence)
 	{
 		ChemObjectFactory factory = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 		IAtomContainer skelleton = factory.getCarbonSkelleton(sequence);		
@@ -598,7 +597,7 @@ public class TestUtilities
 	
 	int testSMARTStoChemObj(String smarts) throws Exception
 	{	
-		QueryAtomContainer query  = sp.parse(smarts);		
+		IQueryAtomContainer query  = sp.parse(smarts);		
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))	
 		{	
@@ -614,7 +613,7 @@ public class TestUtilities
 	
 	int testSMARTSBondToIBond(String smarts)
 	{	
-		QueryAtomContainer query  = sp.parse(smarts);		
+		IQueryAtomContainer query  = sp.parse(smarts);		
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))	
 		{	
@@ -644,7 +643,7 @@ public class TestUtilities
 	
 	int testExtractAtomContainer(String smarts) throws Exception
 	{	
-		QueryAtomContainer query  = sp.parse(smarts);		
+		IQueryAtomContainer query  = sp.parse(smarts);		
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))		
 			return(-1);
@@ -1169,7 +1168,7 @@ public class TestUtilities
 					System.out.print(" " + n + "  " + outSmiles.size());
 				
 				String line = f.readLine();
-				QueryAtomContainer q = sp.parse(line);
+				IQueryAtomContainer q = sp.parse(line);
 				if (q.getAtomCount() <= maxNumAtoms)
 					outSmiles.add(line);
 			}
@@ -1206,7 +1205,7 @@ public class TestUtilities
 	
 	int compareIsoTester(String smarts, String mdlFile)
 	{
-		QueryAtomContainer query  = sp.parse(smarts);
+		IQueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))
@@ -1362,7 +1361,7 @@ public class TestUtilities
 		Screening screen = new Screening(SilentChemObjectBuilder.getInstance());
 		
 		System.out.println("Query " + queryString);
-		QueryAtomContainer query = sp.parse(queryString);
+		IQueryAtomContainer query = sp.parse(queryString);
 		screen.setQuery(query);
 		System.out.println(screen.queryKeysToString());
 		System.out.println();
@@ -1432,7 +1431,7 @@ public class TestUtilities
 	public void testConvertKekuleSmartsToAromatic(String smarts)	 throws Exception
 	{
 		System.out.println("testing Kekule to Aromatic: " + smarts);
-		QueryAtomContainer qac = sp.parse(smarts);
+		IQueryAtomContainer qac = sp.parse(smarts);
 		smToChemObj.convertKekuleSmartsToAromatic(qac);
 	}
 	
@@ -1563,7 +1562,7 @@ public class TestUtilities
 	
 	public void testBondIndexChange(String smarts) throws Exception
 	{
-		QueryAtomContainer q = sp.parse(smarts);
+		IQueryAtomContainer q = sp.parse(smarts);
 		if (!sp.getErrorMessages().equals(""))
 		{
 			System.out.println("Smarts Parser errors:\n" + sp.getErrorMessages());			

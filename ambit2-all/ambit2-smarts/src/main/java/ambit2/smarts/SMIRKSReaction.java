@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 
@@ -17,16 +18,16 @@ public class SMIRKSReaction
 	public SmartsFlags productFlags = new SmartsFlags();
 	
 	//Single container representation 
-	public QueryAtomContainer reactant = new QueryAtomContainer();
-	public QueryAtomContainer agent = new QueryAtomContainer();
-	public QueryAtomContainer product = new QueryAtomContainer();
+	public IQueryAtomContainer reactant = new QueryAtomContainer();
+	public IQueryAtomContainer agent = new QueryAtomContainer();
+	public IQueryAtomContainer product = new QueryAtomContainer();
 	
 		
 	
 	//Multi-container representation
-	public Vector<QueryAtomContainer> reactants = new Vector<QueryAtomContainer>();
-	public Vector<QueryAtomContainer> agents = new Vector<QueryAtomContainer>();
-	public Vector<QueryAtomContainer> products = new Vector<QueryAtomContainer>();
+	public Vector<IQueryAtomContainer> reactants = new Vector<IQueryAtomContainer>();
+	public Vector<IQueryAtomContainer> agents = new Vector<IQueryAtomContainer>();
+	public Vector<IQueryAtomContainer> products = new Vector<IQueryAtomContainer>();
 	
 	public Vector<Integer> reactantCLG = new Vector<Integer>();
 	public Vector<Integer> agentsCLG = new Vector<Integer>();
@@ -170,7 +171,7 @@ public class SMIRKSReaction
 	}
 	
 	
-	void registerMappings(String compType, QueryAtomContainer globalContainer, QueryAtomContainer fragment, 
+	void registerMappings(String compType, IQueryAtomContainer globalContainer, IQueryAtomContainer fragment, 
 			int curFragNum, Vector<Integer> mapIndex, Vector<Integer> notMappedAt, 
 			Vector<Integer> atFragNum, Vector<Integer> atGlobalNum, Vector<Integer> fragNum)
 	{

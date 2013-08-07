@@ -3,7 +3,7 @@ package ambit2.tautomers;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 import ambit2.smarts.SmartsParser;
 
@@ -66,7 +66,7 @@ public class KnowledgeBase
 	
 	public void addFilterRule(String fRule, int filterType)
 	{
-		QueryAtomContainer q = sp.parse(fRule);			
+		IQueryAtomContainer q = sp.parse(fRule);			
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))	
 		{

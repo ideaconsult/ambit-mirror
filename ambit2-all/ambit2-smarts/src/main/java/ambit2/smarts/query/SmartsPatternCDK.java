@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.smarts.SMARTSQueryTool;
 
@@ -59,7 +59,7 @@ public class SmartsPatternCDK extends AbstractSmartsPattern<IAtomContainer> {
 		setSmarts(smarts);
 		setNegate(negate);
 	}
-	public QueryAtomContainer getQuery() {
+	public IQueryAtomContainer getQuery() {
 		return null;
 	}	
 	@Override

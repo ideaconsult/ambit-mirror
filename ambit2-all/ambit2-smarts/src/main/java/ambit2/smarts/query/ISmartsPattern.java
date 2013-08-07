@@ -27,7 +27,7 @@ package ambit2.smarts.query;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 /**
  * Generic interface for a SMARTS pattern.
@@ -49,7 +49,7 @@ public interface ISmartsPattern<T> {
 	String getHint();
 	void setHint(String hint);	
 	void useMOEvPrimitive(boolean flag) throws UnsupportedOperationException;
-	QueryAtomContainer getQuery();
+	IQueryAtomContainer getQuery();
 	/**
 	 * Just for backward compatibility
 	 * @return

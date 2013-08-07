@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -15,11 +14,10 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.processors.structure.AtomConfigurator;
@@ -61,7 +59,7 @@ public class TestSMIRKS {
 		
 		for (int i = 0; i < eResult.length; i++)
 		{
-			QueryAtomContainer query = smartsParser.parse(eResult[i]);
+			IQueryAtomContainer query = smartsParser.parse(eResult[i]);
 			String error = smartsParser.getErrorMessages();
 			if (!error.equals(""))
 			{

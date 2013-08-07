@@ -1,16 +1,16 @@
 package ambit2.tautomers;
 
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond;
-
-import java.util.Vector;
 import java.util.List;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import java.util.Vector;
 
-import ambit2.smarts.SmartsParser;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+
 import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsParser;
 
 public class Rule 
 {
@@ -28,7 +28,7 @@ public class Rule
 	boolean isRuleActive = true;
 	int mobileGroupPos[][] = null;   
 	String RuleInfo = "";
-	QueryAtomContainer stateQueries[] = null;
+	IQueryAtomContainer stateQueries[] = null;
 	String OriginalRuleString = "";
 	RankingRule rankingRule = null;
 	
@@ -46,7 +46,7 @@ public class Rule
 		Vector<IRuleInstance> instances = new Vector<IRuleInstance>();
 		for (int i = 0; i < stateQueries.length; i++)
 		{
-			QueryAtomContainer query = stateQueries[i];			
+			IQueryAtomContainer query = stateQueries[i];			
 			RuleStateFlags flags = stateFlags[i];			
 			SmartsParser.prepareTargetForSMARTSSearch(
 				flags.mNeedNeighbourData, 

@@ -32,7 +32,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.LoggingTool;
@@ -52,7 +52,7 @@ public class TestRecursiveSmartsSearch extends TestCase
 	public SmartsParser smartsParser = new SmartsParser();
 	public SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	public LoggingTool logger;
-	public QueryAtomContainer mQuery;
+	public IQueryAtomContainer mQuery;
 	public IAtomContainer mTarget;
 	SmartsHelper helper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
 	

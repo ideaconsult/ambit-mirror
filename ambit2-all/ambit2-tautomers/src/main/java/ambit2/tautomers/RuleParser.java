@@ -2,8 +2,9 @@ package ambit2.tautomers;
 
 import java.util.Vector;
 
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 import ambit2.smarts.SmartsParser;
 
@@ -121,7 +122,7 @@ public class RuleParser
 		
 		for (int i = 0; i<curRule.smartsStates.length; i++)
 		{
-			QueryAtomContainer q = sp.parse(curRule.smartsStates[i]);			
+			IQueryAtomContainer q = sp.parse(curRule.smartsStates[i]);			
 			String errorMsg = sp.getErrorMessages();
 			if (!errorMsg.equals(""))
 			{	
@@ -382,8 +383,8 @@ public class RuleParser
 		//Currently this version works with two states
 		//Actually at the moment rules with more than two states are not needed
 		
-		QueryAtomContainer q0 = curRule.stateQueries[0];
-		QueryAtomContainer q1 = curRule.stateQueries[1];
+		IQueryAtomContainer q0 = curRule.stateQueries[0];
+		IQueryAtomContainer q1 = curRule.stateQueries[1];
 		
 		if (q0.getAtomCount() != q1.getAtomCount())
 		{	
@@ -415,7 +416,7 @@ public class RuleParser
 		}
 		
 		
-		QueryAtomContainer q, q_2; 
+		IQueryAtomContainer q, q_2; 
 		
 		if (closureState == 1)
 		{
@@ -599,7 +600,7 @@ public class RuleParser
 	*/
 	
 	
-	boolean matchAtomIndexes(QueryAtomContainer q, QueryAtomContainer q2)
+	boolean matchAtomIndexes(IQueryAtomContainer q, IQueryAtomContainer q2)
 	{
 		//The bonds in q2 are reordered so that the q and q2 has the 'same sequences' of atom indexes.
 		//The only exception is the last bond (or maybe several bonds) 
@@ -642,7 +643,7 @@ public class RuleParser
 	}
 	
 	
-	IBond getBondWithAtomIndexes(int ind0, int ind1, Vector<IBond> v, QueryAtomContainer q)
+	IBond getBondWithAtomIndexes(int ind0, int ind1, Vector<IBond> v, IQueryAtomContainer q)
 	{
 		for (int i = 0; i < v.size(); i++)
 		{

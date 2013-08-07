@@ -42,7 +42,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -60,7 +60,7 @@ public class TestSmartsSearch extends TestCase
 	public List<List<Integer>>  matchingAtoms = null;
 	public SmartsParser smartsParser = new SmartsParser();
 	public LoggingTool logger;
-	public QueryAtomContainer mQuery;
+	public IQueryAtomContainer mQuery;
 	public IAtomContainer mTarget;
 	SmartsHelper helper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
 	
@@ -73,7 +73,7 @@ public class TestSmartsSearch extends TestCase
 		return new TestSuite(TestSmartsSearch.class);
 	}
 	
-	public boolean matches(IAtomContainer atomContainer, QueryAtomContainer query) throws CDKException 
+	public boolean matches(IAtomContainer atomContainer, IQueryAtomContainer query) throws CDKException 
 	{		
 		// lets see if we have a single atom query
 		if (query.getAtomCount() == 1) {
@@ -103,7 +103,7 @@ public class TestSmartsSearch extends TestCase
 	
 	public int[] match(String smarts, String smiles) throws Exception 
 	{
-		QueryAtomContainer query = smartsParser.parse(smarts);
+		IQueryAtomContainer query = smartsParser.parse(smarts);
 		mQuery = query;
 		String error = smartsParser.getErrorMessages();
 		if (!error.equals(""))
@@ -128,7 +128,7 @@ public class TestSmartsSearch extends TestCase
 	
 	private int[] match1(String smarts, IAtomContainer atomContainer) throws Exception 
 	{
-		QueryAtomContainer query = smartsParser.parse(smarts);
+		IQueryAtomContainer query = smartsParser.parse(smarts);
 		mQuery = query;
 		String error = smartsParser.getErrorMessages();
 		if (!error.equals(""))

@@ -4,8 +4,7 @@ import java.util.Vector;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 
 public class StructureSetAnalyzer 
@@ -114,7 +113,7 @@ public class StructureSetAnalyzer
 	
 	boolean checkForDuplication(String smarts)
 	{	
-		QueryAtomContainer query  = sp.parse(smarts);
+		IQueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
 		isoTester.setQuery(query);						
 				
@@ -127,7 +126,7 @@ public class StructureSetAnalyzer
 					if (smarts.equals(s.smiles))
 						return(true);
 					
-					QueryAtomContainer q = sp.parse(s.smiles);
+					IQueryAtomContainer q = sp.parse(s.smiles);
 					IAtomContainer ac = stco.extractAtomContainer(q,null);
 					
 					boolean isoRes = isoTester.hasIsomorphism(ac);
@@ -201,7 +200,7 @@ public class StructureSetAnalyzer
 	int getFrequency(String smiles)
 	{
 		int freq = 0;
-		QueryAtomContainer query  = sp.parse(smiles);
+		IQueryAtomContainer query  = sp.parse(smiles);
 		sp.setNeededDataFlags();
 		isoTester.setQuery(query);
 		

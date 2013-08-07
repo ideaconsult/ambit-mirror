@@ -31,8 +31,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
 
@@ -42,7 +42,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
  */
 public class IsomorphismTester 
 {
-	QueryAtomContainer query;
+	IQueryAtomContainer query;
 	IAtomContainer target;
 	boolean isomorphismFound;
 	boolean FlagStoreIsomorphismNode = false;
@@ -55,7 +55,7 @@ public class IsomorphismTester
 	Vector<IQueryAtom> sequencedBondAt2 = new Vector<IQueryAtom>();
 	
 	
-	public void setQuery(QueryAtomContainer container)
+	public void setQuery(IQueryAtomContainer container)
 	{
 		query = container;
 		TopLayer.setAtomTopLayers(query, TopLayer.TLProp);
@@ -67,7 +67,7 @@ public class IsomorphismTester
 		return(sequence);
 	}
 	
-	public void setSequence(QueryAtomContainer queryContainer, Vector<QuerySequenceElement> externalSequence) 
+	public void setSequence(IQueryAtomContainer queryContainer, Vector<QuerySequenceElement> externalSequence) 
 	{
 		query = queryContainer;
 		sequence = externalSequence;

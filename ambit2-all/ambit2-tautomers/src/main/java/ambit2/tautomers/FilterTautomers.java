@@ -9,7 +9,7 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -287,7 +287,7 @@ public class FilterTautomers
 		if (structs.isEmpty())
 			return (false);
 		
-		QueryAtomContainer query = SmartsHelper.getQueryAtomContainer(target, false);
+		IQueryAtomContainer query = SmartsHelper.getQueryAtomContainer(target, false);
 		isoTester.setQuery(query);
 		
 		for (int i = 0; i < structs.size(); i++)

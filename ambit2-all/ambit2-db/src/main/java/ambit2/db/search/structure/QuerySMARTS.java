@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -129,7 +129,7 @@ public class QuerySMARTS extends
 				SmartsPatternAmbit matcher = new SmartsPatternAmbit(builder);
 				matcher.setUseCDKIsomorphism(false);
 				value.setQuery(matcher);
-				QueryAtomContainer container = matcher.getQuery();
+				IQueryAtomContainer container = matcher.getQuery();
 				IAtomContainer atomContainer = smartsToChemObject.process(container);
 				try {
 					AtomConfigurator cfg = new AtomConfigurator();

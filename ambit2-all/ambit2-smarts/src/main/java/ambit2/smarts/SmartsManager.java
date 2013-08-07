@@ -39,6 +39,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
@@ -69,7 +70,7 @@ public class SmartsManager
 	IsomorphismTester isoTester = new IsomorphismTester();
 	String querySmarts;
 	String errorMsg = "";
-	QueryAtomContainer query;
+	IQueryAtomContainer query;
 	
 	//The recursive atoms
 	Vector<SmartsAtomExpression> recAtoms = new Vector<SmartsAtomExpression>();	
@@ -81,7 +82,7 @@ public class SmartsManager
 	int recAtomNumSubSmarts[];
 	int recAtomLastLoAnd[];
 	int curComb[];
-	Vector<QueryAtomContainer> subQueryList = new Vector<QueryAtomContainer>();	
+	Vector<IQueryAtomContainer> subQueryList = new Vector<IQueryAtomContainer>();	
 	
 	//The atoms connected to the recursive atoms and the corresponding bond orders.
 	//The bonds between two recursive atoms are not put in topLayers.
@@ -93,7 +94,7 @@ public class SmartsManager
 	Vector<Integer> compFrags = new Vector<Integer>(); //The indexes of the query frags which are in a component
 	boolean fragMaps[][];
 	int components[];
-	QueryAtomContainer baseStr;	
+	IQueryAtomContainer baseStr;	
 	public boolean mGenerateSubQueries;
 	protected IChemObjectBuilder builder;
 	
@@ -164,7 +165,7 @@ public class SmartsManager
 		return(errorMsg);
 	}
 	
-	public QueryAtomContainer getQueryContaner()
+	public IQueryAtomContainer getQueryContaner()
 	{
 		return(query);
 	}	
@@ -573,7 +574,7 @@ public class SmartsManager
 		while (curComb != null)
 		{	
 			newAtoms = new IAtom [curComb.length]; 
-			QueryAtomContainer subQuery = new QueryAtomContainer();
+			IQueryAtomContainer subQuery = new QueryAtomContainer();
 			subQuery.add(baseStr);
 			for(int i=0; i < curComb.length; i++)
 				expandBaseStruct(subQuery,i);
@@ -640,10 +641,10 @@ public class SmartsManager
 		return(-1);
 	}
 	
-	void expandBaseStruct(QueryAtomContainer struct, int pos)
+	void expandBaseStruct(IQueryAtomContainer struct, int pos)
 	{	
 		SmartsAtomExpression sa = recAtoms.get(pos);		
-		QueryAtomContainer fragment = (QueryAtomContainer)sa.recSmartsContainers.get(curComb[pos]);
+		IQueryAtomContainer fragment = (IQueryAtomContainer)sa.recSmartsContainers.get(curComb[pos]);
 		
 		//Adding the first atom of the fragment 
 		if (recAtomLastLoAnd[pos] > -1)
@@ -667,7 +668,7 @@ public class SmartsManager
 			struct.addBond(fragment.getBond(i));
 	}
 	
-	void addBond(QueryAtomContainer container, IAtom atom0, IAtom atom1, IBond bond)
+	void addBond(IQueryAtomContainer container, IAtom atom0, IAtom atom1, IBond bond)
 	{
 		IBond newBond = null;
 		if (bond instanceof AnyOrderQueryBond)		
@@ -704,7 +705,7 @@ public class SmartsManager
 	    container.addBond(newBond);
 	}
 	
-	void restoreRecAtomBonds(QueryAtomContainer container)
+	void restoreRecAtomBonds(IQueryAtomContainer container)
 	{
 		for(int i = 0; i < bondRecAt1.size(); i++)
 		{
@@ -728,7 +729,7 @@ public class SmartsManager
 		//recursive conditions.
 			for (int i = 0; i < subQueryList.size(); i++)
 			{	
-				QueryAtomContainer subQuery = subQueryList.get(i);
+				IQueryAtomContainer subQuery = subQueryList.get(i);
 				boolean res  = UniversalIsomorphismTester.isSubgraph(target, subQuery);
 				if(res)
 					return(true);
@@ -873,7 +874,7 @@ public class SmartsManager
 	
 	void getQueryRecMatches(IAtomContainer target) throws Exception
 	{
-		Vector<QueryAtomContainer> vRecCon;				
+		Vector<IQueryAtomContainer> vRecCon;				
 		for (int i = 0; i < recAtoms.size(); i++)
 		{	
 			vRecCon = recAtoms.get(i).recSmartsContainers;
@@ -904,7 +905,7 @@ public class SmartsManager
 	}
 	
 	
-	Vector<IAtom> getFirstPosAtomMappings_CurrentIsoTester(IAtomContainer target, QueryAtomContainer recQuery)
+	Vector<IAtom> getFirstPosAtomMappings_CurrentIsoTester(IAtomContainer target,IQueryAtomContainer recQuery)
 	{
 		//This function is based on the IsoTester from this package
 		isoTester.setQuery(recQuery);

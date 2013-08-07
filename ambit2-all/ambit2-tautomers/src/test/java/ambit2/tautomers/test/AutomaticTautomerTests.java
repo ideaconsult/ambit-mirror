@@ -2,20 +2,19 @@ package ambit2.tautomers.test;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.util.Vector;
 import java.text.DecimalFormat;
+import java.util.Vector;
 
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.SMILESWriter;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
-import ambit2.smarts.SmartsParser;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
 
@@ -1246,7 +1245,7 @@ public class AutomaticTautomerTests
 		
 		for (int i = 0; i < tautomers0.size(); i++)
 		{
-			QueryAtomContainer query = SmartsHelper.getQueryAtomContainer(tautomers0.get(i), false);
+			IQueryAtomContainer query = SmartsHelper.getQueryAtomContainer(tautomers0.get(i), false);
 			isoTester.setQuery(query);
 			
 			boolean FlagFound = false;
@@ -2002,7 +2001,7 @@ public class AutomaticTautomerTests
 				sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 				mol2 = sp.parseSmiles(tok2);
 				
-				QueryAtomContainer query = SmartsHelper.getQueryAtomContainer(mol2, false);
+				IQueryAtomContainer query = SmartsHelper.getQueryAtomContainer(mol2, false);
 				isoTester.setQuery(query);
 				if (isoTester.hasIsomorphism(mol))
 				{

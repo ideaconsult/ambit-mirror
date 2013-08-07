@@ -8,7 +8,7 @@ import junit.framework.TestSuite;
 
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
@@ -52,7 +52,7 @@ public class TestSmartsFingerprinter extends TestCase
 				IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles[i]);
 				BitSet bs1 = fp.getFingerprint(mol);
 				
-				QueryAtomContainer query = sp.parse(smiles[i]);
+				IQueryAtomContainer query = sp.parse(smiles[i]);
 				BitSet bs2 = sfp.getFingerprint(query);				
 				
 				assertEquals("Different BitsSet for "+smiles[i], bs1.toString(), bs2.toString());

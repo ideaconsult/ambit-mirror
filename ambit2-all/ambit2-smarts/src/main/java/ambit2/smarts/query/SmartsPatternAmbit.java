@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
@@ -89,7 +89,7 @@ public class SmartsPatternAmbit extends AbstractSmartsPattern<IAtomContainer> {
 		setNegate(negate);
 
 	}	
-	public QueryAtomContainer getQuery() {
+	public IQueryAtomContainer getQuery() {
 		return sman.getQueryContaner();
 	}
 	public IAtomContainer getObjectToVerify(IAtomContainer mol) {

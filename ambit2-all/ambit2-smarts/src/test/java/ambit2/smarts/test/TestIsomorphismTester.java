@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.LoggingTool;
 
@@ -49,7 +49,7 @@ public class TestIsomorphismTester extends TestCase
 		
 		
 		//Direct test of class IsomorphismTester
-		QueryAtomContainer query  = sp.parse(smarts);
+		IQueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))

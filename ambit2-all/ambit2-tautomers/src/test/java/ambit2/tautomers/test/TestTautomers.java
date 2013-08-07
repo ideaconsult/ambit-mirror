@@ -1,14 +1,14 @@
 package ambit2.tautomers.test;
 
-import java.util.List;
-import java.util.Vector;
-import java.util.ArrayList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
@@ -18,28 +18,23 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tautomers.InChITautomerGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.Molecule;
-
-import org.openscience.cdk.io.IChemObjectWriter;
-import org.openscience.cdk.io.SDFWriter;
-import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
 import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.io.FileInputState;
+import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
+import ambit2.tautomers.KnowledgeBase;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
-import ambit2.smarts.ChemObjectFactory;
-import ambit2.tautomers.KnowledgeBase;
-import ambit2.mopac.MopacUtilities;
 
 
 public class TestTautomers 
@@ -477,7 +472,7 @@ public class TestTautomers
 		
 		for (int i = 0; i < expectedStr.length; i++)
 		{	
-			QueryAtomContainer query  = sp.parse(expectedStr[i]);
+			IQueryAtomContainer query  = sp.parse(expectedStr[i]);
 			sp.setNeededDataFlags();
 			String errorMsg = sp.getErrorMessages();
 			if (!errorMsg.equals(""))
