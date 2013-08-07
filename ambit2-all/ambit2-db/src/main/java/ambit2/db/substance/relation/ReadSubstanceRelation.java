@@ -62,6 +62,7 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 	public ReadSubstanceRelation() {
 		this((SubstanceRecord)null);
 	}
+
 	public ReadSubstanceRelation(STRUCTURE_RELATION relation, SubstanceRecord id) {
 		super();
 		setFieldname(relation);
