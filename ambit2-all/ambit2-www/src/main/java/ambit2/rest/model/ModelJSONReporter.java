@@ -13,6 +13,7 @@ import org.restlet.engine.util.Base64;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.json.JSONUtils;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.IEvaluation;
 import ambit2.core.data.model.IEvaluation.EVStatsType;
@@ -20,7 +21,6 @@ import ambit2.core.data.model.IEvaluation.EVType;
 import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.model.evaluation.EvaluationStats;
-import ambit2.rest.json.JSONUtils;
 
 /**
  * JSON

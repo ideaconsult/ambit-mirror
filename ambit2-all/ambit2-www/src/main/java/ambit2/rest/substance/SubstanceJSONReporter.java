@@ -7,9 +7,9 @@ import org.restlet.Request;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.json.JSONUtils;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.json.JSONUtils;
 
 public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> extends SubstanceURIReporter<Q> {
 	protected String comma = null;

@@ -22,6 +22,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.json.JSONUtils;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.db.facets.compounds.CollectionsByChemical;
@@ -32,7 +33,6 @@ import ambit2.db.readers.RetrieveStructure;
 import ambit2.db.reporters.CSVReporter;
 import ambit2.db.search.IQueryCondition;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.json.JSONUtils;
 import ambit2.rest.property.PropertyJSONReporter;
 
 /**

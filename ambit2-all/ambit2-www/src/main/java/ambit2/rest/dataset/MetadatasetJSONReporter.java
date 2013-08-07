@@ -9,8 +9,8 @@ import org.restlet.data.Reference;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.json.JSONUtils;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.json.JSONUtils;
 
 /**
  * JSON

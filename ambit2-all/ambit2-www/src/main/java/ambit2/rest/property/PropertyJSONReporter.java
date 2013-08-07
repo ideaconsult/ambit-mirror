@@ -11,8 +11,8 @@ import ambit2.base.data.Property;
 import ambit2.base.data.PropertyAnnotation;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.ICategory;
+import ambit2.base.json.JSONUtils;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.json.JSONUtils;
 
 /**
  * JSON

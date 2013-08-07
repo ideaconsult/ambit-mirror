@@ -81,5 +81,11 @@ public class SubstanceRecord extends StructureRecord {
 		Object name = getProperty(Property.getI5UUIDInstance());
 		return name==null?null:name.toString();
 	}
+	@Override
+	public void clear() {
+		super.clear();
+		idsubstance = -1;
+		if (relatedStructures!=null) relatedStructures.clear();
+	}
 
 }

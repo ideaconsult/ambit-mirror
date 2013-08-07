@@ -2,6 +2,8 @@ package ambit2.base.relation.composition;
 
 import java.io.Serializable;
 
+import ambit2.base.json.JSONUtils;
+
 /**
  * 
  * @author nina
@@ -13,8 +15,72 @@ public class Proportion implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 578781054130658046L;
-	protected String typical;
 	protected String function;
+	
+	protected String typical;
+	protected Double typical_value;
+	protected String typical_unit;
+	
+	protected Double real_value;
+	protected String real_lower;	
+	protected Double real_lowervalue;
+	protected String real_upper;
+	protected Double real_uppervalue;
+	protected String real_unit;
+	
+	public void clear() {
+		function = null;
+		typical = null;
+		typical_value = null;
+		typical_unit = null;
+		real_value = null;
+		real_lower = null;
+		real_lowervalue = null;
+		real_upper = null;
+		real_uppervalue = null;
+		real_unit = null;
+	}
+	enum _jsonfields {
+		function {
+			@Override
+			public String toJSON(Proportion p) {
+				return String.format("\"%s\":\"%s\"", name(), JSONUtils.jsonEscape(p.getFunction()));
+			}
+		},
+		typical {
+			@Override
+			public String toJSON(Proportion p) {
+				return String.format("\"%s\": {\"precision\": \"%s\",\"value\": %e,\"unit\": \"%s\"}", 
+						name(),
+						JSONUtils.jsonEscape(p.getTypical()),
+						p.getTypical_value(),
+						p.getTypical_unit()
+						);
+			}			
+		},
+		real {
+			@Override
+			public String toJSON(Proportion p) {
+				return String.format("\"%s\": {\"lowerPrecision\": \"%s\",\"lowerValue\": %e,\"upperPrecision\": \"%s\",\"upperValue\": %e,\"unit\": \"%s\"}", 
+						name(),
+						JSONUtils.jsonEscape(p.getReal_lower()),
+						p.getReal_lower(),
+						JSONUtils.jsonEscape(p.getReal_upper()),
+						p.getReal_upper(),
+						p.getReal_unit()
+						);
+			}			
+		},		
+		function_as_additive {
+			@Override
+			public String toJSON(Proportion p) {
+				return String.format("\"%s\":\"%s\"", name(), p.getFunction());
+			}				
+		};
+	
+		public abstract String toJSON(Proportion p);
+		
+	}
 	public String getFunction() {
 		return function;
 	}
@@ -27,18 +93,7 @@ public class Proportion implements Serializable {
 	public void setTypical(String typical) {
 		this.typical = typical;
 	}
-	protected Double typical_value;
-	protected String typical_unit;
-	
-	protected Double real_value;
-	
-	protected String real_lower;	
-	protected Double real_lowervalue;
-	
-	protected String real_upper;
-	protected Double real_uppervalue;
-	
-	protected String real_unit;
+
 	
 	public String getReal_lower() {
 		return real_lower;
@@ -92,5 +147,17 @@ public class Proportion implements Serializable {
 	public void setReal_unit(String real_unit) {
 		this.real_unit = real_unit;
 	}
-	
+	public String toJSON() {
+		StringBuilder b = new StringBuilder();
+		b.append("\t{\n");
+		String comma = "";
+		for (_jsonfields f : _jsonfields.values()) {
+			b.append(comma);
+			b.append("\n\t");
+			b.append(f.toJSON(this));
+			comma = ",";
+		}
+		b.append("\n\t}\n");
+		return b.toString();
+	}
 }

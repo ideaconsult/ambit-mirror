@@ -1,4 +1,4 @@
-package ambit2.rest.json;
+package ambit2.base.json;
 
 public class JSONUtils {
 	public static String jsonEscape(String value) {
