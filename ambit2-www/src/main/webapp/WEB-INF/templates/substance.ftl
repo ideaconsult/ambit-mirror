@@ -5,7 +5,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-substance.js'></script>
 
-<#if algid??>
+<#if substanceid??>
 	<script type='text/javascript'>
 		var algorithm = readSubstance("${ambit_root}","${ambit_request_json}");
 	</script>
@@ -15,18 +15,10 @@
 	$(document).ready(function() {
 	  	var oTable = substance.defineSubstanceTable("${ambit_root}","${ambit_request_json}",true);
 	  	loadHelp("${ambit_root}","substance");
+	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	});
 	</script>
 </#if>
-
-<script type='text/javascript'>
-
-$(document)
-		.ready(
-				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
-				});
-</script>
 
 </head>
 <body>
