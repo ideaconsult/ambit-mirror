@@ -2,27 +2,27 @@ package ambit2.smarts.test;
 
 import java.util.Vector;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.LoggingTool;
 
+import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
-import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParserError;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class TestSmartsParser extends TestCase
 {
 	public SmartsParser smartsParser = new SmartsParser();
 	public IsomorphismTester isoTester = new IsomorphismTester();
 	public LoggingTool logger;
-	public QueryAtomContainer mQuery;
+	public IQueryAtomContainer mQuery;
 	public IAtomContainer mTarget;
 	SmartsHelper helper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
 	
@@ -38,7 +38,7 @@ public class TestSmartsParser extends TestCase
 		
 	public boolean matchBooleanResult(String smarts, String smiles) throws Exception 
 	{
-		QueryAtomContainer query = smartsParser.parse(smarts);
+		IQueryAtomContainer query = smartsParser.parse(smarts);
 		mQuery = query;
 		String error = smartsParser.getErrorMessages();
 		if (!error.equals(""))
@@ -62,7 +62,7 @@ public class TestSmartsParser extends TestCase
 	
 	public void parserError(String smarts, String[] expErrors) throws Exception 
 	{
-		QueryAtomContainer query = smartsParser.parse(smarts);
+		IQueryAtomContainer query = smartsParser.parse(smarts);
 		Vector<SmartsParserError> errors = smartsParser.getErrors();
 		if (expErrors == null)				
 			assertEquals("Parisng " + smarts + " no errors expected!", 0, errors.size());

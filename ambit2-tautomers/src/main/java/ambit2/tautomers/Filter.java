@@ -1,6 +1,6 @@
 package ambit2.tautomers;
 
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 public class Filter 
 {
@@ -9,7 +9,7 @@ public class Filter
 	
 	
 	public String fragmentSmarts;
-	public QueryAtomContainer fragmentQuery;
+	public IQueryAtomContainer fragmentQuery;
 	RuleStateFlags fragmentFlags;
 	public int type; 
 }

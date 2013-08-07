@@ -31,7 +31,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
@@ -45,7 +45,7 @@ public class SmartsAtomExpression extends SMARTSAtom
 	public Vector<SmartsExpressionToken> tokens = new Vector<SmartsExpressionToken>();
 	//Each recursive Smarts is represented with a string and a separate QueryAtomContainer 
 	public Vector<String> recSmartsStrings = new Vector<String>();
-	public Vector<QueryAtomContainer> recSmartsContainers = new Vector<QueryAtomContainer>();
+	public Vector<IQueryAtomContainer> recSmartsContainers = new Vector<IQueryAtomContainer>();
 	
 	//This data must be filled from outside for each different target 
 	//in order to be used for mathching. 
@@ -338,7 +338,7 @@ public class SmartsAtomExpression extends SMARTSAtom
     				return("$()");
     			//return("$("+(String)recSmartsStrings.get(tok.param)+")");    			
     			SmartsHelper sw = new SmartsHelper(SilentChemObjectBuilder.getInstance());    			
-    			return("$("+sw.toSmarts((QueryAtomContainer)recSmartsContainers.get(tok.param))+")");
+    			return("$("+sw.toSmarts((IQueryAtomContainer)recSmartsContainers.get(tok.param))+")");
     		}
     	}
     	return("");

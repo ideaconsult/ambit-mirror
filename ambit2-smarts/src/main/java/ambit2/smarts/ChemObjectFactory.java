@@ -3,12 +3,11 @@ package ambit2.smarts;
 import java.io.File;
 import java.io.FileReader;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
 import java.util.Vector;
-import java.util.ArrayList;
-
 
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
@@ -19,7 +18,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -454,7 +453,7 @@ public class ChemObjectFactory
 					if (smarts.equals(s.smiles))
 						return(true);
 					
-					QueryAtomContainer q = parser.parse(s.smiles);
+					IQueryAtomContainer q = parser.parse(s.smiles);
 					IAtomContainer ac = stco.extractAtomContainer(q,null);
 					boolean res = man.searchIn(ac);
 					if (res)
@@ -604,12 +603,12 @@ public class ChemObjectFactory
 	Vector<Integer> doStatisticsForStructs(Vector<String> smiles, String mdlFile, int nUsedStr) throws Exception
 	{	
 		System.out.print(" queries ..." );
-		Vector<QueryAtomContainer> queries = new Vector<QueryAtomContainer> ();
+		Vector<IQueryAtomContainer> queries = new Vector<IQueryAtomContainer> ();
 		int n = smiles.size();
 		int frequency[] = new int[n];
 		for (int i = 0; i < n; i++)
 		{
-			QueryAtomContainer q = parser.parse(smiles.get(i));
+			IQueryAtomContainer q = parser.parse(smiles.get(i));
 			queries.add(q);
 			frequency[i] = 0;
 		}

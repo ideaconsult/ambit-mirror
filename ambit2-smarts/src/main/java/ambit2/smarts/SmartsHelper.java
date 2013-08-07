@@ -37,15 +37,16 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.SMILESWriter;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -71,7 +72,7 @@ public class SmartsHelper
 		super();
 		smilesparser = new SmilesParser(builder);
 	}
-	static public String getAtomsString(QueryAtomContainer query)
+	static public String getAtomsString(IQueryAtomContainer query)
 	{
 		StringBuffer sb = new StringBuffer();	
 		
@@ -172,7 +173,7 @@ public class SmartsHelper
 		return(sb.toString());
 	}
 	
-	static public String bondToStringExhaustive(QueryAtomContainer query, IBond bond)
+	static public String bondToStringExhaustive(IQueryAtomContainer query, IBond bond)
 	{
 		StringBuffer sb = new StringBuffer();			
 		sb.append(bondToString(bond)+ " "+
@@ -181,7 +182,7 @@ public class SmartsHelper
 		return(sb.toString());
 	}
 	
-	static public String getBondsString(QueryAtomContainer query)
+	static public String getBondsString(IQueryAtomContainer query)
 	{
 		StringBuffer sb = new StringBuffer();			
 		for (int i = 0; i < query.getBondCount(); i++)
@@ -194,9 +195,9 @@ public class SmartsHelper
 		return(sb.toString());
 	}
 	
-	static public QueryAtomContainer getQueryAtomContainer(IAtomContainer ac, boolean HandleAromaticity)
+	static public IQueryAtomContainer getQueryAtomContainer(IAtomContainer ac, boolean HandleAromaticity)
 	{
-		QueryAtomContainer query = new QueryAtomContainer();
+		IQueryAtomContainer query = new QueryAtomContainer();
 		for (int i = 0; i < ac.getAtomCount(); i++)
 		{
 			IAtom a = ac.getAtom(i);
@@ -382,7 +383,7 @@ public class SmartsHelper
 
 	
 	
-	void determineFirstSheres(QueryAtomContainer query)
+	void determineFirstSheres(IQueryAtomContainer query)
 	{
 		firstSphere.clear();
 		nAtom =  query.getAtomCount();
@@ -408,7 +409,7 @@ public class SmartsHelper
 	 * @param query
 	 * @return SMARTS string 
 	 */
-	public String toSmarts(QueryAtomContainer query)
+	public String toSmarts(IQueryAtomContainer query)
 	{
 		determineFirstSheres(query);
 		nodes.clear();
@@ -614,7 +615,7 @@ public class SmartsHelper
 		sp.mSupportDoubleBondAromaticityNotSpecified = FlagSupportDoubleBondAromaticityNotSpecified;
 		IsomorphismTester isoTester = new IsomorphismTester();
 		
-		QueryAtomContainer query  = sp.parse(smartsQuery);
+		IQueryAtomContainer query  = sp.parse(smartsQuery);
 		sp.setNeededDataFlags();
 		String errorMsg = sp.getErrorMessages();
 		if (!errorMsg.equals(""))

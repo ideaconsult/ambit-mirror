@@ -20,6 +20,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.HydrogenAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.LogicalOperatorAtom;
@@ -1084,7 +1085,7 @@ public class AutomaticTestUtilities
 		long timeCDKSMSD = 0;
 		
 		//Ambit parser
-		QueryAtomContainer query_ambit  = spAmbit.parse(line);
+		IQueryAtomContainer query_ambit  = spAmbit.parse(line);
 		spAmbit.setNeededDataFlags();
 		String errorMsg = spAmbit.getErrorMessages();
 		if (!errorMsg.equals(""))
@@ -1266,7 +1267,7 @@ public class AutomaticTestUtilities
 		
 		//Ambit parser
 		startTime = System.nanoTime();
-		QueryAtomContainer query_ambit  = spAmbit.parse(line);
+		IQueryAtomContainer query_ambit  = spAmbit.parse(line);
 		spAmbit.setNeededDataFlags();
 		endTime = System.nanoTime();
 		timeAmbit = endTime - startTime;
@@ -1572,7 +1573,7 @@ public class AutomaticTestUtilities
 	
 	public int processLineForSizeStatistics(String line)
 	{
-		QueryAtomContainer query_ambit  = spAmbit.parse(line);
+		IQueryAtomContainer query_ambit  = spAmbit.parse(line);
 		output(line+"  "+query_ambit.getAtomCount() + endLine);
 		System.out.println(line+"  "+query_ambit.getAtomCount());
 		return(0);

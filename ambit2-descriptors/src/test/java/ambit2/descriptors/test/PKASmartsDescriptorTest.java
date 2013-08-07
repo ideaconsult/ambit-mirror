@@ -42,13 +42,11 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -167,7 +165,7 @@ public class PKASmartsDescriptorTest {
 	ha.setAddEexplicitHydrogens(true);
 	mol = ha.process(mol);
 	
-     QueryAtomContainer query  = sp.parse(smarts);
+     IQueryAtomContainer query  = sp.parse(smarts);
      sp.setNeededDataFlags();
      String errorMsg = sp.getErrorMessages();
      if (!errorMsg.equals(""))

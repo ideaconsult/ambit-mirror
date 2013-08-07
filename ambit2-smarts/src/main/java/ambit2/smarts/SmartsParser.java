@@ -24,16 +24,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 
 package ambit2.smarts;
 
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.Vector;
-import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
@@ -53,7 +54,7 @@ import org.openscience.cdk.ringsearch.SSSRFinder;
 public class SmartsParser 
 {	
 	String smarts;
-	QueryAtomContainer container;
+	IQueryAtomContainer container;
 	Vector<SmartsParserError> errors = new Vector<SmartsParserError>();
 	Stack<IQueryAtom> brackets = new Stack<IQueryAtom>();
 	Vector<SMARTSBond> directionalBonds = new Vector<SMARTSBond>(); 
@@ -83,9 +84,9 @@ public class SmartsParser
 	int curComponent;
 	public int numFragments;
 	public int maxCompNumber;
-	public Vector<QueryAtomContainer> fragments = new Vector<QueryAtomContainer>();
+	public Vector<IQueryAtomContainer> fragments = new Vector<IQueryAtomContainer>();
 	public Vector<Integer> fragmentComponents = new Vector<Integer>();
-	QueryAtomContainer curFragment;
+	IQueryAtomContainer curFragment;
 	
 	//TreeMap<IAtom,Integer> atomComponents = new TreeMap<IAtom,Integer>();
 	//TreeMap<IBond,Integer> bondComponents = new TreeMap<IBond,Integer>();
@@ -100,7 +101,7 @@ public class SmartsParser
 	boolean insideRecSmarts;
 	int curSmirksMapIndex = -1;
 	
-	public QueryAtomContainer parse(String sm)
+	public IQueryAtomContainer parse(String sm)
 	{
 		smarts = sm;
 		container = new QueryAtomContainer();		
@@ -171,7 +172,7 @@ public class SmartsParser
 		setNeededDataFlags();
 		
 		//Treat recursive smarts and chirality info		
-		QueryAtomContainer curContainer = container;
+		IQueryAtomContainer curContainer = container;
 		for (int i = 0; i < curContainer.getAtomCount(); i++)
 		{
 			if (curContainer.getAtom(i) instanceof SmartsAtomExpression)

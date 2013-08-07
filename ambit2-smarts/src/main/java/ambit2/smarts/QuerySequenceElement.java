@@ -26,8 +26,8 @@ package ambit2.smarts;
 
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 
 /**
@@ -46,7 +46,7 @@ public class QuerySequenceElement
 	int atomNums[];
 	int centerNum;
 	
-	public void setAtomNums(QueryAtomContainer container)
+	public void setAtomNums(IQueryAtomContainer container)
 	{
 		if (center != null)
 			centerNum = container.getAtomNumber(center);
@@ -76,7 +76,7 @@ public class QuerySequenceElement
 		return sb.toString();
 	}
 	
-	public String toString(QueryAtomContainer query) 
+	public String toString(IQueryAtomContainer query) 
 	{
 		StringBuffer sb = new StringBuffer();
 		if (center == null)

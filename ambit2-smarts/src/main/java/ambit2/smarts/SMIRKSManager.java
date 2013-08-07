@@ -4,14 +4,13 @@ import java.util.Vector;
 
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
-import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitException;
@@ -102,7 +101,7 @@ public class SMIRKSManager
 		
 		//Parse the components
 		int res = 0;
-		QueryAtomContainer fragment;
+		IQueryAtomContainer fragment;
 		reaction.reactantsSmarts = smirks.substring(0, sep1Pos).trim();
 		fragment = parseComponent(reaction.reactantsSmarts, "Reactants", reaction.reactantFlags,
 				reaction.reactants, reaction.reactantCLG);
@@ -157,10 +156,10 @@ public class SMIRKSManager
 	
 	
 	
-	public QueryAtomContainer parseComponent(String smarts, String compType, SmartsFlags flags,
-			Vector<QueryAtomContainer> fragments, Vector<Integer> CLG)
+	public IQueryAtomContainer parseComponent(String smarts, String compType, SmartsFlags flags,
+			Vector<IQueryAtomContainer> fragments, Vector<Integer> CLG)
 	{
-		QueryAtomContainer fragment = parser.parse(smarts);
+		IQueryAtomContainer fragment = parser.parse(smarts);
 		parser.setNeededDataFlags();
 		String errorMsg = parser.getErrorMessages();
 		if (!errorMsg.equals(""))

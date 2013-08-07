@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
@@ -22,7 +23,7 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.MoleculeTools;
 
-public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContainer, IAtomContainer>
+public class SmartsToChemObject  extends DefaultAmbitProcessor<IQueryAtomContainer, IAtomContainer>
 {
 	
 	private static final long serialVersionUID = -5893878673124511317L;
@@ -74,7 +75,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	 * @param query
 	 * @return atomcontainer
 	 */
-	public IAtomContainer extractAtomContainer(QueryAtomContainer query, IRingSet ringSet)
+	public IAtomContainer extractAtomContainer(IQueryAtomContainer query, IRingSet ringSet)
 	{
 		if (query == null) return null;
 		//Converting the atoms
@@ -147,7 +148,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	 * The "removed" atoms and bonds are marked with a set property
 	 * This object is useful for visualization purposes.
 	 */	
-	public IAtomContainer extractAtomContainerFullyConnected(QueryAtomContainer query, IRingSet ringSet)
+	public IAtomContainer extractAtomContainerFullyConnected(IQueryAtomContainer query, IRingSet ringSet)
 	{
 		if (query == null) return null;
 		//Converting the atoms
@@ -221,7 +222,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return(container);
 	}
 	
-	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query, IRingSet ringSet) throws Exception
+	public IQueryAtomContainer convertKekuleSmartsToAromatic (IQueryAtomContainer query, IRingSet ringSet) throws Exception
 	{
 		Vector<IRingSet> rs = getMaxCondensedRingSystems(ringSet);
 		if (rs.size() == 0)
@@ -229,7 +230,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		
 		for (int i = 0; i < rs.size(); i++)
 		{
-			QueryAtomContainer qac = getCondensedFragmentFromRingSets(query, rs.get(i));
+			IQueryAtomContainer qac = getCondensedFragmentFromRingSets(query, rs.get(i));
 			IAtomContainer container = condensedFragmentToContainer(qac);
 			if (container != null)
 			{	
@@ -252,13 +253,13 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	
 	
 	
-	public IAtomContainer process(QueryAtomContainer target)
+	public IAtomContainer process(IQueryAtomContainer target)
 			throws AmbitException {
 		return extractAtomContainer(target);
 	}
 	
 	/** Version of the function when the Ring data is not supplied outside*/
-	public IAtomContainer extractAtomContainer(QueryAtomContainer query)
+	public IAtomContainer extractAtomContainer(IQueryAtomContainer query)
 	{
 		SSSRFinder sssrf = new SSSRFinder(query);
 		IRingSet ringSet = sssrf.findSSSR();
@@ -266,7 +267,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return(extractAtomContainer(query,ringSet));
 	}
 	
-	public IAtomContainer extractAtomContainerFullyConnected(QueryAtomContainer query)
+	public IAtomContainer extractAtomContainerFullyConnected(IQueryAtomContainer query)
 	{
 		SSSRFinder sssrf = new SSSRFinder(query);
 		IRingSet ringSet = sssrf.findSSSR();
@@ -274,7 +275,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return(extractAtomContainerFullyConnected(query,ringSet));
 	}
 	
-	public QueryAtomContainer convertKekuleSmartsToAromatic (QueryAtomContainer query) throws Exception
+	public IQueryAtomContainer convertKekuleSmartsToAromatic (IQueryAtomContainer query) throws Exception
 	{
 		SSSRFinder sssrf = new SSSRFinder(query);
 		IRingSet ringSet = sssrf.findSSSR();
@@ -1001,12 +1002,12 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 		return (condRS);
 	}
 	
-	QueryAtomContainer getCondensedFragmentFromRingSets(QueryAtomContainer query, IRingSet rs)
+	IQueryAtomContainer getCondensedFragmentFromRingSets(IQueryAtomContainer query, IRingSet rs)
 	{
 		//All atoms and bonds from each ring are added
 		//Check for duplication of atoms and bonds is done
 		
-		QueryAtomContainer qac = new QueryAtomContainer();
+		IQueryAtomContainer qac = new QueryAtomContainer();
 		for (int i = 0; i < rs.getAtomContainerCount(); i++)
 		{
 			IAtomContainer ac = rs.getAtomContainer(i);
@@ -1030,7 +1031,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<QueryAtomContaine
 	}
 		
 	
-	IAtomContainer condensedFragmentToContainer(QueryAtomContainer frag)
+	IAtomContainer condensedFragmentToContainer(IQueryAtomContainer frag)
 	{
 		IMolecule container = builder.newInstance(IMolecule.class);
 		

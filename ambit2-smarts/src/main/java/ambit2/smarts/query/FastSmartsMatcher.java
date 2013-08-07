@@ -5,7 +5,7 @@ import java.util.Vector;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
@@ -21,7 +21,7 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 	private static final long serialVersionUID = -437122688052917294L;
 	protected IsomorphismTester isoTester = new IsomorphismTester();
 	protected SmartsParser sp = new SmartsParser();
-	protected QueryAtomContainer query = null;
+	protected IQueryAtomContainer query = null;
 	protected SMARTSPropertiesReader reader = new SMARTSPropertiesReader();
 	
 	public FastSmartsMatcher() {
@@ -31,11 +31,11 @@ public class FastSmartsMatcher extends AbstractSmartsPattern<IAtomContainer> {
 		setSmarts(smarts);
 		setNegate(negate);
 	}
-	public QueryAtomContainer getQuery() {
+	public IQueryAtomContainer getQuery() {
 		return query;
 	}
 
-	public void setQuery(QueryAtomContainer query) {
+	public void setQuery(IQueryAtomContainer query) {
 		this.query = query;
 	}
 

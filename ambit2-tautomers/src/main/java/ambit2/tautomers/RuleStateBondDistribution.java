@@ -1,14 +1,16 @@
 package ambit2.tautomers;
 
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import java.util.Vector;
-import ambit2.smarts.DoubleNonAromaticBond;
+
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+
 import ambit2.smarts.DoubleBondAromaticityNotSpecified;
+import ambit2.smarts.DoubleNonAromaticBond;
 import ambit2.smarts.SmartsBondExpression;
 import ambit2.smarts.SmartsToChemObject;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 
 public class RuleStateBondDistribution 
@@ -24,7 +26,7 @@ public class RuleStateBondDistribution
 	int ringClosureBondIndex = -1;   
 	
 	
-	public void calcDistribution(QueryAtomContainer statePattern)
+	public void calcDistribution(IQueryAtomContainer statePattern)
 	{
 		int n = 0; 
 		SmartsToChemObject stco = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());

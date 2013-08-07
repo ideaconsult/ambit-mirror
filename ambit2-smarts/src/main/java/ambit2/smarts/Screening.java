@@ -6,7 +6,7 @@ import java.util.Vector;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 public class Screening 
 {
@@ -21,7 +21,7 @@ public class Screening
 	int nKeys;
 	
 	Vector<String> smartsKeys;
-	Vector<QueryAtomContainer> smartsQueries = new Vector<QueryAtomContainer>();	
+	Vector<IQueryAtomContainer> smartsQueries = new Vector<IQueryAtomContainer>();	
 	Vector<Vector<QuerySequenceElement>> sequences = new Vector<Vector<QuerySequenceElement>>(); 
 	
 	/**
@@ -65,7 +65,7 @@ public class Screening
 	 * obtained by {@link SmartsParser} - might not work by other QueryAtomContainer
 	 * @param query  search for this query
 	 */
-	public void setQuery(QueryAtomContainer query) throws Exception
+	public void setQuery(IQueryAtomContainer query) throws Exception
 	{	
 			extractedQueryAC = convertor.extractAtomContainer(query);			
 			querySD = getScreeningDataForTarget(extractedQueryAC);
@@ -163,7 +163,7 @@ public class Screening
 	
 	void prepareKeySequences()
 	{
-		QueryAtomContainer query;
+		IQueryAtomContainer query;
 		sequences.clear();
 		
 		for (int i = 0; i < nKeys; i++)
