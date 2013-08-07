@@ -94,15 +94,17 @@ public class QueryPairwiseTanimotoAndProperty extends QueryPairwiseTanimoto {
 			throws AmbitException {
 		if ((property==null)|| (property.getId()<=0)) return super.getObject(rs);
 		try {
-			IStructureRecord [] records = relation.getStructures();
-			for (int i=0; i < 2; i++) {
-				records[i].clear();
-				records[i].setIdchemical(rs.getInt(i*2+1));
-				records[i].setIdstructure(rs.getInt(i*2+2));
-				
-			}
-			records[0].setProperty(property,rs.getDouble(7));
-			records[1].setProperty(property,rs.getDouble(9));
+			relation.getFirstStructure().clear();
+			relation.getSecondStructure().clear();
+			int i=0;
+			relation.getFirstStructure().setIdchemical(rs.getInt(i*2+1));
+			relation.getFirstStructure().setIdchemical(rs.getInt(i*2+2));
+			i=1;
+			relation.getSecondStructure().setIdchemical(rs.getInt(i*2+1));
+			relation.getSecondStructure().setIdchemical(rs.getInt(i*2+2));
+
+			relation.getFirstStructure().setProperty(property,rs.getDouble(7));
+			relation.getSecondStructure().setProperty(property,rs.getDouble(9));
 			
 			double noise = 0;
 			//linear with noise
@@ -112,7 +114,7 @@ public class QueryPairwiseTanimotoAndProperty extends QueryPairwiseTanimoto {
 			//double similarity = 1-Math.abs((Math.sqrt(rs.getDouble(7))+noise*Math.random())-
 							//(Math.sqrt(rs.getDouble(9))+noise*Math.random()))/10.0;
 			//return new SimilarityRelation(records, similarity);
-			return new SimilarityRelation(records, rs.getDouble(5));
+			return new SimilarityRelation(relation.getFirstStructure(), relation.getSecondStructure(),rs.getDouble(5));
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}

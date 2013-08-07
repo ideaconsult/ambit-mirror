@@ -123,13 +123,16 @@ public class QueryPairwiseTanimoto extends AbstractQuery<ISourceDataset, ISource
 	public SimilarityRelation getObject(ResultSet rs)
 			throws AmbitException {
 		try {
-			IStructureRecord [] records = relation.getStructures();
-			for (int i=0; i < records.length; i++) {
-				records[i].clear();
-				records[i].setIdchemical(rs.getInt(i*2+1));
-				records[i].setIdstructure(rs.getInt(i*2+2));
-			}
-			return new SimilarityRelation(records, rs.getDouble(5));
+			relation.getFirstStructure().clear();
+			relation.getSecondStructure().clear();
+			int i=0;
+			relation.getFirstStructure().setIdchemical(rs.getInt(i*2+1));
+			relation.getFirstStructure().setIdchemical(rs.getInt(i*2+2));
+			i=1;
+			relation.getSecondStructure().setIdchemical(rs.getInt(i*2+1));
+			relation.getSecondStructure().setIdchemical(rs.getInt(i*2+2));
+			
+			return new SimilarityRelation(relation.getFirstStructure(),relation.getSecondStructure(), rs.getDouble(5));
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
