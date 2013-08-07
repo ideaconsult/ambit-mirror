@@ -11,7 +11,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.relation.ReadSubstanceRelation;
-import ambit2.rest.OpenTox;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.substance.SubstanceResource;
 

@@ -6,51 +6,52 @@ import java.util.logging.Level;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
-import ambit2.base.data.ISourceDataset;
-import ambit2.base.data.SourceDataset;
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.relation.AbstractRelation;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
-import ambit2.db.search.AbstractQuery;
-import ambit2.db.search.IStoredQuery;
-import ambit2.rest.OpenTox;
+import ambit2.rest.ResourceDoc;
 import ambit2.rest.structure.ConformerURIReporter;
+import ambit2.rest.substance.SubstanceURIReporter;
 
+/**
+ * Substance composition JSON serialization
+ * @author nina
+ *
+ * @param <Q>
+ */
 public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<CompositionRelation>> extends QueryReporter<CompositionRelation,Q,Writer> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 410930501401847402L;
 	protected String comma = null;
-	protected final Reference baseReference;
-	protected final Request request;
+	protected String jsonpCallback = null;
 	protected final ConformerURIReporter<IQueryRetrieval<IStructureRecord>> cmpReporter;
+	protected final SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>> substanceReporter;
 	public Reference getBaseReference() {
-		return baseReference;
+		return cmpReporter.getBaseReference();
 	}
 	
 	enum jsonFeature {
-		datasetURI,
-		source,
-		target,
+		substance,
+		structure,
 		relation,
-		value,
-		value2
+		proportion
 		;
 		
 		public String jsonname() {
 			return name();
 		}
 	}
-	public SubstanceCompositionJSONReporter(Request request) {
+	public SubstanceCompositionJSONReporter(Request request, ResourceDoc doc,String jsonpCallback) {
 		super();
-		this.request = request;
-		this.baseReference = request.getRootRef();
 		cmpReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(request, null);
+		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request, null);
+		this.jsonpCallback = jsonpCallback;
 	}
 	
 	public ConformerURIReporter<IQueryRetrieval<IStructureRecord>> getCmpReporter() {
@@ -74,12 +75,12 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 					"\n\t\"%s\":\"%s\"," + 
 					"\n\t\"%s\":\"%s\"," +
 					"\n\t\"%s\":\"%s\"," + 
-					"\n\t\"%s\":%6.4f" + //metric
+					"\n\t\"%s\":%s" + //metric
 					"\n}",
-					jsonFeature.source.jsonname(),cmpReporter.getURI(item.getFirstStructure()),
-					jsonFeature.target.jsonname(),cmpReporter.getURI(item.getSecondStructure()),
-					jsonFeature.relation.jsonname(),item.getRelationType(),
-					jsonFeature.value.jsonname(),item.getRelation()
+					jsonFeature.substance.jsonname(),substanceReporter.getURI(item.getFirstStructure()),
+					jsonFeature.structure.jsonname(),cmpReporter.getURI(item.getSecondStructure()),
+					jsonFeature.relation.jsonname(),item.getRelationType().name(),
+					jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
 					));
 			comma = ",";
 		} catch (Exception x) {
@@ -108,18 +109,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	public void header(Writer output, Q query) {
 		try {
 			output.write("{\n");
-			Reference datasetURI = baseReference.clone();
-			datasetURI.addSegment(OpenTox.URI.dataset.name());
-			
-			Object dataset = (query instanceof AbstractQuery)?((AbstractQuery)query).getValue():null;
-			if (dataset instanceof IStoredQuery)
-				datasetURI.addSegment(String.format("R%d",((IStoredQuery)dataset).getID()));
-			else if (dataset instanceof SourceDataset)
-				datasetURI.addSegment(Integer.toString(((ISourceDataset)dataset).getID()));
-			
-			output.write(String.format("\"%s\":\"%s\",\n",jsonFeature.datasetURI.jsonname(),datasetURI));
-
-			output.write("\"links\":[");
+			output.write("\"composition\":[");
 		} catch (Exception x) {
 			x.printStackTrace();
 		}

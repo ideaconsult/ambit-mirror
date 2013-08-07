@@ -9,8 +9,8 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
 
+import ambit2.base.json.JSONUtils;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.json.JSONUtils;
 import ambit2.rest.reporters.TaskURIReporter;
 
 public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {

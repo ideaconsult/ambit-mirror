@@ -65,6 +65,10 @@ public class AbstractRelation<RELATION_TYPE,RELATION_METRIC extends Serializable
 	public void setSecondStructure(SECONDSTRUC struc) {
 		structure2 = struc;
 	}
-	
+	public void clear() {
+		if (structure1!=null) structure1.clear();
+		if (structure2!=null) structure2.clear();
+		
+	}
 
 }
