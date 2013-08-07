@@ -4,13 +4,13 @@ import java.util.BitSet;
 import java.util.Vector;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond.Order;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -27,7 +27,7 @@ import ambit2.smarts.SmartsScreeningKeys;
  */
 public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomContainer, BitSet> {
 	protected IsomorphismTester isoTester = new IsomorphismTester(); 
-	protected static Vector<QueryAtomContainer> smartsQueries = null;	
+	protected static Vector<IQueryAtomContainer> smartsQueries = null;	
 	protected static Vector<Vector<QuerySequenceElement>> sequences = null; 
 	protected static Vector<String> smartsKeys; //not really needed, except for printing structure keys
 	protected static int nKeys;
@@ -47,7 +47,7 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	
 	public StructureKeysBitSetGenerator() throws Exception {
 		if ((smartsQueries==null) || (sequences==null)) {
-			smartsQueries = new Vector<QueryAtomContainer>();
+			smartsQueries = new Vector<IQueryAtomContainer>();
 			sequences = new Vector<Vector<QuerySequenceElement>>();
 			SmartsScreeningKeys smartsScrKeys = new SmartsScreeningKeys(); 
 			nKeys = smartsScrKeys.nKeys;
@@ -66,7 +66,7 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 	protected synchronized void prepareKeySequences(Vector<String> keys, int nKeys)
 	{
 		smartsKeys = keys; 
-		QueryAtomContainer query;
+		IQueryAtomContainer query;
 		sequences.clear();
 		smartsQueries.clear();
 		SmartsParser parser = new SmartsParser();
