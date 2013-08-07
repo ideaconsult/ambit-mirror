@@ -15,7 +15,6 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.ReadSubstance;
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
