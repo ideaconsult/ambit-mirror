@@ -117,6 +117,7 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.tautomers.QueryStructureRelationResource;
 import ambit2.rest.structure.tautomers.QueryTautomersResource;
+import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
@@ -322,6 +323,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter, tupleRouter, smartsRouter);
 		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, tupleRouter, smartsRouter, similarityRouter);
 		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
+
+		router.attach(SubstanceResource.substance,SubstanceResource.class);
+		router.attach(SubstanceResource.substanceID,SubstanceResource.class);
+		//router.attach(String.format("%s/compound",SubstanceResource.substanceID),SubstanceResource.class);
 		
 		//qmap
 		router.attach(QMapResource.qmap,QMapResource.class);

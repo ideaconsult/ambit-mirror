@@ -65,7 +65,8 @@ public class OpenTox {
 				return ids;
 			}			
 		},
-		qmap;
+		qmap,
+		substance;
 		public String getURI() {
 			return String.format("/%s",toString());
 		}

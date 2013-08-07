@@ -34,6 +34,14 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 			return ordinal()+1;
 		}
 	}
+	public ReadSubstance() {
+		super();
+	}
+	public ReadSubstance(SubstanceRecord record) {
+		super();
+		setValue(record);
+	}
+
 	@Override
 	public String getSQL() throws AmbitException {
 		return sql;
