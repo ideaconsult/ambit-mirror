@@ -104,11 +104,10 @@ CREATE TABLE  `chem_relation` (
 DROP TABLE IF EXISTS `substance`;
 CREATE TABLE  `substance` (
   `idsubstance` int(11) NOT NULL AUTO_INCREMENT,
-  `prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL COMMENT 'ECB5 in UUIDS like ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3',
-  `uuid` varbinary(16) DEFAULT NULL COMMENT 'The UUID part of  ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3 in binary format',
+  `prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL COMMENT 'ECB5 in I5 UUIDs like ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3',
+  `uuid` varbinary(16) DEFAULT NULL COMMENT 'The UUID part of  I5 UUIDs in binary format',
   `documentType` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'documentTypeType from I5 XSD schema ',
-  `format` varchar(6) COLLATE utf8_bin DEFAULT 'I5D',
-  `formatversion` varchar(6) COLLATE utf8_bin DEFAULT '5.5',
+  `format` varchar(6) COLLATE utf8_bin DEFAULT 'i5._4.',
   `name` text COLLATE utf8_bin COMMENT 'Human readable name of the entry',
   `publicname` text COLLATE utf8_bin,
   `content` blob,
