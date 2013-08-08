@@ -7,16 +7,17 @@ import org.dbunit.dataset.ITable;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.substance.relation.DeleteSubstanceRelation;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
 import ambit2.db.update.IQueryUpdate;
 
-public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,StructureRecord>{
+public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,IStructureRecord>{
 
 	@Override
-	protected IQueryUpdate<SubstanceRecord,StructureRecord> createQuery() throws Exception {
+	protected IQueryUpdate<SubstanceRecord,IStructureRecord> createQuery() throws Exception {
 		SubstanceRecord c1 = new SubstanceRecord();
 		c1.setIdsubstance(1);
 		StructureRecord c2= new StructureRecord();
@@ -34,7 +35,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,Struct
 	}
 
 	@Override
-	protected void createVerify(IQueryUpdate<SubstanceRecord,StructureRecord> query)
+	protected void createVerify(IQueryUpdate<SubstanceRecord,IStructureRecord> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
@@ -52,7 +53,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,Struct
 	}
 
 
-	protected IQueryUpdate<SubstanceRecord,StructureRecord> createQueryNew() throws Exception {
+	protected IQueryUpdate<SubstanceRecord,IStructureRecord> createQueryNew() throws Exception {
 		SubstanceRecord c1 = new SubstanceRecord();
 		c1.setIdsubstance(1);
 		StructureRecord c2= new StructureRecord();
@@ -71,7 +72,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,Struct
 	
 	}
 	
-	protected void createVerifyNew(IQueryUpdate<SubstanceRecord,StructureRecord> query)
+	protected void createVerifyNew(IQueryUpdate<SubstanceRecord,IStructureRecord> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
@@ -90,7 +91,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,Struct
 	}	
 
 	@Override
-	protected IQueryUpdate<SubstanceRecord,StructureRecord> deleteQuery() throws Exception {
+	protected IQueryUpdate<SubstanceRecord,IStructureRecord> deleteQuery() throws Exception {
 		SubstanceRecord c1 = new SubstanceRecord();
 		c1.setIdsubstance(1);
 		StructureRecord c2= new StructureRecord();
@@ -100,7 +101,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,Struct
 	}
 
 	@Override
-	protected void deleteVerify(IQueryUpdate<SubstanceRecord,StructureRecord> query)
+	protected void deleteVerify(IQueryUpdate<SubstanceRecord,IStructureRecord> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED","SELECT idsubstance,idchemical,relation FROM substance_relation where idsubstance=1 and idchemical=11 and relation='HAS_ADDITIVE'");
@@ -115,13 +116,13 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,Struct
 	}
 
 	@Override
-	protected IQueryUpdate<SubstanceRecord,StructureRecord> updateQuery()
+	protected IQueryUpdate<SubstanceRecord,IStructureRecord> updateQuery()
 			throws Exception {
 		return null;
 	}
 
 	@Override
-	protected void updateVerify(IQueryUpdate<SubstanceRecord,StructureRecord> query)
+	protected void updateVerify(IQueryUpdate<SubstanceRecord,IStructureRecord> query)
 			throws Exception {
 	}
 

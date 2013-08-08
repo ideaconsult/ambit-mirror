@@ -88,7 +88,7 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 		
 	}
 	public void setID(int index, int id) {
-		getObject().setIdchemical(id);
+		getObject().setIdsubstance(id);
 
 	}
 

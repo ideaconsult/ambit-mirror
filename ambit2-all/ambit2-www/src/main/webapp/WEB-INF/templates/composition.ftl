@@ -95,6 +95,7 @@
 			<th>EC No.</th>
 			<th>CAS No.</th>
 			<th>Typical concentration</th>
+			<th>Real concentration</th>
 			<th>Other related substances</th>
 			</tr>
 			</thead>

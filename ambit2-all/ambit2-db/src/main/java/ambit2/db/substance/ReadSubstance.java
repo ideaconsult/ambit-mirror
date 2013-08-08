@@ -64,16 +64,23 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 	            r.setFormat(rs.getString(_sqlids.format.name()));
 	            r.setName(rs.getString(_sqlids.name.name()));
 	            r.setPublicName(rs.getString(_sqlids.publicname.name()));
-	            String uuid = rs.getString(_sqlids.prefix.name()) + "-" + 
-	            		I5Utils.addDashes(rs.getString(_sqlids.huuid.name())).toLowerCase();
-	            r.setI5UUID(uuid);
+	            try {
+		            String uuid = rs.getString(_sqlids.prefix.name()) + "-" + 
+		            		I5Utils.addDashes(rs.getString(_sqlids.huuid.name())).toLowerCase();
+		            r.setI5UUID(uuid);
+	            } catch (Exception xx) {
+	            	r.setI5UUID(null);
+	            }
 	            Blob o = rs.getBlob(_sqlids.content.name());
-	            byte[] bdata = o.getBytes(1, (int) o.length());
-	            r.setContent(new String(bdata,Charset.forName("UTF-8")));
+	            if (o!=null) {
+	            	byte[] bdata = o.getBytes(1, (int) o.length());
+	            	r.setContent(new String(bdata,Charset.forName("UTF-8")));
+	            }
 	            r.setSubstancetype(rs.getString(_sqlids.substanceType.name()));
 	            //rs.getString(_sqlids.documentType.name());
 	            return r;
 	        } catch (SQLException x){
+	        	x.printStackTrace();
 	            throw new AmbitException(x);
 	        }
 	}

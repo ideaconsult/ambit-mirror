@@ -41,40 +41,34 @@ public class Proportion implements Serializable {
 		real_unit = null;
 	}
 	enum _jsonfields {
-		function {
-			@Override
-			public String toJSON(Proportion p) {
-				return String.format("\"%s\":\"%s\"", name(), JSONUtils.jsonEscape(p.getFunction()));
-			}
-		},
 		typical {
 			@Override
 			public String toJSON(Proportion p) {
-				return String.format("\"%s\": {\"precision\": \"%s\",\"value\": %e,\"unit\": \"%s\"}", 
+				return String.format("\"%s\": {\"precision\": %s,\"value\": %e,\"unit\": %s}", 
 						name(),
-						JSONUtils.jsonEscape(p.getTypical()),
+						JSONUtils.jsonQuote(JSONUtils.jsonEscape(p.getTypical())),
 						p.getTypical_value(),
-						p.getTypical_unit()
+						JSONUtils.jsonQuote(p.getTypical_unit())
 						);
 			}			
 		},
 		real {
 			@Override
 			public String toJSON(Proportion p) {
-				return String.format("\"%s\": {\"lowerPrecision\": \"%s\",\"lowerValue\": %e,\"upperPrecision\": \"%s\",\"upperValue\": %e,\"unit\": \"%s\"}", 
+				return String.format("\"%s\": {\"lowerPrecision\": %s,\"lowerValue\": %e,\"upperPrecision\": %s,\"upperValue\": %e,\"unit\": %s}", 
 						name(),
-						JSONUtils.jsonEscape(p.getReal_lower()),
+						JSONUtils.jsonQuote(JSONUtils.jsonEscape(p.getReal_lower())),
 						p.getReal_lowervalue(),
-						JSONUtils.jsonEscape(p.getReal_upper()),
+						JSONUtils.jsonQuote(JSONUtils.jsonEscape(p.getReal_upper())),
 						p.getReal_uppervalue(),
-						p.getReal_unit()
+						JSONUtils.jsonQuote(p.getReal_unit())
 						);
 			}			
 		},		
 		function_as_additive {
 			@Override
 			public String toJSON(Proportion p) {
-				return String.format("\"%s\":\"%s\"", name(), p.getFunction());
+				return String.format("\"%s\":%s", name(), JSONUtils.jsonQuote(p.getFunction()));
 			}				
 		};
 	
