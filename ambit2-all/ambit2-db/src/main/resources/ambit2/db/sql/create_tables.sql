@@ -102,7 +102,7 @@ CREATE TABLE  `chem_relation` (
 -- Table `substance` 
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `substance`;
-CREATE TABLE  `substance` (
+CREATE TABLE `substance` (
   `idsubstance` int(11) NOT NULL AUTO_INCREMENT,
   `prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL COMMENT 'ECB5 in I5 UUIDs like ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3',
   `uuid` varbinary(16) DEFAULT NULL COMMENT 'The UUID part of  I5 UUIDs in binary format',
@@ -111,10 +111,12 @@ CREATE TABLE  `substance` (
   `name` text COLLATE utf8_bin COMMENT 'Human readable name of the entry',
   `publicname` text COLLATE utf8_bin,
   `content` blob,
+  `substanceType` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`idsubstance`),
   UNIQUE KEY `uuid-x` (`prefix`,`uuid`) USING HASH,
   KEY `doxType-x` (`documentType`),
-  KEY `format-x` (`format`)
+  KEY `format-x` (`format`),
+  KEY `stype-x` (`substanceType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substance dossier (mainly to support IUCLID5)';
 
 

@@ -20,7 +20,7 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 	 * 
 	 */
 	private static final long serialVersionUID = -3661558183996204387L;
-	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content from substance where idsubstance=?";
+	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType from substance where idsubstance=?";
 	protected enum _sqlids {
 		idsubstance,
 		prefix,
@@ -29,7 +29,8 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 		format,
 		name,
 		publicname,
-		content;
+		content,
+		substanceType;
 		public int getIndex() {
 			return ordinal()+1;
 		}
@@ -69,6 +70,7 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 	            Blob o = rs.getBlob(_sqlids.content.name());
 	            byte[] bdata = o.getBytes(1, (int) o.length());
 	            r.setContent(new String(bdata,Charset.forName("UTF-8")));
+	            r.setSubstancetype(rs.getString(_sqlids.substanceType.name()));
 	            //rs.getString(_sqlids.documentType.name());
 	            return r;
 	        } catch (SQLException x){

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.interfaces.IStructureRelation;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
@@ -16,7 +15,14 @@ import ambit2.base.relation.composition.Proportion;
  */
 public class SubstanceRecord extends StructureRecord {
 	protected int idsubstance;
+	protected String substancetype;
 
+	public String getSubstancetype() {
+		return substancetype;
+	}
+	public void setSubstancetype(String substancetype) {
+		this.substancetype = substancetype;
+	}
 	/**
 	 * 
 	 */

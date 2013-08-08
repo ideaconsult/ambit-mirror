@@ -73,6 +73,6 @@
   
   <quality_structure idstructure="100214" label="OK" user_name="guest" />
   <chem_relation idchemical1="7" idchemical2="11" relation="test" metric="999"/>
-  <substance idsubstance="1" prefix="ECB5" uuid="LJTjLDZiTeq6AEN4e4pv0w==" documentType="Substance" format="i5._4." name="testname" publicname="publictestname" content="dGVzdA=="/>
+  <substance idsubstance="1" prefix="ECB5" uuid="LJTjLDZiTeq6AEN4e4pv0w==" documentType="Substance" format="i5._4." name="testname" publicname="publictestname" content="dGVzdA==" substanceType="Monoconstituent"/>
   <substance_relation idsubstance="1" idchemical="11" relation="HAS_ADDITIVE" proportion_typical="=" proportion_typical_value="10" proportion_typical_unit="%"/>
 </dataset>

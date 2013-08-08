@@ -27,6 +27,7 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 		c.setI5UUID(example_uuid);
 		c.setFormat("i5d");
 		c.setContent("<?xml>");
+		c.setSubstancetype("Multiconstituent");
 		c.setIdsubstance(1);
 		return new CreateSubstance(c);
 	}
@@ -35,13 +36,14 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 	protected void createVerify(IQueryUpdate<Object, SubstanceRecord> query)
 			throws Exception {
 	       IDatabaseConnection c = getConnection();	
-			ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,name,publicname,format,content,documentType FROM substance where idsubstance=1");
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,name,publicname,format,content,substanceType,documentType FROM substance where idsubstance=1");
 			Assert.assertEquals(1,table.getRowCount());
 			Assert.assertEquals("IUC4",table.getValue(0,"prefix"));
 			Assert.assertEquals(example_uuid,table.getValue(0,"prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
 			Assert.assertEquals("name",table.getValue(0,"name"));
 			Assert.assertEquals("public name",table.getValue(0,"publicname"));
 			Assert.assertEquals("i5d",table.getValue(0,"format"));
+			Assert.assertEquals("Multiconstituent",table.getValue(0,"substanceType"));
 			//Assert.assertEquals("<?xml>".getBytes("UTF-8"),table.getValue(0,"content"));
 			c.close();	
 	}
@@ -75,7 +77,7 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 		c.setName("name");
 		c.setPublicName("public name");
 		c.setI5UUID(example_uuid);
-		c.setIdsubstance(1);
+		c.setSubstancetype("Multiconstituent");
 		c.setProperty(Property.getI5UUIDInstance(), example_uuid);
 
 		return new UpdateSubstance(c);
@@ -86,13 +88,14 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 	protected void updateVerify(IQueryUpdate<Object, SubstanceRecord> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,name,publicname,format,content FROM substance where idsubstance=1");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,name,publicname,format,content,substanceType FROM substance where idsubstance=1");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals("IUC4",table.getValue(0,"prefix"));
 		Assert.assertEquals(example_uuid,table.getValue(0,"prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
 		Assert.assertEquals("name",table.getValue(0,"name"));
 		Assert.assertEquals("public name",table.getValue(0,"publicname"));
 		Assert.assertEquals("i5._4",table.getValue(0,"format"));		
+		Assert.assertEquals("Multiconstituent",table.getValue(0,"substanceType"));
 		c.close();	
 		
 	}

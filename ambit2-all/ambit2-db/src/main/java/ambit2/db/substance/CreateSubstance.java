@@ -46,8 +46,8 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 	
 	
 	public static final String[] create_sql = {
-		"INSERT INTO substance (idsubstance,prefix,uuid,documentType,format,name,publicname,content)\n" +
-		"values (?,?,unhex(replace(?,'-','')),?,?,?,?,?) " +
+		"INSERT INTO substance (idsubstance,prefix,uuid,documentType,format,name,publicname,content,substanceType)\n" +
+		"values (?,?,unhex(replace(?,'-','')),?,?,?,?,?,?) " +
 		"on duplicate key update " +
 		"prefix=values(prefix)," +
 		"uuid=values(uuid)," +
@@ -55,7 +55,8 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 		"format=values(format)," +
 		"name=values(name)," +
 		"publicname=values(publicname)," +
-		"content=values(content)"
+		"content=values(content),"+
+		"substanceType=values(substanceType)"
 	};
 
 	public CreateSubstance(SubstanceRecord substance) {
@@ -81,7 +82,8 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 		params1.add(new QueryParam<String>(String.class, getObject().getFormat()));		
 		params1.add(new QueryParam<String>(String.class, getObject().getName()));
 		params1.add(new QueryParam<String>(String.class, getObject().getPublicName()));
-		params1.add(new QueryParam<String>(String.class, getObject().getContent()));	
+		params1.add(new QueryParam<String>(String.class, getObject().getContent()));
+		params1.add(new QueryParam<String>(String.class, getObject().getSubstancetype()));
 		return params1;
 		
 	}
