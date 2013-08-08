@@ -34,12 +34,14 @@ import java.util.List;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
 import ambit2.db.search.QueryParam;
 
-public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<SubstanceRecord,StructureRecord,STRUCTURE_RELATION,Proportion> {
+public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<SubstanceRecord,IStructureRecord,STRUCTURE_RELATION,Proportion> {
 
 	public static final String[] create_sql = {
 		"INSERT INTO substance_relation (idsubstance,idchemical,relation,`function`, " +
@@ -51,14 +53,23 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		"proportion_real_unit=values(proportion_real_unit),proportion_typical=values(proportion_typical),\n"+
 		"proportion_typical_value=values(proportion_typical_value),proportion_typical_unit=values(proportion_typical_unit)"
 	};
+	public UpdateSubstanceRelation(CompositionRelation relation) {
+		this(relation.getFirstStructure(),relation.getSecondStructure(),relation.getRelationType(),relation.getRelation());
+	}
 	public UpdateSubstanceRelation() {
 		this(null,null,null,null);
 	}
-	public UpdateSubstanceRelation(SubstanceRecord structure1,StructureRecord structure2,STRUCTURE_RELATION relation) {
+	public UpdateSubstanceRelation(SubstanceRecord structure1,IStructureRecord structure2,STRUCTURE_RELATION relation) {
 		this(structure1,structure2,relation,null);
 	}
-	public UpdateSubstanceRelation(SubstanceRecord structure1,StructureRecord structure2,STRUCTURE_RELATION relation,Proportion metric) {
+	public UpdateSubstanceRelation(SubstanceRecord structure1,IStructureRecord structure2,STRUCTURE_RELATION relation,Proportion metric) {
 		super(structure1,structure2,relation,metric);
+	}
+	public void setCompositionRelation(CompositionRelation relation) {
+		setGroup(relation.getFirstStructure());
+		setObject(relation.getSecondStructure());
+		setMetric(relation.getRelation());
+		setRelation(relation.getRelationType());
 	}
 
 	public void setID(int index, int id) {

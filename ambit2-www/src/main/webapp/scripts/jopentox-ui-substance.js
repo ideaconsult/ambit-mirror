@@ -34,6 +34,7 @@ var substance = {
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : "name",
+			    					"sWidth" : "25%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
 			    						return val;
@@ -69,7 +70,7 @@ var substance = {
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : "i5uuid",
-			    					"sWidth" : "25%",
+			    					"sWidth" : "20%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
 			    						return val===undefined?"":(val==null)?"":val;
@@ -81,7 +82,7 @@ var substance = {
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : null,
-			    					"sWidth" : "25%",
+			    					"sWidth" : "20%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
 			    						var sOut = "Reference substance UUID"
@@ -129,9 +130,10 @@ var substance = {
 			    					"bSearchable" : true,
 			    					"mDataProp" : "relation",
 			    					"bUseRendered" : false,	
-			    					"sWidth" : "50%",
+			    					"sWidth" : "15%",
 			    					"fnRender" : function(o,val) {
-			    						return val.replace("HAS_","");
+			    						var sOut = "<a href='"+o.aData["structure"]+"' target=_blank>"+ val.replace("HAS_","") + "</a>"
+			    						return sOut;
 			    					}
 			    				},	    
 			    				{ //2
@@ -176,12 +178,30 @@ var substance = {
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
 			    						var precision = o.aData["proportion"]["typical"]["precision"];
-			    						var sOut = ((precision===undefined) || ("="==precision))?"":precision;
-			    						return precision + " " + val + " " + o.aData["proportion"]["typical"]["unit"] ;
+			    						var sOut = ((precision===undefined) || (precision==null) || ("="==precision))?"":precision;
+			    						return sOut + " " + val + " " + o.aData["proportion"]["typical"]["unit"] ;
 			    					}
 			    				},
-			    				{ //5
+			    				{ //4
 			    					"aTargets": [ 5 ],	
+			    					"sClass" : "center",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "proportion.real",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						var precision = val["lowerPrecision"];
+			    						var sOut = ((precision===undefined) || (precision==null) || ("="==precision))?"":precision;
+			    						sOut += " (" + val["lowerValue"] + " , ";
+			    						precision = val["upperPrecision"];
+			    						sOut += ((precision===undefined) || (precision==null) || ("="==precision))?"":precision;
+			    						sOut += " " + val["upperValue"] + ")";
+			    						sOut += val["unit"]==null?"":(" "+val["unit"]) ;
+			    						return sOut;
+			    					}
+			    				},			    				
+			    				{ //5
+			    					"aTargets": [ 6 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,

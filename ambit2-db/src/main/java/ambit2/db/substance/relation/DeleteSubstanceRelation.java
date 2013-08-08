@@ -31,9 +31,9 @@ package ambit2.db.substance.relation;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
@@ -44,7 +44,7 @@ import ambit2.db.search.QueryParam;
  * @author nina
  *
  */
-public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<SubstanceRecord,StructureRecord,STRUCTURE_RELATION,Proportion> {
+public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<SubstanceRecord,IStructureRecord,STRUCTURE_RELATION,Proportion> {
 
 
 	public static final String[] delete_sql = {"delete from substance_relation where idsubstance=? and idchemical=? and relation=?"};
@@ -52,7 +52,7 @@ public class DeleteSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 	public DeleteSubstanceRelation() {
 		this(null,null,null);
 	}
-	public DeleteSubstanceRelation(SubstanceRecord structure1,StructureRecord structure2,STRUCTURE_RELATION relation) {
+	public DeleteSubstanceRelation(SubstanceRecord structure1,IStructureRecord structure2,STRUCTURE_RELATION relation) {
 		super(structure1,structure2,relation,null);
 	}
 	

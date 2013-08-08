@@ -109,7 +109,9 @@ public class Property extends Model implements Serializable, Comparable<Property
 		return getInstance(Names, LiteratureEntry.getPublicNameReference());
 	}
 	public static synchronized Property getI5UUIDInstance() {
-		return getInstance(IUCLID5_UUID, LiteratureEntry.getI5UUIDReference());
+		Property p =  getInstance(IUCLID5_UUID, LiteratureEntry.getI5UUIDReference());
+		p.setLabel(opentox_IUCLID5_UUID);
+		return p;
 	}
 	public static synchronized Property getCASInstance() {
 		Property p = getInstance(CAS, LiteratureEntry.getCASReference());
@@ -354,7 +356,7 @@ public class Property extends Model implements Serializable, Comparable<Property
 		this.clazz = newProperty.clazz;
 		this.units = newProperty.units;
 	}
-	
+
 	public boolean isCAS() {
 		String label = getLabel();
 		if (getName().equals(label)) label = guessLabel(getName());
