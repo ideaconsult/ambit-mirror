@@ -12,4 +12,8 @@ public class JSONUtils {
         .replace("\t", "\\t")
         .replace("\"", "\\\"");
 	}
+	public static String jsonQuote(String value) {
+		if(value==null) return null;
+		else return String.format("\"%s\"",value);
+	}
 }

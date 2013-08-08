@@ -21,7 +21,8 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 		format,
 		name,
 		publicname,
-		content;
+		content,
+		substanceType;
 		
 		public String jsonname() {
 			return name();
@@ -72,11 +73,12 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 			if (comma!=null) builder.append(comma);
 			
 			builder.append("\n\t{\n");
-			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonSubstance.URI.name(),JSONUtils.jsonEscape(uri)));
-			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonSubstance.i5uuid.name(),JSONUtils.jsonEscape(item.getI5UUID())));
-			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonSubstance.name.name(),JSONUtils.jsonEscape(item.getName())));
-			builder.append(String.format("\t\t\"%s\":\"%s\",\n",jsonSubstance.publicname.name(),JSONUtils.jsonEscape(item.getPublicName())));
-			builder.append(String.format("\t\t\"%s\":\"%s\"\n",jsonSubstance.format.name(),JSONUtils.jsonEscape(item.getFormat())));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.URI.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri))));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getI5UUID()))));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.name.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getName()))));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.publicname.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getPublicName()))));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.format.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getFormat()))));
+			builder.append(String.format("\t\t\"%s\":%s\n",jsonSubstance.substanceType.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubstancetype()))));
 			//builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.documentType.name(),item()));
 			builder.append("\t}");
 			writer.write(builder.toString());
@@ -86,6 +88,5 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 		}
 		return item;
 	}
-
 
 }

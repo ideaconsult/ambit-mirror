@@ -28,21 +28,8 @@ var substance = {
 			          '</select> qmaps.'	            
 			    },	
 			    "aoColumnDefs": [
-			    				{ //1
-			    					"aTargets": [ 0 ],	
-			    					"sClass" : "left",
-			    					"bSortable" : true,
-			    					"bSearchable" : true,
-			    					"mDataProp" : "i5uuid",
-			    					"bUseRendered" : false,	
-			    					"sWidth" : "50%",
-			    					"fnRender" : function(o,val) {
-			    						var sOut = "<a href='"+o.aData["URI"]+"'>"+ val+ "</a>"
-			    						return sOut;
-			    					}
-			    				},	    
 			    				{ //2
-			    					"aTargets": [ 1 ],	
+			    					"aTargets": [ 0 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -53,7 +40,7 @@ var substance = {
 			    					}
 			    				},	    	
 			    				{ //3
-			    					"aTargets": [ 2 ],	
+			    					"aTargets": [ 1 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -62,7 +49,45 @@ var substance = {
 			    					"fnRender" : function(o,val) {
 			    						return val;
 			    					}
-			    				}
+			    				},
+			    				{ //1
+			    					"aTargets": [ 2 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "substanceType",
+			    					"sWidth" : "15%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						var sOut = "<a href='"+o.aData["URI"]+"'>"+ val+ "</a>"
+			    						return sOut;
+			    					}
+			    				},
+			    				{ //1
+			    					"aTargets": [ 3 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "i5uuid",
+			    					"sWidth" : "25%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						return val===undefined?"":(val==null)?"":val;
+			    					}
+			    				},			    				
+			    				{ //1
+			    					"aTargets": [ 4 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : null,
+			    					"sWidth" : "25%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						var sOut = "Reference substance UUID"
+			    						return sOut;
+			    					}
+			    				}				    				
 			    				],
 			    				    				
 			 	  "aaSorting": [[1, 'desc']]
@@ -150,7 +175,9 @@ var substance = {
 			    					"mDataProp" : "proportion.typical.value",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return val + " " + o.aData["proportion"]["typical"]["unit"] ;
+			    						var precision = o.aData["proportion"]["typical"]["precision"];
+			    						var sOut = ((precision===undefined) || ("="==precision))?"":precision;
+			    						return precision + " " + val + " " + o.aData["proportion"]["typical"]["unit"] ;
 			    					}
 			    				},
 			    				{ //5

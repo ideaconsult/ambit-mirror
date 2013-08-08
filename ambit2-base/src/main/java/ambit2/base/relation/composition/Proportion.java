@@ -64,9 +64,9 @@ public class Proportion implements Serializable {
 				return String.format("\"%s\": {\"lowerPrecision\": \"%s\",\"lowerValue\": %e,\"upperPrecision\": \"%s\",\"upperValue\": %e,\"unit\": \"%s\"}", 
 						name(),
 						JSONUtils.jsonEscape(p.getReal_lower()),
-						p.getReal_lower(),
+						p.getReal_lowervalue(),
 						JSONUtils.jsonEscape(p.getReal_upper()),
-						p.getReal_upper(),
+						p.getReal_uppervalue(),
 						p.getReal_unit()
 						);
 			}			
