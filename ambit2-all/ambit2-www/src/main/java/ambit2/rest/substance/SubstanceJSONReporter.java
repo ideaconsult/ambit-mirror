@@ -22,8 +22,8 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 		name,
 		publicname,
 		content,
-		substanceType;
-		
+		substanceType,
+		referenceSubstance;
 		public String jsonname() {
 			return name();
 		}
@@ -74,11 +74,14 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 			
 			builder.append("\n\t{\n");
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.URI.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri))));
-			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getI5UUID()))));
-			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.name.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getName()))));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getCompanyUUID()))));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.name.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getCompanyName()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.publicname.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getPublicName()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.format.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getFormat()))));
-			builder.append(String.format("\t\t\"%s\":%s\n",jsonSubstance.substanceType.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubstancetype()))));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.substanceType.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubstancetype()))));
+			builder.append(String.format("\t\t\"%s\": {\"%s\":%s}\n",
+					jsonSubstance.referenceSubstance.name(),
+					jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getReferenceSubstanceUUID()))));
 			//builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.documentType.name(),item()));
 			builder.append("\t}");
 			writer.write(builder.toString());

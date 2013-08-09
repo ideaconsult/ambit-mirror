@@ -17,14 +17,16 @@ import ambit2.db.substance.UpdateSubstance;
 import ambit2.db.update.IQueryUpdate;
 
 public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
-	private static final String example_uuid = "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734";
+	private static final String example_uuid =    "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734";
+	private static final String example_rs_uuid = "ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3";
 	@Override
 	protected IQueryUpdate<Object, SubstanceRecord> createQuery()
 			throws Exception {
 		SubstanceRecord c = new SubstanceRecord();
-		c.setName("name");
+		c.setCompanyName("name");
 		c.setPublicName("public name");
-		c.setI5UUID(example_uuid);
+		c.setCompanyUUID(example_uuid);
+		c.setReferenceSubstanceUUID(example_rs_uuid);
 		c.setFormat("i5d");
 		c.setContent("<?xml>");
 		c.setSubstancetype("Multiconstituent");
@@ -36,10 +38,11 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 	protected void createVerify(IQueryUpdate<Object, SubstanceRecord> query)
 			throws Exception {
 	       IDatabaseConnection c = getConnection();	
-			ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,name,publicname,format,content,substanceType,documentType FROM substance where idsubstance=1");
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,rs_prefix,hex(rs_uuid) rs_u,name,publicname,format,content,substanceType,documentType FROM substance where idsubstance=1");
 			Assert.assertEquals(1,table.getRowCount());
 			Assert.assertEquals("IUC4",table.getValue(0,"prefix"));
 			Assert.assertEquals(example_uuid,table.getValue(0,"prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
+			Assert.assertEquals(example_rs_uuid,table.getValue(0,"rs_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"rs_u").toString().toLowerCase()));
 			Assert.assertEquals("name",table.getValue(0,"name"));
 			Assert.assertEquals("public name",table.getValue(0,"publicname"));
 			Assert.assertEquals("i5d",table.getValue(0,"format"));
@@ -74,11 +77,11 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 		c.setIdsubstance(1);
 		c.setContent("<?xml>");
 		c.setFormat("i5._4");
-		c.setName("name");
+		c.setCompanyName("name");
 		c.setPublicName("public name");
-		c.setI5UUID(example_uuid);
+		c.setCompanyUUID(example_uuid);
+		c.setReferenceSubstanceUUID(example_rs_uuid);
 		c.setSubstancetype("Multiconstituent");
-		c.setProperty(Property.getI5UUIDInstance(), example_uuid);
 
 		return new UpdateSubstance(c);
 
@@ -88,10 +91,11 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 	protected void updateVerify(IQueryUpdate<Object, SubstanceRecord> query)
 			throws Exception {
         IDatabaseConnection c = getConnection();	
-		ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,name,publicname,format,content,substanceType FROM substance where idsubstance=1");
+		ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,rs_prefix,hex(rs_uuid) rs_u,name,publicname,format,content,substanceType FROM substance where idsubstance=1");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals("IUC4",table.getValue(0,"prefix"));
 		Assert.assertEquals(example_uuid,table.getValue(0,"prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
+		Assert.assertEquals(example_rs_uuid,table.getValue(0,"rs_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"rs_u").toString().toLowerCase()));		
 		Assert.assertEquals("name",table.getValue(0,"name"));
 		Assert.assertEquals("public name",table.getValue(0,"publicname"));
 		Assert.assertEquals("i5._4",table.getValue(0,"format"));		
@@ -107,9 +111,10 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 		//c.setIdsubstance(1);
 		c.setContent("<?xml>");
 		c.setFormat("i5._4.");
-		c.setName("name");
+		c.setCompanyName("name");
 		c.setPublicName("public name");
-		c.setI5UUID(example_uuid);
+		c.setCompanyUUID(example_uuid);
+		c.setReferenceSubstanceUUID(example_rs_uuid);
 		return new CreateSubstance(c);
 	}
 
@@ -118,10 +123,11 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 			throws Exception {
 	        IDatabaseConnection c = getConnection();	
 
-			ITable table = 	c.createQueryTable("EXPECTED","SELECT idsubstance,prefix,hex(uuid) u,name,publicname,format,content FROM substance where idsubstance!=1");
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT idsubstance,prefix,hex(uuid) u,rs_prefix,hex(rs_uuid) rs_u,name,publicname,format,content FROM substance where idsubstance!=1");
 			Assert.assertTrue(table.getRowCount()>0);
 			Assert.assertEquals("IUC4",table.getValue(0,"prefix"));
 			Assert.assertEquals(example_uuid,table.getValue(0,"prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
+			Assert.assertEquals(example_rs_uuid,table.getValue(0,"rs_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"rs_u").toString().toLowerCase()));
 			Assert.assertEquals("name",table.getValue(0,"name"));
 			Assert.assertEquals("public name",table.getValue(0,"publicname"));
 			Assert.assertEquals("i5._4.",table.getValue(0,"format"));	

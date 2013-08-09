@@ -67,9 +67,6 @@ public class LiteratureEntry extends AmbitBean implements ILiteratureEntry{
 	public static synchronized LiteratureEntry getTradeNameReference() {
 		return getInstance(Trade_name,AMBIT_uri);
 	}
-	public static synchronized LiteratureEntry getPublicNameReference() {
-		return getInstance(Public_name,AMBIT_uri);
-	}
 	public static synchronized LiteratureEntry getI5UUIDReference() {
 		return getInstance(IUCLID5_UUID,AMBIT_uri);
 	}	

@@ -20,7 +20,7 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 	 * 
 	 */
 	private static final long serialVersionUID = -3661558183996204387L;
-	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType from substance where idsubstance=?";
+	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid from substance where idsubstance=?";
 	protected enum _sqlids {
 		idsubstance,
 		prefix,
@@ -30,7 +30,9 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 		name,
 		publicname,
 		content,
-		substanceType;
+		substanceType,
+		rs_prefix,
+		rs_huuid;
 		public int getIndex() {
 			return ordinal()+1;
 		}
@@ -62,15 +64,22 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 	            r.clear();
 	            r.setIdsubstance(rs.getInt(_sqlids.idsubstance.name()));
 	            r.setFormat(rs.getString(_sqlids.format.name()));
-	            r.setName(rs.getString(_sqlids.name.name()));
+	            r.setCompanyName(rs.getString(_sqlids.name.name()));
 	            r.setPublicName(rs.getString(_sqlids.publicname.name()));
 	            try {
 		            String uuid = rs.getString(_sqlids.prefix.name()) + "-" + 
 		            		I5Utils.addDashes(rs.getString(_sqlids.huuid.name())).toLowerCase();
-		            r.setI5UUID(uuid);
+		            r.setCompanyUUID(uuid);
 	            } catch (Exception xx) {
-	            	r.setI5UUID(null);
+	            	r.setCompanyUUID(null);
 	            }
+	            try {
+		            String uuid = rs.getString(_sqlids.rs_prefix.name()) + "-" + 
+		            		I5Utils.addDashes(rs.getString(_sqlids.rs_huuid.name())).toLowerCase();
+		            r.setReferenceSubstanceUUID(uuid);
+	            } catch (Exception xx) {
+	            	r.setReferenceSubstanceUUID(null);
+	            }	            
 	            Blob o = rs.getBlob(_sqlids.content.name());
 	            if (o!=null) {
 	            	byte[] bdata = o.getBytes(1, (int) o.length());

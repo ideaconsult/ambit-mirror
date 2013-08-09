@@ -22,10 +22,10 @@ public class ReadSubstanceTest extends QueryTest<ReadSubstance> {
 		while (rs.next()) {
 			SubstanceRecord record = query.getObject(rs);
 			Assert.assertEquals(1,record.getIdsubstance());
-			Assert.assertEquals("testname",record.getName());
+			Assert.assertEquals("testname",record.getCompanyName());
 			Assert.assertEquals("publictestname",record.getPublicName());
 			Assert.assertEquals("i5._4.",record.getFormat());
-			Assert.assertEquals("ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3",record.getI5UUID());
+			Assert.assertEquals("ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3",record.getCompanyUUID());
 			Assert.assertEquals("test",record.getContent());
 			Assert.assertEquals("Monoconstituent",record.getSubstancetype());
 			count++;
