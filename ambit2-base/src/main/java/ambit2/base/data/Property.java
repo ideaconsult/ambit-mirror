@@ -105,9 +105,6 @@ public class Property extends Model implements Serializable, Comparable<Property
 		p.setLabel(opentox_TradeName);
 		return p;
 	}
-	public static synchronized Property getPublicNameInstance() {
-		return getInstance(Names, LiteratureEntry.getPublicNameReference());
-	}
 	public static synchronized Property getI5UUIDInstance() {
 		Property p =  getInstance(IUCLID5_UUID, LiteratureEntry.getI5UUIDReference());
 		p.setLabel(opentox_IUCLID5_UUID);

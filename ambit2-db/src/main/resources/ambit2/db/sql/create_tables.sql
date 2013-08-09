@@ -112,24 +112,26 @@ CREATE TABLE `substance` (
   `publicname` text COLLATE utf8_bin,
   `content` blob,
   `substanceType` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `rs_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL COMMENT 'ReferenceSubstance UUID (prefix)',
+  `rs_uuid` varbinary(16) DEFAULT NULL COMMENT 'ReferenceSubstance UUID',
   PRIMARY KEY (`idsubstance`),
-  UNIQUE KEY `uuid-x` (`prefix`,`uuid`) USING HASH,
+  UNIQUE KEY `uuid-x` (`prefix`,`uuid`),
   KEY `doxType-x` (`documentType`),
   KEY `format-x` (`format`),
-  KEY `stype-x` (`substanceType`)
+  KEY `stype-x` (`substanceType`),
+  KEY `rs-uuid-x` (`rs_uuid`,`rs_prefix`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substance dossier (mainly to support IUCLID5)';
-
 
 -- -----------------------------------------------------
 -- Table `substance_relation` 
 -- -----------------------------------------------------
 
 DROP TABLE IF EXISTS `substance_relation`;
-CREATE TABLE  `substance_relation` (
+CREATE TABLE `substance_relation` (
   `idsubstance` int(11) NOT NULL,
   `idchemical` int(11) unsigned NOT NULL,
   `relation` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `function` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `function` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   `proportion_real_lower` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `proportion_real_lower_value` double DEFAULT NULL,
   `proportion_real_upper` varchar(16) COLLATE utf8_bin DEFAULT NULL,
@@ -143,6 +145,8 @@ CREATE TABLE  `substance_relation` (
   KEY `relation-x` (`relation`),
   CONSTRAINT `chemicalkey` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Dossier to chemicals relation';
+
+
 
 
 -- -----------------------------------------------------

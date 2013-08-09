@@ -91,9 +91,9 @@
 			<thead>
 			<tr>
 			<th>Name</th>
-			<th>Public name</th>
-			<th>Type</th>
 			<th>Company UUID</th>
+			<th>Type</th>
+			<th>Public name</th>
 			<th>Reference substance UUID</th>
 			</tr>
 			</thead>

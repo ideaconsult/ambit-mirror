@@ -16,9 +16,30 @@ import ambit2.base.relation.composition.Proportion;
 public class SubstanceRecord extends StructureRecord {
 	protected int idsubstance;
 	protected String substancetype;
-
+	protected String companyName;
+	protected String publicName;
+	protected String companyUUID;
+	
 	public String getSubstancetype() {
 		return substancetype;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	public String getPublicName() {
+		return publicName;
+	}
+	public void setPublicName(String publicname) {
+		this.publicName = publicname;
+	}
+	public String getCompanyUUID() {
+		return companyUUID;
+	}
+	public void setCompanyUUID(String companyUUID) {
+		this.companyUUID = companyUUID;
 	}
 	public void setSubstancetype(String substancetype) {
 		this.substancetype = substancetype;
@@ -60,30 +81,13 @@ public class SubstanceRecord extends StructureRecord {
 	public void setIdsubstance(int idsubstance) {
 		this.idsubstance = idsubstance;
 	}
-	public void setPublicName(String name) {
-		if (name==null)
-			removeProperty(Property.getPublicNameInstance());
-		else setProperty(Property.getPublicNameInstance(),name);
-	}
-	public String getPublicName() {
-		Object name = getProperty(Property.getPublicNameInstance());
-		return name==null?null:name.toString();
-	}
-	public void setName(String name) {
-		if (name==null)
-			removeProperty(Property.getNameInstance());
-		else setProperty(Property.getNameInstance(),name);
-	}
-	public String getName() {
-		Object name = getProperty(Property.getNameInstance());
-		return name==null?null:name.toString();
-	}
-	public void setI5UUID(String uuid) {
+	
+	public void setReferenceSubstanceUUID(String uuid) {
 		if (uuid==null)
 			removeProperty(Property.getI5UUIDInstance());
 		else setProperty(Property.getI5UUIDInstance(),uuid);
 	}
-	public String getI5UUID() {
+	public String getReferenceSubstanceUUID() {
 		Object name = getProperty(Property.getI5UUIDInstance());
 		return name==null?null:name.toString();
 	}

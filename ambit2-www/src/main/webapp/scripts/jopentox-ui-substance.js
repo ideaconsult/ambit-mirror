@@ -40,8 +40,33 @@ var substance = {
 			    						return val;
 			    					}
 			    				},	    	
-			    				{ //3
+			    				{ //1
 			    					"aTargets": [ 1 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "i5uuid",
+			    					"sWidth" : "20%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						var sOut = "<a href='"+o.aData["URI"]+"'>"+ val+ "</a>"
+			    						return val===undefined?"":(val==null)?"":sOut;
+			    					}
+			    				},		
+			    				{ //1
+			    					"aTargets": [ 2 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "substanceType",
+			    					"sWidth" : "15%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						return val;
+			    					}
+			    				},			    				
+			    				{ //3
+			    					"aTargets": [ 3 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -52,41 +77,15 @@ var substance = {
 			    					}
 			    				},
 			    				{ //1
-			    					"aTargets": [ 2 ],	
-			    					"sClass" : "left",
-			    					"bSortable" : true,
-			    					"bSearchable" : true,
-			    					"mDataProp" : "substanceType",
-			    					"sWidth" : "15%",
-			    					"bUseRendered" : false,	
-			    					"fnRender" : function(o,val) {
-			    						var sOut = "<a href='"+o.aData["URI"]+"'>"+ val+ "</a>"
-			    						return sOut;
-			    					}
-			    				},
-			    				{ //1
-			    					"aTargets": [ 3 ],	
-			    					"sClass" : "left",
-			    					"bSortable" : true,
-			    					"bSearchable" : true,
-			    					"mDataProp" : "i5uuid",
-			    					"sWidth" : "20%",
-			    					"bUseRendered" : false,	
-			    					"fnRender" : function(o,val) {
-			    						return val===undefined?"":(val==null)?"":val;
-			    					}
-			    				},			    				
-			    				{ //1
 			    					"aTargets": [ 4 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
-			    					"mDataProp" : null,
+			    					"mDataProp" : "referenceSubstance.i5uuid",
 			    					"sWidth" : "20%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						var sOut = "Reference substance UUID"
-			    						return sOut;
+			    						return val;
 			    					}
 			    				}				    				
 			    				],
@@ -132,7 +131,7 @@ var substance = {
 			    					"bUseRendered" : false,	
 			    					"sWidth" : "15%",
 			    					"fnRender" : function(o,val) {
-			    						var sOut = "<a href='"+o.aData["structure"]+"' target=_blank>"+ val.replace("HAS_","") + "</a>"
+			    						var sOut = "<span class='camelCase'>"+ val.replace("HAS_","").toLowerCase() + "</span>";
 			    						return sOut;
 			    					}
 			    				},	    
@@ -144,7 +143,8 @@ var substance = {
 			    					"mDataProp" : null,
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return "TODO";
+			    						var sOut = "<a href='"+o.aData["structure"]+"' target=_blank>Name-todo</span></a>"
+			    						return sOut;
 			    					}
 			    				},	    	
 			    				{ //3

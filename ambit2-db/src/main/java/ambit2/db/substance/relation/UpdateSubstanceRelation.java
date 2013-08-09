@@ -31,7 +31,6 @@ package ambit2.db.substance.relation;
 import java.util.ArrayList;
 import java.util.List;
 
-import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -86,7 +85,9 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdsubstance()));
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 		params1.add(new QueryParam<String>(String.class, getRelation().name()));
-		params1.add(new QueryParam<String>(String.class, getMetric().getFunction()));
+		if (getMetric().getFunction()!=null && getMetric().getFunction().length()>45)
+			params1.add(new QueryParam<String>(String.class, getMetric().getFunction().substring(0,44)));
+		else params1.add(new QueryParam<String>(String.class, getMetric().getFunction()));
 		params1.add(new QueryParam<String>(String.class, getMetric().getReal_lower()));
 		params1.add(new QueryParam<Double>(Double.class, getMetric().getReal_lowervalue()));
 		params1.add(new QueryParam<String>(String.class, getMetric().getReal_upper()));

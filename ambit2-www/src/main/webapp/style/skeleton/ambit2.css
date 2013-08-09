@@ -277,3 +277,7 @@ code {
 .structresults { list-style-type: none; margin: 0; padding: 0;  }
 .structresults li { margin: 3px; padding: 1px; float: left; width: 155px; min-height: 155px; font-size: 1em; text-align: center; }
  
+ .camelCase 
+{
+    text-transform:capitalize;
+}

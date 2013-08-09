@@ -23,7 +23,7 @@ public class SubstanceURIReporter<Q extends IQueryRetrieval<SubstanceRecord>> ex
 		if (item.getIdsubstance()>0)
 			return String.format("%s%s/%d", ref,OpenTox.URI.substance.getURI(),item.getIdsubstance());
 		else
-			return String.format("%s%s/%s", ref,OpenTox.URI.substance.getURI(),item.getI5UUID());
+			return String.format("%s%s/%s", ref,OpenTox.URI.substance.getURI(),item.getCompanyUUID());
 	}
 
 }
