@@ -1,14 +1,14 @@
 var substance = {
 		data : {},
-		"defineSubstanceTable" : function (root,url,deleteVisible) {
+		"defineSubstanceTable" : function (root,url,jQueryUI,dom,compositionDom) {
 			var oTable = $('.substancetable').dataTable( {
 				"sAjaxDataProp" : "substance",
 				"sAjaxSource": url,	
 				"sSearch": "Filter:",
-				"bJQueryUI" : true,
+				"bJQueryUI" : jQueryUI,
 				"bSearchable": true,
 				"bProcessing" : true,
-				"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+				"sDom" : dom==null?'<"help remove-bottom"i><"help"p>Trt<"help"lf>':dom,
 				"sSearch": "Filter:",
 				"bPaginate" : true,
 				"sPaginationType": "full_numbers",
@@ -25,11 +25,22 @@ var substance = {
 			          '<option value="50">50</option>' +
 			          '<option value="100">100</option>' +
 			          '<option value="-1">all</option>' +
-			          '</select> qmaps.'	            
+			          '</select> substances.'	            
 			    },	
 			    "aoColumnDefs": [
+				    			{ //2
+				    				"aTargets": [ 0 ],	
+				    				"sClass" : "center",
+				    				"bSortable" : true,
+				    				"bSearchable" : true,
+				    				"mDataProp" : null,
+				    				"bUseRendered" : false,	
+				    				"fnRender" : function(o,val) {
+				    					return "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show substance composition'></span>";
+				    				}
+				    			},				                     
 			    				{ //2
-			    					"aTargets": [ 0 ],	
+			    					"aTargets": [ 1 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -41,7 +52,7 @@ var substance = {
 			    					}
 			    				},	    	
 			    				{ //1
-			    					"aTargets": [ 1 ],	
+			    					"aTargets": [ 2 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -54,7 +65,7 @@ var substance = {
 			    					}
 			    				},		
 			    				{ //1
-			    					"aTargets": [ 2 ],	
+			    					"aTargets": [ 3 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -66,7 +77,7 @@ var substance = {
 			    					}
 			    				},			    				
 			    				{ //3
-			    					"aTargets": [ 3 ],	
+			    					"aTargets": [ 4 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -77,7 +88,7 @@ var substance = {
 			    					}
 			    				},
 			    				{ //1
-			    					"aTargets": [ 4 ],	
+			    					"aTargets": [ 5 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -92,17 +103,52 @@ var substance = {
 			    				    				
 			 	  "aaSorting": [[1, 'desc']]
 				});
+		    	$('#substances tbody td .zoomstruc').live('click',function() {
+					var nTr = $(this).parents('tr')[0];
+					if (oTable.fnIsOpen(nTr)) {
+						$(this).removeClass("ui-icon-folder-open");
+						$(this).addClass("ui-icon-folder-collapsed");
+						this.title='Click to show substance composition';
+						oTable.fnClose(nTr);
+					} else {
+						$(this).removeClass("ui-icon-folder-collapsed");
+						$(this).addClass("ui-icon-folder-open");
+						this.title='Click to close substance composition panel';
+						var id = "c"+getID();
+						oTable.fnOpen(nTr, fnFormatDetails(nTr,id),'details');
+						
+						var composition = oTable.fnGetData(nTr);
+						substance.defineCompositionTable(root,composition["URI"]+"/composition","#"+id,
+									null,
+									compositionDom==null?'Trt':compositionDom);
+									//compositionDom==null?'<"help remove-bottom"><"help">Trt<"help">':compositionDom);
+									
+					}
+		    	});
+		    	function getID() {
+		    		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+		    	}
+				function fnFormatDetails( nTr,id ) {
+					var compositionTable = 
+						"<div id='"+id+"' class='details' style='margin-top: 5x;' >"+						
+						"<table id='composition' class='compositiontable' cellpadding='0' border='0' width='100%' cellspacing='0' style='margin:0;padding:0;' >"+
+						"<thead><tr><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Real concentration</th>"+
+						"<th>Other related substances</th></tr></thead><tbody></tbody></table></div>";
+
+				    return compositionTable;
+				}
+		    	
 				return oTable;			
 		},
-		"defineCompositionTable" : function (root,url,deleteVisible) {
+		"defineCompositionTable" : function (root,url,selector,jQueryUI,dom) {
 			var oTable = $('.compositiontable').dataTable( {
 				"sAjaxDataProp" : "composition",
 				"sAjaxSource": url,	
 				"sSearch": "Filter:",
-				"bJQueryUI" : true,
+				"bJQueryUI" : jQueryUI,
 				"bSearchable": true,
 				"bProcessing" : true,
-				"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+				"sDom" : dom==null?'<"help remove-bottom"i><"help"p>Trt<"help"lf>':dom,
 				"sSearch": "Filter:",
 				"bPaginate" : true,
 				"sPaginationType": "full_numbers",
@@ -119,7 +165,7 @@ var substance = {
 			          '<option value="50">50</option>' +
 			          '<option value="100">100</option>' +
 			          '<option value="-1">all</option>' +
-			          '</select> qmaps.'	            
+			          '</select> substances.'	            
 			    },	
 			    "aoColumnDefs": [
 			    				{ //1
@@ -140,10 +186,10 @@ var substance = {
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
-			    					"mDataProp" : null,
+			    					"mDataProp" : "compound.URI",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						var sOut = "<a href='"+o.aData["structure"]+"' target=_blank>Name-todo</span></a>"
+			    						var sOut = "<a href='"+val+"' target=_blank>Name-todo</span></a>"
 			    						return sOut;
 			    					}
 			    				},	    	
@@ -205,10 +251,12 @@ var substance = {
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
-			    					"mDataProp" : null,
+			    					"mDataProp" : "compound.URI",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return "Related";
+			    						if ((val===undefined) || (val==null)) return "";
+			    						var sOut = "<a href='"+root+"/substance?compound_uri="+val+"' target=_blank>Related</span></a>"
+			    						return sOut;
 			    					}
 			    				}		    				
 			    				],

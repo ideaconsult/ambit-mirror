@@ -14,7 +14,7 @@
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = substance.defineCompositionTable("${ambit_root}","${ambit_request_json}",true);
+	  	var oTable = substance.defineCompositionTable("${ambit_root}","${ambit_request_json}","#composition",true,null);
 	  	loadHelp("${ambit_root}","substance");
 	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	  	downloadForm("${ambit_request}");
