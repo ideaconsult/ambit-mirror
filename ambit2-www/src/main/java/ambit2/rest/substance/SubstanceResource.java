@@ -10,9 +10,11 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.ReadSubstance;
 import ambit2.rest.OpenTox;
@@ -88,7 +90,16 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
 		Object key = request.getAttributes().get(idsubstance);
 		if (key==null) {
-			return (Q)new ReadSubstance(null);
+			Form form = getRequest().getResourceRef().getQueryAsForm();
+			Object cmpURI = OpenTox.params.compound_uri.getFirstValue(form);
+			if (cmpURI!=null) {
+				Object id = OpenTox.URI.compound.getId(cmpURI.toString(), request.getRootRef());
+				if (id!=null && (id instanceof Integer)) {
+					CompositionRelation composition = new CompositionRelation(null,new StructureRecord((Integer)id,-1,null,null),null);
+					return (Q)new ReadSubstance(composition);		
+				}
+			}
+			return (Q)new ReadSubstance();
 		} else try {
 			return (Q)new ReadSubstance(new SubstanceRecord(Integer.parseInt(key.toString())));
 		} catch (Exception x) {
