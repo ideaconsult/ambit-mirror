@@ -9,6 +9,7 @@ import org.restlet.data.Reference;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.json.JSONUtils;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -38,7 +39,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	
 	enum jsonFeature {
 		substance,
-		structure,
+		compound,
 		relation,
 		proportion
 		;
@@ -72,13 +73,13 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 			if (comma!=null) getOutput().write(comma);
 			getOutput().write(String.format(
 					"\n{"+
-					"\n\t\"%s\":\"%s\"," + 
-					"\n\t\"%s\":\"%s\"," +
+					"\n\t\"%s\": {\"URI\" : %s }," + 
+					"\n\t\"%s\": {\"URI\" : %s }," +
 					"\n\t\"%s\":\"%s\"," + 
 					"\n\t\"%s\":%s" + //metric
 					"\n}",
-					jsonFeature.substance.jsonname(),substanceReporter.getURI(item.getFirstStructure()),
-					jsonFeature.structure.jsonname(),cmpReporter.getURI(item.getSecondStructure()),
+					jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceReporter.getURI(item.getFirstStructure())),
+					jsonFeature.compound.jsonname(),JSONUtils.jsonQuote(cmpReporter.getURI(item.getSecondStructure())),
 					jsonFeature.relation.jsonname(),item.getRelationType().name(),
 					jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
 					));

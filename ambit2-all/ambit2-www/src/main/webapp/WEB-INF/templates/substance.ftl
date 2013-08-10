@@ -14,7 +14,7 @@
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = substance.defineSubstanceTable("${ambit_root}","${ambit_request_json}",true);
+	  	var oTable = substance.defineSubstanceTable("${ambit_root}","${ambit_request_json}",true,null);
 	  	loadHelp("${ambit_root}","substance");
 	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	  	downloadForm("${ambit_request}");
@@ -90,6 +90,7 @@
 			<table id='substances' class='substancetable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
+			<th></th>
 			<th>Name</th>
 			<th>Company UUID</th>
 			<th>Type</th>
