@@ -88,7 +88,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
 		Object key = request.getAttributes().get(idsubstance);
 		if (key==null) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			return (Q)new ReadSubstance(null);
 		} else try {
 			return (Q)new ReadSubstance(new SubstanceRecord(Integer.parseInt(key.toString())));
 		} catch (Exception x) {

@@ -10,17 +10,21 @@ import java.util.List;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCondition,SubstanceRecord> implements IQueryRetrieval<SubstanceRecord> {
+public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceRecord,EQCondition,SubstanceRecord> implements IQueryRetrieval<SubstanceRecord> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3661558183996204387L;
-	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid from substance where idsubstance=?";
+	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid from substance\n";
+	private static String  q_idsubstance = "idsubstance=?";
+	//private static String  q_idsubstance = "idsubstance=?";
 	protected enum _sqlids {
 		idsubstance,
 		prefix,
@@ -47,20 +51,29 @@ public class ReadSubstance  extends AbstractQuery<Boolean,SubstanceRecord,EQCond
 
 	@Override
 	public String getSQL() throws AmbitException {
-		return sql;
+		if (getValue()==null || getValue().getIdsubstance()<=0) return sql;
+		else {
+			StringBuilder b = new StringBuilder();
+			b.append(sql);
+			b.append("where ");
+			b.append(q_idsubstance);
+			return b.toString();
+		}
 	}
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
-		if (getValue()==null || getValue().getIdsubstance()<=0) throw new AmbitException("Substance not defined");
-		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		params1.add(new QueryParam<Integer>(Integer.class, getValue().getIdsubstance()));
-		return params1;
+		if (getValue()==null || getValue().getIdsubstance()<=0) return null;
+		else {
+			List<QueryParam> params1 = new ArrayList<QueryParam>();
+			params1.add(new QueryParam<Integer>(Integer.class, getValue().getIdsubstance()));
+			return params1;
+		}
 	}
 
 	@Override
 	public SubstanceRecord getObject(ResultSet rs) throws AmbitException {
 		 try {
-	            SubstanceRecord r = getValue();
+	            SubstanceRecord r = (getValue()==null)?new SubstanceRecord():getValue();
 	            r.clear();
 	            r.setIdsubstance(rs.getInt(_sqlids.idsubstance.name()));
 	            r.setFormat(rs.getString(_sqlids.format.name()));
