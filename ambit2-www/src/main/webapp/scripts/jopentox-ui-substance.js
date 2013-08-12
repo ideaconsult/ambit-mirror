@@ -1,14 +1,14 @@
 var substance = {
 		data : {},
-		"defineSubstanceTable" : function (root,url,jQueryUI,dom,compositionDom) {
-			var oTable = $('.substancetable').dataTable( {
+		"defineSubstanceTable" : function (root,url,selector,jQueryUI,dom,compositionDom) {
+			var oTable = $(selector).dataTable( {
 				"sAjaxDataProp" : "substance",
 				"sAjaxSource": url,	
 				"sSearch": "Filter:",
 				"bJQueryUI" : jQueryUI,
 				"bSearchable": true,
 				"bProcessing" : true,
-				"sDom" : dom==null?'<"help remove-bottom"i><"help"p>Trt<"help"lf>':dom,
+				"sDom" : (dom==null)?'<"help remove-bottom"i><"help"p>Trt<"help"lf>':dom,
 				"sSearch": "Filter:",
 				"bPaginate" : true,
 				"sPaginationType": "full_numbers",
@@ -103,7 +103,7 @@ var substance = {
 			    				    				
 			 	  "aaSorting": [[1, 'desc']]
 				});
-		    	$('#substances tbody td .zoomstruc').live('click',function() {
+		    	$(selector + ' tbody td .zoomstruc').live('click',function() {
 					var nTr = $(this).parents('tr')[0];
 					if (oTable.fnIsOpen(nTr)) {
 						$(this).removeClass("ui-icon-folder-open");
@@ -114,11 +114,12 @@ var substance = {
 						$(this).removeClass("ui-icon-folder-collapsed");
 						$(this).addClass("ui-icon-folder-open");
 						this.title='Click to close substance composition panel';
-						var id = "c"+getID();
-						oTable.fnOpen(nTr, fnFormatDetails(nTr,id),'details');
+						var id = getID();
+						console.log($(this));
+						oTable.fnOpen(nTr, fnFormatDetails(nTr,id),"details");
 						
 						var composition = oTable.fnGetData(nTr);
-						substance.defineCompositionTable(root,composition["URI"]+"/composition","#"+id,
+						substance.defineCompositionTable(root,composition["URI"]+"/composition","#t_"+id,
 									null,
 									compositionDom==null?'Trt':compositionDom);
 									//compositionDom==null?'<"help remove-bottom"><"help">Trt<"help">':compositionDom);
@@ -130,8 +131,8 @@ var substance = {
 		    	}
 				function fnFormatDetails( nTr,id ) {
 					var compositionTable = 
-						"<div id='"+id+"' class='details' style='margin-top: 5x;' >"+						
-						"<table id='composition' class='compositiontable' cellpadding='0' border='0' width='100%' cellspacing='0' style='margin:0;padding:0;' >"+
+						"<div id='c_"+id+"' class='details' style='margin-top: 5x;' >"+						
+						"<table id='t_"+id+"' class='compositiontable' cellpadding='0' border='0' width='100%' cellspacing='0' style='margin:0;padding:0;' >"+
 						"<thead><tr><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Real concentration</th>"+
 						"<th>Other related substances</th></tr></thead><tbody></tbody></table></div>";
 
@@ -141,7 +142,7 @@ var substance = {
 				return oTable;			
 		},
 		"defineCompositionTable" : function (root,url,selector,jQueryUI,dom) {
-			var oTable = $('.compositiontable').dataTable( {
+			var oTable = $(selector).dataTable( {
 				"sAjaxDataProp" : "composition",
 				"sAjaxSource": url,	
 				"sSearch": "Filter:",
@@ -255,7 +256,7 @@ var substance = {
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
 			    						if ((val===undefined) || (val==null)) return "";
-			    						var sOut = "<a href='"+root+"/substance?compound_uri="+val+"' target=_blank>Related</span></a>"
+			    						var sOut = "<a href='"+root+"/substance?compound_uri="+val+"' target=_blank>Also contained in...</span></a>"
 			    						return sOut;
 			    					}
 			    				}		    				
