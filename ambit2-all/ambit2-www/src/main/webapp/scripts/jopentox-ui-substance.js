@@ -178,7 +178,8 @@ var substance = {
 			    					"sWidth" : "10%",
 			    					"fnRender" : function(o,val) {
 			    						var sOut = "<span class='camelCase'>"+ val.replace("HAS_","").toLowerCase() + "</span>";
-			    						return sOut;
+			    						var func = ("HAS_ADDITIVE" == val)?o.aData["proportion"]["function_as_additive"]:"";
+			    						return sOut + " " + (((func===undefined) || (""==func))?"":("("+func+")"));
 			    					}
 			    				},	    
 			    				{ //2
