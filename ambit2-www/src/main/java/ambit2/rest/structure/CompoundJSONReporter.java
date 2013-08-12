@@ -47,8 +47,20 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 	 */
 	private static final long serialVersionUID = 410930501401847402L;
 	protected String comma = null;
+	public String getComma() {
+		return comma;
+	}
+
+	public void setComma(String comma) {
+		this.comma = comma;
+	}
+
 	protected String jsonpCallback = null;
 	protected PropertyJSONReporter propertyJSONReporter;
+	public PropertyJSONReporter getPropertyJSONReporter() {
+		return propertyJSONReporter;
+	}
+
 	protected String hilightPredictions = null;
 	protected MoleculeReader reader = null;
 
@@ -183,7 +195,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 		*/
 		return h;
 	}	
-	@Override
+	@Override 
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			Writer writer = getOutput();

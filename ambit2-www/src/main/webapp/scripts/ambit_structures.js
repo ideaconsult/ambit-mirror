@@ -413,6 +413,21 @@ function defineStructuresTable(url, query_service, similarity,root) {
 
 		var sOutComposition = '<div id="tabs-composition">';
 		sOutComposition += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Other related substances</th></tr></thead><tbody></tbody></table></div>';
+		/*
+		<table id='substances' class='substancetable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+		<thead>
+		<tr>
+		<th></th>
+		<th>Name</th>
+		<th>Company UUID</th>
+		<th>Type</th>
+		<th>Public name</th>
+		<th>Reference substance UUID</th>
+		</tr>
+		</thead>
+		<tbody></tbody>
+		</table>
+		*/
 		
 		$.each(dataEntry.lookup.misc, function(k, value) {
 			var feature = _ambit.search.result.feature[value];

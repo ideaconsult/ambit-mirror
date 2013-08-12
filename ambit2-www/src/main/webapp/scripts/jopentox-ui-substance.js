@@ -41,7 +41,7 @@ var substance = {
 				    			},				                     
 			    				{ //2
 			    					"aTargets": [ 1 ],	
-			    					"sClass" : "center",
+			    					"sClass" : "camelCase",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : "name",
@@ -78,7 +78,7 @@ var substance = {
 			    				},			    				
 			    				{ //3
 			    					"aTargets": [ 4 ],	
-			    					"sClass" : "center",
+			    					"sClass" : "camelCase",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : "publicname",
@@ -115,7 +115,6 @@ var substance = {
 						$(this).addClass("ui-icon-folder-open");
 						this.title='Click to close substance composition panel';
 						var id = getID();
-						console.log($(this));
 						oTable.fnOpen(nTr, fnFormatDetails(nTr,id),"details");
 						
 						var composition = oTable.fnGetData(nTr);
@@ -133,7 +132,7 @@ var substance = {
 					var compositionTable = 
 						"<div id='c_"+id+"' class='details' style='margin-top: 5x;' >"+						
 						"<table id='t_"+id+"' class='compositiontable' cellpadding='0' border='0' width='100%' cellspacing='0' style='margin:0;padding:0;' >"+
-						"<thead><tr><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Real concentration</th>"+
+						"<thead><tr><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Real concentration (lower)</th><th>Real concentration (upper)</th>"+
 						"<th>Other related substances</th></tr></thead><tbody></tbody></table></div>";
 
 				    return compositionTable;
@@ -176,7 +175,7 @@ var substance = {
 			    					"bSearchable" : true,
 			    					"mDataProp" : "relation",
 			    					"bUseRendered" : false,	
-			    					"sWidth" : "15%",
+			    					"sWidth" : "10%",
 			    					"fnRender" : function(o,val) {
 			    						var sOut = "<span class='camelCase'>"+ val.replace("HAS_","").toLowerCase() + "</span>";
 			    						return sOut;
@@ -184,13 +183,14 @@ var substance = {
 			    				},	    
 			    				{ //2
 			    					"aTargets": [ 1 ],	
-			    					"sClass" : "center",
+			    					"sClass" : "camelCase",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
-			    					"mDataProp" : "compound.URI",
+			    					"mDataProp" : "component.compound.name",
+			    					"sWidth" : "20%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						var sOut = "<a href='"+val+"' target=_blank>Name-todo</span></a>"
+			    						var sOut = "<a href='"+o.aData["component"]["compound"]["URI"]+"' target=_blank title='Click to view the compound'><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;''></span></span></a> " + val;
 			    						return sOut;
 			    					}
 			    				},	    	
@@ -199,10 +199,11 @@ var substance = {
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
-			    					"mDataProp" : null,
+			    					"mDataProp" : "component.compound.einecs",
+			    					"sWidth" : "10%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return "TODO";
+			    						return val;
 			    					}
 			    				},
 			    				{ //3
@@ -210,10 +211,11 @@ var substance = {
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
-			    					"mDataProp" : null,
+			    					"mDataProp" : "component.compound.cas",
+			    					"sWidth" : "10%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return "TODO";
+			    						return val;
 			    					}
 			    				},
 			    				{ //4
@@ -239,20 +241,32 @@ var substance = {
 			    					"fnRender" : function(o,val) {
 			    						var precision = val["lowerPrecision"];
 			    						var sOut = ((precision===undefined) || (precision==null) || ("="==precision))?"":precision;
-			    						sOut += " (" + val["lowerValue"] + " , ";
-			    						precision = val["upperPrecision"];
-			    						sOut += ((precision===undefined) || (precision==null) || ("="==precision))?"":precision;
-			    						sOut += " " + val["upperValue"] + ")";
-			    						sOut += val["unit"]==null?"":(" "+val["unit"]) ;
+			    						sOut +=  val["lowerValue"] + " ";
+			    						sOut += val["unit"]==null?"":(val["unit"]) ;
 			    						return sOut;
 			    					}
-			    				},			    				
-			    				{ //5
+			    				},
+			    				{ //4
 			    					"aTargets": [ 6 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
-			    					"mDataProp" : "compound.URI",
+			    					"mDataProp" : "proportion.real",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						var precision = val["upperPrecision"];
+			    						var sOut = ((precision===undefined) || (precision==null) || ("="==precision))?"":precision;
+			    						sOut += val["upperValue"] + " ";
+			    						sOut += val["unit"]==null?"":(val["unit"]) ;
+			    						return sOut;
+			    					}
+			    				},			    				
+			    				{ //5
+			    					"aTargets": [ 7 ],	
+			    					"sClass" : "center",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "component.compound.URI",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
 			    						if ((val===undefined) || (val==null)) return "";
@@ -261,9 +275,71 @@ var substance = {
 			    					}
 			    				}		    				
 			    				],
-			    				    				
-			 	  "aaSorting": [[1, 'desc']]
+					"fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+									
+									oSettings.jqXHR = $.ajax({
+										"type" : "GET",
+										"url" : sSource,
+										"data" : aoData,
+										"dataType" : "json",
+										"contentType" : "application/json",
+										"success" : function(json) {
+											//names
+											$.each(json.composition, function(k, cmp) {
+												cmp.component.compound["name"] = [];
+												cmp.component.compound["cas"] = [];
+												cmp.component.compound["einecs"] = [];
+												$.each(cmp.component.values,function(fURI,value) {
+													var feature = json.feature[fURI];
+													if ((feature!=null) && (value!=null)) {
+												 		if (feature.sameAs == "http://www.opentox.org/api/1.1#IUPACName") {
+												 			substance.formatValues(cmp.component.compound["name"],value.trim().toLowerCase());
+											    		} else if (feature.sameAs == "http://www.opentox.org/api/1.1#ChemicalName") {
+											    			substance.formatValues(cmp.component.compound["name"],value.trim().toLowerCase());
+												        } else if (feature.sameAs == "http://www.opentox.org/api/1.1#CASRN") { 
+												        	substance.formatValues(cmp.component.compound["cas"],value.trim().toLowerCase());
+												        } else if (feature.sameAs == "http://www.opentox.org/api/1.1#EINECS") {
+												        	substance.formatValues(cmp.component.compound["einecs"],value.trim().toLowerCase());
+												        } 
+													}
+												});
+											});	
+											fnCallback(json);
+										},
+										"cache" : true,
+										"error" : function(xhr, textStatus, error) {
+											switch (xhr.status) {
+											case 403: {
+									        	alert("Restricted data access. You are not authorized to access the requested data.");
+												break;
+											}
+											case 404: {
+												//not found
+												break;
+											}
+											default: {
+									        	alert("Error loading data " + xhr.status + " " + error);
+											}
+											}
+											oSettings.oApi._fnProcessingDisplay(oSettings, false);
+										}
+									});
+								},			    				    				
+			 	  "aaSorting": [[0, 'asc']]
 				});
 				return oTable;			
+		},
+		"formatValues" : function(array, value) {
+			$.each(value.split("|"), function(index, v) {
+				if ("" != v) {
+					if (array.length==0) array.push(v);
+					else {
+						var filtered = array.filter(function(element, index, array) {
+							 return (element == v);
+						});
+						if (filtered.length==0)	array.push(v);
+					}
+				}
+			});
 		}
 }
