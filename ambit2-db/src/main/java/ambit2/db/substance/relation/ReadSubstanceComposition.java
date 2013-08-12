@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.I5Utils;
+import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
@@ -23,7 +25,7 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected CompositionRelation record = new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
 	public final static String sql = 
-		"select idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit from substance_relation where idsubstance=?";
+		"select idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,rs_prefix,hex(rs_uuid) from substance_relation where idsubstance=?";
 	
 	@Override
 	public String getSQL() throws AmbitException {
@@ -60,6 +62,14 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 			record.getRelation().setReal_unit(rs.getString("proportion_real_unit"));
 			record.getRelation().setReal_lowervalue(rs.getDouble("proportion_real_lower_value"));
 			record.getRelation().setReal_uppervalue(rs.getDouble("proportion_real_upper_value"));
+			
+            try {
+	            String uuid = rs.getString("rs_prefix") + "-" + 
+	            		I5Utils.addDashes(rs.getString("rs_huuid")).toLowerCase();
+	            record.setProperty(Property.getI5UUIDInstance(),uuid);
+            } catch (Exception xx) {
+            	record.removeProperty(Property.getI5UUIDInstance());
+            }
 		} catch (Exception x) {
 			x.printStackTrace();
 		}

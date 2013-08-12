@@ -4,6 +4,7 @@
 
 <script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/ambit_structures.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-substance.js'></script>
 
 <script type='text/javascript'>
     _ambit.query_service = '${ambit_root}';

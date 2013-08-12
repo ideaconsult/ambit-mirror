@@ -25,9 +25,14 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 	private static String  q_idsubstance = "idsubstance=?";
 	//private static String  q_idsubstance = "idsubstance=?";
 	
-	private static String sql_bychemical = 
+	private static String sql_relatedsubstances = 
 		"select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid\n"+ 
 		"from substance	where idsubstance in (select distinct(idsubstance) from substance_relation where idchemical = ?)";
+	
+	private static String sql_bychemical =
+		"select distinct(substance.idsubstance),prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid "+ 
+		"from substance join substance_relation using(rs_prefix,rs_uuid) where rs_prefix is not null and rs_uuid is not null and idchemical = ?";
+
 	protected enum _sqlids {
 		idsubstance,
 		prefix,
@@ -57,26 +62,36 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 	}
 	@Override
 	public String getSQL() throws AmbitException {
-		if (getValue()!=null && getValue().getIdsubstance()>0) {
-			StringBuilder b = new StringBuilder();
-			b.append(sql);
-			b.append("where ");
-			b.append(q_idsubstance);
-			return b.toString();
+		if (getValue()!=null) {
+			if (getValue().getIdsubstance()>0) {
+				StringBuilder b = new StringBuilder();
+				b.append(sql);
+				b.append("where ");
+				b.append(q_idsubstance);
+				return b.toString();
+			} else if (getValue().getIdchemical()>0) { 
+				return sql_bychemical;
+			} else
+				throw new AmbitException("Unspecified substance");
 		} else if (getFieldname()!=null && getFieldname().getSecondStructure()!=null && getFieldname().getSecondStructure().getIdchemical()>0) {
-			return sql_bychemical;		
+			return sql_relatedsubstances;		
 		} else {
 			return sql;
 		}
 	}
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
-		if (getValue()!=null && getValue().getIdsubstance()>0) {
-			List<QueryParam> params1 = new ArrayList<QueryParam>();
-			params1.add(new QueryParam<Integer>(Integer.class, getValue().getIdsubstance()));
-			return params1;
+		List<QueryParam> params1 = new ArrayList<QueryParam>();
+		if (getValue()!=null) {
+			if (getValue().getIdsubstance()>0) {
+				params1.add(new QueryParam<Integer>(Integer.class, getValue().getIdsubstance()));
+				return params1;
+			} else if (getValue().getIdchemical()>0) {
+				params1.add(new QueryParam<Integer>(Integer.class, getValue().getIdchemical()));
+				return params1;
+			} else
+				throw new AmbitException("Unspecified substance");
 		} else if (getFieldname()!=null && getFieldname().getSecondStructure()!=null && getFieldname().getSecondStructure().getIdchemical()>0) {
-			List<QueryParam> params1 = new ArrayList<QueryParam>();
 			params1.add(new QueryParam<Integer>(Integer.class, getFieldname().getSecondStructure().getIdchemical()));
 			return params1;			
 		} else return null;

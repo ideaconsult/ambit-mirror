@@ -53,7 +53,7 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 	private static final long serialVersionUID = -8329798753353233477L;
 	public final static String sql = 
 		"select idsubstance,idchemical,-1,1,proportion_typical_value as metric,relation as text,proportion_real_lower,proportion_real_lower_value," +
-		"proportion_real_upper,proportion_real_upper_value,proportion_real_unit,proportion_typical,proportion_typical_unit\n"+
+		"proportion_real_upper,proportion_real_upper_value,proportion_real_unit,proportion_typical,proportion_typical_unit,rs_prefix,hex(rs_uuid)\n"+
 		"from substance_relation where idsubstance=? and relation=?";
 	
 	public ReadSubstanceRelation(SubstanceRecord structure) {
