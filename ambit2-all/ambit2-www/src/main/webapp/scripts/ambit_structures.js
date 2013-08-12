@@ -340,6 +340,10 @@ function defineStructuresTable(url, query_service, similarity,root) {
 					var id = 'values'+getID();
 					oTable.fnOpen(nTr, fnFormatDetails(nTr,id),	'details');
 					
+					dataEntry = oTable.fnGetData(nTr);
+					var cmpUri = root+"/substance?media=application/json&compound_uri=" + dataEntry.compound.URI;
+					substance.defineSubstanceTable(root,cmpUri,"#c"+id,false,'Trt','Trt');
+					
 				       $('.'+ id).dataTable({
 				    		'bJQueryUI': false, 
 				    		'bPaginate': false,
@@ -412,22 +416,8 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		sOutCalc += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
 		var sOutComposition = '<div id="tabs-composition">';
-		sOutComposition += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Other related substances</th></tr></thead><tbody></tbody></table></div>';
-		/*
-		<table id='substances' class='substancetable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
-		<thead>
-		<tr>
-		<th></th>
-		<th>Name</th>
-		<th>Company UUID</th>
-		<th>Type</th>
-		<th>Public name</th>
-		<th>Reference substance UUID</th>
-		</tr>
-		</thead>
-		<tbody></tbody>
-		</table>
-		*/
+		sOutComposition += '<table id="c'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th></th><th>Name</th><th>Company UUID</th><th>Type</th><th>Public name</th><th>Reference substance UUID</th></tr></thead><tbody></tbody></table></div>';
+		
 		
 		$.each(dataEntry.lookup.misc, function(k, value) {
 			var feature = _ambit.search.result.feature[value];

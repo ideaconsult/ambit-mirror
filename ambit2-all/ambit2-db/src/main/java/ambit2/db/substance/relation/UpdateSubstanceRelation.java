@@ -31,6 +31,8 @@ package ambit2.db.substance.relation;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.I5Utils;
+import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -45,12 +47,13 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 	public static final String[] create_sql = {
 		"INSERT INTO substance_relation (idsubstance,idchemical,relation,`function`, " +
 		"proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,\n"+
-		"proportion_typical,proportion_typical_value,proportion_typical_unit)\n"+
-		"values(?,?,?,?,?,?,?,?,?,?,?,?) on duplicate key update\n"+
+		"proportion_typical,proportion_typical_value,proportion_typical_unit,rs_prefix,rs_uuid)\n"+
+		"values(?,?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-',''))) on duplicate key update\n"+
 		"proportion_real_lower=values(proportion_real_lower),proportion_real_lower_value=values(proportion_real_lower_value)," +
 		"proportion_real_upper=values(proportion_real_upper),proportion_real_upper_value=values(proportion_real_upper_value)," +
 		"proportion_real_unit=values(proportion_real_unit),proportion_typical=values(proportion_typical),\n"+
-		"proportion_typical_value=values(proportion_typical_value),proportion_typical_unit=values(proportion_typical_unit)"
+		"proportion_typical_value=values(proportion_typical_value),proportion_typical_unit=values(proportion_typical_unit),\n"+
+		"rs_prefix=values(rs_prefix),rs_uuid=values(rs_uuid)"
 	};
 	public UpdateSubstanceRelation(CompositionRelation relation) {
 		this(relation.getFirstStructure(),relation.getSecondStructure(),relation.getRelationType(),relation.getRelation());
@@ -96,6 +99,13 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		params1.add(new QueryParam<String>(String.class, getMetric().getTypical()));
 		params1.add(new QueryParam<Double>(Double.class, getMetric().getTypical_value()));
 		params1.add(new QueryParam<String>(String.class, getMetric().getTypical_unit()));
+		
+		Object o_uuid = getObject().getProperty(Property.getI5UUIDInstance());
+		String[] uuid = {null,o_uuid==null?null:o_uuid.toString()};
+		if (o_uuid!=null) 
+			uuid = I5Utils.splitI5UUID(o_uuid.toString());
+		params1.add(new QueryParam<String>(String.class, uuid[0]));
+		params1.add(new QueryParam<String>(String.class, uuid[1]));		
 		return params1;
 	}
 }

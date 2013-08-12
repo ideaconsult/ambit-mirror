@@ -14,6 +14,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.processors.search.AbstractFinder.MODE;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.ReadSubstance;
@@ -33,7 +34,10 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 	public final static String substance = OpenTox.URI.substance.getURI();
 	public final static String idsubstance = OpenTox.URI.substance.getKey();
 	public final static String substanceID = OpenTox.URI.substance.getResourceID();
-	
+	enum search_mode {
+		reference,
+		related
+	}
 	public SubstanceResource() {
 		super();
 		setHtmlbyTemplate(true);
@@ -92,14 +96,29 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		if (key==null) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			Object cmpURI = OpenTox.params.compound_uri.getFirstValue(form);
-			if (cmpURI!=null) {
-				Object id = OpenTox.URI.compound.getId(cmpURI.toString(), request.getRootRef());
-				if (id!=null && (id instanceof Integer)) {
-					CompositionRelation composition = new CompositionRelation(null,new StructureRecord((Integer)id,-1,null,null),null);
-					return (Q)new ReadSubstance(composition);		
+			if (cmpURI==null)
+				return (Q)new ReadSubstance();				
+			else {
+				Integer idchemical = getIdChemical(OpenTox.params.compound_uri.getFirstValue(form), request);
+				if (idchemical != null) {
+					search_mode mode = search_mode.reference;
+					try { 
+						mode = search_mode.valueOf(form.getFirstValue("type"));
+					} catch (Exception x) {}
+					switch (mode) {
+					case reference: {
+						SubstanceRecord substance = new SubstanceRecord();
+						substance.setIdchemical(idchemical);
+						return (Q)new ReadSubstance(substance);			
+					}
+					case related: {
+						CompositionRelation composition = new CompositionRelation(null,new StructureRecord(idchemical,-1,null,null),null);
+						return (Q)new ReadSubstance(composition);								
+					}
+					}
 				}
 			}
-			return (Q)new ReadSubstance();
+			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		} else try {
 			return (Q)new ReadSubstance(new SubstanceRecord(Integer.parseInt(key.toString())));
 		} catch (Exception x) {
@@ -107,6 +126,19 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		}
 	}
 
+	protected Integer getIdChemical(Object cmpURI, Request request) {
+		if (cmpURI!=null) {
+			Object id = OpenTox.URI.compound.getId(cmpURI.toString(), request.getRootRef());
+			if (id!=null && (id instanceof Integer)) 
+				return (Integer)id;		
+			else {
+				Object[] ids = OpenTox.URI.conformer.getIds(cmpURI.toString(), request.getRootRef());
+				if (ids!=null && (ids.length>1) && (ids[0] instanceof Integer)) 
+					return (Integer)ids[0];
+			}
+		} 
+		return null;
+	}
 	protected QueryURIReporter getURIReporter() {
 		return new SubstanceURIReporter<Q>(getRequest(),getDocumentation());
 	}

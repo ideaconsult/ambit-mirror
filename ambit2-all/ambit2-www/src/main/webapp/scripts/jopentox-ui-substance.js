@@ -31,8 +31,8 @@ var substance = {
 				    			{ //2
 				    				"aTargets": [ 0 ],	
 				    				"sClass" : "center",
-				    				"bSortable" : true,
-				    				"bSearchable" : true,
+				    				"bSortable" : false,
+				    				"bSearchable" : false,
 				    				"mDataProp" : null,
 				    				"bUseRendered" : false,	
 				    				"fnRender" : function(o,val) {
@@ -100,7 +100,35 @@ var substance = {
 			    					}
 			    				}				    				
 			    				],
-			    				    				
+			      "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+						oSettings.jqXHR = $.ajax({
+							"type" : "GET",
+							"url" : sSource,
+							"data" : aoData,
+							"dataType" : "json",
+							"contentType" : "application/json",
+							"success" : function(json) {
+								fnCallback(json);
+							},
+							"cache" : true,
+							"error" : function(xhr, textStatus, error) {
+								switch (xhr.status) {
+								case 403: {
+						        	alert("Restricted data access. You are not authorized to access the requested data.");
+									break;
+								}
+								case 404: {
+									//not found
+									break;
+								}
+								default: {
+						        	alert("Error loading data " + xhr.status + " " + error);
+								}
+								}
+								oSettings.oApi._fnProcessingDisplay(oSettings, false);
+							}
+						});			    	  
+			      },
 			 	  "aaSorting": [[1, 'desc']]
 				});
 		    	$(selector + ' tbody td .zoomstruc').live('click',function() {
@@ -179,7 +207,7 @@ var substance = {
 			    					"fnRender" : function(o,val) {
 			    						var sOut = "<span class='camelCase'>"+ val.replace("HAS_","").toLowerCase() + "</span>";
 			    						var func = ("HAS_ADDITIVE" == val)?o.aData["proportion"]["function_as_additive"]:"";
-			    						return sOut + " " + (((func===undefined) || (""==func))?"":("("+func+")"));
+			    						return sOut + " " + (((func===undefined) || (func==null) || (""==func))?"":("("+func+")"));
 			    					}
 			    				},	    
 			    				{ //2
@@ -271,7 +299,7 @@ var substance = {
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
 			    						if ((val===undefined) || (val==null)) return "";
-			    						var sOut = "<a href='"+root+"/substance?compound_uri="+val+"' target=_blank>Also contained in...</span></a>"
+			    						var sOut = "<a href='"+root+"/substance?type=related&compound_uri="+val+"' target=_blank>Also contained in...</span></a>"
 			    						return sOut;
 			    					}
 			    				}		    				
