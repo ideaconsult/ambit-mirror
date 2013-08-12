@@ -46,6 +46,9 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 	protected List<Property> header = null;
 	
 	
+	public List<Property> getHeader() {
+		return header;
+	}
 	public Template getTemplate() {
 		return template;
 	}

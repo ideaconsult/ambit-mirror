@@ -1,21 +1,28 @@
 package ambit2.rest.substance.composition;
 
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.logging.Level;
 
 import org.restlet.Request;
-import org.restlet.data.Reference;
 
+import ambit2.base.data.Profile;
+import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.json.JSONUtils;
+import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.RetrieveGroupedValuesByAlias;
 import ambit2.db.reporters.QueryReporter;
+import ambit2.pubchem.NCISearchProcessor;
 import ambit2.rest.ResourceDoc;
-import ambit2.rest.structure.ConformerURIReporter;
+import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.substance.SubstanceURIReporter;
 
 /**
@@ -31,15 +38,15 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	private static final long serialVersionUID = 410930501401847402L;
 	protected String comma = null;
 	protected String jsonpCallback = null;
-	protected final ConformerURIReporter<IQueryRetrieval<IStructureRecord>> cmpReporter;
+
+	
+	protected final CompoundJSONReporter<IQueryRetrieval<IStructureRecord>> cmpReporter;
 	protected final SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>> substanceReporter;
-	public Reference getBaseReference() {
-		return cmpReporter.getBaseReference();
-	}
+	
 	
 	enum jsonFeature {
 		substance,
-		compound,
+		component,
 		relation,
 		proportion
 		;
@@ -50,14 +57,41 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	}
 	public SubstanceCompositionJSONReporter(Request request, ResourceDoc doc,String jsonpCallback) {
 		super();
-		cmpReporter = new ConformerURIReporter<IQueryRetrieval<IStructureRecord>>(request, null);
+		Profile groupProperties = getGroupProperties();
+		cmpReporter = new CompoundJSONReporter(null,null,null,request,doc,request.getRootRef().toString(),false,null);
+		cmpReporter.setGroupProperties(groupProperties);
 		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request, null);
 		this.jsonpCallback = jsonpCallback;
+		getProcessors().clear();
+		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(groupProperties)) {
+			@Override
+			public IStructureRecord process(IStructureRecord target)
+					throws AmbitException {
+				((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+				return super.process(target);
+			}
+		});
+		getProcessors().add(new DefaultAmbitProcessor<CompositionRelation,CompositionRelation>() {
+			public CompositionRelation process(CompositionRelation target) throws AmbitException {
+				processItem(target);
+				return target;
+			};
+		});	
+
 	}
-	
-	public ConformerURIReporter<IQueryRetrieval<IStructureRecord>> getCmpReporter() {
-		return cmpReporter;
-	}
+	protected Profile getGroupProperties() {
+		String[] r = NCISearchProcessor.METHODS.names.getOpenToxEntry();
+		Template gp = new Template();
+		for (int i=0; i < r.length;i++) {
+			Property p = new Property(r[i]);
+			p.setLabel(r[i]);
+			p.setEnabled(true);
+			p.setOrder(i+1);
+			gp.add(p);
+		}
+		return gp;
+	}	
+
 
 	/**
 	 * <pre>
@@ -71,15 +105,22 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 			if (item.getFirstStructure()==null) return null;
 			if (item.getSecondStructure()==null) return null;
 			if (comma!=null) getOutput().write(comma);
+			
+			StringWriter w = new StringWriter();
+			cmpReporter.setOutput(w);
+			cmpReporter.setComma(null);
+			cmpReporter.processItem(item.getSecondStructure());
+			
 			getOutput().write(String.format(
 					"\n{"+
 					"\n\t\"%s\": {\"URI\" : %s }," + 
-					"\n\t\"%s\": {\"URI\" : %s }," +
+					"\n\t\"%s\": \t%s ," +
 					"\n\t\"%s\":\"%s\"," + 
 					"\n\t\"%s\":%s" + //metric
 					"\n}",
 					jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceReporter.getURI(item.getFirstStructure())),
-					jsonFeature.compound.jsonname(),JSONUtils.jsonQuote(cmpReporter.getURI(item.getSecondStructure())),
+					jsonFeature.component.jsonname(),
+					w.toString(),
 					jsonFeature.relation.jsonname(),item.getRelationType().name(),
 					jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
 					));
@@ -101,7 +142,24 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	@Override
 	public void footer(Writer output, Q query) {
 		try {
-			output.write("\n]}");
+			output.write("\n],");
+		} catch (Exception x) {}
+		try {
+			output.write("\n\"feature\":{\n");
+			StringWriter w = new StringWriter();
+			cmpReporter.setOutput(w);
+			if (cmpReporter.getHeader()!=null)
+			for (int j=0; j < cmpReporter.getHeader().size(); j++) 
+				cmpReporter.getPropertyJSONReporter().processItem(cmpReporter.getHeader().get(j));
+			output.write(w.toString());
+		} catch (Exception x) {
+			x.printStackTrace();
+		} finally {
+			try {output.write("}\n");} catch (Exception x) {}
+		}
+				
+		try {
+			output.write("\n}");
 		} catch (Exception x) {}
 	};
 	
