@@ -14,7 +14,7 @@
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = substance.defineSubstanceTable("${ambit_root}","${ambit_request_json}",true,null);
+	  	var oTable = substance.defineSubstanceTable("${ambit_root}","${ambit_request_json}","#substances",true,null,'Trt');
 	  	loadHelp("${ambit_root}","substance");
 	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	  	downloadForm("${ambit_request}");
@@ -70,7 +70,7 @@
 
 </form>
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<#include "/menu_substance.ftl">
 	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
 	<!-- Not supported yet
