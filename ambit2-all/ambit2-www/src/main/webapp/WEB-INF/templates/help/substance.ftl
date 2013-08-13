@@ -16,6 +16,7 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
     <li><a href="#main">Main constituent</a></li>
     <li><a href="#additive">Additive</a></li>
     <li><a href="#impurity">Impurity</a></li>
+    <li><a href="#i5z">.i5z file</a></li>
   </ul>
   <div id="mono">
   	A substance with one main constituent..
@@ -34,5 +35,7 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
   <div id="impurity">
     An unintended constituent present in a substance, as produced. Does not contribute to the naming of the substance.
   </div>  
-
+  <div id="i5z">
+    IUCLID5 files. Only Substance and ReferenceSubstance records are imported.
+  </div>  
 </div>      
