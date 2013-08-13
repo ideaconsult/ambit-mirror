@@ -83,6 +83,7 @@ $(document)
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "http://rdf.farmbio.uu.se/chembl/onto/#forMolecule"' value='ChEMBL' >http://rdf.farmbio.uu.se/chembl/onto/#forMolecule</option>
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "Match by column "SAMPLE""' value='SAMPLE' >Match by column "SAMPLE"</option>
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "Match by chemical name"' value='NAME' >Match by chemical name</option>
+			<option title='On import, finds the same compound in the database by matching with the selected criteria "Match by chemical name"' value='IUCLID5_REFERENCESUBSTANCE' >Match by IUCLID5 Reference substance UUID</option>
 			<option title='On import, finds the same compound in the database by matching with the selected criteria "Do not match, add as a new structure"' value='None' >Don't match, add as a new structure</option>
 		</select>
 		<div class='ten columns omega'></div>
