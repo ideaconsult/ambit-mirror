@@ -1,6 +1,7 @@
 package ambit2.db.processors.test;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.Connection;
 
@@ -14,6 +15,7 @@ import org.junit.Test;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.io.DownloadTool;
 import ambit2.core.io.IRawReader;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
@@ -51,10 +53,14 @@ public class SubstanceWriterTest extends DbUnitTest {
     Substance: 1
     EndpointRecord: 14
 		 */
-		URL url = I5AmbitProcessor.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i5z");
-		
-		Assert.assertNotNull(url);
-		File i5z = new File(url.getFile());
+		InputStream in = I5AmbitProcessor.class.getClassLoader().getResourceAsStream("net/idea/i5/_5/substance/i5z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i5z");
+		Assert.assertNotNull(in);
+		File i5z = File.createTempFile("test_", ".i5z");
+		try {
+			DownloadTool.download(in, i5z);
+		} finally {
+			in.close();
+		}
 		Assert.assertTrue(i5z.exists());
 
 	    I5ZReader reader = getReader(i5z);
