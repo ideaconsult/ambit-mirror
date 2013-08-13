@@ -1,7 +1,6 @@
 package ambit2.db.processors.test;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.net.URL;
 import java.sql.Connection;
 
@@ -13,19 +12,11 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 
-import ambit2.base.data.LiteratureEntry;
-import ambit2.base.data.Property;
-import ambit2.base.data.SourceDataset;
-import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.io.IRawReader;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
-import ambit2.db.UpdateExecutor;
-import ambit2.db.processors.RepositoryWriter;
-import ambit2.db.substance.CreateSubstance;
-import ambit2.db.substance.relation.UpdateSubstanceRelation;
+import ambit2.db.processors.DBSubstanceWriter;
 
 public class SubstanceWriterTest extends DbUnitTest {
 
@@ -60,50 +51,49 @@ public class SubstanceWriterTest extends DbUnitTest {
     EndpointRecord: 14
 		 */
 		URL url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i5z");
-		//URL url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/IUC4-21159b7a-0479-342b-be33-4aa1f079ec8e.i5z");
-		
-		//URL url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/formaldehyde.i5z");
-		//URL url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/Benzoicacid.i5z");
 		
 		Assert.assertNotNull(url);
 		File i5z = new File(url.getFile());
 		Assert.assertTrue(i5z.exists());
 
-	   FilenameFilter filter = new FilenameFilter() {
-	        public boolean accept(File dir, String name) {
-	            return !name.startsWith(".");
-	        }
-	    };
-
-	    I5ZReader reader = new I5ZReader(i5z);
-	    reader.setErrorHandler(new IChemObjectReaderErrorHandler() {
-			
-			@Override
-			public void handleError(String message, int row, int colStart, int colEnd,
-					Exception exception) {
-			}
-			
-			@Override
-			public void handleError(String message, int row, int colStart, int colEnd) {
-			}
-			
-			@Override
-			public void handleError(String message, Exception exception) {
-			}
-			
-			@Override
-			public void handleError(String message) {
-			}
-		});
+	    I5ZReader reader = getReader(i5z);
 		int records = write(reader,c.getConnection(),new ReferenceSubstanceUUID());
-		
-		Assert.assertEquals(7,records);
+		reader.close();
+        c.close();
+        /*
+        c = getConnection();
+		url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/Benzoicacid.i5z");
+	    reader = getReader(new File(url.getFile()));
+		records += write(reader,c.getConnection(),new ReferenceSubstanceUUID());
 		reader.close();
         c.close();
         
         c = getConnection();
+		url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/formaldehyde.i5z");
+	    reader = getReader(new File(url.getFile()));
+		records += write(reader,c.getConnection(),new ReferenceSubstanceUUID());
+		reader.close();
+        c.close();
+        */
+        
+        /*
+         * NPE at junit.framework.AssertionFailedError: null
+	at junit.framework.Assert.fail(Assert.java:47)
+	at junit.framework.Assert.assertTrue(Assert.java:20)
+	at junit.framework.Assert.assertTrue(Assert.java:27)
+	at ambit2.db.processors.test.SubstanceWriterTest.write(SubstanceWriterTest.java:184)
+	at ambit2.db.processors.test.SubstanceWriterTest.testWriteMultipleFiles_i5d(SubstanceWriterTest.java:94)
+
+        */
+        
+        
+		Assert.assertEquals(7,records);
+
+        
+        c = getConnection();
         ITable substance = 	c.createQueryTable("EXPECTED","SELECT * FROM substance");
         Assert.assertEquals(1,substance.getRowCount());
+        Assert.assertNotNull(substance.getValue(0,"uuid"));
 
 		chemicals = 	c.createQueryTable("EXPECTED","SELECT * FROM chemicals");
 		Assert.assertEquals(6,chemicals.getRowCount());
@@ -133,52 +123,47 @@ public class SubstanceWriterTest extends DbUnitTest {
 		Assert.assertEquals(6,p_uuid.getRowCount());
 		c.close();
 	}	
-	
+	private I5ZReader getReader(File i5z) throws Exception {
+		 I5ZReader reader = new I5ZReader(i5z);
+		    reader.setErrorHandler(new IChemObjectReaderErrorHandler() {
+				
+				@Override
+				public void handleError(String message, int row, int colStart, int colEnd,
+						Exception exception) {
+				}
+				
+				@Override
+				public void handleError(String message, int row, int colStart, int colEnd) {
+				}
+				
+				@Override
+				public void handleError(String message, Exception exception) {
+				}
+				
+				@Override
+				public void handleError(String message) {
+				}
+			});
+		    return reader;
+	}
 	public int write(IRawReader<IStructureRecord> reader,Connection connection) throws Exception  {
 		return write(reader, connection,new ReferenceSubstanceUUID());
 	}
+
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key) throws Exception  {
 		
-		RepositoryWriter writer = new RepositoryWriter();
-		writer.setUsePreferredStructure(true);
-		if (key != null) writer.setPropertyKey(key);
-		
-		writer.setDataset(new SourceDataset("I5Z INPUT",LiteratureEntry.getInstance("File","file:input.i5z")));
+		DBSubstanceWriter writer = new DBSubstanceWriter();
 		writer.setConnection(connection);
         writer.open();
-        CreateSubstance q = new CreateSubstance();
-        UpdateSubstanceRelation qr = new UpdateSubstanceRelation();
-        UpdateExecutor x = new UpdateExecutor();
-        x.setCloseConnection(false);
-        x.setConnection(connection);
 		int records = 0;
 		while (reader.hasNext()) {
-            IStructureRecord record = reader.nextRecord();
-            if (record instanceof SubstanceRecord) {
-            	SubstanceRecord substance = (SubstanceRecord) record;
-            	q.setObject(substance);
-            	x.process(q);
-            	Assert.assertTrue(substance.getIdsubstance()>0);
-            	Assert.assertTrue(substance.getRelatedStructures().size()>0);
-            	for (CompositionRelation rel : substance.getRelatedStructures()) {
-            		if (rel.getSecondStructure().getIdchemical()<=0) {
-            			writer.write(rel.getSecondStructure());		
-            		}
-            		System.out.println(rel.getSecondStructure().getContent());
-            		System.out.println(rel.getSecondStructure().getProperty(Property.getI5UUIDInstance()));
-            		qr.setCompositionRelation(rel);
-            		x.process(qr);
-            	}
-            	System.out.println(record.getClass().getName());
-    			records ++;
-            } else if (record instanceof IStructureRecord) {
-            	writer.write(record);
-    			records ++;
-            }
+            Object record = reader.next();
+            Assert.assertTrue(record instanceof IStructureRecord);
+            writer.process((IStructureRecord)record);
+            records++;
 		}
-		x.close();
-		reader.close();
 		writer.close();
 		return records;
 	}	
+	
 }

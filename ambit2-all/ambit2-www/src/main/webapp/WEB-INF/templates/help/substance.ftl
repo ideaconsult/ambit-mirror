@@ -36,6 +36,10 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
     An unintended constituent present in a substance, as produced. Does not contribute to the naming of the substance.
   </div>  
   <div id="i5z">
-    IUCLID5 files. Only Substance and ReferenceSubstance records are imported.
+  	<a href='http://en.wikipedia.org/wiki/IUCLID' target=_blank>IUCLID 5</a> exports and imports files in the I5Z format. 
+  	I5Z stands for "IUCLID 5 Zip", as the file uses Zip file compression.
+  	<br/>
+    Only Substance (IUCLID 5.4, IUCLID 5.5) and ReferenceSubstance (IUCLID 5.0, IUCLID 5.4, IUCLID 5.5.) records
+    (as defined by the <a href='http://iuclid.eu/index.php?fuseaction=home.format' target=_blank>IUCLID schema</a>) can be imported in this version of Ambit.
   </div>  
 </div>      

@@ -1,11 +1,17 @@
 package ambit2.rest.substance;
 
+import java.util.List;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -14,7 +20,6 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.base.processors.search.AbstractFinder.MODE;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.ReadSubstance;
@@ -22,7 +27,12 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.TaskApplication;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.task.AmbitFactoryTaskConvertor;
+import ambit2.rest.task.FactoryTaskConvertor;
+import ambit2.rest.task.ITaskStorage;
+import ambit2.rest.task.Task;
 
 /**
  * Substances (in the sense of IUCLID5) 
@@ -141,5 +151,43 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 	}
 	protected QueryURIReporter getURIReporter() {
 		return new SubstanceURIReporter<Q>(getRequest(),getDocumentation());
+	}
+	
+	@Override
+	protected Representation post(Representation entity, Variant variant)
+			throws ResourceException {
+		
+		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
+
+		if (entity.getMediaType()!= null && MediaType.MULTIPART_FORM_DATA.getName().equals(entity.getMediaType().getName())) {
+			DiskFileItemFactory factory = new DiskFileItemFactory();
+            RestletFileUpload upload = new RestletFileUpload(factory);
+            try {
+	            List<FileItem> items = upload.parseRequest(getRequest());
+				String token = getToken();
+				CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(
+							items, 
+							"file",
+							getRootRef(),
+							getContext(), 
+							token);
+				Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+							"Substance import",
+							callable,
+							getRequest().getRootRef(),
+							token);
+							
+				  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+				  task.update();
+				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+	              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
+            } catch (ResourceException x) {
+            	throw x;
+            } catch (Exception x) {
+            	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+            }
+
+		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 	}
 }
