@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 
 import junit.framework.Assert;
+import net.idea.i5._5.ambit2.I5AmbitProcessor;
 import net.idea.i5.io.I5ZReader;
 
 import org.dbunit.database.IDatabaseConnection;
@@ -50,7 +51,7 @@ public class SubstanceWriterTest extends DbUnitTest {
     Substance: 1
     EndpointRecord: 14
 		 */
-		URL url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i5z");
+		URL url = I5AmbitProcessor.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i5z");
 		
 		Assert.assertNotNull(url);
 		File i5z = new File(url.getFile());
