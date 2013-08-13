@@ -143,10 +143,12 @@ var substance = {
 						$(this).addClass("ui-icon-folder-open");
 						this.title='Click to close substance composition panel';
 						var id = getID();
-						oTable.fnOpen(nTr, fnFormatDetails(nTr,id),"details");
+						oTable.fnOpen(nTr, fnFormatDetails(nTr,id),"substancedetails");
 						
 						var composition = oTable.fnGetData(nTr);
-						substance.defineCompositionTable(root,composition["URI"]+"/composition","#t_"+id,
+						substance.defineCompositionTable(root,
+									composition["URI"]+"/composition?media=" +encodeURIComponent("application/json") ,
+									"#t_"+id,
 									null,
 									compositionDom==null?'Trt':compositionDom);
 									//compositionDom==null?'<"help remove-bottom"><"help">Trt<"help">':compositionDom);
@@ -212,7 +214,7 @@ var substance = {
 			    				},	    
 			    				{ //2
 			    					"aTargets": [ 1 ],	
-			    					"sClass" : "camelCase",
+			    					"sClass" : "camelCase left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : "component.compound.name",
@@ -225,7 +227,7 @@ var substance = {
 			    				},	    	
 			    				{ //3
 			    					"aTargets": [ 2 ],	
-			    					"sClass" : "center",
+			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : "component.compound.einecs",
@@ -237,7 +239,7 @@ var substance = {
 			    				},
 			    				{ //3
 			    					"aTargets": [ 3 ],	
-			    					"sClass" : "center",
+			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : "component.compound.cas",
@@ -299,13 +301,12 @@ var substance = {
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
 			    						if ((val===undefined) || (val==null)) return "";
-			    						var sOut = "<a href='"+root+"/substance?type=related&compound_uri="+val+"' target=_blank>Also contained in...</span></a>"
+			    						var sOut = "<a href='"+root+"/substance?type=related&compound_uri="+encodeURIComponent(val)+"' target=_blank>Also contained in...</span></a>"
 			    						return sOut;
 			    					}
 			    				}		    				
 			    				],
 					"fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
-									
 									oSettings.jqXHR = $.ajax({
 										"type" : "GET",
 										"url" : sSource,
