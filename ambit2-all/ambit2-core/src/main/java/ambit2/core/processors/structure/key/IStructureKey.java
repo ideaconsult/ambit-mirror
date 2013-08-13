@@ -148,6 +148,16 @@ public interface IStructureKey<Target, Result> extends IProcessor<Target, Result
 				return "Match by chemical name";
 			}
 		},			
+		IUCLID5_REFERENCESUBSTANCE {
+			@Override
+			public String getClassName() {
+				return "ambit2.core.processors.structure.key.ReferenceSubstanceUUID";
+			}
+			@Override
+			public String getDescription() {
+				return "Match by IUCLID5 Refenrence Substance UUID";
+			}			
+		},
 		None {
 			@Override
 			public String getClassName() {
