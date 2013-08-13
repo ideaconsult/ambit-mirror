@@ -281,3 +281,9 @@ code {
 {
     text-transform:capitalize;
 }
+
+.substancedetails {
+	font-size: 1em;
+	font-weight: !important;
+	color: #000000;
+}

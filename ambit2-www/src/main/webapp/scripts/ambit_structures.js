@@ -341,8 +341,10 @@ function defineStructuresTable(url, query_service, similarity,root) {
 					oTable.fnOpen(nTr, fnFormatDetails(nTr,id),	'details');
 					
 					dataEntry = oTable.fnGetData(nTr);
-					var cmpUri = root+"/substance?media=application/json&compound_uri=" + dataEntry.compound.URI;
-					substance.defineSubstanceTable(root,cmpUri,"#c"+id,false,'Trt','Trt');
+					if (dataEntry!=null) {
+						var cmpUri = root+"/substance?media="+encodeURIComponent("application/json") + "&compound_uri=" + encodeURIComponent(dataEntry.compound.URI);
+						substance.defineSubstanceTable(root,cmpUri,"#c"+id,false,'Trt','Trt');
+					}
 					
 				       $('.'+ id).dataTable({
 				    		'bJQueryUI': false, 
@@ -398,17 +400,6 @@ function defineStructuresTable(url, query_service, similarity,root) {
 			sOut += renderValue(null,"[Struc]","InChIKey","",dataEntry.values[value],"");
 		});
 		*/
-		sOut += renderIdentifiers(null,"CAS",dataEntry.lookup.cas,dataEntry);
-		sOut += renderIdentifiers(null,"EC",dataEntry.lookup.einecs,dataEntry);
-		sOut += renderIdentifiers(null,"Name",dataEntry.lookup.names,dataEntry);
-		sOut += renderIdentifiers(null,"REACH date",dataEntry.lookup.reachdate,dataEntry);
-		sOut += renderIdentifiers(null,"SMILES",dataEntry.lookup.smiles,dataEntry);
-		sOut += renderIdentifiers(null,"IUCLID5 UUID",dataEntry.lookup.i5uuid,dataEntry);
-		sOut += renderIdentifiers(null,"InChI",dataEntry.lookup.inchi,dataEntry);
-		//sOut += renderIdentifiers(null,"InChI key",dataEntry.lookup.inchikey,dataEntry);
-
-		sOut += '</tbody></table></div>\n';
-		
 		var sOutData = '<div id="tabs-data">';
 		sOutData += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Data source</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
@@ -417,21 +408,37 @@ function defineStructuresTable(url, query_service, similarity,root) {
 
 		var sOutComposition = '<div id="tabs-composition">';
 		sOutComposition += '<table id="c'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th></th><th>Name</th><th>Company UUID</th><th>Type</th><th>Public name</th><th>Reference substance UUID</th></tr></thead><tbody></tbody></table></div>';
+
 		
+		if ((dataEntry===undefined) || (dataEntry==null)) {
+			
+		} else {
+			sOut += renderIdentifiers(null,"CAS",dataEntry.lookup.cas,dataEntry);
+			sOut += renderIdentifiers(null,"EC",dataEntry.lookup.einecs,dataEntry);
+			sOut += renderIdentifiers(null,"Name",dataEntry.lookup.names,dataEntry);
+			sOut += renderIdentifiers(null,"REACH date",dataEntry.lookup.reachdate,dataEntry);
+			sOut += renderIdentifiers(null,"SMILES",dataEntry.lookup.smiles,dataEntry);
+			sOut += renderIdentifiers(null,"IUCLID5 UUID",dataEntry.lookup.i5uuid,dataEntry);
+			sOut += renderIdentifiers(null,"InChI",dataEntry.lookup.inchi,dataEntry);
+			
+			$.each(dataEntry.lookup.misc, function(k, value) {
+				var feature = _ambit.search.result.feature[value];
+				switch (feature.source.type) {
+				case 'Dataset': {
+					sOutData += renderValue(value,feature.title,feature.units,dataEntry.values[value],feature.sameAs,feature.source);
+					break;
+				}
+				default: {
+					sOutCalc += renderValue(value,feature.title,feature.units,dataEntry.values[value],feature.sameAs,feature.source);
+					break;
+				}	
+				}
+			});
+		}
+
+		sOut += '</tbody></table></div>\n';
 		
-		$.each(dataEntry.lookup.misc, function(k, value) {
-			var feature = _ambit.search.result.feature[value];
-			switch (feature.source.type) {
-			case 'Dataset': {
-				sOutData += renderValue(value,feature.title,feature.units,dataEntry.values[value],feature.sameAs,feature.source);
-				break;
-			}
-			default: {
-				sOutCalc += renderValue(value,feature.title,feature.units,dataEntry.values[value],feature.sameAs,feature.source);
-				break;
-			}	
-			}
-		});
+
 		sOutData += '</tbody></table></div>\n';
 		sOutCalc += '</tbody></table></div>\n';
 		sOut += sOutData + sOutCalc + sOutComposition + '</div>\n';
