@@ -15,11 +15,12 @@ public class UIResource extends FreeMarkerResource {
 	private static final String key = "key";
 	private enum pages { 
 			index, query, 
-			uploadstruc, uploadprops, 
+			uploadstruc, uploadprops, uploadsubstance,
 			predict, 
 			login, register, myprofile, 
 			uploadstruc_register,uploadprops_batch,uploadprops_biodata,
-			createstruc
+			createstruc,
+			dataprep
 		}
 	public UIResource() {
 		super();
