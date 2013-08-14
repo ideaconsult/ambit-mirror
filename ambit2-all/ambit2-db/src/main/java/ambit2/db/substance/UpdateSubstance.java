@@ -39,7 +39,7 @@ import ambit2.db.update.AbstractUpdate;
 
 public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C,C>  {
 	public static final String[] update_sql = {	
-		"update substance set prefix=?,uuid=unhex(replace(?,'-','')),documentType=?,format=?,name=?,publicname=?,content=?,substanceType=?,rs_prefix=?,rs_uuid=unhex(replace(?,'-','')) where idsubstance=?"
+		"update substance set prefix=?,uuid=unhex(replace(?,'-','')),documentType=?,format=?,name=?,publicname=?,content=?,substanceType=?,rs_prefix=?,rs_uuid=unhex(replace(?,'-','')),owner_prefix=?,owner_uuid=unhex(replace(?,'-','')) where idsubstance=?"
 	};
 	
 	
@@ -79,6 +79,18 @@ public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C
 			params1.add(new QueryParam<String>(String.class, null));
 			params1.add(new QueryParam<String>(String.class, null));
 		}
+		
+		String ownerUUID = getObject().getOwnerUUID();
+		uuid = new String[]{null,ownerUUID};
+		if (ownerUUID!=null) {
+			uuid = I5Utils.splitI5UUID(ownerUUID.toString());
+			params1.add(new QueryParam<String>(String.class, uuid[0]));
+			params1.add(new QueryParam<String>(String.class, uuid[1]));
+		} else {
+			params1.add(new QueryParam<String>(String.class, null));
+			params1.add(new QueryParam<String>(String.class, null));
+		}
+
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
 		return params1;
 		

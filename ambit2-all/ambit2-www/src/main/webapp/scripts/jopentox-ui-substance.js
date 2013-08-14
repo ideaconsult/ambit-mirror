@@ -162,7 +162,7 @@ var substance = {
 					var compositionTable = 
 						"<div id='c_"+id+"' class='details' style='margin-top: 5x;' >"+						
 						"<table id='t_"+id+"' class='compositiontable' cellpadding='0' border='0' width='100%' cellspacing='0' style='margin:0;padding:0;' >"+
-						"<thead><tr><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Real concentration (lower)</th><th>Real concentration (upper)</th>"+
+						"<thead><tr><th>Composition ID</th><th>Type</th><th>Name</th><th>EC No.</th><th>CAS No.</th><th>Typical concentration</th><th>Real concentration (lower)</th><th>Real concentration (upper)</th>"+
 						"<th>Other related substances</th></tr></thead><tbody></tbody></table></div>";
 
 				    return compositionTable;
@@ -198,8 +198,20 @@ var substance = {
 			          '</select> substances.'	            
 			    },	
 			    "aoColumnDefs": [
+								{ //1
+									"aTargets": [ 0 ],	
+									"sClass" : "left",
+									"bSortable" : true,
+									"bSearchable" : true,
+									"mDataProp" : "compositionUUID",
+									"bUseRendered" : false,	
+									"fnRender" : function(o,val) {
+										var s = val.split("-");
+										return s[1];
+									}
+								},	
 			    				{ //1
-			    					"aTargets": [ 0 ],	
+			    					"aTargets": [ 1 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -213,7 +225,7 @@ var substance = {
 			    					}
 			    				},	    
 			    				{ //2
-			    					"aTargets": [ 1 ],	
+			    					"aTargets": [ 2 ],	
 			    					"sClass" : "camelCase left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -226,7 +238,7 @@ var substance = {
 			    					}
 			    				},	    	
 			    				{ //3
-			    					"aTargets": [ 2 ],	
+			    					"aTargets": [ 3 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -238,7 +250,7 @@ var substance = {
 			    					}
 			    				},
 			    				{ //3
-			    					"aTargets": [ 3 ],	
+			    					"aTargets": [ 4 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -250,7 +262,7 @@ var substance = {
 			    					}
 			    				},
 			    				{ //4
-			    					"aTargets": [ 4 ],	
+			    					"aTargets": [ 5 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -263,7 +275,7 @@ var substance = {
 			    					}
 			    				},
 			    				{ //4
-			    					"aTargets": [ 5 ],	
+			    					"aTargets": [ 6 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -278,7 +290,7 @@ var substance = {
 			    					}
 			    				},
 			    				{ //4
-			    					"aTargets": [ 6 ],	
+			    					"aTargets": [ 7 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -293,7 +305,7 @@ var substance = {
 			    					}
 			    				},			    				
 			    				{ //5
-			    					"aTargets": [ 7 ],	
+			    					"aTargets": [ 8 ],	
 			    					"sClass" : "center",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -355,7 +367,7 @@ var substance = {
 										}
 									});
 								},			    				    				
-			 	  "aaSorting": [[0, 'asc']]
+			 	  "aaSorting": [[0, 'asc'],[1, 'asc']]
 				});
 				return oTable;			
 		},

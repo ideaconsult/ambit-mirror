@@ -9,7 +9,6 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 
 import ambit2.base.data.I5Utils;
-import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.db.substance.CreateSubstance;
 import ambit2.db.substance.DeleteSubstance;
@@ -31,6 +30,7 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 		c.setContent("<?xml>");
 		c.setSubstancetype("Multiconstituent");
 		c.setIdsubstance(1);
+		c.setOwnerUUID(String.format("TEST-%s", UUID.randomUUID()));
 		return new CreateSubstance(c);
 	}
 
@@ -38,7 +38,7 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 	protected void createVerify(IQueryUpdate<Object, SubstanceRecord> query)
 			throws Exception {
 	       IDatabaseConnection c = getConnection();	
-			ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,rs_prefix,hex(rs_uuid) rs_u,name,publicname,format,content,substanceType,documentType FROM substance where idsubstance=1");
+			ITable table = 	c.createQueryTable("EXPECTED","SELECT prefix,hex(uuid) u,rs_prefix,hex(rs_uuid) rs_u,name,publicname,format,content,substanceType,documentType,owner_prefix,hex(owner_uuid) ou FROM substance where idsubstance=1");
 			Assert.assertEquals(1,table.getRowCount());
 			Assert.assertEquals("IUC4",table.getValue(0,"prefix"));
 			Assert.assertEquals(example_uuid,table.getValue(0,"prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
@@ -47,6 +47,7 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 			Assert.assertEquals("public name",table.getValue(0,"publicname"));
 			Assert.assertEquals("i5d",table.getValue(0,"format"));
 			Assert.assertEquals("Multiconstituent",table.getValue(0,"substanceType"));
+			Assert.assertNotNull(table.getValue(0,"owner_prefix"));
 			//Assert.assertEquals("<?xml>".getBytes("UTF-8"),table.getValue(0,"content"));
 			c.close();	
 	}
