@@ -106,5 +106,8 @@ public class SubstanceRecord extends StructureRecord {
 		setOwnerUUID(null);
 		if (relatedStructures!=null) relatedStructures.clear();
 	}
-
+	@Override
+	public String toString() {
+		return String.format("idsubstance=%d %s",getIdsubstance(),getCompanyUUID());
+	}
 }

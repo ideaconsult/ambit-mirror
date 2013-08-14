@@ -90,7 +90,10 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	         	SubstanceRecord substance = (SubstanceRecord) record;
 	         	q.setObject(substance);
 	         	x.process(q);
-	         	importedRecord.setIdsubstance(substance.getIdsubstance());
+	         	if (substance.getIdsubstance()>0)
+	         		importedRecord.setIdsubstance(substance.getIdsubstance());
+	         	else importedRecord.setCompanyUUID(substance.getCompanyUUID());
+	         	
 	         	for (CompositionRelation rel : substance.getRelatedStructures()) {
 	         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
 	         		if (rel.getSecondStructure().getIdchemical()<=0) {
