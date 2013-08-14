@@ -47,6 +47,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	enum jsonFeature {
 		substance,
 		component,
+		compositionUUID,
 		relation,
 		proportion
 		;
@@ -115,13 +116,15 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 					"\n{"+
 					"\n\t\"%s\": {\"URI\" : %s }," + 
 					"\n\t\"%s\": \t%s ," +
-					"\n\t\"%s\":\"%s\"," + 
+					"\n\t\"%s\":%s," +
+					"\n\t\"%s\":%s," + 
 					"\n\t\"%s\":%s" + //metric
 					"\n}",
 					jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceReporter.getURI(item.getFirstStructure())),
 					jsonFeature.component.jsonname(),
 					w.toString(),
-					jsonFeature.relation.jsonname(),item.getRelationType().name(),
+					jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(item.getCompositionUUID()),
+					jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(item.getRelationType().name()),
 					jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
 					));
 			comma = ",";
