@@ -78,6 +78,7 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		super(structure1,structure2,relation,metric);
 	}
 	public void setCompositionRelation(CompositionRelation relation) {
+		setCompositionUUID(relation.getCompositionUUID());
 		setGroup(relation.getFirstStructure());
 		setObject(relation.getSecondStructure());
 		setMetric(relation.getRelation());
