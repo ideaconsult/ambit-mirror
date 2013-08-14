@@ -90,6 +90,7 @@
 			<table id='composition' class='compositiontable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
+			<th>Composition ID</th>
 			<th>Type</th>
 			<th>Name</th>
 			<th>EC No.</th>

@@ -46,8 +46,8 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 	
 	
 	public static final String[] create_sql = {
-		"INSERT INTO substance (idsubstance,prefix,uuid,documentType,format,name,publicname,content,substanceType,rs_prefix,rs_uuid)\n" +
-		"values (?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,unhex(replace(?,'-',''))) " +
+		"INSERT INTO substance (idsubstance,prefix,uuid,documentType,format,name,publicname,content,substanceType,rs_prefix,rs_uuid,owner_prefix,owner_uuid)\n" +
+		"values (?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,unhex(replace(?,'-','')),?,unhex(replace(?,'-',''))) " +
 		"on duplicate key update " +
 		"prefix=values(prefix)," +
 		"uuid=values(uuid)," +
@@ -58,7 +58,9 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 		"content=values(content),"+
 		"substanceType=values(substanceType),"+
 		"rs_prefix=values(rs_prefix)," +
-		"rs_uuid=values(rs_uuid)"
+		"rs_uuid=values(rs_uuid),"+
+		"owner_prefix=values(owner_prefix)," +
+		"owner_uuid=values(owner_uuid)"
 	};
 
 	public CreateSubstance(SubstanceRecord substance) {
@@ -92,6 +94,17 @@ public class CreateSubstance  extends AbstractObjectUpdate<SubstanceRecord> {
 			uuid = I5Utils.splitI5UUID(rs_uuid.toString());
 		params1.add(new QueryParam<String>(String.class, uuid[0]));
 		params1.add(new QueryParam<String>(String.class, uuid[1]));
+		
+		String ownerUUID = getObject().getOwnerUUID();
+		uuid = new String[]{null,ownerUUID};
+		if (ownerUUID!=null) {
+			uuid = I5Utils.splitI5UUID(ownerUUID.toString());
+			params1.add(new QueryParam<String>(String.class, uuid[0]));
+			params1.add(new QueryParam<String>(String.class, uuid[1]));
+		} else {
+			params1.add(new QueryParam<String>(String.class, null));
+			params1.add(new QueryParam<String>(String.class, null));
+		}
 		return params1;
 		
 	}
