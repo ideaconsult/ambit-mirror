@@ -23,7 +23,7 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 	private static final long serialVersionUID = -3661558183996204387L;
 	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid from substance\n";
 	private static String  q_idsubstance = "idsubstance=?";
-	//private static String  q_idsubstance = "idsubstance=?";
+	private static String  q_uuid = "prefix=? and hex(uuid)=?";
 	
 	private static String sql_relatedsubstances = 
 		"select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid\n"+ 
@@ -71,6 +71,12 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 				b.append("where ");
 				b.append(q_idsubstance);
 				return b.toString();
+			} else if (getValue().getCompanyUUID()!= null) {
+				StringBuilder b = new StringBuilder();
+				b.append(sql);
+				b.append("where ");
+				b.append(q_uuid);
+				return b.toString();
 			} else if (getValue().getIdchemical()>0) { 
 				return sql_bychemical;
 			} else
@@ -87,6 +93,15 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 		if (getValue()!=null) {
 			if (getValue().getIdsubstance()>0) {
 				params1.add(new QueryParam<Integer>(Integer.class, getValue().getIdsubstance()));
+				return params1;
+			} else if (getValue().getCompanyUUID()!= null) {
+				String o_uuid = getValue().getCompanyUUID();
+				if (o_uuid==null) throw new AmbitException("Empty substance id");
+				String[] uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
+				if (o_uuid!=null) 
+					uuid = I5Utils.splitI5UUID(o_uuid.toString());
+				params1.add(new QueryParam<String>(String.class, uuid[0]));
+				params1.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
 				return params1;
 			} else if (getValue().getIdchemical()>0) {
 				params1.add(new QueryParam<Integer>(Integer.class, getValue().getIdchemical()));
