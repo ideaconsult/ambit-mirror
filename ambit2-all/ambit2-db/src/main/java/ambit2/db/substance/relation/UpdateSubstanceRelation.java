@@ -52,10 +52,10 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		this.compositionUUID = compositionUUID;
 	}
 	public static final String[] create_sql = {
-		"INSERT INTO substance_relation (cmp_prefix,cmp_uuid,idsubstance,idchemical,relation,`function`, " +
+		"INSERT INTO substance_relation (cmp_prefix,cmp_uuid,idchemical,relation,`function`, " +
 		"proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,\n"+
-		"proportion_typical,proportion_typical_value,proportion_typical_unit,rs_prefix,rs_uuid)\n"+
-		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-',''))) on duplicate key update\n"+
+		"proportion_typical,proportion_typical_value,proportion_typical_unit,rs_prefix,rs_uuid,idsubstance)\n"+
+		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-','')),?) on duplicate key update\n"+
 		"cmp_prefix=values(cmp_prefix),cmp_uuid=values(cmp_uuid),\n"+
 		"proportion_real_lower=values(proportion_real_lower),proportion_real_lower_value=values(proportion_real_lower_value)," +
 		"proportion_real_upper=values(proportion_real_upper),proportion_real_upper_value=values(proportion_real_upper_value)," +
@@ -63,6 +63,20 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		"proportion_typical_value=values(proportion_typical_value),proportion_typical_unit=values(proportion_typical_unit),\n"+
 		"rs_prefix=values(rs_prefix),rs_uuid=values(rs_uuid)"
 	};
+	
+	public static final String[] create_sql_uuid = {
+		"INSERT INTO substance_relation (cmp_prefix,cmp_uuid,idchemical,relation,`function`, " +
+		"proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,\n"+
+		"proportion_typical,proportion_typical_value,proportion_typical_unit,rs_prefix,rs_uuid,idsubstance)\n"+
+		"SELECT ?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-','')),idsubstance from substance where prefix=? and uuid=unhex(?)\n" +
+		"on duplicate key update\n"+
+		"cmp_prefix=values(cmp_prefix),cmp_uuid=values(cmp_uuid),\n"+
+		"proportion_real_lower=values(proportion_real_lower),proportion_real_lower_value=values(proportion_real_lower_value)," +
+		"proportion_real_upper=values(proportion_real_upper),proportion_real_upper_value=values(proportion_real_upper_value)," +
+		"proportion_real_unit=values(proportion_real_unit),proportion_typical=values(proportion_typical),\n"+
+		"proportion_typical_value=values(proportion_typical_value),proportion_typical_unit=values(proportion_typical_unit),\n"+
+		"rs_prefix=values(rs_prefix),rs_uuid=values(rs_uuid)"
+	};	
 	public UpdateSubstanceRelation(CompositionRelation relation) {
 		this(relation.getFirstStructure(),relation.getSecondStructure(),relation.getRelationType(),relation.getRelation());
 		setCompositionUUID(relation.getCompositionUUID());
@@ -89,12 +103,14 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 	}
 
 	public String[] getSQL() throws AmbitException {
-		return create_sql;
+		if (getGroup()==null || getGroup().getIdsubstance()<=0) 
+			return create_sql_uuid;
+		else
+			return create_sql;
 	}
 	@Override
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		if (getGroup()==null || getGroup().getIdsubstance()<=0) throw new AmbitException("Empty substance id");
 		if (getObject()==null || getObject().getIdchemical()<=0) throw new AmbitException("Empty chemical id");
 		if (compositionUUID==null) throw new AmbitException("Empty composition id");
 		
@@ -105,8 +121,6 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[0]));
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));		
 
-		
-		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdsubstance()));
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 		params1.add(new QueryParam<String>(String.class, getRelation().name()));
 		if (getMetric().getFunction()!=null && getMetric().getFunction().length()>45)
@@ -126,7 +140,18 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		if (o_uuid!=null) 
 			uuid = I5Utils.splitI5UUID(o_uuid.toString());
 		params1.add(new QueryParam<String>(String.class, uuid[0]));
-		params1.add(new QueryParam<String>(String.class, uuid[1]));		
+		params1.add(new QueryParam<String>(String.class, uuid[1]));
+		
+		if (getGroup()==null || getGroup().getIdsubstance()<=0) {
+			o_uuid = getGroup().getCompanyUUID();
+			if (o_uuid==null) throw new AmbitException("Empty substance id");
+			uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
+			if (o_uuid!=null) 
+				uuid = I5Utils.splitI5UUID(o_uuid.toString());
+			params1.add(new QueryParam<String>(String.class, uuid[0]));
+			params1.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
+		} else
+			params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdsubstance()));
 		return params1;
 	}
 }
