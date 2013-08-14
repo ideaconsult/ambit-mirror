@@ -133,6 +133,11 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		} else try {
 			return (Q)new ReadSubstance(new SubstanceRecord(Integer.parseInt(key.toString())));
 		} catch (Exception x) {
+			if (key.toString().trim().length()==41) {
+				SubstanceRecord record = new SubstanceRecord();
+				record.setCompanyUUID(key.toString());
+				return (Q)new ReadSubstance(record);
+			}	
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 	}
