@@ -21,6 +21,13 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 	 * 
 	 */
 	private static final long serialVersionUID = -1214326347782066597L;
+	protected String compositionUUID;
+	public String getCompositionUUID() {
+		return compositionUUID;
+	}
+	public void setCompositionUUID(String compositionUUID) {
+		this.compositionUUID = compositionUUID;
+	}
 	public CompositionRelation(SubstanceRecord structure1,IStructureRecord structure2, Proportion proportion) {
 		this(structure1,structure2,STRUCTURE_RELATION.HAS_CONSTITUENT,proportion);
 	}

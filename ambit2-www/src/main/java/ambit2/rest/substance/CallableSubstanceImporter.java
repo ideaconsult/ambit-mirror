@@ -2,6 +2,7 @@ package ambit2.rest.substance;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,9 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.ISourceDataset;
+import ambit2.base.data.SourceDataset;
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IBatchStatistics;
 import ambit2.base.interfaces.IProcessor;
@@ -27,6 +31,11 @@ import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.DBProcessorsChain;
 import ambit2.db.processors.DBSubstanceWriter;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.QueryExecutor;
+import ambit2.db.update.dataset.ReadDataset;
+import ambit2.rest.dataset.DatasetURIReporter;
+import ambit2.rest.structure.ConformerURIReporter;
 import ambit2.rest.task.CallableFileUpload;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.TaskResult;
@@ -38,7 +47,10 @@ import ambit2.rest.task.TaskResult;
  * @param <USERID>
  */
 public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<FileInputState, IStructureRecord,USERID> {
-
+	protected SubstanceURIReporter substanceReporter;
+	protected DatasetURIReporter datasetURIReporter;
+	protected SubstanceRecord importedRecord;
+	protected SourceDataset dataset;
 	private File file;
 	protected String fileDescription;
 	protected File getFile() {
@@ -50,9 +62,18 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		this.fileDescription = description;
 	}
 	
-	public CallableSubstanceImporter(List<FileItem> items,String fileUploadField, Reference applicationRootReference,Context context,USERID token) throws Exception {
+	public CallableSubstanceImporter(
+				List<FileItem> items,
+				String fileUploadField, 
+				Reference applicationRootReference,
+				Context context,
+				SubstanceURIReporter substanceReporter,
+				DatasetURIReporter datasetURIReporter,
+				USERID token) throws Exception {
 		super(applicationRootReference,null,  context,  token);
 		try { processForm(items, fileUploadField); } catch (Exception x) {}
+		this.substanceReporter = substanceReporter;
+		this.datasetURIReporter = datasetURIReporter;
 	}
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
@@ -127,7 +148,9 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	protected ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor> createProcessors()
 			throws Exception {
 		DBProcessorsChain chain = new DBProcessorsChain();
-		DBSubstanceWriter writer = new DBSubstanceWriter();
+		dataset = DBSubstanceWriter.datasetMeta();
+		importedRecord = new SubstanceRecord();
+		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,importedRecord);
 		chain.add(writer);
 		return chain;
 	}
@@ -135,8 +158,34 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	@Override
 	protected TaskResult createReference(Connection connection)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+
+		if (importedRecord.getIdsubstance()>0) {
+			
+			try { batch.close();	} catch (Exception xx) {}
+			return new TaskResult(substanceReporter.getURI(importedRecord));				
+		} else {
+			SourceDataset newDataset = dataset;
+			if (newDataset.getId()<=0) {
+				ReadDataset q = new ReadDataset();
+				q.setValue(newDataset);
+				QueryExecutor<ReadDataset> x = new QueryExecutor<ReadDataset>();
+				x.setConnection(connection);
+				ResultSet rs = x.process(q);
+	
+				while (rs.next()) {
+					newDataset = q.getObject(rs);
+					if (newDataset.getId()>0)
+					break;
+				}
+				x.closeResults(rs);
+				x.setConnection(null);
+			}
+			if (newDataset == null || newDataset.getId()<=0)
+				throw new ResourceException(Status.SUCCESS_NO_CONTENT);
+
+			try { batch.close();	} catch (Exception xx) {}
+			return new TaskResult(datasetURIReporter.getURI(newDataset));
+		}
 	}
 
 }

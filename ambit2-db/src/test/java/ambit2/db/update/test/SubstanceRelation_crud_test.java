@@ -1,5 +1,7 @@
 package ambit2.db.update.test;
 
+import java.util.UUID;
+
 import junit.framework.Assert;
 
 import org.dbunit.database.IDatabaseConnection;
@@ -9,6 +11,7 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
+import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.db.substance.relation.DeleteSubstanceRelation;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
@@ -31,7 +34,9 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,IStruc
 		p.setTypical_value(10.0);
 		p.setTypical("c.a.");
 		p.setTypical_unit("%");
-		return new UpdateSubstanceRelation(c1,c2,STRUCTURE_RELATION.HAS_CONSTITUENT,p);
+		CompositionRelation r = new CompositionRelation(c1,c2,STRUCTURE_RELATION.HAS_CONSTITUENT,p);
+		r.setCompositionUUID(String.format("L-%s", UUID.randomUUID().toString()));
+		return new UpdateSubstanceRelation(r);
 	}
 
 	@Override
@@ -68,7 +73,9 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,IStruc
 		p.setTypical("c.a.");
 		p.setTypical_unit("%");
 		p.setFunction("test");
-		return new UpdateSubstanceRelation(c1,c2,STRUCTURE_RELATION.HAS_ADDITIVE,p);
+		CompositionRelation r = new CompositionRelation(c1,c2,STRUCTURE_RELATION.HAS_ADDITIVE,p);
+		r.setCompositionUUID(String.format("L-%s", UUID.randomUUID().toString()));
+		return new UpdateSubstanceRelation(r);
 	
 	}
 	

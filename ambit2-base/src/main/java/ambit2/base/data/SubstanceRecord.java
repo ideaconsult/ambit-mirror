@@ -14,6 +14,13 @@ import ambit2.base.relation.composition.Proportion;
  *
  */
 public class SubstanceRecord extends StructureRecord {
+	protected String ownerUUID;
+	public String getOwnerUUID() {
+		return ownerUUID;
+	}
+	public void setOwnerUUID(String ownerUUID) {
+		this.ownerUUID = ownerUUID;
+	}
 	protected int idsubstance;
 	protected String substancetype;
 	protected String companyName;
@@ -68,9 +75,10 @@ public class SubstanceRecord extends StructureRecord {
 		if (relatedStructures==null) relatedStructures = new ArrayList<CompositionRelation>();
 		relatedStructures.add(relation);
 	}
-	public void addStructureRelation(IStructureRecord record, STRUCTURE_RELATION relation, Proportion value) {
+	public void addStructureRelation(String compositionUUID,IStructureRecord record, STRUCTURE_RELATION relation, Proportion value) {
 		if (relatedStructures==null) relatedStructures = new ArrayList<CompositionRelation>();
 		CompositionRelation r = new CompositionRelation(this,record,value);
+		r.setCompositionUUID(compositionUUID);
 		r.setRelationType(relation);
 		relatedStructures.add(r);
 	}	
@@ -95,6 +103,7 @@ public class SubstanceRecord extends StructureRecord {
 	public void clear() {
 		super.clear();
 		idsubstance = -1;
+		setOwnerUUID(null);
 		if (relatedStructures!=null) relatedStructures.clear();
 	}
 

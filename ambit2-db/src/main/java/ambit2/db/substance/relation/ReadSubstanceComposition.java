@@ -25,7 +25,7 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected CompositionRelation record = new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
 	public final static String sql = 
-		"select idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,rs_prefix,hex(rs_uuid) from substance_relation where idsubstance=?";
+		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,rs_prefix,hex(rs_uuid) from substance_relation where idsubstance=?";
 	
 	@Override
 	public String getSQL() throws AmbitException {
@@ -50,6 +50,13 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 	public CompositionRelation getObject(ResultSet rs) throws AmbitException {
 		record.clear();
 		try {
+            try {
+	            String uuid = rs.getString("cmp_prefix") + "-" + 
+	            		I5Utils.addDashes(rs.getString("cmp_huuid")).toLowerCase();
+	            record.setCompositionUUID(uuid);
+            } catch (Exception xx) {
+            	record.setCompositionUUID(null);
+            }			
 			record.getFirstStructure().setIdsubstance(rs.getInt("idsubstance"));
 			record.getSecondStructure().setIdchemical(rs.getInt("idchemical"));
 			record.setRelationType(STRUCTURE_RELATION.valueOf(rs.getString("relation")));
