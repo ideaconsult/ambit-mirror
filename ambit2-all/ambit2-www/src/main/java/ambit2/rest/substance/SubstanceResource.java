@@ -28,6 +28,7 @@ import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
 import ambit2.rest.TaskApplication;
+import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.FactoryTaskConvertor;
@@ -169,7 +170,9 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 							items, 
 							"file",
 							getRootRef(),
-							getContext(), 
+							getContext(),
+							new SubstanceURIReporter(getRequest().getRootRef(), null),
+							new DatasetURIReporter(getRequest().getRootRef(), null),
 							token);
 				Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 							"Substance import",

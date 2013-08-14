@@ -43,12 +43,20 @@ import ambit2.db.chemrelation.AbstractUpdateStructureRelation;
 import ambit2.db.search.QueryParam;
 
 public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<SubstanceRecord,IStructureRecord,STRUCTURE_RELATION,Proportion> {
-
+	protected String compositionUUID;
+	
+	public String getCompositionUUID() {
+		return compositionUUID;
+	}
+	public void setCompositionUUID(String compositionUUID) {
+		this.compositionUUID = compositionUUID;
+	}
 	public static final String[] create_sql = {
-		"INSERT INTO substance_relation (idsubstance,idchemical,relation,`function`, " +
+		"INSERT INTO substance_relation (cmp_prefix,cmp_uuid,idsubstance,idchemical,relation,`function`, " +
 		"proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,\n"+
 		"proportion_typical,proportion_typical_value,proportion_typical_unit,rs_prefix,rs_uuid)\n"+
-		"values(?,?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-',''))) on duplicate key update\n"+
+		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-',''))) on duplicate key update\n"+
+		"cmp_prefix=values(cmp_prefix),cmp_uuid=values(cmp_uuid),\n"+
 		"proportion_real_lower=values(proportion_real_lower),proportion_real_lower_value=values(proportion_real_lower_value)," +
 		"proportion_real_upper=values(proportion_real_upper),proportion_real_upper_value=values(proportion_real_upper_value)," +
 		"proportion_real_unit=values(proportion_real_unit),proportion_typical=values(proportion_typical),\n"+
@@ -57,14 +65,16 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 	};
 	public UpdateSubstanceRelation(CompositionRelation relation) {
 		this(relation.getFirstStructure(),relation.getSecondStructure(),relation.getRelationType(),relation.getRelation());
+		setCompositionUUID(relation.getCompositionUUID());
 	}
+	
 	public UpdateSubstanceRelation() {
 		this(null,null,null,null);
 	}
-	public UpdateSubstanceRelation(SubstanceRecord structure1,IStructureRecord structure2,STRUCTURE_RELATION relation) {
+	private UpdateSubstanceRelation(SubstanceRecord structure1,IStructureRecord structure2,STRUCTURE_RELATION relation) {
 		this(structure1,structure2,relation,null);
 	}
-	public UpdateSubstanceRelation(SubstanceRecord structure1,IStructureRecord structure2,STRUCTURE_RELATION relation,Proportion metric) {
+	private UpdateSubstanceRelation(SubstanceRecord structure1,IStructureRecord structure2,STRUCTURE_RELATION relation,Proportion metric) {
 		super(structure1,structure2,relation,metric);
 	}
 	public void setCompositionRelation(CompositionRelation relation) {
@@ -85,6 +95,16 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
 		if (getGroup()==null || getGroup().getIdsubstance()<=0) throw new AmbitException("Empty substance id");
 		if (getObject()==null || getObject().getIdchemical()<=0) throw new AmbitException("Empty chemical id");
+		if (compositionUUID==null) throw new AmbitException("Empty composition id");
+		
+		Object o_uuid = compositionUUID;
+		String[] cmp_uuid = {null,o_uuid==null?null:o_uuid.toString()};
+		if (o_uuid!=null) 
+			cmp_uuid = I5Utils.splitI5UUID(o_uuid.toString());
+		params1.add(new QueryParam<String>(String.class, cmp_uuid[0]));
+		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));		
+
+		
 		params1.add(new QueryParam<Integer>(Integer.class, getGroup().getIdsubstance()));
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdchemical()));
 		params1.add(new QueryParam<String>(String.class, getRelation().name()));
@@ -100,7 +120,7 @@ public class UpdateSubstanceRelation extends AbstractUpdateStructureRelation<Sub
 		params1.add(new QueryParam<Double>(Double.class, getMetric().getTypical_value()));
 		params1.add(new QueryParam<String>(String.class, getMetric().getTypical_unit()));
 		
-		Object o_uuid = getObject().getProperty(Property.getI5UUIDInstance());
+		o_uuid = getObject().getProperty(Property.getI5UUIDInstance());
 		String[] uuid = {null,o_uuid==null?null:o_uuid.toString()};
 		if (o_uuid!=null) 
 			uuid = I5Utils.splitI5UUID(o_uuid.toString());

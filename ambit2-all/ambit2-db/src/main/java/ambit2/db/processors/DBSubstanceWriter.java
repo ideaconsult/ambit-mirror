@@ -3,6 +3,8 @@ package ambit2.db.processors;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import ambit2.base.data.ILiteratureEntry;
+import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
@@ -31,9 +33,23 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
     private UpdateSubstanceRelation qr;
     private UpdateExecutor x;
     private RepositoryWriter writer;
+ 
+	protected SubstanceRecord importedRecord;
 
     
-	public DBSubstanceWriter() {
+	public SubstanceRecord getImportedRecord() {
+		return importedRecord;
+	}
+
+	public void setImportedRecord(SubstanceRecord importedRecord) {
+		this.importedRecord = importedRecord;
+	}
+
+	public SourceDataset getDataset() {
+		return writer.getDataset();
+	}
+
+	public DBSubstanceWriter(SourceDataset dataset,SubstanceRecord importedRecord) {
 		super();
 	    q = new CreateSubstance();
 	    qr = new UpdateSubstanceRelation();
@@ -43,7 +59,17 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	    writer.setCloseConnection(false);
 	    writer.setPropertyKey(new ReferenceSubstanceUUID());
 		writer.setUsePreferredStructure(true);
-		writer.setDataset(new SourceDataset("I5Z INPUT",LiteratureEntry.getInstance("File","file:input.i5z")));
+		writer.setDataset(dataset==null?datasetMeta():dataset);
+		this.importedRecord = importedRecord;
+	}
+	
+	public static SourceDataset datasetMeta() {
+		ILiteratureEntry reference = LiteratureEntry.getI5UUIDReference();
+		reference.setType(_type.Dataset);
+		SourceDataset dataset = new SourceDataset("IUCLID5 .i5z file",reference);
+		dataset.setLicenseURI(null);
+		dataset.setrightsHolder(null);
+		return dataset;
 	}
 	@Override
 	public void setConnection(Connection connection) throws DbAmbitException {
@@ -64,6 +90,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	         	SubstanceRecord substance = (SubstanceRecord) record;
 	         	q.setObject(substance);
 	         	x.process(q);
+	         	importedRecord.setIdsubstance(substance.getIdsubstance());
 	         	for (CompositionRelation rel : substance.getRelatedStructures()) {
 	         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
 	         		if (rel.getSecondStructure().getIdchemical()<=0) {

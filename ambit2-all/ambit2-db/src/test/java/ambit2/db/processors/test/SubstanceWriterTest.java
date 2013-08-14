@@ -14,6 +14,7 @@ import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.io.DownloadTool;
 import ambit2.core.io.IRawReader;
@@ -107,7 +108,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 		//there are two empty file without $$$$ sign, which are skipped
 		strucs = 	c.createQueryTable("EXPECTED","SELECT * FROM structure");
 		Assert.assertEquals(6,strucs.getRowCount());
-		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='I5Z INPUT'");
+		srcdataset = 	c.createQueryTable("EXPECTED","SELECT * FROM src_dataset where name='IUCLID5 .i5z file'");
 		Assert.assertEquals(1,srcdataset.getRowCount());
 		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
 		Assert.assertEquals(6,struc_src.getRowCount());
@@ -159,7 +160,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key) throws Exception  {
 		
-		DBSubstanceWriter writer = new DBSubstanceWriter();
+		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord());
 		writer.setConnection(connection);
         writer.open();
 		int records = 0;
