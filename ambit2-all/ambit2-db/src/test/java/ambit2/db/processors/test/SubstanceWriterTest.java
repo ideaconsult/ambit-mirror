@@ -77,7 +77,7 @@ public class SubstanceWriterTest extends DbUnitTest {
         c.close();
         
         c = getConnection();
-		url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/formaldehyde.i5z");
+		URL url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/formaldehyde.i5z");
 	    reader = getReader(new File(url.getFile()));
 		records += write(reader,c.getConnection(),new ReferenceSubstanceUUID());
 		reader.close();
@@ -116,13 +116,13 @@ public class SubstanceWriterTest extends DbUnitTest {
 		Assert.assertEquals(1,property.getRowCount());
 		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) order by name");
 		//Assert.assertEquals(34,property.getRowCount());
-		Assert.assertEquals(6,property.getRowCount());
+		Assert.assertEquals(22,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
-		Assert.assertEquals(34,property_values.getRowCount());		
+		Assert.assertEquals(48,property_values.getRowCount());		
 		ITable tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM tuples");
 		Assert.assertEquals(13,tuples.getRowCount());			
 		ITable p_tuples = 	c.createQueryTable("EXPECTED","SELECT * FROM property_tuples");
-		Assert.assertEquals(41,p_tuples.getRowCount());				
+		Assert.assertEquals(71,p_tuples.getRowCount());				
 		ITable p_cas = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,value FROM property_values join property_string using(idvalue_string) join properties using(idproperty) where name='CasRN'");
 		Assert.assertEquals(6,p_cas.getRowCount());
 		ITable p_ec = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,value FROM property_values join property_string using(idvalue_string) join properties using(idproperty) where name='EC'");

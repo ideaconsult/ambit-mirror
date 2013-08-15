@@ -50,6 +50,8 @@ function identifiers(opentox, targetEntry) {
     			if (opentox.feature[k]) { if (jQuery.inArray(k,lookup.names)<0) lookup.names.push(k); }
     		} else if (value.sameAs == "http://www.opentox.org/api/1.1#ChemicalName") {
 	        	if (opentox.feature[k]) { if (jQuery.inArray(k,lookup.names)<0) lookup.names.push(k); }
+    		} else if (value.sameAs == "http://www.opentox.org/api/1.1#TradeName") {
+	        	if (opentox.feature[k]) { if (jQuery.inArray(k,lookup.names)<0) lookup.names.push(k); }	        	
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#CASRN") { 
 	        	if (opentox.feature[k]) { if (jQuery.inArray(k,lookup.cas)<0) lookup.cas.push(k);   }
 	        } else if (value.sameAs == "http://www.opentox.org/api/1.1#EINECS") { 
@@ -86,6 +88,5 @@ function identifiers(opentox, targetEntry) {
 	        	*/
 	    });
     
-
 
 }

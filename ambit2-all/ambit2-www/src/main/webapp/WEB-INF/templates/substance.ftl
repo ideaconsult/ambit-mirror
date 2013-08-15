@@ -36,16 +36,22 @@
 <div class="row remove-bottom">
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
-		<div class="ten columns alpha">
+		<div class="six columns alpha">
 			<div class="remove-bottom h3">
 					Substances
 			</div>
 		    <div class='help'>
-		     Mono-constituent, multiconstituent, additives, impurities.<br/>
- <a href='?search=' title='List all substances'>All</a>
-<a href='?search=^0' title='Search for substances with name staring with 0'>0</a>&nbsp;<a href='?search=^1' title='Search for substances with name staring with 1'>1</a>&nbsp;<a href='?search=^2' title='Search for substances with name staring with 2'>2</a>&nbsp;<a href='?search=^3' title='Search for substances with name staring with 3'>3</a>&nbsp;<a href='?search=^4' title='Search for substances with name staring with 4'>4</a>&nbsp;<a href='?search=^5' title='Search for substances with name staring with 5'>5</a>&nbsp;<a href='?search=^6' title='Search for substances with name staring with 6'>6</a>&nbsp;<a href='?search=^7' title='Search for substances with name staring with 7'>7</a>&nbsp;<a href='?search=^8' title='Search for substances with name staring with 8'>8</a>&nbsp;<a href='?search=^9' title='Search for substances with name staring with 9'>9</a>&nbsp;|&nbsp;
+		     Mono-constituent, multiconstituent, additives, impurities.
 		    </div>			
 		</div>
+		<div class="four columns omega">
+			<div class="remove-bottom h3">
+				&nbsp;
+			</div>
+		    <div class='h6'>
+		    	Enter substance I5 UUID
+		    </div>			
+		</div>			
 		<div class="four columns omega">
 			<div class="remove-bottom h3">
 				&nbsp;
