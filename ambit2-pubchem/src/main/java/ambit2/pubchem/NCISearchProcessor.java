@@ -29,7 +29,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 		all {
 			@Override
 			public String[] getOpenToxEntry() {
-				return new String[] {Property.opentox_CAS,Property.opentox_EC,Property.opentox_IupacName, Property.opentox_Name,Property.opentox_SMILES,Property.opentox_InChI_std,Property.opentox_InChIKey_std,Property.opentox_REACHDATE,Property.opentox_IUCLID5_UUID};
+				return new String[] {Property.opentox_CAS,Property.opentox_EC,Property.opentox_IupacName, Property.opentox_Name,Property.opentox_SMILES,Property.opentox_InChI_std,Property.opentox_InChIKey_std,Property.opentox_REACHDATE,Property.opentox_IUCLID5_UUID,Property.opentox_TradeName};
 			}			
 		},
 		smiles {
@@ -59,7 +59,7 @@ public class NCISearchProcessor extends HTTPRequest<String, String>  {
 		names {
 			@Override
 			public String[] getOpenToxEntry() {
-				return new String[] {Property.opentox_IupacName, Property.opentox_Name,Property.opentox_CAS,Property.opentox_EC};
+				return new String[] {Property.opentox_IupacName, Property.opentox_Name,Property.opentox_CAS,Property.opentox_EC,Property.opentox_TradeName};
 			}
 		},
 		iupac_name {

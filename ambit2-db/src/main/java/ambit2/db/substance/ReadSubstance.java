@@ -30,7 +30,7 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 		"from substance	where idsubstance in (select distinct(idsubstance) from substance_relation where idchemical = ?)";
 	
 	private static String sql_bychemical =
-		"select distinct(substance.idsubstance),prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,,owner_prefix,hex(owner_uuid) as owner_huuid "+ 
+		"select distinct(substance.idsubstance),prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid "+ 
 		"from substance join substance_relation using(rs_prefix,rs_uuid) where rs_prefix is not null and rs_uuid is not null and idchemical = ?";
 
 	protected enum _sqlids {

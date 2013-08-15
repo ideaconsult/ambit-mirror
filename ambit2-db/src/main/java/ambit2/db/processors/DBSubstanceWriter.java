@@ -11,11 +11,13 @@ import ambit2.base.data.SourceDataset;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
+import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.substance.CreateSubstance;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
 
@@ -103,7 +105,11 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	         		x.process(qr);
 	         	}
 	         } else if (record instanceof IStructureRecord) {
-	         	writer.write(record);
+	        	 if (STRUC_TYPE.NA.equals(((IStructureRecord)record).getType())) {
+	        		 writer.create(record); //with the current settings, if the structure is already there, it will be used
+	        	 } else {
+	        		 writer.update(record);  //with the current settings, if the structure is already there, it will be updated
+	        	 }	 
 	         }
 			 return record;
 		 } catch (AmbitException x) {

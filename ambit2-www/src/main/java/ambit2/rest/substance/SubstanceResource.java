@@ -107,9 +107,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		if (key==null) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			Object cmpURI = OpenTox.params.compound_uri.getFirstValue(form);
-			if (cmpURI==null)
-				return (Q)new ReadSubstance();				
-			else {
+			if (cmpURI!=null) {
 				Integer idchemical = getIdChemical(OpenTox.params.compound_uri.getFirstValue(form), request);
 				if (idchemical != null) {
 					search_mode mode = search_mode.reference;
@@ -127,13 +125,22 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 						return (Q)new ReadSubstance(composition);								
 					}
 					}
-				}
+				} else 
+					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			}
-			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+		
+			String search = form.getFirstValue(QueryResource.search_param);
+			if (search!=null) {
+				SubstanceRecord record = new SubstanceRecord();
+				record.setCompanyUUID(search.trim());
+				return (Q)new ReadSubstance(record);
+			} else 	return (Q)new ReadSubstance();			
+
 		} else try {
 			return (Q)new ReadSubstance(new SubstanceRecord(Integer.parseInt(key.toString())));
 		} catch (Exception x) {
-			if (key.toString().trim().length()==41) {
+			int len = key.toString().trim().length(); 
+			if ((len > 40) && (len <=45)) {
 				SubstanceRecord record = new SubstanceRecord();
 				record.setCompanyUUID(key.toString());
 				return (Q)new ReadSubstance(record);

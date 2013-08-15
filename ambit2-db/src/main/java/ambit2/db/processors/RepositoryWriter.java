@@ -235,4 +235,12 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		structureWriter.setOperation(OP.UPDATE);
 		return write(arg0);
 	}
+	
+	@Override
+	public List<IStructureRecord> create(IStructureRecord arg0)
+			throws SQLException, OperationNotSupportedException, AmbitException {
+		setOperation(OP.CREATE);
+		structureWriter.setOperation(OP.CREATE);
+		return write(arg0);
+	}
 }

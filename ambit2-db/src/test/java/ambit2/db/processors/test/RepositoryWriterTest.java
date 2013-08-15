@@ -768,6 +768,7 @@ delete from struc_dataset where idstructure>3
 		
 		File[] files = dir.listFiles(filter);
 		Assert.assertEquals(3, files.length);
+		
 		RawIteratingFolderReader reader = new RawIteratingFolderReader(files);
 		write(reader,c.getConnection(),new EINECSKey());
 		reader.close();
@@ -783,8 +784,9 @@ delete from struc_dataset where idstructure>3
 		Assert.assertEquals(1,srcdataset.getRowCount());
 		struc_src = 	c.createQueryTable("EXPECTED","SELECT * FROM struc_dataset");
 		Assert.assertEquals(3,struc_src.getRowCount());
-		
-		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties");
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) where name='Names' and title in ('IUCLID5 SYNONYM#2','IUCLID5')");
+		Assert.assertEquals(2,property.getRowCount());
+		property = 	c.createQueryTable("EXPECTED","SELECT * FROM properties join catalog_references using(idreference) order by name");
 		//Assert.assertEquals(34,property.getRowCount());
 		Assert.assertEquals(7,property.getRowCount());
 		property_values = 	c.createQueryTable("EXPECTED","SELECT * FROM property_values");
@@ -800,9 +802,8 @@ delete from struc_dataset where idstructure>3
 		ITable p_uuid = 	c.createQueryTable("EXPECTED","SELECT idchemical,idstructure,value FROM property_values join property_string using(idvalue_string) join properties using(idproperty) where name='I5UUID'");
 		Assert.assertEquals(3,p_uuid.getRowCount());
 		c.close();
-
-
 	}	
+	
 	
 	@Test
 	public void testWriteMultipleFiles() throws Exception {
