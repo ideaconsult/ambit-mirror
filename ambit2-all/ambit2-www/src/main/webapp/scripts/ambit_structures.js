@@ -454,7 +454,9 @@ function defineStructuresTable(url, query_service, similarity,root) {
 				(dataEntry.values[value]==null)||
 				(dataEntry.values[value]=='')||
 				(dataEntry.values[value]=='.')) return;
-			var lv = dataEntry.values[value].toLowerCase();
+			var lv = dataEntry.values[value];
+			
+			try  { lv = lv.toLowerCase();} catch (e) {}
 			if (cache[lv]==null) {
 				sOut += renderValue(url,title,"",dataEntry.values[value],"",null);
 				cache[lv] = true;
@@ -515,20 +517,31 @@ function formatValues(dataEntry, tag) {
 	var delimiter = "";
 	var cache = {};
 	$.each(dataEntry.lookup[tag], function(index, value) {
-		if (dataEntry.values[value] != undefined) {
-			$.each(dataEntry.values[value].split("|"), function(index, v) {
-				if (v.indexOf(".mol") == -1) {
-					if ("" != v) {
-						var lv = v.toLowerCase();
-						if (cache[lv]==null) {
-							sOut += delimiter;
-							sOut += v;
-							delimiter = "<br>";
-							cache[lv] = true;
+		var vals = dataEntry.values[value];
+		if ((vals != undefined) && (vals!=null) && !(""==vals)) {
+			try {
+				$.each(vals.split("|"), function(index, v) {
+					if ($.inArray(v,".mol") == -1) {
+						if ("" != v) {
+							var lv = v.toLowerCase();
+							if (cache[lv]==null) {
+								sOut += delimiter;
+								sOut += v;
+								delimiter = "<br>";
+								cache[lv] = true;
+							}
 						}
 					}
+				});
+			} catch (e) {
+				var lv = vals;
+				if (cache[lv]==null) {
+					sOut += delimiter;
+					sOut += vals;
+					delimiter = "<br>";
+					cache[lv] = true;	
 				}
-			});
+			}
 			// sOut += dataEntry.values[value];
 		}
 	});
