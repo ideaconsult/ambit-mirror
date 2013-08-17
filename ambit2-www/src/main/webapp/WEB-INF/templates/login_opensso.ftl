@@ -52,7 +52,7 @@ $(document)
 	    </div>
     	<div class="half-bottom ui-widget-content ui-corner-bottom">
 		<div style='margin:5px;padding:5px;'>
-		<form method='post' action='${ambit_root}/openssouser?targetUri=${ambit_root}/login'>
+		<form method='post' action='${ambit_root}/openssouser?targetUri=${ambit_root}/login' autocomplete='off'>
 		
 		
 		
