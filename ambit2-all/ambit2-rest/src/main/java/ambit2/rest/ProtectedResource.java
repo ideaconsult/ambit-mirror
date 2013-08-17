@@ -7,6 +7,7 @@ import org.restlet.data.Cookie;
 import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
+import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
@@ -90,4 +91,16 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
        
 	}	
 
+	@Override
+	protected Representation get(Variant variant) throws ResourceException {
+        
+		//This header forbids using the page in iframe
+		Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
+		if (headers == null) {
+			headers = new Form();
+			getRequest().getAttributes().put("org.restlet.http.headers", headers);
+		}
+		headers.add("X-Frame-Options", "SAMEORIGIN");
+		return super.get(variant);
+	}
 }
