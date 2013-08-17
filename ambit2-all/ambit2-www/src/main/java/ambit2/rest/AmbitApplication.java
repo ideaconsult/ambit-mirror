@@ -77,6 +77,7 @@ import ambit2.rest.facet.DatasetStructureQualityStatsResource;
 import ambit2.rest.facet.DatasetsByEndpoint;
 import ambit2.rest.facet.DatasetsByNamePrefixResource;
 import ambit2.rest.freemarker.FreeMarkerApplication;
+import ambit2.rest.freemarker.FreeMarkerStatusService;
 import ambit2.rest.help.HelpResource;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
@@ -197,7 +198,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		} finally {
 			try { if (in!=null) in.close(); } catch (Exception x) {}
 		}
-		setStatusService(new AmbitStatusService());
+		setStatusService(new FreeMarkerStatusService(this));
 		setTunnelService(new TunnelService(true,true) {
 			@Override
 			public Filter createInboundFilter(Context context) {

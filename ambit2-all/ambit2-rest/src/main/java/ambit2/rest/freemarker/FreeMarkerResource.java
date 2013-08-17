@@ -7,7 +7,6 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.CookieSetting;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.ext.freemarker.TemplateRepresentation;
@@ -15,7 +14,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.ProtectedResource;
 
 /**
@@ -23,72 +21,44 @@ import ambit2.rest.ProtectedResource;
  * @author nina
  *
  */
-public class FreeMarkerResource extends ProtectedResource {
-	protected boolean htmlbyTemplate = false;
+public class FreeMarkerResource extends ProtectedResource implements IFreeMarkerSupport{
+	
+	protected FreeMarkerSupport fmSupport = new FreeMarkerSupport();
 	/*
 	 *  HTML via Freemarker
 	 */
 	public boolean isHtmlbyTemplate() {
-		return htmlbyTemplate;
+		return fmSupport.isHtmlbyTemplate();
 	}
 	/**
 	 * 
 	 * @param htmlbyTemplate
 	 */
 	public void setHtmlbyTemplate(boolean htmlbyTemplate) {
-		this.htmlbyTemplate = htmlbyTemplate;
+		fmSupport.setHtmlbyTemplate(htmlbyTemplate);
 	}
 	/**
 	 * 
 	 * @return
 	 */
 	public String getTemplateName() {
-		return null;
+		return fmSupport.getTemplateName();
 	}
 	
 	protected Reference getSearchReference(Context context, Request request,Response response) throws ResourceException {
 		return request.getResourceRef();
 	}
 	
-	/**
-	 * 
-	 * @param map
-	 */
-	protected void configureTemplateMap(Map<String, Object> map) {
-	
-        Form query = getRequest().getResourceRef().getQueryAsForm();
-        //query.removeAll("page");query.removeAll("pagesize");query.removeAll("max");
-        query.removeAll("media");
-        
-		Reference r = getRequest().getResourceRef().clone();
-        r.setQuery(query.getQueryString());
-        map.put("ambit_request",r.toString()) ;
-        if (query.size()>0)	map.put("ambit_query",query.getQueryString()) ;
-        
-        //json
-        query.removeAll("media");query.add("media", MediaType.APPLICATION_JSON.toString());
-        r.setQuery(query.getQueryString());
-        map.put("ambit_request_json",r.toString());
-        //jsonp
-        query.removeAll("media");query.add("media", MediaType.APPLICATION_JAVASCRIPT.toString());
-        r.setQuery(query.getQueryString());
-        map.put("ambit_request_jsonp",r.toString());      
-        //sdf
-        query.removeAll("media");query.add("media", ChemicalMediaType.CHEMICAL_MDLSDF.toString());
-        r.setQuery(query.getQueryString());
-        map.put("ambit_request_sdf",r.toString());   
-        //csv
-        query.removeAll("media");query.add("media", MediaType.TEXT_CSV.toString());
-        r.setQuery(query.getQueryString());
-        map.put("ambit_request_csv",r.toString());
-        
-
-		map.put("creator","Ideaconsult Ltd.");
-	    map.put("ambit_root",getRequest().getRootRef());
-
-	    map.put("ambit_version_short",((FreeMarkerApplication)getApplication()).getVersionShort());
-	    map.put("ambit_version_long",((FreeMarkerApplication)getApplication()).getVersionLong());
+	@Override
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			FreeMarkerApplication app) {
+		fmSupport.configureTemplateMap(map, request, app);
+		
 	}
+	public void configureTemplateMap(Map<String, Object> map) {
+		fmSupport.configureTemplateMap(map, getRequest(), ((FreeMarkerApplication)getApplication()));
+	}
+	
 	
 	/**
 	 * @param variant
