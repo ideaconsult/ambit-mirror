@@ -1,11 +1,6 @@
 package ambit2.namestructure.test;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import junit.framework.Assert;
-
-import nu.xom.Serializer;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,8 +13,6 @@ import uk.ac.cam.ch.wwmm.opsin.NameToInchi;
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult.OPSIN_RESULT_STATUS;
-import ambit2.base.exceptions.AmbitException;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.namestructure.Name2StructureProcessor;
 
@@ -32,6 +25,16 @@ public class Name2StructureProcessorTest {
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@Test
+	public void testIUPACName() throws Exception {
+		Name2StructureProcessor p = new Name2StructureProcessor();
+		IMolecule mol =  (IMolecule)p.process("2-[(3Z)-6-fluoro-2-methyl-3-[(4-methylsulfinylphenyl)methylidene]inden-1-yl]acetic acid");
+		Assert.assertNotNull(mol);
+		Assert.assertTrue(mol.getAtomCount()>0);
+	}
+
+	
 	@Test
 	public void test() throws Exception {
 		Name2StructureProcessor p = new Name2StructureProcessor();
