@@ -21,7 +21,7 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
     <dependency>
     	<groupId>uk.ac.cam.ch.opsin</groupId>
     	<artifactId>opsin-core</artifactId>
-    	<version>1.4.0</version>
+    	<version>1.5.0</version>
     </dependency>
     <dependency>
     	<groupId>junit</groupId>
@@ -38,7 +38,7 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
     <dependency>
     	<groupId>uk.ac.cam.ch.opsin</groupId>
     	<artifactId>opsin-inchi</artifactId>
-    	<version>1.4.0</version>
+    	<version>1.5.0</version>
     </dependency>
   </dependencies>
  <build>
