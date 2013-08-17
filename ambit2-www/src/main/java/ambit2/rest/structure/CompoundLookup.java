@@ -2,6 +2,7 @@ package ambit2.rest.structure;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jniinchi.INCHI_RET;
@@ -24,6 +25,7 @@ import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
+import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.engine.util.Base64;
@@ -186,6 +188,8 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			//query
 			if ((text_multi!= null) && (text_multi.length>1)) {
 				query =  getMultiTextQuery(null,casesens,retrieveProperties, text_multi);
+			} else if ((text==null) || "".equals(text)) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			} else	if (CASProcessor.isValidFormat(text)) { //then this is a CAS number
 				if (CASNumber.isValid(text.trim())) {
 					searchType = _searchtype.cas;
@@ -254,8 +258,15 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	
 	protected Form getParams() {
 		if (params == null) 
-			if (Method.GET.equals(getRequest().getMethod()))
+			if (Method.GET.equals(getRequest().getMethod())) {
 				params = getResourceRef(getRequest()).getQueryAsForm();
+				Iterator<Parameter> p = params.iterator();
+				while (p.hasNext()) {
+					Parameter param = p.next();
+					String value = param.getValue();
+					if (value.contains("script") || value.contains(">") || value.contains("<")) param.setValue(""); 
+				}
+			}	
 			//if POST, the form should be already initialized
 			else params = getRequest().getEntityAsForm();
 		return params;
