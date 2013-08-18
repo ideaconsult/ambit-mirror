@@ -111,9 +111,33 @@ To skip the tests, use -DskipTests=true option
 
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.4.13-SNAPSHOT
+AMBIT2 2.5.1-SNAPSHOT
 
 Current version at trunk
+
+AMBIT2 2.5.0
+
+
+ambit2-core: Zip reader classes use File instead of stream where possible, otherwise the zip table of content is not always correct
+ambit2-core: Specific parser for SDF file with DEREK predictions
+
+ambit2-namestructure: Upgraded to OPSIN 1.5.0
+
+ambit2-db: Database schema 7.0 (IUCLID5 substances support)
+ambit2-db: Database schema 6.8 Chemical landscape / activity cliffs support (see http://toxmatch.sf.net )
+ambit2-db: Database schema 6.7 Support for storing structure relations (e.g. tautomers, metabolites)
+
+ambit2-smarts: Fixed a bug in SMARTS writing.
+ambit2-smarts: Improved parsing of ring closures
+
+ambit2-www: Status reporting in debug or production mode; uses Freemarker template to generate HTML
+ambit2-www: Improved input sanitisation, framed responses are no more allowed; autocomplete off for web forms
+ambit2-www: Improved JS broswer compatibility
+ambit2-www: Initial support for IUCLID5 substances and substance composition. Uses https://github.com/ideaconsult/i5
+ambit2-www: Human readable names for aggregated features in JSON 
+ambit2-www: JSON serialization for property annotations
+ambit2-www: Web services and UI for chemical landscape and activity cliffs ( /qmap and /toxmatch ; see http://toxmatch.sf.net)
+ambit2-www: Web service to generate and store tautomers (OpenTox Algorithm API /algorithm/tautomergen ) 
 
 AMBIT2 2.4.12
 
