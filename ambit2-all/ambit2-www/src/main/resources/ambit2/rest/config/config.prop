@@ -11,6 +11,7 @@ aa.policy=${aa.policy}
 #Test AA user, used for running tests only
 aa.user=${aa.user}
 aa.pass=${aa.pass}
+#Used to enable simple local HTTP Basic authz, in case OpenSSO AA is disabled
 aa.local.enabled=${aa.local.enabled}
 aa.local.admin.name=${aa.local.admin.name}
 aa.local.admin.pass=${aa.local.admin.pass}
