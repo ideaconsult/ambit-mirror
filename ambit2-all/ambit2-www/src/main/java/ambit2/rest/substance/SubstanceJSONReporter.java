@@ -35,7 +35,7 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 	private static final long serialVersionUID = 2315457985592934727L;
 	public SubstanceJSONReporter(Request request, ResourceDoc doc,String jsonpCallback) {
 		super(request, doc);
-		this.jsonpCallback = jsonpCallback;
+		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 	}
 	public void header(java.io.Writer output, Q query) {
 		try {

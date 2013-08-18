@@ -102,7 +102,7 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 					Boolean includeMol,
 					String jsonpCallback) {
 		super(template,groupedProperties,folders,urlPrefix,includeMol);
-		this.jsonpCallback = jsonpCallback;
+		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 		
 		propertyJSONReporter = new PropertyJSONReporter(request);
 		hilightPredictions = request.getResourceRef().getQueryAsForm().getFirstValue("model_uri");

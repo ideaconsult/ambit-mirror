@@ -264,6 +264,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 				while (p.hasNext()) {
 					Parameter param = p.next();
 					String value = param.getValue();
+					if (value==null) continue;
 					if (value.contains("script") || value.contains(">") || value.contains("<")) param.setValue(""); 
 				}
 			}	

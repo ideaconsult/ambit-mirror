@@ -7,6 +7,7 @@ import java.util.Iterator;
 import org.restlet.Context;
 import org.restlet.Request;
 
+import ambit2.base.json.JSONUtils;
 import ambit2.core.data.model.Algorithm;
 import ambit2.rest.ResourceDoc;
 
@@ -23,7 +24,7 @@ public class AlgorithmJSONReporter extends AlgorithmURIReporter {
 	}
 	public AlgorithmJSONReporter(Request request,ResourceDoc doc,String jsonpcallback) {
 		super(request,doc);
-		this.jsonpCallback = jsonpcallback;
+		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpcallback);
 	}
 	
 	private static String format = "\n{\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"content\": \"%s\",\n\t\"endpoint\": \"%s\",\n\t\"description\": \"%s\",\n\t\"format\": \"%s\",\n\t\"implementationOf\": \"%s\",\n\t\"isDataProcessing\": %s,\n\t\"requiresDataset\": %s,\n\t\"isSupevised\": %s,\n\t\"requires\": \"%s\",\n\t\"type\": [\n%s]\n}";

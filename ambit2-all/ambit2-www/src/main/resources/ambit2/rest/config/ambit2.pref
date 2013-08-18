@@ -49,6 +49,8 @@ aa.compound=${aa.compound}
 aa.feature=${aa.feature}
 #aa.model is ignored
 #aa.model=${aa.model}
+#Error report level : production or debug . If debug, the status will show the stack trace 
+ambit.report.level=${ambit.report.level}
 #Ambit XT (standalone) properties only
 startMySQL=true
 showAromaticity=true

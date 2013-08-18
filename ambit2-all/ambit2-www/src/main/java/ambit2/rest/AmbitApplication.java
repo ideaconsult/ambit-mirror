@@ -198,7 +198,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		} finally {
 			try { if (in!=null) in.close(); } catch (Exception x) {}
 		}
-		setStatusService(new FreeMarkerStatusService(this));
+		setStatusService(new FreeMarkerStatusService(this,getStatusReportLevel()));
 		setTunnelService(new TunnelService(true,true) {
 			@Override
 			public Filter createInboundFilter(Context context) {
@@ -983,7 +983,23 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 localSecrets.put(identifier,pass.toCharArray());
 		 return localSecrets;
 	 }
-	
+	/**
+	 * Reads the status report level from ambit.pref ${ambit.report.level}
+	 * If debug the status will include the stack trace 
+	 * @return
+	 */
+	   	protected FreeMarkerStatusService.REPORT_LEVEL getStatusReportLevel() {
+			try {
+				FreeMarkerStatusService.REPORT_LEVEL aa = FreeMarkerStatusService.REPORT_LEVEL.valueOf(getProperty(FreeMarkerStatusService.report_level,ambitProperties));
+				if ((getContext()!=null) && 
+					(getContext().getParameters()!=null) && 
+					(getContext().getParameters().getFirstValue(FreeMarkerStatusService.report_level))!=null)
+					aa = FreeMarkerStatusService.REPORT_LEVEL.valueOf(getContext().getParameters().getFirstValue(FreeMarkerStatusService.report_level));
+				return aa;
+			} catch (Exception x) {	}
+			return FreeMarkerStatusService.REPORT_LEVEL.production;
+		}
+
 }
 
 /**

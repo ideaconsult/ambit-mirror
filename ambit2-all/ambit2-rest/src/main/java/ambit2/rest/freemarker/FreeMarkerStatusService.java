@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.restlet.Request;
 import org.restlet.Response;
@@ -15,13 +17,21 @@ import org.restlet.resource.ResourceException;
 import org.restlet.service.StatusService;
 
 public class FreeMarkerStatusService  extends StatusService implements IFreeMarkerSupport {
+	protected transient Logger logger = Logger.getLogger(getClass().getName());
 	protected IFreeMarkerSupport freeMarkerSupport = new FreeMarkerSupport(); 
 	protected FreeMarkerApplication app;
-
-	public FreeMarkerStatusService(FreeMarkerApplication app) {
+	protected REPORT_LEVEL reportLevel;
+	public final static String report_level = "ambit.report.level";
+	public enum REPORT_LEVEL {
+		production,
+		debug
+	}
+	
+	public FreeMarkerStatusService(FreeMarkerApplication app,REPORT_LEVEL level) {
 		super();
 		this.app = app;
 		setHtmlbyTemplate(true);
+		this.reportLevel = level;
 	}
 
 	@Override
@@ -86,15 +96,20 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 			Response response) {
 		StringWriter details = null;
 		if (status.getThrowable()!= null) {
-			 details = new StringWriter();
-			status.getThrowable().printStackTrace(new PrintWriter(details) {
-				@Override
-				public void print(String s) {
-					super.print(String.format("%s<br>", s));
-					
-				}
-			});
-		} 		
+			if (REPORT_LEVEL.debug.equals(reportLevel)) {
+				details = new StringWriter();
+				status.getThrowable().printStackTrace(new PrintWriter(details) {
+					@Override
+					public void print(String s) {
+						super.print(String.format("%s<br>", s));
+						
+					}
+				});
+			} else {
+				logger.log(Level.SEVERE,status.toString(),status.getThrowable());
+			}		
+		}
+	
 		return getHTMLByTemplate(status,status.getName(),status.getDescription(), details==null?null:details.toString(),request);
 	}
 	
