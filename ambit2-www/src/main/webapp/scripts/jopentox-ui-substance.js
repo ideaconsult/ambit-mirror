@@ -207,7 +207,7 @@ var substance = {
 									"bUseRendered" : false,	
 									"fnRender" : function(o,val) {
 										var s = val.split("-");
-										return s[1];
+										return "<span title='"+val+"'>" + s[1] + "</span>";
 									}
 								},	
 			    				{ //1
