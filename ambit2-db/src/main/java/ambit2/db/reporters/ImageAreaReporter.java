@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.json.JSONUtils;
 import ambit2.db.cache.RetrieveStructureImagePath;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
@@ -29,7 +30,7 @@ public class ImageAreaReporter<Q extends IQueryRetrieval<IStructureRecord>> exte
 	}
 	public ImageAreaReporter(String mainType,String subType,Dimension dimension,String jsonpcallback) {
 		super(mainType,subType,dimension);
-		this.jsonpcallback = jsonpcallback;
+		this.jsonpcallback = JSONUtils.jsonSanitizeCallback(jsonpcallback);
 	}
 	@Override
 	protected RetrieveStructureImagePath initQuery(String mainType,String subType) {

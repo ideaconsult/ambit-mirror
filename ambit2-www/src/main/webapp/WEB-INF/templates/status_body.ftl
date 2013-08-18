@@ -28,7 +28,7 @@ $(document)
 			<div class="remove-bottom h3">
 					Error
 			</div>
-		    <div class='h6'>An error has occured while accessing the web apge requested</div>			
+		    <div class='h6'>An error has occured while accessing the web page requested</div>			
 		</div>
 		</div>
 </div>		

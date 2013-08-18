@@ -62,7 +62,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 		cmpReporter = new CompoundJSONReporter(null,null,null,request,doc,request.getRootRef().toString(),false,null);
 		cmpReporter.setGroupProperties(groupProperties);
 		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request, null);
-		this.jsonpCallback = jsonpCallback;
+		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 		getProcessors().clear();
 		getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(groupProperties)) {
 			@Override
