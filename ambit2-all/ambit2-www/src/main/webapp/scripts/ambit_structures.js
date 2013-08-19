@@ -416,6 +416,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 			sOut += renderIdentifiers(null,"CAS",dataEntry.lookup.cas,dataEntry);
 			sOut += renderIdentifiers(null,"EC",dataEntry.lookup.einecs,dataEntry);
 			sOut += renderIdentifiers(null,"Name",dataEntry.lookup.names,dataEntry);
+			sOut += renderIdentifiers(null,"Trade name",dataEntry.lookup.tradenames,dataEntry);
 			sOut += renderIdentifiers(null,"REACH date",dataEntry.lookup.reachdate,dataEntry);
 			sOut += renderIdentifiers(null,"SMILES",dataEntry.lookup.smiles,dataEntry);
 			sOut += renderIdentifiers(null,"IUCLID5 UUID",dataEntry.lookup.i5uuid,dataEntry);
@@ -458,7 +459,15 @@ function defineStructuresTable(url, query_service, similarity,root) {
 			
 			try  { lv = lv.toLowerCase();} catch (e) {}
 			if (cache[lv]==null) {
-				sOut += renderValue(url,title,"",dataEntry.values[value],"",null);
+				if ("Trade name"==title) {
+					$.each(dataEntry.values[value].split("|"), function(index, v) {
+						var t = title;
+						if ((/^TRA/).test(v)) t = "Trade identifier";
+						sOut += renderValue(url,t,"",v,"",null);
+					});
+					
+				} else
+					sOut += renderValue(url,title,"",dataEntry.values[value],"",null);
 				cache[lv] = true;
 			} 
 		});		
@@ -490,7 +499,6 @@ function defineStructuresTable(url, query_service, similarity,root) {
 				"' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></span></a>";
 				endpoint = sameas.replace(prefix,"");
 			} 
-				
 			var sOut = "<tr bgcolor='#ffffff'>" 
 					+ "<td>" 
 					+ (source==null?"":"<a href='"+source.URI+"' target=_blank class='help' title='"+source.URI+"'>" + src +"</a>") 
