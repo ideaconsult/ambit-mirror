@@ -27,7 +27,7 @@ public class DBVersionQuery extends AbstractQuery<String, String, NumberConditio
 	}
 
 	public String getSQL() throws AmbitException {
-		return "Select idmajor,idminor,date,comment from version order by idmajor,idminor desc";
+		return "Select idmajor,idminor,date,comment from version order by idmajor*100000+idminor desc";
 	}
 	public double calculateMetric(AmbitDBVersion object) {
 		return 1;
