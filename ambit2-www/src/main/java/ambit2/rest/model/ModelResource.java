@@ -132,9 +132,14 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 		return new StringConvertor(	new ModelTextReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
 				MediaType.TEXT_PLAIN);	
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
-		return new StringConvertor(	new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+		return new StringConvertor(	new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),null),
 				MediaType.APPLICATION_JSON);	
-		
+	} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+		Form params = getParams();
+		String jsonpcallback = params.getFirstValue("jsonp");
+		if (jsonpcallback==null) jsonpcallback = params.getFirstValue("callback");
+		return new StringConvertor(	new ModelJSONReporter<IQueryRetrieval<ModelQueryResults>>(getRequest(),jsonpcallback),
+				MediaType.APPLICATION_JAVASCRIPT);			
 	} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) ||
 			variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE) ||
 			variant.getMediaType().equals(MediaType.TEXT_RDF_N3) ||

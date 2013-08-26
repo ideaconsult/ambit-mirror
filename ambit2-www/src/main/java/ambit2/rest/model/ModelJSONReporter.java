@@ -34,6 +34,7 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 	 */
 	private static final long serialVersionUID = 410930501401847402L;
 	protected String comma = null;
+	protected String jsonpCallback = null;
 	
 	enum jsonModel {
 		URI,
@@ -55,8 +56,9 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 			return name();
 		}
 	}
-	public ModelJSONReporter(Request baseRef) {
+	public ModelJSONReporter(Request baseRef,String jsonpcallback) {
 		super(baseRef);
+		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpcallback);
 	}
 	
 	protected void parseContent(ModelQueryResults model) {
@@ -180,9 +182,21 @@ public class ModelJSONReporter<Q extends IQueryRetrieval<ModelQueryResults>> ext
 		try {
 			output.write("\n]\n}");
 		} catch (Exception x) {}
+		try {
+			if (jsonpCallback!=null) {
+				output.write(");");
+			}
+		} catch (Exception x) {}		
+
 	};
 	
 	public void header(java.io.Writer output, Q query) {
+		try {
+			if (jsonpCallback!=null) {
+				output.write(jsonpCallback);
+				output.write("(");
+			}
+		} catch (Exception x) {	}
 		try {
 			output.write("{\"model\": [");
 		} catch (Exception x) {}
