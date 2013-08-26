@@ -39,7 +39,7 @@ public class ModelHTMLReporter  extends QueryHTMLReporter<ModelQueryResults, IQu
 	public ModelHTMLReporter(Request request,Request originalRef,DisplayMode _dmode,ResourceDoc doc) {
 		super(request,_dmode,doc);
 		cmp_reporter = new CompoundHTMLReporter<IQueryRetrieval<IStructureRecord>>(request,doc,_dmode,true);
-		modelJson_reporter = new ModelJSONReporter(request);
+		modelJson_reporter = new ModelJSONReporter(request,null);
 	}
 	@Override
 	protected QueryURIReporter createURIReporter(Request request, ResourceDoc doc) {
