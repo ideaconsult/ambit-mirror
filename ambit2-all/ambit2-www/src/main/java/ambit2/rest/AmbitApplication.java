@@ -8,6 +8,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -148,6 +149,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	public static final String GUARD_ENABLED = "guard.enabled";
 	public static final String GUARD_LIST = "guard.list";
 	public static final String WARMUP_ENABLED = "warmup.enabled";
+	public static final String ALLOWED_ORIGINS = "allowed.origins";
 	
 	static final String identifierKey = "aa.local.admin.name";
 	static final String identifierPass = "aa.local.admin.pass";
@@ -167,6 +169,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
 	protected boolean warmupEnabled = false;
+	protected List<String> allowedOrigins;
 
 	
 	public AmbitApplication() {
@@ -356,7 +359,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		//router.attach(AllAlgorithmsResource.algorithm,createProtectedResource(new AlgorithmRouter(getContext())));
 		router.attach(AllAlgorithmsResource.algorithm,createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
 		/**  /model  */
-		router.attach(ModelResource.resource,createAuthenticatedOpenResource(new ModelRouter(getContext())));
+		
+		OriginFilter originFilter = new OriginFilter(getContext(),getAllowedOrigins()); 
+	    originFilter.setNext(createAuthenticatedOpenResource(new ModelRouter(getContext()))); 
+		router.attach(ModelResource.resource,originFilter);
 		/**  /task  */
 		router.attach(TaskResource.resource, new TaskRouter(getContext()));
 		
@@ -925,6 +931,11 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			String v3 = getProperty(version_timestamp,ambitProperties);
 			return String.format("%s r%s built %s",v1,v2,new Date(Long.parseLong(v3)));
 		} catch (Exception x) {return "Unknown"; }
+	}
+	protected synchronized String getAllowedOrigins()  {
+		try {
+			return getProperty(ALLOWED_ORIGINS,configProperties);
+		} catch (Exception x) {return null; }
 	}
 	protected synchronized boolean isOpenToxAAEnabled()  {
 		try {
