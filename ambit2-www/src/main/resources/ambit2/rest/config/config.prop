@@ -18,3 +18,4 @@ aa.local.admin.pass=${aa.local.admin.pass}
 guard.enabled=${guard.enabled}
 guard.list=${guard.list}
 warmup.enabled=${warmup.enabled}
+allowed.origins=${allowed.origins}
