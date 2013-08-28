@@ -360,9 +360,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		router.attach(AllAlgorithmsResource.algorithm,createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
 		/**  /model  */
 		
-		OriginFilter originFilter = new OriginFilter(getContext(),getAllowedOrigins()); 
-	    originFilter.setNext(createAuthenticatedOpenResource(new ModelRouter(getContext()))); 
-		router.attach(ModelResource.resource,originFilter);
+		router.attach(ModelResource.resource,createAuthenticatedOpenResource(new ModelRouter(getContext())));
 		/**  /task  */
 		router.attach(TaskResource.resource, new TaskRouter(getContext()));
 		
@@ -527,7 +525,9 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			 */
 			router.attach("/"+OpenSSOUserResource.resource,login );
 
-		 return router;
+		 OriginFilter originFilter = new OriginFilter(getContext(),getAllowedOrigins()); 
+		 originFilter.setNext(router); 
+		 return originFilter;
 	}
 	
 	protected Restlet createOpenSSOLoginRouter() {
