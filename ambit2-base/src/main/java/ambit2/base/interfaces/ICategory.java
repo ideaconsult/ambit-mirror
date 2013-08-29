@@ -62,5 +62,5 @@ public interface ICategory {
 	 */
 	CategoryType getCategoryType();
 	void setCategoryType(CategoryType categoryType);
-
+	CategoryType getNegativeCategoryType();
 }
