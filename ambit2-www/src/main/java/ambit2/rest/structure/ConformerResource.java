@@ -94,7 +94,7 @@ public class ConformerResource extends CompoundResource {
 			} catch (NumberFormatException x) {
 				throw new ResourceException(
 						Status.CLIENT_ERROR_BAD_REQUEST,
-						String.format("Invalid resource id %d",request.getAttributes().get(idcompound)),
+						"Invalid resource id",
 						x
 						);				
 			}
@@ -115,7 +115,7 @@ public class ConformerResource extends CompoundResource {
 		} catch (Exception x) {
 			throw new ResourceException(
 					Status.SERVER_ERROR_INTERNAL,
-					String.format("Invalid resource id %d",request.getAttributes().get(idcompound)),
+					"Invalid resource id",
 					x
 					);
 		}

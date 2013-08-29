@@ -114,7 +114,7 @@ public class BookmarkResource extends QueryResource<ReadBookmark,Bookmark> {
 		} catch (Exception x) {
 			throw new ResourceException(
 					Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Invalid resource id %d",idref),
+					String.format("Invalid resource id"),
 					x
 					);
 		}
