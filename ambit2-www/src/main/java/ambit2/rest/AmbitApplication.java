@@ -169,7 +169,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
 	protected boolean warmupEnabled = false;
-	protected List<String> allowedOrigins;
 
 	
 	public AmbitApplication() {
@@ -505,7 +504,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	    		 authorizer.getAuthorizedRoles().add(UPDATE_ALLOWED);
 	    		 authorizer.setNext(router);
 	    		 basicAuth.setNext(authorizer);
-	    		 return basicAuth;
+	    		 
+	    		 String allowedOrigins = getAllowedOrigins();
+	   	      	 getLogger().info("CORS: Origin filter attached:\t"+allowedOrigins);
+	    		 OriginFilter originFilter = new OriginFilter(getContext(),allowedOrigins); 
+	    		 originFilter.setNext(basicAuth); 	    		 
+	    		 return originFilter;
 	    	 }
 	    	 else {
 	    		 getLogger().warning("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
@@ -524,8 +528,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			 * Sets a cookie with OpenSSO token
 			 */
 			router.attach("/"+OpenSSOUserResource.resource,login );
-
-		 OriginFilter originFilter = new OriginFilter(getContext(),getAllowedOrigins()); 
+			
+   		 String allowedOrigins = getAllowedOrigins();
+	     getLogger().info("CORS: Origin filter attached:\t"+allowedOrigins);			
+		 OriginFilter originFilter = new OriginFilter(getContext(),allowedOrigins); 
 		 originFilter.setNext(router); 
 		 return originFilter;
 	}
