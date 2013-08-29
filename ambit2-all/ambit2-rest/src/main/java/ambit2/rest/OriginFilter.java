@@ -25,7 +25,7 @@ public class OriginFilter extends Filter {
 	      super(context); 
 	      String[] origins = allowedOrigins==null?new String[]{}:allowedOrigins.split(" ");
 	      this.allowedOrigins = new ArrayList<String>();
-	      for (String origin : origins) this.allowedOrigins.add(origin);
+	      for (String origin : origins) this.allowedOrigins.add(origin.trim());
 	}
 	public OriginFilter(Context context, List<String> allowedOrigins) { 
 	      super(context); 
