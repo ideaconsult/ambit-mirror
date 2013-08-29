@@ -1,4 +1,4 @@
-
+<#escape x as x?html>
 <ul id="selectable">
 <li class="ui-selectee">
 <a href="${ambit_root}/ui"><span class="ui-icon ui-icon-home" style="float: left; margin-right: .3em;"></span>Home</a>
@@ -65,3 +65,5 @@
 </#if>
 
 </ul>
+
+</#escape>

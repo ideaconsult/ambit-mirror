@@ -1,3 +1,4 @@
+<#escape x as x?html>
 	<ul class='topLinks remove-bottom'>
 	<li class='topLinks'>
 		<a class='topLinks' href='http://ambit.sf.net/'>AMBIT @ sourceforge.net</a>
@@ -21,3 +22,4 @@
 		<a class='topLinks register' title='Register' target=_blank href='http://opentox.org/join_form'>Register</a></li>				
 		</#if>			
 	</ul>
+</#escape>
