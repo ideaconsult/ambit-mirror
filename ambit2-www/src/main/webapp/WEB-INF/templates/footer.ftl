@@ -18,7 +18,7 @@
 </div>
 		
 <#if username??>
-		<form id='logoutForm' name='logoutForm' action='${ambit_root}/openssouser?method=DELETE' method='POST'><input type='hidden' value='${username}'></input></form>
+		<form id='logoutForm' name='logoutForm' action='${ambit_root}/openssouser?method=DELETE' method='POST'><input type='hidden' value="${username}"></input></form>
 </#if>
 						
 <script type="text/javascript">

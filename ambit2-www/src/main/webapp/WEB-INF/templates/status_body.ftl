@@ -1,7 +1,7 @@
 <#include "/html.ftl" >
 <head>
 <#include "/header.ftl" >
-<script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
+<script type='text/javascript' src="${ambit_root}/scripts/jopentox.js"></script>
 <script type='text/javascript'>
 
 $(document)
@@ -41,7 +41,7 @@ $(document)
 </div>
 
 <div class="eleven columns remove-bottom" style="padding:0;" >
-
+<#escape x as x?html>
 		<div class="ui-widget-header ui-corner-top">
 		<span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;' title='' id='status_name'>${status_name}</span>
 		<span id='error_name'>${status_error_name}</span>
@@ -56,13 +56,13 @@ $(document)
 			</div>
 			<div class='row help' style='display: none;text-align:right;margin:10px;' id='details'>
 				<#if status_details??>
-				<span id='details_description'>[${status_code}]&nbsp;<a href='${status_uri}' target=_blank>${status_details}</a></span>
+				<span id='details_description'>[${status_code}]&nbsp;<a href="${status_uri}" target=_blank>${status_details}</a></span>
 				<#else>
-				<span id='details_description'>[${status_code}]&nbsp;<a href='${status_uri}' target=_blank>${status_name}</a></span>
+				<span id='details_description'>[${status_code}]&nbsp;<a href="${status_uri}" target=_blank>${status_name}</a></span>
 				</#if>
 			</div>
 		</div>
-		
+</#escape>
 		
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>

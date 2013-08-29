@@ -1,4 +1,4 @@
-
+<#escape x as x?html>
 <ul id='selected'>
 <li class="ui-selectee">
 <a href="${ambit_root}/ui"><span class="ui-icon ui-icon-home" style="float: left; margin-right: .3em;"></span>Home</a>
@@ -20,3 +20,4 @@
 </li> 
 
 </ul>
+</#escape>
