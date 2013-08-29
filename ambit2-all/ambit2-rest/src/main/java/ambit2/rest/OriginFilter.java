@@ -37,14 +37,14 @@ public class OriginFilter extends Filter {
 	      if(Method.OPTIONS.equals(request.getMethod())) { 
 	         Form requestHeaders = (Form) request.getAttributes().get("org.restlet.http.headers"); 
 	         String origin = requestHeaders.getFirstValue("Origin", true); 
-
-	         if(getAllowedOrigins().contains(origin)) { 
+	         boolean all = getAllowedOrigins().contains("*");
+	         if(all || getAllowedOrigins().contains(origin)) { 
 	            Form responseHeaders = (Form) response.getAttributes().get("org.restlet.http.headers"); 
 	            if (responseHeaders == null) { 
 	                responseHeaders = new Form(); 
 	                response.getAttributes().put("org.restlet.http.headers", responseHeaders); 
 	            } 
-	            responseHeaders.add("Access-Control-Allow-Origin", origin); 
+	            responseHeaders.add("Access-Control-Allow-Origin", all?"*":origin); 
 	            responseHeaders.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"); 
 	            responseHeaders.add("Access-Control-Allow-Headers", "Content-Type"); 
 	            responseHeaders.add("Access-Control-Allow-Credentials", "true"); 
@@ -62,14 +62,14 @@ public class OriginFilter extends Filter {
 	      if(!Method.OPTIONS.equals(request.getMethod())) { 
 	         Form requestHeaders = (Form) request.getAttributes().get("org.restlet.http.headers"); 
 	         String origin = requestHeaders.getFirstValue("Origin", true); 
-
-	         if(getAllowedOrigins().contains(origin)) { 
+	         boolean all = getAllowedOrigins().contains("*");
+	         if(all || getAllowedOrigins().contains(origin)) { 
 	            Form responseHeaders = (Form) response.getAttributes().get("org.restlet.http.headers"); 
 	            if (responseHeaders == null) { 
 	                responseHeaders = new Form(); 
 	                response.getAttributes().put("org.restlet.http.headers", responseHeaders); 
 	            } 
-	            responseHeaders.add("Access-Control-Allow-Origin", origin); 
+	            responseHeaders.add("Access-Control-Allow-Origin", all?"*":origin); 
 	            responseHeaders.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"); 
 	            responseHeaders.add("Access-Control-Allow-Headers", "Content-Type"); 
 	            responseHeaders.add("Access-Control-Allow-Credentials", "true"); 
