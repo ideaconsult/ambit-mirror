@@ -1,7 +1,7 @@
 <div class='helptitle' style='font-weight:bold;'>Help: Substances</div>
 <div class='helpcontent'>
 Chemical substance, a material with a definite chemical composition.
-<a href='http://echa.europa.eu/documents/10162/13643/nutshell_guidance_substance_en.pdf' target='_blank' title='Identification and naming of 
+<a href='http://echa.europa.eu/documents/10162/13643/nutshell_guidance_substance_en.pdf' class='qxternal'  target='_blank' title='Identification and naming of 
 substances under REACH and CLP'>REACH guide</a> 
 <br/>
 Mono-constituent<a href='#' class='chelp mono'>?</a> and multi-constituent <a href='#' class='chelp multi'>?</a> substances.
@@ -36,10 +36,10 @@ Main constituent<a href='#' class='chelp main'>?</a>Additive<a href='#' class='c
     An unintended constituent present in a substance, as produced. Does not contribute to the naming of the substance.
   </div>  
   <div id="i5z">
-  	<a href='http://en.wikipedia.org/wiki/IUCLID' target=_blank>IUCLID 5</a> exports and imports files in the I5Z format. 
+  	<a href='http://en.wikipedia.org/wiki/IUCLID' class='qxternal' target=_blank>IUCLID 5</a> exports and imports files in the I5Z format. 
   	I5Z stands for "IUCLID 5 Zip", as the file uses Zip file compression.
   	<br/>
     Only Substance (IUCLID 5.4, IUCLID 5.5) and ReferenceSubstance (IUCLID 5.0, IUCLID 5.4, IUCLID 5.5.) records
-    (as defined by the <a href='http://iuclid.eu/index.php?fuseaction=home.format' target=_blank>IUCLID schema</a>) can be imported in this version of Ambit.
+    (as defined by the <a href='http://iuclid.eu/index.php?fuseaction=home.format' class='qxternal'  target=_blank>IUCLID schema</a>) can be imported in this version of Ambit.
   </div>  
 </div>      

@@ -49,7 +49,7 @@ $(document)
 		<div class='row' style="margin:5px;padding:5px;"> 	
 		<div class="three columns">Database admin</div>
 		<div class="ten columns"><a href='${ambit_root}/admin/database'>Create or inspect the database</a></div>
-		<div class="three columns help"><a href='http://ambit.sourceforge.net/install_ambitrest.html' target=_blank>Help</a></div>
+		<div class="three columns help"><a href='http://ambit.sourceforge.net/install_ambitrest.html' class='qxternal' target=_blank>Help</a></div>
 		</div>
 	
 		<div class='row' style="margin:5px;padding:5px;">

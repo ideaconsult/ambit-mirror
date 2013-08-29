@@ -69,7 +69,7 @@
 		    <div class='help'>
 		    	Interactive visualisation of Quantitative Structure-Activity-Similarity Maps (QMaps) 
 	    		<br/>
-	    		Background and more information at <a href="http://toxmatch.sf.net" target=_blank title="Click for more information">http://toxmatch.sf.net</a>
+	    		Background and more information at <a href="http://toxmatch.sf.net" class='qxternal' target=_blank title="Click for more information">http://toxmatch.sf.net</a>
 		    </div>			
 		</div>
 		<div class="six columns omega">

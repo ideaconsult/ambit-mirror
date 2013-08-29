@@ -113,7 +113,7 @@ function defineAlgorithmTable(root,url,viscols) {
 					  "fnRender" : function(o,val) {
 						  var p = val.indexOf("#");
 						  var name = val;  if (p>0) name =  val.substring(p+1);
-						  return "<a href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank>" +name +"</a>";
+						  return "<a class='qxternal'  href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank>" +name +"</a>";
 					  }
 				}
 					
@@ -1178,7 +1178,7 @@ function defineFeatureTable(root,url) {
 					  "bSortable" : true,
 					  "sWidth" : "15%",
 					  "fnRender" : function(o,val) {
-						  var ont = "<a href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank title='"+val+"'>owl:sameAs</a>";
+						  var ont = "<a class='qxternal' href='http://apps.ideaconsult.net:8080/ontology?uri=" + encodeURIComponent(val) +"' target=_blank title='"+val+"'>owl:sameAs</a>";
 						  return	(val.replace("http://www.opentox.org/echaEndpoints.owl#","Endpoint: ")
 						  			.replace("http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#","Algorithm: ")
 						  			.replace("http://www.opentox.org/api/1.1#","OpenTox: ")) + "<br>" + ont;;

@@ -57,4 +57,15 @@
 	<script type='text/javascript' src='${ambit_root}/jmol/Jmol.js'></script>
 	-->			
 
-	
+<!-- Uncomment to enable the confirmation message when clicking external links	
+<script type='text/javascript'>
+	$(document).ready(function() {
+		$(".qxternal").click(function(event) {
+		   var confirmation = confirm("You are leaving the AMBIT2 website and entering an external link.");
+		   if (!confirmation) {
+		     event.preventDefault();
+		   }
+		 });
+	});
+ </script>
+ -->

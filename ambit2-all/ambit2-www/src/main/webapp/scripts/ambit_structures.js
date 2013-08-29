@@ -494,7 +494,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 			var searchURI = "";
 			var endpoint =  sameas==null?"":sameas;
 			if (sameas.indexOf(prefix)>=0) {
-				searchURI = " <a href='http://apps.ideaconsult.net:8080/ontology/query?uri="+
+				searchURI = " <a class='qxternal' href='http://apps.ideaconsult.net:8080/ontology/query?uri="+
 				encodeURIComponent(sameas) +
 				"' target=_blank><span class='ui-icon ui-icon-link' style='float: left; margin-right: .3em;'></span></a>";
 				endpoint = sameas.replace(prefix,"");
@@ -562,7 +562,7 @@ function formatValues(dataEntry, tag) {
 	}
 	case 'inchikey' : {
 		if (sOut!="" )
-			sOut = "<a class='help' href='http://www.google.com/search?q="+sOut + "' target=_blank>"+sOut+"</a>";
+			sOut = "<a class='help' class='qxternal' href='http://www.google.com/search?q="+sOut + "' target=_blank>"+sOut+"</a>";
 		break;
 	}
 	}
