@@ -82,7 +82,7 @@ Algorithm types<a href='#' class='chelp halgtypes'>?</a> |
 The SuperBuilder uses descriptor calculation service, feature selection service and a modelling algorithm service to create prediction models. In general,  OpenTox 
 Model services execute only learning algorithms (e.g. regression or classification) and assume the input dataset contains all necessary descriptors.
 The SuperBuilder accepts URI of descriptor calculation algorithms via "feature_calculation" parameters, runs all the calculation, prepares a dataset with all descriptors and the endpoint (URI specified by "prediction_feature" parameter), and submits the final dataset to the learning algorithm (URI specified by "model_learning" parameter).
-More <a href='http://www.ideaconsult.net/web/ngn/blogs/-/blogs/opentox-model-superbuilder' target='help'>details</a>.
+More <a href='http://www.ideaconsult.net/web/ngn/blogs/-/blogs/opentox-model-superbuilder' class='qxternal' target='help'>details</a>.
   </div>
   <div id="hsuperservice" >
  The <a href='${ambit_root}/algorithm/superservice' target=_blank>superservice</a> runs a model and all required dependencies (i.e. descriptor calculations). 

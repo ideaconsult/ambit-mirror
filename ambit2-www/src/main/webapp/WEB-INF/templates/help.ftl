@@ -1,8 +1,8 @@
 	<div class='help'>
 	<a href='${ambit_root}/help'>Help</a><br>
-	<a href='http://ambit.sf.net' title='AMBIT @ sourceforge.net' target='_blank'>ambit.sf.net</a>
+	<a href='http://ambit.sf.net' class='qxternal'  title='AMBIT @ sourceforge.net' target='_blank'>ambit.sf.net</a>
 	</div>
-	<div class='help'><a href='http://ambit.sourceforge.net/api.html' target=_blank>OpenTox API</a><br>
+	<div class='help'><a href='http://ambit.sourceforge.net/api.html' class='qxternal' target=_blank>OpenTox API</a><br>
 		<a href='${ambit_root}/dataset' target='_blank'>Datasets</a>
 		<a href='${ambit_root}/feature' target='_blank'>Features</a>
 		<a href='${ambit_root}/compound' target='_blank'>Chemicals</a>
@@ -28,5 +28,5 @@
 		<a href='${ambit_root}/admin/stats/models' target='_blank'>Number of models</a>
 	</div>	
 	<div class='help'>Applications<br>
-		<a href='http://toxpredict.org' target='_blank'>ToxPredict</a>
+		<a href='http://toxpredict.org' class='qxternal' target='_blank'>ToxPredict</a>
    </div>	

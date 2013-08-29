@@ -58,13 +58,13 @@ Admin<a href='#' class='chelp admin'>?</a>
 		<a href='${ambit_root}/admin/stats/models' target='_blank'>Number of models</a>
 	</div>	
 	<div id='apps'>
-		<a href='http://toxpredict.org' target='_blank'>ToxPredict</a>
+		<a href='http://toxpredict.org' class='qxternal'  target='_blank'>ToxPredict</a>
    </div>	
 	<div id='aa'>
 		Access to AMBIT web services can be controlled via OpenTox Authentication and Authorization infrastructure. 
 		Security tokens are obtained after log in into a preconfigured OpenAM service.
-		<a href='http://forgerock.com/what-we-offer/open-identity-stack/openam/' target='_blank'>OpenAM</a> |
-		<a href='http://opentox.org/dev/apis/api-1.2/AA' target='_blank'>API</a> |
+		<a href='http://forgerock.com/what-we-offer/open-identity-stack/openam/' class='qxternal' target='_blank'>OpenAM</a> |
+		<a href='http://opentox.org/dev/apis/api-1.2/AA' class='qxternal' target='_blank'>API</a> |
 		<a href='${ambit_root}/admin/policy' target='_blank'>Manage policies</a> 
    </div>
    <div id='admin'>
