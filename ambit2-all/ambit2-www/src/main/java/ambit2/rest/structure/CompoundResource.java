@@ -438,8 +438,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					}
 					throw new ResourceException(
 							Status.CLIENT_ERROR_BAD_REQUEST,
-							String.format("Invalid resource id %s",
-									request.getAttributes().get(OpenTox.URI.compound.getKey())==null?"":request.getAttributes().get(OpenTox.URI.compound.getKey())),
+							"Invalid resource id",
 							x
 							);
 				}	
