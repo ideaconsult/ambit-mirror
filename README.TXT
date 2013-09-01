@@ -111,9 +111,15 @@ To skip the tests, use -DskipTests=true option
 
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.5.1-SNAPSHOT
+AMBIT2 2.5.2-SNAPSHOT
 
 Current version at trunk
+AMBIT2 2.5.1
+
+ambit2-www: Security improvements
+ambit2-www: JSONP support for /model
+ambit2-www: Optional CORS support (allowed.origins property at /ambit2/rest/config/prop)
+
 
 AMBIT2 2.5.0
 
