@@ -75,11 +75,40 @@
           img="http://sflogo.sourceforge.net/sflogo.php?group_id=191756&amp;type=12"/>
   </poweredBy>
 
+
     <skin>
-        <groupId>com.googlecode.fluido-skin</groupId>
-        <artifactId>fluido-skin</artifactId>
-        <version>1.3</version>
-    </skin>    
+        <groupId>org.apache.maven.skins</groupId>
+    	<artifactId>maven-fluido-skin</artifactId>
+    	<version>1.3.0</version>
+    </skin>
+
+  <custom>
+    <fluidoSkin>
+      <topBarEnabled>true</topBarEnabled>
+       <topBarContainerStyle>width: 90%;</topBarContainerStyle>
+       <navBarStyle>navbar-inverse</navBarStyle>
+      <sideBarEnabled>false</sideBarEnabled>
+      <topBarIcon>
+        <name>AMBIT</name>
+        <alt>AMBIT</alt>
+        <src>/images/ambit-logo.png</src>
+        <href>/index.html</href>
+      </topBarIcon>
+      <googleSearch>
+        <sitesearch>http://ambit.sourceforge.net</sitesearch>
+      </googleSearch>
+      <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+      <twitter>
+        <user>10705013</user>
+        <showUser>false</showUser>
+        <showFollowers>false</showFollowers>
+      </twitter>
+       <ohloh>
+        <projectId>ambit</projectId>
+        <widget>stats</widget>
+      </ohloh>
+    </fluidoSkin>
+  </custom>    
   <publishDate position="navigation-bottom" format="MM-dd-yy"/>
 
 
