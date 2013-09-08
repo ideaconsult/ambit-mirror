@@ -724,14 +724,16 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
 	public void setDefaultImage(BufferedImage defaultImage) {
 		this.defaultImage = defaultImage;
 	}
-	
-	protected BufferedImage createDefaultImage() {
+	public BufferedImage createDefaultImage() {
+		return createDefaultImage("N/A");
+	}
+	public BufferedImage createDefaultImage(String msg) {
 			BufferedImage buffer = createBuffer();
 			Graphics2D g = buffer.createGraphics();
 			g.setColor(background);
 			g.fillRect(0, 0, imageSize.width, imageSize.height);
 			g.setColor(Color.black);
-			g.drawString("N/A",imageSize.width/2 - 10,imageSize.height / 2);
+			g.drawString(msg,imageSize.width/2 - 10,imageSize.height / 2);
 			return buffer;
 	}
 	//this should be done via selectors ...
