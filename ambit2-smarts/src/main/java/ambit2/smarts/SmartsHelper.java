@@ -255,7 +255,7 @@ public class SmartsHelper
 				}
 			}
 			
-			IAtom[] atoms = new Atom[2];
+			IAtom[] atoms = new IAtom[2];
 		    atoms[0] = query.getAtom(index0);
 		    atoms[1] = query.getAtom(index1);
 		    newBo.setAtoms(atoms);
