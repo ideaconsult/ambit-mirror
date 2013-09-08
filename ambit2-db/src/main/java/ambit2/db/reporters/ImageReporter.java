@@ -7,6 +7,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rendering.CachedImage;
@@ -49,20 +50,24 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	@Override
 	protected CachedImage<BufferedImage> getCached(IStructureRecord item) {
 		try {
-			imageWrapper.setImage(null);
-			imageWrapper.setProperty(null);
-			//Object path = item.getProperty(img);
-			//path=null;//test
-			String tmpDir = System.getProperty("java.io.tmpdir");
-			String dimensions = getQueryName();
-			File path = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, subType);
-			File jsonpath = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, "json");
-			//check if both png & json exists, otherwise generate
-			if ((path != null) && path.exists() && (jsonpath!=null) && (jsonpath.exists())) {
-				imageWrapper.setImage(ImageIO.read(path));
+			if (STRUC_TYPE.NANO.equals(item.getType())) {
+				return new JustTheImage(depict.createDefaultImage("NanoMaterial"),null);
+			} else {
+				imageWrapper.setImage(null);
+				imageWrapper.setProperty(null);
+				//Object path = item.getProperty(img);
+				//path=null;//test
+				String tmpDir = System.getProperty("java.io.tmpdir");
+				String dimensions = getQueryName();
+				File path = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, subType);
+				File jsonpath = getFilePath(tmpDir, getConnection().getCatalog(), dimensions, item, "json");
+				//check if both png & json exists, otherwise generate
+				if ((path != null) && path.exists() && (jsonpath!=null) && (jsonpath.exists())) {
+					imageWrapper.setImage(ImageIO.read(path));
+					return imageWrapper;
+				} 
 				return imageWrapper;
-			} 
-			return imageWrapper;
+			}
 		} catch (Exception x) {
 			logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
 			return null;
@@ -87,7 +92,9 @@ public class ImageReporter<Q extends IQueryRetrieval<IStructureRecord>> extends 
 	
 	}
 
+
 	*/
+
 	public void open() throws DbAmbitException {
 	}
 	@Override
