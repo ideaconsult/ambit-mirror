@@ -199,7 +199,7 @@ public class AbstractDepict extends ProtectedResource {
 			default: {
 				smiles = form.getValuesArray(QueryResource.search_param);
 				if ((smiles==null) || (smiles.length<1)) smiles = new String[] {null};
-				else smiles[0] = smiles[0].trim();
+				else smiles[0] = smiles[0]==null?"":smiles[0].trim();
 			}
 			}
 
