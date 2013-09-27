@@ -116,12 +116,13 @@ public class TautomersDepict extends AbstractDepict {
 	@Override
 	protected String getTitle(Reference ref, String... smiles) throws ResourceException {
 		if ((smiles==null) || smiles.length<1 || "".equals(smiles[0])) smiles = new String[] {"warfarin"}; //demo
+		String visibleSmiles = smiles==null?"":(smiles.length==0?"":smiles[0]);
 		StringBuilder b = new StringBuilder();
 		if (method== null ) {
 			b.append("<div class='tabs' style='padding-left:0;margin-left:0px;border-width:0px'><ul style='padding-left:0;margin-left:0px'>");
 			for (_method m : _method.values()) {
 				b.append(String.format("<li  style='padding-left:0;margin-left:0px'><a href='%s/depict%s/%s?search=%s&headless=true'>%s tautomers</a></li>",
-						getRequest().getRootRef(),TautomersDepict.resource,m,Reference.encode(smiles[0]),m));
+						getRequest().getRootRef(),TautomersDepict.resource,m,Reference.encode(visibleSmiles),m));
 			}
 			b.append("</ul></div>");
 
@@ -160,7 +161,7 @@ public class TautomersDepict extends AbstractDepict {
 			b.append(AmbitResource.printWidget(
 					String.format("<a href='%s' title='%s'>%s</a>",url,smiles,"SOURCE"), 
 					String.format("<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">", 
-							url,smiles==null?"":smiles,smiles==null?"":smiles),"depictBox"));
+							url,visibleSmiles,visibleSmiles),"depictBox"));
 			b.append("</td>");
 			b.append(generateTautomersAmbit(mol));
 			break;
@@ -177,7 +178,7 @@ public class TautomersDepict extends AbstractDepict {
 			b.append(AmbitResource.printWidget(
 					String.format("<a href='%s' title='%s'>%s</a>",url,smiles,"SOURCE"), 
 					String.format("<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">", 
-							url,smiles==null?"":smiles,smiles==null?"":smiles),"depictBox"));
+							url,visibleSmiles,visibleSmiles),"depictBox"));
 			b.append("</td>");			
 			List<String> resultTautomers = generateTautomersCactvs(smiles[0]);
 			if (resultTautomers!=null)
@@ -207,9 +208,9 @@ public class TautomersDepict extends AbstractDepict {
 			b.append(AmbitResource.printWidget(
 					String.format("<a href='%s' title='%s'>%s</a>",url,smiles,"SOURCE"), 
 					String.format("<img id='smiles' src='%s' alt='%s' title='%s' onError=\"hideDiv('smiles')\">", 
-							url,smiles==null?"":smiles,smiles==null?"":smiles),"depictBox"));
+							url,visibleSmiles,visibleSmiles),"depictBox"));
 			b.append("</td>");			
-			mol = getAtomContainer(smiles[0]);
+			mol = getAtomContainer(visibleSmiles);
 			b.append(generateTautomersInChI(mol));
 		}
 		}

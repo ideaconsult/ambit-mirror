@@ -23,15 +23,17 @@ public class ReactionDepict extends AbstractDepict {
 		StringBuilder b = new StringBuilder();
 		b.append("<table><tr>");
 		b.append("<td>");
+		String visibleSmiles = smiles==null?"":(smiles.length==0?"":smiles[0]);
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s/reactant?search=%s'>%s</a>",
-						ref.getHierarchicalPart(),Reference.encode(smiles[0]),"Reactant"),
+						ref.getHierarchicalPart(),Reference.encode(visibleSmiles),"Reactant"),
+						
 						
 				String.format("<strong>%s</strong><img id='reactant' src='%s/reactant?search=%s' alt='%s' title='%s' onError=\"hideDiv('reactant')\">",
-						smiles,
+						visibleSmiles,
 						ref.getHierarchicalPart(),
-						Reference.encode(smiles[0]),
-						smiles,smiles),
+						Reference.encode(visibleSmiles),
+						visibleSmiles,visibleSmiles),
 				"depictBox"						
 					));
 		b.append("</td><td>");
