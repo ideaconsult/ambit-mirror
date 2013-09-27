@@ -298,7 +298,8 @@ public class CompoundJSONReporter<Q extends IQueryRetrieval<IStructureRecord>> e
 			output.write("\"query\": {");
 			output.write("\n\t\"summary\":");
 			output.write("\"");
-			output.write(query==null?"":JSONUtils.jsonEscape(query.toString()));
+			//output.write(query==null?"":JSONUtils.jsonEscape(query.toString()));
+			output.write("query");
 			output.write("\"");
 			output.write("\n},");
 			output.write("\n\"dataEntry\":[");
