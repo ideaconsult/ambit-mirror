@@ -10,7 +10,7 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.base.relation.AbstractRelation;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
@@ -19,7 +19,7 @@ import ambit2.db.search.IStoredQuery;
 import ambit2.rest.OpenTox;
 import ambit2.rest.structure.ConformerURIReporter;
 
-public class StructureRelationJSONReporter<Q extends IQueryRetrieval<CompositionRelation>> extends QueryReporter<CompositionRelation,Q,Writer> {
+public class StructureRelationJSONReporter<Q extends IQueryRetrieval<AbstractRelation>> extends QueryReporter<AbstractRelation,Q,Writer> {
 	/**
 	 * 
 	 */
@@ -62,7 +62,7 @@ public class StructureRelationJSONReporter<Q extends IQueryRetrieval<Composition
 	 * </pre>	
 	 */
 	@Override
-	public Object processItem(CompositionRelation item) throws AmbitException {
+	public Object processItem(AbstractRelation item) throws AmbitException {
 		try {
 			if (item==null) return null;
 			if (item.getFirstStructure()==null) return null;
