@@ -83,10 +83,10 @@
 		</div>
 
 	 	<h5>Tautomers per dataset</h5>
-		Please use the <a href='${ambit_root}/query/relation/dataset/has_tautomer?dataset_uri=&media=application/json'>${ambit_root}/query/relation/has_tautomer/dataset?dataset_uri=${ambit_root}/dataset/999</a> page to retrieve pre-generated tautomers.
+		Please use the <a href='${ambit_root}/query/relation/dataset/has_tautomer?dataset_uri=&media=application/json'>${ambit_root}/query/relation/dataset/has_tautomer?dataset_uri=${ambit_root}/dataset/999</a> page to retrieve pre-generated tautomers.
 		<br/>
 	 	<h5>Tautomers per compound</h5>
-		Please use the <a href='${ambit_root}/query/relation/compound/has_tautomer?dataset_uri=&media=application/json'>${ambit_root}/query/relation/has_tautomer/compound?dataset_uri=${ambit_root}/compound/999</a> page to retrieve pre-generated tautomers of all compounds in a dataset.
+		Please use the <a href='${ambit_root}/query/relation/compound/has_tautomer?dataset_uri=&media=application/json'>${ambit_root}/query/relation/compound/has_tautomer?dataset_uri=${ambit_root}/compound/999</a> page to retrieve pre-generated tautomers of all compounds in a dataset.
 		<h5>Tautomers generation</h5>
 		Please use the <a href='${ambit_root}/algorithm/tautomers'>${ambit_root}/algorithm/tautomers</a> with the OpenTox API
 		<br/>
