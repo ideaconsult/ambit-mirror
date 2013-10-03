@@ -3,13 +3,13 @@
   <parent>
     <artifactId>cdk-all</artifactId>
     <groupId>org.openscience.cdk</groupId>
-    <version>1.4.16</version>
+    <version>1.4.18</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-pure</artifactId>
   <name>cdk-pure</name>
-  <version>1.4.16</version>
+  <version>1.4.18</version>
  <build>
     <plugins>
       <!-- fake out maven and install the binary artifact -->

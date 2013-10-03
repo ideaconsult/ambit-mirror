@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>cdk-all</artifactId>
-<version>1.4.16</version>
+<version>1.4.18</version>
   <packaging>pom</packaging>
   <name>cdk-maven</name>
    <url>http://cdk.sourceforge.net</url>
