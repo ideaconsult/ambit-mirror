@@ -45,6 +45,7 @@ public class AutomaticTautomerTests
 	public static final int LPM_TAUTOMER_DESCR_STAT2 = 15;
 	
 	
+	
 	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
 	//public static final int LPM_COMPARE_AMBIT_EXTERNAL = 12;
 	
@@ -155,7 +156,8 @@ public class AutomaticTautomerTests
 					
 					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
 					//"-i","D:/Projects/data015/LogP/XlogP.csv",
-					"-i","D:/Projects/XXXX/frag-data/ncidb.smi",
+					"-i","D:/Projects/data016/ext-validation-set02-TAUTs-110_padel-desc.csv",
+					"-i2","D:/Projects/data016/ext-validation-set02-activity.csv",
 					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
@@ -167,9 +169,9 @@ public class AutomaticTautomerTests
 					"-nInpStr","0",
 					"-nStartStr","0",
 					//"-c","tautomer-calc-descr-average",
-					"-c","structure-stat",
+					"-c","tautomer-fill-exp-values",
 					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
-					"-o","D:/Projects/XXXX/frag-data/ncidb-stat__.txt",
+					"-o","D:/Projects/data016/ext-validation-set02-tautomer-activity.csv",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -564,6 +566,13 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (command.equals("tautomer-fill-exp-values"))
+		{
+			System.out.println("Add experimental data for each tautomer to a data file with all tatuomers : " + inFileName);
+			fillTautomerExperimentalValues();
+			return(0);
+		}
+		
 		if (command.equals("tautomer-calc-descr-average"))
 		{
 			System.out.println("Calculating tatomer descriptor statistics seocnf order: " + inFileName);
@@ -625,6 +634,7 @@ public class AutomaticTautomerTests
 		System.out.println("                 tautomer-fp-stat      calculates fingerprint statisics as function of the tautomers");
 		System.out.println("                 tautomer-descr-stat2  calculates 2nd order descirptor statisics");
 		System.out.println("                 tautomer-calc-descr-average  calculates descirptors' average values");
+		System.out.println("                 tautomer-fill-exp-values  fill experimental value for each tautomer");
 		
 	}	
 	
@@ -926,7 +936,7 @@ public class AutomaticTautomerTests
 			tautomerCalcDescrAverage(line);
 			return(0);
 		}
-		
+				
 		return 0;
 	}
 	
@@ -2033,6 +2043,101 @@ public class AutomaticTautomerTests
 		return 0;
 	}
 	*/
+	
+	public void fillTautomerExperimentalValues()
+	{
+		String splitter = ",";  //it is for csv file format
+		String propertyName = "Activity";
+		
+		openOutputFile();
+		
+		try
+		{	
+			File file = new File(inFileName);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+			
+			File file2 = new File(inFileName2);
+			RandomAccessFile f2 = new RandomAccessFile(file2,"r");			
+			long length2 = f2.length();
+			
+			String line;
+			String newLine;
+			int n = 0;
+			String curPropertyValue = "0.0";			
+			int curCompound = 0;
+			
+			if (f2.getFilePointer() < length2)
+			{
+				//reading first line (descriptor names) and then follows the first compound
+				f2.readLine();
+			}
+			
+			while (f.getFilePointer() < length)
+			{	
+				n++;								
+				line = f.readLine();
+				
+				System.out.println("line " + n);
+				
+				
+				if (n == 1)  //This is the first line with the descriptor names
+				{					
+					newLine = propertyName + "," + line;  
+					output(newLine + endLine);
+					continue;
+				}
+				
+				if (line.trim().equals("")) //empty line
+					continue;
+				
+				//Get the compound number for particular tautomer
+				int split_pos = line.indexOf(splitter);
+				if (split_pos == -1)
+				{
+					System.out.println("Error on line (incorrect splitting) " + n + endLine + line);
+					continue;
+				}
+				
+				String str_compNum = line.substring(0, split_pos);
+				int tempN =  Integer.parseInt(str_compNum);
+				if (tempN != curCompound)
+				{
+					//read next compound value
+					if (f2.getFilePointer() < length2)
+					{	
+						curCompound++;
+						String line2 = f2.readLine();
+						String tokens[] = line2.split(splitter);
+						curPropertyValue = tokens[tokens.length-1];
+						System.out.println("Compound " + curCompound + "   property = " + curPropertyValue);
+					}
+					else
+					{
+						System.out.println("Compounds are finished!");
+						break;
+					}
+				}
+				
+				newLine = curPropertyValue + "," + line;  
+				output(newLine + endLine);
+				
+			}
+			
+			f.close();
+			f2.close();
+		}
+		catch (Exception e)
+		{	
+			System.out.println("~~~~~~~~~~~");
+			System.out.println(e.toString());
+		}
+		
+		
+		
+		closeOutputFile();	
+	}
+	
 	
 	//--------------------------------------------------------
 	
