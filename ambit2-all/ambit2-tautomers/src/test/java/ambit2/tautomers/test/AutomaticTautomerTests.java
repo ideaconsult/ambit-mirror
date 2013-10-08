@@ -573,6 +573,13 @@ public class AutomaticTautomerTests
 			return(0);
 		}
 		
+		if (command.equals("concat-descr-files"))
+		{
+			System.out.println("Concatinates the descriptior files listed in the input file: " + inFileName);
+			this.concatinateDescriptorFiles();
+			return(0);
+		}
+		
 		if (command.equals("tautomer-calc-descr-average"))
 		{
 			System.out.println("Calculating tatomer descriptor statistics seocnf order: " + inFileName);
@@ -635,6 +642,8 @@ public class AutomaticTautomerTests
 		System.out.println("                 tautomer-descr-stat2  calculates 2nd order descirptor statisics");
 		System.out.println("                 tautomer-calc-descr-average  calculates descirptors' average values");
 		System.out.println("                 tautomer-fill-exp-values  fill experimental value for each tautomer");
+		System.out.println("                 concat-descr-files    Concatinates the descriptior files listed in the input file");
+		
 		
 	}	
 	
@@ -2136,6 +2145,74 @@ public class AutomaticTautomerTests
 		
 		
 		closeOutputFile();	
+	}
+	
+	
+	public void concatinateDescriptorFiles()
+	{	
+		openOutputFile();
+		
+		try
+		{	
+			File file = new File(inFileName);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+			int n = 0;
+			
+			while (f.getFilePointer() < length)
+			{									
+				String fileLine = f.readLine().trim();
+				if (fileLine.equals(""))
+					continue;
+				
+				n++;	
+				System.out.println("Processing file " + fileLine);
+				boolean FlagExcludeFirstLine = false;
+				if (n==1)
+					FlagExcludeFirstLine = true;
+				addDescriptorFileToOutputFileToOut(fileLine, FlagExcludeFirstLine);				
+			}
+			
+			f.close();
+			
+		}
+		catch (Exception e)
+		{				
+			System.out.println(e.toString());
+		}
+		
+		closeOutputFile();	
+	}
+	
+	public void addDescriptorFileToOutputFileToOut(String fileName, boolean FlagExcludeFirstLine)
+	{
+		try
+		{	
+			File file = new File(fileName);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+			int n = 0;
+			
+			while (f.getFilePointer() < length)
+			{									
+				String line = f.readLine().trim();
+				n++;	
+				
+				
+				if (n==1)
+					if (FlagExcludeFirstLine)
+						continue;
+				
+				output(line + endLine);
+			}
+			
+			f.close();
+			
+		}
+		catch (Exception e)
+		{				
+			System.out.println(e.toString());
+		}
 	}
 	
 	
