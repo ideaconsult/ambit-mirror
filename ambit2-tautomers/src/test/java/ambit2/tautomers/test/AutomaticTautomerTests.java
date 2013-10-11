@@ -72,6 +72,7 @@ public class AutomaticTautomerTests
 	String cactvsExecPath = "C:/Program Files/cactvs/lib/tclcactvs.exe";
 	String cactvsOutPath = "D:/Projects/data012-tautomers/cactvs";
 	String descrTestSepareator = ",";
+	String temporaryOutFileName = "temporal-out-file-123456789.txt";
 	
 	RandomAccessFile outFile = null;
 	TautomerManager tman;
@@ -133,6 +134,7 @@ public class AutomaticTautomerTests
 	boolean FlagCompareCanonicalTautomer = true;
 	
 	//helpers for tautomer descr/fp stat
+	DescriptorStatShort descrStat0[];
 	DescriptorStatInfo descrStat[];
 	int Temperatures[] = {300, 500, 1000, 2000} ;
 	int curStruct = -1;
@@ -524,7 +526,7 @@ public class AutomaticTautomerTests
 		
 		if (command.equals("tautomer-full-info"))
 		{
-			System.out.println("Calculating tatomer full info: " + inFileName);
+			System.out.println("Calculating tautomer full info: " + inFileName);
 			openOutputFile();
 			setTautomerManager();
 			lineProcessMode = LPM_TAUTOMER_FULL_INFO;
@@ -535,31 +537,30 @@ public class AutomaticTautomerTests
 		
 		if (command.equals("tautomer-descr-stat"))
 		{
-			System.out.println("Calculating tatomer descriptor statistics: " + inFileName);
-			openOutputFile();
-			//setTautomerManager();
+			System.out.println("Calculating tautomer descriptor statistics: " + inFileName);
+			openOutputFile();			
 			lineProcessMode = LPM_TAUTOMER_DESCR_STAT;
 			iterateInputFile();
+			performSecondDescriptorScan(); //This is done for the last compound and its tautomers
 			closeOutputFile();
 			return(0);
 		}
 						
 		if (command.equals("tautomer-fp-stat"))
 		{
-			System.out.println("Calculating tatomer descriptor statistics: " + inFileName);
+			System.out.println("Calculating tautomer fingerprint statistics: " + inFileName);
 			openOutputFile();
-			//setTautomerManager();
 			lineProcessMode = LPM_TAUTOMER_FP_STAT;
 			iterateInputFile();
+			performSecondFPScan(); //This is done for the last compound and its tautomers
 			closeOutputFile();
 			return(0);
 		}
 		
 		if (command.equals("tautomer-descr-stat2"))
 		{
-			System.out.println("Calculating tatomer descriptor statistics seocnf order: " + inFileName);
-			openOutputFile();
-			//setTautomerManager();
+			System.out.println("Calculating tautomer descriptor statistics second order: " + inFileName);
+			openOutputFile();			
 			lineProcessMode = LPM_TAUTOMER_DESCR_STAT2;
 			iterateInputFile();
 			closeOutputFile();
@@ -582,7 +583,7 @@ public class AutomaticTautomerTests
 		
 		if (command.equals("tautomer-calc-descr-average"))
 		{
-			System.out.println("Calculating tatomer descriptor statistics seocnf order: " + inFileName);
+			System.out.println("Calculating tatomer descriptor average values based on different weigting schemes: " + inFileName);
 			openOutputFile();
 			//setTautomerManager();
 			lineProcessMode = LPM_TAUTOMER_CALC_DESCR_AVERAGE;
@@ -749,17 +750,22 @@ public class AutomaticTautomerTests
 		return(0);
 	}
 	
-	int openTempOutputFile()
+	int openTempOutputFile(boolean FlagReadOnly)
 	{
 		try
 		{
-			File file = new File("temporal-out-file-123456789.txt");
-			tempOutFile = new RandomAccessFile(file,"rw");
-			tempOutFile.setLength(0);
+			File file = new File(temporaryOutFileName);
+			if (FlagReadOnly)
+				tempOutFile = new RandomAccessFile(file,"r");
+			else
+			{	
+				tempOutFile = new RandomAccessFile(file,"rw");
+				tempOutFile.setLength(0);
+			}	
 		}
 		catch(Exception e)
 		{
-			System.out.println("Problem opening the temporal out file");
+			System.out.println("Problem opening the temporal out file " + temporaryOutFileName);
 			System.out.println(e.toString());
 		}	
 		
@@ -778,6 +784,7 @@ public class AutomaticTautomerTests
 		{
 			System.out.println("Problem closing the temporal out file");
 			System.out.println(e.toString());
+			return -1;
 		}
 		
 		return(0);
@@ -805,7 +812,7 @@ public class AutomaticTautomerTests
 		}
 		catch (Exception e)
 		{
-			System.out.println("temporam output error: " + e.toString());
+			System.out.println("temporal output error: " + e.toString());
 			return(-1);
 		}
 		return(0);
@@ -1426,11 +1433,15 @@ public class AutomaticTautomerTests
 				if (curStruct != -1)
 					performSecondDescriptorScan();
 				
-				startNewTautomer(tokens);
+				//Start New Tautomer 
+				initTautomerStatistics();
+				processDescrLineFirstScan(tokens);
+				
 			}
 			else
 				processDescrLineFirstScan(tokens);
 			
+			tempOutput(line);
 		}
 		catch(Exception e)
 		{
@@ -1445,49 +1456,133 @@ public class AutomaticTautomerTests
 	{
 		String tokens[] = firstLine.split(descrTestSepareator);
 		int nDescr = tokens.length - 3;
-		descrStat = new DescriptorStatInfo[nDescr];
+		descrStat0 = new DescriptorStatShort[nDescr];
 		for (int i = 0; i < nDescr; i++)
 		{	
-			descrStat[i] = new DescriptorStatInfo();
-			descrStat[i].name = tokens[i+3];
+			descrStat0[i] = new DescriptorStatShort();
+			descrStat0[i].name = tokens[i+3];
 		}
 	}
 	
+	
 	void initTautomerStatistics()
 	{
-		for (int i = 0; i < descrStat.length; i++)
+		for (int i = 0; i < descrStat0.length; i++)
 		{
-			descrStat[i].valueSum = 0;
-			descrStat[i].valueSDSum = 0;
+			descrStat0[i].valueSum = 0;
+			descrStat0[i].valueSDSum = 0;
+			descrStat0[i].nTautomers = 0;
 		}
 	}
+	
 	
 	void performSecondDescriptorScan()
 	{
 		closeTempOutputFile();
+		
+		//valueSum is converted to mean value for each descriptor
+		for (int i = 0; i < descrStat0.length; i++)
+		{
+			if (descrStat0[i].nTautomers > 0)
+				descrStat0[i].valueSum = descrStat0[i].valueSum / descrStat0[i].nTautomers;
+		}
+		
+		openTempOutputFile(true); //read only mode	
+		
+		try {
+			long length = tempOutFile.length();
+			int n = 0;
+
+			while (tempOutFile.getFilePointer() < length)
+			{	
+				n++;
+				String line = tempOutFile.readLine();
+				String tokens[] = line.split(descrTestSepareator);
+				processDescrLineSecondScan(tokens, n);
+			}
+		}
+		catch(Exception e)
+		{	
+			System.out.println("File error in the second scan ");
+			System.out.println(e.toString());
+		}
+		
+		closeTempOutputFile();
+		
+		//Finalize statistics
 		//TODO
 	}
 	
-	void startNewTautomer(String tokens[])
-	{	
-		//TODO
-	}
 	
 	void processDescrLineFirstScan(String tokens[])
 	{
-		//TODO
+		if (tokens.length != (descrStat0.length + 3))
+		{
+			System.out.println("Incorrect number of tokens on line " + curLine);
+			return;
+		}
+		
+		for (int i = 0; i < descrStat0.length; i++)
+		{
+			try 
+			{
+				double dVal = Double.parseDouble(tokens[3+i]);
+				if (dVal != -999)
+				{
+					descrStat0[i].valueSum += dVal;
+					descrStat0[i].nTautomers++;
+				}
+				else
+					System.out.println("Incorrect value for token " + (3+i) + " -->  '" + tokens[3+i] + "'  on line " + curLine);
+			}
+			catch (Exception e)
+			{	
+				System.out.println("Incorrect token " + (3+i) + " -->  '" + tokens[3+i] + "'  on line " + curLine);
+			}
+		}
 	}
 	
-	void processDescrLineSecondScan(String tokens[])
-	{
-		//TODO
+	void processDescrLineSecondScan(String tokens[], int lineNum)
+	{	
+		if (tokens.length != (descrStat0.length + 3))
+		{
+			System.out.println("Incorrect number of tokens on line " + curLine);
+			return;
+		}
+		
+		for (int i = 0; i < descrStat0.length; i++)
+		{
+			try 
+			{
+				double dVal = Double.parseDouble(tokens[3+i]);
+				if (dVal != -999)
+				{
+					descrStat0[i].valueSDSum += (dVal - descrStat0[i].valueSum)*(dVal - descrStat0[i].valueSum);
+				}
+			}
+			catch (Exception e)
+			{	
+				//The error messages are output in the first scan
+				//System.out.println("Incorrect token " + (3+i) + " -->  '" + tokens[3+i] + "'  on line " + curLine);
+			}
+		}
 	}
+	
+	//---------------fp-functionality----------------
+	
 	
 	int tautomerFPStat(String line)
 	{
 		//TODO
 		return 0;
 	}
+	
+
+	void performSecondFPScan()
+	{			
+		//TODO
+	}
+	
 	
 	int tautomerDescrStat2Order(String line)
 	{
@@ -2283,6 +2378,13 @@ public class AutomaticTautomerTests
 	
 	//Helper classes
 	
+	public class DescriptorStatShort
+	{
+		public String name = "";		
+		public double valueSum = 0;
+		public double valueSDSum = 0;
+		public int nTautomers = 0;
+	}
 	
 	public class DescriptorStatInfo
 	{	
