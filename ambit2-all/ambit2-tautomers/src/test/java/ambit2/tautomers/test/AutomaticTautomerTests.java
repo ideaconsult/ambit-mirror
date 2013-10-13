@@ -139,6 +139,7 @@ public class AutomaticTautomerTests
 	int Temperatures[] = {300, 500, 1000, 2000} ;
 	int curStruct = -1;
 	int numTautomers = 0;
+	String curSMILES = "";
 	String curTautomerSmiles = "";
 	RandomAccessFile tempOutFile = null;
 	String extractError = "";
@@ -551,8 +552,7 @@ public class AutomaticTautomerTests
 			System.out.println("Calculating tautomer fingerprint statistics: " + inFileName);
 			openOutputFile();
 			lineProcessMode = LPM_TAUTOMER_FP_STAT;
-			iterateInputFile();
-			performSecondFPScan(); //This is done for the last compound and its tautomers
+			iterateInputFile();			
 			closeOutputFile();
 			return(0);
 		}
@@ -1429,14 +1429,14 @@ public class AutomaticTautomerTests
 		{
 			int strNum = Integer.parseInt(tokens[0]);
 			if (strNum != curStruct)
-			{
-				if (curStruct != -1)
+			{	
+				//Make second scan and finalize statistics 
+				if (curStruct != -1)					
 					performSecondDescriptorScan();
 				
-				//Start New Tautomer 
-				initTautomerStatistics();
-				processDescrLineFirstScan(tokens);
-				
+				//Start New Compound making statistics for its tautomers 
+				curStruct = strNum;
+				initTautomerStatistics(tokens);
 			}
 			else
 				processDescrLineFirstScan(tokens);
@@ -1465,19 +1465,58 @@ public class AutomaticTautomerTests
 	}
 	
 	
-	void initTautomerStatistics()
+	void initTautomerStatistics(String tokens[])
 	{
+		int n = 1;
+		
+		try 
+		{
+			n = Integer.parseInt(tokens[2]);
+		}
+		catch (Exception e)
+		{	
+			System.out.println("Incorrect number of tautomers in token 3  -->  '" + tokens[2] + "'  on line " + curLine);
+		}
+		
+		curSMILES = tokens[1];
 		for (int i = 0; i < descrStat0.length; i++)
 		{
 			descrStat0[i].valueSum = 0;
 			descrStat0[i].valueSDSum = 0;
 			descrStat0[i].nTautomers = 0;
 		}
+		
+		if (n <= 1)
+		{
+			//Only one tautomer is present 
+			processDescrLineFirstScan(tokens);
+			return;
+		}
+				
+		//The structure contains more than one tautomer
+		openTempOutputFile(false); //read only mode
+		
 	}
 	
 	
 	void performSecondDescriptorScan()
 	{
+		if (descrStat0[0].nTautomers == 1)
+		{
+			//Finalize statistics for this compound for the case of one tautomer
+			StringBuffer sb = new StringBuffer();
+			sb.append(curStruct);
+			sb.append(",");
+			sb.append(curSMILES);
+			sb.append(",1");
+			for (int i = 0; i < descrStat0.length; i++)
+				sb.append(",0");
+			
+			output(sb.toString() + endLine);
+			
+			return;
+		}
+		
 		closeTempOutputFile();
 		
 		//valueSum is converted to mean value for each descriptor
@@ -1509,8 +1548,27 @@ public class AutomaticTautomerTests
 		
 		closeTempOutputFile();
 		
-		//Finalize statistics
-		//TODO
+		//Finalize statistics for this compound
+		StringBuffer sb = new StringBuffer();
+		sb.append(curStruct);
+		sb.append(",");
+		sb.append(curSMILES);
+		sb.append(",");
+		sb.append(descrStat0[0].nTautomers);
+		
+		for (int i = 0; i < descrStat0.length; i++)
+		{
+			double rsd = Math.sqrt(descrStat0[i].valueSDSum/descrStat0[i].nTautomers);
+			double m = Math.abs(descrStat0[i].valueSum);
+			if (m < 1.0e-30)
+				m = 1.0e-30; 
+			
+			rsd = rsd / m;
+			sb.append(",");
+			sb.append(rsd);
+		}
+		
+		output(sb.toString() + endLine);
 	}
 	
 	
@@ -1573,16 +1631,116 @@ public class AutomaticTautomerTests
 	
 	int tautomerFPStat(String line)
 	{
-		//TODO
+		if (curLine == 1)
+		{
+			initDescriptorStatistics(line);  
+			return 0;
+		}
+		
+		String tokens[] = line.split(descrTestSepareator);
+		try
+		{
+			int strNum = Integer.parseInt(tokens[0]);
+			if (strNum != curStruct)
+			{	
+				//Make second scan and finalize statistics 
+				if (curStruct != -1)					
+					finalizeFPTautomerStatistics();
+				
+				//Start New Compound making statistics for its tautomers 
+				curStruct = strNum;
+				initFPTautomerStatistics(tokens);
+			}
+			else
+			{	
+				processFPLineFirstScan(tokens); 
+			}	
+			
+			tempOutput(line);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error on line " + curLine);
+			System.out.println(e.toString());
+		}
+		
 		return 0;
 	}
 	
-
-	void performSecondFPScan()
-	{			
-		//TODO
+	
+	void processFPLineFirstScan(String tokens[])
+	{
+		if (tokens.length != (descrStat0.length + 3))
+		{
+			System.out.println("Incorrect number of tokens on line " + curLine);
+			return;
+		}
+		
+		for (int i = 0; i < descrStat0.length; i++)
+		{
+			if (!tokens[3+i].equals("0"))			
+					descrStat0[i].valueSum += 1.0;
+			descrStat0[i].nTautomers++;
+		}
 	}
 	
+	void initFPTautomerStatistics(String tokens[])
+	{
+		int n = 1;
+		
+		try 
+		{
+			n = Integer.parseInt(tokens[2]);
+		}
+		catch (Exception e)
+		{	
+			System.out.println("Incorrect number of tautomers in token 3  -->  '" + tokens[2] + "'  on line " + curLine);
+		}
+		
+		curSMILES = tokens[1];
+		for (int i = 0; i < descrStat0.length; i++)
+		{
+			descrStat0[i].valueSum = 0;
+			descrStat0[i].valueSDSum = 0;
+			descrStat0[i].nTautomers = 0;
+		}
+		
+		if (n <= 1)
+		{
+			//Only one tautomer is present 
+			processFPLineFirstScan(tokens);
+			return;
+		}
+		
+	}
+	
+	
+	void finalizeFPTautomerStatistics()
+	{
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append(curStruct);
+		sb.append(",");
+		sb.append(curSMILES);
+		sb.append(",");
+		sb.append(descrStat0[0].nTautomers);
+
+		for (int i = 0; i < descrStat0.length; i++)
+		{
+			double rsd = Math.sqrt(descrStat0[i].valueSDSum/descrStat0[i].nTautomers);
+			double m = Math.abs(descrStat0[i].valueSum);
+			if (m < 1.0e-30)
+				m = 1.0e-30; 
+
+			rsd = rsd / m;
+			sb.append(",");
+			sb.append(rsd);
+		}
+
+		output(sb.toString() + endLine);
+	}
+
+		
 	
 	int tautomerDescrStat2Order(String line)
 	{
