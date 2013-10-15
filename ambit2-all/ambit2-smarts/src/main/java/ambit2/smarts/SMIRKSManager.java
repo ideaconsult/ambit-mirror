@@ -474,7 +474,8 @@ public class SMIRKSManager
 		{	
 			int pAtNum = reaction.productNotMappedAt.get(i).intValue();
 			IAtom a = reaction.product.getAtom(pAtNum);
-			IAtom a0 = stco.toAtom(a);  //Also atom charge is set here
+			IAtom a0 = stco.toAtom(a);  //Also atom charge is set here			
+			a0.setImplicitHydrogenCount(new Integer(0));  //This is added as a quick patch for some CKD methods that does not check for null pointer
 			newAtoms.add(a0);
 			target.addAtom(a0);
 		}
