@@ -44,6 +44,12 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import org.openscience.cdk.validate.BasicValidator;
+import org.openscience.cdk.validate.CDKValidator;
+import org.openscience.cdk.validate.ValidationReport;
+import org.openscience.cdk.validate.ValidatorEngine;
+import org.openscience.cdk.smiles.SmilesParser;
+
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
@@ -1666,6 +1672,72 @@ public class TestUtilities
 		System.out.println("Mapping C**C against SCCS = " + res);
 	}
 	
+	public void testSMIRKS_JoergTestCase() throws Exception 
+	{
+		ValidatorEngine validatorEngine = new ValidatorEngine();
+		validatorEngine.addValidator(new CDKValidator());
+		validatorEngine.addValidator(new BasicValidator());
+			
+		SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
+		IMolecule m = sp.parseSmiles("c1ccccc1");		
+		
+		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		SMIRKSReaction smr = smrkMan.parse("[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2]([O])[c:3]([O])[c:4][c:5][c:6]1");
+		//SMIRKSReaction smr = smrkMan.parse("[c:1][c:2]>>[c:2][c:1]Cl");
+		
+		/*
+		smrkMan.applyTransformation(m, smr);
+		myValidation(m);
+		ValidationReport r = null;
+		//r = validatorEngine.validateAtomContainer(m);		
+		String transformedSmiles = SmartsHelper.moleculeToSMILES(m);
+		System.out.println(transformedSmiles);
+		
+		if (r == null)
+			System.out.println("ValidationReport is null");
+		else
+		{	
+			System.out.println(r.getErrorCount());
+		}
+		*/
+		
+		
+		
+		IAtomContainerSet rproducts = smrkMan
+				.applyTransformationWithSingleCopyForEachPos(m, null, smr);
+		
+		
+		int containerCount = rproducts.getAtomContainerCount();
+		ValidationReport r = null;
+		for(int i = 0; i < containerCount; i++)
+		{	
+			System.out.println("Product " + i);
+			IAtomContainer act = rproducts.getAtomContainer(i);
+			if (act == null)
+				System.out.println("null pointer product");
+			else
+				System.out.println("atoms " + act.getAtomCount());
+			
+			r = validatorEngine.validateAtomContainer(act);
+		}
+		System.out.println(r.getErrorCount());
+		
+		
+	}
+	
+	public void myValidation(IAtomContainer mol)
+	{
+		System.out.println("Checking the molecule");
+		for (int i = 0; i < mol.getAtomCount(); i++)
+		{
+			IAtom a = mol.getAtom(i);
+			if (a == null)
+				System.out.println("atom #" + i + "is null");
+			else
+				System.out.println("atom #" + i + "  " + a.getSymbol() + "  " + a.getImplicitHydrogenCount());
+		}
+	}
+	
 	public void testCOF_FileOperations(String inFile, String outFile) throws Exception
 	{
 		ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
@@ -1971,7 +2043,9 @@ public class TestUtilities
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C].[H:10][H:11]",
 		//		"[H]Oc1c(C)cc(O[H])cc1");
 		
-		//tu.testSMIRKS("[N:1][C:2]>>[N:1].[C:2]=[O]", "NNC");
+		//tu.testSMIRKS("[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2]([O])[c:3]([O])[c:4][c:5][c:6]1", "c1ccccc1");
+		//tu.testSMIRKS("[C:1][O][Cl:2]>>[C:1][N][Cl:2]", "CCOCl");
+		tu.testSMIRKS_JoergTestCase();
 		
 		//tu.testSMARTSBondToIBond("C=,@C");
 		
@@ -2000,12 +2074,12 @@ public class TestUtilities
 		//tu.testSmartsToQueryToSmarts("[C,$(CO),Br][n+++;R5]n[A--]ACCa*Cl");
 		
 		
-		tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");
-		tu.testSmartsToQueryToSmarts("C!-C:C=C#C@C!@C~C");
-		tu.testSmartsToQueryToSmarts("C!:1CCCCC!:1%1CCCC1");
-		tu.testSmartsToQueryToSmarts("[#6]-c1cccc2-[#7]3C-,:4(=[#7]-[#6]-5-[#7][C]3(=O)[#6]-3-[#6]-[#6]C(=O)[#7]-3-[#6]-c~3cc-,:44ccccc4~[#7]~3[#6]-5~[#8]-c12)c1ccccc1");
+		//tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");
+		//tu.testSmartsToQueryToSmarts("C!-C:C=C#C@C!@C~C");
+		//tu.testSmartsToQueryToSmarts("C!:1CCCCC!:1%1CCCC1");
+		//tu.testSmartsToQueryToSmarts("[#6]-c1cccc2-[#7]3C-,:4(=[#7]-[#6]-5-[#7][C]3(=O)[#6]-3-[#6]-[#6]C(=O)[#7]-3-[#6]-c~3cc-,:44ccccc4~[#7]~3[#6]-5~[#8]-c12)c1ccccc1");
 		
-		tu.testSmartsToQueryToSmarts("C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1");
+		//tu.testSmartsToQueryToSmarts("C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1");
 		
 		
 	}
