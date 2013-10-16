@@ -43,7 +43,7 @@ public class AutomaticTautomerTests
 	public static final int LPM_TAUTOMER_FP_STAT = 13;
 	public static final int LPM_TAUTOMER_CALC_DESCR_AVERAGE = 14;
 	public static final int LPM_TAUTOMER_DESCR_STAT2 = 15;
-	
+	public static final int LPM_TAUTOMER_FP_STAT2 = 16;
 	
 	
 	//public static final int LPM_COMPARE_AMBIT_INTERNAL = 11;
@@ -1716,8 +1716,7 @@ public class AutomaticTautomerTests
 	
 	
 	void finalizeFPTautomerStatistics()
-	{
-		
+	{	
 		StringBuffer sb = new StringBuffer();
 		sb.append(curStruct);
 		sb.append(",");
@@ -1743,6 +1742,12 @@ public class AutomaticTautomerTests
 		
 	
 	int tautomerDescrStat2Order(String line)
+	{
+		//TODO
+		return 0;
+	}
+	
+	int tautomerFPStat2Order(String line)
 	{
 		//TODO
 		return 0;
@@ -2295,17 +2300,6 @@ public class AutomaticTautomerTests
 	
 	
 	
-	
-	
-	
-	/*
-	int compareAmbitToOtherSoftwareTools()
-	{
-		//TODO
-		return 0;
-	}
-	*/
-	
 	public void fillTautomerExperimentalValues()
 	{
 		String splitter = ",";  //it is for csv file format
@@ -2423,7 +2417,7 @@ public class AutomaticTautomerTests
 				boolean FlagExcludeFirstLine = false;
 				if (n==1)
 					FlagExcludeFirstLine = true;
-				addDescriptorFileToOutputFileToOut(fileLine, FlagExcludeFirstLine);				
+				addDescriptorFileToOutputFile(fileLine, FlagExcludeFirstLine);				
 			}
 			
 			f.close();
@@ -2437,7 +2431,7 @@ public class AutomaticTautomerTests
 		closeOutputFile();	
 	}
 	
-	public void addDescriptorFileToOutputFileToOut(String fileName, boolean FlagExcludeFirstLine)
+	public void addDescriptorFileToOutputFile(String fileName, boolean FlagExcludeFirstLine)
 	{
 		try
 		{	
@@ -2466,6 +2460,44 @@ public class AutomaticTautomerTests
 		{				
 			System.out.println(e.toString());
 		}
+	}
+	
+	public void separateDescriptorWeightingScheme()
+	{	
+		try
+		{	
+			File file = new File(inFileName);
+			RandomAccessFile f = new RandomAccessFile(file,"r");			
+			long length = f.length();
+			int n = 0;
+			
+			while (f.getFilePointer() < length)
+			{									
+				String fileLine = f.readLine().trim();
+				if (fileLine.equals(""))
+					continue;
+				
+				n++;	
+				
+				if (n==1)
+				{
+					analyzeDescritporsForSeparation(fileLine);
+					continue;
+				}
+			}
+			
+			f.close();
+			
+		}
+		catch (Exception e)
+		{				
+			System.out.println(e.toString());
+		}
+	}
+	
+	public void analyzeDescritporsForSeparation(String line)
+	{
+		
 	}
 	
 	
