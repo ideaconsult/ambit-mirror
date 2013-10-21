@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.structure2name
+
+Name: ambit2/structure2name/
+Specification-Title: structure2name structures
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.structure2name
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.structure2name
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

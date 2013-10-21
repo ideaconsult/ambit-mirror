@@ -336,6 +336,8 @@
     <!-- 
     <module>ambit2-nano</module>
      -->
+    <module>ambit2-sln</module>
+    <module>ambit2-structure2name</module>
   </modules>
   <distributionManagement>
     <!-- 
