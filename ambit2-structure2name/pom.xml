@@ -7,8 +7,10 @@
   </parent>
   <groupId>ambit2-structure2name</groupId>
   <artifactId>ambit2-structure2name</artifactId>
+  <name>ambit2-structure2name</name>
   <version>2.5.2-SNAPSHOT</version>
-    <dependencies>
+  <description>IUPAC name generation</description>
+  <dependencies>
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-core</artifactId>

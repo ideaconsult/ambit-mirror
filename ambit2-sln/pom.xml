@@ -7,8 +7,10 @@
   </parent>
   <groupId>ambit2-sln</groupId>
   <artifactId>ambit2-sln</artifactId>
+  <name>ambit2-sln</name>
   <version>2.5.2-SNAPSHOT</version>
-    <dependencies>
+  <description>SYBYL line notation support</description>
+  <dependencies>
   	<dependency>
   		<groupId>ambit</groupId>
   		<artifactId>ambit2-core</artifactId>
