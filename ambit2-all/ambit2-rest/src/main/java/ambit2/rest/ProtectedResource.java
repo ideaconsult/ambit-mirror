@@ -95,10 +95,10 @@ public abstract class ProtectedResource extends ServerResource implements IAuthT
 	protected Representation get(Variant variant) throws ResourceException {
         
 		//This header forbids using the page in iframe
-		Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
+		Form headers = (Form) getResponse().getAttributes().get("org.restlet.http.headers");
 		if (headers == null) {
 			headers = new Form();
-			getRequest().getAttributes().put("org.restlet.http.headers", headers);
+			getResponse().getAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.add("X-Frame-Options", "SAMEORIGIN");
 		return super.get(variant);
