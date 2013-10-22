@@ -8,7 +8,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -164,6 +163,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String configProperties = "ambit2/rest/config/config.prop";
 	static final String loggingProperties = "ambit2/rest/config/logging.prop";
  
+	static final String attachDepict = "attach.depict";
 	
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
@@ -405,8 +405,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		/**
 		 * Demos
 		 */
-		Router depict = new DepictDemoRouter(getContext());
-		router.attach(AbstractDepict.resource,depict);
+		if (attachDepictRouter()) {
+			Router depict = new DepictDemoRouter(getContext());
+			router.attach(AbstractDepict.resource,depict);
+		}
 		router.attach("/name2structure",Name2StructureResource.class);	
 	
 		router.attach(OntologyResource.resource,createRDFPlayground());
@@ -970,6 +972,14 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return aafeature==null?null:Boolean.parseBoolean(aafeature);
 		} catch (Exception x) {return false; }
 	}	
+	
+	protected synchronized boolean attachDepictRouter()  {
+		try {
+			String depict = getProperty(attachDepict,ambitProperties);
+			return depict==null?null:Boolean.parseBoolean(depict);
+		} catch (Exception x) {return true; }
+	}	
+
 	protected synchronized String getProperty(String name,String config)  {
 		try {
 			Properties p = properties.get(config);
