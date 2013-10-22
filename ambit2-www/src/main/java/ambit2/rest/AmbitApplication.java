@@ -164,6 +164,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String loggingProperties = "ambit2/rest/config/logging.prop";
  
 	static final String attachDepict = "attach.depict";
+	static final String attachSubstance = "attach.substance";
+	static final String attachToxmatch = "attach.toxmatch";
 	
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
@@ -329,25 +331,28 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		Router datasetRouter = new DatasetsRouter(getContext(),cmpdRouter, tupleRouter, smartsRouter, similarityRouter);
 		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
 
-		router.attach(SubstanceResource.substance,SubstanceResource.class);
-		router.attach(SubstanceResource.substanceID,SubstanceResource.class);
-		/**
-		 *  /substance/{id}/structure
-		 */
-		router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceStructuresResource.structure),SubstanceStructuresResource.class);
-		router.attach(String.format("%s%s/{%s}",
-				SubstanceResource.substanceID,SubstanceStructuresResource.structure,SubstanceStructuresResource.compositionType),
-				SubstanceStructuresResource.class);
-		/**
-		 * /substance/{id}/composition/{type}
-		 */
-		router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceCompositionResource.composition),SubstanceCompositionResource.class);
-		router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceCompositionResource.compositionID),SubstanceCompositionResource.class);
-		
-		//qmap
-		router.attach(QMapResource.qmap,QMapResource.class);
-		router.attach(String.format("%s/{%s}/metadata",QMapResource.qmap,QMapResource.qmapKey),QMapResource.class);
-		router.attach(String.format("%s/{%s}",QMapResource.qmap,QMapResource.qmapKey),QMapDatasetResource.class);
+		if (attachSubstanceRouter()) {
+			router.attach(SubstanceResource.substance,SubstanceResource.class);
+			router.attach(SubstanceResource.substanceID,SubstanceResource.class);
+			/**
+			 *  /substance/{id}/structure
+			 */
+			router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceStructuresResource.structure),SubstanceStructuresResource.class);
+			router.attach(String.format("%s%s/{%s}",
+					SubstanceResource.substanceID,SubstanceStructuresResource.structure,SubstanceStructuresResource.compositionType),
+					SubstanceStructuresResource.class);
+			/**
+			 * /substance/{id}/composition/{type}
+			 */
+			router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceCompositionResource.composition),SubstanceCompositionResource.class);
+			router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceCompositionResource.compositionID),SubstanceCompositionResource.class);
+		}
+		if (attachToxmatchRouter())  {
+			router.attach(QMapSpaceResource.resource,QMapSpaceResource.class);
+			router.attach(QMapResource.qmap,QMapResource.class);
+			router.attach(String.format("%s/{%s}/metadata",QMapResource.qmap,QMapResource.qmapKey),QMapResource.class);
+			router.attach(String.format("%s/{%s}",QMapResource.qmap,QMapResource.qmapKey),QMapDatasetResource.class);
+		}
 
 		//collections
 		MyRouter collectionRouter = new MyRouter(getContext());
@@ -382,10 +387,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 */
 		queryRouter.attach(QueryStructureRelationResource.resource,createRelationsRouter());
 
-		/**
-		 *  /qmap
-		 */
-		router.attach(QMapSpaceResource.resource,QMapSpaceResource.class);
 		/**
 		 *  API extensions from this point on
 		 */
@@ -975,10 +976,24 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	
 	protected synchronized boolean attachDepictRouter()  {
 		try {
-			String depict = getProperty(attachDepict,ambitProperties);
-			return depict==null?null:Boolean.parseBoolean(depict);
+			String attach = getProperty(attachDepict,ambitProperties);
+			return attach==null?null:Boolean.parseBoolean(attach);
 		} catch (Exception x) {return true; }
 	}	
+	
+	protected synchronized boolean attachSubstanceRouter()  {
+		try {
+			String attach = getProperty(attachSubstance,ambitProperties);
+			return attach==null?null:Boolean.parseBoolean(attach);
+		} catch (Exception x) {return true; }
+	}
+	
+	protected synchronized boolean attachToxmatchRouter()  {
+		try {
+			String attach = getProperty(attachToxmatch,ambitProperties);
+			return attach==null?null:Boolean.parseBoolean(attach);
+		} catch (Exception x) {return true; }
+	}
 
 	protected synchronized String getProperty(String name,String config)  {
 		try {
