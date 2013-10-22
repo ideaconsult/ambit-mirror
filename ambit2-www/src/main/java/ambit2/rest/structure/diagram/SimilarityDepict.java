@@ -79,7 +79,7 @@ public class  SimilarityDepict extends AbstractDepict {
 						uri,
 						smiles==null?"":Reference.encode(smiles),
 						smarts==null?"":"&smarts=",
-						smarts==null?"":Reference.encode(smarts),"CDK depiction",String.format(AmbitResource.gplus,uri)),
+						smarts==null?"":Reference.encode(smarts),"CDK depiction",String.format(AbstractDepict.gplus,uri)),
 				String.format("<img id='cdk_%d' src='%s/any?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk_%d')\">",
 						id,
 						uri,

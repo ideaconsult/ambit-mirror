@@ -45,6 +45,13 @@ public class AbstractDepict extends ProtectedResource {
 	protected QueryType qType = QueryType.smiles;
 	protected boolean headless = false;
 	int w = 400; int h = 200;
+	public final static String gplus = "<g:plusone size='small' href='%s'></g:plusone>";
+	private static final String header_gplus = 
+		"<script type='text/javascript' src='https://apis.google.com/js/plusone.js'></script>";
+	private final static String gplus_snippet = "<span style='display:none;' itemprop=\"name\">%s</span><span  style='display:none;' itemprop=\"description\">%s</span><img itemprop=\"image\" src=\"%s\">";
+	protected static String printGPlusSnippet(String title,String description,String image) {
+		return String.format(gplus_snippet,title,description,image==null?"":image);
+	}	
 	/**
 	 * Might be ignored, currently only CDK depict considers the flags
 	 */
@@ -91,7 +98,7 @@ public class AbstractDepict extends ProtectedResource {
 		String displaySmiles = smiles!=null && (smiles.length>0)?smiles[0]:"";
 		b.append(AmbitResource.printWidget(
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
-						uri,smiles==null?"":Reference.encode(smiles[0]),"Daylight depiction",String.format(AmbitResource.gplus,uri)),
+						uri,smiles==null?"":Reference.encode(smiles[0]),"Daylight depiction",String.format(gplus,uri)),
 				String.format("<img id='daylight' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('daylight')\">",
 						uri,
 						Reference.encode(displaySmiles),
@@ -107,7 +114,7 @@ public class AbstractDepict extends ProtectedResource {
 						uri,
 						smiles==null?"":Reference.encode(smiles[0]),
 						smarts==null?"":"&smarts=",
-						smarts==null?"":Reference.encode(smarts),"CDK depiction",String.format(AmbitResource.gplus,uri)),
+						smarts==null?"":Reference.encode(smarts),"CDK depiction",String.format(gplus,uri)),
 				String.format("<img id='cdk' src='%s/any?search=%s&smarts=%s' alt='%s' title='%s' onError=\"hideDiv('cdk')\">",
 						uri,
 						Reference.encode(displaySmiles),
@@ -123,7 +130,7 @@ public class AbstractDepict extends ProtectedResource {
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
 						Reference.encode(displaySmiles),
-						"Cactvs depiction",String.format(AmbitResource.gplus,uri)),
+						"Cactvs depiction",String.format(gplus,uri)),
 				String.format("<img id='cactvs' src='%s?search=%s' alt='%s' title='%s' onError=\"hideDiv('cactvs')\">",
 						uri,
 						Reference.encode(displaySmiles),
@@ -136,7 +143,7 @@ public class AbstractDepict extends ProtectedResource {
 				String.format("<a href='%s?search=%s'>%s</a>&nbsp;<span style='float:right;'>%s</span>",
 						uri,
 						Reference.encode(displaySmiles),
-						"Open Babel depiction",String.format(AmbitResource.gplus,uri)),
+						"Open Babel depiction",String.format(gplus,uri)),
 				String.format("<img id='obabel' src='%s?search=%s&w=%d&h=%d' alt='%s' title='%s' onError=\"hideDiv('obabel')\" width='%d' heigth='%d'>",
 						uri,
 						Reference.encode(displaySmiles),
@@ -156,7 +163,7 @@ public class AbstractDepict extends ProtectedResource {
 						uri,
 						Reference.encode(displaySmiles),
 						recordTypeOption,
-						"PubChem depiction",String.format(AmbitResource.gplus,uri)),
+						"PubChem depiction",String.format(gplus,uri)),
 				String.format("<img id='pubchem' src='%s?search=%s%s' alt='%s' title='%s' onError=\"hideDiv('pubchem')\">",
 						uri,
 						Reference.encode(displaySmiles),
@@ -220,7 +227,7 @@ public class AbstractDepict extends ProtectedResource {
 	    					if (headless) output.write(target);
 	    					else {
 	    						
-		    					AmbitResource.writeTopHeader(output, smiles[0]==null?"2D structural diagram":smiles[0], getRequest(),getResourceRef(getRequest()), AmbitResource.header_gplus,null);
+		    					AmbitResource.writeTopHeader(output, smiles[0]==null?"2D structural diagram":smiles[0], getRequest(),getResourceRef(getRequest()), header_gplus,null);
 		    					writeSearchForm(output, smiles[0]==null?"N/A":smiles[0], getRequest(), "",Method.GET,params);	    					
 		    					output.write(target);
 		    					
@@ -335,7 +342,7 @@ public class AbstractDepict extends ProtectedResource {
 		w.write("</td>");
 		w.write("<td align='right' valign='bottom' width='256px'>");
 	//	w.write("<span style='float:right;'>");
-		w.write(String.format(AmbitResource.gplus,String.format("%s%s?search=%s",baseReference,resource,smiles)));
+		w.write(String.format(gplus,String.format("%s%s?search=%s",baseReference,resource,smiles)));
 		//w.write("<br>");
 		//w.write(String.format(AmbitResource.facebook,String.format("%s%s?smiles=%s",baseReference,resource,smiles)));
 	//	w.write("</span>");		
@@ -378,7 +385,7 @@ public class AbstractDepict extends ProtectedResource {
 	}
 	
 	protected String getGPlusSnippet() {
-	   return AmbitResource.printGPlusSnippet(
+	   return printGPlusSnippet(
 			   "Chemical structure diagram comparison",
 			   "Chemical structure diagram, generated by different providers.",
 			   null
