@@ -61,5 +61,7 @@ smilesParser=false
 defaultDir=
 MAXRECORDS=${ambit.query.maxrecords}
 atomtypes.stop=false
-#attach_depict
+#attach resources
 attach.depict=${attach.depict}
+attach.toxmatch=${attach.toxmatch}
+attach.substance=${attach.substance}
