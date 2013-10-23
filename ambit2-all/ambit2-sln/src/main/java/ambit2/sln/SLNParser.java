@@ -13,6 +13,7 @@ public class SLNParser
 	{
 		this.sln = sln;
 		container = new QueryAtomContainer();
+		container.setProperty("QUERY_TYPE", "SLN");
 		init();
 		parse();
 		return container;
