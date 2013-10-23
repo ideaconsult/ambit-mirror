@@ -1,19 +1,16 @@
 package ambit2.sln;
 
-import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 
 public class SLNParser 
 {
 	String sln;
-	IQueryAtomContainer container;
+	SLNContainer container;
 	
 	
-	public IQueryAtomContainer parse(String sln)
+	public SLNContainer parse(String sln)
 	{
 		this.sln = sln;
-		container = new QueryAtomContainer();
-		container.setProperty("QUERY_TYPE", "SLN");
+		container = new SLNContainer();
 		init();
 		parse();
 		return container;
