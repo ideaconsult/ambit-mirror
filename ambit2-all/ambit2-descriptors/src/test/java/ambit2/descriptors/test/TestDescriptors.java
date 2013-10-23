@@ -63,6 +63,9 @@ public class TestDescriptors extends TestCase
 		smiles.add("CCCC"); 
 		expectedValues.add(new Double(0));
 		
+		smiles.add("ClC(Br)CCC=CO"); 
+		expectedValues.add(new Double(3));
+		
 		performDescriptorTest(descriptor, 0, "HeteroAtomCountDescriptor", smiles, expectedValues, 1.0e-15);
 	}
 	
