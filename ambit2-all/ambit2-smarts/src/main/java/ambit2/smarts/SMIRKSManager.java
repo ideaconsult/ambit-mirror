@@ -12,6 +12,8 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.MoleculeTools;
@@ -32,6 +34,7 @@ public class SMIRKSManager
 	
 	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; 
 	public boolean FlagFilterEquivalentMappings = false;
+	public boolean FlagPreprocessResultStructures = false;
 	
 	
 	
@@ -677,6 +680,13 @@ public class SMIRKSManager
 		}
 		
 		return(cloneMap);
+	}
+	
+	public void preProcessStructure(IAtomContainer mol) throws Exception
+	{
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+		adder.addImplicitHydrogens(mol);
 	}
 	
 	

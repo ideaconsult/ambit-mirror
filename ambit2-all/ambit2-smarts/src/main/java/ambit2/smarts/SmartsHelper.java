@@ -123,9 +123,13 @@ public class SmartsHelper
 			*/
 			Integer implH = at.getImplicitHydrogenCount();
 			if (implH == null)
+			{	
+				sb.append(" implH = null ");
 				implH = new Integer(0);
+			}	
 			
 			sb.append(" NumH=" + ( implH.intValue() + explHAt));
+			
 			if (at.getFlag(CDKConstants.ISAROMATIC)) 
 				sb.append(" aromatic");
 			

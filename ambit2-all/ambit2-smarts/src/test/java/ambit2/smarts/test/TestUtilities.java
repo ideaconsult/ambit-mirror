@@ -1603,6 +1603,22 @@ public class TestUtilities
 		*/
 	}
 	
+	public void testPreprocessing(String smiles) throws Exception
+	{
+		System.out.println("Testing the preprorocessing for " + smiles);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		IAtom a = new Atom();
+		a.setSymbol("C");
+		mol.addAtom(a);
+		
+		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		
+		System.out.println(SmartsHelper.getAtomsAttributes(mol));
+		System.out.println("-------------------");
+		smrkMan.preProcessStructure(mol);
+		System.out.println(SmartsHelper.getAtomsAttributes(mol));
+	}
+	
 	public void test_IBond_Order()
 	{
 		IBond.Order a[] = IBond.Order.values();
@@ -2045,7 +2061,9 @@ public class TestUtilities
 		
 		//tu.testSMIRKS("[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2]([O])[c:3]([O])[c:4][c:5][c:6]1", "c1ccccc1");
 		//tu.testSMIRKS("[C:1][O][Cl:2]>>[C:1][N][Cl:2]", "CCOCl");
-		tu.testSMIRKS_JoergTestCase();
+		//tu.testSMIRKS_JoergTestCase();
+		
+		tu.testPreprocessing("c1ccccc1");
 		
 		//tu.testSMARTSBondToIBond("C=,@C");
 		
