@@ -69,10 +69,10 @@ public class AtomCountRelativeDescriptor  implements IMolecularDescriptor
 	public DescriptorSpecification getSpecification() 
 	{
 		return new DescriptorSpecification(
-				"http://",
+				"AtomCountRelativeDescriptor",
 				this.getClass().getName(),
-				"$Id:  $",
-				"The Chemistry Development Kit");
+				"$Id: AtomCountRelativeDescriptor.java, v 0.1 2013 Elena Urucheva, Nevena Todorova, Nikolay Kochev",
+				"http://ambit.sourceforge.net");
 	}
 
 
