@@ -23,7 +23,7 @@ public class RotatableBondFractionDescriptor implements IMolecularDescriptor
 
 	public void setParameters(Object[] params) throws CDKException
 	{
-		
+
 	}
 
 	public Object[] getParameters() 
@@ -42,17 +42,17 @@ public class RotatableBondFractionDescriptor implements IMolecularDescriptor
 		DescriptorValue dValue = descr.calculate(container);
 		IDescriptorResult res = dValue.getValue();
 		double nRotB = ((IntegerResult)res).intValue();
-		System.out.println("nRotB = " +nRotB);
-		
+		//	System.out.println("nRotB = " +nRotB);
+
 		double nB = container.getBondCount();
-		System.out.println("nB = " +nB);
-		
+		//	System.out.println("nB = " +nB);
+
 		double RBFD = 0.0;
 		if (nB > 0)
 			RBFD = nRotB/nB;;
 
-		return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-				new DoubleResult(RBFD), getDescriptorNames());
+			return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
+					new DoubleResult(RBFD), getDescriptorNames());
 	}
 
 	public IDescriptorResult getDescriptorResultType()
