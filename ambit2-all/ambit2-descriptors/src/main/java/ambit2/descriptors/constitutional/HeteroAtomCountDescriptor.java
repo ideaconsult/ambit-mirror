@@ -1,6 +1,5 @@
 package ambit2.descriptors.constitutional;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
@@ -25,9 +24,10 @@ public class HeteroAtomCountDescriptor implements IMolecularDescriptor
 	public DescriptorSpecification getSpecification()
 	{
 		return new DescriptorSpecification(
-				"HeteroAtomCount",
+				"HeteroAtomCountDescriptor",
 				this.getClass().getName(),
-				"HeteroAtomCountDescriptor.java", "University of Plovdiv 2013");
+				"$Id: HeteroAtomCountDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
+				"http://ambit.sourceforge.net");
 	} 
 
 

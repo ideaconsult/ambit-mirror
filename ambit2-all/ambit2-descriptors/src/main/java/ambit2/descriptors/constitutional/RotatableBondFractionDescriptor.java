@@ -15,9 +15,10 @@ public class RotatableBondFractionDescriptor implements IMolecularDescriptor
 	public DescriptorSpecification getSpecification()
 	{
 		return new DescriptorSpecification(
-				"RotatableBondFraction",
+				"RotatableBondFractionDescriptor",
 				this.getClass().getName(),
-				"RotatableBondFractionDescriptor.java","PU");
+				"$Id: RotatableBondFractionDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
+				"http://ambit.sourceforge.net");
 	}
 
 	public void setParameters(Object[] params) throws CDKException

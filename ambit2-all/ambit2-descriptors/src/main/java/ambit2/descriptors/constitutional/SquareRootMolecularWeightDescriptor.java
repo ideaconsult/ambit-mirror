@@ -15,10 +15,10 @@ public class SquareRootMolecularWeightDescriptor
 	public DescriptorSpecification getSpecification() 
 	{
 		return new DescriptorSpecification(
-				"SquareRootMolecularWeight",
+				"SquareRootMolecularWeightDescriptor",
 				this.getClass().getName(),
-				"SquareRootMolecularWeightDescriptor.java",
-				"PU");
+				"$Id: SquareRootMolecularWeightDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
+				"http://ambit.sourceforge.net");
 	}
 
 	public void setParameters(Object[] params) throws CDKException 

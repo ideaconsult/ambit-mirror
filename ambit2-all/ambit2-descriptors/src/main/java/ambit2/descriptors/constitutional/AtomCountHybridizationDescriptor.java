@@ -43,7 +43,11 @@ public class AtomCountHybridizationDescriptor implements IMolecularDescriptor
 
 	public DescriptorSpecification getSpecification() 
 	{
-		return null;
+		return new DescriptorSpecification(
+				"AtomCountHybridizationDescriptor",
+				this.getClass().getName(),
+				"$Id: AtomCountHybridizationDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
+				"http://ambit.sourceforge.net");
 	}
 
 	public void setParameters(Object[] arg0) throws CDKException

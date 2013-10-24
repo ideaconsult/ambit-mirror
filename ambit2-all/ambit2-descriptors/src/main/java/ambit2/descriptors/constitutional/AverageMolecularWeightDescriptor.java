@@ -17,9 +17,10 @@ public class AverageMolecularWeightDescriptor implements IMolecularDescriptor
 	public DescriptorSpecification getSpecification()
 	{
 		return new DescriptorSpecification(
-				"AverageMolecularWeightDescriptor.java",
+				"AverageMolecularWeightDescriptor",
 				this.getClass().getName(),
-				"AverageMolecularWeight","University of Plovdiv, 2013");
+				"$Id: AverageMolecularWeightDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
+				"http://ambit.sourceforge.net");
 	}
 
 	public void setParameters(Object[] params) throws CDKException
