@@ -51,6 +51,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 
@@ -132,6 +133,8 @@ public class SmartsHelper
 			
 			if (at.getFlag(CDKConstants.ISAROMATIC)) 
 				sb.append(" aromatic");
+			
+			sb.append("   " + at.getAtomTypeName());
 			
 			//Integer stereo = at.getStereoParity();			
 			//sb.append(" stereo = " + stereo);
@@ -642,6 +645,23 @@ public class SmartsHelper
 				bond.getAtom(0).setFlag(CDKConstants.ISAROMATIC, true);
 				bond.getAtom(1).setFlag(CDKConstants.ISAROMATIC, true);
 			}
+	}
+	
+	public static void preProcessStructure(IAtomContainer mol) throws Exception
+	{
+		preProcessStructure(mol, true, true);
+	}
+	
+	public static void preProcessStructure(IAtomContainer mol, boolean HandleAromaticity, boolean AddExplicitHAtoms) throws Exception
+	{
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+		
+		if (AddExplicitHAtoms)
+			adder.addImplicitHydrogens(mol);
+		
+		if (HandleAromaticity)
+			CDKHueckelAromaticityDetector.detectAromaticity(mol);
 	}
 	
 	

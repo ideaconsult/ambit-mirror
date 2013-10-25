@@ -34,8 +34,9 @@ public class SMIRKSManager
 	
 	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; 
 	public boolean FlagFilterEquivalentMappings = false;
-	public boolean FlagPreprocessResultStructures = false;
-	
+	public boolean FlagPreprocessResultStructures = false;  //Triggers an optional preprocessing
+	public boolean FlagCheckAromaticityInPreprocessing = true;
+	public boolean FlagAddImplicitHAtomsInPreprocessing = true;
 	
 	
 	public SMIRKSManager(IChemObjectBuilder builder)
@@ -201,6 +202,7 @@ public class SMIRKSManager
 				
 		if (FlagSSMode ==  SmartsConst.SSM_SINGLE)
 		{
+			//TODO  - currently nothing is done
 			return false;
 		}
 		
@@ -233,6 +235,9 @@ public class SMIRKSManager
 				throw e;
 			}
 			
+			if (FlagPreprocessResultStructures)
+				SmartsHelper.preProcessStructure(target, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
+			
 			return applied;
 		}
 		
@@ -258,6 +263,9 @@ public class SMIRKSManager
 							throw e;
 						}
 						
+						if (FlagPreprocessResultStructures)
+							SmartsHelper.preProcessStructure(target, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
+						
 						return applied;
 				}
 			}
@@ -282,6 +290,9 @@ public class SMIRKSManager
 			
 			AtomConfigurator  cfg = new AtomConfigurator();
 			cfg.process(target);
+			
+			if (FlagPreprocessResultStructures)
+				SmartsHelper.preProcessStructure(target, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
 			
 			return applied;
 		}
@@ -342,7 +353,9 @@ public class SMIRKSManager
 		
 		if (rMaps.size()==1)
 		{	
-			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, rMaps, reaction);  
+			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, rMaps, reaction);
+			if (FlagPreprocessResultStructures)
+				SmartsHelper.preProcessStructure(product, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
 			resSet.addAtomContainer(product);
 			return(resSet);
 		}
@@ -373,6 +386,8 @@ public class SMIRKSManager
 			
 			//Apply the transformation for the particular combination of locations with cloning
 			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, combMaps, reaction);  
+			if (FlagPreprocessResultStructures)
+				SmartsHelper.preProcessStructure(product, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
 			resSet.addAtomContainer(product);
 			
 			
@@ -391,8 +406,7 @@ public class SMIRKSManager
 			}
 			
 		}
-		while (digit < comb.length);		
-		
+		while (digit < comb.length);
 		
 		return resSet;
 	}
@@ -440,6 +454,8 @@ public class SMIRKSManager
 			Vector<Vector<IAtom>> vMaps = new Vector<Vector<IAtom>>(); 
 			vMaps.add(rMaps.get(i));
 			IAtomContainer product = applyTransformationsAtLocationsWithCloning(target, vMaps, reaction);  
+			if (FlagPreprocessResultStructures)
+				SmartsHelper.preProcessStructure(product, FlagCheckAromaticityInPreprocessing, FlagAddImplicitHAtomsInPreprocessing);
 			resSet.addAtomContainer(product);
 		}
 		
@@ -478,7 +494,7 @@ public class SMIRKSManager
 			int pAtNum = reaction.productNotMappedAt.get(i).intValue();
 			IAtom a = reaction.product.getAtom(pAtNum);
 			IAtom a0 = stco.toAtom(a);  //Also atom charge is set here			
-			a0.setImplicitHydrogenCount(new Integer(0));  //This is added as a quick patch for some CKD methods that does not check for null pointer
+			//a0.setImplicitHydrogenCount(new Integer(0));  //This is added as a quick patch for some CKD methods that does not check for null pointer
 			newAtoms.add(a0);
 			target.addAtom(a0);
 		}
@@ -682,13 +698,7 @@ public class SMIRKSManager
 		return(cloneMap);
 	}
 	
-	public void preProcessStructure(IAtomContainer mol) throws Exception
-	{
-		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
-		adder.addImplicitHydrogens(mol);
-	}
-	
+		
 	
 	//Helper
 	

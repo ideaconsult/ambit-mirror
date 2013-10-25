@@ -50,6 +50,7 @@ import org.openscience.cdk.validate.ValidationReport;
 import org.openscience.cdk.validate.ValidatorEngine;
 import org.openscience.cdk.smiles.SmilesParser;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
@@ -1603,20 +1604,34 @@ public class TestUtilities
 		*/
 	}
 	
-	public void testPreprocessing(String smiles) throws Exception
+	public void testPreprocessing(String smiles, boolean FlagConnectAtom) throws Exception
 	{
 		System.out.println("Testing the preprorocessing for " + smiles);
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
-		IAtom a = new Atom();
-		a.setSymbol("C");
-		mol.addAtom(a);
 		
-		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		if (FlagConnectAtom)
+		{
+			//Create an atoms and connect it to the first atom
+			IAtom a = new Atom();
+			a.setSymbol("C");		
+			mol.addAtom(a);
+
+			IBond b = MoleculeTools.newBond(mol.getBuilder());
+			IAtom a01[] = new IAtom[2];
+			a01[0] = a;
+			a01[1] = mol.getFirstAtom();
+			b.setAtoms(a01);
+			b.setOrder(IBond.Order.SINGLE);
+			mol.addBond(b);
+		}
+		//SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		
 		System.out.println(SmartsHelper.getAtomsAttributes(mol));
+		System.out.println(SmartsHelper.getBondAttributes(mol));
 		System.out.println("-------------------");
-		smrkMan.preProcessStructure(mol);
+		SmartsHelper.preProcessStructure(mol, false, false);
 		System.out.println(SmartsHelper.getAtomsAttributes(mol));
+		System.out.println(SmartsHelper.getBondAttributes(mol));
 	}
 	
 	public void test_IBond_Order()
@@ -1701,11 +1716,13 @@ public class TestUtilities
 		SMIRKSReaction smr = smrkMan.parse("[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2]([O])[c:3]([O])[c:4][c:5][c:6]1");
 		//SMIRKSReaction smr = smrkMan.parse("[c:1][c:2]>>[c:2][c:1]Cl");
 		
+		smrkMan.FlagPreprocessResultStructures = true;
+		
 		/*
 		smrkMan.applyTransformation(m, smr);
 		myValidation(m);
 		ValidationReport r = null;
-		//r = validatorEngine.validateAtomContainer(m);		
+		r = validatorEngine.validateAtomContainer(m);		
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(m);
 		System.out.println(transformedSmiles);
 		
@@ -1716,6 +1733,7 @@ public class TestUtilities
 			System.out.println(r.getErrorCount());
 		}
 		*/
+		
 		
 		
 		
@@ -2061,9 +2079,9 @@ public class TestUtilities
 		
 		//tu.testSMIRKS("[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2]([O])[c:3]([O])[c:4][c:5][c:6]1", "c1ccccc1");
 		//tu.testSMIRKS("[C:1][O][Cl:2]>>[C:1][N][Cl:2]", "CCOCl");
-		//tu.testSMIRKS_JoergTestCase();
+		tu.testSMIRKS_JoergTestCase();
 		
-		tu.testPreprocessing("c1ccccc1");
+		//tu.testPreprocessing("c1ccccc1", true);
 		
 		//tu.testSMARTSBondToIBond("C=,@C");
 		
