@@ -144,6 +144,10 @@ public class AutomaticTautomerTests
 	RandomAccessFile tempOutFile = null;
 	String extractError = "";
 	
+	RandomAccessFile fSchemes[] = null;
+	String firstLineForSeparatedWeightingSchemes = null;
+	
+	
 	
 	public static void main(String[] args)
 	{
@@ -813,6 +817,20 @@ public class AutomaticTautomerTests
 		catch (Exception e)
 		{
 			System.out.println("temporal output error: " + e.toString());
+			return(-1);
+		}
+		return(0);
+	}
+	
+	int output(String data, RandomAccessFile f)
+	{
+		try
+		{
+			f.write(data.getBytes());
+		}
+		catch (Exception e)
+		{
+			System.out.println("output error: " + e.toString());
 			return(-1);
 		}
 		return(0);
@@ -2462,7 +2480,7 @@ public class AutomaticTautomerTests
 		}
 	}
 	
-	public void separateDescriptorWeightingScheme()
+	public void separateDescriptorWeightingSchemes()
 	{	
 		try
 		{	
@@ -2470,6 +2488,8 @@ public class AutomaticTautomerTests
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
 			long length = f.length();
 			int n = 0;
+			
+			
 			
 			while (f.getFilePointer() < length)
 			{									
@@ -2481,11 +2501,25 @@ public class AutomaticTautomerTests
 				
 				if (n==1)
 				{
-					analyzeDescritporsForSeparation(fileLine);
+					String schemes[] = analyzeDescritporsForSeparation(fileLine);
+					fSchemes = new RandomAccessFile[schemes.length];
+					
+					
+					//Creating an output file for each weighting scheme and writting the first line
+					for (int i = 0; i < fSchemes.length; i++)
+					{	
+						fSchemes[i] = new RandomAccessFile(outFileName + schemes[i] + "csv","rw");
+						output(firstLineForSeparatedWeightingSchemes,fSchemes[i]);
+					}	
 					continue;
 				}
+				
+				//TODO
 			}
 			
+			if (fSchemes != null)
+				for (int i = 0; i < fSchemes.length; i++)
+					fSchemes[i].close();
 			f.close();
 			
 		}
@@ -2495,9 +2529,10 @@ public class AutomaticTautomerTests
 		}
 	}
 	
-	public void analyzeDescritporsForSeparation(String line)
+	public String[] analyzeDescritporsForSeparation(String line)
 	{
-		
+		//TODO
+		return null;
 	}
 	
 	
