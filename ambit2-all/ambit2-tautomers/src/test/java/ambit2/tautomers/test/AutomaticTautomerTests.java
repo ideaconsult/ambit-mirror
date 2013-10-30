@@ -164,8 +164,9 @@ public class AutomaticTautomerTests
 					
 					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
 					//"-i","D:/Projects/data015/LogP/XlogP.csv",
-					"-i","D:/Projects/data016/ext-validation-set02-TAUTs-110_padel-desc.csv",
+					"-i","D:/Projects/data016/ext-validation-set02-TAUTs-110_padel-desc-MEAN.csv",
 					"-i2","D:/Projects/data016/ext-validation-set02-activity.csv",
+					
 					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",					
 					//"-i","D:/Projects/data012-tautomers/nci-filtered_max_cyclo_4.smi",
@@ -177,9 +178,9 @@ public class AutomaticTautomerTests
 					"-nInpStr","0",
 					"-nStartStr","0",
 					//"-c","tautomer-calc-descr-average",
-					"-c","tautomer-fill-exp-values",
+					"-c","separate-weighted-descr",
 					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
-					"-o","D:/Projects/data016/ext-validation-set02-tautomer-activity.csv",
+					"-o","D:/Projects/data016/my-test",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -582,7 +583,7 @@ public class AutomaticTautomerTests
 		if (command.equals("concat-descr-files"))
 		{
 			System.out.println("Concatinates the descriptior files listed in the input file: " + inFileName);
-			this.concatinateDescriptorFiles();
+			concatinateDescriptorFiles();
 			return(0);
 		}
 		
@@ -597,6 +598,15 @@ public class AutomaticTautomerTests
 			closeOutputFile();
 			return(0);
 		}
+		
+		if (command.equals("separate-weighted-descr"))
+		{
+			System.out.println("Separation of the calculated weighted descriptors from " + inFileName 
+					+ " into several out files for each weighting scheme");
+			separateDescriptorWeightingSchemes();
+			return(0);
+		}
+		
 		
 		
 		
@@ -649,7 +659,7 @@ public class AutomaticTautomerTests
 		System.out.println("                 tautomer-calc-descr-average  calculates descirptors' average values");
 		System.out.println("                 tautomer-fill-exp-values  fill experimental value for each tautomer");
 		System.out.println("                 concat-descr-files    Concatinates the descriptior files listed in the input file");
-		
+		System.out.println("                 separate-weighted-descr  Calculated weighted descriptors are split into separate files");
 		
 	}	
 	
@@ -2498,6 +2508,8 @@ public class AutomaticTautomerTests
 					continue;
 				
 				n++;	
+				if ((n % 5) == 0)
+					System.out.println("line " + n);
 				
 				if (n==1)
 				{
@@ -2509,11 +2521,11 @@ public class AutomaticTautomerTests
 					}
 					
 					
-					//Creating an output file for each weighting scheme and writting the first line
+					//Creating an output file for each weighting scheme and writing the first line
 					fSchemes = new RandomAccessFile[schemes.length];
 					for (int i = 0; i < fSchemes.length; i++)					{	
-						fSchemes[i] = new RandomAccessFile(outFileName + "_"+schemes[i] + "csv","rw");
-						output(firstLineForSeparatedWeightingSchemes,fSchemes[i]);
+						fSchemes[i] = new RandomAccessFile(outFileName + "_"+schemes[i] + ".csv","rw");
+						output(firstLineForSeparatedWeightingSchemes + endLine,fSchemes[i]);
 					}	
 					continue;
 				}
@@ -2581,8 +2593,11 @@ public class AutomaticTautomerTests
 		for (int i = 3; i < tokens.length; i++)
 		{
 			int index = (i-3)%fSchemes.length;
-			output(tokens[i],fSchemes[index]);
+			output(","+tokens[i],fSchemes[index]);
 		}
+		
+		for (int i = 0; i < fSchemes.length; i++)
+			output(endLine,fSchemes[i]);
 	}
 	
 	
