@@ -2509,21 +2509,16 @@ public class AutomaticTautomerTests
 					}
 					
 					
-					fSchemes = new RandomAccessFile[schemes.length];
-					
-					
 					//Creating an output file for each weighting scheme and writting the first line
-					for (int i = 0; i < fSchemes.length; i++)
-					{	
+					fSchemes = new RandomAccessFile[schemes.length];
+					for (int i = 0; i < fSchemes.length; i++)					{	
 						fSchemes[i] = new RandomAccessFile(outFileName + "_"+schemes[i] + "csv","rw");
 						output(firstLineForSeparatedWeightingSchemes,fSchemes[i]);
 					}	
 					continue;
 				}
-				
-				
-				//TODO
-				//Process line
+						
+				processLineToSeparateSchemes(fileLine);
 			}
 			
 			if (fSchemes != null)
@@ -2546,11 +2541,11 @@ public class AutomaticTautomerTests
 		if (tokens.length <= 3)
 			return null;
 		
-		for (int i = 0; i < 3; i++)
-			sb.append(tokens[i] + ",");
+		String headerToken = tokens[0]+","+tokens[1]+","+tokens[2];		
+		sb.append(headerToken);
 			
 		String baseDescr = tokens[3];
-		sb.append(baseDescr);
+		sb.append("," + baseDescr);
 		mySchemes.add("");
 		
 		for (int i = 4; i < tokens.length; i++)
@@ -2563,20 +2558,31 @@ public class AutomaticTautomerTests
 				break;
 		}
 		
-		
-		if (tokens.length > 3+mySchemes.size())
-		{	
-			
-			baseDescr = tokens[3 + mySchemes.size()];
-			for (int i = 3+mySchemes.size(); i < tokens.length; i++)
-			{
-				//TODO
-			}
-		}	
-		
-		
+		int n = 3 + mySchemes.size();
+		while (n < tokens.length)
+		{
+			baseDescr = tokens[n];
+			sb.append("," + baseDescr);
+			n += mySchemes.size();
+		}			
+				
 		firstLineForSeparatedWeightingSchemes = sb.toString(); 
 		return mySchemes.toArray(new String[]{});
+	}
+	
+	public void processLineToSeparateSchemes(String line)
+	{
+		String tokens[] = line.split(",");
+		
+		String headerToken = tokens[0]+","+tokens[1]+","+tokens[2];
+		for (int i = 0; i < fSchemes.length; i++)
+			output(headerToken,fSchemes[i]);
+			
+		for (int i = 3; i < tokens.length; i++)
+		{
+			int index = (i-3)%fSchemes.length;
+			output(tokens[i],fSchemes[index]);
+		}
 	}
 	
 	
