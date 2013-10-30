@@ -73,7 +73,7 @@ public class AutomaticTautomerTests
 	String cactvsExecPath = "C:/Program Files/cactvs/lib/tclcactvs.exe";
 	String cactvsOutPath = "D:/Projects/data012-tautomers/cactvs";
 	String descrTestSepareator = ",";
-	String temporaryOutFileName = "temporal-out-file-123456789.txt";
+	String temporaryOutFileName = "D:/Projects/data016/temporal-out-file-123456789.txt";
 	
 	RandomAccessFile outFile = null;
 	TautomerManager tman;
@@ -164,7 +164,7 @@ public class AutomaticTautomerTests
 					
 					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
 					//"-i","D:/Projects/data015/LogP/XlogP.csv",
-					"-i","D:/Projects/data016/ext-validation-set02-TAUTs-110_padel-desc-MEAN.csv",
+					"-i","D:/Projects/data016/nci-1-1722-Padel-DESC.csv",
 					"-i2","D:/Projects/data016/ext-validation-set02-activity.csv",
 					
 					
@@ -178,9 +178,9 @@ public class AutomaticTautomerTests
 					"-nInpStr","0",
 					"-nStartStr","0",
 					//"-c","tautomer-calc-descr-average",
-					"-c","separate-weighted-descr",
+					"-c","tautomer-descr-stat",
 					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
-					"-o","D:/Projects/data016/my-test",
+					"-o","D:/Projects/data016/descr-stat.csv",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -814,6 +814,7 @@ public class AutomaticTautomerTests
 		catch (Exception e)
 		{
 			System.out.println("output error: " + e.toString());
+			
 			return(-1);
 		}
 		return(0);
@@ -821,6 +822,7 @@ public class AutomaticTautomerTests
 	
 	int tempOutput(String data)
 	{
+		//System.out.println("***");
 		try
 		{
 			tempOutFile.write(data.getBytes());
@@ -1466,11 +1468,13 @@ public class AutomaticTautomerTests
 				//Start New Compound making statistics for its tautomers 
 				curStruct = strNum;
 				initTautomerStatistics(tokens);
+				//System.out.println("New structs " + strNum + "  at line " + curLine);
 			}
 			else
 				processDescrLineFirstScan(tokens);
 			
-			tempOutput(line);
+			if (descrStat0[0].nTautomers > 1) //The file is not opened when there is only one tautomer  
+				tempOutput(line+endLine);
 		}
 		catch(Exception e)
 		{
@@ -1523,7 +1527,7 @@ public class AutomaticTautomerTests
 		}
 				
 		//The structure contains more than one tautomer
-		openTempOutputFile(false); //read only mode
+		openTempOutputFile(false); //read/write mode
 		
 	}
 	
