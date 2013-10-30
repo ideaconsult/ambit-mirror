@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
 import java.util.Vector;
+import java.util.ArrayList;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -2489,8 +2490,7 @@ public class AutomaticTautomerTests
 			long length = f.length();
 			int n = 0;
 			
-			
-			
+						
 			while (f.getFilePointer() < length)
 			{									
 				String fileLine = f.readLine().trim();
@@ -2502,19 +2502,28 @@ public class AutomaticTautomerTests
 				if (n==1)
 				{
 					String schemes[] = analyzeDescritporsForSeparation(fileLine);
+					if (schemes == null)
+					{
+						System.out.println("Incorrect descriptors and header line");
+						break;
+					}
+					
+					
 					fSchemes = new RandomAccessFile[schemes.length];
 					
 					
 					//Creating an output file for each weighting scheme and writting the first line
 					for (int i = 0; i < fSchemes.length; i++)
 					{	
-						fSchemes[i] = new RandomAccessFile(outFileName + schemes[i] + "csv","rw");
+						fSchemes[i] = new RandomAccessFile(outFileName + "_"+schemes[i] + "csv","rw");
 						output(firstLineForSeparatedWeightingSchemes,fSchemes[i]);
 					}	
 					continue;
 				}
 				
+				
 				//TODO
+				//Process line
 			}
 			
 			if (fSchemes != null)
@@ -2531,8 +2540,43 @@ public class AutomaticTautomerTests
 	
 	public String[] analyzeDescritporsForSeparation(String line)
 	{
-		//TODO
-		return null;
+		StringBuffer sb = new StringBuffer();
+		ArrayList<String> mySchemes = new ArrayList<String>();
+		String tokens[] = line.split(",");
+		if (tokens.length <= 3)
+			return null;
+		
+		for (int i = 0; i < 3; i++)
+			sb.append(tokens[i] + ",");
+			
+		String baseDescr = tokens[3];
+		sb.append(baseDescr);
+		mySchemes.add("");
+		
+		for (int i = 4; i < tokens.length; i++)
+		{	
+			if (tokens[i].startsWith(baseDescr))
+			{	
+				mySchemes.add(tokens[i].substring(baseDescr.length()));
+			}
+			else
+				break;
+		}
+		
+		
+		if (tokens.length > 3+mySchemes.size())
+		{	
+			
+			baseDescr = tokens[3 + mySchemes.size()];
+			for (int i = 3+mySchemes.size(); i < tokens.length; i++)
+			{
+				//TODO
+			}
+		}	
+		
+		
+		firstLineForSeparatedWeightingSchemes = sb.toString(); 
+		return mySchemes.toArray(new String[]{});
 	}
 	
 	
