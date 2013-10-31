@@ -164,7 +164,7 @@ public class AutomaticTautomerTests
 					
 					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
 					//"-i","D:/Projects/data015/LogP/XlogP.csv",
-					"-i","D:/Projects/data016/nci-1-1722-Padel-DESC.csv",
+					"-i","D:/Projects/data016/nci-1-1722-Padel-EStateFingerprinter.csv",
 					"-i2","D:/Projects/data016/ext-validation-set02-activity.csv",
 					
 					
@@ -178,9 +178,9 @@ public class AutomaticTautomerTests
 					"-nInpStr","0",
 					"-nStartStr","0",
 					//"-c","tautomer-calc-descr-average",
-					"-c","tautomer-descr-stat",
+					"-c","tautomer-fp-stat",
 					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
-					"-o","D:/Projects/data016/descr-stat.csv",
+					"-o","D:/Projects/data016/fp-stat.csv",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -1756,7 +1756,6 @@ public class AutomaticTautomerTests
 		}		
 		
 		processFPFirstLine(tokens);
-		
 	}
 	
 	
@@ -1775,22 +1774,22 @@ public class AutomaticTautomerTests
 		{
 			for (int i = 0; i < descrStat0.length; i++)
 				sb.append(",0"); //automatically rsd = 0 is assigned
-			
-			return;
 		}
-		
-
-		for (int i = 0; i < descrStat0.length; i++)
+		else
 		{
-			
-			double pdb;    //percent (part) of different bits
-			if (descrStat0[i].originalValue == 0.0)
-				pdb = (descrStat0[i].nTautomers - descrStat0[i].valueSum) / descrStat0[i].nTautomers;  
-			else
-				pdb = descrStat0[i].valueSum / descrStat0[i].nTautomers;
-			
-			sb.append(",");
-			sb.append(pdb);
+			for (int i = 0; i < descrStat0.length; i++)
+			{
+				double pdb;    //percent (part) of bits which are different from the originbal bit 
+				double pb1 = descrStat0[i].valueSum / descrStat0[i].nTautomers;  //this is the percent of 1-bits       
+				
+				if (descrStat0[i].originalValue == 0.0)
+					pdb = pb1;  
+				else
+					pdb = (1.00 - pb1); //(1.00-pb1) is the percent of 0-bits i.e. those which are different from the original 1-bit in this case
+					
+				sb.append(",");
+				sb.append(pdb);
+			}
 		}
 
 		output(sb.toString() + endLine);
