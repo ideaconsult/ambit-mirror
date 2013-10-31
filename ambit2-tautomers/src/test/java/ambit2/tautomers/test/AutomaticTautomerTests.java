@@ -1676,7 +1676,7 @@ public class AutomaticTautomerTests
 			int strNum = Integer.parseInt(tokens[0]);
 			if (strNum != curStruct)
 			{	
-				//Make second scan and finalize statistics 
+				//Finalize statistics 
 				if (curStruct != -1)					
 					finalizeFPTautomerStatistics();
 				
@@ -1686,10 +1686,9 @@ public class AutomaticTautomerTests
 			}
 			else
 			{	
-				processFPLineFirstScan(tokens); 
-			}	
+				processFPLine(tokens); 
+			}
 			
-			tempOutput(line);
 		}
 		catch(Exception e)
 		{
@@ -1701,7 +1700,7 @@ public class AutomaticTautomerTests
 	}
 	
 	
-	void processFPLineFirstScan(String tokens[])
+	void processFPLine(String tokens[])
 	{
 		if (tokens.length != (descrStat0.length + 3))
 		{
@@ -1714,6 +1713,25 @@ public class AutomaticTautomerTests
 			if (!tokens[3+i].equals("0"))			
 					descrStat0[i].valueSum += 1.0;
 			descrStat0[i].nTautomers++;
+		}
+	}
+	
+	void processFPFirstLine(String tokens[])
+	{
+		if (tokens.length != (descrStat0.length + 3))
+		{
+			System.out.println("Incorrect number of tokens on line " + curLine);
+			return;
+		}
+		
+		for (int i = 0; i < descrStat0.length; i++)
+		{
+			//TODO
+			/*
+			if (!tokens[3+i].equals("0"))			
+					descrStat0[i].valueSum += 1.0;
+			descrStat0[i].nTautomers++;
+			*/
 		}
 	}
 	
@@ -1741,7 +1759,7 @@ public class AutomaticTautomerTests
 		if (n <= 1)
 		{
 			//Only one tautomer is present 
-			processFPLineFirstScan(tokens);
+			processFPLine(tokens);
 			return;
 		}
 		
@@ -1759,6 +1777,7 @@ public class AutomaticTautomerTests
 
 		for (int i = 0; i < descrStat0.length; i++)
 		{
+			/*
 			double rsd = Math.sqrt(descrStat0[i].valueSDSum/descrStat0[i].nTautomers);
 			double m = Math.abs(descrStat0[i].valueSum);
 			if (m < 1.0e-30)
@@ -1767,12 +1786,13 @@ public class AutomaticTautomerTests
 			rsd = rsd / m;
 			sb.append(",");
 			sb.append(rsd);
+			*/
 		}
 
 		output(sb.toString() + endLine);
 	}
 
-		
+	//----------------------------------------------------------------	
 	
 	int tautomerDescrStat2Order(String line)
 	{
@@ -2675,6 +2695,7 @@ public class AutomaticTautomerTests
 	public class DescriptorStatShort
 	{
 		public String name = "";		
+		public double originalValue;
 		public double valueSum = 0;
 		public double valueSDSum = 0;
 		public int nTautomers = 0;
