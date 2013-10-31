@@ -1678,7 +1678,7 @@ public class AutomaticTautomerTests
 			{	
 				//Finalize statistics 
 				if (curStruct != -1)					
-					finalizeFPTautomerStatistics();
+					finalizeFPTautomerStatistics(); //first line is processed here
 				
 				//Start New Compound making statistics for its tautomers 
 				curStruct = strNum;
@@ -1726,12 +1726,11 @@ public class AutomaticTautomerTests
 		
 		for (int i = 0; i < descrStat0.length; i++)
 		{
-			//TODO
-			/*
-			if (!tokens[3+i].equals("0"))			
-					descrStat0[i].valueSum += 1.0;
-			descrStat0[i].nTautomers++;
-			*/
+			
+			if (tokens[3+i].equals("0"))			
+				descrStat0[i].originalValue = 0.0;
+			else
+				descrStat0[i].originalValue = 1.0;
 		}
 	}
 	
@@ -1754,14 +1753,9 @@ public class AutomaticTautomerTests
 			descrStat0[i].valueSum = 0;
 			descrStat0[i].valueSDSum = 0;
 			descrStat0[i].nTautomers = 0;
-		}
+		}		
 		
-		if (n <= 1)
-		{
-			//Only one tautomer is present 
-			processFPLine(tokens);
-			return;
-		}
+		processFPFirstLine(tokens);
 		
 	}
 	
@@ -1773,20 +1767,30 @@ public class AutomaticTautomerTests
 		sb.append(",");
 		sb.append(curSMILES);
 		sb.append(",");
+		if (descrStat0[0].nTautomers == 0)
+			descrStat0[0].nTautomers = 1; //This is performed since no tautomers are cycled and hence the counter is 0
 		sb.append(descrStat0[0].nTautomers);
+		
+		if (descrStat0[0].nTautomers <= 1)
+		{
+			for (int i = 0; i < descrStat0.length; i++)
+				sb.append(",0"); //automatically rsd = 0 is assigned
+			
+			return;
+		}
+		
 
 		for (int i = 0; i < descrStat0.length; i++)
 		{
-			/*
-			double rsd = Math.sqrt(descrStat0[i].valueSDSum/descrStat0[i].nTautomers);
-			double m = Math.abs(descrStat0[i].valueSum);
-			if (m < 1.0e-30)
-				m = 1.0e-30; 
-
-			rsd = rsd / m;
+			
+			double pdb;    //percent (part) of different bits
+			if (descrStat0[i].originalValue == 0.0)
+				pdb = (descrStat0[i].nTautomers - descrStat0[i].valueSum) / descrStat0[i].nTautomers;  
+			else
+				pdb = descrStat0[i].valueSum / descrStat0[i].nTautomers;
+			
 			sb.append(",");
-			sb.append(rsd);
-			*/
+			sb.append(pdb);
 		}
 
 		output(sb.toString() + endLine);
