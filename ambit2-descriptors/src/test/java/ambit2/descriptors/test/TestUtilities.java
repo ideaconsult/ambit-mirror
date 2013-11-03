@@ -1,5 +1,7 @@
 package ambit2.descriptors.test;
 
+import org.openscience.cdk.graph.PathTools;
+import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
@@ -13,6 +15,7 @@ public class TestUtilities
 {
 	public static void main(String[] args) throws Exception
 	{
+		/*
 		calcCTI("CCCCC", false);
 		calcCTI("CC(C)CC", false);
 		calcCTI("CC(C)(C)C", false);
@@ -24,6 +27,11 @@ public class TestUtilities
 		calcCTI("CC(C)NC", false);
 		calcCTI("CC(C)CN", false);
 		calcCTI("NC(C)(C)C", false);
+		*/
+		
+		//calcCTI("CCCN", true);
+		calcCTI("OC1CC(N)CCC1", true);
+		
 		
 		//calcCTI("NCCN");
 		//calcCTI("OC1=C(O)C2=C(C=C1)C3(OC(=O)C4=C3C=CC=C4)C5=C(O2)C(=C(O)C=C5)O");
@@ -39,6 +47,7 @@ public class TestUtilities
 		System.out.println(smiles + "  CTI = " + CTI);
 		
 		if (FlagPrintAtomAttrib)
+		{	
 			for (int i = 0; i < mol.getAtomCount(); i++) 
 			{
 				IAtom a = mol.getAtom(i);
@@ -46,5 +55,18 @@ public class TestUtilities
 						+  a.getValency() + "  H=" + a.getImplicitHydrogenCount() 
 						+ "  q=" + a.getCharge());
 			}
+			
+			double[][] matr = ConnectionMatrix.getMatrix(mol);        
+	        int[][] D = PathTools.computeFloydAPSP(matr);
+	        
+	        for (int i = 0; i < mol.getAtomCount(); i++)
+	        {	
+	        	for (int j = 0; j < mol.getAtomCount(); j++)
+	        		System.out.print(" " + D[i][j]);
+	        		
+	        	System.out.println();
+	        }	
+	        
+		}	
 	}
 }
