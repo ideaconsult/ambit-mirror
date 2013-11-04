@@ -9,10 +9,9 @@ import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.charges.GasteigerMarsiliPartialCharges;
-import org.openscience.cdk.graph.PathTools;
-import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 
 import java.util.List;
+import javax.vecmath.Point3d;
 
 
 
@@ -95,9 +94,23 @@ public class CGIDescriptor
 	}
 	
 	double [][] getGeometricDistanceMatrix(IAtomContainer container)
-	{
-		//TODO
-		return null;
+	{	
+		int n = container.getAtomCount();
+		double [][] R = new double [n][n];
+
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				IAtom a = container.getAtom(i);
+				IAtom a1 = container.getAtom(j);
+				Point3d p = a.getPoint3d();
+				Point3d p1 = a1.getPoint3d();
+				R[i][j] = p.distance(p1);
+			}
+		}
+
+		return R;
 	}
 	
 	
