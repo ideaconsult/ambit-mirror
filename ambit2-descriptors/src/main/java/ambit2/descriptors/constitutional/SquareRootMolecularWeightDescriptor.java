@@ -10,7 +10,11 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 
 import ambit2.descriptors.MolecularWeight;
 
-
+/**
+ * Square root molecular weight. Todeschini , Handbook of Molecular descriptors, physico-chemical properties, p.589.
+ * @author Elena Urucheva, Nikolay Kochev
+ * <b>Modified</b> 2013-10-31
+ */
 public class SquareRootMolecularWeightDescriptor implements IMolecularDescriptor
 {
 	public DescriptorSpecification getSpecification() 

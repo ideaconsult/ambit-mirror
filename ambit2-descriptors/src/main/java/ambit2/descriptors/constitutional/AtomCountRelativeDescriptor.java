@@ -1,6 +1,5 @@
 package ambit2.descriptors.constitutional;
 
-
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -12,6 +11,11 @@ import org.openscience.cdk.qsar.result.DoubleArrayResultType;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 
+/**
+ * Relative atom-type count. Todeschini , Handbook of Molecular descriptors, count descriptors, p.175.
+ * @author Elena Urucheva, Nevena Todorova, Nikolay Kochev
+ * <b>Modified</b> 2013-10-31
+ */
 public class AtomCountRelativeDescriptor  implements IMolecularDescriptor  
 {
 	private String elementName;

@@ -12,6 +12,11 @@ import org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor;
 
 import ambit2.descriptors.MolecularWeight;
 
+/**
+ * Average molecular weight. Todeschini , Handbook of Molecular descriptors, physico-chemical properties, p.589.
+ * @author Elena Urucheva, Nikolay Kochev
+ * <b>Modified</b> 2013-10-31
+ */
 public class AverageMolecularWeightDescriptor implements IMolecularDescriptor
 {
 	public DescriptorSpecification getSpecification()

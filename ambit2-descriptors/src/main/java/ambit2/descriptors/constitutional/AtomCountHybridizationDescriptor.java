@@ -10,6 +10,11 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
+/**
+ * Atomistic topological indices. Todeschini , Handbook of Molecular descriptors, count descriptors, p.175.
+ * @author Elena Urucheva, Nikolay Kochev
+ * <b>Modified</b> 2013-10-31
+ */
 public class AtomCountHybridizationDescriptor implements IMolecularDescriptor
 {
 	private String names[];
