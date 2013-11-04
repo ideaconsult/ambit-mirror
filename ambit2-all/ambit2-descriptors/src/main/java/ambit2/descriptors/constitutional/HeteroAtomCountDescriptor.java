@@ -8,6 +8,11 @@ import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
+/**
+ * Number of atoms which are not hydrogens and carbons .
+ * @author Elena Urucheva, Nikolay Kochev
+ * <b>Modified</b> 2013-10-31
+ */
 public class HeteroAtomCountDescriptor implements IMolecularDescriptor 
 {
 

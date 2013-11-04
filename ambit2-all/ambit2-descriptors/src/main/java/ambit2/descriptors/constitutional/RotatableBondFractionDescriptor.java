@@ -10,6 +10,11 @@ import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor;
 
+/**
+ * Rotatable bond fraction. Todeschini , Handbook of Molecular descriptors, flexibility indices, p.313.
+ * @author Elena Urucheva, Nikolay Kochev
+ * <b>Modified</b> 2013-10-31
+ */
 public class RotatableBondFractionDescriptor implements IMolecularDescriptor 
 {
 	public DescriptorSpecification getSpecification()
