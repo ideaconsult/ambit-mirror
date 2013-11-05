@@ -29,6 +29,7 @@ public class AutomaticTautomerTests
 		String value = null;		
 	};
 	
+	public static final int LPM_TEST_PRINT = 0;
 	public static final int LPM_PROCESS_NCI = 1;
 	public static final int LPM_FILTER = 2;
 	public static final int LPM_TAUTOMER_COUNT = 3;
@@ -55,7 +56,7 @@ public class AutomaticTautomerTests
 	
 	public boolean FlagHandleCommand = true;
 	public boolean FlagFiltrateSmilesToLargestFragment = false;   //currently used only for structure-stat command
-	
+	public boolean FlagWorkWithWholeDirectory = true;  //If this flag is true and input file is a directory then all file in it are used for the input
 	
 	int lineProcessMode = 0;
 		
@@ -162,9 +163,9 @@ public class AutomaticTautomerTests
 			
 			att.handleArguments(new String[] {
 					
-					//"-i","D:/Projects/data015/nci-1-1722-DRAGON.csv",
+					"-i","D:/temp2/test",
 					//"-i","D:/Projects/data015/LogP/XlogP.csv",
-					"-i","D:/Projects/data016/nci-1-1722-Padel-EStateFingerprinter.csv",
+					//"-i","D:/Projects/data016/nci-1-1722-Padel-EStateFingerprinter.csv",
 					"-i2","D:/Projects/data016/ext-validation-set02-activity.csv",
 					
 					
@@ -178,7 +179,7 @@ public class AutomaticTautomerTests
 					"-nInpStr","0",
 					"-nStartStr","0",
 					//"-c","tautomer-calc-descr-average",
-					"-c","tautomer-fp-stat",
+					"-c","test-print",
 					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
 					"-o","D:/Projects/data016/fp-stat.csv",
 					"-fMinNDB", "1",
@@ -433,6 +434,16 @@ public class AutomaticTautomerTests
 			return(0);
 		
 		
+		
+		
+		if (command.equals("test-print"))
+		{
+			System.out.println("Processing nci file: " + inFileName);			
+			lineProcessMode = LPM_TEST_PRINT;
+			iterateInputFile();
+			return(0);
+		}
+		
 		if (command.equals("process-nci"))
 		{
 			System.out.println("Processing nci file: " + inFileName);
@@ -643,6 +654,7 @@ public class AutomaticTautomerTests
 		System.out.println("-nStartStr    the number of starting structure /or line to be processed/");
 		
 		System.out.println("-c            command: ");
+		System.out.println("                 test-print            Test printint of the lines");
 		System.out.println("                 process-nci           nci file is processed");
 		System.out.println("                 filter                input file is filtered");
 		System.out.println("                 tautomer-count        counts the number of tautomers");
@@ -854,6 +866,14 @@ public class AutomaticTautomerTests
 		try
 		{	
 			File file = new File(inFileName);
+			if (FlagWorkWithWholeDirectory)
+				if (file.isDirectory())
+				{	
+					iterateDir(file);
+					return;
+				}	
+			
+			
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
 			long length = f.length();
 			
@@ -897,8 +917,71 @@ public class AutomaticTautomerTests
 		}
 	}
 	
+	void iterateDir(File dir) throws Exception
+	{	
+		System.out.println("Iterating directory " + dir.getPath());
+		System.out.println("-----------------------------------------------");
+		
+		curProcessedStr = 0;
+		for (File child : dir.listFiles()) 
+		{
+			if (child.isFile())
+			{	
+				System.out.println("Iterating file: " + child.getPath());
+				iterateFile(child);
+			}	
+		}
+	}
+	
+	void iterateFile(File file) throws Exception
+	{	
+		RandomAccessFile f = new RandomAccessFile(file,"r");			
+		long length = f.length();
+		
+		int n = 0;
+		while (f.getFilePointer() < length)
+		{	
+			n++;
+			curLine = n;
+			
+			String line = f.readLine();
+			//System.out.println("line " + n + "  " + line);
+			
+			if (n < nStartStr)
+				continue;
+			
+			curProcessedStr++;
+			
+			if (nInputStr > 0)
+				if (curProcessedStr > nInputStr) 
+					break;
+											
+			
+			processLine(line.trim());
+			
+			if (FlagCheckMemory)
+			{
+				checkMemory();				
+				Runtime.getRuntime().gc();
+			}	
+			
+			if (n % this.traceFrequency == 0)
+				System.out.println(n);
+		}
+		
+		f.close();
+	}
+	
+	
 	int processLine(String line)
 	{	
+		
+		if (lineProcessMode == LPM_TEST_PRINT)
+		{
+			processTestPrint(line);
+			return(0);
+		}
+		
 		if (lineProcessMode == LPM_PROCESS_NCI)
 		{
 			processNCILine(line);
@@ -989,6 +1072,12 @@ public class AutomaticTautomerTests
 	
 	
 	//------------- process line functions (implementation of different commands) ------------------
+	
+	int processTestPrint(String line)
+	{
+		System.out.println(line);
+		return 0;
+	}
 	
 	int processNCILine(String line)
 	{
