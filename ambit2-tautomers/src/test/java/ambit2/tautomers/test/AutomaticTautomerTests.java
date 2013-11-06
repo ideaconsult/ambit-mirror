@@ -1940,8 +1940,10 @@ public class AutomaticTautomerTests
 			try 
 			{
 				double dVal = Double.parseDouble(tokens[3+i]);
-				//check for -999 value is not performed
-				descrStat0[i].valueSum += dVal;
+				//check for -999 value is not performed				
+				
+				if (dVal > 1.0e-8)  //otherwise some strange effects with NaN values are obtained
+					descrStat0[i].valueSum += dVal;
 				descrStat0[i].nTautomers++;
 				
 			}
@@ -1958,6 +1960,7 @@ public class AutomaticTautomerTests
 		{
 			double mean = descrStat0[i].valueSum / descrStat0[i].nTautomers; 
 			output("" + (i+1) + "\t" + mean + endLine);
+			//System.out.println("" + (i+1) + "\t" + mean + "   " + descrStat0[i].valueSum + "   " + descrStat0[i].nTautomers );
 		}
 	}
 	
