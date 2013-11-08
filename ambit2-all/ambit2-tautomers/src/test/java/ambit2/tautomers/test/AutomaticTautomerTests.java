@@ -166,7 +166,7 @@ public class AutomaticTautomerTests
 					
 					//"-i","D:/temp2/test",
 					//"-i","D:/Projects/data015/LogP/XlogP.csv",
-					"-i","D:/Projects/data016/descr-stat.csv",
+					"-i","D:/Projects/data016/logP2-kekule-taut-EPI_Suite-LogP-CLEANED.csv",
 					"-i2","D:/Projects/data016/ext-validation-set02-activity.csv",
 					
 					
@@ -179,11 +179,10 @@ public class AutomaticTautomerTests
 					
 					"-nInpStr","0",
 					"-nStartStr","0",
-					//"-c","tautomer-calc-descr-average",
-					"-c","tautomer-descr-stat2",
+					"-c","tautomer-calc-descr-average",					
 					//"-c","test-print",
 					//"-o","D:/Projects/data015/LogP/xlogp-test-average-descr.csv",
-					"-o","D:/Projects/data016/descr-stat-2order.csv",
+					"-o","D:/Projects/data016/test.csv",
 					"-fMinNDB", "1",
 					"-fMaxCyclo", "4",
 			});
@@ -639,6 +638,7 @@ public class AutomaticTautomerTests
 			openOutputFile();
 			//setTautomerManager();
 			lineProcessMode = LPM_TAUTOMER_CALC_DESCR_AVERAGE;
+			System.out.println("**");
 			iterateInputFile();
 			finalizeTautomerAverageCalculation();
 			closeOutputFile();
@@ -878,9 +878,9 @@ public class AutomaticTautomerTests
 					return;
 				}	
 			
-			
 			RandomAccessFile f = new RandomAccessFile(file,"r");			
 			long length = f.length();
+			
 			
 			int n = 0;
 			curProcessedStr = 0;
@@ -900,9 +900,9 @@ public class AutomaticTautomerTests
 				if (nInputStr > 0)
 					if (curProcessedStr > nInputStr) 
 						break;
-												
 				
 				processLine(line.trim());
+			
 				
 				if (FlagCheckMemory)
 				{
@@ -914,11 +914,13 @@ public class AutomaticTautomerTests
 					System.out.println(n);
 			}
 			
+			
 			f.close();
 		}
 		catch (Exception e)
 		{	
 			System.out.println(e.getMessage());
+			
 		}
 	}
 	
@@ -1077,7 +1079,7 @@ public class AutomaticTautomerTests
 		}
 		
 		if (lineProcessMode == LPM_TAUTOMER_CALC_DESCR_AVERAGE)
-		{
+		{	
 			tautomerCalcDescrAverage(line);
 			return(0);
 		}
@@ -1555,7 +1557,7 @@ public class AutomaticTautomerTests
 	{
 		if (curLine == 1)
 		{
-			initDescriptorStatistics(line);
+			initDescriptorStatistics0(line);
 			return 0;
 		}
 		
@@ -1589,7 +1591,7 @@ public class AutomaticTautomerTests
 		return 0;
 	}
 		
-	void initDescriptorStatistics(String firstLine)
+	void initDescriptorStatistics0(String firstLine)
 	{
 		String tokens[] = firstLine.split(descrTestSepareator);
 		int nDescr = tokens.length - 3;
@@ -1598,6 +1600,19 @@ public class AutomaticTautomerTests
 		{	
 			descrStat0[i] = new DescriptorStatShort();
 			descrStat0[i].name = tokens[i+3];
+		}
+	}
+	
+	
+	void initDescriptorStatistics(String firstLine)
+	{
+		String tokens[] = firstLine.split(descrTestSepareator);
+		int nDescr = tokens.length - 3;
+		descrStat = new DescriptorStatInfo[nDescr];
+		for (int i = 0; i < nDescr; i++)
+		{	
+			descrStat[i] = new DescriptorStatInfo();
+			descrStat[i].name = tokens[i+3];
 		}
 	}
 	
@@ -1770,7 +1785,7 @@ public class AutomaticTautomerTests
 	{
 		if (curLine == 1)
 		{
-			initDescriptorStatistics(line);  
+			initDescriptorStatistics0(line);  
 			return 0;
 		}
 		
@@ -1906,7 +1921,7 @@ public class AutomaticTautomerTests
 		
 		if (curLine == 1)
 		{
-			initDescriptorStatistics(line);  
+			initDescriptorStatistics0(line);  
 			
 			for (int i = 0; i < descrStat0.length; i++)
 			{
@@ -1979,8 +1994,9 @@ public class AutomaticTautomerTests
 	{
 		//System.out.println("" + curLine + "   " + line);
 		
+		
 		if (curLine == 1)
-		{
+		{	
 			initDescriptorStatistics(line);
 			output(getFirstOutputLine_CalcAverageDescr() + "\n");
 			return 0;
