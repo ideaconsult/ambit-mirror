@@ -271,7 +271,7 @@
 	<dependency>
   		<groupId>net.idea</groupId>
   		<artifactId>i5z</artifactId>		
-    	  <version>0.0.1</version>
+    	  <version>0.0.3-SNAPSHOT</version>
     </dependency>
         </dependencies>
     </profile>        
