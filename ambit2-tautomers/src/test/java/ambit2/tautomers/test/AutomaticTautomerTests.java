@@ -59,6 +59,10 @@ public class AutomaticTautomerTests
 	public boolean FlagWorkWithWholeDirectory = true;  //If this flag is true and input file is a directory then all file in it are used for the input
 	public boolean FlagSkipFirstLineInDirIteration = false;  //if true the first line is skipped for the all files except the first file in the directory
 	
+	
+	public boolean FlagDescrAverageForCloseEnergies = false;  //The ranking is relative to the energy of the tautomer which is the original structure
+	
+	
 	int lineProcessMode = 0;
 		
 	String endLine = "\r\n";
@@ -638,7 +642,6 @@ public class AutomaticTautomerTests
 			openOutputFile();
 			//setTautomerManager();
 			lineProcessMode = LPM_TAUTOMER_CALC_DESCR_AVERAGE;
-			System.out.println("**");
 			iterateInputFile();
 			finalizeTautomerAverageCalculation();
 			closeOutputFile();
@@ -1981,8 +1984,7 @@ public class AutomaticTautomerTests
 	
 	/*
 	int tautomerFPStat2Order(String line)
-	{
-		//TODO
+	{	
 		return 0;
 	}
 	*/
@@ -2062,8 +2064,18 @@ public class AutomaticTautomerTests
 			}
 			descrStat[i].initWeightedAverageCalculation(10); //maxNumRanks = 10
 			descrStat[i].originalValue = value;
-		}		
+			
+			if (FlagDescrAverageForCloseEnergies)
+			{
+				descrStat[i].allValues.clear();
+				descrStat[i].allRanks.clear();
+			}
+				
+		}	
 		
+		for (int i = 0; i < descrStat.length; i++)		
+			descrStat[i].originalMoleculeIndex = -1; 
+			
 	}
 	
 	void addDescriptorValuesToAverage(String tokens[])
@@ -2084,17 +2096,40 @@ public class AutomaticTautomerTests
 			return;
 		}
 		
+		boolean FlagAllValuesEqualToOriginal = true;
+		
 		for (int i = 0; i < descrStat.length; i++)
 		{
-			double value = extractDouble(tokens[i+3]);
+			double value = extractDouble(tokens[i+3]);			
 			if (!extractError.equals(""))
 			{
 				System.out.println("Error on line " + curLine + "  token " + (i+3));  //error message is 1-base indexed
 				System.out.println(extractError);
 				return;
 			}
-			descrStat[i].calcAverageAddNewValue(value, rank);
-		}	
+			
+			
+			if (FlagDescrAverageForCloseEnergies)
+			{					
+				descrStat[i].addNewRankValue_ClosesEnergy(value, rank);
+				
+				if (FlagAllValuesEqualToOriginal)  
+					if (Math.abs(value - descrStat[i].originalValue) > 1.0E-8)
+						FlagAllValuesEqualToOriginal = false;
+			}
+			else
+				descrStat[i].calcAverageAddNewValue(value, rank);
+		}
+		
+		
+		//checkTautomerForOriginalMolecule(tokens); --> Not used for the moment
+		if (FlagDescrAverageForCloseEnergies)
+		{	
+			if (FlagAllValuesEqualToOriginal)  
+				for (int i = 0; i < descrStat.length; i++)				
+					descrStat[i].originalMoleculeIndex = descrStat[i].nTautomers-1;   //nTautomers has been increased in the cycle
+		}
+		
 	}
 	
 	void finalizeTautomerAverageCalculation()
@@ -2104,18 +2139,22 @@ public class AutomaticTautomerTests
 		sb.append("," + curTautomerSmiles + "," + numTautomers);
 		for (int i = 0; i < descrStat.length; i++)
 		{
+			if (this.FlagDescrAverageForCloseEnergies)
+				descrStat[i].iterateValuesAndRerank_CloseEnergy();  
+				
 			sb.append("," + descrStat[i].originalValue);
 			sb.append("," + descrStat[i].getAverageAll());
 			for (int k = 0; k < Temperatures.length; k++)
 				sb.append("," + descrStat[i].getWeightedAverageAll(k));
-			
+
 			sb.append("," + descrStat[i].getAverageTop(5));
 			for (int k = 0; k < Temperatures.length; k++)
 				sb.append("," + descrStat[i].getWeightedAverageTop(5,k));
-			
+
 			sb.append("," + descrStat[i].getAverageTop(10));
 			for (int k = 0; k < Temperatures.length; k++)
 				sb.append("," + descrStat[i].getWeightedAverageTop(10,k));
+			
 		}
 		sb.append("\n");
 		output(sb.toString());
@@ -2151,21 +2190,47 @@ public class AutomaticTautomerTests
 		
 		for (int i = 0; i < descrStat.length; i++)
 		{
-			sb.append("," + descrStat[i].name);
-			sb.append("," + descrStat[i].name+"-AV");
-			for (int k = 0; k < Temperatures.length; k++)
-				sb.append("," + descrStat[i].name+"-WAV-" +Temperatures[k]+"K");
-			
-			sb.append("," + descrStat[i].name+"-AV5");
-			for (int k = 0; k < Temperatures.length; k++)
-				sb.append("," + descrStat[i].name+"-WAV5-"+Temperatures[k]+"K");
-			
-			sb.append("," + descrStat[i].name+"-AV10");
-			for (int k = 0; k < Temperatures.length; k++)
-				sb.append("," + descrStat[i].name+"-WAV10-"+Temperatures[k]+"K");
+			if (this.FlagDescrAverageForCloseEnergies)
+			{	
+				sb.append("," + descrStat[i].name);
+				sb.append("," + descrStat[i].name+"-CE");
+				for (int k = 0; k < Temperatures.length; k++)
+					sb.append("," + descrStat[i].name+"-WCE-" +Temperatures[k]+"K");
+				
+				sb.append("," + descrStat[i].name+"-CE5");
+				for (int k = 0; k < Temperatures.length; k++)
+					sb.append("," + descrStat[i].name+"-WCE5-" +Temperatures[k]+"K");
+				
+				sb.append("," + descrStat[i].name+"-CE10");
+				for (int k = 0; k < Temperatures.length; k++)
+					sb.append("," + descrStat[i].name+"-WCE10-" +Temperatures[k]+"K");
+				
+			}
+			else
+			{	
+				sb.append("," + descrStat[i].name);
+				sb.append("," + descrStat[i].name+"-AV");
+				for (int k = 0; k < Temperatures.length; k++)
+					sb.append("," + descrStat[i].name+"-WAV-" +Temperatures[k]+"K");
+
+				sb.append("," + descrStat[i].name+"-AV5");
+				for (int k = 0; k < Temperatures.length; k++)
+					sb.append("," + descrStat[i].name+"-WAV5-"+Temperatures[k]+"K");
+
+				sb.append("," + descrStat[i].name+"-AV10");
+				for (int k = 0; k < Temperatures.length; k++)
+					sb.append("," + descrStat[i].name+"-WAV10-"+Temperatures[k]+"K");
+			}
 		}
 		return sb.toString();
 	}
+	
+	/*
+	void checkTautomerForOriginalMolecule(String tokens[])
+	{
+		//not used for the moment
+	}
+	*/
 	
 	//---------------- statistics and comparison methods ----------------------
 	
@@ -2898,6 +2963,11 @@ public class AutomaticTautomerTests
 		int nUsedTopRanks;
 		int maxRankIndex;	//this is the worst rank
 		int nTautomers;
+		int originalMoleculeIndex;  //This is the index of the tautomer which is identical to the target molecule
+		
+		ArrayList<Double> allValues = new  ArrayList<Double>();
+		ArrayList<Double> allRanks = new  ArrayList<Double>();
+		
 		
 		public void initWeightedAverageCalculation(int maxNumRanks)
 		{
@@ -2927,6 +2997,32 @@ public class AutomaticTautomerTests
 				sumProbWeights[i] += p;
 			}
 			addNewRankValue(value, rank);
+		}
+		
+		public void addNewRankValue_ClosesEnergy(double value, double rank)
+		{
+			nTautomers++;
+			allRanks.add(rank);
+			allValues.add(value);
+		}
+		
+		public void iterateValuesAndRerank_CloseEnergy()
+		{
+			if (originalMoleculeIndex == -1)
+			{
+				System.out.println("originalMoleculeIndex = -1  for " + curLine);
+				originalMoleculeIndex = 0;
+			}
+				
+			//Reranking and registering statistics info 	
+			nTautomers = 0;
+			double originalMolRank = allRanks.get(originalMoleculeIndex);
+			double newRank = 0.0;
+			for (int i = 0; i < allRanks.size(); i++)
+			{
+				newRank = Math.abs(originalMolRank - allRanks.get(i));
+				calcAverageAddNewValue(allValues.get(i), newRank);
+			}
 		}
 		
 		void addNewRankValue(double value, double rank)
