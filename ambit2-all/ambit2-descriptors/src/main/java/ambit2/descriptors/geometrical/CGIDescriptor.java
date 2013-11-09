@@ -1,6 +1,11 @@
 package ambit2.descriptors.geometrical;
 
 
+import java.util.List;
+
+import javax.vecmath.Point3d;
+
+import org.openscience.cdk.charges.GasteigerMarsiliPartialCharges;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -8,19 +13,21 @@ import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
-import org.openscience.cdk.charges.GasteigerMarsiliPartialCharges;
 
-import java.util.List;
-import javax.vecmath.Point3d;
+import ambit2.base.data.Property;
 
-
+/**
+ * Charge-related Geometrical Index (CGI
+ * TODO: reference
+ *
+ */
 
 public class CGIDescriptor 
 {
 	public DescriptorSpecification getSpecification()
 	{
 		return new DescriptorSpecification(
-				"Charge-related Geometrical Index (CGI)",
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"CGIDescriptor"),
 				this.getClass().getName(),
 				"$Id: CTIDescriptor.java, v 0.1 2013 Nikolay Kochev",
 				"http://ambit.sourceforge.net");

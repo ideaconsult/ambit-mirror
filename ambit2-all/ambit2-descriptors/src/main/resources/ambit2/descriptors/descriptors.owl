@@ -1,89 +1,116 @@
 <?xml version="1.0"?>
-<rdf:RDF
-    xmlns:p1="http://www.w3.org/1998/Math/MathML"
-    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
-    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
-    xmlns:ambitd="http://ambit.sourceforge.net/descriptors.owl#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns:bo="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
-    xmlns:bibtex="http://bibtexml.sf.net/"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-  xml:base="http://ambit.sourceforge.net/descriptors.owl">
-  <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/"/>
-  </owl:Ontology>
-  <bo:MolecularDescriptor rdf:ID="SpherosityDescriptor">
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Spherosity</rdfs:label>
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Spherosity (ref. Todescini 2000)</bo:definition>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
-  </bo:MolecularDescriptor>
-  <bo:MolecularDescriptor rdf:ID="PlanarityDescriptor">
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Spherosity (ref. Todescini 2000)</bo:definition>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Planarity</rdfs:label>
-  </bo:MolecularDescriptor>
-  <bo:Contributor rdf:ID="ngn">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Nina Jeliazkova</rdfs:label>
-  </bo:Contributor>
-  <bo:MolecularDescriptor rdf:ID="FunctionalGroups">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Functional groups</rdfs:label>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#GraphRepresentation"/>
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Functional groups presence, as per http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml</bo:definition>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#constitutionalDescriptor"/>
-  </bo:MolecularDescriptor>
-  <bo:MolecularDescriptor rdf:ID="MoleculeSize">
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >3D dimensions of the molecule</bo:definition>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Molecule size</rdfs:label>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-  </bo:MolecularDescriptor>
-  <bo:Reference rdf:ID="PAT2008">
-    <rdfs:comment xml:lang="en">null</rdfs:comment>
-    <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >&lt;bibtex:article xmlns:bibtex="http://bibtexml.sf.net/"&gt;
-&lt;bibtex:author&gt;Patlewicz G, Jeliazkova N, Safford RJ, Worth AP, Aleksiev B.&lt;/bibtex:author&gt;
-&lt;bibtex:title&gt;An evaluation of the implementation of the Cramer classification scheme in the Toxtree software.&lt;/bibtex:title&gt;
-&lt;bibtex:journal&gt;SAR QSAR Environ Res.&lt;/bibtex:journal&gt;
-&lt;bibtex:year&gt;2008&lt;/bibtex:year&gt;
-&lt;bibtex:volume&gt;19(5-6)&lt;/bibtex:volume&gt;
-&lt;bibtex:pages&gt;495-524&lt;/bibtex:pages&gt;
-&lt;/bibtex:article&gt;</bibtex:entry>
-  </bo:Reference>
-  <bo:Reference rdf:ID="CRA1978">
-    <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >&lt;bibtex:article xmlns:bibtex="http://bibtexml.sf.net/"&gt;
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY bibtex "http://bibtexml.sf.net/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY swrl "http://www.w3.org/2003/11/swrl#" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY swrlb "http://www.w3.org/2003/11/swrlb#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY p1 "http://www.w3.org/1998/Math/MathML" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY ambitd "http://ambit.sourceforge.net/descriptors.owl#" >
+    <!ENTITY protege "http://protege.stanford.edu/plugins/owl/protege#" >
+    <!ENTITY xsp "http://www.owl-ontologies.com/2005/08/07/xsp.owl#" >
+    <!ENTITY bo "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#" >
+]>
+
+
+<rdf:RDF xmlns="http://ambit.sourceforge.net/descriptors.owl#"
+     xml:base="http://ambit.sourceforge.net/descriptors.owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+     xmlns:ambitd="http://ambit.sourceforge.net/descriptors.owl#"
+     xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+     xmlns:p1="http://www.w3.org/1998/Math/MathML"
+     xmlns:bo="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:bibtex="http://bibtexml.sf.net/"
+     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://ambit.sourceforge.net/descriptors.owl">
+        <owl:imports rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#AtomCountHybridizationDescriptor -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;AtomCountHybridizationDescriptor">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label>Atom Count Hybridization Descriptor</rdfs:label>
+        <dc:contributor>http://ambit.sourceforge.net/descriptors.owl#lioni</dc:contributor>
+        <bo:definition>Atomistic topological indices. Todeschini , Handbook of Molecular descriptors, count descriptors, p.175.
+</bo:definition>
+        <dc:date>2013-11-9</dc:date>
+        <dc:contributor>http://ambit.sourceforge.net/descriptors.owl#ntk73</dc:contributor>
+        <bo:requires rdf:resource="&bo;GraphRepresentation"/>
+        <bo:isClassifiedAs rdf:resource="&bo;constitutionalDescriptor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#AtomCountRelativeDescriptor -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;AtomCountRelativeDescriptor">
+        <rdfs:label>Atom Count Relative Descriptor</rdfs:label>
+        <dc:date>2013-11-9</dc:date>
+        <bo:definition>Relative atom-type count. Todeschini , Handbook of Molecular descriptors, count descriptors, p.175.</bo:definition>
+        <dc:contributor>http://ambit.sourceforge.net/descriptors.owl#lioni</dc:contributor>
+        <dc:contributor>http://ambit.sourceforge.net/descriptors.owl#ntk73</dc:contributor>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#AtomEnvironment -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;AtomEnvironment">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">AtomEnvironment</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2009-01-13</dc:date>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:definition rdf:datatype="&xsd;string">implements atom environment fingerprints, according to
+
+           &lt;bibtex:cite xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot; ref=&quot;XING2002&quot;&gt;&lt;/bibtex:cite&gt; and &lt;bibtex:cite xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot; ref=&quot;JAW2007&quot;&gt;&lt;/bibtex:cite&gt;</bo:definition>
+        <bo:requires rdf:resource="&bo;GraphRepresentation"/>
+        <bo:isClassifiedAs rdf:resource="&bo;topologicalDescriptor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#AverageMolecularWeightDescriptor -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;AverageMolecularWeightDescriptor">
+        <rdfs:label>Average Molecular Weight Descriptor</rdfs:label>
+        <dc:date>2013-11-9</dc:date>
+        <bo:definition>Average molecular weight. Todeschini , Handbook of Molecular descriptors, physico-chemical properties, p.589.</bo:definition>
+        <dc:contributor>http://ambit.sourceforge.net/descriptors.owl#lioni</dc:contributor>
+        <dc:contributor>http://ambit.sourceforge.net/descriptors.owl#ntk73</dc:contributor>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#CRA1978 -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;CRA1978">
+        <rdf:type rdf:resource="&bo;Reference"/>
+        <bibtex:entry rdf:datatype="&xsd;string">&lt;bibtex:article xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot;&gt;
 &lt;bibtex:author&gt;Cramer GM, Ford RA, Hall RL&lt;/bibtex:author&gt;
 &lt;bibtex:title&gt;Estimation of Toxic Hazard - A Decision Tree Approach.&lt;/bibtex:title&gt;
 &lt;bibtex:journal&gt;J. Cosmet. Toxicol.&lt;/bibtex:journal&gt;
@@ -91,40 +118,45 @@
 &lt;bibtex:volume&gt;16&lt;/bibtex:volume&gt;
 &lt;bibtex:pages&gt;255-276&lt;/bibtex:pages&gt;
 &lt;/bibtex:article&gt;</bibtex:entry>
-    <rdfs:comment xml:lang="en">null</rdfs:comment>
-  </bo:Reference>
-  <bo:MolecularDescriptor rdf:ID="MolecularWeight">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Molecular Weight</rdfs:label>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#constitutionalDescriptor"/>
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Molecular weight</bo:definition>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-    <bo:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Uses carbon 12 atomic mass with the right precision (see CDK bug ID  ID: 2794591)</bo:description>
-    <rdfs:seeAlso rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#weight</rdfs:seeAlso>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-  </bo:MolecularDescriptor>
-  <bo:MolecularDescriptor rdf:ID="CrossectionalDiameter">
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cross sectional diameter of the molecule</bo:definition>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-    <bo:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >returns double[] where [max length, max diameter, min diameter ]</bo:description>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Crossectional diameter</rdfs:label>
-  </bo:MolecularDescriptor>
-  <bo:Reference rdf:ID="JAW2007">
-    <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >&lt;bibtex:article xmlns:bibtex="http://bibtexml.sf.net/"&gt;
+        <rdfs:comment xml:lang="en">null</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#CrossectionalDiameter -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;CrossectionalDiameter">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">Crossectional diameter</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2009-01-13</dc:date>
+        <bo:definition rdf:datatype="&xsd;string">Cross sectional diameter of the molecule</bo:definition>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:description rdf:datatype="&xsd;string">returns double[] where [max length, max diameter, min diameter ]</bo:description>
+        <bo:isClassifiedAs rdf:resource="&bo;geometricalDescriptor"/>
+        <bo:requires rdf:resource="&bo;has3DCoordinates"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#FunctionalGroups -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;FunctionalGroups">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">Functional groups</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2009-01-13</dc:date>
+        <bo:definition rdf:datatype="&xsd;string">Functional groups presence, as per http://ambit.acad.bg/downloads/AmbitDb/html/funcgroups.xml</bo:definition>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:requires rdf:resource="&bo;GraphRepresentation"/>
+        <bo:isClassifiedAs rdf:resource="&bo;constitutionalDescriptor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#JAW2007 -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;JAW2007">
+        <rdf:type rdf:resource="&bo;Reference"/>
+        <bibtex:entry rdf:datatype="&xsd;string">&lt;bibtex:article xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot;&gt;
 &lt;bibtex:author&gt;Jaworska J., Nikolova-Jeliazkova N.&lt;/bibtex:author&gt;
 &lt;bibtex:title&gt;How can structural similarity analysis help in category formation&lt;/bibtex:title&gt;
 &lt;bibtex:journal&gt;SAR and QSAR in Environmental Research&lt;/bibtex:journal&gt;
@@ -132,10 +164,15 @@
 &lt;bibtex:volume&gt;18&lt;/bibtex:volume&gt;
 &lt;bibtex:pages&gt;3-4&lt;/bibtex:pages&gt;
 &lt;/bibtex:article&gt;</bibtex:entry>
-  </bo:Reference>
-  <bo:Reference rdf:ID="LEE2008">
-    <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >&lt;bibtex:article xmlns:bibtex="http://bibtexml.sf.net/"&gt;
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#LEE2008 -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;LEE2008">
+        <rdf:type rdf:resource="&bo;Reference"/>
+        <bibtex:entry rdf:datatype="&xsd;string">&lt;bibtex:article xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot;&gt;
 &lt;bibtex:author&gt;Adam C. Lee, Jing-yu Yu, and Gordon M. Crippen&lt;/bibtex:author&gt;
 &lt;bibtex:title&gt;pKa Prediction of Monoprotic Small Molecules the SMARTS Way&lt;/bibtex:title&gt;
 &lt;bibtex:journal&gt;J. Chem. Inf. Model.&lt;/bibtex:journal&gt;
@@ -144,36 +181,103 @@
 &lt;bibtex:number&gt;10&lt;/bibtex:number&gt;
 &lt;bibtex:pages&gt;2042-2053&lt;/bibtex:pages&gt;
 &lt;/bibtex:article&gt;</bibtex:entry>
-  </bo:Reference>
-  <bo:MolecularDescriptor rdf:ID="AtomEnvironment">
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#GraphRepresentation"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >AtomEnvironment</rdfs:label>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#topologicalDescriptor"/>
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >implements atom environment fingerprints, according to
+    </owl:NamedIndividual>
+    
 
-           &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="XING2002"&gt;&lt;/bibtex:cite&gt; and &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="JAW2007"&gt;&lt;/bibtex:cite&gt;</bo:definition>
-  </bo:MolecularDescriptor>
-  <bo:MolecularDescriptor rdf:ID="toxtreecramer">
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >implements atom environment fingerprints, according to
 
-           &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="CRA1978"&gt;&lt;/bibtex:cite&gt; and &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="PAT2008"&gt;&lt;/bibtex:cite&gt;</bo:definition>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2010-10-03</dc:date>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >toxtreecramer</rdfs:label>
-  </bo:MolecularDescriptor>
-  <bo:Reference rdf:ID="XING2002">
-    <bibtex:entry rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >&lt;bibtex:article xmlns:bibtex="http://bibtexml.sf.net/"&gt;
+    <!-- http://ambit.sourceforge.net/descriptors.owl#MOPAC -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;MOPAC">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">OpenMopac</rdfs:label>
+        <bo:definition rdf:datatype="&xsd;string">MOPAC wrapper for electronic descriptor calculation</bo:definition>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:isClassifiedAs rdf:resource="&bo;electronicDescriptor"/>
+        <bo:isClassifiedAs rdf:resource="&bo;geometricalDescriptor"/>
+        <bo:requires rdf:resource="&bo;has3DCoordinates"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#MolecularWeight -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;MolecularWeight">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">Molecular Weight</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2009-01-13</dc:date>
+        <bo:definition rdf:datatype="&xsd;string">Molecular weight</bo:definition>
+        <bo:description rdf:datatype="&xsd;string">Uses carbon 12 atomic mass with the right precision (see CDK bug ID  ID: 2794591)</bo:description>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <rdfs:seeAlso rdf:datatype="&xsd;string">http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#weight</rdfs:seeAlso>
+        <bo:isClassifiedAs rdf:resource="&bo;constitutionalDescriptor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#MoleculeSize -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;MoleculeSize">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">Molecule size</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2009-01-13</dc:date>
+        <bo:definition rdf:datatype="&xsd;string">3D dimensions of the molecule</bo:definition>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:isClassifiedAs rdf:resource="&bo;geometricalDescriptor"/>
+        <bo:requires rdf:resource="&bo;has3DCoordinates"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#PAT2008 -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;PAT2008">
+        <rdf:type rdf:resource="&bo;Reference"/>
+        <bibtex:entry rdf:datatype="&xsd;string">&lt;bibtex:article xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot;&gt;
+&lt;bibtex:author&gt;Patlewicz G, Jeliazkova N, Safford RJ, Worth AP, Aleksiev B.&lt;/bibtex:author&gt;
+&lt;bibtex:title&gt;An evaluation of the implementation of the Cramer classification scheme in the Toxtree software.&lt;/bibtex:title&gt;
+&lt;bibtex:journal&gt;SAR QSAR Environ Res.&lt;/bibtex:journal&gt;
+&lt;bibtex:year&gt;2008&lt;/bibtex:year&gt;
+&lt;bibtex:volume&gt;19(5-6)&lt;/bibtex:volume&gt;
+&lt;bibtex:pages&gt;495-524&lt;/bibtex:pages&gt;
+&lt;/bibtex:article&gt;</bibtex:entry>
+        <rdfs:comment xml:lang="en">null</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#PlanarityDescriptor -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;PlanarityDescriptor">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">Planarity</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2009-01-13</dc:date>
+        <bo:definition rdf:datatype="&xsd;string">Spherosity (ref. Todescini 2000)</bo:definition>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:isClassifiedAs rdf:resource="&bo;geometricalDescriptor"/>
+        <bo:requires rdf:resource="&bo;has3DCoordinates"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#SpherosityDescriptor -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;SpherosityDescriptor">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">Spherosity</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2009-01-13</dc:date>
+        <bo:definition rdf:datatype="&xsd;string">Spherosity (ref. Todescini 2000)</bo:definition>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:isClassifiedAs rdf:resource="&bo;geometricalDescriptor"/>
+        <bo:requires rdf:resource="&bo;has3DCoordinates"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#XING2002 -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;XING2002">
+        <rdf:type rdf:resource="&bo;Reference"/>
+        <bibtex:entry rdf:datatype="&xsd;string">&lt;bibtex:article xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot;&gt;
 &lt;bibtex:author&gt;Xing, L., Glen, R.C.&lt;/bibtex:author&gt;
 &lt;bibtex:title&gt;Novel Methods for the prediction of logger P, pKa and log D.&lt;/bibtex:title&gt;
 &lt;bibtex:journal&gt;J. Chem. Inf. Comput. Sci.&lt;/bibtex:journal&gt;
@@ -181,30 +285,65 @@
 &lt;bibtex:volume&gt;42&lt;/bibtex:volume&gt;
 &lt;bibtex:pages&gt;796-805&lt;/bibtex:pages&gt;
 &lt;/bibtex:article&gt;</bibtex:entry>
-  </bo:Reference>
-  <bo:MolecularDescriptor rdf:ID="pkaSMARTS">
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2009-01-13</dc:date>
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >pKa estimation , as described in             &lt;bibtex:cite xmlns:bibtex="http://bibtexml.sf.net/" ref="LEE2008"&gt;&lt;/bibtex:cite&gt;</bo:definition>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >pKa</rdfs:label>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#GraphRepresentation"/>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#hybridDescriptor"/>
-  </bo:MolecularDescriptor>
-  <bo:MolecularDescriptor rdf:ID="MOPAC">
-    <bo:definition rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >MOPAC wrapper for electronic descriptor calculation</bo:definition>
-    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >OpenMopac</rdfs:label>
-    <bo:requires rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#has3DCoordinates"/>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#geometricalDescriptor"/>
-    <bo:isClassifiedAs rdf:resource="http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#electronicDescriptor"/>
-  </bo:MolecularDescriptor>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#lioni -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;lioni">
+        <rdf:type rdf:resource="&bo;Contributor"/>
+        <rdfs:label>Elena Urucheva</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#ngn -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;ngn">
+        <rdf:type rdf:resource="&bo;Contributor"/>
+        <rdfs:label rdf:datatype="&xsd;string">Nina Jeliazkova</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#ntk73 -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;ntk73">
+        <rdf:type rdf:resource="&bo;Contributor"/>
+        <rdfs:label>Nikolay Kochev</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#pkaSMARTS -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;pkaSMARTS">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">pKa</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2009-01-13</dc:date>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:definition rdf:datatype="&xsd;string">pKa estimation , as described in             &lt;bibtex:cite xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot; ref=&quot;LEE2008&quot;&gt;&lt;/bibtex:cite&gt;</bo:definition>
+        <bo:requires rdf:resource="&bo;GraphRepresentation"/>
+        <bo:isClassifiedAs rdf:resource="&bo;hybridDescriptor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ambit.sourceforge.net/descriptors.owl#toxtreecramer -->
+
+    <owl:NamedIndividual rdf:about="&ambitd;toxtreecramer">
+        <rdf:type rdf:resource="&bo;MolecularDescriptor"/>
+        <rdfs:label rdf:datatype="&xsd;string">toxtreecramer</rdfs:label>
+        <dc:date rdf:datatype="&xsd;string">2010-10-03</dc:date>
+        <dc:contributor rdf:datatype="&xsd;string">http://ambit.sourceforge.net/descriptors.owl#ngn</dc:contributor>
+        <bo:definition rdf:datatype="&xsd;string">implements atom environment fingerprints, according to
+
+           &lt;bibtex:cite xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot; ref=&quot;CRA1978&quot;&gt;&lt;/bibtex:cite&gt; and &lt;bibtex:cite xmlns:bibtex=&quot;http://bibtexml.sf.net/&quot; ref=&quot;PAT2008&quot;&gt;&lt;/bibtex:cite&gt;</bo:definition>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
-<!-- Created with Protege (with OWL Plugin 3.4.1, Build 536)  http://protege.stanford.edu -->
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
