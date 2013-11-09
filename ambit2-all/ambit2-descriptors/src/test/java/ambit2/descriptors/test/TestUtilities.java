@@ -1,23 +1,24 @@
 package ambit2.descriptors.test;
 
+import java.io.FileReader;
+
+import org.junit.Test;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.graph.PathTools;
 import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 
-import ambit2.descriptors.topological.CTIDescriptor;
-import ambit2.descriptors.geometrical.CGIDescriptor;
-import ambit2.smarts.SmartsHelper;
 import ambit2.core.io.MyIteratingMDLReader;
-
-import java.io.FileReader; 
+import ambit2.descriptors.geometrical.CGIDescriptor;
+import ambit2.descriptors.topological.CTIDescriptor;
+import ambit2.smarts.SmartsHelper;
 
 public class TestUtilities 
 {
@@ -137,5 +138,9 @@ public class TestUtilities
 		}
 
 		return null;
+	}
+	@Test
+	public void test() {
+		
 	}
 }
