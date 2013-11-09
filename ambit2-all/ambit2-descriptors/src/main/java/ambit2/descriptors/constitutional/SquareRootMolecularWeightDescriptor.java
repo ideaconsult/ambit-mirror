@@ -1,74 +1,34 @@
 package ambit2.descriptors.constitutional;
 
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
-import org.openscience.cdk.qsar.DescriptorValue;
-import org.openscience.cdk.qsar.IMolecularDescriptor;
-import org.openscience.cdk.qsar.result.DoubleResult;
-import org.openscience.cdk.qsar.result.IDescriptorResult;
 
-import ambit2.descriptors.MolecularWeight;
+import ambit2.base.data.Property;
 
 /**
  * Square root molecular weight. Todeschini , Handbook of Molecular descriptors, physico-chemical properties, p.589.
  * @author Elena Urucheva, Nikolay Kochev
  * <b>Modified</b> 2013-10-31
  */
-public class SquareRootMolecularWeightDescriptor implements IMolecularDescriptor
-{
-	public DescriptorSpecification getSpecification() 
-	{
+public class SquareRootMolecularWeightDescriptor extends DerivedMolecularWeightDescriptor  {
+	
+	public SquareRootMolecularWeightDescriptor() {
+		super(new String[] {"SquareRootMW"});
+	}
+	@Override
+	public DescriptorSpecification getSpecification() {
 		return new DescriptorSpecification(
-				"SquareRootMolecularWeightDescriptor",
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"SquareRootMolecularWeightDescriptor"),
 				this.getClass().getName(),
 				"$Id: SquareRootMolecularWeightDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
 				"http://ambit.sourceforge.net");
 	}
-
-	public void setParameters(Object[] params) throws CDKException 
-	{
-		
+	@Override
+	public double calculateDerivedValue(IAtomContainer container,
+			double weight) {
+		return  Math.sqrt(weight);
 	}
 
-	public Object[] getParameters() 
-	{
-		return null;
-	}
-
-	public String[] getDescriptorNames()
-	{
-		return null;
-	}
-
-	public DescriptorValue calculate(IAtomContainer container)
-	{
-		MolecularWeight descr = new MolecularWeight();
-		DescriptorValue dValue = descr.calculate(container);
-		IDescriptorResult res = dValue.getValue();
-		double weight = ((DoubleResult)res).doubleValue();
-		
-		double SMWD = Math.sqrt(weight);
-
-		return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-				new DoubleResult(SMWD), getDescriptorNames());
-	}
-
-	public IDescriptorResult getDescriptorResultType() 
-	{
-		return new DoubleResult(0.0);
-	}
-
-
-	public String[] getParameterNames()
-	{
-		return null;
-	}
-
-	public Object getParameterType(String name) 
-	{
-		return "";
-	}
 }
 
 
