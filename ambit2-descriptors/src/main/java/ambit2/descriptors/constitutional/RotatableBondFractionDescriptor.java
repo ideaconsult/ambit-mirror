@@ -5,10 +5,12 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
-import org.openscience.cdk.qsar.result.DoubleResult;
-import org.openscience.cdk.qsar.result.IntegerResult;
-import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor;
+import org.openscience.cdk.qsar.result.DoubleResult;
+import org.openscience.cdk.qsar.result.IDescriptorResult;
+import org.openscience.cdk.qsar.result.IntegerResult;
+
+import ambit2.base.data.Property;
 
 /**
  * Rotatable bond fraction. Todeschini , Handbook of Molecular descriptors, flexibility indices, p.313.
@@ -20,7 +22,7 @@ public class RotatableBondFractionDescriptor implements IMolecularDescriptor
 	public DescriptorSpecification getSpecification()
 	{
 		return new DescriptorSpecification(
-				"RotatableBondFractionDescriptor",
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"RotatableBondFractionDescriptor"),
 				this.getClass().getName(),
 				"$Id: RotatableBondFractionDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
 				"http://ambit.sourceforge.net");

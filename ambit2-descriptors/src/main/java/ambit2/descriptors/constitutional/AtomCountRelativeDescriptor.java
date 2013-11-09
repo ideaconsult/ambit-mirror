@@ -5,58 +5,46 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
-import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
 import org.openscience.cdk.qsar.result.DoubleArrayResultType;
-import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
+
+import ambit2.base.data.Property;
 
 /**
  * Relative atom-type count. Todeschini , Handbook of Molecular descriptors, count descriptors, p.175.
  * @author Elena Urucheva, Nevena Todorova, Nikolay Kochev
  * <b>Modified</b> 2013-10-31
  */
-public class AtomCountRelativeDescriptor  implements IMolecularDescriptor  
-{
-	private String elementName;
-	private String names[];
-	private String elements[];
+public class AtomCountRelativeDescriptor  extends AbstractAtomCountDescriptor {
+
+	private String elementName = "";
+
+	private String elements[] = {"H","C","O","N","X"};
 	private double percentFactor = 1.0;
 
 
-	public AtomCountRelativeDescriptor()
-	{
-		elementName = "";
-		elements = new String[] {"H","C","O","N","X"};
-		
-		names = new String[elements.length];
-		for (int i = 0; i<elements.length; i++)
-			names[i] = elements[i] + "%";
+	public AtomCountRelativeDescriptor()  {
+		super( new String[] {"H%","C%","O%","N%","X%"});
 	}
-	
-	public String[] getDescriptorNames() 
-	{
-		
-		if (!elementName.equals(""))
-		{	
-			String name = elementName + "%";
-			names = new String[] {name};
-		}	 
-		
-		return names;
+	/**
+	 * 
+	 */
+	public String[] getDescriptorNames()	{
+		if (!"".equals(elementName)){	
+			return new String[] {String.format("%s%%", elementName)};
+		} else return super.getDescriptorNames();
 	}
 
 
-	public String[] getParameterNames() 
-	{
+	public String[] getParameterNames() {
 		String[] params = new String[1];
 		params[0] = "elementName";
 		return params;
 	}
 
 
-	public Object getParameterType(String name)
-	{
+	public Object getParameterType(String name) {
 		return "";
 	}
 
@@ -64,16 +52,14 @@ public class AtomCountRelativeDescriptor  implements IMolecularDescriptor
 	public Object[] getParameters() 
 	{
 		// return the parameters as used for the descriptor calculation
-		Object[] params = new Object[1];
-		params[0] = elementName;
-		return params;
+		return new String[] {elementName};
 	}
 
 
 	public DescriptorSpecification getSpecification() 
 	{
 		return new DescriptorSpecification(
-				"AtomCountRelativeDescriptor",
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"AtomCountRelativeDescriptor"),
 				this.getClass().getName(),
 				"$Id: AtomCountRelativeDescriptor.java, v 0.1 2013 Elena Urucheva, Nevena Todorova, Nikolay Kochev",
 				"http://ambit.sourceforge.net");
@@ -92,37 +78,20 @@ public class AtomCountRelativeDescriptor  implements IMolecularDescriptor
 	}
 
 
-
-	public DescriptorValue calculate(IAtomContainer container)
-	{
-		if (container == null) 
-		{
-			return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-					new DoubleResult (Double.NaN), getDescriptorNames(),
-					new CDKException("The supplied AtomContainer was NULL"));
-		}
-
-		if (container.getAtomCount() == 0) 
-		{
-			return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-					new DoubleResult(Double.NaN), getDescriptorNames(),
-					new CDKException("The supplied AtomContainer did not have any atoms"));
-		}
-		
+	@Override
+	public DescriptorValue calculateCounts(IAtomContainer container) throws CDKException {
 		int nAllAtoms = countAtoms(container, "*");
 		
 		DoubleArrayResult result = new DoubleArrayResult();
 		
-		if (elementName.equals(""))
-		{
+		if (elementName.equals(""))	{
 			for (int i = 0; i < elements.length; i++)
 			{
 				int nAt = countAtoms(container, elements[i]);
 				result.add((percentFactor * nAt)/nAllAtoms);
 			}
 		}
-		else
-		{
+		else {
 			int nAt = countAtoms(container, elementName);
 			result.add((percentFactor * nAt)/nAllAtoms);
 		}
@@ -134,29 +103,24 @@ public class AtomCountRelativeDescriptor  implements IMolecularDescriptor
 
 	
 
-	private int countAtoms(IAtomContainer container, String atType)
-	{
+	private int countAtoms(IAtomContainer container, String atType) throws CDKException {
 		int atomCount = 0;
 		
-		if (atType.equals("*"))
-		{
+		if (atType.equals("*")) 	{ 
 			atomCount = container.getAtomCount() + getNumImplicitHAtoms(container);   
 			return (atomCount);
 		}
 		
-		if (atType.equals("X"))
-		{
+		if (atType.equals("X")) 		{
 			return countHalogens(container);
 		}
 		
-		for (int i = 0; i < container.getAtomCount(); i++) 
-		{
+		for (int i = 0; i < container.getAtomCount(); i++) 		{
 			if (container.getAtom(i).getSymbol().equals(atType))			
 				atomCount += 1;
 		}	
 		
-		if (atType.equals("H"))
-		{
+		if (atType.equals("H")) {
 			atomCount += getNumImplicitHAtoms(container);
 		}
 		
@@ -164,8 +128,7 @@ public class AtomCountRelativeDescriptor  implements IMolecularDescriptor
 		return atomCount;
 	}
 	
-	private int countHalogens(IAtomContainer container)
-	{
+	private int countHalogens(IAtomContainer container) {
 		int halNum = 0;
 		
 		for (int i = 0; i < container.getAtomCount(); i++) 
@@ -187,24 +150,27 @@ public class AtomCountRelativeDescriptor  implements IMolecularDescriptor
 		return halNum;
 	}
 	
-	
-	private int getNumImplicitHAtoms(IAtomContainer container)
-	{
+	private int getNumImplicitHAtoms(IAtomContainer container) throws CDKException {
 		int n = 0;
-		for (int i = 0; i < container.getAtomCount(); i++) 
-		{
-			// we assume that UNSET is equivalent to 0 implicit H's
+		for (int i = 0; i < container.getAtomCount(); i++) 	{
+			// we assume that UNSET is equivalent to 0 implicit H's 
+			//NJ : no, the assumption is not correct. UNSET should throw an exception
 			Integer hcount = container.getAtom(i).getImplicitHydrogenCount();
 			if (hcount != CDKConstants.UNSET) 
 				n += hcount;
+			else throw new CDKException("Unset implicit H");
 		}
 		
 		return n;
 	}
 	
-
-	public IDescriptorResult getDescriptorResultType()
-	{
-		return new DoubleArrayResultType(5);
+	/**
+	 * Returning results of different size is not very convenient
+	 */
+	public IDescriptorResult getDescriptorResultType() {
+		if (!"".equals(elementName))
+			return new DoubleArrayResultType(1);
+		else
+			return new DoubleArrayResultType(5);
 	}
 }
