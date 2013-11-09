@@ -11,16 +11,21 @@ import org.openscience.cdk.charges.GasteigerMarsiliPartialCharges;
 import org.openscience.cdk.graph.PathTools;
 import org.openscience.cdk.graph.matrix.ConnectionMatrix;
 
+import ambit2.base.data.Property;
+
 import java.util.List;
 
 
-
-public class CTIDescriptor 
-{
+/**
+ * Charge-related Topological Index (CTI)
+ * TODO: reference
+ *
+ */
+public class CTIDescriptor {
 	public DescriptorSpecification getSpecification()
 	{
 		return new DescriptorSpecification(
-				"Charge-related Topological Index (CTI)",
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"CTIDescriptor"),
 				this.getClass().getName(),
 				"$Id: CTIDescriptor.java, v 0.1 2013 Nikolay Kochev",
 				"http://ambit.sourceforge.net");
