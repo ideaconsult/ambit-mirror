@@ -1,5 +1,10 @@
 package ambit2.descriptors.test;
 
+import java.util.ArrayList;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -20,41 +25,26 @@ import ambit2.descriptors.constitutional.HeteroAtomCountDescriptor;
 import ambit2.descriptors.constitutional.RotatableBondFractionDescriptor;
 import ambit2.descriptors.constitutional.SquareRootMolecularWeightDescriptor;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junit.framework.Test;
-
-import java.util.ArrayList;
 
 
-
-public class TestDescriptors extends TestCase
-{
+public class TestDescriptors  {
 	public SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
-
-	public TestDescriptors()
-	{	
-	}
-
-	public static Test suite() 
-	{
-		return new TestSuite(TestDescriptors.class);
-	}
 
 	public void performDescriptorTest(IMolecularDescriptor descriptor, int descrValueIndex, String info,
 			ArrayList<String> smiles, ArrayList<Double> expectedValues, double eps_precision) throws Exception
 			{
-		assertEquals("smiles[] and expectedValues[] arrays must be of equal size()", smiles.size(), expectedValues.size());
+		Assert.assertEquals("smiles[] and expectedValues[] arrays must be of equal size()", smiles.size(), expectedValues.size());
 
 		for (int i = 0; i < smiles.size(); i++)
 		{	
 			IAtomContainer mol = sp.parseSmiles(smiles.get(i));
 			DescriptorValue dv = descriptor.calculate(mol);
 			double d = TestDescriptors.unpackValueAsDouble(descrValueIndex, dv.getValue());
-			assertEquals(info + " value for " +smiles.get(i), expectedValues.get(i).doubleValue(), d, eps_precision);
+			Assert.assertEquals(info + " value for " +smiles.get(i), expectedValues.get(i).doubleValue(), d, eps_precision);
 		}
-			}
-
+	}
+	
+	@Test
 	public void testAtomCountHybridizationDescriptor() throws Exception 
 	{
 		ArrayList<String> smiles = new ArrayList<String>();
@@ -105,9 +95,8 @@ public class TestDescriptors extends TestCase
 		performDescriptorTest(descriptor, 2, "AtomCountHybridizationDescriptor", smiles, expectedValues3, 1.0e-2);
 
 	}
-
-	public void testAtomCountRelativeDescriptor() throws Exception 
-	{
+	@Test
+	public void testAtomCountRelativeDescriptor() throws Exception	{
 		ArrayList<String> smiles = new ArrayList<String>();
 
 		ArrayList<Double> expectedValues1 = new ArrayList<Double> ();
@@ -170,9 +159,8 @@ public class TestDescriptors extends TestCase
 		performDescriptorTest(descriptor, 4, "AtomCountRelativeDescriptor", smiles, expectedValues5, 1.0e-2);
 
 	}
-
-	public void testAverageMolecularWeightDescriptor() throws Exception 
-	{
+	@Test
+	public void testAverageMolecularWeightDescriptor() throws Exception	{
 		ArrayList<String> smiles = new ArrayList<String>();
 		ArrayList<Double> expectedValues = new ArrayList<Double> ();
 
@@ -203,9 +191,8 @@ public class TestDescriptors extends TestCase
 		performDescriptorTest(descriptor, 0, "AverageMolecularWeightDescriptor", smiles, expectedValues, 1.0e-0);
 
 	}
-
-	public void testCubicRootMolecularWeightDescriptor() throws Exception 
-	{
+	@Test
+	public void testCubicRootMolecularWeightDescriptor() throws Exception	{
 		ArrayList<String> smiles = new ArrayList<String>();
 		ArrayList<Double> expectedValues = new ArrayList<Double> ();
 
@@ -236,9 +223,8 @@ public class TestDescriptors extends TestCase
 		performDescriptorTest(descriptor, 0, "CubicRootMolecularWeightDescriptor", smiles, expectedValues, 1.0e-1);
 
 	}
-
-	public void testHeteroAtomCountDescriptor() throws Exception 
-	{
+	@Test
+	public void testHeteroAtomCountDescriptor() throws Exception	{
 		ArrayList<String> smiles = new ArrayList<String>();
 		ArrayList<Double> expectedValues = new ArrayList<Double> ();
 
@@ -251,7 +237,7 @@ public class TestDescriptors extends TestCase
 
 		performDescriptorTest(descriptor, 0, "HeteroAtomCountDescriptor", smiles, expectedValues, 1.0e-15);
 	}
-
+	@Test
 	public void testRotatableBondFractionDescriptor() throws Exception 
 	{
 		ArrayList<String> smiles = new ArrayList<String>();
@@ -269,7 +255,7 @@ public class TestDescriptors extends TestCase
 
 		performDescriptorTest(descriptor, 0, "RotatableBondFractionDescriptor", smiles, expectedValues, 1.0e-02);
 	}
-
+	@Test
 	public void testSquareRootMolecularWeightDescriptor() throws Exception 
 	{
 		ArrayList<String> smiles = new ArrayList<String>();
