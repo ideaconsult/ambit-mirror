@@ -1,84 +1,40 @@
 package ambit2.descriptors.constitutional;
 
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType.Hybridization;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
-import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
-import org.openscience.cdk.qsar.result.IntegerResult;
+
+import ambit2.base.data.Property;
 
 /**
  * Atomistic topological indices. Todeschini , Handbook of Molecular descriptors, count descriptors, p.175.
  * @author Elena Urucheva, Nikolay Kochev
  * <b>Modified</b> 2013-10-31
  */
-public class AtomCountHybridizationDescriptor implements IMolecularDescriptor
-{
-	private String names[];
+public class AtomCountHybridizationDescriptor extends AbstractAtomCountDescriptor {
+
 	
-	public AtomCountHybridizationDescriptor()
-	{
-		names = new String[] {"nSp3" ,"nSp2", "nSp1"};
-	}
-
-
-	public String[] getDescriptorNames() 
-	{
-		return names;
-	}
-
-	public String[] getParameterNames()
-	{
-		return null;
-	}
-
-
-	public Object getParameterType(String arg0)
-	{
-		return null;
-	}
-
-	public Object[] getParameters() 
-	{
-		return null;
+	public AtomCountHybridizationDescriptor()	{
+		super(new String[] {"nSp3" ,"nSp2", "nSp1"});
 	}
 
 	public DescriptorSpecification getSpecification() 
 	{
 		return new DescriptorSpecification(
-				"AtomCountHybridizationDescriptor",
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"AtomCountHybridizationDescriptor"),
 				this.getClass().getName(),
 				"$Id: AtomCountHybridizationDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
 				"http://ambit.sourceforge.net");
 	}
 
-	public void setParameters(Object[] arg0) throws CDKException
-	{
-	}
-
-
-	public DescriptorValue calculate(IAtomContainer container)
-	{
+	@Override
+	public DescriptorValue calculateCounts(IAtomContainer container) {
 		int nSp3 = 0;
 		int nSp2 = 0;
 		int nSp1 = 0;
-
-		if (container == null)
-		{
-			return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-					new IntegerResult((int) Double.NaN), getDescriptorNames(),
-					new CDKException("The supplied AtomContainer was NULL"));
-		}
-
-		if (container.getAtomCount() == 0) 
-		{
-			return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-					new IntegerResult((int) Double.NaN), getDescriptorNames(),
-					new CDKException("The supplied AtomContainer did not have any atoms"));
-		}
 
 		for (int i = 0; i < container.getAtomCount(); i++) 
 		{
@@ -107,8 +63,7 @@ public class AtomCountHybridizationDescriptor implements IMolecularDescriptor
 				result, getDescriptorNames());
 	}
 
-	public IDescriptorResult getDescriptorResultType()
-	{
+	public IDescriptorResult getDescriptorResultType()	{
 		return new IntegerArrayResult(3);
 	}
 

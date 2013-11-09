@@ -4,73 +4,33 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
-import org.openscience.cdk.qsar.IMolecularDescriptor;
-import org.openscience.cdk.qsar.result.IDescriptorResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
+
+import ambit2.base.data.Property;
 
 /**
  * Number of atoms which are not hydrogens and carbons .
  * @author Elena Urucheva, Nikolay Kochev
  * <b>Modified</b> 2013-10-31
  */
-public class HeteroAtomCountDescriptor implements IMolecularDescriptor 
-{
+public class HeteroAtomCountDescriptor extends AbstractAtomCountDescriptor {
 
-	public static final String[] names = 
-	{
-		"nHeteroAtom"
-	};
-	
-
-	public HeteroAtomCountDescriptor()
-	{	
+	public HeteroAtomCountDescriptor() 	{	
+		super(new String[] {"nHeteroAtom"});
 	}
 
 	public DescriptorSpecification getSpecification()
 	{
 		return new DescriptorSpecification(
-				"HeteroAtomCountDescriptor",
+				String.format(Property.AMBIT_DESCRIPTORS_ONTOLOGY,"HeteroAtomCountDescriptor"),
 				this.getClass().getName(),
 				"$Id: HeteroAtomCountDescriptor.java, v 0.1 2013 Elena Urucheva, Nikolay Kochev",
 				"http://ambit.sourceforge.net");
 	} 
 
-
-	public void setParameters(Object[] params) throws CDKException 
-	{	
-	}
-
-
-	public Object[] getParameters() 
-	{
-		// return the parameters as used for the descriptor calculation
-		return null;
-	}
-
-	public String[] getDescriptorNames()
-	{
-		return names;
-	}
-
-
-	public DescriptorValue calculate(IAtomContainer container)
-	{	
-		//int nAtom = countAtoms(container);
-		
-		if (container == null) 
-		{
-			return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-					new IntegerResult((int) Double.NaN), getDescriptorNames(),
-					new CDKException("The supplied AtomContainer was NULL"));
-		}
-		
-		if (container.getAtomCount() == 0)
-		{
-			return new DescriptorValue(getSpecification(), getParameterNames(), getParameters(),
-					new IntegerResult((int) Double.NaN), getDescriptorNames(),
-					new CDKException("The supplied AtomContainer did not have any atoms"));
-		}
-
+	
+	@Override
+	public DescriptorValue calculateCounts(IAtomContainer container) throws CDKException {
 		int nHeteroAtom = 0; 
 		for (int i = 0; i < container.getAtomCount(); i++)
 		{
@@ -88,21 +48,5 @@ public class HeteroAtomCountDescriptor implements IMolecularDescriptor
 	}	
 
 
-	public IDescriptorResult getDescriptorResultType()
-	{
-		return new IntegerResult(1);
-	}
-
-
-	public String[] getParameterNames()
-	{	
-		return new String[0];
-	}
-
-
-	public Object getParameterType(String name) 
-	{
-		return "";
-	}
-}
+}	
 
