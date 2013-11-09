@@ -60,7 +60,7 @@ public class AutomaticTautomerTests
 	public boolean FlagSkipFirstLineInDirIteration = false;  //if true the first line is skipped for the all files except the first file in the directory
 	
 	
-	public boolean FlagDescrAverageForCloseEnergies = false;  //The ranking is relative to the energy of the tautomer which is the original structure
+	public boolean FlagDescrAverageForCloseEnergies = true;  //The ranking is relative to the energy of the tautomer which is the original structure
 	
 	
 	int lineProcessMode = 0;
@@ -2019,7 +2019,7 @@ public class AutomaticTautomerTests
 		{	
 			if (curStruct != -1)
 				if (numTautomers > 1)
-				finalizeTautomerAverageCalculation();
+					finalizeTautomerAverageCalculation();
 
 			curStruct = strNum;
 			
@@ -2134,12 +2134,20 @@ public class AutomaticTautomerTests
 	
 	void finalizeTautomerAverageCalculation()
 	{
+		if (FlagDescrAverageForCloseEnergies)
+		{
+			if (descrStat[0].originalMoleculeIndex == -1)
+				return;  //This situation is counted asn an error i.e. it is not found a tautomer which is the original structure
+		}
+			
 		StringBuffer sb = new StringBuffer();
 		sb.append(curStruct);
 		sb.append("," + curTautomerSmiles + "," + numTautomers);
+			
+		
 		for (int i = 0; i < descrStat.length; i++)
 		{
-			if (this.FlagDescrAverageForCloseEnergies)
+			if (FlagDescrAverageForCloseEnergies)
 				descrStat[i].iterateValuesAndRerank_CloseEnergy();  
 				
 			sb.append("," + descrStat[i].originalValue);
