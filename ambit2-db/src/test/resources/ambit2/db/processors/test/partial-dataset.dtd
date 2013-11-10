@@ -1,5 +1,7 @@
 <!ELEMENT dataset (
     users*,
+    substance_experiment*,
+    substance_protocolapplication*,
     roles*,
     user_roles*,
     catalog_references*,
@@ -33,6 +35,33 @@
     affiliation CDATA #REQUIRED
     keywords CDATA #IMPLIED
     reviewer CDATA #REQUIRED
+>
+
+<!ELEMENT substance_experiment EMPTY>
+<!ATTLIST substance_experiment
+    idresult CDATA #REQUIRED
+    document_prefix CDATA #REQUIRED
+    document_uuid CDATA #REQUIRED
+    endpoint CDATA #IMPLIED
+    conditions CDATA #IMPLIED
+    unit CDATA #IMPLIED
+    loQualifier CDATA #IMPLIED
+    loValue CDATA #IMPLIED
+    upQualifier CDATA #IMPLIED
+    upvalue CDATA #IMPLIED
+>
+
+<!ELEMENT substance_protocolapplication EMPTY>
+<!ATTLIST substance_protocolapplication
+    document_prefix CDATA #REQUIRED
+    document_uuid CDATA #REQUIRED
+    endpoint CDATA #IMPLIED
+    guidance CDATA #IMPLIED
+    substance_prefix CDATA #IMPLIED
+    substance_uuid CDATA #IMPLIED
+    params CDATA #REQUIRED
+    reference CDATA #IMPLIED
+    updated CDATA #REQUIRED
 >
 
 <!ELEMENT roles EMPTY>
@@ -83,10 +112,14 @@
     uuid CDATA #IMPLIED
     documentType CDATA #IMPLIED
     format CDATA #IMPLIED
-    formatversion CDATA #IMPLIED
     name CDATA #IMPLIED
     publicname CDATA #IMPLIED
     content CDATA #IMPLIED
+    substanceType CDATA #IMPLIED
+    rs_prefix CDATA #IMPLIED
+    rs_uuid CDATA #IMPLIED
+    owner_prefix CDATA #IMPLIED
+    owner_uuid CDATA #IMPLIED
 >
 
 <!ELEMENT properties EMPTY>

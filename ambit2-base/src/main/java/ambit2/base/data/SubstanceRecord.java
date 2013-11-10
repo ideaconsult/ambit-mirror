@@ -116,6 +116,7 @@ public class SubstanceRecord extends StructureRecord {
 		idsubstance = -1;
 		setOwnerUUID(null);
 		if (relatedStructures!=null) relatedStructures.clear();
+		if (measurements!=null) measurements.clear();
 	}
 	@Override
 	public String toString() {
