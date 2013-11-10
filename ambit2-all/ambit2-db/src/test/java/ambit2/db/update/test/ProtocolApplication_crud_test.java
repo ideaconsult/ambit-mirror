@@ -55,7 +55,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		Assert.assertEquals(papp.getProtocol().getEndpoint(),table.getValue(0,"endpoint"));
 		Assert.assertEquals(papp.getProtocol().getGuidance().get(0),table.getValue(0,"guidance"));
 		Assert.assertEquals(papp.getReference(),table.getValue(0,"reference"));
-		//Assert.assertEquals(papp.getParameters().toString(),table.getValue(0,"params"));
+		Assert.assertEquals(papp.getParameters().toString(),table.getValue(0,"params"));
 		c.close();
 
 	}
