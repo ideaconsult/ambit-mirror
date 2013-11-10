@@ -25,7 +25,7 @@ public class ReadEffectRecord  extends AbstractQuery<String,EffectRecord<String,
 	private static final long serialVersionUID = -5430387137460722198L;
 	protected EffectRecord record = new EffectRecord();
 	public final static String sql = 
-		"SELECT endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue from substance_experiment where document_prefix =? and hex(document_uuid) u=?";
+		"SELECT endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue from substance_experiment where document_prefix =? and hex(document_uuid) =?";
 	
 	@Override
 	public String getSQL() throws AmbitException {
@@ -35,7 +35,7 @@ public class ReadEffectRecord  extends AbstractQuery<String,EffectRecord<String,
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		if (getFieldname()==null) throw new AmbitException("Empty substance id");
+		if (getFieldname()==null) throw new AmbitException("Empty document id");
 		String[] uuid = new String[]{null,getFieldname()};
 		uuid = I5Utils.splitI5UUID(getFieldname());
 		params.add(new QueryParam<String>(String.class, uuid[0]));
