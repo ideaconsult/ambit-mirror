@@ -58,6 +58,14 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		if (this.effects==null) effects = new ArrayList<EffectRecord<ENDPOINT,CONDITIONS,UNIT>>();
 		effects.add(effect);
 	}
+	
+	public void clear() {
+		documentUUID = null;
+		if (effects!=null) effects.clear();
+		reference = null;
+		parameters = null;
+		protocol = null;
+	}
 
 	@Override
 	public String toString() {

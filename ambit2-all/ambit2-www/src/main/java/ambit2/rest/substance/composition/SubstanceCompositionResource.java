@@ -19,10 +19,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
-import ambit2.rest.QueryURIReporter;
-import ambit2.rest.StringConvertor;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.substance.SubstanceJSONReporter;
 import ambit2.rest.substance.SubstanceResource;
 
 public class SubstanceCompositionResource<Q extends IQueryRetrieval<CompositionRelation>> extends QueryResource<Q,CompositionRelation> { 
