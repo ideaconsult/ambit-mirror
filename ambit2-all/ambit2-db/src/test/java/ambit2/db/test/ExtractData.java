@@ -25,7 +25,10 @@ public class ExtractData {
         // partial database export
         QueryDataSet partialDataSet = new QueryDataSet(connection);
         partialDataSet.addTable("users", "SELECT * FROM users WHERE user_name=\"guest\"");
-        partialDataSet.addTable("roles", "SELECT * FROM roles");              
+        partialDataSet.addTable("substance_experiment", "SELECT * FROM substance_experiment");
+        
+        partialDataSet.addTable("substance_protocolapplication", "SELECT * FROM substance_protocolapplication");
+        partialDataSet.addTable("roles", "SELECT * FROM roles");
         partialDataSet.addTable("user_roles", "SELECT * FROM user_roles WHERE user_name=\"guest\"");
         
         partialDataSet.addTable("catalog_references", "SELECT * FROM catalog_references");

@@ -67,6 +67,16 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	protected Double upValue = null;
 	protected CONDITIONS conditions;
 	
+	public void clear() {
+		endpoint = null;
+		unit = null;
+		conditions = null;
+		loQualifier = null;
+		upQualifier = null;
+		upValue = null;
+		loValue = null;
+		
+	}
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
@@ -77,7 +87,7 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 		b.append(",\n");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("conditions")));
 		b.append(":\t");		
-		b.append(getConditions().toString());
+		b.append(getConditions()==null?null:getConditions().toString());
 		b.append(",\n");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("result")));
 		b.append(":\t{\n\t");
