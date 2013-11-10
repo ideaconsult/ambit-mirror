@@ -3,6 +3,7 @@ package ambit2.base.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
@@ -26,7 +27,17 @@ public class SubstanceRecord extends StructureRecord {
 	protected String companyName;
 	protected String publicName;
 	protected String companyUUID;
-	
+	protected List<ProtocolApplication> measurements;
+	public List<ProtocolApplication> getMeasurements() {
+		return measurements;
+	}
+	public void setMeasurements(List<ProtocolApplication> measurements) {
+		this.measurements = measurements;
+	}
+	public void addtMeasurement(ProtocolApplication measurement) {
+		if (this.measurements ==null) this.measurements = new ArrayList<ProtocolApplication>();
+		measurements.add(measurement);
+	}
 	public String getSubstancetype() {
 		return substancetype;
 	}
