@@ -167,13 +167,14 @@ CREATE TABLE `substance_protocolapplication` (
   `guidance` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `substance_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `substance_uuid` varbinary(16) DEFAULT NULL,
-  `params` blob NOT NULL,
+  `params` text NOT NULL,
   `reference` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`document_prefix`,`document_uuid`),
   KEY `substance` (`substance_prefix`,`substance_uuid`),
   KEY `endpoint` (`endpoint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- -----------------------------------------------------
 -- Table `substance_experiment`
