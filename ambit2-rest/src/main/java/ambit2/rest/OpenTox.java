@@ -68,7 +68,8 @@ public class OpenTox {
 		qmap,
 		substance,
 		composition,
-		study;
+		study,
+		effect;
 		public String getURI() {
 			return String.format("/%s",toString());
 		}

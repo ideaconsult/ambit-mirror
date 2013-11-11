@@ -9,7 +9,7 @@
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = substance.defineSubstanceTable("${ambit_root}","${ambit_request_json}","#substances",true,null,'Trt');
+	  	var oTable = substance.defineSubstanceStudyTable("${ambit_root}","${ambit_request_json}","#study",true,null,'Trt');
 	  	loadHelp("${ambit_root}","substance");
 	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	  	downloadForm("${ambit_request}");
@@ -32,7 +32,7 @@
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="six columns alpha">
 			<div class="remove-bottom h3">
-					Substances
+					Substance study
 			</div>
 		    <div class='help'>
 		     Mono-constituent, multiconstituent, additives, impurities.
@@ -87,15 +87,16 @@
 		<!-- Page Content
 		================================================== -->
 		<div class="row" style="padding:0;" >
-			<table id='substances' class='substancetable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<table id='study' class='studytable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
 			<th></th>
-			<th>Name</th>
-			<th>Company UUID</th>
-			<th>Type</th>
-			<th>Public name</th>
-			<th>Reference substance UUID</th>
+			<th>Substance UUID</th>
+			<th>Category</th>
+			<th>Endpoint</th>
+			<th>Guidance</th>
+			<th>Parameters</th>
+			<th>Effects</th>
 			</tr>
 			</thead>
 			<tbody></tbody>
