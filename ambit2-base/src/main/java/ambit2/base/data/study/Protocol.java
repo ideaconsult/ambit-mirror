@@ -6,6 +6,14 @@ import java.util.List;
 import ambit2.base.json.JSONUtils;
 
 public class Protocol {
+	String category;
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	String endpoint;
 	List<String> guidance;
 	
@@ -36,7 +44,9 @@ public class Protocol {
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
-		b.append("{\"endpoint\":");
+		b.append("{\"category\":");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(category)));
+		b.append(",\"endpoint\":");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint)));
 		b.append(",\"guidance\": [");
 		if (guidance!=null)

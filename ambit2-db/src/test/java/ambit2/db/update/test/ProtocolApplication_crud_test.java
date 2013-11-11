@@ -19,6 +19,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	
 	protected static ProtocolApplication initpa() {
 		Protocol protocol = new Protocol("Short-term toxicity to fish, IUC4#53/Ch.4.1");
+		protocol.setCategory("TO_ACUTE_ORAL");
 		protocol.addGuidance("Method: other: acute toxicity test; \"static bioassay\"");
 		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
 		Params params = new Params();params.put("Test organism", "Lepomis cyanellus");
@@ -48,11 +49,12 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
-		"SELECT document_prefix,hex(document_uuid) u,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication");
+		"SELECT document_prefix,hex(document_uuid) u,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication");
 		Assert.assertEquals(1,table.getRowCount());
 		Assert.assertEquals(papp.getDocumentUUID(),table.getValue(0,"document_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
 		Assert.assertEquals("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",table.getValue(0,"substance_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"su").toString().toLowerCase()));
 		Assert.assertEquals(papp.getProtocol().getEndpoint(),table.getValue(0,"endpoint"));
+		Assert.assertEquals(papp.getProtocol().getCategory(),table.getValue(0,"endpointcategory"));
 		Assert.assertEquals(papp.getProtocol().getGuidance().get(0),table.getValue(0,"guidance"));
 		Assert.assertEquals(papp.getReference(),table.getValue(0,"reference"));
 		Assert.assertEquals(papp.getParameters().toString(),table.getValue(0,"params"));
