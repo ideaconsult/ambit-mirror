@@ -54,6 +54,47 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		return papp;
 	}
 
+	protected static ProtocolApplication initacutetox() {
+		Protocol protocol = new Protocol("Acute toxicity: oral, IUC4#2/Ch.5.1.1");
+		protocol.setCategory("TO_ACUTE_ORAL_SECTION");
+		protocol.addGuidance("Method: other: no data");
+		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
+		Params params = new Params();
+		papp.setParameters(params);
+		papp.setReference("Smyth, H. F. Seaton J., and Fischer L. (1941).|The single dose toxicity of some glycols and derivatives.|J. Ind. Hyg. Toxicol. 23, 259-268");
+		params.put("Species","rat");
+		params.put("Sex","male/female");
+		papp.setDocumentUUID("IUC4-ae64fc3b-22a4-3173-9362-9cce1ff622ae");
+		EffectRecord record = new EffectRecord<String,Params,String>();
+		params = new Params();params.put("Temperature", "25 °C");params.put("Sex","male");
+		record.setConditions(params);
+		record.setEndpoint("LD50");
+		record.setLoValue(260);
+		record.setUpValue(320);
+		record.setUnit("mg/kg bw");
+		papp.addEffect(record);
+		return papp;
+	}
+
+	protected static ProtocolApplication initbiodeg() {
+		Protocol protocol = new Protocol("Biodegradation in water: screening tests, IUC4#1/Ch.3.5");
+		protocol.setCategory("TO_BIODEG_WATER_SCREEN_SECTION");
+		protocol.addGuidance("OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)");
+		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
+		Params params = new Params();
+		papp.setParameters(params);
+		papp.setReference("reference");
+		papp.setDocumentUUID("IUC4-1d75f01c-3b2b-35f5-84f1-ce23e22b6c73");
+		EffectRecord record = new EffectRecord<String,Params,String>();
+		params = new Params();params.put("Time point", "28 d");
+		record.setConditions(params);
+		record.setEndpoint("% Degradation");
+		record.setLoValue(90);
+		record.setUnit("%");
+		papp.addEffect(record);
+		return papp;
+	}
+
 
 	@Override
 	protected IQueryUpdate<String,ProtocolApplication<Protocol, Params, String, Params, String>> updateQuery()
@@ -68,7 +109,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
 		"SELECT document_prefix,hex(document_uuid) u,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication");
-		Assert.assertEquals(1,table.getRowCount());
+		Assert.assertEquals(4,table.getRowCount());
 		Assert.assertEquals(papp.getDocumentUUID(),table.getValue(0,"document_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
 		Assert.assertEquals("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",table.getValue(0,"substance_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"su").toString().toLowerCase()));
 		Assert.assertEquals(papp.getProtocol().getEndpoint(),table.getValue(0,"endpoint"));
@@ -79,23 +120,9 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		c.close();
 
 	}
+/*
+	
 
-	@Override
-	public void testCreateNew() throws Exception {
-		/*
-{
-"uuid":	"IUC4-1d75f01c-3b2b-35f5-84f1-ce23e22b6c73/0",
-"protocol":	{"category":"TO_BIODEG_WATER_SCREEN_SECTION","endpoint":"Biodegradation in water: screening tests, IUC4#1/Ch.3.5","guidance": ["OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)"]},
-"parameters":	{"RESULT":"readily biodegradable","TEST TYPE":"aerobic","RESULT DETAILS":"RS-Freetext:\n% THOD"},
-"effects":	[{
-"endpoint":	"% Degradation",
-"conditions":	{"Time point":"28 d"},
-"result":	{
-	"unit":	"%",
-	"loValue":	90.0
-	}
-}]
-}
 
 	 {
 "uuid":	"IUC4-ae64fc3b-22a4-3173-9362-9cce1ff622ae/0",
@@ -110,8 +137,9 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	}
 }]
 }
-	 */
-	}
+	 
+ */
+
 	@Override
 	public void testDelete() throws Exception {
 	}
@@ -125,8 +153,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	@Override
 	protected IQueryUpdate<String, ProtocolApplication<Protocol, Params, String, Params, String>> createQueryNew()
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return new UpdateSubstanceStudy("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",initacutetox());
 	}
 
 	@Override

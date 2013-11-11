@@ -36,6 +36,27 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 		record.setLoValue(0.35);
 		return record;
 	}
+	protected static EffectRecord initeffect_TO_BIODEG_WATER_SCREEN_SECTION() {
+		EffectRecord record = new EffectRecord<String,Params,String>();
+		Params params = new Params();
+		params.put("Time point", "28 d");
+		record.setConditions(params);
+		record.setEndpoint("% Degradation");
+		record.setLoValue(90);
+		record.setUnit("%");
+		return record;
+	}
+	protected static EffectRecord initeffect_TO_ACUTE_ORAL_SECTION() {
+		EffectRecord record = new EffectRecord<String,Params,String>();
+		Params params = new Params();
+		params = new Params();params.put("Temperature", "25 °C");params.put("Sex","male");
+		record.setConditions(params);
+		record.setEndpoint("LD50");
+		record.setLoValue(260);
+		record.setUpValue(320);
+		record.setUnit("mg/kg bw");
+		return record;
+	}
 	@Override
 	protected IQueryUpdate<String,EffectRecord> updateQuery()
 			throws Exception {
@@ -49,7 +70,7 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
         IDatabaseConnection c = getConnection();	
 		ITable table = 	c.createQueryTable("EXPECTED",
 		"SELECT document_prefix,hex(document_uuid) u,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue from substance_experiment");		
-		Assert.assertEquals(2,table.getRowCount());
+		Assert.assertEquals(5,table.getRowCount());
 		Assert.assertEquals("IUC4-7adb0d03-f69b-32a9-9efe-86b4a8577893",
 				table.getValue(0,"document_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"u").toString().toLowerCase()));
 		
@@ -64,9 +85,6 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 
 	}
 
-	@Override
-	public void testCreateNew() throws Exception {
-	}
 
 	@Override
 	protected IQueryUpdate<String, EffectRecord> createQuery() throws Exception {
@@ -76,8 +94,9 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 	@Override
 	protected IQueryUpdate<String, EffectRecord> createQueryNew()
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		//return new UpdateEffectRecords("IUC4-1d75f01c-3b2b-35f5-84f1-ce23e22b6c73", initeffect_TO_BIODEG_WATER_SCREEN_SECTION());
+		return new UpdateEffectRecords("IUC4-ae64fc3b-22a4-3173-9362-9cce1ff622ae", initeffect_TO_ACUTE_ORAL_SECTION());
+		
 	}
 
 	@Override
