@@ -499,7 +499,7 @@ var substance = {
 			    						$.each(val, function(key,effect) {
 			    							sOut = effect.endpoint + "=";
 			    							sOut += (effect.result["loValue"]===undefined?effect.result["upValue"]:effect.result["loValue"]);
-			    							sOut += " " +(effect.result["unit"]===undefined?"":effect.result["unit"]);
+			    							sOut += " " +((effect.result["unit"]===undefined)||(effect.result["unit"]==null)?"":effect.result["unit"]);
 			    							return sOut;
 			    						});
 			    						return sOut;
@@ -577,13 +577,12 @@ var substance = {
 						"</tr></thead><tbody>";
 						$.each(dataEntry.effects, function(key,effect) {
 							effectsTable += "<tr>";
-							console.log(effect);
 							effectsTable += "<td>"+ effect.endpoint +"</td>";
 							effectsTable += "<td>"+ (effect.result["loQualifier"]===undefined?"":effect.result["loQualifier"]) + 
 													(effect.result["loValue"]===undefined?"":effect.result["loValue"]) +"</td>";
 							effectsTable += "<td>"+ (effect.result["upQualifier"]===undefined?"":effect.result["upQualifier"]) + 
 													(effect.result["upValue"]===undefined?"":effect.result["upValue"]) +"</td>";
-							effectsTable += "<td>"+ effect.result["unit"] +"</td>";
+							effectsTable += "<td>"+ (effect.result["unit"]==null?"":effect.result["unit"]) +"</td>";
 							var sOut = "";
 							$.each(effect["conditions"], function(name,value) {
 								sOut += name + "=" + value + "<br/>";
