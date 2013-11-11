@@ -383,5 +383,206 @@ var substance = {
 					}
 				}
 			});
-		}
+		},
+		"defineSubstanceStudyTable" : function (root,url,selector,jQueryUI,dom,compositionDom) {
+			var oTable = $(selector).dataTable( {
+				"sAjaxDataProp" : "study",
+				"sAjaxSource": url,	
+				"sSearch": "Filter:",
+				"bJQueryUI" : jQueryUI,
+				"bSearchable": true,
+				"bProcessing" : true,
+				"sDom" : (dom==null)?'<"help remove-bottom"i><"help"p>Trt<"help"lf>':dom,
+				"sSearch": "Filter:",
+				"bPaginate" : true,
+				"sPaginationType": "full_numbers",
+				"sPaginate" : ".dataTables_paginate _paging",
+				"oLanguage": {
+			            "sProcessing": "<img src='"+root+"/images/24x24_ambit.gif' border='0'>",
+			            "sLoadingRecords": "No substances found.",
+			            "sZeroRecords": "No substances found.",
+			            "sEmptyTable": "No substances available.",
+			            "sInfo": "Showing _TOTAL_ substance(s) (_START_ to _END_)",
+			            "sLengthMenu": 'Display <select>' +
+			          '<option value="10">10</option>' +
+			          '<option value="20">20</option>' +
+			          '<option value="50">50</option>' +
+			          '<option value="100">100</option>' +
+			          '<option value="-1">all</option>' +
+			          '</select> substances.'	            
+			    },	
+			    "aoColumnDefs": [
+				    			{ //2
+				    				"aTargets": [ 0 ],	
+				    				"sClass" : "center",
+				    				"bSortable" : false,
+				    				"bSearchable" : false,
+				    				"mDataProp" : null,
+				    				"bUseRendered" : false,	
+				    				"fnRender" : function(o,val) {
+				    					return "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show study results'></span>";
+				    				}
+				    			},				                     
+			    				{ //1
+			    					"aTargets": [ 1 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "uuid",
+			    					"sWidth" : "20%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						return val;
+			    					}
+			    				},		
+			    				{ //1
+			    					"aTargets": [ 2 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "protocol.category",
+			    					"sWidth" : "15%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						return val;
+			    					}
+			    				},			    				
+			    				{ //3
+			    					"aTargets": [ 3 ],	
+			    					"sClass" : "camelCase",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "protocol.endpoint",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						return val;
+			    					}
+			    				},
+			    				{ //1
+			    					"aTargets": [ 4 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "protocol.guidance",
+			    					"sWidth" : "20%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						return val;
+			    					}
+			    				},
+			    				{ //1
+			    					"aTargets": [ 5 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "parameters",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						var sOut = "";
+			    						$.each(val, function(key,n) {
+			    							sOut += key + " = " + n;
+			    							sOut += "<br/>";
+			    						});
+			    						return sOut;
+			    					}
+			    				},		
+			    				{ //1
+			    					"aTargets": [ 6 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "effects",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						var sOut = "";
+			    						$.each(val, function(key,effect) {
+			    							sOut = effect.endpoint + "=";
+			    							sOut += (effect.result["loValue"]===undefined?effect.result["upValue"]:effect.result["loValue"]);
+			    							sOut += " " +(effect.result["unit"]===undefined?"":effect.result["unit"]);
+			    							return sOut;
+			    						});
+			    						return sOut;
+			    					}
+			    				}			    				
+			    				],
+			      "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
+						oSettings.jqXHR = $.ajax({
+							"type" : "GET",
+							"url" : sSource,
+							"data" : aoData,
+							"dataType" : "json",
+							"contentType" : "application/json",
+							"success" : function(json) {
+								fnCallback(json);
+							},
+							"cache" : true,
+							"error" : function(xhr, textStatus, error) {
+								switch (xhr.status) {
+								case 403: {
+						        	alert("Restricted data access. You are not authorized to access the requested data.");
+									break;
+								}
+								case 404: {
+									//not found
+									break;
+								}
+								default: {
+						        	alert("Error loading data " + xhr.status + " " + error);
+								}
+								}
+								oSettings.oApi._fnProcessingDisplay(oSettings, false);
+							}
+						});			    	  
+			      },
+			 	  "aaSorting": [[1, 'desc']]
+				});
+
+		    	$(selector + ' tbody td .zoomstruc').live('click',function() {
+					var nTr = $(this).parents('tr')[0];
+					if (oTable.fnIsOpen(nTr)) {
+						$(this).removeClass("ui-icon-folder-open");
+						$(this).addClass("ui-icon-folder-collapsed");
+						this.title='Click to show study results';
+						oTable.fnClose(nTr);
+					} else {
+						$(this).removeClass("ui-icon-folder-collapsed");
+						$(this).addClass("ui-icon-folder-open");
+						this.title='Click to close study results panel';
+						var id = getID();
+						var dataEntry = oTable.fnGetData(nTr);
+						oTable.fnOpen(nTr, fnFormatDetails(dataEntry,id),"studyresults");
+									
+					}
+		    	});
+		    	function getID() {
+		    		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+		    	}
+				function fnFormatDetails( dataEntry,id ) {
+					var effectsTable = 
+						"<div id='c_"+id+"' class='details' style='margin-top: 5x;' >"+						
+						"<table id='t_"+id+"' class='compositiontable' cellpadding='0' border='0' width='100%' cellspacing='0' style='margin:0;padding:0;' >"+
+						"<thead><tr><th>Endpoint</th><th>Value (lower)</th><th>Value (upper)</th><th>Unit</th><th>Conditions</th>"+
+						"</tr></thead><tbody>";
+						$.each(dataEntry.effects, function(key,effect) {
+							effectsTable += "<tr>";
+							console.log(effect);
+							effectsTable += "<td>"+ effect.endpoint +"</td>";
+							effectsTable += "<td>"+ (effect.result["loQualifier"]===undefined?"":effect.result["loQualifier"]) + 
+													(effect.result["loValue"]===undefined?"":effect.result["loValue"]) +"</td>";
+							effectsTable += "<td>"+ (effect.result["upQualifier"]===undefined?"":effect.result["upQualifier"]) + 
+													(effect.result["upValue"]===undefined?"":effect.result["upValue"]) +"</td>";
+							effectsTable += "<td>"+ effect.result["unit"] +"</td>";
+							var sOut = "";
+							$.each(effect["conditions"], function(name,value) {
+								sOut += name + "=" + value + "<br/>";
+							});
+							effectsTable += "<td>"+ sOut +"</td>";
+							effectsTable += "</tr>";
+						});
+						effectsTable += "</tbody></table></div>";
+				    return effectsTable;
+				}
+
+				return oTable;			
+		}		
 }

@@ -6,10 +6,12 @@ import java.util.List;
 
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
+import ambit2.db.search.IParameterizedQuery;
 import ambit2.db.search.QueryParam;
 
 /**
@@ -17,7 +19,9 @@ import ambit2.db.search.QueryParam;
  * @author nina
  *
  */
-public class ReadEffectRecord  extends AbstractQuery<String,EffectRecord<String, String, String>, EQCondition, EffectRecord> implements IQueryRetrieval<EffectRecord>{
+public class ReadEffectRecord  extends AbstractQuery<ProtocolApplication,EffectRecord<String, String, String>, EQCondition, EffectRecord> 
+																	implements IQueryRetrieval<EffectRecord>,
+																	IParameterizedQuery<ProtocolApplication, EffectRecord<String, String, String>, EQCondition>{
 
 	/**
 	 * 
@@ -35,9 +39,9 @@ public class ReadEffectRecord  extends AbstractQuery<String,EffectRecord<String,
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		if (getFieldname()==null) throw new AmbitException("Empty document id");
-		String[] uuid = new String[]{null,getFieldname()};
-		uuid = I5Utils.splitI5UUID(getFieldname());
+		if (getFieldname()==null || getFieldname().getDocumentUUID()==null) throw new AmbitException("Empty document id");
+		String[] uuid = new String[]{null,getFieldname().getDocumentUUID()};
+		uuid = I5Utils.splitI5UUID(getFieldname().getDocumentUUID());
 		params.add(new QueryParam<String>(String.class, uuid[0]));
 		params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
 		return params;
@@ -52,8 +56,10 @@ public class ReadEffectRecord  extends AbstractQuery<String,EffectRecord<String,
 			record.setUnit(rs.getString("unit"));
 			record.setLoQualifier(rs.getString("loQualifier"));
 			record.setUpQualifier(rs.getString("upQualifier"));
-			record.setLoValue(rs.getDouble("loValue"));
-			record.setUpValue(rs.getDouble("upValue"));
+			if (rs.getString("loValue")!=null)
+				record.setLoValue(rs.getDouble("loValue"));
+			if (rs.getString("upValue")!=null)
+				record.setUpValue(rs.getDouble("upValue"));
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
@@ -69,6 +75,8 @@ public class ReadEffectRecord  extends AbstractQuery<String,EffectRecord<String,
 	public double calculateMetric(EffectRecord object) {
 		return 1;
 	}
+	
+	
 
 	
 
