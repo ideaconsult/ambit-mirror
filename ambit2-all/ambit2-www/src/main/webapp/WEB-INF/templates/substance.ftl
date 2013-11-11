@@ -96,6 +96,7 @@
 			<th>Type</th>
 			<th>Public name</th>
 			<th>Reference substance UUID</th>
+			<th>Study</th>
 			</tr>
 			</thead>
 			<tbody></tbody>
