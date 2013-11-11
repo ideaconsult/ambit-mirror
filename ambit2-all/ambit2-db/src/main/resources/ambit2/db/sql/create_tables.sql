@@ -163,6 +163,7 @@ DROP TABLE IF EXISTS `substance_protocolapplication`;
 CREATE TABLE `substance_protocolapplication` (
   `document_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `document_uuid` varbinary(16) NOT NULL,
+  `endpointcategory` varchar(16) DEFAULT NULL,
   `endpoint` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `guidance` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `substance_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
@@ -172,7 +173,8 @@ CREATE TABLE `substance_protocolapplication` (
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`document_prefix`,`document_uuid`),
   KEY `substance` (`substance_prefix`,`substance_uuid`),
-  KEY `endpoint` (`endpoint`)
+  KEY `endpoint` (`endpoint`),
+  KEY `category` (`endpointcategory`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
