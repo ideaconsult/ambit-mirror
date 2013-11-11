@@ -98,6 +98,18 @@ var substance = {
 			    					"fnRender" : function(o,val) {
 			    						return val;
 			    					}
+			    				},
+			    				{ //1
+			    					"aTargets": [6 ],	
+			    					"sClass" : "left",
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "i5uuid",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						return "<a href='"+root+"/substance/"+val+"/study'>Study</a>"
+
+			    					}
 			    				}				    				
 			    				],
 			      "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
@@ -412,19 +424,8 @@ var substance = {
 			          '</select> substances.'	            
 			    },	
 			    "aoColumnDefs": [
-				    			{ //2
-				    				"aTargets": [ 0 ],	
-				    				"sClass" : "center",
-				    				"bSortable" : false,
-				    				"bSearchable" : false,
-				    				"mDataProp" : null,
-				    				"bUseRendered" : false,	
-				    				"fnRender" : function(o,val) {
-				    					return "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show study results'></span>";
-				    				}
-				    			},				                     
 			    				{ //1
-			    					"aTargets": [ 1 ],	
+			    					"aTargets": [ 0 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -436,7 +437,7 @@ var substance = {
 			    					}
 			    				},		
 			    				{ //1
-			    					"aTargets": [ 2 ],	
+			    					"aTargets": [ 1 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -448,7 +449,7 @@ var substance = {
 			    					}
 			    				},			    				
 			    				{ //3
-			    					"aTargets": [ 3 ],	
+			    					"aTargets": [ 2 ],	
 			    					"sClass" : "camelCase",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -459,7 +460,7 @@ var substance = {
 			    					}
 			    				},
 			    				{ //1
-			    					"aTargets": [ 4 ],	
+			    					"aTargets": [ 3 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -471,7 +472,7 @@ var substance = {
 			    					}
 			    				},
 			    				{ //1
-			    					"aTargets": [ 5 ],	
+			    					"aTargets": [ 4 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -487,7 +488,7 @@ var substance = {
 			    					}
 			    				},		
 			    				{ //1
-			    					"aTargets": [ 6 ],	
+			    					"aTargets": [ 5 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -503,7 +504,18 @@ var substance = {
 			    						});
 			    						return sOut;
 			    					}
-			    				}			    				
+			    				},
+				    			{ //2
+				    				"aTargets": [6 ],	
+				    				"sClass" : "center",
+				    				"bSortable" : false,
+				    				"bSearchable" : false,
+				    				"mDataProp" : null,
+				    				"bUseRendered" : false,	
+				    				"fnRender" : function(o,val) {
+				    					return "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show study results'></span>";
+				    				}
+				    			}			    				
 			    				],
 			      "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
 						oSettings.jqXHR = $.ajax({

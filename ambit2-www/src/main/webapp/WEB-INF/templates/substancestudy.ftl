@@ -90,13 +90,13 @@
 			<table id='study' class='studytable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
-			<th></th>
-			<th>Substance UUID</th>
+			<th>Study UUID</th>
 			<th>Category</th>
 			<th>Endpoint</th>
 			<th>Guidance</th>
 			<th>Parameters</th>
 			<th>Effects</th>
+			<th></th>			
 			</tr>
 			</thead>
 			<tbody></tbody>
