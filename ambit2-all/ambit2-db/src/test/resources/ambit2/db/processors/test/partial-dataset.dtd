@@ -55,6 +55,7 @@
 <!ATTLIST substance_protocolapplication
     document_prefix CDATA #REQUIRED
     document_uuid CDATA #REQUIRED
+    endpointcategory CDATA #IMPLIED
     endpoint CDATA #IMPLIED
     guidance CDATA #IMPLIED
     substance_prefix CDATA #IMPLIED
