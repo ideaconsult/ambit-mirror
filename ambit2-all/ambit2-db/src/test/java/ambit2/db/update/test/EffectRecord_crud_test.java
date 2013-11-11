@@ -26,10 +26,19 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 		return record;
 	}
 
+	protected static EffectRecord initeffect_PC_PARTITION_SECTION() {
+
+		EffectRecord record = new EffectRecord<String,Params,String>();
+		Params params = new Params();
+		params = new Params();params.put("Temperature", "25 °C");
+		record.setConditions(params);
+		record.setEndpoint("log Pow");
+		record.setLoValue(0.35);
+		return record;
+	}
 	@Override
 	protected IQueryUpdate<String,EffectRecord> updateQuery()
 			throws Exception {
-		System.out.println(effect);
 		return new UpdateEffectRecords("IUC4-7adb0d03-f69b-32a9-9efe-86b4a8577893",effect);
 	}
 
@@ -54,18 +63,14 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 		c.close();
 
 	}
-	@Override
-	public void testCreate() throws Exception {
 
-	}
 	@Override
 	public void testCreateNew() throws Exception {
 	}
 
 	@Override
 	protected IQueryUpdate<String, EffectRecord> createQuery() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return new UpdateEffectRecords("IUC4-2f64ab27-d2be-352e-b9d8-4f0274fd6633",initeffect_PC_PARTITION_SECTION());
 	}
 
 	@Override

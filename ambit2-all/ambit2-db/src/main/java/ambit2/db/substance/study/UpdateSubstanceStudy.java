@@ -44,7 +44,7 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 	public static final String[] create_sql = {
 		"INSERT INTO substance_protocolapplication (document_prefix,document_uuid,endpointcategory,endpoint,guidance,substance_prefix,substance_uuid,params,reference)\n" +
 		"values(?,unhex(replace(?,'-','')),?,?,?,?,unhex(replace(?,'-','')),?,?) on duplicate key update\n"+
-		"substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid),\n"+
+		"substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid),endpointcategory=values(endpointcategory),\n"+
 		"endpoint=values(endpoint),guidance=values(guidance),params=values(params),reference=values(reference)" 
 	};
 	

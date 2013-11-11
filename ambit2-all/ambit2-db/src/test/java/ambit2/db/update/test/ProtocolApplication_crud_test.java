@@ -19,7 +19,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	
 	protected static ProtocolApplication initpa() {
 		Protocol protocol = new Protocol("Short-term toxicity to fish, IUC4#53/Ch.4.1");
-		protocol.setCategory("TO_ACUTE_ORAL");
+		protocol.setCategory("EC_FISHTOX_SECTION");
 		protocol.addGuidance("Method: other: acute toxicity test; \"static bioassay\"");
 		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
 		Params params = new Params();params.put("Test organism", "Lepomis cyanellus");
@@ -36,10 +36,28 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		return papp;
 	}
 
+	protected static ProtocolApplication initpc() {
+		Protocol protocol = new Protocol("Partition coefficient, IUC4#5/Ch.2.5");
+		protocol.setCategory("PC_PARTITION_SECTION");
+		protocol.addGuidance("Method: other (measured)");
+		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
+		Params params = new Params();
+		papp.setParameters(params);
+		papp.setReference("reference");
+		papp.setDocumentUUID("IUC4-2f64ab27-d2be-352e-b9d8-4f0274fd6633");
+		EffectRecord record = new EffectRecord<String,Params,String>();
+		params = new Params();params.put("Temperature", "25 °C");
+		record.setConditions(params);
+		record.setEndpoint("log Pow");
+		record.setLoValue(0.35);
+		papp.addEffect(record);
+		return papp;
+	}
+
+
 	@Override
 	protected IQueryUpdate<String,ProtocolApplication<Protocol, Params, String, Params, String>> updateQuery()
 			throws Exception {
-		//System.out.println(papp);
 		return new UpdateSubstanceStudy("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",papp);
 	}
 
@@ -61,12 +79,38 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		c.close();
 
 	}
-	@Override
-	public void testCreate() throws Exception {
 
-	}
 	@Override
 	public void testCreateNew() throws Exception {
+		/*
+{
+"uuid":	"IUC4-1d75f01c-3b2b-35f5-84f1-ce23e22b6c73/0",
+"protocol":	{"category":"TO_BIODEG_WATER_SCREEN_SECTION","endpoint":"Biodegradation in water: screening tests, IUC4#1/Ch.3.5","guidance": ["OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)"]},
+"parameters":	{"RESULT":"readily biodegradable","TEST TYPE":"aerobic","RESULT DETAILS":"RS-Freetext:\n% THOD"},
+"effects":	[{
+"endpoint":	"% Degradation",
+"conditions":	{"Time point":"28 d"},
+"result":	{
+	"unit":	"%",
+	"loValue":	90.0
+	}
+}]
+}
+
+	 {
+"uuid":	"IUC4-ae64fc3b-22a4-3173-9362-9cce1ff622ae/0",
+"protocol":	{"category":"TO_ACUTE_ORAL_SECTION","endpoint":"Acute toxicity: oral, IUC4#2/Ch.5.1.1","guidance": ["Method: other: no data"]},
+"parameters":	{"Test Organism":"guinea pig","Reference":"Smyth, H. F. Seaton J., and Fischer L. (1941).|The single dose toxicity of some glycols and derivatives.|J. Ind. Hyg. Toxicol. 23, 259-268","Sex":"male/female"},
+"effects":	[{
+"endpoint":	"LD50",
+"conditions":	{"Sex":"male/female"},
+"result":	{
+	"unit":	"mg/kg bw",
+	"loValue":	260.0
+	}
+}]
+}
+	 */
 	}
 	@Override
 	public void testDelete() throws Exception {
@@ -75,8 +119,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	@Override
 	protected IQueryUpdate<String, ProtocolApplication<Protocol, Params, String, Params, String>> createQuery()
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return new UpdateSubstanceStudy("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",initpc());
 	}
 
 	@Override
