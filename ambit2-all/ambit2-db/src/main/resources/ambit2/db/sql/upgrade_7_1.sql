@@ -29,7 +29,7 @@ CREATE TABLE `substance_experiment` (
   `document_uuid` varbinary(16) NOT NULL,
   `endpoint` varchar(45) DEFAULT NULL,
   `conditions` text,
-  `unit` varchar(6) DEFAULT NULL,
+  `unit` varchar(16) DEFAULT NULL,
   `loQualifier` varchar(6) DEFAULT NULL,
   `loValue` double DEFAULT NULL,
   `upQualifier` varchar(6) DEFAULT NULL,
