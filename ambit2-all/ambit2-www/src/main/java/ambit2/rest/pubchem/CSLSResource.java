@@ -72,7 +72,7 @@ public class CSLSResource extends ProtectedResource {
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
-		
+		setFrameOptions("SAMEORIGIN");
 		try {
 	        if (term != null) {
 	        	

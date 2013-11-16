@@ -66,6 +66,7 @@ public class Build3DResource extends CatalogResource {
 	}
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
+		setFrameOptions("SAMEORIGIN");
 		try {
 			try {
 				Form form = getResourceRef(getRequest()).getQueryAsForm();

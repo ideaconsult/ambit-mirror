@@ -289,6 +289,7 @@ public class ChartResource extends ProtectedResource {
        	return image;
 	}
 	public Representation get(Variant variant) throws ResourceException {
+		setFrameOptions("SAMEORIGIN");
 		final BufferedImage image = createImage();
        	
        	return new OutputRepresentation(MediaType.IMAGE_PNG) {

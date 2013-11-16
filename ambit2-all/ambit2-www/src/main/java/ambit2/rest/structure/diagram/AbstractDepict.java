@@ -181,6 +181,7 @@ public class AbstractDepict extends ProtectedResource {
 	
 	@Override
 	public Representation get(Variant variant) {
+		setFrameOptions("SAMEORIGIN");
 		return process(variant);
 	}
 

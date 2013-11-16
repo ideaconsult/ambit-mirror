@@ -47,7 +47,7 @@ public class LauncherResource extends ProtectedResource {
 	}	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
-		
+		setFrameOptions("SAMEORIGIN");
 		return new OutputRepresentation(MediaType.TEXT_HTML) {
 			@Override
 			public void write(OutputStream stream) throws IOException {

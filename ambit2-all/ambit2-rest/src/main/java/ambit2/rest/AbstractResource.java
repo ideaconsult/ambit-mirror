@@ -89,6 +89,7 @@ public abstract class AbstractResource<Q,T extends Serializable,P extends IProce
 	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
+		setFrameOptions("SAMEORIGIN");
 		CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
 		cS.setPath("/");
         this.getResponse().getCookieSettings().add(cS);
