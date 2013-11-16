@@ -46,7 +46,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		papp.setReference("reference");
 		papp.setDocumentUUID("IUC4-2f64ab27-d2be-352e-b9d8-4f0274fd6633");
 		EffectRecord record = new EffectRecord<String,Params,String>();
-		params = new Params();params.put("Temperature", "25 °C");
+		params = new Params();params.put("Temperature", "25 \u2103C");
 		record.setConditions(params);
 		record.setEndpoint("log Pow");
 		record.setLoValue(0.35);
@@ -66,7 +66,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		params.put("Sex","male/female");
 		papp.setDocumentUUID("IUC4-ae64fc3b-22a4-3173-9362-9cce1ff622ae");
 		EffectRecord record = new EffectRecord<String,Params,String>();
-		params = new Params();params.put("Temperature", "25 °C");params.put("Sex","male");
+		params = new Params();params.put("Temperature", "25 \u2103C");params.put("Sex","male");
 		record.setConditions(params);
 		record.setEndpoint("LD50");
 		record.setLoValue(260);

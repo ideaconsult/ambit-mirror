@@ -30,7 +30,7 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 
 		EffectRecord record = new EffectRecord<String,Params,String>();
 		Params params = new Params();
-		params = new Params();params.put("Temperature", "25 °C");
+		params = new Params();params.put("Temperature", "25 \u2103C");
 		record.setConditions(params);
 		record.setEndpoint("log Pow");
 		record.setLoValue(0.35);
@@ -49,7 +49,7 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 	protected static EffectRecord initeffect_TO_ACUTE_ORAL_SECTION() {
 		EffectRecord record = new EffectRecord<String,Params,String>();
 		Params params = new Params();
-		params = new Params();params.put("Temperature", "25 °C");params.put("Sex","male");
+		params = new Params();params.put("Temperature", "25 \u2103C");params.put("Sex","male");
 		record.setConditions(params);
 		record.setEndpoint("LD50");
 		record.setLoValue(260);
