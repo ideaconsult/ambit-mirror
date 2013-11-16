@@ -62,7 +62,7 @@ public class PubchemResource extends ProtectedResource {
 
 	}
 	public Representation get(Variant variant) {
-		
+		setFrameOptions("SAMEORIGIN");
 		try {
 	        if (term != null) {
 	        	List<IStructureRecord> records = entrezQuery.process(term);

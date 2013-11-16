@@ -17,7 +17,7 @@ public class CDKDepictVariants extends CDKDepict {
 	}	
 	@Override
 	public Representation get(Variant variant) {
-
+		setFrameOptions("SAMEORIGIN");
 		Object mode = getRequest().getAttributes().get("mode");
 			try {
 				displayMode = Mode2D.valueOf(mode.toString());

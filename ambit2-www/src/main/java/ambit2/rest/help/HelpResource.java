@@ -42,6 +42,7 @@ public class HelpResource extends CatalogResource<String>  {
 
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
+		setFrameOptions("SAMEORIGIN");
 		if (isHtmlbyTemplate()) {
 			CookieSetting cS = new CookieSetting(0, "subjectid", getToken());
 			cS.setPath("/");

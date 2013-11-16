@@ -57,7 +57,7 @@ public class Name2StructureResource extends ProtectedResource {
 	}
 
 	public Representation get(Variant variant) {
-		
+		setFrameOptions("SAMEORIGIN");
 		try {
 	        if (name != null) {
 	        	if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) 
