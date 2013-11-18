@@ -7,6 +7,7 @@ import org.restlet.Request;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
+import ambit2.base.json.JSONUtils;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
@@ -64,13 +65,11 @@ public class FacetJSONReporter<Q extends IQueryRetrieval<IFacet>> extends QueryR
 			String subcategory = null;
 			if ((uriReporter!=null) && (uriReporter.getBaseReference()!=null))
 				subcategory = uriReporter.getBaseReference().toString();
-			output.write(String.format("\n\t{\n\t\"value\":\"%s\",\n\t\"count\":%d,\n\t\"uri\":\"%s\",\n\t\"subcategory\":%s%s%s\n\t}",
-					item.getValue(),
+			output.write(String.format("\n\t{\n\t\"value\":%s,\n\t\"count\":%d,\n\t\"uri\":%s,\n\t\"subcategory\":%s\n\t}",
+					item.getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getValue().toString())),
 					item.getCount(),
-					uriReporter.getURI(item),
-					subcategory==null?"":"\"",
-					item.getSubCategoryURL(subcategory),
-					subcategory==null?"":"\""
+					item==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(uriReporter.getURI(item))),
+					JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubCategoryURL(subcategory)))
 					));
 			comma = ",";
 		} catch (Exception x) {
