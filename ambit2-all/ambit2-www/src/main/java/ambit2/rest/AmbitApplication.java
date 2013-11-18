@@ -121,6 +121,7 @@ import ambit2.rest.structure.tautomers.QueryTautomersResource;
 import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.composition.SubstanceCompositionResource;
 import ambit2.rest.substance.composition.SubstanceStructuresResource;
+import ambit2.rest.substance.study.SubstanceStudyFacetResource;
 import ambit2.rest.substance.study.SubstanceStudyResource;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.PolicyProtectedTask;
@@ -343,10 +344,16 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 					SubstanceResource.substanceID,SubstanceStructuresResource.structure,SubstanceStructuresResource.compositionType),
 					SubstanceStructuresResource.class);
 			/**
+			 * /substance/{id}/studysummary
+			 */
+			router.attach(String.format("%s/%s",SubstanceResource.substanceID,SubstanceStudyFacetResource.resource),SubstanceStudyFacetResource.class);
+
+			/**
 			 * /substance/{id}/study
 			 */
 			router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceStudyResource.study),SubstanceStudyResource.class);
 
+			
 			/**
 			 * /substance/{id}/composition/{type}
 			 */
