@@ -30,5 +30,8 @@ public class SubstanceStudyFacetResource extends FacetResource<SubstanceStudyFac
 		q.setFieldname(substanceuuid==null?null:substanceuuid.toString());
 		return q;
 	}
-
+	protected ambit2.db.reporters.QueryReporter createJSONReporter(Request request) {
+		return new StudySummaryJSONReporter(request);
+	};
+	
 }

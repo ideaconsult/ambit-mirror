@@ -17,6 +17,7 @@ import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -63,7 +64,7 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 						MediaType.TEXT_CSV);
 			} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 				return new OutputWriterConvertor(
-						new FacetJSONReporter(getRequest()),
+						createJSONReporter(getRequest()),
 						MediaType.APPLICATION_JSON,filenamePrefix);				
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 					return new OutputWriterConvertor(
@@ -75,6 +76,9 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 						MediaType.TEXT_HTML);
 	}
 	
+	protected QueryReporter createJSONReporter(Request request) {
+		return new FacetJSONReporter(request);
+	}
 	protected FacetHTMLReporter getHTMLReporter(Request request) {
 		return new FacetHTMLReporter(request);
 	}

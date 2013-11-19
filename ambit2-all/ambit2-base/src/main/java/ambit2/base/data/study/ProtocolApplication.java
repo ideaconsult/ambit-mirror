@@ -12,13 +12,6 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	 * 
 	 */
 	private static final long serialVersionUID = 747315722852709360L;
-	protected String documentUUID;
-	public String getDocumentUUID() {
-		return documentUUID;
-	}
-	public void setDocumentUUID(String documentUUID) {
-		this.documentUUID = documentUUID;
-	}
 
 	protected PARAMS parameters;
 	protected String reference;
@@ -29,7 +22,13 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public ProtocolApplication(PROTOCOL protocol) {
 		setProtocol(protocol);
 	}
-
+	protected String documentUUID;
+	public String getDocumentUUID() {
+		return documentUUID;
+	}
+	public void setDocumentUUID(String documentUUID) {
+		this.documentUUID = documentUUID;
+	}
 	public PROTOCOL getProtocol() {
 		return protocol;
 	}
