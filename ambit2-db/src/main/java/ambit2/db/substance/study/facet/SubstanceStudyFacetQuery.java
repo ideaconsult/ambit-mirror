@@ -18,7 +18,7 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 	 */
 	private static final long serialVersionUID = -8910197148842469398L;
 	protected String sql = 
-		"select endpointcategory,count(*) from substance_protocolapplication %s group by endpointcategory with rollup";
+		"select topcategory,endpointcategory,count(*) from substance_protocolapplication %s group by topcategory,endpointcategory with rollup";
 	
 	private static String  substance_uuid = " substance_prefix=? and hex(substance_uuid)=?";
 	
@@ -63,9 +63,9 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 	@Override
 	public SubstanceStudyFacet getObject(ResultSet rs) throws AmbitException {
 		try {
-			
 			record.setValue(rs.getString(1));
-			record.setCount(rs.getInt(2));
+			record.setSubcategoryTitle(rs.getString(2));
+			record.setCount(rs.getInt(3));
 			return record;
 		} catch (Exception x) {
 			record.setValue(x.getMessage());

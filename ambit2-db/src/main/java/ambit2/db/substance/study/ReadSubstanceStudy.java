@@ -21,7 +21,7 @@ public class ReadSubstanceStudy extends AbstractQuery<String,ProtocolApplication
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected ProtocolApplication record = new ProtocolApplication(new Protocol(null));
 	public final static String sql = 
-		"SELECT document_prefix,hex(document_uuid) u,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication  where substance_prefix =? and hex(substance_uuid) =?";
+		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication  where substance_prefix =? and hex(substance_uuid) =?";
 	
 	@Override
 	public String getSQL() throws AmbitException {
@@ -46,6 +46,7 @@ public class ReadSubstanceStudy extends AbstractQuery<String,ProtocolApplication
 			Protocol protocol = new Protocol(rs.getString("endpoint"));
 			protocol.addGuidance(rs.getString("guidance"));
 			protocol.setCategory(rs.getString("endpointcategory"));
+			protocol.setTopCategory(rs.getString("topcategory"));
             record.setProtocol(protocol);
             try {
             	record.setDocumentUUID(rs.getString("document_prefix") + "-" + I5Utils.addDashes(rs.getString("u").toString().toLowerCase()));

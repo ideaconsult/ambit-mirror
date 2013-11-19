@@ -8,7 +8,11 @@ public class SubstanceStudyFacet extends AbstractFacet<String>{
 	 * 
 	 */
 	private static final long serialVersionUID = 9014078415852427522L;
+	protected String subcategory;
 
+	public void setSubcategoryTitle(String subcategory) {
+		this.subcategory = subcategory;
+	}
 	public SubstanceStudyFacet(String url) {
 		super(url);
 	}
@@ -18,13 +22,12 @@ public class SubstanceStudyFacet extends AbstractFacet<String>{
 	}
 	@Override
 	public String getSubcategoryTitle() {
-		// TODO Auto-generated method stub
-		return super.getSubcategoryTitle();
+		return subcategory;
 	}
 	@Override
 	public String getSubCategoryURL(String... params) {
-		// TODO Auto-generated method stub
-		return super.getSubCategoryURL(params);
+		if ((params!=null) && (params.length>0)) return params[0];
+		else return null;
 	}
 	
 }

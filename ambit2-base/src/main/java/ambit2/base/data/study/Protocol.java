@@ -7,6 +7,19 @@ import ambit2.base.json.JSONUtils;
 
 public class Protocol {
 	String category;
+	String endpoint;
+	List<String> guidance;
+	
+
+	protected String topCategory;	
+	public String getTopCategory() {
+		return topCategory;
+	}
+	public void setTopCategory(String topCategory) {
+		this.topCategory = topCategory;
+	}
+
+	
 	public String getCategory() {
 		return category;
 	}
@@ -14,9 +27,6 @@ public class Protocol {
 		this.category = category;
 	}
 
-	String endpoint;
-	List<String> guidance;
-	
 	public List<String> getGuidance() {
 		return guidance;
 	}
@@ -44,11 +54,14 @@ public class Protocol {
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
-		b.append("{\"category\":");
+		b.append("{");
+		b.append("\n\t\"topcategory\":");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(topCategory)));		
+		b.append(",\n\t\"category\":");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(category)));
-		b.append(",\"endpoint\":");
+		b.append(",\n\t\"endpoint\":");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint)));
-		b.append(",\"guidance\": [");
+		b.append(",\n\t\"guidance\": [");
 		if (guidance!=null)
 			for (int i=0; i < guidance.size(); i++) {
 				if (i>0) b.append(",");
