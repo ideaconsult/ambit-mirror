@@ -43,7 +43,7 @@ public class SubstanceStudyParser {
 	public static ProtocolApplication parseProtocolApplication(ObjectNode node) {
 		Protocol protocol = parseProtocol((ObjectNode)node.get(ProtocolApplication._fields.protocol.name()));
 		ProtocolApplication pa = new ProtocolApplication(protocol);
-		pa.setSubstanceUUID(node.get(ProtocolApplication._fields.uuid.name()).getTextValue());
+		pa.setDocumentUUID(node.get(ProtocolApplication._fields.uuid.name()).getTextValue());
 		parseOwner((ObjectNode)node.get(ProtocolApplication._fields.owner.name()),pa);
 		pa.setEffects(parseEffects((ArrayNode)node.get(ProtocolApplication._fields.effects.name())));
 		pa.setParameters(parseParams((ObjectNode)node.get(ProtocolApplication._fields.parameters.name())));
@@ -52,9 +52,9 @@ public class SubstanceStudyParser {
 	}
 	public static void parseOwner(ObjectNode node, ProtocolApplication record) {
 		if (node==null) return ;
-		JsonNode jn = node.get(ProtocolApplication._fields.owner.name());
-		if (jn!=null && (jn instanceof ObjectNode)) {
-			record.setSubstanceUUID(((ObjectNode)jn).get(ProtocolApplication._fields.substanceuuid.name()).asText());
+		JsonNode jn = node.get(ProtocolApplication._fields.substanceuuid.name());
+		if (jn!=null) {
+			record.setSubstanceUUID(jn.getTextValue());
 		}
 	}		
 	public static Params parseParams(ObjectNode node) {
