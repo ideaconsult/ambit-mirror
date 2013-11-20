@@ -27,7 +27,7 @@ public class ReadEffectRecord  extends AbstractQuery<ProtocolApplication,EffectR
 	 * 
 	 */
 	private static final long serialVersionUID = -5430387137460722198L;
-	protected EffectRecord record = new EffectRecord();
+
 	public final static String sql = 
 		"SELECT endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue from substance_experiment where document_prefix =? and hex(document_uuid) =?";
 	
@@ -49,7 +49,7 @@ public class ReadEffectRecord  extends AbstractQuery<ProtocolApplication,EffectR
 
 	@Override
 	public EffectRecord getObject(ResultSet rs) throws AmbitException {
-		record.clear();
+		EffectRecord record = new EffectRecord();
 		try {
 			record.setEndpoint(rs.getString("endpoint"));
 			record.setConditions(rs.getString("conditions"));
