@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.I5Utils;
+import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.exceptions.AmbitException;
@@ -13,19 +14,29 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class ReadSubstanceStudy extends AbstractQuery<String,ProtocolApplication, EQCondition, ProtocolApplication> implements IQueryRetrieval<ProtocolApplication>{
+public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,String,Params,String>> extends AbstractQuery<String,PA, EQCondition, PA> 
+									implements IQueryRetrieval<PA>{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1980335091441168568L;
-	protected ProtocolApplication record = new ProtocolApplication(new Protocol(null));
-	public final static String sql = 
-		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication  where substance_prefix =? and hex(substance_uuid) =?";
-	
+	protected PA record = (PA)new ProtocolApplication<Protocol,String,String,Params,String>(new Protocol(null));
+	private final static String sql = 
+		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication  where substance_prefix =? and hex(substance_uuid) =? ";
+
+	private final static String whereTopCategory = "\nand topcategory=?";
+	private final static String whereCategory = "\nand endpointcategory=?";
 	@Override
 	public String getSQL() throws AmbitException {
-		return sql;
+		if ((getValue()!=null) && (getValue().getProtocol()!=null)) {
+			String wsql = sql;
+			if (getValue().getProtocol().getTopCategory()!=null) 
+				wsql += whereTopCategory;
+			if (getValue().getProtocol().getCategory()!=null) 
+				wsql += whereCategory;
+			return wsql;
+		} else return sql;
 	}
 
 	@Override
@@ -36,11 +47,18 @@ public class ReadSubstanceStudy extends AbstractQuery<String,ProtocolApplication
 		uuid = I5Utils.splitI5UUID(getFieldname());
 		params.add(new QueryParam<String>(String.class, uuid[0]));
 		params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
+		
+		if ((getValue()!=null) && (getValue().getProtocol()!=null)) {
+			if (getValue().getProtocol().getTopCategory()!=null) 
+				params.add(new QueryParam<String>(String.class, getValue().getProtocol().getTopCategory()));
+			if (getValue().getProtocol().getCategory()!=null) 
+				params.add(new QueryParam<String>(String.class, getValue().getProtocol().getCategory()));				
+		}
 		return params;
 	}
 
 	@Override
-	public ProtocolApplication getObject(ResultSet rs) throws AmbitException {
+	public PA getObject(ResultSet rs) throws AmbitException {
 		record.clear();
 		try {
 			Protocol protocol = new Protocol(rs.getString("endpoint"));

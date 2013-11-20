@@ -10,6 +10,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -74,8 +75,17 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		} else {
 			try {
+				Form form = getRequest().getResourceRef().getQueryAsForm();
+				String topCategory = form.getFirstValue("top");
+				String category = form.getFirstValue("category");
 				ReadSubstanceStudy q = new ReadSubstanceStudy();
 				q.setFieldname(key.toString());
+				if (topCategory!=null || category!=null) {
+					Protocol p = new ambit2.base.data.study.Protocol("");
+					p.setTopCategory(topCategory);
+					p.setCategory(category);
+					q.setValue(new ProtocolApplication(p));
+				}
 				//q.setValue(new SubstanceRecord(Integer.parseInt(key.toString())));
 				//q.setFieldname(relation);
 				return (Q)q;
