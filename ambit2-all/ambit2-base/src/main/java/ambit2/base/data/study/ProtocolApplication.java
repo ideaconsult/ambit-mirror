@@ -12,12 +12,21 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	 * 
 	 */
 	private static final long serialVersionUID = 747315722852709360L;
-
+	protected String substanceUUID;
+	
+	public String getSubstanceUUID() {
+		return substanceUUID;
+	}
+	public void setSubstanceUUID(String substanceUUID) {
+		this.substanceUUID = substanceUUID;
+	}
 	protected PARAMS parameters;
 	protected String reference;
 	protected List<EffectRecord<ENDPOINT,CONDITIONS,UNIT>> effects;	
 	public static enum _fields {
 		uuid,
+		owner,
+		substanceuuid,
 		protocol,
 		parameters,
 		effects
@@ -79,7 +88,13 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.uuid.name())));
 		b.append(":\t");
 		b.append(getDocumentUUID()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getDocumentUUID().toString())));
-		b.append(",\n");		
+		b.append(",\n");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.owner.name())));
+		b.append(":\t{\n\t");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.substanceuuid.name())));
+		b.append(":\t");
+		b.append(getSubstanceUUID()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubstanceUUID().toString())));
+		b.append("\n\t},\n");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
 		b.append(":\t");
 		b.append(protocol==null?null:protocol.toString());
