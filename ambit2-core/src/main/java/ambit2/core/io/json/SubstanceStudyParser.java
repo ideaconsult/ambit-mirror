@@ -1,11 +1,13 @@
 package ambit2.core.io.json;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 
@@ -17,7 +19,27 @@ import ambit2.base.data.study.ProtocolApplication;
 public class SubstanceStudyParser {
 	private SubstanceStudyParser() {
 	}
-
+	public static List<ProtocolApplication> parseProtocolApplication(InputStream in) throws Exception{
+		List<ProtocolApplication> list = new ArrayList<ProtocolApplication>();
+		ObjectMapper dx = new ObjectMapper();
+		try {
+			JsonNode root = dx.readTree(in);
+			JsonNode papps = root.get("protocolapplication");
+			if (papps instanceof ArrayNode) {
+				ArrayNode a = (ArrayNode)papps;
+				for (int i=0; i < a.size(); i++) {
+					if (a.get(i) instanceof ObjectNode) {
+						list.add(SubstanceStudyParser.parseProtocolApplication((ObjectNode)a.get(i)));
+					}
+				}
+			}
+			return list;
+		} catch (Exception x) {
+			throw x;
+		} finally {
+ 			try { if (in!=null) in.close();} catch (Exception x) {}
+		}
+	}
 	public static ProtocolApplication parseProtocolApplication(ObjectNode node) {
 		Protocol protocol = parseProtocol((ObjectNode)node.get(ProtocolApplication._fields.protocol.name()));
 		ProtocolApplication pa = new ProtocolApplication(protocol);

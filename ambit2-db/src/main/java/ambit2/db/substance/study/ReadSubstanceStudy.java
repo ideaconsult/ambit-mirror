@@ -53,13 +53,11 @@ public class ReadSubstanceStudy extends AbstractQuery<String,ProtocolApplication
             } catch (Exception xx) {
             	record.setDocumentUUID(null);
             }			
-            /*
             try {
-            	record.setCompanyUUID(rs.getString("substance_prefix") + "-" + I5Utils.addDashes(rs.getString("su").toString().toLowerCase()));
+            	record.setSubstanceUUID(rs.getString("substance_prefix") + "-" + I5Utils.addDashes(rs.getString("su").toString().toLowerCase()));
             } catch (Exception xx) {
-            	papp.setDocumentUUID(null);
+            	record.setSubstanceUUID(null);
             }
-            */
             
     		record.setReference(rs.getString("reference"));
     		record.setParameters(rs.getString("params")); //parse json
