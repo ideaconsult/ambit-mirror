@@ -77,44 +77,54 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 		loValue = null;
 		
 	}
+	public static enum _fields {
+		endpoint,
+		conditions,
+		result,
+		unit,
+		loQualifier,
+		loValue,
+		upQualifier,
+		upValue
+	}
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
 		b.append("{\n");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("endpoint")));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.endpoint.name())));
 		b.append(":\t");
 		b.append(endpoint==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.toString())));
 		b.append(",\n");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("conditions")));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.conditions.name())));
 		b.append(":\t");		
 		b.append(getConditions()==null?null:getConditions().toString());
 		b.append(",\n");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("result")));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.result.name())));
 		b.append(":\t{\n\t");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("unit")));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.unit.name())));
 		b.append(":\t");
 		b.append(getUnit()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUnit().toString())));
 		if (getLoQualifier()!=null) {
 			b.append(",\n\t");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("loQualifier")));
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.loQualifier.name())));
 			b.append(":\t");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getLoQualifier())));
 		}
 		if (getLoValue()!=null) {
 			b.append(",\n\t");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("loValue")));
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.loValue.name())));
 			b.append(":\t");
 			b.append(getLoValue());
 		}
 		if (getUpQualifier()!=null) {
 			b.append(",\n\t");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("upQualifier")));
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.upQualifier.name())));
 			b.append(":\t");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getUpQualifier())));
 		}		
 		if (getUpValue()!=null) {
 			b.append(",\n\t");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("upValue")));
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.upValue.name())));
 			b.append(":\t");
 			b.append(getUpValue());
 		}

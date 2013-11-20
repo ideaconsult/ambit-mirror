@@ -10,6 +10,12 @@ public class Protocol {
 	String endpoint;
 	List<String> guidance;
 	
+	public static enum _fields {
+		topcategory,
+		category,
+		endpoint,
+		guidance
+	}
 
 	protected String topCategory;	
 	public String getTopCategory() {
@@ -55,13 +61,22 @@ public class Protocol {
 	public String toString() {
 		StringBuilder b = new StringBuilder();
 		b.append("{");
-		b.append("\n\t\"topcategory\":");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(topCategory)));		
-		b.append(",\n\t\"category\":");
+
+		b.append("\n\t");
+		b.append(JSONUtils.jsonQuote(_fields.topcategory.name()));		
+		b.append(":");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(topCategory)));
+		b.append(",\n\t");
+		b.append(JSONUtils.jsonQuote(_fields.category.name()));		
+		b.append(":");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(category)));
-		b.append(",\n\t\"endpoint\":");
+		b.append(",\n\t");
+		b.append(JSONUtils.jsonQuote(_fields.endpoint.name()));		
+		b.append(":");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint)));
-		b.append(",\n\t\"guidance\": [");
+		b.append(",\n\t");
+		b.append(JSONUtils.jsonQuote(_fields.guidance.name()));		
+		b.append(": [");				
 		if (guidance!=null)
 			for (int i=0; i < guidance.size(); i++) {
 				if (i>0) b.append(",");
