@@ -16,6 +16,12 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	protected PARAMS parameters;
 	protected String reference;
 	protected List<EffectRecord<ENDPOINT,CONDITIONS,UNIT>> effects;	
+	public static enum _fields {
+		uuid,
+		protocol,
+		parameters,
+		effects
+	}
 	
 	protected PROTOCOL protocol;
 	
@@ -70,19 +76,19 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public String toString() {
 		StringBuilder b = new StringBuilder();
 		b.append("{\n");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("uuid")));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.uuid.name())));
 		b.append(":\t");
 		b.append(getDocumentUUID()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getDocumentUUID().toString())));
 		b.append(",\n");		
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("protocol")));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
 		b.append(":\t");
 		b.append(protocol==null?null:protocol.toString());
 		b.append(",\n");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("parameters")));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.parameters.name())));
 		b.append(":\t");		
 		b.append(getParameters().toString());
 		b.append(",\n");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape("effects")));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.effects.name())));
 		b.append(":\t");
 		b.append(getEffects()==null?null:getEffects().toString());
 		b.append("\n}");
