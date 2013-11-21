@@ -23,7 +23,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected PA record = (PA)new ProtocolApplication<Protocol,String,String,Params,String>(new Protocol(null));
 	private final static String sql = 
-		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,reference from substance_protocolapplication  where substance_prefix =? and hex(substance_uuid) =? ";
+		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,interpretation_result,interpretation_criteria,reference from substance_protocolapplication  where substance_prefix =? and hex(substance_uuid) =? ";
 
 	private final static String whereTopCategory = "\nand topcategory=?";
 	private final static String whereCategory = "\nand endpointcategory=?";
@@ -79,6 +79,8 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
             
     		record.setReference(rs.getString("reference"));
     		record.setParameters(rs.getString("params")); //parse json
+    		record.setInterpretationCriteria(rs.getString("interpretation_criteria")); //parse json
+    		record.setInterpretationResult(rs.getString("interpretation_result")); //parse json
 
 		} catch (Exception x) {
 			x.printStackTrace();

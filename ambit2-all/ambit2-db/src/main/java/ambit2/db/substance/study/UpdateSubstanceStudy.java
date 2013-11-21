@@ -42,10 +42,11 @@ import ambit2.db.update.AbstractUpdate;
 public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplication<Protocol, Params, String, Params, String>> {
 
 	public static final String[] create_sql = {
-		"INSERT INTO substance_protocolapplication (document_prefix,document_uuid,topcategory,endpointcategory,endpoint,guidance,substance_prefix,substance_uuid,params,reference)\n" +
-		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,unhex(replace(?,'-','')),?,?) on duplicate key update\n"+
+		"INSERT INTO substance_protocolapplication (document_prefix,document_uuid,topcategory,endpointcategory,endpoint,guidance,substance_prefix,substance_uuid,params,interpretation_result,interpretation_criteria,reference)\n" +
+		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,unhex(replace(?,'-','')),?,?,?,?) on duplicate key update\n"+
 		"substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid),topcategory=values(topcategory),\n"+
-		"endpointcategory=values(endpointcategory),endpoint=values(endpoint),guidance=values(guidance),params=values(params),reference=values(reference)" 
+		"endpointcategory=values(endpointcategory),endpoint=values(endpoint),guidance=values(guidance),params=values(params)," +
+		"interpretation_result=values(interpretation_result),interpretation_criteria=values(interpretation_criteria),reference=values(reference)" 
 	};
 	
 
@@ -94,6 +95,8 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		params1.add(new QueryParam<String>(String.class, subst_uuid[1]));
 		
 		params1.add(new QueryParam<String>(String.class, getObject().getParameters().toString()));
+		params1.add(new QueryParam<String>(String.class, getObject().getInterpretationResult()));
+		params1.add(new QueryParam<String>(String.class, getObject().getInterpretationCriteria()));
 		params1.add(new QueryParam<String>(String.class, getObject().getReference()));
 		
 		return params1;

@@ -45,17 +45,49 @@ public class SubstanceStudyParser {
 		ProtocolApplication pa = new ProtocolApplication(protocol);
 		pa.setDocumentUUID(node.get(ProtocolApplication._fields.uuid.name()).getTextValue());
 		parseOwner((ObjectNode)node.get(ProtocolApplication._fields.owner.name()),pa);
+		parseInterpretation((ObjectNode)node.get(ProtocolApplication._fields.interpretation.name()),pa);
 		pa.setEffects(parseEffects((ArrayNode)node.get(ProtocolApplication._fields.effects.name())));
 		pa.setParameters(parseParams((ObjectNode)node.get(ProtocolApplication._fields.parameters.name())));
 		return pa;
 		
 	}
-	public static void parseOwner(ObjectNode node, ProtocolApplication record) {
+	public static void parseSubstance(ObjectNode node, ProtocolApplication record) {
 		if (node==null) return ;
-		JsonNode jn = node.get(ProtocolApplication._fields.substanceuuid.name());
+		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
 		if (jn!=null) {
 			record.setSubstanceUUID(jn.getTextValue());
 		}
+	}
+	public static void parseCompany(ObjectNode node, ProtocolApplication record) {
+		if (node==null) return ;
+		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
+		if (jn!=null) record.setCompanyUUID(jn.getTextValue());
+		jn = node.get(ProtocolApplication._fields.name.name());
+		if (jn!=null) record.setCompanyName(jn.getTextValue());
+	}
+	public static void parseOwner(ObjectNode node, ProtocolApplication record) {
+		if (node==null) return ;
+		parseSubstance((ObjectNode)node.get(ProtocolApplication._fields.substance.name()), record);
+		parseCompany((ObjectNode)node.get(ProtocolApplication._fields.company.name()), record);
+	}		
+	public static void parseInterpretedResult(ObjectNode node, ProtocolApplication record) {
+		if (node==null) return ;
+			JsonNode jn = node.get(ProtocolApplication._fields.result.name());
+		if (jn!=null) {
+			record.setInterpretationResult(jn.getTextValue());
+		}
+	}	
+	public static void parseInterpretationCriteria(ObjectNode node, ProtocolApplication record) {
+		if (node==null) return ;
+			JsonNode jn = node.get(ProtocolApplication._fields.criteria.name());
+		if (jn!=null) {
+			record.setInterpretationCriteria(jn.getTextValue());
+		}
+	}	
+	public static void parseInterpretation(ObjectNode node, ProtocolApplication record) {
+		if (node==null) return ;
+		parseInterpretedResult(node, record);
+		parseInterpretationCriteria(node, record);
 	}		
 	public static Params parseParams(ObjectNode node) {
 		if (node==null) return null;
