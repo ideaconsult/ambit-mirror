@@ -13,6 +13,20 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	 */
 	private static final long serialVersionUID = 747315722852709360L;
 	protected String substanceUUID;
+	protected String companyUUID;
+	public String getCompanyUUID() {
+		return companyUUID;
+	}
+	public void setCompanyUUID(String companyUUID) {
+		this.companyUUID = companyUUID;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	protected String companyName;
 	
 	public String getSubstanceUUID() {
 		return substanceUUID;
@@ -20,16 +34,35 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public void setSubstanceUUID(String substanceUUID) {
 		this.substanceUUID = substanceUUID;
 	}
+	protected String interpretationResult;
+	public String getInterpretationResult() {
+		return interpretationResult;
+	}
+	public void setInterpretationResult(String interpretationResult) {
+		this.interpretationResult = interpretationResult;
+	}
+	public String getInterpretationCriteria() {
+		return interpretationCriteria;
+	}
+	public void setInterpretationCriteria(String interpretationCriteria) {
+		this.interpretationCriteria = interpretationCriteria;
+	}
+	protected String interpretationCriteria;
 	protected PARAMS parameters;
 	protected String reference;
 	protected List<EffectRecord<ENDPOINT,CONDITIONS,UNIT>> effects;	
 	public static enum _fields {
 		uuid,
 		owner,
-		substanceuuid,
+		company,
+		name,
+		substance,
 		protocol,
 		parameters,
-		effects
+		effects,
+		interpretation,
+		result,
+		criteria
 	}
 	
 	protected PROTOCOL protocol;
@@ -91,9 +124,12 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append(",\n");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.owner.name())));
 		b.append(":\t{\n\t");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.substanceuuid.name())));
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.substance.name())));
+		b.append(":\t{");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.uuid.name())));
 		b.append(":\t");
 		b.append(getSubstanceUUID()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubstanceUUID().toString())));
+		b.append("}\n");
 		b.append("\n\t},\n");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
 		b.append(":\t");
@@ -103,6 +139,16 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append(":\t");		
 		b.append(getParameters().toString());
 		b.append(",\n");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.interpretation.name())));
+		b.append(":\t{\n\t");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.result.name())));
+		b.append(":\t");		
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInterpretationResult())));		
+		b.append(",\n");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.criteria.name())));
+		b.append(":\t");		
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInterpretationCriteria())));		
+		b.append("\n\t},\n");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.effects.name())));
 		b.append(":\t");
 		b.append(getEffects()==null?null:getEffects().toString());

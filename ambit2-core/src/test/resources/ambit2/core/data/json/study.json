@@ -1,0 +1,466 @@
+{
+    "protocolapplication": [
+        {
+            "uuid": "IUC5-69f39568-46e4-45ba-94f6-f00765525422",
+            "owner" : {
+            	"substance" : {
+            		"uuid" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+            	},
+            	"company" : {
+            		"uuid" : "TEST-e535bebb-e59f-3906-f988-554478ad3734",
+            		"name" : "Morgoth"
+            	}	            		
+            },
+            "protocol": {
+                "topcategory": "TOX",
+                "category": "TO_ACUTE_ORAL_SECTION",
+                "endpoint": "Acute toxicity: oral.001",
+                "guidance": [
+                    "OECD Guideline 401 (Acute Oral Toxicity)"
+                ]
+            },
+            "parameters": {
+                "Year": "1999",
+                "Reference": "ano",
+                "Species": "rat",
+                "Sex": "male/female"
+            },
+            "interpretation" : {
+            	"result" : "not classified",
+            	"criteria" : "EU"
+            },
+            "effects": [
+                {
+                    "endpoint": "LD50",
+                    "conditions": {
+                        "Sex": "male"
+                    },
+                    "result": {
+                        "unit": "mg/kg bw",
+                        "loQualifier": ">",
+                        "loValue": 5000
+                    }
+                },
+                {
+                    "endpoint": "LD50",
+                    "conditions": {
+                        "Sex": "female"
+                    },
+                    "result": {
+                        "unit": "mg/kg bw",
+                        "loQualifier": ">",
+                        "loValue": 2000,
+                        "upQualifier": "<",
+                        "upValue": 5000
+                    }
+                }
+            ]
+        },
+        {
+            "uuid": "IUC5-2ea847fa-b0b9-4fc9-842b-2a3c6b3097ac",
+            "owner" : {
+            	"substance" : {
+            		"uuid" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+            	},
+            	"company" : {
+            		"uuid" : "TEST-e535bebb-e59f-3906-f988-554478ad3734",
+            		"name" : "Morgoth"
+            	}	            	
+            },            
+            "protocol": {
+                "topcategory": "ENV FATE",
+                "category": "TO_BIODEG_WATER_SCREEN_SECTION",
+                "endpoint": "Biodegradation in water: screening tests.001",
+                "guidance": [
+                    "OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)"
+                ]
+            },
+            "parameters": {
+                "TEST TYPE": "aerobic"
+            },
+            "interpretation" : {
+            	"result" : "readily biodegradable"
+            },
+            
+            "effects": [
+                {
+                    "endpoint": "% Degradation",
+                    "conditions": {
+                        "Time point": "3 h"
+                    },
+                    "result": {
+                        "unit": "%",
+                        "loQualifier": "",
+                        "loValue": 0
+                    }
+                },
+                {
+                    "endpoint": "% Degradation",
+                    "conditions": {
+                        "Time point": "7 d"
+                    },
+                    "result": {
+                        "unit": "%",
+                        "loQualifier": "",
+                        "loValue": 20
+                    }
+                },
+                {
+                    "endpoint": "% Degradation",
+                    "conditions": {
+                        "Time point": "14 d"
+                    },
+                    "result": {
+                        "unit": "%",
+                        "loQualifier": "",
+                        "loValue": 50
+                    }
+                },
+                {
+                    "endpoint": "% Degradation",
+                    "conditions": {
+                        "Time point": "28 d"
+                    },
+                    "result": {
+                        "unit": "%",
+                        "loQualifier": "",
+                        "loValue": 85
+                    }
+                }
+            ]
+        },
+        {
+            "uuid": "IUC5-69bca644-5d53-48ae-b6cf-48a5af74bdc8",
+            "owner" : {
+            	"substance" : {
+            		"uuid" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+            	},
+            	"company" : {
+            		"uuid" : "TEST-e535bebb-e59f-3906-f988-554478ad3734",
+            		"name" : "Morgoth"
+            	}	            	
+            },            
+            "protocol": {
+                "topcategory": "ENV FATE",
+                "category": "TO_BIODEG_WATER_SCREEN_SECTION",
+                "endpoint": "Biodegradation in water: screening tests.002",
+                "guidance": ["N/A"]
+            },
+            "parameters": {
+                "TEST TYPE": "aerobic"
+            },
+            "interpretation" : {
+            	"result" : "inherently biodegradable"
+            },
+            
+            "effects": [
+                {
+                    "endpoint": "% Degradation",
+                    "conditions": {
+                        "Time point": "3 h"
+                    },
+                    "result": {
+                        "unit": "%",
+                        "loQualifier": "",
+                        "loValue": 9
+                    }
+                },
+                {
+                    "endpoint": "% Degradation",
+                    "conditions": {
+                        "Time point": "7 d"
+                    },
+                    "result": {
+                        "unit": "%",
+                        "loQualifier": "",
+                        "loValue": 40
+                    }
+                },
+                {
+                    "endpoint": "% Degradation",
+                    "conditions": {
+                        "Time point": "14 d"
+                    },
+                    "result": {
+                        "unit": "%",
+                        "loQualifier": "",
+                        "loValue": 50
+                    }
+                },
+                {
+                    "endpoint": "% Degradation",
+                    "conditions": {
+                        "Time point": "28 d"
+                    },
+                    "result": {
+                        "unit": "%",
+                        "loQualifier": "",
+                        "loValue": 80
+                    }
+                }
+            ]
+        },
+        {
+            "uuid": "IUC5-7b8d664f-5a95-4d41-901e-48767a427434",
+            "owner" : {
+            	"substance" : {
+            		"uuid" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+            	},
+            	"company" : {
+            		"uuid" : "TEST-e535bebb-e59f-3906-f988-554478ad3734",
+            		"name" : "Morgoth"
+            	}	            	
+            },            
+            "protocol": {
+                "topcategory": "ECOTOX",
+                "category": "EC_FISHTOX_SECTION",
+                "endpoint": "Short-term toxicity to fish.001",
+                "guidance": [
+                    "OECD Guideline 203 (Fish, Acute Toxicity Test)"
+                ]
+            },
+            "parameters": {
+                "Test Medium": "freshwater",
+                "Test organism": "Danio rerio",
+                "Exposure": "96",
+                "Exposure unit": "h"
+            },
+            "effects": [
+                {
+                    "endpoint": "LC50",
+                    "conditions": {
+                        "Exposure": "48",
+                        "Exposure unit": "h",
+                        "Conc type": "act. ingr.",
+                        "Effect": "mortality"
+                    },
+                    "result": {
+                        "unit": "mg/L",
+                        "loQualifier": ">",
+                        "loValue": 100
+                    }
+                },
+                {
+                    "endpoint": "LC50",
+                    "conditions": {
+                        "Exposure": "96",
+                        "Exposure unit": "h",
+                        "Conc type": "act. ingr.",
+                        "Effect": "mortality"
+                    },
+                    "result": {
+                        "unit": "mg/L",
+                        "loQualifier": "",
+                        "loValue": 55
+                    }
+                }
+            ]
+        },
+        {
+            "uuid": "IUC5-bdbfc124-346f-468a-bc74-a5f61f45db93",
+            "owner" : {
+            	"substance" : {
+            		"uuid" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+            	},
+            	"company" : {
+            		"uuid" : "TEST-e535bebb-e59f-3906-f988-554478ad3734",
+            		"name" : "Morgoth"
+            	}	            	
+            },            
+            "protocol": {
+                "topcategory": "ECOTOX",
+                "category": "EC_FISHTOX_SECTION",
+                "endpoint": "Short-term toxicity to fish.002",
+                "guidance": [
+                    "OECD Guideline 203 (Fish, Acute Toxicity Test)"
+                ]
+            },
+            "parameters": {
+                "Test Medium": "saltwater",
+                "Test organism": "Cyprinodon variegatus",
+                "Exposure": "96",
+                "Exposure unit": "h"
+            },
+            "effects": [
+                {
+                    "endpoint": "LC0",
+                    "conditions": {
+                        "Exposure": "96",
+                        "Exposure unit": "h",
+                        "Conc type": "act. ingr.",
+                        "Effect": "mortality"
+                    },
+                    "result": {
+                        "unit": "mg/L",
+                        "loQualifier": "",
+                        "loValue": 2
+                    }
+                },
+                {
+                    "endpoint": "LC50",
+                    "conditions": {
+                        "Exposure": "96",
+                        "Exposure unit": "h",
+                        "Conc type": "act. ingr.",
+                        "Effect": "mortality"
+                    },
+                    "result": {
+                        "unit": "mg/L",
+                        "loQualifier": "",
+                        "loValue": 7
+                    }
+                },
+                {
+                    "endpoint": "LC100",
+                    "conditions": {
+                        "Exposure": "96",
+                        "Exposure unit": "h",
+                        "Conc type": "act. ingr.",
+                        "Effect": "mortality"
+                    },
+                    "result": {
+                        "unit": "mg/L",
+                        "loQualifier": "",
+                        "loValue": 15
+                    }
+                }
+            ]
+        },
+        {
+            "uuid": "IUC5-bdb44244-346f-468a-bc74-a5f61f45db93",
+            "owner" : {
+            	"substance" : {
+            		"uuid" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+            	},
+            	"company" : {
+            		"uuid" : "TEST-e535bebb-e59f-3906-f988-554478ad3734",
+            		"name" : "Morgoth"
+            	}	            	
+            },            
+            "protocol": {
+                "topcategory": "ECOTOX",
+                "category": "EC_FISHTOX_SECTION",
+                "endpoint": "Short-term toxicity to fish.002",
+                "guidance": [
+                    "OECD Guideline 203 (Fish, Acute Toxicity Test)"
+                ]
+            },
+            "parameters": {
+                "Test Medium": "saltwater",
+                "Test organism": "Cyprinodon variegatus",
+                "Exposure": "96",
+                "Exposure unit": "h"
+            },
+            "effects": [
+                {
+                    "endpoint": "LC0",
+                    "conditions": {
+                        "Exposure": "96",
+                        "Exposure unit": "h",
+                        "Conc type": "act. ingr.",
+                        "Effect": "mortality"
+                    },
+                    "result": {
+                        "unit": "mg/L",
+                        "loQualifier": "",
+                        "loValue": 2
+                    }
+                },
+                {
+                    "endpoint": "LC50",
+                    "conditions": {
+                        "Exposure": "96",
+                        "Exposure unit": "h",
+                        "Conc type": "act. ingr.",
+                        "Effect": "mortality"
+                    },
+                    "result": {
+                        "unit": "mg/L",
+                        "loQualifier": "",
+                        "loValue": 7
+                    }
+                },
+                {
+                    "endpoint": "LC100",
+                    "conditions": {
+                        "Exposure": "96",
+                        "Exposure unit": "h",
+                        "Conc type": "act. ingr.",
+                        "Effect": "mortality"
+                    },
+                    "result": {
+                        "unit": "mg/L",
+                        "loQualifier": "",
+                        "loValue": 15
+                    }
+                }
+            ]
+        },
+        {
+            "uuid": "IUC5-257b956d-1c25-45fc-81d5-9f4324233d7f",
+            "owner" : {
+            	"substance" : {
+            		"uuid" : "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"
+            	},
+            	"company" : {
+            		"uuid" : "TEST-e535bebb-e59f-3906-f988-554478ad3734",
+            		"name" : "Morgoth"
+            	}	            	
+            },            
+            "protocol": {
+                "topcategory": "P-CHEM",
+                "category": "PC_PARTITION_SECTION",
+                "endpoint": "Partition coefficient.001",
+                "guidance": [
+                    "OECD Guideline 107 (Partition Coefficient (n-octanol / water), Shake Flask Method)"
+                ]
+            },
+            "parameters": {
+                "Method type": "shake-flask method"
+            },
+            "effects": [
+                {
+                    "endpoint": "log Pow",
+                    "conditions": {
+                        "PH (lower)": " 4",
+                        "Temperature": "20 C",
+                        "PH (upper)": " "
+                    },
+                    "result": {
+                        "unit": null,
+                        "loQualifier": ">",
+                        "loValue": 3.4,
+                        "upQualifier": "<",
+                        "upValue": 4.6
+                    }
+                },
+                {
+                    "endpoint": "log Pow",
+                    "conditions": {
+                        "PH (lower)": " 7",
+                        "Temperature": "20 C",
+                        "PH (upper)": " "
+                    },
+                    "result": {
+                        "unit": null,
+                        "loQualifier": "",
+                        "loValue": 5.2
+                    }
+                },
+                {
+                    "endpoint": "log Pow",
+                    "conditions": {
+                        "PH (lower)": " 9",
+                        "Temperature": "20 C",
+                        "PH (upper)": " "
+                    },
+                    "result": {
+                        "unit": null,
+                        "loQualifier": "",
+                        "loValue": 6.5
+                    }
+                }
+            ]
+        }
+    ]
+}
