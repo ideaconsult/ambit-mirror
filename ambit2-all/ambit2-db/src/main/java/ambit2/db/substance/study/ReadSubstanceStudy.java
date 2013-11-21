@@ -87,9 +87,9 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
     		record.setInterpretationCriteria(rs.getString("interpretation_criteria")); //parse json
     		record.setInterpretationResult(rs.getString("interpretation_result")); //parse json
     		
+    		record.setCompanyName(rs.getString("owner_prefix") + " TODO");
     		try {
             	record.setCompanyUUID(rs.getString("owner_prefix") + "-" + I5Utils.addDashes(rs.getString("ou").toString().toLowerCase()));
-            	record.setCompanyName(rs.getString("owner_prefix") + " TODO");
             } catch (Exception xx) {
             	record.setCompanyUUID(null);
             }
