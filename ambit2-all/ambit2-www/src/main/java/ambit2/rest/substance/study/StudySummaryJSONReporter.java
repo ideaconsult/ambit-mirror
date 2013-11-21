@@ -67,7 +67,7 @@ public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 			if (comma!=null) getOutput().write(comma);
 
 			if ((uriReporter!=null) && (uriReporter.getBaseReference()!=null))
-				output.write(String.format("\n\t{\n\t\"category\": {\n\t\t\t\"title\": "));
+				output.write(String.format("\n\t{\n\t\"topcategory\": {\n\t\t\t\"title\": "));
 				output.write(item.getValue()==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getValue().toString())));
 				output.write(",\n\t\t\t\"uri\":");
 				output.write(item==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(
@@ -76,7 +76,7 @@ public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 						(item.getValue()==null?"":Reference.encode(item.getValue().toString()))
 						)));
 				
-				output.write("\n\t},\n\t\"subcategory\":  {\n\t\t\t\"title\":");
+				output.write("\n\t},\n\t\"category\":  {\n\t\t\t\"title\":");
 				output.write(item.getSubcategoryTitle()==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubcategoryTitle())));
 				output.write(",\n\t\t\t\"uri\":");
 				String suri = item.getSubCategoryURL(
