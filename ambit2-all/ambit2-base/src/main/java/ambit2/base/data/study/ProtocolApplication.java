@@ -12,6 +12,14 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	 * 
 	 */
 	private static final long serialVersionUID = 747315722852709360L;
+	protected String referenceSubstanceUUID;
+	
+	public String getReferenceSubstanceUUID() {
+		return referenceSubstanceUUID;
+	}
+	public void setReferenceSubstanceUUID(String referenceSubstanceUUID) {
+		this.referenceSubstanceUUID = referenceSubstanceUUID;
+	}
 	protected String substanceUUID;
 	protected String companyUUID;
 	public String getCompanyUUID() {
@@ -57,6 +65,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		company,
 		name,
 		substance,
+		referencesubstanceuuid,
 		protocol,
 		parameters,
 		effects,
@@ -129,6 +138,12 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.uuid.name())));
 		b.append(":\t");
 		b.append(getSubstanceUUID()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubstanceUUID().toString())));
+		if (getReferenceSubstanceUUID()!=null) {
+			b.append(",");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.referencesubstanceuuid.name())));
+			b.append(":\t");
+			b.append(getSubstanceUUID()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getReferenceSubstanceUUID().toString())));
+		}
 		b.append("}\n");
 		b.append("\n\t},\n");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
@@ -144,10 +159,12 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.result.name())));
 		b.append(":\t");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInterpretationResult())));		
-		b.append(",\n");
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.criteria.name())));
-		b.append(":\t");		
-		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInterpretationCriteria())));		
+		if (getInterpretationCriteria()!=null) {
+			b.append(",");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.criteria.name())));
+			b.append(":\t");		
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInterpretationCriteria())));
+		}
 		b.append("\n\t},\n");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.effects.name())));
 		b.append(":\t");

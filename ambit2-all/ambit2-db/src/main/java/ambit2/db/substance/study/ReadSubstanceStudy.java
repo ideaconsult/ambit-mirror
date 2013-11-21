@@ -23,7 +23,12 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected PA record = (PA)new ProtocolApplication<Protocol,String,String,Params,String>(new Protocol(null));
 	private final static String sql = 
-		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,params,interpretation_result,interpretation_criteria,reference from substance_protocolapplication  where substance_prefix =? and hex(substance_uuid) =? ";
+		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su," +
+		"params,interpretation_result,interpretation_criteria,reference," +
+		"owner_prefix,hex(owner_uuid) ou,idsubstance,hex(rs_prefix),hex(rs_uuid) rsu from substance_protocolapplication p\n" +
+		"left join substance s on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
+		"where substance_prefix =? and hex(substance_uuid) =? ";
+
 
 	private final static String whereTopCategory = "\nand topcategory=?";
 	private final static String whereCategory = "\nand endpointcategory=?";
@@ -81,7 +86,19 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
     		record.setParameters(rs.getString("params")); //parse json
     		record.setInterpretationCriteria(rs.getString("interpretation_criteria")); //parse json
     		record.setInterpretationResult(rs.getString("interpretation_result")); //parse json
+    		
+    		try {
+            	record.setCompanyUUID(rs.getString("owner_prefix") + "-" + I5Utils.addDashes(rs.getString("ou").toString().toLowerCase()));
+            	record.setCompanyName(rs.getString("owner_prefix") + " TODO");
+            } catch (Exception xx) {
+            	record.setCompanyUUID(null);
+            }
 
+    		try {
+            	record.setReferenceSubstanceUUID(rs.getString("rs_prefix") + "-" + I5Utils.addDashes(rs.getString("rsu").toString().toLowerCase()));
+            } catch (Exception xx) {
+            	record.setReferenceSubstanceUUID(null);
+            }            
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
