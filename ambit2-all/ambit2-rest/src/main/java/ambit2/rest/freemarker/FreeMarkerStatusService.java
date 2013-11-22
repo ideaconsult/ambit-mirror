@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.freemarker.TemplateRepresentation;
@@ -65,6 +66,7 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 	}
 	
 	protected Representation getHTMLByTemplate(Status status,String errName,String errDescription,String details,Request request) throws ResourceException {
+
         Map<String, Object> map = new HashMap<String, Object>();
         if (request.getClientInfo().getUser()!=null) 
         	map.put("username", request.getClientInfo().getUser().getIdentifier());
@@ -94,6 +96,12 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 	@Override
 	public Representation getRepresentation(Status status, Request request,
 			Response response) {
+		Form headers = (Form) response.getAttributes().get("org.restlet.http.headers");
+		if (headers == null) {
+			headers = new Form();
+			response.getAttributes().put("org.restlet.http.headers", headers);
+		}
+		headers.add("X-Frame-Options", "SAMEORIGIN");		
 		StringWriter details = null;
 		if (status.getThrowable()!= null) {
 			if (REPORT_LEVEL.debug.equals(reportLevel)) {

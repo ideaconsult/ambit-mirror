@@ -147,6 +147,7 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	}	
 	@Override
 	protected Representation get(Variant variant) throws ResourceException {
+		setFrameOptions("SAMEORIGIN");
 		if (queryObject == null) try {
 			IProcessor<Object, Representation>  convertor = createConvertor(variant);
 			Representation r = convertor.process(null);
