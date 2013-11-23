@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="${ambit_root}/style/skeleton/layout.css" type="text/css">
 
 	<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<script src="${ambit_root}/jquery/html5.js"></script>
 	<![endif]-->
 	
 	<!-- JQuery
