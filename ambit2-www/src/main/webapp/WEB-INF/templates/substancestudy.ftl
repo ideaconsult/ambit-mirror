@@ -4,12 +4,13 @@
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
-<script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-substance.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
+
+<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = substance.defineSubstanceStudyTable("${ambit_root}","${ambit_request_json}","#study",true,null,'Trt');
 	  	loadHelp("${ambit_root}","substance");
 	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	  	downloadForm("${ambit_request}");
@@ -79,30 +80,20 @@
 	-->
 	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
 	</div>
+<!-- help-->		
+	<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+	<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
+	</div>
+	<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
+	</div>		
 </div>
 
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
 		================================================== -->
-		<div class="row" style="padding:0;" >
-			<table id='study' class='studytable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
-			<thead>
-			<tr>
-			<th>Study UUID</th>
-			<th>Category</th>
-			<th>Endpoint</th>
-			<th>Guidance</th>
-			<th>Parameters</th>
-			<th>Effects</th>
-			<th></th>			
-			</tr>
-			</thead>
-			<tbody></tbody>
-			</table>
-	
-		</div>
+<div class="jtox-toolkit remove-bottom" data-kit="study" data-substance-uri="${ambit_root}/substance/${substanceUUID}"></div>
 		
 
 
@@ -110,7 +101,6 @@
 </div>
 
 
-<#include "/chelp.ftl" >
 
 <#include "/footer.ftl" >
 </div> <!-- container -->
