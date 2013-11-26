@@ -14,7 +14,7 @@ function defineAlgorithmTable(root,url,viscols) {
 		"bServerSide": false,
 		"bStateSave": false,
 		"aoColumnDefs": [
-		 		{ "mDataProp": null , "asSorting": [ "asc", "desc" ],
+		 		{ "mData": null , "asSorting": [ "asc", "desc" ],
 	 			  "aTargets": [ 0 ],	
 	 			  "sWidth" : "1em",
 	 			  "bSearchable" : false,
@@ -327,7 +327,7 @@ function defineModelTable(root,url) {
     					"sClass" : "center",
     					"bSortable" : true,
     					"bSearchable" : false,
-    					"mDataProp" : null,
+    					"mData" : null,
     					"bUseRendered" : false,
     					"fnRender" : function(o,val) {
     						 return "<img style='float: left; margin: .1em;' src='"+root + o.aData.algorithm.img +"' title='"+o.aData.algorithm.img+"'><br/>" + 
@@ -394,7 +394,7 @@ function defineModelTable(root,url) {
     			      }
     		  		},    	  			
     	  			{ "sTitle": "RMSE (TR)", 
-      		  		  "mDataProp":null,
+      		  		  "mData":null,
       		  		  "aTargets": [ 5 ],	
       		  		  "bSortable" : true,
       			      "bUseRendered" : true,	
@@ -406,7 +406,7 @@ function defineModelTable(root,url) {
       			       }
       		  		},
     	  			{ "sTitle": "RMSE (CV)", 
-        		  		  "mDataProp":null,
+        		  		  "mData":null,
         		  		  "aTargets": [ 6 ],	
         		  		  "bSortable" : true,
         			      "bUseRendered" : true,	
@@ -418,7 +418,7 @@ function defineModelTable(root,url) {
         			       }
         		  	},
     	  			{ "sTitle": "Correct % (TR)", 
-      		  		  "mDataProp":null,
+      		  		  "mData":null,
       		  		  "aTargets": [ 7 ],	
       		  		  "bSortable" : true,
       			      "bUseRendered" : true,	
@@ -430,7 +430,7 @@ function defineModelTable(root,url) {
       			       }
     	  			},
     	  			{ "sTitle": "Correct % (CV)", 
-        		  		  "mDataProp":null,
+        		  		  "mData":null,
         		  		  "aTargets": [8 ],	
         		  		  "bSortable" : true,
         			      "bUseRendered" : true,	
@@ -442,7 +442,7 @@ function defineModelTable(root,url) {
         			       }
       	  			},     	  			
     	  			{ "sClass": "center", 
-      		  		  "mDataProp":null, 
+      		  		  "mData":null, 
       		  		  "aTargets": [ 9 ],	
       		  		  sWidth: "5%",
     		              "bUseRendered" : false,	"bSortable": true,
@@ -659,7 +659,7 @@ function defineDatasetsTable(root,url,deleteVisible) {
     					"sClass" : "center",
     					"bSortable" : false,
     					"bSearchable" : false,
-    					"mDataProp" : null,
+    					"mData" : null,
     					"bUseRendered" : false,	
     					sWidth : "24px",
     					"fnRender" : function(o,val) {
@@ -711,7 +711,7 @@ function defineDatasetsTable(root,url,deleteVisible) {
     		  		},   
     	  			{  
       				  "bSortable" : true,
-       	              "mDataProp":null,
+       	              "mData":null,
        	              "aTargets": [ 3 ],
        	              "bUseRendered" : false,	
        	              sWidth : "10%",
@@ -722,7 +722,7 @@ function defineDatasetsTable(root,url,deleteVisible) {
   						}     	              
       	  			},      		  		
     	  			{ "sTitle": "Download", 
-    	  			  "mDataProp":null , 
+    	  			  "mData":null , 
     	  			  "aTargets": [ 4 ],	
     	  			  "bSortable" : false,
     	  			  "bSearchable" : false,

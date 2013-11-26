@@ -22,7 +22,7 @@ $(document).ready(function() {
 		"sDom": 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>' ,
 		"aaData": modelArray,
 		"aoColumns": [
-		            { "sClass": "center zoom", "bSortable": false, "mDataProp":null, sWidth: "5%", "bUseRendered" : "true",	
+		            { "sClass": "center zoom", "bSortable": false, "mData":null, sWidth: "5%", "bUseRendered" : "true",	
 				          "fnRender": function ( o, val ) {
 				                  return "<span class='zoommodel'><img src='"+ baseref +"/images/zoom_in.png'></span>";
 				          }

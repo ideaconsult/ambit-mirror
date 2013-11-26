@@ -15,7 +15,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									"aTargets": [ 0 ],	
 									"sClass" : "center",
 									"bSortable" : false,
-									"mDataProp" : null,
+									"mData" : null,
 									sWidth : "24px",
 									"bUseRendered" : "true",
 									"fnRender" : function(o,val) {
@@ -126,7 +126,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									"bVisible" : similarity
 								},
 								{
-									"mDataProp" : null,
+									"mData" : null,
 									"asSorting" : [ "asc", "desc" ],
 									"aTargets" : [6 ],
 									"bSearchable" : true,
@@ -143,7 +143,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									"bVisible" : true
 								},
 								{
-									"mDataProp" : null,
+									"mData" : null,
 									"asSorting" : [ "asc", "desc" ],
 									"aTargets" : [ 7 ],
 									"bSearchable" : true,
@@ -160,7 +160,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 									"bVisible" : false
 								},
 								{
-									"mDataProp" : null,
+									"mData" : null,
 									"asSorting" : [ "asc", "desc" ],
 									"sClass" : "inchikey",
 									"aTargets" : [ 8 ],
@@ -338,13 +338,16 @@ function defineStructuresTable(url, query_service, similarity,root) {
 					$(this).addClass("ui-icon-folder-open");
 					this.title='Click to close compound details panel';
 					var id = 'values'+getID();
-					oTable.fnOpen(nTr, fnFormatDetails(nTr,id),	'details');
+					var newtable = fnFormatDetails(nTr,id);
+					oTable.fnOpen(nTr, newtable,'details');
 					
 					dataEntry = oTable.fnGetData(nTr);
 					if (dataEntry!=null) {
 						var cmpUri = root+"/substance?media="+encodeURIComponent("application/json") + "&compound_uri=" + encodeURIComponent(dataEntry.compound.URI);
-						substance.defineSubstanceTable(root,cmpUri,"#c"+id,false,'Trt','Trt');
+	
+						substance.defineSubstanceTable(root,cmpUri,("#c"+id),false,'Trt','Trt');
 					}
+					
 					
 				       $('.'+ id).dataTable({
 				    		'bJQueryUI': false, 
@@ -401,15 +404,18 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		});
 		*/
 		var sOutData = '<div id="tabs-data">';
-		sOutData += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Data source</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
+		sOutData += '\n<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Data source</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
 		var sOutCalc = '<div id="tabs-predictions">';
-		sOutCalc += '<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
+		sOutCalc += '\n<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
 		var sOutComposition = '<div id="tabs-composition">';
-		sOutComposition += '<table id="c'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th></th><th>Name</th><th>Company UUID</th><th>Type</th><th>Public name</th><th>Reference substance UUID</th></tr></thead><tbody></tbody></table></div>';
-
-		
+		sOutComposition += '\n<table id="c'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th></th><th>Name</th><th>Company UUID</th><th>Type</th><th>Public name</th><th>Reference substance UUID</th><th>Study</th></tr></thead><tbody></tbody></table></div>';
+		/*
+		sOutComposition += '\n<table id="c'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead>';
+		sOutComposition += '<tr><th>Public name</th><th>Reference substance UUID</th></tr>';
+		sOutComposition += '</thead><tbody></tbody></table></div>';
+		*/
 		if ((dataEntry===undefined) || (dataEntry==null)) {
 			
 		} else {
@@ -443,7 +449,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		sOutData += '</tbody></table></div>\n';
 		sOutCalc += '</tbody></table></div>\n';
 		sOut += sOutData + sOutCalc + sOutComposition + '</div>\n';
-		//sOut += '</div>\n';	
+		//sOut += '</div>\n';
 		return sOut;
 	}
 	
