@@ -1,5 +1,7 @@
 package ambit2.rest.substance.study;
 
+import java.util.Map;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -26,6 +28,7 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 	public final static String study = OpenTox.URI.study.getURI();
 	public final static String idstudy = OpenTox.URI.study.getKey();
 	public final static String studyID = OpenTox.URI.study.getResourceID();
+	protected String substanceUUID;
 	
 	public SubstanceStudyResource() {
 		super();
@@ -74,12 +77,13 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 		if (key==null) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		} else {
+			substanceUUID = key.toString();
 			try {
 				Form form = getRequest().getResourceRef().getQueryAsForm();
 				String topCategory = form.getFirstValue("top");
 				String category = form.getFirstValue("category");
 				ReadSubstanceStudy q = new ReadSubstanceStudy();
-				q.setFieldname(key.toString());
+				q.setFieldname(substanceUUID);
 				if (topCategory!=null || category!=null) {
 					Protocol p = new ambit2.base.data.study.Protocol("");
 					p.setTopCategory(topCategory);
@@ -96,4 +100,9 @@ public class SubstanceStudyResource<Q extends IQueryRetrieval<ProtocolApplicatio
 
 	}
 	
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+		map.put("substanceUUID", substanceUUID);
+	}
 }

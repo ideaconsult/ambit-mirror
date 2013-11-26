@@ -1,0 +1,144 @@
+/* toxtstudy.css - Styling for toxstudy engine
+*/
+div.jtox-study {
+  display: block;
+  font-size: small;
+  border-radius: 5px;
+  padding: 5px 5px 35px 5px;
+}
+
+.jtox-study.folded table,
+.jtox-study.folded div.dataTables_wrapper {
+  display: none;
+}
+
+div.jtox-study.unloaded .jtox-study-title,
+div.jtox-study.unloaded.folded .jtox-study-title {
+  background: url(../images/waiting_small.gif) right top no-repeat;
+  background-size: 16px 16px;
+}
+
+div.jtox-study.unloaded .jtox-study-table {
+  display: none;
+}
+
+div.jtox-study.loaded.folded .jtox-study-title {
+  background: url(../images/sort_desc.png) right top no-repeat;
+  background-size: 19px 19px;
+}
+
+div.jtox-study.loaded .jtox-study-title {
+  background: url(../images/sort_asc.png) right top no-repeat;
+  background-size: 19px 19px;
+}
+
+div.jtox-study.folded {
+  padding-bottom: 5px;
+}
+
+div.jtox-study .jtox-study-title {
+  font-weight: bold;
+  clear: both;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  width: 100%;
+}
+
+.jtox-study-filter {
+  width: 50% !important;
+}
+
+div.jtox-study-tab.ui-tabs-panel {
+  padding-left: 0px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+div.jtox-study-tab .dataTables_wrapper {
+	/*
+  overflow-x: scroll;
+  */
+  overflow-y: visible;
+  width: 100%;
+}
+
+/* Start of table-related classes */
+.jtox-study table.dataTable td,
+.jtox-study table.dataTable th {
+  border:1px solid #ccc;
+  overflow: hidden;
+}
+
+.jtox-study table.dataTable th {
+  text-transform: capitalize;
+}
+
+.jtox-study table.dataTable td .shortened {
+  width: 75px;
+  max-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+  white-space: nowrap;
+}
+
+td.middle {
+  vertical-align: middle;  
+}
+
+.jtox-study table.dataTable td.jtox-multi {
+  padding: 0px;
+}
+
+td.jtox-multi table {
+  margin: 0px;
+}
+
+td.jtox-multi table td {
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-bottom: 0px !important;
+}
+
+td.jtox-multi table tr:first-child td {
+  border-top: 0px !important;
+}
+
+td.jtox-multi table {
+  height: 100%;
+  width: 100%;
+}
+/* jtoxkit.css - Styling for all jToxKit parts
+*/
+.jtox-foldable {
+	background: #eee; /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255,255,255,.5) 0%, rgba(200,200,200,.5) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,.5)), color-stop(100%,rgba(200,200,200,.5))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(255,255,255,.5) 0%,rgba(200,200,200,.5) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(255,255,255,.5) 0%,rgba(200,200,200,.5) 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, rgba(255,255,255,.5) 0%,rgba(200,200,200,.5) 100%); /* IE10+ */
+	background: linear-gradient(top, rgba(255,255,255,.5) 0%,rgba(200,200,200,.5) 100%); /* W3C */
+  border: 1px solid #aaa;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc; 
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  border-radius: 7px;
+  
+}
+
+.jtox-foldable:hover {
+	background: #ddd; /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255,255,255,.2) 0%, rgba(200,200,200,.2) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,.2)), color-stop(100%,rgba(200,200,200,.2))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* IE10+ */
+	background: linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* W3C */
+}
+
+.jtox-template {
+  display: none !important;
+}
