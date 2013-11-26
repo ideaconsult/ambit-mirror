@@ -33,7 +33,7 @@ var substance = {
 				    				"sClass" : "center",
 				    				"bSortable" : false,
 				    				"bSearchable" : false,
-				    				"mDataProp" : null,
+				    				"mData" : null,
 				    				"bUseRendered" : false,	
 				    				"fnRender" : function(o,val) {
 				    					return "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show substance composition'></span>";
@@ -143,6 +143,7 @@ var substance = {
 			      },
 			 	  "aaSorting": [[1, 'desc']]
 				});
+				
 		    	$(selector + ' tbody td .zoomstruc').live('click',function() {
 					var nTr = $(this).parents('tr')[0];
 					if (oTable.fnIsOpen(nTr)) {
@@ -167,6 +168,7 @@ var substance = {
 									
 					}
 		    	});
+		    	
 		    	function getID() {
 		    		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 		    	}
@@ -510,7 +512,7 @@ var substance = {
 				    				"sClass" : "center",
 				    				"bSortable" : false,
 				    				"bSearchable" : false,
-				    				"mDataProp" : null,
+				    				"mData" : null,
 				    				"bUseRendered" : false,	
 				    				"fnRender" : function(o,val) {
 				    					return "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show study results'></span>";

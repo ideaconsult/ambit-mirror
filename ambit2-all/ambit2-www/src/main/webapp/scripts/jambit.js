@@ -84,7 +84,7 @@ function initTable(object,root, query_service, tableSelector, arrayName, checkbo
 		  	{ //0
 		  		"aTargets": [ 0 ],	
 		  		"bSortable" : false,
-		  		"mDataProp" : null,
+		  		"mData" : null,
 		  		"bUseRendered" : "false",
 		  		"fnRender" : function(o,val) {
 	  					var uri = o.aData["URI"];

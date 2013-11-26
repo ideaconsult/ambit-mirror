@@ -66,7 +66,7 @@ public class AmbitResource extends FreeMarkerResource {
 	private final static String[] js = new String[] {
 		"<script type='text/javascript' src='%s/jquery/jquery-1.7.1.min.js'></script>\n",
 		"<script type='text/javascript' src='%s/jquery/jquery-ui-1.8.18.custom.min.js'></script>\n",
-		"<script type='text/javascript' charset='utf8' src='%s/jquery/jquery.dataTables-1.9.0.min.js'></script>\n",
+		"<script type='text/javascript' charset='utf8' src='%s/jquery/jquery.dataTables-1.9.4.min.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-model.js'></script>\n",
 		"<script type='text/javascript' src='%s/scripts/jopentox-ui-feature.js'></script>\n",
