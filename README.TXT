@@ -111,9 +111,17 @@ To skip the tests, use -DskipTests=true option
 
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.5.2-SNAPSHOT
-
+AMBIT2 2.5.3-SNAPSHOT
 Current version at trunk
+
+AMBIT2 2.5.2
+ambit2-db: Substance study support. DB Schema 7.1
+ambit2-descriptors: New descriptors
+ambit2-www: x-frame-origin headers added
+ambit2-www: Substance study pages JSON and UI (makes use of jToxKit)
+ambit2-www: i5 dependency 0.0.3
+ambit2-sln: Sybyl Line Notation initial commits
+
 AMBIT2 2.5.1
 
 ambit2-www: Security improvements
