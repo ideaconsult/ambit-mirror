@@ -25,25 +25,50 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected CompositionRelation record = new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
 	public final static String sql = 
-		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,rs_prefix,hex(rs_uuid) from substance_relation where idsubstance=?";
+		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,rs_prefix,hex(rs_uuid) from substance_relation ";
+	
+	private static String  q_idsubstance = "idsubstance=?";
+	private static String  q_uuid = "prefix=? and hex(uuid)=?";
 	
 	@Override
 	public String getSQL() throws AmbitException {
-		return sql;
+		if (getValue()!=null) {
+			if (getValue().getIdsubstance()>0) {
+				StringBuilder b = new StringBuilder();
+				b.append(sql);
+				b.append("where ");
+				b.append(q_idsubstance);
+				return b.toString();
+			} else if (getValue().getCompanyUUID()!= null) {
+				StringBuilder b = new StringBuilder();
+				b.append(sql);
+				b.append("where ");
+				b.append(q_uuid);
+				return b.toString();
+			}
+		}	
+		throw new AmbitException("Unspecified substance");
 	}
 
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		if (getValue()!=null && getValue().getIdsubstance()>0)
-			params.add(new QueryParam<Integer>(Integer.class,getValue().getIdsubstance()));
-		else throw new AmbitException("Empty ID");
-		/*
-		if (getFieldname()!=null)
-			params.add(new QueryParam<String>(String.class,getFieldname().name()));
-		else throw new AmbitException("Relation not specified");
-		*/		
-		return params;
+		if (getValue()!=null) {
+			if (getValue().getIdsubstance()>0) {
+				params.add(new QueryParam<Integer>(Integer.class,getValue().getIdsubstance()));
+				return params;
+			} else if (getValue().getCompanyUUID()!= null) {
+				String o_uuid = getValue().getCompanyUUID();
+				if (o_uuid==null) throw new AmbitException("Empty substance id");
+				String[] uuid = new String[]{null,o_uuid==null?null:o_uuid.toString()};
+				if (o_uuid!=null) 
+					uuid = I5Utils.splitI5UUID(o_uuid.toString());
+				params.add(new QueryParam<String>(String.class, uuid[0]));
+				params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
+				return params;
+			}
+		}	
+		throw new AmbitException("Empty ID");
 	}
 
 	@Override
