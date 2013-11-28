@@ -23,10 +23,10 @@ public class SubstanceURIReporter<Q extends IQueryRetrieval<SubstanceRecord>> ex
 	}
 	@Override
 	public String getURI(String ref, SubstanceRecord item) {
-		if (item.getIdsubstance()>0)
-			return String.format("%s%s/%d", ref,OpenTox.URI.substance.getURI(),item.getIdsubstance());
-		else
+		if (item.getCompanyUUID()!=null)
 			return String.format("%s%s/%s", ref,OpenTox.URI.substance.getURI(),item.getCompanyUUID());
+		else 
+			return String.format("%s%s/%d", ref,OpenTox.URI.substance.getURI(),item.getIdsubstance());
 	}
 
 }

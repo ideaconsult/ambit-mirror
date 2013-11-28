@@ -16,6 +16,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.substance.ReadSubstance;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -81,14 +82,25 @@ public class SubstanceCompositionResource<Q extends IQueryRetrieval<CompositionR
 				if (cmp!=null)
 					relation = STRUCTURE_RELATION.valueOf(cmp.toString());
 			} catch (Exception x) { relation = null;}
+			ReadSubstanceComposition q = null;
 			try {
-				ReadSubstanceComposition q = new ReadSubstanceComposition();
+				q = new ReadSubstanceComposition();
 				q.setValue(new SubstanceRecord(Integer.parseInt(key.toString())));
 				q.setFieldname(relation);
 				return (Q)q;
 			} catch (Exception x) {
+				int len = key.toString().trim().length(); 
+				if ((len > 40) && (len <=45)) {
+					SubstanceRecord record = new SubstanceRecord();
+					record.setCompanyUUID(key.toString());
+					q = new ReadSubstanceComposition();
+					q.setValue(record);
+					q.setFieldname(relation);
+					return (Q)q;
+				}	
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			}
+			
 		}
 
 	}
