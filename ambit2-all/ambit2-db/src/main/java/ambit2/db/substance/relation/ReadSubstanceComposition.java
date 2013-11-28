@@ -24,27 +24,23 @@ public class ReadSubstanceComposition extends AbstractQuery<STRUCTURE_RELATION,S
 	 */
 	private static final long serialVersionUID = -1980335091441168568L;
 	protected CompositionRelation record = new CompositionRelation(new SubstanceRecord(), new StructureRecord(), new Proportion());
-	public final static String sql = 
-		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,rs_prefix,hex(rs_uuid) from substance_relation ";
+	private final static String sql = 
+		"select cmp_prefix,hex(cmp_uuid) cmp_huuid,idsubstance,idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix,hex(r.rs_uuid) from substance_relation r ";
 	
 	private static String  q_idsubstance = "idsubstance=?";
 	private static String  q_uuid = "prefix=? and hex(uuid)=?";
+	
+	private final static String sql_id = sql + " where " + q_idsubstance;
+	private final static String sql_uuid =sql + " join substance using(idsubstance) where " + q_uuid;
+
 	
 	@Override
 	public String getSQL() throws AmbitException {
 		if (getValue()!=null) {
 			if (getValue().getIdsubstance()>0) {
-				StringBuilder b = new StringBuilder();
-				b.append(sql);
-				b.append("where ");
-				b.append(q_idsubstance);
-				return b.toString();
+				return sql_id;
 			} else if (getValue().getCompanyUUID()!= null) {
-				StringBuilder b = new StringBuilder();
-				b.append(sql);
-				b.append("where ");
-				b.append(q_uuid);
-				return b.toString();
+				return sql_uuid;
 			}
 		}	
 		throw new AmbitException("Unspecified substance");
