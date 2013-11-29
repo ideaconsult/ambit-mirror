@@ -18,7 +18,7 @@ div.jtox-study.unloaded.folded .jtox-study-title {
   background-size: 16px 16px;
 }
 
-div.jtox-study.unloaded .jtox-study-table {
+.jtox-toolkit .unloaded table {
   display: none;
 }
 
@@ -58,25 +58,23 @@ div.jtox-study-tab.ui-tabs-panel {
 }
 
 div.jtox-study-tab .dataTables_wrapper {
-	/*
   overflow-x: scroll;
-  */
   overflow-y: visible;
   width: 100%;
 }
 
 /* Start of table-related classes */
-.jtox-study table.dataTable td,
-.jtox-study table.dataTable th {
+.jtox-toolkit table.dataTable td,
+.jtox-toolkit table.dataTable th {
   border:1px solid #ccc;
   overflow: hidden;
 }
 
-.jtox-study table.dataTable th {
+.jtox-toolkit table.dataTable th {
   text-transform: capitalize;
 }
 
-.jtox-study table.dataTable td .shortened {
+.jtox-toolkit table.dataTable td .shortened {
   width: 75px;
   max-height: 20px;
   overflow: hidden;
@@ -84,11 +82,7 @@ div.jtox-study-tab .dataTables_wrapper {
   white-space: nowrap;
 }
 
-td.middle {
-  vertical-align: middle;  
-}
-
-.jtox-study table.dataTable td.jtox-multi {
+.jtox-toolkit table.dataTable td.jtox-multi {
   padding: 0px;
 }
 
@@ -142,3 +136,22 @@ td.jtox-multi table {
 .jtox-template {
   display: none !important;
 }
+
+.jtox-size-quarter {
+  width: 25%;
+}
+
+.jtox-size-third {
+  width: 33%;
+}
+
+.jtox-size-half {
+  width: 50%;
+}
+
+td.middle,
+th.middle {
+  vertical-align: middle;  
+}
+
+
