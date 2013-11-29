@@ -25,7 +25,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MyIteratingMDLReader;
-import ambit2.hashcode.MoleculeAndAtomsHashing;
 
 /** Utilities for generation of different types of 
  * chemical objects: molecules, fragments, queries */
@@ -35,7 +34,7 @@ public class ChemObjectFactory
 	Vector<IAtom> sequencedAtoms = new Vector<IAtom>();
 	Vector<IAtom> sequencedBondAt1 = new Vector<IAtom>();
 	Vector<IAtom> sequencedBondAt2 = new Vector<IAtom>();
-	MoleculeAndAtomsHashing molHash = new MoleculeAndAtomsHashing();
+	//MoleculeAndAtomsHashing molHash = new MoleculeAndAtomsHashing();
 	SmartsManager man;
 	SmartsParser parser = new SmartsParser();
 	SmilesParser smilesParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
