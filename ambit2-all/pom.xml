@@ -299,7 +299,6 @@
     <module>ambit2-smarts</module>
     <module>ambit2-core</module>
     <module>ambit2-db</module>
-    <module>ambit2-hashcode</module>
     <module>ambit2-descriptors</module>
     <module>ambit2-smi23d</module>
     <module>ambit2-mopac</module>
@@ -338,6 +337,7 @@
      -->
     <module>ambit2-sln</module>
     <module>ambit2-structure2name</module>
+    <module>ambit2-groupcontribution</module>
   </modules>
   <distributionManagement>
     <!-- 
