@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>ambit2-all</artifactId>
+    <groupId>ambit</groupId>
+    <version>2.5.3-SNAPSHOT</version>
+  </parent>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-groupcontribution</artifactId>
+  <name>Group contribution methods</name>
+  <version>2.5.3-SNAPSHOT</version>
+  <inceptionYear>Nov 2013</inceptionYear>
+  <dependencies>
+  	<dependency>
+  		<groupId>ambit</groupId>
+  		<artifactId>ambit2-smarts</artifactId>
+  		<version>${project.version}</version>
+  		<scope>compile</scope>
+  	</dependency>
+  </dependencies>
+  <developers>
+  	<developer>
+  		<id>ntk73</id>
+  		<name>Nikolay Kochev</name>
+  	</developer>
+  </developers>  
+</project>

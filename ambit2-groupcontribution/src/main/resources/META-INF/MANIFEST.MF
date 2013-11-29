@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.groupcontribution
+
+Name: ambit2/groupcontribution/
+Specification-Title: group contribution methods
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.groupcontribution
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.groupcontribution
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.
