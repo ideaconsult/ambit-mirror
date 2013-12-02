@@ -1,6 +1,14 @@
 /* toxtstudy.css - Styling for toxstudy engine
 */
-div.jtox-study {
+.jtox-toolkit .dataTables_filter label input,
+.jtox-toolkit .dataTables_length label select {
+  display: inline-block;
+  width: auto;  
+}
+
+div.jtox-study,
+div.jtox-composition,
+div.jtox-substance {
   display: block;
   font-size: small;
   border-radius: 5px;

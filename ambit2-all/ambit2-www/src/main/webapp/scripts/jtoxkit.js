@@ -515,13 +515,13 @@ var jToxStudy = (function () {
             "sZeroRecords": "No substances found.",
             "sEmptyTable": "No substances available.",
             "sInfo": "Showing _TOTAL_ substance(s) (_START_ to _END_)",
-            "sLengthMenu": 'Display<select>' +
+            "sLengthMenu": 'Display&nbsp;<select>' +
               '<option value="10">10</option>' +
               '<option value="20">20</option>' +
               '<option value="50">50</option>' +
               '<option value="100">100</option>' +
               '<option value="-1">all</option>' +
-              '</select>substances.'	            
+              '</select>&nbsp;substances.'	            
           },
   		    "aoColumns": [
     				{  //1
@@ -642,7 +642,7 @@ var jToxStudy = (function () {
       // re-initialize us on each of these calls.
       self.baseUrl = jToxKit.grabBaseUrl(substanceURI, 'substance');
       
-      var rootTab = $('#jtox-substance' + self.suffix)[0];
+      var rootTab = $('.jtox-substance', self.rootElement)[0];
       jToxKit.call(self, substanceURI, function(substance){
          if (!!substance && !!substance.substance && substance.substance.length > 0){
            ccLib.fillTree(rootTab, substance.substance[0]);
@@ -829,7 +829,7 @@ jToxKit.templates['all-studies']  =
 "	      <li><a href=\"#jtox-ecotox\" data-type=\"ECOTOX\">Eco Tox (0)</a></li>" +
 "	      <li><a href=\"#jtox-tox\" data-type=\"TOX\">Tox (0)</a></li>" +
 "	    </ul>" +
-"	    <div id=\"jtox-substance\">" +
+"	    <div id=\"jtox-substance\" class=\"jtox-substance\">" +
 "	      <table class=\"dataTable\">" +
 "	        <thead>" +
 "	          <tr>" +
