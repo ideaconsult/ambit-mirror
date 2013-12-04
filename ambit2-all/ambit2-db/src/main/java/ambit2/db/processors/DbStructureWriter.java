@@ -34,6 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -158,7 +159,14 @@ public class DbStructureWriter extends AbstractRepositoryWriter<IStructureRecord
 		}
 		datasetAddStruc.setObject(structure);
 		datasetAddStruc.setGroup(dataset);
-		exec.process(datasetAddStruc);
+		try {
+			exec.process(datasetAddStruc);
+		} catch (AmbitException x) {
+			logger.log(Level.SEVERE,String.format("Error %s adding structure /compound/%d/conformer/%d to dataset [%d] %s",
+					x.getMessage(),
+					structure.getIdchemical(),structure.getIdstructure(),dataset.getId(),dataset.getName()));
+			throw x;
+		}
 		
 		propertyWriter.setDataset(dataset); 
 	}
