@@ -141,6 +141,27 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 		return getObject(rs,null);
 
 	}
+/*
+ WARNING: No enum const class ambit2.db.search.property.AbstractPropertyRetrieval$_PROPERTY_TYPE.
+ java.lang.IllegalArgumentException: No enum const class ambit2.db.search.property.AbstractPropertyRetrieval$_PROPERTY_TYPE.
+         at java.lang.Enum.valueOf(Enum.java:214)
+         at ambit2.db.search.property.AbstractPropertyRetrieval$_PROPERTY_TYPE.valueOf(AbstractPropertyRetrieval.java:104)
+         at ambit2.db.search.property.AbstractPropertyRetrieval.getObject(AbstractPropertyRetrieval.java:164)
+         at ambit2.db.search.property.AbstractPropertyRetrieval.getObject(AbstractPropertyRetrieval.java:141)
+         at ambit2.db.search.property.AbstractPropertyRetrieval.getObject(AbstractPropertyRetrieval.java:45)
+         at ambit2.db.DbReader$1.next(DbReader.java:159)
+         at ambit2.db.processors.AbstractBatchProcessor.process(AbstractBatchProcessor.java:105)
+         at ambit2.db.reporters.QueryAbstractReporter.process(QueryAbstractReporter.java:115)
+         at ambit2.rest.AbstractObjectConvertor.process(AbstractObjectConvertor.java:41)
+         at ambit2.rest.AbstractObjectConvertor.process(AbstractObjectConvertor.java:17)
+         at ambit2.rest.query.QueryResource.getRepresentation(QueryResource.java:183)
+         at ambit2.rest.AbstractResource.get(AbstractResource.java:98)
+         at org.restlet.resource.ServerResource.doHandle(ServerResource.java:519)
+         at org.restlet.resource.ServerResource.doNegotiatedHandle(ServerResource.java:579)
+         at org.restlet.resource.ServerResource.doConditionalHandle(ServerResource.java:258)
+         at org.restlet.resource.ServerResource.handle(ServerResource.java:818)
+	
+ */
 	public Property getObject(ResultSet rs,Property p) throws AmbitException {
 		try {
 			if (p==null) {
@@ -160,8 +181,11 @@ public abstract class AbstractPropertyRetrieval<F, T, C extends IQueryCondition>
 				String[] types = null;
 				if (type != null && !"".equals(type)) {
 					types = type.split(",");
-					for (String t:types)
+					for (String t:types) try {
 						p.setClazz(_PROPERTY_TYPE.valueOf(t).getClazz());
+					} catch (Exception x) {
+						logger.log(Level.WARNING,x.getMessage(),t);
+					}
 				}
 			} catch (Exception x) {
 				logger.log(Level.WARNING,x.getMessage(),x);
