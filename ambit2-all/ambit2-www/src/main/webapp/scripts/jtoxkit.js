@@ -822,7 +822,7 @@ $(document).ready(function(){
 jToxKit.templates['all-studies']  = 
 "	  <div id=\"jtox-studies\">" +
 "	    <ul>" +
-"	      <li><a href=\"#jtox-substance\">Substance</a></li>" +
+"	      <li><a href=\"#jtox-substance\">IUC Substance</a></li>" +
 "	      <li><a href=\"#jtox-composition\">Composition</a></li>" +
 "	      <li><a href=\"#jtox-pchem\" data-type=\"P-CHEM\">P-Chem (0)</a></li>" +
 "	      <li><a href=\"#jtox-envfate\" data-type=\"ENV_FATE\">Env Fate (0)</a></li>" +
@@ -833,24 +833,24 @@ jToxKit.templates['all-studies']  =
 "	      <table class=\"dataTable\">" +
 "	        <thead>" +
 "	          <tr>" +
-"	            <th class=\"jtox-size-third\">Name:</th>" +
+"	            <th class=\"jtox-size-third\">IUC Substance name:</th>" +
 "	            <td class=\"data-field camelCase\" data-field=\"name\"> ? </td>" +
 "	          </tr>" +
 "	          <tr>" +
-"	            <th>Company UUID:</th>" +
+"	            <th>IUC Substance UUID:</th>" +
 "	            <td class=\"data-field\" data-field=\"i5uuid\"> ? </td>" +
 "	          </tr>" +
 "	          <tr>" +
-"	            <th>Owner UUID:</th>" +
+"	            <th>IUC Public name:</th>" +
+"	            <td class=\"data-field camelCase\" data-field=\"publicname\"> ? </td>" +
+"	          </tr>" +
+"	          <tr>" +
+"	            <th>Legal entity UUID:</th>" +
 "	            <td class=\"data-field\" data-field=\"ownerUUID\"> ? </td>" +
 "	          </tr>" +
 "	          <tr>" +
-"	            <th>Type:</th>" +
+"	            <th>Type substance composition:</th>" +
 "	            <td class=\"data-field\" data-field=\"substanceType\"> ? </td>" +
-"	          </tr>" +
-"	          <tr>" +
-"	            <th>Public name:</th>" +
-"	            <td class=\"data-field camelCase\" data-field=\"publicname\"> ? </td>" +
 "	          </tr>" +
 "	          <tr>" +
 "	            <th>Reference substance UUID:</th>" +
