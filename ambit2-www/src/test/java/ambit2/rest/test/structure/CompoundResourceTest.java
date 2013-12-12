@@ -11,8 +11,8 @@ import javax.imageio.ImageIO;
 
 import junit.framework.Assert;
 import net.idea.opentox.cli.OTClient;
-import net.idea.opentox.cli.structure.Substance;
-import net.idea.opentox.cli.structure.SubstanceClient;
+import net.idea.opentox.cli.structure.Compound;
+import net.idea.opentox.cli.structure.CompoundClient;
 import net.idea.opentox.cli.task.RemoteTask;
 
 import org.apache.http.HttpStatus;
@@ -420,8 +420,8 @@ public class CompoundResourceTest extends ResourceTest {
 	@Test
 	public void testCreateEntryFromSmilesWebForm() throws Exception {
 		OTClient otclient = new OTClient();
-		SubstanceClient cli = otclient.getSubstanceClient();
-		Substance substance = new Substance();
+		CompoundClient cli = otclient.getCompoundClient();
+		Compound substance = new Compound();
 		substance.setName("warfarin");
 		String inchi = "InChI=1S/C19H16O4/c1-12(20)11-15(13-7-3-2-4-8-13)17-18(21)14-9-5-6-10-16(14)23-19(17)22/h2-10,15,21H,11H2,1H3";
 		String smiles = "CC(=O)CC(c1ccccc1)c2c(c3ccccc3oc2=O)O";

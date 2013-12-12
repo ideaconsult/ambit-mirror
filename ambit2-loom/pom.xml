@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>ambit2-all</artifactId>
+    <groupId>ambit</groupId>
+    <version>2.5.3-SNAPSHOT</version>
+  </parent>
+  <groupId>ambit</groupId>
+  <artifactId>ambit2-loom</artifactId>
+  <name>Remote services integration</name>
+  <version>2.5.3-SNAPSHOT</version>
+  <description>Uses https://github.com/vedina/loom</description>
+  <inceptionYear>2013</inceptionYear>
+  <organization>
+  	<name>Ideaconsult Ltd</name>
+  	<url>http://www.ideaconsult.net</url>
+  </organization>
+ <dependencies>
+  	<dependency>
+  		<groupId>ambit</groupId>
+  		<artifactId>ambit2-core</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>${junit.version}</version>
+  		<scope>test</scope>
+  	</dependency>
+	<dependency>
+	  <groupId>net.ideaconsult</groupId>
+	  <artifactId>loom-ops-cli</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	  <type>jar</type>
+      <scope>compile</scope>
+	</dependency>
+  </dependencies>
+<build>
+  	<pluginManagement>
+  		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+				<skip>false</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</pluginManagement>	  
+</build>  
+</project>
