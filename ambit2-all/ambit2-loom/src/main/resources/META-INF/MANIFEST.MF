@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.loom
+
+Name: ambit2/loom/
+Specification-Title: Remote services integration https://github.com/vedina/loom
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.loom
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.loom
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

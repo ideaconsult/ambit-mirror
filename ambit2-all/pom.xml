@@ -338,6 +338,7 @@
     <module>ambit2-sln</module>
     <module>ambit2-structure2name</module>
     <module>ambit2-groupcontribution</module>
+    <module>ambit2-loom</module>
   </modules>
   <distributionManagement>
     <!-- 

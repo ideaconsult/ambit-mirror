@@ -387,9 +387,15 @@ public class AlgorithmsPile {
 			
 			{"expert","Human experts input","expert",null,new String[] {AlgorithmType.Expert.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#expert_input"},
 			
-			{"tautomers","Tautomers generator","tautomers",null,new String[] {AlgorithmType.TautomerGenerator.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#tautomergen"}
+			{"tautomers","Tautomers generator","tautomers",null,new String[] {AlgorithmType.TautomerGenerator.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#tautomergen"},
+
+			{"ambit2.loom.descriptors.OPSCountsByCompound","Number of pathways and assays in OpenPhacts","ambit2.loom.descriptors.OPSCountsByCompound",null,
+				new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
+				Algorithm.requires.structure,
+				"http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT"}
 			
 			/**
+			 * 
 			 * Waffles machine learning library
 			//wrapper is not yet bug free
 			{"WafflesDecisionTree","Decision tree for regression and classification","ambit2.waffles.learn.WafflesLearnDecisionTree",null,new String[] {AlgorithmType.Regression.toString(),AlgorithmType.Classification.toString(),AlgorithmType.Regression.toString(),AlgorithmType.Supervised.toString(),AlgorithmType.EagerLearning.toString()},null,Algorithm.requires.property},
