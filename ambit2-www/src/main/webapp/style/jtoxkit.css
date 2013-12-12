@@ -20,6 +20,23 @@ div.jtox-substance {
   display: none;
 }
 
+.jtox-compoblock {
+  margin-top: 25px;
+  margin-bottom: 45px;  
+}
+
+.jtox-toolkit table.composition-info.dataTable td,
+.jtox-toolkit table.composition-info.dataTable th {
+  border: 0px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.jtox-toolkit table.composition-info.dataTable th {
+  width: 20%;
+  text-align: right;
+}
+
 div.jtox-study.unloaded .jtox-study-title,
 div.jtox-study.unloaded.folded .jtox-study-title {
   background: url(../images/waiting_small.gif) right top no-repeat;
