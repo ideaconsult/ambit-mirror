@@ -98,6 +98,13 @@ var ccLib = {
     return format;
   },
   
+  copyToClipboard: function(text, prompt) {
+    if (!prompt) {
+      prompt = "Press Ctrl-C (Command-C) to copy and then Enter.";
+    }
+    window.prompt(prompt, text);
+  },
+  
   parseURL: function(url) {
     var a =  document.createElement('a');
     a.href = url;
@@ -138,6 +145,9 @@ var jToxStudy = (function () {
       $(this).attr('href', '#' + id);
     })  
   };
+  
+  // make this handler for UUID copying. Once here - it's live, so it works for all tables in the future
+  $(document).on('click', '.jtox-toolkit span.ui-icon-copy', function (e) { ccLib.copyToClipboard($(this).data('uuid'), "Press Ctrl-C (Command-C) to copy UUID:"); return false;});
   
   // constructor
   var cls = function (root, settings) {
@@ -182,7 +192,7 @@ var jToxStudy = (function () {
           loadPanel(ui.newPanel[0]);
       }
     });
-
+    
     // when all handlers are setup - make a call, if needed.    
     if (self.settings['substanceUri'] !== undefined){
       self.querySubstance(self.settings['substanceUri']);
@@ -351,7 +361,7 @@ var jToxStudy = (function () {
         colDefs.push(
           { "sClass": "center", "sWidth": "15%", "mData": "protocol.guidance", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
           { "sClass": "center", "sWidth": "50px", "mData": "owner.company.name", "mRender" : function(data, type, full) { return type != "display" ? '' + data : '<div class="shortened">' + data + '</div>'; }  }, 
-          { "sClass": "center", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : '<div class="shortened">' + data + '</div>'; }  }
+          { "sClass": "center", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : '<div class="shortened">' + data + '</div><span class="ui-icon ui-icon-copy" data-uuid="' + data + '"></span>'; } }
         );
         
         // READYY! Go and prepare THE table.
@@ -496,10 +506,16 @@ var jToxStudy = (function () {
     
     processComposition: function(json){
       var self = this;
-      $('.jtox-composition', self.rootElement).removeClass('unloaded');
+      var tab = $('.jtox-composition', self.rootElement)[0];
       
-      var prepareFillTable = function (json) {
-        var theTable = $('.jtox-composition .substancesTable', self.rootElement);
+      // clear the old tabs, if any.
+      if ($(tab).hasClass('unloaded')){
+        $(tab).removeClass('unloaded');
+        $(tab).empty();
+      }
+      
+      var prepareFillTable = function (json, panel) {
+        var theTable = $('.substances-table', panel);
         // prepare the table...
         $(theTable).dataTable({
   				"bSearchable": true,
@@ -570,11 +586,12 @@ var jToxStudy = (function () {
   		  });
 
         // and fill up the table.
-        $(theTable).dataTable().fnAddData(json.composition);
+        $(theTable).dataTable().fnAddData(json);
         return theTable;
       };
       
       var substances = {};
+
       // proprocess the data...
       for (var i = 0, cmpl = json.composition.length; i < cmpl; ++i) {
         var cmp = json.composition[i];
@@ -603,19 +620,22 @@ var jToxStudy = (function () {
           substances[cmp.compositionUUID] = theSubs = { name: "", purity: "", maxvalue: 0, uuid : cmp.compositionUUID, composition : [] };
         
         theSubs.composition.push(cmp);
-        var val = cmp.proportion.real;
-        if (cmp.relation == 'HAS_CONSTITUENT' && theSubs.maxvalue < val.upperValue) {
-          theSubs.name = cmp.component.compound['name'] + ' ' + self.formatConcentration(val.upperPrecision, val.upperValue, val.unit);
-          theSubs.maxvalue = val.upperValue;
-          theSubs.purity = (val.lowerValue + '-' + val.upperValue + ' ' + (val.unit == null || val.unit == '' ? "% (w/w)" : unit)).replace(/ /g, "&nbsp;");
+        var val = cmp.proportion.typical;
+        if (cmp.relation == 'HAS_CONSTITUENT' && (theSubs.maxvalue < val.value || theSubs.name == '')) {
+          theSubs.name = cmp.component.compound['name'] + ' ' + self.formatConcentration(val.precision, val.value, val.unit);
+          theSubs.maxvalue = val.value;
+          val = cmp.proportion.real;
+          theSubs.purity = (val.lowerValue + '-' + val.upperValue + ' ' + (val.unit == null || val.unit == '' ? "% (w/w)" : val.unit)).replace(/ /g, "&nbsp;");
         }
       }
       
+      // now make the actual filling
       for (var i in substances){
-        ccLib.fillTree($('.compositionInfo', self.rootElement)[0], substances[i]);
-        break;
+        var panel = jToxKit.getTemplate('#jtox-compoblock');
+        tab.appendChild(panel);
+        ccLib.fillTree($('.composition-info', panel)[0], substances[i]);
+        prepareFillTable(substances[i].composition, panel);
       }
-      prepareFillTable(json);
     },
     
     querySummary: function(substanceURI) {
@@ -726,7 +746,7 @@ window.jToxKit = {
   	self.templateRoot = root;
 	},
 	
-	getTemplate: function(selector, suffix) {
+	getTemplate: function(selector) {
   	var el = $(selector, this.templateRoot)[0];
   	if (!!el){
     	var el = $(selector, this.templateRoot)[0].cloneNode(true);
@@ -859,27 +879,7 @@ jToxKit.templates['all-studies']  =
 "	        </thead>" +
 "	      </table>" +
 "	    </div>" +
-"	    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\">" +
-"	      <table class=\"dataTable compositionInfo jtox-font-small\">" +
-"	        <thead>" +
-"	          <tr><th class=\"jtox-size-quarter right\">Composition name:</th><td class=\"data-field camelCase\" data-field=\"name\"> ? </td></tr>" +
-"	          <tr><th class=\"right\">Composition UUID:</th><td class=\"data-field\" data-field=\"uuid\"> ? </td></tr>" +
-"	          <tr><th class=\"right\">Purity of IUC Substance:</th><td class=\"data-field\" data-field=\"purity\"> ? </td></tr>" +
-"	        </thead>" +
-"	      </table>" +
-"	      <table class=\"substancesTable\">" +
-"          <thead>" +
-"            <tr>" +
-"              <th>Type</th>" +
-"              <th>Name</th>" +
-"              <th>EC No.</th>" +
-"              <th>CAS No.</th>" +
-"              <th>Typical concentration</th>" +
-"              <th colspan=\"2\">Concentration ranges</th>" +
-"            </tr>" +
-"          </thead>" +
-"        </table>" +
-"	    </div>" +
+"	    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\"></div>" +
 "	    <div id=\"jtox-pchem\" class=\"jtox-study-tab P-CHEM\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "      </div>" +
@@ -894,6 +894,30 @@ jToxKit.templates['all-studies']  =
 "	    </div>" +
 "	  </div>" +
 ""; // end of #jtox-studies 
+
+jToxKit.templates['composition-block']  = 
+"    <div id=\"jtox-compoblock\" class=\"jtox-compoblock\">" +
+"      <table class=\"dataTable composition-info jtox-font-small\">" +
+"        <thead>" +
+"          <tr><th>Composition name:</th><td class=\"data-field camelCase\" data-field=\"name\"> ? </td></tr>" +
+"          <tr><th>Composition UUID:</th><td class=\"data-field\" data-field=\"uuid\"> ? </td></tr>" +
+"          <tr><th>Purity of IUC Substance:</th><td class=\"data-field\" data-field=\"purity\"> ? </td></tr>" +
+"        </thead>" +
+"      </table>" +
+"      <table class=\"substances-table\">" +
+"        <thead>" +
+"          <tr>" +
+"            <th>Type</th>" +
+"            <th>Name</th>" +
+"            <th>EC No.</th>" +
+"            <th>CAS No.</th>" +
+"            <th>Typical concentration</th>" +
+"            <th colspan=\"2\">Concentration ranges</th>" +
+"          </tr>" +
+"        </thead>" +
+"      </table>" +
+"    </div>" +
+""; // end of #jtox-compoblock 
 
 jToxKit.templates['one-study']  = 
 "    <div id=\"jtox-study\" class=\"jtox-study jtox-foldable folded unloaded\">" +
