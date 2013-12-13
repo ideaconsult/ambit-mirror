@@ -175,7 +175,7 @@ var jToxStudy = (function () {
           jToxKit.call(self, $(table).data('jtox-uri'), function(study){
             $(table).removeClass('unloaded folded');  
             $(table).addClass('loaded');
-            self.processStudies(panel, study.study, true); // TODO: must be changed to 'false', when the real summary is supplied
+            self.processStudies(panel, study.study, false);
             $('.dataTable', table).dataTable().fnAdjustColumnSizing();
           });  
         });
@@ -229,29 +229,7 @@ var jToxStudy = (function () {
       return df;
     },
     
-    formatResult: function (data, type) {
-      var out = "";
-      data = data.result;
-      if (data.loValue !== undefined && data.upValue !== undefined) {
-        out += (data.loQualifier == ">=") ? "[" : "(";
-        out += data.loValue + ", " + data.upValue;
-        out += (data.upQualifier == "<=") ? "]" : ") ";
-      }
-      else // either of them is non-undefined
-      {
-        var fnFormat = function (q, v) {
-          return ((q !== undefined) ? q : "=") + " " + v;
-        };
-        
-        out += (data.loValue !== undefined) ? fnFormat(data.loQualifier, data.loValue) : fnFormat(data.upQualifier, data.upValue);
-      }
-      
-      if (!!data.unit)
-        out += data.unit;
-      return out.replace(/ /g, "&nbsp;");
-    },
-    
-    createCategory: function(tab, category, name) {
+    createCategory: function(tab, category) {
       var self = this;
   
       var theCat = $('.' + category + '.jtox-study', tab)[0];
@@ -261,13 +239,11 @@ var jToxStudy = (function () {
         $(theCat).addClass(category);
         
         // install the click handler for fold / unfold
-        var titleEl = $('.jtox-study-title', theCat);
-        $(titleEl).click(function() {
+        $('.jtox-study-title', theCat).click(function() {
           $(theCat).toggleClass('folded');
         });
       }
       
-      ccLib.fillTree(titleEl[0], { title: "" + name + " (0)"});
       return theCat;
     },
   
@@ -281,7 +257,7 @@ var jToxStudy = (function () {
     ensureTable: function (tab, study) {
       var self = this;
   
-      var theTable = $('.' + study.protocol.category + ' .jtox-study-table')[0];
+      var theTable = $('.' + study.protocol.category.code + ' .jtox-study-table')[0];
       if (!$(theTable).hasClass('dataTable')) {
   
         var colDefs = [
@@ -311,21 +287,54 @@ var jToxStudy = (function () {
           return count;
         }
   
+        // some value formatting functions
+        var formatLoHigh = function (data, type) {
+          var out = "";
+          data = data.result;
+          if (data.loValue !== undefined && data.upValue !== undefined) {
+            out += (data.loQualifier == ">=") ? "[" : "(";
+            out += data.loValue + ", " + data.upValue;
+            out += (data.upQualifier == "<=") ? "]" : ") ";
+          }
+          else // either of them is non-undefined
+          {
+            var fnFormat = function (q, v) {
+              return ((q !== undefined) ? q : "=") + " " + v;
+            };
+            
+            out += (data.loValue !== undefined) ? fnFormat(data.loQualifier, data.loValue) : fnFormat(data.upQualifier, data.upValue);
+          }
+          
+          if (!!data.unit)
+            out += data.unit;
+          return out.replace(/ /g, "&nbsp;");
+        };
+        
+        var formatUnits = function(data, unit) {
+          return data !== undefined ? (data + ((unit !== undefined) ? "&nbsp;" + unit : "")) : "-";
+        };
+
         // use it to put parameters...
         parCount += putAGroup(study.parameters, function(p) {
-          return study.effects[0].conditions[p] === undefined  && study.effects[0].conditions[p + " unit"] === undefined ? 
-          { 
+          if (study.effects[0].conditions[p] !== undefined  || study.effects[0].conditions[p + " unit"] !== undefined)
+            return undefined;
+          
+          var rFn = study.parameters[p].loValue === undefined ? 
+            function (data, type, full) { return formatUnits(data, full[p + " unit"]); } : 
+            function (data, type, full) { return formatLoHigh(data, type); };
+          return  { 
             "sClass" : "center middle", 
             "mData" : "parameters." + p, 
-            "mRender" : function (data, type, full) { return data !== undefined ? (data + ((full[p + " unit"] !== undefined) ? "&nbsp;" + full[p + " unit"] : "")) : "-"; }
-          } : undefined;
+            "mRender" : rFn
+          };
         });
         // .. and conditions
         parCount += putAGroup(study.effects[0].conditions, function(c){
+          var rnFn = study.effects[0].conditions[c].loValue === undefined ? function(data, type) { return formatUnits(data.conditions[c],  data.conditions[c + " unit"]); } : formatLoHigh;
           return study.effects[0].conditions[c + " unit"] === undefined ?
           { "sClass" : "center middle jtox-multi", 
             "mData" : "effects", 
-            "mRender" : function(data, type, full) { return self.renderMulti(data, type, full, function(data, type) { return data.conditions[c] !== undefined ? (data.conditions[c] + (data.conditions[c + " unit"] !== undefined ? "&nbsp;" + data.conditions[c + " unit"] : "")) : "-"; } )} 
+            "mRender" : function(data, type, full) { return self.renderMulti(data, type, full, rnFn); } 
           } : undefined;
         });
         
@@ -339,7 +348,7 @@ var jToxStudy = (function () {
         // add also the "default" effects columns
         colDefs.push(
           { "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, "endpoint");  } },   // Effects columns
-          { "sClass": "center middle jtox-multi", "sWidth": "15%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, self.formatResult) } }
+          { "sClass": "center middle jtox-multi", "sWidth": "15%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, formatLoHigh) } }
         );
   
         // jump over those two - they are already in the DOM      
@@ -361,7 +370,7 @@ var jToxStudy = (function () {
         colDefs.push(
           { "sClass": "center", "sWidth": "15%", "mData": "protocol.guidance", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
           { "sClass": "center", "sWidth": "50px", "mData": "owner.company.name", "mRender" : function(data, type, full) { return type != "display" ? '' + data : '<div class="shortened">' + data + '</div>'; }  }, 
-          { "sClass": "center", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : '<div class="shortened">' + data + '</div><span class="ui-icon ui-icon-copy" data-uuid="' + data + '"></span>'; } }
+          { "sClass": "center", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : '<div class="shortened">' + data + '</div><span class="ui-icon ui-icon-copy" title="Press to copy the UUID in the clipboard" data-uuid="' + data + '"></span>'; } }
         );
         
         // READYY! Go and prepare THE table.
@@ -424,7 +433,7 @@ var jToxStudy = (function () {
           typeSummary[top] = sum.count;
         }
         else {
-          var cat = self.createCategory(tab, catname, catname);
+          var cat = self.createCategory(tab, catname);
           $(cat).data('jtox-uri', sum.category.uri);
         }
       }
@@ -467,29 +476,33 @@ var jToxStudy = (function () {
       var cats = [];
       
       // first swipe to map them to different categories...
-      for (var i = 0, slen = study.length; i < slen; ++i) {
-        var ones = study[i];
-        if (map) {
-          if (cats[ones.protocol.category] === undefined) {
-            cats[ones.protocol.category] = [ones];
-          }
-          else {
-            cats[ones.protocol.category].push(ones);
+      if (!map){
+        // add this one, if we're not remapping. map == false assumes that all passed studies will be from
+        // one category.    
+        cats[study[0].protocol.category.code] = study;
+      }
+      else{
+        for (var i = 0, slen = study.length; i < slen; ++i) {
+          var ones = study[i];
+          if (map) {
+            if (cats[ones.protocol.category] === undefined) {
+              cats[ones.protocol.category.code] = [ones];
+            }
+            else {
+              cats[ones.protocol.category.code].push(ones);
+            }
           }
         }
       }
   
-      // add this one, if we're not remapping. map == false assumes that all passed studies will be from
-      // one category.    
-      if (!map)
-        cats[study[0].protocol.category] = study;
-      
       // now iterate within all categories (if many) and initialize the tables
       for (var c in cats) {
         var onec = cats[c];
-        if ($('.' + c + '.jtox-study', tab).length < 1)
+        var aStudy = $('.' + c + '.jtox-study', tab)[0];
+        if (aStudy === undefined)
           continue;
   
+        ccLib.fillTree(aStudy, {title: onec[0].protocol.category.title + " (0)"});
         var theTable = self.ensureTable(tab, onec[0]);
         $(theTable).dataTable().fnAddData(onec);
       }
