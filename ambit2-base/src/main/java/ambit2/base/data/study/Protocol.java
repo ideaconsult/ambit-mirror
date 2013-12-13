@@ -23,7 +23,7 @@ public class Protocol {
 				return "Biodegradation in water - screening tests";
 			}
 		},
-		oral {
+		TO_ACUTE_ORAL_SECTION {
 			@Override
 			public String toString() {
 				return "Acute toxicity - oral";
