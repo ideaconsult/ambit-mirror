@@ -81,9 +81,15 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.publicname.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getPublicName()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.format.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getFormat()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.substanceType.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubstancetype()))));
-			builder.append(String.format("\t\t\"%s\": {\"%s\":%s}\n",
+			builder.append(String.format("\t\t\"%s\": {\"%s\":%s,\n\t\t\"%s\":%s\n\t\t}\n",
 					jsonSubstance.referenceSubstance.name(),
-					jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getReferenceSubstanceUUID()))));
+					jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getReferenceSubstanceUUID())),
+					"uri",
+					JSONUtils.jsonQuote(
+						getBaseReference()+"/query/compound/search/all?search="+
+						JSONUtils.jsonEscape(item.getReferenceSubstanceUUID())
+					)
+					));
 			//builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.documentType.name(),item()));
 			builder.append("\t}");
 			writer.write(builder.toString());
