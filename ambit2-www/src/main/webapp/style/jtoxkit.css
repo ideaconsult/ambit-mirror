@@ -1,10 +1,26 @@
-/* toxtstudy.css - Styling for toxstudy engine
+/* toxtdataset.css - Styling for tox-dataset engine
 */
-.jtox-toolkit .dataTables_filter label input,
-.jtox-toolkit .dataTables_length label select {
-  display: inline-block;
-  width: auto;  
+
+#jtox-dataset table tr * {
+  border: 1px solid black;
 }
+
+
+.jtox-ds-fixed,
+.jtox-ds-variable {
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.jtox-ds-feature {
+  display: inline-block;
+  width: 250px;
+  border: 0px;
+  padding: 2px;
+  margin: 0px 15px 0px 0px;
+}/* toxtstudy.css - Styling for toxstudy engine
+*/
 
 div.jtox-study,
 div.jtox-composition,
@@ -192,4 +208,24 @@ td.jtox-multi table {
 
 .jtox-font-smaller {
   font-size: smaller;
+}
+
+.jtox-toolkit .borderless-top,
+.jtox-toolkit .borderless-top * {
+  border-top: 0px !important;
+}
+
+.jtox-toolkit .borderless-bottom,
+.jtox-toolkit .borderless-bottom * {
+  border-bottom: 0px !important;
+}
+
+
+/* Make table helper elements, like paging, filter, etc. in one line...
+*/
+.jtox-toolkit .dataTables_filter label input,
+.jtox-toolkit .dataTables_length label select,
+.jtox-inline {
+  display: inline-block;
+  width: auto;  
 }
