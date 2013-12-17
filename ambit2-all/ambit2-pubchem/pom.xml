@@ -22,6 +22,13 @@
   		<artifactId>commons-cli</artifactId>
   		<version>1.1</version>
   	</dependency>
+	<dependency>
+	  <groupId>net.ideaconsult</groupId>
+	  <artifactId>loom-tb-wiki</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	  <type>jar</type>
+      <scope>compile</scope>
+	</dependency>  	
   </dependencies>
 <build>
   	<plugins>
