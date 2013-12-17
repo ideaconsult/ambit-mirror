@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 
+import org.omg.CORBA.ParameterMode;
 import org.opentox.dsl.OTDataset;
 import org.opentox.dsl.OTFeature;
 import org.restlet.Context;
@@ -24,6 +25,7 @@ import ambit2.base.processors.search.AbstractFinder.MODE;
 import ambit2.base.processors.search.AbstractFinder.SITE;
 import ambit2.chebi.ChebiFinder;
 import ambit2.core.data.model.Algorithm;
+import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.db.DbReaderStructure;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.AbstractRepositoryWriter.OP;
@@ -49,6 +51,7 @@ import ambit2.search.AllSourcesFinder;
 import ambit2.search.chemidplus.ChemIdPlusRequest;
 import ambit2.search.csls.CSLSStringRequest;
 import ambit2.search.opentox.OpenToxRequest;
+import ambit2.search.tbwiki.TBWikiFinder;
 
 /**
  * http://chem.sis.nlm.nih.gov/molfiles/0000050000.mol chemidplus
@@ -189,6 +192,12 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 			le =  new LiteratureEntry(request.toString(),request.toString());
 			break;
 		}
+		case TBWIKI: {
+			mode = MODE.propertyonly;
+			le =  new LiteratureEntry("TBWIKI","http://wiki.toxbank.net/wiki/Special:SPARQLEndpoint");
+			p.add(new TBWikiFinder(profile,le));
+			break;
+		}		
 		default : {
 			request = new CSLSStringRequest();
 			p.add(new AllSourcesFinder(profile,request,mode));
@@ -218,7 +227,7 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 				} else return target;
 			}
 		});		
-		
+
 		RepositoryWriter writer = new RepositoryWriter() {
 			@Override
 			public List<IStructureRecord> process(IStructureRecord target)
@@ -227,7 +236,13 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 				return super.process(target);
 			}
 		};
-		writer.setOperation(OP.UPDATE);
+		if (MODE.propertyonly.equals(mode)) {
+			writer.setUsePreferredStructure(true);
+			writer.setPropertyKey(new NoneKey());
+			writer.setPropertiesOnly(true);
+			writer.setOperation(OP.CREATE);
+		} else 		
+			writer.setOperation(OP.UPDATE);
 		writer.setDataset(dataset);
 		p.add(writer);
 		return p;

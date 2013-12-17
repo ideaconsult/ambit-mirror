@@ -41,7 +41,13 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			public String getDescription() {
 				return "Lookup only empty structures and add the result as additional structure representation";
 			}
-		}		
+		},
+		propertyonly {
+			@Override
+			public String getDescription() {
+				return "Lookup all structures and add the results as properties only";
+			}
+		},		
 /*
 ,
 		importproperties {
@@ -158,7 +164,21 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			public boolean isEnabled() {
 				return true;
 			}
-		};
+		},
+		TBWIKI {
+			@Override
+			public String getTitle() {
+				return "ToxBank Wiki";
+			}
+			@Override
+			public String getURI() {
+				return "http://wiki.toxbank.net/wiki/Special:SPARQLEndpoint";
+			}
+			@Override
+			public boolean isEnabled() {
+				return true;
+			}
+		};		
 		public String getTitle() {
 			return toString();
 		}		
@@ -246,6 +266,9 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 							target.setUsePreferedStructure(false);
 							break;
 						}	
+						case propertyonly: {
+							break;
+						}
 						default:  //add
 							target.setIdstructure(-1) ;
 							target.setUsePreferedStructure(false);

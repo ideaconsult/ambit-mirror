@@ -77,6 +77,10 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static final String opentox_ChEBI = "http://www.opentox.org/api/dblinks#ChEBI";
 	public static final String opentox_Pubchem = "http://www.opentox.org/api/dblinks#Pubchem";
 	public static final String opentox_ChemSpider = "http://www.opentox.org/api/dblinks#ChemSpider";
+	public static final String opentox_DrugBank = "http://www.opentox.org/api/dblinks#DrugBank";
+	public static final String opentox_KEGG = "http://www.opentox.org/api/dblinks#KEGG";
+	public static final String opentox_LS = "http://www.opentox.org/api/dblinks#LS";
+	public static final String opentox_SigmaAldrich = "http://www.opentox.org/api/dblinks#SigmaAldrich";
 	public static final String opentox_ChEMBL = "http://www.opentox.org/api/dblinks#ChEMBL";
 	public static final String opentox_ToxbankWiki = "http://www.opentox.org/api/dblinks#ToxbankWiki";
 	public static final String opentox_CMS = "http://www.opentox.org/api/dblinks#CMS";
@@ -125,6 +129,10 @@ public class Property extends Model implements Serializable, Comparable<Property
 	}
 	public static synchronized Property getInChIInstance() {
 		return Property.getInstance(Property.opentox_InChI, new LiteratureEntry(Property.opentox_InChI,"http://www.iupac.org/inchi/"));
+	}
+
+	public static synchronized Property getInChIKeyInstance() {
+		return Property.getInstance(Property.opentox_InChIKey, new LiteratureEntry(Property.opentox_InChIKey,"http://www.iupac.org/inchi/"));
 	}
 	public static synchronized Property getInChIStdInstance() {
 		return Property.getInstance(Property.opentox_InChI_std, new LiteratureEntry(Property.opentox_InChI_std,"http://www.iupac.org/inchi/"));
