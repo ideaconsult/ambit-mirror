@@ -156,6 +156,8 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 			if (Property.opentox_SMILES.equals(feature.getName())) return "SMILES";
 			if (Property.opentox_REACHDATE.equals(feature.getName())) return "REACH registration date";
 			if (Property.opentox_EC.equals(feature.getName())) return "EC number";
+			if (Property.opentox_TradeName.equals(feature.getName())) return "Trade Name";
+			
 			
 			/* Other database IDs */
 			if (Property.opentox_Pubchem.equals(feature.getName())) return "PUBCHEM ID";
