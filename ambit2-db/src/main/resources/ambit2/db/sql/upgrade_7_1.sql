@@ -1,3 +1,4 @@
+
 -- -----------------------------------------------------
 -- Table `substance_protocolapplication` 
 -- -----------------------------------------------------
@@ -12,6 +13,8 @@ CREATE TABLE `substance_protocolapplication` (
   `substance_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `substance_uuid` varbinary(16) DEFAULT NULL,
   `params` text NOT NULL,
+  `interpretation_result` varchar(32) DEFAULT NULL,
+  `interpretation_criteria` varchar(255) DEFAULT NULL,
   `reference` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`document_prefix`,`document_uuid`),
