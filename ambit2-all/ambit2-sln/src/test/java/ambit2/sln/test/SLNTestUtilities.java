@@ -2,6 +2,7 @@ package ambit2.sln.test;
 
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNParser;
+import ambit2.sln.SLNHelper;
 
 
 
@@ -13,12 +14,12 @@ public class SLNTestUtilities
 	{
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
-		tu.testSLN("C#N");
+		tu.testSLN("C-CCO");
 	}
 	
 	public void testSLN(String sln)
 	{
-		//TODO
+		
 		SLNContainer container = slnpar.parse(sln);
 		if (!slnpar.getErrorMessages().equals(""))
 		{
@@ -26,8 +27,9 @@ public class SLNTestUtilities
 			System.out.println("SLN Parser errors:\n" + slnpar.getErrorMessages());			
 			return;
 		}
-		
+		 
 		System.out.println("Original  sln: " + sln); 
+		System.out.println(SLNHelper.getAtomsAttributes(container));
 		
 	}
 	

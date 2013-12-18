@@ -34,4 +34,14 @@ public class SLNContainer extends QueryAtomContainer
 		return globalDictionary;
 	}
 	
+	public void setLocalDictionary(SLNDictionary dict)
+	{
+		localDictionary = dict;
+	}
+	
+	public void setGlobalDictionary(SLNDictionary dict)
+	{
+		globalDictionary = dict;
+	}
+	
 }

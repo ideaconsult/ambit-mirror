@@ -8,15 +8,19 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
  * 
  */
 
-public class SLNAtom extends org.openscience.cdk.PseudoAtom implements
-IQueryAtom
+public class SLNAtom extends org.openscience.cdk.PseudoAtom implements IQueryAtom
 {
-
 	public SLNAtom()
 	{
 	}
 
-	public boolean matches(IAtom atom) {
+	int atomType = 0;
+	String atomName = null; 
+	
+	
+	public boolean matches(IAtom atom) 
+	{
+		//TODO
 		return false;
 	}
 }

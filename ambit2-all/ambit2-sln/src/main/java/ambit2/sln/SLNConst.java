@@ -5,7 +5,7 @@ public class SLNConst
 	//TODO Global values for setting the absolute CIS/TRANS configuration
 
 	//Logical operations
-	public static char LogOperationChars[] = {'!', '&', ',', ';'};
+	public static char LogOperationChars[] = {'!', '&', '|', ';'};
 	//TODO
 
 	//TODO Atom Primitives
@@ -19,22 +19,26 @@ public class SLNConst
 	public static final int BT_AROMATIC = 4;
 	public static final int BT_UNDEFINED = 100;
 	
-	//TODO
+	
 	
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
 	//p[i][j] = 0 means that priority(i) = priority(j)
 	//p[i][j] > 0 means that priority(i) > priority(j)
 	public static int priority[][] = {
-		//         !  &  ,  ;
+		//         !  &  |  ;
 		/* ! */  {-1, 1, 1, 1},
 		/* & */  {-1, 0, 1, 1},
-		/* , */  {-1,-1, 0, 1},
-		/* , */  {-1,-1,-1, 0},
+		/* | */  {-1,-1, 0, 1},
+		/* ; */  {-1,-1,-1, 0},
 	};
 	
-	public static String elSymbols[] =
-		{
+	public static final int GlobDictOffseet = 1000;
+	public static final int LocDictOffseet = 1000000;
+	
+	
+	public static final String elSymbols[] =
+	{
 			"",                                                  
 			"H","He","Li","Be","B",
 			"C","N","O","F","Ne",         
