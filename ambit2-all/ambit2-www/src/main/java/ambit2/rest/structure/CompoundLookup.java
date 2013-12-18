@@ -272,7 +272,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 			else params = getRequest().getEntityAsForm();
 		return params;
 	}
+	private final String chebiuri = "http://purl.obolibrary.org/chebi/";
+	
 	protected QueryField getTextQuery(Property property, boolean caseSensitive, boolean retrieveProperties, String value) {
+		if (value.startsWith(chebiuri)) value = value.replace(chebiuri, "");
 		QueryField q_by_name = new QueryField();
 		q_by_name.setFieldname(property);
     	q_by_name.setCaseSensitive(caseSensitive);
