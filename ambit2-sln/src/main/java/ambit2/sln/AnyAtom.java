@@ -18,12 +18,7 @@ public class AnyAtom extends SLNAtom {
    }
 
    public boolean matches(IAtom atom)
-   {
-       if (atom.getSymbol().equals("H"))
-       {
-           Integer massNumber = atom.getMassNumber();
-           return massNumber != null;
-       }
+   {   
        return true;
    }
 

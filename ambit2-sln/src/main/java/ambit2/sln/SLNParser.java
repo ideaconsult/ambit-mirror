@@ -5,20 +5,19 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
-import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
-import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+import org.openscience.cdk.interfaces.IAtom;
+
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+
+import ambit2.smarts.SingleOrAromaticBond;
 
 public class SLNParser 
 {
 	String sln;
 	SLNContainer container;
 	SLNDictionary globalDictionary = null;
-	Stack<IQueryAtom> brackets = new Stack<IQueryAtom>();
+	Stack<SLNAtom> brackets = new Stack<SLNAtom>();
 	ArrayList<SLNParserError> errors = new ArrayList<SLNParserError>();
-	ArrayList<IQueryBond>directionalBonds = new ArrayList<IQueryBond>();
-	ArrayList<IQueryBond>processedDirBonds = new ArrayList<IQueryBond>();
-	ArrayList<IQueryBond>processedDoubleBonds = new ArrayList<IQueryBond>();
-	ArrayList<IQueryBond>newStereoDoubleBonds = new ArrayList<IQueryBond>();
 	TreeMap<Integer,RingClosure> indexes = new TreeMap<Integer,RingClosure>();
 
 	//Work variables for Component Level Grouping
@@ -28,10 +27,10 @@ public class SLNParser
 	public int maxCompNumber;
 
 	int curChar;	
-	IQueryAtom prevAtom;
+	SLNAtom prevAtom;
 	int curBondType;
 	int nChars;
-	IQueryBond curBond;
+	SMARTSBond curBond;
 
 
 
@@ -50,6 +49,7 @@ public class SLNParser
 	{
 		this.sln = sln;
 		container = new SLNContainer();
+		container.setGlobalDictionary(globalDictionary);
 		errors.clear();
 		init();
 		parse();
@@ -58,31 +58,34 @@ public class SLNParser
 
 	void init()
 	{
-		//TODO
-
 		nChars = sln.length();
 		prevAtom = null;
 		curChar = 0;
 		brackets.clear();
-		directionalBonds.clear();
+		//directionalBonds.clear();
 		curBond = null;
 		curBondType = SLNConst.BT_UNDEFINED;
 		indexes.clear();
 	}
 
 	void parse()
-	{
-		//TODO
-
+	{	
 		while ((curChar < nChars) && (errors.size() == 0))
 		{
-			if (Character.isLowerCase(sln.charAt(curChar)) && Character.isDigit(sln.charAt(curChar)))
+			
+			if (Character.isLowerCase(sln.charAt(curChar)) || Character.isDigit(sln.charAt(curChar)))
+			{
+				errors.add(new SLNParserError(sln, "Incorrect bening of an atom!", curChar, ""));
+				
+				curChar++;
 				continue;
+			}
+			
+			
+			if (Character.isUpperCase(sln.charAt(curChar)))
+				parseAtom();
 			else
-				if (Character.isUpperCase(sln.charAt(curChar)))
-					parseAtom();
-				else
-					parseSpecialSymbol();
+				parseSpecialSymbol();
 		}
 
 		//Treat unclosed brackets
@@ -98,117 +101,89 @@ public class SLNParser
 			for (Integer key : keys)
 				newError("Ring index " + key + " is unclosed",-1, "");
 		}
+		
 	}
 
 	void parseAtom()
 	{
-		//Parsing the atom symbols allowed to be used without brackets [] 
-		IQueryAtom curAtom = null;
-		String symb = null;
-
-		switch (sln.charAt(curChar))
+		//extract atom name
+		String atomName = extractAtomName();
+		int atomType = -1;
+		
+		System.out.println("Atom-->" + atomName);
+		
+		//analyze atomName
+		if (globalDictionary.containsAtomName(atomName))
 		{
-		/*  In contrast to SMILES, aromaticity 
-		 * is not an atomic property, but a property of the bond
-		 *  //Aromatic atoms
-		case 'a':
-			curAtom = new AromaticAtom(); 
-			curChar++;
-			break;
-		case 'c': 
-		case 'o':
-		case 'n':
-		case 's':
-		case 'p':	
-			char ch = Character.toUpperCase(sln.charAt(curChar));	
-			curAtom = new AromaticSymbolQueryAtom(); 
-			curAtom.setSymbol(Character.toString(ch));
-			curChar++;
-			break;
-		 */
-		case 'C':
-			symb = "C";
-			curChar++;
-			if (curChar < nChars)
-			{
-				if (sln.charAt(curChar) == 'l')
-				{	
-					symb = "Cl";
-					curChar++;
-				}	
-			}
-			curAtom = new AliphaticSymbolQueryAtom();
-			curAtom.setSymbol(symb);
-			break;
-
-		case 'B':
-			symb = "B";
-			curChar++;
-			if (curChar < nChars)
-			{
-				if (sln.charAt(curChar) == 'r')
-				{	
-					symb = "Br";
-					curChar++;
-				}	
-			}
-			curAtom = new AliphaticSymbolQueryAtom();
-			curAtom.setSymbol(symb);
-			break;
-
-		case 'A':
-			curAtom = new AliphaticAtom(); 
-			curChar++;
-			break;
-		case 'O':
-		case 'N':
-		case 'S':
-		case 'P':
-		case 'F':
-		case 'I':			
-			curAtom = new AliphaticSymbolQueryAtom(); 
-			curAtom.setSymbol(Character.toString(sln.charAt(curChar)));
-			curChar++;
-			break;
-
-		case 'H':
-			symb = "H";
-			curAtom = new HydrogenAtom();
-			curChar++;
-			if (Character.isDigit(sln.charAt(curChar)))
-			{
-				//TODO
-			}
-			break;
-		}	
-
-		if (curAtom == null)
-			newError("Incorrect atomic symbol", curChar+1, "");
-		else		
-			addAtom(curAtom);
-	}
-
-	void parseAtomIndex()
-	{
-		//TODO
-		if (sln.charAt(curChar) == '[')
-		{				
-			curChar++;
-			if (curChar == nChars)
-			{	
-				newError("Incorrect ring closure",curChar,"");
-				return;
-			}	
-			if (sln.charAt(curChar) == '@' && Character.isDigit(sln.charAt(curChar)))
-				registerIndex(getInteger());
-			else
-				newError("Incorrect ring closure",curChar,"");				
+			atomType = SLNConst.GlobDictOffseet;
 		}
 		else
-		{	
-			registerIndex(Character.getNumericValue(sln.charAt(curChar)));
-			curChar++;			
+		{			
+			if (container.getLocalDictionary() != null)
+			{	
+				atomType = SLNConst.LocDictOffseet;
+			}
+			else
+			{
+				for (int i = 1; i < SLNConst.elSymbols.length; i++)
+					if (atomName.equals(SLNConst.elSymbols[i]))
+						atomType = i;
+			}
 		}
+		
+		
+		if (atomType == -1)
+			errors.add(new SLNParserError(sln, "Atom name", curChar, ""));
+		
+		SLNAtom newAtom = new SLNAtom();
+		newAtom.atomType = atomType;
+		System.out.println("Atom Type : " + atomType);
+		
+		
+		if (curChar <nChars)
+			if (sln.charAt(curChar) == '[')
+			{	
+				String atomExpression = extractAtomExpression();
+				//TODO analyze atomExpression
+			}	
+		
+		if (curChar < nChars)
+			if (sln.charAt(curChar) == 'H')
+			{
+				curChar++;
+				//TODO handle H information
+			}
+		
+		addAtom(newAtom);
+		
+	}
+	
+	String extractAtomName()
+	{	
+		int startPos = curChar;
+		curChar++;
+		while (curChar < nChars)
+		{
+			if (Character.isLowerCase(sln.charAt(curChar)) || Character.isDigit(sln.charAt(curChar)))
+				curChar++;
+			else 
+				break;
+		}
+		
+		return sln.substring(startPos, curChar);
+	}
+	
+	
+	String extractAtomExpression()
+	{
+		return "";
+	}
+	
+
+	void parseAtomIndex()   //???
+	{
+		//TODO
+		
 	}
 
 	int getInteger()
@@ -240,6 +215,7 @@ public class SLNParser
 	void newError(String msg, int pos, String param)
 	{
 		SLNParserError err;
+		
 		//TODO
 	}
 
@@ -258,9 +234,13 @@ public class SLNParser
 		return (errors);
 	}
 
-	void addAtom(IQueryAtom atom)
+	void addAtom(SLNAtom atom)
 	{
-		//TODO
+		container.addAtom(atom);
+		if (prevAtom != null)
+		{	
+			addBond(prevAtom, atom);
+		}	
 	}
 
 	void parseSpecialSymbol()
@@ -268,9 +248,7 @@ public class SLNParser
 		switch (sln.charAt(curChar))
 		{
 		case '*': //Any atom
-			IQueryAtom curAtom = new AnyAtom();
-			curChar++;
-			addAtom(curAtom);			
+			//TODO		
 			break;
 			//Bond expression symbols - bond types and logical operations
 		case '-':	//single bond
@@ -340,9 +318,14 @@ public class SLNParser
 		}
 	}
 
-	void addBond(IQueryAtom atom0, IQueryAtom atom1)
+	void addBond(SLNAtom atom0, SLNAtom atom1)
 	{
-		//TODO
+		curBond = new SingleOrAromaticBond();
+		IAtom[] atoms = new SLNAtom[2];
+	    atoms[0] = atom0;
+	    atoms[1] = atom1;
+	    curBond.setAtoms(atoms);
+	    container.addBond(curBond);
 	}
 
 	void parseBondExpression()
@@ -350,8 +333,5 @@ public class SLNParser
 		//TODO
 	}
 
-	public void setComponentLevelGrouping(boolean flag)
-	{
-		FlagCLG = flag;
-	}
+	
 }
