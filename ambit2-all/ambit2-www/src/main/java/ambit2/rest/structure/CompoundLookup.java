@@ -184,9 +184,36 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 				text_multi = getValuesArray(form);
 			}
 
-			int idcompound = isAmbitID(text);
+			Object idcompound = isAmbitID(text);
 			//query
-			if ((text_multi!= null) && (text_multi.length>1)) {
+			if (idcompound!=null)  {
+				switch (searchType) {
+				case ambitid:
+					IStructureRecord record = new StructureRecord();
+					record.setIdchemical(((Integer)idcompound).intValue());
+					QueryStructureByID q = new QueryStructureByID();
+					q.setPageSize(1);
+					q.setChemicalsOnly(true);
+					q.setValue(record);
+					query = q;						
+					break;
+				case inchikey:
+					String inchikey = idcompound.toString();
+					if ((inchikey==null) || (inchikey.trim().length()!=27)) 
+							throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid InChI Key");
+					QueryStructure q1 = new QueryStructure();
+					q1.setChemicalsOnly(true);
+					q1.setFieldname(ExactStructureSearchMode.inchikey);
+					q1.setValue(inchikey.trim());
+					searchType = _searchtype.inchikey;
+					query = q1;
+					break;
+				default:
+					query=null;
+					break;
+				}
+		
+			} else if ((text_multi!= null) && (text_multi.length>1)) {
 				query =  getMultiTextQuery(null,casesens,retrieveProperties, text_multi);
 			} else if ((text==null) || "".equals(text)) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -201,14 +228,7 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 					searchType = _searchtype.einecs;
 					query =  getTextQuery(Property.getEINECSInstance(),casesens,retrieveProperties,text);
 				}
-			} else if (idcompound>0)  {
-				IStructureRecord record = new StructureRecord();
-				record.setIdchemical(idcompound);
-				QueryStructureByID q = new QueryStructureByID();
-				q.setPageSize(1);
-				q.setChemicalsOnly(true);
-				q.setValue(record);
-				query = q;
+
 			} else {
 				if ("".equals(text))  {
 				//if inchi
@@ -435,13 +455,25 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	public boolean isSearchParam(String text) {
 		return SEARCH_as_id.equals(text.toLowerCase());
 	}	
-	public int isAmbitID(String text) {
+	public Object isAmbitID(String text) {
 		try {
 			searchType = _searchtype.ambitid;
 			return Integer.parseInt(text);
 		} catch (Exception x) {
+			String uri = getRequest().getRootRef().toString()+"/compound/";
+			int pos = text.indexOf(uri);
+			if (pos==0) {
+				String query = text.substring(uri.length());
+				try {
+					searchType = _searchtype.ambitid;
+					return Integer.parseInt(query);
+				} catch (Exception xx) {
+					searchType = _searchtype.inchikey;
+					return query;
+				}
+			}
 			searchType = null;
-			return 0;
+			return null;
 		}
 	}
 
