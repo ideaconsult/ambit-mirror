@@ -96,21 +96,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 			 if (record==null) return record;
 			 if (record instanceof SubstanceRecord) {
 	         	SubstanceRecord substance = (SubstanceRecord) record;
-	         	q.setObject(substance);
-	         	x.process(q);
-         		importedRecord.setCompanyUUID(substance.getCompanyUUID());
-         		importedRecord.setIdsubstance(substance.getIdsubstance());
-	         	if (substance.getRelatedStructures()!=null)
-		         	for (CompositionRelation rel : substance.getRelatedStructures()) {
-		         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
-		         		if (rel.getSecondStructure().getIdchemical()<=0) {
-		         			writer.write(rel.getSecondStructure());		
-		         		}
-		         		rel.getSecondStructure().setProperty(Property.getI5UUIDInstance(),i5uuid);
-		         		qr.setCompositionRelation(rel);
-		         		x.process(qr);
-		         	}
-	         	if (substance.getMeasurements()!=null) 
+	         	if (substance.getMeasurements()!=null) {
 	         		for (ProtocolApplication papp : substance.getMeasurements()) {
 	         			if (qss==null) qss = new UpdateSubstanceStudy(importedRecord.getCompanyUUID(), papp);
 	         			else {
@@ -126,6 +112,23 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	         					x.process(qeffr);
 	         				}
 	         		}
+	         	} else {
+		         	q.setObject(substance);
+		         	x.process(q);
+	         		importedRecord.setCompanyUUID(substance.getCompanyUUID());
+	         		importedRecord.setIdsubstance(substance.getIdsubstance());
+		         	if (substance.getRelatedStructures()!=null)
+			         	for (CompositionRelation rel : substance.getRelatedStructures()) {
+			         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
+			         		if (rel.getSecondStructure().getIdchemical()<=0) {
+			         			writer.write(rel.getSecondStructure());		
+			         		}
+			         		rel.getSecondStructure().setProperty(Property.getI5UUIDInstance(),i5uuid);
+			         		qr.setCompositionRelation(rel);
+			         		x.process(qr);
+			         	}
+	         		
+	         	}
 	         } else if (record instanceof IStructureRecord) {
 	        	 if (STRUC_TYPE.NA.equals(((IStructureRecord)record).getType())) {
 	        		 writer.create(record); //with the current settings, if the structure is already there, it will be used
