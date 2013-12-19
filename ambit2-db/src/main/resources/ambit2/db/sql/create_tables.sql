@@ -153,8 +153,12 @@ CREATE TABLE `substance_relation` (
   KEY `relation-x` (`relation`),
   KEY `crs-uuid-x` (`rs_uuid`,`rs_prefix`),
   KEY `cmp-uuid-x` (`cmp_prefix`,`cmp_uuid`),
+  KEY `idsubstance_idx` (`idsubstance`),
+  CONSTRAINT `idsubstance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `chemicalkey` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Dossier to chemicals relation';
+
+
 
 -- -----------------------------------------------------
 -- Table `substance_protocolapplication` 

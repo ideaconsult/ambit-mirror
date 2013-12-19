@@ -44,4 +44,35 @@ CREATE TABLE `substance_experiment` (
   KEY `endpoint` (`endpoint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- -----------------------------------------------------
+-- Table `substance_relation` FK to substance
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `substance_relation`;
+CREATE TABLE `substance_relation` (
+  `cmp_prefix` varchar(6) COLLATE utf8_bin NOT NULL COMMENT 'Composition UUID prefix',
+  `cmp_uuid` varbinary(16) NOT NULL COMMENT 'Composition UUID',
+  `idsubstance` int(11) NOT NULL,
+  `idchemical` int(11) unsigned NOT NULL,
+  `relation` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `function` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `proportion_real_lower` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `proportion_real_lower_value` double DEFAULT NULL,
+  `proportion_real_upper` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `proportion_real_upper_value` double DEFAULT NULL,
+  `proportion_real_unit` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `proportion_typical` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `proportion_typical_value` double DEFAULT NULL,
+  `proportion_typical_unit` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `rs_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL COMMENT 'ReferenceSubstance UUID (prefix)',
+  `rs_uuid` varbinary(16) DEFAULT NULL COMMENT 'ReferenceSubstance UUID',
+  PRIMARY KEY (`cmp_prefix`,`cmp_uuid`,`idsubstance`,`idchemical`,`relation`) USING BTREE,
+  KEY `chemicalkey` (`idchemical`),
+  KEY `relation-x` (`relation`),
+  KEY `crs-uuid-x` (`rs_uuid`,`rs_prefix`),
+  KEY `cmp-uuid-x` (`cmp_prefix`,`cmp_uuid`),
+  KEY `idsubstance_idx` (`idsubstance`),
+  CONSTRAINT `idsubstance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `chemicalkey` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Dossier to chemicals relation';
+
 insert into version (idmajor,idminor,comment) values (7,1,"AMBIT Schema: substances study records support");
