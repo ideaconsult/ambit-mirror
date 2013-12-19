@@ -9,6 +9,8 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
@@ -17,9 +19,10 @@ import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.AbstractDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.substance.CreateSubstance;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
+import ambit2.db.substance.study.UpdateEffectRecords;
+import ambit2.db.substance.study.UpdateSubstanceStudy;
 
 /**
  * Writes IUCLID5 substances
@@ -33,6 +36,8 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	private static final long serialVersionUID = -2237399197958151808L;
 	private CreateSubstance q;
     private UpdateSubstanceRelation qr;
+    private UpdateSubstanceStudy qss;
+    private UpdateEffectRecords qeffr;
     private UpdateExecutor x;
     private RepositoryWriter writer;
  
@@ -94,16 +99,32 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	         	x.process(q);
          		importedRecord.setCompanyUUID(substance.getCompanyUUID());
          		importedRecord.setIdsubstance(substance.getIdsubstance());
-	         	
-	         	for (CompositionRelation rel : substance.getRelatedStructures()) {
-	         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
-	         		if (rel.getSecondStructure().getIdchemical()<=0) {
-	         			writer.write(rel.getSecondStructure());		
+	         	if (substance.getRelatedStructures()!=null)
+		         	for (CompositionRelation rel : substance.getRelatedStructures()) {
+		         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
+		         		if (rel.getSecondStructure().getIdchemical()<=0) {
+		         			writer.write(rel.getSecondStructure());		
+		         		}
+		         		rel.getSecondStructure().setProperty(Property.getI5UUIDInstance(),i5uuid);
+		         		qr.setCompositionRelation(rel);
+		         		x.process(qr);
+		         	}
+	         	if (substance.getMeasurements()!=null) 
+	         		for (ProtocolApplication papp : substance.getMeasurements()) {
+	         			if (qss==null) qss = new UpdateSubstanceStudy(importedRecord.getCompanyUUID(), papp);
+	         			else {
+	         				qss.setGroup(importedRecord.getCompanyUUID());
+	         				qss.setObject(papp);
+	         			}
+	         			x.process(qss);
+	         			if ( papp.getEffects()!=null)
+	         			for (Object effect : papp.getEffects()) 
+	         				if (effect instanceof EffectRecord) {
+	         					if (qeffr==null) qeffr = new UpdateEffectRecords(papp.getDocumentUUID(),(EffectRecord)effect);
+	         					else {qeffr.setGroup(papp.getDocumentUUID()); qeffr.setObject((EffectRecord)effect);}
+	         					x.process(qeffr);
+	         				}
 	         		}
-	         		rel.getSecondStructure().setProperty(Property.getI5UUIDInstance(),i5uuid);
-	         		qr.setCompositionRelation(rel);
-	         		x.process(qr);
-	         	}
 	         } else if (record instanceof IStructureRecord) {
 	        	 if (STRUC_TYPE.NA.equals(((IStructureRecord)record).getType())) {
 	        		 writer.create(record); //with the current settings, if the structure is already there, it will be used
@@ -115,6 +136,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		 } catch (AmbitException x) {
 			 throw x;
 		 } catch (Exception x) {
+			 x.printStackTrace();
 			 throw new AmbitException(x);
 		 }
 	}

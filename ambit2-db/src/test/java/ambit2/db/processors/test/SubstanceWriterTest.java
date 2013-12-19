@@ -94,7 +94,16 @@ public class SubstanceWriterTest extends DbUnitTest {
 
         */
         
-        
+/*
+
+  Document types:
+    EndpointStudyRecord: 877
+    AttachmentDocument: 5
+    LegalEntity: 1
+    ReferenceSubstance: 6
+    Substance: 1
+    EndpointRecord: 14
+ */
 		Assert.assertEquals(7,records);
 
         
@@ -166,6 +175,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 		int records = 0;
 		while (reader.hasNext()) {
             Object record = reader.next();
+            if (record==null) continue;
             Assert.assertTrue(record instanceof IStructureRecord);
             writer.process((IStructureRecord)record);
             records++;
