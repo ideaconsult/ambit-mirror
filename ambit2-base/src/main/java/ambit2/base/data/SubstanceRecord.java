@@ -16,12 +16,7 @@ import ambit2.base.relation.composition.Proportion;
  */
 public class SubstanceRecord extends StructureRecord {
 	protected String ownerUUID;
-	public String getOwnerUUID() {
-		return ownerUUID;
-	}
-	public void setOwnerUUID(String ownerUUID) {
-		this.ownerUUID = ownerUUID;
-	}
+	protected String ownerName;
 	protected int idsubstance;
 	protected String substancetype;
 	protected String companyName;
@@ -115,6 +110,7 @@ public class SubstanceRecord extends StructureRecord {
 		super.clear();
 		idsubstance = -1;
 		setOwnerUUID(null);
+		
 		if (relatedStructures!=null) relatedStructures.clear();
 		if (measurements!=null) measurements.clear();
 	}
@@ -122,4 +118,17 @@ public class SubstanceRecord extends StructureRecord {
 	public String toString() {
 		return String.format("idsubstance=%d %s",getIdsubstance(),getCompanyUUID());
 	}
+	public String getOwnerUUID() {
+		return ownerUUID;
+	}
+	public void setOwnerUUID(String ownerUUID) {
+		this.ownerUUID = ownerUUID;
+	}
+	public String getOwnerName() {
+		return ownerName;
+	}
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+	
 }

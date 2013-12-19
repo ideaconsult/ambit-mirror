@@ -25,7 +25,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 	private final static String sql = 
 		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su," +
 		"params,interpretation_result,interpretation_criteria,reference," +
-		"owner_prefix,hex(owner_uuid) ou,idsubstance,hex(rs_prefix),hex(rs_uuid) rsu from substance_protocolapplication p\n" +
+		"owner_prefix,hex(owner_uuid) ou,idsubstance,hex(rs_prefix),hex(rs_uuid) rsu,owner_name from substance_protocolapplication p\n" +
 		"left join substance s on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 		"where substance_prefix =? and hex(substance_uuid) =? ";
 
@@ -87,7 +87,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
     		record.setInterpretationCriteria(rs.getString("interpretation_criteria")); //parse json
     		record.setInterpretationResult(rs.getString("interpretation_result")); //parse json
     		
-    		record.setCompanyName(rs.getString("owner_prefix") + " TODO");
+    		record.setCompanyName(rs.getString("owner_name"));
     		try {
             	record.setCompanyUUID(rs.getString("owner_prefix") + "-" + I5Utils.addDashes(rs.getString("ou").toString().toLowerCase()));
             } catch (Exception xx) {
