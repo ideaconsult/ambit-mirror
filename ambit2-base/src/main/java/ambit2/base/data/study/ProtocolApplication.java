@@ -84,7 +84,11 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		return documentUUID;
 	}
 	public void setDocumentUUID(String documentUUID) {
-		this.documentUUID = documentUUID;
+		int slashpos = documentUUID.indexOf("/");
+		if (slashpos > 0)
+			this.documentUUID = documentUUID.substring(0, slashpos);
+		else
+			this.documentUUID = documentUUID;
 	}
 	public PROTOCOL getProtocol() {
 		return protocol;
@@ -184,7 +188,8 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append("\n\t},\n");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.effects.name())));
 		b.append(":\t");
-		b.append(getEffects()==null?null:getEffects().toString());
+		b.append(((getEffects()==null)||(getEffects().size()==0))?"[{\"endpoint\": \"\",\"conditions\": {},  \"result\": {  }}]":getEffects().toString());
+		 
 		b.append("\n}");
 		return b.toString();
 	}
