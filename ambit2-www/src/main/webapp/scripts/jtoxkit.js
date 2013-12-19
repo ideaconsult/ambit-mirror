@@ -167,7 +167,7 @@ var jToxDataset = (function () {
     "http://www.opentox.org/api/1.1#REACHRegistrationDate" : { title: "REACH Date", accumulate: "compound.reachdate"},
     "http://www.opentox.org/api/1.1#CASRN" : { title: "CAS", accumulate: "compound.cas"},
   	"http://www.opentox.org/api/1.1#ChemicalName" : { title: "Name", accumulate: "compound.name"},
-  	"http://www.opentox.org/api/1.1#TradeName" : {title: "Trade Name", accumulate: ["compound.name", "compound.tradename"]},
+  	"http://www.opentox.org/api/1.1#TradeName" : {title: "Trade Name", accumulate: "compound.tradename"},
   	"http://www.opentox.org/api/1.1#IUPACName": {title: "IUPAC Name", accumulate: ["compound.name", "compound.iupac"]},
   	"http://www.opentox.org/api/1.1#EINECS": {title: "EINECS", accumulate: "compound.einecs"},
     "http://www.opentox.org/api/1.1#InChI": {title: "InChI", accumulate: "compound.inchi"},
@@ -1226,7 +1226,7 @@ jToxKit.templates['all-studies']  =
 "	          </tr>" +
 "	          <tr class=\"borderless-top\">" +
 "	            <td class=\"right\">IUC Subst. identifier used by Legal entity:</td>" +
-"	            <td class=\"data-field\" data-field=\"values['http://www.opentox.org/api/1.1#TradeName']\"> ? </td>" +
+"	            <td class=\"data-field\" data-field=\"compound.tradename\"> ? </td>" +
 "	          </tr>" +
 "	        </thead>" +
 "	      </table>" +
