@@ -604,8 +604,8 @@ var jToxStudy = (function () {
         parCount += putAGroup(study.parameters, function(p) {
           if (study.effects[0].conditions[p] !== undefined  || study.effects[0].conditions[p + " unit"] !== undefined)
             return undefined;
-          
-          var rFn = study.parameters[p].loValue === undefined ? 
+        
+          var rFn = (study.parameters[p]=== null)?"":study.parameters[p].loValue === undefined ? 
             function (data, type, full) { return formatUnits(data, full[p + " unit"]); } : 
             function (data, type, full) { return formatLoHigh(data, type); };
           return  { 
@@ -616,7 +616,8 @@ var jToxStudy = (function () {
         });
         // .. and conditions
         parCount += putAGroup(study.effects[0].conditions, function(c){
-          var rnFn = study.effects[0].conditions[c].loValue === undefined ? function(data, type) { return formatUnits(data.conditions[c],  data.conditions[c + " unit"]); } : formatLoHigh;
+          var rnFn = (study.effects[0].conditions[c]==null)?"": 
+        	  study.effects[0].conditions[c].loValue === undefined ? function(data, type) { return formatUnits(data.conditions[c],  data.conditions[c + " unit"]); } : formatLoHigh;
           return study.effects[0].conditions[c + " unit"] === undefined ?
           { "sClass" : "center middle jtox-multi", 
             "mData" : "effects", 
