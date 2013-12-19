@@ -97,7 +97,7 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 		b.append(",\n");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.conditions.name())));
 		b.append(":\t");		
-		b.append(getConditions()==null?null:getConditions().toString());
+		b.append(getConditions()==null?"{}":getConditions().toString());
 		b.append(",\n");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.result.name())));
 		b.append(":\t{\n\t");
