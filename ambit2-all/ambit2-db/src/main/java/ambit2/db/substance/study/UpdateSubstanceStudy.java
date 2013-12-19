@@ -66,8 +66,8 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		if (getObject().getDocumentUUID() == null) throw new AmbitException("No measurement UUID");
 		if (getObject().getProtocol() == null) throw new AmbitException("No protocol");
 		if (getObject().getProtocol().getEndpoint() == null) throw new AmbitException("No endpoint");
-		if (getObject().getProtocol().getGuidance() == null) throw new AmbitException("No guidance");
-		if (getObject().getProtocol().getGuidance().size() == 0) throw new AmbitException("No guidance");
+		//if (getObject().getProtocol().getGuidance() == null) throw new AmbitException("No guidance");
+		//if (getObject().getProtocol().getGuidance().size() == 0) throw new AmbitException("No guidance");
 	}
 	public String[] getSQL() throws AmbitException {
 		check();
@@ -86,7 +86,10 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getTopCategory()));
 		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getCategory()));
 		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getEndpoint()));
-		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getGuidance().get(0)));
+		if ((getObject().getProtocol().getGuidance() == null) || (getObject().getProtocol().getGuidance().size()==0))
+			params1.add(new QueryParam<String>(String.class, ""));
+		else
+			params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getGuidance().get(0)));
 		
 		Object s_uuid = getGroup();
 		String[] subst_uuid = {null,o_uuid==null?null:s_uuid.toString()};
