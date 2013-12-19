@@ -99,6 +99,18 @@ CREATE TABLE  `chem_relation` (
 
 
 -- -----------------------------------------------------
+-- Table `substance_owner` (company submitted the substance dossier)
+-- -----------------------------------------------------
+-- DROP TABLE IF EXISTS `substance_owner`;
+-- CREATE TABLE `substance_owner` (
+--   `owner_prefix` varchar(6) COLLATE utf8_bin NOT NULL DEFAULT '',
+--   `owner_uuid` varbinary(16) NOT NULL DEFAULT '',
+--   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT 'Human readable name of the entry',
+--   PRIMARY KEY (`owner_prefix`,`owner_uuid`),
+--   KEY `name-x` (`name`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substance owner (company)';
+
+-- -----------------------------------------------------
 -- Table `substance` 
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `substance`;
@@ -116,15 +128,16 @@ CREATE TABLE `substance` (
   `rs_uuid` varbinary(16) DEFAULT NULL COMMENT 'ReferenceSubstance UUID',
   `owner_prefix` varchar(6) COLLATE utf8_bin DEFAULT NULL,
   `owner_uuid` varbinary(16) DEFAULT NULL,
+  `owner_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`idsubstance`),
   UNIQUE KEY `uuid-x` (`prefix`,`uuid`),
   KEY `doxType-x` (`documentType`),
   KEY `format-x` (`format`),
   KEY `stype-x` (`substanceType`),
   KEY `rs-uuid-x` (`rs_uuid`,`rs_prefix`),
-  KEY `owner-uuid-x` (`owner_prefix`,`owner_uuid`)
+  KEY `owner-uuid-x` (`owner_prefix`,`owner_uuid`),
+  KEY `owner-name` (`owner_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substance dossier (mainly to support IUCLID5)';
-
 
 -- -----------------------------------------------------
 -- Table `substance_relation` 
@@ -154,10 +167,9 @@ CREATE TABLE `substance_relation` (
   KEY `crs-uuid-x` (`rs_uuid`,`rs_prefix`),
   KEY `cmp-uuid-x` (`cmp_prefix`,`cmp_uuid`),
   KEY `idsubstance_idx` (`idsubstance`),
-  CONSTRAINT `idsubstance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `idsubstance` FOREIGN KEY (`idsubstance`) REFERENCES `substance` (`idsubstance`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `chemicalkey` FOREIGN KEY (`idchemical`) REFERENCES `chemicals` (`idchemical`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Dossier to chemicals relation';
-
 
 
 -- -----------------------------------------------------

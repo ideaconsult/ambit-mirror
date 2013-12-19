@@ -39,7 +39,7 @@ import ambit2.db.update.AbstractUpdate;
 
 public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C,C>  {
 	public static final String[] update_sql = {	
-		"update substance set prefix=?,uuid=unhex(replace(?,'-','')),documentType=?,format=?,name=?,publicname=?,content=?,substanceType=?,rs_prefix=?,rs_uuid=unhex(replace(?,'-','')),owner_prefix=?,owner_uuid=unhex(replace(?,'-','')) where idsubstance=?"
+		"update substance set prefix=?,uuid=unhex(replace(?,'-','')),documentType=?,format=?,name=?,publicname=?,content=?,substanceType=?,rs_prefix=?,rs_uuid=unhex(replace(?,'-','')),owner_prefix=?,owner_uuid=unhex(replace(?,'-','')),owner_name=? where idsubstance=?"
 	};
 	
 	
@@ -90,7 +90,7 @@ public class UpdateSubstance<C extends SubstanceRecord> extends AbstractUpdate<C
 			params1.add(new QueryParam<String>(String.class, null));
 			params1.add(new QueryParam<String>(String.class, null));
 		}
-
+		params1.add(new QueryParam<String>(String.class, getObject().getOwnerName()));
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
 		return params1;
 		
