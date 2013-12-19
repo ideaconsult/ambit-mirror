@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import ambit2.base.json.JSONUtils;
 
-public class Params extends HashMap<String, String> {
+public class Params<VALUE> extends HashMap<String, VALUE> {
 
 	/**
 	 * 
@@ -23,7 +23,12 @@ public class Params extends HashMap<String, String> {
 			String key = keys.next();
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(key)));
 			b.append(":");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(get(key))));
+			
+			VALUE value = get(key);
+			if (value instanceof Params)
+				b.append(value.toString());
+			else
+				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(value.toString())));
 			comma = ",";
 		}
 		b.append("}");
