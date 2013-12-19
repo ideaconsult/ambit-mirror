@@ -93,6 +93,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	@Override
 	public IStructureRecord process(IStructureRecord record) throws AmbitException {
 		 try {
+			 if (record==null) return record;
 			 if (record instanceof SubstanceRecord) {
 	         	SubstanceRecord substance = (SubstanceRecord) record;
 	         	q.setObject(substance);
