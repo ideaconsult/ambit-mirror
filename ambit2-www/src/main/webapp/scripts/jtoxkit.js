@@ -818,7 +818,14 @@ var jToxStudy = (function () {
           continue;
   
         ccLib.fillTree(aStudy, {title: onec[0].protocol.category.title + " (0)"});
-        var theTable = self.ensureTable(tab, onec[0]);
+        
+        // now swipe through all studyies to build a "representative" one with all fields.
+        var study = {};
+        for (var i = 0, cl = onec.length; i < cl; ++i) {
+          $.extend(true, study, onec[i]);
+        }
+
+        var theTable = self.ensureTable(tab, study);
         $(theTable).dataTable().fnAddData(onec);
       }
       
