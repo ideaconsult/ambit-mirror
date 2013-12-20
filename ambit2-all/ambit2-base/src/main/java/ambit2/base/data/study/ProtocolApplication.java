@@ -57,7 +57,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	}
 	protected String interpretationCriteria;
 	protected PARAMS parameters;
-	protected String reference;
+	protected Citation reference;
 	protected List<EffectRecord<ENDPOINT,CONDITIONS,UNIT>> effects;	
 	public static enum _fields {
 		uuid,
@@ -67,6 +67,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		substance,
 		referencesubstanceuuid,
 		protocol,
+		citation,
 		parameters,
 		effects,
 		interpretation,
@@ -103,11 +104,19 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		this.parameters = parameters;
 	}
 	public String getReference() {
-		return reference;
+		return reference==null?null:reference.getTitle();
 	}
 	public void setReference(String reference) {
-		this.reference = reference;
+		if (this.reference==null) this.reference = new Citation(reference); 
+		else this.reference.setTitle(reference);
 	}
+	public String getReferenceYear() {
+		return reference==null?null:reference.getTitle();
+	}
+	public void setReferenceYear(String year) {
+		if (this.reference==null) this.reference = new Citation("",year);
+		else this.reference.setYear(year);
+	}	
 	public List<EffectRecord<ENDPOINT, CONDITIONS, UNIT>> getEffects() {
 		return effects;
 	}
@@ -164,7 +173,12 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append("}\n");
 
 		
-		b.append("\n\t},\n");		
+		b.append("\n\t},\n");
+		
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.citation.name())));
+		b.append(":\t");
+		b.append(this.reference==null?null:this.reference.toString());
+		b.append(",\n\t");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
 		b.append(":\t");
 		b.append(protocol==null?null:protocol.toString());
@@ -192,4 +206,41 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append("\n}");
 		return b.toString();
 	}
+}
+
+class Citation {
+	String year;
+	String title;
+	public Citation(String title) {
+		this.title = title;
+	}
+	public Citation(String title,String year) {
+		this(title);
+		this.year = year;
+	}
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("{");
+		b.append("\"title\"");
+		b.append(":\t");
+		b.append(getTitle()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTitle())));
+		b.append(",\t");
+		b.append("\"year\"");
+		b.append(":\t");
+		b.append(getYear()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getYear())));
+		b.append("}");
+		return b.toString();
+	}	
 }
