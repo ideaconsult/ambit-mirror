@@ -66,7 +66,14 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	protected String upQualifier;
 	protected Double upValue = null;
 	protected CONDITIONS conditions;
+	protected String textValue;
 	
+	public String getTextValue() {
+		return textValue;
+	}
+	public void setTextValue(String textValue) {
+		this.textValue = textValue;
+	}
 	public void clear() {
 		endpoint = null;
 		unit = null;
@@ -85,7 +92,8 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 		loQualifier,
 		loValue,
 		upQualifier,
-		upValue
+		upValue,
+		textValue
 	}
 	@Override
 	public String toString() {
@@ -128,6 +136,12 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 			b.append(":\t");
 			b.append(getUpValue());
 		}
+		if (getTextValue()!=null) {
+			b.append(",\n\t");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.textValue.name())));
+			b.append(":\t");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTextValue())));
+		}		
 		
 		b.append("\n\t}\n}");
 		return b.toString();

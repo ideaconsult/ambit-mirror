@@ -67,7 +67,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 		record.clear();
 		try {
 			Protocol protocol = new Protocol(rs.getString("endpoint"));
-			protocol.addGuidance(rs.getString("guidance"));
+			protocol.addGuideline(rs.getString("guidance"));
 			protocol.setCategory(rs.getString("endpointcategory"));
 			protocol.setTopCategory(rs.getString("topcategory"));
             record.setProtocol(protocol);

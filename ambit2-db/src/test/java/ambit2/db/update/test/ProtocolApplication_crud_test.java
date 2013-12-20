@@ -20,7 +20,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	protected static ProtocolApplication initpa() {
 		Protocol protocol = new Protocol("Short-term toxicity to fish, IUC4#53/Ch.4.1");
 		protocol.setCategory("EC_FISHTOX_SECTION");
-		protocol.addGuidance("Method: other: acute toxicity test; \"static bioassay\"");
+		protocol.addGuideline("Method: other: acute toxicity test; \"static bioassay\"");
 		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
 		Params params = new Params();params.put("Test organism", "Lepomis cyanellus");
 		papp.setParameters(params);
@@ -39,7 +39,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	protected static ProtocolApplication initpc() {
 		Protocol protocol = new Protocol("Partition coefficient, IUC4#5/Ch.2.5");
 		protocol.setCategory("PC_PARTITION_SECTION");
-		protocol.addGuidance("Method: other (measured)");
+		protocol.addGuideline("Method: other (measured)");
 		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
 		Params params = new Params();
 		papp.setParameters(params);
@@ -57,7 +57,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	protected static ProtocolApplication initacutetox() {
 		Protocol protocol = new Protocol("Acute toxicity: oral, IUC4#2/Ch.5.1.1");
 		protocol.setCategory("TO_ACUTE_ORAL_SECTION");
-		protocol.addGuidance("Method: other: no data");
+		protocol.addGuideline("Method: other: no data");
 		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
 		Params params = new Params();
 		papp.setParameters(params);
@@ -79,7 +79,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 	protected static ProtocolApplication initbiodeg() {
 		Protocol protocol = new Protocol("Biodegradation in water: screening tests, IUC4#1/Ch.3.5");
 		protocol.setCategory("TO_BIODEG_WATER_SCREEN_SECTION");
-		protocol.addGuidance("OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)");
+		protocol.addGuideline("OECD Guideline 301 D (Ready Biodegradability: Closed Bottle Test)");
 		ProtocolApplication papp = new ProtocolApplication<Protocol, Params, String, Params, String>(protocol);
 		Params params = new Params();
 		papp.setParameters(params);
@@ -114,7 +114,7 @@ public class ProtocolApplication_crud_test extends CRUDTest<String,ProtocolAppli
 		Assert.assertEquals("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",table.getValue(0,"substance_prefix") + "-" + I5Utils.addDashes(table.getValue(0,"su").toString().toLowerCase()));
 		Assert.assertEquals(papp.getProtocol().getEndpoint(),table.getValue(0,"endpoint"));
 		Assert.assertEquals(papp.getProtocol().getCategory(),table.getValue(0,"endpointcategory"));
-		Assert.assertEquals(papp.getProtocol().getGuidance().get(0),table.getValue(0,"guidance"));
+		Assert.assertEquals(papp.getProtocol().getGuideline().get(0),table.getValue(0,"guidance"));
 		Assert.assertEquals(papp.getReference(),table.getValue(0,"reference"));
 		Assert.assertEquals(papp.getParameters().toString(),table.getValue(0,"params"));
 		c.close();
