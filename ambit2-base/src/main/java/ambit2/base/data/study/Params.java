@@ -25,8 +25,12 @@ public class Params<VALUE> extends HashMap<String, VALUE> {
 			b.append(":");
 			
 			VALUE value = get(key);
-			if (value instanceof Params)
+			if (value==null)
+				b.append("null");
+			else if (value instanceof Params)
 				b.append(value.toString());
+			else if (value instanceof Number)
+				b.append(value);
 			else
 				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(value.toString())));
 			comma = ",";

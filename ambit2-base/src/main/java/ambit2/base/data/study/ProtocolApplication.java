@@ -156,12 +156,11 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append(":\t");
 		b.append(getCompanyUUID()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyUUID().toString())));
 		
-		if (getCompanyName()!=null) {
-			b.append(",");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.name.name())));
-			b.append(":\t");
-			b.append(getCompanyName()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyName())));
-		}
+		b.append(",");
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.name.name())));
+		b.append(":\t");
+		b.append(getCompanyName()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyName())));
+		
 		b.append("}\n");
 
 		
