@@ -466,7 +466,7 @@ var substance = {
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
-			    					"mDataProp" : "protocol.guidance",
+			    					"mDataProp" : "protocol.guideline",
 			    					"sWidth" : "20%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {

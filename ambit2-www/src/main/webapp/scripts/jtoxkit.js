@@ -684,7 +684,7 @@ var jToxStudy = (function () {
         
         // finally put the protocol entries
         colDefs.push(
-          { "sClass": "center", "sWidth": "15%", "mData": "protocol.guidance", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
+          { "sClass": "center", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
           { "sClass": "center", "sWidth": "50px", "mData": "owner.company.name", "mRender" : function(data, type, full) { return type != "display" ? '' + data : '<div class="shortened">' + data + '</div>'; }  }, 
           { "sClass": "center", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : '<div class="shortened">' + data + '</div><span class="ui-icon ui-icon-copy" title="Press to copy the UUID in the clipboard" data-uuid="' + data + '"></span>'; } }
         );
@@ -1315,7 +1315,7 @@ jToxKit.templates['one-study']  =
 "          <tr class=\"jtox-header\">" +
 "            <th class=\"middle\">Endpoint</th>" +
 "            <th class=\"middle\">Result</th>" +
-"            <th class=\"middle\">Guidance</th>" +
+"            <th class=\"middle\">Guideline</th>" +
 "            <th class=\"middle\">Owner</th>" +
 "            <th class=\"middle\">UUID</th>" +
 "          </tr>" +
