@@ -194,9 +194,9 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `substance` (`substance_prefix`,`substance_uuid`),
   KEY `endpoint` (`endpoint`),
   KEY `category` (`endpointcategory`),
-  KEY `topcategory` (`topcategory`,`endpointcategory`)
+  KEY `topcategory` (`topcategory`,`endpointcategory`),
+  CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- -----------------------------------------------------
 -- Table `substance_experiment`
@@ -215,7 +215,9 @@ CREATE TABLE `substance_experiment` (
   `upvalue` double DEFAULT NULL,
   PRIMARY KEY (`idresult`),
   KEY `document_id` (`document_uuid`,`document_prefix`),
-  KEY `endpoint` (`endpoint`)
+  KEY `endpoint` (`endpoint`),
+  KEY `document-x` (`document_prefix`,`document_uuid`),
+  CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------

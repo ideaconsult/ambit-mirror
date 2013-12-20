@@ -54,6 +54,26 @@ ALTER TABLE `substance_relation`
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
+-- -----------------------------------------------------
+-- Table `substance_protocolapplication` FK to substance
+-- -----------------------------------------------------
+ALTER TABLE `substance_protocolapplication` 
+  ADD CONSTRAINT `substance-x`
+  FOREIGN KEY (`substance_prefix` , `substance_uuid` )
+  REFERENCES `substance` (`prefix` , `uuid` )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+-- -----------------------------------------------------
+-- Table `substance_experiment` FK to document (protocolapplication)
+-- -----------------------------------------------------
+ALTER TABLE `substance_experiment` 
+  ADD CONSTRAINT `document-x`
+  FOREIGN KEY (`document_prefix` , `document_uuid` )
+  REFERENCES `substance_protocolapplication` (`document_prefix` , `document_uuid` )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
 
 -- -----------------------------------------------------
 -- Table `substance_owner` (company submitted the substance dossier)
