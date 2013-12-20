@@ -8,7 +8,7 @@ import ambit2.base.json.JSONUtils;
 public class Protocol {
 	String category;
 	String endpoint;
-	List<String> guidance;
+	List<String> guideline;
 	//hack for IUCLID categories, as i can't find the exact titles in the schema :(
 	private enum _categories {
 		PC_PARTITION_SECTION {
@@ -41,7 +41,7 @@ public class Protocol {
 		topcategory,
 		category,
 		endpoint,
-		guidance
+		guideline
 	}
 
 	protected String topCategory;	
@@ -60,28 +60,28 @@ public class Protocol {
 		this.category = category;
 	}
 
-	public List<String> getGuidance() {
-		return guidance;
+	public List<String> getGuideline() {
+		return guideline;
 	}
-	public void setGuidance(List<String> guidance) {
-		this.guidance = guidance;
+	public void setGuideline(List<String> guide) {
+		this.guideline = guide;
 	}
-	public void addGuidance(String guidance) {
-		if (this.guidance==null) this.guidance = new ArrayList<String>();
-		this.guidance.add(guidance);
+	public void addGuideline(String guide) {
+		if (this.guideline==null) this.guideline = new ArrayList<String>();
+		this.guideline.add(guide);
 	}
 	public Protocol(String endpoint) {
 		this(endpoint,null);
 	}
-	public Protocol(String endpoint, String guidance) {
+	public Protocol(String endpoint, String guideline) {
 		setEndpoint(endpoint);
-		if (guidance!=null) addGuidance(guidance);
+		if (guideline!=null) addGuideline(guideline);
 	}
 	public String getEndpoint() {
 		return endpoint;
 	}
 	public void setEndpoint(String endpoint) {
-		this.endpoint = endpoint;
+		this.endpoint = endpoint; 
 	}
 
 	@Override
@@ -110,12 +110,12 @@ public class Protocol {
 		b.append(":");		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint)));
 		b.append(",\n\t");
-		b.append(JSONUtils.jsonQuote(_fields.guidance.name()));		
+		b.append(JSONUtils.jsonQuote(_fields.guideline.name()));		
 		b.append(": [");				
-		if (guidance!=null)
-			for (int i=0; i < guidance.size(); i++) {
+		if (guideline!=null)
+			for (int i=0; i < guideline.size(); i++) {
 				if (i>0) b.append(",");
-				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(guidance.get(i))));
+				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(guideline.get(i))));
 			}	
 		b.append("]}");
 		return b.toString();

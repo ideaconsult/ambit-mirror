@@ -108,10 +108,10 @@ public class SubstanceStudyParser {
 		jn = node.get(Protocol._fields.category.name());
 		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.asText())) 
 			p.setCategory(jn.asText());
-		ArrayNode guidance = (ArrayNode)node.get(Protocol._fields.guidance.name());
+		ArrayNode guidance = (ArrayNode)node.get(Protocol._fields.guideline.name());
 		if (guidance!=null)
 		for (int i=0; i < guidance.size();i++) {
-			p.addGuidance(guidance.get(i).asText());
+			p.addGuideline(guidance.get(i).asText());
 		}
 		return p;
 	}
