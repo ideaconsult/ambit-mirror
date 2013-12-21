@@ -823,6 +823,8 @@ var jToxStudy = (function () {
         var study = {};
         for (var i = 0, cl = onec.length; i < cl; ++i) {
           $.extend(true, study, onec[i]);
+          if (!$.isEmptyObject(study.parameters) && !$.isEmptyObject(study.effects[0].conditions))
+            break;
         }
 
         var theTable = self.ensureTable(tab, study);
@@ -858,7 +860,7 @@ var jToxStudy = (function () {
   				"bPaginate" : true,
           "sDom" : "rt<Fip>",
 /*   				"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>', */
-  /* 				"sPaginationType": "full_numbers", */
+/* 				  "sPaginationType": "full_numbers", */
   				"sPaginate" : ".dataTables_paginate _paging",
   				"bAutoWidth": false,
   				"oLanguage": {
@@ -1227,6 +1229,10 @@ jToxKit.templates['all-studies']  =
 "	          <tr>" +
 "	            <th class=\"right\">IUC Public name:</th>" +
 "	            <td class=\"data-field camelCase\" data-field=\"publicname\"> ? </td>" +
+"	          </tr>" +
+"	          <tr>" +
+"	            <th class=\"right\">Legal entity:</th>" +
+"	            <td class=\"data-field\" data-field=\"ownerName\"> ? </td>" +
 "	          </tr>" +
 "	          <tr>" +
 "	            <th class=\"right\">Legal entity UUID:</th>" +
