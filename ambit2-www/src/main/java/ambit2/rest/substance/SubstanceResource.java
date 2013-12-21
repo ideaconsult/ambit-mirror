@@ -13,16 +13,27 @@ import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.IStoredQuery;
+import ambit2.db.search.StoredQuery;
+import ambit2.db.substance.DeleteSubstance;
 import ambit2.db.substance.ReadSubstance;
+import ambit2.db.update.AbstractUpdate;
+import ambit2.db.update.dataset.DatasetDeleteStructure;
+import ambit2.db.update.dataset.DeleteDataset;
+import ambit2.db.update.storedquery.DeleteStoredQuery;
+import ambit2.db.update.storedquery.QueryDeleteStructure;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -205,4 +216,36 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 
 		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 	}
+	
+
+	@Override
+	protected Representation delete(Variant variant) throws ResourceException {
+		
+		try {
+			Object key = getRequest().getAttributes().get(idsubstance);
+			if (key==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			
+			Form form = getResourceRef(getRequest()).getQueryAsForm();
+			String uri = getRequest().getRootRef()+ "/substance/" + key.toString();
+			if (!uri.toString().equals(form.getFirstValue("substance_uri"))) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+
+			SubstanceRecord record = new SubstanceRecord();
+			record.setCompanyUUID(key.toString());
+			executeUpdate(getRequestEntity(),null,createDeleteObject(record));
+			getResponse().setStatus(Status.SUCCESS_OK);
+			return new StringRepresentation(String.format("%s/dataset", getRequest().getRootRef()),MediaType.TEXT_URI_LIST);
+		} catch (ResourceException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage(),x);
+		}
+	}
+	
+	@Override
+	protected AbstractUpdate createDeleteObject(SubstanceRecord entry)
+			throws ResourceException {
+		DeleteSubstance c = new DeleteSubstance();
+		c.setObject(entry);
+		return c;
+	}	
 }
