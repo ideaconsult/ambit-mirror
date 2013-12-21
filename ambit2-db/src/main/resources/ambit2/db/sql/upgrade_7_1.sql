@@ -89,6 +89,8 @@ ALTER TABLE `substance_experiment`
 
 ALTER TABLE `substance` ADD COLUMN `owner_name` VARCHAR(255) NULL DEFAULT NULL  AFTER `owner_uuid` ;
 ALTER TABLE `substance_protocolapplication` ADD COLUMN `reference_year` SMALLINT NULL DEFAULT NULL  AFTER `reference` ;
+ALTER TABLE `substance_protocolapplication` CHANGE COLUMN `reference` `reference` TEXT CHARACTER SET 'utf8' COLLATE 'utf8_bin' NULL DEFAULT NULL  ;
+
 
 CREATE  OR REPLACE VIEW `substance_study_view` AS
 select idsubstance,substance_prefix,substance_uuid,documentType,format,
