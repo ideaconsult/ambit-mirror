@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.idea.i5._5.ambit2.Phrases;
+
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
@@ -25,7 +27,9 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 	private final static String sql = 
 		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su," +
 		"params,interpretation_result,interpretation_criteria,reference,reference_year," +
-		"owner_prefix,hex(owner_uuid) ou,idsubstance,hex(rs_prefix),hex(rs_uuid) rsu,owner_name from substance_protocolapplication p\n" +
+		"owner_prefix,hex(owner_uuid) ou,idsubstance,hex(rs_prefix),hex(rs_uuid) rsu,owner_name," +
+		"reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType\n" +
+		"from substance_protocolapplication p\n" +
 		"left join substance s on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 		"where substance_prefix =? and hex(substance_uuid) =? ";
 
@@ -99,7 +103,16 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
             	record.setReferenceSubstanceUUID(rs.getString("rs_prefix") + "-" + I5Utils.addDashes(rs.getString("rsu").toString().toLowerCase()));
             } catch (Exception xx) {
             	record.setReferenceSubstanceUUID(null);
-            }            
+            }
+			Params reliability = new Params();
+			record.setReliability(reliability);
+            try { reliability.put("value", rs.getString("reliability"));} catch (Exception x) { }
+    		try { reliability.put("isRobustStudy", rs.getBoolean("isRobustStudy")); } catch (Exception x) { }
+    		try { reliability.put("isUsedforClassification", rs.getBoolean("isUsedforClassification")); } catch (Exception x) { }
+    		try { reliability.put("isUsedforMSDS", rs.getBoolean("isUsedforMSDS"));} catch (Exception x) { }
+    		try { reliability.put("purposeFlag", rs.getString("purposeFlag"));} catch (Exception x) { }
+    		try { reliability.put("studyResultType", rs.getString("studyResultType"));} catch (Exception x) { }
+    		            
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
