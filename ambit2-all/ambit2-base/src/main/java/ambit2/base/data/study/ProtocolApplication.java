@@ -12,6 +12,13 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	 * 
 	 */
 	private static final long serialVersionUID = 747315722852709360L;
+	protected Params reliability = new Params();
+	public Params getReliability() {
+		return reliability;
+	}
+	public void setReliability(Params reliability) {
+		this.reliability = reliability;
+	}
 	protected String referenceSubstanceUUID;
 	
 	public String getReferenceSubstanceUUID() {
@@ -72,7 +79,8 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		effects,
 		interpretation,
 		result,
-		criteria
+		criteria,
+		reliability
 	}
 	
 	protected PROTOCOL protocol;
@@ -183,10 +191,17 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		b.append(":\t");
 		b.append(protocol==null?null:protocol.toString());
 		b.append(",\n");
+		//params
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.parameters.name())));
 		b.append(":\t");		
 		b.append(getParameters().toString());
 		b.append(",\n");
+		//reliability
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.reliability.name())));
+		b.append(":\t");		
+		b.append(getReliability().toString());
+		b.append(",\n");
+		//result
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.interpretation.name())));
 		b.append(":\t{\n\t");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.result.name())));
