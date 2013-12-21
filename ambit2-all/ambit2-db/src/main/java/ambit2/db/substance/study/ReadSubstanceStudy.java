@@ -24,7 +24,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 	protected PA record = (PA)new ProtocolApplication<Protocol,String,String,Params,String>(new Protocol(null));
 	private final static String sql = 
 		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su," +
-		"params,interpretation_result,interpretation_criteria,reference," +
+		"params,interpretation_result,interpretation_criteria,reference,reference_year," +
 		"owner_prefix,hex(owner_uuid) ou,idsubstance,hex(rs_prefix),hex(rs_uuid) rsu,owner_name from substance_protocolapplication p\n" +
 		"left join substance s on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 		"where substance_prefix =? and hex(substance_uuid) =? ";
@@ -83,6 +83,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
             }
             
     		record.setReference(rs.getString("reference"));
+    		try {record.setReferenceYear(Integer.toString(rs.getInt("reference_year")));} catch (Exception x) {record.setReferenceYear(null);}
     		record.setParameters(rs.getString("params")); //parse json
     		record.setInterpretationCriteria(rs.getString("interpretation_criteria")); //parse json
     		record.setInterpretationResult(rs.getString("interpretation_result")); //parse json

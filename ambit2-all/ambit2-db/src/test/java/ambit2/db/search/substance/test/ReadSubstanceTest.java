@@ -25,7 +25,7 @@ public class ReadSubstanceTest extends QueryTest<ReadSubstance> {
 			Assert.assertEquals("testname",record.getCompanyName());
 			Assert.assertEquals("publictestname",record.getPublicName());
 			Assert.assertEquals("i5._4.",record.getFormat());
-			Assert.assertEquals("ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3",record.getCompanyUUID());
+			Assert.assertEquals("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734",record.getCompanyUUID());
 			Assert.assertEquals("test",record.getContent());
 			Assert.assertEquals("Monoconstituent",record.getSubstancetype());
 			Assert.assertNotNull(record.getOwnerUUID());
