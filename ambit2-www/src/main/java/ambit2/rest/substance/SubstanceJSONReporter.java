@@ -24,7 +24,8 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 		content,
 		substanceType,
 		referenceSubstance,
-		ownerUUID;
+		ownerUUID,
+		ownerName;
 		public String jsonname() {
 			return name();
 		}
@@ -76,12 +77,13 @@ public class SubstanceJSONReporter<Q extends IQueryRetrieval<SubstanceRecord>> e
 			builder.append("\n\t{\n");
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.URI.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.ownerUUID.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getOwnerUUID()))));
+			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.ownerName.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getOwnerName()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getCompanyUUID()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.name.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getCompanyName()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.publicname.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getPublicName()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.format.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getFormat()))));
 			builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.substanceType.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubstancetype()))));
-			builder.append(String.format("\t\t\"%s\": {\"%s\":%s,\n\t\t\"%s\":%s\n\t\t}\n",
+			builder.append(String.format("\t\t\"%s\": {\n\t\t\t\"%s\":%s,\n\t\t\t\"%s\":%s\n\t\t}\n",
 					jsonSubstance.referenceSubstance.name(),
 					jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getReferenceSubstanceUUID())),
 					"uri",

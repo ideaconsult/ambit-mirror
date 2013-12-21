@@ -21,16 +21,16 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 	 * 
 	 */
 	private static final long serialVersionUID = -3661558183996204387L;
-	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid from substance\n";
+	private static String sql = "select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name from substance\n";
 	private static String  q_idsubstance = "idsubstance=?";
 	private static String  q_uuid = "prefix=? and hex(uuid)=?";
 	
 	private static String sql_relatedsubstances = 
-		"select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid\n"+ 
+		"select idsubstance,prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name\n"+ 
 		"from substance	where idsubstance in (select distinct(idsubstance) from substance_relation where idchemical = ?)";
 	
 	private static String sql_bychemical =
-		"select distinct(substance.idsubstance),prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid "+ 
+		"select distinct(substance.idsubstance),prefix,hex(uuid) as huuid,documentType,format,name,publicname,content,substanceType,rs_prefix,hex(rs_uuid) as rs_huuid,owner_prefix,hex(owner_uuid) as owner_huuid,owner_name "+ 
 		"from substance join substance_relation using(rs_prefix,rs_uuid) where rs_prefix is not null and rs_uuid is not null and idchemical = ?";
 
 	protected enum _sqlids {
@@ -46,7 +46,8 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 		rs_prefix,
 		rs_huuid,
 		owner_prefix,
-		owner_huuid;
+		owner_huuid,
+		owner_name;
 		public int getIndex() {
 			return ordinal()+1;
 		}
@@ -144,7 +145,13 @@ public class ReadSubstance  extends AbstractQuery<CompositionRelation,SubstanceR
 		            r.setOwnerUUID(uuid);
 	            } catch (Exception xx) {
 	            	r.setOwnerUUID(null);
-	            }	
+	            }
+	            try {
+		            String owner_name = rs.getString(_sqlids.owner_name.name());
+		            r.setOwnerName(owner_name);
+	            } catch (Exception xx) {
+	            	r.setOwnerName(null);
+	            }		            
 	            Blob o = rs.getBlob(_sqlids.content.name());
 	            if (o!=null) {
 	            	byte[] bdata = o.getBytes(1, (int) o.length());
