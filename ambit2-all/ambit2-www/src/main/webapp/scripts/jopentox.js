@@ -387,7 +387,9 @@ function deleteDataset(uri,statusSelector) {
  * Deletes a substance
  * @param uri
  */
-function deleteSubstance(uri,statusSelector) {
+function deleteSubstance(uri,name,statusSelector) {
+	var r=confirm("Do you really want to delete the substance \n\n"+ name +"\n\n at "+uri+"\n\n and ALL related studies?");
+	if (r==true)  
 	$.ajax({
 		contentType :'application/x-www-form-urlencoded; charset=UTF-8',
 	    headers: { 
@@ -395,7 +397,7 @@ function deleteSubstance(uri,statusSelector) {
 	    },
 		data : "substance_uri=" + encodeURIComponent(uri), 
 		type: "POST",
-		url : uri + "?method=delete",
+		url : uri + "?method=delete&substance_uri=" + encodeURIComponent(uri), 
 		success : function(data1, status, xhr) {
 			var sOut = "Deleted.<br/><a href='#' onClick='document.location.reload(true);'>Click to refresh the page.</a>";
 			$(statusSelector).html(sOut);

@@ -122,8 +122,8 @@ var substance = {
 			        			    	   val = o.aData["URI"];
 			        			    	   var statusSelector= 's'+ o['iDataRow'] ;
 			        			    	   var sOut = "";
-			       		                	sOut = "<a href='#' onClick='deleteSubstance(\""+o.aData.URI +
-			       		                		"\",\"#" + statusSelector+  "\");'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title='Remove substance "+ 
+			       		                	sOut = "<a href='#' onClick='deleteSubstance(\""+o.aData.URI + "\"," + "\""+o.aData.name + "\"," +
+			       		                			"\"#" + statusSelector+  "\");'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title='Remove substance "+ 
 			       		                		o.aData.URI + "'></span></a><br/><span class='msg' id='" + statusSelector + "'></span>";
 			        			    	   return sOut;
 			        			      }

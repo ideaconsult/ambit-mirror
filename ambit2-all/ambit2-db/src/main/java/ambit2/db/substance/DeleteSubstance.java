@@ -31,6 +31,7 @@ package ambit2.db.substance;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
@@ -40,7 +41,7 @@ public class DeleteSubstance extends AbstractObjectUpdate<SubstanceRecord>  {
 	
 	
 	public static final String[] delete_sql = {
-		"delete from substance where idsubstance=?"
+		"delete from substance where prefix =? and hex(uuid) =? "
 	};
 
 	public DeleteSubstance(SubstanceRecord substance) {
@@ -50,9 +51,11 @@ public class DeleteSubstance extends AbstractObjectUpdate<SubstanceRecord>  {
 		this(null);
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		if (getObject()==null || getObject().getIdsubstance()<=0) throw new AmbitException("Substance id not defined");
+		if (getObject()==null || getObject().getCompanyUUID()==null) throw new AmbitException("Substance UUID not defined");
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		params.add(new QueryParam<Integer>(Integer.class, getObject().getIdsubstance()));
+		String[] uuid = I5Utils.splitI5UUID(getObject().getCompanyUUID());
+		params.add(new QueryParam<String>(String.class, uuid[0]));
+		params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
 		return params;
 		
 	}
