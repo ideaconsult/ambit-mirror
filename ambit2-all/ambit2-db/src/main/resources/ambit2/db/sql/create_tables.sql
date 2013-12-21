@@ -188,7 +188,7 @@ CREATE TABLE `substance_protocolapplication` (
   `params` text NOT NULL,
   `interpretation_result` varchar(32) DEFAULT NULL,
   `interpretation_criteria` varchar(255) DEFAULT NULL,
-  `reference` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `reference` text CHARACTER SET utf8 COLLATE utf8_bin,
   `reference_year` smallint(6) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`document_prefix`,`document_uuid`),
