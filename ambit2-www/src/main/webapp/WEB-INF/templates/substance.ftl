@@ -91,12 +91,13 @@
 			<thead>
 			<tr>
 			<th></th>
-			<th>Name</th>
-			<th>Company UUID</th>
-			<th>Type</th>
+			<th>IUC Substance Name</th>
+			<th>IUC Substance UUID</th>
+			<th>Type Substance Composition</th>
 			<th>Public name</th>
 			<th>Reference substance UUID</th>
 			<th>Study</th>
+			<th title='Remove the substance and all related studies'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
 			</tr>
 			</thead>
 			<tbody></tbody>

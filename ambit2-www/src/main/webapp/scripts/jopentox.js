@@ -383,6 +383,33 @@ function deleteDataset(uri,statusSelector) {
 	});	
 }
 
+/**
+ * Deletes a substance
+ * @param uri
+ */
+function deleteSubstance(uri,statusSelector) {
+	$.ajax({
+		contentType :'application/x-www-form-urlencoded; charset=UTF-8',
+	    headers: { 
+	        Accept : "text/uri-list; charset=utf-8"
+	    },
+		data : "substance_uri=" + encodeURIComponent(uri), 
+		type: "POST",
+		url : uri + "?method=delete",
+		success : function(data1, status, xhr) {
+			var sOut = "Deleted.<br/><a href='#' onClick='document.location.reload(true);'>Click to refresh the page.</a>";
+			$(statusSelector).html(sOut);
+			
+		},
+		error : function(xhr, status, err) {
+			$(statusSelector).text(status + " " + err);
+		},
+		complete : function(xhr, status) {
+			
+		}
+	});	
+}
+
 function lookup(root,title,selector,callback,errorcallback) {
 	$("#error").text("");
 	var value = $(selector).attr('value');
