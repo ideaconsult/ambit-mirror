@@ -96,7 +96,8 @@ var substance = {
 			    					"sWidth" : "20%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return val;
+			    						var sOut = "<a href='"+root + "/query/compound/search/all?search=" + val +"'>"+ val+ "</a>"
+			    						return val===undefined?"":(val==null)?"":sOut;
 			    					}
 			    				},
 			    				{ //1
@@ -110,7 +111,23 @@ var substance = {
 			    						return "<a href='"+root+"/substance/"+val+"/study'>Study</a>"
 
 			    					}
-			    				}				    				
+			    				},
+			      	  			{  
+			        	  			  "mData": null , 
+			        	  			  "aTargets": [7 ],	
+			        	  			  "sWidth" : "32px",
+			        	  			  "bVisible" : true,
+			        		  	      "bUseRendered" : false,	
+			        			       "fnRender": function ( o, val ) {
+			        			    	   val = o.aData["URI"];
+			        			    	   var statusSelector= 's'+ o['iDataRow'] ;
+			        			    	   var sOut = "";
+			       		                	sOut = "<a href='#' onClick='deleteSubstance(\""+o.aData.URI +
+			       		                		"\",\"#" + statusSelector+  "\");'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;' title='Remove substance "+ 
+			       		                		o.aData.URI + "'></span></a><br/><span class='msg' id='" + statusSelector + "'></span>";
+			        			    	   return sOut;
+			        			      }
+			        		  		}				    				
 			    				],
 			      "fnServerData" : function(sSource, aoData, fnCallback,oSettings) {
 						oSettings.jqXHR = $.ajax({
