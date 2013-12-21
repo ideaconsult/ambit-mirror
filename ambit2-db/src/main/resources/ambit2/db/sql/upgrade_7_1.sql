@@ -90,7 +90,9 @@ ALTER TABLE `substance_experiment`
 ALTER TABLE `substance` ADD COLUMN `owner_name` VARCHAR(255) NULL DEFAULT NULL  AFTER `owner_uuid` ;
 ALTER TABLE `substance_protocolapplication` ADD COLUMN `reference_year` SMALLINT NULL DEFAULT NULL  AFTER `reference` ;
 ALTER TABLE `substance_protocolapplication` CHANGE COLUMN `reference` `reference` TEXT CHARACTER SET 'utf8' COLLATE 'utf8_bin' NULL DEFAULT NULL  ;
-
+ALTER TABLE `substance_protocolapplication` ADD COLUMN `reliability` VARCHAR(45) NULL DEFAULT NULL COMMENT 'Klimish code (text) \n1 (reliable without restriction)\n2 (reliable with restrictions)\n3 (not reliable)\n4 (not assignable)\nother:\nempty (not specified)'  AFTER `updated` , ADD COLUMN `isRobustStudy` TINYINT NULL DEFAULT NULL  AFTER `reliability` , ADD COLUMN `isUsedforClassification` TINYINT NULL DEFAULT NULL  AFTER `isRobustStudy` , ADD COLUMN `isUsedforMSDS` TINYINT NULL DEFAULT NULL  AFTER `isUsedforClassification` ;
+ALTER TABLE `substance_protocolapplication` ADD COLUMN `purposeFlag` VARCHAR(32) NULL DEFAULT NULL  AFTER `isUsedforMSDS` ;
+ALTER TABLE `substance_protocolapplication` ADD COLUMN `studyResultType` VARCHAR(128) NULL DEFAULT NULL COMMENT 'experimental result\nestimated by calculation\nread-across\n(Q)SAR'  AFTER `purposeFlag` ;
 
 CREATE  OR REPLACE VIEW `substance_study_view` AS
 select idsubstance,substance_prefix,substance_uuid,documentType,format,

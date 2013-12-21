@@ -191,6 +191,12 @@ CREATE TABLE `substance_protocolapplication` (
   `reference` text CHARACTER SET utf8 COLLATE utf8_bin,
   `reference_year` smallint(6) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reliability` varchar(45) DEFAULT NULL COMMENT 'Klimish code (text) \n1 (reliable without restriction)\n2 (reliable with restrictions)\n3 (not reliable)\n4 (not assignable)\nother:\nempty (not specified)',
+  `isRobustStudy` tinyint(1) DEFAULT NULL,
+  `isUsedforClassification` tinyint(1) DEFAULT NULL,
+  `isUsedforMSDS` tinyint(1) DEFAULT NULL,
+  `purposeFlag` varchar(32) DEFAULT NULL,
+  `studyResultType` varchar(128) DEFAULT NULL COMMENT 'experimental result\nestimated by calculation\nread-across\n(Q)SAR',
   PRIMARY KEY (`document_prefix`,`document_uuid`),
   KEY `substance` (`substance_prefix`,`substance_uuid`),
   KEY `endpoint` (`endpoint`),
@@ -198,7 +204,6 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `topcategory` (`topcategory`,`endpointcategory`),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- -----------------------------------------------------
 -- Table `substance_experiment`
