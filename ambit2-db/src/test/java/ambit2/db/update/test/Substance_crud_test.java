@@ -16,8 +16,9 @@ import ambit2.db.substance.UpdateSubstance;
 import ambit2.db.update.IQueryUpdate;
 
 public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
-	private static final String example_uuid =    "IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734";
-	private static final String example_rs_uuid = "ECB5-2c94e32c-3662-4dea-ba00-43787b8a6fd3";
+	private static final String example_uuid =    "IUC4-2c94e32c-3662-4dea-ba00-43787b8a6fd3";
+	private static final String example_rs_uuid = "ECB5-053aa8c4-d29b-4aa5-b457-5cc3b47f7d8b";
+	
 	@Override
 	protected IQueryUpdate<Object, SubstanceRecord> createQuery()
 			throws Exception {
@@ -144,7 +145,7 @@ public class Substance_crud_test  extends CRUDTest<Object,SubstanceRecord>{
 	public void testUUID() throws Exception {
 		String[] uuid = I5Utils.splitI5UUID(example_uuid);
 		Assert.assertEquals("IUC4", uuid[0]);
-		Assert.assertEquals("efdb21bb-e79f-3286-a988-b6f6944d3734", uuid[1]);
+		Assert.assertEquals("2c94e32c-3662-4dea-ba00-43787b8a6fd3", uuid[1]);
 		UUID u = UUID.fromString(uuid[1]);
 		Assert.assertEquals(uuid[1],u.toString());
 		String nodash = uuid[1].replace("-", "");

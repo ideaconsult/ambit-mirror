@@ -88,5 +88,23 @@ ALTER TABLE `substance_experiment`
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substance owner (company)';
 
 ALTER TABLE `substance` ADD COLUMN `owner_name` VARCHAR(255) NULL DEFAULT NULL  AFTER `owner_uuid` ;
+ALTER TABLE `substance_protocolapplication` ADD COLUMN `reference_year` SMALLINT NULL DEFAULT NULL  AFTER `reference` ;
+
+CREATE  OR REPLACE VIEW `substance_study_view` AS
+select idsubstance,substance_prefix,substance_uuid,documentType,format,
+name,publicname,content,substanceType,
+rs_prefix,rs_uuid,
+owner_prefix,owner_uuid,owner_name,
+p.document_prefix,p.document_uuid,
+topcategory,endpointcategory,p.endpoint,
+guidance,params,interpretation_result,interpretation_criteria,
+reference,reference_year,updated,idresult,
+e.endpoint as effectendpoint,conditions,unit, 
+loQualifier, loValue, upQualifier, upvalue from substance s
+join substance_protocolapplication p on
+s.prefix=p.substance_prefix and s.uuid=p.substance_uuid
+join substance_experiment e on
+p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid
+;
 
 insert into version (idmajor,idminor,comment) values (7,1,"AMBIT Schema: substances study records support");

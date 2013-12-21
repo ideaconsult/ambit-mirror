@@ -122,7 +122,7 @@ public class SubstanceRelation_crud_test extends CRUDTest<SubstanceRecord,IStruc
 	protected IQueryUpdate<SubstanceRecord,IStructureRecord> updateQuery()
 			throws Exception {
 		SubstanceRecord c1 = new SubstanceRecord();
-		c1.setCompanyUUID("ECB5-2C94E32C-3662-4DEA-BA00-43787B8A6FD3");
+		c1.setCompanyUUID("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734");
 		StructureRecord c2= new StructureRecord();
 		c2.setIdchemical(10);
 		Proportion p = new Proportion();

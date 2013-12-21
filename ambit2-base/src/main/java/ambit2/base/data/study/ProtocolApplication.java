@@ -119,7 +119,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		else this.reference.setTitle(reference);
 	}
 	public String getReferenceYear() {
-		return reference==null?null:reference.getTitle();
+		return reference==null?null:reference.getYear();
 	}
 	public void setReferenceYear(String year) {
 		if (this.reference==null) this.reference = new Citation("",year);
@@ -139,7 +139,8 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public void clear() {
 		documentUUID = null;
 		if (effects!=null) effects.clear();
-		reference = null;
+		if (reliability!=null) reliability.clear();
+		if (reference!=null) reference.clear();
 		parameters = null;
 		protocol = null;
 	}
@@ -229,9 +230,13 @@ class Citation {
 	public Citation(String title) {
 		this.title = title;
 	}
+	
 	public Citation(String title,String year) {
 		this(title);
 		this.year = year;
+	}
+	public void clear() {
+		title = null; year = null;
 	}
 	public String getYear() {
 		return year;

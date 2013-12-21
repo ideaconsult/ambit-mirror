@@ -189,6 +189,7 @@ CREATE TABLE `substance_protocolapplication` (
   `interpretation_result` varchar(32) DEFAULT NULL,
   `interpretation_criteria` varchar(255) DEFAULT NULL,
   `reference` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `reference_year` smallint(6) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`document_prefix`,`document_uuid`),
   KEY `substance` (`substance_prefix`,`substance_uuid`),
@@ -197,6 +198,7 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `topcategory` (`topcategory`,`endpointcategory`),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- -----------------------------------------------------
 -- Table `substance_experiment`
@@ -1613,6 +1615,27 @@ SELECT t1.idtemplate as subjectid,t2.idtemplate as objectid,t1.name as subject,r
 DROP VIEW IF EXISTS `template_properties`;
 create view template_properties as
 SELECT idtemplate,template.name as template,idproperty,properties.name as property,ptype as property_type FROM template join template_def using(idtemplate) join properties using(idproperty);
+
+-- -----------------------------------------------------
+-- Study tables joined
+-- -----------------------------------------------------
+
+CREATE  OR REPLACE VIEW `substance_study_view` AS
+select idsubstance,substance_prefix,substance_uuid,documentType,format,
+name,publicname,content,substanceType,
+rs_prefix,rs_uuid,
+owner_prefix,owner_uuid,owner_name,
+p.document_prefix,p.document_uuid,
+topcategory,endpointcategory,p.endpoint,
+guidance,params,interpretation_result,interpretation_criteria,
+reference,updated,idresult,
+e.endpoint as effectendpoint,conditions,unit, 
+loQualifier, loValue, upQualifier, upvalue from substance s
+join substance_protocolapplication p on
+s.prefix=p.substance_prefix and s.uuid=p.substance_uuid
+join substance_experiment e on
+p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid
+;
 
 -- -----------------------------------------------------
 -- 50 bins
