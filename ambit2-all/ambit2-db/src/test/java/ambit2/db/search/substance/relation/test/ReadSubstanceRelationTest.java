@@ -26,7 +26,8 @@ public class ReadSubstanceRelationTest extends QueryTest<ReadSubstanceRelation> 
 	}
 	@Override
 	protected ReadSubstanceRelation createQuery() throws Exception {
-		ReadSubstanceRelation query = new ReadSubstanceRelation(STRUCTURE_RELATION.HAS_ADDITIVE,new SubstanceRecord(1));
+		ReadSubstanceRelation query = new ReadSubstanceRelation(STRUCTURE_RELATION.HAS_ADDITIVE,
+				new SubstanceRecord("IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734"));
 		return query;
 	}
 

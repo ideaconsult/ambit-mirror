@@ -26,21 +26,22 @@ public class SubstanceStructuresResource extends StructureQueryResource<IQueryRe
 	@Override
 	protected IQueryRetrieval<IStructureRecord> createQuery(Context context,
 			Request request, Response response) throws ResourceException {
+		STRUCTURE_RELATION relation = null;
+		try {
+			Object cmp = request.getAttributes().get(compositionType);
+			relation = STRUCTURE_RELATION.valueOf(cmp.toString().toUpperCase());
+		} catch (Exception x) {}
+
 		Object key = request.getAttributes().get(SubstanceResource.idsubstance);
-		Object cmp = request.getAttributes().get(compositionType);
-		if (key==null) {
+		if (key==null) return new ReadSubstanceRelation(relation, null);
+		try {
+			return new ReadSubstanceRelation(relation,new SubstanceRecord(Integer.parseInt(key.toString())));
+		} catch (Exception x) {
+			int len = key.toString().trim().length(); 
+			if ((len > 40) && (len <=45)) {
+				return new ReadSubstanceRelation(relation,new SubstanceRecord(key.toString()));
+			}	
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		} else {
-			STRUCTURE_RELATION relation = STRUCTURE_RELATION.HAS_CONSTITUENT;
-			try {
-				if (cmp!=null)
-					relation = STRUCTURE_RELATION.valueOf(cmp.toString());
-			} catch (Exception x) {}
-			try {
-				return new ReadSubstanceRelation(relation,new SubstanceRecord(Integer.parseInt(key.toString())));
-			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-			}
 		}
 	}
 

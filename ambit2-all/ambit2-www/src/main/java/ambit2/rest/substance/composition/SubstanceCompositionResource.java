@@ -16,7 +16,6 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.substance.ReadSubstance;
 import ambit2.db.substance.relation.ReadSubstanceComposition;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;

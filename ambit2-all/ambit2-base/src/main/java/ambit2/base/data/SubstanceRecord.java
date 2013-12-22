@@ -65,6 +65,10 @@ public class SubstanceRecord extends StructureRecord {
 	public SubstanceRecord() {
 		super();
 	}
+	public SubstanceRecord(String uuid) {
+		super();
+		setCompanyUUID(uuid);
+	}
 	public SubstanceRecord(int idsubstance) {
 		super();
 		setIdsubstance(idsubstance);

@@ -99,6 +99,7 @@ public class QueryStructure extends AbstractStructureQuery<ExactStructureSearchM
 		}
 
 	}
+	@Override
 	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
 		try {
 			IStructureRecord record = new StructureRecord();

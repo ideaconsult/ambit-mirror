@@ -97,7 +97,7 @@
 			<th>Public name</th>
 			<th>Reference substance UUID</th>
 			<th title='Legal entity'>Owner</th>
-			<th>Study</th>
+			<th>Details</th>
 			<th title='Remove the substance and all related studies'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
 			</tr>
 			</thead>

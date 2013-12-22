@@ -32,7 +32,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.base.data.I5Utils;
 import ambit2.base.data.Property;
+import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -51,13 +53,21 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 	 * 
 	 */
 	private static final long serialVersionUID = -8329798753353233477L;
-	public final static String sql = 
+	private final static String sql_template =
+		/*
 		"select idsubstance,idchemical,-1,1,proportion_typical_value as metric,relation as text,proportion_real_lower,proportion_real_lower_value," +
-		"proportion_real_upper,proportion_real_upper_value,proportion_real_unit,proportion_typical,proportion_typical_unit,rs_prefix,hex(rs_uuid)\n"+
-		"from substance_relation where idsubstance=? and relation=?";
+		"proportion_real_upper,proportion_real_upper_value,proportion_real_unit,proportion_typical,proportion_typical_unit,s.rs_prefix,hex(s.rs_uuid)\n"+
+		"from substance_relation join substance s using(idsubstance) ";
+	*/
+		"select -1 as idquery,idchemical,-1 as idstructure,1 as selected,1 as metric,inchi as text from chemicals where idchemical in\n"+
+		"(select idchemical from substance_relation join substance using(idsubstance) %s)";	
+		
 	
+	private final static String where_substance_id = "idsubstance=?";
+	private final static String where_substance_uuid= "prefix=? and hex(uuid)=?";
+	private final static String where_relation = "relation=?";
 	public ReadSubstanceRelation(SubstanceRecord structure) {
-		this(STRUCTURE_RELATION.HAS_CONSTITUENT,structure);
+		this(null,structure);
 	}
 	public ReadSubstanceRelation() {
 		this((SubstanceRecord)null);
@@ -70,16 +80,35 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 		setCondition(NumberCondition.getInstance("="));
 	}	
 	public String getSQL() throws AmbitException {
-		return 	sql;
+		StringBuilder sql = new StringBuilder();
+		String c = "\nwhere\n";
+		if (getValue()!=null) {
+			if (getValue().getIdsubstance()>0) {
+				sql.append(c); sql.append(where_substance_id); c = " and ";
+			} else if (getValue().getCompanyUUID()!=null) {
+				sql.append(c); sql.append(where_substance_uuid); c = " and ";
+			} 
+		} 
+		if (getFieldname()!=null) {
+			sql.append(c); sql.append(where_relation); 
+		}
+		return String.format(sql_template,sql);
 	}
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
-		if (getValue()!=null && getValue().getIdsubstance()>0)
-			params.add(new QueryParam<Integer>(Integer.class,getValue().getIdsubstance()));
-		else throw new AmbitException("Empty ID");
+		if (getValue()!=null) {
+			if (getValue().getIdsubstance()>0)
+				params.add(new QueryParam<Integer>(Integer.class,getValue().getIdsubstance()));
+			else if (getValue().getCompanyUUID()!=null) {
+				String[] uuid = I5Utils.splitI5UUID(getValue().getCompanyUUID());
+				params.add(new QueryParam<String>(String.class, uuid[0]));
+				params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
+			}
+		} 
+		
 		if (getFieldname()!=null)
 			params.add(new QueryParam<String>(String.class,getFieldname().name()));
-		else throw new AmbitException("Relation not specified");		
+		
 		return params;
 	}
 	@Override
@@ -100,4 +129,21 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 	protected void retrieveMetric(IStructureRecord record, ResultSet rs) throws SQLException {
 		record.setProperty(Property.getInstance("metric",toString(),"http://ambit.sourceforge.net"), retrieveValue(rs));
 	}	
+	
+	@Override
+	public IStructureRecord getObject(ResultSet rs) throws AmbitException {
+		try {
+			IStructureRecord record = new StructureRecord();
+			
+			record.setIdchemical(rs.getInt(2));
+			record.setIdstructure(rs.getInt(3));
+			//retrieveStrucType(record, rs);
+			record.setInchi(rs.getString(6));
+			//metric
+			retrieveMetric(record, rs);
+			return record;
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
+	}
 }
