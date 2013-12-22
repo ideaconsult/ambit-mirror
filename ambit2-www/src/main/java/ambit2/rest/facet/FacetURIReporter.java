@@ -16,10 +16,14 @@ import ambit2.db.facets.qlabel.DatasetConsensusLabelFacet;
 import ambit2.db.facets.qlabel.DatasetStrucTypeFacet;
 import ambit2.db.facets.qlabel.DatasetStructureQLabelFacet;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.substance.study.facet.OwnerFacet;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.structure.ConformerURIReporter;
+import ambit2.rest.substance.SubstanceResource;
+import ambit2.rest.substance.composition.SubstanceStructuresResource;
+import ambit2.rest.substance.study.OwnerSubstanceFacetResource;
 
 /**
  * Generates URI for {@link IFacet}
@@ -87,6 +91,13 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 						    BookmarkResource.resource,
 						    q.getCreator(),
 						    Reference.encode(item.getValue().toString()));
+		} else if (item instanceof OwnerFacet)  {
+			return String.format("%s%s/%s%s",
+							root,
+							OwnerSubstanceFacetResource.owner,
+							item.getValue().toString(),
+							SubstanceStructuresResource.structure
+						    );			
 		} else 
 			return item.getResultsURL(root.toString());
 	}

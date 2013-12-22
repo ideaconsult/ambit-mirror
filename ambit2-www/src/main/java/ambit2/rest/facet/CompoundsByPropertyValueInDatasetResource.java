@@ -2,6 +2,7 @@ package ambit2.rest.facet;
 
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -95,5 +96,11 @@ public class CompoundsByPropertyValueInDatasetResource extends FacetResource<Pro
 				super.footer(w, query);
 			}
 		};
+	}
+	
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+		map.put("facet_title","Compounds");
 	}
 }

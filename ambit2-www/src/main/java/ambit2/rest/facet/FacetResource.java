@@ -1,6 +1,7 @@
 package ambit2.rest.facet;
 
 import java.sql.Connection;
+import java.util.Map;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -27,6 +28,15 @@ import ambit2.rest.query.QueryResource;
 
 public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> extends	QueryResource<Q,IFacet<String>> {
 	public static final String resource = "/facet";
+	
+	public FacetResource() {
+		super();
+		setHtmlbyTemplate(true);
+	}
+	@Override
+	public String getTemplateName() {
+		return "facet_body.ftl";
+	}
 	@Override
 	public IProcessor<Q, Representation> createConvertor(Variant variant)
 			throws AmbitException, ResourceException {
@@ -135,5 +145,14 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 		if ((compoundid>0) || (conformerid>0))
 			return new StructureRecord(compoundid,conformerid,null,null);
 		else return null;
-	}	
+	}
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+		map.put("facet_title","Summary");
+		map.put("facet_tooltip","");
+		map.put("facet_group","");
+		map.put("facet_subgroup","");
+		map.put("facet_count","count");
+	}
 }
