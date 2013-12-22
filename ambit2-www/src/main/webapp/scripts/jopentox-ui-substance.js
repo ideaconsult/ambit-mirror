@@ -120,7 +120,10 @@ var substance = {
 			    					"mDataProp" : "i5uuid",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return "<a href='"+root+"/substance/"+val+"/study'>Study</a>"
+			    						var sOut = "<a href='"+root+"/substance/"+val+"/structure' title='Composition as a Dataset'>Structures</a> ";
+			    						sOut += "<a href='"+root+"/substance/"+val+"/study' title='Study'>Study</a>";
+			    						
+			    						return sOut;
 
 			    					}
 			    				},
