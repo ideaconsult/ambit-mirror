@@ -6,6 +6,8 @@
 <script type='text/javascript' src='${ambit_root}/scripts/ambit_structures.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-substance.js'></script>
 
+<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
+
 <script type='text/javascript'>
     _ambit.query_service = '${ambit_root}';
 	var purl = $.url();

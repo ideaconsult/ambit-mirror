@@ -1,6 +1,6 @@
 var substance = {
 		data : {},
-		"defineSubstanceTable" : function (root,url,selector,jQueryUI,dom,compositionDom) {
+		"defineSubstanceTable" : function (root,url,selector,jQueryUI,dom,compositionDom,removeVisible) {
 			var oTable = $(selector).dataTable( {
 				"sAjaxDataProp" : "substance",
 				"sAjaxSource": url,	
@@ -102,6 +102,18 @@ var substance = {
 			    				},
 			    				{ //1
 			    					"aTargets": [6 ],	
+			    					"bSortable" : true,
+			    					"bSearchable" : true,
+			    					"mDataProp" : "ownerName",
+			    					"sWidth" : "15%",
+			    					"bUseRendered" : false,	
+			    					"fnRender" : function(o,val) {
+			    						return "<div class='shortened' title='"+o.aData["ownerUUID"]+"'>"+val+"</div>";
+
+			    					}
+			    				},			    				
+			    				{ //1
+			    					"aTargets": [7 ],	
 			    					"sClass" : "left",
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
@@ -114,9 +126,9 @@ var substance = {
 			    				},
 			      	  			{  
 			        	  			  "mData": null , 
-			        	  			  "aTargets": [7 ],	
+			        	  			  "aTargets": [8 ],	
 			        	  			  "sWidth" : "32px",
-			        	  			  "bVisible" : true,
+			        	  			  "bVisible" : removeVisible,
 			        		  	      "bUseRendered" : false,	
 			        			       "fnRender": function ( o, val ) {
 			        			    	   val = o.aData["URI"];
