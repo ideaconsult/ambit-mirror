@@ -345,7 +345,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 					if (dataEntry!=null) {
 						var cmpUri = root+"/substance?media="+encodeURIComponent("application/json") + "&compound_uri=" + encodeURIComponent(dataEntry.compound.URI);
 	
-						substance.defineSubstanceTable(root,cmpUri,("#c"+id),false,'Trt','Trt');
+						substance.defineSubstanceTable(root,cmpUri,("#c"+id),false,'Trt','Trt',false);
 					}
 					
 					
@@ -410,7 +410,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 		sOutCalc += '\n<table class="'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th>Prediction</th><th>Property</th><th>Value</th><th>Endpoint</th></tr></thead><tbody>';
 
 		var sOutComposition = '<div id="tabs-composition">';
-		sOutComposition += '\n<table id="c'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th></th><th>Name</th><th>Company UUID</th><th>Type</th><th>Public name</th><th>Reference substance UUID</th><th>Study</th></tr></thead><tbody></tbody></table></div>';
+		sOutComposition += '\n<table id="c'+id+'" class="jtox-toolkit dataTable" width="100%" bgcolor="#fafafa" border="2"><thead><tr><th></th><th>Substance Name</th><th>Substance UUID</th><th>Type Substance</th><th>Public name</th><th>Reference substance UUID</th><th>Owner</th><th>Study</th><th>&nbsp;</th></tr></thead><tbody></tbody></table></div>';
 		/*
 		sOutComposition += '\n<table id="c'+id+'" width="100%" bgcolor="#fafafa" border="2"><thead>';
 		sOutComposition += '<tr><th>Public name</th><th>Reference substance UUID</th></tr>';

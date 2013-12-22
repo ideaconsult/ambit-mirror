@@ -5,11 +5,11 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-substance.js'></script>
-
+<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
-	  	var oTable = substance.defineSubstanceTable("${ambit_root}","${ambit_request_json}","#substances",true,null,'Trt');
+	  	var oTable = substance.defineSubstanceTable("${ambit_root}","${ambit_request_json}","#substances",true,null,'Trt',true);
 	  	loadHelp("${ambit_root}","substance");
 	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	  	downloadForm("${ambit_request}");
@@ -87,15 +87,16 @@
 		<!-- Page Content
 		================================================== -->
 		<div class="row" style="padding:0;" >
-			<table id='substances' class='substancetable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<table id='substances' class='substancetable jtox-toolkit dataTable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
 			<th></th>
-			<th>IUC Substance Name</th>
-			<th>IUC Substance UUID</th>
+			<th>Substance Name</th>
+			<th>Substance UUID</th>
 			<th>Type Substance Composition</th>
 			<th>Public name</th>
 			<th>Reference substance UUID</th>
+			<th title='Legal entity'>Owner</th>
 			<th>Study</th>
 			<th title='Remove the substance and all related studies'><span class='ui-icon ui-icon-trash' style='float: left; margin: .1em;'></span></th>
 			</tr>
