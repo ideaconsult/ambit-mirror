@@ -21,6 +21,7 @@ import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.substance.CreateSubstance;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
+import ambit2.db.substance.study.DeleteEffectRecords;
 import ambit2.db.substance.study.UpdateEffectRecords;
 import ambit2.db.substance.study.UpdateSubstanceStudy;
 
@@ -38,6 +39,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
     private UpdateSubstanceRelation qr;
     private UpdateSubstanceStudy qss;
     private UpdateEffectRecords qeffr;
+    private DeleteEffectRecords deffr;
     private UpdateExecutor x;
     private RepositoryWriter writer;
  
@@ -104,6 +106,11 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	         				qss.setObject(papp);
 	         			}
 	         			x.process(qss);
+	         			//delete effects records for this document, if any
+	         			if (deffr==null) deffr = new DeleteEffectRecords();
+	         			deffr.setGroup(papp.getDocumentUUID());
+	         			x.process(deffr);
+	         			//and add the new ones
 	         			if ( papp.getEffects()!=null)
 	         			for (Object effect : papp.getEffects()) 
 	         				if (effect instanceof EffectRecord) {
