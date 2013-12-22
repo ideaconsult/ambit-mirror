@@ -65,6 +65,7 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 	
 	private final static String where_substance_id = "idsubstance=?";
 	private final static String where_substance_uuid= "prefix=? and hex(uuid)=?";
+	private final static String where_owner_uuid= "owner_prefix=? and hex(owner_uuid)=?";
 	private final static String where_relation = "relation=?";
 	public ReadSubstanceRelation(SubstanceRecord structure) {
 		this(null,structure);
@@ -87,7 +88,9 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 				sql.append(c); sql.append(where_substance_id); c = " and ";
 			} else if (getValue().getCompanyUUID()!=null) {
 				sql.append(c); sql.append(where_substance_uuid); c = " and ";
-			} 
+			} else if (getValue().getOwnerUUID()!=null) {
+				sql.append(c); sql.append(where_owner_uuid); c = " and ";
+			}
 		} 
 		if (getFieldname()!=null) {
 			sql.append(c); sql.append(where_relation); 
@@ -103,6 +106,10 @@ public class ReadSubstanceRelation extends AbstractStructureQuery<STRUCTURE_RELA
 				String[] uuid = I5Utils.splitI5UUID(getValue().getCompanyUUID());
 				params.add(new QueryParam<String>(String.class, uuid[0]));
 				params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));
+			} else if (getValue().getOwnerUUID()!=null) {
+				String[] uuid = I5Utils.splitI5UUID(getValue().getOwnerUUID());
+				params.add(new QueryParam<String>(String.class, uuid[0]));
+				params.add(new QueryParam<String>(String.class, uuid[1].replace("-", "").toLowerCase()));				
 			}
 		} 
 		

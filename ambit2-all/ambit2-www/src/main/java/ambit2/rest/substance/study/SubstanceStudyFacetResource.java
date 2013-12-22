@@ -1,5 +1,7 @@
 package ambit2.rest.substance.study;
 
+import java.util.Map;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -11,6 +13,11 @@ import ambit2.rest.substance.SubstanceResource;
 
 public class SubstanceStudyFacetResource extends FacetResource<SubstanceStudyFacetQuery>  {
 	public final static String resource = "studysummary";
+	
+	public SubstanceStudyFacetResource() {
+		super();
+		setHtmlbyTemplate(false);
+	}
 	@Override
 	protected SubstanceStudyFacetQuery createQuery(Context context,
 			Request request, Response response) throws ResourceException {
@@ -34,4 +41,11 @@ public class SubstanceStudyFacetResource extends FacetResource<SubstanceStudyFac
 		return new StudySummaryJSONReporter(request);
 	};
 	
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+		map.put("facet_title","Substance study summary");
+		map.put("facet_group","Structure type");
+		map.put("facet_count","Number of structures");
+	}
 }

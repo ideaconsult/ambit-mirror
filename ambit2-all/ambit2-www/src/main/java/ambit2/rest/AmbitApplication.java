@@ -121,6 +121,8 @@ import ambit2.rest.structure.tautomers.QueryTautomersResource;
 import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.composition.SubstanceCompositionResource;
 import ambit2.rest.substance.composition.SubstanceStructuresResource;
+import ambit2.rest.substance.study.OwnerStructuresResource;
+import ambit2.rest.substance.study.OwnerSubstanceFacetResource;
 import ambit2.rest.substance.study.SubstanceStudyFacetResource;
 import ambit2.rest.substance.study.SubstanceStudyResource;
 import ambit2.rest.task.ICallableTask;
@@ -359,6 +361,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			 */
 			router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceCompositionResource.composition),SubstanceCompositionResource.class);
 			router.attach(String.format("%s%s",SubstanceResource.substanceID,SubstanceCompositionResource.compositionID),SubstanceCompositionResource.class);
+			//legal entity - substance owner (as in IUC5)
+			router.attach(String.format("%s",OwnerSubstanceFacetResource.owner),OwnerSubstanceFacetResource.class);
+			//router.attach(String.format("%s%s",OwnerSubstanceFacetResource.owner,SubstanceCompositionResource.composition),OwnerStructuresResource.class);
+			router.attach(String.format("%s%s",OwnerSubstanceFacetResource.ownerID,SubstanceStructuresResource.structure),OwnerStructuresResource.class);
+			router.attach(String.format("%s%s/{%s}",
+					OwnerSubstanceFacetResource.ownerID,SubstanceStructuresResource.structure,SubstanceStructuresResource.compositionType),
+					OwnerStructuresResource.class);
 		}
 		if (attachToxmatchRouter())  {
 			router.attach(QMapSpaceResource.resource,QMapSpaceResource.class);

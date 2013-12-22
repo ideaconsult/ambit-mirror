@@ -1,5 +1,7 @@
 package ambit2.rest.bookmark;
 
+import java.util.Map;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -33,6 +35,11 @@ public class BookmarkTopicsResource extends FacetResource<BookmarksByTopicFacetQ
 		BookmarksByTopicFacetQuery q = new BookmarksByTopicFacetQuery(bookmark.getHasTopic());
 		q.setFieldname(bookmark);
 		return q;
+	}
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+		map.put("facet_title","Bookmarks");
 	}
 
 }

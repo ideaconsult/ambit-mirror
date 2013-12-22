@@ -28,7 +28,12 @@
 
 <li class="ui-selectee">
 	<a href="${ambit_root}/substance?page=0&amp;pagesize=100">
-	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>All substances</a>
+	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>Substances</a>
+</li> 
+
+<li class="ui-selectee">
+	<a href="${ambit_root}/le">
+	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>Substance owners</a>
 </li> 
 
 <li class="ui-selectee">

@@ -1,5 +1,7 @@
 package ambit2.rest.facet;
 
+import java.util.Map;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -40,4 +42,9 @@ public class DatasetStructureQualityStatsResource extends FacetResource<DatasetS
 		return q;
 	}
 
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+		map.put("facet_title","QA Labels statistics");
+	}
 }

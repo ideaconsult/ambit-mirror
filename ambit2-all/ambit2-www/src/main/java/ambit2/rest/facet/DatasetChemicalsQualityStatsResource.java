@@ -1,6 +1,7 @@
 package ambit2.rest.facet;
 
 import java.io.Writer;
+import java.util.Map;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -62,6 +63,13 @@ public class DatasetChemicalsQualityStatsResource extends FacetResource<DatasetC
 			}
 		};
 
+	}
+	
+	
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+		map.put("facet_title","QA labels statistics");
 	}
 
 }
