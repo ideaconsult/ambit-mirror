@@ -22,11 +22,13 @@ public class ZipReader extends RawIteratingFolderReader {
 	static final int TOOBIG = 0x6400000; // 100MB
 	
 	public ZipReader(File zipfile) throws AmbitIOException {
-		super(unzip(zipfile,getTempFolder()));
+		super(null);
+		setFiles(unzip(zipfile,getTempFolder()));
 	}
    
 	public ZipReader(InputStream zipstream) throws AmbitIOException {
-		super(unzip(zipstream,getTempFolder()));
+		super(null);
+		setFiles(unzip(zipstream,getTempFolder()));
 	}	
 	public static File getTempFolder() throws AmbitIOException {
 		try {
@@ -38,7 +40,7 @@ public class ZipReader extends RawIteratingFolderReader {
 			throw new AmbitIOException(x);
 		}
 	}
-	public static File[] unzip(File zipfile, File directory) throws AmbitIOException {
+	public  File[] unzip(File zipfile, File directory) throws AmbitIOException {
 		List<File> files = new ArrayList<File>();
 		FileInputStream zipstream = null;
 		try {
@@ -58,7 +60,7 @@ public class ZipReader extends RawIteratingFolderReader {
 		}
 	}
 
-	public static File[] unzip(InputStream zipstream, File directory) throws AmbitIOException {
+	public File[] unzip(InputStream zipstream, File directory) throws AmbitIOException {
 		   List<File> files = new ArrayList<File>();
 		   ZipInputStream zis = null;
 	      try {
@@ -78,11 +80,15 @@ public class ZipReader extends RawIteratingFolderReader {
 	      return files==null?null:files.size()==0?null:files.toArray(new File[files.size()]);
    }
 	
-	protected static File unzipEntry(ZipEntry entry,InputStream zis, File directory) throws FileNotFoundException,IOException {
+	protected File createTempFile(File directory, String name) {
+		return new File(directory,name);
+	}
+	
+	protected File unzipEntry(ZipEntry entry,InputStream zis, File directory) throws FileNotFoundException,IOException {
 	     byte data[] = new byte[BUFFER];
          int total = 0;
          int count;
-     	 File file = new File(directory,entry.getName());
+     	 File file = createTempFile(directory,entry.getName());
      	 try { file.getParentFile().mkdirs(); } catch (Exception x) { x.printStackTrace();}
      	 file.deleteOnExit();
      	 FileOutputStream fos = new FileOutputStream(file);

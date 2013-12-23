@@ -73,6 +73,7 @@ public class RawIteratingFolderReader extends IteratingFolderReader<IStructureRe
 	@Override
 	public void setFiles(File[] files) {
 		super.setFiles(files);
+		if (files ==null) return;
 		casTransformer = new CASProcessor();
 		int[] count = new int[FileNameMode.values().length];
 		mode = FileNameMode.Name;
