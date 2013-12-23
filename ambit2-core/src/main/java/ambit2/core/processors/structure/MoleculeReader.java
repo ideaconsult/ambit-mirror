@@ -36,6 +36,7 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
@@ -50,6 +51,7 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
 	
 	protected InChIGeneratorFactory inchiFactory = null;
 	protected CASProcessor casTransformer = null;
+	protected SmilesParser smiParser = null;
 
     /**
      * 
@@ -91,6 +93,7 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
              }
              
          }
+         
         case CML:     
      	   	try {
      	   		IAtomContainer ac =  MoleculeTools.readCMLMolecule(target.getContent());
@@ -109,6 +112,14 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
              } catch (Exception x) {
                  throw new AmbitException(x);
              }
+        case CSV: {
+      	   try {
+     		   if (smiParser==null) smiParser = new SmilesParser( SilentChemObjectBuilder.getInstance());
+     		   return smiParser.parseSmiles(target.getContent());
+     	   } catch (Exception x) {
+     		   throw new AmbitException(x);
+     	   }        	
+        }
         case INC: 
      	   try {
      		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
