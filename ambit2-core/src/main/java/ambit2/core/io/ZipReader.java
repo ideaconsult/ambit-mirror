@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.AmbitIOException;
 
 public class ZipReader extends RawIteratingFolderReader {
@@ -67,7 +69,7 @@ public class ZipReader extends RawIteratingFolderReader {
 	         zis = new ZipInputStream(zipstream);
 	         ZipEntry entry;
              while((entry = zis.getNextEntry())!=null) {
-            	 System.out.println("Extracting: " + entry);
+            	 logger.log(Level.FINE,"Extracting: " + entry);
 		         if (entry.isDirectory()) continue;
 	        	 File file = unzipEntry(entry, zis, directory);
 	        	 if (file!=null) files.add(file);
@@ -80,15 +82,16 @@ public class ZipReader extends RawIteratingFolderReader {
 	      return files==null?null:files.size()==0?null:files.toArray(new File[files.size()]);
    }
 	
-	protected File createTempFile(File directory, String name) {
-		return new File(directory,name);
+	protected File verifyEntry(File file) throws IOException,AmbitException {
+		return file;
 	}
 	
-	protected File unzipEntry(ZipEntry entry,InputStream zis, File directory) throws FileNotFoundException,IOException {
+	protected File unzipEntry(ZipEntry entry,InputStream zis, File directory) throws FileNotFoundException,IOException,AmbitException {
+     	 File file = new File(directory,entry.getName());
+     	 if (file==null) return null;
 	     byte data[] = new byte[BUFFER];
          int total = 0;
-         int count;
-     	 File file = createTempFile(directory,entry.getName());
+         int count;     	 
      	 try { file.getParentFile().mkdirs(); } catch (Exception x) { x.printStackTrace();}
      	 file.deleteOnExit();
      	 FileOutputStream fos = new FileOutputStream(file);
@@ -105,6 +108,6 @@ public class ZipReader extends RawIteratingFolderReader {
          if (total > TOOBIG) {
              throw new IllegalStateException("File being unzipped is huge.");  }
 
-         return file;
+         return verifyEntry(file);         
 	}
 }
