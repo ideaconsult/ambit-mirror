@@ -112,22 +112,18 @@ public class MoleculeReader extends DefaultAmbitProcessor<IStructureRecord,IAtom
              } catch (Exception x) {
                  throw new AmbitException(x);
              }
-        case CSV: {
-      	   try {
-     		   if (smiParser==null) smiParser = new SmilesParser( SilentChemObjectBuilder.getInstance());
-     		   return smiParser.parseSmiles(target.getContent());
-     	   } catch (Exception x) {
-     		   throw new AmbitException(x);
-     	   }        	
-        }
         case INC: 
      	   try {
-     		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
- 		
-     		   InChIToStructure c =inchiFactory.getInChIToStructure(target.getContent(), SilentChemObjectBuilder.getInstance());
-     		   return c.getAtomContainer();
+     		   if (target.getContent().startsWith("InChI=")) {
+	     		   if (inchiFactory==null) inchiFactory = InChIGeneratorFactory.getInstance();
+	     		   InChIToStructure c =inchiFactory.getInChIToStructure(target.getContent(), SilentChemObjectBuilder.getInstance());
+	     		   return c.getAtomContainer();
+     		   } else { //smiles
+         		   if (smiParser==null) smiParser = new SmilesParser( SilentChemObjectBuilder.getInstance());
+         		   return smiParser.parseSmiles(target.getContent());     			   
+     		   }
      	   } catch (Exception x) {
-     		   throw new AmbitException(x);
+       		   throw new AmbitException(x);
      	   }
         case NANO: try {
 				Class clazz = FileInputState.class.getClassLoader().loadClass("net.idea.ambit2.rest.nano.MoleculeNanoReader");
