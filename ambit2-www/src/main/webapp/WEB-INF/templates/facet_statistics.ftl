@@ -31,7 +31,10 @@ $(document).ready(function() {
 		    <a href="${ambit_root}/admin/stats/properties">Properties</a>  |
 		    <a href="${ambit_root}/admin/stats/values">Values</a>  |		    
 		    <a href="${ambit_root}/admin/stats/models">Models</a>  |
-		    <a href="${ambit_root}/admin/stats/substances">Substances</a>  |		    
+		    <a href="${ambit_root}/admin/stats/substances">Substances</a>  |
+			<a href="${ambit_root}/le">Substance owners</a>  |		    
+		    <a href="${ambit_root}/admin/stats/protocol_applications">Experiments</a>  |
+		    <a href="${ambit_root}/admin/stats/experiment_endpoints">Endpoints</a>  |
 		    <a href="${ambit_root}/admin/stats/chemicals_in_dataset">Chemicals in a dataset</a>  |
 		    <a href="${ambit_root}/admin/stats/dataset_intersection">Dataset intersection</a>
 		    </div>			

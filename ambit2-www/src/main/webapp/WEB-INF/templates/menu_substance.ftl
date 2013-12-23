@@ -20,8 +20,18 @@
 <li class="ui-selectee">
 	<a href="${ambit_root}/le">
 	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>Substance owners</a>
-</li> 
+</li>
 
+<li class="ui-selectee">
+	<a href="${ambit_root}/admin/stats/protocol_applications">
+	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>Experiments</a>
+</li>  
+
+<li class="ui-selectee">
+	<a href="${ambit_root}/admin/stats/experiment_endpoints">
+	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>Endpoints</a>
+</li>  
+		    
 <#if openam_token??>
 
 <#if username??>

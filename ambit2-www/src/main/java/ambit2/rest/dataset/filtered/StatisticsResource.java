@@ -1,13 +1,11 @@
 package ambit2.rest.dataset.filtered;
 
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -15,11 +13,10 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.QueryCountModels;
-import ambit2.db.reporters.QueryReporter;
+import ambit2.db.substance.QueryCountEndpoints;
+import ambit2.db.substance.QueryCountProtocolApplications;
 import ambit2.db.substance.QueryCountSubstances;
 import ambit2.db.update.dataset.QueryCount;
 import ambit2.db.update.dataset.QueryCountChemicalInDataset;
@@ -28,7 +25,6 @@ import ambit2.db.update.dataset.QueryCountDatasetIntersection;
 import ambit2.db.update.dataset.QueryCountProperties;
 import ambit2.db.update.dataset.QueryCountValues;
 import ambit2.rest.OpenTox;
-import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.facet.FacetResource;
 
@@ -70,7 +66,20 @@ public class StatisticsResource<Q extends QueryCount> extends FacetResource<Q>  
 			public String getURL() {
 				return "/substance";
 			}
+		},
+		experiment_endpoints {
+			@Override
+			public String getURL() {
+				return "/substance";
+			}
+		},
+		protocol_applications {
+			@Override
+			public String getURL() {
+				return "/substance";
+			}
 		};
+		
 		public String getURL() {
 			return null;
 		}
@@ -136,6 +145,12 @@ public class StatisticsResource<Q extends QueryCount> extends FacetResource<Q>  
 		case substances: {
 			return (Q)new QueryCountSubstances(mode.getURL());
 		}		
+		case experiment_endpoints: {
+			return (Q)new QueryCountEndpoints(mode.getURL());
+		}		
+		case protocol_applications: {
+			return (Q) new QueryCountProtocolApplications(mode.getURL());
+		}
 		case chemicals_in_dataset: {
 			QueryCountChemicalInDataset q = null;
 			for (int i=0; i < datasetsURI.length;i++ ) {
