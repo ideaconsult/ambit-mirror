@@ -69,6 +69,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	    writer.setPropertyKey(new ReferenceSubstanceUUID());
 		writer.setUsePreferredStructure(true);
 		writer.setDataset(dataset==null?datasetMeta():dataset);
+
 		this.importedRecord = importedRecord;
 	}
 	
@@ -127,10 +128,11 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		         	if (substance.getRelatedStructures()!=null)
 			         	for (CompositionRelation rel : substance.getRelatedStructures()) {
 			         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
+
 			         		if (rel.getSecondStructure().getIdchemical()<=0) {
-			         			writer.write(rel.getSecondStructure());		
+			         			writer.create(rel.getSecondStructure());		
 			         		}
-			         		rel.getSecondStructure().setProperty(Property.getI5UUIDInstance(),i5uuid);
+			         		rel.getSecondStructure().setProperty(Property.getI5UUIDInstance(),i5uuid);			         		
 			         		qr.setCompositionRelation(rel);
 			         		x.process(qr);
 			         	}
