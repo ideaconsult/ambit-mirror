@@ -54,11 +54,9 @@ public class SubstanceWriterTest extends DbUnitTest {
     Substance: 1
     EndpointRecord: 14
 		 */
-//		InputStream in = I5AmbitProcessor.class.getClassLoader().getResourceAsStream("net/idea/i5/_5/substance/i5z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i5z");
+		InputStream in = I5AmbitProcessor.class.getClassLoader().getResourceAsStream("net/idea/i5/_5/substance/i5z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i5z");
 //		InputStream in = I5AmbitProcessor.class.getClassLoader().getResourceAsStream("net/idea/i5/_5/substance/i5z/IUC4-e2b69497-1c50-3d0b-a2b2-41d0a4d74c54.i5z");
 //		InputStream in = I5AmbitProcessor.class.getClassLoader().getResourceAsStream("net/idea/i5/_5/substance/i5z/IUC4-f5dd46ce-6fc9-316f-a468-c4f9acfcfc3c.i5z");
-		
-		InputStream in = new FileInputStream(new File("F:/nina/Ideaconsult/Projects/2013 - LRI AMBIT/AMBIT-LRI/IUCLID example for 4 endpoints.i5z"));
 		Assert.assertNotNull(in);
 		File i5z = File.createTempFile("test_", ".i5z");
 		try {
