@@ -1,4 +1,4 @@
-package ambit2.db.model;
+package ambit2.db.substance;
 
 import java.util.List;
 
@@ -6,25 +6,24 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.dataset.QueryCount;
 
-/**
- * Number of models
- * @author nina
- *
- */
-public class QueryCountModels extends QueryCount {
+public class QueryCountSubstances extends QueryCount {
 
-	public QueryCountModels(String facetURL) {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3168195512257461022L;
+	public QueryCountSubstances(String facetURL) {
 		super(facetURL);
 	}
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2826870937106055180L;
-	protected static String sql_models = 
-		"select 'Models',count(*) from models\n";
+	
+	protected static String sql_substances = 
+		"select 'Substances',count(*) from substance\n";
 	@Override
 	public String getSQL() throws AmbitException {
-		return sql_models;
+		return sql_substances;
 	}
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {

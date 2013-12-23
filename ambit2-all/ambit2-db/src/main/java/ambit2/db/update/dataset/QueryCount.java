@@ -5,8 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.AbstractQuery;
+import ambit2.base.facet.AbstractFacet;
+import ambit2.base.facet.IFacet;
+import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
@@ -15,15 +16,15 @@ import ambit2.db.search.StringCondition;
  * @author nina
  *
  */
-public class QueryCount  extends AbstractQuery<String, String, StringCondition, String> implements IQueryRetrieval<String> {
+public class QueryCount  extends AbstractFacetQuery<String,String,StringCondition,IFacet<String>>  {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3106358743355982496L;
-	protected static String sql_structures = 
-		"select count(idstructure) from structure\n";
-		
+
+	protected static String sql_structures = "select 'Number of structures',count(idstructure) from structure\n";
+
+	protected AbstractFacet facet;
 	public List<QueryParam> getParameters() throws AmbitException {
 		return null;
 	}
@@ -34,12 +35,19 @@ public class QueryCount  extends AbstractQuery<String, String, StringCondition, 
 	}
 	protected String QR_PREFIX = "R";
 	
-	public QueryCount() {
-		super();
+	public QueryCount(String facetURL) {
+		super(facetURL);
+		 facet = new AbstractFacet(facetURL) {
+			 public  String getResultsURL(String[] params) {
+				 return params[0] + (url==null?"":url);
+			 };
+		 };	
 		setPageSize(1);
 		setPage(0);
 	}
-	public double calculateMetric(String object) {
+	
+	@Override
+	public double calculateMetric(IFacet<String> object) {
 		return 1;
 	}
 
@@ -62,11 +70,17 @@ public class QueryCount  extends AbstractQuery<String, String, StringCondition, 
 			throw new AmbitException("Invalid id "+key);
 		}
 	}	
-	public String getObject(ResultSet rs) throws AmbitException {
+	
+	@Override
+	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
 		try {
-			return rs.getString(1);
+			facet.setValue(rs.getString(1));
+			facet.setCount(rs.getInt(2));
+			return facet;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
 		}
 	}
+	
+	
 }

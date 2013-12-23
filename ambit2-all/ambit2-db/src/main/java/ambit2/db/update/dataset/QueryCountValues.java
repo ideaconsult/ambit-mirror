@@ -7,12 +7,15 @@ import ambit2.db.search.QueryParam;
 
 public class QueryCountValues extends QueryCount {
 
+	public QueryCountValues(String facetURL) {
+		super(facetURL);
+	}
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4680217024248382081L;
 	protected static String sql_values = 
-		"select count(*) from property_values\n";
+		"select 'Property values',count(*) from property_values\n";
 	@Override
 	public String getSQL() throws AmbitException {
 		return sql_values;
