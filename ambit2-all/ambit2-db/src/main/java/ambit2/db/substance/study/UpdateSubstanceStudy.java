@@ -102,7 +102,10 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		params1.add(new QueryParam<String>(String.class, subst_uuid[1]));
 		
 		params1.add(new QueryParam<String>(String.class, getObject().getParameters().toString()));
-		params1.add(new QueryParam<String>(String.class, getObject().getInterpretationResult()));
+		
+		String result = getObject().getInterpretationResult();
+		if (result!=null && result.length()>128) result = result.substring(0,127);
+		params1.add(new QueryParam<String>(String.class, result));
 		params1.add(new QueryParam<String>(String.class, getObject().getInterpretationCriteria()));
 		params1.add(new QueryParam<String>(String.class, getObject().getReference()));
 		try {
@@ -110,6 +113,7 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		} catch (Exception x) {
 			params1.add(new QueryParam<Integer>(Integer.class, null));
 		}
+		
 		//reliability
 		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().get("value").toString()));
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}		

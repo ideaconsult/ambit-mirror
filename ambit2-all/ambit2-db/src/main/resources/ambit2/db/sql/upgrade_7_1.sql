@@ -93,6 +93,9 @@ ALTER TABLE `substance_protocolapplication` CHANGE COLUMN `reference` `reference
 ALTER TABLE `substance_protocolapplication` ADD COLUMN `reliability` VARCHAR(45) NULL DEFAULT NULL COMMENT 'Klimish code (text) \n1 (reliable without restriction)\n2 (reliable with restrictions)\n3 (not reliable)\n4 (not assignable)\nother:\nempty (not specified)'  AFTER `updated` , ADD COLUMN `isRobustStudy` TINYINT NULL DEFAULT NULL  AFTER `reliability` , ADD COLUMN `isUsedforClassification` TINYINT NULL DEFAULT NULL  AFTER `isRobustStudy` , ADD COLUMN `isUsedforMSDS` TINYINT NULL DEFAULT NULL  AFTER `isUsedforClassification` ;
 ALTER TABLE `substance_protocolapplication` ADD COLUMN `purposeFlag` VARCHAR(32) NULL DEFAULT NULL  AFTER `isUsedforMSDS` ;
 ALTER TABLE `substance_protocolapplication` ADD COLUMN `studyResultType` VARCHAR(128) NULL DEFAULT NULL COMMENT 'experimental result\nestimated by calculation\nread-across\n(Q)SAR'  AFTER `purposeFlag` ;
+ALTER TABLE `substance_protocolapplication` CHANGE COLUMN `interpretation_criteria` `interpretation_criteria` TEXT NULL DEFAULT NULL  ;
+ALTER TABLE `substance_protocolapplication` CHANGE COLUMN `interpretation_result` `interpretation_result` VARCHAR(128) NULL DEFAULT NULL  ;
+
 
 CREATE  OR REPLACE VIEW `substance_study_view` AS
 select idsubstance,substance_prefix,substance_uuid,documentType,format,
