@@ -484,3 +484,20 @@ function runSearchMOL(sSource,callback, errorcallback) {
 	        }
 	      } );
 }
+
+function loadStats(root,dataseturi,selector) {
+	var url = root + "/admin/stats/chemicals_in_dataset?dataset_uri=" + encodeURIComponent(dataseturi);
+	$.ajax({
+	    url: url,
+	    dataType: "json",
+	    data: {
+	      media:"application/json"
+	    },
+	    success: function( data ) {
+	  	  try {
+	  	  $(selector).text(data.facet[0].count);
+	  	  } catch (err) {($selector).text(url);}
+	    }
+	  });	
+
+}

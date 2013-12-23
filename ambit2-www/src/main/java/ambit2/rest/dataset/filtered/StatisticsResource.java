@@ -15,10 +15,12 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.model.QueryCountModels;
 import ambit2.db.reporters.QueryReporter;
+import ambit2.db.substance.QueryCountSubstances;
 import ambit2.db.update.dataset.QueryCount;
 import ambit2.db.update.dataset.QueryCountChemicalInDataset;
 import ambit2.db.update.dataset.QueryCountDataset;
@@ -28,44 +30,70 @@ import ambit2.db.update.dataset.QueryCountValues;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.dataset.DatasetStructuresResource;
-import ambit2.rest.query.QueryResource;
+import ambit2.rest.facet.FacetResource;
 
 
-public class StatisticsResource extends QueryResource<QueryCount,String>  {
+public class StatisticsResource<Q extends QueryCount> extends FacetResource<Q>  {
 	public static String resource = "/stats";
 	public static String resourceKey = "mode";
 	protected StatsMode mode;
 	public enum StatsMode {
-		structures,
+		structures {
+			@Override
+			public String getURL() {
+				return "/compound";
+			}
+		},
 		chemicals_in_dataset,
 		dataset_intersection,
-		properties,
+		properties {
+			@Override
+			public String getURL() {
+				return "/feature";
+			}
+		},
 		values,
-		dataset,
-		models
-		//algorithms
+		dataset {
+			@Override
+			public String getURL() {
+				return "/dataset";
+			}
+		},
+		models {
+			@Override
+			public String getURL() {
+				return "/model";
+			}			
+		},
+		substances {
+			@Override
+			public String getURL() {
+				return "/substance";
+			}
+		};
+		public String getURL() {
+			return null;
+		}
+	}
+	public StatisticsResource() {
+		super();
+		setHtmlbyTemplate(true);
 	}
 	
 	@Override
-	protected void doInit() throws ResourceException {
-		super.doInit();
-		customizeVariants(new MediaType[] {
-				MediaType.TEXT_PLAIN,
-				MediaType.APPLICATION_JAVA_OBJECT
-				
-		});		
-
-	}	
+	public String getTemplateName() {
+		return "facet_statistics.ftl";
+	}
+	
 	@Override
-	public IProcessor<QueryCount, Representation> createConvertor(
+	public IProcessor<Q, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		return 
-		new OutputWriterConvertor(new CountReporter(),MediaType.TEXT_PLAIN);
+		return super.createConvertor(variant); 	
 	}
 
 	
 	@Override
-	protected QueryCount createQuery(Context context,
+	protected Q createQuery(Context context,
 			Request request, Response response) throws ResourceException {
 		
 		String[] datasetsURI =  getParams().getValuesArray(OpenTox.params.dataset_uri.toString());
@@ -80,7 +108,7 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 		case dataset_intersection: {
 			QueryCountDatasetIntersection q = null;
 			for (int i=0; i < datasetsURI.length;i++ ) {
-				if (q==null) q = new QueryCountDatasetIntersection();
+				if (q==null) q = new QueryCountDatasetIntersection(null);
 				String datasetURI = datasetsURI[i];
 				Map<String, Object> vars = new HashMap<String, Object>();
 				t.parse(datasetURI, vars);
@@ -88,34 +116,37 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 				else q.setValue(vars.get(DatasetStructuresResource.datasetKey).toString());
 			}	
 			if (q==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Missing dataset_uri parameters!");
-			return q;
+			return (Q)q;
 		}
 		case structures: {
-			return new QueryCount();
+			return (Q)new QueryCount(mode.getURL());
 		}
 		case properties: {
-			return new QueryCountProperties();
+			return (Q)new QueryCountProperties(mode.getURL());
 		}		
 		case values: {
-			return new QueryCountValues();
+			return (Q) new QueryCountValues(mode.getURL());
 		}		
 		case dataset: {
-			return new QueryCountDataset();
+			return (Q)new QueryCountDataset(mode.getURL());
 		}	
 		case models: {
-			return new QueryCountModels();
+			return (Q)new QueryCountModels(mode.getURL());
 		}
+		case substances: {
+			return (Q)new QueryCountSubstances(mode.getURL());
+		}		
 		case chemicals_in_dataset: {
 			QueryCountChemicalInDataset q = null;
 			for (int i=0; i < datasetsURI.length;i++ ) {
-				if (q==null) q = new QueryCountChemicalInDataset();
+				if (q==null) q = new QueryCountChemicalInDataset(mode.getURL());
 				String datasetURI = datasetsURI[i];
 				Map<String, Object> vars = new HashMap<String, Object>();
 				t.parse(datasetURI, vars);
 				q.setFieldname(vars.get(DatasetStructuresResource.datasetKey).toString());
 			}	
 			if (q==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Missing dataset_uri parameters!");
-			return q;
+			return (Q)q;
 		}
 		default: {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -124,40 +155,15 @@ public class StatisticsResource extends QueryResource<QueryCount,String>  {
 
 	}
 
+	@Override
+	public void configureTemplateMap(Map<String, Object> map) {
+		super.configureTemplateMap(map);
+		map.put("facet_title","Statistics");/*
+		map.put("facet_tooltip","");
+		map.put("facet_group","");
+		map.put("facet_subgroup","");
+		map.put("facet_count","count");
+		*/
+	}
 }
 
-
-class CountReporter extends QueryReporter<String, QueryCount, Writer> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4756603556533645998L;
-
-	@Override
-	public void footer(Writer output, QueryCount query) {
-		
-		
-	}
-
-	@Override
-	public void header(Writer output, QueryCount query) {
-		
-	}
-
-	@Override
-	public Object processItem(String item) throws AmbitException {
-		try { 
-			getOutput().write(item); 
-			getOutput().write("\n");
-		} catch (Exception x) {
-			throw new AmbitException(x);
-		};
-		return item;
-	}
-
-	public void open() throws DbAmbitException {
-	
-	}
-
-}

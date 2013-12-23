@@ -454,10 +454,13 @@ public class DatasetsHTMLReporter extends QueryHTMLReporter<ISourceDataset, IQue
 			output.write(String.format("<tr><th>%s</th><td>%s</td></tr>\n", "Dataset URI",uri));
 			
 			output.write(String.format("<tr><th>%s</th><td>", "Number of structures"));
-			output.write(String.format("<span id='D%d'></span><script>$('#D%d').load('%s/admin/stats/chemicals_in_dataset?dataset_uri=%s');</script>", 
-					dataset.getID(),dataset.getID(),
+
+			//output.write(String.format("<span id='D%d'></span><script>$('#D%d').load('%s/admin/stats/chemicals_in_dataset?dataset_uri=%s&media=%s');</script>",			
+			output.write(String.format("<span id='D%d'></span><script>loadStats('%s','%s','#D%d');</script>", 
+					dataset.getID(),
 					uriReporter.getBaseReference(),
-					Reference.encode(uri)
+					Reference.encode(uri),
+					dataset.getID()
 					));
 			output.write("</td></tr>\n");
 			//output.write(String.format("<tr><th>%s</th><td>%s</td></tr>\n", "Number of structures",uri));

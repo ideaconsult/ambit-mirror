@@ -12,6 +12,11 @@ import ambit2.db.search.QueryParam;
  *
  */
 public class QueryCountDatasetIntersection extends QueryCount {
+	public QueryCountDatasetIntersection(String facetURL) {
+		super(facetURL);
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * 
 	 */
@@ -20,25 +25,27 @@ public class QueryCountDatasetIntersection extends QueryCount {
 	protected boolean value_dataset = true;
 	
 	protected static String sql_datasets = 
-	"select count(distinct(s1.idchemical))\n"+
+	"select concat('Intersection of /dataset/',d1.id_srcdataset,' and /dataset/',d2.id_srcdataset),count(distinct(s1.idchemical))\n"+
 	"from structure s1 join struc_dataset d1 on d1.idstructure=s1.idstructure\n"+
 	"join structure s2 on s1.idchemical=s2.idchemical\n"+
 	"join struc_dataset d2 on d2.idstructure=s2.idstructure\n"+
 	"where d1.id_srcdataset=? and d2.id_srcdataset=?\n";
 	
 	protected static String sql_queries = 
-		"select count(distinct(s1.idchemical))\n"+
+		"select concat('Intersection of /dataset/R',s1.idquery,' and /dataset/R',s2.idquery),count(distinct(s1.idchemical))\n"+
 		"from query_results s1 \n"+
 		"join query_results s2 on s1.idchemical=s2.idchemical\n"+
 		"where s1.idquery = ? and s2.idquery = ?\n";
 
 	protected static String sql_query_and_dataset = 
-		"select count(distinct(s1.idchemical))\n"+
+		"select concat('Intersection of /dataset/R',s1.idquery,' and /dataset/',d2.id_srcdataset),count(distinct(s1.idchemical))\n"+
 		"from query_results s1 \n"+
 		"join structure s2 on s1.idchemical=s2.idchemical\n"+
 		"join struc_dataset d2 on d2.idstructure=s2.idstructure\n"+		
 		"where s1.idquery = ? and d2.id_srcdataset = ?\n";
 	
+	
+	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
 		if (fieldname_dataset)
