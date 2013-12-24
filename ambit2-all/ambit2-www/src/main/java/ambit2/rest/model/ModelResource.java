@@ -43,6 +43,7 @@ import ambit2.rest.model.predictor.DescriptorPredictor;
 import ambit2.rest.model.predictor.ExpertModelpredictor;
 import ambit2.rest.model.predictor.FingerprintsPredictor;
 import ambit2.rest.model.predictor.ModelPredictor;
+import ambit2.rest.model.predictor.Structure2DProcessor;
 import ambit2.rest.model.predictor.StructureProcessor;
 import ambit2.rest.query.ProcessingResource;
 import ambit2.rest.query.QueryResource;
@@ -312,6 +313,15 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 							;
 							*/
 				}
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.Structure2D.getMediaType())) {
+				return
+				new CallableStructureOptimizer(
+						form,
+						getRequest().getRootRef(),
+						getContext(),
+						(Structure2DProcessor) thepredictor,
+						token
+						);						
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.MOPAC.getMediaType())) {
 				return
 				new CallableStructureOptimizer(
