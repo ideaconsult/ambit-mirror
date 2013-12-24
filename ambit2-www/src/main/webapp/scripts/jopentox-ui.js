@@ -1402,3 +1402,20 @@ function defineFacetsTable(root,url,selector) {
 	} );
 	return oTable;
 }
+
+
+
+function loadMetadata(root,dataseturi) {
+$.ajax({
+    url: dataseturi,
+    dataType: "json",
+    data: {
+      media:"application/json",
+      max: maxhits
+    },
+    success: function( data ) {
+  	  
+    }
+  });
+
+}	
