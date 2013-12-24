@@ -36,6 +36,7 @@ public enum AlgorithmType {
 		SuperService,
 		SuperBuilder,
 		Structure,
+		Structure2D,
 		Expert,
 		Finder,
 		SMSD,
