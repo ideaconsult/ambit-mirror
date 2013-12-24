@@ -38,6 +38,23 @@ var ccLib = {
     else
       obj.innerHTML = value;      
   },
+
+  isNull: function(obj) {
+    return obj === undefined || obj == null;
+  },
+  
+  isEmpty: function(obj) {
+    var empty = true;
+    if (obj !== undefined || obj != null){
+      for (var i in obj) {
+        if (obj[i] != null) {
+          empty = false;
+          break;
+        }
+      } 
+    }
+    return empty;
+  },
   
   setJsonValue: function (json, field, val) {
     if (field !== undefined){
@@ -592,7 +609,7 @@ var jToxStudy = (function () {
           var out = "";
           data.loValue = ccLib.trim(data.loValue);
           data.upValue = ccLib.trim(data.upValue);
-          if (!!data.loValue && !!data.upValue) {
+          if (!ccLib.isNull(data.loValue) && !ccLib.isNull(data.upValue)) {
             out += (data.loQualifier == ">=") ? "[" : "(";
             out += data.loValue + ", " + data.upValue;
             out += (data.upQualifier == "<=") ? "]" : ") ";
@@ -603,7 +620,12 @@ var jToxStudy = (function () {
               return (!!q ? q : "=") + " " + v;
             };
             
-            out += !!data.loValue ? fnFormat(data.loQualifier, data.loValue) : fnFormat(data.upQualifier, data.upValue);
+            if (!ccLib.isNull(data.loValue))
+              out += fnFormat(data.loQualifier, data.loValue);
+            else if (!ccLib.isNull(data.upValue))
+              out += fnFormat(data.upQualifier, data.upValue);
+            else
+              out += '-';
           }
           
           data.unit = ccLib.trim(data.unit);
@@ -615,7 +637,7 @@ var jToxStudy = (function () {
         var formatUnits = function(data, unit) {
           data = ccLib.trim(data);
           unit = ccLib.trim(unit);
-          return !!data ? (data + (!!unit ? "&nbsp;" + unit : "")) : "-";
+          return !ccLib.isNull(data) ? (data + (!!unit ? "&nbsp;" + unit : "")) : "-";
         };
 
         // use it to put parameters...
@@ -823,7 +845,7 @@ var jToxStudy = (function () {
         var study = {};
         for (var i = 0, cl = onec.length; i < cl; ++i) {
           $.extend(true, study, onec[i]);
-          if (!$.isEmptyObject(study.parameters) && !$.isEmptyObject(study.effects[0].conditions))
+          if (!ccLib.isEmpty(study.parameters) && !ccLib.isEmpty(study.effects[0].conditions))
             break;
         }
 
