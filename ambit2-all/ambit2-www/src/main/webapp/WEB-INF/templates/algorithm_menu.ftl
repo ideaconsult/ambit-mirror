@@ -110,6 +110,11 @@
 </li>
 
 <li class="ui-selectee">
+	<a href="${ambit_root}/algorithm?type=Structure2D">
+	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>Generate 2D coordinates</a>
+</li>
+
+<li class="ui-selectee">
 	<a href="${ambit_root}/algorithm?type=SMSD" title='Pairwise similarity by Small Molecule Subgraph Detector'>
 	<span class="ui-icon ui-icon-calculator" style="float: left; margin-right: .3em;"></span>SMSD</a>
 </li>

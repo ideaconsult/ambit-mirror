@@ -359,6 +359,15 @@ public abstract class ModelPredictor<Predictor,NativeTypeItem> extends AbstractD
 						return true;
 					}
 				};
+			} else if (model.getContentMediaType().equals(AlgorithmFormat.Structure2D.getMediaType())) {
+				
+				return new Structure2DProcessor(
+						request.getRootRef(),
+						model,
+						new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(request),
+						new PropertyURIReporter(request,null),
+						null
+						);					
 			} else if (model.getContentMediaType().equals(AlgorithmFormat.MOPAC.getMediaType())) {
 				
 				return new StructureProcessor(

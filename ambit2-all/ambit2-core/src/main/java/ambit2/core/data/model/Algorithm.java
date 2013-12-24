@@ -63,6 +63,16 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 				return "images/benzene_16.jpg";
 			}
 		},		
+		Structure2D {
+			@Override
+			public String getMediaType() {
+				return "structure2d/java";
+			}
+			@Override
+			public String getImage() {
+				return "images/benzene_16.jpg";
+			}
+		},		
 		WWW_FORM {
 			@Override
 			public String getMediaType() {

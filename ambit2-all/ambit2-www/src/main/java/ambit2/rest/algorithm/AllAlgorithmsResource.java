@@ -44,6 +44,7 @@ import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableStructurePairsModelCreator;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.OptimizerModelBuilder;
+import ambit2.rest.task.Structure2DModelBuilder;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.dbpreprocessing.CallableFinder;
 import ambit2.rest.task.dbpreprocessing.CallableFingerprintsCalculator;
@@ -191,6 +192,7 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 		if (model.hasType(AlgorithmType.SuperService)) return null;
 		if (model.hasType(AlgorithmType.SuperBuilder)) return null;
 		if (model.hasType(AlgorithmType.Structure)) return null;
+		if (model.hasType(AlgorithmType.Structure2D)) return null;
 		if (model.hasType(AlgorithmType.TautomerGenerator)) return null;
 		Object datasetURI = OpenTox.params.dataset_uri.getFirstValue(form);
 		if (datasetURI==null) 
@@ -272,14 +274,24 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						algorithm,
 						token);		
 
-			}			
-			else if (algorithm.hasType(AlgorithmType.Structure)) {
+			} else if (algorithm.hasType(AlgorithmType.Structure)) {
 				return new CallableSimpleModelCreator(
 						form,
 						getContext(),
 						algorithm,
 						false,
 						new OptimizerModelBuilder(getRequest().getRootRef(),
+								modelReporter,
+								algReporter,false),
+						token
+						);
+			} else if (algorithm.hasType(AlgorithmType.Structure2D)) {
+				return new CallableSimpleModelCreator(
+						form,
+						getContext(),
+						algorithm,
+						false,
+						new Structure2DModelBuilder(getRequest().getRootRef(),
 								modelReporter,
 								algReporter,false),
 						token
