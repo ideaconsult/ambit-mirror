@@ -114,4 +114,4 @@ join substance_experiment e on
 p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid
 ;
 
-insert into version (idmajor,idminor,comment) values (7,1,"AMBIT Schema: substances study records support");
+insert into version (idmajor,idminor,comment) values (7,1,"AMBIT Schema: substances study");
