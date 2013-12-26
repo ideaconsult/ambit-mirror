@@ -327,7 +327,7 @@ public class AlgorithmsPile {
 			{"ambit2.mopac.MopacShellBalloon","MOPAC: optimizes 3D structure (starting structure by Balloon)","ambit2.mopac.MopacShellBalloon",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
 			{"ambit2.mopac.MopacShellOB","MOPAC: optimizes 3D structure (starting structure by OpenBabel)","ambit2.mopac.MopacShellOB",null,new String[] {AlgorithmType.Structure.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"},
 
-			{"Structure2D","Generates 2D coordinates","Structure2D",null,new String[] {AlgorithmType.Structure2D.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#Structrue2D"},
+			{"Structure2D","Generates 2D coordinates","Structure2D",null,new String[] {AlgorithmType.Structure2D.toString()},"",Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#Structure2D"},
 			//fingerprints
 			{"ambit2.descriptors.fingerprints.EStateFingerprinterWrapper","EState Fingerprints","ambit2.descriptors.fingerprints.EStateFingerprinterWrapper",null,
 						new String[] {AlgorithmType.DescriptorCalculation.toString()},null,

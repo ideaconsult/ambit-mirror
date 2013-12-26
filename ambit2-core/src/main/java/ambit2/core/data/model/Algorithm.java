@@ -167,7 +167,8 @@ public class Algorithm<T extends Serializable> implements Comparable<Algorithm<T
 		hasType(AlgorithmType.Learning.toString()) || hasType(AlgorithmType.LazyLearning.toString()) 
 		|| hasType(AlgorithmType.EagerLearning.toString()) ||
 		hasType(AlgorithmType.DescriptorCalculation.toString()) || hasType(AlgorithmType.AppDomain.toString()) || 
-		hasType(AlgorithmType.Mockup.toString()) || hasType(AlgorithmType.SMSD.toString()) ;
+		hasType(AlgorithmType.Mockup.toString()) || hasType(AlgorithmType.SMSD.toString()) 
+		|| hasType(AlgorithmType.Structure2D.toString()) ;
 	}
 	public boolean isDataProcessing() {
 		return hasType(AlgorithmType.DescriptorCalculation.toString()) || hasType(AlgorithmType.Fingerprints.toString())

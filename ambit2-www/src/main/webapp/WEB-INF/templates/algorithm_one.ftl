@@ -319,7 +319,8 @@
 		</a>
 		<div class='three columns omega help'>A <a href='http://toxtree.sf.net' class='qxternal' >Toxtree</a> module</div>
 	</div>	
-	  <#break>	
+	  <#break>
+	  
   <#default>
 	
 	<div class='row remove-bottom' id='requiresDataset'>
