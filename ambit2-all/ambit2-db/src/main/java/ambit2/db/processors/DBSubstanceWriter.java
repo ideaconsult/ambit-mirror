@@ -69,7 +69,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	    writer.setPropertyKey(new ReferenceSubstanceUUID());
 		writer.setUsePreferredStructure(true);
 		writer.setDataset(dataset==null?datasetMeta():dataset);
-
+		writer.setBuild2D(true);
 		this.importedRecord = importedRecord;
 	}
 	
