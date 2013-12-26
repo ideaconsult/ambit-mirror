@@ -29,16 +29,19 @@
 
 package ambit2.core.processors;
 
+import java.io.StringWriter;
 import java.util.logging.Level;
 
 import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -48,9 +51,11 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.dx.DXParser;
 import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.core.processors.structure.MoleculeWriter;
 import ambit2.core.processors.structure.StructureTypeProcessor;
 import ambit2.core.processors.structure.key.InchiPropertyKey;
 import ambit2.core.processors.structure.key.SmilesKey;
@@ -66,6 +71,7 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 	protected transient StructureTypeProcessor strucType;
 	protected transient InchiProcessor inchiProcessor;
 	protected transient FixBondOrdersTool fbt = new FixBondOrdersTool();
+	protected transient Structure2DBuilder builder  = null;
 	protected DXParser dxParser = null;
 	
 	public StructureNormalizer() {
@@ -92,14 +98,30 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		
 		IAtomContainer molecule = molReader.process(structure);
 		
+		if ((molecule != null) && (molecule.getProperties()!=null))
+			structure.addProperties(molecule.getProperties());
+		
 		if ((molecule == null) || (molecule.getAtomCount()==0)) structure.setType(STRUC_TYPE.NA);
 		else {
 			structure.setType(strucType.process(molecule));
-
+			if (build2D) try {
+				IAtomContainer newmol = build2d(molecule,structure.getType());
+				if (newmol != null) {
+					molecule = newmol;
+					StringWriter w = new StringWriter();
+					ambit2.core.io.MDLWriter writer = new ambit2.core.io.MDLWriter(w);
+					try { 
+						writer.writeMolecule(molecule);
+						writer.close();
+						structure.setType(strucType.process(molecule));
+						structure.setContent(w.toString());
+						structure.setFormat(MOL_TYPE.SDF.name());
+					} catch (Exception x) {
+						
+					}
+				}
+			} catch (Exception x) {}
 		}
-		if ((molecule != null) && (molecule.getProperties()!=null))
-			structure.addProperties(molecule.getProperties());
-
 		
 		try {
 			if ((molecule != null) && (molecule.getAtomCount()>0)) {
@@ -166,5 +188,21 @@ public class StructureNormalizer extends DefaultAmbitProcessor<IStructureRecord,
 		}
 		return structure;
 	}
+	
+	protected boolean build2D = false;
+	
+	public boolean isBuild2D() {
+		return build2D;
+	}
 
+
+	public void setBuild2D(boolean build2d) {
+		build2D = build2d;
+	}
+
+	protected IAtomContainer build2d(IAtomContainer molecule,STRUC_TYPE structype) throws AmbitException {
+		if (!STRUC_TYPE.D1.equals(structype)) return null;
+		if (builder == null) builder = new Structure2DBuilder();
+        return builder.process(molecule);
+	}
 }
