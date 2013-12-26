@@ -65,6 +65,17 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected PreparedStatement ps_seekdataset;		
 	protected StructureNormalizer normalizer = new StructureNormalizer(); 
 	protected boolean usePreferredStructure = false;
+	
+	public boolean isBuild2D() {
+		return normalizer.isBuild2D();
+	}
+
+
+	public void setBuild2D(boolean build2d) {
+		normalizer.setBuild2D(build2d);
+	}
+
+
 	public boolean isUsePreferredStructure() {
 		return usePreferredStructure;
 	}
@@ -82,6 +93,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 
 	public void setPropertiesOnly(boolean propertiesOnly) {
 		this.propertiesOnly = propertiesOnly;
+		this.usePreferredStructure = true;
 	}
 	protected final String idchemical_tag="idchemical";
 	
