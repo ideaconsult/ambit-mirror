@@ -35,6 +35,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected boolean MOLONLY = false;
 	//in case the native format is not SDF
 	protected MoleculeReader reader = null;
+	protected boolean first = true;
 	
 	protected Profile groupProperties;
 	public Profile getGroupProperties() {
@@ -100,14 +101,17 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	}
 
 	private final static String emptySDF = 
-		"\n  EMPTY     1224111917\n"+
-		"\n"+  
-		"  0  0  0  0  0  0  0  0  0  0999 V2000\n"+
+		"\r\n  EMPTY     1224111917\r\n"+
+		"\r\n"+  
+		"  0  0  0  0  0  0  0  0  0  0999 V2000\r\n"+
 		"M  END";
 	
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
+			//some software doesn't like $$$$\n at the end of the file, so writing the \n at the beginning of a record
+			if (!first) output.write("\r\n");
+			first = false;	
 			String content = getSDFContent(item);
 			if (content==null) return null;
 			int pi = content.indexOf("$$$$");
@@ -132,10 +136,10 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 					if (CMLUtilities.SMARTSProp.equals(p.getName())) continue;
 					Object value = item.getProperty(p);
 					if (value != null)
-						output.write(String.format("\n> <%s>\n%s\n",p.getName().toString(),
+						output.write(String.format("\r\n> <%s>\r\n%s\r\n",p.getName().toString(),
 								value.toString()));
 				}
-			output.write("\n$$$$\n");
+			output.write("\r\n$$$$");
 			
 		} catch (Exception x) {
 			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
