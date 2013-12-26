@@ -33,6 +33,7 @@ import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.builder.ExpertModelBuilder;
 import ambit2.rest.model.builder.SMSDModelBuilder;
 import ambit2.rest.model.predictor.DescriptorPredictor;
+import ambit2.rest.model.predictor.Structure2DProcessor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.task.CallableBuilder;
 import ambit2.rest.task.CallableDescriptorCalculator;
@@ -41,6 +42,7 @@ import ambit2.rest.task.CallableMockup;
 import ambit2.rest.task.CallableNumericalModelCreator;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
+import ambit2.rest.task.CallableStructureOptimizer;
 import ambit2.rest.task.CallableStructurePairsModelCreator;
 import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.OptimizerModelBuilder;
@@ -286,16 +288,44 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 						token
 						);
 			} else if (algorithm.hasType(AlgorithmType.Structure2D)) {
-				return new CallableSimpleModelCreator(
-						form,
-						getContext(),
-						algorithm,
-						false,
-						new Structure2DModelBuilder(getRequest().getRootRef(),
-								modelReporter,
-								algReporter,false),
-						token
-						);
+				
+				try {
+					CallableSimpleModelCreator modelCreator = new CallableSimpleModelCreator(
+							form,
+							getContext(),
+							algorithm,
+							false,
+							new Structure2DModelBuilder(getRequest().getRootRef(),
+									modelReporter,
+									algReporter,false),
+							token
+							);
+					TaskResult modelRef = modelCreator.call();
+					ModelQueryResults model = modelCreator.getModel();
+					Structure2DProcessor predictor =  new Structure2DProcessor(
+							getRequest().getRootRef(),
+							model,
+							new ModelURIReporter<IQueryRetrieval<ModelQueryResults>>(getRequest()),
+							new PropertyURIReporter(getRequest(),null),
+							null
+							);					
+
+					return
+					new CallableStructureOptimizer(
+							form,
+							getRequest().getRootRef(),
+							getContext(),
+							(Structure2DProcessor) predictor,
+							token
+							);					
+				} catch (ResourceException x) {
+					throw x;
+				} catch (Exception x) {
+					getLogger().log(Level.WARNING,x.getMessage(),x);
+					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,x.getMessage(),x);
+				}
+				
+			
 			} else if (algorithm.hasType(AlgorithmType.TautomerGenerator))  {
 				return new CallableSimpleModelCreator(
 						form,
