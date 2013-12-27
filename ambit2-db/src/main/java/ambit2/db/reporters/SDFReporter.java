@@ -37,6 +37,8 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	protected MoleculeReader reader = null;
 	protected boolean first = true;
 	private static final String ux = "(?<!\r)\n";
+	private static final String wlinesep = "\r\n";
+	private static final String sdfrecord = "$$$$";
 	protected boolean changeLineSeparators = false;
 	
 	public boolean isChangeLineSeparators() {
@@ -69,7 +71,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		this(new Template(null),null,false);
 	}
 	public SDFReporter(Template template,Profile groupedProperties,boolean changeLineSeparator) {
-		this(template,groupedProperties,false,false);
+		this(template,groupedProperties,false,changeLineSeparator);
 	}
 	public SDFReporter(Template template,Profile groupedProperties,boolean molOnly,boolean changeLineSeparator) {
 		setTemplate(template);
@@ -120,11 +122,11 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			//some software doesn't like $$$$\n at the end of the file, so writing the \n at the beginning of a record
-			if (!first) output.write("\r\n");
+			if (!first) output.write(wlinesep);
 			first = false;	
 			String content = getSDFContent(item);
 			if (content==null) return null;
-			int pi = content.indexOf("$$$$");
+			int pi = content.indexOf(sdfrecord);
 			content = pi>0?content.substring(0,pi-1):content;
 			if ("".equals(content.trim())) content = emptySDF;
 
@@ -149,7 +151,8 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 						output.write(String.format("\r\n> <%s>\r\n%s\r\n",p.getName().toString(),
 								value.toString()));
 				}
-			output.write("\r\n$$$$");
+			output.write(wlinesep);
+			output.write(sdfrecord);
 			
 		} catch (Exception x) {
 			logger.log(java.util.logging.Level.SEVERE,x.getMessage(),x);
@@ -159,7 +162,12 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 
 	protected String getSDFContent(IStructureRecord item) throws AmbitException {
 		//most common case
-		if (MOL_TYPE.SDF.toString().equals(item.getFormat())) return item.getContent();
+		if (MOL_TYPE.SDF.toString().equals(item.getFormat())) {
+			if (isChangeLineSeparators())
+				return item.getContent().replaceAll(ux,wlinesep);
+			else	
+				return item.getContent();
+		}	
 		//otherwise
 		if (reader==null) reader = new MoleculeReader();
 		try {
@@ -170,7 +178,7 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			sdfwriter.write(ac);
 			sdfwriter.close();
 			if (isChangeLineSeparators())
-				return w.toString().replaceAll(ux,"\r\n");
+				return w.toString().replaceAll(ux,wlinesep);
 			else	
 				return w.toString();
 		} catch (Exception x) {
