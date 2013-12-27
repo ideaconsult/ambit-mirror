@@ -111,8 +111,18 @@ To skip the tests, use -DskipTests=true option
 
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.5.3-SNAPSHOT
+AMBIT2 2.5.4-SNAPSHOT
 Current version at trunk
+
+AMBIT2 2.5.3
+ambit2-core: IUCLID5 endpoint study records (via https://github.com/ideaconsult/i5 0.0.4 )
+ambit2-descriptors: Descriptor to retrieve OpenPhacts pharmacology count per compound
+ambit2-db: Substance endpoint study records support. DB Schema 7.1
+ambit2-www: jtoxkit.js for rendering substance endpoint study records
+ambit2-www: DEREK friendly SDF export (Options to unify line separators and generate 2D coordinates)
+ambit2-www: Improved statistcis resource /admin/stats
+ambit2-groupcontribution : new modlule for group contribution methods
+ambit2-sln : new modlule for SLN parser
 
 AMBIT2 2.5.2
 ambit2-db: Substance study support. DB Schema 7.1

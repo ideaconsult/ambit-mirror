@@ -30,7 +30,7 @@
 	<dependency>
 	  <groupId>net.ideaconsult</groupId>
 	  <artifactId>loom-ops-cli</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>${net.idea.loom.version}</version>
 	  <type>jar</type>
       <scope>compile</scope>
 	</dependency>
