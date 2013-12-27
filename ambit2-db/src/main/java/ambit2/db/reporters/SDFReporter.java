@@ -36,7 +36,16 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	//in case the native format is not SDF
 	protected MoleculeReader reader = null;
 	protected boolean first = true;
+	private static final String ux = "(?<!\r)\n";
+	protected boolean changeLineSeparators = false;
 	
+	public boolean isChangeLineSeparators() {
+		return changeLineSeparators;
+	}
+	public void setChangeLineSeparators(boolean changeLineSeparators) {
+		this.changeLineSeparators = changeLineSeparators;
+	}
+
 	protected Profile groupProperties;
 	public Profile getGroupProperties() {
 		return groupProperties;
@@ -57,14 +66,15 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		this.template = template;
 	}
 	public SDFReporter() {
-		this(new Template(null),null);
+		this(new Template(null),null,false);
 	}
-	public SDFReporter(Template template,Profile groupedProperties) {
-		this(template,groupedProperties,false);
+	public SDFReporter(Template template,Profile groupedProperties,boolean changeLineSeparator) {
+		this(template,groupedProperties,false,false);
 	}
-	public SDFReporter(Template template,Profile groupedProperties,boolean molOnly) {
+	public SDFReporter(Template template,Profile groupedProperties,boolean molOnly,boolean changeLineSeparator) {
 		setTemplate(template);
 		setGroupProperties(groupedProperties);
+		setChangeLineSeparators(changeLineSeparator);
 		setMOLONLY(molOnly);
 		getProcessors().clear();
 		RetrieveStructure r = new RetrieveStructure();
@@ -159,7 +169,10 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 			ac.getProperties().clear();
 			sdfwriter.write(ac);
 			sdfwriter.close();
-			return w.toString();
+			if (isChangeLineSeparators())
+				return w.toString().replaceAll(ux,"\r\n");
+			else	
+				return w.toString();
 		} catch (Exception x) {
 			throw new AmbitException(x);
 		}

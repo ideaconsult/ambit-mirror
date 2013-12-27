@@ -78,6 +78,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		stax
 	}
 	protected RDF_WRITER rdfwriter = RDF_WRITER.jena;
+	protected boolean changeLineSeparators = false;
 	protected boolean enableJSONP = false;
 	protected boolean dataset_prefixed_compound_uri = false;
 	public final static String query_resource = "/query";
@@ -146,6 +147,14 @@ Then, when the "get(Variant)" method calls you back,
 			rdfwriter = RDF_WRITER.jena;
 		}
 	}
+	protected void configureSDFLineSeparators() {
+		try { 
+			Object lsOption = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("changeLineSeparators");
+			changeLineSeparators = lsOption==null?false:Boolean.parseBoolean(lsOption.toString());
+		} catch (Exception x) { 
+			changeLineSeparators = false;
+		}
+	}
 	
 
 	protected Representation getRepresentation(Variant variant) throws ResourceException {
@@ -171,6 +180,7 @@ Then, when the "get(Variant)" method calls you back,
 		        		DBConnection dbc = new DBConnection(getContext());
 		        		
 		        		configureRDFWriterOption(dbc.rdfWriter());
+		        		configureSDFLineSeparators();
 		        		configureDatasetMembersPrefixOption(dbc.dataset_prefixed_compound_uri());
 		        		convertor = createConvertor(variant);
 		        		if (convertor instanceof RepresentationConvertor)
