@@ -47,6 +47,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.IQueryObject;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.AbstractResource;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
@@ -78,7 +79,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 		stax
 	}
 	protected RDF_WRITER rdfwriter = RDF_WRITER.jena;
-	protected boolean changeLineSeparators = false;
+	protected boolean changeLineSeparators;
 	protected boolean enableJSONP = false;
 	protected boolean dataset_prefixed_compound_uri = false;
 	public final static String query_resource = "/query";
@@ -147,12 +148,12 @@ Then, when the "get(Variant)" method calls you back,
 			rdfwriter = RDF_WRITER.jena;
 		}
 	}
-	protected void configureSDFLineSeparators() {
+	protected void configureSDFLineSeparators(boolean defaultSeparator) {
 		try { 
 			Object lsOption = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("changeLineSeparators");
-			changeLineSeparators = lsOption==null?false:Boolean.parseBoolean(lsOption.toString());
+			changeLineSeparators = lsOption==null?defaultSeparator:Boolean.parseBoolean(lsOption.toString());
 		} catch (Exception x) { 
-			changeLineSeparators = false;
+			changeLineSeparators = defaultSeparator;
 		}
 	}
 	
@@ -180,7 +181,7 @@ Then, when the "get(Variant)" method calls you back,
 		        		DBConnection dbc = new DBConnection(getContext());
 		        		
 		        		configureRDFWriterOption(dbc.rdfWriter());
-		        		configureSDFLineSeparators();
+		        		configureSDFLineSeparators(((AmbitApplication)getApplication()).isChangeLineSeparators());
 		        		configureDatasetMembersPrefixOption(dbc.dataset_prefixed_compound_uri());
 		        		convertor = createConvertor(variant);
 		        		if (convertor instanceof RepresentationConvertor)

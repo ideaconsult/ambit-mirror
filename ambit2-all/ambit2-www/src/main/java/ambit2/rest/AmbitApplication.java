@@ -170,13 +170,17 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	static final String attachDepict = "attach.depict";
 	static final String attachSubstance = "attach.substance";
 	static final String attachToxmatch = "attach.toxmatch";
+	static final String config_changeLineSeparators = "changeLineSeparators";
 	
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
 	protected boolean warmupEnabled = false;
-
+	protected boolean changeLineSeparators = false; 
 	
+	public boolean isChangeLineSeparators() {
+		return changeLineSeparators;
+	}
 	public AmbitApplication() {
 		this(false);
 	}
@@ -186,6 +190,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		openToxAAEnabled = isOpenToxAAEnabled();
 		localAAEnabled = isSimpleSecretAAEnabled();
 		warmupEnabled = isWarmupEnabled();
+		changeLineSeparators = getConfigChangeLineSeparator();
 		versionShort = readVersionShort();
 		versionLong = readVersionLong();
 		
@@ -1064,6 +1069,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return FreeMarkerStatusService.REPORT_LEVEL.production;
 		}
 
+	   	protected boolean getConfigChangeLineSeparator() {
+	   		try {
+				String attach = getProperty(config_changeLineSeparators,ambitProperties);
+				return attach==null?null:Boolean.parseBoolean(attach);
+			} catch (Exception x) {return false; }
+		}	   	
 }
 
 /**
