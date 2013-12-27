@@ -42,6 +42,7 @@
       <properties>
         <google.analytics>UA-8771500-5</google.analytics>
         <rdf.writer>stax</rdf.writer>
+        <changeLineSeparators>false</changeLineSeparators>
         <jsonp>true</jsonp>
         <ambit.db>ambit2</ambit.db>
         <ambit.db.user.test>guest</ambit.db.user.test>
@@ -57,7 +58,21 @@
         <aa.policy>http://opensso.in-silico.ch/Pol/opensso-pol</aa.policy>
         <aa.user>guest</aa.user>
         <aa.pass>guest</aa.pass>
+        <aa.model>false</aa.model>
+        <aa.feature>false</aa.feature>
+        <aa.compound>false</aa.compound>
         <warmup.enabled>false</warmup.enabled>
+        <aa.local.enabled>false</aa.local.enabled>
+        <aa.local.admin.name>admin</aa.local.admin.name>
+        <aa.local.admin.pass>changeit</aa.local.admin.pass>
+        <guard.enabled></guard.enabled>
+        <guard.list>http://localhost </guard.list>
+        <allowed.origins>*</allowed.origins>
+        <attach.depict>true</attach.depict>
+        <attach.toxmatch>true</attach.toxmatch>
+        <attach.substance>true</attach.substance>
+        <ambit.report.level>debug</ambit.report.level>
+        <MAXRECORDS>10000</MAXRECORDS>
         <!-- The folder, containing Dragon6 executable. Could be changed after deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
         <DRAGON_HOME>/usr/local/dragon</DRAGON_HOME>
         <!-- The folder, containing OpenBabel executable. Could be changed after deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
