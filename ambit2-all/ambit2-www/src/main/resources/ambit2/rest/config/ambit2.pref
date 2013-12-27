@@ -26,6 +26,9 @@ database.user.test.password=${ambit.db.user.test.password}
 database.create=${ambit.db.create.allow}
 #How to serialize RDF/XML - by Jena (standard, prettier, slower) or StAX (faster)
 rdf.writer=${rdf.writer}
+#When serializing to SDF, change line separators to \r\n 
+#(for DEREK compatibility)
+changeLineSeparators=${changeLineSeparators}
 #Enable JSONP support true|false
 jsonp=${jsonp}
 #URI of the ontology service , e.g. http://localhost:8080/ontology

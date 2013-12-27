@@ -177,10 +177,10 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML,filenamePrefix);
 		else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties()),ChemicalMediaType.CHEMICAL_MDLSDF,filenamePrefix);
+					new SDFReporter<QueryStructureByID>(getTemplate(),getGroupProperties(),changeLineSeparators),ChemicalMediaType.CHEMICAL_MDLSDF,filenamePrefix);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLMOL)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(new Template(),getGroupProperties(),true),ChemicalMediaType.CHEMICAL_MDLMOL,filenamePrefix);				
+					new SDFReporter<QueryStructureByID>(new Template(),getGroupProperties(),true,changeLineSeparators),ChemicalMediaType.CHEMICAL_MDLMOL,filenamePrefix);				
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new SmilesReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_SMILES,filenamePrefix);

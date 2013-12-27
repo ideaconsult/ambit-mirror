@@ -245,10 +245,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(template,getGroupProperties()),ChemicalMediaType.CHEMICAL_MDLSDF,filenamePrefix);
+					new SDFReporter<QueryStructureByID>(template,getGroupProperties(),changeLineSeparators),ChemicalMediaType.CHEMICAL_MDLSDF,filenamePrefix);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLMOL)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-						new SDFReporter<QueryStructureByID>(new Template(),getGroupProperties(),true),ChemicalMediaType.CHEMICAL_MDLMOL,filenamePrefix);			
+						new SDFReporter<QueryStructureByID>(new Template(),getGroupProperties(),true,changeLineSeparators),ChemicalMediaType.CHEMICAL_MDLMOL,filenamePrefix);			
 		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) {
 				return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
 						new CMLReporter<QueryStructureByID>(),ChemicalMediaType.CHEMICAL_CML,filenamePrefix);				
@@ -342,7 +342,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					new DatasetRDFReporter(getCompoundInDatasetPrefix(),getRequest(),getDocumentation(),variant.getMediaType(),getTemplate(),getGroupProperties()),variant.getMediaType(),filenamePrefix);			
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(template,getGroupProperties()),ChemicalMediaType.CHEMICAL_MDLSDF,filenamePrefix);
+					new SDFReporter<QueryStructureByID>(template,getGroupProperties(),changeLineSeparators),ChemicalMediaType.CHEMICAL_MDLSDF,filenamePrefix);
 	}
 	
 	protected QueryAbstractReporter createHTMLReporter(Dimension d) {

@@ -1,5 +1,8 @@
 package ambit2.base.test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -37,5 +40,22 @@ public class CASProcessorTest {
 		Assert.assertTrue(CASProcessor.isValidFormat("130032-94-9"));
 		Assert.assertTrue(CASProcessor.isValidFormat("18903-01-0"));
 	}	
+	
+	@Test
+	public void testLineSeparator() {
+		String test = "abc\r\nxyz";
+		String testx = "abc\nxyz";
+		String ux = "(?<!\r)\n";
+		Pattern p = Pattern.compile(ux);
+		Matcher m = p.matcher(test);
+		Assert.assertFalse(m.find());
+		m = p.matcher(testx);
+		Assert.assertTrue(m.find());
+		
+		
+		Assert.assertEquals(test,test.replaceAll(ux,"\r\n"));
+		Assert.assertEquals(test,testx.replaceAll(ux,"\r\n"));
+	}	
+	
 	
 }
