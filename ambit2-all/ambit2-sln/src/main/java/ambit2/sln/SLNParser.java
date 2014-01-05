@@ -6,10 +6,21 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 
+import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
+import ambit2.smarts.DoubleBondAromaticityNotSpecified;
+import ambit2.smarts.DoubleNonAromaticBond;
+import ambit2.smarts.RingClosure;
+import ambit2.smarts.SingleNonAromaticBond;
 import ambit2.smarts.SingleOrAromaticBond;
+import ambit2.smarts.SmartsAtomExpression;
+import ambit2.smarts.SmartsBondExpression;
+import ambit2.smarts.SmartsConst;
 
 public class SLNParser 
 {
@@ -62,7 +73,6 @@ public class SLNParser
 		prevAtom = null;
 		curChar = 0;
 		brackets.clear();
-		//directionalBonds.clear();
 		curBond = null;
 		curBondType = SLNConst.BT_UNDEFINED;
 		indexes.clear();
@@ -72,16 +82,15 @@ public class SLNParser
 	{	
 		while ((curChar < nChars) && (errors.size() == 0))
 		{
-			
+
 			if (Character.isLowerCase(sln.charAt(curChar)) || Character.isDigit(sln.charAt(curChar)))
 			{
-				errors.add(new SLNParserError(sln, "Incorrect bening of an atom!", curChar, ""));
-				
+				errors.add(new SLNParserError(sln, "Incorrect begining of an atom!", curChar, ""));
+
 				curChar++;
 				continue;
 			}
-			
-			
+
 			if (Character.isUpperCase(sln.charAt(curChar)))
 				parseAtom();
 			else
@@ -140,22 +149,23 @@ public class SLNParser
 		System.out.println("Atom Type : " + atomType);
 		
 		
-		if (curChar <nChars)
+		if (curChar < nChars)
 			if (sln.charAt(curChar) == '[')
 			{	
 				String atomExpression = extractAtomExpression();
+				
+				System.out.println("AtExpr " + atomExpression);
 				//TODO analyze atomExpression
 			}	
 		
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == 'H')
 			{
-				curChar++;
-				//TODO handle H information
+				if (Character.isDigit(sln.charAt(curChar)))
+					parseAtomIndex();
 			}
-		
 		addAtom(newAtom);
-		
+
 	}
 	
 	String extractAtomName()
@@ -176,14 +186,55 @@ public class SLNParser
 	
 	String extractAtomExpression()
 	{
-		return "";
+		curChar++;
+		int openBrackets = 1;
+		while ((curChar < nChars) && (openBrackets > 0) && (errors.size() == 0))
+		{
+			if (sln.charAt(curChar)=='[')
+			 {
+				 openBrackets++;
+				 curChar++;
+			 }
+			 else
+			 if (sln.charAt(curChar)==']')
+			 {
+				 openBrackets--;
+				 curChar++;
+			 }
+			 else
+				 break;
+		}
+		
+		return sln.substring(curChar);
 	}
 	
 
-	void parseAtomIndex()   //???
+	void parseAtomIndex()   //!!!
 	{
-		//TODO
-		
+/*		if (sln.charAt(curChar) == '(')
+		{				
+			curChar++;
+			if (sln.charAt(curChar) == '@')
+				curChar++;
+			{
+				if (curChar == nChars)
+				{	
+					newError("Incorrect ring closure",curChar,"");
+					return;
+				}	
+
+				if (Character.isDigit(sln.charAt(curChar)))
+					registerIndex(getInteger());
+
+				else
+					newError("Incorrect ring closure",curChar,"");		
+			}
+		}
+		else */
+		{	
+			if (Character.isDigit(sln.charAt(curChar)))
+				registerIndex(getInteger());
+		}
 	}
 
 	int getInteger()
@@ -247,15 +298,14 @@ public class SLNParser
 	{
 		switch (sln.charAt(curChar))
 		{
-		case '*': //Any atom
-			//TODO		
-			break;
-			//Bond expression symbols - bond types and logical operations
+		//Bond expression symbols - bond types and logical operations
+		case '~':	//any bond
 		case '-':	//single bond
 		case '=':	//double bond
 		case '#':	//triple bond
 		case ':':	//aromatic bond
 		case '.':	//new part of the structure		
+			
 		case '!':	// logical "not"
 		case '&':	// logical "and"
 		case '|':	// logical "or"
@@ -263,12 +313,6 @@ public class SLNParser
 		case '@':	// ring closure
 			parseBondExpression();
 			break;		
-		case '[': //Atom index which > 9 (has two digits)
-			parseAtomIndex();
-			break;
-		case ']':
-			newError("Incorrect opening bracket ']' ", curChar+1,"");
-			break;
 
 		case '(':			
 			if (prevAtom == null)
@@ -315,12 +359,36 @@ public class SLNParser
 				curComponent = 0;
 			curChar++;
 			break;
+		
 		}
 	}
 
 	void addBond(SLNAtom atom0, SLNAtom atom1)
 	{
-		curBond = new SingleOrAromaticBond();
+		//TODO sln bond types
+		switch (curBondType)
+		{
+		case SLNConst.BT_ANY:
+			curBond = new AnyOrderQueryBond();				
+			break;
+		case SLNConst.BT_SINGLE:				
+			curBond = new SingleNonAromaticBond();
+			break;
+		case SLNConst.BT_DOUBLE:
+			curBond = new DoubleNonAromaticBond();									
+			break;
+		case SLNConst.BT_TRIPLE:	
+			curBond = new OrderQueryBond(IBond.Order.TRIPLE);									
+			break;					
+		case SLNConst.BT_AROMATIC:
+			curBond = new AromaticQueryBond();				
+			break;			
+		case SLNConst.BT_UNDEFINED:
+			curBond = new SingleOrAromaticBond();								
+			break;
+		}
+		
+		
 		IAtom[] atoms = new SLNAtom[2];
 	    atoms[0] = atom0;
 	    atoms[1] = atom1;
@@ -329,8 +397,20 @@ public class SLNParser
 	}
 
 	void parseBondExpression()
-	{
-		//TODO
+	{	
+		int lo = -1;
+		int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));		
+		if (bo != -1)
+		{
+			curChar++;
+			if (curChar == nChars)
+			{
+				newError("Smarts string ends incorrectly with a bond expression", curChar,"");				
+				return;
+			}
+			//TODO
+		}
+		
 	}
 
 	
