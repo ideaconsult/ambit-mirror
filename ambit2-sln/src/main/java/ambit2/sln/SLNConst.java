@@ -11,7 +11,7 @@ public class SLNConst
 	//TODO Atom Primitives
 
 	//Bond types
-	public static char BondChars[] = {'~','-','=','#',':','@','/','\\'};
+	public static char BondChars[] = {'-','=','#',':'};
 	public static final int BT_ANY = 0;
 	public static final int BT_SINGLE = 1;
 	public static final int BT_DOUBLE = 2;
@@ -19,7 +19,15 @@ public class SLNConst
 	public static final int BT_AROMATIC = 4;
 	public static final int BT_UNDEFINED = 100;
 	
-	
+	public static int getBondCharNumber (char ch)
+	{
+		for (int i=0; i < BondChars.length; i++)
+		{
+			if (ch == BondChars[i])
+				return (i);
+		}
+		return(-1);
+	}	
 	
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
