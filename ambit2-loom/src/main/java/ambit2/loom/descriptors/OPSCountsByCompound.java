@@ -1,5 +1,8 @@
 package ambit2.loom.descriptors;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 import net.idea.ops.cli.OPSClient;
 import net.sf.jniinchi.INCHI_RET;
 
@@ -84,7 +87,7 @@ public class OPSCountsByCompound implements IMolecularDescriptor {
 					inchikey = gen.getInchiKey();
 			}	
 			if (inchikey!=null) {
-				if (cli==null) { cli = new OPSClient(true); cli.config(); }
+				if (cli==null) cli = createOPSClient();
 				 int[] counts = cli.getCountsbyCompound(inchikey.toString());
 				 IntegerArrayResult result = new IntegerArrayResult();
 				 result.add(counts[0]);
@@ -100,7 +103,21 @@ public class OPSCountsByCompound implements IMolecularDescriptor {
 		
 	}
 
-		
+	protected OPSClient createOPSClient() throws Exception {
+		InputStream in = null;
+		try {
+			in = getClass().getClassLoader().getResourceAsStream("ambit2/loom/ops.properties");
+			Properties properties = new Properties();
+			properties.load(in);
+			MyOPSClient cli = new MyOPSClient(null);
+			cli.setProperties(properties);
+			return cli;
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			try {in.close();} catch (Exception x) {}
+		}
+	}
 	@Override
 	public IDescriptorResult getDescriptorResultType() {
 		return new IntegerArrayResult(2);

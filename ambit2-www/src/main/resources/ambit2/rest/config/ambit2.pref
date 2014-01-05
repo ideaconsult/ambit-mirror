@@ -68,3 +68,7 @@ atomtypes.stop=false
 attach.depict=${attach.depict}
 attach.toxmatch=${attach.toxmatch}
 attach.substance=${attach.substance}
+#OpenPhacts client config
+ops.server_root=${ops.server_root}
+app_id=${ops.app_id}
+app_key=${ops.app_key}

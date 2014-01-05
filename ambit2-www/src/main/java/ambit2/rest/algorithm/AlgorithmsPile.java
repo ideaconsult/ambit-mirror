@@ -390,7 +390,7 @@ public class AlgorithmsPile {
 			
 			{"tautomers","Tautomers generator","tautomers",null,new String[] {AlgorithmType.TautomerGenerator.toString()},null,Algorithm.requires.structure,"http://ambit.sourceforge.net/descriptors.owl#tautomergen"},
 
-			{"ambit2.loom.descriptors.OPSCountsByCompound","Number of pathways and assays in OpenPhacts","ambit2.loom.descriptors.OPSCountsByCompound",null,
+			{"ambit2.rest.algorithm.descriptors.OPSCountsWrapper","Number of pathways and assays in OpenPhacts","ambit2.rest.algorithm.descriptors.OPSCountsWrapper",null,
 				new String[] {AlgorithmType.DescriptorCalculation.toString()},null,
 				Algorithm.requires.structure,
 				"http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT"}
