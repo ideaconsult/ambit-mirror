@@ -29,6 +29,49 @@ public class Protocol {
 				return "Acute toxicity - oral";
 			}
 		},
+		TO_REPEATED_ORAL_SECTION {
+			@Override
+			public String toString() {
+				return "Repeated dose toxicity - oral";
+			}
+		},
+		TO_SENSITIZATION_HUMAN_SECTION {
+			@Override
+			public String toString() {
+				return "Skin sensitisation";
+			}
+		},
+		TO_SENSITIZATION_SECTION {
+			@Override
+			public String toString() {
+				return "Skin sensitisation";
+			}
+		},		
+		TO_SKIN_IRRITATION_SECTION {
+			@Override
+			public String toString() {
+				return "Skin irritation / Corrosion";
+			}			
+		},
+		TO_EYE_IRRITATION_SECTION {
+			@Override
+			public String toString() {
+				return "Eye irritation";
+			}			
+		},		
+		TO_REPRODUCTION_SECTION {
+			@Override
+			public String toString() {
+				return "Toxicity to reproduction";
+			}
+		},
+		TO_GENETIC_IN_VITRO_SECTION {
+			@Override
+			public String toString() {
+				return "Genetic toxicity in vitro";
+			}
+		},
+		
 		EC_FISHTOX_SECTION {
 			@Override
 			public String toString() {
