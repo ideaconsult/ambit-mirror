@@ -47,7 +47,9 @@ public class UpdateEffectRecords extends AbstractUpdate<String,EffectRecord> {
 
 		params1.add(new QueryParam<String>(String.class, getObject().getEndpoint().toString()));
 		params1.add(new QueryParam<String>(String.class, getObject().getConditions()==null?null:getObject().getConditions().toString()));
-		params1.add(new QueryParam<String>(String.class,getObject().getUnit()==null?null:getObject().getUnit().toString()));
+		Object unit = getObject().getUnit();
+		if (unit!=null && unit.toString().length()>16) unit = unit.toString().subSequence(0,15);
+		params1.add(new QueryParam<String>(String.class,unit==null?null:unit.toString()));
 		params1.add(new QueryParam<String>(String.class,getObject().getLoQualifier()==null?null:getObject().getLoQualifier().toString()));
 		params1.add(new QueryParam<Double>(Double.class,getObject().getLoValue()));
 		params1.add(new QueryParam<String>(String.class,getObject().getUpQualifier()==null?null:getObject().getUpQualifier().toString()));
