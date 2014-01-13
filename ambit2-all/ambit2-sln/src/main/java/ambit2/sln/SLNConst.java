@@ -1,23 +1,35 @@
 package ambit2.sln;
 
 public class SLNConst
-{
-	//TODO Global values for setting the absolute CIS/TRANS configuration
+{	
 
 	//Logical operations
 	public static char LogOperationChars[] = {'!', '&', '|', ';'};
-	//TODO
+	public static final int LO_NOT = 0;
+	public static final int LO_AND = 1;
+	public static final int LO_OR = 2;
+	public static final int LO_ANDLO = 3;
+	public static final int LO = 1000;
 
-	//TODO Atom Primitives
+	//Atom Attributes (predefined)   A_ATTR_*
+	
+	public static final int A_ATTR_USER_DEFINED = 500;
+	
+	//Bond Attributes (predefined)   B_ATTR_*
+	
+	public static final int B_ATTR_USER_DEFINED = 500;
+	
 
 	//Bond types
 	public static char BondChars[] = {'-','=','#',':'};
+	
 	public static final int BT_ANY = 0;
 	public static final int BT_SINGLE = 1;
 	public static final int BT_DOUBLE = 2;
 	public static final int BT_TRIPLE = 3;
 	public static final int BT_AROMATIC = 4;
 	public static final int BT_UNDEFINED = 100;
+	
 	
 	public static int getBondCharNumber (char ch)
 	{
@@ -42,7 +54,7 @@ public class SLNConst
 	};
 	
 	public static final int GlobDictOffseet = 1000;
-	public static final int LocDictOffseet = 1000000;
+	public static final int LocalDictOffseet = 1000000;
 	
 	
 	public static final String elSymbols[] =
