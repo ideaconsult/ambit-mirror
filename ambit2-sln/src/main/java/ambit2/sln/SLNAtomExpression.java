@@ -1,15 +1,16 @@
 package ambit2.sln;
 
 import java.util.ArrayList;
+import org.openscience.cdk.interfaces.IAtom;
 
-import org.openscience.cdk.interfaces.IBond;
+import ambit2.smarts.SmartsExpressionToken;
 
-public class SLNBondExpression 
+
+public class SLNAtomExpression 
 {
-
-public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(); 
+	public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(); 
 	
-	public boolean matches(IBond atom) 
+	public boolean matches(IAtom atom) 
 	{
 		//TODO
 		return false;
@@ -31,10 +32,4 @@ public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(
     	sb.append("]");
     	return sb.toString();
     }
-	
-	public boolean isIdenticalTo(SLNBondExpression bondExpression)
-	{
-		// TODO 
-		return true;
-	}
 }

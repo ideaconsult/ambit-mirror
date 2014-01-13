@@ -130,7 +130,7 @@ public class SLNParser
 		{			
 			if (container.getLocalDictionary() != null)
 			{	
-				atomType = SLNConst.LocDictOffseet;
+				atomType = SLNConst.LocalDictOffseet;
 			}
 			else
 			{
