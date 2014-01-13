@@ -10,39 +10,53 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 
 public class SLNAtom extends org.openscience.cdk.PseudoAtom implements IQueryAtom
 {
+	static final long serialVersionUID = 5327582562834894L;
+	
 	public SLNAtom()
 	{
 	}
 
 	int atomType = 0;
-	String atomName = null; 
+	String atomName = null;
+	int numHAtom = 0;
 	SLNAtomExpression atomExpression = null;
 	
 	
 	public boolean matches(IAtom atom) 
 	{
-		if (atomType < 0) // Atom expression
-		{	
-			return atomExpression.matches(atom);
-		}
-			
+		
+		//1. Matching the atom type
+		boolean FlagMatchAtomType = false;
+					
 		if (atomType == 0) //any atom
-			return true;
+			FlagMatchAtomType = true;
+		else		
+			if (atomType < SLNConst.GlobDictOffseet) //atomic symbol
+			{
+				//TODO
+			}
+			else
+				if (atomType < SLNConst.LocalDictOffseet) //It is a global dictionary definition
+				{
+					//TODO
+				}
+				else
+				{
+					//It is a local dictionary definition
+					//TODO
+				}
 		
-		if (atomType < SLNConst.GlobDictOffseet) //atomic symbol
-		{
-			//TODO
+		
+		if (!FlagMatchAtomType)
 			return false;
-		}
 		
-		if (atomType < SLNConst.LocalDictOffseet) //It is a global dictionary definition
-		{
-			//TODO
-			return false;
-		}
-		
-		//It is a local dictionary definition
+		//2. Matching the H atom count
 		//TODO
-		return false;
+		
+		//3. Matching the atom expression
+		if (atomExpression != null)
+			return atomExpression.matches(atom);
+		
+		return true;
 	}
 }
