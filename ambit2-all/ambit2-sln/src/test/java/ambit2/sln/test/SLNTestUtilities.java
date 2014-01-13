@@ -14,7 +14,7 @@ public class SLNTestUtilities
 	{
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
-		tu.testSLN("C-CCO");
+		tu.testSLN("CH-C=O");
 	}
 	
 	public void testSLN(String sln)

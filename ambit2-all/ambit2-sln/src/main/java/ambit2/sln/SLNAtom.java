@@ -59,4 +59,5 @@ public class SLNAtom extends org.openscience.cdk.PseudoAtom implements IQueryAto
 		
 		return true;
 	}
+	
 }

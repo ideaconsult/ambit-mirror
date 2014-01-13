@@ -5,14 +5,15 @@ public class SLNExpressionToken
 {
 	public int type;
 	public int param;
+	public String attrName = null;
+	public String attrValue = null;
 	
-	public SLNExpressionToken(int nType, int nParam)
+	public SLNExpressionToken(int type, int param, String attrName, String attrValue)
 	{
-		type = nType;
-		param = nParam;
-		
-		String userDefAttrName = null;
-		String userDefAttrValue = null;
+		this.type = type;
+		this.param = param;
+		this.attrName = attrName;
+		this.attrValue = attrValue;
 	}
 	
 	public boolean isLogicalOperation()
@@ -26,4 +27,5 @@ public class SLNExpressionToken
 	{
 		return(type - SLNConst.LO);
 	}
+	
 }

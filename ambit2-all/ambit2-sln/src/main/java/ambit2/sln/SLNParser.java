@@ -118,8 +118,8 @@ public class SLNParser
 		//extract atom name
 		String atomName = extractAtomName();
 		int atomType = -1;
+				
 		
-		System.out.println("Atom-->" + atomName);
 		
 		//analyze atomName
 		if (globalDictionary.containsAtomName(atomName))
@@ -146,8 +146,18 @@ public class SLNParser
 		
 		SLNAtom newAtom = new SLNAtom();
 		newAtom.atomType = atomType;
-		System.out.println("Atom Type : " + atomType);
+		newAtom.atomName = atomName;
 		
+		if (curChar < nChars)
+			if (sln.charAt(curChar) == 'H')
+			{
+				int nH = 1;
+				curChar++;
+				if (curChar < nChars)
+					if (Character.isDigit(sln.charAt(curChar)))
+						nH = getInteger();
+				newAtom.numHAtom = nH;
+			}
 		
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == '[')
@@ -158,12 +168,8 @@ public class SLNParser
 				//TODO analyze atomExpression
 			}	
 		
-		if (curChar < nChars)
-			if (sln.charAt(curChar) == 'H')
-			{
-				if (Character.isDigit(sln.charAt(curChar)))
-					parseAtomIndex();
-			}
+		
+		
 		addAtom(newAtom);
 
 	}
