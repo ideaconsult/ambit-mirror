@@ -17,6 +17,31 @@ public class Protocol {
 				return "Partition coeffcicient";
 			}
 		},
+		PC_MELTING_SECTION {
+			@Override
+			public String toString() {
+				return "Melting point";
+			}
+		},
+		PC_BOILING_SECTION {
+			@Override
+			public String toString() {
+				return "Boiling point";
+			}
+		},
+		PC_VAPOUR_SECTION {
+			@Override
+			public String toString() {
+				return "Vapour pressure";
+			}
+		},
+		PC_WATER_SOL_SECTION {
+			@Override
+			public String toString() {
+				return "Water solubility";
+			}
+		},		
+		
 		TO_BIODEG_WATER_SCREEN_SECTION {
 			@Override
 			public String toString() {
