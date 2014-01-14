@@ -92,8 +92,11 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getEndpoint()));
 		if ((getObject().getProtocol().getGuideline() == null) || (getObject().getProtocol().getGuideline().size()==0))
 			params1.add(new QueryParam<String>(String.class, ""));
-		else
-			params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getGuideline().get(0)));
+		else {
+			Object g = getObject().getProtocol().getGuideline().get(0);
+			if (g!=null && g.toString().length()>255) g = g.toString().substring(0,254);
+			params1.add(new QueryParam<String>(String.class, g.toString()));
+		}	
 		
 		Object s_uuid = getGroup();
 		String[] subst_uuid = {null,o_uuid==null?null:s_uuid.toString()};
