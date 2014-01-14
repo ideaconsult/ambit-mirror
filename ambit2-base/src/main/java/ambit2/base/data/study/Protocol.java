@@ -41,7 +41,18 @@ public class Protocol {
 				return "Water solubility";
 			}
 		},		
-		
+		PC_SOL_ORGANIC_SECTION {
+			@Override
+			public String toString() {
+				return "Solubility in organic solvents";
+			}
+		},
+		EN_ADSORPTION_SECTION {
+			@Override
+			public String toString() {
+				return "Adsorption / Desorption";
+			}
+		},
 		TO_BIODEG_WATER_SCREEN_SECTION {
 			@Override
 			public String toString() {
