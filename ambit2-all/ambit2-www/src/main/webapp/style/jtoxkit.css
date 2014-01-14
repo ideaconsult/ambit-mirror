@@ -5,12 +5,20 @@
   border: 1px solid black;
 }
 
-
 .jtox-ds-fixed,
 .jtox-ds-variable {
   border: 0px;
   padding: 0px;
   margin: 0px;
+  vertical-align: top;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.jtox-ds-fixed {
+  display: inline-block;
+  width: 450px;
+  float: left;
 }
 
 .jtox-ds-feature {
@@ -19,6 +27,32 @@
   border: 0px;
   padding: 2px;
   margin: 0px 15px 0px 0px;
+}
+
+.jtox-ds-tables .jtox-inline,
+.jtox-ds-tables td {
+  vertical-align: top;
+}
+
+.jtox-ds-smalldiagram {
+  width: 125px;
+  height: 125px;
+  border: 0px;
+}
+
+.jtox-ds-export {
+  float: right !important;
+}
+
+.jtox-ds-download {
+  padding:0px 5px 0px 5px;
+}
+
+.jtox-ds-details div {
+  float: left;
+  z-index: 10;
+  width: 500px;
+  background-color: #cfcfcf;
 }/* toxtstudy.css - Styling for toxstudy engine
 */
 
@@ -115,14 +149,6 @@ div.jtox-study-tab .dataTables_wrapper {
   text-transform: capitalize;
 }
 
-.jtox-toolkit table.dataTable td .shortened {
-  width: 75px;
-  max-height: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;  
-  white-space: nowrap;
-}
-
 .jtox-toolkit table.dataTable td.jtox-multi {
   padding: 0px;
 }
@@ -195,11 +221,11 @@ td.jtox-multi table {
 }
 
 .middle {
-  vertical-align: middle;  
+  vertical-align: middle !important;
 }
 
 .right {
-  text-align: right;
+  text-align: right !important;
 }
 
 .jtox-font-small {
@@ -228,4 +254,16 @@ td.jtox-multi table {
 .jtox-inline {
   display: inline-block;
   width: auto;  
+}
+
+.jtox-toolkit table.dataTable td .shortened {
+  width: 75px;
+  max-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+  white-space: nowrap;
+}
+
+.jtox-hidden {
+  display: none !important;
 }
