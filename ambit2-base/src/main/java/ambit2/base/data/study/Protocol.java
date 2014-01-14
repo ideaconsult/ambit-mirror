@@ -102,7 +102,50 @@ public class Protocol {
 			public String toString() {
 				return "Short-term toxicity to fish";
 			}
-		}				
+		},
+		
+		EN_BIOACCUMULATION_SECTION {
+			@Override
+			public String toString() {
+				return "Bioaccumulation: aquatic / sediment";
+			}
+		},
+		EN_BIOACCU_TERR {
+			@Override
+			public String toString() {
+				return "Biodegradation in Soil";
+			}			
+		},
+		TO_PHOTOTRANS_AIR_SECTION {
+			@Override
+			public String toString() {
+				return "Phototransformation in Air";
+			}			
+		},
+		TO_HYDROLYSIS {
+			@Override
+			public String toString() {
+				return "Hydrolysis";
+			}				
+		},
+		TO_BIODEG_WATER_SIM {
+			@Override
+			public String toString() {
+				return "Biodeg in water / sediment: Simulation";
+			}			
+		},
+		EN_ADSORPTION {
+			@Override
+			public String toString() {
+				return "Adsorption / Desorption";
+			}				
+		},
+		EN_HENRY_LAW {
+			@Override
+			public String toString() {
+				return "Henry's Law constant";
+			}				
+		}
 	}
 	
 	public static enum _fields {

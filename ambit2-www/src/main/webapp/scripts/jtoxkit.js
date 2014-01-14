@@ -772,7 +772,9 @@ var jToxDataset = (function () {
 **/
 
 var jToxStudy = (function () {
-  var defaultSettings = { };    // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
+  var defaultSettings = { 
+    configuration: {columns: { } }
+  };    // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
   var instanceCount = 0;
   
   var fnDatasetValue = function (old, value){
@@ -787,6 +789,12 @@ var jToxStudy = (function () {
     
     self.settings = $.extend({}, defaultSettings, jToxKit.settings, settings); // i.e. defaults from jToxStudy
     // now we have our, local copy of settings.
+    
+    if (!ccLib.isEmpty(self.settings.config)) {
+      jToxKit.call(self, self.settings.config, function (config) {
+        self.settings.configuration = $.extend(true, self.settings.configuration, config);
+      });
+    }
 
     // get the main template, add it (so that jQuery traversal works) and THEN change the ids.
     // There should be no overlap, because already-added instances will have their IDs changed already...
@@ -880,6 +888,7 @@ var jToxStudy = (function () {
       return str.replace(/(.+)\s\(([0-9]+)\)/, "$1 (" + count + ")");
     },
     
+    // modifies the column title, according to configuration and returns "null" if it is marked as "invisible".
     ensureTable: function (tab, study) {
       var self = this;
       var defaultColumns = [
@@ -899,6 +908,17 @@ var jToxStudy = (function () {
         // start filling it
         var parCount = 0;
   
+        var modifyTitle = function(name, category) {
+          var newCol = self.settings.configuration.columns[name];
+          if (ccLib.isNull(newCol))
+            return name;
+          if (!ccLib.isNull(category))
+            newCol = newCol[category];
+          if (ccLib.isNull(newCol))
+            return name;
+          return !newCol.visible ? null : (ccLib.isNull(newCol.name) ? name : newCol.name);
+        };
+  
         // this function takes care to add as columns all elements from given array
         var putAGroup = function(group, fProcess) {
           var count = 0;
@@ -909,7 +929,7 @@ var jToxStudy = (function () {
             if (group[p + " unit"] !== undefined)
               skip.push(p + " unit");
             var val = fProcess(p);
-            if (val === undefined)
+            if (ccLib.isNull(val))
               continue;
               
             colDefs.push(val);
@@ -919,8 +939,12 @@ var jToxStudy = (function () {
         }
         
         var putDefaults = function(start, len) {
-          for (var i = 0;i < len; ++i)
-            colDefs.push(defaultColumns[i + start]);  
+          for (var i = 0;i < len; ++i) {
+            var col = defaultColumns[i + start];
+            col.sTitle = modifyTitle(col.sTitle);
+            if (!ccLib.isNull(col.sTitle))
+              colDefs.push(col);
+          }
         };
         
         // some value formatting functions
@@ -966,8 +990,12 @@ var jToxStudy = (function () {
           if (study.effects[0].conditions[p] !== undefined  || study.effects[0].conditions[p + " unit"] !== undefined)
             return undefined;
           
+          var name = modifyTitle(p, "parameters");
+          if (ccLib.isNull(name))
+            return null;
+
           var col = {
-            "sTitle" : p,
+            "sTitle" : name,
             "sClass" : "center middle", 
             "mData" : "parameters." + p,
             "sDefaultContent": "-"
@@ -984,6 +1012,10 @@ var jToxStudy = (function () {
         // .. and conditions
         parCount += putAGroup(study.effects[0].conditions, function(c){
           var rnFn = null;
+          var name = modifyTitle(c, "conditions");
+          if (ccLib.isNull(name))
+            return null;
+          
           if (study.effects[0].conditions[c] !== undefined && study.effects[0].conditions[c] != null)
             rnFn = study.effects[0].conditions[c].loValue === undefined ? 
               function(data, type) { return formatUnits(data.conditions[c],  data.conditions[c + " unit"]); } : 
@@ -992,20 +1024,23 @@ var jToxStudy = (function () {
             rnFn = function(data, type) { return "-"; }
             
           return { 
-            "sTitle" : c,
+            "sTitle" : name,
             "sClass" : "center middle jtox-multi", 
             "mData" : "effects", 
             "mRender" : function(data, type, full) { return self.renderMulti(data, type, full, rnFn); } 
           };
         });
         
-        
         // add also the "default" effects columns
         putDefaults(1, 2);
   
         // now is time to put interpretation columns..
         parCount = putAGroup(study.interpretation, function(i){
-          return { "sTitle": "Interpretation", "sClass" : "center middle jtox-multi", "mData" : "interpretation." + i, "sDefaultContent": "-"};
+          var name = modifyTitle(i, "interpretation");
+          if (ccLib.isNull(name))
+            return null;
+        
+          return { "sTitle": name, "sClass" : "center middle jtox-multi", "mData" : "interpretation." + i, "sDefaultContent": "-"};
         });
         
         // finally put the protocol entries
@@ -1016,8 +1051,8 @@ var jToxStudy = (function () {
           "bPaginate": true,
           "bProcessing": true,
           "bLengthChange": false,
-  				"bAutoWidth": false,
-          "sDom" : "rt<Fip>",
+  				"bAutoWidth": true,
+          "sDom" : "zrt<Fip>",
           "aoColumns": colDefs,
           "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
             var el = $('.jtox-study-title .data-field', $(this).parents('.jtox-study'))[0];
@@ -1310,7 +1345,7 @@ var jToxStudy = (function () {
       jToxKit.call(self, substanceURI, function(substance){
          if (!!substance && !!substance.substance && substance.substance.length > 0){
            substance = substance.substance[0];
-           ccLib.fillTree(rootTab, substance);
+           ccLib.fillTree(self.rootElement, substance);
            // go and query for the reference query
            jToxKit.call(self, substance.referenceSubstance.uri, function (dataset){
              if (!!dataset) {
@@ -1630,15 +1665,19 @@ jToxKit.templates['all-studies']  =
 "	    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\"></div>" +
 "	    <div id=\"jtox-pchem\" class=\"jtox-study-tab P-CHEM\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
+"	      <h4 class=\"data-field camelCase\" data-field=\"publicname\"> ? </h4>" +
 "      </div>" +
 "	    <div id=\"jtox-envfate\" class=\"jtox-study-tab ENV_FATE\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
+"	      <h4 class=\"data-field camelCase\" data-field=\"publicname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-ecotox\" class=\"jtox-study-tab ECOTOX\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
+"	      <h4 class=\"data-field camelCase\" data-field=\"publicname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-tox\" class=\"jtox-study-tab TOX\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
+"	      <h4 class=\"data-field camelCase\" data-field=\"publicname\"> ? </h4>" +
 "	    </div>" +
 "	  </div>" +
 ""; // end of #jtox-studies 

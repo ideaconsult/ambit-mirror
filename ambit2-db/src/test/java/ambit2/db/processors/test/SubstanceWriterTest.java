@@ -106,7 +106,7 @@ public class SubstanceWriterTest extends DbUnitTest {
     Substance: 1
     EndpointRecord: 14
  */
-		Assert.assertEquals(369,records);
+		Assert.assertEquals(394,records);
 
         
         c = getConnection();
@@ -157,6 +157,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 				
 				@Override
 				public void handleError(String message, Exception exception) {
+					exception.printStackTrace();
 				}
 				
 				@Override

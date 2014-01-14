@@ -147,6 +147,7 @@ div.jtox-study-tab .dataTables_wrapper {
 
 .jtox-toolkit table.dataTable th {
   text-transform: capitalize;
+  border-right: 3px !important;
 }
 
 .jtox-toolkit table.dataTable td.jtox-multi {
