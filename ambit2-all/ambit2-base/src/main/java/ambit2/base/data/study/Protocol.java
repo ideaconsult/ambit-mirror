@@ -20,7 +20,7 @@ public class Protocol {
 		PC_MELTING_SECTION {
 			@Override
 			public String toString() {
-				return "Melting point";
+				return "Melting point / freezing point";
 			}
 		},
 		PC_BOILING_SECTION {
@@ -47,16 +47,52 @@ public class Protocol {
 				return "Solubility in organic solvents";
 			}
 		},
+		PC_DISSOCIATION_SECTION {
+			@Override
+			public String toString() {
+				return "Dissociation constant";
+			}
+		},
 		EN_ADSORPTION_SECTION {
 			@Override
 			public String toString() {
 				return "Adsorption / Desorption";
 			}
 		},
+		EN_BIOACCU_TERR_SECTION {
+			@Override
+			public String toString() {
+				return "Bioaccumulation: terrestrial";
+			}
+		},
+		EN_STABILITY_IN_SOIL_SECTION {
+			@Override
+			public String toString() {
+				return "Biodegradation in Soil";
+			}
+		},
+		EN_HENRY_LAW_SECTION  {
+			@Override
+			public String toString() {
+				return "Henry's Law constant";
+			}
+		},
 		TO_BIODEG_WATER_SCREEN_SECTION {
 			@Override
 			public String toString() {
 				return "Biodegradation in water - screening tests";
+			}
+		},
+		TO_BIODEG_WATER_SIM_SECTION {
+			@Override
+			public String toString() {
+				return "Biodegradation in water and sediment: simulation tests";
+			}
+		},
+		TO_HYDROLYSIS_SECTION {
+			@Override
+			public String toString() {
+				return "Hydrolysis";
 			}
 		},
 		TO_ACUTE_ORAL_SECTION {
