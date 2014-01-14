@@ -4,7 +4,9 @@
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
+
 
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
