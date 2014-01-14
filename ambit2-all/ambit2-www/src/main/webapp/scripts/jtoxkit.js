@@ -1051,8 +1051,8 @@ var jToxStudy = (function () {
           "bPaginate": true,
           "bProcessing": true,
           "bLengthChange": false,
-  				"bAutoWidth": true,
-          "sDom" : "zrt<Fip>",
+  				"bAutoWidth": false,
+          "sDom" : "rt<Fip>",
           "aoColumns": colDefs,
           "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
             var el = $('.jtox-study-title .data-field', $(this).parents('.jtox-study'))[0];
@@ -1186,6 +1186,7 @@ var jToxStudy = (function () {
 
         var theTable = self.ensureTable(tab, study);
         $(theTable).dataTable().fnAddData(onec);
+        $(theTable).colResizable();
       }
       
       // we need to fix columns height's because of multi-cells
@@ -1345,6 +1346,11 @@ var jToxStudy = (function () {
       jToxKit.call(self, substanceURI, function(substance){
          if (!!substance && !!substance.substance && substance.substance.length > 0){
            substance = substance.substance[0];
+           
+           substance["showname"] = substance.publicname;
+           if (ccLib.isEmpty(substance.showname))
+            substance.showname = substance.name;
+            
            ccLib.fillTree(self.rootElement, substance);
            // go and query for the reference query
            jToxKit.call(self, substance.referenceSubstance.uri, function (dataset){
@@ -1665,19 +1671,19 @@ jToxKit.templates['all-studies']  =
 "	    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\"></div>" +
 "	    <div id=\"jtox-pchem\" class=\"jtox-study-tab P-CHEM\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
-"	      <h4 class=\"data-field camelCase\" data-field=\"publicname\"> ? </h4>" +
+"	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "      </div>" +
 "	    <div id=\"jtox-envfate\" class=\"jtox-study-tab ENV_FATE\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
-"	      <h4 class=\"data-field camelCase\" data-field=\"publicname\"> ? </h4>" +
+"	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-ecotox\" class=\"jtox-study-tab ECOTOX\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
-"	      <h4 class=\"data-field camelCase\" data-field=\"publicname\"> ? </h4>" +
+"	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-tox\" class=\"jtox-study-tab TOX\">" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
-"	      <h4 class=\"data-field camelCase\" data-field=\"publicname\"> ? </h4>" +
+"	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	  </div>" +
 ""; // end of #jtox-studies 
