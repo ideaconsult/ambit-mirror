@@ -1116,6 +1116,7 @@ var jToxStudy = (function () {
   				"bAutoWidth": false,
           "sDom" : "rt<Fip>",
           "aoColumns": colDefs,
+          "bScrollCollapse": true,
           "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
             var el = $('.jtox-study-title .data-field', $(this).parents('.jtox-study'))[0];
             el.innerHTML = self.updateCount(el.innerHTML, iTotal);
@@ -1125,6 +1126,7 @@ var jToxStudy = (function () {
             "sProcessing": "<img src='" + self.baseUrl + "images/24x24_ambit.gif' border='0'>",
             "sLoadingRecords": "No studies found.",
             "sZeroRecords": "No studies found.",
+            
             "sEmptyTable": "No studies available.",
             "sInfo": "Showing _TOTAL_ study(s) (_START_ to _END_)",
             "sLengthMenu": 'Display <select>' +
@@ -1136,6 +1138,8 @@ var jToxStudy = (function () {
               '</select> studies.'
           }
         });
+        
+        $(theTable).dataTable().fnAdjustColumnSizing();
       }
       else
         $(theTable).dataTable().fnClearTable();
