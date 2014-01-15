@@ -12,6 +12,7 @@
             "protocol": {},
             "interpretation": {}
         },
+        
         "PC_BOILING_SECTION": {
             "conditions": {
                 "atm. pressure": {
@@ -218,6 +219,33 @@
                 }
             }
         },
+        "EN_BIOACCU_TERR_SECTION" : {
+            "parameters": {
+                "species": {
+                    "iOrder": -4
+                }
+            },
+            "conditions": {
+                "bioacc. basis": {
+                    "iOrder": -3
+                }
+            },   
+            "effects": {
+                "endpoint": {
+                    "sTitle": "Bioacc. type",
+                    "iOrder": -2
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -1
+                }
+            },                       
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }        
+        },
         "EN_BIOACCUMULATION_SECTION": {
             "parameters": {
                 "route": {
@@ -273,7 +301,60 @@
                 }
             }
         },
+        "TO_HYDROLYSIS_SECTION" : {
+            "conditions": {
+                "ph": {
+                    "iOrder": -3
+                },
+				"temperature": {
+                    "iOrder": -2
+                }                
+            },        
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "sTitle": "DT50",
+                    "iOrder": -1
+                }
+            },        
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }        
+        },
         "EC_FISHTOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+                                                                 
+            },        
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }                                  
+            },                 
+            "effects": {
+                "endpoint": {
+                     "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },            	
             "interpretation": {
                 "result": {
                     "bVisible": false
@@ -518,6 +599,33 @@
                     "iOrder": -6
                 }
             }
+        },
+        "EN_HENRY_LAW_SECTION" : {
+            "conditions": {
+                "temperature": {
+                    "iOrder": -4
+                },
+				"pressure": {
+                    "iOrder": -3
+                },
+				"remark": {
+                    "iOrder": -2
+                }                                      
+            },        
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder" : -5
+                }
+            },        
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }        
         },
         "EN_STABILITY_IN_SOIL_SECTION": {
             "parameters": {
