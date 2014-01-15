@@ -4,6 +4,7 @@
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 
@@ -95,7 +96,7 @@
 
 		<!-- Page Content
 		================================================== -->
-<div class="jtox-toolkit remove-bottom" data-kit="study" data-substance-uri="${ambit_root}/substance/${substanceUUID}"></div>
+<div class="jtox-toolkit remove-bottom" data-kit="study" data-substance-uri="${ambit_root}/substance/${substanceUUID}" data-config-file="${ambit_root}/scripts/study-config.json"></div>
 		
 
 

@@ -1,0 +1,19 @@
+{
+  "columns": { 
+		"main": { 
+		  "name": { "bVisible": false } 
+		},
+		"parameters": { 
+		},
+		"conditions": { 
+		},
+		"effects": {
+			"endpoint": { "sTitle": "Type", "iOrder": -2 },
+			"result": { "sTitle": "Value", "iOrder": -1 }
+		},
+		"protocol": { 
+		},
+		"interpretation": { 
+		}
+	}
+}
