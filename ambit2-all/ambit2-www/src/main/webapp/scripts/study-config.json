@@ -489,18 +489,18 @@
                 },
                 "species": {
                     "iOrder": -8
-                }                
-            },      
+                }
+            },
             "protocol": {
                 "guideline": {
                     "iOrder": -3
                 }
-            },            
+            },
             "conditions": {
                 "study year": {
                     "iOrder": -1
                 }
-            },       
+            },
             "effects": {
                 "endpoint": {
                     "bVisible": false
@@ -508,7 +508,7 @@
                 "result": {
                     "bVisible": false
                 }
-            },                
+            },
             "interpretation": {
                 "result": {
                     "sTitle": "Interpretation of the results",
@@ -517,7 +517,91 @@
                 "criteria": {
                     "iOrder": -6
                 }
-            }               
+            }
+        },
+        "EN_STABILITY_IN_SOIL_SECTION": {
+            "parameters": {
+                "test type": {
+                    "iOrder": -9
+                }
+            },
+            "conditions": {
+                "soil no.": {
+                    "iOrder": -8
+                },
+                "soil type": {
+                    "iOrder": -7
+                },
+                "oc content": {
+                    "iOrder": -6
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "sTitle": "Half-life",
+                    "iOrder": -5
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -4
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "TO_PHOTOTRANS_AIR_SECTION": {
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "sTitle": "DT50"
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "TO_BIODEG_WATER_SIM_SECTION": {
+            "parameters": {
+                "test type": {
+                    "iOrder": -9
+                }
+            },
+            "conditions": {
+                "sampling time": {
+                    "iOrder": -8
+                },
+                "degradation": {
+                    "iOrder": -7
+                },
+                "degradation parameter": {
+                    "iOrder": -6
+                },
+                "compartment": {
+                    "iOrder": -5
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "sTitle": "Half-life",
+                    "iOrder": -4
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -3
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
         }
     }
 }
