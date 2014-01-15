@@ -1,19 +1,130 @@
 {
-  "columns": { 
-		"main": { 
-		  "name": { "bVisible": false } 
-		},
-		"parameters": { 
-		},
-		"conditions": { 
-		},
-		"effects": {
-			"endpoint": { "sTitle": "Type", "iOrder": -2 },
-			"result": { "sTitle": "Value", "iOrder": -1 }
-		},
-		"protocol": { 
-		},
-		"interpretation": { 
-		}
-	}
+    "columns": {
+        "_": {
+            "main": {
+                "name": {
+                    "bVisible": false
+                }
+            },
+            "parameters": {},
+            "conditions": {},
+            "effects": {},
+            "protocol": {},
+            "interpretation": {}
+        },
+        "PC_BOILING_SECTION" : {
+        	"conditions": {
+        		"atm. pressure" : {"sTitle": "Pressure"}
+        	},
+        	"effects": {
+                "endpoint": {
+					"bVisible" : false
+                },
+                "result": {
+                	"sTitle": "Value",
+                    "iOrder": -1
+                }
+            },
+         	"interpretation": { "result" : {"bVisible" : false} }
+        },
+        "PC_MELTING_SECTION" : {
+            "conditions": {
+            	"decomposition" : { "iOrder": -2},
+            	"sublimation" : { "iOrder": -1}
+            },
+        	"effects": {
+                "endpoint": {
+					"bVisible" : false
+                },
+                "result": {
+                	"sTitle": "Value",
+                    "iOrder": -3
+                }
+            },
+         	"interpretation": { "result" : {"bVisible" : false} }
+        },        
+        "PC_PARTITION_SECTION": {
+            "parameters":	{"method type":{"bVisible" : false}},
+            "conditions": {
+            	"temperature" : { "iOrder": -2},
+            	"ph" : { "iOrder": -1}
+            },
+        	"effects": {
+                "endpoint": {
+					"bVisible" : false
+                },
+                "result": {
+                	"sTitle": "Value",
+                    "iOrder": -3
+                }
+            },
+         	"interpretation": { "result" : {"bVisible" : false} }
+        },
+        "PC_VAPOUR_SECTION" : {
+            "conditions": {
+            	"temperature" : { "iOrder": -2},
+            	"decomposition" : { "iOrder": -1}
+            },
+        	"effects": {
+                "endpoint": {
+					"bVisible" : false
+                },
+                "result": {
+                	"sTitle": "Value",
+                    "iOrder": -3
+                }
+            },
+         	"interpretation": { "result" : {"bVisible" : false} }             
+        },
+        "PC_WATER_SOL_SECTION" : {
+            "parameters":	{"method type":{"bVisible" : false}},
+            "conditions": {
+            	"temperature" : { "iOrder": -3},
+            	"ph" : { "iOrder": -2},
+            	"remark" : { "iOrder": -1}
+            },
+        	"effects": {
+                "endpoint": {
+					"bVisible" : false
+                },
+                "result": {
+                	"sTitle": "Value",
+                    "iOrder": -4
+                }
+            },
+         	"interpretation": { "result" : {"bVisible" : false} }        
+        },
+        "PC_DISSOCIATION_SECTION" : {
+            "conditions": {
+            	"temperature" : { "iOrder": -3}
+            },
+        	"effects": {
+                "endpoint": {
+					"bVisible" : false
+                },
+                "result": {
+                	"sTitle": "pKa Value",
+                    "iOrder": -4
+                }
+            },
+         	"interpretation": { "result" : {"bVisible" : false} }          
+        },
+        "PC_SOL_ORGANIC_SECTION" : {
+            "conditions": {
+                "solvent" : { "iOrder": -4},
+            	"temperature" : { "iOrder": -2},
+            	"remark" : { "iOrder": -1}
+            },
+        	"effects": {
+                "endpoint": {
+					"bVisible" : false
+                },
+                "result": {
+                	"sTitle": "Solubility in solv",
+                    "iOrder": -3
+                }
+            },        
+        	"interpretation": { "result" : {"bVisible" : false} }          
+        } 
+    }
 }

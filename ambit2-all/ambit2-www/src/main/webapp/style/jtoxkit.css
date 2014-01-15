@@ -139,17 +139,6 @@ div.jtox-study-tab .dataTables_wrapper {
 }
 
 /* Start of table-related classes */
-.jtox-toolkit table.dataTable td,
-.jtox-toolkit table.dataTable th {
-  border:1px solid #ccc;
-  overflow: hidden;
-}
-
-.jtox-toolkit table.dataTable th {
-  text-transform: capitalize;
-  border-right: 3px !important;
-}
-
 .jtox-toolkit table.dataTable td.jtox-multi {
   padding: 0px;
 }
@@ -247,7 +236,6 @@ td.jtox-multi table {
   border-bottom: 0px !important;
 }
 
-
 /* Make table helper elements, like paging, filter, etc. in one line...
 */
 .jtox-toolkit .dataTables_filter label input,
@@ -257,8 +245,18 @@ td.jtox-multi table {
   width: auto;  
 }
 
+.jtox-toolkit table.dataTable td,
+.jtox-toolkit table.dataTable th {
+  border:1px solid #ccc;
+  overflow: hidden;
+}
+
+.jtox-toolkit table.dataTable th {
+  text-transform: capitalize;
+}
+
 .jtox-toolkit table.dataTable td .shortened {
-  width: 75px;
+  width: 100%;
   max-height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;  
