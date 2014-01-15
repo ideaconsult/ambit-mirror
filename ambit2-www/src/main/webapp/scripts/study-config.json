@@ -12,176 +12,512 @@
             "protocol": {},
             "interpretation": {}
         },
-        "PC_BOILING_SECTION" : {
-        	"conditions": {
-        		"atm. pressure" : {"sTitle": "Pressure"}
-        	},
-        	"effects": {
+        "PC_BOILING_SECTION": {
+            "conditions": {
+                "atm. pressure": {
+                    "sTitle": "Pressure"
+                }
+            },
+            "effects": {
                 "endpoint": {
-					"bVisible" : false
+                    "bVisible": false
                 },
                 "result": {
-                	"sTitle": "Value",
+                    "sTitle": "Value",
                     "iOrder": -1
                 }
             },
-         	"interpretation": { "result" : {"bVisible" : false} }
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
         },
-        "PC_MELTING_SECTION" : {
+        "PC_MELTING_SECTION": {
             "conditions": {
-            	"decomposition" : { "iOrder": -2},
-            	"sublimation" : { "iOrder": -1}
+                "decomposition": {
+                    "iOrder": -2
+                },
+                "sublimation": {
+                    "iOrder": -1
+                }
             },
-        	"effects": {
+            "effects": {
                 "endpoint": {
-					"bVisible" : false
+                    "bVisible": false
                 },
                 "result": {
-                	"sTitle": "Value",
+                    "sTitle": "Value",
                     "iOrder": -3
                 }
             },
-         	"interpretation": { "result" : {"bVisible" : false} }
-        },        
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
         "PC_PARTITION_SECTION": {
-            "parameters":	{"method type":{"bVisible" : false}},
-            "conditions": {
-            	"temperature" : { "iOrder": -2},
-            	"ph" : { "iOrder": -1}
+            "parameters": {
+                "method type": {
+                    "bVisible": false
+                }
             },
-        	"effects": {
+            "conditions": {
+                "temperature": {
+                    "iOrder": -2
+                },
+                "ph": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
                 "endpoint": {
-					"bVisible" : false
+                    "bVisible": false
                 },
                 "result": {
-                	"sTitle": "Value",
+                    "sTitle": "Value",
                     "iOrder": -3
                 }
             },
-         	"interpretation": { "result" : {"bVisible" : false} }
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
         },
-        "PC_VAPOUR_SECTION" : {
+        "PC_VAPOUR_SECTION": {
             "conditions": {
-            	"temperature" : { "iOrder": -2},
-            	"decomposition" : { "iOrder": -1}
+                "temperature": {
+                    "iOrder": -2
+                },
+                "decomposition": {
+                    "iOrder": -1
+                }
             },
-        	"effects": {
+            "effects": {
                 "endpoint": {
-					"bVisible" : false
+                    "bVisible": false
                 },
                 "result": {
-                	"sTitle": "Value",
+                    "sTitle": "Value",
                     "iOrder": -3
                 }
             },
-         	"interpretation": { "result" : {"bVisible" : false} }             
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
         },
-        "PC_WATER_SOL_SECTION" : {
-            "parameters":	{"method type":{"bVisible" : false}},
-            "conditions": {
-            	"temperature" : { "iOrder": -3},
-            	"ph" : { "iOrder": -2},
-            	"remark" : { "iOrder": -1}
+        "PC_WATER_SOL_SECTION": {
+            "parameters": {
+                "method type": {
+                    "bVisible": false
+                }
             },
-        	"effects": {
+            "conditions": {
+                "temperature": {
+                    "iOrder": -3
+                },
+                "ph": {
+                    "iOrder": -2
+                },
+                "remark": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
                 "endpoint": {
-					"bVisible" : false
+                    "bVisible": false
                 },
                 "result": {
-                	"sTitle": "Value",
+                    "sTitle": "Value",
                     "iOrder": -4
                 }
             },
-         	"interpretation": { "result" : {"bVisible" : false} }        
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
         },
-        "PC_DISSOCIATION_SECTION" : {
+        "PC_DISSOCIATION_SECTION": {
             "conditions": {
-            	"temperature" : { "iOrder": -3}
+                "temperature": {
+                    "iOrder": -3
+                }
             },
-        	"effects": {
+            "effects": {
                 "endpoint": {
-					"bVisible" : false
+                    "bVisible": false
                 },
                 "result": {
-                	"sTitle": "pKa Value",
+                    "sTitle": "pKa Value",
                     "iOrder": -4
                 }
             },
-         	"interpretation": { "result" : {"bVisible" : false} }          
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
         },
-        "PC_SOL_ORGANIC_SECTION" : {
+        "PC_SOL_ORGANIC_SECTION": {
             "conditions": {
-                "solvent" : { "iOrder": -4},
-            	"temperature" : { "iOrder": -2},
-            	"remark" : { "iOrder": -1}
+                "solvent": {
+                    "iOrder": -4
+                },
+                "temperature": {
+                    "iOrder": -2
+                },
+                "remark": {
+                    "iOrder": -1
+                }
             },
-        	"effects": {
+            "effects": {
                 "endpoint": {
-					"bVisible" : false
+                    "bVisible": false
                 },
                 "result": {
-                	"sTitle": "Solubility in solv",
+                    "sTitle": "Solubility in solv",
                     "iOrder": -3
                 }
-            },        
-        	"interpretation": { "result" : {"bVisible" : false} }          
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
         },
-        "EN_ADSORPTION_SECTION" : {
-        	"conditions": {
-        	  	"remark" : { "iOrder": -1},
-              	"% org.carbon" : { "bVisible": false},
-            	"temperature" : { "bVisible": false}
-            },        
-        	"effects": {
+        "EN_ADSORPTION_SECTION": {
+            "conditions": {
+                "remark": {
+                    "iOrder": -1
+                },
+                "% org.carbon": {
+                    "bVisible": false
+                },
+                "temperature": {
+                    "bVisible": false
+                }
+            },
+            "effects": {
                 "endpoint": {
-                	"sTitle": "Kp type",
-					"iOrder": -3
+                    "sTitle": "Kp type",
+                    "iOrder": -3
                 },
                 "result": {
-                	"sTitle": "",
+                    "sTitle": "",
                     "iOrder": -2
                 }
             },
-        	"interpretation": { "result" : {"bVisible" : false} }
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
         },
-        "EN_BIOACCUMULATION_SECTION" : {
+        "EN_BIOACCUMULATION_SECTION": {
             "parameters": {
-				"route" : { "iOrder": -5 },
-            	"species" : { "iOrder": -3 }				
+                "route": {
+                    "iOrder": -5
+                },
+                "species": {
+                    "iOrder": -3
+                }
             },
             "conditions": {
-              	"doses/concentrations" : { "iOrder": -4 },
-              	"bioacc. basis"  : { "iOrder": -2 }
-            },  
-			"effects": {
+                "doses/concentrations": {
+                    "iOrder": -4
+                },
+                "bioacc. basis": {
+                    "iOrder": -2
+                }
+            },
+            "effects": {
                 "endpoint": {
-                	"sTitle": "Bioacc. type",
-					"iOrder": -1
+                    "sTitle": "Bioacc. type",
+                    "iOrder": -1
                 },
                 "result": {
-                	"sTitle": "",
+                    "sTitle": "",
                     "iOrder": 0
                 }
-            },            
-        	"interpretation": { "result" : {"bVisible" : false} }
-        },
-        "TO_BIODEG_WATER_SCREEN_SECTION" : {
-            "parameters": {
-				"test type" : { "iOrder": -4 }
             },
-          	"conditions": {
-              	"sampling time"  : { "iOrder": -3 }
-            },        
-			"effects": {
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "TO_BIODEG_WATER_SCREEN_SECTION": {
+            "parameters": {
+                "test type": {
+                    "iOrder": -4
+                }
+            },
+            "conditions": {
+                "sampling time": {
+                    "iOrder": -3
+                }
+            },
+            "effects": {
                 "endpoint": {
-                	"sTitle": "Degrad. Parameter",
-					"iOrder":-2
+                    "sTitle": "Degrad. Parameter",
+                    "iOrder": -2
                 },
                 "result": {
-                	"sTitle": "Degradation",
+                    "sTitle": "Degradation",
                     "iOrder": -1
                 }
-            }        
+            }
+        },
+        "EC_FISHTOX_SECTION": {
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "TO_ACUTE_ORAL_SECTION": {
+            "parameters": {
+                "species": {
+                    "iOrder": -7
+                }
+            },
+            "conditions": {
+                "sex": {
+                    "iOrder": -4
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -6
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -1
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "iOrder": -3
+                },
+                "criteria": {
+                    "iOrder": -2
+                }
+            }
+        },
+        "TO_EYE_IRRITATION_SECTION": {
+            "parameters": {
+                "type of method": {
+                    "iOrder": -7,
+                    "sTitle": "Method type"
+                },
+                "species": {
+                    "iOrder": -6
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "bVisible": false
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "sTitle": "Interpretation of the results",
+                    "iOrder": -3
+                },
+                "criteria": {
+                    "iOrder": -2
+                }
+            }
+        },
+        "TO_GENETIC_IN_VITRO_SECTION": {
+            "parameters": {
+                "type of genotoxicity": {
+                    "iOrder": -9,
+                    "sTitle": "Genotoxicity type"
+                },
+                "type of study": {
+                    "iOrder": -8,
+                    "sTitle": "Study type"
+                },
+                "metabolic activation system": {
+                    "iOrder": -7,
+                    "sVisible": true
+                },
+                "target gene": {
+                    "iOrder": -6
+                }
+            },
+            "conditions": {
+                "metabolic activation system": {
+                    "iOrder": -4,
+                    "sTitle": "Metabolic activation"
+                },
+                "metabolic activation": {
+                    "iOrder": -4
+                },
+                "species": {
+                    "iOrder": -5,
+                    "sTitle": "Species/strain"
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "sTitle": "Genotoxicity",
+                    "iOrder": -3
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -1
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }
+        },
+        "TO_REPRODUCTION_SECTION": {
+            "parameters": {
+                "species": {
+                    "iOrder": -10
+                },
+                "route of administration": {
+                    "iOrder": -9
+                },
+                "doses/concentrations": {
+                    "sTitle": "Dose",
+                    "iOrder": -8
+                }
+            },
+            "conditions": {
+                "generation": {
+                    "iOrder": -6
+                },
+                "sex": {
+                    "iOrder": -4
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -7
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -3
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "TO_SENSITIZATION_SECTION": {
+            "parameters": {
+                "type of study": {
+                    "iOrder": -8,
+                    "sTitle": "Study type"
+                },
+                "type of method": {
+                    "iOrder": -9,
+                    "sTitle": "Method type"
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -3
+                }
+            },
+            "conditions": {
+                "study year": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "bVisible": false
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "sTitle": "Interpretation of the results",
+                    "iOrder": -7
+                },
+                "criteria": {
+                    "iOrder": -6
+                }
+            }
+        },
+        "TO_SKIN_IRRITATION_SECTION": {
+            "parameters": {
+                "type of method": {
+                    "iOrder": -9,
+                    "sTitle": "Method type"
+                },
+                "species": {
+                    "iOrder": -8
+                }                
+            },      
+            "protocol": {
+                "guideline": {
+                    "iOrder": -3
+                }
+            },            
+            "conditions": {
+                "study year": {
+                    "iOrder": -1
+                }
+            },       
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "bVisible": false
+                }
+            },                
+            "interpretation": {
+                "result": {
+                    "sTitle": "Interpretation of the results",
+                    "iOrder": -7
+                },
+                "criteria": {
+                    "iOrder": -6
+                }
+            }               
         }
     }
 }
