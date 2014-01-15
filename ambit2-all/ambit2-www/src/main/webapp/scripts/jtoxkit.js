@@ -234,14 +234,14 @@ var jToxDataset = (function () {
   var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
     "showExport": true,
     "groups": {
-      "Identifiers" : function(name, features) { return [
+      "Identifiers" : [
         "http://www.opentox.org/api/1.1#Diagram", 
         "http://www.opentox.org/api/1.1#CASRN", 
         "http://www.opentox.org/api/1.1#EINECS",
         "http://www.opentox.org/api/1.1#IUCLID5_UUID"
-      ];},
+      ],
       
-      "Names": function (name, features) { return [
+      "Names": [
         "http://www.opentox.org/api/1.1#ChemicalName",
         "http://www.opentox.org/api/1.1#TradeName",
         "http://www.opentox.org/api/1.1#IUPACName",
@@ -249,7 +249,7 @@ var jToxDataset = (function () {
         "http://www.opentox.org/api/1.1#InChIKey",
         "http://www.opentox.org/api/1.1#InChI",
         "http://www.opentox.org/api/1.1#REACHRegistrationDate"
-      ];},
+      ],
       
       "Calculated": function (name, features) {
         var arr = [];
@@ -334,7 +334,7 @@ var jToxDataset = (function () {
     /* make a tab-based widget with features and grouped on tabs. It relies on filled and processed 'self.features' as well
     as created 'self.groups'.
     */
-    prepareTabs: function (root, isMain, nodeFn) {
+    prepareTabs: function (root, isMain, nodeFn, divFn) {
       var self = this;
       
       var fr = document.createDocumentFragment();
@@ -343,7 +343,6 @@ var jToxDataset = (function () {
       ulEl = document.createElement('ul');
       all.appendChild(ulEl);
 
-      var featNames = {};
       var createATab = function(grId, name) {
         var liEl = document.createElement('li');
         ulEl.appendChild(liEl);
@@ -354,6 +353,8 @@ var jToxDataset = (function () {
         return liEl;
       };
       
+      var emptyList = [];
+      var idx = 0;
       for (var gr in self.groups) {
         var grId = "jtox-ds-" + gr + "-" + self.instanceNo;
         createATab(grId, gr.replace(/_/g, " "));
@@ -361,6 +362,12 @@ var jToxDataset = (function () {
         // now prepare the content...
         var divEl = document.createElement('div');
         divEl.id = grId;
+        all.appendChild(divEl);
+        
+        // .. check if we have something else to add in between
+        if (typeof divFn == 'function') {
+          divEl = divFn(gr, divEl); // it's expected to attach it
+        }
         // ... and fill it.
         for (var i = 0, glen = self.groups[gr].length;i < glen; ++i) {
           var fId = self.groups[gr][i];
@@ -372,7 +379,9 @@ var jToxDataset = (function () {
           }
         }
         
-        all.appendChild(divEl);
+        if (glen == 0)
+          emptyList.push(idx);
+        ++idx;
       }
       
       if (isMain && self.settings.showExport) {
@@ -399,7 +408,7 @@ var jToxDataset = (function () {
       
       // now append the prepared document fragment and prepare the tabs.
       root.appendChild(fr);
-      return $(all).tabs({ collapsible: isMain });
+      return $(all).tabs({ collapsible: isMain, disabled: emptyList});
     },
     
     equalizeTables: function () {
@@ -440,12 +449,11 @@ var jToxDataset = (function () {
         { "sClass": "jtox-hidden jtox-ds-details", "mData": "index", "mRender": function(data, type, full) { return ''; } } // details column
       );
       
-      varCols.push({ "sClass": "jtox-hidden jtox-ds-details", "mData": "index", "mRender": function(data, type, full) { return ''; }  });
+      varCols.push({ "sClass": "jtox-hidden jtox-ds-details borderless paddingless", "mData": "index", "mRender": function(data, type, full) { return ''; }  });
 
       // prepare the function for column switching...      
       var fnShowColumn = function(sel, idx) {
         return function() {
-/*           var cells = $(sel + ' table', self.rootElement).dataTable().fnSetColumnVis(idx, this.checked); */
           var cells = $(sel + ' table tr>*:nth-child(' + (idx + 1) + ')', self.rootElement);
           if (this.checked)
             $(cells).show();
@@ -476,6 +484,10 @@ var jToxDataset = (function () {
         fnExpandCell(cell, toShow);
         var varCell = document.getElementById('jtox-var-' + self.instanceNo + '-' + idx).firstElementChild;
         fnExpandCell(varCell, toShow);
+        
+        var iconCell = $('.jtox-details-open', row);
+        $(iconCell).toggleClass('ui-icon-circle-triangle-s');
+        $(iconCell).toggleClass('ui-icon-circle-triangle-n');
 
         if (toShow) {
           // i.e. we need to show it - put the full sized diagram in the fixed part and the tabs in the variable one...
@@ -483,17 +495,29 @@ var jToxDataset = (function () {
           
           var detDiv = document.createElement('div');
           varCell.appendChild(detDiv);
-          self.prepareTabs(detDiv, false, function (id, name) {
-            if (cls.shortFeatureId(id) == "Diagram")
-              return null;
-              
-            var fEl = jToxKit.getTemplate('#jtox-one-detail');
-            ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full)});
-            return fEl;
-          });
+          var tabList = self.prepareTabs(detDiv, false, 
+            function (id, name) {
+              if (cls.shortFeatureId(id) == "Diagram")
+                return null;
+                
+              var fEl = jToxKit.getTemplate('#jtox-one-detail');
+              ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full)});
+              return fEl;
+            },
+            function (id, parent) {
+              var tabTable = jToxKit.getTemplate('#jtox-details-table');
+              parent.appendChild(tabTable);
+              return tabTable;  
+            }
+          );
           
           var img = new Image();
-          img.onload = function(e) { self.equalizeTables(); };
+          img.onload = function(e) { 
+            self.equalizeTables();
+            $(detDiv).height(varCell.parentNode.clientHeight)
+            // $(detDiv).width(self.varTable.parentNode.clientWidth); // enable this if you want the table to be the width of the visible part.
+            $(tabList).tabs( "option", "heightStyle", "fill" );
+          };
           img.src = full.compound.diagramUri;
           cell.appendChild(img);
         }
@@ -532,8 +556,9 @@ var jToxDataset = (function () {
           }
           else if (!!feature.shorten) {
             col["mRender"] = function(data, type, full) {
-              return (type != "display") ? '' + data : jToxKit.shortenedDiv(data, "Press to copy the value in the clipboard");
+              return (type != "display") ? '' + data : jToxKit.shortenedData(data, "Press to copy the value in the clipboard");
             };
+            col["sWidth"] = "75px";
           }
           
           // finally - assign column switching to the checkbox of main tab.
@@ -600,8 +625,9 @@ var jToxDataset = (function () {
         "bPaginate": true,
         "bProcessing": true,
         "bLengthChange": false,
-				"bAutoWidth": false,
+				"bAutoWidth": true,
         "sDom" : "rt<Fip>",
+        
         "aoColumns": fixCols,
         "bSort": false,
         "fnDrawCallback": function(oSettings) { self.equalizeTables(); },
@@ -643,6 +669,11 @@ var jToxDataset = (function () {
                 "iTotalDisplayRecords": dataset.dataEntry.length,
                 "aaData": dataset.dataEntry
               });
+              
+/*
+              $(self.varTable).dataTable().fnAdjustColumnSizing();
+              $(self.fixTable).dataTable().fnAdjustColumnSizing();
+*/
             }
           });
         }
@@ -657,7 +688,8 @@ var jToxDataset = (function () {
       var grps = self.settings.groups;
       self.groups = {};
       for (var i in grps){
-        self.groups[i] = (grps[i])(i, self.features);
+        var grp = grps[i];
+        self.groups[i] = (typeof grp == "function") ? grp(i, self.features) : grp;
       }
     },
     
@@ -906,8 +938,8 @@ var jToxStudy = (function () {
         { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, "endpoint");  } },   // Effects columns
         { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatLoHigh(data.result, type) }) } },
         { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
-        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "50px", "mData": "owner.company.name", "mRender" : function(data, type, full) { return type != "display" ? '' + data : jToxKit.shortenedDiv(data); }}, 
-        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jToxKit.shortenedDiv(data, "Press to copy the UUID in the clipboard"); } }
+        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "50px", "mData": "owner.company.name", "sDefaultContent": "?"  }, 
+        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jToxKit.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
       ];
   
       var category = study.protocol.category.code;
@@ -1301,12 +1333,20 @@ var jToxStudy = (function () {
     					"mData" : "proportion.real",
     					"mRender" : function(val, type, full) { return type != 'display' ? '' + val.lowerValue : self.formatConcentration(val.lowerPrecision, val.lowerValue, val.unit); }
     				},
-    				{ //7
+    				{ //7,8
     					"sClass" : "center",
     					"sWidth" : "15%",
     					"mData" : "proportion.real",
     					"mRender" : function(val, type, full) { return type != 'display' ? '' + val.upperValue : self.formatConcentration(val.upperPrecision, val.upperValue, val.unit); }
-    				}
+    				},
+            { //9
+    					"sClass" : "center",
+    					"bSortable": false,
+    					"mData" : "component.compound.URI",
+    					"mRender" : function(val, type, full) {
+    					  return !val ? '' : '<a href="' + self.baseUrl + 'substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</span></a>';
+  					}
+	    		}    				
   		    ]
   		  });
 
@@ -1509,7 +1549,11 @@ window.jToxKit = {
     })  
   },
   
-  shortenedDiv: function (data, message, deflen) {
+  copySpan: function (data, message) {
+    return ;
+  },
+  
+  shortenedData: function (data, message, deflen) {
     var res = '';
     
     if (ccLib.isNull(deflen))
@@ -1644,11 +1688,15 @@ jToxKit.templates['dataset-export']  =
 "    </div>" +
 ""; // end of #jtox-ds-feature 
 
-jToxKit.templates['dataset-details']  = 
-"    <div id=\"jtox-one-detail\">" +
-"      <span class=\"right data-field\" data-field=\"title\" style=\"width: 30%\"></span>" +
-"      <span class=\"left data-field\" data-field=\"value\" style=\"width: 70%\"></span>" +
-"    </div>" +
+jToxKit.templates['dataset-one-detail']  = 
+"    <tr id=\"jtox-one-detail\">" +
+"      <th class=\"right data-field\" data-field=\"title\"> ? </th>" +
+"      <td class=\"left data-field\" data-field=\"value\"> ? </td>" +
+"    </tr>" +
+""; // end of #jtox-ds-feature 
+
+jToxKit.templates['dataset-details-table']  = 
+"    <table id=\"jtox-details-table\" class=\"jtox-details-table\"></table>" +
 ""; // end of #jtox-ds-feature 
 
 jToxKit.templates['all-studies']  = 
@@ -1757,6 +1805,7 @@ jToxKit.templates['composition-block']  =
 "            <th>CAS No.</th>" +
 "            <th>Typical concentration</th>" +
 "            <th colspan=\"2\">Concentration ranges</th>" +
+"            <th></th>" +
 "          </tr>" +
 "        </thead>" +
 "      </table>" +
