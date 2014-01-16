@@ -355,6 +355,11 @@ var jToxDataset = (function () {
     }
     else // ok - hide me
       pane.style.display = "none";
+
+    // finally make the query, if Uri is provided      
+    if (self.settings['datasetUri'] !== undefined){
+      self.queryDataset(self.settings['datasetUri']);
+    }
   };
   
   // now follow the prototypes of the instance functions.
@@ -645,47 +650,7 @@ var jToxDataset = (function () {
 
     updateTables: function() {
       var self = this;
-      
-      var fnFilterData = function() {
-        var needle = $('.jtox-ds-control input', self.rootElement).val();
-        if (needle == '')
-          return self.dataset.dataEntry;
-        
-        var dataFeed = [];
-        
-        for (var i = 0, slen = self.dataset.dataEntry.length;i < slen; ++i){
-          var entry = self.dataset.dataEntry[i];
-
-          var match = self.enumerateFeatures(function(fId, gr){
-            var feat = self.features[fId];
-            if (feat.search !== undefined && !feat.search)
-              return false;
-            var val = self.featureValue(fId, entry);
-            return !ccLib.isNull(val) && val.toString().indexOf(needle) >= 0;
-          });
-          
-            
-          if (match)
-            dataFeed.push(entry);
-        }
-        
-        return dataFeed;
-      };
-      
-      var dataFeed = fnFilterData();
-      $(self.fixTable).dataTable().fnClearTable();
-      $(self.varTable).dataTable().fnClearTable();
-      $(self.fixTable).dataTable().fnAddData(dataFeed);
-      $(self.varTable).dataTable().fnAddData(dataFeed);
-  
-      if (self.settings.showTabs){
-        self.suspendEqualization = true;
-        $('.jtox-ds-features .jtox-checkbox', self.rootElement).trigger('change');     
-        self.suspendEqualization = false;
-      }
-      
-      // finally
-      self.equalizeTables();
+      self.filterEntries($('.jtox-ds-control input', self.rootElement).val());
     },
     
     /* Prepare the groups and the features.
@@ -720,10 +685,49 @@ var jToxDataset = (function () {
       return stopped;
     },
     
-    /* Clears the page from any dataset fillings, so a new call can be made.
-    */
-    clearDataset: function () {
+    filterEntries: function(needle) {
       var self = this;
+      
+      if (ccLib.isNull(needle))
+        needle = '';
+      else
+        needle = needle.toLowerCase();
+        
+      var dataFeed = [];
+      if (needle != '') {
+        for (var i = 0, slen = self.dataset.dataEntry.length;i < slen; ++i){
+          var entry = self.dataset.dataEntry[i];
+  
+          var match = self.enumerateFeatures(function(fId, gr){
+            var feat = self.features[fId];
+            if (feat.search !== undefined && !feat.search)
+              return false;
+            var val = self.featureValue(fId, entry);
+            return !ccLib.isNull(val) && val.toString().toLowerCase().indexOf(needle) >= 0;
+          });
+          
+            
+          if (match)
+            dataFeed.push(entry);
+        }
+      }
+      else {
+        dataFeed = self.dataset.dataEntry;
+      }
+      
+      $(self.fixTable).dataTable().fnClearTable();
+      $(self.varTable).dataTable().fnClearTable();
+      $(self.fixTable).dataTable().fnAddData(dataFeed);
+      $(self.varTable).dataTable().fnAddData(dataFeed);
+  
+      if (self.settings.showTabs){
+        self.suspendEqualization = true;
+        $('.jtox-ds-features .jtox-checkbox', self.rootElement).trigger('change');     
+        self.suspendEqualization = false;
+      }
+      
+      // finally
+      self.equalizeTables();
     },
     
     // These two are shortcuts for calling the queryEntries routine
@@ -744,6 +748,9 @@ var jToxDataset = (function () {
       var self = this;
       if (from < 0)
         from = 0;
+      if (size == null)
+        size = self.settings.pageSize;
+        
       // setup the size, as well
       $('.jtox-ds-control select', self.rootElement).val(size);
       self.settings.pageSize = size;
@@ -767,12 +774,9 @@ var jToxDataset = (function () {
             return oldVal + ", " + newVal;
           }, self.settings.pageStart);
 
-          // time to call the supplied function, if any, and update the tables.
-          if (typeof fnComplete == 'function')
-            fnComplete();
-            
+          // ok - go and update the table, filtering the entries, if needed            
           self.updateTables();
-            
+
           // finally - go and update controls if they are visible
           if (self.settings.showControls){
             var pane = $('.jtox-ds-control', self.rootElement)[0];
@@ -793,6 +797,10 @@ var jToxDataset = (function () {
             else
               $(prevBut).addClass('paginate_disabled_previous').removeClass('paginate_enabled_previous');
           }
+
+          // time to call the supplied function, if any.
+          if (typeof fnComplete == 'function')
+            fnComplete();
         }
       });
     },
@@ -803,7 +811,6 @@ var jToxDataset = (function () {
     queryDataset: function (datasetUri) {
       var self = this;
       
-      self.clearDataset();
       self.datasetUri = datasetUri;
       jToxKit.call(self, datasetUri + '/feature', function (feature) {
         if (!!feature) {
@@ -916,7 +923,7 @@ var jToxDataset = (function () {
 **/
 
 var jToxStudy = (function () {
-  var defaultSettings = { 
+  var defaultSettings = {
     configuration: { 
       columns: { 
     		"main" : { },
@@ -1564,12 +1571,13 @@ window.jToxKit = {
 	*/
 	settings: {
   	jsonp: false,                   // whether to use JSONP approach, instead of JSON.
+  	crossDomain: false,             // should it expect cross-domain capabilities for the queries.
   	baseUrl: null,					        // the server actually used for connecting. Part of settings. If not set - attempts to get 'baseUrl' parameter of the query, if not - get's current server.
   	timeout: 15000,                 // the timeout an call to the server should be wait before the attempt is considered error.
   	pollDelay: 200,                 // after how many milliseconds a new attempt should be made during task polling.
   	onConnect: function(s){ },		  // function (service): called when a server request is started - for proper visualization. Part of settings.
-  	onSuccess: function(c, m) { },	// function (code, mess): called on server request successful return. It is called along with the normal processing. Part of settings.
-  	onError: function (c, m) { console.log("jToxKit call error (" + c + "): " + m); },		// function (code, mess): called on server reques error. Part of settings.
+  	onSuccess: function(s, c, m) { },	// function (code, mess): called on server request successful return. It is called along with the normal processing. Part of settings.
+  	onError: function (s, c, m) { if (!!console && !!console.log) console.log("jToxKit call error (" + c + "): " + m + " from request: [" + s + "]"); },		// function (code, mess): called on server reques error. Part of settings.
   },
 	
 	// some handler functions that can be configured from outside with the settings parameter.
@@ -1735,6 +1743,8 @@ window.jToxKit = {
 			if (typeof adata == "boolean")
 				adata = {};
 		}
+		else if (settings.jsonp)
+		  adata = { media: accType };
 		else
 			adata = { };
 
@@ -1746,17 +1756,17 @@ window.jToxKit = {
 		$.ajax(service, {
 			dataType: settings.jsonp ? 'jsonp' : 'json',
 			headers: { Accept: accType },
-			crossDomain: true,
+			crossDomain: settings.crossDomain || settings.jsonp,
 			timeout: settings.timeout,
 			type: method,
 			data: adata,
 			jsonp: settings.jsonp ? 'callback' : false,
 			error: function(jhr, status, error){
-			  ccLib.fireCallback(settings.onError, kit, status, error);
+			  ccLib.fireCallback(settings.onError, kit, service, status, error);
 				callback(null);
 			},
 			success: function(data, status, jhr){
-			  ccLib.fireCallback(settings.onSuccess, kit, status, jhr.statusText);
+			  ccLib.fireCallback(settings.onSuccess, kit, service, status, jhr.statusText);
 				callback(data);
 			}
 		});
