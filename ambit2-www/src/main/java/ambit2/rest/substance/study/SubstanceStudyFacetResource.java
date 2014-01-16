@@ -7,6 +7,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
+import ambit2.db.reporters.QueryReporter;
 import ambit2.db.substance.study.facet.SubstanceStudyFacetQuery;
 import ambit2.rest.facet.FacetResource;
 import ambit2.rest.substance.SubstanceResource;
@@ -37,8 +38,9 @@ public class SubstanceStudyFacetResource extends FacetResource<SubstanceStudyFac
 		q.setFieldname(substanceuuid==null?null:substanceuuid.toString());
 		return q;
 	}
-	protected ambit2.db.reporters.QueryReporter createJSONReporter(Request request) {
-		return new StudySummaryJSONReporter(request);
+	@Override
+	protected QueryReporter createJSONReporter(Request request, String jsonp) {
+		return new StudySummaryJSONReporter(request,jsonp);
 	};
 	
 	@Override

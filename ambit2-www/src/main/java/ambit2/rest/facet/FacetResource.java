@@ -13,6 +13,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
+import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IProcessor;
@@ -24,6 +25,7 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.property.ProfileReader;
 import ambit2.rest.query.QueryResource;
+import ambit2.rest.substance.study.SubstanceStudyJSONReporter;
 
 
 public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> extends	QueryResource<Q,IFacet<String>> {
@@ -72,9 +74,13 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 				return new OutputWriterConvertor(
 						new FacetCSVReporter(getRequest()),
 						MediaType.TEXT_CSV);
+			} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
+					String jsonpcallback = getParams().getFirstValue("jsonp");
+					if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
+					return new OutputWriterConvertor(createJSONReporter(getRequest(),jsonpcallback),MediaType.APPLICATION_JSON,filenamePrefix);						
 			} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 				return new OutputWriterConvertor(
-						createJSONReporter(getRequest()),
+						createJSONReporter(getRequest(),null),
 						MediaType.APPLICATION_JSON,filenamePrefix);				
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 					return new OutputWriterConvertor(
@@ -86,8 +92,8 @@ public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> e
 						MediaType.TEXT_HTML);
 	}
 	
-	protected QueryReporter createJSONReporter(Request request) {
-		return new FacetJSONReporter(request);
+	protected QueryReporter createJSONReporter(Request request, String jsonp) {
+		return new FacetJSONReporter(request,jsonp);
 	}
 	protected FacetHTMLReporter getHTMLReporter(Request request) {
 		return new FacetHTMLReporter(request);

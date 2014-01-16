@@ -163,6 +163,9 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 				
 		try {
 			output.write("\n}");
+			if (jsonpCallback!=null) {
+				output.write(");");
+			}			
 		} catch (Exception x) {}
 	};
 	
@@ -170,6 +173,11 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	@Override
 	public void header(Writer output, Q query) {
 		try {
+			if (jsonpCallback!=null) {
+				output.write(jsonpCallback);
+				output.write("(");
+			} 		
+			
 			output.write("{\n");
 			output.write("\"composition\":[");
 		} catch (Exception x) {
