@@ -88,6 +88,10 @@ public class SubstanceStudyJSONReporter<Q extends IQueryRetrieval<ProtocolApplic
 	public void footer(Writer output, Q query) {
 		try {
 			output.write("\n]\n}");
+			
+			if (jsonpCallback!=null) {
+				output.write(");");
+			}			
 		} catch (Exception x) {}
 	};
 	
@@ -95,6 +99,10 @@ public class SubstanceStudyJSONReporter<Q extends IQueryRetrieval<ProtocolApplic
 	@Override
 	public void header(Writer output, Q query) {
 		try {
+			if (jsonpCallback!=null) {
+				output.write(jsonpCallback);
+				output.write("(");
+			}					
 			output.write("{\"study\":[\n");
 		} catch (Exception x) {
 			x.printStackTrace();
