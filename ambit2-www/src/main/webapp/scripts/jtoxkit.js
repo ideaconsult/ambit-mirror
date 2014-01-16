@@ -110,7 +110,7 @@ var ccLib = {
   	if ($(root).hasClass(filter))
   		processFn(root, json);
   
-    $(root.getElementsByClassName(filter)).each(function (i) { processFn($(this)[0], json); } );
+    $('.' + filter, root).each(function (i) { processFn($(this)[0], json); } );
   
     if (prefix && json.id !== undefined) {
       root.id = prefix + json.id;
@@ -232,57 +232,63 @@ function ccNonEmptyFilter(v) {
 
 var jToxDataset = (function () {
   var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
-    "showExport": true,
-    "groups": {
-      "Identifiers" : [
-        "http://www.opentox.org/api/1.1#Diagram", 
-        "http://www.opentox.org/api/1.1#CASRN", 
-        "http://www.opentox.org/api/1.1#EINECS",
-        "http://www.opentox.org/api/1.1#IUCLID5_UUID"
-      ],
-      
-      "Names": [
-        "http://www.opentox.org/api/1.1#ChemicalName",
-        "http://www.opentox.org/api/1.1#TradeName",
-        "http://www.opentox.org/api/1.1#IUPACName",
-        "http://www.opentox.org/api/1.1#SMILES",
-        "http://www.opentox.org/api/1.1#InChIKey",
-        "http://www.opentox.org/api/1.1#InChI",
-        "http://www.opentox.org/api/1.1#REACHRegistrationDate"
-      ],
-      
-      "Calculated": function (name, features) {
-        var arr = [];
-        for (var f in features) {
-          if (!ccLib.isNull(features[f].source) && !ccLib.isNull(features[f].source.type) && !features[f].source.type.toLowerCase() == "algorithm")
-            arr.push(f);
+    "showTabs": true,         // should we show tabs with groups, or not
+    "showExport": true,       // should we add export tab up there
+    "showControls": true,     // should we show the pagination/navigation controls.
+    "pageSize": 20,           // what is the default (startint) page size.
+    "pageStart": 0,           // what is the default startint point for entries retrieval
+    "configuration": {
+      "groups": {
+        "Identifiers" : [
+          "http://www.opentox.org/api/1.1#Diagram", 
+          "http://www.opentox.org/api/1.1#CASRN", 
+          "http://www.opentox.org/api/1.1#EINECS",
+          "http://www.opentox.org/api/1.1#IUCLID5_UUID"
+        ],
+        
+        "Names": [
+          "http://www.opentox.org/api/1.1#ChemicalName",
+          "http://www.opentox.org/api/1.1#TradeName",
+          "http://www.opentox.org/api/1.1#IUPACName",
+          "http://www.opentox.org/api/1.1#SMILES",
+          "http://www.opentox.org/api/1.1#InChIKey",
+          "http://www.opentox.org/api/1.1#InChI",
+          "http://www.opentox.org/api/1.1#REACHRegistrationDate"
+        ],
+        
+        "Calculated": function (name, features) {
+          var arr = [];
+          for (var f in features) {
+            if (!ccLib.isNull(features[f].source) && !ccLib.isNull(features[f].source.type) && !features[f].source.type.toLowerCase() == "algorithm")
+              arr.push(f);
+          }
+          return arr;
+        },
+        
+        "Other": function (name, features) {
+          var arr = [];
+          for (var f in features) {
+            if (!features[f].used)
+              arr.push(f);
+          }
+          return arr;
         }
-        return arr;
       },
-      
-      "Other": function (name, features) {
-        var arr = [];
-        for (var f in features) {
-          if (!features[f].used)
-            arr.push(f);
-        }
-        return arr;
-      }
-    },
-    "exports": [
-      {type: "chemical/x-mdl-sdfile", icon: "images/sdf.jpg"},
-      {type: "chemical/x-cml", icon: "images/cml.jpg"},
-      {type: "chemical/x-daylight-smiles", icon: "images/smi.png"},
-      {type: "chemical/x-inchi", icon: "images/inchi.png"},
-      {type: "text/uri-list", icon: "images/link.png"},
-      {type: "application/pdf", icon: "images/pdf.png"},
-      {type: "text/csv", icon: "images/excel.png"},
-      {type: "text/plain", icon: "images/excel.png"},
-      {type: "text/x-arff", icon: "images/weka.png"},
-      {type: "text/x-arff-3col", icon: "images/weka.png"},
-      {type: "application/rdf+xml", icon: "images/rdf.gif"},
-      {type: "application/json", icon: "images/json.png"}
-    ]
+      "exports": [
+        {type: "chemical/x-mdl-sdfile", icon: "images/sdf.jpg"},
+        {type: "chemical/x-cml", icon: "images/cml.jpg"},
+        {type: "chemical/x-daylight-smiles", icon: "images/smi.png"},
+        {type: "chemical/x-inchi", icon: "images/inchi.png"},
+        {type: "text/uri-list", icon: "images/link.png"},
+        {type: "application/pdf", icon: "images/pdf.png"},
+        {type: "text/csv", icon: "images/excel.png"},
+        {type: "text/plain", icon: "images/excel.png"},
+        {type: "text/x-arff", icon: "images/weka.png"},
+        {type: "text/x-arff-3col", icon: "images/weka.png"},
+        {type: "application/rdf+xml", icon: "images/rdf.gif"},
+        {type: "application/json", icon: "images/json.png"}
+      ]
+    }
   };
   var instanceCount = 0;
 
@@ -312,7 +318,7 @@ var jToxDataset = (function () {
   	"http://www.opentox.org/api/dblinks#ChEMBL": {title: "ChEMBL", used: true},
   	"http://www.opentox.org/api/dblinks#ToxbankWiki": {title: "Toxban Wiki", used: true},
   	// and one for unified way of processing diagram
-  	"http://www.opentox.org/api/1.1#Diagram": {title: "Diagram", accumulate: "compound.URI", used: true},
+  	"http://www.opentox.org/api/1.1#Diagram": {title: "Diagram", accumulate: "compound.URI", search: false, used: true},
   };
 
   // constructor
@@ -325,8 +331,30 @@ var jToxDataset = (function () {
     self.groups = null; // computed groups, i.e. 'groupName' -> array of feature list, prepared.
     self.fixTable = self.varTable = null; // the two tables - to be initialized in prepareTables.
     self.instanceNo = instanceCount++;
+    self.entriesCount = null;
+    self.suspendEqualization = false;
+    self.orderList = [];
     
     root.appendChild(jToxKit.getTemplate('#jtox-dataset'));
+    
+    // now make some action handlers - on next, prev, filter, etc.
+    var pane = $('.jtox-ds-control', self.rootElement)[0];
+    if (self.settings.showControls) {
+      ccLib.fillTree(pane, { "pagesize": self.settings.pageSize });
+      $('.next-field', pane).on('click', function() { self.nextPage(); });
+      $('.prev-field', pane).on('click', function() { self.prevPage(); });
+      $('select', pane).on('change', function() { self.queryEntries(self.settings.pageStart, parseInt($(this).val())); })
+      var pressTimeout = null;
+      $('input', pane).on('keydown', function() { 
+        if (pressTimeout != null)
+          clearTimeout(pressTimeout);
+        pressTimeout = setTimeout(function(){
+          self.updateTables();
+        }, 350);
+      });
+    }
+    else // ok - hide me
+      pane.style.display = "none";
   };
   
   // now follow the prototypes of the instance functions.
@@ -391,11 +419,11 @@ var jToxDataset = (function () {
         var divEl = jToxKit.getTemplate('#jtox-ds-export')
         divEl.id = tabId;
         all.appendChild(divEl);
-        divEl = divEl.getElementsByClassName('jtox-exportlist')[0];
+        divEl = $('.jtox-exportlist', divEl)[0];
         
         var base = jToxKit.grabBaseUrl(self.datasetUri, "dataset");
-        for (var i = 0, elen = self.settings.exports.length; i < elen; ++i) {
-          var expo = self.settings.exports[i];
+        for (var i = 0, elen = self.settings.configuration.exports.length; i < elen; ++i) {
+          var expo = self.settings.configuration.exports[i];
           var el = jToxKit.getTemplate('#jtox-ds-download');
           divEl.appendChild(el);
           
@@ -413,7 +441,7 @@ var jToxDataset = (function () {
     
     equalizeTables: function () {
       var self = this;
-      if (self.fixTable != null && self.varTable != null) {
+      if (!self.suspendEqualization && self.fixTable != null && self.varTable != null) {
         ccLib.equalizeHeights(self.fixTable.tHead, self.varTable.tHead);
         ccLib.equalizeHeights(self.fixTable.tBodies[0], self.varTable.tBodies[0]);
       }
@@ -437,7 +465,7 @@ var jToxDataset = (function () {
       // enter the first column - the number.
       
       fixCols.push({
-            "mData": "index",
+            "mData": "number",
             "sClass": "middle",
             "mRender": function (data, type, full) { 
               return (type != "display") ?
@@ -446,7 +474,8 @@ var jToxDataset = (function () {
                   '<span class="jtox-details-open ui-icon ui-icon-circle-triangle-s" title="Press to open/close detailed info for the entry"></span>';
             }
         },
-        { "sClass": "jtox-hidden jtox-ds-details", "mData": "index", "mRender": function(data, type, full) { return ''; } } // details column
+        { "sClass": "jtox-hidden", "mData": "index", "sDefaultContent": "-", "bSortable": true, "mRender": function(data, type, full) { return ccLib.isNull(self.orderList) ? 0 : self.orderList[data]; } }, // column used for ordering
+        { "sClass": "jtox-hidden jtox-ds-details", "mData": "index", "sDefaultContent": "-", "mRender": function(data, type, full) { return ''; } } // details column
       );
       
       varCols.push({ "sClass": "jtox-hidden jtox-ds-details borderless paddingless", "mData": "index", "mRender": function(data, type, full) { return ''; }  });
@@ -512,7 +541,7 @@ var jToxDataset = (function () {
           );
           
           var img = new Image();
-          img.onload = function(e) { 
+          img.onload = function(e) {
             self.equalizeTables();
             $(detDiv).height(varCell.parentNode.clientHeight)
             // $(detDiv).width(self.varTable.parentNode.clientWidth); // enable this if you want the table to be the width of the visible part.
@@ -572,120 +601,99 @@ var jToxDataset = (function () {
         colList = varCols;
       }
       
-      var fnQueryInfo = function(aoData) {
-          var info = {};
-          for (var i = 0, dl = aoData.length; i < dl; ++i)
-            info[aoData[i].name] = aoData[i].value;
-          return info;
-      };
-      
-      // some helpers
-      var fnSortDataset = function(info) {
-        var data = [];
-        for (var i = 0;i < info['iSortingCols']; ++i)
-          data.push(info["mDataProp_" + info['iSortCol_' + i]]);
-          
-        if (data.length > 0){
-          self.dataset.dataEntry.sort(function(a, b){
-            for (var i = 0, dl = data.length; i < dl; ++i) {
-              var val1 = ccLib.getJsonValue(a, data[i]);
-              var val2 = ccLib.getJsonValue(b, data[i]);
-              if (val1 < val2)
-                return -1;
-              else if (val1 > val2)
-                return 1;
-            }
-            
-            return 0;
-          });
-        }
-      };
-      
-      var fnSearchDataset = function(needle) {
-        
-      };
-      
-      // now - create the tables - they have common options, except the aoColumns (i.e. column definitions), which are added later.
-      self.varTable = ($(".jtox-ds-variable table", self.rootElement).dataTable({
+      // now - create the tables...
+      self.fixTable = ($(".jtox-ds-fixed table", self.rootElement).dataTable({
         "bPaginate": false,
-        "bProcessing": false,
+        "bProcessing": true,
         "bLengthChange": false,
 				"bAutoWidth": true,
+        "sDom" : "rt",
+        "aoColumns": fixCols,
+        "bSort": false,
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+          // attach the click handling      
+          $('.jtox-details-open', nRow).on('click', function(e) {  fnShowDetails(nRow); });
+          $(nRow).data('jtox-index', iDataIndex);
+        },
+      }))[0];
+
+      self.varTable = ($(".jtox-ds-variable table", self.rootElement).dataTable({
+        "bPaginate": false,
+        "bLengthChange": false,
+				"bAutoWidth": false,
         "sDom" : "rt",
         "bSort": true,
         "aoColumns": varCols,
         "bScrollCollapse": true,
         "fnCreatedRow": function( nRow, aData, iDataIndex ) {
           nRow.id = 'jtox-var-' + self.instanceNo + '-' + iDataIndex;
-        },
-        "fnDrawCallback": function(oSettings) { self.equalizeTables(); }
-      }))[0];
-      
-      self.fixTable = ($(".jtox-ds-fixed table", self.rootElement).dataTable({
-        "bPaginate": true,
-        "bProcessing": true,
-        "bLengthChange": false,
-				"bAutoWidth": true,
-        "sDom" : "rt<Fip>",
-        
-        "aoColumns": fixCols,
-        "bSort": false,
-        "fnDrawCallback": function(oSettings) { self.equalizeTables(); },
-        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-          // attach the click handling      
-          $('.jtox-details-open', nRow).on('click', function(e) {
-            fnShowDetails(nRow);
-          });
+          $(nRow).addClass('jtox-row');
           $(nRow).data('jtox-index', iDataIndex);
         },
-        
-        "bServerSide": true,
-        "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
-          var info = fnQueryInfo(aoData);
-          console.log("Server request with info = " + JSON.stringify(info));
-
-          var page = info.iDisplayStart / info.iDisplayLength;
-/*
-          theForm.Order = tableCols[info.iSortCol_0].mData;
-          theForm.Direction = info.sSortDir_0;
-*/
-          var qUri = ccLib.addParameter(self.datasetUri, "page=" + page + "&pagesize=" + info.iDisplayLength);
-          jToxKit.call(self, qUri, function(dataset){
-            if (!!dataset){
-              self.dataset = cls.processDataset(dataset, self.features, function(oldVal, newVal) {
-                if (ccLib.isNull(oldVal) || newVal.toLowerCase().indexOf(oldVal.toLowerCase()) >= 0)
-                  return newVal;
-                if (oldVal.toLowerCase().indexOf(newVal.toLowerCase()) >= 0)
-                  return oldVal;
-                return oldVal + ", " + newVal;
-              });
-              
-              $(self.varTable).dataTable().fnClearTable();
-              $(self.varTable).dataTable().fnAddData(dataset.dataEntry);
-              
-              fnCallback({
-                "sEcho": info.sEcho,
-                "iTotalRecords": dataset.query.total,
-                "iTotalDisplayRecords": dataset.dataEntry.length,
-                "aaData": dataset.dataEntry
-              });
-              
-/*
-              $(self.varTable).dataTable().fnAdjustColumnSizing();
-              $(self.fixTable).dataTable().fnAdjustColumnSizing();
-*/
-            }
-          });
+        "fnDrawCallback": function(oSettings) {
+          var sorted = $('.jtox-row', this);
+          for (var i = 0, rlen = sorted.length;i < rlen; ++i) {
+            var idx = $(sorted[i]).data('jtox-index');
+            self.orderList[idx] = i;
+          }
+          
+          if (rlen > 0)
+            $(self.fixTable).dataTable().fnSort([[1, "asc"]]);
         }
       }))[0];
     },
 
-    /* Process features as reported in the dataset. Works on result of standalone calls to <datasetUri>/feature
+    updateTables: function() {
+      var self = this;
+      
+      var fnFilterData = function() {
+        var needle = $('.jtox-ds-control input', self.rootElement).val();
+        if (needle == '')
+          return self.dataset.dataEntry;
+        
+        var dataFeed = [];
+        
+        for (var i = 0, slen = self.dataset.dataEntry.length;i < slen; ++i){
+          var entry = self.dataset.dataEntry[i];
+
+          var match = self.enumerateFeatures(function(fId, gr){
+            var feat = self.features[fId];
+            if (feat.search !== undefined && !feat.search)
+              return false;
+            var val = self.featureValue(fId, entry);
+            return !ccLib.isNull(val) && val.toString().indexOf(needle) >= 0;
+          });
+          
+            
+          if (match)
+            dataFeed.push(entry);
+        }
+        
+        return dataFeed;
+      };
+      
+      var dataFeed = fnFilterData();
+      $(self.fixTable).dataTable().fnClearTable();
+      $(self.varTable).dataTable().fnClearTable();
+      $(self.fixTable).dataTable().fnAddData(dataFeed);
+      $(self.varTable).dataTable().fnAddData(dataFeed);
+  
+      if (self.settings.showTabs){
+        self.suspendEqualization = true;
+        $('.jtox-ds-features .jtox-checkbox', self.rootElement).trigger('change');     
+        self.suspendEqualization = false;
+      }
+      
+      // finally
+      self.equalizeTables();
+    },
+    
+    /* Prepare the groups and the features.
     */
     prepareGroups: function () {
       var self = this;
       
-      var grps = self.settings.groups;
+      var grps = self.settings.configuration.groups;
       self.groups = {};
       for (var i in grps){
         var grp = grps[i];
@@ -693,10 +701,100 @@ var jToxDataset = (function () {
       }
     },
     
+    /* Enumerate all recofnized features, caling fnMatch(featureId, groupId) for each of it. 
+    Return true from the function to stop enumeration, which in turn will return true if it was stopped.
+    */
+    enumerateFeatures: function(fnMatch) {
+      var self = this;
+      var stopped = false;
+      for (var gr in self.groups) {
+        for (var i = 0, glen = self.groups[gr].length;i < glen; ++i) {
+          if (stopped = fnMatch(self.groups[gr][i], gr))
+            break;
+        }
+        
+        if (stopped)
+          break;
+      }
+      
+      return stopped;
+    },
+    
     /* Clears the page from any dataset fillings, so a new call can be made.
     */
     clearDataset: function () {
       var self = this;
+    },
+    
+    // These two are shortcuts for calling the queryEntries routine
+    nextPage: function() {
+      var self = this;
+      if (self.entriesCount === null || self.settings.pageStart + self.settings.pageSize < self.entriesCount)
+        self.queryEntries(self.settings.pageStart + self.settings.pageSize);
+    },
+    
+    prevPage: function() {
+      var self = this;
+      if (self.settings.pageStart > 0)
+        self.queryEntries(self.settings.pageStart - self.settings.pageSize);
+    },
+    
+    // make the actual query for the (next) portion of data.
+    queryEntries: function(from, size, fnComplete) {
+      var self = this;
+      if (from < 0)
+        from = 0;
+      // setup the size, as well
+      $('.jtox-ds-control select', self.rootElement).val(size);
+      self.settings.pageSize = size;
+      
+      var qStart = Math.floor(from / size);
+      var qUri = ccLib.addParameter(self.datasetUri, "page=" + qStart + "&pagesize=" + size);
+      jToxKit.call(self, qUri, function(dataset){
+        if (!!dataset){
+          // first initialize the counters.
+          var qSize = dataset.dataEntry.length;
+          qStart = self.settings.pageStart = qStart * self.settings.pageSize;
+            if (qSize < self.settings.pageSize) // we've reached the end!!
+              self.entriesCount = qStart + qSize;
+
+          // then, preprocess the dataset
+          self.dataset = cls.processDataset(dataset, self.features, function(oldVal, newVal) {
+            if (ccLib.isNull(oldVal) || newVal.toLowerCase().indexOf(oldVal.toLowerCase()) >= 0)
+              return newVal;
+            if (oldVal.toLowerCase().indexOf(newVal.toLowerCase()) >= 0)
+              return oldVal;
+            return oldVal + ", " + newVal;
+          }, self.settings.pageStart);
+
+          // time to call the supplied function, if any, and update the tables.
+          if (typeof fnComplete == 'function')
+            fnComplete();
+            
+          self.updateTables();
+            
+          // finally - go and update controls if they are visible
+          if (self.settings.showControls){
+            var pane = $('.jtox-ds-control', self.rootElement)[0];
+            ccLib.fillTree(pane, {
+              "pagestart": qStart + 1,
+              "pageend": qStart + qSize,
+            });
+            
+            var nextBut = $('.next-field', pane);
+            if (self.entriesCount === null || qStart + qSize < self.entriesCount)
+              $(nextBut).addClass('paginate_enabled_next').removeClass('paginate_disabled_next');
+            else
+              $(nextBut).addClass('paginate_disabled_next').removeClass('paginate_enabled_next');
+              
+            var prevBut = $('.prev-field', pane);
+            if (qStart > 0)
+              $(prevBut).addClass('paginate_enabled_previous').removeClass('paginate_disabled_previous');
+            else
+              $(prevBut).addClass('paginate_disabled_previous').removeClass('paginate_enabled_previous');
+          }
+        }
+      });
     },
     
     /* Makes a query to the server for particular dataset, asking for feature list first, so that the table(s) can be 
@@ -712,17 +810,21 @@ var jToxDataset = (function () {
           self.features = feature.feature;
           cls.processFeatures(self.features);
           self.prepareGroups();
-          self.prepareTabs($('.jtox-ds-features', self.rootElement)[0], true, function (id, name){
-            var fEl = jToxKit.getTemplate('#jtox-ds-feature');
-            ccLib.fillTree(fEl, {title: name});
-            $(fEl).data('feature-id', id);
-            return fEl;
-          });
-          self.prepareTables(); // prepare and add the tables - they will make certain queries to fill up with data.
+          if (self.settings.showTabs) {
+            self.prepareTabs($('.jtox-ds-features', self.rootElement)[0], true, function (id, name){
+              var fEl = jToxKit.getTemplate('#jtox-ds-feature');
+              ccLib.fillTree(fEl, {title: name});
+              $(fEl).data('feature-id', id);
+              return fEl;
+            });
+          }
+          
+          self.prepareTables(); // prepare the tables - we need features to build them - we have them!
+          self.equalizeTables(); // to make them nicer, while waiting...
+          self.queryEntries(self.settings.pageStart, self.settings.pageSize); // and make the query for actual data
         }
       });
     },
-    
   }; // end of prototype
   
   // some public, static methods
@@ -784,15 +886,19 @@ var jToxDataset = (function () {
     return features;
   };
   
-  cls.processDataset = function(dataset, features, fnValue) {
+  cls.processDataset = function(dataset, features, fnValue, startIdx) {
     if (ccLib.isNull(features)) {
       cls.processFeatures(dataset.feature);
       features = dataset.feature;
     }
     
+    if (!startIdx)
+      startIdx = 0;
+      
     for (var i = 0, dl = dataset.dataEntry.length; i < dl; ++i) {
       cls.processEntry(dataset.dataEntry[i], features, fnValue);
-      dataset.dataEntry[i].index = i + 1;
+      dataset.dataEntry[i].number = i + 1 + startIdx;
+      dataset.dataEntry[i].index = i;
       var uri = dataset.dataEntry[i].compound.URI;
       uri = uri.replace(/(.+)(\/conformer.*)/, "$1");
       dataset.dataEntry[i].compound.diagramUri = uri + "?media=image/png";
@@ -1116,7 +1222,6 @@ var jToxStudy = (function () {
   				"bAutoWidth": false,
           "sDom" : "rt<Fip>",
           "aoColumns": colDefs,
-          "bScrollCollapse": true,
           "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
             var el = $('.jtox-study-title .data-field', $(this).parents('.jtox-study'))[0];
             el.innerHTML = self.updateCount(el.innerHTML, iTotal);
@@ -1126,7 +1231,6 @@ var jToxStudy = (function () {
             "sProcessing": "<img src='" + self.baseUrl + "images/24x24_ambit.gif' border='0'>",
             "sLoadingRecords": "No studies found.",
             "sZeroRecords": "No studies found.",
-            
             "sEmptyTable": "No studies available.",
             "sInfo": "Showing _TOTAL_ study(s) (_START_ to _END_)",
             "sLengthMenu": 'Display <select>' +
@@ -1152,7 +1256,7 @@ var jToxStudy = (function () {
       var typeSummary = [];
       
       // first - clear all existing tabs
-      var catList = self.rootElement.getElementsByClassName('jtox-study');
+      var catList = $('.jtox-study', self.rootElement);
       while(catList.length > 0) {
         catList[0].parentNode.removeChild(catList[0]);
       }
@@ -1196,16 +1300,16 @@ var jToxStudy = (function () {
         var tab = $(this).parents('.jtox-study-tab')[0];
         
         filterTimeout = setTimeout(function() {
-          var tabList = tab.getElementsByClassName('jtox-study-table');
+          var tabList = $('.jtox-study-table', tab);
           for (var t = 0, tlen = tabList.length; t < tlen; ++t) {
             $(tabList[t]).dataTable().fnFilter(field.value);
           }
         }, 300);
       };
       
-      var tabList = document.getElementsByClassName('jtox-study-tab');
+      var tabList = $('.jtox-study-tab');
       for (var t = 0, tlen = tabList.length;t < tlen; t++){
-        var filterEl = tabList[t].getElementsByClassName('jtox-study-filter')[0].onkeydown = fFilter;
+        var filterEl = $('.jtox-study-filter', tabList[t])[0].onkeydown = fFilter;
       }
     },
     
@@ -1518,7 +1622,7 @@ window.jToxKit = {
 	initTemplates: function() {
 	  var self = this;
 
-    var root = document.getElementsByClassName('jtox-template')[0];
+    var root = $('.jtox-template')[0];
     if (root === undefined) {
   	  var html = '';
     	for (var t in self.templates) {
@@ -1665,6 +1769,18 @@ $(document).ready(function(){
 jToxKit.templates['all-dataset']  = 
 "	  <div id=\"jtox-dataset\">" +
 "	    <div class=\"jtox-ds-features\"></div>" +
+"	    <div class=\"jtox-ds-control\">" +
+"	      Showing from <span class=\"data-field from-field\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field\" data-field=\"pageend\"> ? </span> in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
+"          <option value=\"10\" selected=\"yes\">10</option>" +
+"          <option value=\"20\">20</option>" +
+"          <option value=\"50\">50</option>" +
+"          <option value=\"100\">100</option>" +
+"          <option value=\"200\">200</option>" +
+"          <option value=\"500\">500</option>" +
+"        </select> entries" +
+"	      <a class=\"paginate_disabled_previous prev-field\" tabindex=\"0\" role=\"button\">Previous</a><a class=\"paginate_enabled_next next-field\" tabindex=\"0\" role=\"button\">Next</a>" +
+"	      <input type=\"text\" class=\"filterbox\" placeholder=\"Filter...\" />" +
+"	    </div>" +
 "	    <div class=\"jtox-ds-tables\">" +
 "	      <div class=\"jtox-ds-fixed\">" +
 "	        <table></table>" +
