@@ -63,14 +63,53 @@
 }
 
 .jtox-details-table th {
-  border: 0px !important;
+  border-left: 0px !important;
+  border-top: 0px !important;
+  border-right: 0px !important;
   padding-right: 5px;
   font-weight:bold;
-  width: 125px;  
+  width: 125px;
+  vertical-align: bottom;
 }
 
 .jtox-details-table td {
-  border: 0px !important;
+  border-left: 0px !important;
+  border-top: 0px !important;
+  border-right: 0px !important;
+  padding-left: 10px;
+}
+
+.jtox-ds-control {
+  padding: 10px 10px 0px 10px;
+  vertical-align: baseline;
+}
+
+.jtox-ds-control .paginate_disabled_previous,
+.jtox-ds-control .paginate_enabled_previous,
+.jtox-ds-control .paginate_disabled_next,
+.jtox-ds-control .paginate_enabled_next {
+  float: none;
+}
+
+.jtox-ds-control select {
+  width: 75px;
+}
+
+.jtox-ds-control select,
+.jtox-ds-control input {
+  display: inline-block;
+  font-size: 1.1em;
+}
+
+.jtox-ds-control input {
+  position: absolute;
+  right:10px;
+  width: 25%;
+}
+
+.jtox-ds-control span {
+  font-weight: bold;
+  font-size: 1.1em;
 }
 /* toxtstudy.css - Styling for toxstudy engine
 */
@@ -152,8 +191,11 @@ div.jtox-study-tab.ui-tabs-panel {
 }
 
 div.jtox-study-tab .dataTables_wrapper {
+/*
   overflow-x: scroll;
   overflow-y: visible;
+*/
+  overflow: hidden;  
   width: 100%;
 }
 
