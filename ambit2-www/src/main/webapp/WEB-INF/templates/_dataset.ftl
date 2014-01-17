@@ -83,7 +83,7 @@
 		<!-- Page Content
 		================================================== -->
 
-<div class="jtox-toolkit" data-kit="dataset" data-manual-init="yes" data-show-features="yes" data-show-export="yes" data-jsonp="true"></div>
+<div class="jtox-toolkit" data-kit="dataset" data-manual-init="yes" data-show-features="yes" data-show-export="yes" data-jsonp="false"></div>
 <div class="jtox-template">
 <!--[[ jToxKit.templates['all-dataset'] -->
           <div id="jtox-dataset">
