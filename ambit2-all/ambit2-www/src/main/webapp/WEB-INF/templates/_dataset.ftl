@@ -84,41 +84,6 @@
 		================================================== -->
 
 <div class="jtox-toolkit" data-kit="dataset" data-manual-init="yes" data-show-features="yes" data-show-export="yes" data-jsonp="false"></div>
-<div class="jtox-template">
-<!--[[ jToxKit.templates['all-dataset'] -->
-          <div id="jtox-dataset">
-            <div class="jtox-ds-features"></div>
-            <div class="jtox-ds-tables">
-              <div class="jtox-ds-fixed">
-                <table></table>
-              </div><div class="jtox-ds-variable">
-                <table></table>
-              </div>
-            </div>
-          </div>
-<!-- // end of #jtox-dataset ]]-->
-<!--[[ jToxKit.templates['dataset-one-feature'] -->
-    <div id="jtox-ds-feature" class="jtox-ds-feature"><input type="checkbox" checked="yes" class="jtox-checkbox" /><span class="data-field jtox-title" data-field="title"> ? </span></div>
-<!-- // end of #jtox-ds-feature ]]-->
-<!--[[ jToxKit.templates['dataset-export'] -->
-    <div id="jtox-ds-download" class="jtox-inline jtox-ds-download">
-      <a target="_blank"><img class="borderless"/></a>
-    </div>
-<!-- // end of #jtox-ds-feature ]]-->
-<!--[[ jToxKit.templates['dataset-export'] -->
-    <div id="jtox-ds-export">
-      <div class="jtox-inline">Download dataset as: </div>
-      <div class="jtox-inline jtox-exportlist"></div>
-    </div>
-<!-- // end of #jtox-ds-feature ]]-->
-<!--[[ jToxKit.templates['dataset-details'] -->
-    <div id="jtox-one-detail">
-      <span class="right data-field" data-field="title" style="width: 30%"></span>
-      <span class="left data-field" data-field="value" style="width: 70%"></span>
-    </div>
-<!-- // end of #jtox-ds-feature ]]-->
-  
-  </div>		
 
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
