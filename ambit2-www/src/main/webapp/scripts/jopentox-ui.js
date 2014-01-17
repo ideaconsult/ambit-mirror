@@ -687,8 +687,14 @@ function defineDatasetsTable(root,url,deleteVisible) {
   		        	    	pos =  shortURI.lastIndexOf("/");
   		        	    	if (pos>=0) shortURI = shortURI.substring(pos+1); 
     		        	    var sOut = "<a target='table' href='"+o.aData.URI +
-    		        	   		"?page=0&pagesize=100'title='Click to view the dataset at "+ o.aData.URI+" as atable'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>D"+
-    		        	   		shortURI+"</a><br/>"+val;
+    		        	   		"?page=0&pagesize=100' title='Click to view the dataset at "+ o.aData.URI+" as atable'><span class='ui-icon ui-icon-link' style='float: left; margin: .1em;'></span>D"+
+    		        	   		shortURI+"</a> " ;
+    		        	    
+    		        	    sOut += "<a target='table' href='" + root + "/ui/_dataset?dataset_uri="+encodeURIComponent(o.aData.URI) +
+		        	   		"' title='Click to view the dataset in the new dataset browser'>New view mode</a>";
+    		        	    
+    		        	    sOut += "<br/>"+val;
+    		        	    
     		               var seeAlso =  o.aData["seeAlso"];
     		               if ((seeAlso != undefined) && (seeAlso != null)) {
     		            	   if (seeAlso.indexOf('http')==0)

@@ -1805,29 +1805,29 @@ jToxKit.templates['dataset-one-feature']  =
 "    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span></div>" +
 ""; // end of #jtox-ds-feature 
 
-jToxKit.templates['dataset-export']  = 
+jToxKit.templates['dataset-download']  = 
 "    <div id=\"jtox-ds-download\" class=\"jtox-inline jtox-ds-download\">" +
 "      <a target=\"_blank\"><img class=\"borderless\"/></a>" +
 "    </div>" +
-""; // end of #jtox-ds-feature 
+""; // end of #jtox-ds-download 
 
 jToxKit.templates['dataset-export']  = 
 "    <div id=\"jtox-ds-export\">" +
 "      <div class=\"jtox-inline\">Download dataset as: </div>" +
 "      <div class=\"jtox-inline jtox-exportlist\"></div>" +
 "    </div>" +
-""; // end of #jtox-ds-feature 
+""; // end of #jtox-ds-export 
 
 jToxKit.templates['dataset-one-detail']  = 
 "    <tr id=\"jtox-one-detail\">" +
 "      <th class=\"right data-field\" data-field=\"title\"> ? </th>" +
 "      <td class=\"left data-field\" data-field=\"value\"> ? </td>" +
 "    </tr>" +
-""; // end of #jtox-ds-feature 
+""; // end of #jtox-one-detail 
 
 jToxKit.templates['dataset-details-table']  = 
 "    <table id=\"jtox-details-table\" class=\"jtox-details-table\"></table>" +
-""; // end of #jtox-ds-feature 
+""; // end of #jtox-details-table 
 
 jToxKit.templates['all-studies']  = 
 "	  <div id=\"jtox-studies\">" +
