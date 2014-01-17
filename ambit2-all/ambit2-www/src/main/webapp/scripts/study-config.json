@@ -12,7 +12,28 @@
             "protocol": {},
             "interpretation": {}
         },
-        
+        "GI_GENERAL_INFORM_SECTION" : {
+            "conditions": {
+                "remark": {
+                    "iOrder": -4
+                }
+            },        
+            "effects": {
+                "endpoint": {
+                    "sTitle": "Physical state",
+                    "iOrder" : -5
+                },
+                "result": {
+                    "bVisible": false
+                }
+            },        
+           "interpretation": {
+                "result": {
+                    "sTitle": "Substance type",
+                    "iOrder": -3
+                }
+            }        
+        },
         "PC_BOILING_SECTION": {
             "conditions": {
                 "atm. pressure": {
@@ -219,7 +240,7 @@
                 }
             }
         },
-        "EN_BIOACCU_TERR_SECTION" : {
+        "EN_BIOACCU_TERR_SECTION": {
             "parameters": {
                 "species": {
                     "iOrder": -4
@@ -229,7 +250,7 @@
                 "bioacc. basis": {
                     "iOrder": -3
                 }
-            },   
+            },
             "effects": {
                 "endpoint": {
                     "sTitle": "Bioacc. type",
@@ -239,12 +260,12 @@
                     "sTitle": "",
                     "iOrder": -1
                 }
-            },                       
+            },
             "interpretation": {
                 "result": {
                     "bVisible": false
                 }
-            }        
+            }
         },
         "EN_BIOACCUMULATION_SECTION": {
             "parameters": {
@@ -301,15 +322,15 @@
                 }
             }
         },
-        "TO_HYDROLYSIS_SECTION" : {
+        "TO_HYDROLYSIS_SECTION": {
             "conditions": {
                 "ph": {
                     "iOrder": -3
                 },
-				"temperature": {
+                "temperature": {
                     "iOrder": -2
-                }                
-            },        
+                }
+            },
             "effects": {
                 "endpoint": {
                     "bVisible": false
@@ -318,43 +339,7 @@
                     "sTitle": "DT50",
                     "iOrder": -1
                 }
-            },        
-            "interpretation": {
-                "result": {
-                    "bVisible": false
-                }
-            }        
-        },
-        "EC_FISHTOX_SECTION": {
-            "parameters": {
-                "test medium": {
-                    "iOrder": -7
-                },
-                "test organism": {
-                    "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
-                }
-                                                                 
-            },        
-            "conditions": {
-                "exposure": {
-                    "iOrder": -4
-                },
-                "effect": {
-                    "iOrder": -1
-                }                                  
-            },                 
-            "effects": {
-                "endpoint": {
-                     "iOrder": -3
-                },
-                "result": {
-                    "sTitle": "",
-                    "iOrder": -2
-                }
-            },            	
+            },
             "interpretation": {
                 "result": {
                     "bVisible": false
@@ -370,6 +355,77 @@
             "conditions": {
                 "sex": {
                     "iOrder": -4
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -6
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -1
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "iOrder": -3
+                },
+                "criteria": {
+                    "iOrder": -2
+                }
+            }
+        },
+        "TO_ACUTE_DERMAL_SECTION": {
+            "parameters": {
+                "species": {
+                    "iOrder": -7
+                }
+            },
+            "conditions": {
+                "sex": {
+                    "iOrder": -4
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -6
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -1
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "iOrder": -3
+                },
+                "criteria": {
+                    "iOrder": -2
+                }
+            }
+        },
+        "TO_ACUTE_INHAL_SECTION": {
+            "parameters": {
+                "species": {
+                    "iOrder": -8
+                }
+            },
+            "conditions": {
+                "sex": {
+                    "iOrder": -4
+                },
+                "route of administration": {
+                    "iOrder": -7
                 }
             },
             "effects": {
@@ -523,6 +579,129 @@
                 }
             }
         },
+        "TO_REPEATED_ORAL_SECTION": {
+            "parameters": {
+                "species": {
+                    "iOrder": -10
+                },
+                "route of administration": {
+                    "iOrder": -8
+                },
+                "test type": {
+                    "iOrder": -9
+                },
+                "doses/concentrations": {
+                    "sTitle": "Dose",
+                    "iOrder": -7
+                }
+            },
+            "conditions": {
+                "sex": {
+                    "iOrder": -4
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -6
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -3
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "TO_REPEATED_INHAL_SECTION": {
+            "parameters": {
+                "species": {
+                    "iOrder": -10
+                },
+                "route of administration": {
+                    "iOrder": -8
+                },
+                "test type": {
+                    "iOrder": -9
+                },
+                "doses/concentrations": {
+                    "sTitle": "Dose",
+                    "iOrder": -7
+                }
+            },
+            "conditions": {
+                "sex": {
+                    "iOrder": -4
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -6
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -3
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "TO_REPEATED_DERMAL_SECTION": {
+            "parameters": {
+                "species": {
+                    "iOrder": -10
+                },
+                "route of administration": {
+                    "iOrder": -8
+                },
+                "test type": {
+                    "iOrder": -9
+                },
+                "doses/concentrations": {
+                    "sTitle": "Dose",
+                    "iOrder": -7
+                }
+            },
+            "conditions": {
+                "sex": {
+                    "iOrder": -4
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -6
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -3
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
         "TO_SENSITIZATION_SECTION": {
             "parameters": {
                 "type of study": {
@@ -600,32 +779,32 @@
                 }
             }
         },
-        "EN_HENRY_LAW_SECTION" : {
+        "EN_HENRY_LAW_SECTION": {
             "conditions": {
                 "temperature": {
                     "iOrder": -4
                 },
-				"pressure": {
+                "pressure": {
                     "iOrder": -3
                 },
-				"remark": {
+                "remark": {
                     "iOrder": -2
-                }                                      
-            },        
+                }
+            },
             "effects": {
                 "endpoint": {
                     "bVisible": false
                 },
                 "result": {
                     "sTitle": "Value",
-                    "iOrder" : -5
+                    "iOrder": -5
                 }
-            },        
+            },
             "interpretation": {
                 "result": {
                     "bVisible": false
                 }
-            }        
+            }
         },
         "EN_STABILITY_IN_SOIL_SECTION": {
             "parameters": {
@@ -703,6 +882,391 @@
                 "result": {
                     "sTitle": "",
                     "iOrder": -3
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_FISHTOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_CHRONFISHTOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_DAPHNIATOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_CHRONDAPHNIATOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_ALGAETOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_BACTOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_SOIL_MICRO_TOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_PLANTTOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_SEDIMENTDWELLINGTOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_SOILDWELLINGTOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }
+        },
+        "EC_HONEYBEESTOX_SECTION": {
+            "parameters": {
+                "test medium": {
+                    "iOrder": -7
+                },
+                "test organism": {
+                    "iOrder": -6
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }
+            },
+            "conditions": {
+                "exposure": {
+                    "iOrder": -4
+                },
+                "effect": {
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -3
+                },
+                "result": {
+                    "sTitle": "",
+                    "iOrder": -2
                 }
             },
             "interpretation": {
