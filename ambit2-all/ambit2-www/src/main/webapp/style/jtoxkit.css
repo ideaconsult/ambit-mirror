@@ -21,8 +21,10 @@
   display: inline-block;
   width: 250px;
   border: 0px;
-  padding: 2px;
-  margin: 0px 15px 0px 0px;
+  padding: 0px;
+  margin: 2px 15px 2px 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .jtox-ds-tables .jtox-inline,

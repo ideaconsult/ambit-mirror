@@ -586,10 +586,16 @@ var jToxDataset = (function () {
           var fId = self.groups[gr][i];
           var feature = self.features[fId];
           var col = {
-            "sTitle": feature.title + (ccLib.isNull(feature.units) ? "" : feature.units),
+            "sTitle": feature.title.replace(/_/g, ' ') + (ccLib.isNull(feature.units) ? "" : feature.units),
             "sDefaultContent": "-",
-            "mData": feature.accumulate !== undefined ? feature.accumulate : "values." + fId
           };
+          
+          if (feature.accumulate !== undefined)
+            col["mData"] = feature.accumulate;
+          else {
+            col["mData"] = 'values';
+            col["mRender"] = (function(featureId) { return function(data, type, full) { var val = data[featureId]; return ccLib.isEmpty(val) ? '-' : val }; })(fId);
+          }
           
           // some special cases, like diagram
           var shortId = cls.shortFeatureId(fId);
@@ -858,7 +864,7 @@ var jToxDataset = (function () {
             self.prepareTabs($('.jtox-ds-features', self.rootElement)[0], true, function (id, name, parent){
               var fEl = jToxKit.getTemplate('#jtox-ds-feature');
               parent.appendChild(fEl);
-              ccLib.fillTree(fEl, {title: name});
+              ccLib.fillTree(fEl, {title: name.replace(/_/g, ' ')});
               $(fEl).data('feature-id', id);
               return fEl;
             });
