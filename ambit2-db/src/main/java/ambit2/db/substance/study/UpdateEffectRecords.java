@@ -28,7 +28,7 @@ public class UpdateEffectRecords extends AbstractUpdate<String,EffectRecord> {
 	protected void check() throws AmbitException  {
 		if (getGroup()==null) throw new AmbitException("No document UUID");
 		if (getObject() == null) throw new AmbitException("No measurement");
-		if (getObject().getEndpoint() == null) throw new AmbitException("No endpoint");
+		//if (getObject().getEndpoint() == null) throw new AmbitException("No endpoint");
 	}
 	public String[] getSQL() throws AmbitException {
 		check();
@@ -45,7 +45,7 @@ public class UpdateEffectRecords extends AbstractUpdate<String,EffectRecord> {
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[0]));
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));		
 
-		params1.add(new QueryParam<String>(String.class, getObject().getEndpoint().toString()));
+		params1.add(new QueryParam<String>(String.class, getObject().getEndpoint() ==null?"":getObject().getEndpoint().toString()));
 		params1.add(new QueryParam<String>(String.class, getObject().getConditions()==null?null:getObject().getConditions().toString()));
 		Object unit = getObject().getUnit();
 		if (unit!=null && unit.toString().length()>16) unit = unit.toString().substring(0,15);

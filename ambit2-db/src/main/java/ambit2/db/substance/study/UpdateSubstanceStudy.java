@@ -70,7 +70,7 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		if (getObject() == null) throw new AmbitException("No measurement");
 		if (getObject().getDocumentUUID() == null) throw new AmbitException("No measurement UUID");
 		if (getObject().getProtocol() == null) throw new AmbitException("No protocol");
-		if (getObject().getProtocol().getEndpoint() == null) throw new AmbitException("No endpoint");
+		//if (getObject().getProtocol().getEndpoint() == null) throw new AmbitException("No endpoint");
 		
 	}
 	public String[] getSQL() throws AmbitException {
@@ -89,7 +89,7 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));		
 		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getTopCategory()));
 		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getCategory()));
-		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getEndpoint()));
+		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getEndpoint()==null?"":getObject().getProtocol().getEndpoint()));
 		if ((getObject().getProtocol().getGuideline() == null) || (getObject().getProtocol().getGuideline().size()==0))
 			params1.add(new QueryParam<String>(String.class, ""));
 		else {
