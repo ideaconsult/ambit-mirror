@@ -180,7 +180,11 @@ public class CompoundHTMLbyJSONReporter<Q extends IQueryRetrieval<IStructureReco
 					mime,
 					mime));	
 
-		}			
+		}
+		w.append(String.format(" <a href='%s/ui/_dataset?dataset_uri=%s' title='Test the new dataset browser'>New view mode</a> ",
+				uriReporter.getBaseReference().toString(),
+				Reference.encode(uriReporter.getResourceRef().toString())
+				));		
 		return w.toString();
 	}
 	

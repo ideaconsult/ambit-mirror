@@ -96,9 +96,7 @@
 						$('#qvalue').text(description);
 						
 						$('#qvalue').attr('title',purl.param('search'));
-						
-						$('#quri').attr('href',url);
-						$('#quri').attr('title','AMBIT Search URI: ' + url);
+						$('#quri').attr('title','AMBIT search URI '+url);
 						
 						_ambit['query_uri'] = url;
 						_ambit['data_uri'] = null; 
@@ -106,6 +104,7 @@
 						var qurl = url +  $.param(params,false);
 						downloadFormUpdate(null);
 
+						$('#quri').attr('href',queryService + "/ui/_dataset?dataset_uri=" + encodeURIComponent(qurl));
 						var oTable = defineStructuresTable(qurl, queryService,purl.param('option')=='similarity',"${ambit_root}");
 						
 					});
@@ -146,10 +145,11 @@
 	</ul>
 	<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 		<span id='qtype' ></span>	
-		<a href='#' id='quri' title='#'><span class="ui-icon ui-icon-link" style="margin-right: .3em;"></span></a>
-		<br>
+		<br/>
+		<a href='#' id='quri' title='#'>New view mode</a>
+		<br/>
 		<span id='qthreshold'></span>
-		<br>
+		<br/>
 		<b><span id='qvalue'></span></b>
 		<span id='description' style='display:none;'></span>
 		<span>Max number of hits</span>

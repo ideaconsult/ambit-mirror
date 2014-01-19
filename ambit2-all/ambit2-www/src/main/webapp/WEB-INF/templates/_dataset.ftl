@@ -15,8 +15,10 @@
 	var dataset_uri = purl.param('dataset_uri')===undefined?'${ambit_root}/query/similarity?search=c1ccccc1':purl.param('dataset_uri');
 			
 	$(document).ready(function() {
-
-		$('#current').text(dataset_uri);
+		var duri = dataset_uri;
+		if (duri.length>60) duri = duri.substring(0,60) + "...";
+		$('#current').text(duri);
+		$('#current').prop("href",dataset_uri);
 		$('#dataseturi').val(dataset_uri);	  
 	    datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 
@@ -40,12 +42,12 @@
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
 		<div class="six columns alpha">
-			<div class="remove-bottom h3"   id='current'>
+			<div class="remove-bottom h3" >
 				Dataset browser
 			</div>
 		    <div class='help'>
-		     Type first letters of a dataset name in the box to get a list of datasets.<br/>
-		     Or view <a href='${ambit_root}/dataset?max=1000' target='datasets' title='All datasets list'>All datasets</a>
+		     <a href='#' id='current' title='Old view mode'>Old view mode</a>
+		     
 		    </div>			
 		</div>
 		<div class="four columns omega">
@@ -53,15 +55,21 @@
 				&nbsp;
 			</div>
 		    <div class='h6'>
-		    	Enter dataset name
+		    	Enter dataset URI<br/>
+		    	<span class='help remove-bottom'>
+		    	or type first dataset name letters to get a list of datasets
+		    	</span>
 		    </div>			
 		</div>			
 		<div class="four columns omega">
 			<div class="remove-bottom h3">
 				&nbsp;
 			</div>
-		    <div class='h6'>
-		    	<input type='text' class='dataseturi' id='dataseturi' name='dataset_uri' value='' tabindex='1' >
+		    <div class='h6 remove-bottom'>
+		    	<input type='text' class='dataseturi remove-bottom' id='dataseturi' name='dataset_uri' value='' tabindex='1' title='Type first letters of a dataset name in the box to get a list of datasets.'>
+		    	<span class='help remove-bottom'>
+		    	View <a href='${ambit_root}/dataset?max=1000' target='datasets' title='All datasets list'>All datasets</a>
+		    	</span>
 		    </div>			
 		</div>		
 		<div class="two columns omega">
