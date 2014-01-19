@@ -6,7 +6,11 @@
                     "bVisible": false
                 }
             },
-            "parameters": {},
+            "parameters": {
+                "study year": {
+                    "bVisible": false
+                }
+            },
             "conditions": {},
             "effects": {},
             "protocol": {},
@@ -314,11 +318,11 @@
             "effects": {
                 "endpoint": {
                     "sTitle": "Degrad. Parameter",
-                    "iOrder": -2
+                    "iOrder": -1
                 },
                 "result": {
                     "sTitle": "Degradation",
-                    "iOrder": -1
+                    "iOrder": -2
                 }
             }
         },
@@ -350,6 +354,10 @@
             "parameters": {
                 "species": {
                     "iOrder": -7
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : 0
                 }
             },
             "conditions": {
@@ -384,7 +392,11 @@
             "parameters": {
                 "species": {
                     "iOrder": -7
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : 0
+                }                
             },
             "conditions": {
                 "sex": {
@@ -418,7 +430,11 @@
             "parameters": {
                 "species": {
                     "iOrder": -8
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : 0
+                }                
             },
             "conditions": {
                 "sex": {
@@ -459,7 +475,11 @@
                 },
                 "species": {
                     "iOrder": -6
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : 0
+                }                
             },
             "protocol": {
                 "guideline": {
@@ -500,7 +520,11 @@
                 },
                 "target gene": {
                     "iOrder": -6
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : 0
+                }                  
             },
             "conditions": {
                 "metabolic activation system": {
@@ -531,7 +555,8 @@
             },
             "interpretation": {
                 "result": {
-                    "bVisible": false
+                    "bVisible": true,
+                    "iOrder": -2
                 },
                 "criteria": {
                     "bVisible": false
@@ -549,7 +574,11 @@
                 "doses/concentrations": {
                     "sTitle": "Dose",
                     "iOrder": -8
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : -1
+                }                  
             },
             "conditions": {
                 "generation": {
@@ -593,7 +622,11 @@
                 "doses/concentrations": {
                     "sTitle": "Dose",
                     "iOrder": -7
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : -1
+                }                  
             },
             "conditions": {
                 "sex": {
@@ -634,7 +667,11 @@
                 "doses/concentrations": {
                     "sTitle": "Dose",
                     "iOrder": -7
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : -1
+                }                  
             },
             "conditions": {
                 "sex": {
@@ -675,7 +712,11 @@
                 "doses/concentrations": {
                     "sTitle": "Dose",
                     "iOrder": -7
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : -1
+                }                  
             },
             "conditions": {
                 "sex": {
@@ -711,6 +752,10 @@
                 "type of method": {
                     "iOrder": -9,
                     "sTitle": "Method type"
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : -1
                 }
             },
             "protocol": {
@@ -718,11 +763,7 @@
                     "iOrder": -3
                 }
             },
-            "conditions": {
-                "study year": {
-                    "iOrder": -1
-                }
-            },
+
             "effects": {
                 "endpoint": {
                     "bVisible": false
@@ -749,16 +790,15 @@
                 },
                 "species": {
                     "iOrder": -8
-                }
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : -1
+                }                
             },
             "protocol": {
                 "guideline": {
                     "iOrder": -3
-                }
-            },
-            "conditions": {
-                "study year": {
-                    "iOrder": -1
                 }
             },
             "effects": {
