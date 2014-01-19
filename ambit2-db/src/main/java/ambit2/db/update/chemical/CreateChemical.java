@@ -65,7 +65,7 @@ public class CreateChemical  extends AbstractObjectUpdate<IChemical> {
 		params1.add(new QueryParam<String>(String.class, getObject().getInchi()));
 		String formula = getObject().getFormula();
 		if (formula!=null && formula.length()>64) formula = formula.substring(0,63);
-		params1.add(new QueryParam<String>(String.class, getObject().getFormula()));
+		params1.add(new QueryParam<String>(String.class, formula));
 		params1.add(new QueryParam<String>(String.class, getObject().getInchi()==null?"UNKNOWN":"OK"));	
 		return params1;
 		

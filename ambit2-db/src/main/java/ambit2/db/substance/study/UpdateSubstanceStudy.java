@@ -95,7 +95,7 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		else {
 			Object g = getObject().getProtocol().getGuideline().get(0);
 			if (g!=null && g.toString().length()>255) g = g.toString().substring(0,254);
-			params1.add(new QueryParam<String>(String.class, g.toString()));
+			params1.add(new QueryParam<String>(String.class,g==null?null:g.toString()));
 		}	
 		
 		Object s_uuid = getGroup();

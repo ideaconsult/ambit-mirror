@@ -34,6 +34,7 @@ import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.STRUC_TYPE;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractObjectUpdate;
 
@@ -51,9 +52,9 @@ public class UpdateStructure extends AbstractObjectUpdate<IStructureRecord> {
 	}		
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		List<QueryParam> params1 = new ArrayList<QueryParam>();
-		params1.add(new QueryParam<String>(String.class, getObject().getWritableContent()));		
-		params1.add(new QueryParam<String>(String.class, getObject().getFormat()));
-		params1.add(new QueryParam<String>(String.class, getObject().getType().toString()));
+		params1.add(new QueryParam<String>(String.class, getObject().getWritableContent()==null?"":getObject().getWritableContent()));		
+		params1.add(new QueryParam<String>(String.class, getObject().getFormat()==null?"INC":getObject().getFormat()));
+		params1.add(new QueryParam<String>(String.class,  getObject().getType()==null?STRUC_TYPE.NA.name():getObject().getType().toString()));
 		params1.add(new QueryParam<Integer>(Integer.class, getObject().getIdstructure()));		
 		return params1;
 		
