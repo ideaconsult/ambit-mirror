@@ -106,7 +106,7 @@ public class SubstanceWriterTest extends DbUnitTest {
     Substance: 1
     EndpointRecord: 14
  */
-		Assert.assertEquals(535,records);
+		Assert.assertEquals(404,records);
 
         
         c = getConnection();
