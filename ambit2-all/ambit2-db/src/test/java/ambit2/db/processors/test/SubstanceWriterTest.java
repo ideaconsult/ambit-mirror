@@ -70,31 +70,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 		int records = write(reader,c.getConnection(),new ReferenceSubstanceUUID());
 		reader.close();
         c.close();
-        /*
-        c = getConnection();
-		url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/Benzoicacid.i5z");
-	    reader = getReader(new File(url.getFile()));
-		records += write(reader,c.getConnection(),new ReferenceSubstanceUUID());
-		reader.close();
-        c.close();
-        
-        c = getConnection();
-		URL url = I5ZReader.class.getClassLoader().getResource("net/idea/i5/_5/substance/i5z/formaldehyde.i5z");
-	    reader = getReader(new File(url.getFile()));
-		records += write(reader,c.getConnection(),new ReferenceSubstanceUUID());
-		reader.close();
-        c.close();
-        */
-        
-        /*
-         * NPE at junit.framework.AssertionFailedError: null
-	at junit.framework.Assert.fail(Assert.java:47)
-	at junit.framework.Assert.assertTrue(Assert.java:20)
-	at junit.framework.Assert.assertTrue(Assert.java:27)
-	at ambit2.db.processors.test.SubstanceWriterTest.write(SubstanceWriterTest.java:184)
-	at ambit2.db.processors.test.SubstanceWriterTest.testWriteMultipleFiles_i5d(SubstanceWriterTest.java:94)
-
-        */
+     
         
 /*
 
@@ -106,7 +82,9 @@ public class SubstanceWriterTest extends DbUnitTest {
     Substance: 1
     EndpointRecord: 14
  */
-		Assert.assertEquals(404,records);
+		//Assert.assertEquals(404,records);
+        //None match the  QA criteria for data transfer! 
+        Assert.assertEquals(7,records);
 
         
         c = getConnection();
