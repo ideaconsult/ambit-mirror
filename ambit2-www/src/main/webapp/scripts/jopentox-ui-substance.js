@@ -34,6 +34,7 @@ var substance = {
 				    				"bSortable" : false,
 				    				"bSearchable" : false,
 				    				"mData" : null,
+				    				"sWidth" : "24px",
 				    				"bUseRendered" : false,	
 				    				"fnRender" : function(o,val) {
 				    					return "<span class='ui-icon ui-icon-folder-collapsed zoomstruc' style='float: left; margin: .1em;' title='Click to show substance composition'></span>";
@@ -105,10 +106,9 @@ var substance = {
 			    					"bSortable" : true,
 			    					"bSearchable" : true,
 			    					"mDataProp" : "ownerName",
-			    					"sWidth" : "15%",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return "<div class='shortened' title='"+o.aData["ownerUUID"]+"'>"+val+"</div>";
+			    						return "<div class='longellipsis' title='"+o.aData["ownerUUID"]+"'>"+val+"</div>";
 
 			    					}
 			    				},			    				
