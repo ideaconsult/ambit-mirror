@@ -20,7 +20,7 @@ var ccLib = {
   fireCallback: function (callback, self) {
     if (typeof callback != 'function')
       callback = window[callback];
-    callback.apply((self !== undefined && self != null) ? self : document, Array.prototype.slice.call(arguments, 2));
+    return callback.apply((self !== undefined && self != null) ? self : document, Array.prototype.slice.call(arguments, 2));
   },
   
   /* Function setObjValue(obj, value)Set a given to the given element (obj) in the most appropriate way - be it property - the necessary one, or innetHTML
@@ -266,10 +266,10 @@ var jToxDataset = (function () {
           "http://www.opentox.org/api/1.1#REACHRegistrationDate"
         ],
         
-        "Calculated": function (name, miniset, kit) {
+        "Calculated": function (name, miniset) {
           var arr = [];
           if (!ccLib.isNull(miniset.dataEntry[0].compound.metric))
-            arr.push(kit.settings.metricFeature);
+            arr.push(this.settings.metricFeature);
 
           for (var f in miniset.features) {
             var feat = miniset.features[f];
@@ -283,7 +283,7 @@ var jToxDataset = (function () {
           return arr;
         },
         
-        "Other": function (name, miniset, kit) {
+        "Other": function (name, miniset) {
           var arr = [];
           for (var f in miniset.features) {
             if (!miniset.features[f].used)
@@ -305,10 +305,29 @@ var jToxDataset = (function () {
         {type: "text/x-arff-3col", icon: "images/weka.png"},
         {type: "application/rdf+xml", icon: "images/rdf.gif"},
         {type: "application/json", icon: "images/json.png"}
-      ]
-    }
+      ],
+
+      // These are instance-wide pre-definitions of default baseFeatures as described below.
+      "baseFeatures": {
+      	// and one for unified way of processing diagram
+      	"http://www.opentox.org/api/1.1#Diagram": {title: "Diagram", search: false, used: true, 
+      	  process: function(entry) {
+            entry.compound.diagramUri = entry.compound.URI.replace(/(.+)(\/conformer.*)/, "$1") + "?media=image/png";
+      	  },
+      	  render: function(col){
+      	    col["mData"] = "compound.diagramUri";
+            col["mRender"] = function(data, type, full) {
+              return (type != "display") ? "-" : '<img src="' + data + '" class="jtox-ds-smalldiagram jtox-details-open"/>';  
+            };
+            col["sClass"] = "paddingless";
+            col["sWidth"] = "125px";
+            return col;
+        	}
+      	},
+      	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", accumulate: "compound.metric", search: true, used: true},
+      }
+    },
   };
-  var instanceCount = 0;
 
   /* define the standard features-synonymes, working with 'sameAs' property. Beside the title we define the 'accumulate' property
   as well which is used in processEntry() to accumulate value(s) from given (synonym) properties into specific property of the compound entry itself.
@@ -335,16 +354,15 @@ var jToxDataset = (function () {
   	"http://www.opentox.org/api/dblinks#ChemSpider": {title: "Chem Spider", used: true},
   	"http://www.opentox.org/api/dblinks#ChEMBL": {title: "ChEMBL", used: true},
   	"http://www.opentox.org/api/dblinks#ToxbankWiki": {title: "Toxban Wiki", used: true},
-  	// and one for unified way of processing diagram
-  	"http://www.opentox.org/api/1.1#Diagram": {title: "Diagram", accumulate: "compound.URI", search: false, used: true},
-  	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", accumulate: "compound.metric", search: true, used: true},
   };
+  var instanceCount = 0;
 
   // constructor
   var cls = function (root, settings) {
     var self = this;
     self.rootElement = root;
-    self.settings = $.extend({}, defaultSettings, jToxKit.settings, settings); // i.e. defaults from jToxDataset
+    var newDefs = $.extend(true, { "configuration" : { "baseFeatures": baseFeatures} }, defaultSettings);
+    self.settings = $.extend(true, {}, newDefs, jToxKit.settings, settings); // i.e. defaults from jToxDataset
     self.features = null; // features, as downloaded from server, after being processed.
     self.dataset = null; // the last-downloaded dataset.
     self.groups = null; // computed groups, i.e. 'groupName' -> array of feature list, prepared.
@@ -601,15 +619,10 @@ var jToxDataset = (function () {
           }
           
           // some special cases, like diagram
-          var shortId = cls.shortFeatureId(fId);
-          if (shortId == "Diagram") {
-            col["mRender"] = function(data, type, full) {
-              return (type != "display") ? "-" : '<img src="' + full.compound.diagramUri + '" class="jtox-ds-smalldiagram jtox-details-open"/>';  
-            };
-            col["sClass"] = "paddingless";
-            col["sWidth"] = "125px";
-          }
-          else if (!!feature.shorten) {
+          if (feature.render !== undefined) 
+            col = ccLib.fireCallback(feature.render, self, col);
+          
+          if (!!feature.shorten) {
             col["mRender"] = function(data, type, full) {
               return (type != "display") ? '' + data : jToxKit.shortenedData(data, "Press to copy the value in the clipboard");
             };
@@ -687,10 +700,10 @@ var jToxDataset = (function () {
       self.groups = {};
       for (var i in grps){
         var grp = grps[i];
-        var grpArr = (typeof grp == "function") ? grp(i, miniset, self) : grp;
+        var grpArr = (typeof grp == "function" || typeof grp == "string") ? ccLib.fireCallback(grp, self, i, miniset) : grp;
         self.groups[i] = grpArr;
-        for (var i = 0, glen = self.groups; i < glen; ++i)
-          grpArr[i].used = true;
+        for (var j = 0, glen = grpArr.length; j < glen; ++j)
+          self.features[grpArr[j]].used = true;
       }
     },
     
@@ -863,7 +876,7 @@ var jToxDataset = (function () {
       jToxKit.call(self, ccLib.addParameter(datasetUri, "page=0&pagesize=1"), function (dataset) {
         if (!!dataset) {
           self.features = dataset.feature;
-          cls.processFeatures(self.features);
+          cls.processFeatures(self.features, self.settings.configuration.baseFeatures);
           dataset.features = self.features;
           self.prepareGroups(dataset);
           if (self.settings.showTabs) {
@@ -890,11 +903,11 @@ var jToxDataset = (function () {
   };
   
   cls.processEntry = function (entry, features, fnValue) {
-    for (var fid in entry.values) {
+    for (var fid in features) {
       var feature = features[fid];
       
       // if applicable - accumulate the feature value to a specific location whithin the entry
-      if (feature.accumulate !== undefined) {
+      if (entry.values[fid] !== undefined && feature.accumulate !== undefined) {
         var accArr = feature.accumulate;
         if (!$.isArray(accArr))
           accArr = [accArr];
@@ -910,13 +923,18 @@ var jToxDataset = (function () {
             oldVal.push(newVal);
         }
       }
+      
+      if (feature.process !== undefined)
+        ccLib.fireCallback(feature.process, self, entry, fid);
     }
     
     return entry;
   };
   
-  cls.processFeatures = function(features) {
-    features = $.extend(features, baseFeatures);
+  cls.processFeatures = function(features, bases) {
+    if (bases == null)
+      base = baseFeatures;
+    features = $.extend(features, bases);
     for (var fid in features) {
       // starting from the feature itself move to 'sameAs'-referred features, until sameAs is missing or points to itself
       // This, final feature should be considered "main" and title and others taken from it.
@@ -956,9 +974,6 @@ var jToxDataset = (function () {
       cls.processEntry(dataset.dataEntry[i], features, fnValue);
       dataset.dataEntry[i].number = i + 1 + startIdx;
       dataset.dataEntry[i].index = i;
-      var uri = dataset.dataEntry[i].compound.URI;
-      uri = uri.replace(/(.+)(\/conformer.*)/, "$1");
-      dataset.dataEntry[i].compound.diagramUri = uri + "?media=image/png";
     }
     
     return dataset;
