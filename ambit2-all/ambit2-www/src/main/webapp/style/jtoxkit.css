@@ -195,12 +195,12 @@ div.jtox-study-tab.ui-tabs-panel {
 }
 
 div.jtox-study-tab .dataTables_wrapper {
-/*
-  overflow-x: scroll;
-  overflow-y: visible;
-*/
   overflow: hidden;  
   width: 100%;
+}
+
+div.jtox-study-tab table.dataTable th {
+  text-transform: capitalize;
 }
 
 /* Start of table-related classes */
@@ -322,10 +322,6 @@ td.jtox-multi table {
 .jtox-toolkit table.dataTable th {
   border:1px solid #ccc;
   overflow: hidden;
-}
-
-.jtox-toolkit table.dataTable th {
-  text-transform: capitalize;
 }
 
 .jtox-toolkit .shortened {

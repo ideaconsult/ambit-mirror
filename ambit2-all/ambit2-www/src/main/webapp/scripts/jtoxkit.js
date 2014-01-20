@@ -252,6 +252,7 @@ var jToxDataset = (function () {
     "showControls": true,     // should we show the pagination/navigation controls.
     "pageSize": 20,           // what is the default (startint) page size.
     "pageStart": 0,           // what is the default startint point for entries retrieval
+    "metricFeature": "http://www.opentox.org/api/1.1#Similarity",   // This is the default metric feature, if no other is specified
     "configuration": {
       "groups": {
         "Identifiers" : [
@@ -271,19 +272,27 @@ var jToxDataset = (function () {
           "http://www.opentox.org/api/1.1#REACHRegistrationDate"
         ],
         
-        "Calculated": function (name, features) {
+        "Calculated": function (name, miniset, kit) {
           var arr = [];
-          for (var f in features) {
-            if (!ccLib.isNull(features[f].source) && !ccLib.isNull(features[f].source.type) && !features[f].source.type.toLowerCase() == "algorithm")
+          if (!ccLib.isNull(miniset.dataEntry[0].compound.metric))
+            arr.push(kit.settings.metricFeature);
+
+          for (var f in miniset.features) {
+            var feat = miniset.features[f];
+            if (ccLib.isNull(feat.source) || ccLib.isNull(feat.source.type))
+              continue;
+            else if (feat.source.type.toLowerCase() == "algorithm" || feat.source.type.toLowerCase() == "model") {
+              feat.used = true;
               arr.push(f);
+            }
           }
           return arr;
         },
         
-        "Other": function (name, features) {
+        "Other": function (name, miniset, kit) {
           var arr = [];
-          for (var f in features) {
-            if (!features[f].used)
+          for (var f in miniset.features) {
+            if (!miniset.features[f].used)
               arr.push(f);
           }
           return arr;
@@ -334,6 +343,7 @@ var jToxDataset = (function () {
   	"http://www.opentox.org/api/dblinks#ToxbankWiki": {title: "Toxban Wiki", used: true},
   	// and one for unified way of processing diagram
   	"http://www.opentox.org/api/1.1#Diagram": {title: "Diagram", accumulate: "compound.URI", search: false, used: true},
+  	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", accumulate: "compound.metric", search: true, used: true},
   };
 
   // constructor
@@ -677,14 +687,14 @@ var jToxDataset = (function () {
     
     /* Prepare the groups and the features.
     */
-    prepareGroups: function () {
+    prepareGroups: function (miniset) {
       var self = this;
       
       var grps = self.settings.configuration.groups;
       self.groups = {};
       for (var i in grps){
         var grp = grps[i];
-        var grpArr = (typeof grp == "function") ? grp(i, self.features) : grp;
+        var grpArr = (typeof grp == "function") ? grp(i, miniset, self) : grp;
         self.groups[i] = grpArr;
         for (var i = 0, glen = self.groups; i < glen; ++i)
           grpArr[i].used = true;
@@ -859,7 +869,8 @@ var jToxDataset = (function () {
         if (!!dataset) {
           self.features = dataset.feature;
           cls.processFeatures(self.features);
-          self.prepareGroups();
+          dataset.features = self.features;
+          self.prepareGroups(dataset);
           if (self.settings.showTabs) {
             self.prepareTabs($('.jtox-ds-features', self.rootElement)[0], true, function (id, name, parent){
               var fEl = jToxKit.getTemplate('#jtox-ds-feature');
