@@ -213,6 +213,12 @@ a.topLinks {
     padding: 0px;
 }
 
+.longellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+}
+
 .wrap {
 	 word-wrap:break-word;
 }	
