@@ -64,6 +64,16 @@ var ccLib = {
     return empty;
   },
   
+  enumObject: function(obj, fn, idx, level) {
+    if (level == null)
+      level = 0;
+    if (typeof obj != "object")
+      fn(obj, idx, level);
+    else
+      for (var i in obj)
+        this.enumObject(obj[i], fn, i, level + 1);
+  },
+  
   setJsonValue: function (json, field, val) {
     if (field !== undefined){
       try {
@@ -317,7 +327,7 @@ var jToxDataset = (function () {
       	  render: function(col){
       	    col["mData"] = "compound.diagramUri";
             col["mRender"] = function(data, type, full) {
-              return (type != "display") ? "-" : '<img src="' + data + '" class="jtox-ds-smalldiagram jtox-details-open"/>';  
+              return (type != "display") ? "-" : '<a target="_blank" href="' + full.compound.URI + '"><img src="' + data + '" class="jtox-ds-smalldiagram"/></a>';
             };
             col["sClass"] = "paddingless";
             col["sWidth"] = "125px";
@@ -326,7 +336,7 @@ var jToxDataset = (function () {
       	},
       	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", accumulate: "compound.metric", search: true, used: true},
       }
-    },
+    }
   };
 
   /* define the standard features-synonymes, working with 'sameAs' property. Beside the title we define the 'accumulate' property
@@ -435,18 +445,26 @@ var jToxDataset = (function () {
         all.appendChild(divEl);
         
         // .. check if we have something else to add in between
-        if (typeof divFn == 'function') {
+        if (typeof divFn == 'function')
           divEl = divFn(gr, divEl); // it's expected to attach it
-        }
-        // ... and fill it.
-        for (var i = 0, glen = self.groups[gr].length;i < glen; ++i) {
-          var fId = self.groups[gr][i];
-          if (!ccLib.isNull(self.features[fId].title)) {
-            nodeFn(fId, self.features[fId].title, divEl);
-          }
-        }
 
-        if (glen == 0)
+        // ... and fill it.
+        var grp = self.groups[gr];
+        var empty = true;
+        ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
+          empty = false;
+          if (idx == "name") {
+            if (isMain)
+              nodeFn(null, fId, divEl);
+          }
+          else if (!isMain || level == 1) {
+            var title = self.features[fId].title;
+            if (!ccLib.isNull(title))
+              nodeFn(fId, title, divEl);
+          }
+        });
+
+        if (empty)
           emptyList.push(idx);
         ++idx;
       }
@@ -474,7 +492,7 @@ var jToxDataset = (function () {
       
       // now show the whole stuff and mark the disabled tabs
       all.style.display = "block";
-      return $(all).tabs({ collapsible: isMain, disabled: emptyList});
+      return $(all).tabs({ collapsible: isMain, disabled: emptyList, heightStyle: isMain ? "content" : "fill" });
     },
     
     equalizeTables: function () {
@@ -562,28 +580,27 @@ var jToxDataset = (function () {
           
           var detDiv = document.createElement('div');
           varCell.appendChild(detDiv);
-          var tabList = self.prepareTabs(detDiv, false, 
-            function (id, name, parent) {
-              var fEl = null;
-              if (cls.shortFeatureId(id) != "Diagram") {
-                fEl = jToxKit.getTemplate('#jtox-one-detail');
-                parent.appendChild(fEl);
-                ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full)});
-              }
-              return fEl;
-            },
-            function (id, parent) {
-              var tabTable = jToxKit.getTemplate('#jtox-details-table');
-              parent.appendChild(tabTable);
-              return tabTable;  
-            }
-          );
           
           var img = new Image();
           img.onload = function(e) {
             self.equalizeTables();
             $(detDiv).height(varCell.parentNode.clientHeight - 1);
-            $(tabList).tabs( "option", "heightStyle", "fill" );
+            self.prepareTabs(detDiv, false, 
+              function (id, name, parent) {
+                var fEl = null;
+                if (id != null && cls.shortFeatureId(id) != "Diagram") {
+                  fEl = jToxKit.getTemplate('#jtox-one-detail');
+                  parent.appendChild(fEl);
+                  ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full)});
+                }
+                return fEl;
+              },
+              function (id, parent) {
+                var tabTable = jToxKit.getTemplate('#jtox-details-table');
+                parent.appendChild(tabTable);
+                return tabTable;  
+              }
+            );
           };
           img.src = full.compound.diagramUri;
           cell.appendChild(img);
@@ -599,12 +616,16 @@ var jToxDataset = (function () {
       // make a query for all checkboxes in the main tab, so they can be traversed in parallel with the features and 
       // a change handler added.
       var checkList = $('.jtox-ds-features .jtox-checkbox', self.rootElement);
-      var checkIdx = 0;
+      var checkIdx = -1;
       
       // now proceed to enter all other columns
-      for (var gr in self.groups){
-        for (var i = 0, glen = self.groups[gr].length; i < glen; ++i) {
-          var fId = self.groups[gr][i];
+      for (var gr in self.groups) {
+        ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
+          if (idx == "name") {
+            ++checkIdx;
+            return;
+          }
+            
           var feature = self.features[fId];
           var col = {
             "sTitle": feature.title.replace(/_/g, ' ') + (ccLib.isNull(feature.units) ? "" : feature.units),
@@ -630,11 +651,13 @@ var jToxDataset = (function () {
           }
           
           // finally - assign column switching to the checkbox of main tab.
-          $(checkList[checkIdx++]).on('change', fnShowColumn(colList == fixCols ? '.jtox-ds-fixed' : '.jtox-ds-variable', colList.length))
+          if (level == 1)
+            ++checkIdx;
+          $(checkList[checkIdx]).on('change', fnShowColumn(colList == fixCols ? '.jtox-ds-fixed' : '.jtox-ds-variable', colList.length))
           
           // and push it into the proper list.
           colList.push(col);
-        }
+        });
         
         // after the first one we switch to variable table's columns.
         colList = varCols;
@@ -702,8 +725,7 @@ var jToxDataset = (function () {
         var grp = grps[i];
         var grpArr = (typeof grp == "function" || typeof grp == "string") ? ccLib.fireCallback(grp, self, i, miniset) : grp;
         self.groups[i] = grpArr;
-        for (var j = 0, glen = grpArr.length; j < glen; ++j)
-          self.features[grpArr[j]].used = true;
+        ccLib.enumObject(grpArr, function(fid, idx){ if (idx != "name") self.features[fid].used = true; })
       }
     },
     
@@ -884,7 +906,6 @@ var jToxDataset = (function () {
               var fEl = jToxKit.getTemplate('#jtox-ds-feature');
               parent.appendChild(fEl);
               ccLib.fillTree(fEl, {title: name.replace(/_/g, ' ')});
-              $(fEl).data('feature-id', id);
               return fEl;
             });
           }
