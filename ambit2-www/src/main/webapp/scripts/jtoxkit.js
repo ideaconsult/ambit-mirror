@@ -195,7 +195,7 @@ var ccLib = {
   },
   
   addParameter: function (url, param) {
-    return url + (url.indexOf('?') > 0 ? "&" : "?") + param;
+    return url + (url.indexOf('?') > 0 ? "&" : "?") + encodeURIComponent(param);
   },
   
   removeParameter: function (url, param) {
