@@ -124,7 +124,8 @@ div.jtox-substance {
   display: block;
   font-size: small;
   border-radius: 5px;
-  padding: 5px 5px 35px 5px;
+  padding: 5px 5px 5px 5px;
+  margin-bottom: 5px;
 }
 
 .jtox-study.folded table,
