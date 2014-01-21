@@ -195,7 +195,7 @@ var ccLib = {
   },
   
   addParameter: function (url, param) {
-    return url + (url.indexOf('?') > 0 ? "&" : "?") + encodeURIComponent(param);
+    return url + (url.indexOf('?') > 0 ? "&" : "?") + param;
   },
   
   removeParameter: function (url, param) {
@@ -483,7 +483,7 @@ var jToxDataset = (function () {
           var el = jToxKit.getTemplate('#jtox-ds-download');
           divEl.appendChild(el);
           
-          $('a', el)[0].href = ccLib.addParameter(self.datasetUri, "media=" + expo.type);
+          $('a', el)[0].href = ccLib.addParameter(self.datasetUri, "media=" + encodeURIComponent(expo.type));
           var img = el.getElementsByTagName('img')[0];
           img.alt = img.title = expo.type;
           img.src = self.baseUrl + expo.icon;
