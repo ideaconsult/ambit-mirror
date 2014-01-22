@@ -185,9 +185,7 @@ var ccLib = {
         
       for (i = 0;i < tabs.length ; ++i) {
         if (tabs[i] != null) {
-          if (tabs[i].offsetHeight < height)
-            $(tabs[i]).height(height);
-            
+          $(tabs[i]).height(height);
           tabs[i] = tabs[i].nextElementSibling;
         }
       }
