@@ -256,6 +256,20 @@ td.jtox-multi table {
 	background: linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* W3C */
 }
 
+.jtox-toolkit sup {
+  font-size: smaller;
+  vertical-align: super;
+}
+
+.jtox-toolkit sub {
+  font-size: smaller;
+  vertical-align: sub;
+}
+
+.jtox-toolkit sup a {
+  text-decoration: none;
+}
+
 .jtox-template {
   display: none !important;
 }
@@ -276,11 +290,11 @@ td.jtox-multi table {
   width: 100%;
 }
 
-.middle {
+.jtox-toolkit .middle {
   vertical-align: middle !important;
 }
 
-.right {
+.jtox-toolkit .right {
   text-align: right !important;
 }
 

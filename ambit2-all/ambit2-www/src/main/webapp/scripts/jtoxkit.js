@@ -113,7 +113,10 @@ var ccLib = {
         if ( !!format && (typeof window[format] == 'function') ) {
           value = window[format](value, json);
         }
-        self.setObjValue(el, value);
+        if ($(el).hasClass('attribute'))
+          $(el).attr($(el).data('attribute'), value);
+        else // the 'normal' value
+          self.setObjValue(el, value);
       }
   	}
 	
@@ -510,6 +513,12 @@ var jToxDataset = (function () {
         return data.values[fId];
     },
     
+    featureUri: function (fId) {
+      var self = this;
+      var origId = self.features[fId].originalId;
+      return ccLib.isNull(origId) ? fId : origId;
+    },
+    
     prepareTables: function() {
       var self = this;
       var varCols = [];
@@ -519,14 +528,14 @@ var jToxDataset = (function () {
       // enter the first column - the number.
       
       fixCols.push({
-            "mData": "number",
-            "sClass": "middle",
-            "mRender": function (data, type, full) { 
-              return (type != "display") ?
-                '' + data : 
-                "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>" + 
-                  '<span class="jtox-details-open ui-icon ui-icon-circle-triangle-e" title="Press to open/close detailed info for the entry"></span>';
-            }
+          "mData": "number",
+          "sClass": "middle",
+          "mRender": function (data, type, full) { 
+            return (type != "display") ?
+              '' + data : 
+              "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>" + 
+                '<span class="jtox-details-open ui-icon ui-icon-circle-triangle-e" title="Press to open/close detailed info for the entry"></span>';
+          }
         },
         { "sClass": "jtox-hidden", "mData": "index", "sDefaultContent": "-", "bSortable": true, "mRender": function(data, type, full) { return ccLib.isNull(self.orderList) ? 0 : self.orderList[data]; } }, // column used for ordering
         { "sClass": "jtox-hidden jtox-ds-details paddingless", "mData": "index", "sDefaultContent": "-", "mRender": function(data, type, full) { return ''; } } // details column
@@ -589,7 +598,7 @@ var jToxDataset = (function () {
                 if (id != null && cls.shortFeatureId(id) != "Diagram") {
                   fEl = jToxKit.getTemplate('#jtox-one-detail');
                   parent.appendChild(fEl);
-                  ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full)});
+                  ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full), uri: self.featureUri(id)});
                 }
                 return fEl;
               },
@@ -903,7 +912,7 @@ var jToxDataset = (function () {
             self.prepareTabs($('.jtox-ds-features', self.rootElement)[0], true, function (id, name, parent){
               var fEl = jToxKit.getTemplate('#jtox-ds-feature');
               parent.appendChild(fEl);
-              ccLib.fillTree(fEl, {title: name.replace(/_/g, ' ')});
+              ccLib.fillTree(fEl, {title: name.replace(/_/g, ' '), uri: self.featureUri(id)});
               return fEl;
             });
           }
@@ -963,11 +972,15 @@ var jToxDataset = (function () {
       for (;;){
         if (feature.sameAs === undefined || feature.sameAs == null || feature.sameAs == fid || fid == base + feature.sameAs)
           break;
-        if (features[feature.sameAs] !== undefined)
+        if (features[feature.sameAs] !== undefined){
           feature = features[feature.sameAs];
+          feature.originalId = fid;
+        }
         else {
-          if (features[base + feature.sameAs] !== undefined)
+          if (features[base + feature.sameAs] !== undefined) {
             feature = features[base + feature.sameAs];
+            feature.originalId = fid;
+          }
           else
             break;
         }
@@ -1695,7 +1708,7 @@ window.jToxKit = {
 	  
   	// now scan all insertion divs
   	$('.jtox-toolkit').each(function(i) {
-    	var dataParams = $.extend(true, $(this).data(), self.settings);
+    	var dataParams = $.extend(true, self.settings, $(this).data());
     	if (!dataParams.manualInit){
     	  var el = this;
     	  // first, get the configuration, if such is passed
@@ -1736,7 +1749,7 @@ window.jToxKit = {
 	getTemplate: function(selector) {
   	var el = $(selector, this.templateRoot)[0];
   	if (!!el){
-    	var el = $(selector, this.templateRoot)[0].cloneNode(true);
+    	var el = el.cloneNode(true);
       el.removeAttribute('id');
     }
     return el;
@@ -1885,7 +1898,7 @@ jToxKit.templates['all-dataset']  =
 ""; // end of #jtox-dataset 
 
 jToxKit.templates['dataset-one-feature']  = 
-"    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span></div>" +
+"    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span><sup><a target=\"_blank\" class=\"data-field attribute\" data-attribute=\"href\" data-field=\"uri\">?</a></sup></div>" +
 ""; // end of #jtox-ds-feature 
 
 jToxKit.templates['dataset-download']  = 
@@ -1905,7 +1918,7 @@ jToxKit.templates['dataset-one-detail']  =
 "    <table>" +
 "      <tbody>" +
 "        <tr id=\"jtox-one-detail\">" +
-"          <th class=\"right data-field\" data-field=\"title\"> ? </th>" +
+"          <th class=\"right\"><span class=\"data-field\" data-field=\"title\"> ? </span><sup><a target=\"_blank\" class=\"data-field attribute\" data-attribute=\"href\" data-field=\"uri\">?</a></sup></th>" +
 "          <td class=\"left data-field\" data-field=\"value\"> ? </td>" +
 "        </tr>" +
 "      </tbody>" +
