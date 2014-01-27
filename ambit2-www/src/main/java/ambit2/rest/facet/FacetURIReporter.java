@@ -95,7 +95,7 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 			return String.format("%s%s/%s%s",
 							root,
 							OwnerSubstanceFacetResource.owner,
-							item.getValue().toString(),
+							item==null?"ALL":item.getValue()==null?"ALL":item.getValue().toString(),
 							SubstanceStructuresResource.structure
 						    );			
 		} else 
