@@ -123,8 +123,16 @@ public class SDFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		try {
 			//some software doesn't like $$$$\n at the end of the file, so writing the \n at the beginning of a record
 			if (!first) output.write(wlinesep);
-			first = false;	
-			String content = getSDFContent(item);
+			first = false;
+			String content = null;
+			try {
+				content = getSDFContent(item);
+			} catch (Exception x) {
+				content = null;
+				logger.log(java.util.logging.Level.SEVERE,
+						String.format("Error reading structure at /compound/%d/structure/%d : %s",
+									item.getIdchemical(),item.getIdstructure(),x.getMessage()));
+			}
 			if (content==null) return null;
 			int pi = content.indexOf(sdfrecord);
 			content = pi>0?content.substring(0,pi-1):content;
