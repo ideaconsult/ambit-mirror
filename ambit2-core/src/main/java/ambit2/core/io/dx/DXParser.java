@@ -192,15 +192,15 @@ public class DXParser extends DefaultAmbitProcessor<IStructureRecord, IStructure
 				PropertyAnnotation a = new PropertyAnnotation();
 				a.setPredicate("DX Superendpoint");	a.setObject(superEndpoint.getTextValue()); pa.add(a);
 				try {
-				ontology = dxRoot.get(json_fields.endpoints.name()).get(superEndpoint.getTextValue()).get(json_fields.ot.name());
-				} catch (Exception x) {x.printStackTrace();}
+					ontology = dxRoot.get(json_fields.endpoints.name()).get(superEndpoint.getTextValue()).get(json_fields.ot.name());
+				} catch (Exception x) { logger.log(Level.WARNING,x.getMessage() + " " + superEndpoint.getTextValue());}
 			}			
 			if (endpoint != null) {
 				PropertyAnnotation a = new PropertyAnnotation();
 				a.setPredicate("DX endpoint");	a.setObject(split[1]); pa.add(a);
 				try {
 					ontology = dxRoot.get(json_fields.endpoints.name()).get(endpoint.getTextValue()).get(json_fields.ot.name());
-					} catch (Exception x) {}
+				} catch (Exception x) { logger.log(Level.WARNING,x.getMessage() + " " + endpoint.getTextValue());}
 			}
 			if (ontology!=null) property.setLabel(ontology.getTextValue());
 			for (PropertyAnnotation a : categories) pa.add(a);
