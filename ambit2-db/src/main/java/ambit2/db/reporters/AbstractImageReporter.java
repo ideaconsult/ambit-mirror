@@ -212,7 +212,8 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 				}
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
+			logger.log(Level.WARNING,String.format("Error creating image /compound/%d/conformer/%d\t%s",
+						item.getIdchemical(),item.getIdstructure(),x.getMessage()));
 		}
 		//depict.setImageMap(new StringBuilder());
 		imageWrapper.setImage(depict.getImage(ac));
@@ -224,11 +225,15 @@ public abstract class AbstractImageReporter<Q extends IQueryRetrieval<IStructure
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		try {
 			CachedImage<OUTPUT> result = getCached(item);
-			if (result.getImage() == null) {
+			if (result.getImage() == null) try {
 				result = createImage(item);
 				if (result.getImage()!=null) {
 					cache(item,result.getImage());
 				}
+			} catch (Exception x) {
+				result.setImage(null);
+				logger.log(Level.WARNING,String.format("Error creating image /compound/%d/conformer/%d\t%s",
+						item.getIdchemical(),item.getIdstructure(),x.getMessage()));
 			}
 			if (result.getImage()==null) 
 				result.setImage((BufferedImage) depict.getDefaultImage());
