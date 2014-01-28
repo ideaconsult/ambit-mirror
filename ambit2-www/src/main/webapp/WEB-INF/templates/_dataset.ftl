@@ -6,7 +6,9 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config-dataset.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
+
 
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
@@ -22,8 +24,8 @@
 		$('#dataseturi').val(dataset_uri);	  
 	    datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 
-	  	 var ds = new jToxDataset($(".jtox-toolkit")[0]);
-         ds.queryDataset(dataset_uri);
+	  	var ds = new jToxDataset($(".jtox-toolkit")[0],config_dataset);
+        ds.queryDataset(dataset_uri);
 	});
 	</script>
 
@@ -91,7 +93,12 @@
 		<!-- Page Content
 		================================================== -->
 
-<div class="jtox-toolkit" data-kit="dataset" data-manual-init="yes" data-show-features="yes" data-show-export="yes" data-jsonp="false"></div>
+<div class="jtox-toolkit" data-kit="dataset" 
+	data-manual-init="yes" 
+	data-show-features="yes" 
+	data-cross-domain="false"	
+	data-show-export="yes" 
+	data-jsonp="false"></div>
 
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
