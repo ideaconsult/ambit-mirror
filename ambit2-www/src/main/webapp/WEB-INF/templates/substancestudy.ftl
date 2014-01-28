@@ -96,7 +96,11 @@
 
 		<!-- Page Content
 		================================================== -->
-<div class="jtox-toolkit remove-bottom" data-kit="study" data-substance-uri="${ambit_root}/substance/${substanceUUID}"  data-config-file="${ambit_root}/scripts/study-config.json" data-jsonp="true"></div>
+<div class="jtox-toolkit remove-bottom" 
+	data-kit="study" 
+	data-substance-uri="${ambit_root}/substance/${substanceUUID}"
+	data-cross-domain="false"	
+	data-config-file="${ambit_root}/scripts/config-study.js" data-jsonp="false"></div>
 		
 
 
