@@ -10,19 +10,25 @@ public class SLNConst
 	public static final int LO_OR = 2;
 	public static final int LO_ANDLO = 3;
 	public static final int LO = 1000;
-
-	//Atom Attributes (predefined)   A_ATTR_*
+	
 	
 	//public static char AtomAttrChars[] = {'*' //doublet spin state};
 
+	//Atom Attributes (predefined)   A_ATTR_*
 	public static final int A_ATTR_atomtID = 0;	 // doesn't equal to atomNumber
-	public static final int A_ATTR_Charge = 1;	 // specifies formal charge -/+n
+	public static final int A_ATTR_charge = 1;	 // specifies formal charge -/+n
 	public static final int A_ATTR_I = 2;		 // specifies atom isotope
-	public static final int A_ATTR_fCharge = 3;	// specifies a partial charge
-	public static final int A_ATTR_s = 4; 		//specifies stereochemistry at tetrahedral atoms !!! R,S,N,I,D,L,U,E,R,M
-	public static final int A_ATTR_spin = 5;	//specifies that the atom is a radical !!! s, d, t
+	public static final int A_ATTR_fcharge = 3;	// specifies a partial charge
+	public static final int A_ATTR_s = 4; 		//specifies stereo-chemistry at tetrahedral atoms !!! R,S,N,I,D,L,U,E,R,M
+	public static final int A_ATTR_spin = 5;	//specifies that the atom is a radical !!! s, d, t	
 	
 	public static final int A_ATTR_USER_DEFINED = 500;
+	
+	
+	//Atom stereo-chemistry values (for attribute s)
+	public static final int A_STEREO_R = 0;
+	public static final int A_STEREO_S = 1;
+	
 	
 	//Bond Attributes (predefined)   B_ATTR_*
 	
