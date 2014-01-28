@@ -36,12 +36,13 @@ public class SLNParser
 	int curComponent;
 	public int numFragments;
 	public int maxCompNumber;
+	
 
 	int curChar;	
 	SLNAtom prevAtom;
-	int curBondType;
+	//int curBondType;
 	int nChars;
-	SMARTSBond curBond;
+	SLNBond curBond;
 
 
 
@@ -74,7 +75,7 @@ public class SLNParser
 		curChar = 0;
 		brackets.clear();
 		curBond = null;
-		curBondType = SLNConst.BT_UNDEFINED;
+		//curBondType = SLNConst.BT_UNDEFINED;
 		indexes.clear();
 	}
 
@@ -301,7 +302,9 @@ public class SLNParser
 		if (prevAtom != null)
 		{	
 			addBond(prevAtom, atom);
-		}	
+		}
+		
+		prevAtom = atom;
 	}
 
 	void parseSpecialSymbol()
@@ -370,36 +373,26 @@ public class SLNParser
 	}
 
 	void addBond(SLNAtom atom0, SLNAtom atom1)
-	{
-		//TODO sln bond types
-		switch (curBondType)
-		{
-		case SLNConst.BT_ANY:
-			curBond = new AnyOrderQueryBond();				
-			break;
-		case SLNConst.BT_SINGLE:				
-			curBond = new SingleNonAromaticBond();
-			break;
-		case SLNConst.BT_DOUBLE:
-			curBond = new DoubleNonAromaticBond();									
-			break;
-		case SLNConst.BT_TRIPLE:	
-			curBond = new OrderQueryBond(IBond.Order.TRIPLE);									
-			break;					
-		case SLNConst.BT_AROMATIC:
-			curBond = new AromaticQueryBond();				
-			break;			
-		case SLNConst.BT_UNDEFINED:
-			curBond = new SingleOrAromaticBond();								
-			break;
+	{	
+		SLNBond newBond;
+		if (curBond == null)
+		{	
+			newBond = new SLNBond();
+			newBond.bondType = SLNConst.BT_SINGLE;
 		}
+		else
+			newBond = curBond;
+		
 		
 		
 		IAtom[] atoms = new SLNAtom[2];
 	    atoms[0] = atom0;
 	    atoms[1] = atom1;
-	    curBond.setAtoms(atoms);
-	    container.addBond(curBond);
+	    newBond.setAtoms(atoms);
+	    container.addBond(newBond);
+	    
+	    //nullify info to read next bond
+	    curBond = null;
 	}
 
 	void parseBondExpression()

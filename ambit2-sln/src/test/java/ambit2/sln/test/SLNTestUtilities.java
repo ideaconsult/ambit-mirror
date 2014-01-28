@@ -14,7 +14,7 @@ public class SLNTestUtilities
 	{
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
-		tu.testSLN("CH3CH(OCHCH3)CH3");
+		tu.testSLN("CH3CH(OCH(CH3)CH3)CH3");
 	}
 	
 	public void testSLN(String sln)
@@ -28,9 +28,11 @@ public class SLNTestUtilities
 			return;
 		}
 		 
-		System.out.println("Original  sln: " + sln); 
+		System.out.println("Inpit  sln: " + sln); 
+		System.out.println("Atom attributes:");		
 		System.out.println(SLNHelper.getAtomsAttributes(container));
-		//System.out.println(SLNHelper.getBondsAttributes(container));
+		System.out.println("Bond attributes:");
+		System.out.println(SLNHelper.getBondsAttributes(container));
 		
 	}
 	
