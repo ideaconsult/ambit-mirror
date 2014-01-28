@@ -13,9 +13,20 @@ public class SLNConst
 
 	//Atom Attributes (predefined)   A_ATTR_*
 	
+	//public static char AtomAttrChars[] = {'*' //doublet spin state};
+
+	public static final int A_ATTR_atomtID = 0;	 // doesn't equal to atomNumber
+	public static final int A_ATTR_Charge = 1;	 // specifies formal charge -/+n
+	public static final int A_ATTR_I = 2;		 // specifies atom isotope
+	public static final int A_ATTR_fCharge = 3;	// specifies a partial charge
+	public static final int A_ATTR_s = 4; 		//specifies stereochemistry at tetrahedral atoms !!! R,S,N,I,D,L,U,E,R,M
+	public static final int A_ATTR_spin = 5;	//specifies that the atom is a radical !!! s, d, t
+	
 	public static final int A_ATTR_USER_DEFINED = 500;
 	
 	//Bond Attributes (predefined)   B_ATTR_*
+	
+	public static final int B_ATTR_s = 1;	//indicates stereochemistry about a doouble bond !!! C,T,E,Z,N,I,N,I,U,U*
 	
 	public static final int B_ATTR_USER_DEFINED = 500;
 	
@@ -40,6 +51,7 @@ public class SLNConst
 		}
 		return(-1);
 	}	
+	
 	
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
