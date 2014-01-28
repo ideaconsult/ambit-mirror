@@ -31,8 +31,8 @@ public class SLNParser
 	ArrayList<SLNParserError> errors = new ArrayList<SLNParserError>();
 	TreeMap<Integer,RingClosure> indexes = new TreeMap<Integer,RingClosure>();
 
-	//Work variables for Component Level Grouping
-	boolean FlagCLG = false; 
+	//Work variables for Component Level Grouping (inspired from SMARTS)
+	boolean FlagComponentLevelGrouping = false; 
 	int curComponent;
 	public int numFragments;
 	public int maxCompNumber;
@@ -166,6 +166,7 @@ public class SLNParser
 				String atomExpression = extractAtomExpression();
 				
 				System.out.println("AtExpr " + atomExpression);
+				
 				//TODO analyze atomExpression
 			}	
 		
