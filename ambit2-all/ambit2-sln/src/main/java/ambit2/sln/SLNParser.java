@@ -214,6 +214,10 @@ public class SLNParser
 		return sln.substring(curChar);
 	}
 	
+	void parseAtomToken()
+	{
+		
+	}
 
 	void parseAtomIndex()   //!!!
 	{
@@ -320,25 +324,21 @@ public class SLNParser
 			parseBondExpression();
 			break;		
 
-		case '(':			
+		//TODO
+		//doesn't work for nested branches 
+		case '(':							
 			if (prevAtom == null)
-			{	
-				if (FlagCLG)
-				{
-					if (curComponent > 0)
-					{	
-						newError("Incorrect nested componet brackets", curChar+1,"");
-					}
-					else
-					{
-						brackets.push(prevAtom);
-						maxCompNumber++;
-						curComponent = maxCompNumber;
-					}
-
+			{
+				if (curComponent > 0)
+				{	
+					newError("Incorrect nested componet brackets", curChar+1,"");
 				}
 				else
-					newError("Component Level Grouping is off: incorrect openning brackect", curChar+1,"");
+				{
+					brackets.push(prevAtom);
+					maxCompNumber++;
+					curComponent = maxCompNumber;
+				}
 			}	
 			else			
 				brackets.push(prevAtom);

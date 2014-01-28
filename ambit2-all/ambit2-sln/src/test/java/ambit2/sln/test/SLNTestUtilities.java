@@ -14,7 +14,7 @@ public class SLNTestUtilities
 	{
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
-		tu.testSLN("CH-C=O");
+		tu.testSLN("CH3CH(OCHCH3)CH3");
 	}
 	
 	public void testSLN(String sln)
@@ -30,6 +30,7 @@ public class SLNTestUtilities
 		 
 		System.out.println("Original  sln: " + sln); 
 		System.out.println(SLNHelper.getAtomsAttributes(container));
+		//System.out.println(SLNHelper.getBondsAttributes(container));
 		
 	}
 	
