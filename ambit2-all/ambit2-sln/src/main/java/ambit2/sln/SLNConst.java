@@ -32,7 +32,7 @@ public class SLNConst
 	
 
 	//Bond types
-	public static char BondChars[] = {'-','=','#',':'};
+	public static char BondChars[] = {'~','-','=','#',':'};
 	
 	public static final int BT_ANY = 0;
 	public static final int BT_SINGLE = 1;
