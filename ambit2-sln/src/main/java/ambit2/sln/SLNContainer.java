@@ -12,7 +12,7 @@ public class SLNContainer extends QueryAtomContainer
 	//Flags that determine what types of objects are stored in SLNContainer
 	private boolean IsStructureOnly = false;
 	
-	
+	private SLNContainerAttributes attributes = new SLNContainerAttributes(); 
 	
 	public boolean getIsStructureOnly()
 	{
