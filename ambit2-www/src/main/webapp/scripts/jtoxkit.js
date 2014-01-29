@@ -258,6 +258,16 @@ var jToxDataset = (function () {
     "pageSize": 20,           // what is the default (startint) page size.
     "pageStart": 0,           // what is the default startint point for entries retrieval
     "metricFeature": "http://www.opentox.org/api/1.1#Similarity",   // This is the default metric feature, if no other is specified
+    "fnAccumulate": function(fId, oldVal, newVal) {
+      if (ccLib.isNull(newVal))
+        return oldVal;
+      newVal = newVal.toString();
+      if (ccLib.isNull(oldVal) || newVal.toLowerCase().indexOf(oldVal.toLowerCase()) >= 0)
+        return newVal;
+      if (oldVal.toLowerCase().indexOf(newVal.toLowerCase()) >= 0)
+        return oldVal;
+      return oldVal + ", " + newVal;
+    },
     "configuration": {
       "groups": {
         "Identifiers" : [
@@ -735,6 +745,9 @@ var jToxDataset = (function () {
       self.groups = {};
       for (var i in grps){
         var grp = grps[i];
+        if (ccLib.isNull(grp))
+          continue;
+          
         var grpArr = (typeof grp == "function" || typeof grp == "string") ? ccLib.fireCallback(grp, self, i, miniset) : grp;
         self.groups[i] = grpArr;
         ccLib.enumObject(grpArr, function(fid, idx){ if (idx != "name") self.features[fid].used = true; })
@@ -843,13 +856,7 @@ var jToxDataset = (function () {
               self.entriesCount = qStart + qSize;
 
           // then, preprocess the dataset
-          self.dataset = cls.processDataset(dataset, self.features, function(oldVal, newVal) {
-            if (ccLib.isNull(oldVal) || newVal.toLowerCase().indexOf(oldVal.toLowerCase()) >= 0)
-              return newVal;
-            if (oldVal.toLowerCase().indexOf(newVal.toLowerCase()) >= 0)
-              return oldVal;
-            return oldVal + ", " + newVal;
-          }, self.settings.pageStart);
+          self.dataset = cls.processDataset(dataset, self.features, self.settings.fnAccumulate, self.settings.pageStart);
 
           // ok - go and update the table, filtering the entries, if needed            
           self.updateTables();
@@ -948,8 +955,8 @@ var jToxDataset = (function () {
         for (var v = 0; v < accArr.length; ++v){
           var oldVal = ccLib.getJsonValue(entry, accArr[v]);
           var newVal = entry.values[fid];
-          if (typeof fnValue === "function")
-            ccLib.setJsonValue(entry, accArr[v], fnValue(oldVal, newVal));
+          if (!ccLib.isNull(fnValue))
+            ccLib.setJsonValue(entry, accArr[v], ccLib.fireCallback(fnValue, null, fid, oldVal, newVal));
           else if (!$.isArray(oldVal))
             ccLib.setJsonValue(entry, accArr[v], ccLib.isNull(oldVal) ? newVal : oldVal + newVal);
           else
