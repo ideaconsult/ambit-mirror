@@ -1,43 +1,39 @@
 package ambit2.reactions;
 
 import java.util.ArrayList;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainer;
-
 
 
 public class Fragmentation 
 {	
-	public static final String defaultFragmenationRules[] = new String[]{
-		"[*;R]-[*;!R]"
-	};
 	
-	ArrayList<String> fragmenationRules = null;
+	private ArrayList<FragmentationRule> fragmenationRules = null;
 	
 	public Fragmentation()
 	{	
+		setFragmenationRules(DefaultFragmentationRules.getRules());
 	}
 	
-	public void setFragmenationRules(ArrayList<String> fragmenationRules)
+	public Fragmentation(ArrayList<FragmentationRule> fragmenationRules)
+	{	
+		this.fragmenationRules = fragmenationRules;
+	}
+	
+	public void setFragmenationRules(ArrayList<FragmentationRule> fragmenationRules)
 	{
 		this.fragmenationRules = fragmenationRules;
 	}
 	
-	public ArrayList<String> getFragmenationRules()
+	public ArrayList<FragmentationRule> getFragmenationRules()
 	{
 		return fragmenationRules;
 	}
-		
-	public void disconectBonds(IAtomContainer container, ArrayList<IBond> bonds)
-	{
-		for (IBond bo: bonds)
-			container.removeBond(bo);
-	}
 	
-	public void disconectBonds(IAtomContainer container, int bondIndex[])
+	public void apply(IAtomContainer container)
 	{
-		for (int i = 0; i < bondIndex.length; i++)
-			container.removeBond(i);
+		//TODO
 	}
+		
+	
 	
 }
