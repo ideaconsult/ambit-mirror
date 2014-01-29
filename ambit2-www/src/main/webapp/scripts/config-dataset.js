@@ -17,7 +17,17 @@ var config_dataset = {
 	                col["sWidth"] = "150px";
 	                return col;
 	            }
-	        }
+	        },
+		"http://www.wikipathways.org/index.php/Pathway" :  {
+			"title": "Wiki Pathways",
+			"accumulate" : "compound.wikipathway",
+			"render" : function(col) {
+				col["mRender"] = function(data, type, full) {
+					return (type != "display") ? "-" : full.compound.wikipathway;
+				};
+				return col;
+			}
+		}
 	    },
 	    "groups": {
 	          "Identifiers" : [
@@ -34,7 +44,7 @@ var config_dataset = {
 	                    "http://www.opentox.org/api/1.1#InChIKey",
 	                    "http://www.opentox.org/api/1.1#InChI",
 	                    "http://www.opentox.org/api/1.1#REACHRegistrationDate"
-	          ]
+ 		  ]
         }
 	}    
 }
