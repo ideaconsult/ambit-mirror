@@ -258,7 +258,7 @@ var jToxDataset = (function () {
     "pageSize": 20,           // what is the default (startint) page size.
     "pageStart": 0,           // what is the default startint point for entries retrieval
     "metricFeature": "http://www.opentox.org/api/1.1#Similarity",   // This is the default metric feature, if no other is specified
-    "fnAccumulate": function(fId, oldVal, newVal) {
+    "fnAccumulate": function(fId, oldVal, newVal, features) {
       if (ccLib.isNull(newVal))
         return oldVal;
       newVal = newVal.toString();
@@ -294,10 +294,9 @@ var jToxDataset = (function () {
 
           for (var f in miniset.features) {
             var feat = miniset.features[f];
-            if (ccLib.isNull(feat.source) || ccLib.isNull(feat.source.type))
+            if (ccLib.isNull(feat.source) || ccLib.isNull(feat.source.type) || !!feat.basic)
               continue;
             else if (feat.source.type.toLowerCase() == "algorithm" || feat.source.type.toLowerCase() == "model") {
-              feat.used = true;
               arr.push(f);
             }
           }
@@ -307,11 +306,8 @@ var jToxDataset = (function () {
         "Other": function (name, miniset) {
           var arr = [];
           for (var f in miniset.features) {
-            var sameAs = jToxDataset.findSameAs(f, miniset.features);
-            if (!miniset.features[f].used && !miniset.features[sameAs].used) {
+            if (!miniset.features[f].used && !miniset.features[f].basic)
               arr.push(f);
-              miniset.features[sameAs].used = true;
-            }
           }
           return arr;
         }
@@ -334,11 +330,11 @@ var jToxDataset = (function () {
       // These are instance-wide pre-definitions of default baseFeatures as described below.
       "baseFeatures": {
       	// and one for unified way of processing diagram
-      	"http://www.opentox.org/api/1.1#Diagram": {title: "Diagram", search: false, used: true, 
-      	  process: function(entry) {
+      	"http://www.opentox.org/api/1.1#Diagram": {title: "Diagram", search: false,
+      	  process: function(entry, fId, features) {
             entry.compound.diagramUri = entry.compound.URI.replace(/(.+)(\/conformer.*)/, "$1") + "?media=image/png";
       	  },
-      	  render: function(col){
+      	  render: function(col, fId){
       	    col["mData"] = "compound.diagramUri";
             col["mRender"] = function(data, type, full) {
               return (type != "display") ? "-" : '<a target="_blank" href="' + full.compound.URI + '"><img src="' + data + '" class="jtox-ds-smalldiagram"/></a>';
@@ -348,36 +344,36 @@ var jToxDataset = (function () {
             return col;
         	}
       	},
-      	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", accumulate: "compound.metric", search: true, used: true},
+      	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", location: "compound.metric", search: true, used: true},
       }
     }
   };
 
-  /* define the standard features-synonymes, working with 'sameAs' property. Beside the title we define the 'accumulate' property
-  as well which is used in processEntry() to accumulate value(s) from given (synonym) properties into specific property of the compound entry itself.
-  'accumulate' can be an array, which results in adding value to several places.
+  /* define the standard features-synonymes, working with 'sameAs' property. Beside the title we define the 'location' property
+  as well which is used in processEntry() to location value(s) from given (synonym) properties into specific property of the compound entry itself.
+  'location' can be an array, which results in adding value to several places.
   */
   var baseFeatures = {
-    "http://www.opentox.org/api/1.1#REACHRegistrationDate" : { title: "REACH Date", accumulate: "compound.reachdate", used: true},
-    "http://www.opentox.org/api/1.1#CASRN" : { title: "CAS", accumulate: "compound.cas", used: true},
-  	"http://www.opentox.org/api/1.1#ChemicalName" : { title: "Name", accumulate: "compound.name", used: true},
-  	"http://www.opentox.org/api/1.1#TradeName" : {title: "Trade Name", accumulate: "compound.tradename", used: true},
-  	"http://www.opentox.org/api/1.1#IUPACName": {title: "IUPAC Name", accumulate: ["compound.name", "compound.iupac"], used: true},
-  	"http://www.opentox.org/api/1.1#EINECS": {title: "EINECS", accumulate: "compound.einecs", used: true},
-    "http://www.opentox.org/api/1.1#InChI": {title: "InChI", accumulate: "compound.inchi", used: true, shorten: true},
-  	"http://www.opentox.org/api/1.1#InChI_std": {title: "InChI", accumulate: "compound.inchi", used: true, shorten: true},
-    "http://www.opentox.org/api/1.1#InChIKey": {title: "InChI Key", accumulate: "compound.inchikey", used: true},
-  	"http://www.opentox.org/api/1.1#InChIKey_std": {title: "InChI Key", accumulate: "compound.inchikey", used: true},
-    "http://www.opentox.org/api/1.1#InChI_AuxInfo": {title: "InChI Aux", accumulate: "compound.inchi", used: true},
-  	"http://www.opentox.org/api/1.1#InChI_AuxInfo_std": {title: "InChI Aux", accumulate: "compound.inchi", used: true},
-  	"http://www.opentox.org/api/1.1#IUCLID5_UUID": {title: "IUCLID5 UUID", accumulate: "compound.i5uuid", used: true, shorten: true},
-  	"http://www.opentox.org/api/1.1#SMILES": {title: "SMILES", accumulate: "compound.smiles", used: true, shorten: true},
-  	"http://www.opentox.org/api/dblinks#CMS": {title: "CMS", used: true},
-  	"http://www.opentox.org/api/dblinks#ChEBI": {title: "ChEBI", used: true},
-  	"http://www.opentox.org/api/dblinks#Pubchem": {title: "PubChem", used: true},
-  	"http://www.opentox.org/api/dblinks#ChemSpider": {title: "ChemSpider", used: true},
-  	"http://www.opentox.org/api/dblinks#ChEMBL": {title: "ChEMBL", used: true},
-  	"http://www.opentox.org/api/dblinks#ToxbankWiki": {title: "Toxbank Wiki", used: true},
+    "http://www.opentox.org/api/1.1#REACHRegistrationDate" : { title: "REACH Date", location: "compound.reachdate", accumulate: true, basic: true},
+    "http://www.opentox.org/api/1.1#CASRN" : { title: "CAS", location: "compound.cas", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#ChemicalName" : { title: "Name", location: "compound.name", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#TradeName" : {title: "Trade Name", location: "compound.tradename", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#IUPACName": {title: "IUPAC Name", location: ["compound.name", "compound.iupac"], accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#EINECS": {title: "EINECS", location: "compound.einecs", accumulate: true, basic: true},
+    "http://www.opentox.org/api/1.1#InChI": {title: "InChI", location: "compound.inchi", shorten: true, accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#InChI_std": {title: "InChI", location: "compound.inchi", shorten: true, accumulate: true, used: true, basic: true},
+    "http://www.opentox.org/api/1.1#InChIKey": {title: "InChI Key", location: "compound.inchikey", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#InChIKey_std": {title: "InChI Key", location: "compound.inchikey", accumulate: true, used: true, basic: true},
+    "http://www.opentox.org/api/1.1#InChI_AuxInfo": {title: "InChI Aux", location: "compound.inchi", accumulate: true, used: true, basic: true},
+  	"http://www.opentox.org/api/1.1#InChI_AuxInfo_std": {title: "InChI Aux", location: "compound.inchi", accumulate: true, used:true, basic: true},
+  	"http://www.opentox.org/api/1.1#IUCLID5_UUID": {title: "IUCLID5 UUID", location: "compound.i5uuid", shorten: true, accumulate: true, basic: true},
+  	"http://www.opentox.org/api/1.1#SMILES": {title: "SMILES", location: "compound.smiles", shorten: true, accumulate: true, basic: true},
+  	"http://www.opentox.org/api/dblinks#CMS": {title: "CMS", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/dblinks#ChEBI": {title: "ChEBI", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/dblinks#Pubchem": {title: "PubChem", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/dblinks#ChemSpider": {title: "ChemSpider", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/dblinks#ChEMBL": {title: "ChEMBL", accumulate: true, basic: true},
+  	"http://www.opentox.org/api/dblinks#ToxbankWiki": {title: "Toxbank Wiki", accumulate: true, basic: true},
   };
   var instanceCount = 0;
 
@@ -522,8 +518,8 @@ var jToxDataset = (function () {
     featureValue: function (fId, data) {
       var self = this;
       var feature = self.features[fId];
-      if (feature.accumulate !== undefined)
-        return ccLib.getJsonValue(data, $.isArray(feature.accumulate) ? feature.accumulate[0] : feature.accumulate);
+      if (feature.location !== undefined)
+        return ccLib.getJsonValue(data, $.isArray(feature.location) ? feature.location[0] : feature.location);
       else
         return data.values[fId];
     },
@@ -654,8 +650,8 @@ var jToxDataset = (function () {
             "sDefaultContent": "-",
           };
           
-          if (feature.accumulate !== undefined)
-            col["mData"] = feature.accumulate;
+          if (feature.location !== undefined)
+            col["mData"] = feature.location;
           else {
             col["mData"] = 'values';
             col["mRender"] = (function(featureId) { return function(data, type, full) { var val = data[featureId]; return ccLib.isEmpty(val) ? '-' : val }; })(fId);
@@ -663,7 +659,7 @@ var jToxDataset = (function () {
           
           // some special cases, like diagram
           if (feature.render !== undefined) 
-            col = ccLib.fireCallback(feature.render, self, col);
+            col = ccLib.fireCallback(feature.render, self, col, fId);
           
           if (!!feature.shorten) {
             col["mRender"] = function(data, type, full) {
@@ -749,8 +745,14 @@ var jToxDataset = (function () {
           continue;
           
         var grpArr = (typeof grp == "function" || typeof grp == "string") ? ccLib.fireCallback(grp, self, i, miniset) : grp;
-        self.groups[i] = grpArr;
-        ccLib.enumObject(grpArr, function(fid, idx){ if (idx != "name") self.features[fid].used = true; })
+        self.groups[i] = [];
+        ccLib.enumObject(grpArr, function(fid, idx) { 
+          var sameAs = cls.findSameAs(fid, self.features);
+          if (!self.features[sameAs].used && !self.features[fid].used)
+            self.groups[i].push(fid);
+          if (idx != "name")
+            self.features[fid].used = self.features[sameAs].used = true;
+        });
       }
     },
     
@@ -945,27 +947,20 @@ var jToxDataset = (function () {
   cls.processEntry = function (entry, features, fnValue) {
     for (var fid in features) {
       var feature = features[fid];
+      var newVal = entry.values[fid];
       
-      // if applicable - accumulate the feature value to a specific location whithin the entry
-      if (entry.values[fid] !== undefined && feature.accumulate !== undefined) {
-        var accArr = feature.accumulate;
+      // if applicable - location the feature value to a specific location whithin the entry
+      if (!!feature.accumulate && newVal !== undefined && feature.location !== undefined) {
+        var accArr = feature.location;
         if (!$.isArray(accArr))
           accArr = [accArr];
         
-        for (var v = 0; v < accArr.length; ++v){
-          var oldVal = ccLib.getJsonValue(entry, accArr[v]);
-          var newVal = entry.values[fid];
-          if (!ccLib.isNull(fnValue))
-            ccLib.setJsonValue(entry, accArr[v], ccLib.fireCallback(fnValue, null, fid, oldVal, newVal));
-          else if (!$.isArray(oldVal))
-            ccLib.setJsonValue(entry, accArr[v], ccLib.isNull(oldVal) ? newVal : oldVal + newVal);
-          else
-            oldVal.push(newVal);
-        }
+        for (var v = 0; v < accArr.length; ++v)
+          ccLib.setJsonValue(entry, accArr[v], ccLib.fireCallback(fnValue, this, fid,  /* oldVal */ ccLib.getJsonValue(entry, accArr[v]), newVal, features));
       }
       
       if (feature.process !== undefined)
-        ccLib.fireCallback(feature.process, self, entry, fid);
+        ccLib.fireCallback(feature.process, this, entry, fid, features);
     }
     
     return entry;
@@ -998,13 +993,13 @@ var jToxDataset = (function () {
   
   cls.processFeatures = function(features, bases) {
     if (bases == null)
-      base = baseFeatures;
+      bases = baseFeatures;
     features = $.extend(features, bases);
     for (var fid in features) {
       
       var sameAs = cls.findSameAs(fid, features);
-      // now merge with this one... it copies everything that we've added, if we've reached to it. Including 'accumulate'
-      features[fid] = $.extend(features[fid], features[sameAs], { originalId: fid });
+      // now merge with this one... it copies everything that we've added, if we've reached to it. Including 'location'
+      features[fid] = $.extend(features[fid], features[sameAs], { originalId: fid, originalTitle: features[fid].title });
     }
     
     return features;
@@ -1015,6 +1010,9 @@ var jToxDataset = (function () {
       cls.processFeatures(dataset.feature);
       features = dataset.feature;
     }
+
+    if (ccLib.isNull(fnValue))
+      fnValue = cls.defaultSettings.fnAccumuate;
     
     if (!startIdx)
       startIdx = 0;
@@ -1051,7 +1049,7 @@ var jToxStudy = (function () {
   };    // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
   var instanceCount = 0;
   
-  var fnDatasetValue = function (old, value){
+  var fnDatasetValue = function (fid, old, value, features){
 		return ccLib.extendArray(old, value != null ? value.trim().toLowerCase().split("|") : [value]).filter(ccNonEmptyFilter);
   };
   
@@ -1653,7 +1651,7 @@ var jToxStudy = (function () {
             
            ccLib.fillTree(self.rootElement, substance);
            // go and query for the reference query
-            (self, substance.referenceSubstance.uri, function (dataset){
+           jToxKit.call(self, substance.referenceSubstance.uri, function (dataset){
              if (!!dataset) {
               jToxDataset.processDataset(dataset, null, fnDatasetValue);
               ccLib.fillTree(rootTab, dataset.dataEntry[0]);

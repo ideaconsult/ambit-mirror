@@ -1,4 +1,33 @@
 var config_dataset = {
+		/*
+	"fnAccumulate": function(fId, oldVal, newVal, features) {
+		if (
+			features[fId].sameAs == "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity" ||
+			features[fId].sameAs == "http://www.wikipathways.org/index.php/Pathway"				
+			) {
+			if ((oldVal === undefined) || (oldVal == null) || ("" == oldVal)) oldVal = [];
+		    if ((newVal === undefined) || ccLib.isNull(newVal)) return oldVal;
+
+		    newVal = {"feature" : fId,  "value" : newVal };
+
+		    if ($.inArray(newVal,oldVal)==-1)
+		          oldVal.push(newVal);
+	
+		    return oldVal;
+		} else {
+				
+		      if (ccLib.isNull(newVal))
+		          return oldVal;
+		        newVal = newVal.toString();
+		        if (ccLib.isNull(oldVal) || newVal.toLowerCase().indexOf(oldVal.toLowerCase()) >= 0)
+		          return newVal;
+		        if (oldVal.toLowerCase().indexOf(newVal.toLowerCase()) >= 0)
+		          return oldVal;
+		        return oldVal + ", " + newVal;			
+		}
+	},		
+	*/
+	
 	"configuration": {
 	   "baseFeatures": {
 	        "http://www.opentox.org/api/1.1#Diagram": {
@@ -8,7 +37,7 @@ var config_dataset = {
 	                col["mRender"] = function(data, type, full) {
 	                  return (type != "display") ? "-" :
 	                	  (
-//	                	  '<input type="checkbox" name="cmp" value="'+full.compound.URI+'"> '+
+	                	  //'<input type="checkbox" name="cmp" value="'+full.compound.URI+'"> '+
 	                	  '<a target="_blank" href="' + full.compound.URI + '"><img src="' + data + '" class="jtox-ds-smalldiagram"/></a>'
 	                	  //'<a target="_blank" href="' + full.compound.URI + '"><img src="http://localhost:8080/ambit2/model/3?media=image/png&dataset_uri=' + full.compound.URI + '" class="jtox-ds-smalldiagram"/></a>'
 	                	  );
@@ -18,15 +47,60 @@ var config_dataset = {
 	                return col;
 	            }
 	        },
+	        /*
+		"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity" : {
+				"title" : "Carcinogenicity",
+				"accumulate" : false,
+				"location" : "compound.carcinogenicity",
+				"process" : function(entry, featureId, features) {
+					if (ccLib.isNull(entry.compound.carcinogenicity)) entry.compound.carcinogenicity = [];
+					entry.compound.carcinogenicity.push(
+							{
+							"uri"	: featureId,
+							"title" : features[featureId].originalTitle,	
+							"value" : entry.values[featureId]	
+							}
+							);
+				},				
+				"render" : function(col) {
+					col["mData"] = "compound.carcinogenicity";
+					col["mRender"] = function(data, type, full) {
+						if (type != "display") return "-";
+						var sOut = "";
+						$.each(data,function(index,fvalue) {
+							sOut += '<a href="'+fvalue.uri+ '" target="carc">' + fvalue.title + "="+ fvalue.value + '</a><br/>';
+						});
+	                	return sOut;
+		                };
+		            return col;    
+				}				
+		},	        
+	*/
 		"http://www.wikipathways.org/index.php/Pathway" :  {
 			"title": "Wiki Pathways",
 			"accumulate" : "compound.wikipathway",
+			"process" : function(entry, featureId, features) {
+				if (ccLib.isNull(entry.compound.carcinogenicity)) entry.compound.carcinogenicity = [];
+				entry.compound.carcinogenicity.push(
+						{
+						"uri"	: featureId,
+						"title" : features[featureId].originalTitle,	
+						"value" : entry.values[featureId]	
+						}
+						);
+			},				
 			"render" : function(col) {
+				col["mData"] = "compound.wikipathway";
 				col["mRender"] = function(data, type, full) {
-					return (type != "display") ? "-" : full.compound.wikipathway;
-				};
-				return col;
-			}
+					if (type != "display") return "-";
+					var sOut = "";
+					$.each(data,function(index,fvalue) {
+						sOut += '<a href="'+fvalue.title+ '" target="wp">' + fvalue.value + '</a><br/>';
+					});
+                	return sOut;
+	                };
+	            return col;    
+			}	
 		}
 	    },
 	    "groups": {
