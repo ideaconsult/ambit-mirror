@@ -85,6 +85,8 @@ public class Property extends Model implements Serializable, Comparable<Property
 	public static final String opentox_ToxbankWiki = "http://www.opentox.org/api/dblinks#ToxbankWiki";
 	public static final String opentox_CMS = "http://www.opentox.org/api/dblinks#CMS";
 	
+	public static final String link_WikiPathway = "http://www.wikipathways.org/index.php/Pathway";
+	
 	public static final String EC = "EC";
 	
 	protected PropertyAnnotations annotations = null;
@@ -228,6 +230,8 @@ public class Property extends Model implements Serializable, Comparable<Property
 		else if (n.contains("synonym")) return opentox_Name;
 		else if (n.contains("i5uuid")) return opentox_IUCLID5_UUID;
 		else if (n.contains("uuid")) return opentox_IUCLID5_UUID;
+		else if (n.startsWith(link_WikiPathway)) return link_WikiPathway;
+		
 		return null;
 	}
 	public Property(String name) {
