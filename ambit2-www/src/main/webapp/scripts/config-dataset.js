@@ -76,32 +76,35 @@ var config_dataset = {
 				}				
 		},	        
 	*/
-		"http://www.wikipathways.org/index.php/Pathway" :  {
-			"title": "Wiki Pathways",
-			"accumulate" : "compound.wikipathway",
-			"process" : function(entry, featureId, features) {
-				if (ccLib.isNull(entry.compound.carcinogenicity)) entry.compound.carcinogenicity = [];
-				entry.compound.carcinogenicity.push(
-						{
-						"uri"	: featureId,
-						"title" : features[featureId].originalTitle,	
-						"value" : entry.values[featureId]	
-						}
-						);
-			},				
-			"render" : function(col) {
-				col["mData"] = "compound.wikipathway";
-				col["mRender"] = function(data, type, full) {
-					if (type != "display") return "-";
-					var sOut = "";
-					$.each(data,function(index,fvalue) {
-						sOut += '<a href="'+fvalue.title+ '" target="wp">' + fvalue.value + '</a><br/>';
-					});
-                	return sOut;
-	                };
-	            return col;    
-			}	
-		}
+            "http://www.wikipathways.org/index.php/Pathway" :  {
+                "title": "Wiki Pathways",
+                "accumulate" : "compound.wikipathway",
+                "process" : function(entry, featureId, features) {
+                        if (ccLib.isNull(entry.compound.wikipathway)) entry.compound.wikipathway = [];
+                        if ( entry.values[featureId]!= undefined)
+                                entry.compound.wikipathway.push(
+                                        {
+                                        "uri"   : featureId,
+                                        "title" : features[featureId].originalTitle,
+                                        "value" : entry.values[featureId]
+                                        }
+                                        );
+                },
+                "render" : function(col) {
+                        col["mData"] = "compound.wikipathway";
+                        col["mRender"] = function(data, type, full) {
+
+                                if (type != "display") return "-";
+                                var sOut = "";
+                                $.each(data,function(index,fvalue) {
+                                        sOut += '<a href="'+fvalue.title+ '" title="'+fvalue.title+'" target="wp">'
+                                        + fvalue.value + '</a><br/>';
+                                });
+                        return sOut;
+                        };
+                    return col;
+                }
+        }
 	    },
 	    "groups": {
 	          "Identifiers" : [
