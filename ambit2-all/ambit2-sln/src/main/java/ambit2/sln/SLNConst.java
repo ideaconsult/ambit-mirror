@@ -91,24 +91,24 @@ public class SLNConst
 	}	
 	
 	//Atom and Bond attributes used only in query Q_ATTR_*    ???collect them to atom and bond attributes???
-	public static final int Q_ATTR_mapNum = 0; // #1,#2,... map number to an atom "a"
-	public static final int Q_ATTR_c = 1; // contol how atoms in the target are matched "convered"  by pattern atoms "a"
-	public static final int Q_ATTR_f = 2; // boolean attribute indicating that the atom is field "a"
-	public static final int Q_ATTR_hac = 3; // heavy atom count "b"
-	public static final int Q_ATTR_hc = 4; // hydrogen count "b"
-	public static final int Q_ATTR_htc = 5; // hetero atom count "b"
-	public static final int Q_ATTR_is = 6; // Specifies patterns that the qualified atom in a query must match if it is to match the query atom "a"
-	public static final int Q_ATTR_mw = 7; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
-	public static final int Q_ATTR_n = 8; // atom that matches a query atom from being covered "a"
-	public static final int Q_ATTR_not = 9; // Specifies patterns that the qualified atom in a query must not match "a"
-	public static final int Q_ATTR_ntc = 10; // number of nonterminal atoms "b"
-	public static final int Q_ATTR_r = 11; // Boolean attribute used to specify that a bond or atom is in a ring "a"
-	public static final int Q_ATTR_rbc = 12; // ring bond count "b"
-	public static final int Q_ATTR_src = 13; // the smallest ring count "b"
-	public static final int Q_ATTR_tac = 14; // total number of atoms attached to the qualified atom "b"
-	public static final int Q_ATTR_tbo = 15; // total bond order of an atom "b"
-	public static final int Q_ATTR_type = 16; // bond type specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
-	public static final int Q_ATTR_v = 17; // Conveys Markush and macro atom valence information
+	public static final int Q_ATTR_mapNum = 100; // #1,#2,... map number to an atom "a"
+	public static final int Q_ATTR_c = 101; // contol how atoms in the target are matched "convered"  by pattern atoms "a"
+	public static final int Q_ATTR_f = 102; // boolean attribute indicating that the atom is field "a"
+	public static final int Q_ATTR_hac = 103; // heavy atom count "b"
+	public static final int Q_ATTR_hc = 104; // hydrogen count "b"
+	public static final int Q_ATTR_htc = 105; // hetero atom count "b"
+	public static final int Q_ATTR_is = 106; // Specifies patterns that the qualified atom in a query must match if it is to match the query atom "a"
+	public static final int Q_ATTR_mw = 107; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
+	public static final int Q_ATTR_n = 108; // atom that matches a query atom from being covered "a"
+	public static final int Q_ATTR_not = 109; // Specifies patterns that the qualified atom in a query must not match "a"
+	public static final int Q_ATTR_ntc = 110; // number of nonterminal atoms "b"
+	public static final int Q_ATTR_r = 111; // Boolean attribute used to specify that a bond or atom is in a ring "a"
+	public static final int Q_ATTR_rbc = 112; // ring bond count "b"
+	public static final int Q_ATTR_src = 113; // the smallest ring count "b"
+	public static final int Q_ATTR_tac = 114; // total number of atoms attached to the qualified atom "b"
+	public static final int Q_ATTR_tbo = 115; // total bond order of an atom "b"
+	public static final int Q_ATTR_type = 116; // bond type specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
+	public static final int Q_ATTR_v = 117; // Conveys Markush and macro atom valence information
 	
 	//Values of converege attribute
 	public static final int Q_CONVERED_n = 0; // atom must not have been matched previously
