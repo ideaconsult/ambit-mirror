@@ -1,7 +1,7 @@
 body {
 	FONT-FAMILY: Verdana, Arial;
 	background:#fff;
-	color:#344049
+	color:#222222
 }
 
 h1, h2, h3 {
@@ -10,7 +10,7 @@ h1, h2, h3 {
 	font-weight: bold; }
 		
 h4, h5, h6 {
-	color: #344049;
+	color: #222222;
 	FONT-FAMILY: Verdana, Arial;
 font-weight: normal; }
 
@@ -27,7 +27,7 @@ font-weight: normal; }
 	font-weight: bold; }
 		
 .h4, .h5, .h6 {
-	color: #344049;
+	color: #222222;
 	FONT-FAMILY:  Verdana, Arial;
 	font-weight: normal; }
 
@@ -54,13 +54,13 @@ font-weight: normal; }
 
 
 .pane {
-	background:#344049;
+	background:#222222;
 	color:#ffffff;
 }
 
 .search {
 	background:#fff;
-	color:#344049;
+	color:#222222;
 }
 
 
@@ -99,7 +99,7 @@ font-weight: normal; }
 	font-size: 1.0em; 
 }
 #searchform label { 
-	color : #344049;font-weight: bold;
+	color : #222222;font-weight: bold;
 	width: 10em; float: left; 
 }
 #searchform label.error { 
@@ -116,7 +116,7 @@ font-weight: normal; }
 }
 
 #searchform a {
-	color : #344049;
+	color : #222222;
 	font-weight:	bold;
 }
 
@@ -175,7 +175,7 @@ a.topLinks {
 .details {
 	font-size: 0.9em;
 	font-weight: !important;
-	color: #344049;
+	color: #222222;
 }
 
 #footer {
@@ -198,11 +198,11 @@ a.topLinks {
 	text-align: left;
 }
 
-  #selectable .ui-selectee { background: #F2F0E6; color: #344049; }
+  #selectable .ui-selectee {  }
   #selectable .ui-selecting { background: #F2F0E6; color: white; opacity: 0.75;}
-  #selectable .ui-selected { background: #F2F0E6; color: #729203;  }
-  #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-  #selectable li { margin: 3px; padding: 0.4em; font-size: 1em; height: 18px; }
+  #selectable .ui-selected {  }
+  #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; font-size: 0.9em;  }
+  #selectable li { margin: 3px; padding: 0.4em;  height: 18px; }
   
 .long {
    border: solid 0px #F2F0E6 ;
@@ -274,7 +274,7 @@ code {
 }
 
 .bar rect {
-  fill: #344049;
+  fill: #222222;
   shape-rendering: crispEdges;
   stroke: gray;
 }

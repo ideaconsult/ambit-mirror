@@ -89,20 +89,25 @@
 </div>
 
 </form>
-<div class="row" style="margin-left:20px;margin-right:20px;padding:ppx;">
+
+
 		<!-- Page Content
 		================================================== -->
 
-<div class="jtox-toolkit" data-kit="dataset" 
+
+<div class="sixteen columns " style="padding:0 2px 2px 2px 0;margin-top:5px;margin-left:25;margin-right:25;">		
+
+	<div class="jtox-toolkit" data-kit="dataset" 
 	data-manual-init="yes" 
 	data-show-features="yes" 
 	data-cross-domain="false"	
 	data-show-export="yes" 
 	data-jsonp="false"></div>
 
+</div>
+
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
-</div>
 
 
 
