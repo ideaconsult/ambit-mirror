@@ -91,20 +91,31 @@ var config_dataset = {
                                         );
                 },
                 "render" : function(col) {
+                        var root = "http://apps.ideaconsult.net:8080/ambit2/ui/_dataset?dataset_uri=";
                         col["mData"] = "compound.wikipathway";
                         col["mRender"] = function(data, type, full) {
 
                                 if (type != "display") return "-";
-                                var sOut = "";
+                                var sOut = "<ul>";
                                 $.each(data,function(index,fvalue) {
-                                        sOut += '<a href="'+fvalue.title+ '" title="'+fvalue.title+'" target="wp">'
-                                        + fvalue.value + '</a><br/>';
+                                        sOut += '<li><a href="'+fvalue.title+ '" title="'+fvalue.title+'" target="wp">'
+                                        + fvalue.value + '</a> ';
+
+                                        var q =  'http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?search='+
+                                                encodeURIComponent(fvalue.value) +
+                                                "&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/dataset/1967255/feature";
+                                        sOut += '<a href="'+ root + encodeURIComponent(q)+'" title="Structures participating in this pathway">'+
+                                                '<span class="ui-icon ui-icon-search" style="float: right; margin-right: .3em;"></span>'+
+                                                '</a>';
+                                        sOut += "</li>";
                                 });
+                                sOut += "</ul>";
                         return sOut;
                         };
                     return col;
                 }
         }
+
 	    },
 	    "groups": {
 	          "Identifiers" : [
