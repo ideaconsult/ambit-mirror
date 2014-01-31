@@ -17,6 +17,22 @@ public class SLNContainerAttributes
 	public String type = null;
 	public ArrayList<double[]> coord2d = null;
 	public ArrayList<double[]> coord3d = null;
+	
+	public static String coord2dToString(ArrayList<double[]>coord2d)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < coord2d.size(); i++)
+			sb.append(coord2d.get(i));
+		return sb.toString();
+	}
+
+	public static String coord3dToString(ArrayList<double[]>coord3d)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < coord3d.size(); i++)
+			sb.append(coord3d.get(i));
+		return sb.toString();
+	}
 
 	public String toString() 
 	{
@@ -35,7 +51,15 @@ public class SLNContainerAttributes
 		if (type != null)
 			sb.append("type="+type);
 		
+		if (sb.length() > 1)
+			sb.append(";");
+		if (coord2d != null)
+			sb.append("coord2d="+coord2d);
 		
+		if (sb.length() > 1)
+			sb.append(";");
+		if (coord3d != null)
+			sb.append("coord3d="+coord3d);
 		
 		
 		Set<Map.Entry<String,String>> set = userDefiendAttr.entrySet();		
