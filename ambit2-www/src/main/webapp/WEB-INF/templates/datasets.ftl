@@ -86,6 +86,9 @@ Page:<input name='page' type='text' title='Page' size='10' value='0'>
 
 <div class="thirteen columns remove-bottom" style="padding:0;" >
 
+ 		<div class="row remove-bottom ui-widget-header ui-corner-top">
+ 		&nbsp;
+ 		</div>
 
 		<!-- Page Content
 		================================================== -->
@@ -98,8 +101,8 @@ Page:<input name='page' type='text' title='Page' size='10' value='0'>
 				</div>
 			</div>
 		<#else>
-		<div class="row" style="padding:0;" >
-			<table id='datasets' class='datasetstable' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+		<div class="row " style="padding:0;" >
+			<table id='datasets' class='datasetstable ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
 			<th></th>
@@ -117,6 +120,7 @@ Page:<input name='page' type='text' title='Page' size='10' value='0'>
 		
 		</div>
 		
+
 
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
