@@ -87,11 +87,14 @@ $(document)
 
 <div class="thirteen columns remove-bottom" style="padding:0;" >
 
+ 		<div class="row remove-bottom ui-widget-header ui-corner-top">
+ 		&nbsp;
+ 		</div>
 
 		<!-- Page Content
 		================================================== -->
 		<div class="row" style="padding:0;" >
-			<table id='feature'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<table id='feature'  class='ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
 			<th>ID</th>

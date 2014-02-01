@@ -1,18 +1,16 @@
 body {
-	FONT-FAMILY: Verdana, Arial;
 	background:#fff;
 	color:#222222
 }
 
 h1, h2, h3 {
 	color: #729203;
-	FONT-FAMILY: Verdana, Arial;
 	font-weight: bold; }
 		
 h4, h5, h6 {
 	color: #222222;
-	FONT-FAMILY: Verdana, Arial;
-font-weight: normal; }
+	font-weight: normal; 
+}
 
 .h1 { font-size: 46px; line-height: 50px; margin-bottom: 14px;}
 .h2 { font-size: 35px; line-height: 40px; margin-bottom: 10px; }
@@ -23,12 +21,10 @@ font-weight: normal; }
 
 .h1, .h2, .h3 {
 	color: #729203;
-	FONT-FAMILY:  Verdana, Arial;
 	font-weight: bold; }
 		
 .h4, .h5, .h6 {
 	color: #222222;
-	FONT-FAMILY:  Verdana, Arial;
 	font-weight: normal; }
 
 
@@ -182,16 +178,6 @@ a.topLinks {
 	background :#fff;
 }
 
-.dataTables_info {
-    width: 40%;
-}
-
-
-.dataTables_paginate .fg-button {
-	 background :#fff;
-	 min-width:3.5em;
-	 border:0;
-}	
  
 .ui-menu {
 	width: 100%;
@@ -201,7 +187,7 @@ a.topLinks {
   #selectable .ui-selectee {  }
   #selectable .ui-selecting { background: #F2F0E6; color: white; opacity: 0.75;}
   #selectable .ui-selected {  }
-  #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; font-size: 0.9em;  }
+  #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%;}
   #selectable li { margin: 3px; padding: 0.4em;  height: 18px; }
   
 .long {
@@ -299,3 +285,27 @@ a.qxternal {
 	background-position:right;
 	padding: 0 20px 0 0;
 }
+
+
+.dataTables_info {
+    width: 40%;
+}
+
+.dataTables_paginate .fg-button {
+	 background :#fff;
+	 min-width:3.5em;
+	 border:0;
+}	
+
+.ambit2 th {
+	 border:1px solid #cccccc;
+     overflow: hidden;
+	 background : #F5F2EB;
+	 color : #729203;
+	 font-weight: bold;
+}
+
+.ambit2 td {
+	 border:1px solid #cccccc;
+	 overflow: hidden;
+}	

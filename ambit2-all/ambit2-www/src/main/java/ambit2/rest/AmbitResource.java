@@ -656,8 +656,8 @@ public class AmbitResource extends FreeMarkerResource {
 	}
 	public static String printWidgetHeader(String header, String id) {
 		return	String.format(
-				"<div %s%s class=\"ui-widget \" style=\"margin-top: 20px; padding: 0 .7em;\">\n"+
-				"<div class=\"ui-widget-header ui-corner-top\"><p>%s</p></div>\n",id==null?"":"id=",id==null?"":id,header);
+				"<div %s%s class=\"ui-widget \" style=\"margin-top: 20px;\">\n"+
+				"<div class=\"ui-widget-header ui-corner-top \">%s</div>\n",id==null?"":"id=",id==null?"":id,header);
 	}
 	public static String printWidgetFooter() {
 		return	String.format("</div>\n");

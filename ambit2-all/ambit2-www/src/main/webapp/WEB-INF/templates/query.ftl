@@ -184,8 +184,11 @@
 
 <form action="${ambit_root}/ui/query" method="get">  
 <div class="thirteen columns remove-bottom" style="padding:0;" >
+ 		<div class="row remove-bottom ui-widget-header ui-corner-top"  style="padding:0;" >
+ 		&nbsp;
+ 		</div>
 	<div class="row " style="padding:0;" >
-		<table id='structures' class='structable' style='margin:0;' width='100%'>
+		<table id='structures' class='structable ambit2' style='margin:0;' width='100%'>
 					<thead>
 					<tr>
 						<th>

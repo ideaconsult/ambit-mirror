@@ -145,8 +145,12 @@ $(document)
 				</div>
 			</div>
 		<#else>
+ 		<div class="row remove-bottom ui-widget-header ui-corner-top">
+ 		&nbsp;
+ 		</div>		
 		<div class="row" style="padding:0;" >
-			<table id='algorithm'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+		
+			<table id='algorithm'  class='ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
 			<th></th>

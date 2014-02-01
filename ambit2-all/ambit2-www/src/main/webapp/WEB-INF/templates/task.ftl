@@ -85,8 +85,11 @@ $(document)
 			</p>
 			</div>
 		<#else>
+ 		<div class="row remove-bottom ui-widget-header ui-corner-top">
+ 		&nbsp;
+ 		</div>		
 		<div class="row " style="padding:0;" >
-			<table id='task'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
+			<table id='task' class='ambit2' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>
 			<tr>
 			<th>Job status</th>
