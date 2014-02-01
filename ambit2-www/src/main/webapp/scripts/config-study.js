@@ -937,9 +937,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -948,7 +945,10 @@
                 },
                 "effect": {
                     "iOrder": -1
-                }
+                },
+                "measured concentration": {
+                    "iOrder": -5
+                }                
             },
             "effects": {
                 "endpoint": {
@@ -972,9 +972,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -983,6 +980,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1007,9 +1007,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1018,6 +1015,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                } ,
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1042,9 +1042,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1053,6 +1050,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1077,9 +1077,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1088,6 +1085,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1112,9 +1112,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1123,6 +1120,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1147,9 +1147,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1158,6 +1155,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1182,9 +1182,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1193,6 +1190,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1217,9 +1217,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1228,6 +1225,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1252,9 +1252,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1263,6 +1260,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
@@ -1287,9 +1287,6 @@
                 },
                 "test organism": {
                     "iOrder": -6
-                },
-                "measured concentration": {
-                    "iOrder": -5
                 }
             },
             "conditions": {
@@ -1298,6 +1295,9 @@
                 },
                 "effect": {
                     "iOrder": -1
+                },
+                "measured concentration": {
+                    "iOrder": -5
                 }
             },
             "effects": {
