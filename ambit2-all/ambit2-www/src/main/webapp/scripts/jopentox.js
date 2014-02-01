@@ -50,8 +50,7 @@ function getResponseTitle(request, description) {
 }
 
 /**
- * Wrap the dataset URI with the new /ui/query 
- * To be removed when /datset/id is updated to the new look and feel
+ * Wrap the dataset URI with the new /ui/_dataset?dataset_uri= 
  * @param uri
  * @returns
  */
@@ -63,7 +62,7 @@ function wrapDatasetURI(uri) {
 	var p = uri.indexOf("/dataset/");
 	if (p>0) {
 		var wrapped = uri.substring(0,p)+
-		"/ui/query?option=auto&type=url&page=0&pagesize=10&search="+
+		"/ui/_dataset?dataset_uri="+
 		encodeURIComponent(uri);
 		return wrapped;
 	} else return uri;
