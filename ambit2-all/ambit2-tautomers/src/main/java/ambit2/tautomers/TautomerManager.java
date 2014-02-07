@@ -30,6 +30,7 @@ public class TautomerManager
 	public boolean FlagRecurseBackResultTautomers = false;
 	
 	
+	
 	public boolean FlagCheckDuplicationOnRegistering = true;
 	public boolean FlagCheckValencyOnRegistering = false;       //it is not used yet
 	public boolean FlagExcludeWarnFiltersOnRegistering = false; //it is not used yet
@@ -41,8 +42,8 @@ public class TautomerManager
 	public boolean FlagPrintIcrementalStepDebugInfo = false;
 	
 	public int maxNumOfBackTracks = 100000;
-	public int maxNumOfTautomerRegistrations = 100000;
-				
+	//public int maxNumOfTautomerRegistrations = 100000;
+	public boolean FlagProcessRemainingStackIncSteps = true;   //Typically this flag should be true 			
 	
 	public TautomerManager()
 	{

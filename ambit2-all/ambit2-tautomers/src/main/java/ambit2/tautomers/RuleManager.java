@@ -276,6 +276,8 @@ public class RuleManager
 		//first depth search approach
 		int nMax = tman.maxNumOfBackTracks;
 		int n = 0;
+		boolean FlagReachedMaxNumOfBackTracks = false;
+		
 		while (!stackIncSteps.isEmpty())
 		{	
 			if (tman.FlagPrintIcrementalStepDebugInfo)
@@ -302,10 +304,41 @@ public class RuleManager
 			
 			n++;
 			if (n > nMax)
+			{	
+				FlagReachedMaxNumOfBackTracks = true;
 				break;
+			}	
 		}
+		
+		
+		if (FlagReachedMaxNumOfBackTracks)
+			if (tman.FlagProcessRemainingStackIncSteps)
+				processRemainingStackIncSteps();
 	}
 	
+	void processRemainingStackIncSteps()
+	{
+		while (!stackIncSteps.isEmpty())
+		{
+			TautomerIncrementStep incStep = stackIncSteps.pop();
+			
+			try{
+				IAtomContainer newTautomer = (IAtomContainer)incStep.struct.clone();
+				double rank = calculateRank(incStep);
+				newTautomer.setProperty("TAUTOMER_RANK", new Double(rank));
+				
+				tman.registerTautomer(newTautomer); 
+				
+				if (tman.FlagPrintIcrementalStepDebugInfo)
+					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
+							+ "    " + incStep.getTautomerCombination());
+			}
+			catch(Exception e)
+			{	
+				tman.errors.add("Error clonning molecule to get tatutomer!");
+			}
+		}
+	}
 	
 	void expandIncrementStep(TautomerIncrementStep incStep) throws Exception
 	{		
