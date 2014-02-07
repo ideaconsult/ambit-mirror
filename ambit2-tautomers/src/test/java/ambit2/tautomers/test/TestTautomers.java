@@ -73,6 +73,7 @@ public class TestTautomers
 		tt.tman.getKnowledgeBase().use17ShiftRules(false);
 		
 		tt.tman.maxNumOfBackTracks = 10000;
+		tt.tman.FlagProcessRemainingStackIncSteps = true;
 		
 		
 		
@@ -129,10 +130,10 @@ public class TestTautomers
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
 		
 		
-		//tt.visualTest("O=C1OC3=CC=CC=C3(C(O)C1C(C=2C=CC=CC=2)CC(=O)C)");
+		tt.visualTest("O=C1OC3=CC=CC=C3(C(O)C1C(C=2C=CC=CC=2)CC(=O)C)");
 		//tt.visualTest("C3=C(C(C1=C(OC2=C(C1=O)C=CC=C2)O)CC(=O)C)C=CC=C3");
 		
-		tt.visualTest("O=C1OC3=CC=CC=C3(C(O)C1C(C=2C=CC=CC=2)CC(=O)C)");   //from Kekulizer
+		//tt.visualTest("O=C1OC3=CC=CC=C3(C(O)C1C(C=2C=CC=CC=2)CC(=O)C)");   //from Kekulizer
 		
 		//tt.visualTest("O=C1[N+](=N)CN=CC1");		
 		//tt.visualTest("OC1=CC=CC=C1");
@@ -145,7 +146,7 @@ public class TestTautomers
 		
 		//tt.visualTest("OC=C(N)CCC(N)=CN",TautomerConst.GAT_Comb_Pure);
 		//tt.visualTest("OC=1C=CC(=CC=1(NCS(=O)(=O)O))[As]=[Bi][As](C=2C=CC(O)=C(C=2)NCS(=O)(=O)O)[Bi]=[As]C=3C=CC(O)=C(C=3)NCS(=O)(=O)O",TautomerConst.GAT_Comb_Improved);
-		
+		//tt.visualTest("OC=1C=CC(=CC=1(NCS(=O)(=O)O))[As]=[Bi][As](C=2C=CC(O)=C(C=2)NCS(=O)(=O)O)[Bi]=[As]C=3C=CC(O)=C(C=3)NCS(=O)(=O)O");
 		
 		//tt.visualTest("O=C(SO)N",TautomerConst.GAT_Incremental);
 		        
