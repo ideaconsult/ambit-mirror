@@ -307,6 +307,16 @@ public class Protocol {
 				return "7.6.1";
 			}			
 		},		
+		TO_GENETIC_IN_VIVO_SECTION {
+			@Override
+			public String toString() {
+				return "Genetic toxicity in vivo";
+			}
+			@Override
+			public String getNumber() {
+				return "7.6.1";
+			}			
+		},			
 		TO_CARCINOGENICITY_SECTION {
 			@Override
 			public String toString() {
