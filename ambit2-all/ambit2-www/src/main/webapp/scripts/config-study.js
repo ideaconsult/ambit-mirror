@@ -324,7 +324,12 @@
                     "sTitle": "Degradation",
                     "iOrder": -2
                 }
-            }
+            },
+            "interpretation": {
+                "criteria": {
+                    "bVisible": false
+                }
+            }            
         },
         "TO_HYDROLYSIS_SECTION": {
             "conditions": {
