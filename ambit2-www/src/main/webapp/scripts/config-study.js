@@ -578,6 +578,61 @@
                 }
             }
         },
+        "TO_GENETIC_IN_VIVO_SECTION": {
+            "parameters": {
+                "type of genotoxicity": {
+                    "iOrder": -9,
+                    "sTitle": "Genotoxicity type"
+                },
+                "type of study": {
+                    "iOrder": -8,
+                    "sTitle": "Study type"
+                },
+                "route of administration": {
+                    "iOrder": -7,
+                    "sVisible": true
+                },
+                "species": {
+                    "iOrder": -6
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : 0
+                }                  
+            },
+            "conditions": {
+                "toxicity": {
+                    "iOrder": -4
+                },
+                "sex": {
+                    "iOrder": -5
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "sTitle": "Genotoxicity",
+                    "iOrder": -3
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -1
+                }
+            },
+            "interpretation": {
+                "result": {
+                	"sTitle" : "Interpretation of the results",
+                    "bVisible": true,
+                    "iOrder": -2
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }
+        },        
         "TO_REPRODUCTION_SECTION": {
             "parameters": {
                 "species": {
