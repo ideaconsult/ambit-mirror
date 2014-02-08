@@ -386,7 +386,8 @@
             },
             "interpretation": {
                 "result": {
-                    "iOrder": -3
+                    "iOrder": -3,
+					"sTitle" : "Interpretation of the results"                    
                 },
                 "criteria": {
                     "iOrder": -2
@@ -401,7 +402,10 @@
                 "study year" :{
                 	"bVisible" : true,
                 	"iOrder" : 0
-                }                
+                },
+                "sex": {
+                    "iOrder": -4
+                }                                
             },
             "conditions": {
                 "sex": {
@@ -424,7 +428,8 @@
             },
             "interpretation": {
                 "result": {
-                    "iOrder": -3
+                    "iOrder": -3,
+                    "sTitle" : "Interpretation of the results"
                 },
                 "criteria": {
                     "iOrder": -2
@@ -439,7 +444,10 @@
                 "study year" :{
                 	"bVisible" : true,
                 	"iOrder" : 0
-                }                
+                },
+                "sex": {
+                    "iOrder": -4
+                }                                
             },
             "conditions": {
                 "sex": {
@@ -465,7 +473,8 @@
             },
             "interpretation": {
                 "result": {
-                    "iOrder": -3
+                    "iOrder": -3,
+					"sTitle" : "Interpretation of the results"                    
                 },
                 "criteria": {
                     "iOrder": -2
@@ -560,6 +569,7 @@
             },
             "interpretation": {
                 "result": {
+                	"sTitle" : "Interpretation of the results",
                     "bVisible": true,
                     "iOrder": -2
                 },
@@ -577,7 +587,7 @@
                     "iOrder": -9
                 },
                 "doses/concentrations": {
-                    "sTitle": "Dose",
+                    "sTitle": "Dose/concentrations",
                     "iOrder": -8
                 },
                 "study year" :{
@@ -587,7 +597,7 @@
             },
             "conditions": {
                 "generation": {
-                    "iOrder": -6
+                    "iOrder": -7
                 },
                 "sex": {
                     "iOrder": -4
@@ -595,7 +605,7 @@
             },
             "effects": {
                 "endpoint": {
-                    "iOrder": -7
+                    "iOrder": -6
                 },
                 "result": {
                     "sTitle": "Value",
@@ -613,6 +623,51 @@
                 }
             }
         },
+        "TO_DEVELOPMENTAL_SECTION" : {
+   			"parameters": {
+                "species": {
+                    "iOrder": -10
+                },
+                "route of administration": {
+                    "iOrder": -9
+                },
+                "doses/concentrations": {
+                    "sTitle": "Dose/concentrations",
+                    "iOrder": -8
+                },
+                "study year" :{
+                	"bVisible" : true,
+                	"iOrder" : -1
+                }                  
+            },
+            "conditions": {
+                "sex": {
+                    "iOrder": -4
+                },
+                "effect type": {
+                    "iOrder": -7
+                }                
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -6
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -3
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }        
+        },
         "TO_REPEATED_ORAL_SECTION": {
             "parameters": {
                 "species": {
@@ -625,7 +680,7 @@
                     "iOrder": -9
                 },
                 "doses/concentrations": {
-                    "sTitle": "Dose",
+                    "sTitle": "Dose/concentrations",
                     "iOrder": -7
                 },
                 "study year" :{
@@ -670,7 +725,7 @@
                     "iOrder": -9
                 },
                 "doses/concentrations": {
-                    "sTitle": "Dose",
+                    "sTitle": "Dose/concentrations",
                     "iOrder": -7
                 },
                 "study year" :{
@@ -715,7 +770,7 @@
                     "iOrder": -9
                 },
                 "doses/concentrations": {
-                    "sTitle": "Dose",
+                    "sTitle": "Dose/concentrations",
                     "iOrder": -7
                 },
                 "study year" :{
@@ -885,12 +940,23 @@
             }
         },
         "TO_PHOTOTRANS_AIR_SECTION": {
+            "parameters": {
+                "reactant": {
+                    "iOrder": -9
+                }
+            },        
+           "conditions": {
+                "test condition": {
+                    "iOrder": -8
+                }
+            },        
             "effects": {
                 "endpoint": {
                     "bVisible": false
                 },
                 "result": {
-                    "sTitle": "DT50"
+                    "sTitle": "DT50",
+                     "iOrder": -7
                 }
             },
             "interpretation": {
@@ -941,7 +1007,8 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
+                    "iOrder": -6,
+                    "sTitle" : "Organism"
                 }
             },
             "conditions": {
@@ -952,8 +1019,9 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
-                }                
+                    "iOrder": -5,
+                    "sTitle" : "Meas. Conc."
+                }
             },
             "effects": {
                 "endpoint": {
@@ -976,8 +1044,9 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
-                }
+                    "iOrder": -6,
+                    "sTitle" : "Organism"
+                }                
             },
             "conditions": {
                 "exposure": {
@@ -987,7 +1056,8 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+                    "sTitle" : "Meas. Conc."
                 }
             },
             "effects": {
@@ -1011,8 +1081,9 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
-                }
+                    "iOrder": -6,
+                    "sTitle" : "Organism"
+                }      
             },
             "conditions": {
                 "exposure": {
@@ -1022,7 +1093,8 @@
                     "iOrder": -1
                 } ,
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+  					"sTitle" : "Meas. Conc."                    
                 }
             },
             "effects": {
@@ -1046,7 +1118,8 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
+                    "iOrder": -6,
+  					"sTitle" : "Organism"                    
                 }
             },
             "conditions": {
@@ -1057,7 +1130,8 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+                    "sTitle" : "Meas. Conc."
                 }
             },
             "effects": {
@@ -1081,7 +1155,8 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
+                    "iOrder": -6,
+  					"sTitle" : "Organism"                    
                 }
             },
             "conditions": {
@@ -1092,7 +1167,8 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+ 					"sTitle" : "Meas. Conc."                    
                 }
             },
             "effects": {
@@ -1116,7 +1192,8 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
+                    "iOrder": -6,
+  					"sTitle" : "Organism"      
                 }
             },
             "conditions": {
@@ -1127,7 +1204,8 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+ 					"sTitle" : "Meas. Conc."                    
                 }
             },
             "effects": {
@@ -1151,7 +1229,8 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
+                    "iOrder": -6,
+  					"sTitle" : "Organism"      
                 }
             },
             "conditions": {
@@ -1162,7 +1241,8 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+ 					"sTitle" : "Meas. Conc."                    
                 }
             },
             "effects": {
@@ -1183,30 +1263,36 @@
         "EC_PLANTTOX_SECTION": {
             "parameters": {
                 "test medium": {
-                    "iOrder": -7
-                },
-                "test organism": {
-                    "iOrder": -6
+                    "iOrder": -9
                 }
             },
             "conditions": {
                 "exposure": {
-                    "iOrder": -4
+                    "iOrder": -6
                 },
                 "effect": {
-                    "iOrder": -1
+                    "iOrder": -3
                 },
                 "measured concentration": {
-                    "iOrder": -5
-                }
+                    "iOrder": -7,
+ 					"sTitle" : "Meas. Conc."                    
+                },
+                "test organism": {
+                    "iOrder": -8,
+  					"sTitle" : "Organism"      
+                },
+                "based on": {
+                    "iOrder": -2      
+                }                
+                
             },
             "effects": {
                 "endpoint": {
-                    "iOrder": -3
+                    "iOrder": -5
                 },
                 "result": {
                     "sTitle": "",
-                    "iOrder": -2
+                    "iOrder": -4
                 }
             },
             "interpretation": {
@@ -1221,7 +1307,8 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
+                    "iOrder": -6,
+  					"sTitle" : "Organism"      
                 }
             },
             "conditions": {
@@ -1232,7 +1319,8 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+ 					"sTitle" : "Meas. Conc."                    
                 }
             },
             "effects": {
@@ -1256,7 +1344,8 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
+                    "iOrder": -6,
+  					"sTitle" : "Organism"      
                 }
             },
             "conditions": {
@@ -1267,7 +1356,8 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+                    "sTitle" : "Meas. Conc."
                 }
             },
             "effects": {
@@ -1291,7 +1381,8 @@
                     "iOrder": -7
                 },
                 "test organism": {
-                    "iOrder": -6
+                    "iOrder": -6,
+  					"sTitle" : "Organism"      
                 }
             },
             "conditions": {
@@ -1302,7 +1393,8 @@
                     "iOrder": -1
                 },
                 "measured concentration": {
-                    "iOrder": -5
+                    "iOrder": -5,
+ 					"sTitle" : "Meas. Conc."                    
                 }
             },
             "effects": {
