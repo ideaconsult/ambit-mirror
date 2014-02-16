@@ -2064,13 +2064,17 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearchMDL("CC=C","D:/projects/nina/biphenyl.mol");
 		//tu.testSmartsManagerBoolSearchMDL("cc=c","D:/projects/nina/biphenyl.mol");
 		
-		//tu.testIsomorphismTester("[]C", "CC"); - fix []
+		
 		
 		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
-		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Exception to fix !!!!!		
-		//tu.testSMIRKS("[N;:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]"); //--> Exception to fix !!!!!
+		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Exception to fix !!!!!
+		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]"); 
 		
-		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]");
+		//Our parser does not require atom ampping to be at the end of atom expression 
+		tu.testSMIRKS("[N;+:1][C:2]([H])>>[N:1;+][H].[Cl-][C:2]=[O]", "[H][N+1](C)C[H]");    
+		
+		//tu.testSMIRKS("[N:1][C:2]>>[N:1]Cl.[C:2]", "NCC");
+		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N:1]Cl.[C:2]", "NCC");
 		
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[$(C),$(Cl),$(OC),$(CC):9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[$(C),$(Cl),$(OC),$(CC):9].[H:10][H:11]", "[H]Oc1([H])c([H])(C)c([H])c([H])(O[H])c([H])c1([H])");
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C:9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C:9].[H:10][H:11]", "[H]Oc1c(C)cc(O[H])cc1");
@@ -2079,7 +2083,7 @@ public class TestUtilities
 		
 		//tu.testSMIRKS("[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2]([O])[c:3]([O])[c:4][c:5][c:6]1", "c1ccccc1");
 		//tu.testSMIRKS("[C:1][O][Cl:2]>>[C:1][N][Cl:2]", "CCOCl");
-		tu.testSMIRKS_JoergTestCase();
+		//tu.testSMIRKS_JoergTestCase();
 		
 		//tu.testPreprocessing("c1ccccc1", true);
 		

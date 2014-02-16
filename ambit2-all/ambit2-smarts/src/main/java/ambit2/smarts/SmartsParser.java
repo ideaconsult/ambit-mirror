@@ -760,7 +760,7 @@ public class SmartsParser
 			parseAtomExpression();
 			break;
 		case ']':
-			newError("Incorrect opening bracket ']' ", curChar+1,"");
+			newError("Incorrect closing bracket ']' ", curChar+1,"");
 			break;	
 		case '.':
 			if (FlagCLG)
@@ -947,6 +947,20 @@ public class SmartsParser
 				 parseAtomPrimitive();
 		}
 		
+		
+		if (errors.size() == 0)
+		{
+			//Check whether the last token  it is a logical operation (i.e. an operand is missing)
+			//e.g. [C;]		
+			int lastTok = getLastAtomToken();		
+			if (lastTok == -1) //check for empty expressions e.g. []
+				newError("Empty atom expression", curChar,""); //curChar+1 is not added here
+			else
+				if (lastTok >= SmartsConst.LO)			
+					newError("Atom expression incorrectly ends with logical operation. Operand is missing", curChar,"");  //curChar+1 is not added here
+		}
+		
+		
 		if (errors.size() > 0)
 			return;
 		
@@ -1105,7 +1119,7 @@ public class SmartsParser
 					parseAP_SmirksMaping();
 				else
 				{
-					newError("Smirks mapping is not supported!", curChar+1,"");
+					newError("Smirks mapping is not switched on!", curChar+1,"");
 					curChar++;
 				}
 				break;
