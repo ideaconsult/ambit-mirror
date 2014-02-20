@@ -1446,10 +1446,11 @@ public class TestUtilities
 	{
 		System.out.println("Testing SMIRKS: " + smirks);
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
-		SMIRKSReaction reaction = smrkMan.parse(smirks);
+		SMIRKSReaction reaction = smrkMan.parse(smirks);		
 		if (!smrkMan.getErrors().equals(""))
 		{
 			System.out.println(smrkMan.getErrors());
+			//System.out.println("\n" + reaction.transformationDataToString());
 			return;
 		}
 		
@@ -2067,11 +2068,14 @@ public class TestUtilities
 		
 		
 		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
-		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Exception to fix !!!!!
+		tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
+		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O:4]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
+		//tu.testSMIRKS("[N:1][C:2]([C])>>[N:1][C].[C:2]=[O:4]", "NCC"); //---> Parser error is produced !!!!!
+		//tu.testSMIRKS("[N:1][C:1]([C])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Should produce duplciation index errors !!!!!
 		//tu.testSMIRKS("[N:1][C:2]([H])>>[N:1][H].[Cl-][C:2]=[O]", "[H]N(C)C[H]"); 
 		
-		//Our parser does not require atom ampping to be at the end of atom expression 
-		tu.testSMIRKS("[N;+:1][C:2]([H])>>[N:1;+][H].[Cl-][C:2]=[O]", "[H][N+1](C)C[H]");    
+		//Ambit-SMARTS/SMIRKS parser does not require atom ampping info (":n") to be at the end of the atom expression 
+		//tu.testSMIRKS("[N;+:1][C:2]([H])>>[N:1;+][H].[Cl-][C:2]=[O]", "[H][N+1](C)C[H]");    
 		
 		//tu.testSMIRKS("[N:1][C:2]>>[N:1]Cl.[C:2]", "NCC");
 		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N:1]Cl.[C:2]", "NCC");
