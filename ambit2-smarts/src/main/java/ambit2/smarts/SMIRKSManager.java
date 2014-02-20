@@ -700,7 +700,7 @@ public class SMIRKSManager
 	
 		
 	
-	//Helper
+	//Helper functions
 	
 	public void printSSMap(IAtomContainer target, Vector<IAtom> rMap)
 	{	

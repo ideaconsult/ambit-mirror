@@ -33,14 +33,13 @@ public class SMIRKSReaction
 	public Vector<Integer> agentsCLG = new Vector<Integer>();
 	public Vector<Integer> productsCLG = new Vector<Integer>();
 	
-	
-	
+		
 	public  Vector<String> mapErrors = new Vector<String>(); 
 	//HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
 	
 	//Mapping data
 	//Atom numbers are described in two ways
-	//1.<Global atom numbers> i.e. regardless of the reactant/product fragmenttatoin
+	//1.<Global atom numbers> i.e. regardless of the reactant/product fragmentation
 	//2.<Frag Num>  + <Local atom Num> 
 	
 	Vector<Integer> reactantMapIndex = new Vector<Integer>();  //Container with the mapping indexes as they appeared in the SMIRKS
@@ -111,8 +110,15 @@ public class SMIRKSReaction
 				mapErrors.add("Product Map Index " + productMapIndex.get(i).intValue()+ 
 						" is not valid reactant map index!");
 		}
+		
+		
+		if (!mapErrors.isEmpty())
+		{	
+			//At least one mapping error is found
+			//The errors may cause exceptions in the following code hence the checking is stopped    
+			return;
+		}
 			
-				
 		SmartsToChemObject stco = new SmartsToChemObject(builder);
 		
 		//Checking for atom typing and some properties correctness for all mapped atoms
@@ -138,10 +144,10 @@ public class SMIRKSReaction
 			IAtom glob_pa = product.getAtom(pGlobAtNum);
 			
 			if (glob_ra != ra)
-				mapErrors.add("Critical Error: Inconsistency between global and gragment atom treatment.");
+				mapErrors.add("Critical Error: Inconsistency between global and fragment atom treatment.");
 			
 			if (glob_pa != pa)
-				mapErrors.add("Critical Error: Inconsistency between global and gragment atom treatment.");
+				mapErrors.add("Critical Error: Inconsistency between global and fragment atom treatment.");
 			
 			//System.out.println("Map #" + rMapInd.intValue() + "  P" + rNum + " A"+rAtNum + "  -->  R"+pNum+" A"+pAtNum+"  "
 			//		+ "     " + rGlobAtNum + " --> " + pGlobAtNum);
