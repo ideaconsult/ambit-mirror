@@ -68,7 +68,7 @@ public class TautomersGenerator  extends	AbstractStructureProcessor<TautomerMana
 		writer.setConnection(connection);
 		writer.setCloseConnection(false);
 		writer.setDataset(new SourceDataset("TAUTOMERS"));
-		writer.setUsePreferredStructure(true); //force using existing structures
+		writer.setUseExistingStructure(true);
 	}
 	@Override
 	public void close() throws SQLException {

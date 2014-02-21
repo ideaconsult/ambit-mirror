@@ -64,8 +64,18 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	protected static final String seek_dataset = "SELECT idstructure,uncompress(structure) as s,format FROM structure join struc_dataset using(idstructure) join src_dataset using(id_srcdataset) where name=? and idchemical=?";
 	protected PreparedStatement ps_seekdataset;		
 	protected StructureNormalizer normalizer = new StructureNormalizer(); 
-	protected boolean usePreferredStructure = false;
+	protected boolean useExistingStructure = false;
 	
+	public boolean isUseExistingStructure() {
+		return useExistingStructure;
+	}
+
+
+	public void setUseExistingStructure(boolean useExistingStructure) {
+		this.useExistingStructure = useExistingStructure;
+	}
+
+
 	public boolean isBuild2D() {
 		return normalizer.isBuild2D();
 	}
@@ -76,25 +86,6 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 	}
 
 
-	public boolean isUsePreferredStructure() {
-		return usePreferredStructure;
-	}
-
-
-	public void setUsePreferredStructure(boolean usePreferredStructure) {
-		this.usePreferredStructure = usePreferredStructure;
-	}
-	protected boolean propertiesOnly = false;
-	
-	public boolean isPropertiesOnly() {
-		return propertiesOnly;
-	}
-
-
-	public void setPropertiesOnly(boolean propertiesOnly) {
-		this.propertiesOnly = propertiesOnly;
-		this.usePreferredStructure = true;
-	}
 	protected final String idchemical_tag="idchemical";
 	
 	public RepositoryWriter() {
@@ -140,7 +131,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 			rs = queryexec.process(query);
 			while (rs.next()) {
 				record.setIdchemical(rs.getInt(FIELD_NAMES.idchemical.name()));
-				if (usePreferredStructure || (propertiesOnly && (record.getType().equals(STRUC_TYPE.NA)))) 
+				if (useExistingStructure)  
 					record.setIdstructure(rs.getInt(FIELD_NAMES.idstructure.name()));
 				break;
 			}
@@ -174,7 +165,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		
 		if ((structure.getFormat()!=null) && MOL_TYPE.NANO.name().equals(structure.getFormat()))
 			; //TODO don't do lookup (for now)
-		else if (propertiesOnly && (structure.getIdchemical()>0) && (structure.getIdstructure()>0) ) { //all set
+		else if (useExistingStructure && (structure.getIdchemical()>0) && (structure.getIdstructure()>0) ) { //all set
 			
 		} else {
 		//find the chemical

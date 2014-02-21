@@ -391,7 +391,7 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			batch.setReference(dataset.getReference());
 			batch.setConnection(connection);
 			final RepositoryWriter writer = new RepositoryWriter();
-			writer.setPropertiesOnly(isPropertyOnly());
+			writer.setUseExistingStructure(isPropertyOnly());
 			writer.setPropertyKey(getMatcher());
 			writer.setDataset(dataset);
 			final ProcessorsChain<String, IBatchStatistics, IProcessor> chain = new ProcessorsChain<String, IBatchStatistics, IProcessor>();
