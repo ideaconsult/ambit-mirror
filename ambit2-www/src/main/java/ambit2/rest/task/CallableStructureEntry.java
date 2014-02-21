@@ -142,7 +142,7 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 	@Override
 	protected TaskResult createReference(Connection connection)	throws Exception {
 		final RepositoryWriter writer = new RepositoryWriter();
-		writer.setPropertiesOnly(isPropertyOnly());
+		writer.setUseExistingStructure(isPropertyOnly());
 		writer.setPropertyKey(new CASKey());
 		SourceDataset dataset;
 		if (isPropertyOnly()) {

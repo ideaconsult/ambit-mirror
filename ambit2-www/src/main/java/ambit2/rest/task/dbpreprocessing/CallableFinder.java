@@ -237,9 +237,8 @@ public class CallableFinder<USERID> extends	CallableDBProcessing<USERID>  {
 			}
 		};
 		if (MODE.propertyonly.equals(mode)) {
-			writer.setUsePreferredStructure(true);
 			writer.setPropertyKey(new NoneKey());
-			writer.setPropertiesOnly(true);
+			writer.setUseExistingStructure(true);
 			writer.setOperation(OP.CREATE);
 		} else 		
 			writer.setOperation(OP.UPDATE);
