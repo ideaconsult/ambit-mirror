@@ -124,7 +124,14 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public void setReferenceYear(String year) {
 		if (this.reference==null) this.reference = new Citation("",year);
 		else this.reference.setYear(year);
-	}	
+	}
+	public String getReferenceOwner() {
+		return reference==null?null:reference.getOwner();
+	}
+	public void setReferenceOwner(String owner) {
+		if (this.reference==null) this.reference = new Citation("","");
+		this.reference.setOwner(owner);
+	}
 	public List<EffectRecord<ENDPOINT, CONDITIONS, UNIT>> getEffects() {
 		return effects;
 	}
@@ -269,6 +276,10 @@ class Citation {
 		b.append("\"year\"");
 		b.append(":\t");
 		b.append(getYear()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getYear())));
+		b.append(",\t");
+		b.append("\"owner\"");
+		b.append(":\t");
+		b.append(getOwner()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getOwner())));
 		b.append("}");
 		return b.toString();
 	}	

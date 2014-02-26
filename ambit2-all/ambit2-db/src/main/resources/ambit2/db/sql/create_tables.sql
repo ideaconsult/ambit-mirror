@@ -190,6 +190,7 @@ CREATE TABLE `substance_protocolapplication` (
   `interpretation_criteria` text,
   `reference` text CHARACTER SET utf8 COLLATE utf8_bin,
   `reference_year` smallint(6) DEFAULT NULL,
+  `reference_owner` varchar(128) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `reliability` varchar(45) DEFAULT NULL COMMENT 'Klimish code (text) \n1 (reliable without restriction)\n2 (reliable with restrictions)\n3 (not reliable)\n4 (not assignable)\nother:\nempty (not specified)',
   `isRobustStudy` tinyint(1) DEFAULT NULL,
@@ -202,6 +203,7 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `endpoint` (`endpoint`),
   KEY `category` (`endpointcategory`),
   KEY `topcategory` (`topcategory`,`endpointcategory`),
+  KEY `reference_owner` (`reference_owner`),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1167,7 +1169,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (7,1,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (7,2,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
