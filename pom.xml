@@ -156,7 +156,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.3.1</version>
+          <version>2.3.2</version>
           <configuration>
             <source>1.6</source>
             <target>1.6</target>
@@ -339,6 +339,7 @@
     <module>ambit2-structure2name</module>
     <module>ambit2-groupcontribution</module>
     <module>ambit2-loom</module>
+    <module>ambit2-dbi5</module>
   </modules>
   <distributionManagement>
     <!-- 

@@ -112,7 +112,7 @@
 	    <artifactId>c3p0</artifactId>
 	    <version>0.9.1.2</version>
 	</dependency>
-	<!-- IUCLID5 --> 
+	<!-- IUCLID5  
 	<dependency>
   		<groupId>net.idea</groupId>
   		<artifactId>i5z</artifactId>		
@@ -125,6 +125,7 @@
     	  <classifier>tests</classifier>
 	    <scope>test</scope>
     </dependency>
+    -->
   </dependencies>
 <licenses>
   <license>

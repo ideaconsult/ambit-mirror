@@ -109,10 +109,13 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.3.1</version>
+          <version>3.1</version>
           <configuration>
             <source>1.6</source>
             <target>1.6</target>
+             <compilerArgument>-Xlint:all</compilerArgument>
+              <showWarnings>true</showWarnings>
+        	 <showDeprecation>true</showDeprecation>
           </configuration>
         </plugin>
         <plugin>
@@ -305,7 +308,9 @@
   <modules>
     <module>../ambit2-ambitxt</module>
     <module>../ambit2-www</module>
+    <!--
     <module>../ambit2-taglibs</module>
+    -->
     <module>../ambit2-i5rest</module>
   </modules>
   <dependencies>
@@ -313,6 +318,11 @@
     <dependency>
       <groupId>ambit</groupId>
       <artifactId>ambit2-db</artifactId>
+      <version>${ambit.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ambit</groupId>
+      <artifactId>ambit2-dbi5</artifactId>
       <version>${ambit.version}</version>
     </dependency>
     <dependency>

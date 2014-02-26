@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.dbi5
+
+Name: ambit2/dbi5/
+Specification-Title: ambit2.dbi5
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.dbi5
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.dbi5
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.
