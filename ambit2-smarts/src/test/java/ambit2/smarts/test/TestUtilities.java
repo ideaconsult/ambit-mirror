@@ -69,6 +69,7 @@ import ambit2.smarts.SmartsScreeningKeys;
 import ambit2.smarts.SmartsToChemObject;
 import ambit2.smarts.StructInfo;
 import ambit2.smarts.StructureSetAnalyzer;
+import ambit2.smarts.SmartsAtomExpression;
 
 
 
@@ -115,6 +116,7 @@ public class TestUtilities
 			return;
 		}
 		System.out.println("Atoms: "+SmartsHelper.getAtomsString(qac));
+		
 		/*
 		for (int i = 0; i < qac.getAtomCount(); i++)
 			if (qac.getAtom(i) instanceof SmartsAtomExpression)
@@ -1991,6 +1993,7 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[C^2]","C1=CC=CC=1");
 		//tu.testSmartsManagerBoolSearch("[C^1]","CC#CC");
 		//tu.testSmartsManagerBoolSearch("[C^1]","CC=C=C");
+		//tu.testSmartsManagerBoolSearch("[C^1; +]C","CCCC");  //the space within atom expression does not cause parser error !!!
 		
 		//tu.showFullIsomorphismMappings("N", "CCCNCCCNCC");
 		//tu.showFullIsomorphismMappings("CN", "CCCNCCCNCC");
@@ -2023,8 +2026,9 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("cc=c","C1=CC=CC=C1C2=CC=CC=C2");
 		//tu.testSmartsManagerBoolSearch("cc=c","c1ccccc1c2ccccc2");
 		//tu.testSmartsManagerBoolSearch("[C;$(C=O)]", "O=CCC");
+		//tu.testSmartsManagerBoolSearch("[C;D3](O)(O)", "OCC1OC(O)C(O)C1(O)");
 		
-		//This is not working since in has recursion inside recurstion
+		//This example is not working since it has recursion inside recursion
 		//tu.testSmartsManagerBoolSearch("[$([S;H0;D2])!$([S;H0;D2]([$([CX4]),$(C(=O)C)])[$([CX4]),$(C(=O)C)])]", "CCSC=NC");
 		//tu.testSmartsManagerBoolSearch("[$([S;H0;D2])!$([S;H0;D2]([CX4])[CX4])!$([S;H0;D2]([CX4])C(=O)C)!$([S;H0;D2](C(=O)C)C(=O)C)]", "CCSC=NC");
 		
@@ -2035,7 +2039,7 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("C[H]","CC");
 		
 		
-		//These example with a great probability proof that there a bug in the CDK isomorphism algorithm
+		//These examples with a great probability proof that there is a bug in the CDK isomorphism algorithm
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","C(=S)N");	
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[*]~[*]~[N,$(C=S)]","C(=S)N");   //[*] matches [H]
@@ -2068,7 +2072,7 @@ public class TestUtilities
 		
 		
 		//tu.testSMIRKS("[N:1][C:2][C:3][C:4]>>[C:4]=[C:3].[C:2]=[N----:1]Cl", "SNCCCN");
-		tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
+		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
 		//tu.testSMIRKS("[N:1][C:2]([C:3])>>[N:1][C].[C:2]=[O:4]", "NCC"); //---> Parser error is produced (Exception is fixed now) !!!!!
 		//tu.testSMIRKS("[N:1][C:2]([C])>>[N:1][C].[C:2]=[O:4]", "NCC"); //---> Parser error is produced !!!!!
 		//tu.testSMIRKS("[N:1][C:1]([C])>>[N:1][C].[C:2]=[O]", "NCC"); //---> Should produce duplciation index errors !!!!!
@@ -2078,7 +2082,9 @@ public class TestUtilities
 		//tu.testSMIRKS("[N;+:1][C:2]([H])>>[N:1;+][H].[Cl-][C:2]=[O]", "[H][N+1](C)C[H]");    
 		
 		//tu.testSMIRKS("[N:1][C:2]>>[N:1]Cl.[C:2]", "NCC");
-		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N:1]Cl.[C:2]", "NCC");
+		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N;!$(N=O):1]Cl.[C:2]", "NCC");  //--> Exception ...
+		tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N:1]Cl.[C:2]", "NCC");  //--> Error: Product Map Index 1 is not valid reactant map index!
+		
 		
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[$(C),$(Cl),$(OC),$(CC):9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[$(C),$(Cl),$(OC),$(CC):9].[H:10][H:11]", "[H]Oc1([H])c([H])(C)c([H])c([H])(O[H])c([H])c1([H])");
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C:9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C:9].[H:10][H:11]", "[H]Oc1c(C)cc(O[H])cc1");

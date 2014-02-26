@@ -135,6 +135,8 @@ public class SMIRKSManager
 		else
 			reaction.product = fragment;
 		
+		//System.out.println("Reactant Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.reactant));
+		//System.out.println("Product Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.product));
 		
 		if (res > 0)
 			return reaction;
