@@ -26,7 +26,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
 	protected PA record = (PA)new ProtocolApplication<Protocol,String,String,Params,String>(new Protocol(null));
 	private final static String sql = 
 		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su," +
-		"params,interpretation_result,interpretation_criteria,reference,reference_year," +
+		"params,interpretation_result,interpretation_criteria,reference,reference_year,reference_owner," +
 		"owner_prefix,hex(owner_uuid) ou,idsubstance,hex(rs_prefix),hex(rs_uuid) rsu,owner_name," +
 		"reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType\n" +
 		"from substance_protocolapplication p\n" +
@@ -88,6 +88,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
             
     		record.setReference(rs.getString("reference"));
     		try {record.setReferenceYear(Integer.toString(rs.getInt("reference_year")));} catch (Exception x) {record.setReferenceYear(null);}
+    		try {record.setReferenceOwner(rs.getString("reference_owner"));} catch (Exception x) {record.setReferenceOwner(null);}
     		record.setParameters(rs.getString("params")); //parse json
     		record.setInterpretationCriteria(rs.getString("interpretation_criteria")); //parse json
     		record.setInterpretationResult(rs.getString("interpretation_result")); //parse json

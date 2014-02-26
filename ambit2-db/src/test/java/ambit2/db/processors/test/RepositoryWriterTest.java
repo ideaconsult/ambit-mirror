@@ -560,9 +560,11 @@ delete from struc_dataset where idstructure>3
 	public int write(IRawReader<IStructureRecord> reader,Connection connection) throws Exception  {
 		return write(reader, connection,null);
 	}
+	
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key) throws Exception  {
-		
-
+		return write(reader, connection, key, false);
+	}
+	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean iseExistingStructure) throws Exception  {	
 		RepositoryWriter writer = new RepositoryWriter();
 		if (key != null)
 			writer.setPropertyKey(key);
