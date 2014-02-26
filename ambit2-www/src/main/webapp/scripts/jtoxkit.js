@@ -323,8 +323,8 @@ var jToxDataset = (function () {
         {type: "text/plain", icon: "images/txt64.png"},
         {type: "text/x-arff", icon: "images/weka.png"},
         {type: "text/x-arff-3col", icon: "images/weka.png"},
-        {type: "application/rdf+xml", icon: "images/rdf.gif"},
-        {type: "application/json", icon: "images/json.png"}
+        {type: "application/rdf+xml", icon: "images/rdf64.png"},
+        {type: "application/json", icon: "images/json64.png"}
       ],
 
       // These are instance-wide pre-definitions of default baseFeatures as described below.
