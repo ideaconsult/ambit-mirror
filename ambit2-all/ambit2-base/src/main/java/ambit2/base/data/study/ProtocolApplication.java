@@ -227,6 +227,15 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 class Citation {
 	String year;
 	String title;
+	String owner;
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
 	public Citation(String title) {
 		this.title = title;
 	}
