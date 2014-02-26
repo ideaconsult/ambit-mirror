@@ -93,6 +93,25 @@ public class SmartsHelper
 		{
 			sb.append("tok("+expression.tokens.get(k).type+","+expression.tokens.get(k).param+") ");
 		}
+		
+		Object prop = expression.getProperty("SmirksMapIndex");
+		if (prop != null)
+			sb.append("Map "+prop+" ");
+		
+		return(sb.toString());
+	}
+	
+	static public String getAtomsExpressionTokens(IQueryAtomContainer query)
+	{
+		StringBuffer sb = new StringBuffer();	
+		
+		for (int i = 0; i < query.getAtomCount(); i++)
+		{	
+			if (query.getAtom(i) instanceof SmartsAtomExpression)
+				sb.append("Expr["+getAtomExpressionTokens((SmartsAtomExpression)query.getAtom(i)) + "] ");
+			else
+				sb.append(atomToString((SMARTSAtom)query.getAtom(i)) + " ");			
+		}	
 		return(sb.toString());
 	}
 	

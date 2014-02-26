@@ -1372,7 +1372,7 @@ public class SmartsParser
 				else
 					curSmirksMapIndex = par;
 			}
-		}	
+		}
 	}
 	
 	boolean parseMOEExpression()
