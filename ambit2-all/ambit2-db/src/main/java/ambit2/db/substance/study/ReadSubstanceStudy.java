@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.idea.i5._5.ambit2.Phrases;
-
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
