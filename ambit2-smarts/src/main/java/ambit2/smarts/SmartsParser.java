@@ -185,7 +185,6 @@ public class SmartsParser
 				SmartsAtomExpression sa = (SmartsAtomExpression) container0.getAtom(i); 
 				for (int j = 0; j < sa.recSmartsStrings.size(); j++)
 				{	
-					//!!!!!Probably there is a BUG which causes the fragments containers to be filled with wrong information when recursive atoms are present
 					hasRecursiveSmarts = true;
 					smarts = sa.recSmartsStrings.get(j);
 					
