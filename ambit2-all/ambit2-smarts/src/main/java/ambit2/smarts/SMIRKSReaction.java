@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
 
 
@@ -182,11 +183,13 @@ public class SMIRKSReaction
 			Vector<Integer> atFragNum, Vector<Integer> atGlobalNum, Vector<Integer> fragNum)
 	{
 		for (int i = 0; i < fragment.getAtomCount(); i++)
-		{
+		{						
 			IAtom a = fragment.getAtom(i);
 			Integer iObj = (Integer)a.getProperty("SmirksMapIndex");
 			if (iObj != null)
 			{
+				//System.out.println("   Map index = " + iObj);
+				
 				if (containsInteger(mapIndex, iObj))
 					mapErrors.add(compType + " Map Index " + iObj.intValue()+ " is repeated!");
 				else
@@ -202,6 +205,7 @@ public class SMIRKSReaction
 			else
 			{	
 				//This is unmapped atom
+				//System.out.println("   not mapped atom");
 				int globalAtNum = globalContainer.getAtomNumber(a);
 				notMappedAt.add(new Integer(globalAtNum));
 			}
@@ -213,7 +217,7 @@ public class SMIRKSReaction
 	{
 		SmartsToChemObject stco = new SmartsToChemObject(builder);
 		
-		//Atom Transformation. Different atom properties are handles
+		//Atom Transformation. Different atom properties are handled
 		generateChargeTransformation();
 		
 		//TODO - other atom properties transformation
