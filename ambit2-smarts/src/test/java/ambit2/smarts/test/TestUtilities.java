@@ -1446,17 +1446,24 @@ public class TestUtilities
 	
 	public void testSMIRKS(String smirks, String targetSmiles)throws Exception
 	{
-		System.out.println("Testing SMIRKS: " + smirks);
+		System.out.println("Testing SMIRKS: " + smirks);		
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 		SMIRKSReaction reaction = smrkMan.parse(smirks);		
 		if (!smrkMan.getErrors().equals(""))
 		{
 			System.out.println(smrkMan.getErrors());
 			//System.out.println("\n" + reaction.transformationDataToString());
+			
+			//System.out.println("Reactant Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.reactant));
+			//System.out.println("Product Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.product));
 			return;
 		}
 		
-		System.out.println(reaction.transformationDataToString());
+		//System.out.println(reaction.transformationDataToString());
+		
+		//System.out.println("Reactant Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.reactant));
+		//System.out.println("Product Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.product));
+		System.out.println();
 		
 		if (targetSmiles.equals(""))
 			return;
@@ -2083,7 +2090,7 @@ public class TestUtilities
 		
 		//tu.testSMIRKS("[N:1][C:2]>>[N:1]Cl.[C:2]", "NCC");
 		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N;!$(N=O):1]Cl.[C:2]", "NCC");  //--> Exception ...
-		tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N:1]Cl.[C:2]", "NCC");  //--> Error: Product Map Index 1 is not valid reactant map index!
+		tu.testSMIRKS("[N;$(N-O-Br):1][C:2]>>[N:1]Cl.[C:2]", "NCC");  //--> Error: Product Map Index 1 is not valid reactant map index!
 		
 		
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[$(C),$(Cl),$(OC),$(CC):9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[$(C),$(Cl),$(OC),$(CC):9].[H:10][H:11]", "[H]Oc1([H])c([H])(C)c([H])c([H])(O[H])c([H])c1([H])");

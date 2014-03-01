@@ -171,18 +171,32 @@ public class SmartsParser
 			
 		setNeededDataFlags();
 		
-		//Treat recursive smarts and chirality info		
-		IQueryAtomContainer curContainer = container;
-		for (int i = 0; i < curContainer.getAtomCount(); i++)
+		//The global work variables are stored in order to use them again in the recursion 
+		//and to preserve the original values for the code after recursion	
+		IQueryAtomContainer container0 = container;
+		Vector<IQueryAtomContainer> fragments0 = fragments;
+		Vector<Integer> fragmentComponents0 = fragmentComponents;
+		
+		//Treat recursive smarts and chirality info
+		for (int i = 0; i < container0.getAtomCount(); i++)
 		{
-			if (curContainer.getAtom(i) instanceof SmartsAtomExpression)
+			if (container0.getAtom(i) instanceof SmartsAtomExpression)
 			{
-				SmartsAtomExpression sa = (SmartsAtomExpression) curContainer.getAtom(i); 
+				SmartsAtomExpression sa = (SmartsAtomExpression) container0.getAtom(i); 
 				for (int j = 0; j < sa.recSmartsStrings.size(); j++)
 				{	
+					//!!!!!Probably there is a BUG which causes the fragments containers to be filled with wrong information when recursive atoms are present
 					hasRecursiveSmarts = true;
 					smarts = sa.recSmartsStrings.get(j);
+					
+					//New instances of the global working variables are created for the recursion process
+					//This is needed in order to not mess up the original containers.
+					//Generally within recursive SMARTS expression fragments and component level groping do not make sense, 
+					//however in the current version the parser will parse this information, but it will not be stored any where
 					container = new QueryAtomContainer();
+					fragments = new Vector<IQueryAtomContainer>();
+					fragmentComponents = new Vector<Integer>();
+					
 					init();
 					insideRecSmarts = true;
 					parse();
@@ -193,7 +207,11 @@ public class SmartsParser
 			}
 		}
 		
-		container = curContainer;
+		//Restoring the global work variables after recursion
+		container = container0;
+		fragments = fragments0;
+		fragmentComponents = fragmentComponents0;
+		
 	}
 	
 	public void setComponentLevelGrouping(boolean flag)
