@@ -1463,7 +1463,7 @@ public class TestUtilities
 		
 		//System.out.println("Reactant Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.reactant));
 		//System.out.println("Product Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.product));
-		System.out.println();
+		//System.out.println();
 		
 		if (targetSmiles.equals(""))
 			return;
@@ -2089,9 +2089,8 @@ public class TestUtilities
 		//tu.testSMIRKS("[N;+:1][C:2]([H])>>[N:1;+][H].[Cl-][C:2]=[O]", "[H][N+1](C)C[H]");    
 		
 		//tu.testSMIRKS("[N:1][C:2]>>[N:1]Cl.[C:2]", "NCC");
-		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N;!$(N=O):1]Cl.[C:2]", "NCC");  //--> Exception ...
-		tu.testSMIRKS("[N;$(N-O-Br):1][C:2]>>[N:1]Cl.[C:2]", "NCC");  //--> Error: Product Map Index 1 is not valid reactant map index!
-		
+		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N;!$(N=O):1]Cl.[C:2]", "NCC");  //--> No more exception is thown due to the recursive SMARTS
+		//tu.testSMIRKS("[N;$(N-O-Br):1][C:2]>>[N:1]Cl.[C:2]", "NCC");  //--> No more error  is obtained due to the recrusive SMARTS
 		
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[$(C),$(Cl),$(OC),$(CC):9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[$(C),$(Cl),$(OC),$(CC):9].[H:10][H:11]", "[H]Oc1([H])c([H])(C)c([H])c([H])(O[H])c([H])c1([H])");
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[C:9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[C:9].[H:10][H:11]", "[H]Oc1c(C)cc(O[H])cc1");
@@ -2101,6 +2100,12 @@ public class TestUtilities
 		//tu.testSMIRKS("[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2]([O])[c:3]([O])[c:4][c:5][c:6]1", "c1ccccc1");
 		//tu.testSMIRKS("[C:1][O][Cl:2]>>[C:1][N][Cl:2]", "CCOCl");
 		//tu.testSMIRKS_JoergTestCase();
+		
+		tu.testSMIRKS("[*:1][C:2]#[C:3][*;#6:4]>>[*:1]/[C:2](/[H])=[C:3](/[H])[C:4]", "COCCCC#CCCC");		
+		tu.testSMIRKS("[*;#6:1][C:2]=[O:3]>>[*;#6:1][C:2]-[O:3][*;#6]","CCCC=O");
+		tu.testSMIRKS("[C:1]=O>>[C:1]1OCCO1","CCCCCCC=O");
+		tu.testSMIRKS("[*:1]C(=O)O>>[*:1]C(N)=O","CCCCCCC(=O)O");
+		
 		
 		//tu.testPreprocessing("c1ccccc1", true);
 		
