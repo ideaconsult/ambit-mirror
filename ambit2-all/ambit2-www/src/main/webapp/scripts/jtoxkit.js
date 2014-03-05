@@ -1164,7 +1164,7 @@ var jToxStudy = (function () {
         { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, "endpoint");  } },   // Effects columns
         { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatLoHigh(data.result, type) }) } },
         { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
-        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "50px", "mData": "owner.company.name", "sDefaultContent": "?"  }, 
+        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "50px", "mData": "citation.owner", "sDefaultContent": "?"  }, 
         { "sTitle": "UUID", "sClass": "center middle", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jToxKit.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
       ];
   
