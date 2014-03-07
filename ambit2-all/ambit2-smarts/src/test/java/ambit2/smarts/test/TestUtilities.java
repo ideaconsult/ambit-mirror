@@ -2101,12 +2101,22 @@ public class TestUtilities
 		//tu.testSMIRKS("[C:1][O][Cl:2]>>[C:1][N][Cl:2]", "CCOCl");
 		//tu.testSMIRKS_JoergTestCase();
 		
-		tu.testSMIRKS("[*:1][C:2]#[C:3][*;#6:4]>>[*:1]/[C:2](/[H])=[C:3](/[H])[C:4]", "COCCCC#CCCC");		
-		tu.testSMIRKS("[*;#6:1][C:2]=[O:3]>>[*;#6:1][C:2]-[O:3][*;#6]","CCCC=O");
-		tu.testSMIRKS("[C:1]=O>>[C:1]1OCCO1","CCCCCCC=O");
-		tu.testSMIRKS("[*:1]C(=O)O>>[*:1]C(N)=O","CCCCCCC(=O)O");
+		//Test cases from  Yannick Djoumbou (y.djoumbou@gmail.com)
+		//tu.testSMIRKS("[*;#6:1][C:2]#[C:3][*;#6:4]>>[*:1]/[C:2](/[H])=[*:3](/[H])[C:4]", "COCCCC#CCCC");
+		//tu.testSMIRKS("[*:1][C:2]#[C:3][*;#6:4]>>[*:1]/[C:2](/[H])=[C:3](/[H])[C:4]", "COCCCC#CCCC");		
+		//tu.testSMIRKS("[*;#6:1][C:2]=[O:3]>>[*;#6:1][C:2]-[O:3][*;#6]","CCCC=O");
+		//tu.testSMIRKS("[C:1]=O>>[C:1]1OCCO1","CCCCCCC=O");
+		//tu.testSMIRKS("[*:1]C(=O)O>>[*:1]C(N)=O","CCCCCCC(=O)O");
 		
+		//tu.testSMIRKS("[H:99][O;X2:1]c1ccccc1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]Oc1ccccc1");
+		//tu.testSMIRKS("[H:99][O;X2:1]C1=CC=CC=C1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]OC1=CC=CC=C1");
+		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].[O;X2:1][a:2]","[H]OC1=CC=CC=C1");		
+		//tu.testSMIRKS("[H:99][O;X2:1]c1ccccc1>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");		                                                    
+		//tu.testSMIRKS("[H:99][O;X2:1]C1=CC=CC=C1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]Oc1ccccc1");                                     
+		//tu.testSMIRKS("[H:99][O;X2:1][c:2]1[c:3][c:4][c:5][c:6][c:7]1>>C1CCC([O;X2:1][c:2]2[c:3][c:4][c:5][c:6][c:7]2)OC1.[H:99]","[H]Oc1ccccc1");
 		
+		//tu.testSMIRKS("[H:99][O;X2:1][C:2]2=[C:3]C=CC=C2>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");
+		                                                      
 		//tu.testPreprocessing("c1ccccc1", true);
 		
 		//tu.testSMARTSBondToIBond("C=,@C");
