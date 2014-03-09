@@ -20,6 +20,7 @@ import ambit2.db.AbstractDBProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.exceptions.DbAmbitException;
 import ambit2.db.substance.CreateSubstance;
+import ambit2.db.substance.ids.UpdateSubstanceIdentifiers;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
 import ambit2.db.substance.study.DeleteEffectRecords;
 import ambit2.db.substance.study.UpdateEffectRecords;
@@ -36,6 +37,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	 */
 	private static final long serialVersionUID = -2237399197958151808L;
 	private CreateSubstance q;
+	private UpdateSubstanceIdentifiers qids;
     private UpdateSubstanceRelation qr;
     private UpdateSubstanceStudy qss;
     private UpdateEffectRecords qeffr;
@@ -61,6 +63,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	public DBSubstanceWriter(SourceDataset dataset,SubstanceRecord importedRecord) {
 		super();
 	    q = new CreateSubstance();
+	    qids = new UpdateSubstanceIdentifiers();
 	    qr = new UpdateSubstanceRelation();
 	    x = new UpdateExecutor();
 	    x.setCloseConnection(false);
@@ -123,6 +126,8 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 	         	} else {
 		         	q.setObject(substance);
 		         	x.process(q);
+		         	qids.setObject(substance);
+		         	x.process(qids);
 	         		importedRecord.setCompanyUUID(substance.getCompanyUUID());
 	         		importedRecord.setIdsubstance(substance.getIdsubstance());
 		         	if (substance.getRelatedStructures()!=null)
