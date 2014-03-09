@@ -49,6 +49,7 @@ import org.openscience.cdk.validate.CDKValidator;
 import org.openscience.cdk.validate.ValidationReport;
 import org.openscience.cdk.validate.ValidatorEngine;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.smiles.SmilesGenerator;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MyIteratingMDLReader;
@@ -83,8 +84,11 @@ public class TestUtilities
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SmartsToChemObject smToChemObj = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
 	static ChemObjectToSmiles cots = new ChemObjectToSmiles(); 
+	
 	boolean FlagTargetPreprocessing = false;
+	boolean FlagProductPreprocessing = false;
 	boolean FlagExplicitHAtoms = false;
+	boolean FlagPrintAtomAttributes = false;
 	
 	public TestUtilities()
 	{	
@@ -1470,10 +1474,41 @@ public class TestUtilities
 		
 		
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
+		if (FlagPrintAtomAttributes)
+		{	
+			System.out.println("Reactant atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Reactant bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+		}
+			
 		smrkMan.applyTransformation(target, reaction);
+		
+		if (FlagProductPreprocessing)
+			this.preProcess(target);
+		
+		if (FlagPrintAtomAttributes)
+		{	
+			System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+		}		
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
 		
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
+	}
+	
+	public void testSmiles2Smiles(String smiles) throws Exception
+	{
+		System.out.println("Testing smiles: " + smiles);
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smiles);
+		if (FlagPrintAtomAttributes)
+		{	
+			System.out.println("Atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+		}	
+		
+		String smiles2 = SmartsHelper.moleculeToSMILES(target); 
+		SmilesGenerator smiGen = new SmilesGenerator();
+		String smiles3 = smiGen.createSMILES(target);
+		System.out.println(smiles + "  --> " + smiles2 + "    " + smiles3);
 	}
 	
 	public void testEquivalenceTestes(String targetSmiles) throws Exception
@@ -2021,16 +2056,18 @@ public class TestUtilities
 		//System.out.println(man.isFlagUseCDKIsomorphismTester());
 		
 		man.setUseCDKIsomorphismTester(false);
+		
 		//tu.testSmartsManagerBoolSearch("cccc","C1=CC=CC=C1");
 		//tu.testSmartsManagerBoolSearch("cccc","c1ccccc1");
 		//tu.testSmartsManagerBoolSearch("c1ccccc1c2ccccc2","C1=CC=CC=C1-C2=CC=CC=C2");
 		//tu.testSmartsManagerBoolSearch("c1ccccc1!@c2ccccc2","c1ccccc1c2ccccc2");
-		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1");
-		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1-C2=CC=CC=C2");
+		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1"); //The is false because "CC=C" is interpreted as aliphatic fragment
+		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1-C2=CC=CC=C2");   //The is false because "CC=C" is interpreted as aliphatic fragment
+		//tu.testSmartsManagerBoolSearch("cc=,:c","C1=CC=CC=C1-C2=CC=CC=C2"); //The result is true 
 				
 		//tu.testSmartsManagerBoolSearch("cc-c","c1ccccc1ccc");
 		//tu.testSmartsManagerBoolSearch("CC=C","C1=CC=CC=C1C2=CC=CC=C2");		
-		//tu.testSmartsManagerBoolSearch("cc=c","C1=CC=CC=C1C2=CC=CC=C2");
+		//tu.testSmartsManagerBoolSearch("cc=c","C1=CC=CC=C1C2=CC=CC=C2");  //the result is true if man.supportDoubleBondAromaticityNotSpecified(true);
 		//tu.testSmartsManagerBoolSearch("cc=c","c1ccccc1c2ccccc2");
 		//tu.testSmartsManagerBoolSearch("[C;$(C=O)]", "O=CCC");
 		//tu.testSmartsManagerBoolSearch("[C;D3](O)(O)", "OCC1OC(O)C(O)C1(O)");
@@ -2108,12 +2145,23 @@ public class TestUtilities
 		//tu.testSMIRKS("[C:1]=O>>[C:1]1OCCO1","CCCCCCC=O");
 		//tu.testSMIRKS("[*:1]C(=O)O>>[*:1]C(N)=O","CCCCCCC(=O)O");
 		
+		//tu.testSMIRKS("[Cl:3].[N:4][O:1][C:2]>>[N:4].[Cl:3][O:1][C:2]","Cl.NOC"); //Multi component reactions do not work ???!!!!
+		//tu.testSMIRKS("[N:4][O:1][C:2]>>[N:4].[Cl][O:1][C:2]","NOCF.NOC"); //Multi component reaction application ??? to be clarified
+		
 		//tu.testSMIRKS("[H:99][O;X2:1]c1ccccc1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]Oc1ccccc1");
 		//tu.testSMIRKS("[H:99][O;X2:1]C1=CC=CC=C1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]OC1=CC=CC=C1");
 		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].[O;X2:1][a:2]","[H]OC1=CC=CC=C1");		
 		//tu.testSMIRKS("[H:99][O;X2:1]c1ccccc1>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");		                                                    
 		//tu.testSMIRKS("[H:99][O;X2:1]C1=CC=CC=C1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]Oc1ccccc1");                                     
 		//tu.testSMIRKS("[H:99][O;X2:1][c:2]1[c:3][c:4][c:5][c:6][c:7]1>>C1CCC([O;X2:1][c:2]2[c:3][c:4][c:5][c:6][c:7]2)OC1.[H:99]","[H]Oc1ccccc1");
+		
+		tu.FlagPrintAtomAttributes = true;
+		tu.FlagProductPreprocessing = true;
+		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]Oc1ccccc1");
+		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]OC1=CC=CC=C1");
+		
+		tu.testSmiles2Smiles("C1=CC=CC=C1");
+		tu.testSmiles2Smiles("c1ccccc1");
 		
 		//tu.testSMIRKS("[H:99][O;X2:1][C:2]2=[C:3]C=CC=C2>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");
 		                                                      
