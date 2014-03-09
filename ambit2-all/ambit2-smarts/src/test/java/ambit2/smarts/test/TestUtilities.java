@@ -1507,7 +1507,8 @@ public class TestUtilities
 		
 		String smiles2 = SmartsHelper.moleculeToSMILES(target); 
 		SmilesGenerator smiGen = new SmilesGenerator();
-		String smiles3 = smiGen.createSMILES(target);
+		smiGen.setUseAromaticityFlag(true);
+		String smiles3 = smiGen.createSMILES(target);		
 		System.out.println(smiles + "  --> " + smiles2 + "    " + smiles3);
 	}
 	
@@ -2160,8 +2161,10 @@ public class TestUtilities
 		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]Oc1ccccc1");
 		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]OC1=CC=CC=C1");
 		
-		tu.testSmiles2Smiles("C1=CC=CC=C1");
-		tu.testSmiles2Smiles("c1ccccc1");
+		//tu.testSmiles2Smiles("C1=CC=CC=C1");
+		//tu.testSmiles2Smiles("c1ccccc1");
+		tu.testSmiles2Smiles("C[C@](CC)(O)Cl");
+		
 		
 		//tu.testSMIRKS("[H:99][O;X2:1][C:2]2=[C:3]C=CC=C2>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");
 		                                                      
