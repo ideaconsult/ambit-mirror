@@ -140,6 +140,20 @@ CREATE TABLE `substance` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Substance dossier (mainly to support IUCLID5)';
 
 -- -----------------------------------------------------
+-- Table `substance_ids` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `substance_ids`;
+CREATE TABLE `substance_ids` (
+  `prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `uuid` varbinary(16) DEFAULT NULL,
+  `type` varchar(64) NOT NULL,
+  `id` varchar(64) NOT NULL,
+  PRIMARY KEY (`prefix`,`uuid`,`type`,`id`),
+  KEY `systemid` (`type`,`id`),
+  CONSTRAINT `substanceids-x` FOREIGN KEY (`prefix`, `uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- -----------------------------------------------------
 -- Table `substance_relation` 
 -- -----------------------------------------------------
 

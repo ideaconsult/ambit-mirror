@@ -1,6 +1,7 @@
 package ambit2.rest.substance.study;
 
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 import org.restlet.Request;
@@ -9,6 +10,7 @@ import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.json.JSONUtils;
 import ambit2.base.processors.DefaultAmbitProcessor;
@@ -18,6 +20,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.db.search.IParameterizedQuery;
 import ambit2.db.search.IQueryCondition;
+import ambit2.db.substance.ids.ReadSubstanceIdentifiers;
 import ambit2.db.substance.study.ReadEffectRecord;
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.substance.SubstanceURIReporter;

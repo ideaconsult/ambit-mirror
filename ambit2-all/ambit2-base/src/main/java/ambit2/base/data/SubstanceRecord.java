@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
@@ -15,6 +16,7 @@ import ambit2.base.relation.composition.Proportion;
  *
  */
 public class SubstanceRecord extends StructureRecord {
+	protected List<ExternalIdentifier> externalids;
 	protected String ownerUUID;
 	protected String ownerName;
 	protected int idsubstance;
@@ -22,6 +24,7 @@ public class SubstanceRecord extends StructureRecord {
 	protected String companyName;
 	protected String publicName;
 	protected String companyUUID;
+	
 	protected List<ProtocolApplication> measurements;
 	public List<ProtocolApplication> getMeasurements() {
 		return measurements;
@@ -135,4 +138,10 @@ public class SubstanceRecord extends StructureRecord {
 		this.ownerName = ownerName;
 	}
 	
+	public List<ExternalIdentifier> getExternalids() {
+		return externalids;
+	}
+	public void setExternalids(List<ExternalIdentifier> externalids) {
+		this.externalids = externalids;
+	}	
 }
