@@ -52,6 +52,8 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
+import org.openscience.cdk.interfaces.ITetrahedralChirality;
+import org.openscience.cdk.interfaces.IStereoElement;
 
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 
@@ -160,11 +162,46 @@ public class SmartsHelper
 						
 			
 			sb.append("\n");
-		}	
+		}
+		
+		String stereoInfo = stereoInfoToString(container);	
+		if (!stereoInfo.isEmpty())
+		{
+			sb.append("Stereo information:\n");
+			sb.append(stereoInfo);
+		}
+		
 		return(sb.toString());
 	}
 	
+	static public String stereoInfoToString(IAtomContainer container)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (IStereoElement stereoEl : container.stereoElements())
+		{
+			if (stereoEl instanceof ITetrahedralChirality)
+			{	
+				sb.append(stereoCenterToString(container, (ITetrahedralChirality) stereoEl) + "\n");
+				continue;
+			}
+			sb.append(stereoEl.toString());
+		}
+		
+		return sb.toString();
+	}
 	
+	static public String stereoCenterToString(IAtomContainer container, ITetrahedralChirality chiral)
+	{
+		StringBuffer sb = new StringBuffer();
+		IAtom at = chiral.getChiralAtom();
+		sb.append(at.getSymbol()+ container.getAtomNumber(at)+ "  ");
+		sb.append(chiral.getStereo()+ "  ligands:");
+		IAtom ats[] = chiral.getLigands();
+		for (int i = 0; i < ats.length; i++)
+			sb.append(" "+ats[i].getSymbol()+ container.getAtomNumber(ats[i]));
+		
+		return sb.toString();
+	}
 	
 	static public String getBondAttributes(IAtomContainer container)
 	{
@@ -521,7 +558,8 @@ public class SmartsHelper
 	
 	public static String moleculeToSMILES(IAtomContainer mol) throws Exception
 	{	 
-		//TODO use SmilesGenerator(true)
+		//TODO use SmilesGenerator(true) - It is crucial to use because aromatic aromatic structures obtain incorrect SMILES 
+		
 		java.io.StringWriter result =  new java.io.StringWriter();
 		SMILESWriter writer = new SMILESWriter(result);
 		
