@@ -201,7 +201,7 @@ public class TestStrVisualizer
 		for (int i = 0; i < target.getBondCount(); i++)
 			System.out.println(target.getBond(i).getOrder() + "  " + target.getBond(i).getFlag(CDKConstants.ISAROMATIC));
 		
-		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
+		String transformedSmiles = SmartsHelper.moleculeToSMILES(target,true);
 		
 		
 		addStructure(target);
@@ -250,11 +250,11 @@ public class TestStrVisualizer
 		System.out.println(reaction.transformationDataToString());
 		
 		setFrame();
-		String targetSmiles = SmartsHelper.moleculeToSMILES(target);
+		String targetSmiles = SmartsHelper.moleculeToSMILES(target,true);
 		
 		addStructure((IAtomContainer)target.clone());
 		smrkMan.applyTransformation(target, reaction);
-		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
+		String transformedSmiles = SmartsHelper.moleculeToSMILES(target,true);
 		addStructure(target);
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
 		

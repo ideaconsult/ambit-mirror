@@ -941,7 +941,7 @@ public class ChemObjectFactory
 		for (int i = 0; i < inputSmiles.size(); i++)
 		{
 			IAtomContainer ac = connectStructures(groupSmiles, groupAttachPos, inputSmiles.get(i), strDefaultPos, IBond.Order.SINGLE);
-			String resSmiles = SmartsHelper.moleculeToSMILES(ac);
+			String resSmiles = SmartsHelper.moleculeToSMILES(ac,true);  
 			outSmiles.add(resSmiles);
 		}
 		

@@ -234,7 +234,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<IQueryAtomContain
 			IAtomContainer container = condensedFragmentToContainer(qac);
 			if (container != null)
 			{	
-				String smiles = SmartsHelper.moleculeToSMILES(container);
+				String smiles = SmartsHelper.moleculeToSMILES(container, true);
 				System.out.print("condensed: " + smiles);
 			}
 			else
@@ -244,7 +244,7 @@ public class SmartsToChemObject  extends DefaultAmbitProcessor<IQueryAtomContain
 			
 			//This is helper code for debugging
 			IAtomContainer ac = extractAtomContainerFullyConnected(qac, ringSet);
-			String smiles = SmartsHelper.moleculeToSMILES(ac);
+			String smiles = SmartsHelper.moleculeToSMILES(ac,true);
 			System.out.print("extract: " + smiles);
 		}
 		

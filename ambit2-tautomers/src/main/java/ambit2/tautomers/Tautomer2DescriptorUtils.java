@@ -74,7 +74,7 @@ public class Tautomer2DescriptorUtils
 				{
 					IAtomContainer tautomer = resultTautomers.get(i);
 					double rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
-					String smiles = SmartsHelper.moleculeToSMILES(tautomer).trim();
+					String smiles = SmartsHelper.moleculeToSMILES(tautomer,false).trim();
 					output("" + strNum + "   " + smiles + "  " + rank  +  endLineSymb);
 				}
 		}	

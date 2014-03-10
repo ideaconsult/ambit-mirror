@@ -49,6 +49,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -60,7 +61,9 @@ import ambit2.core.processors.structure.HydrogenAdderProcessor;
 
 public class SmartsHelper 
 {
-	static SmilesParser smilesparser;
+	SmilesParser smilesparser;
+	static SmilesGenerator smiGen = new SmilesGenerator();
+	
 	int curIndex;
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();	
 	//Work container - list with the processed atom nodes
@@ -556,10 +559,15 @@ public class SmartsHelper
 		return(sb.toString());
 	}
 	
-	public static String moleculeToSMILES(IAtomContainer mol) throws Exception
+	public static String moleculeToSMILES(IAtomContainer mol, boolean useAromaticityFlag) throws Exception
 	{	 
-		//TODO use SmilesGenerator(true) - It is crucial to use because aromatic aromatic structures obtain incorrect SMILES 
+		//SmilesGenerator(true) - is needed for  aromatic structures to obtain incorrect SMILES 
 		
+		smiGen.setUseAromaticityFlag(useAromaticityFlag); 
+		return (smiGen.createSMILES(mol));
+		
+		
+		/*
 		java.io.StringWriter result =  new java.io.StringWriter();
 		SMILESWriter writer = new SMILESWriter(result);
 		
@@ -567,6 +575,7 @@ public class SmartsHelper
 		writer.close();
 
 		return(result.toString());
+		*/
 	}
 	
 	public static void convertToCarbonSkelleton(IAtomContainer mol)
@@ -622,7 +631,7 @@ public class SmartsHelper
 		{	
 			IAtomContainer frag = ms.getAtomContainer(i);
 			SmartsHelper.convertToCarbonSkelleton(frag);
-			res[i] =  SmartsHelper.moleculeToSMILES(frag);
+			res[i] =  SmartsHelper.moleculeToSMILES(frag,true);
 		}
 		return(res);
 	}

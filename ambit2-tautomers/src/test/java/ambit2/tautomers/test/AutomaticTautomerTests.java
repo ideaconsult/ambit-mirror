@@ -1241,7 +1241,7 @@ public class AutomaticTautomerTests
 			IAtomContainer can_t = TautomerManager.getCanonicTautomer(resultTautomers);
 			
 			output("" + curLine + "   " + line + "  " + resultTautomers.size() + "  " +  
-					SmartsHelper.moleculeToSMILES(can_t)  /* +  endLine */);
+					SmartsHelper.moleculeToSMILES(can_t,false)  /* +  endLine */);
 		}	
 		catch(Exception e){
 			System.out.println(e.toString());
@@ -1542,7 +1542,7 @@ public class AutomaticTautomerTests
 				{
 					IAtomContainer tautomer = resultTautomers.get(i);
 					double rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
-					String smiles = SmartsHelper.moleculeToSMILES(tautomer).trim();
+					String smiles = SmartsHelper.moleculeToSMILES(tautomer, false).trim();
 					output("" + curLine + "   " + smiles + "  " + rank  +  endLine);
 				}
 			

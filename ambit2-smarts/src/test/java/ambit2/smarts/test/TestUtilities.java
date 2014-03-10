@@ -388,7 +388,7 @@ public class TestUtilities
 					System.out.print(" "+a.getSymbol()+"<"+mol.getAtomNumber(a)+">");
 			}
 			
-			System.out.print("      " + SmartsHelper.moleculeToSMILES(ac));
+			System.out.print("      " + SmartsHelper.moleculeToSMILES(ac,true));
 			//System.out.println();
 		}
 		System.out.println();
@@ -620,7 +620,7 @@ public class TestUtilities
 		
 		//smToChemObj.forceAromaticBondsAlways = true;
 		IAtomContainer mol =  smToChemObj.extractAtomContainer(query);
-		System.out.println(smarts + "  --> " + SmartsHelper.moleculeToSMILES(mol));
+		System.out.println(smarts + "  --> " + SmartsHelper.moleculeToSMILES(mol,true));
 		return(0);
 	}
 	
@@ -668,14 +668,14 @@ public class TestUtilities
 		System.out.println(smarts);		
 		printAromaticity(mol);
 		System.out.println("Object to SMILES");
-		System.out.println(SmartsHelper.moleculeToSMILES(mol));
+		System.out.println(SmartsHelper.moleculeToSMILES(mol,true));
 		
 		System.out.println("Creating a Chem object with teh SMILES parser ");
 		System.out.println(smarts);	
 		IMolecule mol2 =  SmartsHelper.getMoleculeFromSmiles(smarts);
 		printAromaticity(mol2);
 		System.out.println("Object to SMILES");
-		System.out.println(SmartsHelper.moleculeToSMILES(mol2));
+		System.out.println(SmartsHelper.moleculeToSMILES(mol2,true));
 		
 		
 		if (mol.getAtomCount() != query.getAtomCount())
@@ -970,7 +970,7 @@ public class TestUtilities
 			IMolecule mol2 = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
 			
 			System.out.println("-------------------------");
-			String smiles2 = SmartsHelper.moleculeToSMILES(mol2);
+			String smiles2 = SmartsHelper.moleculeToSMILES(mol2,true);
 			
 			cmlut.extractSMARTSProperties(mol2);
 			System.out.println(smiles2);
@@ -1490,7 +1490,7 @@ public class TestUtilities
 			System.out.println("Product atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
 			System.out.println("Product bond attributes:\n" + SmartsHelper.getBondAttributes(target));
 		}		
-		String transformedSmiles = SmartsHelper.moleculeToSMILES(target);
+		String transformedSmiles = SmartsHelper.moleculeToSMILES(target,true);
 		
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
 	}
@@ -1505,7 +1505,7 @@ public class TestUtilities
 			System.out.println("Bond attributes:\n" + SmartsHelper.getBondAttributes(target));
 		}	
 		
-		String smiles2 = SmartsHelper.moleculeToSMILES(target); 
+		String smiles2 = SmartsHelper.moleculeToSMILES(target,true); 
 		SmilesGenerator smiGen = new SmilesGenerator();
 		smiGen.setUseAromaticityFlag(true);
 		String smiles3 = smiGen.createSMILES(target);		
@@ -1624,7 +1624,7 @@ public class TestUtilities
 		
 		System.out.println(smarts);		
 		IAtomContainer mol0 =  smToChemObj.extractAtomContainer(q);
-		System.out.println(SmartsHelper.moleculeToSMILES(mol0));
+		System.out.println(SmartsHelper.moleculeToSMILES(mol0,true));
 		for (int i = 0; i < q.getBondCount(); i++)
 		{
 			IBond b = q.getBond(i);
