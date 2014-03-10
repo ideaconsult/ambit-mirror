@@ -1493,6 +1493,7 @@ public class TestUtilities
 		String transformedSmiles = SmartsHelper.moleculeToSMILES(target,true);
 		
 		System.out.println("Reaction application: " + targetSmiles + "  -->  " + transformedSmiles);
+		System.out.println();
 	}
 	
 	public void testSmiles2Smiles(String smiles) throws Exception
@@ -1508,7 +1509,8 @@ public class TestUtilities
 		String smiles2 = SmartsHelper.moleculeToSMILES(target,true); 
 		SmilesGenerator smiGen = new SmilesGenerator();
 		smiGen.setUseAromaticityFlag(true);
-		String smiles3 = smiGen.createSMILES(target);		
+		String smiles3 = smiGen.createSMILES(target);
+		//String smiles4 = smiGen.createChiralSMILES(target, new boolean[0]);   //This function requires 2D coordinates
 		System.out.println(smiles + "  --> " + smiles2 + "    " + smiles3);
 	}
 	
@@ -2148,22 +2150,33 @@ public class TestUtilities
 		
 		//tu.testSMIRKS("[Cl:3].[N:4][O:1][C:2]>>[N:4].[Cl:3][O:1][C:2]","Cl.NOC"); //Multi component reactions do not work ???!!!!
 		//tu.testSMIRKS("[N:4][O:1][C:2]>>[N:4].[Cl][O:1][C:2]","NOCF.NOC"); //Multi component reaction application ??? to be clarified
-		
+				
+		//tu.FlagProductPreprocessing = true;
 		//tu.testSMIRKS("[H:99][O;X2:1]c1ccccc1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]Oc1ccccc1");
+		//tu.testSMIRKS("[H:99][O;X2:1]c1ccccc1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]OC1=CC=CC=C1");		
 		//tu.testSMIRKS("[H:99][O;X2:1]C1=CC=CC=C1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]OC1=CC=CC=C1");
+		
+		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>C1CCC([O;X2:1][a:2])OC1.[H:99]","[H]Oc1ccccc1");		
+		//tu.testSMIRKS("[H:99][O;X2:1]c1ccccc1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]Oc1ccccc1NN"); //benzene atom are not mapped and NN is disconnected 
+		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>C1CCC([O;X2:1][a:2])OC1.[H:99]","[H]Oc1ccccc1NN");
+		
+		
 		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].[O;X2:1][a:2]","[H]OC1=CC=CC=C1");		
 		//tu.testSMIRKS("[H:99][O;X2:1]c1ccccc1>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");		                                                    
 		//tu.testSMIRKS("[H:99][O;X2:1]C1=CC=CC=C1>>C1CCC([O;X2:1]c2ccccc2)OC1.[H:99]","[H]Oc1ccccc1");                                     
 		//tu.testSMIRKS("[H:99][O;X2:1][c:2]1[c:3][c:4][c:5][c:6][c:7]1>>C1CCC([O;X2:1][c:2]2[c:3][c:4][c:5][c:6][c:7]2)OC1.[H:99]","[H]Oc1ccccc1");
+		//tu.testSMIRKS("[H:99][O;X2:1][c:2]1[c:3][c:4][c:5][c:6][c:7]1>>C1CCC([O;X2:1][c:2]2[c:3][c:4][c:5][c:6][c:7]2)OC1.[H:99]","[H]Oc1ccccc1NN");
 		
 		tu.FlagPrintAtomAttributes = true;
-		tu.FlagProductPreprocessing = true;
+		
 		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]Oc1ccccc1");
 		//tu.testSMIRKS("[H:99][O;X2:1][a:2]>>[H:99].Cl[O;X2:1][a:2]","[H]OC1=CC=CC=C1");
 		
+		//tu.testSMIRKS("[H:99][O;X2]C2=CC=CC=C2>>C1CCC([O;X2]C2=CC=CC=C2)OC1.[H:99]","[H]OC1=CC=CC=C1");
+		
 		//tu.testSmiles2Smiles("C1=CC=CC=C1");
 		//tu.testSmiles2Smiles("c1ccccc1");
-		tu.testSmiles2Smiles("C[C@](CC)(O)Cl");
+		//tu.testSmiles2Smiles("C[C@](CC)(O)Cl");
 		
 		
 		//tu.testSMIRKS("[H:99][O;X2:1][C:2]2=[C:3]C=CC=C2>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");
