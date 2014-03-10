@@ -224,7 +224,7 @@ public class TestTautomers
 		
 		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 		for (int i = 0; i < resultTautomers.size(); i++)		
-			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+			System.out.println("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
 			
 	}
 	
@@ -252,10 +252,10 @@ public class TestTautomers
 			if (rank == null)
 				rank = new Double(999999);
 						
-			System.out.print(
+			System.out.println(
 					TautomerManager.getTautomerCodeString(resultTautomers.get(i), false) +   
 					"   " + rank.toString() + "    " + (100.0*distr[i]) + "%    " + 
-					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)) );
+					SmartsHelper.moleculeToSMILES(resultTautomers.get(i),false) );
 			v.add(resultTautomers.get(i));
 		}
 		System.out.println();
@@ -308,8 +308,8 @@ public class TestTautomers
 			if (rank == null)
 				rank = new Double(999999);
 			
-			System.out.print("   " + rank.toString() + "   " +
-					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+			System.out.println("   " + rank.toString() + "   " +
+					SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
 			v.add(resultTautomers.get(i));
 		}
 		System.out.println();
@@ -326,7 +326,7 @@ public class TestTautomers
 		System.out.println("Visual Testing with file " + sdfFile);
 		IAtomContainer mol = getMoleculeFromFile(sdfFile);
 		
-		String smiles = SmartsHelper.moleculeToSMILES(mol);
+		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
 		System.out.println("Loaded molecule " + smiles);
 		
 		tman.setStructure(mol);
@@ -346,10 +346,10 @@ public class TestTautomers
 			if (rank == null)
 				rank = new Double(999999);
 						
-			System.out.print(
+			System.out.println(
 					TautomerManager.getTautomerCodeString(resultTautomers.get(i), false) +   
 					"   " + rank.toString() + "   " +
-					SmartsHelper.moleculeToSMILES(resultTautomers.get(i)) );
+					SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false) );
 			v.add(resultTautomers.get(i));
 		}
 		System.out.println();
@@ -417,7 +417,7 @@ public class TestTautomers
 
 		System.out.println("\n  Result tautomers: ");
 		for (int i = 0; i < resultTautomers.size(); i++)		
-			System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+			System.out.println("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
 
 		TestStrVisualizer tsv = new TestStrVisualizer(resultTautomers, "InChI");
 		
@@ -436,7 +436,7 @@ public class TestTautomers
 		Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
 		if (FlagPrintTautomers)
 			for (int i = 0; i < resultTautomers.size(); i++)		
-				System.out.print("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i)));
+				System.out.println("   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
 		
 		int res = checkResultTautomerSet(resultTautomers, expectedTautomers);
 		if (res == 0)
@@ -618,7 +618,7 @@ public class TestTautomers
 		String expectedTautomers[] = new String[initialTautomers.size()];
 		
 		for (int i = 0; i < initialTautomers.size(); i++)		
-			expectedTautomers[i] = SmartsHelper.moleculeToSMILES(initialTautomers.get(i));
+			expectedTautomers[i] = SmartsHelper.moleculeToSMILES(initialTautomers.get(i), false);
 		
 		int nErrors = 0;
 		
@@ -694,7 +694,7 @@ public class TestTautomers
 		IAtomContainer newStr = cof.connectStructures(smi1, numAt1, smi2, numAt2, order);
 		v.add(newStr);
 		
-		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr)));
+		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr),false));
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(v);
 	}
@@ -711,7 +711,7 @@ public class TestTautomers
 		IAtomContainer newStr = cof.condenseStructures(smi1, str1At0, str1At1, smi2, str2At0, str2At1);
 		v.add(newStr);
 		
-		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr)));
+		System.out.println("\nResult = " + SmartsHelper.moleculeToSMILES(new Molecule(newStr), true));
 		
 		TestStrVisualizer tsv = new TestStrVisualizer(v);
 	}
@@ -723,7 +723,7 @@ public class TestTautomers
 		
 		System.out.println(SmartsHelper.getAtomsAttributes(mol));
 		
-		String smiles2 = SmartsHelper.moleculeToSMILES(mol);
+		String smiles2 = SmartsHelper.moleculeToSMILES(mol,true);
 		System.out.println(smiles2);
 		
 		Vector<IAtomContainer> v = new Vector<IAtomContainer>();

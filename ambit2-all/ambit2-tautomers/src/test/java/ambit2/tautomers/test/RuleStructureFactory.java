@@ -50,8 +50,8 @@ public class RuleStructureFactory
 			System.out.println(base);
 			IAtomContainer mol1 = cof.connectStructures(smi1, pos1, base, 0, IBond.Order.SINGLE);
 			IAtomContainer mol2 = cof.connectStructures(smi2, pos2, base, 0, IBond.Order.SINGLE);
-			String target1 = SmartsHelper.moleculeToSMILES(new Molecule(mol1));
-			String target2 = SmartsHelper.moleculeToSMILES(new Molecule(mol2));
+			String target1 = SmartsHelper.moleculeToSMILES(new Molecule(mol1), false);
+			String target2 = SmartsHelper.moleculeToSMILES(new Molecule(mol2), false);
 			ArrayList<String> list = new ArrayList<String>();
 			list.add(target1.trim());
 			list.add(target2.trim());

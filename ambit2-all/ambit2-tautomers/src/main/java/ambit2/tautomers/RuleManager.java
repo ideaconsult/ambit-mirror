@@ -292,7 +292,7 @@ public class RuleManager
 			{
 				System.out.println(tStep.debugInfo());
 				System.out.println("tStep.unusedRI  = " + tStep.unUsedRuleInstances.size());
-				System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct));
+				System.out.print("  pop stack: " + SmartsHelper.moleculeToSMILES(tStep.struct, false));
 			}
 			
 			
@@ -330,7 +330,7 @@ public class RuleManager
 				tman.registerTautomer(newTautomer); 
 				
 				if (tman.FlagPrintIcrementalStepDebugInfo)
-					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
+					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer, false) 
 							+ "    " + incStep.getTautomerCombination());
 			}
 			catch(Exception e)
@@ -354,7 +354,7 @@ public class RuleManager
 				tman.registerTautomer(newTautomer); 
 				
 				if (tman.FlagPrintIcrementalStepDebugInfo)
-					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer) 
+					System.out.println("***new tautomer " + SmartsHelper.moleculeToSMILES(newTautomer, false) 
 							+ "    " + incStep.getTautomerCombination());
 			}
 			catch(Exception e)
@@ -374,7 +374,7 @@ public class RuleManager
 			stackIncSteps.push(newIncSteps[i]);
 			
 			if (tman.FlagPrintIcrementalStepDebugInfo)
-				System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct));
+				System.out.print("  push stack: " + SmartsHelper.moleculeToSMILES(newIncSteps[i].struct, false));
 		}	
 	}	
 		
@@ -1017,7 +1017,7 @@ public class RuleManager
 		{
 			TautomerIncrementStep incStep = stackIncSteps.get(i);
 			sb.append(prompt + "IncStep " + incStep.ID + "    parent = " + incStep.parentID +
-					"    " + SmartsHelper.moleculeToSMILES(incStep.struct));
+					"    " + SmartsHelper.moleculeToSMILES(incStep.struct, false));
 			sb.append(prompt + "    used_ri:");
 			for (int k = 0; k < incStep.usedRuleInstances.size(); k++)
 				sb.append("{"+incStep.usedRuleInstances.get(k).debugInfo(incStep.struct)+"} ");
