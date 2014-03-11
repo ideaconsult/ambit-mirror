@@ -23,7 +23,6 @@ $(document)
 					        //xhrFields: {withCredentials: true},
 					        url: '${ambit_root}/ui/uploadsubstance'
 					    });
-					 $('#fileupload').addClass('fileupload-processing'); 
 				});
 </script>
 
