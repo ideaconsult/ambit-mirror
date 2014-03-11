@@ -17,23 +17,15 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.base.data.SourceDataset;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.search.IStoredQuery;
-import ambit2.db.search.StoredQuery;
 import ambit2.db.substance.DeleteSubstance;
 import ambit2.db.substance.ReadSubstance;
 import ambit2.db.update.AbstractUpdate;
-import ambit2.db.update.dataset.DatasetDeleteStructure;
-import ambit2.db.update.dataset.DeleteDataset;
-import ambit2.db.update.storedquery.DeleteStoredQuery;
-import ambit2.db.update.storedquery.QueryDeleteStructure;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
@@ -191,7 +183,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 				String token = getToken();
 				CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(
 							items, 
-							"file",
+							"files[]",
 							getRootRef(),
 							getContext(),
 							new SubstanceURIReporter(getRequest().getRootRef(), null),
