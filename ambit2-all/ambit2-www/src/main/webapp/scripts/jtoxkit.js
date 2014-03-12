@@ -1642,26 +1642,31 @@ var jToxStudy = (function () {
       
       var rootTab = $('.jtox-substance', self.rootElement)[0];
       jToxKit.call(self, substanceURI, function(substance){
-         if (!!substance && !!substance.substance && substance.substance.length > 0){
-           substance = substance.substance[0];
+        if (!!substance && !!substance.substance && substance.substance.length > 0){
+          substance = substance.substance[0];
            
-           substance["showname"] = substance.publicname;
-           if (ccLib.isEmpty(substance.showname))
-            substance.showname = substance.name;
+          substance["showname"] = substance.publicname || substance.name;
+          var flags = '';
+          for (var i = 0, iLen = substance.externalIdentifiers.length; i < iLen; ++i) {
+            if (i > 0)
+              flags += ', ';
+            flags += substance.externalIdentifiers[i].id || '';
+          }
+          substance["IUCFlags"] = flags;
             
-           ccLib.fillTree(self.rootElement, substance);
-           // go and query for the reference query
-           jToxKit.call(self, substance.referenceSubstance.uri, function (dataset){
-             if (!!dataset) {
+          ccLib.fillTree(self.rootElement, substance);
+          // go and query for the reference query
+          jToxKit.call(self, substance.referenceSubstance.uri, function (dataset){
+            if (!!dataset) {
               jToxDataset.processDataset(dataset, null, fnDatasetValue);
               ccLib.fillTree(rootTab, dataset.dataEntry[0]);
-             }
-           });
+            }
+          });
            
-           // query for the summary and the composition too.
-           self.querySummary(substance.URI);
-           self.queryComposition(substance.URI);
-         }
+          // query for the summary and the composition too.
+          self.querySummary(substance.URI);
+          self.queryComposition(substance.URI);
+        }
       });
     }
   }; // end of prototype
@@ -2007,8 +2012,8 @@ jToxKit.templates['all-studies']  =
 "	            <td class=\"data-field\" data-field=\"referenceSubstance.i5uuid\"> ? </td>" +
 "	          </tr>" +
 "	          <tr class=\"borderless-top\">" +
-"	            <td class=\"right\">IUC Subst. identifier used by Legal entity:</td>" +
-"	            <td class=\"data-field\" data-field=\"compound.tradename\"> ? </td>" +
+"	            <td class=\"right\">IUC Flags:</td>" +
+"	            <td class=\"data-field\" data-field=\"IUCFlags\"> ? </td>" +
 "	          </tr>" +
 "	        </thead>" +
 "	      </table>" +
