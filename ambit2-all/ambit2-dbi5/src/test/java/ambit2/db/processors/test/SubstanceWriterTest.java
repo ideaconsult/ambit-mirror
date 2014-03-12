@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import junit.framework.Assert;
 import net.idea.i5._5.ambit2.I5AmbitProcessor;
 import net.idea.i5.io.I5ZReader;
+import net.idea.i5.io.QASettings;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
@@ -67,6 +68,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 		Assert.assertTrue(i5z.exists());
 
 	    I5ZReader reader = getReader(i5z);
+	    reader.setQASettings(new QASettings(false));
 		int records = write(reader,c.getConnection(),new ReferenceSubstanceUUID());
 		reader.close();
         c.close();

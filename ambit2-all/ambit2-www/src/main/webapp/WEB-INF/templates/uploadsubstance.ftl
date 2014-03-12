@@ -95,7 +95,7 @@ $(document)
 	        <span class="fileupload-process remove-bottom"></span>
 	    </div>
 	    <div class="sixteen columns">
-        	<span>Enable QA</span> <input type="checkbox" id="qaenabled" name="qaenabled" class="toggle" checked>
+        	<span title='Use predefined filtering criteria'>Import only high quality study records (uncheck to import all records)</span> <input type="checkbox" id="qaenabled" name="qaenabled" class="toggle" checked>
 	    </div>
 	    <!-- The global progress state -->
 	    <div class="fileupload-progress fade remove-bottom" style="display:none">
