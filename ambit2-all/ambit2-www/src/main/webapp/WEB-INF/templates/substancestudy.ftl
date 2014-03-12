@@ -62,6 +62,10 @@
 				  <option value="uuid">UUID</option>
 				  <option value="">External identifier</option>
 				  <option value="CompTox">CompTox</option>
+				  <option value="reliability" title='1 (reliable without restriction)|2 (reliable with restrictions)|3 (not reliable)|4 (not assignable)|other:empty (not specified)'>Reliability</option>
+				  <option value="purposeFlag" title='key study|supporting study'>Study purpose</option>
+				  <option value="studyResultType" title='experimental result|estimated by calculation|read-across|(Q)SAR'>Study result type</option>
+				  <option value="isRobustStudy" title='true|false'>Robust study</option>
 				</select>
 		    </div>			
 		</div>			

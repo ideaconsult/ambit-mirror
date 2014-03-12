@@ -24,6 +24,7 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.DeleteSubstance;
+import ambit2.db.substance.ReadByReliabilityFlags;
 import ambit2.db.substance.ReadSubstance;
 import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
 import ambit2.db.substance.ReadSubstanceByName;
@@ -143,6 +144,14 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 					return (Q)new ReadSubstance(record);
 				} else if ("name".equals(type)) {
 					return (Q)new ReadSubstanceByName(type,search);
+				} else if ("reliability".equals(type)) {
+					return (Q)new ReadByReliabilityFlags(type,search);
+				} else if ("purposeFlag".equals(type)) {
+					return (Q)new ReadByReliabilityFlags(type,search);
+				} else if ("studyResultType".equals(type)) {
+					return (Q)new ReadByReliabilityFlags(type,search);
+				} else if ("isRobustStudy".equals(type)) {
+					return (Q)new ReadByReliabilityFlags(type,search);					
 				} else {
 					return (Q)new ReadSubstanceByExternalIDentifier(type,search);
 				}
