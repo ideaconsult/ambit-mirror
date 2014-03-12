@@ -3,6 +3,7 @@ package ambit2.smarts.test;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.RandomAccessFile;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
@@ -31,6 +33,9 @@ import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.CMLWriter;
+import org.openscience.cdk.io.MDLV2000Writer;
+//import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
@@ -53,6 +58,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.io.MyIteratingMDLReader;
+import ambit2.core.io.MDLWriter;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.ChemObjectToSmiles;
@@ -1514,6 +1520,64 @@ public class TestUtilities
 		System.out.println(smiles + "  --> " + smiles2 + "    " + smiles3);
 	}
 	
+	public void testSmiles2MOLFile(String smiles, String molFileName) throws Exception
+	{
+		System.out.println("Testing smiles: " + smiles);
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smiles);
+		if (FlagPrintAtomAttributes)
+		{	
+			System.out.println("Atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+		}	
+		
+		
+		System.out.println("Writing molecule to file: " + molFileName);
+		//This is specialized Ambit version of the MDL Writer (special hack to code aromatic bonds as bonds of type 4)
+		//MDLWriter writer = new MDLWriter(new FileWriter(new File(molFileName)));
+		//writer.write((IMolecule)target);
+		//writer.close();
+		
+		MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(new File(molFileName)));
+		writer.writeMolecule(target);
+		writer.close();
+		
+	}
+	
+	public void testMOL2MOLFile(String inMolFileName, String outMolFileName) throws Exception
+	{
+		System.out.println("Testing molecule from file: " + inMolFileName);
+		
+		IteratingMDLReader reader = new IteratingMDLReader(new FileReader(new File(outMolFileName)), DefaultChemObjectBuilder.getInstance());
+		IAtomContainer target = null;
+		if (reader.hasNext())
+			target = reader.next();
+		reader.close();
+		
+		if (target == null)
+		{
+			System.out.println("Read null object");
+			return;
+		}
+				
+		String smiles = SmartsHelper.moleculeToSMILES(target,true);
+		System.out.println("    " + smiles);
+		
+		if (FlagPrintAtomAttributes)
+		{	
+			System.out.println("Atom attributes:\n" + SmartsHelper.getAtomsAttributes(target));
+			System.out.println("Bond attributes:\n" + SmartsHelper.getBondAttributes(target));
+		}	
+		
+		
+		System.out.println("Writing molecule to file: " + outMolFileName);
+		MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(new File(outMolFileName)));
+		writer.writeMolecule(target);
+		writer.close();
+	}
+	
+	
+	
+	
 	public void testEquivalenceTestes(String targetSmiles) throws Exception
 	{
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
@@ -2177,6 +2241,8 @@ public class TestUtilities
 		//tu.testSmiles2Smiles("C1=CC=CC=C1");
 		//tu.testSmiles2Smiles("c1ccccc1");
 		//tu.testSmiles2Smiles("C[C@](CC)(O)Cl");
+		
+		tu.testSmiles2MOLFile("C[C@](CC)(O)Cl","/test-chirality-01.mol");
 		
 		
 		//tu.testSMIRKS("[H:99][O;X2:1][C:2]2=[C:3]C=CC=C2>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");
