@@ -25,6 +25,7 @@ import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.DeleteSubstance;
 import ambit2.db.substance.ReadSubstance;
+import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -137,19 +138,27 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 				SubstanceRecord record = new SubstanceRecord();
 				record.setCompanyUUID(search.trim());
 				return (Q)new ReadSubstance(record);
-			} else 	return (Q)new ReadSubstance();			
+			} else {
+				//try searching by external identifiers
+				String type = form.getFirstValue("type");
+				String id = form.getFirstValue("id");
+				if (id!=null) 
+					return (Q)new ReadSubstanceByExternalIDentifier(type,id);
+				return (Q)new ReadSubstance();			
+			}
 
-		} else try {
+		} else 
+			try {
 			return (Q)new ReadSubstance(new SubstanceRecord(Integer.parseInt(key.toString())));
-		} catch (Exception x) {
-			int len = key.toString().trim().length(); 
-			if ((len > 40) && (len <=45)) {
-				SubstanceRecord record = new SubstanceRecord();
-				record.setCompanyUUID(key.toString());
-				return (Q)new ReadSubstance(record);
-			}	
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
+			} catch (Exception x) {
+				int len = key.toString().trim().length(); 
+				if ((len > 40) && (len <=45)) {
+					SubstanceRecord record = new SubstanceRecord();
+					record.setCompanyUUID(key.toString());
+					return (Q)new ReadSubstance(record);
+				}	
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			}
 	}
 
 	protected Integer getIdChemical(Object cmpURI, Request request) {
