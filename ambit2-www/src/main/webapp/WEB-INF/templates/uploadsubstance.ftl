@@ -89,10 +89,13 @@ $(document)
 	        <button type="reset" class="cancel">Cancel upload</button>
 	        <!--
 	        <button type="button" class="delete">Delete</button>
-	        -->
 	        <input type="checkbox" class="toggle">
+	        -->
 	        <!-- The global file processing state -->
 	        <span class="fileupload-process remove-bottom"></span>
+	    </div>
+	    <div class="sixteen columns">
+        	<span>Enable QA</span> <input type="checkbox" id="qaenabled" name="qaenabled" class="toggle" checked>
 	    </div>
 	    <!-- The global progress state -->
 	    <div class="fileupload-progress fade remove-bottom" style="display:none">
@@ -102,6 +105,8 @@ $(document)
 	        <div class="progress-extended">&nbsp;</div>
 	    </div>
 	</div>
+	
+	
 	<!-- The table listing the files available for upload/download -->
 	<div role="presentation" border="1" ><div class="files"></div></div>
 	

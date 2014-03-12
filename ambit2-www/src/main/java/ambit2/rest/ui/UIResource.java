@@ -1,10 +1,11 @@
 package ambit2.rest.ui;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.idea.i5.io.QASettings;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -108,6 +109,17 @@ public class UIResource extends FreeMarkerResource {
 				StringBuilder json = new StringBuilder();
 				json.append("{\"files\": [");
 				String delimiter = "";
+				QASettings qa = new QASettings();
+				qa.setEnabled(false);
+				for (FileItem file : items) if (file.isFormField()) {
+					if ("qaenabled".equals(file.getFieldName())) try {
+						if ("on".equals(file.getString())) qa.setEnabled(true);
+						if ("yes".equals(file.getString())) qa.setEnabled(true);
+						if ("checked".equals(file.getString())) qa.setEnabled(true);
+					} catch (Exception x) {
+						qa.setEnabled(true);
+					}
+				}	
 				for (FileItem file : items) {
 					if (file.isFormField()) continue;
 					
@@ -130,6 +142,7 @@ public class UIResource extends FreeMarkerResource {
 									new SubstanceURIReporter(getRequest().getRootRef(), null),
 									new DatasetURIReporter(getRequest().getRootRef(), null),
 									null);
+							callable.setQASettings(qa);
 							TaskResult result = callable.call();
 							json.append(",\n\"url\":");
 							json.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(result.getReference().toString())));

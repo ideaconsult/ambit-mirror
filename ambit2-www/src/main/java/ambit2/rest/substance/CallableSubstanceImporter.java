@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.idea.i5.io.I5ZReader;
+import net.idea.i5.io.IQASettings;
+import net.idea.i5.io.QASettings;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
@@ -46,17 +48,29 @@ import ambit2.rest.task.TaskResult;
  *
  * @param <USERID>
  */
-public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<FileInputState, IStructureRecord,USERID> {
+public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<FileInputState, IStructureRecord,USERID> implements IQASettings {
 	protected SubstanceURIReporter substanceReporter;
 	protected DatasetURIReporter datasetURIReporter;
 	protected SubstanceRecord importedRecord;
 	protected SourceDataset dataset;
 	private File file;
 	protected String fileDescription;
+	
+	protected QASettings qaSettings;
+	@Override
+	public QASettings getQASettings() {
+		if (qaSettings==null) qaSettings = new QASettings();
+		return qaSettings;
+	}
+	@Override
+	public void setQASettings(QASettings qa) {
+		this.qaSettings = qa;
+	}
 	protected File getFile() {
 		return file;
 	}
 
+	
 	protected void setFile(File file,String description) {
 		this.file = file;
 		this.fileDescription = description;
@@ -117,6 +131,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 				try {
 					File file = ((FileInputState) target).getFile();
 					I5ZReader reader = new I5ZReader(file);
+					reader.setQASettings(getQASettings());
 					reader.setErrorHandler(new IChemObjectReaderErrorHandler() {
 							@Override
 							public void handleError(String message, int row, int colStart, int colEnd,
