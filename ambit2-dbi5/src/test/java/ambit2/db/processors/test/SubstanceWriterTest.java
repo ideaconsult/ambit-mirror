@@ -68,7 +68,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 		Assert.assertTrue(i5z.exists());
 
 	    I5ZReader reader = getReader(i5z);
-	    reader.setQASettings(new QASettings(false));
+	    reader.setQASettings(new QASettings(true));
 		int records = write(reader,c.getConnection(),new ReferenceSubstanceUUID());
 		reader.close();
         c.close();
