@@ -162,6 +162,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		if ((importedRecord.getIdsubstance()>0) || (importedRecord.getCompanyUUID()!=null)) {
 			
 			try { batch.close();	} catch (Exception xx) {}
+			try { if (file!=null && file.exists()) file.delete(); } catch (Exception x) {}
 			return new TaskResult(substanceReporter.getURI(importedRecord));				
 		} else {
 			SourceDataset newDataset = dataset;
@@ -184,9 +185,11 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 				throw new ResourceException(Status.SUCCESS_NO_CONTENT);
 
 			try { batch.close();	} catch (Exception xx) {}
+			try { if (file!=null && file.exists()) file.delete(); } catch (Exception x) {}
 			return new TaskResult(datasetURIReporter.getURI(newDataset));
 		}
 	}
+	
 
 }
 

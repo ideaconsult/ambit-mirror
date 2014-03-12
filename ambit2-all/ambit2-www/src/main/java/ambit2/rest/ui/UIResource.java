@@ -1,5 +1,6 @@
 package ambit2.rest.ui;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -142,7 +143,6 @@ public class UIResource extends FreeMarkerResource {
 							json.append(",\n\"error\":");
 							json.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(x.getMessage())));	
 						} finally {
-							file.delete();
 						}
 
 					} else {
