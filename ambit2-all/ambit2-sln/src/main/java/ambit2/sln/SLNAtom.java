@@ -18,7 +18,7 @@ public class SLNAtom extends org.openscience.cdk.PseudoAtom implements IQueryAto
 
 	int atomType = 0;
 	String atomName = null;
-	int atomID = 0;
+	int atomID = -1;
 	int numHAtom = 0;
 	SLNAtomExpression atomExpression = null;
 	

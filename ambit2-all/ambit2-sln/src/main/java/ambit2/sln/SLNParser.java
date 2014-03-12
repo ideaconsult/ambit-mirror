@@ -14,6 +14,8 @@ import ambit2.smarts.SmartsExpressionToken;
 
 public class SLNParser 
 {
+	private boolean FlagTolerateSpaces = false;
+	
 	String sln;
 	SLNContainer container;
 	SLNDictionary globalDictionary = null;
@@ -34,6 +36,7 @@ public class SLNParser
 	int nChars;
 	SLNBond curBond;
 	SLNAtomExpression curAtExp;
+	String extractError ="";
 
 
 
@@ -45,6 +48,16 @@ public class SLNParser
 	public SLNParser(SLNDictionary globalDictionary)
 	{
 		this.globalDictionary = globalDictionary;
+	}
+	
+	public boolean getTolerateSpaces()
+	{
+		return FlagTolerateSpaces;
+	}
+	
+	public void setTolerateSpaces(boolean tolerateSpaces)
+	{
+		FlagTolerateSpaces = tolerateSpaces;
 	}
 
 
@@ -134,12 +147,17 @@ public class SLNParser
 
 
 		if (atomType == -1)
-			errors.add(new SLNParserError(sln, "Atom name", curChar, ""));
+			errors.add(new SLNParserError(sln, "Incorrect atom name", curChar, ""));
 
 		SLNAtom newAtom = new SLNAtom();
 		newAtom.atomType = atomType;
 		newAtom.atomName = atomName;
 
+		
+		//The SLN parser allows H atoms to be before or after atoms expression 
+		//i.e. CH[S=R] and C[S=R]H are both correct variants
+		boolean ReadHAtoms = false;
+		
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == 'H')
 			{
@@ -149,19 +167,31 @@ public class SLNParser
 					if (Character.isDigit(sln.charAt(curChar)))
 						nH = getInteger();
 				newAtom.numHAtom = nH;
+				ReadHAtoms = true;
 			}
 
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == '[')
 			{	
-				String atomExpression = extractAtomExpression();
-
-				System.out.println("AtExpr " + atomExpression);
-
-				//TODO analyze atomExpression
-			}	
-
-
+				String atomExpression = extractAtomExpression();				
+				analyzeAtomExpression(atomExpression);				
+			}
+		
+		if (curChar < nChars)
+			if (sln.charAt(curChar) == 'H')
+			{
+				if (ReadHAtoms)				
+					newError("H atoms are specified before and after atom attributes", curChar+1,"");
+				else
+				{	
+					int nH = 1;
+					curChar++;
+					if (curChar < nChars)
+						if (Character.isDigit(sln.charAt(curChar)))
+							nH = getInteger();
+					newAtom.numHAtom = nH;
+				}
+			}
 
 		addAtom(newAtom);
 
@@ -185,72 +215,203 @@ public class SLNParser
 	String extractAtomExpression()
 	{
 		curChar++;
+		int startPos = curChar;
 		int openBrackets = 1;
 		while ((curChar < nChars) && (openBrackets > 0) && (errors.size() == 0))
 		{
-			if (sln.charAt(curChar)=='[')
-			{
+			if (sln.charAt(curChar)=='[')			
 				openBrackets++;
-				curChar++;
-			}
 			else
-				if (sln.charAt(curChar)==']')
-				{
+				if (sln.charAt(curChar)==']')				
 					openBrackets--;
-					curChar++;
-				}
-				else
-					break;
+			
+			curChar++;
 		}
 		
-		return sln.substring(curChar);
+		return sln.substring(startPos,curChar-1);
 	}
 
-	public void analyzeAtomExpression()
+	public void analyzeAtomExpression(String atomExpr)
 	{
-	/*	curAtExp = new SLNAtomExpression();
-		if (Character.isLetter(sln.charAt(curChar)))
+		System.out.println("***** AtExpr " + atomExpr);
+		
+		if (atomExpr.trim().equals(""))
 		{
-			switch (sln.charAt(curChar))
-			{			
-			case 'a':
-			//	testForDefaultAND();
-				curAtExp.tokens.add(new SLNExpressionToken(SLNConst.A_ATTR_atomtID,0,sln,sln));	// ???
-				curChar++;
-				break;	
-			case 's':
-				curChar++;
-				if (curChar < nChars)
-					curAtExp.tokens.add(new SLNExpressionToken(SLNConst.A_ATTR_spin,0,sln,sln));	
-				else	
-					curAtExp.tokens.add(new SLNExpressionToken(SLNConst.A_ATTR_s,0,sln,sln));
-				break;	
+			newError("Empty atom expression", curChar+1,"");
+			return;
+		}
+		curAtExp = new SLNAtomExpression();
+		int pos = 0;
+		
+		//Check atom ID
+		if (Character.isDigit(atomExpr.charAt(pos)))
+		{
+			int startPos = pos;
+			while (pos < atomExpr.length())
+			{
+				if ( Character.isDigit(atomExpr.charAt(pos)) )
+					pos++;
+				else
+					break;	
 			}
-		}*/
-		//TODO
-	}
-	
-	public void checkSymbol()
-	{
-		String curAttr = null;
-		SLNExpressionToken token = new SLNExpressionToken(curChar, curChar, curAttr, curAttr);
-		if (!token.isLogicalOperation() || !token.equals(":"))
-			extractAtomExpression();
-		if (token.isLogicalOperation())
-			analyzeAtomAttribute();
-		if (token.equals(":"))
+			int endPos = pos;
+			
+			if (pos < atomExpr.length())
+			{	
+				if (atomExpr.charAt(pos) == ':')
+					pos++;
+				else
+				{
+					newError("Missing symbol ':' after atom ID", curChar,"");
+					return;
+				}
+			}
+			
+			String idString = atomExpr.substring(startPos, endPos);
+			try
+			{
+				curAtExp.atomID = Integer.parseInt(idString);
+			}
+			catch(Exception e)
+			{
+				newError("Incorrect atom ID - too big",curChar,"");
+				return;
+			}
+			
+		}
+		//Handle all attributes and logical operations
+		while (pos < atomExpr.length())
 		{
-			curChar--;
-			if(Character.isDigit(sln.charAt(curChar)))
-					parseA_ATTR_atomID();
-			else
-				newError("Error: incorrect token ':' ", curChar, curAttr);		
-		}	
+			if(atomExpr.charAt(pos) == ' ')
+			{	
+				pos++;
+				if (FlagTolerateSpaces)
+					continue;
+				else
+				{
+					newError("Space symbol found: ", curChar, "");
+					break;
+				}	
+			}
+			
+			
+			if (Character.isLetter(atomExpr.charAt(pos)))
+			{
+				//Read attribute name
+				int startPos = pos;
+				while (pos < atomExpr.length())
+				{
+					if (Character.isLetter(atomExpr.charAt(pos)) 
+							 || Character.isDigit(atomExpr.charAt(pos)) )
+						pos++;
+					else
+						break;
+				}
+				
+				String attrName = atomExpr.substring(startPos, pos);
+				if(pos < atomExpr.length())
+				{
+					if(atomExpr.charAt(pos) == '=')
+						pos++;
+					else
+					{	
+						//Register attribute without value (it is allowed by the SLN syntax 
+						SLNExpressionToken newToken =  analyzeAtomAttribute(attrName, null);
+						curAtExp.tokens.add(newToken);
+						continue;
+					}
+				}
+				
+				if(pos >= atomExpr.length())				
+				{
+					//'=' is found but the end of atom expression is reached.
+					newError("Missing value for attribute " + attrName + " ",curChar,"");
+					return;
+				}
+				
+				//Read attribute value (after '=')
+				startPos = pos;
+				while (pos < atomExpr.length())
+				{
+					if (Character.isLetter(atomExpr.charAt(pos)) ||
+							Character.isDigit(atomExpr.charAt(pos)) ||
+							(atomExpr.charAt(pos) == '+' ) || 
+							(atomExpr.charAt(pos) == '-')	 
+					)
+						pos++;
+					else
+						break;
+				}
+				
+				String attrValue = atomExpr.substring(startPos, pos);
+				
+				//Register attribute with a value 
+				SLNExpressionToken newToken =  analyzeAtomAttribute(attrName, attrValue);
+				curAtExp.tokens.add(newToken);
+				
+				continue;
+			}
+			
+			//Read special symbol
+			switch  (atomExpr.charAt(pos))
+			{
+			case '!':
+				SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT,0,null,null);  
+				curAtExp.tokens.add(newToken0);
+				break;
+			case '&':
+				SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND,0,null,null);  
+				curAtExp.tokens.add(newToken1);
+				break;
+			case '|':
+				SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR,0,null,null);  
+				curAtExp.tokens.add(newToken2);				
+				break;
+			case ';':
+				SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO,0,null,null);  
+				curAtExp.tokens.add(newToken3);				
+				break;	
+				
+			default:
+				{
+					newError("Incorrect symbol in atom expression '"+atomExpr.charAt(pos)+"' ",curChar,"");
+					return;
+				}
+			}
+			
+			pos++;
+		}
 	}
 	
-	void analyzeAtomAttribute()
+	
+	
+	
+	SLNExpressionToken analyzeAtomAttribute(String name, String value)
 	{
-		//TODO
+		if (value == null)
+			System.out.println("Attribute " + name);
+		else
+			System.out.println("Attribute " + name + "=" + value);
+		
+		//Handle charge attribute
+		if (name.equals("charge"))
+		{
+			int charge = extractInteger(value);
+			if (extractError.equals(""))
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_charge,charge,null,null);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect charge value " + value, curChar,"");
+				return null;
+			}
+		}
+		
+		//By default it is an user defined attribute
+		SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_USER_DEFINED,0,name,value);
+		return token;
 	}
 	
 	void parseA_ATTR_atomID()
@@ -258,14 +419,16 @@ public class SLNParser
 		//TODO
 	}
 	
-	void parseAtomIndex()   //!!!
-	{
+	void parseAtomIndex()   //!!!  ???????
+	{	
 		if (Character.isDigit(sln.charAt(curChar)))
 			registerIndex(getInteger());
 	}
 
 	int getInteger()
 	{
+		//TODO to protect against very large integers
+		
 		if (!Character.isDigit(sln.charAt(curChar)))
 			return(-1);
 
@@ -292,9 +455,8 @@ public class SLNParser
 
 	void newError(String msg, int pos, String param)
 	{
-		SLNParserError err;
-
-		//TODO
+		SLNParserError error = new SLNParserError(sln, msg, pos, param);
+		errors.add(error);
 	}
 
 	public String getErrorMessages()
@@ -340,7 +502,7 @@ public class SLNParser
 		case '|':	// logical "or"
 		case ';':	// low-binding version of "and"		
 		case '@':	// ring closure
-			parseBondExpression();
+			parseBond();
 			break;		
 
 		case '(':							
@@ -392,7 +554,7 @@ public class SLNParser
 		if (curBond == null)
 		{	
 			newBond = new SLNBond();
-			newBond.bondType = SLNConst.BT_SINGLE;
+			newBond.bondType = SLNConst.B_TYPE_1;
 		}
 		else
 			newBond = curBond;
@@ -407,7 +569,7 @@ public class SLNParser
 		curBond = null;
 	}
 
-	void parseBondExpression()
+	void parseBond()
 	{	
 		int lo = -1;
 		int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));		
@@ -422,6 +584,44 @@ public class SLNParser
 			//TODO
 		}
 
+	}
+	
+	int extractInteger(String valueString)
+	{
+		extractError = "";
+		try
+		{
+			int value;
+			if (valueString.charAt(0) == '+')
+				value = Integer.parseInt(valueString.substring(1));
+			else	
+				value = Integer.parseInt(valueString);
+			return value;
+		}
+		catch(Exception e)
+		{
+			extractError = "Incorrect integer value " + valueString;
+			return 0;
+		}
+	}
+	
+	double extractDouble(String valueString)
+	{
+		extractError = "";
+		try
+		{
+			double value;
+			if (valueString.charAt(0) == '+')
+				value = Double.parseDouble(valueString.substring(1));
+			else
+				value = Double.parseDouble(valueString);
+			return value;
+		}
+		catch(Exception e)
+		{
+			extractError = "Incorrect double value " + valueString;
+			return 0.0;
+		}
 	}
 
 

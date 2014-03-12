@@ -8,6 +8,7 @@ import ambit2.smarts.SmartsExpressionToken;
 
 public class SLNAtomExpression 
 {
+	public int atomID = -1;
 	public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(); 
 	
 	public boolean matches(IAtom atom) 

@@ -12,17 +12,29 @@ public class SLNConst
 	public static final int LO = 1000;
 	
 	
-	//Atom Attributes (predefined)   A_ATTR_*
-	public static final int A_ATTR_atomtID = 0;	 // doesn't equal to atomNumber
+	//Atom Attributes (predefined)   A_ATTR_*	
 	public static final int A_ATTR_charge = 1;	 // specifies formal charge -/+n
 	public static final int A_ATTR_I = 2;		 // specifies atom isotope
 	public static final int A_ATTR_fcharge = 3;	// specifies a partial charge
 	public static final int A_ATTR_s = 4; 		//specifies stereo-chemistry at tetrahedral atoms 
-	public static final int A_ATTR_spin = 5;	//specifies that the atom is a radical 
-	
+	public static final int A_ATTR_spin = 5;	//specifies that the atom is a radical 	
 	public static final int A_ATTR_USER_DEFINED = 500; //  == other= !!!
 	//boolean  - the attribute's name is specified, as in C[backbone]
 	//valued - the name is specified, followed by an equal sign ant the value, as in C-[chemshift=7.2]
+	
+	public static String atomAttributeToNameString(int attr)
+	{
+		switch (attr)
+		{
+		case A_ATTR_charge:
+			return "charge";
+		case A_ATTR_I:
+			return "I";
+			//TODO
+		default:
+			return "";
+		}
+	}
 	
 	//Atom stereo-chemistry values (for attribute s)
 	public static final int A_STEREO_R = 0; // CIP configurations
@@ -50,10 +62,11 @@ public class SLNConst
 	public static final int B_ATTR_USER_DEFINED = 500;
 	
 	// Predefined values for type 
-	public static final int B_TYPE_1 = 0; // equal to -
-	public static final int B_TYPE_2 = 1; // equal to =
-	public static final int B_TYPE_3 = 2; // equal to #
-	public static final int B_TYPE_aromatic = 3; // equal to :
+	public static final int B_TYPE_ANY = 0; // equal to -
+	public static final int B_TYPE_1 = 1; // equal to -
+	public static final int B_TYPE_2 = 2; // equal to =
+	public static final int B_TYPE_3 = 3; // equal to #
+	public static final int B_TYPE_aromatic = 4; // equal to :
 	
 	public static final int B_TYPE_USER_DEFINED = 100; //???
 	
@@ -68,17 +81,19 @@ public class SLNConst
 	public static final int B_STEREO_U = 6; // Unknown, structure might represent single, mixture or both config.
 	public static final int B_STEREO_U_= 7; // unknown, structure represent single configuration
 	
+	
 
 	//Bond types
 	public static char BondChars[] = {'~','-','=','#',':'};
 	
+	/*  //left-out from SMARTS parser could be removed
 	public static final int BT_ANY = 0;
 	public static final int BT_SINGLE = 1;
 	public static final int BT_DOUBLE = 2;
 	public static final int BT_TRIPLE = 3;
 	public static final int BT_AROMATIC = 4;
 	public static final int BT_UNDEFINED = 100;
-	
+	*/
 	
 	public static int getBondCharNumber (char ch)
 	{
