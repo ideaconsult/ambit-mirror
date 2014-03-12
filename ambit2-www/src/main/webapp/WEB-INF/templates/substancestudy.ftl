@@ -7,7 +7,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
-
+<script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
 
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
@@ -17,6 +17,12 @@
 	  	loadHelp("${ambit_root}","substance");
 	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	  	downloadForm("${ambit_request}");
+	  	var purl = $.url();
+		$('#search').attr('value',purl.param('search')===undefined?'':purl.param('search'));
+		var typeToSelect = purl.param('type')===undefined?'':purl.param('type');
+        $("#selecttype option").each(function (a, b) {
+	            if ($(this).val() == typeToSelect ) $(this).attr("selected", "selected");
+	    });		
 	});
 	</script>
 
@@ -43,7 +49,7 @@
 		    </div>			
 		     <div class='h6'>
 		     <a href='${ambit_root}/substance' title='All substances'>All</a> | 
-		     <a href='${ambit_root}/substance?type=CompTox&id=Ambit+Transfer' title='Substances with external identifier set to "other:CompTox=Ambit Transfer"'>CompTox</a>
+		     <a href='${ambit_root}/substance?type=CompTox&search=Ambit+Transfer' title='Substances with external identifier set to "other:CompTox=Ambit Transfer"'>CompTox</a>
 		     </div>		    
 		</div>
 		<div class="four columns omega">
@@ -51,7 +57,12 @@
 				&nbsp;
 			</div>
 		    <div class='h6'>
-		    	Enter substance I5 UUID
+				<select id='selecttype'  name="type">
+				  <option value="name">Name</option>
+				  <option value="uuid">UUID</option>
+				  <option value="">External identifier</option>
+				  <option value="CompTox">CompTox</option>
+				</select>
 		    </div>			
 		</div>			
 		<div class="four columns omega">

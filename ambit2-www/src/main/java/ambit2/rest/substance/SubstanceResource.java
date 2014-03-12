@@ -26,6 +26,7 @@ import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.DeleteSubstance;
 import ambit2.db.substance.ReadSubstance;
 import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
+import ambit2.db.substance.ReadSubstanceByName;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -135,17 +136,18 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		
 			String search = form.getFirstValue(QueryResource.search_param);
 			if (search!=null) {
-				SubstanceRecord record = new SubstanceRecord();
-				record.setCompanyUUID(search.trim());
-				return (Q)new ReadSubstance(record);
-			} else {
-				//try searching by external identifiers
-				String type = form.getFirstValue("type");
-				String id = form.getFirstValue("id");
-				if (id!=null) 
-					return (Q)new ReadSubstanceByExternalIDentifier(type,id);
+				String type = form.getFirstValue("type"); 
+				if ("uuid".equals(type)) {
+					SubstanceRecord record = new SubstanceRecord();
+					record.setCompanyUUID(search.trim());
+					return (Q)new ReadSubstance(record);
+				} else if ("name".equals(type)) {
+					return (Q)new ReadSubstanceByName(type,search);
+				} else {
+					return (Q)new ReadSubstanceByExternalIDentifier(type,search);
+				}
+			} else
 				return (Q)new ReadSubstance();			
-			}
 
 		} else 
 			try {
