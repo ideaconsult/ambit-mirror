@@ -12,6 +12,7 @@ public class SLNHelper
 			SLNAtom at = (SLNAtom)container.getAtom(i); 
 			sb.append("  #" + i + "  ");
 			sb.append(at.atomType + "  " + at.atomName + "  H" + at.numHAtom);
+			//TODO print atom attributes 
 			sb.append("\n");
 		}	
 		return(sb.toString());
