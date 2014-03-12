@@ -28,6 +28,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <toxtree.version>2.6.5</toxtree.version>
     <ambit.version>2.5.4</ambit.version>
+    <junit.version>4.8.1</junit.version>
+    <!-- https://github.com/ideaconsult/i5 -->
+    <i5.version>0.0.5</i5.version>
   </properties>
   <description>AmbitXT and Ambit REST web services </description>
   <inceptionYear>2008</inceptionYear>
