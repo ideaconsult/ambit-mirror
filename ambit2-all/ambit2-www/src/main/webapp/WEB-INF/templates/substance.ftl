@@ -6,6 +6,8 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-substance.js'></script>
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
+<script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
+
 	<script type='text/javascript'>
 	
 	$(document).ready(function() {
@@ -13,6 +15,14 @@
 	  	loadHelp("${ambit_root}","substance");
 	  	$( "#selectable" ).selectable( "option", "distance", 18);
 	  	downloadForm("${ambit_request}");
+	  	
+		var purl = $.url();
+		$('#search').attr('value',purl.param('search')===undefined?'':purl.param('search'));
+		
+		var typeToSelect = purl.param('type')===undefined?'':purl.param('type');
+        $("#selecttype option").each(function (a, b) {
+	          if ($(this).val() == typeToSelect ) $(this).attr("selected", "selected");
+	    });		
 	});
 	</script>
 
@@ -38,14 +48,19 @@
 		     Mono-constituent, multiconstituent, additives, impurities.
 		    </div>
 		     <a href='${ambit_root}/substance' title='All substances'>All</a> | 
-		     <a href='${ambit_root}/substance?type=CompTox&id=Ambit+Transfer' title='Substances with external identifier set to "other:CompTox=Ambit Transfer"'>CompTox</a>
+		     <a href='${ambit_root}/substance?type=CompTox&search=Ambit+Transfer' title='Substances with external identifier set to "other:CompTox=Ambit Transfer"'>CompTox</a>
 		</div>
 		<div class="four columns omega">
 			<div class="remove-bottom h3">
 				&nbsp;
 			</div>
 		    <div class='h6'>
-		    	Enter substance I5 UUID
+				<select id='selecttype' name="type">
+				  <option value="name">Name</option>
+				  <option value="uuid">UUID</option>
+				  <option value="">External identifier</option>
+				  <option value="CompTox">CompTox</option>
+				</select>
 		    </div>			
 		</div>			
 		<div class="four columns omega">
