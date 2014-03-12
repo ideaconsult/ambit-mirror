@@ -6,21 +6,11 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond;
 
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
-
-import ambit2.smarts.DoubleBondAromaticityNotSpecified;
-import ambit2.smarts.DoubleNonAromaticBond;
-import ambit2.smarts.RingClosure;
-import ambit2.smarts.SingleNonAromaticBond;
-import ambit2.smarts.SingleOrAromaticBond;
 import ambit2.smarts.SmartsAtomExpression;
-import ambit2.smarts.SmartsBondExpression;
 import ambit2.smarts.SmartsConst;
+import ambit2.smarts.SmartsExpressionToken;
+
 
 public class SLNParser 
 {
@@ -36,13 +26,14 @@ public class SLNParser
 	int curComponent;
 	public int numFragments;
 	public int maxCompNumber;
-	
+
 
 	int curChar;	
 	SLNAtom prevAtom;
 	//int curBondType;
 	int nChars;
 	SLNBond curBond;
+	SLNAtomExpression curAtExp;
 
 
 
@@ -111,7 +102,7 @@ public class SLNParser
 			for (Integer key : keys)
 				newError("Ring index " + key + " is unclosed",-1, "");
 		}
-		
+
 	}
 
 	void parseAtom()
@@ -119,9 +110,9 @@ public class SLNParser
 		//extract atom name
 		String atomName = extractAtomName();
 		int atomType = -1;
-				
-		
-		
+
+
+
 		//analyze atomName
 		if (globalDictionary.containsAtomName(atomName))
 		{
@@ -140,15 +131,15 @@ public class SLNParser
 						atomType = i;
 			}
 		}
-		
-		
+
+
 		if (atomType == -1)
 			errors.add(new SLNParserError(sln, "Atom name", curChar, ""));
-		
+
 		SLNAtom newAtom = new SLNAtom();
 		newAtom.atomType = atomType;
 		newAtom.atomName = atomName;
-		
+
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == 'H')
 			{
@@ -159,23 +150,23 @@ public class SLNParser
 						nH = getInteger();
 				newAtom.numHAtom = nH;
 			}
-		
+
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == '[')
 			{	
 				String atomExpression = extractAtomExpression();
-				
+
 				System.out.println("AtExpr " + atomExpression);
-				
+
 				//TODO analyze atomExpression
 			}	
-		
-		
-		
+
+
+
 		addAtom(newAtom);
 
 	}
-	
+
 	String extractAtomName()
 	{	
 		int startPos = curChar;
@@ -187,11 +178,10 @@ public class SLNParser
 			else 
 				break;
 		}
-		
+
 		return sln.substring(startPos, curChar);
 	}
-	
-	
+
 	String extractAtomExpression()
 	{
 		curChar++;
@@ -199,54 +189,79 @@ public class SLNParser
 		while ((curChar < nChars) && (openBrackets > 0) && (errors.size() == 0))
 		{
 			if (sln.charAt(curChar)=='[')
-			 {
-				 openBrackets++;
-				 curChar++;
-			 }
-			 else
-			 if (sln.charAt(curChar)==']')
-			 {
-				 openBrackets--;
-				 curChar++;
-			 }
-			 else
-				 break;
+			{
+				openBrackets++;
+				curChar++;
+			}
+			else
+				if (sln.charAt(curChar)==']')
+				{
+					openBrackets--;
+					curChar++;
+				}
+				else
+					break;
 		}
 		
 		return sln.substring(curChar);
 	}
-	
-	void parseAtomToken()
-	{
-		
-	}
 
+	public void analyzeAtomExpression()
+	{
+	/*	curAtExp = new SLNAtomExpression();
+		if (Character.isLetter(sln.charAt(curChar)))
+		{
+			switch (sln.charAt(curChar))
+			{			
+			case 'a':
+			//	testForDefaultAND();
+				curAtExp.tokens.add(new SLNExpressionToken(SLNConst.A_ATTR_atomtID,0,sln,sln));	// ???
+				curChar++;
+				break;	
+			case 's':
+				curChar++;
+				if (curChar < nChars)
+					curAtExp.tokens.add(new SLNExpressionToken(SLNConst.A_ATTR_spin,0,sln,sln));	
+				else	
+					curAtExp.tokens.add(new SLNExpressionToken(SLNConst.A_ATTR_s,0,sln,sln));
+				break;	
+			}
+		}*/
+		//TODO
+	}
+	
+	public void checkSymbol()
+	{
+		String curAttr = null;
+		SLNExpressionToken token = new SLNExpressionToken(curChar, curChar, curAttr, curAttr);
+		if (!token.isLogicalOperation() || !token.equals(":"))
+			extractAtomExpression();
+		if (token.isLogicalOperation())
+			analyzeAtomAttribute();
+		if (token.equals(":"))
+		{
+			curChar--;
+			if(Character.isDigit(sln.charAt(curChar)))
+					parseA_ATTR_atomID();
+			else
+				newError("Error: incorrect token ':' ", curChar, curAttr);		
+		}	
+	}
+	
+	void analyzeAtomAttribute()
+	{
+		//TODO
+	}
+	
+	void parseA_ATTR_atomID()
+	{
+		//TODO
+	}
+	
 	void parseAtomIndex()   //!!!
 	{
-/*		if (sln.charAt(curChar) == '(')
-		{				
-			curChar++;
-			if (sln.charAt(curChar) == '@')
-				curChar++;
-			{
-				if (curChar == nChars)
-				{	
-					newError("Incorrect ring closure",curChar,"");
-					return;
-				}	
-
-				if (Character.isDigit(sln.charAt(curChar)))
-					registerIndex(getInteger());
-
-				else
-					newError("Incorrect ring closure",curChar,"");		
-			}
-		}
-		else */
-		{	
-			if (Character.isDigit(sln.charAt(curChar)))
-				registerIndex(getInteger());
-		}
+		if (Character.isDigit(sln.charAt(curChar)))
+			registerIndex(getInteger());
 	}
 
 	int getInteger()
@@ -278,7 +293,7 @@ public class SLNParser
 	void newError(String msg, int pos, String param)
 	{
 		SLNParserError err;
-		
+
 		//TODO
 	}
 
@@ -304,7 +319,7 @@ public class SLNParser
 		{	
 			addBond(prevAtom, atom);
 		}
-		
+
 		prevAtom = atom;
 	}
 
@@ -319,7 +334,7 @@ public class SLNParser
 		case '#':	//triple bond
 		case ':':	//aromatic bond
 		case '.':	//new part of the structure		
-			
+
 		case '!':	// logical "not"
 		case '&':	// logical "and"
 		case '|':	// logical "or"
@@ -328,8 +343,6 @@ public class SLNParser
 			parseBondExpression();
 			break;		
 
-		//TODO
-		//doesn't work for nested branches 
 		case '(':							
 			if (prevAtom == null)
 			{
@@ -369,7 +382,7 @@ public class SLNParser
 				curComponent = 0;
 			curChar++;
 			break;
-		
+
 		}
 	}
 
@@ -383,17 +396,15 @@ public class SLNParser
 		}
 		else
 			newBond = curBond;
-		
-		
-		
+
 		IAtom[] atoms = new SLNAtom[2];
-	    atoms[0] = atom0;
-	    atoms[1] = atom1;
-	    newBond.setAtoms(atoms);
-	    container.addBond(newBond);
-	    
-	    //nullify info to read next bond
-	    curBond = null;
+		atoms[0] = atom0;
+		atoms[1] = atom1;
+		newBond.setAtoms(atoms);
+		container.addBond(newBond);
+
+		//nullify info to read next bond
+		curBond = null;
 	}
 
 	void parseBondExpression()
@@ -410,8 +421,8 @@ public class SLNParser
 			}
 			//TODO
 		}
-		
+
 	}
 
-	
+
 }
