@@ -41,6 +41,10 @@
 		    <div class='help'>
 		     Mono-constituent, multiconstituent, additives, impurities.
 		    </div>			
+		     <div class='h6'>
+		     <a href='${ambit_root}/substance' title='All substances'>All</a> | 
+		     <a href='${ambit_root}/substance?type=CompTox&id=Ambit+Transfer' title='Substances with external identifier set to "other:CompTox=Ambit Transfer"'>CompTox</a>
+		     </div>		    
 		</div>
 		<div class="four columns omega">
 			<div class="remove-bottom h3">
