@@ -111,8 +111,18 @@ To skip the tests, use -DskipTests=true option
 
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.5.4-SNAPSHOT
+AMBIT2 2.5.5-SNAPSHOT
 Current version at trunk
+
+AMBIT2 2.5.4
+ambit2-www: i5 0.0.5 (43 endpoints and QA filtering criteria)
+ambit2-www: jtoxkit.js update; configurable dataset browser and study tabs improvements
+ambit2-www: multiple i5z files upload
+ambit2-www: large download icons; 
+ambit2-www: theme black-tie
+ambit2-db: Support for substance external identifiers and reference owner DB schema 7.2
+ambit2-smarts: better stereochemistry support
+ambit2-sln: Sybyl Line Notation (in progress)
 
 AMBIT2 2.5.3
 ambit2-core: IUCLID5 endpoint study records (via https://github.com/ideaconsult/i5 0.0.4 )
