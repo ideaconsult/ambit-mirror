@@ -92,7 +92,7 @@
 </div>
 
 </form>
-<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/menu_substance.ftl">
 	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
@@ -110,7 +110,7 @@
 	</div>		
 </div>
 
-<div class="fourteen columns remove-bottom" style="padding:0;" >
+<div class="thirteen columns remove-bottom" style="padding:0;" >
 
 
 		<!-- Page Content
