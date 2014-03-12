@@ -20,7 +20,7 @@ public class SLNConst
 	public static final int A_ATTR_spin = 5;	//specifies that the atom is a radical 	
 	public static final int A_ATTR_USER_DEFINED = 500; //  == other= !!!
 	//boolean  - the attribute's name is specified, as in C[backbone]
-	//valued - the name is specified, followed by an equal sign ant the value, as in C-[chemshift=7.2]
+	//valued - the name is specified, followed by an equal sign and the value, as in C-[chemshift=7.2]
 	
 	public static String atomAttributeToNameString(int attr)
 	{
@@ -30,7 +30,15 @@ public class SLNConst
 			return "charge";
 		case A_ATTR_I:
 			return "I";
-			//TODO
+		case A_ATTR_fcharge:
+			return "fcharge";
+		case A_ATTR_s:
+			return "stereo-chemistry";
+		case A_ATTR_spin:
+			return "spin";
+		case A_ATTR_USER_DEFINED:
+			return "userDef";
+
 		default:
 			return "";
 		}
@@ -49,17 +57,78 @@ public class SLNConst
 	public static final int A_STEREO_M = 9; // mixture
 	//TODO  Specifying Stereo-chemistry
 	
+	public static String atomStereoChemistryAttributeToNameString(int attr)
+	{
+		switch (attr)
+		{
+		case A_STEREO_R:
+			return "CIP config R";
+		case A_STEREO_S:
+			return "CIP config S";
+		case A_STEREO_N:
+			return "Normal";
+		case A_STEREO_I:
+			return "Invert";
+		case A_STEREO_D:
+			return "D";
+		case A_STEREO_L:
+			return "L";
+		case A_STEREO_U:
+			return "unknown";
+		case A_STEREO_E:
+			return "explicit";
+		case A_STEREO_Rel:
+			return "relative";
+		case A_STEREO_M:
+			return "mixture";
+			
+		default:
+			return "";
+		}
+	}
+	
 	//Atom radical values (for attribute spin)
 	public static final int A_spin_s = 0; // singlet
 	public static final int A_spin_d = 1; // doublet == * !!!
 	public static final int A_spin_t = 2; // triplet
 	
+	public static String spinAttributeToNameString(int attr)
+	{
+		switch (attr)
+		{
+		case A_spin_s:
+			return "s";
+		case A_spin_d:
+			return "d";
+		case A_spin_t:
+			return "t";
+			
+		default:
+			return "";
+		}
+	}
 	
 	//Bond Attributes (predefined)   B_ATTR_*
 	public static final int B_ATTR_type = 0; // overrides the type specified by the bond character
 	public static final int B_ATTR_s = 1;	//indicates stereo-chemistry about a double bond
 	
 	public static final int B_ATTR_USER_DEFINED = 500;
+	
+	public static String bondAttributeToNameString(int attr)
+	{
+		switch (attr)
+		{
+		case B_ATTR_type:
+			return "type";
+		case B_ATTR_s:
+			return "stereo-chemistry";
+		case B_ATTR_USER_DEFINED:
+			return "userDef";
+			
+		default:
+			return "";
+		}
+	}
 	
 	// Predefined values for type 
 	public static final int B_TYPE_ANY = 0; // equal to -
@@ -70,6 +139,28 @@ public class SLNConst
 	
 	public static final int B_TYPE_USER_DEFINED = 100; //???
 	
+	public static String bondTypeAttributeToNameString(int attr)
+	{
+		switch (attr)
+		{
+		case B_TYPE_ANY:
+			return "any";
+		case B_TYPE_1:
+			return "-";
+		case B_TYPE_2:
+			return "=";	
+		case B_TYPE_3:
+			return "#";
+		case B_TYPE_aromatic:
+			return "aromatic";
+			
+		case B_TYPE_USER_DEFINED:
+			return "userDef";
+			
+		default:
+			return "";
+		}
+	}
 	
 	//Bond stereo-chemistry values (for attribute s)
 	public static final int B_STEREO_C = 0; // Cis
@@ -81,7 +172,31 @@ public class SLNConst
 	public static final int B_STEREO_U = 6; // Unknown, structure might represent single, mixture or both config.
 	public static final int B_STEREO_U_= 7; // unknown, structure represent single configuration
 	
-	
+	public static String bondStereoChemistryAttributeToNameString(int attr)
+	{
+		switch (attr)
+		{
+		case B_STEREO_C:
+			return "cis";
+		case B_STEREO_T:
+			return "trans";
+		case B_STEREO_E:
+			return "Entgegen";	
+		case B_STEREO_Z:
+			return "Zusammen";
+		case B_STEREO_N:
+			return "normal=E";
+		case B_STEREO_I:
+			return "inverted=Z";
+		case B_STEREO_U:
+			return "unknown";
+		case B_STEREO_U_:
+			return "unknown, single config";
+			
+		default:
+			return "";
+		}
+	}
 
 	//Bond types
 	public static char BondChars[] = {'~','-','=','#',':'};
@@ -107,8 +222,8 @@ public class SLNConst
 	
 	//Atom and Bond attributes used only in query Q_ATTR_*    ???collect them to atom and bond attributes???
 	public static final int Q_ATTR_mapNum = 100; // #1,#2,... map number to an atom "a"
-	public static final int Q_ATTR_c = 101; // contol how atoms in the target are matched "convered"  by pattern atoms "a"
-	public static final int Q_ATTR_f = 102; // boolean attribute indicating that the atom is field "a"
+	public static final int Q_ATTR_c = 101; // control how atoms in the target are matched "convered"  by pattern atoms "a"
+	public static final int Q_ATTR_f = 102; // boolean attribute indicating that the atom is filled "a"
 	public static final int Q_ATTR_hac = 103; // heavy atom count "b"
 	public static final int Q_ATTR_hc = 104; // hydrogen count "b"
 	public static final int Q_ATTR_htc = 105; // hetero atom count "b"
@@ -125,12 +240,73 @@ public class SLNConst
 	public static final int Q_ATTR_type = 116; // bond type specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
 	public static final int Q_ATTR_v = 117; // Conveys Markush and macro atom valence information
 	
-	//Values of converege attribute
-	public static final int Q_CONVERED_n = 0; // atom must not have been matched previously
-	public static final int Q_CONVERED_o = 1; // atom's coverage flags are ignored
-	public static final int Q_CONVERED_y = 2; // atom must be covered by previous search
 	
+	public static String queryAttributeToNameString(int attr)
+	{
+		switch (attr)
+		{
+		case Q_ATTR_mapNum:
+			return "mapNum";
+		case Q_ATTR_c:
+			return "covered";
+		case Q_ATTR_f:
+			return "filled atom";	
+		case Q_ATTR_hac:
+			return "heavy atom count";
+		case Q_ATTR_hc:
+			return "hydrogen count";
+		case Q_ATTR_htc:
+			return "hetero atom count";
+		case Q_ATTR_is:
+			return "is match";
+		case Q_ATTR_mw:
+			return "MW";
+		case Q_ATTR_n:
+			return "not noncovering";
+		case Q_ATTR_not:
+			return "not";
+		case Q_ATTR_ntc:
+			return "nonterminal atoms";
+		case Q_ATTR_r:
+			return "ring";
+		case Q_ATTR_rbc:
+			return "ring bond count";
+		case Q_ATTR_src:
+			return "smallest ring count";
+		case Q_ATTR_tac:
+			return "atoms attached to the qualified atom";
+		case Q_ATTR_tbo:
+			return "total bond order of an atom";
+		case Q_ATTR_type:
+			return "bond type"; // specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
+		case Q_ATTR_v:
+			return "Markush and macro atom valence information";
+			
+		default:
+			return "";
+		}
+	}
 	
+	//Values of coverage attribute
+	public static final int Q_COVERED_n = 0; // atom must not have been matched previously
+	public static final int Q_COVERED_o = 1; // atom's coverage flags are ignored
+	public static final int Q_COVERED_y = 2; // atom must be covered by previous search
+	
+	public static String coverageQueryAttributeToNameString(int attr)
+	{
+		switch (attr)
+		{
+		case Q_COVERED_n:
+			return "not matched prev";
+		case Q_COVERED_o:
+			return "ignored coverage flags";
+		case Q_COVERED_y:
+			return "covered by prev search";
+			
+		default:
+			return "";
+		}
+	}
 	//Matrix with the operation priorities {pij}
 	//p[i][j] < 0 means that priority(i) < priority(j)
 	//p[i][j] = 0 means that priority(i) = priority(j)

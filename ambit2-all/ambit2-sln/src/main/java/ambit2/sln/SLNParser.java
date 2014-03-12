@@ -7,10 +7,6 @@ import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtom;
 
-import ambit2.smarts.SmartsAtomExpression;
-import ambit2.smarts.SmartsConst;
-import ambit2.smarts.SmartsExpressionToken;
-
 
 public class SLNParser 
 {
@@ -382,10 +378,7 @@ public class SLNParser
 			pos++;
 		}
 	}
-	
-	
-	
-	
+
 	SLNExpressionToken analyzeAtomAttribute(String name, String value)
 	{
 		if (value == null)
@@ -407,6 +400,23 @@ public class SLNParser
 				newError("Incorrect charge value " + value, curChar,"");
 				return null;
 			}
+		}
+		
+		//Handle isotope attribute
+		if (name.equals("I"))
+		{
+			int isotope = extractInteger(value);
+			if (extractError.equals("") || isotope >= 0)
+			{
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_I,isotope,null,null);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect isotope value " + value, curChar,"");
+				return null;
+			}
+			
 		}
 		
 		//By default it is an user defined attribute
