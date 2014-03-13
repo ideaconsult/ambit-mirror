@@ -1547,7 +1547,7 @@ public class TestUtilities
 	{
 		System.out.println("Testing molecule from file: " + inMolFileName);
 		
-		IteratingMDLReader reader = new IteratingMDLReader(new FileReader(new File(outMolFileName)), DefaultChemObjectBuilder.getInstance());
+		IteratingMDLReader reader = new IteratingMDLReader(new FileReader(new File(inMolFileName)), DefaultChemObjectBuilder.getInstance());
 		IAtomContainer target = null;
 		if (reader.hasNext())
 			target = reader.next();
@@ -2242,8 +2242,9 @@ public class TestUtilities
 		//tu.testSmiles2Smiles("c1ccccc1");
 		//tu.testSmiles2Smiles("C[C@](CC)(O)Cl");
 		
-		tu.testSmiles2MOLFile("C[C@](CC)(O)Cl","/test-chirality-01.mol");
-		
+		//tu.testSmiles2MOLFile("C[C@](CC)(O)Cl","/test-chirality-01.mol");
+		//tu.testMOL2MOLFile("D:/test-mol-chiral.mol", "D:/test-mol-chiral-conv.mol");
+		//tu.testMOL2MOLFile("D:/test-mol-chiral-02.mol", "D:/test-mol-chiral-02-conv.mol");
 		
 		//tu.testSMIRKS("[H:99][O;X2:1][C:2]2=[C:3]C=CC=C2>>C1CCC([O;X2:1]C2=CC=CC=C2)OC1.[H:99]","[H]Oc1ccccc1");
 		                                                      
@@ -2274,14 +2275,15 @@ public class TestUtilities
 		//tu.testCOF_FileOperations("/test.smi", "/test2.smi");
 				
 		//tu.testSmartsToQueryToSmarts("[C,$(CO),Br][n+++;R5]n[A--]ACCa*Cl");
-		
-		
 		//tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");
 		//tu.testSmartsToQueryToSmarts("C!-C:C=C#C@C!@C~C");
 		//tu.testSmartsToQueryToSmarts("C!:1CCCCC!:1%1CCCC1");
 		//tu.testSmartsToQueryToSmarts("[#6]-c1cccc2-[#7]3C-,:4(=[#7]-[#6]-5-[#7][C]3(=O)[#6]-3-[#6]-[#6]C(=O)[#7]-3-[#6]-c~3cc-,:44ccccc4~[#7]~3[#6]-5~[#8]-c12)c1ccccc1");
 		
 		//tu.testSmartsToQueryToSmarts("C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1C1CC1");
+		
+		//tu.testSmartsToQueryToSmarts("Cl/C=C/Cl");          //!!!!! CIS/TRANS info is missing
+		//tu.testSmartsToQueryToSmarts("C[C@](CO)(N)CC");   //!!!!! Bug in the SMARTS outputting --> C[C&@@](CO)(N)CC   
 		
 		
 	}
