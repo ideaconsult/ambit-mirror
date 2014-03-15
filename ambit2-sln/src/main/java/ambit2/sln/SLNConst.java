@@ -22,7 +22,8 @@ public class SLNConst
 	//boolean  - the attribute's name is specified, as in C[backbone]
 	//valued - the name is specified, followed by an equal sign and the value, as in C-[chemshift=7.2]
 	
-	public static String atomAttributeToNameString(int attr)
+	
+	public static String atomAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
@@ -33,7 +34,7 @@ public class SLNConst
 		case A_ATTR_fcharge:
 			return "fcharge";
 		case A_ATTR_s:
-			return "stereo-chemistry";
+			return "s";
 		case A_ATTR_spin:
 			return "spin";
 		case A_ATTR_USER_DEFINED:
