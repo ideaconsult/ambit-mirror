@@ -298,7 +298,7 @@ public class SLNParser
 				while (pos < atomExpr.length())
 				{
 					if (Character.isLetter(atomExpr.charAt(pos)) 
-							 || Character.isDigit(atomExpr.charAt(pos)) )
+							 || Character.isDigit(atomExpr.charAt(pos))  )
 						pos++;
 					else
 						break;
@@ -332,7 +332,9 @@ public class SLNParser
 					if (Character.isLetter(atomExpr.charAt(pos)) ||
 							Character.isDigit(atomExpr.charAt(pos)) ||
 							(atomExpr.charAt(pos) == '+' ) || 
-							(atomExpr.charAt(pos) == '-')	 
+							(atomExpr.charAt(pos) == '-')  ||
+							(atomExpr.charAt(pos) == '.')  ||
+							(atomExpr.charAt(pos) == '*')
 					)
 						pos++;
 					else
