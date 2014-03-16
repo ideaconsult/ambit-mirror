@@ -58,30 +58,30 @@ public class SLNConst
 	public static final int A_STEREO_M = 9; // mixture
 	//TODO  Specifying Stereo-chemistry
 	
-	public static String atomStereoChemistryAttributeToNameString(int attr)
+	public static String atomStereoChemistryAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
 		case A_STEREO_R:
-			return "CIP config R";
+			return "R";
 		case A_STEREO_S:
-			return "CIP config S";
+			return "S";
 		case A_STEREO_N:
-			return "Normal";
+			return "N";
 		case A_STEREO_I:
-			return "Invert";
+			return "I";
 		case A_STEREO_D:
 			return "D";
 		case A_STEREO_L:
 			return "L";
 		case A_STEREO_U:
-			return "unknown";
+			return "U";
 		case A_STEREO_E:
-			return "explicit";
+			return "E";
 		case A_STEREO_Rel:
-			return "relative";
+			return "R";  // or *
 		case A_STEREO_M:
-			return "mixture";
+			return "M";
 			
 		default:
 			return "";
@@ -93,14 +93,14 @@ public class SLNConst
 	public static final int A_spin_d = 1; // doublet == * !!!
 	public static final int A_spin_t = 2; // triplet
 	
-	public static String spinAttributeToNameString(int attr)
+	public static String spinAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
 		case A_spin_s:
 			return "s";
 		case A_spin_d:
-			return "d";
+			return "d"; //or *
 		case A_spin_t:
 			return "t";
 			
@@ -115,14 +115,14 @@ public class SLNConst
 	
 	public static final int B_ATTR_USER_DEFINED = 500;
 	
-	public static String bondAttributeToNameString(int attr)
+	public static String bondAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
 		case B_ATTR_type:
 			return "type";
 		case B_ATTR_s:
-			return "stereo-chemistry";
+			return "s";
 		case B_ATTR_USER_DEFINED:
 			return "userDef";
 			
@@ -140,7 +140,7 @@ public class SLNConst
 	
 	public static final int B_TYPE_USER_DEFINED = 100; //???
 	
-	public static String bondTypeAttributeToNameString(int attr)
+	public static String bondTypeAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
@@ -178,21 +178,21 @@ public class SLNConst
 		switch (attr)
 		{
 		case B_STEREO_C:
-			return "cis";
+			return "C";
 		case B_STEREO_T:
-			return "trans";
+			return "T";
 		case B_STEREO_E:
-			return "Entgegen";	
+			return "E";	
 		case B_STEREO_Z:
-			return "Zusammen";
+			return "Z";
 		case B_STEREO_N:
-			return "normal=E";
+			return "N";
 		case B_STEREO_I:
-			return "inverted=Z";
+			return "I";
 		case B_STEREO_U:
-			return "unknown";
+			return "U";
 		case B_STEREO_U_:
-			return "unknown, single config";
+			return "U*";
 			
 		default:
 			return "";
@@ -242,46 +242,46 @@ public class SLNConst
 	public static final int Q_ATTR_v = 117; // Conveys Markush and macro atom valence information
 	
 	
-	public static String queryAttributeToNameString(int attr)
+	public static String queryAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
 		case Q_ATTR_mapNum:
-			return "mapNum";
+			return "#";
 		case Q_ATTR_c:
-			return "covered";
+			return "c";
 		case Q_ATTR_f:
-			return "filled atom";	
+			return "f";	
 		case Q_ATTR_hac:
-			return "heavy atom count";
+			return "hac";
 		case Q_ATTR_hc:
-			return "hydrogen count";
+			return "hc";
 		case Q_ATTR_htc:
-			return "hetero atom count";
+			return "htc";
 		case Q_ATTR_is:
-			return "is match";
+			return "is";
 		case Q_ATTR_mw:
-			return "MW";
+			return "mw";
 		case Q_ATTR_n:
-			return "not noncovering";
+			return "n";
 		case Q_ATTR_not:
 			return "not";
 		case Q_ATTR_ntc:
-			return "nonterminal atoms";
+			return "ntc";
 		case Q_ATTR_r:
-			return "ring";
+			return "r";
 		case Q_ATTR_rbc:
-			return "ring bond count";
+			return "rbc";
 		case Q_ATTR_src:
-			return "smallest ring count";
+			return "src";
 		case Q_ATTR_tac:
-			return "atoms attached to the qualified atom";
+			return "tac";
 		case Q_ATTR_tbo:
-			return "total bond order of an atom";
+			return "tbo";
 		case Q_ATTR_type:
-			return "bond type"; // specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
+			return "type"; // specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
 		case Q_ATTR_v:
-			return "Markush and macro atom valence information";
+			return "v";
 			
 		default:
 			return "";
@@ -293,16 +293,16 @@ public class SLNConst
 	public static final int Q_COVERED_o = 1; // atom's coverage flags are ignored
 	public static final int Q_COVERED_y = 2; // atom must be covered by previous search
 	
-	public static String coverageQueryAttributeToNameString(int attr)
+	public static String coverageQueryAttributeToSLNString(int attr)
 	{
 		switch (attr)
 		{
 		case Q_COVERED_n:
-			return "not matched prev";
+			return "n";
 		case Q_COVERED_o:
-			return "ignored coverage flags";
+			return "o";
 		case Q_COVERED_y:
-			return "covered by prev search";
+			return "y";
 			
 		default:
 			return "";
