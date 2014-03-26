@@ -35,7 +35,9 @@ var funcgroups = [
 */
 {"family" : "Azides" , "name":"Azides" , "smarts": "N=N=N" },
 {"family" : "Benzotriazoles" , "name":"Benzotriazoles" , "smarts": "C12=CC=CC=C1NN=N2" },
+/*
 {"family" : "Benzotriazoles" , "name":"Benzotriazole-hindered phenols" , "smarts": "" },
+*/
 {"family" : "Boron Compounds" , "name":"Boron Compounds (borates and borate esters)" , "smarts": "[BX3]([O])([O])[O]" },
 {"family" : "Boron Compounds (organoboranes)" , "name":"Boron Compounds (organoboranes)" , "smarts": "[BX3,BX4-]([C,c,O,H])([C,c,O,H])[C,c,O,H]" },
 {"family" : "Boron Compounds (boroxines)" , "name":"Boron Compounds (boroxines)" , "smarts": "[BX3]([C,c])[O]" },

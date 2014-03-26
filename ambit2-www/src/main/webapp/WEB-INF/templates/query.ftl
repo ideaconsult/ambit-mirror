@@ -1,7 +1,7 @@
 <#include "/html.ftl" >
 <head>
 <#include "/header.ftl" >
-
+<script type='text/javascript' src='${ambit_root}/editor/ketcher_editor.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/ambit_structures.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-substance.js'></script>
@@ -15,15 +15,27 @@
 	_ambit.selectedModels = purl.param('model_uri');
 	_ambit.selectedDatasets = purl.param('dataset_uri');
 	var option = purl.param('option')===undefined?'auto':purl.param('option');
+	var b64 = purl.param('b64search');
+	var psearch = "";
+	if (b64===undefined || b64=="") 
+		psearch = purl.param('search')===undefined?'50-00-0':purl.param('search');
+	else psearch="";
+	
+	$.cookie('ambit2.search', psearch, { expires: 1 });
+	$.cookie('ambit2.b64search', b64===undefined?'':b64, { expires: 1 });
+	$.cookie('ambit2.type', purl.param('type')===undefined?'smiles':purl.param('type'), { expires: 1 });
+	$.cookie('ambit2.threshold', purl.param('threshold')===undefined?'0.8':purl.param('threshold'), { expires: 1 });
+	$.cookie('ambit2.option', purl.param('option')===undefined?'auto':purl.param('option'), { expires: 1 });
+	$.cookie('ambit2.pagesize', purl.param('pagesize')===undefined?'10':purl.param('pagesize'), { expires: 1 });
+
 	var params = {
 			'threshold'	:purl.param('threshold')===undefined?'0.8':purl.param('threshold'),
 			'media'		:'application/json',
 			//'search'	:purl.param('search')===undefined?'50-00-0':purl.param('search'),
-			'b64search'	:purl.param('search')===undefined?$.base64.encode('50-00-0'):$.base64.encode(purl.param('search')),
+			'b64search'	:(b64===undefined || b64=="")?(psearch===undefined || psearch==""?$.base64.encode('50-00-0'):$.base64.encode(psearch)):b64,
 			'pagesize'	:purl.param('pagesize')===undefined?'10':purl.param('pagesize'),
-			'type' : 'smiles'	
+			'type' : purl.param('type')===undefined?'smiles':purl.param('type')	
 			};
-
 	$(function() {
 		initSearchForm();
 		initTable("model",null,'${ambit_root}/model?max=20','#models',"models","model_uri[]",_ambit.selectedModels,"selectModel");
@@ -35,7 +47,6 @@
 	$(document)
 			.ready(
 					function() {
-												
 						//ajax
 						$.ajaxSetup({
 							cache : _ambit.cache  //while dev
@@ -102,8 +113,8 @@
 						_ambit['data_uri'] = null; 
 						_ambit['query_params'] = params;
 						var qurl = url +  $.param(params,false);
-						downloadFormUpdate(null);
 
+						downloadFormUpdate(null);
 						$('#quri').attr('href',queryService + "/ui/_dataset?dataset_uri=" + encodeURIComponent(qurl));
 						var oTable = defineStructuresTable(qurl, queryService,purl.param('option')=='similarity',"${ambit_root}");
 						
@@ -114,13 +125,6 @@
 	});
 	$('#structures').css('class','remove-bottom');
 
-</script>
-
-<script type="text/javascript" >
-		$.cookie('ambit2.search', purl.param('search')===undefined?'50-00-0':purl.param('search'), { expires: 1 });
-		$.cookie('ambit2.threshold', purl.param('threshold')===undefined?'0.8':purl.param('threshold'), { expires: 1 });
-		$.cookie('ambit2.option', purl.param('option')===undefined?'auto':purl.param('option'), { expires: 1 });
-		$.cookie('ambit2.pagesize', purl.param('pagesize')===undefined?'10':purl.param('pagesize'), { expires: 1 });
 </script>
 
 </head>

@@ -1,6 +1,7 @@
 <#include "/html.ftl" >
 <head>
 <#include "/header.ftl" >
+<script type='text/javascript' src='${ambit_root}/jme/jme.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
 <script type='text/javascript' charset='utf8' src='${ambit_root}/jquery/jquery.base64.min.js'></script>

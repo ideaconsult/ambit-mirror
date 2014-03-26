@@ -2,8 +2,11 @@ function searchFormValidation(formName) {
 	$(formName).validate({
 		rules : {
 			'search': {
-				required : true
-			},		
+				required : ($('input[name=b64search]').val() === undefined) || ($('input[name=b64search]').val() === null)
+			},
+			'b64search': {
+				required : false
+			},					
 			'option': {
 				required : true
 			},
@@ -36,7 +39,11 @@ function searchFormValidation(formName) {
 }
 
 function initSearchForm() {
-	
+		$( "#search" )
+			.focusout(function() {
+				$('#b64search').attr("value",null);
+				$('#type').attr("value","smiles");
+		});
 		$.each(funcgroups,function(index,val) {
 			$('<option>',
 					{
@@ -51,18 +58,33 @@ function initSearchForm() {
 			});
 		$('#funcgroups').change(function(){ 
 			$('#search').attr("value",$(this).val());
+			$("#molQuery").text("");
+			$('#b64search').attr("value",null);
+			document["searchform"].type.value = "smiles";
 			$('input:radio[name=option][value=smarts]').click();
 		});						
-			
+		$("#molQuery").text("");
+		var cb64 = $.cookie('ambit2.b64search');
+		var csearch;
+		if (cb64===undefined || cb64=="") 
+			csearch = $.cookie('ambit2.search')===undefined || $.cookie('ambit2.search')==null?'50-00-0':$.cookie('ambit2.search');
+		else csearch="";
+		
 		try {
-			document.searchform.search.value = $.cookie('ambit2.search')==null?"50-00-0":$.cookie('ambit2.search');
+			$("#search").attr("value",csearch);
 		} catch (err) {
-			document.searchform.search.value="";
+			$("#search").attr("value","");
 		}
 		try {
-			document.searchform.pagesize.value = $.cookie('ambit2.pagesize')==null?"10":$.cookie('ambit2.pagesize');
+			$("#b64search").attr("value",(cb64==null?"":cb64));
+			$("#molQuery").text(cb64==null || cb64==""?"":"mol");
 		} catch (err) {
-			document.searchform.pagesize.value = "10";
+			$("#b64search").attr("value","");
+		}		
+		try {
+			$("#pagesize").attr("value",$.cookie('ambit2.pagesize')==null?"10":$.cookie('ambit2.pagesize'));
+		} catch (err) {
+			$("#pagesize").attr("value","10");
 		}
 		//option
 		try {
@@ -88,13 +110,20 @@ function initSearchForm() {
 		} catch (err) {
 			$('#threshold').val(0.9);
 		}
-		//func groups
 		try {
-			$('#funcgroups').val($.cookie('ambit2.search')==null?"":$.cookie('ambit2.search'));
+			document["searchform"].type.value = $.cookie('ambit2.type'); 
 		} catch (err) {
-			$('#funcgroups').val("");
+			document["searchform"].type.value = "smiles";
+		}		
+		//func groups
+		
+		try {
+			$('#funcgroups').val(csearch).change();
+		} catch (err) {
+			$('#funcgroups').val("").change();
 		}						
 		searchFormValidation('#searchform');
+
 }
 
 function clickSimilarity() {

@@ -49,8 +49,10 @@
 		&nbsp;
 	</div>
 	<div class="remove-bottom h6">
-		<input type='text' style='margin:0;padding-bottom:0;width: 40em;height:1em;'  id='search' name='search' value='' tabindex='1' >
+		<input type='text' style='margin:0;padding-bottom:0;width: 40em;height:1em;'  id='search' name='search' value='' tabindex='1' > 
+		<input type='hidden' style='margin:0;padding-bottom:0;width: 40em;height:1em;'  id='b64search' name='b64search' value='' tabindex='2' >
 		<a href='#' class='help' style='margin:0;padding:0;' onClick='startEditor("${ambit_root}","searchform");'>Draw (sub)structure</a>
+		<span id="molQuery"></span>		
 	</div>	
 </div>
 <div class="one column omega">
@@ -63,3 +65,4 @@
 </div>		
 
 </div>	
+

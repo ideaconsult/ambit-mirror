@@ -815,6 +815,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 Directory imgDir = new Directory(getContext(), "war:///images");
 		 Directory jmolDir = new Directory(getContext(), "war:///jmol");
 		 Directory jmeDir = new Directory(getContext(), "war:///jme");
+		 Directory editorDir = new Directory(getContext(), "war:///editor");
 		 Directory styleDir = new Directory(getContext(), "war:///style");
 		 Directory jquery = new Directory(getContext(), "war:///jquery");
 		 Directory scriptsDir = new Directory(getContext(), "war:///scripts");
@@ -823,6 +824,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 router.attach("/images/", imgDir);
 		 router.attach("/jmol/", jmolDir);
 		 router.attach("/jme/", jmeDir);
+		 router.attach("/editor/", editorDir);
 		 router.attach("/jquery/", jquery);
 		 router.attach("/style/", styleDir);
  		 router.attach("/scripts/", scriptsDir);
