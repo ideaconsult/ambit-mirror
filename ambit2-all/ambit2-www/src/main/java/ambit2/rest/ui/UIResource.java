@@ -10,8 +10,6 @@ import net.idea.i5.io.QASettings;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -25,7 +23,6 @@ import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
-import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.rendering.StructureEditorProcessor;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.dataset.DatasetURIReporter;
@@ -36,6 +33,7 @@ import ambit2.rest.task.TaskResult;
 
 public class UIResource extends FreeMarkerResource {
 	private static final String key = "key";
+	protected pages page = pages.index;
 	private enum pages { 
 			index, query, 
 			uploadstruc, uploadprops, 
@@ -89,13 +87,23 @@ public class UIResource extends FreeMarkerResource {
 		super();
 		setHtmlbyTemplate(true);
 	}
+	@Override
+	public boolean isHtmlbyTemplate() {
+		return pages.layout.equals(page)?false:super.isHtmlbyTemplate();
+	}
+	
+	
 	
 	@Override
 	public String getTemplateName() {
-		Object ui = getRequest().getAttributes().get(key);
+		//Object ui = getRequest().getAttributes().get(key);
 		try {
-			return ui==null?"index.ftl":String.format("%s.ftl", pages.valueOf(ui.toString()).name());
-		} catch (Exception x) { return "index.ftl";}
+			//page = pages.valueOf(ui.toString());
+			//return ui==null?"index.ftl":String.format("%s.ftl", page.name());
+			return String.format("%s.ftl", page.name());
+		} catch (Exception x) {
+			return "index.ftl";
+		}
 	}
 	
 	@Override
@@ -103,6 +111,13 @@ public class UIResource extends FreeMarkerResource {
 		super.doInit();
         getVariants().add(new Variant(MediaType.TEXT_HTML));
         getVariants().add(new Variant(MediaType.APPLICATION_JSON));
+		try {
+			Object ui = getRequest().getAttributes().get(key);
+			page = pages.valueOf(ui.toString());
+		} catch (Exception x) {
+			page = pages.index;
+		}
+        
 	}
 	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -118,6 +133,27 @@ public class UIResource extends FreeMarkerResource {
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 	
+	@Override
+	protected Representation getRepresentation(Variant variant)
+			throws ResourceException {
+		switch (page) {
+		case layout: { //ketcher specifics
+			String smiles = getRequest().getResourceRef().getQueryAsForm().getFirstValue("smiles");
+			if ((smiles!=null) && !"".equals(smiles.trim())) {
+				IStructureRecord record = new StructureRecord();
+				record.setContent(smiles);
+				record.setFormat(MOL_TYPE.CSV.name());
+				StructureEditorProcessor processor = new StructureEditorProcessor(page.name());
+				try {
+					return new StringRepresentation("Ok.\n"+processor.process(record),MediaType.TEXT_PLAIN);
+				} catch (Exception x) {
+					return new StringRepresentation("Error.\n",MediaType.TEXT_PLAIN);
+				}
+			}
+		}
+		}
+		return super.getRepresentation(variant);
+	}
 	@Override
 	protected Representation post(Representation entity, Variant variant)
 			throws ResourceException {

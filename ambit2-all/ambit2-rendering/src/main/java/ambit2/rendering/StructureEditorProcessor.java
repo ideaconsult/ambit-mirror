@@ -1,6 +1,5 @@
 package ambit2.rendering;
 
-import java.awt.PageAttributes.MediaType;
 import java.io.StringWriter;
 
 import org.openscience.cdk.CDKConstants;
@@ -33,7 +32,7 @@ public class StructureEditorProcessor extends DefaultAmbitProcessor<IStructureRe
 		this.command = command;
 	}
 
-	protected enum _commands {
+	public enum _commands {
 		layout,
 		aromatize,
 		dearomatize

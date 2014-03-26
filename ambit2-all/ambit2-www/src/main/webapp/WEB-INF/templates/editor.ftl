@@ -22,16 +22,21 @@
       jT.insertTool('ketcher', jT.$('#ketcher-test')[0]);
       ketcher.init();
       try {
-    	  var mol =$.base64.decode($.cookie('ambit2.b64search'));
-      	  ketcher.setMolecule(mol);
+    	  if ($.cookie('ambit2.search')!=undefined && $.cookie('ambit2.search')!="")
+    		  ketcher.setMolecule($.cookie('ambit2.search'));
+    	  else {
+    		  var mol =$.base64.decode($.cookie('ambit2.b64search'));
+    		  ketcher.setMolecule(mol);
+    	  }
+    	  
       } catch (err) {
+
       }
     });
     
     
 function submitSmiles() {
   var smiles = ketcher.getSmiles();
-  console.log(smiles);
   var jme = ketcher.getMolfile();
   if (jme == "") {
     alert("Nothing to submit");

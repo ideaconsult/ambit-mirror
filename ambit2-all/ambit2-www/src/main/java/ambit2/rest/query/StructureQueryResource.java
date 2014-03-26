@@ -7,13 +7,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.logging.Level;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.restlet.Client;
 import org.restlet.Context;
@@ -444,6 +447,11 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				query_smiles = form.getFirstValue(QueryResource.search_param);
 			try {
 				IAtomContainer ac = MoleculeTools.readMolfile(query_smiles);
+				for (IBond b : ac.bonds()) if (b.getFlag(CDKConstants.ISAROMATIC)) {
+					FixBondOrdersTool fbt = new FixBondOrdersTool();
+					ac = fbt.kekuliseAromaticRings((IMolecule)ac);
+					break;
+				}
 				SmilesGenerator g = new SmilesGenerator();
 				return g.createSMILES(ac);	
 			} catch (Exception x) {
