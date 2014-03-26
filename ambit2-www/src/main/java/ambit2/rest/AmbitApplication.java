@@ -8,6 +8,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -51,6 +52,7 @@ import org.restlet.util.RouteList;
 import org.restlet.util.Series;
 
 import ambit2.base.config.Preferences;
+import ambit2.rendering.StructureEditorProcessor;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
@@ -1093,7 +1095,15 @@ class UpdateAuthorizer extends RoleAuthorizer {
 	@Override
 	public boolean authorize(Request request, Response response) {
 		if (Method.GET.equals(request.getMethod())) return true;
-		else return super.authorize(request, response);
+		try {
+			String segment = request.getResourceRef().getLastSegment();
+			StructureEditorProcessor._commands.valueOf(segment);
+			List<String> s = request.getResourceRef().getSegments();
+			//enable /ui/layout , /ui/aromatize /ui/dearomatize
+			if ("ui".equals(s.get(s.size()-2))) return true;
+		} catch (Exception x) {}
+
+		return super.authorize(request, response);
 	}
 	
 }
