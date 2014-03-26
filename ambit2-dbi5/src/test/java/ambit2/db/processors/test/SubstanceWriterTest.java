@@ -3,7 +3,6 @@ package ambit2.db.processors.test;
 import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.io.FileInputStream;
 
 import junit.framework.Assert;
 import net.idea.i5._5.ambit2.I5AmbitProcessor;
