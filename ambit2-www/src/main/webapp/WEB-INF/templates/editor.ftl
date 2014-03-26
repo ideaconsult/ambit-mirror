@@ -1,10 +1,10 @@
-<html>
+<#include "/html.ftl" >
 <head>
-<title>KETCHER Molecular Editor</title>
+ <title>KETCHER Molecular Editor</title>
  <link rel="stylesheet" href="../style/skeleton/base.css">
  <link rel="stylesheet" href="${ambit_root}/style/skeleton/skeleton-fluid.css">
-	<link rel="stylesheet" href="${ambit_root}/style/skeleton/layout.css">
-	<link rel="stylesheet" href="${ambit_root}/style/jquery-ui.css">
+ <link rel="stylesheet" href="${ambit_root}/style/skeleton/layout.css">
+  <link rel="stylesheet" href="${ambit_root}/style/jquery-ui.css">
 	<link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css">
 	<link rel="stylesheet" href="${ambit_root}/style/ketcher.css"/>
 
