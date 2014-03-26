@@ -44,7 +44,8 @@ public class UIResource extends FreeMarkerResource {
 			createstruc,
 			dataprep,
 			_dataset,
-			_search;
+			_search,
+			editor;
 			public boolean enablePOST() {
 				return false;
 			}

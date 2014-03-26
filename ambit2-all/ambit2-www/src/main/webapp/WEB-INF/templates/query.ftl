@@ -1,7 +1,7 @@
 <#include "/html.ftl" >
 <head>
 <#include "/header.ftl" >
-<script type='text/javascript' src='${ambit_root}/editor/ketcher_editor.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/ketcher_editor.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jcompound.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/ambit_structures.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui-substance.js'></script>

@@ -86,6 +86,12 @@ function initSearchForm() {
 		} catch (err) {
 			$("#pagesize").attr("value","10");
 		}
+		
+		try {
+			$('#funcgroups').val(csearch).change();
+		} catch (err) {
+			$('#funcgroups').val("").change();
+		}							
 		//option
 		try {
 			if ($.cookie('ambit2.option')==null) {
@@ -116,12 +122,7 @@ function initSearchForm() {
 			document["searchform"].type.value = "smiles";
 		}		
 		//func groups
-		
-		try {
-			$('#funcgroups').val(csearch).change();
-		} catch (err) {
-			$('#funcgroups').val("").change();
-		}						
+	
 		searchFormValidation('#searchform');
 
 }
