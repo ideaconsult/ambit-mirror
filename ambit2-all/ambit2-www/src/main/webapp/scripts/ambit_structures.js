@@ -220,7 +220,6 @@ function defineStructuresTable(url, query_service, similarity,root) {
 										break;
 									}
 									default: {
-										//console.log(xhr.status + " " + xhr.statusText + " " + xhr.responseText);
 							        	alert("Error loading data " + xhr.status + " " + error);
 									}
 									}
