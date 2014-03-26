@@ -474,15 +474,17 @@ public class CompoundImageTools implements IStructureDiagramHighlights , ICompou
         }
         return new Color(clr1[0], clr1[1], clr1[2], clr1[3]);
     }
-    
-    public synchronized void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules)
-    {
+
+    public synchronized void generate2D(IAtomContainer molecule,boolean generateCoordinates,IMoleculeSet molecules)  {
         if (molecule != null) {
-            if ((molecule ==null) || (molecule.getAtomCount() == 0)) 
-                generateCoordinates=false;
-            else if (StructureTypeProcessor.has2DCoordinates(molecule)>1)   
-               generateCoordinates=false;
-            else generateCoordinates = true;
+        	
+        	if (!generateCoordinates) {
+	            if ((molecule ==null) || (molecule.getAtomCount() == 0)) 
+	                generateCoordinates=false;
+	            else if (StructureTypeProcessor.has2DCoordinates(molecule)>1)   
+	               generateCoordinates=false;
+	            else generateCoordinates = true;
+        	}
             
             molecules.removeAllAtomContainers();
             if (!generateCoordinates) {

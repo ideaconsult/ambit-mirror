@@ -30,8 +30,8 @@
     
     
 function submitSmiles() {
-  var smiles = null;
-  // document.ketcher.getSmiles();
+  var smiles = ketcher.getSmiles();
+  console.log(smiles);
   var jme = ketcher.getMolfile();
   if (jme == "") {
     alert("Nothing to submit");

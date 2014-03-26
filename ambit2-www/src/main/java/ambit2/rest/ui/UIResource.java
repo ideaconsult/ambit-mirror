@@ -10,6 +10,9 @@ import net.idea.i5.io.QASettings;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
@@ -18,7 +21,12 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.StructureRecord;
+import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
 import ambit2.base.json.JSONUtils;
+import ambit2.core.processors.structure.MoleculeReader;
+import ambit2.rendering.StructureEditorProcessor;
 import ambit2.rest.aa.opensso.OpenSSOUser;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.freemarker.FreeMarkerResource;
@@ -45,8 +53,35 @@ public class UIResource extends FreeMarkerResource {
 			dataprep,
 			_dataset,
 			_search,
-			editor;
+			editor,
+			knocknock {
+				@Override
+				public boolean editorServices() {
+					return true;
+				};
+			},
+			layout {
+				@Override
+				public boolean editorServices() {
+					return true;
+				};				
+			},
+			aromatize {
+				@Override
+				public boolean editorServices() {
+					return true;
+				};				
+			},
+			dearomatize {
+				@Override
+				public boolean editorServices() {
+					return true;
+				};				
+			};
 			public boolean enablePOST() {
+				return false;
+			}
+			public boolean editorServices() {
 				return false;
 			}
 		}
@@ -88,8 +123,29 @@ public class UIResource extends FreeMarkerResource {
 			throws ResourceException {
 		Object ui = getRequest().getAttributes().get(key);
 		try {
-			if (pages.valueOf(ui.toString()).enablePOST()) {
+			pages page= pages.valueOf(ui.toString()); 
+			if (page.enablePOST()) {
 				return uploadsubstance(entity,variant);
+			} else if (page.editorServices()) {
+				Form form = new Form(entity);
+				String moldata = form.getFirstValue("moldata");
+				IStructureRecord record = new StructureRecord();
+				if (moldata!=null && !"".equals(moldata)) try {
+					record.setContent(moldata);
+					record.setFormat(MOL_TYPE.SDF.name());
+				} catch (Exception x) {	 return new StringRepresentation("Error.\n"+x.getMessage(),MediaType.TEXT_PLAIN); }
+				
+				String smiles = getRequest().getResourceRef().getQueryAsForm().getFirstValue("smiles");
+				if ((smiles!=null) && !"".equals(smiles)) {
+					record.setContent(smiles);
+					record.setFormat(MOL_TYPE.CSV.name());
+				}
+				StructureEditorProcessor processor = new StructureEditorProcessor(page.name());
+				try {
+					return new StringRepresentation("Ok.\n"+processor.process(record),MediaType.TEXT_PLAIN);
+				} catch (Exception x) {
+					return new StringRepresentation("Error.\n",MediaType.TEXT_PLAIN);
+				}
 			}
 		} catch (Exception x) { 
 			x.printStackTrace();
