@@ -1891,11 +1891,11 @@ window.jT = window.jToxKit = {
 			jsonp: settings.jsonp ? 'callback' : false,
 			error: function(jhr, status, error){
 			  ccLib.fireCallback(settings.onError, kit, service, status, error);
-				callback(null);
+				callback(null, jhr);
 			},
 			success: function(data, status, jhr){
 			  ccLib.fireCallback(settings.onSuccess, kit, service, status, jhr.statusText);
-				callback(data);
+				callback(data, jhr);
 			}
 		});
 	}

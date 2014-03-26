@@ -11,7 +11,7 @@ function startEditor(baseRef,formName) {
 	  // use here fully qualified IP address (number!) i.e.
 	  // window.open('http://123.456.789.1/jme_window.html',...
 	  form = formName==undefined?'searchform':formName;
-	  window.open(baseRef+'/editor/ketcher_window.html','KETCHER','left=5,top=20,width=940,height=640,scrollbars=no,resizable=yes,status=yes');
+	  window.open(baseRef+'/ui/editor','KETCHER','left=5,top=20,width=940,height=640,scrollbars=no,resizable=yes,status=yes');
 }
 
 function fromEditor(smiles,mol) {
