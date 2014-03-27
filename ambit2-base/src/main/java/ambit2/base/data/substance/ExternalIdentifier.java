@@ -1,6 +1,5 @@
 package ambit2.base.data.substance;
 
-import ambit2.base.data.study.EffectRecord._fields;
 import ambit2.base.json.JSONUtils;
 
 public class ExternalIdentifier {

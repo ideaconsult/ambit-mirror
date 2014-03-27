@@ -44,6 +44,7 @@ public class UIResource extends FreeMarkerResource {
 				}
 			},
 			uploadsubstance1,
+			updatesubstancei5,
 			predict, 
 			login, register, myprofile, 
 			uploadstruc_register,uploadprops_batch,uploadprops_biodata,
@@ -51,6 +52,7 @@ public class UIResource extends FreeMarkerResource {
 			dataprep,
 			_dataset,
 			_search,
+			
 			editor,
 			knocknock {
 				@Override

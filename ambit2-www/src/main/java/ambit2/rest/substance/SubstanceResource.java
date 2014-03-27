@@ -22,6 +22,7 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.DeleteSubstance;
 import ambit2.db.substance.ReadByReliabilityFlags;
@@ -195,38 +196,72 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
 
-		if (entity.getMediaType()!= null && MediaType.MULTIPART_FORM_DATA.getName().equals(entity.getMediaType().getName())) {
-			DiskFileItemFactory factory = new DiskFileItemFactory();
-            RestletFileUpload upload = new RestletFileUpload(factory);
-            try {
-	            List<FileItem> items = upload.parseRequest(getRequest());
+		if (entity.getMediaType()!= null)
+			if (MediaType.MULTIPART_FORM_DATA.getName().equals(entity.getMediaType().getName())) {
+				DiskFileItemFactory factory = new DiskFileItemFactory();
+	            RestletFileUpload upload = new RestletFileUpload(factory);
+	            try {
+		            List<FileItem> items = upload.parseRequest(getRequest());
+					String token = getToken();
+					CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(
+								items, 
+								"files[]",
+								getRootRef(),
+								getContext(),
+								new SubstanceURIReporter(getRequest().getRootRef(), null),
+								new DatasetURIReporter(getRequest().getRootRef(), null),
+								token);
+					Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+								"Substance import",
+								callable,
+								getRequest().getRootRef(),
+								token);
+								
+					  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+					  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
+					  task.update();
+					  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
+		              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
+	            } catch (ResourceException x) {
+	            	throw x;
+	            } catch (Exception x) {
+	            	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
+	            }
+			} else if (MediaType.APPLICATION_WWW_FORM.getName().equals(entity.getMediaType().getName())) {
+				/* web form to update substances from IUCLID5 server
+				 * Expected web form fields :
+				 * substance: UUID or query URL
+				 * type : UUID or query or URL (ambit substance URL)
+				 * qa options
+				 * query : one of {@link QueryToolClient.PredefinedQuery}
+				 * query parameters: depend on the query type
+				 * iuclid5 server; credentials - optional, use preconfigured if not submitted
+				 * [(option,UUID), (uuid,ZZZZZZZZZZ), (extidtype,CompTox), (extidvalue,Ambit Transfer), (i5server,null), (i5user,null), (i5pass,null)]
+				 */
+
+				Form form = new Form(entity);
 				String token = getToken();
-				CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(
-							items, 
-							"files[]",
-							getRootRef(),
-							getContext(),
-							new SubstanceURIReporter(getRequest().getRootRef(), null),
-							new DatasetURIReporter(getRequest().getRootRef(), null),
-							token);
-				Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
-							"Substance import",
-							callable,
-							getRequest().getRootRef(),
-							token);
-							
+				CallableSubstanceI5Query<String> callable = new CallableSubstanceI5Query<String>(
+						getRootRef(),
+						form,
+						getContext(),
+						new SubstanceURIReporter(getRequest().getRootRef(), null),
+						new DatasetURIReporter(getRequest().getRootRef(), null),
+						token);
+						Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+						"Retrieve substance from IUCLID5 server",
+						callable,
+						getRequest().getRootRef(),
+						token);
+						
 				  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
 				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 				  task.update();
 				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
-	              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
-            } catch (ResourceException x) {
-            	throw x;
-            } catch (Exception x) {
-            	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x);
-            }
-
-		} else throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+	              return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);				
+				
+			}
+		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 	}
 	
 

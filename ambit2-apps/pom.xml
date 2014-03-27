@@ -30,7 +30,7 @@
     <ambit.version>2.5.5-SNAPSHOT</ambit.version>
     <junit.version>4.8.1</junit.version>
     <!-- https://github.com/ideaconsult/i5 -->
-    <i5.version>0.0.5</i5.version>
+    <i5.version>0.0.6-SNAPSHOT</i5.version>
   </properties>
   <description>AmbitXT and Ambit REST web services </description>
   <inceptionYear>2008</inceptionYear>

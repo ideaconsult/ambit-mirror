@@ -57,6 +57,13 @@
 	<!--
 	<script type='text/javascript' src='${ambit_root}/jmol/Jmol.js'></script>
 	-->			
+	
+	<!-- jqBreadCrumbs
+	================================================== -->
+	<link rel="stylesheet" href="${ambit_root}/style/jqBreadCrumbBase.css" type="text/css">
+    <link rel="stylesheet" href="${ambit_root}/style/jqBreadCrumb.css" type="text/css">
+    <script src="${ambit_root}/jquery/jquery.jBreadCrumb.1.1.js" type="text/javascript" language="JavaScript"></script>
+    	
 
 <!-- Uncomment to enable the confirmation message when clicking external links	
 <script type='text/javascript'>

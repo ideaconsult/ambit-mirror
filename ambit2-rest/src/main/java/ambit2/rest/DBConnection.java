@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.Properties;
 
 import org.restlet.Context;
-import org.restlet.Request;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.exceptions.AmbitException;
@@ -162,4 +161,8 @@ public class DBConnection {
 	}
 	*/
 	
+	public String getProperty(String key) {
+		loadProperties();
+		return properties.getProperty(key);
+	}
 }

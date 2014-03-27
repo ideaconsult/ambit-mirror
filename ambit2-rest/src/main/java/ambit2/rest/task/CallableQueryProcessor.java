@@ -23,6 +23,7 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.dataset.RDFStructuresReader;
 
+
 public abstract class CallableQueryProcessor<Target,Result,USERID> extends CallableProtectedTask<USERID> {
 	protected AbstractBatchProcessor batch; 
 	protected Target target;
