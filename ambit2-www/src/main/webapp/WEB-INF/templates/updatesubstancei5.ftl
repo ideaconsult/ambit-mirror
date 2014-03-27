@@ -145,7 +145,7 @@ function updateFormValidation(formName) {
 	</div>
 	<div class='row remove-bottom' >
 		<label class='three columns alpha' for="i5pass">IUCLID5 password</label>
-		<input class='four columns alpha half-bottom' type="text" id='i5pass' value='' name='i5pass' title='IUCLID5 password (optional)' size="20">
+		<input class='four columns alpha half-bottom' type="password" id='i5pass' value='' name='i5pass' title='IUCLID5 password (optional)' size="20">
 		<div class='nine columns omega'></div>
 	</div>	
 				
