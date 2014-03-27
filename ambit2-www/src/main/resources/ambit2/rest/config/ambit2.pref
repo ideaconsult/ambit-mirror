@@ -72,3 +72,9 @@ attach.substance=${attach.substance}
 ops.server_root=${ops.server_root}
 app_id=${ops.app_id}
 app_key=${ops.app_key}
+#username for iuclid5 SessionEngine service 
+i5.user=${i5.user}
+#password for iuclid5 SessionEngine service 
+i5.pass=${i5.pass}
+#target url for iuclid5 services 
+i5.server=${i5.server}
