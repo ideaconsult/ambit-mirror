@@ -46,7 +46,9 @@ $(document)
 		    <div class='h6'>
 		    		Upload substances as defined in multiple IUCLID 5 .i5d or .i5z files
 		    		<br/>
-		    		<a href="${ambit_root}/ui/uploadsubstance1">Single .i5z file upload<a>
+		    		<a href="${ambit_root}/ui/uploadsubstance1">Single .i5z file upload<a> | 
+		    		<a href="${ambit_root}/ui/updatesubstancei5">Retrieve substance from IUCLID5 server<a>
+		    		
 		    </div>
 		</div>
 	</div>				
