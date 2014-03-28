@@ -10,6 +10,12 @@ $(document)
 				function() {
 					$( "#selectable" ).selectable( "option", "distance", 18);
 					loadHelp("${ambit_root}","substance");
+					
+			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substance">Substances</a></li>');
+		    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/uploadsubstance" title="File upload">Import</a></li>');
+		    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/uploadsubstance1" title="Upload substances as defined in a single IUCLID5 .i5d or .i5z file">Single .i5z file upload</a></li>');
+		    jQuery("#breadCrumb").jBreadCrumb();
+					
 				});
 </script>
 
@@ -26,16 +32,16 @@ $(document)
 <div class="row remove-bottom">
 		<#include "/logo.ftl">
 		<div class="thirteen columns remove-bottom" id="query">
-		<div class="alpha">
-			<div class="remove-bottom h3">
-				Substances upload	
+			<div class="half-bottom h3">
+				Substance import
 			</div>
-		    <div class='h6'>Upload substances as defined in a single IUCLID5 .i5d or .i5z file
-		    <br/>
-    		<a href="${ambit_root}/ui/uploadsubstance">Multiple .i5z files upload<a> | 
-    		<a href="${ambit_root}/ui/updatesubstancei5">Retrieve substance from IUCLID5 server<a>
-		    </div>
-		</div>
+			<div id="breadCrumb" class="row breadCrumb module remove-bottom">
+                    <ul>
+                        <li>
+                            <a href="${ambit_root}" title="AMBIT Home">Home</a>
+                        </li>
+                    </ul>
+			</div>			    
 		</div>
 </div>		
 <div class="row remove-bottom" >
@@ -72,6 +78,22 @@ $(document)
 	</form>	
 </div>			
 </div>
+
+
+<div class='row' >
+		&nbsp;
+	</div>	
+	<div class='row half-bottom'>
+		<label class='three columns alpha h6'>Substance import options:</label>
+		<div class='ten columns alpha half-bottom'>
+			<a href="${ambit_root}/ui/uploadsubstance" title="Multiple .i5z files upload">Multiple .i5z files upload</a>
+			 | 
+			<a href="${ambit_root}/ui/uploadsubstance1" title="Single .i5z file upload">Single .i5z file upload</a>
+			 | 
+			<a href="${ambit_root}/ui/updatesubstancei5" title="Retrieve substance(s) from IUCLID5 server">Retrieve substance(s) from IUCLID5 server</a>
+		</div>	
+	</div>
+	
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
 
