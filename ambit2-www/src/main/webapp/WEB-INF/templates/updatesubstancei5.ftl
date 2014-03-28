@@ -165,14 +165,15 @@ function updateFormValidation(formName) {
 		&nbsp;
 	</div>		
 	<div class='row half-bottom'>
-		<label class='three columns alpha h6'>Substance file upload:</label>
-		<div class='four columns alpha half-bottom'>
-			<a href="${ambit_root}/ui/uploadsubstance" title="Multiple .i5z files upload">Multiple .i5z files upload</a>
-		</div>
-		<div class='four columns alpha half-bottom'>	
-			<a href="${ambit_root}/ui/uploadsubstance1" title="Single .i5z file upload">Single .i5z file upload</a>
-		</div>	
-	</div>
+	<label class='three columns alpha h6'>Substance import options:</label>
+	<div class='ten columns alpha half-bottom'>
+		<a href="${ambit_root}/ui/uploadsubstance" title="Multiple .i5z files upload">Multiple .i5z files upload</a>
+		 | 
+		<a href="${ambit_root}/ui/uploadsubstance1" title="Single .i5z file upload">Single .i5z file upload</a>
+		 | 
+		<a href="${ambit_root}/ui/updatesubstancei5" title="Retrieve substance(s) from IUCLID5 server">Retrieve substance(s) from IUCLID5 server</a>
+	</div>	
+</div>
 	
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
