@@ -283,7 +283,6 @@
     </pluginManagement>
   </build>
   <modules>
-    <!--    <module>ambit2-i5rest</module> -->
     <module>ambit2-base</module>
     <module>ambit2-rest</module>
     <module>ambit2-smarts</module>
@@ -298,12 +297,14 @@
     <module>ambit2-tautomers</module>
     <module>ambit2-ui</module>
     <module>ambit2-dbui</module>
+    <!-- 
     <module>ambit2-workflow</module>
     <module>ambit2-plugin-search</module>
     <module>ambit2-plugin-analogs</module>
     <module>ambit2-plugin-pbt</module>
     <module>ambit2-plugin-dbtools</module>
     <module>ambit2-plugin-usermgr</module>
+     -->
     <module>ambit2-rendering</module>
     <module>ambit2-jchempaint</module>
     <module>ambit2-chebi</module>
@@ -312,11 +313,6 @@
     <module>ambit2-taglibs</module>
      -->
     <module>ambit2-dragon</module>
-    <!--
-    <module>ambit2-discovery</module>
-
-    <module>ambit2-swing</module>
-    -->
     <module>ambit2-dbext</module>
     <module>ambit2-waffles</module>
     <module>ambit2-reactions</module>
