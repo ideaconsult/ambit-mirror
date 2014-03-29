@@ -6,6 +6,7 @@ import java.util.List;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.json.JSONUtils;
 import ambit2.base.relation.STRUCTURE_RELATION;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
@@ -24,7 +25,23 @@ public class SubstanceRecord extends StructureRecord {
 	protected String companyName;
 	protected String publicName;
 	protected String companyUUID;
-	
+	enum jsonSubstance {
+		URI,
+		externalIdentifiers,
+		i5uuid,
+		documentType,
+		format,
+		name,
+		publicname,
+		content,
+		substanceType,
+		referenceSubstance,
+		ownerUUID,
+		ownerName;
+		public String jsonname() {
+			return name();
+		}
+	}
 	protected List<ProtocolApplication> measurements;
 	public List<ProtocolApplication> getMeasurements() {
 		return measurements;
@@ -144,4 +161,45 @@ public class SubstanceRecord extends StructureRecord {
 	public void setExternalids(List<ExternalIdentifier> externalids) {
 		this.externalids = externalids;
 	}	
+	public String toJSON(String baseReference) {
+		String uri = getURI(baseReference,this);
+		StringBuilder builder = new StringBuilder();
+		builder.append("\n\t{\n");
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.URI.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(uri))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.ownerUUID.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getOwnerUUID()))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.ownerName.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getOwnerName()))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyUUID()))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.name.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getCompanyName()))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.publicname.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getPublicName()))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.format.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getFormat()))));
+		builder.append(String.format("\t\t\"%s\":%s,\n",jsonSubstance.substanceType.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubstancetype()))));
+		builder.append(String.format("\t\t\"%s\": {\n\t\t\t\"%s\":%s,\n\t\t\t\"%s\":%s\n\t\t},\n",
+				jsonSubstance.referenceSubstance.name(),
+				jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getReferenceSubstanceUUID())),
+				"uri",
+				JSONUtils.jsonQuote(
+						baseReference+"/query/compound/search/all?search="+
+					JSONUtils.jsonEscape(getReferenceSubstanceUUID())
+				)
+				));
+		builder.append(String.format("\t\t\"%s\":[\n",jsonSubstance.externalIdentifiers.name()));
+		if (getExternalids()!=null) {
+			String d = "";
+			for (ExternalIdentifier id : getExternalids()) {
+				builder.append(d);
+				builder.append(id.toString());
+				d = ",";
+			}	
+		}	
+		builder.append("\t]\n");
+		builder.append("\t}");
+		return builder.toString();
+	}	
+	
+	public static String getURI(String ref, SubstanceRecord item) {
+		if (item.getCompanyUUID()!=null)
+			return String.format("%s/substance/%s", ref,item.getCompanyUUID());
+		else 
+			return String.format("%s/substance/%d", ref,item.getIdsubstance());
+	}
 }
