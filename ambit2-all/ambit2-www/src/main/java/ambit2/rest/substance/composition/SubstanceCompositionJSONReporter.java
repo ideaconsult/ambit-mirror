@@ -42,20 +42,7 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 	
 	protected final CompoundJSONReporter<IQueryRetrieval<IStructureRecord>> cmpReporter;
 	protected final SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>> substanceReporter;
-	
-	
-	enum jsonFeature {
-		substance,
-		component,
-		compositionUUID,
-		relation,
-		proportion
-		;
-		
-		public String jsonname() {
-			return name();
-		}
-	}
+
 	public SubstanceCompositionJSONReporter(Request request, ResourceDoc doc,String jsonpCallback) {
 		super();
 		Profile groupProperties = getGroupProperties();
@@ -120,12 +107,12 @@ public class SubstanceCompositionJSONReporter<Q extends IQueryRetrieval<Composit
 					"\n\t\"%s\":%s," + 
 					"\n\t\"%s\":%s" + //metric
 					"\n}",
-					jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceReporter.getURI(item.getFirstStructure())),
-					jsonFeature.component.jsonname(),
+					CompositionRelation.jsonFeature.substance.jsonname(),JSONUtils.jsonQuote(substanceReporter.getURI(item.getFirstStructure())),
+					CompositionRelation.jsonFeature.component.jsonname(),
 					w.toString(),
-					jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(item.getCompositionUUID()),
-					jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(item.getRelationType().name()),
-					jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
+					CompositionRelation.jsonFeature.compositionUUID.jsonname(),JSONUtils.jsonQuote(item.getCompositionUUID()),
+					CompositionRelation.jsonFeature.relation.jsonname(),JSONUtils.jsonQuote(item.getRelationType().name()),
+					CompositionRelation.jsonFeature.proportion.jsonname(),item.getRelation().toJSON()
 					));
 			comma = ",";
 		} catch (Exception x) {

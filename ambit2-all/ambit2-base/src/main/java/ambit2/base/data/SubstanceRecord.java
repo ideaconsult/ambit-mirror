@@ -25,7 +25,7 @@ public class SubstanceRecord extends StructureRecord {
 	protected String companyName;
 	protected String publicName;
 	protected String companyUUID;
-	enum jsonSubstance {
+	public enum jsonSubstance {
 		URI,
 		externalIdentifiers,
 		i5uuid,
@@ -177,10 +177,9 @@ public class SubstanceRecord extends StructureRecord {
 				jsonSubstance.referenceSubstance.name(),
 				jsonSubstance.i5uuid.name(),JSONUtils.jsonQuote(JSONUtils.jsonEscape(getReferenceSubstanceUUID())),
 				"uri",
-				JSONUtils.jsonQuote(
-						baseReference+"/query/compound/search/all?search="+
-					JSONUtils.jsonEscape(getReferenceSubstanceUUID())
-				)
+				JSONUtils.jsonQuote(JSONUtils.jsonEscape(
+						baseReference+"/query/compound/search/all?search="+getReferenceSubstanceUUID()
+						))
 				));
 		builder.append(String.format("\t\t\"%s\":[\n",jsonSubstance.externalIdentifiers.name()));
 		if (getExternalids()!=null) {
