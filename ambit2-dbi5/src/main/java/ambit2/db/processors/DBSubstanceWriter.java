@@ -44,7 +44,17 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
     private DeleteEffectRecords deffr;
     private UpdateExecutor x;
     private RepositoryWriter writer;
- 
+    
+    protected boolean splitRecord = true;
+    
+	public boolean isSplitRecord() {
+		return splitRecord;
+	}
+
+	public void setSplitRecord(boolean splitRecord) {
+		this.splitRecord = splitRecord;
+	}
+
 	protected SubstanceRecord importedRecord;
 
     
@@ -96,53 +106,66 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		try {writer.close();} catch (Exception x) {}
 		super.close();
 	}
+	
+	protected void importSubstanceMeasurements(SubstanceRecord substance) throws Exception {
+		if (substance.getMeasurements()==null) return;
+		for (ProtocolApplication papp : substance.getMeasurements()) {
+ 			if (qss==null) qss = new UpdateSubstanceStudy(importedRecord.getCompanyUUID(), papp);
+ 			else {
+ 				qss.setGroup(importedRecord.getCompanyUUID());
+ 				qss.setObject(papp);
+ 			}
+ 			x.process(qss);
+ 			//delete effects records for this document, if any
+ 			if (deffr==null) deffr = new DeleteEffectRecords();
+ 			deffr.setGroup(papp.getDocumentUUID());
+ 			x.process(deffr);
+ 			//and add the new ones
+ 			if ( papp.getEffects()!=null)
+ 			for (Object effect : papp.getEffects()) 
+ 				if (effect instanceof EffectRecord) {
+ 					if (qeffr==null) qeffr = new UpdateEffectRecords(papp.getDocumentUUID(),(EffectRecord)effect);
+ 					else {qeffr.setGroup(papp.getDocumentUUID()); qeffr.setObject((EffectRecord)effect);}
+ 					x.process(qeffr);
+ 				}
+ 		}		
+	}
+	protected void importSubstanceRecord(SubstanceRecord substance) throws Exception {
+     	q.setObject(substance);
+     	x.process(q);
+     	qids.setObject(substance);
+     	x.process(qids);
+ 		importedRecord.setCompanyUUID(substance.getCompanyUUID());
+ 		importedRecord.setIdsubstance(substance.getIdsubstance());
+     	if (substance.getRelatedStructures()!=null)
+         	for (CompositionRelation rel : substance.getRelatedStructures()) {
+         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
+
+         		if (rel.getSecondStructure().getIdchemical()<=0) {
+         			writer.create(rel.getSecondStructure());		
+         		}
+         		rel.getSecondStructure().setProperty(Property.getI5UUIDInstance(),i5uuid);			         		
+         		qr.setCompositionRelation(rel);
+         		x.process(qr);
+         	}
+	}
 	@Override
 	public IStructureRecord process(IStructureRecord record) throws AmbitException {
 		 try {
 			 if (record==null) return record;
 			 if (record instanceof SubstanceRecord) {
 	         	SubstanceRecord substance = (SubstanceRecord) record;
-	         	if (substance.getMeasurements()!=null) {
-	         		for (ProtocolApplication papp : substance.getMeasurements()) {
-	         			if (qss==null) qss = new UpdateSubstanceStudy(importedRecord.getCompanyUUID(), papp);
-	         			else {
-	         				qss.setGroup(importedRecord.getCompanyUUID());
-	         				qss.setObject(papp);
-	         			}
-	         			x.process(qss);
-	         			//delete effects records for this document, if any
-	         			if (deffr==null) deffr = new DeleteEffectRecords();
-	         			deffr.setGroup(papp.getDocumentUUID());
-	         			x.process(deffr);
-	         			//and add the new ones
-	         			if ( papp.getEffects()!=null)
-	         			for (Object effect : papp.getEffects()) 
-	         				if (effect instanceof EffectRecord) {
-	         					if (qeffr==null) qeffr = new UpdateEffectRecords(papp.getDocumentUUID(),(EffectRecord)effect);
-	         					else {qeffr.setGroup(papp.getDocumentUUID()); qeffr.setObject((EffectRecord)effect);}
-	         					x.process(qeffr);
-	         				}
-	         		}
+	         	if (isSplitRecord()) {
+		         	if (substance.getMeasurements()!=null) 
+		         		importSubstanceMeasurements(substance);
+		         	else 
+		         		importSubstanceRecord(substance);
 	         	} else {
-		         	q.setObject(substance);
-		         	x.process(q);
-		         	qids.setObject(substance);
-		         	x.process(qids);
-	         		importedRecord.setCompanyUUID(substance.getCompanyUUID());
-	         		importedRecord.setIdsubstance(substance.getIdsubstance());
-		         	if (substance.getRelatedStructures()!=null)
-			         	for (CompositionRelation rel : substance.getRelatedStructures()) {
-			         		Object i5uuid = rel.getSecondStructure().getProperty(Property.getI5UUIDInstance());
-
-			         		if (rel.getSecondStructure().getIdchemical()<=0) {
-			         			writer.create(rel.getSecondStructure());		
-			         		}
-			         		rel.getSecondStructure().setProperty(Property.getI5UUIDInstance(),i5uuid);			         		
-			         		qr.setCompositionRelation(rel);
-			         		x.process(qr);
-			         	}
-	         		
+	         		importSubstanceRecord(substance);
+	         		importedRecord = substance;
+	         		importSubstanceMeasurements(substance);
 	         	}
+	         	
 	         } else if (record instanceof IStructureRecord) {
 	        	 if (STRUC_TYPE.NA.equals(((IStructureRecord)record).getType())) {
 	        		 writer.create(record); //with the current settings, if the structure is already there, it will be used
