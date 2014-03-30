@@ -86,14 +86,8 @@ public class SubstanceStudyParser {
 		ObjectMapper dx = new ObjectMapper();
 		try {
 			JsonNode root = dx.readTree(reader);
-			JsonNode substance = root.get("substance");
-			if (substance instanceof ArrayNode) {
-				JsonNode papps = substance.get(0).get("study");
-				return parseProtocolApplications(papps);
-			} else {
-				JsonNode papps = substance.get(0).get("study");
-				return parseProtocolApplications(papps);
-			}
+			JsonNode papps = root.get("study");
+			return parseProtocolApplications(papps);
 		} catch (Exception x) {
 			throw x;
 		} finally {
