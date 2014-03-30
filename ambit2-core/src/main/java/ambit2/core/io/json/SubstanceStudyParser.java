@@ -1,6 +1,6 @@
 package ambit2.core.io.json;
 
-import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,36 +11,113 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.substance.ExternalIdentifier;
+import ambit2.base.relation.composition.CompositionRelation;
 
 public class SubstanceStudyParser {
 	private SubstanceStudyParser() {
 	}
-	public static List<ProtocolApplication> parseProtocolApplication(InputStream in) throws Exception{
-		List<ProtocolApplication> list = new ArrayList<ProtocolApplication>();
+	public static SubstanceRecord parseSubstance(Reader reader) throws Exception {
 		ObjectMapper dx = new ObjectMapper();
 		try {
-			JsonNode root = dx.readTree(in);
-			JsonNode papps = root.get("protocolapplication");
-			if (papps instanceof ArrayNode) {
-				ArrayNode a = (ArrayNode)papps;
-				for (int i=0; i < a.size(); i++) {
-					if (a.get(i) instanceof ObjectNode) {
-						list.add(SubstanceStudyParser.parseProtocolApplication((ObjectNode)a.get(i)));
-					}
-				}
+			JsonNode root = dx.readTree(reader);
+			JsonNode substance = root.get("substance");
+			if (substance instanceof ArrayNode) {
+				SubstanceRecord record = parseSubstance(substance.get(0));
+				JsonNode papps = substance.get(0).get("study");
+				record.setMeasurements(parseProtocolApplications(papps));
+				JsonNode composition = substance.get(0).get("composition");
+				record.setRelatedStructures(parseComposition(composition));
+				return record;
 			}
-			return list;
+			return null;
 		} catch (Exception x) {
 			throw x;
 		} finally {
- 			try { if (in!=null) in.close();} catch (Exception x) {}
+ 			try { if (reader!=null) reader.close();} catch (Exception x) {}
 		}
 	}
+	public static SubstanceRecord parseSubstance(JsonNode node) {
+		if (node==null) return null;
+		SubstanceRecord record = new SubstanceRecord();
+		record.setCompanyName(node.get(SubstanceRecord.jsonSubstance.name.name()).getTextValue());
+		record.setCompanyUUID(node.get(SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());
+		record.setOwnerName(node.get(SubstanceRecord.jsonSubstance.ownerName.name()).getTextValue());
+		record.setOwnerUUID(node.get(SubstanceRecord.jsonSubstance.ownerUUID.name()).getTextValue());
+		record.setPublicName(node.get(SubstanceRecord.jsonSubstance.publicname.name()).getTextValue());
+		record.setSubstancetype(node.get(SubstanceRecord.jsonSubstance.substanceType.name()).getTextValue());
+		record.setFormat(node.get(SubstanceRecord.jsonSubstance.format.name()).getTextValue());
+		JsonNode subnode = node.get(SubstanceRecord.jsonSubstance.externalIdentifiers.name());
+		if (subnode instanceof ArrayNode) {
+			ArrayNode ids = (ArrayNode)subnode;
+			List<ExternalIdentifier> extids = new ArrayList<ExternalIdentifier>();
+			record.setExternalids(extids);
+			for (int i=0; i < ids.size(); i++) {
+				if (ids.get(i) instanceof ObjectNode) {
+					extids.add(new ExternalIdentifier(
+							((ObjectNode) ids.get(i)).get("type").getTextValue(),
+							((ObjectNode) ids.get(i)).get("id").getTextValue()
+							));
+				}
+			}
+		}
+		subnode = node.get(SubstanceRecord.jsonSubstance.referenceSubstance.name());
+		if (subnode!=null) {
+			record.setReferenceSubstanceUUID(subnode.get(SubstanceRecord.jsonSubstance.i5uuid.name()).getTextValue());	
+		}
+		return record;
+	}	
+	/**
+	 * TODO
+	 * @param node
+	 * @return
+	 */
+	public static List<CompositionRelation> parseComposition(JsonNode node) {
+		//if (node==null) 
+			return null;
+	}
+	public static List<ProtocolApplication> parseProtocolApplication(Reader reader) throws Exception{
+		
+		ObjectMapper dx = new ObjectMapper();
+		try {
+			JsonNode root = dx.readTree(reader);
+			JsonNode substance = root.get("substance");
+			if (substance instanceof ArrayNode) {
+				JsonNode papps = substance.get(0).get("study");
+				return parseProtocolApplications(papps);
+			} else {
+				JsonNode papps = substance.get(0).get("study");
+				return parseProtocolApplications(papps);
+			}
+		} catch (Exception x) {
+			throw x;
+		} finally {
+ 			try { if (reader!=null) reader.close();} catch (Exception x) {}
+		}	
+	}
+	
+	
+	public static List<ProtocolApplication> parseProtocolApplications(JsonNode papps) {
+		if (papps==null) return null;
+		List<ProtocolApplication> list = new ArrayList<ProtocolApplication>();
+		if (papps instanceof ArrayNode) {
+			ArrayNode a = (ArrayNode)papps;
+			for (int i=0; i < a.size(); i++) {
+				if (a.get(i) instanceof ObjectNode) {
+					list.add(SubstanceStudyParser.parseProtocolApplication((ObjectNode)a.get(i)));
+				}
+			}
+		}
+		return list;
+
+	}
 	public static ProtocolApplication parseProtocolApplication(ObjectNode node) {
+		if (node==null) return null;
 		Protocol protocol = parseProtocol((ObjectNode)node.get(ProtocolApplication._fields.protocol.name()));
 		ProtocolApplication pa = new ProtocolApplication(protocol);
 		pa.setDocumentUUID(node.get(ProtocolApplication._fields.uuid.name()).getTextValue());
@@ -51,14 +128,8 @@ public class SubstanceStudyParser {
 		return pa;
 		
 	}
-	public static void parseSubstance(ObjectNode node, ProtocolApplication record) {
-		if (node==null) return ;
-		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
-		if (jn!=null) {
-			record.setSubstanceUUID(jn.getTextValue());
-		}
-	}
-	public static void parseCompany(ObjectNode node, ProtocolApplication record) {
+
+	protected static void parseCompany(ObjectNode node, ProtocolApplication record) {
 		if (node==null) return ;
 		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
 		if (jn!=null) record.setCompanyUUID(jn.getTextValue());
@@ -69,7 +140,14 @@ public class SubstanceStudyParser {
 		if (node==null) return ;
 		parseSubstance((ObjectNode)node.get(ProtocolApplication._fields.substance.name()), record);
 		parseCompany((ObjectNode)node.get(ProtocolApplication._fields.company.name()), record);
-	}		
+	}
+	protected static void parseSubstance(ObjectNode node, ProtocolApplication record) {
+		if (node==null) return ;
+		JsonNode jn = node.get(ProtocolApplication._fields.uuid.name());
+		if (jn!=null) {
+			record.setSubstanceUUID(jn.getTextValue());
+		}
+	}	
 	public static void parseInterpretedResult(ObjectNode node, ProtocolApplication record) {
 		if (node==null) return ;
 			JsonNode jn = node.get(ProtocolApplication._fields.result.name());

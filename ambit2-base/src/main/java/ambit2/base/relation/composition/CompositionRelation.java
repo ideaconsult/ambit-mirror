@@ -21,6 +21,22 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 	 * 
 	 */
 	private static final long serialVersionUID = -1214326347782066597L;
+	
+	
+	
+	public enum jsonFeature {
+		substance,
+		component,
+		compositionUUID,
+		relation,
+		proportion
+		;
+		
+		public String jsonname() {
+			return name();
+		}
+	}
+	
 	protected String compositionUUID;
 	public String getCompositionUUID() {
 		return compositionUUID;
@@ -201,5 +217,6 @@ public class CompositionRelation extends AbstractRelation<STRUCTURE_RELATION, Pr
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
+
 
 }
