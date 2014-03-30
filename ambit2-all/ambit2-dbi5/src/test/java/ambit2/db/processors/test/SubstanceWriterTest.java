@@ -2,6 +2,7 @@ package ambit2.db.processors.test;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 
 import junit.framework.Assert;
@@ -18,6 +19,7 @@ import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.io.DownloadTool;
 import ambit2.core.io.IRawReader;
+import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.processors.DBSubstanceWriter;
@@ -150,8 +152,12 @@ public class SubstanceWriterTest extends DbUnitTest {
 	}
 
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key) throws Exception  {
+		return write(reader, connection,key,true);
+	}
+	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean splitRecord) throws Exception  {
 		
 		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord());
+		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);
         writer.open();
 		int records = 0;
@@ -165,5 +171,42 @@ public class SubstanceWriterTest extends DbUnitTest {
 		writer.close();
 		return records;
 	}	
+	
+
+	public SubstanceStudyParser getJSONReader() throws Exception {
+		InputStream in= null;
+		try {
+			in = this.getClass().getClassLoader().getResourceAsStream("ambit2/core/data/json/substance.json");
+			return new SubstanceStudyParser(new InputStreamReader(in,"UTF-8"));
+		} catch (Exception x) {
+			throw x;
+		} finally {
+ 			try { if (in!=null) in.close();} catch (Exception x) {}
+		}
+	}
+
+	@Test
+	public void testWriteJSONStudies() throws Exception {
+		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
+        IDatabaseConnection c = getConnection();
+        try {
+	        IRawReader<IStructureRecord> parser = getJSONReader();
+	        /*
+	        while (parser.hasNext()) {
+	        	IStructureRecord record = parser.nextRecord();
+	        	Assert.assertTrue(record instanceof SubstanceRecord);
+	        	Assert.assertNotNull(((SubstanceRecord)record).getMeasurements());
+	        	System.out.println(((SubstanceRecord)record).toJSON("http://localhost:8080/ambit2"));
+	        }
+	        */
+	
+	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
+	        parser.close();
+        } finally {
+        	c.close();
+        }
+        
+	}
+	
 	
 }
