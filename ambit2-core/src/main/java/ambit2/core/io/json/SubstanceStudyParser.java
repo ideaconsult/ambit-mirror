@@ -1,5 +1,8 @@
 package ambit2.core.io.json;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,18 +13,108 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.io.formats.IResourceFormat;
+import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.ExternalIdentifier;
+import ambit2.base.interfaces.ICiteable;
+import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.core.io.IRawReader;
 
-public class SubstanceStudyParser {
-	private SubstanceStudyParser() {
+public class SubstanceStudyParser extends DefaultIteratingChemObjectReader implements IRawReader<IStructureRecord>, ICiteable {
+
+	protected ObjectMapper dx = new ObjectMapper();
+	protected ArrayNode substance;
+	protected int index = -1;
+	protected SubstanceRecord record = null; 
+	
+	public SubstanceStudyParser(InputStreamReader reader) throws Exception {
+		super();
+		setReader(reader);
 	}
+	
+
+	@Override
+	public void setReader(Reader reader) throws CDKException {
+		try {
+			JsonNode node = dx.readTree(reader).get("substance");
+			if (node instanceof ArrayNode) {
+				substance = (ArrayNode)node;
+				index = -1;
+			}
+			else substance = null;
+		} catch (Exception x ) {
+			throw new CDKException(x.getMessage(),x);
+		} finally {
+			try { reader.close();} catch (Exception x) {}
+		}
+	}
+
+	@Override
+	public void setReader(InputStream in) throws CDKException {
+		try {
+			setReader(new InputStreamReader(in,"UTF-8"));
+		} catch (Exception x) {
+			throw new CDKException(x.getMessage(),x);
+		}
+		
+	}
+
+	@Override
+	public IResourceFormat getFormat() {
+		return null;
+	}
+
+	
+
+	@Override
+	public void close() throws IOException {
+		
+	}
+
+	@Override
+	public boolean hasNext() {
+		index++;
+		if (index<substance.size()) {
+			record = parseSubstance(substance.get(index));
+			JsonNode papps = substance.get(index).get("study");
+			record.setMeasurements(parseProtocolApplications(papps));
+			JsonNode composition = substance.get(0).get("composition");
+			record.setRelatedStructures(parseComposition(composition));
+			return true;
+		} else {
+			record = null;
+			return false;
+		}
+	}
+
+	@Override
+	public Object next() {
+		return record;
+	}
+
+	@Override
+	public void setReference(ILiteratureEntry reference) {
+	}
+
+	@Override
+	public ILiteratureEntry getReference() {
+		return null;
+	}
+
+	@Override
+	public IStructureRecord nextRecord() {
+		return record;
+	}	
+	
 	public static SubstanceRecord parseSubstance(Reader reader) throws Exception {
 		ObjectMapper dx = new ObjectMapper();
 		try {
@@ -223,5 +316,5 @@ public class SubstanceStudyParser {
 		if (jn!=null && !"".equals(jn.getTextValue()) && !"null".equals(jn.asText())) {
 			record.setUnit(jn.asText());
 		}	
-	}	
+	}
 }
