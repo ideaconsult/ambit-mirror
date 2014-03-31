@@ -17,13 +17,13 @@ public class SMIRKSReaction
 	public SmartsFlags reactantFlags = new SmartsFlags();
 	public SmartsFlags agentFlags = new SmartsFlags();
 	public SmartsFlags productFlags = new SmartsFlags();
+	public Vector<SmartsAtomExpression> reactantRecursiveAtoms = null;  
+	public Vector<SmartsAtomExpression> productRecursiveAtoms = null;
 	
 	//Single container representation 
 	public IQueryAtomContainer reactant = new QueryAtomContainer();
 	public IQueryAtomContainer agent = new QueryAtomContainer();
 	public IQueryAtomContainer product = new QueryAtomContainer();
-	
-		
 	
 	//Multi-container representation
 	public Vector<IQueryAtomContainer> reactants = new Vector<IQueryAtomContainer>();

@@ -30,6 +30,7 @@ public class SMIRKSManager
 	SmartsToChemObject stco ;
 	EquivalenceTester eqTester = new EquivalenceTester();
 	
+	
 	Vector<String> parserErrors = new Vector<String>();
 	
 	public int FlagSSMode = SmartsConst.SSM_NON_OVERLAPPING; 
@@ -37,6 +38,7 @@ public class SMIRKSManager
 	public boolean FlagPreprocessResultStructures = false;  //Triggers an optional preprocessing
 	public boolean FlagCheckAromaticityInPreprocessing = true;
 	public boolean FlagAddImplicitHAtomsInPreprocessing = true;
+	
 	
 	
 	public SMIRKSManager(IChemObjectBuilder builder)
@@ -112,8 +114,11 @@ public class SMIRKSManager
 		if (fragment == null)
 			res++;
 		else
+		{	
 			reaction.reactant = fragment;
-		
+			if (reaction.reactantFlags.hasRecursiveSmarts)
+				reaction.reactantRecursiveAtoms = getRecursiveAtoms(fragment);
+		}
 		
 		reaction.agentsSmarts = smirks.substring(sep1Pos+1, sep2Pos).trim();
 		if (!reaction.agentsSmarts.equals(""))
@@ -133,7 +138,11 @@ public class SMIRKSManager
 		if (fragment == null)
 			res++;
 		else
+		{	
 			reaction.product = fragment;
+			if (reaction.productFlags.hasRecursiveSmarts)
+				reaction.productRecursiveAtoms = getRecursiveAtoms(fragment);
+		}
 		
 		//System.out.println("Reactant Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.reactant));
 		//System.out.println("Product Atoms: "+SmartsHelper.getAtomsExpressionTokens(reaction.product));
@@ -148,6 +157,7 @@ public class SMIRKSManager
 			parserErrors.addAll(reaction.mapErrors);
 			return (reaction);
 		}
+		
 		
 		reaction.generateTransformationData();
 		
@@ -197,10 +207,14 @@ public class SMIRKSManager
 	}
 	
 	public boolean applyTransformation(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction) throws Exception 
-	{
-		isoTester.setQuery(reaction.reactant);
+	{	
 		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
+		if (reaction.reactantFlags.hasRecursiveSmarts)
+			mapRecursiveAtomsAgainstTarget(reaction.reactantRecursiveAtoms, target);
 		
+		//It is absolutely needed that setQuery() function is called after recursive atom mapping
+		//because the recursive mapping calls setQuery() as well
+		isoTester.setQuery(reaction.reactant);
 				
 		if (FlagSSMode ==  SmartsConst.SSM_SINGLE)
 		{
@@ -307,10 +321,12 @@ public class SMIRKSManager
 	 *  the overlapping mappings at particular site produce multiple copies of the molecule.
 	 */
 	public IAtomContainerSet applyTransformationWithCombinedOverlappedPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction) throws Exception
-	{
-		isoTester.setQuery(reaction.reactant);
+	{	
 		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
+		if (reaction.reactantFlags.hasRecursiveSmarts)
+			mapRecursiveAtomsAgainstTarget(reaction.reactantRecursiveAtoms, target);
 		
+		isoTester.setQuery(reaction.reactant);
 		
 		Vector<Vector<IAtom>> rMaps0 = getNonIdenticalMappings(target);
 		if (rMaps0.size()==0) 
@@ -415,10 +431,12 @@ public class SMIRKSManager
 	
 	
 	public IAtomContainerSet applyTransformationWithSingleCopyForEachPos(IAtomContainer target, IAcceptable selection, SMIRKSReaction reaction) throws Exception
-	{
-		isoTester.setQuery(reaction.reactant);
+	{	
 		SmartsParser.prepareTargetForSMARTSSearch(reaction.reactantFlags, target);
+		if (reaction.reactantFlags.hasRecursiveSmarts)
+			mapRecursiveAtomsAgainstTarget(reaction.reactantRecursiveAtoms, target);
 		
+		isoTester.setQuery(reaction.reactant);
 		
 		Vector<Vector<IAtom>> rMaps0 = getNonIdenticalMappings(target);
 		if (rMaps0.size()==0) 
@@ -700,7 +718,50 @@ public class SMIRKSManager
 		return(cloneMap);
 	}
 	
+	public Vector<SmartsAtomExpression> getRecursiveAtoms(IQueryAtomContainer query)
+	{
+		Vector<SmartsAtomExpression> recursiveAtoms = new Vector<SmartsAtomExpression>() ;
+		for (int i = 0; i < query.getAtomCount(); i++)
+		{
+			if (query.getAtom(i) instanceof SmartsAtomExpression)
+			{
+				SmartsAtomExpression sa = (SmartsAtomExpression) query.getAtom(i);				
+				if (sa.recSmartsStrings.size() > 0)
+				{	
+					recursiveAtoms.add(sa);
+					//System.out.println(SmartsHelper.atomToString(sa));
+					
+				}	
+			}
+		}
 		
+		return recursiveAtoms;
+	}
+	
+	public void mapRecursiveAtomsAgainstTarget(Vector<SmartsAtomExpression> recursiveAtoms, IAtomContainer target)
+	{	
+		//Reset for new mapping
+		for (int i = 0; i < recursiveAtoms.size(); i++)
+			recursiveAtoms.get(i).recSmartsMatches = new Vector<Vector<IAtom>>();
+		
+		//The mapping info is stored "inside" each recursive atom
+		Vector<IQueryAtomContainer> vRecCon;				
+		for (int i = 0; i < recursiveAtoms.size(); i++)
+		{	
+			vRecCon = recursiveAtoms.get(i).recSmartsContainers;
+			for (int j = 0; j < vRecCon.size(); j++)				
+			{	
+				isoTester.setQuery(vRecCon.get(j));
+				Vector<Integer> pos = isoTester.getIsomorphismPositions(target);		
+				Vector<IAtom> v = new Vector<IAtom>();
+				
+				for (int k = 0; k < pos.size(); k++)
+					v.add(target.getAtom(pos.get(k).intValue()));
+				
+				recursiveAtoms.get(i).recSmartsMatches.add(v);
+			}
+		}
+	}	
 	
 	//Helper functions
 	
