@@ -84,6 +84,7 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		
 		Object o_uuid = getObject().getDocumentUUID();
 		String[] cmp_uuid = {null,o_uuid==null?null:o_uuid.toString()};
+		if (cmp_uuid==null || cmp_uuid.length<2) throw new AmbitException("Invalid UUID "+o_uuid.toString());
 		if (o_uuid!=null) cmp_uuid = I5Utils.splitI5UUID(o_uuid.toString());
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[0]));
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));		
@@ -99,7 +100,8 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		}	
 		
 		Object s_uuid = getGroup();
-		String[] subst_uuid = {null,o_uuid==null?null:s_uuid.toString()};
+		String[] subst_uuid = {null,s_uuid==null?null:s_uuid.toString()};
+		if (subst_uuid==null || subst_uuid.length<2) throw new AmbitException("Invalid UUID "+s_uuid.toString());
 		if (s_uuid!=null) subst_uuid = I5Utils.splitI5UUID(s_uuid.toString());
 		params1.add(new QueryParam<String>(String.class, subst_uuid[0]));
 		params1.add(new QueryParam<String>(String.class, subst_uuid[1]));
