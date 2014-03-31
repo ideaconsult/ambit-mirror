@@ -17,13 +17,19 @@ public class ExternalIdentifier {
 		return systemDesignator;
 	}
 	public void setSystemDesignator(String systemDesignator) {
-		this.systemDesignator = systemDesignator;
+		if (systemDesignator!=null && systemDesignator.length()>64)
+			this.systemDesignator = systemDesignator.substring(0,63);
+		else	
+			this.systemDesignator = systemDesignator;
 	}
 	public String getSystemIdentifier() {
 		return systemIdentifier;
 	}
 	public void setSystemIdentifier(String systemIdentifier) {
-		this.systemIdentifier = systemIdentifier;
+		if (systemIdentifier!=null && systemIdentifier.length()>64)
+			this.systemIdentifier = systemIdentifier.substring(0,63);
+		else	
+			this.systemIdentifier = systemIdentifier;		
 	}
 	@Override
 	public String toString() {
