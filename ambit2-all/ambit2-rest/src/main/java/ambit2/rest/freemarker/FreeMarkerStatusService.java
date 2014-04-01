@@ -17,6 +17,8 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.service.StatusService;
 
+import ambit2.base.config.AMBITConfig;
+
 public class FreeMarkerStatusService  extends StatusService implements IFreeMarkerSupport {
 	protected transient Logger logger = Logger.getLogger(getClass().getName());
 	protected IFreeMarkerSupport freeMarkerSupport = new FreeMarkerSupport(); 
@@ -70,7 +72,7 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
         Map<String, Object> map = new HashMap<String, Object>();
         if (request.getClientInfo().getUser()!=null) 
         	map.put("username", request.getClientInfo().getUser().getIdentifier());
-        map.put("ambit_root",request.getRootRef().toString());
+        map.put(AMBITConfig.ambit_root.name(),request.getRootRef().toString());
         map.put("status_code",status.getCode());
         map.put("status_uri",status.getUri());
         map.put("status_name",status.getName());

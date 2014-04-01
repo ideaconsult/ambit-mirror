@@ -7,6 +7,7 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.rest.ChemicalMediaType;
 
 public class FreeMarkerSupport implements IFreeMarkerSupport {
@@ -42,32 +43,31 @@ public class FreeMarkerSupport implements IFreeMarkerSupport {
         
 		Reference r = request.getResourceRef().clone();
         r.setQuery(query.getQueryString());
-        map.put("ambit_request",r.toString()) ;
+        map.put(AMBITConfig.ambit_request.name(),r.toString()) ;
         if (query.size()>0)	map.put("ambit_query",query.getQueryString()) ;
         
         //json
         query.removeAll("media");query.add("media", MediaType.APPLICATION_JSON.toString());
         r.setQuery(query.getQueryString());
-        map.put("ambit_request_json",r.toString());
+        map.put(AMBITConfig.ambit_request_json.name(),r.toString());
         //jsonp
         query.removeAll("media");query.add("media", MediaType.APPLICATION_JAVASCRIPT.toString());
         r.setQuery(query.getQueryString());
-        map.put("ambit_request_jsonp",r.toString());      
+        map.put(AMBITConfig.ambit_request_jsonp.name(),r.toString());      
         //sdf
         query.removeAll("media");query.add("media", ChemicalMediaType.CHEMICAL_MDLSDF.toString());
         r.setQuery(query.getQueryString());
-        map.put("ambit_request_sdf",r.toString());   
+        map.put(AMBITConfig.ambit_request_sdf.name(),r.toString());   
         //csv
         query.removeAll("media");query.add("media", MediaType.TEXT_CSV.toString());
         r.setQuery(query.getQueryString());
-        map.put("ambit_request_csv",r.toString());
+        map.put(AMBITConfig.ambit_request_csv.name(),r.toString());
         
 
 		map.put("creator","Ideaconsult Ltd.");
-	    map.put("ambit_root",request.getRootRef());
-
-	    map.put("ambit_version_short",app.getVersionShort());
-	    map.put("ambit_version_long",app.getVersionLong());
+        map.put(AMBITConfig.ambit_root.name(),request.getRootRef());
+	    map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
+	    map.put(AMBITConfig.ambit_version_long.name(),app.getVersionLong());
 	}
 		
 }

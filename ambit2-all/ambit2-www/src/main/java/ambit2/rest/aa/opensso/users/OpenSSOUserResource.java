@@ -17,6 +17,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 import org.restlet.security.User;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.StringConvertor;
@@ -191,10 +192,10 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
         } catch (Exception x) {
         	map.remove("openam_service");
         }
-        map.put("creator","IdeaConsult Ltd.");
-        map.put("ambit_root",getRequest().getRootRef().toString());		
-	    map.put("ambit_version_short",((FreeMarkerApplication)getApplication()).getVersionShort());
-	    map.put("ambit_version_long",((FreeMarkerApplication)getApplication()).getVersionLong());
+        map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
+        map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());		
+	    map.put(AMBITConfig.ambit_version_short.name(),((FreeMarkerApplication)getApplication()).getVersionShort());
+	    map.put(AMBITConfig.ambit_version_short.name(),((FreeMarkerApplication)getApplication()).getVersionLong());
 
 	}
 }
