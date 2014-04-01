@@ -33,26 +33,6 @@ public class FPAtomEnvironmentCrudTest extends CRUDTest<IStructureRecord,IStruct
 		c.close();
 		return q;		
 		
-		
-/*
-    	
-	    SmilesParserWrapper sp = SmilesParserWrapper.getInstance();
-	        IAtomContainer mol = sp.parseSmiles("CCCC(O)=O");
-		AtomConfigurator typer = new AtomConfigurator();
-		typer.process(mol);
-		    
-		CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(NoNotificationChemObjectBuilder.getInstance());
-		hAdder.addImplicitHydrogens(mol);
-
-		mol = gen.process(mol);
-		Object ae = mol.getProperty(AmbitCONSTANTS.AtomEnvironment);
-		Assert.assertTrue(ae instanceof AtomEnvironmentList);		
-		q.setObject((AtomEnvironmentList) ae);
-
-		IStructureRecord record = new StructureRecord(7,100211,null,null);
-		q.setGroup(record);
-		return q;
-		*/
 	}
 
 	@Override
