@@ -12,6 +12,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.core.config.Resources;
@@ -81,10 +82,10 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 	public void configureTemplateMap(Map<String, Object> map) {
         if (getClientInfo().getUser()!=null) 
         	map.put("username", getClientInfo().getUser().getIdentifier());
-        map.put("creator","IdeaConsult Ltd.");
-        map.put("ambit_root",getRequest().getRootRef().toString());
-	    map.put("ambit_version_short",((FreeMarkerApplication)getApplication()).getVersionShort());
-	    map.put("ambit_version_long",((FreeMarkerApplication)getApplication()).getVersionLong());
+        map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
+        map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());
+	    map.put(AMBITConfig.ambit_version_short.name(),((FreeMarkerApplication)getApplication()).getVersionShort());
+	    map.put(AMBITConfig.ambit_version_long.name(),((FreeMarkerApplication)getApplication()).getVersionLong());
 
         //remove paging
         Form query = getRequest().getResourceRef().getQueryAsForm();
@@ -92,17 +93,17 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
         query.removeAll("media");
         Reference r = getRequest().getResourceRef().clone();
         r.setQuery(query.getQueryString());
-        map.put("ambit_request",r.toString()) ;
+        map.put(AMBITConfig.ambit_request.name(),r.toString()) ;
         if (query.size()>0)
-        	map.put("ambit_query",query.getQueryString()) ;
+        	map.put(AMBITConfig.ambit_query.name(),query.getQueryString()) ;
         //json
         query.removeAll("media");query.add("media", MediaType.APPLICATION_JSON.toString());
         r.setQuery(query.getQueryString());
-        map.put("ambit_request_json",r.toString());
+        map.put(AMBITConfig.ambit_request_json.name(),r.toString());
         //csv
         query.removeAll("media");query.add("media", MediaType.TEXT_CSV.toString());
         r.setQuery(query.getQueryString());
-        map.put("ambit_request_csv",r.toString());
+        map.put(AMBITConfig.ambit_request_csv.name(),r.toString());
         
         Object taskid = getRequest().getAttributes().get(resourceKey);
         if (taskid!=null)
