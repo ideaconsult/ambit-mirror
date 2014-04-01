@@ -316,21 +316,7 @@ public class SmilesTest {
 					System.out.println(bond.getOrder());
 			}
 			reader.close();
-			/*
-			//String smiles= "O=C5C(=NNc1ccc(c2ccccc12)S(=O)(=O)O)C=C(C(=O)C5(=NNc3ccc(c4ccccc34)S(=O)(=O)O))CO";
-			SmilesParser parser = new SmilesParser(NoNotificationChemObjectBuilder.getInstance());
-			IMolecule mol = //parser.parseSmiles("O=C1c2ccccc2C(=O)c3c1ccc4c3[nH]c5c6C(=O)c7ccccc7C(=O)c6c8[nH]c9c%10C(=O)c%11ccccc%11C(=O)c%10ccc9c8c45");
-				//parser.parseSmiles("O1c4cccc5ccc3ccc2cccc1c2c3c45");
-				//parser.parseSmiles("O=C5C=CC(=NNc1ccc(cc1)c2ccc(cc2)NN=C4C(=O)C=Cc3cc(cc(c34)S(=O)(=O)O)S(=O)(=O)O)C=C5");
-				//parser.parseSmiles("c1ccc(cc1)P(c2ccccc2)c3ccccc3");OK
-				//parser.parseSmiles("[O+]#[C-][Ru+2][C-]#[O+].c1ccc(cc1)P(c2ccccc2)c3ccccc3.c1ccc(cc1)P(c2ccccc2)c3ccccc3.[Cl-].[Cl-]");
-				//parser.parseSmiles("[O+]#[C-][Ru+2][C-]#[O+].c1ccc(cc1)P(c2ccccc2)c3ccccc3.c1ccc(cc1)P(c2ccccc2)c3ccccc3");
-				//parser.parseSmiles("O(c1ccccc1)c7cccc(Oc6cccc(Oc5cccc(Oc4cccc(Oc3cccc(Oc2ccccc2)c3)c4)c5)c6)c7"); //OK
-				//parser.parseSmiles("c1ccc(cc1)P(c2ccccc2)CCP(CCP(c3ccccc3)c4ccccc4)CCP(c5ccccc5)c6ccccc6"); //OK
-				//parser.parseSmiles("O=C3c5c(O)ccc(Nc1ccccc1)c5(C(=O)c4c(O)ccc(Nc2ccccc2)c34)");
-				parser.parseSmiles(smiles);
-			*/
-			
+
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
