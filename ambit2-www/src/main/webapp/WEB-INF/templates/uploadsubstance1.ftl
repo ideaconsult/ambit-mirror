@@ -15,40 +15,19 @@ $(document)
 		    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/uploadsubstance" title="File upload">Import</a></li>');
 		    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/uploadsubstance1" title="Upload substances as defined in a single IUCLID5 .i5d or .i5z file">Single .i5z file upload</a></li>');
 		    jQuery("#breadCrumb").jBreadCrumb();
-					
+					jQuery("#welcome").text("Substance Import");
 				});
 </script>
 
 </head>
 <body>
 
-
 <div class="container" style="margin:0;padding:0;">
 
 <!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-			<div class="half-bottom h3">
-				Substance import
-			</div>
-			<div id="breadCrumb" class="row breadCrumb module remove-bottom">
-                    <ul>
-                        <li>
-                            <a href="${ambit_root}" title="AMBIT Home">Home</a>
-                        </li>
-                    </ul>
-			</div>			    
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
+<#include "/banner_crumbs.ftl">
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/menu_substance.ftl">
 <ul >
 <li class="ui-selectee">
@@ -56,6 +35,10 @@ $(document)
 </li>
 </ul>
 </div>
+
+
+		<!-- Page Content
+		================================================== -->
 
 <div class="eleven columns remove-bottom" style="padding:0;" >
 
@@ -84,8 +67,9 @@ $(document)
 		&nbsp;
 	</div>	
 	<div class='row half-bottom'>
-		<label class='three columns alpha h6'>Substance import options:</label>
-		<div class='ten columns alpha half-bottom'>
+		<div class='four columns alpha'>&nbsp;</div>
+		<div class='twelve columns omega half-bottom'>
+		    Substance import options: 
 			<a href="${ambit_root}/ui/uploadsubstance" title="Multiple .i5z files upload">Multiple .i5z files upload</a>
 			 | 
 			<a href="${ambit_root}/ui/uploadsubstance1" title="Single .i5z file upload">Single .i5z file upload</a>
