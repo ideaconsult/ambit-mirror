@@ -6,6 +6,23 @@ use `ambit_users`;
 -- Users. If registered, 'username' points to users table
 -- -----------------------------------------------------
 
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE  `user` (
+  `iduser` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) DEFAULT NULL COMMENT 'OpenAM user name',
+  `title` varchar(45) DEFAULT NULL,
+  `firstname` varchar(45) NOT NULL,
+  `lastname` varchar(45) NOT NULL,
+  `institute` varchar(128) DEFAULT NULL,
+  `weblog` varchar(45) DEFAULT NULL,
+  `homepage` varchar(45) DEFAULT NULL,
+  `address` varchar(128) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+   `keywords` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
+  `reviewer` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'true if wants to become a reviewer',
+  PRIMARY KEY (`iduser`),
+  UNIQUE KEY `Index_2` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- User credentials 
@@ -49,7 +66,7 @@ CREATE TABLE `user_registration` (
   `code` varchar(45) NOT NULL,
   `status` enum('disabled','commenced','confirmed') NOT NULL DEFAULT 'disabled',
   PRIMARY KEY (`user_name`),
-  UNIQUE KEY `Index_2` (`code`) USING BTREE,
+  UNIQUE KEY `kur2` (`code`) USING BTREE,
   CONSTRAINT `` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -86,8 +103,8 @@ CREATE TABLE  `organisation` (
   `ldapgroup` varchar(128) DEFAULT NULL,
   `cluster` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`idorganisation`),
-  UNIQUE KEY `Index_2` (`name`),
-  KEY `Index_3` (`cluster`)
+  UNIQUE KEY `xorg2` (`name`),
+  KEY `korg2` (`cluster`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
@@ -100,8 +117,8 @@ CREATE TABLE  `project` (
   `ldapgroup` varchar(128) DEFAULT NULL,
   `cluster` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`idproject`),
-  UNIQUE KEY `Index_2` (`name`),
-  KEY `Index_3` (`cluster`)
+  UNIQUE KEY `xprj2` (`name`),
+  KEY `kprj2` (`cluster`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- -----------------------------------------------------
 -- User affiliations 
@@ -113,7 +130,7 @@ CREATE TABLE  `user_organisation` (
   `priority` int(2) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`iduser`,`idorganisation`),
   KEY `FK_user_organisation_2` (`idorganisation`),
-  KEY `Index_3` (`iduser`,`priority`),
+  KEY `kprjuo` (`iduser`,`priority`),
   CONSTRAINT `FK_user_organisation_2` FOREIGN KEY (`idorganisation`) REFERENCES `organisation` (`idorganisation`) ON UPDATE CASCADE,
   CONSTRAINT `FK_user_organisation_1` FOREIGN KEY (`iduser`) REFERENCES `user` (`iduser`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -128,7 +145,7 @@ CREATE TABLE  `user_project` (
   `priority` int(2) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`iduser`,`idproject`),
   KEY `FK_user_project_2` (`idproject`),
-  KEY `Index_3` (`iduser`,`priority`),
+  KEY `kup2` (`iduser`,`priority`),
   CONSTRAINT `FK_user_project_2` FOREIGN KEY (`idproject`) REFERENCES `project` (`idproject`) ON UPDATE CASCADE,
   CONSTRAINT `FK_user_project_1` FOREIGN KEY (`iduser`) REFERENCES `user` (`iduser`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -136,6 +153,7 @@ CREATE TABLE  `user_project` (
 -- ----------------------------------------
 -- Version
 -- ----------------------------------------
+DROP TABLE IF EXISTS `version`;
 CREATE TABLE  `version` (
   `idmajor` int(5) unsigned NOT NULL,
   `idminor` int(5) unsigned NOT NULL,
@@ -162,4 +180,6 @@ insert into user_roles values("admin","ambit_user");
 insert ignore into user_registration
 SELECT user_name,now(),now(),concat("SYSTEM_",user_name),'confirmed' FROM users;
 
-
+insert into user values (null,'admin','','Admin','Administrator','AMBIT','http://ambit.sf.net','http://ambit.sf.net','','','admin',1);
+insert into user values (null,'guest','','Guest','Guest','AMBIT','http://ambit.sf.net','http://ambit.sf.net','','','guest',1);
+ 
