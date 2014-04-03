@@ -1,6 +1,9 @@
 -- User refactoring. From now on a separate database for users AA will be used (ambit_users)
-DROP TABLE IF EXISTS `roles`;
+
 DROP TABLE IF EXISTS `user_roles`;
+DROP TABLE IF EXISTS `roles`;
+
+-- This table is not used for AA at all - see ambit_users database instead 
 ALTER TABLE `users` 
 	DROP COLUMN `registration_id` , 
 	DROP COLUMN `registration_date` , 
@@ -12,6 +15,5 @@ ALTER TABLE `users`
 	CHANGE COLUMN `webpage` `homepage` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL DEFAULT '""'  , 
 	CHANGE COLUMN `affiliation` `institute` VARCHAR(128) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL DEFAULT '""'  ;
 
-ALTER TABLE `users` ADD COLUMN `iduser` INT(11) NULL AUTO_INCREMENT  FIRST 
-, ADD UNIQUE INDEX `iduser_UNIQUE` (`iduser` ASC) ;
+-- ALTER TABLE `users` ADD COLUMN `iduser` INT(11) NULL AUTO_INCREMENT  FIRST, ADD UNIQUE INDEX `iduser_UNIQUE` (`iduser` ASC) ;
 	
