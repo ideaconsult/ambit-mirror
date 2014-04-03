@@ -4,6 +4,8 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -177,8 +179,9 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
 		else return false;
 	}
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-		super.configureTemplateMap(map);
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
         if (getClientInfo().getUser()!=null) {
         //	map.put("username", getClientInfo().getUser().getIdentifier());
         	try {
@@ -194,8 +197,8 @@ public class OpenSSOUserResource extends CatalogResource<OpenSSOUser>{
         }
         map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
         map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());		
-	    map.put(AMBITConfig.ambit_version_short.name(),((FreeMarkerApplication)getApplication()).getVersionShort());
-	    map.put(AMBITConfig.ambit_version_short.name(),((FreeMarkerApplication)getApplication()).getVersionLong());
+	    map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
+	    map.put(AMBITConfig.ambit_version_short.name(),app.getVersionLong());
 
 	}
 }

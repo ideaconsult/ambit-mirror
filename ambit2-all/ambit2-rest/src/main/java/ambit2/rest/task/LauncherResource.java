@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -83,7 +88,7 @@ public class LauncherResource extends ProtectedResource {
 		try {
 
 			Form form = new Form(entity);
-			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+			ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 					getRequest().getRootRef().toString(),
 					createCallable(form),
 					getRequest().getRootRef(),false, 
@@ -91,7 +96,7 @@ public class LauncherResource extends ProtectedResource {
 			task.update();
 
 			setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
-			ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
+			ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();
 			FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 			return tc.createTaskRepresentation(task.getUuid(), variant,getRequest(), getResponse(),null);
 

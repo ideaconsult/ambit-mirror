@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.idea.i5.io.QASettings;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -131,7 +132,7 @@ public class UIResource extends FreeMarkerResource {
 			getClientInfo().setUser(ou);
 		}
         setTokenCookies(variant, useSecureCookie(getRequest()));
-        configureTemplateMap(map);
+        configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 	

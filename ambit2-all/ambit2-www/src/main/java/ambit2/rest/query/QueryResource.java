@@ -16,6 +16,12 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.opentox.aa.IOpenToxUser;
 import org.opentox.aa.OpenToxUser;
 import org.opentox.aa.opensso.OpenSSOPolicy;
@@ -61,9 +67,6 @@ import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableQueryProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
-import ambit2.rest.task.ICallableTask;
-import ambit2.rest.task.ITaskStorage;
-import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskCreator;
 
 /**
@@ -466,11 +469,11 @@ Then, when the "get(Variant)" method calls you back,
 						return createCallable(form,item);
 					}
 					@Override
-					protected Task<Reference, Object> createTask(
+					protected ITask<Reference, Object> createTask(
 							ICallableTask callable,
 							T item) throws ResourceException {
 	
-							return ((TaskApplication)getApplication()).addTask(
+							return ((ITaskApplication)getApplication()).addTask(
 								String.format("Apply %s %s %s",item.toString(),reference==null?"":"to",reference==null?"":reference),									
 								callable,
 								getRequest().getRootRef(),
@@ -494,10 +497,10 @@ Then, when the "get(Variant)" method calls you back,
 				}
 				if ((r==null) || (r.size()==0)) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 				else {
-					ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
+					ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();
 					FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 					if (r.size()==1) {
-						Task<Reference,Object> task = storage.findTask(r.get(0));
+						ITask<Reference,Object> task = storage.findTask(r.get(0));
 						task.update();
 						setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
 						return tc.createTaskRepresentation(r.get(0), variant,getRequest(), getResponse(),getDocumentation());
@@ -637,7 +640,7 @@ Then, when the "get(Variant)" method calls you back,
 			getClientInfo().setUser(ou);
 		}
         setTokenCookies(variant, useSecureCookie(getRequest()));
-        configureTemplateMap(map);
+        configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 	

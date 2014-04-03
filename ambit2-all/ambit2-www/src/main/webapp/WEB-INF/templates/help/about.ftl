@@ -7,7 +7,8 @@
 		<a href='${ambit_root}/algorithm' target='_blank'>Algorithms</a> |
 		<a href='${ambit_root}/model' target='_blank'>Models</a> |
 		<a href='${ambit_root}/task' target='_blank'>Tasks</a> |
-		<a href='${ambit_root}/help' target=_blank>More API Help</a><br>
+		<a href='${ambit_root}/help' target=_blank>More API Help</a> |
+	    <a class='topLinks' href='http://ambit.sf.net/' class='qxternal' >AMBIT@sf.net</a><br>
 <div style='font-weight:bold;'>Demos:</div> 
 <a href='${ambit_root}/depict?search=c1ccccc1' target='_blank'>2D depiction</a> |
 <a href='${ambit_root}/depict/reaction?search=c1ccccc1' target='_blank'>Reactions (SMIRKS)</a> |

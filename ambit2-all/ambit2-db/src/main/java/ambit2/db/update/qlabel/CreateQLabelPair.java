@@ -19,14 +19,11 @@ order by idchemical
  */
 public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 	protected static String[] sql = {
-		"insert ignore into roles (role_name) values (\"ambit_quality\");",
-		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (?,\"d66636b253cb346dbb6240e30def3618\",\"quality\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",
-		"insert ignore into user_roles (user_name,role_name) values (?,\"ambit_quality\");",
-
-		//"LOCK TABLES quality_pair WRITE , quality_chemicals WRITE, fp1024_struc READ \n",
-		
+		//1
+		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (?,\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
+		//3
 		"delete from quality_pair\n",
-		
+		//4
 		"insert into quality_pair (idchemical,idstructure,rel,user_name,updated,`text`)\n"+
 		"select s1.idchemical,s1.idstructure id1,\n"+
 		"s1.fp1=s2.fp1 && s1.fp2=s2.fp2 && s1.fp3=s2.fp3 && s1.fp4=s2.fp4 && s1.fp5=s2.fp5 && s1.fp6=s2.fp6 &&\n"+
@@ -60,16 +57,11 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"ELSE " +
 		"IF (FIND_IN_SET(s2.idstructure,`text`)=0,concat_WS(',',`text`,cast(s2.idstructure as char)),`text`) " +
 		"END",
-
-		/*
-		DbCreateDatabase.func[0],
-		DbCreateDatabase.func[1],
-		*/
+		//5
 		"update quality_pair set text=sortstring(text)\n",
-		
+		//6
 		"delete from quality_chemicals",
-		
-		
+		//7
 		"insert into quality_chemicals (idchemical,num_sources,label,num_structures,text)\n"+
 		"select idchemical,1,'Unconfirmed',1,'1' from\n"+
 		"(\n"+
@@ -81,8 +73,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"and src_dataset.user_name != 'guest'\n"+ //restrict to datasets uploaded by users other than guest
 		"group by idchemical\n"+
 		") A where c=1\n",
-
-
+		//8
 		"insert into quality_chemicals (idchemical,num_sources,label,num_structures,text)\n"+
 		"SELECT idchemical,count(text) c,'Consensus',1,(rel+1) FROM quality_pair\n"+
 		"group by idchemical,text\n"+
@@ -91,20 +82,14 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"`label`=CASE 1 WHEN values(num_sources)=num_sources THEN 'Ambiguous'  WHEN values(num_sources)<num_sources THEN 'Majority' ELSE 'Majority' END,\n"+
 		"`text`=concat_ws(',',`text`,values(`text`)),\n"+
 		"num_sources=CASE 1 WHEN num_sources<=values(num_sources) THEN values(num_sources) ELSE num_sources END\n",
-		
-		
-		
-		//"DROP TEMPORARY TABLE 'quality_pair'\n",
-		//"delete from quality_pair\n",
-		
-		"insert ignore into roles (role_name) values (\"ambit_quality\");",
-		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"comparison\",\"d66636b253cb346dbb6240e30def3618\",\"quality\",\"Automatic comparisong between sources\",now(),\"confirmed\",\"comparison\",\"http://ambit.sourceforge.net\");",
-		"insert ignore into user_roles (user_name,role_name) values (\"comparison\",\"ambit_quality\");",
-		
+
+		//10
+		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (\"comparison\",\"quality\",\"Automatic comparisong between sources\",\"comparison\",\"http://ambit.sourceforge.net\");",
+		//12
 		"update quality_chemicals set text=replace(sortstring(text),',',':')\n",
-		
+		//13
 		"delete from quality_structure where user_name='comparison'\n",
-		
+		//14
 		"insert into quality_structure (idstructure,user_name,label,text,updated)\n"+
 		"SELECT idstructure,'comparison',\n"+
 		"if (q.label='Consensus','OK',\n"+
@@ -113,7 +98,7 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"\'Comparison between different sources',current_timestamp()\n"+
 		" FROM quality_chemicals q\n"+
 		"join quality_pair p using(idchemical)\n",
-		
+		//15
 		"insert ignore into quality_structure (idstructure,user_name,label,text,updated)\n"+
 		"select idstructure,'comparison','Unknown','single source',current_timestamp() from structure\n"+
 		"join\n"+
@@ -130,8 +115,8 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		"and type_structure != 'NA'\n",
 		//"and type_structure != 'MARKUSH'\n",
 		//"UNLOCK TABLES"
-	
 		
+		//16
 		"insert into structure (idchemical,idstructure,structure,atomproperties,user_name,`preference`)\n"+
 		"select structure.idchemical,idstructure,structure,atomproperties,structure.user_name,100*min(q.label)+(10-type_structure) from quality_structure q join structure using(idstructure)\n"+
 		"group by idstructure\n"+
@@ -140,14 +125,16 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 		//"delete from quality_pair"
 	};
 		
-
+	int n1 = 0; //was 1;
+	int n2 = -1; //was 2;
+	int n4 = 2; //was 4;
 	public CreateQLabelPair() {
 		super();
 		setGroup(new AmbitUser("quality"));
 	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 
-		if ((index == 1) || (index == 2) || (index == 4)) {
+		if ((index == n1) || (index == n2) || (index == n4)) {
 			List<QueryParam> p = new ArrayList<QueryParam>();
 			if (getGroup() ==null) setGroup(new AmbitUser("quality"));
 			p.add(new QueryParam<String>(String.class,getGroup().getName()));
@@ -165,37 +152,3 @@ public class CreateQLabelPair extends AbstractUpdate<AmbitUser, String> {
 	}
 
 }
-
-/*
-SELECT
-concat(
-hex(fp1),'-',
-hex(fp2),'-',
-hex(fp3),'-',
-hex(fp4),'-',
-hex(fp5),'-',
-hex(fp6),'-',
-hex(fp7),'-',
-hex(fp8),'-',
-hex(fp9),'-',
-hex(fp10),'-',
-hex(fp11),'-',
-hex(fp12),'-',
-hex(fp13),'-',
-hex(fp14),'-',
-hex(fp15),'-',
-hex(fp16)
-) x,
-id_srcdataset,group_concat(name),
-idstructure,f.idchemical,
-count(*) c,
-preference,type_structure,
-100*count(*) +(10-type_structure)
-from fp1024_struc f
-join struc_dataset using(idstructure)
-join src_dataset d using(id_srcdataset)
-join structure using(idstructure)
-where f.idchemical=23
-and d.user_name="admin"
-group by x,id_srcdataset,idstructure with rollup
-*/

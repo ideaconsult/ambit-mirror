@@ -7,20 +7,22 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.TaskStatus;
+
 import org.restlet.resource.ResourceException;
 
-import ambit2.rest.task.Task.TaskStatus;
-
-public class ExecutableTask<USERID> extends FutureTask<TaskResult> {
-	protected Task<TaskResult,USERID> task;
+public class ExecutableTask<USERID> extends FutureTask<ITaskResult> {
+	protected ITask<ITaskResult,USERID> task;
 	
-	public Task<TaskResult, USERID> getTask() {
+	public ITask<ITaskResult, USERID> getTask() {
 		return task;
 	}
-	public void setTask(Task<TaskResult, USERID> task) {
+	public void setTask(ITask<ITaskResult, USERID> task) {
 		this.task = task;
 	}
-	public ExecutableTask(Callable<TaskResult> callable,Task<TaskResult,USERID> task) {
+	public ExecutableTask(Callable<ITaskResult> callable,ITask<ITaskResult,USERID> task) {
 		super(callable);
 		this.task = task;
 	}
@@ -34,7 +36,7 @@ public class ExecutableTask<USERID> extends FutureTask<TaskResult> {
 	@Override
 	protected void done() {
 		try {
-			TaskResult ref = get(100, TimeUnit.MILLISECONDS);
+			ITaskResult ref = get(100, TimeUnit.MILLISECONDS);
 			task.setTimeCompleted(System.currentTimeMillis());
 			task.setStatus(TaskStatus.Completed);
 			task.setUri(ref);
@@ -62,7 +64,7 @@ public class ExecutableTask<USERID> extends FutureTask<TaskResult> {
 		super.done();
 	}
 	@Override
-	protected void set(TaskResult v) {
+	protected void set(ITaskResult v) {
 		super.set(v);
 		task.setUri(v);
 	}

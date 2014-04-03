@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.util.Map;
 import java.util.logging.Level;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -423,12 +425,10 @@ public class ModelResource extends ProcessingResource<IQueryRetrieval<ModelQuery
 
 		return super.post(entity, variant);
 	}
-	
-
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-        super.configureTemplateMap(map);
-        
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
         Object modelid = getRequest().getAttributes().get(resourceKey);
         if (modelid!=null)
         	map.put("modelid",modelid.toString());

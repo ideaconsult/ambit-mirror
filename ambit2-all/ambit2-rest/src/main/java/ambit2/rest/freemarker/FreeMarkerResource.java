@@ -3,11 +3,13 @@ package ambit2.rest.freemarker;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.freemarker.IFreeMarkerSupport;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.CookieSetting;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.ext.freemarker.TemplateRepresentation;
@@ -16,6 +18,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.ProtectedResource;
+import freemarker.template.Configuration;
 
 /**
  * Renders HTML by freemarker template, if htmlByTemplate is true. Otherwise, uses the old behaviour (htmlreporter).
@@ -24,7 +27,7 @@ import ambit2.rest.ProtectedResource;
  */
 public class FreeMarkerResource extends ProtectedResource implements IFreeMarkerSupport{
 	
-	protected FreeMarkerSupport fmSupport = new FreeMarkerSupport();
+	protected IFreeMarkerSupport fmSupport = new FreeMarkerSupport();
 	/*
 	 *  HTML via Freemarker
 	 */
@@ -50,15 +53,10 @@ public class FreeMarkerResource extends ProtectedResource implements IFreeMarker
 		return request.getResourceRef();
 	}
 	
-	@Override
-	public void configureTemplateMap(Map<String, Object> map, Request request,
-			FreeMarkerApplication app) {
-		fmSupport.configureTemplateMap(map, request, app);
-		
+	public void configureTemplateMap(Map<String, Object> map, Request request, IFreeMarkerApplication app) {
+		fmSupport.configureTemplateMap(map, getRequest(), ((IFreeMarkerApplication)getApplication()));
 	}
-	public void configureTemplateMap(Map<String, Object> map) {
-		fmSupport.configureTemplateMap(map, getRequest(), ((FreeMarkerApplication)getApplication()));
-	}
+
 	
 	
 	/**
@@ -72,7 +70,7 @@ public class FreeMarkerResource extends ProtectedResource implements IFreeMarker
 		        	map.put("username", getClientInfo().getUser().getIdentifier());
 		        
 		        setTokenCookies(variant, useSecureCookie(getRequest()));
-		        configureTemplateMap(map);
+		        configureTemplateMap(map, null, null);
 		        return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 		}
 		
@@ -88,7 +86,7 @@ public class FreeMarkerResource extends ProtectedResource implements IFreeMarker
 	        
 	        return new TemplateRepresentation(
 	        		templateName,
-	        		((FreeMarkerApplication)getApplication()).getConfiguration(),
+	        		(Configuration)((IFreeMarkerApplication)getApplication()).getConfiguration(),
 	        		map,
 	        		MediaType.TEXT_HTML);
 	}

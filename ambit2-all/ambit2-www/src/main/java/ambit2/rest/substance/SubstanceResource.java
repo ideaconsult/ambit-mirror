@@ -2,6 +2,10 @@ package ambit2.rest.substance;
 
 import java.util.List;
 
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.restlet.Context;
@@ -39,8 +43,6 @@ import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.query.QueryResource;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.FactoryTaskConvertor;
-import ambit2.rest.task.ITaskStorage;
-import ambit2.rest.task.Task;
 
 /**
  * Substances (in the sense of IUCLID5) 
@@ -211,13 +213,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 								new SubstanceURIReporter(getRequest().getRootRef(), null),
 								new DatasetURIReporter(getRequest().getRootRef(), null),
 								token);
-					Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+					ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 								"Substance import",
 								callable,
 								getRequest().getRootRef(),
 								token);
 								
-					  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+					  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
 					  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 					  task.update();
 					  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
@@ -248,13 +250,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 						new SubstanceURIReporter(getRequest().getRootRef(), null),
 						new DatasetURIReporter(getRequest().getRootRef(), null),
 						token);
-						Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+						ITask<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
 						"Retrieve substance from IUCLID5 server",
 						callable,
 						getRequest().getRootRef(),
 						token);
 						
-				  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+				  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
 				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 				  task.update();
 				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);

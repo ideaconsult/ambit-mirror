@@ -36,12 +36,9 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
 import ambit2.base.config.Preferences;
 import ambit2.base.data.StringBean;
-import ambit2.db.LoginInfo;
-import ambit2.db.update.user.CreateUser;
 
 
 public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String> {
@@ -102,7 +99,6 @@ public class DbCreateDatabase extends AbstractRepositoryWriter<StringBean,String
 	 */
 	private static final long serialVersionUID = -335737998721944578L;
 	protected String SQLFile = "ambit2/db/sql/create_tables.sql";
-	protected CreateUser creatUser = new CreateUser();
 	
 	public DbCreateDatabase() {
 		this("guest","guest");
@@ -139,15 +135,9 @@ skip-name-resolve
         //TODO move this to the SQL script
         //TODO refactor to use existing empty db with rights assigned; not create it on the fly
         	String[] users = {
-        	"insert into roles (role_name) values (\"ambit_guest\");",
-        	"insert into roles (role_name) values (\"ambit_admin\");",
-        	"insert into roles (role_name) values (\"ambit_quality\");",
-        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"guest\",MD5(\"%s\"),\"guest\",\"Default guest user\",now(),\"confirmed\",\"guest\",\"http://ambit.sourceforge.net\");",""),
-        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"admin\",MD5(\"%s\"),\"admin\",\"Default admin user\",now(),\"confirmed\",\"admin\",\"http://ambit.sourceforge.net\");",""),
-        	String.format("insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"quality\",MD5(\"%s\"),\"quality\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",""),
-        	"insert into user_roles (user_name,role_name) values (\"guest\",\"ambit_guest\");",
-        	"insert into user_roles (user_name,role_name) values (\"admin\",\"ambit_admin\");",
-        	"insert into user_roles (user_name,role_name) values (\"quality\",\"ambit_quality\");",
+        	String.format("insert into users (user_name,email,lastname,keywords,homepage) values (\"guest\",\"guest\",\"Default guest user\",\"guest\",\"http://ambit.sourceforge.net\");"),
+        	String.format("insert into users (user_name,email,lastname,keywords,homepage) values (\"admin\",\"admin\",\"Default admin user\",\"admin\",\"http://ambit.sourceforge.net\");"),
+        	String.format("insert into users (user_name,email,lastname,keywords,homepage) values (\"quality\",\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");"),
         	
         	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' IDENTIFIED BY '%s';",database,"localhost",userPass),
         	String.format("GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `%s`.* TO 'guest'@'%s' ;",database,"127.0.0.1"),
@@ -159,7 +149,7 @@ skip-name-resolve
 	        for (String user : users) try {
 	        	st.executeUpdate(user);
 	        } catch (Exception x) {
-	        	logger.log(java.util.logging.Level.WARNING,x.getMessage(),x);
+	        	logger.log(java.util.logging.Level.WARNING,user,x);
 	        }
 	        	
 	        

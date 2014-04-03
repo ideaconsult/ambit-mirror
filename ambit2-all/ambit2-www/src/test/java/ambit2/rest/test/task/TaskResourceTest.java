@@ -8,6 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITaskResult;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,7 +33,6 @@ import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.task.CallablePOST;
-import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.TaskResult;
 import ambit2.rest.test.ResourceTest;
 
@@ -85,7 +87,7 @@ public class TaskResourceTest extends ResourceTest {
 	public void testRDF() throws Exception {
 		ICallableTask c = new ICallableTask() {
 			protected UUID uuid;
-			public TaskResult call() throws Exception {
+			public ITaskResult call() throws Exception {
 				return new TaskResult("http://localhost/newResult");
 			}
 			@Override
@@ -95,6 +97,10 @@ public class TaskResourceTest extends ResourceTest {
 			@Override
 			public void setUuid(UUID uuid) {
 				this.uuid = uuid;
+			}
+			@Override
+			public String getTaskCategory() {
+				return null;
 			}
 		};
 		((AmbitApplication) app).addTask("Test task", c, new Reference(String
@@ -107,8 +113,9 @@ public class TaskResourceTest extends ResourceTest {
 	@Test
 	public void testURI() throws Exception {
 		ICallableTask c = new ICallableTask() {
+			
 			protected UUID uuid;
-			public TaskResult call() throws Exception {
+			public ITaskResult call() throws Exception {
 				return new TaskResult("quickTaskURI");
 			}
 			@Override
@@ -118,6 +125,10 @@ public class TaskResourceTest extends ResourceTest {
 			@Override
 			public void setUuid(UUID uuid) {
 				this.uuid = uuid;
+			}
+			@Override
+			public String getTaskCategory() {
+				return null;
 			}
 		};
 		((AmbitApplication) app).addTask("Test task", c, new Reference(String

@@ -2,17 +2,19 @@ package ambit2.rest;
 
 import java.util.concurrent.TimeUnit;
 
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.restlet.Application;
 import org.restlet.data.Reference;
 
 import ambit2.rest.task.CallablePOST;
-import ambit2.rest.task.ICallableTask;
-import ambit2.rest.task.ITaskStorage;
-import ambit2.rest.task.Task;
-import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
 
-public class TaskApplication<USERID> extends Application {
+public class TaskApplication<USERID> extends Application implements ITaskApplication<USERID>{
 	protected ITaskStorage<USERID> taskStorage;
 	public TaskApplication() {
 		super();
@@ -51,20 +53,17 @@ public class TaskApplication<USERID> extends Application {
 	public void removeTasks() {
 		taskStorage.removeTasks();
 	}
-
-	public synchronized Task<TaskResult,USERID> addTask(String taskName, 
-			ICallableTask callable, 
-			Reference baseReference,
-			USERID user) {
+	@Override
+	public ITask<ITaskResult,USERID> addTask(String taskName, ICallableTask callable, Reference baseReference, USERID user) {
 		return addTask(taskName,callable,baseReference,!(callable instanceof CallablePOST), user);
-	}
+	};
 	
-	public synchronized Task<TaskResult,USERID> addTask(String taskName, 
+	public synchronized ITask<ITaskResult,USERID> addTask(String taskName, 
 			ICallableTask callable, 
 			Reference baseReference,boolean internal, USERID user) {
 		return taskStorage.addTask(taskName,callable,baseReference,user,internal);
 	}
-	public synchronized Task<TaskResult,USERID> findTask(String id) {
+	public synchronized ITask<ITaskResult,USERID> findTask(String id) {
 		return taskStorage.findTask(id);
 	}
 	/*

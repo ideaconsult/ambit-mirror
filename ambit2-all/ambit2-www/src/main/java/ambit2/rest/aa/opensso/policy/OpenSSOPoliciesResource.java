@@ -1,7 +1,6 @@
 package ambit2.rest.aa.opensso.policy;
 
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -9,14 +8,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.CharacterSet;
 import org.restlet.data.Form;
-import org.restlet.data.Language;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -30,21 +33,13 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.exceptions.NotFoundException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
-import ambit2.db.version.AmbitDBVersion;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.TaskApplication;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
-import ambit2.rest.admin.DBHtmlReporter;
 import ambit2.rest.algorithm.CatalogResource;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
-import ambit2.rest.task.ICallableTask;
-import ambit2.rest.task.ITaskStorage;
-import ambit2.rest.task.Task;
-import ambit2.rest.task.TaskResult;
 
 /**
  * <pre>
@@ -163,7 +158,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 			Form form = entity.isAvailable()?new Form(entity):new Form();
 			
 				ICallableTask callable= createCallable(form,null);
-				Task<TaskResult,String> task =  ((AmbitApplication)getApplication()).addTask(
+				ITask<ITaskResult,String> task =  ((ITaskApplication)getApplication()).addTask(
 						String.format("Create policy"),
 						callable,
 						getRequest().getRootRef(),
@@ -183,7 +178,7 @@ public class OpenSSOPoliciesResource extends CatalogResource<Policy> {
 				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			else {
 				
-				ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
+				ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();
 				FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 				if (tasks.size()==1)
 					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse(),getDocumentation());

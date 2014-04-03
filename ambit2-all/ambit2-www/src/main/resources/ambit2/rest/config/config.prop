@@ -19,3 +19,29 @@ guard.enabled=${guard.enabled}
 guard.list=${guard.list}
 warmup.enabled=${warmup.enabled}
 allowed.origins=${allowed.origins}
+############################################################
+#AMBIT local users database
+aa.db.enabled=${aa.db.enabled}
+#MySQL Database configuration
+Host=${ambit.db.host}
+Scheme=jdbc\:mysql
+Port=3306
+Database=ambit_users
+User=${ambit.db.user.test}
+Password=${ambit.db.user.test.password}
+users_dbname=ambit_users
+#Secret (used to encrypt cookies) Change it. Should be 16 characters!
+secret=${ambit.secret}
+#Session timeout in milliseconds. Default is 45 min = 2700000 ms
+sessiontimeout=${ambit.sessiontimeout}
+############################################################
+#e-mail setup. Used for registration notifications
+mail.smtp.starttls.enable=${notification.mail.smtp.starttls.enable}
+mail.smtp.auth=${notification.mail.smtp.auth}
+mail.transport.protocol=${notification.mail.transport.protocol}
+mail.smtp.port=${notification.mail.smtp.port}
+mail.smtp.socketFactory.fallback=${notification.mail.smtp.socketFactory.fallback}
+mail.host=${notification.mail.host}
+mail.user=${notification.mail.user}
+mail.password=${notification.mail.password}
+notification.admin.email=${notification.admin.email}

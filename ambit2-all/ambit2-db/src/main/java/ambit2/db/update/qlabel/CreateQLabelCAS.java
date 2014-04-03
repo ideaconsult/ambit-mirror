@@ -38,23 +38,21 @@ public class CreateQLabelCAS extends AbstractUpdate<AmbitUser, String> {
 		"and substring(right(value,5),1,1)='-'\n"+
 		") A\n";
 	protected static String[] sql = {
-		"insert ignore into roles (role_name) values (\"ambit_quality\");",
-		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (?,\"d66636b253cb346dbb6240e30def3618\",\"CAS verifier\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",
-		"insert ignore into user_roles (user_name,role_name) values (?,\"ambit_quality\");",
-		
+		//1
+		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (?,\"CAS verifier\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
+		//3
 		"delete from quality_structure where user_name=?",
-		/*
-		"insert into quality_structure (idstructure,user_name,label,text,updated)\n"+
-		"select idstructure,?,if(cs=g,'OK','ERROR'),name,now() from\n"+				
-		select_cas+
-		"on duplicate key update label=values(label),text=values(text),updated=values(updated)\n",
-		*/
+		//4
 		"insert into quality_labels (id,user_name,label,text,updated)\n"+
+		//5
 		"select id,?,if(cs=g,'OK','ERROR'),name,now() from\n"+	
 		select_cas+
 		"on duplicate key update label=values(label),text=values(text),updated=values(updated)\n"
 	};
-	
+	int n1 = 0;//was 1;
+	int n2 = -1; //was 2;
+	int n3 = 1; //was 3;
+	int n4 = 2; //was 4;
 	
 	public CreateQLabelCAS() {
 		super();
@@ -62,7 +60,7 @@ public class CreateQLabelCAS extends AbstractUpdate<AmbitUser, String> {
 	}
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 
-		if ((index == 1) || (index == 2) || (index == 3) || (index == 4)  ){
+		if ((index == n1) || (index == n2) || (index == n3) || (index == n4)  ){
 			List<QueryParam> p = new ArrayList<QueryParam>();
 			if (getGroup() ==null) setGroup(new AmbitUser("CAS numbers"));
 			p.add(new QueryParam<String>(String.class,getGroup().getName()));

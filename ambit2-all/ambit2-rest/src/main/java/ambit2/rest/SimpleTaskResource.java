@@ -4,10 +4,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.UUID;
 
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+import net.idea.restnet.i.task.TaskStatus;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.CookieSetting;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -20,11 +25,8 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.rest.task.FilteredTasksIterator;
-import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.SingleTaskIterator;
 import ambit2.rest.task.Task;
-import ambit2.rest.task.Task.TaskStatus;
-import ambit2.rest.task.TaskResult;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs
@@ -112,7 +114,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 		}		
 	}
 
-	protected boolean filterTask(Task<TaskResult, USERID> task, int taskNumber) {
+	protected boolean filterTask(ITask<ITaskResult, USERID> task, int taskNumber) {
 		if ((max > 0) && (taskNumber>=max)) return false;
 		else return searchStatus==null?true:searchStatus.equals(task.getStatus().toString());
 	}
@@ -120,9 +122,9 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 	protected Iterator<UUID> getTasks() {
 
 		
-		return new FilteredTasksIterator<USERID>(((TaskApplication)getApplication()).getTaskStorage()){
+		return new FilteredTasksIterator<USERID>(((ITaskApplication)getApplication()).getTaskStorage()){
 			@Override
-			protected boolean accepted(Task<TaskResult, USERID> task) {
+			protected boolean accepted(ITask<ITaskResult, USERID> task) {
 				//task.update();
 				if (!task.isDone()) getResponse().setStatus(Status.SUCCESS_ACCEPTED);
 				return filterTask(task,getNum());
@@ -159,7 +161,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 
 			} else {
 
-				Task<TaskResult,USERID> task = ((TaskApplication<USERID>)getApplication()).findTask(Reference.decode(id.toString()));
+				ITask<ITaskResult,USERID> task = ((ITaskApplication<USERID>)getApplication()).findTask(Reference.decode(id.toString()));
 				
 				if (task==null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			
@@ -218,7 +220,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 	public synchronized IProcessor<Iterator<UUID>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
 
-		ITaskStorage<USERID> storage = ((TaskApplication)getApplication()).getTaskStorage();
+		ITaskStorage<USERID> storage = ((ITaskApplication)getApplication()).getTaskStorage();
 		FactoryTaskConvertor<USERID> tc = new FactoryTaskConvertor<USERID>(storage);
 	
 		return tc.createTaskConvertor(variant, getRequest(),getDocumentation(),DisplayMode.table);

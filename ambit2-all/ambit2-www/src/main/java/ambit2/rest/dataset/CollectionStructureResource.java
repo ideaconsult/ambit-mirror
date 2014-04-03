@@ -2,6 +2,8 @@ package ambit2.rest.dataset;
 
 import java.util.concurrent.Callable;
 
+import net.idea.restnet.i.task.ITaskResult;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -93,7 +95,7 @@ public class CollectionStructureResource<Q extends IQueryRetrieval<IStructureRec
 	protected Representation copyDatasetToQueryResultsTable(Form form, boolean clearPreviousContent)
 			throws ResourceException {
 		String token = getToken();
-		Callable<TaskResult> callable = null;
+		Callable<ITaskResult> callable = null;
 		
 		Object datasetid = getRequest().getAttributes().get(datasetKey);
 		Object folder = getRequest().getAttributes().get(folderKey);

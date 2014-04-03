@@ -14,6 +14,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.core.data.model.ModelWrapper;
+import ambit2.db.model.ModelQueryResults;
 import ambit2.rest.OpenTox;
 
 import com.hp.hpl.jena.ontology.OntModel;

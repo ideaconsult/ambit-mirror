@@ -2,6 +2,8 @@ package ambit2.rest.facet;
 
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -36,9 +38,11 @@ public class DatasetsByNamePrefixResource  extends FacetResource<DatasetByPrefix
 		return q;
 		
 	}
+	
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-		super.configureTemplateMap(map);
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
 		map.put("facet_title","Datasets");
 	}
 }

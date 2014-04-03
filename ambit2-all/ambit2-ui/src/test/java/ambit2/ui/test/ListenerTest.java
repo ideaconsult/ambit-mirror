@@ -85,7 +85,7 @@ public class ListenerTest  {
     
     @Test public void testListenerSDF() throws Exception {
 			IIteratingChemObjectReader reader = new InteractiveIteratingMDLReader(
-					getClass().getClassLoader().getResourceAsStream("test_properties.sdf"), DefaultChemObjectBuilder.getInstance());
+					getClass().getClassLoader().getResourceAsStream("test_properties.sdf"), DefaultChemObjectBuilder.getInstance(),true);
 			String[] labels = {"ID","SMILES","WEIGHT","FORMULA","NAME","Drug" };
 			readFile(reader,labels);
 			reader.close();

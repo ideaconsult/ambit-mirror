@@ -3,6 +3,11 @@ package ambit2.rest.dataset;
 import java.sql.Connection;
 import java.util.List;
 
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.restlet.Application;
@@ -32,9 +37,7 @@ import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableFileImport;
 import ambit2.rest.task.CallableQueryResultsCreator;
 import ambit2.rest.task.FactoryTaskConvertor;
-import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.PolicyProtectedTask;
-import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResult;
 
 public class FileUpload<USERID> {
@@ -165,13 +168,13 @@ public class FileUpload<USERID> {
 	              
 	              callable.setPropertyOnly(propertyOnly);
 
-				  Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+				  ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 							 "File import",
 							callable,
 							getRequest().getRootRef(),
 							token);
 							
-				  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+				  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
 				  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 				  task.update();
 				  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
@@ -202,13 +205,13 @@ public class FileUpload<USERID> {
 			        		  token);
 			          
 		              callable.setPropertyOnly(propertyOnly);
-			          Task<TaskResult,String> task =  ((AmbitApplication)getApplication()).addTask(
+			          ITask<ITaskResult,String> task =  ((AmbitApplication)getApplication()).addTask(
 							  
 							  	 String.format("File import %s [%d]", entity.getDownloadName()==null?entity.getMediaType():entity.getDownloadName(),entity.getSize()),
 								callable,
 								getRequest().getRootRef(),
 								token==null?null:token.toString());		
-			          ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
+			          ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();
 			          FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 					  task.update();
 					  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);			          

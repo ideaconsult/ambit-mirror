@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskResult;
+
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
@@ -65,11 +69,11 @@ public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, L
 		try {
 			ICallableTask callable = getCallable(form,item);
 			if (async)	{
-				Task<Reference,USERID> task = createTask(callable,item);
+				ITask<Reference,USERID> task = createTask(callable,item);
 				tasks.add(task.getUuid());
 			}
 			else {
-				TaskResult ref = callable.call();
+				ITaskResult ref = callable.call();
 			}
 		} catch (AmbitException x) {
 			throw x;
@@ -86,7 +90,7 @@ public class TaskCreator<USERID,T> extends QueryReporter<T,IQueryRetrieval<T>, L
 	protected ICallableTask getCallable(Form form,T item) throws ResourceException  {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
-	protected Task<Reference,USERID> createTask(ICallableTask callable, T item) throws ResourceException  {
+	protected ITask<Reference,USERID> createTask(ICallableTask callable, T item) throws ResourceException  {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 	@Override

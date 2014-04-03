@@ -5,6 +5,10 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
 
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.data.Reference;
@@ -36,7 +40,7 @@ public class TaskJSONReporter<USERID> extends TaskURIReporter<USERID> {
 		try {
 			if (comma!=null) output.write(comma);
 
-			Task<TaskResult,USERID> task = storage.findTask(item);
+			ITask<ITaskResult,USERID> task = storage.findTask(item);
 			String uri = task.getUri()==null?null:task.getUri().toString();
 			
 			output.write(String.format(format,

@@ -23,11 +23,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+import net.idea.restnet.i.task.TaskStatus;
+
 import org.restlet.Context;
 import org.restlet.data.Reference;
 
 import ambit2.rest.SimpleTaskResource;
-import ambit2.rest.task.Task.TaskStatus;
 
 public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	protected Logger logger;
@@ -45,7 +50,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	protected ScheduledThreadPoolExecutor cleanupTimer;
 	protected ScheduledThreadPoolExecutor cleanupCompletedTasks;
 
-	protected ConcurrentMap<UUID,Task<TaskResult,USERID>> tasks;
+	protected ConcurrentMap<UUID,ITask<ITaskResult,USERID>> tasks;
 	
 	public TaskStorage(String name, Logger logger) {
 		this.name = name;
@@ -66,7 +71,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		completionService_internal = new ExecutorCompletionService<Reference>(pool_internal);
 		completionService_external = new ExecutorCompletionService<Reference>(pool_external);
 
-		tasks = new ConcurrentHashMap<UUID,Task<TaskResult,USERID>>();
+		tasks = new ConcurrentHashMap<UUID,ITask<ITaskResult,USERID>>();
 		
 
 		TimerTask cleanUpTasks  = new TimerTask() {
@@ -114,7 +119,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		Iterator<UUID> keys = tasks.keySet().iterator();
 		while (keys.hasNext()) {
 			UUID key = keys.next();
-			Task<TaskResult,USERID> task = tasks.get(key);
+			ITask<ITaskResult,USERID> task = tasks.get(key);
 			try {
 				//task.update();
 				if (task.isDone() && (task.isExpired(taskCleanupRate))) tasks.remove(key);
@@ -191,8 +196,8 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		return xs;
 	}
 	
-	protected Task<TaskResult,USERID> createTask(USERID user,ICallableTask callable) {
-		return new Task<TaskResult,USERID>(user) {
+	protected ITask<ITaskResult,USERID> createTask(USERID user,ICallableTask callable) {
+		return new Task<ITaskResult,USERID>(user) {
 			@Override
 			public synchronized float getPercentCompleted() {
 				return getUri()==null?0:getUri().getPercentCompleted();
@@ -202,13 +207,13 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 	}
 	
 	
-	public Task<TaskResult,USERID> addTask(String taskName, 
+	public ITask<ITaskResult,USERID> addTask(String taskName, 
 			ICallableTask callable, 
 			Reference baseReference,
 			USERID user,boolean internal) {
 		if (callable == null) return null;
 		
-		Task<TaskResult,USERID> task = createTask(user,callable);
+		ITask<ITaskResult,USERID> task = createTask(user,callable);
 		task.setName(taskName);
 		task.setInternal(internal);
 		callable.setUuid(task.getUuid());
@@ -224,7 +229,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		task.setUri(ref);
 
 		if (tasks.get(task.getUuid())==null) {
-			Task<TaskResult,USERID> theTask = tasks.putIfAbsent(task.getUuid(),task);
+			ITask<ITaskResult,USERID> theTask = tasks.putIfAbsent(task.getUuid(),task);
 	
 			if (theTask==null) {
 				theTask = task;
@@ -247,14 +252,14 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		}
 		else return null;
 	}	
-	public synchronized Task<TaskResult,USERID> findTask(String id) {
+	public synchronized ITask<ITaskResult,USERID> findTask(String id) {
 		try {
 			return tasks.get(UUID.fromString(id));
 		} catch (Exception x) {
 			return null;
 		}
 	}
-	public synchronized Task<TaskResult,USERID> findTask(UUID id) {
+	public synchronized ITask<ITaskResult,USERID> findTask(UUID id) {
 		try {
 			return tasks.get(id);
 		} catch (Exception x) {
@@ -293,7 +298,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 		Iterator<UUID> keys = tasks.keySet().iterator();
 		while (keys.hasNext()) {
 			UUID key = keys.next();
-			Task<TaskResult,USERID> task = tasks.get(key);
+			ITask<ITaskResult,USERID> task = tasks.get(key);
 			try {
 				if (!task.isDone()) task.setStatus(TaskStatus.Cancelled);
 				} catch (Exception x) {logger.warning(x.getMessage());}
@@ -319,7 +324,7 @@ public class TaskStorage<USERID> implements ITaskStorage<USERID> {
 			cleanupCompletedTasks.shutdown();
 		}		
 	}	
-	public Iterator<Task<Reference,USERID>> filterTasks() {
+	public Iterator<ITask<Reference,USERID>> filterTasks() {
 		return null;
 	}
 }

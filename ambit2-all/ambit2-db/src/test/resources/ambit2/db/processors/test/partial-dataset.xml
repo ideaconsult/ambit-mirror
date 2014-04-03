@@ -9,9 +9,6 @@
   <substance_protocolapplication document_prefix="IUC4" document_uuid="L2SrJ9K+NS652E8CdP1mMw==" endpointcategory="PC_PARTITION_SECTION" endpoint="Partition coefficient, IUC4#5/Ch.2.5" guidance="Method: other (measured)" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{}" reference="reference" updated="2013-11-11 13:32:38.0"/>
   <substance_protocolapplication document_prefix="IUC4" document_uuid="etsNA/abMqme/oa0qFd4kw==" endpointcategory="EC_FISHTOX_SECTION" endpoint="Short-term toxicity to fish, IUC4#53/Ch.4.1" guidance="Method: other: acute toxicity test; &quot;static bioassay&quot;" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{&quot;Test organism&quot;:&quot;Lepomis cyanellus&quot;}" reference="reference" updated="2013-11-10 21:11:16.0"/>
   <substance_protocolapplication document_prefix="IUC4" document_uuid="rmT8OyKkMXOTYpzOH/Yirg==" endpointcategory="TO_ACUTE_ORAL_SECTION" endpoint="Acute toxicity: oral, IUC4#2/Ch.5.1.1" guidance="Method: other: no data" substance_prefix="IUC4" substance_uuid="79shu+efMoapiLb2lE03NA==" params="{&quot;Species&quot;:&quot;rat&quot;,&quot;Sex&quot;:&quot;male/female&quot;}" reference="Smyth, H. F. Seaton J., and Fischer L. (1941).|The single dose toxicity of some glycols and derivatives.|J. Ind. Hyg. Toxicol. 23, 259-268" updated="2013-11-11 14:15:35.0"/>
-  <roles role_name="ambit_admin"/>
-  <roles role_name="ambit_guest"/>
-  <user_roles user_name="guest" role_name="ambit_guest"/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org" type="Dataset"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org" type="Dataset"/>
   <catalog_references idreference="3" title="XLogP" url="XLogP reference" type="Dataset"/>

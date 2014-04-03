@@ -2,6 +2,8 @@ package ambit2.rest.substance.study;
 
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -34,10 +36,10 @@ public class OwnerSubstanceFacetResource  extends FacetResource<OwnerSubstanceSt
 		q.setFieldname(owneruuid==null?null:owneruuid.toString());
 		return q;
 	}
-	
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-		super.configureTemplateMap(map);
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
 		map.put("facet_title","Substances per owner");
 		map.put("facet_tooltip","Click on the UUID links to show structures");
 		map.put("facet_group","UUID");

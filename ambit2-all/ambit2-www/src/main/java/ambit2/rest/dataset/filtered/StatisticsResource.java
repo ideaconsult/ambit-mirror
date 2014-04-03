@@ -3,6 +3,8 @@ package ambit2.rest.dataset.filtered;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -169,10 +171,10 @@ public class StatisticsResource<Q extends QueryCount> extends FacetResource<Q>  
 		}
 
 	}
-
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-		super.configureTemplateMap(map);
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
 		map.put("facet_title","Statistics");/*
 		map.put("facet_tooltip","");
 		map.put("facet_group","");

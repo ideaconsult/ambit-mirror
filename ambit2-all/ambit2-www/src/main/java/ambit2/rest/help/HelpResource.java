@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -32,7 +34,12 @@ public class HelpResource extends CatalogResource<String>  {
 		task,
 		dataprep,
 		qmap,
-		substance
+		substance,
+		users,
+		login,
+		register,
+		myprofile,
+		pwd_forgotten
 	}
 	public HelpResource() {
 		super();
@@ -56,7 +63,7 @@ public class HelpResource extends CatalogResource<String>  {
 	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		configureTemplateMap(map);
+		configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
 		return toRepresentation(map, getTemplateName(), variant.getMediaType());
 
 	}

@@ -5,6 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
+
+import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -15,12 +20,9 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.config.AMBITConfig;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
-import ambit2.core.config.Resources;
 import ambit2.rest.DisplayMode;
 import ambit2.rest.SimpleTaskResource;
-import ambit2.rest.TaskApplication;
 import ambit2.rest.aa.opensso.OpenSSOUser;
-import ambit2.rest.freemarker.FreeMarkerApplication;
 
 /**
  * http://opentox.org/wiki/opentox/Asynchronous_jobs
@@ -57,7 +59,7 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 	@Override
 	public synchronized IProcessor<Iterator<UUID>, Representation> createConvertor(
 			Variant variant) throws AmbitException, ResourceException {
-		ITaskStorage<USERID> storage = ((TaskApplication)getApplication()).getTaskStorage();
+		ITaskStorage<USERID> storage = ((ITaskApplication)getApplication()).getTaskStorage();
 		FactoryTaskConvertor<USERID> tc = new AmbitFactoryTaskConvertor<USERID>(storage);
 	
 		return tc.createTaskConvertor(variant, getRequest(),getDocumentation(),DisplayMode.table);
@@ -74,18 +76,20 @@ public class TaskResource<USERID> extends SimpleTaskResource<USERID> {
 			getClientInfo().setUser(ou);
 		}
         setTokenCookies(variant, useSecureCookie(getRequest()));
-        configureTemplateMap(map);
+        configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}	
 	
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
         if (getClientInfo().getUser()!=null) 
         	map.put("username", getClientInfo().getUser().getIdentifier());
         map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
         map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());
-	    map.put(AMBITConfig.ambit_version_short.name(),((FreeMarkerApplication)getApplication()).getVersionShort());
-	    map.put(AMBITConfig.ambit_version_long.name(),((FreeMarkerApplication)getApplication()).getVersionLong());
+	    map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
+	    map.put(AMBITConfig.ambit_version_long.name(),app.getVersionLong());
 
         //remove paging
         Form query = getRequest().getResourceRef().getQueryAsForm();

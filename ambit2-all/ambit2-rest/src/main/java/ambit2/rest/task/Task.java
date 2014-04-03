@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.TaskStatus;
+
 import org.restlet.resource.ResourceException;
 
-public abstract class Task<REFERENCE,USERID> implements Serializable /*, PropertyChangeListener */ {
+public abstract class Task<REFERENCE,USERID> implements Serializable,ITask<REFERENCE,USERID> /*, PropertyChangeListener */ {
 
 	public enum TaskProperty {
 		//this is not really used, to be removed
@@ -34,7 +37,7 @@ public abstract class Task<REFERENCE,USERID> implements Serializable /*, Propert
 	 */
 	private static final long serialVersionUID = -646087833848914553L;
 
-	public enum TaskStatus {Running,Cancelled,Completed,Error,Queued};
+	
 	//protected FutureTask<Reference> future;
 	protected REFERENCE result;
 	protected String name = "Default";
