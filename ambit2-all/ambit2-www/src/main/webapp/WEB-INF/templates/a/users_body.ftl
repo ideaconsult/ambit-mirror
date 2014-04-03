@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header_updated.ftl" >
+<#include "/header.ftl" >
 <#include "/a/users_head.ftl" >
 
 <#if ambit_admin?? && ambit_admin>
@@ -10,16 +10,6 @@
 
 </#if>	
 
-<script type='text/javascript'>
-$(document).ready(function() {
-	var oTable = defineUsersTable("${ambit_root}","${ambit_request_json}","#users");	
-	<#if ambit_admin?? && ambit_admin>
-		makeEditableUsersTable("${ambit_root}",oTable);
-	</#if>
-
-});
-</script>
-
 <script type="text/javascript">
 jQuery(document).ready(function()
 {
@@ -27,6 +17,15 @@ jQuery(document).ready(function()
 	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/user" title="AMBIT users">Users</a></li>');
     jQuery("#breadCrumb").jBreadCrumb();
     loadHelp("${ambit_root}","users");
+    
+	var oTable = defineUsersTable("${ambit_root}","${ambit_request_json}","#users");	
+	<#if ambit_admin?? && ambit_admin>
+		try {
+		makeEditableUsersTable("${ambit_root}",oTable);
+		} catch (err) {
+			console.log(err);
+		}
+	</#if>
 })
 </script>
 
