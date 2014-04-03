@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.user
+
+Name: ambit2/user/
+Specification-Title: Local users support
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.user
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.user
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.
