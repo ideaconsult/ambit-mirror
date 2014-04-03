@@ -6,7 +6,11 @@
 $(document)
 		.ready(
 				function() {
-						loadHelp("${ambit_root}","about");
+						jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/login" title="OpenTox log in">Log in</a></li>');
+					    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/login" title="OpenTox log in">via OpenAM identity service</a></li>');
+	   					jQuery("#breadCrumb").jBreadCrumb();
+	   					jQuery("#welcome").text("OpenTox log in");
+    					loadHelp("${ambit_root}","opensso");
 				});
 </script>
 </head>
@@ -15,28 +19,12 @@ $(document)
 <div class="container" style="margin:0;padding:0;">
 
 <!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="alpha">
-		<div class="remove-bottom h3">
-				OpenTox log in
-		</div>
-	    <div class='h6'>via OpenAM identity service at ${openam_service}</div>			
-	    </div>
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
+<!-- banner -->
+<#include "/banner_crumbs.ftl">
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/menu.ftl">
 </div>
-
 
 		
 		<!-- Page Content
@@ -50,7 +38,7 @@ $(document)
 	    &nbsp;Log in to OpenTox
 	    </#if>
 	    </div>
-    	<div class="half-bottom ui-widget-content ui-corner-bottom">
+    	<div class="ui-widget-content ui-corner-bottom">
 		<div style='margin:5px;padding:5px;'>
 		<form method='post' action='${ambit_root}/openssouser?targetUri=${ambit_root}/login' autocomplete='off'>
 		
@@ -58,8 +46,12 @@ $(document)
 		
 		<div class="row">		
 		<label class='three columns alpha'>OpenAM service</label> 
-		<div class='thirteen columns omega'>
+		<div class='five columns omega'>
 			${openam_service}
+		</div>
+		<div class='three columns omega'>&nbsp;</div>
+		<div class='five columns omega'>
+			<a title='Register at OpenTox site' target=_blank href='http://opentox.org/join_form' class='h5 qxternal' >Create an OpenTox account</a>
 		</div>
 		</div>
 		
@@ -70,7 +62,7 @@ $(document)
 		<#else>
 		<input class='five columns omega' type='text' size='40' name='user' value=''>
 		</#if>
-		<div class='eight columns omega'></div>
+		
 		</div>
 		
 		<#if openam_token??>
@@ -103,7 +95,7 @@ $(document)
 		</div>
 		</div>
 		
-		<div class="row remove-bottom">		
+		<div class="row half-bottom">		
 		<label class='five columns alpha'>&nbsp;</label>		
 		<input class='three columns omega'  type="submit" value="Log in">
 		<input type='hidden' size='40' name='targetURI' value='${ambit_root}/openssouser'>
@@ -112,10 +104,11 @@ $(document)
 		</#if>
 		
 		</form>
+		</div>
+		</div>		
+		</div>
 		
-		</div>
-		</div>				
-		</div>
+
 		<!-- Right column and footer
 		================================================== -->
 

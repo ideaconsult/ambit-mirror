@@ -120,9 +120,9 @@ public class AtomEnvironmentGeneratorTest {
 			}
 			reader.close();
 		}	   	
-	   @Test
+	   
 		public void testAtomTypeMatrixDescriptor() throws Exception {
-			
+			FileWriter w = new FileWriter(new File("F:/nina/Ideaconsult/Proposals/2014-columndb/ae.txt"));
 			AtomEnvironmentMatrixDescriptor gen = new AtomEnvironmentMatrixDescriptor();
 			InputStream in = AtomEnvironmentGeneratorTest.class.getClassLoader().getResourceAsStream("ambit2/descriptors/3d/test.sdf");
 			IIteratingChemObjectReader<IAtomContainer> reader = new MyIteratingMDLReader(new InputStreamReader(in),SilentChemObjectBuilder.getInstance());
@@ -138,19 +138,27 @@ public class AtomEnvironmentGeneratorTest {
 				CDKHueckelAromaticityDetector.detectAromaticity(mol);        
 				DescriptorValue value = gen.calculate(mol);
 			    System.out.println("Value");
-			    for (int i=0; i < value.getNames().length; i++)  
+			    for (int i=0; i < value.getNames().length; i++)  {
 			    	if (((IntegerArrayResult)value.getValue()).get(i)>0) {
-			    		System.out.println(value.getNames()[i] + " = " + ((IntegerArrayResult)value.getValue()).get(i));		
+			    		System.out.println(value.getNames()[i] + " = " + ((IntegerArrayResult)value.getValue()).get(i));
 			    	}
+			    	String[] split = value.getNames()[i].split("_");
+			    	
+		    		w.append(String.format("%d\t%s\t%s\t%s\n",(i+1),split[0].replace("L",""),split[1],
+		    				split.length<3?"":split[2]));			    	
+			    }		
 			    System.out.println("End Value");
+			    w.flush();
 			}
+		    w.close();			
 			reader.close();
 		}	   
 	   
 	   
 		public void runAtomTypeMatrixDescriptor(String root) throws Exception {
 			AtomEnvironmentMatrixDescriptor gen = new AtomEnvironmentMatrixDescriptor();
-			InputStream in = new FileInputStream(root+"tox_benchmark_N6512.sdf");
+			//InputStream in = new FileInputStream(root+"tox_benchmark_N6512.sdf");
+			InputStream in = new FileInputStream(root+"COSING1.sdf");
 			IIteratingChemObjectReader<IAtomContainer> reader = new MyIteratingMDLReader(new InputStreamReader(in),SilentChemObjectBuilder.getInstance());
 			//matrix market sparse
 			String mmfile = root+"tox_benchmark_N6512_AEMATRIX.mm.tmp";
@@ -168,6 +176,7 @@ public class AtomEnvironmentGeneratorTest {
 				
 				IAtomContainer mol = reader.next();
 				String set = mol.getProperty("Set")==null?"":mol.getProperty("Set").toString();
+				Object activityValue = mol.getProperty("Activity")==null?"":mol.getProperty("Activity");
 				FileWriter writer = writers.get("ALL");
 				System.out.print(".");
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);				
@@ -180,7 +189,9 @@ public class AtomEnvironmentGeneratorTest {
 				} catch (Exception x) {
 					
 				}
+				try {
 	  			CDKHueckelAromaticityDetector.detectAromaticity(mol);
+				} catch (Exception x) {}
 	  			DescriptorValue value = gen.calculate(mol);
 	  			if (!header) {
 	  				for (int i=0; i < value.getNames().length; i++) {
@@ -200,16 +211,19 @@ public class AtomEnvironmentGeneratorTest {
 	  			//row
 
 				for (int i=0; i < value.getNames().length; i++) {
-				   	int count = ((IntegerArrayResult)value.getValue()).get(i);
+					int count = 0;
+					if (value.getValue()!=null) 
+						count = ((IntegerArrayResult)value.getValue()).get(i);
 				   	writer.write(Integer.toString(count));
 				   	writer.write(",");
 				}
-				Object activityValue = mol.getProperty("Activity");
 				if (activityValue==null)
 					writer.write("Unknown");
-				else {	
+				else try {	
 					double activity = Double.parseDouble(activityValue.toString());
 					writer.write(activity==1.0?"Yes":"No");
+				} catch (Exception x) {
+					writer.write("Unknown");
 				}
 	  			writer.write(",");
 	  			writer.write(set);
@@ -218,7 +232,9 @@ public class AtomEnvironmentGeneratorTest {
 				
 				mmrows++;
 				for (int i=0; i < value.getNames().length; i++) {
-				   	int count = ((IntegerArrayResult)value.getValue()).get(i);
+					int count = 0;
+					if (value.getValue()!=null) 
+						count = ((IntegerArrayResult)value.getValue()).get(i);
 				   	if (count<=0) continue;
 				   	mmentries++;
 					mmwriter.write(String.format("%d\t%d\t%d\n",mmrows,(i+1),count));

@@ -25,10 +25,23 @@ public class SameRefererGuard  extends SimpleGuard {
 	protected boolean authorize(Request request, Response response) {
 		try {
 			Form headers = (Form) request.getAttributes().get("org.restlet.http.headers");  
+			/*
+			String accept = headers.getFirstValue("accept");
+			if (accept != null) {
+				logger.log(Level.INFO,accept);
+				if (accept.indexOf("javascript")>=0) return true;
+				if (accept.indexOf("css")>=0) return true;
+				if (accept.indexOf("image")>=0) return true;
+			}
+			*/			
 			String referer = headers.getFirstValue("referer");
 			if (referer != null) 
 				for (String r : allowed) 
-					if (referer.startsWith(r)) return true;
+					if (referer.startsWith(r)) {
+						System.out.println(request.getResourceRef());
+						System.out.println(referer);
+						return true;
+					}
 		} catch (Exception x) {
 			getLogger().log(Level.WARNING,x.getMessage(),x);
 		}

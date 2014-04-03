@@ -49,7 +49,7 @@ public class QueryUser extends AbstractQuery<String,String,StringCondition, Ambi
 	 */
 	private static final long serialVersionUID = -1174549562613435168L;
 	public static final String SQL = 
-		"SELECT user_name,email,registration_status,registration_date,title,firstname,lastname,address,country,webpage,affiliation,keywords,reviewer FROM users ";
+		"SELECT user_name,email,title,firstname,lastname,address,country,homepage,institute,keywords,reviewer FROM users ";
 	public static final String WHERE = " where %s %s ?";
 	
 	public QueryUser(String value) {
@@ -79,14 +79,14 @@ public class QueryUser extends AbstractQuery<String,String,StringCondition, Ambi
 		try {
 			AmbitUser user = new AmbitUser();
 			user.setAddress(rs.getString("address"));
-			user.setAffiliation(rs.getString("affiliation"));
+			user.setAffiliation(rs.getString("institute"));
 			user.setCountry(rs.getString("country"));
 			user.setEmail(rs.getString("email"));
 			user.setFirstName(rs.getString("firstName"));
 			user.setLastName(rs.getString("lastName"));
 			user.setName(rs.getString("user_name"));
 			user.setTitle(rs.getString("title"));
-			user.setWww(rs.getString("webpage"));
+			user.setWww(rs.getString("homepage"));
 			//user.setType()
 			return user;
 		} catch (SQLException x) {

@@ -23,6 +23,11 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import net.idea.restnet.aa.local.UserLoginPOSTResource;
+import net.idea.restnet.aa.local.UserLogoutPOSTResource;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITaskResult;
+
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -51,6 +56,7 @@ import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
 import org.restlet.util.Series;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.base.config.Preferences;
 import ambit2.rendering.StructureEditorProcessor;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
@@ -127,15 +133,30 @@ import ambit2.rest.substance.study.OwnerStructuresResource;
 import ambit2.rest.substance.study.OwnerSubstanceFacetResource;
 import ambit2.rest.substance.study.SubstanceStudyFacetResource;
 import ambit2.rest.substance.study.SubstanceStudyResource;
-import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskResource;
-import ambit2.rest.task.TaskResult;
 import ambit2.rest.task.TaskStorage;
 import ambit2.rest.task.WarmupTask;
 import ambit2.rest.template.OntologyResource;
 import ambit2.rest.ui.UIResource;
+import ambit2.user.aa.AMBITLoginFormResource;
+import ambit2.user.aa.AMBITLoginPOSTResource;
+import ambit2.user.aa.AMBITLogoutPOSTResource;
+import ambit2.user.groups.OrganisationRouter;
+import ambit2.user.groups.ProjectRouter;
+import ambit2.user.rest.UserRouter;
+import ambit2.user.rest.resource.AMBITRegistrationNotifyResource;
+import ambit2.user.rest.resource.MyAccountResource;
+import ambit2.user.rest.resource.PwdForgottenConfirmResource;
+import ambit2.user.rest.resource.PwdForgottenFailedResource;
+import ambit2.user.rest.resource.PwdForgottenNotifyResource;
+import ambit2.user.rest.resource.PwdForgottenResource;
+import ambit2.user.rest.resource.PwdResetResource;
+import ambit2.user.rest.resource.RegistrationConfirmResource;
+import ambit2.user.rest.resource.RegistrationResource;
+import ambit2.user.rest.resource.Resources;
+import ambit2.user.rest.resource.RoleDBResource;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in http://opentox.org/development/wiki/
@@ -151,6 +172,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected Hashtable<String,Properties> properties = new Hashtable<String, Properties>();
 	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
 	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
+	public static final String DB_AA_ENABLED = "aa.db.enabled";
 	public static final String GUARD_ENABLED = "guard.enabled";
 	public static final String GUARD_LIST = "guard.list";
 	public static final String WARMUP_ENABLED = "warmup.enabled";
@@ -177,6 +199,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
+	protected boolean dbAAEnabled = false;
 	protected boolean warmupEnabled = false;
 	protected boolean changeLineSeparators = false; 
 	
@@ -191,6 +214,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		this.standalone = standalone;
 		openToxAAEnabled = isOpenToxAAEnabled();
 		localAAEnabled = isSimpleSecretAAEnabled();
+		dbAAEnabled = isDBAAEnabled();
 		warmupEnabled = isWarmupEnabled();
 		changeLineSeparators = getConfigChangeLineSeparator();
 		versionShort = readVersionShort();
@@ -294,7 +318,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		/** /feature */
 		FeaturesRouter featuresRouter = new FeaturesRouter(getContext());
 		
-		
 		if (openToxAAEnabled) {
 			if (protectFeatureResource())
 				router.attach(PropertyResource.featuredef,createProtectedResource(featuresRouter,"feature"));
@@ -305,9 +328,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			}
 		} else 	router.attach(PropertyResource.featuredef,featuresRouter);
 		
-
-		//Filter openssoAuth = new OpenSSOAuthenticator(getContext(),false,"opentox.org");
-		//Filter openssoAuthz = new OpenSSOAuthorizer();
 		/** filter */
 		router.attach(FilteredDatasetResource.resource,FilteredDatasetResource.class);
 		/** /dataEntry */ 
@@ -389,10 +409,8 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		router.attach(CollectionStructureResource.collection,createProtectedResource(collectionRouter,"collection"));
 
 		/**  /algorithm  */
-		//router.attach(AllAlgorithmsResource.algorithm,createProtectedResource(new AlgorithmRouter(getContext())));
 		router.attach(AllAlgorithmsResource.algorithm,createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
 		/**  /model  */
-		
 		router.attach(ModelResource.resource,createAuthenticatedOpenResource(new ModelRouter(getContext())));
 		/**  /task  */
 		router.attach(TaskResource.resource, new TaskRouter(getContext()));
@@ -420,8 +438,6 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		 *  API extensions from this point on
 		 */
 
-
-		
 		/**
 		 * Dataset reporting  /report
 		 * Practically same as /dataset , but allows POST , so that long URIs with features could be send
@@ -442,6 +458,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		router.attach("/name2structure",Name2StructureResource.class);	
 	
 		router.attach(OntologyResource.resource,createRDFPlayground());
+		
 		/**
 		 * Images, styles, favicons, applets
 		 */
@@ -498,50 +515,75 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 				
 		 } catch (Exception x) {
 			 logger.log(Level.WARNING,x.getMessage(),x);
-		 }	     
+		 }	  
+		 
 	     if (!isOpenToxAAEnabled()) {
-
-				
-	    	 if (isSimpleSecretAAEnabled()) {
+	    	 
+			 if (isDBAAEnabled()) {
+				 String secret = getProperty(AMBITConfig.secret.name(),configProperties);
+				 long sessionLength = 1000*60*45L; //45 min in milliseconds
+					try { sessionLength = Long.parseLong(getProperty(AMBITConfig.sessiontimeout.name(),configProperties)); } catch (Exception x) {}
+				 
+				 router.attach("/", UIResource.class);
+				 router.attach("", UIResource.class);
+				 
+				 logger.log(Level.INFO,String.format("Property %s set, DB AA enabled.", DB_AA_ENABLED));
+		    		
+				 /*
+				  * /login
+				  */
+				 router.attach(ambit2.user.rest.resource.Resources.login, AMBITLoginFormResource.class);
+				 /*
+				  * /myaccount 
+				  * /myaccount/reset  
+				  * /user/{id}
+				  */
+				 
+				 OrganisationRouter org_router = new OrganisationRouter(getContext());
+				 ProjectRouter projectRouter = new ProjectRouter(getContext());
+				 router.attach(Resources.project, projectRouter);
+				 router.attach(Resources.organisation, org_router);
+					
+				 MyRouter myAccountRouter = new MyRouter(getContext());
+				 myAccountRouter.attachDefault(MyAccountResource.class);
+				 myAccountRouter.attach(ambit2.user.rest.resource.Resources.reset,PwdResetResource.class);
+				 router.attach(ambit2.user.rest.resource.Resources.myaccount, myAccountRouter);
+				 router.attach(ambit2.user.rest.resource.Resources.user, new UserRouter(getContext(),org_router,projectRouter));
+				 router.attach(ambit2.user.rest.resource.Resources.register, RegistrationResource.class);
+				 router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.register, ambit2.user.rest.resource.Resources.confirm), RegistrationConfirmResource.class);
+				 router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.register, ambit2.user.rest.resource.Resources.notify), AMBITRegistrationNotifyResource.class);
+				 /*
+				  *  /forgotten
+				  *  /forgotten/confirm
+				  *  /forgotten/notify
+				  *  /forgotten/failed
+				  */
+				 router.attach(ambit2.user.rest.resource.Resources.forgotten, PwdForgottenResource.class);
+				 router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.forgotten, ambit2.user.rest.resource.Resources.confirm), PwdForgottenConfirmResource.class);
+				 router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.forgotten, ambit2.user.rest.resource.Resources.notify), PwdForgottenNotifyResource.class);
+				 router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.forgotten, ambit2.user.rest.resource.Resources.failed), PwdForgottenFailedResource.class);				 
+	 
+				 Router protectedRouter = new MyRouter(getContext());
+				 protectedRouter.attach("/roles", AMBITLoginFormResource.class);
+				 protectedRouter.attach(String.format("/%s", UserLoginPOSTResource.resource),AMBITLoginPOSTResource.class);
+				 protectedRouter.attach(String.format("/%s", UserLogoutPOSTResource.resource),AMBITLogoutPOSTResource.class);
+				 //protectedRouter.attach(NotificationResource.resourceKey, NotificationResource.class);
+				 protectedRouter.attach(Resources.role, RoleDBResource.class);
+					
+				 router.attach("/provider", protectedRouter);
+					
+				 Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(),  "ambit_users", "ambit2/rest/config/config.prop", secret, sessionLength);
+				 dbAuth.setNext(router);
+		    	 return addOriginFilter(dbAuth);					
+					
+			 } else if (isSimpleSecretAAEnabled()) {
 		    	 
 				 router.attach("/", UIResource.class);
 				 router.attach("", UIResource.class);
 				 
 				 logger.log(Level.INFO,String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
-	    		 ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC, "ambit2");
-	    		 //get from config file
-	    		 ConcurrentMap<String, char[]> localSecrets = null;
-	    		 try {
-	    			 localSecrets = getLocalSecrets();
-	    		 } catch (Exception x) {
-	    			 getLogger().log(Level.SEVERE,x.getMessage(),x);
-	    			 localSecrets  = new ConcurrentHashMap<String, char[]>(); //empty
-	    		 }
-	    		 basicAuth.setVerifier(new MapVerifier(localSecrets) {
-	    			 @Override
-	    			public int verify(Request request, Response response) {
-	    				 int result = super.verify(request, response);
-	    				 return Method.GET.equals(request.getMethod())?RESULT_VALID:result; 
-	    			}
-	    		 });
-	    		 basicAuth.setEnroler(new Enroler() {
-					@Override
-					public void enrole(ClientInfo clientInfo) {
-						if (clientInfo.isAuthenticated()) 
-							clientInfo.getRoles().add(UPDATE_ALLOWED);
-					}
-				});
-
-	    		 UpdateAuthorizer authorizer = new UpdateAuthorizer();
-	    		 authorizer.getAuthorizedRoles().add(UPDATE_ALLOWED);
-	    		 authorizer.setNext(router);
-	    		 basicAuth.setNext(authorizer);
 	    		 
-	    		 String allowedOrigins = getAllowedOrigins();
-	   	      	 getLogger().info("CORS: Origin filter attached:\t"+allowedOrigins);
-	    		 OriginFilter originFilter = new OriginFilter(getContext(),allowedOrigins); 
-	    		 originFilter.setNext(basicAuth); 	    		 
-	    		 return originFilter;
+	    		 return addOriginFilter(getBasicAuthFilter(router));
 	    	 }
 	    	 else {
 	    		 getLogger().warning("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
@@ -560,14 +602,52 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			 * Sets a cookie with OpenSSO token
 			 */
 			router.attach("/"+OpenSSOUserResource.resource,login );
+			router.attach("/login",login );
+			router.attach("/myaccount",login );
+			router.attach("/provider/signout",login );
 			
-   		 String allowedOrigins = getAllowedOrigins();
+		 
+		 return addOriginFilter(router);
+	}
+	
+	protected Restlet addOriginFilter(Restlet router) {
+  		 String allowedOrigins = getAllowedOrigins();
 	     getLogger().info("CORS: Origin filter attached:\t"+allowedOrigins);			
 		 OriginFilter originFilter = new OriginFilter(getContext(),allowedOrigins); 
 		 originFilter.setNext(router); 
 		 return originFilter;
 	}
-	
+	protected Filter getBasicAuthFilter(Router router) {
+		ChallengeAuthenticator basicAuth = new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC, "ambit2");
+		 //get from config file
+		 ConcurrentMap<String, char[]> localSecrets = null;
+		 try {
+			 localSecrets = getLocalSecrets();
+		 } catch (Exception x) {
+			 getLogger().log(Level.SEVERE,x.getMessage(),x);
+			 localSecrets  = new ConcurrentHashMap<String, char[]>(); //empty
+		 }
+		 basicAuth.setVerifier(new MapVerifier(localSecrets) {
+			 @Override
+			public int verify(Request request, Response response) {
+				 int result = super.verify(request, response);
+				 return Method.GET.equals(request.getMethod())?RESULT_VALID:result; 
+			}
+		 });
+		 basicAuth.setEnroler(new Enroler() {
+			@Override
+			public void enrole(ClientInfo clientInfo) {
+				if (clientInfo.isAuthenticated()) 
+					clientInfo.getRoles().add(UPDATE_ALLOWED);
+			}
+		});
+
+		 UpdateAuthorizer authorizer = new UpdateAuthorizer();
+		 authorizer.getAuthorizedRoles().add(UPDATE_ALLOWED);
+		 authorizer.setNext(router);
+		 basicAuth.setNext(authorizer);
+		 return basicAuth;
+	}
 	protected Restlet createOpenSSOLoginRouter() {
 		Filter userAuthn = new OpenSSOAuthenticator(getContext(),true,"opentox.org",new OpenSSOVerifierSetUser(false));
 		userAuthn.setNext(OpenSSOUserResource.class);
@@ -698,7 +778,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			
 			
 			@Override
-			protected Task<TaskResult, String> createTask(String user,ICallableTask callable) {
+			protected Task<ITaskResult, String> createTask(String user,ICallableTask callable) {
 				
 				return new PolicyProtectedTask(user,!(callable instanceof CallablePolicyCreator)) {
 					@Override
@@ -930,6 +1010,13 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	        return result;
     }
 */
+   protected synchronized boolean isDBAAEnabled()  {
+		try {
+			String aaadmin = getProperty(DB_AA_ENABLED,configProperties);
+			return aaadmin==null?null:Boolean.parseBoolean(aaadmin);
+		} catch (Exception x) {return false; }
+  }
+   
    protected synchronized boolean isSimpleSecretAAEnabled()  {
 		try {
 			String aaadmin = getProperty(LOCAL_AA_ENABLED,configProperties);

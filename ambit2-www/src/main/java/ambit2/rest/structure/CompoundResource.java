@@ -3,6 +3,11 @@ package ambit2.rest.structure;
 import java.awt.Dimension;
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -64,12 +69,9 @@ import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource;
 import ambit2.rest.rdf.RDFObjectIterator;
 import ambit2.rest.rdf.RDFStructuresIterator;
-import ambit2.rest.structure.CompoundLookup._searchtype;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallableStructureEntry;
 import ambit2.rest.task.FactoryTaskConvertor;
-import ambit2.rest.task.ITaskStorage;
-import ambit2.rest.task.Task;
 
 /**
  * Chemical compound resource as in http://opentox.org/development/wiki/structure
@@ -549,13 +551,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 						getContext(), 
 						null, token);
 			callable.setPropertyOnly(false);
-			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+			ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 						"New structure from web form",
 						callable,
 						getRequest().getRootRef(),
 						token);
 						
-			  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+			  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
 			  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 			  task.update();
 			  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
@@ -661,13 +663,13 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					getRecord(),
 					getContext(), null, token);
 			callable.setPropertyOnly(true);
-			Task<Reference,Object> task =  ((TaskApplication)getApplication()).addTask(
+			ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 						"Properties from web form",
 						callable,
 						getRequest().getRootRef(),
 						token);
 						
-			  ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();				  
+			  ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();				  
 			  FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 			  task.update();
 			  getResponse().setStatus(task.isDone()?Status.SUCCESS_OK:Status.SUCCESS_ACCEPTED);
@@ -695,9 +697,9 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 	}
 
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-        super.configureTemplateMap(map);
-        
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
         Object key = getRequest().getAttributes().get(OpenTox.URI.compound.getKey());
         if (key!=null)    	map.put("cmpid",key.toString());
         Object idconformer = getRequest().getAttributes().get(ConformerResource.idconformer);

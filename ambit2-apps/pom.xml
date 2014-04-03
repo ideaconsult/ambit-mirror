@@ -31,6 +31,7 @@
     <junit.version>4.8.1</junit.version>
     <!-- https://github.com/ideaconsult/i5 -->
     <i5.version>0.0.6-SNAPSHOT</i5.version>
+    <restnet.version>1.0.2-SNAPSHOT</restnet.version>
   </properties>
   <description>AmbitXT and Ambit REST web services </description>
   <inceptionYear>2008</inceptionYear>
@@ -310,12 +311,14 @@
   </reporting>
   <modules>
     <module>../ambit2-www</module>
+    <module>../ambit2-dbi5</module>    
     <!--
     <module>../ambit2-ambitxt</module>    
     <module>../ambit2-taglibs</module>
     <module>../ambit2-i5rest</module>    
-    -->
-    <module>../ambit2-dbi5</module>    
+        -->    
+    <module>ambit2-user</module>
+
   </modules>
   <dependencies>
     <!--  Ambit -->

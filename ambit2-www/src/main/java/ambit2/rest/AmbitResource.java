@@ -8,6 +8,8 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -726,7 +728,7 @@ public class AmbitResource extends FreeMarkerResource {
 			getClientInfo().setUser(ou);
 		}
         setTokenCookies(variant, useSecureCookie(getRequest()));
-        configureTemplateMap(map);
+        configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 }

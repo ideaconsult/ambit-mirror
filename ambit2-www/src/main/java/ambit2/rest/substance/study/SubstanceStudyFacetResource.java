@@ -2,6 +2,8 @@ package ambit2.rest.substance.study;
 
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -44,8 +46,9 @@ public class SubstanceStudyFacetResource extends FacetResource<SubstanceStudyFac
 	};
 	
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-		super.configureTemplateMap(map);
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
 		map.put("facet_title","Substance study summary");
 		map.put("facet_group","Structure type");
 		map.put("facet_count","Number of structures");

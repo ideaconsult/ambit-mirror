@@ -4,6 +4,8 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.UUID;
 
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;

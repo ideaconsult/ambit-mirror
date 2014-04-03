@@ -38,10 +38,9 @@ public class ValuesQualityCheck extends AbstractUpdate<IStructureRecord,String> 
 	}
 
 	protected static String[] sql = {
-		"insert ignore into roles (role_name) values (\"ambit_quality\");",
-		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"quality\",\"d66636b253cb346dbb6240e30def3618\",\"quality\",\"Automatic quality verifier\",now(),\"confirmed\",\"quality\",\"http://ambit.sourceforge.net\");",
-		"insert ignore into user_roles (user_name,role_name) values (\"quality\",\"ambit_quality\");",
-		
+		//1
+		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (\"quality\",\"quality\",\"Automatic quality verifier\",\"quality\",\"http://ambit.sourceforge.net\");",
+		//3
 		//assigns OK if all structures of a chemical have the same value for properties with e.g. comments="CasRN", error if not
 		"insert into quality_labels (id,user_name,`label`,`text`)\n"+
 		"select id,'quality',Q,'Verifies if the value is different for the same chemical' from\n"+
@@ -57,6 +56,7 @@ public class ValuesQualityCheck extends AbstractUpdate<IStructureRecord,String> 
 		"where idchemical=? and idstructure=? and comments=?\n"+
 		"on duplicate key update `label`=values(`label`), `text`=values(`text`)\n",
 		
+		//4
 		//assigns error if there are different chemicals with the same value for properties with comments="CasRN"
 		"insert into quality_labels (id,user_name,`label`,`text`)\n"+
 		"select id,'quality',Q,'Same value for a different chemical' from\n"+
@@ -71,12 +71,14 @@ public class ValuesQualityCheck extends AbstractUpdate<IStructureRecord,String> 
 		"join property_values v on v.idstructure=L.struc\n"+
 		"join properties using(idproperty)\n"+
 		"where comments=? and Q=\"ProbablyError\"\n"+
-		"on duplicate key update `label`=values(`label`), `text`=values(`text`)\n",
+		"on duplicate key update `label`=values(`label`), `text`=values(`text`)\n"
 	};
 		
+	private final int n3 = 3;
+	private final int n4 = 4;
 	public List<QueryParam> getParameters(int index) throws AmbitException {
 		switch (index) {
-		case 3: {
+		case n3: {
 			List<QueryParam> params = new ArrayList<QueryParam>();
 			params.add(new QueryParam<Integer>(Integer.class, getGroup().getIdchemical()));
 			params.add(new QueryParam<String>(String.class, getProperty().getLabel()));
@@ -85,7 +87,7 @@ public class ValuesQualityCheck extends AbstractUpdate<IStructureRecord,String> 
 			params.add(new QueryParam<String>(String.class, getProperty().getLabel()));			
 			return params;
 		}
-		case 4: {
+		case n4: {
 			List<QueryParam> params = new ArrayList<QueryParam>();
 			params.add(new QueryParam<Integer>(Integer.class, getGroup().getIdchemical()));
 			params.add(new QueryParam<Integer>(Integer.class, getGroup().getIdstructure()));	

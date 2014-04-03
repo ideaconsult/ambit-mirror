@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import net.idea.restnet.i.task.ITaskResult;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -207,7 +209,7 @@ where d1.id_srcdataset=8 and d2.id_srcdataset=6
 	protected Representation copyDatasetToQueryResultsTable(Form form, boolean clearPreviousContent)
 			throws ResourceException {
 		String token = getToken();
-		Callable<TaskResult> callable = null;
+		Callable<ITaskResult> callable = null;
 		if ((queryResultsID!=null) && (queryResultsID>0)) {
 			callable = new CallableQueryResultsCreator(
 					form,

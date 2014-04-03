@@ -2,52 +2,25 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-
--- -----------------------------------------------------
--- Table `roles`  User roles
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `roles`;
-CREATE TABLE  `roles` (
-  `role_name` varchar(16) character set utf8 collate utf8_bin NOT NULL,
-  PRIMARY KEY  (`role_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- -----------------------------------------------------
 -- Table `users` Users
+-- If registered, 'username' points to ambit_users.users table
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `users`;
-CREATE TABLE  `users` (
-  `user_name` varchar(16) character set utf8 collate utf8_bin NOT NULL,
-  `password` varchar(45) character set utf8 collate utf8_bin NOT NULL,
+CREATE TABLE `users` (
+  `user_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `email` varchar(45) NOT NULL,
-  `registration_status` enum('commenced','confirmed','deleted') NOT NULL default 'commenced',
-  `registration_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `registration_id` blob,
-  `title` varchar(6) character set utf8 collate utf8_bin NOT NULL default '""',
-  `firstname` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
-  `lastname` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
-  `address` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
-  `country` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
-  `webpage` varchar(255) character set utf8 collate utf8_bin NOT NULL default '""',
-  `affiliation` varchar(128) character set utf8 collate utf8_bin NOT NULL default '""',
-  `keywords` varchar(128) default '""',
-  `reviewer` tinyint(1) NOT NULL default '0' COMMENT 'true if wants to become a reviewer',
-  PRIMARY KEY  (`user_name`)
+  `title` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
+  `firstname` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
+  `lastname` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
+  `address` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
+  `country` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
+  `homepage` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
+  `institute` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
+  `keywords` varchar(128) DEFAULT '""',
+  `reviewer` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'true if wants to become a reviewer',
+  PRIMARY KEY (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- -----------------------------------------------------
--- Table `roles` Roles assigned to users
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `user_roles`;
-CREATE TABLE  `user_roles` (
-  `user_name` varchar(16) character set utf8 collate utf8_bin NOT NULL,
-  `role_name` varchar(16) character set utf8 collate utf8_bin NOT NULL,
-  PRIMARY KEY  (`user_name`,`role_name`),
-  KEY `FK_user_roles_2` (`role_name`),
-  CONSTRAINT `FK_user_roles_2` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_user_roles_1` FOREIGN KEY (`user_name`) REFERENCES `users` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- -----------------------------------------------------
 -- Table `references`
@@ -1183,7 +1156,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (7,2,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,0,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -2560,18 +2533,6 @@ BEGIN
 END $$
 
 DELIMITER ;
-
--- -----------------------------------------------------
--- default users (guest, admin)
--- -----------------------------------------------------
-
--- insert into roles (role_name) values ("ambit_guest");
--- insert into roles (role_name) values ("ambit_admin");
--- insert into roles (role_name) values ("quality");
--- insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values ("guest","084e0343a0486ff05530df6c705c8bb4","guest","Default guest user",now(),"confirmed","guest","http://ambit.acad.bg");
--- insert into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values ("admin","21232f297a57a5a743894a0e4a801fc3","admin","Default admin user",now(),"confirmed","admin","http://ambit.acad.bg");
--- insert into user_roles (user_name,role_name) values ("guest","ambit_guest");
--- insert into user_roles (user_name,role_name) values ("admin","ambit_admin");
 
 
 -- -----------------------------------------------------

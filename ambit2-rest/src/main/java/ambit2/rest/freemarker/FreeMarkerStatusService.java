@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.freemarker.IFreeMarkerSupport;
+
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
@@ -59,8 +62,7 @@ public class FreeMarkerStatusService  extends StatusService implements IFreeMark
 		freeMarkerSupport.setHtmlbyTemplate(htmlbyTemplate);
 	}
 	@Override
-	public void configureTemplateMap(Map<String, Object> map, Request request,
-			FreeMarkerApplication app) {
+	public void configureTemplateMap(Map<String, Object> map, Request request,IFreeMarkerApplication app) {
 	
 		freeMarkerSupport.configureTemplateMap(map,request,app);
         map.put("creator","IdeaConsult Ltd.");

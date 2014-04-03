@@ -7,6 +7,10 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.opentox.rdf.OT;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -15,9 +19,7 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.rest.ResourceDoc;
 import ambit2.rest.SimpleTaskResource;
-import ambit2.rest.task.ITaskStorage;
 import ambit2.rest.task.Task;
-import ambit2.rest.task.TaskResult;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
@@ -54,7 +56,7 @@ public class TaskRDFReporter<USERID> extends CatalogRDFReporter<UUID> {
 	@Override
 	public void processItem(UUID name, Writer output) {
 		String ref;
-		Task<TaskResult,USERID> item = storage.findTask(name.toString());
+		ITask<ITaskResult,USERID> item = storage.findTask(name.toString());
 		try {
 			ref = item.getUri().toString();
 		} catch (Exception x) {

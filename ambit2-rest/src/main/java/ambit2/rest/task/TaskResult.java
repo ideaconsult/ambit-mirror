@@ -1,10 +1,14 @@
 package ambit2.rest.task;
 
+import java.util.List;
+
+import net.idea.restnet.i.task.ITaskResult;
+
 import org.restlet.data.Reference;
 
 
 
-public class TaskResult {
+public class TaskResult implements ITaskResult {
 	protected float percentCompleted = 0;
 	protected String uri;
 	protected boolean newResource = true;
@@ -42,5 +46,9 @@ public class TaskResult {
 	@Override
 	public String toString() {
 		return uri;
+	}
+	@Override //replace with restnet implementation
+	public List<String> getPolicy() {
+		return null;
 	}
 }

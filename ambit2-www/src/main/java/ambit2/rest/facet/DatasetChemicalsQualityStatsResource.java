@@ -3,6 +3,8 @@ package ambit2.rest.facet;
 import java.io.Writer;
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -65,10 +67,10 @@ public class DatasetChemicalsQualityStatsResource extends FacetResource<DatasetC
 
 	}
 	
-	
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-		super.configureTemplateMap(map);
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
 		map.put("facet_title","QA labels statistics");
 	}
 

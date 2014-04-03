@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ICallableTask;
+
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -44,7 +47,6 @@ import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.CallableSimpleModelCreator;
 import ambit2.rest.task.CallableStructureOptimizer;
 import ambit2.rest.task.CallableStructurePairsModelCreator;
-import ambit2.rest.task.ICallableTask;
 import ambit2.rest.task.OptimizerModelBuilder;
 import ambit2.rest.task.Structure2DModelBuilder;
 import ambit2.rest.task.TaskResult;
@@ -461,11 +463,10 @@ public class AllAlgorithmsResource extends CatalogResource<Algorithm<String>> {
 
 			
 	}
-
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
-        super.configureTemplateMap(map);
-        
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
+		super.configureTemplateMap(map, request, app);
         Object taskid = getRequest().getAttributes().get(algorithmKey);
         if (taskid!=null)
         	map.put("algid",taskid.toString());

@@ -2,6 +2,9 @@ package ambit2.rest.freemarker;
 
 import java.util.Map;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.freemarker.IFreeMarkerSupport;
+
 import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -33,8 +36,9 @@ public class FreeMarkerSupport implements IFreeMarkerSupport {
 	public void setHtmlbyTemplate(boolean htmlbyTemplate) {
 		this.htmlbyTemplate = htmlbyTemplate;
 	}
-	
-	public void configureTemplateMap(Map<String, Object> map, Request request, FreeMarkerApplication app) {
+	@Override
+	public void configureTemplateMap(Map<String, Object> map, Request request, IFreeMarkerApplication app) {
+//	public void configureTemplateMap(Map<String, Object> map, Request request, FreeMarkerApplication app) {
 
 		
         Form query = request.getResourceRef().getQueryAsForm();

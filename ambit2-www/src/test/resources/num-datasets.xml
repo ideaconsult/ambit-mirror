@@ -1,11 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <users user_name="guest" password="084e0343a0486ff05530df6c705c8bb4" email="guest" registration_status="confirmed" registration_date="2008-10-29 06:32:21.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="false"/>
-  <users user_name="admin" password="084e0343a0486ff05530df6c705c8bb4" email="admin" registration_status="confirmed" registration_date="2008-10-29 06:32:21.0" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" webpage="http://ambit.acad.bg" affiliation="&quot;&quot;" keywords="guest" reviewer="false"/>
-  <roles role_name="ambit_admin"/>
-  <roles role_name="ambit_guest"/>
-  <user_roles user_name="guest" role_name="ambit_guest"/>
-  <user_roles user_name="admin" role_name="ambit_admin"/>
+  <users user_name="guest" email="guest" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
+  <users user_name="admin" email="admin" title="&quot;&quot;" firstname="&quot;&quot;" lastname="Default guest user" address="&quot;&quot;" country="&quot;&quot;" homepage="http://ambit.acad.bg" institute="&quot;&quot;" keywords="guest" reviewer="false"/>
   <catalog_references idreference="1" title="CAS Registry Number" url="http://www.cas.org"/>
   <catalog_references idreference="2" title="IUPAC name" url="http://www.iupac.org"/>
   <catalog_references idreference="3" title="XLogP" url="XLogP reference"/>

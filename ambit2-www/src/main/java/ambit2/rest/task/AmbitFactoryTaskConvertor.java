@@ -3,6 +3,8 @@ package ambit2.rest.task;
 import java.io.Writer;
 import java.util.UUID;
 
+import net.idea.restnet.i.task.ITaskStorage;
+
 import org.restlet.Request;
 import org.restlet.resource.ResourceException;
 

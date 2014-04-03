@@ -5,7 +5,6 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.ResourceDoc;
 

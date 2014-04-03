@@ -9,6 +9,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+
+import org.restlet.Request;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -22,20 +30,13 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.processors.Reporter;
 import ambit2.rest.AbstractResource;
-import ambit2.rest.AmbitApplication;
 import ambit2.rest.OpenTox;
 import ambit2.rest.StringConvertor;
-import ambit2.rest.TaskApplication;
 import ambit2.rest.aa.opensso.OpenSSOUser;
-import ambit2.rest.freemarker.FreeMarkerApplication;
 import ambit2.rest.reporters.CatalogURIReporter;
 import ambit2.rest.task.AmbitFactoryTaskConvertor;
 import ambit2.rest.task.CallablePOST;
 import ambit2.rest.task.FactoryTaskConvertor;
-import ambit2.rest.task.ICallableTask;
-import ambit2.rest.task.ITaskStorage;
-import ambit2.rest.task.Task;
-import ambit2.rest.task.TaskResult;
 
 /**
  * Algorithms as per http://opentox.org/development/wiki/Algorithms
@@ -140,7 +141,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				T model = query.next();
 				Reference reference = getSourceReference(form,model);
 				ICallableTask callable= createCallable(form,model);
-				Task<TaskResult,String> task =  ((AmbitApplication)getApplication()).addTask(
+				ITask<ITaskResult,String> task =  ((ITaskApplication)getApplication()).addTask(
 						String.format("Apply %s %s %s",model.toString(),reference==null?"":"to",reference==null?"":reference),
 						callable,
 						getRequest().getRootRef(),
@@ -160,7 +161,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			else {
 				
-				ITaskStorage storage = ((TaskApplication)getApplication()).getTaskStorage();
+				ITaskStorage storage = ((ITaskApplication)getApplication()).getTaskStorage();
 				FactoryTaskConvertor<Object> tc = new AmbitFactoryTaskConvertor<Object>(storage);
 				if (tasks.size()==1)
 					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(),getResponse(),getDocumentation());
@@ -197,13 +198,14 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 	}
 
 	@Override
-	public void configureTemplateMap(Map<String, Object> map) {
+	public void configureTemplateMap(Map<String, Object> map, Request request,
+			IFreeMarkerApplication app) {
         if (getClientInfo().getUser()!=null) 
         	map.put("username", getClientInfo().getUser().getIdentifier());
         map.put(AMBITConfig.creator.name(),"IdeaConsult Ltd.");
         map.put(AMBITConfig.ambit_root.name(),getRequest().getRootRef().toString());
-        map.put(AMBITConfig.ambit_version_short.name(),((FreeMarkerApplication)getApplication()).getVersionShort());
-	    map.put(AMBITConfig.ambit_version_long.name(),((FreeMarkerApplication)getApplication()).getVersionLong());
+        map.put(AMBITConfig.ambit_version_short.name(),app.getVersionShort());
+	    map.put(AMBITConfig.ambit_version_long.name(),app.getVersionLong());
 
         //remove paging
         Form query = getRequest().getResourceRef().getQueryAsForm();
@@ -275,7 +277,7 @@ public abstract class CatalogResource<T extends Serializable> extends AbstractRe
 			getClientInfo().setUser(ou);
 		}
         setTokenCookies(variant, useSecureCookie(getRequest()));
-        configureTemplateMap(map);
+        configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 }

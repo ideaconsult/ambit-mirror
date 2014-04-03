@@ -11,10 +11,9 @@ import ambit2.db.update.AbstractUpdate;
 public class SmilesUniquenessCheck extends AbstractUpdate<IStructureRecord, String> {
 
 	protected static String[] sql = {
-		"insert ignore into roles (role_name) values (\"ambit_quality\");",
-		"insert ignore into users (user_name,password,email,lastname,registration_date,registration_status,keywords,webpage) values (\"quality_smiles\",\"7dac3b7c36524e7fac79d1ca6086f775\",\"quality_smiles\",\"Verifies if different chemicals have the same smiles\",now(),\"confirmed\",\"quality_smiles\",\"http://ambit.sourceforge.net\");",
-		"insert ignore into user_roles (user_name,role_name) values (\"quality_smiles\",\"ambit_quality\");",
-
+		//1
+		"insert ignore into users (user_name,email,lastname,keywords,homepage) values (\"quality_smiles\",\"quality_smiles\",\"Verifies if different chemicals have the same smiles\",\"quality_smiles\",\"http://ambit.sourceforge.net\");",
+		//3
 		"insert into quality_structure (idstructure,user_name,`label`,`text`)\n"+
 		"select idstructure,'quality_smiles',Q,'Same SMILES for different chemicals' from\n"+
 		"(\n"+
@@ -26,9 +25,9 @@ public class SmilesUniquenessCheck extends AbstractUpdate<IStructureRecord, Stri
 		"join structure s on s.idstructure=L.struc\n"+
 		"where Q='ProbablyERROR'"
 	};
-		
+	int n3 = 1; //was 3;
 	public List<QueryParam> getParameters(int index) throws AmbitException {
-		if ((index==3)) {
+		if ((index==n3)) {
 			
 			List<QueryParam> params = new ArrayList<QueryParam>();
 			

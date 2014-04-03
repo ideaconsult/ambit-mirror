@@ -3,6 +3,10 @@ package ambit2.rest.task;
 import java.util.Iterator;
 import java.util.UUID;
 
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskResult;
+import net.idea.restnet.i.task.ITaskStorage;
+
 public class FilteredTasksIterator<USERID> implements Iterator<UUID> {
 	protected Iterator<UUID> keys;
 	protected UUID task_id;
@@ -37,7 +41,7 @@ public class FilteredTasksIterator<USERID> implements Iterator<UUID> {
 
 	public void remove() {
 	}
-	protected boolean accepted(Task<TaskResult,USERID> task) {
+	protected boolean accepted(ITask<ITaskResult,USERID> task) {
 		return task==null?false:true;
 	}
 	

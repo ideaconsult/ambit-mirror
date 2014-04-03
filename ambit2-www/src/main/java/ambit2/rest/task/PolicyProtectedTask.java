@@ -3,6 +3,8 @@ package ambit2.rest.task;
 import java.util.Hashtable;
 import java.util.logging.Level;
 
+import net.idea.restnet.i.task.ITaskResult;
+
 import org.opentox.aa.opensso.OpenSSOPolicy;
 import org.opentox.aa.opensso.OpenSSOToken;
 import org.restlet.Context;
@@ -10,7 +12,7 @@ import org.restlet.data.Reference;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 
-public class PolicyProtectedTask extends Task<TaskResult, String> {
+public class PolicyProtectedTask extends Task<ITaskResult, String> {
 	/**
 	 * 
 	 */
