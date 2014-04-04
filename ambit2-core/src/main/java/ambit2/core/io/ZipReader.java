@@ -44,7 +44,6 @@ public class ZipReader extends RawIteratingFolderReader {
 	}
 	public  File[] unzip(File zipfile, File directory) throws AmbitIOException {
 		List<File> files = new ArrayList<File>();
-		FileInputStream zipstream = null;
 		try {
 			ZipFile zipFile = new ZipFile(zipfile);
 			Enumeration<? extends ZipEntry> zEntries = zipFile.entries();
@@ -58,7 +57,6 @@ public class ZipReader extends RawIteratingFolderReader {
 		} catch (Exception x) {
 			throw new AmbitIOException(x);
 		} finally {
-			try {zipstream.close(); } catch (Exception x) {}
 		}
 	}
 
