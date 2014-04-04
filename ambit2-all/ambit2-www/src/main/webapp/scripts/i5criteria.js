@@ -5,7 +5,8 @@ var _i5 = {
 	            "1590": {"title" :"supporting study", "selected" : true},
 	            "1661": {"title" :"weight of evidence"},
 	            "8108": {"title" :"disregarded study"},
-	            "NOT_SPECIFIED": {"title" :"Not specified"}
+	            "NOT_SPECIFIED": {"title" :"Not specified"},
+	            "null": {"title" :"Not assigned (null)"}
 	        },
 	        "Study result type": {
 	            "1895": {"title" :"experimental result", "selected" : true},
@@ -16,7 +17,8 @@ var _i5 = {
 	            "14": {"title" :"(Q)SAR"},
 	            "1342": {"title" :"other:"},
 	            "1173": {"title" :"no data"},
-	            "NOT_SPECIFIED": {"title" :"Not specified"}
+	            "NOT_SPECIFIED": {"title" :"Not specified"},
+	            "null": {"title" :"Not assigned (null)"}
 	        },
 	        "Reliability": {
 	            "16": {"title" :"1 (reliable without restriction)", "selected" : true},
@@ -24,7 +26,8 @@ var _i5 = {
 	            "22": {"title" :"3 (not reliable)"},
 	            "24": {"title" :"4 (not assignable)"},
 	            "1342": {"title" :"other:"},
-	            "NOT_SPECIFIED": {"title" :"Not specified"}
+	            "NOT_SPECIFIED": {"title" :"Not specified"},
+	            "null": {"title" :"Not assigned (null)"}
 	        },
 	        "Reference type": {
 	            "1586": {"title" :"study report", "selected" : true},	        	
@@ -34,12 +37,14 @@ var _i5 = {
 	            "1542": {"title" :"secondary source"},
 	            "811": {"title" :"grey literature"},
 	            "1342": {"title" :"other:"},
-	            "NOT_SPECIFIED": {"title" :"Not specified"}
+	            "NOT_SPECIFIED": {"title" :"Not specified"},
+	            "null": {"title" :"Not assigned (null)"}
 	        },
 	        "Test material": {
 	        	"2480": {"title" :"yes", "selected" : true},
 	        	"2158": {"title" :"no"},
-	        	"NOT_SPECIFIED" : {"title" :"Not specified"} 
+	        	"NOT_SPECIFIED" : {"title" :"Not specified"},
+	        	"null": {"title" :"Not assigned (null)"}
 	        }	        
 	    },
 	    "selections" : {
