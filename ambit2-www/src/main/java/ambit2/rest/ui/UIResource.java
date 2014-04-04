@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
 import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
@@ -192,37 +193,7 @@ public class UIResource extends FreeMarkerResource {
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 
 	}
-	private enum qa_field {
-		purposeflag {
-			public void addOption(QASettings qa, String value) {
-				qa.addPurposeflagOption(value);
-			}
-		},
-		studyresulttype {
-			public void addOption(QASettings qa, String value) {
-				qa.addStudyResultOption(value);
-			}
-		},
-		testmaterial {
-			public void addOption(QASettings qa, String value) {
-				qa.addTestMaterialIdentityOption(value);
-			}
-		},
-		reliability {
-			public void addOption(QASettings qa, String value) {
-				qa.addReliabilityOption(value);
-			}
-		},
-		referencetype {
-		@Override
-			public void addOption(QASettings qa, String value) {
-				qa.addReferenceTypeOption(value);
-			}	
-		}
-		;
-		public abstract void addOption(QASettings qa,String value);
-		
-	}
+	
 	protected Representation uploadsubstance(Representation entity, Variant variant)
 			throws ResourceException {
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
@@ -245,7 +216,7 @@ public class UIResource extends FreeMarkerResource {
 					} catch (Exception x) {
 						qa.setEnabled(true);
 					} else
-					for (qa_field f : qa_field.values()) 
+					for (IQASettings.qa_field f : IQASettings.qa_field.values()) 
 						if (f.name().equals(file.getFieldName())) try {
 							String value = file.getString("UTF-8");
 							f.addOption(qa, "null".equals(value)?null:value==null?null:value.toString());

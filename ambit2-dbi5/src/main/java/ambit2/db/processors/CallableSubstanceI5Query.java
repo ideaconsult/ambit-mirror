@@ -83,13 +83,18 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 		extIDType = form.getFirstValue("extidtype");
 		extIDValue = form.getFirstValue("extidvalue");
 		String qaEnabled = form.getFirstValue("qaenabled");
+		getQASettings().clear();
 		try {
 			if ("on".equals(qaEnabled)) getQASettings().setEnabled(true);
 			if ("yes".equals(qaEnabled)) getQASettings().setEnabled(true);
 			if ("checked".equals(qaEnabled)) getQASettings().setEnabled(true);
 		} catch (Exception x) {
 			getQASettings().setEnabled(true);
-		}		
+		}
+		for (IQASettings.qa_field f : IQASettings.qa_field.values()) try {
+			String value = form.getFirstValue(f.name());
+			f.addOption(getQASettings(), "null".equals(value)?null:value==null?null:value.toString());
+		} catch (Exception x) {}		
 	}
 	@Override
 	protected FileInputState createTarget(Reference reference) throws Exception {
