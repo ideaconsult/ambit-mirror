@@ -2149,6 +2149,9 @@ public class TestUtilities
 		//tu.testSmartsManagerBoolSearch("[O,o,OH,$(P=O),$(C=S),$(S=O),$(C=O)]","[S-]C(=S)N");
 		//tu.testSmartsManagerBoolSearch("C[H]","CC");
 		
+		//Stereo info testing
+		tu.testSmartsManagerBoolSearch("C[C@](O)(N)CCC","CC(O)(N)CCC");
+		tu.testSmartsManagerBoolSearch("C/C=C/C","C\\C=C/C");
 		
 		//These examples with a great probability proof that there is a bug in the CDK isomorphism algorithm
 		//tu.testSmartsManagerBoolSearch("[N,$(C=S)]~[A,a]~[A,a]~[N,$(C=S)]","[S-]C(=S)N");
@@ -2193,9 +2196,9 @@ public class TestUtilities
 		//tu.testSMIRKS("[N;+:1][C:2]([H])>>[N:1;+][H].[Cl-][C:2]=[O]", "[H][N+1](C)C[H]");    
 		
 		//tu.testSMIRKS("[N:1][C:2]>>[N:1]Cl.[C:2]", "NCC");
-		tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N;!$(N=O):1]Cl.[C:2]", "NCCCCCN=O");  //--> No more exception is thrown due to the recursive SMARTS
-		tu.testSMIRKS("[N;$(N-O-Br):1][C:2]>>[N:1]Cl.[C:2]", "ONCC");  //--> No more error  is obtained due to the recursive SMARTS
-		tu.testSMIRKS("[N:1][C;!$([C;r5]);!$(CC=C):2]>>[N:1]Cl.[C:2]", "NC1CCCCC1CCCC2CCC=CC2N");
+		//tu.testSMIRKS("[N;!$(N=O):1][C:2]>>[N;!$(N=O):1]Cl.[C:2]", "NCCCCCN=O");  //--> No more exception is thrown due to the recursive SMARTS
+		//tu.testSMIRKS("[N;$(N-O-Br):1][C:2]>>[N:1]Cl.[C:2]", "ONCC");  //--> No more error  is obtained due to the recursive SMARTS
+		//tu.testSMIRKS("[N:1][C;!$([C;r5]);!$(CC=C):2]>>[N:1]Cl.[C:2]", "NC1CCCCC1CCCC2CCC=CC2N");
 		
 		
 		//tu.testSMIRKS("[O:1]([H:10])[c:2]1[cH:3][cH:4][c:5]([O:6][H:11])[cH:7][c:8]1[$(C),$(Cl),$(OC),$(CC):9]>>[O:1]=[C:2]1[CH:3]=[CH:4][C:5](=[O:6])[CH:7]=[C:8]1[$(C),$(Cl),$(OC),$(CC):9].[H:10][H:11]", "[H]Oc1([H])c([H])(C)c([H])c([H])(O[H])c([H])c1([H])");
