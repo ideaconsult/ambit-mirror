@@ -168,8 +168,18 @@ public class SmartsParser
 		
 		if (directionalBonds.size() > 0)
 			setDoubleBondsStereoInfo();
-			
+		
+		//Handle chirality info
+		for (int i = 0; i < container.getAtomCount(); i++)		
+			if (container.getAtom(i) instanceof SmartsAtomExpression)
+			{
+				SmartsAtomExpression sa = (SmartsAtomExpression) container.getAtom(i); 				
+				handleChirality(sa);
+			}	
+		
+		
 		setNeededDataFlags();
+		
 		
 		//The global work variables are stored in order to use them again in the recursion 
 		//and to preserve the original values for the code after recursion	
@@ -177,7 +187,7 @@ public class SmartsParser
 		Vector<IQueryAtomContainer> fragments0 = fragments;
 		Vector<Integer> fragmentComponents0 = fragmentComponents;
 		
-		//Treat recursive smarts and chirality info
+		//Handle recursive smarts 
 		for (int i = 0; i < container0.getAtomCount(); i++)
 		{
 			if (container0.getAtom(i) instanceof SmartsAtomExpression)
@@ -201,8 +211,7 @@ public class SmartsParser
 					parse();
 					sa.recSmartsContainers.add(container);
 					insideRecSmarts = false;
-				}				
-				convertChirality(sa);
+				}		
 			}
 		}
 		
@@ -1768,7 +1777,7 @@ public class SmartsParser
 		return(false);
 	}
 	
-	void convertChirality(SmartsAtomExpression atom)
+	void handleChirality(SmartsAtomExpression atom)
 	{
 		for (int i = 0; i < atom.tokens.size(); i++)
 		{			

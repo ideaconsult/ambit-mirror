@@ -191,8 +191,14 @@ public class SmartsAtomExpression extends SMARTSAtom
 			else
 				return(false);
     		
-    	case SmartsConst.AP_Chiral:	
-    		//It is assusmed that PLUS is R and MINUS is S
+    	case SmartsConst.AP_Chiral:
+    		//Currently chirality is not taken into account
+    		//TODO - use stereo elements information in IAtomContainer
+    		return true;
+    		
+    		/*
+    		//The following code does not work. It will throw null pointer exception and the assumption is not OK
+    		//It is assumed that PLUS is R and MINUS is S
     		if (tok.param == SmartsConst.ChC_R)
     		{
     			if (atom.getStereoParity() == CDKConstants.STEREO_ATOM_PARITY_MINUS)
@@ -216,6 +222,7 @@ public class SmartsAtomExpression extends SMARTSAtom
         		}
     			else
     				return(true); //undefined chirality
+    		*/
     		
     	case SmartsConst.AP_Recursive:  
     		//System.out.println("Match recursive token");
