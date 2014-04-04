@@ -247,9 +247,9 @@ public class UIResource extends FreeMarkerResource {
 					} else
 					for (qa_field f : qa_field.values()) 
 						if (f.name().equals(file.getFieldName())) try {
-							f.addOption(qa, file.getString("UTF-8"));
+							String value = file.getString("UTF-8");
+							f.addOption(qa, "null".equals(value)?null:value==null?null:value.toString());
 						} catch (Exception x) {}
-					
 				}	
 
 				for (FileItem file : items) {
