@@ -111,27 +111,34 @@ function updateFormValidation(formName) {
  	<div class='row remove-bottom'>
 			<div class='six columns alpha remove-bottom'>
 				<label for="purposeflag">Purpose flag</label>
-				<select multiple id="purposeflag" size='5'></select>
+				<select multiple id="purposeflag" name="purposeflag" size='5'></select>
 	    	</div>
 			<div class='six columns omega remove-bottom'>
 				<label for="studyresulttype">Study result type</label>
-				<select multiple id="studyresulttype" size='5'></select>
+				<select multiple id="studyresulttype" name="studyresulttype" size='5'></select>
 	    	</div>
 			<div class='four columns omega remove-bottom'>
 				<label for="testmaterial">Test material</label>
-				<select multiple id="testmaterial" size='3'></select>
+				<select multiple id="testmaterial" name="testmaterial" size='3'></select>
 	    	</div>
 
 	   </div>
 		<div class='row remove-bottom'>
 			<div class='six columns alpha remove-bottom'>
 				<label for="reliability">Reliability</label>
-				<select multiple id="reliability" size='5'></select>
+				<select multiple id="reliability" name="reliability" size='5'></select>
 	    	</div>
 			<div class='six columns omega remove-bottom'>
 				<label for="referencetype" >Reference type</label>
-				<select multiple id="referencetype" size='5'></select>
+				<select multiple id="referencetype" name="referencetype" size='5'></select>
 	    	</div>
+			<div class='four columns omega remove-bottom'>
+				<a href="javascript:void(0)" onclick="_i5.selections.highQuality()" title='Click to select a predefined set of high quality study criteria'>Select high quality study criteria</a> 
+				<br/>
+				<a href="javascript:void(0)" onclick="_i5.selections.selectall(true);">Select All</a> 
+				<br/>
+				<a href="javascript:void(0)" onclick="_i5.selections.selectall(false)">Unselect all</a>
+	    	</div>	    	
 		</div>	    		
 	<div class='row remove-bottom' >
 		<hr/>
