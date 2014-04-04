@@ -394,7 +394,7 @@ public class Protocol {
 		EC_ALGAETOX_SECTION {
 			@Override
 			public String toString() {
-				return "Algae";
+				return "Toxicity to aquatic algae and cyanobacteria";
 			}
 			@Override
 			public String getNumber() {
@@ -533,7 +533,10 @@ public class Protocol {
 			b.append(",");
 			b.append(JSONUtils.jsonQuote("title"));b.append(": ");
 			try {
-				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_categories.valueOf(category).toString())));
+				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(
+						_categories.valueOf(category).getNumber()) + " " +
+						_categories.valueOf(category).toString()) 
+						);
 			} catch (Exception x) {
 				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(category)));
 			}
