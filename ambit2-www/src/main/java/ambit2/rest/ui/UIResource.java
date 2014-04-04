@@ -192,7 +192,37 @@ public class UIResource extends FreeMarkerResource {
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 
 	}
-	
+	private enum qa_field {
+		purposeflag {
+			public void addOption(QASettings qa, String value) {
+				qa.addPurposeflagOption(value);
+			}
+		},
+		studyresulttype {
+			public void addOption(QASettings qa, String value) {
+				qa.addStudyResultOption(value);
+			}
+		},
+		testmaterial {
+			public void addOption(QASettings qa, String value) {
+				qa.addTestMaterialIdentityOption(value);
+			}
+		},
+		reliability {
+			public void addOption(QASettings qa, String value) {
+				qa.addReliabilityOption(value);
+			}
+		},
+		referencetype {
+		@Override
+			public void addOption(QASettings qa, String value) {
+				qa.addReferenceTypeOption(value);
+			}	
+		}
+		;
+		public abstract void addOption(QASettings qa,String value);
+		
+	}
 	protected Representation uploadsubstance(Representation entity, Variant variant)
 			throws ResourceException {
 		if ((entity == null) || !entity.isAvailable()) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty content");
@@ -206,7 +236,7 @@ public class UIResource extends FreeMarkerResource {
 				json.append("{\"files\": [");
 				String delimiter = "";
 				QASettings qa = new QASettings();
-				qa.setEnabled(false);
+				qa.clear(); //sets enabled to false and clears all flags
 				for (FileItem file : items) if (file.isFormField()) {
 					if ("qaenabled".equals(file.getFieldName())) try {
 						if ("on".equals(file.getString())) qa.setEnabled(true);
@@ -214,8 +244,14 @@ public class UIResource extends FreeMarkerResource {
 						if ("checked".equals(file.getString())) qa.setEnabled(true);
 					} catch (Exception x) {
 						qa.setEnabled(true);
-					}
+					} else
+					for (qa_field f : qa_field.values()) 
+						if (f.name().equals(file.getFieldName())) try {
+							f.addOption(qa, file.getString("UTF-8"));
+						} catch (Exception x) {}
+					
 				}	
+
 				for (FileItem file : items) {
 					if (file.isFormField()) continue;
 					
