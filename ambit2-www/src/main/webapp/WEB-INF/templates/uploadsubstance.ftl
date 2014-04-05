@@ -82,6 +82,13 @@ $(document)
 	        <!-- The global file processing state -->
 	        <span class="fileupload-process remove-bottom"></span>
 	    </div>
+	    
+		<div class='row remove-bottom'>
+			<label class='six columns alpha' title='Uncheck to add or replace study records, retaining existing where relevant'>Clear existing study records</label>
+		   	<input class='one column alpha half-bottom' type="checkbox" id="clearMeasurements" name="clearMeasurements" class="toggle" checked>
+		   	<span class='five columns alpha half-bottom' >&nbsp;</span>
+		   	<div class='four columns omega'></div>
+		</div>	  	    
 
 		<div class='row remove-bottom'>
 			<label class='six columns alpha' title='Use predefined filtering criteria'>Import only high quality study records</label>
@@ -153,10 +160,16 @@ $(document)
 				<span style="float: left; margin-left: .1em;" class="ui-icon ui-icon-minus"></span>Unselect all</a>
 	    	</div>
 	    	
-		</div>	    
-  
+		</div>	
+		<div class='row half-bottom' >
+		<hr class='remove-bottom' />
+		</div>	
+
 	<!-- The table listing the files available for upload/download -->
 	<div role="presentation" border="1" ><div class="files"></div></div>
+	
+	
+	
 	
 	</form>
 	</div>	

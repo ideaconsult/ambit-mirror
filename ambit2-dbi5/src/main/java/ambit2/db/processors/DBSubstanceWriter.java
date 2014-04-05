@@ -2,6 +2,7 @@ package ambit2.db.processors;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.ILiteratureEntry._type;
@@ -23,6 +24,7 @@ import ambit2.db.substance.CreateSubstance;
 import ambit2.db.substance.ids.UpdateSubstanceIdentifiers;
 import ambit2.db.substance.relation.UpdateSubstanceRelation;
 import ambit2.db.substance.study.DeleteEffectRecords;
+import ambit2.db.substance.study.DeleteStudy;
 import ambit2.db.substance.study.UpdateEffectRecords;
 import ambit2.db.substance.study.UpdateSubstanceStudy;
 
@@ -43,7 +45,9 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
     private UpdateEffectRecords qeffr;
     private DeleteEffectRecords deffr;
     private UpdateExecutor x;
+    private DeleteStudy deleteStudy;
     private RepositoryWriter writer;
+    protected boolean clearMeasurements;
     
     protected boolean splitRecord = true;
     
@@ -70,11 +74,12 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		return writer.getDataset();
 	}
 
-	public DBSubstanceWriter(SourceDataset dataset,SubstanceRecord importedRecord) {
+	public DBSubstanceWriter(SourceDataset dataset,SubstanceRecord importedRecord,boolean clearMeasurements) {
 		super();
 	    q = new CreateSubstance();
 	    qids = new UpdateSubstanceIdentifiers();
 	    qr = new UpdateSubstanceRelation();
+	    deleteStudy = new DeleteStudy();
 	    x = new UpdateExecutor();
 	    x.setCloseConnection(false);
 	    writer = new RepositoryWriter();
@@ -84,6 +89,7 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
 		writer.setDataset(dataset==null?datasetMeta():dataset);
 		writer.setBuild2D(true);
 		this.importedRecord = importedRecord;
+		this.clearMeasurements = clearMeasurements;
 	}
 	
 	public static SourceDataset datasetMeta() {
@@ -148,6 +154,13 @@ public class DBSubstanceWriter  extends AbstractDBProcessor<IStructureRecord, IS
          		qr.setCompositionRelation(rel);
          		x.process(qr);
          	}
+     
+     	if (clearMeasurements) try {
+     		deleteStudy.setGroup(substance.getCompanyUUID());
+     		x.process(deleteStudy);
+     	} catch (Exception x) {
+     		logger.log(Level.WARNING,x.getMessage());
+     	}
 	}
 	@Override
 	public IStructureRecord process(IStructureRecord record) throws AmbitException {

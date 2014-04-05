@@ -42,11 +42,18 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 	protected QASettings qaSettings;
 	protected SubstanceRecord importedRecord;
 	protected SourceDataset dataset;
-	
 	boolean useUUID;
 	protected String substanceUUID;
 	protected String extIDType;
 	protected String extIDValue;
+	protected boolean clearMeasurements=true;
+	
+	public boolean isClearMeasurements() {
+		return clearMeasurements;
+	}
+	public void setClearMeasurements(boolean clearMeasurements) {
+		this.clearMeasurements = clearMeasurements;
+	}
 	
 	@Override
 	public QASettings getQASettings() {
@@ -92,9 +99,19 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 			getQASettings().setEnabled(true);
 		}
 		for (IQASettings.qa_field f : IQASettings.qa_field.values()) try {
-			String value = form.getFirstValue(f.name());
-			f.addOption(getQASettings(), "null".equals(value)?null:value==null?null:value.toString());
-		} catch (Exception x) {}		
+			String[] values = form.getValuesArray(f.name());
+			for (String value: values)
+				f.addOption(getQASettings(), "null".equals(value)?null:value==null?null:value);
+		} catch (Exception x) {}	
+		try {
+			String cm = form.getFirstValue("clearMeasurements");
+			clearMeasurements = false;
+			if ("on".equals(cm)) clearMeasurements = true;
+			else if ("yes".equals(cm)) clearMeasurements = true;
+			else if ("checked".equals(cm)) clearMeasurements = true;
+		} catch (Exception x) {
+			clearMeasurements = true;
+		}			
 	}
 	@Override
 	protected FileInputState createTarget(Reference reference) throws Exception {
@@ -132,7 +149,7 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 				if (substanceUUID.indexOf("/")<0) substanceUUID = substanceUUID + "/0";
 				List<IIdentifiableResource<String>> container = ccli.get(substanceUUID);
 				connection = dbc.getConnection();
-				writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord());		
+				writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),clearMeasurements);		
 				writer.setCloseConnection(false);
 				writer.setConnection(connection);
 		        writer.open();
@@ -148,7 +165,7 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 				List<IIdentifiableResource<String>> queryResults = cli.executeQuery(PredefinedQuery.query_by_it_identifier,extIDType,extIDValue);
 				
 				connection = dbc.getConnection();
-				writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord());		
+				writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),clearMeasurements);		
 				writer.setCloseConnection(false);
 				writer.setConnection(connection);
 		        writer.open();
