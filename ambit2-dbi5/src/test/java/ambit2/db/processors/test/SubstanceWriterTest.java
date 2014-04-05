@@ -67,12 +67,19 @@ public class SubstanceWriterTest extends DbUnitTest {
 			in.close();
 		}
 		Assert.assertTrue(i5z.exists());
-
-	    I5ZReader reader = getReader(i5z);
-	    reader.setQASettings(new QASettings(true));
-		int records = write(reader,c.getConnection(),new ReferenceSubstanceUUID());
-		reader.close();
-        c.close();
+		I5ZReader reader= null;
+		int records = 0;
+		try {
+		    reader = getReader(i5z);
+		    QASettings qa = new QASettings(true);
+		    qa.setAll();
+		    reader.setQASettings(qa);
+			records = write(reader,c.getConnection(),new ReferenceSubstanceUUID());
+		} finally {
+			try {reader.close();} catch (Exception x) {}
+			try {c.close();} catch (Exception x) {}
+			try {i5z.delete();} catch (Exception x) {}
+		}
      
         
 /*
@@ -156,7 +163,7 @@ public class SubstanceWriterTest extends DbUnitTest {
 	}
 	public int write(IRawReader<IStructureRecord> reader,Connection connection,PropertyKey key, boolean splitRecord) throws Exception  {
 		
-		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord());
+		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),true);
 		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);
         writer.open();
