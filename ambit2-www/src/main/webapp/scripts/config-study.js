@@ -94,6 +94,7 @@
                     "iOrder": -2
                 },
                 "ph": {
+                	"sTitle": "pH",
                     "iOrder": -1
                 }
             },
@@ -111,6 +112,36 @@
                     "bVisible": false
                 }
             }
+        },
+        "PC_NON_SATURATED_PH_SECTION": {
+            "parameters": {
+                "method type": {
+                    "bVisible": false
+                }
+            },
+            "conditions": {
+                "temperature": {
+                    "iOrder": -2
+                },
+                "doses/concentrations": {
+                	"sTitle": "Concentration",
+                    "iOrder": -1
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "bVisible": false
+                },
+                "result": {
+                    "sTitle": "pH Value",
+                    "iOrder": -3
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "bVisible": false
+                }
+            }        	
         },
         "PC_VAPOUR_SECTION": {
             "conditions": {
@@ -147,6 +178,7 @@
                     "iOrder": -3
                 },
                 "ph": {
+                	"sTitle" : "pH",
                     "iOrder": -2
                 },
                 "remark": {
@@ -170,8 +202,12 @@
         },
         "PC_DISSOCIATION_SECTION": {
             "conditions": {
-                "temperature": {
+                "no": {
+                	"sTitle": "pKa No.",
                     "iOrder": -3
+                },            	
+                "temperature": {
+                    "iOrder": -4
                 }
             },
             "effects": {
@@ -180,7 +216,7 @@
                 },
                 "result": {
                     "sTitle": "pKa Value",
-                    "iOrder": -4
+                    "iOrder": -5
                 }
             },
             "interpretation": {
@@ -282,6 +318,7 @@
             },
             "conditions": {
                 "doses/concentrations": {
+                	"sTitle" : "Conc. / Dose",	
                     "iOrder": -4
                 },
                 "bioacc. basis": {
