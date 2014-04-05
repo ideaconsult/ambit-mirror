@@ -19,3 +19,23 @@ ALTER TABLE `users`
 -- extend units length	
 ALTER TABLE `substance_experiment` CHANGE COLUMN `unit` `unit` VARCHAR(45) NULL DEFAULT NULL  ;
 insert into version (idmajor,idminor,comment) values (8,0,"AMBIT2 schema");	
+
+-- extend the view
+CREATE  OR REPLACE VIEW `substance_study_view` AS
+select idsubstance,substance_prefix,substance_uuid,documentType,format,
+name,publicname,content,substanceType,
+rs_prefix,rs_uuid,
+owner_prefix,owner_uuid,owner_name,
+p.document_prefix,p.document_uuid,
+topcategory,endpointcategory,p.endpoint,
+guidance,
+reliability,isRobustStudy,purposeFlag,studyResultType,
+params,interpretation_result,interpretation_criteria,
+reference,updated,idresult,
+e.endpoint as effectendpoint,conditions,unit, 
+loQualifier, loValue, upQualifier, upvalue from substance s
+join substance_protocolapplication p on
+s.prefix=p.substance_prefix and s.uuid=p.substance_uuid
+join substance_experiment e on
+p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid
+;

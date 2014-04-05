@@ -208,6 +208,7 @@ public class UIResource extends FreeMarkerResource {
 				String delimiter = "";
 				QASettings qa = new QASettings();
 				qa.clear(); //sets enabled to false and clears all flags
+				boolean clearMeasurements = true;
 				for (FileItem file : items) if (file.isFormField()) {
 					if ("qaenabled".equals(file.getFieldName())) try {
 						if ("on".equals(file.getString())) qa.setEnabled(true);
@@ -215,6 +216,15 @@ public class UIResource extends FreeMarkerResource {
 						if ("checked".equals(file.getString())) qa.setEnabled(true);
 					} catch (Exception x) {
 						qa.setEnabled(true);
+					} else if ("clearMeasurements".equals(file.getFieldName())) {
+						try {
+							clearMeasurements = false;
+							if ("on".equals(file.getString())) clearMeasurements = true;
+							else if ("yes".equals(file.getString())) clearMeasurements = true;
+							else if ("checked".equals(file.getString())) clearMeasurements = true;
+						} catch (Exception x) {
+							clearMeasurements = true;
+						}							
 					} else
 					for (IQASettings.qa_field f : IQASettings.qa_field.values()) 
 						if (f.name().equals(file.getFieldName())) try {
@@ -245,6 +255,7 @@ public class UIResource extends FreeMarkerResource {
 									new SubstanceURIReporter(getRequest().getRootRef(), null),
 									new DatasetURIReporter(getRequest().getRootRef(), null),
 									null);
+							callable.setClearMeasurements(clearMeasurements);
 							callable.setQASettings(qa);
 							TaskResult result = callable.call();
 							json.append(",\n\"url\":");

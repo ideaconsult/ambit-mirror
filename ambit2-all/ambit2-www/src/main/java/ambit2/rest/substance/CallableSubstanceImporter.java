@@ -52,7 +52,15 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	protected SourceDataset dataset;
 	private File file;
 	protected String fileDescription;
+	protected boolean clearMeasurements=true;
 	
+	public boolean isClearMeasurements() {
+		return clearMeasurements;
+	}
+	public void setClearMeasurements(boolean clearMeasurements) {
+		this.clearMeasurements = clearMeasurements;
+	}
+
 	protected QASettings qaSettings;
 	@Override
 	public QASettings getQASettings() {
@@ -162,7 +170,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		DBProcessorsChain chain = new DBProcessorsChain();
 		dataset = DBSubstanceWriter.datasetMeta();
 		importedRecord = new SubstanceRecord();
-		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,importedRecord);
+		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,importedRecord,clearMeasurements);
 		chain.add(writer);
 		return chain;
 	}
