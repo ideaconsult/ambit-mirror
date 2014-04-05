@@ -558,6 +558,7 @@
                     "bVisible": false
                 },
                 "result": {
+                	"bVisible": false,
                     "sTitle": "Genotoxicity",
                     "iOrder": -3
                 }
@@ -569,7 +570,7 @@
             },
             "interpretation": {
                 "result": {
-                	"sTitle" : "Interpretation of the results",
+                	"sTitle" : "Genotoxicity",
                     "bVisible": true,
                     "iOrder": -2
                 },
@@ -613,6 +614,7 @@
                     "bVisible": false
                 },
                 "result": {
+                	"bVisible": false,
                     "sTitle": "Genotoxicity",
                     "iOrder": -3
                 }
@@ -624,7 +626,7 @@
             },
             "interpretation": {
                 "result": {
-                	"sTitle" : "Interpretation of the results",
+                	"sTitle" : "Genotoxicity",
                     "bVisible": true,
                     "iOrder": -2
                 },
