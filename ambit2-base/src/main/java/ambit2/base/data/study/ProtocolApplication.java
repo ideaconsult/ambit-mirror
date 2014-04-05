@@ -193,7 +193,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.citation.name())));
 		b.append(":\t");
-		b.append(this.reference==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(this.reference.toString())));
+		b.append(this.reference.toString());
 		b.append(",\n\t");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
 		b.append(":\t");
