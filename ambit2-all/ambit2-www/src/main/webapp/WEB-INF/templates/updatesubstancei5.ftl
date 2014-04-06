@@ -192,6 +192,7 @@ function updateFormValidation(formName) {
 		<input class='four columns alpha half-bottom' type="text" id='i5user' value='' name='i5user' title='IUCLID5 user (optional)' size="20">
 		<div class='three columns omega'>&nbsp;</div>
 		<div class='six columns omega'>
+			<img src='${ambit_root}/images/24x24_ambit.gif' id='imgping' style='display:none;'>
 			<div id='task_status'></div>		
 		</div>
 	</div>
