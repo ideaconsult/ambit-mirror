@@ -111,8 +111,27 @@ To skip the tests, use -DskipTests=true option
 
 ----------------------------------------------------------------------
 CHANGELOG
-AMBIT2 2.5.5-SNAPSHOT
+AMBIT2 2.5.6-SNAPSHOT
 Current version at trunk
+
+
+AMBIT2 2.5.5
+ambit2-db: Database schema 8.0. User table cleaned. 
+ambit2-db:  SQL script to create ambit_users.
+ambit2-user: new module dealing with user management (user defined in ambit_users database). Depends on https://github.com/vedina/RESTNet
+ambit2-dbi5: IUCLID5 web services (retrieve container). Importing .i5z substances into AMBIT database
+ambit2-dbi5: JSON and RDF reader for substances (experimental)
+ambit2-www: QA filtering for IUCLID5 input (both file and web service)
+ambit2-www: Users management UI support.
+ambit2-www: IUCLID5 server settings added to ambit2.pref
+ambit2-www: JME structure diagram editor replaced by Ketcher (https://github.com/ideaconsult/Toxtree.js wrapper)
+ambit2-smarts: Recursive SMARTS support. 
+ambit2-xt: removed AMBIT-XT related modules.
+ambit2-plugin-analogs: removed
+ambit2-plugin-dbtools: removed
+ambit2-plugin-pbt: removed
+ambit2-plugin-search: removed
+ambit2-plugin-usermgr: removed
 
 AMBIT2 2.5.4
 ambit2-www: i5 0.0.5 (43 endpoints and QA filtering criteria)
