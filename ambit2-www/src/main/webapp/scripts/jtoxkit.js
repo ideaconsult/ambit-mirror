@@ -1071,6 +1071,15 @@ var jToxStudy = (function () {
     var tree = jT.getTemplate('#jtox-studies');
     root.appendChild(tree);
     jT.changeTabsIds(tree, self.suffix);
+    $('div.jtox-study-tab div button', tree).on('click', function (e) {
+    	var par = $(this).parents('.jtox-study-tab')[0];
+	    if ($(this).hasClass('expand-all')) {
+		    $('.jtox-foldable', par).removeClass('folded');
+	    }
+	    else if ($(this).hasClass('collapse-all')) {
+		    $('.jtox-foldable', par).addClass('folded');
+	    }
+    });
     
     // keep on initializing...
     var loadPanel = function(panel){
@@ -1079,7 +1088,7 @@ var jToxStudy = (function () {
           var table = this;
           jT.call(self, jT.$(table).data('jtox-uri'), function(study){
             if (!!study) {
-              jT.$(table).removeClass('unloaded folded');  
+              jT.$(table).removeClass('unloaded');  
               jT.$(table).addClass('loaded');
               self.processStudies(panel, study.study, false);
             }
@@ -2036,18 +2045,30 @@ jT.templates['all-studies']  =
 "	    </div>" +
 "	    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\"></div>" +
 "	    <div id=\"jtox-pchem\" class=\"jtox-study-tab P-CHEM\">" +
+"	    	<div class=\"small float-right\">" +
+"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "      </div>" +
 "	    <div id=\"jtox-envfate\" class=\"jtox-study-tab ENV_FATE\">" +
+"	    	<div class=\"small float-right\">" +
+"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-ecotox\" class=\"jtox-study-tab ECOTOX\">" +
+"	    	<div class=\"small float-right\">" +
+"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-tox\" class=\"jtox-study-tab TOX\">" +
+"	    	<div class=\"small float-right\">" +
+"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
