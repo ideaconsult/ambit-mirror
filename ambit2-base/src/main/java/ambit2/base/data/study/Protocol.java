@@ -10,7 +10,7 @@ public class Protocol {
 	String endpoint;
 	List<String> guideline;
 	//hack for IUCLID categories, as i can't find the exact titles in the schema :(
-	private enum _categories {
+	public enum _categories {
 		/**
 		 * Phys chem properties	
 		 */

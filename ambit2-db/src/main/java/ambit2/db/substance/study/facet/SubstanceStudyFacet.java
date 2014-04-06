@@ -9,7 +9,14 @@ public class SubstanceStudyFacet extends AbstractFacet<String>{
 	 */
 	private static final long serialVersionUID = 9014078415852427522L;
 	protected String subcategory;
-
+	protected String description;
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public void setSubcategoryTitle(String subcategory) {
 		this.subcategory = subcategory;
 	}
