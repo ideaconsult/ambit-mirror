@@ -153,6 +153,9 @@ var _i5 = {
 	    	        'user' : $(user).val(),
 	    	        'pass' : $(pass).val() 
 	    	    };
+	    	$('#imgping').show();
+	    	$("#task_status").text("");
+	    	$("#task_errorreport").text("");
 	  	  $.ajax({
 		        dataType: "json",
 		        url: url + "?" + $.param(p),
@@ -161,6 +164,7 @@ var _i5 = {
 		        		$("#task_status").text(entry.name + " " + entry.status);
 		        		$("#task_errorreport").text(entry.error);
 		        	});
+		        	$('#imgping').hide();
 		        },
 		        error: function(xhr, status, err) {
 		        	try {
@@ -172,12 +176,14 @@ var _i5 = {
 				        		$("#task_errorreport").text(entry.error);
 				        	}
 		        		}
+		        		$('#imgping').hide();
 		        	} catch (err) {
 		        		$("#task_status").text(status);
 		        		$("#task_errorreport").text(err);
 		        	}
 		        },
 		        complete: function(xhr, status) {
+		        	$('#imgping').hide();
 		        }
 		     });
 	    }
