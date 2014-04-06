@@ -87,6 +87,8 @@ import ambit2.rest.facet.DatasetsByNamePrefixResource;
 import ambit2.rest.freemarker.FreeMarkerApplication;
 import ambit2.rest.freemarker.FreeMarkerStatusService;
 import ambit2.rest.help.HelpResource;
+import ambit2.rest.loom.LoomResource;
+import ambit2.rest.loom.LoomRouter;
 import ambit2.rest.model.ModelResource;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.pubchem.CSLSResource;
@@ -470,11 +472,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	     router.setDefaultMatchingMode(Template.MODE_STARTS_WITH); 
 	     router.setRoutingMode(Router.MODE_BEST_MATCH); 
 	     
-	    /*
-	     StringWriter w = new StringWriter();
-	     AmbitApplication.printRoutes(router,">",w);
-	     System.out.println(w.toString());
-	    */
+	     router.attach(LoomResource.resource, new LoomRouter(getContext()));
 	     
 		 try {	
 			 //TODO use config file
