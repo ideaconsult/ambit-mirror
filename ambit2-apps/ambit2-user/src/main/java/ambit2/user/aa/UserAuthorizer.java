@@ -2,22 +2,17 @@ package ambit2.user.aa;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.idea.modbcum.p.QueryExecutor;
 import net.idea.restnet.db.DBConnection;
 
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Reference;
-import org.restlet.routing.Template;
+import org.restlet.data.Method;
 import org.restlet.security.RoleAuthorizer;
 
 import ambit2.user.rest.VerifyUser;
 import ambit2.user.rest.resource.DBRoles;
-import ambit2.user.rest.resource.Resources;
-import ambit2.user.rest.resource.UserDBResource;
 
 /**
  * The editor and manager roles have full access, 
@@ -38,28 +33,28 @@ public class UserAuthorizer extends RoleAuthorizer {
 
 	@Override
 	public boolean authorize(Request request, Response response) {
+		//shortcut - GET always allowed
+		if (Method.GET.equals(request.getMethod())) return true;
+		
 		if ((request.getClientInfo()==null) 
 				|| (request.getClientInfo().getUser()==null)
 				|| (request.getClientInfo().getUser().getIdentifier()==null)) return false;
-		//role based
-		if (super.authorize(request, response)) return true;
 		
-		Template template1 = new Template(String.format("%s%s/{%s}",request.getRootRef(),Resources.user,UserDBResource.resourceKey));
+		//role based
+		return super.authorize(request, response);
 		/*
+		Template template1 = new Template(String.format("%s%s/{%s}",request.getRootRef(),Resources.user,UserDBResource.resourceKey));
 		Template template2 = new Template(String.format("%s%s/{%s}%s",request.getRootRef(),Resources.user,UserDBResource.resourceKey,Resources.protocol));
 		Template template3 = new Template(String.format("%s%s/{%s}%s",request.getRootRef(),Resources.user,UserDBResource.resourceKey,Resources.project));
 		Template template4 = new Template(String.format("%s%s/{%s}%s",request.getRootRef(),Resources.user,UserDBResource.resourceKey,Resources.organisation));
-		*/
 		Template template5 = new Template(String.format("%s%s/{%s}%s",request.getRootRef(),Resources.user,UserDBResource.resourceKey,Resources.alert));
 		Map<String, Object> vars = new HashMap<String, Object>();
 		Reference ref = request.getResourceRef().clone();
 		ref.setQuery(null);
 		template1.parse(ref.toString(),vars);
-		/*
 		template2.parse(ref.toString(),vars);
 		template3.parse(ref.toString(),vars);
 		template4.parse(ref.toString(),vars);
-		*/
 		template5.parse(ref.toString(),vars);
 		if (vars.get(UserDBResource.resourceKey)==null) return false;
 		Integer iduser  = null;
@@ -68,6 +63,7 @@ public class UserAuthorizer extends RoleAuthorizer {
 			return verify(iduser,request.getClientInfo().getUser().getIdentifier());
 		} catch (Exception x) {	}
 		return false; 
+		*/
 	}
 	public boolean verify(Integer iduser, String identifier) throws Exception {
 		//TODO make use of same connection for performance reasons
