@@ -9,6 +9,8 @@ import net.idea.restnet.i.task.TaskStatus;
 
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.json.JSONUtils;
+
 public abstract class Task<REFERENCE,USERID> implements Serializable,ITask<REFERENCE,USERID> /*, PropertyChangeListener */ {
 
 	public enum TaskProperty {
@@ -167,5 +169,23 @@ public abstract class Task<REFERENCE,USERID> implements Serializable,ITask<REFER
 	 */
 	public void setPolicy() throws Exception {
 		
+	}
+	private static String format = "\n{\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"error\": \"%s\",\n\t\"policyError\": \"%s\",\n\t\"status\": \"%s\",\n\t\"started\": %d,\n\t\"completed\": %d,\n\t\"result\": \"%s\",\n\t\"user\": \"%s\"\n}";
+	
+	@Override
+	public String toJSON() {
+			String uri = getUri()==null?null:getUri().toString();
+			return String.format(format,
+					uri,
+					toString(),
+					getName()==null?"":JSONUtils.jsonEscape(getName()),
+					getError()==null?"":JSONUtils.jsonEscape(getError().toString()),
+					getPolicyError()==null?"":JSONUtils.jsonEscape(getPolicyError().toString()),
+					getStatus()==null?"":getStatus(),
+					getStarted(),
+					getTimeCompleted(),
+					getUri()==null?"":JSONUtils.jsonEscape(getUri().toString()),
+					getUserid()==null?"":getUserid()
+					);
 	}
 }

@@ -47,6 +47,9 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 	protected String extIDType;
 	protected String extIDValue;
 	protected boolean clearMeasurements=true;
+	protected String server;
+	protected String user;
+	protected String pass;
 	
 	public boolean isClearMeasurements() {
 		return clearMeasurements;
@@ -112,6 +115,25 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 		} catch (Exception x) {
 			clearMeasurements = true;
 		}			
+		try {
+			server = form.getFirstValue("i5server").trim();
+			if ("".equals(server)) server = null;
+		} catch (Exception x) {
+			server = null;
+		}
+		try {
+			user = form.getFirstValue("i5user").trim();
+			if ("".equals(user)) user = null;
+		} catch (Exception x) {
+			user = null;
+		}			
+		try {
+			pass = form.getFirstValue("i5pass").trim();
+			if ("".equals(pass)) pass = null;
+		} catch (Exception x) {
+			pass = null;
+		}			
+		
 	}
 	@Override
 	protected FileInputState createTarget(Reference reference) throws Exception {
@@ -143,42 +165,52 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 			if (useUUID) {
 				if (substanceUUID==null || "".equals(substanceUUID)) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Empty UUID");
 				dbc = new DBConnection(context);
-				i5 = new I5LightClient(dbc.getProperty("i5.server"));
-				i5.login(dbc.getProperty("i5.user"),dbc.getProperty("i5.pass"));
-				ContainerClient ccli = i5.getContainerClient();
-				if (substanceUUID.indexOf("/")<0) substanceUUID = substanceUUID + "/0";
-				List<IIdentifiableResource<String>> container = ccli.get(substanceUUID);
-				connection = dbc.getConnection();
-				writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),clearMeasurements);		
-				writer.setCloseConnection(false);
-				writer.setConnection(connection);
-		        writer.open();
-				IIdentifiableResource<String> result = processContainer(container, writer);
+				if (server==null) server = dbc.getProperty("i5.server");
+				i5 = new I5LightClient(server);
+				if (user==null) user = dbc.getProperty("i5.user");
+				if (pass==null) pass = dbc.getProperty("i5.pass");				
+				if (i5.login(user,pass)) {
+					ContainerClient ccli = i5.getContainerClient();
+					if (substanceUUID.indexOf("/")<0) substanceUUID = substanceUUID + "/0";
+					List<IIdentifiableResource<String>> container = ccli.get(substanceUUID);
+					connection = dbc.getConnection();
+					writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),clearMeasurements);		
+					writer.setCloseConnection(false);
+					writer.setConnection(connection);
+			        writer.open();
+					IIdentifiableResource<String> result = processContainer(container, writer);
+				} else throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,"IUCLID5 server login failed ["+server+"].");
 		        
 			} else { //query
 				if (extIDType==null || extIDValue==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"Invalid query");
 				dbc = new DBConnection(context);
-				i5 = new I5LightClient(dbc.getProperty("i5.server"));
-				i5.login(dbc.getProperty("i5.user"),dbc.getProperty("i5.pass"));
-				QueryToolClient cli = i5.getQueryToolClient();
-				ContainerClient ccli = i5.getContainerClient();				
-				List<IIdentifiableResource<String>> queryResults = cli.executeQuery(PredefinedQuery.query_by_it_identifier,extIDType,extIDValue);
-				
-				connection = dbc.getConnection();
-				writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),clearMeasurements);		
-				writer.setCloseConnection(false);
-				writer.setConnection(connection);
-		        writer.open();
-
-				for (IIdentifiableResource<String> item : queryResults) {
-					List<IIdentifiableResource<String>> container = ccli.get(item.getResourceIdentifier());
-					processContainer(container, writer);					
-				}
+				if (server==null) server = dbc.getProperty("i5.server");
+				i5 = new I5LightClient(server);
+				if (user==null) user = dbc.getProperty("i5.user");
+				if (pass==null) pass = dbc.getProperty("i5.pass");
+				if (i5.login(user,pass)) {
+					QueryToolClient cli = i5.getQueryToolClient();
+					ContainerClient ccli = i5.getContainerClient();				
+					List<IIdentifiableResource<String>> queryResults = cli.executeQuery(PredefinedQuery.query_by_it_identifier,extIDType,extIDValue);
+					
+					connection = dbc.getConnection();
+					writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(),new SubstanceRecord(),clearMeasurements);		
+					writer.setCloseConnection(false);
+					writer.setConnection(connection);
+			        writer.open();
+	
+					for (IIdentifiableResource<String> item : queryResults) {
+						List<IIdentifiableResource<String>> container = ccli.get(item.getResourceIdentifier());
+						processContainer(container, writer);					
+					}
+				} else throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,"IUCLID5 server login failed ["+server+"].");
 			}
 			return createReference(connection);
+		} catch (ResourceException x) {
+			Context.getCurrentLogger().log(Level.SEVERE,x.getMessage(),x);
+			throw x;
 		} catch (Exception x) {
 			Context.getCurrentLogger().log(Level.SEVERE,x.getMessage(),x);
-
 			throw x;
 		} finally {
 			Context.getCurrentLogger().fine("Done");

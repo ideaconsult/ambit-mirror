@@ -119,6 +119,7 @@ public class SimpleTaskResource<USERID> extends AbstractResource<Iterator<UUID>,
 		else return searchStatus==null?true:searchStatus.equals(task.getStatus().toString());
 	}
 	
+	
 	protected Iterator<UUID> getTasks() {
 
 		

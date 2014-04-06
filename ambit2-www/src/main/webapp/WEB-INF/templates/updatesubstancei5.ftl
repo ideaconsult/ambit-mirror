@@ -27,6 +27,8 @@ $(document).ready(function() {
 		    $('[name=options]').val( 'UUID' );
 		    updateFormValidation("#uploadForm");
 		    _i5.getQAOptions(_i5.qaSettings);
+		    var purl = $.url();
+			$('#uuid').attr('value',purl.param('uuid')===undefined?'':purl.param('uuid'));
 });
 
 function updateFormValidation(formName) {
@@ -181,23 +183,31 @@ function updateFormValidation(formName) {
 	<div class='row remove-bottom' >
 		<label class='three columns alpha' for="i5server">IUCLID5 server</label>
 		<input class='seven columns alpha half-bottom' type="text" id='i5server' value='' name='i5server' title='IUCLID5 server URI (optional)' size="40">
-		<div class='six columns omega'></div>
+		<div class='six columns omega'>
+			<a href="javascript:void(0)" onclick="_i5.ping('${ambit_root}/loom/i5/default/ping','#i5server','#i5user','#i5pass')">Check connectivity</a>
+		</div>
 	</div>
 	<div class='row remove-bottom' >
 		<label class='three columns alpha' for="i5user">IUCLID5 user</label>
 		<input class='four columns alpha half-bottom' type="text" id='i5user' value='' name='i5user' title='IUCLID5 user (optional)' size="20">
-		<div class='nine columns omega'></div>
+		<div class='three columns omega'>&nbsp;</div>
+		<div class='six columns omega'>
+			<div id='task_status'></div>		
+		</div>
 	</div>
 	<div class='row remove-bottom' >
 		<label class='three columns alpha' for="i5pass">IUCLID5 password</label>
 		<input class='four columns alpha half-bottom' type="password" id='i5pass' value='' name='i5pass' title='IUCLID5 password (optional)' size="20">
-		<div class='nine columns omega'></div>
+		<div class='three columns omega'>&nbsp;</div>
+		<div class='six columns omega'>
+			<div id='task_errorreport'></div>
+		</div>		
 	</div>	
 				
 	<div class='row'>
-		<label class='three columns alpha'>&nbsp;</label>
+		<label class='ten columns alpha'>&nbsp;</label>
 		<input class='four columns alpha' type='submit' class='submit' value='Submit'>
-		<div class='nine columns omega'></div>
+		<div class='two columns omega'></div>
 	</div>
 
 	</form>	

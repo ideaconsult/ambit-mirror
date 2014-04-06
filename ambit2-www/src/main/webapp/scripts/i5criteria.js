@@ -146,5 +146,40 @@ var _i5 = {
 						}).appendTo(selector);
 				});
 	    	this.selections.highQuality(qa,selector);	    
+	    },
+	    "ping" : function(url,server,user,pass) {
+	    	var p = {
+	    	        'server'   : $(server).val(),
+	    	        'user' : $(user).val(),
+	    	        'pass' : $(pass).val() 
+	    	    };
+	  	  $.ajax({
+		        dataType: "json",
+		        url: url + "?" + $.param(p),
+		        success: function(data, status, xhr) {
+		        	$.each(data["task"],function(index, entry) {
+		        		$("#task_status").text(entry.name + " " + entry.status);
+		        		$("#task_errorreport").text(entry.error);
+		        	});
+		        },
+		        error: function(xhr, status, err) {
+		        	try {
+		        		if (xhr.responseText != undefined) {
+				        	var task = jQuery.parseJSON(xhr.responseText);
+				        	if (task.length > 0) {
+				        		var entry = task[0];
+				        		$("#task_status").text(entry.name + " " + entry.status);
+				        		$("#task_errorreport").text(entry.error);
+				        	}
+		        		}
+		        	} catch (err) {
+		        		$("#task_status").text(status);
+		        		$("#task_errorreport").text(err);
+		        	}
+		        },
+		        complete: function(xhr, status) {
+		        }
+		     });
 	    }
+	    
 	}
