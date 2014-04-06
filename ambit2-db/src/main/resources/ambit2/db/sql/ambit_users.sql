@@ -76,9 +76,9 @@ CREATE TABLE `user_registration` (
 DROP TABLE IF EXISTS `policy`;
 CREATE TABLE `policy` (
   `idpolicy` int(11) NOT NULL AUTO_INCREMENT,
-  `prefix` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL,
-  `resource` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `role_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `prefix` varchar(255) NOT NULL,
+  `resource` varchar(255) NOT NULL,
+  `role_name` varchar(16) NOT NULL,
   `get` tinyint(4) DEFAULT NULL,
   `put` tinyint(4) DEFAULT NULL,
   `post` tinyint(4) DEFAULT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE `policy` (
   KEY `put` (`put`),
   KEY `post` (`post`),
   KEY `delete` (`delete`),
-  FULLTEXT KEY `uri` (`prefix`,`resource`,`role_name`),
+  KEY `uri` (`prefix`,`resource`,`role_name`),
   CONSTRAINT `fkrole1` FOREIGN KEY (`role_name`) REFERENCES `roles` (`role_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
