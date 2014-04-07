@@ -79,8 +79,12 @@ public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 				
 				output.write("\n\t},\n\t\"category\":  {\n\t\t\t\"title\":");
 				output.write(item.getSubcategoryTitle()==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubcategoryTitle())));
-				output.write(",\n\t\t\t\"description\":");
-				output.write(JSONUtils.jsonQuote(JSONUtils.jsonEscape(((SubstanceStudyFacet)item).getDescription())));
+				
+				if (item instanceof SubstanceStudyFacet) {
+					SubstanceStudyFacet ssf = (SubstanceStudyFacet)item;
+					output.write(",\n\t\t\t\"description\":");
+					output.write(ssf==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(ssf.getDescription())));
+				}
 				output.write(",\n\t\t\t\"uri\":");
 				String suri = item.getSubCategoryURL(
 						uriReporter.getURI(item))+
