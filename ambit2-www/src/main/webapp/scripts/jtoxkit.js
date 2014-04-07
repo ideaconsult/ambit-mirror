@@ -1393,7 +1393,13 @@ var jToxStudy = (function () {
       
       // create the groups on the corresponding tabs, first sorting them alphabetically
       summary.sort(function (a, b) {
-	      return (a.category.description || a.category.title) < (b.category.description || b.category.title) ? -1 : 1;
+      	var valA = (a.category.description || a.category.title);
+      	var valB = (b.category.description || b.category.title);
+      	if (valA == null)
+      		return -1;
+      	if (valB == null)
+      		return 1;
+	      return (valA < valB) ? -1 : 1;
       });
       
       for (var si = 0, sl = summary.length; si < sl; ++si) {
