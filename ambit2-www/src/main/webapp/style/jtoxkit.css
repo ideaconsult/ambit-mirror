@@ -183,10 +183,6 @@ div.jtox-study .jtox-study-title {
   width: 100%;
 }
 
-.jtox-study-filter {
-  width: 50% !important;
-}
-
 div.jtox-study-tab.ui-tabs-panel {
   padding-left: 0px;
   padding-bottom: 0px;
@@ -195,13 +191,14 @@ div.jtox-study-tab.ui-tabs-panel {
   height: 100%;
 }
 
+div.jtox-study-tab div button {
+	font-size: 80%;
+	padding:4px 8px 4px 8px;
+}
+
 div.jtox-study-tab .dataTables_wrapper {
   overflow: hidden;  
   width: 100%;
-}
-
-div.jtox-study-tab table.dataTable th {
-  text-transform: capitalize;
 }
 
 /* Start of table-related classes */
@@ -348,4 +345,8 @@ td.jtox-multi table {
 
 .jtox-hidden {
   display: none !important;
+}
+
+.jtox-toolkit .float-right {
+	float: right !important;
 }
