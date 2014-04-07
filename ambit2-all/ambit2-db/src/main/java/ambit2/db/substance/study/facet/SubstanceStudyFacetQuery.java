@@ -69,11 +69,10 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 			record.setCount(rs.getInt(3));
 			try {
 				Protocol._categories category = Protocol._categories.valueOf(rs.getString(2));
-				record.setDescription(
-				category.getNumber() + " " + category.toString()
+				record.setDescription(category.getNumber() + " " + category.toString()
 				);
 			} catch (Exception x) {
-				record.setDescription(rs.getString(2));
+				record.setDescription(null);
 			}
 			return record;
 		} catch (Exception x) {
