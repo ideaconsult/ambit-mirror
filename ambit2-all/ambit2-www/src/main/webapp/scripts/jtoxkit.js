@@ -1031,7 +1031,7 @@ var jToxDataset = (function () {
   
   return cls;
 })();
-/* toxstudy.js - Study-related functions from jT.
+/* toxstudy.js - Study-related functions from jToxKit
  *
  * Copyright 2012-2013, IDEAconsult Ltd. http://www.ideaconsult.net/
  * Created by Ivan Georgiev
@@ -1071,6 +1071,15 @@ var jToxStudy = (function () {
     var tree = jT.getTemplate('#jtox-studies');
     root.appendChild(tree);
     jT.changeTabsIds(tree, self.suffix);
+    jT.$('div.jtox-study-tab div button', tree).on('click', function (e) {
+    	var par = jT.$(this).parents('.jtox-study-tab')[0];
+	    if (jT.$(this).hasClass('expand-all')) {
+		    jT.$('.jtox-foldable', par).removeClass('folded');
+	    }
+	    else if (jT.$(this).hasClass('collapse-all')) {
+		    jT.$('.jtox-foldable', par).addClass('folded');
+	    }
+    });
     
     // keep on initializing...
     var loadPanel = function(panel){
@@ -1079,10 +1088,12 @@ var jToxStudy = (function () {
           var table = this;
           jT.call(self, jT.$(table).data('jtox-uri'), function(study){
             if (!!study) {
-              jT.$(table).removeClass('unloaded folded');  
+              jT.$(table).removeClass('unloaded folded');
               jT.$(table).addClass('loaded');
               self.processStudies(panel, study.study, false);
             }
+            
+           // now try to order them, if they are all loaded...
           });  
         });
       }
@@ -1162,18 +1173,17 @@ var jToxStudy = (function () {
     // modifies the column title, according to configuration and returns "null" if it is marked as "invisible".
     ensureTable: function (tab, study) {
       var self = this;
-      var defaultColumns = [
-        { "sTitle": "Name", "sClass": "center middle", "sWidth": "20%", "mData": "protocol.endpoint" }, // The name (endpoint)
-        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, "endpoint");  } },   // Effects columns
-        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatLoHigh(data.result, type) }) } },
-        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
-        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "50px", "mData": "citation.owner", "sDefaultContent": "?"  }, 
-        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "50px", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
-      ];
-  
       var category = study.protocol.category.code;
       var theTable = jT.$('.' + category + ' .jtox-study-table', tab)[0];
       if (!jT.$(theTable).hasClass('dataTable')) {
+	      var defaultColumns = [
+	        { "sTitle": "Name", "sClass": "center middle", "sWidth": "20%", "mData": "protocol.endpoint" }, // The name (endpoint)
+	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, "endpoint");  } },   // Effects columns
+	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatLoHigh(data.result, type) }) } },
+	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
+	        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "?"  }, 
+	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
+	      ];
   
         var colDefs = [];
         
@@ -1379,12 +1389,13 @@ var jToxStudy = (function () {
       var typeSummary = [];
       
       // first - clear all existing tabs
-      var catList = jT.$('.jtox-study', self.rootElement);
-      while(catList.length > 0) {
-        catList[0].parentNode.removeChild(catList[0]);
-      }
+			jT.$('.jtox-study', self.rootElement).remove();
       
-      // create the groups on the corresponding tabs
+      // create the groups on the corresponding tabs, first sorting them alphabetically
+      summary.sort(function (a, b) {
+	      return (a.category.description || a.category.title) < (b.category.description || b.category.title) ? -1 : 1;
+      });
+      
       for (var si = 0, sl = summary.length; si < sl; ++si) {
         var sum = summary[si];
         var top = sum.topcategory.title;
@@ -1438,7 +1449,7 @@ var jToxStudy = (function () {
     
     processStudies: function (tab, study, map) {
       var self = this;
-      var cats = [];
+      var cats = {};
       
       // first swipe to map them to different categories...
       if (!map){
@@ -1479,7 +1490,8 @@ var jToxStudy = (function () {
 
         var theTable = self.ensureTable(tab, study);
         jT.$(theTable).dataTable().fnAddData(onec);
-        jT.$(theTable).colResizable();
+        jT.$(theTable).colResizable({ minWidth: 15, liveDrag: true });
+        jT.$(theTable).parents('.jtox-study').addClass('folded');
       }
       
       // we need to fix columns height's because of multi-cells
@@ -2036,18 +2048,30 @@ jT.templates['all-studies']  =
 "	    </div>" +
 "	    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\"></div>" +
 "	    <div id=\"jtox-pchem\" class=\"jtox-study-tab P-CHEM\">" +
+"	    	<div class=\"small float-right\">" +
+"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "      </div>" +
 "	    <div id=\"jtox-envfate\" class=\"jtox-study-tab ENV_FATE\">" +
+"	    	<div class=\"small float-right\">" +
+"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-ecotox\" class=\"jtox-study-tab ECOTOX\">" +
+"	    	<div class=\"small float-right\">" +
+"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-tox\" class=\"jtox-study-tab TOX\">" +
+"	    	<div class=\"small float-right\">" +
+"	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
+"	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
