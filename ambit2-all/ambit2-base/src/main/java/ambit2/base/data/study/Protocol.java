@@ -474,7 +474,7 @@ public class Protocol {
 		AGGLOMERATION_AGGREGATION_SECTION {
 			@Override
 			public String toString() {
-				return "Agglomeration/aggregation";
+				return "Nano material agglomeration/aggregation";
 			}
 			@Override
 			public String getNumber() {
@@ -484,7 +484,7 @@ public class Protocol {
 		CRYSTALLINE_PHASE_SECTION {
 			@Override
 			public String toString() {
-				return "Crystalline phase";
+				return "Nano material crystalline phase";
 			}
 			@Override
 			public String getNumber() {
@@ -494,7 +494,7 @@ public class Protocol {
 		CRYSTALLITE_AND_GRAIN_SIZE_SECTION {
 			@Override
 			public String toString() {
-				return "Crystallite and grain size";
+				return "Nano material crystallite and grain size";
 			}
 			@Override
 			public String getNumber() {
@@ -504,17 +504,27 @@ public class Protocol {
 		ASPECT_RATIO_SHAPE_SECTION {
 			@Override
 			public String toString() {
-				return "Aspect ratio/shape";
+				return "Nano material aspect ratio/shape";
 			}
 			@Override
 			public String getNumber() {
 				return "4.27";
 			}				
 		},
+		SPECIFIC_SURFACE_AREA_SECTION {
+			@Override
+			public String toString() {
+				return "Nano material specific surface area";
+			}
+			@Override
+			public String getNumber() {
+				return "4.28";
+			}
+		},		
 		ZETA_POTENTIAL_SECTION {
 			@Override
 			public String toString() {
-				return "Zeta potential";
+				return "Nano material zeta potential";
 			}
 			@Override
 			public String getNumber() {
@@ -524,13 +534,64 @@ public class Protocol {
 		SURFACE_CHEMISTRY_SECTION {
 			@Override
 			public String toString() {
-				return "Surface chemistry";
+				return "Nano material surface chemistry";
 			}
 			@Override
 			public String getNumber() {
 				return "4.30";
 			}				
-		}
+		},
+		DUSTINESS_SECTION {
+			@Override
+			public String toString() {
+				return "Nano material dustiness";
+			}
+			@Override
+			public String getNumber() {
+				return "4.31";
+			}
+		},
+		POROSITY_SECTION {
+			@Override
+			public String toString() {
+				return "Nano material porosity";
+			}
+			@Override
+			public String getNumber() {
+				return "4.32";
+			}
+		},
+		POUR_DENSITY_SECTION {
+			@Override
+			public String toString() {
+				return "Nanomaterial pour density";
+			}
+			@Override
+			public String getNumber() {
+				return "4.33";
+			}
+		},
+		PHOTOCATALYTIC_ACTIVITY_SECTION {
+			@Override
+			public String toString() {
+				return "Nanomaterial photocatalytic activity";
+			}
+			@Override
+			public String getNumber() {
+				return "4.34";
+			}
+		},
+		CATALYTIC_ACTIVITY_SECTION {
+			@Override
+			public String toString() {
+				return "Nanomaterial catalytic activity";
+			}
+			@Override
+			public String getNumber() {
+				return "4.36";
+			}
+		}		
+		
 
 		;
 		public String getNumber() {

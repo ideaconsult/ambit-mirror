@@ -11,7 +11,20 @@ public class Params<VALUE> extends HashMap<String, VALUE> {
 	 * 
 	 */
 	private static final long serialVersionUID = 8844381138806492152L;
-
+	
+	public static final String unit = "unit";
+	public static final String loValue = "loValue";
+	public static final String upValue = "upValue";
+	public static final String loQualifier = "loQualifier";
+	public static final String upQualifier = "upQualifier";
+	
+	public Params() {
+		super();
+	}
+	public Params(String key,VALUE value) {
+		super();
+		put(key,value);
+	}
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();

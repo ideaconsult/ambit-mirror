@@ -1519,12 +1519,16 @@
                       "iOrder": -9,
                       "bVisible": false
                   },
-                  "instruments": {
+                  "data_gathering_instruments": {
+                	  "sTitle" : "Instruments",
                       "iOrder": -8,
                       "bVisible": false
                   }                  
               },
               "conditions": {
+            	  "percentile" : {
+            		  "bVisible": false
+            	  },
                   "remarks": {
                 	  "sTitle" : "Remarks",
                       "iOrder": -15,
@@ -1580,7 +1584,8 @@
                       "iOrder": -9,
                       "bVisible": false
                   },
-                  "instruments": {
+                  "data_gathering_instruments": {
+                	  "sTitle" : "Instruments",
                       "iOrder": -8,
                       "bVisible": false
                   }                  
@@ -1637,10 +1642,16 @@
                     "iOrder": -9,
                     "bVisible": false
                 },
-                "instruments": {
+                "data_gathering_instruments": {
+              	    "sTitle" : "Instruments",
                     "iOrder": -8,
                     "bVisible": false
-                }                  
+                },
+                "testmat_form": {
+                	"sTitle": "Test Material Form",
+                  	"bVisible": true,
+                  	"iOrder": -21
+                  }                 
             },
             "conditions": {
                 "remarks": {
@@ -1677,7 +1688,8 @@
             "interpretation": {
                 "result": {
                 	"sTitle" : "Conclusions",
-                    "bVisible": true
+                	"iOrder": -11,
+                    "bVisible": false
                 }
             }        	
       },
@@ -1766,6 +1778,9 @@
       },
       "PC_GRANULOMETRY_SECTION" : {
     	  "parameters": {
+              "type of method": {
+                  "iOrder": -25
+              },
               "distribution_type" : {
                 	"sTitle" : "Distribution type",
                 	"iOrder": -23
@@ -1781,10 +1796,10 @@
               	"sTitle" : "Passage num.",
               	"iOrder": -22
               },            	                
-              "remarks": {
-            	  "sTitle" : "Remarks",
-                  "iOrder": -15,
-                  "bVisible": true
+              "remark": {
+            	  "sTitle" : "Remark",
+                  "iOrder": -16,
+                  "bVisible": false
               },
               "std_dev": {
             	  "sTitle" : "Std. dev.",
@@ -1815,7 +1830,490 @@
                   "bVisible": false
               }
           }            	  
-      }
- 
+      },
+    "CRYSTALLITE_AND_GRAIN_SIZE_SECTION" : {
+    	"parameters": {
+    		 "type of method": {
+                 "iOrder": -23,
+                 "sTitle": "Method type"
+             }, 
+              "method details": {
+                  "iOrder": -22,
+                  "bVisible": false
+              },
+              "sampling": {
+              	"sTitle" : "Sampling",
+                  "iOrder": -21,
+                  "bVisible": false
+              },              
+              "data_gathering_instruments": {
+                	"sTitle" : "Instruments",
+                    "iOrder": -20,
+                    "bVisible": false
+                },                          
+              "testmat_form": {
+            	"sTitle": "Test Material Form",
+              	"bVisible": true,
+              	"iOrder": -19
+              },
+              "material_isotropic" : {
+            	  "sTitle" : "Isotropic material",
+                  "iOrder": -18
+              }
+          },
+          "conditions": {
+              "std_dev": {
+            	  "sTitle" : "Std. dev.",
+                 "iOrder": -15
+              }
+          },
+          "effects": {
+              "endpoint": {
+                  "iOrder": -17,
+                  "bVisible" : false
+              },
+              "result": {
+            	  "sTitle" : "Mean diameter",
+                  "iOrder": -16
+              }
+          },
+          "protocol": {
+              "guideline": {
+                  "iOrder": -10
+              }
+          },
+          "interpretation": {
+              "result": {
+            	  "sTitle" : "Conclusions",
+                  "bVisible": false
+              },
+              "criteria": {
+                  "bVisible": false
+              }
+          }            	  
+    },
+    "DUSTINESS_SECTION" : {
+    	"parameters": {
+    		 "type of method": {
+                 "iOrder": -23,
+                 "sTitle": "Method type"
+             }, 
+              "method details": {
+                  "iOrder": -22,
+                  "bVisible": false
+              },
+              "sampling": {
+              	"sTitle" : "Sampling",
+                  "iOrder": -21,
+                  "bVisible": false
+              },              
+              "data_gathering_instruments": {
+                	"sTitle" : "Instruments",
+                    "iOrder": -20,
+                    "bVisible": false
+                },                          
+              "testmat_form": {
+            	"sTitle": "Test Material Form",
+              	"bVisible": true,
+              	"iOrder": -19
+              }
+          },
+          "conditions": {
+              "std_dev": {
+            	  "sTitle" : "Std. dev.",
+                 "iOrder": -15
+              }
+          },
+          "effects": {
+              "endpoint": {
+                  "iOrder": -17,
+                  "bVisible" : false
+              },
+              "result": {
+            	  "sTitle" : "Dustiness index",
+                  "iOrder": -16
+              }
+          },
+          "protocol": {
+              "guideline": {
+                  "iOrder": -10
+              }
+          },
+          "interpretation": {
+              "result": {
+            	  "sTitle" : "Conclusions",
+                  "bVisible": false
+              },
+              "criteria": {
+                  "bVisible": false
+              }
+          }            	  
+    },
+    "POROSITY_SECTION" : {
+    	"parameters": {
+    		 "type of method": {
+                 "iOrder": -23,
+                 "sTitle": "Method type"
+             }, 
+              "method details": {
+                  "iOrder": -22,
+                  "bVisible": false
+              },
+              "sampling": {
+              	"sTitle" : "Sampling",
+                  "iOrder": -21,
+                  "bVisible": false
+              },              
+              "data_gathering_instruments": {
+                	"sTitle" : "Instruments",
+                    "iOrder": -20,
+                    "bVisible": false
+                },                          
+              "testmat_form": {
+            	"sTitle": "Test Material Form",
+              	"bVisible": true,
+              	"iOrder": -19
+              }
+          },
+          "conditions": {
+              "std_dev": {
+            	  "sTitle" : "Std. dev.",
+                 "iOrder": -15
+              }
+          },
+          "effects": {
+              "endpoint": {
+                  "iOrder": -17,
+                  "bVisible" : true
+              },
+              "result": {
+                  "iOrder": -16
+              }
+          },
+          "protocol": {
+              "guideline": {
+                  "iOrder": -10
+              }
+          },
+          "interpretation": {
+              "result": {
+            	  "sTitle" : "Conclusions",
+                  "bVisible": false
+              },
+              "criteria": {
+                  "bVisible": false
+              }
+          }            	  
+    },
+    "SPECIFIC_SURFACE_AREA_SECTION" : {
+    	"parameters": {
+   		 "type of method": {
+                "iOrder": -23,
+                "sTitle": "Method type"
+            }, 
+             "method details": {
+                 "iOrder": -22,
+                 "bVisible": false
+             },
+             "sampling": {
+             	"sTitle" : "Sampling",
+                 "iOrder": -21,
+                 "bVisible": false
+             },              
+             "data_gathering_instruments": {
+               	"sTitle" : "Instruments",
+                   "iOrder": -20,
+                   "bVisible": false
+               },                          
+             "testmat_form": {
+           	"sTitle": "Test Material Form",
+             	"bVisible": true,
+             	"iOrder": -19
+             }
+         },
+         "conditions": {
+             "std_dev": {
+           	  "sTitle" : "Std. dev.",
+                "iOrder": -15
+             },
+             "remarks": {
+              	  "sTitle" : "Remarks",
+                   "iOrder": -14
+                }
+         },
+         "effects": {
+             "endpoint": {
+                 "iOrder": -17,
+                 "bVisible" : false
+             },
+             "result": {
+            	 "sTitle" : "Specific Surface Area",
+                 "iOrder": -16
+             }
+         },
+         "protocol": {
+             "guideline": {
+                 "iOrder": -10
+             }
+         },
+         "interpretation": {
+             "result": {
+           	  "sTitle" : "Conclusions",
+                 "bVisible": false
+             },
+             "criteria": {
+                 "bVisible": false
+             }
+         }       	
+    },
+    "POUR_DENSITY_SECTION" : {
+    	"parameters": {
+      		 "type of method": {
+                   "iOrder": -23,
+                   "sTitle": "Method type"
+               }, 
+                "method details": {
+                    "iOrder": -22,
+                    "bVisible": false
+                },
+                "sampling": {
+                	"sTitle" : "Sampling",
+                    "iOrder": -21,
+                    "bVisible": false
+                },              
+                "data_gathering_instruments": {
+                  	"sTitle" : "Instruments",
+                      "iOrder": -20,
+                      "bVisible": false
+                  },                          
+                "testmat_form": {
+              	"sTitle": "Test Material Form",
+                	"bVisible": true,
+                	"iOrder": -19
+                }
+            },
+            "conditions": {
+                "std_dev": {
+              	  "sTitle" : "Std. dev.",
+                   "iOrder": -15
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -17,
+                    "bVisible" : false
+                },
+                "result": {
+               	 "sTitle" : "Pour density",
+                    "iOrder": -16
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -10
+                }
+            },
+            "interpretation": {
+                "result": {
+              	  "sTitle" : "Conclusions",
+              	 "iOrder": -14,
+                    "bVisible": true
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }        	
+    },
+    "PHOTOCATALYTIC_ACTIVITY_SECTION" : {
+    	"parameters": {
+     		 "type of method": {
+                  "iOrder": -23,
+                  "sTitle": "Method type"
+              }, 
+               "method details": {
+                   "iOrder": -22,
+                   "bVisible": false
+               },
+               "sampling": {
+               	"sTitle" : "Sampling",
+                   "iOrder": -21,
+                   "bVisible": false
+               },              
+               "data_gathering_instruments": {
+                 	"sTitle" : "Instruments",
+                     "iOrder": -20,
+                     "bVisible": false
+                 },                          
+               "testmat_form": {
+             	"sTitle": "Test Material Form",
+               	"bVisible": true,
+               	"iOrder": -19
+               }
+           },
+           "conditions": {
+               "std_dev": {
+             	  "sTitle" : "Std. dev.",
+                  "iOrder": -15
+               }
+           },
+           "effects": {
+               "endpoint": {
+                   "iOrder": -17
+               },
+               "result": {
+                   "iOrder": -16
+               }
+           },
+           "protocol": {
+               "guideline": {
+                   "iOrder": -10
+               }
+           },
+           "interpretation": {
+               "result": {
+             	  "sTitle" : "Conclusions",
+             	 "iOrder": -14,
+                   "bVisible": true
+               },
+               "criteria": {
+                   "bVisible": false
+               }
+           }     	
+    },
+    "CATALYTIC_ACTIVITY_SECTION" : {
+    	"parameters": {
+    		 "type of method": {
+                 "iOrder": -23,
+                 "sTitle": "Method type"
+             }, 
+              "method details": {
+                  "iOrder": -22,
+                  "bVisible": false
+              },
+              "sampling": {
+              	"sTitle" : "Sampling",
+                  "iOrder": -21,
+                  "bVisible": false
+              },              
+              "data_gathering_instruments": {
+                	"sTitle" : "Instruments",
+                    "iOrder": -20,
+                    "bVisible": false
+                },                          
+              "testmat_form": {
+            	"sTitle": "Test Material Form",
+              	"bVisible": true,
+              	"iOrder": -19
+              }
+          },
+          "conditions": {
+              "std_dev": {
+            	  "sTitle" : "Std. dev.",
+                 "iOrder": -15
+              }
+          },
+          "effects": {
+              "endpoint": {
+                  "iOrder": -17
+              },
+              "result": {
+                  "iOrder": -16
+              }
+          },
+          "protocol": {
+              "guideline": {
+                  "iOrder": -10
+              }
+          },
+          "interpretation": {
+              "result": {
+            	  "sTitle" : "Conclusions",
+            	 "iOrder": -14,
+                  "bVisible": true
+              },
+              "criteria": {
+                  "bVisible": false
+              }
+          }   
+    },
+    "CRYSTALLINE_PHASE_SECTION" : {
+    	"parameters": {
+    		 "type of method": {
+                 "iOrder": -23,
+                 "sTitle": "Method type"
+             }, 
+              "method details": {
+                  "iOrder": -22,
+                  "bVisible": false
+              },
+              "sampling": {
+              	"sTitle" : "Sampling",
+                  "iOrder": -21,
+                  "bVisible": false
+              },              
+              "data_gathering_instruments": {
+                	"sTitle" : "Instruments",
+                    "iOrder": -20,
+                    "bVisible": false
+                },                          
+              "testmat_form": {
+            	"sTitle": "Test Material Form",
+              	"bVisible": true,
+              	"iOrder": -19
+              }
+          },
+          "conditions": {
+              "crystal system": {
+             	 "sTitle" : "Crystal system",
+                  "iOrder": -18
+               },        	  
+              "common name": {
+            	 "sTitle" : "Common name",
+                 "iOrder": -17
+              },
+              "bravais lattice": {
+             	 "sTitle" : "Bravais lattice",
+                  "iOrder": -16
+              },
+              "point group": {
+            	  "sTitle" : "Point group",
+                  "iOrder": -15
+              },
+              "space group": {
+              	 "sTitle" : "Space group",
+                 "iOrder": -14
+              },
+              "crystallographic planes": {
+               	 "sTitle" : "Crystallographic planes",
+                  "iOrder": -13
+               }                
+          },
+          "effects": {
+              "endpoint": {
+                  "iOrder": -12,
+                  "bVisible"  :false
+              },
+              "result": {
+            	  "bVisible"  :false,
+                  "iOrder": -11
+              }
+          },
+          "protocol": {
+              "guideline": {
+                  "iOrder": -5
+              }
+          },
+          "interpretation": {
+              "result": {
+            	  "sTitle" : "Conclusions",
+            	 "iOrder": -10,
+                  "bVisible": false
+              },
+              "criteria": {
+                  "bVisible": false
+              }
+          }   
+    }
+    
     }
 }
