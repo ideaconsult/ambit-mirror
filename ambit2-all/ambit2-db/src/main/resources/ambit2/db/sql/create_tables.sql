@@ -167,7 +167,7 @@ CREATE TABLE `substance_protocolapplication` (
   `document_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `document_uuid` varbinary(16) NOT NULL,
   `topcategory` varchar(32) DEFAULT NULL,
-  `endpointcategory` varchar(32) DEFAULT NULL,
+  `endpointcategory` varchar(45) DEFAULT NULL,
   `endpoint` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `guidance` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `substance_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
@@ -1156,7 +1156,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,0,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,1,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
