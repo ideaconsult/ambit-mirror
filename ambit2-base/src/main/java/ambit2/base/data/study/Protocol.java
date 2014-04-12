@@ -44,6 +44,16 @@ public class Protocol {
 				return "4.3";
 			}						
 		},
+		PC_GRANULOMETRY_SECTION {
+			@Override
+			public String toString() {
+				return "Particle size distribution (Granulometry)";
+			}
+			@Override
+			public String getNumber() {
+				return "4.5";
+			}				
+		},		
 		PC_VAPOUR_SECTION {
 			@Override
 			public String toString() {
@@ -460,7 +470,69 @@ public class Protocol {
 			public String getNumber() {
 				return "6.3.4";
 			}			
-		};		
+		},
+		AGGLOMERATION_AGGREGATION_SECTION {
+			@Override
+			public String toString() {
+				return "Agglomeration/aggregation";
+			}
+			@Override
+			public String getNumber() {
+				return "4.24";
+			}	
+		},
+		CRYSTALLINE_PHASE_SECTION {
+			@Override
+			public String toString() {
+				return "Crystalline phase";
+			}
+			@Override
+			public String getNumber() {
+				return "4.25";
+			}
+		},
+		CRYSTALLITE_AND_GRAIN_SIZE_SECTION {
+			@Override
+			public String toString() {
+				return "Crystallite and grain size";
+			}
+			@Override
+			public String getNumber() {
+				return "4.26";
+			}				
+		},
+		ASPECT_RATIO_SHAPE_SECTION {
+			@Override
+			public String toString() {
+				return "Aspect ratio/shape";
+			}
+			@Override
+			public String getNumber() {
+				return "4.27";
+			}				
+		},
+		ZETA_POTENTIAL_SECTION {
+			@Override
+			public String toString() {
+				return "Zeta potential";
+			}
+			@Override
+			public String getNumber() {
+				return "4.29";
+			}			
+		},
+		SURFACE_CHEMISTRY_SECTION {
+			@Override
+			public String toString() {
+				return "Surface chemistry";
+			}
+			@Override
+			public String getNumber() {
+				return "4.30";
+			}				
+		}
+
+		;
 		public String getNumber() {
 			return "";
 		}
