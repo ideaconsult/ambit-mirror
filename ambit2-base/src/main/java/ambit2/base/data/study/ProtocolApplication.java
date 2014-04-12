@@ -13,6 +13,14 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	 */
 	private static final long serialVersionUID = 747315722852709360L;
 	protected Params reliability = new Params();
+	protected String interpretationCriteria;
+	protected PARAMS parameters;
+	protected Citation reference;
+	protected List<EffectRecord<ENDPOINT,CONDITIONS,UNIT>> effects;	
+	protected String companyName;
+	protected PROTOCOL protocol;
+	
+	
 	public Params getReliability() {
 		return reliability;
 	}
@@ -29,6 +37,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	}
 	protected String substanceUUID;
 	protected String companyUUID;
+	
 	public String getCompanyUUID() {
 		return companyUUID;
 	}
@@ -41,8 +50,6 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-	protected String companyName;
-	
 	public String getSubstanceUUID() {
 		return substanceUUID;
 	}
@@ -62,10 +69,6 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	public void setInterpretationCriteria(String interpretationCriteria) {
 		this.interpretationCriteria = interpretationCriteria;
 	}
-	protected String interpretationCriteria;
-	protected PARAMS parameters;
-	protected Citation reference;
-	protected List<EffectRecord<ENDPOINT,CONDITIONS,UNIT>> effects;	
 	public static enum _fields {
 		uuid,
 		owner,
@@ -82,8 +85,6 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		criteria,
 		reliability
 	}
-	
-	protected PROTOCOL protocol;
 	
 	public ProtocolApplication(PROTOCOL protocol) {
 		setProtocol(protocol);
@@ -193,7 +194,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.citation.name())));
 		b.append(":\t");
-		b.append(this.reference.toString());
+		b.append((this.reference==null)?"null":this.reference.toString());
 		b.append(",\n\t");
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.protocol.name())));
 		b.append(":\t");
@@ -282,5 +283,10 @@ class Citation {
 		b.append(getOwner()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getOwner())));
 		b.append("}");
 		return b.toString();
-	}	
+	}
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
 }
