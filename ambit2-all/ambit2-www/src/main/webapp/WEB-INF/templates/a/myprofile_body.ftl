@@ -41,7 +41,7 @@ jQuery(document).ready(function()
 			<#assign ro='readonly'>
 			<#assign disabled='disabled="disabled"'>
 		</#if>
-		<form action="${ambit_root}/myaccount/?method=put" id="form_myaccount" method="POST" >		
+		<form action="${ambit_root}/myaccount/?method=put" id="form_myaccount" method="POST" autocomplete="off" >		
 
     	<div class="row remove-bottom ui-widget-header ui-corner-top"> <a href='#' id='useruri'></a></div>
     	<div class="half-bottom ui-widget-content ui-corner-bottom" >
