@@ -1505,6 +1505,317 @@
                     "bVisible": false
                 }
             }
-        }
+        },
+        "AGGLOMERATION_AGGREGATION_SECTION" : {
+        	  "parameters": {
+                  "type of method": {
+                      "iOrder": -22
+                  },
+                  "method details": {
+                      "iOrder": -11,
+                      "bVisible": false
+                  },
+                  "sampling": {
+                      "iOrder": -9,
+                      "bVisible": false
+                  },
+                  "instruments": {
+                      "iOrder": -8,
+                      "bVisible": false
+                  }                  
+              },
+              "conditions": {
+                  "remarks": {
+                	  "sTitle" : "Remarks",
+                      "iOrder": -15,
+                      "bVisible": false
+                  },
+                  "medium": {
+                	  "sTitle" : "Medium",	
+                      "iOrder": -16
+                  },
+                  "std_dev": {
+                	  "sTitle" : "Std. dev.",
+                     "iOrder": -18
+                  },
+                  "ph": {
+                      "iOrder": -17
+                   },
+                   "seq_num": {
+                       "iOrder": -21,
+                       "sTitle" : "Seq. num."
+                    }                    
+              },
+              "effects": {
+                  "endpoint": {
+                      "iOrder": -20
+                  },
+                  "result": {
+                      "iOrder": -19
+                  }
+              },
+              "protocol": {
+                  "guideline": {
+                      "iOrder": -10
+                  }
+              },
+              "interpretation": {
+                  "result": {
+                	  "sTitle" : "Conclusions",
+                	  "iOrder": -7,
+                      "bVisible": false
+                  }
+              }        	
+        },
+        "ASPECT_RATIO_SHAPE_SECTION" : {
+        	  "parameters": {
+                  "type of method": {
+                      "iOrder": -22
+                  },
+                  "method details": {
+                      "iOrder": -11,
+                      "bVisible": false
+                  },
+                  "sampling": {
+                      "iOrder": -9,
+                      "bVisible": false
+                  },
+                  "instruments": {
+                      "iOrder": -8,
+                      "bVisible": false
+                  }                  
+              },
+              "conditions": {
+                  "shape_descriptive": {
+                	  "sTitle" : "Shape",
+                      "iOrder": -19
+                  },
+                  "x": {
+                      "iOrder": -16
+                  },
+                  "y": {
+                      "iOrder": -15
+                  },
+                  "z": {
+                      "iOrder": -14
+                  },                  
+                  "std_dev": {
+                	  "sTitle" : "Std. dev.",
+                     "iOrder": -17
+                  }
+              },
+              "effects": {
+                  "endpoint": {
+                      "iOrder": -20
+                  },
+                  "result": {
+                      "iOrder": -18
+                  }
+              },
+              "protocol": {
+                  "guideline": {
+                      "iOrder": -10
+                  }
+              },
+              "interpretation": {
+                  "result": {
+                	  "sTitle" : "Conclusions",
+                      "bVisible": false
+                  }
+              }                	
+        },
+        "ZETA_POTENTIAL_SECTION" : {
+      	  "parameters": {
+                "type of method": {
+                    "iOrder": -22
+                },
+                "method details": {
+                    "iOrder": -11,
+                    "bVisible": false
+                },
+                "sampling": {
+                    "iOrder": -9,
+                    "bVisible": false
+                },
+                "instruments": {
+                    "iOrder": -8,
+                    "bVisible": false
+                }                  
+            },
+            "conditions": {
+                "remarks": {
+              	  "sTitle" : "Remarks",
+                    "iOrder": -15,
+                    "bVisible": false
+                },
+                "medium": {
+              	  "sTitle" : "Medium",	
+                    "iOrder": -16
+                },
+                "std_dev": {
+              	  "sTitle" : "Std. dev.",
+                   "iOrder": -18
+                },
+                "ph": {
+                    "iOrder": -17
+                 }
+                
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -20
+                },
+                "result": {
+                    "iOrder": -19
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -10
+                }
+            },
+            "interpretation": {
+                "result": {
+                	"sTitle" : "Conclusions",
+                    "bVisible": true
+                }
+            }        	
+      },
+      "SURFACE_CHEMISTRY_SECTION" : {
+      	  "parameters": {
+                "type of method": {
+                    "iOrder": -25
+                },
+                "method details": {
+                    "iOrder": -11,
+                    "bVisible": false
+                },
+                "sampling": {
+                	"sTitle" : "Sampling",
+                    "iOrder": -9,
+                    "bVisible": false
+                },
+                "functionalization": {
+                	"bVisible": false
+                },
+                "coating": {
+                	"bVisible": false
+                },                
+                "data_gathering_instruments": {
+                	"sTitle" : "Instruments",
+                    "iOrder": -8,
+                    "bVisible": false
+                }                  
+            },
+            "conditions": {
+                "type" : {
+                	"sTitle" : "",
+                	"iOrder": -23
+                },
+                "description" : {
+                	"sTitle" : "Type",
+                	"iOrder": -22
+                },            	                
+                "coating_description" : {
+                	"sTitle" : "Coating description",
+                	"iOrder": -21,
+                	"bVisible" : false
+
+                },
+                "remarks": {
+              	  "sTitle" : "Remarks",
+                    "iOrder": -15,
+                    "bVisible": false
+                },
+                "element_or_group": {
+              	  "sTitle" : "Element / Func. group",	
+                    "iOrder": -19
+                },
+                "std_dev": {
+              	  "sTitle" : "Std. dev.",
+                   "iOrder": -17
+                }
+                
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -20,
+                    "bVisible" : false
+                },
+                "result": {
+                	"sTitle" : "Fraction",
+                    "iOrder": -18
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -10
+                }
+            },
+            "interpretation": {
+                "result": {
+                	"sTitle" : "Conclusions",
+                    "bVisible": false
+                },
+                "criteria": {
+                	"sTitle" : "Coating / Functionalisation",
+                    "bVisible": true,
+                    "iOrder": -24
+                }
+            }        	
+      },
+      "PC_GRANULOMETRY_SECTION" : {
+    	  "parameters": {
+              "distribution_type" : {
+                	"sTitle" : "Distribution type",
+                	"iOrder": -23
+              },              
+              "testmat_form": {
+            	"sTitle": "Test Material Form",
+              	"bVisible": true,
+              	"iOrder": -24
+              }                 
+          },
+          "conditions": {
+              "seq_num" : {
+              	"sTitle" : "Passage num.",
+              	"iOrder": -22
+              },            	                
+              "remarks": {
+            	  "sTitle" : "Remarks",
+                  "iOrder": -15,
+                  "bVisible": true
+              },
+              "std_dev": {
+            	  "sTitle" : "Std. dev.",
+                 "iOrder": -17
+              }
+          },
+          "effects": {
+              "endpoint": {
+                  "iOrder": -20,
+                  "bVisible" : true
+              },
+              "result": {
+              	"sTitle" : "Value",
+                  "iOrder": -18
+              }
+          },
+          "protocol": {
+              "guideline": {
+                  "iOrder": -10
+              }
+          },
+          "interpretation": {
+              "result": {
+            	  "sTitle" : "Conclusions",
+                  "bVisible": false
+              },
+              "criteria": {
+                  "bVisible": false
+              }
+          }            	  
+      }
+ 
     }
 }
