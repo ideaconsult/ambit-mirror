@@ -7,7 +7,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import net.idea.i5.io.I5_ROOT_OBJECTS;
+import net.idea.i5.io.I5CONSTANTS;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.formats.IResourceFormat;
@@ -265,22 +265,45 @@ class ProcessMeasurement extends ProcessSolution {
 	enum endpoints {
 		Zeta_Potential {
 			@Override
-			public I5_ROOT_OBJECTS getCategory() {
-				return I5_ROOT_OBJECTS.ZETA_POTENTIAL;
-			}
+			public String getCategory() {
+				return Protocol._categories.ZETA_POTENTIAL_SECTION.name();
+			}				
+
 			@Override
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+			@Override
+			public String getTag() {
+				return I5CONSTANTS.eZETA_POTENTIAL;
+			}
+		},
+		Isoelectric_point {
+			@Override
+			public String getCategory() {
+				return Protocol._categories.ZETA_POTENTIAL_SECTION.name();
+			}				
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+			@Override
+			public String getTag() {
+				return I5CONSTANTS.eISOELECTRIC_POINT;
 			}
 		},
 		Aggregation {
 			@Override
-			public I5_ROOT_OBJECTS getCategory() {
-				return I5_ROOT_OBJECTS.AGGLOMERATION_AGGREGATION;
-			}
+			public String getCategory() {
+				return Protocol._categories.AGGLOMERATION_AGGREGATION_SECTION.name();
+			}					
 			@Override
 			public String getTopCategory() {
 				return "P-CHEM";
+			}
+			@Override
+			public String getTag() {
+				return I5CONSTANTS.eAGGLO_AGGR_SIZE;
 			}
 		},
 		Particle_Size {
@@ -289,9 +312,13 @@ class ProcessMeasurement extends ProcessSolution {
 				return "P-CHEM";
 			}
 			@Override
-			public I5_ROOT_OBJECTS getCategory() {
-				return I5_ROOT_OBJECTS.CRYSTALLITE_AND_GRAIN_SIZE;
-			}			
+			public String getCategory() {
+				return Protocol._categories.PC_GRANULOMETRY_SECTION.name();
+			}				
+			@Override
+			public String getTag() {
+				return I5CONSTANTS.pPARTICLESIZE;
+			}
 		},
 		Hydrodynamic_size {
 			@Override
@@ -299,30 +326,74 @@ class ProcessMeasurement extends ProcessSolution {
 				return "P-CHEM";
 			}
 			@Override
-			public I5_ROOT_OBJECTS getCategory() {
-				return I5_ROOT_OBJECTS.CRYSTALLITE_AND_GRAIN_SIZE;
-			}			
+			public String getCategory() {
+				return Protocol._categories.PC_GRANULOMETRY_SECTION.name();
+			}		
+			@Override
+			public String getTag() {
+				//hydrodynamic and aerodynamic size is the same
+				// MMAD is Mass median aerodynamic diameter  - is this what NanoWiki assumes here?
+				return I5CONSTANTS.pMMAD;
+			}
 		}, 		
 		Toxicity {
-			//what kind of toxicity???
+			//what kind of toxicity endpoint???
+			@Override
+			public String getCategory() {
+				//best guess
+				return Protocol._categories.TO_GENETIC_IN_VITRO_SECTION.name();
+			}
+		},
+		Toxicity_Classifier {
+			//what kind of toxicity endpoint???
+			@Override
+			public String getCategory() {
+				//best guess
+				return Protocol._categories.TO_GENETIC_IN_VITRO_SECTION.name();
+			}			
 		},
 		Oxidation_State_Concentration,
-		Log_Reciprocal_EC50,
-		Cytotoxicity,
+		Log_Reciprocal_EC50 {
+			// what endpoint?
+			@Override
+			public String getCategory() {
+				//best guess
+				return Protocol._categories.TO_GENETIC_IN_VITRO_SECTION.name();
+			}			
+		},
+		Cytotoxicity {
+			@Override
+			public String getCategory() {
+				//best guess
+				return Protocol._categories.TO_GENETIC_IN_VITRO_SECTION.name();
+			}
+		},
 		Log_GI50,
 		Percentage_Non_2DViable_Cells {
 			@Override
-			public I5_ROOT_OBJECTS getCategory() {
+			public String getCategory() {
 				//best guess
-				return I5_ROOT_OBJECTS.TO_GENETIC_IN_VITRO;
+				return Protocol._categories.TO_GENETIC_IN_VITRO_SECTION.name();
+			}
+			@Override
+			public String getUnit() {
+				return "%";
 			}
 		},
-		Bioassay_Profile;
-		public I5_ROOT_OBJECTS getCategory() {
-			return null;
+		Bioassay_Profile {
+			//????
+		};
+		public String getCategory() {
+			return Protocol._categories.UNKNOWN_TOXICITY_SECTION.name();
 		}
 		public String getTopCategory() {
 			return "TOX";
+		}
+		public String getTag() {
+			return name();
+		}
+		public String getUnit() {
+			return null;
 		}
 	}
 	@Override
@@ -331,20 +402,30 @@ class ProcessMeasurement extends ProcessSolution {
 		String endpoint = null;
 		try {endpoint = qs.get("endpoint").asResource().getLocalName();}catch (Exception x) {endpoint = qs.get("endpoint").toString(); }
 		Protocol protocol = new Protocol(endpoint); 
-		
+		String measuredEndpoint = endpoint;
 		try {
-			endpoints ep = endpoints.valueOf(endpoint.replace("-","_"));
-			protocol.setCategory(ep.getCategory().name());
+			endpoints ep = endpoints.valueOf(endpoint.replace("-","_").replace(" ","_"));
+			protocol.setCategory(ep.getCategory());
 			protocol.setTopCategory(ep.getTopCategory());
+			measuredEndpoint = ep.getTag();
 		} catch (Exception x) {
-			protocol.setCategory("Unknown");
+			
+			protocol.setCategory(Protocol._categories.UNKNOWN_TOXICITY_SECTION.name());
 			protocol.setTopCategory("TOX");
 		}	
 				
-		try {protocol.addGuideline(qs.get("method").asResource().getLocalName());} catch (Exception x) {}
+		RDFNode method = qs.get("method");
+		try {protocol.addGuideline(method.asResource().getLocalName());} catch (Exception x) {}
 		
-		ProtocolApplication papp = new ProtocolApplication(protocol);
+		ProtocolApplication<Protocol,Params,String,Params,String> papp = new ProtocolApplication<Protocol,Params,String,Params,String>(protocol);
+		//papp.setReliability(reliability)
 		papp.setParameters(new Params());
+		try {
+			if (method!=null)
+				papp.getParameters().put(I5CONSTANTS.methodType,method.asResource().getLocalName());
+		} catch (Exception x) {
+			
+		}
 		papp.setDocumentUUID(NanoWikiRDFReader.generateUUID("NWKI"));
 		try {papp.setReference(qs.get("definedBy").asResource().getURI());} catch (Exception x) {}
 		try {
@@ -352,26 +433,33 @@ class ProcessMeasurement extends ProcessSolution {
 		} catch (Exception x) {}
 		try {papp.setInterpretationResult(qs.get("resultInterpretation").asLiteral().getString());} catch (Exception x) {}
 		
-		EffectRecord effect = new EffectRecord();
-		effect.setEndpoint(endpoint);
-		
+		EffectRecord<String,Params,String> effect = new EffectRecord<String,Params,String>();
+		effect.setEndpoint(measuredEndpoint);
+		effect.setConditions(new Params());
+		try {effect.setTextValue(qs.get("resultInterpretation").asLiteral().getString());} catch (Exception x) {}
 		try {
 			if (value!=null) effect.setLoValue(Double.parseDouble(value.asLiteral().getString()));
 		} catch (Exception x) {
 			effect.setTextValue(value.asLiteral().getString());
 		}
 		
-		try {effect.setUpValue(effect.getLoValue()+Double.parseDouble(qs.get("valueError").asLiteral().getString()));
-			effect.setLoQualifier("<=");effect.setUpQualifier("<=");
+		RDFNode valueError = qs.get("valueError");
+		try {
+			effect.setStdDev(Double.parseDouble(valueError.asLiteral().getString()));
 		} catch (Exception x) {}
-		try {effect.setUnit(qs.get("valueUnit").asLiteral().getString());} catch (Exception x) {}
+		
+		try {	effect.setUnit(qs.get("valueUnit").asLiteral().getString());
+		} catch (Exception x) {
+		}
 
-		if (qs.get("dose")!=null) {
+		RDFNode dose = qs.get("dose"); 
+		if (dose!=null) {
 			Params v = new Params();
-			try {v.put("loValue",Double.parseDouble(qs.get("dose").asLiteral().getString()));} catch (Exception x) {}
-			try {v.put("unit",qs.get("doseUnit").asLiteral().getString());} catch (Exception x) {}
-			Params conditions = new Params();				
-			conditions.put("dose", v);
+			try {v.setLoValue(Double.parseDouble(dose.asLiteral().getString()));} catch (Exception x) {v.setLoValue(null);}
+			try {v.setUnits(qs.get("doseUnit").asLiteral().getString());} catch (Exception x) {}
+			Params conditions = effect.getConditions(); 
+			if (effect.getConditions()==null) conditions = new Params();				
+			conditions.put(I5CONSTANTS.cDoses, v);
 			effect.setConditions(conditions);
 		}
 		papp.addEffect(effect);
@@ -403,16 +491,23 @@ class ProcessNMMeasurement extends ProcessSolution {
 			Protocol protocol = new Protocol(endpoint); 
 			protocol.setCategory(category);
 			protocol.setTopCategory(topCategory);
-			try {protocol.addGuideline(qs.get("method").asResource().getLocalName());} catch (Exception x) {
-			}
 			
-			ProtocolApplication papp = new ProtocolApplication(protocol);
+			RDFNode method = qs.get("method");
+			try {protocol.addGuideline(method.asResource().getLocalName());} catch (Exception x) {}
+			
+			ProtocolApplication<Protocol,Params,String,Params,String> papp = new ProtocolApplication<Protocol,Params,String,Params,String>(protocol);
 			papp.setDocumentUUID(NanoWikiRDFReader.generateUUID("NWKI"));
 			papp.setSubstanceUUID(record.getCompanyUUID());
 			papp.setParameters(new Params());
 			
+			try {
+				if (method!=null)
+					papp.getParameters().put(I5CONSTANTS.methodType,method.asResource().getLocalName());
+			} catch (Exception x) {}
+			
 			EffectRecord effect = new EffectRecord();
 			effect.setEndpoint(endpoint);
+			effect.setConditions(new Params());
 			
 			try {
 				if (value!=null) effect.setLoValue(Double.parseDouble(value.asLiteral().getString()));
@@ -564,7 +659,7 @@ class ProcessMaterial extends ProcessSolution {
 				material.asResource().getURI(),material.asResource().getURI(),material.asResource().getURI(),
 				material.asResource().getURI(),material.asResource().getURI(),material.asResource().getURI()
 				),
-				new ProcessNMMeasurement(record,"P-CHEM","ZETA_POTENTIAL","Isoelectric point"));
+				new ProcessNMMeasurement(record,"P-CHEM",Protocol._categories.ZETA_POTENTIAL_SECTION.name(),I5CONSTANTS.eISOELECTRIC_POINT));
 	}
 
 	private void parseSize(Model rdf,RDFNode material,SubstanceRecord record) {
@@ -572,14 +667,14 @@ class ProcessMaterial extends ProcessSolution {
 				material.asResource().getURI(),material.asResource().getURI(),material.asResource().getURI(),
 				material.asResource().getURI(),material.asResource().getURI(),material.asResource().getURI()
 				),
-				new ProcessNMMeasurement(record,"P-CHEM","CRYSTALLITE_AND_GRAIN_SIZE","Size"));
+				new ProcessNMMeasurement(record,"P-CHEM",Protocol._categories.PC_GRANULOMETRY_SECTION.name(),I5CONSTANTS.pPARTICLESIZE));
 	}
 	private void parseZetaPotential(Model rdf,RDFNode material,SubstanceRecord record) {
 		execQuery(rdf, String.format(m_zetapotential, 
 				material.asResource().getURI(),material.asResource().getURI(),material.asResource().getURI(),
 				material.asResource().getURI(),material.asResource().getURI(),material.asResource().getURI()
 				),
-				new ProcessNMMeasurement(record,"P-CHEM","ZETA_POTENTIAL","Zeta_Potential"));
+				new ProcessNMMeasurement(record,"P-CHEM",Protocol._categories.ZETA_POTENTIAL_SECTION.name(),I5CONSTANTS.eZETA_POTENTIAL));
 	}
 
 	private void parseMeasurement(Model rdf,RDFNode material,SubstanceRecord record) {
