@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.exceptions.AmbitException;
@@ -69,15 +70,16 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 			record.setCount(rs.getInt(3));
 			try {
 				Protocol._categories category = Protocol._categories.valueOf(rs.getString(2));
-				record.setDescription(category.getNumber() + " " + category.toString()
-				);
+				record.setSortingOrder(category.getSortingOrder());
+				
 			} catch (Exception x) {
-				record.setDescription(null);
+				record.setSortingOrder(999);
 			}
 			return record;
 		} catch (Exception x) {
 			record.setValue(x.getMessage());
 			record.setCount(-1);
+			record.setSortingOrder(999);
 			return record;
 		}
 	}

@@ -23,6 +23,10 @@ public class Protocol {
 			public String getNumber() {
 				return "4.1";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 401;
+			}
 		},
 		PC_MELTING_SECTION {
 			@Override
@@ -33,6 +37,10 @@ public class Protocol {
 			public String getNumber() {
 				return "4.2";
 			}			
+			@Override
+			public int getSortingOrder() {
+				return 402;
+			}
 		},
 		PC_BOILING_SECTION {
 			@Override
@@ -42,7 +50,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "4.3";
-			}						
+			}		
+			@Override
+			public int getSortingOrder() {
+				return 403;
+			}
 		},
 		PC_GRANULOMETRY_SECTION {
 			@Override
@@ -52,7 +64,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "4.5";
-			}				
+			}			
+			@Override
+			public int getSortingOrder() {
+				return 405;
+			}
 		},		
 		PC_VAPOUR_SECTION {
 			@Override
@@ -62,7 +78,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "4.6";
-			}						
+			}			
+			@Override
+			public int getSortingOrder() {
+				return 406;
+			}
 		},
 		PC_PARTITION_SECTION {
 			@Override
@@ -72,7 +92,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "4.7";
-			}						
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 407;
+			}
 		},				
 		PC_WATER_SOL_SECTION {
 			@Override
@@ -82,7 +106,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "4.8";
-			}						
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 408;
+			}
 		},		
 		PC_SOL_ORGANIC_SECTION {
 			@Override
@@ -93,6 +121,10 @@ public class Protocol {
 			public String getNumber() {
 				return "4.9";
 			}			
+			@Override
+			public int getSortingOrder() {
+				return 409;
+			}
 		},
 		PC_NON_SATURATED_PH_SECTION {
 			@Override
@@ -103,6 +135,10 @@ public class Protocol {
 			public String getNumber() {
 				return "4.20";
 			}			
+			@Override
+			public int getSortingOrder() {
+				return 420;
+			}
 		},		
 		PC_DISSOCIATION_SECTION {
 			@Override
@@ -112,7 +148,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "4.21";
-			}			
+			}		
+			@Override
+			public int getSortingOrder() {
+				return 421;
+			}
 		},
 		/**
 		 * Environmental fate
@@ -125,7 +165,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "5.1.1";
-			}				
+			}		
+			@Override
+			public int getSortingOrder() {
+				return 511;
+			}
 		},
 		TO_HYDROLYSIS_SECTION {
 			@Override
@@ -135,7 +179,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "5.1.2";
-			}				
+			}		
+			@Override
+			public int getSortingOrder() {
+				return 512;
+			}
 		},
 		TO_BIODEG_WATER_SCREEN_SECTION {
 			@Override
@@ -145,7 +193,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "5.2.1";
-			}			
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 521;
+			}
 		},
 		TO_BIODEG_WATER_SIM_SECTION {
 			@Override
@@ -155,7 +207,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "5.2.2";
-			}						
+			}			
+			@Override
+			public int getSortingOrder() {
+				return 522;
+			}
 		},
 		EN_STABILITY_IN_SOIL_SECTION {
 			@Override
@@ -165,7 +221,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "5.2.3";
-			}				
+			}
+			@Override
+			public int getSortingOrder() {
+				return 523;
+			}
 		},
 		EN_BIOACCUMULATION_SECTION {
 			@Override
@@ -175,7 +235,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "5.3.1";
-			}				
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 531;
+			}
 		},
 		EN_BIOACCU_TERR_SECTION {
 			@Override
@@ -185,7 +249,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "5.3.2";
-			}				
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 532;
+			}
 		},		
 		EN_ADSORPTION_SECTION {
 			@Override
@@ -196,6 +264,10 @@ public class Protocol {
 			public String getNumber() {
 				return "5.4.1";
 			}				
+			@Override
+			public int getSortingOrder() {
+				return 541;
+			}
 		},
 		EN_HENRY_LAW_SECTION  {
 			@Override
@@ -205,7 +277,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "5.4.2";
-			}			
+			}		
+			@Override
+			public int getSortingOrder() {
+				return 542;
+			}
 		},
 
 		/**
@@ -219,7 +295,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.2.1";
-			}				
+			}			
+			@Override
+			public int getSortingOrder() {
+				return 721;
+			}
 		},
 		TO_ACUTE_INHAL_SECTION {
 			@Override
@@ -229,7 +309,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.2.2";
-			}			
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 722;
+			}
 		},
 		TO_ACUTE_DERMAL_SECTION {
 			@Override
@@ -239,7 +323,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.2.3";
-			}				
+			}		
+			@Override
+			public int getSortingOrder() {
+				return 723;
+			}
 		},
 		TO_SKIN_IRRITATION_SECTION {
 			@Override
@@ -249,7 +337,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.3.1";
-			}				
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 731;
+			}
 		},		
 		TO_EYE_IRRITATION_SECTION {
 			@Override
@@ -259,7 +351,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.3.2";
-			}					
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 732;
+			}
 		},	
 		TO_SENSITIZATION_SECTION {
 			@Override
@@ -269,12 +365,24 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.4.1";
-			}			
+			}
+			@Override
+			public int getSortingOrder() {
+				return 741;
+			}
 		},			
 		TO_SENSITIZATION_HUMAN_SECTION {
 			@Override
 			public String toString() {
 				return "Skin sensitisation (human)";
+			}
+			@Override
+			public String getNumber() {
+				return "7.4.1";
+			}			
+			@Override
+			public int getSortingOrder() {
+				return 741;
 			}
 		},		
 		TO_REPEATED_ORAL_SECTION {
@@ -285,7 +393,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.5.1";
-			}			
+			}		
+			@Override
+			public int getSortingOrder() {
+				return 751;
+			}
 		},
 		TO_REPEATED_INHAL_SECTION {
 			@Override
@@ -296,6 +408,10 @@ public class Protocol {
 			public String getNumber() {
 				return "7.5.2";
 			}	
+			@Override
+			public int getSortingOrder() {
+				return 752;
+			}
 		},
 		TO_REPEATED_DERMAL_SECTION {
 			@Override
@@ -306,6 +422,10 @@ public class Protocol {
 			public String getNumber() {
 				return "7.5.3";
 			}	
+			@Override
+			public int getSortingOrder() {
+				return 753;
+			}
 		},
 		TO_GENETIC_IN_VITRO_SECTION {
 			@Override
@@ -316,6 +436,10 @@ public class Protocol {
 			public String getNumber() {
 				return "7.6.1";
 			}			
+			@Override
+			public int getSortingOrder() {
+				return 761;
+			}
 		},		
 		TO_GENETIC_IN_VIVO_SECTION {
 			@Override
@@ -324,8 +448,12 @@ public class Protocol {
 			}
 			@Override
 			public String getNumber() {
-				return "7.6.1";
+				return "7.6.2";
 			}			
+			@Override
+			public int getSortingOrder() {
+				return 762;
+			}
 		},			
 		TO_CARCINOGENICITY_SECTION {
 			@Override
@@ -335,7 +463,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.7";
-			}				
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 770;
+			}
 		},
 		TO_REPRODUCTION_SECTION {
 			@Override
@@ -345,7 +477,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.8.1";
-			}			
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 781;
+			}
 		},		
 		TO_DEVELOPMENTAL_SECTION {
 			@Override
@@ -355,7 +491,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "7.8.2";
-			}			
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 782;
+			}
 		},	
 
 		/**
@@ -370,6 +510,10 @@ public class Protocol {
 			public String getNumber() {
 				return "6.1.1";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 611;
+			}
 		},
 		EC_CHRONFISHTOX_SECTION {
 			@Override
@@ -380,6 +524,10 @@ public class Protocol {
 			public String getNumber() {
 				return "6.1.2";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 612;
+			}
 		},
 		EC_DAPHNIATOX_SECTION {
 			@Override
@@ -389,7 +537,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "6.1.3";
-			}			
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 613;
+			}
 		},		
 		EC_CHRONDAPHNIATOX_SECTION {
 			@Override
@@ -399,6 +551,10 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "6.1.4";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 614;
 			}
 		},
 		EC_ALGAETOX_SECTION {
@@ -410,6 +566,10 @@ public class Protocol {
 			public String getNumber() {
 				return "6.1.5";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 615;
+			}
 		},
 		EC_BACTOX_SECTION {
 			@Override
@@ -420,6 +580,10 @@ public class Protocol {
 			public String getNumber() {
 				return "6.1.7";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 617;
+			}
 		},
 		EC_SEDIMENTDWELLINGTOX_SECTION {
 			@Override
@@ -429,7 +593,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "6.2";
-			}			
+			}		
+			@Override
+			public int getSortingOrder() {
+				return 620;
+			}
 		},
 		EC_SOILDWELLINGTOX_SECTION {
 			@Override
@@ -440,6 +608,10 @@ public class Protocol {
 			public String getNumber() {
 				return "6.3.1";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 631;
+			}
 		},		
 		EC_HONEYBEESTOX_SECTION {
 			@Override
@@ -449,7 +621,11 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "6.3.2";
-			}			
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 632;
+			}
 		},
 		EC_PLANTTOX_SECTION {
 			@Override
@@ -460,6 +636,10 @@ public class Protocol {
 			public String getNumber() {
 				return "6.3.3";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 633;
+			}
 		},
 		EC_SOIL_MICRO_TOX_SECTION {
 			@Override
@@ -469,96 +649,136 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "6.3.4";
-			}			
+			}	
+			@Override
+			public int getSortingOrder() {
+				return 634;
+			}
 		},
 		AGGLOMERATION_AGGREGATION_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material agglomeration/aggregation";
+				return "Nanomaterial agglomeration/aggregation";
 			}
 			@Override
 			public String getNumber() {
 				return "4.24";
 			}	
+			@Override
+			public int getSortingOrder() {
+				return 424;
+			}
 		},
 		CRYSTALLINE_PHASE_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material crystalline phase";
+				return "Nanomaterial crystalline phase";
 			}
 			@Override
 			public String getNumber() {
 				return "4.25";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 425;
+			}
 		},
 		CRYSTALLITE_AND_GRAIN_SIZE_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material crystallite and grain size";
+				return "Nanomaterial crystallite and grain size";
 			}
 			@Override
 			public String getNumber() {
 				return "4.26";
 			}				
+			@Override
+			public int getSortingOrder() {
+				return 426;
+			}
 		},
 		ASPECT_RATIO_SHAPE_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material aspect ratio/shape";
+				return "Nanomaterial aspect ratio/shape";
 			}
 			@Override
 			public String getNumber() {
 				return "4.27";
-			}				
+			}			
+			@Override
+			public int getSortingOrder() {
+				return 427;
+			}
 		},
 		SPECIFIC_SURFACE_AREA_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material specific surface area";
+				return "Nanomaterial specific surface area";
 			}
 			@Override
 			public String getNumber() {
 				return "4.28";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 428;
+			}
 		},		
 		ZETA_POTENTIAL_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material zeta potential";
+				return "Nanomaterial zeta potential";
 			}
 			@Override
 			public String getNumber() {
 				return "4.29";
 			}			
+			@Override
+			public int getSortingOrder() {
+				return 429;
+			}
 		},
 		SURFACE_CHEMISTRY_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material surface chemistry";
+				return "Nanomaterial surface chemistry";
 			}
 			@Override
 			public String getNumber() {
 				return "4.30";
-			}				
+			}			
+			@Override
+			public int getSortingOrder() {
+				return 430;
+			}
 		},
 		DUSTINESS_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material dustiness";
+				return "Nanomaterial dustiness";
 			}
 			@Override
 			public String getNumber() {
 				return "4.31";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 431;
+			}
 		},
 		POROSITY_SECTION {
 			@Override
 			public String toString() {
-				return "Nano material porosity";
+				return "Nanomaterial porosity";
 			}
 			@Override
 			public String getNumber() {
 				return "4.32";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 432;
 			}
 		},
 		POUR_DENSITY_SECTION {
@@ -570,6 +790,10 @@ public class Protocol {
 			public String getNumber() {
 				return "4.33";
 			}
+			@Override
+			public int getSortingOrder() {
+				return 433;
+			}
 		},
 		PHOTOCATALYTIC_ACTIVITY_SECTION {
 			@Override
@@ -579,6 +803,10 @@ public class Protocol {
 			@Override
 			public String getNumber() {
 				return "4.34";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 434;
 			}
 		},
 		CATALYTIC_ACTIVITY_SECTION {
@@ -590,14 +818,34 @@ public class Protocol {
 			public String getNumber() {
 				return "4.36";
 			}
-		}		
+			@Override
+			public int getSortingOrder() {
+				return 436;
+			}
+		},
+		UNKNOWN_TOXICITY_SECTION {
+			@Override
+			public String toString() {
+				return "Unclassified toxicity";
+			}
+			@Override
+			public String getNumber() {
+				return "7.99";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 799;
+			}
+		}	
 		
 
 		;
 		public String getNumber() {
 			return "";
 		}
-
+		public int getSortingOrder() {
+			return 10000;
+		}
 
 
 	}
