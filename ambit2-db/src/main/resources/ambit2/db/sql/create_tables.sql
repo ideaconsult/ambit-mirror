@@ -208,13 +208,15 @@ CREATE TABLE `substance_experiment` (
   `loQualifier` varchar(6) DEFAULT NULL,
   `loValue` double DEFAULT NULL,
   `upQualifier` varchar(6) DEFAULT NULL,
-  `upvalue` double DEFAULT NULL,
+  `upValue` double DEFAULT NULL,
+  `textValue` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idresult`),
   KEY `document_id` (`document_uuid`,`document_prefix`),
   KEY `endpoint` (`endpoint`),
   KEY `document-x` (`document_prefix`,`document_uuid`),
   CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB' DEFAULT CHARSET=utf8;
+
 
 -- -----------------------------------------------------
 -- Table `structure`
@@ -1626,10 +1628,10 @@ reliability,isRobustStudy,purposeFlag,studyResultType,
 params,interpretation_result,interpretation_criteria,
 reference,updated,idresult,
 e.endpoint as effectendpoint,conditions,unit, 
-loQualifier, loValue, upQualifier, upvalue from substance s
+loQualifier, loValue, upQualifier, upValue, textValue from substance s
 join substance_protocolapplication p on
 s.prefix=p.substance_prefix and s.uuid=p.substance_uuid
-join substance_experiment e on
+left join substance_experiment e on
 p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid
 ;
 
