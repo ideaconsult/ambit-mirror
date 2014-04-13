@@ -9,13 +9,13 @@ public class SubstanceStudyFacet extends AbstractFacet<String>{
 	 */
 	private static final long serialVersionUID = 9014078415852427522L;
 	protected String subcategory;
-	protected String description;
-	
-	public String getDescription() {
-		return description;
+	protected int sortingOrder;
+
+	public int getSortingOrder() {
+		return sortingOrder;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setSortingOrder(int sortingOrder) {
+		this.sortingOrder = sortingOrder;
 	}
 	public void setSubcategoryTitle(String subcategory) {
 		this.subcategory = subcategory;

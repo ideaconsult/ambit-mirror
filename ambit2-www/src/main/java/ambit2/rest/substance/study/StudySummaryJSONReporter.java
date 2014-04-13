@@ -84,7 +84,7 @@ public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 				try {
 					if (item instanceof SubstanceStudyFacet) {
 						SubstanceStudyFacet ssf = (SubstanceStudyFacet)item;
-						output.write(ssf.getDescription()==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(ssf.getDescription())));
+						output.write(Integer.toString(ssf.getSortingOrder()));
 					} else output.write("null");
 				} catch (Exception x) { output.write("null"); }
 				
