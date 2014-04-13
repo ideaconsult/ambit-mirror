@@ -12,19 +12,55 @@ public class Params<VALUE> extends HashMap<String, VALUE> {
 	 */
 	private static final long serialVersionUID = 8844381138806492152L;
 	
-	public static final String unit = "unit";
-	public static final String loValue = "loValue";
-	public static final String upValue = "upValue";
-	public static final String loQualifier = "loQualifier";
-	public static final String upQualifier = "upQualifier";
-	
 	public Params() {
 		super();
+	}
+	public Params(VALUE value) {
+		super();
+		setLoValue(value);
 	}
 	public Params(String key,VALUE value) {
 		super();
 		put(key,value);
 	}
+	
+	public VALUE getUnits() {
+		return get(_FIELDS_RANGE.unit.name());
+	}
+	public void setUnits(VALUE unit) {
+		if (unit==null) remove(_FIELDS_RANGE.unit.name());
+		else put(_FIELDS_RANGE.unit.name(),unit);
+	}
+
+	public VALUE getLoValue() {
+		return get(_FIELDS_RANGE.loValue.name());
+	}
+	public VALUE getUpValue() {
+		return get(_FIELDS_RANGE.upValue.name());
+	}
+	public void setLoValue(VALUE value) {
+		if (value==null) remove(_FIELDS_RANGE.loValue.name());
+		else put(_FIELDS_RANGE.loValue.name(),value);
+	}	
+	public void setUpValue(VALUE value) {
+		if (value==null) remove(_FIELDS_RANGE.upValue.name());
+		else put(_FIELDS_RANGE.upValue.name(),value);
+	}
+	public VALUE getUpQualifier() {
+		return get(_FIELDS_RANGE.upQualifier.name());
+	}
+	public VALUE getLoQualifier() {
+		return get(_FIELDS_RANGE.loQualifier.name());
+	}
+	public void setUpQualifier(VALUE qualifier) {
+		if (qualifier==null) remove(_FIELDS_RANGE.upQualifier.name());
+		else put(_FIELDS_RANGE.upQualifier.name(),qualifier);
+	}
+	public void setLoQualifier(VALUE qualifier) {
+		if (qualifier==null) remove(_FIELDS_RANGE.loQualifier.name());
+		else put(_FIELDS_RANGE.loQualifier.name(),qualifier);
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();
