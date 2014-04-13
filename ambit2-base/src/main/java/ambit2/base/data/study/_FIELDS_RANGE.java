@@ -5,5 +5,6 @@ public enum _FIELDS_RANGE {
 	upValue,
 	loQualifier,
 	upQualifier,
+	STD_DEV,
 	unit
 }
