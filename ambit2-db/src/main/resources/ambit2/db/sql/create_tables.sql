@@ -215,7 +215,7 @@ CREATE TABLE `substance_experiment` (
   KEY `endpoint` (`endpoint`),
   KEY `document-x` (`document_prefix`,`document_uuid`),
   CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB' DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
