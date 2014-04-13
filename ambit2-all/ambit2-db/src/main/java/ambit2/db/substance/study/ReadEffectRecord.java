@@ -29,7 +29,7 @@ public class ReadEffectRecord  extends AbstractQuery<ProtocolApplication,EffectR
 	private static final long serialVersionUID = -5430387137460722198L;
 
 	public final static String sql = 
-		"SELECT endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue from substance_experiment where document_prefix =? and hex(document_uuid) =?";
+		"SELECT endpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue from substance_experiment where document_prefix =? and hex(document_uuid) =?";
 	
 	@Override
 	public String getSQL() throws AmbitException {
@@ -60,6 +60,7 @@ public class ReadEffectRecord  extends AbstractQuery<ProtocolApplication,EffectR
 				record.setLoValue(rs.getDouble("loValue"));
 			if (rs.getString("upValue")!=null)
 				record.setUpValue(rs.getDouble("upValue"));
+			record.setTextValue(rs.getString("textValue"));
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
