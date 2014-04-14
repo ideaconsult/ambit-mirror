@@ -349,19 +349,19 @@ var jToxDataset = (function () {
         }
       },
       "exports": [
-                  {type: "chemical/x-mdl-sdfile", icon: "images/sdf64.png"},
-                  {type: "chemical/x-cml", icon: "images/cml64.png"},
-                  {type: "chemical/x-daylight-smiles", icon: "images/smi64.png"},
-                  {type: "chemical/x-inchi", icon: "images/inchi64.png"},
-                  {type: "text/uri-list", icon: "images/lnk64.png"},
-                  {type: "application/pdf", icon: "images/pdf64.png"},
-                  {type: "text/csv", icon: "images/csv64.png"},
-                  {type: "text/plain", icon: "images/txt64.png"},
-                  {type: "text/x-arff", icon: "images/arff.png"},
-                  {type: "text/x-arff-3col", icon: "images/arff-3.png"},
-                  {type: "application/rdf+xml", icon: "images/rdf64.png"},
-                  {type: "application/json", icon: "images/json64.png"}
-                ],
+        {type: "chemical/x-mdl-sdfile", icon: "images/sdf64.png"},
+        {type: "chemical/x-cml", icon: "images/cml64.png"},
+        {type: "chemical/x-daylight-smiles", icon: "images/smi64.png"},
+        {type: "chemical/x-inchi", icon: "images/inchi64.png"},
+        {type: "text/uri-list", icon: "images/lnk64.png"},
+        {type: "application/pdf", icon: "images/pdf64.png"},
+        {type: "text/csv", icon: "images/csv64.png"},
+        {type: "text/plain", icon: "images/txt64.png"},
+        {type: "text/x-arff", icon: "images/arff.png"},
+        {type: "text/x-arff-3col", icon: "images/arff-3.png"},
+        {type: "application/rdf+xml", icon: "images/rdf64.png"},
+        {type: "application/json", icon: "images/json64.png"}
+      ],
 
       // These are instance-wide pre-definitions of default baseFeatures as described below.
       "baseFeatures": {
