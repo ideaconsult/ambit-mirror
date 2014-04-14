@@ -61,6 +61,15 @@ public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 			} catch (Exception x) {}
 	}
 
+	private String printOrder(IFacet item) {
+		try {
+			if (item instanceof SubstanceStudyFacet) {
+				SubstanceStudyFacet ssf = (SubstanceStudyFacet)item;
+				return Integer.toString(ssf.getSortingOrder());
+			} 
+		} catch (Exception x) { }
+		return "null";
+	}
 
 	@Override
 	public Object processItem(IFacet item) throws AmbitException {
@@ -81,12 +90,10 @@ public class StudySummaryJSONReporter<Q extends IQueryRetrieval<IFacet>> extends
 				output.write(item.getSubcategoryTitle()==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(item.getSubcategoryTitle())));
 
 				output.write(",\n\t\t\t\"description\":");
-				try {
-					if (item instanceof SubstanceStudyFacet) {
-						SubstanceStudyFacet ssf = (SubstanceStudyFacet)item;
-						output.write(Integer.toString(ssf.getSortingOrder()));
-					} else output.write("null");
-				} catch (Exception x) { output.write("null"); }
+				output.write(printOrder(item));
+				//change description to order, but leave the former for compatibility
+				output.write(",\n\t\t\t\"order\":");
+				output.write(printOrder(item));
 				
 				output.write(",\n\t\t\t\"uri\":");
 				String suri = item.getSubCategoryURL(
