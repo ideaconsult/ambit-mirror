@@ -160,6 +160,10 @@ div.jtox-study.unloaded.folded .jtox-study-title {
   display: none;
 }
 
+.jtox-toolkit span.units {
+  font-size: 80%;
+}
+
 div.jtox-study.loaded.folded .jtox-study-title {
   background: url(../images/sort_desc.png) right top no-repeat;
   background-size: 19px 19px;
