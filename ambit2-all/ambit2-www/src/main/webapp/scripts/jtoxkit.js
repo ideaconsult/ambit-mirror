@@ -1281,15 +1281,15 @@ var jToxStudy = (function () {
             
             data.unit = ccLib.trim(data.unit);
             if (!ccLib.isNull(data.unit))
-              out += ' ' + data.unit;
+              out += ' <span class="units">' + data.unit + '</span>';
           }
-          return out.replace(/ /g, "&nbsp;");
+          return out.replace(/ /g, "&nbsp;").replace("span&nbsp;", "span ");
         };
         
         var formatUnits = function(data, unit) {
           data = ccLib.trim(data);
           unit = ccLib.trim(unit);
-          return !ccLib.isNull(data) ? (data + (!!unit ? "&nbsp;" + unit : "")) : "-";
+          return !ccLib.isNull(data) ? (data + (!!unit ? '&nbsp;<span class="units">' + unit + '</span>': "")) : "-";
         };
 
         putDefaults(0, 1, "main");
@@ -1517,7 +1517,7 @@ var jToxStudy = (function () {
     },
     
     formatConcentration: function (precision, val, unit) {
-    	return ((precision === undefined || precision === null || "=" == precision ? "" : precision) + val + " " + (unit == null || unit == '' ? "% (w/w)" : unit)).replace(/ /g, "&nbsp;");
+    	return ((precision === undefined || precision === null || "=" == precision ? "" : precision) + val + " " + (unit == null || unit == '' ? '<span class="units">% (w/w)</span>' : unit)).replace(/ /g, "&nbsp;").replace("span&nbsp;", "span ");
     },
     
     processComposition: function(json){
@@ -1634,7 +1634,7 @@ var jToxStudy = (function () {
           theSubs.name = cmp.component.compound['name'] + ' ' + self.formatConcentration(val.precision, val.value, val.unit);
           theSubs.maxvalue = val.value;
           val = cmp.proportion.real;
-          theSubs.purity = (val.lowerValue + '-' + val.upperValue + ' ' + (val.unit == null || val.unit == '' ? "% (w/w)" : val.unit)).replace(/ /g, "&nbsp;");
+          theSubs.purity = (val.lowerValue + '-' + val.upperValue + ' ' + (val.unit == null || val.unit == '' ? '<span class="units">% (w/w)</span>' : val.unit)).replace(/ /g, "&nbsp;").replace("span&nbsp;", "span ");
         }
       }
       
