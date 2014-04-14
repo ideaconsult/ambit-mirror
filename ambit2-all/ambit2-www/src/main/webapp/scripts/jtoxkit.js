@@ -133,6 +133,40 @@ var ccLib = {
     }
   },
   
+  // Prepare a form so that non-empty fields are checked before submit and accumuater fields
+  // are accumulated. Call it after you've set submit behavior, etc.
+  prepareForm: function (form) {
+  	var self = this;
+	  var $ = window.jQuery;
+
+		// first - attach the accumulators handler.	  
+	  $('.accumulate', form).each(function (){
+		  $(this).on('change', function (e) {
+			  var target = $(this).data('accumulate');
+			  if (!!target) {
+			  	target = this.form[target];
+			  	var val = target.value.replace(new RegExp('(' + this.value + ')'), '');
+			  	if (this.checked)
+				  	val += ',' + this.value;
+
+				  target.value = val.replace(/,,/g, ',').replace(/^,/g, '').replace(/,$/g, ''); // change double commas with one, and replaces commas at the beginning and at the end
+			  }
+				return false;
+		  })
+	  });
+	 },
+	 
+	 // Check if the form is not-empty according to non-empty fields
+	 validateForm: function (form, callback) {
+  	var self = this;
+	  var ok = true;
+	  jQuery('.validate', form).each(function () {
+		  if (!self.fireCallback(callback, this))
+		  	ok = false;
+	  });
+	  
+	  return ok;
+  },
   /*
   Passed a HTML DOM element - it clears all children folowwing last one. Pass null for clearing all.
   */
@@ -142,12 +176,11 @@ var ccLib = {
     }
   },
     
-	/* formats a string, replacing [<number>] in it with the corresponding value in the arguments
+	/* formats a string, replacing {number | property} in it with the corresponding value in the arguments
   */
-  formatString: function(format) {
-    for (var i = 1;i < arguments.length; ++i) {
-      format = format.replace('<' + i + '>', arguments[i]);
-    }
+  formatString: function(format, pars) {
+    for (var i in pars)
+      format = format.replace('{' + i + '}', pars[i]);
     return format;
   },
   
@@ -345,7 +378,8 @@ var jToxDataset = (function () {
             col["sClass"] = "paddingless";
             col["sWidth"] = "125px";
             return col;
-        	}
+        	},
+        	visibility: "main"
       	},
       	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", location: "compound.metric", search: true, used: true},
       }
@@ -467,6 +501,9 @@ var jToxDataset = (function () {
         var grp = self.groups[gr];
         var empty = true;
         ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
+          var vis = (self.features[fId] || {})['visibility'];
+          if (!!vis && (vis == "none" || (!isMain && vis == 'main') || (isMain && vis == "details")))
+            return;
           empty = false;
           if (idx == "name") {
             if (isMain)
@@ -609,7 +646,7 @@ var jToxDataset = (function () {
             self.prepareTabs(detDiv, false, 
               function (id, name, parent) {
                 var fEl = null;
-                if (id != null && cls.shortFeatureId(id) != "Diagram") {
+                if (id != null) {
                   fEl = jT.getTemplate('#jtox-one-detail');
                   parent.appendChild(fEl);
                   ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full), uri: self.featureUri(id)});
@@ -943,10 +980,6 @@ var jToxDataset = (function () {
   }; // end of prototype
   
   // some public, static methods
-  cls.shortFeatureId = function(fId) {
-    return fId.substr(fId.indexOf('#') + 1); // a small trick - 'not-found' returns -1, and adding 1 results in exactly what we want: 0, i.e. - start, i.e. - no change.
-  };
-  
   cls.processEntry = function (entry, features, fnValue) {
     for (var fid in features) {
       var feature = features[fid];
@@ -1040,13 +1073,18 @@ var jToxDataset = (function () {
 var jToxStudy = (function () {
   var defaultSettings = {
     configuration: { 
-      columns: { 
-    		"main" : { },
-    		"parameters": { },
-    		"conditions": { },
-    		"effects": { },
-    		"protocol": { },
-    		"interpretation": { }
+      columns: {
+      	"_": {
+	    		"main" : { },
+	    		"parameters": { },
+	    		"conditions": { },
+	    		"effects": { },
+	    		"protocol": { },
+	    		"interpretation": { },
+	    	},
+    		"composition": { 
+	    		"main" : { }
+    		}
     	}
     }
   };    // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
@@ -1092,8 +1130,6 @@ var jToxStudy = (function () {
               jT.$(table).addClass('loaded');
               self.processStudies(panel, study.study, false);
             }
-            
-           // now try to order them, if they are all loaded...
           });  
         });
       }
@@ -1111,7 +1147,7 @@ var jToxStudy = (function () {
     });
     
     // when all handlers are setup - make a call, if needed.    
-    if (self.settings['substanceUri'] !== undefined){
+    if (self.settings['substanceUri'] !== undefined) {
       self.querySubstance(self.settings['substanceUri']);
     }
   };
@@ -1190,30 +1226,6 @@ var jToxStudy = (function () {
         // start filling it
         var parCount = 0;
   
-        var modifyColumn = function(col, group) {
-          if (group == null)
-            group = "main";
-          var name = col.sTitle.toLowerCase();
-          
-          // helper function for retrieving col definition, if exists. Returns empty object, if no.          
-          var getColDef = function (cat) {
-            var catCol = self.settings.configuration.columns[cat];
-            if (!ccLib.isNull(catCol)) {
-              catCol = catCol[group];
-              if (!ccLib.isNull(catCol))
-                catCol = catCol[name];
-            }
-
-            if (ccLib.isNull(catCol))
-              catCol = {};
-            return catCol;
-          };
-          // now form the default column, if existing and the category-specific one...
-          // extract column redefinitions and merge them all.
-          col = jT.$.extend(col, getColDef('_'), getColDef(category));
-          return ccLib.isNull(col.bVisible) || col.bVisible ? col : null;
-        };
-  
         // this function takes care to add as columns all elements from given array
         var putAGroup = function(group, fProcess) {
           var count = 0;
@@ -1236,7 +1248,7 @@ var jToxStudy = (function () {
         var putDefaults = function(start, len, group) {
           for (var i = 0;i < len; ++i) {
             var col = jT.$.extend({}, defaultColumns[i + start]);
-            col = modifyColumn(col, group);
+            col = jT.modifyColDef(self, col, category, group);
             if (col != null)
               colDefs.push(col);
           }
@@ -1267,7 +1279,9 @@ var jToxStudy = (function () {
                 out += '-';
             }
             
-            out += (data.unit = ccLib.trim(data.unit));
+            data.unit = ccLib.trim(data.unit);
+            if (!ccLib.isNull(data.unit))
+              out += ' ' + data.unit;
           }
           return out.replace(/ /g, "&nbsp;");
         };
@@ -1292,7 +1306,7 @@ var jToxStudy = (function () {
             "sDefaultContent": "-"
           };
           
-          col = modifyColumn(col, "parameters");
+          col = jT.modifyColDef(self, col, category, "parameters");
           if (col == null)
             return null;
           
@@ -1312,7 +1326,7 @@ var jToxStudy = (function () {
             "mData" : "effects"
           };
           
-          col = modifyColumn(col, "conditions");
+          col = jT.modifyColDef(self, col, category, "conditions");
           if (col == null)
             return null;
           
@@ -1334,18 +1348,14 @@ var jToxStudy = (function () {
         // now is time to put interpretation columns..
         putAGroup(study.interpretation, function(i){
           var col = { "sTitle": i, "sClass" : "center middle jtox-multi", "mData" : "interpretation." + i, "sDefaultContent": "-"};
-          return modifyColumn(col, "interpretation");
+          return jT.modifyColDef(self, col, category, "interpretation");
         });
         
         // finally put the protocol entries
         putDefaults(3, 3, "protocol");
         
         // but before given it up - make a small sorting..
-        colDefs.sort(function(a, b) {
-          var valA = ccLib.isNull(a.iOrder) ? 0 : a.iOrder;
-          var valB = ccLib.isNull(b.iOrder) ? 0 : b.iOrder;
-          return valA - valB;
-        });
+        jT.sortColDefs(colDefs);
         
         // READYY! Go and prepare THE table.
         jT.$(theTable).dataTable( {
@@ -1496,7 +1506,7 @@ var jToxStudy = (function () {
 
         var theTable = self.ensureTable(tab, study);
         jT.$(theTable).dataTable().fnAddData(onec);
-        jT.$(theTable).colResizable({ minWidth: 15, liveDrag: true });
+        jT.$(theTable).colResizable({ minWidth: 30, liveDrag: true });
         jT.$(theTable).parents('.jtox-study').addClass('folded');
       }
       
@@ -1637,19 +1647,19 @@ var jToxStudy = (function () {
       }
     },
     
-    querySummary: function(substanceURI) {
+    querySummary: function(summaryURI) {
       var self = this;
       
-      jT.call(self, substanceURI + "/studysummary", function(summary) {
+      jT.call(self, summaryURI, function(summary) {
         if (!!summary && !!summary.facet)
           self.processSummary(summary.facet);
       });
     },
     
-    queryComposition: function(substanceURI) {
+    queryComposition: function(compositionURI) {
       var self = this;
       
-      jT.call(self, substanceURI + "/composition", function(composition) {
+      jT.call(self, compositionURI, function(composition) {
         if (!!composition && !!composition.composition)
           self.processComposition(composition);
         });
@@ -1685,8 +1695,8 @@ var jToxStudy = (function () {
           });
            
           // query for the summary and the composition too.
-          self.querySummary(substance.URI);
-          self.queryComposition(substance.URI);
+          self.querySummary(substance.URI + "/studysummary");
+          self.queryComposition(substance.URI + "/composition");
         }
       });
     }
@@ -1697,11 +1707,11 @@ var jToxStudy = (function () {
 window.jT = window.jToxKit = {
 	templateRoot: null,
 
-	/* A single place to hold all necessary queries. Parameters are marked with <XX> and formatString() (common.js) is used
+	/* A single place to hold all necessary queries. Parameters are marked with {id} and formatString() (common.js) is used
 	to prepare the actual URLs
 	*/
 	queries: {
-		taskPoll: "/task/<1>",
+		taskPoll: { method: 'GET', service: "/task/{id}" },
 	},
 	
 	templates: { },        // html2js routine will fill up this variable
@@ -1725,49 +1735,67 @@ window.jT = window.jToxKit = {
     return url.protocol + "://" + url.host + (url.port.length > 0 ? ":" + url.port : '') + '/' + url.segments[0] + '/';	
 	},
     
+  // initializes one kit, based on the kit name passed, either as params, or found within data-XXX parameters of the element
+  initKit: function(element) {
+    var self = this;
+  	var dataParams = self.$.extend(true, self.settings, self.$(element).data());
+    
+  	if (!dataParams.manualInit){
+    	var kit = dataParams.kit;
+
+  	  // the real initialization function
+      var realInit = function (params) {
+      	if (!kit)
+      		return null;
+        // add jTox if it is missing AND there is not existing object/function with passed name. We can initialize ketcher and others like this too.
+      	if (!window[kit] && kit.indexOf('jTox') != 0)
+    	  	kit = 'jTox' + kit.charAt(0).toUpperCase() + kit.slice(1);
+    
+      	var fn = window[kit];
+      	if (typeof fn == 'function')
+      	  return new fn(element, params);
+        else if (typeof fn == "object" && typeof fn.init == "function")
+          return fn.init(element, params);
+
+        return null;
+      };
+
+  	  // first, get the configuration, if such is passed
+  	  if (!ccLib.isNull(dataParams.configFile)) {
+  	    // we'll use a trick here so the baseUrl parameters set so far to take account... thus passing 'fake' kit instance
+  	    // as the first parameter of jT.call();
+    	  self.call({ settings: dataParams}, dataParams.configFile, function(config){
+      	  if (!!config)
+      	    dataParams['configuration'] = self.$.extend(true, dataParams['configuration'], config);
+          realInit(dataParams);
+    	  });
+  	  }
+  	  else
+  	    realInit(dataParams);
+    }
+  },
+  
   // the jToxKit initialization routine, which scans all elements, marked as 'jtox-toolkit' and initializes them
-	init: function() {
+	init: function(root) {
   	var self = this;
   	
-  	self.initTemplates();
-
-    // make this handler for UUID copying. Once here - it's live, so it works for all tables in the future
-    jT.$(document).on('click', '.jtox-toolkit span.ui-icon-copy', function (e) { ccLib.copyToClipboard(jT.$(this).data('uuid')); return false;});
+  	if (!root) {
+    	self.initTemplates();
   
-    // scan the query parameter for settings
-		var url = ccLib.parseURL(document.location);
-		var queryParams = url.params;
-		queryParams.host = self.formBaseUrl(url);
-	
-    self.settings = jT.$.extend(self.settings, queryParams); // merge with defaults
-    
-	  // initializes the kit, based on the passed kit name
-	  var initKit = function(element, params) {
-    	if (params.kit == "study")
-    	  new jToxStudy(element, params);
-      if (params.kit == "dataset")
-        new jToxDataset(element, params);
-	  };
-	  
+      // make this handler for UUID copying. Once here - it's live, so it works for all tables in the future
+      jT.$(document).on('click', '.jtox-toolkit span.ui-icon-copy', function (e) { ccLib.copyToClipboard(jT.$(this).data('uuid')); return false;});
+
+      // scan the query parameter for settings
+  		var url = ccLib.parseURL(document.location);
+  		var queryParams = url.params;
+  		queryParams.host = self.formBaseUrl(url);
+  	
+      self.settings = self.$.extend(self.settings, queryParams); // merge with defaults
+      root = document;
+  	}
+
   	// now scan all insertion divs
-  	jT.$('.jtox-toolkit').each(function(i) {
-    	var dataParams = jT.$.extend(true, self.settings, jT.$(this).data());
-    	if (!dataParams.manualInit){
-    	  var el = this;
-    	  // first, get the configuration, if such is passed
-    	  if (!ccLib.isNull(dataParams.configFile)) {
-    	    // we'll use a trick here so the baseUrl parameters set so far to take account... thus passing 'fake' kit instance
-    	    // as the first parameter of jT.call();
-      	  self.call({ settings: dataParams}, dataParams.configFile, function(config){
-        	  if (!!config)
-        	    dataParams['configuration'] = config;
-            initKit(el, dataParams);
-      	  });
-    	  }
-    	  else
-    	    initKit(el, dataParams);
-      }
-  	});
+  	self.$('.jtox-toolkit', root).each(function(i) { self. initKit(this); });
 	},
 	
 	initTemplates: function() {
@@ -1800,9 +1828,11 @@ window.jT = window.jToxKit = {
 	
 	insertTool: function (name, root) {
 	  var html = this.tools[name];
-	  if (!ccLib.isNull(html))
+	  if (!ccLib.isNull(html)) {
   	  root.innerHTML = html;
-  	 return root;
+  	  this.init(root); // since we're pasting as HTML - we need to make re-traverse and initiazaltion of possible jTox kits.
+    }
+    return root;
 	},
 		
   changeTabsIds: function (root, suffix) {
@@ -1815,8 +1845,38 @@ window.jT = window.jToxKit = {
     })  
   },
   
-  copySpan: function (data, message) {
-    return ;
+  modifyColDef: function (kit, col, category, group) {
+	  var name = col.sTitle.toLowerCase();
+	  
+	  // helper function for retrieving col definition, if exists. Returns empty object, if no.          
+	  var getColDef = function (cat) {
+	    var catCol = kit.settings.configuration.columns[cat];
+	    if (!ccLib.isNull(catCol)) {
+	      if (!!group) {
+	        catCol = catCol[group];
+  	      if (!ccLib.isNull(catCol))
+  	        catCol = catCol[name];
+        }
+        else
+	        catCol = catCol[name];
+	    }
+	
+	    if (ccLib.isNull(catCol))
+	      catCol = {};
+	    return catCol;
+	  };
+	  // now form the default column, if existing and the category-specific one...
+	  // extract column redefinitions and merge them all.
+	  col = this.$.extend(col, (!!group ? getColDef('_') : {}), getColDef(category));
+	  return ccLib.isNull(col.bVisible) || col.bVisible ? col : null;
+  },
+  
+  sortColDefs: function (colDefs) {
+	  colDefs.sort(function(a, b) {
+	    var valA = ccLib.isNull(a.iOrder) ? 0 : a.iOrder;
+	    var valB = ccLib.isNull(b.iOrder) ? 0 : b.iOrder;
+	    return valA - valB;
+	  });
   },
   
   shortenedData: function (data, message, deflen) {
@@ -1838,24 +1898,22 @@ window.jT = window.jToxKit = {
 	/* Poll a given taskId and calls the callback when a result from the server comes - 
 	be it "running", "completed" or "error" - the callback is always called.
 	*/
-	pollTask : function(task, callback) {
+	pollTask : function(kit, task, callback) {
 		var self = this;
 		if (task === undefined || task.task === undefined || task.task.length < 1){
-		  ccLib.fireCallback(self.settings.onError, self, '-1', localMessage.taskFailed);
+			console.log("Wrong task passed for polling: " + JSON.stringify(task));
 			return;
 		}
 		task = task.task[0];
+		ccLib.fireCallback(callback, kit, task);
 		if (task.completed == -1){ // i.e. - running
 			setTimeout(function(){
-				self.call(task.result, function(newTask){
+				self.call(kit, task.result, function(newTask){
 					self.pollTask(newTask, callback);
 				});
 			}, self.pollDelay);
 		}
-		else if (!task.error){
-			callback(task.result);
-		}
-		else { // error
+		else if (task.error){ // additionally call the error handler
 		  ccLib.fireCallback(self.settings.onError, self, '-1', task.error);
 		}
 	},
@@ -1870,29 +1928,51 @@ window.jT = window.jToxKit = {
       return this.settings.host;
 	},
 	
-	/* Makes a server call with the provided method. If none is given - the internally stored one is used
+	/* Uses a kit-defined set of queries to make an automated jToxKit.call
 	*/
-	call: function (kit, service, callback, adata){
-	  var settings = jT.$.extend({"baseUrl" : this.settings.host}, this.settings);
+	service: function (kit, service, data, callback) {
+		var params = { };
+		if (!!kit && kit.queries[service] !== undefined) {
+			var info = kit.queries[service];
+			service = info.service;
+			params.method = info.method;
+			params.data = data;
+		}
+		
+		this.call(kit, ccLib.formatString(service, data), params, callback);
+	},
+	
+	/* Makes a server call for provided service, with settings form the given kit and calls 'callback' at the end - always.
+	The 'params', if passed, can have following attributes:
+		'method': the HTTP method to be used
+		'data': the data to be passed to the server with the request.
+	*/
+	call: function (kit, service, params, callback){
+		if (typeof params != 'object') {
+			callback = params; // the params parameters is obviously omitted
+			params = {};
+		}
+		
+	  var settings = jT.$.extend({"baseUrl" : this.settings.host}, this.settings, params);
 		if (kit == null)
 		  kit = this;
 		else 
-  		settings = jT.$.extend(true, settings, kit.settings);
+  		settings = jT.$.extend(settings, kit.settings);
 
 		ccLib.fireCallback(settings.onConnect, kit, service);
 		  
-		var method = 'GET';
 		var accType = settings.jsonp ? "application/x-javascript" : "application/json";
 		
-		if (adata !== undefined){
-			method = 'POST';
-			if (typeof adata == "boolean")
-				adata = {};
+		if (params.data === undefined){
+			params.data = {};
+			if (settings.jsonp)
+				params.data.media = accType;
+				
+			if (params.method === undefined)
+				params.method = 'GET';
 		}
-		else if (settings.jsonp)
-		  adata = { media: accType };
-		else
-			adata = { };
+		else if (params.method === undefined)
+				params.method = 'POST';
 
 		// on some queries, like tasks, we DO have baseUrl at the beginning
 		if (service.indexOf("http") != 0)
@@ -1904,8 +1984,8 @@ window.jT = window.jToxKit = {
 			headers: { Accept: accType },
 			crossDomain: settings.crossDomain || settings.jsonp,
 			timeout: settings.timeout,
-			type: method,
-			data: adata,
+			type: params.method,
+			data: params.data,
 			jsonp: settings.jsonp ? 'callback' : false,
 			error: function(jhr, status, error){
 			  ccLib.fireCallback(settings.onError, kit, service, status, error);
@@ -2054,28 +2134,28 @@ jT.templates['all-studies']  =
 "	    </div>" +
 "	    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\"></div>" +
 "	    <div id=\"jtox-pchem\" class=\"jtox-study-tab P-CHEM\">" +
-"	    	<div class=\"small float-right\">" +
+"	    	<div class=\"float-right\">" +
 "	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
 "	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "      </div>" +
 "	    <div id=\"jtox-envfate\" class=\"jtox-study-tab ENV_FATE\">" +
-"	    	<div class=\"small float-right\">" +
+"	    	<div class=\"float-right\">" +
 "	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
 "	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-ecotox\" class=\"jtox-study-tab ECOTOX\">" +
-"	    	<div class=\"small float-right\">" +
+"	    	<div class=\"float-right\">" +
 "	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
 "	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
 "	      <h4 class=\"data-field camelCase\" data-field=\"showname\"> ? </h4>" +
 "	    </div>" +
 "	    <div id=\"jtox-tox\" class=\"jtox-study-tab TOX\">" +
-"	    	<div class=\"small float-right\">" +
+"	    	<div class=\"float-right\">" +
 "	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
 "	    	</div>" +
 "	      <p><input type=\"text\" class=\"jtox-study-filter ui-input\" placeholder=\"Filter...\" /></p>" +
