@@ -117,11 +117,10 @@
 		================================================== -->
 <div class="jtox-toolkit remove-bottom" 
 	data-kit="study" 
+	data-tab="P-CHEM"
 	data-substance-uri="${ambit_root}/substance/${substanceUUID}"
 	data-cross-domain="false"	
 	data-config-file="${ambit_root}/scripts/config-study.js" data-jsonp="false"></div>
-		
-
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
