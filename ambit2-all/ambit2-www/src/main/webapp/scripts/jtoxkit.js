@@ -538,7 +538,7 @@ var jToxDataset = (function () {
           jT.$('a', el)[0].href = ccLib.addParameter(self.datasetUri, "media=" + encodeURIComponent(expo.type));
           var img = el.getElementsByTagName('img')[0];
           img.alt = img.title = expo.type;
-          img.src = self.baseUrl + expo.icon;
+          img.src = (jT.settings.baseUrl || self.baseUrl) + expo.icon;
         }
       }
       
@@ -1371,7 +1371,7 @@ var jToxStudy = (function () {
             return sPre;
           },
   				"oLanguage": {
-            "sProcessing": "<img src='" + self.baseUrl + "images/24x24_ambit.gif' border='0'>",
+            "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "images/24x24_ambit.gif' border='0'>",
             "sLoadingRecords": "No studies found.",
             "sZeroRecords": "No studies found.",
             "sEmptyTable": "No studies available.",
@@ -1543,7 +1543,7 @@ var jToxStudy = (function () {
   				"sPaginate" : ".dataTables_paginate _paging",
   				"bAutoWidth": false,
   				"oLanguage": {
-            "sProcessing": "<img src='" + self.baseUrl + "images/24x24_ambit.gif' border='0'>",
+            "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "images/24x24_ambit.gif' border='0'>",
             "sLoadingRecords": "No substances found.",
             "sZeroRecords": "No substances found.",
             "sEmptyTable": "No substances available.",
@@ -1603,7 +1603,7 @@ var jToxStudy = (function () {
     					"bSortable": false,
     					"mData" : "component.compound.URI",
     					"mRender" : function(val, type, full) {
-    					  return !val ? '' : '<a href="' + self.baseUrl + 'substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</span></a>';
+    					  return !val ? '' : '<a href="' + (jT.settings.baseUrl || self.baseUrl) + 'substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</span></a>';
   					}
 	    		}    				
   		    ]
@@ -1732,7 +1732,7 @@ window.jT = window.jToxKit = {
 	
 	// form the "default" baseUrl if no other is supplied
 	formBaseUrl: function(url) {
-    return url.protocol + "://" + url.host + (url.port.length > 0 ? ":" + url.port : '') + '/' + url.segments[0] + '/';	
+    return !!url.host ? url.protocol + "://" + url.host + (url.port.length > 0 ? ":" + url.port : '') + '/' + url.segments[0] + '/' : null;
 	},
     
   // initializes one kit, based on the kit name passed, either as params, or found within data-XXX parameters of the element
@@ -1788,7 +1788,8 @@ window.jT = window.jToxKit = {
       // scan the query parameter for settings
   		var url = ccLib.parseURL(document.location);
   		var queryParams = url.params;
-  		queryParams.host = self.formBaseUrl(url);
+  		if (!queryParams.baseUrl)
+  		  queryParams.baseUrl = self.formBaseUrl(url);
   	
       self.settings = self.$.extend(self.settings, queryParams); // merge with defaults
       root = document;
@@ -1925,7 +1926,7 @@ window.jT = window.jToxKit = {
     if (!ccLib.isNull(url) && url.indexOf('http') == 0)
       return this.formBaseUrl(ccLib.parseURL(url));
     else
-      return this.settings.host;
+      return this.settings.baseUrl;
 	},
 	
 	/* Uses a kit-defined set of queries to make an automated jToxKit.call
@@ -1953,7 +1954,7 @@ window.jT = window.jToxKit = {
 			params = {};
 		}
 		
-	  var settings = jT.$.extend({"baseUrl" : this.settings.host}, this.settings, params);
+	  var settings = jT.$.extend({}, this.settings, params);
 		if (kit == null)
 		  kit = this;
 		else 
