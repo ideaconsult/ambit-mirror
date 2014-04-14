@@ -1102,6 +1102,7 @@ var jToxStudy = (function () {
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even in manual initialization.
     
     self.settings = jT.$.extend({}, defaultSettings, jT.settings, settings); // i.e. defaults from jToxStudy
+    self.settings.tab = self.settings.tab || jT.settings.fullUrl.hash;
     // now we have our, local copy of settings.
     
     // get the main template, add it (so that jQuery traversal works) and THEN change the ids.
@@ -1119,8 +1120,27 @@ var jToxStudy = (function () {
 	    }
     });
     
-    // keep on initializing...
-    var loadPanel = function(panel){
+    // initialize the tab structure for several versions of dataTables.
+    self.tabs = jT.$(tree).tabs({
+      "select" : function(event, ui) {
+        self.loadPanel(ui.panel);
+      },
+      "beforeActivate" : function(event, ui) {
+        if (ui.newPanel)
+          self.loadPanel(ui.newPanel[0]);
+      }
+    });
+    
+    // when all handlers are setup - make a call, if needed.    
+    if (self.settings['substanceUri'] !== undefined) {
+      self.querySubstance(self.settings['substanceUri']);
+    }
+  };
+  
+  // now follow the prototypes of the instance functions.
+  cls.prototype = {
+    loadPanel: function(panel){
+      var self = this;
       if (panel){
         jT.$('.jtox-study.unloaded', panel).each(function(i){
           var table = this;
@@ -1133,27 +1153,8 @@ var jToxStudy = (function () {
           });  
         });
       }
-    };
+    },
     
-    // initialize the tab structure for several versions of dataTables.
-    jT.$(tree).tabs({
-      "select" : function(event, ui) {
-        loadPanel(ui.panel);
-      },
-      "beforeActivate" : function(event, ui) {
-        if (ui.newPanel)
-          loadPanel(ui.newPanel[0]);
-      }
-    });
-    
-    // when all handlers are setup - make a call, if needed.    
-    if (self.settings['substanceUri'] !== undefined) {
-      self.querySubstance(self.settings['substanceUri']);
-    }
-  };
-  
-  // now follow the prototypes of the instance functions.
-  cls.prototype = {
     getFormatted: function (data, type, format) {
       var value = null;
       if (typeof format === 'function' )
@@ -1403,8 +1404,8 @@ var jToxStudy = (function () {
       
       // create the groups on the corresponding tabs, first sorting them alphabetically
       summary.sort(function (a, b) {
-      	var valA = (a.category.description || a.category.title);
-      	var valB = (b.category.description || b.category.title);
+      	var valA = (a.category.order || a.category.description || a.category.title);
+      	var valB = (b.category.order || b.category.description || b.category.title);
       	if (valA == null)
       		return -1;
       	if (valB == null)
@@ -1653,6 +1654,16 @@ var jToxStudy = (function () {
       jT.call(self, summaryURI, function(summary) {
         if (!!summary && !!summary.facet)
           self.processSummary(summary.facet);
+          // check if there is an initial tab passed so we switch to it
+          if (!!self.settings.tab) {
+            var div = jT.$('.jtox-study-tab.' + decodeURIComponent(self.settings.tab).replace(/ /g, '_'), self.root)[0];
+            if (!!div) {
+              for (var idx = 0, cl = div.parentNode.children.length; idx < cl; ++idx)
+                if (div.parentNode.children[idx].id == div.id)
+                  break;
+              $(self.tabs).tabs('option', 'active', idx - 1);
+            }
+          }
       });
     },
     
@@ -1722,7 +1733,8 @@ window.jT = window.jToxKit = {
 	settings: {
   	jsonp: false,                   // whether to use JSONP approach, instead of JSON.
   	crossDomain: false,             // should it expect cross-domain capabilities for the queries.
-  	host: null,                     // same as above, but for the calling server, i.e. - the one that loaded the page.        
+  	baseUrl: null,                  // the baseUrl for the server that loaded the page.
+  	fullUrl: null,                  // the url as it is on loading the page - this is parsed one, i.e. parseUrl() processed.
   	timeout: 15000,                 // the timeout an call to the server should be wait before the attempt is considered error.
   	pollDelay: 200,                 // after how many milliseconds a new attempt should be made during task polling.
   	onConnect: function(s){ },		  // function (service): called when a server request is started - for proper visualization. Part of settings.
@@ -1786,7 +1798,7 @@ window.jT = window.jToxKit = {
       jT.$(document).on('click', '.jtox-toolkit span.ui-icon-copy', function (e) { ccLib.copyToClipboard(jT.$(this).data('uuid')); return false;});
 
       // scan the query parameter for settings
-  		var url = ccLib.parseURL(document.location);
+  		var url = self.settings.fullUrl = ccLib.parseURL(document.location);
   		var queryParams = url.params;
   		if (!queryParams.baseUrl)
   		  queryParams.baseUrl = self.formBaseUrl(url);
