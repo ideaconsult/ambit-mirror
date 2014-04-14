@@ -1661,7 +1661,9 @@ var jToxStudy = (function () {
               for (var idx = 0, cl = div.parentNode.children.length; idx < cl; ++idx)
                 if (div.parentNode.children[idx].id == div.id)
                   break;
-              $(self.tabs).tabs('option', 'active', idx - 1);
+              --idx;
+              jT.$(self.tabs).tabs('option', 'active', idx);
+              jT.$(self.tabs).tabs('option', 'selected', idx);
             }
           }
       });
