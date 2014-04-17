@@ -31,6 +31,6 @@ public interface IRetroSynthRule
 	
 	public void setType(RetroSynthRuleType newType);	
 	
-	//public ArrayList<IRetroSynthRuleInstance> getInstances(IAtomContainer str);
+	public ArrayList<IRetroSynthRuleInstance> apply(IAtomContainer str);
 	
 }
