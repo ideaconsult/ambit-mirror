@@ -6,6 +6,11 @@ public class RetroSynthPath
 {
 	public ArrayList<RetroSynthStep> steps = new ArrayList<RetroSynthStep>();
 	
+	public double getSyntPathScore()
+	{
+		//TODO
+		return 0.0;
+	}
 	
 	public String toString()
 	{
