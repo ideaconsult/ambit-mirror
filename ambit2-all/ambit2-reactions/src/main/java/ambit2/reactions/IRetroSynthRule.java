@@ -1,8 +1,7 @@
 package ambit2.reactions;
 
 import java.util.ArrayList;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import ambit2.reactions.ReactionConst.RetroSynthRuleType;
+
 
 
 public interface IRetroSynthRule 
@@ -27,10 +26,26 @@ public interface IRetroSynthRule
 	
 	public void setID(int newID);
 	
-	public RetroSynthRuleType getType();
+	public Type getType();
 	
-	public void setType(RetroSynthRuleType newType);	
+	public void setType(Type newType);	
 	
-	public ArrayList<IRetroSynthRuleInstance> apply(IAtomContainer str);
+	//public ArrayList<IRetroSynthRuleInstance> getRuleInstances(IAtomContainer str);
 	
+	/*
+	 * Retro Synthesis Rule Types 
+	 */
+	public enum Type {
+		TRANSFORM, 
+		UNKNOWN;
+
+		public static Type getFromString(String stringType)
+		{
+			if (stringType.equals("TRANSFORM"))
+				return Type.TRANSFORM;
+
+			return Type.UNKNOWN;
+		}
+	}
+
 }
