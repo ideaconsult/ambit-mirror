@@ -8,7 +8,7 @@ import ambit2.reactions.ReactionConst.RetroSynthRuleType;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SMIRKSReaction;
 
-public class RetroSynthRule 
+public class RetroSynthRule implements IRetroSynthRule
 {
 	//String info
 	String originalRuleString = "";
@@ -97,6 +97,12 @@ public class RetroSynthRule
 	public void setSmirks(String newName)
 	{
 		name = newName;
+	}
+	
+	public ArrayList<IRetroSynthRuleInstance> apply(IAtomContainer str)
+	{
+		//TODO
+		return null;
 	}
 	
 	//---------- specific function implementation -------------
