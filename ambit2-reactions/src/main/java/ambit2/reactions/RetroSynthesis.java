@@ -51,12 +51,12 @@ public class RetroSynthesis
 	}
 	
 	
-	ArrayList<RetroSynthRuleInstance> findAllRuleInstances(IAtomContainer mol)
+	ArrayList<IRetroSynthRuleInstance> findAllRuleInstances(IAtomContainer mol)
 	{
-		ArrayList<RetroSynthRuleInstance> ruleInstances = new ArrayList<RetroSynthRuleInstance>(); 
+		ArrayList<IRetroSynthRuleInstance> ruleInstances = new ArrayList<IRetroSynthRuleInstance>(); 
 		for (RetroSynthRule rule : knowledgeBase.retroSynthRules)
 		{
-			 ArrayList<RetroSynthRuleInstance> inst = findRuleInstances(mol, rule);
+			 ArrayList<IRetroSynthRuleInstance> inst = findRuleInstances(mol, rule);
 			 for (int i = 0; i < inst.size(); i++)
 				 ruleInstances.add(inst.get(i));
 		}
@@ -99,12 +99,11 @@ public class RetroSynthesis
 			return;
 		}
 		
-		ArrayList<RetroSynthRuleInstance> ruleInstances = findAllRuleInstances(node.components);
-		for (RetroSynthRuleInstance instance : ruleInstances)
+		ArrayList<IRetroSynthRuleInstance> ruleInstances = findAllRuleInstances(node.components);
+		for (IRetroSynthRuleInstance instance : ruleInstances)
 		{
 			//TODO
 		}
-		
 		
 		
 		ArrayList<RetroSynthNode> children = generateChildrenNodes(node);
@@ -140,9 +139,9 @@ public class RetroSynthesis
 	
 		
 	
-	ArrayList<RetroSynthRuleInstance> findRuleInstances(IAtomContainer str, RetroSynthRule rule)
+	ArrayList<IRetroSynthRuleInstance> findRuleInstances(IAtomContainer str, RetroSynthRule rule)
 	{	
-		ArrayList<RetroSynthRuleInstance> instances = new ArrayList<RetroSynthRuleInstance>();
+		ArrayList<IRetroSynthRuleInstance> instances = new ArrayList<IRetroSynthRuleInstance>();
 				
 		smrkMan.getIsomorphismTester().setQuery(rule.reaction.reactant);
 		SmartsParser.prepareTargetForSMARTSSearch(rule.reaction.reactantFlags, str);
