@@ -87,7 +87,8 @@ public class RetroSynthesis
 		//Generated "zero" node;
 		RetroSynthNode node0 = new RetroSynthNode();
 		node0.components = molecule; //may be clone would be better 
-		processNode(node0);
+		nodes.push(node0);
+		//processNode(node0);
 	}
 	
 	void processNode(RetroSynthNode node)
@@ -165,7 +166,7 @@ public class RetroSynthesis
 	{
 		//TODO
 		//Check all components and if some of them is a starting material 
-		//then it is moved to the resolved componets container 
+		//then it is moved to the resolved components container 
 	}
 		
 	
