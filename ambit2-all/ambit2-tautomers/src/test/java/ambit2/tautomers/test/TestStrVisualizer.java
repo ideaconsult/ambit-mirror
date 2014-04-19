@@ -1,10 +1,19 @@
 package ambit2.tautomers.test;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.io.FileReader;
 import java.util.Vector;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
@@ -41,6 +50,8 @@ public class TestStrVisualizer
 	boolean filterEqMaps = true;
 	boolean FlagSingleCopyForPos = false;
 	JFrame frame;
+	JScrollPane scrPane;
+	JPanel panel;
 	int nStr = 0;
 	int nCol = 6;	
 	int size = 150;
@@ -75,30 +86,39 @@ public class TestStrVisualizer
 	}
 	
 	TestStrVisualizer(Vector<IAtomContainer> structs)
-	{
-		setFrame();
+	{	
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(0,nCol));
 		addStructures(structs);
+		//addTestPanel();addTestPanel();
+		setFrame();
 	}
 	
 	TestStrVisualizer(Vector<IAtomContainer> structs, String title)
 	{
 		frameTitle = title;
-		setFrame();
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(0,nCol));
 		addStructures(structs);
+		setFrame();
 		
 	}
 	
 	TestStrVisualizer(List<IAtomContainer> structs)
 	{
-		setFrame();
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(0,nCol));
 		addStructures(structs);
+		setFrame();
 	}
 	
 	TestStrVisualizer(List<IAtomContainer> structs, String title)
 	{
 		frameTitle = title;
-		setFrame();
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(0,nCol));
 		addStructures(structs);
+		setFrame();
 	}
 	
 	void addStructures(Vector<IAtomContainer> structs)
@@ -116,12 +136,16 @@ public class TestStrVisualizer
 	
 	
 	void setFrame()
-	{
+	{	
 		frame = new JFrame();
+		int v=ScrollPaneConstants. VERTICAL_SCROLLBAR_AS_NEEDED;
+		int h=ScrollPaneConstants. HORIZONTAL_SCROLLBAR_AS_NEEDED;		
+		scrPane = new JScrollPane(panel,v,h);
+		frame.getContentPane().add(scrPane);
+		
 		frame.setTitle(frameTitle);
 		frame.setSize(1000, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		frame.setVisible(true);
 	}
 	
@@ -129,10 +153,20 @@ public class TestStrVisualizer
 	{	
 		Panel2D p = new Panel2D();
 		p.setAtomContainer(struct);
-		frame.getContentPane().add(p);
-		p.setBounds((nStr%nCol)*size,(nStr/nCol)*size,size-2,size-2);
-		frame.setVisible(true);
+		p.setBorder(BorderFactory.createLineBorder(Color.black));
+		
+		//frame.getContentPane().add(p);
+		panel.add(p);
+		//p.setBounds((nStr%nCol)*size,(nStr/nCol)*size,size-2,size-2);
 		nStr++;
+	}
+	
+	void addTestPanel()
+	{	
+		JPanel p = new JPanel();
+		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+		p.setBorder(raisedetched);
+		panel.add(p);
 	}
 	
 	
