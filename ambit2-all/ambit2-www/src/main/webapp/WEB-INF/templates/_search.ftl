@@ -1,6 +1,6 @@
 <#include "/html.ftl">
 <head>
-  <#include "/header.ftl">
+  <#include "/header_updated.ftl">
   
 
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
@@ -27,18 +27,34 @@ $(document)
 <div class="container" style="margin:0;padding:0;">
 
 <!-- banner -->
-<!-- banner -->
-<#include "/banner_crumbs.ftl">
-
-<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<div class="row remove-bottom" id="header">
+	<#include "/toplinks.ftl">
 </div>
+<div class="row half-bottom">
+		<div class="two columns">
+			<a href='${ambit_root}/ui'>
+				<img class='scale-with-grid' border='0' src='${ambit_root}/images/ambit-logo-small.png' title='v${ambit_version_short}' alt='AMBIT logo'>
+			</a>
+		</div>
+		<div class="thirteen columns remove-bottom breadCrumb module h6" id="breadCrumb">
+                    <ul>
+                        <li>
+                            <a href="${ambit_root}" title="AMBIT Home [v ${ambit_version_long}]">Home</a>
+                        </li>
+                    </ul>
+		</div>
+</div>
+<div class="row remove-bottom" >
+	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
+</div>
+
+
 
 
 		
 		<!-- Page Content
 		================================================== -->
-	<div class="fourteen columns remove-bottom" style="padding:0;" >
+	<div class="sixteen columns remove-bottom" style="padding:0;" >
 
 	<div class="jtox-toolkit" data-kit="query" data-initial-query="yes" data-base-url="${ambit_root}">
     	<div class="jtox-toolkit jtox-widget" data-kit="search"></div>
