@@ -16411,7 +16411,7 @@ ui.onMouseDown_DropdownListItem = function (event)
 
 ui.defaultSelector = 'selector_lasso';
 
-ui.init = function (root)
+ui.init = function (settings)
 {
     if (this.initialized)
     {
@@ -16424,9 +16424,26 @@ ui.init = function (root)
         return;
     }
 
-    this.root = (!!root ? root : document);
+    if (!settings)
+      settings = {};
+
+    this.root = (!!settings.root ? settings.root : document);
     this.is_osx = (navigator.userAgent.indexOf('Mac OS X') != -1);
     this.is_touch = 'ontouchstart' in document;
+    
+    if (settings.ajaxRequest === undefined) {
+      ui.ajaxRequest = function (service, method, async, parameters, onready) {
+        new Ajax.Request(ui.path + service,
+        {
+          'method': method,
+          'asynchronous' : async,
+          'parameters' : parameters,
+          'onComplete': function (res) { onready(res.responseText, res); }
+        });
+      }
+    }
+    else
+      ui.ajaxRequest = settings.ajaxRequest;
 
     // IE specific styles
     if (Prototype.Browser.IE)
@@ -16628,15 +16645,9 @@ ui.init = function (root)
     ui.path = document.location.pathname.substring(0, document.location.pathname.lastIndexOf('/') + 1);
     ui.base_url = document.location.href.substring(0, document.location.href.lastIndexOf('/') + 1);
 
-    new Ajax.Request(ui.path + 'knocknock',
-    {
-        method: 'get',
-        asynchronous : false,
-        onComplete: function (res)
-        {
-            if (res.responseText == 'You are welcome!')
-                ui.standalone = false;
-        }
+    ui.ajaxRequest('knocknock', 'get', false, null, function (res, xhr) {
+      if (res == 'You are welcome!')
+          ui.standalone = false;
     });
 
     if (this.standalone)
@@ -16797,29 +16808,11 @@ ui.selectMode = function (mode)
         ui.showAutomapProperties({
             onOk: function(mode) {
                 var moldata = new chem.MolfileSaver().saveMolecule(ui.ctab/*.clone()*/, true);
-                new Ajax.Request(ui.path + 'automap',
-                {
-                    method: 'post',
-                    asynchronous : true,
-                    parameters : { moldata : moldata, mode : mode },
-                    onComplete: function (res)
-                    {
-                        if (res.responseText.startsWith('Ok.')) {
-/*
-                            var aam = ui.parseCTFile(res.responseText);
-                            var action = new ui.Action();
-                            for (var aid = aam.atoms.count() - 1; aid >= 0; aid--) {
-                                action.mergeWith(ui.Action.fromAtomAttrs(aid, { aam : aam.atoms.get(aid).aam }));
-                            }
-                            ui.addUndoAction(action, true);
-*/
-                            ui.updateMolecule(ui.parseCTFile(res.responseText));
-/*
-                            ui.render.update();
-*/
-                        }
-                    }
-                });
+                ui.ajaxRequest('automap', 'post', true, { moldata : moldata, mode : mode }, function (res) {
+                  if (res.startsWith('Ok.')) {
+                      ui.updateMolecule(ui.parseCTFile(res));
+                  }
+              });
             }
         });
         return;
@@ -17142,7 +17135,7 @@ ui.onKeyUp = function (event)
     // Esc
     if (event.keyCode == 27)
     {
-        if (this == document || !this.visible())
+        if (this == ui.root || !this.visible())
         {
             if (!p$('window_cover').visible())
             {
@@ -17175,7 +17168,7 @@ ui.onKeyUp = function (event)
         ui.ctrlShortcuts.indexOf(event.which) != -1) && (event.keyCode != 46 && Prototype.Browser.WebKit))
         return;
 
-    if (this != document)
+    if (this != ui.root)
         return;
 
     util.stopEventPropagation(event);
@@ -17354,37 +17347,24 @@ ui.loadMolecule = function (mol_string, force_layout, check_empty_line, paste)
             }
             return;
         }
-        new Ajax.Request(ui.path + 'layout?smiles=' + encodeURIComponent(smiles),
-        {
-            method: 'get',
-            asynchronous : true,
-            onComplete: function (res)
-            {
-                if (res.responseText.startsWith('Ok.'))
-                    updateFunc.call(ui, ui.parseCTFile(res.responseText));
-                else if (res.responseText.startsWith('Error.'))
-                    alert(res.responseText.split('\n')[1]);
-                else
-                    throw new Error('Something went wrong' + res.responseText);
-            }
+        ui.ajaxRequest('layout?smiles=' + encodeURIComponent(smiles), 'get', true, null, function (res) {
+          if (res.startsWith('Ok.'))
+              updateFunc.call(ui, ui.parseCTFile(res));
+          else if (res.startsWith('Error.'))
+              alert(res.split('\n')[1]);
+          else
+              throw new Error('Something went wrong' + res);
         });
     } else if (!ui.standalone && force_layout)
     {
-        new Ajax.Request(ui.path + 'layout',
-        {
-            method: 'post',
-            asynchronous : true,
-            parameters: {moldata: mol_string},
-            onComplete: function (res)
-            {
-                if (res.responseText.startsWith('Ok.'))
-                    updateFunc.call(ui, ui.parseCTFile(res.responseText));
-                else if (res.responseText.startsWith('Error.'))
-                    alert(res.responseText.split('\n')[1]);
-                else
-                    throw new Error('Something went wrong' + res.responseText);
-            }
-        });
+      ui.ajaxRequest('layout', 'post', true, {moldata: mol_string}, function (res) {
+          if (res.startsWith('Ok.'))
+              updateFunc.call(ui, ui.parseCTFile(res));
+          else if (res.startsWith('Error.'))
+              alert(res.split('\n')[1]);
+          else
+              throw new Error('Something went wrong' + res);
+      });
     } else {
         updateFunc.call(ui, ui.parseCTFile(mol_string, check_empty_line));
     }
@@ -17394,22 +17374,20 @@ ui.dearomatizeMolecule = function (mol_string, aromatize)
 {
     if (!ui.standalone)
     {
-        new Ajax.Request(ui.path + (aromatize ? 'aromatize' : 'dearomatize'),
-        {
-            method: 'post',
-            asynchronous : true,
-            parameters: {moldata: mol_string},
-            onComplete: function (res)
-            {
-                if (res.responseText.startsWith('Ok.')) {
-                    ui.updateMolecule(ui.parseCTFile(res.responseText));
-                } else if (res.responseText.startsWith('Error.')) {
-                    alert(res.responseText.split('\n')[1]);
-                } else {
-                    throw new Error('Something went wrong' + res.responseText);
-                }
-            }
-        });
+      ui.ajaxRequest(
+        (aromatize ? 'aromatize' : 'dearomatize'), 
+        'post', 
+        true, 
+        {moldata: mol_string},
+        function (res) {
+          if (res.startsWith('Ok.')) {
+              ui.updateMolecule(ui.parseCTFile(res));
+          } else if (res.startsWith('Error.')) {
+              alert(res.split('\n')[1]);
+          } else {
+              throw new Error('Something went wrong' + res);
+          }
+      });
     } else {
         throw new Error('Aromatization and dearomatization are not supported in the standalone mode.');
     }
@@ -20571,7 +20549,7 @@ ketcher = function () {
 
 ketcher.version = "1.0b5";
 
-ketcher.init = function (root)
+ketcher.init = function (settings)
 {
   ketcher.templates = {};
 	ketcher.button_areas = {};
@@ -20797,7 +20775,7 @@ ketcher.init = function (root)
     ketcher.button_areas.rgroup_label = ketcher.showMolfileOpts('rgroup', tmpl.rgroup_label, 75, renderOpts);
 */
 
-    ui.init(root);
+    ui.init(settings);
 };
 
 ketcher.getSmiles = function ()
@@ -20899,7 +20877,7 @@ ketcher.runTest = function(test, context) {
 jT.tools['ketcher'] = 
 "" +
 "<div class=\"ketcher_root\">" +
-"<table id=\"ketcher_window\">" +
+"<table id=\"ketcher_window\" tabindex=\"1\">" +
 "<tr align=\"center\" id=\"main_toolbar\">" +
 "<td style=\"width:36px\"><div style=\"position:relative\"><img class=\"sideButton modeButton stateButton\" id=\"selector\" selid=\"selector_lasso\" src=\"png/action/lasso.png\" alt=\"\" title=\"Select Tool (Esc)\" /><img class=\"dropdownButton\" id=\"selector_dropdown\" src=\"png/dropdown.png\" alt=\"\" /></div></td>" +
 "<td class=\"toolDelimiter\"></td>" +
@@ -20920,7 +20898,7 @@ jT.tools['ketcher'] =
 "<td class=\"toolButtonCell toolButton serverRequired\" id=\"clean_up\"><img title=\"Clean Up (Ctrl+L)\" alt=\"\" src=\"png/action/layout.png\" /></td>" +
 "<td class=\"toolButtonCell toolButton serverRequired\" id=\"aromatize\"><img title=\"Aromatize\" alt=\"\" src=\"png/action/arom.png\" /></td>" +
 "<td class=\"toolButtonCell toolButton serverRequired\" id=\"dearomatize\"><img title=\"Dearomatize\" alt=\"\" src=\"png/action/dearom.png\" /></td>" +
-"<td style=\"width:100%\"></td>" +
+"<td class=\"toolEmptyCell\" style=\"width:100%\"></td>" +
 "<td style=\"width:1px\" rowspan=\"14\"></td>" +
 "<td style=\"width:36px;padding:0 2px 0 0;\"><a href=\"http://www.ggasoftware.com/\" target=\"_blank\"><img src=\"png/logo.png\" alt=\"\" title=\"GGA Software Services\" /></a></td>" +
 "</tr>" +
