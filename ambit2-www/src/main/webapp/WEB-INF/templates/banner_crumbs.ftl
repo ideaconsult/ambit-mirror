@@ -9,10 +9,10 @@
 			</a>
 			<div class='h6' style='color:#729203;' title='${ambit_version_long}'>v${ambit_version_short}</div>
 		</div>
-		<div class="thirteen columns remove-bottom" id="query">
+		<div class="thirteen columns remove-bottom">
 			<div id='welcome' class="remove-bottom h3">&nbsp;
 			</div>
-			<div id="breadCrumb" class="row breadCrumb module remove-bottom h5">
+			<div id="breadCrumb" class="breadCrumb module remove-bottom h5">
                     <ul>
                         <li>
                             <a href="${ambit_root}" title="AMBIT Home">Home</a>

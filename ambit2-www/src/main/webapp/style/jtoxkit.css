@@ -1,3 +1,78 @@
+/* toxtstudy.css - Styling for toxstudy engine
+*/
+
+.jtox-search .search-pane input {
+  min-width: 380px;
+  height: 20px;
+  -moz-transition: width 0.3s ease-out;
+  -webkit-transition: width 0.3s ease-out;
+  transition: width 0.3s ease-out;
+}
+
+.jtox-search .search-pane .jtox-inline input,
+.jtox-search .search-pane .jtox-inline select {
+  font-size: 1.1em;
+  margin-top: 2px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.jtox-search .search-pane .jtox-inline select {
+  margin: 6px;
+  height: 26px;
+}
+
+.jtox-search .jq-buttonset {
+  margin: 4px;
+}
+
+.jtox-search .search-pane button {
+  vertical-align: top;
+  margin-top: 2px;
+}
+
+.jtox-search .searchsimilarity select {
+  width: 5em;
+}
+
+.jtox-search .search-pane .dynamic {
+  -moz-transition: opacity 0.3s ease-out;
+  -webkit-transition: opacity 0.3s ease-out;
+  transition: opacity 0.3s ease-out;
+}
+
+.jtox-search .search-pane .dynamic.hidden {
+  opacity: 0.0;
+  width: 0px;
+}
+
+.jtox-search .ketcher {
+  display: block;
+  height: auto;
+  position: relative;
+  left: 0px;
+  -moz-transition: left 0.5s ease, opacity 0.2s;
+  -webkit-transition: left 0.5s ease, opacity 0.2s;
+  transition: left 0.5s ease, opacity 0.2s;
+}
+
+.jtox-search .ketcher.shrinken {
+  left: 100%;
+/*   opacity: 0.0; */
+}
+
+.jtox-search .ketcher .toolEmptyCell {
+  vertical-align: middle;
+}
+
+.jtox-search .ketcher .toolEmptyCell button {
+  margin: 0px;
+  padding: 4px 8px;
+}
+
+.jtox-search .ketcher .toolEmptyCell button span {
+  display: inline-block;
+}
 /* toxtdataset.css - Styling for tox-dataset engine
 */
 
@@ -275,19 +350,19 @@ td.jtox-multi table {
   display: none !important;
 }
 
-.jtox-size-quarter {
+.jtox-toolkit .size-quarter {
   width: 25%;
 }
 
-.jtox-size-third {
+.jtox-toolkit .size-third {
   width: 33%;
 }
 
-.jtox-size-half {
+.jtox-toolkit .size-half {
   width: 50%;
 }
 
-.jtox-size-full {
+.jtox-toolkit .size-full {
   width: 100%;
 }
 
@@ -311,13 +386,22 @@ td.jtox-multi table {
 	margin: 0px !important;
 }
 
-.jtox-font-small {
+.jtox-toolkit .font-small {
   font-size: small;
 }
 
-.jtox-font-smaller {
+.jtox-toolkit .font-smaller {
   font-size: smaller;
 }
+
+.jtox-toolkit .font-big {
+  font-size: large;
+}
+
+.jtox-toolkit .font-bigger {
+  font-size: larger;
+}
+
 
 .jtox-toolkit .paddingless {
   padding: 0px !important;
