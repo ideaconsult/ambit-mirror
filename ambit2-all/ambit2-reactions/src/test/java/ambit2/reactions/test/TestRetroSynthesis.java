@@ -14,8 +14,8 @@ public class TestRetroSynthesis
 		
 		TestRetroSynthesis trs = new TestRetroSynthesis();
 		trs.retroSyn = new RetroSynthesis();
-		System.out.println("Retro Synthesis Knowledge base:");
-		System.out.println(trs.retroSyn.getReactionKnowledgeBase().toString());
+		//System.out.println("Retro Synthesis Knowledge base:\n" + trs.retroSyn.getReactionKnowledgeBase().toString());
+		
 		
 		//trs.test("CCNS");
 		trs.test("c1[n+](S)ccn1O");
@@ -26,7 +26,7 @@ public class TestRetroSynthesis
 	{	
 		System.out.println("Testing Retro Synthesis for " + smi);
 		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
-		System.out.println("Atom attributes: \n" + SmartsHelper.getAtomsAttributes(mol));
+		//System.out.println("Atom attributes: \n" + SmartsHelper.getAtomsAttributes(mol));
 		
 		System.out.println();
 		retroSyn.setStructure(mol);

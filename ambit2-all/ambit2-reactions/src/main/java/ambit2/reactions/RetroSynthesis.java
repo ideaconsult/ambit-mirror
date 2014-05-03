@@ -51,17 +51,7 @@ public class RetroSynthesis
 	}
 	
 	
-	ArrayList<IRetroSynthRuleInstance> findAllRuleInstances(IAtomContainer mol)
-	{
-		ArrayList<IRetroSynthRuleInstance> ruleInstances = new ArrayList<IRetroSynthRuleInstance>(); 
-		for (RetroSynthRule rule : knowledgeBase.retroSynthRules)
-		{
-			 ArrayList<IRetroSynthRuleInstance> inst = findRuleInstances(mol, rule);
-			 for (int i = 0; i < inst.size(); i++)
-				 ruleInstances.add(inst.get(i));
-		}
-		return ruleInstances;
-	}
+	
 	
 	
 	/*
@@ -84,11 +74,11 @@ public class RetroSynthesis
 	
 	void generateInitialNodes()
 	{
-		//Generated "zero" node;
+		//Generated "zero" node (tree root of Depth-First Search algorithm);
 		RetroSynthNode node0 = new RetroSynthNode();
-		node0.components = molecule; //may be clone would be better 
+		node0.components = molecule; //may be clone would be better ???
+		checkComponents(node0);
 		nodes.push(node0);
-		//processNode(node0);
 	}
 	
 	void processNode(RetroSynthNode node)
@@ -100,17 +90,22 @@ public class RetroSynthesis
 			return;
 		}
 		
-		ArrayList<IRetroSynthRuleInstance> ruleInstances = findAllRuleInstances(node.components);
-		for (IRetroSynthRuleInstance instance : ruleInstances)
-		{
-			//TODO
-		}
-		
-		
 		ArrayList<RetroSynthNode> children = generateChildrenNodes(node);
 		if (children != null)
 			for (RetroSynthNode child : children)
 				nodes.push(child);
+	}
+	
+	ArrayList<IRetroSynthRuleInstance> findAllRuleInstances(IAtomContainer mol)
+	{
+		ArrayList<IRetroSynthRuleInstance> ruleInstances = new ArrayList<IRetroSynthRuleInstance>(); 
+		for (RetroSynthRule rule : knowledgeBase.retroSynthRules)
+		{
+			 ArrayList<IRetroSynthRuleInstance> inst = findRuleInstances(mol, rule);
+			 for (int i = 0; i < inst.size(); i++)
+				 ruleInstances.add(inst.get(i));
+		}
+		return ruleInstances;
 	}
 	
 	void generateResult(RetroSynthNode node)
@@ -121,19 +116,24 @@ public class RetroSynthesis
 	public ArrayList<RetroSynthNode> generateChildrenNodes(RetroSynthNode node)
 	{	
 		ArrayList<RetroSynthNode> children = new ArrayList<RetroSynthNode>();		
-		IAtomContainerSet compSet =  ConnectivityChecker.partitionIntoMolecules(node.components);
-		for (int i =0; i < compSet.getAtomContainerCount(); i++)
-		{
-			
-			//checkForResolvedComponets(newNode)
-		}
-			
-		//TODO		
-		//Ideas for generation strategies
+		IAtomContainerSet compSet =  ConnectivityChecker.partitionIntoMolecules(node.components);	
+		
+		//Handle the first component		
+		IAtomContainer comp = compSet.getAtomContainer(0);			
+		ArrayList<IRetroSynthRuleInstance> ruleInstances = findAllRuleInstances(comp);
+				
+					
+		//TODO
+		
 		//1.Check components status		
 		//2.Prepare initial set of components for processing		
-		//3.Prioritize the components		
+		//3.Prioritize the components/instances		
 		//4.generated children one by one for each component (or with a more complicated combinations)
+		
+		
+		
+		for (RetroSynthNode childNode : children)
+			checkComponents(childNode);
 		
 		return  children;
 	}
@@ -162,20 +162,34 @@ public class RetroSynthesis
 	}
 	
 	
-	void checkForResolvedComponets(RetroSynthNode node)
+	boolean isComponentResolved(IAtomContainer container)
 	{
 		//TODO
-		//Check all components and if some of them is a starting material 
-		//then it is moved to the resolved components container 
+		return false;
 	}
+	
+	//All resolved components are moved to resolved container
+	void checkComponents(RetroSynthNode node)
+	{
+		IAtomContainerSet compSet =  ConnectivityChecker.partitionIntoMolecules(node.components);
+		boolean isCompResolved[] = new boolean[compSet.getAtomContainerCount()];
+		for (int i =0; i < compSet.getAtomContainerCount(); i++)
+		{	
+			IAtomContainer comp = compSet.getAtomContainer(i);
+			isCompResolved[i] = isComponentResolved(comp);
+		}
 		
+		//TODO
+	}
 	
 	
+	/*
 	ArrayList<RetroSynthRuleInstance> filterAndSortInstances(ArrayList<RetroSynthRuleInstance> ruleInstances)
 	{
 		//currently does nothing		
 		//TODO
 		return ruleInstances;
 	}
+	*/
 	
 }
