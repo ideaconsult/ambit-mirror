@@ -16,7 +16,8 @@ import ambit2.smarts.SmartsParser;
 
 public class RetroSynthesis 
 {
-	private ReactionKnowledgeBase knowledgeBase; 	
+	private ReactionKnowledgeBase knowledgeBase;
+	private StartingMaterialsDataBase startMatDatabase;
 	private IAtomContainer molecule;
 	private RetroSynthesisResult retroSynthResult;
 	private Stack<RetroSynthNode> nodes = new Stack<RetroSynthNode>(); 
@@ -50,10 +51,7 @@ public class RetroSynthesis
 		return retroSynthResult;
 	}
 	
-	
-	
-	
-	
+		
 	/*
 	 * Principle Strategy is based on depth first search algorithm
 	 * There can be various criteria for stopping
@@ -118,25 +116,35 @@ public class RetroSynthesis
 	{
 		//TODO
 	}
+	
 		
 	public ArrayList<RetroSynthNode> generateChildrenNodes(RetroSynthNode node)
 	{	
 		ArrayList<RetroSynthNode> children = new ArrayList<RetroSynthNode>();		
 				
-		//Handle a the first component		
-		IAtomContainer comp = node.components.pop();
-		ArrayList<IRetroSynthRuleInstance> ruleInstances = findAllRuleInstances(comp);
-		
+		//Find one component which is resolvable		
+		while (!node.components.isEmpty())
+		{	
+			IAtomContainer comp = node.components.pop();
+			ArrayList<IRetroSynthRuleInstance> ruleInstances = findAllRuleInstances(comp);
+			if (ruleInstances.isEmpty())
+			{
+				//The component can not be resolved 
+				node.unresolved.addAtomContainer(comp);
+				continue;
+			}
+			else
+				break;
+		}
 		
 					
-		//TODO
-		
+		//TODO		
 			
-		//2.Prepare initial set of components for processing		
-		//3.Prioritize the components/instances		
-		//4.generated children one by one for each component (or with a more complicated combinations)
+				
+		//Apply strategy /Prioritize the components/instances/		
+		//Generate children one by one for each component (or with a more complicated combinations)
 		
-		
+		node.clone();
 		
 		//Check the result components from comp  
 		
@@ -167,9 +175,11 @@ public class RetroSynthesis
 	}
 	
 	
+	
+	
 	boolean isComponentResolved(IAtomContainer container)
 	{
-		//TODO
+		startMatDatabase.isStartingMaterial(container);
 		return false;
 	}
 	
