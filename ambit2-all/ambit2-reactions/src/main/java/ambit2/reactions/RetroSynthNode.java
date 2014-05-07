@@ -1,13 +1,17 @@
 package ambit2.reactions;
 
 
+import java.util.Stack;
+import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 
 public class RetroSynthNode 
 {
 	public RetroSynthPath path;
-	public IAtomContainer components;  //these are unresolved components
-	public IAtomContainer resolved;   //these are resolved components
+	public Stack<IAtomContainer> components = new Stack<IAtomContainer>(); //these are the unhandled components
+	public IAtomContainerSet unresolved = new AtomContainerSet(); //these are unresolved components
+	public IAtomContainerSet resolved= new AtomContainerSet();  //these are resolved components
 	
 	public int getNodeLevel()
 	{
