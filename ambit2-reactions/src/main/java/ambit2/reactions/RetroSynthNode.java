@@ -17,4 +17,11 @@ public class RetroSynthNode
 	{
 		return path.steps.size();
 	}
+	
+	@Override
+	public RetroSynthNode clone()
+	{
+		//TODO
+		return null;		
+	}
 }
