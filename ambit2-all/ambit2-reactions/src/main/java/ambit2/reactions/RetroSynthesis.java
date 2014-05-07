@@ -18,6 +18,7 @@ public class RetroSynthesis
 {
 	private ReactionKnowledgeBase knowledgeBase;
 	private StartingMaterialsDataBase startMatDatabase;
+	private SyntheticStrategy synthStrategy;
 	private IAtomContainer molecule;
 	private RetroSynthesisResult retroSynthResult;
 	private Stack<RetroSynthNode> nodes = new Stack<RetroSynthNode>(); 
@@ -27,11 +28,15 @@ public class RetroSynthesis
 	public RetroSynthesis() throws Exception 
 	{	
 		knowledgeBase = new ReactionKnowledgeBase();
+		synthStrategy = new SyntheticStrategy();
+		startMatDatabase = new StartingMaterialsDataBase();
 	}
 	
 	public RetroSynthesis(String knowledgeBaseFile) throws Exception 
 	{	
 		knowledgeBase = new ReactionKnowledgeBase(knowledgeBaseFile);
+		synthStrategy = new SyntheticStrategy();
+		startMatDatabase = new StartingMaterialsDataBase();
 	}
 	
 	public ReactionKnowledgeBase getReactionKnowledgeBase()
@@ -53,7 +58,7 @@ public class RetroSynthesis
 	
 		
 	/*
-	 * Principle Strategy is based on depth first search algorithm
+	 * Principle algorithm is based on depth first search algorithm
 	 * There can be various criteria for stopping
 	 * (1)impossible to apply more rules (transformations)
 	 * (2)some of the products are starting materials
@@ -87,7 +92,7 @@ public class RetroSynthesis
 	
 	void processNode(RetroSynthNode node)
 	{
-		//Check if terminal 
+		//Check if terminal node 
 		if (node.components.isEmpty())		
 		{	
 			generateResult(node);
@@ -121,13 +126,15 @@ public class RetroSynthesis
 	public ArrayList<RetroSynthNode> generateChildrenNodes(RetroSynthNode node)
 	{	
 		ArrayList<RetroSynthNode> children = new ArrayList<RetroSynthNode>();		
-				
+		ArrayList<IRetroSynthRuleInstance> ruleInstances0 = null;
+		IAtomContainer comp = null;
+		
 		//Find one component which is resolvable		
 		while (!node.components.isEmpty())
 		{	
-			IAtomContainer comp = node.components.pop();
-			ArrayList<IRetroSynthRuleInstance> ruleInstances = findAllRuleInstances(comp);
-			if (ruleInstances.isEmpty())
+			comp = node.components.pop();
+			ruleInstances0 = findAllRuleInstances(comp);
+			if (ruleInstances0.isEmpty())
 			{
 				//The component can not be resolved 
 				node.unresolved.addAtomContainer(comp);
@@ -137,16 +144,25 @@ public class RetroSynthesis
 				break;
 		}
 		
-					
-		//TODO		
+		if (comp == null)
+			return children;
+		
+		//Apply strategy. Prioritise the instances
+		ArrayList<IRetroSynthRuleInstance> ruleInstances = synthStrategy.applyStrategy(comp, ruleInstances0);
+		
+		
+		//Generate a child node one by one for each instance
+		for (IRetroSynthRuleInstance instance : ruleInstances)
+		{	
+			//TODO
+			RetroSynthNode newNode = node.clone();
+		
+		
+			//Check the result components from comp  
+			//TODO
 			
-				
-		//Apply strategy /Prioritize the components/instances/		
-		//Generate children one by one for each component (or with a more complicated combinations)
-		
-		node.clone();
-		
-		//Check the result components from comp  
+			children.add(newNode);
+		}	
 		
 		return  children;
 	}
@@ -170,13 +186,10 @@ public class RetroSynthesis
 			System.out.print("rule: " + rule.smirks+"  "); smrkMan.printSSMap(str, rInstance.atoms);			
 		}
 		
-		//TODO - Filtration eventually may be done here			
 		return instances;
 	}
 	
-	
-	
-	
+		
 	boolean isComponentResolved(IAtomContainer container)
 	{
 		startMatDatabase.isStartingMaterial(container);
