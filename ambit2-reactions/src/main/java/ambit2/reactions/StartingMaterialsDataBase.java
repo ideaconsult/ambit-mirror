@@ -8,6 +8,7 @@ public class StartingMaterialsDataBase
 {		
 	//It can be composed of several data sets
 	
+	ArrayList<String> errors = new ArrayList<String>(); 
 	
 	//Flags that configure the search process
 	boolean FlagCheckMolDescr = true;	
@@ -21,10 +22,32 @@ public class StartingMaterialsDataBase
 	AccessType FlagFingerprintAccess = AccessType.FILE;
 	AccessType FlagStructureAccess = AccessType.FILE;
 	
-	String sourceStructures = "";
-	String sourceDescriptors = "";
-	String sourceHashCodes = "";
-			
+	String sourceStructures = null;
+	String sourceDescriptors = null;
+	String sourceHashCodes = null;
+	
+	public StartingMaterialsDataBase()
+	{	
+	}
+	
+	public StartingMaterialsDataBase(String sourceStructures, String sourceDescriptors, String sourceHashCodes)
+	{	
+		setSources(sourceStructures, sourceDescriptors, sourceHashCodes);
+		initialize();
+	}
+	
+	public void setSources(String sourceStructures, String sourceDescriptors, String sourceHashCodes)
+	{
+		this.sourceStructures = sourceStructures;
+		this.sourceDescriptors = sourceDescriptors;
+		this.sourceHashCodes = sourceHashCodes;
+	}
+	
+	public void initialize()
+	{	
+		//TODO
+	}
+	
 	public boolean isStartingMaterial(IAtomContainer str)
 	{
 		//TODO
