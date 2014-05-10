@@ -124,18 +124,18 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 			params1.add(new QueryParam<String>(String.class, null));
 		}
 		//reliability
-		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().get("value").toString()));
+		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().getValue().toString()));
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}		
 		
-		try { params1.add(new QueryParam<Boolean>(Boolean.class, Boolean.parseBoolean(getObject().getReliability().get("isRobustStudy").toString())));
+		try { params1.add(new QueryParam<Boolean>(Boolean.class, Boolean.parseBoolean(getObject().getReliability().getIsRobustStudy().toString())));
 		} catch (Exception x) {	params1.add(new QueryParam<Boolean>(Boolean.class, null));}
-		try { params1.add(new QueryParam<Boolean>(Boolean.class, Boolean.parseBoolean(getObject().getReliability().get("isUsedforClassification").toString())));
+		try { params1.add(new QueryParam<Boolean>(Boolean.class, Boolean.parseBoolean(getObject().getReliability().getIsUsedforClassification().toString())));
 		} catch (Exception x) {	params1.add(new QueryParam<Boolean>(Boolean.class, null));}
-		try { params1.add(new QueryParam<Boolean>(Boolean.class, Boolean.parseBoolean(getObject().getReliability().get("isUsedforMSDS").toString())));
+		try { params1.add(new QueryParam<Boolean>(Boolean.class, Boolean.parseBoolean(getObject().getReliability().getIsUsedforMSDS().toString())));
 		} catch (Exception x) {	params1.add(new QueryParam<Boolean>(Boolean.class, null));}
-		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().get("purposeFlag").toString()));
+		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().getPurposeFlag().toString()));
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}
-		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().get("studyResultType").toString()));
+		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().getStudyResultType().toString()));
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}
 		return params1;
 	}

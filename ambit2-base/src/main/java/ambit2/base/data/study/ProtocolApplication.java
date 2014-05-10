@@ -12,7 +12,7 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	 * 
 	 */
 	private static final long serialVersionUID = 747315722852709360L;
-	protected Params reliability = new Params();
+	protected ReliabilityParams reliability = new ReliabilityParams();
 	protected String interpretationCriteria;
 	protected PARAMS parameters;
 	protected Citation reference;
@@ -21,10 +21,10 @@ public class ProtocolApplication<PROTOCOL,PARAMS,ENDPOINT,CONDITIONS,UNIT> imple
 	protected PROTOCOL protocol;
 	
 	
-	public Params getReliability() {
+	public ReliabilityParams getReliability() {
 		return reliability;
 	}
-	public void setReliability(Params reliability) {
+	public void setReliability(ReliabilityParams reliability) {
 		this.reliability = reliability;
 	}
 	protected String referenceSubstanceUUID;
