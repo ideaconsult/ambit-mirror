@@ -87,6 +87,10 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <ciManagement>
+  	<system>Jenkins</system>
+  	<url>jenkins.uni-plovdiv.net</url>
+  </ciManagement>
   <inceptionYear>2004</inceptionYear>
   <issueManagement>
     <url>https://sourceforge.net/p/ambit/bugs/</url>
@@ -143,6 +147,7 @@
   </scm>
   <organization>
     <name>Ideaconsult Ltd.</name>
+    <url>http://www.ideaconsult.net</url>
   </organization>
   <build>
     <resources>
