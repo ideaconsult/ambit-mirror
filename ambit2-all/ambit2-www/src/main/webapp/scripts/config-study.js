@@ -287,6 +287,10 @@
                 }
             },
             "conditions": {
+                "doses/concentrations": {
+                    "iOrder": -5,
+                    "sTitle" : "Conc./Dose"
+                } ,           	
                 "bioacc. basis": {
                     "iOrder": -3
                 }
@@ -607,7 +611,7 @@
             },
             "interpretation": {
                 "result": {
-                	"sTitle" : "Genotoxicity",
+                	"sTitle" : "Interpretation of the result",
                     "bVisible": true,
                     "iOrder": -2
                 },
@@ -663,12 +667,56 @@
             },
             "interpretation": {
                 "result": {
-                	"sTitle" : "Genotoxicity",
+                	"sTitle" : "Interpretation of the result",
                     "bVisible": true,
                     "iOrder": -2
                 },
                 "criteria": {
                     "bVisible": false
+                }
+            }
+        },        
+        "TO_CARCINOGENICITY_SECTION": {
+            "parameters": {
+                "species": {
+                    "iOrder": -10
+                },
+                "route of administration" : {
+                	"iOrder" : -9
+                },
+                "doses/concentrations": {
+                    "iOrder": -8,
+                    "sTitle" : "Dose/concentrations"
+                }                                
+            },
+            "conditions": {
+                "effect type": {
+                    "iOrder": -6
+                }
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -7
+                },
+                "result": {
+                    "sTitle": "Value",
+                    "iOrder": -5
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -1
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "iOrder": -3,
+                    "bVisible" : false,
+                    "sTitle" : "Interpretation of the results"
+                },
+                "criteria": {
+                	"bVisible" : false,
+                    "iOrder": -2
                 }
             }
         },        
@@ -855,7 +903,11 @@
         "TO_REPEATED_DERMAL_SECTION": {
             "parameters": {
                 "species": {
-                    "iOrder": -10
+                    "iOrder": -11
+                },
+                "type_coverage" : {
+                	"iOrder": -10,
+                	"sTitle" : "Type of coverage"
                 },
                 "route of administration": {
                     "iOrder": -8
