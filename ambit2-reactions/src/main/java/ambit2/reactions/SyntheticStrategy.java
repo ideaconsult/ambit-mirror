@@ -8,6 +8,7 @@ public class SyntheticStrategy
 {
 	public ArrayList<IRetroSynthRuleInstance> applyStrategy(IAtomContainer target, ArrayList<IRetroSynthRuleInstance> ruleInstances)
 	{
+		//Currently the strategy does nothing
 		//TODO
 		return ruleInstances;
 	}

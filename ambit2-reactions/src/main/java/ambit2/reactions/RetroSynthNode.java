@@ -21,7 +21,10 @@ public class RetroSynthNode
 	@Override
 	public RetroSynthNode clone()
 	{
-		//TODO
-		return null;		
+		RetroSynthNode cloneNode = new RetroSynthNode();
+		cloneNode.components.addAll(components);
+		cloneNode.unresolved.add(unresolved);
+		cloneNode.resolved.add(resolved);
+		return cloneNode;	
 	}
 }

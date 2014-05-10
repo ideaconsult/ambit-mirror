@@ -150,16 +150,20 @@ public class RetroSynthesis
 		//Apply strategy. Prioritise the instances
 		ArrayList<IRetroSynthRuleInstance> ruleInstances = synthStrategy.applyStrategy(comp, ruleInstances0);
 		
-		
 		//Generate a child node one by one for each instance
 		for (IRetroSynthRuleInstance instance : ruleInstances)
 		{	
-			//TODO
 			RetroSynthNode newNode = node.clone();
+			ArrayList<IAtomContainer> products = applyRuleInstance(comp, instance);
 		
-		
-			//Check the result components from comp  
-			//TODO
+			//Check the result components (the products from working component - comp)  
+			for (IAtomContainer product : products)
+			{
+				if (isComponentResolved(product))
+					newNode.resolved.addAtomContainer(product);
+				else
+					newNode.components.push(product);
+			}
 			
 			children.add(newNode);
 		}	
@@ -187,6 +191,17 @@ public class RetroSynthesis
 		}
 		
 		return instances;
+	}
+	
+	
+	ArrayList<IAtomContainer> applyRuleInstance(IAtomContainer target, IRetroSynthRuleInstance instance)
+	{
+		//The reaction is applied with cloning of the target
+		
+		//TODO 
+		
+		ArrayList<IAtomContainer> products = new ArrayList<IAtomContainer>();
+		return products;
 	}
 	
 		
