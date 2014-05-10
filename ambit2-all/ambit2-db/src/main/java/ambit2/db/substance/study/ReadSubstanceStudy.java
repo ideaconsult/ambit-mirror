@@ -8,6 +8,7 @@ import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.data.study.ReliabilityParams;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.AbstractQuery;
@@ -103,14 +104,14 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,S
             } catch (Exception xx) {
             	record.setReferenceSubstanceUUID(null);
             }
-			Params reliability = new Params();
+			ReliabilityParams reliability = new ReliabilityParams();
 			record.setReliability(reliability);
-            try { reliability.put("value", rs.getString("reliability"));} catch (Exception x) { }
-    		try { reliability.put("isRobustStudy", rs.getBoolean("isRobustStudy")); } catch (Exception x) { }
-    		try { reliability.put("isUsedforClassification", rs.getBoolean("isUsedforClassification")); } catch (Exception x) { }
-    		try { reliability.put("isUsedforMSDS", rs.getBoolean("isUsedforMSDS"));} catch (Exception x) { }
-    		try { reliability.put("purposeFlag", rs.getString("purposeFlag"));} catch (Exception x) { }
-    		try { reliability.put("studyResultType", rs.getString("studyResultType"));} catch (Exception x) { }
+            try { reliability.setValue(rs.getString("reliability"));} catch (Exception x) { }
+    		try { reliability.setIsRobustStudy(rs.getBoolean("isRobustStudy")); } catch (Exception x) { }
+    		try { reliability.setIsUsedforClassification(rs.getBoolean("isUsedforClassification")); } catch (Exception x) { }
+    		try { reliability.setIsUsedforMSDS(rs.getBoolean("isUsedforMSDS"));} catch (Exception x) { }
+    		try { reliability.setPurposeFlag(rs.getString("purposeFlag"));} catch (Exception x) { }
+    		try { reliability.setStudyResultType(rs.getString("studyResultType"));} catch (Exception x) { }
     		            
 		} catch (Exception x) {
 			x.printStackTrace();
