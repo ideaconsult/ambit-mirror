@@ -73,7 +73,7 @@
 .jtox-search .ketcher .toolEmptyCell button span {
   display: inline-block;
 }
-/* toxtdataset.css - Styling for tox-dataset engine
+/* toxtcompound.css - Styling for tox-compound engine
 */
 
 .jtox-ds-fixed,
@@ -203,11 +203,6 @@ div.jtox-substance {
   margin-bottom: 5px;
 }
 
-.jtox-study.folded table,
-.jtox-study.folded div.dataTables_wrapper {
-  display: none;
-}
-
 .jtox-compoblock {
   margin-top: 25px;
   margin-bottom: 45px;  
@@ -225,13 +220,13 @@ div.jtox-substance {
   text-align: right;
 }
 
-div.jtox-study.unloaded .jtox-study-title,
-div.jtox-study.unloaded.folded .jtox-study-title {
+div.jtox-study.unloaded div.title,
+div.jtox-study.unloaded.folded div.title {
   background: url(../images/waiting_small.gif) right top no-repeat;
   background-size: 16px 16px;
 }
 
-.jtox-toolkit .unloaded table {
+div.jtox-study.unloaded table {
   display: none;
 }
 
@@ -239,21 +234,11 @@ div.jtox-study.unloaded.folded .jtox-study-title {
   font-size: 80%;
 }
 
-div.jtox-study.loaded.folded .jtox-study-title {
-  background: url(../images/sort_desc.png) right top no-repeat;
-  background-size: 19px 19px;
-}
-
-div.jtox-study.loaded .jtox-study-title {
-  background: url(../images/sort_asc.png) right top no-repeat;
-  background-size: 19px 19px;
-}
-
 div.jtox-study.folded {
   padding-bottom: 5px;
 }
 
-div.jtox-study .jtox-study-title {
+div.jtox-study .title {
   font-weight: bold;
   clear: both;
   padding: 0px;
@@ -318,8 +303,7 @@ td.jtox-multi table {
   border-left: 1px solid #ccc; 
   -moz-border-radius: 7px;
   -webkit-border-radius: 7px;
-  border-radius: 7px;
-  
+  border-radius: 7px; 
 }
 
 .jtox-foldable:hover {
@@ -330,6 +314,19 @@ td.jtox-multi table {
 	background: -o-linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* Opera11.10+ */
 	background: -ms-linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* IE10+ */
 	background: linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(200,200,200,.2) 100%); /* W3C */
+}
+
+.jtox-foldable.folded>.content {
+  display: none;
+}
+
+.jtox-foldable.folded>.title {
+  background: url(../images/sort_desc.png) right top no-repeat;
+}
+
+.jtox-foldable>.title {
+  background: url(../images/sort_asc.png) right top no-repeat;
+  background-size: 19px 19px;
 }
 
 .jtox-toolkit sup {
@@ -402,6 +399,9 @@ td.jtox-multi table {
   font-size: larger;
 }
 
+.jtox-toolkit .transparent {
+  opacity: 0.3;
+}
 
 .jtox-toolkit .paddingless {
   padding: 0px !important;
@@ -427,7 +427,6 @@ td.jtox-multi table {
 .jtox-toolkit .dataTables_length label select,
 .jtox-inline {
   display: inline-block;
-  width: auto;  
 }
 
 .jtox-toolkit table.dataTable td,
