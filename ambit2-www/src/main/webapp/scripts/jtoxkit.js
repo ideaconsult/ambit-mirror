@@ -20,7 +20,7 @@ var ccLib = {
   fireCallback: function (callback, self) {
     if (typeof callback != 'function')
       callback = window[callback];
-    return callback.apply((self !== undefined && self != null) ? self : document, Array.prototype.slice.call(arguments, 2));
+    return (typeof callback == 'function') ? (callback.apply((self !== undefined && self != null) ? self : document, Array.prototype.slice.call(arguments, 2))) : null;
   },
   
   /* Function setObjValue(obj, value)Set a given to the given element (obj) in the most appropriate way - be it property - the necessary one, or innetHTML
@@ -280,7 +280,7 @@ var ccLib = {
 function ccNonEmptyFilter(v) {
   return v !== undefined && v != null && v != '';  
 }
-/* toxquery.js - Universal query widget, that can work with any kit (study or dataset) inside
+/* toxquery.js - Universal query widget, that can work with any kit (study or compound) inside
  *
  * Copyright 2012-2014, IDEAconsult Ltd. http://www.ideaconsult.net/
  * Created by Ivan Georgiev
@@ -320,9 +320,9 @@ var jToxQuery = (function () {
       });
     }
 
-    self.initHandlers(root);
+    self.initHandlers();
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
-    if (!ccLib.isNull(self.settings.initialQuery))
+    if (!!self.settings.initialQuery)
       setTimeout(function () { self.query(); }, 200);
   };
   
@@ -342,7 +342,7 @@ var jToxQuery = (function () {
       return this.mainKit;
     },
     
-    initHandlers: function (root) {
+    initHandlers: function () {
       var self = this;
       var fireHandler = function (e) {
         var handler = self.settings.configuration.handlers[jT.$(this).data('handler')];
@@ -352,8 +352,8 @@ var jToxQuery = (function () {
           console.log("jToxQuery: referring unknown handler: " + jT.$(this).data('handler'));
       };
       
-      jT.$('.jtox-handler', root).on('change', fireHandler);
-      jT.$('button.jtox-handler', root).on('click', fireHandler);
+      jT.$(document).on('change', '.jtox-handler', fireHandler);
+      jT.$(document).on('click', 'button.jtox-handler', fireHandler);
     },
     
     /* Perform the actual query, traversing all the widgets and asking them to
@@ -374,19 +374,6 @@ var jToxQuery = (function () {
         this.kit().query(uri);
     }
   }; // end of prototype
-  
-  cls.queryKit = function(element) {
-    var query = null;
-    jT.$(element).parents().each(function() {
-      var kit = jT.kit(this);
-      if (!kit)
-        return;
-      if (kit instanceof jToxQuery)
-        query = kit;
-    });
-    
-    return query;
-  };
   
   return cls;
 })();
@@ -416,8 +403,7 @@ var jToxSearch = (function () {
     
     self.settings = jT.$.extend({}, defaultSettings, jT.settings, settings);
     self.rootElement.appendChild(jT.getTemplate('#jtox-search'));
-    self.queryKit = jToxQuery.queryKit(self.rootElement);
-    self.queryKit.initHandlers(root);
+    self.queryKit = jT.parentKit(jToxQuery, self.rootElement);
     
     self.search = { mol: "", type: ""};
     
@@ -567,6 +553,7 @@ var jToxSearch = (function () {
         params.search = form.searchbox.value;
         if (!params.search)
           params.search = this.settings.defaultSmiles;
+          this.setAuto(params.search);
       }
         
       if (type == 'similarity')
@@ -622,20 +609,24 @@ var jToxSearch = (function () {
   
   return cls;
 })();
-/* toxdataset.js - General, universal dataset visualizer.
+/* toxcompound.js - General, universal compound dataset visualizer.
  *
  * Copyright 2012-2013, IDEAconsult Ltd. http://www.ideaconsult.net/
  * Created by Ivan Georgiev
 **/
 
-var jToxDataset = (function () {
+var jToxCompound = (function () {
   var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
     "showTabs": true,         // should we show tabs with groups, or not
     "showExport": true,       // should we add export tab up there
     "showControls": true,     // should we show the pagination/navigation controls.
+    "hideEmpty": false,       // whether to hide empty groups instead of making them inactive
+    "hasDetails": true,       // whether browser should provide the option for per-item detailed info rows.
     "pageSize": 20,           // what is the default (startint) page size.
     "pageStart": 0,           // what is the default startint point for entries retrieval
+    "rememberChecks": false,  // whether to remember feature-checkbox settings between queries
     "metricFeature": "http://www.opentox.org/api/1.1#Similarity",   // This is the default metric feature, if no other is specified
+    "onReady": null,
     "fnAccumulate": function(fId, oldVal, newVal, features) {
       if (ccLib.isNull(newVal))
         return oldVal;
@@ -763,8 +754,10 @@ var jToxDataset = (function () {
     jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even in manual initialization.
     
     var newDefs = jT.$.extend(true, { "configuration" : { "baseFeatures": baseFeatures} }, defaultSettings);
-    self.settings = jT.$.extend(true, {}, newDefs, jT.settings, settings); // i.e. defaults from jToxDataset
+    self.settings = jT.$.extend(true, {}, newDefs, jT.settings, settings); // i.e. defaults from jToxCompound
     self.instanceNo = instanceCount++;
+    if (self.settings.rememberChecks && self.settings.showTabs)
+      self.featureStates = {};
 
     // finally make the query, if Uri is provided      
     if (self.settings['datasetUri'] !== undefined){
@@ -786,7 +779,7 @@ var jToxDataset = (function () {
       self.orderList = [];
       self.usedFeatures = [];
       
-      self.rootElement.appendChild(jT.getTemplate('#jtox-dataset'));
+      self.rootElement.appendChild(jT.getTemplate('#jtox-compound'));
       
       // now make some action handlers - on next, prev, filter, etc.
       var pane = jT.$('.jtox-ds-control', self.rootElement)[0];
@@ -844,7 +837,7 @@ var jToxDataset = (function () {
       var idx = 0;
       for (var gr in self.groups) {
         var grId = "jtox-ds-" + gr.replace(/\s/g, "_") + "-" + self.instanceNo;
-        createATab(grId, gr.replace(/_/g, " "));
+        var tabLi = createATab(grId, gr.replace(/_/g, " "));
         
         // now prepare the content...
         var divEl = document.createElement('div');
@@ -864,18 +857,31 @@ var jToxDataset = (function () {
             return;
           empty = false;
           if (idx == "name") {
-            if (isMain)
-              nodeFn(null, fId, divEl);
+            if (isMain) {
+              var fEl = nodeFn(null, fId, divEl);
+              if (self.settings.rememberChecks)
+                jT.$('input[type="checkbox"]', fEl)[0].checked = (self.featureStates[fId] === undefined || self.featureStates[fId]);
+            }
           }
           else if (!isMain || level == 1) {
             var title = self.features[fId].title;
-            if (!ccLib.isNull(title))
-              nodeFn(fId, title, divEl);
+            if (!ccLib.isNull(title)) {
+              var fEl = nodeFn(fId, title, divEl);
+              if (isMain && self.settings.rememberChecks)
+                jT.$('input[type="checkbox"]', fEl)[0].checked = (self.featureStates[fId] === undefined || self.featureStates[fId]);
+            }
           }
         });
 
-        if (empty)
-          emptyList.push(idx);
+        if (empty) {
+          if (self.settings.hideEmpty) {
+            jT.$(divEl).remove();
+            jT.$(tabLi).remove();
+            --idx;
+          }
+          else
+            emptyList.push(idx);
+        }
         ++idx;
       }
       
@@ -896,7 +902,7 @@ var jToxDataset = (function () {
           jT.$('a', el)[0].href = ccLib.addParameter(self.datasetUri, "media=" + encodeURIComponent(expo.type));
           var img = el.getElementsByTagName('img')[0];
           img.alt = img.title = expo.type;
-          img.src = (jT.settings.baseUrl || self.settings.baseUrl) + expo.icon;
+          img.src = (jT.settings.baseUrl || self.settings.baseUrl) + '/' + expo.icon;
         }
       }
       
@@ -943,7 +949,9 @@ var jToxDataset = (function () {
             return (type != "display") ?
               '' + data : 
               "&nbsp;-&nbsp;" + data + "&nbsp;-&nbsp;<br/>" + 
-                '<span class="jtox-details-open ui-icon ui-icon-circle-triangle-e" title="Press to open/close detailed info for the entry"></span>';
+                (self.settings.hasDetails ?              
+                  '<span class="jtox-details-open ui-icon ui-icon-circle-triangle-e" title="Press to open/close detailed info for this compound"></span>'
+                  : '');
           }
         },
         { "sClass": "jtox-hidden", "mData": "index", "sDefaultContent": "-", "bSortable": true, "mRender": function(data, type, full) { return ccLib.isNull(self.orderList) ? 0 : self.orderList[data]; } }, // column used for ordering
@@ -953,15 +961,16 @@ var jToxDataset = (function () {
       varCols.push({ "sClass": "jtox-hidden jtox-ds-details paddingless", "mData": "index", "mRender": function(data, type, full) { return ''; }  });
 
       // prepare the function for column switching...      
-      var fnShowColumn = function(sel, idx) {
-        return function() {
-          var cells = jT.$(sel + ' table tr>*:nth-child(' + (idx + 1) + ')', self.rootElement);
-          if (this.checked)
-            jT.$(cells).show();
-          else
-            jT.$(cells).hide();
-          self.equalizeTables();
-        }
+      var fnShowColumn = function() {
+        var dt = $(this).data();
+        var cells = jT.$(dt.sel + ' table tr>*:nth-child(' + (dt.idx + 1) + ')', self.rootElement);
+        if (this.checked)
+          jT.$(cells).show();
+        else
+          jT.$(cells).hide();
+        if (self.settings.rememberChecks)
+          self.featureStates[dt.id] = this.checked;
+        self.equalizeTables();
       };
       
       var fnExpandCell = function (cell, expand) {
@@ -975,7 +984,7 @@ var jToxDataset = (function () {
           cell.removeAttribute('colspan');
       };
       
-      var fnShowDetails = function(row) {
+      var fnShowDetails = (self.settings.hasDetails ? function(row) {
         var cell = jT.$(".jtox-ds-details", row)[0];
         var idx = jT.$(row).data('jtox-index');
         jT.$(row).toggleClass('jtox-detailed-row');
@@ -1027,7 +1036,7 @@ var jToxDataset = (function () {
           jT.$(varCell).empty();
           self.equalizeTables();
         }
-      };
+      } : null); // fnShowDetails definition end
 
       // make a query for all checkboxes in the main tab, so they can be traversed in parallel with the features and 
       // a change handler added.
@@ -1061,7 +1070,7 @@ var jToxDataset = (function () {
           
           if (!!feature.shorten) {
             col["mRender"] = function(data, type, full) {
-              return (type != "display") ? '' + data : jT.shortenedData(data, "Press to copy the value in the clipboard");
+              return (type != "display") ? '' + data : jT.ui.shortenedData(data, "Press to copy the value in the clipboard");
             };
             col["sWidth"] = "75px";
           }
@@ -1069,7 +1078,7 @@ var jToxDataset = (function () {
           // finally - assign column switching to the checkbox of main tab.
           if (level == 1)
             ++checkIdx;
-          jT.$(checkList[checkIdx]).on('change', fnShowColumn(colList == fixCols ? '.jtox-ds-fixed' : '.jtox-ds-variable', colList.length))
+          jT.$(checkList[checkIdx]).data({ sel: colList == fixCols ? '.jtox-ds-fixed' : '.jtox-ds-variable', idx: colList.length, id: fId}).on('change', fnShowColumn)
           
           // and push it into the proper list.
           colList.push(col);
@@ -1089,8 +1098,9 @@ var jToxDataset = (function () {
         "aoColumns": fixCols,
         "bSort": false,
         "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-          // attach the click handling      
-          jT.$('.jtox-details-open', nRow).on('click', function(e) {  fnShowDetails(nRow); });
+          // attach the click handling
+          if (self.settings.hasDetails)
+            jT.$('.jtox-details-open', nRow).on('click', function(e) {  fnShowDetails(nRow); });
           jT.$(nRow).data('jtox-index', iDataIndex);
         },
         "oLanguage" : {
@@ -1112,6 +1122,7 @@ var jToxDataset = (function () {
           jT.$(nRow).data('jtox-index', iDataIndex);
         },
         "fnDrawCallback": function(oSettings) {
+          // this is for synchro-sorting the two tables
           var sorted = jT.$('.jtox-row', this);
           for (var i = 0, rlen = sorted.length;i < rlen; ++i) {
             var idx = jT.$(sorted[i]).data('jtox-index');
@@ -1287,6 +1298,7 @@ var jToxDataset = (function () {
           }
 
           // time to call the supplied function, if any.
+          ccLib.fireCallback(self.settings.onReady, self, dataset);
           if (typeof fnComplete == 'function')
             fnComplete();
         }
@@ -1302,21 +1314,8 @@ var jToxDataset = (function () {
       this.clearDataset();
       this.init();
 
-      // we want to take into account the passed page & pagesize, but remove them, afterwards.
-      var urlObj = ccLib.parseURL(datasetUri);
-      if (urlObj.params['pagesize'] !== undefined) {
-        var sz = parseInt(urlObj.params['pagesize']);
-        if (sz > 0)
-          self.settings.pageSize = sz;
-          datasetUri = ccLib.removeParameter(datasetUri, 'pagesize');
-      }
-      if (urlObj.params['page'] !== undefined) {
-        var beg = parseInt(urlObj.params['page']);
-        if (beg >= 0)
-          self.settings.pageStart = beg * self.settings.pageSize;
-        datasetUri = ccLib.removeParameter(datasetUri, 'page');
-      }
-      
+      datasetUri = jT.grabPaging(self, datasetUri);
+
       self.settings.baseUrl = self.settings.baseUrl || jT.grabBaseUrl(datasetUri);
       
       // remember the _original_ datasetUri and make a call with one size length to retrieve all features...
@@ -1435,6 +1434,300 @@ var jToxDataset = (function () {
   
   return cls;
 })();
+/* toxdataset.js - A kit for querying/manipulating all available datasets
+ *
+ * Copyright 2012-2014, IDEAconsult Ltd. http://www.ideaconsult.net/
+ * Created by Ivan Georgiev
+**/
+
+var jToxDataset = (function () {
+  var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
+    shortStars: false,
+    maxStars: 10,
+    selectable: false,
+    selectionHandler: null,
+    sDom: "<Fif>rt",
+    onReady: null,
+    /* listUri */
+    configuration: { 
+      columns : {
+        dataset: {
+          'Id': { iOrder: 0, sTitle: "Id", mData: "URI", sWidth: "50px", mRender: function (data, type, full) {
+            var num = parseInt(data.match(/http:\/\/.*\/dataset\/(\d+).*/)[1]);
+            if (type != 'display')
+              return num;
+            return '<a target="_blank" href="' + data + '"><span class="ui-icon ui-icon-link jtox-inline"></span> D' + num + '</a>';
+          }},
+          'Title': { iOrder: 1, sTitle: "Title", mData: "title", sDefaultContent: "-" },
+          'Stars': { iOrder: 2, sTitle: "Stars", mData: "stars", sWidth: "160px" },
+          'Info': { iOrder: 3, sTitle: "Info", mData: "rights", mRender: function (data, type, full) {
+            return '<a target="_blank" href="' + data.URI + '">rights</a>';
+          } }
+        }
+      }
+    }
+  };
+  
+  var cls = function (root, settings) {
+    var self = this;
+    self.rootElement = root;
+    jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
+    
+    self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
+    
+    self.rootElement.appendChild(jT.getTemplate('#jtox-dataset'));
+    self.init();
+        
+    // finally, wait a bit for everyone to get initialized and make a call, if asked to
+    self.listDatasets(self.settings.listUri)
+  };
+  
+  cls.prototype = {
+    init: function () {
+      var self = this;
+      
+      // arrange certain things on the columns first - like dealing with short/long stars
+      self.settings.configuration.columns.dataset.Stars.mRender = function (data, type, full) {
+        return type != 'display' ? data : jT.ui.putStars(self, data, "Dataset quality stars rating (worst) 1-10 (best)");
+      };
+      if (self.settings.shortStars)
+        self.settings.configuration.columns.dataset.Stars.sWidth = "40px";
+      
+      // deal if the selection is chosen
+      if (self.settings.selectable) {
+        self.settings.configuration.columns.dataset.Id.mRender = jT.ui.addSelection(self, self.settings.configuration.columns.dataset.Id.mRender);
+        self.settings.configuration.columns.dataset.Id.sWidth = "60px";
+      }
+      
+      // READYY! Go and prepare THE table.
+      self.table = jT.$('table', self.rootElement).dataTable({
+        "bPaginate": false,
+        "bLengthChange": false,
+				"bAutoWidth": false,
+        "sDom" : self.settings.sDom,
+        "aoColumns": jT.ui.processColumns(self, 'dataset'),
+				"oLanguage": {
+          "sLoadingRecords": "No datasets found.",
+          "sZeroRecords": "No datasets found.",
+          "sEmptyTable": "No datasets available.",
+          "sInfo": "Showing _TOTAL_ dataset(s) (_START_ to _END_)"
+        }
+      });
+      
+      jT.$(self.table).dataTable().fnAdjustColumnSizing();
+    },
+    
+    listDatasets: function (uri) {
+      var self = this;
+      if (uri == null)
+        uri = self.settings.baseUrl + '/dataset';
+      
+      jT.$(self.table).dataTable().fnClearTable();
+      jT.call(self, uri, function (result) {
+        if (!!result) {
+          jT.$(self.table).dataTable().fnAddData(result.dataset);
+          ccLib.fireCallback(self.settings.onReady, self, result);
+        }
+      });
+    },
+    
+    query: function (uri) {
+      this.listDatasets(uri);
+    },
+    
+    modifyUri: function (uri) {
+      jT.$('input[type="checkbox"]', this.rootElement).each(function () {
+        if (this.checked)
+          uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/feature'));
+      })
+      
+      return uri;
+    }
+  };
+    
+  return cls;
+})();
+/* toxmodel.js - A kit for querying/manipulating all available models (algorithms)
+ *
+ * Copyright 2012-2014, IDEAconsult Ltd. http://www.ideaconsult.net/
+ * Created by Ivan Georgiev
+**/
+
+var jToxModel = (function () {
+  var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
+    selectable: false,
+    selectionHandler: null,
+    maxStars: 10,
+    algorithmLink: true,
+    algorithms: false,
+    algorithmNeedle: null,
+    onReady: null,
+    sDom: "<Fif>rt",
+    /* modelUri */
+    configuration: { 
+      columns : {
+        model: {
+          'Id': { iOrder: 0, sTitle: "Id", mData: "id", sWidth: "50px", mRender: function (data, type, full) {
+            if (type != 'display')
+              return data;
+            return '<a target="_blank" href="' + full.URI + '"><span class="ui-icon ui-icon-link jtox-inline"></span> M' + data + '</a>';
+          }},
+          'Title': { iOrder: 1, sTitle: "Title", mData: "title", sDefaultContent: "-" },
+          'Stars': { iOrder: 2, sTitle: "Stars", mData: "stars", sWidth: "160px" },
+          'Algorithm': {iOrder: 3, sTitle: "Algorithm", mData: "algorithm" },
+          'Info': { iOrder: 4, sTitle: "Info", mData: "trainingDataset", mRender: function (data, type, full) {
+            if (type != 'display' || !data)
+              return data;
+            return '<a href="' + data + '"><span class="ui-icon ui-icon-calculator"></span>&nbsp;training set</a>';
+          } }
+        },
+        algorithm: {
+          'Id': { iOrder: 0, sTitle: "Id", mData: "id", sWidth: "150px", mRender: function (data, type, full) {
+            if (type != 'display')
+              return data;
+            return '<a target="_blank" href="' + full.uri + '"><span class="ui-icon ui-icon-link jtox-inline"></span> M' + data + '</a>';
+          }},
+          'Title': { iOrder: 1, sTitle: "Title", mData: "name", sDefaultContent: "-" },
+          'Description': {iOrder: 2, sTitle: "Description", sClass: "shortened", mData: "description", sDefaultContent: '-' },
+          'Info': { iOrder: 3, sTitle: "Info", mData: "format", mRender: function (data, type, full) {
+            if (type != 'display' || !data)
+              return data;
+            return  '<strong>' + data + '</strong>; ' +
+                    (full.isSupevised ? '<strong>Supervised</strong>; ' : '') +
+                    '<a target="_blank" href="' + full.implementationOf + '">' + full.implementationOf + '</a>';
+          } }
+        }
+      }
+    }
+  };
+  
+  var cls = function (root, settings) {
+    var self = this;
+    self.rootElement = root;
+    jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
+    
+    self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
+    self.models = null;
+    
+    self.rootElement.appendChild(jT.getTemplate('#jtox-model'));
+    self.init();
+        
+    // finally, wait a bit for everyone to get initialized and make a call, if asked to
+    self.query();
+  };
+  
+  cls.prototype = {
+    init: function () {
+      var self = this;
+      
+      // but before given it up - make a small sorting..
+      if (!self.settings.algorithms) {
+        self.settings.configuration.columns.model.Stars.mRender = function (data, type, full) { return type != 'display' ? data : jT.ui.putStars(self, data, "Model star rating (worst) 1 - 10 (best)"); };
+        if (self.settings.shortStars) {
+          self.settings.configuration.columns.model.Stars.sWidth = "40px";
+        }
+
+        self.settings.configuration.columns.model.Algorithm.mRender = function (data, type, full) { 
+          var name = data.URI.match(/http:\/\/.*\/algorithm\/(\w+).*/)[1];
+          if (type != 'display')
+            return name;
+          var res = '<a target="_blank" href="' + data.URI + '">' + 
+                    '<img src="' + (self.settings.baseUrl || jT.settings.baseUrl) + data.img + '"/>&nbsp;' +
+                    name + 
+                    '</a>';
+          if (self.settings.algorithmLink) {
+            res += '<a href="' + ccLib.addParameter(self.modelUri, 'algorithm=' + encodeURIComponent(data.URI)) + '"><span class="ui-icon ui-icon-calculator float-right" title="Show models using algorithm ' + name + '"></span></a>';
+          }
+  
+          return res;
+        };
+      }
+      
+      var cat = self.settings.algorithms ? 'algorithm' : 'model';
+      // deal if the selection is chosen
+      if (self.settings.selectable) {
+        self.settings.configuration.columns[cat].Id.mRender = jT.ui.addSelection(self, self.settings.configuration.columns.model.Id.mRender);
+        self.settings.configuration.columns[cat].Id.sWidth = "60px";
+      }
+      
+      // READYY! Go and prepare THE table.
+      self.table = jT.$('table', self.rootElement).dataTable({
+        "bPaginate": false,
+        "bLengthChange": false,
+				"bAutoWidth": false,
+        "sDom" : self.settings.sDom,
+        "aoColumns": jT.ui.processColumns(self, cat),
+				"oLanguage": {
+          "sLoadingRecords": "No models found.",
+          "sZeroRecords": "No models found.",
+          "sEmptyTable": "No models available.",
+          "sInfo": "Showing _TOTAL_ model(s) (_START_ to _END_)"
+        }
+      });
+      
+      jT.$(self.table).dataTable().fnAdjustColumnSizing();
+    },
+    
+    listModels: function (uri) {
+      var self = this;
+      if (uri == null)
+        uri = self.settings.baseUrl + '/model';
+
+      self.modelUri = uri;
+      jT.$(self.table).dataTable().fnClearTable();
+      jT.call(self, uri, function (result) {
+        if (!!result) {
+          self.models = result.model;
+          jT.$(self.table).dataTable().fnAddData(result.model);
+          ccLib.fireCallback(self.settings.onReady, self, result);
+        }
+      });
+    },
+    
+    /* List algorithms that contain given 'needle' in their name
+    */
+    listAlgorithms: function (needle) {
+      var self = this;
+      var uri = self.settings.baseUrl + '/algorithm';
+      if (!!needle)
+        uri = ccLib.addParameter(uri, 'search=' + needle);
+      jT.call(self, uri, function (result) {
+        if (!!result) {
+          self.algorithms = result.algorithm;
+          jT.$(self.table).dataTable().fnAddData(result.algorithm);
+          ccLib.fireCallback(self.settings.onReady, self, result);
+        }
+      });
+    },
+    
+    getModel: function (algoUri, callback) {
+      // TODO: make a request for getting / creating a model for given algorithm
+    },
+    
+    runPrediction: function (compoundUri, modelUri, callback) {
+      // TODO: make a POST request for prediction for given compound on given model
+      // the callback is returned after the task polling is done.
+    },
+    
+    query: function (uri) {
+      if (this.settings.algorithms)
+        this.listAlgorithms(this.settings.algorithmNeedle = (uri || this.settings.algorithmNeedle));
+      else
+        this.listModels(this.settings.modelUri = (uri || this.settings.modelUri));
+    },
+    
+    modifyUri: function (uri) {
+      jT.$('input[type="checkbox"]', this.rootElement).each(function () {
+        if (this.checked)
+          uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/predicted'));
+      })
+      
+      return uri;
+    }
+  };
+  
+  return cls;
+})();
 /* toxstudy.js - Study-related functions from jToxKit
  *
  * Copyright 2012-2013, IDEAconsult Ltd. http://www.ideaconsult.net/
@@ -1444,6 +1737,7 @@ var jToxDataset = (function () {
 var jToxStudy = (function () {
   var defaultSettings = {
     tab: null,
+    sDom: "rt<Fip>",
     configuration: { 
       columns: {
       	"_": {
@@ -1481,7 +1775,7 @@ var jToxStudy = (function () {
     // There should be no overlap, because already-added instances will have their IDs changed already...
     var tree = jT.getTemplate('#jtox-studies');
     root.appendChild(tree);
-    jT.changeTabsIds(tree, suffix);
+    jT.ui.changeTabsIds(tree, suffix);
     jT.$('div.jtox-study-tab div button', tree).on('click', function (e) {
     	var par = jT.$(this).parents('.jtox-study-tab')[0];
 	    if (jT.$(this).hasClass('expand-all')) {
@@ -1492,7 +1786,7 @@ var jToxStudy = (function () {
 	    }
     });
     
-    // initialize the tab structure for several versions of dataTables.
+    // initialize the tab structure for several versions of tabs.
     self.tabs = jT.$(tree).tabs({
       "select" : function(event, ui) {
         self.loadPanel(ui.panel);
@@ -1563,11 +1857,6 @@ var jToxStudy = (function () {
         theCat = jT.getTemplate('#jtox-study');
         tab.appendChild(theCat);
         jT.$(theCat).addClass(category);
-        
-        // install the click handler for fold / unfold
-        jT.$('.jtox-study-title', theCat).click(function() {
-          jT.$(theCat).toggleClass('folded');
-        });
       }
       
       return theCat;
@@ -1591,7 +1880,7 @@ var jToxStudy = (function () {
 	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatLoHigh(data.result, type) }) } },
 	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
 	        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "?"  }, 
-	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
+	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
 	      ];
   
         var colDefs = [];
@@ -1621,7 +1910,7 @@ var jToxStudy = (function () {
         var putDefaults = function(start, len, group) {
           for (var i = 0;i < len; ++i) {
             var col = jT.$.extend({}, defaultColumns[i + start]);
-            col = jT.modifyColDef(self, col, category, group);
+            col = jT.ui.modifyColDef(self, col, category, group);
             if (col != null)
               colDefs.push(col);
           }
@@ -1679,7 +1968,7 @@ var jToxStudy = (function () {
             "sDefaultContent": "-"
           };
           
-          col = jT.modifyColDef(self, col, category, "parameters");
+          col = jT.ui.modifyColDef(self, col, category, "parameters");
           if (col == null)
             return null;
           
@@ -1699,7 +1988,7 @@ var jToxStudy = (function () {
             "mData" : "effects"
           };
           
-          col = jT.modifyColDef(self, col, category, "conditions");
+          col = jT.ui.modifyColDef(self, col, category, "conditions");
           if (col == null)
             return null;
           
@@ -1721,14 +2010,14 @@ var jToxStudy = (function () {
         // now is time to put interpretation columns..
         putAGroup(study.interpretation, function(i){
           var col = { "sTitle": i, "sClass" : "center middle jtox-multi", "mData" : "interpretation." + i, "sDefaultContent": "-"};
-          return jT.modifyColDef(self, col, category, "interpretation");
+          return jT.ui.modifyColDef(self, col, category, "interpretation");
         });
         
         // finally put the protocol entries
         putDefaults(3, 3, "protocol");
         
         // but before given it up - make a small sorting..
-        jT.sortColDefs(colDefs);
+        jT.ui.sortColDefs(colDefs);
         
         // READYY! Go and prepare THE table.
         jT.$(theTable).dataTable( {
@@ -1736,10 +2025,10 @@ var jToxStudy = (function () {
           "bProcessing": true,
           "bLengthChange": false,
   				"bAutoWidth": false,
-          "sDom" : self.settings.configuration.sDom || "rt<Fip>",
+          "sDom" : self.settings.sDom || "rt<Fip>",
           "aoColumns": colDefs,
           "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-            var el = jT.$('.jtox-study-title .data-field', jT.$(this).parents('.jtox-study'))[0];
+            var el = jT.$('.title .data-field', jT.$(this).parents('.jtox-study'))[0];
             el.innerHTML = self.updateCount(el.innerHTML, iTotal);
             return sPre;
           },
@@ -1910,7 +2199,7 @@ var jToxStudy = (function () {
   				"bSearchable": true,
   				"bProcessing" : true,
   				"bPaginate" : true,
-          "sDom" : self.settings.configuration.sDom || "rt<Fip>",
+          "sDom" : self.settings.sDom || "rt<Fip>",
   				"sPaginate" : ".dataTables_paginate _paging",
   				"bAutoWidth": false,
   				"oLanguage": {
@@ -1987,12 +2276,12 @@ var jToxStudy = (function () {
       
       var substances = {};
 
-      jToxDataset.processFeatures(json.feature);
+      jToxCompound.processFeatures(json.feature);
       // proprocess the data...
       for (var i = 0, cmpl = json.composition.length; i < cmpl; ++i) {
         var cmp = json.composition[i];
         
-        jToxDataset.processEntry(cmp.component, json.feature, fnDatasetValue);
+        jToxCompound.processEntry(cmp.component, json.feature, fnDatasetValue);
 
         // now prepare the subs        
         var theSubs = substances[cmp.compositionUUID];
@@ -2072,7 +2361,7 @@ var jToxStudy = (function () {
           // go and query for the reference query
           jT.call(self, substance.referenceSubstance.uri, function (dataset){
             if (!!dataset) {
-              jToxDataset.processDataset(dataset, null, fnDatasetValue);
+              jToxCompound.processDataset(dataset, null, fnDatasetValue);
               ccLib.fillTree(rootTab, dataset.dataEntry[0]);
             }
           });
@@ -2117,7 +2406,7 @@ window.jT = window.jToxKit = {
 	
 	// form the "default" baseUrl if no other is supplied
 	formBaseUrl: function(url) {
-    return !!url.host ? url.protocol + "://" + url.host + (url.port.length > 0 ? ":" + url.port : '') + '/' + url.segments[0] + '/' : null;
+    return !!url.host ? url.protocol + "://" + url.host + (url.port.length > 0 ? ":" + url.port : '') + '/' + url.segments[0] : null;
 	},
     
   // initializes one kit, based on the kit name passed, either as params, or found within data-XXX parameters of the element
@@ -2126,7 +2415,7 @@ window.jT = window.jToxKit = {
 
   	var dataParams = self.$(element).data();
     
-  	if (!dataParams.manualInit){
+  	if (!dataParams.manualInit) {
     	var kit = dataParams.kit;
     	var topSettings = self.$.extend(true, {}, self.settings);
 
@@ -2173,8 +2462,12 @@ window.jT = window.jToxKit = {
           jT.$(element).data('jtKit', realInit(dataParams));
     	  });
   	  }
-  	  else
+  	  else {
+  	    if (!ccLib.isNull(dataParams.configuration) && typeof dataParams.configuration == "string" && !ccLib.isNull(window[dataParams.configuration]))
+  	      dataParams.configuration = window[dataParams.configuration];
+    	  
         jT.$(element).data('jtKit', realInit(dataParams));
+  	  }
     }
   },
   
@@ -2186,7 +2479,9 @@ window.jT = window.jToxKit = {
     	self.initTemplates();
   
       // make this handler for UUID copying. Once here - it's live, so it works for all tables in the future
-      jT.$(document).on('click', '.jtox-toolkit span.ui-icon-copy', function (e) { ccLib.copyToClipboard(jT.$(this).data('uuid')); return false;});
+      self.$(document).on('click', '.jtox-toolkit span.ui-icon-copy', function () { ccLib.copyToClipboard(self.$(this).data('uuid')); return false;});
+      // install the click handler for fold / unfold
+      self.$(document).on('click', '.jtox-foldable>.title', function() { self.$(this).parent().toggleClass('folded'); });
 
       // scan the query parameter for settings
   		var url = self.settings.fullUrl = ccLib.parseURL(document.location);
@@ -2205,6 +2500,21 @@ window.jT = window.jToxKit = {
 	kit: function (element) {
   	return $(element).data('jtKit');
 	},
+	
+	parentKit: function(name, element) {
+    var query = null;
+    if (typeof name == 'string')
+      name = window[name];
+    self.$(element).parents('.jtox-toolkit').each(function() {
+      var kit = jT.kit(this);
+      if (!kit)
+        return;
+      if (kit instanceof name)
+        query = kit;
+    });
+    
+    return query;
+  },
 	
 	initTemplates: function() {
 	  var self = this;
@@ -2242,67 +2552,7 @@ window.jT = window.jToxKit = {
     }
     return root;
 	},
-		
-  changeTabsIds: function (root, suffix) {
-    jT.$('ul li a', root).each(function() {
-      var id = jT.$(this).attr('href').substr(1);
-      var el = document.getElementById(id);
-      id += suffix;
-      el.id = id;
-      jT.$(this).attr('href', '#' + id);
-    })  
-  },
   
-  modifyColDef: function (kit, col, category, group) {
-	  var name = col.sTitle.toLowerCase();
-	  
-	  // helper function for retrieving col definition, if exists. Returns empty object, if no.          
-	  var getColDef = function (cat) {
-	    var catCol = kit.settings.configuration.columns[cat];
-	    if (!ccLib.isNull(catCol)) {
-	      if (!!group) {
-	        catCol = catCol[group];
-  	      if (!ccLib.isNull(catCol))
-  	        catCol = catCol[name];
-        }
-        else
-	        catCol = catCol[name];
-	    }
-	
-	    if (ccLib.isNull(catCol))
-	      catCol = {};
-	    return catCol;
-	  };
-	  // now form the default column, if existing and the category-specific one...
-	  // extract column redefinitions and merge them all.
-	  col = this.$.extend(col, (!!group ? getColDef('_') : {}), getColDef(category));
-	  return ccLib.isNull(col.bVisible) || col.bVisible ? col : null;
-  },
-  
-  sortColDefs: function (colDefs) {
-	  colDefs.sort(function(a, b) {
-	    var valA = ccLib.isNull(a.iOrder) ? 0 : a.iOrder;
-	    var valB = ccLib.isNull(b.iOrder) ? 0 : b.iOrder;
-	    return valA - valB;
-	  });
-  },
-  
-  shortenedData: function (data, message, deflen) {
-    var res = '';
-    
-    if (ccLib.isNull(deflen))
-      deflen = 5;
-    if (data.toString().length <= deflen) {
-      res += data;
-    }
-    else {
-      res += '<div class="shortened">' + data + '</div>';
-      if (message != null)
-        res += '<span class="ui-icon ui-icon-copy" title="' + message + '" data-uuid="' + data + '"></span>';
-    }
-    return res;
-  },
-		
 	/* Poll a given taskId and calls the callback when a result from the server comes - 
 	be it "running", "completed" or "error" - the callback is always called.
 	*/
@@ -2335,6 +2585,29 @@ window.jT = window.jToxKit = {
     else
       return this.settings.baseUrl;
 	},
+
+  /* Grab the paging information from the given URL and place it into the settings of passed
+  kit, as <kit>.settings.pageStart and <kit>.settings.pageSize. Pay attention that it is 'pageStart' 
+  and not 'pageNo'.
+  */
+  grabPaging: function (kit, url) {
+    var urlObj = ccLib.parseURL(url);
+    if (urlObj.params['pagesize'] !== undefined) {
+      var sz = parseInt(urlObj.params['pagesize']);
+      if (sz > 0)
+        kit.settings.pageSize = sz;
+      url = ccLib.removeParameter(url, 'pagesize');
+    }
+    
+    if (urlObj.params['page'] !== undefined) {
+      var beg = parseInt(urlObj.params['page']);
+      if (beg >= 0)
+        kit.settings.pageStart = beg * kit.settings.pageSize;
+      url = ccLib.removeParameter(url, 'page');
+    }
+    
+    return url;
+  },
 	
 	/* Makes a server call for provided service, with settings form the given kit and calls 'callback' at the end - always.
 	The 'params', if passed, can have following attributes:
@@ -2395,6 +2668,130 @@ window.jT = window.jToxKit = {
 	}
 };
 
+/* UI related functions of jToxKit are put here for more convenient usage
+*/
+window.jT.ui = {
+  shortenedData: function (data, message, deflen) {
+    var res = '';
+    
+    if (ccLib.isNull(deflen))
+      deflen = 5;
+    if (data.toString().length <= deflen) {
+      res += data;
+    }
+    else {
+      res += '<div class="shortened">' + data + '</div>';
+      if (message != null)
+        res += '<span class="ui-icon ui-icon-copy" title="' + message + '" data-uuid="' + data + '"></span>';
+    }
+    return res;
+  },
+  
+  changeTabsIds: function (root, suffix) {
+    jT.$('ul li a', root).each(function() {
+      var id = jT.$(this).attr('href').substr(1);
+      var el = document.getElementById(id);
+      id += suffix;
+      el.id = id;
+      jT.$(this).attr('href', '#' + id);
+    })  
+  },
+  
+  modifyColDef: function (kit, col, category, group) {
+	  var name = col.sTitle.toLowerCase();
+	  
+	  // helper function for retrieving col definition, if exists. Returns empty object, if no.          
+	  var getColDef = function (cat) {
+	    var catCol = kit.settings.configuration.columns[cat];
+	    if (!ccLib.isNull(catCol)) {
+	      if (!!group) {
+	        catCol = catCol[group];
+  	      if (!ccLib.isNull(catCol))
+  	        catCol = catCol[name];
+        }
+        else
+	        catCol = catCol[name];
+	    }
+	
+	    if (ccLib.isNull(catCol))
+	      catCol = {};
+	    return catCol;
+	  };
+	  // now form the default column, if existing and the category-specific one...
+	  // extract column redefinitions and merge them all.
+	  col = jT.$.extend(col, (!!group ? getColDef('_') : {}), getColDef(category));
+	  return ccLib.isNull(col.bVisible) || col.bVisible ? col : null;
+  },
+  
+  sortColDefs: function (colDefs) {
+	  colDefs.sort(function(a, b) {
+	    var valA = ccLib.isNull(a.iOrder) ? 0 : a.iOrder;
+	    var valB = ccLib.isNull(b.iOrder) ? 0 : b.iOrder;
+	    return valA - valB;
+	  });
+  },
+  
+  processColumns: function (kit, category) {
+    var colDefs = [];
+    var catList = kit.settings.configuration.columns[category];
+    for (var name in catList) {
+      var col = this.modifyColDef(kit, catList[name], category);
+      if (col != null)
+        colDefs.push(col);
+    }
+      
+    this.sortColDefs(colDefs);
+    return colDefs;
+  },
+  
+  queryInfo: function (aoData) {
+    var info = {};
+    for (var i = 0, dl = aoData.length; i < dl; ++i)
+      info[aoData[i].name] = aoData[i].value;
+  
+    if (info.iSortingCols > 0) {
+      info.iSortDirection = info.sSortDir_0.toLowerCase();
+      info.sSortData = info["mDataProp_" + info.iSortCol_0];
+    }
+    else {
+      info.iSortDirection = 0;
+      info.sSortData = "";
+    }
+    
+    return info;
+  },
+  
+  putStars: function (kit, stars, title) {
+    if (!kit.settings.shortStars) {
+      var res = '<div title="' + title + '">';
+      for (var i = 0;i < kit.settings.maxStars;++i) {
+        res += '<span class="ui-icon ui-icon-star jtox-inline';
+        if (i >= stars)
+          res += ' transparent';
+        res += '"></span>';
+      }
+      return res + '</div>';
+    }
+    else { // i.e. short version
+      return '<span class="ui-icon ui-icon-star jtox-inline" title="' + title + '"></span>' + stars;
+    }
+  },
+  
+  addSelection: function (kit, oldFn) {
+    return function (data, type, full) {
+      var oldRes = oldFn(data, type, full);
+      if (type != 'display')
+        return oldRes;
+      
+      var html = '<input type="checkbox" value="' + (full.URI || full.uri) + '"' +
+              (!!kit.settings.selectionHandler ? ' class="jtox-handler" data-handler="' + kit.settings.selectionHandler + '"' : '') +
+              '/>';
+              
+      return html + oldRes;
+    }
+  }
+};
+
 // we need to do this here - because other tools/libraries could have scheduled themselves on 'ready',
 // so it'll be too late to make this assignment then. Also - we can use jT.$ from now on :-)
 jT.$ = jQuery; // .noConflict();
@@ -2436,7 +2833,7 @@ jT.templates['widget-search']  =
 "  			  </div>" +
 "  			  <div class=\"jtox-inline\">" +
 "            <input type=\"text\" name=\"searchbox\" class=\"jtox-handler\"/>" +
-"            <button name=\"searchbutton\" class=\"jtox-handler\" title=\"Search\" data-handler=\"query\"><span class=\"ui-icon ui-icon-search\"/></button>" +
+"            <button name=\"searchbutton\" class=\"jtox-handler\" title=\"Search/refresh\" data-handler=\"query\"><span class=\"ui-icon ui-icon-search\"/></button>" +
 "            <button name=\"drawbutton\" title=\"Draw the (sub)structure\"><span class=\"ui-icon ui-icon-pencil\"/></button>" +
 "  			  </div>" +
 "    		</div>" +
@@ -2450,8 +2847,8 @@ jT.templates['ketcher-buttons']  =
 "    <button id=\"ketcher-drawbutton\">Draw <span class=\"ui-icon ui-icon-arrowthick-1-s\"></span></button>" +
 ""; // end of ketcher-buttons 
 
-jT.templates['all-dataset']  = 
-"	  <div id=\"jtox-dataset\">" +
+jT.templates['all-compound']  = 
+"	  <div id=\"jtox-compound\">" +
 "	    <div class=\"jtox-ds-features\"></div>" +
 "	    <div class=\"jtox-ds-control\">" +
 "	      Showing from <span class=\"data-field from-field\" data-field=\"pagestart\"> ? </span> to <span class=\"data-field\" data-field=\"pageend\"> ? </span> in pages of <select class=\"data-field\" data-field=\"pagesize\">" +
@@ -2475,24 +2872,24 @@ jT.templates['all-dataset']  =
 "	  </div>" +
 ""; // end of #jtox-dataset 
 
-jT.templates['dataset-one-feature']  = 
+jT.templates['compound-one-feature']  = 
 "    <div id=\"jtox-ds-feature\" class=\"jtox-ds-feature\"><input type=\"checkbox\" checked=\"yes\" class=\"jtox-checkbox\" /><span class=\"data-field jtox-title\" data-field=\"title\"> ? </span><sup><a target=\"_blank\" class=\"data-field attribute\" data-attribute=\"href\" data-field=\"uri\">?</a></sup></div>" +
 ""; // end of #jtox-ds-feature 
 
-jT.templates['dataset-download']  = 
+jT.templates['compound-download']  = 
 "    <div id=\"jtox-ds-download\" class=\"jtox-inline jtox-ds-download\">" +
 "      <a target=\"_blank\"><img class=\"borderless\"/></a>" +
 "    </div>" +
 ""; // end of #jtox-ds-download 
 
-jT.templates['dataset-export']  = 
+jT.templates['compound-export']  = 
 "    <div id=\"jtox-ds-export\">" +
 "      <div class=\"jtox-inline\">Download dataset as: </div>" +
 "      <div class=\"jtox-inline jtox-exportlist\"></div>" +
 "    </div>" +
 ""; // end of #jtox-ds-export 
 
-jT.templates['dataset-one-detail']  = 
+jT.templates['compound-one-detail']  = 
 "    <table>" +
 "      <tbody>" +
 "        <tr id=\"jtox-one-detail\">" +
@@ -2503,9 +2900,21 @@ jT.templates['dataset-one-detail']  =
 "    </table>" +
 ""; // end of #jtox-one-detail 
 
-jT.templates['dataset-details-table']  = 
+jT.templates['compound-details-table']  = 
 "    <table id=\"jtox-details-table\" class=\"jtox-details-table\"></table>" +
 ""; // end of #jtox-details-table 
+
+jT.templates['all-dataset']  = 
+"	  <div id=\"jtox-dataset\">" +
+"      <table></table>" +
+"	  </div>" +
+""; // end of #jtox-dataset 
+
+jT.templates['all-model']  = 
+"	  <div id=\"jtox-model\">" +
+"      <table></table>" +
+"	  </div>" +
+""; // end of #jtox-model 
 
 jT.templates['all-studies']  = 
 "	  <div id=\"jtox-studies\">" +
@@ -2634,8 +3043,10 @@ jT.templates['composition-block']  =
 
 jT.templates['one-study']  = 
 "    <div id=\"jtox-study\" class=\"jtox-study jtox-foldable folded unloaded\">" +
-"      <div class=\"jtox-study-title\"><p class=\"data-field\" data-field=\"title\">? (0)</p></div>" +
-"      <table class=\"jtox-study-table\"></table>" +
+"      <div class=\"title\"><p class=\"data-field\" data-field=\"title\">? (0)</p></div>" +
+"      <div class=\"content\">" +
+"        <table class=\"jtox-study-table content\"></table>" +
+"      </div>" +
 "    </div>" +
 ""; // end of #jtox-study 
 
