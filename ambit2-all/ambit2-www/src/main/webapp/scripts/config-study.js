@@ -951,6 +951,10 @@
         },
         "TO_SENSITIZATION_SECTION": {
             "parameters": {
+                "species": {
+                	"iOrder": -7,
+                    "bVisible": false
+                },
                 "type of study": {
                     "iOrder": -8,
                     "sTitle": "Study type"
