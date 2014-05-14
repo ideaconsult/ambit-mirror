@@ -18,6 +18,7 @@ import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
@@ -417,7 +418,7 @@ class ProcessMeasurement extends ProcessSolution {
 		RDFNode method = qs.get("method");
 		try {protocol.addGuideline(method.asResource().getLocalName());} catch (Exception x) {}
 		
-		ProtocolApplication<Protocol,Params,String,Params,String> papp = new ProtocolApplication<Protocol,Params,String,Params,String>(protocol);
+		ProtocolApplication<Protocol,IParams,String,IParams,String> papp = new ProtocolApplication<Protocol,IParams,String,IParams,String>(protocol);
 		//papp.setReliability(reliability)
 		papp.setParameters(new Params());
 		try {
@@ -433,7 +434,7 @@ class ProcessMeasurement extends ProcessSolution {
 		} catch (Exception x) {}
 		try {papp.setInterpretationResult(qs.get("resultInterpretation").asLiteral().getString());} catch (Exception x) {}
 		
-		EffectRecord<String,Params,String> effect = new EffectRecord<String,Params,String>();
+		EffectRecord<String,IParams,String> effect = new EffectRecord<String,IParams,String>();
 		effect.setEndpoint(measuredEndpoint);
 		effect.setConditions(new Params());
 		try {effect.setTextValue(qs.get("resultInterpretation").asLiteral().getString());} catch (Exception x) {}
@@ -454,10 +455,10 @@ class ProcessMeasurement extends ProcessSolution {
 
 		RDFNode dose = qs.get("dose"); 
 		if (dose!=null) {
-			Params v = new Params();
+			IParams v = new Params();
 			try {v.setLoValue(Double.parseDouble(dose.asLiteral().getString()));} catch (Exception x) {v.setLoValue(null);}
 			try {v.setUnits(qs.get("doseUnit").asLiteral().getString());} catch (Exception x) {}
-			Params conditions = effect.getConditions(); 
+			IParams conditions = effect.getConditions(); 
 			if (effect.getConditions()==null) conditions = new Params();				
 			conditions.put(I5CONSTANTS.cDoses, v);
 			effect.setConditions(conditions);

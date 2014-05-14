@@ -20,6 +20,7 @@ import org.openscience.cdk.io.iterator.DefaultIteratingChemObjectReader;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
@@ -254,9 +255,9 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader imple
 		parseInterpretedResult(node, record);
 		parseInterpretationCriteria(node, record);
 	}		
-	public static Params parseParams(ObjectNode node) {
+	public static IParams parseParams(ObjectNode node) {
 		if (node==null) return null;
-		Params params = new Params();
+		IParams params = new Params();
 		Iterator<Entry<String,JsonNode>> i = node.getFields();
 		while (i.hasNext()) {
 			Entry<String,JsonNode> val = i.next();
