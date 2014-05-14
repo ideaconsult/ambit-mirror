@@ -1,59 +1,64 @@
 package ambit2.base.data.study;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import ambit2.base.json.JSONUtils;
 
-public class Params<VALUE> extends HashMap<String, VALUE> {
-
+public class Params<VALUE> implements IParams<VALUE> {
+	protected HashMap<String, VALUE> storage;
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = 8844381138806492152L;
 	
 	public Params() {
 		super();
+		storage = new HashMap<String, VALUE>();
 	}
 	public Params(VALUE value) {
-		super();
+		this();
 		setLoValue(value);
 	}
 	public Params(String key,VALUE value) {
 		super();
-		put(key,value);
+		storage.put(key,value);
 	}
 	
 	public VALUE getUnits() {
-		return get(_FIELDS_RANGE.unit.name());
+		return storage.get(_FIELDS_RANGE.unit.name());
 	}
 	public void setUnits(VALUE unit) {
-		 put(_FIELDS_RANGE.unit.name(),unit);
+		 storage.put(_FIELDS_RANGE.unit.name(),unit);
 	}
 
 	public VALUE getLoValue() {
-		return get(_FIELDS_RANGE.loValue.name());
+		return storage.get(_FIELDS_RANGE.loValue.name());
 	}
 	public VALUE getUpValue() {
-		return get(_FIELDS_RANGE.upValue.name());
+		return storage.get(_FIELDS_RANGE.upValue.name());
 	}
 	public void setLoValue(VALUE value) {
-		put(_FIELDS_RANGE.loValue.name(),value);
+		storage.put(_FIELDS_RANGE.loValue.name(),value);
 	}	
 	public void setUpValue(VALUE value) {
-		put(_FIELDS_RANGE.upValue.name(),value);
+		storage.put(_FIELDS_RANGE.upValue.name(),value);
 	}
 	public VALUE getUpQualifier() {
-		return get(_FIELDS_RANGE.upQualifier.name());
+		return storage.get(_FIELDS_RANGE.upQualifier.name());
 	}
 	public VALUE getLoQualifier() {
-		return get(_FIELDS_RANGE.loQualifier.name());
+		return storage.get(_FIELDS_RANGE.loQualifier.name());
 	}
 	public void setUpQualifier(VALUE qualifier) {
-		put(_FIELDS_RANGE.upQualifier.name(),qualifier);
+		storage.put(_FIELDS_RANGE.upQualifier.name(),qualifier);
 	}
 	public void setLoQualifier(VALUE qualifier) {
-		put(_FIELDS_RANGE.loQualifier.name(),qualifier);
+		storage.put(_FIELDS_RANGE.loQualifier.name(),qualifier);
 	}
 
 	@Override
@@ -71,7 +76,9 @@ public class Params<VALUE> extends HashMap<String, VALUE> {
 			VALUE value = get(key);
 			if (value==null)
 				b.append("null");
-			else if (value instanceof Params)
+			else if (value instanceof IValue)
+				b.append(value.toString());
+			else if (value instanceof IParams)
 				b.append(value.toString());
 			else if (value instanceof Number)
 				b.append(value);
@@ -81,5 +88,54 @@ public class Params<VALUE> extends HashMap<String, VALUE> {
 		}
 		b.append("}");
 		return b.toString();
+	}
+	@Override
+	public int size() {
+		return storage.size();
+	}
+	@Override
+	public boolean isEmpty() {
+		return storage.isEmpty();
+	}
+	@Override
+	public boolean containsKey(Object key) {
+		return storage.containsKey(key);
+	}
+	@Override
+	public boolean containsValue(Object value) {
+		return storage.containsValue(value);
+	}
+	@Override
+	public VALUE get(Object key) {
+		return storage.get(key);
+	}
+	@Override
+	public VALUE put(String key, VALUE value) {
+		return storage.put(key, value);
+	}
+	@Override
+	public VALUE remove(Object key) {
+		return storage.remove(key);
+	}
+	@Override
+	public void putAll(Map<? extends String, ? extends VALUE> m) {
+		storage.putAll(m);
+		
+	}
+	@Override
+	public void clear() {
+		storage.clear();
+	}
+	@Override
+	public Set<String> keySet() {
+		return storage.keySet();
+	}
+	@Override
+	public Collection<VALUE> values() {
+		return storage.values();
+	}
+	@Override
+	public Set<java.util.Map.Entry<String, VALUE>> entrySet() {
+		return storage.entrySet();
 	}
 }

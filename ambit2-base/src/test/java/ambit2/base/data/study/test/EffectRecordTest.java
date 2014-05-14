@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import ambit2.base.data.study.EffectRecord;
 import ambit2.base.data.study.Params;
+import ambit2.base.data.study.Value;
 
 public class EffectRecordTest {
 
@@ -27,4 +28,16 @@ public class EffectRecordTest {
 		} catch (UnsupportedOperationException x) {
 		}
 	}
+	
+	@Test
+	public void testValue() throws Exception {
+		Value value = new Value();
+		value.setUnits("mg");
+		value.setLoValue(3.14);
+		value.setLoQualifier("ca.");
+		value.setUpQualifier("<=");
+		value.setUpValue("6.28");
+		System.out.println(value.toString());
+	}
+
 }

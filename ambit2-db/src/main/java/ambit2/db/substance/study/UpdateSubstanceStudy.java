@@ -32,14 +32,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.I5Utils;
-import ambit2.base.data.study.Params;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.db.search.QueryParam;
 import ambit2.db.update.AbstractUpdate;
 
-public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplication<Protocol, Params, String, Params, String>> {
+public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplication<Protocol, IParams, String, IParams, String>> {
 
 	public static final String[] create_sql = {
 		"INSERT INTO substance_protocolapplication (document_prefix,document_uuid,topcategory,endpointcategory,endpoint,guidance," +
@@ -55,7 +55,7 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 	};
 	
 
-	public UpdateSubstanceStudy(String substanceuuid, ProtocolApplication<Protocol, Params, String, Params, String> papp) {
+	public UpdateSubstanceStudy(String substanceuuid, ProtocolApplication<Protocol, IParams, String, IParams, String> papp) {
 		super();
 		setGroup(substanceuuid);
 		setObject(papp);

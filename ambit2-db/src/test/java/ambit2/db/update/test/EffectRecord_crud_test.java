@@ -6,6 +6,7 @@ import org.junit.Assert;
 
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.db.substance.study.DeleteEffectRecords;
 import ambit2.db.substance.study.UpdateEffectRecords;
@@ -18,7 +19,7 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 	protected static EffectRecord initeffect() {
 		EffectRecord record = new EffectRecord();
 
-		Params params = new Params();params.put("Exposure", "96");
+		IParams params = new Params();params.put("Exposure", "96");
 		record.setConditions(params);
 		record.setEndpoint("LC50");
 		record.setUnit("mg/L");
@@ -28,8 +29,8 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 
 	protected static EffectRecord initeffect_PC_PARTITION_SECTION() {
 
-		EffectRecord record = new EffectRecord<String,Params,String>();
-		Params params = new Params();
+		EffectRecord record = new EffectRecord<String,IParams,String>();
+		IParams params = new Params();
 		params = new Params();params.put("Temperature", "25 \u2103C");
 		record.setConditions(params);
 		record.setEndpoint("log Pow");
@@ -37,8 +38,8 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 		return record;
 	}
 	protected static EffectRecord initeffect_TO_BIODEG_WATER_SCREEN_SECTION() {
-		EffectRecord record = new EffectRecord<String,Params,String>();
-		Params params = new Params();
+		EffectRecord record = new EffectRecord<String,IParams,String>();
+		IParams params = new Params();
 		params.put("Time point", "28 d");
 		record.setConditions(params);
 		record.setEndpoint("% Degradation");
@@ -48,7 +49,7 @@ public class EffectRecord_crud_test  extends CRUDTest<String,EffectRecord> {
 	}
 	protected static EffectRecord initeffect_TO_ACUTE_ORAL_SECTION() {
 		EffectRecord record = new EffectRecord<String,Params,String>();
-		Params params = new Params();
+		IParams params = new Params();
 		params = new Params();params.put("Temperature", "25 \u2103C");params.put("Sex","male");
 		record.setConditions(params);
 		record.setEndpoint("LD50");
