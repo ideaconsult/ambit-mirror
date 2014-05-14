@@ -24,7 +24,7 @@
   		<name>UCC repositories proxy</name>
   		<url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/ucc-repo/</url>
   	</repository>
-  	
+
   </repositories>
   <dependencies>
     <dependency>
@@ -230,6 +230,12 @@
       <artifactId>jackson-mapper-asl</artifactId>
       <version>1.9.13</version>
     </dependency>
+    <dependency>
+	<groupId>com.fasterxml.jackson.module</groupId>
+	<artifactId>jackson-module-jsonSchema</artifactId>
+	<version>2.4.0-rc3</version>
+	</dependency>
+	            
     <!-- 7zip
   	<dependency>
     <groupId>com.github.jponge</groupId>
