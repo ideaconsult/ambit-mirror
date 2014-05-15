@@ -12,7 +12,11 @@
                 }
             },
             "conditions": {},
-            "effects": {},
+            "effects": {
+            	"text" : {
+            		"bVisible" : false
+            	}
+            },
             "protocol": {},
             "interpretation": {}
         },
@@ -149,7 +153,7 @@
                     "iOrder": -2
                 },
                 "decomposition": {
-                    "iOrder": -1
+                	"bVisible": false
                 }
             },
             "effects": {
@@ -602,7 +606,12 @@
                 	"bVisible": false,
                     "sTitle": "Genotoxicity",
                     "iOrder": -3
-                }
+                },
+             	"text" : {
+             		"sTitle": "Genotoxicity",
+            		"bVisible" : true,
+            		"iOrder": -3
+            	}                
             },
             "protocol": {
                 "guideline": {
@@ -658,7 +667,12 @@
                 	"bVisible": false,
                     "sTitle": "Genotoxicity",
                     "iOrder": -3
-                }
+                },
+             	"text" : {
+             		"sTitle": "Genotoxicity",
+            		"bVisible" : true,
+            		"iOrder": -3
+            	}                 
             },
             "protocol": {
                 "guideline": {

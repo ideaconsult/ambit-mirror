@@ -24,7 +24,7 @@
 		$('#dataseturi').val(dataset_uri);	  
 	    datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 
-	  	var ds = new jToxDataset($(".jtox-toolkit")[0],config_dataset);
+	  	var ds = new jToxCompound($(".jtox-toolkit")[0],config_dataset);
         ds.queryDataset(dataset_uri);
 	});
 	</script>
@@ -97,7 +97,7 @@
 
 <div class="sixteen columns " style="padding:0 2px 2px 2px 0;margin-top:5px;margin-left:25;margin-right:25;">		
 
-	<div class="jtox-toolkit" data-kit="dataset" 
+	<div class="jtox-toolkit" data-kit="compound" 
 	data-manual-init="yes" 
 	data-show-features="yes" 
 	data-cross-domain="false"	
