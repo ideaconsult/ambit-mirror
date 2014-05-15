@@ -1879,8 +1879,9 @@ var jToxStudy = (function () {
 	        { "sTitle": "Endpoint", "sClass": "center middle jtox-multi", "sWidth": "15%", "mData": "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, "endpoint");  } },   // Effects columns
 	        { "sTitle": "Result", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return formatLoHigh(data.result, type) }); } },
 	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return !!data.result.textValue  ? data.result.textValue : '-'; }); } },
-	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "?"  },    // Protocol columns
-	        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "?"  }, 
+	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
+	        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
+	        { "sTitle": "Citation", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year && data.year.length > 1 ? data.year : "") + ' ' + (data.owner || ""); }  },
 	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
 	      ];
   
@@ -2015,7 +2016,7 @@ var jToxStudy = (function () {
         });
         
         // finally put the protocol entries
-        putDefaults(4, 3, "protocol");
+        putDefaults(4, 4, "protocol");
         
         // but before given it up - make a small sorting..
         jT.ui.sortColDefs(colDefs);
@@ -2034,7 +2035,7 @@ var jToxStudy = (function () {
             return sPre;
           },
   				"oLanguage": {
-            "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "images/24x24_ambit.gif' border='0'>",
+            "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "/images/24x24_ambit.gif' border='0'>",
             "sLoadingRecords": "No studies found.",
             "sZeroRecords": "No studies found.",
             "sEmptyTable": "No studies available.",
@@ -2204,7 +2205,7 @@ var jToxStudy = (function () {
   				"sPaginate" : ".dataTables_paginate _paging",
   				"bAutoWidth": false,
   				"oLanguage": {
-            "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "images/24x24_ambit.gif' border='0'>",
+            "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "/images/24x24_ambit.gif' border='0'>",
             "sLoadingRecords": "No substances found.",
             "sZeroRecords": "No substances found.",
             "sEmptyTable": "No substances available.",
