@@ -8,6 +8,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 <script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
 
 <link rel="stylesheet" href="${ambit_root}/style/jtoxkit.css"/>
 
@@ -119,8 +120,9 @@
 	data-kit="study" 
 	data-tab="P-CHEM"
 	data-substance-uri="${ambit_root}/substance/${substanceUUID}"
-	data-cross-domain="false"	
-	data-config-file="${ambit_root}/scripts/config-study.js" data-jsonp="false"></div>
+	data-cross-domain="false"
+	data-configuration="config_study"	
+	data-jsonp="false"></div>
 
 <div class='row add-bottom' style="height:140px;">&nbsp;</div>
 </div>
