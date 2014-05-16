@@ -9,9 +9,19 @@ var config_study = {
             "parameters": {
                 "study year": {
                     "bVisible": false
+                },
+                "data_gathering_instruments": {
+                    "sTitle": "Instruments"
+                },
+                "testmat_form": {
+                    "sTitle": "Test Material Form"
+                }                
+            },
+            "conditions": {
+            	"medium": {
+                    "sTitle": "Medium"
                 }
             },
-            "conditions": {},
             "effects": {
                 "text": {
                     "bVisible": false
@@ -605,10 +615,6 @@ var config_study = {
                 },
                 "target gene": {
                     "iOrder": -6
-                },
-                "study year": {
-                	"bVisible": false,
-                    "iOrder": 0
                 }
             },
             "conditions": {
@@ -622,6 +628,10 @@ var config_study = {
                 "species": {
                     "iOrder": -5,
                     "sTitle": "Species/strain"
+                },
+                "study year": {
+                	"bVisible": false,
+                    "iOrder": -1
                 }
             },
             "effects": {
@@ -1650,7 +1660,7 @@ var config_study = {
                 "percentile": {
                     "bVisible": false
                 },
-                "remarks": {
+                "remark": {
                     "sTitle": "Remarks",
                     "iOrder": -15,
                     "bVisible": false
@@ -1778,14 +1788,15 @@ var config_study = {
                 }
             },
             "conditions": {
-                "remarks": {
+                "remark": {
                     "sTitle": "Remarks",
                     "iOrder": -15,
                     "bVisible": false
                 },
                 "medium": {
                     "sTitle": "Medium",
-                    "iOrder": -16
+                    "iOrder": -16,
+                    "bVisible": true
                 },
                 "std_dev": {
                     "sTitle": "Std. dev.",
@@ -1793,14 +1804,18 @@ var config_study = {
                 },
                 "ph": {
                     "iOrder": -17
+                },
+                "remark": {
+                    "sTitle": "Remarks",
+                    "iOrder": -19
                 }
             },
             "effects": {
                 "endpoint": {
-                    "iOrder": -20
+                    "iOrder": -21
                 },
                 "result": {
-                    "iOrder": -19
+                    "iOrder": -20
                 }
             },
             "protocol": {
@@ -1859,14 +1874,15 @@ var config_study = {
                     "iOrder": -21,
                     "bVisible": false
                 },
-                "remarks": {
+                "remark": {
                     "sTitle": "Remarks",
                     "iOrder": -15,
                     "bVisible": false
                 },
                 "element_or_group": {
                     "sTitle": "Element / Func. group",
-                    "iOrder": -19
+                    "iOrder": -19,
+                    "bVisible": false
                 },
                 "std_dev": {
                     "sTitle": "Std. dev.",
@@ -1881,7 +1897,13 @@ var config_study = {
                 "result": {
                     "sTitle": "Fraction",
                     "iOrder": -18
+                },
+                "text" : {
+                	"sTitle": "Element / Func. group",
+                	"iOrder": -19,
+                	"bVisible": true
                 }
+                
             },
             "protocol": {
                 "guideline": {
@@ -1923,6 +1945,11 @@ var config_study = {
                     "sTitle": "Passage num.",
                     "iOrder": -22
                 },
+                "medium": {
+                    "sTitle": "Medium",
+                    "iOrder": -15,
+                    "bVisible": true
+                },                
                 "remark": {
                     "sTitle": "Remark",
                     "iOrder": -16,
@@ -1931,6 +1958,9 @@ var config_study = {
                 "std_dev": {
                     "sTitle": "Std. dev.",
                     "iOrder": -17
+                },
+                "phraseother_percentile" : {
+                	"bVisible": false
                 }
             },
             "effects": {
@@ -1994,6 +2024,10 @@ var config_study = {
             "conditions": {
                 "std_dev": {
                     "sTitle": "Std. dev.",
+                    "iOrder": -14
+                },
+                "medium": {
+                    "sTitle": "Medium",
                     "iOrder": -15
                 }
             },
@@ -2175,7 +2209,7 @@ var config_study = {
                     "sTitle": "Std. dev.",
                     "iOrder": -15
                 },
-                "remarks": {
+                "remark": {
                     "sTitle": "Remarks",
                     "iOrder": -14
                 }
