@@ -171,7 +171,8 @@ public class FileInputState extends FileState implements IInputState {
 			return new I5ReaderSimple(new FileReader(file));	
 		}
 	}
-	public static IIteratingChemObjectReader getReader(InputStream stream, String ext, IChemFormat format) throws AmbitIOException, CDKException {
+	public static IIteratingChemObjectReader getReader(InputStream stream, String extension, IChemFormat format) throws AmbitIOException, CDKException {
+		String ext = extension.toLowerCase();
 		if (ext.endsWith(extensions[SDF_INDEX])) {
 			return new InteractiveIteratingMDLReader(stream,SilentChemObjectBuilder.getInstance(),true);
 		} else if (ext.endsWith(extensions[SMI_INDEX])) { 
