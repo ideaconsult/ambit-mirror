@@ -190,23 +190,6 @@
   font-weight: bold;
   font-size: 1.1em;
 }
-/* toxtstudy.css - Styling for toxstudy engine
-*/
-
-div.jtox-study,
-div.jtox-composition,
-div.jtox-substance {
-  display: block;
-  font-size: small;
-  border-radius: 5px;
-  padding: 5px 5px 35px 5px;
-}
-
-.jtox-compoblock {
-  margin-top: 25px;
-  margin-bottom: 45px;  
-}
-
 .jtox-toolkit table.composition-info.dataTable td,
 .jtox-toolkit table.composition-info.dataTable th {
   border: 0px;
@@ -217,6 +200,22 @@ div.jtox-substance {
 .jtox-toolkit table.composition-info.dataTable th {
   width: 20%;
   text-align: right;
+}
+/* toxtstudy.css - Styling for toxstudy engine
+*/
+
+div.jtox-study,
+div.jtox-compo-tab,
+div.jtox-substance {
+  display: block;
+  font-size: small;
+  border-radius: 5px;
+  padding: 5px 5px 35px 5px;
+}
+
+.jtox-compo-tab {
+  margin-top: 25px;
+  margin-bottom: 45px;  
 }
 
 div.jtox-study.unloaded div.title,

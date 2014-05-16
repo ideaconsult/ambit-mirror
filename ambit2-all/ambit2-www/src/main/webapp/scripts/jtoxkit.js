@@ -18,9 +18,17 @@ var ccLib = {
   },
 
   fireCallback: function (callback, self) {
-    if (typeof callback != 'function')
-      callback = window[callback];
-    return (typeof callback == 'function') ? (callback.apply((self !== undefined && self != null) ? self : document, Array.prototype.slice.call(arguments, 2))) : null;
+    if (!jQuery.isArray(callback))
+      callback = [callback];
+      
+    var ret = null;
+    for (var i = 0, cl = callback.length; i < cl; ++i) {
+      var callone = callback[i];
+      if (typeof callone != 'function')
+        callone = window[callone];
+      ret = (typeof callone == 'function') ? (callone.apply((self !== undefined && self != null) ? self : document, Array.prototype.slice.call(arguments, 2))) : null;
+    }
+    return ret;
   },
   
   /* Function setObjValue(obj, value)Set a given to the given element (obj) in the most appropriate way - be it property - the necessary one, or innetHTML
@@ -626,7 +634,8 @@ var jToxCompound = (function () {
     "pageStart": 0,           // what is the default startint point for entries retrieval
     "rememberChecks": false,  // whether to remember feature-checkbox settings between queries
     "metricFeature": "http://www.opentox.org/api/1.1#Similarity",   // This is the default metric feature, if no other is specified
-    "onReady": null,
+    "onLoaded": null,         // invoked when a set of compound is loaded.
+    "onPrepared": null,       // invoked when the initial call for determining the tabs/columns is ready
     "fnAccumulate": function(fId, oldVal, newVal, features) {
       if (ccLib.isNull(newVal))
         return oldVal;
@@ -1248,7 +1257,7 @@ var jToxCompound = (function () {
     },
     
     // make the actual query for the (next) portion of data.
-    queryEntries: function(from, size, fnComplete) {
+    queryEntries: function(from, size) {
       var self = this;
       if (from < 0)
         from = 0;
@@ -1298,9 +1307,7 @@ var jToxCompound = (function () {
           }
 
           // time to call the supplied function, if any.
-          ccLib.fireCallback(self.settings.onReady, self, dataset);
-          if (typeof fnComplete == 'function')
-            fnComplete();
+          ccLib.fireCallback(self.settings.onLoaded, self, dataset);
         }
       });
     },
@@ -1337,6 +1344,7 @@ var jToxCompound = (function () {
           
           self.prepareTables(); // prepare the tables - we need features to build them - we have them!
           self.equalizeTables(); // to make them nicer, while waiting...
+          ccLib.fireCallback(self.settings.onPrepared, self, dataset);
           self.queryEntries(self.settings.pageStart, self.settings.pageSize); // and make the query for actual data
         }
       });
@@ -1447,8 +1455,9 @@ var jToxDataset = (function () {
     selectable: false,
     selectionHandler: null,
     sDom: "<Fif>rt",
-    onReady: null,
-    /* listUri */
+    onLoaded: null,
+    loadOnInit: false,
+    /* datasetUri */
     configuration: { 
       columns : {
         dataset: {
@@ -1479,7 +1488,8 @@ var jToxDataset = (function () {
     self.init();
         
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
-    self.listDatasets(self.settings.listUri)
+    if (self.settings.datasetUri != undefined || self.settings.loadOnInit)
+      self.listDatasets(self.settings.datasetUri)
   };
   
   cls.prototype = {
@@ -1521,12 +1531,14 @@ var jToxDataset = (function () {
       var self = this;
       if (uri == null)
         uri = self.settings.baseUrl + '/dataset';
+      else if (!self.settings.baseUrl)
+        self.settings.baseUrl = jT.grabBaseUrl(uri);
       
       jT.$(self.table).dataTable().fnClearTable();
       jT.call(self, uri, function (result) {
         if (!!result) {
           jT.$(self.table).dataTable().fnAddData(result.dataset);
-          ccLib.fireCallback(self.settings.onReady, self, result);
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
         }
       });
     },
@@ -1560,9 +1572,10 @@ var jToxModel = (function () {
     maxStars: 10,
     algorithmLink: true,
     algorithms: false,
-    algorithmNeedle: null,
-    onReady: null,
+    onLoaded: null,
     sDom: "<Fif>rt",
+    loadOnInit: false,
+    /* algorithmNeedle */
     /* modelUri */
     configuration: { 
       columns : {
@@ -1613,7 +1626,8 @@ var jToxModel = (function () {
     self.init();
         
     // finally, wait a bit for everyone to get initialized and make a call, if asked to
-    self.query();
+    if (self.settings.modelUri !== undefined || self.settings.algorithmNeedle !== undefined || self.settings.loadOnInit)
+      self.query();
   };
   
   cls.prototype = {
@@ -1672,6 +1686,8 @@ var jToxModel = (function () {
       var self = this;
       if (uri == null)
         uri = self.settings.baseUrl + '/model';
+      else if (!self.settings.baseUrl)
+        self.settings.baseUrl = jT.grabBaseUrl(uri);
 
       self.modelUri = uri;
       jT.$(self.table).dataTable().fnClearTable();
@@ -1679,7 +1695,7 @@ var jToxModel = (function () {
         if (!!result) {
           self.models = result.model;
           jT.$(self.table).dataTable().fnAddData(result.model);
-          ccLib.fireCallback(self.settings.onReady, self, result);
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
         }
       });
     },
@@ -1695,7 +1711,7 @@ var jToxModel = (function () {
         if (!!result) {
           self.algorithms = result.algorithm;
           jT.$(self.table).dataTable().fnAddData(result.algorithm);
-          ccLib.fireCallback(self.settings.onReady, self, result);
+          ccLib.fireCallback(self.settings.onLoaded, self, result);
         }
       });
     },
@@ -1728,6 +1744,151 @@ var jToxModel = (function () {
   
   return cls;
 })();
+/* toxcomposition.js - A kit for visualizing substance composition(s)
+ *
+ * Copyright 2012-2014, IDEAconsult Ltd. http://www.ideaconsult.net/
+ * Created by Ivan Georgiev
+**/
+
+var jToxComposition = (function () {
+  var defaultSettings = { // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
+    selectable: false,    // whether to show selection checkbox on each row
+    showBanner: true,     // whether to show a banner of composition info before each compounds-table
+    sDom: "rt<Ffp>",   // compounds (ingredients) table sDom
+    onLoaded: null,
+    
+    /* compositionUri */
+    configuration: {
+      columns : {
+        composition: {
+          'Type': { sTitle: "Type", sClass : "left", sWidth : "10%", mData : "relation", mRender : function(val, type, full) {
+					  if (type != 'display')
+					    return '' + val;
+					  var func = ("HAS_ADDITIVE" == val) ? full.proportion.function_as_additive : "";
+					  return '<span class="camelCase">' +  val.replace("HAS_", "").toLowerCase() + '</span>' + ((func === undefined || func === null || func == '') ? "" : " (" + func + ")");
+          } },
+          'Name': { sTitle: "Name", sClass: "camelCase left", sWidth: "15%", mData: "component.compound.name", mRender: function(val, type, full) {
+						return (type != 'display') ? '' + val : 
+						  '<a href="' + full.component.compound.URI + '" target="_blank" title="Click to view the compound"><span class="ui-icon ui-icon-link" style="float: left; margin-right: .3em;"></span></a>' + val; } },
+					'EC No.': { sTitle: "EC No.", sClass: "left", sWidth: "10%", mData: "component.compound.einecs" },
+					'CAS No.': { sTitle: "CAS No.", sClass : "left", sWidth: "10%", mData : "component.compound.cas" },
+					'Typical concentration': { sTitle: "Typical concentration", sClass: "center", sWidth: "15%", mData: "proportion.typical", mRender: function(val, type, full) { return type != 'display' ? '' + val.value : jToxComposition.formatConcentration(val.precision, val.value, val.unit); } },
+					'Concentration ranges': { sTitle: "Concentration ranges", sClass : "center colspan-2", sWidth : "20%", mData : "proportion.real", mRender : function(val, type, full) { return type != 'display' ? '' + val.lowerValue : jToxComposition.formatConcentration(val.lowerPrecision, val.lowerValue, val.unit); } },
+					'Upper range': { sTitle: 'Upper range', sClass: "center", sWidth: "20%", mData: "proportion.real", mRender: function(val, type, full) { return type != 'display' ? '' + val.upperValue : jToxComposition.formatConcentration(val.upperPrecision, val.upperValue, val.unit); } },
+					'Also': { sTitle: "Also", sClass: "center", bSortable: false, mData: "component.compound.URI", mRender: function(val, type, full) { return !val ? '' : '<a href="' + (jT.settings.baseUrl || self.baseUrl) + 'substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</span></a>'; } }
+				}
+      }
+    }
+  };
+  
+  var cls = function (root, settings) {
+    var self = this;
+    self.rootElement = root;
+    jT.$(root).addClass('jtox-toolkit'); // to make sure it is there even when manually initialized
+    
+    self.settings = jT.$.extend(true, {}, defaultSettings, jT.settings, settings);
+    
+    // finally, if provided - make the query
+    if (!!self.settings.compositionUri)
+      self.queryComposition(self.settings.compositionUri)
+  };
+  
+  cls.formatConcentration = function (precision, val, unit) {
+  	return ((precision === undefined || precision === null || "=" == precision ? "" : precision) + val + " " + (unit == null || unit == '' ? '<span class="units">% (w/w)</span>' : unit)).replace(/ /g, "&nbsp;").replace("span&nbsp;", "span ");
+  };
+
+  var fnDatasetValue = function (fid, old, value, features){
+		return ccLib.extendArray(old, value != null ? value.trim().toLowerCase().split("|") : [value]).filter(ccNonEmptyFilter);
+  };
+  
+  cls.prototype = {
+    prepareTable: function (json, tab) {
+      var self = this;
+      
+      // deal if the selection is chosen
+      var colId = self.settings.configuration.columns.composition.Name;
+      if (self.settings.selectable) {
+        colId.mRender = jT.ui.addSelection(self, colId.mRender);
+        colId.sWidth = "60px";
+      }
+        
+      // we need that processing to remove the title of "Also contained in..." column...
+      var cols = jT.ui.processColumns(self, 'composition');
+      for (var i = 0, cl = cols.length; i < cl; ++i)
+        if (cols[i].sTitle == 'Also') {
+          cols[i].sTitle = '';
+          break;
+        }
+      // READYY! Go and prepare THE table.
+      self.table = jT.$('table.composition-table', tab).dataTable({
+        "bPaginate": false,
+        "bLengthChange": false,
+				"bAutoWidth": false,
+        "bServerSide": false,
+        "sDom" : self.settings.sDom,
+        "aoColumns": cols,
+      });
+      
+      jT.$(self.table).dataTable().fnAdjustColumnSizing();
+      jT.$(self.table).dataTable().fnAddData(json);
+      // now make a few fixing for multi-column title
+      var colSpan = jT.$('th.colspan-2', self.table);
+      jT.$(colSpan).attr('colspan', 2);
+      jT.$(jT.$(colSpan).next()).remove();
+      return self.table;
+    },
+    
+    queryComposition: function (uri) {
+      var self = this;
+      self.compositionUri = uri;
+      jT.call(self, uri, function (json) {
+        if (!!json && !!json.composition) {
+          // clear the old tabs, if any.
+          var substances = {};
+    
+          jToxCompound.processFeatures(json.feature);
+          // proprocess the data...
+          for (var i = 0, cmpl = json.composition.length; i < cmpl; ++i) {
+            var cmp = json.composition[i];
+            
+            jToxCompound.processEntry(cmp.component, json.feature, fnDatasetValue);
+    
+            // now prepare the subs        
+            var theSubs = substances[cmp.compositionUUID];
+            if (theSubs === undefined)
+              substances[cmp.compositionUUID] = theSubs = { name: "", purity: "", maxvalue: 0, uuid: cmp.compositionUUID, composition: [] };
+            
+            theSubs.composition.push(cmp);
+            var val = cmp.proportion.typical;
+            if (cmp.relation == 'HAS_CONSTITUENT' && (theSubs.maxvalue < val.value || theSubs.name == '')) {
+              theSubs.name = cmp.component.compound['name'] + ' ' + jToxComposition.formatConcentration(val.precision, val.value, val.unit);
+              theSubs.maxvalue = val.value;
+              val = cmp.proportion.real;
+              theSubs.purity = (val.lowerValue + '-' + val.upperValue + ' ' + (val.unit == null || val.unit == '' ? '<span class="units">% (w/w)</span>' : val.unit)).replace(/ /g, "&nbsp;").replace("span&nbsp;", "span ");
+            }
+          }
+          
+          // now make the actual filling
+          for (var i in substances) {
+            var panel = jT.getTemplate('#jtox-composition');
+            self.rootElement.appendChild(panel);
+            ccLib.fillTree(jT.$('.composition-info', panel)[0], substances[i]);
+            self.prepareTable(substances[i].composition, panel);
+          }
+          
+          ccLib.fireCallback(self.settings.onLoaded, self, json.composition);
+        }
+      });
+    },   
+    
+    query: function (uri) {
+      jT.$(self.rootElement).empty();
+      this.queryComposition(uri);
+    }
+  };
+  
+  return cls;
+})();
 /* toxstudy.js - Study-related functions from jToxKit
  *
  * Copyright 2012-2013, IDEAconsult Ltd. http://www.ideaconsult.net/
@@ -1738,6 +1899,11 @@ var jToxStudy = (function () {
   var defaultSettings = {
     tab: null,
     sDom: "rt<Fip>",
+    // events
+    onSummary: null,    // invoked when the summary is loaded
+    onComposition: null, // invoked when the 
+    onStudy: null,      // invoked for each loaded study
+    onLoaded: null,     // invoked when the substance general info is loaded
     configuration: { 
       columns: {
       	"_": {
@@ -1747,10 +1913,7 @@ var jToxStudy = (function () {
 	    		"effects": { },
 	    		"protocol": { },
 	    		"interpretation": { },
-	    	},
-    		"composition": { 
-	    		"main" : { }
-    		}
+	    	}
     	}
     }
   };    // all settings, specific for the kit, with their defaults. These got merged with general (jToxKit) ones.
@@ -1815,6 +1978,7 @@ var jToxStudy = (function () {
               jT.$(table).removeClass('unloaded folded');
               jT.$(table).addClass('loaded');
               self.processStudies(panel, study.study, false);
+              ccLib.fireCallback(self.settings.onStudy, self, study.study);
             }
           });  
         });
@@ -1881,7 +2045,7 @@ var jToxStudy = (function () {
 	        { "sTitle": "Text", "sClass": "center middle jtox-multi", "sWidth": "10%", "mData" : "effects", "mRender": function (data, type, full) { return self.renderMulti(data, type, full, function (data, type) { return !!data.result.textValue  ? data.result.textValue : '-'; }); } },
 	        { "sTitle": "Guideline", "sClass": "center middle", "sWidth": "15%", "mData": "protocol.guideline", "mRender" : "[,]", "sDefaultContent": "-"  },    // Protocol columns
 	        { "sTitle": "Owner", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation.owner", "sDefaultContent": "-" },
-	        { "sTitle": "Citation", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year && data.year.length > 1 ? data.year : "") + ' ' + (data.owner || ""); }  },
+	        { "sTitle": "Citation", "sClass": "center middle shortened", "sWidth": "15%", "mData": "citation", "mRender": function (data, type, full) { return (data.title || "") + ' ' + (!!data.year && data.year.length > 1 ? data.year : ""); }  },
 	        { "sTitle": "UUID", "sClass": "center middle", "sWidth": "15%", "mData": "uuid", "bSearchable": false, "mRender" : function(data, type, full) { return type != "display" ? '' + data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard"); } }
 	      ];
   
@@ -2179,142 +2343,14 @@ var jToxStudy = (function () {
         this.style.height = '' + this.offsetHeight + 'px';
       });
     },
-    
-    formatConcentration: function (precision, val, unit) {
-    	return ((precision === undefined || precision === null || "=" == precision ? "" : precision) + val + " " + (unit == null || unit == '' ? '<span class="units">% (w/w)</span>' : unit)).replace(/ /g, "&nbsp;").replace("span&nbsp;", "span ");
-    },
-    
-    processComposition: function(json){
-      var self = this;
-      var tab = jT.$('.jtox-composition', self.rootElement)[0];
-      
-      // clear the old tabs, if any.
-      if (jT.$(tab).hasClass('unloaded')){
-        jT.$(tab).removeClass('unloaded');
-        jT.$(tab).empty();
-      }
-      
-      var prepareFillTable = function (json, panel) {
-        var theTable = jT.$('.substances-table', panel);
-        // prepare the table...
-        jT.$(theTable).dataTable({
-  				"bSearchable": true,
-  				"bProcessing" : true,
-  				"bPaginate" : true,
-          "sDom" : self.settings.sDom || "rt<Fip>",
-  				"sPaginate" : ".dataTables_paginate _paging",
-  				"bAutoWidth": false,
-  				"oLanguage": {
-            "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "/images/24x24_ambit.gif' border='0'>",
-            "sLoadingRecords": "No substances found.",
-            "sZeroRecords": "No substances found.",
-            "sEmptyTable": "No substances available.",
-            "sInfo": "Showing _TOTAL_ substance(s) (_START_ to _END_)",
-          },
-  		    "aoColumns": [
-            {  //1
-    					"sClass" : "left",
-    					"sWidth" : "10%",
-    					"mData" : "relation",
-    					"mRender" : function(val, type, full) {
-    					  if (type != 'display')
-    					    return '' + val;
-    					  var func = ("HAS_ADDITIVE" == val) ? full.proportion.function_as_additive : "";
-    					  return '<span class="camelCase">' +  val.replace("HAS_", "").toLowerCase() + '</span>' + ((func === undefined || func === null || func == '') ? "" : " (" + func + ")");
-              }
-            },	    
-    				{ //2
-    					"sClass" : "camelCase left",
-    					"sWidth" : "15%",
-    					"mData" : "component.compound.name",
-    					"mRender" : function(val, type, full) {
-    						return (type != 'display') ? '' + val : 
-    						  '<a href="' + full.component.compound.URI + '" target="_blank" title="Click to view the compound"><span class="ui-icon ui-icon-link" style="float: left; margin-right: .3em;"></span></a>' + val;
-    					}
-    				},	    	
-    				{ //3
-    					"sClass" : "left",
-    					"sWidth" : "10%",
-    					"mData" : "component.compound.einecs",
-    				},
-    				{ //4
-    					"sClass" : "left",
-    					"sWidth" : "10%",
-    					"mData" : "component.compound.cas",
-    				},
-    				{ //5
-    					"sClass" : "center",
-    					"sWidth" : "15%",
-    					"mData" : "proportion.typical",
-    					"mRender" : function(val, type, full) { return type != 'display' ? '' + val.value : self.formatConcentration(val.precision, val.value, val.unit); }
-    				},
-    				{ //6
-    					"sClass" : "center",
-    					"sWidth" : "15%",
-    					"mData" : "proportion.real",
-    					"mRender" : function(val, type, full) { return type != 'display' ? '' + val.lowerValue : self.formatConcentration(val.lowerPrecision, val.lowerValue, val.unit); }
-    				},
-    				{ //7,8
-    					"sClass" : "center",
-    					"sWidth" : "15%",
-    					"mData" : "proportion.real",
-    					"mRender" : function(val, type, full) { return type != 'display' ? '' + val.upperValue : self.formatConcentration(val.upperPrecision, val.upperValue, val.unit); }
-    				},
-            { //9
-    					"sClass" : "center",
-    					"bSortable": false,
-    					"mData" : "component.compound.URI",
-    					"mRender" : function(val, type, full) {
-    					  return !val ? '' : '<a href="' + (jT.settings.baseUrl || self.baseUrl) + 'substance?type=related&compound_uri=' + encodeURIComponent(val) + '" target="_blank">Also contained in...</span></a>';
-  					}
-	    		}    				
-  		    ]
-  		  });
-
-        // and fill up the table.
-        jT.$(theTable).dataTable().fnAddData(json);
-        return theTable;
-      };
-      
-      var substances = {};
-
-      jToxCompound.processFeatures(json.feature);
-      // proprocess the data...
-      for (var i = 0, cmpl = json.composition.length; i < cmpl; ++i) {
-        var cmp = json.composition[i];
         
-        jToxCompound.processEntry(cmp.component, json.feature, fnDatasetValue);
-
-        // now prepare the subs        
-        var theSubs = substances[cmp.compositionUUID];
-        if (theSubs === undefined)
-          substances[cmp.compositionUUID] = theSubs = { name: "", purity: "", maxvalue: 0, uuid : cmp.compositionUUID, composition : [] };
-        
-        theSubs.composition.push(cmp);
-        var val = cmp.proportion.typical;
-        if (cmp.relation == 'HAS_CONSTITUENT' && (theSubs.maxvalue < val.value || theSubs.name == '')) {
-          theSubs.name = cmp.component.compound['name'] + ' ' + self.formatConcentration(val.precision, val.value, val.unit);
-          theSubs.maxvalue = val.value;
-          val = cmp.proportion.real;
-          theSubs.purity = (val.lowerValue + '-' + val.upperValue + ' ' + (val.unit == null || val.unit == '' ? '<span class="units">% (w/w)</span>' : val.unit)).replace(/ /g, "&nbsp;").replace("span&nbsp;", "span ");
-        }
-      }
-      
-      // now make the actual filling
-      for (var i in substances) {
-        var panel = jT.getTemplate('#jtox-compoblock');
-        tab.appendChild(panel);
-        ccLib.fillTree(jT.$('.composition-info', panel)[0], substances[i]);
-        prepareFillTable(substances[i].composition, panel);
-      }
-    },
-    
     querySummary: function(summaryURI) {
       var self = this;
       
       jT.call(self, summaryURI, function(summary) {
         if (!!summary && !!summary.facet)
           self.processSummary(summary.facet);
+          ccLib.fireCallback(self.settings.onSummary, self, summary.facet);
           // check if there is an initial tab passed so we switch to it
           if (!!self.settings.tab) {
             var div = jT.$('.jtox-study-tab.' + decodeURIComponent(self.settings.tab).replace(/ /g, '_'), self.root)[0];
@@ -2330,13 +2366,12 @@ var jToxStudy = (function () {
       });
     },
     
-    queryComposition: function(compositionURI) {
+    insertComposition: function(compositionURI) {
       var self = this;
       
-      jT.call(self, compositionURI, function(composition) {
-        if (!!composition && !!composition.composition)
-          self.processComposition(composition);
-        });
+      var compoRoot = jT.$('.jtox-compo-tab', self.rootElement)[0];
+      var ds = new jToxComposition(compoRoot);
+      ds.queryComposition(compositionURI);
     },
     
     querySubstance: function(substanceURI) {
@@ -2368,9 +2403,10 @@ var jToxStudy = (function () {
             }
           });
            
+          ccLib.fireCallback(self.settings.onLoaded, self, substance.substance);
           // query for the summary and the composition too.
           self.querySummary(substance.URI + "/studysummary");
-          self.queryComposition(substance.URI + "/composition");
+          self.insertComposition(substance.URI + "/composition");
         }
       });
     }
@@ -2700,6 +2736,9 @@ window.jT.ui = {
   },
   
   modifyColDef: function (kit, col, category, group) {
+    if (col.sTitle === undefined || col.sTitle == null)
+      return null;
+      
 	  var name = col.sTitle.toLowerCase();
 	  
 	  // helper function for retrieving col definition, if exists. Returns empty object, if no.          
@@ -2918,11 +2957,24 @@ jT.templates['all-model']  =
 "	  </div>" +
 ""; // end of #jtox-model 
 
+jT.templates['all-composition']  = 
+"    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\">" +
+"      <table class=\"dataTable composition-info font-small\">" +
+"        <thead>" +
+"          <tr><th>Composition name:</th><td class=\"data-field camelCase\" data-field=\"name\"> ? </td></tr>" +
+"          <tr><th>Composition UUID:</th><td class=\"data-field\" data-field=\"uuid\"> ? </td></tr>" +
+"          <tr><th>Purity of IUC Substance:</th><td class=\"data-field\" data-field=\"purity\"> ? </td></tr>" +
+"        </thead>" +
+"      </table>" +
+"      <table class=\"composition-table\"></table>" +
+"    </div>" +
+""; // end of #jtox-composition 
+
 jT.templates['all-studies']  = 
 "	  <div id=\"jtox-studies\">" +
 "	    <ul>" +
 "	      <li><a href=\"#jtox-substance\">IUC Substance</a></li>" +
-"	      <li><a href=\"#jtox-composition\">Composition</a></li>" +
+"	      <li><a href=\"#jtox-compo-tab\">Composition</a></li>" +
 "	      <li><a href=\"#jtox-pchem\" data-type=\"P-CHEM\">P-Chem (0)</a></li>" +
 "	      <li><a href=\"#jtox-envfate\" data-type=\"ENV_FATE\">Env Fate (0)</a></li>" +
 "	      <li><a href=\"#jtox-ecotox\" data-type=\"ECOTOX\">Eco Tox (0)</a></li>" +
@@ -2986,7 +3038,7 @@ jT.templates['all-studies']  =
 "	        </thead>" +
 "	      </table>" +
 "	    </div>" +
-"	    <div id=\"jtox-composition\" class=\"jtox-composition unloaded\"></div>" +
+"	    <div id=\"jtox-compo-tab\" class=\"jtox-compo-tab unloaded\"></div>" +
 "	    <div id=\"jtox-pchem\" class=\"jtox-study-tab P-CHEM\">" +
 "	    	<div class=\"float-right\">" +
 "	      	<button class=\"expand-all\">Expand all</button><button class=\"collapse-all\">Collapse all</button>" +
@@ -3017,31 +3069,6 @@ jT.templates['all-studies']  =
 "	    </div>" +
 "	  </div>" +
 ""; // end of #jtox-studies 
-
-jT.templates['composition-block']  = 
-"    <div id=\"jtox-compoblock\" class=\"jtox-compoblock\">" +
-"      <table class=\"dataTable composition-info font-small\">" +
-"        <thead>" +
-"          <tr><th>Composition name:</th><td class=\"data-field camelCase\" data-field=\"name\"> ? </td></tr>" +
-"          <tr><th>Composition UUID:</th><td class=\"data-field\" data-field=\"uuid\"> ? </td></tr>" +
-"          <tr><th>Purity of IUC Substance:</th><td class=\"data-field\" data-field=\"purity\"> ? </td></tr>" +
-"        </thead>" +
-"      </table>" +
-"      <table class=\"substances-table\">" +
-"        <thead>" +
-"          <tr>" +
-"            <th>Type</th>" +
-"            <th>Name</th>" +
-"            <th>EC No.</th>" +
-"            <th>CAS No.</th>" +
-"            <th>Typical concentration</th>" +
-"            <th colspan=\"2\">Concentration ranges</th>" +
-"            <th></th>" +
-"          </tr>" +
-"        </thead>" +
-"      </table>" +
-"    </div>" +
-""; // end of #jtox-compoblock 
 
 jT.templates['one-study']  = 
 "    <div id=\"jtox-study\" class=\"jtox-study jtox-foldable folded unloaded\">" +
