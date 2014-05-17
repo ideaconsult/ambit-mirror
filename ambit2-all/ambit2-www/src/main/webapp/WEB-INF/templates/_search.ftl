@@ -22,6 +22,37 @@ $(document)
     					loadHelp("${ambit_root}","search");
 				});
 </script>  
+  <script language="JavaScript">
+    function onSideLoaded(result) {
+    	var tEl = $('.title', $(this.rootElement).parents('.jtox-foldable')[0])[0];
+    	var set = result.dataset || result.model;
+    	tEl.innerHTML = tEl.innerHTML.replace(/(.+)\((\d+)\/(\d+)(.*)?/, '$1($2/' + set.length + '$4');;
+    }
+    
+    function onSelectedUpdate(el) {
+      var par = $(el).parents('.jtox-foldable')[0];
+    	var tEl = $('.title', par)[0];
+    	var v = $('input[type="checkbox"]:checked', par).length;
+    	tEl.innerHTML = tEl.innerHTML.replace(/(.+)\((\d+)\/(\d+)(.*)?/, '$1(' + v + '/$3$4');;
+    }
+    
+    $(document).ready(function(){
+      var toggleBar = function () {
+        $(this).parents('#sidebar').toggleClass('hidden');
+      };
+      $('#sidebar span.ui-icon').on('click', toggleBar);
+      $('#sidebar div.side-title').on('click', toggleBar);
+      
+      $('#sidebar a.select-all').on('click', function () {
+        $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = true;});
+        onSelectedUpdate(this);
+      });
+      $('#sidebar a.unselect-all').on('click', function () {
+        $('input[type="checkbox"]', this.parentNode).each(function () { this.checked = false;});
+        onSelectedUpdate(this);
+      });
+    });
+  </script>
 <style>
 	#sidebar {
 	  position: fixed;
