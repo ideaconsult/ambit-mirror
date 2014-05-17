@@ -33,6 +33,12 @@ public enum STRUCTURE_RELATION {
 			return IMPURITY_OF;
 		}
 	},	
+	HAS_CORE {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return CORE_OF;
+		}
+	},	
 	HAS_COATING {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
@@ -74,7 +80,13 @@ public enum STRUCTURE_RELATION {
 		public STRUCTURE_RELATION inverseOf() {
 			return HAS_COATING;
 		}
-	};			
+	},
+	CORE_OF {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return HAS_CORE;
+		}
+	};		
 	public STRUCTURE_RELATION inverseOf() {
 		return null;
 	}

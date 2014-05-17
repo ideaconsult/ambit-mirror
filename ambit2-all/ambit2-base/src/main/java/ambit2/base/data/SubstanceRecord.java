@@ -49,7 +49,7 @@ public class SubstanceRecord extends StructureRecord {
 	public void setMeasurements(List<ProtocolApplication> measurements) {
 		this.measurements = measurements;
 	}
-	public void addtMeasurement(ProtocolApplication measurement) {
+	public void addMeasurement(ProtocolApplication measurement) {
 		if (this.measurements ==null) this.measurements = new ArrayList<ProtocolApplication>();
 		measurements.add(measurement);
 	}

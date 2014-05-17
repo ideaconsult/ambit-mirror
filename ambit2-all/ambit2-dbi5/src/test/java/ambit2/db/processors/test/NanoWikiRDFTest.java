@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.sql.Connection;
 
 import junit.framework.Assert;
+import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.junit.Test;
@@ -15,14 +16,16 @@ import ambit2.core.io.IRawReader;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.core.processors.structure.key.ReferenceSubstanceUUID;
 import ambit2.db.processors.DBSubstanceWriter;
-import ambit2.db.processors.NanoWikiRDFReader;
 
 public class NanoWikiRDFTest  extends DbUnitTest {
-	
+    @Test
 	public void test() throws Exception {
+	}
+
+	public void testRead() throws Exception {
 		NanoWikiRDFReader reader = null;
 		try {
-			reader = new NanoWikiRDFReader(new FileReader(new File("D:/src-other/nanowiki/backup.rdf")));
+			reader = new NanoWikiRDFReader(new FileReader(new File("D:/src-other/nanowiki/backup_public.rdf")));
 			while (reader.hasNext()) {
 				IStructureRecord record = reader.nextRecord();
 				Assert.assertTrue(record instanceof SubstanceRecord);
@@ -33,13 +36,12 @@ public class NanoWikiRDFTest  extends DbUnitTest {
 		}
 	}
 	
-
 	public void testWriteNanoWikiRDF() throws Exception {
 		setUpDatabase("src/test/resources/ambit2/db/processors/test/empty-datasets.xml");
         IDatabaseConnection c = getConnection();
         IRawReader<IStructureRecord> parser = null;
         try {
-	        parser = new NanoWikiRDFReader(new FileReader(new File("D:/src-other/nanowiki/backup.rdf")));
+	        parser = new NanoWikiRDFReader(new FileReader(new File("D:/src-other/nanowiki/backup_public.rdf")));
 	        write(parser,c.getConnection(),new ReferenceSubstanceUUID(),false);
 	        
         } finally {

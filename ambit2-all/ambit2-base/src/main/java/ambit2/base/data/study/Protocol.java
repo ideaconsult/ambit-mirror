@@ -27,6 +27,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 401;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		PC_MELTING_SECTION {
 			@Override
@@ -40,6 +43,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 402;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},
 		PC_BOILING_SECTION {
@@ -55,6 +61,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 403;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		PC_GRANULOMETRY_SECTION {
 			@Override
@@ -68,6 +77,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 405;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},		
 		PC_VAPOUR_SECTION {
@@ -83,6 +95,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 406;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		PC_PARTITION_SECTION {
 			@Override
@@ -96,6 +111,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 407;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},				
 		PC_WATER_SOL_SECTION {
@@ -111,6 +129,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 408;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},		
 		PC_SOL_ORGANIC_SECTION {
 			@Override
@@ -124,6 +145,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 409;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},
 		PC_NON_SATURATED_PH_SECTION {
@@ -139,6 +163,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 420;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},		
 		PC_DISSOCIATION_SECTION {
 			@Override
@@ -153,7 +180,27 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 421;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
+		PC_UNKNOWN_SECTION {
+			@Override
+			public String toString() {
+				return "Physico chemical properties (other)";
+			}
+			@Override
+			public String getNumber() {
+				return "4.99";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 499;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}			
+		},			
 		/**
 		 * Environmental fate
 		 */
@@ -170,6 +217,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 511;
 			}
+			public String getTopCategory() {
+				return "ENV FATE";
+			}
 		},
 		TO_HYDROLYSIS_SECTION {
 			@Override
@@ -183,6 +233,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 512;
+			}
+			public String getTopCategory() {
+				return "ENV FATE";
 			}
 		},
 		TO_BIODEG_WATER_SCREEN_SECTION {
@@ -212,6 +265,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 522;
 			}
+			public String getTopCategory() {
+				return "ENV FATE";
+			}
 		},
 		EN_STABILITY_IN_SOIL_SECTION {
 			@Override
@@ -225,6 +281,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 523;
+			}
+			public String getTopCategory() {
+				return "ENV FATE";
 			}
 		},
 		EN_BIOACCUMULATION_SECTION {
@@ -240,6 +299,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 531;
 			}
+			public String getTopCategory() {
+				return "ENV FATE";
+			}
 		},
 		EN_BIOACCU_TERR_SECTION {
 			@Override
@@ -253,6 +315,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 532;
+			}
+			public String getTopCategory() {
+				return "ENV FATE";
 			}
 		},		
 		EN_ADSORPTION_SECTION {
@@ -268,6 +333,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 541;
 			}
+			public String getTopCategory() {
+				return "ENV FATE";
+			}
 		},
 		EN_HENRY_LAW_SECTION  {
 			@Override
@@ -281,6 +349,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 542;
+			}
+			public String getTopCategory() {
+				return "ENV FATE";
 			}
 		},
 
@@ -300,6 +371,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 721;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}
 		},
 		TO_ACUTE_INHAL_SECTION {
 			@Override
@@ -313,6 +387,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 722;
+			}
+			public String getTopCategory() {
+				return "TOX";
 			}
 		},
 		TO_ACUTE_DERMAL_SECTION {
@@ -328,6 +405,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 723;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}
 		},
 		TO_SKIN_IRRITATION_SECTION {
 			@Override
@@ -341,6 +421,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 731;
+			}
+			public String getTopCategory() {
+				return "TOX";
 			}
 		},		
 		TO_EYE_IRRITATION_SECTION {
@@ -356,6 +439,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 732;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}
 		},	
 		TO_SENSITIZATION_SECTION {
 			@Override
@@ -369,6 +455,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 741;
+			}
+			public String getTopCategory() {
+				return "TOX";
 			}
 		},			
 		TO_SENSITIZATION_HUMAN_SECTION {
@@ -384,6 +473,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 741;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}
 		},		
 		TO_REPEATED_ORAL_SECTION {
 			@Override
@@ -397,6 +489,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 751;
+			}
+			public String getTopCategory() {
+				return "TOX";
 			}
 		},
 		TO_REPEATED_INHAL_SECTION {
@@ -412,6 +507,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 752;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}
 		},
 		TO_REPEATED_DERMAL_SECTION {
 			@Override
@@ -425,6 +523,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 753;
+			}
+			public String getTopCategory() {
+				return "TOX";
 			}
 		},
 		TO_GENETIC_IN_VITRO_SECTION {
@@ -440,6 +541,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 761;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}
 		},		
 		TO_GENETIC_IN_VIVO_SECTION {
 			@Override
@@ -453,6 +557,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 762;
+			}
+			public String getTopCategory() {
+				return "TOX";
 			}
 		},			
 		TO_CARCINOGENICITY_SECTION {
@@ -468,6 +575,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 770;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}
 		},
 		TO_REPRODUCTION_SECTION {
 			@Override
@@ -482,6 +592,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 781;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}
 		},		
 		TO_DEVELOPMENTAL_SECTION {
 			@Override
@@ -495,6 +608,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 782;
+			}
+			public String getTopCategory() {
+				return "TOX";
 			}
 		},	
 
@@ -514,6 +630,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 611;
 			}
+			public String getTopCategory() {
+				return "ECOTOX";
+			}
 		},
 		EC_CHRONFISHTOX_SECTION {
 			@Override
@@ -527,6 +646,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 612;
+			}
+			public String getTopCategory() {
+				return "ECOTOX";
 			}
 		},
 		EC_DAPHNIATOX_SECTION {
@@ -542,6 +664,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 613;
 			}
+			public String getTopCategory() {
+				return "ECOTOX";
+			}
 		},		
 		EC_CHRONDAPHNIATOX_SECTION {
 			@Override
@@ -555,6 +680,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 614;
+			}
+			public String getTopCategory() {
+				return "ECOTOX";
 			}
 		},
 		EC_ALGAETOX_SECTION {
@@ -570,6 +698,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 615;
 			}
+			public String getTopCategory() {
+				return "ECOTOX";
+			}
 		},
 		EC_BACTOX_SECTION {
 			@Override
@@ -583,6 +714,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 617;
+			}
+			public String getTopCategory() {
+				return "ECOTOX";
 			}
 		},
 		EC_SEDIMENTDWELLINGTOX_SECTION {
@@ -598,6 +732,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 620;
 			}
+			public String getTopCategory() {
+				return "ECOTOX";
+			}
 		},
 		EC_SOILDWELLINGTOX_SECTION {
 			@Override
@@ -611,6 +748,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 631;
+			}
+			public String getTopCategory() {
+				return "ECOTOX";
 			}
 		},		
 		EC_HONEYBEESTOX_SECTION {
@@ -626,6 +766,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 632;
 			}
+			public String getTopCategory() {
+				return "ECOTOX";
+			}
 		},
 		EC_PLANTTOX_SECTION {
 			@Override
@@ -639,6 +782,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 633;
+			}
+			public String getTopCategory() {
+				return "ECOTOX";
 			}
 		},
 		EC_SOIL_MICRO_TOX_SECTION {
@@ -654,6 +800,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 634;
 			}
+			public String getTopCategory() {
+				return "ECOTOX";
+			}
 		},
 		AGGLOMERATION_AGGREGATION_SECTION {
 			@Override
@@ -667,6 +816,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 424;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},
 		CRYSTALLINE_PHASE_SECTION {
@@ -682,6 +834,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 425;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		CRYSTALLITE_AND_GRAIN_SIZE_SECTION {
 			@Override
@@ -695,6 +850,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 426;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},
 		ASPECT_RATIO_SHAPE_SECTION {
@@ -710,6 +868,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 427;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		SPECIFIC_SURFACE_AREA_SECTION {
 			@Override
@@ -723,6 +884,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 428;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},		
 		ZETA_POTENTIAL_SECTION {
@@ -738,6 +902,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 429;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		SURFACE_CHEMISTRY_SECTION {
 			@Override
@@ -751,6 +918,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 430;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},
 		DUSTINESS_SECTION {
@@ -766,6 +936,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 431;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		POROSITY_SECTION {
 			@Override
@@ -779,6 +952,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 432;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},
 		POUR_DENSITY_SECTION {
@@ -794,6 +970,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 433;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		PHOTOCATALYTIC_ACTIVITY_SECTION {
 			@Override
@@ -807,6 +986,9 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 434;
+			}
+			public String getTopCategory() {
+				return "P-CHEM";
 			}
 		},
 		CATALYTIC_ACTIVITY_SECTION {
@@ -822,6 +1004,9 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 436;
 			}
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
 		},
 		UNKNOWN_TOXICITY_SECTION {
 			@Override
@@ -836,17 +1021,28 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 799;
 			}
+			public String getTopCategory() {
+				return "TOX";
+			}			
 		}	
 		
 
 		;
+		public String getTopCategory() {
+			return "P-CHEM";
+		}
 		public String getNumber() {
 			return "";
 		}
 		public int getSortingOrder() {
 			return 10000;
 		}
-
+		public Protocol getProtocol(String guide) {
+			Protocol protocol = new Protocol(guide);
+			protocol.setCategory(name());
+			protocol.setTopCategory(getTopCategory());
+			return protocol;
+		}
 
 	}
 	
