@@ -95,6 +95,9 @@ public abstract class IteratingFilesWithHeaderReader<COLUMN> extends
 	protected COLUMN getHeaderColumn(int index) {
 		return header.get(index);
 	}
+	protected void updateHeaderColumn(int index,COLUMN value) {
+		header.set(index,value);
+	}
 	protected int getNumberOfColumns() {
 		return header.size();
 	}

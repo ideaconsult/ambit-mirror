@@ -24,13 +24,18 @@ public class RawIteratingWrapper<R extends IIteratingChemObjectReader> implement
 	protected R reader;
 	protected MoleculeWriter writer ;
 	protected ILiteratureEntry reference;	
-	protected final IStructureRecord r = new StructureRecord();
+	protected IStructureRecord r;
    // protected IChemObjectReader.Mode mode = IChemObjectReader.Mode.RELAXED;
    // protected IChemObjectReaderErrorHandler errorHandler = null;
 	
 	public RawIteratingWrapper(R reader) {
 		this.reader = reader;
 		writer = new MoleculeWriter();
+		r = createStructureRecord();
+	}
+	
+	protected IStructureRecord createStructureRecord() {
+		return new StructureRecord();
 	}
 	
 
