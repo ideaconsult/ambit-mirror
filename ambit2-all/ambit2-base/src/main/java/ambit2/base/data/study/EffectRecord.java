@@ -17,6 +17,13 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7520767344716433227L;
+	protected String sampleID;
+	public String getSampleID() {
+		return sampleID;
+	}
+	public void setSampleID(String sampleID) {
+		this.sampleID = sampleID;
+	}
 	protected ENDPOINT endpoint;
 	public ENDPOINT getEndpoint() {
 		return endpoint;
