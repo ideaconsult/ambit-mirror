@@ -99,12 +99,12 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	protected String upQualifier;
 	protected Double upValue = null;
 	protected CONDITIONS conditions;
-	protected String textValue;
+	protected Object textValue;
 	
-	public String getTextValue() {
+	public Object getTextValue() {
 		return textValue;
 	}
-	public void setTextValue(String textValue) {
+	public void setTextValue(Object textValue) {
 		this.textValue = textValue;
 	}
 	public void clear() {
@@ -173,7 +173,10 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 			b.append(",\n\t");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.textValue.name())));
 			b.append(":\t");
-			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTextValue())));
+			if (getTextValue() instanceof Params)
+				b.append(getTextValue().toString());
+			else
+				b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTextValue().toString())));
 		}		
 		
 		b.append("\n\t}\n}");
