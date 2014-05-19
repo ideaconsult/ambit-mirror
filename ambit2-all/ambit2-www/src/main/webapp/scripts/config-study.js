@@ -20,6 +20,9 @@ var config_study = {
             "conditions": {
             	"medium": {
                     "sTitle": "Medium"
+                },
+              	"std_dev": {
+                    "sTitle": "Std. Dev."
                 }
             },
             "effects": {
@@ -1769,16 +1772,16 @@ var config_study = {
                     "iOrder": -22
                 },
                 "method details": {
-                    "iOrder": -11,
+                    "iOrder": -10,
                     "bVisible": false
                 },
                 "sampling": {
-                    "iOrder": -9,
+                    "iOrder": -8,
                     "bVisible": false
                 },
                 "data_gathering_instruments": {
                     "sTitle": "Instruments",
-                    "iOrder": -8,
+                    "iOrder": -7,
                     "bVisible": false
                 },
                 "testmat_form": {
@@ -1790,20 +1793,23 @@ var config_study = {
             "conditions": {
                 "remark": {
                     "sTitle": "Remarks",
-                    "iOrder": -15,
+                    "iOrder": -14,
                     "bVisible": false
                 },
                 "medium": {
                     "sTitle": "Medium",
-                    "iOrder": -16,
+                    "iOrder": -15,
                     "bVisible": true
                 },
                 "std_dev": {
                     "sTitle": "Std. dev.",
                     "iOrder": -18
                 },
-                "ph": {
+                "n": {
                     "iOrder": -17
+                },                
+                "ph": {
+                    "iOrder": -16
                 },
                 "remark": {
                     "sTitle": "Remarks",
@@ -1820,8 +1826,8 @@ var config_study = {
             },
             "protocol": {
                 "guideline": {
-                    "iOrder": -10
-                },
+                    "iOrder": -9
+                 },
                 "citation": {
                     "bVisible": true
                 }
@@ -1829,7 +1835,7 @@ var config_study = {
             "interpretation": {
                 "result": {
                     "sTitle": "Conclusions",
-                    "iOrder": -11,
+                    "iOrder": -10,
                     "bVisible": false
                 }
             }
@@ -1947,18 +1953,21 @@ var config_study = {
                 },
                 "medium": {
                     "sTitle": "Medium",
-                    "iOrder": -15,
+                    "iOrder": -14,
                     "bVisible": true
                 },                
                 "remark": {
                     "sTitle": "Remark",
-                    "iOrder": -16,
+                    "iOrder": -15,
                     "bVisible": false
                 },
                 "std_dev": {
                     "sTitle": "Std. dev.",
                     "iOrder": -17
                 },
+                "n": {
+                    "iOrder": -16
+                },                
                 "phraseother_percentile" : {
                 	"bVisible": false
                 }
@@ -1975,7 +1984,7 @@ var config_study = {
             },
             "protocol": {
                 "guideline": {
-                    "iOrder": -10
+                    "iOrder": -9
                 },
                 "citation": {
                     "bVisible": true
@@ -2034,10 +2043,10 @@ var config_study = {
             "effects": {
                 "endpoint": {
                     "iOrder": -17,
-                    "bVisible": false
+                    "bVisible": true
                 },
                 "result": {
-                    "sTitle": "Mean diameter",
+                    "sTitle": "Result",
                     "iOrder": -16
                 }
             },
@@ -2489,6 +2498,68 @@ var config_study = {
                 },
                 "citation": {
                     "bVisible": true
+                }
+            },
+            "interpretation": {
+                "result": {
+                    "sTitle": "Conclusions",
+                    "iOrder": -10,
+                    "bVisible": false
+                },
+                "criteria": {
+                    "bVisible": false
+                }
+            }
+        },
+        "PROTEOMICS_SECTION": {
+            "parameters": {
+                "type of method": {
+                    "iOrder": -23,
+                    "sTitle": "Method type"
+                },
+                "method details": {
+                    "iOrder": -22,
+                    "bVisible": false
+                },
+                "sampling": {
+                    "sTitle": "Sampling",
+                    "iOrder": -21,
+                    "bVisible": false
+                },
+                "data_gathering_instruments": {
+                    "sTitle": "Instruments",
+                    "iOrder": -20,
+                    "bVisible": true
+                },
+                "testmat_form": {
+                    "sTitle": "Test Material Form",
+                    "bVisible": false,
+                    "iOrder": -19
+                }
+            },
+            "conditions": {
+             
+            },
+            "effects": {
+                "endpoint": {
+                    "iOrder": -13,
+                    "bVisible": true
+                },
+                "text": {
+                    "bVisible": true,
+                    "iOrder": -12
+                },                
+                "result": {
+                    "bVisible": false,
+                    "iOrder": -11
+                }
+            },
+            "protocol": {
+                "guideline": {
+                    "iOrder": -5
+                },
+                "citation": {
+                    "bVisible": false
                 }
             },
             "interpretation": {
