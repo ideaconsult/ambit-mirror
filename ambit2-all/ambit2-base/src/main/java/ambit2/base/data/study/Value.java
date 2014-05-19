@@ -13,8 +13,11 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 	public Value() {
 	}
 	public Value(VALUE value) {
+		this(value,"  ");
+	}
+	public Value(VALUE value,String qualifier) {
 		setLoValue(value);
-		setLoQualifier("  ");
+		setLoQualifier(qualifier);
 	}
 	@Override
 	public String getAnnotation() {
