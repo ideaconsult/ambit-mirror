@@ -191,6 +191,7 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `category` (`endpointcategory`),
   KEY `topcategory` (`topcategory`,`endpointcategory`),
   KEY `reference_owner` (`reference_owner`),
+  KEY `reference-x` (`reference`(255)),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -209,7 +210,7 @@ CREATE TABLE `substance_experiment` (
   `loValue` double DEFAULT NULL,
   `upQualifier` varchar(6) DEFAULT NULL,
   `upValue` double DEFAULT NULL,
-  `textValue` varchar(255) DEFAULT NULL,
+  `textValue` text,
   PRIMARY KEY (`idresult`),
   KEY `document_id` (`document_uuid`,`document_prefix`),
   KEY `endpoint` (`endpoint`),

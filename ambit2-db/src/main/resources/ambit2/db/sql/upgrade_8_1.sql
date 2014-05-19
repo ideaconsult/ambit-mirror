@@ -3,6 +3,9 @@ ALTER TABLE `substance_protocolapplication` CHANGE COLUMN `endpointcategory` `en
 
 -- and some results are really just strings
 ALTER TABLE `substance_experiment` CHANGE COLUMN `upvalue` `upValue` DOUBLE NULL DEFAULT NULL  , ADD COLUMN `textValue` VARCHAR(255) NULL DEFAULT NULL  AFTER `upValue` ;
+ALTER TABLE `substance_experiment` CHANGE COLUMN `textValue` `textValue` TEXT NULL DEFAULT NULL  ;
+-- enable search by reference
+ALTER TABLE `substance_protocolapplication` ADD INDEX `reference-x` (`reference`(255) ASC) ;
 
 insert into version (idmajor,idminor,comment) values (8,1,"AMBIT2 schema");
 
