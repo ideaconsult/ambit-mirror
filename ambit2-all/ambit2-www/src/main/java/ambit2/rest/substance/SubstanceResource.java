@@ -212,7 +212,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 								getContext(),
 								new SubstanceURIReporter(getRequest().getRootRef(), null),
 								new DatasetURIReporter(getRequest().getRootRef(), null),
-								token);
+								token,true); //assumes i5z split record!
 					ITask<Reference,Object> task =  ((ITaskApplication)getApplication()).addTask(
 								"Substance import",
 								callable,

@@ -1,6 +1,8 @@
 package ambit2.rest.substance;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.Hashtable;
@@ -10,6 +12,9 @@ import java.util.List;
 import net.idea.i5.io.I5ZReader;
 import net.idea.i5.io.IQASettings;
 import net.idea.i5.io.QASettings;
+import net.idea.loom.nm.csv.ProteinCoronaPaperReader;
+import net.idea.loom.nm.csv.ProteinCoronaSubstanceReader;
+import net.idea.loom.nm.nanowiki.NanoWikiRDFReader;
 
 import org.apache.commons.fileupload.FileItem;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
@@ -28,6 +33,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorsChain;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.IInputState;
+import ambit2.core.io.IRawReader;
 import ambit2.db.processors.AbstractBatchProcessor;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.DBProcessorsChain;
@@ -53,6 +59,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 	private File file;
 	protected String fileDescription;
 	protected boolean clearMeasurements=true;
+	protected boolean splitRecord = true;
 	
 	public boolean isClearMeasurements() {
 		return clearMeasurements;
@@ -88,11 +95,13 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 				Context context,
 				SubstanceURIReporter substanceReporter,
 				DatasetURIReporter datasetURIReporter,
-				USERID token) throws Exception {
+				USERID token,
+				boolean splitRecord) throws Exception {
 		super(applicationRootReference,null,  context,  token);
 		try { processForm(items, fileUploadField); } catch (Exception x) {}
 		this.substanceReporter = substanceReporter;
 		this.datasetURIReporter = datasetURIReporter;
+		this.splitRecord = splitRecord;
 	}
 	@Override
 	protected void processForm(Reference applicationRootReference, Form form) {
@@ -134,9 +143,20 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 			public Iterator<String> getIterator(IInputState target)
 					throws AmbitException {
 				try {
+					IRawReader<IStructureRecord> reader = null;
 					File file = ((FileInputState) target).getFile();
-					I5ZReader reader = new I5ZReader(file);
-					reader.setQASettings(getQASettings());
+					String ext = file.getName().toLowerCase();
+					if (ext.endsWith(FileInputState.extensions[FileInputState.I5Z_INDEX])) {
+						reader = new I5ZReader(file);
+						((I5ZReader)reader).setQASettings(getQASettings());
+					} else if (ext.endsWith(FileInputState.extensions[FileInputState.CSV_INDEX])) { 
+						reader = new ProteinCoronaSubstanceReader(new ProteinCoronaPaperReader(new FileReader(file)));
+					} else if (ext.endsWith(".rdf")) {
+						reader = new NanoWikiRDFReader(new FileReader(file));
+					} else {
+						throw new AmbitException("Unsupported format "+file);
+					}
+					
 					reader.setErrorHandler(new IChemObjectReaderErrorHandler() {
 							@Override
 							public void handleError(String message, int row, int colStart, int colEnd,
@@ -171,6 +191,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 		dataset = DBSubstanceWriter.datasetMeta();
 		importedRecord = new SubstanceRecord();
 		DBSubstanceWriter writer = new DBSubstanceWriter(dataset,importedRecord,clearMeasurements);
+		writer.setSplitRecord(splitRecord);
 		chain.add(writer);
 		return chain;
 	}
