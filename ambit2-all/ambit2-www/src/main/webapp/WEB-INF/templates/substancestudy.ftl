@@ -63,10 +63,15 @@
 				  <option value="uuid">UUID</option>
 				  <option value="">External identifier</option>
 				  <option value="CompTox">CompTox</option>
+				  <option value="DOI">DOI</option>
 				  <option value="reliability" title='1 (reliable without restriction)|2 (reliable with restrictions)|3 (not reliable)|4 (not assignable)|other:empty (not specified)'>Reliability</option>
 				  <option value="purposeFlag" title='key study|supporting study'>Study purpose</option>
 				  <option value="studyResultType" title='experimental result|estimated by calculation|read-across|(Q)SAR'>Study result type</option>
 				  <option value="isRobustStudy" title='true|false'>Robust study</option>
+				  <option value="citation" title='Experiment reference'>Publication/report describing the experiment</option>
+				  <option value="topcategory" title='One of P-CHEM, ENV FATE, ECOTOX, TOX'>One of P-CHEM, ENV FATE, ECOTOX, TOX</option>
+				  <option value="endpointcategory" title='Endpoint category (e.g. EC_FISHTOX_SECTION)'>Endpoint category (e.g. EC_FISHTOX_SECTION)</option>
+				  <option value="params" title='Protocol parameter'>Protocol parameter</option>
 				</select>
 		    </div>			
 		</div>			

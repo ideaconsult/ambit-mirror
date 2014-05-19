@@ -50,6 +50,14 @@
 </ul>
 
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+<span title='Filter substances by category'>Study: </span> 
+<a href='${ambit_root}/substance?type=topcategory&search=P-CHEM' title='Physicochemical'>P-Chem</a>
+<a href='${ambit_root}/substance?type=topcategory&search=ENV+FATE' title='Environmental fate'>ENV</a>
+<a href='${ambit_root}/substance?type=topcategory&search=ECOTOX' title='Ecotoxicity'>ECO</a>
+<a href='${ambit_root}/substance?type=topcategory&search=TOX' title='Toxicity'>TOX</a> 
+</div>
+
+<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
 <span title='Filter substances by Klimisch code'>Reliability: </span> 
 <a href='${ambit_root}/substance?type=reliability&search=1+%28reliable+without+restriction%29' title='1 (reliable without restriction)'>1</a> 
 <a href='${ambit_root}/substance?type=reliability&search=2+%28reliable+with+restrictions%29' title='2 (reliable with restrictions)'>2</a>

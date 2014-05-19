@@ -33,6 +33,7 @@ import ambit2.db.substance.ReadByReliabilityFlags;
 import ambit2.db.substance.ReadSubstance;
 import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
 import ambit2.db.substance.ReadSubstanceByName;
+import ambit2.db.substance.ReadSubstanceByStudy;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
@@ -140,8 +141,14 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 		
 			String search = form.getFirstValue(QueryResource.search_param);
 			if (search!=null) {
-				String type = form.getFirstValue("type"); 
-				if ("uuid".equals(type)) {
+				String type = form.getFirstValue("type");
+				ReadSubstanceByStudy._studysearchmode byStudy = null;
+				try {
+					byStudy = ReadSubstanceByStudy._studysearchmode.valueOf(type);
+				} catch (Exception x) {}
+				if (byStudy!=null) {
+					return (Q) new ReadSubstanceByStudy(byStudy,search);
+				} else if ("uuid".equals(type)) {
 					SubstanceRecord record = new SubstanceRecord();
 					record.setCompanyUUID(search.trim());
 					return (Q)new ReadSubstance(record);
@@ -154,7 +161,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 				} else if ("studyResultType".equals(type)) {
 					return (Q)new ReadByReliabilityFlags(type,search);
 				} else if ("isRobustStudy".equals(type)) {
-					return (Q)new ReadByReliabilityFlags(type,search);					
+					return (Q)new ReadByReliabilityFlags(type,search);							
 				} else {
 					return (Q)new ReadSubstanceByExternalIDentifier(type,search);
 				}
