@@ -73,11 +73,8 @@ public abstract class StringArrayHeader<CATEGORIES> {
 		experiment.setReferenceYear("-");
 		experiment.setReference("Unknown");
 	}
-	protected Value getMedium(String cell) {
-		Value medium = null;
-		if ((cell!=null) && cell.indexOf("serum")>0) {
-			medium = new Value(cell.trim());
-		} return medium;
+	protected String getMedium(String cell) {
+		return cell;
 	}
 	
 }
