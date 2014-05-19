@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import ambit2.base.json.JSONUtils;
 
 public class Params<VALUE> implements IParams<VALUE> {
-	protected HashMap<String, VALUE> storage;
+	protected Map<String, VALUE> storage;
 	/**
 	 * 
 	 */
@@ -18,7 +19,7 @@ public class Params<VALUE> implements IParams<VALUE> {
 	
 	public Params() {
 		super();
-		storage = new HashMap<String, VALUE>();
+		storage = new TreeMap<String, VALUE>();
 	}
 	public Params(VALUE value) {
 		this();
