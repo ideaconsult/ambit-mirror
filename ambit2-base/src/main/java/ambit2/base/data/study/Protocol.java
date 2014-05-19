@@ -1024,7 +1024,25 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}			
-		}	
+		},
+		PROTEOMICS_SECTION {
+			@Override
+			public String toString() {
+				return "Proteomics";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 700;
+			}
+			@Override
+			public String getNumber() {
+				return "7.100";
+			}	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}				
+		}
 		
 
 		;
