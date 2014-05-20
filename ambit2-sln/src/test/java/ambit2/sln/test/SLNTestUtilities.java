@@ -14,7 +14,7 @@ public class SLNTestUtilities
 	{
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
-		tu.testSLN("CH3CH[5:S=R;fcharge=-5.3](OCH(CH3)CH3)CH3");
+		tu.testSLN("C=H2CH[5:S=R;fcharge=-5.3](OCH(CH3)CH3)CH3");
 	}
 	
 	public void testSLN(String sln)

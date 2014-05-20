@@ -32,6 +32,7 @@ public class SLNParser
 	int nChars;
 	SLNBond curBond;
 	SLNAtomExpression curAtExp;
+	SLNBondExpression curBondExp;
 	String extractError ="";
 
 
@@ -726,7 +727,11 @@ public class SLNParser
 		if (curBond == null)
 		{	
 			newBond = new SLNBond();
+			newBond.bondType = SLNConst.B_TYPE_ANY;
 			newBond.bondType = SLNConst.B_TYPE_1;
+			newBond.bondType = SLNConst.B_TYPE_2;
+			newBond.bondType = SLNConst.B_TYPE_3;
+			newBond.bondType = SLNConst.B_TYPE_aromatic;
 		}
 		else
 			newBond = curBond;
@@ -743,19 +748,201 @@ public class SLNParser
 
 	void parseBond()
 	{	
-		int lo = -1;
-		int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));		
-		if (bo != -1)
-		{
-			curChar++;
-			if (curChar == nChars)
+//		int lo = -1;
+			int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));		
+			if (bo != -1)
 			{
-				newError("Smarts string ends incorrectly with a bond expression", curChar,"");				
-				return;
+				curChar++;
+				if (curChar == nChars)
+				{
+					newError("SLN string ends incorrectly with a bond expression", curChar,"");				
+					return;
+				}
+				SLNBond  newBond = new SLNBond();
+				newBond.bondType = bo;
+
+				//Read bond symbols
+				if (curChar < nChars)
+				//TODO
+					switch (sln.charAt(curChar))
+					{
+					//Bond symbols - bond types 
+					case '~':	//any bond
+						bo = SLNConst.B_TYPE_ANY;
+						break;
+					case '-':	//single bond
+						bo = SLNConst.B_TYPE_1;
+						break;
+					case '=':	//double bond
+						bo = SLNConst.B_TYPE_2;
+						break;
+					case '#':	//triple bond
+						bo = SLNConst.B_TYPE_3;
+						break;
+					case ':':	//aromatic bond
+						bo = SLNConst.B_TYPE_aromatic;
+						break;
+						
+					default:
+					{
+						newError("Incorrect bond symbol  '"+ bo +"' ",curChar,"");
+						return;
+					}	
+					}
+				
+				
+					
+				if (curChar < nChars)
+					if (sln.charAt(curChar) == '[')
+					{	
+						String bondExpression = extractBondExpression();				
+						analyzeBondExpression(bondExpression);				
+					}
 			}
-			//TODO
+
+	}
+	
+	String extractBondExpression()
+	{
+		curChar++;
+		int startPos = curChar;
+		int openBrackets = 1;
+		while ((curChar < nChars) && (openBrackets > 0) && (errors.size() == 0))
+		{
+			if (sln.charAt(curChar)=='[')			
+				openBrackets++;
+			else
+				if (sln.charAt(curChar)==']')				
+					openBrackets--;
+
+			curChar++;
 		}
 
+		return sln.substring(startPos,curChar-1);
+	}
+
+	public void analyzeBondExpression(String bondExpr)
+	{
+		if (bondExpr.trim().equals(""))
+		{
+			newError("Empty atom expression", curChar+1,"");
+			return;
+		}
+		curBondExp = new SLNBondExpression();
+		int pos = 0;
+
+
+
+		//Handle all attributes and logical operations
+		while (pos < bondExpr.length())
+		{
+			if(bondExpr.charAt(pos) == ' ')
+			{	
+				pos++;
+				if (FlagTolerateSpaces)
+					continue;
+				else
+				{
+					newError("Space symbol found: ", curChar, "");
+					break;
+				}	
+			}
+
+			if (Character.isLetter(bondExpr.charAt(pos)))
+			{
+				//Read attribute name
+				int startPos = pos;
+				while (pos < bondExpr.length())
+				{
+					if (Character.isLetter(bondExpr.charAt(pos)))
+						pos++;
+					else 
+						break;		
+				}
+
+				String attrName = bondExpr.substring(startPos, pos);
+				if(pos < bondExpr.length())
+				{
+					if(bondExpr.charAt(pos) == '=')
+						pos++;
+					else
+					{	
+						//Register attribute without value (it is allowed by the SLN syntax 
+						SLNExpressionToken newToken =  analyzeBondAttribute(attrName, null);
+						curBondExp.tokens.add(newToken);
+						continue;
+					}
+				}
+				if(pos >= bondExpr.length())				
+				{
+					//'=' is found but the end of atom expression is reached.
+					newError("Missing value for attribute " + attrName + " ",curChar,"");
+					return;
+				}
+
+				//Read attribute value (after '=')
+				startPos = pos;
+				while (pos < bondExpr.length())
+				{
+					if (Character.isLetter(bondExpr.charAt(pos)) ||
+							Character.isDigit(bondExpr.charAt(pos)))
+						pos++;
+					else
+						break;
+				}
+
+				String attrValue = bondExpr.substring(startPos, pos);
+
+				//Register attribute with a value 
+				SLNExpressionToken newToken =  analyzeBondAttribute(attrName, attrValue);
+				curBondExp.tokens.add(newToken);
+
+				continue;
+			}
+			
+			//Read special symbol
+			switch  (bondExpr.charAt(pos))
+			{
+			case '!':
+				SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT,0,null,null);  
+				curBondExp.tokens.add(newToken0);
+				break;
+			case '&':
+				SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND,0,null,null);  
+				curBondExp.tokens.add(newToken1);
+				break;
+			case '|':
+				SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR,0,null,null);  
+				curBondExp.tokens.add(newToken2);				
+				break;
+			case ';':
+				SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO,0,null,null);  
+				curBondExp.tokens.add(newToken3);				
+				break;	
+
+			default:
+			{
+				newError("Incorrect symbol in atom expression '"+bondExpr.charAt(pos)+"' ",curChar,"");
+				return;
+			}
+			}
+
+			pos++;
+		}
+	}
+
+	SLNExpressionToken analyzeBondAttribute (String name, String value)
+	{
+		if (value == null)
+			System.out.println("Attribute " + name);
+		else
+			System.out.println("Attribute " + name + " = " + value);
+		//TODO
+		
+		
+		//By default it is an user defined attribute
+		SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_USER_DEFINED,0,name,value);
+		return token;
 	}
 	
 	int extractInteger(String valueString)

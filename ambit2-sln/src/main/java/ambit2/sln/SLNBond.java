@@ -2,7 +2,6 @@ package ambit2.sln;
 
 
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 
 public class SLNBond extends SMARTSBond
