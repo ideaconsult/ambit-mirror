@@ -58,7 +58,7 @@ public class SLNConst
 	public static final int A_STEREO_M = 9; // mixture
 	//TODO  Specifying Stereo-chemistry
 	
-	public static String atomStereoChemistryAttributeToSLNString(int attr)
+	public static String atomStereoChemAttrToSLNString(int attr)
 	{
 		switch (attr)
 		{
@@ -86,6 +86,17 @@ public class SLNConst
 		default:
 			return "";
 		}
+	}
+	
+	public static int SLNStringToAtomStereoChemAttr(String stereo)
+	{
+		if (stereo.equals("R"))
+			return A_STEREO_R;		
+		if (stereo.equals("S"))
+			return A_STEREO_S;
+		//TODO
+		
+		return -1;
 	}
 	
 	//Atom radical values (for attribute spin)

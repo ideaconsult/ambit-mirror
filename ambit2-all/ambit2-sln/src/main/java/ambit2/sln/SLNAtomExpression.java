@@ -18,18 +18,18 @@ public class SLNAtomExpression
 	}
 	
 	
-	String tokenToString(SLNExpressionToken tok)
-    {
-		//TODO
-		return "";
-    }
-	
 	public String toString() 
     {
     	StringBuffer sb = new StringBuffer();
     	sb.append("[");
+    	if (atomID >= 0)
+    	{	
+    		sb.append(atomID);
+    		if (!tokens.isEmpty())
+    			sb.append(":");
+    	}
     	for (int i=0; i < tokens.size(); i++)
-    		sb.append(tokenToString(tokens.get(i)));
+    		sb.append(tokens.get(i).toString());
     	sb.append("]");
     	return sb.toString();
     }
