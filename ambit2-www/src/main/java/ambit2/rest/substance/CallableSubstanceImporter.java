@@ -3,6 +3,7 @@ package ambit2.rest.substance;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.Hashtable;
@@ -152,7 +153,7 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 					} else if (ext.endsWith(FileInputState.extensions[FileInputState.CSV_INDEX])) { 
 						reader = new ProteinCoronaSubstanceReader(new ProteinCoronaPaperReader(new FileReader(file)));
 					} else if (ext.endsWith(".rdf")) {
-						reader = new NanoWikiRDFReader(new FileReader(file));
+						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
 					} else {
 						throw new AmbitException("Unsupported format "+file);
 					}
