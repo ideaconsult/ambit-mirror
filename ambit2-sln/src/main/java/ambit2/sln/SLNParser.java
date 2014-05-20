@@ -171,7 +171,8 @@ public class SLNParser
 			if (sln.charAt(curChar) == '[')
 			{	
 				String atomExpression = extractAtomExpression();				
-				analyzeAtomExpression(atomExpression);				
+				analyzeAtomExpression(atomExpression);
+				newAtom.atomExpression = curAtExp;
 			}
 		
 		if (curChar < nChars)
@@ -355,19 +356,19 @@ public class SLNParser
 			switch  (atomExpr.charAt(pos))
 			{
 			case '!':
-				SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT,0,null,null);  
+				SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT);  
 				curAtExp.tokens.add(newToken0);
 				break;
 			case '&':
-				SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND,0,null,null);  
+				SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND);  
 				curAtExp.tokens.add(newToken1);
 				break;
 			case '|':
-				SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR,0,null,null);  
+				SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR);  
 				curAtExp.tokens.add(newToken2);				
 				break;
 			case ';':
-				SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO,0,null,null);  
+				SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO);  
 				curAtExp.tokens.add(newToken3);				
 				break;	
 				
@@ -395,7 +396,7 @@ public class SLNParser
 			int charge = extractInteger(value);
 			if (extractError.equals(""))
 			{
-				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_charge,charge,null,null);
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_charge,charge);
 				return token;
 			}
 			else
@@ -415,7 +416,7 @@ public class SLNParser
 				{
 					newError("Isotope could not be negative" +value, curChar,"");
 				}
-				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_I,isotope,null,null);
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_I,isotope);
 				return token;
 			}
 			else
@@ -431,7 +432,7 @@ public class SLNParser
 			double fcharge = extractDouble(value);
 			if (extractError.equals(""))
 			{
-				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_fcharge,fcharge,null,null);
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_fcharge,fcharge);
 				return token;
 			}
 			else
@@ -442,148 +443,47 @@ public class SLNParser
 		}
 		
 		//Handle stereo-chemistry atom attribute s
-				if (name.equals("s"))
+		if (name.equals("s"))
+		{	
+			if (extractError.equals(""))
+			{
+				int param = SLNConst.SLNStringToAtomStereoChemAttr(value);
+				if (param == -1)
 				{
-					int s = SLNConst.A_ATTR_s;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_s,s,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect stereo-chemistry value " + value, curChar,"");
-						return null;
-					}
+					newError("Incorrect stereo-chemistry value " + value, curChar,"");
+					return null;
 				}
-				
-				if (name.equals("R"))
-				{
-					int r = SLNConst.A_STEREO_R;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_STEREO_R,r,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect stereo (R) value " + value, curChar,"");
-						return null;
-					}
-				}
-				
-				if (name.equals("S"))
-				{
-					int s = SLNConst.A_STEREO_S;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_STEREO_S,s,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect stereo (S) value " + value, curChar,"");
-						return null;
-					}
-				}
-				
-				if (name.equals("N"))
-				{
-					int n = SLNConst.A_STEREO_N;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_STEREO_N,n,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect stereo (N) value " + value, curChar,"");
-						return null;
-					}
-				}
-				
-				if (name.equals("I"))
-				{
-					int i = SLNConst.A_STEREO_I;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_STEREO_I,i,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect stereo (I) value " + value, curChar,"");
-						return null;
-					}
-				}
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_s,param);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect stereo-chemistry value " + value, curChar,"");
+				return null;
+			}
+		}
 
-				//Handle atom attribute spin
-				if (name.equals("spin"))
-				{
-					int spin = SLNConst.A_ATTR_spin;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_spin,spin,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect spin value " + value, curChar,"");
-						return null;
-					}
-				}
-				
-				//Handle attribute spin
-				if (name.equals("s"))
-				{
-					int singlet = SLNConst.A_spin_s;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_spin_s,singlet,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect spin value " + value, curChar,"");
-						return null;
-					}
-				}
-
-				//Handle attribute spin
-				if (name.equals("d") || name.equals("*"))
-				{
-					int doublet = SLNConst.A_spin_d;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_spin_d,doublet,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect spin value " + value, curChar,"");
-						return null;
-					}
-				}
-				
-
-				//Handle atom attribute spin
-				if (name.equals("t"))
-				{
-					int triplet = SLNConst.A_spin_t;
-					if (extractError.equals(""))
-					{
-						SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_spin_t,triplet,null,null);
-						return token;
-					}
-					else
-					{
-						newError("Incorrect spin value " + value, curChar,"");
-						return null;
-					}
-				}
+		//Handle atom attribute spin
+		if (name.equals("spin"))
+		{
+			
+			if (extractError.equals(""))
+			{
+				int param = 0; 
+				//TODO  - function from SLNConst
+				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_spin,param);
+				return token;
+			}
+			else
+			{
+				newError("Incorrect spin value " + value, curChar,"");
+				return null;
+			}
+		}
 		
+
 		//By default it is an user defined attribute
-		SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_USER_DEFINED,0,name,value);
+		SLNExpressionToken token = new SLNExpressionToken(name,value);
 		return token;
 	}
 	
@@ -904,19 +804,19 @@ public class SLNParser
 			switch  (bondExpr.charAt(pos))
 			{
 			case '!':
-				SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT,0,null,null);  
+				SLNExpressionToken newToken0 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_NOT);  
 				curBondExp.tokens.add(newToken0);
 				break;
 			case '&':
-				SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND,0,null,null);  
+				SLNExpressionToken newToken1 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_AND);  
 				curBondExp.tokens.add(newToken1);
 				break;
 			case '|':
-				SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR,0,null,null);  
+				SLNExpressionToken newToken2 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_OR);  
 				curBondExp.tokens.add(newToken2);				
 				break;
 			case ';':
-				SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO,0,null,null);  
+				SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO);  
 				curBondExp.tokens.add(newToken3);				
 				break;	
 
@@ -941,7 +841,7 @@ public class SLNParser
 		
 		
 		//By default it is an user defined attribute
-		SLNExpressionToken token = new SLNExpressionToken(SLNConst.B_ATTR_USER_DEFINED,0,name,value);
+		SLNExpressionToken token = new SLNExpressionToken(name,value);
 		return token;
 	}
 	
