@@ -14,7 +14,7 @@ public class SLNTestUtilities
 	{
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
-		tu.testSLN("CH2CH[5:s=R;fcharge=-5.3](OCH(CH3)CH3)CH3[7]");
+		tu.testSLN("CH2CH[5:ccor=z;!fcharge=-5.3](OCH(CH3)CH3)CH3[7]");
 		
 	}
 	
