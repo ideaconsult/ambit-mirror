@@ -90,7 +90,8 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));		
 		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getTopCategory()));
 		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getCategory()));
-		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getEndpoint()==null?"":getObject().getProtocol().getEndpoint()));
+		
+		params1.add(new QueryParam<String>(String.class, getObject().getProtocol().getEndpoint()==null?"":truncate(getObject().getProtocol().getEndpoint(),255)));
 		if ((getObject().getProtocol().getGuideline() == null) || (getObject().getProtocol().getGuideline().size()==0))
 			params1.add(new QueryParam<String>(String.class, ""));
 		else {
@@ -119,12 +120,12 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 			params1.add(new QueryParam<Integer>(Integer.class, null));
 		}
 		try {
-			params1.add(new QueryParam<String>(String.class, getObject().getReferenceOwner()));
+			params1.add(new QueryParam<String>(String.class, truncate(getObject().getReferenceOwner(),128)));
 		} catch (Exception x) {
 			params1.add(new QueryParam<String>(String.class, null));
 		}
 		//reliability
-		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().getValue().toString()));
+		try { params1.add(new QueryParam<String>(String.class, truncate(getObject().getReliability().getValue().toString(),45)));
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}		
 		
 		try { params1.add(new QueryParam<Boolean>(Boolean.class, Boolean.parseBoolean(getObject().getReliability().getIsRobustStudy().toString())));
@@ -133,10 +134,11 @@ public class UpdateSubstanceStudy extends AbstractUpdate<String,ProtocolApplicat
 		} catch (Exception x) {	params1.add(new QueryParam<Boolean>(Boolean.class, null));}
 		try { params1.add(new QueryParam<Boolean>(Boolean.class, Boolean.parseBoolean(getObject().getReliability().getIsUsedforMSDS().toString())));
 		} catch (Exception x) {	params1.add(new QueryParam<Boolean>(Boolean.class, null));}
-		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().getPurposeFlag().toString()));
+		try { params1.add(new QueryParam<String>(String.class, truncate(getObject().getReliability().getPurposeFlag().toString(),32)));
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}
-		try { params1.add(new QueryParam<String>(String.class, getObject().getReliability().getStudyResultType().toString()));
+		try { params1.add(new QueryParam<String>(String.class, truncate(getObject().getReliability().getStudyResultType().toString(),128)));
 		} catch (Exception x) {	params1.add(new QueryParam<String>(String.class, null));}
 		return params1;
 	}
+
 }
