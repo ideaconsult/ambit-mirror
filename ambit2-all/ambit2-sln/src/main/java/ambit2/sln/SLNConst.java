@@ -4,14 +4,14 @@ public class SLNConst
 {	
 
 	//Logical operations
-	public static char LogOperationChars[] = {'!', '&', '|', ';'};
+//	public static char LogOperationChars[] = {'!', '&', '|', ';'};
 	public static final int LO_NOT = 0;
 	public static final int LO_AND = 1;
 	public static final int LO_OR = 2;
 	public static final int LO_ANDLO = 3;
 	public static final int LO = 1000;
-	
-	
+
+
 	//Atom Attributes (predefined)   A_ATTR_*	
 	public static final int A_ATTR_charge = 1;	 // specifies formal charge -/+n
 	public static final int A_ATTR_I = 2;		 // specifies atom isotope
@@ -21,8 +21,8 @@ public class SLNConst
 	public static final int A_ATTR_USER_DEFINED = 500; //  == other= !!!
 	//boolean  - the attribute's name is specified, as in C[backbone]
 	//valued - the name is specified, followed by an equal sign and the value, as in C-[chemshift=7.2]
-	
-	
+
+
 	public static String atomAttributeToSLNString(int attr)
 	{
 		switch (attr)
@@ -44,7 +44,7 @@ public class SLNConst
 			return "";
 		}
 	}
-	
+
 	//Atom stereo-chemistry values (for attribute s)
 	public static final int A_STEREO_R = 0; // CIP configurations
 	public static final int A_STEREO_S = 1; // CIP configurations
@@ -57,7 +57,7 @@ public class SLNConst
 	public static final int A_STEREO_Rel = 8; // relative == * !!!
 	public static final int A_STEREO_M = 9; // mixture
 	//TODO  Specifying Stereo-chemistry
-	
+
 	public static String atomStereoChemAttrToSLNString(int attr)
 	{
 		switch (attr)
@@ -79,32 +79,47 @@ public class SLNConst
 		case A_STEREO_E:
 			return "E";
 		case A_STEREO_Rel:
-			return "R";  // or *
+			return "R*";  // or *
 		case A_STEREO_M:
 			return "M";
-			
+
 		default:
 			return "";
 		}
 	}
-	
+
 	public static int SLNStringToAtomStereoChemAttr(String stereo)
 	{
 		if (stereo.equals("R"))
 			return A_STEREO_R;		
 		if (stereo.equals("S"))
 			return A_STEREO_S;
-		//TODO
-		
+		if (stereo.equals("N"))
+			return A_STEREO_N;
+		if (stereo.equals("I"))
+			return A_STEREO_I;
+		if (stereo.equals("D"))
+			return A_STEREO_D;
+		if (stereo.equals("L"))
+			return A_STEREO_L;
+		if (stereo.equals("U"))
+			return A_STEREO_U;
+		if (stereo.equals("E"))
+			return A_STEREO_E;
+		if (stereo.equals("Rel") || stereo.equals("*")) //!!!
+			return A_STEREO_Rel;
+		if (stereo.equals("M"))
+			return A_STEREO_M;
+
 		return -1;
 	}
-	
+
 	//Atom radical values (for attribute spin)
 	public static final int A_spin_s = 0; // singlet
 	public static final int A_spin_d = 1; // doublet == * !!!
 	public static final int A_spin_t = 2; // triplet
-	
-	public static String spinAttributeToSLNString(int attr)
+
+	public static String atomSpinAttrToSLNString(int attr)
 	{
 		switch (attr)
 		{
@@ -114,18 +129,30 @@ public class SLNConst
 			return "d"; //or *
 		case A_spin_t:
 			return "t";
-			
+
 		default:
 			return "";
 		}
 	}
-	
+
+	public static int SLNStringToSpinAttr(String spin)
+	{
+		if (spin.equals("s"))
+			return A_spin_s;
+		if (spin.equals("d") || spin.equals("*"))
+			return A_spin_d;
+		if (spin.equals("t"))
+			return A_spin_t;
+
+		return -1;
+	}
+
 	//Bond Attributes (predefined)   B_ATTR_*
 	public static final int B_ATTR_type = 0; // overrides the type specified by the bond character
 	public static final int B_ATTR_s = 1;	//indicates stereo-chemistry about a double bond
-	
+
 	public static final int B_ATTR_USER_DEFINED = 500;
-	
+
 	public static String bondAttributeToSLNString(int attr)
 	{
 		switch (attr)
@@ -136,21 +163,21 @@ public class SLNConst
 			return "s";
 		case B_ATTR_USER_DEFINED:
 			return "userDef";
-			
+
 		default:
 			return "";
 		}
 	}
-	
+
 	// Predefined values for type 
 	public static final int B_TYPE_ANY = 0; // equal to -
 	public static final int B_TYPE_1 = 1; // equal to -
 	public static final int B_TYPE_2 = 2; // equal to =
 	public static final int B_TYPE_3 = 3; // equal to #
 	public static final int B_TYPE_aromatic = 4; // equal to :
-	
+
 	public static final int B_TYPE_USER_DEFINED = 100; //???
-	
+
 	public static String bondTypeAttributeToSLNString(int attr)
 	{
 		switch (attr)
@@ -165,15 +192,15 @@ public class SLNConst
 			return "#";
 		case B_TYPE_aromatic:
 			return "aromatic";
-			
+
 		case B_TYPE_USER_DEFINED:
 			return "userDef";
-			
+
 		default:
 			return "";
 		}
 	}
-	
+
 	//Bond stereo-chemistry values (for attribute s)
 	public static final int B_STEREO_C = 0; // Cis
 	public static final int B_STEREO_T = 1; // Trans
@@ -183,7 +210,7 @@ public class SLNConst
 	public static final int B_STEREO_I = 5; // Inverted, similar to Z
 	public static final int B_STEREO_U = 6; // Unknown, structure might represent single, mixture or both config.
 	public static final int B_STEREO_U_= 7; // unknown, structure represent single configuration
-	
+
 	public static String bondStereoChemistryAttributeToNameString(int attr)
 	{
 		switch (attr)
@@ -204,7 +231,7 @@ public class SLNConst
 			return "U";
 		case B_STEREO_U_:
 			return "U*";
-			
+
 		default:
 			return "";
 		}
@@ -212,7 +239,7 @@ public class SLNConst
 
 	//Bond types
 	public static char BondChars[] = {'~','-','=','#',':'};
-	
+
 	/*  //left-out from SMARTS parser could be removed
 	public static final int BT_ANY = 0;
 	public static final int BT_SINGLE = 1;
@@ -220,8 +247,8 @@ public class SLNConst
 	public static final int BT_TRIPLE = 3;
 	public static final int BT_AROMATIC = 4;
 	public static final int BT_UNDEFINED = 100;
-	*/
-	
+	 */
+
 	public static int getBondCharNumber (char ch)
 	{
 		for (int i=0; i < BondChars.length; i++)
@@ -231,7 +258,7 @@ public class SLNConst
 		}
 		return(-1);
 	}	
-	
+
 	//Atom and Bond attributes used only in query Q_ATTR_*    ???collect them to atom and bond attributes???
 	public static final int Q_ATTR_mapNum = 100; // #1,#2,... map number to an atom "a"
 	public static final int Q_ATTR_c = 101; // control how atoms in the target are matched "convered"  by pattern atoms "a"
@@ -251,8 +278,8 @@ public class SLNConst
 	public static final int Q_ATTR_tbo = 115; // total bond order of an atom "b"
 	public static final int Q_ATTR_type = 116; // bond type specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
 	public static final int Q_ATTR_v = 117; // Conveys Markush and macro atom valence information
-	
-	
+
+
 	public static String queryAttributeToSLNString(int attr)
 	{
 		switch (attr)
@@ -293,17 +320,17 @@ public class SLNConst
 			return "type"; // specified by the bond character !!! -,=,#,:,1,2,3,aromatic,.,~
 		case Q_ATTR_v:
 			return "v";
-			
+
 		default:
 			return "";
 		}
 	}
-	
+
 	//Values of coverage attribute
 	public static final int Q_COVERED_n = 0; // atom must not have been matched previously
 	public static final int Q_COVERED_o = 1; // atom's coverage flags are ignored
 	public static final int Q_COVERED_y = 2; // atom must be covered by previous search
-	
+
 	public static String coverageQueryAttributeToSLNString(int attr)
 	{
 		switch (attr)
@@ -314,7 +341,7 @@ public class SLNConst
 			return "o";
 		case Q_COVERED_y:
 			return "y";
-			
+
 		default:
 			return "";
 		}
@@ -330,36 +357,36 @@ public class SLNConst
 		/* | */  {-1,-1, 0, 1},
 		/* ; */  {-1,-1,-1, 0},
 	};
-	
+
 	public static final int GlobDictOffseet = 1000;
 	public static final int LocalDictOffseet = 1000000;
-	
-	
+
+
 	public static final String elSymbols[] =
-	{
-			"",                                                  
-			"H","He","Li","Be","B",
-			"C","N","O","F","Ne",         
-			"Na","Mg","Al","Si","P",
-			"S","Cl","Ar","K","Ca",      
-			"Sc","Ti","V","Cr","Mn",
-			"Fe","Co","Ni","Cu","Zn",    
-			"Ga","Ge","As","Se","Br",
-			"Kr","Rb","Sr","Y","Zr",    
-			"Nb","Mo","Tc","Ru","Rh",
-			"Pd","Ag","Cd","In","Sn",   
-			"Sb","Te","I","Xe","Cs",
-			"Ba","La","Ce","Pr","Nd",    
-			"Pm","Sm","Eu","Gd","Tb",
-			"Dy","Ho","Er","Tm","Yb",   
-			"Lu","Hf","Ta","W","Re",
-			"Os","Ir","Pt","Au","Hg",    
-			"Tl","Pb","Bi","Po","At",
-			"Rn","Fr","Ra","Ac","Th",   
-			"Pa","U","Np","Pu","Am",
-			"Cm","Bk","Cf","Es","Fm",    
-			"Md","No","Lr","Rf","Db",
-			"Sg","Bh","Hs","Mt","Ds", 
-			"Rg"  		//up to element #111
+		{
+		"",                                                  
+		"H","He","Li","Be","B",
+		"C","N","O","F","Ne",         
+		"Na","Mg","Al","Si","P",
+		"S","Cl","Ar","K","Ca",      
+		"Sc","Ti","V","Cr","Mn",
+		"Fe","Co","Ni","Cu","Zn",    
+		"Ga","Ge","As","Se","Br",
+		"Kr","Rb","Sr","Y","Zr",    
+		"Nb","Mo","Tc","Ru","Rh",
+		"Pd","Ag","Cd","In","Sn",   
+		"Sb","Te","I","Xe","Cs",
+		"Ba","La","Ce","Pr","Nd",    
+		"Pm","Sm","Eu","Gd","Tb",
+		"Dy","Ho","Er","Tm","Yb",   
+		"Lu","Hf","Ta","W","Re",
+		"Os","Ir","Pt","Au","Hg",    
+		"Tl","Pb","Bi","Po","At",
+		"Rn","Fr","Ra","Ac","Th",   
+		"Pa","U","Np","Pu","Am",
+		"Cm","Bk","Cf","Es","Fm",    
+		"Md","No","Lr","Rf","Db",
+		"Sg","Bh","Hs","Mt","Ds", 
+		"Rg"  		//up to element #111
 		};
 }

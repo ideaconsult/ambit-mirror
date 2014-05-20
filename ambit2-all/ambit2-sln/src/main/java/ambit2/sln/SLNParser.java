@@ -11,7 +11,7 @@ import org.openscience.cdk.interfaces.IAtom;
 public class SLNParser 
 {
 	private boolean FlagTolerateSpaces = false;
-	
+
 	String sln;
 	SLNContainer container;
 	SLNDictionary globalDictionary = null;
@@ -46,12 +46,12 @@ public class SLNParser
 	{
 		this.globalDictionary = globalDictionary;
 	}
-	
+
 	public boolean getTolerateSpaces()
 	{
 		return FlagTolerateSpaces;
 	}
-	
+
 	public void setTolerateSpaces(boolean tolerateSpaces)
 	{
 		FlagTolerateSpaces = tolerateSpaces;
@@ -150,11 +150,11 @@ public class SLNParser
 		newAtom.atomType = atomType;
 		newAtom.atomName = atomName;
 
-		
+
 		//The SLN parser allows H atoms to be before or after atoms expression 
 		//i.e. CH[S=R] and C[S=R]H are both correct variants
 		boolean ReadHAtoms = false;
-		
+
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == 'H')
 			{
@@ -174,7 +174,7 @@ public class SLNParser
 				analyzeAtomExpression(atomExpression);
 				newAtom.atomExpression = curAtExp;
 			}
-		
+
 		if (curChar < nChars)
 			if (sln.charAt(curChar) == 'H')
 			{
@@ -222,17 +222,17 @@ public class SLNParser
 			else
 				if (sln.charAt(curChar)==']')				
 					openBrackets--;
-			
+
 			curChar++;
 		}
-		
+
 		return sln.substring(startPos,curChar-1);
 	}
 
 	public void analyzeAtomExpression(String atomExpr)
 	{
 		System.out.println("***** AtExpr " + atomExpr);
-		
+
 		if (atomExpr.trim().equals(""))
 		{
 			newError("Empty atom expression", curChar+1,"");
@@ -240,7 +240,7 @@ public class SLNParser
 		}
 		curAtExp = new SLNAtomExpression();
 		int pos = 0;
-		
+
 		//Check atom ID
 		if (Character.isDigit(atomExpr.charAt(pos)))
 		{
@@ -253,7 +253,7 @@ public class SLNParser
 					break;	
 			}
 			int endPos = pos;
-			
+
 			if (pos < atomExpr.length())
 			{	
 				if (atomExpr.charAt(pos) == ':')
@@ -264,7 +264,7 @@ public class SLNParser
 					return;
 				}
 			}
-			
+
 			String idString = atomExpr.substring(startPos, endPos);
 			try
 			{
@@ -275,7 +275,7 @@ public class SLNParser
 				newError("Incorrect atom ID - too big",curChar,"");
 				return;
 			}
-			
+
 		}
 		//Handle all attributes and logical operations
 		while (pos < atomExpr.length())
@@ -291,8 +291,8 @@ public class SLNParser
 					break;
 				}	
 			}
-			
-			
+
+
 			if (Character.isLetter(atomExpr.charAt(pos)))
 			{
 				//Read attribute name
@@ -300,12 +300,12 @@ public class SLNParser
 				while (pos < atomExpr.length())
 				{
 					if (Character.isLetter(atomExpr.charAt(pos)) 
-							 || Character.isDigit(atomExpr.charAt(pos))  )
+							|| Character.isDigit(atomExpr.charAt(pos))  )
 						pos++;
 					else
 						break;
 				}
-				
+
 				String attrName = atomExpr.substring(startPos, pos);
 				if(pos < atomExpr.length())
 				{
@@ -319,14 +319,14 @@ public class SLNParser
 						continue;
 					}
 				}
-				
+
 				if(pos >= atomExpr.length())				
 				{
 					//'=' is found but the end of atom expression is reached.
 					newError("Missing value for attribute " + attrName + " ",curChar,"");
 					return;
 				}
-				
+
 				//Read attribute value (after '=')
 				startPos = pos;
 				while (pos < atomExpr.length())
@@ -337,21 +337,21 @@ public class SLNParser
 							(atomExpr.charAt(pos) == '-')  ||
 							(atomExpr.charAt(pos) == '.')  ||
 							(atomExpr.charAt(pos) == '*')
-					)
+							)
 						pos++;
 					else
 						break;
 				}
-				
+
 				String attrValue = atomExpr.substring(startPos, pos);
-				
+
 				//Register attribute with a value 
 				SLNExpressionToken newToken =  analyzeAtomAttribute(attrName, attrValue);
 				curAtExp.tokens.add(newToken);
-				
+
 				continue;
 			}
-			
+
 			//Read special symbol
 			switch  (atomExpr.charAt(pos))
 			{
@@ -371,14 +371,14 @@ public class SLNParser
 				SLNExpressionToken newToken3 = new SLNExpressionToken(SLNConst.LO + SLNConst.LO_ANDLO);  
 				curAtExp.tokens.add(newToken3);				
 				break;	
-				
+
 			default:
-				{
-					newError("Incorrect symbol in atom expression '"+atomExpr.charAt(pos)+"' ",curChar,"");
-					return;
-				}
+			{
+				newError("Incorrect symbol in atom expression '"+atomExpr.charAt(pos)+"' ",curChar,"");
+				return;
 			}
-			
+			}
+
 			pos++;
 		}
 	}
@@ -389,7 +389,7 @@ public class SLNParser
 			System.out.println("Attribute " + name);
 		else
 			System.out.println("Attribute " + name + "=" + value);
-		
+
 		//Handle charge attribute
 		if (name.equals("charge"))
 		{
@@ -405,7 +405,7 @@ public class SLNParser
 				return null;
 			}
 		}
-		
+
 		//Handle isotope attribute
 		if (name.equals("I"))
 		{
@@ -425,7 +425,7 @@ public class SLNParser
 				return null;
 			}
 		}
-		
+
 		//Handle fcharge attribute
 		if (name.equals("fcharge"))
 		{
@@ -441,7 +441,7 @@ public class SLNParser
 				return null;
 			}
 		}
-		
+
 		//Handle stereo-chemistry atom attribute s
 		if (name.equals("s"))
 		{	
@@ -466,11 +466,14 @@ public class SLNParser
 		//Handle atom attribute spin
 		if (name.equals("spin"))
 		{
-			
 			if (extractError.equals(""))
 			{
-				int param = 0; 
-				//TODO  - function from SLNConst
+				int param = SLNConst.SLNStringToSpinAttr(value);
+				if (param == -1)
+				{
+					newError("Incorrect spin value " + value, curChar,"");
+					return null;
+				}
 				SLNExpressionToken token = new SLNExpressionToken(SLNConst.A_ATTR_spin,param);
 				return token;
 			}
@@ -480,18 +483,13 @@ public class SLNParser
 				return null;
 			}
 		}
-		
+
 
 		//By default it is an user defined attribute
 		SLNExpressionToken token = new SLNExpressionToken(name,value);
 		return token;
 	}
-	
-	void parseA_ATTR_atomID()
-	{
-		//TODO
-	}
-	
+
 	void parseAtomIndex()   //!!!  ???????
 	{	
 		if (Character.isDigit(sln.charAt(curChar)))
@@ -501,7 +499,7 @@ public class SLNParser
 	int getInteger()
 	{
 		//TODO to protect against very large integers
-		
+
 		if (!Character.isDigit(sln.charAt(curChar)))
 			return(-1);
 
@@ -648,60 +646,59 @@ public class SLNParser
 
 	void parseBond()
 	{	
-//		int lo = -1;
-			int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));		
-			if (bo != -1)
+		int bo = SLNConst.getBondCharNumber(sln.charAt(curChar));		
+		if (bo != -1)
+		{
+			curChar++;
+			if (curChar == nChars)
 			{
-				curChar++;
-				if (curChar == nChars)
-				{
-					newError("SLN string ends incorrectly with a bond expression", curChar,"");				
-					return;
-				}
-				SLNBond  newBond = new SLNBond();
-				newBond.bondType = bo;
-
-				//Read bond symbols
-				if (curChar < nChars)
-				//TODO
-					switch (sln.charAt(curChar))
-					{
-					//Bond symbols - bond types 
-					case '~':	//any bond
-						bo = SLNConst.B_TYPE_ANY;
-						break;
-					case '-':	//single bond
-						bo = SLNConst.B_TYPE_1;
-						break;
-					case '=':	//double bond
-						bo = SLNConst.B_TYPE_2;
-						break;
-					case '#':	//triple bond
-						bo = SLNConst.B_TYPE_3;
-						break;
-					case ':':	//aromatic bond
-						bo = SLNConst.B_TYPE_aromatic;
-						break;
-						
-					default:
-					{
-						newError("Incorrect bond symbol  '"+ bo +"' ",curChar,"");
-						return;
-					}	
-					}
-				
-				
-					
-				if (curChar < nChars)
-					if (sln.charAt(curChar) == '[')
-					{	
-						String bondExpression = extractBondExpression();				
-						analyzeBondExpression(bondExpression);				
-					}
+				newError("SLN string ends incorrectly with a bond expression", curChar,"");				
+				return;
 			}
+			SLNBond  newBond = new SLNBond();
+			newBond.bondType = bo;
+
+			//Read bond symbols
+			if (curChar < nChars)
+				//TODO
+				switch (sln.charAt(curChar))
+				{
+				//Bond symbols - bond types 
+				case '~':	//any bond
+					bo = SLNConst.B_TYPE_ANY;
+					break;
+				case '-':	//single bond
+					bo = SLNConst.B_TYPE_1;
+					break;
+				case '=':	//double bond
+					bo = SLNConst.B_TYPE_2;
+					break;
+				case '#':	//triple bond
+					bo = SLNConst.B_TYPE_3;
+					break;
+				case ':':	//aromatic bond
+					bo = SLNConst.B_TYPE_aromatic;
+					break;
+
+				default:
+				{
+					newError("Incorrect bond symbol  '"+ bo +"' ",curChar,"");
+					return;
+				}	
+				}
+
+
+
+			if (curChar < nChars)
+				if (sln.charAt(curChar) == '[')
+				{	
+					String bondExpression = extractBondExpression();				
+					analyzeBondExpression(bondExpression);				
+				}
+		}
 
 	}
-	
+
 	String extractBondExpression()
 	{
 		curChar++;
@@ -799,7 +796,7 @@ public class SLNParser
 
 				continue;
 			}
-			
+
 			//Read special symbol
 			switch  (bondExpr.charAt(pos))
 			{
@@ -838,13 +835,13 @@ public class SLNParser
 		else
 			System.out.println("Attribute " + name + " = " + value);
 		//TODO
-		
-		
+
+
 		//By default it is an user defined attribute
 		SLNExpressionToken token = new SLNExpressionToken(name,value);
 		return token;
 	}
-	
+
 	int extractInteger(String valueString)
 	{
 		extractError = "";
@@ -863,7 +860,7 @@ public class SLNParser
 			return 0;
 		}
 	}
-	
+
 	double extractDouble(String valueString)
 	{
 		extractError = "";
