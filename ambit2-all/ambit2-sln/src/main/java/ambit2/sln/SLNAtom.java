@@ -61,4 +61,22 @@ public class SLNAtom extends org.openscience.cdk.PseudoAtom implements IQueryAto
 		return true;
 	}
 	
+	static public String SLNAtomToString(SLNContainer container)
+	{
+		StringBuffer sb = new StringBuffer();
+
+		for (int i = 0; i < container.getAtomCount(); i++)
+		{
+			SLNAtom at = (SLNAtom)container.getAtom(i); 
+			sb.append("  #" + i + "  ");
+			sb.append(at.atomType + "  " + at.atomName + " H " + at.numHAtom);
+			//TODO atom attributes
+			{
+				sb.append(" [ " + " = " +  " ]");
+			}
+			sb.append("\n");
+		}
+		return (sb.toString());
+	}
+	
 }
