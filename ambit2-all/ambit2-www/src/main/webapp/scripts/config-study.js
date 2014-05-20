@@ -319,7 +319,8 @@ var config_study = {
             "conditions": {
                 "doses/concentrations": {
                     "iOrder": -5,
-                    "sTitle": "Conc./Dose"
+                    "sTitle": "Conc./Dose",
+                    "bVisible" : false
                 },
                 "bioacc. basis": {
                     "iOrder": -3
