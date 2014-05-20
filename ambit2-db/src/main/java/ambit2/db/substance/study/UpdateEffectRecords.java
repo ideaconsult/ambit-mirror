@@ -45,7 +45,7 @@ public class UpdateEffectRecords extends AbstractUpdate<String,EffectRecord> {
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[0]));
 		params1.add(new QueryParam<String>(String.class, cmp_uuid[1]));		
 
-		params1.add(new QueryParam<String>(String.class, getObject().getEndpoint() ==null?"":getObject().getEndpoint().toString()));
+		params1.add(new QueryParam<String>(String.class, getObject().getEndpoint() ==null?"":truncate(getObject().getEndpoint().toString(),45)));
 		params1.add(new QueryParam<String>(String.class, getObject().getConditions()==null?null:getObject().getConditions().toString()));
 		Object unit = getObject().getUnit();
 		if (unit!=null && unit.toString().length()>45) unit = unit.toString().substring(0,45);

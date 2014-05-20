@@ -61,4 +61,9 @@ public abstract class AbstractUpdate<Group,Target>  implements IQueryUpdate<Grou
 	public boolean isStoredProcedure() {
 		return false;
 	}
+	
+	protected String truncate(String g,int length) {
+		if (g!=null && g.length()>length) return g.substring(0,length-1);
+		return g;
+	}
 }
