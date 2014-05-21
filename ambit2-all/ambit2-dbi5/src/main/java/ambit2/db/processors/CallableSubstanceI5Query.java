@@ -190,7 +190,7 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 				if (pass==null) pass = dbc.getProperty("i5.pass");
 				if (i5.login(user,pass)) {
 					QueryToolClient cli = i5.getQueryToolClient();
-					ContainerClient ccli = i5.getContainerClient();				
+					
 					List<IIdentifiableResource<String>> queryResults = cli.executeQuery(PredefinedQuery.query_by_it_identifier,extIDType,extIDValue);
 					
 					connection = dbc.getConnection();
@@ -199,10 +199,14 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 					writer.setConnection(connection);
 			        writer.open();
 	
-					for (IIdentifiableResource<String> item : queryResults) {
-						List<IIdentifiableResource<String>> container = ccli.get(item.getResourceIdentifier());
-						processContainer(container, writer);					
-					}
+			        ContainerClient ccli = i5.getContainerClient();				
+					for (IIdentifiableResource<String> item : queryResults) try {
+							logger.log(Level.INFO,item.getResourceIdentifier());
+							List<IIdentifiableResource<String>> container = ccli.get(item.getResourceIdentifier());
+							processContainer(container, writer);					
+						} catch (Exception x) {
+							logger.log(Level.SEVERE,x.getMessage());
+						}
 				} else throw new ResourceException(Status.SERVER_ERROR_BAD_GATEWAY,"IUCLID5 server login failed ["+server+"].");
 			}
 			return createReference(connection);
@@ -240,10 +244,10 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 					result = item;
 				}
 			} catch (Exception x) {
-				Context.getCurrentLogger().log(Level.SEVERE,x.getMessage(),x);
+				logger.log(Level.SEVERE,item.toString(),x);
 			} finally {
 				try {if (reader!=null) reader.close();} catch (Exception x) {}
-				try {file.delete(); } catch (Exception x) {}
+				//try {file.delete(); } catch (Exception x) {}
 			}
 		}	
 		return result;
