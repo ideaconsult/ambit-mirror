@@ -107,7 +107,7 @@ var substance = {
 			    					"mDataProp" : "ownerName",
 			    					"bUseRendered" : false,	
 			    					"fnRender" : function(o,val) {
-			    						return "<div class='longellipsis' title='"+o.aData["ownerUUID"]+"'>"+val+"</div>";
+			    						return "<a href='"+root+"/substanceowner/"+o.aData["ownerUUID"]+"' title='Click to see summary for the substance owner' target='substanceowner'>"+val+"</a>";
 
 			    					}
 			    				},			    				
