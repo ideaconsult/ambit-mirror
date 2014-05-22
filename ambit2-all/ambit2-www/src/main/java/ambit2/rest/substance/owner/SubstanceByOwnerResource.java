@@ -8,6 +8,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.data.Property;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.rest.substance.SubstanceResource;
 
@@ -21,7 +22,16 @@ public class SubstanceByOwnerResource extends SubstanceResource<ReadSubstanceByO
 	@Override
 	protected ReadSubstanceByOwner createQuery(Context context, Request request, Response response) throws ResourceException {
 		Object owneruuid = request.getAttributes().get(OwnerSubstanceFacetResource.idowner);
-		return new ReadSubstanceByOwner(ReadSubstanceByOwner._ownersearchmode.owner_uuid,owneruuid.toString());
+		return new ReadSubstanceByOwner(ReadSubstanceByOwner._ownersearchmode.owner_uuid,owneruuid.toString()) {
+			public ambit2.base.data.SubstanceRecord getObject(java.sql.ResultSet rs) throws ambit2.base.exceptions.AmbitException {
+				ambit2.base.data.SubstanceRecord record = super.getObject(rs);
+				record.setProperty(Property.getInstance(Property.opentox_Name,"Substance"),record.getPublicName());
+				record.setProperty(Property.getTradeNameInstance("Name"),record.getCompanyName());
+				record.setProperty(Property.getI5UUIDInstance(), record.getCompanyUUID());
+				//record.getExternalids()
+				return record;
+			}
+		};
 
 	}
 	@Override
