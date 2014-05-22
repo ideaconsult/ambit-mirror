@@ -14,9 +14,9 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.facet.FacetResource;
 
 public class OwnerSubstanceFacetResource  extends FacetResource<OwnerSubstanceStats>  {
-	public final static String owner = OpenTox.URI.le.getURI();
-	public final static String idowner = OpenTox.URI.le.getKey();
-	public final static String ownerID = OpenTox.URI.le.getResourceID();
+	public final static String owner = OpenTox.URI.substanceowner.getURI();
+	public final static String idowner = OpenTox.URI.substanceowner.getKey();
+	public final static String ownerID = OpenTox.URI.substanceowner.getResourceID();
 
 	public final static String resource = "substance";
 	

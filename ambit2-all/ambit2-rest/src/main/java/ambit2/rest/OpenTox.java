@@ -67,7 +67,7 @@ public class OpenTox {
 		},
 		qmap,
 		substance,
-		le, //legalentity
+		substanceowner,
 		composition,
 		study,
 		effect;

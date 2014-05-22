@@ -32,7 +32,7 @@
 </li> 
 
 <li class="ui-selectee">
-	<a href="${ambit_root}/le">
+	<a href="${ambit_root}/substanceowner">
 	<span class="ui-icon ui-icon-document" style="float: left; margin-right: .3em;"></span>Substance owners</a>
 </li> 
 
