@@ -247,7 +247,7 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 				logger.log(Level.SEVERE,item.toString(),x);
 			} finally {
 				try {if (reader!=null) reader.close();} catch (Exception x) {}
-				//try {file.delete(); } catch (Exception x) {}
+				try {file.delete(); } catch (Exception x) {}
 			}
 		}	
 		return result;

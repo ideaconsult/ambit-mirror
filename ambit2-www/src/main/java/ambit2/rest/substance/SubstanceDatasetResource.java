@@ -1,5 +1,12 @@
 package ambit2.rest.substance;
 
+import java.io.StringReader;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
@@ -10,10 +17,17 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
+import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.study.IParams;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.core.io.json.SubstanceStudyParser;
+import ambit2.db.processors.MasterDetailsProcessor;
+import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.search.IQueryCondition;
 import ambit2.db.substance.ReadSubstanceByOwner;
+import ambit2.db.substance.study.ReadEffectRecordBySubstance;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
@@ -77,6 +91,8 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		}
 	}	
 	
+
+	
 	protected IProcessor<ReadSubstanceByOwner, Representation> createJSONReporter(String filenamePrefix) {
 		String jsonpcallback = getParams().getFirstValue("jsonp");
 		if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
@@ -90,7 +106,43 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 					}
 					@Override
 					protected void configurePropertyProcessors() {
-							
+						IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecordBySubstance(); 
+						MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition> effectReader = 
+											new MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition>(
+													new ReadEffectRecordBySubstance()) {
+							@Override
+							protected SubstanceRecord processDetail(SubstanceRecord master,
+									EffectRecord<String, String, String> detail) throws Exception {
+								if (detail != null) {
+									if (detail.getTextValue() != null && detail.getTextValue().toString().startsWith("{")) {
+										ObjectMapper dx = new ObjectMapper();
+										JsonNode node = dx.readTree(new StringReader(detail.getTextValue().toString()));
+										
+										Iterator<Entry<String,JsonNode>> i = node.getFields();
+										while (i.hasNext()) {
+											Entry<String,JsonNode> val = i.next();
+											Property key = Property.getInstance(val.getKey(),detail.getSampleID());
+											key.setUnits(detail.getUnit());
+											groupProperties.add(key);
+											master.setProperty(key, val.getValue().get("loValue"));
+											
+										}
+									} else {
+										Property key = Property.getInstance(detail.getEndpoint(),detail.getSampleID());
+										key.setUnits(detail.getUnit());
+										
+										groupProperties.add(key);
+										if (detail.getLoValue() == null)
+											master.setProperty(key, detail.getTextValue());
+										else
+											master.setProperty(key, detail.getLoValue());
+									}
+								}
+								return master;
+								
+							}
+						};
+						getProcessors().add(effectReader);
 					}
 				},
 				MediaType.APPLICATION_JSON,filenamePrefix);

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.data.I5Utils;
-import ambit2.base.data.study.Params;
+import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.ReliabilityParams;
@@ -15,14 +15,14 @@ import ambit2.db.search.AbstractQuery;
 import ambit2.db.search.EQCondition;
 import ambit2.db.search.QueryParam;
 
-public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,String,Params,String>> extends AbstractQuery<String,PA, EQCondition, PA> 
+public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol,String,String,IParams,String>> extends AbstractQuery<String,PA, EQCondition, PA> 
 									implements IQueryRetrieval<PA>{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1980335091441168568L;
-	protected PA record = (PA)new ProtocolApplication<Protocol,String,String,Params,String>(new Protocol(null));
+	protected PA record = (PA)new ProtocolApplication<Protocol,String,String,IParams,String>(new Protocol(null));
 	private final static String sql = 
 		"SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su," +
 		"params,interpretation_result,interpretation_criteria,reference,reference_year,reference_owner," +
