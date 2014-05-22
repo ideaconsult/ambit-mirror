@@ -46,13 +46,13 @@ public class SubstanceStudyJSONReporter<Q extends IQueryRetrieval<ProtocolApplic
 		substanceReporter = new SubstanceURIReporter<IQueryRetrieval<SubstanceRecord>>(request, null);
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpCallback);
 		getProcessors().clear();
-		IQueryRetrieval<EffectRecord> queryP = new ReadEffectRecord(); 
-		MasterDetailsProcessor<ProtocolApplication,EffectRecord,IQueryCondition> effectReader = 
-							new MasterDetailsProcessor<ProtocolApplication,EffectRecord,IQueryCondition>(queryP) {
+		IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecord(); 
+		MasterDetailsProcessor<ProtocolApplication,EffectRecord<String, String, String>,IQueryCondition> effectReader = 
+							new MasterDetailsProcessor<ProtocolApplication,EffectRecord<String, String, String>,IQueryCondition>(queryP) {
 			@Override
 			protected void configureQuery(
 					ProtocolApplication target,
-					IParameterizedQuery<ProtocolApplication, EffectRecord, IQueryCondition> query)
+					IParameterizedQuery<ProtocolApplication, EffectRecord<String, String, String>, IQueryCondition> query)
 					throws AmbitException {
 							super.configureQuery(target, query);
 			}

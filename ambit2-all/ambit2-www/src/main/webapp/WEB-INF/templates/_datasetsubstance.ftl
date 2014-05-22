@@ -6,7 +6,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jquery-migrate-1.2.1.min.js.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/colResizable-1.3.min.js'></script>
-<script type='text/javascript' src='${ambit_root}/scripts/config-dataset.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config-substance.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 
 
@@ -24,7 +24,7 @@
 		$('#dataseturi').val(dataset_uri);	  
 	    datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 
-	  	var ds = new jToxCompound($(".jtox-toolkit")[0],config_dataset);
+	  	var ds = new jToxCompound($(".jtox-toolkit")[0],config_substancedataset);
         ds.queryDataset(dataset_uri);
 	});
 	</script>
