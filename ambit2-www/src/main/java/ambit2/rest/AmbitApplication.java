@@ -128,6 +128,7 @@ import ambit2.rest.structure.CompoundResource;
 import ambit2.rest.structure.diagram.AbstractDepict;
 import ambit2.rest.structure.tautomers.QueryStructureRelationResource;
 import ambit2.rest.structure.tautomers.QueryTautomersResource;
+import ambit2.rest.substance.SubstanceDatasetResource;
 import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.composition.SubstanceCompositionResource;
 import ambit2.rest.substance.composition.SubstanceStructuresResource;
@@ -260,7 +261,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		getMetadataService().addExtension("cml", ChemicalMediaType.CHEMICAL_CML, true);
 		getMetadataService().addExtension("smiles", ChemicalMediaType.CHEMICAL_SMILES, true);
 
-		
+
 	}
 
 
@@ -396,7 +397,10 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			router.attach(String.format("%s",OwnerSubstanceFacetResource.owner),OwnerSubstanceFacetResource.class);
 			//router.attach(String.format("%s%s",OwnerSubstanceFacetResource.owner,SubstanceCompositionResource.composition),OwnerStructuresResource.class);
 			router.attach(String.format("%s%s",OwnerSubstanceFacetResource.ownerID,SubstanceResource.substance),SubstanceByOwnerResource.class);
+			router.attach(String.format("%s%s",OwnerSubstanceFacetResource.ownerID,DatasetResource.dataset),SubstanceDatasetResource.class);
+			
 			router.attach(String.format("%s%s",OwnerSubstanceFacetResource.ownerID,SubstanceStructuresResource.structure),OwnerStructuresResource.class);
+			
 			router.attach(String.format("%s%s/{%s}",
 					OwnerSubstanceFacetResource.ownerID,SubstanceStructuresResource.structure,SubstanceStructuresResource.compositionType),
 					OwnerStructuresResource.class);
