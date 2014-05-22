@@ -131,8 +131,9 @@ import ambit2.rest.structure.tautomers.QueryTautomersResource;
 import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.composition.SubstanceCompositionResource;
 import ambit2.rest.substance.composition.SubstanceStructuresResource;
-import ambit2.rest.substance.study.OwnerStructuresResource;
-import ambit2.rest.substance.study.OwnerSubstanceFacetResource;
+import ambit2.rest.substance.owner.OwnerStructuresResource;
+import ambit2.rest.substance.owner.OwnerSubstanceFacetResource;
+import ambit2.rest.substance.owner.SubstanceByOwnerResource;
 import ambit2.rest.substance.study.SubstanceStudyFacetResource;
 import ambit2.rest.substance.study.SubstanceStudyResource;
 import ambit2.rest.task.PolicyProtectedTask;
@@ -394,6 +395,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			//legal entity - substance owner (as in IUC5)
 			router.attach(String.format("%s",OwnerSubstanceFacetResource.owner),OwnerSubstanceFacetResource.class);
 			//router.attach(String.format("%s%s",OwnerSubstanceFacetResource.owner,SubstanceCompositionResource.composition),OwnerStructuresResource.class);
+			router.attach(String.format("%s%s",OwnerSubstanceFacetResource.ownerID,SubstanceResource.substance),SubstanceByOwnerResource.class);
 			router.attach(String.format("%s%s",OwnerSubstanceFacetResource.ownerID,SubstanceStructuresResource.structure),OwnerStructuresResource.class);
 			router.attach(String.format("%s%s/{%s}",
 					OwnerSubstanceFacetResource.ownerID,SubstanceStructuresResource.structure,SubstanceStructuresResource.compositionType),
