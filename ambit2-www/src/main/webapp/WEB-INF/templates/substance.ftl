@@ -69,6 +69,8 @@
 				  <option value="topcategory" title='One of P-CHEM, ENV FATE, ECOTOX, TOX'>One of P-CHEM, ENV FATE, ECOTOX, TOX</option>
 				  <option value="endpointcategory" title='Endpoint category (e.g. EC_FISHTOX_SECTION)'>Endpoint category (e.g. EC_FISHTOX_SECTION)</option>
 				  <option value="params" title='Protocol parameter'>Protocol parameter</option>
+				  <option value="owner_name">Owner name</option>
+				  <option value="owner_uuid">Owner UUID</option>
 				</select>
 		    </div>			
 		</div>			

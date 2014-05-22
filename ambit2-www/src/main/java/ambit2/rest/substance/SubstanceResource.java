@@ -33,6 +33,7 @@ import ambit2.db.substance.ReadByReliabilityFlags;
 import ambit2.db.substance.ReadSubstance;
 import ambit2.db.substance.ReadSubstanceByExternalIDentifier;
 import ambit2.db.substance.ReadSubstanceByName;
+import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.ReadSubstanceByStudy;
 import ambit2.db.update.AbstractUpdate;
 import ambit2.rest.OpenTox;
@@ -142,13 +143,20 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>> exten
 			String search = form.getFirstValue(QueryResource.search_param);
 			if (search!=null) {
 				String type = form.getFirstValue("type");
-				ReadSubstanceByStudy._studysearchmode byStudy = null;
+				//search by study				
 				try {
+					ReadSubstanceByStudy._studysearchmode byStudy = null;
 					byStudy = ReadSubstanceByStudy._studysearchmode.valueOf(type);
-				} catch (Exception x) {}
-				if (byStudy!=null) {
 					return (Q) new ReadSubstanceByStudy(byStudy,search);
-				} else if ("uuid".equals(type)) {
+				} catch (Exception x) {}
+				//search by owner
+				try {
+					ReadSubstanceByOwner._ownersearchmode byOwner = null;
+					byOwner = ReadSubstanceByOwner._ownersearchmode.valueOf(type);
+					return (Q) new ReadSubstanceByOwner(byOwner,search);
+				} catch (Exception x) {}
+				
+				if ("uuid".equals(type)) {
 					SubstanceRecord record = new SubstanceRecord();
 					record.setCompanyUUID(search.trim());
 					return (Q)new ReadSubstance(record);
