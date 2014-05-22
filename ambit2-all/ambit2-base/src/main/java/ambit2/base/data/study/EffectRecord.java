@@ -61,6 +61,18 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	public void setUpValue(double upValue) {
 		this.upValue = upValue;
 	}
+	public String getErrQualifier() {
+		return errQualifier;
+	}
+	public void setErrQualifier(String errQualifier) {
+		this.errQualifier = errQualifier;
+	}	
+	public Double getErrorValue() {
+		return errValue;
+	}
+	public void setErrorValue(double errorValue) {
+		this.errValue = errorValue;
+	}
 	public IParams getStdDev() {
 		if (getConditions() instanceof IParams) {
 			Object stddev = ((IParams) getConditions()).get(_FIELDS_RANGE.STD_DEV.name());
@@ -73,6 +85,8 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 		setStdDev(value, null);
 	}
 	public void setStdDev(double value,String units) throws UnsupportedOperationException{
+		setErrorValue(value);
+		/*
 		if (getConditions() instanceof IParams) {
 			//this is a hack to enter std deviation in the condition fields. To be refactored together with the database storage.
 			IParams cond = (IParams) getConditions();
@@ -86,6 +100,7 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 			((IParams) stddev).setLoValue(value);
 			((IParams) stddev).setUnits(units);			
 		} else throw new UnsupportedOperationException();
+		*/
 	}
 	public CONDITIONS getConditions() {
 		return conditions;
@@ -100,6 +115,8 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 	protected Double upValue = null;
 	protected CONDITIONS conditions;
 	protected Object textValue;
+	protected String errQualifier;
+	protected Double errValue = null;
 	
 	public Object getTextValue() {
 		return textValue;
@@ -126,6 +143,8 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 		loValue,
 		upQualifier,
 		upValue,
+		errQualifier,
+		errorValue,
 		textValue
 	}
 	@Override
@@ -169,6 +188,18 @@ public class EffectRecord<ENDPOINT,CONDITIONS,UNIT> implements Serializable {
 			b.append(":\t");
 			b.append(getUpValue());
 		}
+		if (getErrQualifier()!=null) {
+			b.append(",\n\t");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.errQualifier.name())));
+			b.append(":\t");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getErrQualifier())));
+		}				
+		if (getErrorValue()!=null) {
+			b.append(",\n\t");
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.errorValue.name())));
+			b.append(":\t");
+			b.append(getErrorValue());
+		}		
 		if (getTextValue()!=null) {
 			b.append(",\n\t");
 			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.textValue.name())));
