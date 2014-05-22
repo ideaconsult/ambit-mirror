@@ -19,7 +19,7 @@ public abstract class ReadEffectRecordAbstract<F> extends AbstractQuery<F,Effect
 	 */
 	private static final long serialVersionUID = 2277250526632665919L;
 	protected final static String sql = 
-		"SELECT idresult,endpoint as effectendpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue from substance_experiment where document_prefix =? and hex(document_uuid) =?";
+		"SELECT idresult,endpoint as effectendpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,errQualifier,err,textValue from substance_experiment where document_prefix =? and hex(document_uuid) =?";
 	
 	
 	@Override
@@ -41,6 +41,9 @@ public abstract class ReadEffectRecordAbstract<F> extends AbstractQuery<F,Effect
 				record.setLoValue(rs.getDouble("loValue"));
 			if (rs.getString("upValue")!=null)
 				record.setUpValue(rs.getDouble("upValue"));
+			record.setErrQualifier(rs.getString("errQualifier"));
+			if (rs.getString("err")!=null)
+				record.setErrorValue(rs.getDouble("err"));			
 			String text = rs.getString("textValue");
 			record.setTextValue(text);
 		} catch (Exception x) {

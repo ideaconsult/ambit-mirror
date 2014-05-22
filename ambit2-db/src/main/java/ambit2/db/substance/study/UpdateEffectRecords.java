@@ -12,8 +12,8 @@ import ambit2.db.update.AbstractUpdate;
 public class UpdateEffectRecords extends AbstractUpdate<String,EffectRecord> {
 
 	public static final String[] create_sql = {
-		"INSERT INTO substance_experiment (document_prefix,document_uuid,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue)\n"+
-		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?)"
+		"INSERT INTO substance_experiment (document_prefix,document_uuid,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue,errQualifier,err)\n"+
+		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?)"
 	};
 	
 
@@ -60,6 +60,10 @@ public class UpdateEffectRecords extends AbstractUpdate<String,EffectRecord> {
 		params1.add(new QueryParam<Double>(Double.class,getObject().getUpValue()));
 		
 		params1.add(new QueryParam<String>(String.class,getObject().getTextValue()==null?null:getObject().getTextValue().toString()));
+		
+
+		params1.add(new QueryParam<String>(String.class,truncate(getObject().getErrQualifier(),6)));
+		params1.add(new QueryParam<Double>(Double.class,getObject().getErrorValue()));
 		return params1;
 	}
 }

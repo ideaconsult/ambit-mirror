@@ -7,6 +7,8 @@ ALTER TABLE `substance_experiment` CHANGE COLUMN `textValue` `textValue` TEXT NU
 -- enable search by reference
 ALTER TABLE `substance_protocolapplication` ADD INDEX `reference-x` (`reference`(255) ASC) ;
 
+ALTER TABLE `substance_experiment` ADD COLUMN `errQualifier` VARCHAR(6) NULL DEFAULT NULL  AFTER `textValue` , ADD COLUMN `err` DOUBLE NULL DEFAULT NULL  AFTER `errQualifier` ;
+
 insert into version (idmajor,idminor,comment) values (8,1,"AMBIT2 schema");
 
 -- extend the view
@@ -22,7 +24,7 @@ reliability,isRobustStudy,purposeFlag,studyResultType,
 params,interpretation_result,interpretation_criteria,
 reference,updated,idresult,
 e.endpoint as effectendpoint,conditions,unit, 
-loQualifier, loValue, upQualifier, upValue, textValue from substance s
+loQualifier, loValue, upQualifier, upValue, textValue, err from substance s
 join substance_protocolapplication p on
 s.prefix=p.substance_prefix and s.uuid=p.substance_uuid
 left join substance_experiment e on
