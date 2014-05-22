@@ -23,7 +23,7 @@ import ambit2.rest.bookmark.BookmarkResource;
 import ambit2.rest.structure.ConformerURIReporter;
 import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.composition.SubstanceStructuresResource;
-import ambit2.rest.substance.study.OwnerSubstanceFacetResource;
+import ambit2.rest.substance.owner.OwnerSubstanceFacetResource;
 
 /**
  * Generates URI for {@link IFacet}
@@ -92,12 +92,13 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 						    q.getCreator(),
 						    Reference.encode(item.getValue().toString()));
 		} else if (item instanceof OwnerFacet)  {
-			return String.format("%s%s/%s%s",
+			String uri = String.format("%s%s/%s%s",
 							root,
 							OwnerSubstanceFacetResource.owner,
 							item==null?"ALL":item.getValue()==null?"ALL":item.getValue().toString(),
 							SubstanceStructuresResource.structure
 						    );			
+			return String.format("%s/ui/_dataset?dataset_uri=%s", root,Reference.encode(uri));
 		} else 
 			return item.getResultsURL(root.toString());
 	}

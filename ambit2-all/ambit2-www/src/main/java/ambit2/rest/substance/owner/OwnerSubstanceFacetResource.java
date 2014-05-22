@@ -1,4 +1,4 @@
-package ambit2.rest.substance.study;
+package ambit2.rest.substance.owner;
 
 import java.util.Map;
 
