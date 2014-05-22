@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
+import org.codehaus.jackson.node.NullNode;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
@@ -15,14 +15,14 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
+import ambit2.base.data.PropertyAnnotation;
+import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.data.study.EffectRecord;
-import ambit2.base.data.study.IParams;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.IQueryCondition;
@@ -38,6 +38,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 	protected Template template;
 	protected Profile groupProperties;
 	protected String[] folders;
+	protected ObjectMapper dx = new ObjectMapper();
 	
 	public SubstanceDatasetResource() {
 		super();
@@ -115,7 +116,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 									EffectRecord<String, String, String> detail) throws Exception {
 								if (detail != null) {
 									if (detail.getTextValue() != null && detail.getTextValue().toString().startsWith("{")) {
-										ObjectMapper dx = new ObjectMapper();
+
 										JsonNode node = dx.readTree(new StringReader(detail.getTextValue().toString()));
 										
 										Iterator<Entry<String,JsonNode>> i = node.getFields();
@@ -128,9 +129,33 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 											
 										}
 									} else {
-										Property key = Property.getInstance(detail.getEndpoint(),detail.getSampleID());
-										key.setUnits(detail.getUnit());
+										JsonNode conditions = dx.readTree(new StringReader(detail.getConditions()));
+										PropertyAnnotations ann = new PropertyAnnotations();
 										
+										Iterator<Entry<String,JsonNode>> i = conditions.getFields();
+										StringBuilder b = new StringBuilder();
+										b.append(detail.getEndpoint());
+										
+										while (i.hasNext()) {
+											Entry<String,JsonNode> val = i.next();
+											if (val.getValue() instanceof NullNode) continue;
+											PropertyAnnotation a = new PropertyAnnotation();
+											a.setPredicate(val.getKey());
+											if (val.getValue().getTextValue()==null) 
+												a.setObject(val.getValue().get("loValue"));
+											else {
+												a.setObject(val.getValue().getTextValue());
+												b.append(" [");
+												b.append(val.getValue().getTextValue());
+												b.append("]");
+											}	
+											ann.add(a);
+										}
+
+										Property key = Property.getInstance(b.toString(),detail.getSampleID());
+										key.setUnits(detail.getUnit());
+										key.setAnnotations(ann);
+										groupProperties.add(key);										
 										groupProperties.add(key);
 										if (detail.getLoValue() == null)
 											master.setProperty(key, detail.getTextValue());
