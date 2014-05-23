@@ -203,7 +203,7 @@ CREATE TABLE `substance_experiment` (
   `idresult` int(11) NOT NULL AUTO_INCREMENT,
   `document_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `document_uuid` varbinary(16) NOT NULL,
-  `endpoint` varchar(45) DEFAULT NULL,
+  `endpoint` varchar(64) DEFAULT NULL,
   `conditions` text,
   `unit` varchar(45) DEFAULT NULL,
   `loQualifier` varchar(6) DEFAULT NULL,
@@ -219,7 +219,6 @@ CREATE TABLE `substance_experiment` (
   KEY `document-x` (`document_prefix`,`document_uuid`),
   CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 
 -- -----------------------------------------------------

@@ -8,6 +8,7 @@ ALTER TABLE `substance_experiment` CHANGE COLUMN `textValue` `textValue` TEXT NU
 ALTER TABLE `substance_protocolapplication` ADD INDEX `reference-x` (`reference`(255) ASC) ;
 
 ALTER TABLE `substance_experiment` ADD COLUMN `errQualifier` VARCHAR(6) NULL DEFAULT NULL  AFTER `textValue` , ADD COLUMN `err` DOUBLE NULL DEFAULT NULL  AFTER `errQualifier` ;
+ALTER TABLE `substance_experiment` CHANGE COLUMN `endpoint` `endpoint` VARCHAR(64) NULL DEFAULT NULL  ;
 
 insert into version (idmajor,idminor,comment) values (8,1,"AMBIT2 schema");
 
