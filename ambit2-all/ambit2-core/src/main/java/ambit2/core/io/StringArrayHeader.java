@@ -8,7 +8,7 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
-import ambit2.base.data.study.Value;
+import ambit2.base.data.study.ReliabilityParams;
 
 public abstract class StringArrayHeader<CATEGORIES> {
 	protected ArrayList<StringArrayHeader> header;
@@ -60,7 +60,8 @@ public abstract class StringArrayHeader<CATEGORIES> {
 	public abstract void assign(SubstanceRecord record, Object value);
 		
 	
-	protected ProtocolApplication<Protocol, IParams, String, IParams, String> getExperiment(CATEGORIES categories,SubstanceRecord record,Protocol protocol) {
+	protected ProtocolApplication<Protocol, IParams, String, IParams, String> getExperiment(CATEGORIES categories,SubstanceRecord record,Protocol protocol,
+				ReliabilityParams reliability) {
 		String experimentUUID = prefix+UUID.nameUUIDFromBytes(
 				(record.getCompanyUUID() + lines[_lines.technology.ordinal()]+lines[_lines.endpoint.ordinal()]).getBytes()
 				);
@@ -70,6 +71,7 @@ public abstract class StringArrayHeader<CATEGORIES> {
 				if (experimentUUID.equals(experiment.getDocumentUUID())) return experiment;
 			}
 		ProtocolApplication<Protocol, IParams, String, IParams, String> experiment = new ProtocolApplication<Protocol, IParams, String, IParams, String>(protocol);
+		experiment.setReliability(reliability);
 		experiment.setParameters(new Params());
 		experiment.getParameters().put("testmat_form", null);
 		experiment.getParameters().put("Type of method",null);
@@ -81,7 +83,7 @@ public abstract class StringArrayHeader<CATEGORIES> {
 		experiment.setReferenceYear("-");
 		experiment.setReference("Unknown");
 	}
-	protected String getMedium(String cell) {
+	protected String getConditionValue(String cell) {
 		return cell;
 	}
 	
