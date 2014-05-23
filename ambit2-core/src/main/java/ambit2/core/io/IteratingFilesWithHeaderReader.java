@@ -50,7 +50,7 @@ public abstract class IteratingFilesWithHeaderReader<COLUMN> extends
 	protected InChIGeneratorFactory inchiFactory = null;
 	public static String defaultSMILESHeader = "SMILES";
 	
-	private ArrayList<COLUMN> header;
+	protected ArrayList<COLUMN> header;
 	protected int smilesIndex = -1;
 	protected int inchiIndex = -1;
 	protected long timeout = 60000; //ms
@@ -93,6 +93,7 @@ public abstract class IteratingFilesWithHeaderReader<COLUMN> extends
 	protected abstract COLUMN createPropertyByColumnName(String name);
 	
 	protected COLUMN getHeaderColumn(int index) {
+		if (header==null || header.size()<=index) return null;
 		return header.get(index);
 	}
 	protected void updateHeaderColumn(int index,COLUMN value) {
