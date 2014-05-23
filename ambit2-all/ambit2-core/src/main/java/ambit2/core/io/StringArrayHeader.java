@@ -1,5 +1,6 @@
 package ambit2.core.io;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import ambit2.base.data.SubstanceRecord;
@@ -10,6 +11,13 @@ import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.Value;
 
 public abstract class StringArrayHeader<CATEGORIES> {
+	protected ArrayList<StringArrayHeader> header;
+	public ArrayList<StringArrayHeader> getHeader() {
+		return header;
+	}
+	public void setHeader(ArrayList<StringArrayHeader> header) {
+		this.header = header;
+	}
 	protected String[] lines;
 	enum _lines {
 		endpointcategory,
@@ -28,7 +36,7 @@ public abstract class StringArrayHeader<CATEGORIES> {
 		this(prefix,nlines);
 		lines[_lines.endpointcategory.ordinal()] = value;
 	}
-	public void setValue(int nline,String value) {
+	public void setValue(int nline,int column, String value) {
 		lines[nline] = value;
 	}
 	public String getValue(int nline) {
