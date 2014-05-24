@@ -16,9 +16,9 @@ import ambit2.base.exceptions.AmbitException;
 import ambit2.base.json.JSONUtils;
 import ambit2.core.data.model.Algorithm.AlgorithmFormat;
 import ambit2.core.data.model.IEvaluation;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.data.model.IEvaluation.EVStatsType;
 import ambit2.core.data.model.IEvaluation.EVType;
-import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.model.evaluation.EvaluationStats;
 

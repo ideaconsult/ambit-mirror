@@ -16,8 +16,9 @@ package ambit2.domain.stats.transforms.densityestimation;
  * @version 1.0
  */
 
+import java.util.Arrays;
+
 import Jama.Matrix;
-import ambit2.domain.stats.datastructures.Sort;
 import ambit2.domain.stats.transforms.transformfilters.TransformFilter;
 /**
  * Multivariate kernel density estimation
@@ -469,9 +470,7 @@ public KDensityMD(int number) {
 
     double d[] = getDensityValues(points);
     if (d != null) {
-      Sort sr = new Sort();
-      sr.QuickSortArray(d, i);
-      sr = null;
+      Arrays.sort(d);
       double h = d.length;
       for (int L = 0; L < NumHPDLevels; L++) MultivariateHPDLevels[1][L] = 0;
 

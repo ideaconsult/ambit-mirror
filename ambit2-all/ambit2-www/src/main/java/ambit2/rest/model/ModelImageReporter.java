@@ -15,9 +15,9 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
 import ambit2.core.data.IStructureDiagramHighlights;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.core.io.MyIteratingMDLReader;
 import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.reporters.QueryReporter;
 import ambit2.rest.ChemicalMediaType;

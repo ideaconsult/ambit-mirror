@@ -1,8 +1,7 @@
 package ambit2.domain.stats;
 
+import java.util.Arrays;
 import java.util.Vector;
-
-import ambit2.domain.stats.datastructures.Sort;
 
 
 
@@ -79,9 +78,7 @@ public class Tools {
     for (int i = 0; i < n; i++)
       order[i] = x[i];
 
-    Sort sort = new Sort();
-    sort.QuickSortArray(order, n);
-    sort = null;
+    Arrays.sort(order);
 
     int mlo = (int) Math.floor(n / 4) + 1;
     int mhi = (int) Math.floor( (3 * n) / 4) + 1;
