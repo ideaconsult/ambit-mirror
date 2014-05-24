@@ -4,9 +4,10 @@
  */
 package ambit2.model.numeric;
 
+import java.util.Arrays;
+
 import Jama.Matrix;
 import ambit2.domain.stats.Tools;
-import ambit2.domain.stats.datastructures.Sort;
 import ambit2.domain.stats.transforms.transformfilters.OrthogonalTransform;
 
 
@@ -150,10 +151,8 @@ public class DataCoverageDescriptors extends DataCoverage<Matrix> {
 			t = Tools.max(values,values.length);
 		}
 		else {
-		    Sort sort = new Sort();
-		    sort.QuickSortArray(values, values.length);
-		    sort = null;
-		    tIndex = (int) Math.round(values.length * percent);
+		    Arrays.sort(values);
+		    tIndex = (int) Math.round(values.length * (percent));
 		    if (tIndex > values.length) tIndex = values.length;
 			t = values[tIndex-1];
 		}

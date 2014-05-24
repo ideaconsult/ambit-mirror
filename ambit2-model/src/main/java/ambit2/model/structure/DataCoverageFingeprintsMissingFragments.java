@@ -3,8 +3,7 @@ package ambit2.model.structure;
 import java.util.BitSet;
 import java.util.List;
 
-public class DataCoverageFingeprintsMissingFragments extends
-		DataCoverageFingerprints {
+public class DataCoverageFingeprintsMissingFragments extends DataCoverageFingerprints {
 
 	/**
 	 * 
@@ -57,7 +56,8 @@ public class DataCoverageFingeprintsMissingFragments extends
 			else domain[i] =1;
 		return domain;
 	}	
-
+	
+	
 	
 	public double[] predict(List<BitSet> data) {
 		return zeroBits(data);

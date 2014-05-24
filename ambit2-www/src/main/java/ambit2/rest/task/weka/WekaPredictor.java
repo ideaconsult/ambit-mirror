@@ -18,7 +18,7 @@ import weka.filters.unsupervised.attribute.ReplaceMissingValues;
 import ambit2.base.data.Property;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.db.model.ModelQueryResults;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.predictor.ModelPredictor;
 

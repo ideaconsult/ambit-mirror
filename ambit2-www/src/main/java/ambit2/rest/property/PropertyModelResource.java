@@ -11,7 +11,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
-import ambit2.db.model.ModelQueryResults;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.property.ModelTemplates;
 import ambit2.rest.DisplayMode;

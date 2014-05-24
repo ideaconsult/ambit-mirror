@@ -4,10 +4,10 @@ import org.restlet.data.Reference;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.core.data.model.Algorithm;
-import ambit2.db.model.ModelQueryResults;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.model.builder.AbstractModelBuilder;
 import ambit2.rest.algorithm.AlgorithmURIReporter;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.rdf.RDFPropertyIterator;
@@ -22,27 +22,14 @@ import ambit2.rest.rdf.RDFPropertyIterator;
  * @param <TestInstances>
  * @param <Content>
  */
-public abstract class ModelBuilder<DATA,A extends Algorithm,Model extends ModelQueryResults> 
-											extends DefaultAmbitProcessor<A, Model> {
+public abstract class ModelBuilder<DATA,A extends Algorithm,Model extends ModelQueryResults> extends 
+													AbstractModelBuilder<DATA,A,Model>  {
+	
 	protected ModelURIReporter<IQueryRetrieval<ModelQueryResults>> model_reporter;
 	protected AlgorithmURIReporter alg_reporter;
 	protected Reference applicationRootReference;
-	protected String[] targetURI = null;
-	public String[] getTargetURI() {
-		return targetURI;
-	}
-	public void setTargetURI(String[] targetURI) {
-		this.targetURI = targetURI;
-	}
-	protected String[] parameters = null;	
-	protected DATA trainingData = null;
-
-	public DATA getTrainingData() {
-		return trainingData;
-	}
-	public void setTrainingData(DATA trainingData) {
-		this.trainingData = trainingData;
-	}
+	
+	
 	public Reference getApplicationRootReference() {
 		return applicationRootReference;
 	}
@@ -63,12 +50,10 @@ public abstract class ModelBuilder<DATA,A extends Algorithm,Model extends ModelQ
 			AlgorithmURIReporter alg_reporter,
 			String[] targetURI,
 			String[] parameters) {
-		super();
+		super(targetURI,parameters);
+		this.applicationRootReference = applicationRootReference;
 		this.alg_reporter = alg_reporter;
 		this.model_reporter = model_reporter;
-		this.applicationRootReference = applicationRootReference;
-		this.targetURI = targetURI;
-		this.parameters = parameters;
 	}	
 
 	public AlgorithmURIReporter getAlgorithmReporter() {

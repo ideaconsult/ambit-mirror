@@ -1,7 +1,5 @@
-package ambit2.db.model;
+package ambit2.core.data.model;
 
-import ambit2.core.data.model.ModelWrapper;
-import ambit2.db.readers.IQueryRetrieval;
 
 /**
  * Training and test instances are available via {@link IQueryRetrieval}

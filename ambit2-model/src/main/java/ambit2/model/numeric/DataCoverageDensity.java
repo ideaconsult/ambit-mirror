@@ -4,9 +4,10 @@
  */
 package ambit2.model.numeric;
 
+import java.util.Arrays;
+
 import Jama.Matrix;
 import ambit2.domain.stats.Tools;
-import ambit2.domain.stats.datastructures.Sort;
 import ambit2.domain.stats.transforms.densityestimation.KDensity1D;
 import ambit2.domain.stats.transforms.densityestimation.KNormal;
 import ambit2.domain.stats.transforms.densityestimation.Kernel;
@@ -35,15 +36,6 @@ public class DataCoverageDensity extends DataCoverageDescriptors {
 
 	}
 
-	/**
-	 * @param mode
-	 */
-	public DataCoverageDensity(ADomainMethodType mode) {
-		//TODO bandwidth mode
-		super(mode);
-		kdeList = null;
-		mode = ADomainMethodType._modeDENSITY;
-	}
 
 	public boolean isEmpty() {
 		return super.isEmpty() || (kdeList == null);
@@ -140,9 +132,7 @@ public class DataCoverageDensity extends DataCoverageDescriptors {
 			t = Tools.min(values,values.length);
 		}
 		else {
-		    Sort sort = new Sort();
-		    sort.QuickSortArray(values, values.length);
-		    sort = null;
+		    Arrays.sort(values);
 		    tIndex = (int) Math.round(values.length * (1-percent));
 		    if (tIndex < 0) tIndex = 0;
 			t = values[tIndex];

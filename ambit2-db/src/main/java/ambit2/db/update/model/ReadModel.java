@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.model.ModelQueryResults;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;

@@ -4,6 +4,9 @@
  */
 package ambit2.model.numeric;
 
+import ambit2.model.structure.DataCoverageFingeprintsMissingFragments;
+import ambit2.model.structure.DataCoverageFingerprintsTanimoto;
+
 
 
 /**
@@ -18,8 +21,8 @@ public enum ADomainMethodType {
 			return "PCARanges";
 		}
 		@Override
-		public String getClazz() {
-			return "ambit2.model.numeric.DataCoverageDescriptors.class";
+		public DataCoverage createDataCoverageObject() {
+			return new DataCoverageDescriptors();
 		}
 		@Override
 		public boolean isRange() {
@@ -31,20 +34,18 @@ public enum ADomainMethodType {
 		public String getName() {
 			return "Leverage";
 		}
+
 		@Override
-		public String getClazz() {
-			return "ambit2.model.numeric.DataCoverageLeverage.class";
-		}		
+		public DataCoverage createDataCoverageObject() {
+			return new DataCoverageLeverageHatMatrix();
+		}
 	},
 	_modeEUCLIDEAN {
 		@Override
 		public String getName() {
 			return "Euclidean distance";
 		}
-		@Override
-		public String getClazz() {
-			return "ambit2.model.numeric.DataCoverageDistance.class";
-		}
+
 		@Override
 		public boolean isDistance() {
 			return true;
@@ -56,10 +57,7 @@ public enum ADomainMethodType {
 		public String getName() {
 			return "City-block distance";
 		}
-		@Override
-		public String getClazz() {
-			return "ambit2.model.numeric.DataCoverageDistance.class";
-		}			
+
 		@Override
 		public boolean isDistance() {
 			return true;
@@ -72,10 +70,6 @@ public enum ADomainMethodType {
 			return "Mahalanobis distance";
 		}
 		@Override
-		public String getClazz() {
-			return "ambit2.model.numeric.DataCoverageDistance.class";
-		}			
-		@Override
 		public boolean isDistance() {
 			return true;
 		}
@@ -85,21 +79,37 @@ public enum ADomainMethodType {
 		public String getName() {
 			return "Probability density";
 		}
+
 		@Override
-		public String getClazz() {
-			return "ambit2.model.numeric.DataCoverageDensity.class";
-		}			
+		public DataCoverage createDataCoverageObject() {
+			return new DataCoverageDensity();
+		}
 	},
-	_modeFINGERPRINTS {
+	_modeFINGERPRINTS_CONSENSUS {
 		@Override
 		public String getName() {
-			return "Fingerprints";
+			return "Tanimoto Fingerprints (consensus)";
 		}
+
 		@Override
-		public String getClazz() {
-			return "ambit2.model.structure.DataCoverageFingerprints.class";
-		}			
+		public DataCoverage createDataCoverageObject() {
+			return new DataCoverageFingerprintsTanimoto();
+		}
+			
 	},
+	_modeFINGERPRINT_MISSINGFRAGMENTS {
+		@Override
+		public String getName() {
+			return "Tanimoto Fingerprints (consensus)";
+		}
+
+		@Override
+		public DataCoverage createDataCoverageObject() {
+			return new DataCoverageFingeprintsMissingFragments();
+		}
+	}	
+	/*
+	,
 	_modeATOMENVIRONMENT {
 		@Override
 		public String getName() {
@@ -107,7 +117,7 @@ public enum ADomainMethodType {
 		}
 		@Override
 		public String getClazz() {
-			return "ambit2.model.structure.DataCoverageAtomEnvironment.class";
+			return "ambit2.model.DataCoverageAtomEnvironment.class";
 		}			
 	},
 	_modeATOMENVIRONMENTRANK {
@@ -119,12 +129,16 @@ public enum ADomainMethodType {
 		public String getClazz() {
 			return "ambit2.model.structure.DataCoverageAtomEnvironment.class";
 		}			
-	};
+	}
+	*/;
 	public abstract String getName();
 	public String getId() {
 		return String.format("AD%d", ordinal());
 	}
-	public abstract String getClazz();
+
+	public DataCoverage createDataCoverageObject() {
+		return new DataCoverageDistance(this);
+	}
 	public boolean isDistance() { return false; }
 	public boolean isRange() { return false; }
 	@Override

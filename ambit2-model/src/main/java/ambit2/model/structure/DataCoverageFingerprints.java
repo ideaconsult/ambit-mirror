@@ -33,7 +33,7 @@ public abstract class DataCoverageFingerprints extends DataCoverage<List<BitSet>
 	 * @param mode
 	 */
 	public DataCoverageFingerprints() {
-		super(ADomainMethodType._modeFINGERPRINTS);
+		super(ADomainMethodType._modeFINGERPRINTS_CONSENSUS);
 		fpProfile = new double[fingerPrintLength];
 	}
 	public void clear() {

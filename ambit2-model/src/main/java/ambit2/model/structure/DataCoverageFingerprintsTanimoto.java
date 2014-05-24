@@ -1,10 +1,10 @@
 package ambit2.model.structure;
 
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 
 import ambit2.domain.stats.Tools;
-import ambit2.domain.stats.datastructures.Sort;
 
 public class DataCoverageFingerprintsTanimoto extends DataCoverageFingerprints {
 	/**
@@ -85,10 +85,8 @@ public class DataCoverageFingerprintsTanimoto extends DataCoverageFingerprints {
 			t = Tools.min(values,npoints);
 		}
 		else {
-		    Sort sort = new Sort();
-		    sort.QuickSortArray(values, npoints);
-		    sort = null;
-		    tIndex = (int) Math.round(npoints * percent);
+			Arrays.sort(values);
+		    tIndex = (int) Math.round(npoints * (1-percent));
 		    if (tIndex > npoints) tIndex = npoints;
 			t = values[tIndex-1];
 		}

@@ -38,6 +38,7 @@ public class DataCoverageDistanceTest {
 		Matrix data = read("ambit2/model/numeric/test/AD_problem_apps_dataset_603204.sdf");
 		data.print(10,3);
 		distance.setPca(true);
+		
 		try {
 			distance.build(data);
 		} catch (Exception x) {

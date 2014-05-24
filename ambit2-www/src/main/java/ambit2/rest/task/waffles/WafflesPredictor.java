@@ -11,7 +11,7 @@ import org.restlet.engine.util.Base64;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.db.model.ModelQueryResults;
+import ambit2.core.data.model.ModelQueryResults;
 import ambit2.rest.model.ModelURIReporter;
 import ambit2.rest.model.predictor.ModelPredictor;
 import ambit2.waffles.ShellWafflesLearn;
