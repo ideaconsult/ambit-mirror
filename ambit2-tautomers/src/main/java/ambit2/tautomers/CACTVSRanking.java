@@ -1,5 +1,7 @@
 package ambit2.tautomers;
 
+import java.util.List;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
@@ -134,10 +136,15 @@ public class CACTVSRanking
 		return false;
 	}
 	
-	public static boolean checkMethylGroup(IAtom at, IAtomContainer mol)
+	public static boolean checkMethylGroup(IAtom atom, IAtomContainer mol)
 	{
-		//TODO
-		return false;
+		if (!atom.getSymbol().equals("C"))			
+			return false;
+		
+		if (getHNeigbours(atom, mol)==3) 
+			return true;
+		else 
+			return false;
 	}
 	
 	public static int checkOximAciNitro(IAtom at, IAtomContainer mol)
@@ -146,10 +153,28 @@ public class CACTVSRanking
 		return 0;
 	}
 	
-	public static boolean checkPSSeTeH(IAtom at, IAtomContainer mol)
+	public static boolean checkPSSeTeH(IAtom atom, IAtomContainer mol)
 	{
-		//TODO
+		String atSy = atom.getSymbol();
+		if (atSy.equals("P") || atSy.equals("S") || atSy.equals("Se") || atSy.equals("Te"))
+			if (getHNeigbours(atom, mol) == 1) 
+				return true;
 		return false;
+	}
+	
+	public static int getHNeigbours(IAtom atom, IAtomContainer mol) 
+	{
+		List<IAtom> list = mol.getConnectedAtomsList(atom);
+		Integer intNH = atom.getImplicitHydrogenCount();
+		int nH = 0;
+		if (intNH != null)
+			nH = intNH;
+		
+		for (IAtom at : list)
+			if (at.getSymbol().equals("H"))
+				nH++;
+		
+		return nH;
 	}
 	
 }
