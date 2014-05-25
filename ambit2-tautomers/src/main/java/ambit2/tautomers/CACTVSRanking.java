@@ -39,8 +39,12 @@ public class CACTVSRanking
 			if (atom.getFlag(CDKConstants.ISAROMATIC))
 			{
 				nAromAt++;
-				if (checkCarboxylicNeighbour(atom, mol))
-					nCarboxAromRing++;
+				//Find non-aromatic neighbour and check for carboxylic group
+				List<IAtom> list = mol.getConnectedAtomsList(atom);
+				for (IAtom at : list)
+					if (!at.getFlag(CDKConstants.ISAROMATIC))
+						if (checkCarboxylicGroup(atom, mol))
+							nCarboxAromRing++;
 				continue;
 			}
 			
@@ -130,7 +134,7 @@ public class CACTVSRanking
 		return score2eV * calcScoreRank(mol);
 	}
 	
-	public static boolean checkCarboxylicNeighbour(IAtom at, IAtomContainer mol)
+	public static boolean checkCarboxylicGroup(IAtom at, IAtomContainer mol)
 	{
 		//TODO
 		return false;
@@ -141,15 +145,65 @@ public class CACTVSRanking
 		if (!atom.getSymbol().equals("C"))			
 			return false;
 		
-		if (getHNeigbours(atom, mol)==3) 
+		if (getHNeighbours(atom, mol)==3) 
 			return true;
 		else 
 			return false;
 	}
 	
-	public static int checkOximAciNitro(IAtom at, IAtomContainer mol)
-	{
-		//TODO
+	/**
+	 * 
+	 * @param atom - target atom
+	 * @param mol - target molecule
+	 * @return 1 if oxim group (C=N[OH]), 2 if aci-nitro group (C=N(=O)[OH]), otherwise return 0
+	 */	
+	public static int checkOximAciNitro(IAtom atom, IAtomContainer mol)
+	{	
+		if (!atom.getSymbol().equals("N"))
+			return 0;
+		
+		List<IAtom> list = mol.getConnectedAtomsList(atom);
+		if (list.size() < 2)
+			return 0;
+		
+		boolean Flag2C = false;
+		boolean FlagOH = false;
+		boolean Flag2O = false;
+		for (IAtom at : list)
+		{
+			if (at.getSymbol().equals("C"))
+				if (mol.getBond(atom, at).getOrder() == IBond.Order.DOUBLE)
+				{	
+					Flag2C = true;
+					continue;
+				}	
+			
+			if (at.getSymbol().equals("O"))
+				if (mol.getBond(atom, at).getOrder() == IBond.Order.SINGLE)
+				{	
+					if (getHNeighbours(at, mol) == 1)
+					{	
+						FlagOH = true;
+						continue;
+					}	
+				}
+				else
+				{
+					//It must be a double bond 
+					Flag2O = true;
+					continue;
+				}
+			
+		}
+		
+		 if (Flag2C && FlagOH)
+		 {
+			 if (Flag2O)
+				 return 2;
+			 else
+				 return 1;
+		 }
+		
 		return 0;
 	}
 	
@@ -157,12 +211,12 @@ public class CACTVSRanking
 	{
 		String atSy = atom.getSymbol();
 		if (atSy.equals("P") || atSy.equals("S") || atSy.equals("Se") || atSy.equals("Te"))
-			if (getHNeigbours(atom, mol) == 1) 
+			if (getHNeighbours(atom, mol) == 1) 
 				return true;
 		return false;
 	}
 	
-	public static int getHNeigbours(IAtom atom, IAtomContainer mol) 
+	public static int getHNeighbours(IAtom atom, IAtomContainer mol) 
 	{
 		List<IAtom> list = mol.getConnectedAtomsList(atom);
 		Integer intNH = atom.getImplicitHydrogenCount();
