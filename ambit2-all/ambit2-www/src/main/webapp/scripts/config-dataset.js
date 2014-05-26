@@ -32,7 +32,7 @@ var config_dataset = {
 	   "baseFeatures": {
 	        "http://www.opentox.org/api/1.1#Diagram": {
 	            "title" : "Structure diagram",
-	            "render" : function(col) {
+	            "column" : function(col) {
 	          	    col["mData"] = "compound.diagramUri";
 	                col["mRender"] = function(data, type, full) {
 	                  return (type != "display") ? "-" :
@@ -51,7 +51,7 @@ var config_dataset = {
 		"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity" : {
 				"title" : "Carcinogenicity",
 				"accumulate" : false,
-				"location" : "compound.carcinogenicity",
+				"data" : "compound.carcinogenicity",
 				"process" : function(entry, featureId, features) {
 					if (ccLib.isNull(entry.compound.carcinogenicity)) entry.compound.carcinogenicity = [];
 					entry.compound.carcinogenicity.push(
@@ -90,7 +90,7 @@ var config_dataset = {
                                         }
                                         );
                 },
-                "render" : function(col) {
+                "column" : function(col) {
                         var root = "http://apps.ideaconsult.net:8080/ambit2/ui/_dataset?dataset_uri=";
                         col["mData"] = "compound.wikipathway";
                         col["mRender"] = function(data, type, full) {
