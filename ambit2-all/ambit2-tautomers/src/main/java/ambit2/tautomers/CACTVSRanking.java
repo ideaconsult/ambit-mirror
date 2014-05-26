@@ -43,7 +43,7 @@ public class CACTVSRanking
 				List<IAtom> list = mol.getConnectedAtomsList(atom);
 				for (IAtom at : list)
 					if (!at.getFlag(CDKConstants.ISAROMATIC))
-						if (checkCarboxylicGroup(atom, mol))
+						if (checkCarboxylicGroup(at, atom, mol))
 							nCarboxAromRing++;
 				continue;
 			}
@@ -124,6 +124,7 @@ public class CACTVSRanking
 			}		
 		}
 		
+		System.out.println(scoreFragmentsToString(nCarboxAromRing, nAromAt, nOximGroup, nC2O, nN2O, nP2O, nC2X, nCH3, nYH, nAciNitro));
 		
 		double rank = nAromAt*(100.0/6) + nOximGroup * 4 + (nC2O + nN2O + nP2O)*2 + nC2X + nCH3 - nYH - 4*nAciNitro;
 		return rank;
@@ -131,13 +132,50 @@ public class CACTVSRanking
 	
 	public static double getEnergyRank(IAtomContainer mol)
 	{
-		return score2eV * calcScoreRank(mol);
+		return (- score2eV * calcScoreRank(mol));
 	}
 	
-	public static boolean checkCarboxylicGroup(IAtom at, IAtomContainer mol)
+	public static boolean checkCarboxylicGroup(IAtom centerAtom, IAtom attachAtom, IAtomContainer mol)
 	{
-		//TODO
-		return false;
+		if (!centerAtom.getSymbol().equals("C"))
+			return false;
+		
+		List<IAtom> list = mol.getConnectedAtomsList(centerAtom);
+		if (list.size() != 3)
+			return false;
+		boolean FlagOH = false;
+		boolean Flag2O = false;		
+		for (IAtom at : list)
+		{
+			if (at == attachAtom)
+				continue; //the is the atom (R) that the carboxylic group is substituted to i.e. R-C(-OH)=O
+			if (at.getSymbol().equals("O"))
+			{
+				if (mol.getBond(centerAtom, at).getOrder() == IBond.Order.SINGLE)
+				{	
+					if (getHNeighbours(at, mol) == 1)
+					{	
+						FlagOH = true;
+						continue;
+					}
+					else
+						return false; //not OH group probably O-X
+				}
+				else
+				{
+					//It must be a double bond 
+					Flag2O = true;
+					continue;
+				}
+			}
+			else
+				return false; //non O atom
+		}
+		
+		if (FlagOH && Flag2O)
+			return true;
+		else
+			return false;
 	}
 	
 	public static boolean checkMethylGroup(IAtom atom, IAtomContainer mol)
@@ -229,6 +267,35 @@ public class CACTVSRanking
 				nH++;
 		
 		return nH;
+	}
+	
+	public static String scoreFragmentsToString(int nCarboxAromRing, int nAromAt, 
+												int nOximGroup, int nC2O, int nN2O, int nP2O, int nC2X,
+												int nCH3, 	int nYH, int nAciNitro)
+	{
+		StringBuffer sb = new StringBuffer();
+		if (nCarboxAromRing > 0)
+			sb.append("nCarboxAromRing = " + nCarboxAromRing + "\n");		
+		if (nAromAt > 0)
+			sb.append("nAromAt = " + nAromAt + "\n");
+		if (nOximGroup > 0)
+			sb.append("nOximGroup = " + nOximGroup + "\n");
+		if (nC2O > 0)
+			sb.append("nC=O = " + nC2O + "\n");
+		if (nN2O > 0)
+			sb.append("nN=O = " + nN2O + "\n");
+		if (nP2O > 0)
+			sb.append("nP=O = " + nP2O + "\n");
+		if (nC2X > 0)
+			sb.append("nC=X = " + nC2X + "\n");
+		if (nCH3 > 0)
+			sb.append("nCH3 = " + nCH3 + "\n");
+		if (nYH > 0)
+			sb.append("nY-H = " + nYH + "     (Y=P,S,Se,Te,)\n");
+		if (nAciNitro > 0)
+			sb.append("nAciNitro = " + nAciNitro + "\n");
+		
+		return sb.toString();
 	}
 	
 }
