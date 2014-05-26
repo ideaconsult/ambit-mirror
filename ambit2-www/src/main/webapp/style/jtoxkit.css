@@ -158,37 +158,40 @@
   padding-left: 10px;
 }
 
-.jtox-ds-control {
+.jtox-controls {
   padding: 10px 10px 0px 10px;
   vertical-align: baseline;
 }
 
-.jtox-ds-control .paginate_disabled_previous,
-.jtox-ds-control .paginate_enabled_previous,
-.jtox-ds-control .paginate_disabled_next,
-.jtox-ds-control .paginate_enabled_next {
+.jtox-controls .paginate_disabled_previous,
+.jtox-controls .paginate_enabled_previous,
+.jtox-controls .paginate_disabled_next,
+.jtox-controls .paginate_enabled_next {
   float: none;
 }
 
-.jtox-ds-control select {
+.jtox-controls select {
   width: 75px;
 }
 
-.jtox-ds-control select,
-.jtox-ds-control input {
+.jtox-controls select,
+.jtox-controls input {
   display: inline-block;
   font-size: 1.1em;
 }
 
-.jtox-ds-control input {
+.jtox-controls input {
   position: absolute;
   right:10px;
   width: 25%;
 }
 
-.jtox-ds-control span {
+.jtox-controls span {
   font-weight: bold;
   font-size: 1.1em;
+}
+.jtox-substance table td div.shortened {
+  width: 120px;
 }
 .jtox-toolkit table.composition-info.dataTable td,
 .jtox-toolkit table.composition-info.dataTable th {
@@ -325,6 +328,10 @@ td.jtox-multi table {
 .jtox-foldable>.title {
   background: url(../images/sort_asc.png) right top no-repeat;
   background-size: 19px 19px;
+}
+
+.jtox-toolkit .jtox-details {
+  font-size: 80%;
 }
 
 .jtox-toolkit sup {

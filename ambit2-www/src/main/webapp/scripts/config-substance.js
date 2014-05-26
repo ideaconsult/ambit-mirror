@@ -33,56 +33,58 @@ var config_substancedataset = {
 	        "http://www.opentox.org/api/1.1#Diagram": {
 	        	"used" : true,	
 	            "title" : "Image",
-	            "render" : function(col) {
+	            "column" : function(col) {
 	                col["bVisible"] = false;
+	                col["sClass"] = "paddingless";
+	                col["sWidth"] = "64px";
 	                return col;
 	            }
 	        },
 	        "http://www.opentox.org/api/1.1#CASRN" : {
 		    	"used" : true,	
-					"render" : function(col) {
+					"column" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#EINECS" : {
 		    	"used" : true,	
-					"render" : function(col) {
+					"column" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	    
 		    "http://www.opentox.org/api/1.1#IUPACName" : {
 		    	"used" : true,	
-					"render" : function(col) {
+					"column" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#SMILES" : {
 		    	"used" : true,	
-					"render" : function(col) {
+					"column" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#InChIKey" : {
 		    	"used" : true,	
-					"render" : function(col) {
+					"column" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#InChI" : {
 		    	"used" : true,	
-					"render" : function(col) {
+					"column" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#REACHRegistrationDate" : {
 		    	"used" : true,	
-					"render" : function(col) {
+					"column" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
