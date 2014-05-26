@@ -17,7 +17,7 @@ import ambit2.db.search.StringCondition;
  * @author nina
  *
  */
-public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStructureRecord,StringCondition,IFacet<String>> {
+public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStructureRecord,StringCondition,EndpointCompoundFacet> {
 	/**
 	 * 
 	 */
@@ -56,12 +56,18 @@ public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStr
 	public EndpointCompoundFacetQuery(String url) {
 		super(url);
 		setCondition(StringCondition.getInstance(StringCondition.C_STARTS_WITH));
-		record = new EndpointCompoundFacet(url);
+		record = createFacet(url);	
+	}
+	
+	@Override
+	protected EndpointCompoundFacet createFacet(String facetURL) {
+		EndpointCompoundFacet record = new EndpointCompoundFacet(facetURL);
 		record.setProperty(getFieldname());
-		record.setDataset(getValue());		
+		record.setDataset(getValue());
+		return record;
 	}
 	@Override
-	public double calculateMetric(IFacet<String> object) {
+	public double calculateMetric(EndpointCompoundFacet object) {
 		return 1;
 	}
 
@@ -97,9 +103,9 @@ public class EndpointCompoundFacetQuery extends AbstractFacetQuery<Property,IStr
 	}
 
 	@Override
-	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
+	public EndpointCompoundFacet getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
-			record = new EndpointCompoundFacet(null);
+			record = createFacet(null);
 		}
 		record.setProperty(getFieldname());
 		record.setDataset(getValue());		

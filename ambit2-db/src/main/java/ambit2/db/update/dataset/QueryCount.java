@@ -16,7 +16,7 @@ import ambit2.db.search.StringCondition;
  * @author nina
  *
  */
-public class QueryCount  extends AbstractFacetQuery<String,String,StringCondition,IFacet<String>>  {
+public class QueryCount<FACET extends IFacet<String>>  extends AbstractFacetQuery<String,String,StringCondition,FACET>  {
 
 	/**
 	 * 
@@ -24,7 +24,8 @@ public class QueryCount  extends AbstractFacetQuery<String,String,StringConditio
 
 	protected static String sql_structures = "select 'Number of structures',count(idstructure) from structure\n";
 
-	protected AbstractFacet facet;
+	protected FACET facet;
+	
 	public List<QueryParam> getParameters() throws AmbitException {
 		return null;
 	}
@@ -37,17 +38,22 @@ public class QueryCount  extends AbstractFacetQuery<String,String,StringConditio
 	
 	public QueryCount(String facetURL) {
 		super(facetURL);
-		 facet = new AbstractFacet(facetURL) {
-			 public  String getResultsURL(String[] params) {
-				 return params[0] + (url==null?"":url);
-			 };
-		 };	
+		 facet = createFacet(facetURL);
 		setPageSize(1);
 		setPage(0);
 	}
 	
 	@Override
-	public double calculateMetric(IFacet<String> object) {
+	protected FACET createFacet(String facetURL) {
+		 IFacet<String> facet = new AbstractFacet<String>(facetURL) {
+			 public  String getResultsURL(String[] params) {
+				 return params[0] + (url==null?"":url);
+			 };
+		 };	
+		 return (FACET)facet;
+	}
+	@Override
+	public double calculateMetric(FACET object) {
 		return 1;
 	}
 
@@ -72,7 +78,7 @@ public class QueryCount  extends AbstractFacetQuery<String,String,StringConditio
 	}	
 	
 	@Override
-	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
+	public FACET getObject(ResultSet rs) throws AmbitException {
 		try {
 			facet.setValue(rs.getString(1));
 			facet.setCount(rs.getInt(2));

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.facet.IFacet;
 import ambit2.db.search.QueryParam;
 
 /**
@@ -11,7 +12,8 @@ import ambit2.db.search.QueryParam;
  * @author nina
  *
  */
-public class QueryCountDatasetIntersection extends QueryCount {
+public class QueryCountDatasetIntersection<FACET extends IFacet<String>> extends QueryCount<FACET> {
+	
 	public QueryCountDatasetIntersection(String facetURL) {
 		super(facetURL);
 		// TODO Auto-generated constructor stub
@@ -81,7 +83,5 @@ public class QueryCountDatasetIntersection extends QueryCount {
 			return sql_queries;
 		else return sql_query_and_dataset;
 	}
-
-
 
 }

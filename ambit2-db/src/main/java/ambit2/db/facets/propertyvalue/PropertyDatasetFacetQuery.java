@@ -17,7 +17,7 @@ import ambit2.db.search.StringCondition;
  * @author nina
  *
  */
-public class PropertyDatasetFacetQuery extends AbstractFacetQuery<Property,SourceDataset,StringCondition,IFacet<String>>  {
+public class PropertyDatasetFacetQuery extends AbstractFacetQuery<Property,SourceDataset,StringCondition,PropertyDatasetFacet<Property,SourceDataset>>  {
 
 	/**
 	 * 
@@ -34,15 +34,21 @@ public class PropertyDatasetFacetQuery extends AbstractFacetQuery<Property,Sourc
 	
 	public PropertyDatasetFacetQuery(String url) {
 		super(url);
-		record = new PropertyDatasetFacet<Property,SourceDataset>(url);
-		record.setProperty(getFieldname());
-		record.setDataset(getValue());		
+		record = createFacet(url);
 	}
 	@Override
-	public double calculateMetric(IFacet<String> object) {
-		return 0;
+	protected PropertyDatasetFacet<Property,SourceDataset> createFacet(String facetURL) {
+		PropertyDatasetFacet<Property,SourceDataset> facet = new PropertyDatasetFacet<Property,SourceDataset>(facetURL);
+		facet.setProperty(getFieldname());
+		facet.setDataset(getValue());
+		return facet;
 	}
 
+	@Override
+	public double calculateMetric(
+			PropertyDatasetFacet<Property, SourceDataset> object) {
+		return 1;
+	}
 	@Override
 	public boolean isPrescreen() {
 		return false;
@@ -67,11 +73,9 @@ public class PropertyDatasetFacetQuery extends AbstractFacetQuery<Property,Sourc
 	}
 
 	@Override
-	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
+	public PropertyDatasetFacet<Property,SourceDataset> getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
-			record = new PropertyDatasetFacet<Property,SourceDataset>(null);
-			record.setProperty(getFieldname());
-			record.setDataset(getValue());
+			record = createFacet(null);
 		} else { 
 			if (record.getDataset()==null) record.setDataset(getValue());
 			if (record.getProperty()==null) record.setProperty(getFieldname());

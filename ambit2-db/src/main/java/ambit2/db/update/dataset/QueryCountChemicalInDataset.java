@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.facet.AbstractFacet;
 import ambit2.db.search.QueryParam;
 
-public class QueryCountChemicalInDataset extends QueryCount {
+public class QueryCountChemicalInDataset extends QueryCount<AbstractFacet<String>> {
 
 	public QueryCountChemicalInDataset(String facetURL) {
 		super(facetURL);

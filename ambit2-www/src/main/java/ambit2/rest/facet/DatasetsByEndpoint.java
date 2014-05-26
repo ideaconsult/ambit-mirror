@@ -10,12 +10,13 @@ import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.Property;
+import ambit2.db.facets.datasets.EndpointCompoundFacet;
 import ambit2.db.facets.datasets.EndpointCompoundFacetQuery;
 import ambit2.db.search.StringCondition;
 import ambit2.rest.dataset.MetadatasetResource;
 import ambit2.rest.query.QueryResource;
 
-public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacetQuery> {
+public class DatasetsByEndpoint extends FacetResource<EndpointCompoundFacet,EndpointCompoundFacetQuery> {
 	public static final String resource = "/ndatasets_endpoint";
 	
 

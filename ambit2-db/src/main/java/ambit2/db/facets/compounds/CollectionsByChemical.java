@@ -26,7 +26,7 @@ public class CollectionsByChemical   extends AbstractFacetQuery<IStructureRecord
 	private final static String sql = "SELECT group_concat(distinct(title)),count(distinct(a1.name)) c from query_results\n"+ 
 						   "join query a1 using(idquery) join sessions using(idsessions)\n"+
 						   "where title in (%s) and idchemical = ?";
-	protected AbstractFacet<String> record;
+	protected IFacet<String> record;
 	
 	public CollectionsByChemical(String facetURL) {
 		super(facetURL);
@@ -59,11 +59,16 @@ public class CollectionsByChemical   extends AbstractFacetQuery<IStructureRecord
 		params.add(new QueryParam<Integer>(Integer.class,getFieldname().getIdchemical()));		
 		return params;
 	}
+	
+	@Override
+	protected IFacet<String> createFacet(String facetURL) {
+		return new AbstractFacet<String>() {};
+	}
 
 	@Override
 	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
-			record = new AbstractFacet<String>() {};
+			record = createFacet(null);
 		}
 		try {
 			record.setValue(rs.getString(1));

@@ -12,7 +12,7 @@ import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class OwnerSubstanceStats  extends AbstractFacetQuery<String,String,StringCondition,IFacet<String>> {
+public class OwnerSubstanceStats  extends AbstractFacetQuery<String,String,StringCondition,OwnerFacet> {
 
 	/**
 	 * 
@@ -29,13 +29,18 @@ public class OwnerSubstanceStats  extends AbstractFacetQuery<String,String,Strin
 		super(facetURL);
 		record = new OwnerFacet();
 	}
+	
+	@Override
+	protected OwnerFacet createFacet(String facetURL) {
+		return new OwnerFacet();
+	}
 	@Override
 	public boolean isPrescreen() {
 		return false;
 	}
 
 	@Override
-	public double calculateMetric(IFacet<String> object) {
+	public double calculateMetric(OwnerFacet object) {
 		return 1;
 	}
 

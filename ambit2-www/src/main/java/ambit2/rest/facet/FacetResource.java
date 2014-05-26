@@ -15,7 +15,6 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.Template;
-import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IProcessor;
@@ -27,10 +26,9 @@ import ambit2.rest.OpenTox;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.property.ProfileReader;
 import ambit2.rest.query.QueryResource;
-import ambit2.rest.substance.study.SubstanceStudyJSONReporter;
 
 
-public abstract class FacetResource<Q extends IQueryRetrieval<IFacet<String>>> extends	QueryResource<Q,IFacet<String>> {
+public abstract class FacetResource<FACET extends IFacet<String>,Q extends IQueryRetrieval<FACET>> extends	QueryResource<Q,FACET> {
 	public static final String resource = "/facet";
 	
 	public FacetResource() {

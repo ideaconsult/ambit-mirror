@@ -11,7 +11,7 @@ import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class BookmarksByTopicFacetQuery   extends AbstractFacetQuery<Bookmark,String,StringCondition,IFacet<String>>  {
+public class BookmarksByTopicFacetQuery   extends AbstractFacetQuery<Bookmark,String,StringCondition,BookmarksByTopicFacet>  {
 	/**
 	 * 
 	 */
@@ -29,7 +29,7 @@ public class BookmarksByTopicFacetQuery   extends AbstractFacetQuery<Bookmark,St
 	}
 
 	@Override
-	public double calculateMetric(IFacet<String> object) {
+	public double calculateMetric(BookmarksByTopicFacet object) {
 		return 1;
 	}
 
@@ -45,11 +45,16 @@ public class BookmarksByTopicFacetQuery   extends AbstractFacetQuery<Bookmark,St
 		params.add(new QueryParam<String>(String.class,getFieldname().getCreator()));
 		return params;
 	}
+	
+	@Override
+	protected BookmarksByTopicFacet createFacet(String facetURL) {
+		return new BookmarksByTopicFacet();
+	}
 
 	@Override
 	public BookmarksByTopicFacet getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
-			record = new BookmarksByTopicFacet();
+			record = createFacet(null);
 		}
 		record.setCreator(getFieldname().getCreator());
 		try {

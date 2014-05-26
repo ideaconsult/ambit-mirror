@@ -8,23 +8,24 @@ import ambit2.db.facets.datasets.DatasetByPrefixNameFacetQuery;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.search.test.QueryTest;
 
-public class DatasetPrefixFacet extends QueryTest<IQueryRetrieval<IFacet<String>>>  {
+public class DatasetPrefixFacet extends QueryTest<IQueryRetrieval<ambit2.db.facets.datasets.DatasetPrefixFacet>>  {
 
 	@Override
 	public String getDbFile() {
 		setDbFile("src/test/resources/ambit2/db/processors/test/query-datasets-string.xml");
 		return super.getDbFile();
 	}
-
+	
 	@Override
-	protected IQueryRetrieval<IFacet<String>> createQuery() throws Exception {
+	protected IQueryRetrieval<ambit2.db.facets.datasets.DatasetPrefixFacet> createQuery()
+			throws Exception {
 		DatasetByPrefixNameFacetQuery q = new DatasetByPrefixNameFacetQuery(null);
 		return q;
 	}
 	/**
 	 */
 	@Override
-	protected void verify(IQueryRetrieval<IFacet<String>> query, ResultSet rs)
+	protected void verify(IQueryRetrieval<ambit2.db.facets.datasets.DatasetPrefixFacet> query, ResultSet rs)
 			throws Exception {
 		int count = 0;
 		while (rs.next()) {

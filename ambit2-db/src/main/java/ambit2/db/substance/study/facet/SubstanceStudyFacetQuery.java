@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.exceptions.AmbitException;
@@ -13,7 +12,7 @@ import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,StringCondition,IFacet<String>>  {
+public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,StringCondition,SubstanceStudyFacet>  {
 
 	/**
 	 * 
@@ -28,7 +27,12 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 	
 	public SubstanceStudyFacetQuery(String facetURL) {
 		super(facetURL);
-		record = new SubstanceStudyFacet(facetURL);
+		record = createFacet(facetURL);
+	}
+	
+	@Override
+	protected SubstanceStudyFacet createFacet(String facetURL) {
+		return new SubstanceStudyFacet(facetURL);
 	}
 	@Override
 	public boolean isPrescreen() {
@@ -36,7 +40,7 @@ public class SubstanceStudyFacetQuery  extends AbstractFacetQuery<String,String,
 	}
 
 	@Override
-	public double calculateMetric(IFacet<String> object) {
+	public double calculateMetric(SubstanceStudyFacet object) {
 		return 1;
 	}
 

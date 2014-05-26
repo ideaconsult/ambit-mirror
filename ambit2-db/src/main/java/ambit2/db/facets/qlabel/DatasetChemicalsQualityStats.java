@@ -8,12 +8,11 @@ import ambit2.base.data.ConsensusLabel;
 import ambit2.base.data.ConsensusLabel.CONSENSUS_LABELS;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.facet.IFacet;
 import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_LABELS,SourceDataset,StringCondition,IFacet<String>> {
+public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_LABELS,SourceDataset,StringCondition,DatasetConsensusLabelFacet> {
 	protected DatasetConsensusLabelFacet record;
 	protected boolean summary = false;
 	public boolean isSummary() {
@@ -50,7 +49,7 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 	}
 
 	@Override
-	public double calculateMetric(IFacet<String> object) {
+	public double calculateMetric(DatasetConsensusLabelFacet object) {
 		return 1;
 	}
 
@@ -71,9 +70,13 @@ public class DatasetChemicalsQualityStats  extends AbstractFacetQuery<CONSENSUS_
 	}
 
 	@Override
-	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
+	protected DatasetConsensusLabelFacet createFacet(String facetURL) {
+		return new DatasetConsensusLabelFacet(null);
+	}
+	@Override
+	public DatasetConsensusLabelFacet getObject(ResultSet rs) throws AmbitException {
 		if (record == null) 
-			record = new DatasetConsensusLabelFacet(null);
+			record = createFacet(null);
 		
 		try {
 			SourceDataset dataset = null;

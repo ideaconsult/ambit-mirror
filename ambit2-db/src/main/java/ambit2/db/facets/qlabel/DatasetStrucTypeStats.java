@@ -12,7 +12,7 @@ import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class DatasetStrucTypeStats  extends AbstractFacetQuery<IStructureRecord.STRUC_TYPE,SourceDataset,StringCondition,IFacet<String>> {
+public class DatasetStrucTypeStats  extends AbstractFacetQuery<IStructureRecord.STRUC_TYPE,SourceDataset,StringCondition,DatasetStrucTypeFacet> {
 
 	/**
 	 * 
@@ -35,8 +35,8 @@ public class DatasetStrucTypeStats  extends AbstractFacetQuery<IStructureRecord.
 		record.setDataset(getValue());		
 	}
 	@Override
-	public double calculateMetric(IFacet<String> object) {
-		return 0;
+	public double calculateMetric(DatasetStrucTypeFacet object) {
+		return 1;
 	}
 
 	@Override
@@ -61,9 +61,13 @@ public class DatasetStrucTypeStats  extends AbstractFacetQuery<IStructureRecord.
 	}
 
 	@Override
-	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
+	protected DatasetStrucTypeFacet createFacet(String facetURL) {
+		return new DatasetStrucTypeFacet(null);
+	}
+	@Override
+	public DatasetStrucTypeFacet getObject(ResultSet rs) throws AmbitException {
 		if (record == null) 
-			record = new DatasetStrucTypeFacet(null);
+			record = createFacet(null);
 		
 		try {
 			SourceDataset dataset = null;

@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.facet.AbstractFacet;
 import ambit2.base.facet.IFacet;
-import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public abstract  class PrefixFacetQuery<PARAM,FACET extends AbstractFacet<String>>  extends AbstractFacetQuery<PARAM,String,StringCondition,IFacet<String>>  {
+public abstract  class PrefixFacetQuery<PARAM,FACET extends IFacet<String>>  extends AbstractFacetQuery<PARAM,String,StringCondition,FACET>  {
 	
 	/**
 	 * 
@@ -27,7 +25,7 @@ public abstract  class PrefixFacetQuery<PARAM,FACET extends AbstractFacet<String
 		record = createRecord(url);
 	}
 	@Override
-	public double calculateMetric(IFacet<String> object) {
+	public double calculateMetric(FACET object) {
 		return 0;
 	}
 
@@ -59,8 +57,9 @@ public abstract  class PrefixFacetQuery<PARAM,FACET extends AbstractFacet<String
 
 	protected abstract FACET createRecord(String url);
 	
+	
 	@Override
-	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
+	public FACET getObject(ResultSet rs) throws AmbitException {
 		if (record == null) {
 			record = createRecord(null);
 		}
