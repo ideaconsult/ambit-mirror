@@ -7,9 +7,10 @@ import java.util.List;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.facet.IFacet;
 import ambit2.db.search.QueryParam;
+import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.db.update.dataset.QueryCount;
 
-public class QueryCountProtocolApplications   extends QueryCount {
+public class QueryCountProtocolApplications   extends QueryCount<SubstanceByCategoryFacet> {
 
 	/**
 	 * 
@@ -33,14 +34,20 @@ public class QueryCountProtocolApplications   extends QueryCount {
 	public String getSQL() throws AmbitException {
 		return sql;
 	}
+	
+	@Override
+	protected SubstanceByCategoryFacet createFacet(String facetURL) {
+		return new SubstanceByCategoryFacet(facetURL);
+	}
 	@Override
 	public List<QueryParam> getParameters() throws AmbitException {
 		return null;
 	}
 	@Override
-	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
+	public SubstanceByCategoryFacet getObject(ResultSet rs) throws AmbitException {
 		try {
-			facet.setValue(rs.getString(1) + "/" + rs.getString(3));
+			facet.setSubcategoryTitle(rs.getString(1));
+			facet.setValue(rs.getString(3));
 			facet.setCount(rs.getInt(2));
 			
 			return facet;

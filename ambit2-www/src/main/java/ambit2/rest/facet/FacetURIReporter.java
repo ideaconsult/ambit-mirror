@@ -17,6 +17,7 @@ import ambit2.db.facets.qlabel.DatasetStrucTypeFacet;
 import ambit2.db.facets.qlabel.DatasetStructureQLabelFacet;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.db.substance.study.facet.OwnerFacet;
+import ambit2.db.substance.study.facet.SubstanceByCategoryFacet;
 import ambit2.rest.OpenTox;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.bookmark.BookmarkResource;
@@ -91,6 +92,14 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 						    BookmarkResource.resource,
 						    q.getCreator(),
 						    Reference.encode(item.getValue().toString()));
+		} else if (item instanceof SubstanceByCategoryFacet)  {
+			if (item!=null && item.getValue()!=null) {
+				return String.format("%s%s?type=endpointcategory&search=%s",
+							root,
+							SubstanceResource.substance,item.getValue().toString()
+						    );			
+			} else return "";
+		
 		} else if (item instanceof OwnerFacet)  {
 			String uri = String.format("%s%s/%s%s",
 							root,
