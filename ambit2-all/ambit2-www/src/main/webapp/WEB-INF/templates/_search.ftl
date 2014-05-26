@@ -36,6 +36,21 @@ $(document)
     	tEl.innerHTML = tEl.innerHTML.replace(/(.+)\((\d+)\/(\d+)(.*)?/, '$1(' + v + '/$3$4');;
     }
     
+    function onDetailedRow(row, data, index) {
+      var el = $('.jtox-details-composition', row);
+      var uri = $(el).data('uri');
+      uri = this.settings.baseUrl + '/substance?compound_uri=' + encodeURIComponent(uri);
+      el = $(el).parents('table')[0];
+      el = el.parentNode;
+      $(el).empty();
+      var div = document.createElement('div');
+      el.appendChild(div);
+      var ds = new jToxSubstance(div, {crossDomain: true, substanceUri: uri, showControls: false, onDetails: function (root, data, event) {
+        var comp = new jToxStudy(root);
+        comp.querySubstance(data);
+      } } );
+    }
+    
     $(document).ready(function(){
       var toggleBar = function () {
         $(this).parents('#sidebar').toggleClass('hidden');
@@ -178,7 +193,7 @@ $(document)
         </div>
       </div>
     </div>
-	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true"></div>
+	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" data-on-details="onDetailedRow"></div>
   </div>
 
    </div>
