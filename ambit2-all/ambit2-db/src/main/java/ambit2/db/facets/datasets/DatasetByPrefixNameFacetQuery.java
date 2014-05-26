@@ -1,11 +1,9 @@
 package ambit2.db.facets.datasets;
 
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.logging.Level;
 
 import ambit2.base.exceptions.AmbitException;
-import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryParam;
 
@@ -55,7 +53,12 @@ public class DatasetByPrefixNameFacetQuery extends PrefixFacetQuery<IStructureRe
 	protected DatasetPrefixFacet createRecord(String url) {
 		//record.setProperty(getFieldname());
 		//record.setDataset(getValue());
-		DatasetPrefixFacet record = new DatasetPrefixFacet(url);
+		return createFacet(url);
+	}
+	
+	@Override
+	protected DatasetPrefixFacet createFacet(String facetURL) {
+		DatasetPrefixFacet record = new DatasetPrefixFacet(facetURL);
 		record.setStructure(getFieldname());
 		return record;
 	}

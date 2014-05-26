@@ -11,10 +11,11 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
+import ambit2.db.facets.qlabel.DatasetStrucTypeFacet;
 import ambit2.db.facets.qlabel.DatasetStrucTypeStats;
 import ambit2.rest.OpenTox;
 
-public class DatasetStrucTypeStatsResource  extends FacetResource<DatasetStrucTypeStats> {
+public class DatasetStrucTypeStatsResource  extends FacetResource<DatasetStrucTypeFacet,DatasetStrucTypeStats> {
 	public static final String resource = "/type_strucs";
 	protected Integer datasetID;
 	protected Integer queryResultsID;

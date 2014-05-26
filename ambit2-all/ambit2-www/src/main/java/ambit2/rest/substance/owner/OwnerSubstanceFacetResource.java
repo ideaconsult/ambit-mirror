@@ -9,11 +9,12 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
+import ambit2.db.substance.study.facet.OwnerFacet;
 import ambit2.db.substance.study.facet.OwnerSubstanceStats;
 import ambit2.rest.OpenTox;
 import ambit2.rest.facet.FacetResource;
 
-public class OwnerSubstanceFacetResource  extends FacetResource<OwnerSubstanceStats>  {
+public class OwnerSubstanceFacetResource  extends FacetResource<OwnerFacet,OwnerSubstanceStats>  {
 	public final static String owner = OpenTox.URI.substanceowner.getURI();
 	public final static String idowner = OpenTox.URI.substanceowner.getKey();
 	public final static String ownerID = OpenTox.URI.substanceowner.getResourceID();

@@ -14,10 +14,11 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
 import ambit2.db.facets.qlabel.DatasetChemicalsQualityStats;
+import ambit2.db.facets.qlabel.DatasetConsensusLabelFacet;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
 
-public class DatasetChemicalsQualityStatsResource extends FacetResource<DatasetChemicalsQualityStats> {
+public class DatasetChemicalsQualityStatsResource extends FacetResource<DatasetConsensusLabelFacet,DatasetChemicalsQualityStats> {
 	public static final String resource = "/label_compounds";
 	protected Integer datasetID;
 	protected Integer queryResultsID;

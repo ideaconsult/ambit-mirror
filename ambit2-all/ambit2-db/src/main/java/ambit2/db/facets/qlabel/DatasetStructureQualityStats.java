@@ -13,7 +13,7 @@ import ambit2.db.facets.AbstractFacetQuery;
 import ambit2.db.search.QueryParam;
 import ambit2.db.search.StringCondition;
 
-public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,SourceDataset,StringCondition,IFacet<String>> {
+public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,SourceDataset,StringCondition,DatasetStructureQLabelFacet> {
 
 	/**
 	 * 
@@ -36,7 +36,7 @@ public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,Sour
 		record.setDataset(getValue());		
 	}
 	@Override
-	public double calculateMetric(IFacet<String> object) {
+	public double calculateMetric(DatasetStructureQLabelFacet object) {
 		return 0;
 	}
 
@@ -62,9 +62,13 @@ public class DatasetStructureQualityStats extends AbstractFacetQuery<QLabel,Sour
 	}
 
 	@Override
-	public IFacet<String> getObject(ResultSet rs) throws AmbitException {
+	protected DatasetStructureQLabelFacet createFacet(String facetURL) {
+		return new DatasetStructureQLabelFacet(null);
+	}
+	@Override
+	public DatasetStructureQLabelFacet getObject(ResultSet rs) throws AmbitException {
 		if (record == null) 
-			record = new DatasetStructureQLabelFacet(null);
+			record = createFacet(null);
 		
 		try {
 			SourceDataset dataset = null;

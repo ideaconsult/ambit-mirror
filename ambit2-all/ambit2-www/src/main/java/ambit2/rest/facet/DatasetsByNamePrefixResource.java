@@ -10,6 +10,7 @@ import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
 import ambit2.db.facets.datasets.DatasetByPrefixNameFacetQuery;
+import ambit2.db.facets.datasets.DatasetPrefixFacet;
 import ambit2.rest.query.QueryResource;
 
 /**
@@ -18,7 +19,7 @@ import ambit2.rest.query.QueryResource;
  * @author nina
  *
  */
-public class DatasetsByNamePrefixResource  extends FacetResource<DatasetByPrefixNameFacetQuery>  {
+public class DatasetsByNamePrefixResource  extends FacetResource<DatasetPrefixFacet,DatasetByPrefixNameFacetQuery>  {
 	public static final String resource = "/ndatasets_nameprefix";
 	
 	@Override

@@ -16,6 +16,7 @@ import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.Property;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.Template;
+import ambit2.db.facets.propertyvalue.PropertyDatasetFacet;
 import ambit2.db.facets.propertyvalue.PropertyDatasetFacetQuery;
 import ambit2.db.readers.IQueryRetrieval;
 import ambit2.rest.OpenTox;
@@ -25,7 +26,7 @@ import ambit2.rest.OpenTox;
  * @author nina
  *
  */
-public class CompoundsByPropertyValueInDatasetResource extends FacetResource<PropertyDatasetFacetQuery> {
+public class CompoundsByPropertyValueInDatasetResource extends FacetResource<PropertyDatasetFacet<Property,SourceDataset>,PropertyDatasetFacetQuery> {
 	public static final String resource = "/ncompound_value";
 	@Override
 	protected PropertyDatasetFacetQuery createQuery(Context context,

@@ -10,11 +10,12 @@ import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
 import ambit2.db.reporters.QueryReporter;
+import ambit2.db.substance.study.facet.SubstanceStudyFacet;
 import ambit2.db.substance.study.facet.SubstanceStudyFacetQuery;
 import ambit2.rest.facet.FacetResource;
 import ambit2.rest.substance.SubstanceResource;
 
-public class SubstanceStudyFacetResource extends FacetResource<SubstanceStudyFacetQuery>  {
+public class SubstanceStudyFacetResource extends FacetResource<SubstanceStudyFacet,SubstanceStudyFacetQuery>  {
 	public final static String resource = "studysummary";
 	
 	public SubstanceStudyFacetResource() {

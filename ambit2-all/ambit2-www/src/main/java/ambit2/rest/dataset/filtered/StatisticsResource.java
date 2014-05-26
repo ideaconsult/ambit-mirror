@@ -15,6 +15,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.routing.Template;
 
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.facet.IFacet;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.db.model.QueryCountModels;
 import ambit2.db.substance.QueryCountEndpoints;
@@ -31,7 +32,7 @@ import ambit2.rest.dataset.DatasetStructuresResource;
 import ambit2.rest.facet.FacetResource;
 
 
-public class StatisticsResource<Q extends QueryCount> extends FacetResource<Q>  {
+public class StatisticsResource<FACET extends IFacet<String>,Q extends QueryCount<FACET>> extends FacetResource<FACET,Q>  {
 	public static String resource = "/stats";
 	public static String resourceKey = "mode";
 	protected StatsMode mode;
@@ -130,7 +131,7 @@ public class StatisticsResource<Q extends QueryCount> extends FacetResource<Q>  
 			return (Q)q;
 		}
 		case structures: {
-			return (Q)new QueryCount(mode.getURL());
+			return (Q)new QueryCount<FACET>(mode.getURL());
 		}
 		case properties: {
 			return (Q)new QueryCountProperties(mode.getURL());

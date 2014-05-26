@@ -42,6 +42,7 @@ public class QueryCountProtocolApplications   extends QueryCount {
 		try {
 			facet.setValue(rs.getString(1) + "/" + rs.getString(3));
 			facet.setCount(rs.getInt(2));
+			
 			return facet;
 		} catch (SQLException x) {
 			throw new AmbitException(x);

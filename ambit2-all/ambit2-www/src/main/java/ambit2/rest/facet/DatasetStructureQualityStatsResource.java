@@ -11,10 +11,11 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.data.SourceDataset;
+import ambit2.db.facets.qlabel.DatasetStructureQLabelFacet;
 import ambit2.db.facets.qlabel.DatasetStructureQualityStats;
 import ambit2.rest.OpenTox;
 
-public class DatasetStructureQualityStatsResource extends FacetResource<DatasetStructureQualityStats> {
+public class DatasetStructureQualityStatsResource extends FacetResource<DatasetStructureQLabelFacet,DatasetStructureQualityStats> {
 	public static final String resource = "/label_strucs";
 	protected Integer datasetID;
 	protected Integer queryResultsID;
