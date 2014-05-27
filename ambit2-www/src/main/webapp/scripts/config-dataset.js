@@ -76,6 +76,7 @@ var config_dataset = {
 				}				
 		},	        
 	*/
+	        /*
             "http://www.wikipathways.org/index.php/Pathway" :  {
                 "title": "Wiki Pathways",
                 "accumulate" : "compound.wikipathway",
@@ -115,13 +116,14 @@ var config_dataset = {
                     return col;
                 }
         },
+        */
 		"http://www.opentox.org/api/1.1#CompositionInfo" : {
 			  "visibility": "details",
 				"title": "Composition",
 				"data": "compound.URI",
 				"render" : function(data, type, full) {
-	        return (type != "details") ? "-" : '<span class="jtox-details-composition" data-URI="' + data + '"></span>';
-	      }
+					return (type != "details") ? "-" : '<span class="jtox-details-composition" data-URI="' + data + '"></span>';
+				}
 		}        
 
 	    },
@@ -140,7 +142,8 @@ var config_dataset = {
 	                    "http://www.opentox.org/api/1.1#InChIKey",
 	                    "http://www.opentox.org/api/1.1#InChI",
 	                    "http://www.opentox.org/api/1.1#REACHRegistrationDate"
- 		  ]
+ 		  	],
+ 			 "Composition": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
         }
 	}    
 }
