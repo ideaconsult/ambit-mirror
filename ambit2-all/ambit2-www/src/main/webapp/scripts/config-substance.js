@@ -33,7 +33,7 @@ var config_substancedataset = {
 	        "http://www.opentox.org/api/1.1#Diagram": {
 	        	"used" : true,	
 	            "title" : "Image",
-	            "column" : function(col) {
+	            "render" : function(col) {
 	                col["bVisible"] = false;
 	                col["sClass"] = "paddingless";
 	                col["sWidth"] = "64px";
@@ -42,49 +42,49 @@ var config_substancedataset = {
 	        },
 	        "http://www.opentox.org/api/1.1#CASRN" : {
 		    	"used" : true,	
-					"column" : function(col) {
+					"render" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#EINECS" : {
 		    	"used" : true,	
-					"column" : function(col) {
+					"render" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	    
 		    "http://www.opentox.org/api/1.1#IUPACName" : {
 		    	"used" : true,	
-					"column" : function(col) {
+					"render" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#SMILES" : {
 		    	"used" : true,	
-					"column" : function(col) {
+					"render" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#InChIKey" : {
 		    	"used" : true,	
-					"column" : function(col) {
+					"render" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#InChI" : {
 		    	"used" : true,	
-					"column" : function(col) {
+					"render" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
 		    },	        
 		    "http://www.opentox.org/api/1.1#REACHRegistrationDate" : {
 		    	"used" : true,	
-					"column" : function(col) {
+					"render" : function(col) {
 			          	    col["bVisible"] = false;
 			                return col;
 			            }    		
@@ -114,7 +114,8 @@ var config_substancedataset = {
 	          "Names": [
 	                    "http://www.opentox.org/api/1.1#ChemicalName",
 	                    "http://www.opentox.org/api/1.1#TradeName"
- 		  ]
+ 		  	],
+ 		 	"Composition": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
         }
 	}    
 }
