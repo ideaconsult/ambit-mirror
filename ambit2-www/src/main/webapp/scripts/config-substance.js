@@ -94,7 +94,15 @@ var config_substancedataset = {
 		    },
 	        "http://www.opentox.org/api/1.1#IUCLID5_UUID" : {
 	        	"title" : "UUID"
-		    }				    
+		    },
+			"http://www.opentox.org/api/1.1#CompositionInfo" : {
+				  "visibility": "details",
+					"title": "Composition",
+					"data": "compound.URI",
+					"render" : function(data, type, full) {
+		        return (type != "details") ? "-" : '<span class="jtox-details-composition" data-URI="' + data + '"></span>';
+		      }
+			}   		    
 	    
 
 	    },
