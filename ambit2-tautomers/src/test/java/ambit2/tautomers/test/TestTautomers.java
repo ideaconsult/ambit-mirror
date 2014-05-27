@@ -35,6 +35,7 @@ import ambit2.tautomers.KnowledgeBase;
 import ambit2.tautomers.TautomerConst;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
+import ambit2.tautomers.CACTVSRanking;
 
 
 public class TestTautomers 
@@ -125,7 +126,7 @@ public class TestTautomers
 		
 		//tt.visualTest("OC=1N=CN=CC=1");  //Kekule aromatic - !!!!
 		
-		tt.visualTest("O=C1N=C(N=CC1)N");
+		//tt.visualTest("O=C1N=C(N=CC1)N");
 		
 		//tt.visualTest("C1=CN=C(N)NC1(=O)");
 		
@@ -191,6 +192,8 @@ public class TestTautomers
 		//rsf.calculateEnergyDifferences("/gen-test.txt", "/energies-diff-test.txt");
 		
 		//tt.visualTestFromFile("/work/tempAmbitIn.sdf");
+		
+		tt.testCACTVSRank("O=C(O)c1ccccc1CCC=O");
 	}
 	
 	public void performTestCases() throws Exception
@@ -732,6 +735,14 @@ public class TestTautomers
 		//TestStrVisualizer tsv = new TestStrVisualizer(v);
 		
 	} 
+	
+	public void testCACTVSRank(String smi) throws Exception
+	{	
+		System.out.println("Testing tautomer CACTVS ranking: " + smi);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		double scoreRank = CACTVSRanking.calcScoreRank(mol);
+		System.out.println("Score = " + scoreRank);
+	}
 	
 	
 	IAtomContainer getMoleculeFromFile(String fname) throws Exception

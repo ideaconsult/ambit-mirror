@@ -126,7 +126,8 @@ public class CACTVSRanking
 		
 		System.out.println(scoreFragmentsToString(nCarboxAromRing, nAromAt, nOximGroup, nC2O, nN2O, nP2O, nC2X, nCH3, nYH, nAciNitro));
 		
-		double rank = nAromAt*(100.0/6) + nOximGroup * 4 + (nC2O + nN2O + nP2O)*2 + nC2X + nCH3 - nYH - 4*nAciNitro;
+		double rank = nCarboxAromRing*50 + nAromAt*(100.0/6) + nOximGroup * 4 +  
+				 (nC2O + nN2O + nP2O)*2 + nC2X + nCH3 - nYH - 4*nAciNitro;
 		return rank;
 	}
 	
