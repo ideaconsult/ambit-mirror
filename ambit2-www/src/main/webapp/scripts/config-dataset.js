@@ -28,7 +28,7 @@ var config_dataset = {
 	},		
 	*/
 	
-	"configuration": {
+	
 	   "baseFeatures": {
 	        "http://www.opentox.org/api/1.1#Diagram": {
 	            "title" : "Structure diagram",
@@ -121,6 +121,7 @@ var config_dataset = {
 			  "visibility": "details",
 				"title": "Composition",
 				"data": "compound.URI",
+				"basic": true,
 				"render" : function(data, type, full) {
 					return (type != "details") ? "-" : '<span class="jtox-details-composition" data-URI="' + data + '"></span>';
 				}
@@ -145,5 +146,5 @@ var config_dataset = {
  		  	],
  			 "Composition": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
         }
-	}    
+    
 }
