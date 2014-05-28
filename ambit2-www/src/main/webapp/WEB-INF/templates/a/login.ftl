@@ -21,7 +21,7 @@ $(document)
 <#include "/banner_crumbs.ftl">
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+&nbsp;
 </div>
 
 
