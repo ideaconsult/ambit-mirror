@@ -174,9 +174,6 @@ a.topLinks {
 	color: #222222;
 }
 
-#footer {
-	background :#fff;
-}
 
  
 .ui-menu {
@@ -309,3 +306,73 @@ a.qxternal {
 	 border:1px solid #cccccc;
 	 overflow: hidden;
 }	
+
+
+#copyright {
+	position: fixed;
+	height: 30px;
+	width: 50%;
+	left: 25%;
+	top: -20px;
+	text-align: center;
+	opacity: 0;
+}
+
+#copyright p {
+	margin: 0px;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+#footer {
+	position: fixed;
+	height: 40px;
+	width: 18%;
+	left: 82%;
+	bottom: -17px;
+	padding: 10px 0 0 0;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: -30px;
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	color: white;
+	background-color: #516373;
+	text-align: center;
+}
+
+#footer p {
+	margin: 0;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+#footer-in {
+	position: fixed;
+	height: 45px;
+	width: 60%;
+	left: 20%;
+	bottom: -5px;
+}
+
+#footer-out {
+	position: fixed;
+	height: 60px;
+	width: 54%;
+	left: 23%;
+	bottom: -5px;
+}
+
+a.footerLink, a.footerLink:active, a.footerLink:visited {
+	color: white !important;
+	font-weight: bold !important;
+}
+
+a.footerLink:hover {
+	color: white !important;
+	font-weight: bold !important;
+	cursor: pointer !important;
+	text-decoration: overline !important;
+}

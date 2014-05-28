@@ -56,6 +56,7 @@
 	<script type='text/javascript' src='${ambit_root}/jquery/jquery.base64.min.js'></script>
 
 	<script type='text/javascript' src='${ambit_root}/scripts/help.js'></script>
+	<script type='text/javascript' src='${ambit_root}/scripts/footer.js'></script>
 	<!--
 	<script type='text/javascript' src='${ambit_root}/jmol/Jmol.js'></script>
 	-->			

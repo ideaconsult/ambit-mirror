@@ -1,6 +1,6 @@
 <ul id='smartmenu' class="sm sm-mint">
 <li>
-	<a href="${ambit_root}/ui/_search">Search</a>
+	<a href="${ambit_root}/ui/_search" title="Chemical structure search">Search</a>
 </li>
 <li>
 	<a href="${ambit_root}/datasets?page=0&pagesize=100" title="Datasets: Chemical structures and properties">Datasets</a>

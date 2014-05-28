@@ -1,14 +1,14 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <script type='text/javascript'>
 
 $(document)
 		.ready(
 				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
 						loadHelp("${ambit_root}","about");
+						jQuery("#breadCrumb").hide();
 				});
 </script>
 
@@ -19,50 +19,61 @@ $(document)
 <div class="container" style="margin:0;padding:0;">
 
 <!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="alpha">
-			<div class="remove-bottom h3">
-					Welcome to AMBIT 
-			</div>
-		    <div class='h6'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
-		</div>
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
-</div>
+<#include "/banner_crumbs.ftl">
 
-<div class="eleven columns remove-bottom" style="padding:0;" >
+	
+<div class="three columns" id="query">
+&nbsp;
+</div>	
 
+<div class="eleven columns " style="padding:0;" >
+	<div class="row add-bottom">
+	&nbsp;
+	</div>
+	<div class="row add-bottom">
 		
-	<div style="margin:50px 5px 5px 5px;padding:5px;">	
+			<div class="thirteen columns remove-bottom" id="query">
+			<div class="alpha">
+				<div class="remove-bottom h3">
+						Welcome to AMBIT 
+				</div>
+			    <div class='h6'>Chemical structures database, properties prediction & machine learning with OpenTox REST web services API</div>			
+			</div>
+			</div>
+	</div>	
+		
+	<div class="row add-bottom">	
 	
-	<form action="${ambit_root}/ui/query?option=auto" id="searchForm"  method="GET" >		
+	<form action="${ambit_root}/ui/_search?option=auto" id="searchForm"  method="GET" >		
 	
-	<div class='row remove-bottom'>
-		<label class='three columns alpha' for="search">&nbsp;</label>
+	<div class='row add-bottom'>
 		<input class='eight columns omega half-bottom' type="text" id='search' value='' name='search'>
 		<input class='three columns omega submit' type='submit' value='Search'>
 	</div>
 	</form>	
 	
 	
-   </div>			
+    </div>	
+    
+    
 
-<div class='row add-bottom' style="height:140px;">&nbsp;</div>
-</div>
+</div>   		
+
 
 <#include "/chelp.ftl" >
 
+<div class='row add-bottom' style="height:400px;">&nbsp;</div>
+    <div class="row ">
+    	<div class="four columns" id="query">&nbsp;</div>
+    	<div class='twelve columns omega'>
+			<a href='http://www.cefic.be' class='qxternal' title='CEFIC' target=_blank><img src='${ambit_root}/images/logocefic.png' border='0' width='115' height='60' alt='Logo CEFIC'></a>&nbsp;
+		
+			<a href='http://www.cefic-lri.org' class='qxternal'  title='CEFIC LRI' target=_blank><img src='${ambit_root}/images/logolri.png' border='0' width='115' height='60' alt='Logo CEFIC-LRI'></a>&nbsp;
+		
+			<a href='http://www.opentox.org' class='qxternal'  title='OpenTox' target=_blank><img src='${ambit_root}/images/logo.png' border='0' width='115' height='60' alt='Logo OpenTox'></a>
+		</div>
+	</div>	
 
 <#include "/footer.ftl" >
 </div> <!-- container -->
