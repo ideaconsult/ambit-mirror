@@ -27,7 +27,7 @@ $(document)
 <#include "/banner_crumbs.ftl">
 
 <div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu_substance.ftl">
+<#include "/searchmenu/menu_substance.ftl">
 
 </div>
 
