@@ -102,6 +102,20 @@
   overflow: hidden;
 }
 
+.jtox-ds-tables {
+  position: relative;  
+}
+
+.jtox-ds-tables .jtox-details-box {
+  position: absolute;
+  margin: 0px;
+  left: 0px;
+  top: 0px;
+  padding: 0px;
+  z-index: 100;
+  height: auto;
+}
+
 .jtox-ds-tables .jtox-inline,
 .jtox-ds-tables td {
   vertical-align: top;

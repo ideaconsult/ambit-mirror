@@ -239,6 +239,16 @@ var ccLib = {
     }
   },
   
+  positionTo: function (el, parent) {
+    var ps = { left: -parent.offsetLeft, top: -parent.offsetTop };
+    parent = parent.offsetParent;
+    for (;!!el && el != parent; el = el.offsetParent) {
+      ps.left += el.offsetLeft;
+      ps.top += el.offsetTop;
+    }
+    return ps;
+  },
+  
   addParameter: function (url, param) {
     return url + (("&?".indexOf(url.charAt(url.length - 1)) == -1) ?  (url.indexOf('?') > 0 ? "&" : "?") : '') + param;
   },
@@ -630,6 +640,7 @@ var jToxCompound = (function () {
     "showControls": true,     // should we show the pagination/navigation controls.
     "hideEmpty": false,       // whether to hide empty groups instead of making them inactive
     "hasDetails": true,       // whether browser should provide the option for per-item detailed info rows.
+    "detailsHeight": "fill",  // what is the tabs' heightStyle used for details row
     "pageSize": 20,           // what is the default (startint) page size.
     "pageStart": 0,           // what is the default startint point for entries retrieval
     "rememberChecks": false,  // whether to remember feature-checkbox settings between queries
@@ -650,7 +661,8 @@ var jToxCompound = (function () {
     "configuration": {
       "groups": {
         "Identifiers" : [
-          "http://www.opentox.org/api/1.1#Diagram", 
+          "http://www.opentox.org/api/1.1#Diagram",
+          "#DetailedInfoRow",
           "http://www.opentox.org/api/1.1#CASRN", 
           "http://www.opentox.org/api/1.1#EINECS",
           "http://www.opentox.org/api/1.1#IUCLID5_UUID"
@@ -722,6 +734,16 @@ var jToxCompound = (function () {
           },
         	visibility: "main"
       	},
+      	"#DetailedInfoRow": {
+      	  title: "Diagram", 
+      	  search: false,
+      	  data: "compound.URI",
+      	  basic: true,
+      	  column: { sClass: "jtox-hidden jtox-ds-details paddingless", sWidth: "0px"},
+        	visibility: "details",
+        	render: function(data, type, full) { return ''; }
+      	},
+      	
       	"http://www.opentox.org/api/1.1#Similarity": {title: "Similarity", data: "compound.metric", search: true, used: true},
       }
     }
@@ -904,7 +926,7 @@ var jToxCompound = (function () {
       
       // now show the whole stuff and mark the disabled tabs
       all.style.display = "block";
-      return jT.$(all).tabs({ collapsible: isMain, disabled: emptyList, heightStyle: isMain ? "content" : "fill" });
+      return jT.$(all).tabs({ collapsible: isMain, disabled: emptyList, heightStyle: isMain ? "content" : (self.settings.detailsHeight == 'auto' ? 'auto' : 'fill') });
     },
     
     equalizeTables: function () {
@@ -912,6 +934,16 @@ var jToxCompound = (function () {
       if (!self.suspendEqualization && self.fixTable != null && self.varTable != null) {
         ccLib.equalizeHeights(self.fixTable.tHead, self.varTable.tHead);
         ccLib.equalizeHeights(self.fixTable.tBodies[0], self.varTable.tBodies[0]);
+
+        // now we need to equalize openned details boxes, if any
+        var tabRoot = jT.$('.jtox-ds-tables', self.rootElement)[0];
+        jT.$('.jtox-details-box', self.rootElement).each(function (i) {
+          var cell = jT.$(this).data('rootCell');
+          if (!!cell) {
+            var ps = ccLib.positionTo(cell, tabRoot);
+            this.style.top = ps.top + 'px';
+          }
+        });
       }
     },
     
@@ -948,8 +980,7 @@ var jToxCompound = (function () {
                   : '');
           }
         },
-        { "sClass": "jtox-hidden", "mData": "index", "sDefaultContent": "-", "bSortable": true, "mRender": function(data, type, full) { return ccLib.isNull(self.orderList) ? 0 : self.orderList[data]; } }, // column used for ordering
-        { "sClass": "jtox-hidden jtox-ds-details paddingless", "mData": "index", "sDefaultContent": "-", "mRender": function(data, type, full) { return ''; } } // details column
+        { "sClass": "jtox-hidden", "mData": "index", "sDefaultContent": "-", "bSortable": true, "mRender": function(data, type, full) { return ccLib.isNull(self.orderList) ? 0 : self.orderList[data]; } } // column used for ordering
       );
       
       varCols.push({ "sClass": "jtox-hidden jtox-ds-details paddingless", "mData": "index", "mRender": function(data, type, full) { return ''; }  });
@@ -980,6 +1011,9 @@ var jToxCompound = (function () {
       
       var fnShowDetails = (self.settings.hasDetails ? function(row, event) {
         var cell = jT.$(".jtox-ds-details", row)[0];
+        if (!cell)
+          return; // that means you've forgotten to add #DetailedInfoRow feature somewhere.
+          
         var idx = jT.$(row).data('jtox-index');
         jT.$(row).toggleClass('jtox-detailed-row');
         var toShow = jT.$(row).hasClass('jtox-detailed-row');
@@ -992,45 +1026,58 @@ var jToxCompound = (function () {
         var iconCell = jT.$('.jtox-details-open', row);
         jT.$(iconCell).toggleClass('ui-icon-circle-triangle-e');
         jT.$(iconCell).toggleClass('ui-icon-circle-triangle-w');
-
+        
         if (toShow) {
           // i.e. we need to show it - put the full sized diagram in the fixed part and the tabs in the variable one...
           var full = self.dataset.dataEntry[idx];
-          
+
           var detDiv = document.createElement('div');
-          varCell.appendChild(detDiv);
+          detDiv.className = 'jtox-details-box';
+
+          var tabRoot = jT.$('.jtox-ds-tables', self.rootElement)[0];
+          var width = jT.$(cell).width() + jT.$('.jtox-ds-variable', tabRoot).width();
+          jT.$(detDiv).width(width);
+          var ps = ccLib.positionTo(cell, tabRoot);
+          detDiv.style.left = ps.left + 'px';
+          detDiv.style.top = ps.top + 'px';
+
+          if (!ccLib.isNull(self.settings.detailsHeight)) {
+            if (parseInt(self.settings.detailsHeight) > 0)
+              jT.$(detDiv).height(self.settings.detailsHeight);
+            else if (self.settings.detailsHeight == 'fill')
+              jT.$(detDiv).height(jT.$(cell).height() * 2);
+          }
+
+          tabRoot.appendChild(detDiv);
           
-          var img = new Image();
-          img.onload = function(e) {
-            self.equalizeTables();
-            jT.$(detDiv).height(varCell.parentNode.clientHeight - 1);
-            self.prepareTabs(detDiv, false, 
-              function (id, name, parent) {
-                var fEl = null;
-                if (id != null) {
-                  fEl = jT.getTemplate('#jtox-one-detail');
-                  parent.appendChild(fEl);
-                  ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full, 'details'), uri: self.featureUri(id)});
-                }
-                return fEl;
-              },
-              function (id, parent) {
-                var tabTable = jT.getTemplate('#jtox-details-table');
-                parent.appendChild(tabTable);
-                return tabTable;  
+          self.prepareTabs(detDiv, false, 
+            function (id, name, parent) {
+              var fEl = null;
+              if (id != null) {
+                fEl = jT.getTemplate('#jtox-one-detail');
+                parent.appendChild(fEl);
+                ccLib.fillTree(fEl, {title: name, value: self.featureValue(id, full, 'details'), uri: self.featureUri(id)});
               }
-            );
-            ccLib.fireCallback(self.settings.onDetails, self, detDiv, full, event);
-          };
-          img.src = full.compound.diagramUri;
-          cell.appendChild(img);
+              return fEl;
+            },
+            function (id, parent) {
+              var tabTable = jT.getTemplate('#jtox-details-table');
+              parent.appendChild(tabTable);
+              return tabTable;  
+            }
+          );
+          
+          jT.$(cell).height(detDiv.offsetHeight);
+          ccLib.fireCallback(self.settings.onDetails, self, detDiv, full, event);
+          jT.$(cell).data('detailsDiv', detDiv);
+          jT.$(detDiv).data('rootCell', cell);
         }
         else {
           // i.e. we need to hide
-          jT.$(cell).empty();
-          jT.$(varCell).empty();
-          self.equalizeTables();
+          jT.$(cell).data('detailsDiv').remove();
         }
+        
+        self.equalizeTables();
       } : null); // fnShowDetails definition end
 
       // make a query for all checkboxes in the main tab, so they can be traversed in parallel with the features and 
@@ -1119,7 +1166,6 @@ var jToxCompound = (function () {
           nRow.id = 'jtox-var-' + self.instanceNo + '-' + iDataIndex;
           jT.$(nRow).addClass('jtox-row');
           jT.$(nRow).data('jtox-index', iDataIndex);
-          ccLib.fireCallback(self.settings.onRow, self, nRow, aData, iDataIndex);
         },
         "fnDrawCallback": function(oSettings) {
           // this is for synchro-sorting the two tables
@@ -1758,7 +1804,7 @@ var jToxSubstance = (function () {
           'Substance UUID': { sTitle: "Substance UUID", mData: "i5uuid", mRender: function (data, type, full) {
             return (type != 'display') ? data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard");
           } },
-          'Composition Type': { sTitle: "Composition Type", mData: "substanceType", sWidth: "15%", sDefaultContent: '-' },
+          'Substance Type': { sTitle: "Substance Type", mData: "substanceType", sWidth: "15%", sDefaultContent: '-' },
           'Public name': { sTitle: "Public name", mData: "publicname", sDefaultContent: '-'},
           'Reference substance UUID': { sTitle: "Reference substance UUID", mData: "referenceSubstance", mRender: function (data, type, full) {
             return (type != 'display') ? 
