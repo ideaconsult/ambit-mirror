@@ -1,46 +1,31 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
+
 <script type='text/javascript'>
 
 $(document)
 		.ready(
 				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
+					loadHelp("${ambit_root}","model");
+					jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/model" title="Models">Models</a></li>');
 				});
 </script>
-
 </head>
 <body>
 
 
 <div class="container" style="margin:0;padding:0;">
 
-<!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="seven columns alpha">
-			<div class="remove-bottom h3">
-					Predictions
-			</div>
-		    <div class='h6'>Run predictive models</div>			
-		</div>
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
-
+<#include "/banner_crumbs.ftl">
+	
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<#include "/model_menu.ftl">
+
 </div>
 
-<div class="eleven columns remove-bottom" style="padding:0;" >
+<div class="twelve columns remove-bottom" style="padding:0;" >
 
 <div class='ui-widget-header ui-corner-top'>&nbsp;How to run predictive models</div>
 <div class='ui-widget-content ui-corner-bottom'>	

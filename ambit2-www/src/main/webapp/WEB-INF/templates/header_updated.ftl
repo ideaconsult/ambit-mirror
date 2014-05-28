@@ -66,7 +66,12 @@
     <link rel="stylesheet" href="${ambit_root}/style/jqBreadCrumb.css" type="text/css">
     <script src="${ambit_root}/jquery/jquery.jBreadCrumb.1.1.js" type="text/javascript" language="JavaScript"></script>
     
-    
+    <!-- smartmenus
+	================================================== -->
+    <script src="${ambit_root}/jquery/jquery.smartmenus.min.js" type="text/javascript" language="JavaScript"></script>
+    <link rel="stylesheet" href="${ambit_root}/style/sm-core-css.css" type="text/css">
+    <link rel="stylesheet" href="${ambit_root}/style/sm-mint.css" type="text/css">
+     
 <!-- Uncomment to enable the confirmation message when clicking external links	
 <script type='text/javascript'>
 	$(document).ready(function() {
