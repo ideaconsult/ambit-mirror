@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
@@ -18,14 +18,6 @@
 	</script>
 </#if>
 
-<script type='text/javascript'>
-
-$(document)
-		.ready(
-				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
-				});
-</script>
 
 </head>
 <body>

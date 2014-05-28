@@ -1,8 +1,10 @@
 
-
 <#if substanceUUID??>
 <div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
 	<a href="${ambit_root}/ui/_dataset?dataset_uri=${ambit_root}/substance/${substanceUUID}/structure" title='Chemical structures for this substance'>Show structures</a>
+</div>
+<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+	<a href="${ambit_root}/substance/${substanceUUID}/composition" title='Substance composition'>Show composition</a>
 </div>
 </#if>
 
