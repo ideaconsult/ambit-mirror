@@ -1052,7 +1052,7 @@ var jToxCompound = (function () {
           var full = self.dataset.dataEntry[idx];
 
           var detDiv = document.createElement('div');
-          detDiv.className = 'jtox-details-box';
+          detDiv.className = 'jtox-details-box jtox-details';
 
           var tabRoot = jT.$('.jtox-ds-tables', self.rootElement)[0];
           var width = jT.$(cell).width() + jT.$('.jtox-ds-variable', tabRoot).width();
@@ -1822,14 +1822,12 @@ var jToxSubstance = (function () {
           } },
           'Substance Name': { sTitle: "Substance Name", mData: "name", sDefaultContent: "-" },
           'Substance UUID': { sTitle: "Substance UUID", mData: "i5uuid", mRender: function (data, type, full) {
-            return (type != 'display') ? data : jT.ui.shortenedData(data, "Press to copy the UUID in the clipboard");
+            return (type != 'display') ? data : jT.ui.shortenedData('<a target="_blank" href="' + full.URI + '/study">' + data + '</a>', "Press to copy the UUID in the clipboard", data)
           } },
           'Substance Type': { sTitle: "Substance Type", mData: "substanceType", sWidth: "15%", sDefaultContent: '-' },
           'Public name': { sTitle: "Public name", mData: "publicname", sDefaultContent: '-'},
           'Reference substance UUID': { sTitle: "Reference substance UUID", mData: "referenceSubstance", mRender: function (data, type, full) {
-            return (type != 'display') ? 
-              data.i5uuid : 
-               jT.ui.shortenedData('<a target="_blank" href="' + data.uri + '">' + data.i5uuid + '</a>', "Press to copy the UUID in the clipboard", data.i5uuid);
+            return (type != 'display') ? data.i5uuid : jT.ui.shortenedData('<a target="_blank" href="' + data.uri + '">' + data.i5uuid + '</a>', "Press to copy the UUID in the clipboard", data.i5uuid);
           } },
           'Owner': { sTitle: "Owner", mData: "ownerName", sDefaultContent: '-'},
           'Info': { sTitle: "Info", mData: "externalIdentifiers", mRender: function (data, type, full) {
@@ -1864,12 +1862,16 @@ var jToxSubstance = (function () {
       
       // deal if the selection is chosen
       
-      var colId = self.settings.configuration.columns.substance.Id;
+      var colId = self.settings.configuration.columns.substance['Id'];
       jT.ui.putActions(self, colId, { 
         selection: self.settings.selectionHandler,
         details: !!self.settings.onDetails
       });
       colId.sTitle = '';
+      
+      self.settings.configuration.columns.substance['Owner'].mRender = function (data, type, full) {
+        return (type != 'display') ? data : '<a target="_blank" href="' + self.settings.baseUrl + '/substanceowner/' + full.ownerUUID + '/substance">' + data + '</a>';
+      };
         
       jT.ui.putControls(self, { 
         nextPage: function () { self.nextPage(); },
@@ -1940,6 +1942,8 @@ var jToxSubstance = (function () {
     querySubstance: function (uri) {
       var self = this;
       self.substanceUri = jT.grabPaging(self, uri);
+      if (ccLib.isNull(self.settings.baseUrl))
+        self.settings.baseUrl = jT.grabBaseUrl(uri);
       self.queryEntries(self.settings.pageStart);
     },   
     
