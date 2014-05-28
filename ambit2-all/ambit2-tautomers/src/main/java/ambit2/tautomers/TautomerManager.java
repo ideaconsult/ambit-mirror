@@ -28,8 +28,7 @@ public class TautomerManager
 	int originalValencySum;
 		
 	public boolean FlagRecurseBackResultTautomers = false;
-	
-	
+	public boolean FlagCalculateCACTVSEnergyRank = false;
 	
 	public boolean FlagCheckDuplicationOnRegistering = true;
 	public boolean FlagCheckValencyOnRegistering = false;       //it is not used yet
@@ -73,11 +72,18 @@ public class TautomerManager
 	}
 	
 	
-	//Approach 00: this is the initial (pure combinatorial)  approach 
+	/**
+	 * This is pure combinatorial approach
+	 * It is the initial approach 00 based on binary combinations. 
+	 * n rule instances define 2^n combinations (binary number with n digits) 
+	 */
+	
+	
+	
 	public Vector<IAtomContainer> generateTautomers() throws Exception
 	{
 		searchAllRulePositions();
-		handleOverlapedInstances();
+		//handleOverlapedInstances();    Currently does nothing. Incorrect tautomers are filtered out by FilterTautomers
 		
 		resultTautomers = new Vector<IAtomContainer>();
 		if (ruleInstances.isEmpty())
@@ -93,7 +99,11 @@ public class TautomerManager
 		return(resultTautomers);
 	}
 	
-	//Approach 01: improved combinatorial approach 
+	/**
+	 * @return 
+	 * @throws Exception
+	 * Approach 01: improved combinatorial approach
+	 */	 
 	public Vector<IAtomContainer> generateTautomers_ImprovedCombApproach() throws Exception
 	{
 		searchAllRulePositions();
@@ -124,7 +134,14 @@ public class TautomerManager
 		return(resultTautomers);
 	}
 	
-	//Approach 02 (basic one) based on first depth search algorithm
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 * This is the basic approach 
+	 * Approach 02 (basic one) based on first depth search algorithm
+	 */
+	//
 	public Vector<IAtomContainer> generateTautomersIncrementaly() throws Exception
 	{
 		//An approach for generation of tautomers
@@ -161,13 +178,12 @@ public class TautomerManager
 		return(resultTautomers);
 	}
 	
-	//Combined approach (00, 01, 02)
+	//Combined approach (00, 01, 02) - not implemented!
 	public Vector<IAtomContainer> generateTautomersCombinedApproach() throws Exception
 	{
 		resultTautomers = new Vector<IAtomContainer>();	
 		resultTatomerStringCodes.clear();
 		//TODO
-		
 		return(resultTautomers);
 		
 	}

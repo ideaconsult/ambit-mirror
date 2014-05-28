@@ -20,7 +20,7 @@ public class CACTVSRanking
 	 */
 	public static double calcScoreRank(IAtomContainer mol)
 	{
-		int nCarboxAromRing = 0;
+		//int nCarbocyclicAromRing = 0;  
 		int nAromAt = 0;
 		//int nBenzQuin = 0;
 		int nOximGroup = 0;
@@ -39,15 +39,8 @@ public class CACTVSRanking
 			if (atom.getFlag(CDKConstants.ISAROMATIC))
 			{
 				nAromAt++;
-				//Find non-aromatic neighbour and check for carboxylic group
-				List<IAtom> list = mol.getConnectedAtomsList(atom);
-				for (IAtom at : list)
-					if (!at.getFlag(CDKConstants.ISAROMATIC))
-						if (checkCarboxylicGroup(at, atom, mol))
-							nCarboxAromRing++;
 				continue;
-			}
-			
+			}			
 			
 			if (checkMethylGroup(atom, mol))
 			{	
@@ -69,8 +62,7 @@ public class CACTVSRanking
 				}
 						
 			//Check Y-H (P-H, S-H, Se-H or Te-H)
-			if (checkPSSeTeH(atom, mol))
-				nYH++;
+			nYH+=checkPSSeTeH(atom, mol);
 		}
 		
 		for (IBond bond : mol.bonds())
@@ -124,9 +116,13 @@ public class CACTVSRanking
 			}		
 		}
 		
-		System.out.println(scoreFragmentsToString(nCarboxAromRing, nAromAt, nOximGroup, nC2O, nN2O, nP2O, nC2X, nCH3, nYH, nAciNitro));
+		//Correction due to the aci-nitro group
+		nN2O =nN2O - nOximGroup;
 		
-		double rank = nCarboxAromRing*50 + nAromAt*(100.0/6) + nOximGroup * 4 +  
+		
+		System.out.println(scoreFragmentsToString( nAromAt, nOximGroup, nC2O, nN2O, nP2O, nC2X, nCH3, nYH, nAciNitro));
+		
+		double rank = nAromAt*(100.0/6) + nOximGroup * 4 +  
 				 (nC2O + nN2O + nP2O)*2 + nC2X + nCH3 - nYH - 4*nAciNitro;
 		return rank;
 	}
@@ -134,49 +130,6 @@ public class CACTVSRanking
 	public static double getEnergyRank(IAtomContainer mol)
 	{
 		return (- score2eV * calcScoreRank(mol));
-	}
-	
-	public static boolean checkCarboxylicGroup(IAtom centerAtom, IAtom attachAtom, IAtomContainer mol)
-	{
-		if (!centerAtom.getSymbol().equals("C"))
-			return false;
-		
-		List<IAtom> list = mol.getConnectedAtomsList(centerAtom);
-		if (list.size() != 3)
-			return false;
-		boolean FlagOH = false;
-		boolean Flag2O = false;		
-		for (IAtom at : list)
-		{
-			if (at == attachAtom)
-				continue; //the is the atom (R) that the carboxylic group is substituted to i.e. R-C(-OH)=O
-			if (at.getSymbol().equals("O"))
-			{
-				if (mol.getBond(centerAtom, at).getOrder() == IBond.Order.SINGLE)
-				{	
-					if (getHNeighbours(at, mol) == 1)
-					{	
-						FlagOH = true;
-						continue;
-					}
-					else
-						return false; //not OH group probably O-X
-				}
-				else
-				{
-					//It must be a double bond 
-					Flag2O = true;
-					continue;
-				}
-			}
-			else
-				return false; //non O atom
-		}
-		
-		if (FlagOH && Flag2O)
-			return true;
-		else
-			return false;
 	}
 	
 	public static boolean checkMethylGroup(IAtom atom, IAtomContainer mol)
@@ -235,24 +188,26 @@ public class CACTVSRanking
 			
 		}
 		
-		 if (Flag2C && FlagOH)
-		 {
-			 if (Flag2O)
-				 return 2;
-			 else
-				 return 1;
-		 }
+		if (Flag2C && FlagOH)
+		{
+			if (Flag2O)
+				return 2;
+			else
+				return 1;
+		}
 		
 		return 0;
 	}
 	
-	public static boolean checkPSSeTeH(IAtom atom, IAtomContainer mol)
+	public static int checkPSSeTeH(IAtom atom, IAtomContainer mol)
 	{
 		String atSy = atom.getSymbol();
 		if (atSy.equals("P") || atSy.equals("S") || atSy.equals("Se") || atSy.equals("Te"))
-			if (getHNeighbours(atom, mol) == 1) 
-				return true;
-		return false;
+		{	
+			System.out.println("atom " + atSy + "  H" + getHNeighbours(atom, mol));
+			return getHNeighbours(atom, mol); //Each H neigbour defined a bond Y-H (Y=P,S,Se,Te)
+		}	
+		return 0;
 	}
 	
 	public static int getHNeighbours(IAtom atom, IAtomContainer mol) 
@@ -270,13 +225,10 @@ public class CACTVSRanking
 		return nH;
 	}
 	
-	public static String scoreFragmentsToString(int nCarboxAromRing, int nAromAt, 
-												int nOximGroup, int nC2O, int nN2O, int nP2O, int nC2X,
-												int nCH3, 	int nYH, int nAciNitro)
+	public static String scoreFragmentsToString(int nAromAt, int nOximGroup, int nC2O, int nN2O, int nP2O, 
+												int nC2X, int nCH3, 	int nYH, int nAciNitro)
 	{
 		StringBuffer sb = new StringBuffer();
-		if (nCarboxAromRing > 0)
-			sb.append("nCarboxAromRing = " + nCarboxAromRing + "\n");		
 		if (nAromAt > 0)
 			sb.append("nAromAt = " + nAromAt + "\n");
 		if (nOximGroup > 0)
