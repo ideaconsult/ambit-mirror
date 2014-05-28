@@ -851,6 +851,15 @@ var jToxCompound = (function () {
         return liEl;
       };
       
+      var processCheckEl = function(fEl, fId) {
+        var checkEl = jT.$('input[type="checkbox"]', fEl)[0];
+        if (!checkEl)
+          return;
+        checkEl.value = fId;
+        if (self.settings.rememberChecks)
+          checkEl.checked = (self.featureStates[fId] === undefined || self.featureStates[fId]);
+      };
+      
       var emptyList = [];
       var idx = 0;
       for (var gr in self.groups) {
@@ -877,16 +886,14 @@ var jToxCompound = (function () {
           if (idx == "name") {
             if (isMain) {
               var fEl = nodeFn(null, fId, divEl);
-              if (self.settings.rememberChecks)
-                jT.$('input[type="checkbox"]', fEl)[0].checked = (self.featureStates[fId] === undefined || self.featureStates[fId]);
+              processCheckEl(fEl, fId);
             }
           }
           else if (!isMain || level == 1) {
             var title = self.feature[fId].title;
             if (!ccLib.isNull(title)) {
               var fEl = nodeFn(fId, title, divEl);
-              if (isMain && self.settings.rememberChecks)
-                jT.$('input[type="checkbox"]', fEl)[0].checked = (self.featureStates[fId] === undefined || self.featureStates[fId]);
+              processCheckEl(fEl, fId);
             }
           }
         });
@@ -1099,16 +1106,10 @@ var jToxCompound = (function () {
         self.equalizeTables();
       } : null); // fnShowDetails definition end
 
-      // make a query for all checkboxes in the main tab, so they can be traversed in parallel with the features and 
-      // a change handler added.
-      var checkList = jT.$('.jtox-ds-features .jtox-checkbox', self.rootElement);
-      var checkIdx = -1;
-      
       // now proceed to enter all other columns
       for (var gr in self.groups) {
         ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
           if (idx == "name") {
-            ++checkIdx;
             return;
           }
             
@@ -1141,9 +1142,10 @@ var jToxCompound = (function () {
             col["mRender"] = feature.render;
           
           // finally - assign column switching to the checkbox of main tab.
-          if (level == 1)
-            ++checkIdx;
-          jT.$(checkList[checkIdx]).data({ sel: colList == fixCols ? '.jtox-ds-fixed' : '.jtox-ds-variable', idx: colList.length, id: fId}).on('change', fnShowColumn)
+          jT.$().each(function () {
+            
+          });
+          jT.$('.jtox-ds-features input.jtox-checkbox[value="' + fId + '"]', self.rootElement).data({ sel: colList == fixCols ? '.jtox-ds-fixed' : '.jtox-ds-variable', idx: colList.length, id: fId}).on('change', fnShowColumn)
           
           // and push it into the proper list.
           colList.push(col);
