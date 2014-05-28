@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 <#include "/a/users_head.ftl" >
 
 <#if ambit_admin?? && ambit_admin>
@@ -37,13 +37,13 @@ jQuery(document).ready(function()
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
-<div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
+&nbsp;
 </div>
 		
 		<!-- Page Content
 		================================================== -->
-		<div class="eleven columns ui-widget-content ui-corner-all add-bottom" style="padding:0;" >
+		<div class="twelve columns ui-widget-content ui-corner-all add-bottom" style="padding:0;" >
 		
 		<table id='users' cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 		<thead>
