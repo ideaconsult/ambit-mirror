@@ -30,23 +30,6 @@ var config_dataset = {
 	
 	
 	   "baseFeatures": {
-	        "http://www.opentox.org/api/1.1#Diagram": {
-	            "title" : "Structure diagram",
-	            "column" : function(col) {
-	          	    col["mData"] = "compound.diagramUri";
-	                col["mRender"] = function(data, type, full) {
-	                  return (type != "display") ? "-" :
-	                	  (
-	                	  //'<input type="checkbox" name="cmp" value="'+full.compound.URI+'"> '+
-	                	  '<a target="_blank" href="' + full.compound.URI + '"><img src="' + data + '" class="jtox-ds-smalldiagram"/></a>'
-	                	  //'<a target="_blank" href="' + full.compound.URI + '"><img src="http://localhost:8080/ambit2/model/3?media=image/png&dataset_uri=' + full.compound.URI + '" class="jtox-ds-smalldiagram"/></a>'
-	                	  );
-	                };
-	                col["sClass"] = "paddingless";
-	                col["sWidth"] = "150px";
-	                return col;
-	            }
-	        },
 	        /*
 		"http://www.opentox.org/echaEndpoints.owl#Carcinogenicity" : {
 				"title" : "Carcinogenicity",
@@ -128,7 +111,8 @@ var config_dataset = {
 		}        
 
 	    },
-	    "groups": {
+	    "groups": function createGroups(miniset, kit) {
+	    	 var groups = {
 	          "Identifiers" : [
 	             "http://www.opentox.org/api/1.1#Diagram",
 	             "#DetailedInfoRow",
@@ -147,6 +131,19 @@ var config_dataset = {
 	                    "http://www.opentox.org/api/1.1#REACHRegistrationDate"
  		  	],
  			 "Substances": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
+	    	 };
+	    	 	for (var fId in miniset.feature) {
+	    	      	var src = miniset.feature[fId].source;
+	    	      	if (!src || !src.type || src.type.toLowerCase() != 'model')
+	    	      	  continue;
+	    	      	 src = src.URI.substr(src.URI.lastIndexOf('/') + 1);
+	    	      	 if (groups[src] === undefined)
+	    	      	  groups[src] = [];
+	    	      	 groups[src].push(fId);
+	    	    	}
+	    	    	groups["Substances"] = [ "http://www.opentox.org/api/1.1#CompositionInfo" ];
+	    	    	groups["Calculated"] = null;
+	    	    	return groups;
         }
     
 }
