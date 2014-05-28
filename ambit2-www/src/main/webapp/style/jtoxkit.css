@@ -90,6 +90,7 @@
   display: inline-block;
   width: 450px;
   float: left;
+  overflow-x: hidden;
 }
 
 .jtox-ds-feature {
@@ -123,12 +124,6 @@
 
 .jtox-ds-tables td .shortened {
   max-width: 75px;  
-}
-
-.jtox-ds-smalldiagram {
-  width: 125px;
-  height: 125px;
-  border: 0px;
 }
 
 .jtox-ds-export {
@@ -170,6 +165,30 @@
   border-top: 0px !important;
   border-right: 0px !important;
   padding-left: 10px;
+}
+
+.jtox-diagram {
+  position: relative;
+}
+
+.jtox-diagram img {
+  border: 0px;
+}
+
+.jtox-diagram span.ui-icon {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  display: none; 
+}
+
+.jtox-diagram:hover span.ui-icon {
+  display: block;
+}
+
+img.jtox-smalldiagram {
+  width: 125px;
+  height: 125px;
 }
 
 .jtox-controls {
