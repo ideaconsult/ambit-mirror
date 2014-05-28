@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
@@ -9,78 +9,27 @@
 $(document).ready(function() {
 	var oTable = defineFacetsTable("${ambit_root}","${ambit_request_json}","#facet");
 	downloadForm("${ambit_request}");
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin" title="Admin">Admin</a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/admin/stats" title="Statistics">Statistics</a></li>');
 });
 </script>
 </head>
 <body>
 
 <div class="container columns" style="margin:0;padding:0;">
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="ten columns alpha">
-			<div class="h3 remove-bottom">
-					${facet_title}
-			</div>
-		    <div class='h6'>
-		    <a href="${ambit_root}/admin/stats/structures">Structures</a> |
-		    <a href="${ambit_root}/admin/stats/dataset">Datasets</a>  |
-		    <a href="${ambit_root}/admin/stats/properties">Properties</a>  |
-		    <a href="${ambit_root}/admin/stats/values">Values</a>  |		    
-		    <a href="${ambit_root}/admin/stats/models">Models</a>  |
-		    <a href="${ambit_root}/admin/stats/substances">Substances</a>  |
-			<a href="${ambit_root}/substanceowner">Substance owners</a>  |		    
-		    <a href="${ambit_root}/admin/stats/protocol_applications">Experiments</a>  |
-		    <a href="${ambit_root}/admin/stats/experiment_endpoints">Endpoints</a>  |
-		    <a href="${ambit_root}/admin/stats/chemicals_in_dataset">Chemicals in a dataset</a>  |
-		    <a href="${ambit_root}/admin/stats/dataset_intersection">Dataset intersection</a>
-		    </div>			
-		</div>
-		<div class="four columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	<input type='text'  id='dataset_uri' name='dataset_uri' value='' tabindex='1' >
-		    </div>			
-		</div>		
-		<div class="two columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-		    </div>			
-		</div>	
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
-
-</form>
+<!-- banner -->
+<#include "/banner_crumbs.ftl">
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+	<#include "/searchmenu/menu_facets.ftl">
 
-	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-	<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list'></a>
-	<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
-	<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
-	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
+<!-- help-->		
+	<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
+	<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
 	</div>
-	
-<!-- help-->	
-<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
-<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
+	<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
+	</div>		
 </div>
-<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
-</div>	
-</div>
-
  		
 		<div class="thirteen columns remove-bottom" style="padding:0;" >
 
