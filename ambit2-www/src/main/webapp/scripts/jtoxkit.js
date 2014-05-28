@@ -683,8 +683,8 @@ var jToxCompound = (function () {
           if (miniset.dataEntry.length > 0 && !ccLib.isNull(miniset.dataEntry[0].compound.metric))
             arr.push(this.settings.metricFeature);
 
-          for (var f in miniset.features) {
-            var feat = miniset.features[f];
+          for (var f in miniset.feature) {
+            var feat = miniset.feature[f];
             if (ccLib.isNull(feat.source) || ccLib.isNull(feat.source.type) || !!feat.basic)
               continue;
             else if (feat.source.type.toLowerCase() == "algorithm" || feat.source.type.toLowerCase() == "model") {
@@ -696,8 +696,8 @@ var jToxCompound = (function () {
         
         "Other": function (name, miniset) {
           var arr = [];
-          for (var f in miniset.features) {
-            if (!miniset.features[f].used && !miniset.features[f].basic)
+          for (var f in miniset.feature) {
+            if (!miniset.feature[f].used && !miniset.feature[f].basic)
               arr.push(f);
           }
           return arr;
@@ -800,7 +800,7 @@ var jToxCompound = (function () {
     init: function () {
       var self = this;
       
-      self.features = null; // features, as downloaded from server, after being processed.
+      self.feature = null; // features, as downloaded from server, after being processed.
       self.dataset = null; // the last-downloaded dataset.
       self.groups = null; // computed groups, i.e. 'groupName' -> array of feature list, prepared.
       self.fixTable = self.varTable = null; // the two tables - to be initialized in prepareTables.
@@ -824,12 +824,12 @@ var jToxCompound = (function () {
         jT.$(this.rootElement).empty();
         for (var i = 0, fl = this.usedFeatures.length; i < fl; ++i) {
           var fid = this.usedFeatures[i];
-          this.features[fid].used = false;
+          this.feature[fid].used = false;
         }
       }
     },
     
-    /* make a tab-based widget with features and grouped on tabs. It relies on filled and processed 'self.features' as well
+    /* make a tab-based widget with features and grouped on tabs. It relies on filled and processed 'self.feature' as well
     as created 'self.groups'.
     */
     prepareTabs: function (root, isMain, nodeFn, divFn) {
@@ -870,7 +870,7 @@ var jToxCompound = (function () {
         var grp = self.groups[gr];
         var empty = true;
         ccLib.enumObject(self.groups[gr], function (fId, idx, level) {
-          var vis = (self.features[fId] || {})['visibility'];
+          var vis = (self.feature[fId] || {})['visibility'];
           if (!!vis && (vis == "none" || (!isMain && vis == 'main') || (isMain && vis == "details")))
             return;
           empty = false;
@@ -882,7 +882,7 @@ var jToxCompound = (function () {
             }
           }
           else if (!isMain || level == 1) {
-            var title = self.features[fId].title;
+            var title = self.feature[fId].title;
             if (!ccLib.isNull(title)) {
               var fEl = nodeFn(fId, title, divEl);
               if (isMain && self.settings.rememberChecks)
@@ -970,14 +970,14 @@ var jToxCompound = (function () {
     
     featureValue: function (fId, data, type) {
       var self = this;
-      var feature = self.features[fId];
+      var feature = self.feature[fId];
       var val = (feature.data !== undefined) ? (ccLib.getJsonValue(data, jT.$.isArray(feature.data) ? feature.data[0] : feature.data)) : data.values[fId];
       return (typeof feature.render == 'function') ? feature.render(val, !!type ? type : 'filter', data) : val;
     },
     
     featureUri: function (fId) {
       var self = this;
-      var origId = self.features[fId].originalId;
+      var origId = self.feature[fId].originalId;
       return ccLib.isNull(origId) ? fId : origId;
     },
     
@@ -1112,7 +1112,7 @@ var jToxCompound = (function () {
             return;
           }
             
-          var feature = self.features[fId];
+          var feature = self.feature[fId];
           var col = {
             "sTitle": feature.title.replace(/_/g, ' ') + (ccLib.isNull(feature.units) ? "" : feature.units),
             "sDefaultContent": "-",
@@ -1218,6 +1218,9 @@ var jToxCompound = (function () {
       var self = this;
       
       var grps = self.settings.configuration.groups;
+      if (typeof grps == 'function')
+        grps = grps(miniset, self);
+        
       self.groups = {};
       for (var i in grps){
         var grp = grps[i];
@@ -1227,14 +1230,14 @@ var jToxCompound = (function () {
         var grpArr = (typeof grp == "function" || typeof grp == "string") ? ccLib.fireCallback(grp, self, i, miniset) : grp;
         self.groups[i] = [];
         ccLib.enumObject(grpArr, function(fid, idx) { 
-          var sameAs = cls.findSameAs(fid, self.features);
-          if (!self.features[sameAs].used && !self.features[fid].used)
+          var sameAs = cls.findSameAs(fid, self.feature);
+          if (!self.feature[sameAs].used && !self.feature[fid].used)
             self.groups[i].push(fid);
           if (idx != "name") {
             // these we need to be able to return back to original state.
             self.usedFeatures.push(fid);
             self.usedFeatures.push(sameAs);
-            self.features[fid].used = self.features[sameAs].used = true;
+            self.feature[fid].used = self.feature[sameAs].used = true;
           }
         });
       }
@@ -1273,7 +1276,7 @@ var jToxCompound = (function () {
           var entry = self.dataset.dataEntry[i];
   
           var match = self.enumerateFeatures(function(fId, gr){
-            var feat = self.features[fId];
+            var feat = self.feature[fId];
             if (feat.search !== undefined && !feat.search)
               return false;
             var val = self.featureValue(fId, entry);
@@ -1365,7 +1368,7 @@ var jToxCompound = (function () {
       jT.call(self, qUri, function(dataset){
         if (!!dataset){
           // then, preprocess the dataset
-          self.dataset = cls.processDataset(dataset, self.features, self.settings.fnAccumulate, self.settings.pageStart);
+          self.dataset = cls.processDataset(dataset, self.feature, self.settings.fnAccumulate, self.settings.pageStart);
 
           // ok - go and update the table, filtering the entries, if needed            
           self.updateTables();
@@ -1396,9 +1399,9 @@ var jToxCompound = (function () {
       self.datasetUri = datasetUri;
       jT.call(self, ccLib.addParameter(datasetUri, "page=0&pagesize=1"), function (dataset) {
         if (!!dataset) {
-          self.features = dataset.feature;
-          cls.processFeatures(self.features, self.settings.configuration.baseFeatures);
-          dataset.features = self.features;
+          self.feature = dataset.feature;
+          cls.processFeatures(self.feature, self.settings.configuration.baseFeatures);
+          dataset.feature = self.feature;
           self.prepareGroups(dataset);
           if (self.settings.showTabs) {
             self.prepareTabs(jT.$('.jtox-ds-features', self.rootElement)[0], true, function (id, name, parent){

@@ -30,16 +30,6 @@ var config_substancedataset = {
 	
 	
 	   "baseFeatures": {
-	        "http://www.opentox.org/api/1.1#Diagram": {
-	        	"used" : true,	
-	            "title" : "Image",
-	            "render" : function(col) {
-	                col["bVisible"] = false;
-	                col["sClass"] = "paddingless";
-	                col["sWidth"] = "64px";
-	                return col;
-	            }
-	        },
 	        "http://www.opentox.org/api/1.1#CASRN" : {
 		    	"used" : true,	
 					"render" : function(col) {
@@ -107,16 +97,31 @@ var config_substancedataset = {
 	    
 
 	    },
-	    "groups": {
+	    "groups": function createGroups(miniset, kit) {
+	    	 var groups = {
 	          "Identifiers" : [
+	             "#DetailedInfoRow",
 	             "http://www.opentox.org/api/1.1#IUCLID5_UUID"
-		          "#DetailedInfoRow", 
 	          ],
+	          
 	          "Names": [
 	                    "http://www.opentox.org/api/1.1#ChemicalName",
-	                    "http://www.opentox.org/api/1.1#TradeName"
- 		  	],
- 		 	"Substances": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
-        }
+	                    "http://www.opentox.org/api/1.1#TradeName",
+		  	],
+			 "Substances": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
+	    	 };
+	    	 	for (var fId in miniset.feature) {
+	    	      	var src = miniset.feature[fId].source;
+	    	      	if (!src || !src.type || src.type.toLowerCase() != 'model')
+	    	      	  continue;
+	    	      	 src = src.URI.substr(src.URI.lastIndexOf('/') + 1);
+	    	      	 if (groups[src] === undefined)
+	    	      	  groups[src] = [];
+	    	      	 groups[src].push(fId);
+	    	    	}
+	    	    	groups["Substances"] = [ "http://www.opentox.org/api/1.1#CompositionInfo" ];
+	    	    	groups["Calculated"] = null;
+	    	    	return groups;
+	    }	    
     
 }
