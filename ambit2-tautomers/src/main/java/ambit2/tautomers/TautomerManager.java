@@ -96,6 +96,9 @@ public class TautomerManager
 		
 		resultTautomers = tautomerFilter.filter(resultTautomers);
 		
+		if (FlagCalculateCACTVSEnergyRank)
+			calcCACTVSEnergyRanks(resultTautomers);
+		
 		return(resultTautomers);
 	}
 	
@@ -130,6 +133,9 @@ public class TautomerManager
 		}
 		
 		resultTautomers = tautomerFilter.filter(resultTautomers);
+		
+		if (FlagCalculateCACTVSEnergyRank)
+			calcCACTVSEnergyRanks(resultTautomers);
 		
 		return(resultTautomers);
 	}
@@ -174,6 +180,9 @@ public class TautomerManager
 		}
 		else
 			resultTautomers = tautomerFilter.filter(resultTautomers);
+		
+		if (FlagCalculateCACTVSEnergyRank)
+			calcCACTVSEnergyRanks(resultTautomers);
 		
 		return(resultTautomers);
 	}
@@ -549,6 +558,15 @@ public class TautomerManager
 			mol.getAtom(i).setImplicitHydrogenCount(nH);
 		}	
 			
+	}
+	
+	public static void calcCACTVSEnergyRanks(Vector<IAtomContainer> tautomers)
+	{
+		for (IAtomContainer mol: tautomers)
+		{
+			double rank = CACTVSRanking.getEnergyRank(mol);
+			mol.setProperty("CACTVS_ENERGY_RANK", new Double(rank));
+		}
 	}
 	
 }
