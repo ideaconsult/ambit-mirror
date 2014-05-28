@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
@@ -17,78 +17,31 @@
 	var dataset_uri = purl.param('dataset_uri')===undefined?'${ambit_root}/query/similarity?search=c1ccccc1':purl.param('dataset_uri');
 			
 	$(document).ready(function() {
+        jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/dataset?page=0&pagesize=100" title="Datasets">Datasets</a></li>');
+        jQuery("#breadCrumb ul").append('<li><a href="${ambit_request}" title="Dataset browser">Dataset browser</a></li>');
+        jQuery("#breadCrumb ul").append("<li><a href='#' id='current' title='Old view mode'>Old view mode</a></li>");
+
+	
 		var duri = dataset_uri;
 		if (duri.length>60) duri = duri.substring(0,60) + "...";
 		$('#current').text(duri);
 		$('#current').prop("href",dataset_uri);
 		$('#dataseturi').val(dataset_uri);	  
 	    datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
-
 	  	var ds = new jToxCompound($(".jtox-toolkit")[0],config_dataset);
         ds.queryDataset(dataset_uri);
+        
+        
 	});
 	</script>
 
 </head>
 <body>
 
-
 <div class="container" style="margin:0;padding:0;">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui/_dataset' style='padding:0;margin:0;'>
 <!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="six columns alpha">
-			<div class="remove-bottom h3" >
-				Dataset browser
-			</div>
-		    <div class='help'>
-		     <a href='#' id='current' title='Old view mode'>Old view mode</a>
-		     
-		    </div>			
-		</div>
-		<div class="four columns omega">
-			<div class="remove-bottom h3" >
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	Enter dataset URI<br/>
-		    	<span class='help remove-bottom'>
-		    	or type first dataset name letters to get a list of datasets
-		    	</span>
-		    </div>			
-		</div>			
-		<div class="four columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6 remove-bottom'>
-		    	<input type='text' class='dataseturi remove-bottom' id='dataseturi' name='dataset_uri' value='' tabindex='1' title='Type first letters of a dataset name in the box to get a list of datasets.'>
-		    	<span class='help remove-bottom'>
-		    	View <a href='${ambit_root}/dataset?max=1000' target='datasets' title='All datasets list'>All datasets</a>
-		    	</span>
-		    </div>			
-		</div>		
-		<div class="two columns omega">
-			<div class="remove-bottom h3" >
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	<input class='ambit_search ' id='submit' type='submit' value='Browse' tabindex='2'>
-		    </div>			
-		</div>	
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
-
-</form>
+<#include "/banner_crumbs.ftl">
 
 
 		<!-- Page Content

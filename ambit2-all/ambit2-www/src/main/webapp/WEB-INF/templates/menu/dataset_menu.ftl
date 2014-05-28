@@ -7,4 +7,24 @@
 	<li ><a href="${ambit_root}/ui/uploadprops" title="Import properties for compounds already in the database">Import properties</a></li>
 	<li ><a href="${ambit_root}/ui/createstruc" title="Import properties for compounds already in the database">Add structure</a></li>
 </ul>
+<li>
+	<a href="#">Dataset search</a>
+	<ul class="mega-menu">
+		<li>
+		<div style="width:400px;max-width:100%;">
+		<form method='GET' name='searchform' id='searchform' action='${ambit_root}/ui/_dataset' style='padding:0;margin:0;'>
+		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+			Enter dataset URI
+		</div>
+		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+		<input type='text' class='dataseturi remove-bottom' id='dataseturi' name='dataset_uri' value='' tabindex='1' title='Type first letters of a dataset name in the box to get a list of datasets.'>
+		</div>
+		<div class='row' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; ' >
+		<input class='ambit_search ' id='submit' type='submit' value='Browse' tabindex='2'>
+		</div>
+		</form>
+		</div>
+		</li>
+	</ul>
+</li>
 </ul>

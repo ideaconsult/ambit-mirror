@@ -5,7 +5,7 @@
 </li>
 
 <li class="ui-selectee">
-<a href="${ambit_root}/ui/query"><span class="ui-icon ui-icon-search" style="float: left; margin-right: .3em;"></span>Structure search</a>
+<a href="${ambit_root}/ui/_search"><span class="ui-icon ui-icon-search" style="float: left; margin-right: .3em;"></span>Structure search</a>
 </li>
 
 <li class="ui-selectee">
