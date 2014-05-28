@@ -935,13 +935,33 @@ var jToxCompound = (function () {
         ccLib.equalizeHeights(self.fixTable.tHead, self.varTable.tHead);
         ccLib.equalizeHeights(self.fixTable.tBodies[0], self.varTable.tBodies[0]);
 
-        // now we need to equalize openned details boxes, if any
+        // now we need to equalize openned details boxes, if any.
         var tabRoot = jT.$('.jtox-ds-tables', self.rootElement)[0];
+        var varWidth = jT.$('.jtox-ds-variable', tabRoot).width();
+
         jT.$('.jtox-details-box', self.rootElement).each(function (i) {
           var cell = jT.$(this).data('rootCell');
           if (!!cell) {
+            this.style.display = 'none';
             var ps = ccLib.positionTo(cell, tabRoot);
             this.style.top = ps.top + 'px';
+            this.style.left = ps.left + 'px';
+            this.style.width = (jT.$(cell).width() + varWidth) + 'px';
+            this.style.display = 'block';
+
+            var rowH = jT.$(cell).parents('tr').height();
+            var cellH = cell.offsetHeight;
+            var meH = jT.$(this).height();
+            
+            if (cellH < rowH)
+              jT.$(cell).height(cellH = rowH);
+            if (cellH < meH)
+              jT.$(cell).height(cellH = meH);
+              
+            if (meH < cellH) {
+              jT.$(this).height(cellH);
+              jT.$('.ui-tabs').tabs('refresh');
+            }
           }
         });
       }
@@ -1041,12 +1061,10 @@ var jToxCompound = (function () {
           detDiv.style.left = ps.left + 'px';
           detDiv.style.top = ps.top + 'px';
 
-          if (!ccLib.isNull(self.settings.detailsHeight)) {
-            if (parseInt(self.settings.detailsHeight) > 0)
-              jT.$(detDiv).height(self.settings.detailsHeight);
-            else if (self.settings.detailsHeight == 'fill')
-              jT.$(detDiv).height(jT.$(cell).height() * 2);
-          }
+          if (ccLib.isNull(self.settings.detailsHeight) || self.settings.detailsHeight == 'fill')
+            jT.$(detDiv).height(jT.$(cell).height() * 2);
+          else if (parseInt(self.settings.detailsHeight) > 0)
+            jT.$(detDiv).height(self.settings.detailsHeight)
 
           tabRoot.appendChild(detDiv);
           
@@ -1075,6 +1093,8 @@ var jToxCompound = (function () {
         else {
           // i.e. we need to hide
           jT.$(cell).data('detailsDiv').remove();
+          jT.$(cell).data('detailsDiv', null);
+          cell.style.height = '';
         }
         
         self.equalizeTables();
