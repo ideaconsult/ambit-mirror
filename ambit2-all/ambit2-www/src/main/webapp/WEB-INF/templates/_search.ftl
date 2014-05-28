@@ -18,7 +18,7 @@ $(document)
 				function() {
 					    jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/ui/_search" title="AMBIT Structure search">Structure search</a></li>');
     					jQuery("#breadCrumb").jBreadCrumb();
-    					jQuery("#welcome").text("Structure search");
+    					jQuery("#welcome").html("&nbsp;");
     					loadHelp("${ambit_root}","search");
 				});
 </script>  
@@ -136,30 +136,9 @@ $(document)
 
 <div class="container" style="margin:0;padding:0;">
 
-<!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row half-bottom">
-		<div class="two columns">
-			<a href='${ambit_root}/ui'>
-				<img class='scale-with-grid' border='0' src='${ambit_root}/images/ambit-logo-small.png' title='v${ambit_version_short}' alt='AMBIT logo'>
-			</a>
-		</div>
-		<div class="twelve columns remove-bottom breadCrumb module h6" id="breadCrumb">
-                    <ul>
-                        <li>
-                            <a href="${ambit_root}" title="AMBIT Home [v ${ambit_version_long}]">Home</a>
-                        </li>
-                    </ul>
-		</div>
-</div>
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
 
-
-		
+<#include "/banner_crumbs.ftl">
+	
 		<!-- Page Content
 		================================================== -->
 	<div class="sixteen columns remove-bottom" style="padding:0;" >
@@ -193,7 +172,7 @@ $(document)
         </div>
       </div>
     </div>
-	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" data-on-details="onDetailedRow"></div>
+	  <div id="browser" class="jtox-toolkit" data-kit="compound" data-remember-checks="true" data-on-details="onDetailedRow" data-details-height="500px"></div>
   </div>
 
    </div>

@@ -1,13 +1,12 @@
 <#include "/html.ftl" >
 
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <script type='text/javascript' src='${ambit_root}/scripts/i5criteria.js'></script>
 <script type='text/javascript'>
 
 $(document).ready(function() {
-			$( "#selectable" ).selectable( "option", "distance", 18);
 			loadHelp("${ambit_root}","substance");
 					
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substance">Substances</a></li>');

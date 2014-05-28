@@ -1,9 +1,17 @@
 <#include "/html.ftl" >
 <head>
 <#include "/header.ftl" >
-
+    
+    <!-- smartmenus
+	================================================== -->
+    <script src="${ambit_root}/jquery/jquery.smartmenus.min.js" type="text/javascript" language="JavaScript"></script>
+    <link rel="stylesheet" href="${ambit_root}/style/sm-core-css.css" type="text/css">
+    <link rel="stylesheet" href="${ambit_root}/style/sm-mint.css" type="text/css">
+    
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
+
+
 
 <#if modelid??>
 	<script type='text/javascript'>
@@ -49,10 +57,13 @@
 $(document)
 		.ready(
 				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
 					datasetAutocomplete(".dataseturi","${ambit_root}/dataset",10);
 					loadHelp("${ambit_root}","model");
 					downloadForm("${ambit_request}");
+					jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/model" title="Models">Models</a></li>');
+					<#if modelid??>
+					jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/model/${modelid}" title="This model">M${modelid}</a></li>');
+					</#if>
 				});
 </script>
 
@@ -61,66 +72,17 @@ $(document)
 
 <div class="container" style="margin:0;padding:0;">
 
-<form method='GET' name='searchform' id='searchform' action='${ambit_root}/model' style='padding:0;margin:0;'>
 <!-- banner -->
-<div class="row remove-bottom" id="header">
-	<#include "/toplinks.ftl">
-</div>
-<div class="row remove-bottom">
-		<#include "/logo.ftl">
-		<div class="thirteen columns remove-bottom" id="query">
-		<div class="ten columns alpha">
-			<div class="remove-bottom h3">
-					Models
-			</div>
-		    <div class='h6'>Regression, classification, clustering, structural alerts, applicability domain, structure optimisation.</div>			
-		</div>
-		<div class="four columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	<input type='text'  id='search' name='search' value='' tabindex='1' >
-		    </div>			
-		</div>		
-		<div class="two columns omega">
-			<div class="remove-bottom h3">
-				&nbsp;
-			</div>
-		    <div class='h6'>
-		    	<input class='ambit_search' id='submit' type='submit' value='Search' tabindex='2'>
-		    </div>			
-		</div>	
-		</div>
-</div>		
-<div class="row remove-bottom" >
-	  <div id="header_bottom" class="remove-bottom">&nbsp;</div>
-</div>
+<#include "/banner_crumbs.ftl">
 
-</form>
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
-<#include "/menu.ftl">
+<#include "/model_menu.ftl">
 
-<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
-<a href='#' id='uri'><img src='${ambit_root}/images/link.png' alt='text/uri-list' title='Download as URI list '></a>
-<a href='#' id='rdfxml'><img src='${ambit_root}/images/rdf.gif' alt='RDF/XML' title='Download as RDF/XML (Resource Description Framework XML format)'></a>
-<a href='#' id='rdfn3'><img src='${ambit_root}/images/rdf.gif' alt='RDF/N3' title='Download as RDF N3 (Resource Description Framework N3 format)'></a>
-<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
 </div>
 
-<div class='row half-bottom chelp' style='padding:0;margin:0;' id='pagehelp'></div>
-<div class='row remove-bottom chelp' style='padding:0;margin:0;font-weight:bold;' id='keytitle'>		
-</div>
-<div class='row half-bottom chelp' style='padding:0;margin:0;' id='keycontent'>		
-</div>	
-</div>
 
 <div class="thirteen columns remove-bottom" style="padding:0;" >
 
- 		<div class="row remove-bottom ui-widget-header ui-corner-top">
- 		&nbsp;
- 		</div>
- 		
 		<!-- Page Content
 		================================================== -->
 		<#if modelid??>
@@ -134,6 +96,9 @@ $(document)
 				</div>
 			</div>
 		<#else>
+ 		<div class="row remove-bottom ui-widget-header ui-corner-top">
+ 		&nbsp;
+ 		</div>		
 		<div class="row " style="padding:0;" >
 			<table id='model' class='modeltable ambit2'  cellpadding='0' border='0' width='100%' cellspacing='0' style="margin:0;padding:0;" >
 			<thead>

@@ -1,14 +1,13 @@
 <#include "/html.ftl" >
 
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 
 <script type='text/javascript'>
 
 $(document)
 		.ready(
 				function() {
-					$( "#selectable" ).selectable( "option", "distance", 18);
 					loadHelp("${ambit_root}","substance");
 					
 			jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance" title="Substance">Substances</a></li>');
@@ -29,11 +28,7 @@ $(document)
 
 <div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/menu_substance.ftl">
-<ul >
-<li class="ui-selectee">
-<a href="${ambit_root}/admin"><span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Admin</a>
-</li>
-</ul>
+
 </div>
 
 

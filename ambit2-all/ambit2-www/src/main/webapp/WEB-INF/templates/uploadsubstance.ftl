@@ -42,11 +42,7 @@ $(document)
 
 <div class="three columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 <#include "/menu_substance.ftl">
-<ul >
-<li class="ui-selectee">
-<a href="${ambit_root}/admin"><span class="ui-icon ui-icon-wrench" style="float: left; margin-right: .3em;"></span>Admin</a>
-</li>
-</ul>
+
 </div>
 
 
