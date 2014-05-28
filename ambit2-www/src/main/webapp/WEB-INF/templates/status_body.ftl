@@ -1,6 +1,6 @@
 <#include "/html.ftl" >
 <head>
-<#include "/header.ftl" >
+<#include "/header_updated.ftl" >
 <script type='text/javascript' src="${ambit_root}/scripts/jopentox.js"></script>
 <script type='text/javascript'>
 
