@@ -97,7 +97,7 @@ var config_substancedataset = {
 		    },
 			"http://www.opentox.org/api/1.1#CompositionInfo" : {
 				  "visibility": "details",
-					"title": "Composition",
+					"title": "Substances",
 					"data": "compound.URI",
 					"basic": true,
 					"render" : function(data, type, full) {
@@ -110,13 +110,13 @@ var config_substancedataset = {
 	    "groups": {
 	          "Identifiers" : [
 	             "http://www.opentox.org/api/1.1#IUCLID5_UUID"
- 
+		          "#DetailedInfoRow", 
 	          ],
 	          "Names": [
 	                    "http://www.opentox.org/api/1.1#ChemicalName",
 	                    "http://www.opentox.org/api/1.1#TradeName"
  		  	],
- 		 	"Composition": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
+ 		 	"Substances": [ "http://www.opentox.org/api/1.1#CompositionInfo" ]
         }
     
 }
