@@ -1398,8 +1398,9 @@ var jToxCompound = (function () {
       self.settings.baseUrl = self.settings.baseUrl || jT.grabBaseUrl(datasetUri);
       
       // remember the _original_ datasetUri and make a call with one size length to retrieve all features...
-      self.datasetUri = datasetUri;
-      jT.call(self, ccLib.addParameter(datasetUri, "page=0&pagesize=1"), function (dataset) {
+      self.datasetUri = (datasetUri.indexOf('http') !=0 ? self.settings.baseUrl : '') + datasetUri;
+      
+      jT.call(self, ccLib.addParameter(self.datasetUri, "page=0&pagesize=1"), function (dataset) {
         if (!!dataset) {
           self.feature = dataset.feature;
           cls.processFeatures(self.feature, self.settings.configuration.baseFeatures);
