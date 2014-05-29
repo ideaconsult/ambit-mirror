@@ -193,7 +193,7 @@ public class TestTautomers
 		
 		//tt.visualTestFromFile("/work/tempAmbitIn.sdf");
 		
-		tt.testCACTVSRank("CCCC=N(=O)O");
+		tt.testCACTVSRank("c1ccccc1CCC=O");
 	}
 	
 	public void performTestCases() throws Exception
@@ -739,7 +739,7 @@ public class TestTautomers
 	public void testCACTVSRank(String smi) throws Exception
 	{	
 		System.out.println("Testing tautomer CACTVS ranking: " + smi);
-		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi,false);
+		IMolecule mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		double scoreRank = CACTVSRanking.calcScoreRank(mol);
 		System.out.println("Score = " + scoreRank);
 	}
