@@ -137,6 +137,7 @@ public class SubstanceRecord extends StructureRecord {
 		
 		if (relatedStructures!=null) relatedStructures.clear();
 		if (measurements!=null) measurements.clear();
+		if (externalids!=null) externalids.clear();
 	}
 	@Override
 	public String toString() {
