@@ -2209,6 +2209,10 @@ var jToxStudy = (function () {
             if (!!study) {
               jT.$(table).removeClass('unloaded folded');
               jT.$(table).addClass('loaded');
+/*
+              if (study.study[0].protocol.category.code == issue_study.study[0].protocol.category.code)
+                study = issue_study;
+*/
               self.processStudies(panel, study.study, false);
               ccLib.fireCallback(self.settings.onStudy, self, study.study);
             }
@@ -2370,11 +2374,9 @@ var jToxStudy = (function () {
           if (col == null)
             return null;
           
-          if (study.parameters[p] !== undefined && study.parameters[p] != null){
-            col["mRender"] = study.parameters[p].loValue === undefined ?
-              function (data, type, full) { return formatUnits(data, full[p + " unit"]); } : 
-              function (data, type, full) { return formatLoHigh(data.parameters[p], type); };
-          }
+          col["mRender"] = (!ccLib.isNull(study.parameters[p]) && study.parameters[p].loValue !== undefined) ?
+            function (data, type, full) { return formatLoHigh(data, type); } :
+            function (data, type, full) { return formatUnits(data, full[p + " unit"]); };
           
           return col;
         });
@@ -2390,13 +2392,9 @@ var jToxStudy = (function () {
           if (col == null)
             return null;
           
-          var rnFn = null;
-          if (study.effects[0].conditions[c] !== undefined && study.effects[0].conditions[c] != null)
-            rnFn = study.effects[0].conditions[c].loValue === undefined ? 
-              function(data, type) { return formatUnits(data.conditions[c],  data.conditions[c + " unit"]); } : 
-              function(data, type) { return formatLoHigh(data.conditions[c], type); }
-          else
-            rnFn = function(data, type) { return "-"; }
+          var rnFn = (!ccLib.isNull(study.effects[0].conditions[c]) && study.effects[0].conditions[c].loValue !== undefined) ? 
+            function(data, type) { return formatLoHigh(data.conditions[c], type); } :
+            function(data, type) { return formatUnits(data.conditions[c],  data.conditions[c + " unit"]); };
             
           col["mRender"] = function(data, type, full) { return self.renderMulti(data, type, full, rnFn); };
           return col;
@@ -2568,12 +2566,12 @@ var jToxStudy = (function () {
         jT.$(theTable).dataTable().fnAddData(onec);
         jT.$(theTable).colResizable({ minWidth: 30, liveDrag: true });
         jT.$(theTable).parents('.jtox-study').addClass('folded');
+
+        // we need to fix columns height's because of multi-cells
+        jT.$('#' + theTable.id + ' .jtox-multi').each(function(index){
+          this.style.height = '' + this.offsetHeight + 'px';
+        });
       }
-      
-      // we need to fix columns height's because of multi-cells
-      jT.$('#' + theTable.id + ' .jtox-multi').each(function(index){
-        this.style.height = '' + this.offsetHeight + 'px';
-      });
     },
         
     querySummary: function(summaryURI) {
