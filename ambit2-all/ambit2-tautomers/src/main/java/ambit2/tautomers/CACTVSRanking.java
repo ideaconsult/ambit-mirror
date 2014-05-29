@@ -116,9 +116,15 @@ public class CACTVSRanking
 			}		
 		}
 		
-		//Correction due to the aci-nitro group
-		nN2O =nN2O - nOximGroup;
+		//Correction due to the aci-nitro group. Aci-nitro group is not counted in N=O and C=X
+		nN2O = nN2O - nAciNitro;
+		nC2X = nC2X - nAciNitro;
 		
+		//Correction due to the oxim group. Oxim group is not counted in C=X
+		nC2X = nC2X - nOximGroup;
+		
+		//correction for C=O. It is not counted in C=X
+		nC2X = nC2X - nC2O;
 		
 		System.out.println(scoreFragmentsToString( nAromAt, nOximGroup, nC2O, nN2O, nP2O, nC2X, nCH3, nYH, nAciNitro));
 		
