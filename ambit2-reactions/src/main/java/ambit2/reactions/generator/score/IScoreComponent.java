@@ -4,10 +4,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 
 public interface IScoreComponent 
-{
-	public enum Type{
-		
-	}
+{	
+	public double getWeight();
+	
+	public void setWeight(double weight);
 	
 	public double getScore(IAtomContainer mol);
 }
