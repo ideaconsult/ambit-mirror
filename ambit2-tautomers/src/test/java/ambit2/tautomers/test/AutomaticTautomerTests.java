@@ -2922,6 +2922,7 @@ public class AutomaticTautomerTests
 		tman.getKnowledgeBase().use15ShiftRules(true);
 		tman.getKnowledgeBase().use17ShiftRules(false);
 		tman.maxNumOfBackTracks = 10000;
+		tman.FlagCalculateCACTVSEnergyRank = FlagUseCACTVSRank;
 	}
 	
 	void checkMemory()
