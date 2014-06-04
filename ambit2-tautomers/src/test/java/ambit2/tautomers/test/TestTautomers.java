@@ -75,7 +75,7 @@ public class TestTautomers
 		
 		tt.tman.maxNumOfBackTracks = 10000;
 		tt.tman.FlagProcessRemainingStackIncSteps = true;
-		
+		tt.tman.FlagCalculateCACTVSEnergyRank = true;
 		
 		
 		//tt.performTestCases();
@@ -141,7 +141,7 @@ public class TestTautomers
 		
 		//tt.visualTest("NC1=CC=CC=C1");
 		//tt.visualTest("N=C1C=CC=CC1");
-		
+		tt.visualTest("N=C1C=CC=CC1",TautomerConst.GAT_Comb_Improved);
 		
 		//tt.visualTest("N=C(O)C=CN");  //two problems (1) alene atoms are obtained, (2) missing tautomers
 		
@@ -193,7 +193,7 @@ public class TestTautomers
 		
 		//tt.visualTestFromFile("/work/tempAmbitIn.sdf");
 		
-		tt.testCACTVSRank("c1ccccc1CCC=O");
+		//tt.testCACTVSRank("c1ccccc1CCC=O");
 	}
 	
 	public void performTestCases() throws Exception
@@ -254,10 +254,14 @@ public class TestTautomers
 			Double rank = (Double)resultTautomers.get(i).getProperty("TAUTOMER_RANK");
 			if (rank == null)
 				rank = new Double(999999);
-						
+			
+			Double csRank = (Double)resultTautomers.get(i).getProperty("CACTVS_ENERGY_RANK");
+			if (csRank == null)
+				csRank = new Double(999999);
+			
 			System.out.println(
 					TautomerManager.getTautomerCodeString(resultTautomers.get(i), false) +   
-					"   " + rank.toString() + "    " + (100.0*distr[i]) + "%    " + 
+					"   " + rank.toString() + "    " + (100.0*distr[i]) + "%    CS_RANK = " + csRank.toString() + "    " +
 					SmartsHelper.moleculeToSMILES(resultTautomers.get(i),false) );
 			v.add(resultTautomers.get(i));
 		}
@@ -311,7 +315,11 @@ public class TestTautomers
 			if (rank == null)
 				rank = new Double(999999);
 			
-			System.out.println("   " + rank.toString() + "   " +
+			Double csRank = (Double)resultTautomers.get(i).getProperty("CACTVS_ENERGY_RANK");
+			if (csRank == null)
+				csRank = new Double(999999);
+			
+			System.out.println("   " + rank.toString() + "   CS_RANK = " + csRank.toString() + "   " + 
 					SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
 			v.add(resultTautomers.get(i));
 		}

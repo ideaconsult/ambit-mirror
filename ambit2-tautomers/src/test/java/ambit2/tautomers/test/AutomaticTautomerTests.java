@@ -18,6 +18,7 @@ import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.tautomers.TautomerManager;
 import ambit2.tautomers.TautomerRanking;
+import ambit2.tautomers.TautomerConst;
 
 
 
@@ -58,6 +59,9 @@ public class AutomaticTautomerTests
 	public boolean FlagFiltrateSmilesToLargestFragment = false;   //currently used only for structure-stat command
 	public boolean FlagWorkWithWholeDirectory = true;  //If this flag is true and input file is a directory then all file in it are used for the input
 	public boolean FlagSkipFirstLineInDirIteration = false;  //if true the first line is skipped for the all files except the first file in the directory
+	public boolean FlagUseCACTVSRank = false;
+	public int FlagGenerationAlgorithm = TautomerConst.GAT_Incremental; //GAT_Comb_Pure  GAT_Comb_Improved  
+	
 	
 	
 	public boolean FlagDescrAverageForCloseEnergies = true;  //The ranking is relative to the energy of the tautomer which is the original structure
@@ -1530,8 +1534,24 @@ public class AutomaticTautomerTests
 			SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());			
 			mol = sp.parseSmiles(line.trim());
 			
-			tman.setStructure(mol);
+			tman.setStructure(mol);			
 			Vector<IAtomContainer> resultTautomers = tman.generateTautomersIncrementaly();
+			
+			switch (FlagGenerationAlgorithm)
+			{
+			case TautomerConst.GAT_Comb_Pure:
+				resultTautomers = tman.generateTautomers();	
+				break;
+			
+			case TautomerConst.GAT_Incremental:
+				resultTautomers = tman.generateTautomersIncrementaly();
+				break;
+			
+			case TautomerConst.GAT_Comb_Improved:
+				resultTautomers = tman.generateTautomers_ImprovedCombApproach();
+				break;
+			}
+			
 			
 			output("" + curLine + "   " + line + "  " + resultTautomers.size() + "  "  +  endLine);
 			System.out.println("    -->  " + resultTautomers.size() + " tautomers");
@@ -1541,7 +1561,12 @@ public class AutomaticTautomerTests
 				for (int i = 0; i < resultTautomers.size(); i++)
 				{
 					IAtomContainer tautomer = resultTautomers.get(i);
-					double rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
+					double rank;
+					if (FlagUseCACTVSRank)
+						rank = ((Double)tautomer.getProperty("CACTVS_ENERGY_RANK")).doubleValue();
+					else
+						rank = ((Double)tautomer.getProperty("TAUTOMER_RANK")).doubleValue();
+					
 					String smiles = SmartsHelper.moleculeToSMILES(tautomer, false).trim();
 					output("" + curLine + "   " + smiles + "  " + rank  +  endLine);
 				}
