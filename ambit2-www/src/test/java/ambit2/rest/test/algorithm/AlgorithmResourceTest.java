@@ -88,7 +88,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		while ((line = reader.readLine())!=null) {
 			count++;
 		}
-		return count == 133;
+		return count == 140;
 	}	
 	/**
 	 * fails because of not finding the Freemarker templates.
@@ -261,7 +261,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 	}		
 	
 	
-	@Test
+	
 	public void testMOPAC() throws Exception {
 		Form headers = new Form();  
 		Reference model = testAsyncTask(
@@ -330,7 +330,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		
 		
 		headers.add("dataset_uri",String.format(task.getResult().toExternalForm(), port));
-		String expected = String.format("http://localhost:%d/query/tautomer?dataset_uri=%s", port,
+		String expected = String.format("http://localhost:%d/query/relation/compound/HAS_TAUTOMER?dataset_uri=%s", port,
 									Reference.encode(task.getResult().toExternalForm()));
 		Reference ref = testAsyncTask(model.toString(),headers, Status.SUCCESS_OK,expected);
 		
