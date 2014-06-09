@@ -53,10 +53,6 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		setHtmlbyTemplate(true);
 		template = new Template();
 		groupProperties = new Profile<Property>();
-		groupProperties.add(new SubstancePublicName());
-		//groupProperties.add(Property.getTradeNameInstance("Name"));
-		groupProperties.add(new SubstanceName());
-		groupProperties.add(new SubstanceUUID());
 	}
 
 	@Override
@@ -121,7 +117,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		}
 	}	
 	
-	protected IProcessor getPropertyProcessors(final boolean removeIdentifiers) {
+	protected IProcessor getPropertyProcessors(final boolean removeIdentifiers, final boolean removeStringProperties) {
 		IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecordBySubstance(); 
 		MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition> effectReader = 
 							new MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition>(
@@ -151,6 +147,9 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 							}
 						}
 					} else {
+						boolean isTextValue = (detail.getLoValue() == null);
+						if (isTextValue && removeStringProperties) return master;
+						
 						JsonNode conditions = dx.readTree(new StringReader(detail.getConditions()));
 						PropertyAnnotations ann = new PropertyAnnotations();
 						
@@ -200,13 +199,14 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 	}
 	
 	protected IProcessor<ReadSubstanceByOwner, Representation> createARFFReporter(String filenamePrefix) {
+
 		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
 				new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
 							String.format("%s%s",getRequest().getRootRef(),"")
 						) {
 					@Override
 					protected void configurePropertyProcessors() {
-						getProcessors().add(getPropertyProcessors(true));
+						getProcessors().add(getPropertyProcessors(true,true));
 					}
 
 				},
@@ -220,7 +220,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 						) {
 					@Override
 					protected void configurePropertyProcessors() {
-						getProcessors().add(getPropertyProcessors(true));
+						getProcessors().add(getPropertyProcessors(true,false));
 					}
 
 				},
@@ -228,6 +228,9 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 
 	}
 	protected IProcessor<ReadSubstanceByOwner, Representation> createCSVReporter(String filenamePrefix) {
+		groupProperties.add(new SubstancePublicName());
+		groupProperties.add(new SubstanceName());
+		groupProperties.add(new SubstanceUUID());
 		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
 				new CSVReporter(getTemplate(),groupProperties,
 						String.format("%s%s",getRequest().getRootRef(),"")
@@ -235,7 +238,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 					
 					@Override
 					protected void configurePropertyProcessors() {
-						getProcessors().add(getPropertyProcessors(false));
+						getProcessors().add(getPropertyProcessors(false,false));
 					}
 
 				},
@@ -243,6 +246,9 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 
 	}
 	protected IProcessor<ReadSubstanceByOwner, Representation> createJSONReporter(String filenamePrefix) {
+		groupProperties.add(new SubstancePublicName());
+		groupProperties.add(new SubstanceName());
+		groupProperties.add(new SubstanceUUID());
 		String jsonpcallback = getParams().getFirstValue("jsonp");
 		if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
 		return new OutputWriterConvertor(
@@ -255,7 +261,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 					}
 					@Override
 					protected void configurePropertyProcessors() {
-						getProcessors().add(getPropertyProcessors(false));
+						getProcessors().add(getPropertyProcessors(false,false));
 					}
 				},
 				MediaType.APPLICATION_JSON,filenamePrefix);
