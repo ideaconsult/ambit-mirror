@@ -36,7 +36,9 @@ public interface ILiteratureEntry extends Serializable {
 			public String toString() {
 				return "Property";
 			}			
-		};
+		},
+		Substance 
+		;
 		public String toString() {
 			return name();
 		};
