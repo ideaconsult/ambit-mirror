@@ -2,6 +2,7 @@ package ambit2.base.data.substance;
 
 import java.util.UUID;
 
+import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 
@@ -21,6 +22,11 @@ public class SubstanceProperty extends Property {
 		super(name,LiteratureEntry.getInstance(reference,""));
 		setLabel(name);
 		setEnabled(true);
+	}
+	
+	public SubstanceProperty(String name, String units, ILiteratureEntry reference) {
+		super(name,units,reference);
+		setEnabled(true);		
 	}
 	@Override
 	public String getRelativeURI() {

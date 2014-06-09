@@ -135,6 +135,7 @@ import ambit2.rest.substance.composition.SubstanceStructuresResource;
 import ambit2.rest.substance.owner.OwnerStructuresResource;
 import ambit2.rest.substance.owner.OwnerSubstanceFacetResource;
 import ambit2.rest.substance.owner.SubstanceByOwnerResource;
+import ambit2.rest.substance.property.SubstancePropertyResource;
 import ambit2.rest.substance.study.SubstanceStudyFacetResource;
 import ambit2.rest.substance.study.SubstanceStudyResource;
 import ambit2.rest.task.PolicyProtectedTask;
@@ -368,6 +369,16 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		router.attach(DatasetResource.dataset,createProtectedResource(datasetRouter,"dataset"));
 
 		if (attachSubstanceRouter()) {
+			/**
+			 *  /property/{id}
+			 */
+			router.attach(SubstancePropertyResource.substanceproperty,SubstancePropertyResource.class);
+			router.attach(String.format("%s/{%s}",SubstancePropertyResource.substanceproperty,SubstancePropertyResource.substancepropertyid),SubstancePropertyResource.class);
+			
+			/**
+			 * /substance/
+			 *  /substance/{id}
+			 */
 			router.attach(SubstanceResource.substance,SubstanceResource.class);
 			router.attach(SubstanceResource.substanceID,SubstanceResource.class);
 			/**
