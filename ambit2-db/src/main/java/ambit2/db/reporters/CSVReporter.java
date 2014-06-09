@@ -99,45 +99,7 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		configureProcessors(includeMol);
 	}
 	
-	protected void configurePropertyProcessors() {
-		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
-					return super.process(target);
-				}
-			});
-		if (getTemplate().size()>0) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveProfileValues)getQuery()).setRecord(target);
-					return super.process(target);
-				}
-			});		
-		
-		getProcessors().add(new ProcessorStructureRetrieval(new ReadChemicalIds()) {
-			@Override
-			public IStructureRecord process(IStructureRecord target)
-					throws AmbitException {
-				((ReadChemicalIds)getQuery()).setValue(target);
-				return super.process(target);
-			}
-		});				
-	}
-	protected void configureProcessors(boolean includeMol) {
-		configurePropertyProcessors();
-		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));		
-		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target);
-				return target;
-			};
-		});	
-	}
+	
 	
 	protected void configureCollectionProcessors() {
 	}
@@ -297,4 +259,16 @@ public class CSVReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 		return ",".equals(separator)?"csv":"txt";
 	}
 
+	@Override
+	protected void configurePropertyProcessors() {
+		super.configurePropertyProcessors();
+		getProcessors().add(new ProcessorStructureRetrieval(new ReadChemicalIds()) {
+			@Override
+			public IStructureRecord process(IStructureRecord target)
+					throws AmbitException {
+				((ReadChemicalIds)getQuery()).setValue(target);
+				return super.process(target);
+			}
+		});	
+	}
 }

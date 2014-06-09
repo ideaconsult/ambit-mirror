@@ -9,8 +9,16 @@ import java.util.List;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
+import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.processors.DefaultAmbitProcessor;
+import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.readers.ReadChemicalIds;
+import ambit2.db.readers.RetrieveGroupedValuesByAlias;
+import ambit2.db.readers.RetrieveProfileValues;
+import ambit2.db.readers.RetrieveProfileValues.SearchMode;
+import ambit2.db.search.QuerySmilesByID;
 
 /**
  * Generates report from a query with header at a top (e.g. CSV columns or ARFF header)
@@ -90,6 +98,39 @@ public abstract class QueryHeaderReporter<Q extends IQueryRetrieval<IStructureRe
 		});	
 		*/
 		return h;
+	}
+
+	
+	protected void configureProcessors(boolean includeMol) {
+		configurePropertyProcessors();
+		getProcessors().add(new ProcessorStructureRetrieval(new QuerySmilesByID()));		
+		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
+			public IStructureRecord process(IStructureRecord target) throws AmbitException {
+				processItem(target);
+				return target;
+			};
+		});	
+	}
+	protected void configurePropertyProcessors() {
+		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0))
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});
+		if (getTemplate().size()>0) 
+			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
+				@Override
+				public IStructureRecord process(IStructureRecord target)
+						throws AmbitException {
+					((RetrieveProfileValues)getQuery()).setRecord(target);
+					return super.process(target);
+				}
+			});		
+		
 	}
 
 }
