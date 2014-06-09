@@ -20,6 +20,10 @@ import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.data.study.EffectRecord;
+import ambit2.base.data.substance.SubstanceName;
+import ambit2.base.data.substance.SubstanceProperty;
+import ambit2.base.data.substance.SubstancePublicName;
+import ambit2.base.data.substance.SubstanceUUID;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
@@ -49,11 +53,12 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		setHtmlbyTemplate(true);
 		template = new Template();
 		groupProperties = new Profile<Property>();
-		groupProperties.add(Property.getInstance(Property.opentox_Name,"Substance"));
-		groupProperties.add(Property.getTradeNameInstance("Name"));
-		groupProperties.add(Property.getI5UUIDInstance());
+		groupProperties.add(new SubstancePublicName());
+		//groupProperties.add(Property.getTradeNameInstance("Name"));
+		groupProperties.add(new SubstanceName());
+		groupProperties.add(new SubstanceUUID());
 	}
-	
+
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
@@ -116,7 +121,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		}
 	}	
 	
-	protected IProcessor getPropertyProcessors() {
+	protected IProcessor getPropertyProcessors(final boolean removeIdentifiers) {
 		IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecordBySubstance(); 
 		MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition> effectReader = 
 							new MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition>(
@@ -133,7 +138,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 						while (i.hasNext()) {
 							Entry<String,JsonNode> val = i.next();
 							
-							Property key = Property.getInstance(val.getKey(),detail.getSampleID());
+							Property key = new SubstanceProperty(val.getKey(),detail.getSampleID());
 							key.setUnits(detail.getUnit());
 							key.setLabel(detail.getEndpoint());
 							groupProperties.add(key);
@@ -159,17 +164,21 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 							PropertyAnnotation a = new PropertyAnnotation();
 							a.setPredicate(val.getKey());
 							if (val.getValue().getTextValue()==null) 
-								a.setObject(val.getValue().get("loValue"));
+								a.setObject(val.getValue().get("loValue").asText());
 							else {
 								a.setObject(val.getValue().getTextValue());
-								b.append(" [");
-								b.append(val.getValue().getTextValue());
-								b.append("]");
+								try {
+									if (!"".equals(val.getValue().getTextValue().trim())) {
+										b.append(" [");
+										b.append(val.getValue().getTextValue());
+										b.append("]");
+									}
+								} catch (Exception x) {}
 							}	
 							ann.add(a);
 						}
 
-						Property key = Property.getInstance(b.toString(),detail.getSampleID());
+						Property key = new SubstanceProperty(b.toString(),detail.getSampleID());
 						key.setUnits(detail.getUnit());
 						key.setAnnotations(ann);
 						key.setLabel(detail.getEndpoint());
@@ -197,7 +206,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 						) {
 					@Override
 					protected void configurePropertyProcessors() {
-						getProcessors().add(getPropertyProcessors());
+						getProcessors().add(getPropertyProcessors(true));
 					}
 
 				},
@@ -211,7 +220,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 						) {
 					@Override
 					protected void configurePropertyProcessors() {
-						getProcessors().add(getPropertyProcessors());
+						getProcessors().add(getPropertyProcessors(true));
 					}
 
 				},
@@ -226,7 +235,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 					
 					@Override
 					protected void configurePropertyProcessors() {
-						getProcessors().add(getPropertyProcessors());
+						getProcessors().add(getPropertyProcessors(false));
 					}
 
 				},
@@ -246,7 +255,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 					}
 					@Override
 					protected void configurePropertyProcessors() {
-						getProcessors().add(getPropertyProcessors());
+						getProcessors().add(getPropertyProcessors(false));
 					}
 				},
 				MediaType.APPLICATION_JSON,filenamePrefix);

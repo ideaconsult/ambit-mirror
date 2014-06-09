@@ -387,4 +387,12 @@ public class Property extends Model implements Serializable, Comparable<Property
 		if (getName().equals(label)) label = guessLabel(getName());
 		return opentox_IUCLID5_UUID.equals(label);
 	}
+	
+	public String getVisibleIdentifier() {
+		if (getId()>0)
+			return Integer.toString(getId());
+		else
+			return getName() + getTitle();
+					
+	}
 }

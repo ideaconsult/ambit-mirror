@@ -47,12 +47,7 @@ public class PropertyURIReporter extends QueryURIReporter<Property, IQueryRetrie
 					getDelimiter()
 					);
 		} else
-		if (record.getId()>0)
-			return String.format("%s%s/%d%s",ref,PropertyResource.featuredef,record.getId(),getDelimiter());
-		else
-			return String.format("%s%s/%s%s",ref,PropertyResource.featuredef,
-					Reference.encode(record.getName()+record.getTitle()),
-					getDelimiter());
+			return String.format("%s%s/%s%s",ref,PropertyResource.featuredef,Reference.encode(record.getVisibleIdentifier()),getDelimiter());
 
 	}
 
