@@ -13,14 +13,10 @@ import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
+import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
-import ambit2.base.processors.DefaultAmbitProcessor;
 import ambit2.db.exceptions.DbAmbitException;
-import ambit2.db.processors.ProcessorStructureRetrieval;
 import ambit2.db.readers.IQueryRetrieval;
-import ambit2.db.readers.RetrieveGroupedValuesByAlias;
-import ambit2.db.readers.RetrieveProfileValues;
-import ambit2.db.readers.RetrieveProfileValues.SearchMode;
 
 public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends QueryHeaderReporter< Q, Writer> {
 	/**
@@ -46,37 +42,14 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 	public ARFFReporter(Template template) {
 		this(template,null);
 	}
-	public ARFFReporter(Template template,Profile groupedProperties) {
+	public ARFFReporter(Template template,Profile groupedProperties,IProcessor... processors) {
 		setGroupProperties(groupedProperties);
 		setTemplate(template==null?new Template(null):template);
 		getProcessors().clear();
-		if ((getGroupProperties()!=null) && (getGroupProperties().size()>0)) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveGroupedValuesByAlias(getGroupProperties())) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveGroupedValuesByAlias)getQuery()).setRecord(target);
-					return super.process(target);
-				}
-			});				
-		if (getTemplate().size()>0) 
-			getProcessors().add(new ProcessorStructureRetrieval(new RetrieveProfileValues(SearchMode.idproperty,getTemplate(),true)) {
-				@Override
-				public IStructureRecord process(IStructureRecord target)
-						throws AmbitException {
-					((RetrieveProfileValues)getQuery()).setRecord(target);
-					IStructureRecord record = super.process(target);
-					return record;
-				}
-			});
-
-		getProcessors().add(new DefaultAmbitProcessor<IStructureRecord,IStructureRecord>() {
-			public IStructureRecord process(IStructureRecord target) throws AmbitException {
-				processItem(target);
-				return target;
-			};
-		});	
-
+		if (processors!=null)
+			for (IProcessor processor : processors) getProcessors().add(processor);
+		else 
+			configureProcessors(false);
 	}
 	
 	@Override
