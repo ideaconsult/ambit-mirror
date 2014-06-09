@@ -6,7 +6,13 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 
 public class SubstanceProperty extends Property {
-
+	protected String identifier;
+	public String getIdentifier() {
+		return identifier;
+	}
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 	/**
 	 * 
 	 */
@@ -17,8 +23,10 @@ public class SubstanceProperty extends Property {
 		setEnabled(true);
 	}
 	@Override
-	public String getVisibleIdentifier() {
-		return UUID.nameUUIDFromBytes((getName() + getTitle()).toString().getBytes()).toString();
+	public String getRelativeURI() {
+		if (identifier==null)
+			return String.format("/property/%s",UUID.nameUUIDFromBytes((getName() + getTitle()).toString().getBytes()).toString());
+		else return String.format("/property/%s",identifier);
 	}
 
 }

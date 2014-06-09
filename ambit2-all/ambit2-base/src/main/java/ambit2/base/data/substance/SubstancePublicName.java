@@ -10,9 +10,10 @@ public class SubstancePublicName extends Property {
 		setLabel(Property.opentox_Name);
 		setEnabled(true);
 	}
+	
 	@Override
-	public String getVisibleIdentifier() {
-		return "SubstancePublicName";
+	public String getRelativeURI() {
+		return "/identifier/name";
 	}
 
 	/**

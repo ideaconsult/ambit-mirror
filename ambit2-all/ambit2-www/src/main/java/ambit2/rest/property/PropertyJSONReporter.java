@@ -110,8 +110,8 @@ public class PropertyJSONReporter extends PropertyURIReporter {
 					"\n\t\"type\":\"Feature\"," + //uri
 					"\n\t\"%s\":%s," + //title
 					"\n\t\"%s\":%s," + //units
-					"\n\t\"%s\":%s," + //nominal
-					"\n\t\"%s\":%s," + //numeric
+					"\n\t\"%s\":\"%s\"," + //nominal
+					"\n\t\"%s\":\"%s\"," + //numeric
 					"\n\t\"%s\":%s," + //sameAs
 					"\n\t\"%s\":%s," + //isModelPredictionFeature
 					"\n\t\"%s\":\"%s\"," + //creator
