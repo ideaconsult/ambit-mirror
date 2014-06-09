@@ -199,10 +199,12 @@ CREATE TABLE `substance_protocolapplication` (
 -- Table `substance_experiment`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `substance_experiment`;
+
 CREATE TABLE `substance_experiment` (
   `idresult` int(11) NOT NULL AUTO_INCREMENT,
   `document_prefix` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `document_uuid` varbinary(16) NOT NULL,
+  `endpointhash` varbinary(20) DEFAULT NULL COMMENT 'SHA1 over endpoint, unit and conditions',
   `endpoint` varchar(64) DEFAULT NULL,
   `conditions` text,
   `unit` varchar(45) DEFAULT NULL,
@@ -217,8 +219,10 @@ CREATE TABLE `substance_experiment` (
   KEY `document_id` (`document_uuid`,`document_prefix`),
   KEY `endpoint` (`endpoint`),
   KEY `document-x` (`document_prefix`,`document_uuid`),
+  KEY `hash-x` (`endpointhash`),
   CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 -- -----------------------------------------------------
@@ -1161,7 +1165,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (8,1,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (8,2,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

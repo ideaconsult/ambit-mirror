@@ -134,7 +134,8 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 						while (i.hasNext()) {
 							Entry<String,JsonNode> val = i.next();
 							
-							Property key = new SubstanceProperty(val.getKey(),detail.getSampleID());
+							SubstanceProperty key = new SubstanceProperty(val.getKey(),detail.getSampleID());
+							key.setIdentifier(detail.getSampleID()+"/" + val.getKey());
 							key.setUnits(detail.getUnit());
 							key.setLabel(detail.getEndpoint());
 							groupProperties.add(key);
@@ -160,12 +161,19 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 						while (i.hasNext()) {
 							Entry<String,JsonNode> val = i.next();
 							if (val.getValue() instanceof NullNode) continue;
-							PropertyAnnotation a = new PropertyAnnotation();
-							a.setPredicate(val.getKey());
+							
 							if (val.getValue().getTextValue()==null) 
-								a.setObject(val.getValue().get("loValue").asText());
+								try {
+									PropertyAnnotation a = new PropertyAnnotation();
+									a.setPredicate(val.getKey());
+									a.setObject(val.getValue().get("loValue").asText());
+									ann.add(a);
+								} catch (Exception x) {}
 							else {
+								PropertyAnnotation a = new PropertyAnnotation();
+								a.setPredicate(val.getKey());
 								a.setObject(val.getValue().getTextValue());
+								ann.add(a);
 								try {
 									if (!"".equals(val.getValue().getTextValue().trim())) {
 										b.append(" [");
@@ -174,10 +182,11 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 									}
 								} catch (Exception x) {}
 							}	
-							ann.add(a);
+							
 						}
 
-						Property key = new SubstanceProperty(b.toString(),detail.getSampleID());
+						SubstanceProperty key = new SubstanceProperty(b.toString(),detail.getSampleID());
+						key.setIdentifier(detail.getSampleID());
 						key.setUnits(detail.getUnit());
 						key.setAnnotations(ann);
 						key.setLabel(detail.getEndpoint());

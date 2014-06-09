@@ -26,7 +26,7 @@ public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<Substa
 	private String sql = 
 			"select p.document_prefix,hex(p.document_uuid) u,\n"+
 			"topcategory,endpointcategory,guidance,params,reference,idresult,\n"+
-			"e.endpoint as effectendpoint,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier\n"+ 
+			"e.endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier\n"+ 
 			"from substance s join substance_protocolapplication p on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 			"join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"+
 			"where p.substance_prefix =? and hex(p.substance_uuid) =?\n"+
@@ -53,8 +53,7 @@ public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<Substa
 			throws AmbitException {
 		EffectRecord<String, String, String> effect = super.getObject(rs);
 		try {
-			//protocol application UUID
-			//effect.setSampleID(rs.getString("document_prefix") + "-" + I5Utils.addDashes(rs.getString("u").toString().toLowerCase()));
+			/*
 			String topcategory = rs.getString("topcategory");
 			String endpointcategory = rs.getString("endpointcategory");
 			String guidance = rs.getString("guidance");
@@ -66,6 +65,7 @@ public class ReadEffectRecordBySubstance extends ReadEffectRecordAbstract<Substa
 				(guidance==null?"":guidance)+
 				(conditions==null?"":conditions);
 			effect.setSampleID(UUID.nameUUIDFromBytes(key.getBytes()).toString());
+			*/
 		} catch (Exception x) {
 			x.printStackTrace();
 		}

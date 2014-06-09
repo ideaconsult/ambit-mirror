@@ -15,8 +15,8 @@ public class SubstanceName  extends Property {
 		setEnabled(true);
 	}
 	@Override
-	public String getVisibleIdentifier() {
-		return "SubstanceName";
+	public String getRelativeURI() {
+		return "/identifier/tradename";
 	}
 
 }

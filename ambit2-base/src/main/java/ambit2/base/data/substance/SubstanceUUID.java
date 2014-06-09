@@ -15,8 +15,8 @@ public class SubstanceUUID extends Property {
 		setEnabled(true);
 	}
 	@Override
-	public String getVisibleIdentifier() {
-		return "SubstanceUUID";
+	public String getRelativeURI() {
+		return "/identifier/uuid";
 	}
 
 }

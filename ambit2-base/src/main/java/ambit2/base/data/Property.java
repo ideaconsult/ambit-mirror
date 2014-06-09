@@ -29,8 +29,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ambit2.base.exceptions.AmbitIOException;
 
@@ -388,11 +390,13 @@ public class Property extends Model implements Serializable, Comparable<Property
 		return opentox_IUCLID5_UUID.equals(label);
 	}
 	
-	public String getVisibleIdentifier() {
+	public String getRelativeURI() {
 		if (getId()>0)
-			return Integer.toString(getId());
-		else
-			return getName() + getTitle();
-					
+			return String.format("/feature/%d",getId());
+		else try {
+			return String.format("/feature/%s",URLEncoder.encode(getName() + getTitle(),"UTF-8"));
+		} catch (Exception x) {
+			return String.format("/feature/%s",UUID.nameUUIDFromBytes((getName() + getTitle()).getBytes()).toString());
+		}	
 	}
 }
