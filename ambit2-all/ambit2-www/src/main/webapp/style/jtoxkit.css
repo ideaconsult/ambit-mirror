@@ -281,6 +281,11 @@ div.jtox-study .title {
   width: 100%;
 }
 
+div.jtox-foldable.jtox-study.unloaded>.title {
+  background: url(../images/waiting_small.png) right top no-repeat;
+  background-size: 16px 16px;
+}
+
 div.jtox-study-tab.ui-tabs-panel {
   padding-left: 0px;
   padding-bottom: 0px;

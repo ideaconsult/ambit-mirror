@@ -2239,10 +2239,9 @@ var jToxStudy = (function () {
       if (dlen < 2)
         return self.getFormatted(data[0], type, format);
   
-      var height = 100 / dlen;
       var df = '<table>';
       for (var i = 0, dlen = data.length; i < dlen; ++i) {
-        df += '<tr class="' + (i % 2 == 0 ? 'even' : 'odd') + '"><td class="center" style="height: ' + height + '%">' + self.getFormatted(data[i], type, format) + '</td></tr>';
+        df += '<tr class="' + (i % 2 == 0 ? 'even' : 'odd') + '"><td class="center">' + self.getFormatted(data[i], type, format) + '</td></tr>';
       }
       
       df += '</table>';
@@ -2428,6 +2427,10 @@ var jToxStudy = (function () {
             el.innerHTML = self.updateCount(el.innerHTML, iTotal);
             return sPre;
           },
+          "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+            ccLib.equalizeHeights.apply(window, jT.$('td.jtox-multi table tbody', nRow).toArray());
+          },
+          
   				"oLanguage": {
             "sProcessing": "<img src='" + (jT.settings.baseUrl || self.baseUrl) + "/images/24x24_ambit.gif' border='0'>",
             "sLoadingRecords": "No studies found.",
