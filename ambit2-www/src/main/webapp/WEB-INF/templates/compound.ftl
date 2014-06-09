@@ -35,7 +35,7 @@ $(document)
 			
 			var pTable = definePropertyValuesTable("${ambit_root}","${ambit_request_json}","#properties");
 			
-			var cmpURI_datasets = cmpURI + "/datasets?media=application/json";
+			var cmpURI_datasets = cmpURI + "/dataset?media=application/json";
 			try {
 				var oTable = defineDatasetsTable("${ambit_root}",cmpURI_datasets,false);
 			} catch (err) {
