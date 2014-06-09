@@ -14,7 +14,7 @@
 
 <script type='text/javascript'>
 	var purl = $.url();
-	var dataset_uri = "${ambit_request_json}";
+	var dataset_uri = "${ambit_request}";
 			
 	$(document).ready(function() {
 		var duri = dataset_uri;
