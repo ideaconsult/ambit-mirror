@@ -25,12 +25,16 @@ import ambit2.base.interfaces.IProcessor;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.processors.MasterDetailsProcessor;
 import ambit2.db.readers.IQueryRetrieval;
+import ambit2.db.reporters.CSVReporter;
 import ambit2.db.search.IQueryCondition;
 import ambit2.db.substance.ReadSubstanceByOwner;
 import ambit2.db.substance.study.ReadEffectRecordBySubstance;
+import ambit2.rest.ChemicalMediaType;
 import ambit2.rest.OutputWriterConvertor;
 import ambit2.rest.QueryURIReporter;
 import ambit2.rest.StringConvertor;
+import ambit2.rest.dataset.ARFF3ColResourceReporter;
+import ambit2.rest.dataset.ARFFResourceReporter;
 import ambit2.rest.structure.CompoundJSONReporter;
 import ambit2.rest.substance.owner.SubstanceByOwnerResource;
 
@@ -50,6 +54,16 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 		groupProperties.add(Property.getI5UUIDInstance());
 	}
 	
+	@Override
+	protected void doInit() throws ResourceException {
+		super.doInit();
+		customizeVariants(new MediaType[] {
+				ChemicalMediaType.WEKA_ARFF,
+				MediaType.TEXT_CSV,
+				ChemicalMediaType.THREECOL_ARFF
+				});
+				
+	}
 	@Override
 	public String getTemplateName() {
 		return "_datasetsubstance.ftl";
@@ -87,13 +101,138 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 			return createJSONReporter(filenamePrefix);	
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return createJSONReporter(filenamePrefix);	
+		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
+			return createARFFReporter(filenamePrefix);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
+			return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
+					new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+								String.format("%s%s",getRequest().getRootRef(),"")
+							),
+					ChemicalMediaType.THREECOL_ARFF,filenamePrefix);				
+		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
+			return createCSVReporter(filenamePrefix);
 		} else { //json by default
 			return createJSONReporter(filenamePrefix);
 		}
 	}	
 	
+	protected IProcessor getPropertyProcessors() {
+		IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecordBySubstance(); 
+		MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition> effectReader = 
+							new MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition>(
+									new ReadEffectRecordBySubstance()) {
+			@Override
+			protected SubstanceRecord processDetail(SubstanceRecord master,
+					EffectRecord<String, String, String> detail) throws Exception {
+				if (detail != null) {
+					if (detail.getTextValue() != null && detail.getTextValue().toString().startsWith("{")) {
 
+						JsonNode node = dx.readTree(new StringReader(detail.getTextValue().toString()));
+						
+						Iterator<Entry<String,JsonNode>> i = node.getFields();
+						while (i.hasNext()) {
+							Entry<String,JsonNode> val = i.next();
+							
+							Property key = Property.getInstance(val.getKey(),detail.getSampleID());
+							key.setUnits(detail.getUnit());
+							key.setLabel(detail.getEndpoint());
+							groupProperties.add(key);
+							if (val.getValue().get("loValue")!=null) {
+								master.setProperty(key, val.getValue().get("loValue").asInt());
+								key.setClazz(Number.class);
+							} else {
+								master.setProperty(key, val.getValue().getTextValue());
+								key.setClazz(String.class);
+							}
+						}
+					} else {
+						JsonNode conditions = dx.readTree(new StringReader(detail.getConditions()));
+						PropertyAnnotations ann = new PropertyAnnotations();
+						
+						Iterator<Entry<String,JsonNode>> i = conditions.getFields();
+						StringBuilder b = new StringBuilder();
+						b.append(detail.getEndpoint());
+						
+						while (i.hasNext()) {
+							Entry<String,JsonNode> val = i.next();
+							if (val.getValue() instanceof NullNode) continue;
+							PropertyAnnotation a = new PropertyAnnotation();
+							a.setPredicate(val.getKey());
+							if (val.getValue().getTextValue()==null) 
+								a.setObject(val.getValue().get("loValue"));
+							else {
+								a.setObject(val.getValue().getTextValue());
+								b.append(" [");
+								b.append(val.getValue().getTextValue());
+								b.append("]");
+							}	
+							ann.add(a);
+						}
+
+						Property key = Property.getInstance(b.toString(),detail.getSampleID());
+						key.setUnits(detail.getUnit());
+						key.setAnnotations(ann);
+						key.setLabel(detail.getEndpoint());
+						groupProperties.add(key);
+						if (detail.getLoValue() == null) {
+							master.setProperty(key, detail.getTextValue());
+							key.setClazz(String.class);
+						} else {
+							master.setProperty(key, detail.getLoValue());
+							key.setClazz(Number.class);
+						}	
+					}
+				}
+				return master;
+				
+			}
+		};
+		return effectReader;
+	}
 	
+	protected IProcessor<ReadSubstanceByOwner, Representation> createARFFReporter(String filenamePrefix) {
+		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
+				new ARFFResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+							String.format("%s%s",getRequest().getRootRef(),"")
+						) {
+					@Override
+					protected void configurePropertyProcessors() {
+						getProcessors().add(getPropertyProcessors());
+					}
+
+				},
+				ChemicalMediaType.WEKA_ARFF,filenamePrefix);				
+
+	}
+	protected IProcessor<ReadSubstanceByOwner, Representation> createARFF3ColumnReporter(String filenamePrefix) {
+		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
+				new ARFF3ColResourceReporter(getTemplate(),getGroupProperties(),getRequest(),getDocumentation(),
+							String.format("%s%s",getRequest().getRootRef(),"")
+						) {
+					@Override
+					protected void configurePropertyProcessors() {
+						getProcessors().add(getPropertyProcessors());
+					}
+
+				},
+				ChemicalMediaType.THREECOL_ARFF,filenamePrefix);				
+
+	}
+	protected IProcessor<ReadSubstanceByOwner, Representation> createCSVReporter(String filenamePrefix) {
+		return new OutputWriterConvertor<SubstanceRecord, ReadSubstanceByOwner>(
+				new CSVReporter(getTemplate(),groupProperties,
+						String.format("%s%s",getRequest().getRootRef(),"")
+						) {
+					
+					@Override
+					protected void configurePropertyProcessors() {
+						getProcessors().add(getPropertyProcessors());
+					}
+
+				},
+				MediaType.TEXT_CSV,filenamePrefix);				
+
+	}
 	protected IProcessor<ReadSubstanceByOwner, Representation> createJSONReporter(String filenamePrefix) {
 		String jsonpcallback = getParams().getFirstValue("jsonp");
 		if (jsonpcallback==null) jsonpcallback = getParams().getFirstValue("callback");
@@ -107,67 +246,7 @@ public class SubstanceDatasetResource extends SubstanceByOwnerResource {
 					}
 					@Override
 					protected void configurePropertyProcessors() {
-						IQueryRetrieval<EffectRecord<String, String, String>> queryP = new ReadEffectRecordBySubstance(); 
-						MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition> effectReader = 
-											new MasterDetailsProcessor<SubstanceRecord,EffectRecord<String, String, String>,IQueryCondition>(
-													new ReadEffectRecordBySubstance()) {
-							@Override
-							protected SubstanceRecord processDetail(SubstanceRecord master,
-									EffectRecord<String, String, String> detail) throws Exception {
-								if (detail != null) {
-									if (detail.getTextValue() != null && detail.getTextValue().toString().startsWith("{")) {
-
-										JsonNode node = dx.readTree(new StringReader(detail.getTextValue().toString()));
-										
-										Iterator<Entry<String,JsonNode>> i = node.getFields();
-										while (i.hasNext()) {
-											Entry<String,JsonNode> val = i.next();
-											Property key = Property.getInstance(val.getKey(),detail.getSampleID());
-											key.setUnits(detail.getUnit());
-											groupProperties.add(key);
-											master.setProperty(key, val.getValue().get("loValue"));
-											
-										}
-									} else {
-										JsonNode conditions = dx.readTree(new StringReader(detail.getConditions()));
-										PropertyAnnotations ann = new PropertyAnnotations();
-										
-										Iterator<Entry<String,JsonNode>> i = conditions.getFields();
-										StringBuilder b = new StringBuilder();
-										b.append(detail.getEndpoint());
-										
-										while (i.hasNext()) {
-											Entry<String,JsonNode> val = i.next();
-											if (val.getValue() instanceof NullNode) continue;
-											PropertyAnnotation a = new PropertyAnnotation();
-											a.setPredicate(val.getKey());
-											if (val.getValue().getTextValue()==null) 
-												a.setObject(val.getValue().get("loValue"));
-											else {
-												a.setObject(val.getValue().getTextValue());
-												b.append(" [");
-												b.append(val.getValue().getTextValue());
-												b.append("]");
-											}	
-											ann.add(a);
-										}
-
-										Property key = Property.getInstance(b.toString(),detail.getSampleID());
-										key.setUnits(detail.getUnit());
-										key.setAnnotations(ann);
-										groupProperties.add(key);										
-										groupProperties.add(key);
-										if (detail.getLoValue() == null)
-											master.setProperty(key, detail.getTextValue());
-										else
-											master.setProperty(key, detail.getLoValue());
-									}
-								}
-								return master;
-								
-							}
-						};
-						getProcessors().add(effectReader);
+						getProcessors().add(getPropertyProcessors());
 					}
 				},
 				MediaType.APPLICATION_JSON,filenamePrefix);

@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
+import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.Template;
 import ambit2.base.exceptions.AmbitException;
 import ambit2.base.interfaces.IProcessor;
@@ -169,9 +170,14 @@ public class ARFFReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Q
 			Writer writer = tmpWriter;
 			writeHeader(writer);
 			int i = 0;
-			String uri = String.format("%s/compound/%d",urlPrefix,item.getIdchemical());
-			if (item.getIdstructure()>0)
-				uri = String.format("%s/conformer/%d",uri,item.getIdstructure());
+			String uri = null;
+			if (item instanceof SubstanceRecord) {
+				uri = String.format("%s/substance/%s",urlPrefix,((SubstanceRecord)item).getCompanyUUID());
+			} else {
+				uri = String.format("%s/compound/%d",urlPrefix,item.getIdchemical());
+				if (item.getIdstructure()>0)
+					uri = String.format("%s/conformer/%d",uri,item.getIdstructure());
+			}
 
 			output.append(delimiter);
 			output.append(uri);
