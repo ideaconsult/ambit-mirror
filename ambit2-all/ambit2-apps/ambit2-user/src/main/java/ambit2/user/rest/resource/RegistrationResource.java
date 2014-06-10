@@ -66,6 +66,7 @@ public class RegistrationResource extends CatalogResource<DBUser> {
 		try {
         	map.put(AMBITConfig.ambit_version_short.name(),((IFreeMarkerApplication)getApplication()).getVersionShort());
 	    	map.put(AMBITConfig.ambit_version_long.name(),((IFreeMarkerApplication)getApplication()).getVersionLong());
+	    	map.put(AMBITConfig.menu_profile.name(),app.getProfile());
         } catch (Exception x) {}
 		map.put(AMBITDBRoles.ambit_admin.name(), Boolean.FALSE);
 		map.put(AMBITDBRoles.ambit_curator.name(), Boolean.FALSE);

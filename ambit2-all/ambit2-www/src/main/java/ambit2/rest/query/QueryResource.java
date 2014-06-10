@@ -86,7 +86,6 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>,T extends Seria
 	protected boolean enableJSONP = false;
 	protected boolean dataset_prefixed_compound_uri = false;
 	public final static String query_resource = "/query";
-	protected String menu_profile = "default";
 	
 	/**TODO
 	 * http://markmail.org/search/?q=restlet+statusservice+variant#query:restlet%20statusservice%20variant+page:1+mid:2qrzgzbendopxg5t+state:results
@@ -142,9 +141,7 @@ Then, when the "get(Variant)" method calls you back,
 	public void configureDatasetMembersPrefixOption(boolean prefix) {
 		dataset_prefixed_compound_uri = prefix;
 	}
-	public void configureProfile(String value) {
-		menu_profile = value;
-	}
+
 	protected void configureRDFWriterOption(String defaultWriter) {
 		try { 
 			Object jenaOption = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("rdfwriter");
@@ -190,7 +187,6 @@ Then, when the "get(Variant)" method calls you back,
 		        		configureRDFWriterOption(dbc.rdfWriter());
 		        		configureSDFLineSeparators(((AmbitApplication)getApplication()).isChangeLineSeparators());
 		        		configureDatasetMembersPrefixOption(dbc.dataset_prefixed_compound_uri());
-		        		configureProfile(dbc.getMenuProfile());
 		        		convertor = createConvertor(variant);
 		        		if (convertor instanceof RepresentationConvertor)
 		        			((RepresentationConvertor)convertor).setLicenseURI(getLicenseURI());
@@ -647,13 +643,6 @@ Then, when the "get(Variant)" method calls you back,
         setTokenCookies(variant, useSecureCookie(getRequest()));
         configureTemplateMap(map,getRequest(),(IFreeMarkerApplication)getApplication());
         return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
-	}
-	
-	@Override
-	public void configureTemplateMap(Map<String, Object> map, Request request,
-			IFreeMarkerApplication app) {
-		super.configureTemplateMap(map, request, app);
-		map.put("ambit.profile", menu_profile);
 	}
 	
 	protected void deletePolicy(URL url,String token) throws Exception {

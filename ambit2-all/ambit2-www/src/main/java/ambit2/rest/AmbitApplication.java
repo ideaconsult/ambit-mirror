@@ -208,6 +208,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 	protected boolean dbAAEnabled = false;
 	protected boolean warmupEnabled = false;
 	protected boolean changeLineSeparators = false; 
+
 	
 	public boolean isChangeLineSeparators() {
 		return changeLineSeparators;
@@ -225,6 +226,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		changeLineSeparators = getConfigChangeLineSeparator();
 		versionShort = readVersionShort();
 		versionLong = readVersionLong();
+		setProfile(getMenuProfile());
 		
 		setName("AMBIT REST services");
 		setDescription("AMBIT implementation of OpenTox framework");
@@ -1035,6 +1037,7 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 		} catch (Exception x) {return false; }
   }
    
+   
    protected synchronized boolean isSimpleSecretAAEnabled()  {
 		try {
 			String aaadmin = getProperty(LOCAL_AA_ENABLED,configProperties);
@@ -1095,6 +1098,12 @@ public class AmbitApplication extends FreeMarkerApplication<String> {
 			return aaadmin==null?null:Boolean.parseBoolean(aaadmin);
 		} catch (Exception x) {return false; }
 	}	
+	
+	public synchronized String getMenuProfile() {
+		String prefix = getProperty("ambit.profile",ambitProperties);
+		if (prefix == null || "".equals(prefix) || prefix.contains("${")) prefix = "default";
+		return prefix;
+	}
 
 	protected synchronized boolean protectCompoundResource()  {
 		try {

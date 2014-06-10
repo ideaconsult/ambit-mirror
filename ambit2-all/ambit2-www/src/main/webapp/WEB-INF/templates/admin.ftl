@@ -36,6 +36,16 @@ $(document)
 		<div class="three columns help"><a href='http://ambit.sourceforge.net/install_ambitrest.html' class='qxternal' target=_blank>Help</a></div>
 		</div>
 	
+		<div class='row' style="margin:5px;padding:5px;"> 	
+		<div class="three columns">Profile</div>
+		<#if menu_profile??>
+			<div class="ten columns">${menu_profile}</div>
+		<#else>
+			<div class="ten columns">default</div>
+		</#if>
+		<div class="three columns help">&nbsp;</div>
+		</div>
+		
 		<div class='row' style="margin:5px;padding:5px;">
 		<div class="three columns">System jobs</div>
 		<div class="thirteen columns"><a href='${ambit_root}/task'>Browse jobs status</a></div>
