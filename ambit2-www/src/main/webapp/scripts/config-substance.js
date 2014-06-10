@@ -122,6 +122,9 @@ var config_substancedataset = {
 	    	    	groups["Substances"] = [ "http://www.opentox.org/api/1.1#CompositionInfo" ];
 	    	    	groups["Calculated"] = null;
 	    	    	return groups;
-	    }	    
+	    },
+		"handlers": {
+			"checked": onSelectedUpdate
+		}
     
 }
